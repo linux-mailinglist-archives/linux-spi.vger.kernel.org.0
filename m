@@ -2,144 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 274CAEC67
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2019 00:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB0BF214
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2019 10:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729409AbfD2WCz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Apr 2019 18:02:55 -0400
-Received: from nat-hk.nvidia.com ([203.18.50.4]:16894 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729398AbfD2WCz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 29 Apr 2019 18:02:55 -0400
-Received: from hkpgpgate102.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cc774960000>; Tue, 30 Apr 2019 06:03:02 +0800
-Received: from HKMAIL102.nvidia.com ([10.18.16.11])
-  by hkpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 29 Apr 2019 15:02:50 -0700
-X-PGP-Universal: processed;
-        by hkpgpgate102.nvidia.com on Mon, 29 Apr 2019 15:02:50 -0700
-Received: from HKMAIL101.nvidia.com (10.18.16.10) by HKMAIL102.nvidia.com
- (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 29 Apr
- 2019 22:02:49 +0000
-Received: from NAM03-CO1-obe.outbound.protection.outlook.com (104.47.40.58) by
- HKMAIL101.nvidia.com (10.18.16.10) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Mon, 29 Apr 2019 22:02:49 +0000
-Received: from BYAPR12MB3398.namprd12.prod.outlook.com (20.178.196.24) by
- BYAPR12MB3542.namprd12.prod.outlook.com (20.179.94.151) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1835.12; Mon, 29 Apr 2019 22:02:46 +0000
-Received: from BYAPR12MB3398.namprd12.prod.outlook.com
- ([fe80::a426:a072:b48b:530c]) by BYAPR12MB3398.namprd12.prod.outlook.com
- ([fe80::a426:a072:b48b:530c%5]) with mapi id 15.20.1835.016; Mon, 29 Apr 2019
- 22:02:46 +0000
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Timo Alho <talho@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "Krishna Yarlagadda" <kyarlagadda@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH V3 5/9] spi: export spi core function spi_set_cs
-Thread-Topic: [PATCH V3 5/9] spi: export spi core function spi_set_cs
-Thread-Index: AQHU89KFcGFem7n2hUyXzOJxTF1ajaZDnpyAgBAjKRA=
-Date:   Mon, 29 Apr 2019 22:02:46 +0000
-Message-ID: <BYAPR12MB3398D133D1C71355BC530754C2390@BYAPR12MB3398.namprd12.prod.outlook.com>
-References: <1555363834-32155-1-git-send-email-skomatineni@nvidia.com>
- <1555363834-32155-6-git-send-email-skomatineni@nvidia.com>
- <20190419151823.GS2803@sirena.org.uk>
-In-Reply-To: <20190419151823.GS2803@sirena.org.uk>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=skomatineni@nvidia.com; 
-x-originating-ip: [216.228.112.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 49f9f5d5-042f-4d19-89c2-08d6ccee69c7
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR12MB3542;
-x-ms-traffictypediagnostic: BYAPR12MB3542:
-x-microsoft-antispam-prvs: <BYAPR12MB3542901594B6E9E3B1BD0604C2390@BYAPR12MB3542.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0022134A87
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(396003)(39850400004)(366004)(376002)(346002)(189003)(199004)(8676002)(81156014)(256004)(8936002)(81166006)(446003)(486006)(476003)(97736004)(33656002)(11346002)(478600001)(14454004)(71190400001)(5660300002)(71200400001)(66066001)(52536014)(4326008)(99286004)(316002)(68736007)(305945005)(102836004)(74316002)(7736002)(86362001)(186003)(6916009)(25786009)(54906003)(3846002)(64756008)(73956011)(6116002)(55016002)(2906002)(53936002)(6436002)(66446008)(6506007)(76176011)(6246003)(7696005)(229853002)(26005)(76116006)(66476007)(66946007)(66556008)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3542;H:BYAPR12MB3398.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: rcZ/uG7uSEaY2FGCqvhZ7GlepjAa+wi+9N5qAVcarydMdjVMv3gZGG0BnKqGK1TEzvVcH9/F4jfzRPBRXpNZZmYkT6p6X9uAVAdEJmYNjKBuD1nm9wZi7g95QWhpfHIj6g37Em5L0Vc+FLQWkrXngA6Pt2VPoOhDDdv8krRNh++EgZjc1OqxvbzaroXIu/++ZFUze4zsb1SMgHcx5YyxZNY+ur7sVjaYW9jyfoiMkJAUnjllEif1K/f40PO5ynOuD3nsabpk2zBZA18e+y7Bb+v9c4jYcRnPkGlX1JpEi/vlsiFWFtrMW9jCqq0LNW6jGjer1HfXSRwNfIxtVtpld3yuOKdnZTng5J9Y+WykoB0mV2IPOaLE9OHBgp3mcfeqX+9sKlTdoB20/DVJZWthXv/niBnsAJr6jPFUY31KAbQ=
+        id S1726742AbfD3IdJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Apr 2019 04:33:09 -0400
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:33551 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726119AbfD3IdJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Apr 2019 04:33:09 -0400
+Received: by mail-vk1-f196.google.com with SMTP id x194so2923604vke.0;
+        Tue, 30 Apr 2019 01:33:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UbtPc15q7GKjPaxpVvUWLOqg1VlSL3zdcDHBknplqUM=;
+        b=KKF66LvB4hXLT/pNgPl7J03Aedbn8lzAfCc1BGXMSc1JuJmgtJKVmwbIxmyfRUWuRu
+         qN/jKZBfH20DI73zPN/gPi6tvRscsLu3flzxpqpfvn+Re4ZqNlIJR4muOFqSPWYxTIoX
+         +7LgXlarYAfAr7fcKAtl6/tR8Ym4YMDkbcDKBQwmjc0k89xgEbnABKZ9JE5VA0L3uUlx
+         4zzopcMkgkYFYTM8K/nLa4G/4fRZ6lbDKeIkLMbgR0rILJLU/vjjtWYZKubr7Io0pwGB
+         Vli5VNvmZrCvozlzuK+c+nHEgQ8sQcrqfTOmfiNAuThB/oJLM3/7LbbPTiERGUQkalfC
+         eiWQ==
+X-Gm-Message-State: APjAAAUS7Tks5VqVEvfF8TlLbm8i0ozNd8xgdMAvZF91KnlIGoXkdzY7
+        ArMkY4SnXhWMnthqpOfb3C+RCbAd4knN+ZBDmdk=
+X-Google-Smtp-Source: APXvYqwNJvA/cUF1NB0m6pyWsl9CyCvHUJUiwZKEfQfVXdBF7uE7d6duKg78DxzSZJkgPLe13xRctlVB0lkGA9a5OhY=
+X-Received: by 2002:a1f:17cd:: with SMTP id 196mr219315vkx.83.1556613188159;
+ Tue, 30 Apr 2019 01:33:08 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 49f9f5d5-042f-4d19-89c2-08d6ccee69c7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2019 22:02:46.6309
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3542
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1556575382; bh=5yKZKf0errhNL3mQy5FDPk9vvc7PMqpXX3TIYiMpOPE=;
-        h=X-PGP-Universal:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
-         Message-ID:References:In-Reply-To:Accept-Language:X-MS-Has-Attach:
-         X-MS-TNEF-Correlator:authentication-results:x-originating-ip:
-         x-ms-publictraffictype:x-ms-office365-filtering-correlation-id:
-         x-microsoft-antispam:x-ms-traffictypediagnostic:
-         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
-         x-forefront-prvs:x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=Vt7gPh05mJ9yLbOAxTMaNWD6IehPsu83L6qYDntcQNJwoyLxVzP23G0FgqWvN0mj4
-         b0zDhT0KYjaPq40ytVYaEhkKRPsKVZ1fmhIH2U41GzFtd/ymAgghZ07xs+Fp1/2LMf
-         f0J0t3nch7QGeZ+fXXK2ayWFU/+KEuEf9kfe1oGphloQP4BZOh1GgFGI84fuP+JH/8
-         2NoIOauYiQ2c1nWGgETN63pqX4R5Ylqe8uu4WdpDLAiyv36WcYKAGb+5RLaMmrE26/
-         L2KxeoeHgUfCxgNK/rVcR0eYtoTizDnXaJqeDtl+iXrGcWAWK77Xt334BypNmEQxfr
-         D4HwaCRNbApnQ==
+References: <1554969262-15028-20-git-send-email-cv-dong@jinso.co.jp> <20190415085333.91F9A1127B60@debutante.sirena.org.uk>
+In-Reply-To: <20190415085333.91F9A1127B60@debutante.sirena.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 30 Apr 2019 10:32:56 +0200
+Message-ID: <CAMuHMdXnZjND2f9dfrq=0+TuS3ZpAgmpAspBfbH-VvtsH=6TYg@mail.gmail.com>
+Subject: Re: Applied "spi: sh-msiof: Document r8a77470 bindings" to the spi tree
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Biju Das <biju.das@bp.renesas.com>,
+        =?UTF-8?B?44Kr44Kq44O744O044Kh44Oz44O744OJ44Oz?= 
+        <cv-dong@jinso.co.jp>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?B?56iy5ZCJ?= <h-inayoshi@jinso.co.jp>,
+        Simon Horman <horms+renesas@verge.net.au>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Hoan Nguyen An <na-hoan@jinso.co.jp>,
+        =?UTF-8?B?RHVuZ++8muS6uuOCvQ==?= <nv-dung@jinso.co.jp>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> On Mon, Apr 15, 2019 at 02:30:30PM -0700, Sowjanya Komatineni wrote:
-> > This patch exports spi_set_cs of the spi core to allow SPI masters to=20
-> > use when gpio based chip select is needed.
->
-> This isn't really what I meant when I said it'd be good to use the core G=
-PIO code - this function doesn't do a huge amount really and the usage of i=
-t in your subsequent patch for the > driver isn't exactly joined up with th=
-e little it does (which is mainly swapping in the GPIO chip select instead =
-of the hardware chip select) isn't used in your driver usage of this as far=
- as I can see.  The bulk of the chip select handling code in the core is ac=
-tually in transfer_one_message() which your driver doesn't use as it's got =
-it's own implementation of that; I've not looked in enough detail to figure=
- out if it could use it.
->
->
->
-In SPI Tegra driver, we wanted to have GPIO based CS control when cs-gpios =
-is specified in parallel to HW/SW CS. Having parallel GPIO based CS is to m=
-imic some of the timing stuff that's needed for some spi devices by not act=
-ually using HW CS on platform but only for SPI HW design logic inside the c=
-hip.
+Hi Mark,
 
-Tegra spi driver don't use set_cs callback so looking into spi_set_cs from =
-spi core implementation when cs-gpios property is used it exactly the same =
-that is needed for GPIO control CS. So used this in V3.=20
+On Mon, Apr 15, 2019 at 10:53 AM Mark Brown <broonie@kernel.org> wrote:
+> The patch
+>
+>    spi: sh-msiof: Document r8a77470 bindings
+>
+> has been applied to the spi tree at
+>
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.2
+>
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+>
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+>
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+>
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+>
+> Thanks,
+> Mark
+>
+> From efc3d5b2e79bd5470fa4a333933867d7b934a3e6 Mon Sep 17 00:00:00 2001
+> From: Cao Van Dong <cv-dong@jinso.co.jp>
+> Date: Thu, 11 Apr 2019 16:54:21 +0900
+> Subject: [PATCH] spi: sh-msiof: Document r8a77470 bindings
+>
+> Document SoC specific bindings for R-Car RZ/G1C(r8a77470) SoC.
+>
+> Signed-off-by: Cao Van Dong <cv-dong@jinso.co.jp>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Can you please provide more details on what you are suggesting?
-Do you prefer not to use SPI core spi_set_cs and gpio_set_values APIs and i=
-nstead implement in tegra SPI driver using GPIO descriptors ?
+Is their any specific reason this was dropped from spi/for-next again?
+Upon closer look, the following seem to have been dropped as well, compared
+to last week:
 
-Thanks
-Sowjanya
+$ git cherry -v spi/for-next 96a9209ae8ebb4e8
++ 0e530e4eba5e9003af83c6afda833c64c7fcae08 spi: spi-mem: Fix build
+error without CONFIG_SPI_MEM
++ d4a91044e241d8f87fb990b673549a7d2f9cacc4 spi: spi-mem: Make
+spi_mem_default_supports_op() static inline
++ 2c54c4a640ed4dc9db03693641a1a651535f05f1 spi: pxa2xx: use a module
+softdep for dw_dmac
++ bf0c999f7f0e8934c8db8261fb67a38770fffac2 spi: pxa2xx: fix SCR
+(divisor) calculation
++ efc3d5b2e79bd5470fa4a333933867d7b934a3e6 spi: sh-msiof: Document
+r8a77470 bindings
++ ac533755d3cb2db003785f9f770646295643bee1 spi: Remove one needless
+transfer speed fall back case
++ 179f7949c0663f1923564acf0e626d459ea80047 spi: Remove warning in
+spi_split_transfers_maxsize()
++ 8ed2e1a50e74a08adce3fe0207be1649b2b13a83 spi: Release spi_res after
+finalizing message
++ 316e60af88bc81780a01c0f5b431affe0e679686 spi/trace: Cap buffer
+contents at 64 bytes
++ 3f6e3f7843a6a1667ed890ca51a1388fc7bf3429 spi: tegra114: fix PIO transfer
++ 5127b4d69f96793dfabb602b133dc19d1aa36880 spi: pxa2xx: Add support
+for Intel Comet Lake
++ bee5c20b7323a7af027d1b4ba538137b518ad232 dt-bindings: spi:
+spi-mt65xx: add support for MT8516
++ 4b490710d4d24f95e95a07baac6f3f98bb94cf3b spi: expand mode support
++ ad1ac1fa0b24b40281eeccdc1d7b085e77639357 spi/spi-bcm2835: Split
+transfers that exceed DLEN
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
