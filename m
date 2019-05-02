@@ -2,131 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2068011145
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2019 04:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046B6111AB
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2019 04:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbfEBCTj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 May 2019 22:19:39 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57666 "EHLO
+        id S1726186AbfEBCla (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 May 2019 22:41:30 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37966 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726769AbfEBCTi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 May 2019 22:19:38 -0400
+        with ESMTP id S1726196AbfEBCla (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 May 2019 22:41:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=1grwRNg1rL6fWWwwY9b01aFhIjRlWDX1p/iSHRpIX2M=; b=Yr9ISyKB5G54
-        mnCOy3hKifVuQiBTblOnEWujwqpIv0cwGsxLW8c3mTOU1uSoWSpwj2HwSm+PnKiU/YfiVSd5ocKyh
-        wKr4tMLmvJemYOQXwPqOj7urdyez9DlIWmKT8kMc/XyTVxCvbxnyNf21OjjZiy7KrtZNRh/B2+FVe
-        ulKbg=;
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=5ObYVRU0Kf3pIITjmag/DPVZ4iVx1mDoeKshyHfJ4vg=; b=cUEDpZHpMZfUfljvsKyxjzbES
+        jWRaGxO3R9a3EdC2DaCtHkS9Vhdxvktq3aB9nQfImncj6KC4FS8w8k+EY4u1TSJ+yKAxodqr/Wbav
+        JahLkMP6xJ8NFsNMUrUarbZBLbsRy374CbDweYt3y7gyTLMbbOEa6m0S6GHXl5Ay87bak=;
 Received: from [211.55.52.15] (helo=finisterre.ee.mobilebroadband)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hM1Jv-0005xk-8k; Thu, 02 May 2019 02:19:35 +0000
+        id 1hM1el-00060N-6I; Thu, 02 May 2019 02:41:07 +0000
 Received: by finisterre.ee.mobilebroadband (Postfix, from userid 1000)
-        id E2A78441D3C; Thu,  2 May 2019 03:19:26 +0100 (BST)
+        id 0FB6D441D3C; Thu,  2 May 2019 03:41:04 +0100 (BST)
+Date:   Thu, 2 May 2019 11:41:04 +0900
 From:   Mark Brown <broonie@kernel.org>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        naga.sureshkumar.relli@xilinx.com
-Subject: Applied "spi: spi-mem: Fix build error without CONFIG_SPI_MEM" to the spi tree
-In-Reply-To:  <20190408143949.10688-1-yuehaibing@huawei.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190502021926.E2A78441D3C@finisterre.ee.mobilebroadband>
-Date:   Thu,  2 May 2019 03:19:26 +0100 (BST)
+To:     masonccyang@mxic.com.tw
+Cc:     bbrezillon@kernel.org, christophe.kerello@st.com,
+        computersforpeace@gmal.com, devicetree@vger.kernel.org,
+        dwmw2@infradead.org, geert@linux-m68k.org, juliensu@mxic.com.tw,
+        lee.jones@linaro.org, liang.yang@amlogic.com,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, marcel.ziswiler@toradex.com,
+        marek.vasut@gmail.com, mark.rutland@arm.com,
+        miquel.raynal@bootlin.com, paul.burton@mips.com, richard@nod.at,
+        robh+dt@kernel.org, stefan@agner.ch, zhengxunli@mxic.com.tw
+Subject: Re: [PATCH v3 3/4] spi: Patch Macronix SPI controller driver
+ according to MX25F0A MFD driver
+Message-ID: <20190502024103.GT14916@sirena.org.uk>
+References: <1555320234-15802-1-git-send-email-masonccyang@mxic.com.tw>
+ <1555320234-15802-4-git-send-email-masonccyang@mxic.com.tw>
+ <20190419145151.GR2803@sirena.org.uk>
+ <OF7742B4A9.445066F6-ON482583EC.0037E377-482583EC.0039125B@mxic.com.tw>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="U2mKMzaWgYxzMy3/"
+Content-Disposition: inline
+In-Reply-To: <OF7742B4A9.445066F6-ON482583EC.0037E377-482583EC.0039125B@mxic.com.tw>
+X-Cookie: -- I have seen the FUN --
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
 
-   spi: spi-mem: Fix build error without CONFIG_SPI_MEM
+--U2mKMzaWgYxzMy3/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been applied to the spi tree at
+On Tue, Apr 30, 2019 at 06:23:21PM +0800, masonccyang@mxic.com.tw wrote:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+> > It'd be much better to describe what the above actually means - what
+> > changes have been made in the introduction of the MFD driver?  It does
+> > feel like there's not as much abstraction as I'd expect between the MFD
+> > and the child, there's a lot of peering into the parent and enabling and
+> > disabling individual clocks for example rather than either having this
+> > hidden behind a function or just having the clocks owned by the child
+> > driver.=20
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+> Do you mean I should remove ps_clk/send_clk/send_dly_clk resource from MF=
+D=20
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> and patch them to spi-mxic.c ?
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+> Or any other ?
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+I think you need to have a clear idea that you can explain as to what
+the MFD is and how it's split up.  What's being abstracted, what's not
+and why.  Without knowing anything about the device or what the series
+is trying to accomplish it's hard to be sure exactly what the best thing
+to do is.
 
-Thanks,
-Mark
+> The driver also isn't using the MFD interfaces to pass through
+> > the register subblocks for the IP - instead the child driver is peering
+> > straight into the MFD structure and looking at a variable in there.
 
-From 72e6841608b9ce7e04515ed43693b2878936c93a Mon Sep 17 00:00:00 2001
-From: YueHaibing <yuehaibing@huawei.com>
-Date: Mon, 8 Apr 2019 22:39:49 +0800
-Subject: [PATCH] spi: spi-mem: Fix build error without CONFIG_SPI_MEM
+> Patch regmap for mfd, nand and spi ?
+> or any other patches is needed ?
 
-When building with CONFIG_SPI_MEM is not set
-gc warns this:
+This is a memory mapped device so there should be no need to use regmap
+unless you want to.  The MFD subsystem has facilities for passing
+through memory regions to subdevices.
 
-drivers/spi/spi-zynq-qspi.o: In function `zynq_qspi_supports_op':
-spi-zynq-qspi.c:(.text+0x1da): undefined reference to `spi_mem_default_supports_op'
+--U2mKMzaWgYxzMy3/
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fixes: 67dca5e580f1 ("spi: spi-mem: Add support for Zynq QSPI controller")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- include/linux/spi/spi-mem.h | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-index c845cd6e22ba..1941b845aa15 100644
---- a/include/linux/spi/spi-mem.h
-+++ b/include/linux/spi/spi-mem.h
-@@ -295,6 +295,10 @@ int spi_controller_dma_map_mem_op_data(struct spi_controller *ctlr,
- void spi_controller_dma_unmap_mem_op_data(struct spi_controller *ctlr,
- 					  const struct spi_mem_op *op,
- 					  struct sg_table *sg);
-+
-+bool spi_mem_default_supports_op(struct spi_mem *mem,
-+				 const struct spi_mem_op *op);
-+
- #else
- static inline int
- spi_controller_dma_map_mem_op_data(struct spi_controller *ctlr,
-@@ -310,6 +314,13 @@ spi_controller_dma_unmap_mem_op_data(struct spi_controller *ctlr,
- 				     struct sg_table *sg)
- {
- }
-+
-+bool spi_mem_default_supports_op(struct spi_mem *mem,
-+				 const struct spi_mem_op *op)
-+{
-+	return false;
-+}
-+
- #endif /* CONFIG_SPI_MEM */
- 
- int spi_mem_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op);
-@@ -341,9 +352,6 @@ int spi_mem_driver_register_with_owner(struct spi_mem_driver *drv,
- 
- void spi_mem_driver_unregister(struct spi_mem_driver *drv);
- 
--bool spi_mem_default_supports_op(struct spi_mem *mem,
--				 const struct spi_mem_op *op);
--
- #define spi_mem_driver_register(__drv)                                  \
- 	spi_mem_driver_register_with_owner(__drv, THIS_MODULE)
- 
--- 
-2.20.1
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzKWL8ACgkQJNaLcl1U
+h9AjiQf/bW7XYR+RCtB5mk7NUhGOFWv7c4gcOImzc4a6QObhKLrSolCYsj2RWhcl
+Gnq+EA50PHXQZqZMl6tLN7skgu1q8gHz79mwbns4pqSQtAC5Uw5PU2MWGMpBkBXl
+lx4jDU7D7JmlCkkbWCOb9mi/Rhq4AAbn4yWSd4ZN+3FC2znx8HY9x/12257saaV8
+ndBNuyLQdAWw8oz5cIpcLU7w+YaEYcT6qHbTbmfRBdCyIfKTxVOwq403UnLSjKW6
+LU90b3lGa1zs5IP2m6rKwRCggfZnkgjvrRl9VQJXPxx3Ggyj7jG1OKBa7ia0Kf/a
+QZsQU1oxCxD+GUVGvbJkybiuRYKmxw==
+=TLm4
+-----END PGP SIGNATURE-----
 
+--U2mKMzaWgYxzMy3/--
