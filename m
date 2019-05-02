@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 046B6111AB
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2019 04:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B57111B4
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2019 04:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726186AbfEBCla (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 May 2019 22:41:30 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37966 "EHLO
+        id S1726249AbfEBCmM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 May 2019 22:42:12 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:39154 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbfEBCla (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 May 2019 22:41:30 -0400
+        with ESMTP id S1726191AbfEBCmM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 May 2019 22:42:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=5ObYVRU0Kf3pIITjmag/DPVZ4iVx1mDoeKshyHfJ4vg=; b=cUEDpZHpMZfUfljvsKyxjzbES
-        jWRaGxO3R9a3EdC2DaCtHkS9Vhdxvktq3aB9nQfImncj6KC4FS8w8k+EY4u1TSJ+yKAxodqr/Wbav
-        JahLkMP6xJ8NFsNMUrUarbZBLbsRy374CbDweYt3y7gyTLMbbOEa6m0S6GHXl5Ay87bak=;
+         bh=RQycgOI7TQiHnn6G3te99vU3cYPvSzTcJudMZ61IXZQ=; b=AjViRcaLcDZVQ6cSw1edgQTn/
+        FF+nDFbWw710FRhA/9bNhVT9R3YcO5X0YwlcB7XLn6/1JggawODHic4p/Auje1pRcRjaqhkCAW78a
+        /3ednAJWpIiCIiyhi2/vgshjWGdPNv4kUsoE1CnamIjv+H+PqUQOBNk8uwfXq71IrJzIA=;
 Received: from [211.55.52.15] (helo=finisterre.ee.mobilebroadband)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hM1el-00060N-6I; Thu, 02 May 2019 02:41:07 +0000
+        id 1hM1fi-00060m-1x; Thu, 02 May 2019 02:42:06 +0000
 Received: by finisterre.ee.mobilebroadband (Postfix, from userid 1000)
-        id 0FB6D441D3C; Thu,  2 May 2019 03:41:04 +0100 (BST)
-Date:   Thu, 2 May 2019 11:41:04 +0900
+        id F3EE4441D3C; Thu,  2 May 2019 03:42:01 +0100 (BST)
+Date:   Thu, 2 May 2019 11:42:01 +0900
 From:   Mark Brown <broonie@kernel.org>
-To:     masonccyang@mxic.com.tw
-Cc:     bbrezillon@kernel.org, christophe.kerello@st.com,
-        computersforpeace@gmal.com, devicetree@vger.kernel.org,
-        dwmw2@infradead.org, geert@linux-m68k.org, juliensu@mxic.com.tw,
-        lee.jones@linaro.org, liang.yang@amlogic.com,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, marcel.ziswiler@toradex.com,
-        marek.vasut@gmail.com, mark.rutland@arm.com,
-        miquel.raynal@bootlin.com, paul.burton@mips.com, richard@nod.at,
-        robh+dt@kernel.org, stefan@agner.ch, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH v3 3/4] spi: Patch Macronix SPI controller driver
- according to MX25F0A MFD driver
-Message-ID: <20190502024103.GT14916@sirena.org.uk>
-References: <1555320234-15802-1-git-send-email-masonccyang@mxic.com.tw>
- <1555320234-15802-4-git-send-email-masonccyang@mxic.com.tw>
- <20190419145151.GR2803@sirena.org.uk>
- <OF7742B4A9.445066F6-ON482583EC.0037E377-482583EC.0039125B@mxic.com.tw>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Timo Alho <talho@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
+Subject: Re: Applied "spi: tegra114: fix PIO transfer" to the spi tree
+Message-ID: <20190502024201.GU14916@sirena.org.uk>
+References: <1555363834-32155-2-git-send-email-skomatineni@nvidia.com>
+ <20190416163257.956F211281C6@debutante.sirena.org.uk>
+ <BYAPR12MB33989027C79790E4B3CC827CC2390@BYAPR12MB3398.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="U2mKMzaWgYxzMy3/"
+        protocol="application/pgp-signature"; boundary="jllsgs4PL/sXFNaa"
 Content-Disposition: inline
-In-Reply-To: <OF7742B4A9.445066F6-ON482583EC.0037E377-482583EC.0039125B@mxic.com.tw>
+In-Reply-To: <BYAPR12MB33989027C79790E4B3CC827CC2390@BYAPR12MB3398.namprd12.prod.outlook.com>
 X-Cookie: -- I have seen the FUN --
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
@@ -59,58 +59,35 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---U2mKMzaWgYxzMy3/
+--jllsgs4PL/sXFNaa
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 30, 2019 at 06:23:21PM +0800, masonccyang@mxic.com.tw wrote:
+On Mon, Apr 29, 2019 at 09:42:39PM +0000, Sowjanya Komatineni wrote:
+> Hi Mark,
+>=20
+> I don't see below patches that I see as applied in latest linux-next.
+> Can you please confirm if they are applied?
+>=20
+> Applied "spi: tegra114: fix PIO transfer" to the spi tree
+> Applied "spi: expand mode support" to the spi tree
 
-> > It'd be much better to describe what the above actually means - what
-> > changes have been made in the introduction of the MFD driver?  It does
-> > feel like there's not as much abstraction as I'd expect between the MFD
-> > and the child, there's a lot of peering into the parent and enabling and
-> > disabling individual clocks for example rather than either having this
-> > hidden behind a function or just having the clocks owned by the child
-> > driver.=20
+Check again, they should be restored now.
 
-> Do you mean I should remove ps_clk/send_clk/send_dly_clk resource from MF=
-D=20
-
-> and patch them to spi-mxic.c ?
-
-> Or any other ?
-
-I think you need to have a clear idea that you can explain as to what
-the MFD is and how it's split up.  What's being abstracted, what's not
-and why.  Without knowing anything about the device or what the series
-is trying to accomplish it's hard to be sure exactly what the best thing
-to do is.
-
-> The driver also isn't using the MFD interfaces to pass through
-> > the register subblocks for the IP - instead the child driver is peering
-> > straight into the MFD structure and looking at a variable in there.
-
-> Patch regmap for mfd, nand and spi ?
-> or any other patches is needed ?
-
-This is a memory mapped device so there should be no need to use regmap
-unless you want to.  The MFD subsystem has facilities for passing
-through memory regions to subdevices.
-
---U2mKMzaWgYxzMy3/
+--jllsgs4PL/sXFNaa
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzKWL8ACgkQJNaLcl1U
-h9AjiQf/bW7XYR+RCtB5mk7NUhGOFWv7c4gcOImzc4a6QObhKLrSolCYsj2RWhcl
-Gnq+EA50PHXQZqZMl6tLN7skgu1q8gHz79mwbns4pqSQtAC5Uw5PU2MWGMpBkBXl
-lx4jDU7D7JmlCkkbWCOb9mi/Rhq4AAbn4yWSd4ZN+3FC2znx8HY9x/12257saaV8
-ndBNuyLQdAWw8oz5cIpcLU7w+YaEYcT6qHbTbmfRBdCyIfKTxVOwq403UnLSjKW6
-LU90b3lGa1zs5IP2m6rKwRCggfZnkgjvrRl9VQJXPxx3Ggyj7jG1OKBa7ia0Kf/a
-QZsQU1oxCxD+GUVGvbJkybiuRYKmxw==
-=TLm4
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzKWPkACgkQJNaLcl1U
+h9DYAwf+MNXdI7RM9oCnExD93pc31GFmhhpwuxn0wXF2H8qg9jWwV87Qk4S6bQad
+84+WJDZYteWg3gwEh5Gx37njs6wpVd8SAss0WLwEbWqdNf69U28K2jSMEcPWmAIG
+QeQeukw5cm3dyHUOpqaQnl+idg0RxIUjSU7FXFJLz4B9pOqbH71Vozf+ZKH/v1kg
+Pzc5Kwla5P2aO4V55R4JLM/M0wrbk7rUMw1rww8kfIm8FwmdxN5G9812yburnI3b
+q3k0PDCYT1QnxFKC/ZrzdLy+etMUHinOaHLBKy/b8UWWewZ7zNBs3m+yctbmXZMz
+3MCsM8VordXwiEmuKeN1AyQGoHbrtw==
+=evNI
 -----END PGP SIGNATURE-----
 
---U2mKMzaWgYxzMy3/--
+--jllsgs4PL/sXFNaa--
