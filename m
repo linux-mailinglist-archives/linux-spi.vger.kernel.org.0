@@ -2,40 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AF911166
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2019 04:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488791113F
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2019 04:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbfEBCTE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 May 2019 22:19:04 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56488 "EHLO
+        id S1726711AbfEBCTb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 May 2019 22:19:31 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57330 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726546AbfEBCTE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 May 2019 22:19:04 -0400
+        with ESMTP id S1726734AbfEBCT2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 May 2019 22:19:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=aQcIAK37ePlgZcojTuUqaapKxWplc+a2fIA7ntOLNqQ=; b=WPJXVK9drn2H
-        lb6xQTDJ1sqtC+XaPIyyg1wAdLSuP57zQ57lymjKGpzwf9iiRrlak0P18gu9+8HPNb3wvGBWH7YIi
-        LaXt5zXzKEZi46mW1mzZZ3Zd2tngmCdfazb2g+RpExUEl1dOBJIgJLnVg+9/pdQbclcxjWnmgO/jR
-        lYbJo=;
+        List-Archive; bh=feyKP1du32lu5/MyQZS18HeItBqnrlQxBxyoBKEM4vw=; b=o7XMYTMHWz1G
+        l6VKr+6EowJPK/aYtjvkDbM65ihBQyrnNUmzovRNCY2KGX7GWYpHTIrmzK+Nlcl/OYBbDjqw2S4AH
+        l8g1p48G9daOvC/GS9efKGtTMFaRn/JKFhdMs9Ps1ba8Js/lLrXtr6fOxXCAQX1ZpxO1946QzYuOv
+        TqNGQ=;
 Received: from [211.55.52.15] (helo=finisterre.ee.mobilebroadband)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hM1JL-0005v0-Ll; Thu, 02 May 2019 02:18:59 +0000
+        id 1hM1JN-0005vL-Rg; Thu, 02 May 2019 02:19:02 +0000
 Received: by finisterre.ee.mobilebroadband (Postfix, from userid 1000)
-        id AF9DE441D3D; Thu,  2 May 2019 03:18:56 +0100 (BST)
+        id B4B5E441D3C; Thu,  2 May 2019 03:18:58 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: tegra114: fix PIO transfer" to the spi tree
-In-Reply-To: 
+To:     Flavio Suligoi <f.suligoi@asem.it>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Applied "spi: pxa2xx: fix SCR (divisor) calculation" to the spi tree
+In-Reply-To:  <1555054339-17096-1-git-send-email-f.suligoi@asem.it>
 X-Patchwork-Hint: ignore
-Message-Id: <20190502021856.AF9DE441D3D@finisterre.ee.mobilebroadband>
-Date:   Thu,  2 May 2019 03:18:56 +0100 (BST)
+Message-Id: <20190502021858.B4B5E441D3C@finisterre.ee.mobilebroadband>
+Date:   Thu,  2 May 2019 03:18:58 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -43,7 +48,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: tegra114: fix PIO transfer
+   spi: pxa2xx: fix SCR (divisor) calculation
 
 has been applied to the spi tree at
 
@@ -68,36 +73,61 @@ to this mail.
 Thanks,
 Mark
 
-From cc1b69fc5f9f52cf18295db05cad57187cee1c1d Mon Sep 17 00:00:00 2001
-From: Sowjanya Komatineni <skomatineni@nvidia.com>
-Date: Mon, 15 Apr 2019 14:30:26 -0700
-Subject: [PATCH] spi: tegra114: fix PIO transfer
+From 29f2133717c527f492933b0622a4aafe0b3cbe9e Mon Sep 17 00:00:00 2001
+From: Flavio Suligoi <f.suligoi@asem.it>
+Date: Fri, 12 Apr 2019 09:32:19 +0200
+Subject: [PATCH] spi: pxa2xx: fix SCR (divisor) calculation
 
-This patch fixes PIO mode transfer to use PIO bit in SPI_COMMAND1 register.
-Current driver uses DMA_EN instead of PIO bit.
+Calculate the divisor for the SCR (Serial Clock Rate), avoiding
+that the SSP transmission rate can be greater than the device rate.
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+When the division between the SSP clock and the device rate generates
+a reminder, we have to increment by one the divisor.
+In this way the resulting SSP clock will never be greater than the
+device SPI max frequency.
+
+For example, with:
+
+ - ssp_clk  = 50 MHz
+ - dev freq = 15 MHz
+
+without this patch the SSP clock will be greater than 15 MHz:
+
+ - 25 MHz for PXA25x_SSP and CE4100_SSP
+ - 16,56 MHz for the others
+
+Instead, with this patch, we have in both case an SSP clock of 12.5MHz,
+so the max rate of the SPI device clock is respected.
+
+Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+Reviewed-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Reviewed-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-tegra114.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/spi/spi-pxa2xx.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
-index b57f10182fae..21e4fdad013f 100644
---- a/drivers/spi/spi-tegra114.c
-+++ b/drivers/spi/spi-tegra114.c
-@@ -641,8 +641,9 @@ static int tegra_spi_start_cpu_based_transfer(
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index b6ddba833d02..d2076f2f468f 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -884,10 +884,14 @@ static unsigned int ssp_get_clk_div(struct driver_data *drv_data, int rate)
  
- 	tspi->is_curr_dma_xfer = false;
+ 	rate = min_t(int, ssp_clk, rate);
  
--	val |= SPI_DMA_EN;
--	tegra_spi_writel(tspi, val, SPI_DMA_CTL);
-+	val = tspi->command1_reg;
-+	val |= SPI_PIO;
-+	tegra_spi_writel(tspi, val, SPI_COMMAND1);
- 	return 0;
++	/*
++	 * Calculate the divisor for the SCR (Serial Clock Rate), avoiding
++	 * that the SSP transmission rate can be greater than the device rate
++	 */
+ 	if (ssp->type == PXA25x_SSP || ssp->type == CE4100_SSP)
+-		return (ssp_clk / (2 * rate) - 1) & 0xff;
++		return (DIV_ROUND_UP(ssp_clk, 2 * rate) - 1) & 0xff;
+ 	else
+-		return (ssp_clk / rate - 1) & 0xfff;
++		return (DIV_ROUND_UP(ssp_clk, rate) - 1)  & 0xfff;
  }
  
+ static unsigned int pxa2xx_ssp_get_clk_div(struct driver_data *drv_data,
 -- 
 2.20.1
 
