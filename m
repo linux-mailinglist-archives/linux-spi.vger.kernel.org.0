@@ -2,40 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E37D111C3
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2019 05:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFBE1139F
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2019 09:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbfEBDAI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 May 2019 23:00:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726183AbfEBDAI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 1 May 2019 23:00:08 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556766007;
-        bh=eKEA/mRvCur+kApym6dCQJZvk03RANx8RzUKnF3LzPo=;
-        h=Subject:From:Date:To:From;
-        b=T6et5HFq691J8+rKrvInojZfcOqV9I/+Ab0NzZ6xbo8Q7WiNOEdmHP/B4vH+NZYXf
-         rZPq2ns9hNtbFkFk/2Zb/OT28vJN5yaZeLagRO80H7ZLpZ5rxVvll3g2weGpldEc09
-         +nwjeEYRXg9IZh0HSuowBFx4wM2GIDBVo153NrWY=
+        id S1726055AbfEBG7y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 2 May 2019 02:59:54 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48809 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725795AbfEBG7y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 May 2019 02:59:54 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hM5gz-0008TR-Au; Thu, 02 May 2019 08:59:41 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hM5gx-0007lH-EQ; Thu, 02 May 2019 08:59:39 +0200
+Date:   Thu, 2 May 2019 08:59:39 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Robin Gong <yibin.gong@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "broonie@kernel.org" <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "plyatov@gmail.com" <plyatov@gmail.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH v2 08/15] dt-bindings: spi: imx: add i.mx6ul to state
+ errata fixed
+Message-ID: <20190502065939.nyejomrsowhy6xox@pengutronix.de>
+References: <1556265512-9130-1-git-send-email-yibin.gong@nxp.com>
+ <1556265512-9130-9-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <155676600778.15941.11431802436480774516.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 02 May 2019 03:00:07 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <1556265512-9130-9-git-send-email-yibin.gong@nxp.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: spi-mem: Fix build error without CONFIG_SPI_MEM (2019-04-10T12:13:41)
-  Superseding: [v1] spi: spi-mem: Fix build error without CONFIG_SPI_MEM (2019-04-08T14:39:49):
-    spi: spi-mem: Fix build error without CONFIG_SPI_MEM
+On Fri, Apr 26, 2019 at 08:05:51AM +0000, Robin Gong wrote:
+> ERR009165 fixed from i.mx6ul, add it to show the errata fixed.
+> 
+> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt b/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
+> index 2d32641..32c4263d 100644
+> --- a/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
+> +++ b/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
+> @@ -10,6 +10,8 @@ Required properties:
+>    - "fsl,imx35-cspi" for SPI compatible with the one integrated on i.MX35
+>    - "fsl,imx51-ecspi" for SPI compatible with the one integrated on i.MX51
+>    - "fsl,imx53-ecspi" for SPI compatible with the one integrated on i.MX53 and later Soc
+> +  - "fsl,imx6ul-ecspi" ERR009165 fixed on i.MX6UL and later Soc
+> +    (https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf)
 
+I wouldn't mention this errata in the binding documentation. Just state
+that fsl,imx6ul-ecspi is designed to be used on i.MX6UL. And that it
+might also be used on later SoCs as a "fallback compatible" is a detail
+that is so common that I would expect it not being worth mentioning. So
+for me it would also be OK to drop "fsl,imx53-ecspi" from the list as
+this is only used like:
+
+	compatible = "fsl,imx53-ecspi", "fsl,imx51-ecspi";
+
+(But note that I have no authority here.)
+
+Best regards
+Uwe
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
