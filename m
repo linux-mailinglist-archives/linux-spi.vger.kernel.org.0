@@ -2,1778 +2,387 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B6014951
-	for <lists+linux-spi@lfdr.de>; Mon,  6 May 2019 14:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128D814BDC
+	for <lists+linux-spi@lfdr.de>; Mon,  6 May 2019 16:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbfEFMGp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 May 2019 08:06:45 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:50197 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbfEFMGp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 May 2019 08:06:45 -0400
-Received: from maxwell.fritz.box ([109.41.66.189]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MgARS-1go2K224RK-00hiBD; Mon, 06 May 2019 14:06:36 +0200
-From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
-To:     linux-spi@vger.kernel.org
-Cc:     broonie@kernel.org,
-        Jochen Henneberg <jh@henneberg-systemdesign.com>
-Subject: [PATCH] spi: Added driver for CP2130 USB-to-SPI bridge
-Date:   Mon,  6 May 2019 14:06:20 +0200
-Message-Id: <1557144380-19935-2-git-send-email-jh@henneberg-systemdesign.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1557144380-19935-1-git-send-email-jh@henneberg-systemdesign.com>
-References: <1557144380-19935-1-git-send-email-jh@henneberg-systemdesign.com>
-X-Provags-ID: V03:K1:aKMHk4GqOCQaqbzSPpy+UAxIn0zVXPtR1uyoDFhgQ2HISCF1d+y
- 2g6J3udBa70GeyOjcE3kSCkFnjByUD2AeKWM6IcJPSbla1k7GQlaF9XoVesEkpV/kIzwQ14
- ygSL8sKozKtuOCcDjsMRML3buYTr0CDNK5LcoYDuTyUkEePvKY39abgLQzAmnxQLwnYRlL+
- qYuJpeU00n3mDVvCiazBg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:o7z0MGIZX8w=:0mSfeFZXUKVTF7exKzV2GP
- pcorbJDZGQaxvmbSpM8/peI3sxV+mXyWYrdUkOc0rTZgjo7bIfZxO9tx/tMZOzGTBXvAGRHtH
- uKr0x1nNHVE6S2u+nLsgK5kmSfkcfrnp+B2Y5SUiDt8GwmY3R9obtdYMXdl87gD7zzb3AyCDw
- oFHJSZu4FfFqluAa45eRrQzEhIR7HxOJrXVV73Ohqva5fhPGRGOcmjWl66V+5wcD6ncG5iTch
- YZq4v5u5+ZTIJ2UsuBVqeXejErExUDIWYlfVCuPMvog4kAUJtaX2iYAvjATTWLxbvjOqQevPS
- 41fPdEavbwznshXYqYP82ynKUKPv1Kp8fk1zVNHtE93lBy8V3PmUFzX+9+35qwMZcXu8Q84R4
- MalSTIQy3GjzspCFBM3d1dQyyNTc2XH3A9Xa5mQz8DnyucbAwivJi18GrdBgxnuaZDLSk3Mtn
- a85nXOjJbns54ctpJ1qJIdq1AxovXO1Rm+Ulz01XJKuA2wUGeTfMakqJAsdXX22Ee/XsI3dQC
- 5SlKZ53Iei6rFqWtVXQxvxN/f006wFFZSrEb/ndbRO2cnQfoKjOwWSc9KAG7yNuZS1YlP0y6B
- tvok3TbRf/iySi52oU1vefAJIb4/Se/0swKrtdTCjmQ/gk6/Uuiws6oDDi9tEQ+WznnmuRBVp
- zsF5zeA7L8CFlPet37lMLr9UvOxUYI0VhoyY/nv8MwqVac8sXquPUo7Li8jpTU7BbaE0DjIZu
- v+FLiHx1fPsrSQ8oNz28Nxa7T8XWFDGktydW+/8KS8NqL17+NoCvR+eNHmE=
+        id S1726094AbfEFOdP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 May 2019 10:33:15 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:58658 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725883AbfEFOdP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 May 2019 10:33:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=W058nK+QSPPuhBMTAKnmZqxwQYuCwqOACffPxhrFSwY=; b=Q5212ex2RUlj27dhj3Ux19gO0
+        ABvUKqMv3cMo3KG9neqt+nO2sLiUHUb536ViOxu08tHCZsnNvVbxPpQrtwI0U5Zgp9ChXns5N4nBc
+        MMoWmw84bcwijC+jlVGnjXknAqp/0fLxrLHFng5M/EeQF7nj1nrwWrfUC3zLm3xHkqIj0=;
+Received: from kd111239184067.au-net.ne.jp ([111.239.184.67] helo=finisterre.ee.mobilebroadband)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hNefx-0001pl-Tr; Mon, 06 May 2019 14:33:06 +0000
+Received: by finisterre.ee.mobilebroadband (Postfix, from userid 1000)
+        id 43A7244000C; Mon,  6 May 2019 15:33:01 +0100 (BST)
+Date:   Mon, 6 May 2019 23:33:01 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] spi updates for v5.2
+Message-ID: <20190506143301.GU14916@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dZRDC+ooC0woGCz3"
+Content-Disposition: inline
+X-Cookie: -- I have seen the FUN --
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This is a new driver for the Silicon Labs CP2130 USB-to-SPI bridge. It
-is meant to be used for hotplug devices, e. g. the CP2130 combined with
-the MCP251x CAN controllers.
 
-Configuration happens when plugged (e. g. from udev), the CP2130 driver
-provides sysfs files to control the bridge setup. From there you can
-configured SPI bus settings, the interrupt pin, the attached
-devices. You can also provide platform data in binary format if the
-attached chip requires this.
+--dZRDC+ooC0woGCz3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The OTP ROM can be used to setup a specific product/vendor id to
-simplify different device setup recognition.
+The following changes since commit 37624b58542fb9f2d9a70e6ea006ef8a5f66c30b:
 
-Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
----
- drivers/spi/Kconfig      |    6 +
- drivers/spi/Makefile     |    1 +
- drivers/spi/spi-cp2130.c | 1672 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 1679 insertions(+)
- create mode 100644 drivers/spi/spi-cp2130.c
+  Linux 5.1-rc7 (2019-04-28 17:04:13 -0700)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index f761655..a58684c 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -205,6 +205,12 @@ config SPI_COLDFIRE_QSPI
- 	  This enables support for the Coldfire QSPI controller in master
- 	  mode.
- 
-+config SPI_CP2130
-+	tristate "CP2130 USB-SPI bridge"
-+	depends on USB
-+	help
-+	  This enables support for Silicon Labs CP2130 USB-to-SPI bridge.
-+
- config SPI_DAVINCI
- 	tristate "Texas Instruments DaVinci/DA8x/OMAP-L/AM1x SoC SPI controller"
- 	depends on ARCH_DAVINCI || ARCH_KEYSTONE
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index d8fc03c..7ec9204 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -31,6 +31,7 @@ obj-$(CONFIG_SPI_BUTTERFLY)		+= spi-butterfly.o
- obj-$(CONFIG_SPI_CADENCE)		+= spi-cadence.o
- obj-$(CONFIG_SPI_CLPS711X)		+= spi-clps711x.o
- obj-$(CONFIG_SPI_COLDFIRE_QSPI)		+= spi-coldfire-qspi.o
-+obj-$(CONFIG_SPI_CP2130)		+= spi-cp2130.o
- obj-$(CONFIG_SPI_DAVINCI)		+= spi-davinci.o
- obj-$(CONFIG_SPI_DLN2)			+= spi-dln2.o
- obj-$(CONFIG_SPI_DESIGNWARE)		+= spi-dw.o
-diff --git a/drivers/spi/spi-cp2130.c b/drivers/spi/spi-cp2130.c
-new file mode 100644
-index 0000000..99a0254
---- /dev/null
-+++ b/drivers/spi/spi-cp2130.c
-@@ -0,0 +1,1672 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/* Kernel driver for Silicon Labs CP2130 USB-to-SPI bridge.
-+ *
-+ * Copyright (C) 2019 Jochen Henneberg (jh@henneberg-systemdesign.com)
-+ */
-+
-+#include <linux/slab.h>
-+#include <linux/module.h>
-+#include <linux/usb.h>
-+#include <linux/spi/spi.h>
-+#include <linux/workqueue.h>
-+#include <linux/string.h>
-+#include <asm/byteorder.h>
-+#include <linux/interrupt.h>
-+#include <linux/irqdomain.h>
-+#include <linux/irq.h>
-+#include <linux/gpio.h>
-+#include <linux/version.h>
-+
-+#define USB_DEVICE_ID_CP2130         0x87a0
-+#define USB_VENDOR_ID_CYGNAL         0x10c4
-+
-+#define CP2130_NUM_GPIOS             11
-+#define CP2130_IRQ_POLL_INTERVAL     (1 * 1000 * 1000) /* us */
-+
-+#define CP2130_MAX_USB_PACKET_SIZE   64
-+
-+#define CP2130_CMD_READ              0x00
-+#define CP2130_CMD_WRITE             0x01
-+#define CP2130_CMD_WRITEREAD         0x02
-+#define CP2130_BULK_OFFSET_CMD       2
-+#define CP2130_BULK_OFFSET_LENGTH    4
-+#define CP2130_BULK_OFFSET_DATA      8
-+#define CP2130_BULK_HEADER_SIZE      (CP2130_BULK_OFFSET_DATA)
-+
-+#define CP2130_BREQ_GET_GPIO_VALUES  0x20
-+#define CP2130_BREQ_SET_GPIO_MODE    0x23
-+#define CP2130_BREQ_GET_GPIO_CS      0x24
-+#define CP2130_BREQ_SET_GPIO_CS      0x25
-+#define CP2130_BREQ_GET_SPI_WORD     0x30
-+#define CP2130_BREQ_SET_SPI_WORD     0x31
-+#define CP2130_BREQ_GET_SPI_DELAY    0x32
-+#define CP2130_BREQ_SET_SPI_DELAY    0x33
-+#define CP2130_BREQ_GET_LOCK_BYTE    0x6E
-+#define CP2130_BREQ_GET_PIN_CONFIG   0x6C
-+#define CP2130_BREQ_SET_PIN_CONFIG   0x6D
-+
-+#define CP2130_BREQ_MEMORY_KEY       0xA5F1
-+
-+/* cp2130 attached chip */
-+struct cp2130_channel {
-+	int updated;
-+	int cs_en; /* chip-select enable mode */
-+	int irq_pin;
-+	int clock_phase;
-+	int polarity;
-+	int cs_pin_mode;
-+	int clock_freq; /* spi clock frequency */
-+	int delay_mask; /* cs enable, pre-deassert,
-+			 * post assert and inter-byte delay enable
-+			 */
-+	int inter_byte_delay;
-+	int pre_deassert_delay;
-+	int post_assert_delay;
-+	char *modalias;
-+	void *pdata;
-+	struct spi_device *chip;
-+};
-+
-+/* cp2130 OTP ROM */
-+struct cp2130_otprom {
-+	int lock_byte;
-+	int pin_config[CP2130_NUM_GPIOS];
-+	int suspend_level;
-+	int suspend_mode;
-+	int wakeup_mask;
-+	int wakeup_match;
-+	int divider;
-+};
-+
-+struct cp2130_gpio_irq {
-+	struct irq_domain *irq_domain;
-+	struct mutex      irq_lock;
-+	int               virq[CP2130_NUM_GPIOS];
-+	u16               irq_mask;
-+};
-+
-+/* cp2130 device structure */
-+struct cp2130_device {
-+	struct usb_device *udev;
-+	struct usb_interface *intf;
-+	struct spi_master *spi_master;
-+
-+	struct mutex chn_config_lock;
-+	struct mutex otprom_lock;
-+	struct mutex usb_bus_lock;
-+
-+	struct work_struct update_chn_config;
-+	struct work_struct read_chn_config;
-+	struct work_struct update_otprom;
-+	struct work_struct read_otprom;
-+	struct cp2130_channel chn_configs[CP2130_NUM_GPIOS];
-+	struct cp2130_otprom otprom_config;
-+
-+	struct cp2130_gpio_irq irq_chip;
-+	struct work_struct irq_work;
-+
-+	struct gpio_chip gpio_chip;
-+	char *gpio_names[CP2130_NUM_GPIOS];
-+	u8 gpio_states[2];
-+
-+	int current_channel;
-+
-+	int irq_poll_interval;
-+
-+	u8 *usb_xfer;
-+};
-+
-+/* Prototypes */
-+static int cp2130_probe(struct usb_interface *intf,
-+			const struct usb_device_id *id);
-+static void cp2130_disconnect(struct usb_interface *intf);
-+
-+static const struct usb_device_id cp2130_devices[] = {
-+	{ USB_DEVICE(USB_VENDOR_ID_CYGNAL, USB_DEVICE_ID_CP2130) },
-+	{ }
-+};
-+
-+/* USB device functions */
-+static struct usb_driver cp2130_driver = {
-+	.name                 = "cp2130",
-+	.probe                = cp2130_probe,
-+	.disconnect           = cp2130_disconnect,
-+	.suspend              = NULL,
-+	.resume               = NULL,
-+	.reset_resume         = NULL,
-+	.id_table             = cp2130_devices,
-+	.supports_autosuspend = 0,
-+};
-+
-+static int __init cp2130_init(void)
-+{
-+	int ret;
-+
-+	pr_debug("%s", __func__);
-+	ret = usb_register_driver(&cp2130_driver, THIS_MODULE, "cp2130");
-+	if (ret)
-+		pr_err("can't register cp2130 driver");
-+
-+	return ret;
-+}
-+
-+static void __exit cp2130_exit(void)
-+{
-+	pr_debug("%s", __func__);
-+	usb_deregister(&cp2130_driver);
-+}
-+
-+static int cp2130_spi_setup(struct spi_device *spi)
-+{
-+	return 0;
-+}
-+
-+static void cp2130_spi_cleanup(struct spi_device *spi)
-+{
-+}
-+
-+static char *cp2130_spi_speed_to_string(int reg_val)
-+{
-+	switch (reg_val) {
-+	case 0: return "12 MHz   ";
-+	case 1: return "6 MHz    ";
-+	case 2: return "3 MHz    ";
-+	case 3: return "1.5 MHz  ";
-+	case 4: return "750 kHz  ";
-+	case 5: return "375 kHz  ";
-+	case 6: return "187.5 kHz";
-+	case 7: return "93.8 kHz ";
-+	}
-+	return "";
-+}
-+
-+static unsigned int cp2130_spi_speed_to_nsec(int reg_val)
-+{
-+#define USEC (1 * 1000 * 1000)
-+#define FREQ_MHZ(n) (n * 1000)
-+#define FREQ_KHZ(n) (n)
-+
-+	switch (reg_val) {
-+	case 0: return USEC / FREQ_MHZ(12);
-+	case 1: return USEC / FREQ_MHZ(6);
-+	case 2: return USEC / FREQ_MHZ(3);
-+	case 3: return USEC / FREQ_KHZ(1500);
-+	case 4: return USEC / FREQ_KHZ(750);
-+	case 5: return USEC / FREQ_KHZ(375);
-+	case 6: return USEC / FREQ_KHZ(187);
-+	case 7: return USEC / FREQ_KHZ(93);
-+	}
-+	return USEC / FREQ_KHZ(93);
-+}
-+
-+static ssize_t channel_config_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct usb_interface *intf;
-+	struct usb_device *udev;
-+	struct cp2130_device *chip;
-+	struct cp2130_channel *chn;
-+	int i = 0;
-+	char out[256];
-+	ssize_t ret;
-+
-+	intf = to_usb_interface(dev);
-+	if (!intf)
-+		return -EFAULT;
-+
-+	chip = usb_get_intfdata(intf);
-+	if (!chip)
-+		return -EFAULT;
-+
-+	udev = usb_get_dev(interface_to_usbdev(intf));
-+	if (!udev)
-+		return -EFAULT;
-+
-+	ret = sprintf(out, "channel\tcs_mode\tirq_pin\tclock_phase\tpolarity"
-+		"\tcs_pin_mode\tclock_freq\tdelay_mask"
-+		"\tinter_byte_delay\tpre_delay\tpost_delay"
-+		"\tmod_alias\n");
-+	strcat(buf, out);
-+	mutex_lock(&chip->chn_config_lock);
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		chn = &chip->chn_configs[i];
-+		ret += sprintf(out, "%d\t%d\t%d\t%d\t\t%d\t\t%d\t\t%s\t%d"
-+			"\t\t%d\t\t\t%d\t\t%d\t\t'%s'\n",
-+			i, chn->cs_en, chn->irq_pin, chn->clock_phase,
-+			chn->polarity, chn->cs_pin_mode,
-+			cp2130_spi_speed_to_string(chn->clock_freq),
-+			chn->delay_mask, chn->inter_byte_delay,
-+			chn->pre_deassert_delay, chn->post_assert_delay,
-+			chn->modalias);
-+		strcat(buf, out);
-+	}
-+	mutex_unlock(&chip->chn_config_lock);
-+
-+	return ret;
-+}
-+
-+static ssize_t channel_config_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	struct cp2130_channel chn;
-+	struct usb_interface *intf;
-+	struct usb_device *udev;
-+	struct cp2130_device *chip;
-+	char *lbuf;
-+	char *del; /* delimiter ',' */
-+	char *pos; /* current item position in buffer */
-+	int i, ret, eos, chn_id;
-+
-+	intf = to_usb_interface(dev);
-+	if (!intf)
-+		return -EFAULT;
-+
-+	chip = usb_get_intfdata(intf);
-+	if (!chip)
-+		return -EFAULT;
-+
-+	udev = usb_get_dev(interface_to_usbdev(intf));
-+	if (!udev)
-+		return -EFAULT;
-+
-+	dev_dbg(&udev->dev, "received '%s' from 'channel_config'", buf);
-+
-+	if (!count)
-+		return -EINVAL;
-+
-+	lbuf = kstrdup(buf, GFP_KERNEL);
-+	if (!lbuf)
-+		return -ENOMEM;
-+
-+	pos = lbuf;
-+	eos = i = 0;
-+	do {
-+		/* search for next separator or end-of-string */
-+		del = strchr(pos, ',');
-+		if (!del)
-+			del = strchr(pos, '\0');
-+		if (!del) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		if (*del == '\0')
-+			eos = 1;
-+		*del = '\0';
-+
-+		dev_dbg(&udev->dev, "parsing: %s(%d)", pos, i);
-+
-+		/* parse current item */
-+		switch (i) {
-+		case 0: /* channel id */
-+			ret = kstrtoint(pos, 10, &chn_id);
-+			ret |= (chn_id < 0 || chn_id > 10) ? -EINVAL : 0;
-+			if (ret)
-+				goto out;
-+			break;
-+		case 1: /* chip-select enable */
-+			ret = kstrtoint(pos, 10, &chn.cs_en);
-+			ret |= (chn.cs_en < 0 || chn.cs_en > 2) ? -EINVAL : 0;
-+			if (ret)
-+				goto out;
-+			break;
-+		case 2: /* irq pin */
-+			ret = kstrtoint(pos, 10, &chn.irq_pin);
-+			ret |= (chn.irq_pin > 10) ? -EINVAL : 0;
-+			if (ret)
-+				goto out;
-+			break;
-+		case 3: /* clock phase */
-+			ret = kstrtoint(pos, 10, &chn.clock_phase);
-+			if (ret)
-+				goto out;
-+			chn.clock_phase = !!chn.clock_phase;
-+			break;
-+		case 4: /* polarity */
-+			ret = kstrtoint(pos, 10, &chn.polarity);
-+			if (ret)
-+				goto out;
-+			chn.polarity = !!chn.polarity;
-+			break;
-+		case 5: /* chip-select pin mode */
-+			ret = kstrtoint(pos, 10, &chn.cs_pin_mode);
-+			if (ret)
-+				goto out;
-+			chn.cs_pin_mode = !!chn.cs_pin_mode;
-+			break;
-+		case 6: /* spi clock frequency */
-+			ret = kstrtoint(pos, 10, &chn.clock_freq);
-+			ret |= (chn.clock_freq < 0 || chn.clock_freq > 7) ?
-+				-EINVAL : 0;
-+			if (ret)
-+				goto out;
-+			break;
-+		case 7: /* delay mask */
-+			ret = kstrtoint(pos, 10, &chn.delay_mask);
-+			ret |= (chn.delay_mask < 0 || chn.delay_mask > 15) ?
-+				-EINVAL : 0;
-+			if (ret)
-+				goto out;
-+			break;
-+		case 8: /* inter-byte delay */
-+			ret = kstrtoint(pos, 10, &chn.inter_byte_delay);
-+			ret |= (chn.inter_byte_delay < 0 ||
-+				chn.inter_byte_delay > 0xffff) ?
-+				-EINVAL : 0;
-+			if (ret)
-+				goto out;
-+			break;
-+		case 9: /* pre-deassert delay */
-+			ret = kstrtoint(pos, 10, &chn.pre_deassert_delay);
-+			ret |= (chn.pre_deassert_delay < 0 ||
-+				chn.pre_deassert_delay > 0xffff) ?
-+				-EINVAL : 0;
-+			if (ret)
-+				goto out;
-+			break;
-+		case 10: /* post-assert delay */
-+			ret = kstrtoint(pos, 10, &chn.post_assert_delay);
-+			ret |= (chn.post_assert_delay < 0 ||
-+				chn.post_assert_delay > 0xffff) ?
-+				-EINVAL : 0;
-+			if (ret)
-+				goto out;
-+			break;
-+		case 11: /* modalias */
-+			chn.modalias = kstrdup(pos, GFP_KERNEL);
-+			if (!chn.modalias) {
-+				ret = -EINVAL;
-+				goto out;
-+			}
-+			break;
-+		default:
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		/* move the parser position forward */
-+		pos = ++del;
-+		i++;
-+	} while (!eos);
-+
-+	if (i < 11) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	chn.updated = 1;
-+	mutex_lock(&chip->chn_config_lock);
-+	if (chip->chn_configs[chn_id].updated) {
-+		ret = -EINVAL;
-+		goto unlock;
-+	}
-+	/* preserve pdata */
-+	chn.pdata = chip->chn_configs[chn_id].pdata;
-+
-+	memcpy(&chip->chn_configs[chn_id], &chn, sizeof(chn));
-+	schedule_work(&chip->update_chn_config);
-+	ret = count;
-+
-+unlock:
-+	mutex_unlock(&chip->chn_config_lock);
-+
-+out:
-+	kfree(lbuf);
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(channel_config);
-+
-+
-+static ssize_t channel_pdata_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	struct usb_interface *intf;
-+	struct usb_device *udev;
-+	struct cp2130_device *chip;
-+	struct cp2130_channel *chn;
-+	int chn_id;
-+	int ret;
-+
-+	intf = to_usb_interface(dev);
-+	if (!intf)
-+		return -EFAULT;
-+
-+	chip = usb_get_intfdata(intf);
-+	if (!chip)
-+		return -EFAULT;
-+
-+	udev = usb_get_dev(interface_to_usbdev(intf));
-+	if (!udev)
-+		return -EFAULT;
-+
-+	/* first byte is channel id,
-+	 * then follows binary platform data
-+	 */
-+	if (count < 2)
-+		return -EINVAL;
-+
-+	chn_id = buf[0];
-+	dev_dbg(&udev->dev, "received pdata for channel %u", chn_id);
-+
-+	if (chn_id < 0 || chn_id >= CP2130_NUM_GPIOS)
-+		return -EINVAL;
-+
-+	chn = &chip->chn_configs[chn_id];
-+
-+	/* pdata can be set only once */
-+	if (chn->pdata) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	dev_dbg(&udev->dev, "set pdata for channel %u", chn_id);
-+
-+	mutex_lock(&chip->chn_config_lock);
-+	chn->pdata = kzalloc(count - 1, GFP_KERNEL);
-+	if (!chn->pdata) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	if (!memcpy(chn->pdata, buf + 1, count - 1)) {
-+		kfree(chn->pdata);
-+		chn->pdata = NULL;
-+		ret = -EIO;
-+		goto out;
-+	}
-+
-+	ret = count;
-+out:
-+	mutex_unlock(&chip->chn_config_lock);
-+	return ret;
-+}
-+static DEVICE_ATTR_WO(channel_pdata);
-+
-+static char *cp2130_pin_mode_to_string(int val)
-+{
-+	switch (val) {
-+	case 0:  return "in        ";
-+	case 1:  return "open-drain";
-+	case 2:  return "push-pull ";
-+	case 3:  return "nCS       ";
-+	default: return "special   ";
-+	}
-+	return "";
-+}
-+
-+static ssize_t otp_rom_show(struct device *dev,
-+			struct device_attribute *attr, char *buf)
-+{
-+	struct usb_interface *intf;
-+	struct usb_device *udev;
-+	struct cp2130_device *chip;
-+	int pin;
-+	int i = 0;
-+	char out[256];
-+	ssize_t ret;
-+
-+	intf = to_usb_interface(dev);
-+	if (!intf)
-+		return -EFAULT;
-+
-+	chip = usb_get_intfdata(intf);
-+	if (!chip)
-+		return -EFAULT;
-+
-+	udev = usb_get_dev(interface_to_usbdev(intf));
-+	if (!udev)
-+		return -EFAULT;
-+
-+	mutex_lock(&chip->otprom_lock);
-+
-+	ret = sprintf(out, "OTP lock status (ro):"
-+		"\nvid\t\tpid\t\tmax_power\tpower_mode"
-+		"\tversion\t\tmanu_2\t\tmanu_1"
-+		"\t\tpriority\tproduct_1\tproduct_2\tserial"
-+		"\t\tpin_config\n");
-+	strcat(buf, out);
-+	for (i = 0; i < 12; i++) {
-+		if (!!((chip->otprom_config.lock_byte >> i) & 1))
-+			ret += sprintf(out, "unlocked\t");
-+		else
-+			ret += sprintf(out, "locked\t\t");
-+		strcat(buf, out);
-+	}
-+	ret += sprintf(out, "\n\nOTP pin configuration (rw):\n");
-+	strcat(buf, out);
-+
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		ret += sprintf(out, "pin %d\t\t", i);
-+		strcat(buf, out);
-+	}
-+	strcat(buf, "\n");
-+	ret++;
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		pin = chip->otprom_config.pin_config[i];
-+		ret += sprintf(out, "%s\t", cp2130_pin_mode_to_string(pin));
-+		strcat(buf, out);
-+	}
-+
-+	ret += sprintf(out, "\n\nOTP pin configuration extra data(ro):"
-+		"\nsuspend_level\tsuspend_mode\twakeup_mask\twakeup_match"
-+		"\tdivider\n");
-+	strcat(buf, out);
-+	ret += sprintf(out, "%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
-+		chip->otprom_config.suspend_level,
-+		chip->otprom_config.suspend_mode,
-+		chip->otprom_config.wakeup_mask,
-+		chip->otprom_config.wakeup_match,
-+		chip->otprom_config.divider);
-+	strcat(buf, out);
-+
-+	mutex_unlock(&chip->otprom_lock);
-+
-+	return ret;
-+}
-+
-+static ssize_t otp_rom_store(struct device *dev,
-+			struct device_attribute *attr,
-+			const char *buf, size_t count)
-+{
-+	int pin_config[CP2130_NUM_GPIOS];
-+	struct usb_interface *intf;
-+	struct usb_device *udev;
-+	struct cp2130_device *chip;
-+	char *lbuf;
-+	char *del; /* delimiter ',' */
-+	char *pos; /* current item position in buffer */
-+	int i, ret, eos;
-+
-+	intf = to_usb_interface(dev);
-+	if (!intf)
-+		return -EFAULT;
-+
-+	chip = usb_get_intfdata(intf);
-+	if (!chip)
-+		return -EFAULT;
-+
-+	udev = usb_get_dev(interface_to_usbdev(intf));
-+	if (!udev)
-+		return -EFAULT;
-+
-+	dev_dbg(&udev->dev, "received '%s' from 'otp_rom'", buf);
-+
-+	if (!count)
-+		return -EINVAL;
-+
-+	lbuf = kstrdup(buf, GFP_KERNEL);
-+	if (!lbuf)
-+		return -ENOMEM;
-+
-+	pos = lbuf;
-+	eos = i = 0;
-+	do {
-+		/* search for next separator or end-of-string */
-+		del = strchr(pos, ',');
-+		if (!del)
-+			del = strchr(pos, '\0');
-+		if (!del) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		if (*del == '\0')
-+			eos = 1;
-+		*del = '\0';
-+
-+		dev_dbg(&udev->dev, "parsing: %s(%d)", pos, i);
-+
-+		if (i == CP2130_NUM_GPIOS) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		/* parse current item */
-+		if (*pos == 'x') {
-+			pin_config[i] = -1;
-+		} else {
-+			ret = kstrtoint(pos, 10, &(pin_config[i]));
-+			ret |= (pin_config[i] < 0 ||
-+				pin_config[i] > 3) ?
-+				-EINVAL : 0;
-+			if (ret)
-+				goto out;
-+		}
-+
-+		/* move the parser position forward */
-+		pos = ++del;
-+		i++;
-+	} while (!eos);
-+
-+	if (i < 11) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	mutex_lock(&chip->otprom_lock);
-+
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		if (pin_config[i] < 0)
-+			continue;
-+		pr_info("cp2130 read OTP: %d", pin_config[i]);
-+		chip->otprom_config.pin_config[i] = pin_config[i];
-+	}
-+	schedule_work(&chip->update_otprom);
-+	ret = count;
-+
-+	mutex_unlock(&chip->otprom_lock);
-+
-+out:
-+	kfree(lbuf);
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(otp_rom);
-+
-+static ssize_t irq_poll_interval_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct usb_interface *intf;
-+	struct usb_device *udev;
-+	struct cp2130_device *chip;
-+	ssize_t ret;
-+
-+	intf = to_usb_interface(dev);
-+	if (!intf)
-+		return -EFAULT;
-+
-+	chip = usb_get_intfdata(intf);
-+	if (!chip)
-+		return -EFAULT;
-+
-+	udev = usb_get_dev(interface_to_usbdev(intf));
-+	if (!udev)
-+		return -EFAULT;
-+
-+	ret = sprintf(buf, "%d us\n", chip->irq_poll_interval);
-+
-+	return ret;
-+}
-+
-+static ssize_t irq_poll_interval_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	struct usb_interface *intf;
-+	struct usb_device *udev;
-+	struct cp2130_device *chip;
-+	int ret, interval;
-+
-+	intf = to_usb_interface(dev);
-+	if (!intf)
-+		return -EFAULT;
-+
-+	chip = usb_get_intfdata(intf);
-+	if (!chip)
-+		return -EFAULT;
-+
-+	udev = usb_get_dev(interface_to_usbdev(intf));
-+	if (!udev)
-+		return -EFAULT;
-+
-+	ret = kstrtoint(buf, 10, &interval);
-+
-+	/* we only allow numbers and nothing below 10us */
-+	if (ret || interval < 10)
-+		return -EINVAL;
-+
-+	chip->irq_poll_interval = interval;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(irq_poll_interval);
-+
-+static int cp2130_transfer_bulk_message(struct spi_master *master,
-+					struct spi_transfer *xfer,
-+					unsigned int pos)
-+{
-+	int header_size, data_size, len, tx_len;
-+	int ret = -EINVAL;
-+	unsigned int limit;
-+	unsigned int recv_pipe, xmit_pipe;
-+	struct cp2130_device *dev =
-+		(struct cp2130_device *) spi_master_get_devdata(master);
-+	bool first_frame = !pos;
-+
-+	xmit_pipe = usb_sndbulkpipe(dev->udev, 0x01);
-+	recv_pipe = usb_rcvbulkpipe(dev->udev, 0x82);
-+
-+	dev_dbg(&master->dev, "recv/xmit pipes: %u / %u",
-+		recv_pipe, xmit_pipe);
-+
-+	/* if this is the first packet we need to prepare the header,
-+	 * if not we can use all available space in the packet
-+	 */
-+	if (first_frame) {
-+		/* zero the transfer buffer header, this implicitely
-+		 * initializes the reserved fields
-+		 */
-+		memset(dev->usb_xfer, 0, CP2130_BULK_HEADER_SIZE);
-+
-+		/* init length field */
-+		*((u32 *) (dev->usb_xfer + CP2130_BULK_OFFSET_LENGTH)) =
-+			__cpu_to_le32(xfer->len);
-+
-+		header_size = CP2130_BULK_HEADER_SIZE;
-+
-+		/* now set the command type according to the SPI
-+		 * message setup
-+		 */
-+		if (xfer->tx_buf && xfer->rx_buf) {
-+			/* Simultaneous SPI write and read */
-+			limit = CP2130_MAX_USB_PACKET_SIZE -
-+				CP2130_BULK_HEADER_SIZE;
-+			data_size = min(limit, xfer->len - pos);
-+			tx_len = header_size + data_size;
-+			dev->usb_xfer[CP2130_BULK_OFFSET_CMD] =
-+				CP2130_CMD_WRITEREAD;
-+		} else if (xfer->tx_buf) {
-+			/* SPI write only */
-+			limit = CP2130_MAX_USB_PACKET_SIZE -
-+				CP2130_BULK_HEADER_SIZE;
-+			data_size = min(limit, xfer->len - pos);
-+			tx_len = header_size + data_size;
-+			dev->usb_xfer[CP2130_BULK_OFFSET_CMD] =
-+				CP2130_CMD_WRITE;
-+		} else if (xfer->rx_buf) {
-+			/* SPI read only */
-+			limit = CP2130_MAX_USB_PACKET_SIZE;
-+			data_size = min(limit, xfer->len - pos);
-+			tx_len = CP2130_BULK_HEADER_SIZE;
-+			dev->usb_xfer[CP2130_BULK_OFFSET_CMD] =
-+				CP2130_CMD_READ;
-+		}
-+	} else {
-+		header_size = 0;
-+		limit = CP2130_MAX_USB_PACKET_SIZE;
-+		data_size = min(limit, xfer->len - pos);
-+		tx_len = header_size + data_size;
-+	}
-+
-+	/* copy chunk of SPI tx data */
-+	if (xfer->tx_buf)
-+		memcpy(dev->usb_xfer + header_size, xfer->tx_buf + pos,
-+			data_size);
-+
-+	/* prepare URB and submit sync CP2130 / AN792 p.7: 'any
-+	 * previous data transfer command must complete before another
-+	 * data transfer command is issued', so there is no advantage
-+	 * from using the async USB API
-+	 */
-+	if (xfer->tx_buf && xfer->rx_buf) {
-+		/* simultaneous SPI write and read */
-+		ret = usb_bulk_msg(dev->udev, xmit_pipe, dev->usb_xfer,
-+				tx_len, &len, 200);
-+		dev_dbg(&master->dev,
-+			"write-read - usb tx phase: ret=%d, wrote %d/%d",
-+			ret, len, tx_len);
-+		if (ret)
-+			goto out;
-+		ret = usb_bulk_msg(dev->udev, recv_pipe, xfer->rx_buf + pos,
-+				data_size, &len, 200);
-+		dev_dbg(&master->dev,
-+			"write-read - usb rx phase: ret=%d, read %d/%d",
-+			ret, len, data_size);
-+	} else if (xfer->tx_buf) {
-+		/* SPI write only */
-+		ret = usb_bulk_msg(dev->udev, xmit_pipe, dev->usb_xfer,
-+				tx_len, &len, 200);
-+		dev_dbg(&master->dev,
-+			"write - usb tx phase: ret=%d, wrote %d/%d",
-+			ret, len, tx_len);
-+		len -= header_size;
-+	} else if (xfer->rx_buf) {
-+		/* SPI read only */
-+		if (first_frame) { /* write read request only for first frame */
-+			ret = usb_bulk_msg(dev->udev, xmit_pipe, dev->usb_xfer,
-+					tx_len, &len, 200);
-+			dev_dbg(&master->dev,
-+				"read - usb tx phase: ret=%d, wrote %d/%d",
-+				ret, len, tx_len);
-+			if (ret)
-+				goto out;
-+		}
-+		ret = usb_bulk_msg(dev->udev, recv_pipe, xfer->rx_buf + pos,
-+				data_size, &len, 200);
-+		dev_dbg(&master->dev,
-+			"read - usb rx phase: ret=%d, read %d/%d",
-+			ret, len, data_size);
-+	}
-+
-+out:
-+	return (!ret ? len : ret);
-+}
-+
-+static int cp2130_spi_transfer_one_message(struct spi_master *master,
-+					struct spi_message *mesg)
-+{
-+	struct spi_transfer *xfer;
-+	struct cp2130_device *dev =
-+		(struct cp2130_device *) spi_master_get_devdata(master);
-+	int ret = 0, chn_id;
-+	struct cp2130_channel *chn;
-+	unsigned int xmit_ctrl_pipe;
-+	unsigned int pos, transfer_delay;
-+
-+	dev_dbg(&master->dev, "spi transfer one message");
-+
-+	/* search for spi setup of this device */
-+	for (chn_id = 0; chn_id < CP2130_NUM_GPIOS; chn_id++) {
-+		chn = &dev->chn_configs[chn_id];
-+		if (chn->chip == mesg->spi)
-+			break;
-+	}
-+
-+	if (chn_id == CP2130_NUM_GPIOS) {
-+		ret = -ENODEV;
-+		goto out_notfound;
-+	}
-+
-+	mutex_lock(&dev->usb_bus_lock);
-+
-+	xmit_ctrl_pipe = usb_sndctrlpipe(dev->udev, 0);
-+	if (chn_id != dev->current_channel) {
-+		dev_dbg(&dev->udev->dev, "load setup for channel %d", chn_id);
-+		dev->usb_xfer[0] = chn_id;
-+		dev->usb_xfer[1] = chn->cs_en;
-+		ret = usb_control_msg(
-+			dev->udev, xmit_ctrl_pipe,
-+			CP2130_BREQ_SET_GPIO_CS,
-+			USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
-+			0, 0,
-+			dev->usb_xfer, 2, 200);
-+		if (ret != 2)
-+			goto out;
-+
-+		dev->current_channel = chn_id;
-+	}
-+
-+	/* iterate through all transfers */
-+	list_for_each_entry(xfer, &mesg->transfers, transfer_list) {
-+		dev_dbg(&master->dev, "spi transfer stats: %p, %p, %d",
-+			xfer->tx_buf, xfer->rx_buf, xfer->len);
-+
-+		/* empty transfer */
-+		if (!xfer->tx_buf && !xfer->rx_buf) {
-+			udelay(xfer->delay_usecs);
-+			continue;
-+		}
-+
-+		/* be prepared for messages > 64 byte */
-+		pos = 0;
-+
-+		/* split the xfer data into chunks for 64 bytes and submit */
-+		while (pos < xfer->len) {
-+			ret = cp2130_transfer_bulk_message(master, xfer, pos);
-+
-+			/* wait until all bytes are sent on the SPI bus */
-+			transfer_delay = cp2130_spi_speed_to_nsec(
-+				chn->clock_freq) /* nsec per bit */
-+				* ret * 8 /* number of bits */
-+				* 2 /* headroom */
-+				/ 1000 /* to usec */;
-+			udelay(transfer_delay);
-+
-+			if (ret < 0)
-+				break;
-+			pos += ret;
-+		}
-+		udelay(xfer->delay_usecs);
-+		mesg->actual_length += xfer->len;
-+	}
-+
-+out:
-+	mutex_unlock(&dev->usb_bus_lock);
-+out_notfound:
-+	mesg->status = (ret < 0) ? ret : 0;
-+	if (mesg->status)
-+		dev_err(&master->dev, "USB transfer failed with %d", ret);
-+	spi_finalize_current_message(master); /* signal done to queue */
-+	return mesg->status;
-+}
-+
-+static int cp2130_irq_from_pin(struct cp2130_device *dev, int pin)
-+{
-+	return dev->irq_chip.virq[pin];
-+}
-+
-+static void cp2130_update_channel_config(struct work_struct *work)
-+{
-+	int i;
-+	int ret;
-+	unsigned int xmit_pipe;
-+	struct cp2130_device *dev = container_of(work,
-+						struct cp2130_device,
-+						update_chn_config);
-+	struct cp2130_channel *chn;
-+
-+	dev_dbg(&dev->udev->dev, "control pipes: %u, %u",
-+		usb_sndctrlpipe(dev->udev, 0),
-+		usb_rcvctrlpipe(dev->udev, 0));
-+
-+	xmit_pipe = usb_sndctrlpipe(dev->udev, 0);
-+
-+	mutex_lock(&dev->chn_config_lock);
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		chn = &dev->chn_configs[i];
-+		if (!chn->updated)
-+			continue;
-+
-+		if (chn->updated > 1)
-+			continue;
-+
-+		chn->updated++;
-+
-+		dev_dbg(&dev->udev->dev, "update config of channel %d", i);
-+		dev->usb_xfer[0] = i;
-+
-+		mutex_lock(&dev->usb_bus_lock);
-+
-+		dev_dbg(&dev->udev->dev, "set spi word");
-+		dev->usb_xfer[1] = (chn->clock_freq  << 0) |
-+			(chn->cs_pin_mode << 3) |
-+			(chn->polarity    << 4) |
-+			(chn->clock_phase << 5);
-+
-+		ret = usb_control_msg(
-+			dev->udev, xmit_pipe,
-+			CP2130_BREQ_SET_SPI_WORD,
-+			USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
-+			0, 0,
-+			dev->usb_xfer, 2, 200);
-+		if (ret < 2)
-+			goto error_unlock;
-+
-+		dev_dbg(&dev->udev->dev, "set spi delay");
-+		dev->usb_xfer[1] = chn->delay_mask;
-+
-+		dev->usb_xfer[2] = (chn->inter_byte_delay & 0xff00) >> 8;
-+		dev->usb_xfer[3] = (chn->inter_byte_delay & 0x00ff) >> 0;
-+
-+		dev->usb_xfer[4] = (chn->post_assert_delay & 0xff00) >> 8;
-+		dev->usb_xfer[5] = (chn->post_assert_delay & 0x00ff) >> 0;
-+
-+		dev->usb_xfer[6] = (chn->pre_deassert_delay & 0xff00) >> 8;
-+		dev->usb_xfer[7] = (chn->pre_deassert_delay & 0x00ff) >> 0;
-+		ret = usb_control_msg(
-+			dev->udev, xmit_pipe,
-+			CP2130_BREQ_SET_SPI_DELAY,
-+			USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
-+			0, 0,
-+			dev->usb_xfer, 8, 200);
-+		if (ret < 8)
-+			goto error_unlock;
-+
-+		/* configure irq pin as input if required */
-+		if (chn->irq_pin >= 0) {
-+			dev->usb_xfer[0] = chn->irq_pin;
-+			dev->usb_xfer[1] = 0; /* input */
-+			dev->usb_xfer[2] = 0; /* value, ignored for input */
-+			ret = usb_control_msg(
-+				dev->udev, xmit_pipe,
-+				CP2130_BREQ_SET_GPIO_MODE,
-+				USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
-+				0, 0,
-+				dev->usb_xfer, 3, 200);
-+			if (ret < 3)
-+				goto error_unlock;
-+		}
-+
-+		mutex_unlock(&dev->usb_bus_lock);
-+
-+		dev_dbg(&dev->udev->dev, "try register %s", chn->modalias);
-+
-+		chn->chip = spi_alloc_device(dev->spi_master);
-+		if (!chn->chip)
-+			goto error;
-+
-+		chn->chip->max_speed_hz = dev->spi_master->max_speed_hz;
-+		chn->chip->chip_select = i;
-+		chn->chip->mode = (chn->polarity << 1) | chn->clock_phase;
-+		chn->chip->bits_per_word = 8; /* we can only do this */
-+		chn->chip->irq = cp2130_irq_from_pin(dev, chn->irq_pin);
-+
-+		chn->chip->dev.platform_data = chn->pdata;
-+
-+		dev_dbg(&dev->udev->dev, "initialized %s chip", chn->modalias);
-+		strncpy(chn->chip->modalias, chn->modalias,
-+			sizeof(chn->chip->modalias));
-+
-+		ret = spi_add_device(chn->chip);
-+		if (ret)
-+			goto error;
-+
-+		dev_dbg(&dev->udev->dev, "%s probe complete", chn->modalias);
-+	}
-+	mutex_unlock(&dev->chn_config_lock);
-+
-+	schedule_work(&dev->read_chn_config);
-+	return;
-+
-+error_unlock:
-+	mutex_unlock(&dev->usb_bus_lock);
-+
-+error:
-+	mutex_unlock(&dev->chn_config_lock);
-+	dev_err(&dev->udev->dev, "failed to configure channel %d", i);
-+}
-+
-+static void cp2130_read_channel_config(struct work_struct *work)
-+{
-+	int i;
-+	int ret;
-+	unsigned int recv_pipe;
-+	struct cp2130_device *dev = container_of(work,
-+						struct cp2130_device,
-+						read_chn_config);
-+	struct cp2130_channel *chn;
-+
-+	dev_dbg(&dev->udev->dev, "control pipes: %u, %u",
-+		usb_sndctrlpipe(dev->udev, 0),
-+		usb_rcvctrlpipe(dev->udev, 0));
-+
-+	recv_pipe = usb_rcvctrlpipe(dev->udev, 0);
-+
-+	mutex_lock(&dev->chn_config_lock);
-+	mutex_lock(&dev->usb_bus_lock);
-+	dev_dbg(&dev->udev->dev, "read channel configs");
-+
-+	dev_dbg(&dev->udev->dev, "get spi word");
-+	ret = usb_control_msg(
-+		dev->udev, recv_pipe,
-+		CP2130_BREQ_GET_SPI_WORD,
-+		USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
-+		0, 0,
-+		dev->usb_xfer, 11, 200);
-+
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		chn = &dev->chn_configs[i];
-+
-+		chn->clock_freq = dev->usb_xfer[i] & 7;
-+		chn->cs_pin_mode = !!(dev->usb_xfer[i] & 8);
-+		chn->polarity = !!(dev->usb_xfer[i] & 16);
-+		chn->clock_phase = !!(dev->usb_xfer[i] & 32);
-+	}
-+
-+	dev_dbg(&dev->udev->dev, "get delays");
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		ret = usb_control_msg(
-+			dev->udev, recv_pipe,
-+			CP2130_BREQ_GET_SPI_DELAY,
-+			USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
-+			0, i,
-+			dev->usb_xfer, 8, 200);
-+
-+		chn = &dev->chn_configs[i];
-+
-+		chn->delay_mask = dev->usb_xfer[1];
-+		chn->inter_byte_delay = dev->usb_xfer[2] << 8;
-+		chn->inter_byte_delay |= dev->usb_xfer[3] & 0xff;
-+		chn->post_assert_delay = dev->usb_xfer[4] << 8;
-+		chn->post_assert_delay |= dev->usb_xfer[5] & 0xff;
-+		chn->pre_deassert_delay = dev->usb_xfer[6] << 8;
-+		chn->pre_deassert_delay |= dev->usb_xfer[7] & 0xff;
-+	}
-+
-+	mutex_unlock(&dev->usb_bus_lock);
-+	mutex_unlock(&dev->chn_config_lock);
-+}
-+
-+static void cp2130_update_otprom(struct work_struct *work)
-+{
-+	int i;
-+	struct cp2130_device *dev = container_of(work,
-+						struct cp2130_device,
-+						update_otprom);
-+	int ret;
-+	unsigned int xmit_pipe;
-+
-+	xmit_pipe = usb_sndctrlpipe(dev->udev, 0);
-+
-+	mutex_lock(&dev->otprom_lock);
-+
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++)
-+		dev->usb_xfer[i] = dev->otprom_config.pin_config[i];
-+
-+	mutex_lock(&dev->usb_bus_lock);
-+
-+	ret = usb_control_msg(
-+		dev->udev, xmit_pipe,
-+		CP2130_BREQ_SET_PIN_CONFIG,
-+		USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
-+		CP2130_BREQ_MEMORY_KEY, 0,
-+		dev->usb_xfer, 20, 200);
-+
-+	if (ret)
-+		dev_err(&dev->udev->dev, "error writing OTP ROM pin config");
-+
-+	mutex_unlock(&dev->usb_bus_lock);
-+	mutex_unlock(&dev->otprom_lock);
-+
-+	schedule_work(&dev->read_otprom);
-+}
-+
-+static void cp2130_read_otprom(struct work_struct *work)
-+{
-+	int i;
-+	int ret;
-+	unsigned int recv_pipe;
-+	struct cp2130_device *dev = container_of(work,
-+						struct cp2130_device,
-+						read_otprom);
-+
-+	dev_dbg(&dev->udev->dev, "control pipes: %u, %u",
-+		usb_sndctrlpipe(dev->udev, 0),
-+		usb_rcvctrlpipe(dev->udev, 0));
-+
-+	recv_pipe = usb_rcvctrlpipe(dev->udev, 0);
-+
-+	mutex_lock(&dev->otprom_lock);
-+	mutex_lock(&dev->usb_bus_lock);
-+	dev_dbg(&dev->udev->dev, "read OTP ROM");
-+
-+	dev_dbg(&dev->udev->dev, "get lock byte");
-+	ret = usb_control_msg(
-+		dev->udev, recv_pipe,
-+		CP2130_BREQ_GET_LOCK_BYTE,
-+		USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
-+		0, 0,
-+		dev->usb_xfer, 2, 200);
-+	dev_info(&dev->udev->dev, "lock byte %02X %02X",
-+		dev->usb_xfer[0] & 0xff, dev->usb_xfer[1] & 0x0f);
-+	dev->otprom_config.lock_byte = dev->usb_xfer[0] & 0xff;
-+	dev->otprom_config.lock_byte |= (dev->usb_xfer[1] & 0x0f) << 8;
-+
-+	dev_dbg(&dev->udev->dev, "get pin config");
-+	ret = usb_control_msg(
-+		dev->udev, recv_pipe,
-+		CP2130_BREQ_GET_PIN_CONFIG,
-+		USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
-+		0, 0,
-+		dev->usb_xfer, 20, 200);
-+
-+	for (i = 0; i < CP2130_NUM_GPIOS; ++i) {
-+		dev_info(&dev->udev->dev, "pin %d: %02X",
-+			i, dev->usb_xfer[i]);
-+		dev->otprom_config.pin_config[i] = dev->usb_xfer[i];
-+	}
-+	dev->otprom_config.suspend_level =
-+		(dev->usb_xfer[i] << 8) | dev->usb_xfer[i + 1];
-+	i += 2;
-+	dev->otprom_config.suspend_mode =
-+		(dev->usb_xfer[i] << 8) | dev->usb_xfer[i + 1];
-+	i += 2;
-+	dev->otprom_config.wakeup_mask =
-+		(dev->usb_xfer[i] << 8) | dev->usb_xfer[i + 1];
-+	i += 2;
-+	dev->otprom_config.wakeup_match =
-+		(dev->usb_xfer[i] << 8) | dev->usb_xfer[i + 1];
-+	i += 2;
-+	dev->otprom_config.divider = dev->usb_xfer[i];
-+
-+	mutex_unlock(&dev->usb_bus_lock);
-+	mutex_unlock(&dev->otprom_lock);
-+}
-+
-+static void cp2130_read_gpios(struct work_struct *work)
-+{
-+	unsigned int recv_pipe;
-+	struct cp2130_device *dev = container_of(work,
-+						struct cp2130_device,
-+						irq_work);
-+	int i, set;
-+	unsigned long flags;
-+
-+loop:
-+	recv_pipe = usb_rcvctrlpipe(dev->udev, 0);
-+
-+	dev_dbg(&dev->udev->dev, "start read gpios");
-+
-+	mutex_lock(&dev->usb_bus_lock);
-+
-+	i = usb_control_msg(
-+		dev->udev, recv_pipe,
-+		CP2130_BREQ_GET_GPIO_VALUES,
-+		USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
-+		0, 0,
-+		dev->usb_xfer, 2, 200);
-+
-+	dev->gpio_states[0] = dev->usb_xfer[0];
-+	dev->gpio_states[1] = dev->usb_xfer[1];
-+
-+	mutex_unlock(&dev->usb_bus_lock);
-+
-+	if (i < 2) {
-+		dev_err(&dev->udev->dev, "failed to read gpios");
-+		goto next;
-+	}
-+
-+	dev_dbg(&dev->udev->dev, "read gpios 1: %02X",
-+		dev->gpio_states[1] & 0xff & ~(1 | 2 | 4));
-+	dev_dbg(&dev->udev->dev, "read gpios 2: %02X",
-+		dev->gpio_states[0] & 0xff & ~(2 | 128));
-+
-+	for (i = 0; i < CP2130_NUM_GPIOS; ++i) {
-+		if (!(dev->irq_chip.irq_mask & (1 << i)))
-+			continue;
-+
-+		switch (i) {
-+		case 0:
-+		case 1:
-+		case 2:
-+		case 3:
-+		case 4:
-+			set = dev->gpio_states[1] & (8 << i);
-+			break;
-+		case 5:
-+			set = dev->gpio_states[0] & (1 << 0);
-+			break;
-+		case 6:
-+		case 7:
-+		case 8:
-+		case 9:
-+		case 10:
-+			set = dev->gpio_states[0] & (4 << (i - 6));
-+			break;
-+		}
-+
-+		if (!set) {
-+			dev_dbg(&dev->udev->dev, "issue irq on %d", i);
-+			local_irq_save(flags);
-+			generic_handle_irq(dev->irq_chip.virq[i]);
-+			local_irq_restore(flags);
-+		}
-+	}
-+
-+next:
-+	if (dev->irq_poll_interval < 0)
-+		return;
-+
-+	usleep_range(dev->irq_poll_interval, dev->irq_poll_interval + 20);
-+	goto loop;
-+}
-+
-+static void cp2130_gpio_irq_mask(struct irq_data *data)
-+{
-+	struct cp2130_gpio_irq *irq_dev = irq_data_get_irq_chip_data(data);
-+	struct cp2130_device *dev
-+		= container_of(irq_dev, struct cp2130_device, irq_chip);
-+
-+	dev_dbg(&dev->udev->dev, "irq mask %lu", data->hwirq);
-+	irq_dev->irq_mask &= ~(1 << data->hwirq);
-+}
-+
-+static void cp2130_gpio_irq_unmask(struct irq_data *data)
-+{
-+	struct cp2130_gpio_irq *irq_dev = irq_data_get_irq_chip_data(data);
-+	struct cp2130_device *dev
-+		= container_of(irq_dev, struct cp2130_device, irq_chip);
-+
-+	dev_dbg(&dev->udev->dev, "irq unmask %lu", data->hwirq);
-+	irq_dev->irq_mask |= 1 << data->hwirq;
-+}
-+
-+static int cp2130_gpio_irq_set_type(struct irq_data *data, unsigned int type)
-+{
-+	return 0;
-+}
-+
-+static void cp2130_gpio_irq_bus_lock(struct irq_data *data)
-+{
-+	struct cp2130_gpio_irq *irq_dev = irq_data_get_irq_chip_data(data);
-+
-+	mutex_lock(&irq_dev->irq_lock);
-+}
-+
-+static void cp2130_gpio_irq_bus_unlock(struct irq_data *data)
-+{
-+	struct cp2130_gpio_irq *irq_dev = irq_data_get_irq_chip_data(data);
-+
-+	mutex_unlock(&irq_dev->irq_lock);
-+}
-+
-+static struct irq_chip cp2130_gpio_irq_chip = {
-+	.name                = "gpio-cp2130",
-+	.irq_mask            = cp2130_gpio_irq_mask,
-+	.irq_unmask          = cp2130_gpio_irq_unmask,
-+	.irq_set_type        = cp2130_gpio_irq_set_type,
-+	.irq_bus_lock        = cp2130_gpio_irq_bus_lock,
-+	.irq_bus_sync_unlock = cp2130_gpio_irq_bus_unlock,
-+};
-+
-+static int cp2130_gpio_irq_map(struct irq_domain *domain, unsigned int irq,
-+			irq_hw_number_t hwirq)
-+{
-+	irq_set_chip_data(irq, domain->host_data);
-+	irq_set_chip(irq, &cp2130_gpio_irq_chip);
-+	irq_set_chip_and_handler(irq, &cp2130_gpio_irq_chip, handle_simple_irq);
-+	irq_set_noprobe(irq);
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops cp2130_gpio_irq_domain_ops = {
-+	.map = cp2130_gpio_irq_map,
-+};
-+
-+static void cp2130_gpio_irq_remove(struct cp2130_device *dev);
-+
-+static int cp2130_gpio_irq_probe(struct cp2130_device *dev)
-+{
-+	struct cp2130_gpio_irq *irq_dev = &dev->irq_chip;
-+	int i;
-+
-+	mutex_init(&irq_dev->irq_lock);
-+
-+	irq_dev->irq_domain = irq_domain_add_linear(
-+		dev->udev->dev.of_node, CP2130_NUM_GPIOS,
-+		&cp2130_gpio_irq_domain_ops, irq_dev);
-+
-+	if (!irq_dev->irq_domain) {
-+		dev_err(&dev->udev->dev, "failed to register IRQ domain");
-+		return -ENOMEM;
-+	}
-+
-+	irq_dev->irq_mask = 0;
-+	for (i = 0; i < CP2130_NUM_GPIOS; ++i) {
-+		irq_dev->virq[i] =
-+			irq_create_mapping(irq_dev->irq_domain, i);
-+		dev_dbg(&dev->udev->dev, "created virtual irq %d",
-+			irq_dev->virq[i]);
-+	}
-+
-+	INIT_WORK(&dev->irq_work, cp2130_read_gpios);
-+	schedule_work(&dev->irq_work);
-+
-+	return 0;
-+}
-+
-+static void cp2130_gpio_irq_remove(struct cp2130_device *dev)
-+{
-+	int i = 0;
-+
-+	if (!dev->irq_chip.irq_domain)
-+		return;
-+
-+	for (i = 0; i < CP2130_NUM_GPIOS; ++i)
-+		irq_dispose_mapping(dev->irq_chip.virq[i]);
-+
-+	irq_domain_remove(dev->irq_chip.irq_domain);
-+}
-+
-+static int cp2130_gpio_direction_input(struct gpio_chip *gc, unsigned int off)
-+{
-+	struct cp2130_device *dev = gpiochip_get_data(gc);
-+	int ret;
-+	unsigned int xmit_pipe;
-+
-+	xmit_pipe = usb_sndctrlpipe(dev->udev, 0);
-+
-+	mutex_lock(&dev->usb_bus_lock);
-+
-+	dev->usb_xfer[0] = off;
-+	dev->usb_xfer[1] = 0; /* input */
-+	dev->usb_xfer[2] = 0; /* value, ignored for input */
-+	ret = usb_control_msg(
-+		dev->udev, xmit_pipe,
-+		CP2130_BREQ_SET_GPIO_MODE,
-+		USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
-+		0, 0,
-+		dev->usb_xfer, 3, 200);
-+
-+	mutex_unlock(&dev->usb_bus_lock);
-+
-+	return (ret == 3) ? 0 : -EIO;
-+}
-+
-+static int cp2130_gpio_direction_output(struct gpio_chip *gc, unsigned int off,
-+					int val)
-+{
-+	struct cp2130_device *dev = gpiochip_get_data(gc);
-+	int ret;
-+	unsigned int xmit_pipe;
-+
-+	xmit_pipe = usb_sndctrlpipe(dev->udev, 0);
-+
-+	mutex_lock(&dev->usb_bus_lock);
-+
-+	dev->usb_xfer[0] = off;
-+	dev->usb_xfer[1] = 2; /* push-pull output */
-+	dev->usb_xfer[2] = val; /* state */
-+	ret = usb_control_msg(
-+		dev->udev, xmit_pipe,
-+		CP2130_BREQ_SET_GPIO_MODE,
-+		USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_OUT,
-+		0, 0,
-+		dev->usb_xfer, 3, 200);
-+
-+	mutex_unlock(&dev->usb_bus_lock);
-+
-+	return (ret == 3) ? 0 : -EIO;
-+}
-+
-+static int cp2130_gpio_get_value(struct gpio_chip *gc, unsigned int off)
-+{
-+	struct cp2130_device *dev = gpiochip_get_data(gc);
-+	int set;
-+
-+	switch (off) {
-+	case 0:
-+	case 1:
-+	case 2:
-+	case 3:
-+	case 4:
-+		set = !!(dev->gpio_states[1] & (8 << off));
-+		break;
-+	case 5:
-+		set = !!(dev->gpio_states[0] & (1 << 0));
-+		break;
-+	case 6:
-+	case 7:
-+	case 8:
-+	case 9:
-+	case 10:
-+		set = !!(dev->gpio_states[0] & (4 << (off - 6)));
-+		break;
-+	default:
-+		set = -EINVAL;
-+		break;
-+	}
-+	return set;
-+}
-+
-+static void cp2130_gpio_set_value(struct gpio_chip *gc, unsigned int off,
-+				int val)
-+{
-+	cp2130_gpio_direction_output(gc, off, val);
-+}
-+
-+static const char *const cp2130_gpio_names[] = {
-+	"........-_cs0",
-+	"........-_cs1",
-+	"........-_cs2",
-+	"........-_rtr",
-+	"........-event_counter",
-+	"........-clk_out",
-+	"........-gpi",
-+	"........-gpo",
-+	"........-activity",
-+	"........-suspend",
-+	"........-_suspend",
-+};
-+
-+static struct attribute *cp2130_sysfs_attributes[] = {
-+	&dev_attr_channel_config.attr,
-+	&dev_attr_channel_pdata.attr,
-+	&dev_attr_otp_rom.attr,
-+	&dev_attr_irq_poll_interval.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group cp2130_sysfs_atributes_group = {
-+	.name = "cp2130",
-+	.attrs = cp2130_sysfs_attributes,
-+};
-+
-+static int cp2130_probe(struct usb_interface *intf,
-+			const struct usb_device_id *id)
-+{
-+	struct usb_device *udev = usb_get_dev(interface_to_usbdev(intf));
-+	struct cp2130_device *dev;
-+	struct spi_master *spi_master = NULL;
-+	struct gpio_chip *gc;
-+	struct usb_host_interface *iface_desc = intf->cur_altsetting;
-+	struct usb_endpoint_descriptor *endpoint;
-+	int i, ret;
-+
-+	ret = -ENOMEM;
-+
-+	pr_debug("%s", __func__);
-+
-+	if (!udev)
-+		return -ENODEV;
-+
-+	dev = devm_kzalloc(&udev->dev, sizeof(struct cp2130_device),
-+			GFP_KERNEL);
-+	if (!dev)
-+		return -ENOMEM;
-+
-+	dev->usb_xfer = devm_kmalloc(&udev->dev, CP2130_MAX_USB_PACKET_SIZE,
-+				GFP_KERNEL);
-+	if (!dev->usb_xfer)
-+		return -ENOMEM;
-+
-+	dev->udev = udev;
-+	dev->intf = intf;
-+
-+	mutex_init(&dev->usb_bus_lock);
-+	mutex_init(&dev->chn_config_lock);
-+	mutex_init(&dev->otprom_lock);
-+
-+	dev->current_channel = -1;
-+
-+	usb_set_intfdata(intf, dev);
-+
-+	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
-+		endpoint = &iface_desc->endpoint[i].desc;
-+		dev_dbg(&udev->dev, "ep addr: 0x%02x",
-+			endpoint->bEndpointAddress);
-+		if (usb_endpoint_is_bulk_in(endpoint))
-+			dev_dbg(&udev->dev, "bulk in ep addr: 0x%02x",
-+				endpoint->bEndpointAddress);
-+		if (usb_endpoint_is_bulk_out(endpoint))
-+			dev_dbg(&udev->dev, "bulk out ep addr: 0x%02x",
-+				endpoint->bEndpointAddress);
-+	}
-+
-+	spi_master = spi_alloc_master(&udev->dev, sizeof(void *));
-+	if (!spi_master)
-+		return -ENOMEM;
-+
-+	spi_master_set_devdata(spi_master, (void *) dev);
-+
-+	spi_master->min_speed_hz = 93 * 1000 + 800; /* 93.8kHz */
-+	spi_master->max_speed_hz = 12 * 1000 * 1000; /* 12 MHz */
-+
-+	spi_master->bus_num = -1; /* dynamically assigned */
-+	spi_master->num_chipselect = CP2130_NUM_GPIOS;
-+	spi_master->mode_bits =
-+		SPI_MODE_0 | SPI_MODE_1 | SPI_MODE_2 | SPI_MODE_3;
-+
-+	spi_master->flags = 0;
-+	spi_master->setup = cp2130_spi_setup;
-+	spi_master->cleanup = cp2130_spi_cleanup;
-+	spi_master->transfer_one_message = cp2130_spi_transfer_one_message;
-+
-+	ret = devm_spi_register_master(&udev->dev, spi_master);
-+
-+	if (ret) {
-+		dev_err(&udev->dev, "failed to register SPI master");
-+		return -ENOMEM;
-+	}
-+
-+	dev->spi_master = spi_master;
-+	dev_dbg(&udev->dev, "registered SPI master");
-+
-+	/* now enable the gpio chip */
-+	gc = &dev->gpio_chip;
-+	gc->direction_input = cp2130_gpio_direction_input;
-+	gc->direction_output = cp2130_gpio_direction_output;
-+	gc->get = cp2130_gpio_get_value;
-+	gc->set = cp2130_gpio_set_value;
-+	gc->can_sleep = true;
-+
-+	gc->base = -1; /* auto */
-+	gc->ngpio = CP2130_NUM_GPIOS;
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		dev->gpio_names[i] = kstrdup(cp2130_gpio_names[i], GFP_KERNEL);
-+		memcpy(dev->gpio_names[i],
-+			dev_name(&spi_master->dev), 3 + 5 /* spixxxxx */);
-+	}
-+	gc->names = (const char **) dev->gpio_names;
-+	gc->label = dev_name(&spi_master->dev);
-+	gc->owner = THIS_MODULE;
-+
-+	ret = devm_gpiochip_add_data(&udev->dev, &dev->gpio_chip, dev);
-+	if (ret)
-+		dev_err(&udev->dev, "failed to register gpio chip");
-+
-+	/* start irq polling */
-+	dev->irq_poll_interval = CP2130_IRQ_POLL_INTERVAL;
-+	cp2130_gpio_irq_probe(dev);
-+	dev_dbg(&udev->dev, "registered irq chip");
-+
-+	/* create sysfs files */
-+	ret = sysfs_create_group(&intf->dev.kobj,
-+				&cp2130_sysfs_atributes_group);
-+	if (ret)
-+		dev_err(&udev->dev, "device_create_file failed");
-+
-+	INIT_WORK(&dev->update_chn_config, cp2130_update_channel_config);
-+	INIT_WORK(&dev->read_chn_config, cp2130_read_channel_config);
-+	INIT_WORK(&dev->update_otprom, cp2130_update_otprom);
-+	INIT_WORK(&dev->read_otprom, cp2130_read_otprom);
-+	schedule_work(&dev->read_chn_config);
-+	schedule_work(&dev->read_otprom);
-+
-+	return 0;
-+}
-+
-+static void cp2130_disconnect(struct usb_interface *intf)
-+{
-+	struct cp2130_device *dev = usb_get_intfdata(intf);
-+	int i = dev->irq_poll_interval;
-+
-+	dev->irq_poll_interval = -1;
-+	usleep_range(i, i + 100); /* wait for worker to complete */
-+
-+	/* Remove all devices (if any) attached to the SPI bus */
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++)
-+		if (dev->chn_configs[i].chip)
-+			spi_unregister_device(dev->chn_configs[i].chip);
-+
-+	cp2130_gpio_irq_remove(dev);
-+	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-+		struct cp2130_channel *chn_cfg = &dev->chn_configs[i];
-+
-+		kfree(dev->gpio_names[i]);
-+		kfree(chn_cfg->pdata);
-+	}
-+
-+	/* remove sysfs files */
-+	sysfs_remove_group(&intf->dev.kobj, &cp2130_sysfs_atributes_group);
-+}
-+
-+module_init(cp2130_init);
-+module_exit(cp2130_exit);
-+MODULE_AUTHOR("Jochen Henneberg <jh@henneberg-systemdesign.com>");
-+MODULE_DESCRIPTION("Silicon Labs CP2130 USB-to-SPI bridge");
-+MODULE_LICENSE("GPL");
-+
-+MODULE_DEVICE_TABLE(usb, cp2130_devices);
--- 
-2.7.4
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-=
+v5.2
+
+for you to fetch changes up to 2e5f081003f033d37be3faf052aaccc8b6a44aa5:
+
+  Merge branch 'spi-5.2' into spi-next (2019-05-02 11:20:29 +0900)
+
+----------------------------------------------------------------
+spi: Updates for v5.2
+
+One small feature was added this release but the bulk of the diffstat
+and the changelog comes from the fact that several older drivers got
+some fairly hefty reworks and a couple of new drivers were added:
+
+ - Support for detailed control of timing around chip selects from
+   Sowjanya Komatineni.
+ - A big set of fixes and imrovements for the Tegra114 driver from
+   Sowjanya Komatineni.
+ - A big simplification of the GPIO driver from Andrey Smirnov.
+ - DMA support and fixes for the Freescale LPSPI driver from Clark Wang.
+ - Fixes and optimizations for the bcm2835aux from Martin Sparl.
+ - New drivers for Mediatek MT7621 (graduated from staging) and Zynq QSPI.
+
+----------------------------------------------------------------
+Aditya Pakki (1):
+      spi : spi-topcliff-pch: Fix to handle empty DMA buffers
+
+Andrey Smirnov (12):
+      spi: gpio: Drop unused spi_to_pdata()
+      spi: gpio: Add local struct device pointer in spi_gpio_probe()
+      spi: gpio: Add local struct spi_bitbang pointer in spi_gpio_probe()
+      spi: gpio: Simplify SPI_MASTER_NO_TX check in spi_gpio_probe()
+      spi: gpio: Drop unused pdata copy in struct spi_gpio
+      spi: gpio: Don't request CS GPIO in DT use-case
+      spi: Don't call spi_get_gpio_descs() before device name is set
+      spi: gpio: Drop mflags argument from spi_gpio_request()
+      spi: gpio: Drop unused pdev field in struct spi_gpio
+      spi: gpio: Make sure spi_master_put() is called in every error path
+      spi: bitbang: Introduce spi_bitbang_init()
+      spi: gpio: Use devm_spi_register_master()
+
+Andy Shevchenko (3):
+      spi: pxa2xx-pci: Drop unused header inclusion
+      spi: pxa2xx: Introduce DMA burst size support
+      spi: pxa2xx: Debug print DMA burst size
+
+Arnd Bergmann (3):
+      spi: work around clang bug in SPI_BPW_RANGE_MASK()
+      spi: fix SPI_BPW_RANGE_MASK() regression
+      spi: export tracepoint symbols to modules
+
+Axel Lin (4):
+      spi: at91-usart: Remove duplicated checking for spi->bits_per_word
+      spi: fsl-lpspi: Fix problematic dev_set_drvdata call
+      spi: fsl-lpspi: Fix build warning when !CONFIG_PM
+      spi: fsl-lpspi: Clean up fsl_lpspi_probe
+
+Cao Van Dong (1):
+      spi: sh-msiof: Document r8a77470 bindings
+
+Cezary Gapinski (1):
+      spi: pic32: fix dma channels termination
+
+Chris Lesiak (1):
+      spi: Fix zero length xfer bug
+
+Clark Wang (9):
+      spi: lpspi: Add i.MX8 boards support for lpspi
+      doc: lpspi: Document DT bindings for LPSPI clocks
+      spi: lpspi: add the error info of transfer speed setting
+      spi: lpspi: use the core way to implement cs-gpio function
+      spi: lpspi: add dma mode support
+      spi: lpspi: Add the missing NULL check
+      spi: lpspi: Code cleanup
+      spi: lpspi: fix dataloss when SS is inactivated between every words
+      spi: lpspi: add missing complete in abort func at dma mode
+
+Claudiu Beznea (1):
+      spi: atmel-quadspi: fix crash while suspending
+
+Daniel Gomez (1):
+      spi: AD ASoC: declare missing of table
+
+Evan Green (1):
+      spi: pxa2xx: Add support for Intel Comet Lake
+
+Fabien Dessenne (2):
+      spi: stm32-qspi: manage the get_irq error case
+      spi: stm32: return the get_irq error
+
+Flavio Suligoi (3):
+      spi: pxa2xxx: change "no DMA channels..." msg from debug to warning
+      spi: pxa2xx: use a module softdep for dw_dmac
+      spi: pxa2xx: fix SCR (divisor) calculation
+
+Gareth Williams (1):
+      dt-bindings: snps,dw-apb-ssi: Add optional clock bindings documentati=
+on
+
+Geert Uytterhoeven (8):
+      spi: rspi: Fix register initialization while runtime-suspended
+      spi: rspi: Fix sequencer reset during initialization
+      spi: sh-msiof: Use BIT() and GENMASK()
+      spi: sh-msiof: Use readl_poll_timeout_atomic() instead of open-coding
+      spi: sh-msiof: Add reset of registers before starting transfer
+      spi: spi-gpio: Remove spi->controller_data comment
+      spi: Add missing error handling for CS GPIOs
+      spi: sh-msiof: Convert to use GPIO descriptors
+
+Han Xu (1):
+      spi: lpspi: enable runtime pm for lpspi
+
+Hoan Nguyen An (1):
+      spi: rspi: Fix handling of QSPI code when transmit and receive
+
+Jan Kundr=E1t (2):
+      spi: spidev: Enable control of inter-word delays
+      spi: orion: Support spi_xfer->word_delay_usecs
+
+Jarkko Nikula (3):
+      spi: pxa2xx: Use struct spi_device directly in pxa2xx_spi_transfer_on=
+e()
+      spi: pxa2xx: Unify remaing prints in pxa2xx_spi_transfer_one()
+      spi: Remove one needless transfer speed fall back case
+
+Leilk Liu (1):
+      dt-bindings: spi: spi-mt65xx: add support for MT8516
+
+Linus Walleij (1):
+      spi: ep93xx: Convert to use CS GPIO descriptors
+
+Ludovic Barre (4):
+      spi: spi-mem: stm32-qspi: avoid memory corruption at low frequency
+      spi: spi-mem: stm32-qspi: add suspend/resume support
+      spi: stm32-qspi: add spi_master_put in release function
+      spi: stm32-qspi: add dma support
+
+Mark Brown (5):
+      Merge branch 'spi-5.1' into spi-5.2 for stm32
+      Merge tag 'v5.1-rc1' into spi-5.2
+      Merge branch 'spi-5.1' into spi-5.2
+      Merge branch 'spi-5.1' into spi-linus
+      Merge branch 'spi-5.2' into spi-next
+
+Martin Sperl (9):
+      spi: bcm2835aux: unifying code between polling and interrupt driven c=
+ode
+      spi: bcm2835aux: remove dangerous uncontrolled read of fifo
+      spi: bcm2835aux: fix corruptions for longer spi transfers
+      spi: bcm2835aux: remove dead code
+      spi: bcm2835aux: fix driver to not allow 65535 (=3D-1) cs-gpios
+      spi: bcm2835aux: warn in dmesg that native cs is not really supported
+      spi: bcm2835aux: setup gpio-cs to output and correct level during set=
+up
+      spi: bcm2835aux: make the polling duration limits configurable
+      spi: bcm2835aux: add driver stats to debugfs
+
+Meghana Madhyastha (1):
+      spi/spi-bcm2835: Split transfers that exceed DLEN
+
+Naga Sureshkumar Relli (4):
+      spi: spi-mem: export spi_mem_default_supports_op()
+      dt-bindings: spi: Add device tree binding documentation for Zynq QSPI=
+ controller
+      spi: spi-mem: Add support for Zynq QSPI controller
+      spi: spi-mem: zynq-qspi: Fix build error on architectures missing rea=
+dsl/writesl
+
+Noralf Tr=F8nnes (3):
+      spi: Remove warning in spi_split_transfers_maxsize()
+      spi: Release spi_res after finalizing message
+      spi/trace: Cap buffer contents at 64 bytes
+
+Phil Edworthy (2):
+      dt-bindings: snps,dw-apb-ssi: Add mandatory clock bindings documentat=
+ion
+      spi: dw: Add support for an optional interface clock
+
+Randolph Maa=DFen (1):
+      spi: tegra20-slink: change chip select action order
+
+Rasmus Villemoes (5):
+      spi: spi-fsl-spi: support use of the SPISEL_BOOT signal on MPC8309
+      spi: spi-fsl-spi: remove always-true conditional in fsl_spi_do_one_msg
+      spi: spi-fsl-spi: relax message sanity checking a little
+      spi: spi-fsl-spi: allow changing bits_per_word while CS is still acti=
+ve
+      spi: spi-fsl-spi: automatically adapt bits-per-word in cpu mode
+
+Serge Semin (1):
+      spi: Clear SPI_CS_HIGH flag from bad_bits for GPIO chip-select
+
+Sergei Shtylyov (2):
+      spi: kill useless initializer in spi_register_controller()
+      spi-mem: fix kernel-doc for spi_mem_dirmap_{read|write}()
+
+Sowjanya Komatineni (22):
+      spi: tegra114: clear packed bit for unpacked mode
+      spi: tegra114: fix for unpacked mode transfers
+      spi: tegra114: terminate dma and reset on transfer timeout
+      spi: tegra114: flush fifos
+      spi: tegra114: configure dma burst size to fifo trig level
+      spi: tegra114: reset controller on probe
+      spi: tegra114: use packed mode for 32 bits per word
+      spi: tegra114: add SPI_LSB_FIRST support
+      spi: tegra114: de-assert CS before SPI mode change
+      spi: tegra114: avoid reset call in atomic context
+      spi: tegra114: dump SPI registers during timeout
+      spi: tegra114: set supported bits per word
+      spi: tegra114: use unpacked mode for below 4 bytes
+      spi: tegra114: set bus number based on id
+      spi: tegra114: add dual mode support
+      spi: tegra114: add 3 wire transfer mode support
+      spi: tegra114: add support for interrupt mask
+      spi-summary: document set_cs_timing
+      spi: add a method for configuring CS timing
+      spi: document tx/rx clock delay properties
+      spi: expand mode support
+      spi: tegra114: fix PIO transfer
+
+Stefan Roese (1):
+      spi: mt7621: Move SPI driver out of staging
+
+Trent Piepho (2):
+      spi: imx: add module parameter to control DMA use
+      spi: imx: stop buffer overflow in RX FIFO flush
+
+Volker Haspel (1):
+      spi: spi-fsl-qspi: use devm_spi_register_controller
+
+Wolfram Sang (1):
+      spi: mxic: simplify getting .driver_data
+
+YueHaibing (4):
+      spi: atmel-quadspi: Make atmel_qspi_get_name static
+      spi: bcm2835aux: Fix build error without CONFIG_DEBUG_FS
+      spi: spi-mem: Fix build error without CONFIG_SPI_MEM
+      spi: spi-mem: Make spi_mem_default_supports_op() static inline
+
+kbuild test robot (3):
+      spi: lpspi: fsl_lpspi_runtime_resume() can be static
+      spi: spi-mem: stm32-qspi: stm32_qspi_pm_ops can be static
+      spi: bcm2835aux: polling_limit_us can be static
+
+ Documentation/devicetree/bindings/spi/fsl-spi.txt  |   4 +
+ .../bindings/spi/nvidia,tegra114-spi.txt           |  20 +
+ Documentation/devicetree/bindings/spi/sh-msiof.txt |   1 +
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.txt    |  10 +-
+ .../devicetree/bindings/spi/spi-fsl-lpspi.txt      |  10 +-
+ .../devicetree/bindings/spi/spi-mt65xx.txt         |   1 +
+ .../devicetree/bindings/spi/spi-mt7621.txt         |  26 +
+ .../devicetree/bindings/spi/spi-zynq-qspi.txt      |  25 +
+ Documentation/spi/spi-summary                      |   6 +
+ arch/arm/mach-ep93xx/edb93xx.c                     |  13 +-
+ arch/arm/mach-ep93xx/simone.c                      |  11 +-
+ arch/arm/mach-ep93xx/ts72xx.c                      |  25 +-
+ arch/arm/mach-ep93xx/vision_ep9307.c               |  15 +-
+ arch/sh/boards/mach-ecovec24/setup.c               |  12 +-
+ drivers/spi/Kconfig                                |  16 +-
+ drivers/spi/Makefile                               |   2 +
+ drivers/spi/atmel-quadspi.c                        |   8 +-
+ drivers/spi/spi-at91-usart.c                       |   8 +-
+ drivers/spi/spi-bcm2835.c                          |  39 +-
+ drivers/spi/spi-bcm2835aux.c                       | 205 ++++--
+ drivers/spi/spi-bitbang.c                          |  66 +-
+ drivers/spi/spi-dw-mmio.c                          |  12 +
+ drivers/spi/spi-ep93xx.c                           |  32 +-
+ drivers/spi/spi-fsl-lib.h                          |   2 +
+ drivers/spi/spi-fsl-lpspi.c                        | 573 ++++++++++++++--
+ drivers/spi/spi-fsl-qspi.c                         |   2 +-
+ drivers/spi/spi-fsl-spi.c                          |  81 ++-
+ drivers/spi/spi-gpio.c                             | 227 +++---
+ drivers/spi/spi-imx.c                              |   9 +-
+ drivers/spi/spi-mem.c                              |   8 +-
+ drivers/{staging/mt7621-spi =3D> spi}/spi-mt7621.c   |  83 ++-
+ drivers/spi/spi-mxic.c                             |   6 +-
+ drivers/spi/spi-orion.c                            |   4 +
+ drivers/spi/spi-pic32.c                            |   2 +-
+ drivers/spi/spi-pxa2xx-dma.c                       |   4 +-
+ drivers/spi/spi-pxa2xx-pci.c                       |   5 +-
+ drivers/spi/spi-pxa2xx.c                           |  38 +-
+ drivers/spi/spi-rspi.c                             | 119 ++--
+ drivers/spi/spi-sh-msiof.c                         | 224 +++---
+ drivers/spi/spi-stm32-qspi.c                       | 229 ++++++-
+ drivers/spi/spi-stm32.c                            |   5 +-
+ drivers/spi/spi-tegra114.c                         | 310 +++++++--
+ drivers/spi/spi-tegra20-slink.c                    |  12 +-
+ drivers/spi/spi-topcliff-pch.c                     |  15 +-
+ drivers/spi/spi-zynq-qspi.c                        | 761 +++++++++++++++++=
+++++
+ drivers/spi/spi.c                                  |  76 +-
+ drivers/spi/spidev.c                               |   4 +-
+ drivers/staging/Kconfig                            |   2 -
+ drivers/staging/Makefile                           |   1 -
+ drivers/staging/mt7621-spi/Kconfig                 |   6 -
+ drivers/staging/mt7621-spi/Makefile                |   1 -
+ drivers/staging/mt7621-spi/TODO                    |   5 -
+ include/linux/platform_data/spi-ep93xx.h           |   4 -
+ include/linux/spi/pxa2xx_spi.h                     |   1 +
+ include/linux/spi/spi-mem.h                        |  12 +
+ include/linux/spi/spi.h                            |  24 +-
+ include/linux/spi/spi_bitbang.h                    |   1 +
+ include/trace/events/spi.h                         |  10 +-
+ include/uapi/linux/spi/spidev.h                    |   6 +-
+ sound/soc/codecs/adau1977-spi.c                    |  11 +
+ 60 files changed, 2650 insertions(+), 800 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-mt7621.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-zynq-qspi.txt
+ rename drivers/{staging/mt7621-spi =3D> spi}/spi-mt7621.c (88%)
+ create mode 100644 drivers/spi/spi-zynq-qspi.c
+ delete mode 100644 drivers/staging/mt7621-spi/Kconfig
+ delete mode 100644 drivers/staging/mt7621-spi/Makefile
+ delete mode 100644 drivers/staging/mt7621-spi/TODO
+
+--dZRDC+ooC0woGCz3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzQRZwACgkQJNaLcl1U
+h9DXUQf9HVDOINJUKCshzWvx+Ye/ahWUxyJM7Mkn6Jhysa/Hxxc9WyFPrZEeQt7e
+jFQWtxvE16viEP7QidccLfWpKwC176KebbelmGUFLtqqN5fFhhGARIQI8q8gmjXL
++IwmUx/c4vbQAE0CTRdIAN0XDAFO+fvhVx8W80fh3+7DKk15ttp9cPmaa/VPjLip
+OO+f8isPOjtgctBFpViwK+1mDrlYyWkRfaDW60F6utUt/xMX90f0i0S87otmHs59
+JhwuAemqGPkqvqkG2juECXikluJotYzgYTbf4AjVlNO84s159xkqEq6OBY/qA3WM
+Ot17PvuMOjKGvKok5D0VSW6zNT3Qyg==
+=3+yX
+-----END PGP SIGNATURE-----
+
+--dZRDC+ooC0woGCz3--
