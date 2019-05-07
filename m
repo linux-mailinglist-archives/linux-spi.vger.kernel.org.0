@@ -2,232 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0048416608
-	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2019 16:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F3316641
+	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2019 17:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbfEGOwB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 May 2019 10:52:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726351AbfEGOwB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 7 May 2019 10:52:01 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E937C21019;
-        Tue,  7 May 2019 14:51:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557240719;
-        bh=gWUxo89d44SUn3J2Zc928qElLW2XT8oWIyto8ecrjIY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YUtgkGToiqE6/WiAbanqadOhny/GrUBQ7hVL+t9ZAGA2iEdyxQtd38ixlsU4zL3y8
-         w+xWAtKkx73pRR7L41YbY9B5/OtTMHhgAsIhu49ZJsJnAEFqRaj8NF3OLQDefAIJOT
-         kgi1vgjg5tXIIEE+/VLjaVz39OGKHTGmPR61RfXw=
-Received: by mail-qt1-f176.google.com with SMTP id i31so19291016qti.13;
-        Tue, 07 May 2019 07:51:58 -0700 (PDT)
-X-Gm-Message-State: APjAAAXmaFWY69FBJT2S3EwGJp+DTxa8DD95Rdygy0m9n2nhh4gJpd5q
-        Xv7412jJ/iQ1TZgLxgIk+6SQl8ySqdaWTZepEA==
-X-Google-Smtp-Source: APXvYqzxIefvVeNFRFHHncOA0m/a9ZI1n2OxWxSSZe8gViWqPJVgQkyi4KCb2IcqBYcRyd+wlZBqTVovXgTwYP7ETyw=
-X-Received: by 2002:aed:2471:: with SMTP id s46mr6594381qtc.144.1557240718119;
- Tue, 07 May 2019 07:51:58 -0700 (PDT)
+        id S1726460AbfEGPJC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 May 2019 11:09:02 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:55478 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbfEGPJC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 May 2019 11:09:02 -0400
+Received: by mail-it1-f194.google.com with SMTP id q132so11763517itc.5
+        for <linux-spi@vger.kernel.org>; Tue, 07 May 2019 08:09:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NMKxSMzwu+s2/SzB62Nh+x3vxif2iOJIy/DFOJy1IA0=;
+        b=JttxCubqoLk3AhCSATJ1dG2YMRqkDdBeMD1EsHQl6xUaQs1B71zOLKZ5cMzviHJKwW
+         TC/VBGHn1zLbnhTXdleyXucuXKeSTCELa5Q075xnaoCzKzXwWJR0FGxa4EWQs/NBOs/P
+         8bgs9hxAdu1KMzEdD0Vh1GrRaWkc/Ekt5c7E8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NMKxSMzwu+s2/SzB62Nh+x3vxif2iOJIy/DFOJy1IA0=;
+        b=qGJaDLR3n1xJ516Lhwgc5s/iLRiz5w4jbQFgrMk4vTiuv+298nft93zm+xlzPmN9HA
+         sUjLgseiZi6n2KtRDnMhxFVsJs7nicnXrnb41S+isZrIxWUK8aI6KFQhVuGt1OpYdWTj
+         K6P6N1lVUP728KsPFGW1Sd6R2gvXMdEEQbWhJWhPARWR68LXFSau6fN6fctj2SJufLiT
+         y65zqeNve4S7cD86zR6PWnABU1yk8PPJWV8S2L6iQW45j5trQ7vdsdJUhD+z4pWHskGi
+         NM2lI4OClClvFRF/eJWLD5x7VaQXxHvyIWYSAiMG2tRivbd8+G8f6oTXiD0pSd/j3ouX
+         Z4gg==
+X-Gm-Message-State: APjAAAXq/FP2ubOrSYtOE9LJPvvRAqpchyEoVN1/WddEA9ZMguZ4JkKT
+        U94kSItp6EOdFwLVvqUzwpE1CPCTQuCle29RXph1gA==
+X-Google-Smtp-Source: APXvYqxzxPAnUM9yMUPw0bSHqeGRGlrlpk4UlIXm0lTx42L8iYNvI597rZp60jpeX4QnxGdyIAI5VtNkTfFYR51QJ3A=
+X-Received: by 2002:a24:9183:: with SMTP id i125mr21968894ite.105.1557241741389;
+ Tue, 07 May 2019 08:09:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <b7a6095a5c900fa23cc54d1ccd8e8ef0ccf6e788.1557236840.git-series.maxime.ripard@bootlin.com>
- <e39713deed69735e5c02c4273bf84572aa589736.1557236840.git-series.maxime.ripard@bootlin.com>
-In-Reply-To: <e39713deed69735e5c02c4273bf84572aa589736.1557236840.git-series.maxime.ripard@bootlin.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 7 May 2019 09:51:46 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLJ+aeG8zakZokv2qfwiLBiJ-49ByGuQ_-YuTUyGXtNnQ@mail.gmail.com>
-Message-ID: <CAL_JsqLJ+aeG8zakZokv2qfwiLBiJ-49ByGuQ_-YuTUyGXtNnQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: spi: sun6i: Add YAML schemas
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>
+References: <20190506143301.GU14916@sirena.org.uk>
+In-Reply-To: <20190506143301.GU14916@sirena.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 7 May 2019 08:08:50 -0700
+Message-ID: <CAADWXX_k_D7=SPd=bi-=3EtBjeG6fe0EaTb4U4ZZgoOoRSub-Q@mail.gmail.com>
+Subject: Re: [GIT PULL] spi updates for v5.2
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 7, 2019 at 8:48 AM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+On Mon, May 6, 2019 at 7:33 AM Mark Brown <broonie@kernel.org> wrote:
 >
-> Switch the DT binding to a YAML schema to enable the DT validation.
->
-> Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml | 106 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
->  Documentation/devicetree/bindings/spi/spi-sun6i.txt                |  44 +------------------------------
->  2 files changed, 106 insertions(+), 44 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-sun6i.txt
->
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> new file mode 100644
-> index 000000000000..0cd7244653a8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -0,0 +1,106 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/allwinner,sun6i-a31-spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner A31 SPI Controller Device Tree Bindings
-> +
-> +allOf:
-> +  - $ref: "spi-controller.yaml"
-> +
-> +maintainers:
-> +  - Chen-Yu Tsai <wens@csie.org>
-> +  - Maxime Ripard <maxime.ripard@bootlin.com>
-> +
-> +properties:
-> +  "#address-cells": true
-> +  "#size-cells": true
-> +
-> +  compatible:
-> +    enum:
-> +      - allwinner,sun6i-a31-spi
-> +      - allwinner,sun8i-h3-spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Bus Clock
-> +      - description: Module Clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ahb
-> +      - const: mod
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  dmas:
-> +    items:
-> +      - description: RX DMA Channel
-> +      - description: TX DMA Channel
-> +
-> +  dma-names:
-> +    items:
-> +      - const: rx
-> +      - const: tx
-> +
-> +  num-cs: true
-> +
-> +patternProperties:
-> +  "^[a-z]+@[0-9]+$":
+> spi: Updates for v5.2
 
-Same issues here as patch 1.
+Hmm. Please be more careful. Commit 1dfbf334f123 ("spi: ep93xx:
+Convert to use CS GPIO descriptors") caused a new warning because it
+removed a "for ()" loop, but left the now unused variable 'i' around.
 
-> +    properties:
-> +      reg:
-> +        items:
-> +          minimum: 0
-> +          maximum: 4
-> +
-> +      spi-rx-bus-width:
-> +        const: 1
-> +
-> +      spi-tx-bus-width:
-> +        const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    spi1: spi@1c69000 {
-> +        compatible = "allwinner,sun6i-a31-spi";
-> +        reg = <0x01c69000 0x1000>;
-> +        interrupts = <0 66 4>;
-> +        clocks = <&ahb1_gates 21>, <&spi1_clk>;
-> +        clock-names = "ahb", "mod";
-> +        resets = <&ahb1_rst 21>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +    };
-> +
-> +  - |
-> +    spi0: spi@1c68000 {
-> +        compatible = "allwinner,sun8i-h3-spi";
-> +        reg = <0x01c68000 0x1000>;
-> +        interrupts = <0 65 4>;
-> +        clocks = <&ccu 30>, <&ccu 82>;
-> +        clock-names = "ahb", "mod";
-> +        dmas = <&dma 23>, <&dma 23>;
-> +        dma-names = "rx", "tx";
-> +        resets = <&ccu 15>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/spi/spi-sun6i.txt b/Documentation/devicetree/bindings/spi/spi-sun6i.txt
-> deleted file mode 100644
-> index 435a8e0731ac..000000000000
-> --- a/Documentation/devicetree/bindings/spi/spi-sun6i.txt
-> +++ /dev/null
-> @@ -1,44 +0,0 @@
-> -Allwinner A31/H3 SPI controller
-> -
-> -Required properties:
-> -- compatible: Should be "allwinner,sun6i-a31-spi" or "allwinner,sun8i-h3-spi".
-> -- reg: Should contain register location and length.
-> -- interrupts: Should contain interrupt.
-> -- clocks: phandle to the clocks feeding the SPI controller. Two are
-> -          needed:
-> -  - "ahb": the gated AHB parent clock
-> -  - "mod": the parent module clock
-> -- clock-names: Must contain the clock names described just above
-> -- resets: phandle to the reset controller asserting this device in
-> -          reset
-> -
-> -Optional properties:
-> -- dmas: DMA specifiers for rx and tx dma. See the DMA client binding,
-> -       Documentation/devicetree/bindings/dma/dma.txt
-> -- dma-names: DMA request names should include "rx" and "tx" if present.
-> -
-> -Example:
-> -
-> -spi1: spi@1c69000 {
-> -       compatible = "allwinner,sun6i-a31-spi";
-> -       reg = <0x01c69000 0x1000>;
-> -       interrupts = <0 66 4>;
-> -       clocks = <&ahb1_gates 21>, <&spi1_clk>;
-> -       clock-names = "ahb", "mod";
-> -       resets = <&ahb1_rst 21>;
-> -};
-> -
-> -spi0: spi@1c68000 {
-> -       compatible = "allwinner,sun8i-h3-spi";
-> -       reg = <0x01c68000 0x1000>;
-> -       interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
-> -       clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
-> -       clock-names = "ahb", "mod";
-> -       dmas = <&dma 23>, <&dma 23>;
-> -       dma-names = "rx", "tx";
-> -       pinctrl-names = "default";
-> -       pinctrl-0 = <&spi0_pins>;
-> -       resets = <&ccu RST_BUS_SPI0>;
-> -       #address-cells = <1>;
-> -       #size-cells = <0>;
-> -};
-> --
-> git-series 0.9.1
+I fixed it up in the merge, because I hate warnings that may hide real
+problems. But I also expect maintainers to check their warnings,
+exactly because the normal build is supposed to have none. So a new
+warning does stand out.
+
+                    Linus
