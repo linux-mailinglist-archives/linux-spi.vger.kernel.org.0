@@ -2,54 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18269160AD
-	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2019 11:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07E8161A9
+	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2019 12:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbfEGJUK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 May 2019 05:20:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53842 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726063AbfEGJUK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 7 May 2019 05:20:10 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557220810;
-        bh=oLlfNi+ZKgtsbVq/Q5bvDob8kRIMZBXqoMDas5P/280=;
-        h=Subject:From:Date:To:From;
-        b=etiT6sTuGcdkt314lDCjCscj/srccBh//CB4nvLHOl5AhEBl/xlJRk4XpqxM4xQaX
-         jE9kpp9FaIlAxbpNP/2ytXWpaQZXBjCV3tJwSFdE9WUJAhqPA1FAoKAC3gd5SF1XBL
-         sOHyal6lRlkqMt2YrvE7wd2T+Lh16nyI+fFkVjMA=
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <155722081008.3095.6157171849604030711.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 07 May 2019 09:20:10 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+        id S1726496AbfEGKHd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 May 2019 06:07:33 -0400
+Received: from 212-186-180-163.static.upcbusiness.at ([212.186.180.163]:35646
+        "EHLO cgate.sperl.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbfEGKHc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 May 2019 06:07:32 -0400
+Received: from msmac.intern.sperl.org (account martin@sperl.org [10.10.10.11] verified)
+  by sperl.org (CommuniGate Pro SMTP 6.2.1 _community_)
+  with ESMTPSA id 7764261; Tue, 07 May 2019 10:07:30 +0000
+Content-Type: text/plain; charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Subject: Re: [PATCH 3/5] spi: core: allow defining time that cs is deasserted as a multiple of SCK
+From:   kernel@martin.sperl.org
+In-Reply-To: <20190226113720.GB7082@sirena.org.uk>
+Date:   Tue, 7 May 2019 12:07:35 +0200
+Cc:     Lukas Wunner <lukas@wunner.de>, Eric Anholt <eric@anholt.net>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <E177DD3C-49B0-4319-A6F5-45DF9ED02070@martin.sperl.org>
+References: <20190223084952.14758-1-kernel@martin.sperl.org> <20190223084952.14758-4-kernel@martin.sperl.org> <20190223124010.y7lsncknnxoblvgz@wunner.de> <CCC6392E-3189-49BE-B04D-3997434184D0@martin.sperl.org> <20190224103913.bjw7g6ievr75iawz@wunner.de> <0CA42E9E-3297-41EC-8E90-FAE937E892DE@martin.sperl.org> <20190226113720.GB7082@sirena.org.uk>
+To:     Mark Brown <broonie@kernel.org>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] add ecspi ERR009165 for i.mx6/7 soc family (2019-05-07T09:15:41)
-  Superseding: [v2] add ecspi ERR009165 for i.mx6/7 soc family (2019-04-26T08:05:04):
-    [v2,01/15] Revert "ARM: dts: imx6q: Use correct SDMA script for SPI5 core"
-    [v2,02/15] Revert "ARM: dts: imx6: Use correct SDMA script for SPI cores"
-    [v2,03/15] Revert "dmaengine: imx-sdma: refine to load context only once"
-    [v2,04/15] dmaengine: imx-sdma: remove dupilicated sdma_load_context
-    [v2,05/15] dmaengine: imx-sdma: add mcu_2_ecspi script
-    [v2,06/15] spi: imx: fix ERR009165
-    [v2,07/15] spi: imx: remove ERR009165 workaround on i.mx6ul
-    [v2,08/15] dt-bindings: spi: imx: add i.mx6ul to state errata fixed
-    [v2,09/15] dmaengine: imx-sdma: remove ERR009165 on i.mx6ul
-    [v2,10/15] dt-bindings: dma: imx-sdma: add i.mx6ul/6sx compatible name
-    [v2,11/15] dmaengine: imx-sdma: fix ecspi1 rx dma not work on i.mx8mm
-    [v2,12/15] ARM64: dts: freescale: imx8mm/8mq: update new compatible name for ecspi and sdma
-    [v2,13/15] ARM: dts: imx6ul: add dma support on ecspi
-    [v2,14/15] ARM: dts: imx6sll: correct ecspi/sdma compatible
-    [v2,15/15] arm64: defconfig: Enable SDMA on i.mx8mq/8mm
 
+> On 26.02.2019, at 12:37, Mark Brown <broonie@kernel.org> wrote:
+> 
+> On Sun, Feb 24, 2019 at 12:03:33PM +0100, kernel@martin.sperl.org wrote:
+> 
+>> Some devices - like the mcp2517fd -  have for example an internal PLL
+>> based on an external clock. So during setup you have to use speed_hz 
+>> of <clock_hz> / 2 (or 4MHz at most) and only when PLL is in sync we 
+>> may be using speed_hz from the dt (or less if a module parameter is
+>> used to limit ourselves further)
+> 
+>> So the initial setup would not be able to help here - and every
+>> bus controller would now be required to implement setup.
+> 
+>> It also means open coding the calculations in each driver that 
+>> needs something like this.
+> 
+>> Thus it is - imo - in the right location to support it in spi core.
+> 
+> I agree, this feature makes sense to me.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+Is there anything that really block this patch?
+
+Do you want a rebase?
+Anything else?
+
+Martin
