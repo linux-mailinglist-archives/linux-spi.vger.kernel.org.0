@@ -2,63 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D07E8161A9
-	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2019 12:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CEB1628C
+	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2019 13:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbfEGKHd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 May 2019 06:07:33 -0400
-Received: from 212-186-180-163.static.upcbusiness.at ([212.186.180.163]:35646
-        "EHLO cgate.sperl.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726268AbfEGKHc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 May 2019 06:07:32 -0400
-Received: from msmac.intern.sperl.org (account martin@sperl.org [10.10.10.11] verified)
-  by sperl.org (CommuniGate Pro SMTP 6.2.1 _community_)
-  with ESMTPSA id 7764261; Tue, 07 May 2019 10:07:30 +0000
-Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: [PATCH 3/5] spi: core: allow defining time that cs is deasserted as a multiple of SCK
-From:   kernel@martin.sperl.org
-In-Reply-To: <20190226113720.GB7082@sirena.org.uk>
-Date:   Tue, 7 May 2019 12:07:35 +0200
-Cc:     Lukas Wunner <lukas@wunner.de>, Eric Anholt <eric@anholt.net>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <E177DD3C-49B0-4319-A6F5-45DF9ED02070@martin.sperl.org>
-References: <20190223084952.14758-1-kernel@martin.sperl.org> <20190223084952.14758-4-kernel@martin.sperl.org> <20190223124010.y7lsncknnxoblvgz@wunner.de> <CCC6392E-3189-49BE-B04D-3997434184D0@martin.sperl.org> <20190224103913.bjw7g6ievr75iawz@wunner.de> <0CA42E9E-3297-41EC-8E90-FAE937E892DE@martin.sperl.org> <20190226113720.GB7082@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Mailer: Apple Mail (2.3124)
+        id S1726280AbfEGLDy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 May 2019 07:03:54 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:35360 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726160AbfEGLDy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 May 2019 07:03:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=VxO5HXqAUGV48DUVM+11/Wfy8Lwq9a0eGcJIbwEBSr0=; b=pwV9zI+7Gb/AO2irMfgamCo/8
+        9SzCfi0XGbTSRPnLjCFuzRY9A/XU77YOhPYnOgUt1FYjqMv367eK6Enk3ZmH2Lcs6/7xkTz3isiGI
+        goqe9+c14AroYvA5dSK5VF3Q6Cqbz1kgmBKtOYrZcz6IQUxX5mO8MIUiL9gdtGzHTCqjw=;
+Received: from [2001:268:c0e4:c15b:6e1:832c:7bbd:a9e1] (helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hNxt1-0004cv-5v; Tue, 07 May 2019 11:03:51 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id 6C5BB44000C; Tue,  7 May 2019 12:03:45 +0100 (BST)
+Date:   Tue, 7 May 2019 20:03:45 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] spi updates for v5.2
+Message-ID: <20190507110345.GF14916@sirena.org.uk>
+References: <20190506143301.GU14916@sirena.org.uk>
+ <CAADWXX_MqtZ6RxS2zEVmHtKrjqigiNzdSe5qVwBVvfVU6dxJRQ@mail.gmail.com>
+ <20190507021853.GY14916@sirena.org.uk>
+ <20190507030241.GC14916@sirena.org.uk>
+ <CAHk-=wi4EJQLoMNd4ptiiZvLy8ZW49pcCy0VQwZt4xhDDqSOjw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5yI2NvEZ36o0Huwo"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi4EJQLoMNd4ptiiZvLy8ZW49pcCy0VQwZt4xhDDqSOjw@mail.gmail.com>
+X-Cookie: -- I have seen the FUN --
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-> On 26.02.2019, at 12:37, Mark Brown <broonie@kernel.org> wrote:
-> 
-> On Sun, Feb 24, 2019 at 12:03:33PM +0100, kernel@martin.sperl.org wrote:
-> 
->> Some devices - like the mcp2517fd -  have for example an internal PLL
->> based on an external clock. So during setup you have to use speed_hz 
->> of <clock_hz> / 2 (or 4MHz at most) and only when PLL is in sync we 
->> may be using speed_hz from the dt (or less if a module parameter is
->> used to limit ourselves further)
-> 
->> So the initial setup would not be able to help here - and every
->> bus controller would now be required to implement setup.
-> 
->> It also means open coding the calculations in each driver that 
->> needs something like this.
-> 
->> Thus it is - imo - in the right location to support it in spi core.
-> 
-> I agree, this feature makes sense to me.
+--5yI2NvEZ36o0Huwo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Is there anything that really block this patch?
+On Mon, May 06, 2019 at 08:13:49PM -0700, Linus Torvalds wrote:
+> On Mon, May 6, 2019 at 8:02 PM Mark Brown <broonie@kernel.org> wrote:
 
-Do you want a rebase?
-Anything else?
+> >                    Everything I'm
+> > seeing is saying that Google just isn't enthusiastic about domains like
+> > kernel.org which is going an issue.
 
-Martin
+> Well, there are other people who use kernel.org email addresses.  Ingo
+> Molnar, Rafael Wysocki, a couple of others.  But you're the one
+> getting marked as spam.
+
+I'm not going to search for rule 36 SPI.
+
+> Somebody just hates you. I do end up checking my spam-box regularly,
+> so maybe it doesn't matter.
+
+Some spot checks are suggesting that they use gmail as their outbound
+relay which I can imagine they'd like but would break some stuff for me
+for non-kernel.org mail I think, it'd be a major rework to not inject
+stuff via sendmail.
+
+--5yI2NvEZ36o0Huwo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzRZg4ACgkQJNaLcl1U
+h9CAyQf8DVlvoFWeiTUwpzTQFEIq5Wwp/JRRXMVMhw7sxqeRaOBRVanVtNu8wtKH
+ZcDWMjKJnSwyS6aaMJi+mVvWklpvUZoJDWV1WhpTgdPE7GMpA76Iylgp2ykHlaCX
+aiHtn/eDeipQQVNN9/AUhmVzph3pOS5QamOfi4QKA9EY7+5xMfiFT1bEPbfi1p58
+PykMZ+pbaIWrLFhdo5uRzJdF6AnlyMxsyRVh0JSFTk+E5JoEEMKTM78CfwXH6FIF
+Nv0sHzV5bxN6FJrGXRh6BQJM1RSEkUvRIsounFTh7IfSqyNb7aITNXRBoXYPqEQ2
+uN7xilb711sEZoay6sh217Saj+5RFA==
+=wPfk
+-----END PGP SIGNATURE-----
+
+--5yI2NvEZ36o0Huwo--
