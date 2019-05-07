@@ -2,101 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD7D15782
-	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2019 04:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CE9157B1
+	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2019 04:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbfEGCTB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 May 2019 22:19:01 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57466 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfEGCTB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 May 2019 22:19:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=HJ6HqMU1sPHXWvDxvJW6MISYuiPP8r+D0++57SCHFmI=; b=DUSD2I6furej502T+29FUF5s9
-        Ir1MXxFDaIAYjGXu+mv2qZKFhrjjdbNYAzamOBTMyVx+dtcF9Em4yCq/cs+TsitOwz2F4xttFh1gA
-        Rw4TL4qm6gewD73gJL2Rc80kPtWf/dSRi5P/pmY585tILEZ5/kQaUm13kBKEl0Tpuqo3s=;
-Received: from kd111239185057.au-net.ne.jp ([111.239.185.57] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hNph3-0003Pa-85; Tue, 07 May 2019 02:18:57 +0000
-Received: by finisterre.ee.mobilebroadband (Postfix, from userid 1000)
-        id 878CA44000C; Tue,  7 May 2019 03:18:53 +0100 (BST)
-Date:   Tue, 7 May 2019 11:18:53 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] spi updates for v5.2
-Message-ID: <20190507021853.GY14916@sirena.org.uk>
-References: <20190506143301.GU14916@sirena.org.uk>
- <CAADWXX_MqtZ6RxS2zEVmHtKrjqigiNzdSe5qVwBVvfVU6dxJRQ@mail.gmail.com>
+        id S1726181AbfEGCet (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 May 2019 22:34:49 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:42875 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725994AbfEGCet (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 May 2019 22:34:49 -0400
+Received: by mail-lf1-f67.google.com with SMTP id w23so10600130lfc.9
+        for <linux-spi@vger.kernel.org>; Mon, 06 May 2019 19:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MtEkyVeK1FG141ZNbqUNDiDkDaGa5Egmv7z41Kin/Z4=;
+        b=bMpsabR8hmahjs3RFGKw3QVCOwzsV9GbkOHIuC+Dib6ELB3W2v2LQnqamGXsCBN7zp
+         k2yliPz5yx0OjC3SBTcyQKjEUZ+6CaNyC8hMRNBJWhX/dULq1WZ6c/SMO3NcID56id8n
+         se1+GooMIUOS9ysKu0WWktm1ZEx0BepMEm5/E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MtEkyVeK1FG141ZNbqUNDiDkDaGa5Egmv7z41Kin/Z4=;
+        b=hIf9921bZZLYebPKR4dhZ0mA6zm3l0aVjABaq4bfW0InCsjdHvq7mo14bh51tkl9Mh
+         FeAJsbly3IcrHHwnQBvpU9Trsrm2Tzv/+B4NI9cody2+hf/noPXfYBiCEiBuYH9Jrczp
+         fO9zy522DVjSnL3UTKe/qods9cCQDUOmHMy2k+2O9MOqzHqSP6fBBi0G0Z2tZatOsuRY
+         HnAMSvI4UTP0PIfKiegmLnKf8nd28xA+WuGVUpdhyCweJ5WnWDWPEYQ/MqD0U4tL+XCB
+         FthxF5yHRYRObxr9fSzESiYePXX89mxArzO1zsiYb8/8xmlisCw545ozRGgiWy/m/k1e
+         jWdg==
+X-Gm-Message-State: APjAAAX0g0zNz7VKTdnY69nx1NHpm3co4E9dCLWLHTksvDHaT5WyQRNy
+        Itc5bTEuW7t3IbdMKRTp7IynvztmMN4=
+X-Google-Smtp-Source: APXvYqy3HQyo8/iSlqg3/0sJ06MwXbfvXcHgMtrQc29M7UEmP33fqnmtbXxDFxGiF7Q1FBY88eH7hQ==
+X-Received: by 2002:ac2:428f:: with SMTP id m15mr14712302lfh.40.1557196487344;
+        Mon, 06 May 2019 19:34:47 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id x6sm2871472lfn.74.2019.05.06.19.34.46
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 May 2019 19:34:46 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id h126so10602048lfh.4
+        for <linux-spi@vger.kernel.org>; Mon, 06 May 2019 19:34:46 -0700 (PDT)
+X-Received: by 2002:ac2:5a41:: with SMTP id r1mr1358836lfn.148.1557196486137;
+ Mon, 06 May 2019 19:34:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iwX7oKFvAj2SwWc7"
-Content-Disposition: inline
-In-Reply-To: <CAADWXX_MqtZ6RxS2zEVmHtKrjqigiNzdSe5qVwBVvfVU6dxJRQ@mail.gmail.com>
-X-Cookie: -- I have seen the FUN --
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190506143301.GU14916@sirena.org.uk> <CAADWXX_MqtZ6RxS2zEVmHtKrjqigiNzdSe5qVwBVvfVU6dxJRQ@mail.gmail.com>
+ <20190507021853.GY14916@sirena.org.uk>
+In-Reply-To: <20190507021853.GY14916@sirena.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 6 May 2019 19:34:29 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whLZMe5kNpNMnhh5oVHFKNv7Um4tBS+rH=kLvM+CWzzxw@mail.gmail.com>
+Message-ID: <CAHk-=whLZMe5kNpNMnhh5oVHFKNv7Um4tBS+rH=kLvM+CWzzxw@mail.gmail.com>
+Subject: Re: [GIT PULL] spi updates for v5.2
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, May 6, 2019 at 7:19 PM Mark Brown <broonie@kernel.org> wrote:
+> >
+> >     dmarc=fail (p=NONE sp=NONE dis=NONE) header.from=kernel.org
+>
+> That looks like it's a fail on validation of the kernel.org bit of
+> things which I have no control over and which purposely doesn't
+> advertise DKIM stuff in the hope that people will actually be able to
+> send mail from non-kernel.org mail servers.
 
---iwX7oKFvAj2SwWc7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looking around, I think you're right, and it's probably not actually
+the DKIM thing that causes problems.
 
-On Mon, May 06, 2019 at 12:01:44PM -0700, Linus Torvalds wrote:
-> Mark,
->  gmail once again hates your emails. Your email ends up as spam, due to
->=20
->     dmarc=3Dfail (p=3DNONE sp=3DNONE dis=3DNONE) header.from=3Dkernel.org
+Because yes, kernel.org dmarc will just say "ignore".
 
-That looks like it's a fail on validation of the kernel.org bit of
-things which I have no control over and which purposely doesn't
-advertise DKIM stuff in the hope that people will actually be able to
-send mail from non-kernel.org mail servers.  I'm really unsure why
-that's failing at all, there's no policy for kernel.org to fail.
+So I think it's just google that still doesn't like sirena.org.uk.
+Iirc, that's happened before, no?
 
-> but it has a DKIM signature for sirena.org.uk:
->=20
->     DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/relax=
-ed;
-> d=3Dsirena.org.uk; ...
-
-which should match the envelope sender.
-
-As far as I can tell Google is going to be unhappy no matter what unless
-I use their services - if there's DKIM records it's not going to like
-that the from is from kernel.org and if I don't have DKIM records then
-it's not going to like that either and I'll be more vulnerable to the
-blacklists that try to extort money out of people for permanent
-delisting.
-
-Possibly it's not actually anything to do with the DKIM and it's just
-upset that I'm travelling and so the mail was injected from a mobile
-broadband IP in Japan which doesn't match up with the .uk domain.
-
---iwX7oKFvAj2SwWc7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzQ6woACgkQJNaLcl1U
-h9CVoQf/VViEns1FF+b1XU9wV7gcbUx9zYS/VA3JSRel7Z5EwW95p98WYkw8RG3k
-BKLav1zV87dO+uCB2jhW9QZX6M1HC9k09MR3W5hlRPmh9WEYfNdTmhBxAad7MFje
-XpYC2lrYAoBeOx4Lf0GwsjbLERG4D4t9zc424sazqj6spnnwIMlgw9LlU8oYpuqJ
-CdyWWs3tTPrMhfMo7KyN52/X0xAxuvdNn/ENDgEOlUC49msa/+mAnsgsOKRL4kAd
-A7omKODjAzUUXDxPAkjkmtvdtZc5SwdvJ4OJ57OcKtOZkQp6Qjjo6DA6cG3V6Hby
-dt2hGyITxKXWX5i1WsjCtLuHrBzWIQ==
-=AaKX
------END PGP SIGNATURE-----
-
---iwX7oKFvAj2SwWc7--
+                   Linus
