@@ -2,126 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D571752F
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 11:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1261617567
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 11:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbfEHJfH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 May 2019 05:35:07 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:44588 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726404AbfEHJfH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 05:35:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=cwjgt3LWAecjUe1gad06+8+vUQlYe5AecFK/x5RLNLc=; b=VW3Z0OU+M4kZ
-        g/TC48/ZPWJAx0WNwGL+e4a8FvW4kFJWfJn2s2CqkJ8fgrK+qs99ZA2lCebdcoPo1VA94lm/fnkeZ
-        8Axwtgk9UZdiD8av43/26dNqfn96XCwWYWagTCAM7ZHMltE2L0pd/hvi848xVAQTRcaHAjJEDsJAn
-        cUEnQ=;
-Received: from [61.199.190.11] (helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hOIyZ-0007l8-QK; Wed, 08 May 2019 09:35:00 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 7780444000C; Wed,  8 May 2019 10:34:54 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin Sperl <kernel@martin.sperl.org>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: core: allow defining time that cs is deasserted as a multiple of SCK" to the spi tree
-In-Reply-To: 
-X-Patchwork-Hint: ignore
-Message-Id: <20190508093454.7780444000C@finisterre.sirena.org.uk>
-Date:   Wed,  8 May 2019 10:34:54 +0100 (BST)
+        id S1726789AbfEHJro (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 May 2019 05:47:44 -0400
+Received: from mail-eopbgr150050.outbound.protection.outlook.com ([40.107.15.50]:42753
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726634AbfEHJro (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 8 May 2019 05:47:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MYKSw8E3S3YAcBWxSFu4j7WStB3i2e/0mj4lpwSvJ58=;
+ b=RDKS6WCpPv13kq+kVmnYdXH3VrZ5+IQMYhXC2A59w5WrA5dzlXMTOa0rI1DouXMNz3zwxpTGjTUijLRTMgDk20hN/TYSb8lbuAZS2viyxsUzXspKd+HRtzCfzjXU9FjmR7CY/LKORWtkZRaa/fq1cawVbaKYr/AsQav0sQtV5Iw=
+Received: from VI1PR04MB4543.eurprd04.prod.outlook.com (20.177.55.90) by
+ VI1PR04MB4462.eurprd04.prod.outlook.com (20.177.53.94) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.11; Wed, 8 May 2019 09:47:38 +0000
+Received: from VI1PR04MB4543.eurprd04.prod.outlook.com
+ ([fe80::5d07:911b:18e1:1525]) by VI1PR04MB4543.eurprd04.prod.outlook.com
+ ([fe80::5d07:911b:18e1:1525%4]) with mapi id 15.20.1856.012; Wed, 8 May 2019
+ 09:47:38 +0000
+From:   Robin Gong <yibin.gong@nxp.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "broonie@kernel.org" <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "plyatov@gmail.com" <plyatov@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: RE: [EXT] Re: [PATCH v3 10/14] dt-bindings: dma: imx-sdma: add
+ i.mx6ul/6sx  compatible name
+Thread-Topic: [EXT] Re: [PATCH v3 10/14] dt-bindings: dma: imx-sdma: add
+ i.mx6ul/6sx  compatible name
+Thread-Index: AQHVBPXDrkhn+7eeekK+EpnqoHxjf6Zg+QNg
+Date:   Wed, 8 May 2019 09:47:38 +0000
+Message-ID: <VI1PR04MB45434F10FA0AC88AFE2DB09489320@VI1PR04MB4543.eurprd04.prod.outlook.com>
+References: <1557249513-4903-1-git-send-email-yibin.gong@nxp.com>
+ <1557249513-4903-11-git-send-email-yibin.gong@nxp.com>
+ <20190507165601.GA17194@bogus>
+In-Reply-To: <20190507165601.GA17194@bogus>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yibin.gong@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bc0548f4-333e-4519-fe07-08d6d39a34f4
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4462;
+x-ms-traffictypediagnostic: VI1PR04MB4462:
+x-microsoft-antispam-prvs: <VI1PR04MB446223DD4B9BE9D881B73A7089320@VI1PR04MB4462.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0031A0FFAF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(346002)(39860400002)(396003)(376002)(366004)(189003)(199004)(8676002)(81156014)(81166006)(53936002)(71190400001)(4326008)(76176011)(102836004)(66066001)(8936002)(7696005)(6506007)(5660300002)(446003)(256004)(11346002)(478600001)(476003)(25786009)(6916009)(14454004)(486006)(6116002)(4744005)(3846002)(305945005)(66946007)(73956011)(76116006)(66476007)(7416002)(9686003)(71200400001)(54906003)(68736007)(86362001)(33656002)(2906002)(26005)(186003)(99286004)(229853002)(66556008)(6436002)(52536014)(64756008)(74316002)(66446008)(7736002)(6246003)(316002)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4462;H:VI1PR04MB4543.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: +Yl8u/xWF8nmY5CuTOD0yrKFVHCLe7vxfUCGAyUOGsf7dq9JERyXEW3j1sNgFd47DfPRADxiG3i+vCaha6weSAI+wsXp4Ok4XNR/WjZlrPUj87wQr3s8sH+0xLg6nRENpb2bCh0SwVo6DXImMpIMYJHYjXAkpgGHOEKUnv1lc5caD1vhNGnol3GzQteqbxv48IfgxzjBebinFO8De5yrcsgFp58KzAW2vLdBCuQwA1CgGgY06zJrEXw//E94ZcL17iyxfK2MlaQbFQZYbj1y0K+m6frfZ3fk1u7FUXiYxpfwz85C9BYj8oRn3NlLRxVVqS6Bb7lWiFJAVqmqzIKFg/vjJu/3OoiiN5HE7gYPzBE5MqPHn+tVA+E2Mq32ZAHHxOQ1LR9hKPI5cCJqqHfh9vqYD9Fy17XDrOPPWLSuZ3M=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc0548f4-333e-4519-fe07-08d6d39a34f4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2019 09:47:38.5528
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4462
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
-
-   spi: core: allow defining time that cs is deasserted as a multiple of SCK
-
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From d5864e5bed96db7230da45463d6ae7af5b3b4399 Mon Sep 17 00:00:00 2001
-From: Martin Sperl <kernel@martin.sperl.org>
-Date: Sat, 23 Feb 2019 08:49:50 +0000
-Subject: [PATCH] spi: core: allow defining time that cs is deasserted as a
- multiple of SCK
-
-Support setting a delay between cs assert and deassert as
-a multiple of spi clock length.
-
-Signed-off-by: Martin Sperl <kernel@martin.sperl.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi.c       | 8 ++++++++
- include/linux/spi/spi.h | 1 +
- 2 files changed, 9 insertions(+)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 7e8ffe3fdc00..cfa3c3decb8a 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1111,6 +1111,7 @@ static void _spi_transfer_cs_change_delay(struct spi_message *msg,
- {
- 	u32 delay = xfer->cs_change_delay;
- 	u32 unit = xfer->cs_change_delay_unit;
-+	u32 hz;
- 
- 	/* return early on "fast" mode - for everything but USECS */
- 	if (!delay && unit != SPI_DELAY_UNIT_USECS)
-@@ -1126,6 +1127,13 @@ static void _spi_transfer_cs_change_delay(struct spi_message *msg,
- 		break;
- 	case SPI_DELAY_UNIT_NSECS: /* nothing to do here */
- 		break;
-+	case SPI_DELAY_UNIT_SCK:
-+		/* if there is no effective speed know, then approximate
-+		 * by underestimating with half the requested hz
-+		 */
-+		hz = xfer->effective_speed_hz ?: xfer->speed_hz / 2;
-+		delay *= DIV_ROUND_UP(1000000000, hz);
-+		break;
- 	default:
- 		dev_err_once(&msg->spi->dev,
- 			     "Use of unsupported delay unit %i, using default of 10us\n",
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 023beb9e9e4b..e552a036cb4d 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -831,6 +831,7 @@ struct spi_transfer {
- 	u8		cs_change_delay_unit;
- #define SPI_DELAY_UNIT_USECS	0
- #define SPI_DELAY_UNIT_NSECS	1
-+#define SPI_DELAY_UNIT_SCK	2
- 	u32		speed_hz;
- 	u16		word_delay;
- 
--- 
-2.20.1
-
+> On Wed, 8 May 2019 09:16:38 +0000, Rob Herring wrote:
+> On Tue, 7 May 2019 09:16:38 +0000, Robin Gong wrote:
+> > Add i.mx6ul and i.mx6sx compatible name.
+> >
+> > Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+> > ---
+> >  Documentation/devicetree/bindings/dma/fsl-imx-sdma.txt | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+>=20
+> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+> there's no need to repost patches *only* to add the tags. The upstream
+> maintainer will do that for acks received on the version they apply.
+Sorry, no tags and no comments get from V2 for this patch. Just resend the =
+whole
+patch set for v3 since other comments addressed from other patch.=20
+>=20
+> If a tag was not added on purpose, please state why and what changed.
