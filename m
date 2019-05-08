@@ -2,49 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE6D174A9
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 11:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3D3174A3
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 11:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727011AbfEHJJk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 May 2019 05:09:40 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:58348 "EHLO
+        id S1726977AbfEHJJY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 May 2019 05:09:24 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57876 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbfEHJJj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 05:09:39 -0400
+        with ESMTP id S1726460AbfEHJJY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 05:09:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=DXt5IntGctC+H7tmN7EBvL0ioZYMHBlAhEaJOHxOk2M=; b=QripnkRtQHYP
-        1MfCqvkWjIjF3ZxOPKirO+fKlNxWj81QKDx5JRCVqQF5UK07eADTWpy8uMv8yW2BTfBWtvLajWO1u
-        rND8Pl20qN9DfjbWtXvCcCi5luE/BldIqfXVopiaJa+lGkJkDMNpwVDUDFcjA8JBErXU2b++/wnRd
-        AGkaI=;
+        List-Archive; bh=COXYRcFBUtXgmLe1rrJSb3TEPOb9/EzOUdDeaGoi6o0=; b=oAeisNZ57zz4
+        COQDcdRFLZvXoyvnN5PB5bS0cJ3DdZ2+GGjXwwHp4Vp5e+f2mw4DbECyoMKOhgYUOTWnAcZpULWzs
+        MDfx7VbaI1CXl0nw4Yl5QaYy4n1GhQpGG/vOTeDUz+zaAtdDlXf7t7QfckvulVQ13da+cwEseLIbL
+        nC48Y=;
 Received: from [61.199.190.11] (helo=finisterre.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hOIZl-0007gS-A6; Wed, 08 May 2019 09:09:24 +0000
+        id 1hOIZf-0007gb-Og; Wed, 08 May 2019 09:09:16 +0000
 Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id B7CB344003F; Wed,  8 May 2019 10:08:57 +0100 (BST)
+        id 4A279440017; Wed,  8 May 2019 10:08:58 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Radu Pirea <radu_nicolae.pirea@upb.ro>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Applied "dt-bindings: mfd: atmel-usart: add DMA bindings for USART in SPI mode" to the spi tree
-In-Reply-To: <20190505180646.1442-2-radu_nicolae.pirea@upb.ro>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Fabio Estevam <festevam@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Applied "spi: ep93xx: Drop unused variable" to the spi tree
+In-Reply-To: <20190503231829.4112-1-linus.walleij@linaro.org>
 X-Patchwork-Hint: ignore
-Message-Id: <20190508090857.B7CB344003F@finisterre.sirena.org.uk>
-Date:   Wed,  8 May 2019 10:08:57 +0100 (BST)
+Message-Id: <20190508090858.4A279440017@finisterre.sirena.org.uk>
+Date:   Wed,  8 May 2019 10:08:58 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -52,7 +46,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   dt-bindings: mfd: atmel-usart: add DMA bindings for USART in SPI mode
+   spi: ep93xx: Drop unused variable
 
 has been applied to the spi tree at
 
@@ -77,67 +71,34 @@ to this mail.
 Thanks,
 Mark
 
-From f7b99e5948e6be8b850eecbb2de1986d26a76b36 Mon Sep 17 00:00:00 2001
-From: Radu Pirea <radu_nicolae.pirea@upb.ro>
-Date: Sun, 5 May 2019 21:06:45 +0300
-Subject: [PATCH] dt-bindings: mfd: atmel-usart: add DMA bindings for USART in
- SPI mode
+From e29eaa3c4b76d4dd46d7a92018de1ab2793794e1 Mon Sep 17 00:00:00 2001
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Sat, 4 May 2019 01:18:29 +0200
+Subject: [PATCH] spi: ep93xx: Drop unused variable
 
-The bindings for DMA are now common for both drivers of the USART
-IP.
+My previous patch leaves a dangling variable in the driver.
+get rid of it.
 
-The node given as an example for USART in SPI mode has been updated in
-order to include DMA bindings.
-
-Signed-off-by: Radu Pirea <radu_nicolae.pirea@upb.ro>
+Fixes: 06a391b1621e ("spi: ep93xx: Convert to use CS GPIO descriptors")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../devicetree/bindings/mfd/atmel-usart.txt   | 20 ++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ drivers/spi/spi-ep93xx.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/atmel-usart.txt b/Documentation/devicetree/bindings/mfd/atmel-usart.txt
-index 7f0cd72f47d2..699fd3c9ace8 100644
---- a/Documentation/devicetree/bindings/mfd/atmel-usart.txt
-+++ b/Documentation/devicetree/bindings/mfd/atmel-usart.txt
-@@ -17,17 +17,24 @@ Required properties for USART in SPI mode:
- - cs-gpios: chipselects (internal cs not supported)
- - atmel,usart-mode : Must be <AT91_USART_MODE_SPI> (found in dt-bindings/mfd/at91-usart.h)
+diff --git a/drivers/spi/spi-ep93xx.c b/drivers/spi/spi-ep93xx.c
+index 47e39251bad9..81889389280b 100644
+--- a/drivers/spi/spi-ep93xx.c
++++ b/drivers/spi/spi-ep93xx.c
+@@ -651,7 +651,6 @@ static int ep93xx_spi_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	int irq;
+ 	int error;
+-	int i;
  
-+Optional properties in serial and SPI mode:
-+- dma bindings for dma transfer:
-+	- dmas: DMA specifier, consisting of a phandle to DMA controller node,
-+		memory peripheral interface and USART DMA channel ID, FIFO configuration.
-+		The order of DMA channels is fixed. The first DMA channel must be TX
-+		associated channel and the second one must be RX associated channel.
-+		Refer to dma.txt and atmel-dma.txt for details.
-+	- dma-names: "tx" for TX channel.
-+		     "rx" for RX channel.
-+		     The order of dma-names is also fixed. The first name must be "tx"
-+		     and the second one must be "rx" as in the examples below.
-+
- Optional properties in serial mode:
- - atmel,use-dma-rx: use of PDC or DMA for receiving data
- - atmel,use-dma-tx: use of PDC or DMA for transmitting data
- - {rts,cts,dtr,dsr,rng,dcd}-gpios: specify a GPIO for RTS/CTS/DTR/DSR/RI/DCD line respectively.
-   It will use specified PIO instead of the peripheral function pin for the USART feature.
-   If unsure, don't specify this property.
--- add dma bindings for dma transfer:
--	- dmas: DMA specifier, consisting of a phandle to DMA controller node,
--		memory peripheral interface and USART DMA channel ID, FIFO configuration.
--		Refer to dma.txt and atmel-dma.txt for details.
--	- dma-names: "rx" for RX channel, "tx" for TX channel.
- - atmel,fifo-size: maximum number of data the RX and TX FIFOs can store for FIFO
-   capable USARTs.
- - rs485-rts-delay, rs485-rx-during-tx, linux,rs485-enabled-at-boot-time: see rs485.txt
-@@ -81,5 +88,8 @@ Example:
- 		interrupts = <12 IRQ_TYPE_LEVEL_HIGH 5>;
- 		clocks = <&usart0_clk>;
- 		clock-names = "usart";
-+		dmas = <&dma0 2 AT91_DMA_CFG_PER_ID(3)>,
-+		       <&dma0 2 (AT91_DMA_CFG_PER_ID(4) | AT91_DMA_CFG_FIFOCFG_ASAP)>;
-+		dma-names = "tx", "rx";
- 		cs-gpios = <&pioB 3 0>;
- 	};
+ 	info = dev_get_platdata(&pdev->dev);
+ 	if (!info) {
 -- 
 2.20.1
 
