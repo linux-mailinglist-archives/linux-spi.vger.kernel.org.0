@@ -2,36 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A07175DE
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 12:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F30175FA
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 12:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbfEHKUr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 May 2019 06:20:47 -0400
-Received: from onstation.org ([52.200.56.107]:54298 "EHLO onstation.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726640AbfEHKUr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 8 May 2019 06:20:47 -0400
-Received: from localhost (c-98-239-145-235.hsd1.wv.comcast.net [98.239.145.235])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: masneyb)
-        by onstation.org (Postfix) with ESMTPSA id 610443E941;
-        Wed,  8 May 2019 10:20:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onstation.org;
-        s=default; t=1557310846;
-        bh=GQMfiDCH+yPuPYxmkr3rVNJiGPHx3JJy8lKsx/Svqk4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RCduyU6kHTTTdGkLVgNg48NGethGwiEZa+Os/9cU/btdu1k09pKeqPLBcFrTFnqZi
-         gSQsKHFt7TmyOvd7Ui6zrplzj/60nk8rhrxOgS7Kgu0/2ARXPTQACAcd38izUrgcUV
-         xvrOYjFChA4XemKLTx92uZ4Bmw5nQt4HOJkh6bpA=
-Date:   Wed, 8 May 2019 06:20:46 -0400
-From:   Brian Masney <masneyb@onstation.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1726776AbfEHKay (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 May 2019 06:30:54 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:53660 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725868AbfEHKay (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 06:30:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=6zKEjeMM16COzxVFPj2qwKD0N14L6e+VxtnDZD3acEk=; b=fsCXGVb8UjYuCmhgNP7K1zHLd
+        XQLDXNv3RxBAkaOgfNmOTLZsvAUPjkfOF6eop4tj/Sw0t8fN0zANvMNm0Os97csT071qPQCcbxjxz
+        QFu63GtwVc3M+mGWYER+g9Gzk3SzioV69NrT/tjI+GudYlyI+v7RMMXF16qqA97K1voaY=;
+Received: from [61.199.190.11] (helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hOJqc-0007sb-Q7; Wed, 08 May 2019 10:30:51 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id B7E6144000C; Wed,  8 May 2019 11:27:36 +0100 (BST)
+Date:   Wed, 8 May 2019 19:27:36 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-spi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
 Subject: Re: [GIT PULL] spi updates for v5.2
-Message-ID: <20190508102046.GA18635@basecamp>
+Message-ID: <20190508102736.GO14916@sirena.org.uk>
 References: <20190506143301.GU14916@sirena.org.uk>
  <CAADWXX_MqtZ6RxS2zEVmHtKrjqigiNzdSe5qVwBVvfVU6dxJRQ@mail.gmail.com>
  <20190507021853.GY14916@sirena.org.uk>
@@ -40,43 +42,61 @@ References: <20190506143301.GU14916@sirena.org.uk>
  <20190507110345.GF14916@sirena.org.uk>
  <20190507120730.5ylk6v4yvzxuzqld@earth.universe>
  <20190508060936.GH14916@sirena.org.uk>
+ <20190508101301.lxwt4e6eziujdfit@earth.universe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="N8EXF1oXVIanxtk/"
 Content-Disposition: inline
-In-Reply-To: <20190508060936.GH14916@sirena.org.uk>
+In-Reply-To: <20190508101301.lxwt4e6eziujdfit@earth.universe>
+X-Cookie: -- I have seen the FUN --
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, May 08, 2019 at 03:09:36PM +0900, Mark Brown wrote:
-> On Tue, May 07, 2019 at 02:07:30PM +0200, Sebastian Reichel wrote:
-> 
-> > FWIW, I send out kernel.org mails via mail.kernel.org. Konstantin
-> > added that service in 2014. You can get a password with
-> 
-> > ssh git@gitolite.kernel.org getsmtppass
-> > 
-> > and then use the following settings for (example for git):
-> 
-> I'd have to send all mail out via kernel.org to do that, or persuade a
-> MTA to route mail differently based on contents which seems interesting
-> - I inject most of my mail via /usr/sbin/sendmail rather than SMTP
-> (including a bunch of scripts).
 
-I use a program called msmtp (https://marlam.de/msmtp/) to route email
-to different SMTP servers based on my sender address. Once you have your
-accounts configured, replace the call to the sendmail binary in your MUA
-with msmtp and it'll route the email differently for you. It's included
-in the package repositories for most major Linux distributions. Here's
-two resources I found that show how to configure mutt and git send-email
-to use msmtp:
+--N8EXF1oXVIanxtk/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://hostpresto.com/community/tutorials/how-to-send-email-from-the-command-line-with-msmtp-and-mutt/
-https://jordonwu.github.io/blog/2015/12/01/git-send-email-and-msmtp-config/
+On Wed, May 08, 2019 at 12:13:01PM +0200, Sebastian Reichel wrote:
+> On Wed, May 08, 2019 at 03:09:36PM +0900, Mark Brown wrote:
 
-Once you have msmtp setup, send test emails from each of your accounts
-to check-auth@verifier.port25.com to have a bot verify that your email
-is setup properly (DKIM, SPF, reverse DNS, etc).
+> > I'd have to send all mail out via kernel.org to do that, or persuade a
+> > MTA to route mail differently based on contents which seems interesting
+> > - I inject most of my mail via /usr/sbin/sendmail rather than SMTP
+> > (including a bunch of scripts).
 
-Brian
+> I have a locally installed postfix in sender dependent relay
+> configuration, which does that for me:
+
+> http://www.postfix.org/SOHO_README.html#client_sasl_sender
+
+I'm using exim on the central relay box which is much more painful to
+configure than postfix sadly (one of these days I'll get round to
+converting to Postfix since I prefer it and already use it on my client
+boxes but the DKIM stuff is painful enough and there's enough stuff
+using the box that it'll require me to actually sit down properly to do
+something as substantial as cutting over MTAs).  It's also not clear to
+me that Postfix can be configured based on From rather than envelope
+sender, I have used the configuration options you're pointing at for
+envelope senders before but at least at that time Postfix didn't support
+setting envelope sender via /usr/sbin/sendmail.
+
+--N8EXF1oXVIanxtk/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzSrxcACgkQJNaLcl1U
+h9ApdQgAgd+Tex6oCuaxwPfVHqJlxF6U9IdZ5e/tN4kqyoqXrVHGYgd8Ty++q8gD
+MyNkEy2rO+N8SzvfTIlffM6E4ascQA8lXu/iSyNzeuDI12tsc0N5TxixRSDZgVWz
+OQ/9hGdtUvxUipxH/lF7upTNtKEH0lylrP3iSNrnXiED3sUY4niyt+yGukCLS00T
+q9gXwFNo9Dr0LoPmQ3wEwDfF+AktWDZtDlskljh709qztoeJPOzpIWPdlBgTXp+5
+71u0dUMk4PQJavsDy19LYBvCH1doaTe1HLt0orwjvM5ROyJu1iYhjdWjyyTPhZ08
+xuD4PXII2siLA1yJ3UIDPZjois9prg==
+=QGT7
+-----END PGP SIGNATURE-----
+
+--N8EXF1oXVIanxtk/--
