@@ -2,31 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A99018047
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 21:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A8618076
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 21:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727706AbfEHTLu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 8 May 2019 15:11:50 -0400
-Received: from 212-186-180-163.static.upcbusiness.at ([212.186.180.163]:36184
+        id S1727410AbfEHTbN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 8 May 2019 15:31:13 -0400
+Received: from 212-186-180-163.static.upcbusiness.at ([212.186.180.163]:36196
         "EHLO cgate.sperl.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727624AbfEHTLu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 15:11:50 -0400
+        with ESMTP id S1727400AbfEHTbN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 15:31:13 -0400
 Received: from msmac.intern.sperl.org (account martin@sperl.org [10.10.10.11] verified)
   by sperl.org (CommuniGate Pro SMTP 6.2.1 _community_)
-  with ESMTPSA id 7764428; Wed, 08 May 2019 19:11:43 +0000
-Content-Type: text/plain; charset=utf-8
+  with ESMTPSA id 7764429; Wed, 08 May 2019 19:31:10 +0000
+Content-Type: text/plain; charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
 Subject: Re: SPI regression with today's build
 From:   kernel@martin.sperl.org
-In-Reply-To: <0f0b3e3c-93c4-b76c-854c-6f498bc017d6@tronnes.org>
-Date:   Wed, 8 May 2019 21:11:54 +0200
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        broonie@kernel.org, linux-spi@vger.kernel.org,
+In-Reply-To: <515AD7AA-19E4-4DBF-8AAB-5EE8071FCAF6@martin.sperl.org>
+Date:   Wed, 8 May 2019 21:31:22 +0200
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
         Stefan Wahren <stefan.wahren@i2se.com>
 Content-Transfer-Encoding: 8BIT
-Message-Id: <515AD7AA-19E4-4DBF-8AAB-5EE8071FCAF6@martin.sperl.org>
-References: <5be80c08e0873ab200ed472b98ea8772666852ff.camel@suse.de> <a2f71bcab3756dc35385288ca3287af6849933a6.camel@suse.de> <0f0b3e3c-93c4-b76c-854c-6f498bc017d6@tronnes.org>
-To:     =?utf-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
+Message-Id: <3B6A48E5-87AF-430A-A916-AD97662F90A9@martin.sperl.org>
+References: <5be80c08e0873ab200ed472b98ea8772666852ff.camel@suse.de> <a2f71bcab3756dc35385288ca3287af6849933a6.camel@suse.de> <0f0b3e3c-93c4-b76c-854c-6f498bc017d6@tronnes.org> <515AD7AA-19E4-4DBF-8AAB-5EE8071FCAF6@martin.sperl.org>
+To:     =?utf-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 X-Mailer: Apple Mail (2.3124)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -34,68 +35,62 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-> On 08.05.2019, at 19:33, Noralf Trønnes <noralf@tronnes.org> wrote:
+> On 08.05.2019, at 21:11, kernel@martin.sperl.org wrote:
 > 
-> [cc:Martin]
+> As per (intended) api finalize_current_message should be called before
+> finalize current message, as all sorts of reordering may occur and data
+> may get moved arround.
 > 
-> Den 08.05.2019 19.07, skrev Nicolas Saenz Julienne:
->> Small follow-up on this, and CCing Noralf as I forgot to add him on the last
->> e-mail.
->> 
->> On Wed, 2019-05-08 at 17:01 +0200, Nicolas Saenz Julienne wrote:
-...
->> It seems the SPI controller thread is racing with the device's thread.
->> Something like this:
->> 
->>     SPI Controller Thread                       SPI Device Thread
->> 
->> 					    -> spi_sync_transfer() creates
->> 					       spi_message on stack then
->> 					       sleeps until finished
->> 
->> 			[SPI transfer happens...]
->> 
->> -> spi_finalize_current_message()
->>   which wakes up SPI Device Thread
->> 
->>                                            -> spi_sync_transfer() returns, the
->> 					       message disapears from the stack
->> 
->> -> spi_res_release() there is no more
->>   spi_message and the memory is
->>   potentialy used for something else
->> 
->> I've been looking at the spi_split_transfers_maxsize() code and can't think of
->> a reason why spi_res_release() couldn't be placed before
->> spi_finalize_current_message(). Which would solve the issue, but I guess Noralf
->> has a better perspective on the topic.
->> 
+> For example you could even transform a spi_write_then_read into a single
+> spi_transfer using a buffer and then copy the data back to the original
+> place, whioch would not be supported as is.
 > 
-> The problem was that spi_res_release() restored the original transfers
-> before spi_unmap_msg() is called in spi_finalize_current_message() thus
-> dma unmapping the original transfers, not the split ones that was mapped.
+> In the end it may even make sense to make the dma-mapping also a
+> spi resource transformation at the right place and move spi_res_release
+> before the finalize current message.
 > 
-> This is the accompanying change to the driver that hasn't been applied:
-> [v5,3/4] spi/spi-bcm2835: Split transfers that exceed DLEN
-> https://patchwork.kernel.org/patch/10899587/
-> 
-> Unless Martin Sperl, who wrote spi_split_transfers_maxsize(), has other
-> suggestions, I think we should just revert this patch.
+> But obviously that is a bigger change to core we may not be able to
+> get into the current release window.
 
-As per (intended) api finalize_current_message should be called before
-finalize current message, as all sorts of reordering may occur and data
-may get moved arround.
+Something like this (compiles but untested) could solve the issue:
 
-For example you could even transform a spi_write_then_read into a single
-spi_transfer using a buffer and then copy the data back to the original
-place, whioch would not be supported as is.
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5e75944ad5d1..002acfee7785 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1183,8 +1183,6 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
 
-In the end it may even make sense to make the dma-mapping also a
-spi resource transformation at the right place and move spi_res_release
-before the finalize current message.
+        spi_finalize_current_message(ctlr);
 
-But obviously that is a bigger change to core we may not be able to
-get into the current release window.
+-       spi_res_release(ctlr, msg);
+-
+        return ret;
+ }
+
+@@ -1448,6 +1446,8 @@ void spi_finalize_current_message(struct spi_controller *ctlr)
+                }
+        }
+
++       spi_res_release(ctlr, mesg);
++
+        spin_lock_irqsave(&ctlr->queue_lock, flags);
+        ctlr->cur_msg = NULL;
+        ctlr->cur_msg_prepared = false;
+
+
+It also fixes a memory leak (spi_res objects) when:
+* bus_drivers call spi_finalize_current_message on its own
+* prepare_message fails
+* spi_map_msg fails
+
+Then those resource transformations are not reverted and
+memory is not freed.
+
+@Nicolas: maybe you can confirm that this fixes your issue.
+
+@Marc: you need to decide on if this is acceptable, but as
+it is fixing actual memory leaks there may be a good argument
+to apply it. But then as it is at the core longer testing would
+be welcome...
 
 Martin
-
