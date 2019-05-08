@@ -2,106 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F8E17202
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 09:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9423B172B1
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 09:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbfEHHCa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 May 2019 03:02:30 -0400
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:38963 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725884AbfEHHCa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 03:02:30 -0400
-Received: by mail-vk1-f196.google.com with SMTP id s80so4701510vke.6;
-        Wed, 08 May 2019 00:02:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s3snM+V6eXPtc3suucMMZZ/lK+LHa/OrZBjLjSByG20=;
-        b=CykxoTpcT9zU5Q/RpdVfPWYZ7Yd/Hkg4CwX59NuEGsQL6KFKRoTcg/Vo2x9QirPjNo
-         4KOa/cyxHHEHeBQAnMyaE2lQq3XcQVKzauygnId9WbBuDbvEixn3cWJ1yiJyHIINq8aM
-         H9CsAk1Gs4+g+NoiOkc2psHM44qkT7af3ZRiSTozb0VHCwCu1BuQcSQfAXgnVdVzb4b6
-         47kGS+j33ETqgaSO15pdorwduIxble6vcIwDmXbgYzDL9oA0T5IiEOSbMyXNx+whiuB5
-         qCQh+qIEvwHjDjwjZpZR8wASFIlcGB3qoWmP8tn/mWKR6hjPLPtsbAtoLnMe/CJErZ4q
-         fxlQ==
-X-Gm-Message-State: APjAAAXI7mQR6jBwfnart0RmySiY0cYdqv1vNokmO/0mIXG059Wjz6bs
-        C4MJPxyRZ8X1KliJB/441f3649zBlcQXAg77AwY=
-X-Google-Smtp-Source: APXvYqza/1hvaxWQdWLSj9zXnCXHGz/kbH9GtVmvA3jR7MZPios+I6UtHlJUbjkjBLz4KluTkPylBVYsMYSX9Ufq2UQ=
-X-Received: by 2002:a1f:c2c1:: with SMTP id s184mr10230817vkf.65.1557298949399;
- Wed, 08 May 2019 00:02:29 -0700 (PDT)
+        id S1726754AbfEHHjD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 May 2019 03:39:03 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:47096 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726657AbfEHHjD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 03:39:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=6K1Rt+UqFHqJVjcVj5C1jBXFCflebrolwRwMUFbBsXg=; b=fF70EpON4ML3dgEb0p/H00HFw
+        qp+/uy91WAo6EYwfr9MzqrAbzIyFOJlqL0ERYA+MArYJPcJ1AinleNnd8XxjKcvV4HNmXjwX4OnWL
+        qjZtfAm8qbKSvfU7KgDWjiFtWI4uVI5yr5ufP0FcAC8+Suz1t4UZm30IlU6r2LUj5s5wU=;
+Received: from [61.199.190.11] (helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hOHAL-0007LX-6f; Wed, 08 May 2019 07:39:01 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id E38CB44003B; Wed,  8 May 2019 08:03:41 +0100 (BST)
+Date:   Wed, 8 May 2019 16:03:41 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Jochen Henneberg <jh@henneberg-systemdesign.com>
+Cc:     linux-spi@vger.kernel.org
+Subject: Re: New driver for CP2130 USB-to-SPI bridge
+Message-ID: <20190508070341.GR14916@sirena.org.uk>
+References: <1557144380-19935-1-git-send-email-jh@henneberg-systemdesign.com>
 MIME-Version: 1.0
-References: <b7a6095a5c900fa23cc54d1ccd8e8ef0ccf6e788.1557236840.git-series.maxime.ripard@bootlin.com>
- <CAL_JsqKeLWgGLafwbKViTgpw4B=W9YGULaMr8h0p_rWX8PP_UQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqKeLWgGLafwbKViTgpw4B=W9YGULaMr8h0p_rWX8PP_UQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 8 May 2019 09:02:17 +0200
-Message-ID: <CAMuHMdX7KjJf4yDiEBBXLogHGbo9LcfTM5TvCHAXu_0Bvf0uzA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: spi: Add YAML schemas for the generic
- SPI options
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Mark Brown <broonie@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/Y9mfvbaELdqM67d"
+Content-Disposition: inline
+In-Reply-To: <1557144380-19935-1-git-send-email-jh@henneberg-systemdesign.com>
+X-Cookie: -- I have seen the FUN --
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 7, 2019 at 4:35 PM Rob Herring <robh+dt@kernel.org> wrote:
-> On Tue, May 7, 2019 at 8:48 AM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
-> > The SPI controllers have a bunch of generic options that are needed in a
-> > device tree. Add a YAML schemas for those.
-> >
-> > Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 
-> > index 1f6e86f787ef..000000000000
-> > --- a/Documentation/devicetree/bindings/spi/spi-bus.txt
-> > +++ /dev/null
+--/Y9mfvbaELdqM67d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > -In master mode, the SPI controller node requires the following additional
-> > -properties:
-> > -- #address-cells  - number of cells required to define a chip select
-> > -               address on the SPI bus.
-> > -- #size-cells     - should be zero.
-> > -
-> > -In slave mode, the SPI controller node requires one additional property:
-> > -- spi-slave       - Empty property.
+On Mon, May 06, 2019 at 02:06:19PM +0200, Jochen Henneberg wrote:
+> This is a new driver to support the Silicon Labs CP2130 USB-to-SPI
+> bridge. There are some warning left from checkpatch.pl but I would
+> consider those as false negatives as they will reduce code
+> readability.
 
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+Please don't send cover letters for single patches, if there is anything
+that needs saying put it in the changelog of the patch or after the ---
+if it's administrative stuff.  This reduces mail volume and ensures that=20
+any important information is recorded in the changelog rather than being
+lost.=20
 
-> > +  spi-slave:
-> > +    $ref: /schemas/types.yaml#/definitions/flag
->
-> "type: boolean" is sufficient here. Maybe we should just remove
-> 'flag'. OTOH, maybe consistency with other types and the abstraction
-> is better as we could add to the flag schema.
->
-> > +    description:
-> > +      The SPI controller acts as a slave, instead of a master.
-> > +
-> > +required:
-> > +  - "#address-cells"
-> > +  - "#size-cells"
->
-> Only if there are child nodes...
+--/Y9mfvbaELdqM67d
+Content-Type: application/pgp-signature; name="signature.asc"
 
-... and spi-slave is not present.
+-----BEGIN PGP SIGNATURE-----
 
-Gr{oetje,eeting}s,
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzSf00ACgkQJNaLcl1U
+h9BgCQf+PasIs7LOTAj8HA942pt5b/s9I8C3Z5U1nJBuQZEcBvqzME4b4wDkCFJh
+RA0KimJyONDttiox/9tsY2h8xBlJwDGsPOYry2x8EgGncoRT6pYX8L+FDDUiZ+h+
+3uVN3yShL+7y9aP4yL4fyGZNoxAW4Wt3rLS0BtmLDc9Y3ZiVI8JFr/0CgYz/tUmW
+jmUTFRRQsHCvg8m4bU5o5nnU/eL75R+6tx+xffhNp3nZo0oxae9RKJWs+P9MzJLy
+8oXgvFc2bZXpy87aI6EAvTwuxrddwiZ22JlOYHZlTdWXF1QL5M1pO3NuWDGaiEH8
+LvZbUdLpVQ18xu5lZ85EgDQszJ08mw==
+=h0RQ
+-----END PGP SIGNATURE-----
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--/Y9mfvbaELdqM67d--
