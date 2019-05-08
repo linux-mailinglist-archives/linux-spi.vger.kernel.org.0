@@ -2,14 +2,14 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D44741749F
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 11:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEB7174A0
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 11:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725815AbfEHJJQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 May 2019 05:09:16 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57596 "EHLO
+        id S1726767AbfEHJJR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 May 2019 05:09:17 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57658 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbfEHJJQ (ORCPT
+        with ESMTP id S1726460AbfEHJJQ (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 05:09:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
@@ -17,17 +17,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=oc9XTQISbyvrbEHH1Tqa1V67oMH5ek6FoAZrGdVKBHs=; b=C8I/shjdkWya
-        dPzJscULk01uu/6D3CzzO1g9o6MG2RFYC5TEQc+yTDTK/zyxC//r7qnuK4eNSJYYu82S4ZwQ3CbvQ
-        0+nEyMLow1FFpQx97jcuGvFQq+U79XCud9XO7EFRX1g0BWkHYPtSsMmMsYa5mad8+UPwoITCTmvoM
-        g4PVk=;
+        List-Archive; bh=f24yIUqKY62IUeKCB9wagap3Ak2+vXM3hqhMbChgSU4=; b=SG64waa3mliC
+        f9LkGEKXMhvjLx9PwgFbIeoIFO90JDC0Hc0nypkmHCg6dI4hkIKbCq2tEuYVesAKzMy1cye0jhfs9
+        pQG7JO3CI6xkiY+BRbmMwh2up+cr0/MfKb1nSpcbyzmchoxYfoJmPGbUhI8H3K2Tx5ah1T4bILDL2
+        lPWV0=;
 Received: from [61.199.190.11] (helo=finisterre.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hOIZU-0007gJ-VH; Wed, 08 May 2019 09:09:06 +0000
+        id 1hOIZU-0007gI-Cp; Wed, 08 May 2019 09:09:09 +0000
 Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id DA05F440039; Wed,  8 May 2019 10:08:55 +0100 (BST)
+        id 3E3B3440036; Wed,  8 May 2019 10:08:55 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Martin Sperl <kernel@martin.sperl.org>
 Cc:     Eric Anholt <eric@anholt.net>,
@@ -35,10 +35,10 @@ Cc:     Eric Anholt <eric@anholt.net>,
         linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
         Stefan Wahren <stefan.wahren@i2se.com>
-Subject: Applied "spi: bcm2835: Avoid 64-bit arithmetic in xfer len calc" to the spi tree
-In-Reply-To: <20190423201513.8073-3-kernel@martin.sperl.org>
+Subject: Applied "spi: bcm2835: added comment about different bus behaviour of DMA mode" to the spi tree
+In-Reply-To: <20190423201513.8073-4-kernel@martin.sperl.org>
 X-Patchwork-Hint: ignore
-Message-Id: <20190508090855.DA05F440039@finisterre.sirena.org.uk>
+Message-Id: <20190508090855.3E3B3440036@finisterre.sirena.org.uk>
 Date:   Wed,  8 May 2019 10:08:55 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -47,7 +47,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: bcm2835: Avoid 64-bit arithmetic in xfer len calc
+   spi: bcm2835: added comment about different bus behaviour of DMA mode
 
 has been applied to the spi tree at
 
@@ -72,63 +72,41 @@ to this mail.
 Thanks,
 Mark
 
-From 7f1922eb3adba8c372fdf0d04fe9e6268f98291a Mon Sep 17 00:00:00 2001
+From c41d62b06cb92289ab5db9d37a0f27fe6271fa34 Mon Sep 17 00:00:00 2001
 From: Martin Sperl <kernel@martin.sperl.org>
-Date: Tue, 23 Apr 2019 20:15:09 +0000
-Subject: [PATCH] spi: bcm2835: Avoid 64-bit arithmetic in xfer len calc
+Date: Tue, 23 Apr 2019 20:15:10 +0000
+Subject: [PATCH] spi: bcm2835: added comment about different bus behaviour of
+ DMA mode
 
-Avoid 64 bit aritmetics when deciding if we need to use polling or not
-This replicates: commit d704afffe65c
-("spi: bcm2835aux: Avoid 64-bit arithmetic in xfer len calc")
-from spi-bcm2835aux
+The DMA mode behaves slightly different than polling or interrupt driven
+mode, so just document the fact
 
 Signed-off-by: Martin Sperl <kernel@martin.sperl.org>
 
 Changelog:
   V1 -> V2: applied feedback by Stefan Wahren
-            reorganized patchset
-	    added extra rational, descriptions
+            new in V2
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-bcm2835.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/spi/spi-bcm2835.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index 6c73e694794a..b7bb07c9507d 100644
+index b7bb07c9507d..0d8c97502f14 100644
 --- a/drivers/spi/spi-bcm2835.c
 +++ b/drivers/spi/spi-bcm2835.c
-@@ -749,7 +749,6 @@ static int bcm2835_spi_transfer_one(struct spi_master *master,
- 	struct bcm2835_spi *bs = spi_master_get_devdata(master);
- 	unsigned long spi_hz, clk_hz, cdiv;
- 	unsigned long spi_used_hz;
--	unsigned long long xfer_time_us;
- 	u32 cs = bcm2835_rd(bs, BCM2835_SPI_CS);
- 
- 	/* set clock */
-@@ -790,14 +789,15 @@ static int bcm2835_spi_transfer_one(struct spi_master *master,
- 	bs->tx_len = tfr->len;
- 	bs->rx_len = tfr->len;
- 
--	/* calculate the estimated time in us the transfer runs */
--	xfer_time_us = (unsigned long long)tfr->len
--		* 9 /* clocks/byte - SPI-HW waits 1 clock after each byte */
--		* 1000000;
--	do_div(xfer_time_us, spi_used_hz);
--
--	/* for short requests run polling*/
--	if (xfer_time_us <= BCM2835_SPI_POLLING_LIMIT_US)
-+	/* Calculate the estimated time in us the transfer runs.  Note that
-+	 * there is 1 idle clocks cycles after each byte getting transferred
-+	 * so we have 9 cycles/byte.  This is used to find the number of Hz
-+	 * per byte per polling limit.  E.g., we can transfer 1 byte in 30 us
-+	 * per 300,000 Hz of bus clock.
-+	 */
-+#define HZ_PER_BYTE ((9 * 1000000) / BCM2835_SPI_POLLING_LIMIT_US)
-+	/* run in polling mode for short transfers */
-+	if (tfr->len < spi_used_hz / HZ_PER_BYTE)
+@@ -800,7 +800,10 @@ static int bcm2835_spi_transfer_one(struct spi_master *master,
+ 	if (tfr->len < spi_used_hz / HZ_PER_BYTE)
  		return bcm2835_spi_transfer_one_poll(master, spi, tfr, cs);
  
- 	/* run in dma mode if conditions are right */
+-	/* run in dma mode if conditions are right */
++	/* run in dma mode if conditions are right
++	 * Note that unlike poll or interrupt mode DMA mode does not have
++	 * this 1 idle clock cycle pattern but runs the spi clock without gaps
++	 */
+ 	if (master->can_dma && bcm2835_spi_can_dma(master, spi, tfr))
+ 		return bcm2835_spi_transfer_one_dma(master, spi, tfr, cs);
+ 
 -- 
 2.20.1
 
