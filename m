@@ -2,241 +2,346 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3110118570
-	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2019 08:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAD518627
+	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2019 09:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbfEIGc1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 May 2019 02:32:27 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:59275 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbfEIGc1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 May 2019 02:32:27 -0400
-Received: from maxwell ([109.41.64.220]) by mrelayeu.kundenserver.de (mreue107
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1Mv2l4-1gXcRR1WgS-00qxHs; Thu, 09
- May 2019 08:32:21 +0200
-References: <1557144380-19935-1-git-send-email-jh@henneberg-systemdesign.com> <1557144380-19935-2-git-send-email-jh@henneberg-systemdesign.com> <20190508071812.GS14916@sirena.org.uk>
-From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: Added driver for CP2130 USB-to-SPI bridge
-In-reply-to: <20190508071812.GS14916@sirena.org.uk>
-Date:   Thu, 09 May 2019 08:32:20 +0200
-Message-ID: <87sgto16kr.fsf@henneberg-systemdesign.com>
+        id S1726617AbfEIH0Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 May 2019 03:26:16 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:56533 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726620AbfEIH0Q (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 May 2019 03:26:16 -0400
+X-Originating-IP: 90.88.28.253
+Received: from localhost (aaubervilliers-681-1-86-253.w90-88.abo.wanadoo.fr [90.88.28.253])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id AA0641C0007;
+        Thu,  9 May 2019 07:26:11 +0000 (UTC)
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH v2 1/4] dt-bindings: spi: Add YAML schemas for the generic SPI options
+Date:   Thu,  9 May 2019 09:26:05 +0200
+Message-Id: <1acc9ff7f59064b74cc319b7812479bcd842a897.1557386749.git-series.maxime.ripard@bootlin.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Provags-ID: V03:K1:QZFpnL2lm9DCIjlRTQFt39d16w9tfXCo2zurUnmEXky5rtjGBWh
- XWhEpkLl5bTCR7nC7CAioMVaX6LKpB/JBy7EbQjt1Q9hVCYy5q0cLCxbpNiSKA54Bm/nwiy
- ERtDwT3sy/CY6qcNbbM7G+KqW/9X/stxF+IkKyxK7z9P+cmoByT8nuFsXv0Zx3E2ec9MBYL
- Ch3O3OF1O9p3hooQf7jVA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MMF77e+hpIE=:RurB1j7jD6P7LOse0i0cPd
- K7IoL/8YiDy4k2I0X3lt6xgZqv7avEmm+f9nRfLQQf1dfBPIkBEbQo9/pi0Nd/W3ZJIvZrD6B
- FJMVgaUrXg0Zuv5D5Fq6fEdudOOGpXt4ZP4r+01VoHwnw8Yy5vgjcrJdBLZRvAKpzBopq6ZQq
- ywWXFNAwZoj//O5i4uKY06msIFLKOeq+mBS2CDb90PmPGoAK0zhxFoqSkEy4higeyTWFXj2WK
- 2nKsGovUtalrbYWCtCLt7DPYKOST8gKlxrXQSOrVIEHBB1ivNDqJSrhtBD4q23XG/TlBDA/4I
- qj0fSysA2oo7mt7AoApjkASWmUEBqQ75pMTJBBKGA3tv/ynKG6przG6oRymS3KVfkJQ6GtMCA
- K4s0ldd1EAXbDSV822UNV5+cQLmCGsDKLJrrxM+Y72ldliBcpV51IOotwEMPxNF4IwQkuzZbP
- gIDpkXlSr6DvUCB640WIr/P+HqU3GpJz2UhYcCFRvh2URZ/NFQTHT7+rorPehcWxqXCavcZO1
- zrue2kdGJ1yLZBMEhlfqThWH0YuChRaYdFcieqBEsCOkccZ73ow6eAOlXQhQbaf9Rr03SF0Oi
- lXnwY0KF3wBo+w3MLY58uZjUnWCgUriw/oB9k0fvXslE5YvRqu99R6DpgRPdFpB2vuewUSnlf
- EwNAEObTfWb53RdduVVsZd45MNjEOM54wCzcndUiBve30M7eb7vHWhHbQeJ5r0cAQa+yUbg+1
- iXKuf342JV+YOQS3FAA6AcqsC7rPwJ6OW9CPGfqKn5DDd8F/E2vIMHByRza3WxFY4QPR7Kvqn
- mGB7SMI
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Mark Brown <broonie@kernel.org> writes:
-> On Mon, May 06, 2019 at 02:06:20PM +0200, Jochen Henneberg wrote:
->
-> This driver has huge amounts of non-standard interfaces in it,
-> especially the userpace ABI it adds.  It would be a lot easier to review
-> if it were split up so that it's a series where the core SPI
-> functionality is added initially and then other things were layered on
-> top as additional patches.
+The SPI controllers have a bunch of generic options that are needed in a
+device tree. Add a YAML schemas for those.
 
-Will do that once the open issues have been clarified (see comments below).
+Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 
->
->> @@ -0,0 +1,1672 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +/* Kernel driver for Silicon Labs CP2130 USB-to-SPI bridge.
->> + *
->> + * Copyright (C) 2019 Jochen Henneberg (jh@henneberg-systemdesign.com)
->> + */
->
-> Please keep the entire comment a C++ comment, it makes things look more
-> intentional.
+---
 
-I fixed that.
+Changes from v1:
+  - Rework the nodename pattern
+  - Limit the index of the usable chip selects to 256
+  - Rework the slave devices regex
+  - Remove the requirement on #address-cells and #size-cells
+  - Declare the slave and slave devices nodes as objects
+  - Add spi-max-frequency
+  - Fix the bus width range
+---
+ Documentation/devicetree/bindings/spi/spi-bus.txt         | 111 +-----
+ Documentation/devicetree/bindings/spi/spi-controller.yaml | 161 +++++++-
+ 2 files changed, 161 insertions(+), 111 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-bus.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-controller.yaml
 
->
->> +/* Prototypes */
->> +static int cp2130_probe(struct usb_interface *intf,
->> +			const struct usb_device_id *id);
->> +static void cp2130_disconnect(struct usb_interface *intf);
->
-> These forward declarations are really weird in a Linux driver, normally
-> things like probe() are defined at the bottom of the driver just before
-> the driver structure which also usually goes at the end.
->
->> +/* USB device functions */
->> +static struct usb_driver cp2130_driver = {
->> +	.name                 = "cp2130",
->> +	.probe                = cp2130_probe,
->> +	.disconnect           = cp2130_disconnect,
->> +	.suspend              = NULL,
->> +	.resume               = NULL,
->> +	.reset_resume         = NULL,
->> +	.id_table             = cp2130_devices,
->> +	.supports_autosuspend = 0,
->> +};
->
-> Static variables are initialized to 0 by default, no need to explicitly
-> do that.
+diff --git a/Documentation/devicetree/bindings/spi/spi-bus.txt b/Documentation/devicetree/bindings/spi/spi-bus.txt
+deleted file mode 100644
+index 1f6e86f787ef..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-bus.txt
++++ /dev/null
+@@ -1,111 +0,0 @@
+-SPI (Serial Peripheral Interface) busses
+-
+-SPI busses can be described with a node for the SPI controller device
+-and a set of child nodes for each SPI slave on the bus.  The system's SPI
+-controller may be described for use in SPI master mode or in SPI slave mode,
+-but not for both at the same time.
+-
+-The SPI controller node requires the following properties:
+-- compatible      - Name of SPI bus controller following generic names
+-		    recommended practice.
+-
+-In master mode, the SPI controller node requires the following additional
+-properties:
+-- #address-cells  - number of cells required to define a chip select
+-		address on the SPI bus.
+-- #size-cells     - should be zero.
+-
+-In slave mode, the SPI controller node requires one additional property:
+-- spi-slave       - Empty property.
+-
+-No other properties are required in the SPI bus node.  It is assumed
+-that a driver for an SPI bus device will understand that it is an SPI bus.
+-However, the binding does not attempt to define the specific method for
+-assigning chip select numbers.  Since SPI chip select configuration is
+-flexible and non-standardized, it is left out of this binding with the
+-assumption that board specific platform code will be used to manage
+-chip selects.  Individual drivers can define additional properties to
+-support describing the chip select layout.
+-
+-Optional properties (master mode only):
+-- cs-gpios	  - gpios chip select.
+-- num-cs	  - total number of chipselects.
+-
+-If cs-gpios is used the number of chip selects will be increased automatically
+-with max(cs-gpios > hw cs).
+-
+-So if for example the controller has 2 CS lines, and the cs-gpios
+-property looks like this:
+-
+-cs-gpios = <&gpio1 0 0>, <0>, <&gpio1 1 0>, <&gpio1 2 0>;
+-
+-Then it should be configured so that num_chipselect = 4 with the
+-following mapping:
+-
+-cs0 : &gpio1 0 0
+-cs1 : native
+-cs2 : &gpio1 1 0
+-cs3 : &gpio1 2 0
+-
+-
+-SPI slave nodes must be children of the SPI controller node.
+-
+-In master mode, one or more slave nodes (up to the number of chip selects) can
+-be present.  Required properties are:
+-- compatible      - Name of SPI device following generic names recommended
+-		    practice.
+-- reg             - Chip select address of device.
+-- spi-max-frequency - Maximum SPI clocking speed of device in Hz.
+-
+-In slave mode, the (single) slave node is optional.
+-If present, it must be called "slave".  Required properties are:
+-- compatible      - Name of SPI device following generic names recommended
+-		    practice.
+-
+-All slave nodes can contain the following optional properties:
+-- spi-cpol        - Empty property indicating device requires inverse clock
+-		    polarity (CPOL) mode.
+-- spi-cpha        - Empty property indicating device requires shifted clock
+-		    phase (CPHA) mode.
+-- spi-cs-high     - Empty property indicating device requires chip select
+-		    active high.
+-- spi-3wire       - Empty property indicating device requires 3-wire mode.
+-- spi-lsb-first   - Empty property indicating device requires LSB first mode.
+-- spi-tx-bus-width - The bus width (number of data wires) that is used for MOSI.
+-		    Defaults to 1 if not present.
+-- spi-rx-bus-width - The bus width (number of data wires) that is used for MISO.
+-		    Defaults to 1 if not present.
+-- spi-rx-delay-us - Microsecond delay after a read transfer.
+-- spi-tx-delay-us - Microsecond delay after a write transfer.
+-
+-Some SPI controllers and devices support Dual and Quad SPI transfer mode.
+-It allows data in the SPI system to be transferred using 2 wires (DUAL) or 4
+-wires (QUAD).
+-Now the value that spi-tx-bus-width and spi-rx-bus-width can receive is
+-only 1 (SINGLE), 2 (DUAL) and 4 (QUAD).
+-Dual/Quad mode is not allowed when 3-wire mode is used.
+-
+-If a gpio chipselect is used for the SPI slave the gpio number will be passed
+-via the SPI master node cs-gpios property.
+-
+-SPI example for an MPC5200 SPI bus:
+-	spi@f00 {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		compatible = "fsl,mpc5200b-spi","fsl,mpc5200-spi";
+-		reg = <0xf00 0x20>;
+-		interrupts = <2 13 0 2 14 0>;
+-		interrupt-parent = <&mpc5200_pic>;
+-
+-		ethernet-switch@0 {
+-			compatible = "micrel,ks8995m";
+-			spi-max-frequency = <1000000>;
+-			reg = <0>;
+-		};
+-
+-		codec@1 {
+-			compatible = "ti,tlv320aic26";
+-			spi-max-frequency = <100000>;
+-			reg = <1>;
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+new file mode 100644
+index 000000000000..6258644249b2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+@@ -0,0 +1,161 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/spi-controller.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: SPI Controller Generic Binding
++
++maintainers:
++  - Mark Brown <broonie@kernel.org>
++
++description: |
++  SPI busses can be described with a node for the SPI controller device
++  and a set of child nodes for each SPI slave on the bus. The system SPI
++  controller may be described for use in SPI master mode or in SPI slave mode,
++  but not for both at the same time.
++
++properties:
++  $nodename:
++    pattern: "^spi(@.*)$"
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  cs-gpios:
++    description: |
++      GPIOs used as chip selects.
++      If that property is used, the number of chip selects will be
++      increased automatically with max(cs-gpios, hardware chip selects).
++
++      So if, for example, the controller has 2 CS lines, and the
++      cs-gpios looks like this
++        cs-gpios = <&gpio1 0 0>, <0>, <&gpio1 1 0>, <&gpio1 2 0>;
++
++      Then it should be configured so that num_chipselect = 4, with
++      the following mapping
++        cs0 : &gpio1 0 0
++        cs1 : native
++        cs2 : &gpio1 1 0
++        cs3 : &gpio1 2 0
++
++  num-cs:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Total number of chip selects.
++
++  spi-slave:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      The SPI controller acts as a slave, instead of a master.
++
++patternProperties:
++  "^slave$":
++    type: object
++
++    properties:
++      compatible:
++        description:
++          Compatible of the SPI device.
++
++    required:
++      - compatible
++
++  "^.*@[0-9a-f]+$":
++    type: object
++
++    properties:
++      compatible:
++        description:
++          Compatible of the SPI device.
++
++      reg:
++        maxItems: 1
++        minimum: 0
++        maximum: 256
++        description:
++          Chip select used by the device.
++
++      spi-3wire:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description:
++          The device requires 3-wire mode.
++
++      spi-cpha:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description:
++          The device requires shifted clock phase (CPHA) mode.
++
++      spi-cpol:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description:
++          The device requires inverse clock polarity (CPOL) mode.
++
++      spi-cs-high:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description:
++          The device requires the chip select active high.
++
++      spi-lsb-first:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description:
++          The device requires the LSB first mode.
++
++      spi-max-frequency:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description:
++          Maximum SPI clocking speed of the device in Hz.
++
++      spi-rx-bus-width:
++        allOf:
++          - $ref: /schemas/types.yaml#/definitions/uint32
++          - enum: [ 1, 2, 4 ]
++          - default: 1
++        description:
++          Bus width to the SPI bus used for MISO.
++
++      spi-rx-delay-us:
++        description:
++          Delay, in microseconds, after a read transfer.
++
++      spi-tx-bus-width:
++        allOf:
++          - $ref: /schemas/types.yaml#/definitions/uint32
++          - enum: [ 1, 2, 4 ]
++          - default: 1
++        description:
++          Bus width to the SPI bus used for MOSI.
++
++      spi-tx-delay-us:
++        description:
++          Delay, in microseconds, after a write transfer.
++
++    required:
++      - compatible
++      - reg
++
++examples:
++  - |
++    spi@f00 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        compatible = "fsl,mpc5200b-spi","fsl,mpc5200-spi";
++        reg = <0xf00 0x20>;
++        interrupts = <2 13 0 2 14 0>;
++        interrupt-parent = <&mpc5200_pic>;
++
++        ethernet-switch@0 {
++            compatible = "micrel,ks8995m";
++            spi-max-frequency = <1000000>;
++            reg = <0>;
++        };
++
++        codec@1 {
++            compatible = "ti,tlv320aic26";
++            spi-max-frequency = <100000>;
++            reg = <1>;
++        };
++    };
 
-I fixed that.
-
->
->> +static int __init cp2130_init(void)
->> +{
->
-> module_usb_driver().
-
-Fixed that.
-
->
->> +static int cp2130_spi_setup(struct spi_device *spi)
->> +{
->> +	return 0;
->> +}
->> +
->> +static void cp2130_spi_cleanup(struct spi_device *spi)
->> +{
->> +}
->
-> Omit empty functions.  If the framework won't let you omit empty
-> functions they probably can't safely be empty.
-
-I removed the empty functions. Most of the things that happen there need
-information from platform data or DT which would not be available for
-CP2130.
-
->
->> +	ret = sprintf(out, "channel\tcs_mode\tirq_pin\tclock_phase\tpolarity"
->> +		"\tcs_pin_mode\tclock_freq\tdelay_mask"
->> +		"\tinter_byte_delay\tpre_delay\tpost_delay"
->> +		"\tmod_alias\n");
->> +	strcat(buf, out);
->> +	mutex_lock(&chip->chn_config_lock);
->> +	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
->> +		chn = &chip->chn_configs[i];
->> +		ret += sprintf(out, "%d\t%d\t%d\t%d\t\t%d\t\t%d\t\t%s\t%d"
->> +			"\t\t%d\t\t\t%d\t\t%d\t\t'%s'\n",
->> +			i, chn->cs_en, chn->irq_pin, chn->clock_phase,
->> +			chn->polarity, chn->cs_pin_mode,
->> +			cp2130_spi_speed_to_string(chn->clock_freq),
->> +			chn->delay_mask, chn->inter_byte_delay,
->> +			chn->pre_deassert_delay, chn->post_assert_delay,
->> +			chn->modalias);
->> +		strcat(buf, out);
->> +	}
->
-> This looks like a bunch of mostly very generic diagnostic data, if it's
-> useful to have it should be added in the framework so it's available for
-> all drivers.
-
-The information is quite specific for the CP2130 so I cannot see how
-this could fit into the SPI framework.
-
->
->> +static ssize_t channel_config_store(struct device *dev,
->> +				struct device_attribute *attr,
->> +				const char *buf, size_t count)
->> +{
->
-> This is adding a completely non-standard ABI for configuring things -
-> why not use standard interfaces?
->
->> +static DEVICE_ATTR_RW(channel_config);
-
-I think this needs some more explanation about the nature of the
-chip. As it is a USB device and the SPI performance is not as good as it
-would be with a SOC SPI port the chip is typically used for prototyping
-or for bus testers, e. g. CAN or ARINC429 chips that need an SPI bus.
-
-We could use the timing information that comes with each SPI transfer to
-setup the transport parameters of the chip, however, there are several
-settings that may be incomplete. E. g. the IRQ pin. If the SPI slave
-chip IRQ is connected to one of the GPIOs of CP2130 nobody knows upfront
-which IRQ to configure for the slave chip driver. Same issue applies for
-the CS pin, there is pre-numbered GPIO available for CS before the
-CP2130 is plugged so you cannot setup other driver in advance.
-
-If the chip is permanently connected (e. g. in an embedded board, which
-is unlikely because those often have host SPI ports anyway) we may have
-an advantage from DT pre-configuration but I think this use-case is
-quite unlikely and then there would still be the problem to know which
-data is valid, the one that comes with the transfer message or the one
-configured from sysfs.
-
-I have added a mechanism to provide driver platform data for the slave
-chip via sysfs which is a bit of a hack but some slave drivers need the
-platform data to work without modifications.
-
-What happens is that if the CP2130 is plugged you need to run some udev
-actions to setup the communication parameters, the interrupt GPIOs, the
-SPI slave chip platform data (maybe) and modalias along with some pin
-configurations. If somebody builds a test adapter with the CP2130 it
-should be shipped with udev rules and adapter configuration scripts.
-
-The only reason why I put all this into the driver and not into some
-userspace implementation (libusb) is that this drivers allows to use
-and/or develop/debug SPI slave chip drivers, e. g. on a laptop where no
-host SPI port is available.
-
->
-> Device attributes in sysfs should follow sysfs rules, including having
-> just a single value per file to ease machine parsing.
->
->> +out:
->> +	return (!ret ? len : ret);
->
-> Please write normal conditional statements to make things easier for
-> people reading the driver.
-
-Fixed that.
-
->
->> +	mutex_lock(&dev->usb_bus_lock);
->
-> What is this protecting?
-
-To be perfectly honest this is just a precaution. Polling GPIO states or
-writing the OTP ROM may interfere with SPI communication (I did not
-really test that nor does the datasheet provide sufficient information
-if that matters or not) so I wanted to be save that every action that
-needs multiple USB transfers is protected against other multi USB
-transfers. I will try if this really is an issue and remove the lock if
-possible.
-
->
->> +	/* iterate through all transfers */
->> +	list_for_each_entry(xfer, &mesg->transfers, transfer_list) {
->> +		dev_dbg(&master->dev, "spi transfer stats: %p, %p, %d",
->> +			xfer->tx_buf, xfer->rx_buf, xfer->len);
->
-> It's not clear to me why the driver can't use transfer_one() instead of
-> transfer_one_message().
-
-The documentation says that if both callbacks are provided the framework
-will always use transfer_one_message() which I think is the superior
-callback because we can keep the SPI configuration as it is if the same
-channel is used with subsequent transfers (performance) which we cannot
-do for transfer_one(), at least if the driver should remain stateless
-for the transfers.
-
-Regards
--Jochen
+base-commit: fcdb095ad0016d77d3729dcf8ea915ca4b80fd8b
+-- 
+git-series 0.9.1
