@@ -2,90 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B01A519306
-	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2019 21:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3066819379
+	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2019 22:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbfEITrM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 9 May 2019 15:47:12 -0400
-Received: from 212-186-180-163.static.upcbusiness.at ([212.186.180.163]:36596
-        "EHLO cgate.sperl.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726704AbfEITrM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 May 2019 15:47:12 -0400
-Received: from [10.10.10.192] (account martin@sperl.org [10.10.10.192] verified)
-  by sperl.org (CommuniGate Pro SMTP 6.2.1 _community_)
-  with ESMTPSA id 7764569; Thu, 09 May 2019 19:47:08 +0000
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (1.0)
-Subject: Re: Regression: spi: core: avoid waking pump thread from spi_sync instead run teardown delayed
-From:   Martin Sperl <kernel@martin.sperl.org>
-X-Mailer: iPad Mail (16E227)
-In-Reply-To: <20190123175609.GG7503@sirena.org.uk>
-Date:   Thu, 9 May 2019 21:47:08 +0200
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <CB6BCD42-60F9-493A-B05B-FC27C125E982@martin.sperl.org>
-References: <f86eaebb-0359-13be-f4a2-4f2b8832252e@nvidia.com> <7C4A5EFC-8235-40C8-96E1-E6020529DF72@martin.sperl.org> <aabd916e-005e-6cda-25d7-8ab875afa7a0@nvidia.com> <AAA7943B-B1F1-4389-AAC3-8621EC6E38B8@martin.sperl.org> <20190115192619.GG5522@sirena.org.uk> <5D3256B1-5DAE-4E3F-9099-5425F4BCA304@martin.sperl.org> <20190115212539.GK5522@sirena.org.uk> <EA757B47-A264-4B4D-9E5F-16611ABA0278@martin.sperl.org> <20190118191202.GG6260@sirena.org.uk> <EE52ED32-CBB4-40D4-8615-CA814158C826@martin.sperl.org> <20190123175609.GG7503@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
+        id S1726749AbfEIUgO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 May 2019 16:36:14 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:43907 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726701AbfEIUgO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 May 2019 16:36:14 -0400
+Received: by mail-pl1-f195.google.com with SMTP id n8so1684938plp.10;
+        Thu, 09 May 2019 13:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=P54plBXS3RTIB7poB2qEfvlIATtsECBcJgQ25eYeFIc=;
+        b=ZYPloAXxqHRrCxoohcw65BioipAqRuQrBEsHP5zQolytgVoK3kyzeXR5TYSk7up89n
+         dKNjVKCdWUM0zJeH63EO0wN6sORKc+8qzrYna/VtoV+yIbUc0on+xaF1CYl5TFLz7aPA
+         pDUGW9LdiJBYt4W1gY3JPh7odvxFlIzWctcxQxx4hEldLzPHO/rWUnsS9oOcTxe++k0x
+         QeMhEmb+bycJ9exO2io3euQazCY7Ls5bMONAu2aytstK5nw6Myh9SmJSdrQ9nE3+n3OA
+         1jiyHWNjuPH5lDisxCWo+c3THY/Se8g9nDkJdza7xFBnrA9x3tADOH/jFR4GlVXu2Em4
+         Bzcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=P54plBXS3RTIB7poB2qEfvlIATtsECBcJgQ25eYeFIc=;
+        b=tV2+1I6VxSGLafAA8QF9GWXUZdu+e26/S81ur70pyXsrKkyJZvs3d/p0FW+K64XUGe
+         3mi4zcH5vBYVhkD4WrTh7VIOLcGzqNvAeSEB5EvXscAWTabh1G3s73fvf1chP2uxEx3Z
+         JczexiOg+/LfcOgvyG8tO4AcLMgdrfBUVlocjoEJILtE2V4bEDbmA/mesWBsJY1DvaAZ
+         ESjGtkWRiOo/9TKo0kC2Vm9nh8N9shKwHhTwTZJlNx0/TxMytNKcvLg3YfyohK9yxdTA
+         abxVUETETjfDiq4DbZ/ucpjUgSa4QsnzJP92LKuwKw60QbHXlNmUc4+dneClUuIZGDUE
+         l8gA==
+X-Gm-Message-State: APjAAAVZYTVshARr7rZBP9H5MM9icuEiDlgUxYrIjAvInureeLJqwi3J
+        sBvD3yQVmwFQKgINa/XsaQ8=
+X-Google-Smtp-Source: APXvYqwJxmjpl8NhI+fEGPmLJ6p2uxJfE6/EhZKp/0jQpKKXGkfrTTUPm/DSSStZMsXW4Eu7F1od/Q==
+X-Received: by 2002:a17:902:bd91:: with SMTP id q17mr8019530pls.13.1557434173644;
+        Thu, 09 May 2019 13:36:13 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.250])
+        by smtp.gmail.com with ESMTPSA id h74sm4779779pfj.5.2019.05.09.13.36.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 May 2019 13:36:12 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     eric@anholt.net, stefan.wahren@i2se.com, wahrenst@gmx.net,
+        bcm-kernel-feedback-list@Broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] spi: Allow selecting BCM2835 SPI controllers on ARCH_BRCMSTB
+Date:   Thu,  9 May 2019 13:36:00 -0700
+Message-Id: <20190509203600.6867-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark!
+ARCH_BRCMSTB platforms have the BCM2835 SPI controllers (normal and
+auxiliary), allow selecting the two drivers on such platforms.
 
-> On 23.01.2019, at 18:56, Mark Brown <broonie@kernel.org> wrote:
-> 
->> On Sun, Jan 20, 2019 at 12:24:23PM +0100, kernel@martin.sperl.org wrote:
->> 
->> These kind of changes it requires are consuming a bit more time than
->> I was hoping for.
-> 
-> Thanks for trying.
-> 
->> So maybe at this very moment the best is reverting the patch.
-> 
-> Yes, I'm just going to do that for now.
-> 
->> As for the root cause of the regression: my guess is that spi-mem is
->> just not triggering a shutdown any more because of how message_pump works.
-> 
-> I'm fairly sure that's what's going on but not been able to get my head
-> around things enough to figure out what's going wrong yet.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/spi/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-While thinking about this again maybe an idea:
-What about implement a second spi_transfer_one implementation (together
-with a message pump implementation) that would handle things correctly.
-
-Any driver then can select the old (default) or new implementation and thus
-would allow the optimizations to take place only for verified working drivers...
-
-At least this way we would not be blocked because no hw exposing this
-Behavior is available to us - at the cost of extra code to get maintained.
-
-What I would then also like to do for the new implementation is modify the
-API a bit - ideally I would like to:
-* Make spi_sync the primary interface which the message pump is also 
-  using directly
-* move all the prepare stuff early into spi-sync, so that for example the
-  Preparing (including dma mapping) would get done in the calling thread
-  And only the prepared message would get submitted to the queue
-  - special processing would be needed for the spi-async case.
-
-This should optimize the computations out of the central loop faster.
-
-Adding spi-nand support could get added later by someone who has
-access to a device making use of this.
-
-If that sounds as somewhat acceptable then I will try get something
-Implemented.
-
-Any other ideas where we could improve as well?
-
-Martin
-
-
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 0fba8f400c59..3ee152feee2b 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -119,7 +119,7 @@ config SPI_AXI_SPI_ENGINE
+ config SPI_BCM2835
+ 	tristate "BCM2835 SPI controller"
+ 	depends on GPIOLIB
+-	depends on ARCH_BCM2835 || COMPILE_TEST
++	depends on ARCH_BCM2835 || ARCH_BRCMSTB || COMPILE_TEST
+ 	help
+ 	  This selects a driver for the Broadcom BCM2835 SPI master.
+ 
+@@ -130,7 +130,7 @@ config SPI_BCM2835
+ 
+ config SPI_BCM2835AUX
+ 	tristate "BCM2835 SPI auxiliary controller"
+-	depends on (ARCH_BCM2835 && GPIOLIB) || COMPILE_TEST
++	depends on ((ARCH_BCM2835 || ARCH_BRCMSTB) && GPIOLIB) || COMPILE_TEST
+ 	help
+ 	  This selects a driver for the Broadcom BCM2835 SPI aux master.
+ 
+-- 
+2.17.1
 
