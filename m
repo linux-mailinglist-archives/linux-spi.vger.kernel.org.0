@@ -2,95 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A8618076
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2019 21:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32C0183BC
+	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2019 04:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727410AbfEHTbN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 8 May 2019 15:31:13 -0400
-Received: from 212-186-180-163.static.upcbusiness.at ([212.186.180.163]:36196
-        "EHLO cgate.sperl.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727400AbfEHTbN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 15:31:13 -0400
-Received: from msmac.intern.sperl.org (account martin@sperl.org [10.10.10.11] verified)
-  by sperl.org (CommuniGate Pro SMTP 6.2.1 _community_)
-  with ESMTPSA id 7764429; Wed, 08 May 2019 19:31:10 +0000
-Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+        id S1726100AbfEIC1X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 May 2019 22:27:23 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49706 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbfEIC1W (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 May 2019 22:27:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=wMySUkO+0cF93SEvvlk2EZh5iYW76SXJnk6D3wJbWEU=; b=J9EYztFGNcxx5eL4h+09TANOg
+        Tdd+9C6xDL1A5YX03Hc+xBtWXul7+odU98ghuc7WNY7uqciDnnWYW+XbnYcZRxREAT2/wthmFs0Rt
+        dglH+QE5LfKqDPSbWkN0uOB8DsxaBsRANFG1rTb1BDtLO2fzDEXFrGFxTY10YTq+MeYUw=;
+Received: from [2001:268:c0e3:9e6d:fb20:4124:5afd:9c02] (helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hOYm2-0001QV-Ej; Thu, 09 May 2019 02:27:06 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id EF4BE44000C; Thu,  9 May 2019 03:27:01 +0100 (BST)
+Date:   Thu, 9 May 2019 11:27:01 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
+Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-spi@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Martin Sperl <kernel@martin.sperl.org>
 Subject: Re: SPI regression with today's build
-From:   kernel@martin.sperl.org
-In-Reply-To: <515AD7AA-19E4-4DBF-8AAB-5EE8071FCAF6@martin.sperl.org>
-Date:   Wed, 8 May 2019 21:31:22 +0200
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <3B6A48E5-87AF-430A-A916-AD97662F90A9@martin.sperl.org>
-References: <5be80c08e0873ab200ed472b98ea8772666852ff.camel@suse.de> <a2f71bcab3756dc35385288ca3287af6849933a6.camel@suse.de> <0f0b3e3c-93c4-b76c-854c-6f498bc017d6@tronnes.org> <515AD7AA-19E4-4DBF-8AAB-5EE8071FCAF6@martin.sperl.org>
-To:     =?utf-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-X-Mailer: Apple Mail (2.3124)
+Message-ID: <20190509022701.GS14916@sirena.org.uk>
+References: <5be80c08e0873ab200ed472b98ea8772666852ff.camel@suse.de>
+ <a2f71bcab3756dc35385288ca3287af6849933a6.camel@suse.de>
+ <0f0b3e3c-93c4-b76c-854c-6f498bc017d6@tronnes.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jF32gZOFbnzmk3b4"
+Content-Disposition: inline
+In-Reply-To: <0f0b3e3c-93c4-b76c-854c-6f498bc017d6@tronnes.org>
+X-Cookie: -- I have seen the FUN --
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-> On 08.05.2019, at 21:11, kernel@martin.sperl.org wrote:
-> 
-> As per (intended) api finalize_current_message should be called before
-> finalize current message, as all sorts of reordering may occur and data
-> may get moved arround.
-> 
-> For example you could even transform a spi_write_then_read into a single
-> spi_transfer using a buffer and then copy the data back to the original
-> place, whioch would not be supported as is.
-> 
-> In the end it may even make sense to make the dma-mapping also a
-> spi resource transformation at the right place and move spi_res_release
-> before the finalize current message.
-> 
-> But obviously that is a bigger change to core we may not be able to
-> get into the current release window.
+--jF32gZOFbnzmk3b4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Something like this (compiles but untested) could solve the issue:
+On Wed, May 08, 2019 at 07:33:32PM +0200, Noralf Tr=F8nnes wrote:
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 5e75944ad5d1..002acfee7785 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1183,8 +1183,6 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+> Unless Martin Sperl, who wrote spi_split_transfers_maxsize(), has other
+> suggestions, I think we should just revert this patch.
 
-        spi_finalize_current_message(ctlr);
+I'll just revert for now, we can always re-apply things later but
+that'll get the problem sorted in Linus' tree quickest.
 
--       spi_res_release(ctlr, msg);
--
-        return ret;
- }
+--jF32gZOFbnzmk3b4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-@@ -1448,6 +1446,8 @@ void spi_finalize_current_message(struct spi_controller *ctlr)
-                }
-        }
+-----BEGIN PGP SIGNATURE-----
 
-+       spi_res_release(ctlr, mesg);
-+
-        spin_lock_irqsave(&ctlr->queue_lock, flags);
-        ctlr->cur_msg = NULL;
-        ctlr->cur_msg_prepared = false;
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzTj/UACgkQJNaLcl1U
+h9CCFAf/bSOhxvFDl0KXMCJmE62+jQP9FM0+gqOV5Pq1uVRKl1XzLVAvNZu/rgNt
+2sRNYWnVyFsRuBNsR9dQt4bTcB8DpOq9aY88LVtS8eump10ffZyOSajkeQblbFFi
+XcDqRQAuvwSKTqDnu/ojvOiWdRaAfUJ9JBnZGds1k0mKH9CzuWNMIlqW2mCnhHqn
+G101xVEXtPMj4kmVySW4q33gySCiAPVRUmnR0ai43ynYUpsFnJBfqMJ4dIYQ1QZY
+hbr48KmMV0dZvXwu4MbRpnfIO+Q1ALMtQXugZZLPQ5gYnEcZqaOnPkrlj7GpfKQq
+RexQ7EiIO/W7x+dxnyUiForXCxvdJA==
+=tQvz
+-----END PGP SIGNATURE-----
 
-
-It also fixes a memory leak (spi_res objects) when:
-* bus_drivers call spi_finalize_current_message on its own
-* prepare_message fails
-* spi_map_msg fails
-
-Then those resource transformations are not reverted and
-memory is not freed.
-
-@Nicolas: maybe you can confirm that this fixes your issue.
-
-@Marc: you need to decide on if this is acceptable, but as
-it is fixing actual memory leaks there may be a good argument
-to apply it. But then as it is at the core longer testing would
-be welcome...
-
-Martin
+--jF32gZOFbnzmk3b4--
