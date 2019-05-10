@@ -2,67 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0310619A88
-	for <lists+linux-spi@lfdr.de>; Fri, 10 May 2019 11:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B52719A95
+	for <lists+linux-spi@lfdr.de>; Fri, 10 May 2019 11:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbfEJJXb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 May 2019 05:23:31 -0400
-Received: from www3345.sakura.ne.jp ([49.212.235.55]:27611 "EHLO
-        www3345.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727097AbfEJJXb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 May 2019 05:23:31 -0400
-Received: from fsav301.sakura.ne.jp (fsav301.sakura.ne.jp [153.120.85.132])
-        by www3345.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x4A9NIu5072302;
-        Fri, 10 May 2019 18:23:18 +0900 (JST)
-        (envelope-from na-hoan@jinso.co.jp)
-Received: from www3345.sakura.ne.jp (49.212.235.55)
- by fsav301.sakura.ne.jp (F-Secure/fsigk_smtp/530/fsav301.sakura.ne.jp);
- Fri, 10 May 2019 18:23:18 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/530/fsav301.sakura.ne.jp)
-Received: from [192.168.1.8] (p14010-ipadfx41marunouchi.tokyo.ocn.ne.jp [61.118.107.10])
-        (authenticated bits=0)
-        by www3345.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id x4A9NH6T072290
-        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NO);
-        Fri, 10 May 2019 18:23:18 +0900 (JST)
-        (envelope-from na-hoan@jinso.co.jp)
-Subject: Re: [PATCH] spi: bcm2835: Remove spi_alloc_master() error printing
-To:     Stefan Wahren <stefan.wahren@i2se.com>, broonie@kernel.org,
-        linux-rpi-kernel@lists.infradead.org, eric@anholt.net
-Cc:     linux-spi@vger.kernel.org
-References: <1557477738-20634-1-git-send-email-na-hoan@jinso.co.jp>
- <f8998234-1ab6-43e7-7dd8-859933b2179f@i2se.com>
-From:   Hoan <na-hoan@jinso.co.jp>
-Message-ID: <a16cd122-8f30-d9d3-6774-bb6c25243f8c@jinso.co.jp>
-Date:   Fri, 10 May 2019 18:23:17 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727009AbfEJJ0r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 May 2019 05:26:47 -0400
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:34626 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726992AbfEJJ0r (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 May 2019 05:26:47 -0400
+Received: by mail-vk1-f194.google.com with SMTP id d7so1327806vkf.1
+        for <linux-spi@vger.kernel.org>; Fri, 10 May 2019 02:26:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DT5wT8AJFVUKeUgrd/69X3hf26YvnynRb3rkliFJbeQ=;
+        b=rcMTsE1Zunz3RWKGXWGvaEF7YcDYAq+aYLfpWOmVln8GDmg51K+3DM4oUeDPkSPang
+         Xz9lWykCZFlbR4+dEDrBCdg0g87PFe1uDvm8WWvRt3Q8YnGAU9gQIvdzdlOijt7tONEQ
+         pVF/+JTaoDhL/CdqyrXxvw8W2sywndyc0QsskvdGHAiWZJcTRLEpnA/xJKSMykaR+vaM
+         kN2XaaVpFwLVBJB5+BTc7H1X+i07Ix5xs5j5NukOoBWJFMwGMUOo7D7yJtQYmnVO1aSW
+         /dj5Td45AwPmpyuzBtz5SdBDDJuGlvOA2y0bPzPZOZ9R3oprFhF5xvKsQZe9PE1HgAYc
+         cm8g==
+X-Gm-Message-State: APjAAAUhRdSf4zWzgZ0Y+8PUGIEunWXIsHRObGCvKAZnV1/nmp1JrPV5
+        5aF4T9vKZ1Rp8IOBoAS5K+bgnXJS8BDf1V2oCeE=
+X-Google-Smtp-Source: APXvYqzj9/rCw1pufzI1/agjRwFhQV+30BDwd3fzoCGNzdcwix3rNmXJAjBYqBSsxKR7EK7EHL7MuNngBAZXWTOnlw8=
+X-Received: by 2002:a1f:ff0b:: with SMTP id p11mr4594722vki.83.1557480406122;
+ Fri, 10 May 2019 02:26:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <f8998234-1ab6-43e7-7dd8-859933b2179f@i2se.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <1557480060-15311-1-git-send-email-na-hoan@jinso.co.jp>
+In-Reply-To: <1557480060-15311-1-git-send-email-na-hoan@jinso.co.jp>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 May 2019 11:26:33 +0200
+Message-ID: <CAMuHMdX4x8x=xbszMJ-BVd6xCvZV_m7ds41d2b3og5XJKyZNQg@mail.gmail.com>
+Subject: Re: [PATCH] spi: bcm2835aux: Remove spi_alloc_master() error printing
+To:     Nguyen An Hoan <na-hoan@jinso.co.jp>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Eric Anholt <eric@anholt.net>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dear Mr. Stefan!
-
-On 2019/05/10 18:05, Stefan Wahren wrote:
-> Hi,
+On Fri, May 10, 2019 at 11:25 AM Nguyen An Hoan <na-hoan@jinso.co.jp> wrote:
+> From: Hoan Nguyen An <na-hoan@jinso.co.jp>
 >
-> On 10.05.19 10:42, Nguyen An Hoan wrote:
->> From: Hoan Nguyen An <na-hoan@jinso.co.jp>
->>
->> Printing an error on memory allocation failure is unnecessary,
->> as the memory allocation core code already takes care of that.
->>
->> Signed-off-by: Hoan Nguyen An <na-hoan@jinso.co.jp>
-> looks like more spi drivers are affected.
+> Printing an error on memory allocation failure is unnecessary,
+> as the memory allocation core code already takes care of that.
 >
-> Could you please take care at least of spi-bcm2835aux ?
-Thanks! I have just updated it!
+> Signed-off-by: Hoan Nguyen An <na-hoan@jinso.co.jp>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Thank You!
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
