@@ -2,46 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 769AD1AD43
-	for <lists+linux-spi@lfdr.de>; Sun, 12 May 2019 19:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCC11AD45
+	for <lists+linux-spi@lfdr.de>; Sun, 12 May 2019 19:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbfELRFn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 12 May 2019 13:05:43 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49280 "EHLO
+        id S1726993AbfELRFr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 May 2019 13:05:47 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49464 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbfELRFn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 May 2019 13:05:43 -0400
+        with ESMTP id S1726883AbfELRFr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 May 2019 13:05:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=NjameZdy07GXrnYB3egZ9x9jkXwU69GYuWQhuwBGLF0=; b=qbftyWRofeynHyGSqHc4PEhdC
-        jJfSPVmsSR/WVOZhIM22P2KElvP8lIU/xm5KNXRO398B0W9iYMGWDnjDm8Dnh9wB9lgOhn1v9ECul
-        oxkqaIHEylzKdhk4u1TYxvpLkptMHlorDOcEFLKBAB0JlqftTPccw+gliXfKIN3wW0E0k=;
+         bh=ndywyr82/NFXN1lC+orQHknEu4sY+tlBor1wOLnwHSE=; b=Opwi9hM51BLy0cPkDfwO3cqSQ
+        9nRzofIkcNCQfT+hrTfUv8FrTcrP+2t9/YRayPL9C5CxWkqF87Eq4uLN6LmvutKsUXNq/MiTQgzp9
+        DR7LWfSifYzHzl7+qeL1P5R0BQJpvra4fXMJ5RWFfYbVK/mkELLD+MONxJ6qfYY786dVQ=;
 Received: from [81.145.206.43] (helo=finisterre.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hPruu-00044b-8I; Sun, 12 May 2019 17:05:40 +0000
+        id 1hPruu-00044k-9y; Sun, 12 May 2019 17:05:40 +0000
 Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id D2BAB440052; Sun, 12 May 2019 09:26:45 +0100 (BST)
-Date:   Sun, 12 May 2019 17:26:45 +0900
+        id BB886440059; Sun, 12 May 2019 09:54:09 +0100 (BST)
+Date:   Sun, 12 May 2019 17:54:09 +0900
 From:   Mark Brown <broonie@kernel.org>
-To:     Jochen Henneberg <jh@henneberg-systemdesign.com>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: Added driver for CP2130 USB-to-SPI bridge
-Message-ID: <20190512082645.GK21483@sirena.org.uk>
-References: <1557144380-19935-1-git-send-email-jh@henneberg-systemdesign.com>
- <1557144380-19935-2-git-send-email-jh@henneberg-systemdesign.com>
- <20190508071812.GS14916@sirena.org.uk>
- <87sgto16kr.fsf@henneberg-systemdesign.com>
+To:     Martin Sperl <kernel@martin.sperl.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi@vger.kernel.org
+Subject: Re: Regression: spi: core: avoid waking pump thread from spi_sync
+ instead run teardown delayed
+Message-ID: <20190512085409.GM21483@sirena.org.uk>
+References: <aabd916e-005e-6cda-25d7-8ab875afa7a0@nvidia.com>
+ <AAA7943B-B1F1-4389-AAC3-8621EC6E38B8@martin.sperl.org>
+ <20190115192619.GG5522@sirena.org.uk>
+ <5D3256B1-5DAE-4E3F-9099-5425F4BCA304@martin.sperl.org>
+ <20190115212539.GK5522@sirena.org.uk>
+ <EA757B47-A264-4B4D-9E5F-16611ABA0278@martin.sperl.org>
+ <20190118191202.GG6260@sirena.org.uk>
+ <EE52ED32-CBB4-40D4-8615-CA814158C826@martin.sperl.org>
+ <20190123175609.GG7503@sirena.org.uk>
+ <CB6BCD42-60F9-493A-B05B-FC27C125E982@martin.sperl.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HTLCc13+3hfAZ6SL"
+        protocol="application/pgp-signature"; boundary="jB+02Y6wHc2pEa2x"
 Content-Disposition: inline
-In-Reply-To: <87sgto16kr.fsf@henneberg-systemdesign.com>
+In-Reply-To: <CB6BCD42-60F9-493A-B05B-FC27C125E982@martin.sperl.org>
 X-Cookie: HOST SYSTEM RESPONDING, PROBABLY UP...
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
@@ -50,98 +60,72 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---HTLCc13+3hfAZ6SL
+--jB+02Y6wHc2pEa2x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 09, 2019 at 08:32:20AM +0200, Jochen Henneberg wrote:
-> Mark Brown <broonie@kernel.org> writes:
-> > On Mon, May 06, 2019 at 02:06:20PM +0200, Jochen Henneberg wrote:
+On Thu, May 09, 2019 at 09:47:08PM +0200, Martin Sperl wrote:
 
-> >> +	mutex_lock(&chip->chn_config_lock);
-> >> +	for (i = 0; i < CP2130_NUM_GPIOS; i++) {
-> >> +		chn = &chip->chn_configs[i];
-> >> +		ret += sprintf(out, "%d\t%d\t%d\t%d\t\t%d\t\t%d\t\t%s\t%d"
-> >> +			"\t\t%d\t\t\t%d\t\t%d\t\t'%s'\n",
-> >> +			i, chn->cs_en, chn->irq_pin, chn->clock_phase,
-> >> +			chn->polarity, chn->cs_pin_mode,
-> >> +			cp2130_spi_speed_to_string(chn->clock_freq),
-> >> +			chn->delay_mask, chn->inter_byte_delay,
-> >> +			chn->pre_deassert_delay, chn->post_assert_delay,
-> >> +			chn->modalias);
-> >> +		strcat(buf, out);
-> >> +	}
+> While thinking about this again maybe an idea:
+> What about implement a second spi_transfer_one implementation (together
+> with a message pump implementation) that would handle things correctly.
 
-> > This looks like a bunch of mostly very generic diagnostic data, if it's
-> > useful to have it should be added in the framework so it's available for
-> > all drivers.
+> Any driver then can select the old (default) or new implementation and th=
+us
+> would allow the optimizations to take place only for verified working dri=
+vers...
 
-> The information is quite specific for the CP2130 so I cannot see how
-> this could fit into the SPI framework.
+I'd rather avoid having yet another interface for drivers to use, people
+already get confused trying to choose between the ones we already have.
+It'd have to be something where the existing drivers got actively
+converted and the old interface retired rather than something that hangs
+around.
 
-All those delays, polarities and speeds look very generic.
+> What I would then also like to do for the new implementation is modify the
+> API a bit - ideally I would like to:
+> * Make spi_sync the primary interface which the message pump is also=20
+>   using directly
+> * move all the prepare stuff early into spi-sync, so that for example the
+>   Preparing (including dma mapping) would get done in the calling thread
+>   And only the prepared message would get submitted to the queue
+>   - special processing would be needed for the spi-async case.
 
-> We could use the timing information that comes with each SPI transfer to
-> setup the transport parameters of the chip, however, there are several
-> settings that may be incomplete. E. g. the IRQ pin. If the SPI slave
-> chip IRQ is connected to one of the GPIOs of CP2130 nobody knows upfront
-> which IRQ to configure for the slave chip driver. Same issue applies for
-> the CS pin, there is pre-numbered GPIO available for CS before the
-> CP2130 is plugged so you cannot setup other driver in advance.
+IIRC the mapping is deliberately done late in order to minimize the
+amount of time we're consuming resources for the mapping, there were
+some systems that had limited DMA channels.  However I don't know how
+big a concern that is in this day and age with even relatively old
+systems.  The idea of spi_async() having a separate path also makes me a
+bit nervous as it's much less widely used so more likely to get broken
+accidentially.
 
-This is the same problem as all the plugin modules for non-enumerable
-buses like the Raspberry Pi have, they currently use things like DT or
-ACPI overlays to enumerate - there are some efforts at improving things
-as it's not ideal at the minute.  I'd expect you to be trying to use
-similar interfaces to them rather than inventing something completely
-driver specific, users shouldn't have to figure out some random driver
-specific interface for this.
+Otherwise pushing things out to the caller makes sense, it should have
+no real impact in the majority of cases where the thread is just getting
+used to idle the controller and the actual work is all happening in the
+calling context anyway and if the pump is being used it means it's
+spending more time actually pushing transfers out.
 
-> If the chip is permanently connected (e. g. in an embedded board, which
-> is unlikely because those often have host SPI ports anyway) we may have
-> an advantage from DT pre-configuration but I think this use-case is
-> quite unlikely and then there would still be the problem to know which
-> data is valid, the one that comes with the transfer message or the one
-> configured from sysfs.
+For the case where we do have the message pump going one thing it'd be
+good to do is overlap more of the admin work around the messages with
+other transfers - ideally we'd be able to kick off the next transfer
+=66rom within the completion of a DMA.  I need to have a dig around and
+figure out if I have any hardware that can actually support that, last
+time I looked at this my main system needed to kick everything up to the
+thread due to hardware requirements.
 
-This is one reason why you shouldn't have a random sysfs interface.
-
-> >> +	/* iterate through all transfers */
-> >> +	list_for_each_entry(xfer, &mesg->transfers, transfer_list) {
-> >> +		dev_dbg(&master->dev, "spi transfer stats: %p, %p, %d",
-> >> +			xfer->tx_buf, xfer->rx_buf, xfer->len);
-
-> > It's not clear to me why the driver can't use transfer_one() instead of
-> > transfer_one_message().
-
-> The documentation says that if both callbacks are provided the framework
-> will always use transfer_one_message() which I think is the superior
-> callback because we can keep the SPI configuration as it is if the same
-
-No, it's better to use transfer_one() if you can as it means there is
-less open coding of standard features in the driver.
-
-> channel is used with subsequent transfers (performance) which we cannot
-> do for transfer_one(), at least if the driver should remain stateless
-> for the transfers.
-
-It's perfectly OK to cache the last settings that were sent to the
-hardware and only reconfigure if there's a change, several drivers do
-that already.
-
---HTLCc13+3hfAZ6SL
+--jB+02Y6wHc2pEa2x
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzX2MUACgkQJNaLcl1U
-h9C/Kwf6A8gheJrX5sK4mxJKeM6fglrDGdvaPLlu6eRuyKkTsfbQ1WLcCLB6tJyZ
-WFNu6iS4uUQryGjJl5DSnx2MzEGkpcp3AUHE5g6vvgCMEl2EyqZPVNtCGwpPDnnW
-h3PKTjUTJpFY+ueRnS53EdKQ+G1ZSPKdKdIpjVxfxXVByJggw/x/Nfw3ozaoOr7I
-v2e2AfkeQwiIwGW+QjSd1AW7Mw5dPPscw9hT7Xr9zcBQLv2mse63opUg/LNhETaW
-w58nXrkqAMIFDNeyTkx0cPGqcFL7xfjMBYdQgeMnSDSFXT5+2obAtGhOEUsSpVn2
-3YdTHdMd/bfIpXpWhM7ETk6cShC7CA==
-=6mdv
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzX3zAACgkQJNaLcl1U
+h9BPIQf+IXs6QkyGGEDlkcfJDDpZrmikAxecDDwRGwsR0dIdbhHaiZp+bNayRaaX
+ygo+j+63kO8AJ6fOHI3tPyLlCPcktVWeIMIbI2BGiOa5+Y58ZuJd1zCODDVOElK1
+YHmzWKZZaeYGsZ+3McBRBRjURVPVxKXkLYaVBOLskI4gS2t7qedUXQrwqX+75YIe
+jRI53hs7tuL1Hlq31Fpy9wqibKjb6L41WkbL1c4eTpYEM5zR5umw//HJXheDW84r
+94g7Q2+fvwaLt3fi7TXjJOMS6tRjQEupWfbxcd6bmySW65b5CNx/i3WaFs+26xbh
+yqrApK5wdTIXj637t8vHGfE9WpxMnQ==
+=22+6
 -----END PGP SIGNATURE-----
 
---HTLCc13+3hfAZ6SL--
+--jB+02Y6wHc2pEa2x--
