@@ -2,134 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 243D91B2E2
-	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2019 11:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F771B569
+	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2019 14:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728415AbfEMJbv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 May 2019 05:31:51 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57401 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726900AbfEMJbv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 May 2019 05:31:51 -0400
-Received: from kresse.hi.pengutronix.de ([2001:67c:670:100:1d::2a])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1hQ7J3-0007BB-G5; Mon, 13 May 2019 11:31:37 +0200
-Message-ID: <1557739890.3997.1.camel@pengutronix.de>
-Subject: Re: [PATCH v3 00/14] add ecspi ERR009165 for i.mx6/7 soc family
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Robin Gong <yibin.gong@nxp.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "plyatov@gmail.com" <plyatov@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Mon, 13 May 2019 11:31:30 +0200
-In-Reply-To: <1557249513-4903-1-git-send-email-yibin.gong@nxp.com>
-References: <1557249513-4903-1-git-send-email-yibin.gong@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::2a
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+        id S1729582AbfEMMB0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 May 2019 08:01:26 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:35658 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727462AbfEMMBZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 May 2019 08:01:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=2U9UTMwlbnOzCVkVyvFY8C+ElBTGuKoTwgg7Mw8xZY4=; b=eI4NTkH0rPVT
+        t+dYnZPZOHLPrehkcE0BqaA1mNwa9uPjQzJ/MObxrSCbQEEL3aMF4af9yA1wA244EABZQO+eLGft2
+        U24ekzLQux2D3cf1VzU5+sF+HsCCpzfboOfFBjOb+8HzhJ2xiJujzb34QtIEvuKdDz13YpWy7If1A
+        iTFk0=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hQ9dr-0006U4-MF; Mon, 13 May 2019 12:01:15 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id 0FFE344000C; Mon, 13 May 2019 13:01:12 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     kbuild test robot <lkp@intel.com>, linux-spi@vger.kernel.org
+Subject: Applied "spi: core: Fix build" to the spi tree
+In-Reply-To: 
+X-Patchwork-Hint: ignore
+Message-Id: <20190513120112.0FFE344000C@finisterre.sirena.org.uk>
+Date:   Mon, 13 May 2019 13:01:11 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Robin,
+The patch
 
-Am Dienstag, den 07.05.2019, 09:15 +0000 schrieb Robin Gong:
->   There is ecspi ERR009165 on i.mx6/7 soc family, which cause FIFO
-> transfer to be send twice in DMA mode. Please get more information from:
-> https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf. The workaround is adding
-> new sdma ram script which works in XCH  mode as PIO inside sdma instead
-> of SMC mode, meanwhile, 'TX_THRESHOLD' should be 0. The issue should be
-> exist on all legacy i.mx6/7 soc family before i.mx6ul.
-> NXP fix this design issue from i.mx6ul, so newer chips including i.mx6ul/
-> 6ull/6sll do not need this workaroud anymore. All other i.mx6/7/8 chips
-> still need this workaroud. This patch set add new 'fsl,imx6ul-ecspi'
-> for ecspi driver and 'ecspi_fixed' in sdma driver to choose if need errata
-> or not.
->   The first two reverted patches should be the same issue, though, it
-> seems 'fixed' by changing to other shp script. Hope Sean or Sascha could
-> have the chance to test this patch set if could fix their issues.
->   Besides, enable sdma support for i.mx8mm/8mq and fix ecspi1 not work
-> on i.mx8mm because the event id is zero.
-> 
-> PS:
->   Please get sdma firmware from below linux-firmware and copy it to your
-> local rootfs /lib/firmware/imx/sdma.
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/imx/sdma
+   spi: core: Fix build
 
-This series is unfit for merging, as long as it depends on a SDMA RAM
-script that is known to break serial DMA. When can we expect to get a
-firmware version with the broken serial script removed out into the
-public?
+has been applied to the spi tree at
 
-Regards,
-Lucas
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
 
-> v2:
->   1. add commit log for reverted patches.
->   2. add comment for 'ecspi_fixed' in sdma driver.
->   3. add 'fsl,imx6sll-ecspi' compatible instead of 'fsl,imx6ul-ecspi'
->      rather than remove.
-> v3:
->   1. confirm with design team make sure ERR009165 fixed on i.mx6ul/i.mx6ull
->   /i.mx6sll, not fixed on i.mx8m/8mm and other i.mx6/7 legacy chips.
->   Correct dts related dts patch in v2.
->   2. clean eratta information in binding doc and new 'tx_glitch_fixed' flag
->   in spi-imx driver to state ERR009165 fixed or not.
->   3. Enlarge burst size to fifo size for tx since tx_wml set to 0 in the
->   errata workaroud, thus improve performance as possible.
-> 
-> Robin Gong (14):
->   Revert "ARM: dts: imx6q: Use correct SDMA script for SPI5 core"
->   Revert "ARM: dts: imx6: Use correct SDMA script for SPI cores"
->   Revert "dmaengine: imx-sdma: refine to load context only once"
->   dmaengine: imx-sdma: remove dupilicated sdma_load_context
->   dmaengine: imx-sdma: add mcu_2_ecspi script
->   spi: imx: fix ERR009165
->   spi: imx: remove ERR009165 workaround on i.mx6ul
->   dt-bindings: spi: imx: add new i.mx6ul compatible name
->   dmaengine: imx-sdma: remove ERR009165 on i.mx6ul
->   dt-bindings: dma: imx-sdma: add i.mx6ul/6sx compatible name
->   dmaengine: imx-sdma: fix ecspi1 rx dma not work on i.mx8mm
->   ARM: dts: imx6ul: add dma support on ecspi
->   ARM: dts: imx6sll: correct sdma compatible
->   arm64: defconfig: Enable SDMA on i.mx8mq/8mm
-> 
->  .../devicetree/bindings/dma/fsl-imx-sdma.txt       |  2 +
->  .../devicetree/bindings/spi/fsl-imx-cspi.txt       |  1 +
->  arch/arm/boot/dts/imx6q.dtsi                       |  2 +-
->  arch/arm/boot/dts/imx6qdl.dtsi                     |  8 +--
->  arch/arm/boot/dts/imx6sll.dtsi                     |  2 +-
->  arch/arm/boot/dts/imx6ul.dtsi                      |  8 +++
->  arch/arm64/configs/defconfig                       |  3 +
->  drivers/dma/imx-sdma.c                             | 78 ++++++++++++++++------
->  drivers/spi/spi-imx.c                              | 61 ++++++++++++++---
->  include/linux/platform_data/dma-imx-sdma.h         |  1 +
->  10 files changed, 132 insertions(+), 34 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 7ef39a69b9c6c84885a86eef4e4ba5c161c44366 Mon Sep 17 00:00:00 2001
+From: Mark Brown <broonie@kernel.org>
+Date: Sun, 12 May 2019 17:13:21 +0900
+Subject: [PATCH] spi: core: Fix build
+
+This reverts d5864e5bed96 (spi: core: allow defining time that cs is
+deasserted as a multiple of SCK) as it breaks the build.
+
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi.c       | 8 --------
+ include/linux/spi/spi.h | 1 -
+ 2 files changed, 9 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index cfa3c3decb8a..7e8ffe3fdc00 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1111,7 +1111,6 @@ static void _spi_transfer_cs_change_delay(struct spi_message *msg,
+ {
+ 	u32 delay = xfer->cs_change_delay;
+ 	u32 unit = xfer->cs_change_delay_unit;
+-	u32 hz;
+ 
+ 	/* return early on "fast" mode - for everything but USECS */
+ 	if (!delay && unit != SPI_DELAY_UNIT_USECS)
+@@ -1127,13 +1126,6 @@ static void _spi_transfer_cs_change_delay(struct spi_message *msg,
+ 		break;
+ 	case SPI_DELAY_UNIT_NSECS: /* nothing to do here */
+ 		break;
+-	case SPI_DELAY_UNIT_SCK:
+-		/* if there is no effective speed know, then approximate
+-		 * by underestimating with half the requested hz
+-		 */
+-		hz = xfer->effective_speed_hz ?: xfer->speed_hz / 2;
+-		delay *= DIV_ROUND_UP(1000000000, hz);
+-		break;
+ 	default:
+ 		dev_err_once(&msg->spi->dev,
+ 			     "Use of unsupported delay unit %i, using default of 10us\n",
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index f55b20254612..c0b2a61bcced 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -831,7 +831,6 @@ struct spi_transfer {
+ 	u8		cs_change_delay_unit;
+ #define SPI_DELAY_UNIT_USECS	0
+ #define SPI_DELAY_UNIT_NSECS	1
+-#define SPI_DELAY_UNIT_SCK	2
+ 	u32		speed_hz;
+ 	u16		word_delay;
+ 
+-- 
+2.20.1
+
