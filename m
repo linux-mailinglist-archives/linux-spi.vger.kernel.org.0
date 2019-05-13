@@ -2,121 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B71051B111
-	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2019 09:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243D91B2E2
+	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2019 11:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbfEMHVf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 13 May 2019 03:21:35 -0400
-Received: from 212-186-180-163.static.upcbusiness.at ([212.186.180.163]:37156
-        "EHLO cgate.sperl.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727568AbfEMHVf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 May 2019 03:21:35 -0400
-Received: from msmac.intern.sperl.org (account martin@sperl.org [10.10.10.11] verified)
-  by sperl.org (CommuniGate Pro SMTP 6.2.1 _community_)
-  with ESMTPSA id 7764767; Mon, 13 May 2019 07:21:31 +0000
-Content-Type: text/plain; charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: Regression: spi: core: avoid waking pump thread from spi_sync instead run teardown delayed
-From:   kernel@martin.sperl.org
-In-Reply-To: <20190512085409.GM21483@sirena.org.uk>
-Date:   Mon, 13 May 2019 09:21:40 +0200
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <02F11B40-F747-4E57-9E37-1DD010D54CBC@martin.sperl.org>
-References: <aabd916e-005e-6cda-25d7-8ab875afa7a0@nvidia.com> <AAA7943B-B1F1-4389-AAC3-8621EC6E38B8@martin.sperl.org> <20190115192619.GG5522@sirena.org.uk> <5D3256B1-5DAE-4E3F-9099-5425F4BCA304@martin.sperl.org> <20190115212539.GK5522@sirena.org.uk> <EA757B47-A264-4B4D-9E5F-16611ABA0278@martin.sperl.org> <20190118191202.GG6260@sirena.org.uk> <EE52ED32-CBB4-40D4-8615-CA814158C826@martin.sperl.org> <20190123175609.GG7503@sirena.org.uk> <CB6BCD42-60F9-493A-B05B-FC27C125E982@martin.sperl.org> <20190512085409.GM21483@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Mailer: Apple Mail (2.3124)
+        id S1728415AbfEMJbv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 May 2019 05:31:51 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57401 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbfEMJbv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 May 2019 05:31:51 -0400
+Received: from kresse.hi.pengutronix.de ([2001:67c:670:100:1d::2a])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1hQ7J3-0007BB-G5; Mon, 13 May 2019 11:31:37 +0200
+Message-ID: <1557739890.3997.1.camel@pengutronix.de>
+Subject: Re: [PATCH v3 00/14] add ecspi ERR009165 for i.mx6/7 soc family
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Robin Gong <yibin.gong@nxp.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "plyatov@gmail.com" <plyatov@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will.deacon@arm.com" <will.deacon@arm.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Mon, 13 May 2019 11:31:30 +0200
+In-Reply-To: <1557249513-4903-1-git-send-email-yibin.gong@nxp.com>
+References: <1557249513-4903-1-git-send-email-yibin.gong@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::2a
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark!
+Hi Robin,
 
-> On 12.05.2019, at 10:54, Mark Brown <broonie@kernel.org> wrote:
+Am Dienstag, den 07.05.2019, 09:15 +0000 schrieb Robin Gong:
+>   There is ecspi ERR009165 on i.mx6/7 soc family, which cause FIFO
+> transfer to be send twice in DMA mode. Please get more information from:
+> https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf. The workaround is adding
+> new sdma ram script which works in XCH  mode as PIO inside sdma instead
+> of SMC mode, meanwhile, 'TX_THRESHOLD' should be 0. The issue should be
+> exist on all legacy i.mx6/7 soc family before i.mx6ul.
+> NXP fix this design issue from i.mx6ul, so newer chips including i.mx6ul/
+> 6ull/6sll do not need this workaroud anymore. All other i.mx6/7/8 chips
+> still need this workaroud. This patch set add new 'fsl,imx6ul-ecspi'
+> for ecspi driver and 'ecspi_fixed' in sdma driver to choose if need errata
+> or not.
+>   The first two reverted patches should be the same issue, though, it
+> seems 'fixed' by changing to other shp script. Hope Sean or Sascha could
+> have the chance to test this patch set if could fix their issues.
+>   Besides, enable sdma support for i.mx8mm/8mq and fix ecspi1 not work
+> on i.mx8mm because the event id is zero.
 > 
-> On Thu, May 09, 2019 at 09:47:08PM +0200, Martin Sperl wrote:
+> PS:
+>   Please get sdma firmware from below linux-firmware and copy it to your
+> local rootfs /lib/firmware/imx/sdma.
+> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/imx/sdma
+
+This series is unfit for merging, as long as it depends on a SDMA RAM
+script that is known to break serial DMA. When can we expect to get a
+firmware version with the broken serial script removed out into the
+public?
+
+Regards,
+Lucas
+
+> v2:
+>   1. add commit log for reverted patches.
+>   2. add comment for 'ecspi_fixed' in sdma driver.
+>   3. add 'fsl,imx6sll-ecspi' compatible instead of 'fsl,imx6ul-ecspi'
+>      rather than remove.
+> v3:
+>   1. confirm with design team make sure ERR009165 fixed on i.mx6ul/i.mx6ull
+>   /i.mx6sll, not fixed on i.mx8m/8mm and other i.mx6/7 legacy chips.
+>   Correct dts related dts patch in v2.
+>   2. clean eratta information in binding doc and new 'tx_glitch_fixed' flag
+>   in spi-imx driver to state ERR009165 fixed or not.
+>   3. Enlarge burst size to fifo size for tx since tx_wml set to 0 in the
+>   errata workaroud, thus improve performance as possible.
 > 
->> While thinking about this again maybe an idea:
->> What about implement a second spi_transfer_one implementation (together
->> with a message pump implementation) that would handle things correctly.
+> Robin Gong (14):
+>   Revert "ARM: dts: imx6q: Use correct SDMA script for SPI5 core"
+>   Revert "ARM: dts: imx6: Use correct SDMA script for SPI cores"
+>   Revert "dmaengine: imx-sdma: refine to load context only once"
+>   dmaengine: imx-sdma: remove dupilicated sdma_load_context
+>   dmaengine: imx-sdma: add mcu_2_ecspi script
+>   spi: imx: fix ERR009165
+>   spi: imx: remove ERR009165 workaround on i.mx6ul
+>   dt-bindings: spi: imx: add new i.mx6ul compatible name
+>   dmaengine: imx-sdma: remove ERR009165 on i.mx6ul
+>   dt-bindings: dma: imx-sdma: add i.mx6ul/6sx compatible name
+>   dmaengine: imx-sdma: fix ecspi1 rx dma not work on i.mx8mm
+>   ARM: dts: imx6ul: add dma support on ecspi
+>   ARM: dts: imx6sll: correct sdma compatible
+>   arm64: defconfig: Enable SDMA on i.mx8mq/8mm
 > 
->> Any driver then can select the old (default) or new implementation and thus
->> would allow the optimizations to take place only for verified working drivers...
+>  .../devicetree/bindings/dma/fsl-imx-sdma.txt       |  2 +
+>  .../devicetree/bindings/spi/fsl-imx-cspi.txt       |  1 +
+>  arch/arm/boot/dts/imx6q.dtsi                       |  2 +-
+>  arch/arm/boot/dts/imx6qdl.dtsi                     |  8 +--
+>  arch/arm/boot/dts/imx6sll.dtsi                     |  2 +-
+>  arch/arm/boot/dts/imx6ul.dtsi                      |  8 +++
+>  arch/arm64/configs/defconfig                       |  3 +
+>  drivers/dma/imx-sdma.c                             | 78 ++++++++++++++++------
+>  drivers/spi/spi-imx.c                              | 61 ++++++++++++++---
+>  include/linux/platform_data/dma-imx-sdma.h         |  1 +
+>  10 files changed, 132 insertions(+), 34 deletions(-)
 > 
-> I'd rather avoid having yet another interface for drivers to use, people
-> already get confused trying to choose between the ones we already have.
-> It'd have to be something where the existing drivers got actively
-> converted and the old interface retired rather than something that hangs
-> around.
-
-I totally understand that.
-
+> -- 
+> 2.7.4
 > 
->> What I would then also like to do for the new implementation is modify the
->> API a bit - ideally I would like to:
->> * Make spi_sync the primary interface which the message pump is also 
->>  using directly
->> * move all the prepare stuff early into spi-sync, so that for example the
->>  Preparing (including dma mapping) would get done in the calling thread
->>  And only the prepared message would get submitted to the queue
->>  - special processing would be needed for the spi-async case.
-> 
-> IIRC the mapping is deliberately done late in order to minimize the
-> amount of time we're consuming resources for the mapping, there were
-> some systems that had limited DMA channels.  However I don't know how
-> big a concern that is in this day and age with even relatively old
-> systems.
-
-We may be able to make the mapping early or late.
-
-The place where it REALLY makes a difference is when we are running
-in the Pump (because of async or because of multiple threads writing
-to the same spi bus via spi_sync)
-
->  The idea of spi_async() having a separate path also makes me a
-> bit nervous as it's much less widely used so more likely to get broken
-> accidentially.
-
-I would try to come up with something,
-
-
-> Otherwise pushing things out to the caller makes sense, it should have
-> no real impact in the majority of cases where the thread is just getting
-> used to idle the controller and the actual work is all happening in the
-> calling context anyway and if the pump is being used it means it's
-> spending more time actually pushing transfers out.
-
-> For the case where we do have the message pump going one thing it'd be
-> good to do is overlap more of the admin work around the messages with
-> other transfers - ideally we'd be able to kick off the next transfer
-> from within the completion of a DMA.  I need to have a dig around and
-> figure out if I have any hardware that can actually support that, last
-> time I looked at this my main system needed to kick everything up to the
-> thread due to hardware requirements.
-
-But to get all this done I fear it will definitely require api changes
-and thus a new kind of pump.
-
-Maybe the pump can get shared by multiple spi (master) controller. This
-would help when there are say 4 devices connected each to a separate
-controller and then transferring short messages that would get handled
-by polling - that would mean 4 CPUs just polling, which is also consuming
-lots of cpu cycles. If we could pool this polling
-
-I am starting to wonder if there is a means to make the wakeup of threads 
-fast/priority to keep the latency on spi_sync minimal - essentially
-yielding the CPU to the “right” thread (so making a yield cheap).
-
-But let us see how far we get before we can tackle this...
-
-Form a performance/thru-put perspective I guess it may be relevant to
-extend the spi_test framework to also gather performance/latency
-statistics so that we have a means to compare actual performance
-numbers and avoid regressions.
-
-Martin
-
-
-
