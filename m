@@ -2,180 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE0E1CF45
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 20:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765341CF99
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 21:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727635AbfENSkU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 May 2019 14:40:20 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35918 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727634AbfENSkJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 May 2019 14:40:09 -0400
-Received: by mail-pg1-f193.google.com with SMTP id a3so7876pgb.3
-        for <linux-spi@vger.kernel.org>; Tue, 14 May 2019 11:40:08 -0700 (PDT)
+        id S1727689AbfENTGn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 May 2019 15:06:43 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:38489 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726997AbfENTGn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 May 2019 15:06:43 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y19so49260lfy.5
+        for <linux-spi@vger.kernel.org>; Tue, 14 May 2019 12:06:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bCp66aV1gNxi33sE4L4kBrPzrebCfikC/mxwtWxT3pw=;
-        b=Pg0FWMZIqRZLdiikvIImkxfeP3LRkBxXx/th6apFqSwURqdn63h23semFgSQmGJy6F
-         lwDY5vXvHCiZV70qr4Z+Y4+b86bZf3VwvRVteFfJzUMjjLVFsEnyoqvNDPWMalvLGQ6i
-         Os6I56KrF9GgyES0oR9JXF3o8a9b/ASyBEqzs=
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=SPWmKpq6VDGUfyOzmQTA3tI7BJu0RPpA6WUx4ql1p0M=;
+        b=MeFq+tmDozlVwHUa/pirnaQUyzHzhiC922oLEAd3VZSh7SQs/8lTjYBKazPc8OI/3f
+         aD8IoPZ8mJx5iLrL+MCV/S9RnL1ffUq9tgdO6ubADK0wQj3lx2tIb2T9eO5FVg9jcnEV
+         l48gJnNLj8cFsXg356nvAolyYevr0DwKfyW0dhSkz3vR3T0wCBP7RPDLfxZt50xi69l5
+         u5zLWcDHJcPmasR54xK+MBfniS3Mh21UfWPTl7N6KLj8pwkK/rhJg8/W7QjH7+ex66Dm
+         OamrI2TSVd9HUuywpc6pkUClP5OK0UHg6vlo0K4S2IF+L5a4DN5OMKLT2ucSF52OXx9s
+         Sxkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bCp66aV1gNxi33sE4L4kBrPzrebCfikC/mxwtWxT3pw=;
-        b=BcMNBmakz+J0CzXqg9iIujVKQJh77SfJ9di/XoZX8uTfgh6GdL3k9hAricrG1vB+Xk
-         dI92KQa/BE8vy9kAWlBUEIr0cLPT20NgtqFqEFFq8RNzH+qtH3Bq8YscwV6ULdF2D2Pp
-         hLlbF+d423twau6OJI14wT+rmMj16/HDFqhZBpyOr6p7tnmIPzv0CHLmzofaKyVRM0Ha
-         cET4caxx7zhO6EG0V2GjX6VIzpudPOl2oIGakza6+jYpLCAL15rvu0/jc07dmUazf9SC
-         qlZ2mg5GG1P/7l9NLBs2jysl9zR09sxpMKVcyQzPYd3w8S7pXUATuDmL/rlWOrne+md1
-         QQ1g==
-X-Gm-Message-State: APjAAAUS+bVQY84f6SjycbbvFXItrvllVbGIAuMydxH8omI3RvKqCyMd
-        3WwbWPTQzj6cEfa4F/FJCmhNMQ==
-X-Google-Smtp-Source: APXvYqwKFFk8VbfvQdWZ//TMaT0qP/i15b1ykYA7pmCwvZ+MflxIyOjEaHAbRIib6vZAH8JiTkSiyA==
-X-Received: by 2002:a63:a449:: with SMTP id c9mr3561397pgp.149.1557859208387;
-        Tue, 14 May 2019 11:40:08 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id 19sm19182454pgz.24.2019.05.14.11.40.07
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=SPWmKpq6VDGUfyOzmQTA3tI7BJu0RPpA6WUx4ql1p0M=;
+        b=Ipw44mOUDEeQ8rqGK5SGTXvlmaP/MM0N2KD4HRAvsNxMiP071pRKb9htidccNfBUqK
+         LsBlcNXz7Fvc0bZuB44ABCcgPtDDl9sIkNGOIwfoirbTAqqzlVTz1oaJG0oOrdoOsgBY
+         y6qAW7Wg9aOE94cNJHMHowGhQ3lI8h1r2IuzJVQS9lHJs4HEkFskfEToxgwFUyrVdjAz
+         VqLADk2hlRONIsq6yIaaEHtG+dE45QLlIezEKDzZnW2cKZ5wXn5JjjaXwtQcJFLxQWZD
+         8Uprd5iOuXr85h8nFZK37uR1nTSls1/NkzCO3AS8C+eizfZpI76wHilFuCA2RnFNNmrK
+         rgyg==
+X-Gm-Message-State: APjAAAXHMaRTIksa7hUt0J2NTSJWnixe5dipVYnywPMCBCxGTS+cu2yL
+        UbR/tkLNUYqCsG62anxiRbm2Zg==
+X-Google-Smtp-Source: APXvYqwRZdUgwLeaMIdAgHuhbJILXHkJsRzfX0+TBZ94IjzXws/h3v/fHnQlT4e7PoL8NqcM0zp2iA==
+X-Received: by 2002:a19:1dc3:: with SMTP id d186mr17340891lfd.101.1557860800826;
+        Tue, 14 May 2019 12:06:40 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([31.173.86.127])
+        by smtp.gmail.com with ESMTPSA id j19sm3969610lfj.52.2019.05.14.12.06.38
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 May 2019 11:40:07 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Cc:     linux-rockchip@lists.infradead.org, drinkcat@chromium.org,
-        Guenter Roeck <groeck@chromium.org>, briannorris@chromium.org,
-        mka@chromium.org, Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v3 2/3] spi: Allow SPI devices to request the pumping thread be realtime
-Date:   Tue, 14 May 2019 11:39:34 -0700
-Message-Id: <20190514183935.143463-3-dianders@chromium.org>
-X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-In-Reply-To: <20190514183935.143463-1-dianders@chromium.org>
-References: <20190514183935.143463-1-dianders@chromium.org>
+        Tue, 14 May 2019 12:06:40 -0700 (PDT)
+Subject: Re: [PATCH v9 2/3] spi: Add Renesas R-Car Gen3 RPC-IF SPI controller
+ driver
+To:     masonccyang@mxic.com.tw
+Cc:     bbrezillon@kernel.org, broonie@kernel.org,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms@verge.net.au>, juliensu@mxic.com.tw,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        marek.vasut@gmail.com, mark.rutland@arm.com, robh+dt@kernel.org,
+        zhengxunli@mxic.com.tw
+References: <1553847606-18122-1-git-send-email-masonccyang@mxic.com.tw>
+ <1553847606-18122-3-git-send-email-masonccyang@mxic.com.tw>
+ <1e2bf23d-db39-0d1d-0bcc-6d9cd2935a82@cogentembedded.com>
+ <cdee3d53-6ee3-4435-117e-8ba4a58ca72b@cogentembedded.com>
+ <OF82CE76E9.E6395EF7-ON482583DD.000E37D7-482583DD.000E5077@mxic.com.tw>
+ <3d334751-8fd4-7db1-9deb-e6c94936df13@cogentembedded.com>
+ <OF4ABCC306.B053BA23-ON482583E0.000F480C-482583E0.000FAD4A@mxic.com.tw>
+ <3971c669-9095-9d18-d029-37f9663a54b2@cogentembedded.com>
+ <OF58AAFF49.C4593DEB-ON482583E1.001D551E-482583E1.001F089D@mxic.com.tw>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <9014077e-2648-adad-72c1-baf834f5a511@cogentembedded.com>
+Date:   Tue, 14 May 2019 22:06:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <OF58AAFF49.C4593DEB-ON482583E1.001D551E-482583E1.001F089D@mxic.com.tw>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Right now the only way to get the SPI pumping thread bumped up to
-realtime priority is for the controller to request it.  However it may
-be that the controller works fine with the normal priority but
-communication to a particular SPI device on the bus needs realtime
-priority.
+Hello!
 
-Let's add a way for devices to request realtime priority when they set
-themselves up.
+On 04/19/2019 08:38 AM, masonccyang@mxic.com.tw wrote:
 
-NOTE: this will just affect the priority of transfers that end up on
-the SPI core's pumping thread.  In many cases transfers happen in the
-context of the caller so if you need realtime priority for all
-transfers you should ensure the calling context is also realtime
-priority.
+>> >> >> >> Add a driver for Renesas R-Car Gen3 RPC-IF SPI controller.
+>> >> >> >>
+>> >> >> >> Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
+>> >> >> >> Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+>> >> >> > [...]
+>> >> >> >> diff --git a/drivers/spi/spi-renesas-rpc.c b/drivers/spi/spi-
+>> >> renesas-rpc.c
+>> >> >> >> new file mode 100644
+>> >> >> >> index 0000000..037f273
+>> >> >> >> --- /dev/null
+>> >> >> >> +++ b/drivers/spi/spi-renesas-rpc.c
+>> >> >> > [...]
+>> >> >> >> +static int rpc_spi_probe(struct platform_device *pdev)
+>> >> >> >> +{
+>> >> >> >> +   struct spi_controller *ctlr;
+>> >> >> >> +   struct rpc_mfd *rpc_mfd = dev_get_drvdata(pdev->dev.parent);
+>> >> >> >> +   struct rpc_spi *rpc;
+>> >> >> >> +   int ret;
+>> >> >> >> +
+>> >> >> >> +   ctlr = spi_alloc_master(&pdev->dev, sizeof(*rpc));
+>> >> >> >> +   if (!ctlr)
+>> >> >> >> +      return -ENOMEM;
+>> >> >> >> +
+>> >> >> >> +   platform_set_drvdata(pdev, ctlr);
+>> >> >> >> +
+>> >> >> >> +   rpc = spi_controller_get_devdata(ctlr);
+>> >> >> >> +
+>> >> >> >> +   ctlr->dev.of_node = pdev->dev.of_node;
+>> >> >> > [...]
+>> >> >> >> +
+>> >> >> >> +   pm_runtime_enable(&pdev->dev);
+>> >> >> >> +   ctlr->auto_runtime_pm = true;
+>> >> >> >
+>> >> >> >    I think this line no longer works as expected with the new
+>> >> >> probing scheme.
+>> >>
+>> >>    That's because we added another (SPI) device under our MFD.
+>> >
+>> > Do you mean just to remove one line
+>> > ctlr->auto_runtime_pm = true;
+>> > ?
+> 
+> how did you test it ?
+> what is your testing flow ?
+> 
+>>    No, you should explicitly call RPM for the MFD (not the SPI device).
+> 
+> okay, patch RPM to RPC MFD and will remove SPI RPM enable part.
+> 
+>>
+>> >> >> > Have you tested reading? v8 patch still works while v9 patches
+>> >> >> > hang on doing:
+>> >> >> >
+>> >> >> > $ cat /dev/mtd<n>...
+>> >> >>
+>> >> >>    Sorry, 'od -x', not 'cat'.
+>> >> >
+>> >> > root@draak:/# cat /proc/mtd
+>> >> > dev:    size   erasesize  name
+>> >> > mtd0: 00040000 00001000 "Bank 1 - Boot parameter"
+>> >> > mtd1: 00140000 00001000 "Bank 1 - Loader-BL2"
+>> >> > mtd2: 00040000 00001000 "Bank 1 - Certification"
+>> >> > mtd3: 00080000 00001000 "Bank 1 - ARM Trusted FW"
+>> >> > mtd4: 00400000 00001000 "Bank 1 - Reserved-1"
+>> >> > mtd5: 00300000 00001000 "Bank 1 - U-Boot"
+>> >> > mtd6: 00200000 00001000 "Bank 1 - Reserved-2"
+>> >> > mtd7: 00480000 00001000 "Bank 1 - Splash"
+>> >> > mtd8: 00040000 00001000 "Bank 1 - Device Tree"
+>> >> > root@draak:/# od -x /dev/mtd1
+>> >> > 0000000 0000 d280 0001 d280 0002 d280 0003 d280
+>> >> > 0000020 0004 d280 0005 d280 0006 d280 0007 d280
+>> >> > 0000040 0008 d280 0009 d280 000a d280 000b d280
+>> >> > 0000060 000c d280 000d d280 000e d280 000f d280
+>> >> > 0000100 0010 d280 0011 d280 0012 d280 0013 d280
+>> >> > 0000120 0014 d280 0015 d280 0016 d280 0017 d280
+>> >> > 0000140 0018 d280 0019 d280 001a d280 001b d280
+>> >> > 0000160 001c d280 001d d280 001e d280 1000 d53e
+>> >> > 0000200 f800 9266 1000 d51e 3fdf d503 3ba0 1005
+>> >>
+>> >>    Still hangs for me. After I patches spi-mem.c and the driver to
+>> >> call RPM for the MFD, it started working again. Perhaps, that clock>> >> is still enabled on your target. What does the following print (for
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+   Even with these issues worked around, I still see strange behavior on
+writes, e.g. after I mount JFFS2 partition, remove 1 file, unmount, re-mount,
+and mount again, the removed file is back! :-/
 
-Changes in v3:
-- SPI core change now like patch v1 patch #2 (with name "rt").
+[...]
 
-Changes in v2:
-- Now only force transfers to the thread for devices that want it.
-- Squashed patch #1 and #2 together.
-- Renamed variable to "force_rt_transfers".
+> thanks & best regards,
+> Mason
 
- drivers/spi/spi.c       | 36 ++++++++++++++++++++++++++++++------
- include/linux/spi/spi.h |  2 ++
- 2 files changed, 32 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 8eb7460dd744..466984796dd9 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1364,10 +1364,32 @@ static void spi_pump_messages(struct kthread_work *work)
- 	__spi_pump_messages(ctlr, true);
- }
- 
--static int spi_init_queue(struct spi_controller *ctlr)
-+/**
-+ * spi_set_thread_rt - set the controller to pump at realtime priority
-+ * @ctlr: controller to boost priority of
-+ *
-+ * This can be called because the controller requested realtime priority
-+ * (by setting the ->rt value before calling spi_register_controller()) or
-+ * because a device on the bus said that its transfers needed realtime
-+ * priority.
-+ *
-+ * NOTE: at the moment if any device on a bus says it needs realtime then
-+ * the thread will be at realtime priority for all transfers on that
-+ * controller.  If this eventually becomes a problem we may see if we can
-+ * find a way to boost the priority only temporarily during relevant
-+ * transfers.
-+ */
-+static void spi_set_thread_rt(struct spi_controller *ctlr)
- {
- 	struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };
- 
-+	dev_info(&ctlr->dev,
-+		"will run message pump with realtime priority\n");
-+	sched_setscheduler(ctlr->kworker_task, SCHED_FIFO, &param);
-+}
-+
-+static int spi_init_queue(struct spi_controller *ctlr)
-+{
- 	ctlr->running = false;
- 	ctlr->busy = false;
- 
-@@ -1387,11 +1409,8 @@ static int spi_init_queue(struct spi_controller *ctlr)
- 	 * request and the scheduling of the message pump thread. Without this
- 	 * setting the message pump thread will remain at default priority.
- 	 */
--	if (ctlr->rt) {
--		dev_info(&ctlr->dev,
--			"will run message pump with realtime priority\n");
--		sched_setscheduler(ctlr->kworker_task, SCHED_FIFO, &param);
--	}
-+	if (ctlr->rt)
-+		spi_set_thread_rt(ctlr);
- 
- 	return 0;
- }
-@@ -2982,6 +3001,11 @@ int spi_setup(struct spi_device *spi)
- 
- 	spi_set_cs(spi, false);
- 
-+	if (spi->rt && !spi->controller->rt) {
-+		spi->controller->rt = true;
-+		spi_set_thread_rt(spi->controller);
-+	}
-+
- 	dev_dbg(&spi->dev, "setup mode %d, %s%s%s%s%u bits/w, %u Hz max --> %d\n",
- 			(int) (spi->mode & (SPI_CPOL | SPI_CPHA)),
- 			(spi->mode & SPI_CS_HIGH) ? "cs_high, " : "",
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 053abd22ad31..15505c2485d6 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -109,6 +109,7 @@ void spi_statistics_add_transfer_stats(struct spi_statistics *stats,
-  *	This may be changed by the device's driver, or left at the
-  *	default (0) indicating protocol words are eight bit bytes.
-  *	The spi_transfer.bits_per_word can override this for each transfer.
-+ * @rt: Make the pump thread real time priority.
-  * @irq: Negative, or the number passed to request_irq() to receive
-  *	interrupts from this device.
-  * @controller_state: Controller's runtime state
-@@ -143,6 +144,7 @@ struct spi_device {
- 	u32			max_speed_hz;
- 	u8			chip_select;
- 	u8			bits_per_word;
-+	bool			rt;
- 	u32			mode;
- #define	SPI_CPHA	0x01			/* clock phase */
- #define	SPI_CPOL	0x02			/* clock polarity */
--- 
-2.21.0.1020.gf2820cf01a-goog
-
+MBR, Sergei
