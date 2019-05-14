@@ -2,188 +2,275 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AD81D020
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 21:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0694D1D097
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 22:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbfENTo7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 May 2019 15:44:59 -0400
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:41954 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbfENToz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 May 2019 15:44:55 -0400
-Received: by mail-yw1-f68.google.com with SMTP id o65so247677ywd.8
-        for <linux-spi@vger.kernel.org>; Tue, 14 May 2019 12:44:54 -0700 (PDT)
+        id S1726089AbfENU1y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 May 2019 16:27:54 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33569 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726533AbfENU1y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 May 2019 16:27:54 -0400
+Received: by mail-lf1-f68.google.com with SMTP id x132so235870lfd.0
+        for <linux-spi@vger.kernel.org>; Tue, 14 May 2019 13:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WWNzgUR578IGEFBbLtpCrpyvIXcz+Pq8uV/vbHZGD+s=;
-        b=OXIGVEAclJ24CckrLwHBe7KOlCnYTPq5OOSitVLOpgVht6ZiCChl6+yJ7aViSYPpGG
-         9HvafLnLPzRF7WTia1W/ogZktH7Y1zNQdDO5C4+g+ctGVR8yqDtV789qJ/hmv0u79aWn
-         N1Gh12znkPe1RXUlTVzjwqOTzT8BP/iDSGPg4wvQktMNZxi4o5Gnti4yFH0njCQSYr90
-         QeRfMooTXFqqP4heorGGkr/7435EboXPhnO1GLpleZQNJtVFJVhew8xXfSk9wpSMbcis
-         H8CMdDo7bs4IaRmG9Ahp7GgrHPIpHiD+p2RDNOqGL+8ERsu32UKtkDtqUAm67ugQ4DDB
-         L/Qg==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Cg+0pIxncJfvTs4tSoXl4GsGWbTnN63dbKG4EXKdY5I=;
+        b=uXDDy/8gSW0jEorXj4eEKaiOvkegZ9DkXL+itl4xCKsGvVnDxiqb9TOYJ7uZwxQQ6f
+         Z5zwbihzNlRL5hNx0YodjSJ1b0ibJ1+pIOHph2tL5/Jw0hYNo0axkDGfyiAlW8tpFsf+
+         Qiqpqp2Wq5e/kcKkbYo4NdSGqxA4Ajt8jDRBg1dlGf235oqdtzr9M52JXGW613NuIk6b
+         lKvC63Gx6Scwn48rpDrpKQXCfc4Rv2+M/BQyi1KlwGKNNEXPgSC7s+vKIhLey+YZDOXi
+         6c8QKUx6VHUS5BiVOs8NNBzxwigbKmDaRpAdHoMUpvqpzaNSH+7hBGLJb6z0J/Z0hq0v
+         ul0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WWNzgUR578IGEFBbLtpCrpyvIXcz+Pq8uV/vbHZGD+s=;
-        b=LnRlw4hYTASbvbnq83qBQR+BihUg0gniaUFHe1Ml4ZleLueTljuitSbpKCaSAANyvm
-         7pFmO3NtBR3sgfTGmdf1xHlg3hSve1T1QwT1tGMOj04AJ2cLT4zrxnUBqZJ2R+7tme6w
-         dksiGNWCP2R/qkq4AJhWH1tREGWK/BqgSrysOcQXO9HTiAoICg04rTy3u9d17lGN9vx0
-         Brh0HF86h0sqJQ4ZMPaG0aLKOELGiFlINzbDlgTRCksJuFMr+HlHNf5rTnKe1Ap8h+A+
-         DWV5F1rE91GHGv8nAUZAeKa4GPTlMMn7tLmRp/YTKf5vYPVWUt0cKSjeclFEVPHSr14m
-         aAQQ==
-X-Gm-Message-State: APjAAAU6t+F5o81+IRCQiT0i2Sx+HoD9b8PFJN80U8CVNHZndbyKpjeV
-        qqa4V+6x5A39OSM7TMnHV3+hVGCBV47REL5jpJrjHg==
-X-Google-Smtp-Source: APXvYqx9Q+7nW0k0HhrbLDn+euVlJ8+dDDSqHxkodW9CqTuwRx1EbaZHRhc2S2IKSuQF/Pyrgiz6q2gHxOQRNronuo4=
-X-Received: by 2002:a81:2513:: with SMTP id l19mr13039829ywl.299.1557863093359;
- Tue, 14 May 2019 12:44:53 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Cg+0pIxncJfvTs4tSoXl4GsGWbTnN63dbKG4EXKdY5I=;
+        b=SJWt2MtyfAwMEZM6dXE9wEkUxvsHEHYFABMMdNM72AQ1Ow9Ku3qUL/TXACW+mmK1t9
+         nfNkkuPafUScfSiHWTNQN1X5tWkj4eEHkLWOZhMr+Z1hazss6Glys5zhis5WVwRcbdDF
+         hdC8hsB1ml5Mvc6DKnYgOnL6N2z/9QAsaQj8uIWEDIBnyDgtjL8YxBub3wVcaYQydlP6
+         BECaUy+KlqIYllz2h2q7FQ+kjqxcCib3oVhSsgY5NWGuZ73HmBNFDBijFlSNZCJh1Cjo
+         Av6fj430VNyL6KOv4IPqE/YPCAIQj7cWly68eW1eblL2p3044LGbiaE9TOj2tnWvCyFY
+         f0Mw==
+X-Gm-Message-State: APjAAAXNn+mjbRtFBmzOJeD2fXVYvcH44NihTZ20Ze1s8Ofs9g7nPn9o
+        SZUJwnbLozdrnlOHk+OYvyPWvg==
+X-Google-Smtp-Source: APXvYqzPxsM8974bIW7yAai/77T/30BrUMlizPu9DEpJloaDJRxl1lG+PYCPEmvieuPciMNeWkUmjw==
+X-Received: by 2002:a05:6512:206:: with SMTP id a6mr18870241lfo.18.1557865672326;
+        Tue, 14 May 2019 13:27:52 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([31.173.86.127])
+        by smtp.gmail.com with ESMTPSA id x29sm3942315lfg.58.2019.05.14.13.27.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 May 2019 13:27:51 -0700 (PDT)
+Subject: Re: [PATCH v12 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3
+ RPC-IF MFD bindings
+To:     masonccyang@mxic.com.tw, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     Boris Brezillon <bbrezillon@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms@verge.net.au>, juliensu@mxic.com.tw,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh@kernel.org>, zhengxunli@mxic.com.tw
+References: <1556092536-17095-1-git-send-email-masonccyang@mxic.com.tw>
+ <1556092536-17095-4-git-send-email-masonccyang@mxic.com.tw>
+ <20190424212356.GA27103@bogus>
+ <65853dc2-6f3c-1494-7e72-54877797cdd2@gmail.com>
+ <20190507125730.GD29524@dell>
+ <OF08A5650B.8AE8977C-ON482583F4.000E5B1E-482583F4.000F7215@mxic.com.tw>
+ <d229b19e-351c-c576-b5c4-716d10dad1a0@gmail.com> <20190508061119.GB7627@dell>
+ <OFE86674B9.06D723A0-ON482583F5.000AD50C-482583F5.000BA075@mxic.com.tw>
+ <a05cff8f-7df2-1938-c0e7-f9366bece607@cogentembedded.com>
+ <OFB19BCE91.6EBBAA77-ON482583F6.000234E2-482583F6.00061290@mxic.com.tw>
+ <CAMuHMdUP8KU3Dbv6cwOvrY0hWOcm1xqVcsi20+GvazYMDLGGZg@mail.gmail.com>
+ <OFD932ABFC.E3FFCEB8-ON482583F9.003412B1-482583F9.0034D5CA@mxic.com.tw>
+ <b51d1cb7-b3b5-208f-ab4c-145ecb57805d@cogentembedded.com>
+ <OFAD9AA573.86373900-ON482583FA.0034781A-482583FA.0035B40C@mxic.com.tw>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <44bc8f0a-cbdc-db4a-9a46-b8bae5cc37a2@cogentembedded.com>
+Date:   Tue, 14 May 2019 23:27:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-References: <20190514183935.143463-1-dianders@chromium.org> <20190514183935.143463-3-dianders@chromium.org>
-In-Reply-To: <20190514183935.143463-3-dianders@chromium.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 14 May 2019 12:44:42 -0700
-Message-ID: <CABXOdTdiEgF2Jypha1qZ4s1X2bkYqVTmT7XNYge19WQtSarSVw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] spi: Allow SPI devices to request the pumping
- thread be realtime
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <OFAD9AA573.86373900-ON482583FA.0034781A-482583FA.0035B40C@mxic.com.tw>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 14, 2019 at 11:40 AM Douglas Anderson <dianders@chromium.org> wrote:
->
-> Right now the only way to get the SPI pumping thread bumped up to
-> realtime priority is for the controller to request it.  However it may
-> be that the controller works fine with the normal priority but
-> communication to a particular SPI device on the bus needs realtime
-> priority.
->
-> Let's add a way for devices to request realtime priority when they set
-> themselves up.
->
-> NOTE: this will just affect the priority of transfers that end up on
-> the SPI core's pumping thread.  In many cases transfers happen in the
-> context of the caller so if you need realtime priority for all
-> transfers you should ensure the calling context is also realtime
-> priority.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+On 05/14/2019 12:46 PM, masonccyang@mxic.com.tw wrote:
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+>>>> There's precedence for such constructs being an MFD: please see
+>>>> drivers/mfd/at91-usart.c, which registers a single MFD cell for 
+> either
+>>>> serial or SPI.
+>>
+>>    Thanks fir your example, Geert! :-)
 
-> ---
->
-> Changes in v3:
-> - SPI core change now like patch v1 patch #2 (with name "rt").
->
-> Changes in v2:
-> - Now only force transfers to the thread for devices that want it.
-> - Squashed patch #1 and #2 together.
-> - Renamed variable to "force_rt_transfers".
->
->  drivers/spi/spi.c       | 36 ++++++++++++++++++++++++++++++------
->  include/linux/spi/spi.h |  2 ++
->  2 files changed, 32 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 8eb7460dd744..466984796dd9 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -1364,10 +1364,32 @@ static void spi_pump_messages(struct kthread_work *work)
->         __spi_pump_messages(ctlr, true);
->  }
->
-> -static int spi_init_queue(struct spi_controller *ctlr)
-> +/**
-> + * spi_set_thread_rt - set the controller to pump at realtime priority
-> + * @ctlr: controller to boost priority of
-> + *
-> + * This can be called because the controller requested realtime priority
-> + * (by setting the ->rt value before calling spi_register_controller()) or
-> + * because a device on the bus said that its transfers needed realtime
-> + * priority.
-> + *
-> + * NOTE: at the moment if any device on a bus says it needs realtime then
-> + * the thread will be at realtime priority for all transfers on that
-> + * controller.  If this eventually becomes a problem we may see if we can
-> + * find a way to boost the priority only temporarily during relevant
-> + * transfers.
-> + */
-> +static void spi_set_thread_rt(struct spi_controller *ctlr)
->  {
->         struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };
->
-> +       dev_info(&ctlr->dev,
-> +               "will run message pump with realtime priority\n");
-> +       sched_setscheduler(ctlr->kworker_task, SCHED_FIFO, &param);
-> +}
+   s/fir/for/, not the firtree season anymore. :-)
+
+>>> okay, many thanks for your information.
+>>>
+>>> How about to patch RPF-IF dts to:
+>>> -------------------------------------------------------------->
+>>>
+>>> Renesas R-Car Gen3 RPC-IF controller Device Tree Bindings
+>>> ---------------------------------------------------------
+>>>
+>>>   RPC-IF supports both SPI NOR and HyperFlash (CFI-compliant flash)
+>>>
+>>>   Required properties:
+>>>   - compatible: should be an SoC-specific compatible value, followed 
+> by
+>>>                   "renesas,rcar-gen3-rpc" as a fallback.
+>>>                   supported SoC-specific values are:
+>>>                   "renesas,r8a77995-rpc"  (R-Car D3)
+>>>   - reg: should contain three register areas:
+>>>           first for the base address of RPC-IF registers,
+>>
+>>    I'd drop "the base address" here.
+> 
+> okay.
+> 
+>>>           second for the direct mapping read mode and
+>>>           third for the write buffer area.
+>>>   - reg-names: should contain "regs", "dirmap" and "wbuf"
+>>>   - clocks: should contain 1 entries for the module's clock
+>>>   - clock-names: should contain "rpc"
+>>
+>>    I suspect we'd need the RPC/RPCD2 clocks mentioned as well (not sure 
+> yet)...
+> 
+> Need it ?
+
+   You seem to call clk_get_rate() on the module clock, I doubt that's
+correct topologically...
+
+> RPCD2 is derived from RPC and it's value is half of RPC,
+> i.e., RPC = 160MHz, RPCD2 = 80 MHz
+
+   I know.
+
+>>    And how about "power-domains", "resets" (seen in the example below),
+>> also what about #address-cells & #size-cells?
+>>
+>>>
+>>>   Example:
+>>
+>>    Could you please indent with 1 or 2 tabs where you used 8 or 16 
+> spaces?
+>>
+>>>   - SPI mode:
+>>>
+>>>           rpc: rpc-if@ee200000 {
+>>
+>>    The node names should be generic, based on the device class. And in 
+> this
+>> case I'd like to use "spi@ee200000" as otherwise dtc keeps bitching like 
+> below:
+> 
+> okay, patch to
+> 
+> rpc_if: spi@<...>
+
+   That, or just keep the node label.
+
+>> arch/arm64/boot/dts/renesas/r8a77980.dtsi:1344.21-1359.5: Warning 
+> (spi_bus_bridge):
+>> /soc/rpc@ee200000: node name for SPI buses should be 'spi'
+>>   also defined at 
+> arch/arm64/boot/dts/renesas/r8a77980-condor.dts:283.6-343.3
+>> arch/arm64/boot/dts/renesas/r8a77980-condor.dtb: Warning (spi_bus_reg):
+>> Failed prerequisite 'spi_bus_bridge'
+>>
+>>
+>>>   - HF mode:
+>>>           rpc: rpc-if@ee200000 {
+>>
+>>    Again, spi@<...>.
+> 
+> what about rpc_if: hf@<...>
+
+   Can't change the node name, as it's declared in the .dtsi files, not *.dts
+ones. And "spi" works for the HF case as well -- no complaints from dtc. :-)
+
+>>>                   compatible = "renesas,r8a77995-rpc", 
+> "renesas,rcar-gen3-rpc";
+>>>                   reg = <0 0xee200000 0 0x200>, <0 0x08000000 0 
+> 0x4000000>,
+>>>                         <0 0xee208000 0 0x100>;
+>>>                   reg-names = "regs", "dirmap", "wbuf";
+>>>                   clocks = <&cpg CPG_MOD 917>;
+>>>                   clock-names = "rpc";
+>>>                   power-domains = <&sysc R8A77995_PD_ALWAYS_ON>;
+>>>                   resets = <&cpg 917>;
+>>>                   #address-cells = <1>;
+>>>                   #size-cells = <1>;
+>>>
+>>>                   flash@0 {
+>>>                           compatible = "cfi-flash";
+>>
+>>    The working HF implementation has "cypress,hyperflash" before 
+> "cfi-flash".
+>>
+>>>                           reg = <0 0x4000000>;
+>>>                   };
+>>>           };
+>>>
+>>> --------------------------------------------------------------<
+>>>
+>>> Is it OK ?
+>>
+>>    Yeah, seems good (assuming you fix the issues above).
+> 
+> Patch new DTS to
+> ===============================================================> 
+> 
+> +Renesas R-Car Gen3 RPC-IF controller Device Tree Bindings
+> +---------------------------------------------------------
 > +
-> +static int spi_init_queue(struct spi_controller *ctlr)
-> +{
->         ctlr->running = false;
->         ctlr->busy = false;
->
-> @@ -1387,11 +1409,8 @@ static int spi_init_queue(struct spi_controller *ctlr)
->          * request and the scheduling of the message pump thread. Without this
->          * setting the message pump thread will remain at default priority.
->          */
-> -       if (ctlr->rt) {
-> -               dev_info(&ctlr->dev,
-> -                       "will run message pump with realtime priority\n");
-> -               sched_setscheduler(ctlr->kworker_task, SCHED_FIFO, &param);
-> -       }
-> +       if (ctlr->rt)
-> +               spi_set_thread_rt(ctlr);
->
->         return 0;
->  }
-> @@ -2982,6 +3001,11 @@ int spi_setup(struct spi_device *spi)
->
->         spi_set_cs(spi, false);
->
-> +       if (spi->rt && !spi->controller->rt) {
-> +               spi->controller->rt = true;
-> +               spi_set_thread_rt(spi->controller);
-> +       }
+> +RPC-IF supports both SPI NOR and HyperFlash (CFI-compliant flash)
 > +
->         dev_dbg(&spi->dev, "setup mode %d, %s%s%s%s%u bits/w, %u Hz max --> %d\n",
->                         (int) (spi->mode & (SPI_CPOL | SPI_CPHA)),
->                         (spi->mode & SPI_CS_HIGH) ? "cs_high, " : "",
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 053abd22ad31..15505c2485d6 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -109,6 +109,7 @@ void spi_statistics_add_transfer_stats(struct spi_statistics *stats,
->   *     This may be changed by the device's driver, or left at the
->   *     default (0) indicating protocol words are eight bit bytes.
->   *     The spi_transfer.bits_per_word can override this for each transfer.
-> + * @rt: Make the pump thread real time priority.
->   * @irq: Negative, or the number passed to request_irq() to receive
->   *     interrupts from this device.
->   * @controller_state: Controller's runtime state
-> @@ -143,6 +144,7 @@ struct spi_device {
->         u32                     max_speed_hz;
->         u8                      chip_select;
->         u8                      bits_per_word;
-> +       bool                    rt;
->         u32                     mode;
->  #define        SPI_CPHA        0x01                    /* clock phase */
->  #define        SPI_CPOL        0x02                    /* clock polarity */
-> --
-> 2.21.0.1020.gf2820cf01a-goog
->
+> +Required properties:
+> +- compatible: should be an SoC-specific compatible value, followed by
+> +                                "renesas,rcar-gen3-rpc" as a fallback.
+> +                                supported SoC-specific values are:
+> +                                "renesas,r8a77995-rpc"          (R-Car 
+> D3)
+> +- reg: should contain three register areas:
+> +                first for RPC-IF registers,
+> +                second for the direct mapping read mode and
+> +                third for the write buffer area.
+> +- reg-names: should contain "regs", "dirmap" and "wbuf"
+> +- clocks: should contain 1 entries for the module's clock
+> +- clock-names: should contain "rpc"
+> +- #address-cells: should be 1
+> +- #size-cells: should be 0
+
+   Still nothing about the "oower-domains" and "resets" props... :-(
+
+> +
+> +Example:
+> +- SPI mode:
+> +
+> +                rpc_if: spi@ee200000 {
+> +                                compatible = "renesas,r8a77995-rpc", 
+> "renesas,rcar-gen3-rpc";
+> +                                reg = <0 0xee200000 0 0x200>, <0 
+> 0x08000000 0 0x4000000>,
+> +                                      <0 0xee208000 0 0x100>;
+> +                                reg-names = "regs", "dirmap", "wbuf";
+> +                                clocks = <&cpg CPG_MOD 917>;
+> +                                clock-names = "rpc";
+> +                                power-domains = <&sysc 
+> R8A77995_PD_ALWAYS_ON>;
+> +                                resets = <&cpg 917>;
+> +                                #address-cells = <1>;
+> +                                #size-cells = <0>;
+[...]
+> =======================================================================<
+> 
+> OK ?
+
+   Yes, with the remaining issue fixed.
+ 
+> thanks & best regards,
+> Mason
+
+[...]
+
+MBR, Sergei
