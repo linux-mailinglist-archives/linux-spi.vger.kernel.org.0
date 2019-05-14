@@ -2,106 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3021C6A6
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 12:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6E81CAA2
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 16:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbfENKII (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 May 2019 06:08:08 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:34906 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbfENKIH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 May 2019 06:08:07 -0400
-Received: by mail-vs1-f67.google.com with SMTP id q13so5084946vso.2;
-        Tue, 14 May 2019 03:08:07 -0700 (PDT)
+        id S1725901AbfENOm4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 May 2019 10:42:56 -0400
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:35338 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726277AbfENOmz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 May 2019 10:42:55 -0400
+Received: by mail-vk1-f196.google.com with SMTP id k1so576962vkb.2
+        for <linux-spi@vger.kernel.org>; Tue, 14 May 2019 07:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HxDUMgya6C+pewtw7CuJTqXH1C16ghWjNPJmFKzBodw=;
+        b=YnagnjO5b68039SYmxN/WdB6Ql0sRD42h+ael4hmT//KXQ86nw8uXrPU+1d9zAISK0
+         B/ZPTyFXNf5dghs1EWBTX81mNIRNG38fXxm6eUqFxpimvYxcKZ/s8SzEqss7mf3T9NG9
+         c6Mwmn07wSQZkXlpK4KSKMGmtVb7c83RJWuXs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dUhPIQQJZs5Vh3eweO1WtOgzVtv83v6N5NsZQ6JZ7+c=;
-        b=YxNiTXXHoDBFpFTaWS7OqKMlXpPl8foshheVv3W3yV5+1Ss2Os8TxkKZHNQuDYaMys
-         WqMr06byaneCZaHr5b2/T1VPn6HHKFfFEW+nzSZSkyODGX8NaY/SxIeT7OFU8NKSHLQz
-         29GrbXgDKHkJ97lGVCCF29j4lyWKjnCEhYymxNtWbNdHBR1HlSfk8P/3AtmEzm8xzEoR
-         s7h4FbAORuytl3hOST6tTBF/nmlOnh2h3iPBVyzGB+KP1F9FIbcpACOlMtv4QNnXov8S
-         y4QcbJTBmxkMN2l3YARFcSdyiLCc4nRuicrK39wAyOu8GEsfInzGnyUaZ8oHmRa5UhNj
-         gvqw==
-X-Gm-Message-State: APjAAAV69evRn/yCRv/Iu+4e1Jgw/tLccKBbsKt9mti0n+v+rAAtRrPi
-        JdvJVCvgGCYSLwYtOT8X8EvsgUqpKJaEb+CZ1sE=
-X-Google-Smtp-Source: APXvYqyKB1cL40577bS36WrKoIvy12plVmfKdngymvdB6XDyb6Wgl/Dtk2X3JeqP2l9zunBcmzvTb9DUCwWc+RrOsBs=
-X-Received: by 2002:a67:fdd4:: with SMTP id l20mr12127723vsq.63.1557828486542;
- Tue, 14 May 2019 03:08:06 -0700 (PDT)
+        bh=HxDUMgya6C+pewtw7CuJTqXH1C16ghWjNPJmFKzBodw=;
+        b=i6oBRvhfcUG94DgG8jA2ijR08/k0fblX4dcy6jUHTRua7IVZ31dkZ84yN5uO8WVGK/
+         5/dWv/IR4HBaFgXGfsy7xvH/hcjnql1BlQs643rCCXba/rG8wdUCSaU7Ui2TdNPrWNWO
+         gN88BErktwIveAktxjwpTSdtxJybdMtNUrsqaXiVOEZXJWaSuRk4r0VvxpPnqhW/vAES
+         p0KIt5qua0o/efa+fBK27svPUgs5hIVYMquNYboRAA9Qtdp/I9x09sexiwl+bjehrCeH
+         zNp3pTRoeDZPsc/84WAf6OJyzYOabgcl6n4GO6U3vZtPrexNEe2GEFDLQQzd19C7t8yG
+         gDUg==
+X-Gm-Message-State: APjAAAVDjMwCtaAVbGLoJUrtvgUHU9dzgoHFmJwBPnjnYQ5aNn0RulB7
+        Du/MQvlNH78nJl+jlPPTaaOJLMUEEPg=
+X-Google-Smtp-Source: APXvYqwNepLyJ2wyfS6Q93pnRA9XGSfqQdLnpM0CQ+AsOjqJVYHIy8X/bquxg39zNtqIapdPEsTiTw==
+X-Received: by 2002:a1f:9bd0:: with SMTP id d199mr15717262vke.25.1557844974001;
+        Tue, 14 May 2019 07:42:54 -0700 (PDT)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id m39sm4476018uae.14.2019.05.14.07.42.51
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 May 2019 07:42:51 -0700 (PDT)
+Received: by mail-vs1-f41.google.com with SMTP id o10so10460704vsp.12
+        for <linux-spi@vger.kernel.org>; Tue, 14 May 2019 07:42:51 -0700 (PDT)
+X-Received: by 2002:a67:79ca:: with SMTP id u193mr16139657vsc.20.1557844970925;
+ Tue, 14 May 2019 07:42:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <1556092536-17095-1-git-send-email-masonccyang@mxic.com.tw>
- <1556092536-17095-4-git-send-email-masonccyang@mxic.com.tw>
- <20190424212356.GA27103@bogus> <65853dc2-6f3c-1494-7e72-54877797cdd2@gmail.com>
- <20190507125730.GD29524@dell> <OF08A5650B.8AE8977C-ON482583F4.000E5B1E-482583F4.000F7215@mxic.com.tw>
- <d229b19e-351c-c576-b5c4-716d10dad1a0@gmail.com> <20190508061119.GB7627@dell>
- <OFE86674B9.06D723A0-ON482583F5.000AD50C-482583F5.000BA075@mxic.com.tw>
- <a05cff8f-7df2-1938-c0e7-f9366bece607@cogentembedded.com> <OFB19BCE91.6EBBAA77-ON482583F6.000234E2-482583F6.00061290@mxic.com.tw>
- <CAMuHMdUP8KU3Dbv6cwOvrY0hWOcm1xqVcsi20+GvazYMDLGGZg@mail.gmail.com>
- <OFD932ABFC.E3FFCEB8-ON482583F9.003412B1-482583F9.0034D5CA@mxic.com.tw>
- <b51d1cb7-b3b5-208f-ab4c-145ecb57805d@cogentembedded.com> <OFAD9AA573.86373900-ON482583FA.0034781A-482583FA.0035B40C@mxic.com.tw>
-In-Reply-To: <OFAD9AA573.86373900-ON482583FA.0034781A-482583FA.0035B40C@mxic.com.tw>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 May 2019 12:07:54 +0200
-Message-ID: <CAMuHMdVyfnO+wTHNrjjvJoqopC_xC0+sxSY+9a=pv-Wf=w6aCQ@mail.gmail.com>
-Subject: Re: [PATCH v12 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3
- RPC-IF MFD bindings
-To:     Mason Yang <masonccyang@mxic.com.tw>
-Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <horms@verge.net.au>, juliensu@mxic.com.tw,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh@kernel.org>, zhengxunli@mxic.com.tw
+References: <20190510223437.84368-1-dianders@chromium.org> <20190510223437.84368-2-dianders@chromium.org>
+ <20190512073301.GC21483@sirena.org.uk> <CAD=FV=UBic4qywgYQFGEXx_frD9ZoRJX7XGgDbQCvb2CbkBa9w@mail.gmail.com>
+ <20190514093038.GB8665@sirena.org.uk>
+In-Reply-To: <20190514093038.GB8665@sirena.org.uk>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 14 May 2019 07:42:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UXhQg2CuNsTCkSe1BuEvkGMj6qeUB2iF=Qfj=Z0fLiWw@mail.gmail.com>
+Message-ID: <CAD=FV=UXhQg2CuNsTCkSe1BuEvkGMj6qeUB2iF=Qfj=Z0fLiWw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] spi: For controllers that need realtime always use
+ the pump thread
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mason,
+Hi,
 
-On Tue, May 14, 2019 at 11:46 AM <masonccyang@mxic.com.tw> wrote:
-> > >> There's precedence for such constructs being an MFD: please see
-> > >> drivers/mfd/at91-usart.c, which registers a single MFD cell for
-> > >           second for the direct mapping read mode and
-> > >           third for the write buffer area.
-> > >   - reg-names: should contain "regs", "dirmap" and "wbuf"
-> > >   - clocks: should contain 1 entries for the module's clock
-> > >   - clock-names: should contain "rpc"
-> >
-> >    I suspect we'd need the RPC/RPCD2 clocks mentioned as well (not sure
-> yet)...
+On Tue, May 14, 2019 at 2:30 AM Mark Brown <broonie@kernel.org> wrote:
+
+> On Mon, May 13, 2019 at 01:24:57PM -0700, Doug Anderson wrote:
+> > On Sun, May 12, 2019 at 10:05 AM Mark Brown <broonie@kernel.org> wrote:
 >
-> Need it ?
-> RPCD2 is derived from RPC and it's value is half of RPC,
-> i.e., RPC = 160MHz, RPCD2 = 80 MHz
+> > In my case performance is 2nd place to a transfer not getting
+> > interrupted once started (so we don't break the 8ms rule of the EC).
+>
+> That's great but other users do care very much about performance and are
+> also interested in both priority control and avoiding context thrashing.
+>
+> > My solution in v2 of my series is to take out the forcing in the case
+> > that the controller wanted "rt" priority and then to add "force" to
+> > the parameter name.  If someone wants rt priority for the thread but
+> > doesn't want to force all transfers to the thread we can later add a
+> > different parameter for that?
+>
+> I think that's going to be the common case for this.  Forcing context
+> thrashing is really not something anyone else is asking for.
 
-That hierarchy depends on the actual SoC, right?
-AFAIU, both are derived from RPCSRC, and can be controlled individually
-on some SoCs.
+OK, that's fair.  Even if nobody else is asking for it, the solution
+I've coded up for v2 still allows cros_ec to use the SPI core's thread
+in a pretty clean way and saves a bunch of code in cros_ec.  It
+shouldn't penalize any other SPI users.
 
-BTW, I still haven't seen a patch for drivers/clk/renesas/r8a77995-cpg-mssr.c
-adding RPC-related clocks, so I have no idea what's the Linux view of the
-hierarchy on your system.
+...but I guess you're saying that you don't want to guarantee that the
+SPI core will happen to have this thread sitting around in the future
+so you'd rather add the extra complexity to cros_ec so the core can
+evolve more freely?
 
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-Doug
