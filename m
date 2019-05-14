@@ -2,62 +2,33 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6E81CAA2
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 16:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E47A1CB55
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 17:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbfENOm4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 May 2019 10:42:56 -0400
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:35338 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726277AbfENOmz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 May 2019 10:42:55 -0400
-Received: by mail-vk1-f196.google.com with SMTP id k1so576962vkb.2
-        for <linux-spi@vger.kernel.org>; Tue, 14 May 2019 07:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HxDUMgya6C+pewtw7CuJTqXH1C16ghWjNPJmFKzBodw=;
-        b=YnagnjO5b68039SYmxN/WdB6Ql0sRD42h+ael4hmT//KXQ86nw8uXrPU+1d9zAISK0
-         B/ZPTyFXNf5dghs1EWBTX81mNIRNG38fXxm6eUqFxpimvYxcKZ/s8SzEqss7mf3T9NG9
-         c6Mwmn07wSQZkXlpK4KSKMGmtVb7c83RJWuXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HxDUMgya6C+pewtw7CuJTqXH1C16ghWjNPJmFKzBodw=;
-        b=i6oBRvhfcUG94DgG8jA2ijR08/k0fblX4dcy6jUHTRua7IVZ31dkZ84yN5uO8WVGK/
-         5/dWv/IR4HBaFgXGfsy7xvH/hcjnql1BlQs643rCCXba/rG8wdUCSaU7Ui2TdNPrWNWO
-         gN88BErktwIveAktxjwpTSdtxJybdMtNUrsqaXiVOEZXJWaSuRk4r0VvxpPnqhW/vAES
-         p0KIt5qua0o/efa+fBK27svPUgs5hIVYMquNYboRAA9Qtdp/I9x09sexiwl+bjehrCeH
-         zNp3pTRoeDZPsc/84WAf6OJyzYOabgcl6n4GO6U3vZtPrexNEe2GEFDLQQzd19C7t8yG
-         gDUg==
-X-Gm-Message-State: APjAAAVDjMwCtaAVbGLoJUrtvgUHU9dzgoHFmJwBPnjnYQ5aNn0RulB7
-        Du/MQvlNH78nJl+jlPPTaaOJLMUEEPg=
-X-Google-Smtp-Source: APXvYqwNepLyJ2wyfS6Q93pnRA9XGSfqQdLnpM0CQ+AsOjqJVYHIy8X/bquxg39zNtqIapdPEsTiTw==
-X-Received: by 2002:a1f:9bd0:: with SMTP id d199mr15717262vke.25.1557844974001;
-        Tue, 14 May 2019 07:42:54 -0700 (PDT)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id m39sm4476018uae.14.2019.05.14.07.42.51
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 May 2019 07:42:51 -0700 (PDT)
-Received: by mail-vs1-f41.google.com with SMTP id o10so10460704vsp.12
-        for <linux-spi@vger.kernel.org>; Tue, 14 May 2019 07:42:51 -0700 (PDT)
-X-Received: by 2002:a67:79ca:: with SMTP id u193mr16139657vsc.20.1557844970925;
- Tue, 14 May 2019 07:42:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190510223437.84368-1-dianders@chromium.org> <20190510223437.84368-2-dianders@chromium.org>
- <20190512073301.GC21483@sirena.org.uk> <CAD=FV=UBic4qywgYQFGEXx_frD9ZoRJX7XGgDbQCvb2CbkBa9w@mail.gmail.com>
- <20190514093038.GB8665@sirena.org.uk>
-In-Reply-To: <20190514093038.GB8665@sirena.org.uk>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 14 May 2019 07:42:38 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UXhQg2CuNsTCkSe1BuEvkGMj6qeUB2iF=Qfj=Z0fLiWw@mail.gmail.com>
-Message-ID: <CAD=FV=UXhQg2CuNsTCkSe1BuEvkGMj6qeUB2iF=Qfj=Z0fLiWw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] spi: For controllers that need realtime always use
- the pump thread
-To:     Mark Brown <broonie@kernel.org>
+        id S1726009AbfENPGM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 May 2019 11:06:12 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52172 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbfENPGM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 May 2019 11:06:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=NQhfVy0qFNuvDpdRYcvkTlDsVD03kBM9D8DvgCnqBPc=; b=Dl5/ocQVDpG/+WUNiJvVsFRBD
+        +ZkCa4teBLvzobqhtymTMHwRMN1560TtLfuX8i3hGHz4nH+aHwmDrQig/arE4f8Em+vwjmiclnVGl
+        axaSq2p7TChHq11t36ylMJH87h10VU4zL8+zHyONdqsNUd+YcPZIwuVXIdQZS4Oswg+7w=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hQZ0K-00015Q-Ac; Tue, 14 May 2019 15:06:08 +0000
+Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
+        id 85DBD1121EE8; Tue, 14 May 2019 16:06:07 +0100 (BST)
+Date:   Tue, 14 May 2019 16:06:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
 Cc:     Benson Leung <bleung@chromium.org>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
@@ -67,42 +38,60 @@ Cc:     Benson Leung <bleung@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 1/4] spi: For controllers that need realtime always use
+ the pump thread
+Message-ID: <20190514150607.GA1917@sirena.org.uk>
+References: <20190510223437.84368-1-dianders@chromium.org>
+ <20190510223437.84368-2-dianders@chromium.org>
+ <20190512073301.GC21483@sirena.org.uk>
+ <CAD=FV=UBic4qywgYQFGEXx_frD9ZoRJX7XGgDbQCvb2CbkBa9w@mail.gmail.com>
+ <20190514093038.GB8665@sirena.org.uk>
+ <CAD=FV=UXhQg2CuNsTCkSe1BuEvkGMj6qeUB2iF=Qfj=Z0fLiWw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ikeVEW9yuYc//A+q"
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=UXhQg2CuNsTCkSe1BuEvkGMj6qeUB2iF=Qfj=Z0fLiWw@mail.gmail.com>
+X-Cookie: There is a fly on your nose.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-On Tue, May 14, 2019 at 2:30 AM Mark Brown <broonie@kernel.org> wrote:
+--ikeVEW9yuYc//A+q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> On Mon, May 13, 2019 at 01:24:57PM -0700, Doug Anderson wrote:
-> > On Sun, May 12, 2019 at 10:05 AM Mark Brown <broonie@kernel.org> wrote:
->
-> > In my case performance is 2nd place to a transfer not getting
-> > interrupted once started (so we don't break the 8ms rule of the EC).
->
-> That's great but other users do care very much about performance and are
-> also interested in both priority control and avoiding context thrashing.
->
-> > My solution in v2 of my series is to take out the forcing in the case
-> > that the controller wanted "rt" priority and then to add "force" to
-> > the parameter name.  If someone wants rt priority for the thread but
-> > doesn't want to force all transfers to the thread we can later add a
-> > different parameter for that?
->
-> I think that's going to be the common case for this.  Forcing context
-> thrashing is really not something anyone else is asking for.
+On Tue, May 14, 2019 at 07:42:38AM -0700, Doug Anderson wrote:
 
-OK, that's fair.  Even if nobody else is asking for it, the solution
-I've coded up for v2 still allows cros_ec to use the SPI core's thread
-in a pretty clean way and saves a bunch of code in cros_ec.  It
-shouldn't penalize any other SPI users.
+> ...but I guess you're saying that you don't want to guarantee that the
+> SPI core will happen to have this thread sitting around in the future
+> so you'd rather add the extra complexity to cros_ec so the core can
+> evolve more freely?
 
-...but I guess you're saying that you don't want to guarantee that the
-SPI core will happen to have this thread sitting around in the future
-so you'd rather add the extra complexity to cros_ec so the core can
-evolve more freely?
+We need something to support spi_async() but what you're asking for is
+fairly specific implementation details about how things are currently
+structured, and we do need to be able to continue to make improvements
+for users who are interested in performance.  Ensuring that the calling
+context is also less likely to be preempted is going to make it much
+less likely that any other work is going to cause some timing change
+that creates problems for you.
 
--Doug
+--ikeVEW9yuYc//A+q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlza2V4ACgkQJNaLcl1U
+h9BdzAf+KMVQaYP9/vNw0i0uGrveiVFMzejKMkn1HLO53K5CGl+UPRj+Y2OYUy/4
+o4zonygqZNCkn+XY4BVZHOGInN1sb2Vzp6Ky1kuw76YxxwL+xKsLuua7+HQ9bCQM
+oVh1Okwky0twqGK78DMtZpfRrYyetWfXA6teiW7G3LZ9+eEd0hXuVVGamq9lzDlM
+zYR8ar3mdRRJmW8JGkJSE0t6Q03CMoeVPoNT8TUs41QnLfNOi/shVZ5kRwbuyoTA
+PZGyAEjbIEYmMe7UR09ePu685ymCtrO9KjqplYeBQBOaUm6KqjURqrJBGWhVyLqF
+sRSuDvQVfjGjiNbqlpfc7QsEj0HaLw==
+=RN96
+-----END PGP SIGNATURE-----
+
+--ikeVEW9yuYc//A+q--
