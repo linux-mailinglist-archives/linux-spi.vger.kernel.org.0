@@ -2,102 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B61541BEA8
-	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2019 22:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6501C0B2
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2019 04:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbfEMUZL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 May 2019 16:25:11 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:35888 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726218AbfEMUZL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 May 2019 16:25:11 -0400
-Received: by mail-vs1-f68.google.com with SMTP id l20so321449vsp.3
-        for <linux-spi@vger.kernel.org>; Mon, 13 May 2019 13:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s5749hj+ec8qMiNkDdVTE/yv4EVBb0STJhROaexO/ow=;
-        b=aSzILZh1B8qR6DUScwEycKF1nqIky18KqZ5ulbFuZ49/8VSCk0RfsYIyjXbmjOqY4+
-         v5VrAMcifpVcmVKK415z2GAmJJupcK+NY5AMUX4LVVM+faq3TlPY441Jg0LvzmxT4Du8
-         ghz0j7IS4/ptx8mgYUVFCZA4ip/zRO01nTshs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s5749hj+ec8qMiNkDdVTE/yv4EVBb0STJhROaexO/ow=;
-        b=ef+hgnBSw1Gi0JAxCZXH4TkYbJK/vFoqnvZdnAaUhbLwyQ3+xzp/MsG6Yf/ncjTpCL
-         ziFjnHverOIEIG/ybLP9p7KmGox0CWdekRS+nz6Pk6hSAK416W+ofqf97H7xJ4XXlyRx
-         wqHuoSP8TiW50aEWBXvoyqBSB9vipzK+LUKtG6hHg+wNq4Fjjkj4GGI8OQJKSpsXUAhr
-         0TaWgdl/Zp150MBDfjdBTfdIfEgeJFO8J8dK0WQW+aC5STTiQGsBvD0qYzsWDiYdTJAT
-         MFVrDSGz3BePRCaYaWnHGE5pY/DwckZjuvglgP07hy4iuFRS2rY3LGHVLf2H7HNO81cj
-         22uw==
-X-Gm-Message-State: APjAAAV5bGbbYONKMXPVhrKszfHz8nQ+5jtKlcMSmWyFY2Die4JMJXk4
-        fWQUm3N1r2iVbCBU28O7IK27FOEh/5c=
-X-Google-Smtp-Source: APXvYqzi2ymEYPWvWFugFsZo8J8Y1Gc0wUqSTSbCVYF0/l0pLX6mC4dKvk5nWt3OdiV6C+TvGYQCEQ==
-X-Received: by 2002:a67:ed44:: with SMTP id m4mr14995951vsp.112.1557779110035;
-        Mon, 13 May 2019 13:25:10 -0700 (PDT)
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
-        by smtp.gmail.com with ESMTPSA id n68sm14007880vkd.0.2019.05.13.13.25.08
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 May 2019 13:25:09 -0700 (PDT)
-Received: by mail-vs1-f54.google.com with SMTP id l20so321403vsp.3
-        for <linux-spi@vger.kernel.org>; Mon, 13 May 2019 13:25:08 -0700 (PDT)
-X-Received: by 2002:a67:79ca:: with SMTP id u193mr13859822vsc.20.1557779108576;
- Mon, 13 May 2019 13:25:08 -0700 (PDT)
+        id S1726598AbfENCdk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 May 2019 22:33:40 -0400
+Received: from twhmllg3.macronix.com ([211.75.127.131]:22985 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbfENCdk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 May 2019 22:33:40 -0400
+Received: from twhfmlp1.macronix.com (twhfm1p1.macronix.com [172.17.20.91])
+        by TWHMLLG3.macronix.com with ESMTP id x4E2XAxF017497;
+        Tue, 14 May 2019 10:33:10 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id 8D513CCBE407EB61FA46;
+        Tue, 14 May 2019 10:33:10 +0800 (CST)
+In-Reply-To: <CAMuHMdWsZPevpYg0HfbgaXPD89RFdOOEPawvvZDt3Kp4=PeLRQ@mail.gmail.com>
+References: <1556092536-17095-1-git-send-email-masonccyang@mxic.com.tw> <1556092536-17095-4-git-send-email-masonccyang@mxic.com.tw> <20190424212356.GA27103@bogus> <65853dc2-6f3c-1494-7e72-54877797cdd2@gmail.com> <20190507125730.GD29524@dell> <OF08A5650B.8AE8977C-ON482583F4.000E5B1E-482583F4.000F7215@mxic.com.tw> <d229b19e-351c-c576-b5c4-716d10dad1a0@gmail.com> <20190508061119.GB7627@dell> <OFE86674B9.06D723A0-ON482583F5.000AD50C-482583F5.000BA075@mxic.com.tw> <a05cff8f-7df2-1938-c0e7-f9366bece607@cogentembedded.com> <OFB19BCE91.6EBBAA77-ON482583F6.000234E2-482583F6.00061290@mxic.com.tw> <CAMuHMdUP8KU3Dbv6cwOvrY0hWOcm1xqVcsi20+GvazYMDLGGZg@mail.gmail.com> <OFD932ABFC.E3FFCEB8-ON482583F9.003412B1-482583F9.0034D5CA@mxic.com.tw> <CAMuHMdWsZPevpYg0HfbgaXPD89RFdOOEPawvvZDt3Kp4=PeLRQ@mail.gmail.com>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc:     "Boris Brezillon" <bbrezillon@kernel.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Simon Horman" <horms@verge.net.au>, juliensu@mxic.com.tw,
+        "Lee Jones" <lee.jones@linaro.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Linux-Renesas" <linux-renesas-soc@vger.kernel.org>,
+        "linux-spi" <linux-spi@vger.kernel.org>,
+        "Marek Vasut" <marek.vasut@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Rob Herring" <robh@kernel.org>,
+        "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>,
+        zhengxunli@mxic.com.tw
+Subject: Re: [PATCH v12 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3 RPC-IF
+ MFD bindings
 MIME-Version: 1.0
-References: <20190510223437.84368-1-dianders@chromium.org> <20190510223437.84368-2-dianders@chromium.org>
- <20190512073301.GC21483@sirena.org.uk>
-In-Reply-To: <20190512073301.GC21483@sirena.org.uk>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 13 May 2019 13:24:57 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UBic4qywgYQFGEXx_frD9ZoRJX7XGgDbQCvb2CbkBa9w@mail.gmail.com>
-Message-ID: <CAD=FV=UBic4qywgYQFGEXx_frD9ZoRJX7XGgDbQCvb2CbkBa9w@mail.gmail.com>
-Subject: Re: [PATCH 1/4] spi: For controllers that need realtime always use
- the pump thread
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-KeepSent: D347E742:50D5CB45-482583FA:000D5FC2;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OFD347E742.50D5CB45-ON482583FA.000D5FC2-482583FA.000E05BB@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Tue, 14 May 2019 10:33:10 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2019/05/14 AM 10:33:10,
+        Serialize complete at 2019/05/14 AM 10:33:10
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG3.macronix.com x4E2XAxF017497
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-On Sun, May 12, 2019 at 10:05 AM Mark Brown <broonie@kernel.org> wrote:
+Hi Geert,
 
-> On Fri, May 10, 2019 at 03:34:34PM -0700, Douglas Anderson wrote:
-> > If a controller specifies that it needs high priority for sending
-> > messages we should always schedule our transfers on the thread.  If we
-> > don't do this we'll do the transfer in the caller's context which
-> > might not be very high priority.
->
-> If performance is important you probably also want to avoid the context
-> thrashing - executing in the calling context is generally a substantial
-> performance boost.  I can see this causing problems further down the
-> line when someone else turns up with a different requirement, perhaps in
-> an application where the caller does actually have a raised priority
-> themselves and just wanted to make sure that the thread wasn't lower
-> than they are.  I guess it'd be nice if we could check what priority the
-> calling thread has and make a decision based on that but there don't
-> seem to be any facilities for doing that which I can see right now.
+> Subject
+> 
+> Re: [PATCH v12 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3 RPC-IF 
+MFD bindings
+> 
+> Hi Mason,
+> 
+> Note that if you send multipart/text+html emails, they will be dropped 
+silently
+> by most Linux mailing lists.
+> Hence I'm quoting your last email fully, to give other people a chance
+> reading it (and commenting).
 
-In my case performance is 2nd place to a transfer not getting
-interrupted once started (so we don't break the 8ms rule of the EC).
-My solution in v2 of my series is to take out the forcing in the case
-that the controller wanted "rt" priority and then to add "force" to
-the parameter name.  If someone wants rt priority for the thread but
-doesn't want to force all transfers to the thread we can later add a
-different parameter for that?
+Thanks for your remind !
+I have configured my Lotus Notes to plain text mode only and it should be 
+OK
+for Linux mailing lists now.
 
--Doug
+thanks & best regards,
+Mason
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
