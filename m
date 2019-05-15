@@ -2,181 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 286F61EAD8
-	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2019 11:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC9B1EAFC
+	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2019 11:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbfEOJUL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 May 2019 05:20:11 -0400
-Received: from twhmllg4.macronix.com ([122.147.135.202]:33124 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725871AbfEOJUL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 May 2019 05:20:11 -0400
-Received: from twhfmnt1.mxic.com.tw (twhfm1p2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id x4F9IYq4083398;
-        Wed, 15 May 2019 17:18:34 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id C9C318AF5007845D623E;
-        Wed, 15 May 2019 17:18:34 +0800 (CST)
-In-Reply-To: <OF8A566F14.A2F0F576-ON482583FB.002E7E32-482583FB.003068B1@LocalDomain>
-References: <1555320234-15802-1-git-send-email-masonccyang@mxic.com.tw> <1555320234-15802-3-git-send-email-masonccyang@mxic.com.tw> <20190512151820.4f2dd9da@xps13> <OF8A566F14.A2F0F576-ON482583FB.002E7E32-482583FB.003068B1@LocalDomain>
-To:     "Miquel Raynal" <miquel.raynal@bootlin.com>
-Cc:     bbrezillon@kernel.org, broonie@kernel.org,
-        christophe.kerello@st.com, computersforpeace@gmail.com,
-        devicetree@vger.kernel.org, dwmw2@infradead.org,
-        geert@linux-m68k.org, juliensu@mxic.com.tw, lee.jones@linaro.org,
-        liang.yang@amlogic.com, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        marcel.ziswiler@toradex.com, marek.vasut@gmail.com,
-        mark.rutland@arm.com, "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        paul.burton@mips.com, richard@nod.at, robh+dt@kernel.org,
-        stefan@agner.ch, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH v3 2/4] mtd: rawnand: Add Macronix MX25F0A NAND controller
+        id S1726032AbfEOJf1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 May 2019 05:35:27 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:50890 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725871AbfEOJf1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 May 2019 05:35:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=h6tbazTbo2wFwWyE9fnl5htOCMABGokXLkWNr2arzpU=; b=xKOja/nU32roMxp3sGAIfk0pT
+        e8z52PIxjOZoe8uytGhx4H5amhlD8MgtXrkbfnbCJ1bo1CBSdgAnJ9zCjQcTEmNcQ+6Yul7w8qAo3
+        HIYEEjIjJ9C+/p7ZufngpGmsluK21EjB1jeAAeYbnmmFe3/UCPl9GZrFDy/IcT3SNn6cM=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hQqJo-0003Jh-5B; Wed, 15 May 2019 09:35:24 +0000
+Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
+        id 90C3F1126D5D; Wed, 15 May 2019 10:35:22 +0100 (BST)
+Date:   Wed, 15 May 2019 10:35:22 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH V5 1/4] spi: tegra114: add support for gpio based CS
+Message-ID: <20190515093522.GC5613@sirena.org.uk>
+References: <1557810235-16401-1-git-send-email-skomatineni@nvidia.com>
+ <1557810235-16401-2-git-send-email-skomatineni@nvidia.com>
+ <cf4bd167-49b8-5649-a2e2-7bf5ddcc6e2d@nvidia.com>
+ <BYAPR12MB33986B88CF3A30036E3F1F04C2080@BYAPR12MB3398.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-X-KeepSent: BFE3CB74:F4E01135-482583FB:00313C7E;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OFBFE3CB74.F4E01135-ON482583FB.00313C7E-482583FB.003323B4@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Wed, 15 May 2019 17:18:35 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2019/05/15 PM 05:18:34,
-        Serialize complete at 2019/05/15 PM 05:18:34
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG4.macronix.com x4F9IYq4083398
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="raC6veAxrt5nqIoY"
+Content-Disposition: inline
+In-Reply-To: <BYAPR12MB33986B88CF3A30036E3F1F04C2080@BYAPR12MB3398.namprd12.prod.outlook.com>
+X-Cookie: You will lose an important tape file.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-Hi Miquel,
+--raC6veAxrt5nqIoY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, previous email missed this mxic_nand_data_xfer() reply.
+On Tue, May 14, 2019 at 05:18:48PM +0000, Sowjanya Komatineni wrote:
 
-This Flash Memory Controller implemented the Buffer read-write data 
-transfer 
-for SPI mode and raw NAND mode.
+> Tegra SPI doesn=E2=80=99t support inter byte delay directly to meet some =
+SPI slave requirements.
+> So we use GPIO control CS in parallel with a dummy HW CS and use inactive=
+ cycles delay of SPI controller to mimic inter byte delay.
 
-That is each time driver write to the transmit of the TXD port and the 
-data 
-is shifted out, new data is received in RXD port. 
-By transmitting the entire buffer without reading any data, driver are 
-losing
-the received data.
+Please fix your mail client to word wrap within paragraphs at something
+substantially less than 80 columns.  Doing this makes your messages much
+easier to read and reply to.
 
-Actually the mxic_nand_data_xfer() is a copy of mxic_spi_data_xfer().
+Please don't ignore review comments, people are generally making them
+for a reason and are likely to have the same concerns if issues remain
+unaddressed.  Having to repeat the same comments can get repetitive and
+make people question the value of time spent reviewing.  If you disagree
+with the review comments that's fine but you need to reply and discuss
+your concerns so that the reviewer can understand your decisions.
 
-https://github.com/torvalds/linux/blame/master/drivers/spi/spi-mxic.c 
+--raC6veAxrt5nqIoY
+Content-Type: application/pgp-signature; name="signature.asc"
 
-therefore, I plan to patch this part to MFD as a common code for 
-both raw NAND and SPI.
+-----BEGIN PGP SIGNATURE-----
 
-i.e,. 
-In driver/mfd/mxic-mfd.c, we have mxic_mfd_data_xfer() and 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzb3VkACgkQJNaLcl1U
+h9DDwgf+IgSDwzI5qR9A6I3NzqXiuPcYQwmgXzmah1o3/xQ9fvEAUz4bAkK2FkqX
+VtvQy+JWAMR/3O5ydxa3czZfwgWVTXvwM45kwrgye/uuc6plpsJmsHPNraBuy28z
+iPEJZSuAWrhTYT/5sHrjAv4tEapzYRBMs/HIYxXclBbz3mvHy9TvgF49iwgScJF/
+p2GZVLoX2cfaxzvhdFzV2HZrJA/838DdOp06vKR1PPr7csfwDtTBOnjpMd6WLEJ1
+pi/+g/kRW7qCzshGjqBhKGorhPo5HONC9qap8+D1RU8ol7p4JjuxgDhjgaSDa/rY
+x/RgG+BBwZjujStSaE/v31pqdFUAzA==
+=GuwL
+-----END PGP SIGNATURE-----
 
-here call mxic_mfd_data_xfer() for raw NAND data read-write.
-
-
-> > > +static int mxic_nand_data_xfer(struct mxic_nand_ctlr *mxic, const 
-void *txbuf,
-> > > +                void *rxbuf, unsigned int len)
-> > > +{
-> > 
-> > There is not so much code shared, why not separating this function for
-> > rx and tx cases?
-> > 
-> > > +   unsigned int pos = 0;
-> > > +
-> > > +   while (pos < len) {
-> > > +      unsigned int nbytes = len - pos;
-> > > +      u32 data = 0xffffffff;
-> > > +      u32 sts;
-> > > +      int ret;
-> > > +
-> > > +      if (nbytes > 4)
-> > > +         nbytes = 4;
-> > > +
-> > > +      if (txbuf)
-> > > +         memcpy(&data, txbuf + pos, nbytes);
-> > > +
-> > > +      ret = readl_poll_timeout(mxic->mfd->regs + INT_STS, sts,
-> > > +                sts & INT_TX_EMPTY, 0, USEC_PER_SEC);
-> > 
-> > Using USEC_PER_SEC for a delay is weird
-> > 
-> > > +      if (ret)
-> > > +         return ret;
-> > > +
-> > > +      writel(data, mxic->mfd->regs + TXD(nbytes % 4));
-> > > +
-> > > +      if (rxbuf) {
-> > > +         ret = readl_poll_timeout(mxic->mfd->regs + INT_STS, sts,
-> > > +                   sts & INT_TX_EMPTY, 0,
-> > > +                   USEC_PER_SEC);
-> > > +         if (ret)
-> > > +            return ret;
-> > > +
-> > > +         ret = readl_poll_timeout(mxic->mfd->regs + INT_STS, sts,
-> > > +                   sts & INT_RX_NOT_EMPTY, 0,
-> > > +                   USEC_PER_SEC);
-> > > +         if (ret)
-> > > +            return ret;
-> > > +
-> > > +         data = readl(mxic->mfd->regs + RXD);
-> > > +         data >>= (8 * (4 - nbytes));
-> > 
-> > What is this? Are you trying to handle some endianness issue?
-> 
-> yes,
-> 
-> > 
-> > > +         memcpy(rxbuf + pos, &data, nbytes);
-> > > +         WARN_ON(readl(mxic->mfd->regs + INT_STS) &
-> > > +            INT_RX_NOT_EMPTY);
-> > > +      } else {
-> > > +         readl(mxic->mfd->regs + RXD);
-> > > +      }
-> > > +      WARN_ON(readl(mxic->mfd->regs + INT_STS) & INT_RX_NOT_EMPTY);
-> > > +
-> > > +      pos += nbytes;
-> > > +   }
-> > > +
-> > > +   return 0;
-> > > +}
-
-thanks for your review.
-
-best regards,
-Mason
-
---
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
-
-
-============================================================================
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
+--raC6veAxrt5nqIoY--
