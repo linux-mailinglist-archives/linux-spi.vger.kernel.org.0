@@ -2,182 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F6C1F1C7
-	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2019 13:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18241F0B6
+	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2019 13:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730808AbfEOLS3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 May 2019 07:18:29 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54428 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730797AbfEOLS3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 May 2019 07:18:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=XueWC9NaAC+a0tui5U5SBbamkvqq+xEVAEG1fYGi7Q0=; b=cTl3bAQnWO80
-        JrRi8wG+XyPxS1+2l9ILterwGc4TVopTiVu/a8aLhDOSELEa9VlfdRpHlFZXabb9Od5/o3JfKgQ5V
-        XUfRgaZ2TXmeQRwo5BQFC1wIyN8+R0n4LoVaJlTzil958dV0qzdOrQICcxWoL5MDYWwcFH941U3kP
-        B14K0=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hQrvU-0003bw-NW; Wed, 15 May 2019 11:18:24 +0000
-Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
-        id 1C34E1126D6D; Wed, 15 May 2019 12:18:24 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     broonie@kernel.org, jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        thierry.reding@gmail.com
-Subject: Applied "spi: tegra114: add support for hw based cs" to the spi tree
-In-Reply-To: <1557810235-16401-3-git-send-email-skomatineni@nvidia.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190515111824.1C34E1126D6D@debutante.sirena.org.uk>
-Date:   Wed, 15 May 2019 12:18:24 +0100 (BST)
+        id S1731571AbfEOLYb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 May 2019 07:24:31 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:19659 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731805AbfEOLY1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 May 2019 07:24:27 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cdbf6c20000>; Wed, 15 May 2019 04:23:46 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 15 May 2019 04:24:26 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 15 May 2019 04:24:26 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL106.nvidia.com
+ (172.18.146.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 May
+ 2019 11:24:26 +0000
+Received: from NAM04-BN3-obe.outbound.protection.outlook.com (104.47.46.54) by
+ HQMAIL109.nvidia.com (172.20.187.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Wed, 15 May 2019 11:24:26 +0000
+Received: from BYAPR12MB3398.namprd12.prod.outlook.com (20.178.196.24) by
+ BYAPR12MB2888.namprd12.prod.outlook.com (20.179.91.25) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1878.21; Wed, 15 May 2019 11:24:22 +0000
+Received: from BYAPR12MB3398.namprd12.prod.outlook.com
+ ([fe80::e843:91f7:56c:73e8]) by BYAPR12MB3398.namprd12.prod.outlook.com
+ ([fe80::e843:91f7:56c:73e8%5]) with mapi id 15.20.1900.010; Wed, 15 May 2019
+ 11:24:22 +0000
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Jonathan Hunter <jonathanh@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "Krishna Yarlagadda" <kyarlagadda@nvidia.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH V5 1/4] spi: tegra114: add support for gpio based CS
+Thread-Topic: [PATCH V5 1/4] spi: tegra114: add support for gpio based CS
+Thread-Index: AQHVChJyTuikRwKAUUyx+CcmS+4wvqZqXBUAgACAP+CAARKPAIAAHQTz
+Date:   Wed, 15 May 2019 11:24:22 +0000
+Message-ID: <BYAPR12MB3398ED52051F5BFA08D7B3A6C2090@BYAPR12MB3398.namprd12.prod.outlook.com>
+References: <1557810235-16401-1-git-send-email-skomatineni@nvidia.com>
+ <1557810235-16401-2-git-send-email-skomatineni@nvidia.com>
+ <cf4bd167-49b8-5649-a2e2-7bf5ddcc6e2d@nvidia.com>
+ <BYAPR12MB33986B88CF3A30036E3F1F04C2080@BYAPR12MB3398.namprd12.prod.outlook.com>,<20190515093522.GC5613@sirena.org.uk>
+In-Reply-To: <20190515093522.GC5613@sirena.org.uk>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=skomatineni@nvidia.com; 
+x-originating-ip: [24.176.232.13]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9a389552-fcc3-42fd-d114-08d6d927e157
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR12MB2888;
+x-ms-traffictypediagnostic: BYAPR12MB2888:
+x-microsoft-antispam-prvs: <BYAPR12MB2888F1D7A3D1AB4DE35F95E1C2090@BYAPR12MB2888.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0038DE95A2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(136003)(376002)(346002)(39860400002)(396003)(199004)(189003)(6916009)(102836004)(66066001)(54906003)(229853002)(256004)(6506007)(478600001)(14454004)(71200400001)(71190400001)(86362001)(6116002)(2906002)(7736002)(66476007)(4326008)(186003)(9686003)(81166006)(8676002)(68736007)(11346002)(81156014)(446003)(486006)(8936002)(3846002)(73956011)(55016002)(52536014)(5660300002)(66446008)(99286004)(64756008)(66556008)(6436002)(66946007)(76116006)(7696005)(76176011)(25786009)(74316002)(53936002)(6246003)(26005)(33656002)(305945005)(476003)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB2888;H:BYAPR12MB3398.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nvidia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: h+6GLRc1A+sEBDIzX0BGHQksHEmu8SyHtqJdQTrYbCy5w9fnmgKKWV9geCxLUqWmCDSN+k/hGfkaowDvFnYejaHWaHOYzBr58WZw8aync2jTaK0M/wS6GbTkpHjvS5J+3rM0qBYDKDctYaOam57ksl2uhp1qQKZ3uAz8k0Ng1eDMMD1c+/dWkdp2vaEOCN/IOsPJ50pYb4/qWO+rB2SOPTSnCQYP+othZjVei6HPgBMHWDvp60jymgNkxd8eMg7Ub/NK1ffkzZ8Z9HWEgwBibRVlU7tYzbVRAnCWSzpANeSSceWPmYuk9UAD+bv/ZLeNIo/l6KQjzBGmvVu6/amDgBlahCRFDPD2nJCwnZrIegozGvuIDjygWWVuuJvESTTI5gbxoVffK2E+5+3BpRDsFaJQbKZgcf7zjwK6sT6+toU=
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a389552-fcc3-42fd-d114-08d6d927e157
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2019 11:24:22.5275
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2888
+X-OriginatorOrg: Nvidia.com
+Content-Language: en-US
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1557919426; bh=JeH8eqv+lXYcPjDvBywwbC9f2Ip3KnltI9obfH5lE+Q=;
+        h=X-PGP-Universal:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
+         Message-ID:References:In-Reply-To:Accept-Language:X-MS-Has-Attach:
+         X-MS-TNEF-Correlator:authentication-results:x-originating-ip:
+         x-ms-publictraffictype:x-ms-office365-filtering-correlation-id:
+         x-microsoft-antispam:x-ms-traffictypediagnostic:
+         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
+         x-forefront-prvs:x-forefront-antispam-report:received-spf:
+         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
+         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
+         X-MS-Exchange-CrossTenant-originalarrivaltime:
+         X-MS-Exchange-CrossTenant-fromentityheader:
+         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
+         Content-Language:Content-Type:Content-Transfer-Encoding;
+        b=U2X6HEGgqdYQjZYMzAPA48gRYv9szkbYqpuKbWc3M/LQGd6cpKq8K59xTRajIKSKu
+         kwl5g9tS6vZIr4SzneQwhGWa/+XGHAoWDBYuS1rGCGHKW8aqQrUdf0Gae7mWMB3fll
+         Rcd90mnxTxDw9IkJ1DTJ0MOGnQMiuk8bv0K4pKzO2yTywCJuXBBiJUUPuP5eS4VsN2
+         MH7+Ign8JrE/IBBvJM7TNK1nXNwUO0UtIH90MgGrUFtpoF0AZZ3LWnpVuzo9AHnal/
+         0tG8QjRDn0pyBQgMsD6PJu4oqaGtG4rf8wM8yKBF/y4mT3awBp+kK3bmW62x3g/tUW
+         LyLYZllAW7w5A==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+> > Tegra SPI doesn=92t support inter byte delay directly to meet some SPI =
+slave requirements.
+> > So we use GPIO control CS in parallel with a dummy HW CS and use inacti=
+ve cycles delay of SPI controller to mimic inter byte delay.
 
-   spi: tegra114: add support for hw based cs
+> Please fix your mail client to word wrap within paragraphs at something
+substantially less than 80 columns.  Doing this makes your messages much
+easier to read and reply to.
 
-has been applied to the spi tree at
+I did changed but looks like it didn't made diff. Will try with different e=
+mail client.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
+> Please don't ignore review comments, people are generally making them
+for a reason and are likely to have the same concerns if issues remain
+unaddressed.  Having to repeat the same comments can get repetitive and
+make people question the value of time spent reviewing.  If you disagree
+with the review comments that's fine but you need to reply and discuss
+your concerns so that the reviewer can understand your decisions.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+If you are referring to comment from Jon on updating commit, I didn't ignor=
+ed. I am just waiting if any more comments from you or others before postin=
+g updated patch.=20
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 1bf9f3c9232d08651aa6990001e7b042c95303dc Mon Sep 17 00:00:00 2001
-From: Sowjanya Komatineni <skomatineni@nvidia.com>
-Date: Mon, 13 May 2019 22:03:53 -0700
-Subject: [PATCH] spi: tegra114: add support for hw based cs
-
-Tegra SPI controller supports both HW and SW based CS control
-for SPI transfers.
-
-This patch adds support for HW based CS control where CS is driven
-to active state during the transfer and is driven inactive at the
-end of the transfer directly by the HW.
-
-This patch enables the use of HW based CS only for single transfers
-without cs_change request.
-
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-tegra114.c | 39 ++++++++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
-index f47417dd9edb..0cb0932d32fd 100644
---- a/drivers/spi/spi-tegra114.c
-+++ b/drivers/spi/spi-tegra114.c
-@@ -193,6 +193,7 @@ struct tegra_spi_data {
- 	unsigned				dma_buf_size;
- 	unsigned				max_buf_size;
- 	bool					is_curr_dma_xfer;
-+	bool					use_hw_based_cs;
- 
- 	struct completion			rx_dma_complete;
- 	struct completion			tx_dma_complete;
-@@ -723,7 +724,9 @@ static void tegra_spi_deinit_dma_param(struct tegra_spi_data *tspi,
- }
- 
- static u32 tegra_spi_setup_transfer_one(struct spi_device *spi,
--		struct spi_transfer *t, bool is_first_of_msg)
-+					struct spi_transfer *t,
-+					bool is_first_of_msg,
-+					bool is_single_xfer)
- {
- 	struct tegra_spi_data *tspi = spi_master_get_devdata(spi->master);
- 	u32 speed = t->speed_hz;
-@@ -780,11 +783,17 @@ static u32 tegra_spi_setup_transfer_one(struct spi_device *spi,
- 		if (spi->cs_gpiod)
- 			gpiod_set_value(spi->cs_gpiod, 1);
- 
--		command1 |= SPI_CS_SW_HW;
--		if (spi->mode & SPI_CS_HIGH)
--			command1 |= SPI_CS_SW_VAL;
--		else
--			command1 &= ~SPI_CS_SW_VAL;
-+		if (is_single_xfer && !(t->cs_change)) {
-+			tspi->use_hw_based_cs = true;
-+			command1 &= ~(SPI_CS_SW_HW | SPI_CS_SW_VAL);
-+		} else {
-+			tspi->use_hw_based_cs = false;
-+			command1 |= SPI_CS_SW_HW;
-+			if (spi->mode & SPI_CS_HIGH)
-+				command1 |= SPI_CS_SW_VAL;
-+			else
-+				command1 &= ~SPI_CS_SW_VAL;
-+		}
- 
- 		tegra_spi_writel(tspi, 0, SPI_COMMAND2);
- 	} else {
-@@ -905,11 +914,14 @@ static void tegra_spi_transfer_end(struct spi_device *spi)
- 	if (spi->cs_gpiod)
- 		gpiod_set_value(spi->cs_gpiod, 0);
- 
--	if (cs_val)
--		tspi->command1_reg |= SPI_CS_SW_VAL;
--	else
--		tspi->command1_reg &= ~SPI_CS_SW_VAL;
--	tegra_spi_writel(tspi, tspi->command1_reg, SPI_COMMAND1);
-+	if (!tspi->use_hw_based_cs) {
-+		if (cs_val)
-+			tspi->command1_reg |= SPI_CS_SW_VAL;
-+		else
-+			tspi->command1_reg &= ~SPI_CS_SW_VAL;
-+		tegra_spi_writel(tspi, tspi->command1_reg, SPI_COMMAND1);
-+	}
-+
- 	tegra_spi_writel(tspi, tspi->def_command1_reg, SPI_COMMAND1);
- }
- 
-@@ -936,16 +948,19 @@ static int tegra_spi_transfer_one_message(struct spi_master *master,
- 	struct spi_device *spi = msg->spi;
- 	int ret;
- 	bool skip = false;
-+	int single_xfer;
- 
- 	msg->status = 0;
- 	msg->actual_length = 0;
- 
-+	single_xfer = list_is_singular(&msg->transfers);
- 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
- 		u32 cmd1;
- 
- 		reinit_completion(&tspi->xfer_completion);
- 
--		cmd1 = tegra_spi_setup_transfer_one(spi, xfer, is_first_msg);
-+		cmd1 = tegra_spi_setup_transfer_one(spi, xfer, is_first_msg,
-+						    single_xfer);
- 
- 		if (!xfer->len) {
- 			ret = 0;
--- 
-2.20.1
-
+But I see you applied patch now. So how should I post with updated commit?=
