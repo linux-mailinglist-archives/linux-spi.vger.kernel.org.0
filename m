@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C101F1D0
-	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2019 13:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB48F1F1CA
+	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2019 13:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730350AbfEOLzY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 May 2019 07:55:24 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54520 "EHLO
+        id S1730698AbfEOLy6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 May 2019 07:54:58 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54668 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730815AbfEOLSc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 May 2019 07:18:32 -0400
+        with ESMTP id S1727358AbfEOLSh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 May 2019 07:18:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=fD191BWt3Mk159coCvNwMJ2L4tNuIv/BNCkxSDNHmnI=; b=hKRliB2yjCdw
-        EXrpSoWYRKKGqKf77Gwj8lTMTvb63QZwgEzmT2LqaoBVridkTB4sSuA/Us3W6Fkpq6ceN9DHin8Oh
-        OnvR3oleoCfNAbFXnV6QgQVrr2BVEqXGhFGireqB3zWQbWIEffAZvTCdUxdiGKT4wNmVfmRgW2ogj
-        dPKos=;
+        List-Archive; bh=M8HnZIujkbhUq3io3X6iAXWmi94TySFud4EIiWGqJiA=; b=H2GuoGcO74Lu
+        HbUeqjeDHGSLXe0oswGV7vYGjaQImL8JXS0lItfw+VBcQ8cw/HrhncPolUDyP7mVeE8DCcWBXuDR6
+        VzbzebuO7FA7g0AreMbueuGN3x9RFQCYR5tU9LdI/kHwfsTjyQ9atW0yeZ8W6tyMrBMqIOQCLJMHt
+        eryCg=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hQrvX-0003c7-H5; Wed, 15 May 2019 11:18:27 +0000
+        id 1hQrvX-0003c8-H8; Wed, 15 May 2019 11:18:27 +0000
 Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
-        id E25FB1126D6C; Wed, 15 May 2019 12:18:23 +0100 (BST)
+        id 4C5A51126D70; Wed, 15 May 2019 12:18:24 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Sowjanya Komatineni <skomatineni@nvidia.com>
 Cc:     broonie@kernel.org, jonathanh@nvidia.com, ldewangan@nvidia.com,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-tegra@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         thierry.reding@gmail.com
-Subject: Applied "spi: tegra114: add support for HW CS timing" to the spi tree
-In-Reply-To: <1557810235-16401-4-git-send-email-skomatineni@nvidia.com>
+Subject: Applied "spi: tegra114: add support for gpio based CS" to the spi tree
+In-Reply-To: <1557810235-16401-2-git-send-email-skomatineni@nvidia.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20190515111823.E25FB1126D6C@debutante.sirena.org.uk>
-Date:   Wed, 15 May 2019 12:18:23 +0100 (BST)
+Message-Id: <20190515111824.4C5A51126D70@debutante.sirena.org.uk>
+Date:   Wed, 15 May 2019 12:18:24 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -45,7 +45,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: tegra114: add support for HW CS timing
+   spi: tegra114: add support for gpio based CS
 
 has been applied to the spi tree at
 
@@ -70,107 +70,65 @@ to this mail.
 Thanks,
 Mark
 
-From 9b76ef39b7fbc2ddb0869725f9745a402d93cce5 Mon Sep 17 00:00:00 2001
+From 63c1440596ff0a34efec491f41832c2c9ea01857 Mon Sep 17 00:00:00 2001
 From: Sowjanya Komatineni <skomatineni@nvidia.com>
-Date: Mon, 13 May 2019 22:03:54 -0700
-Subject: [PATCH] spi: tegra114: add support for HW CS timing
+Date: Mon, 13 May 2019 22:03:52 -0700
+Subject: [PATCH] spi: tegra114: add support for gpio based CS
 
-This patch implements set_cs_timing SPI controller method to allow
-SPI client driver to configure device specific SPI CS timings.
+This patch adds support for GPIO based CS control through SPI core
+function spi_set_cs.
 
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-tegra114.c | 48 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 46 insertions(+), 2 deletions(-)
+ drivers/spi/spi-tegra114.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
-index 0cb0932d32fd..e59ff7c1cee6 100644
+index b1f31bb16659..f47417dd9edb 100644
 --- a/drivers/spi/spi-tegra114.c
 +++ b/drivers/spi/spi-tegra114.c
-@@ -95,8 +95,10 @@
- 		(reg = (((val) & 0x1) << ((cs) * 8 + 5)) |	\
- 			((reg) & ~(1 << ((cs) * 8 + 5))))
- #define SPI_SET_CYCLES_BETWEEN_PACKETS(reg, cs, val)		\
--		(reg = (((val) & 0xF) << ((cs) * 8)) |		\
--			((reg) & ~(0xF << ((cs) * 8))))
-+		(reg = (((val) & 0x1F) << ((cs) * 8)) |		\
-+			((reg) & ~(0x1F << ((cs) * 8))))
-+#define MAX_SETUP_HOLD_CYCLES			16
-+#define MAX_INACTIVE_CYCLES			32
+@@ -776,6 +776,10 @@ static u32 tegra_spi_setup_transfer_one(struct spi_device *spi,
+ 		} else
+ 			tegra_spi_writel(tspi, command1, SPI_COMMAND1);
  
- #define SPI_TRANS_STATUS			0x010
- #define SPI_BLK_CNT(val)			(((val) >> 0) & 0xFFFF)
-@@ -206,6 +208,8 @@ struct tegra_spi_data {
- 	u32					command1_reg;
- 	u32					dma_control_reg;
- 	u32					def_command1_reg;
-+	u32					spi_cs_timing1;
-+	u32					spi_cs_timing2;
++		/* GPIO based chip select control */
++		if (spi->cs_gpiod)
++			gpiod_set_value(spi->cs_gpiod, 1);
++
+ 		command1 |= SPI_CS_SW_HW;
+ 		if (spi->mode & SPI_CS_HIGH)
+ 			command1 |= SPI_CS_SW_VAL;
+@@ -864,6 +868,10 @@ static int tegra_spi_setup(struct spi_device *spi)
+ 	}
  
- 	struct completion			xfer_completion;
- 	struct spi_transfer			*curr_xfer;
-@@ -723,6 +727,43 @@ static void tegra_spi_deinit_dma_param(struct tegra_spi_data *tspi,
- 	dma_release_channel(dma_chan);
- }
+ 	spin_lock_irqsave(&tspi->lock, flags);
++	/* GPIO based chip select control */
++	if (spi->cs_gpiod)
++		gpiod_set_value(spi->cs_gpiod, 0);
++
+ 	val = tspi->def_command1_reg;
+ 	if (spi->mode & SPI_CS_HIGH)
+ 		val &= ~SPI_CS_POL_INACTIVE(spi->chip_select);
+@@ -893,6 +901,10 @@ static void tegra_spi_transfer_end(struct spi_device *spi)
+ 	struct tegra_spi_data *tspi = spi_master_get_devdata(spi->master);
+ 	int cs_val = (spi->mode & SPI_CS_HIGH) ? 0 : 1;
  
-+static void tegra_spi_set_hw_cs_timing(struct spi_device *spi, u8 setup_dly,
-+				       u8 hold_dly, u8 inactive_dly)
-+{
-+	struct tegra_spi_data *tspi = spi_master_get_devdata(spi->master);
-+	u32 setup_hold;
-+	u32 spi_cs_timing;
-+	u32 inactive_cycles;
-+	u8 cs_state;
++	/* GPIO based chip select control */
++	if (spi->cs_gpiod)
++		gpiod_set_value(spi->cs_gpiod, 0);
 +
-+	setup_dly = min_t(u8, setup_dly, MAX_SETUP_HOLD_CYCLES);
-+	hold_dly = min_t(u8, hold_dly, MAX_SETUP_HOLD_CYCLES);
-+	if (setup_dly && hold_dly) {
-+		setup_hold = SPI_SETUP_HOLD(setup_dly - 1, hold_dly - 1);
-+		spi_cs_timing = SPI_CS_SETUP_HOLD(tspi->spi_cs_timing1,
-+						  spi->chip_select,
-+						  setup_hold);
-+		if (tspi->spi_cs_timing1 != spi_cs_timing) {
-+			tspi->spi_cs_timing1 = spi_cs_timing;
-+			tegra_spi_writel(tspi, spi_cs_timing, SPI_CS_TIMING1);
-+		}
-+	}
-+
-+	inactive_cycles = min_t(u8, inactive_dly, MAX_INACTIVE_CYCLES);
-+	if (inactive_cycles)
-+		inactive_cycles--;
-+	cs_state = inactive_cycles ? 0 : 1;
-+	spi_cs_timing = tspi->spi_cs_timing2;
-+	SPI_SET_CS_ACTIVE_BETWEEN_PACKETS(spi_cs_timing, spi->chip_select,
-+					  cs_state);
-+	SPI_SET_CYCLES_BETWEEN_PACKETS(spi_cs_timing, spi->chip_select,
-+				       inactive_cycles);
-+	if (tspi->spi_cs_timing2 != spi_cs_timing) {
-+		tspi->spi_cs_timing2 = spi_cs_timing;
-+		tegra_spi_writel(tspi, spi_cs_timing, SPI_CS_TIMING2);
-+	}
-+}
-+
- static u32 tegra_spi_setup_transfer_one(struct spi_device *spi,
- 					struct spi_transfer *t,
- 					bool is_first_of_msg,
-@@ -1232,6 +1273,7 @@ static int tegra_spi_probe(struct platform_device *pdev)
+ 	if (cs_val)
+ 		tspi->command1_reg |= SPI_CS_SW_VAL;
+ 	else
+@@ -1199,6 +1211,7 @@ static int tegra_spi_probe(struct platform_device *pdev)
+ 		master->max_speed_hz = 25000000; /* 25MHz */
+ 
+ 	/* the spi->mode bits understood by this driver: */
++	master->use_gpio_descriptors = true;
+ 	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST |
+ 			    SPI_TX_DUAL | SPI_RX_DUAL | SPI_3WIRE;
  	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
- 	master->setup = tegra_spi_setup;
- 	master->transfer_one_message = tegra_spi_transfer_one_message;
-+	master->set_cs_timing = tegra_spi_set_hw_cs_timing;
- 	master->num_chipselect = MAX_CHIP_SELECT;
- 	master->auto_runtime_pm = true;
- 	bus_num = of_alias_get_id(pdev->dev.of_node, "spi");
-@@ -1307,6 +1349,8 @@ static int tegra_spi_probe(struct platform_device *pdev)
- 	reset_control_deassert(tspi->rst);
- 	tspi->def_command1_reg  = SPI_M_S;
- 	tegra_spi_writel(tspi, tspi->def_command1_reg, SPI_COMMAND1);
-+	tspi->spi_cs_timing1 = tegra_spi_readl(tspi, SPI_CS_TIMING1);
-+	tspi->spi_cs_timing2 = tegra_spi_readl(tspi, SPI_CS_TIMING2);
- 	pm_runtime_put(&pdev->dev);
- 	ret = request_threaded_irq(tspi->irq, tegra_spi_isr,
- 				   tegra_spi_isr_thread, IRQF_ONESHOT,
 -- 
 2.20.1
 
