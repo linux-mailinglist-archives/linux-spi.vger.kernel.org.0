@@ -2,76 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B900B20138
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2019 10:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DB62014E
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2019 10:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbfEPIZX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 May 2019 04:25:23 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:36199 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbfEPIZX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 May 2019 04:25:23 -0400
-Received: by mail-vs1-f66.google.com with SMTP id l20so1778738vsp.3;
-        Thu, 16 May 2019 01:25:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kom7CYU+qZNtW2jhA/vUJyPJXygJervJGsEuV/SOp60=;
-        b=iuMcoLFRmGqCnoME87YxWMHfyLCUC+TKrE+vv6libXqIBnyoGZ6IbsvKwvOKa9FVlc
-         P7AWl7nqQN8ZKQr2KOWY7UtdMe25ui1Hq6NU20z1rf6JvmMLvg899FZ5irb/SIXBhI1W
-         VCTXfF9HUEyKA33cG9rxCavhm8Oy3MAl+pyNZDCTY7HR/PtRjWx5U+mRQMYE0tc71bu6
-         2azFS5w2Pi24ELZVx0GTM9x89nXy3fIqZ1Z4tUnzNlQvZmDejYxPAyj2mLy9loYBXmUc
-         XJIQvOjpyJ4OtJn0gn0ndEf1AaTVo+p1m3kVp5nQtw+B7GTKlFFbkWZOACC086cqqeBt
-         x08g==
-X-Gm-Message-State: APjAAAUGcwLAjT3wqhM3Y6Emu2G5NKIc+6FbphsXRiR47Vye4P63MFzc
-        l4d/2ACUUaIrN6oU/9n66sYVsIJEb7zxskWXlIQ=
-X-Google-Smtp-Source: APXvYqz8A+UKfZ2oOCYzeXseCIyYZ4wWUIDb6b9Gxt8lpJxZNlnNHTRGzBSCc2MdFNDG5Jw0r3bbHv8IOqodaorNY/Q=
-X-Received: by 2002:a67:fdd4:: with SMTP id l20mr18322924vsq.63.1557995122611;
- Thu, 16 May 2019 01:25:22 -0700 (PDT)
+        id S1726618AbfEPI1f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 May 2019 04:27:35 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:46027 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726383AbfEPI1f (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 May 2019 04:27:35 -0400
+X-Originating-IP: 80.215.246.107
+Received: from localhost (unknown [80.215.246.107])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 992E924000A;
+        Thu, 16 May 2019 08:27:23 +0000 (UTC)
+Date:   Thu, 16 May 2019 10:27:22 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: spi: Add YAML schemas for the
+ generic SPI options
+Message-ID: <20190516082722.wcv2kmg4b5lqhszi@flea>
+References: <1acc9ff7f59064b74cc319b7812479bcd842a897.1557386749.git-series.maxime.ripard@bootlin.com>
+ <CAL_JsqLRWSWk7cV=pYi1fbYsLJFUxE1fMo6Bm2FC99oPtS-88w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20190516075656.25880-1-yuehaibing@huawei.com>
-In-Reply-To: <20190516075656.25880-1-yuehaibing@huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 16 May 2019 10:25:11 +0200
-Message-ID: <CAMuHMdUMBg9HL8PQvkHvppP+qJ6fWjs0ZbFTX=8x0A1_AVUJqw@mail.gmail.com>
-Subject: Re: [PATCH] spi: bitbang: Fix NULL pointer dereference in spi_unregister_master
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Mark Brown <broonie@kernel.org>, Axel Lin <axel.lin@ingics.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>, albeu@free.fr,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="l2jinyemzygueieg"
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqLRWSWk7cV=pYi1fbYsLJFUxE1fMo6Bm2FC99oPtS-88w@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 16, 2019 at 9:57 AM YueHaibing <yuehaibing@huawei.com> wrote:
-> If spi_register_master fails in spi_bitbang_start
-> because device_add failure, We should return the
-> error code other than 0, otherwise calling
-> spi_bitbang_stop may trigger NULL pointer dereference
-> like this:
+
+--l2jinyemzygueieg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi,
+
+On Fri, May 10, 2019 at 11:05:48AM -0500, Rob Herring wrote:
+> > +description: |
+> > +  SPI busses can be described with a node for the SPI controller device
+> > +  and a set of child nodes for each SPI slave on the bus. The system SPI
+> > +  controller may be described for use in SPI master mode or in SPI slave mode,
+> > +  but not for both at the same time.
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    pattern: "^spi(@.*)$"
 >
-> BUG: KASAN: null-ptr-deref in __list_del_entry_valid+0x45/0xd0
-> Read of size 8 at addr 0000000000000000 by task syz-executor.0/3661
+> Doing some testing with spi-gpio schema I'm writing, this needs to be
+> "^spi(@.*)*$" so that just 'spi' is allowed.
 
-[...]
+I guess "^spi(@.*)+$" would be enough then?
 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 702a4879ec33 ("spi: bitbang: Let spi_bitbang_start() take a reference to master")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> However, that's not enough for handling multiple instances of
+> spi-gpio. So maybe we need "^spi(@.*|-[0-9a-f])*$" to allow spi-1,
+> spi-2, etc. Really, we need to decide the larger issue of how we
+> handle multiple instances when there's no address space.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+That works for me, I'll change it.
 
-Gr{oetje,eeting}s,
+> Also, this schema will be applied to any matching node name as it is
+> used for automatic selection if compatible schema is not present. If
+> we want to prevent that and only apply it when explicitly included,
+> then we need to add a 'select: false'. Without it, we get more
+> coverage, but it could slow things down and we'll get double printing
+> of errors.
 
-                        Geert
+I guess we can change that later if it becomes too slow and / or
+confusing?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Maxime
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--l2jinyemzygueieg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXN0e6gAKCRDj7w1vZxhR
+xZD0AQDElc8nw58kmcEtzisrHDw0kwYpGMDedspqGUAaatx23gEA+etEsJlvv+2n
+byABh15Bk0eVWPg8bNsQLSXD9sx2FQ4=
+=Xl7S
+-----END PGP SIGNATURE-----
+
+--l2jinyemzygueieg--
