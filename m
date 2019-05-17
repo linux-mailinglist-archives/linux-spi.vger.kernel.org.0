@@ -2,79 +2,168 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 735A120BB2
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2019 17:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46B521654
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2019 11:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726339AbfEPP4M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 May 2019 11:56:12 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56958 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726314AbfEPP4L (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 May 2019 11:56:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=8xQGYMWEUvgEKQ9dnqz6HVEgkN3PnC4OsTTFftuaUkw=; b=rcILKcdTLzB+Hw4ficgrdCjKU
-        lDGe84tvh2rEsJHUFDlfK3hwv4VdKCBoth2YVcKMtYQ2O0eA6X9jx53ZV28pgA/ESXTwFgnbMggfv
-        fAOlqK/U2RdI2bLg/mbWR4+GaQVNFDncfyCcE1+9+6SgJbSc0pz4MgDsJudrIdOvpjheU=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hRIjo-0006xQ-Kr; Thu, 16 May 2019 15:56:08 +0000
-Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
-        id 07392112929C; Thu, 16 May 2019 16:56:03 +0100 (BST)
-Date:   Thu, 16 May 2019 16:56:02 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: spidev: Add dhcom-board to compatibility list
- [Klartext]
-Message-ID: <20190516155602.GH5598@sirena.org.uk>
-References: <kcis.7DC7E250415B4C2E9DA25490D6832213@DHPLMX01>
+        id S1727826AbfEQJda (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 May 2019 05:33:30 -0400
+Received: from twhmllg3.macronix.com ([122.147.135.201]:19583 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727758AbfEQJda (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 May 2019 05:33:30 -0400
+Received: from twhfmlp1.macronix.com (twhfm1p1.macronix.com [172.17.20.91])
+        by TWHMLLG3.macronix.com with ESMTP id x4H9ULi6090469;
+        Fri, 17 May 2019 17:30:21 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id 6A6869C38E176687E328;
+        Fri, 17 May 2019 17:30:21 +0800 (CST)
+In-Reply-To: <20190512151820.4f2dd9da@xps13>
+References: <1555320234-15802-1-git-send-email-masonccyang@mxic.com.tw> <1555320234-15802-3-git-send-email-masonccyang@mxic.com.tw> <20190512151820.4f2dd9da@xps13>
+To:     "Miquel Raynal" <miquel.raynal@bootlin.com>
+Cc:     bbrezillon@kernel.org, broonie@kernel.org,
+        christophe.kerello@st.com, computersforpeace@gmail.com,
+        devicetree@vger.kernel.org, dwmw2@infradead.org,
+        geert@linux-m68k.org, juliensu@mxic.com.tw, lee.jones@linaro.org,
+        liang.yang@amlogic.com, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        marcel.ziswiler@toradex.com, marek.vasut@gmail.com,
+        mark.rutland@arm.com, paul.burton@mips.com, richard@nod.at,
+        robh+dt@kernel.org, stefan@agner.ch, zhengxunli@mxic.com.tw
+Subject: Re: [PATCH v3 2/4] mtd: rawnand: Add Macronix MX25F0A NAND controller
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N8ia4yKhAKKETby7"
-Content-Disposition: inline
-In-Reply-To: <kcis.7DC7E250415B4C2E9DA25490D6832213@DHPLMX01>
-X-Cookie: <ahzz_> i figured 17G oughta be enough.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-KeepSent: 074A1F06:5C1A58BE-482583FD:0031CD95;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OF074A1F06.5C1A58BE-ON482583FD.0031CD95-482583FD.003437AD@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Fri, 17 May 2019 17:30:21 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2019/05/17 PM 05:30:21,
+        Serialize complete at 2019/05/17 PM 05:30:21
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG3.macronix.com x4H9ULi6090469
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---N8ia4yKhAKKETby7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Miquel,
 
-On Thu, May 16, 2019 at 12:48:10PM +0000, Christoph Niedermaier wrote:
+> > +
+> > +static void mxic_nand_select_chip(struct nand_chip *chip, int chipnr)
+> 
+> _select_target() is preferred now
 
-> You are right, it has something do to with encryption on our mailing server.
-> I am in contact with our IT department to fix this issue.
-> Should I resend the patch when this issue is fixed?
+Do you mean I implement mxic_nand_select_target() to control #CS ?
 
-This is already the second time you sent it today, the other time didn't
-have this problem.
+If so, I need to call mxic_nand_select_target( ) to control #CS ON
+and then #CS OFF in _exec_op() due to nand_select_target()<in nand_base,c>
+is still calling chip->legacy.select_chip ?
 
---N8ia4yKhAKKETby7
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> > +{
+> > +   struct mxic_nand_ctlr *mxic = nand_get_controller_data(chip);
+> > +
+> > +   switch (chipnr) {
+> > +   case 0:
+> > +   case 1:
+> > +      writel(HC_EN_BIT, mxic->mfd->regs + HC_EN);
+> > +      writel(HC_CFG_MAN_CS_ASSERT | readl(mxic->mfd->regs + HC_CFG),
+> > +             mxic->mfd->regs + HC_CFG);
+> 
+> In both case I would prefer a:
+> 
+>         reg = readl(...);
+>         reg &= ~xxx;
+>    reg |= yyy;
+>    writel(reg, ...);
+> 
+> Much easier to read.
+> 
+> > +      break;
+> > +
+> > +   case -1:
+> > +      writel(~HC_CFG_MAN_CS_ASSERT & readl(mxic->mfd->regs + HC_CFG),
+> > +             mxic->mfd->regs + HC_CFG);
+> > +      writel(0, mxic->mfd->regs + HC_EN);
+> > +      break;
+> > +
+> > +   default:
+> 
+> Error?
+> 
+> > +      break;
+> > +   }
+> > +}
+> > +
 
------BEGIN PGP SIGNATURE-----
+> > +static int mx25f0a_nand_probe(struct platform_device *pdev)
+> > +{
+> > +   struct mtd_info *mtd;
+> > +   struct mx25f0a_mfd *mfd = dev_get_drvdata(pdev->dev.parent);
+> > +   struct mxic_nand_ctlr *mxic;
+> > +   struct nand_chip *nand_chip;
+> > +   int err;
+> > +
+> > +   mxic = devm_kzalloc(&pdev->dev, sizeof(struct mxic_nand_ctlr),
+> > +             GFP_KERNEL);
+> 
+> mxic for a NAND controller structure is probably not a name meaningful
+> enough.
+> 
+> > +   if (!mxic)
+> > +      return -ENOMEM;
+> > +
+> > +   nand_chip = &mxic->nand;
+> > +   mtd = nand_to_mtd(nand_chip);
+> > +   mtd->dev.parent = pdev->dev.parent;
+> > +   nand_chip->ecc.priv = NULL;
+> > +   nand_set_flash_node(nand_chip, pdev->dev.parent->of_node);
+> > +   nand_chip->priv = mxic;
+> > +
+> > +   mxic->mfd = mfd;
+> > +
+> > +   nand_chip->legacy.select_chip = mxic_nand_select_chip;
+> 
+> Please don't implement legacy interfaces. You can check in
+> marvell_nand.c how this is handled now:
+> 
+> b25251414f6e mtd: rawnand: marvell: Stop implementing ->select_chip()
+> 
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzdiBIACgkQJNaLcl1U
-h9AWxAf9HlPgqvZTVahRW3CfddQctwPCo7feSgJDs9NW7GSx/CRLWlNpAXj+Bi0Q
-TO03hjqaSgez+yU/ptkYZDIy7Xh+G6R2O8BZ0avQGT/fv9YNa98pjGj6MJaClb0q
-6xgsDauTMzvAScwgc1h8YRXfNvkjb258SjxmYFwA0JcZZAeXORd15ZuvLB7RXau+
-Yv00Ru97EXjxK0qHKr/NWs5QJ4jPaSBqPKqWtzNC2sUndNz7/eUr3C4rdsGTXBXH
-/sBYUU/t8XT33fEA+Bl7Rlxc09DqJWek+V8t/O4sOtezxgKPFrOdEFt4ManISbX5
-tRXLJayyjQHV61ZRG+CbObjgh/UrPw==
-=BvsO
------END PGP SIGNATURE-----
+Does it mean chip->legacy.select_chip() will phase-out ?
 
---N8ia4yKhAKKETby7--
+
+thanks & best regards,
+Mason
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
