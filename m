@@ -2,94 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B14D7247D5
-	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2019 08:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E10247F8
+	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2019 08:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725982AbfEUGMl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 May 2019 02:12:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49188 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725798AbfEUGMl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 May 2019 02:12:41 -0400
-Received: from localhost (unknown [106.201.107.13])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DDFC920863;
-        Tue, 21 May 2019 06:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558419160;
-        bh=4VC9bKP9QU7iVDFMtdo9WoMzmY1tJYqXCWxT9T/NUpY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lJzLTxcVnQlcC8g5MlkXWsEtukxQJremgG+7zcGYuVRwfHSSl/CjVbwp62oapFxjZ
-         RB3v+k7IXX6G0ix1zRMQJ2OvmqFFR1LCVcZnUWQFvAHionw5nVJu6KU8/EW2X/ujcW
-         XyM9/dqc3r3hrt7uRZc5BRuGjG8gjJF0yevCkmSg=
-Date:   Tue, 21 May 2019 11:42:36 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     "robh@kernel.org" <robh@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "plyatov@gmail.com" <plyatov@gmail.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: Re: Re: [PATCH v3 11/14] dmaengine: imx-sdma: fix ecspi1 rx dma
- not work on i.mx8mm
-Message-ID: <20190521061236.GA15118@vkoul-mobl>
-References: <VI1PR04MB4543DEEC702531ED69616B8C89070@VI1PR04MB4543.eurprd04.prod.outlook.com>
+        id S1726396AbfEUGWw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 May 2019 02:22:52 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:43310 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726047AbfEUGWv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 May 2019 02:22:51 -0400
+Received: by mail-pl1-f196.google.com with SMTP id gn7so3749185plb.10
+        for <linux-spi@vger.kernel.org>; Mon, 20 May 2019 23:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=y2m5dpNz16ZybgYk5tQ8GutOzZqz8vAuz2rdBiTBnjw=;
+        b=l9FHorTul2Tyg2dOrb6zBPnqrZNmerYqH7eUWz8QrYYH0IhCHHLfh32l4hP3eIA/X7
+         vAjYlCEuZb1wqfD9LentK6vgUI8A/1mrqJ9S052A1vrO93c315n4VxO7f9kRYZ/dwhpt
+         a2aJmXtu4Ef1cIkwGn8dhSCJPXp5lNBa9khww/rmBXfha/2d2tEcDNaiPXcmM3XDnEaQ
+         mx1DNLV+4klz/BgBK87ZGo3hmiGMX2Wio0auyYuss6yzMBipwqekj/2uRHVRH1p/MxLn
+         /xGx4aZ9zZwmOx4XOBcEUeoMV+xdaLp+hhXsm7XNYpMPkIwBvPkWXUbq5Wi0Owu0YWlS
+         uo5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=y2m5dpNz16ZybgYk5tQ8GutOzZqz8vAuz2rdBiTBnjw=;
+        b=K2nktf5TdJtI7XSSqlvJ33gQN5fV4EcwJS62B8CmIRWZYjTsCzTS0GuJEqgO3hD4fd
+         +bH6bk34rCpzIG9OOoi5QwnGYaaJHW//thaIo2gcpw5w4LllZimNOi6nlOduA2+z0wff
+         bgjvEhH5OO1iCz3sMBUkjGfWM+TtO8+nzqKNxB1Dsrmrr9KGweczi9S5eFpwsB7RXLSp
+         s0/e6m87/PjBdmViqcOVBWPZ6QdGvashcTyvzhK7CO0lozRDhhKChhKkkjb8e1ZAKd8j
+         Rpu1NdV0/7+sfiJUa9A24cZTnsZ26vdR6wq4e41p6u0IgOTdBVaeQEniGqeQtzUH8Yrl
+         x2OQ==
+X-Gm-Message-State: APjAAAVxvxeQTKXGbDvn8P3tnMEwNd/nAxGgM9cpcbn/q4cLxQg4Za2A
+        G2ZbNoJLVDml7K+91CSMpqip9w==
+X-Google-Smtp-Source: APXvYqz2YMCSRvKN2MJ+jWniKEVRU5sQ/FMpg7ookR4wjHFWBAIZ3T0Rpg+BvD1LhysbsKdoQyBKgQ==
+X-Received: by 2002:a17:902:8d96:: with SMTP id v22mr5073943plo.282.1558419770837;
+        Mon, 20 May 2019 23:22:50 -0700 (PDT)
+Received: from localhost ([122.172.118.99])
+        by smtp.gmail.com with ESMTPSA id n27sm42589245pfb.129.2019.05.20.23.22.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 May 2019 23:22:50 -0700 (PDT)
+Date:   Tue, 21 May 2019 11:52:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, swboyd@chromium.org,
+        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org,
+        vincent.guittot@linaro.org
+Subject: Re: [RFC v2 00/11] DVFS in the OPP core
+Message-ID: <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <VI1PR04MB4543DEEC702531ED69616B8C89070@VI1PR04MB4543.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190320094918.20234-1-rnayak@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 21-05-19, 05:41, Robin Gong wrote:
-> > -----Original Message-----
-> > From: Vinod Koul <vkoul@kernel.org>
-> > Sent: 2019年5月21日 13:13
-> > 
-> > On 21-05-19, 04:58, Robin Gong wrote:
-> > > > -----Original Message-----
-> > > > From: Vinod Koul <vkoul@kernel.org>
-> > > > Sent: 2019年5月21日 12:18
-> > > >
-> > > > On 07-05-19, 09:16, Robin Gong wrote:
-> > > > > Because the number of ecspi1 rx event on i.mx8mm is 0, the
-> > > > > condition check ignore such special case without dma channel
-> > > > > enabled, which caused
-> > > > > ecspi1 rx works failed. Actually, no need to check event_id0,
-> > > > > checking
-> > > > > event_id1 is enough for DEV_2_DEV case because it's so lucky that
-> > > > > event_id1 never be 0.
-> > > >
-> > > > Well is that by chance or design that event_id1 will be never 0?
-> > > >
-> > > That's by chance. DEV_2_DEV is just for Audio case and non-zero for
-> > event_id1 on current i.MX family.
-> > 
-> > Then it wont be fgood to rely on chance :)
-> Yes, I knew that. May I create another independent patch for event_id1 since that's potential issue is not related with this ecspi patch set?
+On 20-03-19, 15:19, Rajendra Nayak wrote:
+> This is a v2 of the RFC posted earlier by Stephen Boyd [1]
+> 
+> As part of v2 I still follow the same approach of dev_pm_opp_set_rate()
+> API using clk framework to round the frequency passed and making it
+> accept 0 as a valid frequency indicating the frequency isn't required
+> anymore. It just has a few more drivers converted to use this approach
+> like dsi/dpu and ufs.
+> ufs demonstrates the case of having to handle multiple power domains, one
+> of which is scalable.
+> 
+> The patches are based on 5.1-rc1 and depend on some ufs fixes I posted
+> earlier [2] and a DT patch to include the rpmpd header [3]
+> 
+> [1] https://lkml.org/lkml/2019/1/28/2086
+> [2] https://lkml.org/lkml/2019/3/8/70
+> [3] https://lkml.org/lkml/2019/3/20/120
 
-Sure a patch should change one thing but I think it should come before
-this one. The log for this should be fixed up as well
+Hi Rajendra,
+
+I am inclined to apply/push this series for 5.3-rc1, will it be
+possible for you to spend some time on this at priority ?
 
 -- 
-~Vinod
+viresh
