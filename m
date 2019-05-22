@@ -2,193 +2,207 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 843AE259E2
-	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2019 23:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A021525F76
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 10:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727733AbfEUVXa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 May 2019 17:23:30 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:46566 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727362AbfEUVX3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 May 2019 17:23:29 -0400
-Received: by mail-ot1-f66.google.com with SMTP id j49so105414otc.13;
-        Tue, 21 May 2019 14:23:28 -0700 (PDT)
+        id S1728406AbfEVI1h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 May 2019 04:27:37 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40802 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728552AbfEVI1h (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 May 2019 04:27:37 -0400
+Received: by mail-lf1-f66.google.com with SMTP id h13so1005564lfc.7
+        for <linux-spi@vger.kernel.org>; Wed, 22 May 2019 01:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=svB5nl3fT0U7Ej+HdK0cpAaD6HsRDyQv724K7n/Iu1I=;
+        b=XPEPKyJ/KUpL4GASg/fc1AhnAc89hB55UzTCv9GAfj0URH6kzxw1eUYfGBG11VQ5At
+         2dDshoZQA6fnD+mZpwP70GzbAms/pdzL36VN2lPl90cEPt8W393ZARceZbc1TIs6QvFw
+         +ILMXpZtnTQWokmfGyiVSDuidVlODHO+sMZIsEi5cBwQlHYkmIrzaILUEi8i0m4Zs1EN
+         9w4YokIDB6SDoq7kLJckccU33keqVAJqW93QXNpPpdhAn5euH+BGv9+2+7TTL5zDz66L
+         p/ZVtJ0CFkuL84QdMI6GKd127tuSHPMHF1jhuyMpV362gjXoTeV3ykTx/2+MhqpLpQg1
+         5YYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zqAy2tu1FFqlI/CRjq09V8yQxMvBSVTSPxlWezcgKGg=;
-        b=dfpvE6SfjM3a66zQ9tKFxvDhnykaulTHm/Rx0awHLE4Kiv4oJWKygp2FEm3ucK4WL1
-         OrxsX+HucL9ygPxFpOfvqcazOym43ziFIv5I7PXQogwQf56RS/UmyM3OCv6KgMifDtEV
-         3Zz/6e/waEZlDNHtqGLbQfRVomQua+ocq7Z1TQ3VgMLbntdCrlOzvkbvwTQCxy2fI6bj
-         NMBzommvJxoqoDmqBljagJVVpEmX/Zsj9aUwwNo7ewF/ieRtaiSfDG7qKGN+f9RO1N9G
-         g6gJBpPKNVVWWI8/Pa4B3/rGO3rpO1AXzKVg5Ro7DXLQ1xwVIYUWbMMpFI+SrP5LKavP
-         2ehQ==
-X-Gm-Message-State: APjAAAVhcbTsg5dIaz0wv8VvPmcyOUQWju/EVOxyi/KnoGPxP5YtNh9C
-        rF8NA0r0yvrlF9/CM5kfFQ==
-X-Google-Smtp-Source: APXvYqzhMQubjFBn9Wr/shxi3QOZv21jPoLOUF+H3Tyk3H+LV4pShyHV/+1b7UcJZhdKLjC+akUbTQ==
-X-Received: by 2002:a9d:6195:: with SMTP id g21mr24908otk.179.1558473808278;
-        Tue, 21 May 2019 14:23:28 -0700 (PDT)
-Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id w24sm4835474otk.74.2019.05.21.14.23.27
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 21 May 2019 14:23:27 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: dt-bindings: Convert spi-gpio binding to json-schema
-Date:   Tue, 21 May 2019 16:23:25 -0500
-Message-Id: <20190521212325.16639-2-robh@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=svB5nl3fT0U7Ej+HdK0cpAaD6HsRDyQv724K7n/Iu1I=;
+        b=FlmzBZ3274s8SwKuVmBAMBhcTGzqu7/QDPbjU7zKz9CKBPIBHAhtTntI4y37XDhAH6
+         pOPoxdIBVQi/XTM6h0rjUAPaDpOwZdDdZA454rxrN6Sc6PETURUHVGaD/XX/5HArrO7/
+         6s5A1uxlpZhLzwpL6kWje4yWNq+4JDad8U0z2Bhfxt1agmPQWjtNcUof6esjGBoAeebX
+         NX2pljQuxVRoDz5sdovsjlZJ6wOynhXtHtXX4kJpC1xfZvzLjg9PcVvr/5JMdhhdfvpr
+         CiMOSORTmFDQgfrzG3508u0zFxGnjDZphxbqfOx+XcvjHHGQNdJySdKFvegm3OXOUl5S
+         g44g==
+X-Gm-Message-State: APjAAAXRiDtud6L8SsCGjln1ek+6dlKIxJJK6MheKBzAIRso05Ii+/Zy
+        QjSJoWn62F1tNZpSpNlSKNk1iRIBBRCnua75V5XRRw==
+X-Google-Smtp-Source: APXvYqxCkbgEFxI6SZaBp54bJgBFxf7xmKlK2jv+sAoeqTCvs9thEtMgg1qBHJrg2aSXpeqTY1a8wnY5n7yq2u03Dps=
+X-Received: by 2002:ac2:4c93:: with SMTP id d19mr24078559lfl.116.1558513654796;
+ Wed, 22 May 2019 01:27:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190521115958.22504-1-masahisa.kojima@linaro.org>
+ <20190521115958.22504-4-masahisa.kojima@linaro.org> <20190521181609.GB16633@sirena.org.uk>
+In-Reply-To: <20190521181609.GB16633@sirena.org.uk>
+From:   Masahisa Kojima <masahisa.kojima@linaro.org>
+Date:   Wed, 22 May 2019 17:27:23 +0900
+Message-ID: <CADQ0-X9yKQ2akerpxKfjxOxmRhPiaaxe7ALDO7VQiH+-+SHo3w@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] spi: Add spi driver for Socionext Synquacer platform
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        geert@linux-m68k.org, tpiepho@impinj.com,
+        andy.shevchenko@gmail.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
+        Satoru Okamoto <okamoto.satoru@socionext.com>,
+        Yoshitoyo Osaki <osaki.yoshitoyo@socionext.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert the spi-gpio binding to DT schema format.
+Thank you very much for your comments.
 
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/spi/spi-gpio.txt      | 43 -----------
- .../devicetree/bindings/spi/spi-gpio.yaml     | 72 +++++++++++++++++++
- 2 files changed, 72 insertions(+), 43 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-gpio.txt
- create mode 100644 Documentation/devicetree/bindings/spi/spi-gpio.yaml
+On Wed, 22 May 2019 at 03:16, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, May 21, 2019 at 08:59:58PM +0900, Masahisa Kojima wrote:
+>
+> > +     switch (sspi->bpw) {
+> > +     case 8:
+>
+> > +             {
+> > +             u8 *buf = sspi->rx_buf;
+> > +
+> > +             readsb(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
+> > +             sspi->rx_buf = buf + len;
+> > +             break;
+> > +             }
+>
+> Please indent these properly.
+>
+> > +     default:
+> > +             {
+> > +             u32 *buf = sspi->rx_buf;
+> > +
+> > +             readsl(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
+> > +             sspi->rx_buf = buf + len;
+> > +             break;
+> > +             }
+>
+> It'd be better to explicitly list the values this works for and return
+> an error otherwise.
+>
+> > +     if (sspi->rx_words) {
+> > +             val = SYNQUACER_HSSPI_RXE_FIFO_MORE_THAN_THRESHOLD |
+> > +                   SYNQUACER_HSSPI_RXE_SLAVE_RELEASED;
+> > +             writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
+> > +             status = wait_for_completion_timeout(&sspi->transfer_done,
+> > +                     msecs_to_jiffies(SYNQUACER_HSSPI_TRANSFER_TMOUT_MSEC));
+> > +             writel_relaxed(0, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
+> > +     }
+> > +
+> > +     if (xfer->tx_buf) {
+> > +             val = SYNQUACER_HSSPI_TXE_FIFO_EMPTY;
+> > +             writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_TXE);
+> > +             status = wait_for_completion_timeout(&sspi->transfer_done,
+> > +                     msecs_to_jiffies(SYNQUACER_HSSPI_TRANSFER_TMOUT_MSEC));
+> > +             writel_relaxed(0, sspi->regs + SYNQUACER_HSSPI_REG_TXE);
+> > +     }
+>
+> I guess the TX will complete before the RX usually so I'd kind of expect
+> the waits to be in the other order?
+>
+> > +     if (status < 0) {
+> > +             dev_err(sspi->dev, "failed to transfer\n");
+> > +             return status;
+> > +     }
+>
+> Printing the error code could be helpful for users.
+>
+> > +static void synquacer_spi_set_cs(struct spi_device *spi, bool enable)
+> > +{
+> > +     struct synquacer_spi *sspi = spi_master_get_devdata(spi->master);
+> > +     u32 val;
+> > +
+> > +     val = readl_relaxed(sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
+> > +     val &= ~(SYNQUACER_HSSPI_DMPSEL_CS_MASK <<
+> > +              SYNQUACER_HSSPI_DMPSEL_CS_SHIFT);
+> > +     val |= spi->chip_select << SYNQUACER_HSSPI_DMPSEL_CS_SHIFT;
+> > +
+> > +     if (enable) {
+> > +             val |= SYNQUACER_HSSPI_DMSTOP_STOP;
+> > +             writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
+> > +
+> > +             if (sspi->rx_buf) {
+> > +                     u32 buf[SYNQUACER_HSSPI_FIFO_DEPTH];
+> > +
+> > +                     sspi->rx_buf = buf;
+> > +                     sspi->rx_words = SYNQUACER_HSSPI_FIFO_DEPTH;
+> > +                     read_fifo(sspi);
+> > +             }
+>
+> This is doing things with the FIFO, that's completely inappropriate for
+> a set_cs() operation.  The set_cs() operation should set the chip select
+> and nothing else.
+>
+> > +static irqreturn_t sq_spi_rx_handler(int irq, void *priv)
+> > +{
+> > +     uint32_t val;
+> > +     struct synquacer_spi *sspi = priv;
+> > +
+> > +     val = readl_relaxed(sspi->regs + SYNQUACER_HSSPI_REG_RXF);
+> > +     if ((val & SYNQUACER_HSSPI_RXF_SLAVE_RELEASED) ||
+> > +         (val & SYNQUACER_HSSPI_RXF_FIFO_MORE_THAN_THRESHOLD))
+> > +             read_fifo(sspi);
+> > +
+> > +     if (sspi->rx_words == 0) {
+> > +             writel_relaxed(0, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
+> > +             complete(&sspi->transfer_done);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+>
+> 0 is not a valid return from an interrupt handler, IRQ_HANDLED or
+> IRQ_NONE.
+>
+> > +     ret = devm_request_irq(&pdev->dev, rx_irq, sq_spi_rx_handler,
+> > +                             0, "synquacer-spi-rx", sspi);
+> > +     ret = devm_request_irq(&pdev->dev, tx_irq, sq_spi_tx_handler,
+> > +                             0, "synquacer-spi-tx", sspi);
+>
+> The code looked awfully like we depend on having interrupts?
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-gpio.txt b/Documentation/devicetree/bindings/spi/spi-gpio.txt
-deleted file mode 100644
-index 52db562f17a4..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-gpio.txt
-+++ /dev/null
-@@ -1,43 +0,0 @@
--SPI-GPIO devicetree bindings
--
--This represents a group of 3-n GPIO lines used for bit-banged SPI on dedicated
--GPIO lines.
--
--Required properties:
--
-- - compatible: should be set to "spi-gpio"
-- - #address-cells: should be set to <0x1>
-- - ranges
-- - sck-gpios: GPIO spec for the SCK line to use
-- - miso-gpios: GPIO spec for the MISO line to use
-- - mosi-gpios: GPIO spec for the MOSI line to use
-- - cs-gpios: GPIOs to use for chipselect lines.
--             Not needed if num-chipselects = <0>.
-- - num-chipselects: Number of chipselect lines. Should be <0> if a single device
--                    with no chip select is connected.
--
--Deprecated bindings:
--
--These legacy GPIO line bindings can alternatively be used to define the
--GPIO lines used, they should not be used in new device trees.
--
-- - gpio-sck: GPIO spec for the SCK line to use
-- - gpio-miso: GPIO spec for the MISO line to use
-- - gpio-mosi: GPIO spec for the MOSI line to use
--
--Example:
--
--	spi {
--		compatible = "spi-gpio";
--		#address-cells = <0x1>;
--		ranges;
--
--		sck-gpios = <&gpio 95 0>;
--		miso-gpios = <&gpio 98 0>;
--		mosi-gpios = <&gpio 97 0>;
--		cs-gpios = <&gpio 125 0>;
--		num-chipselects = <1>;
--
--		/* clients */
--	};
--
-diff --git a/Documentation/devicetree/bindings/spi/spi-gpio.yaml b/Documentation/devicetree/bindings/spi/spi-gpio.yaml
-new file mode 100644
-index 000000000000..55c4f1705f07
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/spi-gpio.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/spi-gpio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: SPI-GPIO devicetree bindings
-+
-+maintainers:
-+  - Rob Herring <robh@kernel.org>
-+
-+description:
-+  This represents a group of 3-n GPIO lines used for bit-banged SPI on
-+  dedicated GPIO lines.
-+
-+allOf:
-+  - $ref: "/schemas/spi/spi-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    const: spi-gpio
-+
-+  sck-gpios:
-+    description: GPIO spec for the SCK line to use
-+    maxItems: 1
-+
-+  miso-gpios:
-+    description: GPIO spec for the MISO line to use
-+    maxItems: 1
-+
-+  mosi-gpios:
-+    description: GPIO spec for the MOSI line to use
-+    maxItems: 1
-+
-+  cs-gpios:
-+    description: GPIOs to use for chipselect lines.
-+      Not needed if num-chipselects = <0>.
-+    minItems: 1
-+    maxItems: 1024
-+
-+  num-chipselects:
-+    description: Number of chipselect lines. Should be <0> if a single device
-+      with no chip select is connected.
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+
-+  # Deprecated properties
-+  gpio-sck: false
-+  gpio-miso: false
-+  gpio-mosi: false
-+
-+required:
-+  - compatible
-+  - num-chipselects
-+  - sck-gpios
-+
-+examples:
-+  - |
-+    spi {
-+      compatible = "spi-gpio";
-+      #address-cells = <0x1>;
-+      #size-cells = <0x0>;
-+
-+      sck-gpios = <&gpio 95 0>;
-+      miso-gpios = <&gpio 98 0>;
-+      mosi-gpios = <&gpio 97 0>;
-+      cs-gpios = <&gpio 125 0>;
-+      num-chipselects = <1>;
-+
-+      /* clients */
-+    };
-+
-+...
--- 
-2.20.1
+I"m not sure I correctly understand what this comment means,
+should driver assume the case interrupt is not available?
+Do I need to support both interrupt and polling handling?
 
+> > +     master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_TX_DUAL | SPI_RX_DUAL |
+> > +                         SPI_TX_QUAD | SPI_RX_QUAD;
+>
+> I don't see any code in the driver that configures dual or quad mode
+> support other than setting _PCC_SAFESYNC, I'm not clear how the driver
+> supports these modes?
+
+Configuring single, dual and quad mode is depending on
+the spi_transfer member from upper driver.
+
++static int synquacer_spi_config(struct spi_master *master,
+
+ <snip>
+
++       if (xfer->tx_buf) {
++               bus_width = xfer->tx_nbits;
++               transfer_mode = SYNQUACER_HSSPI_TRANSFER_MODE_TX;
++       } else {
++               bus_width = xfer->rx_nbits;
++               transfer_mode = SYNQUACER_HSSPI_TRANSFER_MODE_RX;
++       }
+
+ <snip>
+
++       val &= ~(3 << SYNQUACER_HSSPI_DMTRP_BUS_WIDTH_SHIFT);
++       val |= ((bus_width >> 1) << SYNQUACER_HSSPI_DMTRP_BUS_WIDTH_SHIFT);
++       writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
