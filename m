@@ -2,90 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 457E7264E8
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 15:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A5D26526
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 15:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729172AbfEVNkQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 May 2019 09:40:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38262 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729071AbfEVNkQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 May 2019 09:40:16 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558532415;
-        bh=wdqQFxUB65rzep043nOlMltXSHo+zk4Y544XirVNU+g=;
-        h=Subject:From:Date:To:From;
-        b=HCWRtcL5wA2t02ph5KmYPzBmn/GGAD+d8xZSsRGxYg2p9rlnfcptrLAw22YPZMvMN
-         kXpoAbqx95XUL4vP5CN2isEa24qrwUnP3kfcIDm4HZ1Drnr+G99aiEArZM5nIx+ykb
-         H5O0/HtdQ5Rbbf7PD7f4tYmZ+BT4pBCVvtlTJtSY=
+        id S1729171AbfEVNvb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 May 2019 09:51:31 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34344 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726770AbfEVNva (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 May 2019 09:51:30 -0400
+Received: by mail-ot1-f65.google.com with SMTP id l17so2138838otq.1;
+        Wed, 22 May 2019 06:51:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=WNC2JYWG7tWES9f64iNfx+WaqJ4vmOCp/0J1TeLz0p4=;
+        b=qvDEVPVqzuWN4+F1oBQDNBoUDdISpYKkJKEo2Cs6N45xy8S1Qpgw5EubdZDx2rAj6L
+         UErOCz8Oqxz5cnCMHZ0dtTO2laJzV+/lgvrymruRQ8MHh2sMklXJ0GuST0uUh1m+NSc/
+         uC0xWDV4Vr4ZggrxRWDE8JR31c04MeE65QiIC1vsQCQW2ZSP5ALRzQ4U8A/Kw7kdZvt/
+         GkDUmPxTCqJLm7VzhCH5FOYixAwKYtLS/dq0MWLq+jOyVG0+qOI/9IJxt2ehj6Wmp6As
+         0l+CggYmYmHtb+12+uL+zVm8Gz2DkkeOCg/aGZM4inOjHxeIcgKFAUzKRGW8KuU2sLqz
+         9f1w==
+X-Gm-Message-State: APjAAAX8TUFhDNgH6qjeyogUqQq5iBDzhAwUAieSbYJkiowI77w0tuAX
+        BcLFsp4pbtVJzdALtQjYug==
+X-Google-Smtp-Source: APXvYqyruJO4hpb5ERYDyy8YFYJg7Z8ngUs0aEUiTimEwLTJsVuVZ4S1t245qpR8qtmb7mfA8CLAFA==
+X-Received: by 2002:a05:6830:11ce:: with SMTP id v14mr23382616otq.184.1558533089709;
+        Wed, 22 May 2019 06:51:29 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id e8sm4849679otk.13.2019.05.22.06.51.28
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 22 May 2019 06:51:29 -0700 (PDT)
+Date:   Wed, 22 May 2019 08:51:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     "robh@kernel.org" <robh@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "plyatov@gmail.com" <plyatov@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH v4 10/14] dma: imx-sdma: add i.mx6ul/6sx compatible name
+Message-ID: <20190522135128.GA24987@bogus>
+References: <1558548188-1155-1-git-send-email-yibin.gong@nxp.com>
+ <1558548188-1155-11-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <155853241559.6660.10634526291488014813.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 22 May 2019 13:40:15 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1558548188-1155-11-git-send-email-yibin.gong@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: pxa2xx: add driver enabling message (2019-04-10T09:47:04)
-  Superseding: [v1] spi: pxa2xx: add driver enabling message (2019-04-08T15:22:44):
-    [1/1] spi: pxa2xx: add driver enabling message
+On Wed, 22 May 2019 10:00:38 +0000, Robin Gong wrote:
+> Add i.mx6ul and i.mx6sx compatible name in binding doc.
+> 
+> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/dma/fsl-imx-sdma.txt | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Latest series: [v2] spi: tegra114: fix PIO transfer (2019-04-05T00:14:14)
-  Superseding: [v1] spi: tegra114: fix PIO transfer (2019-03-27T05:56:22):
-    [V1,01/26] spi: tegra114: fix PIO transfer
-    [V1,02/26] spi: tegra114: clear packed bit for unpacked mode
-    [V1,03/26] spi: tegra114: fix for unpacked mode transfers
-    [V1,04/26] spi: tegra114: use packed mode for 32 bits per word
-    [V1,05/26] spi: tegra114: use unpacked mode for below 4 byte transfers
-    [V1,06/26] spi: tegra114: terminate dma and reset on transfer timeout
-    [V1,07/26] spi: tegra114: flush fifos
-    [V1,08/26] spi: tegra114: configure dma burst size to fifo trig level
-    [V1,09/26] spi: tegra114: dump SPI registers during timeout
-    [V1,10/26] spi: tegra114: avoid reset call in atomic context
-    [V1,11/26] spi: tegra114: reset controller on probe
-    [V1,12/26] spi: tegra114: add SPI_LSB_FIRST support
-    [V1,13/26] spi: tegra114: add dual mode support
-    [V1,14/26] spi: tegra114: add 3 wire transfer mode support
-    [V1,15/26] spi: tegra114: set supported bits_per_word
-    [V1,16/26] spi: tegra114: set bus number based on id
-    [V1,17/26] spi: tegra114: add support for interrupt mask
-    [V1,18/26] spi: tegra114: add support for hw based cs
-    [V1,19/26] DT bindings: spi: add spi client device properties
-    [V1,20/26] spi: tegra114: add support for tuning HW CS timing
-    [V1,21/26] DT bindings: spi: add tx/rx clock delay SPI client properties
-    [V1,22/26] spi: tegra114: add support for tuning clock delay
-    [V1,23/26] spi: tegra114: add support for gpio based cs
-    [V1,24/26] spi: tegra114: de-assert CS before SPI mode is reset to its default
-    [V1,25/26] spi: expand mode and mode_bits support
-    [V1,26/26] spi: tegra114: add support for LSBYTE_FIRST
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-Latest series: [v3] dt-bindings: spi: Add YAML schemas for the generic SPI options (2019-05-20T14:50:34)
-  Superseding: [v1] dt-bindings: spi: Add YAML schemas for the generic SPI options (2019-05-07T13:48:13):
-    [1/4] dt-bindings: spi: Add YAML schemas for the generic SPI options
-    [2/4] dt-bindings: spi: sun4i: Add YAML schemas
-    [3/4] dt-bindings: spi: sun6i: Add YAML schemas
-    [4/4] ARM: dts: sun6i: Add default address and size cells for SPI
-  Superseding: [v2] dt-bindings: spi: Add YAML schemas for the generic SPI options (2019-05-09T07:26:05):
-    [v2,1/4] dt-bindings: spi: Add YAML schemas for the generic SPI options
-    [v2,2/4] dt-bindings: spi: sun4i: Add YAML schemas
-    [v2,3/4] dt-bindings: spi: sun6i: Add YAML schemas
-    [v2,4/4] ARM: dts: sun6i: Add default address and size cells for SPI
-
-Latest series: [v3] spi: spi-mem: Fix build error without CONFIG_SPI_MEM (2019-04-10T11:57:09)
-  Superseding: [v2] spi: spi-mem: Fix build error without CONFIG_SPI_MEM (2019-04-10T05:44:45):
-    [LINUX,v2] spi: spi-mem: Fix build error without CONFIG_SPI_MEM
-
-Latest series: [v2] spi: pxa2xx: fix SCR (divisor) calculation (2019-04-12T07:32:19)
-  Superseding: [v1] spi: pxa2xx: fix SCR (divisor) calculation (2019-04-10T12:51:35):
-    [1/2] spi: pxa2xx: fix SCR (divisor) calculation
-    [2/2] spi: pxa2xx: use a module softdep for dw_dmac
-
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+If a tag was not added on purpose, please state why and what changed.
