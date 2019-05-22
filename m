@@ -2,207 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A021525F76
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 10:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708B9260E9
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 12:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728406AbfEVI1h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 May 2019 04:27:37 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40802 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728552AbfEVI1h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 May 2019 04:27:37 -0400
-Received: by mail-lf1-f66.google.com with SMTP id h13so1005564lfc.7
-        for <linux-spi@vger.kernel.org>; Wed, 22 May 2019 01:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=svB5nl3fT0U7Ej+HdK0cpAaD6HsRDyQv724K7n/Iu1I=;
-        b=XPEPKyJ/KUpL4GASg/fc1AhnAc89hB55UzTCv9GAfj0URH6kzxw1eUYfGBG11VQ5At
-         2dDshoZQA6fnD+mZpwP70GzbAms/pdzL36VN2lPl90cEPt8W393ZARceZbc1TIs6QvFw
-         +ILMXpZtnTQWokmfGyiVSDuidVlODHO+sMZIsEi5cBwQlHYkmIrzaILUEi8i0m4Zs1EN
-         9w4YokIDB6SDoq7kLJckccU33keqVAJqW93QXNpPpdhAn5euH+BGv9+2+7TTL5zDz66L
-         p/ZVtJ0CFkuL84QdMI6GKd127tuSHPMHF1jhuyMpV362gjXoTeV3ykTx/2+MhqpLpQg1
-         5YYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=svB5nl3fT0U7Ej+HdK0cpAaD6HsRDyQv724K7n/Iu1I=;
-        b=FlmzBZ3274s8SwKuVmBAMBhcTGzqu7/QDPbjU7zKz9CKBPIBHAhtTntI4y37XDhAH6
-         pOPoxdIBVQi/XTM6h0rjUAPaDpOwZdDdZA454rxrN6Sc6PETURUHVGaD/XX/5HArrO7/
-         6s5A1uxlpZhLzwpL6kWje4yWNq+4JDad8U0z2Bhfxt1agmPQWjtNcUof6esjGBoAeebX
-         NX2pljQuxVRoDz5sdovsjlZJ6wOynhXtHtXX4kJpC1xfZvzLjg9PcVvr/5JMdhhdfvpr
-         CiMOSORTmFDQgfrzG3508u0zFxGnjDZphxbqfOx+XcvjHHGQNdJySdKFvegm3OXOUl5S
-         g44g==
-X-Gm-Message-State: APjAAAXRiDtud6L8SsCGjln1ek+6dlKIxJJK6MheKBzAIRso05Ii+/Zy
-        QjSJoWn62F1tNZpSpNlSKNk1iRIBBRCnua75V5XRRw==
-X-Google-Smtp-Source: APXvYqxCkbgEFxI6SZaBp54bJgBFxf7xmKlK2jv+sAoeqTCvs9thEtMgg1qBHJrg2aSXpeqTY1a8wnY5n7yq2u03Dps=
-X-Received: by 2002:ac2:4c93:: with SMTP id d19mr24078559lfl.116.1558513654796;
- Wed, 22 May 2019 01:27:34 -0700 (PDT)
+        id S1728406AbfEVJ7q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 May 2019 05:59:46 -0400
+Received: from mail-eopbgr20058.outbound.protection.outlook.com ([40.107.2.58]:22337
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727464AbfEVJ7p (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 May 2019 05:59:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WDyskuE1hfrVjxPzPDO3h59MjCYr/+DW7fNrhovBzYY=;
+ b=r8VzIPYmATUNiTqGa7xA1UawM3hW9IKBgg3nOQJ0F5BFxBYlfDFZfhh1nOdaUh2uRqxW1Zhjx0yR6vwGw3YTKDaLaSFnwGrOIQqiIqIOYwSCa4UGDPIfE+jZ3/ZfgHHs4vmTDnAz5kqofqqdg7JkmP3xnfWYeveKF63dUtN4aZo=
+Received: from VI1PR04MB4543.eurprd04.prod.outlook.com (20.177.55.90) by
+ VI1PR04MB3103.eurprd04.prod.outlook.com (10.170.229.13) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.18; Wed, 22 May 2019 09:59:39 +0000
+Received: from VI1PR04MB4543.eurprd04.prod.outlook.com
+ ([fe80::5062:df97:a70b:93f8]) by VI1PR04MB4543.eurprd04.prod.outlook.com
+ ([fe80::5062:df97:a70b:93f8%7]) with mapi id 15.20.1900.020; Wed, 22 May 2019
+ 09:59:39 +0000
+From:   Robin Gong <yibin.gong@nxp.com>
+To:     "robh@kernel.org" <robh@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "plyatov@gmail.com" <plyatov@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: [PATCH v4 00/14] add ecspi ERR009165 for i.mx6/7 soc family
+Thread-Topic: [PATCH v4 00/14] add ecspi ERR009165 for i.mx6/7 soc family
+Thread-Index: AQHVEIUR54BxkzTNOk2fBr52LKhyNQ==
+Date:   Wed, 22 May 2019 09:59:39 +0000
+Message-ID: <1558548188-1155-1-git-send-email-yibin.gong@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.7.4
+x-clientproxiedby: HK2PR04CA0045.apcprd04.prod.outlook.com
+ (2603:1096:202:14::13) To VI1PR04MB4543.eurprd04.prod.outlook.com
+ (2603:10a6:803:6d::26)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yibin.gong@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 87ebcce8-5d67-4a02-6927-08d6de9c33f8
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB3103;
+x-ms-traffictypediagnostic: VI1PR04MB3103:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <VI1PR04MB3103F029DE5EAE4CC102C56A89000@VI1PR04MB3103.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2803;
+x-forefront-prvs: 0045236D47
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(189003)(199004)(68736007)(81166006)(2201001)(2501003)(52116002)(71200400001)(14454004)(186003)(256004)(14444005)(26005)(53936002)(7736002)(25786009)(81156014)(305945005)(966005)(8936002)(4326008)(86362001)(8676002)(50226002)(71190400001)(486006)(6512007)(6306002)(5660300002)(6436002)(66946007)(73956011)(498600001)(66446008)(66066001)(66476007)(64756008)(66556008)(3846002)(6116002)(99286004)(386003)(6506007)(2906002)(54906003)(36756003)(110136005)(7416002)(2616005)(6486002)(102836004)(476003)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3103;H:VI1PR04MB4543.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: jnsnaHzcad38YiP83FfDlBCYBJ0GMZPivmHg4wOR57yoTdXl2R3JmK81S9ktZE1NnM9yFYXqoEpB82tanGIzEfsFKclYNaRXVyUIUWbhFMB3dM0tfk7yhiLgLudUiR0PT1Orxj+0cMk3hg/Fbfjxz8QuW6zGySAl7/KWjYyIofhToKtL3evJCZgVlfiQto1o/P/Fm5lgoazQZCOC9J4CMuSK9iZ3MRAHcPfiMHx5GOC3YXEatdntT4n44m/c2su7YiZG3e3qlyun+VQllxPcNi+O4gxayDkZAapD587786dMJFRbuckFQVlfLrZV5HiG17H13drTfkF4teCkqfqnDQwcjCTzwqjzPqx9w5lS83XK+PPlpKdYoucN8lxWhw8PHhGIM7W4ctr02WiAEdnL1PZeiw/lSkfn2qif1wiunoQ=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20190521115958.22504-1-masahisa.kojima@linaro.org>
- <20190521115958.22504-4-masahisa.kojima@linaro.org> <20190521181609.GB16633@sirena.org.uk>
-In-Reply-To: <20190521181609.GB16633@sirena.org.uk>
-From:   Masahisa Kojima <masahisa.kojima@linaro.org>
-Date:   Wed, 22 May 2019 17:27:23 +0900
-Message-ID: <CADQ0-X9yKQ2akerpxKfjxOxmRhPiaaxe7ALDO7VQiH+-+SHo3w@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] spi: Add spi driver for Socionext Synquacer platform
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        geert@linux-m68k.org, tpiepho@impinj.com,
-        andy.shevchenko@gmail.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        Satoru Okamoto <okamoto.satoru@socionext.com>,
-        Yoshitoyo Osaki <osaki.yoshitoyo@socionext.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87ebcce8-5d67-4a02-6927-08d6de9c33f8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2019 09:59:39.2933
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3103
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Thank you very much for your comments.
-
-On Wed, 22 May 2019 at 03:16, Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, May 21, 2019 at 08:59:58PM +0900, Masahisa Kojima wrote:
->
-> > +     switch (sspi->bpw) {
-> > +     case 8:
->
-> > +             {
-> > +             u8 *buf = sspi->rx_buf;
-> > +
-> > +             readsb(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
-> > +             sspi->rx_buf = buf + len;
-> > +             break;
-> > +             }
->
-> Please indent these properly.
->
-> > +     default:
-> > +             {
-> > +             u32 *buf = sspi->rx_buf;
-> > +
-> > +             readsl(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
-> > +             sspi->rx_buf = buf + len;
-> > +             break;
-> > +             }
->
-> It'd be better to explicitly list the values this works for and return
-> an error otherwise.
->
-> > +     if (sspi->rx_words) {
-> > +             val = SYNQUACER_HSSPI_RXE_FIFO_MORE_THAN_THRESHOLD |
-> > +                   SYNQUACER_HSSPI_RXE_SLAVE_RELEASED;
-> > +             writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
-> > +             status = wait_for_completion_timeout(&sspi->transfer_done,
-> > +                     msecs_to_jiffies(SYNQUACER_HSSPI_TRANSFER_TMOUT_MSEC));
-> > +             writel_relaxed(0, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
-> > +     }
-> > +
-> > +     if (xfer->tx_buf) {
-> > +             val = SYNQUACER_HSSPI_TXE_FIFO_EMPTY;
-> > +             writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_TXE);
-> > +             status = wait_for_completion_timeout(&sspi->transfer_done,
-> > +                     msecs_to_jiffies(SYNQUACER_HSSPI_TRANSFER_TMOUT_MSEC));
-> > +             writel_relaxed(0, sspi->regs + SYNQUACER_HSSPI_REG_TXE);
-> > +     }
->
-> I guess the TX will complete before the RX usually so I'd kind of expect
-> the waits to be in the other order?
->
-> > +     if (status < 0) {
-> > +             dev_err(sspi->dev, "failed to transfer\n");
-> > +             return status;
-> > +     }
->
-> Printing the error code could be helpful for users.
->
-> > +static void synquacer_spi_set_cs(struct spi_device *spi, bool enable)
-> > +{
-> > +     struct synquacer_spi *sspi = spi_master_get_devdata(spi->master);
-> > +     u32 val;
-> > +
-> > +     val = readl_relaxed(sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
-> > +     val &= ~(SYNQUACER_HSSPI_DMPSEL_CS_MASK <<
-> > +              SYNQUACER_HSSPI_DMPSEL_CS_SHIFT);
-> > +     val |= spi->chip_select << SYNQUACER_HSSPI_DMPSEL_CS_SHIFT;
-> > +
-> > +     if (enable) {
-> > +             val |= SYNQUACER_HSSPI_DMSTOP_STOP;
-> > +             writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
-> > +
-> > +             if (sspi->rx_buf) {
-> > +                     u32 buf[SYNQUACER_HSSPI_FIFO_DEPTH];
-> > +
-> > +                     sspi->rx_buf = buf;
-> > +                     sspi->rx_words = SYNQUACER_HSSPI_FIFO_DEPTH;
-> > +                     read_fifo(sspi);
-> > +             }
->
-> This is doing things with the FIFO, that's completely inappropriate for
-> a set_cs() operation.  The set_cs() operation should set the chip select
-> and nothing else.
->
-> > +static irqreturn_t sq_spi_rx_handler(int irq, void *priv)
-> > +{
-> > +     uint32_t val;
-> > +     struct synquacer_spi *sspi = priv;
-> > +
-> > +     val = readl_relaxed(sspi->regs + SYNQUACER_HSSPI_REG_RXF);
-> > +     if ((val & SYNQUACER_HSSPI_RXF_SLAVE_RELEASED) ||
-> > +         (val & SYNQUACER_HSSPI_RXF_FIFO_MORE_THAN_THRESHOLD))
-> > +             read_fifo(sspi);
-> > +
-> > +     if (sspi->rx_words == 0) {
-> > +             writel_relaxed(0, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
-> > +             complete(&sspi->transfer_done);
-> > +     }
-> > +
-> > +     return 0;
-> > +}
->
-> 0 is not a valid return from an interrupt handler, IRQ_HANDLED or
-> IRQ_NONE.
->
-> > +     ret = devm_request_irq(&pdev->dev, rx_irq, sq_spi_rx_handler,
-> > +                             0, "synquacer-spi-rx", sspi);
-> > +     ret = devm_request_irq(&pdev->dev, tx_irq, sq_spi_tx_handler,
-> > +                             0, "synquacer-spi-tx", sspi);
->
-> The code looked awfully like we depend on having interrupts?
-
-I"m not sure I correctly understand what this comment means,
-should driver assume the case interrupt is not available?
-Do I need to support both interrupt and polling handling?
-
-> > +     master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_TX_DUAL | SPI_RX_DUAL |
-> > +                         SPI_TX_QUAD | SPI_RX_QUAD;
->
-> I don't see any code in the driver that configures dual or quad mode
-> support other than setting _PCC_SAFESYNC, I'm not clear how the driver
-> supports these modes?
-
-Configuring single, dual and quad mode is depending on
-the spi_transfer member from upper driver.
-
-+static int synquacer_spi_config(struct spi_master *master,
-
- <snip>
-
-+       if (xfer->tx_buf) {
-+               bus_width = xfer->tx_nbits;
-+               transfer_mode = SYNQUACER_HSSPI_TRANSFER_MODE_TX;
-+       } else {
-+               bus_width = xfer->rx_nbits;
-+               transfer_mode = SYNQUACER_HSSPI_TRANSFER_MODE_RX;
-+       }
-
- <snip>
-
-+       val &= ~(3 << SYNQUACER_HSSPI_DMTRP_BUS_WIDTH_SHIFT);
-+       val |= ((bus_width >> 1) << SYNQUACER_HSSPI_DMTRP_BUS_WIDTH_SHIFT);
-+       writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
+ICBUaGVyZSBpcyBlY3NwaSBFUlIwMDkxNjUgb24gaS5teDYvNyBzb2MgZmFtaWx5LCB3aGljaCBj
+YXVzZSBGSUZPDQp0cmFuc2ZlciB0byBiZSBzZW5kIHR3aWNlIGluIERNQSBtb2RlLiBQbGVhc2Ug
+Z2V0IG1vcmUgaW5mb3JtYXRpb24gZnJvbToNCmh0dHBzOi8vd3d3Lm54cC5jb20vZG9jcy9lbi9l
+cnJhdGEvSU1YNkRRQ0UucGRmLiBUaGUgd29ya2Fyb3VuZCBpcyBhZGRpbmcNCm5ldyBzZG1hIHJh
+bSBzY3JpcHQgd2hpY2ggd29ya3MgaW4gWENIICBtb2RlIGFzIFBJTyBpbnNpZGUgc2RtYSBpbnN0
+ZWFkDQpvZiBTTUMgbW9kZSwgbWVhbndoaWxlLCAnVFhfVEhSRVNIT0xEJyBzaG91bGQgYmUgMC4g
+VGhlIGlzc3VlIHNob3VsZCBiZQ0KZXhpc3Qgb24gYWxsIGxlZ2FjeSBpLm14Ni83IHNvYyBmYW1p
+bHkgYmVmb3JlIGkubXg2dWwuDQpOWFAgZml4IHRoaXMgZGVzaWduIGlzc3VlIGZyb20gaS5teDZ1
+bCwgc28gbmV3ZXIgY2hpcHMgaW5jbHVkaW5nIGkubXg2dWwvDQo2dWxsLzZzbGwgZG8gbm90IG5l
+ZWQgdGhpcyB3b3JrYXJvdWQgYW55bW9yZS4gQWxsIG90aGVyIGkubXg2LzcvOCBjaGlwcw0Kc3Rp
+bGwgbmVlZCB0aGlzIHdvcmthcm91ZC4gVGhpcyBwYXRjaCBzZXQgYWRkIG5ldyAnZnNsLGlteDZ1
+bC1lY3NwaScNCmZvciBlY3NwaSBkcml2ZXIgYW5kICdlY3NwaV9maXhlZCcgaW4gc2RtYSBkcml2
+ZXIgdG8gY2hvb3NlIGlmIG5lZWQgZXJyYXRhDQpvciBub3QuDQogIFRoZSBmaXJzdCB0d28gcmV2
+ZXJ0ZWQgcGF0Y2hlcyBzaG91bGQgYmUgdGhlIHNhbWUgaXNzdWUsIHRob3VnaCwgaXQNCnNlZW1z
+ICdmaXhlZCcgYnkgY2hhbmdpbmcgdG8gb3RoZXIgc2hwIHNjcmlwdC4gSG9wZSBTZWFuIG9yIFNh
+c2NoYSBjb3VsZA0KaGF2ZSB0aGUgY2hhbmNlIHRvIHRlc3QgdGhpcyBwYXRjaCBzZXQgaWYgY291
+bGQgZml4IHRoZWlyIGlzc3Vlcy4NCiAgQmVzaWRlcywgZW5hYmxlIHNkbWEgc3VwcG9ydCBmb3Ig
+aS5teDhtbS84bXEgYW5kIGZpeCBlY3NwaTEgbm90IHdvcmsNCm9uIGkubXg4bW0gYmVjYXVzZSB0
+aGUgZXZlbnQgaWQgaXMgemVyby4NCg0KUFM6DQogIFBsZWFzZSBnZXQgc2RtYSBmaXJtd2FyZSBm
+cm9tIGJlbG93IGxpbnV4LWZpcm13YXJlIGFuZCBjb3B5IGl0IHRvIHlvdXINCmxvY2FsIHJvb3Rm
+cyAvbGliL2Zpcm13YXJlL2lteC9zZG1hLg0KaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2Nt
+L2xpbnV4L2tlcm5lbC9naXQvZmlybXdhcmUvbGludXgtZmlybXdhcmUuZ2l0L3RyZWUvaW14L3Nk
+bWENCg0KdjI6DQogIDEuIGFkZCBjb21taXQgbG9nIGZvciByZXZlcnRlZCBwYXRjaGVzLg0KICAy
+LiBhZGQgY29tbWVudCBmb3IgJ2Vjc3BpX2ZpeGVkJyBpbiBzZG1hIGRyaXZlci4NCiAgMy4gYWRk
+ICdmc2wsaW14NnNsbC1lY3NwaScgY29tcGF0aWJsZSBpbnN0ZWFkIG9mICdmc2wsaW14NnVsLWVj
+c3BpJw0KICAgICByYXRoZXIgdGhhbiByZW1vdmUuDQp2MzoNCiAgMS4gY29uZmlybSB3aXRoIGRl
+c2lnbiB0ZWFtIG1ha2Ugc3VyZSBFUlIwMDkxNjUgZml4ZWQgb24gaS5teDZ1bC9pLm14NnVsbA0K
+ICAvaS5teDZzbGwsIG5vdCBmaXhlZCBvbiBpLm14OG0vOG1tIGFuZCBvdGhlciBpLm14Ni83IGxl
+Z2FjeSBjaGlwcy4NCiAgQ29ycmVjdCBkdHMgcmVsYXRlZCBkdHMgcGF0Y2ggaW4gdjIuDQogIDIu
+IGNsZWFuIGVyYXR0YSBpbmZvcm1hdGlvbiBpbiBiaW5kaW5nIGRvYyBhbmQgbmV3ICd0eF9nbGl0
+Y2hfZml4ZWQnIGZsYWcNCiAgaW4gc3BpLWlteCBkcml2ZXIgdG8gc3RhdGUgRVJSMDA5MTY1IGZp
+eGVkIG9yIG5vdC4NCiAgMy4gRW5sYXJnZSBidXJzdCBzaXplIHRvIGZpZm8gc2l6ZSBmb3IgdHgg
+c2luY2UgdHhfd21sIHNldCB0byAwIGluIHRoZQ0KICBlcnJhdGEgd29ya2Fyb3VkLCB0aHVzIGlt
+cHJvdmUgcGVyZm9ybWFuY2UgYXMgcG9zc2libGUuDQp2NDoNCiAgMS4gYWRkIEFjayB0YWcgZnJv
+bSBNYXJrIGFuZCBWaW5vZA0KICAyLiByZW1vdmUgY2hlY2tpbmcgJ2V2ZW50X2lkMScgemVybyBh
+cyAnZXZlbnRfaWQwJy4NCg0KUm9iaW4gR29uZyAoMTQpOg0KICBSZXZlcnQgIkFSTTogZHRzOiBp
+bXg2cTogVXNlIGNvcnJlY3QgU0RNQSBzY3JpcHQgZm9yIFNQSTUgY29yZSINCiAgUmV2ZXJ0ICJB
+Uk06IGR0czogaW14NjogVXNlIGNvcnJlY3QgU0RNQSBzY3JpcHQgZm9yIFNQSSBjb3JlcyINCiAg
+UmV2ZXJ0ICJkbWFlbmdpbmU6IGlteC1zZG1hOiByZWZpbmUgdG8gbG9hZCBjb250ZXh0IG9ubHkg
+b25jZSINCiAgZG1hZW5naW5lOiBpbXgtc2RtYTogcmVtb3ZlIGR1cGlsaWNhdGVkIHNkbWFfbG9h
+ZF9jb250ZXh0DQogIGRtYWVuZ2luZTogaW14LXNkbWE6IGFkZCBtY3VfMl9lY3NwaSBzY3JpcHQN
+CiAgc3BpOiBpbXg6IGZpeCBFUlIwMDkxNjUNCiAgc3BpOiBpbXg6IHJlbW92ZSBFUlIwMDkxNjUg
+d29ya2Fyb3VuZCBvbiBpLm14NnVsDQogIGR0LWJpbmRpbmdzOiBzcGk6IGlteDogYWRkIG5ldyBp
+Lm14NnVsIGNvbXBhdGlibGUgbmFtZQ0KICBkbWFlbmdpbmU6IGlteC1zZG1hOiByZW1vdmUgRVJS
+MDA5MTY1IG9uIGkubXg2dWwNCiAgZHQtYmluZGluZ3M6IGRtYTogaW14LXNkbWE6IGFkZCBpLm14
+NnVsLzZzeCBjb21wYXRpYmxlIG5hbWUNCiAgZG1hZW5naW5lOiBpbXgtc2RtYTogZml4IGVjc3Bp
+MSByeCBkbWEgbm90IHdvcmsgb24gaS5teDhtbQ0KICBBUk06IGR0czogaW14NnVsOiBhZGQgZG1h
+IHN1cHBvcnQgb24gZWNzcGkNCiAgQVJNOiBkdHM6IGlteDZzbGw6IGNvcnJlY3Qgc2RtYSBjb21w
+YXRpYmxlDQogIGFybTY0OiBkZWZjb25maWc6IEVuYWJsZSBTRE1BIG9uIGkubXg4bXEvOG1tDQoN
+CiAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9kbWEvZnNsLWlteC1zZG1hLnR4dCAgICAgICB8ICAy
+ICsNCiAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9zcGkvZnNsLWlteC1jc3BpLnR4dCAgICAgICB8
+ICAxICsNCiBhcmNoL2FybS9ib290L2R0cy9pbXg2cS5kdHNpICAgICAgICAgICAgICAgICAgICAg
+ICB8ICAyICstDQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFkbC5kdHNpICAgICAgICAgICAgICAg
+ICAgICAgfCAgOCArLS0NCiBhcmNoL2FybS9ib290L2R0cy9pbXg2c2xsLmR0c2kgICAgICAgICAg
+ICAgICAgICAgICB8ICAyICstDQogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnVsLmR0c2kgICAgICAg
+ICAgICAgICAgICAgICAgfCAgOCArKysNCiBhcmNoL2FybTY0L2NvbmZpZ3MvZGVmY29uZmlnICAg
+ICAgICAgICAgICAgICAgICAgICB8ICAzICsNCiBkcml2ZXJzL2RtYS9pbXgtc2RtYS5jICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8IDc4ICsrKysrKysrKysrKysrKystLS0tLS0NCiBkcml2
+ZXJzL3NwaS9zcGktaW14LmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDYxICsrKysr
+KysrKysrKysrLS0tDQogaW5jbHVkZS9saW51eC9wbGF0Zm9ybV9kYXRhL2RtYS1pbXgtc2RtYS5o
+ICAgICAgICAgfCAgMSArDQogMTAgZmlsZXMgY2hhbmdlZCwgMTMyIGluc2VydGlvbnMoKyksIDM0
+IGRlbGV0aW9ucygtKQ0KDQotLSANCjIuNy40DQoNCg==
