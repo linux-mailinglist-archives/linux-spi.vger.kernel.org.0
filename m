@@ -2,39 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6F926B2A
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 21:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD14026E3C
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 21:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731345AbfEVTYi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 May 2019 15:24:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45768 "EHLO mail.kernel.org"
+        id S1732408AbfEVTrj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 May 2019 15:47:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49066 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731336AbfEVTYf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 May 2019 15:24:35 -0400
+        id S1731574AbfEVT1N (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 May 2019 15:27:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4FE9121873;
-        Wed, 22 May 2019 19:24:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 69B0A2177E;
+        Wed, 22 May 2019 19:27:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553075;
-        bh=SW4cBt0iKxxCITgt9q1r/ch9ZCLoBZQxu34/LIDlRt4=;
+        s=default; t=1558553233;
+        bh=PYjNQK/FrUQYHSYE6DZ6L1kZFOY+XTo5Qh+A+ryT02U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nMs6zhVe9N2H1pdShQLUV4YWp3KP7E6976tAxun/S3cA8Ie0E1zr5cavXbr3m1YhP
-         r8a6sPrUdiApMMLwvBP/c4f4LVfUoJe2N1FNUIdSpFPhHstbIZEh66g10lo3ZwkCxa
-         6Zmp5EGVDr/pEKk6gUBGcK/Xa4bzQk9I7GNbfEgE=
+        b=WXqLWKxEijKhQFdsZhhqENk4m8AklKU7QuNKccqM+O240kDtrXoR4reFcKe+pa3IT
+         eqmm+kpcVF9dshAuE7hTws2TW9e8DDtwdcoBhw3St16fpq46n9bggEsdOfYgemcfu+
+         baAC9L+UEMNGPJDNtI/FXf4wADhgo7d/gJphgbgw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Flavio Suligoi <f.suligoi@asem.it>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 034/317] spi: pxa2xx: fix SCR (divisor) calculation
-Date:   Wed, 22 May 2019 15:18:55 -0400
-Message-Id: <20190522192338.23715-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 026/244] spi: pxa2xx: fix SCR (divisor) calculation
+Date:   Wed, 22 May 2019 15:22:52 -0400
+Message-Id: <20190522192630.24917-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
-References: <20190522192338.23715-1-sashal@kernel.org>
+In-Reply-To: <20190522192630.24917-1-sashal@kernel.org>
+References: <20190522192630.24917-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 3e82eaad0f2d9..41aadb41a20bf 100644
+index b624f6fb04ce5..729be74621e37 100644
 --- a/drivers/spi/spi-pxa2xx.c
 +++ b/drivers/spi/spi-pxa2xx.c
-@@ -884,10 +884,14 @@ static unsigned int ssp_get_clk_div(struct driver_data *drv_data, int rate)
+@@ -876,10 +876,14 @@ static unsigned int ssp_get_clk_div(struct driver_data *drv_data, int rate)
  
  	rate = min_t(int, ssp_clk, rate);
  
