@@ -2,39 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBF427026
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 22:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7826226B27
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2019 21:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730393AbfEVTWS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 May 2019 15:22:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42958 "EHLO mail.kernel.org"
+        id S1731323AbfEVTYd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 May 2019 15:24:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45710 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730387AbfEVTWR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 May 2019 15:22:17 -0400
+        id S1730590AbfEVTYc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 May 2019 15:24:32 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F0FC21851;
-        Wed, 22 May 2019 19:22:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 42102217D9;
+        Wed, 22 May 2019 19:24:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558552937;
-        bh=UNA7ilmtExavjSLgp8JG4+7awfg75FhUCfWArenMdpU=;
+        s=default; t=1558553072;
+        bh=IoWvHBc4tBzjlAk72m/+qe+eQqCGNqN/lSyE/o9xWuo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q72SScEp+BbcVtlTT6Gp8BK2C0Kl3vkKpDW/95KrWCrLD5wnUpTibhee5jyNW11/J
-         umA1Kdrym8374hzA95HpST+SuGwtgAvZnaXvIV8Ujfk56+TzMpcDgrkFMVumHyaA7j
-         Pf4wI0HHmzX7lceqeBHvhkwsq/tOgOR0sAE4rRMY=
+        b=g6ZUthM6RZ9wJlZL9o8qEi6wXkUAV7wYhJNkXpOlcgOIyXzUTWNsbUCL6rfA04dsW
+         WLOOAbVm9txS3wmC4/FWRA6x2/K/QyGmYx4xim7W9gvRDKmr7B1ZPZsqaI5wv6PDyq
+         4+8dVWmBudrnjYKLMIYoH1LLiepo068OQ0gVLiYw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Flavio Suligoi <f.suligoi@asem.it>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 039/375] spi: pxa2xx: fix SCR (divisor) calculation
-Date:   Wed, 22 May 2019 15:15:39 -0400
-Message-Id: <20190522192115.22666-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.0 032/317] spi: atmel-quadspi: fix crash while suspending
+Date:   Wed, 22 May 2019 15:18:53 -0400
+Message-Id: <20190522192338.23715-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192115.22666-1-sashal@kernel.org>
-References: <20190522192115.22666-1-sashal@kernel.org>
+In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
+References: <20190522192338.23715-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,61 +44,47 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Flavio Suligoi <f.suligoi@asem.it>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-[ Upstream commit 29f2133717c527f492933b0622a4aafe0b3cbe9e ]
+[ Upstream commit e5c27498a0403b270620b1a8a0a66e3efc222fb6 ]
 
-Calculate the divisor for the SCR (Serial Clock Rate), avoiding
-that the SSP transmission rate can be greater than the device rate.
+atmel_qspi objects are kept in spi_controller objects, so, first get
+pointer to spi_controller object and then get atmel_qspi object from
+spi_controller object.
 
-When the division between the SSP clock and the device rate generates
-a reminder, we have to increment by one the divisor.
-In this way the resulting SSP clock will never be greater than the
-device SPI max frequency.
-
-For example, with:
-
- - ssp_clk  = 50 MHz
- - dev freq = 15 MHz
-
-without this patch the SSP clock will be greater than 15 MHz:
-
- - 25 MHz for PXA25x_SSP and CE4100_SSP
- - 16,56 MHz for the others
-
-Instead, with this patch, we have in both case an SSP clock of 12.5MHz,
-so the max rate of the SPI device clock is respected.
-
-Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
-Reviewed-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Reviewed-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Fixes: 2d30ac5ed633 ("mtd: spi-nor: atmel-quadspi: Use spi-mem interface for atmel-quadspi driver")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-pxa2xx.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/spi/atmel-quadspi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index b6ddba833d021..d2076f2f468f0 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -884,10 +884,14 @@ static unsigned int ssp_get_clk_div(struct driver_data *drv_data, int rate)
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index ddc7124108125..ec6e9970d7750 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -506,7 +506,8 @@ static int atmel_qspi_remove(struct platform_device *pdev)
  
- 	rate = min_t(int, ssp_clk, rate);
+ static int __maybe_unused atmel_qspi_suspend(struct device *dev)
+ {
+-	struct atmel_qspi *aq = dev_get_drvdata(dev);
++	struct spi_controller *ctrl = dev_get_drvdata(dev);
++	struct atmel_qspi *aq = spi_controller_get_devdata(ctrl);
  
-+	/*
-+	 * Calculate the divisor for the SCR (Serial Clock Rate), avoiding
-+	 * that the SSP transmission rate can be greater than the device rate
-+	 */
- 	if (ssp->type == PXA25x_SSP || ssp->type == CE4100_SSP)
--		return (ssp_clk / (2 * rate) - 1) & 0xff;
-+		return (DIV_ROUND_UP(ssp_clk, 2 * rate) - 1) & 0xff;
- 	else
--		return (ssp_clk / rate - 1) & 0xfff;
-+		return (DIV_ROUND_UP(ssp_clk, rate) - 1)  & 0xfff;
- }
+ 	clk_disable_unprepare(aq->clk);
  
- static unsigned int pxa2xx_ssp_get_clk_div(struct driver_data *drv_data,
+@@ -515,7 +516,8 @@ static int __maybe_unused atmel_qspi_suspend(struct device *dev)
+ 
+ static int __maybe_unused atmel_qspi_resume(struct device *dev)
+ {
+-	struct atmel_qspi *aq = dev_get_drvdata(dev);
++	struct spi_controller *ctrl = dev_get_drvdata(dev);
++	struct atmel_qspi *aq = spi_controller_get_devdata(ctrl);
+ 
+ 	clk_prepare_enable(aq->clk);
+ 
 -- 
 2.20.1
 
