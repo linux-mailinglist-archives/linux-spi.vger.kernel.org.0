@@ -2,45 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5038B27EB8
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 15:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E50C27EAF
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 15:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730999AbfEWNtX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 May 2019 09:49:23 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45234 "EHLO
+        id S1730919AbfEWNtL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 May 2019 09:49:11 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45154 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730917AbfEWNtN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 May 2019 09:49:13 -0400
+        with ESMTP id S1730706AbfEWNtL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 May 2019 09:49:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=b122EVJlos6RA6CaX/D0uOWThmN55B1I+VtXXmnEAMc=; b=OOWoqZQ9YJwe
-        3+6I3dJUKDKweJ1L/0VHt80j5vdxpkxpYdMQUkCO/+F5fF8dX+mfZXaJJv2fOHArF+vsx7GipR5e4
-        l5u7HXL3uGs4Gn3QJLJpgFjZ2U4E9v3+5qMTDftb4kykooPyHAYDqUz7eg2gRDcotCDHvQwCGc2g1
-        DqXlw=;
+        List-Archive; bh=XNfOmz3mv1HI9Hoz2nuwSlZ+6AVMa+i0bbmtNTX06rY=; b=vYclXzO/lJeo
+        5I3MA1p+mhNuW9aJRR1b0h4FIWti7rFeFjRJZVNr0v8sVisTaD2+tKTmUPrLGpvOv7Mmd9hzLneV+
+        /ls7ALHv2GolE9ROmBJQcZR5dPmhsqRPbS87GCgKmL3oOAfmPmLjG76vVoCjv3+eZqcwgAIzi2V1W
+        Egfiw=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hTo5k-0000FX-MI; Thu, 23 May 2019 13:49:08 +0000
+        id 1hTo5k-0000FQ-CM; Thu, 23 May 2019 13:49:08 +0000
 Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
-        id 74DD41126D24; Thu, 23 May 2019 14:49:06 +0100 (BST)
+        id C162C1126D28; Thu, 23 May 2019 14:49:07 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>, briannorris@chromium.org,
-        drinkcat@chromium.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        mka@chromium.org
-Subject: Applied "spi: Allow SPI devices to request the pumping thread be realtime" to the spi tree
-In-Reply-To: <20190515164814.258898-3-dianders@chromium.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: dt-bindings: Convert spi-gpio binding to json-schema" to the spi tree
+In-Reply-To: <20190521212325.16639-2-robh@kernel.org>
 X-Patchwork-Hint: ignore
-Message-Id: <20190523134906.74DD41126D24@debutante.sirena.org.uk>
-Date:   Thu, 23 May 2019 14:49:06 +0100 (BST)
+Message-Id: <20190523134907.C162C1126D28@debutante.sirena.org.uk>
+Date:   Thu, 23 May 2019 14:49:07 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -48,7 +45,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: Allow SPI devices to request the pumping thread be realtime
+   spi: dt-bindings: Convert spi-gpio binding to json-schema
 
 has been applied to the spi tree at
 
@@ -73,120 +70,152 @@ to this mail.
 Thanks,
 Mark
 
-From 924b5867e7bd6a6a98014f0517b747465b108011 Mon Sep 17 00:00:00 2001
-From: Douglas Anderson <dianders@chromium.org>
-Date: Wed, 15 May 2019 09:48:12 -0700
-Subject: [PATCH] spi: Allow SPI devices to request the pumping thread be
- realtime
+From 97266c4d05345f9b500d10c3caa1070249e895e7 Mon Sep 17 00:00:00 2001
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 21 May 2019 16:23:25 -0500
+Subject: [PATCH] spi: dt-bindings: Convert spi-gpio binding to json-schema
 
-Right now the only way to get the SPI pumping thread bumped up to
-realtime priority is for the controller to request it.  However it may
-be that the controller works fine with the normal priority but
-communication to a particular SPI device on the bus needs realtime
-priority.
+Convert the spi-gpio binding to DT schema format.
 
-Let's add a way for devices to request realtime priority when they set
-themselves up.
-
-NOTE: this will just affect the priority of transfers that end up on
-the SPI core's pumping thread.  In many cases transfers happen in the
-context of the caller so if you need realtime priority for all
-transfers you should ensure the calling context is also realtime
-priority.
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Tested-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-spi@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi.c       | 36 ++++++++++++++++++++++++++++++------
- include/linux/spi/spi.h |  2 ++
- 2 files changed, 32 insertions(+), 6 deletions(-)
+ .../devicetree/bindings/spi/spi-gpio.txt      | 43 -----------
+ .../devicetree/bindings/spi/spi-gpio.yaml     | 72 +++++++++++++++++++
+ 2 files changed, 72 insertions(+), 43 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-gpio.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-gpio.yaml
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 5e75944ad5d1..18f70e4bbb31 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1364,10 +1364,32 @@ static void spi_pump_messages(struct kthread_work *work)
- 	__spi_pump_messages(ctlr, true);
- }
- 
--static int spi_init_queue(struct spi_controller *ctlr)
-+/**
-+ * spi_set_thread_rt - set the controller to pump at realtime priority
-+ * @ctlr: controller to boost priority of
-+ *
-+ * This can be called because the controller requested realtime priority
-+ * (by setting the ->rt value before calling spi_register_controller()) or
-+ * because a device on the bus said that its transfers needed realtime
-+ * priority.
-+ *
-+ * NOTE: at the moment if any device on a bus says it needs realtime then
-+ * the thread will be at realtime priority for all transfers on that
-+ * controller.  If this eventually becomes a problem we may see if we can
-+ * find a way to boost the priority only temporarily during relevant
-+ * transfers.
-+ */
-+static void spi_set_thread_rt(struct spi_controller *ctlr)
- {
- 	struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };
- 
-+	dev_info(&ctlr->dev,
-+		"will run message pump with realtime priority\n");
-+	sched_setscheduler(ctlr->kworker_task, SCHED_FIFO, &param);
-+}
+diff --git a/Documentation/devicetree/bindings/spi/spi-gpio.txt b/Documentation/devicetree/bindings/spi/spi-gpio.txt
+deleted file mode 100644
+index 52db562f17a4..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-gpio.txt
++++ /dev/null
+@@ -1,43 +0,0 @@
+-SPI-GPIO devicetree bindings
+-
+-This represents a group of 3-n GPIO lines used for bit-banged SPI on dedicated
+-GPIO lines.
+-
+-Required properties:
+-
+- - compatible: should be set to "spi-gpio"
+- - #address-cells: should be set to <0x1>
+- - ranges
+- - sck-gpios: GPIO spec for the SCK line to use
+- - miso-gpios: GPIO spec for the MISO line to use
+- - mosi-gpios: GPIO spec for the MOSI line to use
+- - cs-gpios: GPIOs to use for chipselect lines.
+-             Not needed if num-chipselects = <0>.
+- - num-chipselects: Number of chipselect lines. Should be <0> if a single device
+-                    with no chip select is connected.
+-
+-Deprecated bindings:
+-
+-These legacy GPIO line bindings can alternatively be used to define the
+-GPIO lines used, they should not be used in new device trees.
+-
+- - gpio-sck: GPIO spec for the SCK line to use
+- - gpio-miso: GPIO spec for the MISO line to use
+- - gpio-mosi: GPIO spec for the MOSI line to use
+-
+-Example:
+-
+-	spi {
+-		compatible = "spi-gpio";
+-		#address-cells = <0x1>;
+-		ranges;
+-
+-		sck-gpios = <&gpio 95 0>;
+-		miso-gpios = <&gpio 98 0>;
+-		mosi-gpios = <&gpio 97 0>;
+-		cs-gpios = <&gpio 125 0>;
+-		num-chipselects = <1>;
+-
+-		/* clients */
+-	};
+-
+diff --git a/Documentation/devicetree/bindings/spi/spi-gpio.yaml b/Documentation/devicetree/bindings/spi/spi-gpio.yaml
+new file mode 100644
+index 000000000000..55c4f1705f07
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/spi-gpio.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/spi-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+static int spi_init_queue(struct spi_controller *ctlr)
-+{
- 	ctlr->running = false;
- 	ctlr->busy = false;
- 
-@@ -1387,11 +1409,8 @@ static int spi_init_queue(struct spi_controller *ctlr)
- 	 * request and the scheduling of the message pump thread. Without this
- 	 * setting the message pump thread will remain at default priority.
- 	 */
--	if (ctlr->rt) {
--		dev_info(&ctlr->dev,
--			"will run message pump with realtime priority\n");
--		sched_setscheduler(ctlr->kworker_task, SCHED_FIFO, &param);
--	}
-+	if (ctlr->rt)
-+		spi_set_thread_rt(ctlr);
- 
- 	return 0;
- }
-@@ -2982,6 +3001,11 @@ int spi_setup(struct spi_device *spi)
- 
- 	spi_set_cs(spi, false);
- 
-+	if (spi->rt && !spi->controller->rt) {
-+		spi->controller->rt = true;
-+		spi_set_thread_rt(spi->controller);
-+	}
++title: SPI-GPIO devicetree bindings
 +
- 	dev_dbg(&spi->dev, "setup mode %d, %s%s%s%s%u bits/w, %u Hz max --> %d\n",
- 			(int) (spi->mode & (SPI_CPOL | SPI_CPHA)),
- 			(spi->mode & SPI_CS_HIGH) ? "cs_high, " : "",
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 053abd22ad31..15505c2485d6 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -109,6 +109,7 @@ void spi_statistics_add_transfer_stats(struct spi_statistics *stats,
-  *	This may be changed by the device's driver, or left at the
-  *	default (0) indicating protocol words are eight bit bytes.
-  *	The spi_transfer.bits_per_word can override this for each transfer.
-+ * @rt: Make the pump thread real time priority.
-  * @irq: Negative, or the number passed to request_irq() to receive
-  *	interrupts from this device.
-  * @controller_state: Controller's runtime state
-@@ -143,6 +144,7 @@ struct spi_device {
- 	u32			max_speed_hz;
- 	u8			chip_select;
- 	u8			bits_per_word;
-+	bool			rt;
- 	u32			mode;
- #define	SPI_CPHA	0x01			/* clock phase */
- #define	SPI_CPOL	0x02			/* clock polarity */
++maintainers:
++  - Rob Herring <robh@kernel.org>
++
++description:
++  This represents a group of 3-n GPIO lines used for bit-banged SPI on
++  dedicated GPIO lines.
++
++allOf:
++  - $ref: "/schemas/spi/spi-controller.yaml#"
++
++properties:
++  compatible:
++    const: spi-gpio
++
++  sck-gpios:
++    description: GPIO spec for the SCK line to use
++    maxItems: 1
++
++  miso-gpios:
++    description: GPIO spec for the MISO line to use
++    maxItems: 1
++
++  mosi-gpios:
++    description: GPIO spec for the MOSI line to use
++    maxItems: 1
++
++  cs-gpios:
++    description: GPIOs to use for chipselect lines.
++      Not needed if num-chipselects = <0>.
++    minItems: 1
++    maxItems: 1024
++
++  num-chipselects:
++    description: Number of chipselect lines. Should be <0> if a single device
++      with no chip select is connected.
++    $ref: "/schemas/types.yaml#/definitions/uint32"
++
++  # Deprecated properties
++  gpio-sck: false
++  gpio-miso: false
++  gpio-mosi: false
++
++required:
++  - compatible
++  - num-chipselects
++  - sck-gpios
++
++examples:
++  - |
++    spi {
++      compatible = "spi-gpio";
++      #address-cells = <0x1>;
++      #size-cells = <0x0>;
++
++      sck-gpios = <&gpio 95 0>;
++      miso-gpios = <&gpio 98 0>;
++      mosi-gpios = <&gpio 97 0>;
++      cs-gpios = <&gpio 125 0>;
++      num-chipselects = <1>;
++
++      /* clients */
++    };
++
++...
 -- 
 2.20.1
 
