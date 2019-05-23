@@ -2,87 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE1927536
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 06:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719D727589
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 07:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725811AbfEWEff (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 May 2019 00:35:35 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:43419 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725792AbfEWEfe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 May 2019 00:35:34 -0400
-Received: by mail-lf1-f68.google.com with SMTP id u27so3330455lfg.10
-        for <linux-spi@vger.kernel.org>; Wed, 22 May 2019 21:35:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I855tJLOmH+qENWERPddony+uMrLikCWrVK/n6EsJqc=;
-        b=rCgMh7qpt13wmLAW/uPcMoimflmUIWRE5l1dzHpFB6L1XFMi7NIAAyl2nAGdY3QYAm
-         2Vp3JxFwWfhj1hCSKK6QapYcHiBkpDuxPlMJfGm4vVVr6PsO50LgdIKPTtKqdxzKB3gu
-         fJVnZVhCcxwYEREjEQlh+Fko+9kSupaCOq1Jifj7JZ3CjB5MSYl/Cbffoe0nAD46Ak+k
-         E5tl6G/OuHtr9KqCw4RBWVXyq+b5rhYTcSpFuS0ahwK/9lkO+9MnW5+tP6yKvmYX5/G3
-         WHgkwMjHmnwaAc1RPsfxb6LHZft2CHPx+adeSd3Ufs/lG0rJodh1t2icOQJHg9JaHuIH
-         f9jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I855tJLOmH+qENWERPddony+uMrLikCWrVK/n6EsJqc=;
-        b=B+yxubWS2Y9o2fhBrmFbQMyPeQIxU9UrbiR2C4PS0MDPZZ+r/hmJKVwTg18rX/u9b5
-         i92v9uwXagfRunQNxv6uB2nnrccCWWDv7FIWFgTItw00XwmGb8e+H15qO7ulPAw9y2oW
-         95XRQdNbuQDAXLWJ/rb2WwKVrMBg4VcGgCSKbSwHiLRpo0XBgMGc8zrSYqYKyOjxtaoT
-         I8ZouMggGPpmN+JQlXYgd+yT//nuoqRDGyo7j5gpIR4CDuJuyx2fPSjwkbe/Hc069S+B
-         Yo6FoxqTFNZCumpiyJu4opa5sVGEpwqCOYfhcrMIXu5dRlmiaD3c6hNE2JRMUyyxrK4i
-         zTyA==
-X-Gm-Message-State: APjAAAUsEc1NCSA9FOzXH4q0oe4lTsoRjWRkdDXpIkikDrC+uMUoW358
-        /mmEQu4u4b1RwdjGZVE/P6DrQwONfmMFIknHWY3iHQ==
-X-Google-Smtp-Source: APXvYqyaErcZ/ZN3iXve6bWnH5MYhT4dOYSh5zC4VziNvEwTFzT6US9SEnDJGPzkHwm5nImpUQk6ket1qgSZ82jyGJg=
-X-Received: by 2002:a19:1dc3:: with SMTP id d186mr44962791lfd.101.1558586133038;
- Wed, 22 May 2019 21:35:33 -0700 (PDT)
+        id S1726299AbfEWFfH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 May 2019 01:35:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40194 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725786AbfEWFfH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 23 May 2019 01:35:07 -0400
+Received: from localhost (unknown [122.167.116.27])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA71820881;
+        Thu, 23 May 2019 05:34:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558589706;
+        bh=axoFYG+Ewq4P5tKjbxbISXb6YfmQNDHpVw2dJGFc954=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bOWOSmD2i59EAn8qv2c2koqfOlVadTTmuQ4MnCpL4LVwqUJNOReOP/tQ7pGRtxI7F
+         IOeCTIR+iMN671PifxwpfqUjP1b0Y2hCPJ3pomtULk+wIg5iVrg0aZQp14P3S5rtkI
+         c6QbUl8TLEViprRBJ4rQR9wFq2uG6gATwE95NuJg=
+Date:   Thu, 23 May 2019 11:04:33 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     "robh@kernel.org" <robh@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "plyatov@gmail.com" <plyatov@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH v4 11/14] dmaengine: imx-sdma: fix ecspi1 rx dma not work
+ on i.mx8mm
+Message-ID: <20190523053433.GU15118@vkoul-mobl>
+References: <1558548188-1155-1-git-send-email-yibin.gong@nxp.com>
+ <1558548188-1155-12-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
-References: <20190521115958.22504-1-masahisa.kojima@linaro.org>
- <20190521115958.22504-4-masahisa.kojima@linaro.org> <20190521181609.GB16633@sirena.org.uk>
- <CADQ0-X9yKQ2akerpxKfjxOxmRhPiaaxe7ALDO7VQiH+-+SHo3w@mail.gmail.com> <20190522110906.GD8582@sirena.org.uk>
-In-Reply-To: <20190522110906.GD8582@sirena.org.uk>
-From:   Masahisa Kojima <masahisa.kojima@linaro.org>
-Date:   Thu, 23 May 2019 13:35:21 +0900
-Message-ID: <CADQ0-X8xd+edmPWfMSDgHrRCHEHewxsLH3zNs6jnPtfaQBhaLQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] spi: Add spi driver for Socionext Synquacer platform
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        geert@linux-m68k.org, tpiepho@impinj.com,
-        andy.shevchenko@gmail.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        Satoru Okamoto <okamoto.satoru@socionext.com>,
-        Yoshitoyo Osaki <osaki.yoshitoyo@socionext.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1558548188-1155-12-git-send-email-yibin.gong@nxp.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 22 May 2019 at 20:09, Mark Brown <broonie@kernel.org> wrote:
->
-> On Wed, May 22, 2019 at 05:27:23PM +0900, Masahisa Kojima wrote:
-> > On Wed, 22 May 2019 at 03:16, Mark Brown <broonie@kernel.org> wrote:
-> > > On Tue, May 21, 2019 at 08:59:58PM +0900, Masahisa Kojima wrote:
->
-> > > > +     ret = devm_request_irq(&pdev->dev, rx_irq, sq_spi_rx_handler,
-> > > > +                             0, "synquacer-spi-rx", sspi);
-> > > > +     ret = devm_request_irq(&pdev->dev, tx_irq, sq_spi_tx_handler,
-> > > > +                             0, "synquacer-spi-tx", sspi);
->
-> > > The code looked awfully like we depend on having interrupts?
->
-> > I"m not sure I correctly understand what this comment means,
-> > should driver assume the case interrupt is not available?
-> > Do I need to support both interrupt and polling handling?
->
-> If the driver requires interrupts it should not just ignore errors when
-> it requests interrupts.
+On 22-05-19, 10:00, Robin Gong wrote:
+> Because the number of ecspi1 rx event on i.mx8mm is 0, the condition
+> check ignore such special case without dma channel enabled, which caused
+> ecspi1 rx works failed. Actually, no need to check event_id0/event_id1
+> and replace checking 'event_id1' with 'DMA_DEV_TO_DEV', so that configure
+> event_id1 only in case DEV_TO_DEV.
 
-I'm sorry, I misunderstood.
-Yes, interrupt is required. I will handle errors properly.
+Acked-by: Vinod Koul <vkoul@kernel.org>
+
+-- 
+~Vinod
