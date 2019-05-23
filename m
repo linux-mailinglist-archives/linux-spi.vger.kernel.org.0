@@ -2,115 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD32927400
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 03:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CBA27443
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 04:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727802AbfEWB3t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 May 2019 21:29:49 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:19556 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727305AbfEWB3t (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 May 2019 21:29:49 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ce5f7880000>; Wed, 22 May 2019 18:29:44 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 22 May 2019 18:29:48 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 22 May 2019 18:29:48 -0700
-Received: from [10.2.170.210] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 May
- 2019 01:29:46 +0000
-Subject: Re: [PATCH V1 00/12] LP0 entry and exit support for Tegra210
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <ldewangan@nvidia.com>, <broonie@kernel.org>,
-        <natechancellor@gmail.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>
-References: <1558574922-16531-1-git-send-email-skomatineni@nvidia.com>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <0418cbdb-1bb6-23c3-f13d-e0a70f899f3c@nvidia.com>
-Date:   Wed, 22 May 2019 18:29:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <1558574922-16531-1-git-send-email-skomatineni@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S1728050AbfEWCJA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 May 2019 22:09:00 -0400
+Received: from mail-eopbgr60084.outbound.protection.outlook.com ([40.107.6.84]:64142
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727854AbfEWCJA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 May 2019 22:09:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MwZgzs/4aZwNfCjdz+/ne/jbJMPxd4bUOyyhLYXEmVI=;
+ b=nP+EimQWUqrXt5cXHaVpbVhy9ZH0Qhzk9/N8pJLoVsYEIZArUpMWK+JjZhixjfAkEwKt6YzZUk4IbDXAjv9uQ73WmK9LUTo7ME0k2MXH+Ydx6ljp8vfknOuWbPlf42I7KMpJ5FFL9oECyA8N7GB96CvUPqYnmsYB2ECqIlrFaq0=
+Received: from VI1PR04MB4543.eurprd04.prod.outlook.com (20.177.55.90) by
+ VI1PR04MB6094.eurprd04.prod.outlook.com (20.179.25.148) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.17; Thu, 23 May 2019 02:08:55 +0000
+Received: from VI1PR04MB4543.eurprd04.prod.outlook.com
+ ([fe80::5062:df97:a70b:93f8]) by VI1PR04MB4543.eurprd04.prod.outlook.com
+ ([fe80::5062:df97:a70b:93f8%7]) with mapi id 15.20.1900.020; Thu, 23 May 2019
+ 02:08:54 +0000
+From:   Robin Gong <yibin.gong@nxp.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "broonie@kernel.org" <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "plyatov@gmail.com" <plyatov@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: RE: [EXT] Re: [PATCH v4 10/14] dma: imx-sdma: add i.mx6ul/6sx
+ compatible name
+Thread-Topic: [EXT] Re: [PATCH v4 10/14] dma: imx-sdma: add i.mx6ul/6sx
+ compatible name
+Thread-Index: AQHVEIU1vbltRMJezUidB/k1RHkv66Z3Kd0AgADL88A=
+Date:   Thu, 23 May 2019 02:08:54 +0000
+Message-ID: <VI1PR04MB4543BE5BB829A2BFDA48824789010@VI1PR04MB4543.eurprd04.prod.outlook.com>
+References: <1558548188-1155-1-git-send-email-yibin.gong@nxp.com>
+ <1558548188-1155-11-git-send-email-yibin.gong@nxp.com>
+ <20190522135128.GA24987@bogus>
+In-Reply-To: <20190522135128.GA24987@bogus>
+Accept-Language: en-US
 Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1558574984; bh=iArqTE+js56+O2/nbQ1GpZLkqXxaKFPuqNJHbGlsARI=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=TtjipGVK4xhFgrbYoPGkmerDXLj/Z0o/+ZCFd4wanpqk7LDH0IjcmKW4sXmZOhFEN
-         uwQhbKJ2jWAORYYHmQtgrKmdhuu64c/JB0xM3CxYBVhvUQHY+wZmMnJ8Kr5dle7cA4
-         97Ql74z9gS3hFpEBxsX8QsLFTz+OAknpuWd1umMZTDbCPGLXhzI6fAX/KI2hKIVAGv
-         MpKX0BrI9j/4nfXRDPT0uDJFkLK3NJ2vJdFt5YNhOVKAUn2jQCqNaANj03uoQWVRA2
-         H+k8Jrszl9zpdRaJ83a65JHX9Mh1B57nBbpb+RM2rDPJIeiCZdObi1SapoLgdh1nAm
-         FDuTTJeQ81KJw==
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yibin.gong@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 817b28b3-d63c-44eb-92dc-08d6df239bc7
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB6094;
+x-ms-traffictypediagnostic: VI1PR04MB6094:
+x-microsoft-antispam-prvs: <VI1PR04MB6094D46D8E2A38D25049248E89010@VI1PR04MB6094.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 00462943DE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(366004)(39860400002)(136003)(376002)(13464003)(189003)(199004)(446003)(476003)(11346002)(4744005)(71190400001)(71200400001)(52536014)(5660300002)(2906002)(486006)(186003)(68736007)(66446008)(64756008)(66556008)(66476007)(66946007)(73956011)(6116002)(26005)(3846002)(7736002)(76116006)(305945005)(81156014)(81166006)(86362001)(66066001)(6916009)(316002)(74316002)(8676002)(8936002)(33656002)(7416002)(54906003)(76176011)(7696005)(229853002)(25786009)(102836004)(256004)(14444005)(4326008)(99286004)(53936002)(55016002)(9686003)(478600001)(6436002)(6506007)(6246003)(14454004);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6094;H:VI1PR04MB4543.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 3K3cPhbNnzwtDRRdVPWB7LqwrE1SytmzdbFbuVWzSXwQZk3Y7rA0D2XnHHotVTwx3+sRL6VDKWi/xQHHiF6yFOFhIZT9Wd/aljoL8Lx5wOsbGuPHmU5mqHJO63/04mu916C8MXbmFOZklhC+ZuvCV8veFV2h9d2TCHgTZNUqRTRO0642CtdTdz5ibtYipB/riCr8VKtr1VkNBDp102UhasX3I5J4Xvra1cki0WLom6AyaUt/UsqL+Rikl+XKAckrNigKNMyLr9/kV9jCuaBDR6vIHIIIeu1Iop1OeyKgwAnK2AgeUJ9LGAJYrr3a0xbKyuZEo2flSHijZx4vyygD+sxrFhKNJt4szoidsugeYeiY8AUvUU8XZJsI2H4l2PuFKpp1D+XGfLH/uC2XXYdCxB49FYJ8VGstqB2hL0HBwPg=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 817b28b3-d63c-44eb-92dc-08d6df239bc7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 02:08:54.8391
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6094
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-HI All
-
-Sorry. Please ignore this as it was sent out accidentally
-
-thanks
-
-sowjanya
-
-On 5/22/19 6:28 PM, Sowjanya Komatineni wrote:
-> This patch series includes Tegra210 deepsleep or LP0 support with
-> deep sleep exit through RTC alarm wake and power button wake events.
->
-> This series also includes save and restore of PLLs, clocks, OSC contexts
-> for basic LP0 exit.
->
-> This patch series is doesn't support for 100% suspend/resume to fully
-> functional state and we are working on some more drivers suspend and
-> resume implementations.
->
-> Sowjanya Komatineni (12):
->    irqchip: tegra: do not disable COP IRQ during suspend
->    pinctrl: tegra: add suspend and resume support
->    clk: tegra: save and restore PLLs state for system
->    clk: tegra: add support for peripheral clock suspend and resume
->    clk: tegra: add support for OSC clock resume
->    clk: tegra: add suspend resume support for DFLL clock
->    clk: tegra: support for Tegra210 clocks suspend-resume
->    soc/tegra: pmc: allow support for more tegra wake models
->    soc/tegra: pmc: add pmc wake support for tegra210
->    gpio: tegra: implement wake event support for Tegra210 and prior GPIO
->    soc/tegra: pmc: configure tegra deep sleep control settings
->    arm64: tegra: enable wake from deep sleep on RTC alarm.
->
->   arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi |   7 +
->   arch/arm64/boot/dts/nvidia/tegra210.dtsi       |   5 +-
->   drivers/clk/tegra/clk-dfll.c                   |  82 ++++++
->   drivers/clk/tegra/clk-dfll.h                   |   2 +
->   drivers/clk/tegra/clk-divider.c                |  19 ++
->   drivers/clk/tegra/clk-pll-out.c                |  25 ++
->   drivers/clk/tegra/clk-pll.c                    | 220 ++++++++++++--
->   drivers/clk/tegra/clk-tegra-fixed.c            |  15 +
->   drivers/clk/tegra/clk-tegra210.c               | 382 +++++++++++++++++++++++++
->   drivers/clk/tegra/clk.c                        |  74 ++++-
->   drivers/clk/tegra/clk.h                        |  18 ++
->   drivers/gpio/gpio-tegra.c                      | 109 ++++++-
->   drivers/irqchip/irq-tegra.c                    |  10 +-
->   drivers/pinctrl/tegra/pinctrl-tegra.c          |  68 ++++-
->   drivers/pinctrl/tegra/pinctrl-tegra.h          |   3 +
->   drivers/pinctrl/tegra/pinctrl-tegra114.c       |   1 +
->   drivers/pinctrl/tegra/pinctrl-tegra124.c       |   1 +
->   drivers/pinctrl/tegra/pinctrl-tegra20.c        |   1 +
->   drivers/pinctrl/tegra/pinctrl-tegra210.c       |   1 +
->   drivers/pinctrl/tegra/pinctrl-tegra30.c        |   1 +
->   drivers/soc/tegra/pmc.c                        | 159 +++++++++-
->   21 files changed, 1167 insertions(+), 36 deletions(-)
->
+SGkgUm9iLA0KCVRoYW5rIHlvdSBmb3IgeW91ciByZW1pbmRpbmcsIEkgaGF2ZSBhZGRlZCBBY2tl
+ZC1ieSB0YWdzIGdvdHRlbiBmcm9tIE1hcmsgYW5kIFZpbm9kIGluIHY0IHBhdGNoIHNldCwgYnV0
+IHRoZXJlIGlzIHN0aWxsIG9uZSB1cGRhdGUgKA0KcmVtb3ZlIGNoZWNraW5nICdldmVudF9pZDEn
+IHplcm8gYXMgJ2V2ZW50X2lkMCcuKSBmb3IgVmlub2QncyBjb25jZXJuLCBzbyBJIHNlbnQgbmV3
+IHY0Lg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBSb2IgSGVycmluZyA8
+cm9iaEBrZXJuZWwub3JnPg0KPiBTZW50OiAyMDE5xOo11MIyMsjVIDIxOjUxPiANCj4gT24gV2Vk
+LCAyMiBNYXkgMjAxOSAxMDowMDozOCArMDAwMCwgUm9iaW4gR29uZyB3cm90ZToNCj4gPiBBZGQg
+aS5teDZ1bCBhbmQgaS5teDZzeCBjb21wYXRpYmxlIG5hbWUgaW4gYmluZGluZyBkb2MuDQo+ID4N
+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JpbiBHb25nIDx5aWJpbi5nb25nQG54cC5jb20+DQo+ID4g
+LS0tDQo+ID4gIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kbWEvZnNsLWlteC1z
+ZG1hLnR4dCB8IDIgKysNCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQ0KPiA+
+DQo+IA0KPiBQbGVhc2UgYWRkIEFja2VkLWJ5L1Jldmlld2VkLWJ5IHRhZ3Mgd2hlbiBwb3N0aW5n
+IG5ldyB2ZXJzaW9ucy4gSG93ZXZlciwNCj4gdGhlcmUncyBubyBuZWVkIHRvIHJlcG9zdCBwYXRj
+aGVzICpvbmx5KiB0byBhZGQgdGhlIHRhZ3MuIFRoZSB1cHN0cmVhbQ0KPiBtYWludGFpbmVyIHdp
+bGwgZG8gdGhhdCBmb3IgYWNrcyByZWNlaXZlZCBvbiB0aGUgdmVyc2lvbiB0aGV5IGFwcGx5Lg0K
+PiANCj4gSWYgYSB0YWcgd2FzIG5vdCBhZGRlZCBvbiBwdXJwb3NlLCBwbGVhc2Ugc3RhdGUgd2h5
+IGFuZCB3aGF0IGNoYW5nZWQuDQo=
