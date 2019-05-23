@@ -2,134 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC0327900
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 11:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FD227E93
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 15:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726429AbfEWJQ4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 May 2019 05:16:56 -0400
-Received: from twhmllg4.macronix.com ([122.147.135.202]:52423 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726363AbfEWJQ4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 May 2019 05:16:56 -0400
-Received: from twhfmnt1.mxic.com.tw (twhfm1p2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id x4N9G2se058184;
-        Thu, 23 May 2019 17:16:02 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 9068031A9482045BD690;
-        Thu, 23 May 2019 17:16:02 +0800 (CST)
-In-Reply-To: <0e2994d6-6efc-9f36-f681-609199f20b9f@cogentembedded.com>
-References: <1558423174-10748-1-git-send-email-masonccyang@mxic.com.tw> <1558423174-10748-4-git-send-email-masonccyang@mxic.com.tw> <0e2994d6-6efc-9f36-f681-609199f20b9f@cogentembedded.com>
-To:     "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>
-Cc:     bbrezillon@kernel.org, broonie@kernel.org,
-        devicetree@vger.kernel.org,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        "Simon Horman" <horms@verge.net.au>, juliensu@mxic.com.tw,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
-        marek.vasut@gmail.com, mark.rutland@arm.com,
-        miquel.raynal@bootlin.com, robh+dt@kernel.org
-Subject: Re: [PATCH v13 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3 RPC-IF
- controller bindings
+        id S1730769AbfEWNqc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 May 2019 09:46:32 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40576 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730564AbfEWNqb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 May 2019 09:46:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=mfme33xseZptaUR1J0V/caYBOllJ3rsr79Z37c1uExY=; b=p03EHWT2EucM1oy2mwwkLoCa4
+        cEClGv19UdrvGGd0zT2qpW5VR+hR7uqzOdMkk8Pq97xH1hF2IuNiIw8WCKa8qpFzoFcgidqqUxoFM
+        qkFRSOWgyqaN+BmVvehSRKNxsehKedaX1zgRl/igV7NNJdWO7vlbzoLgwPplFrbbMbU6w=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hTo39-0000Dd-D8; Thu, 23 May 2019 13:46:27 +0000
+Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
+        id 0250D1126D24; Thu, 23 May 2019 14:46:25 +0100 (BST)
+Date:   Thu, 23 May 2019 14:46:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        linux-rockchip@lists.infradead.org, drinkcat@chromium.org,
+        Guenter Roeck <groeck@chromium.org>, briannorris@chromium.org,
+        mka@chromium.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] spi: Allow SPI devices to request the pumping
+ thread be realtime
+Message-ID: <20190523134625.GG17245@sirena.org.uk>
+References: <20190515164814.258898-1-dianders@chromium.org>
+ <20190515164814.258898-3-dianders@chromium.org>
 MIME-Version: 1.0
-X-KeepSent: B9416C97:8812436C-48258403:00329D12;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OFB9416C97.8812436C-ON48258403.00329D12-48258403.0032E82E@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Thu, 23 May 2019 17:16:03 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2019/05/23 PM 05:16:02,
-        Serialize complete at 2019/05/23 PM 05:16:02
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG4.macronix.com x4N9G2se058184
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bO4vSxwwZtUjUWHo"
+Content-Disposition: inline
+In-Reply-To: <20190515164814.258898-3-dianders@chromium.org>
+X-Cookie: I brake for chezlogs!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-Hi Sergei,
+--bO4vSxwwZtUjUWHo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> On 05/21/2019 10:19 AM, Mason Yang wrote:
-> 
-> > Document the bindings used by the Renesas R-Car Gen3 RPC-IF 
-controller.
-> > 
-> > Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
-> > ---
-> >  .../devicetree/bindings/mfd/renesas-rpc-if.txt     | 65 
-++++++++++++++++++++++
-> >  1 file changed, 65 insertions(+)
-> >  create mode 100644 
-Documentation/devicetree/bindings/mfd/renesas-rpc-if.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mfd/renesas-rpc-if.txt 
-b/
-> Documentation/devicetree/bindings/mfd/renesas-rpc-if.txt
-> > new file mode 100644
-> > index 0000000..20ec85b
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mfd/renesas-rpc-if.txt
-> > @@ -0,0 +1,65 @@
-> > +Renesas R-Car Gen3 RPC-IF controller Device Tree Bindings
-> > +---------------------------------------------------------
-> > +
-> > +RPC-IF supports both SPI NOR and HyperFlash (CFI-compliant flash)
-> > +
-> > +Required properties:
-> > +- compatible: should be an SoC-specific compatible value, followed by
-> > +      "renesas,rcar-gen3-rpc" as a fallback.
-> > +      supported SoC-specific values are:
-> > +      "renesas,r8a77995-rpc"   (R-Car D3)
-> > +- reg: should contain three register areas:
-> > +   first for RPC-IF registers,
-> > +   second for the direct mapping read mode and
-> > +   third for the write buffer area.
-> > +- reg-names: should contain "regs", "dirmap" and "wbuf"
-> > +- clocks: should contain 1 entries for the module's clock
-> > +- clock-names: should contain "rpc"
-> > +- power-domains: should contain system-controller(sysc) for 
-power-domain-cell
-> > +- resets: should contain clock pulse generator(cpg) for reset-cell,
-> > +     power-domain-cell and clock-cell
-> 
->    That's just some nonsense, sorry...
->    I suggest that you stop reposting your patches as I'm going to post
-> my version of this patchset RSN (based on your patches, of course) and 
-I'm
-> going to take care of fixing this file as well.
+On Wed, May 15, 2019 at 09:48:12AM -0700, Douglas Anderson wrote:
+> Right now the only way to get the SPI pumping thread bumped up to
+> realtime priority is for the controller to request it.  However it may
+> be that the controller works fine with the normal priority but
+> communication to a particular SPI device on the bus needs realtime
+> priority.
 
-okay, just let me know your patch then.
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
 
-thanks & best regards,
-Mason
+  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
 
-CONFIDENTIALITY NOTE:
+are available in the Git repository at:
 
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-rt-pump
 
-Macronix International Co., Ltd.
+for you to fetch changes up to 924b5867e7bd6a6a98014f0517b747465b108011:
 
-=====================================================================
+  spi: Allow SPI devices to request the pumping thread be realtime (2019-05-23 14:44:02 +0100)
 
+----------------------------------------------------------------
+spi: Allow setting pump to RT priority
 
+----------------------------------------------------------------
+Douglas Anderson (1):
+      spi: Allow SPI devices to request the pumping thread be realtime
 
-============================================================================
+ drivers/spi/spi.c       | 36 ++++++++++++++++++++++++++++++------
+ include/linux/spi/spi.h |  2 ++
+ 2 files changed, 32 insertions(+), 6 deletions(-)
 
-CONFIDENTIALITY NOTE:
+--bO4vSxwwZtUjUWHo
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+-----BEGIN PGP SIGNATURE-----
 
-Macronix International Co., Ltd.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzmpDEACgkQJNaLcl1U
+h9AT8wf9HCQwiI9ChQBim3VkHh1VA8vwPgC20zoPo4PUGPcvvaWX5I3lrUoeCp1Q
+vpMaUDp9J8OQ57wbmNFjqYYwLAK66XMUPQmqyH6q+1m1JSp5FP41aVGkJD32UOnk
+wqsDdznTOvdDrgnVtJWtqjSWiK18M4OQJhIJGwe0wBRIfk+bpQDa+s+R34wgHCt8
+xGJZcdJagggMsco0HvSgLuIRcIVuLbsCiu9Vxh1GR3ko3x7xLUVhkoKzxJ81qVu1
+99KmShuE/rXn2IKU0lfC6WjItvey3r1RWyKFsSd7xKI6Izz45lNFrUlgrSOyLW4R
+NqMXjQUeC/nEluG0IIC4X0mbopIIsw==
+=Xgy/
+-----END PGP SIGNATURE-----
 
-=====================================================================
-
+--bO4vSxwwZtUjUWHo--
