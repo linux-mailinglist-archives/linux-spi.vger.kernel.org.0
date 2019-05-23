@@ -2,111 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3E22744E
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 04:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE1927536
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2019 06:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728022AbfEWCSQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 May 2019 22:18:16 -0400
-Received: from mail-eopbgr130078.outbound.protection.outlook.com ([40.107.13.78]:1038
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727305AbfEWCSQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 May 2019 22:18:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yqaTJtux+lWdFM11IqGkLWvFA0WYDpmJrHnerLDRBDM=;
- b=b34BiZjoVGaBlPYGbxFxemSo51casMzvJCTilprkEdeJFES5LvENPZSFBD30/GNDStplaHqce2BJ5JVdHyhEd1oRFvMV7+gPAUohfD33nAUrLvDfNog26FE8AUesWoopv0Uzj/rj5zy9lnDCl515zMtFpyFcW6Aq1ESGGncXXcg=
-Received: from VI1PR04MB4543.eurprd04.prod.outlook.com (20.177.55.90) by
- VI1PR04MB5807.eurprd04.prod.outlook.com (20.178.204.29) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Thu, 23 May 2019 02:18:10 +0000
-Received: from VI1PR04MB4543.eurprd04.prod.outlook.com
- ([fe80::5062:df97:a70b:93f8]) by VI1PR04MB4543.eurprd04.prod.outlook.com
- ([fe80::5062:df97:a70b:93f8%7]) with mapi id 15.20.1900.020; Thu, 23 May 2019
- 02:18:10 +0000
-From:   Robin Gong <yibin.gong@nxp.com>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "plyatov@gmail.com" <plyatov@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: RE:Re: [PATCH v4 00/14] add ecspi ERR009165 for i.mx6/7 soc family
-Thread-Topic: Re: [PATCH v4 00/14] add ecspi ERR009165 for i.mx6/7 soc family
-Thread-Index: AdURDIuPRlx991CcRFGr8aoDaMhF+Q==
-Date:   Thu, 23 May 2019 02:18:10 +0000
-Message-ID: <VI1PR04MB45434A8AB7BC8B3DADBFCD5D89010@VI1PR04MB4543.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yibin.gong@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c3b08190-7cb3-4b82-2466-08d6df24e6f9
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5807;
-x-ms-traffictypediagnostic: VI1PR04MB5807:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <VI1PR04MB58070808651E8B5314FC837C89010@VI1PR04MB5807.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 00462943DE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(396003)(136003)(366004)(376002)(346002)(189003)(199004)(13464003)(8936002)(99286004)(476003)(14454004)(110136005)(81166006)(33656002)(45080400002)(54906003)(478600001)(6116002)(966005)(71200400001)(71190400001)(3846002)(486006)(68736007)(64756008)(66556008)(66446008)(73956011)(66946007)(76116006)(66476007)(316002)(9686003)(55016002)(6306002)(6436002)(53936002)(2501003)(7696005)(6506007)(4326008)(7416002)(74316002)(102836004)(81156014)(26005)(2906002)(25786009)(14444005)(186003)(86362001)(256004)(5660300002)(52536014)(8676002)(305945005)(2201001)(66066001)(7736002)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5807;H:VI1PR04MB4543.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: DO1Ogv0ky5Ioo2TomolfMJFyqfZHQ1D0MfgzNqmn9ZBQY9nntGB81m98nrEWqnYKDdACTsxgjfyvWbJMe6/uOs3jqIzVWVqVBuGv/xnpqsE6+60tbb1bZbOU8nyWWghypg9Dw5wpx8iQb8rgsB51Z7lZywDiP9rTzdx/7r92DhGwUkMtAX9G0r43vJihRbAs4JX7F1LkFtWevBZQR8v75qvw40nm7KYnW5CGRwPySECgtzj2MzgccB+5ZGBOvmbNjCguYnpUlP/xlLyTa3DZYQpDUw8CLtN9HxRGFJuCwtI8+2TYwAZeHWrTzyrpWLIVGffdJ7ju6XJybz/3dKKSFbU1DKxIW+7znx1YFOBOuQwJOwywHIoUZpvW7/hOh7qePIsIMqHuVpbGer5sizgR3e/KpjY1bJtll8B3bjMCy00=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1725811AbfEWEff (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 May 2019 00:35:35 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:43419 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbfEWEfe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 May 2019 00:35:34 -0400
+Received: by mail-lf1-f68.google.com with SMTP id u27so3330455lfg.10
+        for <linux-spi@vger.kernel.org>; Wed, 22 May 2019 21:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I855tJLOmH+qENWERPddony+uMrLikCWrVK/n6EsJqc=;
+        b=rCgMh7qpt13wmLAW/uPcMoimflmUIWRE5l1dzHpFB6L1XFMi7NIAAyl2nAGdY3QYAm
+         2Vp3JxFwWfhj1hCSKK6QapYcHiBkpDuxPlMJfGm4vVVr6PsO50LgdIKPTtKqdxzKB3gu
+         fJVnZVhCcxwYEREjEQlh+Fko+9kSupaCOq1Jifj7JZ3CjB5MSYl/Cbffoe0nAD46Ak+k
+         E5tl6G/OuHtr9KqCw4RBWVXyq+b5rhYTcSpFuS0ahwK/9lkO+9MnW5+tP6yKvmYX5/G3
+         WHgkwMjHmnwaAc1RPsfxb6LHZft2CHPx+adeSd3Ufs/lG0rJodh1t2icOQJHg9JaHuIH
+         f9jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I855tJLOmH+qENWERPddony+uMrLikCWrVK/n6EsJqc=;
+        b=B+yxubWS2Y9o2fhBrmFbQMyPeQIxU9UrbiR2C4PS0MDPZZ+r/hmJKVwTg18rX/u9b5
+         i92v9uwXagfRunQNxv6uB2nnrccCWWDv7FIWFgTItw00XwmGb8e+H15qO7ulPAw9y2oW
+         95XRQdNbuQDAXLWJ/rb2WwKVrMBg4VcGgCSKbSwHiLRpo0XBgMGc8zrSYqYKyOjxtaoT
+         I8ZouMggGPpmN+JQlXYgd+yT//nuoqRDGyo7j5gpIR4CDuJuyx2fPSjwkbe/Hc069S+B
+         Yo6FoxqTFNZCumpiyJu4opa5sVGEpwqCOYfhcrMIXu5dRlmiaD3c6hNE2JRMUyyxrK4i
+         zTyA==
+X-Gm-Message-State: APjAAAUsEc1NCSA9FOzXH4q0oe4lTsoRjWRkdDXpIkikDrC+uMUoW358
+        /mmEQu4u4b1RwdjGZVE/P6DrQwONfmMFIknHWY3iHQ==
+X-Google-Smtp-Source: APXvYqyaErcZ/ZN3iXve6bWnH5MYhT4dOYSh5zC4VziNvEwTFzT6US9SEnDJGPzkHwm5nImpUQk6ket1qgSZ82jyGJg=
+X-Received: by 2002:a19:1dc3:: with SMTP id d186mr44962791lfd.101.1558586133038;
+ Wed, 22 May 2019 21:35:33 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3b08190-7cb3-4b82-2466-08d6df24e6f9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 02:18:10.5088
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5807
+References: <20190521115958.22504-1-masahisa.kojima@linaro.org>
+ <20190521115958.22504-4-masahisa.kojima@linaro.org> <20190521181609.GB16633@sirena.org.uk>
+ <CADQ0-X9yKQ2akerpxKfjxOxmRhPiaaxe7ALDO7VQiH+-+SHo3w@mail.gmail.com> <20190522110906.GD8582@sirena.org.uk>
+In-Reply-To: <20190522110906.GD8582@sirena.org.uk>
+From:   Masahisa Kojima <masahisa.kojima@linaro.org>
+Date:   Thu, 23 May 2019 13:35:21 +0900
+Message-ID: <CADQ0-X8xd+edmPWfMSDgHrRCHEHewxsLH3zNs6jnPtfaQBhaLQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] spi: Add spi driver for Socionext Synquacer platform
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        geert@linux-m68k.org, tpiepho@impinj.com,
+        andy.shevchenko@gmail.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
+        Satoru Okamoto <okamoto.satoru@socionext.com>,
+        Yoshitoyo Osaki <osaki.yoshitoyo@socionext.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBMdWNhcyBTdGFjaCA8bC5zdGFj
-aEBwZW5ndXRyb25peC5kZT4NCj4gU2VudDogMjAxOeW5tDXmnIgyMuaXpSAxODoxMA0KPiBIaSBS
-b2JpbiwNCj4gDQo+IEFtIE1pdHR3b2NoLCBkZW4gMjIuMDUuMjAxOSwgMDk6NTkgKzAwMDAgc2No
-cmllYiBSb2JpbiBHb25nOg0KPiA+ICAgVGhlcmUgaXMgZWNzcGkgRVJSMDA5MTY1IG9uIGkubXg2
-Lzcgc29jIGZhbWlseSwgd2hpY2ggY2F1c2UgRklGTw0KPiA+IHRyYW5zZmVyIHRvIGJlIHNlbmQg
-dHdpY2UgaW4gRE1BIG1vZGUuIFBsZWFzZSBnZXQgbW9yZSBpbmZvcm1hdGlvbiBmcm9tOg0KPiA+
-IGh0dHBzOi8vZXVyMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRw
-cyUzQSUyRiUyRnd3dy4NCj4gDQo+IEkgaGF2ZW4ndCB0ZXN0ZWQgdGhpcyBzbyBhc2tpbmcgdGhl
-IG9idmlvdXMgcXVlc3Rpb246IHdoYXQgaGFwcGVucyB3aGVuIHRoaXMNCj4gc2VyaWVzIGlzIGFw
-cGxpZWQgd2l0aG91dCB0aGUgUkFNIHNjcmlwdCBiZWluZyBwcmVzZW50IG9uIHRoZSBzeXN0ZW0/
-IFdpbGwgaXQNCj4gcmVuZGVyIFNQSSB1bnVzYWJsZT8gSSBndWVzcyBzbyBzaW5jZSBpdCBjaGFu
-Z2VzIHRoZSBmbG93IGJldHdlZW4gdGhlIFNQSSBjb3JlDQo+IGFuZCBETUEgY29udHJvbGxlci4g
-Q2FuIHdlIHNvbWVob3cgZGV0ZWN0IHRoYXQgU0RNQSBpc24ndCB1c2luZyB0aGUgY29ycmVjdA0K
-PiBSQU0gc2NyaXB0IGFuZCBmYWxsIGJhY2sgdG8gUElPIG1vZGUgaW4gdGhlIFNQSSBkcml2ZXIg
-aW4gdGhhdCBjYXNlPw0KPiANCj4gQ3VycmVudGx5IHVzaW5nIHRoZSBSQU0gc2NyaXB0IGlzIG5v
-dCBhbiBvcHRpb24gaW4gYSBsb3Qgb2YgdXNlLWNhc2VzLCBhcyBpdCBzdGlsbA0KPiBicmVha3Mg
-c2VyaWFsIERNQSBzdXBwb3J0LiBUaGUgZml4IGZvciB0aGUgc2VyaWFsIGlzc3VlIHJlYWxseSBu
-ZWVkcyB0byBiZQ0KPiByZW1vdmUgdGhlIGJyb2tlbiBzZXJpYWwgc2NyaXB0IGZyb20gdGhlIFJB
-TSBmaXJtd2FyZSwgbm90IGNoYW5nZSB0aGUgc2VyaWFsDQo+IGRyaXZlciB0byBkZWFsIHdpdGgg
-dGhlIGJyb2tlbiBiZWhhdmlvciBpbnRyb2R1Y2VkIGJ5IHRoZSBSQU0gc2NyaXB0Lg0KT2theSwg
-SSdsbCB0cnkgdG8gbWVyZ2UgYW5vdGhlciBwYXRjaCB3aGljaCBmaXggVUFSVCBkcml2ZXIgZnVu
-Y3Rpb24gYnJva2VuIGlzc3VlIHdpdGggcmFtIHNjcmlwdCBzbyB0aGF0IG5vIGFueSBicm9rZW4g
-Zm9yIHRoaXMgcGF0Y2ggc2V0Lg0KPiANCj4gUmVnYXJkcywNCj4gTHVjYXMNCg==
+On Wed, 22 May 2019 at 20:09, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, May 22, 2019 at 05:27:23PM +0900, Masahisa Kojima wrote:
+> > On Wed, 22 May 2019 at 03:16, Mark Brown <broonie@kernel.org> wrote:
+> > > On Tue, May 21, 2019 at 08:59:58PM +0900, Masahisa Kojima wrote:
+>
+> > > > +     ret = devm_request_irq(&pdev->dev, rx_irq, sq_spi_rx_handler,
+> > > > +                             0, "synquacer-spi-rx", sspi);
+> > > > +     ret = devm_request_irq(&pdev->dev, tx_irq, sq_spi_tx_handler,
+> > > > +                             0, "synquacer-spi-tx", sspi);
+>
+> > > The code looked awfully like we depend on having interrupts?
+>
+> > I"m not sure I correctly understand what this comment means,
+> > should driver assume the case interrupt is not available?
+> > Do I need to support both interrupt and polling handling?
+>
+> If the driver requires interrupts it should not just ignore errors when
+> it requests interrupts.
+
+I'm sorry, I misunderstood.
+Yes, interrupt is required. I will handle errors properly.
