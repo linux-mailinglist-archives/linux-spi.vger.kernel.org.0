@@ -2,100 +2,152 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E402E172
-	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2019 17:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562802F575
+	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2019 06:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbfE2Ppo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 May 2019 11:45:44 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41804 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbfE2Ppn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 May 2019 11:45:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=SFUcAWGUAUUKHowTC8cn4GA1KTcSwBBPNRW8bn19lAw=; b=Wy3QBNQTbVDl
-        bHx0tVLK8+dOlAkde8Sz2vUNDc8tFDuo8aXT46PXdYW+8qxHhh+2qZPbqR6vkAqC7TmOgPRXqoFbW
-        eFkT9T5nepZkAFhSe+9rrOwDswg8UhCxWmW6YT37XMsMZz3WDtLxQ+WtrD3VZAee0JwuC3XnrjP61
-        sFd5Q=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hW0lo-000528-1K; Wed, 29 May 2019 15:45:40 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 527A5440046; Wed, 29 May 2019 16:45:39 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spidev: Add M53Menlo CPLD compatible" to the spi tree
-In-Reply-To: <20190529102451.4548-1-marex@denx.de>
-X-Patchwork-Hint: ignore
-Message-Id: <20190529154539.527A5440046@finisterre.sirena.org.uk>
-Date:   Wed, 29 May 2019 16:45:39 +0100 (BST)
+        id S1728558AbfE3DL1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 May 2019 23:11:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51046 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728551AbfE3DL1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 29 May 2019 23:11:27 -0400
+Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D37E244FF;
+        Thu, 30 May 2019 03:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559185886;
+        bh=B7dNO3kXNyfXTlNOL5kR74EmahW3u0qcRg/nMy1bMtU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WTnNFvyaHCmo1i8TpzCQfNcHdiQEOMkizd7iU3tH/cbtVydTkZuCT2Oze3N7Qo0qN
+         TYhhYv80UYVxyTdaUAC7/ylhCRRJFEx7UKqV+OpGciC1mzTOMAm4/P3bbrHgr02Snv
+         KdhkP+BbNmjYNZXt76jDwsK5o0H9oU7ZrLxYAy/I=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chris Healy <cphealy@gmail.com>, linux-spi@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.1 236/405] spi: Dont call spi_get_gpio_descs() before device name is set
+Date:   Wed, 29 May 2019 20:03:54 -0700
+Message-Id: <20190530030552.951884503@linuxfoundation.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190530030540.291644921@linuxfoundation.org>
+References: <20190530030540.291644921@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+[ Upstream commit 0a919ae49223d32ac0e8be3494547fcd1e4aa0aa ]
 
-   spidev: Add M53Menlo CPLD compatible
+Move code calling spi_get_gpio_descs() to happen after ctlr->dev's
+name is set in order to have proper GPIO consumer names.
 
-has been applied to the spi tree at
+Before:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
+cat /sys/kernel/debug/gpio
+gpiochip0: GPIOs 0-31, parent: platform/40049000.gpio, vf610-gpio:
+ gpio-6   (                    |regulator-usb0-vbus ) out lo
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+gpiochip1: GPIOs 32-63, parent: platform/4004a000.gpio, vf610-gpio:
+ gpio-36  (                    |scl                 ) in  hi
+ gpio-37  (                    |sda                 ) in  hi
+ gpio-40  (                    |(null) CS1          ) out lo
+ gpio-41  (                    |(null) CS0          ) out lo ACTIVE LOW
+ gpio-42  (                    |miso                ) in  hi
+ gpio-43  (                    |mosi                ) in  lo
+ gpio-44  (                    |sck                 ) out lo
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+After:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+cat /sys/kernel/debug/gpio
+gpiochip0: GPIOs 0-31, parent: platform/40049000.gpio, vf610-gpio:
+ gpio-6   (                    |regulator-usb0-vbus ) out lo
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+gpiochip1: GPIOs 32-63, parent: platform/4004a000.gpio, vf610-gpio:
+ gpio-36  (                    |scl                 ) in  hi
+ gpio-37  (                    |sda                 ) in  hi
+ gpio-40  (                    |spi0 CS1            ) out lo
+ gpio-41  (                    |spi0 CS0            ) out lo ACTIVE LOW
+ gpio-42  (                    |miso                ) in  hi
+ gpio-43  (                    |mosi                ) in  lo
+ gpio-44  (                    |sck                 ) out lo
 
-Thanks,
-Mark
-
-From c6e2d2c7ca4e6d09bc07ab5ced2e687cc842a860 Mon Sep 17 00:00:00 2001
-From: Marek Vasut <marex@denx.de>
-Date: Wed, 29 May 2019 12:24:51 +0200
-Subject: [PATCH] spidev: Add M53Menlo CPLD compatible
-
-Add compatible string for Menlosystems CPLD present on the M53Menlo
-board. This CPLD is used to communicate with various custom sensors.
-
-Signed-off-by: Marek Vasut <marex@denx.de>
-To: linux-spi@vger.kernel.org
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Cc: Mark Brown <broonie@kernel.org>
+Cc: Chris Healy <cphealy@gmail.com>
+Cc: linux-spi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spidev.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/spi/spi.c | 37 +++++++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index df4c0a9b34dd..30498cf25f3b 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -673,6 +673,7 @@ static const struct of_device_id spidev_dt_ids[] = {
- 	{ .compatible = "semtech,sx1301" },
- 	{ .compatible = "lwn,bk4" },
- 	{ .compatible = "dh,dhcom-board" },
-+	{ .compatible = "menlo,m53cpld" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, spidev_dt_ids);
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 93986f879b09e..d17f68775a4bb 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2275,24 +2275,6 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	if (status)
+ 		return status;
+ 
+-	if (!spi_controller_is_slave(ctlr)) {
+-		if (ctlr->use_gpio_descriptors) {
+-			status = spi_get_gpio_descs(ctlr);
+-			if (status)
+-				return status;
+-			/*
+-			 * A controller using GPIO descriptors always
+-			 * supports SPI_CS_HIGH if need be.
+-			 */
+-			ctlr->mode_bits |= SPI_CS_HIGH;
+-		} else {
+-			/* Legacy code path for GPIOs from DT */
+-			status = of_spi_register_master(ctlr);
+-			if (status)
+-				return status;
+-		}
+-	}
+-
+ 	/* even if it's just one always-selected device, there must
+ 	 * be at least one chipselect
+ 	 */
+@@ -2349,6 +2331,25 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	 * registration fails if the bus ID is in use.
+ 	 */
+ 	dev_set_name(&ctlr->dev, "spi%u", ctlr->bus_num);
++
++	if (!spi_controller_is_slave(ctlr)) {
++		if (ctlr->use_gpio_descriptors) {
++			status = spi_get_gpio_descs(ctlr);
++			if (status)
++				return status;
++			/*
++			 * A controller using GPIO descriptors always
++			 * supports SPI_CS_HIGH if need be.
++			 */
++			ctlr->mode_bits |= SPI_CS_HIGH;
++		} else {
++			/* Legacy code path for GPIOs from DT */
++			status = of_spi_register_master(ctlr);
++			if (status)
++				return status;
++		}
++	}
++
+ 	status = device_add(&ctlr->dev);
+ 	if (status < 0) {
+ 		/* free bus id */
 -- 
 2.20.1
+
+
 
