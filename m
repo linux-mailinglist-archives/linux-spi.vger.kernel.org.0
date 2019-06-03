@@ -2,79 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1935633480
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2019 18:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379243376B
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2019 20:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729012AbfFCQEe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Jun 2019 12:04:34 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:55266 "EHLO
+        id S1726521AbfFCSCy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Jun 2019 14:02:54 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56568 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728962AbfFCQEe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jun 2019 12:04:34 -0400
+        with ESMTP id S1725876AbfFCSCy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jun 2019 14:02:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=0cUdzCSD5aTy1CLRMPEAv9Ir1iQsp2ShOu2rnQ9I/2A=; b=M9FEdq8/iVN2OhKi2AQQvqzwk
-        FfgysU0HJocKBFa80YLFN++8JT2ShJ0ZyI4dAEUPjCLaOoNBjiPNXrC/QSWMDcU6aDszjk+uV1Rfp
-        +QAXhgWvs40LjEe8VjIYqbPNIN58Zd7d+A5UePqU0xtwlJe+jq+ebk0Dqv8kHChU4AYfo=;
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=ma35thperYGWyb/nkjWyegfRbpj87ZHQlb98QF7Ppqg=; b=MacOEriOZ/v7
+        nuQEgHWOdboZ17Tw2BaNzgeiQmEEvvL93bfSbzUj62TIG00QKGp8rcP1m4hyHfYhVRtSJje45fL9O
+        zpVFui3og9JLXDxmFvYsW8vLkltfLZzo7tZgvrPzBXpiJ9gN9ubQTiFpmBoEinpaBKk7xUef9q0VX
+        2xvAU=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hXpRm-0002J4-EI; Mon, 03 Jun 2019 16:04:30 +0000
+        id 1hXrIJ-0003ay-6h; Mon, 03 Jun 2019 18:02:51 +0000
 Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id E0D99440046; Mon,  3 Jun 2019 17:04:29 +0100 (BST)
-Date:   Mon, 3 Jun 2019 17:04:29 +0100
+        id 9792D440046; Mon,  3 Jun 2019 19:02:50 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [RFC PATCH 23/57] drivers: spi: Use bus_find_device_by_acpi_dev
- match helper
-Message-ID: <20190603160429.GC27065@sirena.org.uk>
-References: <1559577023-558-1-git-send-email-suzuki.poulose@arm.com>
- <1559577023-558-24-git-send-email-suzuki.poulose@arm.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i7F3eY7HS/tUJxUd"
-Content-Disposition: inline
-In-Reply-To: <1559577023-558-24-git-send-email-suzuki.poulose@arm.com>
-X-Cookie: Been Transferred Lately?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Cc:     agross@kernel.org, broonie@kernel.org, david.brown@linaro.org,
+        jorge.ramirez-ortiz@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: qup: remove unnecessary goto" to the spi tree
+In-Reply-To: <20190531144636.27843-1-jorge.ramirez-ortiz@linaro.org>
+X-Patchwork-Hint: ignore
+Message-Id: <20190603180250.9792D440046@finisterre.sirena.org.uk>
+Date:   Mon,  3 Jun 2019 19:02:50 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The patch
 
---i7F3eY7HS/tUJxUd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+   spi: qup: remove unnecessary goto
 
-On Mon, Jun 03, 2019 at 04:49:49PM +0100, Suzuki K Poulose wrote:
-> Switch to the generic helper bus_find_device_by_acpi_dev.
+has been applied to the spi tree at
 
-Please use subject lines matching the style for the subsystem.  This
-makes it easier for people to identify relevant patches.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
 
-Acked-by: Mark Brown <broonie@kernel.org>
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
---i7F3eY7HS/tUJxUd
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlz1RQ0ACgkQJNaLcl1U
-h9CQBwf9H09l78szJ3SsaQn6PSfi69VPGAAQ3ow2xP765ppwg205GOWZSFh91i/F
-S+GgszqbRJl/KiEwrPBe8nOrIAIXrBryWxDELZ4tI4h+nQnu5BoHq70B8rhGuZln
-U80DQsvKrmTXSpgal77fz/OWr3+An9Bz+NQSmTfWkJRDSXasypcBOIowJ39CzvCh
-DQdiFSpYkUXkX5ohtkRR1sWagTgbIvj2CtAyI74VcRPU8qT0f5ag46p7rJ01qmqr
-Pbeb6wvubWgO2tPPiZ89bsR712tSXhxJ3dKCJ+Hg/ORBAVkqYl48hpov0PU0lJFh
-kdzI6tgsUFi2fwHzKWdwoSnCby1C1g==
-=9Tow
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---i7F3eY7HS/tUJxUd--
+Thanks,
+Mark
+
+From 3594bfa265da38dcfbab2312ddaff39711b98857 Mon Sep 17 00:00:00 2001
+From: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Date: Fri, 31 May 2019 16:46:36 +0200
+Subject: [PATCH] spi: qup: remove unnecessary goto
+
+Remove unnecessary condition check and associated goto.
+
+Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-qup.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index 974a8ce58b68..314d91b95a16 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -842,10 +842,6 @@ static int spi_qup_transfer_one(struct spi_master *master,
+ 	else
+ 		ret = spi_qup_do_pio(spi, xfer, timeout);
+ 
+-	if (ret)
+-		goto exit;
+-
+-exit:
+ 	spi_qup_set_state(controller, QUP_STATE_RESET);
+ 	spin_lock_irqsave(&controller->lock, flags);
+ 	if (!ret)
+-- 
+2.20.1
+
