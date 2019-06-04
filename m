@@ -2,123 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A62B33C95
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jun 2019 02:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6EF33D4F
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jun 2019 04:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbfFDAxc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Jun 2019 20:53:32 -0400
-Received: from twhmllg4.macronix.com ([122.147.135.202]:23797 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726163AbfFDAxc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jun 2019 20:53:32 -0400
-Received: from twhfmnt1.mxic.com.tw (twhfm1p2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id x540qiIv045850;
-        Tue, 4 Jun 2019 08:52:44 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 6E1518B48C5379D5623A;
-        Tue,  4 Jun 2019 08:52:44 +0800 (CST)
-In-Reply-To: <20190603130235.GW4797@dell>
-References: <1558423174-10748-1-git-send-email-masonccyang@mxic.com.tw> <1558423174-10748-2-git-send-email-masonccyang@mxic.com.tw> <20190603130235.GW4797@dell>
-To:     "Lee Jones" <lee.jones@linaro.org>
-Cc:     bbrezillon@kernel.org, broonie@kernel.org,
-        devicetree@vger.kernel.org,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        "Simon Horman" <horms@verge.net.au>, juliensu@mxic.com.tw,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-spi@vger.kernel.org, marek.vasut@gmail.com,
-        mark.rutland@arm.com, miquel.raynal@bootlin.com,
-        robh+dt@kernel.org, sergei.shtylyov@cogentembedded.com
-Subject: Re: [PATCH v13 1/3] mfd: Add Renesas R-Car Gen3 RPC-IF MFD driver
-MIME-Version: 1.0
-X-KeepSent: 6FE801F4:46B471FF-4825840F:0003D358;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OF6FE801F4.46B471FF-ON4825840F.0003D358-4825840F.0004D419@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Tue, 4 Jun 2019 08:52:44 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2019/06/04 AM 08:52:44,
-        Serialize complete at 2019/06/04 AM 08:52:44
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG4.macronix.com x540qiIv045850
+        id S1726301AbfFDCvn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Jun 2019 22:51:43 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46994 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbfFDCvn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jun 2019 22:51:43 -0400
+Received: by mail-qt1-f195.google.com with SMTP id z19so12011224qtz.13
+        for <linux-spi@vger.kernel.org>; Mon, 03 Jun 2019 19:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=OVkhgHGZecqg71Nt6b+nRHlxOoYRQehGuMik5VmzaIY=;
+        b=cia+qHaa0jRKFrd04Ro5RmYrdyXj9iDMUBKWok5RRkSMbaqlvyqNxsJCSK7+yoe1Th
+         K/2sbGU8kZkIWl0Fpih+F56YV9WWKHflULqCbkMUO6HpqLZjuoLmKe6ibATGcmNPgmUQ
+         WcpAI7+riEHDgD0bcdhpbjGZvMqDFuanu175B9XiHhQQGOlK1rUUTXrUuwV/qLY20/uV
+         15tGa1yIRzhrEXHf01p0zf9hwexmEKQ+P0biP5pdoC1o3sKZZ4rTjvvd42lf8e2uSalo
+         ujJ3Ue8VIsLuLitpw5gvqAon+1u12rTUhmrOwwvwdwFrLmbGnuwcvdflH3z8eOMBcvfA
+         IwFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=OVkhgHGZecqg71Nt6b+nRHlxOoYRQehGuMik5VmzaIY=;
+        b=Sp4wifaAPP4A66zrwA4wOTM8kxkaOS6Caw5Ed8DB3FbRFD644PgePide4qd6n1I3qd
+         TsVmag3FTelInQX75L7ZiaOmX0Te+9Xc4lXyPSXCe0udt7g9nZlVf3WnUOwgxBflFSAA
+         OvYoux8zjI//G286bcNaGEcn+uOHoI7qsO1/GJJ9ftpfAKxzaGdTv9Axkq4Vi8Ot5TrQ
+         MfGqsshlgAtzaIuViag8KAHzQDW4CcO3gtSATjQ8yH6OUEfLKtldDzimYjBB9TvFP1zA
+         gThoGu6yhlMRI3JqDhzppmvoF26Jsfuo/SyAoGJ7+1gK2i/rmKOVx3XiqhhoARzbH2dN
+         whuw==
+X-Gm-Message-State: APjAAAV6TZKqTD3Q1Ekhd8hB7/na7nJj/o7wNion3QUeKz7Yotfj7tzp
+        U9ilaIeKtWO+VOZ9bdg4wAQ=
+X-Google-Smtp-Source: APXvYqzyrYAM/4UgtrOG2bdMtqkfHOiKG3CIE6H55eHfqerDM6uF1pu/bGx3ECjGsu9NvcF5Uyf5vg==
+X-Received: by 2002:a05:6214:cf:: with SMTP id f15mr5852383qvs.154.1559616702025;
+        Mon, 03 Jun 2019 19:51:42 -0700 (PDT)
+Received: from fabio-Latitude-E5450.am.freescale.net ([2804:14c:482:3c8:56cb:1049:60d2:137b])
+        by smtp.gmail.com with ESMTPSA id k5sm8013942qtj.40.2019.06.03.19.51.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 19:51:41 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH] spidev: Use dev_dbg() instead of pr_debug()
+Date:   Mon,  3 Jun 2019 23:51:29 -0300
+Message-Id: <20190604025129.20387-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+dev_dbg() is more appropriate for printing debug messages inside
+drivers, so switch to dev_dbg().
 
-Hi Jones,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/spi/spidev.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> > +static int rpc_mfd_probe(struct platform_device *pdev)
-> 
-> Remove the "mfd" from the nomenclature.
-
-okay, will fix.
-
-> 
-> > +   struct device_node *flash;
-> > +   const struct mfd_cell *cell;
-> > +   struct resource *res;
-> > +   struct rpc_mfd *rpc;
-> > +   void __iomem *base;
-> > +
-> > +   flash = of_get_next_child(pdev->dev.of_node, NULL);
-> > +   if (!flash) {
-> > +      dev_warn(&pdev->dev, "no flash node found\n");
-> > +      return -ENODEV;
-> > +   }
-> > +
-> > +   if (of_device_is_compatible(flash, "jedec,spi-nor")) {
-> > +      cell = &rpc_spi_ctlr;
-> > +   } else if (of_device_is_compatible(flash, "cfi-flash")) {
-> > +      cell = &rpc_hf_ctlr;
-> > +   } else {
-> > +      dev_warn(&pdev->dev, "unknown flash type\n");
-> > +      return -ENODEV;
-> > +   }
-> 
-> Are there going to be more children coming?
-
-No, just spi-nor or cfi-flash.
-
-The operation mode is decided at booting time by HW pin configuration.
-Can't change spi-nor or cfi-flash mode at run-time.
-
-> 
-> If not, I'd argue that this is not an MFD.
-> 
-
-umm, agreed.
-
-thanks & best regards,
-Mason
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
-
-
-============================================================================
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 255786f2e844..0ea67ef3e65c 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -560,7 +560,8 @@ static int spidev_open(struct inode *inode, struct file *filp)
+ 	}
+ 
+ 	if (status) {
+-		pr_debug("spidev: nothing for minor %d\n", iminor(inode));
++		dev_dbg(&spidev->spi->dev, "spidev: nothing for minor %d\n",
++			iminor(inode));
+ 		goto err_find_dev;
+ 	}
+ 
+-- 
+2.17.1
 
