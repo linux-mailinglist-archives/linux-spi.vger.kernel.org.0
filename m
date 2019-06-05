@@ -2,159 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A8635B4C
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2019 13:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE4F36000
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2019 17:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbfFELcA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jun 2019 07:32:00 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57584 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbfFELcA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jun 2019 07:32:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Pm/mmoeGqcCBZtcmDvislyEyEeKGBoCAKEAcpjvYEpE=; b=tkDq1kZK6wQ5D5HrrpNNuC9x5
-        b/ImcQzihIUN2qW62pGaITPf0ZyUAv/5ac69XeHRylr2EoAzbiIARBC3YZFQmucx8DCOxfFWv/cjh
-        vK47bbHXuIYha9ul400Ka78qhSvUHUVAbKGnNGzAbYWf4FzVMpzV5PB7ojqan9pVFS25M=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hYU95-0000Gd-Ox; Wed, 05 Jun 2019 11:31:55 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 25317440046; Wed,  5 Jun 2019 12:31:55 +0100 (BST)
-Date:   Wed, 5 Jun 2019 12:31:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     linux-spi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: Re: [PATCH RFC] spi: add Renesas RPC-IF driver
-Message-ID: <20190605113154.GP2456@sirena.org.uk>
-References: <ad503d6e-4739-9744-64b4-fd13f44ea6fe@cogentembedded.com>
- <beb35895-f531-977b-4766-d1e17f9b1d13@cogentembedded.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lPoaUxpIfuIzBujk"
-Content-Disposition: inline
-In-Reply-To: <beb35895-f531-977b-4766-d1e17f9b1d13@cogentembedded.com>
-X-Cookie: The other line moves faster.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1728467AbfFEPOf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Jun 2019 11:14:35 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:33392 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728458AbfFEPOe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 5 Jun 2019 11:14:34 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5092115BF;
+        Wed,  5 Jun 2019 08:14:34 -0700 (PDT)
+Received: from en101.cambridge.arm.com (en101.cambridge.arm.com [10.1.196.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0B1963F246;
+        Wed,  5 Jun 2019 08:14:28 -0700 (PDT)
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        suzuki.poulose@arm.com, Alan Tull <atull@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Moritz Fischer <mdf@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joe Perches <joe@perches.com>
+Subject: [PATCH 04/13] drivers: Add generic helper to match by of_node
+Date:   Wed,  5 Jun 2019 16:13:41 +0100
+Message-Id: <1559747630-28065-5-git-send-email-suzuki.poulose@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
+References: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Add a helper to match device by the of_node. This will be later used
+to provide generic lookup functions by of_node.
 
---lPoaUxpIfuIzBujk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Cc: Alan Tull <atull@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: David Airlie <airlied@linux.ie>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: devicetree@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: linux-fpga@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+Cc: Moritz Fischer <mdf@kernel.org>
+Cc: Peter Rosin <peda@axentia.se>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Thor Thayer <thor.thayer@linux.intel.com>
+Cc: Wolfram Sang <wsa@the-dreams.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Joe Perches <joe@perches.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+---
+ drivers/base/core.c    | 6 ++++++
+ include/linux/device.h | 2 ++
+ 2 files changed, 8 insertions(+)
 
-On Thu, May 30, 2019 at 11:24:04PM +0300, Sergei Shtylyov wrote:
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index fd7511e..9211908 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3328,3 +3328,9 @@ void device_set_of_node_from_dev(struct device *dev, const struct device *dev2)
+ 	dev->of_node_reused = true;
+ }
+ EXPORT_SYMBOL_GPL(device_set_of_node_from_dev);
++
++int device_match_of_node(struct device *dev, const void *np)
++{
++	return dev->of_node == np;
++}
++EXPORT_SYMBOL_GPL(device_match_of_node);
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 4d7c881..7093085 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -163,6 +163,8 @@ void subsys_dev_iter_init(struct subsys_dev_iter *iter,
+ struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter);
+ void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
+ 
++int device_match_of_node(struct device *dev, const void *np);
++
+ int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+ 		     int (*fn)(struct device *dev, void *data));
+ struct device *bus_find_device(struct bus_type *bus, struct device *start,
+-- 
+2.7.4
 
-> +config SPI_RPCIF
-> +	tristate "Renesas RPC-IF SPI driver"
-> +	select MFD_RPCIF
-> +	depends on ARCH_RENESAS || COMPILE_TEST
-> +	help
-> +	  SPI driver for Renesas R-Car Gen3 RPC-IF.
-> +
-
-Why are we selecting the MFD rather than depending on it like normal?
-
-> @@ -0,0 +1,339 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * RPC-IF SPI/QSPI/Octa driver
-> + *
-
-Please make the entire header a C++ one so this looks more intentional.
-
-> +static void rpcif_spi_transfer_setup(struct rpcif_spi *spi,
-> +				     struct spi_message *msg)
-> +{
-> +	struct spi_transfer *t, xfer[4] = { };
-
-Don't mix initialized and non-initialized declarations in a single line
-(as per coding style).
-
-> +	u32 i, xfercnt, xferpos = 0;
-> +	struct rpcif_op op = { };
-> +
-> +	spi->totalxferlen = 0;
-> +	spi->xfer_dir = SPI_MEM_NO_DATA;
-> +
-> +	list_for_each_entry(t, &msg->transfers, transfer_list) {
-> +		if (t->tx_buf) {
-> +			xfer[xferpos].tx_buf = t->tx_buf;
-> +			xfer[xferpos].tx_nbits = t->tx_nbits;
-> +		}
-
-xfer is hard coded to 4 elements but I'm not seeing any validation that
-we don't have more transfers than that in the message, and there's lots
-of assumptions later on about the number of transfers.
-
-> +		if (list_is_last(&t->transfer_list, &msg->transfers)) {
-> +			if (xferpos > 1) {
-> +				if (t->rx_buf)
-> +					spi->xfer_dir = SPI_MEM_DATA_IN;
-> +				else if (t->tx_buf)
-> +					spi->xfer_dir = SPI_MEM_DATA_OUT;
-> +			}
-> +		}
-
-Transfers can be bidirectional...  if the device can't support that it
-should set SPI_CONTROLLER_HALF_DUPLEX.
-
-> +static inline int rpcif_spi_xfer_message(struct rpcif_spi *spi,
-> +				       struct spi_transfer *data_xfer)
-
-This has exactly one caller and contains a single statement - why have a
-separate function?
-
-> +{
-> +	return rpcif_io_xfer(spi->rpc,
-> +			   spi->xfer_dir == SPI_MEM_DATA_OUT ?
-> +			   data_xfer->tx_buf : NULL,
-> +			   spi->xfer_dir == SPI_MEM_DATA_IN ?
-> +			   data_xfer->rx_buf : NULL);
-
-This is really hard to read.  Why are we abusing the ternery operator
-here, especially when there's other places where we already set things
-up based on the direction?
-
-> +static int rpcif_spi_remove(struct platform_device *pdev)
-> +{
-> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
-> +	struct rpcif *rpc = dev_get_drvdata(pdev->dev.parent);
-> +
-> +	rpcif_disable_rpm(rpc);
-> +	spi_unregister_controller(ctlr);
-> +
-> +	return 0;
-> +}
-
-Shouldn't we unregister the controller before we disable the RPM?  The
-probe was the other way around and this means that we might still be
-processing messages while the hardware is disabled which doesn't seem
-good.
-
---lPoaUxpIfuIzBujk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlz3qCoACgkQJNaLcl1U
-h9BSgQgAhQdPlZ2rue0td8PdKv/pFt9C9vDxzKBOdbIW3pmbon//irv+A4IVgO0F
-dwbC9uuiGTUIO8MokwXnnealEHVSMIctrQ6BvEyuppgfhlAmQzPeTboAuNYmGHZr
-tPVRWBlsSG0rY+67BE+vThL1342p+P9AOeUP1QLNxQnCUK0tf6L3CZbKPaU3LTln
-cHrR4o8xcmHoH8etYxykJNWwgIj6AHVJe3BE7pjBSy3TI51E2sn792ISfVKFuqeT
-idCCoaEFIpx2WIRdJNHOXF1pnESJviybOIFZYj/YG+d93zjHcgotqx8yQGZFjdsn
-OkU3vLu4xVGGtqFxNkUSA/zM313p1g==
-=Dj5i
------END PGP SIGNATURE-----
-
---lPoaUxpIfuIzBujk--
