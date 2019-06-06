@@ -2,73 +2,212 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF8136531
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2019 22:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCAE36D7C
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2019 09:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726572AbfFEUPM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jun 2019 16:15:12 -0400
-Received: from mail-it1-f178.google.com ([209.85.166.178]:52916 "EHLO
-        mail-it1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726502AbfFEUPM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jun 2019 16:15:12 -0400
-Received: by mail-it1-f178.google.com with SMTP id l21so5543740ita.2;
-        Wed, 05 Jun 2019 13:15:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=THJJt/ZPhh8isKdn2NsQHGAKZfNn4iulXXsjjcZVkJk=;
-        b=rWon5Fu4RCmo8tkHAvZ/U7WQ3+Q81pOXAnPrt1ch556o74O+VMy3QtBkWGoFBxmHL1
-         Y7rNKrjSRLbCsDPeG/ZRmAItfj/kEG59qK+LQRrMXrrm6GWbaJm5u8s46UGem9/fXxYm
-         lqgbD9l6Y4JN29WWrArmKQE6OxJeKttndgTl4K3gL5E5BbwEPACNRBK5IWaiALdCDiEv
-         W+uD+T2M4UF63jtUmjE/eTPBKhWbYNgITDwg1oiuuhUrU0nE2TBS18CO9FTBfy20/w7b
-         PbDvTtjV3JMz4KSZqLzFBGy20RjIK53ZmqI2Fqzeot0LYi/fR7Mr4K4X8hv5gLvNLmIc
-         t3cA==
-X-Gm-Message-State: APjAAAUVUIVAjWlvoNmgjVGZSWhl72nxVItqDdRwq7uRx1v/+cxhlD8D
-        raOrElE8qhb60OvO+jbMbGssFQ11QfNApuFfqKA=
-X-Google-Smtp-Source: APXvYqyrpsndryg2pdcv8bRbnFKvQOW5n7ws+8amqaHflUu9NqIphSTk1hfXgnbNdWzwKOBlue4Rts3JPGsdQ7vzs78=
-X-Received: by 2002:a02:a001:: with SMTP id a1mr28751687jah.115.1559765710777;
- Wed, 05 Jun 2019 13:15:10 -0700 (PDT)
+        id S1726472AbfFFHl3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Jun 2019 03:41:29 -0400
+Received: from twhmllg4.macronix.com ([122.147.135.202]:32594 "EHLO
+        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725267AbfFFHl3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jun 2019 03:41:29 -0400
+Received: from twhfmnt1.mxic.com.tw (twhfm1p2.macronix.com [172.17.20.92])
+        by TWHMLLG4.macronix.com with ESMTP id x567ejnl029719;
+        Thu, 6 Jun 2019 15:40:45 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
+        by Forcepoint Email with ESMTP id F26E03F4C1666F37E5FA;
+        Thu,  6 Jun 2019 15:40:45 +0800 (CST)
+In-Reply-To: <02addf64-9f6e-ccc1-2f94-8983456e3ebc@cogentembedded.com>
+References: <1558423174-10748-1-git-send-email-masonccyang@mxic.com.tw> <1558423174-10748-4-git-send-email-masonccyang@mxic.com.tw> <0e2994d6-6efc-9f36-f681-609199f20b9f@cogentembedded.com> <20190603130428.GX4797@dell> <02addf64-9f6e-ccc1-2f94-8983456e3ebc@cogentembedded.com>
+To:     "Lee Jones" <lee.jones@linaro.org>
+Cc:     bbrezillon@kernel.org, broonie@kernel.org,
+        devicetree@vger.kernel.org,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Simon Horman" <horms@verge.net.au>, juliensu@mxic.com.tw,
+        "Lee Jones" <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        marek.vasut@gmail.com, mark.rutland@arm.com,
+        miquel.raynal@bootlin.com, robh+dt@kernel.org,
+        "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>
+Subject: Re: [PATCH v13 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3 RPC-IF
+ controller bindings
 MIME-Version: 1.0
-References: <20190412105320.2924-1-kernel@esmil.dk> <20190508103358.5C7EB440010@finisterre.sirena.org.uk>
- <CANBLGcxiXR7KqKn4U-2PgefuxpBFX=yR06cw6A5GEALuqa54FA@mail.gmail.com> <20190605195511.GX2456@sirena.org.uk>
-In-Reply-To: <20190605195511.GX2456@sirena.org.uk>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Wed, 5 Jun 2019 22:14:59 +0200
-Message-ID: <CANBLGcwE_KfwJ=-FKNJ9RzrH58FVcmyxAR9niWQRubjM0pZgWA@mail.gmail.com>
-Subject: Re: Applied "spi: rockchip: turn down tx dma bursts" to the spi tree
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-spi@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Vicente Bergas <vicencb@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+X-KeepSent: DA7648A0:F1733EA5-48258411:002946DF;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OFDA7648A0.F1733EA5-ON48258411.002946DF-48258411.002A2F0D@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Thu, 6 Jun 2019 15:40:45 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2019/06/06 PM 03:40:45,
+        Serialize complete at 2019/06/06 PM 03:40:45
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG4.macronix.com x567ejnl029719
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 5 Jun 2019 at 21:55, Mark Brown <broonie@kernel.org> wrote:
->
-> On Wed, Jun 05, 2019 at 09:36:44PM +0200, Emil Renner Berthing wrote:
-> > On Wed, 8 May 2019 at 12:34, Mark Brown <broonie@kernel.org> wrote:
->
-> > >    spi: rockchip: turn down tx dma bursts
->
-> > I've tried looking in the for-next and for-5.x branches here, and I
-> > can't seem to find this patch.
-> > Am I missing something?
->
-> > It fixes a problem introduced in 4.19, so it'd be nice if it could
-> > make it to stable trees eventually.
->
-> 47300728fb213486a830565d2af49da967c9d16a is in my tree.  When it reaches
-> Linus' tree send a request to Greg for it to be backported if none of
-> the stable automation picks it up.
 
-You're absolutely right, sorry about the noise.
+Hi Jones,
 
-Thanks.
-/Emil
+
+> Subject
+> 
+> Re: [PATCH v13 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3 RPC-IF 
+
+> controller bindings
+> 
+> Hello!
+> 
+> On 06/03/2019 04:04 PM, Lee Jones wrote:
+> 
+> >>> Document the bindings used by the Renesas R-Car Gen3 RPC-IF 
+controller.
+> >>>
+> >>> Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
+> >>> ---
+> >>>  .../devicetree/bindings/mfd/renesas-rpc-if.txt     | 65 
+++++++++++++++++++++++
+> >>>  1 file changed, 65 insertions(+)
+> >>>  create mode 100644 
+Documentation/devicetree/bindings/mfd/renesas-rpc-if.txt
+> >>>
+> >>> diff --git 
+a/Documentation/devicetree/bindings/mfd/renesas-rpc-if.txt b/
+> Documentation/devicetree/bindings/mfd/renesas-rpc-if.txt
+> >>> new file mode 100644
+> >>> index 0000000..20ec85b
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/mfd/renesas-rpc-if.txt
+> >>> @@ -0,0 +1,65 @@
+> >>> +Renesas R-Car Gen3 RPC-IF controller Device Tree Bindings
+> >>> +---------------------------------------------------------
+> >>> +
+> >>> +RPC-IF supports both SPI NOR and HyperFlash (CFI-compliant flash)
+> >>> +
+> >>> +Required properties:
+> >>> +- compatible: should be an SoC-specific compatible value, followed 
+by
+> >>> +      "renesas,rcar-gen3-rpc" as a fallback.
+> >>> +      supported SoC-specific values are:
+> >>> +      "renesas,r8a77995-rpc"   (R-Car D3)
+> >>> +- reg: should contain three register areas:
+> >>> +   first for RPC-IF registers,
+> >>> +   second for the direct mapping read mode and
+> >>> +   third for the write buffer area.
+> >>> +- reg-names: should contain "regs", "dirmap" and "wbuf"
+> >>> +- clocks: should contain 1 entries for the module's clock
+> >>> +- clock-names: should contain "rpc"
+> >>> +- power-domains: should contain system-controller(sysc) for 
+power-domain-cell
+> >>> +- resets: should contain clock pulse generator(cpg) for reset-cell,
+> >>> +     power-domain-cell and clock-cell
+> >>
+> >>    That's just some nonsense, sorry...
+> >>    I suggest that you stop reposting your patches as I'm going to 
+post
+> >> my version of this patchset RSN (based on your patches, of course) 
+and I'm
+> >> going to take care of fixing this file as well.
+> > 
+> > Why is this necessary?
+> 
+>    Because Mason doesn't want to develop the HyperFlash driver (or even 
+move his code
+> in preparation to this driver being developed). I must develop this 
+driver, and I'd
+> like to avoid the extra churn of mving the code between the MFD and SPI 
+drivers.
+> 
+
+There might be some misunderstandings.
+
+I had been requested to boot R-CAR from the OctaFlash and finally I have 
+achieved it 
+by patching SPI framework for OctaFlash operation and RPC-IF SPI driver. 
+
+We were aware of the lacking support of RPC-IF in the Linux kernel at that 
+time and 
+I though I could contribute what I had developed.
+
+At that time for my first submission of RPC-IF SPI on 15 NOv 2018, there 
+was no any 
+HyperFlash (or Hyper Bus) patches. And we did not consider it because the 
+resource
+of HyperFlash was shortage to us.
+
+RPC-IF SPI was applied by Mark on 12,Feb 2019 but Marek comment to add 
+supporting
+MFD for RPC-IF and then I patched RPC-IF to MFD and SPI till this v13.
+
+I always think about:
+
+Is RPC-IF really good/suitable for MFD ?
+RPC-IF works either in SPI or HyperFlash is decided by external hardware 
+pins 
+configuration and it can NOT switch it's operation mode in the run time. 
+This is not like my understanding of MFD.
+
+As your comments:
+------------------------------------------------------------------------>
+> +              flash = of_get_next_child(pdev->dev.of_node, NULL);
+> +              if (!flash) {
+> +                              dev_warn(&pdev->dev, "no flash node 
+found\n");
+> +                              return -ENODEV;
+> +              }
+> +
+> +              if (of_device_is_compatible(flash, "jedec,spi-nor")) {
+> +                              cell = &rpc_spi_ctlr;
+> +              } else if (of_device_is_compatible(flash, "cfi-flash")) {
+> +                              cell = &rpc_hf_ctlr;
+> +              } else {
+> +                              dev_warn(&pdev->dev, "unknown flash 
+type\n");
+> +                              return -ENODEV;
+> +              }
+
+Are there going to be more children coming?
+
+If not, I'd argue that this is not an MFD.
+<-------------------------------------------------------------------
+
+I agreed with your opinion and I will resubmit RPC-IF in SPI only
+if you also agree with it.
+
+
+thanks & best regards,
+Mason
+
+
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
