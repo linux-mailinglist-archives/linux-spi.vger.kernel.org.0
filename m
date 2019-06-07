@@ -2,83 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3CD3918F
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2019 18:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6313954C
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2019 21:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729408AbfFGQFm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 7 Jun 2019 12:05:42 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45112 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729133AbfFGQFm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 Jun 2019 12:05:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=AtaSTkf1DBf94OVADGmL4073qC0dMdKOc6GCWJ2B5nE=; b=kVMKtQN2lU5qDB9hwkgVECukB
-        6m8Mk4mxg+JZJ9GxZOxj9OFP/nyuP84YEZKcp145Ff+lrth76K8hff7HxAMH3ldl9Al5Qv6enqToF
-        j1pKTsQpQVvXN9dcMyqsPUVAJnYfQ0JWiJWzfImh63ZcoUnPIMotXgIRIduj70+poP+UI=;
-Received: from [2001:470:1f1d:6b5:7e7a:91ff:fede:4a45] (helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hZHN6-0002tA-C9; Fri, 07 Jun 2019 16:05:40 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id CFAEF440046; Fri,  7 Jun 2019 17:05:39 +0100 (BST)
-Date:   Fri, 7 Jun 2019 17:05:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     od@zcrc.me, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-gpio: Make probe function __init_or_module
-Message-ID: <20190607160539.GI2456@sirena.org.uk>
-References: <20190607155631.15072-1-paul@crapouillou.net>
- <20190607155907.GH2456@sirena.org.uk>
- <1559923340.1918.0@crapouillou.net>
+        id S1728738AbfFGTKL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 7 Jun 2019 15:10:11 -0400
+Received: from gateway21.websitewelcome.com ([192.185.45.163]:48340 "EHLO
+        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728727AbfFGTKK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 Jun 2019 15:10:10 -0400
+X-Greylist: delayed 1281 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jun 2019 15:10:10 EDT
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway21.websitewelcome.com (Postfix) with ESMTP id 30118400CAC73
+        for <linux-spi@vger.kernel.org>; Fri,  7 Jun 2019 13:48:49 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id ZJuzhapBp90onZJuzhc926; Fri, 07 Jun 2019 13:48:49 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.134.24] (port=47344 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hZJux-002VU0-Ra; Fri, 07 Jun 2019 13:48:47 -0500
+Date:   Fri, 7 Jun 2019 13:48:45 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] spi: Use struct_size() helper
+Message-ID: <20190607184845.GA13401@embeddedor>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LPYkZes1JsE9T1lX"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1559923340.1918.0@crapouillou.net>
-X-Cookie: The other line moves faster.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.134.24
+X-Source-L: No
+X-Exim-ID: 1hZJux-002VU0-Ra
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.134.24]:47344
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 10
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+One of the more common cases of allocation size calculations is finding
+the size of a structure that has a zero-sized array at the end, along
+with memory for some number of elements for that array. For example:
 
---LPYkZes1JsE9T1lX
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+struct spi_replaced_transfers {
+	...
+        struct spi_transfer inserted_transfers[];
+};
 
-On Fri, Jun 07, 2019 at 06:02:20PM +0200, Paul Cercueil wrote:
-> Le ven. 7 juin 2019 =E0 17:59, Mark Brown <broonie@kernel.org> a =E9crit :
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
 
-> > Hopefully not since we might probe later on if something registers a new
-> > device...
+So, replace the following form:
 
-> Makes sense. Sorry for the noise.
+insert * sizeof(struct spi_transfer) + sizeof(struct spi_replaced_transfers)
 
-No problem.  There used to be an annotation for probe() and remove()
-functions but it got removed since hotplug and deferred probe made it
-very difficult to ever practically take advanage of it.
+with:
 
---LPYkZes1JsE9T1lX
-Content-Type: application/pgp-signature; name="signature.asc"
+struct_size(rxfer, inserted_transfers, insert)
 
------BEGIN PGP SIGNATURE-----
+This code was detected with the help of Coccinelle.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlz6i1IACgkQJNaLcl1U
-h9Ctggf/ZkWVbeBDP7S/xhHdF5lonQeFIVA24awMWy1BPO+zdDas4oSFwUBik4c4
-u+krCzZdQzwLx5ZTHPFSP+cxhvYy0HV3hQxIXjhCFS7JupiL1npDKoCLGjvKSCYI
-5hMjEASlUQYk0XiRBVfnEKshR7dPq0UBcRkgCnmo7xOpxaeg75vfjtePZmGYNPKA
-q3aDOK9Z7fGJFzF8qSDAUrofo7D2DiWZRuH8/aB6W46IAstodUZjLOS9cnU+SC0e
-GQ+hj4XaJg7Jfmy3SAeck6fmDOF6+Xq5hulHItYU+nzYLOLGZiJrjiHzf9ilPNyG
-7wU+IQpIiKYRkfo5BIueEGnAvKUf3A==
-=UR4I
------END PGP SIGNATURE-----
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/spi/spi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---LPYkZes1JsE9T1lX--
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index e0cd8ccfe92d..69e492ed414a 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2769,8 +2769,7 @@ struct spi_replaced_transfers *spi_replace_transfers(
+ 
+ 	/* allocate the structure using spi_res */
+ 	rxfer = spi_res_alloc(msg->spi, __spi_replace_transfers_release,
+-			      insert * sizeof(struct spi_transfer)
+-			      + sizeof(struct spi_replaced_transfers)
++			      struct_size(rxfer, inserted_transfers, insert)
+ 			      + extradatasize,
+ 			      gfp);
+ 	if (!rxfer)
+-- 
+2.21.0
+
