@@ -2,105 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4D83B74D
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2019 16:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426D63BA47
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2019 19:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389241AbfFJO0v (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jun 2019 10:26:51 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:47908 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388936AbfFJO0v (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jun 2019 10:26:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=w7gFGP/pm4Hi9glOBcXMYzWxwWWedAusuMfX2g2W4Ew=; b=SML5uyMHHW5MmXWWqP8/oUcTR
-        bz5uNebXLz0slpqYb/6Db9NNEhdD/sXD+ZzqTqTCz8KVTaGJFtkg8Mfow53irEQu7Qf5GgRvSnqCt
-        98L8JF0qhOK2iwXntL6z8P9NXED2elDbhtih+tb9xgW/yCWHNCYjKLAoZqSxVZukmhiSA=;
-Received: from [2001:470:1f1d:6b5:7e7a:91ff:fede:4a45] (helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1haLG5-0005tm-Ta; Mon, 10 Jun 2019 14:26:49 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id BAF45440046; Mon, 10 Jun 2019 15:26:48 +0100 (BST)
-Date:   Mon, 10 Jun 2019 15:26:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] spi fixes for v5.2
-Message-ID: <20190610142648.GB5316@sirena.org.uk>
+        id S1728007AbfFJRDu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jun 2019 13:03:50 -0400
+Received: from server101.serverconfig.center ([195.242.103.101]:50035 "EHLO
+        server101.serverconfig.center" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725270AbfFJRDu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jun 2019 13:03:50 -0400
+X-Greylist: delayed 439 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Jun 2019 13:03:49 EDT
+Received: from christian-pc.localdomain (p54A59287.dip0.t-ipconnect.de [84.165.146.135])
+        by server101.serverconfig.center (Postfix) with ESMTPSA id 3BAC12381D55
+        for <linux-spi@vger.kernel.org>; Mon, 10 Jun 2019 18:56:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-mauderer.de;
+        s=default; t=1560185789;
+        bh=IODfGsfOvXZ+NtdkIoKiVHRcu6oxlD6o3v0Gi5MnqBw=; l=1450;
+        h=From:Subject:To;
+        b=XoCuZKXQkiqp4bDJUgnbnbZBnMvWws86oR/mG56dDwXnxR8StAPvVrlqNLUoU9oK2
+         RPX9+Qb2OxRdw9AB1zwoeSnzmtehhROIgMTPfqoN0zxMaOD4x2vkPGvuENkIovEcA2
+         +2DVQlNI3uO/v/s+UfHDnL7y8mKPad/IZQz7CQxA=
+Authentication-Results: server101.serverconfig.center;
+        spf=pass (sender IP is 84.165.146.135) smtp.mailfrom=oss@c-mauderer.de smtp.helo=christian-pc.localdomain
+Received-SPF: pass (server101.serverconfig.center: connection is authenticated)
+From:   Christian Mauderer <oss@c-mauderer.de>
+Subject: spi-gpio too fast for some devices
+To:     linux-spi@vger.kernel.org
+Message-ID: <32d3f238-c21c-b937-72c9-7a9ba842c01e@c-mauderer.de>
+Date:   Mon, 10 Jun 2019 18:56:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5I6of5zJg18YgZEa"
-Content-Disposition: inline
-X-Cookie: Editing is a rewording activity.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-PPP-Message-ID: <156018578951.129032.12641371879720637066@server101.serverconfig.center>
+X-PPP-Vhost: c-mauderer.de
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello,
 
---5I6of5zJg18YgZEa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I have a problem with the spi-gpio driver: It's too fast for one of my
+devices. Now I'm searching for a good solution that could be
+acceptable as a patch for the Linux kernel.
 
-The following changes since commit d61ad23cb3be09ff4956e9b9794134456522817f:
+Currently there is the following comment and implementation for the
+spidelay(...) function in spi-gpio.c:
 
-  spi: Clear SPI_CS_HIGH flag from bad_bits for GPIO chip-select (2019-05-02 10:38:00 +0900)
+> /*
+>  * NOTE:  this clocks "as fast as we can".  It "should" be a function of the
+>  * requested device clock.  Software overhead means we usually have trouble
+>  * reaching even one Mbit/sec (except when we can inline bitops), so for now
+>  * we'll just assume we never need additional per-bit slowdowns.
+>  */
+> #define spidelay(nsecs)	do {} while (0)
 
-are available in the Git repository at:
+With that I have a speed of about 2.2MHz on a QCA9533 chip with 650MHz
+using a 4.14 Kernel. The spidelay hasn't been changed in a newer
+kernel so I assume it's still similar.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.2-rc4
+I tried to just define spidelay like follows:
 
-for you to fetch changes up to f3440d9a0da292dc4998d9393162fcfb996fd671:
+> #define spidelay(nsecs)	ndelay(nsecs)
 
-  spi: abort spi_sync if failed to prepare_transfer_hardware (2019-05-23 14:36:13 +0100)
+which basically works. But with that the maximum rate drops to 1.6MHz.
+I assume that such a drastic performance decrease isn't acceptable for
+the kernel?
 
-----------------------------------------------------------------
-spi: Fixes for v5.2
+Beneath that the bitrate isn't too well approximated. For a target
+rate of 1MHz I get about 630kHz and for 100kHz I get 88kHz. But I'm
+not sure how I could create something that has a good enough
+estimation independent of the target architecture.
 
-A small set of fixes here, one core fix for error handling when we fail
-to set up the hardware before initiating a transfer and another one
-reverting a change in the core which broke Raspberry Pi in common use
-cases as part of some optimization work.  There's also a couple of
-driver specific fixes.
+Any directions for how an acceptable implementation could look like?
 
-----------------------------------------------------------------
-Christophe Leroy (1):
-      spi: spi-fsl-spi: call spi_finalize_current_message() at the end
+Best regards
 
-Mark Brown (1):
-      spi: Fix Raspberry Pi breakage
-
-Super Liu (1):
-      spi: abort spi_sync if failed to prepare_transfer_hardware
-
-YueHaibing (1):
-      spi: bitbang: Fix NULL pointer dereference in spi_unregister_master
-
- drivers/spi/spi-bitbang.c |  2 +-
- drivers/spi/spi-fsl-spi.c |  2 +-
- drivers/spi/spi.c         | 11 ++++++++---
- 3 files changed, 10 insertions(+), 5 deletions(-)
-
---5I6of5zJg18YgZEa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlz+aKcACgkQJNaLcl1U
-h9CIFAf/ROOT3trWHzotcI7wHH8gQPZdZ9Ojm2mjxC6XGbhafTvd+XgLv9dDiT88
-B70DVcuR7VUBtJSDSirKXeOuDQ+vG9/xKtRQMLjIojmkJ2+yO6MzmZLCX3xRZZ9K
-xIgj8U+A5Mbed48XvwD9kHRd57SpUvjaUwp4GBypxHVp6cqJnFDoEcLkN15MNgOQ
-6t2hReLFATJdEPMVRfADLkr6ksVc25pIfmXgpeedT7NXiErkDNez5AtVY0gukLqK
-YM4TSwidRhp8gnXD6wZtBZtniiI881zw25YbCGpIyNJBfL2PykskDGDARB4Gl1t7
-uaEtGcGKR23bSzjQQ2+s9cDmwpADZA==
-=XCGZ
------END PGP SIGNATURE-----
-
---5I6of5zJg18YgZEa--
+Christian Mauderer
