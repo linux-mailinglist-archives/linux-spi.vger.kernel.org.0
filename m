@@ -2,191 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BA13AF90
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2019 09:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC153B085
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2019 10:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387944AbfFJHWu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jun 2019 03:22:50 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:32814 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387785AbfFJHWt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jun 2019 03:22:49 -0400
-Received: by mail-wr1-f68.google.com with SMTP id n9so8051711wru.0
-        for <linux-spi@vger.kernel.org>; Mon, 10 Jun 2019 00:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jbLxpWuUonBzNVgnD/xYkcw7GrDlHMS37R/RDa4E2Kg=;
-        b=abcOHs1oSH8mEsGUMSJzy5b1RaEKPt7RkL3pIvcDpv2/Oh1dFwoc/BMA9x2X7NGuaU
-         8BakLflGRhZ+v7Y2Sai9DDGqdZCjRGFLOaU7hwveLAXKQ2dSBTr+7P9N2dQlWWMx3fMw
-         6FnwUAfnPZa8o8RPcbm3PRlnj+nvkvPfHYD0hbiSX2lafD7Q641AJSoxEAnYBOscYGlD
-         ZgU4LxAwRd8A20yrnIphC2fra/0ugdtvIuay4c+RJ+ABZ64movos5GBB2Fm+D1Tf5VkN
-         MySvEsSsERbcPD6s4EOyp9rdNyA3RjB5HHhv+Bz7cSxLEG9/5FqmI0MZEcZQIK8e5wyR
-         2I4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jbLxpWuUonBzNVgnD/xYkcw7GrDlHMS37R/RDa4E2Kg=;
-        b=SUS1AZ/sA5VtYcQWimmGDNDcKyO9ng32fKBkNRvc8Chn5oPuU0K09wpRT96XBMPUQt
-         oEGKlFGWdZG64VdzboskI2+DyPlm5EKO4pYtwHHFwi4hA56sHZ8bZzawfgx6kVlE/zSv
-         6ObCXrh8J3xL/EOZe/G6+DqpwPv8toJ7hbQBohE9ZVRdrWed08kTZsvnaM4KFacWz/Ps
-         8E1YsFDKF1nN6Y0zUenNYQnR+hKIKQUjBtFGd5x5G4uSQ8rw+AEbyIVRQc5B+fiqVBiH
-         Gn650abHwNh9fLxcTHl1xhZAFV/bOmOEpouMf4Vwy8v4rbZgFvzrH+643mdgyQS2WWNp
-         gX8g==
-X-Gm-Message-State: APjAAAUkbQ5swTpb/EQtbvn0hkgnbpkWNbX7kdnMOGT1afw5sdAWJk9L
-        oYUXb53IWNKBsTOBJ6q+WkKgNExGTBA=
-X-Google-Smtp-Source: APXvYqzQEDfQc3vaIs3W803X6//9nQHYTuEqtlawE9U0l12vpy7sFBz3r42F3OHypKgv/d6CvaTDFA==
-X-Received: by 2002:a5d:4cc3:: with SMTP id c3mr17499958wrt.259.1560151367402;
-        Mon, 10 Jun 2019 00:22:47 -0700 (PDT)
-Received: from localhost.localdomain (233.red-79-146-84.dynamicip.rima-tde.net. [79.146.84.233])
-        by smtp.gmail.com with ESMTPSA id y9sm12587654wma.1.2019.06.10.00.22.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 10 Jun 2019 00:22:46 -0700 (PDT)
-From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-To:     jorge.ramirez-ortiz@linaro.org, agross@kernel.org,
-        david.brown@linaro.org, broonie@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        khasim.mohammed@linaro.org
-Subject: [PATCH] spi: qup: fix PIO/DMA transfers.
-Date:   Mon, 10 Jun 2019 09:22:43 +0200
-Message-Id: <20190610072243.19710-1-jorge.ramirez-ortiz@linaro.org>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2387974AbfFJIQX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jun 2019 04:16:23 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:36684 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387824AbfFJIQX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 10 Jun 2019 04:16:23 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4C4C11A07AF;
+        Mon, 10 Jun 2019 10:16:20 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 0FC271A07AC;
+        Mon, 10 Jun 2019 10:16:12 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 0DAE4402FB;
+        Mon, 10 Jun 2019 16:16:01 +0800 (SGT)
+From:   yibin.gong@nxp.com
+To:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, broonie@kernel.org,
+        festevam@gmail.com, vkoul@kernel.org, dan.j.williams@intel.com,
+        u.kleine-koenig@pengutronix.de, catalin.marinas@arm.com,
+        l.stach@pengutronix.de, will.deacon@arm.com
+Cc:     linux-spi@vger.kernel.org, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v5 00/15] add ecspi ERR009165 for i.mx6/7 soc family
+Date:   Mon, 10 Jun 2019 16:17:38 +0800
+Message-Id: <20190610081753.11422-1-yibin.gong@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-- DMA/PIO:
-  If an error IRQ occurred during PIO or DMA mode make sure to log it so
-on completion the transfer can be marked as an error.
+From: Robin Gong <yibin.gong@nxp.com>
 
-- PIO:
-  Do not complete a transaction until all data has been transferred or
-an error IRQ was flagged.
+  There is ecspi ERR009165 on i.mx6/7 soc family, which cause FIFO
+transfer to be send twice in DMA mode. Please get more information from:
+https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf. The workaround is adding
+new sdma ram script which works in XCH  mode as PIO inside sdma instead
+of SMC mode, meanwhile, 'TX_THRESHOLD' should be 0. The issue should be
+exist on all legacy i.mx6/7 soc family before i.mx6ul.
+  NXP fix this design issue from i.mx6ul, so newer chips including i.mx6ul/
+6ull/6sll do not need this workaroud anymore. All other i.mx6/7/8 chips
+still need this workaroud. This patch set add new 'fsl,imx6ul-ecspi'
+for ecspi driver and 'ecspi_fixed' in sdma driver to choose if need errata
+or not.
+  The first two reverted patches should be the same issue, though, it
+seems 'fixed' by changing to other shp script. Hope Sean or Sascha could
+have the chance to test this patch set if could fix their issues.
+  Besides, enable sdma support for i.mx8mm/8mq and fix ecspi1 not work
+on i.mx8mm because the event id is zero.
 
-1) If there was no error IRQ, ignore the done flag IRQ
-(QUP_OP_MAX_INPUT_DONE_FLAG) until all data for the transfer has been
-processed: not doing so risks completing the transfer returning
-uninitialized data in the buffers.
+PS:
+   Please get sdma firmware from below linux-firmware and copy it to your
+local rootfs /lib/firmware/imx/sdma.
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/imx/sdma
 
-2) Under stress testing we have identified the need to
-protect read/write operations against spurious IN/OUT service events.
+v2:
+  1.Add commit log for reverted patches.
+  2.Add comment for 'ecspi_fixed' in sdma driver.
+  3.Add 'fsl,imx6sll-ecspi' compatible instead of 'fsl,imx6ul-ecspi'
+    rather than remove.
+v3:
+  1.Confirm with design team make sure ERR009165 fixed on i.mx6ul/i.mx6ull
+    /i.mx6sll, not fixed on i.mx8m/8mm and other i.mx6/7 legacy chips.
+    Correct dts related dts patch in v2.
+  2.Clean eratta information in binding doc and new 'tx_glitch_fixed' flag
+    in spi-imx driver to state ERR009165 fixed or not.
+  3.Enlarge burst size to fifo size for tx since tx_wml set to 0 in the
+    errata workaroud, thus improve performance as possible.
+v4:
+  1.add Ack tag from Mark and Vinod
+  2. remove checking 'event_id1' zero as 'event_id0'.
+v5:
+  1.Add another patch for compatible with the current uart driver which
+    using rom script, so both uart ram script and rom script supported
+    in latest firmware, by default uart rom script used. UART driver
+    will be broken without this patch. Latest sdma firmware has been
+    already updated in linux-firmware. 
 
-Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
----
- drivers/spi/spi-qup.c | 51 ++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 45 insertions(+), 6 deletions(-)
+Robin Gong (15):
+  Revert "ARM: dts: imx6q: Use correct SDMA script for SPI5 core"
+  Revert "ARM: dts: imx6: Use correct SDMA script for SPI cores"
+  Revert "dmaengine: imx-sdma: refine to load context only once"
+  dmaengine: imx-sdma: remove dupilicated sdma_load_context
+  dmaengine: imx-sdma: add mcu_2_ecspi script
+  spi: imx: fix ERR009165
+  spi: imx: remove ERR009165 workaround on i.mx6ul
+  spi: imx: add new i.mx6ul compatible name in binding doc
+  dmaengine: imx-sdma: remove ERR009165 on i.mx6ul
+  dma: imx-sdma: add i.mx6ul/6sx compatible name
+  dmaengine: imx-sdma: fix ecspi1 rx dma not work on i.mx8mm
+  ARM: dts: imx6ul: add dma support on ecspi
+  ARM: dts: imx6sll: correct sdma compatible
+  arm64: defconfig: Enable SDMA on i.mx8mq/8mm
+  dmaengine: imx-sdma: add uart rom script
 
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index 974a8ce58b68..0a2ffd2f968a 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -281,6 +281,9 @@ static void spi_qup_read(struct spi_qup *controller, u32 *opflags)
- 		writel_relaxed(QUP_OP_IN_SERVICE_FLAG,
- 			       controller->base + QUP_OPERATIONAL);
- 
-+		if (!remainder)
-+			goto exit;
-+
- 		if (is_block_mode) {
- 			num_words = (remainder > words_per_block) ?
- 					words_per_block : remainder;
-@@ -310,11 +313,13 @@ static void spi_qup_read(struct spi_qup *controller, u32 *opflags)
- 	 * to refresh opflags value because MAX_INPUT_DONE_FLAG may now be
- 	 * present and this is used to determine if transaction is complete
- 	 */
--	*opflags = readl_relaxed(controller->base + QUP_OPERATIONAL);
--	if (is_block_mode && *opflags & QUP_OP_MAX_INPUT_DONE_FLAG)
--		writel_relaxed(QUP_OP_IN_SERVICE_FLAG,
--			       controller->base + QUP_OPERATIONAL);
--
-+exit:
-+	if (!remainder) {
-+		*opflags = readl_relaxed(controller->base + QUP_OPERATIONAL);
-+		if (is_block_mode && *opflags & QUP_OP_MAX_INPUT_DONE_FLAG)
-+			writel_relaxed(QUP_OP_IN_SERVICE_FLAG,
-+				       controller->base + QUP_OPERATIONAL);
-+	}
- }
- 
- static void spi_qup_write_to_fifo(struct spi_qup *controller, u32 num_words)
-@@ -362,6 +367,10 @@ static void spi_qup_write(struct spi_qup *controller)
- 		writel_relaxed(QUP_OP_OUT_SERVICE_FLAG,
- 			       controller->base + QUP_OPERATIONAL);
- 
-+		/* make sure the interrupt is valid */
-+		if (!remainder)
-+			return;
-+
- 		if (is_block_mode) {
- 			num_words = (remainder > words_per_block) ?
- 				words_per_block : remainder;
-@@ -575,10 +584,24 @@ static int spi_qup_do_pio(struct spi_device *spi, struct spi_transfer *xfer,
- 	return 0;
- }
- 
-+static bool spi_qup_data_pending(struct spi_qup *controller)
-+{
-+	unsigned int remainder_tx, remainder_rx;
-+
-+	remainder_tx = DIV_ROUND_UP(spi_qup_len(controller) -
-+				    controller->tx_bytes, controller->w_size);
-+
-+	remainder_rx = DIV_ROUND_UP(spi_qup_len(controller) -
-+				    controller->rx_bytes, controller->w_size);
-+
-+	return remainder_tx || remainder_rx;
-+}
-+
- static irqreturn_t spi_qup_qup_irq(int irq, void *dev_id)
- {
- 	struct spi_qup *controller = dev_id;
- 	u32 opflags, qup_err, spi_err;
-+	unsigned long flags;
- 	int error = 0;
- 
- 	qup_err = readl_relaxed(controller->base + QUP_ERROR_FLAGS);
-@@ -610,6 +633,11 @@ static irqreturn_t spi_qup_qup_irq(int irq, void *dev_id)
- 		error = -EIO;
- 	}
- 
-+	spin_lock_irqsave(&controller->lock, flags);
-+	if (!controller->error)
-+		controller->error = error;
-+	spin_unlock_irqrestore(&controller->lock, flags);
-+
- 	if (spi_qup_is_dma_xfer(controller->mode)) {
- 		writel_relaxed(opflags, controller->base + QUP_OPERATIONAL);
- 	} else {
-@@ -618,11 +646,22 @@ static irqreturn_t spi_qup_qup_irq(int irq, void *dev_id)
- 
- 		if (opflags & QUP_OP_OUT_SERVICE_FLAG)
- 			spi_qup_write(controller);
-+
-+		if (!spi_qup_data_pending(controller))
-+			complete(&controller->done);
- 	}
- 
--	if ((opflags & QUP_OP_MAX_INPUT_DONE_FLAG) || error)
-+	if (error)
- 		complete(&controller->done);
- 
-+	if (opflags & QUP_OP_MAX_INPUT_DONE_FLAG) {
-+		if (!spi_qup_is_dma_xfer(controller->mode)) {
-+			if (spi_qup_data_pending(controller))
-+				return IRQ_HANDLED;
-+		}
-+		complete(&controller->done);
-+	}
-+
- 	return IRQ_HANDLED;
- }
- 
+ .../devicetree/bindings/dma/fsl-imx-sdma.txt       |  2 +
+ .../devicetree/bindings/spi/fsl-imx-cspi.txt       |  1 +
+ arch/arm/boot/dts/imx6q.dtsi                       |  2 +-
+ arch/arm/boot/dts/imx6qdl.dtsi                     |  8 +-
+ arch/arm/boot/dts/imx6sll.dtsi                     |  2 +-
+ arch/arm/boot/dts/imx6ul.dtsi                      |  8 ++
+ arch/arm64/configs/defconfig                       |  3 +
+ drivers/dma/imx-sdma.c                             | 88 ++++++++++++++++------
+ drivers/spi/spi-imx.c                              | 61 ++++++++++++---
+ include/linux/platform_data/dma-imx-sdma.h         | 11 ++-
+ 10 files changed, 145 insertions(+), 41 deletions(-)
+
 -- 
-2.21.0
+2.7.4
 
