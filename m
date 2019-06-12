@@ -2,99 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B403D4213E
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2019 11:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027F1448F7
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2019 19:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437364AbfFLJnm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 12 Jun 2019 05:43:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:48800 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726636AbfFLJnm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 12 Jun 2019 05:43:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6609C337;
-        Wed, 12 Jun 2019 02:43:41 -0700 (PDT)
-Received: from [10.1.196.93] (en101.cambridge.arm.com [10.1.196.93])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 574AB3F246;
-        Wed, 12 Jun 2019 02:45:23 -0700 (PDT)
-Subject: Re: [PATCH 07/13] drivers: Add generic match helper by ACPI_COMPANION
- device
-To:     rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-spi@vger.kernel.org, broonie@kernel.org
-References: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
- <1559747630-28065-8-git-send-email-suzuki.poulose@arm.com>
- <CAJZ5v0h+maPj-ijKV_vvQBpHD7N-VMiAqSeyztAkiUR9E2WdmQ@mail.gmail.com>
- <1f230eb7-f4e3-ed4e-960d-c3bbb60f0a18@arm.com>
- <CAJZ5v0i0WP88+vTEheSTfAoSi5nEdjaLs4KOGxXK3_AoPhPrhg@mail.gmail.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-Message-ID: <621f33db-d7d8-380e-fe50-effb27523068@arm.com>
-Date:   Wed, 12 Jun 2019 10:43:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727213AbfFMRMk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Jun 2019 13:12:40 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:51555 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729018AbfFLWHh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Jun 2019 18:07:37 -0400
+Received: from 79.184.253.190.ipv4.supernova.orange.pl (79.184.253.190) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id 6a7a66494343cf0e; Thu, 13 Jun 2019 00:07:34 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-spi@vger.kernel.org,
+        broonie@kernel.org
+Subject: Re: [PATCH 07/13] drivers: Add generic match helper by ACPI_COMPANION device
+Date:   Thu, 13 Jun 2019 00:07:34 +0200
+Message-ID: <12403040.8iQv1AJh6Y@kreacher>
+In-Reply-To: <621f33db-d7d8-380e-fe50-effb27523068@arm.com>
+References: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com> <CAJZ5v0i0WP88+vTEheSTfAoSi5nEdjaLs4KOGxXK3_AoPhPrhg@mail.gmail.com> <621f33db-d7d8-380e-fe50-effb27523068@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0i0WP88+vTEheSTfAoSi5nEdjaLs4KOGxXK3_AoPhPrhg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rafael,
+On Wednesday, June 12, 2019 11:43:38 AM CEST Suzuki K Poulose wrote:
+> Hi Rafael,
+> 
+> On 06/06/2019 10:57, Rafael J. Wysocki wrote:
+> > On Thu, Jun 6, 2019 at 11:28 AM Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+> >>
+> >>
+> >>
+> >> On 06/06/2019 10:17, Rafael J. Wysocki wrote:
+> >>> On Wed, Jun 5, 2019 at 5:14 PM Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+> >>>>
+> >>>> Add a generic helper to match a device by the acpi device.
+> >>>
+> >>> "by its ACPI companion device object", please.
+> >>
+> >> Sure.
+> >>
+> >>>
+> >>> Also, it would be good to combine this patch with the patch(es) that
+> >>> cause device_match_acpi_dev() to be actually used.
+> >>>
+> >>> Helpers without any users are arguably not useful.
+> >>
+> >> Sure, the helpers will be part of the part2 of the whole series,
+> >> which will actually have the individual subsystems consuming the
+> >> new helpers. For your reference, it is available here :
+> >>
+> >> http://linux-arm.org/git?p=linux-skp.git;a=shortlog;h=refs/heads/driver-cleanup/v2
+> >>
+> >> e.g:
+> >> http://linux-arm.org/git?p=linux-skp.git;a=commit;h=59534e843e2f214f1f29659993f6e423bef16b28
+> >>
+> >> I could simply pull those patches into this part, if you prefer that.
+> > 
+> > Not really.
+> > 
+> > I'd rather do it the other way around: push the introduction of the
+> > helpers to part 2.
+> 
+> Sure, I will do that.
+> 
+> > 
+> >> However, that would be true for the other patches in the part2.
+> >> I am open to suggestions, on how to split the series.
+> > 
+> > You can introduce each helper along with its users in one patch.
+> > 
+> > This way the total number of patches will be reduced and they will be
+> > easier to review IMO.
+> > 
+> 
+> Wouldn't it make the merging complicated ? I am still not clear how we plan
+> to merge the part 2 ?
 
-On 06/06/2019 10:57, Rafael J. Wysocki wrote:
-> On Thu, Jun 6, 2019 at 11:28 AM Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>
->>
->>
->> On 06/06/2019 10:17, Rafael J. Wysocki wrote:
->>> On Wed, Jun 5, 2019 at 5:14 PM Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>>>
->>>> Add a generic helper to match a device by the acpi device.
->>>
->>> "by its ACPI companion device object", please.
->>
->> Sure.
->>
->>>
->>> Also, it would be good to combine this patch with the patch(es) that
->>> cause device_match_acpi_dev() to be actually used.
->>>
->>> Helpers without any users are arguably not useful.
->>
->> Sure, the helpers will be part of the part2 of the whole series,
->> which will actually have the individual subsystems consuming the
->> new helpers. For your reference, it is available here :
->>
->> http://linux-arm.org/git?p=linux-skp.git;a=shortlog;h=refs/heads/driver-cleanup/v2
->>
->> e.g:
->> http://linux-arm.org/git?p=linux-skp.git;a=commit;h=59534e843e2f214f1f29659993f6e423bef16b28
->>
->> I could simply pull those patches into this part, if you prefer that.
-> 
-> Not really.
-> 
-> I'd rather do it the other way around: push the introduction of the
-> helpers to part 2.
+I wouldn't worry about it that much.  Without review, you have nothing to merge anyway.
 
-Sure, I will do that.
+Technically, every patch with a new helper and its users can go in via the Greg's tree
+as long as it has been ACKed by the maintainers of the code touched by it.
 
-> 
->> However, that would be true for the other patches in the part2.
->> I am open to suggestions, on how to split the series.
-> 
-> You can introduce each helper along with its users in one patch.
-> 
-> This way the total number of patches will be reduced and they will be
-> easier to review IMO.
-> 
 
-Wouldn't it make the merging complicated ? I am still not clear how we plan
-to merge the part 2 ?
 
-Cheers
-Suzuki
