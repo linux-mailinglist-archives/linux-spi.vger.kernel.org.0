@@ -2,110 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE15741A69
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2019 04:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D884B41E09
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2019 09:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405046AbfFLCcw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jun 2019 22:32:52 -0400
-Received: from mail-eopbgr10080.outbound.protection.outlook.com ([40.107.1.80]:21118
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2404957AbfFLCcw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 Jun 2019 22:32:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=czVDxJ0zf8mPj6zoTY55KvKQNA0Z7prW1b4S5CPyVgg=;
- b=FGGM+m7Mve3Gix62H81vFM30aQN8PciGEnUPQtUBfiAc7gOMvzYXSRq6WIcVOrPR0zN9BLCMlSzuLQb4WK2FXCMmp5a9pW3AKAfOQ8T7+9gIn405gEWYG03vWKRioXba8E7XkQff0kkC09SdnApqZgPZWUPNF9JK6AFBSGCMB7Y=
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (20.179.235.81) by
- VE1PR04MB6717.eurprd04.prod.outlook.com (20.179.235.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.17; Wed, 12 Jun 2019 02:32:46 +0000
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::a13e:6f61:e9e6:16d7]) by VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::a13e:6f61:e9e6:16d7%7]) with mapi id 15.20.1943.026; Wed, 12 Jun 2019
- 02:32:46 +0000
-From:   Robin Gong <yibin.gong@nxp.com>
-To:     "robh@kernel.org" <robh@kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Subject: Re: [PATCH v5 10/15] dma: imx-sdma: add i.mx6ul/6sx compatible name
-Thread-Topic: [PATCH v5 10/15] dma: imx-sdma: add i.mx6ul/6sx compatible name
-Thread-Index: AQHVH2TUbTkL7+9S6kqyltkWYzddn6aXDQ2AgADJhYA=
-Date:   Wed, 12 Jun 2019 02:32:46 +0000
-Message-ID: <1560335783.21664.6.camel@nxp.com>
-References: <20190610081753.11422-1-yibin.gong@nxp.com>
-         <20190610081753.11422-11-yibin.gong@nxp.com> <20190611223507.GA25722@bogus>
-In-Reply-To: <20190611223507.GA25722@bogus>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.18.5.2-0ubuntu3.2 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yibin.gong@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ae661d44-0e4e-4c0c-9394-08d6eede4184
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VE1PR04MB6717;
-x-ms-traffictypediagnostic: VE1PR04MB6717:
-x-microsoft-antispam-prvs: <VE1PR04MB671780A9155EB4CA11E4A01789EC0@VE1PR04MB6717.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0066D63CE6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(39860400002)(136003)(346002)(396003)(376002)(199004)(189003)(54906003)(25786009)(102836004)(2906002)(50226002)(66066001)(478600001)(6486002)(14454004)(6916009)(2501003)(53546011)(6506007)(4326008)(6116002)(3846002)(4744005)(7736002)(6512007)(99286004)(76176011)(53936002)(91956017)(66476007)(64756008)(66446008)(305945005)(66556008)(76116006)(73956011)(86362001)(66946007)(446003)(71200400001)(8936002)(71190400001)(8676002)(229853002)(11346002)(476003)(2616005)(6436002)(256004)(2351001)(5660300002)(81156014)(36756003)(316002)(103116003)(26005)(1730700003)(186003)(81166006)(6246003)(68736007)(7416002)(5640700003)(486006)(99106002);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6717;H:VE1PR04MB6638.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: elcSp7V6Y5RQ3Z0SliXk9WYBx1omOdFOo/8aNfCztwSHf1D/3ZZYrNfcv6nyhnjdFuHc99F859lwHxvSwphu9uhOFX7B9/Z+M6bvZimk2eaEFmB2//S40Vej8w3+xf5SZjLiP/ypMJT+ScAnbmJLJcjXV3cXuZ3f+7dOnr8yTWjaOt14/6Q4Aj2GXPhfy7UVMwQYt9DsK1nkarDYbPAqQHgD0nUjN5/EU9MmOZf7yQoOT38YhsY71m1BevS2dgphq6Lcj2bHAIW5ZKEXDAqWQQv7AKS0dh6uADo79w6tM8aNiOQXTFT3XcAgH7TsMjRoXf0mub/SqW6cHfr0ab+I+tK0fsD0m8/2Mbw1vBI7EH7fE+BvVf2rNI8U7Eg1w3oZxO6BWK6hfzP25Cef44GU/z9eDiDeCfiyB0eZk9Bm3so=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <804F0C69EA776E4583B6B19240044F3A@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S2407554AbfFLHnC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 12 Jun 2019 03:43:02 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:40284 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406728AbfFLHnB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Jun 2019 03:43:01 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id AB99660F3A; Wed, 12 Jun 2019 07:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1560325378;
+        bh=akNFareB34O+WoELW9a+vXLpK/S7e9w6RCo5AwPjb2A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=b6L0hfL3FpRwBcfm7DqTiSOJXV1qO+cKG6vdFUKA92yPW42Gg4GSTg7oWylS6l0CP
+         NT1Qa14L+91OHy3VP0yw1NC7oTgFa8WU/nEZ+rwAXpxqniua5APd1uwAV5WysKbNeq
+         U4zu3+X2m030hPWSus3HgHdDx30BlqWfec1xEzII=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.131.117.43] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F04D960CF1;
+        Wed, 12 Jun 2019 07:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1560325377;
+        bh=akNFareB34O+WoELW9a+vXLpK/S7e9w6RCo5AwPjb2A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=U/s1AWqwx7q0I8Ng/jLB1n8gUT0Mk/9P2K9ccSQ7OCjYnbfmz3j/qMd/2j7W+KCy8
+         E34Zus5a4XaR6M5L9kZwN0qpKgm6ECocxs25r9Fw3cev2eJHHhQZJNVk4z+w5ABMnd
+         ThX+4IziXS3BDPUulhM0GRvNTDLUqxX6Tbi1AUG4=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F04D960CF1
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
+To:     Viresh Kumar <viresh.kumar@linaro.org>, swboyd@chromium.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
+        dianders@chromium.org, rafael@kernel.org
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
+ <20190320094918.20234-2-rnayak@codeaurora.org>
+ <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
+Date:   Wed, 12 Jun 2019 13:12:51 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae661d44-0e4e-4c0c-9394-08d6eede4184
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2019 02:32:46.7182
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yibin.gong@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6717
+In-Reply-To: <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gMjAxOS0wNi0xMSBhdCAyMjozNSArMDAwMCwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+IE9uIE1v
-biwgMTAgSnVuIDIwMTkgMTY6MTc6NDggKzA4MDAsIHlpYmluLmdvbmdAbnhwLmNvbSB3cm90ZToN
-Cj4gPiANCj4gPiBGcm9tOiBSb2JpbiBHb25nIDx5aWJpbi5nb25nQG54cC5jb20+DQo+ID4gDQo+
-ID4gQWRkIGkubXg2dWwgYW5kIGkubXg2c3ggY29tcGF0aWJsZSBuYW1lIGluIGJpbmRpbmcgZG9j
-Lg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFJvYmluIEdvbmcgPHlpYmluLmdvbmdAbnhwLmNv
-bT4NCj4gPiAtLS0NCj4gPiDCoERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kbWEv
-ZnNsLWlteC1zZG1hLnR4dCB8IDIgKysNCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlv
-bnMoKykNCj4gPiANCj4gUGxlYXNlIGFkZCBBY2tlZC1ieS9SZXZpZXdlZC1ieSB0YWdzIHdoZW4g
-cG9zdGluZyBuZXcgdmVyc2lvbnMuDQo+IEhvd2V2ZXIsDQo+IHRoZXJlJ3Mgbm8gbmVlZCB0byBy
-ZXBvc3QgcGF0Y2hlcyAqb25seSogdG8gYWRkIHRoZSB0YWdzLiBUaGUNCj4gdXBzdHJlYW0NCj4g
-bWFpbnRhaW5lciB3aWxsIGRvIHRoYXQgZm9yIGFja3MgcmVjZWl2ZWQgb24gdGhlIHZlcnNpb24g
-dGhleSBhcHBseS4NCj4gDQoNCj4gSWYgYSB0YWcgd2FzIG5vdCBhZGRlZCBvbiBwdXJwb3NlLCBw
-bGVhc2Ugc3RhdGUgd2h5IGFuZCB3aGF0IGNoYW5nZWQuDQpTb3JyeSBSb2IuLi5JIG1pc3MgeW91
-ciBtYWlsIHdpdGggJ1Jldmlld2VkLWJ5JyBpbiB2MiBiZWNhdXNlIGl0IHNsaXANCmludG8gJ3Vu
-ayBFbWFpbCcgZm9sZGVyLiBXaWxsIGFkZCB5b3VyIHRhZyBpbiB2NiBpZiBjb21tZW50cyByZWNl
-aXZlZA0KZnJvbSB2NQ==
+
+On 6/11/2019 4:24 PM, Viresh Kumar wrote:
+> On 20-03-19, 15:19, Rajendra Nayak wrote:
+>> From: Stephen Boyd <swboyd@chromium.org>
+>>
+>> Doing this allows us to call this API with any rate requested and have
+>> it not need to match in the OPP table. Instead, we'll round the rate up
+>> to the nearest OPP that we see so that we can get the voltage or level
+>> that's required for that OPP. This supports users of OPP that want to
+>> specify the 'fmax' tables of a device instead of every single frequency
+>> that they need. And for devices that required the exact frequency, we
+>> can rely on the clk framework to round the rate to the nearest supported
+>> frequency instead of the OPP framework to do so.
+>>
+>> Note that this may affect drivers that don't want the clk framework to
+>> do rounding, but instead want the OPP table to do the rounding for them.
+>> Do we have that case? Should we add some flag to the OPP table to
+>> indicate this and then not have that flag set when there isn't an OPP
+>> table for the device and also introduce a property like 'opp-use-clk' to
+>> tell the table that it should use the clk APIs to round rates instead of
+>> OPP?
+>>
+>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+>> ---
+
+[]...
+
+> 
+> I see a logical problem with this patch.
+> 
+> Suppose the clock driver supports following frequencies: 500M, 800M,
+> 1G, 1.2G and the OPP table contains following list: 500M, 1G, 1.2G
+> (i.e. missing 800M).
+> 
+> Now 800M should never get programmed as it isn't part of the OPP
+> table. But if you pass 600M to opp-set-rate, then it will end up
+> selecting 800M as clock driver will round up to the closest value.
+
+correct
+
+> 
+> Even if no one is doing this right now, it is a sensible usecase,
+> specially during testing of patches and I don't think we should avoid
+> it.
+> 
+> What exactly is the use case for which we need this patch ? 
+Like the changelog says 'This supports users of OPP that want to
+specify the 'fmax' tables of a device instead of every single frequency
+that they need'
+
+so the 'fmax' tables basically say what the max frequency the device can
+operate at for a given performance state/voltage level.
+
+so in your example it would be for instance
+
+500M, Perf state = 2
+1G, Perf state = 3
+1.2G, Perf state = 4
+
+Now when the device wants to operate at say 800Mhz, you need to set the
+Perf state to 3, so this patch basically avoids you having to put those additional
+OPPs in the table which would otherwise look something like this
+
+500M, Perf state = 2
+800M, Perf state = 3 <-- redundant OPP
+1G, Perf state = 3
+1.2G, Perf state = 4
+
+Your example had just 1 missing entry in the 'fmax' tables in reality its a lot more,
+atleast on all qualcomm platforms.
+
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
