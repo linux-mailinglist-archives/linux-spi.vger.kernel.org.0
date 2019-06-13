@@ -2,153 +2,208 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AF143D1F
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2019 17:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E518F43F66
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2019 17:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730603AbfFMPjm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Jun 2019 11:39:42 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:33874 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731913AbfFMJyY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Jun 2019 05:54:24 -0400
-Received: by mail-pf1-f194.google.com with SMTP id c85so11527287pfc.1
-        for <linux-spi@vger.kernel.org>; Thu, 13 Jun 2019 02:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hjw/27BiWyRsokNbznNmO94DEfRuOPMKzlIXgRI+H5k=;
-        b=WUhQgDpav09wCsvAut2BWW+R7sS7LtghDHpfI6v0bUGLZjzR+QUQRAULtuQ+dBOAS+
-         5B9NTVliKzqPVgFAQafRgRYnR51hBF4bFPqnp+SsVxb/s1dw527gW4ZdAD71YLZdwcQ0
-         kP0XOt6g2JH7P49I+eaVhp4nGWzzZa4kZC41fTHL4Dh4FeCF8y1xkbVGRNCVSFpZMYT1
-         seXbQTfhtWg/Y2ZFYMhZdfSkXlmqGNBTcy0L6z6YZU0v3YRzsY93irO3uxYz27fLorQY
-         xCaAv7PNE+Wc9gb1a0ZIBFgBoTFuvbNfAi4+vMKRTRmWIgoX9FjCYaWw5pHArsOCxWin
-         Y5wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hjw/27BiWyRsokNbznNmO94DEfRuOPMKzlIXgRI+H5k=;
-        b=nM+E+076xRKbLCv4+47FcdVYSTYVA9x/ZaOoAd5zxF43Y2V/qbYzjsFAN9TU4gAggu
-         7W+6efIMxcN/8U5saiIkbDC88u0tpVmiuoV0H5m20YsmaGRok7UyYbikG151H6iG+rQe
-         01POWbSIXLz+CxcOlYxGJF/1tWYn3nv3oYDXCjFFzcX+UKLRD8tngnwA6gndFZdRDWCd
-         gsIbLehA65u8y8xcHff0S9RkEiBE3bHGg67o28oO+kLrA93bjY7m+GXAa1iTbm30y9gV
-         dQNREEhZjN6rE+mOAzwT4g2OMAUgU6EJViZwLzBaOpvPbFAnGXJeg/qGu4KS816Dyfjq
-         2oFg==
-X-Gm-Message-State: APjAAAXlHIQG4zNt2AtZeBNJ8xDNdkr24XrJSKqM1I9+PRBlKgY+qwTV
-        VlQ22B4lNdN8cC1t9XYqXRmQaA==
-X-Google-Smtp-Source: APXvYqyRW+yesk5LbA1w8QMeFbdIKEhSaWce+1/TtkgKa+kMImAbjDmOqy9rTc27doz8KV05Ir4xXQ==
-X-Received: by 2002:a17:90a:3225:: with SMTP id k34mr4393711pjb.31.1560419663353;
-        Thu, 13 Jun 2019 02:54:23 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id u97sm3965453pjb.26.2019.06.13.02.54.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 02:54:21 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 15:24:19 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     swboyd@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        vincent.guittot@linaro.org, mturquette@baylibre.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
-        dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
-Message-ID: <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-2-rnayak@codeaurora.org>
- <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
- <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
- <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1731519AbfFMP46 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Jun 2019 11:56:58 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:58320 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731602AbfFMP44 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Jun 2019 11:56:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=rdQRuigh4pPeCL+DVbRSo6mhbiJGsrIQYlQjApHWDv0=; b=oQqdv9lbFaap
+        lqFl0w8uGa3mtUNuoyJ3dzjNNPSg2zlLw9FZv2WJqiSQQCSXU260B+0O8NCq136s/Fkv+HMl6+M6x
+        eNCrhjKTPfhFzTFar4/Q6xf5qoL5vo7cllUKDv18o27TQ+EanPRjjjRtvRnnYklr+8JDBo7gaXhGe
+        nTicM=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hbS5t-0005HU-Rk; Thu, 13 Jun 2019 15:56:53 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id 66A20440046; Thu, 13 Jun 2019 16:56:53 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, broonie@kernel.org,
+        david.brown@linaro.org, jorge.ramirez-ortiz@linaro.org,
+        khasim.mohammed@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: qup: fix PIO/DMA transfers." to the spi tree
+In-Reply-To: <20190610072243.19710-1-jorge.ramirez-ortiz@linaro.org>
+X-Patchwork-Hint: ignore
+Message-Id: <20190613155653.66A20440046@finisterre.sirena.org.uk>
+Date:   Thu, 13 Jun 2019 16:56:53 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 12-06-19, 13:55, Viresh Kumar wrote:
-> Okay, I have applied this patch (alone) to the OPP tree with minor
-> modifications in commit log and diff.
+The patch
 
-And I have removed it now :)
+   spi: qup: fix PIO/DMA transfers.
 
-I am confused as hell on what we should be doing and what we are doing
-right now. And if we should do better.
+has been applied to the spi tree at
 
-Let me explain with an example.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.2
 
-- The clock provider supports following frequencies: 500, 600, 700,
-  800, 900, 1000 MHz.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-- The OPP table contains/supports only a subset: 500, 700, 1000 MHz.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Now, the request to change the frequency starts from cpufreq
-governors, like schedutil when they calls:
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-__cpufreq_driver_target(policy, 599 MHz, CPUFREQ_RELATION_L);
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-CPUFREQ_RELATION_L means: lowest frequency at or above target. And so
-I would expect the frequency to get set to 600MHz (if we look at clock
-driver) or 700MHz (if we look at OPP table). I think we should decide
-this thing from the OPP table only as that's what the platform guys
-want us to use. So, we should end up with 700 MHz.
+Thanks,
+Mark
 
-Then we land into dev_pm_opp_set_rate(), which does this (which is
-code copied from earlier version of cpufreq-dt driver):
+From a75e91bad717fea43358e7f743de5f93c4e5978f Mon Sep 17 00:00:00 2001
+From: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Date: Mon, 10 Jun 2019 09:22:43 +0200
+Subject: [PATCH] spi: qup: fix PIO/DMA transfers.
 
-- clk_round_rate(clk, 599 MHz).
+- DMA/PIO:
+  If an error IRQ occurred during PIO or DMA mode make sure to log it so
+on completion the transfer can be marked as an error.
 
-  clk_round_rate() returns the highest frequency lower than target. So
-  it must return 500 MHz (I haven't tested this yet, all theoretical).
+- PIO:
+  Do not complete a transaction until all data has been transferred or
+an error IRQ was flagged.
 
-- _find_freq_ceil(opp_table, 500 MHz).
+1) If there was no error IRQ, ignore the done flag IRQ
+(QUP_OP_MAX_INPUT_DONE_FLAG) until all data for the transfer has been
+processed: not doing so risks completing the transfer returning
+uninitialized data in the buffers.
 
-  This works like CPUFREQ_RELATION_L, so we find lowest frequency >=
-  target freq. And so we should get: 500 MHz itself as OPP table has
-  it.
+2) Under stress testing we have identified the need to
+protect read/write operations against spurious IN/OUT service events.
 
-- clk_set_rate(clk, 500 MHz).
+Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-qup.c | 51 ++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 45 insertions(+), 6 deletions(-)
 
-  This must be doing round-rate again, but I think we will settle with
-  500 MHz eventually.
-
-
-Now the questionnaire:
-
-- Is this whole exercise correct ?
-- We shouldn't have landed on 500 MHz, right ?
-- Is there anything wrong with the above theory (I am going to test it soon though).
-- Why do we need to do the first clock_round_rate() ? Should we remove
-  it ?
-
-
-
-Now lets move to this patch, which makes it more confusing.
-
-The OPP tables for CPUs and GPUs should already be somewhat like fmax
-tables for particular voltage values and that's why both cpufreq and
-OPP core try to find a frequency higher than target so we choose the
-most optimum one power-efficiency wise.
-
-For cases where the OPP table is only a subset of the clk-providers
-table (almost always), if we let the clock provider to find the
-nearest frequency (which is lower) we will run the CPU/GPU at a
-not-so-optimal frequency. i.e. if 500, 600, 700 MHz all need voltage
-to be 1.2 V, we should be running at 700 always, while we may end up
-running at 500 MHz.
-
-This kind of behavior (introduced by this patch) is important for
-other devices which want to run at the nearest frequency to target
-one, but not for CPUs/GPUs. So, we need to tag these IO devices
-separately, maybe from DT ? So we select the closest match instead of
-most optimal one.
-
-But lets fix the existing issues first and then think about this
-patch.
-
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index 974a8ce58b68..0a2ffd2f968a 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -281,6 +281,9 @@ static void spi_qup_read(struct spi_qup *controller, u32 *opflags)
+ 		writel_relaxed(QUP_OP_IN_SERVICE_FLAG,
+ 			       controller->base + QUP_OPERATIONAL);
+ 
++		if (!remainder)
++			goto exit;
++
+ 		if (is_block_mode) {
+ 			num_words = (remainder > words_per_block) ?
+ 					words_per_block : remainder;
+@@ -310,11 +313,13 @@ static void spi_qup_read(struct spi_qup *controller, u32 *opflags)
+ 	 * to refresh opflags value because MAX_INPUT_DONE_FLAG may now be
+ 	 * present and this is used to determine if transaction is complete
+ 	 */
+-	*opflags = readl_relaxed(controller->base + QUP_OPERATIONAL);
+-	if (is_block_mode && *opflags & QUP_OP_MAX_INPUT_DONE_FLAG)
+-		writel_relaxed(QUP_OP_IN_SERVICE_FLAG,
+-			       controller->base + QUP_OPERATIONAL);
+-
++exit:
++	if (!remainder) {
++		*opflags = readl_relaxed(controller->base + QUP_OPERATIONAL);
++		if (is_block_mode && *opflags & QUP_OP_MAX_INPUT_DONE_FLAG)
++			writel_relaxed(QUP_OP_IN_SERVICE_FLAG,
++				       controller->base + QUP_OPERATIONAL);
++	}
+ }
+ 
+ static void spi_qup_write_to_fifo(struct spi_qup *controller, u32 num_words)
+@@ -362,6 +367,10 @@ static void spi_qup_write(struct spi_qup *controller)
+ 		writel_relaxed(QUP_OP_OUT_SERVICE_FLAG,
+ 			       controller->base + QUP_OPERATIONAL);
+ 
++		/* make sure the interrupt is valid */
++		if (!remainder)
++			return;
++
+ 		if (is_block_mode) {
+ 			num_words = (remainder > words_per_block) ?
+ 				words_per_block : remainder;
+@@ -575,10 +584,24 @@ static int spi_qup_do_pio(struct spi_device *spi, struct spi_transfer *xfer,
+ 	return 0;
+ }
+ 
++static bool spi_qup_data_pending(struct spi_qup *controller)
++{
++	unsigned int remainder_tx, remainder_rx;
++
++	remainder_tx = DIV_ROUND_UP(spi_qup_len(controller) -
++				    controller->tx_bytes, controller->w_size);
++
++	remainder_rx = DIV_ROUND_UP(spi_qup_len(controller) -
++				    controller->rx_bytes, controller->w_size);
++
++	return remainder_tx || remainder_rx;
++}
++
+ static irqreturn_t spi_qup_qup_irq(int irq, void *dev_id)
+ {
+ 	struct spi_qup *controller = dev_id;
+ 	u32 opflags, qup_err, spi_err;
++	unsigned long flags;
+ 	int error = 0;
+ 
+ 	qup_err = readl_relaxed(controller->base + QUP_ERROR_FLAGS);
+@@ -610,6 +633,11 @@ static irqreturn_t spi_qup_qup_irq(int irq, void *dev_id)
+ 		error = -EIO;
+ 	}
+ 
++	spin_lock_irqsave(&controller->lock, flags);
++	if (!controller->error)
++		controller->error = error;
++	spin_unlock_irqrestore(&controller->lock, flags);
++
+ 	if (spi_qup_is_dma_xfer(controller->mode)) {
+ 		writel_relaxed(opflags, controller->base + QUP_OPERATIONAL);
+ 	} else {
+@@ -618,11 +646,22 @@ static irqreturn_t spi_qup_qup_irq(int irq, void *dev_id)
+ 
+ 		if (opflags & QUP_OP_OUT_SERVICE_FLAG)
+ 			spi_qup_write(controller);
++
++		if (!spi_qup_data_pending(controller))
++			complete(&controller->done);
+ 	}
+ 
+-	if ((opflags & QUP_OP_MAX_INPUT_DONE_FLAG) || error)
++	if (error)
+ 		complete(&controller->done);
+ 
++	if (opflags & QUP_OP_MAX_INPUT_DONE_FLAG) {
++		if (!spi_qup_is_dma_xfer(controller->mode)) {
++			if (spi_qup_data_pending(controller))
++				return IRQ_HANDLED;
++		}
++		complete(&controller->done);
++	}
++
+ 	return IRQ_HANDLED;
+ }
+ 
 -- 
-viresh
+2.20.1
+
