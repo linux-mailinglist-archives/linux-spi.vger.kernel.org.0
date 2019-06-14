@@ -2,125 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3216454C1
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Jun 2019 08:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC50A45768
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Jun 2019 10:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725851AbfFNGcP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Jun 2019 02:32:15 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:35756 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbfFNGcO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jun 2019 02:32:14 -0400
-Received: by mail-pl1-f193.google.com with SMTP id p1so587750plo.2
-        for <linux-spi@vger.kernel.org>; Thu, 13 Jun 2019 23:32:14 -0700 (PDT)
+        id S1726207AbfFNIXs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Jun 2019 04:23:48 -0400
+Received: from mail-pf1-f181.google.com ([209.85.210.181]:37493 "EHLO
+        mail-pf1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726096AbfFNIXr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jun 2019 04:23:47 -0400
+Received: by mail-pf1-f181.google.com with SMTP id 19so987659pfa.4
+        for <linux-spi@vger.kernel.org>; Fri, 14 Jun 2019 01:23:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+B7qKXGJFcpQLr7qp/Npmcr+UB+pLON9p4u3OT4sydE=;
-        b=IteYjWMcdrUIqBhhG5AEnX6ufnl4qdQ94/AhbuAqyXzyusOiHbjueExr31Z/7k3vK1
-         8qxjudR4xriHfmMP9c6US25vQWx1jXjkH8k/Mu3slZvFI70Hc9fpA4PC3oQ3cfq1GnBz
-         DfiY/Ib8YY5gn+P1ODVqEgVHY/OCOLDh+1M7OSwV8m1AeZ5bgYJrZvSrMPc7hH111ZRA
-         oE5TmKKmdmW3InOVhB9xPk5eSBVIU7YqJ2GCgHUCJMKB/rJVw1WSQxmqP9gSfpKZ/htO
-         va49FUHCzSBqKq6qVHw9WUMQZMZWYPylyZmguBUq1jqSAbUvDs/rqipmfDendsqMUjtu
-         zJtQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=IbROzr8FoRs1kLVb6zqUpOyz06MuvRZq9MAyDRUAEVQ=;
+        b=vEKJzigg2ioobI/J/vq6CTq6DrquDGogNgeekS5h0XUZe/f7y5yiL4mEr6SHyJkwDj
+         l340ictH7fMq9UlenUObreqd0BYEVHmjJejf8ewcR/1/amw/FiUHcyCUwR1MzrepDnk7
+         fk233C2bitoz7B4E2oWYN7fpQ3mEhktp6XfHKQFNN/B/UEdzwEaL0EDC/NQh9cqMr06T
+         hhEqfpbEoypLZWm23OYh+XhWMKkRM5bdG5+ua402Zs5gctNZpFaWJoRK2JXs/MHRXNul
+         yB0cQYVQ+10GzxSYMQ+/KKpIjHzMxnYsa+MhBEYY60YVs8qH2FDNbjUAJWvMrADKSCq+
+         Yhmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+B7qKXGJFcpQLr7qp/Npmcr+UB+pLON9p4u3OT4sydE=;
-        b=Hc9qCDRBQVV6VYwhC1D6EYFeXgwLjcS65XG1EQ3Hiw19lZgZYqRGxUvZghU7oI952E
-         2Ot4MOKk17RKj8p/GaUWwUptLRS1JVV0wuxYDlhmLB1sUCfOY4ITCNFO/UVmzIaHTQPR
-         M9Msdm3aUK55DK3zpeqJJdieneWT9DooDTwmauIRHbj11amsChlERKX5xtL1ts59mkFX
-         taDfzmqBG72SJpDSOoAIx+te1pgxhHjE9EXvA85ESGOHLHA1CoOeuFe/fXAxSKMF28UM
-         clIPjz8hPawpLccVWWuOj/j46LoyLqBcXO3tw0ZNDRYGrxSM0xJYm0JyN+JR6eD92W+/
-         oDkQ==
-X-Gm-Message-State: APjAAAUxBcWUM7edQBmtLcQNay7qtrRBBNBv+Slcp0A3kL1s4M/hyBhM
-        t13s6F4NewrmGIpt86WFcc5UKA==
-X-Google-Smtp-Source: APXvYqwaUgWQWH6DKaYdF1Cdc9oLYapZi22Rqa6xAUqkllNSLwfCxqoVWtlD/qftHOdi36hhnvLW8A==
-X-Received: by 2002:a17:902:2ba9:: with SMTP id l38mr85574068plb.300.1560493933681;
-        Thu, 13 Jun 2019 23:32:13 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id x25sm1719091pfm.48.2019.06.13.23.32.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 23:32:12 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 12:02:10 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, swboyd@chromium.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 02/11] OPP: Make dev_pm_opp_set_rate() with freq=0 as
- valid
-Message-ID: <20190614063210.lfsquoycronah3fe@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-3-rnayak@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IbROzr8FoRs1kLVb6zqUpOyz06MuvRZq9MAyDRUAEVQ=;
+        b=eNYi0OYqnsAGKQL+AVZg6lbNRz2WDTKVrtBM/xmg0a2cwL7OHhB7zjDiD+OJaGiXRB
+         ab7rgGIQILkXp+l3la8xI5fa51E29muk+i0pL4ecrKyGrZFdtgsV7wiiCyLvz+fNmgAH
+         RH5adF1GDMaP4XZgaFAWM9FpXTFOzelFwA5yqUPd5YPl181sySYc0aw2iqDXXNwEhq3b
+         cU/sOPqG8d4xJLulk40xroWSGyTJqHHh/sWtU66hM72TukoopshBayPFd7VPM9mXi4mD
+         ijh1T3tqpVaWD23YSJwzcST+NV3FXeEg3v3Mw8j1z8Z1cX09W/rd7hhKsDGGEyfB3t5c
+         DFIg==
+X-Gm-Message-State: APjAAAUGhUAsHESmr6uXU7AzWubgy+Lv+LLZuUT3U8cdFskH8UskBU1M
+        +3GX6acDjObzYs658Z2spJgIyOA1TlNYEZqoAcI=
+X-Google-Smtp-Source: APXvYqz1iiROZDSaHXqQIMegtkaArZX+A1PliWoUdxr8KiUcEa0kOyoK45fv/ybjocWGcOEWKPNwbJeVSg7mCB7YUl8=
+X-Received: by 2002:a63:c0e:: with SMTP id b14mr15896922pgl.4.1560500626977;
+ Fri, 14 Jun 2019 01:23:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190320094918.20234-3-rnayak@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <5be80c08e0873ab200ed472b98ea8772666852ff.camel@suse.de>
+ <a2f71bcab3756dc35385288ca3287af6849933a6.camel@suse.de> <0f0b3e3c-93c4-b76c-854c-6f498bc017d6@tronnes.org>
+ <20190509022701.GS14916@sirena.org.uk>
+In-Reply-To: <20190509022701.GS14916@sirena.org.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 14 Jun 2019 11:23:36 +0300
+Message-ID: <CAHp75VcWB+UyAjXg5rjhw4-g9pJUHLtGwpr1XSSn1rOm+Rm=9g@mail.gmail.com>
+Subject: Re: SPI regression with today's build
+To:     Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Martin Sperl <kernel@martin.sperl.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 20-03-19, 15:19, Rajendra Nayak wrote:
-> For devices with performance state, we use dev_pm_opp_set_rate()
-> to set the appropriate clk rate and the performance state.
-> We do need a way to *remove* the performance state vote when
-> we idle the device and turn the clocks off. Use dev_pm_opp_set_rate()
-> with freq=0 to achieve this.
-> 
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/opp/core.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
+On Thu, May 9, 2019 at 5:27 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, May 08, 2019 at 07:33:32PM +0200, Noralf Tr=C3=B8nnes wrote:
+>
+> > Unless Martin Sperl, who wrote spi_split_transfers_maxsize(), has other
+> > suggestions, I think we should just revert this patch.
+>
+> I'll just revert for now, we can always re-apply things later but
+> that'll get the problem sorted in Linus' tree quickest.
 
-What about this instead ?
+I got the same issue on v5.2-rc4. Are you going to submit the fix to v5.2 c=
+ycle?
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 2fe96c2363a3..9accf8bb6afc 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -711,7 +711,7 @@ static int _set_required_opps(struct device *dev,
- 
-        /* Single genpd case */
-        if (!genpd_virt_devs) {
--               pstate = opp->required_opps[0]->pstate;
-+               pstate = likely(opp) ? opp->required_opps[0]->pstate : 0;
-                ret = dev_pm_genpd_set_performance_state(dev, pstate);
-                if (ret) {
-                        dev_err(dev, "Failed to set performance state of %s: %d (%d)\n",
-@@ -729,7 +729,7 @@ static int _set_required_opps(struct device *dev,
-        mutex_lock(&opp_table->genpd_virt_dev_lock);
- 
-        for (i = 0; i < opp_table->required_opp_count; i++) {
--               pstate = opp->required_opps[i]->pstate;
-+               pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
- 
-                if (!genpd_virt_devs[i])
-                        continue;
-@@ -770,14 +770,13 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 
-        if (unlikely(!target_freq)) {
-                if (opp_table->required_opp_tables) {
--                       /* drop the performance state vote */
--                       dev_pm_genpd_set_performance_state(dev, 0);
--                       return 0;
-+                       ret = _set_required_opps(dev, opp_table, NULL);
-                } else {
--                       dev_err(dev, "%s: Invalid target frequency %lu\n", __func__,
--                               target_freq);
--                       return -EINVAL;
-+                       dev_err(dev, "target frequency can't be 0\n");
-+                       ret = -EINVAL;
-                }
-+
-+               goto put_opp_table;
-        }
- 
-        clk = opp_table->clk;
+P.S. The commit misses Fixes tag AFAICS.
+
+--=20
+With Best Regards,
+Andy Shevchenko
