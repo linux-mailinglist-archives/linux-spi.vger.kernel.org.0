@@ -2,94 +2,157 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B40461DF
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Jun 2019 16:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D0046682
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Jun 2019 19:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728901AbfFNO7L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Jun 2019 10:59:11 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:36616 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728876AbfFNO7L (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jun 2019 10:59:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ODvuEo2UhMVgECkphX4nfw40sbJoOoQzAeDtCHR4CWM=; b=ZlKNKdhWi8dhKQ5ANaRcOUdFV
-        UqC7Dh0qAqQQnsa2qK5mzE+Mj++Crlwe1gMNPTmuAEKWurG9qw8lRA3ByRzf/w5Z8JOvqbdth7EFd
-        R60pWK02pC0rWOM+dj9G1bW9EapNKc4ZiuzF3aGhnNxpvVWNkDAmTScZebGTLK5jqress=;
-Received: from [2001:470:1f1d:6b5:7e7a:91ff:fede:4a45] (helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hbnfT-00085e-V5; Fri, 14 Jun 2019 14:59:04 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id F309C440046; Fri, 14 Jun 2019 15:59:02 +0100 (BST)
-Date:   Fri, 14 Jun 2019 15:59:02 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Martin Sperl <kernel@martin.sperl.org>
-Subject: Re: SPI regression with today's build
-Message-ID: <20190614145902.GA5316@sirena.org.uk>
-References: <5be80c08e0873ab200ed472b98ea8772666852ff.camel@suse.de>
- <a2f71bcab3756dc35385288ca3287af6849933a6.camel@suse.de>
- <0f0b3e3c-93c4-b76c-854c-6f498bc017d6@tronnes.org>
- <CAHp75VdhfYXa_6wkYD+_DYQh1k5Mc43e6yF4uj00e6EvgGuOHg@mail.gmail.com>
- <d9be77a9-5198-fc80-636b-41865f3eec85@tronnes.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jIdBwf7/i7YThJrI"
-Content-Disposition: inline
-In-Reply-To: <d9be77a9-5198-fc80-636b-41865f3eec85@tronnes.org>
-X-Cookie: Editing is a rewording activity.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727383AbfFNRy7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Jun 2019 13:54:59 -0400
+Received: from foss.arm.com ([217.140.110.172]:39354 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726837AbfFNRy7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 14 Jun 2019 13:54:59 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EEF05346;
+        Fri, 14 Jun 2019 10:54:57 -0700 (PDT)
+Received: from en101.cambridge.arm.com (en101.cambridge.arm.com [10.1.196.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EF5FE3F718;
+        Fri, 14 Jun 2019 10:54:53 -0700 (PDT)
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        suzuki.poulose@arm.com, Alan Tull <atull@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Moritz Fischer <mdf@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joe Perches <joe@perches.com>
+Subject: [PATCH v2 06/28] drivers: Add generic helper to match by of_node
+Date:   Fri, 14 Jun 2019 18:54:01 +0100
+Message-Id: <1560534863-15115-7-git-send-email-suzuki.poulose@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1560534863-15115-1-git-send-email-suzuki.poulose@arm.com>
+References: <1560534863-15115-1-git-send-email-suzuki.poulose@arm.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Add a helper to match device by the of_node. This will be later used
+to provide wrappers to the device iterators for {bus/class/driver}_find_device().
+Convert other users to reuse this new helper.
 
---jIdBwf7/i7YThJrI
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cc: Alan Tull <atull@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: David Airlie <airlied@linux.ie>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: devicetree@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: linux-fpga@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+Cc: Moritz Fischer <mdf@kernel.org>
+Cc: Peter Rosin <peda@axentia.se>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Thor Thayer <thor.thayer@linux.intel.com>
+Cc: Wolfram Sang <wsa@the-dreams.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Joe Perches <joe@perches.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+---
+ drivers/base/core.c           | 6 ++++++
+ drivers/fpga/of-fpga-region.c | 7 +------
+ include/linux/device.h        | 2 ++
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-On Fri, Jun 14, 2019 at 11:56:34AM +0200, Noralf Tr=F8nnes wrote:
-> Den 14.06.2019 10.28, skrev Andy Shevchenko:
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index fd7511e..9211908 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3328,3 +3328,9 @@ void device_set_of_node_from_dev(struct device *dev, const struct device *dev2)
+ 	dev->of_node_reused = true;
+ }
+ EXPORT_SYMBOL_GPL(device_set_of_node_from_dev);
++
++int device_match_of_node(struct device *dev, const void *np)
++{
++	return dev->of_node == np;
++}
++EXPORT_SYMBOL_GPL(device_match_of_node);
+diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+index 75f64ab..e405309 100644
+--- a/drivers/fpga/of-fpga-region.c
++++ b/drivers/fpga/of-fpga-region.c
+@@ -22,11 +22,6 @@ static const struct of_device_id fpga_region_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, fpga_region_of_match);
+ 
+-static int fpga_region_of_node_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /**
+  * of_fpga_region_find - find FPGA region
+  * @np: device node of FPGA Region
+@@ -37,7 +32,7 @@ static int fpga_region_of_node_match(struct device *dev, const void *data)
+  */
+ static struct fpga_region *of_fpga_region_find(struct device_node *np)
+ {
+-	return fpga_region_class_find(NULL, np, fpga_region_of_node_match);
++	return fpga_region_class_find(NULL, np, device_match_of_node);
+ }
+ 
+ /**
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 4d7c881..7093085 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -163,6 +163,8 @@ void subsys_dev_iter_init(struct subsys_dev_iter *iter,
+ struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter);
+ void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
+ 
++int device_match_of_node(struct device *dev, const void *np);
++
+ int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+ 		     int (*fn)(struct device *dev, void *data));
+ struct device *bus_find_device(struct bus_type *bus, struct device *start,
+-- 
+2.7.4
 
-> > I gave a suggestion during LPC 2016 about this all stuff. We have to
-> > provide a DMA channel capability to tell user what is the maximum
-> > length is supported by the DMA engine. In such case the user may
-> > prepare the transfers which are satisfying limitations and no
-> > recreation is necessary, moreover, it will be performance wise to do
-> > so.
-
-> In this case the problem isn't the DMA engine, but the SPI controller
-> DLEN register which limits the overall transfer to ~64kB.
-
-Andy's point still stands though, we just need to make sure we also
-include SPI controller limits in case they're lower than the DMA
-controller limit.
-
---jIdBwf7/i7YThJrI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0DtjYACgkQJNaLcl1U
-h9BTCAf/Xo48iePX8UFs/NDW9WIOjh9ylCoT2wrwGi1neuJSQC+JJDCkEhIHME8b
-jv4cYbVsjzg1j6wTfS1QT+YrrvMy4DhbtDMNlRgqs0lxpErKFjBd/HXFxodSaRnI
-okC/vFp08wtzRCQl1bV6Bvcmc7u4k5d3DKoWeB4vZBw/8jdUtbNc4aIxH3UTLzAt
-2075mRbyWFoujRgHSixD5l80iUOUvC9XZ5Ou480msNVrqp/AhYWLwqlKWuipxsaF
-QzomSCNqZlX0/eoy6lnpfUz3l/QwDNEOH5eDHgCm7ftCdeFtxxLrWK6Tz8hu/Yv6
-L2FfTzdTBxnLQJyYVYQqI/ZVXHoCvQ==
-=OG+P
------END PGP SIGNATURE-----
-
---jIdBwf7/i7YThJrI--
