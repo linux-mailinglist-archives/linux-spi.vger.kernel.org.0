@@ -2,137 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B098D48297
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 14:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BB148708
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 17:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbfFQMfZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 17 Jun 2019 08:35:25 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:39883 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbfFQMfZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jun 2019 08:35:25 -0400
-Received: from xps13 (aaubervilliers-681-1-81-150.w90-88.abo.wanadoo.fr [90.88.23.150])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id C29EB20000E;
-        Mon, 17 Jun 2019 12:35:11 +0000 (UTC)
-Date:   Mon, 17 Jun 2019 14:35:10 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     masonccyang@mxic.com.tw
-Cc:     bbrezillon@kernel.org, broonie@kernel.org,
-        christophe.kerello@st.com, computersforpeace@gmail.com,
-        devicetree@vger.kernel.org, dwmw2@infradead.org,
-        geert@linux-m68k.org, juliensu@mxic.com.tw, lee.jones@linaro.org,
-        liang.yang@amlogic.com, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        marcel.ziswiler@toradex.com, marek.vasut@gmail.com,
-        mark.rutland@arm.com, paul.burton@mips.com, richard@nod.at,
-        robh+dt@kernel.org, stefan@agner.ch, zhengxunli@mxic.com.tw
-Subject: Re: [PATCH v3 2/4] mtd: rawnand: Add Macronix MX25F0A NAND
- controller
-Message-ID: <20190617143510.4ded5728@xps13>
-In-Reply-To: <OFE923A8E5.50375C30-ON48258409.0009AE1B-48258409.00119767@mxic.com.tw>
-References: <1555320234-15802-1-git-send-email-masonccyang@mxic.com.tw>
-        <1555320234-15802-3-git-send-email-masonccyang@mxic.com.tw>
-        <20190512151820.4f2dd9da@xps13>
-        <OF074A1F06.5C1A58BE-ON482583FD.0031CD95-482583FD.003437AD@mxic.com.tw>
-        <20190520142333.390091d5@xps13>
-        <OFADC47344.0F9941B2-ON48258403.002336E3-48258403.003141F0@mxic.com.tw>
-        <20190527144250.71908bd9@xps13>
-        <OFE923A8E5.50375C30-ON48258409.0009AE1B-48258409.00119767@mxic.com.tw>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+        id S1728612AbfFQPY6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Jun 2019 11:24:58 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52330 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728645AbfFQPY5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jun 2019 11:24:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=cISVkSd0Idc+ftOHCHbQfbJgXUZkYpNnMD4BSGTdwoc=; b=xmBu++zTE5Id
+        cC/ResLzUiD5vRiChQW6Ou6msOC+u+lA5V+oC5FqZHbIen2ZkmMvg43iJsAF3Ic9SBC90WGmb8j1V
+        bSJJyDQkMz5xJZRDvO4IuXHGp7FS6e9MhOyCTSeUnhpjc4MEMmNOlsMojvZbOs+/fOPJtiyvo5EUk
+        KXXtc=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hctV8-000206-BR; Mon, 17 Jun 2019 15:24:54 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id D6DA0440046; Mon, 17 Jun 2019 16:24:53 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: Add a prototype for exported spi_set_cs_timing()" to the spi tree
+In-Reply-To: <20190615174737.4868-1-andriy.shevchenko@linux.intel.com>
+X-Patchwork-Hint: ignore
+Message-Id: <20190617152453.D6DA0440046@finisterre.sirena.org.uk>
+Date:   Mon, 17 Jun 2019 16:24:53 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mason,
+The patch
 
-masonccyang@mxic.com.tw wrote on Wed, 29 May 2019 11:12:08 +0800:
+   spi: Add a prototype for exported spi_set_cs_timing()
 
-> Hi Miquel,
-> 
-> > > > > > > +static void mxic_nand_select_chip(struct nand_chip *chip, int   
->  
-> > > chipnr)   
-> > > > > > 
-> > > > > > _select_target() is preferred now   
-> > > > > 
-> > > > > Do you mean I implement mxic_nand_select_target() to control #CS ?
-> > > > > 
-> > > > > If so, I need to call mxic_nand_select_target( ) to control #CS ON
-> > > > > and then #CS OFF in _exec_op() due to nand_select_target()<in   
-> > > nand_base,c>   
-> > > > > is still calling chip->legacy.select_chip ?   
-> > > > 
-> > > > You must forget about the ->select_chip() callback. Now it should be
-> > > > handled directly from the controller driver. Please have a look at   
-> the
-> > > > commit pointed against the marvell_nand.c driver.   
-> > > 
-> > > I have no Marvell NFC datasheet and have one question.
-> > > 
-> > > In marvell_nand.c, there is no xxx_deselect_target() or 
-> > > something like that doing #CS OFF.
-> > > marvell_nfc_select_target() seems always to make one of chip or die
-> > > #CS keep low.
-> > > 
-> > > Is it right ?  
-> > 
-> > Yes, AFAIR there is no "de-assert" mechanism in this controller.
-> >   
-> > > 
-> > > How to make all #CS keep high for NAND to enter 
-> > > low-power standby mode if driver don't use "legacy.select_chip()" ?  
-> > 
-> > See commit 02b4a52604a4 ("mtd: rawnand: Make ->select_chip() optional
-> > when ->exec_op() is implemented") which states:
-> > 
-> >         "When [->select_chip() is] not implemented, the core is assuming
-> >    the CS line is automatically asserted/deasserted by the driver  
-> >    ->exec_op() implementation."  
-> > 
-> > Of course, the above is right only when the controller driver supports
-> > the ->exec_op() interface.   
-> 
-> Currently, it seems that we will get the incorrect data and error
-> operation due to CS in error toggling if CS line is controlled in 
-> ->exec_op().  
+has been applied to the spi tree at
 
-Most of the chips today are CS-don't-care, which chip are you using?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
 
-Is this behavior publicly documented?
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-Is this LPM mode always activated?
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> i.e,. 
-> 
-> 1) In nand_onfi_detect() to call nand_exec_op() twice by 
-> nand_read_param_page_op() and annd_read_data_op()
-> 
-> 2) In nand_write_page_xxx to call nand_exec_op() many times by
-> nand_prog_page_begin_op(), nand_write_data_op() and 
-> nand_prog_page_end_op().
-> 
-> 
-> Should we consider to add a CS line controller in struct nand_controller
-> i.e,.
-> 
-> struct nand_controller {
->          struct mutex lock;
->          const struct nand_controller_ops *ops;
-> +          void (*select_chip)(struct nand_chip *chip, int cs);
-> };
-> 
-> to replace legacy.select_chip() ?
-> 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-No, if really needed, we could add a "macro op done" flag in the nand
-operation structure.
-
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Miquèl
+Mark
+
+From 36f34737ff48f66c8a19b8788311e4b40d4adf80 Mon Sep 17 00:00:00 2001
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Sat, 15 Jun 2019 20:47:37 +0300
+Subject: [PATCH] spi: Add a prototype for exported spi_set_cs_timing()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Compiler is not happy about spi_set_cs_timing() prototype.
+
+drivers/spi/spi.c:3016:6: warning: no previous prototype for ‘spi_set_cs_timing’ [-Wmissing-prototypes]
+ void spi_set_cs_timing(struct spi_device *spi, u8 setup, u8 hold,
+      ^~~~~~~~~~~~~~~~~
+
+Let's add it to the header.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ include/linux/spi/spi.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index d0c5ba746e01..0ec11f2911af 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -980,6 +980,8 @@ static inline void spi_message_free(struct spi_message *m)
+ 	kfree(m);
+ }
+ 
++extern void spi_set_cs_timing(struct spi_device *spi, u8 setup, u8 hold, u8 inactive_dly);
++
+ extern int spi_setup(struct spi_device *spi);
+ extern int spi_async(struct spi_device *spi, struct spi_message *message);
+ extern int spi_async_locked(struct spi_device *spi,
+-- 
+2.20.1
+
