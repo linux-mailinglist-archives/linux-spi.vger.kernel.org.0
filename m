@@ -2,112 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C3D478D5
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 05:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308B7478E6
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 06:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727650AbfFQDvE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 16 Jun 2019 23:51:04 -0400
-Received: from mail-pf1-f175.google.com ([209.85.210.175]:43502 "EHLO
-        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727648AbfFQDvE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Jun 2019 23:51:04 -0400
-Received: by mail-pf1-f175.google.com with SMTP id i189so4874732pfg.10
-        for <linux-spi@vger.kernel.org>; Sun, 16 Jun 2019 20:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=57FOpX8q6OFc6W9+7flDD5a/Z9hlA87d2qLRqS0QYaA=;
-        b=e68ppl05KRRtZIc1up7uMbJ/HjhMgh58+UwxNJKYKlaAGtXco05wfaqv7IgnA1jbKc
-         lHnO0U8yljUgdWHpuTfTN/cXV04X3CiRTk1Isbrt43ve37Fb3maMQSD5/n/280jzVolS
-         usDQMVtEvfq+0+Fg6mFwdaKgLifFV2xhY3NEjpN+I8Lx+4MwBYpUas/Ve1oA5XQrxilD
-         dVXlSp/l/jjHqYcf2x5HbmkVD7fXKOL++1687ZoxfGGLT9kozygpxW38FXdTKU2cdCm/
-         Qz15Gc9On/OD28FLeKrmF7JJm8nvC4SwGeURaguzhcHNqaaAMZM5TylX2hnB2ggrwMmu
-         v10w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=57FOpX8q6OFc6W9+7flDD5a/Z9hlA87d2qLRqS0QYaA=;
-        b=guiRG9OylUR4GurQfJvsb2q6u77VkrrOKWY9Wqo4r86qgcbF/EcjUbSogj4fWYF7UE
-         +UN7rdnx+ay+ZbR+f0fzOmwV71ZW+AugXWl+p7bfUdCaZ5+PcmXE1hy982uX7cUQo/Kl
-         eIzQucNTfjGImgVkyvtFunuDhwiry+ACqkewKEGg5QwQnrkDdROudWePRK0PgbLbdbXX
-         1EeRnqrfC8SCXyQ7WWpsyvzpgsUrhS/2d9Rt0DcrWS46X/Hqbq8aClLFwWCG7sdIBMBd
-         PFv0DOFMrEoIiLhzHDOvD4Lvi2rIsFAAWIlt5gpSHP97w64SXipQ9g00C3Umpuvk2aSZ
-         Oxyg==
-X-Gm-Message-State: APjAAAUkI5wvDFSc+psU0cn+LUHrZiZG0TSVSf8iws/V6VhHenBv6uX+
-        s3UYMXk+FMgzUf3A4cR3YbRYCA==
-X-Google-Smtp-Source: APXvYqw7hr8o8WapiyfCJVNaq9F8LVepSPGUar/mLLidClzHNbV4xV6Ezzi7xspIP+K/WxmqHTt6oA==
-X-Received: by 2002:aa7:956d:: with SMTP id x13mr72685522pfq.132.1560743462982;
-        Sun, 16 Jun 2019 20:51:02 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id l44sm11566082pje.29.2019.06.16.20.51.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 16 Jun 2019 20:51:01 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 09:20:58 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     swboyd@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        vincent.guittot@linaro.org, mturquette@baylibre.com
+        id S1726079AbfFQEEO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Jun 2019 00:04:14 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:47398 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725440AbfFQEEO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jun 2019 00:04:14 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 91D4060779; Mon, 17 Jun 2019 04:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1560744252;
+        bh=PYHnmpPKNQezYb6d7XsHr1kzQDKcd5CpbPQ9GTSBk7M=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=HrP5+sQUQWwwnDh7bqcYMPTFEDH9Lzt9kn3ys1kffJNNBMhJMvNTbHPkLOnF1CJ4Y
+         cHCbC3lGJHCiL3kbi5NDet+By7SQMIRwMSKFg/Me8Ic73YIut8gQTSPij/fkxJyspC
+         LuAbXR5PM9rpWVCKn4nyiNKO6NqQiqdnb59O5ApA=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.131.117.43] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CFF9E60779;
+        Mon, 17 Jun 2019 04:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1560744251;
+        bh=PYHnmpPKNQezYb6d7XsHr1kzQDKcd5CpbPQ9GTSBk7M=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=QAfyryVjJ0aYRrxwywXTHc0J2mthJdf5wry79zhqxHn5/Ou6Z5q/xyvyB3Q5oiwUz
+         3EEs8MFhVFJKpBouxy47nAqxic69sVbpT+RcHHAvPmdXXdyMsvy7y6QroSohBPDxbT
+         yJRiortH6undkk09yJ5+YWY7CjzuEmRB0/BcLEfE=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CFF9E60779
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [RFC v2 02/11] OPP: Make dev_pm_opp_set_rate() with freq=0 as
+ valid
+To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
-        dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
-Message-ID: <20190617035058.veo7uwqjrpa6kykt@vireshk-i7>
+        linux-scsi@vger.kernel.org, swboyd@chromium.org,
+        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
 References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-2-rnayak@codeaurora.org>
- <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
- <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
- <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
- <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
- <20190614052732.4w6vvwwich2h4cgu@vireshk-i7>
+ <20190320094918.20234-3-rnayak@codeaurora.org>
+ <20190614063210.lfsquoycronah3fe@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <37e7ff9e-6bfa-585e-1ca6-f8e079dd0aef@codeaurora.org>
+Date:   Mon, 17 Jun 2019 09:34:06 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190614052732.4w6vvwwich2h4cgu@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20190614063210.lfsquoycronah3fe@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 14-06-19, 10:57, Viresh Kumar wrote:
-> Hmm, so this patch won't break anything and I am inclined to apply it again :)
+
+
+On 6/14/2019 12:02 PM, Viresh Kumar wrote:
+> On 20-03-19, 15:19, Rajendra Nayak wrote:
+>> For devices with performance state, we use dev_pm_opp_set_rate()
+>> to set the appropriate clk rate and the performance state.
+>> We do need a way to *remove* the performance state vote when
+>> we idle the device and turn the clocks off. Use dev_pm_opp_set_rate()
+>> with freq=0 to achieve this.
+>>
+>> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>> ---
+>>   drivers/opp/core.c | 18 ++++++++++++------
+>>   1 file changed, 12 insertions(+), 6 deletions(-)
 > 
-> Does anyone see any other issues with it, which I might be missing ?
+> What about this instead ?
 
-I have updated the commit log a bit more to clarify on things, please let me
-know if it looks okay.
+yes, this works, thanks for updating the patch.
 
-    opp: Don't overwrite rounded clk rate
-    
-    The OPP table normally contains 'fmax' values corresponding to the
-    voltage or performance levels of each OPP, but we don't necessarily want
-    all the devices to run at fmax all the time. Running at fmax makes sense
-    for devices like CPU/GPU, which have a finite amount of work to do and
-    since a specific amount of energy is consumed at an OPP, its better to
-    run at the highest possible frequency for that voltage value.
-    
-    On the other hand, we have IO devices which need to run at specific
-    frequencies only for their proper functioning, instead of maximum
-    possible frequency.
-    
-    The OPP core currently roundup to the next possible OPP for a frequency
-    and select the fmax value. To support the IO devices by the OPP core,
-    lets do the roundup to fetch the voltage or performance state values,
-    but not use the OPP frequency value. Rather use the value returned by
-    clk_round_rate().
-    
-    The current user, cpufreq, of dev_pm_opp_set_rate() already does the
-    rounding to the next OPP before calling this routine and it won't
-    have any side affects because of this change.
-    
-    Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-    Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-    [ Viresh: Massaged changelog and use temp_opp variable instead ]
-    Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 2fe96c2363a3..9accf8bb6afc 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -711,7 +711,7 @@ static int _set_required_opps(struct device *dev,
+>   
+>          /* Single genpd case */
+>          if (!genpd_virt_devs) {
+> -               pstate = opp->required_opps[0]->pstate;
+> +               pstate = likely(opp) ? opp->required_opps[0]->pstate : 0;
+>                  ret = dev_pm_genpd_set_performance_state(dev, pstate);
+>                  if (ret) {
+>                          dev_err(dev, "Failed to set performance state of %s: %d (%d)\n",
+> @@ -729,7 +729,7 @@ static int _set_required_opps(struct device *dev,
+>          mutex_lock(&opp_table->genpd_virt_dev_lock);
+>   
+>          for (i = 0; i < opp_table->required_opp_count; i++) {
+> -               pstate = opp->required_opps[i]->pstate;
+> +               pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
+>   
+>                  if (!genpd_virt_devs[i])
+>                          continue;
+> @@ -770,14 +770,13 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+>   
+>          if (unlikely(!target_freq)) {
+>                  if (opp_table->required_opp_tables) {
+> -                       /* drop the performance state vote */
+> -                       dev_pm_genpd_set_performance_state(dev, 0);
+> -                       return 0;
+> +                       ret = _set_required_opps(dev, opp_table, NULL);
+>                  } else {
+> -                       dev_err(dev, "%s: Invalid target frequency %lu\n", __func__,
+> -                               target_freq);
+> -                       return -EINVAL;
+> +                       dev_err(dev, "target frequency can't be 0\n");
+> +                       ret = -EINVAL;
+>                  }
+> +
+> +               goto put_opp_table;
+>          }
+>   
+>          clk = opp_table->clk;
+> 
 
 -- 
-viresh
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
