@@ -2,44 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F61F48C3E
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 20:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7A748C44
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 20:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfFQSkq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Jun 2019 14:40:46 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:40089 "EHLO
+        id S1725878AbfFQSky (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Jun 2019 14:40:54 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:52939 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbfFQSkq (ORCPT
+        with ESMTP id S1725844AbfFQSkq (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jun 2019 14:40:46 -0400
 Received: from orion.localdomain ([77.2.173.233]) by mrelayeu.kundenserver.de
  (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MsI4Q-1iVAln3msE-00tltd; Mon, 17 Jun 2019 20:40:42 +0200
+ 1My2pz-1iYB2z0yrP-00zXBY; Mon, 17 Jun 2019 20:40:42 +0200
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
         broonie@kernel.org, linux-gpio@vger.kernel.org,
         linux-spi@vger.kernel.org
-Subject: [PATCH 1/3] include: linux: spi: more helpers for declaring spi drivers
-Date:   Mon, 17 Jun 2019 20:40:38 +0200
-Message-Id: <1560796840-18207-1-git-send-email-info@metux.net>
+Subject: [PATCH 2/3] drivers: gpio: pcf857x: use subsys_spi_driver()
+Date:   Mon, 17 Jun 2019 20:40:39 +0200
+Message-Id: <1560796840-18207-2-git-send-email-info@metux.net>
 X-Mailer: git-send-email 1.9.1
-X-Provags-ID: V03:K1:05rIirEOuVh/P2GdhGgoALTibWMKzcYIYDli8Uu//ZC/3VBGI2w
- +JIY4qGMr/KjTh0Ppz2vrXxXy41cx263AHETMbkXWAcydFrR/jKTiozF+AkwFY4RA6qyQ1K
- LI3uMpGHuBiSXZ0GeZqOZ/65Qg9BNa1sGxKroYGElKDyvZvERJiKF/NWASU/ArGsW5bqcaJ
- 4uNZhph5J1wMf9p1vjweg==
+In-Reply-To: <1560796840-18207-1-git-send-email-info@metux.net>
+References: <1560796840-18207-1-git-send-email-info@metux.net>
+X-Provags-ID: V03:K1:M/nsSJBHaWVfUfkok+yQ95wDcx5oNEK92hp+dTuZ1CnCnhjvWgZ
+ XJx7TSgLZqCQ/hSdGwQ676mK5NtYlYWFgAjUxq++KusMtwFY0WAh1AjLDYyhzR1T1OxtamD
+ lwkPRgYbL7l08CFT+CguKpWK+R0btJUsvDoYJZVWIaInPG1jaYjsVF8kvwCSpP9hE6SW5aR
+ 08JK0+RpwmkjcZ76MyKoQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DbZzcJp0H/g=:W4xpeF7mD2ihzuY4mz4zvV
- Mz9o6ivmAQFHsM/1tyfdeMxNAZDi7t+3LNqty4ZeuajIz+U2oSfAPH2P0ZS4XyCV2Xayhl31P
- egaXRNkJpZlROWmx+b2taN/QMksYOmTDkjBNp/Yw1Tbm5el1UPFkWE0L4U/aqC3OQ6R3g4osR
- kX+uYV849Jxe41HHoyaxJxHZtxO92vr8or61zWPuKf/cYYDuZk/ZzuzVF5jkluL5j3y5X/awS
- iJBRfTKIUlzevJGA4pvD9ICWW1wQ5dKX/t5pepqsDqn2uVBRVpTsroc/nanzrXrxWtzZM189d
- 6TR8r0F0HvzALAn16IENWRDnjQdQDNKgO2/QNnbP4Eg3yBQxUFlByLdO/EO25OjWY0BmTskRQ
- ndtfnOEJChtozu9D1u3U+ONHCDXHaLNVVFkKOz/bDjQSHfjFFBnouZAQkcI7gyDzxsV0ffeif
- i82sCtCrJsDekSwAMumFmgjOlAiDQM/6simcBGLXqQEQeS4hmRiCMasPv3GiFcTOQWq66GMJA
- V1DYoOg9Q/mRlqcfHbDU66g34t9YR/aIp19WF+LZQeW0soIzZr6RAfmehGTDlcmmlaQuwdNeY
- ZWSmfhPPJWLvlzbFXmWETCP3qPn9DrnfQm7dUtH4cDIi9/5/aeHqbu4RTrCw32T83dvNFXmmc
- W78gciRdLng6agaEH4nGGwrzAwZTAczz+hhHzWOl9L918q8I6AAhgEMq5GbKlNCRZPDB5zrE6
- Lyk9Ofw7cVoGsQ7HgYVW7ElpIwzCBAMkzA3pew==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2MjLVd3qQAQ=:2kFG66DdoTwfVODnECYuCx
+ Grqm+co+8Erozqx8ViFcKDj64slkV8HKSpOpFG9V7o69FOxKaiGQs1B8b5YRvdesslV2BxAIs
+ yT6J80XSBtRYnjJ07xGte4jAUQpaMSKcOR2L18C1tPW7oeAI2ePhmI+nrUjDNEJS+a6k5dL3y
+ oxPlC7XP9M5fY0OukcY1fZFnW1Hy/FFXgeRIjdSB1gSNh5lT2Zr1bbhusvjfMESLwVGhAly4v
+ 8nfMfU+A0ScGMXvJGMLpbEJKe+DLKpYw3KdywwnksaQsnoZa2OLzMJWJ9wttYa8vn8R1pC3fu
+ ML41GX0/7RDg3MJpgPHcwE0eQzEYV8ZfCmCMGdym3kWN8TzGbvw0kFUzZkwxbefa5aioYEvWr
+ afY040pMQxBMhDZx6zC01ORm9QAaydT49i5yUtzIBv6lhJRDaYOnv546wBjqns/Vn8iQnJqsX
+ 9VPmBWAR03XlLngqRGX3xX7fzUwN9mHnMosPDMC/n4G2Z+uQCNBPhprDYwkuUTe1xqbP3yy/h
+ IrGpdGax9VHZ/qWxVguzuLuW/w/gk+HNd9oviyHY90KBmRznmrjyLqjWagIdnVpxMRPjdPrLN
+ lptCJdNwFRZgSTYcNuArbFVstMNh5cDSXbxNqTkDVoChL/ipsgjjYj+HVqwtoyaJzWpSirbgj
+ 1AKbb1DIEuG8pPy0/BMFHO+3bc5Fk3ZMn7Xw4Bn6rwy6oJYmLqNfk7ght03P+70T8WnF9jV3d
+ 3Wu3O3i0QZpo1aQNt0LW+2pwv6IOmBhwWZ5ePK4QEkeuf9EkJHzvjE23cRn1pRWpOb3OkcqBw
+ 84c4h4bWQH2aUTSkFGM0X2QuOOLLmK8jdBxiEMIXpY17pSQ9+msT8EgxHT6X0zHGuA6x3nlsH
+ Od0mxzvF41bjcVNnVKUqeWBKbDkqRJAombAvPH4eUeMvpBQIQH2SAAaz01Y4F1XIV+EbWuEJ6
+ l4ALBexy+TA==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -47,45 +52,41 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Enrico Weigelt <info@metux.net>
 
-Add more helper macros for trivial driver init cases, similar to the
-already existing module_spi_driver()+friends - now for those which
-are initialized at other stages (eg. by subsys_initcall()).
-
-This helps to further reduce driver init boilerplate.
+Reduce driver init boilerplate by using the new
+subsys_spi_driver() macro.
 
 Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- include/linux/spi/spi.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/gpio/gpio-max7301.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 053abd2..f55ba34 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -296,6 +296,23 @@ static inline void spi_unregister_driver(struct spi_driver *sdrv)
- 	module_driver(__spi_driver, spi_register_driver, \
- 			spi_unregister_driver)
+diff --git a/drivers/gpio/gpio-max7301.c b/drivers/gpio/gpio-max7301.c
+index 647dfbb..30815cf 100644
+--- a/drivers/gpio/gpio-max7301.c
++++ b/drivers/gpio/gpio-max7301.c
+@@ -86,21 +86,10 @@ static int max7301_remove(struct spi_device *spi)
+ 	.remove = max7301_remove,
+ 	.id_table = max7301_id,
+ };
+-
+-static int __init max7301_init(void)
+-{
+-	return spi_register_driver(&max7301_driver);
+-}
+ /* register after spi postcore initcall and before
+  * subsys initcalls that may rely on these GPIOs
+  */
+-subsys_initcall(max7301_init);
+-
+-static void __exit max7301_exit(void)
+-{
+-	spi_unregister_driver(&max7301_driver);
+-}
+-module_exit(max7301_exit);
++subsys_spi_driver(max7301_driver);
  
-+/* subsys_spi_driver() - Helper macro for drivers that don't do
-+ * anything special in module init/exit.  This eliminates a lot of
-+ * boilerplate.  Each module may only use this macro once, and
-+ * calling it replaces subsys_initcall() and module_exit()
-+ */
-+#define subsys_spi_driver(__spi_driver) \
-+static int __init __spi_driver##_init(void) \
-+{ \
-+	return spi_register_driver(&(__spi_driver)); \
-+} \
-+subsys_initcall(__spi_driver##_init); \
-+static void __exit __spi_driver##_exit(void) \
-+{ \
-+	spi_unregister_driver(&(__spi_driver)); \
-+} \
-+module_exit(__spi_driver##_exit);
-+
- /**
-  * struct spi_controller - interface to SPI master or slave controller
-  * @dev: device interface to this driver
+ MODULE_AUTHOR("Juergen Beisert, Wolfram Sang");
+ MODULE_LICENSE("GPL v2");
 -- 
 1.9.1
 
