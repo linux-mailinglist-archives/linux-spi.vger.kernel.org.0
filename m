@@ -2,116 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 336B548707
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 17:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F61F48C3E
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 20:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728648AbfFQPY5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Jun 2019 11:24:57 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52300 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728602AbfFQPY5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jun 2019 11:24:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=iOqLgkdilFnLHLMJQ5zYUD9aMZOdA8/Ai44+vLhw43M=; b=U4DyaRpwUUlq
-        06jKxh/d2tR3etJYlIU4yw2f0bTHgbO4HsJl5ZsogHv/x1Yl4hOnTQyJgGMxwF2ahhfeKrGLudMEm
-        fv7GSfxr1aK7F0zV5ztE4oL8BcNdI3iAVPrR8BEFCyyVhXnFWjLCQMXMLhnH6JNfTjHc/JtdSWN0b
-        DtY94=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hctV7-000201-Pv; Mon, 17 Jun 2019 15:24:53 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 5B4C4440046; Mon, 17 Jun 2019 16:24:53 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: No need to assign dummy value in spi_unregister_controller()" to the spi tree
-In-Reply-To: <20190615174135.86181-1-andriy.shevchenko@linux.intel.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190617152453.5B4C4440046@finisterre.sirena.org.uk>
-Date:   Mon, 17 Jun 2019 16:24:53 +0100 (BST)
+        id S1726535AbfFQSkq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Jun 2019 14:40:46 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:40089 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbfFQSkq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jun 2019 14:40:46 -0400
+Received: from orion.localdomain ([77.2.173.233]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MsI4Q-1iVAln3msE-00tltd; Mon, 17 Jun 2019 20:40:42 +0200
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH 1/3] include: linux: spi: more helpers for declaring spi drivers
+Date:   Mon, 17 Jun 2019 20:40:38 +0200
+Message-Id: <1560796840-18207-1-git-send-email-info@metux.net>
+X-Mailer: git-send-email 1.9.1
+X-Provags-ID: V03:K1:05rIirEOuVh/P2GdhGgoALTibWMKzcYIYDli8Uu//ZC/3VBGI2w
+ +JIY4qGMr/KjTh0Ppz2vrXxXy41cx263AHETMbkXWAcydFrR/jKTiozF+AkwFY4RA6qyQ1K
+ LI3uMpGHuBiSXZ0GeZqOZ/65Qg9BNa1sGxKroYGElKDyvZvERJiKF/NWASU/ArGsW5bqcaJ
+ 4uNZhph5J1wMf9p1vjweg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DbZzcJp0H/g=:W4xpeF7mD2ihzuY4mz4zvV
+ Mz9o6ivmAQFHsM/1tyfdeMxNAZDi7t+3LNqty4ZeuajIz+U2oSfAPH2P0ZS4XyCV2Xayhl31P
+ egaXRNkJpZlROWmx+b2taN/QMksYOmTDkjBNp/Yw1Tbm5el1UPFkWE0L4U/aqC3OQ6R3g4osR
+ kX+uYV849Jxe41HHoyaxJxHZtxO92vr8or61zWPuKf/cYYDuZk/ZzuzVF5jkluL5j3y5X/awS
+ iJBRfTKIUlzevJGA4pvD9ICWW1wQ5dKX/t5pepqsDqn2uVBRVpTsroc/nanzrXrxWtzZM189d
+ 6TR8r0F0HvzALAn16IENWRDnjQdQDNKgO2/QNnbP4Eg3yBQxUFlByLdO/EO25OjWY0BmTskRQ
+ ndtfnOEJChtozu9D1u3U+ONHCDXHaLNVVFkKOz/bDjQSHfjFFBnouZAQkcI7gyDzxsV0ffeif
+ i82sCtCrJsDekSwAMumFmgjOlAiDQM/6simcBGLXqQEQeS4hmRiCMasPv3GiFcTOQWq66GMJA
+ V1DYoOg9Q/mRlqcfHbDU66g34t9YR/aIp19WF+LZQeW0soIzZr6RAfmehGTDlcmmlaQuwdNeY
+ ZWSmfhPPJWLvlzbFXmWETCP3qPn9DrnfQm7dUtH4cDIi9/5/aeHqbu4RTrCw32T83dvNFXmmc
+ W78gciRdLng6agaEH4nGGwrzAwZTAczz+hhHzWOl9L918q8I6AAhgEMq5GbKlNCRZPDB5zrE6
+ Lyk9Ofw7cVoGsQ7HgYVW7ElpIwzCBAMkzA3pew==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+From: Enrico Weigelt <info@metux.net>
 
-   spi: No need to assign dummy value in spi_unregister_controller()
+Add more helper macros for trivial driver init cases, similar to the
+already existing module_spi_driver()+friends - now for those which
+are initialized at other stages (eg. by subsys_initcall()).
 
-has been applied to the spi tree at
+This helps to further reduce driver init boilerplate.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From ebc37af5e0a134355ea2b62ed4141458bdbd5389 Mon Sep 17 00:00:00 2001
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Sat, 15 Jun 2019 20:41:35 +0300
-Subject: [PATCH] spi: No need to assign dummy value in
- spi_unregister_controller()
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-The device_for_each_child() doesn't require the returned value to be checked.
-Thus, drop the dummy variable completely and have no warning anymore:
-
-drivers/spi/spi.c: In function ‘spi_unregister_controller’:
-drivers/spi/spi.c:2480:6: warning: variable ‘dummy’ set but not used [-Wunused-but-set-variable]
-  int dummy;
-      ^~~~~
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- drivers/spi/spi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ include/linux/spi/spi.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 498f9b7419a4..e71881afe475 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2559,7 +2559,6 @@ void spi_unregister_controller(struct spi_controller *ctlr)
- {
- 	struct spi_controller *found;
- 	int id = ctlr->bus_num;
--	int dummy;
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 053abd2..f55ba34 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -296,6 +296,23 @@ static inline void spi_unregister_driver(struct spi_driver *sdrv)
+ 	module_driver(__spi_driver, spi_register_driver, \
+ 			spi_unregister_driver)
  
- 	/* First make sure that this controller was ever added */
- 	mutex_lock(&board_lock);
-@@ -2573,7 +2572,7 @@ void spi_unregister_controller(struct spi_controller *ctlr)
- 	list_del(&ctlr->list);
- 	mutex_unlock(&board_lock);
- 
--	dummy = device_for_each_child(&ctlr->dev, NULL, __unregister);
-+	device_for_each_child(&ctlr->dev, NULL, __unregister);
- 	device_unregister(&ctlr->dev);
- 	/* free bus id */
- 	mutex_lock(&board_lock);
++/* subsys_spi_driver() - Helper macro for drivers that don't do
++ * anything special in module init/exit.  This eliminates a lot of
++ * boilerplate.  Each module may only use this macro once, and
++ * calling it replaces subsys_initcall() and module_exit()
++ */
++#define subsys_spi_driver(__spi_driver) \
++static int __init __spi_driver##_init(void) \
++{ \
++	return spi_register_driver(&(__spi_driver)); \
++} \
++subsys_initcall(__spi_driver##_init); \
++static void __exit __spi_driver##_exit(void) \
++{ \
++	spi_unregister_driver(&(__spi_driver)); \
++} \
++module_exit(__spi_driver##_exit);
++
+ /**
+  * struct spi_controller - interface to SPI master or slave controller
+  * @dev: device interface to this driver
 -- 
-2.20.1
+1.9.1
 
