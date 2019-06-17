@@ -2,95 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EF84795A
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 06:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E07E479DF
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Jun 2019 08:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725863AbfFQE05 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Jun 2019 00:26:57 -0400
-Received: from mail-pg1-f170.google.com ([209.85.215.170]:34248 "EHLO
-        mail-pg1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725869AbfFQE05 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jun 2019 00:26:57 -0400
-Received: by mail-pg1-f170.google.com with SMTP id p10so5044802pgn.1
-        for <linux-spi@vger.kernel.org>; Sun, 16 Jun 2019 21:26:57 -0700 (PDT)
+        id S1725863AbfFQGKY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Jun 2019 02:10:24 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46140 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725468AbfFQGKY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jun 2019 02:10:24 -0400
+Received: by mail-pg1-f193.google.com with SMTP id v9so5145821pgr.13
+        for <linux-spi@vger.kernel.org>; Sun, 16 Jun 2019 23:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PmqFguwW3dYc7xJhH5/ZTk/3G85fwsIEI5IZBeTVbMI=;
-        b=T1bv07G606y22acLgdMZkhaLJx08RUHyZBX7NdaHMzsC4fMzVPcJ02aU7u5IykZhqg
-         SlAfQR0uFoGC+bPxUEGOXI6tFFYfoZLFmk1py+M7f9MftwDzqJCzY/6BvQ/k10SbjYt1
-         Sg1ky4ojNLm9kyNOa+3B56ibkdrvgeDgx55vLLfg6TT86hDy2fCvMyIViyZ5nFPI/4lW
-         8RDCU91bKDgJHKygUFl6M+7lyW6y3JosmhS2sCekPqqmfPvshQ/fh9FJsbXHh/LF1BcH
-         bCzZn5g4twxBZ7Rsn0H8SegEmRp47yDF57icq13SQvZfGTFfOwW9xlLbgilfbDOsQkQI
-         LETQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=MZPuGCyVvonDrs7OcHZvEqrCPe242jhYFHqiG+ThiYc=;
+        b=oLmx/hfdh3eYh1yM18gQZEgUb9i0ZKK1+ERI0YW9M4/E9cgj6f/Uf5GVvzwxs95EXY
+         3Ie93TFBHY/rteT9ifYdtY4cGObZo9hWhwbCgKo+XVkGe73Mvvl6pDa+hrhZjerB05mr
+         075mYbg49/R9h9V0+HqavNq94ll9EIJyE8BpzUOknfugxk58AkKZg0pPFJIbUwFd33eK
+         r0qqpO0wTliZ7Aqej9V5/tv+LWTfoz24DUe/hPw5QhBSgO5DLB7rw045w+hpE0XLLdQY
+         P0sShsaTKwjL/J7ucmp9/xU3NA9X8m0kJWjVNo6sZjO765AhACZHDsnwMRmvDQFCTubV
+         MnyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PmqFguwW3dYc7xJhH5/ZTk/3G85fwsIEI5IZBeTVbMI=;
-        b=t8RrzNmnVf/+Vwsf1/2CR8T5mF0EltlCH3AW4lT1rHkU37924lID1vXXVuVptm0J9h
-         XmoUk0adrIKEUyyekqQR2V+QlPwwyYIeI5WOZt6LQyzgYrCm6GUV7c50pex8n4QOrTYE
-         DoW2dzyL894mJXllcwG8b8tHdlk6fzBMAxXG9OOxJS842EJhBIjJR6gWs40WRcVyXtaU
-         hCkBZxMJ8QpDKl3LtDhZUJmW7ORcbymVDkbmYjCtC2mCPvXXOkHPqcC7H84rF/EQ6v8G
-         Ws15TM6t3EGMRWYjrkyAllNOWpiQNS6/QMPw6yb8NsbHtLqo2tV1NMdU6/4vTY3mcWe5
-         9v3w==
-X-Gm-Message-State: APjAAAVcK/ErqwBjxZ383o7LxiyL9C37Co5eR0Y7Iev2GDeCCBCCYxOZ
-        nIV8rECwH0ANHKWNLwZEqj4XHw==
-X-Google-Smtp-Source: APXvYqzqf2rvVzZQ9jtplmCuuCEzv3tRRPzxsJ+P8Z5XBfMDeAYsYxpXV5gZplXN6I0Z9Bp2k24iCA==
-X-Received: by 2002:a63:246:: with SMTP id 67mr48365918pgc.145.1560745616533;
-        Sun, 16 Jun 2019 21:26:56 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id s64sm10266562pfb.160.2019.06.16.21.26.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 16 Jun 2019 21:26:55 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 09:56:54 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, swboyd@chromium.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 00/11] DVFS in the OPP core
-Message-ID: <20190617042654.xdqx5naxo3lq7kv6@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190320094918.20234-1-rnayak@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=MZPuGCyVvonDrs7OcHZvEqrCPe242jhYFHqiG+ThiYc=;
+        b=Gx7jEGrJYIq8odZi5o8gyYj+WiJmbGlZ5fJ0/J6aLIMgudfPdAkNxYYqzG1ROyOaeg
+         h32F4FQfP9AojGhixQtb+D9PhAuVdZIDGWrW3Ha2fma6Oc0ow7XscGWjUjPExozp+jQ+
+         msBNg7E2R30zRx+6/DpXkOOfxAvWgCQb2PJhwEkKCsNuNgzieAc7wzq3lxTE9lKrOKlD
+         lEEsKbymiSHdkNk+Wuvwu1MeEtzrEXSBYii4adLc1tzmP8+ztutbwI84qvDnoBD+byEp
+         b9mIUt04AteAhgNm2NPQ1R3Ud92NYr9164DWHyVE6c+YGpcjd8NfO+dMpoSTXqCzekAC
+         il3w==
+X-Gm-Message-State: APjAAAXwaAQb1yBv8u6mTmd1VOmqsmNLBPUdbfhXiFMunsxGWIAVlCok
+        LvSVEtAsDAgpFyBrmfIy8UsFOg==
+X-Google-Smtp-Source: APXvYqxcyLU9TwYY78BGl+9GtiBAsDrXSO4GLnlajfBKUSJ8xN18EnOZmexJ1162Q53jj+b+dywcVA==
+X-Received: by 2002:a17:90a:37c8:: with SMTP id v66mr24901434pjb.33.1560751823323;
+        Sun, 16 Jun 2019 23:10:23 -0700 (PDT)
+Received: from localhost ([121.95.100.191])
+        by smtp.gmail.com with ESMTPSA id a7sm10083949pgj.42.2019.06.16.23.10.21
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 16 Jun 2019 23:10:22 -0700 (PDT)
+From:   Masahisa Kojima <masahisa.kojima@linaro.org>
+To:     lkp@intel.com
+Cc:     kbuild-all@01.org, linux-spi@vger.kernel.org, broonie@kernel.org,
+        jaswinder.singh@linaro.org, ard.biesheuvel@linaro.org,
+        Masahisa Kojima <masahisa.kojima@linaro.org>
+Subject: [PATCH] spi: Kconfig: spi-synquacer: Added ARM and ARM64 dependence
+Date:   Mon, 17 Jun 2019 15:09:57 +0900
+Message-Id: <20190617060957.16171-1-masahisa.kojima@linaro.org>
+X-Mailer: git-send-email 2.14.2
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 20-03-19, 15:19, Rajendra Nayak wrote:
-> This is a v2 of the RFC posted earlier by Stephen Boyd [1]
-> 
-> As part of v2 I still follow the same approach of dev_pm_opp_set_rate()
-> API using clk framework to round the frequency passed and making it
-> accept 0 as a valid frequency indicating the frequency isn't required
-> anymore. It just has a few more drivers converted to use this approach
-> like dsi/dpu and ufs.
-> ufs demonstrates the case of having to handle multiple power domains, one
-> of which is scalable.
-> 
-> The patches are based on 5.1-rc1 and depend on some ufs fixes I posted
-> earlier [2] and a DT patch to include the rpmpd header [3]
-> 
-> [1] https://lkml.org/lkml/2019/1/28/2086
-> [2] https://lkml.org/lkml/2019/3/8/70
-> [3] https://lkml.org/lkml/2019/3/20/120
-> 
-> Rajendra Nayak (10):
->   OPP: Make dev_pm_opp_set_rate() with freq=0 as valid
-> 
-> Stephen Boyd (1):
->   OPP: Don't overwrite rounded clk rate
+kbuild test reported that Alpha and some of the architectures
+are missing readsx/writesx functions.
+spi-synquacer driver is only targeted for arm and arm64 platforms.
+With that, added ARM and ARM64 dependence in Kconfig.
+This patch also specifies the default compile type as module.
 
-I have applied modified version of these two patches to the OPP tree now.
-Thanks.
+Fixes: b0823ee35cf9b ("spi: Add spi driver for Socionext SynQuacer platform")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+---
+ drivers/spi/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index ae9c81214298..667d341e8e95 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -736,6 +736,8 @@ config SPI_SUN6I
+ config SPI_SYNQUACER
+ 	tristate "Socionext's SynQuacer HighSpeed SPI controller"
+ 	depends on ARCH_SYNQUACER || COMPILE_TEST
++	depends on ARM || ARM64
++	default m if ARCH_SYNQUACER
+ 	help
+ 	  SPI driver for Socionext's High speed SPI controller which provides
+ 	  various operating modes for interfacing to serial peripheral devices
 -- 
-viresh
+2.14.2
+
