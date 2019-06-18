@@ -2,130 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D4A49F45
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2019 13:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3514A024
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2019 14:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729695AbfFRLea (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jun 2019 07:34:30 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:50705 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729621AbfFRLea (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jun 2019 07:34:30 -0400
-Received: by mail-wm1-f68.google.com with SMTP id c66so2866027wmf.0
-        for <linux-spi@vger.kernel.org>; Tue, 18 Jun 2019 04:34:29 -0700 (PDT)
+        id S1726640AbfFRMBo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jun 2019 08:01:44 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:55798 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfFRMBo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jun 2019 08:01:44 -0400
+Received: by mail-wm1-f66.google.com with SMTP id a15so2943306wmj.5;
+        Tue, 18 Jun 2019 05:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=GXSsckTMqxje7wmnOmj8eR9o0K5epX6miDSEzrBDFq4=;
-        b=u1r760zPa/orghgy/1lKLcY0HOyAVNwKz7ZGvJtEm+nZl38cDdKYEaBTJm8QoHOBAN
-         9QqwCupkkKJrhSOS7moQBzm3EapRM07JjqvxsFLuHDzg7gS3PMPU26FXulWU5lDuyNuJ
-         OaDX+2g1HDIN1FlyiCz7rd3VmzZXMakK2NcZwdexVwPvtiE/97FxqV2eq/9Qdb+hPYMG
-         4Y4q1pCTR8vlwgzpfuBz6iFpzhobOQlRygR/NUpm6U6R9BzK7zr7XRILXjYBiAjK0tp7
-         P2oPrluRHYdg0H4NcogC1V9SelHSUMXEE1y8pMkQdLDUpjLPIM8Z84fNssBd9XG7vEir
-         wZSg==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:openpgp:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oj9R2h7PLbPIbssfUEZGisJttd/OMEPsCeLkAVDP4/k=;
+        b=EZbHQj3xMGBqj9Q9GX/wU+YiLHLfXk+cdZg7gRWU9n/Y8XEhWmFdCUR+bTHZJ5cSvc
+         KUzll32D21EfZi+MHAOH8vq6rbY/m6fHvYeohptFvTxOqEC386rTUHlyh0nKeIiNS4Wl
+         friRRybP9vG4hZB0omRydPP9Df6NCF/z8lJ6CQI0q0ic5hPulqLbxUA9E/iHUvRnx8Jc
+         Sw0myf5f4DlMTs4nLW166v7sL6iQKANBux9MRMDV7Sp1REbzRVLEOiXzF5vPZc3paY8z
+         VmxE9Pz38snaHNywmkwY+N9aNhb+KCistFLoqqkBjRZoe+xNrX0XRa6FcexZ8mcB2SjF
+         tEWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=GXSsckTMqxje7wmnOmj8eR9o0K5epX6miDSEzrBDFq4=;
-        b=UtI1GotkGOqEqA+rh0CPgORV59JFwYkEDZNOh0wctpb/Otk9yFwUL6oAV9PTBZnMSz
-         Xaz5PA6hAdaomOvMlqEeQsRvY/80DAZs4BAyIfcO1ILdDevW9VSEcLV69TWqLcbgWUy0
-         Jb5ZZF2oSOXwQC9x7O/wsoRv52wosoGwvcvQ0CZwLLzKsloIIhgLcxIPYLrZ7SBUhwfp
-         +Ti/aCBqyZ3qzGUPcgk3XxY++QFsfgEJLecW8V7THSgP50yiuPIMB4RHh8xWSE8BAvh6
-         fMZHsmh+9bP6tdxirSf1upsE/hsp3AvJUSRpCsUtc0CjUnQ6EFVjMS1xXqW1MOgYDBIH
-         HAHA==
-X-Gm-Message-State: APjAAAW4DvuUom2YMKdYo0aYuB1MA/JITOHybf8rWh35OnvDrNVBGROr
-        ddiig7u63lUyBlKm41t4/pn6Pw==
-X-Google-Smtp-Source: APXvYqxihQrpdmh4ryVLmwf4vT8JM1RjRHndJmSPE7pLg7PvRtpOD8iPdbgdmTU897eaaYKaJ5pDvg==
-X-Received: by 2002:a1c:ac81:: with SMTP id v123mr3291332wme.145.1560857668594;
-        Tue, 18 Jun 2019 04:34:28 -0700 (PDT)
-Received: from dell ([2.27.35.243])
-        by smtp.gmail.com with ESMTPSA id t6sm2577260wmb.29.2019.06.18.04.34.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 18 Jun 2019 04:34:28 -0700 (PDT)
-Date:   Tue, 18 Jun 2019 12:34:26 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>
-Subject: Re: [PATCH RFC 2/2] mfd: add Renesas RPC-IF driver
-Message-ID: <20190618113426.GD18371@dell>
-References: <ad503d6e-4739-9744-64b4-fd13f44ea6fe@cogentembedded.com>
- <1538cadb-7c6a-2c4c-fe8c-960b25286950@cogentembedded.com>
- <20190612090552.GD4797@dell>
- <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com>
- <20190617093048.GD16364@dell>
- <CAMuHMdX6GC2ZDam=odC-QFLUdrh1PYPVWEo5x3EHduqJ4FmTng@mail.gmail.com>
- <20190618091955.GN16364@dell>
- <CAMuHMdX7fFSO25TPJA9PO=VQC0czKux8nritMeffBcnaxr=WMQ@mail.gmail.com>
- <20190618095741.GA18371@dell>
- <CAMuHMdX829_CFGt53fS4nd9=qdS479OvJXYY3++DZ=4fLmp62w@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oj9R2h7PLbPIbssfUEZGisJttd/OMEPsCeLkAVDP4/k=;
+        b=OE+BbU1k7+YIRLQSSeMZE3QJmiSFVsb7MewbmYBEjmcjmQgzGPXcgqazvs8AB1KoQw
+         ZzxDFll1pLan/Sc8rCyvEsoFjpI+H2bpNXg64p+4PTblRSyV7WU7I6my1g0D/IH1WKHi
+         Ycwa4M51aneIHWJKqUdb+d2yx5fbxC50WFbs/g4eq7WO05ShWkLpAQ8OC9ndIWer3+c6
+         d3j9ursqgMmLxdxwqyk09PZ+YrPOZI6lofPgWSJpA6a2OspGsQ9SzcZ1WOqlE3I0UhkC
+         tqDcy+4PFZSg8ZrCo99YBKPJXcNPM9e4P2M8qkJCIVeTpAM/fk7zpuxckIAB2XfMwFes
+         VBbg==
+X-Gm-Message-State: APjAAAUIQpRk2w2WCYlMeElGbbLZfE+wkj7RYgShfHF1fctMYnEZnCIo
+        CINaYov5qCQEphfquSchA2s=
+X-Google-Smtp-Source: APXvYqzsfBn5Vi+/8ppaMw0HGNWkGiV0h3v4+fwxzpiUXMBe6NlmaVTpFJobraD+wboFQBeWNXiMJQ==
+X-Received: by 2002:a1c:3c8a:: with SMTP id j132mr3279580wma.172.1560859301896;
+        Tue, 18 Jun 2019 05:01:41 -0700 (PDT)
+Received: from [192.168.1.4] (ip-86-49-110-70.net.upcbroadband.cz. [86.49.110.70])
+        by smtp.gmail.com with ESMTPSA id r12sm21413531wrt.95.2019.06.18.05.01.40
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 18 Jun 2019 05:01:41 -0700 (PDT)
+Subject: Re: [PATCH v13 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3
+ RPC-IF controller bindings
+To:     masonccyang@mxic.com.tw, Lee Jones <lee.jones@linaro.org>
+Cc:     bbrezillon@kernel.org, broonie@kernel.org,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms@verge.net.au>, juliensu@mxic.com.tw,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-spi@vger.kernel.org, mark.rutland@arm.com,
+        miquel.raynal@bootlin.com, robh+dt@kernel.org,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+References: <1558423174-10748-1-git-send-email-masonccyang@mxic.com.tw>
+ <1558423174-10748-4-git-send-email-masonccyang@mxic.com.tw>
+ <0e2994d6-6efc-9f36-f681-609199f20b9f@cogentembedded.com>
+ <20190603130428.GX4797@dell>
+ <02addf64-9f6e-ccc1-2f94-8983456e3ebc@cogentembedded.com>
+ <OFDA7648A0.F1733EA5-ON48258411.002946DF-48258411.002A2F0D@mxic.com.tw>
+From:   Marek Vasut <marek.vasut@gmail.com>
+Openpgp: preference=signencrypt
+Message-ID: <2671d488-82a1-8720-d9a1-03554d955a38@gmail.com>
+Date:   Tue, 18 Jun 2019 14:01:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <OFDA7648A0.F1733EA5-ON48258411.002946DF-48258411.002A2F0D@mxic.com.tw>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdX829_CFGt53fS4nd9=qdS479OvJXYY3++DZ=4fLmp62w@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 18 Jun 2019, Geert Uytterhoeven wrote:
+On 6/6/19 9:40 AM, masonccyang@mxic.com.tw wrote:
+[...]
 
-> Hi Lee,
-> 
-> On Tue, Jun 18, 2019 at 11:57 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > On Tue, 18 Jun 2019, Geert Uytterhoeven wrote:
-> > > On Tue, Jun 18, 2019 at 11:20 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > > > So is an RPC-IF a real hardware device.  Can you share the datasheet?
-> > >
-> > > Unfortunately the datasheet for the R-Car Gen3 and RZ/G2 SoCs is
-> > > not yet public.
-> >
-> > When will it be public?
-> 
-> Dunno. RZ/G1 documentation became public a few months after the SoC
-> release.
-> 
-> > Do you have access to it?
-> 
-> Yes I do.
+> RPC-IF works either in SPI or HyperFlash is decided by external hardware 
+> pins 
+> configuration and it can NOT switch it's operation mode in the run time. 
+> This is not like my understanding of MFD.
 
-Great.  Maybe you can help Sergei with his 'undocumented bits' issue.
+Which external hardware pins decide the RPC configuration ?
 
-> > > However, a very similar hardware block is present in the RZ/A2M SoC.
-> > > Please see Chapter 20 ("SPI Multi I/O Bus Controller") of the "RZ/A2M Group
-> > > User’s Manual: Hardware", which you can download from
-> > > https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/rz/rza/rza2m.html#documents
-> >
-> >   "The SPI multi I/O bus controller enables the direct connection of
-> >    serial flash, OctaFlashTM, XccelaTM flash, or HyperFlashTM memory
-> >    devices to this LSI chip.
-> >
-> >    This module allows the connected serial flash, OctaFlashTM, XccelaTM
-> >    flash, or HyperFlashTM memory devices to be accessed by reading the
-> >    external address space, or using Manual mode to transmit and receive
-> >    data."
-> >
-> > Looks like a flash device to me.
-> 
-> The external address space is a small window.
-> 
-> > Can the SPI portion be used to connect generic SPI devices?
-> 
-> I'll defer that to the people who worked on the driver...
+It seems to me like PHYCNT register, PHYMEM bitfield, selects what
+device is connected, and then a couple of other bits control the
+communication, but I see nothing which would be tied to any external
+configuration pins.
 
-...
+[...]
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Best regards,
+Marek Vasut
