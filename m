@@ -2,106 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D7949EFB
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2019 13:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184F349F0F
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2019 13:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729458AbfFRLMT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 18 Jun 2019 07:12:19 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:42428 "EHLO
+        id S1729508AbfFRLUx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jun 2019 07:20:53 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43726 "EHLO
         mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729110AbfFRLMT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jun 2019 07:12:19 -0400
-Received: by mail-lf1-f65.google.com with SMTP id y13so8926183lfh.9
-        for <linux-spi@vger.kernel.org>; Tue, 18 Jun 2019 04:12:18 -0700 (PDT)
+        with ESMTP id S1729110AbfFRLUx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jun 2019 07:20:53 -0400
+Received: by mail-lf1-f65.google.com with SMTP id j29so8949051lfk.10
+        for <linux-spi@vger.kernel.org>; Tue, 18 Jun 2019 04:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BqAQziBuj9AHgjLdy1ruEhnfS6TP1Hx9eyj6mxwxuVY=;
+        b=beCCz7QmMZSMUGW1ehplyyYV6H2zAGH2ymXMgTQkdLJOdUIBHLM9nFnGibLF7Dvaj1
+         QAqlFa+2b4aKA7v5k6dHB1lWResDnyDY/oxIf5+mVPI+5qbpa1J5ap54VLLTHtYS3+qH
+         eXSCFP/0DlZ3HGcYISaktbM6Cqb0HflbOuhCSYnX5aFaRu3AEmbv3Z94xx5SLku400cO
+         9t2OA5rn5FmP4EScKNLcYtP3LRTLy+A5tcEB4Mh1QQFjrENiTv8Ix/3oMGbnvK3Osu8N
+         LID1ZHoEzN7uEUVPi+ZmczM3R1aoB0zkA11FYYBaOoohol9XdePy+na+RCck9pcPKyrJ
+         NyjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LA73LFXA8kT+iMCX0CVf0WxBB7EVdW67wDF0JGCv8Tc=;
-        b=Nbicb6AeN05PSs1GEpPm8fKbyLD7TWgVdWy0MMqVB+10/c41ku+bu6kQbxe6k/5fj3
-         3iOBmU/FUX+mNq2+S2ZEs+Zl1R45c6ri3t3v1RHPVnrIhE22hfeA+M36tq35j3SSfBWI
-         Jc4/qAbfIgJgpElykB4PkNS7Vy/2zE1BDDQPAuZCS7GcDd7OjzFH9tHU9zEqUoXWckFV
-         pOk38tbOSO+0mCU1wErZCkzOobS0Rno28wHcJPiEvx3tqP0S8SeV8zaztw3Bc0GzolSo
-         CfoAWfnLZQfWSo8Ww7XAe2rLlqa53RQ/fP9n7DQEg63MzFjCASP73fpdSpQMZWOP+9hT
-         5NgA==
-X-Gm-Message-State: APjAAAWYfH6Vn74HFFnU+FNiBPhzbgMrBpT4DKDuaCStr5d4MjT4+duA
-        aY4KK6Rknj350qTifC4YQdSMzsWyEl0Aacie0CE=
-X-Google-Smtp-Source: APXvYqwRuygEnyyMvR3pFNzXEfFOo8BRWr3AwFGw6CoUW1J4uCdnDjeycelPMouBeaoAElC9Pu4vnmSa2OzWlEJGc3Q=
-X-Received: by 2002:ac2:5467:: with SMTP id e7mr34681371lfn.23.1560856337483;
- Tue, 18 Jun 2019 04:12:17 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=BqAQziBuj9AHgjLdy1ruEhnfS6TP1Hx9eyj6mxwxuVY=;
+        b=U5MULdtXNdRLcdPEoxFMnKnaNOC3g/dsqSs2fApo4qhjA5QCqdZmCOXeiNFAQfm4qx
+         QqMPlrhR9zgM/hsaOjI/iHxsOblPx8TkiKCyj5OQ0POA4Kd57P8nU3flqSRpZH83BJq9
+         WtGvbo7BylKRKScDul0F15MBok7mv82Xxrul1ig1/X/9+657zFxtp1hQjiue7IDhXhRb
+         yoLI1sdiKLp8gCgMGQcxxFSFc9rcdcW2o0mpnA6b8a9G8RvowOB5IyyVY2unq+7JIdeQ
+         can5MRyg3/T4NVGbuhQhYu8Oj+V3yBWTqoFmg+avreSw2UTq5vadDWJxtxON5W6wRPyg
+         EiwA==
+X-Gm-Message-State: APjAAAVSic8DMhbIpbUflwVwJWularlH0sBpRGIyHorSdwBA157bikGN
+        nCpiNnwvrX2Scj2ID6MB4cR5ixJaq0EOdkpkW3aS6w==
+X-Google-Smtp-Source: APXvYqy9dosDTTJ7Ccl2s4o9bC+yfVHz93nXQ4Yj2pRnpWkk4JjCx0Blsyav6g7HJtf+Qo6SyexVG1tOvtjnqlkeZFU=
+X-Received: by 2002:a05:6512:21c:: with SMTP id a28mr13786559lfo.14.1560856850926;
+ Tue, 18 Jun 2019 04:20:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <ad503d6e-4739-9744-64b4-fd13f44ea6fe@cogentembedded.com>
- <1538cadb-7c6a-2c4c-fe8c-960b25286950@cogentembedded.com> <20190612090552.GD4797@dell>
- <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com> <20190617093048.GD16364@dell>
- <CAMuHMdX6GC2ZDam=odC-QFLUdrh1PYPVWEo5x3EHduqJ4FmTng@mail.gmail.com>
- <20190618091955.GN16364@dell> <CAMuHMdX7fFSO25TPJA9PO=VQC0czKux8nritMeffBcnaxr=WMQ@mail.gmail.com>
- <20190618095741.GA18371@dell>
-In-Reply-To: <20190618095741.GA18371@dell>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Jun 2019 13:12:05 +0200
-Message-ID: <CAMuHMdX829_CFGt53fS4nd9=qdS479OvJXYY3++DZ=4fLmp62w@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/2] mfd: add Renesas RPC-IF driver
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Mason Yang <masonccyang@mxic.com.tw>,
+References: <20190617060957.16171-1-masahisa.kojima@linaro.org>
+ <20190617101741.GK5316@sirena.org.uk> <CAKv+Gu-DYzRRG82t27nFZKeLOPzCYphY=AQCQy78=m591rXs_A@mail.gmail.com>
+ <20190617114630.GO5316@sirena.org.uk> <CADQ0-X_1kNChYr_vvOiafghk8h1AcERaGYWjo61ATLXy0_f_UA@mail.gmail.com>
+ <20190618105714.GL5316@sirena.org.uk>
+In-Reply-To: <20190618105714.GL5316@sirena.org.uk>
+From:   Masahisa Kojima <masahisa.kojima@linaro.org>
+Date:   Tue, 18 Jun 2019 20:20:39 +0900
+Message-ID: <CADQ0-X-HSPMCY+NY5g_53KY18M2E-W9VJiUOrxB7oDy0hx+EeQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: Kconfig: spi-synquacer: Added ARM and ARM64 dependence
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        kbuild test robot <lkp@intel.com>, kbuild-all@01.org,
         linux-spi <linux-spi@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>
+        Jaswinder Singh <jaswinder.singh@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Lee,
+On Tue, 18 Jun 2019 at 19:57, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, Jun 18, 2019 at 05:13:57PM +0900, Masahisa Kojima wrote:
+>
+> Please don't top post, reply in line with needed context.  This allows
+> readers to readily follow the flow of conversation and understand what
+> you are talking about and also helps ensure that everything in the
+> discussion is being addressed.
 
-On Tue, Jun 18, 2019 at 11:57 AM Lee Jones <lee.jones@linaro.org> wrote:
-> On Tue, 18 Jun 2019, Geert Uytterhoeven wrote:
-> > On Tue, Jun 18, 2019 at 11:20 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > > So is an RPC-IF a real hardware device.  Can you share the datasheet?
+I'm sorry, I understood.
+
+> > There was a patch to address same compile error.
+> > https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1982194.html
 > >
-> > Unfortunately the datasheet for the R-Car Gen3 and RZ/G2 SoCs is
-> > not yet public.
+> > Does it preferable solution to use iowrite32_rep() series?
 >
-> When will it be public?
+> If there's a patch that removes the need to have a hard dependency on
+> the particular architectures that'd definitely be better.  Separately a
+> patch adding a depends on the architectures with || COMPILE_TEST would
+> be OK though and potentially useful like Ard says.
 
-Dunno. RZ/G1 documentation became public a few months after the SoC
-release.
-
-> Do you have access to it?
-
-Yes I do.
-
-> > However, a very similar hardware block is present in the RZ/A2M SoC.
-> > Please see Chapter 20 ("SPI Multi I/O Bus Controller") of the "RZ/A2M Group
-> > User’s Manual: Hardware", which you can download from
-> > https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/rz/rza/rza2m.html#documents
->
->   "The SPI multi I/O bus controller enables the direct connection of
->    serial flash, OctaFlashTM, XccelaTM flash, or HyperFlashTM memory
->    devices to this LSI chip.
->
->    This module allows the connected serial flash, OctaFlashTM, XccelaTM
->    flash, or HyperFlashTM memory devices to be accessed by reading the
->    external address space, or using Manual mode to transmit and receive
->    data."
->
-> Looks like a flash device to me.
-
-The external address space is a small window.
-
-> Can the SPI portion be used to connect generic SPI devices?
-
-I'll defer that to the people who worked on the driver...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I will try to use iowrite32_rep() series.
