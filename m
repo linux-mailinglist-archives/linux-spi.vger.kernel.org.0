@@ -2,92 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E59504B7C5
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 14:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1788C4B9BA
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 15:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727076AbfFSMOp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jun 2019 08:14:45 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:51448 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726999AbfFSMOo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jun 2019 08:14:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=k3P3++6GQiP2ImSaOTC4gPs5tYB1KrKrlADh55M4Y7c=; b=GLoxLkGT3DKYUTbegAR4dtLvl
-        JAcOZ35M+taNnvlktiRr/9cbCSk4qpR/PmFqAoCqDXh//hiD5SZ/ynCIud2p0Hd/FMTUNsYa+qiIS
-        NKWiVYV6bxLxxM2DoLQCNcZfdjWSFUQK/qNwEbUZxmd1Y41Khiv3C6QLu3DgXsKGS/4zU=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hdZUA-0007EJ-9X; Wed, 19 Jun 2019 12:14:42 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id D7BDC440046; Wed, 19 Jun 2019 13:14:41 +0100 (BST)
-Date:   Wed, 19 Jun 2019 13:14:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH 1/3] include: linux: spi: more helpers for declaring spi
- drivers
-Message-ID: <20190619121441.GS5316@sirena.org.uk>
-Mail-Followup-To: "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <1560796840-18207-1-git-send-email-info@metux.net>
+        id S1730613AbfFSNVX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Jun 2019 09:21:23 -0400
+Received: from mga17.intel.com ([192.55.52.151]:55844 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726330AbfFSNVW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 19 Jun 2019 09:21:22 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jun 2019 06:21:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,392,1557212400"; 
+   d="scan'208";a="186456946"
+Received: from mylly.fi.intel.com (HELO [10.237.72.61]) ([10.237.72.61])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jun 2019 06:21:19 -0700
+Subject: Re: [PATCH] spi/acpi: fix incorrect ACPI parent check
+To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        kbuild test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Lukas Wunner <lukas@wunner.de>
+References: <20190619095254.19559-1-ard.biesheuvel@linaro.org>
+ <20190619101604.GR2640@lahna.fi.intel.com>
+ <54ede1d8-0e6b-e7d9-5e61-a7d057abbd2b@linux.intel.com>
+ <CAKv+Gu_Bw3aV-pUVYf8T1hLfL35X7ozEPtqL9oLcDvwcQ4qMiw@mail.gmail.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <c96afe71-c7bd-d30f-ef37-0c6eeb726f67@linux.intel.com>
+Date:   Wed, 19 Jun 2019 16:21:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6s/G0Ait2f6IH9MX"
-Content-Disposition: inline
-In-Reply-To: <1560796840-18207-1-git-send-email-info@metux.net>
-X-Cookie: Editing is a rewording activity.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKv+Gu_Bw3aV-pUVYf8T1hLfL35X7ozEPtqL9oLcDvwcQ4qMiw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 6/19/19 2:59 PM, Ard Biesheuvel wrote:
+> On Wed, 19 Jun 2019 at 13:58, Jarkko Nikula
+> <jarkko.nikula@linux.intel.com> wrote:
+>>
+>> On 6/19/19 1:16 PM, Mika Westerberg wrote:
+>>> On Wed, Jun 19, 2019 at 11:52:54AM +0200, Ard Biesheuvel wrote:
+>>>> The ACPI device object parsing code for SPI slaves enumerates the
+>>>> entire ACPI namespace to look for devices that refer to the master
+>>>> in question via the 'resource_source' field in the 'SPISerialBus'
+>>>> resource. If that field does not refer to a valid ACPI device or
+>>>> if it refers to the wrong SPI master, we should disregard the
+>>>> device.
+>>>>
+>>>> Current, the valid device check is wrong, since it gets the
+>>>> polarity of 'status' wrong. This could cause issues if the
+>>>> 'resource_source' field is bogus but parent_handle happens to
+>>>> refer to the correct master (which is not entirely imaginary
+>>>> since this code runs in a loop)
+>>>>
+>>>> So test for ACPI_FAILURE() instead, to make the code more
+>>>> self explanatory.
+>>>>
+>>>> Fixes: 4c3c59544f33 ("spi/acpi: enumerate all SPI slaves in the namespace")
+>>>> Reported-by: kbuild test robot <lkp@intel.com>
+>>>> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>>>> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+>>>
+>>> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>>>
+>> I hit yesterday a regression caused by 4c3c59544f33. I've a custom ACPI
+>> tables defining I2C gpio expanders (gpio-pca953x.c as INT3491) and a
+>> spidev test device (SPT0001).
+>>
+>> Both stopped enumerating after 4c3c59544f33. With this fix spidev device
+>> enumerates but still get confused with I2C GPIO expanders (INT3491):
+>>
+> 
+> Could you share the decomplied D/SSDT please?
+> 
+It's Intel Edison with tables from Mika's sample ACPI tables. The 
+interesting parts here are these two:
 
---6s/G0Ait2f6IH9MX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+https://github.com/westeri/meta-acpi/blob/master/recipes-bsp/acpi-tables/samples/edison/spidev.asl
 
-On Mon, Jun 17, 2019 at 08:40:38PM +0200, Enrico Weigelt, metux IT consult wrote:
+https://github.com/westeri/meta-acpi/blob/master/recipes-bsp/acpi-tables/samples/edison/gpioexp.asli
 
-> +/* subsys_spi_driver() - Helper macro for drivers that don't do
-> + * anything special in module init/exit.  This eliminates a lot of
-> + * boilerplate.  Each module may only use this macro once, and
-> + * calling it replaces subsys_initcall() and module_exit()
-> + */
-> +#define subsys_spi_driver(__spi_driver) \
+The full tables are of course larger but I think those two above are 
+relevant here. I build SSDT from arduino-all.asl below which includes 
+bunch of other files and with above spidev.asl.
 
-I'm not convinced we want to be encouraging anyone to be using
-subsys_initcall() for SPI drivers in the first place - my guess would be
-that with deferred probing none of that is needed anyway and the driver
-could just use module_spi_driver().  Certainly if the drivers do
-actually need subsys_initcall() I'd like to understand why before going
-forward with something like this, and ideally we'd be able to remove the
-need.
+https://github.com/westeri/meta-acpi/blob/master/recipes-bsp/acpi-tables/samples/edison/arduino-all.asl
 
---6s/G0Ait2f6IH9MX
-Content-Type: application/pgp-signature; name="signature.asc"
+Let me know if you need full dump.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0KJzAACgkQJNaLcl1U
-h9DeUQf+PgOAkyo4pT4LasAHcsQL8bXxE3hqloJcMpaFpRgnSp4/I5Pc/Jg04XCu
-CI2k7QnDLDIcUq1FlrI+eVvb0SKhzeEkIfJyaL8dX1kRPea2n9WbP0ZF5GcnQQ2d
-ZidAKFQNB7eSWEhgPUIvkNHIvGm7TUNST35PbhZCd+j4ACcErdrKhGpZPm2hmHRN
-7T7nUtkLFL5YvCH8QqdPLUzg2Co6BFik3jiseCAIi1PH4+zIA9QPi3g47VDPQ6aF
-nTUg51S5Y4aduklIOTW8G+D47tUTsjFiKb3g2ZqUz1wbgmJlyd6q48h4lR55gSj8
-xJYmx5diMemXIks5Ksr1Ny2mhGsXqg==
-=szr+
------END PGP SIGNATURE-----
-
---6s/G0Ait2f6IH9MX--
+-- 
+Jarkko
