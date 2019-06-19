@@ -2,119 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E45FD4B367
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 09:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E3F4B397
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 10:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730418AbfFSHy1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jun 2019 03:54:27 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37264 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbfFSHy1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jun 2019 03:54:27 -0400
-Received: by mail-wm1-f67.google.com with SMTP id f17so656875wme.2
-        for <linux-spi@vger.kernel.org>; Wed, 19 Jun 2019 00:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=1iIRBwX7O/jV0okvup0LaLa7MSxzENqsv71JZIteECA=;
-        b=vkkpTRYLqsygG8afhbPOZ0pNiBWiLDgcHsdJKbvlWZoTNoBt3qyqKH1oEIknGN87dp
-         lWrrlB1LRm9lgDF0Oopyh5jmOb0gb4kJNppf7PYFTpDLqGNkEbf8NeiW0FpZ91qXb2x2
-         Txpw9kKdeLk3kk0qdiZCnprjdXEkCPgopj8ymIxdEb+t2mg4qOp17AoSv4Tu9vWn1BIm
-         lUXbMxd/8sMituj9+vdqaSddR5ElxHaSI4DyT9Dg/FQmufv9xLWfdBm8PDuAsX1m4T7z
-         IL+bjwPkMCJtiX21yXkCScYsi3BP6yzoGoXgBWvLJaHwqTgk4piC23w829X2z2iE0+57
-         uRdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=1iIRBwX7O/jV0okvup0LaLa7MSxzENqsv71JZIteECA=;
-        b=E5sG7BpJGWuXSDPU0uyo+fQ9jvrpRP4T9qBlfhn8ix96pabUg+s0t/0zeLMuF/pD+G
-         jvCR3kQ6vslQbXu6rRgxkBR6Dv7Yj80tdQy/M1hWrubzcCuDid5uYgDwuhJNz8xlA86J
-         cTbGQBOb7WEg22K2nwt/p412QfijyT8Ct+wr1s0F+Vs6OKhN2nAUR4A+pWyfdXXAwdLq
-         xKd9W/DQpPRBVzG8RPU23UwmurC+Sema/yf7u9KKQeCJ9f9V7l2W4bUXS4jbhHLqC7ht
-         V88eUwNyOFNU8liFON5KWMs+MkRqDgqlXm/m1mXo8fnz3vPbbrwTwZ5Hbl9O/tz+zrsX
-         M10g==
-X-Gm-Message-State: APjAAAV65hJ+Z9/7iiYJ0NzrC+zuzR33ENMJ0GyE3vn31QhMPNuxaShH
-        vCALgFtkV6WONcYejFQxuhKekTqikS8=
-X-Google-Smtp-Source: APXvYqxtlRBwzGq5dEKue40aes5iWJK+zPk+04ph/bqqj/eP5649tyAHA7Iexecci0Y/aRJ1GJTkJQ==
-X-Received: by 2002:a1c:9c4d:: with SMTP id f74mr6838838wme.156.1560930864744;
-        Wed, 19 Jun 2019 00:54:24 -0700 (PDT)
-Received: from dell ([2.27.35.243])
-        by smtp.gmail.com with ESMTPSA id c65sm484062wma.44.2019.06.19.00.54.23
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 19 Jun 2019 00:54:24 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 08:54:22 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     masonccyang@mxic.com.tw
-Cc:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        juliensu@mxic.com.tw
-Subject: Re: [PATCH RFC 2/2] mfd: add Renesas RPC-IF driver
-Message-ID: <20190619075422.GJ18371@dell>
-References: <20190612090552.GD4797@dell>
- <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com>
- <20190617093048.GD16364@dell>
- <CAMuHMdX6GC2ZDam=odC-QFLUdrh1PYPVWEo5x3EHduqJ4FmTng@mail.gmail.com>
- <20190618091955.GN16364@dell>
- <CAMuHMdX7fFSO25TPJA9PO=VQC0czKux8nritMeffBcnaxr=WMQ@mail.gmail.com>
- <20190618095741.GA18371@dell>
- <ff85a907-8f26-5e80-c7f0-655ca11afe25@cogentembedded.com>
- <20190619061659.GH18371@dell>
- <OFB918AE65.CB02BB75-ON4825841E.0025C688-4825841E.00265891@mxic.com.tw>
+        id S1731105AbfFSIG5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Jun 2019 04:06:57 -0400
+Received: from twhmllg4.macronix.com ([122.147.135.202]:56997 "EHLO
+        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731063AbfFSIG4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jun 2019 04:06:56 -0400
+Received: from twhfmnt1.mxic.com.tw (twhfm1p2.macronix.com [172.17.20.92])
+        by TWHMLLG4.macronix.com with ESMTP id x5J84fX5040768;
+        Wed, 19 Jun 2019 16:04:41 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id DF2DCF7716F0D9DE9D5B;
+        Wed, 19 Jun 2019 16:04:41 +0800 (CST)
+In-Reply-To: <20190618092901.3bdd9f61@collabora.com>
+References: <1555320234-15802-1-git-send-email-masonccyang@mxic.com.tw> <1555320234-15802-3-git-send-email-masonccyang@mxic.com.tw>
+        <20190512151820.4f2dd9da@xps13> <OF074A1F06.5C1A58BE-ON482583FD.0031CD95-482583FD.003437AD@mxic.com.tw>
+        <20190520142333.390091d5@xps13> <OFADC47344.0F9941B2-ON48258403.002336E3-48258403.003141F0@mxic.com.tw>
+        <20190527144250.71908bd9@xps13> <OFE923A8E5.50375C30-ON48258409.0009AE1B-48258409.00119767@mxic.com.tw>
+        <20190617143510.4ded5728@xps13> <OF1C1397B4.241DC339-ON4825841D.000482A2-4825841D.0007B67E@mxic.com.tw>
+        <20190618081436.5d488320@collabora.com> <20190618092901.3bdd9f61@collabora.com>
+To:     "Boris Brezillon" <boris.brezillon@collabora.com>
+Cc:     bbrezillon@kernel.org, broonie@kernel.org,
+        christophe.kerello@st.com, computersforpeace@gmail.com,
+        devicetree@vger.kernel.org, dwmw2@infradead.org,
+        geert@linux-m68k.org, juliensu@mxic.com.tw, lee.jones@linaro.org,
+        liang.yang@amlogic.com, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        marcel.ziswiler@toradex.com, marek.vasut@gmail.com,
+        mark.rutland@arm.com, "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        paul.burton@mips.com, richard@nod.at, robh+dt@kernel.org,
+        stefan@agner.ch, zhengxunli@mxic.com.tw
+Subject: Re: [PATCH v3 2/4] mtd: rawnand: Add Macronix MX25F0A NAND controller
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <OFB918AE65.CB02BB75-ON4825841E.0025C688-4825841E.00265891@mxic.com.tw>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-KeepSent: 5EAF94EB:AE31CF59-4825841E:002A2C38;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OF5EAF94EB.AE31CF59-ON4825841E.002A2C38-4825841E.002C60BF@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Wed, 19 Jun 2019 16:04:43 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2019/06/19 PM 04:04:41,
+        Serialize complete at 2019/06/19 PM 04:04:41
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG4.macronix.com x5J84fX5040768
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 19 Jun 2019, masonccyang@mxic.com.tw wrote:
-> > > > Looks like a flash device to me.
-> > > 
-> > >    More like a multi-protocol flash controller, with the real flash 
-> chip connected
-> > > to it.
-> > 
-> > Right, this has been my point from the start.
-> > 
-> > It's a flash controller.  Sure, you can access it in different ways,
-> > but it's still *just* a flash controller and thus not a true MFD.
-> > 
-> > Surely this whole thing, including the shared portion should live in
-> > one of the memory related subsystems?
-> > 
-> > This is not the first device people have tried to shove in MFD, that
-> > is really *just* an <X> device, able to be controlled via different
-> > protocols.
-> > 
-> > MFD is for registering child devices of chips which offer genuine
-> > cross-subsystem functionality.  It is not designed for mode selecting,
-> > or as a place to shove shared code just because a better location
-> > doesn't appear to exist.
-> > 
-> > Also, ramming it into drivers/platform/<vendor> is not correct either,
-> > since this is not a platform controller driver either.
-> 
-> 
-> I will patch RPC-IF back to SPI only and 
-> rebase onto previous patches as bellow:
 
-This sounds more like the easy way out, rather than the right thing to
-do.  Just because this isn't an MFD, doesn't mean it's not suitable
-for inclusion into the kernel.  Take a look at drivers/memory/Kconfig,
-and see if any of those devices sound familiar.
+Hi Boris,
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> 
+> Re: [PATCH v3 2/4] mtd: rawnand: Add Macronix MX25F0A NAND controller
+> 
+> On Tue, 18 Jun 2019 08:14:36 +0200
+> Boris Brezillon <boris.brezillon@collabora.com> wrote:
+> 
+> > > > > > > 
+> > > > > > > How to make all #CS keep high for NAND to enter 
+> > > > > > > low-power standby mode if driver don't use 
+"legacy.select_chip()" 
+> > > ? 
+> > > > > > 
+> > > > > > See commit 02b4a52604a4 ("mtd: rawnand: Make ->select_chip()  
+> > > optional 
+> > > > > > when ->exec_op() is implemented") which states:
+> > > > > > 
+> > > > > >         "When [->select_chip() is] not implemented, the core 
+is 
+> > > assuming 
+> > > > > >    the CS line is automatically asserted/deasserted by the 
+driver 
+> > > > > >    ->exec_op() implementation." 
+> > > > > > 
+> > > > > > Of course, the above is right only when the controller driver  
+ 
+> > > supports 
+> > > > > > the ->exec_op() interface. 
+> > > > > 
+> > > > > Currently, it seems that we will get the incorrect data and 
+error
+> > > > > operation due to CS in error toggling if CS line is controlled 
+in 
+> > > > > ->exec_op(). 
+> 
+> Oh, and please provide the modifications you added on top of this patch.
+> Right now we're speculating on what you've done which is definitely not
+> an efficient way to debug this sort of issues.
+
+The patch is to add in beginning of ->exec_op() to control CS# low and 
+before return from ->exec_op() to control CS# High.
+i.e,.
+static in mxic_nand_exec_op( )
+{
+ cs_to_low();
+
+
+
+ cs_to_high();
+ return;
+}
+
+But for nand_onfi_detect(), 
+it calls nand_read_param_page_op() and then nand_read_data_op().
+mxic_nand_exec_op() be called twice for nand_onfi_detect() and
+driver will get incorrect ONFI parameter table data from 
+nand_read_data_op().
+
+thanks & best regards,
+Mason
+
+
+
+
+
+
+
+
+
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
