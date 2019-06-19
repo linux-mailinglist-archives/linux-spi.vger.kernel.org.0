@@ -2,118 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADE64B282
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 08:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C518C4B32F
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 09:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726246AbfFSG7U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jun 2019 02:59:20 -0400
-Received: from twhmllg3.macronix.com ([211.75.127.131]:49381 "EHLO
+        id S1731210AbfFSHg6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Jun 2019 03:36:58 -0400
+Received: from twhmllg3.macronix.com ([122.147.135.201]:54836 "EHLO
         TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbfFSG7U (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jun 2019 02:59:20 -0400
+        with ESMTP id S1725854AbfFSHg5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jun 2019 03:36:57 -0400
 Received: from twhfmlp1.macronix.com (twhfm1p1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id x5J6wmAJ071980;
-        Wed, 19 Jun 2019 14:58:48 +0800 (GMT-8)
+        by TWHMLLG3.macronix.com with ESMTP id x5J7aIhW016432;
+        Wed, 19 Jun 2019 15:36:18 +0800 (GMT-8)
         (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
-        by Forcepoint Email with ESMTP id 3838995820E3DEDE1215;
-        Wed, 19 Jun 2019 14:58:49 +0800 (CST)
-In-Reply-To: <20190619061659.GH18371@dell>
-References: <ad503d6e-4739-9744-64b4-fd13f44ea6fe@cogentembedded.com> <1538cadb-7c6a-2c4c-fe8c-960b25286950@cogentembedded.com> <20190612090552.GD4797@dell> <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com> <20190617093048.GD16364@dell> <CAMuHMdX6GC2ZDam=odC-QFLUdrh1PYPVWEo5x3EHduqJ4FmTng@mail.gmail.com> <20190618091955.GN16364@dell> <CAMuHMdX7fFSO25TPJA9PO=VQC0czKux8nritMeffBcnaxr=WMQ@mail.gmail.com> <20190618095741.GA18371@dell> <ff85a907-8f26-5e80-c7f0-655ca11afe25@cogentembedded.com> <20190619061659.GH18371@dell>
-To:     "Lee Jones" <lee.jones@linaro.org>,
-        "Mark Brown" <broonie@kernel.org>
-Cc:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "linux-spi" <linux-spi@vger.kernel.org>,
-        "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>,
-        juliensu@mxic.com.tw
-Subject: Re: [PATCH RFC 2/2] mfd: add Renesas RPC-IF driver
+Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
+        by Forcepoint Email with ESMTP id AEE003E5F394D6571948;
+        Wed, 19 Jun 2019 15:36:18 +0800 (CST)
+In-Reply-To: <2671d488-82a1-8720-d9a1-03554d955a38@gmail.com>
+References: <1558423174-10748-1-git-send-email-masonccyang@mxic.com.tw> <1558423174-10748-4-git-send-email-masonccyang@mxic.com.tw> <0e2994d6-6efc-9f36-f681-609199f20b9f@cogentembedded.com> <20190603130428.GX4797@dell> <02addf64-9f6e-ccc1-2f94-8983456e3ebc@cogentembedded.com> <OFDA7648A0.F1733EA5-ON48258411.002946DF-48258411.002A2F0D@mxic.com.tw> <2671d488-82a1-8720-d9a1-03554d955a38@gmail.com>
+To:     "Marek Vasut" <marek.vasut@gmail.com>
+Cc:     bbrezillon@kernel.org, broonie@kernel.org,
+        devicetree@vger.kernel.org,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Simon Horman" <horms@verge.net.au>, juliensu@mxic.com.tw,
+        "Lee Jones" <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        mark.rutland@arm.com, miquel.raynal@bootlin.com,
+        robh+dt@kernel.org,
+        "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>
+Subject: Re: [PATCH v13 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3 RPC-IF
+ controller bindings
 MIME-Version: 1.0
-X-KeepSent: B918AE65:CB02BB75-4825841E:0025C688;
+X-KeepSent: E8CD77A1:CDBE040B-4825841E:00288DA8;
  type=4; name=$KeepSent
 X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OFB918AE65.CB02BB75-ON4825841E.0025C688-4825841E.00265891@mxic.com.tw>
+Message-ID: <OFE8CD77A1.CDBE040B-ON4825841E.00288DA8-4825841E.0029C76F@mxic.com.tw>
 From:   masonccyang@mxic.com.tw
-Date:   Wed, 19 Jun 2019 14:58:50 +0800
+Date:   Wed, 19 Jun 2019 15:36:20 +0800
 X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2019/06/19 PM 02:58:49,
-        Serialize complete at 2019/06/19 PM 02:58:49
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG3.macronix.com x5J6wmAJ071980
+ 2019/06/19 PM 03:36:18,
+        Serialize complete at 2019/06/19 PM 03:36:18
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG3.macronix.com x5J7aIhW016432
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-SGkgSm9uZXMsIA0KDQo+ID4gDQo+ID4gPiBMb29rcyBsaWtlIGEgZmxhc2ggZGV2aWNlIHRvIG1l
-Lg0KPiA+IA0KPiA+ICAgIE1vcmUgbGlrZSBhIG11bHRpLXByb3RvY29sIGZsYXNoIGNvbnRyb2xs
-ZXIsIHdpdGggdGhlIHJlYWwgZmxhc2ggDQpjaGlwIGNvbm5lY3RlZA0KPiA+IHRvIGl0Lg0KPiAN
-Cj4gUmlnaHQsIHRoaXMgaGFzIGJlZW4gbXkgcG9pbnQgZnJvbSB0aGUgc3RhcnQuDQo+IA0KPiBJ
-dCdzIGEgZmxhc2ggY29udHJvbGxlci4gIFN1cmUsIHlvdSBjYW4gYWNjZXNzIGl0IGluIGRpZmZl
-cmVudCB3YXlzLA0KPiBidXQgaXQncyBzdGlsbCAqanVzdCogYSBmbGFzaCBjb250cm9sbGVyIGFu
-ZCB0aHVzIG5vdCBhIHRydWUgTUZELg0KPiANCj4gU3VyZWx5IHRoaXMgd2hvbGUgdGhpbmcsIGlu
-Y2x1ZGluZyB0aGUgc2hhcmVkIHBvcnRpb24gc2hvdWxkIGxpdmUgaW4NCj4gb25lIG9mIHRoZSBt
-ZW1vcnkgcmVsYXRlZCBzdWJzeXN0ZW1zPw0KPiANCj4gVGhpcyBpcyBub3QgdGhlIGZpcnN0IGRl
-dmljZSBwZW9wbGUgaGF2ZSB0cmllZCB0byBzaG92ZSBpbiBNRkQsIHRoYXQNCj4gaXMgcmVhbGx5
-ICpqdXN0KiBhbiA8WD4gZGV2aWNlLCBhYmxlIHRvIGJlIGNvbnRyb2xsZWQgdmlhIGRpZmZlcmVu
-dA0KPiBwcm90b2NvbHMuDQo+IA0KPiBNRkQgaXMgZm9yIHJlZ2lzdGVyaW5nIGNoaWxkIGRldmlj
-ZXMgb2YgY2hpcHMgd2hpY2ggb2ZmZXIgZ2VudWluZQ0KPiBjcm9zcy1zdWJzeXN0ZW0gZnVuY3Rp
-b25hbGl0eS4gIEl0IGlzIG5vdCBkZXNpZ25lZCBmb3IgbW9kZSBzZWxlY3RpbmcsDQo+IG9yIGFz
-IGEgcGxhY2UgdG8gc2hvdmUgc2hhcmVkIGNvZGUganVzdCBiZWNhdXNlIGEgYmV0dGVyIGxvY2F0
-aW9uDQo+IGRvZXNuJ3QgYXBwZWFyIHRvIGV4aXN0Lg0KPiANCj4gQWxzbywgcmFtbWluZyBpdCBp
-bnRvIGRyaXZlcnMvcGxhdGZvcm0vPHZlbmRvcj4gaXMgbm90IGNvcnJlY3QgZWl0aGVyLA0KPiBz
-aW5jZSB0aGlzIGlzIG5vdCBhIHBsYXRmb3JtIGNvbnRyb2xsZXIgZHJpdmVyIGVpdGhlci4NCg0K
-DQpJIHdpbGwgcGF0Y2ggUlBDLUlGIGJhY2sgdG8gU1BJIG9ubHkgYW5kIA0KcmViYXNlIG9udG8g
-cHJldmlvdXMgcGF0Y2hlcyBhcyBiZWxsb3c6DQoNCj4gIk1hcmsgQnJvd24iIDxicm9vbmllQGtl
-cm5lbC5vcmc+IA0KPiAyMDE5LzAyLzEyIKRVpMggMTA6MjINCj4gDQo+IFRvDQo+IA0KPiAiTWFz
-b24gWWFuZyIgPG1hc29uY2N5YW5nQG14aWMuY29tLnR3PiwgDQo+IA0KPiBjYw0KPiANCj4gIlNl
-cmdlaSBTaHR5bHlvdiIgPHNlcmdlaS5zaHR5bHlvdkBjb2dlbnRlbWJlZGRlZC5jb20+LCAiTWFy
-ayBCcm93biIgDQo+IDxicm9vbmllQGtlcm5lbC5vcmc+LCBicm9vbmllQGtlcm5lbC5vcmcsIG1h
-cmVrLnZhc3V0QGdtYWlsLmNvbSwgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcsIGxp
-bnV4LXNwaUB2Z2VyLmtlcm5lbC5vcmcsIA0KYmJyZXppbGxvbkBrZXJuZWwub3JnLCANCj4gbGlu
-dXgtcmVuZXNhcy1zb2NAdmdlci5rZXJuZWwub3JnLCAiR2VlcnQgVXl0dGVyaG9ldmVuIiA8Z2Vl
-cnQNCj4gK3JlbmVzYXNAZ2xpZGVyLmJlPiwgc2VyZ2VpLnNodHlseW92QGNvZ2VudGVtYmVkZGVk
-LmNvbSwgDQpqdWxpZW5zdUBteGljLmNvbS50dywNCj4gIlNpbW9uIEhvcm1hbiIgPGhvcm1zQHZl
-cmdlLm5ldC5hdT4sIHpoZW5neHVubGlAbXhpYy5jb20udHcsIA0KbGludXgtc3BpQHZnZXIua2Vy
-bmVsLm9yZw0KPiANCj4gU3ViamVjdA0KPiANCj4gQXBwbGllZCAic3BpOiBBZGQgUmVuZXNhcyBS
-LUNhciBHZW4zIFJQQy1JRiBTUEkgY29udHJvbGxlciBkcml2ZXIiIHRvIA0KdGhlIHNwaSB0cmVl
-DQo+IA0KPiBUaGUgcGF0Y2gNCj4gDQo+ICAgIHNwaTogQWRkIFJlbmVzYXMgUi1DYXIgR2VuMyBS
-UEMtSUYgU1BJIGNvbnRyb2xsZXIgZHJpdmVyDQo+IA0KPiBoYXMgYmVlbiBhcHBsaWVkIHRvIHRo
-ZSBzcGkgdHJlZSBhdA0KPiANCj4gICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xp
-bnV4L2tlcm5lbC9naXQvYnJvb25pZS9zcGkuZ2l0IA0KPiANCj4gQWxsIGJlaW5nIHdlbGwgdGhp
-cyBtZWFucyB0aGF0IGl0IHdpbGwgYmUgaW50ZWdyYXRlZCBpbnRvIHRoZSBsaW51eC1uZXh0DQo+
-IHRyZWUgKHVzdWFsbHkgc29tZXRpbWUgaW4gdGhlIG5leHQgMjQgaG91cnMpIGFuZCBzZW50IHRv
-IExpbnVzIGR1cmluZw0KPiB0aGUgbmV4dCBtZXJnZSB3aW5kb3cgKG9yIHNvb25lciBpZiBpdCBp
-cyBhIGJ1ZyBmaXgpLCBob3dldmVyIGlmDQo+IHByb2JsZW1zIGFyZSBkaXNjb3ZlcmVkIHRoZW4g
-dGhlIHBhdGNoIG1heSBiZSBkcm9wcGVkIG9yIHJldmVydGVkLiANCg0KdGhhbmtzICYgYmVzdCBy
-ZWdhcmRzLA0KTWFzb24NCg0KDQpDT05GSURFTlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwg
-YW5kIGFueSBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24g
-DQphbmQvb3IgcGVyc29uYWwgZGF0YSwgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5IGFwcGxpY2FibGUg
-bGF3cy4gUGxlYXNlIGJlIA0KcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwg
-ZGlzdHJpYnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgDQooYW5kL29yIGl0cyBhdHRhY2ht
-ZW50cykgb3IgYW55IHBhcnQgdGhlcmVvZiBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSAN
-CnRoaXMgZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHVzIGltbWVkaWF0ZWx5IGFuZCBk
-ZWxldGUgdGhpcyBtYWlsIGFzIA0Kd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIg
-c3lzdGVtLiBJbiBhZGRpdGlvbiwgcGxlYXNlIGJlIA0KaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9u
-LCBwcm9jZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRhdGEgaXMgDQpwcm9oaWJpdGVk
-IHVubGVzcyBleHByZXNzbHkgcGVybWl0dGVkIGJ5IHBlcnNvbmFsIGRhdGEgcHJvdGVjdGlvbiBs
-YXdzLiANClRoYW5rIHlvdSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpN
-YWNyb25peCBJbnRlcm5hdGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg0KDQoNCj09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT0NCg0KQ09ORklERU5USUFMSVRZIE5PVEU6DQoNClRoaXMgZS1tYWls
-IGFuZCBhbnkgYXR0YWNobWVudHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9u
-IGFuZC9vciBwZXJzb25hbCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBs
-YXdzLiBQbGVhc2UgYmUgcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlz
-dHJpYnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgKGFuZC9vciBpdHMgYXR0YWNobWVudHMp
-IG9yIGFueSBwYXJ0IHRoZXJlb2YgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBl
-LW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0
-aGlzIG1haWwgYXMgd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJ
-biBhZGRpdGlvbiwgcGxlYXNlIGJlIGluZm9ybWVkIHRoYXQgY29sbGVjdGlvbiwgcHJvY2Vzc2lu
-ZywgYW5kL29yIHVzZSBvZiBwZXJzb25hbCBkYXRhIGlzIHByb2hpYml0ZWQgdW5sZXNzIGV4cHJl
-c3NseSBwZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIFRoYW5rIHlv
-dSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5h
-dGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg==
+Hi Marek, 
+
+> Subject
+> 
+> Re: [PATCH v13 3/3] dt-bindings: mfd: Document Renesas R-Car Gen3 RPC-IF 
+
+> controller bindings
+> 
+> On 6/6/19 9:40 AM, masonccyang@mxic.com.tw wrote:
+> [...]
+> 
+> > RPC-IF works either in SPI or HyperFlash is decided by external 
+hardware 
+> > pins 
+> > configuration and it can NOT switch it's operation mode in the run 
+time. 
+> > This is not like my understanding of MFD.
+> 
+> Which external hardware pins decide the RPC configuration ?
+> 
+> It seems to me like PHYCNT register, PHYMEM bitfield, selects what
+> device is connected, and then a couple of other bits control the
+> communication, but I see nothing which would be tied to any external
+> configuration pins.
+> 
+
+You may refer to R-Car D3 Draak Eva. board hardware manual 
+and start-up guide, i.e., 
+Table 2.12 Pin Multiplexing of R-Car D3 Mode setting pins and
+set by hardware switch 1, 2, 3, 13, 31 and 10 to configure
+booting from SPI mode or HyperFlash mode.
+
+thanks & best regards,
+Mason
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
 
