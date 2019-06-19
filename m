@@ -2,140 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 889F14B207
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 08:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADE64B282
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 08:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725881AbfFSGTD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jun 2019 02:19:03 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:33127 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725854AbfFSGTD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jun 2019 02:19:03 -0400
-Received: by mail-wm1-f68.google.com with SMTP id h19so3830157wme.0
-        for <linux-spi@vger.kernel.org>; Tue, 18 Jun 2019 23:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=ARjohvqvMzEy8Wt5d1xLPSZTobeYlfPS/trXnHM/+Ws=;
-        b=CgHLT/P7Ak82+EGpXCJTu9eFXFTuQM+XCyfV6vOBjmRJqs9J5KVKny2zP2AAMRZYzl
-         zqWUX/ViEbpaHUoQFjJ1IrH2+2GoLEJ+fpoZ1yEGnZg43xn5BT9o27zDIkIeEEjwA95w
-         X3Ism89homysvx8b/tyw3sh1cyeygDqxXoVZTTcgH5X6oAn2bxPLqNXoMS551ebvAv4B
-         FjeOKDLCFtypO2wYpUHbBehlkj16zrw437c1zJyJISrnKY05TIcLbDP572TIhiWHbvcj
-         GheuQuFaoO92gvbgSagz2C2qxXGwC7ms+u+5mO5qhpIjikz0mY5pVtYNi+n0f+sNsOyw
-         0S/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=ARjohvqvMzEy8Wt5d1xLPSZTobeYlfPS/trXnHM/+Ws=;
-        b=EOaeIONVVWEMr9VM8VbsIIWdmh5McdRKx+QpUQofAALFJcPP3HK2WJq2lqb8liZg1P
-         va1EJAKo8p80rtZBD+4gmRfCJTp90U/AbOeNgnwIxTDWJRNam3sQ4m5dVOUVhbN/Tm80
-         Mfl7K4gwb9eBwdauB2JKc33mRvwT92JUkCcOw+0rQaB159CrNQuTbH3EAlbRFGPWRjS3
-         xU6jiFf3boy1czKbVu2k55EIhBh9dwe/t1bOi8bxfbca4Ff6M7ZMXQjuNTSGrqgwdKkv
-         78D4dJoFcIF2fSRG6ScCTZqsM7F3QavzhCF32gfPM0G8ewPC4MO9Dk8v/zBj6Rv6HypM
-         p/Tw==
-X-Gm-Message-State: APjAAAVsArPltfmZYG2uZDylKX3KqlnOICMz5zB/XwzZz3CpnNCUpx+U
-        L9mCQj4tTZMDx6oINYWTfDgvIKtcoWk=
-X-Google-Smtp-Source: APXvYqzNoF8ns09nJ5m2qlCAmuiq1GzDOwIBjJZI2ZQpr6VPjOGpwxFyI9TvoYQUbLhUiHPUxSqs8g==
-X-Received: by 2002:a1c:b457:: with SMTP id d84mr7012356wmf.153.1560925140710;
-        Tue, 18 Jun 2019 23:19:00 -0700 (PDT)
-Received: from dell ([2.27.35.243])
-        by smtp.gmail.com with ESMTPSA id x6sm19477794wru.0.2019.06.18.23.18.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 18 Jun 2019 23:19:00 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 07:18:58 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>
+        id S1726246AbfFSG7U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Jun 2019 02:59:20 -0400
+Received: from twhmllg3.macronix.com ([211.75.127.131]:49381 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbfFSG7U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jun 2019 02:59:20 -0400
+Received: from twhfmlp1.macronix.com (twhfm1p1.macronix.com [172.17.20.91])
+        by TWHMLLG3.macronix.com with ESMTP id x5J6wmAJ071980;
+        Wed, 19 Jun 2019 14:58:48 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id 3838995820E3DEDE1215;
+        Wed, 19 Jun 2019 14:58:49 +0800 (CST)
+In-Reply-To: <20190619061659.GH18371@dell>
+References: <ad503d6e-4739-9744-64b4-fd13f44ea6fe@cogentembedded.com> <1538cadb-7c6a-2c4c-fe8c-960b25286950@cogentembedded.com> <20190612090552.GD4797@dell> <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com> <20190617093048.GD16364@dell> <CAMuHMdX6GC2ZDam=odC-QFLUdrh1PYPVWEo5x3EHduqJ4FmTng@mail.gmail.com> <20190618091955.GN16364@dell> <CAMuHMdX7fFSO25TPJA9PO=VQC0czKux8nritMeffBcnaxr=WMQ@mail.gmail.com> <20190618095741.GA18371@dell> <ff85a907-8f26-5e80-c7f0-655ca11afe25@cogentembedded.com> <20190619061659.GH18371@dell>
+To:     "Lee Jones" <lee.jones@linaro.org>,
+        "Mark Brown" <broonie@kernel.org>
+Cc:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "linux-spi" <linux-spi@vger.kernel.org>,
+        "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>,
+        juliensu@mxic.com.tw
 Subject: Re: [PATCH RFC 2/2] mfd: add Renesas RPC-IF driver
-Message-ID: <20190619061858.GI18371@dell>
-References: <20190612090552.GD4797@dell>
- <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com>
- <20190617093048.GD16364@dell>
- <CAMuHMdX6GC2ZDam=odC-QFLUdrh1PYPVWEo5x3EHduqJ4FmTng@mail.gmail.com>
- <20190618091955.GN16364@dell>
- <CAMuHMdX7fFSO25TPJA9PO=VQC0czKux8nritMeffBcnaxr=WMQ@mail.gmail.com>
- <20190618095741.GA18371@dell>
- <CAMuHMdX829_CFGt53fS4nd9=qdS479OvJXYY3++DZ=4fLmp62w@mail.gmail.com>
- <20190618113426.GD18371@dell>
- <303086dc-5ec0-f46d-3e41-8f12878f5db0@cogentembedded.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <303086dc-5ec0-f46d-3e41-8f12878f5db0@cogentembedded.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-KeepSent: B918AE65:CB02BB75-4825841E:0025C688;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OFB918AE65.CB02BB75-ON4825841E.0025C688-4825841E.00265891@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Wed, 19 Jun 2019 14:58:50 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2019/06/19 PM 02:58:49,
+        Serialize complete at 2019/06/19 PM 02:58:49
+Content-Type: text/plain; charset="Big5"
+Content-Transfer-Encoding: base64
+X-MAIL: TWHMLLG3.macronix.com x5J6wmAJ071980
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 18 Jun 2019, Sergei Shtylyov wrote:
 
-> Hello!
-> 
-> On 06/18/2019 02:34 PM, Lee Jones wrote:
-> 
-> >>>>> So is an RPC-IF a real hardware device.  Can you share the datasheet?
-> >>>>
-> >>>> Unfortunately the datasheet for the R-Car Gen3 and RZ/G2 SoCs is
-> >>>> not yet public.
-> >>>
-> >>> When will it be public?
-> >>
-> >> Dunno. RZ/G1 documentation became public a few months after the SoC
-> >> release.
-> >>
-> >>> Do you have access to it?
-> >>
-> >> Yes I do.
-> > 
-> > Great.  Maybe you can help Sergei with his 'undocumented bits' issue.
-> 
->    You're an optimist. :-)
->    I think I have the same gen3 manual v1.50 as Geert. It won't help as the
-> bits that constitute the magic numbers in the driver are not described (not
-> even the default values are listed for the most of them).
+SGkgSm9uZXMsIA0KDQo+ID4gDQo+ID4gPiBMb29rcyBsaWtlIGEgZmxhc2ggZGV2aWNlIHRvIG1l
+Lg0KPiA+IA0KPiA+ICAgIE1vcmUgbGlrZSBhIG11bHRpLXByb3RvY29sIGZsYXNoIGNvbnRyb2xs
+ZXIsIHdpdGggdGhlIHJlYWwgZmxhc2ggDQpjaGlwIGNvbm5lY3RlZA0KPiA+IHRvIGl0Lg0KPiAN
+Cj4gUmlnaHQsIHRoaXMgaGFzIGJlZW4gbXkgcG9pbnQgZnJvbSB0aGUgc3RhcnQuDQo+IA0KPiBJ
+dCdzIGEgZmxhc2ggY29udHJvbGxlci4gIFN1cmUsIHlvdSBjYW4gYWNjZXNzIGl0IGluIGRpZmZl
+cmVudCB3YXlzLA0KPiBidXQgaXQncyBzdGlsbCAqanVzdCogYSBmbGFzaCBjb250cm9sbGVyIGFu
+ZCB0aHVzIG5vdCBhIHRydWUgTUZELg0KPiANCj4gU3VyZWx5IHRoaXMgd2hvbGUgdGhpbmcsIGlu
+Y2x1ZGluZyB0aGUgc2hhcmVkIHBvcnRpb24gc2hvdWxkIGxpdmUgaW4NCj4gb25lIG9mIHRoZSBt
+ZW1vcnkgcmVsYXRlZCBzdWJzeXN0ZW1zPw0KPiANCj4gVGhpcyBpcyBub3QgdGhlIGZpcnN0IGRl
+dmljZSBwZW9wbGUgaGF2ZSB0cmllZCB0byBzaG92ZSBpbiBNRkQsIHRoYXQNCj4gaXMgcmVhbGx5
+ICpqdXN0KiBhbiA8WD4gZGV2aWNlLCBhYmxlIHRvIGJlIGNvbnRyb2xsZWQgdmlhIGRpZmZlcmVu
+dA0KPiBwcm90b2NvbHMuDQo+IA0KPiBNRkQgaXMgZm9yIHJlZ2lzdGVyaW5nIGNoaWxkIGRldmlj
+ZXMgb2YgY2hpcHMgd2hpY2ggb2ZmZXIgZ2VudWluZQ0KPiBjcm9zcy1zdWJzeXN0ZW0gZnVuY3Rp
+b25hbGl0eS4gIEl0IGlzIG5vdCBkZXNpZ25lZCBmb3IgbW9kZSBzZWxlY3RpbmcsDQo+IG9yIGFz
+IGEgcGxhY2UgdG8gc2hvdmUgc2hhcmVkIGNvZGUganVzdCBiZWNhdXNlIGEgYmV0dGVyIGxvY2F0
+aW9uDQo+IGRvZXNuJ3QgYXBwZWFyIHRvIGV4aXN0Lg0KPiANCj4gQWxzbywgcmFtbWluZyBpdCBp
+bnRvIGRyaXZlcnMvcGxhdGZvcm0vPHZlbmRvcj4gaXMgbm90IGNvcnJlY3QgZWl0aGVyLA0KPiBz
+aW5jZSB0aGlzIGlzIG5vdCBhIHBsYXRmb3JtIGNvbnRyb2xsZXIgZHJpdmVyIGVpdGhlci4NCg0K
+DQpJIHdpbGwgcGF0Y2ggUlBDLUlGIGJhY2sgdG8gU1BJIG9ubHkgYW5kIA0KcmViYXNlIG9udG8g
+cHJldmlvdXMgcGF0Y2hlcyBhcyBiZWxsb3c6DQoNCj4gIk1hcmsgQnJvd24iIDxicm9vbmllQGtl
+cm5lbC5vcmc+IA0KPiAyMDE5LzAyLzEyIKRVpMggMTA6MjINCj4gDQo+IFRvDQo+IA0KPiAiTWFz
+b24gWWFuZyIgPG1hc29uY2N5YW5nQG14aWMuY29tLnR3PiwgDQo+IA0KPiBjYw0KPiANCj4gIlNl
+cmdlaSBTaHR5bHlvdiIgPHNlcmdlaS5zaHR5bHlvdkBjb2dlbnRlbWJlZGRlZC5jb20+LCAiTWFy
+ayBCcm93biIgDQo+IDxicm9vbmllQGtlcm5lbC5vcmc+LCBicm9vbmllQGtlcm5lbC5vcmcsIG1h
+cmVrLnZhc3V0QGdtYWlsLmNvbSwgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcsIGxp
+bnV4LXNwaUB2Z2VyLmtlcm5lbC5vcmcsIA0KYmJyZXppbGxvbkBrZXJuZWwub3JnLCANCj4gbGlu
+dXgtcmVuZXNhcy1zb2NAdmdlci5rZXJuZWwub3JnLCAiR2VlcnQgVXl0dGVyaG9ldmVuIiA8Z2Vl
+cnQNCj4gK3JlbmVzYXNAZ2xpZGVyLmJlPiwgc2VyZ2VpLnNodHlseW92QGNvZ2VudGVtYmVkZGVk
+LmNvbSwgDQpqdWxpZW5zdUBteGljLmNvbS50dywNCj4gIlNpbW9uIEhvcm1hbiIgPGhvcm1zQHZl
+cmdlLm5ldC5hdT4sIHpoZW5neHVubGlAbXhpYy5jb20udHcsIA0KbGludXgtc3BpQHZnZXIua2Vy
+bmVsLm9yZw0KPiANCj4gU3ViamVjdA0KPiANCj4gQXBwbGllZCAic3BpOiBBZGQgUmVuZXNhcyBS
+LUNhciBHZW4zIFJQQy1JRiBTUEkgY29udHJvbGxlciBkcml2ZXIiIHRvIA0KdGhlIHNwaSB0cmVl
+DQo+IA0KPiBUaGUgcGF0Y2gNCj4gDQo+ICAgIHNwaTogQWRkIFJlbmVzYXMgUi1DYXIgR2VuMyBS
+UEMtSUYgU1BJIGNvbnRyb2xsZXIgZHJpdmVyDQo+IA0KPiBoYXMgYmVlbiBhcHBsaWVkIHRvIHRo
+ZSBzcGkgdHJlZSBhdA0KPiANCj4gICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xp
+bnV4L2tlcm5lbC9naXQvYnJvb25pZS9zcGkuZ2l0IA0KPiANCj4gQWxsIGJlaW5nIHdlbGwgdGhp
+cyBtZWFucyB0aGF0IGl0IHdpbGwgYmUgaW50ZWdyYXRlZCBpbnRvIHRoZSBsaW51eC1uZXh0DQo+
+IHRyZWUgKHVzdWFsbHkgc29tZXRpbWUgaW4gdGhlIG5leHQgMjQgaG91cnMpIGFuZCBzZW50IHRv
+IExpbnVzIGR1cmluZw0KPiB0aGUgbmV4dCBtZXJnZSB3aW5kb3cgKG9yIHNvb25lciBpZiBpdCBp
+cyBhIGJ1ZyBmaXgpLCBob3dldmVyIGlmDQo+IHByb2JsZW1zIGFyZSBkaXNjb3ZlcmVkIHRoZW4g
+dGhlIHBhdGNoIG1heSBiZSBkcm9wcGVkIG9yIHJldmVydGVkLiANCg0KdGhhbmtzICYgYmVzdCBy
+ZWdhcmRzLA0KTWFzb24NCg0KDQpDT05GSURFTlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwg
+YW5kIGFueSBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24g
+DQphbmQvb3IgcGVyc29uYWwgZGF0YSwgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5IGFwcGxpY2FibGUg
+bGF3cy4gUGxlYXNlIGJlIA0KcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwg
+ZGlzdHJpYnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgDQooYW5kL29yIGl0cyBhdHRhY2ht
+ZW50cykgb3IgYW55IHBhcnQgdGhlcmVvZiBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSAN
+CnRoaXMgZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHVzIGltbWVkaWF0ZWx5IGFuZCBk
+ZWxldGUgdGhpcyBtYWlsIGFzIA0Kd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIg
+c3lzdGVtLiBJbiBhZGRpdGlvbiwgcGxlYXNlIGJlIA0KaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9u
+LCBwcm9jZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRhdGEgaXMgDQpwcm9oaWJpdGVk
+IHVubGVzcyBleHByZXNzbHkgcGVybWl0dGVkIGJ5IHBlcnNvbmFsIGRhdGEgcHJvdGVjdGlvbiBs
+YXdzLiANClRoYW5rIHlvdSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpN
+YWNyb25peCBJbnRlcm5hdGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg0KDQoNCj09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT0NCg0KQ09ORklERU5USUFMSVRZIE5PVEU6DQoNClRoaXMgZS1tYWls
+IGFuZCBhbnkgYXR0YWNobWVudHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9u
+IGFuZC9vciBwZXJzb25hbCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBs
+YXdzLiBQbGVhc2UgYmUgcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlz
+dHJpYnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgKGFuZC9vciBpdHMgYXR0YWNobWVudHMp
+IG9yIGFueSBwYXJ0IHRoZXJlb2YgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBl
+LW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0
+aGlzIG1haWwgYXMgd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJ
+biBhZGRpdGlvbiwgcGxlYXNlIGJlIGluZm9ybWVkIHRoYXQgY29sbGVjdGlvbiwgcHJvY2Vzc2lu
+ZywgYW5kL29yIHVzZSBvZiBwZXJzb25hbCBkYXRhIGlzIHByb2hpYml0ZWQgdW5sZXNzIGV4cHJl
+c3NseSBwZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIFRoYW5rIHlv
+dSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5h
+dGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg==
 
-Then how did you get hold of them?
-
-> >>>> However, a very similar hardware block is present in the RZ/A2M SoC.
-> >>>> Please see Chapter 20 ("SPI Multi I/O Bus Controller") of the "RZ/A2M Group
-> >>>> User’s Manual: Hardware", which you can download from
-> >>>> https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/rz/rza/rza2m.html#documents
-> >>>
-> >>>   "The SPI multi I/O bus controller enables the direct connection of
-> >>>    serial flash, OctaFlashTM, XccelaTM flash, or HyperFlashTM memory
-> >>>    devices to this LSI chip.
-> >>>
-> >>>    This module allows the connected serial flash, OctaFlashTM, XccelaTM
-> >>>    flash, or HyperFlashTM memory devices to be accessed by reading the
-> >>>    external address space, or using Manual mode to transmit and receive
-> >>>    data."
-> >>>
-> >>> Looks like a flash device to me.
-> >>
-> >> The external address space is a small window.
-> 
->    Yeah, it only provides 64 MiB window into the flash chip.
-> 
-> >>> Can the SPI portion be used to connect generic SPI devices?
-> >>
-> >> I'll defer that to the people who worked on the driver...
-> 
->    Yes. Or at least it should, looking at the driver code...
-
-Judging by that response, I'm guessing that this is unused/untested.
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
