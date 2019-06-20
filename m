@@ -2,102 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BA64CE61
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2019 15:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7219C4CEBD
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2019 15:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731779AbfFTNOF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jun 2019 09:14:05 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:19924 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726952AbfFTNOE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jun 2019 09:14:04 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5KD6pbC021627;
-        Thu, 20 Jun 2019 15:13:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=AqEt1HjWRKgGGIYLNysj/iOUGva1/k0fnnA1DQfj/Nc=;
- b=1i2iITqjSzxjPDA0v34j1gyK2boQJeVzaXxp+3wBomDQ3gQiYTCFRnctwfbFI4hR7YO3
- ZabYwttKVrPzJ0COcQfryFixiLRLA7qvHsMT1LROqmgrPg1+QYAc9uEEkIIzSvvIxrXe
- VWA88QCqoUODGiKSlccTHZp8WEyR+Wh8vce4WBxoKn6ANShoXgSFeGGv3MbGlVA1JJ3j
- JuK1mx5iBqhoBEtg8ng2Pf6Z7/2JkcOka3Ncrc9E614228EYHyTJSKjy+ADBxfQK0lu0
- g3r9CUxF74F+pRGz7NyLXjzUI+PLXlAD4TeCNwnV2aVZJInur0W44tAM21BxACrkAEC1 Sw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2t7813hq5j-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Thu, 20 Jun 2019 15:13:52 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2F58B38;
-        Thu, 20 Jun 2019 13:13:51 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag6node3.st.com [10.75.127.18])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 16B4E27F7;
-        Thu, 20 Jun 2019 13:13:51 +0000 (GMT)
-Received: from localhost (10.75.127.45) by SFHDAG6NODE3.st.com (10.75.127.18)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 20 Jun 2019 15:13:50
- +0200
-From:   <patrice.chotard@st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <patrice.chotard@st.com>, <christophe.kerello@st.com>
-Subject: [PATCH 1/1] spi: spi-stm32-qspi: Remove CR_FTHRES_MASK usage
-Date:   Thu, 20 Jun 2019 15:13:23 +0200
-Message-ID: <20190620131323.5955-1-patrice.chotard@st.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG7NODE1.st.com (10.75.127.19) To SFHDAG6NODE3.st.com
- (10.75.127.18)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-20_09:,,
- signatures=0
+        id S1726838AbfFTNcr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jun 2019 09:32:47 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59530 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726951AbfFTNcq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jun 2019 09:32:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=rZMUmhqov9N+WKT0f0ZFqk9rcPF4Vvdn8EoZRYcyfSY=; b=bKyOqOaxRPHA
+        t0lXYbkRosLnZUwQOjpVPrwQdwvbcKKV2R7FedEaegNwj28iyaacwGyx+RACKAr5+vzZZbc8LweHn
+        WYfF/Mmt+xihYe9zZaEkQlPJrdUHXl46czsKPig8FaQ62dCS2TrG08fQNLiU/1UToeEQE6wRbxxja
+        y49+g=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hdxB7-0000ku-97; Thu, 20 Jun 2019 13:32:37 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id C9BA0440049; Thu, 20 Jun 2019 14:32:36 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Masahisa Kojima <masahisa.kojima@linaro.org>
+Cc:     ard.biesheuvel@linaro.org, broonie@kernel.org,
+        jaswinder.singh@linaro.org, kbuild-all@01.org,
+        kbuild test robot <lkp@intel.com>, linux-spi@vger.kernel.org,
+        lkp@intel.com, Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: spi-synquacer: Fixed build on architectures missing readsl/writesl series" to the spi tree
+In-Reply-To: <20190620082426.14530-1-masahisa.kojima@linaro.org>
+X-Patchwork-Hint: ignore
+Message-Id: <20190620133236.C9BA0440049@finisterre.sirena.org.uk>
+Date:   Thu, 20 Jun 2019 14:32:36 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@st.com>
+The patch
 
-On STM32 F4/F7/H7 SoCs, FTHRES is a 5 bits field in QSPI_CR register,
-but for STM32MP1 SoCs, FTHRES is a 4 bits field long. CR_FTHRES_MASK
-definition is not correct.
+   spi: spi-synquacer: Fixed build on architectures missing readsl/writesl series
 
-As for all these SoCs, FTHRES field is set to 3, FIELD_PREP() macro
-is used with a constant as second parameter which make its usage useless.
+has been applied to the spi tree at
 
-CR_FTHRES_MASK and FIELD_PREP() can be removed.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
 
-Signed-off-by: Patrice Chotard <patrice.chotard@st.com>
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 51c711f2c38a412aaeda43c8167fe41877cf414d Mon Sep 17 00:00:00 2001
+From: Masahisa Kojima <masahisa.kojima@linaro.org>
+Date: Thu, 20 Jun 2019 17:24:26 +0900
+Subject: [PATCH] spi: spi-synquacer: Fixed build on architectures missing
+ readsl/writesl series
+
+kbuild test reported that alpha and some of the architectures
+are missing readsl/writesl series.
+Use more portable ioread32_rep()/iowrite32_rep() series.
+
+Fixes: b0823ee35cf9b ("spi: Add spi driver for Socionext SynQuacer platform")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-stm32-qspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-synquacer.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 42f8e3c6aa1f..5dbb6a8e893c 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -29,7 +29,7 @@
- #define CR_SSHIFT		BIT(4)
- #define CR_DFM			BIT(6)
- #define CR_FSEL			BIT(7)
--#define CR_FTHRES_MASK		GENMASK(12, 8)
-+#define CR_FTHRES_SHIFT		8
- #define CR_TEIE			BIT(16)
- #define CR_TCIE			BIT(17)
- #define CR_FTIE			BIT(18)
-@@ -463,7 +463,7 @@ static int stm32_qspi_setup(struct spi_device *spi)
- 	flash->presc = presc;
+diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
+index c8c8d9cdd4b3..f99abd85c50a 100644
+--- a/drivers/spi/spi-synquacer.c
++++ b/drivers/spi/spi-synquacer.c
+@@ -150,14 +150,16 @@ static int read_fifo(struct synquacer_spi *sspi)
+ 	case 8: {
+ 		u8 *buf = sspi->rx_buf;
  
- 	mutex_lock(&qspi->lock);
--	qspi->cr_reg = FIELD_PREP(CR_FTHRES_MASK, 3) | CR_SSHIFT | CR_EN;
-+	qspi->cr_reg = 3 << CR_FTHRES_SHIFT | CR_SSHIFT | CR_EN;
- 	writel_relaxed(qspi->cr_reg, qspi->io_base + QSPI_CR);
+-		readsb(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
++		ioread8_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
++			    buf, len);
+ 		sspi->rx_buf = buf + len;
+ 		break;
+ 	}
+ 	case 16: {
+ 		u16 *buf = sspi->rx_buf;
  
- 	/* set dcr fsize to max address */
+-		readsw(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
++		ioread16_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
++			     buf, len);
+ 		sspi->rx_buf = buf + len;
+ 		break;
+ 	}
+@@ -166,7 +168,8 @@ static int read_fifo(struct synquacer_spi *sspi)
+ 	case 32: {
+ 		u32 *buf = sspi->rx_buf;
+ 
+-		readsl(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
++		ioread32_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
++			     buf, len);
+ 		sspi->rx_buf = buf + len;
+ 		break;
+ 	}
+@@ -191,14 +194,16 @@ static int write_fifo(struct synquacer_spi *sspi)
+ 	case 8: {
+ 		const u8 *buf = sspi->tx_buf;
+ 
+-		writesb(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
++		iowrite8_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
++			     buf, len);
+ 		sspi->tx_buf = buf + len;
+ 		break;
+ 	}
+ 	case 16: {
+ 		const u16 *buf = sspi->tx_buf;
+ 
+-		writesw(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
++		iowrite16_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
++			      buf, len);
+ 		sspi->tx_buf = buf + len;
+ 		break;
+ 	}
+@@ -207,7 +212,8 @@ static int write_fifo(struct synquacer_spi *sspi)
+ 	case 32: {
+ 		const u32 *buf = sspi->tx_buf;
+ 
+-		writesl(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
++		iowrite32_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
++			      buf, len);
+ 		sspi->tx_buf = buf + len;
+ 		break;
+ 	}
 -- 
-2.17.1
+2.20.1
 
