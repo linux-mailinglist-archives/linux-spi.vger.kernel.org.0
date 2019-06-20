@@ -2,129 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEA44C144
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2019 21:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B38B4C963
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2019 10:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbfFSTLJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jun 2019 15:11:09 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:46664 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730029AbfFSTLI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jun 2019 15:11:08 -0400
-Received: by mail-lj1-f194.google.com with SMTP id v24so244671ljg.13
-        for <linux-spi@vger.kernel.org>; Wed, 19 Jun 2019 12:11:07 -0700 (PDT)
+        id S1730487AbfFTIYt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jun 2019 04:24:49 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:38885 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbfFTIYt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jun 2019 04:24:49 -0400
+Received: by mail-pg1-f196.google.com with SMTP id v11so1185674pgl.5
+        for <linux-spi@vger.kernel.org>; Thu, 20 Jun 2019 01:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DGOglYyfX7mGgGEgVmzQPpmnWJKM5QaRpbisBQnw/Hs=;
-        b=Ix3D32NGWT6WeehaQRn+2JAI1ozE3isAEHzdkGJlfOCar24PdPro1hsvhx+CfNoaau
-         qN5NTgPdP9XFjqNb2lJ4BLNU37oJ8tBtS4+vIiklAs00YBXMbmNa/n/mlBxLwidy60CJ
-         g/RwttFXJFvXhilta86zLjC/1j0acLT/LHKik/QvbsD5XxSVgTK6hXLWhdaPdDnrIgnd
-         yuevKQTp+hA+Z2QsfHeQN47X+QLffQ8Fpxix6VOFq1CzAhAPoBHv8G5iUJ8znvhVSJxr
-         /WJ8vz0uFztPhWTGPwhmaJ5VK9W8W22MEwPcUWd6+WPHAJdJ7dm/SFNPgPqJ6rquasAW
-         UqTg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=pJbc/qPdW8lHkXoqwLBQ/OGgKBVvW4RHSru8Vl1YTxM=;
+        b=aueYmegw+YtRYaq+XY3qMWQtnZ0Dd02weIkX2OouxCS835+ZnJrQvL5vSwvdrRts75
+         eT2iItxzI3keaKhPIpeaVD3fUBSk+g4LkwHbvRNy5BJaaonBVRcZiQaYxfeTLvSdvCEK
+         xd2b61Fo7TYA0eu9T+jeCf8m+kIvkpksodjTGvqPD2Dm2qXWSyLGxuMrRGGjkjjaOV7W
+         C9Xu2cYGsi3nwHy1aUMmGmmA/MhEcCmSUoI7dALOZuEzV0edCNxguFIKyxxRfmrdUGvV
+         roAQG9P6Oyst7mqZgi3UFRqmyfQCImFOFcVE5GBQMof9dT86mqg3FcBqzlOtCFbSUoB6
+         DNQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=DGOglYyfX7mGgGEgVmzQPpmnWJKM5QaRpbisBQnw/Hs=;
-        b=i/SunhvvskMc1pTHRmsqCE1XMUGT7Hy//mTV64GJ4ahjdlrZU/gG1k7Ilx4ebE4T1y
-         /ddoEDMprP4K7fWvCmAYvUndXPHqLFJPJgzKsGD6UB/yjgCt/2cIkcrzL8JOk2iYYJCO
-         cTqkWHBus580Uks0yWgU/bdFEUvPdeafZF+eA8rreB2rfUVe6tiSRSjPEjPPTOK9uB0+
-         593mlTzkf7B3OTHcnhmUOl66vZ/7yA39sV4W0sbHtCneUfVaTKZ5sdMaCSqPamSRzcrK
-         FIrJTkKlT3l8LLjSqaTcKQG2QNERTJP8Y/Q4bTlVxYjUXTrAqwpaQqV+SHATAY/u+EOm
-         DEFw==
-X-Gm-Message-State: APjAAAWSe8/Ffq9zBWfazB34wDPHt/6IShj23AQ/yRk0DZf6xrVZLXgt
-        1ziJ6W9TW1PaWwJ4CKXMr9EBYg==
-X-Google-Smtp-Source: APXvYqxovE7fTRUIYjNby4iWFlTkjV4sbynKSqYpv5pcUb6vzNb3Lc3/9S5irofX6DIiYzLICQX+Fg==
-X-Received: by 2002:a2e:9e8e:: with SMTP id f14mr43867664ljk.120.1560971466591;
-        Wed, 19 Jun 2019 12:11:06 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([31.173.80.22])
-        by smtp.gmail.com with ESMTPSA id o9sm2788084lfb.47.2019.06.19.12.11.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Jun 2019 12:11:06 -0700 (PDT)
-Subject: Re: [PATCH RFC 2/2] mfd: add Renesas RPC-IF driver
-To:     Lee Jones <lee.jones@linaro.org>, masonccyang@mxic.com.tw
-Cc:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-spi <linux-spi@vger.kernel.org>, juliensu@mxic.com.tw
-References: <20190612090552.GD4797@dell>
- <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com>
- <20190617093048.GD16364@dell>
- <CAMuHMdX6GC2ZDam=odC-QFLUdrh1PYPVWEo5x3EHduqJ4FmTng@mail.gmail.com>
- <20190618091955.GN16364@dell>
- <CAMuHMdX7fFSO25TPJA9PO=VQC0czKux8nritMeffBcnaxr=WMQ@mail.gmail.com>
- <20190618095741.GA18371@dell>
- <ff85a907-8f26-5e80-c7f0-655ca11afe25@cogentembedded.com>
- <20190619061659.GH18371@dell>
- <OFB918AE65.CB02BB75-ON4825841E.0025C688-4825841E.00265891@mxic.com.tw>
- <20190619075422.GJ18371@dell>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <c8dab2f7-3ddb-497a-bb14-dded31930ce6@cogentembedded.com>
-Date:   Wed, 19 Jun 2019 22:11:05 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
-MIME-Version: 1.0
-In-Reply-To: <20190619075422.GJ18371@dell>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=pJbc/qPdW8lHkXoqwLBQ/OGgKBVvW4RHSru8Vl1YTxM=;
+        b=cQpgkALsr4mqYJchx/8Ds/X6C3V6obLUTGrYKMg+5U2bkMSNCLwmEZZz0Rtmlz0Ncm
+         NjI9Y0BXm42rmUI0EyLZFgMJyrmNTPURhrjbGmsqQhinWth82vmk02Bt+pZevNYSVhtf
+         ynENXyMCHyru8nr3lR3ludJqHW/PHZ3tXQb35Wq7rn6jXGTo0EPDdjl5youYmiyUn4lM
+         7Gdg+dVOyA/9JfL8vR8XSkz/KZDUJ7Mg8zwGl8Ue5UkUUJEWp7mEkSkS/9k6NUfZUbZW
+         zrc7YNcZIDPvGGWCA7E5Hnq32m2E3LXvSxj21L3v7A9E8n3BLLb6LKcWSwxgz55vahI/
+         iaoQ==
+X-Gm-Message-State: APjAAAWZfzh8OliNTqsoFtg5Id6Kxxuhxa//GvJeF/7WXmpRzljE/b3b
+        d2eSCPwprDPDA/msZB4XgscfUg==
+X-Google-Smtp-Source: APXvYqxPXvQ/oakAEjYnC3bpGtfZ0h3MK0ELuibEeGve8yBg7ZZoUQ3APcSnN5cxSjAT9UydCU6WEg==
+X-Received: by 2002:a63:d755:: with SMTP id w21mr11905352pgi.311.1561019088436;
+        Thu, 20 Jun 2019 01:24:48 -0700 (PDT)
+Received: from localhost ([121.95.100.191])
+        by smtp.gmail.com with ESMTPSA id k3sm3569597pju.27.2019.06.20.01.24.47
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 20 Jun 2019 01:24:47 -0700 (PDT)
+From:   Masahisa Kojima <masahisa.kojima@linaro.org>
+To:     lkp@intel.com, linux-spi@vger.kernel.org
+Cc:     kbuild-all@01.org, broonie@kernel.org, jaswinder.singh@linaro.org,
+        ard.biesheuvel@linaro.org,
+        Masahisa Kojima <masahisa.kojima@linaro.org>
+Subject: [PATCH v2] spi: spi-synquacer: Fixed build on architectures missing readsl/writesl series
+Date:   Thu, 20 Jun 2019 17:24:26 +0900
+Message-Id: <20190620082426.14530-1-masahisa.kojima@linaro.org>
+X-Mailer: git-send-email 2.14.2
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 06/19/2019 10:54 AM, Lee Jones wrote:
+kbuild test reported that alpha and some of the architectures
+are missing readsl/writesl series.
+Use more portable ioread32_rep()/iowrite32_rep() series.
 
->>>>> Looks like a flash device to me.
->>>>
->>>>    More like a multi-protocol flash controller, with the real flash 
->>>> chip connected to it.
->>>
->>> Right, this has been my point from the start.
->>>
->>> It's a flash controller.  Sure, you can access it in different ways,
+Fixes: b0823ee35cf9b ("spi: Add spi driver for Socionext SynQuacer platform")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+---
+Changes since v1:
+        # Instead of updating Kconfig, use more portable
+          ioread32_rep()/iowrite32_rep() series.
 
-   No, the software access will be the same, just the initial controler
-setup will be somewhat different depending on the flash type used...
+ drivers/spi/spi-synquacer.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
->>> but it's still *just* a flash controller and thus not a true MFD.
+diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
+index c8c8d9cdd4b3..f99abd85c50a 100644
+--- a/drivers/spi/spi-synquacer.c
++++ b/drivers/spi/spi-synquacer.c
+@@ -150,14 +150,16 @@ static int read_fifo(struct synquacer_spi *sspi)
+ 	case 8: {
+ 		u8 *buf = sspi->rx_buf;
+ 
+-		readsb(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
++		ioread8_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
++			    buf, len);
+ 		sspi->rx_buf = buf + len;
+ 		break;
+ 	}
+ 	case 16: {
+ 		u16 *buf = sspi->rx_buf;
+ 
+-		readsw(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
++		ioread16_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
++			     buf, len);
+ 		sspi->rx_buf = buf + len;
+ 		break;
+ 	}
+@@ -166,7 +168,8 @@ static int read_fifo(struct synquacer_spi *sspi)
+ 	case 32: {
+ 		u32 *buf = sspi->rx_buf;
+ 
+-		readsl(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
++		ioread32_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
++			     buf, len);
+ 		sspi->rx_buf = buf + len;
+ 		break;
+ 	}
+@@ -191,14 +194,16 @@ static int write_fifo(struct synquacer_spi *sspi)
+ 	case 8: {
+ 		const u8 *buf = sspi->tx_buf;
+ 
+-		writesb(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
++		iowrite8_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
++			     buf, len);
+ 		sspi->tx_buf = buf + len;
+ 		break;
+ 	}
+ 	case 16: {
+ 		const u16 *buf = sspi->tx_buf;
+ 
+-		writesw(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
++		iowrite16_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
++			      buf, len);
+ 		sspi->tx_buf = buf + len;
+ 		break;
+ 	}
+@@ -207,7 +212,8 @@ static int write_fifo(struct synquacer_spi *sspi)
+ 	case 32: {
+ 		const u32 *buf = sspi->tx_buf;
+ 
+-		writesl(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
++		iowrite32_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
++			      buf, len);
+ 		sspi->tx_buf = buf + len;
+ 		break;
+ 	}
+-- 
+2.14.2
 
-   Also a SPI controller when a SPI bus is used.
-
->>> Surely this whole thing, including the shared portion should live in
->>> one of the memory related subsystems?
->>>
->>> This is not the first device people have tried to shove in MFD, that
->>> is really *just* an <X> device, able to be controlled via different
->>> protocols.
-
-   You somehow still mix the (master) controller and (slave) device,
-it seems...
-
->>> MFD is for registering child devices of chips which offer genuine
->>> cross-subsystem functionality.  It is not designed for mode selecting,
->>> or as a place to shove shared code just because a better location
->>> doesn't appear to exist.
-
-   OK, fair enough...
-
->>> Also, ramming it into drivers/platform/<vendor> is not correct either,
->>> since this is not a platform controller driver either.
-
->> I will patch RPC-IF back to SPI only and 
->> rebase onto previous patches as bellow:
-> 
-> This sounds more like the easy way out, rather than the right thing to
-> do.  Just because this isn't an MFD, doesn't mean it's not suitable
-> for inclusion into the kernel.  Take a look at drivers/memory/Kconfig,
-> and see if any of those devices sound familiar.
-
-   TI AEMIF sounded familiar, I have some DaVinci/DA8xx background.
-Trying to wrap my head into (missing?) API in drivers/memory/...
-
-MBR, Sergei
