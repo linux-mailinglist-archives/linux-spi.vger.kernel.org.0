@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7219C4CEBD
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2019 15:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417084CEC1
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2019 15:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbfFTNcr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jun 2019 09:32:47 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59530 "EHLO
+        id S1731871AbfFTNcl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jun 2019 09:32:41 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59374 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726951AbfFTNcq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jun 2019 09:32:46 -0400
+        with ESMTP id S1731553AbfFTNcl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jun 2019 09:32:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=rZMUmhqov9N+WKT0f0ZFqk9rcPF4Vvdn8EoZRYcyfSY=; b=bKyOqOaxRPHA
-        t0lXYbkRosLnZUwQOjpVPrwQdwvbcKKV2R7FedEaegNwj28iyaacwGyx+RACKAr5+vzZZbc8LweHn
-        WYfF/Mmt+xihYe9zZaEkQlPJrdUHXl46czsKPig8FaQ62dCS2TrG08fQNLiU/1UToeEQE6wRbxxja
-        y49+g=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
+        List-Archive; bh=Dv9ZBE80g7Z3d10imVyCnlRbO2J+0mkQKX+QLqGV7YY=; b=p3r5yCvPJSwj
+        +5y0GAkBB519r+d45x2QbdB5SHY1v/qA1HpDKwIzConMTN7PwHpm/i0GUDUgmArfUrqaDHh62/pTz
+        4nIgWHayiuSiWsvdLX5oZgYbkfIzPhQNXRM5IdDepjLJQEI4K622CsihU+8uezq45XXzruIKt3Ry8
+        NQmwk=;
+Received: from [2001:470:1f1d:6b5:7e7a:91ff:fede:4a45] (helo=finisterre.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hdxB7-0000ku-97; Thu, 20 Jun 2019 13:32:37 +0000
+        id 1hdxB7-0000kt-8y; Thu, 20 Jun 2019 13:32:37 +0000
 Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id C9BA0440049; Thu, 20 Jun 2019 14:32:36 +0100 (BST)
+        id B1610440046; Thu, 20 Jun 2019 14:32:36 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Masahisa Kojima <masahisa.kojima@linaro.org>
-Cc:     ard.biesheuvel@linaro.org, broonie@kernel.org,
-        jaswinder.singh@linaro.org, kbuild-all@01.org,
-        kbuild test robot <lkp@intel.com>, linux-spi@vger.kernel.org,
-        lkp@intel.com, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spi-synquacer: Fixed build on architectures missing readsl/writesl series" to the spi tree
-In-Reply-To: <20190620082426.14530-1-masahisa.kojima@linaro.org>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     broonie@kernel.org, linus.walleij@linaro.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, Nicolas.Ferre@microchip.com,
+        Tudor.Ambarus@microchip.com
+Subject: Applied "spi: fix ctrl->num_chipselect constraint" to the spi tree
+In-Reply-To: <20190619143820.4045-1-tudor.ambarus@microchip.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20190620133236.C9BA0440049@finisterre.sirena.org.uk>
+Message-Id: <20190620133236.B1610440046@finisterre.sirena.org.uk>
 Date:   Thu, 20 Jun 2019 14:32:36 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -46,7 +46,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-synquacer: Fixed build on architectures missing readsl/writesl series
+   spi: fix ctrl->num_chipselect constraint
 
 has been applied to the spi tree at
 
@@ -71,86 +71,65 @@ to this mail.
 Thanks,
 Mark
 
-From 51c711f2c38a412aaeda43c8167fe41877cf414d Mon Sep 17 00:00:00 2001
-From: Masahisa Kojima <masahisa.kojima@linaro.org>
-Date: Thu, 20 Jun 2019 17:24:26 +0900
-Subject: [PATCH] spi: spi-synquacer: Fixed build on architectures missing
- readsl/writesl series
+From f9481b08220d7dc1ff21e296a330ee8b721b44e4 Mon Sep 17 00:00:00 2001
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
+Date: Wed, 19 Jun 2019 14:38:28 +0000
+Subject: [PATCH] spi: fix ctrl->num_chipselect constraint
 
-kbuild test reported that alpha and some of the architectures
-are missing readsl/writesl series.
-Use more portable ioread32_rep()/iowrite32_rep() series.
+at91sam9g25ek showed the following error at probe:
+atmel_spi f0000000.spi: Using dma0chan2 (tx) and dma0chan3 (rx)
+for DMA transfers
+atmel_spi: probe of f0000000.spi failed with error -22
 
-Fixes: b0823ee35cf9b ("spi: Add spi driver for Socionext SynQuacer platform")
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+Commit 0a919ae49223 ("spi: Don't call spi_get_gpio_descs() before device name is set")
+moved the calling of spi_get_gpio_descs() after ctrl->dev is set,
+but didn't move the !ctrl->num_chipselect check. When there are
+chip selects in the device tree, the spi-atmel driver lets the
+SPI core discover them when registering the SPI master.
+The ctrl->num_chipselect is thus expected to be set by
+spi_get_gpio_descs().
+
+Move the !ctlr->num_chipselect after spi_get_gpio_descs() as it was
+before the aforementioned commit. While touching this block, get rid
+of the explicit comparison with 0 and update the commenting style.
+
+Fixes: 0a919ae49223 ("spi: Don't call spi_get_gpio_descs() before device name is set")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-synquacer.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/spi/spi.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
-index c8c8d9cdd4b3..f99abd85c50a 100644
---- a/drivers/spi/spi-synquacer.c
-+++ b/drivers/spi/spi-synquacer.c
-@@ -150,14 +150,16 @@ static int read_fifo(struct synquacer_spi *sspi)
- 	case 8: {
- 		u8 *buf = sspi->rx_buf;
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index a31e1e291335..80d2d14f6294 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2375,11 +2375,6 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	if (status)
+ 		return status;
  
--		readsb(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
-+		ioread8_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
-+			    buf, len);
- 		sspi->rx_buf = buf + len;
- 		break;
+-	/* even if it's just one always-selected device, there must
+-	 * be at least one chipselect
+-	 */
+-	if (ctlr->num_chipselect == 0)
+-		return -EINVAL;
+ 	if (ctlr->bus_num >= 0) {
+ 		/* devices with a fixed bus num must check-in with the num */
+ 		mutex_lock(&board_lock);
+@@ -2450,6 +2445,13 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 		}
  	}
- 	case 16: {
- 		u16 *buf = sspi->rx_buf;
  
--		readsw(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
-+		ioread16_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
-+			     buf, len);
- 		sspi->rx_buf = buf + len;
- 		break;
- 	}
-@@ -166,7 +168,8 @@ static int read_fifo(struct synquacer_spi *sspi)
- 	case 32: {
- 		u32 *buf = sspi->rx_buf;
- 
--		readsl(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
-+		ioread32_rep(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO,
-+			     buf, len);
- 		sspi->rx_buf = buf + len;
- 		break;
- 	}
-@@ -191,14 +194,16 @@ static int write_fifo(struct synquacer_spi *sspi)
- 	case 8: {
- 		const u8 *buf = sspi->tx_buf;
- 
--		writesb(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
-+		iowrite8_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
-+			     buf, len);
- 		sspi->tx_buf = buf + len;
- 		break;
- 	}
- 	case 16: {
- 		const u16 *buf = sspi->tx_buf;
- 
--		writesw(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
-+		iowrite16_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
-+			      buf, len);
- 		sspi->tx_buf = buf + len;
- 		break;
- 	}
-@@ -207,7 +212,8 @@ static int write_fifo(struct synquacer_spi *sspi)
- 	case 32: {
- 		const u32 *buf = sspi->tx_buf;
- 
--		writesl(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
-+		iowrite32_rep(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO,
-+			      buf, len);
- 		sspi->tx_buf = buf + len;
- 		break;
- 	}
++	/*
++	 * Even if it's just one always-selected device, there must
++	 * be at least one chipselect.
++	 */
++	if (!ctlr->num_chipselect)
++		return -EINVAL;
++
+ 	status = device_add(&ctlr->dev);
+ 	if (status < 0) {
+ 		/* free bus id */
 -- 
 2.20.1
 
