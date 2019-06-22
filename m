@@ -2,130 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4049A4E6A2
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jun 2019 13:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DEC4F3EF
+	for <lists+linux-spi@lfdr.de>; Sat, 22 Jun 2019 07:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726438AbfFULCh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jun 2019 07:02:37 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:39070 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726299AbfFULCh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jun 2019 07:02:37 -0400
-Received: by mail-qt1-f196.google.com with SMTP id i34so6419172qta.6
-        for <linux-spi@vger.kernel.org>; Fri, 21 Jun 2019 04:02:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JKY+V1xDV646PH+WVED+pFbq8Ww+7SitfxHjplviGZc=;
-        b=aF0DOSfADWcsweJOGSpZA/V3bLWzn5o2RmfrAzEYsjgxwtPBtR6Pm5cPFQbJa/VvuP
-         rk6suBrva7qOL/TBMaYsEJ5+2Uo/fFYQKCuveS7MJZcXZW01xj3ejDBKcPoVc4qECbDn
-         m+2sKDrkCdXPPrGAM9Dqulufvjqdanzpq7JXPhZ3QnBQgxN7mH63FipaQptaNzal/bG0
-         0oEY3Q4wcT/HTS0V7/0iYHUtAF7SQXcvbyO2ekTApqFjIQZe37dijvLpab94nGuoNMEs
-         ZvmSZ+zUWPUzeFnh0/k/CcTzfT5leH0i9tlugKwzmMm1Vg8LP2hzyC3F1u18BR7RsyrR
-         W1xA==
-X-Gm-Message-State: APjAAAWM6WC4OF+pTjU+giDGbi9QQ3RU+IQrQYLW4uUijxKXZd8OUUmF
-        jAG+XHCkkR0JHBixXK+nhw+wbmelpiuNmvyBoJI=
-X-Google-Smtp-Source: APXvYqxT46cC6hPATh/9Gdcn1KIMqJAxEwONqvzdM+3FecHSQv+Z3HcMroU85hlWedq+m4CsThzeXVvk3LjaEPTf0og=
-X-Received: by 2002:ac8:7349:: with SMTP id q9mr112596158qtp.151.1561114956692;
- Fri, 21 Jun 2019 04:02:36 -0700 (PDT)
+        id S1726033AbfFVFpy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 22 Jun 2019 01:45:54 -0400
+Received: from server101.serverconfig.center ([195.242.103.101]:46077 "EHLO
+        server101.serverconfig.center" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725932AbfFVFpy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 22 Jun 2019 01:45:54 -0400
+Received: from christian-pc.localdomain (p2E5940A8.dip0.t-ipconnect.de [46.89.64.168])
+        by server101.serverconfig.center (Postfix) with ESMTPSA id 8E7F1238274E;
+        Sat, 22 Jun 2019 07:45:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-mauderer.de;
+        s=default; t=1561182352;
+        bh=0XCGZXsGhLFTHoofcoO3wIO4moEcXNx3QiWIK1Mi5LM=; l=1799;
+        h=Subject:From:To;
+        b=MQFyzBmgFUHM5lDEG6EyxOiX52P1ZIlXAyg+xWmfuhzOHZBFBU/kyUzOqJFnNmQpH
+         jxvwrd1d9bHCQoiai2dvype/PUCKkrZBhUyHJDl3lMhiONXmN8d7/q1TzWxbHsEmEs
+         w+885iVOgpHqrxmD9+q6Oous0l9/ui++scIf/poc=
+Authentication-Results: server101.serverconfig.center;
+        spf=pass (sender IP is 46.89.64.168) smtp.mailfrom=oss@c-mauderer.de smtp.helo=christian-pc.localdomain
+Received-SPF: pass (server101.serverconfig.center: connection is authenticated)
+Subject: Re: spi-gpio too fast for some devices
+From:   Christian Mauderer <oss@c-mauderer.de>
+To:     linux-spi@vger.kernel.org
+References: <32d3f238-c21c-b937-72c9-7a9ba842c01e@c-mauderer.de>
+Cc:     Mark Brown <broonie@kernel.org>
+Message-ID: <a06e9923-735a-da2c-9946-4740842d5ca5@c-mauderer.de>
+Date:   Sat, 22 Jun 2019 07:45:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <ad503d6e-4739-9744-64b4-fd13f44ea6fe@cogentembedded.com>
- <1538cadb-7c6a-2c4c-fe8c-960b25286950@cogentembedded.com> <20190612090552.GD4797@dell>
- <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com> <20190617093048.GD16364@dell>
- <07603eca-7e4b-e244-781f-e391c1a87319@cogentembedded.com>
-In-Reply-To: <07603eca-7e4b-e244-781f-e391c1a87319@cogentembedded.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Jun 2019 13:02:25 +0200
-Message-ID: <CAMuHMdXawjCqe3K7MdD5CuwBc96h-xSychYnoLwfDjqCcNL+8w@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/2] mfd: add Renesas RPC-IF driver
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Mason Yang <masonccyang@mxic.com.tw>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <32d3f238-c21c-b937-72c9-7a9ba842c01e@c-mauderer.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-PPP-Message-ID: <156118235176.27196.14012556220849897597@server101.serverconfig.center>
+X-PPP-Vhost: c-mauderer.de
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Sergei, Lee,
+It seems that no one has read the mail that I've only sent to the list.
+Mark Brown: You are the maintainer that would have to accept a patch in
+that subsystem. Might I guide your attention to the mail?
 
-On Thu, Jun 20, 2019 at 8:46 PM Sergei Shtylyov
-<sergei.shtylyov@cogentembedded.com> wrote:
-> On 06/17/2019 12:30 PM, Lee Jones wrote:
-> >>>> Add the MFD driver for Renesas RPC-IF which registers either the SPI or
-> >>>> HyperFLash  device depending on the contents of the device tree subnode.
-> >>>> It also provides the absract "back end" device APIs that can be used by
-> >>>> the "front end" SPI/MTD drivers to talk to the real hardware.
-> >>>>
-> >>>> Based on the original patch by Mason Yang <masonccyang@mxic.com.tw>.
-> >>>>
-> >>>> Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-> >>
-> >> [...]
-> >>>> Index: mfd/drivers/mfd/rpc-if.c
-> >>>> ===================================================================
-> >>>> --- /dev/null
-> >>>> +++ mfd/drivers/mfd/rpc-if.c
-> >>>> @@ -0,0 +1,535 @@
-> [...]
-> >>>> +#define RPCIF_DIRMAP_SIZE 0x4000000
-> >>>
-> >>> Can you shift this lot out to a header file please.
-> >>
-> >>    You mean all register #defne's? Why? I'm not intending to use them outside
-> >> this file.
-> >
-> > Because its 10's of lines of cruft.
->
->    Thank you! :-)
->
-> > People won't want to wade through that to get to real functional C
-> > code every time they open up this file.
->
->    This is how the most drivers are written.
->
-> > You already have a header file, please use it.
->
->    Headers are for public things. I've encapsulated the h/w assess into
-> the MFD driver, the client code doesn't have to see all the gory hardware
-> details... IOW, I don't agree to this request.
+Thanks
 
-+1
+Christian Mauderer
 
-> >>>> +static int wait_msg_xfer_end(struct rpcif *rpc)
-> >>>> +{
-> >>>> +  u32 sts;
-> >>>> +
-> >>>> +  return regmap_read_poll_timeout(rpc->regmap, RPCIF_CMNSR, sts,
-> >>>> +                                  sts & RPCIF_CMNSR_TEND, 0,
-> >>>
-> >>> Aren't you using sts undefined here?
-> >>
-> >>    No, the macro reads 'sts' from the register first.
-> >
-> > That's confusing and ugly.
-> >
-> > Please re-write it to the code is clear and easy to read/maintain.
-
-How to rewrite?
-This is exactly how the various *_poll_timeout*() helpers are intended
-to be used.
-
- * @val: Unsigned integer variable to read the value into
-
-See also include/linux/iopoll.h.
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On 10/06/2019 18:56, Christian Mauderer wrote:
+> Hello,
+> 
+> I have a problem with the spi-gpio driver: It's too fast for one of my
+> devices. Now I'm searching for a good solution that could be
+> acceptable as a patch for the Linux kernel.
+> 
+> Currently there is the following comment and implementation for the
+> spidelay(...) function in spi-gpio.c:
+> 
+>> /*
+>>  * NOTE:  this clocks "as fast as we can".  It "should" be a function of the
+>>  * requested device clock.  Software overhead means we usually have trouble
+>>  * reaching even one Mbit/sec (except when we can inline bitops), so for now
+>>  * we'll just assume we never need additional per-bit slowdowns.
+>>  */
+>> #define spidelay(nsecs)	do {} while (0)
+> 
+> With that I have a speed of about 2.2MHz on a QCA9533 chip with 650MHz
+> using a 4.14 Kernel. The spidelay hasn't been changed in a newer
+> kernel so I assume it's still similar.
+> 
+> I tried to just define spidelay like follows:
+> 
+>> #define spidelay(nsecs)	ndelay(nsecs)
+> 
+> which basically works. But with that the maximum rate drops to 1.6MHz.
+> I assume that such a drastic performance decrease isn't acceptable for
+> the kernel?
+> 
+> Beneath that the bitrate isn't too well approximated. For a target
+> rate of 1MHz I get about 630kHz and for 100kHz I get 88kHz. But I'm
+> not sure how I could create something that has a good enough
+> estimation independent of the target architecture.
+> 
+> Any directions for how an acceptable implementation could look like?
+> 
+> Best regards
+> 
+> Christian Mauderer
+> 
