@@ -2,176 +2,194 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7544D4FF7E
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2019 04:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB8E504FB
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2019 10:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbfFXCmY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 23 Jun 2019 22:42:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52830 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726510AbfFXCmY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 23 Jun 2019 22:42:24 -0400
-Received: from dragon (li1322-146.members.linode.com [45.79.223.146])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 312382073F;
-        Mon, 24 Jun 2019 00:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561335418;
-        bh=rlOHzwEHb6pqbLmFFdbDpWnjpgMeLjwtJXHuyHU99k4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=roJv8fNnUZ0dRiuDvVUwCMeTZKp+rYD7LINPyt/Equnhsgqrl0uw2KlYXz3yv/oOz
-         LsjbdcChTu9SBpwoJkep+EimMkvVRkjQ0BK0ZtsArotoz5QR34PwqBsyCMuDxcASBL
-         BZJmJN/MJsDoVQKxEcXbXI5c6+E4rwQscQOAaLSc=
-Date:   Mon, 24 Jun 2019 08:16:45 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v5 00/15] add ecspi ERR009165 for i.mx6/7 soc family
-Message-ID: <20190624001643.GB3800@dragon>
-References: <20190610081753.11422-1-yibin.gong@nxp.com>
- <1561135476.7537.5.camel@nxp.com>
+        id S1727135AbfFXI5j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Jun 2019 04:57:39 -0400
+Received: from twhmllg4.macronix.com ([122.147.135.202]:39818 "EHLO
+        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725916AbfFXI5j (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jun 2019 04:57:39 -0400
+Received: from twhfmnt1.mxic.com.tw (twhfm1p2.macronix.com [172.17.20.92])
+        by TWHMLLG4.macronix.com with ESMTP id x5O8te4j092345;
+        Mon, 24 Jun 2019 16:55:40 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id 61692E8312812FC0B8BA;
+        Mon, 24 Jun 2019 16:55:41 +0800 (CST)
+In-Reply-To: <20190619110643.523c1f56@collabora.com>
+References: <1555320234-15802-1-git-send-email-masonccyang@mxic.com.tw> <20190512151820.4f2dd9da@xps13>
+        <OF074A1F06.5C1A58BE-ON482583FD.0031CD95-482583FD.003437AD@mxic.com.tw> <20190520142333.390091d5@xps13>
+        <OFADC47344.0F9941B2-ON48258403.002336E3-48258403.003141F0@mxic.com.tw> <20190527144250.71908bd9@xps13>
+        <OFE923A8E5.50375C30-ON48258409.0009AE1B-48258409.00119767@mxic.com.tw> <20190617143510.4ded5728@xps13>
+        <OF1C1397B4.241DC339-ON4825841D.000482A2-4825841D.0007B67E@mxic.com.tw> <20190618081436.5d488320@collabora.com>
+        <20190618092901.3bdd9f61@collabora.com> <OF5EAF94EB.AE31CF59-ON4825841E.002A2C38-4825841E.002C60BF@mxic.com.tw>
+        <20190619101519.391919ec@collabora.com> <OF9EFE4BDE.3166D82B-ON4825841E.00307F51-4825841E.00310FB5@mxic.com.tw
+ <20190619110643.523c1f56@collabora.com>
+To:     "Boris Brezillon" <boris.brezillon@collabora.com>
+Cc:     bbrezillon@kernel.org, broonie@kernel.org,
+        christophe.kerello@st.com, computersforpeace@gmail.com,
+        devicetree@vger.kernel.org, dwmw2@infradead.org,
+        geert@linux-m68k.org, juliensu@mxic.com.tw, lee.jones@linaro.org,
+        liang.yang@amlogic.com, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        marcel.ziswiler@toradex.com, marek.vasut@gmail.com,
+        mark.rutland@arm.com, "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        paul.burton@mips.com, richard@nod.at, robh+dt@kernel.org,
+        stefan@agner.ch, zhengxunli@mxic.com.tw
+Subject: Re: [PATCH v3 2/4] mtd: rawnand: Add Macronix MX25F0A NAND controller
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1561135476.7537.5.camel@nxp.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+X-KeepSent: C97D5691:B26644D3-48258423:002F8D47;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OFC97D5691.B26644D3-ON48258423.002F8D47-48258423.00310B3E@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Mon, 24 Jun 2019 16:55:41 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2019/06/24 PM 04:55:41,
+        Serialize complete at 2019/06/24 PM 04:55:41
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG4.macronix.com x5O8te4j092345
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 08:42:48AM +0000, Robin Gong wrote:
-> Hello Shawn/Will,
->   Do you have comments for this V5 patch set? I got tags from Mark,
-> Vinod and Rob.
 
-I'm fine with the DTS change, but not sure how the series should be
-merged.
+Hi Boris,
 
-Shawn
 
+> > > > > Re: [PATCH v3 2/4] mtd: rawnand: Add Macronix MX25F0A NAND 
+> > controller
+> > > > > 
+> > > > > On Tue, 18 Jun 2019 08:14:36 +0200
+> > > > > Boris Brezillon <boris.brezillon@collabora.com> wrote:
+> > > > > 
+> > > > > > > > > > > 
+> > > > > > > > > > > How to make all #CS keep high for NAND to enter 
+> > > > > > > > > > > low-power standby mode if driver don't use 
+> > > > "legacy.select_chip()" 
+> > > > > > > ? 
+> > > > > > > > > > 
+> > > > > > > > > > See commit 02b4a52604a4 ("mtd: rawnand: Make 
+> > ->select_chip() 
+> > > > > > > optional 
+> > > > > > > > > > when ->exec_op() is implemented") which states:
+> > > > > > > > > > 
+> > > > > > > > > >         "When [->select_chip() is] not implemented, 
+the 
+> > core 
+> > > > is 
+> > > > > > > assuming 
+> > > > > > > > > >    the CS line is automatically asserted/deasserted by 
+the 
+> > 
+> > > > driver 
+> > > > > > > > > >    ->exec_op() implementation." 
+> > > > > > > > > > 
+> > > > > > > > > > Of course, the above is right only when the controller 
+ 
+> > driver 
+> > > > 
+> > > > > > > supports 
+> > > > > > > > > > the ->exec_op() interface. 
+> > > > > > > > > 
+> > > > > > > > > Currently, it seems that we will get the incorrect data 
+and 
+> > 
+> > > > error 
+> > > > > > > > > operation due to CS in error toggling if CS line is 
+> > controlled 
+> > > > in 
+> > > > > > > > > ->exec_op(). 
+> > > > > 
+> > > > > Oh, and please provide the modifications you added on top of 
+this 
+> > patch.
+> > > > > Right now we're speculating on what you've done which is 
+definitely 
+> > not
+> > > > > an efficient way to debug this sort of issues. 
+> > > > 
+> > > > The patch is to add in beginning of ->exec_op() to control CS# low 
+and 
+> > 
+> > > > before return from ->exec_op() to control CS# High.
+> > > > i.e,.
+> > > > static in mxic_nand_exec_op( )
+> > > > {
+> > > >  cs_to_low();
+> > > > 
+> > > > 
+> > > > 
+> > > >  cs_to_high();
+> > > >  return;
+> > > > }
+> > > > 
+> > > > But for nand_onfi_detect(), 
+> > > > it calls nand_read_param_page_op() and then nand_read_data_op().
+> > > > mxic_nand_exec_op() be called twice for nand_onfi_detect() and
+> > > > driver will get incorrect ONFI parameter table data from 
+> > > > nand_read_data_op(). 
+> > > 
+> > > And I think it's valid to release the CE pin between
+> > > read_param_page_op() (CMD(0xEC)+ADDR(0x0)) and read_data_op() (data
+> > > cycles) if your chip is CE-dont-care compliant. So, either you have 
+a
+> > > problem with your controller driver (CS-related timings are 
+incorrect)
+> > > or your chip is not CE-dont-care compliant. 
+> > 
+> > Understood, I will try to fix it on my NFC driver.
 > 
-> On 2019-06-10 at 08:17 +0000, yibin.gong@nxp.com wrote:
-> > From: Robin Gong <yibin.gong@nxp.com>
-> > 
-> >   There is ecspi ERR009165 on i.mx6/7 soc family, which cause FIFO
-> > transfer to be send twice in DMA mode. Please get more information
-> > from:
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww
-> > .nxp.com%2Fdocs%2Fen%2Ferrata%2FIMX6DQCE.pdf&amp;data=02%7C01%7Cyibin
-> > .gong%40nxp.com%7C67d3e78fe5ef4428b3af08d6ed7beb74%7C686ea1d3bc2b4c6f
-> > a92cd99c5c301635%7C0%7C1%7C636957513814970412&amp;sdata=%2F9sbrDEmIpu
-> > OazcIAVpIrELZMEjO94%2Bjen7wOOlVsVk%3D&amp;reserved=0. The workaround
-> > is adding
-> > new sdma ram script which works in XCH  mode as PIO inside sdma
-> > instead
-> > of SMC mode, meanwhile, 'TX_THRESHOLD' should be 0. The issue should
-> > be
-> > exist on all legacy i.mx6/7 soc family before i.mx6ul.
-> >   NXP fix this design issue from i.mx6ul, so newer chips including
-> > i.mx6ul/
-> > 6ull/6sll do not need this workaroud anymore. All other i.mx6/7/8
-> > chips
-> > still need this workaroud. This patch set add new 'fsl,imx6ul-ecspi'
-> > for ecspi driver and 'ecspi_fixed' in sdma driver to choose if need
-> > errata
-> > or not.
-> >   The first two reverted patches should be the same issue, though, it
-> > seems 'fixed' by changing to other shp script. Hope Sean or Sascha
-> > could
-> > have the chance to test this patch set if could fix their issues.
-> >   Besides, enable sdma support for i.mx8mm/8mq and fix ecspi1 not
-> > work
-> > on i.mx8mm because the event id is zero.
-> > 
-> > PS:
-> >    Please get sdma firmware from below linux-firmware and copy it to
-> > your
-> > local rootfs /lib/firmware/imx/sdma.
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit
-> > .kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ffirmware%2Flinux-
-> > firmware.git%2Ftree%2Fimx%2Fsdma&amp;data=02%7C01%7Cyibin.gong%40nxp.
-> > com%7C67d3e78fe5ef4428b3af08d6ed7beb74%7C686ea1d3bc2b4c6fa92cd99c5c30
-> > 1635%7C0%7C1%7C636957513814970412&amp;sdata=xXHBWpSaSLmMosb%2FajOAiXn
-> > nkxaYV6HCt25OOzgRLbI%3D&amp;reserved=0
-> > 
-> > v2:
-> >   1.Add commit log for reverted patches.
-> >   2.Add comment for 'ecspi_fixed' in sdma driver.
-> >   3.Add 'fsl,imx6sll-ecspi' compatible instead of 'fsl,imx6ul-ecspi'
-> >     rather than remove.
-> > v3:
-> >   1.Confirm with design team make sure ERR009165 fixed on
-> > i.mx6ul/i.mx6ull
-> >     /i.mx6sll, not fixed on i.mx8m/8mm and other i.mx6/7 legacy
-> > chips.
-> >     Correct dts related dts patch in v2.
-> >   2.Clean eratta information in binding doc and new 'tx_glitch_fixed'
-> > flag
-> >     in spi-imx driver to state ERR009165 fixed or not.
-> >   3.Enlarge burst size to fifo size for tx since tx_wml set to 0 in
-> > the
-> >     errata workaroud, thus improve performance as possible.
-> > v4:
-> >   1.add Ack tag from Mark and Vinod
-> >   2. remove checking 'event_id1' zero as 'event_id0'.
-> > v5:
-> >   1.Add another patch for compatible with the current uart driver
-> > which
-> >     using rom script, so both uart ram script and rom script
-> > supported
-> >     in latest firmware, by default uart rom script used. UART driver
-> >     will be broken without this patch. Latest sdma firmware has been
-> >     already updated in linux-firmware. 
-> > 
-> > Robin Gong (15):
-> >   Revert "ARM: dts: imx6q: Use correct SDMA script for SPI5 core"
-> >   Revert "ARM: dts: imx6: Use correct SDMA script for SPI cores"
-> >   Revert "dmaengine: imx-sdma: refine to load context only once"
-> >   dmaengine: imx-sdma: remove dupilicated sdma_load_context
-> >   dmaengine: imx-sdma: add mcu_2_ecspi script
-> >   spi: imx: fix ERR009165
-> >   spi: imx: remove ERR009165 workaround on i.mx6ul
-> >   spi: imx: add new i.mx6ul compatible name in binding doc
-> >   dmaengine: imx-sdma: remove ERR009165 on i.mx6ul
-> >   dma: imx-sdma: add i.mx6ul/6sx compatible name
-> >   dmaengine: imx-sdma: fix ecspi1 rx dma not work on i.mx8mm
-> >   ARM: dts: imx6ul: add dma support on ecspi
-> >   ARM: dts: imx6sll: correct sdma compatible
-> >   arm64: defconfig: Enable SDMA on i.mx8mq/8mm
-> >   dmaengine: imx-sdma: add uart rom script
-> > 
-> >  .../devicetree/bindings/dma/fsl-imx-sdma.txt       |  2 +
-> >  .../devicetree/bindings/spi/fsl-imx-cspi.txt       |  1 +
-> >  arch/arm/boot/dts/imx6q.dtsi                       |  2 +-
-> >  arch/arm/boot/dts/imx6qdl.dtsi                     |  8 +-
-> >  arch/arm/boot/dts/imx6sll.dtsi                     |  2 +-
-> >  arch/arm/boot/dts/imx6ul.dtsi                      |  8 ++
-> >  arch/arm64/configs/defconfig                       |  3 +
-> >  drivers/dma/imx-sdma.c                             | 88
-> > ++++++++++++++++------
-> >  drivers/spi/spi-imx.c                              | 61
-> > ++++++++++++---
-> >  include/linux/platform_data/dma-imx-sdma.h         | 11 ++-
-> >  10 files changed, 145 insertions(+), 41 deletions(-)
-> > 
+> Before you do that, can you please try to understand where the problem
+> comes from and explain it to us? Hacking the NFC driver is only
+> meaningful if the problem is on the NFC side. If your NAND chip does
+> not support when the CS pin goes high between read_param_page_op() and
+> read_data_op() the problem should be fixed in the core.
+
+I think I have fixed the problem and the root cause is the our NFC's TX 
+FIFO counter 
+do a unnecessary reset in CS control function. Our NFC implement 
+read-write 
+buffer transfer to send command, address and data.
+A unnecessary reset to TX FIFO will send a command byte out first and this 
+extra
+command will make something wrong to next operation.
+
+For now, doing CS# control in ->exec_op() is OK to me.
+
+thanks & best regards,
+Mason
+
+
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
