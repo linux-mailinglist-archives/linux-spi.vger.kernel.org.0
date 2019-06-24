@@ -2,104 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC41E50BE3
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2019 15:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1198D5289F
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2019 11:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729933AbfFXNX6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Jun 2019 09:23:58 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33838 "EHLO
+        id S1729855AbfFYJyF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jun 2019 05:54:05 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37182 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729198AbfFXNX5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jun 2019 09:23:57 -0400
+        with ESMTP id S1727613AbfFYJyE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jun 2019 05:54:04 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=+UrtYLXzSnIgM6VP/LvN4aeGEXDC7vRlevOeGO44jQ4=; b=xKH5P5x5td39K7stmKi14D5rg
-        ct6jsj/lxoC1KKU1kZacn8g9d6CCLTXNRlWTDXvoHyDlYtLOHPQ/vuzKmakL9gPuIxsjY56CHnLTQ
-        0+ONqmRo17Lu0QZI6tNmKdSCPOnXJyl6UFu5mA8N6Xo0ib79U3ctfGKtaXRFg83/tQh9s=;
-Received: from 188.29.164.245.threembb.co.uk ([188.29.164.245] helo=finisterre.sirena.org.uk)
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=4xhafNZ9vsKKvjfqO+yD1YjW/mVePLcmRuEcd5QcDMA=; b=SCJr7OJ8/Njz
+        sjrg808suH9HC4CBUz9daEFnlgLmMAzA5NIn6wpTTpHuJacXeImBpd1jD9AzN1rKJLX13BbcaUxxr
+        uFqawaJkOIdT6Qq4pqif2W5wJ3lbTxODiXA1sYC3ma8Qq5nd+VVgxao/29MX0Arurm+aWI+nzzXcU
+        EmTU4=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hfOwt-0001U6-Uf; Mon, 24 Jun 2019 13:23:56 +0000
+        id 1hfi9F-0004mM-03; Tue, 25 Jun 2019 09:53:57 +0000
 Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 7F446440046; Mon, 24 Jun 2019 14:23:52 +0100 (BST)
-Date:   Mon, 24 Jun 2019 14:23:52 +0100
+        id DD2B044006F; Mon, 24 Jun 2019 17:32:28 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Christian Mauderer <oss@c-mauderer.de>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: spi-gpio too fast for some devices
-Message-ID: <20190624132352.GL5316@sirena.org.uk>
-References: <32d3f238-c21c-b937-72c9-7a9ba842c01e@c-mauderer.de>
- <a06e9923-735a-da2c-9946-4740842d5ca5@c-mauderer.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KKvDzCUevEmRe2yO"
-Content-Disposition: inline
-In-Reply-To: <a06e9923-735a-da2c-9946-4740842d5ca5@c-mauderer.de>
-X-Cookie: Editing is a rewording activity.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Patrice Chotard <patrice.chotard@st.com>
+Cc:     Alexandre Torgue <alexandre.torgue@st.com>,
+        christophe.kerello@st.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        patrice.chotard@st.com
+Subject: Applied "spi: spi-stm32-qspi: Remove CR_FTHRES_MASK usage" to the spi tree
+In-Reply-To: <20190620131323.5955-1-patrice.chotard@st.com>
+X-Patchwork-Hint: ignore
+Message-Id: <20190624163228.DD2B044006F@finisterre.sirena.org.uk>
+Date:   Mon, 24 Jun 2019 17:32:28 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The patch
 
---KKvDzCUevEmRe2yO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+   spi: spi-stm32-qspi: Remove CR_FTHRES_MASK usage
 
-On Sat, Jun 22, 2019 at 07:45:50AM +0200, Christian Mauderer wrote:
-> On 10/06/2019 18:56, Christian Mauderer wrote:
+has been applied to the spi tree at
 
-> > I have a problem with the spi-gpio driver: It's too fast for one of my
-> > devices. Now I'm searching for a good solution that could be
-> > acceptable as a patch for the Linux kernel.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.2
 
-> > Currently there is the following comment and implementation for the
-> > spidelay(...) function in spi-gpio.c:
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-> >> /*
-> >>  * NOTE:  this clocks "as fast as we can".  It "should" be a function of the
-> >>  * requested device clock.  Software overhead means we usually have trouble
-> >>  * reaching even one Mbit/sec (except when we can inline bitops), so for now
-> >>  * we'll just assume we never need additional per-bit slowdowns.
-> >>  */
-> >> #define spidelay(nsecs)	do {} while (0)
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> >> #define spidelay(nsecs)	ndelay(nsecs)
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> > which basically works. But with that the maximum rate drops to 1.6MHz.
-> > I assume that such a drastic performance decrease isn't acceptable for
-> > the kernel?
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Yes, I can't imagine that other users are going to be happy with a
-performance reduction like that.
+Thanks,
+Mark
 
-> > Any directions for how an acceptable implementation could look like?
+From 94613d5ae1091a28b33f38e18d96e8d953ac18df Mon Sep 17 00:00:00 2001
+From: Patrice Chotard <patrice.chotard@st.com>
+Date: Thu, 20 Jun 2019 15:13:23 +0200
+Subject: [PATCH] spi: spi-stm32-qspi: Remove CR_FTHRES_MASK usage
 
-Off the top of my head you probably need to build a second copy of the
-code with the delays included and then select that copy depending on the
-speed that's been requested for the device and the speed of the system
-somehow.  The actual bitbanging is in a header so that makes it a bit
-easier to build two copies than it might otherwise be.
+On STM32 F4/F7/H7 SoCs, FTHRES is a 5 bits field in QSPI_CR register,
+but for STM32MP1 SoCs, FTHRES is a 4 bits field long. CR_FTHRES_MASK
+definition is not correct.
 
---KKvDzCUevEmRe2yO
-Content-Type: application/pgp-signature; name="signature.asc"
+As for all these SoCs, FTHRES field is set to 3, FIELD_PREP() macro
+is used with a constant as second parameter which make its usage useless.
 
------BEGIN PGP SIGNATURE-----
+CR_FTHRES_MASK and FIELD_PREP() can be removed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0QzucACgkQJNaLcl1U
-h9BG2Af+ILDi1nSe+5/828rNKaYgLC/odMc+lsAPgrJliTlgQeDo6CStklqipF+N
-EK5KLJStaHsg6jHXEuDmNuDHdBp0Z9llgqWcgjgE+uOYiSX0GhhKXKlN00Gx0+Ef
-cvBzgaACdkjHUH/+o82T1K8FqPaXCxyv4FB0rMkT8ooskYoOMnMMmyI5FnTKgaQE
-MMNqS48MvLVQqhzAsUEAmbzZ28hirXV2IG1VPpPioEynZqKIzQzVjLeY2VEO72CW
-VvL2TLioh5hBKOt8TZVvJXNWrp3ErI6idFUZfD4rM2aEXdmKZY0O3eWNXLUQERMj
-ZN/+eVV8Vobn4n9eDMDazb28fwbE4A==
-=Fabk
------END PGP SIGNATURE-----
+Signed-off-by: Patrice Chotard <patrice.chotard@st.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-stm32-qspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---KKvDzCUevEmRe2yO--
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 42f8e3c6aa1f..5dbb6a8e893c 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -29,7 +29,7 @@
+ #define CR_SSHIFT		BIT(4)
+ #define CR_DFM			BIT(6)
+ #define CR_FSEL			BIT(7)
+-#define CR_FTHRES_MASK		GENMASK(12, 8)
++#define CR_FTHRES_SHIFT		8
+ #define CR_TEIE			BIT(16)
+ #define CR_TCIE			BIT(17)
+ #define CR_FTIE			BIT(18)
+@@ -463,7 +463,7 @@ static int stm32_qspi_setup(struct spi_device *spi)
+ 	flash->presc = presc;
+ 
+ 	mutex_lock(&qspi->lock);
+-	qspi->cr_reg = FIELD_PREP(CR_FTHRES_MASK, 3) | CR_SSHIFT | CR_EN;
++	qspi->cr_reg = 3 << CR_FTHRES_SHIFT | CR_SSHIFT | CR_EN;
+ 	writel_relaxed(qspi->cr_reg, qspi->io_base + QSPI_CR);
+ 
+ 	/* set dcr fsize to max address */
+-- 
+2.20.1
+
