@@ -2,120 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1198D5289F
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2019 11:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC91951AE0
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2019 20:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729855AbfFYJyF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jun 2019 05:54:05 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37182 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727613AbfFYJyE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jun 2019 05:54:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=4xhafNZ9vsKKvjfqO+yD1YjW/mVePLcmRuEcd5QcDMA=; b=SCJr7OJ8/Njz
-        sjrg808suH9HC4CBUz9daEFnlgLmMAzA5NIn6wpTTpHuJacXeImBpd1jD9AzN1rKJLX13BbcaUxxr
-        uFqawaJkOIdT6Qq4pqif2W5wJ3lbTxODiXA1sYC3ma8Qq5nd+VVgxao/29MX0Arurm+aWI+nzzXcU
-        EmTU4=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hfi9F-0004mM-03; Tue, 25 Jun 2019 09:53:57 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id DD2B044006F; Mon, 24 Jun 2019 17:32:28 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Patrice Chotard <patrice.chotard@st.com>
-Cc:     Alexandre Torgue <alexandre.torgue@st.com>,
-        christophe.kerello@st.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        patrice.chotard@st.com
-Subject: Applied "spi: spi-stm32-qspi: Remove CR_FTHRES_MASK usage" to the spi tree
-In-Reply-To: <20190620131323.5955-1-patrice.chotard@st.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190624163228.DD2B044006F@finisterre.sirena.org.uk>
-Date:   Mon, 24 Jun 2019 17:32:28 +0100 (BST)
+        id S1729326AbfFXSmx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Jun 2019 14:42:53 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:42141 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727664AbfFXSmx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jun 2019 14:42:53 -0400
+Received: from [192.168.1.110] ([77.4.138.202]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N2lzA-1iic5w3MB2-0138jG; Mon, 24 Jun 2019 20:42:44 +0200
+Subject: Re: [PATCH] spi: spi-gpio: Make probe function __init_or_module
+To:     Mark Brown <broonie@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Cc:     od@zcrc.me, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190607155631.15072-1-paul@crapouillou.net>
+ <20190607155907.GH2456@sirena.org.uk>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Organization: metux IT consult
+Message-ID: <0323abd9-2c68-2d2e-0140-c34edf983f4f@metux.net>
+Date:   Mon, 24 Jun 2019 20:42:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
+MIME-Version: 1.0
+In-Reply-To: <20190607155907.GH2456@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:B+ndejNADLbmP9NRTeO+zCHd8NO0E21L/8XSu+JU+mD7UOddsph
+ U1qSW8obBRMcO4mka1He6D8C+vH8prpf2f+MpWv/FfR2sSDIGyhcw/TsZxFRcvnngqw1kn2
+ aWB6yhSbIyei6Kxh0wmIxD4W9ZcGxTPGHnwgo5T7xNrnwUfshZ7jLauXc81VeUpdOOjqdBw
+ 7MtRnQ7o8j/IJwRVrbX2A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7aKfJg27cUI=:PMcIRU/bPjtyYQ/lc67Q4c
+ i+u1enHgsJBu/v9tnbNGZ17JMna8D1SD6pbqIlibzyChudF7uXU+4oN6z43lY/6bib/ERdpU3
+ KcCdV6vpYcx0DnPe36iTNr3xFrNRaXx/9sKBkOoG14L8s+EygPyiq/yMzKXKQnBDXvNVFodQL
+ IC/zyWDRi/zCMZklIkI7BmOgiN5yBL8NiI0yflMUOO0xny48i3fTwYbOAuoTlKy5WrdSQPj7G
+ +bxAlA3As3YMwrqJIJ3pxjKNLkGlFN2V52cMJm3Z48nB3UGEg94FO8L3hG4FESGKCUl2CE/MH
+ 6msLmhwxMT2/bQvI7du3bB9fmtA8WC6hbzbITt2Hr+UnU3P/PMxLQWrnMYT6oqpZad5qRnHcr
+ J+o/j6hubN4Vl2WZEGh5eWtngHh/7gjDfNZy0JhgjKfi6GoUTw336+sHAfE0LDmNphSq3dLNl
+ cxnD1/SyLSY0nWp0FkWVW/FXr/O53WkoKnPurzY+a/GaeHSIu8slZKaBRf9QpeB485Gat56AH
+ 4mIcEIxcZnR+YOpuTM65Og4iBTPJwbMvUObYA6a7MuGpYp/i/j6PDfbJfdiMPPR5FJr13KpSh
+ 4ardoF3P3Q8NTf8m8kYQZsG1t9ytGxXclAEtSAvzH2/ZOXrtC9roFKoBjfbRE70g6bV7no9OC
+ ZsEV1G4gU29v3VfLD6tCrekNckD90lwK4G+K9lomumJqAnp4YgT5o+xVUvr6mlhaEdbvpOpjf
+ 0Mlmvv+R6WTNvtxqQQi4JekEDyfFYRkDojSRxBxj2h/5NBGzt9BfOmc5SUU=
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On 07.06.19 17:59, Mark Brown wrote:
+> On Fri, Jun 07, 2019 at 05:56:31PM +0200, Paul Cercueil wrote:
+>> This allows the probe function to be dropped after the kernel finished
+>> its initialization, in the case where the driver was not compiled as a
+>> module.
+> 
+> Hopefully not since we might probe later on if something registers a new
+> device...
+> 
 
-   spi: spi-stm32-qspi: Remove CR_FTHRES_MASK usage
+Common pitfall. Also fallen into this myself and wondered why
+it oops'd :o.
 
-has been applied to the spi tree at
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.2
+--mtx
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 94613d5ae1091a28b33f38e18d96e8d953ac18df Mon Sep 17 00:00:00 2001
-From: Patrice Chotard <patrice.chotard@st.com>
-Date: Thu, 20 Jun 2019 15:13:23 +0200
-Subject: [PATCH] spi: spi-stm32-qspi: Remove CR_FTHRES_MASK usage
-
-On STM32 F4/F7/H7 SoCs, FTHRES is a 5 bits field in QSPI_CR register,
-but for STM32MP1 SoCs, FTHRES is a 4 bits field long. CR_FTHRES_MASK
-definition is not correct.
-
-As for all these SoCs, FTHRES field is set to 3, FIELD_PREP() macro
-is used with a constant as second parameter which make its usage useless.
-
-CR_FTHRES_MASK and FIELD_PREP() can be removed.
-
-Signed-off-by: Patrice Chotard <patrice.chotard@st.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-stm32-qspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 42f8e3c6aa1f..5dbb6a8e893c 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -29,7 +29,7 @@
- #define CR_SSHIFT		BIT(4)
- #define CR_DFM			BIT(6)
- #define CR_FSEL			BIT(7)
--#define CR_FTHRES_MASK		GENMASK(12, 8)
-+#define CR_FTHRES_SHIFT		8
- #define CR_TEIE			BIT(16)
- #define CR_TCIE			BIT(17)
- #define CR_FTIE			BIT(18)
-@@ -463,7 +463,7 @@ static int stm32_qspi_setup(struct spi_device *spi)
- 	flash->presc = presc;
- 
- 	mutex_lock(&qspi->lock);
--	qspi->cr_reg = FIELD_PREP(CR_FTHRES_MASK, 3) | CR_SSHIFT | CR_EN;
-+	qspi->cr_reg = 3 << CR_FTHRES_SHIFT | CR_SSHIFT | CR_EN;
- 	writel_relaxed(qspi->cr_reg, qspi->io_base + QSPI_CR);
- 
- 	/* set dcr fsize to max address */
 -- 
-2.20.1
-
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
