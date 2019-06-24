@@ -2,74 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC91951AE0
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2019 20:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE34551B0A
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2019 20:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729326AbfFXSmx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Jun 2019 14:42:53 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:42141 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727664AbfFXSmx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jun 2019 14:42:53 -0400
-Received: from [192.168.1.110] ([77.4.138.202]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N2lzA-1iic5w3MB2-0138jG; Mon, 24 Jun 2019 20:42:44 +0200
-Subject: Re: [PATCH] spi: spi-gpio: Make probe function __init_or_module
-To:     Mark Brown <broonie@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     od@zcrc.me, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190607155631.15072-1-paul@crapouillou.net>
- <20190607155907.GH2456@sirena.org.uk>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <0323abd9-2c68-2d2e-0140-c34edf983f4f@metux.net>
-Date:   Mon, 24 Jun 2019 20:42:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1729704AbfFXS65 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Jun 2019 14:58:57 -0400
+Received: from server101.serverconfig.center ([195.242.103.101]:57853 "EHLO
+        server101.serverconfig.center" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727984AbfFXS64 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jun 2019 14:58:56 -0400
+Received: from christian-pc.localdomain (p2E5940A8.dip0.t-ipconnect.de [46.89.64.168])
+        by server101.serverconfig.center (Postfix) with ESMTPSA id 04EA22382CD7;
+        Mon, 24 Jun 2019 20:58:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-mauderer.de;
+        s=default; t=1561402735;
+        bh=hw0cUv3NZMoP4biFeM5ddjzN9EPA+loGAupo7DXKqwI=; l=2198;
+        h=Subject:To:From;
+        b=W+yK1SGhg8lzoj/NzR/RXX70KGm5PrrF8c3Xoyxt46l9TWXYy7T38xZddgpk2NtTD
+         rO4A9qU6bvX5sHJahoCnZXR604DJkgwYARfw//LsX+p9OpoHhCL5ilLQca2K0q7xp+
+         uBjFsVDch6AA6TMpAWKfvX8/s9BFJXrMpRx0iQVA=
+Authentication-Results: server101.serverconfig.center;
+        spf=pass (sender IP is 46.89.64.168) smtp.mailfrom=oss@c-mauderer.de smtp.helo=christian-pc.localdomain
+Received-SPF: pass (server101.serverconfig.center: connection is authenticated)
+Subject: Re: spi-gpio too fast for some devices
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org
+References: <32d3f238-c21c-b937-72c9-7a9ba842c01e@c-mauderer.de>
+ <a06e9923-735a-da2c-9946-4740842d5ca5@c-mauderer.de>
+ <20190624132352.GL5316@sirena.org.uk>
+From:   Christian Mauderer <oss@c-mauderer.de>
+Message-ID: <7e9d963c-9402-979c-1dbd-51e548a15652@c-mauderer.de>
+Date:   Mon, 24 Jun 2019 20:58:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190607155907.GH2456@sirena.org.uk>
+In-Reply-To: <20190624132352.GL5316@sirena.org.uk>
 Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:B+ndejNADLbmP9NRTeO+zCHd8NO0E21L/8XSu+JU+mD7UOddsph
- U1qSW8obBRMcO4mka1He6D8C+vH8prpf2f+MpWv/FfR2sSDIGyhcw/TsZxFRcvnngqw1kn2
- aWB6yhSbIyei6Kxh0wmIxD4W9ZcGxTPGHnwgo5T7xNrnwUfshZ7jLauXc81VeUpdOOjqdBw
- 7MtRnQ7o8j/IJwRVrbX2A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7aKfJg27cUI=:PMcIRU/bPjtyYQ/lc67Q4c
- i+u1enHgsJBu/v9tnbNGZ17JMna8D1SD6pbqIlibzyChudF7uXU+4oN6z43lY/6bib/ERdpU3
- KcCdV6vpYcx0DnPe36iTNr3xFrNRaXx/9sKBkOoG14L8s+EygPyiq/yMzKXKQnBDXvNVFodQL
- IC/zyWDRi/zCMZklIkI7BmOgiN5yBL8NiI0yflMUOO0xny48i3fTwYbOAuoTlKy5WrdSQPj7G
- +bxAlA3As3YMwrqJIJ3pxjKNLkGlFN2V52cMJm3Z48nB3UGEg94FO8L3hG4FESGKCUl2CE/MH
- 6msLmhwxMT2/bQvI7du3bB9fmtA8WC6hbzbITt2Hr+UnU3P/PMxLQWrnMYT6oqpZad5qRnHcr
- J+o/j6hubN4Vl2WZEGh5eWtngHh/7gjDfNZy0JhgjKfi6GoUTw336+sHAfE0LDmNphSq3dLNl
- cxnD1/SyLSY0nWp0FkWVW/FXr/O53WkoKnPurzY+a/GaeHSIu8slZKaBRf9QpeB485Gat56AH
- 4mIcEIxcZnR+YOpuTM65Og4iBTPJwbMvUObYA6a7MuGpYp/i/j6PDfbJfdiMPPR5FJr13KpSh
- 4ardoF3P3Q8NTf8m8kYQZsG1t9ytGxXclAEtSAvzH2/ZOXrtC9roFKoBjfbRE70g6bV7no9OC
- ZsEV1G4gU29v3VfLD6tCrekNckD90lwK4G+K9lomumJqAnp4YgT5o+xVUvr6mlhaEdbvpOpjf
- 0Mlmvv+R6WTNvtxqQQi4JekEDyfFYRkDojSRxBxj2h/5NBGzt9BfOmc5SUU=
+X-PPP-Message-ID: <156140273517.122954.9182846242705088809@server101.serverconfig.center>
+X-PPP-Vhost: c-mauderer.de
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07.06.19 17:59, Mark Brown wrote:
-> On Fri, Jun 07, 2019 at 05:56:31PM +0200, Paul Cercueil wrote:
->> This allows the probe function to be dropped after the kernel finished
->> its initialization, in the case where the driver was not compiled as a
->> module.
+On 24/06/2019 15:23, Mark Brown wrote:
+> On Sat, Jun 22, 2019 at 07:45:50AM +0200, Christian Mauderer wrote:
+>> On 10/06/2019 18:56, Christian Mauderer wrote:
 > 
-> Hopefully not since we might probe later on if something registers a new
-> device...
+>>> I have a problem with the spi-gpio driver: It's too fast for one of my
+>>> devices. Now I'm searching for a good solution that could be
+>>> acceptable as a patch for the Linux kernel.
+> 
+>>> Currently there is the following comment and implementation for the
+>>> spidelay(...) function in spi-gpio.c:
+> 
+>>>> /*
+>>>>  * NOTE:  this clocks "as fast as we can".  It "should" be a function of the
+>>>>  * requested device clock.  Software overhead means we usually have trouble
+>>>>  * reaching even one Mbit/sec (except when we can inline bitops), so for now
+>>>>  * we'll just assume we never need additional per-bit slowdowns.
+>>>>  */
+>>>> #define spidelay(nsecs)	do {} while (0)
+> 
+>>>> #define spidelay(nsecs)	ndelay(nsecs)
+> 
+>>> which basically works. But with that the maximum rate drops to 1.6MHz.
+>>> I assume that such a drastic performance decrease isn't acceptable for
+>>> the kernel?
+> 
+> Yes, I can't imagine that other users are going to be happy with a
+> performance reduction like that.
+> 
+>>> Any directions for how an acceptable implementation could look like?
+> 
+> Off the top of my head you probably need to build a second copy of the
+> code with the delays included and then select that copy depending on the
+> speed that's been requested for the device and the speed of the system
+> somehow.  The actual bitbanging is in a header so that makes it a bit
+> easier to build two copies than it might otherwise be.
 > 
 
-Common pitfall. Also fallen into this myself and wondered why
-it oops'd :o.
+Hello Mark,
 
+thanks for the answer and the direction. I'll have a look at the driver
+and try to create a rough plan which function I can replace without
+creating too much of copy and paste code and without loosing too much
+performance. I'm not sure yet where a good location would be to decide
+which function should be used depending on the speed but I'll try to
+find one.
 
---mtx
+I'll report back as soon as I have a plan and (maybe) at least a sketch
+for a patch. Most likely that will need some time because I only do that
+in my free time.
 
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Best regards
+
+Christian
