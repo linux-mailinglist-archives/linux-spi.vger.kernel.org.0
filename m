@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3630E560AA
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Jun 2019 05:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C6056073
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Jun 2019 05:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727423AbfFZDnt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jun 2019 23:43:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55102 "EHLO mail.kernel.org"
+        id S1727743AbfFZDpR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jun 2019 23:45:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56806 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726955AbfFZDns (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 25 Jun 2019 23:43:48 -0400
-Received: from sasha-vm.mshome.net (mobile-107-77-172-98.mobile.att.net [107.77.172.98])
+        id S1727737AbfFZDpQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 25 Jun 2019 23:45:16 -0400
+Received: from sasha-vm.mshome.net (mobile-107-77-172-74.mobile.att.net [107.77.172.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E1D1D20883;
-        Wed, 26 Jun 2019 03:43:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 823EE20659;
+        Wed, 26 Jun 2019 03:45:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561520627;
-        bh=CopbPDkmpyBYVPNLicCPlny+gTOGGt4Mg7HQaPoI71E=;
+        s=default; t=1561520715;
+        bh=rofvzWsIBCAeGUFGJxZ/YQEGN7NmaGddgE4JIcTL0q4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u/U/lEbyOAoRcC0c1o69n2UCMcSWUz43pTCeL+f4Nt+0LdO7w0NjJlUVsd2ldUZZi
-         EFgbs/w/ChzcL1xN7fNb6+ts9LW2sZLxivCZxThPEMVoSrUYAgo2uQyjyZc0g9+64B
-         3BVimRW7PPsOo3524SX66hZEO8oIy1FwSemcWYzo=
+        b=BSSRXcDxao13WFIbStu6hxZZFV+ndZlOjmcccawi+FPIU399DxpaySj7uqBtPvCef
+         q9SsFa7upe0C4GeH+REyIHFgUvR9o1QLuXvx4dFLF9/EJUAGhN4qIlYFygEw8FWydz
+         94LSH5eM6iHXrOK2jkn8WSHwMnfc1icktU1SDy+c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     YueHaibing <yuehaibing@huawei.com>, Hulk Robot <hulkci@huawei.com>,
@@ -31,12 +31,12 @@ Cc:     YueHaibing <yuehaibing@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Mukesh Ojha <mojha@codeaurora.org>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 05/34] spi: bitbang: Fix NULL pointer dereference in spi_unregister_master
-Date:   Tue, 25 Jun 2019 23:43:06 -0400
-Message-Id: <20190626034335.23767-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 03/21] spi: bitbang: Fix NULL pointer dereference in spi_unregister_master
+Date:   Tue, 25 Jun 2019 23:44:48 -0400
+Message-Id: <20190626034506.24125-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190626034335.23767-1-sashal@kernel.org>
-References: <20190626034335.23767-1-sashal@kernel.org>
+In-Reply-To: <20190626034506.24125-1-sashal@kernel.org>
+References: <20190626034506.24125-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -114,10 +114,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-bitbang.c b/drivers/spi/spi-bitbang.c
-index f29176000b8d..06cf9388e74f 100644
+index 3aa9e6e3dac8..4ef54436b9d4 100644
 --- a/drivers/spi/spi-bitbang.c
 +++ b/drivers/spi/spi-bitbang.c
-@@ -416,7 +416,7 @@ int spi_bitbang_start(struct spi_bitbang *bitbang)
+@@ -392,7 +392,7 @@ int spi_bitbang_start(struct spi_bitbang *bitbang)
  	if (ret)
  		spi_master_put(master);
  
