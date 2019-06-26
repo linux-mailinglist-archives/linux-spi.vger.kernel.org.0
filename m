@@ -2,97 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E40355D3A
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Jun 2019 03:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DB656080
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Jun 2019 05:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbfFZBG6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jun 2019 21:06:58 -0400
-Received: from twhmllg4.macronix.com ([122.147.135.202]:48645 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbfFZBG6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jun 2019 21:06:58 -0400
-Received: from twhfmnt1.mxic.com.tw (twhfm1p2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id x5Q16cti017312;
-        Wed, 26 Jun 2019 09:06:38 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 385FD1B2CB53599BD566;
-        Wed, 26 Jun 2019 09:06:38 +0800 (CST)
-In-Reply-To: <c8dab2f7-3ddb-497a-bb14-dded31930ce6@cogentembedded.com>
-References: <20190612090552.GD4797@dell> <41d74ecf-c939-27e1-4ef2-ad052b4e924b@cogentembedded.com> <20190617093048.GD16364@dell> <CAMuHMdX6GC2ZDam=odC-QFLUdrh1PYPVWEo5x3EHduqJ4FmTng@mail.gmail.com> <20190618091955.GN16364@dell> <CAMuHMdX7fFSO25TPJA9PO=VQC0czKux8nritMeffBcnaxr=WMQ@mail.gmail.com> <20190618095741.GA18371@dell> <ff85a907-8f26-5e80-c7f0-655ca11afe25@cogentembedded.com> <20190619061659.GH18371@dell> <OFB918AE65.CB02BB75-ON4825841E.0025C688-4825841E.00265891@mxic.com.tw> <20190619075422.GJ18371@dell> <c8dab2f7-3ddb-497a-bb14-dded31930ce6@cogentembedded.com>
-To:     "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>
-Cc:     "Mark Brown" <broonie@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>, juliensu@mxic.com.tw,
-        "Lee Jones" <lee.jones@linaro.org>,
-        "linux-spi" <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH RFC 2/2] mfd: add Renesas RPC-IF driver
+        id S1726779AbfFZDlf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jun 2019 23:41:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51924 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726695AbfFZDle (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 25 Jun 2019 23:41:34 -0400
+Received: from sasha-vm.mshome.net (mobile-107-77-172-74.mobile.att.net [107.77.172.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D629E214DA;
+        Wed, 26 Jun 2019 03:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561520493;
+        bh=uuppBSg3eza1xx49952zPvGnZggmxSRSfmH5l1GAxdU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RV2jKSFpNYVBRtT0BSvu7FCT6vwExbXKzKMBuk/PBL8Tk2PqzjRtom5tLtuzfjXCD
+         VqFE2WnT5N1Cy2K4ss4SfUO9Rno+vPa6+CUfRNBfgb/enqcUfvI81cVzbG2JAp7pnj
+         WiiXS6qZUiB/w1Z5j4OSxgBr1y1IPosqYkDtd0L0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     YueHaibing <yuehaibing@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Axel Lin <axel.lin@ingics.com>,
+        Mukesh Ojha <mojha@codeaurora.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 06/51] spi: bitbang: Fix NULL pointer dereference in spi_unregister_master
+Date:   Tue, 25 Jun 2019 23:40:22 -0400
+Message-Id: <20190626034117.23247-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190626034117.23247-1-sashal@kernel.org>
+References: <20190626034117.23247-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-KeepSent: 29A041F3:432D8EC4-48258425:00047895;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OF29A041F3.432D8EC4-ON48258425.00047895-48258425.00061A38@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Wed, 26 Jun 2019 09:06:39 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2019/06/26 AM 09:06:38,
-        Serialize complete at 2019/06/26 AM 09:06:38
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG4.macronix.com x5Q16cti017312
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: YueHaibing <yuehaibing@huawei.com>
 
-SGVsbG8sIA0KDQo+IFJlOiBbUEFUQ0ggUkZDIDIvMl0gbWZkOiBhZGQgUmVuZXNhcyBSUEMtSUYg
-ZHJpdmVyDQo+IA0KPiBPbiAwNi8xOS8yMDE5IDEwOjU0IEFNLCBMZWUgSm9uZXMgd3JvdGU6DQo+
-IA0KPiA+Pj4+PiBMb29rcyBsaWtlIGEgZmxhc2ggZGV2aWNlIHRvIG1lLg0KPiA+Pj4+DQo+ID4+
-Pj4gICAgTW9yZSBsaWtlIGEgbXVsdGktcHJvdG9jb2wgZmxhc2ggY29udHJvbGxlciwgd2l0aCB0
-aGUgcmVhbCBmbGFzaCANCg0KPiA+Pj4+IGNoaXAgY29ubmVjdGVkIHRvIGl0Lg0KPiA+Pj4NCj4g
-Pj4+IFJpZ2h0LCB0aGlzIGhhcyBiZWVuIG15IHBvaW50IGZyb20gdGhlIHN0YXJ0Lg0KPiA+Pj4N
-Cj4gPj4+IEl0J3MgYSBmbGFzaCBjb250cm9sbGVyLiAgU3VyZSwgeW91IGNhbiBhY2Nlc3MgaXQg
-aW4gZGlmZmVyZW50IHdheXMsDQo+IA0KPiAgICBObywgdGhlIHNvZnR3YXJlIGFjY2VzcyB3aWxs
-IGJlIHRoZSBzYW1lLCBqdXN0IHRoZSBpbml0aWFsIGNvbnRyb2xlcg0KPiBzZXR1cCB3aWxsIGJl
-IHNvbWV3aGF0IGRpZmZlcmVudCBkZXBlbmRpbmcgb24gdGhlIGZsYXNoIHR5cGUgdXNlZC4uLg0K
-PiANCj4gPj4+IGJ1dCBpdCdzIHN0aWxsICpqdXN0KiBhIGZsYXNoIGNvbnRyb2xsZXIgYW5kIHRo
-dXMgbm90IGEgdHJ1ZSBNRkQuDQo+IA0KPiAgICBBbHNvIGEgU1BJIGNvbnRyb2xsZXIgd2hlbiBh
-IFNQSSBidXMgaXMgdXNlZC4NCg0KDQpDeXByZXNzIGhhcyBhbm5vdW5jZWQgdGhlIGluY2x1c2lv
-biBvZiBDeXByZXNz4oCZIGhpZ2gtYmFuZHdpZHRoIA0KSHlwZXJCdXPihKIgOC1iaXQgc2VyaWFs
-IG1lbW9yeSBpbnRlcmZhY2UgaW50byB0aGUgbmV3IGVYcGFuZGVkIFNQSSAoeFNQSSkgDQplbGVj
-dHJpY2FsIGludGVyZmFjZSBzdGFuZGFyZCBmcm9tIHRoZSBKRURFQyBTb2xpZCBTdGF0ZSBUZWNo
-bm9sb2d5IA0KQXNzb2NpYXRpb24gDQoNCmZvciBkZXRhaWwsIHBsZWFzZSBnb2VzIHRvDQpodHRw
-czovL3d3dy5jeXByZXNzLmNvbS9uZXdzL2N5cHJlc3MtaHlwZXJidXMtbWVtb3J5LWludGVyZmFj
-ZS1pbnN0YW50LWFwcGxpY2F0aW9ucy1pbmNvcnBvcmF0ZWQtamVkZWMteHNwaS1lbGVjdHJpY2Fs
-IA0KDQoNCkFzIG1lbnRpb25lZCBiZWZvcmUgdGhhdCBIeXBlckZsYXNoIGlzIGEga2luZCBvZiBz
-dGFuZGFyZCBOT1IgRmxhc2ggd2l0aCANCmhpZ2gtc3BlZWQgU1BJIGludGVyZmFjZS4NCg0KdGhh
-bmtzICYgYmVzdCByZWdhcmRzLA0KTWFzb24NCg0KQ09ORklERU5USUFMSVRZIE5PVEU6DQoNClRo
-aXMgZS1tYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIGlu
-Zm9ybWF0aW9uIA0KYW5kL29yIHBlcnNvbmFsIGRhdGEsIHdoaWNoIGlzIHByb3RlY3RlZCBieSBh
-cHBsaWNhYmxlIGxhd3MuIFBsZWFzZSBiZSANCnJlbWluZGVkIHRoYXQgZHVwbGljYXRpb24sIGRp
-c2Nsb3N1cmUsIGRpc3RyaWJ1dGlvbiwgb3IgdXNlIG9mIHRoaXMgZS1tYWlsIA0KKGFuZC9vciBp
-dHMgYXR0YWNobWVudHMpIG9yIGFueSBwYXJ0IHRoZXJlb2YgaXMgcHJvaGliaXRlZC4gSWYgeW91
-IHJlY2VpdmUgDQp0aGlzIGUtbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB1cyBpbW1lZGlh
-dGVseSBhbmQgZGVsZXRlIHRoaXMgbWFpbCBhcyANCndlbGwgYXMgaXRzIGF0dGFjaG1lbnQocykg
-ZnJvbSB5b3VyIHN5c3RlbS4gSW4gYWRkaXRpb24sIHBsZWFzZSBiZSANCmluZm9ybWVkIHRoYXQg
-Y29sbGVjdGlvbiwgcHJvY2Vzc2luZywgYW5kL29yIHVzZSBvZiBwZXJzb25hbCBkYXRhIGlzIA0K
-cHJvaGliaXRlZCB1bmxlc3MgZXhwcmVzc2x5IHBlcm1pdHRlZCBieSBwZXJzb25hbCBkYXRhIHBy
-b3RlY3Rpb24gbGF3cy4gDQpUaGFuayB5b3UgZm9yIHlvdXIgYXR0ZW50aW9uIGFuZCBjb29wZXJh
-dGlvbi4NCg0KTWFjcm9uaXggSW50ZXJuYXRpb25hbCBDby4sIEx0ZC4NCg0KPT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-DQoNCg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09DQoNCkNPTkZJREVOVElBTElUWSBOT1RFOg0KDQpU
-aGlzIGUtbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIG1heSBjb250YWluIGNvbmZpZGVudGlhbCBp
-bmZvcm1hdGlvbiBhbmQvb3IgcGVyc29uYWwgZGF0YSwgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5IGFw
-cGxpY2FibGUgbGF3cy4gUGxlYXNlIGJlIHJlbWluZGVkIHRoYXQgZHVwbGljYXRpb24sIGRpc2Ns
-b3N1cmUsIGRpc3RyaWJ1dGlvbiwgb3IgdXNlIG9mIHRoaXMgZS1tYWlsIChhbmQvb3IgaXRzIGF0
-dGFjaG1lbnRzKSBvciBhbnkgcGFydCB0aGVyZW9mIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNl
-aXZlIHRoaXMgZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHVzIGltbWVkaWF0ZWx5IGFu
-ZCBkZWxldGUgdGhpcyBtYWlsIGFzIHdlbGwgYXMgaXRzIGF0dGFjaG1lbnQocykgZnJvbSB5b3Vy
-IHN5c3RlbS4gSW4gYWRkaXRpb24sIHBsZWFzZSBiZSBpbmZvcm1lZCB0aGF0IGNvbGxlY3Rpb24s
-IHByb2Nlc3NpbmcsIGFuZC9vciB1c2Ugb2YgcGVyc29uYWwgZGF0YSBpcyBwcm9oaWJpdGVkIHVu
-bGVzcyBleHByZXNzbHkgcGVybWl0dGVkIGJ5IHBlcnNvbmFsIGRhdGEgcHJvdGVjdGlvbiBsYXdz
-LiBUaGFuayB5b3UgZm9yIHlvdXIgYXR0ZW50aW9uIGFuZCBjb29wZXJhdGlvbi4NCg0KTWFjcm9u
-aXggSW50ZXJuYXRpb25hbCBDby4sIEx0ZC4NCg0KPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQo=
+[ Upstream commit 5caaf29af5ca82d5da8bc1d0ad07d9e664ccf1d8 ]
+
+If spi_register_master fails in spi_bitbang_start
+because device_add failure, We should return the
+error code other than 0, otherwise calling
+spi_bitbang_stop may trigger NULL pointer dereference
+like this:
+
+BUG: KASAN: null-ptr-deref in __list_del_entry_valid+0x45/0xd0
+Read of size 8 at addr 0000000000000000 by task syz-executor.0/3661
+
+CPU: 0 PID: 3661 Comm: syz-executor.0 Not tainted 5.1.0+ #28
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1 04/01/2014
+Call Trace:
+ dump_stack+0xa9/0x10e
+ ? __list_del_entry_valid+0x45/0xd0
+ ? __list_del_entry_valid+0x45/0xd0
+ __kasan_report+0x171/0x18d
+ ? __list_del_entry_valid+0x45/0xd0
+ kasan_report+0xe/0x20
+ __list_del_entry_valid+0x45/0xd0
+ spi_unregister_controller+0x99/0x1b0
+ spi_lm70llp_attach+0x3ae/0x4b0 [spi_lm70llp]
+ ? 0xffffffffc1128000
+ ? klist_next+0x131/0x1e0
+ ? driver_detach+0x40/0x40 [parport]
+ port_check+0x3b/0x50 [parport]
+ bus_for_each_dev+0x115/0x180
+ ? subsys_dev_iter_exit+0x20/0x20
+ __parport_register_driver+0x1f0/0x210 [parport]
+ ? 0xffffffffc1150000
+ do_one_initcall+0xb9/0x3b5
+ ? perf_trace_initcall_level+0x270/0x270
+ ? kasan_unpoison_shadow+0x30/0x40
+ ? kasan_unpoison_shadow+0x30/0x40
+ do_init_module+0xe0/0x330
+ load_module+0x38eb/0x4270
+ ? module_frob_arch_sections+0x20/0x20
+ ? kernel_read_file+0x188/0x3f0
+ ? find_held_lock+0x6d/0xd0
+ ? fput_many+0x1a/0xe0
+ ? __do_sys_finit_module+0x162/0x190
+ __do_sys_finit_module+0x162/0x190
+ ? __ia32_sys_init_module+0x40/0x40
+ ? __mutex_unlock_slowpath+0xb4/0x3f0
+ ? wait_for_completion+0x240/0x240
+ ? vfs_write+0x160/0x2a0
+ ? lockdep_hardirqs_off+0xb5/0x100
+ ? mark_held_locks+0x1a/0x90
+ ? do_syscall_64+0x14/0x2a0
+ do_syscall_64+0x72/0x2a0
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: 702a4879ec33 ("spi: bitbang: Let spi_bitbang_start() take a reference to master")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Axel Lin <axel.lin@ingics.com>
+Reviewed-by: Mukesh Ojha <mojha@codeaurora.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-bitbang.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-bitbang.c b/drivers/spi/spi-bitbang.c
+index dd9a8c54a693..be95be4fe985 100644
+--- a/drivers/spi/spi-bitbang.c
++++ b/drivers/spi/spi-bitbang.c
+@@ -403,7 +403,7 @@ int spi_bitbang_start(struct spi_bitbang *bitbang)
+ 	if (ret)
+ 		spi_master_put(master);
+ 
+-	return 0;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(spi_bitbang_start);
+ 
+-- 
+2.20.1
 
