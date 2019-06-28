@@ -2,111 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 474A65A17E
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2019 18:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8983B5A4AE
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2019 21:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbfF1Q4l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jun 2019 12:56:41 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:42616 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726956AbfF1Q4k (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jun 2019 12:56:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=iDKc40FydAHvdXLFNwmMjAx1GM+vsXmu1CM9PROUYY4=; b=sTFFxXe07FaF
-        /Vb6DqwLJZ3Ir44c5J+ZPxdRp2YdrODpWMdm3ZaPBdOodXjmH+b7g2lEHhHmUejekBnxya3cNAE9L
-        oYov+sWXYLdeMONNCYO1M7xn7s35IeUmIkdqnKmMyhfAh4qJ8ceEH05oYf2sA+4ldLSJIb4MW2kjb
-        IGK+4=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hguAs-0007D4-E1; Fri, 28 Jun 2019 16:56:34 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 0A62C440049; Fri, 28 Jun 2019 17:56:34 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Ludovic Barre <ludovic.barre@st.com>
-Cc:     Alexandre Torgue <alexandre.torgue@st.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Applied "dt-bindings: spi: stm32-qspi: add dma properties" to the spi tree
-In-Reply-To: <1561621439-7305-1-git-send-email-ludovic.Barre@st.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190628165634.0A62C440049@finisterre.sirena.org.uk>
-Date:   Fri, 28 Jun 2019 17:56:34 +0100 (BST)
+        id S1726687AbfF1TAZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jun 2019 15:00:25 -0400
+Received: from bmailout2.hostsharing.net ([83.223.90.240]:36543 "EHLO
+        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726565AbfF1TAZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jun 2019 15:00:25 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 3B9872800BC1C;
+        Fri, 28 Jun 2019 21:00:23 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id D2E9316F24; Fri, 28 Jun 2019 21:00:22 +0200 (CEST)
+Date:   Fri, 28 Jun 2019 21:00:22 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Stefan Wahren <wahrenst@gmx.net>
+Cc:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        broonie@kernel.org, eric@anholt.net,
+        Martin Sperl <kernel@martin.sperl.org>, f.fainelli@gmail.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-bcm2835.c: Fix 3-wire mode
+Message-ID: <20190628190022.vya4h2lihm6x2xpb@wunner.de>
+References: <20190628123023.4696-1-nuno.sa@analog.com>
+ <1b932c61-982b-aae0-1fef-3c574e7d17eb@gmx.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1b932c61-982b-aae0-1fef-3c574e7d17eb@gmx.net>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Fri, Jun 28, 2019 at 05:23:54PM +0200, Stefan Wahren wrote:
+> Am 28.06.19 um 14:30 schrieb Nuno Sá:
+> > As stated in
+> > https://www.raspberrypi.org/documentation/hardware/raspberrypi/spi/README.md,
+> > one of rx or tx buffer's must be null. However, if DMA is enabled, the
+> > driver sets the SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX on the
+> > controller flags. Hence, the spi core will provide dummy buffers even if
+> > one of the buffers was set to null by the device driver. Thus, the
+> > communication with the 3-wire device fails.
+> >
+> > This patch uses the prepare_message callback to look for the device mode
+> > and sets/clears the SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX on a
+> > per spi message basis. It also assumes that DMA is not supported on
+> > half-duplex devices.
+> >
+> > Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+> 
+> i never tested the 3-wire mode. Could you please describe your test setup?
 
-   dt-bindings: spi: stm32-qspi: add dma properties
+__spi_validate() returns -EINVAL if 3-wire mode is used and both buffers
+are non-NULL, I guess that's the problem.
 
-has been applied to the spi tree at
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
+> @Martin, @Lukas Are you fine with this patch?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+I have a patch set in the pipeline to drop SPI_CONTROLLER_MUST_RX
+and SPI_CONTROLLER_MUST_TX from spi-bcm2835.c.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Latest snapshot is available here (top-most 10 commits):
+https://github.com/l1k/linux/commits/revpi_staging
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+@Nuno, could you give this branch a spin and see if it fixes the
+issue for you?  If so, this might be a better solution.  Your patch
+is fine in principle since it works around the problem, but the
+patch set on the above-linked branch fixes it at the root.
+It also provides a nice welcome speedup and reduces resource
+consumption.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+I've been working on this on-and-off for about half a year,
+I think the patch set is in pretty good shape now so I was
+planning to submit it probably in 2 weeks or so.
 
 Thanks,
-Mark
 
-From cae86eac98cd90934f94072028c362550338e084 Mon Sep 17 00:00:00 2001
-From: Ludovic Barre <ludovic.barre@st.com>
-Date: Thu, 27 Jun 2019 09:43:58 +0200
-Subject: [PATCH] dt-bindings: spi: stm32-qspi: add dma properties
-
-This patch adds description of dma properties (optional).
-
-Signed-off-by: Ludovic Barre <ludovic.barre@st.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt b/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
-index adeeb63e84b9..bfc038b9478d 100644
---- a/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
-@@ -19,8 +19,11 @@ Required properties:
- - reg: chip-Select number (QSPI controller may connect 2 flashes)
- - spi-max-frequency: max frequency of spi bus
- 
--Optional property:
-+Optional properties:
- - spi-rx-bus-width: see ./spi-bus.txt for the description
-+- dmas: DMA specifiers for tx and rx dma. See the DMA client binding,
-+Documentation/devicetree/bindings/dma/dma.txt.
-+- dma-names: DMA request names should include "tx" and "rx" if present.
- 
- Example:
- 
--- 
-2.20.1
-
+Lukas
