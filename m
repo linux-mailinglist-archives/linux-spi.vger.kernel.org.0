@@ -2,111 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 377725A6BD
-	for <lists+linux-spi@lfdr.de>; Sat, 29 Jun 2019 00:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E465A9E2
+	for <lists+linux-spi@lfdr.de>; Sat, 29 Jun 2019 11:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726818AbfF1WKa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jun 2019 18:10:30 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:43695 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726537AbfF1WK3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jun 2019 18:10:29 -0400
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 47A3B24000B;
-        Fri, 28 Jun 2019 22:10:10 +0000 (UTC)
-Date:   Sat, 29 Jun 2019 00:10:10 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andreas Werner <andreas.werner@men.de>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        Seth Heasley <seth.heasley@intel.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Michael Shych <michaelsh@mellanox.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 3/5] docs: i2c: convert to ReST and add to driver-api
- bookset
-Message-ID: <20190628221010.GV3692@piout.net>
-References: <cover.1561756511.git.mchehab+samsung@kernel.org>
- <3997b54a2e73887b96ec665573f08ded78b71421.1561756511.git.mchehab+samsung@kernel.org>
- <20190628214138.GU3692@piout.net>
- <20190628185445.71eb824b@coco.lan>
+        id S1726839AbfF2JnU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 29 Jun 2019 05:43:20 -0400
+Received: from server101.serverconfig.center ([195.242.103.101]:37561 "EHLO
+        server101.serverconfig.center" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726818AbfF2JnU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 29 Jun 2019 05:43:20 -0400
+Received: from christian-pc.localdomain (p2E5940A8.dip0.t-ipconnect.de [46.89.64.168])
+        by server101.serverconfig.center (Postfix) with ESMTPSA id 6E1F72382A2F;
+        Sat, 29 Jun 2019 11:43:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-mauderer.de;
+        s=default; t=1561801398;
+        bh=Fllw7ZiKyrkEBs2EreOkeQXcUFAZL36fcIGmxlrm+nM=; l=3607;
+        h=Subject:From:To;
+        b=HhZ70wqXT8isy25IaEd34VRO90urx/QCml45FR7Blj8+VywHNTusBPZJc3WN7a8X4
+         54rWJDAT1g//X6EfchVLkbt0JjIcCcJWKRO74EgxnwMAL2gS9xttIU7N8lqXt4g5ao
+         +K5xKFAkWhv0TT0N8+jc1fVwyWw/6Ef7ISzoAp/s=
+Authentication-Results: server101.serverconfig.center;
+        spf=pass (sender IP is 46.89.64.168) smtp.mailfrom=oss@c-mauderer.de smtp.helo=christian-pc.localdomain
+Received-SPF: pass (server101.serverconfig.center: connection is authenticated)
+Subject: Re: spi-gpio too fast for some devices
+From:   Christian Mauderer <oss@c-mauderer.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org
+References: <32d3f238-c21c-b937-72c9-7a9ba842c01e@c-mauderer.de>
+ <a06e9923-735a-da2c-9946-4740842d5ca5@c-mauderer.de>
+ <20190624132352.GL5316@sirena.org.uk>
+ <7e9d963c-9402-979c-1dbd-51e548a15652@c-mauderer.de>
+Message-ID: <a1cb37c8-dc05-3827-0646-3bf58937a19b@c-mauderer.de>
+Date:   Sat, 29 Jun 2019 11:43:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190628185445.71eb824b@coco.lan>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <7e9d963c-9402-979c-1dbd-51e548a15652@c-mauderer.de>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-PPP-Message-ID: <156180139859.14335.3577005838699042217@server101.serverconfig.center>
+X-PPP-Vhost: c-mauderer.de
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 28/06/2019 18:54:45-0300, Mauro Carvalho Chehab wrote:
-> Em Fri, 28 Jun 2019 23:41:38 +0200
-> Alexandre Belloni <alexandre.belloni@bootlin.com> escreveu:
+On 24/06/2019 20:58, Christian Mauderer wrote:
+> On 24/06/2019 15:23, Mark Brown wrote:
+>> On Sat, Jun 22, 2019 at 07:45:50AM +0200, Christian Mauderer wrote:
+>>> On 10/06/2019 18:56, Christian Mauderer wrote:
+>>
+>>>> I have a problem with the spi-gpio driver: It's too fast for one of my
+>>>> devices. Now I'm searching for a good solution that could be
+>>>> acceptable as a patch for the Linux kernel.
+>>
+>>>> Currently there is the following comment and implementation for the
+>>>> spidelay(...) function in spi-gpio.c:
+>>
+>>>>> /*
+>>>>>  * NOTE:  this clocks "as fast as we can".  It "should" be a function of the
+>>>>>  * requested device clock.  Software overhead means we usually have trouble
+>>>>>  * reaching even one Mbit/sec (except when we can inline bitops), so for now
+>>>>>  * we'll just assume we never need additional per-bit slowdowns.
+>>>>>  */
+>>>>> #define spidelay(nsecs)	do {} while (0)
+>>
+>>>>> #define spidelay(nsecs)	ndelay(nsecs)
+>>
+>>>> which basically works. But with that the maximum rate drops to 1.6MHz.
+>>>> I assume that such a drastic performance decrease isn't acceptable for
+>>>> the kernel?
+>>
+>> Yes, I can't imagine that other users are going to be happy with a
+>> performance reduction like that.
+>>
+>>>> Any directions for how an acceptable implementation could look like?
+>>
+>> Off the top of my head you probably need to build a second copy of the
+>> code with the delays included and then select that copy depending on the
+>> speed that's been requested for the device and the speed of the system
+>> somehow.  The actual bitbanging is in a header so that makes it a bit
+>> easier to build two copies than it might otherwise be.
+>>
 > 
-> > On 28/06/2019 18:23:14-0300, Mauro Carvalho Chehab wrote:
-> > > diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
-> > > index 225a8df1d4e9..1803f3cab39f 100644
-> > > --- a/drivers/rtc/rtc-ds1374.c
-> > > +++ b/drivers/rtc/rtc-ds1374.c
-> > > @@ -14,7 +14,7 @@
-> > >   */
-> > >  /*
-> > >   * It would be more efficient to use i2c msgs/i2c_transfer directly but, as
-> > > - * recommened in .../Documentation/i2c/writing-clients section
-> > > + * recommened in .../Documentation/i2c/writing-clients.rst section
-> > >   * "Sending and receiving", using SMBus level communication is preferred.
-> > >   */
-> > >    
-> > 
-> > Honestly, the whole comment could be removed. The current trend is to
-> > move everything to regmap anyway.
-> > 
-> > However, I'm fine with that change if you want to keep it that way (and
-> > probably scripted).
+> Hello Mark,
 > 
-> While the conversion was manually made, the renames were scripted,
-> and checked with:
+> thanks for the answer and the direction. I'll have a look at the driver
+> and try to create a rough plan which function I can replace without
+> creating too much of copy and paste code and without loosing too much
+> performance. I'm not sure yet where a good location would be to decide
+> which function should be used depending on the speed but I'll try to
+> find one.
 > 
-> 	./scripts/documentation-file-ref-check
+> I'll report back as soon as I have a plan and (maybe) at least a sketch
+> for a patch. Most likely that will need some time because I only do that
+> in my free time.
 > 
-> Otherwise I would very likely fix the typo:
+> Best regards
 > 
-> 	recommened -> recommended
-> 
-> :-)
-> 
-> I can certainly add new patch at this (before or after patch 3/5 - as you
-> prefer) in order to get rid of the comment, but I would avoid doing a
-> somewhat unrelated changes at the same documentation patch.
+> Christian
 > 
 
-I'm okay with that.
+Hello Mark,
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I had a look at my options for slowing down the spi-gpio in some cases:
+
+== Approach 1:
+
+With some preprocessor magic I could create two sets of bitbang
+functions (bitbang_txrx_be_cpha0/1 and bitbang_txrx_be_cpha0/1_slow). I
+can then decide which of the functions to use in
+spi_gpio_txrx_word_mode0 (and similar functions) based on the nsecs
+value. For example if (nsecs > 1000) use bitbang_txrx_be_cpha0_slow()
+function otherwise use bitbang_txrx_be_cpha0().
+
+This approach would add a minimal delay between the bytes but not in the
+bits. It would allow to have fast and slow devices on the same bus. But
+it's a little intransparent from a user perspective because there is
+some special (hard coded) speed where the behaviour changes.
+
+== Approach 2:
+
+Add a kernel config option to allow the user to select whether he wants
+maximum speed or the possibility to slow down the SPI bus. Default would
+be the same as it is now.
+
+That is very simple to implement. It doesn't allow to mix slow and fast
+devices but it is quite clear from a user perspective and can be
+documented via a kernel option. Due to that I would slightly prefer that
+approach.
+
+What do you think: Would one of these be acceptable as a solution?
+
+With kind regards
+
+Christian
