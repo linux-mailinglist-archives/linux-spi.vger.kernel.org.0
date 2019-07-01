@@ -2,106 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 422765C18B
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2019 18:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6982A5C1E5
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2019 19:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728501AbfGAQ7f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Jul 2019 12:59:35 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48854 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727782AbfGAQ7f (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Jul 2019 12:59:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=dH+ZO9vjnzlxJhzCxr64cQF3PbXgmYG/yXjCxO+X4io=; b=RR6D5uWO3rX5NTTvJEJiHHmhJ
-        kFoChX9NR/q9h193CSJHlNvYcQlH25snJG29y/L+64xjWOHt48G6Cm0xO4UpPOm8k5o8NFRYln6WU
-        4Cq7Z8wXjey01rZtgnKcveFf/VNPW7l+JiGsusKELcDSEx47LsoBuzJgKIvk76WiiADdU=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hhzeN-0001ks-21; Mon, 01 Jul 2019 16:59:31 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 8C98B440046; Mon,  1 Jul 2019 17:59:30 +0100 (BST)
-Date:   Mon, 1 Jul 2019 17:59:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christian Mauderer <oss@c-mauderer.de>,
-        linux-spi <linux-spi@vger.kernel.org>
+        id S1728752AbfGARWK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Jul 2019 13:22:10 -0400
+Received: from server101.serverconfig.center ([195.242.103.101]:58713 "EHLO
+        server101.serverconfig.center" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728591AbfGARWJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Jul 2019 13:22:09 -0400
+Received: from christian-pc.localdomain (p2E5940A8.dip0.t-ipconnect.de [46.89.64.168])
+        by server101.serverconfig.center (Postfix) with ESMTPSA id DAB4D2383038;
+        Mon,  1 Jul 2019 19:22:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-mauderer.de;
+        s=default; t=1562001727;
+        bh=J+29UDU/d3cCn9dUcmESXz/Bg4eysfrnXfVo3cuD00A=; l=2282;
+        h=Subject:To:From;
+        b=prsffCcByG5udtPU3XfsimsiCc3MrvXUo24MsHR4iyGeIfd1a30Fs/PNM2SxuHOAq
+         p+X2s2FEZnV74suF6jkjXV28f6eSvw3Ld4i/IToiBKx2Tu++uBtfPeoTV0+KhNeteJ
+         xMp8CzQg/ItgUmEqxhlZbzs+GMWoqO5QWspBz45E=
+Authentication-Results: server101.serverconfig.center;
+        spf=pass (sender IP is 46.89.64.168) smtp.mailfrom=oss@c-mauderer.de smtp.helo=christian-pc.localdomain
+Received-SPF: pass (server101.serverconfig.center: connection is authenticated)
 Subject: Re: spi-gpio too fast for some devices
-Message-ID: <20190701165930.GE2793@sirena.org.uk>
+To:     Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-spi <linux-spi@vger.kernel.org>
 References: <32d3f238-c21c-b937-72c9-7a9ba842c01e@c-mauderer.de>
  <a06e9923-735a-da2c-9946-4740842d5ca5@c-mauderer.de>
  <20190624132352.GL5316@sirena.org.uk>
  <7e9d963c-9402-979c-1dbd-51e548a15652@c-mauderer.de>
  <a1cb37c8-dc05-3827-0646-3bf58937a19b@c-mauderer.de>
  <CAMuHMdX7g0QePv4KustSExjyQOxHyATpShWEVBVyNXLvqon0Dw@mail.gmail.com>
+ <20190701165930.GE2793@sirena.org.uk>
+From:   Christian Mauderer <oss@c-mauderer.de>
+Message-ID: <88b52423-7489-8958-ad87-5139a6213e4e@c-mauderer.de>
+Date:   Mon, 1 Jul 2019 19:22:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Lb0e7rgc7IsuDeGj"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdX7g0QePv4KustSExjyQOxHyATpShWEVBVyNXLvqon0Dw@mail.gmail.com>
-X-Cookie: This sentence no verb.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190701165930.GE2793@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-PPP-Message-ID: <156200172710.116506.15999274982052260553@server101.serverconfig.center>
+X-PPP-Vhost: c-mauderer.de
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 01/07/2019 18:59, Mark Brown wrote:
+> On Mon, Jul 01, 2019 at 05:05:49PM +0200, Geert Uytterhoeven wrote:
+>> On Sat, Jun 29, 2019 at 11:44 AM Christian Mauderer <oss@c-mauderer.de> wrote:
+> 
+>>> == Approach 1:
+> 
+>>> With some preprocessor magic I could create two sets of bitbang
+>>> functions (bitbang_txrx_be_cpha0/1 and bitbang_txrx_be_cpha0/1_slow). I
+>>> can then decide which of the functions to use in
+>>> spi_gpio_txrx_word_mode0 (and similar functions) based on the nsecs
+>>> value. For example if (nsecs > 1000) use bitbang_txrx_be_cpha0_slow()
+>>> function otherwise use bitbang_txrx_be_cpha0().
+> 
+>>> This approach would add a minimal delay between the bytes but not in the
+>>> bits. It would allow to have fast and slow devices on the same bus. But
+>>> it's a little intransparent from a user perspective because there is
+>>> some special (hard coded) speed where the behaviour changes.
+> 
+>>> What do you think: Would one of these be acceptable as a solution?
+> 
+>> A third approach would be to set up the spi_bitbang.txrx_word[]
+>> function pointers at runtime, to point to "fast" or "slow" versions,
+>> depending on the runtime-detected speed of the system you're
+>> running on.
+> 
+> Either of the above two would be OK (I guess Geert's suggestion is one
+> way of using the functions generated by your suggestion).  A compile
+> time option isn't great as it's not usable by distro kernels or anything
+> which will doubtless become an issue, though of course it gets over the
+> immediate problem.  I can see that we might end up wanting to add a
+> property to configure the cutover between delay and no delay variants,
+> that'd make things a bit more transparent to users.
+> 
 
---Lb0e7rgc7IsuDeGj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Accepted. I'll try to implement one of the two variants. Basically both
+need the same approach (adding two sets of functions). Only the decision
+is done at a different location. Geert's suggestion avoids the delays
+between bytes but increases the preparation time. Most likely therefore
+it's the better one for SPI slaves which need the performance so I'll
+try to prefer that one.
 
-On Mon, Jul 01, 2019 at 05:05:49PM +0200, Geert Uytterhoeven wrote:
-> On Sat, Jun 29, 2019 at 11:44 AM Christian Mauderer <oss@c-mauderer.de> wrote:
+Sorry that I'm not that common with the terms: With property you most
+likely mean one changeable at run time via the /sys filesystem right?
 
-> > == Approach 1:
+Best regards
 
-> > With some preprocessor magic I could create two sets of bitbang
-> > functions (bitbang_txrx_be_cpha0/1 and bitbang_txrx_be_cpha0/1_slow). I
-> > can then decide which of the functions to use in
-> > spi_gpio_txrx_word_mode0 (and similar functions) based on the nsecs
-> > value. For example if (nsecs > 1000) use bitbang_txrx_be_cpha0_slow()
-> > function otherwise use bitbang_txrx_be_cpha0().
-
-> > This approach would add a minimal delay between the bytes but not in the
-> > bits. It would allow to have fast and slow devices on the same bus. But
-> > it's a little intransparent from a user perspective because there is
-> > some special (hard coded) speed where the behaviour changes.
-
-> > What do you think: Would one of these be acceptable as a solution?
-
-> A third approach would be to set up the spi_bitbang.txrx_word[]
-> function pointers at runtime, to point to "fast" or "slow" versions,
-> depending on the runtime-detected speed of the system you're
-> running on.
-
-Either of the above two would be OK (I guess Geert's suggestion is one
-way of using the functions generated by your suggestion).  A compile
-time option isn't great as it's not usable by distro kernels or anything
-which will doubtless become an issue, though of course it gets over the
-immediate problem.  I can see that we might end up wanting to add a
-property to configure the cutover between delay and no delay variants,
-that'd make things a bit more transparent to users.
-
---Lb0e7rgc7IsuDeGj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0aO/EACgkQJNaLcl1U
-h9C6bQf+NqyRx1+Otg6IwXCqbEoUqSdAKFqFYUSe40A4mG8gzXg0B0dYn1Mzsi7G
-x5SC9B1Fz++BKTaJ14BvRpaVpXbOIj7nrUuK13zg7QMh8E8E7uc2RIdAqZXKU2BM
-lpFI4V2tJpsnagHD4PynoIC4cHRgzsoGM8dheqMaQDmLkNbvK68jenYleqC8HYBX
-H5mX67lXmaUshqQfPLmPJTX66il30uTmsj1fOGJeMITo35XKi+RUUv3ESNEqMEGp
-kThsgoLW023G8VAEfNdgSIGWG6h9zmVX1zfCnwdCbDKWgT9gqP74T2Wxp61cGBYs
-go6Fxs4xAswSOMygsvYB1RRZXyudNw==
-=LTGW
------END PGP SIGNATURE-----
-
---Lb0e7rgc7IsuDeGj--
+Christian
