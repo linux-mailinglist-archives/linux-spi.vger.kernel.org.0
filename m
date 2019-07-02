@@ -2,93 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECFF5D5A8
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jul 2019 19:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2615D5C8
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jul 2019 19:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbfGBRwP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jul 2019 13:52:15 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38932 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbfGBRwP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jul 2019 13:52:15 -0400
-Received: by mail-pg1-f196.google.com with SMTP id 196so8044674pgc.6
-        for <linux-spi@vger.kernel.org>; Tue, 02 Jul 2019 10:52:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5ixpJfhwdwCZLCTaghHH9e+e+L7UAinPYTOetEuPG/A=;
-        b=t/vVRSaFiBTzjienW48J86EsCpUaCkc/PDBmaU7Bb7qxoI1gKuuRJF4JUKsdV9lOtW
-         /Q2uAUK8Kra8RDpuWY0RyoYWapAPZyKvJwTO1crcKUGW9cobavcLlMZMnZJNVxGFLFZn
-         AOX/umovqlqlYdCPQyyyu2gIryRRGOyo1qjDtGaZOFmC+DcDVh34k/yJc002u6VnXEx9
-         Ppe0Xj4DKX9EOsvrrwVtRK9YI+HLXFCLdL6iYbQfYuiULHqOg8xRQeORL3H9U4+xgKqd
-         ADk93mCttIQIIWjvpGFAOe35FsTNiSSU9gIL/toudX0FcUid1S3H1nKVlyf5GXwQ4B9Q
-         HkGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5ixpJfhwdwCZLCTaghHH9e+e+L7UAinPYTOetEuPG/A=;
-        b=NKN2y6wkzbeeaYnM7oQAfwN314m0nf51/aFESwq44aZUZnQIxL00Hn1RqhsWmHrNdj
-         yIsGSuBLvtwtrcjzpSxUmEPf/BqJShgn2sZUCRMUxMjrCr8sBDT9gYeYQJXFHlB474yY
-         289WI+aiu6LYWrZ0qMOVTL02S8J8elwiHXjoOv2ouawevr+TxGaSo/K1ns7aUPFSO+jF
-         IuuITr1McqLVrzUjzOO30Ygj6pP11/gMJZYtA+HZ4Unn8ovp4SbVfdWfOFqtJhJCcf8W
-         TWq5SjFKvzfEEDOgtALSK/7H518Xsjo2ytkHfD44H6xpjtArHb+DnVZL5CGqbV2YEFzS
-         jn4w==
-X-Gm-Message-State: APjAAAWsUBj+bWgTr49qzYc25KxZ6WGbGngUXsXDKKMjcdVHgiYKDaJZ
-        +DaYNxy7vhPyTFgsk9qdb4+KhCbtn5AbrZRuLJQ=
-X-Google-Smtp-Source: APXvYqygpARTK8BhLrsqM9pgZq3+2m1WQBcQHvsUYYR8EG8jFDMj4s2LFaGKChnB61sfDX8JwvvHFS+F83Kgngs1urg=
-X-Received: by 2002:a63:6eca:: with SMTP id j193mr13451678pgc.74.1562089934510;
- Tue, 02 Jul 2019 10:52:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <201906042339.gt5sS7Hb%lkp@intel.com> <CAHp75VcqTvoSf3-vbH555iY9NNu+fd5bzL0TFxfZEVU3M=Pg2Q@mail.gmail.com>
-In-Reply-To: <CAHp75VcqTvoSf3-vbH555iY9NNu+fd5bzL0TFxfZEVU3M=Pg2Q@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 2 Jul 2019 20:52:03 +0300
-Message-ID: <CAHp75VdVKCwwijbQNTqxLaR8k=D2SHRZ=D6pJDaTSVQL=j_Oow@mail.gmail.com>
-Subject: Re: [spi:for-5.3 41/41] drivers/spi/spi-synquacer.c:153:3: error:
- implicit declaration of function 'readsb'; did you mean 'readb'?
-To:     kbuild test robot <lkp@intel.com>
-Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>, kbuild-all@01.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
+        id S1726457AbfGBR6v (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jul 2019 13:58:51 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54338 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726329AbfGBR6v (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jul 2019 13:58:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=zDkkFruDgEc76Kn9IcJqixFSeRcKCWxigGe9KohcN2U=; b=GwqV23bLSCe9nl2kovi6Beruh
+        XWNmWAWY74tmwy1n+D07LY3qbRcSD9TCnBBTL0Xb+7yXVAgEm+vm86Nw2ErUFbtxpmGrH2WsxOUGd
+        Q6dy4UOM0uBRP/5Sw+QbJmg5SL/iws+4TqZrgIxeADTzs4Fosd8suQ9/XqQcDTU8wNLzo=;
+Received: from [2001:470:1f1d:6b5:7e7a:91ff:fede:4a45] (helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hiN3C-0002ik-F9; Tue, 02 Jul 2019 17:58:42 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id 9D013440046; Tue,  2 Jul 2019 18:58:41 +0100 (BST)
+Date:   Tue, 2 Jul 2019 18:58:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     kbuild test robot <lkp@intel.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        kbuild-all@01.org, linux-spi <linux-spi@vger.kernel.org>,
         Jassi Brar <jaswinder.singh@linaro.org>,
         Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [spi:for-5.3 41/41] drivers/spi/spi-synquacer.c:153:3: error:
+ implicit declaration of function 'readsb'; did you mean 'readb'?
+Message-ID: <20190702175841.GR2793@sirena.org.uk>
+References: <201906042339.gt5sS7Hb%lkp@intel.com>
+ <CAHp75VcqTvoSf3-vbH555iY9NNu+fd5bzL0TFxfZEVU3M=Pg2Q@mail.gmail.com>
+ <CAHp75VdVKCwwijbQNTqxLaR8k=D2SHRZ=D6pJDaTSVQL=j_Oow@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YkilVOb9qhI0mB+X"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdVKCwwijbQNTqxLaR8k=D2SHRZ=D6pJDaTSVQL=j_Oow@mail.gmail.com>
+X-Cookie: This sentence no verb.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jul 2, 2019 at 8:50 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jun 4, 2019 at 6:59 PM kbuild test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
-> > head:   b0823ee35cf9bc6b9a5403c12f12bd3e0b490045
-> > commit: b0823ee35cf9bc6b9a5403c12f12bd3e0b490045 [41/41] spi: Add spi driver for Socionext SynQuacer platform
-> > config: alpha-allyesconfig (attached as .config)
-> > compiler: alpha-linux-gcc (GCC) 7.4.0
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         git checkout b0823ee35cf9bc6b9a5403c12f12bd3e0b490045
-> >         # save the attached .config to linux build tree
-> >         GCC_VERSION=7.4.0 make.cross ARCH=alpha
-> >
->
-> It seems false positive.
-> kbuild bot has to be fixed,
 
+--YkilVOb9qhI0mB+X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Ah, didn't noticed ALPHA!
-Perhaps,
+On Tue, Jul 02, 2019 at 08:52:03PM +0300, Andy Shevchenko wrote:
+> On Tue, Jul 2, 2019 at 8:50 PM Andy Shevchenko
+> > On Tue, Jun 4, 2019 at 6:59 PM kbuild test robot <lkp@intel.com> wrote:
 
-depends on !ALPHA (or how is it called?)
+> > It seems false positive.
+> > kbuild bot has to be fixed,
 
-should fix this.
+> Ah, didn't noticed ALPHA!
+> Perhaps,
 
--- 
-With Best Regards,
-Andy Shevchenko
+> depends on !ALPHA (or how is it called?)
+
+> should fix this.
+
+Is that the only architecture that's missing these functions?  If
+not it's probably better to have something for the feature (or
+have Alpha stub it out like we ended up doing with the DMA stuff
+for s390).
+
+--YkilVOb9qhI0mB+X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0bm1AACgkQJNaLcl1U
+h9AAlwf+PN8S5rp6gTtD75wP6P59+SuK7TFKfzj751DeitLePIiXUws1TomnHq2H
+8NB1lFKbB2dxKtUjn+Xno54xZR18Im/Q18zilfkZt95cNeLQR2/tHgGxE31sF1EL
+oOGOjNId7GNbrXZd1UIeTnDlwyDEwLRDlnQFUi/8pdDrF04XL0KTYvUZhaHh5gkp
+o46IMhpKJEAj0Mxi/igRwxcwLtJS4Le3JgtXl3DrDZLPwt5wkahO8vBpToz20gEz
+hjJAX7x7TbXGK/Fp7hulAUf1k9aJ6jjqg+NpCB45Nd5Xvwbd+wxL1i8hfkGtzW4q
+Dsh+8v1ss/XHGi+QOwS7jYVxOYmmgQ==
+=K7qf
+-----END PGP SIGNATURE-----
+
+--YkilVOb9qhI0mB+X--
