@@ -2,129 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 109275D6FD
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jul 2019 21:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758805D700
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jul 2019 21:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbfGBTkf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jul 2019 15:40:35 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42215 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726635AbfGBTkf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jul 2019 15:40:35 -0400
-Received: by mail-lf1-f67.google.com with SMTP id x144so12261795lfa.9
-        for <linux-spi@vger.kernel.org>; Tue, 02 Jul 2019 12:40:34 -0700 (PDT)
+        id S1726291AbfGBTlS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jul 2019 15:41:18 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:45515 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726635AbfGBTlS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jul 2019 15:41:18 -0400
+Received: by mail-lj1-f195.google.com with SMTP id m23so18144081lje.12
+        for <linux-spi@vger.kernel.org>; Tue, 02 Jul 2019 12:41:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=82eMZxwOWHVRAy4QkqHiIVsrvrrm4gUfEQ6ASMxsICw=;
-        b=MCr5IZ0rUq1B5TKNFO9MkSvECBmHEYoIJNyi3podRvKIzh3AU3AWTZtq05JaS0bNFK
-         N/kS2gwX4xoaEf+2qqGoYrg2UgoNEZwcCeMod91Kq6yUzcbbDwp4ekgnluSEq2x4yVJ+
-         265Sb0TbSx+dAqMW7ux628lcOWb3XmbY2+RKHmJf79jZ8lhG9DHrBrrC58h3YZbnMNiC
-         9RmxUSzRIfyf3aYeRY65PMWMURmynG803JuEAFedrc4sKU7lXz/WuMHLnUZ3X+7rvJQC
-         Jh+P27YVl9XOuyNVJxkS39QA75Jdnhdpr9hlgU6x2eC6SFsEV9XdPeB88ybZttqA0/EX
-         n5Dg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZYo3fqkgckZ01WAJt3EqS51tHEujjvkKZjkmoWDUa9A=;
+        b=Xpi3vAPbwBAlVsv0euo5n4oQ6uuO0hk1xXNMSeCj4fUnq4AY25PEkmkkI++aTo2Jw6
+         VJwf1SKbDpivAthOmK8wEUGxRyBzWbKmFvdQL/QKpH03GQa9FORJz3/kIm2l6tdlaxfh
+         ZVStIPp9g7LN3Aj+SAe5pG+D9WKFIA/iFRIzuR/XbnJJ6rby72ncCB/IxAtewnquIwVp
+         /lpu5mCEpcVKdkFRRaOpI7ciD3GB+R7FpPV5XY/LLm1zFLw8BcgTlwMQhs6ZVP6mzKMx
+         jrU8gqcGwPkF/D2xuzoRmYeWk1aR2Szmd6ehrRYJGi7AAsXu87HzRwGNLW3CP4QasQ6i
+         vDuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=82eMZxwOWHVRAy4QkqHiIVsrvrrm4gUfEQ6ASMxsICw=;
-        b=g44aU2wFiZJkACYKPN07pr0j1HohE0hlq7+k7q3do65WpuuN6Ro6x9yq0SnkQOBsSa
-         SbYmzcSd5u72kIvvi6y1FLPGKoUJQoY6gwt8rHvvsTLUo/yWdHUgppwXpXwrgUlZafia
-         rc39TjvGl0t1i6ivwGZOFXHJKSGqLMMfexMWEAT+OqQt/5t/nXpWIQ+LaccASUvW4E+k
-         LDnpUyOEeHOoUaDMPleqBJjSu+t8EU2WB2gm+CMOwD4SZnndyE5tlBhWnGrYjezTLuVI
-         U2QRXLCnFshYCXDAA2ym7Dus7ErB+6f6Mi4nmWITWgbG8kNB0he9utpqZtA3Ten9Znnn
-         f4/A==
-X-Gm-Message-State: APjAAAVEqk1ah1S6ERb2yrABP/aHtJLAR2EDMewcSqLfkFkKNW0w66Uo
-        Cz5xReC+7vYzrYvNOd95euUaRw==
-X-Google-Smtp-Source: APXvYqw+ZyNmDZ9e+HcPCT2h1vg2MdxUB7HsMfK8q8L1u+flQ5dL5cTL8K58vcRLlmL4jK6XiDyGLQ==
-X-Received: by 2002:ac2:42c7:: with SMTP id n7mr9960246lfl.65.1562096433408;
-        Tue, 02 Jul 2019 12:40:33 -0700 (PDT)
-Received: from localhost.bredbandsbolaget (c-22cd225c.014-348-6c756e10.bbcust.telenor.se. [92.34.205.34])
-        by smtp.gmail.com with ESMTPSA id z83sm3970798ljb.73.2019.07.02.12.40.31
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 02 Jul 2019 12:40:32 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>
-Subject: [PATCH] gpio/spi: Fix spi-gpio regression on active high CS
-Date:   Tue,  2 Jul 2019 21:39:59 +0200
-Message-Id: <20190702193959.11150-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZYo3fqkgckZ01WAJt3EqS51tHEujjvkKZjkmoWDUa9A=;
+        b=ZT0KG5JL6MMYNfKSJQv9zgeFBqduC2Wz5UF6628RCvXSXV9ialhisowizBUbdSIBYZ
+         88RvVbeU4OTSh6T0VqXlYmMR55BipQYnwoqr7Qi9r6ZK6gwWETA0XVihiMctss1sRLkN
+         zDloRhZBHriswPGuP8bpboXC5cYkdw6ZZ5e7r09ZU8D2wDWdLM1eMBlqDu+eOEwj4R+3
+         9blfDtZ5+a/LgBaBA9inbjqOhNheibi7gXqD5bWXq/lOk5TyofkPn7ZKDUglZKoJoqww
+         jg+DGeysKMnNf+I41Iw8YI6wy8+RA4Alj7I5iSM0RfJ3GaaselbH2ua+rW1kuf7hjHt9
+         H3Wg==
+X-Gm-Message-State: APjAAAWTcXYayCO+GTpawj4tDMzoRfzM6wAPNDQI+mSkm+uaV4yFO7f3
+        3J+vqvhf0ZwWAVkRtcw648z8+MRJuTyUZf0cg0nEig==
+X-Google-Smtp-Source: APXvYqzlfSQ2odWRbFfHpnUHsDrMaxebp6ZbRHkkCp3wBOqoPBe3KPJAJ7knDKlNyx6IHJexgvlVZtuUd8j5oYh2UUo=
+X-Received: by 2002:a2e:2c14:: with SMTP id s20mr18257301ljs.54.1562096476358;
+ Tue, 02 Jul 2019 12:41:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190701172517.31641-1-linus.walleij@linaro.org>
+ <20190702113914.GH2793@sirena.org.uk> <CACRpkdbng1M=5BnzFuiubRaqM1Bu4eLxqKvb3fCQuqyKsVcBjg@mail.gmail.com>
+In-Reply-To: <CACRpkdbng1M=5BnzFuiubRaqM1Bu4eLxqKvb3fCQuqyKsVcBjg@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 2 Jul 2019 21:41:04 +0200
+Message-ID: <CACRpkdZ=FTUc2xTx9JJtU1c8x0s8N3c_=wbUzJpCRq=_xV9HKw@mail.gmail.com>
+Subject: Re: [PATCH] Revert "spi: gpio: Don't request CS GPIO in DT use-case"
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-I ran into an intriguing bug caused by
-commit ""spi: gpio: Don't request CS GPIO in DT use-case"
-affecting all SPI GPIO devices with an active high
-chip select line.
+On Tue, Jul 2, 2019 at 3:08 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-The commit switches the CS gpio handling over to the GPIO
-core, which will parse and handle "cs-gpios" from the OF
-node without even calling down to the driver to get the
-job done.
+> I am trying to rootcause it, I suspect I was just the first to try this
+> on real hardware actually.
 
-However the GPIO core handles the standard bindings in
-Documentation/devicetree/bindings/spi/spi-controller.yaml
-that specifies that active high CS needs to be specified
-using "spi-cs-high" in the DT node.
+Ha! I found it. Only affects active high CS GPIO users.
+A nasty one. Sent a patch.
 
-The code in drivers/spi/spi-gpio.c never respected this
-and never tried to inspect subnodes to see if they contained
-"spi-cs-high" like the gpiolib OF quirks does. Instead the
-only way to get an active high CS was to tag it in the
-device tree using the flags cell such as
-cs-gpios = <&gpio 4 GPIO_ACTIVE_HIGH>;
-
-This alters the quirks to not inspect the subnodes of SPI
-masters on "spi-gpio" for the standard attribute "spi-cs-high",
-making old device trees work as expected.
-
-This semantic is a bit ambigous, but just allowing the
-flags on the GPIO descriptor to modify polarity is what
-the kernel at large mostly uses so let's encourage that.
-
-Fixes: 249e2632dcd0 ("spi: gpio: Don't request CS GPIO in DT use-case")
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc: linux-gpio@vger.kernel.org
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-Mark: I will apply this to the GPIO tree, so I think it is
-safe for you to drop my revert of Andrey's patch once this
-hits mainline. I will try to expediate it, I feel a bit
-responsible.
----
- drivers/gpio/gpiolib-of.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index aec7bd86ae7e..9c9b965d7d6d 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -118,8 +118,15 @@ static void of_gpio_flags_quirks(struct device_node *np,
- 	 * Legacy handling of SPI active high chip select. If we have a
- 	 * property named "cs-gpios" we need to inspect the child node
- 	 * to determine if the flags should have inverted semantics.
-+	 *
-+	 * This does not apply to an SPI device named "spi-gpio", because
-+	 * these have traditionally obtained their own GPIOs by parsing
-+	 * the device tree directly and did not respect any "spi-cs-high"
-+	 * property on the SPI bus children.
- 	 */
--	if (IS_ENABLED(CONFIG_SPI_MASTER) && !strcmp(propname, "cs-gpios") &&
-+	if (IS_ENABLED(CONFIG_SPI_MASTER) &&
-+	    !strcmp(propname, "cs-gpios") &&
-+	    !of_device_is_compatible(np, "spi-gpio") &&
- 	    of_property_read_bool(np, "cs-gpios")) {
- 		struct device_node *child;
- 		u32 cs;
--- 
-2.21.0
-
+Yours,
+Linus Walleij
