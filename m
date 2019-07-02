@@ -2,86 +2,206 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5135A5D0F5
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jul 2019 15:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81285D5A5
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jul 2019 19:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbfGBNsr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jul 2019 09:48:47 -0400
-Received: from server101.serverconfig.center ([195.242.103.101]:48883 "EHLO
-        server101.serverconfig.center" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726375AbfGBNsr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jul 2019 09:48:47 -0400
-Received: from [192.168.96.177] (unknown [82.100.198.138])
-        by server101.serverconfig.center (Postfix) with ESMTPSA id 188E6238098F;
-        Tue,  2 Jul 2019 15:48:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-mauderer.de;
-        s=default; t=1562075325;
-        bh=g3P83tARUOybsH39N/CDp9dHtCGe/t7Nn69vLI1qdgk=; l=1250;
-        h=Subject:To:From;
-        b=f9h4lWHwTpaRFCtkgVrcooUrBlX8rsTDqjVICm0dVAoAR1TfK3Facaq1dP9ifD2qE
-         GeSL/imbn/3vtGxoO7QOALznajfMb263WYN2obW0Q1mVkJIYDq7DYWXsCqC1i6Hx6P
-         mFL8/fwBrU9Qbh5EMfge6idqImhmzBn9JD4SO/Uk=
-Authentication-Results: server101.serverconfig.center;
-        spf=pass (sender IP is 82.100.198.138) smtp.mailfrom=oss@c-mauderer.de smtp.helo=[192.168.96.177]
-Received-SPF: pass (server101.serverconfig.center: connection is authenticated)
-Subject: Re: spi-gpio too fast for some devices
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-References: <32d3f238-c21c-b937-72c9-7a9ba842c01e@c-mauderer.de>
- <a06e9923-735a-da2c-9946-4740842d5ca5@c-mauderer.de>
- <20190624132352.GL5316@sirena.org.uk>
- <7e9d963c-9402-979c-1dbd-51e548a15652@c-mauderer.de>
- <a1cb37c8-dc05-3827-0646-3bf58937a19b@c-mauderer.de>
- <CAMuHMdX7g0QePv4KustSExjyQOxHyATpShWEVBVyNXLvqon0Dw@mail.gmail.com>
- <20190701165930.GE2793@sirena.org.uk>
- <88b52423-7489-8958-ad87-5139a6213e4e@c-mauderer.de>
- <20190701172635.GF2793@sirena.org.uk>
- <46a067d5-5c87-545b-d034-1cfbc7c674dd@c-mauderer.de>
- <20190702130008.GM2793@sirena.org.uk>
-From:   Christian Mauderer <oss@c-mauderer.de>
-Message-ID: <56b5135b-2897-6bee-8583-827716f322a5@c-mauderer.de>
-Date:   Tue, 2 Jul 2019 15:48:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726686AbfGBRvJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jul 2019 13:51:09 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33153 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbfGBRvI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jul 2019 13:51:08 -0400
+Received: by mail-pg1-f195.google.com with SMTP id m4so8052242pgk.0
+        for <linux-spi@vger.kernel.org>; Tue, 02 Jul 2019 10:51:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6c1bABhNAfFqqcqeosnnC+OxaYU9EX7lfVatAKGkYfk=;
+        b=SnKf+xx5/8zxMVJ01OSR5jKZ+4C7bL0AMI/7TDGUbVw9rqn0HiJ2FsOMS5iJgNO51j
+         fjb9ULg73n5LC8UYFyGquLRaxk1rTFW+EBeLGgrlqW81By1RtCV+oaoAZZVeCo8k1k0/
+         5YiO6V12vlnRz8o0KWkcdkH6YnxkWApi5kW6oytHtvUxxDqtiFO57JCxfmQqaTtw6Tvc
+         lL38xqOxgmwZLdq5Fj/t5jeme5PkA0/al6w6I1Q/OdhX+4LvaUJaVXBCcRw3qEskLTxj
+         jILpJ27gUv7S7XRPGKHVibg3JZDPfBSn09p4rhGLTq2Rlf20k6IhVCpDJ4i+IZHnXI7V
+         WlXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6c1bABhNAfFqqcqeosnnC+OxaYU9EX7lfVatAKGkYfk=;
+        b=RgyVN3rRrRktBz0AG5EOYhOmPZw2SswNF65IV/kqaJ+kjMeEwD53xHYs0z4dQIKyD3
+         NLXyjKweaBXRhYj5Wq8eoW9ukCHRPoBK5wZCV5/ruGlLEpNPAaB+bKjHjfMKmg3jea1k
+         svEQ6tl+MYPP7jCEAZ40xsUvolB0sr2XzpU43s/NxpESpTIC5qIwW6NILy4RNXCMjBfl
+         PW6OOqkA5sBRJVOOg6CsTUmoZ+K2rjzG715OFOo07DQw2f4yHgE3DMoMF3vfrNDfVv55
+         JqqZpJvuSqQudCrVB9CqaaW7yaGxxk49HsGxwtqEXJBo4aOlEVPMN/3rFKS17gojPcZs
+         puYg==
+X-Gm-Message-State: APjAAAUsAH+1YUHmSxYHFKFMm+iFLBvd1qnbOgmFBBktQICUFpmSD1JE
+        iFQBBicRPo9BigIJjNxMcbT2xeIHkPrmEi5MA/8=
+X-Google-Smtp-Source: APXvYqy0jtI25bJsHAA7TuvKeZTn6Mk0Dt2GzIYMG3pInZ8RoVpSz6GjzlG6SfN4FGzwXDON6j/dRMxpPICCjURt2I4=
+X-Received: by 2002:a63:6eca:: with SMTP id j193mr13446820pgc.74.1562089868140;
+ Tue, 02 Jul 2019 10:51:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190702130008.GM2793@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-PPP-Message-ID: <156207532527.77586.17005822618139327017@server101.serverconfig.center>
-X-PPP-Vhost: c-mauderer.de
+References: <201906042339.gt5sS7Hb%lkp@intel.com>
+In-Reply-To: <201906042339.gt5sS7Hb%lkp@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 2 Jul 2019 20:50:56 +0300
+Message-ID: <CAHp75VcqTvoSf3-vbH555iY9NNu+fd5bzL0TFxfZEVU3M=Pg2Q@mail.gmail.com>
+Subject: Re: [spi:for-5.3 41/41] drivers/spi/spi-synquacer.c:153:3: error:
+ implicit declaration of function 'readsb'; did you mean 'readb'?
+To:     kbuild test robot <lkp@intel.com>
+Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>, kbuild-all@01.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 02/07/2019 15:00, Mark Brown wrote:
-> On Mon, Jul 01, 2019 at 08:33:27PM +0200, Christian Mauderer wrote:
->> On 01/07/2019 19:26, Mark Brown wrote:
-> 
->>> I was actually thinking of a DT property but yes that too, probably
->>> would be useful for people trying to figure out the right number.
-> 
->> My experience with the device tree from last time (a LED driver) was
->> that implementation specific properties are not that popular. A property
-> 
-> No, they're absolutely fine when they have a use case.
-> 
->> that tells one special driver from which speed on it should just ignore
->> the speed and try it's best to do max speed seems quite implementation
->> specific. Maybe except if I try to introduce a max-speed property to the
->> SPI slaves that can be used instead of the speed.
-> 
-> You can already set the maximum speed - this is about tuning a
-> very system specific point to switch implementations.
-> 
+On Tue, Jun 4, 2019 at 6:59 PM kbuild test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
+> head:   b0823ee35cf9bc6b9a5403c12f12bd3e0b490045
+> commit: b0823ee35cf9bc6b9a5403c12f12bd3e0b490045 [41/41] spi: Add spi driver for Socionext SynQuacer platform
+> config: alpha-allyesconfig (attached as .config)
+> compiler: alpha-linux-gcc (GCC) 7.4.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git checkout b0823ee35cf9bc6b9a5403c12f12bd3e0b490045
+>         # save the attached .config to linux build tree
+>         GCC_VERSION=7.4.0 make.cross ARCH=alpha
+>
 
-Sorry, bad choice of words. I meant that I could try to introduce a
-value for the maximum speed setting to just use the best that is
-possible. Something like
+It seems false positive.
+kbuild bot has to be fixed,
 
-    spi-max-frequency = "AS_FAST_AS_POSSIBLE"
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    drivers/spi/spi-synquacer.c: In function 'read_fifo':
+> >> drivers/spi/spi-synquacer.c:153:3: error: implicit declaration of function 'readsb'; did you mean 'readb'? [-Werror=implicit-function-declaration]
+>       readsb(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
+>       ^~~~~~
+>       readb
+> >> drivers/spi/spi-synquacer.c:160:3: error: implicit declaration of function 'readsw'; did you mean 'readw'? [-Werror=implicit-function-declaration]
+>       readsw(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
+>       ^~~~~~
+>       readw
+> >> drivers/spi/spi-synquacer.c:169:3: error: implicit declaration of function 'readsl'; did you mean 'readl'? [-Werror=implicit-function-declaration]
+>       readsl(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
+>       ^~~~~~
+>       readl
+>    drivers/spi/spi-synquacer.c: In function 'write_fifo':
+> >> drivers/spi/spi-synquacer.c:194:3: error: implicit declaration of function 'writesb'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
+>       writesb(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
+>       ^~~~~~~
+>       writeb
+> >> drivers/spi/spi-synquacer.c:201:3: error: implicit declaration of function 'writesw'; did you mean 'writew'? [-Werror=implicit-function-declaration]
+>       writesw(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
+>       ^~~~~~~
+>       writew
+> >> drivers/spi/spi-synquacer.c:210:3: error: implicit declaration of function 'writesl'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+>       writesl(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
+>       ^~~~~~~
+>       writel
+>    cc1: some warnings being treated as errors
+>
+> vim +153 drivers/spi/spi-synquacer.c
+>
+>    140
+>    141  static int read_fifo(struct synquacer_spi *sspi)
+>    142  {
+>    143          u32 len = readl(sspi->regs + SYNQUACER_HSSPI_REG_DMSTATUS);
+>    144
+>    145          len = (len >> SYNQUACER_HSSPI_DMSTATUS_RX_DATA_SHIFT) &
+>    146                 SYNQUACER_HSSPI_DMSTATUS_RX_DATA_MASK;
+>    147          len = min(len, sspi->rx_words);
+>    148
+>    149          switch (sspi->bpw) {
+>    150          case 8: {
+>    151                  u8 *buf = sspi->rx_buf;
+>    152
+>  > 153                  readsb(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
+>    154                  sspi->rx_buf = buf + len;
+>    155                  break;
+>    156          }
+>    157          case 16: {
+>    158                  u16 *buf = sspi->rx_buf;
+>    159
+>  > 160                  readsw(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
+>    161                  sspi->rx_buf = buf + len;
+>    162                  break;
+>    163          }
+>    164          case 24:
+>    165                  /* fallthrough, should use 32-bits access */
+>    166          case 32: {
+>    167                  u32 *buf = sspi->rx_buf;
+>    168
+>  > 169                  readsl(sspi->regs + SYNQUACER_HSSPI_REG_RX_FIFO, buf, len);
+>    170                  sspi->rx_buf = buf + len;
+>    171                  break;
+>    172          }
+>    173          default:
+>    174                  return -EINVAL;
+>    175          }
+>    176
+>    177          sspi->rx_words -= len;
+>    178          return 0;
+>    179  }
+>    180
+>    181  static int write_fifo(struct synquacer_spi *sspi)
+>    182  {
+>    183          u32 len = readl(sspi->regs + SYNQUACER_HSSPI_REG_DMSTATUS);
+>    184
+>    185          len = (len >> SYNQUACER_HSSPI_DMSTATUS_TX_DATA_SHIFT) &
+>    186                 SYNQUACER_HSSPI_DMSTATUS_TX_DATA_MASK;
+>    187          len = min(SYNQUACER_HSSPI_FIFO_DEPTH - len,
+>    188                      sspi->tx_words);
+>    189
+>    190          switch (sspi->bpw) {
+>    191          case 8: {
+>    192                  const u8 *buf = sspi->tx_buf;
+>    193
+>  > 194                  writesb(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
+>    195                  sspi->tx_buf = buf + len;
+>    196                  break;
+>    197          }
+>    198          case 16: {
+>    199                  const u16 *buf = sspi->tx_buf;
+>    200
+>  > 201                  writesw(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
+>    202                  sspi->tx_buf = buf + len;
+>    203                  break;
+>    204          }
+>    205          case 24:
+>    206                  /* fallthrough, should use 32-bits access */
+>    207          case 32: {
+>    208                  const u32 *buf = sspi->tx_buf;
+>    209
+>  > 210                  writesl(sspi->regs + SYNQUACER_HSSPI_REG_TX_FIFO, buf, len);
+>    211                  sspi->tx_buf = buf + len;
+>    212                  break;
+>    213          }
+>    214          default:
+>    215                  return -EINVAL;
+>    216          }
+>    217
+>    218          sspi->tx_words -= len;
+>    219          return 0;
+>    220  }
+>    221
+>
+> ---
+> 0-DAY kernel test infrastructure                Open Source Technology Center
+> https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
 
-But I think I'll just start with the implementation and discuss that as
-soon as I have a working prototype.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
