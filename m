@@ -2,86 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D776A61F5D
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2019 15:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4097620D8
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2019 16:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727663AbfGHNMu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Jul 2019 09:12:50 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52255 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727601AbfGHNMu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Jul 2019 09:12:50 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hkTRn-0001zX-E0; Mon, 08 Jul 2019 15:12:47 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hkTRk-0003nn-Uo; Mon, 08 Jul 2019 15:12:44 +0200
-Date:   Mon, 8 Jul 2019 15:12:44 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
-        linux-spi@vger.kernel.org
-Subject: glitch in spi-imx rxready irq assertion?
-Message-ID: <20190708131244.q3cbjrtneputkkds@pengutronix.de>
+        id S1730224AbfGHOtZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Jul 2019 10:49:25 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:31060 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729391AbfGHOtZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Jul 2019 10:49:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1562597363;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=/NxcwVSeE0BXGa4ssjeW1ZZTh6Qlk8w8DETi9t1acGA=;
+        b=bcTk0ccJtsL8IrNzQ2J12abjNHnwvEIf8tg6eUm1oJC4Fo1YqVL2w1P9SywKJVMKJj
+        RZfHns8bba/QnMvyQwsqL7615IGwAcRWu+e1si1zyaj5nxuCTE+tI+MMpdw5WPRQPc+C
+        B8VgyAi7G0/hY4uOYhx+4aC8WEae15EYPiH7JPMPp4lwApGhvwoRQIHud9cyZTdtS8JE
+        MMv3akML2gjcyNbwuoEh+2e7LQCg1AkSiZQmHgUsNfp1rDjwyh9Gfh8ms0v0vKU6fqGB
+        ZmgwYiw+OCs0drkRr6xqYpNaabJKbgP9R+TQit+VZ3sPT+duhVE6mhdQlVTkLzTwcz+D
+        Z18Q==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2AyOEF/R66y"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
+        with ESMTPSA id V09459v68Ek6X7D
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Mon, 8 Jul 2019 16:46:06 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     letux-kernel@openphoenux.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH 0/2] DTS: ARM: some minor updates and fixes for GTA04
+Date:   Mon,  8 Jul 2019 16:46:03 +0200
+Message-Id: <cover.1562597164.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+We define define chosen/stdout-path chosen to remove the
+console= entry in the kernel command line.
 
-I currently try to pin down a problem reported by a customer. They do
-repeated read/write operations to an MRAM connected via SPI to an i.MX6
-running Linux 4.14 with a few spi-Patches backported (
-e697271c4e29 ("spi: imx: add a device specific prepare_message callback")
-00b80ac93553 ("spi: imx: mx51-ecspi: Move some initialisation to prepare_message hook.")
-). We only use PIO because of some problems we saw disappearing when DMA
-is disabled.
+And we fix the SPI definition to make the LCD panel work
+again.
 
-Sometimes the machine logs an I/O error and after that hangs, sometimes
-the whole machine is not responsive any more (not entirely sure this is
-related).
+H. Nikolaus Schaller (2):
+  DTS: ARM: gta04: define chosen/stdout-path
+  DTS: ARM: gta04: introduce legacy spi-cs-high to make display work
+    again
 
-Applying some tracing I see:
-
-After a big transfer (4096 bytes) that completed successfully another 4
-bytes are written to the hardware. Then the irq routine[1] is called,
-->rx_available returns false, ->count is zero and ->txfifo is still
-non-zero. So the irq triggered because the TX-fifo was empty but there
-wasn't yet data available to receive and so the RR irq got enabled. The
-RR-irq doesn't trigger during the next two seconds however.
-
-Does this ring a bell for you? Is there maybe a glitch that the RR-irq
-doesn't trigger in such a case?
-
-The obvious workaround would be to enable RR (or RDR) before starting to
-write data to the FIFO.
-The problem isn't easy to reproduce and I'm unsure if I can resolve the
-problem as fixed when it doesn't reappear after that change. So some
-input from your side that confirms my suspicion would be great.
-
-I'd also make sure that no FIFO overflow happened (using the
-RO interrupt) but I don't expect any relevant insights here.
-
-Best regards
-Uwe
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/spi/spi-imx.c?h=v4.14#n951
+ Documentation/devicetree/bindings/spi/spi-bus.txt | 6 ++++++
+ arch/arm/boot/dts/omap3-gta04.dtsi                | 5 +++++
+ 2 files changed, 11 insertions(+)
 
 -- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+2.19.1
+
