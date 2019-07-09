@@ -2,52 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C6363A6F
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2019 20:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4EB63BDF
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2019 21:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbfGISFL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Jul 2019 14:05:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36180 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727381AbfGISFK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 9 Jul 2019 14:05:10 -0400
-Subject: Re: [GIT PULL] SPI updates for v5.3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562695510;
-        bh=ZsIWyGFwW/WH/1PRq35FPeD8inaeQ886pMe4Ngzy3TE=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=v716gG8LDisvi6QTCiBpTmpPYiYg45aBocXjk565tb1WuBUStmw/DNg2oWG53L0bU
-         plwG6AR55uyE205iW/QUh0rLzYd4/AuMeetMgilrK/+RZfGxd4BZ6NQ+hitAgMnPyH
-         qlh8gQHLC3rqMl3ppaUp+arlygbJgUxuy6nk/D00=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190708124940.GB12731@sirena.co.uk>
-References: <20190708124940.GB12731@sirena.co.uk>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190708124940.GB12731@sirena.co.uk>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.3
-X-PR-Tracked-Commit-Id: 26ac56506b0ea598bd0b52dcbd2d697282af98ed
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c6b6cebbc597aaf7d941f781b5fc114c58cc3352
-Message-Id: <156269551020.14383.15290822098573855750.pr-tracker-bot@kernel.org>
-Date:   Tue, 09 Jul 2019 18:05:10 +0000
+        id S1727046AbfGIT0f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Jul 2019 15:26:35 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:34148 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbfGIT0e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Jul 2019 15:26:34 -0400
+Received: by mail-io1-f65.google.com with SMTP id k8so454614iot.1;
+        Tue, 09 Jul 2019 12:26:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YJCxWDqrIACeyw572XUN88X748QX9Vah3vz0WR7ceS0=;
+        b=YCpxB+sehO4NnSiV+g6W2Xa1MMwpIoZVq4FwBkp5z+xJL6Zpqqvnvgf8JkCc5Ir2+4
+         6+Kdo5oY++mF2hqWIZJKiB3YgV3qlMZP5IwaQXpePNtKhCg1H8waZrxzEzQVB21xz4sX
+         wx9dfDY+V/TIH4jsTmpj+KFKLwagRI8f2oxd8L/uQwuEEjWIrUJMas3MIHDlIKD4t2Jl
+         LlgGwdVednr2sStHoPAxe76UzOLfdtwUGw0ZYDnoOo2MjA0RBFn/FcVELjdOV15xGWqk
+         cqUPrEtqnl8MCREIJjcXMP4lG/Xaf8nQ1ma3hlAZoi6qvmbVrxGYag1DzAELMfNoSrDi
+         yIbA==
+X-Gm-Message-State: APjAAAWhsSV3b3jMrtJa2tp7f80aX6xuTE46q/n5LnryDJfHRTv2v02Y
+        g8IHB69hKdeE99ZAfo4uu5EHrCF1CQ==
+X-Google-Smtp-Source: APXvYqzFQYn+xq0I9wKEnggnMxeBx0XK0qbhuePWj72qrLE7hJHFol3dpjQxB5aYLpvyr7Hg82Dl9w==
+X-Received: by 2002:a05:6638:3d2:: with SMTP id r18mr30146201jaq.13.1562700393681;
+        Tue, 09 Jul 2019 12:26:33 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.251])
+        by smtp.googlemail.com with ESMTPSA id c17sm18671708ioo.82.2019.07.09.12.26.32
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 09 Jul 2019 12:26:33 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] spi: dt-bindings: spi-controller: remove unnecessary 'maxItems: 1' from reg
+Date:   Tue,  9 Jul 2019 13:26:31 -0600
+Message-Id: <20190709192631.16394-1-robh@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Mon, 8 Jul 2019 13:49:40 +0100:
+Mixing array constraints like 'maxItems' and string or integer value
+constraints like 'minimum' don't make sense. Also, with only value
+constraints, it is implied we have a single value. So lets remove
+'maxItems: 1'.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.3
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/spi/spi-controller.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c6b6cebbc597aaf7d941f781b5fc114c58cc3352
-
-Thank you!
-
+diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+index 876c0623f322..a02e2fe2bfb2 100644
+--- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+@@ -73,7 +73,6 @@ patternProperties:
+           Compatible of the SPI device.
+ 
+       reg:
+-        maxItems: 1
+         minimum: 0
+         maximum: 256
+         description:
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.20.1
+
