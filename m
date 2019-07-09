@@ -2,74 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E33A462E03
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2019 04:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B0A63785
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2019 16:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbfGICRz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Jul 2019 22:17:55 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:44333 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725886AbfGICRz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Jul 2019 22:17:55 -0400
-Received: by mail-io1-f65.google.com with SMTP id s7so39781024iob.11;
-        Mon, 08 Jul 2019 19:17:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YjoGM7Wxe563lt2QEMzedfEv/oSE8kILweoYwhow1Iw=;
-        b=cdYu33aCcEFvOlz9LtCEyc+0YfKwXyeAOHKB6EgmMcLHti1T+juraNUaUMFdLrQO0i
-         UqKYLSOmHLSazuKr3QYTQSilsWb+ySrBewj+N+8BBcfrOWbmowluKw3xGbN9I8/fEADL
-         Mhbc09P4qSJv5xUrO4etftB6n28IVpudDjrLrwR6q4j8Na3/PBJAc236Hcil7DS0YZtg
-         jMZHzn5zAKJRlD1nOUqhr//iIkB0+QSilRHJPW5BzcfUXfoRA3y84oBmCTFPl7x0IWz+
-         On7fm6hg2IhU1QLMqpvFoiZ8WyWldA7HwosmHr2G/iKL1r8paiaXOlVqlpMIWVv/Q2W5
-         uT3A==
-X-Gm-Message-State: APjAAAWgFpq2d+EImPq9s5YmqcUvfsnqF7XwPSkiBxCcQOWCuX9HPSDf
-        JRM6wivWCkbXPjRRIa4rkg==
-X-Google-Smtp-Source: APXvYqw2MSMSTPDKr0hezGEPUjDdJtsCKqWkhfbqCfu9I/mUn4AvK/Y9H6kSLF5ZreFy1Ml/afZiGg==
-X-Received: by 2002:a02:ac09:: with SMTP id a9mr11371164jao.48.1562638674579;
-        Mon, 08 Jul 2019 19:17:54 -0700 (PDT)
-Received: from localhost ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id e26sm16401377iod.10.2019.07.08.19.17.53
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 08 Jul 2019 19:17:53 -0700 (PDT)
-Date:   Mon, 8 Jul 2019 20:17:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     yibin.gong@nxp.com
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, broonie@kernel.org,
-        festevam@gmail.com, vkoul@kernel.org, dan.j.williams@intel.com,
-        u.kleine-koenig@pengutronix.de, catalin.marinas@arm.com,
-        l.stach@pengutronix.de, will.deacon@arm.com,
-        linux-spi@vger.kernel.org, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 08/15] spi: imx: add new i.mx6ul compatible name in
- binding doc
-Message-ID: <20190709021753.GA8533@bogus>
-References: <20190610081753.11422-1-yibin.gong@nxp.com>
- <20190610081753.11422-9-yibin.gong@nxp.com>
+        id S1726309AbfGIOMe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Jul 2019 10:12:34 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:34260 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbfGIOMe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Jul 2019 10:12:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=V/u97jHNPmLvmTFvnXoJFWrA6FUKihtUF7vD/H2p1QU=; b=QOEmchoPQ9nmuToWmMJj/YqMf
+        uTd9ny3nzPsSlzStQ0fbSOpLhpxBAyXab6JIs5f+CLQA8+u9suJKoptJFa9pV5sRyxOTHkFXvJjsq
+        bqSCW43hh2n8aSGBwPYwQebVVl+HlB3R8ghUTI0urMtdApAyXEbt95/qeMJf8VZHHVaWk=;
+Received: from [217.140.106.51] (helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1hkqr7-0005ci-9l; Tue, 09 Jul 2019 14:12:29 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 56D73D02D6A; Tue,  9 Jul 2019 15:12:28 +0100 (BST)
+Date:   Tue, 9 Jul 2019 15:12:28 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
+Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        linux-iio@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>
+Subject: Re: [PATCH 2/5] drivers: spi: core: Add optional stall delay between
+ cs_change transfers
+Message-ID: <20190709141228.GC14859@sirena.co.uk>
+References: <20190625131328.11883-1-alexandru.ardelean@analog.com>
+ <20190625131328.11883-2-alexandru.ardelean@analog.com>
+ <20190626193438.7248d0a9@archlinux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m51xatjYGsM+13rf"
 Content-Disposition: inline
-In-Reply-To: <20190610081753.11422-9-yibin.gong@nxp.com>
+In-Reply-To: <20190626193438.7248d0a9@archlinux>
+X-Cookie: Visit beautiful Vergas, Minnesota.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 10 Jun 2019 16:17:46 +0800, yibin.gong@nxp.com wrote:
-> From: Robin Gong <yibin.gong@nxp.com>
-> 
-> ERR009165 fixed from i.mx6ul, add its compatible name in binding
-> doc.
-> 
-> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> ---
->  Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--m51xatjYGsM+13rf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jun 26, 2019 at 07:34:38PM +0100, Jonathan Cameron wrote:
+> On Tue, 25 Jun 2019 16:13:25 +0300
+> Alexandru Ardelean <alexandru.ardelean@analog.com> wrote:
+>=20
+> > Some devices like the ADIS16460 IMU require a stall period between
+> > transfers, i.e. between when the CS is de-asserted and re-asserted. The
+> > default value of 10us is not enough. This change makes the delay
+> > configurable for when the next CS change goes active.
+
+This looks like cs_change_delay.
+
+As documented in SubmittingPatches please send patches to the=20
+maintainers for the code you would like to change.  The normal kernel
+workflow is that people apply patches from their inboxes, if they aren't
+copied they are likely to not see the patch at all and it is much more
+difficult to apply patches.
+
+--m51xatjYGsM+13rf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0koMsACgkQJNaLcl1U
+h9DKIAf/ZSDNvbMm/N+6RjKfnFdQwjyhpG6CS03BFIGfNvdDiHDfcIUOccR8kUSS
+hWzTKI/7f4jlLyaWXinkVc59G60+IS1+DbO8o2PCAQ3Fpciz5/c6F7BQrLy42Xal
+/icTrnVX0d/70ss5a7YT5yj67O7bItcRvbUuT8bDzHIIVzNWmXc8hMZYMTSB14DV
+fLs8tnfbR0SK4zjd2smCFHGieZBZquTeBjF2ZQlA0YS232MyNNBJCtmW52KUfbVn
+gBukHDwh9QkCJEAdFHknAMmcYPgBF0FXnBkMwhXKeCW9PAxHXK/PC+nqvanw4dmi
+ZVeeGKO4caaGNXi5unWwFznO4RwCFQ==
+=xlH7
+-----END PGP SIGNATURE-----
+
+--m51xatjYGsM+13rf--
