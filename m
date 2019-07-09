@@ -2,106 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C11663934
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2019 18:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C6363A6F
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2019 20:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbfGIQTZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Jul 2019 12:19:25 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:40023 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726060AbfGIQTY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Jul 2019 12:19:24 -0400
-Received: by mail-io1-f66.google.com with SMTP id h6so36179877iom.7;
-        Tue, 09 Jul 2019 09:19:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7tAfXbTGjm8fRgQr1s7o3SHyobzROVcWesepsvUVeJ0=;
-        b=ruanipF8ui2ugcexuiwtCQgXb2kw9c0aikK7uxCD126M1XxoKqOOi4Rwul1BaQqawZ
-         bfKWEIpOnDryBjbcQkA7epjzHmhZuatuWjdEuIA/Eb4qGZipcfk92OD1kUOO0H+z4Txm
-         bbwdw6Zhj/GnbIzZD6Bf8MSb/YZCu7lIvBI7BH4TYTWBxoNhK4ucwZSpvzjvbyJF2wFt
-         6mKz/9SCZ88DfGi5+VtdUZNZC47WZjzPnoMYf4XqKU+9mhXjc2bVTP1aDNVLWuvFeDWP
-         jtsSSu4tWhIoSY4g9y4URrPCV8Lfryyf9aPl/4YbRlvIcBYh+a8TpZYgLBmhjm5UesQJ
-         PI1w==
-X-Gm-Message-State: APjAAAU3y1fTxN5rKRmpF+hiDLdWeZj15P5GBYUxeSjzdGcZqQhoXD+Y
-        kRDoXVp2WWBmAb82vOvOdw==
-X-Google-Smtp-Source: APXvYqytUb4e1tTFkilBAmDnbfpUegwR/3+McS2ESVbZuIF2pcM4ypCPA270vJObgxVGw3SsHisGJg==
-X-Received: by 2002:a05:6638:191:: with SMTP id a17mr24115446jaq.101.1562689163723;
-        Tue, 09 Jul 2019 09:19:23 -0700 (PDT)
-Received: from localhost ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id r5sm18036660iom.42.2019.07.09.09.19.22
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 09 Jul 2019 09:19:22 -0700 (PDT)
-Date:   Tue, 9 Jul 2019 10:19:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, suzuki.poulose@arm.com,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>, Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH v2 17/28] drivers: Introduce bus_find_device_by_of_node()
- helper
-Message-ID: <20190709161922.GA1609@bogus>
-References: <1560534863-15115-1-git-send-email-suzuki.poulose@arm.com>
- <1560534863-15115-18-git-send-email-suzuki.poulose@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1560534863-15115-18-git-send-email-suzuki.poulose@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727308AbfGISFL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Jul 2019 14:05:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727381AbfGISFK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 9 Jul 2019 14:05:10 -0400
+Subject: Re: [GIT PULL] SPI updates for v5.3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562695510;
+        bh=ZsIWyGFwW/WH/1PRq35FPeD8inaeQ886pMe4Ngzy3TE=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=v716gG8LDisvi6QTCiBpTmpPYiYg45aBocXjk565tb1WuBUStmw/DNg2oWG53L0bU
+         plwG6AR55uyE205iW/QUh0rLzYd4/AuMeetMgilrK/+RZfGxd4BZ6NQ+hitAgMnPyH
+         qlh8gQHLC3rqMl3ppaUp+arlygbJgUxuy6nk/D00=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20190708124940.GB12731@sirena.co.uk>
+References: <20190708124940.GB12731@sirena.co.uk>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20190708124940.GB12731@sirena.co.uk>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.3
+X-PR-Tracked-Commit-Id: 26ac56506b0ea598bd0b52dcbd2d697282af98ed
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c6b6cebbc597aaf7d941f781b5fc114c58cc3352
+Message-Id: <156269551020.14383.15290822098573855750.pr-tracker-bot@kernel.org>
+Date:   Tue, 09 Jul 2019 18:05:10 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 14 Jun 2019 18:54:12 +0100, Suzuki K Poulose wrote:
-> Add a wrapper to bus_find_device() to search for a device
-> by the of_node pointer, reusing the generic match function.
-> Also convert the existing users to make use of the new helper.
-> 
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: devicetree@vger.kernel.org
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Heiko Stuebner <heiko@sntech.de>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-rockchip@lists.infradead.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Takashi Iwai <tiwai@suse.com>
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> ---
->  drivers/gpu/drm/drm_mipi_dsi.c             |  7 +------
->  drivers/hwtracing/coresight/of_coresight.c | 11 ++---------
->  drivers/i2c/i2c-core-of.c                  |  7 +------
->  drivers/nvmem/core.c                       |  7 +------
->  drivers/of/of_mdio.c                       |  8 +-------
->  drivers/of/platform.c                      |  7 +------
->  drivers/spi/spi.c                          |  9 ++-------
->  include/linux/device.h                     | 12 ++++++++++++
->  sound/soc/rockchip/rk3399_gru_sound.c      |  9 ++-------
->  9 files changed, 23 insertions(+), 54 deletions(-)
-> 
+The pull request you sent on Mon, 8 Jul 2019 13:49:40 +0100:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.3
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c6b6cebbc597aaf7d941f781b5fc114c58cc3352
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
