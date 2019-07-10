@@ -2,41 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBC9649BC
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Jul 2019 17:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5132B649B8
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Jul 2019 17:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727197AbfGJPfL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 Jul 2019 11:35:11 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45838 "EHLO
+        id S1727621AbfGJPe7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Jul 2019 11:34:59 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45840 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727521AbfGJPe4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Jul 2019 11:34:56 -0400
+        with ESMTP id S1727522AbfGJPe5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Jul 2019 11:34:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=7QYvFls9cFFESC1iCFjHNVMcABi/vx5KKko2y+ogruc=; b=DCTWJJmqSBmc
-        Cg/2D57XqG2bNMWH+/z9If72M7H90alUmHKY3e9c6j1/+lRKN4s6EColac2SYyUKff/GYuQNU2VNa
-        K/a5wqetVmYCREYGAqrxPv2DOK2JWZWcXqx+po0mBGD7H+p0vw/ZBCgci4yiOCi0PEnJ+ieTi+ZlB
-        8DybQ=;
+        List-Archive; bh=SwHG6LTAEAh13sjDvyFHVD4GV3/BS+B3YNOvIoOotQs=; b=nTP0/1VSUJm0
+        ngl2m7yQueHy4gxqaEnAj8ukmW3EdIcRETyiGGUXXIaU9+UZn9oYJjHu+PXZOqKIZMcoAc25jbAeg
+        BVljbvfzBgMIotY8bigzHBvqsgmbQHO3g9uBA3Bc/fje/Zq0p5alIwEyytWbRfjD/8BGiK+Lsifcs
+        xW1sk=;
 Received: from [217.140.106.53] (helo=fitzroy.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1hlEcQ-00083v-8X; Wed, 10 Jul 2019 15:34:54 +0000
+        id 1hlEcQ-00083t-6C; Wed, 10 Jul 2019 15:34:54 +0000
 Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id F057BD02D84; Wed, 10 Jul 2019 16:34:53 +0100 (BST)
+        id DF598D02D7C; Wed, 10 Jul 2019 16:34:53 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: Applied "spi: dt-bindings: spi-controller: remove unnecessary 'maxItems: 1' from reg" to the spi tree
-In-Reply-To: <20190709192631.16394-1-robh@kernel.org>
+To:     Han Xu <han.xu@nxp.com>
+Cc:     ashish.kumar@nxp.com, broonie@kernel.org, han.xu@nxp.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: spi-fsl-qspi: change i.MX7D RX FIFO size" to the spi tree
+In-Reply-To: <20190710023128.13115-3-han.xu@nxp.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20190710153453.F057BD02D84@fitzroy.sirena.org.uk>
+Message-Id: <20190710153453.DF598D02D7C@fitzroy.sirena.org.uk>
 Date:   Wed, 10 Jul 2019 16:34:53 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -45,7 +45,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: dt-bindings: spi-controller: remove unnecessary 'maxItems: 1' from reg
+   spi: spi-fsl-qspi: change i.MX7D RX FIFO size
 
 has been applied to the spi tree at
 
@@ -70,38 +70,34 @@ to this mail.
 Thanks,
 Mark
 
-From 43167bb1f6bb7efa73adc40d2dd700bb6546cc2c Mon Sep 17 00:00:00 2001
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 9 Jul 2019 13:26:31 -0600
-Subject: [PATCH] spi: dt-bindings: spi-controller: remove unnecessary
- 'maxItems: 1' from reg
+From d6b197a14863818a7ed7890e91f043fab49e8c60 Mon Sep 17 00:00:00 2001
+From: Han Xu <han.xu@nxp.com>
+Date: Wed, 10 Jul 2019 10:31:27 +0800
+Subject: [PATCH] spi: spi-fsl-qspi: change i.MX7D RX FIFO size
 
-Mixing array constraints like 'maxItems' and string or integer value
-constraints like 'minimum' don't make sense. Also, with only value
-constraints, it is implied we have a single value. So lets remove
-'maxItems: 1'.
+The RX FIFO should be 128 byte rather than 512 byte. It's a typo on
+reference manual.
 
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20190709192631.16394-1-robh@kernel.org
+Signed-off-by: Han Xu <han.xu@nxp.com>
+Link: https://lore.kernel.org/r/20190710023128.13115-3-han.xu@nxp.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/devicetree/bindings/spi/spi-controller.yaml | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/spi/spi-fsl-qspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-index 876c0623f322..a02e2fe2bfb2 100644
---- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-@@ -73,7 +73,6 @@ patternProperties:
-           Compatible of the SPI device.
+diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
+index 41a49b93ca60..448c00e4065b 100644
+--- a/drivers/spi/spi-fsl-qspi.c
++++ b/drivers/spi/spi-fsl-qspi.c
+@@ -206,7 +206,7 @@ static const struct fsl_qspi_devtype_data imx6sx_data = {
+ };
  
-       reg:
--        maxItems: 1
-         minimum: 0
-         maximum: 256
-         description:
+ static const struct fsl_qspi_devtype_data imx7d_data = {
+-	.rxfifo = SZ_512,
++	.rxfifo = SZ_128,
+ 	.txfifo = SZ_512,
+ 	.ahb_buf_size = SZ_1K,
+ 	.quirks = QUADSPI_QUIRK_TKT253890 | QUADSPI_QUIRK_4X_INT_CLK,
 -- 
 2.20.1
 
