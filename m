@@ -2,106 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2EF69638
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jul 2019 17:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4069B69D00
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jul 2019 22:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388788AbfGOOKW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jul 2019 10:10:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38774 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388603AbfGOOKU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:10:20 -0400
-Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EEE602083D;
-        Mon, 15 Jul 2019 14:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199819;
-        bh=hWwjP+rKG/WpmEczv6N7q5Qr9DUTij0C+wlSV0YM0aE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vllRiBLvUd0PTlr3QKj8iRr+JnM1dtTE2NbN1MDOT8giUCYUcaRbR2H9tkWP7MJ6n
-         xmdaYWTId9Blw0i6IqtEMBFhjksVBYCYHhZLog8WZoFNBRli8yE8GL7y5efVxzlTaW
-         l2zq2yYaybHyfavuSadkXIRYvgbuWi4UkRd9BwS4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 115/219] spi: fix ctrl->num_chipselect constraint
-Date:   Mon, 15 Jul 2019 10:01:56 -0400
-Message-Id: <20190715140341.6443-115-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
-References: <20190715140341.6443-1-sashal@kernel.org>
+        id S1729718AbfGOUp4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jul 2019 16:45:56 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:46171 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729574AbfGOUp4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jul 2019 16:45:56 -0400
+Received: by mail-lj1-f195.google.com with SMTP id v24so17669702ljg.13
+        for <linux-spi@vger.kernel.org>; Mon, 15 Jul 2019 13:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZYBOs3aLnhuf2faNdh8yo+pXx5Re8ii69AgHIOGgYXM=;
+        b=xXQ84woWd6JtRurNXZ+LWho0SzsWefI+syk6IeKlgUlmeeUzs2BjNwuqUnKZRddNm8
+         R/8MscBULhDQ1LucF1wVgpmPD8/8h5jeWM0nMeujOR+KiL/JYABHQvqO+DmUCKXmJd3W
+         8NGP3HVRZDsy5/Q5qSkwGTa4n5cCwOH9BxJhC+D6ekrNFgmjbIGDlEAJvUlaDOrcCcBz
+         0kuXdZAxbkGS4LgqZV6J3UWgk3Hy86LFvW+88jvM96vIadGu6OQ1SMHAOgV1VtEQDbCx
+         /HIym52XN0QAkAKAwAcY4Jk1wKEAu2GCw956zXsOW8N4785cyOzUwmZLAh/IspxzWyv/
+         vLBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZYBOs3aLnhuf2faNdh8yo+pXx5Re8ii69AgHIOGgYXM=;
+        b=P80NQLjN26A7uYR0xTERo5xWAEU7MAzSkFO1dFZmo3pUYSqJ05uG/U4olpgl/unfQG
+         lxsZULFRV7+imryPjZ1i4VBV63la3emUfUQLzJ5p0Q0+AMbAZBAUeE0N5sszmMMqoojq
+         qpmRwoaKF3gIGkCXb3ZmVc5gJpymM7g1+wk7K3lvbw2e0VqHI7OWP8uLQ6wQhE86ybV9
+         jdwfUbDKgdAREV0es1e1BOhQLLS4K/PezPGz4VC+zHAkj7cDAly+5UaI+ZDkmAb97Xcg
+         b5YeUITsDhzu/nmxEeVIxxtkr0QdOOX0IxCh80S/vkbnP04H3r0XdXwJ6uBpBkjFCsFf
+         GNEQ==
+X-Gm-Message-State: APjAAAV0yjSRmIBBILo2ppQdKSRBjxnOGWU+KbRQLE1YwVQRVtBPXg32
+        DeTG0eJAil6Y0faOCYn7RCiZXA==
+X-Google-Smtp-Source: APXvYqycBzyi6XjJyj5PoLiqzXEqn1fJu1mTyuzyCrEWAPx1KE6EEg0I/5C7kPkBB2DAM4DfT3Zgbg==
+X-Received: by 2002:a2e:5b0f:: with SMTP id p15mr14682754ljb.82.1563223554303;
+        Mon, 15 Jul 2019 13:45:54 -0700 (PDT)
+Received: from localhost.bredbandsbolaget (c-22cd225c.014-348-6c756e10.bbcust.telenor.se. [92.34.205.34])
+        by smtp.gmail.com with ESMTPSA id b1sm3338326ljj.26.2019.07.15.13.45.52
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 15 Jul 2019 13:45:53 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     linux-gpio@vger.kernel.org
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] Revert "gpio/spi: Fix spi-gpio regression on active high CS"
+Date:   Mon, 15 Jul 2019 22:45:29 +0200
+Message-Id: <20190715204529.9539-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+This reverts commit fbbf145a0e0a0177e089c52275fbfa55763e7d1d.
 
-[ Upstream commit f9481b08220d7dc1ff21e296a330ee8b721b44e4 ]
+It seems I was misguided in my fixup, which was working at the
+time but did not work on the final v5.2.
 
-at91sam9g25ek showed the following error at probe:
-atmel_spi f0000000.spi: Using dma0chan2 (tx) and dma0chan3 (rx)
-for DMA transfers
-atmel_spi: probe of f0000000.spi failed with error -22
+The patch tried to avoid a quirk the gpiolib code not to treat
+"spi-gpio" CS gpios "special" by enforcing them to be active
+low, in the belief that since the "spi-gpio" driver was
+parsing the device tree on its own, it did not care to inspect
+the "spi-cs-high" attribute on the device nodes.
 
-Commit 0a919ae49223 ("spi: Don't call spi_get_gpio_descs() before device name is set")
-moved the calling of spi_get_gpio_descs() after ctrl->dev is set,
-but didn't move the !ctrl->num_chipselect check. When there are
-chip selects in the device tree, the spi-atmel driver lets the
-SPI core discover them when registering the SPI master.
-The ctrl->num_chipselect is thus expected to be set by
-spi_get_gpio_descs().
+That's wrong. The SPI core was inspecting them inside the
+of_spi_parse_dt() funtion and setting SPI_CS_HIGH on the
+nodes, and the driver inspected this flag when driving the
+line.
 
-Move the !ctlr->num_chipselect after spi_get_gpio_descs() as it was
-before the aforementioned commit. While touching this block, get rid
-of the explicit comparison with 0 and update the commenting style.
+As of now, the core handles the GPIO and it will consistently
+set the GPIO descriptor to 1 to enable CS, strictly requireing
+the gpiolib to invert it. And the gpiolib should indeed
+enforce active low on the CS line.
 
-Fixes: 0a919ae49223 ("spi: Don't call spi_get_gpio_descs() before device name is set")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Device trees should of course put the right flag on the GPIO
+handles, but it used to not matter. If we don't enforce active
+low on "gpio-gpio" we may run into ABI backward compatibility
+issues, so revert this.
+
+Cc: linux-spi@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/spi/spi.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+I am sorry that this at one point fixed a problem for me, it
+doesn't anymore and I don't know why it ever did. :(
+---
+ drivers/gpio/gpiolib-of.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index a83fcddf1dad..7f6fb383d7a7 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2281,11 +2281,6 @@ int spi_register_controller(struct spi_controller *ctlr)
- 	if (status)
- 		return status;
- 
--	/* even if it's just one always-selected device, there must
--	 * be at least one chipselect
--	 */
--	if (ctlr->num_chipselect == 0)
--		return -EINVAL;
- 	if (ctlr->bus_num >= 0) {
- 		/* devices with a fixed bus num must check-in with the num */
- 		mutex_lock(&board_lock);
-@@ -2356,6 +2351,13 @@ int spi_register_controller(struct spi_controller *ctlr)
- 		}
- 	}
- 
-+	/*
-+	 * Even if it's just one always-selected device, there must
-+	 * be at least one chipselect.
-+	 */
-+	if (!ctlr->num_chipselect)
-+		return -EINVAL;
-+
- 	status = device_add(&ctlr->dev);
- 	if (status < 0) {
- 		/* free bus id */
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index f974075ff00e..a8f02f551d6b 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -118,15 +118,8 @@ static void of_gpio_flags_quirks(struct device_node *np,
+ 	 * Legacy handling of SPI active high chip select. If we have a
+ 	 * property named "cs-gpios" we need to inspect the child node
+ 	 * to determine if the flags should have inverted semantics.
+-	 *
+-	 * This does not apply to an SPI device named "spi-gpio", because
+-	 * these have traditionally obtained their own GPIOs by parsing
+-	 * the device tree directly and did not respect any "spi-cs-high"
+-	 * property on the SPI bus children.
+ 	 */
+-	if (IS_ENABLED(CONFIG_SPI_MASTER) &&
+-	    !strcmp(propname, "cs-gpios") &&
+-	    !of_device_is_compatible(np, "spi-gpio") &&
++	if (IS_ENABLED(CONFIG_SPI_MASTER) && !strcmp(propname, "cs-gpios") &&
+ 	    of_property_read_bool(np, "cs-gpios")) {
+ 		struct device_node *child;
+ 		u32 cs;
 -- 
-2.20.1
+2.21.0
 
