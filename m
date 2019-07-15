@@ -2,39 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C4568BA4
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jul 2019 15:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BDF68BD9
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jul 2019 15:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730939AbfGONib (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jul 2019 09:38:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38716 "EHLO mail.kernel.org"
+        id S1730732AbfGONrV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jul 2019 09:47:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56120 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730961AbfGONib (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:38:31 -0400
+        id S1730890AbfGONrU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:47:20 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D5494216C4;
-        Mon, 15 Jul 2019 13:38:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6B7E212F5;
+        Mon, 15 Jul 2019 13:47:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563197910;
-        bh=mSly9/QB6NgeDVXk7wAa+JBqfFX3uXKExoFhgAGyqtg=;
+        s=default; t=1563198440;
+        bh=ItdIf+SpfcLyABhkX8V/kialrW2/Lw/Qt/bX3sAzwgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sZT3QXG0S6SsCG6w/01mg/LoBzv3Ed2gH2FHNaoBCd+lqYsbsc+psO7mQFkf+1iFx
-         y10KKBSlbDAe97g8HhQx2QKpjTXQ29Ji6A4UamAmWBVXBHMTWU85ey59SQVSN6xsag
-         FRI9z0EYYT4xBG7SDSmdiN4IFIzypEFd6keBqw4M=
+        b=SPdNAavHZmVnGB2kbi48xxdSi+NJ6wAAp2dyzLALteWhBj+cwl+KRn2I68crcRJLn
+         KnY7lRLzLIwaumG2amuJ6oBqa2DT1N5rtd4CuU2WoOF0rk5QbGtyvnLAO27oaPsFRK
+         ydAx1ZJI7LkhAA+6zczf+5WPCkDWUaiOxBvuTiv4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Emil Renner Berthing <kernel@esmil.dk>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.1 007/219] spi: rockchip: turn down tx dma bursts
-Date:   Mon, 15 Jul 2019 09:34:39 -0400
-Message-Id: <20190715133811.2441-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 007/249] spi: rockchip: turn down tx dma bursts
+Date:   Mon, 15 Jul 2019 09:42:52 -0400
+Message-Id: <20190715134655.4076-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715133811.2441-1-sashal@kernel.org>
-References: <20190715133811.2441-1-sashal@kernel.org>
+In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
+References: <20190715134655.4076-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -75,10 +75,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 3912526ead66..19f6a76f1c07 100644
+index 9b91188a85f9..2cc6d9951b52 100644
 --- a/drivers/spi/spi-rockchip.c
 +++ b/drivers/spi/spi-rockchip.c
-@@ -425,7 +425,7 @@ static int rockchip_spi_prepare_dma(struct rockchip_spi *rs,
+@@ -417,7 +417,7 @@ static int rockchip_spi_prepare_dma(struct rockchip_spi *rs,
  			.direction = DMA_MEM_TO_DEV,
  			.dst_addr = rs->dma_addr_tx,
  			.dst_addr_width = rs->n_bytes,
@@ -87,7 +87,7 @@ index 3912526ead66..19f6a76f1c07 100644
  		};
  
  		dmaengine_slave_config(master->dma_tx, &txconf);
-@@ -526,7 +526,7 @@ static void rockchip_spi_config(struct rockchip_spi *rs,
+@@ -518,7 +518,7 @@ static void rockchip_spi_config(struct rockchip_spi *rs,
  	else
  		writel_relaxed(rs->fifo_len / 2 - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
  
