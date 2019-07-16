@@ -2,79 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6E26A3DD
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jul 2019 10:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4956A45C
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jul 2019 10:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbfGPIal (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Jul 2019 04:30:41 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:49233 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbfGPIal (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Jul 2019 04:30:41 -0400
-Received: from localhost (91-163-65-175.subs.proxad.net [91.163.65.175])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id C1EAD240005;
-        Tue, 16 Jul 2019 08:28:21 +0000 (UTC)
-Date:   Tue, 16 Jul 2019 10:28:21 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chen-Yu Tsai <wens@csie.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Ensure child nodes are of type 'object'
-Message-ID: <20190716082821.eafjvqfczxahx4as@flea>
-References: <20190715230457.3901-1-robh@kernel.org>
+        id S1731732AbfGPI4x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Jul 2019 04:56:53 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44766 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731702AbfGPI4x (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Jul 2019 04:56:53 -0400
+Received: by mail-lj1-f194.google.com with SMTP id k18so19117747ljc.11
+        for <linux-spi@vger.kernel.org>; Tue, 16 Jul 2019 01:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=InUWrv7LAkQKvZ+McQ69NdIMdHUt9wQBtSn0Ql2S6b4=;
+        b=NYWBxxtkEarHHKN4dpAk9Z3o+e7dlOaIFbYRjCgVyDUXE5/Q7hCWk37cEjSrv+kDaI
+         v7yHpJDZmf/3oYGlbX117KQzLJ4umJQ5+OjX6dw31RpDF48K6L5OswFhXCK2/NpCeonR
+         jNNqGULBmAFVTWgakUEu4ZcLpiMAjEecaPzDROkawKgKwYej+eNtIu6Sj0yns/uOU40q
+         TQ/2gC66WBgRApLvY2Qn8suKx1B64NI8JQeg/SyQBB+mBkNPYCOO26gNFyyVaq5smfTc
+         2mZLXc/xf0XXa5oYidiHELyQSWN/3pnZoGg9/bVf2tLlzPOewh0d4cEHHMqWpOZfR0CT
+         F65A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=InUWrv7LAkQKvZ+McQ69NdIMdHUt9wQBtSn0Ql2S6b4=;
+        b=eboAnGGt6kQvXkntkThy1udkrEEbArdihYoyz5qGxFSojod2yCL6guVQt4qaKiztRQ
+         yXv1CJmczyG4QK2ZkMZuXvpgIkc07TEnKoHV1iP7tqZWCh4PH0uU5mj30Q5+G5LB35Mm
+         maOKW7sFUvBraUO4u4KIkzH3FXPvNN9Ufps3OJt3sN1xcjHeeHE4SpS265VdKfN+/IAk
+         D1bGiuWht48cfCXrIKEdpMB9ROADvTJlhWqHa1z69mwIkSNvVxJhJ/HoJKbNyEM5bCir
+         mJHwJ4DkoanTYge8uMkLnMaqI2GpHTzjOVbPFU40BEpiSG4+hLT3ADeEpk+ZNd+FF7eU
+         /KLA==
+X-Gm-Message-State: APjAAAWhc9Km5/pckFLwrR10bKoow+0Sdh8FygpVlx16aHBMef2ZFZKC
+        qQN0+5G4J+ikmeEhmcIoIPbe3I7alyofqhwilSqi3A==
+X-Google-Smtp-Source: APXvYqz0/LleO9xJcnbDEQsKjfgEBzAose29BV4VVCT9BK/mzxrXWaVnDmJyWLu7V7p65vgCAaGIQkI8PUIsBxalh2E=
+X-Received: by 2002:a2e:781a:: with SMTP id t26mr16865993ljc.28.1563267411846;
+ Tue, 16 Jul 2019 01:56:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190715230457.3901-1-robh@kernel.org>
-User-Agent: NeoMutt/20180716
+References: <20190715204529.9539-1-linus.walleij@linaro.org> <20190716012712.BC9F22173C@mail.kernel.org>
+In-Reply-To: <20190716012712.BC9F22173C@mail.kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 16 Jul 2019 10:56:40 +0200
+Message-ID: <CACRpkdaLQzax2XPJ4j1a9gNw3r=ZizVSgsbLFGAycCLd2TzD0g@mail.gmail.com>
+Subject: Re: [PATCH] Revert "gpio/spi: Fix spi-gpio regression on active high CS"
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 15, 2019 at 05:04:57PM -0600, Rob Herring wrote:
-> Properties which are child node definitions need to have an explict
-> type. Otherwise, a matching (DT) property can silently match when an
-> error is desired. Fix this up tree-wide. Once this is fixed, the
-> meta-schema will enforce this on any child node definitions.
->
-> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: David Woodhouse <dwmw2@infradead.org>
-> Cc: Brian Norris <computersforpeace@gmail.com>
-> Cc: Marek Vasut <marek.vasut@gmail.com>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@st.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Tue, Jul 16, 2019 at 3:27 AM Sasha Levin <sashal@kernel.org> wrote:
 
-Acked-by: Maxime Ripard <maxime.ripard@bootlin.com>
+> v5.2.1: Build OK!
+> v5.1.18: Failed to apply! Possible dependencies:
+(...)
+> How should we proceed with this patch?
+
+Only apply it to 5.2.y once upstream.
 
 Thanks!
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Linus Walleij
