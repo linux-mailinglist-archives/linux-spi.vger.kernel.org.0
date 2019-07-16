@@ -2,89 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B34956A709
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jul 2019 13:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71BFD6B099
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jul 2019 22:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387588AbfGPLJz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Jul 2019 07:09:55 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45160 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733200AbfGPLJz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Jul 2019 07:09:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=GTNttLKfykU0fMB8TWGXww71EUURBDV6zbj9y9y9CVY=; b=Stdaqrb4Nzvjz4Bj7OxsqHHhD
-        +Td7CdZOlzO+ek+Wlj1/FC/WJHeQ9gSPUYQBkEz/5sipVYr/hPyWPqlS7cSDQnO+iL3ns21zEDaGi
-        3VvzwyAvDJ+Chvj8tqRy5yeKmx6ZrWTp1EMApgzMNqNyFnCUcN19Mpy6CuXjZ4JswoqRQ=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hnLKz-0004Sl-R4; Tue, 16 Jul 2019 11:09:37 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 9164A2742C01; Tue, 16 Jul 2019 12:09:36 +0100 (BST)
-Date:   Tue, 16 Jul 2019 12:09:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        id S2388753AbfGPUq6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Jul 2019 16:46:58 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:37974 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728575AbfGPUq6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Jul 2019 16:46:58 -0400
+Received: by mail-lj1-f194.google.com with SMTP id r9so21332089ljg.5
+        for <linux-spi@vger.kernel.org>; Tue, 16 Jul 2019 13:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VDtv/K1StBArURVJJzLaJem8yNVgXpi8Ipr2vGaPzvo=;
+        b=hpsI6btjemMsbAKAPbm50uTJ1RxmTedQv8WlK+XIZLT/5npg9OHRc4lYkwZmvWGKWP
+         cmoYfAtxqOt5dYym4UC1nd+efKjyoYJgKqQKpeP4ZiPv4fL4t8kE6fIZsOaV4BwQjn0V
+         ivJWqTqw+u2bz8FTt+q/TzXm4h1dHnE4HiZhD+HSBRCKUlUreODQxske1KrWqlp/CUvh
+         joft6PDj/PAFzBJa9UpzqwNVB751E1tcglAo0bH7N0x0Eo9eGiDTz6rjWrBd8/MzIjpR
+         gqFVOeHwx+X21HEjne1TGfCwoNaPY9qb/zB7w9N04zz2+4gWTFZXtkZOjrkJUmUTc1cP
+         cb5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VDtv/K1StBArURVJJzLaJem8yNVgXpi8Ipr2vGaPzvo=;
+        b=AmNhVu1+AkIa/j3r4KbB8mHFll8+/2LYB8YjR3+sPgL42NojgziVfuNazKvTnc8Dgc
+         GT71xnWwn9AqSvOrNMqJHLDNo756A1EbA2V/EQPxYyDXu66c5ey9+vMc0u3ttfwCidkN
+         GQhz/9pt3yukHPxtYrtrWX7QWcEi9tf2oZRdUDkqHAyn4K9yh/FfDZFAg6BtTcLTJeIB
+         bU+14IbbmzFlyCt/jzPpe30+1LL7YPcj5/JXF+wov9aei6yMc1lqJKPkOEX7yCBgKLyu
+         +8EcCaArFTjDGoAsG7UlDaM8HZZcXCuDHs+nteTN/99r65RDpJhagN9eJrrFHVkYc95/
+         yLdA==
+X-Gm-Message-State: APjAAAX71SYpu0NGusw1NUpdefnllBAAlh/eA0usgUBaeWRJJobd++w4
+        1T0e7mGAfPycw+NtWxO4IXJMSg==
+X-Google-Smtp-Source: APXvYqzzcvFxahcEMff8Eo+XDI5IN29FlKyYZM6gdWhl+mmbb0tBUgKplVIbAMFnXPqhK+kx5R6eXw==
+X-Received: by 2002:a2e:5b0f:: with SMTP id p15mr18095389ljb.82.1563310016005;
+        Tue, 16 Jul 2019 13:46:56 -0700 (PDT)
+Received: from localhost.bredbandsbolaget (c-22cd225c.014-348-6c756e10.bbcust.telenor.se. [92.34.205.34])
+        by smtp.gmail.com with ESMTPSA id z22sm3998540ljz.20.2019.07.16.13.46.54
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 16 Jul 2019 13:46:54 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     linux-gpio@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-mtd@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Ensure child nodes are of type 'object'
-Message-ID: <20190716110936.GA5428@sirena.org.uk>
-References: <20190715230457.3901-1-robh@kernel.org>
+        Andrey Smirnov <andrew.smirnov@gmail.com>
+Subject: [PATCH] spi: gpio: Add SPI_MASTER_GPIO_SS flag
+Date:   Tue, 16 Jul 2019 22:46:51 +0200
+Message-Id: <20190716204651.7743-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UugvWAfsgieZRqgk"
-Content-Disposition: inline
-In-Reply-To: <20190715230457.3901-1-robh@kernel.org>
-X-Cookie: May be too intense for some viewers.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The GPIO SPI master has some code in its local CS
+callback to set the initial sck GPIO value. This was
+lost in the commit converting it to use SPI core
+GPIO handling as this callback isn't called if the
+internal GPIO handling is active.
 
---UugvWAfsgieZRqgk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Add the special SPI_MASTER_GPIO_SS to ascertain it
+gets called anyway so we get the initial SCK setting
+right. There is some platform provided GPIO handling
+there as well but this will be skipped as the cs_gpios
+will be NULL.
 
-On Mon, Jul 15, 2019 at 05:04:57PM -0600, Rob Herring wrote:
-> Properties which are child node definitions need to have an explict
-> type. Otherwise, a matching (DT) property can silently match when an
-> error is desired. Fix this up tree-wide. Once this is fixed, the
-> meta-schema will enforce this on any child node definitions.
+My test targets seem not to care about the initial
+SCK value so I am uncertain if this is a regression,
+but to preserve the previous semantic we better do
+this.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+Fixes: 249e2632dcd0 ("spi: gpio: Don't request CS GPIO in DT use-case")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/spi/spi-gpio.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
---UugvWAfsgieZRqgk
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
+index eca9d52ecf65..9eb82150666e 100644
+--- a/drivers/spi/spi-gpio.c
++++ b/drivers/spi/spi-gpio.c
+@@ -410,6 +410,12 @@ static int spi_gpio_probe(struct platform_device *pdev)
+ 
+ 	bb = &spi_gpio->bitbang;
+ 	bb->master = master;
++	/*
++	 * There is some additional business, apart from driving the CS GPIO
++	 * line, that we need to do on selection. This makes the local
++	 * callback for chipselect always get called.
++	 */
++	master->flags |= SPI_MASTER_GPIO_SS;
+ 	bb->chipselect = spi_gpio_chipselect;
+ 	bb->set_line_direction = spi_gpio_set_direction;
+ 
+-- 
+2.21.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0tsG0ACgkQJNaLcl1U
-h9DgRwf/RVQwM4uJZfc77Bg1QUPRV93uCJ6maAGlUjFImP1U0fpoRuD/zNm5kiIp
-hJhe5TMTX5ua+ajO5DV9S4HD4tRJBv5imHYgx7edGX0XnD6uBhO/Fx91okJhKb54
-hmWEPpZyjursasR/A6HjQi6+OYEnCqrMoTenaZQZ/R7MlS8Z57C5m8slR9m1tSBp
-xam5qvxG3pn5oNarJlCWF9VcVmZckekdU+qutRLVc3xH8bCF6pjfyR5E1M+qRJV6
-av5KFLsTopgBECl4QPHGqIXqhegIjWyeqeMC69s7Nh8pDFpLIwFJfXd7x7UGStgS
-RrPGZDcB2vfMfsXwQAGfu5lyMqkYJA==
-=IEmg
------END PGP SIGNATURE-----
-
---UugvWAfsgieZRqgk--
