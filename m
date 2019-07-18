@@ -2,122 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 489B86C0B1
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Jul 2019 19:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929B86CE47
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jul 2019 14:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727140AbfGQR6X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 Jul 2019 13:58:23 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:44372 "EHLO
+        id S1727757AbfGRMuP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Jul 2019 08:50:15 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54764 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbfGQR6X (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Jul 2019 13:58:23 -0400
+        with ESMTP id S1727730AbfGRMuP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Jul 2019 08:50:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=D/zbFrOzyCwGCJW08ztoVg22SqJnjWI3tzlg/Z8Cj80=; b=ZXpITInP+oKZ
-        nwLPZLUo2oDn5HHztOFfD10XFEyT+Qb6vNNVgtJukQSOa5dc9MR+STqdoorAaJOgISJ+ISS1ywvnh
-        GNyuqM6JU8vxzrLAK1JHFtaEWyQ35SAUVKd76Dr3ppRQNQEX0+3EKeFJkfKh3OTGRxW0IludROcQ8
-        ZAhwI=;
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=cEKz6vzhG50bLPrFj2nQ+q2iCqfHJ5p08/faFuU/tmo=; b=GkRibwu+YUKwTy3cvBnatmb2D
+        FD10UfEpSVZg4jJPngQlitY7aA/iWbv18ZQaXaLcxpyYbpNkX66qWKc6LjwyN9nenTpPt1VSAbPp5
+        3qdSEVW2GJBLOTnS+rrdpMgZ5BFMCxHAyzCvnzvSZY/2GQQiNPjsoE1+J3mp/bZN76DRg=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1hnoC4-0001lq-HS; Wed, 17 Jul 2019 17:58:20 +0000
+        id 1ho5rN-000564-HM; Thu, 18 Jul 2019 12:50:09 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 346612742C25; Wed, 17 Jul 2019 18:58:19 +0100 (BST)
+        id A5E4C2742A55; Thu, 18 Jul 2019 13:50:08 +0100 (BST)
+Date:   Thu, 18 Jul 2019 13:50:08 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: gpio: Add SPI_MASTER_GPIO_SS flag" to the spi tree
-In-Reply-To: <20190716204651.7743-1-linus.walleij@linaro.org>
-X-Patchwork-Hint: ignore
-Message-Id: <20190717175819.346612742C25@ypsilon.sirena.org.uk>
-Date:   Wed, 17 Jul 2019 18:58:19 +0100 (BST)
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-iio@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jic23@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        Michael Hennerich <michael.hennerich@analog.com>
+Subject: Re: [PATCH 1/4][V2] drivers: spi: core: Add optional delay between
+ cs_change transfers
+Message-ID: <20190718125008.GD5761@sirena.org.uk>
+References: <20190717115109.15168-1-alexandru.ardelean@analog.com>
+ <20190717115109.15168-2-alexandru.ardelean@analog.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3Gf/FFewwPeBMqCJ"
+Content-Disposition: inline
+In-Reply-To: <20190717115109.15168-2-alexandru.ardelean@analog.com>
+X-Cookie: Oh, wow!  Look at the moon!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
 
-   spi: gpio: Add SPI_MASTER_GPIO_SS flag
+--3Gf/FFewwPeBMqCJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been applied to the spi tree at
+On Wed, Jul 17, 2019 at 02:51:06PM +0300, Alexandru Ardelean wrote:
+> Some devices like the ADIS16460 IMU require a stall period between
+> transfers, i.e. between when the CS is de-asserted and re-asserted. The
+> default value of 10us is not enough. This change makes the delay
+> configurable for when the next CS change goes active.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
+To repeat my previous feedback:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+| This looks like cs_change_delay.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Please use subject lines matching the style for the subsystem.  This
+makes it easier for people to identify relevant patches.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Please don't ignore review comments, people are generally making them
+for a reason and are likely to have the same concerns if issues remain
+unaddressed.  Having to repeat the same comments can get repetitive and
+make people question the value of time spent reviewing.  If you disagree
+with the review comments that's fine but you need to reply and discuss
+your concerns so that the reviewer can understand your decisions.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+--3Gf/FFewwPeBMqCJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Mark
+-----BEGIN PGP SIGNATURE-----
 
-From 2922d1cc1696200a3e1fd6d82a7798fcd2cadf12 Mon Sep 17 00:00:00 2001
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 16 Jul 2019 22:46:51 +0200
-Subject: [PATCH] spi: gpio: Add SPI_MASTER_GPIO_SS flag
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0wav8ACgkQJNaLcl1U
+h9APhQf/QOouOeq0OOWIhFy4+/g0D4HdPXY0lzPOPRqIa3No7BWtewQIntQ7uARy
+/6nZrCA4lT9IuLtQY9TtxBtY3GyY1hLyWXnibxUsD0vZqS7cBjvVdYYv9/FTdDEK
+VquUng/K54Vp6Ku0GCfh9EXhEs05w/L4B1cWa1r7FD6gbF5llweQ6A/JP68B2Jzl
+mAj3fEjb7brceyU08UiJsfDCIehvVc3vpu5wCyFFj0FzGhJ+IfJdAmFn7C6EmotF
+CM8deV1NaeQB0iUkCSVgTj+pBG4UZ0hj0CGju8xXxE6/f/+1BgBp6EpNZj1Tptzg
+XIBZ7Xf1k9oTXGZ+05q/wXtv2P9N+w==
+=liAJ
+-----END PGP SIGNATURE-----
 
-The GPIO SPI master has some code in its local CS
-callback to set the initial sck GPIO value. This was
-lost in the commit converting it to use SPI core
-GPIO handling as this callback isn't called if the
-internal GPIO handling is active.
-
-Add the special SPI_MASTER_GPIO_SS to ascertain it
-gets called anyway so we get the initial SCK setting
-right. There is some platform provided GPIO handling
-there as well but this will be skipped as the cs_gpios
-will be NULL.
-
-My test targets seem not to care about the initial
-SCK value so I am uncertain if this is a regression,
-but to preserve the previous semantic we better do
-this.
-
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Fixes: 249e2632dcd0 ("spi: gpio: Don't request CS GPIO in DT use-case")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20190716204651.7743-1-linus.walleij@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-gpio.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
-index eca9d52ecf65..9eb82150666e 100644
---- a/drivers/spi/spi-gpio.c
-+++ b/drivers/spi/spi-gpio.c
-@@ -410,6 +410,12 @@ static int spi_gpio_probe(struct platform_device *pdev)
- 
- 	bb = &spi_gpio->bitbang;
- 	bb->master = master;
-+	/*
-+	 * There is some additional business, apart from driving the CS GPIO
-+	 * line, that we need to do on selection. This makes the local
-+	 * callback for chipselect always get called.
-+	 */
-+	master->flags |= SPI_MASTER_GPIO_SS;
- 	bb->chipselect = spi_gpio_chipselect;
- 	bb->set_line_direction = spi_gpio_set_direction;
- 
--- 
-2.20.1
-
+--3Gf/FFewwPeBMqCJ--
