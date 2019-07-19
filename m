@@ -2,86 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C113D6E5A5
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jul 2019 14:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A03D6EC92
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Jul 2019 00:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728252AbfGSM1c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Jul 2019 08:27:32 -0400
-Received: from shell.v3.sk ([90.176.6.54]:41313 "EHLO shell.v3.sk"
+        id S1728917AbfGSWtu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Jul 2019 18:49:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40876 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727552AbfGSM1b (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 19 Jul 2019 08:27:31 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id AEECC49112;
-        Fri, 19 Jul 2019 14:27:28 +0200 (CEST)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 34WDe8hZMmYk; Fri, 19 Jul 2019 14:27:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id E31AE4911E;
-        Fri, 19 Jul 2019 14:27:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8Ji-UDjYCTN7; Fri, 19 Jul 2019 14:27:20 +0200 (CEST)
-Received: from belphegor.brq.redhat.com (nat-pool-brq-t.redhat.com [213.175.37.10])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id CC7FA49112;
-        Fri, 19 Jul 2019 14:27:19 +0200 (CEST)
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH] spi: pxa2xx: Balance runtime PM enable/disable on error
-Date:   Fri, 19 Jul 2019 14:27:13 +0200
-Message-Id: <20190719122713.3444318-1-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.21.0
+        id S1727344AbfGSWtu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 19 Jul 2019 18:49:50 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A42E721874;
+        Fri, 19 Jul 2019 22:49:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563576589;
+        bh=Klt7CebjyXqGVRbXNF1U3wyGJqIWQOIIcRLJT93OQ+g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=wCy7eeadZZYg4XZBwCEH/aG4rCHd2X8+WQJiqZrXJ05hWYYDpJXaZWmRfgv4FvYEM
+         EuINtaeTGaWgTB9XR5asYzOpIZ7b9GSBb0mTWM1ZHC/jGKTReSTIOeTeqvrCh0vAU+
+         cVlTZzQsQGSlXlgZiHR8eBtYlTA1QwdjIODnYyj0=
+Received: by mail-qk1-f171.google.com with SMTP id d79so24435899qke.11;
+        Fri, 19 Jul 2019 15:49:49 -0700 (PDT)
+X-Gm-Message-State: APjAAAV3xo+BhMweRPDC4rqsrvLxXr4Nw7WlqDWtAPj9/6Imc3E0QQYq
+        kJpn5wRCyQ57jyOfhK2pX8zCfiz1d6iHbuoBEQ==
+X-Google-Smtp-Source: APXvYqzTrjLNjpoGgXzQ/tPDhplfN9MU7nWEaESSUgvy6jdg+g0UISnO9ycXnTKR/7UlNhzEJDMiPYgAxXRtGPIff+g=
+X-Received: by 2002:a37:a48e:: with SMTP id n136mr37922560qke.223.1563576588892;
+ Fri, 19 Jul 2019 15:49:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20190717115109.15168-1-alexandru.ardelean@analog.com> <20190717115109.15168-5-alexandru.ardelean@analog.com>
+In-Reply-To: <20190717115109.15168-5-alexandru.ardelean@analog.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 19 Jul 2019 16:49:37 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKZMoxdH_rpyD9kTEPtFZ=QxEV325wH=6qdhNX2nS=9ug@mail.gmail.com>
+Message-ID: <CAL_JsqKZMoxdH_rpyD9kTEPtFZ=QxEV325wH=6qdhNX2nS=9ug@mail.gmail.com>
+Subject: Re: [PATCH 4/4][V2] dt-bindings: iio: imu: add bindings for ADIS16460
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Don't undo the PM initialization if we error out before we managed to
-initialize it. The call to pm_runtime_disable() without being preceded
-by pm_runtime_enable() would disturb the balance of the Force.
+On Wed, Jul 17, 2019 at 5:51 AM Alexandru Ardelean
+<alexandru.ardelean@analog.com> wrote:
+>
+> This change adds device-tree bindings for the ADIS16460.
+>
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> ---
+>  .../bindings/iio/imu/adi,adis16460.yaml       | 53 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/imu/adi,adis16460.yaml
 
-In practice, this happens if we fail to allocate any of the GPIOS ("cs",
-"ready") due to -EPROBE_DEFER because we're getting probled before the
-GPIO driver.
-
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
----
- drivers/spi/spi-pxa2xx.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index fc7ab4b268802..22513caf20006 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1831,14 +1831,16 @@ static int pxa2xx_spi_probe(struct platform_devic=
-e *pdev)
- 	status =3D devm_spi_register_controller(&pdev->dev, controller);
- 	if (status !=3D 0) {
- 		dev_err(&pdev->dev, "problem registering spi controller\n");
--		goto out_error_clock_enabled;
-+		goto out_error_pm_runtime_enabled;
- 	}
-=20
- 	return status;
-=20
--out_error_clock_enabled:
-+out_error_pm_runtime_enabled:
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-+
-+out_error_clock_enabled:
- 	clk_disable_unprepare(ssp->clk);
-=20
- out_error_dma_irq_alloc:
---=20
-2.21.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
