@@ -2,33 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 843B1700AE
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2019 15:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C0F70392
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2019 17:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730554AbfGVNKt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Jul 2019 09:10:49 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:41274 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728343AbfGVNKt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Jul 2019 09:10:49 -0400
+        id S1728689AbfGVPVh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 Jul 2019 11:21:37 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49280 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727036AbfGVPVh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Jul 2019 11:21:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=GLfj3XE94O2rj+M1sDTUTWfglE0+aX441ii2IeKx/CI=; b=nRZwn/4NR9XHQ9sVhmDigrjy7
-        3S3HlKrJQkjiz0voh8ZPb7dQm7aJXztF5PbsOj0DSouxZY2y0qPviHngwp1ZWVrE+dxDw6SoKrY2l
-        pF6HqDdBwRqqDDaHnXCfoXdLSq23wo9bRL8C9N7rA0GirCNhiSUCdOscHoY0mKB4XKMjBJr4C4oRh
-        8InhsLufSJN14DVBLsEuEp593sGGRaSS/RMWrTSz+MbrSvcSPAbpcD8HDOLR5mJ2mkkG7qC1Pw8Lz
-        I6wbdSuhVGHJBJlMFyz2F5TAmgmsWf1ZollbkM6ttMGYn2Ap7eilwDCK0Ku392VFkvbWxZQ77m2Mo
-        4dM8QpNxQ==;
-Received: from 177.157.124.3.dynamic.adsl.gvt.net.br ([177.157.124.3] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hpY5P-0002aj-VB; Mon, 22 Jul 2019 13:10:40 +0000
-Date:   Mon, 22 Jul 2019 10:10:35 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
+         bh=GRH4LnU5ViZtMGHEsEp/vqva0F0wm21N2vWJmToWljk=; b=aUV6XEHo0PdIqX6ITKyFjeglI
+        +3mE1SamSPgc0r7Wp73J1LBoDEhOyHvHoRncJBU6bGhTVaIBZtFcd6Q59mf5FZm+BqCJeCAS9gc1l
+        TGxCLkFdfEzRFjYF1c1oiUGCUbwnBexh+rHqiUvKke242Pqf7Emj60FD5na2prmpR8PHg=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hpa7j-0008Ob-E0; Mon, 22 Jul 2019 15:21:11 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 55D8827416F9; Mon, 22 Jul 2019 16:21:10 +0100 (BST)
+Date:   Mon, 22 Jul 2019 16:21:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Jonathan Cameron <jic23@kernel.org>,
         Hartmut Knaack <knaack.h@gmx.de>,
@@ -39,118 +40,114 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Subject: Re: [PATCH 04/22] docs: spi: convert to ReST and add it to the kABI
  bookset
-Message-ID: <20190722101035.4f61c1bf@coco.lan>
-In-Reply-To: <20190722121151.GC4756@sirena.org.uk>
+Message-ID: <20190722152110.GE4756@sirena.org.uk>
 References: <cover.1563792333.git.mchehab+samsung@kernel.org>
-        <be171b438013f8824425595e3d637f5e7d466249.1563792334.git.mchehab+samsung@kernel.org>
-        <20190722121151.GC4756@sirena.org.uk>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+ <be171b438013f8824425595e3d637f5e7d466249.1563792334.git.mchehab+samsung@kernel.org>
+ <20190722121151.GC4756@sirena.org.uk>
+ <20190722101035.4f61c1bf@coco.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9crTWz/Z+Zyzu20v"
+Content-Disposition: inline
+In-Reply-To: <20190722101035.4f61c1bf@coco.lan>
+X-Cookie: No skis take rocks like rental skis!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Em Mon, 22 Jul 2019 13:11:51 +0100
-Mark Brown <broonie@kernel.org> escreveu:
 
-> On Mon, Jul 22, 2019 at 08:07:31AM -0300, Mauro Carvalho Chehab wrote:
-> > While there's one file there with briefily describes the uAPI,
-> > the documentation was written just like most subsystems: focused
-> > on kernel developers. So, add it together with driver-api books.  
-> 
-> Please use subject lines matching the style for the subsystem.  This
-> makes it easier for people to identify relevant patches.
+--9crTWz/Z+Zyzu20v
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure. Do you prefer this prefixed by:
+On Mon, Jul 22, 2019 at 10:10:35AM -0300, Mauro Carvalho Chehab wrote:
+> Mark Brown <broonie@kernel.org> escreveu:
 
-	spi: docs:
+> > On Mon, Jul 22, 2019 at 08:07:31AM -0300, Mauro Carvalho Chehab wrote:
+> > > While there's one file there with briefily describes the uAPI,
+> > > the documentation was written just like most subsystems: focused
+> > > on kernel developers. So, add it together with driver-api books. =20
 
-Or with something else?
+> > Please use subject lines matching the style for the subsystem.  This
+> > makes it easier for people to identify relevant patches.
 
-> >  Documentation/spi/{spidev => spidev.rst}      |  30 +++--  
-> 
-> This is clearly a userspace focused document rather than a kernel
-> internal one.
+> Sure. Do you prefer this prefixed by:
 
-True. What I've been doing so far is, for all drivers that I'm converting
-with carries more than one documentation type (kABI, uABI and/or 
-admin-guide) is to keep the directory as-is, adding them under
-this section at Documentation/index.rst:
+> 	spi: docs:
 
-	Kernel API documentation
-	------------------------
+> Or with something else?
 
-That's the case of media, input, hwmon, and so many other subsystems.
+Anything starting with spi:
 
-Yet, you're right: this implies that there will be some things
-to be done, as the long-term documentation should be like:
+> > >  Documentation/spi/{spidev =3D> spidev.rst}      |  30 +++-- =20
+> >=20
+> > This is clearly a userspace focused document rather than a kernel
+> > internal one.
+>=20
+> True. What I've been doing so far is, for all drivers that I'm converting
+> with carries more than one documentation type (kABI, uABI and/or=20
+> admin-guide) is to keep the directory as-is, adding them under
+> this section at Documentation/index.rst:
+>=20
+> 	Kernel API documentation
+> 	------------------------
+>=20
+> That's the case of media, input, hwmon, and so many other subsystems.
 
-	Documentation/admin-guide/{media, input, hwmon, spi, ...}
-	Documentation/userspace-api/{media, input, hwmon, spi, ...}
-	Documentation/driver-api/{media, input, hwmon, spi, ...}
+> Yet, you're right: this implies that there will be some things
+> to be done, as the long-term documentation should be like:
+>=20
+> 	Documentation/admin-guide/{media, input, hwmon, spi, ...}
+> 	Documentation/userspace-api/{media, input, hwmon, spi, ...}
+> 	Documentation/driver-api/{media, input, hwmon, spi, ...}
 
-Btw, if you look at spidev file, it contains stuff for both
-userspace-api:
+> Btw, if you look at spidev file, it contains stuff for both
+> userspace-api:
+>=20
+> 	"SPI devices have a limited userspace API, supporting basic half-duplex
+> 	 read() and write() access to SPI slave devices.  Using ioctl() requests=
+,"
 
-	"SPI devices have a limited userspace API, supporting basic half-duplex
-	 read() and write() access to SPI slave devices.  Using ioctl() requests,"
+> And for admin-guide:
 
-And for admin-guide:
+> 	"For a SPI device with chipselect C on bus B, you should see:
+>=20
+> 	    /dev/spidevB.C ... character special device, major number 153 with
+> 		a dynamically chosen minor device number. "
 
-	"For a SPI device with chipselect C on bus B, you should see:
+I think that split is higly artificial...
 
-	    /dev/spidevB.C ... character special device, major number 153 with
-		a dynamically chosen minor device number. "
+> So, if we're willing to move it, the best is to do on a separate patch
+> with would split its contents into two files: admin-guide/spi-devices.rst=
+ and=20
+> userspace-api/spi-api.rst.
 
-So, if we're willing to move it, the best is to do on a separate patch
-with would split its contents into two files: admin-guide/spi-devices.rst and 
-userspace-api/spi-api.rst.
+=2E..
 
--
+> Ideally, we should split what's there at media/uapi into admin-guide
+> and userspace-api, but this would mean *a lot* of efforts. Not sure
+> if it is worth the effort.
 
-There are a couple of reasons why I opted for this strategy:
+Is the admin/API stuff even sensible for things that are more embedded
+or desktop focused?  It feels very arbatrary and unhelpful for things
+like spidev where theuser is going to be writing a program.
 
-1) There are *lots* of docs that contain all 3 types of information
-   on it on a single file.
+--9crTWz/Z+Zyzu20v
+Content-Type: application/pgp-signature; name="signature.asc"
 
-2) On media, we use SPHINXDIRS to produce the media book from our
-   devel tree:
-	https://linuxtv.org/downloads/v4l-dvb-apis-new/index.html
+-----BEGIN PGP SIGNATURE-----
 
-   When documents are built with either PDF SPHINXDIRS, each subdir
-   will be on a different book and all inter-book cross-references
-   will break.
-   
-   For this to be fixed, we'll likely need to use something like
-   intersphinx extension, but this would probably require a
-   per-subsystem mapping (for example, saying that, for media, the
-   site used to resolve broken cross references is linuxtv.org). 
-   Maintaining it can be painful.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl011GUACgkQJNaLcl1U
+h9CZ5gf/Vsyo2s1zqSdsE+XThHziQ8cTLyZGPQXBl9NPwjRgYStFIoEqDLybvHwh
+fUff37LiyFYcFrJvexN8aJBiJK8fTbbDdbqAY0K48HJIaIsQzXHyWU/PnCT6TcpZ
+Pq8TgmqknTHlORqVhUTCoGa9RG7VxjrUxO+CaO6JULIzvpFNfXzuK4QoYlBx0SD/
+hjYZTs7SLRtas2DgKwYDFgTgxXHe9+usm/xAKxSff8dA9MDmdGrURlhAmsLRHWpb
+dqlJZiSgJYQhkM79SqXkSXCr6NMfZHmuV1ACo/9dbDkFdCxeDf424Z9WKRd45d05
+P5/YE7JbpJxcV+8Q17sLnA5Xe/6JQg==
+=j0gD
+-----END PGP SIGNATURE-----
 
-3) So far, I was unable to split even the media docs! Shame on
-   me! The reason is that this is not an easy task.
-
-
-One interesting example is at what we consider to be the media
-uAPI book. It actually contains both sysadmin and uAPI documentation.
-
-For example, at:
-
-	Documentation/media/uapi/v4l/open.rst
-
-You'll see that, while most things there belong to the admin
-guide (device node descriptions, multiple opens, etc), it
-mentions the Kernel userspace API - open(), read(), close() syscalls.
-
-Splitting this file on two separate books won't be that easy.
-
-Ideally, we should split what's there at media/uapi into admin-guide
-and userspace-api, but this would mean *a lot* of efforts. Not sure
-if it is worth the effort.
-
-
-Thanks,
-Mauro
+--9crTWz/Z+Zyzu20v--
