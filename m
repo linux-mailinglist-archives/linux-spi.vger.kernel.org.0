@@ -2,112 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 842C3737B2
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2019 21:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F2673E7E
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2019 22:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726715AbfGXTSl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 Jul 2019 15:18:41 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:34626 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726430AbfGXTSH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Jul 2019 15:18:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=zLOyjuMGLnZd3b5xW00mz+HMld+XrRBlTLTieGu4vyw=; b=tsNLOsuRwjgi
-        qNH52NAUZSpkDKc1q6m53Zz+mLddr7qhVvPMIQ/InszAffGBTrDIQQpnutj82V399SnYfj1S3xWRl
-        ICzdufECff83TpPEyc172roOAPgGj14PjXDNDtOm/zQMf/+4StjwhAvgNs5spWUGuWDOdHICCRT+q
-        oK4+Y=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hqMm5-00005G-78; Wed, 24 Jul 2019 19:18:05 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id ADA792742BAC; Wed, 24 Jul 2019 20:18:04 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Chuhong Yuan <hslester96@gmail.com>
-Cc:     "Cc:"@sirena.org.uk, "Cc:"@sirena.org.uk,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: dw-pci: Use dev_get_drvdata" to the spi tree
-In-Reply-To: <20190724122331.21856-1-hslester96@gmail.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190724191804.ADA792742BAC@ypsilon.sirena.org.uk>
-Date:   Wed, 24 Jul 2019 20:18:04 +0100 (BST)
+        id S2391004AbfGXUXN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Jul 2019 16:23:13 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36129 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390453AbfGXTnB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Jul 2019 15:43:01 -0400
+Received: by mail-io1-f67.google.com with SMTP id o9so92214717iom.3;
+        Wed, 24 Jul 2019 12:43:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XSPJRPecmIkBOwXjOa6IB3IwqosGZbZUtric4Ph4E4o=;
+        b=Uz1vzZMmISM+EBL8D3JE3iB1WEkzLnUcCa+bZq8kQ8vBTZt/CeK49yyuH9VYj/mSQc
+         cKlTho2y9sBe6EHEFFt83JI7+My4kdNg5/+xAF5za2rAOUUBC7D6OFf8Rj9CzLLEbGT6
+         3qYGZyfMMWw74jZBcFkWO/qG5IdITPtAAHdx9Y6orfZRsFu3yyUmMDK0j2G8h16un2Tb
+         YedgapKIVgB3pfSAq9fJZ9cz933OAL0WyWhvAYCj/NQ3bvKRQGeB9H6AWHrzQCS43ezW
+         cSueR2pTrupM5Z8xG9FJBTA22Rt46yyKNWN87IvV2nmEaKWlh/sGqUGiEiR4WzQLKL/u
+         44ZQ==
+X-Gm-Message-State: APjAAAW6XZ70Q2gH8z4pMOEYyTJDuWWAH/kl6D/Fczi/WQ8GNHJqSCwc
+        ze1rvu/wU7y7+fUKcNTvkw==
+X-Google-Smtp-Source: APXvYqwHgt8wZNph+Kfk3NAJ2uOYvBBd1tibxisfgZlYpbdY6CVInbD0nZywDI8EDMJ/YLDUSyHdAw==
+X-Received: by 2002:a5d:885a:: with SMTP id t26mr25104113ios.218.1563997380432;
+        Wed, 24 Jul 2019 12:43:00 -0700 (PDT)
+Received: from localhost ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id v13sm38532541ioq.13.2019.07.24.12.42.59
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 24 Jul 2019 12:42:59 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 13:42:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>, letux-kernel@openphoenux.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] DTS: ARM: gta04: introduce legacy spi-cs-high to
+ make display work again
+Message-ID: <20190724194259.GA25847@bogus>
+References: <cover.1562597164.git.hns@goldelico.com>
+ <8ae7cf816b22ef9cecee0d789fcf9e8a06495c39.1562597164.git.hns@goldelico.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8ae7cf816b22ef9cecee0d789fcf9e8a06495c39.1562597164.git.hns@goldelico.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Mon, Jul 08, 2019 at 04:46:05PM +0200, H. Nikolaus Schaller wrote:
+> commit 6953c57ab172 "gpio: of: Handle SPI chipselect legacy bindings"
+> 
+> did introduce logic to centrally handle the legacy spi-cs-high property
+> in combination with cs-gpios. This assumes that the polarity
+> of the CS has to be inverted if spi-cs-high is missing, even
+> and especially if non-legacy GPIO_ACTIVE_HIGH is specified.
+> 
+> The DTS for the GTA04 was orginally introduced under the assumption
+> that there is no need for spi-cs-high if the gpio is defined with
+> proper polarity GPIO_ACTIVE_HIGH.
 
-   spi: dw-pci: Use dev_get_drvdata
+Given that spi-cs-high is called legacy, that would imply that DT's 
+should not have to use spi-cs-high.
 
-has been applied to the spi tree at
+> This was not a problem until gpiolib changed the interpretation of
+> GPIO_ACTIVE_HIGH and missing spi-cs-high.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.4
+Then we should fix gpiolib...
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 2a3b6f7b02cd141c990c6f5aed41070b5b7f4a7d Mon Sep 17 00:00:00 2001
-From: Chuhong Yuan <hslester96@gmail.com>
-Date: Wed, 24 Jul 2019 20:23:31 +0800
-Subject: [PATCH] spi: dw-pci: Use dev_get_drvdata
-
-Instead of using to_pci_dev + pci_get_drvdata,
-use dev_get_drvdata to make code simpler.
-
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-Link: https://lore.kernel.org/r/20190724122331.21856-1-hslester96@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-dw-pci.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/spi/spi-dw-pci.c b/drivers/spi/spi-dw-pci.c
-index 9651679ee7f7..c1e2401cace0 100644
---- a/drivers/spi/spi-dw-pci.c
-+++ b/drivers/spi/spi-dw-pci.c
-@@ -98,16 +98,14 @@ static void spi_pci_remove(struct pci_dev *pdev)
- #ifdef CONFIG_PM_SLEEP
- static int spi_suspend(struct device *dev)
- {
--	struct pci_dev *pdev = to_pci_dev(dev);
--	struct dw_spi *dws = pci_get_drvdata(pdev);
-+	struct dw_spi *dws = dev_get_drvdata(dev);
- 
- 	return dw_spi_suspend_host(dws);
- }
- 
- static int spi_resume(struct device *dev)
- {
--	struct pci_dev *pdev = to_pci_dev(dev);
--	struct dw_spi *dws = pci_get_drvdata(pdev);
-+	struct dw_spi *dws = dev_get_drvdata(dev);
- 
- 	return dw_spi_resume_host(dws);
- }
--- 
-2.20.1
-
+> The effect is that the missing spi-cs-high is now interpreted as CS being
+> low (despite GPIO_ACTIVE_HIGH) which turns off the SPI interface when the
+> panel is to be programmed by the panel driver.
+> 
+> Therefore, we have to add the redundant and legacy spi-cs-high property
+> to properly pass through the legacy handler.
+> 
+> Since this is nowhere documented in the bindings, we add some words of
+> WARNING.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  Documentation/devicetree/bindings/spi/spi-bus.txt | 6 ++++++
+>  arch/arm/boot/dts/omap3-gta04.dtsi                | 1 +
+>  2 files changed, 7 insertions(+)
