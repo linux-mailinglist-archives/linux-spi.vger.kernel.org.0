@@ -2,128 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5157240E
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2019 03:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA177282A
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2019 08:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728791AbfGXBxF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Jul 2019 21:53:05 -0400
-Received: from mail-eopbgr140083.outbound.protection.outlook.com ([40.107.14.83]:20858
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725837AbfGXBxF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 23 Jul 2019 21:53:05 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KQTOEWBkE04IY+YAyrzfpgwlv93BC/UfmnlY4I5Rnnu69m5crFIR3nMuozpmwShzXM0ZsO1TXuRI0kR4p2NnbGb/xSff8gpIlfCzRJ3sIRESxaSX8M9cm2e5ACvSYq0QKFf7CgIjTVs7IYsxDs80WRjL8+mnFVCogfVOgywjLniGkFndmxZesC8nd1CE/5WIkpUasqSCz0fX8IVPQ8ZaqWU9xXPviX82tNXbgLGfE9jh6cMaQ9yljidhpmBAtxqnb7J3p7WnGbfryBK0/VNMF++ppbC2zQTAKDzpo0Gl5BNQCe9mD28SRJzcyKql5QwTWnVV1/dHMWUe2Vd65naxNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XVRTQOJR8hUnc7CckOKhDvoVieXPJrdfQhUMUFZtr60=;
- b=mLO0BAXB5arqC6QvgNlnmklpthF2TszeSehQTJAPXTbf44gy0I4pNoEDGmimL2FkGP1H4XLKfssl8IDuZrMx8peRxw0uTDI6GSiBXrx39VBCbqQ8JsRrdwNN9O8lSSsUJ2sF0H+QMvoLVxqHukuUXesNfXZBANNjKFO3perFZdeWUdPX2LbuJfg9EGR8QY3bEB/1ttHFCLjrUY1iYd2D5Suymwjm3d8itf+M40os8k6xO+8yUF6OYTu1hbnXbG4V50ShUN2cJS3f8F5MhacFj63IuJDZ/ukoWPk3oB0ioj1giOIdONMCDIKgP5w336lCCFCiutvT2aPuUZURQ/6isA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XVRTQOJR8hUnc7CckOKhDvoVieXPJrdfQhUMUFZtr60=;
- b=rgxIEaoJ9pJjqTGIRqLjPk5AgUK6+HScSwjGq6hxjrRC1a69OpSMGZZkT9E2QYDsmuBDzlTTdy1S7WIIpurQiNVixdHwgmjh/lRs/zH/sEtimmv3XHwCr28oPKhPbtqyVX2U6Wr8SokWXAEgAnlmpH2/bbs3u/s1gMA1PDiQjfI=
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (20.179.235.81) by
- VE1SPR01MB0007.eurprd04.prod.outlook.com (20.179.193.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.17; Wed, 24 Jul 2019 01:53:01 +0000
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::905c:a110:72fc:3a49]) by VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::905c:a110:72fc:3a49%7]) with mapi id 15.20.2094.017; Wed, 24 Jul 2019
- 01:53:01 +0000
-From:   Robin Gong <yibin.gong@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH v5 12/15] ARM: dts: imx6ul: add dma support on ecspi
-Thread-Topic: [PATCH v5 12/15] ARM: dts: imx6ul: add dma support on ecspi
-Thread-Index: AQHVH2TVoxrocaPAG0GbhXUgE95pRabOlrSAgAmbW7CAAQJGgIAAEIzw
-Date:   Wed, 24 Jul 2019 01:53:00 +0000
-Message-ID: <VE1PR04MB6638F60965CD3D5CE47F26C489C60@VE1PR04MB6638.eurprd04.prod.outlook.com>
-References: <20190610081753.11422-1-yibin.gong@nxp.com>
- <20190610081753.11422-13-yibin.gong@nxp.com> <20190717064204.GA3738@dragon>
- <VE1PR04MB663894FA5BC88B130C70AC0789C70@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20190724004848.GV15632@dragon>
-In-Reply-To: <20190724004848.GV15632@dragon>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yibin.gong@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 153fc810-43c0-4ffa-be34-08d70fd9a8e4
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VE1SPR01MB0007;
-x-ms-traffictypediagnostic: VE1SPR01MB0007:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <VE1SPR01MB0007C7C8F79C9966AFE4CB7589C60@VE1SPR01MB0007.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
-x-forefront-prvs: 0108A997B2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(346002)(396003)(376002)(136003)(199004)(189003)(6436002)(33656002)(55016002)(966005)(66066001)(4001150100001)(6306002)(486006)(9686003)(53936002)(2906002)(102836004)(8936002)(6116002)(68736007)(25786009)(6506007)(53546011)(76176011)(7696005)(478600001)(186003)(11346002)(66556008)(66476007)(81166006)(4326008)(8676002)(99286004)(64756008)(14454004)(26005)(305945005)(316002)(7736002)(256004)(4744005)(476003)(76116006)(5660300002)(229853002)(66946007)(54906003)(52536014)(3846002)(446003)(71200400001)(74316002)(66446008)(6916009)(7416002)(81156014)(86362001)(71190400001)(6246003)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1SPR01MB0007;H:VE1PR04MB6638.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: GHJD73MEUaC/tMFOsrJaSUhVSGrdVXLWUG8i8gVF083Z8djAh+aZH4AtLNofEPr0hzxubHDvFE9hsUYLtaOphE2LSOSpTmvH/hyoOT+XB0/KgcvV2wM+sdv1iBhL8Oamhv4eLMqMy+2gELHLrwfReLZbwU4OJ03bPguINsp85dYeUjQxPG7y9A9w+OgbKx67F1fkZ3WlLEahuwtTAkc6rEw3Dr1mVqa1oQ9+BP8eUJwNRSt7Tp8wSCl/eq+XbpmlBEhKy8OtxIA861rYfjEObHNznoESU20iz7eWqpsCoeyn27Y60JQ3/SaAX/UaQ3TYavsDlIBNovRFIeadrZFm7nt2gB8CRV+krHmZZMrx4OSC1QgQBVkurTCtBFpOEDz0Pw/T4c3t1+T4eAi8FZGmUnjbENxAGbTv7yK4eiwC3UQ=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1725899AbfGXGTT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Jul 2019 02:19:19 -0400
+Received: from mout.gmx.net ([212.227.17.20]:55597 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725882AbfGXGTT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 24 Jul 2019 02:19:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1563949135;
+        bh=D+gEbfwgaLvlLdhFCwTJMZNO9xaSlTRsrYukU3+uer4=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Whr6y/h5H6clav3tw07AJce4YSNDIvPuCitYGga5eg9yEXNUUncLMaFp/eiomkH5f
+         iYqJSUe4KDhi/E2/xa2UNjRDqlqJWaMtUnoHu8j8U+pseSDkAkETF8dI8r+2WqXN3l
+         tto1y0Oy+NHwP6sKZuGGLnbOLABHenCaO9J/W83o=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.1.162] ([37.4.249.115]) by mail.gmx.com (mrgmx102
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 0MfSrf-1i4eWq1PjP-00P8iI; Wed, 24
+ Jul 2019 08:18:55 +0200
+Subject: Re: [PATCH for-5.3] spi: bcm2835: Fix 3-wire mode if DMA is enabled
+To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     Eric Anholt <eric@anholt.net>, Nuno Sa <nuno.sa@analog.com>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+References: <328318841455e505370ef8ecad97b646c033dc8a.1562148527.git.lukas@wunner.de>
+From:   Stefan Wahren <wahrenst@gmx.net>
+Message-ID: <f8d7d3f4-260e-efe2-328e-a88a057cc08a@gmx.net>
+Date:   Wed, 24 Jul 2019 08:18:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 153fc810-43c0-4ffa-be34-08d70fd9a8e4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jul 2019 01:53:01.0358
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yibin.gong@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1SPR01MB0007
+In-Reply-To: <328318841455e505370ef8ecad97b646c033dc8a.1562148527.git.lukas@wunner.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:+emEDpTUnTjF20Ze+aa8FhLqroErc3BzHUH106315jYfFjc5l6S
+ CN2fnPkJQCs8hh789r+o5QMPRdZt8dKCEsv7kIUstedF80iONqz/lcKJ5siGtaHKPVl2I5h
+ +wIq63jF2qfRXDdFTfd6kd86/vJwOwFrNDL5XN9W1MoOq/ZLeJs/zI4IYMRwQIgYq7GcSv0
+ FFoaudDk0TOnXoPKqd7nw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:01/Xjc8Lw8A=:naeY1klCLRxAkdBEJECsMK
+ +tFL2CS786UUnBdSTihIgW6UfpHrS5PLI4zItB9+glOD21hDGzAyX4FaLJKk/qQ9slhjVxLeJ
+ jCr2sNbkmKWFVFDucIFXOVMKkzcwAWy1JjHjsu5LHC2V/ynXHe1Ju+EqYSKAztAsANeW16RMZ
+ wDmj41SJXmREK5wbRJ/9q0K40PF+QExa5jYDmD6t4361ErA6S9D4InFiuxO9W4/wU28cGhJ6b
+ 6zmzxHaM+sKB+D/uHmEtz/siFznY9pgij+jNHfQwHNtq/4G1ySsXxtLxwb4Om+Wpay5OvHV0Z
+ l5Sc0B/aOKxlmr4jR7KZkooYLu8yi7Z8a/o+BUZd7TyK/MRXKxUMBMdsGDPIuI2WcC5Lasv/C
+ m8XgiYeZ8nKnMAThuUZOEJSQq/hzkfGMavzKLaNSFhEb2fFMs3dxtRF5ZHweDevZ3tSrugrM6
+ 9xk4cZgMKnpaqiZl0QqGKQU30qahdpiPqTfk1yWa7x1z301Q9q9DuhDGhOLi7//+J3hjDgM+P
+ ubU34b9/4m630kmaQg04bpfOmvXqbzxvsruCSI02FYDdEhha9CtjN8iXtKIBzTNMXYjtPkiz8
+ 6kHuVRBJWyxxHkvVB+jawXLQMPSdQQ05w99y4TaQHWMiXDu5eUyDKMYj3y7NG/dpMWWRZAd6y
+ YhGPX96dB1RfrJrfLGZPJ2qSBEeV9W4HpXcAE/TeLJ7y01fYmI4rNxNQw/a2WRVAjxiBrerxv
+ c2KHOEOe5yAuQYeSuNAHJnJenAQ2FLF7JkX4YTkMHUxH3TyaK4B9SbrIJqnnxCXZxKT2LQ3Cg
+ d5ncBoMlshub1v3lC5YLNG7MF5xdR5wQ7O31R/4DQ1Byz7s6nLUU0iYN0HcfsiC+uvQ6446wE
+ 9xD0+mFDbE4Cz7nTrbRa4q8qjhtFZ1D+YJN25aQvFjMkiGYBVKuKzJlg36C7Cpl0T1Yl0I4Sq
+ CbLOoF+zWO12+RCybbkIHqaAwSmRxjWgVXCzNqglj71NVcRAkVk3mBOIZJWcOcoTyvhAXw9L1
+ A916Y47HTKK59sM3c2wvQGp+1YzeFd1mUVxYzLXSaolNhNh4xz57w6f5N5aRKXdNKJ0YHSwNE
+ 19kPLEqY/xfYzE=
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2019-7-24 at 08:49 Shawn Guo <shawnguo@kernel.org> wrote:
-> On Tue, Jul 23, 2019 at 09:39:38AM +0000, Robin Gong wrote:
-> > On 2019-7-17 at 14:42 Shawn Guo <shawnguo@kernel.org> wrote:
-> > > On Mon, Jun 10, 2019 at 04:17:50PM +0800, yibin.gong@nxp.com wrote:
-> > > > From: Robin Gong <yibin.gong@nxp.com>
-> > > >
-> > > > Add dma support on ecspi.
-> > > >
-> > > > Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-> > >
-> > > Applied, thanks.
-> > Thanks Shawn, but how about other dts patches such as 01/15,02/15?
->=20
-> I need the authors of the commits being reverted agree on the reverting.
->=20
->   Sean Nyekjaer <sean.nyekjaer@prevas.dk>
->   Sascha Hauer <s.hauer@pengutronix.de>
-Seems Sean's mail can't be reached.
-Hello Sacha, Could you please help test if my patch set could fix your issu=
-e even
-I revert your patch?
-https://patchwork.kernel.org/cover/10984301/
->=20
-> Shawn
+Am 03.07.19 um 12:29 schrieb Lukas Wunner:
+> Commit 6935224da248 ("spi: bcm2835: enable support of 3-wire mode")
+> added 3-wire support to the BCM2835 SPI driver by setting the REN bit
+> (Read Enable) in the CS register when receiving data.  The REN bit puts
+> the transmitter in high-impedance state.  The driver recognizes that
+> data is to be received by checking whether the rx_buf of a transfer is
+> non-NULL.
+>
+> Commit 3ecd37edaa2a ("spi: bcm2835: enable dma modes for transfers
+> meeting certain conditions") subsequently broke 3-wire support because
+> it set the SPI_MASTER_MUST_RX flag which causes spi_map_msg() to replace
+> rx_buf with a dummy buffer if it is NULL.  As a result, rx_buf is
+> *always* non-NULL if DMA is enabled.
+>
+> Reinstate 3-wire support by not only checking whether rx_buf is non-NULL=
+,
+> but also checking that it is not the dummy buffer.
+>
+> Fixes: 3ecd37edaa2a ("spi: bcm2835: enable dma modes for transfers meeti=
+ng certain conditions")
+> Reported-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Cc: stable@vger.kernel.org # v4.2+
+> Cc: Martin Sperl <kernel@martin.sperl.org>
+
+Acked-by: Stefan Wahren <wahrenst@gmx.net>
+
+Please use my new address in the future
+
