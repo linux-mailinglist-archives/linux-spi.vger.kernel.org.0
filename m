@@ -2,129 +2,166 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8228574721
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jul 2019 08:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFA375043
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jul 2019 15:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbfGYG0t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 25 Jul 2019 02:26:49 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:22096 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbfGYG0t (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 25 Jul 2019 02:26:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1564036007;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=MA157R7B1YjDlv3TGVme83JNkT3dM1NdR6lxMLM44Co=;
-        b=pzTimIawgYkEAMeiyrNNTXUbLZOdkpqvskS9bmhArnu1TH0g1gg3qmjvHkwyl0HB/D
-        35q5eK+RpmfELmSlIEBjHEtyqUu/YM4EB6zBvU3CfsGzOYqooXfmm7lA0RaSDg2glhcZ
-        eWlbai19WMvOftwGDQJQlVTMTsuIf+uAYMX5+yCAdX/M5EUYbf1Fw/rYIsy0QNPBKwTR
-        VA3IWiaJJZEjPOT+Pjr2PmVVMOYpF0piC8YQUS8v83nZRhC/oloipvHFp23WO2IXYgXg
-        D/QMEPIDMBpakw0ueXfSbYpo64WBLG6die2XGSi0vt7NIRtNiZP3WukUiUuysDfmHkaf
-        a5/g==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qOxWRk4dCzwp5iD+2s6bqei8mNpEiGupa/KJG1vh7ft13w="
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2001:16b8:26ed:3500:85cc:8b56:536:d1f1]
-        by smtp.strato.de (RZmta 44.24 AUTH)
-        with ESMTPSA id j00b6dv6P6NhX0K
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Thu, 25 Jul 2019 08:23:43 +0200 (CEST)
-Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: [PATCH 2/2] DTS: ARM: gta04: introduce legacy spi-cs-high to make display work again
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20190724194259.GA25847@bogus>
-Date:   Thu, 25 Jul 2019 08:23:49 +0200
-Cc:     Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Content-Transfer-Encoding: 7bit
-Message-Id: <2EA06398-E45B-481B-9A26-4DD2E043BF9C@goldelico.com>
-References: <cover.1562597164.git.hns@goldelico.com> <8ae7cf816b22ef9cecee0d789fcf9e8a06495c39.1562597164.git.hns@goldelico.com> <20190724194259.GA25847@bogus>
-To:     Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: Apple Mail (2.3124)
+        id S2403804AbfGYNyc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 25 Jul 2019 09:54:32 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:37609 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728964AbfGYNyc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 25 Jul 2019 09:54:32 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n9so25817902wrr.4
+        for <linux-spi@vger.kernel.org>; Thu, 25 Jul 2019 06:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=kiGD59LaW0LszoAZzmVLJ1Hft59fIaEtybxXjg0U4OU=;
+        b=sQQDJiby1lR9rJnYwpFayBJL1RCmEUHrXJL5ktfkxstXcB1e72/IJ+7W0b7G/ZBDE7
+         l2/Oe7WGAKBlaplOUnR9eKLvijJm+yqgNtv1e2Xt94tpqVPUHg4DEcD9UGsRs0szMquI
+         gd0SnX7mYKDLhjJOaB+OD74kiTzZcmfgGeIajBjxHk8HORwabuVH5qYZ14shV48okQcq
+         oV1q3+hmkLuRmabQQ4N1s3WbE9w1LtffyarQQhGJ98ItiO4babxYtOZPj/d8HElgIXh3
+         +7ifv5dKadFG/B1N65t8KG2r29CwpiyOZg/YA0MfSDcC9TY3HZioK4MipWty6YP9bw5P
+         6xWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=kiGD59LaW0LszoAZzmVLJ1Hft59fIaEtybxXjg0U4OU=;
+        b=TYPsItGFkxPGfQPLQZ+SU+d3+mn+OKayq6af+L1KsIx6qlgyjG7JvLH5UlWbpi3udN
+         vhYx9HNPpY1u5Yyi80fwNc4aZSssvpohbFZmAWllyChySbZ96NmTHJoJiA3V5SGtiR38
+         TlrnWvXjKQDhvX6kx3pXCkl5TMCa96f+nMxSz8mfrTKZeQdnOzkxr4jo6MM3EMRnufqS
+         hkW5gd6nLK8SeDkvcebsEIHJN5YjFnWd3i3yeZZpu7ewTuZF1LMJIZM5c3JP2MTXSJpF
+         zEtSZKuXzx838IWIs7QmD4Ie93VxjpN217ZXTPMAeu/xMaxT1wcdTG7AJF1gMyJhtoyQ
+         YIVA==
+X-Gm-Message-State: APjAAAWTaePQed8867yH0ZzXfz1d76gDeZEK9hRlTy/PHYaNYrj0Ydpv
+        Io8zGpwNOjmGJffGVOZnZmVu7A==
+X-Google-Smtp-Source: APXvYqyi+7SaHwgU0aK/nQJij+0evagD7L54rP/lc55M34rnwnlBR+KX1Ln1iOdMtsPd3Xr0XJt2kw==
+X-Received: by 2002:adf:f3d1:: with SMTP id g17mr64650717wrp.38.1564062869954;
+        Thu, 25 Jul 2019 06:54:29 -0700 (PDT)
+Received: from dell ([2.27.35.164])
+        by smtp.gmail.com with ESMTPSA id c9sm40786310wml.41.2019.07.25.06.54.08
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 25 Jul 2019 06:54:29 -0700 (PDT)
+Date:   Thu, 25 Jul 2019 14:54:02 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>, Alan Tull <atull@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Mark Brown <broonie@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3 2/7] drivers: Introduce device lookup variants by
+ of_node
+Message-ID: <20190725135402.GL23883@dell>
+References: <20190723221838.12024-1-suzuki.poulose@arm.com>
+ <20190723221838.12024-3-suzuki.poulose@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190723221838.12024-3-suzuki.poulose@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+On Tue, 23 Jul 2019, Suzuki K Poulose wrote:
 
-> Am 24.07.2019 um 21:42 schrieb Rob Herring <robh@kernel.org>:
+> Introduce wrappers for {bus/driver/class}_find_device() to
+> locate devices by its of_node.
 > 
-> On Mon, Jul 08, 2019 at 04:46:05PM +0200, H. Nikolaus Schaller wrote:
->> commit 6953c57ab172 "gpio: of: Handle SPI chipselect legacy bindings"
->> 
->> did introduce logic to centrally handle the legacy spi-cs-high property
->> in combination with cs-gpios. This assumes that the polarity
->> of the CS has to be inverted if spi-cs-high is missing, even
->> and especially if non-legacy GPIO_ACTIVE_HIGH is specified.
->> 
->> The DTS for the GTA04 was orginally introduced under the assumption
->> that there is no need for spi-cs-high if the gpio is defined with
->> proper polarity GPIO_ACTIVE_HIGH.
-> 
-> Given that spi-cs-high is called legacy, that would imply that DT's 
-> should not have to use spi-cs-high.
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: devicetree@vger.kernel.org
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-rockchip@lists.infradead.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Takashi Iwai <tiwai@suse.com>
+> Cc: Wolfram Sang <wsa@the-dreams.de>
+> Cc: Alan Tull <atull@kernel.org>
+> Cc: Moritz Fischer <mdf@kernel.org>
+> Cc: linux-fpga@vger.kernel.org
+> Cc: Peter Rosin <peda@axentia.se>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Thor Thayer <thor.thayer@linux.intel.com>
+> Cc: Jiri Slaby <jslaby@suse.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Peter Rosin <peda@axentia.se>
+> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> ---
+>  - Dropped the reviewed-by tags from Thor, Mark, Andrew and Peter as the
+>    patches are mereged, though there are no functional changes.
+> ---
+>  drivers/amba/tegra-ahb.c              | 11 +-------
+>  drivers/fpga/fpga-bridge.c            |  8 +-----
+>  drivers/fpga/fpga-mgr.c               |  8 +-----
+>  drivers/gpu/drm/drm_mipi_dsi.c        |  7 +----
+>  drivers/i2c/i2c-core-of.c             |  7 +----
+>  drivers/mfd/altera-sysmgr.c           | 14 ++--------
 
-Yes.
+For my own reference:
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
-> 
->> This was not a problem until gpiolib changed the interpretation of
->> GPIO_ACTIVE_HIGH and missing spi-cs-high.
-> 
-> Then we should fix gpiolib...
+What's the merge plan for this patch?
 
-I tried to convince Linus that this is the right way but he convinced
-me that a fix that handles all cases does not exist.
+Is anyone prepared to create an immutable branch for us to pull from?
+I'm happy to do it if no one else steps up.
 
-There seem to be embedded devices with older DTB (potentially in ROM)
-which provide a plain 0 value for a gpios definition. And either with
-or without spi-cs-high.
+>  drivers/mux/core.c                    |  7 +----
+>  drivers/net/phy/mdio_bus.c            |  9 +------
+>  drivers/nvmem/core.c                  |  7 +----
+>  drivers/of/of_mdio.c                  |  8 +-----
+>  drivers/of/platform.c                 |  7 +----
+>  drivers/regulator/of_regulator.c      |  7 +----
+>  drivers/spi/spi.c                     | 20 +++------------
+>  include/linux/device.h                | 37 +++++++++++++++++++++++++++
+>  sound/soc/rockchip/rk3399_gru_sound.c |  9 ++-----
+>  15 files changed, 56 insertions(+), 110 deletions(-)
 
-Since "0" is the same as "GPIO_ACTIVE_HIGH", the absence of
-spi-cs-high was and must be interpreted as active low for these
-devices. This leads to the inversion logic in code.
-
-AFAIR it boils down to the question if gpiolib and the bindings
-should still support such legacy devices with out-of tree DTB,
-but force in-tree DTS to add the legacy spi-cs-high property.
-
-Or if we should fix the 2 or 3 cases of in-tree legacy cases
-and potentially break out-of tree DTBs.
-
-IMHO it is more general to keep the out-of-tree DTBs working
-and "fix" what we can control (in-tree DTS).
-
-> 
->> The effect is that the missing spi-cs-high is now interpreted as CS being
->> low (despite GPIO_ACTIVE_HIGH) which turns off the SPI interface when the
->> panel is to be programmed by the panel driver.
->> 
->> Therefore, we have to add the redundant and legacy spi-cs-high property
->> to properly pass through the legacy handler.
->> 
->> Since this is nowhere documented in the bindings, we add some words of
->> WARNING.
->> 
->> Cc: stable@vger.kernel.org
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> ---
->> Documentation/devicetree/bindings/spi/spi-bus.txt | 6 ++++++
->> arch/arm/boot/dts/omap3-gta04.dtsi                | 1 +
->> 2 files changed, 7 insertions(+)
-
-BR,
-Nikolaus
-
-
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
