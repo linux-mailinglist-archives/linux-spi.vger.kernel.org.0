@@ -2,106 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E254175FAC
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2019 09:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EAE76478
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2019 13:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbfGZHVp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Jul 2019 03:21:45 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34168 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726443AbfGZHVo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Jul 2019 03:21:44 -0400
-Received: by mail-pf1-f194.google.com with SMTP id b13so24068360pfo.1
-        for <linux-spi@vger.kernel.org>; Fri, 26 Jul 2019 00:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=UKHcPnP1X/YH0KxOMapb8zoNNla2jhYhzX+lsHS5cTM=;
-        b=E/8yDjb7ZXAoXz4rohf7xtU4fhLLX5e2g+HPtRaZkv3EEOnRi93Lc23PAFcSQlkXjb
-         J3Wa6rERdfomrw2OTiK4FH5qYxtfwCfuIP5rQTWocufBjT6s+yyn1isAdW1mS7TBlhF9
-         zqljjj5O16ddI36qYavzuNIlDPSDILRII6NiiRPPmJihn6ZmtXZXEsUy2qxRn9toErIe
-         4pfyj+dW/0gFmCbyCGfQd+hC89i8hZK+dH8qwarrCFKd4U4csbslNRiqS39I2iAeb36O
-         DbPPLxMS6drd93OWQxQEkAus7EIMyOpygAFaoynlbckmOxeAGcmfGvzwBIlPb3h08hLh
-         3cYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=UKHcPnP1X/YH0KxOMapb8zoNNla2jhYhzX+lsHS5cTM=;
-        b=ay9neEl55h+ee6VWB/tOhTShTVv7Xp+9flsPBU6Zewz4cdPkMzihTUmxqJsg68ky7U
-         zQp2asyBOhiWCWGXgDV0rum/K6Ye0x24rZSJQBhgw0O+YjOxQoXUpMXY5WsqhXTduKuX
-         JAdupYhqMYR1YlPdXie3MaG22VV+POinef+uhk8HLzZX1ltrD6tlasktrO6HrVR4UdAD
-         dmN1RgDdWfEaB/Phmcj/DaqOvzBTgekZk4Aa7P9qC8sRBMTPb42X86VhlhKYLwoN1I22
-         HByBA/sI2aXVnIiffbDEoZoHwqFlhfjBy2FuI8cGAU3sO3CjjpCJwzobsHJGKZqRSS9t
-         HNiQ==
-X-Gm-Message-State: APjAAAWzur4fiB663QyFovRyzvcBJ4qpZjQqe0uKzqW6Y5s8AFfeb413
-        whnh2wx+p8KYQg3xPig2G6tTuQ==
-X-Google-Smtp-Source: APXvYqx0MzCJG7d9iPnuvF6O22gUq9ll3iEEBUmjoDkNejDovvr6c+hOVWesySnuyHKOJNCRdJYZtg==
-X-Received: by 2002:a63:b747:: with SMTP id w7mr36749242pgt.205.1564125704234;
-        Fri, 26 Jul 2019 00:21:44 -0700 (PDT)
-Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id o12sm39216152pjr.22.2019.07.26.00.21.40
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 26 Jul 2019 00:21:43 -0700 (PDT)
-From:   Baolin Wang <baolin.wang@linaro.org>
-To:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        orsonzhai@gmail.com, zhang.lyra@gmail.com
-Cc:     weicx@spreadst.com, sherry.zong@unisoc.com, baolin.wang@linaro.org,
+        id S1726026AbfGZL3S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 Jul 2019 07:29:18 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48290 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725953AbfGZL3S (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Jul 2019 07:29:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Tmj943UI2GE6JqWb1wO5QjWgNH6NQQ0vyuXq2eJUd20=; b=WFVaTPJMPU4srOQFD8ydc5JvE
+        YdZFCrE86M81nq/6ah/bC7ukAKGLnqQfpXzmpiCgNVu5El8kxBfpdwKctmbeT2B/RhhzBX/AZJpV2
+        7O9b2OvG8iK0QQAs9rrGxphvvAq8dc+PeyZTczYccjqXUqVA3qdZMTtLv0pJnI5JieGhc=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hqyPG-0001LW-I2; Fri, 26 Jul 2019 11:29:02 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id C04912742B63; Fri, 26 Jul 2019 12:29:01 +0100 (BST)
+Date:   Fri, 26 Jul 2019 12:29:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Baolin Wang <baolin.wang@linaro.org>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com, weicx@spreadst.com, sherry.zong@unisoc.com,
         vincent.guittot@linaro.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] dt-bindings: spi: sprd: Change the hwlock support to be optional
-Date:   Fri, 26 Jul 2019 15:20:53 +0800
-Message-Id: <23d51f5d9c9cc647ad0c5a1fb950d3d9fb9c1303.1564125131.git.baolin.wang@linaro.org>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <cover.1564125131.git.baolin.wang@linaro.org>
+Subject: Re: [PATCH 6/6] dt-bindings: spi: sprd: Change the hwlock support to
+ be optional
+Message-ID: <20190726112901.GC4902@sirena.org.uk>
 References: <cover.1564125131.git.baolin.wang@linaro.org>
-In-Reply-To: <cover.1564125131.git.baolin.wang@linaro.org>
-References: <cover.1564125131.git.baolin.wang@linaro.org>
+ <23d51f5d9c9cc647ad0c5a1fb950d3d9fb9c1303.1564125131.git.baolin.wang@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Qbvjkv9qwOGw/5Fx"
+Content-Disposition: inline
+In-Reply-To: <23d51f5d9c9cc647ad0c5a1fb950d3d9fb9c1303.1564125131.git.baolin.wang@linaro.org>
+X-Cookie: List at least two alternate dates.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-No need to add hardware spinlock proctection due to add multiple
-msater channel, so change it to be optional in documentation.
 
-Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
----
- .../devicetree/bindings/spi/spi-sprd-adi.txt       |   11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+--Qbvjkv9qwOGw/5Fx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt b/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
-index 8de589b..2567c82 100644
---- a/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
-@@ -25,18 +25,23 @@ data by ADI software channels at the same time, or two parallel routine of setti
- ADI registers will make ADI controller registers chaos to lead incorrect results.
- Then we need one hardware spinlock to synchronize between the multiple subsystems.
- 
-+The new version ADI controller supplies multiple master channels for different
-+subsystem accessing, that means no need to add hardware spinlock to synchronize,
-+thus change the hardware spinlock support to be optional to keep backward
-+compatibility.
-+
- Required properties:
- - compatible: Should be "sprd,sc9860-adi".
- - reg: Offset and length of ADI-SPI controller register space.
--- hwlocks: Reference to a phandle of a hwlock provider node.
--- hwlock-names: Reference to hwlock name strings defined in the same order
--	as the hwlocks, should be "adi".
- - #address-cells: Number of cells required to define a chip select address
- 	on the ADI-SPI bus. Should be set to 1.
- - #size-cells: Size of cells required to define a chip select address size
- 	on the ADI-SPI bus. Should be set to 0.
- 
- Optional properties:
-+- hwlocks: Reference to a phandle of a hwlock provider node.
-+- hwlock-names: Reference to hwlock name strings defined in the same order
-+	as the hwlocks, should be "adi".
- - sprd,hw-channels: This is an array of channel values up to 49 channels.
- 	The first value specifies the hardware channel id which is used to
- 	transfer data triggered by hardware automatically, and the second
--- 
-1.7.9.5
+On Fri, Jul 26, 2019 at 03:20:53PM +0800, Baolin Wang wrote:
+> No need to add hardware spinlock proctection due to add multiple
+> msater channel, so change it to be optional in documentation.
 
+Please use subject lines matching the style for the subsystem.  This
+makes it easier for people to identify relevant patches.
+
+--Qbvjkv9qwOGw/5Fx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl064/wACgkQJNaLcl1U
+h9B7bgf/fakNc6GhblvBArHGpWpC8q89Ra3uoMipte1qypILuTKN7E62daZdcjYe
+Gj8ANmdKpEkZw01Qst3bSW52x/rxSnP4/FHF/GJCtxtVd/KhM9n+JMMiA4qelyOM
+cY9P5GmhDNrVFj1j0rVN0fJ9AIs2ac1dZi8J6CjLsQplr6EoxsimMv2Ajx3eE5rc
+p2NLuwvU4iWW4IFm08HME8zJU5vJQB9kLRZedpZMl8ICP4O2gAbR34mHXmvaXdBE
+NLETx7mZtKpC1l9H5DSE0t9172tDOceqcJIYwx+4grk8uwDPLvqXZ4UBk2ukvWSI
+fgisQ7kn7VuWXe5GeA7R3roV8LUciw==
+=6yRt
+-----END PGP SIGNATURE-----
+
+--Qbvjkv9qwOGw/5Fx--
