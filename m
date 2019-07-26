@@ -2,57 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5289275FAF
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2019 09:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 114DF75FAA
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2019 09:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbfGZHVi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Jul 2019 03:21:38 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34913 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbfGZHVh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Jul 2019 03:21:37 -0400
-Received: by mail-pl1-f194.google.com with SMTP id w24so24419660plp.2
-        for <linux-spi@vger.kernel.org>; Fri, 26 Jul 2019 00:21:36 -0700 (PDT)
+        id S1726552AbfGZHVl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 Jul 2019 03:21:41 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:36278 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726534AbfGZHVk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Jul 2019 03:21:40 -0400
+Received: by mail-pg1-f193.google.com with SMTP id l21so24329871pgm.3
+        for <linux-spi@vger.kernel.org>; Fri, 26 Jul 2019 00:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=awaZGPNc/AiKA1O3cSLxgegYtsyLyL9rlW0mw3ih7no=;
-        b=hcdxHXTXSCGhdOQdBW4+4VMJP+Jhc+nc1uovLJWNFJxc41lrFFPfCNYwCPTFcxDoXb
-         9tr86iamuf0K6KAiiVUTjXGfwpT4MgiIe6IjOR7TQFqZicFg82ntoaSGMYaV7wmpo0Ie
-         CqZfC8dNbK0TPqeiXoAsJwnIBcsbukcG7qH+elAgtHduucPyF0kt6NKVL3/FuNCxVwxS
-         YkPZZi33pmgj+rZqQ1vAkYonQd1huLBzxfwiLZvixQKPKhxjSnPc4BJ9EscG0vQVrHBW
-         o9Mik5sW0MV6Fuv0x725KZOrtn3ECutcv0/R93ssh5nHgN1o27ocG+l30Hvj2DCYc1Gu
-         l+eQ==
+        bh=NWVsUkkDHIuRmUj9QU93X+5+YMySiLs15Fa6SS5cpaE=;
+        b=PV6UmmpTsl4qyL9YLpPEkrDLpNgZumlLqQgJL5tf2AhWNCYTaorte9k2Pj6IBUNSly
+         P3k2AtwrjF3ASvtlPfbzMtob1Cg03Jd+goAm4I7kOQisa12ZR8ojvxgnuaesv3WCzKFe
+         Pq4rBflmWmlGTT2BdXqwa0x25C5sGnY4r3dCX5ZxUlkDj23l8P1xT5sr2XjxSPYPgErI
+         6schkzFTtMrRNHU3fT2UZrOgBpsicdyIYMZgQj3x1b4OkZNx911u9ycHBJuLm7pEVZda
+         IlKXw2hSsZESskRI+3b+vVA34+9nm2QXl2cxQB7Nb6VGGObnFHwYVgBPu6WvUEsFzssY
+         vvvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=awaZGPNc/AiKA1O3cSLxgegYtsyLyL9rlW0mw3ih7no=;
-        b=MBFDrDa+Ezu+MrfpZ4AnhgoAMhLW0m4p+Q1S+i6F6FAW+hRxIVautm4T4m6ZDpByw2
-         j76OvSK8frpthcDHob6UwfagcrH0/TWjJ8vVGFquqlKDcgmE0tbteIekp8PCd0mn78Hh
-         6LYsm9LGgtzWOzEuRgxojOqo/c+O2ov8F9UFrUA9h8bQoLaBFE4jJ79y8/uV+OXPCVVR
-         WQSSIkgc9pWk8zu+LE3kJAi9oxvkr8Q4RSEDc3WU7n/UgJzOmzWFRWh58W3qI0NXRV7V
-         phBQYkEy38J1e2zZgDIIi/myhJ6rRwr4dcDXVqfi3eDPRWU2nPvGNpf0+Ayk+cTencJ6
-         0FJw==
-X-Gm-Message-State: APjAAAWnVdZuCGizS5T7cf2M5BqDPcI/OSg7HjAaYE1t+ktScGDpI56N
-        VgRIcvxRFGnB/5Ti/NRL0I19bw==
-X-Google-Smtp-Source: APXvYqz5csq4PH62Y4pHncq04XhqPmiZ0V67ygPR5K9KyAY1KJ9EhukP86bExIV61cuWT7DVjtiNvg==
-X-Received: by 2002:a17:902:9688:: with SMTP id n8mr92948320plp.227.1564125696457;
-        Fri, 26 Jul 2019 00:21:36 -0700 (PDT)
+        bh=NWVsUkkDHIuRmUj9QU93X+5+YMySiLs15Fa6SS5cpaE=;
+        b=eCDmu9dI4Uc+G1RoxSlPpVzRhbbtWFVr5vRMLzcgvNUZQbCJ06T0g3VzdTBW0EtyMk
+         0KekMEv6ojvaB4Vmn6Ppn2j48T2v5dQ7sFNBZl7q/yR+wQ1PBCZSjD8kjnJKh7u80thn
+         O51OMhbTk4tqVk2aav/lxIx2YWHn60aK17tLYB0zn6uHk1/gY88ViT+X3diFYpCxuyzX
+         yr7bMlY6DZS+TbdgJEUIsVIliIYzFFrTKIV0mB8LzqAI6huFqkYQfv4AHdFgrqLqmJB2
+         8rLOa9LU+ArYOluJkZhPutGh3kx8yJ2ZVZl1XO5lZ5yoBc2fLtqSx1nDaWbXbz5HYXij
+         zRWw==
+X-Gm-Message-State: APjAAAVpiK5b0OVP91UqGIJIRjMUf0b7FckKEJ6tyccyO70st5SToHJC
+        QAXcbrPwNSpfSdMIVOgyCgL87g==
+X-Google-Smtp-Source: APXvYqyysUnX0wySMncWO4KIIl78EKADDoXzDUyhNNMPwEIaoBIbQZFiErLNKUuc3bxwyzllKRQx9Q==
+X-Received: by 2002:a63:7358:: with SMTP id d24mr89898767pgn.224.1564125700079;
+        Fri, 26 Jul 2019 00:21:40 -0700 (PDT)
 Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id o12sm39216152pjr.22.2019.07.26.00.21.33
+        by smtp.gmail.com with ESMTPSA id o12sm39216152pjr.22.2019.07.26.00.21.36
         (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 26 Jul 2019 00:21:36 -0700 (PDT)
+        Fri, 26 Jul 2019 00:21:39 -0700 (PDT)
 From:   Baolin Wang <baolin.wang@linaro.org>
 To:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
         orsonzhai@gmail.com, zhang.lyra@gmail.com
 Cc:     weicx@spreadst.com, sherry.zong@unisoc.com, baolin.wang@linaro.org,
         vincent.guittot@linaro.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] spi: sprd: adi: Add a reset reason for watchdog mode
-Date:   Fri, 26 Jul 2019 15:20:51 +0800
-Message-Id: <1563f3de43c6c2262d597a25d6138b5de61ea23d.1564125131.git.baolin.wang@linaro.org>
+Subject: [PATCH 5/6] spi: sprd: adi: Change hwlock to be optional
+Date:   Fri, 26 Jul 2019 15:20:52 +0800
+Message-Id: <2abe7dcf210e4197f8c5ece7fc6d6cc1eda8c655.1564125131.git.baolin.wang@linaro.org>
 X-Mailer: git-send-email 1.7.9.5
 In-Reply-To: <cover.1564125131.git.baolin.wang@linaro.org>
 References: <cover.1564125131.git.baolin.wang@linaro.org>
@@ -63,69 +63,126 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Sherry Zong <sherry.zong@unisoc.com>
+Now Spreadtrum ADI controller supplies multiple master accessing channel
+to support multiple subsystems accessing, instead of using a hardware
+spinlock to synchronize between the multiple subsystems.
 
-When the system was rebooted by watchdog, now we did not save the watchdog
-reset mode which will make system enter a incorrect mode after rebooting.
+To keep backward compatibility, we should change the hardware spinlock
+to be optional. Moreover change to use of_hwspin_lock_get_id() function
+which return -ENOENT error number to indicate no hwlock support.
 
-Thus we should set the watchdog reset mode as default when opening the
-watchdog configuration, that means if the system was rebooted by other
-reason through the restart_handler(), then we will clear the default
-watchdog reset mode to save the correct reset mode.
-
-Signed-off-by: Sherry Zong <sherry.zong@unisoc.com>
 Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
 ---
- drivers/spi/spi-sprd-adi.c |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/spi/spi-sprd-adi.c |   68 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 42 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index 509ce69..0d767eb 100644
+index 0d767eb..9a05128 100644
 --- a/drivers/spi/spi-sprd-adi.c
 +++ b/drivers/spi/spi-sprd-adi.c
-@@ -99,6 +99,7 @@
- #define HWRST_STATUS_IQMODE		0xb0
- #define HWRST_STATUS_SPRDISK		0xc0
- #define HWRST_STATUS_FACTORYTEST	0xe0
-+#define HWRST_STATUS_WATCHDOG		0xf0
+@@ -165,14 +165,16 @@ static int sprd_adi_read(struct sprd_adi *sadi, u32 reg_paddr, u32 *read_val)
+ 	int read_timeout = ADI_READ_TIMEOUT;
+ 	unsigned long flags;
+ 	u32 val, rd_addr;
+-	int ret;
+-
+-	ret = hwspin_lock_timeout_irqsave(sadi->hwlock,
+-					  ADI_HWSPINLOCK_TIMEOUT,
+-					  &flags);
+-	if (ret) {
+-		dev_err(sadi->dev, "get the hw lock failed\n");
+-		return ret;
++	int ret = 0;
++
++	if (sadi->hwlock) {
++		ret = hwspin_lock_timeout_irqsave(sadi->hwlock,
++						  ADI_HWSPINLOCK_TIMEOUT,
++						  &flags);
++		if (ret) {
++			dev_err(sadi->dev, "get the hw lock failed\n");
++			return ret;
++		}
+ 	}
  
- /* Use default timeout 50 ms that converts to watchdog values */
- #define WDG_LOAD_VAL			((50 * 1000) / 32768)
-@@ -309,6 +310,18 @@ static int sprd_adi_transfer_one(struct spi_controller *ctlr,
- 	return 0;
+ 	/*
+@@ -219,7 +221,8 @@ static int sprd_adi_read(struct sprd_adi *sadi, u32 reg_paddr, u32 *read_val)
+ 	*read_val = val & RD_VALUE_MASK;
+ 
+ out:
+-	hwspin_unlock_irqrestore(sadi->hwlock, &flags);
++	if (sadi->hwlock)
++		hwspin_unlock_irqrestore(sadi->hwlock, &flags);
+ 	return ret;
  }
  
-+static void sprd_adi_set_wdt_rst_mode(struct sprd_adi *sadi)
-+{
-+#ifdef CONFIG_SPRD_WATCHDOG
-+	u32 val;
-+
-+	/* Set default watchdog reboot mode */
-+	sprd_adi_read(sadi, sadi->slave_pbase + PMIC_RST_STATUS, &val);
-+	val |= HWRST_STATUS_WATCHDOG;
-+	sprd_adi_write(sadi, sadi->slave_pbase + PMIC_RST_STATUS, val);
-+#endif
-+}
-+
- static int sprd_adi_restart_handler(struct notifier_block *this,
- 				    unsigned long mode, void *cmd)
- {
-@@ -347,6 +360,7 @@ static int sprd_adi_restart_handler(struct notifier_block *this,
+@@ -230,12 +233,14 @@ static int sprd_adi_write(struct sprd_adi *sadi, u32 reg_paddr, u32 val)
+ 	unsigned long flags;
+ 	int ret;
  
- 	/* Record the reboot mode */
- 	sprd_adi_read(sadi, sadi->slave_pbase + PMIC_RST_STATUS, &val);
-+	val &= ~HWRST_STATUS_WATCHDOG;
- 	val |= reboot_mode;
- 	sprd_adi_write(sadi, sadi->slave_pbase + PMIC_RST_STATUS, val);
+-	ret = hwspin_lock_timeout_irqsave(sadi->hwlock,
+-					  ADI_HWSPINLOCK_TIMEOUT,
+-					  &flags);
+-	if (ret) {
+-		dev_err(sadi->dev, "get the hw lock failed\n");
+-		return ret;
++	if (sadi->hwlock) {
++		ret = hwspin_lock_timeout_irqsave(sadi->hwlock,
++						  ADI_HWSPINLOCK_TIMEOUT,
++						  &flags);
++		if (ret) {
++			dev_err(sadi->dev, "get the hw lock failed\n");
++			return ret;
++		}
+ 	}
  
-@@ -475,6 +489,7 @@ static int sprd_adi_probe(struct platform_device *pdev)
+ 	ret = sprd_adi_drain_fifo(sadi);
+@@ -261,7 +266,8 @@ static int sprd_adi_write(struct sprd_adi *sadi, u32 reg_paddr, u32 val)
+ 	}
+ 
+ out:
+-	hwspin_unlock_irqrestore(sadi->hwlock, &flags);
++	if (sadi->hwlock)
++		hwspin_unlock_irqrestore(sadi->hwlock, &flags);
+ 	return ret;
+ }
+ 
+@@ -476,16 +482,26 @@ static int sprd_adi_probe(struct platform_device *pdev)
+ 	sadi->slave_pbase = res->start + ADI_SLAVE_OFFSET;
+ 	sadi->ctlr = ctlr;
+ 	sadi->dev = &pdev->dev;
+-	ret = of_hwspin_lock_get_id_byname(np, "adi");
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "can not get the hardware spinlock\n");
+-		goto put_ctlr;
+-	}
+-
+-	sadi->hwlock = devm_hwspin_lock_request_specific(&pdev->dev, ret);
+-	if (!sadi->hwlock) {
+-		ret = -ENXIO;
+-		goto put_ctlr;
++	ret = of_hwspin_lock_get_id(np, 0);
++	if (ret > 0 || (IS_ENABLED(CONFIG_HWSPINLOCK) && ret == 0)) {
++		sadi->hwlock =
++			devm_hwspin_lock_request_specific(&pdev->dev, ret);
++		if (!sadi->hwlock) {
++			ret = -ENXIO;
++			goto put_ctlr;
++		}
++	} else {
++		switch (ret) {
++		case -ENOENT:
++			dev_info(&pdev->dev, "no hardware spinlock supplied\n");
++			break;
++		default:
++			dev_err(&pdev->dev,
++				"failed to find hwlock id, %d\n", ret);
++			/* fall-through */
++		case -EPROBE_DEFER:
++			goto put_ctlr;
++		}
  	}
  
  	sprd_adi_hw_init(sadi);
-+	sprd_adi_set_wdt_rst_mode(sadi);
- 
- 	ctlr->dev.of_node = pdev->dev.of_node;
- 	ctlr->bus_num = pdev->id;
 -- 
 1.7.9.5
 
