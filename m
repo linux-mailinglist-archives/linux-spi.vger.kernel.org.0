@@ -2,83 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C8276540
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2019 14:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C32E76561
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2019 14:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726339AbfGZMKS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Jul 2019 08:10:18 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34770 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726124AbfGZMKP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Jul 2019 08:10:15 -0400
-Received: by mail-ot1-f68.google.com with SMTP id n5so55157672otk.1
-        for <linux-spi@vger.kernel.org>; Fri, 26 Jul 2019 05:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JrQTsqOEOykeYsYpjUAu93byMK1KwkPcKibV3U5vnJs=;
-        b=n/Tfy/qYbxxPMGO0GtR4PSwWNzJiHr/teYhJWdmOLIQXeIGRhXlrNAOjHxIg44X/c8
-         rTMphlu7MEMszPQPE7i0KXL/fg/5WjYEzxco2QaaRD1yrK2bg+KCzZWa39ZRgNTM2LtM
-         lCI+/my1YocZGIgiqhq3JHhPYzlOqgYvp6ZdftyiDQSF1s5Nqn4vzv+ZzYEuh31enYTk
-         jjQ04X5nn2NicQK3HyVuUjV+toViPvNj+wcJA44R4DusLvIx9mXjaDaZ27VLOEOxPKkn
-         k32sNyCUvsUw8nN+h7F+9P8EGFwgzyFqenM4BP1xKx9k2fNKMAwbFIXSWbIArOH/RDFF
-         Qdtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JrQTsqOEOykeYsYpjUAu93byMK1KwkPcKibV3U5vnJs=;
-        b=cb48iI6JrhH3OOb5J9jPx9jmj1biGJ7fA2MLleajJz1Go660QSXMkQaQ1d5K1utBld
-         m3wehBbL3+0Nj3/1MV9a2P+o7A6k11nIyAtFXKTUhn+Ew9CaqxMDTHRyVvm1ii4Lzt0x
-         Bnc1yGcc7P/fx/0wcHNgj1aisHh4TIjMBlhUW7BK+B10S0FfWVK1f2RBy+mAmTF11ZVs
-         7VBe3tEQIMYke2Ys01LI6qNcFsq5qWw3aW2om2A/LakO3cYunuDU7PukT5uQhTWwvCfC
-         JkrZK1mrkwoYdXlZHKs4BtnnwnDBK3uU7+sjIj5Woom0eoISKwT7iQc17OJ94TI1EWZT
-         lujg==
-X-Gm-Message-State: APjAAAU92u2XG8WF0PTuf+cobBzdJAAGO2tGWOLsUwlPnP3SGpk9KwVo
-        fA65Msfs5sG47i6L61DO1DBO33ytgm7y5XgjIZGUkA==
-X-Google-Smtp-Source: APXvYqywRN7n6lzmjA5a4KHs4TPzxtEcwP96gaeiFcPkyYj2chffCIcDU5MoSxlTXx3/N/hta8tMsIUOdAnpviY8SDk=
-X-Received: by 2002:a9d:529:: with SMTP id 38mr69587609otw.145.1564143014185;
- Fri, 26 Jul 2019 05:10:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1564125131.git.baolin.wang@linaro.org> <23d51f5d9c9cc647ad0c5a1fb950d3d9fb9c1303.1564125131.git.baolin.wang@linaro.org>
- <20190726112901.GC4902@sirena.org.uk>
-In-Reply-To: <20190726112901.GC4902@sirena.org.uk>
-From:   Baolin Wang <baolin.wang@linaro.org>
-Date:   Fri, 26 Jul 2019 20:10:02 +0800
-Message-ID: <CAMz4ku+3FVOYr7Gvh-Yrdhvw2cfntbnEkhONYGbC71UmCgZA-A@mail.gmail.com>
-Subject: Re: [PATCH 6/6] dt-bindings: spi: sprd: Change the hwlock support to
- be optional
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, weicx@spreadst.com,
-        sherry.zong@unisoc.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727031AbfGZMMh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 Jul 2019 08:12:37 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:36542 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726277AbfGZMMh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Jul 2019 08:12:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=0JaOym/8/1xYTPj/lo5DfsfdR6OwtKMSwBUpWlF89z0=; b=hnGLPn1FdiHl
+        v3Z8uQinKEdqNQGi4zdGQZwpSG/IHSsABkF/uQSQA+UwhUIDEhestFvojqz32XVGIH4jxNARq4Rkq
+        EJ+NTVhZcyL809+hqpgpPt5YG1KIX6WKbI4RykYu5fUjqY9D7KOUV3w5ENCGQQrIgxK6cHZ0UmHzU
+        Xs4Hk=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hqz5E-0001aO-3f; Fri, 26 Jul 2019 12:12:24 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 99EF52742B63; Fri, 26 Jul 2019 13:12:23 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Baolin Wang <baolin.wang@linaro.org>
+Cc:     baolin.wang@linaro.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        mark.rutland@arm.com, orsonzhai@gmail.com, robh+dt@kernel.org,
+        sherry.zong@unisoc.com, vincent.guittot@linaro.org,
+        weicx@spreadst.com, zhang.lyra@gmail.com
+Subject: Applied "spi: sprd: Change the hwlock support to be optional" to the spi tree
+In-Reply-To: <23d51f5d9c9cc647ad0c5a1fb950d3d9fb9c1303.1564125131.git.baolin.wang@linaro.org>
+X-Patchwork-Hint: ignore
+Message-Id: <20190726121223.99EF52742B63@ypsilon.sirena.org.uk>
+Date:   Fri, 26 Jul 2019 13:12:23 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+The patch
 
-On Fri, 26 Jul 2019 at 19:29, Mark Brown <broonie@kernel.org> wrote:
->
-> On Fri, Jul 26, 2019 at 03:20:53PM +0800, Baolin Wang wrote:
-> > No need to add hardware spinlock proctection due to add multiple
-> > msater channel, so change it to be optional in documentation.
->
-> Please use subject lines matching the style for the subsystem.  This
-> makes it easier for people to identify relevant patches.
+   spi: sprd: Change the hwlock support to be optional
 
-The subject lines format 'dt-bindings: xxx' was recommended by Rob, so
-I am not sure if I need to change the format as 'spi: sprd:'? Thanks.
+has been applied to the spi tree at
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.4
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 70f69f481b87da0614360e57e05a3ba962d60439 Mon Sep 17 00:00:00 2001
+From: Baolin Wang <baolin.wang@linaro.org>
+Date: Fri, 26 Jul 2019 15:20:53 +0800
+Subject: [PATCH] spi: sprd: Change the hwlock support to be optional
+
+No need to add hardware spinlock proctection due to add multiple
+msater channel, so change it to be optional in documentation.
+
+Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
+Link: https://lore.kernel.org/r/23d51f5d9c9cc647ad0c5a1fb950d3d9fb9c1303.1564125131.git.baolin.wang@linaro.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ .../devicetree/bindings/spi/spi-sprd-adi.txt          | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt b/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
+index 8de589b376ce..2567c829e2dc 100644
+--- a/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
++++ b/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
+@@ -25,18 +25,23 @@ data by ADI software channels at the same time, or two parallel routine of setti
+ ADI registers will make ADI controller registers chaos to lead incorrect results.
+ Then we need one hardware spinlock to synchronize between the multiple subsystems.
+ 
++The new version ADI controller supplies multiple master channels for different
++subsystem accessing, that means no need to add hardware spinlock to synchronize,
++thus change the hardware spinlock support to be optional to keep backward
++compatibility.
++
+ Required properties:
+ - compatible: Should be "sprd,sc9860-adi".
+ - reg: Offset and length of ADI-SPI controller register space.
+-- hwlocks: Reference to a phandle of a hwlock provider node.
+-- hwlock-names: Reference to hwlock name strings defined in the same order
+-	as the hwlocks, should be "adi".
+ - #address-cells: Number of cells required to define a chip select address
+ 	on the ADI-SPI bus. Should be set to 1.
+ - #size-cells: Size of cells required to define a chip select address size
+ 	on the ADI-SPI bus. Should be set to 0.
+ 
+ Optional properties:
++- hwlocks: Reference to a phandle of a hwlock provider node.
++- hwlock-names: Reference to hwlock name strings defined in the same order
++	as the hwlocks, should be "adi".
+ - sprd,hw-channels: This is an array of channel values up to 49 channels.
+ 	The first value specifies the hardware channel id which is used to
+ 	transfer data triggered by hardware automatically, and the second
 -- 
-Baolin Wang
-Best Regards
+2.20.1
+
