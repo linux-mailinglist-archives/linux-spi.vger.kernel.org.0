@@ -2,41 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4B375CE5
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2019 04:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6ABF75FA0
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2019 09:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725878AbfGZCUS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 25 Jul 2019 22:20:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34864 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725851AbfGZCUS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 25 Jul 2019 22:20:18 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564107618;
-        bh=3A/qv15YEBE3ppIMHrn+RWowyIFto8TguqSDykG/2+g=;
-        h=Subject:From:Date:To:From;
-        b=rn/4E8Gst4tQTy0TJ6IAgL5+7JVgVhk0EfFJ6u/Mck2alyqdiY+Couv+sY2FVL0hI
-         GNsEsZz2yqCOftA1nOGpD+9BTZbXPhx/FGgBsbkGcD/V5MtQ++3dQz1BBkOUC7nFo7
-         BltMqCS2EcyysAQ9Q/RtmLKFRE5SrqMVxcq/I224=
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <156410761833.10745.17881166622609689602.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 26 Jul 2019 02:20:18 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+        id S1726360AbfGZHVV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 26 Jul 2019 03:21:21 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36249 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbfGZHVV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Jul 2019 03:21:21 -0400
+Received: by mail-pg1-f196.google.com with SMTP id l21so24329393pgm.3
+        for <linux-spi@vger.kernel.org>; Fri, 26 Jul 2019 00:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=DPFbvaM0ffzn/S9lvtDvQ6X/wXEPD6IvdQw6DnygcpE=;
+        b=Dcn0TQ5iRKLiq9la/u8PnkLoh/bQ2HK/pp5dNWDnoSTPgId5B1ES2XCZi8js0tnVhC
+         KXOtq22CVWqlrrr+aJObx2rwiuJsfIl7mY9R3xWmrAFgRkh9A0GLxELmkTaWSiy/d51P
+         s0bap92JtiqtNfdeVMzIxqhcUx6GIyuEaMsWzjldAXjQdkBdQjzVZXq03JkOdlEqsCr7
+         +/7+BNEovq0MpwM8KHegM16BSHvp9FATaTzBq6pse5fXCApisAoCGuNKaecOlGBVxX9n
+         LmfGDxRULfqXvBm7lRINK7qgeM4mx9z+WK8g8Cm7S5UQc9jKSK0AonVKhg+tPDB2PiFo
+         qIIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=DPFbvaM0ffzn/S9lvtDvQ6X/wXEPD6IvdQw6DnygcpE=;
+        b=C94gUQFk6QuAxoSaEB/ZVdeqE5QNqKtMCQUuweY9ENTnbT0N3MSlw5rZ53dexgbbhR
+         l0g1LGaruaiv7wiP959JRsJiJ2hlMkYkp6wu1BRm73uP+Hv3hggPLcC12jdnAV/wymVl
+         ORF88PJllVFA06walsrmXYOrLq30FE8upGhS6/UyuX1RXM74HIvkJYonXbaQvSRXVlkw
+         h8szaGkLXh7ewcbLvnbBvATvkXtr7E1uLmF2kmJ8RlJzq3X8TcftjviLU/d3uZKvev9a
+         n1ADgP0z/5UtbOHKfIBJWksBbK5E+iOLWflmYCWdHO8jL823dFthKN/C4ejJsDYHvwR4
+         fq7A==
+X-Gm-Message-State: APjAAAVdUz3r+ptIzVNFIsjGSK2+CqP4D4jyb/4F0O1FP8VDIPcmQPVF
+        W1tuVjiCqnLSVTzm+jAQpXe4Zw==
+X-Google-Smtp-Source: APXvYqyF4Tr6KpqzUUg1uyFSW7cNnma7IjvzfFuYcV2VA1wP1hJQrdEzG7PNSHLazixsMdq0cLRW9Q==
+X-Received: by 2002:a63:c006:: with SMTP id h6mr56329731pgg.290.1564125680781;
+        Fri, 26 Jul 2019 00:21:20 -0700 (PDT)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id o12sm39216152pjr.22.2019.07.26.00.21.17
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 26 Jul 2019 00:21:20 -0700 (PDT)
+From:   Baolin Wang <baolin.wang@linaro.org>
+To:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        orsonzhai@gmail.com, zhang.lyra@gmail.com
+Cc:     weicx@spreadst.com, sherry.zong@unisoc.com, baolin.wang@linaro.org,
+        vincent.guittot@linaro.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] Optimize Spreadtrum ADI driver
+Date:   Fri, 26 Jul 2019 15:20:47 +0800
+Message-Id: <cover.1564125131.git.baolin.wang@linaro.org>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v15] spi: Add Renesas R-Car Gen3 RPC-IF SPI driver (2019-07-26T02:42:55)
-  Superseding: [v14] spi: Add Renesas R-Car Gen3 RPC-IF SPI driver (2019-06-20T09:30:44):
-    [v14,1/2] spi: Add Renesas R-Car Gen3 RPC-IF SPI controller driver
-    [v14,2/2] dt-bindings: spi: Document Renesas R-Car Gen3 RPC-IF controller bindings
+This patchset did some optimization to remove some redundant code,
+add more reboot mode support and change hardware spinlock support
+to be optional.
 
+Baolin Wang (3):
+  spi: sprd: adi: Remove redundant address bits setting
+  spi: sprd: adi: Change hwlock to be optional
+  dt-bindings: spi: sprd: Change the hwlock support to be optional
+
+Chenxu Wei (1):
+  spi: sprd: adi: Add a reset reason for TOS panic
+
+Sherry Zong (2):
+  spi: sprd: adi: Add a reset reason for factory test mode
+  spi: sprd: adi: Add a reset reason for watchdog mode
+
+ .../devicetree/bindings/spi/spi-sprd-adi.txt       |   11 ++-
+ drivers/spi/spi-sprd-adi.c                         |   92 ++++++++++++++------
+ 2 files changed, 71 insertions(+), 32 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+1.7.9.5
+
