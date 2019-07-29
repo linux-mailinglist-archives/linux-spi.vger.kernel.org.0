@@ -2,122 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 087C2788C5
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2019 11:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B896F789CF
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2019 12:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbfG2Joq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Jul 2019 05:44:46 -0400
-Received: from twhmllg3.macronix.com ([122.147.135.201]:27274 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726195AbfG2Joq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Jul 2019 05:44:46 -0400
-Received: from twhfmlp1.macronix.com (twhfm1p1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id x6T9i7EL097649;
-        Mon, 29 Jul 2019 17:44:07 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id B88CE71CEDC6172E91C1;
-        Mon, 29 Jul 2019 17:44:07 +0800 (CST)
-In-Reply-To: <CAMuHMdXDJFWHaXk3KHQqhOqVhEGc3PL33f+HO2Ld8nYbvSpq7Q@mail.gmail.com>
-References: <1564108975-27423-1-git-send-email-masonccyang@mxic.com.tw> <1564108975-27423-3-git-send-email-masonccyang@mxic.com.tw> <CAMuHMdWVuQa1LLXPqrdSw6wdRzwQapAkk6Est=XrjESPF9zQwg@mail.gmail.com> <OFFF9D8385.D8395BBD-ON48258446.0033FD62-48258446.00349608@mxic.com.tw> <CAMuHMdXDJFWHaXk3KHQqhOqVhEGc3PL33f+HO2Ld8nYbvSpq7Q@mail.gmail.com>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Mark Brown" <broonie@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        "Simon Horman" <horms@verge.net.au>, juliensu@mxic.com.tw,
-        "Lee Jones" <lee.jones@linaro.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Linux-Renesas" <linux-renesas-soc@vger.kernel.org>,
-        "linux-spi" <linux-spi@vger.kernel.org>,
-        "Marek Vasut" <marek.vasut@gmail.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Sergei Shtylyov" <sergei.shtylyov@cogentembedded.com>
-Subject: Re: [PATCH v15 2/2] dt-bindings: spi: Document Renesas R-Car Gen3 RPC-IF
- controller bindings
+        id S2387413AbfG2Kvh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Jul 2019 06:51:37 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:42456 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387404AbfG2Kvh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Jul 2019 06:51:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Fp98NvsVQHW4OteUr6DoqjsManneTqzSgEmj4Sv6NWQ=; b=TlrwPKA0cPSJXmi/CZ25ALugV
+        fwE4t4puANsJwlT545pg2qTFU4B+9F6GQ/3Vul5hbHisbMVARhBjcbRa24Zv2oXN2VB6YsUcDLK7Y
+        dOD+aHReKKAGSf3i1gXHw5qn1blH1XnwlHIny424vFxgYHzeNuB35PUh3wafro2dQtaC8=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hs3FW-00048A-Dm; Mon, 29 Jul 2019 10:51:26 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 641832742B59; Mon, 29 Jul 2019 11:51:25 +0100 (BST)
+Date:   Mon, 29 Jul 2019 11:51:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     linux-spi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] spi: tle620x: remove stale driver
+Message-ID: <20190729105125.GA4787@sirena.org.uk>
+References: <20190728161304.32022-1-yamada.masahiro@socionext.com>
 MIME-Version: 1.0
-X-KeepSent: 6B92D643:D40CDE6C-48258446:0035328A;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OF6B92D643.D40CDE6C-ON48258446.0035328A-48258446.00357A40@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Mon, 29 Jul 2019 17:44:07 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2019/07/29 PM 05:44:07,
-        Serialize complete at 2019/07/29 PM 05:44:07
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG3.macronix.com x6T9i7EL097649
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zhXaljGHf11kAtnf"
+Content-Disposition: inline
+In-Reply-To: <20190728161304.32022-1-yamada.masahiro@socionext.com>
+X-Cookie: A man's house is his hassle.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-Hi Geert, 
+--zhXaljGHf11kAtnf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> On Mon, Jul 29, 2019 at 11:34 AM <masonccyang@mxic.com.tw> wrote:
-> > > On Fri, Jul 26, 2019 at 4:19 AM Mason Yang <masonccyang@mxic.com.tw>
-> > wrote:
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/spi/spi-renesas-rpc.txt
-> > > > @@ -0,0 +1,46 @@
-> > >
-> > > [...]
-> > >
-> > > > +- flash: should be represented by a subnode of the RPC-IF node,
-> > > > +        which "compatible" property contains "jedec,spi-nor", it
-> > presents
-> > > > +        SPI is used.
-> > >
-> > > Sorry, I failed to parse the last subsentence.
-> >
-> >
-> > Fix it to:
-> > - flash: should be represented by a subnode of the RPC-IF node,
-> >          its "compatible" property contains "jedec,spi-nor" presents
-> >          SPI is used.
-> >
-> > OK?
-> 
-> s/presents/if/?
-> 
+On Mon, Jul 29, 2019 at 01:13:04AM +0900, Masahiro Yamada wrote:
+> This driver seems obsolte because this driver needs platform data
+> but no one in upstream passes it.
 
-Got it, thanks for your correction.
+I've not noticed this driver getting in the way of anything?
 
-- flash: should be represented by a subnode of the RPC-IF node,
-         its "compatible" property contains "jedec,spi-nor" if SPI is 
-used.
+--zhXaljGHf11kAtnf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-best regards,
-Mason
+-----BEGIN PGP SIGNATURE-----
 
-CONFIDENTIALITY NOTE:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0+z6wACgkQJNaLcl1U
+h9A8iQf/WUaWbus2/y56hSB5wgIdbmnLdlQKFIbOiLlLCvTHg1+B16u4ggqtmNNy
+i/LxhIXJHljhPSB5UqNvqGbUUfJPqlC6EjP/VH9Se25srhYgCzNetng4TSJgUhf6
+mPx38/UCRMss9iggUIlCcZlwum4olpdkChGQCKbRpJYiJEmAT4/iiNdRbOhNVGor
+w75RTowSMbKKwzSw/vcrpZiyH+XV2xoRGiDRAR2yltKK84yEEvRd8LsiZnYtKm/f
+oEVeTbr2aM5P0EmyoTUN6waKMEHyUKDfiYI8fPqh+YIqEUM1cGor0tRyQUFah9G/
++M/W7SX1YG7bE4+hsWQjfNpfkAxf4Q==
+=+NF+
+-----END PGP SIGNATURE-----
 
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
-
-
-============================================================================
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
+--zhXaljGHf11kAtnf--
