@@ -2,86 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A33FB78F36
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2019 17:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 336B879CC1
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Jul 2019 01:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387952AbfG2P3E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Jul 2019 11:29:04 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57430 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387854AbfG2P3E (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Jul 2019 11:29:04 -0400
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726911AbfG2XYy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Jul 2019 19:24:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53930 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726748AbfG2XYx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 29 Jul 2019 19:24:53 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 65B8826D9C2;
-        Mon, 29 Jul 2019 16:29:02 +0100 (BST)
-Date:   Mon, 29 Jul 2019 17:28:59 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     broonie@kernel.org, dwmw2@infradead.org,
-        computersforpeace@gmail.com, marek.vasut@gmail.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        bbrezillon@kernel.org, yogeshnarayan.gaur@nxp.com,
-        tudor.ambarus@microchip.com, gregkh@linuxfoundation.org,
-        frieder.schrempf@exceet.de, tglx@linutronix.de,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [RFC v1 0/3] *spi-mem: adding setup and callback function
-Message-ID: <20190729172859.4374a2ad@collabora.com>
-In-Reply-To: <20190729142504.188336-1-tmaimon77@gmail.com>
-References: <20190729142504.188336-1-tmaimon77@gmail.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        by mail.kernel.org (Postfix) with ESMTPSA id DD869216C8;
+        Mon, 29 Jul 2019 23:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564442693;
+        bh=wfISxyG+4xV3u+yxlqZGIvkRUeNLBrZabreIQWxsSdU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bVE23u721FLzaxngi2MUY4F06qPgLJvv/baqfJ6t0A1bKOG4E2spxg+kxW2ulkWvm
+         cDzEfghfNit9mk3GAvhHOdaNayc4Tf81WbmjLunXTR6v8e8aVKqu3wyb64wT336kuF
+         2Eggm/9o13I1XnSPwzmNOtz2xP+4B6Pej6IrjsaY=
+Received: by mail-qk1-f172.google.com with SMTP id s22so45312671qkj.12;
+        Mon, 29 Jul 2019 16:24:52 -0700 (PDT)
+X-Gm-Message-State: APjAAAVfNLEnOx3hj9aAXKF/0r4MDuB8KfWG1hFHkAMYRO2oOPgqyFAX
+        gJcbDdgkFQScEaHtNVJ9iu/GKO71v6FaVLHv2Q==
+X-Google-Smtp-Source: APXvYqzY5ya7QJ0w5KWtcD8heY+Jsyhgj4n66xL29WKjYNOqnCvGQoUberoWQj9zJEk4fySsTU/pGiOPBLYiuMGT7Ak=
+X-Received: by 2002:a05:620a:1447:: with SMTP id i7mr75655382qkl.254.1564442692098;
+ Mon, 29 Jul 2019 16:24:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20190723073641.27801-1-alexandru.ardelean@analog.com>
+ <20190723073641.27801-4-alexandru.ardelean@analog.com> <20190727195623.42c8b4f3@archlinux>
+In-Reply-To: <20190727195623.42c8b4f3@archlinux>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 29 Jul 2019 17:24:40 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLXTnrtCr4hVVc9HrOkkvwGWk02EibdutfUBm4JDnJO5Q@mail.gmail.com>
+Message-ID: <CAL_JsqLXTnrtCr4hVVc9HrOkkvwGWk02EibdutfUBm4JDnJO5Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3][V4] dt-bindings: iio: imu: add bindings for ADIS16460
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Tomer,
+On Sat, Jul 27, 2019 at 12:56 PM Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Tue, 23 Jul 2019 10:36:40 +0300
+> Alexandru Ardelean <alexandru.ardelean@analog.com> wrote:
+>
+> > This change adds device-tree bindings for the ADIS16460.
+> >
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+>
+> Really trivial, but convention (as driven by what git am -s does if nothing
+> else, is to add extra tags in chronological order.  So Rob would be after
+> you.  I tweaked it which I don't always remember to do.
 
-On Mon, 29 Jul 2019 17:25:01 +0300
-Tomer Maimon <tmaimon77@gmail.com> wrote:
+I'd argue it is in chronological order as the submitter added my tag
+and then sent it out. If you applied it and added my tag, then it
+would be after (but before yours).
 
-> Lately we have working on Flash interface unit (FIU) SPI driver that 
-> using spi-mem interface, Our FIU HW module support direct Flash Rd//Wr.
-> 
-> In our SOC (32 bit dual core ARM) we have 3 FIU's that using memory mapping as follow:
-> 
-> FIU0 - have 2 chip select and each one have 128MB memory mapping (total 256MB memory mapping)
-> FIU1 - have 4 chip select and each one have 128MB memory mapping (total 512MB memory mapping)
-> FIU2 - have 4 chip select and each one have 16MB memory mapping (total 32MB memory mapping)
-> 
-> Totally 800MB memory mapping.
-> 
-> When the FIU driver probe it don't know the size of each Flash that 
-> connected to the FIU, so the entire memory mapping is allocated for each FIU 
-> according the FIU device tree memory map parameters.
+> It's not consistent across the kernel but I'll fight for my little corner
+> to be :)
 
-Do you need those mappings to be active to support simple reg accesses?
+More consistency would be nice then there's less tribal knowledge
+about maintainers for submitters to learn.
 
-> It means, if we enable all three FIU's the drivers will try to allocate totally 800MB.
-> 
-> In 32bit system it is problematic because the kernel have only 1GB 
-> of memory allocation so the vmalloc cannot take 800MB.
-> 
-> When implementing the FIU driver in the mtd/spi-nor we allocating memory address only 
-> for detected Flash with exact size (usually we are not using 128MB Flash), and in that case usually we allocating much less memory.
-> 
-> To solve this issue we needed to overcome two things:
-> 
-> 1.	Get argument from the upper layer (spi-mem layer) 
-> 2.	Calling the get argument function after SPI_NOR_SCAN function. (the MTD Flash size filled in  SPI_NOR_SCAN function)
-
-That's clearly breaking the layering we've tried to restore with the
-spi-nor/spi-mem split, and I don't see why this is needed since we now
-have a way to create direct mappings dynamically (with the dirmap API).
-Have you tried implementing the dirmap hooks in your driver?
-
-Regards,
-
-Boris
+Rob
