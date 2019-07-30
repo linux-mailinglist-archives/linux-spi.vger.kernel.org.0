@@ -2,117 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AE07A17D
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Jul 2019 08:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87CF7A66D
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Jul 2019 13:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbfG3Gyn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Jul 2019 02:54:43 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36648 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726083AbfG3Gyn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Jul 2019 02:54:43 -0400
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        id S1729963AbfG3LDu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Jul 2019 07:03:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46556 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725974AbfG3LDu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 30 Jul 2019 07:03:50 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id E0AD228A971;
-        Tue, 30 Jul 2019 07:54:40 +0100 (BST)
-Date:   Tue, 30 Jul 2019 08:54:38 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Tomer Maimon <tmaimon77@gmail.com>, vigneshr@ti.com
-Cc:     broonie@kernel.org,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        miquel.raynal@bootlin.com, richard@nod.at, bbrezillon@kernel.org,
-        tudor.ambarus@microchip.com,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [RFC v1 0/3] *spi-mem: adding setup and callback function
-Message-ID: <20190730085438.6fe0480b@collabora.com>
-In-Reply-To: <CAP6Zq1iPXDX_Gtz6ZWYm3JoHgHjdapotVLGw-Lq4tc2X-6eAug@mail.gmail.com>
-References: <20190729142504.188336-1-tmaimon77@gmail.com>
-        <20190729172859.4374a2ad@collabora.com>
-        <CAP6Zq1iPXDX_Gtz6ZWYm3JoHgHjdapotVLGw-Lq4tc2X-6eAug@mail.gmail.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0C5A4206E0;
+        Tue, 30 Jul 2019 11:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564484629;
+        bh=m7dX//3pP3+FR/k30u2LZ08eMNQLWPNMDC/X3b/BoIk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KMur5BSVhiHRRxRO7wuNTmwbmOspluKLLcMqQiSBI6R7I/hFrZiXflMDNkswhbTtv
+         EtfxkIXJJq6sth6CVf9ItRiCuP0D4xoZNWRDgBMa+C9ci6Q/RzCOpg0pkrmiDgRQ+R
+         3Gg+K/+v70+FPzWyiJ5B9GhEpGfyM7rsXoIoSgX0=
+Date:   Tue, 30 Jul 2019 13:03:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>, Alan Tull <atull@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Mark Brown <broonie@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3 2/7] drivers: Introduce device lookup variants by
+ of_node
+Message-ID: <20190730110315.GA31631@kroah.com>
+References: <20190723221838.12024-1-suzuki.poulose@arm.com>
+ <20190723221838.12024-3-suzuki.poulose@arm.com>
+ <20190725135402.GL23883@dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190725135402.GL23883@dell>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Trimmed the recipient list a bit and used Frieder's new address.
-+Sergey
+On Thu, Jul 25, 2019 at 02:54:02PM +0100, Lee Jones wrote:
+> On Tue, 23 Jul 2019, Suzuki K Poulose wrote:
+> 
+> > Introduce wrappers for {bus/driver/class}_find_device() to
+> > locate devices by its of_node.
+> > 
+> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+> > Cc: dri-devel@lists.freedesktop.org
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: devicetree@vger.kernel.org
+> > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > Cc: Frank Rowand <frowand.list@gmail.com>
+> > Cc: Heiko Stuebner <heiko@sntech.de>
+> > Cc: Liam Girdwood <lgirdwood@gmail.com>
+> > Cc: linux-i2c@vger.kernel.org
+> > Cc: linux-rockchip@lists.infradead.org
+> > Cc: linux-spi@vger.kernel.org
+> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> > Cc: Takashi Iwai <tiwai@suse.com>
+> > Cc: Wolfram Sang <wsa@the-dreams.de>
+> > Cc: Alan Tull <atull@kernel.org>
+> > Cc: Moritz Fischer <mdf@kernel.org>
+> > Cc: linux-fpga@vger.kernel.org
+> > Cc: Peter Rosin <peda@axentia.se>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: Liam Girdwood <lgirdwood@gmail.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Lee Jones <lee.jones@linaro.org>
+> > Cc: Thor Thayer <thor.thayer@linux.intel.com>
+> > Cc: Jiri Slaby <jslaby@suse.com>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: Peter Rosin <peda@axentia.se>
+> > Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> > ---
+> >  - Dropped the reviewed-by tags from Thor, Mark, Andrew and Peter as the
+> >    patches are mereged, though there are no functional changes.
+> > ---
+> >  drivers/amba/tegra-ahb.c              | 11 +-------
+> >  drivers/fpga/fpga-bridge.c            |  8 +-----
+> >  drivers/fpga/fpga-mgr.c               |  8 +-----
+> >  drivers/gpu/drm/drm_mipi_dsi.c        |  7 +----
+> >  drivers/i2c/i2c-core-of.c             |  7 +----
+> >  drivers/mfd/altera-sysmgr.c           | 14 ++--------
+> 
+> For my own reference:
+>   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> 
+> What's the merge plan for this patch?
+> 
+> Is anyone prepared to create an immutable branch for us to pull from?
+> I'm happy to do it if no one else steps up.
 
-On Mon, 29 Jul 2019 23:55:05 +0300
-Tomer Maimon <tmaimon77@gmail.com> wrote:
+I'll take it, and create a branch for everyone to pull from.
 
-> Hi Boris,
-> 
-> Thanks for the prompt reply,
-> 
-> 
-> 
-> On Mon, 29 Jul 2019 at 18:29, Boris Brezillon <boris.brezillon@collabora.com>
-> wrote:
-> 
-> > Hi Tomer,
-> >
-> > On Mon, 29 Jul 2019 17:25:01 +0300
-> > Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >  
-> > > Lately we have working on Flash interface unit (FIU) SPI driver that
-> > > using spi-mem interface, Our FIU HW module support direct Flash Rd//Wr.
-> > >
-> > > In our SOC (32 bit dual core ARM) we have 3 FIU's that using memory  
-> > mapping as follow:  
-> > >
-> > > FIU0 - have 2 chip select and each one have 128MB memory mapping (total  
-> > 256MB memory mapping)  
-> > > FIU1 - have 4 chip select and each one have 128MB memory mapping (total  
-> > 512MB memory mapping)  
-> > > FIU2 - have 4 chip select and each one have 16MB memory mapping (total  
-> > 32MB memory mapping)  
-> > >
-> > > Totally 800MB memory mapping.
-> > >
-> > > When the FIU driver probe it don't know the size of each Flash that
-> > > connected to the FIU, so the entire memory mapping is allocated for each  
-> > FIU  
-> > > according the FIU device tree memory map parameters.  
-> >
-> > Do you need those mappings to be active to support simple reg accesses?
-> >  
-> > > It means, if we enable all three FIU's the drivers will try to allocate  
-> > totally 800MB.  
-> > >
-> > > In 32bit system it is problematic because the kernel have only 1GB
-> > > of memory allocation so the vmalloc cannot take 800MB.
-> > >
-> > > When implementing the FIU driver in the mtd/spi-nor we allocating memory  
-> > address only  
-> > > for detected Flash with exact size (usually we are not using 128MB  
-> > Flash), and in that case usually we allocating much less memory.  
-> > >
-> > > To solve this issue we needed to overcome two things:
-> > >
-> > > 1.    Get argument from the upper layer (spi-mem layer)
-> > > 2.    Calling the get argument function after SPI_NOR_SCAN function.  
-> > (the MTD Flash size filled in  SPI_NOR_SCAN function)
-> >
-> > That's clearly breaking the layering we've tried to restore with the
-> > spi-nor/spi-mem split, and I don't see why this is needed since we now
-> > have a way to create direct mappings dynamically (with the dirmap API).
-> > Have you tried implementing the dirmap hooks in your driver?  
-> 
-> 
->  Sorry but I wasn't familiar with the direct mapping in the spi-mem, it
-> seems it needed to implemented in the m25p80 driver as well, am I correct?
+thanks,
 
-There's this patch [1] floating around. IIRC, Sergey was waiting for
-the m25p80 -> spi-nor merge to send a v5. Vignesh, any updates on that
-one? If you don't have time to work on that, maybe Sergey could send a
-v5.
-
-[1]https://www.spinics.net/lists/linux-mtd/msg07358.html
+greg k-h
