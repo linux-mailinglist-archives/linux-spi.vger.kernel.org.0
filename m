@@ -2,41 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D427B7E0
-	for <lists+linux-spi@lfdr.de>; Wed, 31 Jul 2019 04:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5907C219
+	for <lists+linux-spi@lfdr.de>; Wed, 31 Jul 2019 14:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727646AbfGaCAI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Jul 2019 22:00:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57206 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727636AbfGaCAI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 30 Jul 2019 22:00:08 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564538407;
-        bh=f1jqnWTXy1JwzCir1d9P/llZFzP4OVNT/A630lvdxs0=;
-        h=Subject:From:Date:To:From;
-        b=JKGh3fMP27vnkkpRA+eEuVeTQqkG2ss1RtNi4smmqmPupiZWviNATzOE8iaG30RVe
-         xNckPUWETiPyD0xig3SqzD4ZCphvQj9/ZS9coBt8qi40iVbAdjkL3ORDsuHSAsfuCQ
-         RzgTKJzvxhFNGmPILVB1enuFWCS03d54nlP10EZ8=
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <156453840769.10902.11405811118753334656.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 31 Jul 2019 02:00:07 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+        id S1729012AbfGaMrm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 31 Jul 2019 08:47:42 -0400
+Received: from laurent.telenet-ops.be ([195.130.137.89]:43882 "EHLO
+        laurent.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726307AbfGaMrl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 Jul 2019 08:47:41 -0400
+Received: from ramsan ([84.194.98.4])
+        by laurent.telenet-ops.be with bizsmtp
+        id jQnf2000705gfCL01QnfAQ; Wed, 31 Jul 2019 14:47:39 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hso15-0000Ub-4Z; Wed, 31 Jul 2019 14:47:39 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hso15-0003mu-1E; Wed, 31 Jul 2019 14:47:39 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] spi: core: Use DEVICE_ATTR_RW() for SPI slave control sysfs attribute
+Date:   Wed, 31 Jul 2019 14:47:38 +0200
+Message-Id: <20190731124738.14519-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v16] spi: Add Renesas R-Car Gen3 RPC-IF SPI driver (2019-07-31T02:14:16)
-  Superseding: [v15] spi: Add Renesas R-Car Gen3 RPC-IF SPI driver (2019-07-26T02:42:55):
-    [v15,1/2] spi: Add Renesas R-Car Gen3 RPC-IF SPI controller driver
-    [v15,2/2] dt-bindings: spi: Document Renesas R-Car Gen3 RPC-IF controller bindings
+Convert the SPI slave control sysfs attribute from DEVICE_ATTR() to
+DEVICE_ATTR_RW(), to reduce boilerplate.
 
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/spi/spi.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 75ac046cae5267b7..9fd7926e80c07681 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2105,8 +2105,8 @@ static int match_true(struct device *dev, void *data)
+ 	return 1;
+ }
+ 
+-static ssize_t spi_slave_show(struct device *dev,
+-			      struct device_attribute *attr, char *buf)
++static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
++			  char *buf)
+ {
+ 	struct spi_controller *ctlr = container_of(dev, struct spi_controller,
+ 						   dev);
+@@ -2117,9 +2117,8 @@ static ssize_t spi_slave_show(struct device *dev,
+ 		       child ? to_spi_device(child)->modalias : NULL);
+ }
+ 
+-static ssize_t spi_slave_store(struct device *dev,
+-			       struct device_attribute *attr, const char *buf,
+-			       size_t count)
++static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
++			   const char *buf, size_t count)
+ {
+ 	struct spi_controller *ctlr = container_of(dev, struct spi_controller,
+ 						   dev);
+@@ -2157,7 +2156,7 @@ static ssize_t spi_slave_store(struct device *dev,
+ 	return count;
+ }
+ 
+-static DEVICE_ATTR(slave, 0644, spi_slave_show, spi_slave_store);
++static DEVICE_ATTR_RW(slave);
+ 
+ static struct attribute *spi_slave_attrs[] = {
+ 	&dev_attr_slave.attr,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+2.17.1
+
