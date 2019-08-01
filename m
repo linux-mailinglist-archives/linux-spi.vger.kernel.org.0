@@ -2,79 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5347DA3D
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2019 13:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6737DA41
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2019 13:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725804AbfHAL1D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Aug 2019 07:27:03 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49694 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725790AbfHAL1D (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Aug 2019 07:27:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=2Kc+586cLBp8zFGNgc6TDcOHIhcpqIkYJZtL4/ooZqg=; b=CPeTun1XF7sNP7Qyt0LL/i7UK
-        zUTT1p/jffhHQjvpzucB2OwPo/BCwvIFfXhNPsoXQCrPQB90Nr3WbGL5ONHkPWGAHirP0a8REBRa4
-        M+g1kA+3hBz7s8EOQdpP9g4UPJiu8krgXPd5VSQPq525TzGO513JepWewd8/m23JOQwsA=;
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1ht9EW-0004a7-C9; Thu, 01 Aug 2019 11:26:56 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 43FAA2742C47; Thu,  1 Aug 2019 12:26:55 +0100 (BST)
-Date:   Thu, 1 Aug 2019 12:26:55 +0100
-From:   Mark Brown <broonie@kernel.org>
+        id S1729796AbfHAL1R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Aug 2019 07:27:17 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:40704 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725790AbfHAL1R (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Aug 2019 07:27:17 -0400
+Received: by mail-wr1-f68.google.com with SMTP id r1so73157076wrl.7;
+        Thu, 01 Aug 2019 04:27:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JF7ywhFpFNuJZGA1xyx9jGrse3xaPHw4cmSqzNiI3vk=;
+        b=qZrk2KEbitOTgCcaTaW5k/XjAfij/uYC3YNS9eRXlAoSRHb6XF+9oQ8f1nv2cKvF70
+         msLLtb8OcFSM7qPCZfHi0xvByu9HQlvL5Y4D4opOlkosaa5yB4G19RfZ+udIpbVmtigM
+         qIIvMTIhj6vWJwWNksNYbZONQO/stkZk7chcEPn2XxKZetIrPYxYbw2XmUZGWZ8xCTwZ
+         dnbsCA54YdtCohdcf3wYdSdf5n4rYSkO/GY40R8ZKcLI6RISG2QnzXOzDRiegB/JzpQM
+         NivApK2jHpWsZO8dwMMsMdckwn4pPdlMtndzLhV/xvcMnKEnbErjz+sgNyza0hkAByXZ
+         KCPg==
+X-Gm-Message-State: APjAAAXpQ9jvbPnK5x6f1GMg/vu8CYvp8MPBQN4IW2ylNCnLrtPZc2OI
+        UFKzwaKMH8cIXygQxU7nmNRPxX+ZPkHCZc15vxQ=
+X-Google-Smtp-Source: APXvYqzZoh9lq4IJstoOg0/8lFzWL5HjArUiogjMPyBhpEsKUEJr7TttklW94tFumEIQdDSYZ7LjGuimsRYEK9ZHj30=
+X-Received: by 2002:a5d:4b91:: with SMTP id b17mr1404812wrt.57.1564658835072;
+ Thu, 01 Aug 2019 04:27:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190801111348.530242235@infradead.org> <20190801111541.917256884@infradead.org>
+In-Reply-To: <20190801111541.917256884@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 1 Aug 2019 13:27:03 +0200
+Message-ID: <CAMuHMdU3D22PAWepGP6rMvDwJKVTfbxxH9J=kuo59PB7CCVKOA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] spi: Reduce kthread priority
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Benson Leung <bleung@chromium.org>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 5/5] spi: Reduce kthread priority
-Message-ID: <20190801112655.GA5488@sirena.org.uk>
-References: <20190801111348.530242235@infradead.org>
- <20190801111541.917256884@infradead.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
-Content-Disposition: inline
-In-Reply-To: <20190801111541.917256884@infradead.org>
-X-Cookie: Love thy neighbor, tune thy piano.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Guenter Roeck <groeck@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Peter,
 
---EVF5PPMfhYS0aIcm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Aug 01, 2019 at 01:13:53PM +0200, Peter Zijlstra wrote:
-
+On Thu, Aug 1, 2019 at 1:18 PM Peter Zijlstra <peterz@infradead.org> wrote:
 > The SPI thingies request FIFO-99 by default, reduce this to FIFO-50.
+>
+> FIFO-99 is the very highest priority available to SCHED_FIFO and
+> it not a suitable default; it would indicate the SPI work is the
+> most important work on the machine.
+>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  drivers/platform/chrome/cros_ec_spi.c |    2 +-
+>  drivers/spi/spi.c                     |    2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> --- a/drivers/platform/chrome/cros_ec_spi.c
+> +++ b/drivers/platform/chrome/cros_ec_spi.c
+> @@ -706,7 +706,7 @@ static int cros_ec_spi_devm_high_pri_all
+>                                            struct cros_ec_spi *ec_spi)
+>  {
+>         struct sched_param sched_priority = {
+> -               .sched_priority = MAX_RT_PRIO - 1,
+> +               .sched_priority = MAX_RT_PRIO / 2,
 
-I don't have a cover letter or any other context, what's going on here
-with dependencies?
+include/linux/sched/prio.h says:
 
---EVF5PPMfhYS0aIcm
-Content-Type: application/pgp-signature; name="signature.asc"
+ * Priority of a process goes from 0..MAX_PRIO-1, valid RT
+ * priority is 0..MAX_RT_PRIO-1, and SCHED_NORMAL/SCHED_BATCH
+ * tasks are in the range MAX_RT_PRIO..MAX_PRIO-1. Priority
+ * values are inverted: lower p->prio value means higher priority.
 
------BEGIN PGP SIGNATURE-----
+So the new 50 is actually a higher priority than the old 99?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1CzHwACgkQJNaLcl1U
-h9Bi1gf/R2RBFRK38yt4CRZFig5dJ3Fm/3wsfKj5hFNGFGrz8KB7AC0KdnjuX6wf
-IveemuHcUiCpATP7HwY3w47Z6DFlFJSYaXFce8ku9+i/jmJ85e82GbikQHndMSqd
-l3Kv2hC6y9wmWRgr2GJ4isTtRIH9vPei9nHWaGGUmkLwZQnphY7pbPLx+GPFBFHt
-gIRwDK2kw4ivbCJrS6uwaXSlXPIKu5SxVF6o0kkyGUb2QxdlzqnuwxUQpoX+r183
-iebAuHWZJEheKQtd/+yhAbSH8rGThdQ3sie3Q1e8KPf9Coc8RteL58NV47RFyYQj
-B7gEl66Otu+l9uYADgMTz+VsY6d+uQ==
-=tJYV
------END PGP SIGNATURE-----
+Given I'm far from an RT expert, I must be missing something?
+Thanks!
 
---EVF5PPMfhYS0aIcm--
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
