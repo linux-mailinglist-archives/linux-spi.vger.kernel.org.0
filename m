@@ -2,117 +2,212 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C059D7D05D
-	for <lists+linux-spi@lfdr.de>; Wed, 31 Jul 2019 23:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1BA7D59F
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2019 08:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731073AbfGaV4M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 31 Jul 2019 17:56:12 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:42876 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727809AbfGaV4M (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 31 Jul 2019 17:56:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=K/tOdg0rARIHNKt8myQdNk7juboEm6U9R00/FeIUiBE=; b=dAQCdVcqawi/p92YlttDZTR93
-        BKyG7tTLWgF7ROCBKJ78mPeMReOpPz03DvX3MgsE3fL4jZKpXbSgEfnsqgHzMIJoSh2RNJNUt/7Vs
-        W4pmxcdPzOCef23B1cmjFfttX03YC386eRlZje3tRqBKZnkd81Qs+16ww3Bey4vn/dVho=;
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hswZ4-0003OG-Ci; Wed, 31 Jul 2019 21:55:18 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 1A3322742C6C; Wed, 31 Jul 2019 22:55:17 +0100 (BST)
-Date:   Wed, 31 Jul 2019 22:55:16 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        samba-technical@lists.samba.org, devicetree@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Evgeniy Dushistov <dushistov@mail.ru>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Steve French <sfrench@samba.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-cifs@vger.kernel.org, Dave Kleikamp <shaggy@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org,
-        Hartmut Knaack <knaack.h@gmx.de>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 0/6] ReST conversion patches not applied yet
-Message-ID: <20190731215516.GM4369@sirena.org.uk>
-References: <cover.1564603513.git.mchehab+samsung@kernel.org>
- <20190731141734.1fa9ce64@lwn.net>
- <20190731202007.GI4369@sirena.org.uk>
- <20190731172613.32d65ad8@coco.lan>
- <20190731203712.GJ4369@sirena.org.uk>
- <20190731182729.01c98cd3@coco.lan>
+        id S1729266AbfHAGmf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Aug 2019 02:42:35 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:51418 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730159AbfHAGme (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Aug 2019 02:42:34 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x716gE2u083842;
+        Thu, 1 Aug 2019 01:42:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1564641734;
+        bh=zY3/va/JJMLXHu2ZBucuC1YJa86+EEc/yvWStmNyiU8=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=D82Zx4D0hzXF/9u1gNe4uW+WnS8m7WohTi0s9nYVxY+Mpf67C/jXPEK8wkBNrJtUN
+         8ec6IBg9yNB8jFp2HY6QzJ8kT1JibdsZIjR/DFCiIRRCOVSLmcCradgsqEpEA1DZ9S
+         Hi1Qr6vLS0UbvaHhsf6+6BCD5EWNSNDXkGvZkI98=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x716gEEt113903
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Aug 2019 01:42:14 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 1 Aug
+ 2019 01:42:14 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 1 Aug 2019 01:42:14 -0500
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x716gA1e112596;
+        Thu, 1 Aug 2019 01:42:11 -0500
+Subject: Re: [RFC v1 0/3] *spi-mem: adding setup and callback function
+To:     Tomer Maimon <tmaimon77@gmail.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+CC:     <broonie@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <bbrezillon@kernel.org>, <tudor.ambarus@microchip.com>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
+References: <20190729142504.188336-1-tmaimon77@gmail.com>
+ <20190729172859.4374a2ad@collabora.com>
+ <CAP6Zq1iPXDX_Gtz6ZWYm3JoHgHjdapotVLGw-Lq4tc2X-6eAug@mail.gmail.com>
+ <20190730085438.6fe0480b@collabora.com>
+ <d8adef3f-e901-2e25-6183-35cb1e53bcda@ti.com>
+ <20190730200410.72b2f7d3@collabora.com>
+ <CAP6Zq1hfVoS8+VU0rAtKAX7D22qTVHDMosiCRMKV8sQB_m0qOQ@mail.gmail.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <ac96da83-3b52-c030-cefa-e0d366fc3151@ti.com>
+Date:   Thu, 1 Aug 2019 12:12:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iKKZt69u2Wx/rspf"
-Content-Disposition: inline
-In-Reply-To: <20190731182729.01c98cd3@coco.lan>
-X-Cookie: FEELINGS are cascading over me!!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAP6Zq1hfVoS8+VU0rAtKAX7D22qTVHDMosiCRMKV8sQB_m0qOQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
---iKKZt69u2Wx/rspf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 31/07/19 1:49 PM, Tomer Maimon wrote:
+> Hi Vignesh,
+> 
+> Does your new merge version will support direct spi-mem API?
+> 
 
-On Wed, Jul 31, 2019 at 06:27:29PM -0300, Mauro Carvalho Chehab wrote:
 
-> Meanwhile, if someone needs something that it is at the wrong book, he
-> can just use some search tool to seek what he needs, no matter on
-> what book the relevant information is stored.
+No, I don't have a driver to test out dirmap APIs. So, that would need
+to be added separately on top.
 
-OTOH it might be weird for the intended audience of the book.
+I have posted next version of my series here (expect more revisions):
+https://patchwork.ozlabs.org/cover/1140269/
 
-> Mark Brown <broonie@kernel.org> escreveu:
+Feel free to test and rebase dirmap API addition on top of it.
 
-> > I don't know if it makes sense to have an embedded developer's
-> > manual as well?
+Regards
+Vignesh
 
-> Yeah, that's a good question.=20
 
-> Jon is planning todo a documentation track at LPC. One of the things
-> that should be discussed, IMO, is how we'll organize the books.
+> Thanks,
+> 
+> Tomer
+> 
+> On Tue, 30 Jul 2019 at 21:04, Boris Brezillon
+> <boris.brezillon@collabora.com <mailto:boris.brezillon@collabora.com>>
+> wrote:
+> 
+>     On Tue, 30 Jul 2019 23:18:25 +0530
+>     Vignesh Raghavendra <vigneshr@ti.com <mailto:vigneshr@ti.com>> wrote:
+> 
+>     > On 30-Jul-19 12:24 PM, Boris Brezillon wrote:
+>     > > Trimmed the recipient list a bit and used Frieder's new address.
+>     > > +Sergey
+>     > >
+>     > > On Mon, 29 Jul 2019 23:55:05 +0300
+>     > > Tomer Maimon <tmaimon77@gmail.com <mailto:tmaimon77@gmail.com>>
+>     wrote:
+>     > >   
+>     > >> Hi Boris,
+>     > >>
+>     > >> Thanks for the prompt reply,
+>     > >>
+>     > >>
+>     > >>
+>     > >> On Mon, 29 Jul 2019 at 18:29, Boris Brezillon
+>     <boris.brezillon@collabora.com <mailto:boris.brezillon@collabora.com>>
+>     > >> wrote:
+>     > >> 
+>     > >>> Hi Tomer,
+>     > >>>
+>     > >>> On Mon, 29 Jul 2019 17:25:01 +0300
+>     > >>> Tomer Maimon <tmaimon77@gmail.com
+>     <mailto:tmaimon77@gmail.com>> wrote:
+>     > >>>   
+>     > >>>> Lately we have working on Flash interface unit (FIU) SPI
+>     driver that
+>     > >>>> using spi-mem interface, Our FIU HW module support direct
+>     Flash Rd//Wr.
+>     > >>>>
+>     > >>>> In our SOC (32 bit dual core ARM) we have 3 FIU's that using
+>     memory   
+>     > >>> mapping as follow:   
+>     > >>>>
+>     > >>>> FIU0 - have 2 chip select and each one have 128MB memory
+>     mapping (total   
+>     > >>> 256MB memory mapping)   
+>     > >>>> FIU1 - have 4 chip select and each one have 128MB memory
+>     mapping (total   
+>     > >>> 512MB memory mapping)   
+>     > >>>> FIU2 - have 4 chip select and each one have 16MB memory
+>     mapping (total   
+>     > >>> 32MB memory mapping)   
+>     > >>>>
+>     > >>>> Totally 800MB memory mapping.
+>     > >>>>
+>     > >>>> When the FIU driver probe it don't know the size of each
+>     Flash that
+>     > >>>> connected to the FIU, so the entire memory mapping is
+>     allocated for each   
+>     > >>> FIU   
+>     > >>>> according the FIU device tree memory map parameters.   
+>     > >>>
+>     > >>> Do you need those mappings to be active to support simple reg
+>     accesses?
+>     > >>>   
+>     > >>>> It means, if we enable all three FIU's the drivers will try
+>     to allocate   
+>     > >>> totally 800MB.   
+>     > >>>>
+>     > >>>> In 32bit system it is problematic because the kernel have
+>     only 1GB
+>     > >>>> of memory allocation so the vmalloc cannot take 800MB.
+>     > >>>>
+>     > >>>> When implementing the FIU driver in the mtd/spi-nor we
+>     allocating memory   
+>     > >>> address only   
+>     > >>>> for detected Flash with exact size (usually we are not using
+>     128MB   
+>     > >>> Flash), and in that case usually we allocating much less
+>     memory.   
+>     > >>>>
+>     > >>>> To solve this issue we needed to overcome two things:
+>     > >>>>
+>     > >>>> 1.    Get argument from the upper layer (spi-mem layer)
+>     > >>>> 2.    Calling the get argument function after SPI_NOR_SCAN
+>     function.   
+>     > >>> (the MTD Flash size filled in  SPI_NOR_SCAN function)
+>     > >>>
+>     > >>> That's clearly breaking the layering we've tried to restore
+>     with the
+>     > >>> spi-nor/spi-mem split, and I don't see why this is needed
+>     since we now
+>     > >>> have a way to create direct mappings dynamically (with the
+>     dirmap API).
+>     > >>> Have you tried implementing the dirmap hooks in your driver?   
+>     > >>
+>     > >>
+>     > >>  Sorry but I wasn't familiar with the direct mapping in the
+>     spi-mem, it
+>     > >> seems it needed to implemented in the m25p80 driver as well, am
+>     I correct? 
+>     > >
+>     > > There's this patch [1] floating around. IIRC, Sergey was waiting for
+>     > > the m25p80 -> spi-nor merge to send a v5. Vignesh, any updates
+>     on that
+>     > > one? If you don't have time to work on that, maybe Sergey could
+>     send a
+>     > > v5.
+>     > >   
+>     >
+>     > I did send an updated series of merging m25p80 to spi-nor last
+>     week and
+>     > have received few comments. Will respin one more version this week
+>     > (mostly by tomorrow).
+> 
+>     Okay, great!
+> 
 
-I'll be at Plumbers, not sure what the schedule's looking like yet
-though.
-
---iKKZt69u2Wx/rspf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1CDkQACgkQJNaLcl1U
-h9DmyQf8CbO6RT3vDVCTbWB0f/yKJ/A87r+D9XnXG94SH0Vqj3KAl/HFsPpl4gyU
-1t9Uo9ZtFC8lSFh29z5fxpIzNkfsanBjnTrJS1lxOvU+DgmoTfXV5+2xa3rel1E0
-oOzMumEUJLWQmAQIaSzObUMvLTHaHZXE9UwveI9WkjfE0k7lsrK4vKzotxGDUk1a
-6B/LdVb+NH3ME369z6GL2hpH6SkNc0jCRYj4PcGud8PTKBqHim7kBI3AeE51lFUV
-Dsr7zD6gH+cbj/GXdXApIDJvlR8bH6LLM/dakss84cM6CvJoD/pd4z9fn2kmUkVY
-5tMO7f2i3x9slM6yQ78bDwGSrn8XIg==
-=1tp/
------END PGP SIGNATURE-----
-
---iKKZt69u2Wx/rspf--
+-- 
+Regards
+Vignesh
