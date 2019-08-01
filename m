@@ -2,94 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC2B7D7D7
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2019 10:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8D77DA1D
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2019 13:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730769AbfHAIkr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Aug 2019 04:40:47 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:46666 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730766AbfHAIkp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 1 Aug 2019 04:40:45 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 58947200B50;
-        Thu,  1 Aug 2019 10:40:44 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id F2067200B6B;
-        Thu,  1 Aug 2019 10:40:38 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 2712F402C4;
-        Thu,  1 Aug 2019 16:40:32 +0800 (SGT)
-From:   Chuanhua Han <chuanhua.han@nxp.com>
-To:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        shawnguo@kernel.org, leoyang.li@nxp.com
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chuanhua Han <chuanhua.han@nxp.com>
-Subject: [PATCH 3/3] arm64: dts: ls1088a-qds: Add the spi-flash nodes under the DSPI controller
-Date:   Thu,  1 Aug 2019 16:31:05 +0800
-Message-Id: <20190801083105.30102-3-chuanhua.han@nxp.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190801083105.30102-1-chuanhua.han@nxp.com>
-References: <20190801083105.30102-1-chuanhua.han@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1730471AbfHALSY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Aug 2019 07:18:24 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:50870 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730447AbfHALSX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Aug 2019 07:18:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Type:MIME-Version:References:
+        Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Ts7Wuhwdp6RUU0lWUdro44IST7FhRZuEKkrJRN/QhKM=; b=S2iVsB9TvL3c2A0C6BVu99iu8C
+        M4CYn3OLGZe/Kq2Z3wvLAEiNZiQdCq25GSXPjnY3goThBuRPh/1OOeNWTWG/JbG2FUKzGV3A0su4U
+        MraCsCcc+ZLreEhvH2+hg9GTVv1YN9BzFbP2RlYSM/LoMTmkhjMOUjErl7rPWyyF6aljEusK4HKZz
+        A814rOmCbId28UB+7qzPIBg/EtNIpAYMe/iJ2bKu4WDNIF1pc4OEz5wwA2sgyPZak8KEoF55VxaVg
+        kbINHdxSoCP9mXEns/GU9+dneG35Ys9fn+it/VTzNa1zGwH1aZBtx/vC47CMV5pUKogy104q4LPxt
+        F2OqzPrw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1ht968-0005fe-Ie; Thu, 01 Aug 2019 11:18:16 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 8E421202975E5; Thu,  1 Aug 2019 13:18:12 +0200 (CEST)
+Message-Id: <20190801111541.917256884@infradead.org>
+User-Agent: quilt/0.65
+Date:   Thu, 01 Aug 2019 13:13:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     mingo@kernel.org
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH 5/5] spi: Reduce kthread priority
+References: <20190801111348.530242235@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch adds the spi-flash nodes under the DSPI controller for
-ls1088a-qds boards.
+The SPI thingies request FIFO-99 by default, reduce this to FIFO-50.
 
-Signed-off-by: Chuanhua Han <chuanhua.han@nxp.com>
+FIFO-99 is the very highest priority available to SCHED_FIFO and
+it not a suitable default; it would indicate the SPI work is the
+most important work on the machine.
+
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dts | 33 +++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ drivers/platform/chrome/cros_ec_spi.c |    2 +-
+ drivers/spi/spi.c                     |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dts
-index 6f48d21..120e62d 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dts
-@@ -17,6 +17,39 @@
- 	compatible = "fsl,ls1088a-qds", "fsl,ls1088a";
- };
+--- a/drivers/platform/chrome/cros_ec_spi.c
++++ b/drivers/platform/chrome/cros_ec_spi.c
+@@ -706,7 +706,7 @@ static int cros_ec_spi_devm_high_pri_all
+ 					   struct cros_ec_spi *ec_spi)
+ {
+ 	struct sched_param sched_priority = {
+-		.sched_priority = MAX_RT_PRIO - 1,
++		.sched_priority = MAX_RT_PRIO / 2,
+ 	};
+ 	int err;
  
-+&dspi {
-+	bus-num = <0>;
-+	status = "okay";
-+
-+	flash@0 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <1000000>;
-+	};
-+
-+	flash@1 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "jedec,spi-nor";
-+		spi-cpol;
-+		spi-cpha;
-+		spi-max-frequency = <3500000>;
-+		reg = <1>;
-+	};
-+
-+	flash@2 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "jedec,spi-nor";
-+		spi-cpol;
-+		spi-cpha;
-+		spi-max-frequency = <3500000>;
-+		reg = <2>;
-+	};
-+};
-+
- &i2c0 {
- 	status = "okay";
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1434,7 +1434,7 @@ static void spi_pump_messages(struct kth
+  */
+ static void spi_set_thread_rt(struct spi_controller *ctlr)
+ {
+-	struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };
++	struct sched_param param = { .sched_priority = MAX_RT_PRIO / 2 };
  
--- 
-2.9.5
+ 	dev_info(&ctlr->dev,
+ 		"will run message pump with realtime priority\n");
+
 
