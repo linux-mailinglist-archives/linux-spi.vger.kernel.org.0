@@ -2,31 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6B8805B5
-	for <lists+linux-spi@lfdr.de>; Sat,  3 Aug 2019 12:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DB1805D0
+	for <lists+linux-spi@lfdr.de>; Sat,  3 Aug 2019 12:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388425AbfHCK1l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 3 Aug 2019 06:27:41 -0400
-Received: from mailout3.hostsharing.net ([176.9.242.54]:55409 "EHLO
+        id S2388801AbfHCKin (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 3 Aug 2019 06:38:43 -0400
+Received: from mailout3.hostsharing.net ([176.9.242.54]:58061 "EHLO
         mailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388201AbfHCK1l (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Aug 2019 06:27:41 -0400
-X-Greylist: delayed 432 seconds by postgrey-1.27 at vger.kernel.org; Sat, 03 Aug 2019 06:27:40 EDT
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        with ESMTP id S1727123AbfHCKin (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Aug 2019 06:38:43 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout3.hostsharing.net (Postfix) with ESMTPS id 763041033E0D3;
-        Sat,  3 Aug 2019 12:20:26 +0200 (CEST)
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id 1E0861033B348;
+        Sat,  3 Aug 2019 12:38:40 +0200 (CEST)
 Received: from localhost (unknown [89.246.108.87])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 1BD6A618EDF5;
-        Sat,  3 Aug 2019 12:20:26 +0200 (CEST)
-X-Mailbox-Line: From fe12893a7521a162001a1f52d2a98f07592c811c Mon Sep 17 00:00:00 2001
-Message-Id: <cover.1564825752.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id B4394618F189;
+        Sat,  3 Aug 2019 12:38:39 +0200 (CEST)
+X-Mailbox-Line: From 08a6fa2163fcbeacd50e647072d1eb39bafb8d31 Mon Sep 17 00:00:00 2001
+Message-Id: <08a6fa2163fcbeacd50e647072d1eb39bafb8d31.1564825752.git.lukas@wunner.de>
+In-Reply-To: <cover.1564825752.git.lukas@wunner.de>
+References: <cover.1564825752.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
 Date:   Sat, 3 Aug 2019 12:10:00 +0200
-Subject: [PATCH 00/10] Raspberry Pi SPI speedups
+Subject: [PATCH 04/10] spi: bcm2835: Drop dma_pending flag
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -47,42 +48,113 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-So far the BCM2835 SPI driver cannot cope with TX-only and RX-only
-transfers (rx_buf or tx_buf is NULL) when using DMA:  It relies on
-the SPI core to convert them to full-duplex transfers by allocating
-and DMA-mapping a dummy rx_buf or tx_buf.  This costs performance.
+The BCM2835 SPI driver uses a flag to keep track of whether a DMA
+transfer is in progress.
 
-Resolve by pre-allocating reusable DMA descriptors which cyclically
-clear the RX FIFO (for TX-only transfers) or zero-fill the TX FIFO
-(for RX-only transfers).  Patch [07/10] provides some numbers for
-the achieved latency improvement and CPU time reduction with an
-SPI Ethernet controller.  SPI displays should see a similar speedup.
-I've also made an effort to reduce peripheral and memory bus accesses.
+The flag is used to avoid terminating DMA channels multiple times if a
+transfer finishes orderly while simultaneously the SPI core invokes the
+->handle_err() callback because the transfer took too long.  However
+terminating DMA channels multiple times is perfectly fine, so the flag
+is unnecessary for this particular purpose.
 
-The series is meant to be applied on top of broonie/for-next.
-It can be applied to Linus' current tree if commit
-8d8bef503658 ("spi: bcm2835: Fix 3-wire mode if DMA is enabled")
-is cherry-picked from broonie's repo beforehand.
+The flag is also used to avoid invoking bcm2835_spi_undo_prologue()
+multiple times under this race condition.  However multiple *concurrent*
+invocations can no longer happen since commit 2527704d8411 ("spi:
+bcm2835: Synchronize with callback on DMA termination") because the
+->handle_err() callback now uses the _sync() variant when terminating
+DMA channels.
 
-Please review and test.  Thank you.
+The only raison d'être of the flag is therefore that
+bcm2835_spi_undo_prologue() cannot cope with multiple *sequential*
+invocations.  Achieve that by setting tx_prologue to 0 at the end of
+the function.  Subsequent invocations thus become no-ops.
 
-Lukas Wunner (10):
-  dmaengine: bcm2835: Allow reusable descriptors
-  dmaengine: bcm2835: Allow cyclic transactions without interrupt
-  spi: Guarantee cacheline alignment of driver-private data
-  spi: bcm2835: Drop dma_pending flag
-  spi: bcm2835: Work around DONE bit erratum
-  spi: bcm2835: Cache CS register value for ->prepare_message()
-  spi: bcm2835: Speed up TX-only DMA transfers by clearing RX FIFO
-  dmaengine: bcm2835: Document struct bcm2835_dmadev
-  dmaengine: bcm2835: Avoid accessing memory when copying zeroes
-  spi: bcm2835: Speed up RX-only DMA transfers by zero-filling TX FIFO
+With that, the dma_pending flag becomes unnecessary, so drop it.
 
- drivers/dma/bcm2835-dma.c |  38 +++-
- drivers/spi/spi-bcm2835.c | 408 ++++++++++++++++++++++++++++++++------
- drivers/spi/spi.c         |  18 +-
- 3 files changed, 390 insertions(+), 74 deletions(-)
+Tested-by: Nuno Sá <nuno.sa@analog.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: Martin Sperl <kernel@martin.sperl.org>
+Cc: Noralf Trønnes <noralf@tronnes.org>
+---
+ drivers/spi/spi-bcm2835.c | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 4b89e0a04ffd..2bf725e909fd 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -92,7 +92,6 @@ MODULE_PARM_DESC(polling_limit_us,
+  * @rx_prologue: bytes received without DMA if first RX sglist entry's
+  *	length is not a multiple of 4 (to overcome hardware limitation)
+  * @tx_spillover: whether @tx_prologue spills over to second TX sglist entry
+- * @dma_pending: whether a DMA transfer is in progress
+  * @debugfs_dir: the debugfs directory - neede to remove debugfs when
+  *      unloading the module
+  * @count_transfer_polling: count of how often polling mode is used
+@@ -115,7 +114,6 @@ struct bcm2835_spi {
+ 	int tx_prologue;
+ 	int rx_prologue;
+ 	unsigned int tx_spillover;
+-	unsigned int dma_pending;
+ 
+ 	struct dentry *debugfs_dir;
+ 	u64 count_transfer_polling;
+@@ -539,6 +537,8 @@ static void bcm2835_spi_undo_prologue(struct bcm2835_spi *bs)
+ 		sg_dma_address(&tfr->tx_sg.sgl[1]) -= 4;
+ 		sg_dma_len(&tfr->tx_sg.sgl[1])     += 4;
+ 	}
++
++	bs->tx_prologue = 0;
+ }
+ 
+ static void bcm2835_spi_dma_done(void *data)
+@@ -554,10 +554,8 @@ static void bcm2835_spi_dma_done(void *data)
+ 	 * is called the tx-dma must have finished - can't get to this
+ 	 * situation otherwise...
+ 	 */
+-	if (cmpxchg(&bs->dma_pending, true, false)) {
+-		dmaengine_terminate_async(ctlr->dma_tx);
+-		bcm2835_spi_undo_prologue(bs);
+-	}
++	dmaengine_terminate_async(ctlr->dma_tx);
++	bcm2835_spi_undo_prologue(bs);
+ 
+ 	/* and mark as completed */;
+ 	complete(&ctlr->xfer_completion);
+@@ -632,9 +630,6 @@ static int bcm2835_spi_transfer_one_dma(struct spi_controller *ctlr,
+ 	/* start TX early */
+ 	dma_async_issue_pending(ctlr->dma_tx);
+ 
+-	/* mark as dma pending */
+-	bs->dma_pending = 1;
+-
+ 	/* set the DMA length */
+ 	bcm2835_wr(bs, BCM2835_SPI_DLEN, bs->tx_len);
+ 
+@@ -650,7 +645,6 @@ static int bcm2835_spi_transfer_one_dma(struct spi_controller *ctlr,
+ 	if (ret) {
+ 		/* need to reset on errors */
+ 		dmaengine_terminate_sync(ctlr->dma_tx);
+-		bs->dma_pending = false;
+ 		goto err_reset_hw;
+ 	}
+ 
+@@ -915,11 +909,10 @@ static void bcm2835_spi_handle_err(struct spi_controller *ctlr,
+ 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+ 
+ 	/* if an error occurred and we have an active dma, then terminate */
+-	if (cmpxchg(&bs->dma_pending, true, false)) {
+-		dmaengine_terminate_sync(ctlr->dma_tx);
+-		dmaengine_terminate_sync(ctlr->dma_rx);
+-		bcm2835_spi_undo_prologue(bs);
+-	}
++	dmaengine_terminate_sync(ctlr->dma_tx);
++	dmaengine_terminate_sync(ctlr->dma_rx);
++	bcm2835_spi_undo_prologue(bs);
++
+ 	/* and reset */
+ 	bcm2835_spi_reset_hw(ctlr);
+ }
 -- 
 2.20.1
 
