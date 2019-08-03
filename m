@@ -2,32 +2,33 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DB1805D0
-	for <lists+linux-spi@lfdr.de>; Sat,  3 Aug 2019 12:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BC7805C3
+	for <lists+linux-spi@lfdr.de>; Sat,  3 Aug 2019 12:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388801AbfHCKin (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 3 Aug 2019 06:38:43 -0400
-Received: from mailout3.hostsharing.net ([176.9.242.54]:58061 "EHLO
+        id S2388526AbfHCKdO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 3 Aug 2019 06:33:14 -0400
+Received: from mailout3.hostsharing.net ([176.9.242.54]:55441 "EHLO
         mailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727123AbfHCKin (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Aug 2019 06:38:43 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        with ESMTP id S2388423AbfHCKdO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Aug 2019 06:33:14 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout3.hostsharing.net (Postfix) with ESMTPS id 1E0861033B348;
-        Sat,  3 Aug 2019 12:38:40 +0200 (CEST)
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id 4663B1033A716;
+        Sat,  3 Aug 2019 12:33:12 +0200 (CEST)
 Received: from localhost (unknown [89.246.108.87])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id B4394618F189;
-        Sat,  3 Aug 2019 12:38:39 +0200 (CEST)
-X-Mailbox-Line: From 08a6fa2163fcbeacd50e647072d1eb39bafb8d31 Mon Sep 17 00:00:00 2001
-Message-Id: <08a6fa2163fcbeacd50e647072d1eb39bafb8d31.1564825752.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id D4ADB618F189;
+        Sat,  3 Aug 2019 12:33:11 +0200 (CEST)
+X-Mailbox-Line: From 037b83d2ae8aa92448b9d647436012c06f4c0561 Mon Sep 17 00:00:00 2001
+Message-Id: <037b83d2ae8aa92448b9d647436012c06f4c0561.1564825752.git.lukas@wunner.de>
 In-Reply-To: <cover.1564825752.git.lukas@wunner.de>
 References: <cover.1564825752.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
 Date:   Sat, 3 Aug 2019 12:10:00 +0200
-Subject: [PATCH 04/10] spi: bcm2835: Drop dma_pending flag
+Subject: [PATCH 02/10] dmaengine: bcm2835: Allow cyclic transactions without
+ interrupt
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -48,113 +49,62 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The BCM2835 SPI driver uses a flag to keep track of whether a DMA
-transfer is in progress.
+The BCM2835 DMA driver currently requests an interrupt from the
+controller regardless whether or not the client has passed in the
+DMA_PREP_INTERRUPT flag. This causes unnecessary overhead for cyclic
+transactions which do not need an interrupt after each period.
 
-The flag is used to avoid terminating DMA channels multiple times if a
-transfer finishes orderly while simultaneously the SPI core invokes the
-->handle_err() callback because the transfer took too long.  However
-terminating DMA channels multiple times is perfectly fine, so the flag
-is unnecessary for this particular purpose.
-
-The flag is also used to avoid invoking bcm2835_spi_undo_prologue()
-multiple times under this race condition.  However multiple *concurrent*
-invocations can no longer happen since commit 2527704d8411 ("spi:
-bcm2835: Synchronize with callback on DMA termination") because the
-->handle_err() callback now uses the _sync() variant when terminating
-DMA channels.
-
-The only raison d'être of the flag is therefore that
-bcm2835_spi_undo_prologue() cannot cope with multiple *sequential*
-invocations.  Achieve that by setting tx_prologue to 0 at the end of
-the function.  Subsequent invocations thus become no-ops.
-
-With that, the dma_pending flag becomes unnecessary, so drop it.
+We're about to add such a use case, namely cyclic clearing of the SPI
+controller's RX FIFO, so amend the DMA driver to request an interrupt
+only if DMA_PREP_INTERRUPT was passed in. Ignore the period_len for
+such transactions and set it to the buffer length to make the driver's
+calculations work.
 
 Tested-by: Nuno Sá <nuno.sa@analog.com>
 Signed-off-by: Lukas Wunner <lukas@wunner.de>
 Cc: Martin Sperl <kernel@martin.sperl.org>
-Cc: Noralf Trønnes <noralf@tronnes.org>
+Cc: Florian Kauer <florian.kauer@koalo.de>
 ---
- drivers/spi/spi-bcm2835.c | 23 ++++++++---------------
- 1 file changed, 8 insertions(+), 15 deletions(-)
+ drivers/dma/bcm2835-dma.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index 4b89e0a04ffd..2bf725e909fd 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -92,7 +92,6 @@ MODULE_PARM_DESC(polling_limit_us,
-  * @rx_prologue: bytes received without DMA if first RX sglist entry's
-  *	length is not a multiple of 4 (to overcome hardware limitation)
-  * @tx_spillover: whether @tx_prologue spills over to second TX sglist entry
-- * @dma_pending: whether a DMA transfer is in progress
-  * @debugfs_dir: the debugfs directory - neede to remove debugfs when
-  *      unloading the module
-  * @count_transfer_polling: count of how often polling mode is used
-@@ -115,7 +114,6 @@ struct bcm2835_spi {
- 	int tx_prologue;
- 	int rx_prologue;
- 	unsigned int tx_spillover;
--	unsigned int dma_pending;
+diff --git a/drivers/dma/bcm2835-dma.c b/drivers/dma/bcm2835-dma.c
+index 523c507ad69e..a65514fcb7f2 100644
+--- a/drivers/dma/bcm2835-dma.c
++++ b/drivers/dma/bcm2835-dma.c
+@@ -691,7 +691,7 @@ static struct dma_async_tx_descriptor *bcm2835_dma_prep_dma_cyclic(
+ 	struct bcm2835_desc *d;
+ 	dma_addr_t src, dst;
+ 	u32 info = BCM2835_DMA_WAIT_RESP;
+-	u32 extra = BCM2835_DMA_INT_EN;
++	u32 extra = 0;
+ 	size_t max_len = bcm2835_dma_max_frame_length(c);
+ 	size_t frames;
  
- 	struct dentry *debugfs_dir;
- 	u64 count_transfer_polling;
-@@ -539,6 +537,8 @@ static void bcm2835_spi_undo_prologue(struct bcm2835_spi *bs)
- 		sg_dma_address(&tfr->tx_sg.sgl[1]) -= 4;
- 		sg_dma_len(&tfr->tx_sg.sgl[1])     += 4;
- 	}
-+
-+	bs->tx_prologue = 0;
- }
- 
- static void bcm2835_spi_dma_done(void *data)
-@@ -554,10 +554,8 @@ static void bcm2835_spi_dma_done(void *data)
- 	 * is called the tx-dma must have finished - can't get to this
- 	 * situation otherwise...
- 	 */
--	if (cmpxchg(&bs->dma_pending, true, false)) {
--		dmaengine_terminate_async(ctlr->dma_tx);
--		bcm2835_spi_undo_prologue(bs);
--	}
-+	dmaengine_terminate_async(ctlr->dma_tx);
-+	bcm2835_spi_undo_prologue(bs);
- 
- 	/* and mark as completed */;
- 	complete(&ctlr->xfer_completion);
-@@ -632,9 +630,6 @@ static int bcm2835_spi_transfer_one_dma(struct spi_controller *ctlr,
- 	/* start TX early */
- 	dma_async_issue_pending(ctlr->dma_tx);
- 
--	/* mark as dma pending */
--	bs->dma_pending = 1;
--
- 	/* set the DMA length */
- 	bcm2835_wr(bs, BCM2835_SPI_DLEN, bs->tx_len);
- 
-@@ -650,7 +645,6 @@ static int bcm2835_spi_transfer_one_dma(struct spi_controller *ctlr,
- 	if (ret) {
- 		/* need to reset on errors */
- 		dmaengine_terminate_sync(ctlr->dma_tx);
--		bs->dma_pending = false;
- 		goto err_reset_hw;
+@@ -707,6 +707,11 @@ static struct dma_async_tx_descriptor *bcm2835_dma_prep_dma_cyclic(
+ 		return NULL;
  	}
  
-@@ -915,11 +909,10 @@ static void bcm2835_spi_handle_err(struct spi_controller *ctlr,
- 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
- 
- 	/* if an error occurred and we have an active dma, then terminate */
--	if (cmpxchg(&bs->dma_pending, true, false)) {
--		dmaengine_terminate_sync(ctlr->dma_tx);
--		dmaengine_terminate_sync(ctlr->dma_rx);
--		bcm2835_spi_undo_prologue(bs);
--	}
-+	dmaengine_terminate_sync(ctlr->dma_tx);
-+	dmaengine_terminate_sync(ctlr->dma_rx);
-+	bcm2835_spi_undo_prologue(bs);
++	if (flags & DMA_PREP_INTERRUPT)
++		extra |= BCM2835_DMA_INT_EN;
++	else
++		period_len = buf_len;
 +
- 	/* and reset */
- 	bcm2835_spi_reset_hw(ctlr);
- }
+ 	/*
+ 	 * warn if buf_len is not a multiple of period_len - this may leed
+ 	 * to unexpected latencies for interrupts and thus audiable clicks
+@@ -778,7 +783,10 @@ static int bcm2835_dma_terminate_all(struct dma_chan *chan)
+ 
+ 	/* stop DMA activity */
+ 	if (c->desc) {
+-		vchan_terminate_vdesc(&c->desc->vd);
++		if (c->desc->vd.tx.flags & DMA_PREP_INTERRUPT)
++			vchan_terminate_vdesc(&c->desc->vd);
++		else
++			vchan_vdesc_fini(&c->desc->vd);
+ 		c->desc = NULL;
+ 		bcm2835_dma_abort(c);
+ 	}
 -- 
 2.20.1
 
