@@ -2,133 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28693805D3
-	for <lists+linux-spi@lfdr.de>; Sat,  3 Aug 2019 12:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92E080722
+	for <lists+linux-spi@lfdr.de>; Sat,  3 Aug 2019 18:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727484AbfHCKkw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 3 Aug 2019 06:40:52 -0400
-Received: from mailout3.hostsharing.net ([176.9.242.54]:41163 "EHLO
-        mailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727123AbfHCKkw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Aug 2019 06:40:52 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout3.hostsharing.net (Postfix) with ESMTPS id 4EC491034071B;
-        Sat,  3 Aug 2019 12:40:49 +0200 (CEST)
-Received: from localhost (unknown [89.246.108.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id E146B618F189;
-        Sat,  3 Aug 2019 12:40:48 +0200 (CEST)
-X-Mailbox-Line: From edb004dff4af6106f6bfcb89e1a96391e96eb857 Mon Sep 17 00:00:00 2001
-Message-Id: <edb004dff4af6106f6bfcb89e1a96391e96eb857.1564825752.git.lukas@wunner.de>
-In-Reply-To: <cover.1564825752.git.lukas@wunner.de>
-References: <cover.1564825752.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Sat, 3 Aug 2019 12:10:00 +0200
-Subject: [PATCH 05/10] spi: bcm2835: Work around DONE bit erratum
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        id S2387575AbfHCQBo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 3 Aug 2019 12:01:44 -0400
+Received: from smtp.domeneshop.no ([194.63.252.55]:33640 "EHLO
+        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387464AbfHCQBn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Aug 2019 12:01:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org; s=ds201810;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=FVVDDc3qcCOsDzVHjJvBttU1tFjf1MY/wUz+c8T/9Js=;
+        b=XPUC40aDylcelt6AwUjRPrre7+jPfAoWRzu66fOZY7TSgGf1EfVFG+oRzEiX/PqNzam9vsvaZqQk5NqmEeXcg/HlVhujjuBsjohpTYiSvD655VJ78dFLXcw+j7KXdK4KcEMGbhgPimjredtCZLKeFDueAdDdswSgkIBr2MoTLxerJS+t+K1lHRrfBpgX1wSb40yYcmU5fhTOCbDHCmX1Iyp5NSxK2yigZdeFisifsJMcmLH1cOGNe5ClQdLc09wEeUEcLwJncZL66kZfBRlHOAoqOpERHqWYDUnJ42pvGFHISiLj5v3+nDSlumvjR1tp4RtFZVV/MHOqpiNgg5WPsA==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:53009 helo=[192.168.10.173])
+        by smtp.domeneshop.no with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <noralf@tronnes.org>)
+        id 1htwTT-0003PB-E8; Sat, 03 Aug 2019 18:01:39 +0200
+Subject: Re: [PATCH 00/10] Raspberry Pi SPI speedups
+To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
         Stefan Wahren <wahrenst@gmx.net>, linux-spi@vger.kernel.org,
         dmaengine@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         bcm-kernel-feedback-list@broadcom.com
 Cc:     Eric Anholt <eric@anholt.net>, Nuno Sa <nuno.sa@analog.com>,
         Martin Sperl <kernel@martin.sperl.org>,
-        Noralf Tronnes <noralf@tronnes.org>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Florian Kauer <florian.kauer@koalo.de>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>
+References: <cover.1564825752.git.lukas@wunner.de>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <7e3eda3e-838a-fb08-b543-a3c576f11ea6@tronnes.org>
+Date:   Sat, 3 Aug 2019 18:01:27 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <cover.1564825752.git.lukas@wunner.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Commit 3bd7f6589f67 ("spi: bcm2835: Overcome sglist entry length
-limitation") amended the BCM2835 SPI driver with support for DMA
-transfers whose buffers are not aligned to 4 bytes and require more than
-one sglist entry.
 
-When testing this feature with upcoming commits to speed up TX-only and
-RX-only transfers, I noticed that SPI transmission sometimes breaks.
-A function introduced by the commit, bcm2835_spi_transfer_prologue(),
-performs one or two PIO transmissions as a prologue to the actual DMA
-transmission.  It turns out that the breakage goes away if the DONE bit
-in the CS register is set when ending such a PIO transmission.
 
-The DONE bit signifies emptiness of the TX FIFO.  According to the spec,
-the bit is of type RO, so writing it should never have any effect.
-Perhaps the spec is wrong and the bit is actually of type RW1C.
-E.g. the I2C controller on the BCM2835 does have an RW1C DONE bit which
-needs to be cleared by the driver.  Another, possibly more likely
-explanation is that it's a hardware erratum since the issue does not
-occur consistently.
+Den 03.08.2019 12.10, skrev Lukas Wunner:
+> So far the BCM2835 SPI driver cannot cope with TX-only and RX-only
+> transfers (rx_buf or tx_buf is NULL) when using DMA:  It relies on
+> the SPI core to convert them to full-duplex transfers by allocating
+> and DMA-mapping a dummy rx_buf or tx_buf.  This costs performance.
+> 
+> Resolve by pre-allocating reusable DMA descriptors which cyclically
+> clear the RX FIFO (for TX-only transfers) or zero-fill the TX FIFO
+> (for RX-only transfers).  Patch [07/10] provides some numbers for
+> the achieved latency improvement and CPU time reduction with an
+> SPI Ethernet controller.  SPI displays should see a similar speedup.
+> I've also made an effort to reduce peripheral and memory bus accesses.
+> 
+> The series is meant to be applied on top of broonie/for-next.
+> It can be applied to Linus' current tree if commit
+> 8d8bef503658 ("spi: bcm2835: Fix 3-wire mode if DMA is enabled")
+> is cherry-picked from broonie's repo beforehand.
+> 
+> Please review and test.  Thank you.
+> 
 
-Either way, amend bcm2835_spi_transfer_prologue() to always write the
-DONE bit.
+Tested-by: Noralf Trønnes <noralf@tronnes.org>
 
-Usually a transmission is ended by bcm2835_spi_reset_hw().  If the
-transmission was successful, the TX FIFO is empty and thus the DONE bit
-is set when bcm2835_spi_reset_hw() reads the CS register.  The bit is
-then written back to the register, so we happen to do the right thing.
+I've tested on a 320x240 RGB565 display, flipping 2 framebuffers as fast
+as possible. The buffers are 320x240x2=150kB which are maxsize split by
+spi-bcm2835.
 
-However if DONE is not set, e.g. because transmission is aborted with
-a non-empty TX FIFO, the bit won't be written by bcm2835_spi_reset_hw()
-and it seems possible that transmission might subsequently break.  To be
-on the safe side, likewise amend bcm2835_spi_reset_hw() to always write
-the bit.
+I see a small increase in speed from ~34.75 to ~35.55 fps using this series.
 
-Tested-by: Nuno Sá <nuno.sa@analog.com>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Cc: Martin Sperl <kernel@martin.sperl.org>
-Cc: Noralf Trønnes <noralf@tronnes.org>
----
- drivers/spi/spi-bcm2835.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+Details:
 
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index 2bf725e909fd..f6391c302363 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -317,6 +317,13 @@ static void bcm2835_spi_reset_hw(struct spi_controller *ctlr)
- 		BCM2835_SPI_CS_INTD |
- 		BCM2835_SPI_CS_DMAEN |
- 		BCM2835_SPI_CS_TA);
-+	/*
-+	 * Transmission sometimes breaks unless the DONE bit is written at the
-+	 * end of every transfer.  The spec says it's a RO bit.  Either the
-+	 * spec is wrong and the bit is actually of type RW1C, or it's a
-+	 * hardware erratum.
-+	 */
-+	cs |= BCM2835_SPI_CS_DONE;
- 	/* and reset RX/TX FIFOS */
- 	cs |= BCM2835_SPI_CS_CLEAR_RX | BCM2835_SPI_CS_CLEAR_TX;
- 
-@@ -475,7 +482,9 @@ static void bcm2835_spi_transfer_prologue(struct spi_controller *ctlr,
- 		bcm2835_wr_fifo_count(bs, bs->rx_prologue);
- 		bcm2835_wait_tx_fifo_empty(bs);
- 		bcm2835_rd_fifo_count(bs, bs->rx_prologue);
--		bcm2835_spi_reset_hw(ctlr);
-+		bcm2835_wr(bs, BCM2835_SPI_CS, cs | BCM2835_SPI_CS_CLEAR_RX
-+						  | BCM2835_SPI_CS_CLEAR_TX
-+						  | BCM2835_SPI_CS_DONE);
- 
- 		dma_sync_single_for_device(ctlr->dma_rx->device->dev,
- 					   sg_dma_address(&tfr->rx_sg.sgl[0]),
-@@ -496,7 +505,8 @@ static void bcm2835_spi_transfer_prologue(struct spi_controller *ctlr,
- 						  | BCM2835_SPI_CS_DMAEN);
- 		bcm2835_wr_fifo_count(bs, tx_remaining);
- 		bcm2835_wait_tx_fifo_empty(bs);
--		bcm2835_wr(bs, BCM2835_SPI_CS, cs | BCM2835_SPI_CS_CLEAR_TX);
-+		bcm2835_wr(bs, BCM2835_SPI_CS, cs | BCM2835_SPI_CS_CLEAR_TX
-+						  | BCM2835_SPI_CS_DONE);
- 	}
- 
- 	if (likely(!bs->tx_spillover)) {
--- 
-2.20.1
+$ ~/libdrm/tests/modetest/modetest -M mi0283qt -s 31:320x240@RG16 -v
+setting mode 320x240-0Hz@RG16 on connectors 31, crtc 34
+freq: 30.36Hz
+freq: 35.32Hz
+freq: 35.56Hz
+freq: 35.57Hz
+freq: 35.54Hz
+freq: 35.55Hz
+freq: 35.60Hz
+freq: 35.62Hz
+freq: 35.50Hz
+freq: 35.23Hz
+freq: 35.49Hz
+freq: 35.44Hz
+freq: 35.39Hz
+freq: 35.58Hz
+
+$ od --endian big -tu4 -An
+/sys/bus/spi/devices/spi0.0/of_node/spi-max-frequency
+   64000000
+
+<skip those that are zero>
+pi@pi2835:~$ tail -n +1 /sys/bus/spi/devices/spi0.0/statistics/*
+==> /sys/bus/spi/devices/spi0.0/statistics/bytes <==
+131644720
+==> /sys/bus/spi/devices/spi0.0/statistics/bytes_rx <==
+2
+==> /sys/bus/spi/devices/spi0.0/statistics/bytes_tx <==
+131644718
+==> /sys/bus/spi/devices/spi0.0/statistics/messages <==
+5188
+==> /sys/bus/spi/devices/spi0.0/statistics/spi_sync <==
+5188
+==> /sys/bus/spi/devices/spi0.0/statistics/spi_sync_immediate <==
+5188
+==> /sys/bus/spi/devices/spi0.0/statistics/transfer_bytes_histo_0-1 <==
+2609
+==>
+/sys/bus/spi/devices/spi0.0/statistics/transfer_bytes_histo_16384-32767 <==
+857
+==> /sys/bus/spi/devices/spi0.0/statistics/transfer_bytes_histo_2-3 <==
+5
+==>
+/sys/bus/spi/devices/spi0.0/statistics/transfer_bytes_histo_32768-65535 <==
+1714
+==> /sys/bus/spi/devices/spi0.0/statistics/transfer_bytes_histo_4-7 <==
+1717
+==> /sys/bus/spi/devices/spi0.0/statistics/transfer_bytes_histo_8-15 <==
+2
+==> /sys/bus/spi/devices/spi0.0/statistics/transfers <==
+6904
+==> /sys/bus/spi/devices/spi0.0/statistics/transfers_split_maxsize <==
+857
+
+
+Noralf.
 
