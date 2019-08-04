@@ -2,61 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8E6808C2
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Aug 2019 02:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FDA808C5
+	for <lists+linux-spi@lfdr.de>; Sun,  4 Aug 2019 02:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729407AbfHDAhp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 3 Aug 2019 20:37:45 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:37301 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729420AbfHDAhp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Aug 2019 20:37:45 -0400
-Received: by mail-lf1-f68.google.com with SMTP id c9so55352618lfh.4
-        for <linux-spi@vger.kernel.org>; Sat, 03 Aug 2019 17:37:43 -0700 (PDT)
+        id S1729391AbfHDAlB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 3 Aug 2019 20:41:01 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:33970 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729372AbfHDAlA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 3 Aug 2019 20:41:00 -0400
+Received: by mail-lj1-f195.google.com with SMTP id p17so76166767ljg.1
+        for <linux-spi@vger.kernel.org>; Sat, 03 Aug 2019 17:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=k4fPec1ZMrof5O8+Iw9iMzlfBvwpOif9EEyaTKz5PQY=;
-        b=jlvWoMHrM71WAI/BTTRe4UNM0tJcJwiDVtVJ1MSFfOiUqQ2Zlp8d3XgpfglP90Jg1i
-         cp0kN/2gqwjKIrVBSZc0s/ZY2P+1357wy/juwXGeuuGx5p7TYNc0mcZB++4FBBX5QHGT
-         1/1ZkYRIYKYkQfyWTTWaDzKX3xXMfBsSmVfkUEn4/f+coA33V1gsKlY5JEcqFvEaaWs8
-         MDdugXdg3bjKhyew0Jbkrs0cJjoFb/fLQL+LFnTkQqWh69pCQBuEotSc+reP6MpQFyVh
-         vyE5xAzuKzydOizby3ognejNUf6n7zb6ay2joDFI4tZIK6AofdVdIPEtVABtUgY64I+5
-         DSRQ==
+        bh=83IVBUszXJBDBbbp8swTg62jU4/KejA7UpzPe0S6xm0=;
+        b=Bh7MnHYJZl49goeYeBqiYnQPcskpwVWmg8V1GLR4XNU0Ag8CznRicpcqNiDtOVjsJX
+         x7x3Ku5PctABAZ7hlhuiIU+dPypZ8LUIlhrxJ5VJJkVvCNrBlyFhuuO3phV273fqwwO5
+         D2TqK1a4qC4ktSTEjzQBpsbVbHD4l66lzyZZgzZoU/BS74shvxkBHvTUoIw9za2a3Eya
+         h5bx8iFBpP/t0bCzyUVw1zWiRW7JCXUNWIzoFqzK1lkFAJZ9ve6G5DzmSt4NxJzpjo7i
+         mjJvTC7ty6KDXaFMyDskhSbQ0XvVKGZUWyoVvETJ8GF5+lMRgmF8GepMDkths/ljM8dL
+         DTGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=k4fPec1ZMrof5O8+Iw9iMzlfBvwpOif9EEyaTKz5PQY=;
-        b=EHZsVp6GWgK+pHpWMIGNAdCrOgZbxW/cR84PRLvY9E62amjsZ9QFlGtwbUhg16V4XS
-         3Hd0O28ZlAgxAt8Vw9q3x1II8X7aEQXpVSm4ZXJkurFg9fwxof+UEAzqkGIA2o+gyI9+
-         1Wuow4c5kO4NnzmBSaYr/gT+ZgGzDFEOgjRvZHPy5Qw20Siu6VUbRgASr9acDf0gcWY+
-         uoO5oXDWZf7BHk+wGXHAiXqbe3pBjUP3suob6wi/BGLnTrmoD8fckVT5PT402e4bAbI6
-         YYZm6M2yz5adaIazciFMTqwzg1o2YTzTMZ5c8r1SvSOZ/f2Vfa+je/VmRSlzo2DLfLmW
-         ZCag==
-X-Gm-Message-State: APjAAAXSAJ62x0Ym4bj7M/wnj5MCmuYqOLGRagQo5pVoqHcEWpOz4d/I
-        afBgujQvMfBFP/cHX1EU7YqPiQ==
-X-Google-Smtp-Source: APXvYqwlD9WclpD9YpyNplViDl+15+OVMJ5LaUsYrGGRyNeUcFrnGOCHsZrORuaB94uXS2vbFh20Iw==
-X-Received: by 2002:a19:4a50:: with SMTP id x77mr23174803lfa.91.1564879062355;
-        Sat, 03 Aug 2019 17:37:42 -0700 (PDT)
+        bh=83IVBUszXJBDBbbp8swTg62jU4/KejA7UpzPe0S6xm0=;
+        b=JMILtmtTFz4OBZvk9n2yxT1ZPnvUr6u/n89PtiMR8JTbNN5TukKFz3BobERBxIKode
+         NdC6wi2H/VwzifF5MMXnXZH3kr4QutwiFTpwrRq9fdSTztvaK2YT90+xamxmBRN7Bu9C
+         Dbb2sX1oBRmuWFvhpKLTYf9ejjOfjJ//p3Z0bzhJl2lPfFoiHPlRYbvMYAw4MiTINCh6
+         PqsAxnr0QqXfVQNfaYpMcAxva6wBSdCIdKtNeCZ7Gq3QRljvN4pTXBykYK2KFZN6pKx3
+         HIkWWjbqSZnGW3zVm2W4AXmOaj3sA4WYTrAuFeab0AmzrIZbH5adyJKRw2tyT1FlNKrf
+         KRIQ==
+X-Gm-Message-State: APjAAAWY/Gip//fJv0H5GuC9mLndEeZ3cGtgfbHBVTgqYUdN+7FFDQEL
+        biz0u1+dKZ7eZheMbW7EzNH/XA==
+X-Google-Smtp-Source: APXvYqxD+Z5r+DO33M2OTj+KZ/rbnBZZiu/iWM+krMOc8IkE+sqfU8ExW8SIln5EB5HcVOEznTj6Ew==
+X-Received: by 2002:a2e:8696:: with SMTP id l22mr10773261lji.201.1564879257882;
+        Sat, 03 Aug 2019 17:40:57 -0700 (PDT)
 Received: from localhost.localdomain (c-2ccd225c.014-348-6c756e10.bbcust.telenor.se. [92.34.205.44])
-        by smtp.gmail.com with ESMTPSA id e26sm16048603ljl.33.2019.08.03.17.37.40
+        by smtp.gmail.com with ESMTPSA id k23sm12363158ljg.90.2019.08.03.17.40.56
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sat, 03 Aug 2019 17:37:41 -0700 (PDT)
+        Sat, 03 Aug 2019 17:40:56 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
 Cc:     linux-gpio@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: [PATCH v2] spi: fsl: Convert to use CS GPIO descriptors
-Date:   Sun,  4 Aug 2019 02:35:39 +0200
-Message-Id: <20190804003539.985-1-linus.walleij@linaro.org>
+        Lukas Wunner <lukas@wunner.de>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        Chris Boot <bootc@bootc.net>
+Subject: [PATCH v4] spi: bcm2835: Convert to use CS GPIO descriptors
+Date:   Sun,  4 Aug 2019 02:38:52 +0200
+Message-Id: <20190804003852.1312-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -65,316 +64,152 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This converts the Freescale SPI master driver to use GPIO
+This converts the BCM2835 SPI master driver to use GPIO
 descriptors for chip select handling.
 
-The Freescale (fsl) driver has a lot of quirks to look up
-"gpios" rather than "cs-gpios" from the device tree.
-After the prior patch that will make gpiolib return the
-GPIO descriptor for "gpios" in response to a request for
-"cs-gpios", this code can be cut down quite a bit.
+The BCM2835 driver was relying on the core to drive the
+CS high/low so very small changes were needed for this
+part. If it managed to request the CS from the device tree
+node, all is pretty straight forward.
 
-The driver has custom handling of chip select rather
-than using the core (which may be possible but not
-done in this patch) so it still needs to refer directly
-to spi->cs_gpiod to set the chip select.
+However for native GPIOs this driver has a quite unorthodox
+loopback to request some GPIOs from the SoC GPIO chip by
+looking it up from the device tree using gpiochip_find()
+and then offseting hard into its numberspace. This has
+been augmented a bit by using gpiochip_request_own_desc()
+but this code really needs to be verified. If "native CS"
+is actually an SoC GPIO, why is it even done this way?
+Should this GPIO not just be defined in the device tree
+like any other CS GPIO? I'm confused.
 
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: Stefan Wahren <stefan.wahren@i2se.com>
+Cc: Martin Sperl <kernel@martin.sperl.org>
+Cc: Chris Boot <bootc@bootc.net>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-ChangeLog v1->v2:
-- Rebased on v5.3-rc1
----
- drivers/spi/spi-fsl-lib.h |   3 -
- drivers/spi/spi-fsl-spi.c | 193 +++++---------------------------------
- 2 files changed, 25 insertions(+), 171 deletions(-)
+ChangeLog v3->v4:
+- Fix the offset of the chipselect line to be 8 - CS
+  as in the original code.
+- Use the modified gpiochip_request_own_desc() to set up
+  line inversion semantics if need be. Look at the OF
+  node of the SPI device for flags.
+ChangeLog v2->v3:
+- Fix unused variable "err" compile-time message.
+ChangeLog RFT->v2:
+- Rebased on v5.1-rc1
 
-diff --git a/drivers/spi/spi-fsl-lib.h b/drivers/spi/spi-fsl-lib.h
-index 3576167283dc..015a1abb6a84 100644
---- a/drivers/spi/spi-fsl-lib.h
-+++ b/drivers/spi/spi-fsl-lib.h
-@@ -91,9 +91,6 @@ static inline u32 mpc8xxx_spi_read_reg(__be32 __iomem *reg)
- 
- struct mpc8xxx_spi_probe_info {
- 	struct fsl_spi_platform_data pdata;
--	int ngpios;
--	int *gpios;
--	bool *alow_flags;
- 	__be32 __iomem *immr_spi_cs;
- };
- 
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index 1d9b33aa1a3b..4b80ace1d137 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -18,7 +18,7 @@
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
- #include <linux/fsl_devices.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/kernel.h>
-@@ -28,7 +28,6 @@
+I would very much appreciate if someone took this for
+a ride on top of linux-next (there are some fixes in
+the -rcs you need) and see if all still works as expected.
+---
+ drivers/spi/spi-bcm2835.c | 58 +++++++++++++++++++++++++++------------
+ 1 file changed, 40 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 6f243a90c844..a40c09c553d3 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -25,7 +25,9 @@
  #include <linux/of.h>
  #include <linux/of_address.h>
- #include <linux/of_irq.h>
+ #include <linux/of_device.h>
 -#include <linux/of_gpio.h>
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
++#include <linux/gpio/consumer.h>
++#include <linux/gpio/machine.h> /* FIXME: using chip internals */
++#include <linux/gpio/driver.h> /* FIXME: using chip internals */
+ #include <linux/of_irq.h>
  #include <linux/spi/spi.h>
-@@ -481,32 +480,6 @@ static int fsl_spi_setup(struct spi_device *spi)
- 		return retval;
- 	}
  
--	if (mpc8xxx_spi->type == TYPE_GRLIB) {
--		if (gpio_is_valid(spi->cs_gpio)) {
--			int desel;
--
--			retval = gpio_request(spi->cs_gpio,
--					      dev_name(&spi->dev));
--			if (retval)
--				return retval;
--
--			desel = !(spi->mode & SPI_CS_HIGH);
--			retval = gpio_direction_output(spi->cs_gpio, desel);
--			if (retval) {
--				gpio_free(spi->cs_gpio);
--				return retval;
--			}
--		} else if (spi->cs_gpio != -ENOENT) {
--			if (spi->cs_gpio < 0)
--				return spi->cs_gpio;
--			return -EINVAL;
--		}
--		/* When spi->cs_gpio == -ENOENT, a hole in the phandle list
--		 * indicates to use native chipselect if present, or allow for
--		 * an always selected chip
--		 */
--	}
--
- 	/* Initialize chipselect - might be active for SPI_CS_HIGH mode */
- 	fsl_spi_chipselect(spi, BITBANG_CS_INACTIVE);
+@@ -930,14 +932,19 @@ static int chip_match_name(struct gpio_chip *chip, void *data)
  
-@@ -515,12 +488,8 @@ static int fsl_spi_setup(struct spi_device *spi)
- 
- static void fsl_spi_cleanup(struct spi_device *spi)
+ static int bcm2835_spi_setup(struct spi_device *spi)
  {
--	struct mpc8xxx_spi *mpc8xxx_spi = spi_master_get_devdata(spi->master);
- 	struct spi_mpc8xxx_cs *cs = spi_get_ctldata(spi);
- 
--	if (mpc8xxx_spi->type == TYPE_GRLIB && gpio_is_valid(spi->cs_gpio))
--		gpio_free(spi->cs_gpio);
--
- 	kfree(cs);
- 	spi_set_ctldata(spi, NULL);
- }
-@@ -586,8 +555,8 @@ static void fsl_spi_grlib_cs_control(struct spi_device *spi, bool on)
- 	u32 slvsel;
- 	u16 cs = spi->chip_select;
- 
--	if (gpio_is_valid(spi->cs_gpio)) {
--		gpio_set_value(spi->cs_gpio, on);
-+	if (spi->cs_gpiod) {
-+		gpiod_set_value(spi->cs_gpiod, on);
- 	} else if (cs < mpc8xxx_spi->native_chipselects) {
- 		slvsel = mpc8xxx_spi_read_reg(&reg_base->slvsel);
- 		slvsel = on ? (slvsel | (1 << cs)) : (slvsel & ~(1 << cs));
-@@ -718,139 +687,19 @@ static struct spi_master * fsl_spi_probe(struct device *dev,
- 
- static void fsl_spi_cs_control(struct spi_device *spi, bool on)
- {
--	struct device *dev = spi->dev.parent->parent;
--	struct fsl_spi_platform_data *pdata = dev_get_platdata(dev);
--	struct mpc8xxx_spi_probe_info *pinfo = to_of_pinfo(pdata);
--	u16 cs = spi->chip_select;
--
--	if (cs < pinfo->ngpios) {
--		int gpio = pinfo->gpios[cs];
--		bool alow = pinfo->alow_flags[cs];
--
--		gpio_set_value(gpio, on ^ alow);
-+	if (spi->cs_gpiod) {
-+		gpiod_set_value(spi->cs_gpiod, on);
- 	} else {
--		if (WARN_ON_ONCE(cs > pinfo->ngpios || !pinfo->immr_spi_cs))
-+		struct device *dev = spi->dev.parent->parent;
-+		struct fsl_spi_platform_data *pdata = dev_get_platdata(dev);
-+		struct mpc8xxx_spi_probe_info *pinfo = to_of_pinfo(pdata);
+-	int err;
+ 	struct gpio_chip *chip;
++	enum gpio_lookup_flags lflags;
 +
-+		if (WARN_ON_ONCE(!pinfo->immr_spi_cs))
- 			return;
- 		iowrite32be(on ? SPI_BOOT_SEL_BIT : 0, pinfo->immr_spi_cs);
+ 	/*
+ 	 * sanity checking the native-chipselects
+ 	 */
+ 	if (spi->mode & SPI_NO_CS)
+ 		return 0;
+-	if (gpio_is_valid(spi->cs_gpio))
++	/*
++	 * The SPI core has successfully requested the CS GPIO line from the
++	 * device tree, so we are done.
++	 */
++	if (spi->cs_gpiod)
+ 		return 0;
+ 	if (spi->chip_select > 1) {
+ 		/* error in the case of native CS requested with CS > 1
+@@ -948,29 +955,43 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 			"setup: only two native chip-selects are supported\n");
+ 		return -EINVAL;
  	}
- }
- 
--static int of_fsl_spi_get_chipselects(struct device *dev)
--{
--	struct device_node *np = dev->of_node;
--	struct fsl_spi_platform_data *pdata = dev_get_platdata(dev);
--	struct mpc8xxx_spi_probe_info *pinfo = to_of_pinfo(pdata);
--	bool spisel_boot = IS_ENABLED(CONFIG_FSL_SOC) &&
--		of_property_read_bool(np, "fsl,spisel_boot");
--	int ngpios;
--	int i = 0;
--	int ret;
--
--	ngpios = of_gpio_count(np);
--	ngpios = max(ngpios, 0);
--	if (ngpios == 0 && !spisel_boot) {
--		/*
--		 * SPI w/o chip-select line. One SPI device is still permitted
--		 * though.
--		 */
--		pdata->max_chipselect = 1;
--		return 0;
--	}
--
--	pinfo->ngpios = ngpios;
--	pinfo->gpios = kmalloc_array(ngpios, sizeof(*pinfo->gpios),
--				     GFP_KERNEL);
--	if (!pinfo->gpios)
--		return -ENOMEM;
--	memset(pinfo->gpios, -1, ngpios * sizeof(*pinfo->gpios));
--
--	pinfo->alow_flags = kcalloc(ngpios, sizeof(*pinfo->alow_flags),
--				    GFP_KERNEL);
--	if (!pinfo->alow_flags) {
--		ret = -ENOMEM;
--		goto err_alloc_flags;
--	}
--
--	for (; i < ngpios; i++) {
--		int gpio;
--		enum of_gpio_flags flags;
--
--		gpio = of_get_gpio_flags(np, i, &flags);
--		if (!gpio_is_valid(gpio)) {
--			dev_err(dev, "invalid gpio #%d: %d\n", i, gpio);
--			ret = gpio;
--			goto err_loop;
--		}
--
--		ret = gpio_request(gpio, dev_name(dev));
--		if (ret) {
--			dev_err(dev, "can't request gpio #%d: %d\n", i, ret);
--			goto err_loop;
--		}
--
--		pinfo->gpios[i] = gpio;
--		pinfo->alow_flags[i] = flags & OF_GPIO_ACTIVE_LOW;
--
--		ret = gpio_direction_output(pinfo->gpios[i],
--					    pinfo->alow_flags[i]);
--		if (ret) {
--			dev_err(dev,
--				"can't set output direction for gpio #%d: %d\n",
--				i, ret);
--			goto err_loop;
--		}
--	}
--
--#if IS_ENABLED(CONFIG_FSL_SOC)
--	if (spisel_boot) {
--		pinfo->immr_spi_cs = ioremap(get_immrbase() + IMMR_SPI_CS_OFFSET, 4);
--		if (!pinfo->immr_spi_cs) {
--			ret = -ENOMEM;
--			i = ngpios - 1;
--			goto err_loop;
--		}
--	}
--#endif
--
--	pdata->max_chipselect = ngpios + spisel_boot;
--	pdata->cs_control = fsl_spi_cs_control;
--
--	return 0;
--
--err_loop:
--	while (i >= 0) {
--		if (gpio_is_valid(pinfo->gpios[i]))
--			gpio_free(pinfo->gpios[i]);
--		i--;
--	}
--
--	kfree(pinfo->alow_flags);
--	pinfo->alow_flags = NULL;
--err_alloc_flags:
--	kfree(pinfo->gpios);
--	pinfo->gpios = NULL;
--	return ret;
--}
--
--static int of_fsl_spi_free_chipselects(struct device *dev)
--{
--	struct fsl_spi_platform_data *pdata = dev_get_platdata(dev);
--	struct mpc8xxx_spi_probe_info *pinfo = to_of_pinfo(pdata);
--	int i;
--
--	if (!pinfo->gpios)
--		return 0;
--
--	for (i = 0; i < pdata->max_chipselect; i++) {
--		if (gpio_is_valid(pinfo->gpios[i]))
--			gpio_free(pinfo->gpios[i]);
--	}
--
--	kfree(pinfo->gpios);
--	kfree(pinfo->alow_flags);
--	return 0;
--}
--
- static int of_fsl_spi_probe(struct platform_device *ofdev)
- {
- 	struct device *dev = &ofdev->dev;
-@@ -866,9 +715,21 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
- 
- 	type = fsl_spi_get_type(&ofdev->dev);
- 	if (type == TYPE_FSL) {
--		ret = of_fsl_spi_get_chipselects(dev);
--		if (ret)
--			goto err;
-+		struct fsl_spi_platform_data *pdata = dev_get_platdata(dev);
-+#if IS_ENABLED(CONFIG_FSL_SOC)
-+		struct mpc8xxx_spi_probe_info *pinfo = to_of_pinfo(pdata);
-+		bool spisel_boot = of_property_read_bool(np, "fsl,spisel_boot");
+-	/* now translate native cs to GPIO */
 +
-+		if (spisel_boot) {
-+			pinfo->immr_spi_cs = ioremap(get_immrbase() + IMMR_SPI_CS_OFFSET, 4);
-+			if (!pinfo->immr_spi_cs) {
-+				ret = -ENOMEM;
-+				goto err;
-+			}
-+		}
-+#endif
-+
-+		pdata->cs_control = fsl_spi_cs_control;
- 	}
++	/*
++	 * Translate native CS to GPIO
++	 *
++	 * FIXME: poking around in the gpiolib internals like this is
++	 * not very good practice. Find a way to locate the real problem
++	 * and fix it. Why is the GPIO descriptor in spi->cs_gpiod
++	 * sometimes not assigned correctly? Erroneous device trees?
++	 */
  
- 	ret = of_address_to_resource(np, 0, &mem);
-@@ -891,8 +752,6 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
+ 	/* get the gpio chip for the base */
+ 	chip = gpiochip_find("pinctrl-bcm2835", chip_match_name);
+ 	if (!chip)
+ 		return 0;
  
- err:
- 	irq_dispose_mapping(irq);
--	if (type == TYPE_FSL)
--		of_fsl_spi_free_chipselects(dev);
- 	return ret;
- }
+-	/* and calculate the real CS */
+-	spi->cs_gpio = chip->base + 8 - spi->chip_select;
++	/*
++	 * Retrieve the corresponding GPIO line used for CS.
++	 * The inversion semantics will be handled by the GPIO core
++	 * code, so we pass GPIOS_OUT_LOW for "unasserted" and
++	 * the correct flag for inversion semantics. The SPI_CS_HIGH
++	 * on spi->mode cannot be checked for polarity in this case
++	 * as the flag use_gpio_descriptors enforces SPI_CS_HIGH.
++	 */
++	if (of_property_read_bool(spi->dev.of_node, "spi-cs-high"))
++		lflags = GPIO_ACTIVE_HIGH;
++	else
++		lflags = GPIO_ACTIVE_LOW;
++	spi->cs_gpiod = gpiochip_request_own_desc(chip, 8 - spi->chip_select,
++						  DRV_NAME,
++						  lflags,
++						  GPIOD_OUT_LOW);
++	if (IS_ERR(spi->cs_gpiod))
++		return PTR_ERR(spi->cs_gpiod);
  
-@@ -902,8 +761,6 @@ static int of_fsl_spi_remove(struct platform_device *ofdev)
- 	struct mpc8xxx_spi *mpc8xxx_spi = spi_master_get_devdata(master);
+ 	/* and set up the "mode" and level */
+-	dev_info(&spi->dev, "setting up native-CS%i as GPIO %i\n",
+-		 spi->chip_select, spi->cs_gpio);
+-
+-	/* set up GPIO as output and pull to the correct level */
+-	err = gpio_direction_output(spi->cs_gpio,
+-				    (spi->mode & SPI_CS_HIGH) ? 0 : 1);
+-	if (err) {
+-		dev_err(&spi->dev,
+-			"could not set CS%i gpio %i as output: %i",
+-			spi->chip_select, spi->cs_gpio, err);
+-		return err;
+-	}
++	dev_info(&spi->dev, "setting up native-CS%i to use GPIO\n",
++		 spi->chip_select);
  
- 	fsl_spi_cpm_free(mpc8xxx_spi);
--	if (mpc8xxx_spi->type == TYPE_FSL)
--		of_fsl_spi_free_chipselects(&ofdev->dev);
  	return 0;
  }
+@@ -988,6 +1009,7 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
  
+ 	platform_set_drvdata(pdev, ctlr);
+ 
++	ctlr->use_gpio_descriptors = true;
+ 	ctlr->mode_bits = BCM2835_SPI_MODE_BITS;
+ 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	ctlr->num_chipselect = 3;
 -- 
 2.21.0
 
