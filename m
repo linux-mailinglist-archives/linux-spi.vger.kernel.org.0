@@ -2,78 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4794F82F9E
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Aug 2019 12:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378DF83133
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Aug 2019 14:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732262AbfHFKSd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Aug 2019 06:18:33 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39827 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728845AbfHFKSd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Aug 2019 06:18:33 -0400
-Received: by mail-pl1-f194.google.com with SMTP id b7so37734286pls.6
-        for <linux-spi@vger.kernel.org>; Tue, 06 Aug 2019 03:18:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=B2Az8FZ7ku0X2inJnd7funCGhhLUuh16TDsRGjU7wPY=;
-        b=YLSHDIxEYeh158kEGbiXMI86GIByE6ZBeC0wvOq22XFHllvFtRDEVX/D4B2rCKIkpU
-         B95CBSqrEOjKGdoZI6typuPUN1FG/78x+D6pL8LNHFsHe0YSQYZwO+nNZiMOca5i3WsF
-         HH1Csge+AVd6PV0yT31mCQliC59Y77ttlGxFU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=B2Az8FZ7ku0X2inJnd7funCGhhLUuh16TDsRGjU7wPY=;
-        b=SpC6U5Cq++WRouJ3PQixPW/eLxSJYvlqmmjtg9kuz1w094EenGQ3Go2X00BZl9/eGE
-         terPDPckrXZmifW7StDLuwm34wVkZl+f5EKE7sUVyYMas4orBFr7TII1azC7/MHZGVFW
-         gB2utDFXOeK/tWrqx7Xb+Z7s98jBDGa7aJYulevG8OG/Y0uVGJ4I2UVOxxLGYLQqdDWl
-         NYMdPs1MY5Xg2PBO8k1b/sAkKkodJEugJh15TcRRQx5s5Y16QeC6Q5rKlhln5UfzWHqm
-         K+/XKUAXjSAppcX0AolsSDeiZNC0aoerPcLfEkwMI/hyVkagDolYVKeofyE6q+yE39nT
-         Vkog==
-X-Gm-Message-State: APjAAAWevcelbnuhdZNJl9prjrJkH5IvNFcYHs9hre/povi5JmyWkP9g
-        oh6W9SEfo6Xpa1A30p8MjT1Odw==
-X-Google-Smtp-Source: APXvYqxyS1wEbeR/Ana/G2s2t8MN3btZM/Gabob2KwSWhuZCr75sQgO/4yYcxz0amLEeqYPRTivpyQ==
-X-Received: by 2002:a17:902:12d:: with SMTP id 42mr2319319plb.187.1565086712671;
-        Tue, 06 Aug 2019 03:18:32 -0700 (PDT)
-Received: from rayagonda.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id y23sm90516588pfo.106.2019.08.06.03.18.30
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 06 Aug 2019 03:18:31 -0700 (PDT)
-From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        id S1726373AbfHFMQQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Aug 2019 08:16:16 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59290 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726036AbfHFMQQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Aug 2019 08:16:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=qhMVapevkt7GGro5itwqbhs4kgXV6GMbDr4EtrsfY3A=; b=R7lP8lCrLZjQLhSWdDBL6I5Vg
+        q8RWHe5JPteLEB8J4Z5ZgzeVYAp3RkzBPa7STUdzYAgoc7z/w+yBYZgYa0c/aExgGREJdhsyeUWCK
+        JtXFr91mQ3reSbuCghmkUdjo9g3MlBepLvRAMKWR/3Dzim5xky+daS6F5wpllsKq3Dpus=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1huyNx-0003Mg-Tf; Tue, 06 Aug 2019 12:16:13 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 575E22742B67; Tue,  6 Aug 2019 13:16:12 +0100 (BST)
+Date:   Tue, 6 Aug 2019 13:16:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Subject: [PATCH v1 1/1] spi: bcm-qspi: Make BSPI default mode
-Date:   Tue,  6 Aug 2019 15:44:34 +0530
-Message-Id: <1565086474-4461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-X-Mailer: git-send-email 1.9.1
+Subject: Re: [PATCH v1 1/1] spi: bcm-qspi: Make BSPI default mode
+Message-ID: <20190806121612.GB4527@sirena.org.uk>
+References: <1565086474-4461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Bn2rw/3z4jIqBvZU"
+Content-Disposition: inline
+In-Reply-To: <1565086474-4461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+X-Cookie: All men have the right to wait in line.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Switch back to BSPI mode after MSPI operations (write and erase)
-are completed. This change will keep qpsi in BSPI mode by default.
 
-Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
----
- drivers/spi/spi-bcm-qspi.c | 1 +
- 1 file changed, 1 insertion(+)
+--Bn2rw/3z4jIqBvZU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index 902bdbf..46a811a 100644
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -897,6 +897,7 @@ static int bcm_qspi_transfer_one(struct spi_master *master,
- 
- 		read_from_hw(qspi, slots);
- 	}
-+	bcm_qspi_enable_bspi(qspi);
- 
- 	return 0;
- }
--- 
-1.9.1
+On Tue, Aug 06, 2019 at 03:44:34PM +0530, Rayagonda Kokatanur wrote:
+> Switch back to BSPI mode after MSPI operations (write and erase)
+> are completed. This change will keep qpsi in BSPI mode by default.
 
+Why?
+
+--Bn2rw/3z4jIqBvZU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1Jb4sACgkQJNaLcl1U
+h9DgGgf/XDjuMvbF0gxlnycvschMI54KdALlicilAY/EdgOqMP0nYuI2Aq5ajfLW
+iyCZuqnv5yB8zvfCmgkQDpMHCFqvyzOD+1e0uaHzW87GiksgU34YADpCjdhYc+Qw
+Ji2fr1lH0NCiCPeMc2ATQ+r431RO2f05Cgo1eUIdtdYdIMGeRt8r3NUbs9P/pTgf
+SFvVWF8s+bb3nsQKiLizNjCCzBAjzPcKsxkKIlwYMu5v2dlQQJUVQNA/Wrs6bada
+FRHWgV5N1VCYSAWxTG9X0nK9prvb6U2K4RLn4Sx4KQjG9+dXIcON3yIRjqCbIyCg
+jWPS/FWELxU9yNtO0ja47BfU2zbm1Q==
+=NEaP
+-----END PGP SIGNATURE-----
+
+--Bn2rw/3z4jIqBvZU--
