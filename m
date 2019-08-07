@@ -2,76 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 378DF83133
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Aug 2019 14:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6D084831
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Aug 2019 10:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbfHFMQQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Aug 2019 08:16:16 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59290 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726036AbfHFMQQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Aug 2019 08:16:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=qhMVapevkt7GGro5itwqbhs4kgXV6GMbDr4EtrsfY3A=; b=R7lP8lCrLZjQLhSWdDBL6I5Vg
-        q8RWHe5JPteLEB8J4Z5ZgzeVYAp3RkzBPa7STUdzYAgoc7z/w+yBYZgYa0c/aExgGREJdhsyeUWCK
-        JtXFr91mQ3reSbuCghmkUdjo9g3MlBepLvRAMKWR/3Dzim5xky+daS6F5wpllsKq3Dpus=;
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1huyNx-0003Mg-Tf; Tue, 06 Aug 2019 12:16:13 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 575E22742B67; Tue,  6 Aug 2019 13:16:12 +0100 (BST)
-Date:   Tue, 6 Aug 2019 13:16:12 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] spi: bcm-qspi: Make BSPI default mode
-Message-ID: <20190806121612.GB4527@sirena.org.uk>
-References: <1565086474-4461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Bn2rw/3z4jIqBvZU"
-Content-Disposition: inline
-In-Reply-To: <1565086474-4461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-X-Cookie: All men have the right to wait in line.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726412AbfHGIwQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Aug 2019 04:52:16 -0400
+Received: from andre.telenet-ops.be ([195.130.132.53]:48270 "EHLO
+        andre.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725891AbfHGIwQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Aug 2019 04:52:16 -0400
+Received: from ramsan ([84.194.98.4])
+        by andre.telenet-ops.be with bizsmtp
+        id m8sE2000D05gfCL018sEKT; Wed, 07 Aug 2019 10:52:14 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hvHg6-0002fN-3n; Wed, 07 Aug 2019 10:52:14 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hvHg6-0006Qa-2Q; Wed, 07 Aug 2019 10:52:14 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] spi: sh-msiof: Use devm_platform_ioremap_resource() helper
+Date:   Wed,  7 Aug 2019 10:52:13 +0200
+Message-Id: <20190807085213.24666-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Use the devm_platform_ioremap_resource() helper instead of open-coding
+the same operation.
 
---Bn2rw/3z4jIqBvZU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/spi/spi-sh-msiof.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-On Tue, Aug 06, 2019 at 03:44:34PM +0530, Rayagonda Kokatanur wrote:
-> Switch back to BSPI mode after MSPI operations (write and erase)
-> are completed. This change will keep qpsi in BSPI mode by default.
+diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
+index b50bdbc27e5899cc..fc1331057e7599d7 100644
+--- a/drivers/spi/spi-sh-msiof.c
++++ b/drivers/spi/spi-sh-msiof.c
+@@ -1297,7 +1297,6 @@ static void sh_msiof_release_dma(struct sh_msiof_spi_priv *p)
+ 
+ static int sh_msiof_spi_probe(struct platform_device *pdev)
+ {
+-	struct resource	*r;
+ 	struct spi_controller *ctlr;
+ 	const struct sh_msiof_chipdata *chipdata;
+ 	struct sh_msiof_spi_info *info;
+@@ -1351,8 +1350,7 @@ static int sh_msiof_spi_probe(struct platform_device *pdev)
+ 		goto err1;
+ 	}
+ 
+-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	p->mapbase = devm_ioremap_resource(&pdev->dev, r);
++	p->mapbase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(p->mapbase)) {
+ 		ret = PTR_ERR(p->mapbase);
+ 		goto err1;
+-- 
+2.17.1
 
-Why?
-
---Bn2rw/3z4jIqBvZU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1Jb4sACgkQJNaLcl1U
-h9DgGgf/XDjuMvbF0gxlnycvschMI54KdALlicilAY/EdgOqMP0nYuI2Aq5ajfLW
-iyCZuqnv5yB8zvfCmgkQDpMHCFqvyzOD+1e0uaHzW87GiksgU34YADpCjdhYc+Qw
-Ji2fr1lH0NCiCPeMc2ATQ+r431RO2f05Cgo1eUIdtdYdIMGeRt8r3NUbs9P/pTgf
-SFvVWF8s+bb3nsQKiLizNjCCzBAjzPcKsxkKIlwYMu5v2dlQQJUVQNA/Wrs6bada
-FRHWgV5N1VCYSAWxTG9X0nK9prvb6U2K4RLn4Sx4KQjG9+dXIcON3yIRjqCbIyCg
-jWPS/FWELxU9yNtO0ja47BfU2zbm1Q==
-=NEaP
------END PGP SIGNATURE-----
-
---Bn2rw/3z4jIqBvZU--
