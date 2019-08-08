@@ -2,161 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C034985C80
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2019 10:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DA385D4B
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2019 10:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731736AbfHHIJX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Aug 2019 04:09:23 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:36346 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731658AbfHHIJX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Aug 2019 04:09:23 -0400
-Received: by mail-ot1-f67.google.com with SMTP id r6so115155113oti.3;
-        Thu, 08 Aug 2019 01:09:22 -0700 (PDT)
+        id S1728289AbfHHIvp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Aug 2019 04:51:45 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:37530 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730994AbfHHIvp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Aug 2019 04:51:45 -0400
+Received: by mail-wr1-f65.google.com with SMTP id b3so1680377wro.4
+        for <linux-spi@vger.kernel.org>; Thu, 08 Aug 2019 01:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vifwZCE4bnskih8jmiWXXxluQMEl4VWESPVBYYZw1Fc=;
+        b=OFvZDM2GMu+vNEzqszF7ge0Swd1VEF//llkq14iazVY4eYdAX7SfvBw71e1ROskeQs
+         eTdH3onFMmimiTDbMHf9wtIEsKETqkpp9/znyHWDzs4GlVAbIKA4jTEuba2fzW4QST1U
+         lC/c7vcgt016PN9/xE2xfZFIbHDkJTzNiXKECIoIYkZu8EE6PnEc7MjW4/qi4JsSqy8R
+         tgs4Fojid604Eo4/9TjdzfeFrnVyBUwCZalwvqCe/36SLypMwp2C4Qi75ZuL0y2vWqG5
+         SAkAo9ITL5rrygXMNmYZbRWkvOECmyI/ILT6X84dtMcZffLwNvZs0Dga6Pw11fLaKwqR
+         fPsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NBFSdcaTcFoDPEtsfprZTWviaehhzIBA9CqQY+IL5/Y=;
-        b=QWLrJVSTN+oAbY8u6+JjSBfg0cXKMI3XZQ+gDdGFWHhrkwsl9UMHLw+kjxum9wPNqj
-         po2aXEKcWt+duY4vHH8tGpwKqF+8JveQabU8DwSDeo+MWwCXygSzgVATvRFx4qQntc2a
-         iScU8C3/TVj6s8+ne8ZRW1yE6W13qIiKh2OQjgy6/DM0t7OARwezeV8rIcqscI9NOM2B
-         z7B3Y11JYQINiifdtHm0vGhqqlAe8aJSAUMEJ69KkuR25/DsBxqQefrK9sPZtD37zzQW
-         mPRGtUyQ8pnvyVC96CT6zdfjUyAUqgjuMkyol2ybfin/SH2OkJn95/VzhG3Q8Gnj+jbF
-         /wJw==
-X-Gm-Message-State: APjAAAV+vhawgbnciT+KqBPPZgmWGfXfzWZyxQS/h9RCLJPbgH3Bd0qe
-        SqISaw6SF3H8g/KZBoxgKNPpCsYQoU7WrveP5FM=
-X-Google-Smtp-Source: APXvYqydNbKoEj5yccYRAI19XY287hgtCeiyoefADzGyalRGi0KNiysoeatvbVR35E7SB8lrJ1JjxbckO9DPGCuWlA0=
-X-Received: by 2002:a9d:529:: with SMTP id 38mr12094425otw.145.1565251762153;
- Thu, 08 Aug 2019 01:09:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vifwZCE4bnskih8jmiWXXxluQMEl4VWESPVBYYZw1Fc=;
+        b=NR7q1Zbyk8A15/RLGpTAiHsIXtlbybS+Wc+Rv6mzlmHzzB0E/1kG1o4e48gPmkqldx
+         la7ALEhmeNtqs8f64WiA50/v1Aq5xt9ZCm6R2DBYBnTy2MLdYskhsXBKcUZuLUj6hFO5
+         PEEslRTkNxVqKRLwxuBJZDQqofqkJfb/p3jWgV8ia4gHtpG7NU1ibHVY1/dslmHsd4Bi
+         IjBYgS6lTP4jmzzbNF+jdvxtGLwMw2w4Ce2gVq6v2D1/wQEnTnwDpaWoGfBCpYEwNg+A
+         dZFUPWmvJuH2cP287UFndW6wql7cI4zKAlI3D+IBvhFVnXnZU6w/fh/c0M9hLrnrlgqy
+         4HKA==
+X-Gm-Message-State: APjAAAUbelmAalXO4Iw9TL0ywSdDVGyOuLjCqNxGgVEk/MCQVTa9JCmJ
+        Os2HZxIZcBA96CdVAuF0O6akUA==
+X-Google-Smtp-Source: APXvYqwYEgl9MohCcq4LViUU9lWOpsLOwFkb7HqqBUCOa+plL4VwngfAF9IVJpka4nRbg/TwRZbMuQ==
+X-Received: by 2002:adf:f088:: with SMTP id n8mr15584283wro.58.1565254301982;
+        Thu, 08 Aug 2019 01:51:41 -0700 (PDT)
+Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id i66sm3360031wmi.11.2019.08.08.01.51.40
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 08 Aug 2019 01:51:41 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     robh+dt@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        jassisinghbrar@gmail.com, kishon@ti.com, p.zabel@pengutronix.de
+Subject: [PATCH 0/9] dt-bindings: first tentative of conversion to yaml format
+Date:   Thu,  8 Aug 2019 10:51:30 +0200
+Message-Id: <20190808085139.21438-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20190730181557.90391-1-swboyd@chromium.org> <20190730181557.90391-42-swboyd@chromium.org>
-In-Reply-To: <20190730181557.90391-42-swboyd@chromium.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 8 Aug 2019 10:09:10 +0200
-Message-ID: <CAMuHMdWBFzNGhzAdEyFEbRE6nOWBKpCQ-5VXZfh3Bg+FMB7NXg@mail.gmail.com>
-Subject: Re: [PATCH v6 41/57] spi: Remove dev_err() usage after platform_get_irq()
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Stephen,
+This is a first tentative to convert some of the simplest Amlogic
+dt-bindings to the yaml format.
 
-On Tue, Jul 30, 2019 at 8:19 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> We don't need dev_err() messages when platform_get_irq() fails now that
-> platform_get_irq() prints an error message itself when something goes
-> wrong. Let's remove these prints with a simple semantic patch.
->
-> // <smpl>
-> @@
-> expression ret;
-> struct platform_device *E;
-> @@
->
-> ret =
-> (
-> platform_get_irq(E, ...)
-> |
-> platform_get_irq_byname(E, ...)
-> );
->
-> if ( \( ret < 0 \| ret <= 0 \) )
-> {
-> (
-> -if (ret != -EPROBE_DEFER)
-> -{ ...
-> -dev_err(...);
-> -... }
-> |
-> ...
-> -dev_err(...);
-> )
-> ...
-> }
-> // </smpl>
->
-> While we're here, remove braces on if statements that only have one
-> statement (manually).
->
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-spi@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->
-> Please apply directly to subsystem trees
->
->  drivers/spi/atmel-quadspi.c     |  1 -
->  drivers/spi/spi-armada-3700.c   |  1 -
->  drivers/spi/spi-bcm2835.c       |  1 -
->  drivers/spi/spi-bcm2835aux.c    |  1 -
->  drivers/spi/spi-bcm63xx-hsspi.c |  4 +---
->  drivers/spi/spi-bcm63xx.c       |  4 +---
->  drivers/spi/spi-cadence.c       |  1 -
->  drivers/spi/spi-dw-mmio.c       |  4 +---
->  drivers/spi/spi-efm32.c         |  4 +---
->  drivers/spi/spi-ep93xx.c        |  4 +---
->  drivers/spi/spi-fsl-dspi.c      |  1 -
->  drivers/spi/spi-fsl-qspi.c      |  4 +---
->  drivers/spi/spi-geni-qcom.c     |  4 +---
->  drivers/spi/spi-lantiq-ssc.c    | 12 +++---------
->  drivers/spi/spi-mt65xx.c        |  1 -
->  drivers/spi/spi-npcm-pspi.c     |  1 -
->  drivers/spi/spi-nuc900.c        |  1 -
->  drivers/spi/spi-nxp-fspi.c      |  4 +---
->  drivers/spi/spi-pic32-sqi.c     |  1 -
->  drivers/spi/spi-pic32.c         | 12 +++---------
->  drivers/spi/spi-qcom-qspi.c     |  4 +---
->  drivers/spi/spi-s3c24xx.c       |  1 -
->  drivers/spi/spi-sh-msiof.c      |  1 -
->  drivers/spi/spi-sh.c            |  4 +---
->  drivers/spi/spi-sifive.c        |  1 -
->  drivers/spi/spi-slave-mt27xx.c  |  1 -
->  drivers/spi/spi-sprd.c          |  4 +---
->  drivers/spi/spi-stm32-qspi.c    |  5 +----
->  drivers/spi/spi-sun4i.c         |  1 -
->  drivers/spi/spi-sun6i.c         |  1 -
->  drivers/spi/spi-synquacer.c     |  2 --
->  drivers/spi/spi-ti-qspi.c       |  1 -
->  drivers/spi/spi-uniphier.c      |  1 -
->  drivers/spi/spi-xlp.c           |  4 +---
->  drivers/spi/spi-zynq-qspi.c     |  1 -
->  drivers/spi/spi-zynqmp-gqspi.c  |  1 -
->  36 files changed, 19 insertions(+), 80 deletions(-)
+All have been tested using :
+$ make ARCH=arm64 dtbs_check
 
-Failed to catch
-drivers/spi/spi-rspi.c: ret = platform_get_irq_byname(pdev, "rx");
-drivers/spi/spi-rspi.c- if (ret < 0) {
-drivers/spi/spi-rspi.c:         ret = platform_get_irq_byname(pdev, "mux");
-drivers/spi/spi-rspi.c-         if (ret < 0)
-drivers/spi/spi-rspi.c:                 ret = platform_get_irq(pdev, 0);
-drivers/spi/spi-rspi.c-         if (ret >= 0)
-drivers/spi/spi-rspi.c-                 rspi->rx_irq = rspi->tx_irq = ret;
-drivers/spi/spi-rspi.c- } else {
-drivers/spi/spi-rspi.c-         rspi->rx_irq = ret;
-drivers/spi/spi-rspi.c:         ret = platform_get_irq_byname(pdev, "tx");
-drivers/spi/spi-rspi.c-         if (ret >= 0)
-drivers/spi/spi-rspi.c-                 rspi->tx_irq = ret;
-drivers/spi/spi-rspi.c- }
-drivers/spi/spi-rspi.c- if (ret < 0) {
-drivers/spi/spi-rspi.c:         dev_err(&pdev->dev, "platform_get_irq error\n");
-drivers/spi/spi-rspi.c-         goto error2;
-drivers/spi/spi-rspi.c- }
+Issues with the amlogic arm64 DTs has already been identified thanks
+to the validation scripts. The DT fixes will be pushed once these yaml
+bindings are acked.
 
-Gr{oetje,eeting}s,
+Changes since rfc v2:
+- Collected Rob's, Martin's, Philipp's and Guenter's tags
+- Removed mhu maxItems: 3 to leave only minItems
+- Fixed flash@0 in spifc example
 
-                        Geert
+Changes since rfc v1:
+- Fixed bindings according to Rob's comments
+- Added commit log
+- renamed yaml files using amlogic prefix
+
+Neil Armstrong (9):
+  dt-bindings: mailbox: meson-mhu: convert to yaml
+  dt-bindings: rng: amlogic,meson-rng: convert to yaml
+  dt-bindings: spi: meson: convert to yaml
+  dt-bindings: reset: amlogic,meson-reset: convert to yaml
+  dt-bindings: arm: amlogic: amlogic,meson-gx-ao-secure: convert to yaml
+  dt-bindings: phy: meson-g12a-usb2-phy: convert to yaml
+  dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml
+  dt-bindings: serial: meson-uart: convert to yaml
+  dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
+
+ .../amlogic/amlogic,meson-gx-ao-secure.txt    | 28 -------
+ .../amlogic/amlogic,meson-gx-ao-secure.yaml   | 52 +++++++++++++
+ .../mailbox/amlogic,meson-gxbb-mhu.yaml       | 52 +++++++++++++
+ .../devicetree/bindings/mailbox/meson-mhu.txt | 34 ---------
+ .../phy/amlogic,meson-g12a-usb2-phy.yaml      | 63 ++++++++++++++++
+ .../phy/amlogic,meson-g12a-usb3-pcie-phy.yaml | 57 +++++++++++++++
+ .../bindings/phy/meson-g12a-usb2-phy.txt      | 22 ------
+ .../bindings/phy/meson-g12a-usb3-pcie-phy.txt | 22 ------
+ .../bindings/reset/amlogic,meson-reset.txt    | 19 -----
+ .../bindings/reset/amlogic,meson-reset.yaml   | 37 ++++++++++
+ .../bindings/rng/amlogic,meson-rng.txt        | 21 ------
+ .../bindings/rng/amlogic,meson-rng.yaml       | 37 ++++++++++
+ .../bindings/serial/amlogic,meson-uart.txt    | 38 ----------
+ .../bindings/serial/amlogic,meson-uart.yaml   | 73 +++++++++++++++++++
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 67 +++++++++++++++++
+ .../bindings/spi/amlogic,meson6-spifc.yaml    | 53 ++++++++++++++
+ .../devicetree/bindings/spi/spi-meson.txt     | 55 --------------
+ .../watchdog/amlogic,meson-gxbb-wdt.yaml      | 37 ++++++++++
+ .../bindings/watchdog/meson-gxbb-wdt.txt      | 16 ----
+ 19 files changed, 528 insertions(+), 255 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+ create mode 100644 Documentation/devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb3-pcie-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
+ delete mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.txt
+ create mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-meson.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.22.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
