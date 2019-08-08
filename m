@@ -2,124 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2EA86B91
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2019 22:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F5B86C60
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2019 23:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390364AbfHHUd6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Aug 2019 16:33:58 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59174 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404800AbfHHUd6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Aug 2019 16:33:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=Wzf+I9fcsxZuVaYRajx66L1PY3WCux2mFR6C4152LNM=; b=rzSrJ+LL0sL1
-        P6O11YsZkVDbKRtuB09B8IAybDpOKC8o5SUQUDFcB+RLyR4rwJJ/N/60pG0RAtnC0/dhwsunZ2Ock
-        7Ay7EWzrE2kRWW/mx26FUPj/ju13v/8e30dBhZwRCxpMqLb53d0ra80O+TTRiJ1sxgTR8CHmKWTnm
-        Z89Yc=;
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1hvp6h-00043F-1u; Thu, 08 Aug 2019 20:33:55 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 6CADD2742B42; Thu,  8 Aug 2019 21:33:54 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        id S2403940AbfHHV3O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Aug 2019 17:29:14 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:51859 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404251AbfHHV3O (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Aug 2019 17:29:14 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1Mxpqo-1iF0VT3dks-00zD7L; Thu, 08 Aug 2019 23:28:57 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Tony Lindgren <tony@atomide.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
         Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: Rename of_spi_register_master() function" to the spi tree
-In-Reply-To: <20190808150321.23319-1-linus.walleij@linaro.org>
-X-Patchwork-Hint: ignore
-Message-Id: <20190808203354.6CADD2742B42@ypsilon.sirena.org.uk>
-Date:   Thu,  8 Aug 2019 21:33:54 +0100 (BST)
+Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH 07/22] ARM: omap1: move perseus spi pinconf to board file
+Date:   Thu,  8 Aug 2019 23:22:16 +0200
+Message-Id: <20190808212234.2213262-8-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190808212234.2213262-1-arnd@arndb.de>
+References: <20190808212234.2213262-1-arnd@arndb.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:OUywYjmUvR4CggfZfvVTBOs6Wqw61X7ANdp+0I65+P8MCPSSa41
+ 5GvGcAmYjU2DGOzqYVYCAn/KSoqrC1TXd4CnESq/PgpAi3GqLbpTe3IptCS8caaxMlQ7MWB
+ qspivVS8oe8TFvFiGP+yhn+TNtbQ31DZqvBQMB8LsgaAzHiS6rwCdV2Wa5fHzpxxGDK29H2
+ oVjrpRiT3l+OAdxjzkEqg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HTgsHXt4VYg=:wv/3Tz08gC4O1xmYtn1lnv
+ 0DQVchC6pJEpqwK+9CzLoTkrnBsAxE7wZ+elRXgafIIObsfCNN/YIgTQ1GdzAShuaQlhVUAiI
+ x2put5/QNp+CQKco+ufIo3WHRGRBqey6WIpXX3I0vYqr5zrSFImTvDEr26dWXewa8Mge4eIl9
+ 1zandRW0JCIG0L7TtDX6UFCokfvoWtQFPzY3zsIR/U9cFbYboSkaJl1xb6m8LmTMz1Fy+r3Xo
+ 3IxwAXhdJ539LXs1RLtojMfFqgTVwmfhY2aiC4Mu1N4VhBJRVMUU39ySLQZi7LVc/eOT7qiOt
+ mbUIg0pOs3W84yVSI/V/2eEOCoxIhMCWtiQ8UYSmcrk3HumNFJCiB0TJn2lnbrIByn4XAm24E
+ WznZoc38kwirw1rzqsFaDVwfSRvHkB5IOK392edCP0d7AgSYWCrBKpTvLVWew9EfVojJI/WHc
+ 2mVDRcJiU4P/xzA3rN8j7ED727y6zXc0KrWLV+OLt27wntOZxNuwOIjm9oDiicsH1bvFm7OUC
+ SNkSxxwqlJeNQXllVKUrLsRfTT5UGPZIqVy5go2ubH3J6RHBC1w0pP+0w5WqBW8Cm89usEALa
+ iKtMuH4jjEzc/yH9jf4lu9GQ05158U+qlSFKhqq27BtihJNJhdr4cG8OTguF49oF/z3GoUZbz
+ 0zk3AiGWMmw/7SdHAJ8JjCbDR6tL1hq0xnwyrGxON2pNn9j7RW51LxD6sg3MZJxWqMNYZ+1WU
+ sY7/qqbeEDI/viciS0gwy5RjMHG7ffieopLw0A==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+The driver has always had a FIXME about this, and it seems
+like this trivial code move avoids a mach header inclusion,
+so just do it.
 
-   spi: Rename of_spi_register_master() function
+With that out of the way, and the header file inclusions
+changed to global files, the driver can also be compile-tested
+on other platforms.
 
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.4
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 43004f31ebf2705905460a6d9a77da4182170c38 Mon Sep 17 00:00:00 2001
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 8 Aug 2019 17:03:21 +0200
-Subject: [PATCH] spi: Rename of_spi_register_master() function
-
-Rename this function to of_spi_get_gpio_numbers() as this
-is what the function does, it does not register a master,
-it is called in the path of registering a master so the
-name is logical in a convoluted way, but it is better to
-follow Rusty Russell's ABI level no 7:
-"The obvious use is (probably) the correct one"
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20190808150321.23319-1-linus.walleij@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/spi/spi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/mach-omap1/board-perseus2.c |  6 ++++++
+ drivers/spi/Kconfig                  |  2 +-
+ drivers/spi/spi-omap-uwire.c         | 15 +++------------
+ 3 files changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 8e83c9567353..aef55acb5ccd 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2235,7 +2235,7 @@ struct spi_controller *__spi_alloc_controller(struct device *dev,
- EXPORT_SYMBOL_GPL(__spi_alloc_controller);
+diff --git a/arch/arm/mach-omap1/board-perseus2.c b/arch/arm/mach-omap1/board-perseus2.c
+index 1aeeb7337d29..da0155107d85 100644
+--- a/arch/arm/mach-omap1/board-perseus2.c
++++ b/arch/arm/mach-omap1/board-perseus2.c
+@@ -289,6 +289,12 @@ static void __init omap_perseus2_init(void)
+ 	omap_cfg_reg(F4_7XX_KBC3);
+ 	omap_cfg_reg(E3_7XX_KBC4);
  
- #ifdef CONFIG_OF
--static int of_spi_register_master(struct spi_controller *ctlr)
-+static int of_spi_get_gpio_numbers(struct spi_controller *ctlr)
- {
- 	int nb, i, *cs;
- 	struct device_node *np = ctlr->dev.of_node;
-@@ -2268,7 +2268,7 @@ static int of_spi_register_master(struct spi_controller *ctlr)
- 	return 0;
++	if (IS_ENABLED(CONFIG_SPI_OMAP_UWIRE)) {
++		/* configure pins: MPU_UW_nSCS1, MPU_UW_SDO, MPU_UW_SCLK */
++		int val = omap_readl(OMAP7XX_IO_CONF_9) & ~0x00EEE000;
++		omap_writel(val | 0x00AAA000, OMAP7XX_IO_CONF_9);
++	}
++
+ 	platform_add_devices(devices, ARRAY_SIZE(devices));
+ 
+ 	omap_serial_init();
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 949b18ed9d6b..4e67c155229e 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -464,7 +464,7 @@ config SPI_OCTEON
+ 
+ config SPI_OMAP_UWIRE
+ 	tristate "OMAP1 MicroWire"
+-	depends on ARCH_OMAP1
++	depends on ARCH_OMAP1 || (ARM && COMPILE_TEST)
+ 	select SPI_BITBANG
+ 	help
+ 	  This hooks up to the MicroWire controller on OMAP1 chips.
+diff --git a/drivers/spi/spi-omap-uwire.c b/drivers/spi/spi-omap-uwire.c
+index ce8dbdbce312..278d42a2ec49 100644
+--- a/drivers/spi/spi-omap-uwire.c
++++ b/drivers/spi/spi-omap-uwire.c
+@@ -44,13 +44,10 @@
+ #include <linux/module.h>
+ #include <linux/io.h>
+ 
+-#include <mach/hardware.h>
+ #include <asm/mach-types.h>
+-
+-#include <mach/mux.h>
+-
+-#include <mach/omap7xx.h>	/* OMAP7XX_IO_CONF registers */
+-
++#include <linux/soc/ti/omap1-io.h>
++#include <linux/soc/ti/omap1-soc.h>
++#include <linux/soc/ti/omap1-mux.h>
+ 
+ /* FIXME address is now a platform device resource,
+  * and irqs should show there too...
+@@ -541,12 +538,6 @@ static int __init omap_uwire_init(void)
+ 		omap_cfg_reg(N14_1610_UWIRE_CS0);
+ 		omap_cfg_reg(N15_1610_UWIRE_CS1);
+ 	}
+-	if (machine_is_omap_perseus2()) {
+-		/* configure pins: MPU_UW_nSCS1, MPU_UW_SDO, MPU_UW_SCLK */
+-		int val = omap_readl(OMAP7XX_IO_CONF_9) & ~0x00EEE000;
+-		omap_writel(val | 0x00AAA000, OMAP7XX_IO_CONF_9);
+-	}
+-
+ 	return platform_driver_register(&uwire_driver);
  }
- #else
--static int of_spi_register_master(struct spi_controller *ctlr)
-+static int of_spi_get_gpio_numbers(struct spi_controller *ctlr)
- {
- 	return 0;
- }
-@@ -2455,7 +2455,7 @@ int spi_register_controller(struct spi_controller *ctlr)
- 			ctlr->mode_bits |= SPI_CS_HIGH;
- 		} else {
- 			/* Legacy code path for GPIOs from DT */
--			status = of_spi_register_master(ctlr);
-+			status = of_spi_get_gpio_numbers(ctlr);
- 			if (status)
- 				return status;
- 		}
+ 
 -- 
-2.20.1
+2.20.0
 
