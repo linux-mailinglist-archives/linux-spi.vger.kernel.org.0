@@ -2,59 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0307865D0
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2019 17:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3628D8692F
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2019 20:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732760AbfHHPch (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Aug 2019 11:32:37 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40508 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbfHHPch (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Aug 2019 11:32:37 -0400
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D319028CAE4;
-        Thu,  8 Aug 2019 16:32:35 +0100 (BST)
-Date:   Thu, 8 Aug 2019 17:32:32 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
+        id S2404164AbfHHSze (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Aug 2019 14:55:34 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:35066 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404161AbfHHSzd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Aug 2019 14:55:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=QjkoBON2R0G9dPWiD46toYdQm9FG0fge33xVSCag5ms=; b=vqt03qIKNSYXmWRwtn6SMC0vn
+        2KxAD407l3Awcyh2IzdII6GyPqRZFsRiCPW6czfrc9RB9mRifazXgV+8/2TNZ76/UaOA0+A2UJDmJ
+        IyNQtmNyWKwRuBMlsGkSPrg8Pj0jKAk8CeSe2LXRN+1EW53APKC59dZ9Blp6kqbrQuQNw=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1hvnZL-0003lN-Gm; Thu, 08 Aug 2019 18:55:23 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 5CB972742B42; Thu,  8 Aug 2019 19:55:22 +0100 (BST)
+Date:   Thu, 8 Aug 2019 19:55:22 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        vigneshr@ti.com, bbrezillon@kernel.org, avifishman70@gmail.com,
-        tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
-        benjaminfair@google.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, bbrezillon@kernel.org,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-spi@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2 2/2] spi: npcm-fiu: add NPCM FIU controller driver
-Message-ID: <20190808173232.4d79d698@collabora.com>
-In-Reply-To: <20190808131448.349161-3-tmaimon77@gmail.com>
+Message-ID: <20190808185522.GJ3795@sirena.co.uk>
 References: <20190808131448.349161-1-tmaimon77@gmail.com>
-        <20190808131448.349161-3-tmaimon77@gmail.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+ <20190808131448.349161-3-tmaimon77@gmail.com>
+ <20190808132740.GG3795@sirena.co.uk>
+ <CAP6Zq1j7jHejdx9h-nxCJcVjtGx_3rHmay7R8nn11DLaE8Q4gA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5me2qT3T17SWzdxI"
+Content-Disposition: inline
+In-Reply-To: <CAP6Zq1j7jHejdx9h-nxCJcVjtGx_3rHmay7R8nn11DLaE8Q4gA@mail.gmail.com>
+X-Cookie: I think we're in trouble.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu,  8 Aug 2019 16:14:48 +0300
-Tomer Maimon <tmaimon77@gmail.com> wrote:
 
+--5me2qT3T17SWzdxI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +
-> +static const struct spi_controller_mem_ops npcm_fiu_mem_ops = {
-> +	.exec_op = npcm_fiu_exec_op,
+On Thu, Aug 08, 2019 at 06:37:06PM +0300, Tomer Maimon wrote:
 
-No npcm_supports_op()? That's suspicious, especially after looking at
-the npcm_fiu_exec_op() (and the functions called from there) where the
-requested ->buswidth seems to be completely ignored...
+> for example in our driver we modify the access type (singe, dual or quad)
+> according the op->addr.buswidth
+> for example in the npcm_fiu_set_drd function.
 
-> +	.dirmap_create = npcm_fiu_dirmap_create,
-> +	.dirmap_read = npcm_fiu_direct_read,
-> +	.dirmap_write = npcm_fiu_direct_write,
-> +};
-> +
+>         regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
+>                            NPCM_FIU_DRD_CFG_ACCTYPE,
+>                            ilog2(op->addr.buswidth) <<
+>                            NPCM_FIU_DRD_ACCTYPE_SHIFT);
+
+> we also modify it in the UMA R/W functions.
+
+Ah, it's only for the flash functions - that's fine.
+
+--5me2qT3T17SWzdxI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1McBkACgkQJNaLcl1U
+h9CSyQf9HMQyWI7F+/mz/TefzbACHnpE0c8lwToPC8gs3NlHo8g0orLblfG3DsLm
+UEB893DEnNq2PyAZ3RalNBeet13paLEA0qBru8OSMUWpeNwDNxNPJnw0LKgWMfJd
+hR7ajSCzI8nNleQRxNko7depUDzpemRXDWxmIyeoBPOYzHxX3AWFoyuaz9aUo2Rl
+Unh0Hf1osxqIy1e/McvePEnPv0TT99Ymj8k6/8GnvioyP4EpahOXI8dSR2jI0EhD
+E00zLhgmAoNpkwrV/jtjy/U4bWl2oEXrySbQ9Ljy8b0iFVArSIEFILHO06iXOkXP
+gKzJeeqWsQ6fz//+fGxegx1F6fcTpg==
+=AZer
+-----END PGP SIGNATURE-----
+
+--5me2qT3T17SWzdxI--
