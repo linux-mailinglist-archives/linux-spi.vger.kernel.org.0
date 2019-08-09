@@ -2,892 +2,354 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF26881EE
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Aug 2019 20:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9663988406
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Aug 2019 22:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437342AbfHISCZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Aug 2019 14:02:25 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42490 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437146AbfHISCZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Aug 2019 14:02:25 -0400
-Received: by mail-ot1-f68.google.com with SMTP id l15so135908987otn.9
-        for <linux-spi@vger.kernel.org>; Fri, 09 Aug 2019 11:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h3dChRxMujcpJS/h7Gf+sQx61G+5xszBXdmMOQDhv1M=;
-        b=g0oi6CqAAQxe2E6hp6nt7KSkDFm/q5DlK3KWqaUDx6Bp0jlufJsAcurxcrSyGlwFP2
-         /RvA7urrh9enhpMtOOy/nX6Q6Nb8J/WUBwxwkD3+jIj1jYJviniewjKimZ2SWDjOWgkK
-         t2I3EqHIx3HfrGq5cYMAnQEZNHMbh/yj2Oj6aLUDFVshLVlrQ5pZ5Iixy6jtu6UlCCLk
-         mK2BUh9Ej1bBgWNpVnYOkIqMZkgZHrdq3SzqqYOGhSesMtH+jnz66eF9Sn/9zNUflxvY
-         uHSBQZR9hH/rkmItuY2ZrKAhrKqwepUsMzNTpxStB/a3f9YNWMUmm9lV/jEq/XOHMDKa
-         6bxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h3dChRxMujcpJS/h7Gf+sQx61G+5xszBXdmMOQDhv1M=;
-        b=uNglUcc6+827FZ9DjmJ73Um/0DWbbvqfM/UmH1c6hepx5HAwfNENImaA119ERnWoRf
-         eFklg3siS+joV3Kln8UZFDZlBNyUEmR/gp4LnNE+U2ZQis/gD+YL476EgP5NaUu83iMG
-         zNzaihwA41mdc/uMOWTEziuzBb0SoRWLVzRQKWbWJh84Q/v4AKzgzye+GeuKdS15jKYg
-         Fyc+ktzYWyhfKBX7HEoGYAXz0Z/2AcD4JkjVU21K7zW3jpLKTyZaVgqsykkAOCSnJ/Hh
-         1i6OWcpogKer28UQb445zvF612y4SrVt/a+5Y2Gt4Ken4xPIIPIEueCwO5Rqwua3GKdz
-         TfHA==
-X-Gm-Message-State: APjAAAUcn4WFRgWZa32fxvJ81utxSCxhXcng5oMgx+uNaG8SUvm7dG+R
-        rEnZVYAZIjRdDngkUYVcv8rinIYwzHragCmRoWxyLg==
-X-Google-Smtp-Source: APXvYqwngz2wfrTAed/STUVSr9QbRWy6iKBS9zVgrC7Uk6kr8Y+1SQ8Vs8OmXHwxhxvEjUHT63ji+6Ak8gxXO+Hl8aQ=
-X-Received: by 2002:a6b:f718:: with SMTP id k24mr11226585iog.126.1565373742130;
- Fri, 09 Aug 2019 11:02:22 -0700 (PDT)
+        id S1728190AbfHIU24 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Aug 2019 16:28:56 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:54781 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726219AbfHIU2y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Aug 2019 16:28:54 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1M7JvQ-1hxGt81mMG-007hOC; Fri, 09 Aug 2019 22:27:58 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     soc@kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Wanzongshun (Vincent)" <wanzongshun@huawei.com>,
+        Greg Ungerer <gerg@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-fbdev@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/16] ARM: remove ks8695 and w90x900 platforms
+Date:   Fri,  9 Aug 2019 22:27:28 +0200
+Message-Id: <20190809202749.742267-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-References: <20190808131448.349161-1-tmaimon77@gmail.com> <20190808131448.349161-3-tmaimon77@gmail.com>
-In-Reply-To: <20190808131448.349161-3-tmaimon77@gmail.com>
-From:   Benjamin Fair <benjaminfair@google.com>
-Date:   Fri, 9 Aug 2019 11:01:44 -0700
-Message-ID: <CADKL2t4=k=73uDMwdg3OJch1ZhRcv6Z5pRFoAbHvPxmSzvJczg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] spi: npcm-fiu: add NPCM FIU controller driver
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        vigneshr@ti.com, bbrezillon@kernel.org, avifishman70@gmail.com,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:e79DZkgFNZp9dvGTGpRIzDbp1U9xKtmOwS7NFPvWoCd6W8DgsD8
+ jFUaOsADnQ6HFt2f8JSvwKT8EjJLooql7wgw8IHL92/OCsO8hIy6Llwq9pC9ITibTzSW0Zi
+ WnvPGjly+Jz6QZvY0sMmV3ekLUbB3HHPOjhXkeR+1bHaYxthIA0XyrnigzaPJoW2SE4PbNJ
+ ZX50iQEG1VqSY3M3Abx7A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rQFXwhsBnbk=:vcvGYL5gwOuGJrKu5EyJdE
+ pXygFIdcThx5H7XMGCHmk35kpFvAy/2y+Wkb4oZXuz1GjFsbLNqvdkVSjkUsesOEG+8YHB+Wv
+ SXL4XjEZulOtG1QTXPnly6foF3gfGzwf5EXRucbGcOPLfHyfiV19XiOztVmavCg2PTcPt0cLU
+ TeX23Y+MSGxSVegJjUIkfYkzIM5wwLUl2pUVYycLOyYhJS9rZiIx5dbyX3WMBZxxfVlNGu6HN
+ LdnzKzi/L2t2OKa4LfwZd937QYk4rqsZymU+PUfEKiQwe+J+X4Hzkr7t0EhHS+lLSUh85jknc
+ Rxs2+jz/0IlHIN5Xg6EHnSgzSEsFrUwS6KNspyEfffxN+vNESdlB4K71f70/b05uKwwxJTFBu
+ L3u+ZZrQq2QpmF1XgxagBsCc2DI5j0OlW72Kx/6IU1BIwMILJRC9z9ouU1ibHJ28+fzfQLZ0K
+ 3XJb0cSZGsI8sxflpYzLQunxdv8mUeZNBZCmpsWWSDFLxqOmFnxBCbDX7p+4CSB5AVnccWbJb
+ 43frVwPcAXU8YrjXMqUXYTXmE/MWCrx3j17tK7op3/zRwi2QXApGezne/G03i0gnHAgS8QE4a
+ 6CWVbu6M6/6wJN24YtbQP91ovCVnK+1qQO0vqei4lgMzNBE1d82Ti91AO8cZyF7LGJwLv+kQu
+ 2HEAtywxk7QwdTDYMR8yI67QGy3UzJg/rjjBxJ3LA1Dh7cjxE0LAdmBIj8iNlZ4wXUwi+x7B2
+ C1devbxpoi3Vyy6OBbE6SWUn/lPO76kTgiU/gw==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Aug 8, 2019 at 6:15 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
->
-> Add Nuvoton NPCM BMC Flash Interface Unit(FIU) SPI master
-> controller driver using SPI-MEM interface.
->
-> The FIU supports single, dual or quad communication interface.
->
-> the FIU controller can operate in following modes:
-> - User Mode Access(UMA): provides flash access by using an
->   indirect address/data mechanism.
-> - direct rd/wr mode: maps the flash memory into the core
->   address space.
-> - SPI-X mode: used for an expansion bus to an ASIC or CPLD.
->
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  drivers/spi/Kconfig        |  10 +
->  drivers/spi/Makefile       |   1 +
->  drivers/spi/spi-npcm-fiu.c | 761 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 772 insertions(+)
->  create mode 100644 drivers/spi/spi-npcm-fiu.c
->
-> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index 3a1d8f1170de..6ee514fd0920 100644
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -433,6 +433,16 @@ config SPI_MT7621
->         help
->           This selects a driver for the MediaTek MT7621 SPI Controller.
->
-> +config SPI_NPCM_FIU
-> +       tristate "Nuvoton NPCM FLASH Interface Unit"
-> +       depends on ARCH_NPCM || COMPILE_TEST
-> +       depends on OF && HAS_IOMEM
-> +       help
-> +         This enables support for the Flash Interface Unit SPI controller
-> +         in master mode.
-> +         This driver does not support generic SPI. The implementation only
-> +         supports spi-mem interface.
-> +
->  config SPI_NPCM_PSPI
->         tristate "Nuvoton NPCM PSPI Controller"
->         depends on ARCH_NPCM || COMPILE_TEST
-> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-> index 63dcab552bcb..adbebee93a75 100644
-> --- a/drivers/spi/Makefile
-> +++ b/drivers/spi/Makefile
-> @@ -63,6 +63,7 @@ obj-$(CONFIG_SPI_MT65XX)                += spi-mt65xx.o
->  obj-$(CONFIG_SPI_MT7621)               += spi-mt7621.o
->  obj-$(CONFIG_SPI_MXIC)                 += spi-mxic.o
->  obj-$(CONFIG_SPI_MXS)                  += spi-mxs.o
-> +obj-$(CONFIG_SPI_NPCM_FIU)             += spi-npcm-fiu.o
->  obj-$(CONFIG_SPI_NPCM_PSPI)            += spi-npcm-pspi.o
->  obj-$(CONFIG_SPI_NUC900)               += spi-nuc900.o
->  obj-$(CONFIG_SPI_NXP_FLEXSPI)          += spi-nxp-fspi.o
-> diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
-> new file mode 100644
-> index 000000000000..2d8c281e8fa9
-> --- /dev/null
-> +++ b/drivers/spi/spi-npcm-fiu.c
-> @@ -0,0 +1,761 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2019 Nuvoton Technology corporation.
-> +
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/device.h>
-> +#include <linux/module.h>
-> +#include <linux/ioport.h>
-> +#include <linux/clk.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/io.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/regmap.h>
-> +#include <linux/of_device.h>
-> +#include <linux/spi/spi-mem.h>
-> +#include <linux/mfd/syscon.h>
-> +
-> +/* NPCM7xx GCR module */
-> +#define NPCM7XX_INTCR3_OFFSET          0x9C
-> +#define NPCM7XX_INTCR3_FIU_FIX         BIT(6)
-> +
-> +/* Flash Interface Unit (FIU) Registers */
-> +#define NPCM_FIU_DRD_CFG               0x00
-> +#define NPCM_FIU_DWR_CFG               0x04
-> +#define NPCM_FIU_UMA_CFG               0x08
-> +#define NPCM_FIU_UMA_CTS               0x0C
-> +#define NPCM_FIU_UMA_CMD               0x10
-> +#define NPCM_FIU_UMA_ADDR              0x14
-> +#define NPCM_FIU_PRT_CFG               0x18
-> +#define NPCM_FIU_UMA_DW0               0x20
-> +#define NPCM_FIU_UMA_DW1               0x24
-> +#define NPCM_FIU_UMA_DW2               0x28
-> +#define NPCM_FIU_UMA_DW3               0x2C
-> +#define NPCM_FIU_UMA_DR0               0x30
-> +#define NPCM_FIU_UMA_DR1               0x34
-> +#define NPCM_FIU_UMA_DR2               0x38
-> +#define NPCM_FIU_UMA_DR3               0x3C
-> +#define NPCM_FIU_MAX_REG_LIMIT         0x80
-> +
-> +/* FIU Direct Read Configuration Register */
-> +#define NPCM_FIU_DRD_CFG_LCK           BIT(31)
-> +#define NPCM_FIU_DRD_CFG_R_BURST       GENMASK(25, 24)
-> +#define NPCM_FIU_DRD_CFG_ADDSIZ                GENMASK(17, 16)
-> +#define NPCM_FIU_DRD_CFG_DBW           GENMASK(13, 12)
-> +#define NPCM_FIU_DRD_CFG_ACCTYPE       GENMASK(9, 8)
-> +#define NPCM_FIU_DRD_CFG_RDCMD         GENMASK(7, 0)
-> +#define NPCM_FIU_DRD_ADDSIZ_SHIFT      16
-> +#define NPCM_FIU_DRD_DBW_SHIFT         12
-> +#define NPCM_FIU_DRD_ACCTYPE_SHIFT     8
-> +
-> +/* FIU Direct Write Configuration Register */
-> +#define NPCM_FIU_DWR_CFG_LCK           BIT(31)
-> +#define NPCM_FIU_DWR_CFG_W_BURST       GENMASK(25, 24)
-> +#define NPCM_FIU_DWR_CFG_ADDSIZ                GENMASK(17, 16)
-> +#define NPCM_FIU_DWR_CFG_ABPCK         GENMASK(11, 10)
-> +#define NPCM_FIU_DWR_CFG_DBPCK         GENMASK(9, 8)
-> +#define NPCM_FIU_DWR_CFG_WRCMD         GENMASK(7, 0)
-> +#define NPCM_FIU_DWR_ADDSIZ_SHIFT      16
-> +#define NPCM_FIU_DWR_ABPCK_SHIFT       10
-> +#define NPCM_FIU_DWR_DBPCK_SHIFT       8
-> +
-> +/* FIU UMA Configuration Register */
-> +#define NPCM_FIU_UMA_CFG_LCK           BIT(31)
-> +#define NPCM_FIU_UMA_CFG_CMMLCK                BIT(30)
-> +#define NPCM_FIU_UMA_CFG_RDATSIZ       GENMASK(28, 24)
-> +#define NPCM_FIU_UMA_CFG_DBSIZ         GENMASK(23, 21)
-> +#define NPCM_FIU_UMA_CFG_WDATSIZ       GENMASK(20, 16)
-> +#define NPCM_FIU_UMA_CFG_ADDSIZ                GENMASK(13, 11)
-> +#define NPCM_FIU_UMA_CFG_CMDSIZ                BIT(10)
-> +#define NPCM_FIU_UMA_CFG_RDBPCK                GENMASK(9, 8)
-> +#define NPCM_FIU_UMA_CFG_DBPCK         GENMASK(7, 6)
-> +#define NPCM_FIU_UMA_CFG_WDBPCK                GENMASK(5, 4)
-> +#define NPCM_FIU_UMA_CFG_ADBPCK                GENMASK(3, 2)
-> +#define NPCM_FIU_UMA_CFG_CMBPCK                GENMASK(1, 0)
-> +#define NPCM_FIU_UMA_CFG_ADBPCK_SHIFT  2
-> +#define NPCM_FIU_UMA_CFG_WDBPCK_SHIFT  4
-> +#define NPCM_FIU_UMA_CFG_DBPCK_SHIFT   6
-> +#define NPCM_FIU_UMA_CFG_RDBPCK_SHIFT  8
-> +#define NPCM_FIU_UMA_CFG_ADDSIZ_SHIFT  11
-> +#define NPCM_FIU_UMA_CFG_WDATSIZ_SHIFT 16
-> +#define NPCM_FIU_UMA_CFG_DBSIZ_SHIFT   21
-> +#define NPCM_FIU_UMA_CFG_RDATSIZ_SHIFT 24
-> +
-> +/* FIU UMA Control and Status Register */
-> +#define NPCM_FIU_UMA_CTS_RDYIE         BIT(25)
-> +#define NPCM_FIU_UMA_CTS_RDYST         BIT(24)
-> +#define NPCM_FIU_UMA_CTS_SW_CS         BIT(16)
-> +#define NPCM_FIU_UMA_CTS_DEV_NUM       GENMASK(9, 8)
-> +#define NPCM_FIU_UMA_CTS_EXEC_DONE     BIT(0)
-> +#define NPCM_FIU_UMA_CTS_DEV_NUM_SHIFT 8
-> +
-> +/* FIU UMA Command Register */
-> +#define NPCM_FIU_UMA_CMD_DUM3          GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_CMD_DUM2          GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_CMD_DUM1          GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_CMD_CMD           GENMASK(7, 0)
-> +
-> +/* FIU UMA Address Register */
-> +#define NPCM_FIU_UMA_ADDR_UMA_ADDR     GENMASK(31, 0)
-> +#define NPCM_FIU_UMA_ADDR_AB3          GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_ADDR_AB2          GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_ADDR_AB1          GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_ADDR_AB0          GENMASK(7, 0)
-> +
-> +/* FIU UMA Write Data Bytes 0-3 Register */
-> +#define NPCM_FIU_UMA_DW0_WB3           GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_DW0_WB2           GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_DW0_WB1           GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_DW0_WB0           GENMASK(7, 0)
-> +
-> +/* FIU UMA Write Data Bytes 4-7 Register */
-> +#define NPCM_FIU_UMA_DW1_WB7           GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_DW1_WB6           GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_DW1_WB5           GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_DW1_WB4           GENMASK(7, 0)
-> +
-> +/* FIU UMA Write Data Bytes 8-11 Register */
-> +#define NPCM_FIU_UMA_DW2_WB11          GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_DW2_WB10          GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_DW2_WB9           GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_DW2_WB8           GENMASK(7, 0)
-> +
-> +/* FIU UMA Write Data Bytes 12-15 Register */
-> +#define NPCM_FIU_UMA_DW3_WB15          GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_DW3_WB14          GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_DW3_WB13          GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_DW3_WB12          GENMASK(7, 0)
-> +
-> +/* FIU UMA Read Data Bytes 0-3 Register */
-> +#define NPCM_FIU_UMA_DR0_RB3           GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_DR0_RB2           GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_DR0_RB1           GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_DR0_RB0           GENMASK(7, 0)
-> +
-> +/* FIU UMA Read Data Bytes 4-7 Register */
-> +#define NPCM_FIU_UMA_DR1_RB15          GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_DR1_RB14          GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_DR1_RB13          GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_DR1_RB12          GENMASK(7, 0)
-> +
-> +/* FIU UMA Read Data Bytes 8-11 Register */
-> +#define NPCM_FIU_UMA_DR2_RB15          GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_DR2_RB14          GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_DR2_RB13          GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_DR2_RB12          GENMASK(7, 0)
-> +
-> +/* FIU UMA Read Data Bytes 12-15 Register */
-> +#define NPCM_FIU_UMA_DR3_RB15          GENMASK(31, 24)
-> +#define NPCM_FIU_UMA_DR3_RB14          GENMASK(23, 16)
-> +#define NPCM_FIU_UMA_DR3_RB13          GENMASK(15, 8)
-> +#define NPCM_FIU_UMA_DR3_RB12          GENMASK(7, 0)
-> +
-> +/* FIU Read Mode */
-> +enum {
-> +       DRD_SINGLE_WIRE_MODE    = 0,
-> +       DRD_DUAL_IO_MODE        = 1,
-> +       DRD_QUAD_IO_MODE        = 2,
-> +       DRD_SPI_X_MODE          = 3,
-> +};
-> +
-> +enum {
-> +       DWR_ABPCK_BIT_PER_CLK   = 0,
-> +       DWR_ABPCK_2_BIT_PER_CLK = 1,
-> +       DWR_ABPCK_4_BIT_PER_CLK = 2,
-> +};
-> +
-> +enum {
-> +       DWR_DBPCK_BIT_PER_CLK   = 0,
-> +       DWR_DBPCK_2_BIT_PER_CLK = 1,
-> +       DWR_DBPCK_4_BIT_PER_CLK = 2,
-> +};
-> +
-> +#define NPCM_FIU_DRD_16_BYTE_BURST     0x3000000
-> +#define NPCM_FIU_DWR_16_BYTE_BURST     0x3000000
-> +
-> +#define MAP_SIZE_128MB                 0x8000000
-> +#define MAP_SIZE_16MB                  0x1000000
-> +#define MAP_SIZE_8MB                   0x800000
-> +
-> +#define NUM_BITS_IN_BYTE               8
-> +#define FIU_DRD_MAX_DUMMY_NUMBER       3
-> +#define NPCM_MAX_CHIP_NUM              4
-> +#define CHUNK_SIZE                     16
-> +#define UMA_MICRO_SEC_TIMEOUT          150
-> +
-> +enum {
-> +       FIU0 = 0,
-> +       FIU3,
-> +       FIUX,
-> +};
-> +
-> +struct npcm_fiu_info {
-> +       char *name;
-> +       u32 fiu_id;
-> +       u32 max_map_size;
-> +       u32 max_cs;
-> +};
-> +
-> +struct fiu_data {
-> +       const struct npcm_fiu_info *npcm_fiu_data_info;
-> +       int fiu_max;
-> +};
-> +
-> +static const struct npcm_fiu_info npxm7xx_fiu_info[] = {
-> +       {.name = "FIU0", .fiu_id = FIU0,
-> +               .max_map_size = MAP_SIZE_128MB, .max_cs = 2},
-> +       {.name = "FIU3", .fiu_id = FIU3,
-> +               .max_map_size = MAP_SIZE_128MB, .max_cs = 4},
-> +       {.name = "FIUX", .fiu_id = FIUX,
-> +               .max_map_size = MAP_SIZE_16MB, .max_cs = 2} };
-> +
-> +static const struct fiu_data npxm7xx_fiu_data = {
-> +       .npcm_fiu_data_info = npxm7xx_fiu_info,
-> +       .fiu_max = 3,
-> +};
-> +
-> +struct npcm_fiu_spi;
-> +
-> +struct npcm_fiu_chip {
-> +       void __iomem *flash_region_mapped_ptr;
-> +       struct npcm_fiu_spi *fiu;
-> +       unsigned long clkrate;
-> +       u32 chipselect;
-> +};
-> +
-> +struct npcm_fiu_spi {
-> +       struct npcm_fiu_chip chip[NPCM_MAX_CHIP_NUM];
-> +       const struct npcm_fiu_info *info;
-> +       struct spi_mem_op drd_op;
-> +       struct resource *res_mem;
-> +       struct regmap *regmap;
-> +       unsigned long clkrate;
-> +       struct device *dev;
-> +       struct clk *clk;
-> +       bool spix_mode;
-> +};
-> +
-> +static const struct regmap_config npcm_mtd_regmap_config = {
-> +       .reg_bits = 32,
-> +       .val_bits = 32,
-> +       .reg_stride = 4,
-> +       .max_register = NPCM_FIU_MAX_REG_LIMIT,
-> +};
-> +
-> +static void npcm_fiu_set_drd(struct npcm_fiu_spi *fiu,
-> +                            const struct spi_mem_op *op)
-> +{
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
-> +                          NPCM_FIU_DRD_CFG_ACCTYPE,
-> +                          ilog2(op->addr.buswidth) <<
-> +                          NPCM_FIU_DRD_ACCTYPE_SHIFT);
-> +       fiu->drd_op.addr.buswidth = op->addr.buswidth;
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
-> +                          NPCM_FIU_DRD_CFG_DBW,
-> +                          ((op->dummy.nbytes * ilog2(op->addr.buswidth))
-> +                           / NUM_BITS_IN_BYTE) << NPCM_FIU_DRD_DBW_SHIFT);
-> +       fiu->drd_op.dummy.nbytes = op->dummy.nbytes;
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
-> +                          NPCM_FIU_DRD_CFG_RDCMD, op->cmd.opcode);
-> +       fiu->drd_op.cmd.opcode = op->cmd.opcode;
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
-> +                          NPCM_FIU_DRD_CFG_ADDSIZ,
-> +                          (op->addr.nbytes - 3) << NPCM_FIU_DRD_ADDSIZ_SHIFT);
-> +       fiu->drd_op.addr.nbytes = op->addr.nbytes;
-> +}
-> +
-> +static ssize_t npcm_fiu_direct_read(struct spi_mem_dirmap_desc *desc,
-> +                                   u64 offs, size_t len, void *buf)
-> +{
-> +       struct npcm_fiu_spi *fiu =
-> +               spi_controller_get_devdata(desc->mem->spi->master);
-> +       struct npcm_fiu_chip *chip = &fiu->chip[desc->mem->spi->chip_select];
-> +       void __iomem *src = (void __iomem *)(chip->flash_region_mapped_ptr +
-> +                                            offs);
-> +       u8 *buf_rx = buf;
-> +       u32 i;
-> +
-> +       if (fiu->spix_mode) {
-> +               for (i = 0 ; i < len ; i++)
-> +                       *(buf_rx + i) = ioread8(src + i);
-> +       } else {
-> +               if (desc->info.op_tmpl.addr.buswidth != fiu->drd_op.addr.buswidth ||
-> +                   desc->info.op_tmpl.dummy.nbytes != fiu->drd_op.dummy.nbytes ||
-> +                   desc->info.op_tmpl.cmd.opcode != fiu->drd_op.cmd.opcode ||
-> +                   desc->info.op_tmpl.addr.nbytes != fiu->drd_op.addr.nbytes)
-> +                       npcm_fiu_set_drd(fiu, &desc->info.op_tmpl);
-> +
-> +               memcpy_fromio(buf_rx, src, len);
+As discussed previously, these two ARM platforms have no
+known remaining users, let's remove them completely.
 
-Does this need to make sure the memcpy is aligned, or is that handled
-at a higher layer?
+Subsystem maintainers: feel free to take the driver removals
+through your respective trees, they are all independent of
+one another. We can merge any remaining patches through the
+soc tree.
 
-> +       }
-> +
-> +       return len;
-> +}
-> +
-> +static ssize_t npcm_fiu_direct_write(struct spi_mem_dirmap_desc *desc,
-> +                                    u64 offs, size_t len, const void *buf)
-> +{
-> +       struct npcm_fiu_spi *fiu =
-> +               spi_controller_get_devdata(desc->mem->spi->master);
-> +       struct npcm_fiu_chip *chip = &fiu->chip[desc->mem->spi->chip_select];
-> +       void __iomem *dst = (void __iomem *)(chip->flash_region_mapped_ptr +
-> +                                            offs);
-> +       const u8 *buf_tx = buf;
-> +       u32 i;
-> +
-> +       if (fiu->spix_mode)
-> +               for (i = 0 ; i < len ; i++)
-> +                       iowrite8(*(buf_tx + i), dst + i);
-> +       else
-> +               memcpy_toio(dst, buf_tx, len);
-> +
-> +       return len;
-> +}
-> +
-> +static int npcm_fiu_uma_read(struct spi_mem *mem,
-> +                            const struct spi_mem_op *op, u32 addr,
-> +                             bool is_address_size, u8 *data, u32 data_size)
-> +{
-> +       struct npcm_fiu_spi *fiu =
-> +               spi_controller_get_devdata(mem->spi->master);
-> +       u32 uma_cfg = BIT(10);
-> +       u32 data_reg[4];
-> +       int ret;
-> +       u32 val;
-> +       u32 i;
-> +
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_UMA_CTS,
-> +                          NPCM_FIU_UMA_CTS_DEV_NUM,
-> +                          (mem->spi->chip_select <<
-> +                           NPCM_FIU_UMA_CTS_DEV_NUM_SHIFT));
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_UMA_CMD,
-> +                          NPCM_FIU_UMA_CMD_CMD, op->cmd.opcode);
-> +
-> +       if (is_address_size) {
-> +               uma_cfg |= ilog2(op->cmd.buswidth);
-> +               uma_cfg |= ilog2(op->addr.buswidth)
-> +                       << NPCM_FIU_UMA_CFG_ADBPCK_SHIFT;
-> +               uma_cfg |= ilog2(op->dummy.buswidth)
-> +                       << NPCM_FIU_UMA_CFG_DBPCK_SHIFT;
-> +               uma_cfg |= ilog2(op->data.buswidth)
-> +                       << NPCM_FIU_UMA_CFG_RDBPCK_SHIFT;
-> +               uma_cfg |= op->dummy.nbytes << NPCM_FIU_UMA_CFG_DBSIZ_SHIFT;
-> +               uma_cfg |= op->addr.nbytes << NPCM_FIU_UMA_CFG_ADDSIZ_SHIFT;
-> +               regmap_write(fiu->regmap, NPCM_FIU_UMA_ADDR, addr);
-> +       } else {
-> +               regmap_write(fiu->regmap, NPCM_FIU_UMA_ADDR, 0x0);
-> +       }
-> +
-> +       uma_cfg |= data_size << NPCM_FIU_UMA_CFG_RDATSIZ_SHIFT;
-> +       regmap_write(fiu->regmap, NPCM_FIU_UMA_CFG, uma_cfg);
-> +       regmap_write_bits(fiu->regmap, NPCM_FIU_UMA_CTS,
-> +                         NPCM_FIU_UMA_CTS_EXEC_DONE,
-> +                         NPCM_FIU_UMA_CTS_EXEC_DONE);
-> +       ret = regmap_read_poll_timeout(fiu->regmap, NPCM_FIU_UMA_CTS, val,
-> +                                      (!(val & NPCM_FIU_UMA_CTS_EXEC_DONE)), 0,
-> +                                      UMA_MICRO_SEC_TIMEOUT);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (data_size) {
-> +               for (i = 0; i < DIV_ROUND_UP(data_size, 4); i++)
-> +                       regmap_read(fiu->regmap, NPCM_FIU_UMA_DR0 + (i * 4),
-> +                                   &data_reg[i]);
-> +               memcpy(data, data_reg, data_size);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int npcm_fiu_uma_write(struct spi_mem *mem,
-> +                             const struct spi_mem_op *op, u8 cmd,
-> +                             bool is_address_size, u8 *data, u32 data_size)
-> +{
-> +       struct npcm_fiu_spi *fiu =
-> +               spi_controller_get_devdata(mem->spi->master);
-> +       u32 uma_cfg = BIT(10);
-> +       u32 data_reg[4] = {0};
-> +       u32 val;
-> +       u32 i;
-> +
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_UMA_CTS,
-> +                          NPCM_FIU_UMA_CTS_DEV_NUM,
-> +                          (mem->spi->chip_select <<
-> +                           NPCM_FIU_UMA_CTS_DEV_NUM_SHIFT));
-> +
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_UMA_CMD,
-> +                          NPCM_FIU_UMA_CMD_CMD, cmd);
-> +
-> +       if (data_size) {
-> +               memcpy(data_reg, data, data_size);
-> +               for (i = 0; i < DIV_ROUND_UP(data_size, 4); i++)
-> +                       regmap_write(fiu->regmap, NPCM_FIU_UMA_DW0 + (i * 4),
-> +                                    data_reg[i]);
-> +       }
-> +
-> +       if (is_address_size) {
-> +               uma_cfg |= ilog2(op->cmd.buswidth);
-> +               uma_cfg |= ilog2(op->addr.buswidth) <<
-> +                       NPCM_FIU_UMA_CFG_ADBPCK_SHIFT;
-> +               uma_cfg |= ilog2(op->data.buswidth) <<
-> +                       NPCM_FIU_UMA_CFG_WDBPCK_SHIFT;
-> +               uma_cfg |= op->addr.nbytes << NPCM_FIU_UMA_CFG_ADDSIZ_SHIFT;
-> +               regmap_write(fiu->regmap, NPCM_FIU_UMA_ADDR, op->addr.val);
-> +       } else {
-> +               regmap_write(fiu->regmap, NPCM_FIU_UMA_ADDR, 0x0);
-> +       }
-> +
-> +       uma_cfg |= (data_size << NPCM_FIU_UMA_CFG_WDATSIZ_SHIFT);
-> +       regmap_write(fiu->regmap, NPCM_FIU_UMA_CFG, uma_cfg);
-> +
-> +       regmap_write_bits(fiu->regmap, NPCM_FIU_UMA_CTS,
-> +                         NPCM_FIU_UMA_CTS_EXEC_DONE,
-> +                         NPCM_FIU_UMA_CTS_EXEC_DONE);
-> +
-> +       return regmap_read_poll_timeout(fiu->regmap, NPCM_FIU_UMA_CTS, val,
-> +                                      (!(val & NPCM_FIU_UMA_CTS_EXEC_DONE)), 0,
-> +                                       UMA_MICRO_SEC_TIMEOUT);
-> +}
-> +
-> +static int npcm_fiu_manualwrite(struct spi_mem *mem,
-> +                               const struct spi_mem_op *op)
-> +{
-> +       struct npcm_fiu_spi *fiu =
-> +               spi_controller_get_devdata(mem->spi->master);
-> +       u8 *data = (u8 *)op->data.buf.out;
-> +       u32 num_data_chunks;
-> +       u32 remain_data;
-> +       u32 idx = 0;
-> +       int ret;
-> +
-> +       num_data_chunks  = op->data.nbytes / CHUNK_SIZE;
-> +       remain_data  = op->data.nbytes % CHUNK_SIZE;
-> +
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_UMA_CTS,
-> +                          NPCM_FIU_UMA_CTS_DEV_NUM,
-> +                          (mem->spi->chip_select <<
-> +                           NPCM_FIU_UMA_CTS_DEV_NUM_SHIFT));
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_UMA_CTS,
-> +                          NPCM_FIU_UMA_CTS_SW_CS, 0);
-> +
-> +       ret = npcm_fiu_uma_write(mem, op, op->cmd.opcode, true, NULL, 0);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Starting the data writing loop in multiples of 8 */
-> +       for (idx = 0; idx < num_data_chunks; ++idx) {
-> +               ret = npcm_fiu_uma_write(mem, op, data[0], false,
-> +                                        &data[1], CHUNK_SIZE - 1);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               data += CHUNK_SIZE;
-> +       }
-> +
-> +       /* Handling chunk remains */
-> +       if (remain_data > 0) {
-> +               ret = npcm_fiu_uma_write(mem, op, data[0], false,
-> +                                        &data[1], remain_data - 1);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_UMA_CTS,
-> +                          NPCM_FIU_UMA_CTS_SW_CS, NPCM_FIU_UMA_CTS_SW_CS);
-> +
-> +       return 0;
-> +}
-> +
-> +static int npcm_fiu_read(struct spi_mem *mem, const struct spi_mem_op *op)
-> +{
-> +       u8 *data = op->data.buf.in;
-> +       int i, readlen, currlen;
-> +       size_t retlen = 0;
-> +       u8 *buf_ptr;
-> +       u32 addr;
-> +       int ret;
-> +
-> +       i = 0;
-> +       currlen = op->data.nbytes;
-> +
-> +       do {
-> +               addr = ((u32)op->addr.val + i);
-> +               if (currlen < 16)
-> +                       readlen = currlen;
-> +               else
-> +                       readlen = 16;
-> +
-> +               buf_ptr = data + i;
-> +               ret = npcm_fiu_uma_read(mem, op, addr, true, buf_ptr,
-> +                                       readlen);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               i += readlen;
-> +               currlen -= 16;
-> +       } while (currlen > 0);
-> +
-> +       retlen = i;
-> +
-> +       return 0;
-> +}
-> +
-> +static void npcm_fiux_set_direct_wr(struct npcm_fiu_spi *fiu)
-> +{
-> +       regmap_write(fiu->regmap, NPCM_FIU_DWR_CFG,
-> +                    NPCM_FIU_DWR_16_BYTE_BURST);
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_DWR_CFG,
-> +                          NPCM_FIU_DWR_CFG_ABPCK,
-> +                          DWR_ABPCK_4_BIT_PER_CLK << NPCM_FIU_DWR_ABPCK_SHIFT);
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_DWR_CFG,
-> +                          NPCM_FIU_DWR_CFG_DBPCK,
-> +                          DWR_DBPCK_4_BIT_PER_CLK << NPCM_FIU_DWR_DBPCK_SHIFT);
-> +}
-> +
-> +static void npcm_fiux_set_direct_rd(struct npcm_fiu_spi *fiu)
-> +{
-> +       u32 rx_dummy = 0;
-> +
-> +       regmap_write(fiu->regmap, NPCM_FIU_DRD_CFG,
-> +                    NPCM_FIU_DRD_16_BYTE_BURST);
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
-> +                          NPCM_FIU_DRD_CFG_ACCTYPE,
-> +                          DRD_SPI_X_MODE << NPCM_FIU_DRD_ACCTYPE_SHIFT);
-> +       regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
-> +                          NPCM_FIU_DRD_CFG_DBW,
-> +                          rx_dummy << NPCM_FIU_DRD_DBW_SHIFT);
-> +}
-> +
-> +static int npcm_fiu_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
-> +{
-> +       struct npcm_fiu_spi *fiu =
-> +               spi_controller_get_devdata(mem->spi->master);
-> +       struct npcm_fiu_chip *chip = &fiu->chip[mem->spi->chip_select];
-> +       int ret = 0;
-> +       u8 *buf;
-> +
-> +       dev_dbg(fiu->dev, "cmd:%#x mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
-> +               op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
-> +               op->dummy.buswidth, op->data.buswidth, op->addr.val,
-> +               op->data.nbytes);
-> +
-> +       if (fiu->spix_mode)
-> +               return -ENOTSUPP;
-> +
-> +       if (fiu->clkrate != chip->clkrate) {
-> +               ret = clk_set_rate(fiu->clk, chip->clkrate);
-> +               if (ret < 0)
-> +                       dev_warn(fiu->dev, "Failed setting %lu frequancy, stay at %lu frequancy\n", chip->clkrate, fiu->clkrate);
-> +               else
-> +                       fiu->clkrate = chip->clkrate;
-> +       }
-> +
-> +       if (op->data.dir == SPI_MEM_DATA_IN) {
-> +               if (!op->addr.nbytes) {
-> +                       buf = op->data.buf.in;
-> +                       ret = npcm_fiu_uma_read(mem, op, op->addr.val, false,
-> +                                               buf, op->data.nbytes);
-> +               } else {
-> +                       ret = npcm_fiu_read(mem, op);
-> +               }
-> +       } else  {
-> +               if (!op->addr.nbytes || !op->data.nbytes) {
-> +                       if (op->data.nbytes)
-> +                               buf = (u8 *)op->data.buf.out;
-> +                       else
-> +                               buf = NULL;
-> +                       ret = npcm_fiu_uma_write(mem, op, op->cmd.opcode, false,
-> +                                                buf, op->data.nbytes);
-> +               } else {
-> +                       ret = npcm_fiu_manualwrite(mem, op);
-> +               }
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +static int npcm_fiu_dirmap_create(struct spi_mem_dirmap_desc *desc)
-> +{
-> +       struct npcm_fiu_spi *fiu =
-> +               spi_controller_get_devdata(desc->mem->spi->master);
-> +       struct npcm_fiu_chip *chip = &fiu->chip[desc->mem->spi->chip_select];
-> +       struct regmap *gcr_regmap;
-> +
-> +       if (!fiu->res_mem) {
-> +               dev_warn(fiu->dev, "Reserved memory not defined, direct read disabled\n");
-> +               desc->nodirmap = true;
-> +               return 0;
-> +       }
-> +
-> +       if (!fiu->spix_mode &&
-> +           desc->info.op_tmpl.data.dir == SPI_MEM_DATA_OUT) {
-> +               desc->nodirmap = true;
-> +               return 0;
-> +       }
-> +
-> +       if (!chip->flash_region_mapped_ptr) {
-> +               chip->flash_region_mapped_ptr =
-> +                       devm_ioremap_nocache(fiu->dev, (fiu->res_mem->start +
-> +                                                  (fiu->info->max_map_size *
-> +                                                   desc->mem->spi->chip_select)),
-> +                                            (u32)desc->info.length);
-> +               if (!chip->flash_region_mapped_ptr) {
-> +                       dev_warn(fiu->dev, "Error mapping memory region, direct read disabled\n");
-> +                       desc->nodirmap = true;
-> +                       return 0;
-> +               }
-> +       }
-> +
-> +       if (of_device_is_compatible(fiu->dev->of_node, "nuvoton,npcm750-fiu")) {
-> +               gcr_regmap =
-> +                       syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
-> +               if (IS_ERR(gcr_regmap)) {
-> +                       dev_warn(fiu->dev, "Didn't find nuvoton,npcm750-gcr, direct read disabled\n");
-> +                       desc->nodirmap = true;
-> +                       return 0;
-> +               }
-> +               regmap_update_bits(gcr_regmap, NPCM7XX_INTCR3_OFFSET,
-> +                                  NPCM7XX_INTCR3_FIU_FIX,
-> +                                  NPCM7XX_INTCR3_FIU_FIX);
-> +       }
-> +
-> +       if (desc->info.op_tmpl.data.dir == SPI_MEM_DATA_IN) {
-> +               if (!fiu->spix_mode)
-> +                       npcm_fiu_set_drd(fiu, &desc->info.op_tmpl);
-> +               else
-> +                       npcm_fiux_set_direct_rd(fiu);
-> +
-> +       } else {
-> +               npcm_fiux_set_direct_wr(fiu);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int npcm_fiu_setup(struct spi_device *spi)
-> +{
-> +       struct spi_controller *ctrl = spi->master;
-> +       struct npcm_fiu_spi *fiu = spi_controller_get_devdata(ctrl);
-> +       struct npcm_fiu_chip *chip;
-> +
-> +       chip = &fiu->chip[spi->chip_select];
-> +       chip->fiu = fiu;
-> +       chip->chipselect = spi->chip_select;
-> +       chip->clkrate = spi->max_speed_hz;
-> +
-> +       fiu->clkrate = clk_get_rate(fiu->clk);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct spi_controller_mem_ops npcm_fiu_mem_ops = {
-> +       .exec_op = npcm_fiu_exec_op,
-> +       .dirmap_create = npcm_fiu_dirmap_create,
-> +       .dirmap_read = npcm_fiu_direct_read,
-> +       .dirmap_write = npcm_fiu_direct_write,
-> +};
-> +
-> +static const struct of_device_id npcm_fiu_dt_ids[] = {
-> +       { .compatible = "nuvoton,npcm750-fiu", .data = &npxm7xx_fiu_data  },
-> +       { /* sentinel */ }
-> +};
-> +
-> +static int npcm_fiu_probe(struct platform_device *pdev)
-> +{
-> +       const struct fiu_data *fiu_data_match;
-> +       const struct of_device_id *match;
-> +       struct device *dev = &pdev->dev;
-> +       struct spi_controller *ctrl;
-> +       struct npcm_fiu_spi *fiu;
-> +       void __iomem *regbase;
-> +       struct resource *res;
-> +       int ret;
-> +       int id;
-> +
-> +       ctrl = spi_alloc_master(dev, sizeof(*fiu));
-> +       if (!ctrl)
-> +               return -ENOMEM;
-> +
-> +       fiu = spi_controller_get_devdata(ctrl);
-> +
-> +       match = of_match_device(npcm_fiu_dt_ids, dev);
-> +       if (!match || !match->data) {
-> +               dev_err(dev, "No compatible OF match\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       fiu_data_match = match->data;
-> +       id = of_alias_get_id(dev->of_node, "fiu");
-> +       if (id < 0 || id >= fiu_data_match->fiu_max) {
-> +               dev_err(dev, "Invalid platform device id: %d\n", id);
-> +               return -EINVAL;
-> +       }
-> +
-> +       fiu->info = &fiu_data_match->npcm_fiu_data_info[id];
-> +
-> +       platform_set_drvdata(pdev, fiu);
-> +       fiu->dev = dev;
-> +
-> +       res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "control");
-> +       regbase = devm_ioremap_resource(dev, res);
-> +       if (IS_ERR(regbase))
-> +               return PTR_ERR(regbase);
-> +
-> +       fiu->regmap = devm_regmap_init_mmio(dev, regbase,
-> +                                           &npcm_mtd_regmap_config);
-> +       if (IS_ERR(fiu->regmap)) {
-> +               dev_err(dev, "Failed to create regmap\n");
-> +               return PTR_ERR(fiu->regmap);
-> +       }
-> +
-> +       fiu->res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-> +                                                   "memory");
-> +       fiu->clk = devm_clk_get(dev, NULL);
-> +       if (IS_ERR(fiu->clk))
-> +               return PTR_ERR(fiu->clk);
-> +
-> +       fiu->spix_mode = of_property_read_bool(dev->of_node, "spix-mode");
-> +
-> +       platform_set_drvdata(pdev, fiu);
-> +       clk_prepare_enable(fiu->clk);
-> +
-> +       ctrl->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD
-> +               | SPI_TX_DUAL | SPI_TX_QUAD;
-> +       ctrl->setup = npcm_fiu_setup;
-> +       ctrl->bus_num = -1;
-> +       ctrl->mem_ops = &npcm_fiu_mem_ops;
-> +       ctrl->num_chipselect = fiu->info->max_cs;
-> +       ctrl->dev.of_node = dev->of_node;
-> +
-> +       ret = devm_spi_register_master(dev, ctrl);
-> +       if (ret)
-> +               return ret;
-> +
-> +       dev_info(dev, "NPCM %s probe succeed\n", fiu->info->name);
-> +
-> +       return 0;
-> +}
-> +
-> +static int npcm_fiu_remove(struct platform_device *pdev)
-> +{
-> +       struct npcm_fiu_spi *fiu = platform_get_drvdata(pdev);
-> +
-> +       clk_disable_unprepare(fiu->clk);
-> +       return 0;
-> +}
-> +
-> +MODULE_DEVICE_TABLE(of, npcm_fiu_dt_ids);
-> +
-> +static struct platform_driver npcm_fiu_driver = {
-> +       .driver = {
-> +               .name   = "NPCM-FIU",
-> +               .bus    = &platform_bus_type,
-> +               .of_match_table = npcm_fiu_dt_ids,
-> +       },
-> +       .probe      = npcm_fiu_probe,
-> +       .remove     = npcm_fiu_remove,
-> +};
-> +module_platform_driver(npcm_fiu_driver);
-> +
-> +MODULE_DESCRIPTION("Nuvoton FLASH Interface Unit SPI Controller Driver");
-> +MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
-> +MODULE_LICENSE("GPL v2");
-> --
-> 2.18.0
->
+      Arnd
+
+Arnd Bergmann (16):
+  ARM: remove ks8695 platform
+  serial: remove ks8695 driver
+  gpio: remove ks8695 driver
+  watchdog: remove ks8695 driver
+  net: remove ks8695 driver
+  watchdog: remove w90x900 driver
+  spi: remove w90x900 driver
+  ASoC: remove w90x900/nuc900 platform drivers
+  fbdev: remove w90x900/nuc900 platform drivers
+  Input: remove w90x900 keyboard driver
+  Input: remove w90x900 touchscreen driver
+  mtd: rawnand: remove w90x900 driver
+  net: remove w90p910-ether driver
+  rtc: remove w90x900/nuc900 driver
+  usb: remove ehci-w90x900 driver
+  ARM: remove w90x900 platform
+
+Cc: "Wanzongshun (Vincent)" <wanzongshun@huawei.com>
+Cc: Greg Ungerer <gerg@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-serial@vger.kernel.org
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: linux-input@vger.kernel.org
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-gpio@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: netdev@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: alsa-devel@alsa-project.org
+Cc: linux-spi@vger.kernel.org
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: linux-fbdev@vger.kernel.org
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: linux-mtd@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+
+ .../watchdog/watchdog-parameters.rst          |   19 -
+ MAINTAINERS                                   |   22 -
+ arch/arm/Kconfig                              |   34 +-
+ arch/arm/Kconfig.debug                        |    8 -
+ arch/arm/Makefile                             |    2 -
+ arch/arm/configs/acs5k_defconfig              |   77 -
+ arch/arm/configs/acs5k_tiny_defconfig         |   69 -
+ arch/arm/configs/ks8695_defconfig             |   67 -
+ arch/arm/configs/nuc910_defconfig             |   51 -
+ arch/arm/configs/nuc950_defconfig             |   67 -
+ arch/arm/configs/nuc960_defconfig             |   57 -
+ arch/arm/include/debug/ks8695.S               |   37 -
+ arch/arm/mach-ks8695/Kconfig                  |   88 -
+ arch/arm/mach-ks8695/Makefile                 |   23 -
+ arch/arm/mach-ks8695/Makefile.boot            |    9 -
+ arch/arm/mach-ks8695/board-acs5k.c            |  238 ---
+ arch/arm/mach-ks8695/board-dsm320.c           |  127 --
+ arch/arm/mach-ks8695/board-micrel.c           |   59 -
+ arch/arm/mach-ks8695/board-og.c               |  197 --
+ arch/arm/mach-ks8695/board-sg.c               |  118 --
+ arch/arm/mach-ks8695/cpu.c                    |   60 -
+ arch/arm/mach-ks8695/devices.c                |  197 --
+ arch/arm/mach-ks8695/devices.h                |   29 -
+ arch/arm/mach-ks8695/generic.h                |   12 -
+ .../mach-ks8695/include/mach/entry-macro.S    |   47 -
+ .../mach-ks8695/include/mach/gpio-ks8695.h    |   36 -
+ arch/arm/mach-ks8695/include/mach/hardware.h  |   42 -
+ arch/arm/mach-ks8695/include/mach/irqs.h      |   51 -
+ arch/arm/mach-ks8695/include/mach/memory.h    |   51 -
+ arch/arm/mach-ks8695/include/mach/regs-gpio.h |   55 -
+ arch/arm/mach-ks8695/include/mach/regs-irq.h  |   41 -
+ arch/arm/mach-ks8695/include/mach/regs-misc.h |   97 -
+ .../mach-ks8695/include/mach/regs-switch.h    |   66 -
+ arch/arm/mach-ks8695/include/mach/regs-uart.h |   89 -
+ .../arm/mach-ks8695/include/mach/uncompress.h |   33 -
+ arch/arm/mach-ks8695/irq.c                    |  164 --
+ arch/arm/mach-ks8695/pci.c                    |  247 ---
+ arch/arm/mach-ks8695/regs-hpna.h              |   25 -
+ arch/arm/mach-ks8695/regs-lan.h               |   65 -
+ arch/arm/mach-ks8695/regs-mem.h               |   89 -
+ arch/arm/mach-ks8695/regs-pci.h               |   53 -
+ arch/arm/mach-ks8695/regs-sys.h               |   34 -
+ arch/arm/mach-ks8695/regs-wan.h               |   65 -
+ arch/arm/mach-ks8695/time.c                   |  159 --
+ arch/arm/mach-w90x900/Kconfig                 |   50 -
+ arch/arm/mach-w90x900/Makefile                |   20 -
+ arch/arm/mach-w90x900/Makefile.boot           |    4 -
+ arch/arm/mach-w90x900/clksel.c                |   88 -
+ arch/arm/mach-w90x900/clock.c                 |  121 --
+ arch/arm/mach-w90x900/clock.h                 |   40 -
+ arch/arm/mach-w90x900/cpu.c                   |  238 ---
+ arch/arm/mach-w90x900/cpu.h                   |   56 -
+ arch/arm/mach-w90x900/dev.c                   |  537 ------
+ arch/arm/mach-w90x900/gpio.c                  |  150 --
+ .../mach-w90x900/include/mach/entry-macro.S   |   26 -
+ arch/arm/mach-w90x900/include/mach/hardware.h |   19 -
+ arch/arm/mach-w90x900/include/mach/irqs.h     |   82 -
+ arch/arm/mach-w90x900/include/mach/map.h      |  153 --
+ arch/arm/mach-w90x900/include/mach/mfp.h      |   21 -
+ .../mach-w90x900/include/mach/regs-clock.h    |   49 -
+ arch/arm/mach-w90x900/include/mach/regs-irq.h |   46 -
+ arch/arm/mach-w90x900/include/mach/regs-ldm.h |  248 ---
+ .../mach-w90x900/include/mach/regs-serial.h   |   54 -
+ .../mach-w90x900/include/mach/uncompress.h    |   43 -
+ arch/arm/mach-w90x900/irq.c                   |  212 ---
+ arch/arm/mach-w90x900/mach-nuc910evb.c        |   38 -
+ arch/arm/mach-w90x900/mach-nuc950evb.c        |   42 -
+ arch/arm/mach-w90x900/mach-nuc960evb.c        |   38 -
+ arch/arm/mach-w90x900/mfp.c                   |  197 --
+ arch/arm/mach-w90x900/nuc910.c                |   58 -
+ arch/arm/mach-w90x900/nuc910.h                |   17 -
+ arch/arm/mach-w90x900/nuc950.c                |   52 -
+ arch/arm/mach-w90x900/nuc950.h                |   17 -
+ arch/arm/mach-w90x900/nuc960.c                |   50 -
+ arch/arm/mach-w90x900/nuc960.h                |   17 -
+ arch/arm/mach-w90x900/nuc9xx.h                |   22 -
+ arch/arm/mach-w90x900/regs-ebi.h              |   29 -
+ arch/arm/mach-w90x900/regs-gcr.h              |   34 -
+ arch/arm/mach-w90x900/regs-timer.h            |   37 -
+ arch/arm/mach-w90x900/regs-usb.h              |   31 -
+ arch/arm/mach-w90x900/time.c                  |  168 --
+ arch/arm/mm/Kconfig                           |    2 +-
+ drivers/gpio/Makefile                         |    1 -
+ drivers/gpio/gpio-ks8695.c                    |  284 ---
+ drivers/input/keyboard/Kconfig                |   11 -
+ drivers/input/keyboard/Makefile               |    1 -
+ drivers/input/keyboard/w90p910_keypad.c       |  264 ---
+ drivers/input/touchscreen/Kconfig             |    9 -
+ drivers/input/touchscreen/Makefile            |    1 -
+ drivers/input/touchscreen/w90p910_ts.c        |  331 ----
+ drivers/mtd/nand/raw/Kconfig                  |    8 -
+ drivers/mtd/nand/raw/Makefile                 |    1 -
+ drivers/mtd/nand/raw/nuc900_nand.c            |  304 ---
+ drivers/net/ethernet/Kconfig                  |    1 -
+ drivers/net/ethernet/Makefile                 |    1 -
+ drivers/net/ethernet/micrel/Kconfig           |   11 +-
+ drivers/net/ethernet/micrel/Makefile          |    1 -
+ drivers/net/ethernet/micrel/ks8695net.c       | 1632 -----------------
+ drivers/net/ethernet/micrel/ks8695net.h       |  108 --
+ drivers/net/ethernet/nuvoton/Kconfig          |   29 -
+ drivers/net/ethernet/nuvoton/Makefile         |    6 -
+ drivers/net/ethernet/nuvoton/w90p910_ether.c  | 1082 -----------
+ drivers/rtc/Kconfig                           |    7 -
+ drivers/rtc/Makefile                          |    1 -
+ drivers/rtc/rtc-nuc900.c                      |  271 ---
+ drivers/spi/Kconfig                           |    7 -
+ drivers/spi/Makefile                          |    1 -
+ drivers/spi/spi-nuc900.c                      |  429 -----
+ drivers/tty/serial/Kconfig                    |   17 -
+ drivers/tty/serial/Makefile                   |    1 -
+ drivers/tty/serial/serial_ks8695.c            |  698 -------
+ drivers/usb/host/Kconfig                      |    6 -
+ drivers/usb/host/Makefile                     |    1 -
+ drivers/usb/host/ehci-w90x900.c               |  130 --
+ drivers/video/fbdev/Kconfig                   |   14 -
+ drivers/video/fbdev/Makefile                  |    1 -
+ drivers/video/fbdev/nuc900fb.c                |  760 --------
+ drivers/video/fbdev/nuc900fb.h                |   51 -
+ drivers/watchdog/Kconfig                      |   16 -
+ drivers/watchdog/Makefile                     |    2 -
+ drivers/watchdog/ks8695_wdt.c                 |  319 ----
+ drivers/watchdog/nuc900_wdt.c                 |  302 ---
+ include/Kbuild                                |    2 -
+ include/linux/platform_data/keypad-w90p910.h  |   16 -
+ include/linux/platform_data/spi-nuc900.h      |   29 -
+ include/linux/platform_data/video-nuc900fb.h  |   79 -
+ include/uapi/linux/serial_core.h              |    3 -
+ sound/soc/Kconfig                             |    1 -
+ sound/soc/Makefile                            |    1 -
+ sound/soc/nuc900/Kconfig                      |   29 -
+ sound/soc/nuc900/Makefile                     |   12 -
+ sound/soc/nuc900/nuc900-ac97.c                |  391 ----
+ sound/soc/nuc900/nuc900-audio.c               |   73 -
+ sound/soc/nuc900/nuc900-audio.h               |  108 --
+ sound/soc/nuc900/nuc900-pcm.c                 |  321 ----
+ 135 files changed, 6 insertions(+), 14461 deletions(-)
+ delete mode 100644 arch/arm/configs/acs5k_defconfig
+ delete mode 100644 arch/arm/configs/acs5k_tiny_defconfig
+ delete mode 100644 arch/arm/configs/ks8695_defconfig
+ delete mode 100644 arch/arm/configs/nuc910_defconfig
+ delete mode 100644 arch/arm/configs/nuc950_defconfig
+ delete mode 100644 arch/arm/configs/nuc960_defconfig
+ delete mode 100644 arch/arm/include/debug/ks8695.S
+ delete mode 100644 arch/arm/mach-ks8695/Kconfig
+ delete mode 100644 arch/arm/mach-ks8695/Makefile
+ delete mode 100644 arch/arm/mach-ks8695/Makefile.boot
+ delete mode 100644 arch/arm/mach-ks8695/board-acs5k.c
+ delete mode 100644 arch/arm/mach-ks8695/board-dsm320.c
+ delete mode 100644 arch/arm/mach-ks8695/board-micrel.c
+ delete mode 100644 arch/arm/mach-ks8695/board-og.c
+ delete mode 100644 arch/arm/mach-ks8695/board-sg.c
+ delete mode 100644 arch/arm/mach-ks8695/cpu.c
+ delete mode 100644 arch/arm/mach-ks8695/devices.c
+ delete mode 100644 arch/arm/mach-ks8695/devices.h
+ delete mode 100644 arch/arm/mach-ks8695/generic.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/entry-macro.S
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/gpio-ks8695.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/irqs.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/memory.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/regs-gpio.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/regs-irq.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/regs-misc.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/regs-switch.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/regs-uart.h
+ delete mode 100644 arch/arm/mach-ks8695/include/mach/uncompress.h
+ delete mode 100644 arch/arm/mach-ks8695/irq.c
+ delete mode 100644 arch/arm/mach-ks8695/pci.c
+ delete mode 100644 arch/arm/mach-ks8695/regs-hpna.h
+ delete mode 100644 arch/arm/mach-ks8695/regs-lan.h
+ delete mode 100644 arch/arm/mach-ks8695/regs-mem.h
+ delete mode 100644 arch/arm/mach-ks8695/regs-pci.h
+ delete mode 100644 arch/arm/mach-ks8695/regs-sys.h
+ delete mode 100644 arch/arm/mach-ks8695/regs-wan.h
+ delete mode 100644 arch/arm/mach-ks8695/time.c
+ delete mode 100644 arch/arm/mach-w90x900/Kconfig
+ delete mode 100644 arch/arm/mach-w90x900/Makefile
+ delete mode 100644 arch/arm/mach-w90x900/Makefile.boot
+ delete mode 100644 arch/arm/mach-w90x900/clksel.c
+ delete mode 100644 arch/arm/mach-w90x900/clock.c
+ delete mode 100644 arch/arm/mach-w90x900/clock.h
+ delete mode 100644 arch/arm/mach-w90x900/cpu.c
+ delete mode 100644 arch/arm/mach-w90x900/cpu.h
+ delete mode 100644 arch/arm/mach-w90x900/dev.c
+ delete mode 100644 arch/arm/mach-w90x900/gpio.c
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/entry-macro.S
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/irqs.h
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/map.h
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/mfp.h
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/regs-clock.h
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/regs-irq.h
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/regs-ldm.h
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/regs-serial.h
+ delete mode 100644 arch/arm/mach-w90x900/include/mach/uncompress.h
+ delete mode 100644 arch/arm/mach-w90x900/irq.c
+ delete mode 100644 arch/arm/mach-w90x900/mach-nuc910evb.c
+ delete mode 100644 arch/arm/mach-w90x900/mach-nuc950evb.c
+ delete mode 100644 arch/arm/mach-w90x900/mach-nuc960evb.c
+ delete mode 100644 arch/arm/mach-w90x900/mfp.c
+ delete mode 100644 arch/arm/mach-w90x900/nuc910.c
+ delete mode 100644 arch/arm/mach-w90x900/nuc910.h
+ delete mode 100644 arch/arm/mach-w90x900/nuc950.c
+ delete mode 100644 arch/arm/mach-w90x900/nuc950.h
+ delete mode 100644 arch/arm/mach-w90x900/nuc960.c
+ delete mode 100644 arch/arm/mach-w90x900/nuc960.h
+ delete mode 100644 arch/arm/mach-w90x900/nuc9xx.h
+ delete mode 100644 arch/arm/mach-w90x900/regs-ebi.h
+ delete mode 100644 arch/arm/mach-w90x900/regs-gcr.h
+ delete mode 100644 arch/arm/mach-w90x900/regs-timer.h
+ delete mode 100644 arch/arm/mach-w90x900/regs-usb.h
+ delete mode 100644 arch/arm/mach-w90x900/time.c
+ delete mode 100644 drivers/gpio/gpio-ks8695.c
+ delete mode 100644 drivers/input/keyboard/w90p910_keypad.c
+ delete mode 100644 drivers/input/touchscreen/w90p910_ts.c
+ delete mode 100644 drivers/mtd/nand/raw/nuc900_nand.c
+ delete mode 100644 drivers/net/ethernet/micrel/ks8695net.c
+ delete mode 100644 drivers/net/ethernet/micrel/ks8695net.h
+ delete mode 100644 drivers/net/ethernet/nuvoton/Kconfig
+ delete mode 100644 drivers/net/ethernet/nuvoton/Makefile
+ delete mode 100644 drivers/net/ethernet/nuvoton/w90p910_ether.c
+ delete mode 100644 drivers/rtc/rtc-nuc900.c
+ delete mode 100644 drivers/spi/spi-nuc900.c
+ delete mode 100644 drivers/tty/serial/serial_ks8695.c
+ delete mode 100644 drivers/usb/host/ehci-w90x900.c
+ delete mode 100644 drivers/video/fbdev/nuc900fb.c
+ delete mode 100644 drivers/video/fbdev/nuc900fb.h
+ delete mode 100644 drivers/watchdog/ks8695_wdt.c
+ delete mode 100644 drivers/watchdog/nuc900_wdt.c
+ delete mode 100644 include/linux/platform_data/keypad-w90p910.h
+ delete mode 100644 include/linux/platform_data/spi-nuc900.h
+ delete mode 100644 include/linux/platform_data/video-nuc900fb.h
+ delete mode 100644 sound/soc/nuc900/Kconfig
+ delete mode 100644 sound/soc/nuc900/Makefile
+ delete mode 100644 sound/soc/nuc900/nuc900-ac97.c
+ delete mode 100644 sound/soc/nuc900/nuc900-audio.c
+ delete mode 100644 sound/soc/nuc900/nuc900-audio.h
+ delete mode 100644 sound/soc/nuc900/nuc900-pcm.c
+
+-- 
+2.20.0
+
