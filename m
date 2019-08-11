@@ -2,129 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE85893A1
-	for <lists+linux-spi@lfdr.de>; Sun, 11 Aug 2019 22:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2EE894CB
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Aug 2019 01:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbfHKU3G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 11 Aug 2019 16:29:06 -0400
-Received: from anholt.net ([50.246.234.109]:45476 "EHLO anholt.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725870AbfHKU3G (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 11 Aug 2019 16:29:06 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by anholt.net (Postfix) with ESMTP id DDB7010A10CA;
-        Sun, 11 Aug 2019 13:29:05 -0700 (PDT)
-X-Virus-Scanned: Debian amavisd-new at anholt.net
-Received: from anholt.net ([127.0.0.1])
-        by localhost (kingsolver.anholt.net [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id KGHKBLsbJF_K; Sun, 11 Aug 2019 13:29:04 -0700 (PDT)
-Received: from eliezer.anholt.net (localhost [127.0.0.1])
-        by anholt.net (Postfix) with ESMTP id 3DE6110A1066;
-        Sun, 11 Aug 2019 13:29:04 -0700 (PDT)
-Received: by eliezer.anholt.net (Postfix, from userid 1000)
-        id 6A0052FE2547; Sun, 11 Aug 2019 13:29:05 -0700 (PDT)
-From:   Eric Anholt <eric@anholt.net>
-To:     Lukas Wunner <lukas@wunner.de>, Stefan Wahren <wahrenst@gmx.net>
-Cc:     Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        linux-spi@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nuno Sa <nuno.sa@analog.com>,
-        Martin Sperl <kernel@martin.sperl.org>,
-        Noralf Tronnes <noralf@tronnes.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Florian Kauer <florian.kauer@koalo.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Subject: Re: [PATCH 05/10] spi: bcm2835: Work around DONE bit erratum
-In-Reply-To: <20190811195709.u5gkllkfxutufvt7@wunner.de>
-References: <cover.1564825752.git.lukas@wunner.de> <edb004dff4af6106f6bfcb89e1a96391e96eb857.1564825752.git.lukas@wunner.de> <35aab039-17a2-ca22-5567-4088c98400f0@gmx.net> <20190811195709.u5gkllkfxutufvt7@wunner.de>
-User-Agent: Notmuch/0.22.2+1~gb0bcfaa (http://notmuchmail.org) Emacs/26.1 (x86_64-pc-linux-gnu)
-Date:   Sun, 11 Aug 2019 13:29:05 -0700
-Message-ID: <87v9v38mzy.fsf@anholt.net>
+        id S1726155AbfHKXFm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 11 Aug 2019 19:05:42 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:35544 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726014AbfHKXFm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 11 Aug 2019 19:05:42 -0400
+Received: by mail-ot1-f65.google.com with SMTP id g17so1758097otl.2
+        for <linux-spi@vger.kernel.org>; Sun, 11 Aug 2019 16:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=iA6a4qC4pEGqTR513iAiCdf6YZdJrbIKcB73xSjnGJk=;
+        b=XnPOTzGTbZRnjOHxngGkhQI5Kg+21CK3xlUQMHycdbk3GMI5HCW8TuVfZNFopEg7WY
+         zGX8gHKmrHXg5qvulXFmp6I5Mg8A5faVNFFXiSzc5eNjMNY42HXHsoEToZYN3RYSkEJE
+         BTSyhBwzePhzfDcekQXS0iA9GodWKx1HcQdddq275eZaSOTP0EDpfpQsSLALDDtnHTrF
+         mV597qG+h+WGXwumsC5NVS80ZBbyVchCaOUuB0Qye03Kbq9aS9yF2A0sG0T2bs1c0nFk
+         j2Cqg0O+qhdkqyN2cU4s0ILQtiRDC6eOfi833Gt+l7S64iHyZ2DOrz5ypjfYLSDVfbCR
+         mEcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=iA6a4qC4pEGqTR513iAiCdf6YZdJrbIKcB73xSjnGJk=;
+        b=GXhDKQYZn6fpdCKYeJF/V5x4/+hz+l/0BWe3FuJNdnuKU6CyialS5QwCsn7w+ATR6g
+         qJ4YSqhB7koCULP5PhX0qpBywKxFXwLe3nt6IszkkycOzldYBQpWq56xH/Pl47KzuWqw
+         8++IzdbrtZt5/9Vcxy3QJIOKLN12rt+/ZxBZSNAa86+9Jhyz30BzxTX5MEt7J0ICiCfW
+         iU/0nW9v5O2PTCIjTjiXG40Mh8F7Qm1uh58b5oeSoeKd/ogXpl+hPWHOIhgNT1edHPRh
+         vqrhCCW2lsWfb0QzCuxA+V4au/Y5QfrWaFhE2NdeAEXIwoDuQAakMjO9XJ23flOzZHrZ
+         HAtQ==
+X-Gm-Message-State: APjAAAXC0xFK7sjw7zkyjFcXg9RekXP+Btkdggx7smiiw4xcAtiOwvLe
+        9F2Em6FA6xcvkmjytfDT7e2Sg4qeJvWt5gKpLsY=
+X-Google-Smtp-Source: APXvYqzdH5InEaJxRmITjSZltTqi8yFrXGzMAGz4NqHdxyOLpO2KbH4Hia4uHAVovTleRceUCkG07KvVQlBasCLp0x8=
+X-Received: by 2002:a05:6808:8d3:: with SMTP id k19mr12339467oij.164.1565564741225;
+ Sun, 11 Aug 2019 16:05:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
+Received: by 2002:a8a:2d6:0:0:0:0:0 with HTTP; Sun, 11 Aug 2019 16:05:40 -0700 (PDT)
+Reply-To: stellerbarid@barid.com
+From:   "Mrs. Stellar Maoris" <agencydirectorwu@gmail.com>
+Date:   Sun, 11 Aug 2019 16:05:40 -0700
+Message-ID: <CAMTsjJe1QQ7dd1=i-aN3P7WXt1XvcpUFh0ZCSddTnOcv9igtfA@mail.gmail.com>
+Subject: Hello Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hello Dear Friend.
+I=E2=80=99m  Mrs. Stellar Maoris  a manger in  HSBC  bank  of  Spain Madrid=
+, I
+am sending
+this brief letter  to seek for  your partnership and long term relationship=
+,
+I have an important and urgent issue I want to discuss with you privately a=
+bout
+Transaction fund worth the sum of $9.5m America dollars left by most
+of the greedy
+Asia Kuwait politician in our bank here in Spain Madrid, A fund which
+suppose to have been use to develop the continent.
 
-Lukas Wunner <lukas@wunner.de> writes:
+If you know that you can invest this fund into profitable business in
+your country by the end we shall have 50%50 share each, kindly get
+back to me for more detail and procedures.
 
-> On Sun, Aug 11, 2019 at 09:45:09PM +0200, Stefan Wahren wrote:
->> Am 03.08.19 um 12:10 schrieb Lukas Wunner:
->> > Commit 3bd7f6589f67 ("spi: bcm2835: Overcome sglist entry length
->> > limitation") amended the BCM2835 SPI driver with support for DMA
->> > transfers whose buffers are not aligned to 4 bytes and require more th=
-an
->> > one sglist entry.
->> >
->> > When testing this feature with upcoming commits to speed up TX-only and
->> > RX-only transfers, I noticed that SPI transmission sometimes breaks.
->> > A function introduced by the commit, bcm2835_spi_transfer_prologue(),
->> > performs one or two PIO transmissions as a prologue to the actual DMA
->> > transmission.  It turns out that the breakage goes away if the DONE bit
->> > in the CS register is set when ending such a PIO transmission.
->> >
->> > The DONE bit signifies emptiness of the TX FIFO.  According to the spe=
-c,
->> > the bit is of type RO, so writing it should never have any effect.
->> > Perhaps the spec is wrong and the bit is actually of type RW1C.
->> > E.g. the I2C controller on the BCM2835 does have an RW1C DONE bit which
->> > needs to be cleared by the driver.  Another, possibly more likely
->> > explanation is that it's a hardware erratum since the issue does not
->> > occur consistently.
->> >
->> > Either way, amend bcm2835_spi_transfer_prologue() to always write the
->> > DONE bit.
->> >
->> > Usually a transmission is ended by bcm2835_spi_reset_hw().  If the
->> > transmission was successful, the TX FIFO is empty and thus the DONE bit
->> > is set when bcm2835_spi_reset_hw() reads the CS register.  The bit is
->> > then written back to the register, so we happen to do the right thing.
->> >
->> > However if DONE is not set, e.g. because transmission is aborted with
->> > a non-empty TX FIFO, the bit won't be written by bcm2835_spi_reset_hw()
->> > and it seems possible that transmission might subsequently break.  To =
-be
->> > on the safe side, likewise amend bcm2835_spi_reset_hw() to always write
->> > the bit.
->>=20
->> has the issue already reported to Raspberry Pi Trading?
->
-> You mean to fix such errata in future revisions?
->
-> I wouldn't know who to report this to, Roger Thornton or James Adams perh=
-aps?
->
-> I'm not sure if the SPI controller isn't just an IP block licensed from
-> a third party, that might make it difficult to get errata fixed.
-
-It's Broadcom's.
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE/JuuFDWp9/ZkuCBXtdYpNtH8nugFAl1QepEACgkQtdYpNtH8
-nugjiQ/7BM8nlTdAiZ/IHoGwmVbikdKFrJfiDS5YFXltKU3STyDpHKI/5IHEILUN
-R0o8h4/WWWSO+Y8A5InhQH64bk0/HEjS+O9kcJC1eaTfMpe9/ZoFlbIzo1j+CPjm
-smvK1eh41qo6LF/u3lR8FTCSAiI0yCz9QWTxRorq1WncavA3J6UU9AuznvrmGkzy
-/VmFrv6PrFnWRCX/GqDiIvVWDaKcNFjsvxMBTXfjn0OT2S6gDJOK/HO0bJiKfQCw
-cebCpgGg0QUD6HjcQh6HqKiE0YoavW5oNBGovkS/g1Mu84DTAwTidXczqiTRoEmz
-lZ99q5mv+jvKz5FRIWyHOkPwk8RO1JKC3W/rJNW+7F/TlQj8yY7h+G3pVY5kiJvB
-c3wbevRw/mB0VAOqcegcG69sD6qWsAMcVnq940dlVjPm8kV5jvpDZaiUdMdxs678
-aoWCkmcnQRBi4ZmUa/OezLIyEeGOiNmQ9SNe3qAZh+09l/LqAANxlKjWDStVsV8N
-RrguIZMcU10yH0iV03flIU4Q7WAYGSSYjpva2RYEHrkDiQ60ivMTHgrtWSWfClEO
-1bEATWhyh7x9bue8QJMnps+PDPBtsaQBQBi03RgEz3GTsGY31K5kWO+AyhUoByJ5
-Q5UI91dtdb1bSxljV/xhwCO05Tw5d4RmsR/IT7KTKCIxCpMKjtg=
-=+hMe
------END PGP SIGNATURE-----
---=-=-=--
+Your urgent respond will be highly appreciated
+Awaiting to hear from you asap.
+My Regard.
+Stellar Maoris
+Email: stellerbarid@barid.com
+Phone Number:  +34(62) 768 5146
