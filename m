@@ -2,79 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2EE894CB
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Aug 2019 01:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7540289B16
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Aug 2019 12:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbfHKXFm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 11 Aug 2019 19:05:42 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:35544 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbfHKXFm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 11 Aug 2019 19:05:42 -0400
-Received: by mail-ot1-f65.google.com with SMTP id g17so1758097otl.2
-        for <linux-spi@vger.kernel.org>; Sun, 11 Aug 2019 16:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=iA6a4qC4pEGqTR513iAiCdf6YZdJrbIKcB73xSjnGJk=;
-        b=XnPOTzGTbZRnjOHxngGkhQI5Kg+21CK3xlUQMHycdbk3GMI5HCW8TuVfZNFopEg7WY
-         zGX8gHKmrHXg5qvulXFmp6I5Mg8A5faVNFFXiSzc5eNjMNY42HXHsoEToZYN3RYSkEJE
-         BTSyhBwzePhzfDcekQXS0iA9GodWKx1HcQdddq275eZaSOTP0EDpfpQsSLALDDtnHTrF
-         mV597qG+h+WGXwumsC5NVS80ZBbyVchCaOUuB0Qye03Kbq9aS9yF2A0sG0T2bs1c0nFk
-         j2Cqg0O+qhdkqyN2cU4s0ILQtiRDC6eOfi833Gt+l7S64iHyZ2DOrz5ypjfYLSDVfbCR
-         mEcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=iA6a4qC4pEGqTR513iAiCdf6YZdJrbIKcB73xSjnGJk=;
-        b=GXhDKQYZn6fpdCKYeJF/V5x4/+hz+l/0BWe3FuJNdnuKU6CyialS5QwCsn7w+ATR6g
-         qJ4YSqhB7koCULP5PhX0qpBywKxFXwLe3nt6IszkkycOzldYBQpWq56xH/Pl47KzuWqw
-         8++IzdbrtZt5/9Vcxy3QJIOKLN12rt+/ZxBZSNAa86+9Jhyz30BzxTX5MEt7J0ICiCfW
-         iU/0nW9v5O2PTCIjTjiXG40Mh8F7Qm1uh58b5oeSoeKd/ogXpl+hPWHOIhgNT1edHPRh
-         vqrhCCW2lsWfb0QzCuxA+V4au/Y5QfrWaFhE2NdeAEXIwoDuQAakMjO9XJ23flOzZHrZ
-         HAtQ==
-X-Gm-Message-State: APjAAAXC0xFK7sjw7zkyjFcXg9RekXP+Btkdggx7smiiw4xcAtiOwvLe
-        9F2Em6FA6xcvkmjytfDT7e2Sg4qeJvWt5gKpLsY=
-X-Google-Smtp-Source: APXvYqzdH5InEaJxRmITjSZltTqi8yFrXGzMAGz4NqHdxyOLpO2KbH4Hia4uHAVovTleRceUCkG07KvVQlBasCLp0x8=
-X-Received: by 2002:a05:6808:8d3:: with SMTP id k19mr12339467oij.164.1565564741225;
- Sun, 11 Aug 2019 16:05:41 -0700 (PDT)
+        id S1727563AbfHLKNz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Aug 2019 06:13:55 -0400
+Received: from mga04.intel.com ([192.55.52.120]:59913 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727518AbfHLKNz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 12 Aug 2019 06:13:55 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Aug 2019 03:13:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,377,1559545200"; 
+   d="scan'208";a="175835873"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.59])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Aug 2019 03:13:54 -0700
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH] spi: dw-pci: Add support for Intel Elkhart Lake PSE SPI
+Date:   Mon, 12 Aug 2019 13:13:44 +0300
+Message-Id: <20190812101344.3975-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Received: by 2002:a8a:2d6:0:0:0:0:0 with HTTP; Sun, 11 Aug 2019 16:05:40 -0700 (PDT)
-Reply-To: stellerbarid@barid.com
-From:   "Mrs. Stellar Maoris" <agencydirectorwu@gmail.com>
-Date:   Sun, 11 Aug 2019 16:05:40 -0700
-Message-ID: <CAMTsjJe1QQ7dd1=i-aN3P7WXt1XvcpUFh0ZCSddTnOcv9igtfA@mail.gmail.com>
-Subject: Hello Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Dear Friend.
-I=E2=80=99m  Mrs. Stellar Maoris  a manger in  HSBC  bank  of  Spain Madrid=
-, I
-am sending
-this brief letter  to seek for  your partnership and long term relationship=
-,
-I have an important and urgent issue I want to discuss with you privately a=
-bout
-Transaction fund worth the sum of $9.5m America dollars left by most
-of the greedy
-Asia Kuwait politician in our bank here in Spain Madrid, A fund which
-suppose to have been use to develop the continent.
+Add support for Intel(R) Programmable Services Engine (Intel(R) PSE) SPI
+controller in Intel Elkhart Lake when interface is assigned to the host
+processor.
 
-If you know that you can invest this fund into profitable business in
-your country by the end we shall have 50%50 share each, kindly get
-back to me for more detail and procedures.
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/spi/spi-dw-pci.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Your urgent respond will be highly appreciated
-Awaiting to hear from you asap.
-My Regard.
-Stellar Maoris
-Email: stellerbarid@barid.com
-Phone Number:  +34(62) 768 5146
+diff --git a/drivers/spi/spi-dw-pci.c b/drivers/spi/spi-dw-pci.c
+index c1e2401cace0..4e3a4c317636 100644
+--- a/drivers/spi/spi-dw-pci.c
++++ b/drivers/spi/spi-dw-pci.c
+@@ -19,6 +19,7 @@ struct spi_pci_desc {
+ 	int	(*setup)(struct dw_spi *);
+ 	u16	num_cs;
+ 	u16	bus_num;
++	u32	max_freq;
+ };
+ 
+ static struct spi_pci_desc spi_pci_mid_desc_1 = {
+@@ -33,6 +34,12 @@ static struct spi_pci_desc spi_pci_mid_desc_2 = {
+ 	.bus_num = 1,
+ };
+ 
++static struct spi_pci_desc spi_pci_ehl_desc = {
++	.num_cs = 1,
++	.bus_num = -1,
++	.max_freq = 100000000,
++};
++
+ static int spi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ {
+ 	struct dw_spi *dws;
+@@ -65,6 +72,7 @@ static int spi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (desc) {
+ 		dws->num_cs = desc->num_cs;
+ 		dws->bus_num = desc->bus_num;
++		dws->max_freq = desc->max_freq;
+ 
+ 		if (desc->setup) {
+ 			ret = desc->setup(dws);
+@@ -123,6 +131,11 @@ static const struct pci_device_id pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x0800), (kernel_ulong_t)&spi_pci_mid_desc_1},
+ 	/* Intel MID platform SPI controller 2 */
+ 	{ PCI_VDEVICE(INTEL, 0x0812), (kernel_ulong_t)&spi_pci_mid_desc_2},
++	/* Intel Elkhart Lake PSE SPI controllers */
++	{ PCI_VDEVICE(INTEL, 0x4b84), (kernel_ulong_t)&spi_pci_ehl_desc},
++	{ PCI_VDEVICE(INTEL, 0x4b85), (kernel_ulong_t)&spi_pci_ehl_desc},
++	{ PCI_VDEVICE(INTEL, 0x4b86), (kernel_ulong_t)&spi_pci_ehl_desc},
++	{ PCI_VDEVICE(INTEL, 0x4b87), (kernel_ulong_t)&spi_pci_ehl_desc},
+ 	{},
+ };
+ 
+-- 
+2.20.1
+
