@@ -2,56 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D88B58BA76
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Aug 2019 15:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3A38C374
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Aug 2019 23:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729088AbfHMNgz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Aug 2019 09:36:55 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:37229 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728413AbfHMNgz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Aug 2019 09:36:55 -0400
-Received: by mail-wr1-f65.google.com with SMTP id z11so5847747wrt.4
-        for <linux-spi@vger.kernel.org>; Tue, 13 Aug 2019 06:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Qdmr+YsyNEzi6xlTRb1XkGQBKf4sbVAPmkHW8yrPpl4=;
-        b=vaTGEKhSpWO2eCt8Z/WG5PO2Bx/2pcFU6fL2NPdHIB6WK5qpJk1ZA4cI86BvL88ZrL
-         /XsoE9OgdXm50tr3qTbXfAnsZ5Mm85bBbabTcI9fO7CC5WqJq2dQw6kk8sqtZ/9p7Y91
-         4c5oC4sPdAHYrGONR0GGKTodXfZPbZPQZSPRTJou2tMa+Cct2NTPn4kjShCAiTd1+uTR
-         LiizOzovLtVa2GA4W9rdw/lloLX5S0P6QzMsV+KUMx3pDaLFkUBfPQGISsxirXPZ3LQI
-         fPDv1+vCrBaJRWhQFvXS6VmzDcce0div5C0hqs8wbsaVJKxbtCyUEhUxYFWhK6dhYQBi
-         KO8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Qdmr+YsyNEzi6xlTRb1XkGQBKf4sbVAPmkHW8yrPpl4=;
-        b=cuKZJoFUoP+Avk8Qn4wa8zkli+MzYCGC4zwYt4RW6UHcSSDXHy9W+Uv3kmxghL/9F2
-         0S/ZTzsYeW3XB6nIUHlmMitmvmV5JlPXe8lrWbF0YW9A9zbMCfdv27PCDoxjwf4nQ6mv
-         4g54OmWG8pd/qk/dPD7RmezVgKYJGufi+OYbT2a6yCLo3FtDEikB+XGvdxsc2FITmxxd
-         kEm2Vrv9rvjh57izERCVtQ/OQxk+k+NzE6FFVCBPdm0lj49djfx5WF8LHI39WKQxeJND
-         32b8BDVur/V0majv64ofgTrvxEjrT5KIJOkRMwJtPu7BmOYttFOE0pfjdSRZsEGCgNYU
-         TkcQ==
-X-Gm-Message-State: APjAAAXLPx9zDo85bHppt1GmUU8TUVgwzV5KGWWjQibPZDjrYXR95/Wa
-        PMKIVbJzwRsoYMG1vzqL4eT4utbn+buW/EQt43c=
-X-Google-Smtp-Source: APXvYqx6KbeNDFoh2A46b/fdzZN4OrlVkezePI583sOVaEKFhN5L0ZEoiEWLHOpmmvet/rSz8M8BvDzm7HvvJMX33fM=
-X-Received: by 2002:adf:f204:: with SMTP id p4mr48592116wro.317.1565703413861;
- Tue, 13 Aug 2019 06:36:53 -0700 (PDT)
+        id S1726595AbfHMVTR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Aug 2019 17:19:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726579AbfHMVTQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 13 Aug 2019 17:19:16 -0400
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6BC1020842;
+        Tue, 13 Aug 2019 21:19:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565731155;
+        bh=JBsXkG9yjV9pbDty8DqzOGotTUIFrOYtaCE16hbum0E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=crdeyHeUCm2qAB/OFjwFqysrHfSLR+UetxBzbXV/OkhxIzZfVtCcy8QUXWO3fAxFd
+         2KmAbggtL+55hUlR84ISmfdKkirvhsBnEQBoP/uxSi32b2CwTR1v2IV+trggF1jN+B
+         8eECl3mkn8psCrRYD3Xw2D9PO80/YYBYHiSRZJFw=
+Received: by mail-qt1-f169.google.com with SMTP id d17so28957848qtj.8;
+        Tue, 13 Aug 2019 14:19:15 -0700 (PDT)
+X-Gm-Message-State: APjAAAUyIjDiiCsezqewY84HQlrASvCaByVgvYt7uZjb1u8k/D+Ie+xj
+        hJ+lkwKE8FxBYaDkugqG6ro5Ayp7FESZLYwMuA==
+X-Google-Smtp-Source: APXvYqyYbgP4TBRZegMhEKfIghK9abGk/VBtufyF+J98q6CTeTofBSY0orANz1i3T/gclh3hbfmdnJ7cT6pao2tVfEA=
+X-Received: by 2002:a0c:acef:: with SMTP id n44mr228291qvc.39.1565731154671;
+ Tue, 13 Aug 2019 14:19:14 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a1c:2d42:0:0:0:0:0 with HTTP; Tue, 13 Aug 2019 06:36:53
- -0700 (PDT)
-Reply-To: nascointt@hotmail.com
-From:   Nayef Abu Sakran <chrisdickson020@gmail.com>
-Date:   Tue, 13 Aug 2019 13:36:53 +0000
-Message-ID: <CAArOMWHaMFPckJgkkM=FWaBVfTZr4nKCGXUFgstO2-3py7XA+A@mail.gmail.com>
-Subject: ve a good day
-To:     undisclosed-recipients:;
+References: <20190808085139.21438-1-narmstrong@baylibre.com>
+In-Reply-To: <20190808085139.21438-1-narmstrong@baylibre.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 13 Aug 2019 15:19:03 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+rBUWCBo0CnhnJX91o+8QF4gO5cJYqFgKEJeekAeuVxg@mail.gmail.com>
+Message-ID: <CAL_Jsq+rBUWCBo0CnhnJX91o+8QF4gO5cJYqFgKEJeekAeuVxg@mail.gmail.com>
+Subject: Re: [PATCH 0/9] dt-bindings: first tentative of conversion to yaml format
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     linux-amlogic@lists.infradead.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Do you receive the mail i send to you?
+On Thu, Aug 8, 2019 at 2:51 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
+>
+> This is a first tentative to convert some of the simplest Amlogic
+> dt-bindings to the yaml format.
+>
+> All have been tested using :
+> $ make ARCH=arm64 dtbs_check
+>
+> Issues with the amlogic arm64 DTs has already been identified thanks
+> to the validation scripts. The DT fixes will be pushed once these yaml
+> bindings are acked.
+>
+> Changes since rfc v2:
+> - Collected Rob's, Martin's, Philipp's and Guenter's tags
+> - Removed mhu maxItems: 3 to leave only minItems
+> - Fixed flash@0 in spifc example
+>
+> Changes since rfc v1:
+> - Fixed bindings according to Rob's comments
+> - Added commit log
+> - renamed yaml files using amlogic prefix
+>
+> Neil Armstrong (9):
+>   dt-bindings: mailbox: meson-mhu: convert to yaml
+>   dt-bindings: rng: amlogic,meson-rng: convert to yaml
+>   dt-bindings: spi: meson: convert to yaml
+>   dt-bindings: reset: amlogic,meson-reset: convert to yaml
+>   dt-bindings: arm: amlogic: amlogic,meson-gx-ao-secure: convert to yaml
+>   dt-bindings: phy: meson-g12a-usb2-phy: convert to yaml
+>   dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml
+>   dt-bindings: serial: meson-uart: convert to yaml
+>   dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
+
+Series applied.
+
+Rob
