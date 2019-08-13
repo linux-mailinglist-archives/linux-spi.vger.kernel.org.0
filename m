@@ -2,133 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C0E89F44
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Aug 2019 15:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2038D8B449
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Aug 2019 11:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728724AbfHLNKZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Aug 2019 09:10:25 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40886 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728880AbfHLNKT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Aug 2019 09:10:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=Ds2HZcbtnxHYnhfwZpFOVMikdP1uPxKConW1giV0NuU=; b=gvcpqwbUhRvg
-        FHlOZ0EDNT3tywc/b9yjVmypJJEGEF18RhKz20H0VfDEZgVcqilglqSPtt16sq0FLut9c/14t0QL0
-        6j/rKn24vLW46PBmbgmchr20ZT75u3sssCG/oYi4undeMmREnSP4JmnTdju6J41uqeVzpZQFj9G2G
-        KRhHM=;
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1hxA5X-0001S6-1u; Mon, 12 Aug 2019 13:10:15 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 5B7332740CB7; Mon, 12 Aug 2019 14:10:14 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: dw-pci: Add support for Intel Elkhart Lake PSE SPI" to the spi tree
-In-Reply-To: <20190812101344.3975-1-jarkko.nikula@linux.intel.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190812131014.5B7332740CB7@ypsilon.sirena.org.uk>
-Date:   Mon, 12 Aug 2019 14:10:14 +0100 (BST)
+        id S1727038AbfHMJgZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Aug 2019 05:36:25 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:60207 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726685AbfHMJgZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Aug 2019 05:36:25 -0400
+Received: from [192.168.178.60] ([109.104.47.130]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1M5gAG-1hukSx14nq-007FT2; Tue, 13 Aug 2019 11:36:17 +0200
+Subject: Re: [PATCH v4] spi: bcm2835: Convert to use CS GPIO descriptors
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        Chris Boot <bootc@bootc.net>
+References: <20190804003852.1312-1-linus.walleij@linaro.org>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Message-ID: <d4df1cdd-604b-89bd-27da-ed455f170b00@i2se.com>
+Date:   Tue, 13 Aug 2019 11:36:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190804003852.1312-1-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:jCoBHsGzrqvGdA03wROJa4FubZzr0bFm8xCEVDDmuFqFwFOdJN4
+ Rx+dIIKRYx+4DqV7/PtIa2Y7q3cIAWDm5etyKmuFGveGCKq4HpUNEud8irkcdax1xINgRit
+ dMVWtJzAUlD7xKcRNg61Z/3cXi1GU8OnjH/WJUli/ews8MUuMhxHPGfdNR9oSn2YQP2kQS1
+ RRk2gV7EfnRBvaPpaQdog==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:uUABwUqmInI=:Ji8rCBQBBOxDVgq4U3KlIP
+ KqbEQdg5IqgWL6Nf78WESRbqYtInqOSrPTmZVc5FCsBAHxFfu+HykknX/+lFX6mXcaqUfUj8i
+ tULnac9w/eiN23/Ew43G1t+X3Wf4r8XHCcLaCK7D/PZBoqhO7vSX0LZG3h+g+EWFgAE8kCAgs
+ ONgMqZwh1NjVJcqlXQ3cJeGlSM3Obli72B17ipyWBJrwL3oZ6Bd3yyZ35n2Ujdee3Jx/Fw3kG
+ aOkkAhg3CC4yKbJW3QlIFMYmnIazTVi37AQtfi1tKaSLkfYLAKFrZ14WOsaz6LM/Vh7VRlaCd
+ yuUIs9d1nkah8etZAAhKmKs1WDfjrkiLWf3yEKOUmcmMkepfP7QgcJrsF36xMBd7mmX7Y/hA0
+ ifETm+T9isMScJBwGuWLsYEBsNlOVDWoBS2KqbkysvybnxjUK9CRPKoO9DzqJDMXfzFsu5IIy
+ 0hjwnn6YLMP6qpj7Co/1PS9ejhpIRrARiL7AIS97pM/DAj+t7JTo+xhqr+3otqo6UA5kkg69H
+ PHr877NfagmzC+NhX97qj/2pvfvAHk1UqGMVShxkc03J2OKYX7zjHnYN6jONrYVrfbJW1FCwa
+ MP7WUk9BdFlGupO433M0OkJGOnz8k8OUpk9Zn4mNhFTTYbNFUYUbjnltLA7A2p5gdFBnwsmvZ
+ q8WAAF2EczVebhvnadGcevTbVT5XOWvEwCMzEf/nHVxmdVsBxFpy8OT04d3uXTgoB52EEoZC2
+ Q+FLM3wp1uC6CAhInFZ38oCr+iIhQm18aZjcsgOOhFBLh/0MiTlk0FKg/AA=
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+Hi Linus,
 
-   spi: dw-pci: Add support for Intel Elkhart Lake PSE SPI
+On 04.08.19 02:38, Linus Walleij wrote:
+> This converts the BCM2835 SPI master driver to use GPIO
+> descriptors for chip select handling.
+>
+> The BCM2835 driver was relying on the core to drive the
+> CS high/low so very small changes were needed for this
+> part. If it managed to request the CS from the device tree
+> node, all is pretty straight forward.
+>
+> However for native GPIOs this driver has a quite unorthodox
+> loopback to request some GPIOs from the SoC GPIO chip by
+> looking it up from the device tree using gpiochip_find()
+> and then offseting hard into its numberspace. This has
+> been augmented a bit by using gpiochip_request_own_desc()
+> but this code really needs to be verified. If "native CS"
+> is actually an SoC GPIO, why is it even done this way?
+> Should this GPIO not just be defined in the device tree
+> like any other CS GPIO? I'm confused.
+>
+> Cc: Lukas Wunner <lukas@wunner.de>
+> Cc: Stefan Wahren <stefan.wahren@i2se.com>
+> Cc: Martin Sperl <kernel@martin.sperl.org>
+> Cc: Chris Boot <bootc@bootc.net>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v3->v4:
+> - Fix the offset of the chipselect line to be 8 - CS
+>   as in the original code.
+> - Use the modified gpiochip_request_own_desc() to set up
+>   line inversion semantics if need be. Look at the OF
+>   node of the SPI device for flags.
+> ChangeLog v2->v3:
+> - Fix unused variable "err" compile-time message.
+> ChangeLog RFT->v2:
+> - Rebased on v5.1-rc1
+>
+> I would very much appreciate if someone took this for
+> a ride on top of linux-next (there are some fixes in
+> the -rcs you need) and see if all still works as expected.
 
-has been applied to the spi tree at
+sorry for my late reply, but i was on vacation.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 52718908c3f44b939a9934ef624e68457b21704f Mon Sep 17 00:00:00 2001
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Date: Mon, 12 Aug 2019 13:13:44 +0300
-Subject: [PATCH] spi: dw-pci: Add support for Intel Elkhart Lake PSE SPI
-
-Add support for Intel(R) Programmable Services Engine (Intel(R) PSE) SPI
-controller in Intel Elkhart Lake when interface is assigned to the host
-processor.
-
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Link: https://lore.kernel.org/r/20190812101344.3975-1-jarkko.nikula@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-dw-pci.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/spi/spi-dw-pci.c b/drivers/spi/spi-dw-pci.c
-index 9651679ee7f7..e9ba63814548 100644
---- a/drivers/spi/spi-dw-pci.c
-+++ b/drivers/spi/spi-dw-pci.c
-@@ -19,6 +19,7 @@ struct spi_pci_desc {
- 	int	(*setup)(struct dw_spi *);
- 	u16	num_cs;
- 	u16	bus_num;
-+	u32	max_freq;
- };
- 
- static struct spi_pci_desc spi_pci_mid_desc_1 = {
-@@ -33,6 +34,12 @@ static struct spi_pci_desc spi_pci_mid_desc_2 = {
- 	.bus_num = 1,
- };
- 
-+static struct spi_pci_desc spi_pci_ehl_desc = {
-+	.num_cs = 1,
-+	.bus_num = -1,
-+	.max_freq = 100000000,
-+};
-+
- static int spi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- {
- 	struct dw_spi *dws;
-@@ -65,6 +72,7 @@ static int spi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	if (desc) {
- 		dws->num_cs = desc->num_cs;
- 		dws->bus_num = desc->bus_num;
-+		dws->max_freq = desc->max_freq;
- 
- 		if (desc->setup) {
- 			ret = desc->setup(dws);
-@@ -125,6 +133,11 @@ static const struct pci_device_id pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, 0x0800), (kernel_ulong_t)&spi_pci_mid_desc_1},
- 	/* Intel MID platform SPI controller 2 */
- 	{ PCI_VDEVICE(INTEL, 0x0812), (kernel_ulong_t)&spi_pci_mid_desc_2},
-+	/* Intel Elkhart Lake PSE SPI controllers */
-+	{ PCI_VDEVICE(INTEL, 0x4b84), (kernel_ulong_t)&spi_pci_ehl_desc},
-+	{ PCI_VDEVICE(INTEL, 0x4b85), (kernel_ulong_t)&spi_pci_ehl_desc},
-+	{ PCI_VDEVICE(INTEL, 0x4b86), (kernel_ulong_t)&spi_pci_ehl_desc},
-+	{ PCI_VDEVICE(INTEL, 0x4b87), (kernel_ulong_t)&spi_pci_ehl_desc},
- 	{},
- };
- 
--- 
-2.20.1
+Thanks for your efforts on this, but currently i don't have a setup to
+test this :-(
 
