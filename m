@@ -2,73 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE0F8B568
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Aug 2019 12:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6FF8B77B
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Aug 2019 13:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728736AbfHMKX0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Aug 2019 06:23:26 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:33966 "EHLO inva021.nxp.com"
+        id S1727420AbfHMLrs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Aug 2019 07:47:48 -0400
+Received: from muru.com ([72.249.23.125]:57216 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727959AbfHMKX0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 13 Aug 2019 06:23:26 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A1C61200154;
-        Tue, 13 Aug 2019 12:23:24 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C1DD3200783;
-        Tue, 13 Aug 2019 12:23:20 +0200 (CEST)
-Received: from lsv03124.swis.in-blr01.nxp.com (lsv03124.swis.in-blr01.nxp.com [92.120.146.121])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 8636B402F0;
-        Tue, 13 Aug 2019 18:23:15 +0800 (SGT)
-From:   Ashish Kumar <Ashish.Kumar@nxp.com>
-To:     linux-kernel@vger.kernel.org, broonie@kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-next@vger.kernel.org, Ashish Kumar <Ashish.Kumar@nxp.com>
-Subject: [Patch v4 3/3] dt-bindings: Enhance binding to extend example for flash entry
-Date:   Tue, 13 Aug 2019 15:53:11 +0530
-Message-Id: <1565691791-26167-3-git-send-email-Ashish.Kumar@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
-References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726298AbfHMLrs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 13 Aug 2019 07:47:48 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 5CEAD805C;
+        Tue, 13 Aug 2019 11:48:15 +0000 (UTC)
+Date:   Tue, 13 Aug 2019 04:47:44 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        letux-kernel@openphoenux.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH 1/2] DTS: ARM: gta04: define chosen/stdout-path
+Message-ID: <20190813114744.GT52127@atomide.com>
+References: <cover.1562597164.git.hns@goldelico.com>
+ <21ed570c5920346bf9dc1284c8dfee2e6ef79a51.1562597164.git.hns@goldelico.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <21ed570c5920346bf9dc1284c8dfee2e6ef79a51.1562597164.git.hns@goldelico.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add example for adding flash entry on various boards' dts
-using flash manufacture spansion/cypress.
+* H. Nikolaus Schaller <hns@goldelico.com> [190708 14:46]:
+> This allows to remove the console= entry in the kernel command line.
 
-Signed-off-by: Ashish Kumar <Ashish.Kumar@nxp.com>
----
-v4:
--Add new patch to series.
-v3:
-Not present
-v2:
-Not present
- 
- Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Applying this patch into omap-for-v5.4/dt thanks.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt b/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
-index 2c2a3e9..7ba0472 100644
---- a/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
-@@ -35,7 +35,11 @@ qspi0: quadspi@40044000 {
- 	clock-names = "qspi_en", "qspi";
- 
- 	flash0: s25fl128s@0 {
--		....
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "spansion,s25fl128s", "jedec,spi-nor";
-+		spi-max-frequency = <50000000>;
-+		reg = <0>;
- 	};
- };
- 
--- 
-2.7.4
-
+Tony
