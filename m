@@ -2,34 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2B38C986
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Aug 2019 04:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7938C901
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Aug 2019 04:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727566AbfHNCjV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Aug 2019 22:39:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43782 "EHLO mail.kernel.org"
+        id S1728507AbfHNCfe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Aug 2019 22:35:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45492 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727516AbfHNCLd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:11:33 -0400
+        id S1728287AbfHNCN3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:13:29 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D7F3820989;
-        Wed, 14 Aug 2019 02:11:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7A83A214DA;
+        Wed, 14 Aug 2019 02:13:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565748693;
-        bh=x+Nda0dplsGeQvZJUh8S6xSL8VrWFUAaYwqBqSC64qQ=;
+        s=default; t=1565748808;
+        bh=nvv5wvA6z8M5WfbSUdq7v2bAub2mac3SXvLLZWtTXLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cmRLdQzuCgPlw2fZ7+JGkJTcQnsBicVyJJCRq+sSqdpdKITl3p5wB/LOfB6A9qBWu
-         KgKLOYTYbgkU/KCzSc1Uye/Uks6rCXhZgjuoboeh6fejRaUGvsehcjByq2QnGFZN8M
-         n5suTu02pMcK8otY0HR6g82v3lUCmYB36fyh1fIc=
+        b=FXlTmsTx0K3idWdnktRwCiumh+lfI2hlOdDsFXXD4WxMVgOfc8bIu9JVJ2ZZxcKJ+
+         UXxaK8mS1fr4TX9m2dC4l5lflrurMvO7KiJWGkOYJsC7xDaqzV1feCjyWb5lO9ubhS
+         z+16uN+SqtYe9Z5a/QwwuPs2mIt+eTxa+wMxSzZU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, Mark Brown <broonie@kernel.org>,
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 024/123] spi: pxa2xx: Balance runtime PM enable/disable on error
-Date:   Tue, 13 Aug 2019 22:09:08 -0400
-Message-Id: <20190814021047.14828-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 074/123] spi: pxa2xx: Add support for Intel Tiger Lake
+Date:   Tue, 13 Aug 2019 22:09:58 -0400
+Message-Id: <20190814021047.14828-74-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190814021047.14828-1-sashal@kernel.org>
 References: <20190814021047.14828-1-sashal@kernel.org>
@@ -42,49 +43,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Lubomir Rintel <lkundrak@v3.sk>
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-[ Upstream commit 1274204542f683e1d8491ebe9cc86284d5a8ebcc ]
+[ Upstream commit a4127952859a869cf3fc5a49547dbe2ffa2eac89 ]
 
-Don't undo the PM initialization if we error out before we managed to
-initialize it. The call to pm_runtime_disable() without being preceded
-by pm_runtime_enable() would disturb the balance of the Force.
+Intel Tiger Lake -LP LPSS SPI controller is otherwise similar than
+Cannon Lake but has more controllers and up to two chip selects per
+controller.
 
-In practice, this happens if we fail to allocate any of the GPIOS ("cs",
-"ready") due to -EPROBE_DEFER because we're getting probled before the
-GPIO driver.
-
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-Link: https://lore.kernel.org/r/20190719122713.3444318-1-lkundrak@v3.sk
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Link: https://lore.kernel.org/r/20190801134901.12635-1-jarkko.nikula@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-pxa2xx.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/spi/spi-pxa2xx.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index af3f37ba82c83..c1af8887d9186 100644
+index c1af8887d9186..1f32c9e3ca65c 100644
 --- a/drivers/spi/spi-pxa2xx.c
 +++ b/drivers/spi/spi-pxa2xx.c
-@@ -1817,14 +1817,16 @@ static int pxa2xx_spi_probe(struct platform_device *pdev)
- 	status = devm_spi_register_controller(&pdev->dev, controller);
- 	if (status != 0) {
- 		dev_err(&pdev->dev, "problem registering spi controller\n");
--		goto out_error_clock_enabled;
-+		goto out_error_pm_runtime_enabled;
- 	}
+@@ -1453,6 +1453,14 @@ static const struct pci_device_id pxa2xx_spi_pci_compound_match[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x02aa), LPSS_CNL_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x02ab), LPSS_CNL_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x02fb), LPSS_CNL_SSP },
++	/* TGL-LP */
++	{ PCI_VDEVICE(INTEL, 0xa0aa), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0xa0ab), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0xa0de), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0xa0df), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0xa0fb), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0xa0fd), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0xa0fe), LPSS_CNL_SSP },
+ 	{ },
+ };
  
- 	return status;
- 
--out_error_clock_enabled:
-+out_error_pm_runtime_enabled:
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-+
-+out_error_clock_enabled:
- 	clk_disable_unprepare(ssp->clk);
- 
- out_error_dma_irq_alloc:
 -- 
 2.20.1
 
