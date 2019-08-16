@@ -2,86 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6198F815
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Aug 2019 02:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D6E90136
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Aug 2019 14:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbfHPApS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Aug 2019 20:45:18 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:37623 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbfHPApP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Aug 2019 20:45:15 -0400
-Received: by mail-wr1-f67.google.com with SMTP id z11so3803426wrt.4;
-        Thu, 15 Aug 2019 17:45:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=gA4EghheVlwLTCkXpIEYPy5tZr9mfwdcWn3E8suJuks=;
-        b=JRz75JIJcjxCunTKyo2AFnHHYecc7R7edPD69KNAXKcY91FtFa0xSyXaLZ89fmnnfG
-         hSLkWSWfqCBmCGeVhzBWlfbpAuDTOWR0HFTg2+VdUq/YBoI4wt5KLPt7mLp88msnM37J
-         iHxKkcZfNl27a+xAJd1Xs48TqGv8/rrfLM9PcWWalTiFx1y6uS0Bm12/dXfk/jyvz3PU
-         garlnuphL5+EdQbOnzfr361ha35cTwQWi90kXTZLgB4rBGVLpdD1akcLDNgBMS4GXzth
-         r5S05x3N0T9K5rLf+1Q/6dRtdQkZ07NUROhZIsLgNUI29fe/0ypax7ByR8MpMHSF5fvx
-         /edQ==
+        id S1727007AbfHPMSk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Aug 2019 08:18:40 -0400
+Received: from mail-ed1-f97.google.com ([209.85.208.97]:33562 "EHLO
+        mail-ed1-f97.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727118AbfHPMSk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Aug 2019 08:18:40 -0400
+Received: by mail-ed1-f97.google.com with SMTP id s15so4982679edx.0
+        for <linux-spi@vger.kernel.org>; Fri, 16 Aug 2019 05:18:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=gA4EghheVlwLTCkXpIEYPy5tZr9mfwdcWn3E8suJuks=;
-        b=AohsMBTUBy6Ff4BuGZsVqZaKY2yl/45Nhn/3I6JqPzYnGdkmn/W42W0hbfuHZWvJjP
-         7rkCGf+qHWsCJN0bxLi5CJ1tCEAfL9cXIQuj/gcC96YY7yFd8Id3XYoVUFAP1luLxAkT
-         MbCNdk/Phar3hrcquYABcmrsFIbkXedrZ0dCo2roxLTsPIO9qO7H4e9kNRB//oHaNhGL
-         I/4brt83vbClwuleRQ+sE3sR50ITBWC4kI6ZOxPrBYvtUyG/YJcLm+upH6Ze0jC4rIVC
-         DxhpKR/167ZZ3lxi44pkDUWC514uO3o1xeKF1xM0acFwutklltc/15TlBlZlyLPr1Z7j
-         7F5Q==
-X-Gm-Message-State: APjAAAV00Miaw4JgUYPal8oEZ38DbqqXuE/LyL/3csKCfOdcCfCEsZFg
-        XhBUx/d21nzXCzX8Df9BcJW/mBgCmj8=
-X-Google-Smtp-Source: APXvYqwF7U4q4GgDkG8suyoncsL5tJr3g2YiTFunwyeVgsgnYGWenc8ELvE/9f/VTa0O5KYTfsa4hw==
-X-Received: by 2002:a5d:6ad0:: with SMTP id u16mr7872106wrw.84.1565916313393;
-        Thu, 15 Aug 2019 17:45:13 -0700 (PDT)
-Received: from localhost.localdomain ([188.25.91.80])
-        by smtp.gmail.com with ESMTPSA id k124sm6451204wmk.47.2019.08.15.17.45.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cQi6Hr8QVAwL/OcjjXHQ7e3FDQKZyWG4jpVl4xyx0WM=;
+        b=gnzboT8BJn6YcNZHlZOo8vXZFm1LAtXzeOhktgGHffKPeQyUSFdA+KHQKxuWhDTp6U
+         zwTUnLt167d4Jp6mLN3KSyJCI+MfFmMaRBsYgM1gAHBhzdSOCSwTYq5v1fPOKOJZ1fcs
+         0QoUau1AJspwojuDGJqbJryXZmv2QNgKkiVN9xJbuZVanC12IDM3souVSUldvquSOOuV
+         Uykdh3478VY4pBqU255btjFMhpMSe410BU3PdU1NmNCP7hoeQNwOYfPOns/+0FGaxMB5
+         sODpDbjeejtt0rgycX/6wJBD2jlA+gFhQSSqq3rvG9UEugqOfHheo38HimT2cs7QsfBy
+         B2bw==
+X-Gm-Message-State: APjAAAUlhUOvayUc/wTgAz3oJ8h/0MxwhVelMdjHrJgTbeBTkPvCCnOE
+        FsqggdASp+T2Ga2iIvLrePT2expPKGcTLSqC1+cs4Oa3mMRrSQ/n6TubEr7SX/q+AQ==
+X-Google-Smtp-Source: APXvYqzBU4078lVt/vD9xKkrFgGaipVSPwwRnC3vbNrF7n5F9O6bdjccgv8jAuYQqjXdq7AuXIWEiPOMeCxK
+X-Received: by 2002:a17:906:8481:: with SMTP id m1mr8875891ejx.43.1565957918833;
+        Fri, 16 Aug 2019 05:18:38 -0700 (PDT)
+Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
+        by smtp-relay.gmail.com with ESMTPS id me22sm33418ejb.69.2019.08.16.05.18.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2019 17:45:13 -0700 (PDT)
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     h.feurstein@gmail.com, mlichvar@redhat.com,
+        Fri, 16 Aug 2019 05:18:38 -0700 (PDT)
+X-Relaying-Domain: sirena.org.uk
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1hybBm-0003OX-E8; Fri, 16 Aug 2019 12:18:38 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id A5A5B27430D6; Fri, 16 Aug 2019 13:18:37 +0100 (BST)
+Date:   Fri, 16 Aug 2019 13:18:37 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     h.feurstein@gmail.com, mlichvar@redhat.com,
         richardcochran@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, netdev@vger.kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: [RFC PATCH net-next 11/11] ARM: dts: ls1021a-tsn: Reduce the SJA1105 SPI frequency for debug
-Date:   Fri, 16 Aug 2019 03:44:49 +0300
-Message-Id: <20190816004449.10100-12-olteanv@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190816004449.10100-1-olteanv@gmail.com>
+        linux-spi@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH net-next 03/11] spi: Add a PTP system timestamp to
+ the transfer structure
+Message-ID: <20190816121837.GD4039@sirena.co.uk>
 References: <20190816004449.10100-1-olteanv@gmail.com>
+ <20190816004449.10100-4-olteanv@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hxkXGo8AKqTJ+9QI"
+Content-Disposition: inline
+In-Reply-To: <20190816004449.10100-4-olteanv@gmail.com>
+X-Cookie: My life is a patio of fun!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-I have a logic analyzer that cannot sample signals at a higher frequency
-than this, and it's nice to actually see the captured data and not just
-an amorphous mess.
 
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
----
- arch/arm/boot/dts/ls1021a-tsn.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--hxkXGo8AKqTJ+9QI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm/boot/dts/ls1021a-tsn.dts b/arch/arm/boot/dts/ls1021a-tsn.dts
-index 3b35e6b5977f..8fdf4c3b24c7 100644
---- a/arch/arm/boot/dts/ls1021a-tsn.dts
-+++ b/arch/arm/boot/dts/ls1021a-tsn.dts
-@@ -55,7 +55,7 @@
- 		#size-cells = <0>;
- 		compatible = "nxp,sja1105t";
- 		/* 12 MHz */
--		spi-max-frequency = <12000000>;
-+		spi-max-frequency = <6000000>;
- 		/* Sample data on trailing clock edge */
- 		spi-cpha;
- 		/* SPI controller settings for SJA1105 timing requirements */
--- 
-2.17.1
+On Fri, Aug 16, 2019 at 03:44:41AM +0300, Vladimir Oltean wrote:
 
+> @@ -842,6 +843,9 @@ struct spi_transfer {
+> =20
+>  	u32		effective_speed_hz;
+> =20
+> +	struct ptp_system_timestamp *ptp_sts;
+> +	unsigned int	ptp_sts_word_offset;
+> +
+
+You've not documented these fields at all so it's not clear what the
+intended usage is.
+
+--hxkXGo8AKqTJ+9QI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1WnxwACgkQJNaLcl1U
+h9D8nwf8DrLh/nyypE5Z9eyCgD6tjtuKC/OLPBwFr+Ok3tAYfcVFUJ32DJ8ZsCMh
+U3HfHE/KSUK/VgOCv3d6iuNk/2fozEYiFgggeyqoDagiyssXjNSFQwaBI1jNh/8A
+9gG+00aG06VCwcYtFPeXNZGyv1ifPFZOuyuwZjIyM9Wfl4B4CbX3o+cxGBhpHQvE
+F1Nn4b4/rttBYAmxt5whDtU6ZgGnilVy9i3naqH5bO1ZPR8Mi3i8lOtntBetVVHG
+obyEBNVcgWAfxcuHoGZnQXRVJjYicjNa3odkE971eZnqFJlBlQdOWZc5sOpdVFrs
+/3NmdZUt9i/YniIdFEhbJ2YM954ivg==
+=C5En
+-----END PGP SIGNATURE-----
+
+--hxkXGo8AKqTJ+9QI--
