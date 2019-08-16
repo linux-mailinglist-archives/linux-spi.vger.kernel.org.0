@@ -2,102 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D9090146
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Aug 2019 14:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF80901B3
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Aug 2019 14:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727217AbfHPMVG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Aug 2019 08:21:06 -0400
-Received: from mail-ed1-f100.google.com ([209.85.208.100]:33875 "EHLO
-        mail-ed1-f100.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727007AbfHPMVF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Aug 2019 08:21:05 -0400
-Received: by mail-ed1-f100.google.com with SMTP id s49so4984367edb.1
-        for <linux-spi@vger.kernel.org>; Fri, 16 Aug 2019 05:21:04 -0700 (PDT)
+        id S1727238AbfHPMfn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Aug 2019 08:35:43 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:44504 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726981AbfHPMfn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Aug 2019 08:35:43 -0400
+Received: by mail-ed1-f65.google.com with SMTP id a21so4970466edt.11;
+        Fri, 16 Aug 2019 05:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aopwDoWmGMmSqryhB3TtenNCf2ffEFD0Q7hDjwb+d9I=;
+        b=oc2RnDRwEX58ApA+IPs6AwXrLlraAXBAFiBhEQkR+vMPPswi1KHmrlIBZ5Bus3GaRw
+         r1ns5pZmPWiH8Zi7nKaAxvFaqXEg/X3sDuQxV0Unv3vy99d91StdatATDuTdNglRPS2o
+         wMHYLzG8UM/JFAOLZPdOY6zF/7wB28SJ1vfwdWWISoDrDIyzPaEvN0Q9mpx5VQoNd6vO
+         i0uhO1UaGn6aN7C6JNnbAr3KqEWZSCV6ISCtxjMUdrEWS1d3skivNbhtg03EYSI2+XiZ
+         +Kbbfyxkl+wulZeoRq6lgzDOztsy7OUxxuYTwH0tPcGBlsg1kxmlvTYcSrwtAYQM/9A+
+         npXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tKhOd3WCCS81mToTkVuzJS8ppaBmXDvx6Wnxxnym8UA=;
-        b=Xvj7+CN4e+UTPkZO7n6HOfpotYWiZDqTybK+GGbJVRmoR6+yzR15eeU4HiO1uOaBuU
-         ZABSaXq5z12xY6V456O7m/oJr8LSJwoaigMadboHEVV3gS+BndZu1WKTVyvwbftwRNkF
-         5BYX6Hs38Xo4NwxJsErP2Fczrlzr3FPbA+1XKNH8jWLDMMBu0h85Y9EELDAcJ9IySyuw
-         26maRNLxEDQrUX61KNrOEa1q5AYUebr+jusIMfjYOIjt56O8jmve0sHxAGTAd+RdD5EP
-         +gyRntmi3nZ/TnsDljxDNSJYHCuJoDGhusVqJXzPRf7/PqMDYg7sc+8WM+/duR1A4q/O
-         Ohhw==
-X-Gm-Message-State: APjAAAXd8PkFUYKp6WgU9krQ7DUAVpEjTUjr53JKyTlwOmyjwueor7a/
-        WGlPhkecHPyFJX59SKzhu0ym0s+uXva/bnEyT8PhcEpL1L2K9Of8SKTbb+hWhzW6Vg==
-X-Google-Smtp-Source: APXvYqyFDPVRuRVwUVQN1kIePjFpx4dlJQLiWIWPHH9631C2TJn6okaPRQ51znHz4j/5JNjE11Aw/HA9rtFA
-X-Received: by 2002:a17:906:1303:: with SMTP id w3mr9048193ejb.143.1565958064263;
-        Fri, 16 Aug 2019 05:21:04 -0700 (PDT)
-Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
-        by smtp-relay.gmail.com with ESMTPS id o23sm21973eja.23.2019.08.16.05.21.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2019 05:21:04 -0700 (PDT)
-X-Relaying-Domain: sirena.org.uk
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1hybE7-0003R1-Un; Fri, 16 Aug 2019 12:21:04 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 2D12127430D6; Fri, 16 Aug 2019 13:21:03 +0100 (BST)
-Date:   Fri, 16 Aug 2019 13:21:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     h.feurstein@gmail.com, mlichvar@redhat.com,
-        richardcochran@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        linux-spi@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH net-next 04/11] spi: spi-fsl-dspi: Cosmetic cleanup
-Message-ID: <20190816122103.GE4039@sirena.co.uk>
-References: <20190816004449.10100-1-olteanv@gmail.com>
- <20190816004449.10100-5-olteanv@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aopwDoWmGMmSqryhB3TtenNCf2ffEFD0Q7hDjwb+d9I=;
+        b=WOh06djX87coaYfp2CWX2bXUbHk6cAdbAP352QwmsxNlXWoz93BJ3a0QrNm3IYXaFr
+         0r+KfCHOJRgnuE62mwrZs9YZNgBIpTKogS+TQOTQ8glmz7XM0SrkyCso7pJx8UBnVq/h
+         HzhoYq/e/Ytzv0+R2uCt/oUuh+mzUKTg9gm61pxrdo9uvQefj/Zu78mhG+d3cwsb+/yH
+         7AxGZQAw3sBwWqT6DwmzZfbXDSfaPKYaP0YnpqXosayGCTBK8Sv+4et2zl4zCBDQpwEH
+         9xwAUN8m3RSv4de9u75cWPcrn0GULLkdQFBC7nTGjzfDFga7suG8yyQy171uth4WeoHt
+         vmDw==
+X-Gm-Message-State: APjAAAWxsPJHXcwwOn2Jc50UYIgZ2wkPeHE+lryCMEycuz7NR53tEIcf
+        ITGaRQNmn+7qpYkL8SSf1OdzXw+alkRosVKplNU=
+X-Google-Smtp-Source: APXvYqzyOHKvO7geFWMkb7zQnrojx1lyottfgcoRJmX6ObUBtlXG9tt7k03kTrXvbgOEQXFoU+9TxH5OeO+SRL7oAnY=
+X-Received: by 2002:a17:907:2069:: with SMTP id qp9mr8954773ejb.90.1565958941334;
+ Fri, 16 Aug 2019 05:35:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Q8BnQc91gJZX4vDc"
-Content-Disposition: inline
-In-Reply-To: <20190816004449.10100-5-olteanv@gmail.com>
-X-Cookie: My life is a patio of fun!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190816004449.10100-1-olteanv@gmail.com> <20190816004449.10100-4-olteanv@gmail.com>
+ <20190816121837.GD4039@sirena.co.uk>
+In-Reply-To: <20190816121837.GD4039@sirena.co.uk>
+From:   Vladimir Oltean <olteanv@gmail.com>
+Date:   Fri, 16 Aug 2019 15:35:30 +0300
+Message-ID: <CA+h21hqatTeS2shV9QSiPzkjSeNj2Z4SOTrycffDjRHj=9s=nQ@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next 03/11] spi: Add a PTP system timestamp to the
+ transfer structure
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Hubert Feurstein <h.feurstein@gmail.com>, mlichvar@redhat.com,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Mark,
 
---Q8BnQc91gJZX4vDc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, 16 Aug 2019 at 15:18, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Fri, Aug 16, 2019 at 03:44:41AM +0300, Vladimir Oltean wrote:
+>
+> > @@ -842,6 +843,9 @@ struct spi_transfer {
+> >
+> >       u32             effective_speed_hz;
+> >
+> > +     struct ptp_system_timestamp *ptp_sts;
+> > +     unsigned int    ptp_sts_word_offset;
+> > +
+>
+> You've not documented these fields at all so it's not clear what the
+> intended usage is.
 
-On Fri, Aug 16, 2019 at 03:44:42AM +0300, Vladimir Oltean wrote:
-> This patch addresses some cosmetic issues:
-> - Alignment
-> - Typos
-> - (Non-)use of BIT() and GENMASK() macros
-> - Unused definitions
-> - Unused includes
-> - Abuse of ternary operator in detriment of readability
-> - Reduce indentation level
+Thanks for looking into this.
+Indeed I didn't document them as the patch is part of a RFC and I
+thought the purpose was more clear from the context (cover letter
+etc).
+If I do ever send a patchset for submission I will document the newly
+introduced fields properly.
+So let me clarify:
+The SPI slave device driver is populating these fields to indicate to
+the controller driver that it wants word number @ptp_sts_word_offset
+from the tx buffer snapshotted. The controller driver is supposed to
+put the snapshot into the @ptp_sts field, which is a pointer to a
+memory location under the control of the SPI slave device driver.
+It is ok if the ptp_sts pointer is NULL (no need to check), because
+the API for taking snapshots already checks for that.
+At the moment there is yet no proposed mechanism for the SPI slave
+driver to ensure that the controller will really act upon this
+request. That would be really nice to have, since some SPI slave
+devices are time-sensitive and warning early is a good way to prevent
+unnecessary troubleshooting.
 
-This is difficult to review since there's a bunch of largely unrelated
-changes all munged into one patch.  It'd be better to split this up so
-each change makes one kind of fix, and better to do this separately to
-the rest of the series.  In particular having alignment changes along
-with other changes hurts reviewability as it's less immediately clear
-what's a like for liken substitution.
-
---Q8BnQc91gJZX4vDc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1Wn64ACgkQJNaLcl1U
-h9D5Bwf+OKuQMiT2y6NsdVvC4VV6RHVuXDYQxs3lIWdb2gLw+ikQZum3e77gvc+Z
-If4Yc1d+XAwqFbrD81a522yH0cyGfWIed/Hlmc6CwkKMZC1j+0ngO2PSIKeBdZzA
-cuVlqNjke4qPs6lsNcBN9tig3A7Qer4de9hkCCtctdPGBalJSBprV+ow85cjyXbp
-4wvnTojb1EzWCMplDPvoTeAGgZHZjsfp5lpf+eTI+isYBjRFeyokFvsosUZiMdZI
-Wi+o/Swe1nL/6jM8+EVmJpUzTUDtT191cSM4KaHEifU9zXdrSk1ss09wlruRAETy
-ACNvbL2isq76eFbeLwIwtDqf/mfaaA==
-=2xml
------END PGP SIGNATURE-----
-
---Q8BnQc91gJZX4vDc--
+Regards,
+-Vladimir
