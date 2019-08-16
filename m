@@ -2,158 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66743903A0
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Aug 2019 16:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5B19066C
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Aug 2019 19:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbfHPOGH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Aug 2019 10:06:07 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:38286 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727252AbfHPOGG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Aug 2019 10:06:06 -0400
-Received: by mail-ed1-f67.google.com with SMTP id r12so5241691edo.5;
-        Fri, 16 Aug 2019 07:06:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8e7Z0p2sBGPUJzObsUt4mu3Xwz8ikmNkfBbWkS9jRyE=;
-        b=GpGPsFoXG+hpRJPpDXHOSYuzTkQZpccsp66KsUvo1dVVlRRtGqezako/96GoKG7N55
-         zUBQzSlqlGrHt5p3B7u4sNgG4MLKgvsD0c8gCzPcoLRwtRbLsfmZ7RQVCRxuoaiF3kXe
-         t7IMwYARFBCD8QhtHxBOs8qbsvfDVbNXvTVrMGrYc/23/hX7hMNjpR9AL1O9GxYVgjG+
-         DgdAxPAlHlUHOji3mjWLHq8F5STxqTVq/0h+en6x/j6M3Qgl013DajZVsRr/nhx10Nki
-         T9k0+QD2IeqhvwdFNdr3NCkRGrPf6t0nXTZenk090HdVK1ceGQxQ26vPtxhlMduBc6fM
-         U/MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8e7Z0p2sBGPUJzObsUt4mu3Xwz8ikmNkfBbWkS9jRyE=;
-        b=FVOitc9g5INvMRywSCnDqNNYhS4YovoBfXelOY9f8rB/SL+o8VKkEfjc5CMuLtSWxi
-         AEXP+OxJtXDG6OgUYFsqvGgZOSs2foD7sq+ZkPb3hJDH+f9XilurW53h0nRppgvAXBFd
-         r5xiQRktwkrJEwXZhOSopEaeKznDqqvGyQWeJwSG68M9sPo4pLbaFX/mWrvEMJTzf1NT
-         Gb5aupl2JDjct/l/cSRxof5A7G4U/qHR0500+aKWOUuPJCHW9y26FEQEqNV+G3pP6Stm
-         ByBvwk20IOmZWmViq3avzRTxnKYrrqHTXQsQEIORD0JF2Q3X1lbF9sVezzWbApzu/sWJ
-         FaBQ==
-X-Gm-Message-State: APjAAAU8L+QdA4DvezKbUIXtJABT663TaymBkl46ncO9zepkWO5sH6J1
-        AvXnBEqpVGxsQsMXyDUFL4KgTql3pqtAPSnmjqk=
-X-Google-Smtp-Source: APXvYqxP6KpjVu8D9+MCbXjqKCqDIEjZp1N7n4Mku54AV4tX1b2vzYSgZgLaVi0qXD4JEb7g27IqtWJxee/DQ0JJW5Q=
-X-Received: by 2002:a17:906:d298:: with SMTP id ay24mr9552094ejb.230.1565964364249;
- Fri, 16 Aug 2019 07:06:04 -0700 (PDT)
+        id S1726497AbfHPRFl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Aug 2019 13:05:41 -0400
+Received: from mail.andi.de1.cc ([85.214.55.253]:48174 "EHLO mail.andi.de1.cc"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726447AbfHPRFk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Aug 2019 13:05:40 -0400
+X-Greylist: delayed 923 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Aug 2019 13:05:40 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TMl0t22j8qYVABIvPAxoYrZBeDSEu0ad3kM77/ptRoY=; b=hbTpfDeLYXAn+UuBGXwhvLgYW1
+        qE1JEkDq17OwOZsSvyKJAhAgykxc7KsKQyjq5YBrNJmbPfFZBodVEeJicEvKKDv+yL3e4rtI5E9Vg
+        wBijc8pOhYzsAWdCHz2KN/PLm0H8cAB8oSNnxPmRQsPOOkvYg7VBe74IBRMBs2LK4JCA=;
+Received: from pd9e2f4fd.dip0.t-ipconnect.de ([217.226.244.253] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1hyfQc-0002DT-Pg; Fri, 16 Aug 2019 18:50:15 +0200
+Received: from andi by aktux with local (Exim 4.92)
+        (envelope-from <andreas@kemnade.info>)
+        id 1hyfQc-0008QU-CO; Fri, 16 Aug 2019 18:50:14 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, linux-spi@vger.kernel.org
+Cc:     Andreas Kemnade <andreas@kemnade.info>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH] gpio: of: fix Freescale SPI CS quirk handling
+Date:   Fri, 16 Aug 2019 18:50:00 +0200
+Message-Id: <20190816165000.32334-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190816004449.10100-1-olteanv@gmail.com> <20190816004449.10100-4-olteanv@gmail.com>
- <20190816121837.GD4039@sirena.co.uk> <CA+h21hqatTeS2shV9QSiPzkjSeNj2Z4SOTrycffDjRHj=9s=nQ@mail.gmail.com>
- <20190816125820.GF4039@sirena.co.uk>
-In-Reply-To: <20190816125820.GF4039@sirena.co.uk>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Fri, 16 Aug 2019 17:05:53 +0300
-Message-ID: <CA+h21hrZbun_j+oABJFP+P+V3zHP2x0mAhv-1ocF38miCvZHew@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next 03/11] spi: Add a PTP system timestamp to the
- transfer structure
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Hubert Feurstein <h.feurstein@gmail.com>, mlichvar@redhat.com,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 16 Aug 2019 at 15:58, Mark Brown <broonie@kernel.org> wrote:
->
-> On Fri, Aug 16, 2019 at 03:35:30PM +0300, Vladimir Oltean wrote:
-> > On Fri, 16 Aug 2019 at 15:18, Mark Brown <broonie@kernel.org> wrote:
-> > > On Fri, Aug 16, 2019 at 03:44:41AM +0300, Vladimir Oltean wrote:
->
-> > > > @@ -842,6 +843,9 @@ struct spi_transfer {
-> > > >
-> > > >       u32             effective_speed_hz;
-> > > >
-> > > > +     struct ptp_system_timestamp *ptp_sts;
-> > > > +     unsigned int    ptp_sts_word_offset;
-> > > > +
->
-> > > You've not documented these fields at all so it's not clear what the
-> > > intended usage is.
->
-> > Thanks for looking into this.
-> > Indeed I didn't document them as the patch is part of a RFC and I
-> > thought the purpose was more clear from the context (cover letter
-> > etc).
-> > If I do ever send a patchset for submission I will document the newly
-> > introduced fields properly.
->
-> The issue I'm having is that I have zero idea about the PTP API so I've
-> got nothing to go on when thinking about if this approach makes any
-> sense unless I go do some research.
->
-> > So let me clarify:
-> > The SPI slave device driver is populating these fields to indicate to
-> > the controller driver that it wants word number @ptp_sts_word_offset
-> > from the tx buffer snapshotted. The controller driver is supposed to
-> > put the snapshot into the @ptp_sts field, which is a pointer to a
-> > memory location under the control of the SPI slave device driver.
->
-> Snapshot here basically meaning recording a timestamp?  This interface
-> does seem like it basically precludes DMA based controllers from using
-> it unless someone happened to implement some very specific stuff in
-> hardware which seems implausible.  I'd be inclined to just require that
-> users can only snapshot the first (and possibly also the last, though
-> DMA completions make that fun) word of a transfer, we could then pull
-> this out into the core a bit by providing a wrapper function drivers
-> should call at the appropriate moment.
->
+On the gta04 we see:
+spi_gpio: probe of spi_lcd failed with error -2
 
-I'm not sure how to respond to this, because I don't know anything
-about the timing of DMA transfers.
-Maybe snapshotting DMA transfers the same way is not possible (if at
-all). Maybe they are not exactly adequate for this sort of application
-anyway. Maybe it depends.
-But the switch I'm working on is issuing an internal read transaction
-of the PTP timer exactly at the 4th-to-last bit of the 3rd byte. This
-is so that it has time (4 SPI clock cycles, to be precise) for the
-result of the read transaction to become available again to the SPI
-block, for output. It is impossible to know exactly when the switch
-will snapshot the time internally (because there are several clock
-domain crossings from the SPI interface towards its core) but for
-certain it takes place during the latter part of the 3rd SPI byte. I
-believe other devices are similar in this regard.
-In other words, from a purely performance perspective, I am against
-limiting the API to just snapshotting the first and last byte. At this
-level of "zoom", if I change the offset of the byte to anything other
-than 3, the synchronization offset refuses to converge towards zero,
-because the snapshot is incurring a constant offset that the servo
-loop from userspace (phc2sys) can't compensate for.
-Maybe the SPI master driver should just report what sort of
-snapshotting capability it can offer, ranging from none (default
-unless otherwise specified), to transfer-level (DMA style) or
-byte-level.
-I'm afraid more actual experimentation is needed with DMA-based
-controllers to understand what can be expected from them, and as a
-result, how the API should map around them.
-MDIO bus controllers are in a similar situation (with Hubert's patch)
-but at least there the frame size is fixed and I haven't heard of an
-MDIO controller to use DMA.
-I'm not really sure what the next step would be. In the other thread,
-Richard Cochran mentioned something about a two-part write API,
-although I didn't quite understand the idea behind it.
+The quirk introduced in
+commit e3023bf80639 ("gpio: of: Handle the Freescale SPI CS")
+can also be triggered by a temporary -EPROBE_DEFER and
+so "convert" it to a hard -ENOENT.
 
+Disable that conversion by checking for -EPROBE_DEFER.
 
-> > It is ok if the ptp_sts pointer is NULL (no need to check), because
-> > the API for taking snapshots already checks for that.
-> > At the moment there is yet no proposed mechanism for the SPI slave
-> > driver to ensure that the controller will really act upon this
-> > request. That would be really nice to have, since some SPI slave
-> > devices are time-sensitive and warning early is a good way to prevent
-> > unnecessary troubleshooting.
->
-> Yes, that's one of the things I was thinking about looking at the series
-> - we should at least be able to warn if we can't timestamp so nobody
-> gets confused, possibly error out if the calling code particularly
-> depends on it.
+Fixes: e3023bf80639 ("gpio: of: Handle the Freescale SPI CS")
+Suggested-by: H. Nikolaus Schaller <hns@goldelico.com>
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ drivers/gpio/gpiolib-of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
--Vladimir
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index 567fb98c0892..9762dd6d99fa 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -363,7 +363,7 @@ struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+ 	/* Special handling for SPI GPIOs if used */
+ 	if (IS_ERR(desc))
+ 		desc = of_find_spi_gpio(dev, con_id, &of_flags);
+-	if (IS_ERR(desc)) {
++	if (IS_ERR(desc) && PTR_ERR(desc) != -EPROBE_DEFER) {
+ 		/* This quirk looks up flags and all */
+ 		desc = of_find_spi_cs_gpio(dev, con_id, idx, flags);
+ 		if (!IS_ERR(desc))
+-- 
+2.20.1
+
