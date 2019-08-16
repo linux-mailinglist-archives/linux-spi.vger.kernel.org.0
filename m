@@ -2,82 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B066490AF1
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Aug 2019 00:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E952990B09
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Aug 2019 00:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbfHPW32 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Aug 2019 18:29:28 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33257 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727788AbfHPW32 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Aug 2019 18:29:28 -0400
-Received: by mail-lj1-f195.google.com with SMTP id z17so6632394ljz.0
-        for <linux-spi@vger.kernel.org>; Fri, 16 Aug 2019 15:29:27 -0700 (PDT)
+        id S1727930AbfHPWd4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Aug 2019 18:33:56 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38707 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727847AbfHPWd4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Aug 2019 18:33:56 -0400
+Received: by mail-pl1-f193.google.com with SMTP id m12so2997733plt.5
+        for <linux-spi@vger.kernel.org>; Fri, 16 Aug 2019 15:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UcIQ8f7uiCgBRDYQZgvf9BdkFXQfiqi4Jnab8kvYofM=;
-        b=DDD0IAvtj0S3l02ltQU8EpNBnZXa/LPDRrS4ggAiitlDhWaKUUJDCnxA9iSvTLf+N9
-         JZWiD52Bcwo2O1maT+VX7N3rDWG8fv9AAnOB7/f/1WWnGc/YMMnbRqLO9qyo/efPOZS/
-         Vxx/aIR67dEPcfQpYYXixqhhM2QH0AZsUyogKTjNIBdasiZlwTXiIuexbtky0AZxHq1T
-         3xYzXlFudhl39/1Zhd13U4fFewgwdGqBUSj1kW090KxlTnaKJ+VLSIzpIwgSbpiVNCJI
-         TdAtYozC06bsrgLh4jUhwGe7flg7gHfJOcuhikauTII5mO35xtcuLhNYkNBH3dVA5HrL
-         rYFQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VVHqpfahoARpAJG52ZuuoX9QL0nU1VIcF3Aae9cHyHs=;
+        b=R866kRE0Sa8owq1xi3wWL7ytKHBpsBHh4JlmJv7gwsms4li1YAT19D8imu0NAthKPz
+         xo7+FJ8wNuT714cRin4HXm+nFumirDXKD2uUiNLdDE/ZfKRHD+XH/dKt19OqpNCraFgu
+         5rHjzrdBn/Aoiy6IonqE5/ORdEWlT+BWaCa2k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UcIQ8f7uiCgBRDYQZgvf9BdkFXQfiqi4Jnab8kvYofM=;
-        b=g7/n+lrCf+srm5Gg380ETbvWzbbeMP44zF4q/NL02Q5biIuRDf4OaTkZntQGFetzMf
-         sQBQYnhKzd+XI87U2G8kOfNDushADe4y2aIVQoI7XBq6qvoKH4RnX44mJjXPf8B8Puzz
-         B8dxt28/d+J/Kb8EJ0uqaWKsLumFDEBc/z+a2UAA9bmvmYFQFmGryBc8boL/9gbpad1d
-         LEvYuu9CAN0BC8bWON4XJoP3wf+1V+cxW6LfTU0C/eMYV1zAlQMiDsjBHA7wOo2FDibu
-         JTCkIs26A7dScm+BVbRhai/hW+3Go07JWWi2dGlMpfMBAnSG3TRDZ2cEeC1/RcsgVu7g
-         NePw==
-X-Gm-Message-State: APjAAAV7PhFK5tJ5QtWAH0KZ/7Mjfxpo0B+URnQ+Md/NagmAUEqtev4/
-        VurbGLcN0lkiN6sZjmQJigVOldJNgaaw2luZMh6Q4w==
-X-Google-Smtp-Source: APXvYqz/Um0VpLAdA90TWsPCo26kbKDPeGImTYJpGVkwKP0ZHIykSPf1mpDFbizhE48JPVnKM4VviobMERdB5LF39uY=
-X-Received: by 2002:a2e:80da:: with SMTP id r26mr4644548ljg.62.1565994566351;
- Fri, 16 Aug 2019 15:29:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VVHqpfahoARpAJG52ZuuoX9QL0nU1VIcF3Aae9cHyHs=;
+        b=jEZvhBsJg5tqUONf9I4hRiXZr5OTy6JPQkreDsgEsmnxWRuYEKWQ0NnmYIrduynyOA
+         Eg5CkZItJSVDAWSNfCQ4oCVKjL8RBHVdQsehu2Sra70jFLw0vpV6Hg+9IQ72xKJTxvYJ
+         yh6xbTnNAQcyaSFPxvVzcPKQ1JAPb7geuLG77KCn/Jpr+6I9MnT+uhD7tyt9MLY/KoYm
+         QVlSQGh+FuJpO0nmv1XDmJquTm/WHv894WWLsNFY99ldsE/La+JCzs0IZvGFosSERtc+
+         UuSrzb5F1WQiV63A930TOFuPY2FrZ00DtWb5vObdX1X04O31nH4kogLnK0XP4SakIZYt
+         CJpw==
+X-Gm-Message-State: APjAAAXVVvCusE+56jMPXmqz3KKPRSyDjaDoedHVag8j15GTqWpBnKoM
+        nyaYfD4UKvfoPVSll6VvN75J+IEAMQ==
+X-Google-Smtp-Source: APXvYqwncmolMEMBHR4zAYavy0ufv9ZKuLZ7fURlKVW/6pp2xpXcZco4NI8basuNflcOHLn/PpXYVA==
+X-Received: by 2002:a17:902:2ea2:: with SMTP id r31mr11605265plb.200.1565994835260;
+        Fri, 16 Aug 2019 15:33:55 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:c87a:31ae:9107:f63d])
+        by smtp.gmail.com with ESMTPSA id h17sm7185395pfo.24.2019.08.16.15.33.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 16 Aug 2019 15:33:54 -0700 (PDT)
+From:   Curtis Malainey <cujomalainey@chromium.org>
+To:     linux-spi@vger.kernel.org
+Cc:     Curtis Malainey <cujomalainey@chromium.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH] spi: pxa2xx: restore lpss state after resume
+Date:   Fri, 16 Aug 2019 15:33:33 -0700
+Message-Id: <20190816223333.144924-1-cujomalainey@chromium.org>
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
 MIME-Version: 1.0
-References: <20190816165000.32334-1-andreas@kemnade.info>
-In-Reply-To: <20190816165000.32334-1-andreas@kemnade.info>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 17 Aug 2019 00:29:14 +0200
-Message-ID: <CACRpkdaVHPFgw9g8D=zrYECO5Syk1kMT3VgL+wq2ebKQxg_FGA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: of: fix Freescale SPI CS quirk handling
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "H . Nikolaus Schaller" <hns@goldelico.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 6:50 PM Andreas Kemnade <andreas@kemnade.info> wrote:
+On broadwell machines it has been observed that the registers do not
+maintain their state through a suspend resume cycle. This is given that
+after a suspend resume cycle the SW CS bit is no longer set. This can
+break reads as CS will now be asserted between transmissions in messages
+and therefore reset the slave device unintentionally.
 
-> On the gta04 we see:
-> spi_gpio: probe of spi_lcd failed with error -2
->
-> The quirk introduced in
-> commit e3023bf80639 ("gpio: of: Handle the Freescale SPI CS")
-> can also be triggered by a temporary -EPROBE_DEFER and
-> so "convert" it to a hard -ENOENT.
->
-> Disable that conversion by checking for -EPROBE_DEFER.
->
-> Fixes: e3023bf80639 ("gpio: of: Handle the Freescale SPI CS")
-> Suggested-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+Signed-off-by: Curtis Malainey <cujomalainey@chromium.org>
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/spi/spi-pxa2xx.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Good catch! Patch applied for fixes.
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index fc7ab4b268802..3f313a9755640 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -1913,6 +1913,9 @@ static int pxa2xx_spi_resume(struct device *dev)
+ 			return status;
+ 	}
+ 
++	if (is_lpss_ssp(drv_data))
++		lpss_ssp_setup(drv_data);
++
+ 	/* Start the queue running */
+ 	return spi_controller_resume(drv_data->controller);
+ }
+-- 
+2.23.0.rc1.153.gdeed80330f-goog
 
-Yours,
-Linus Walleij
