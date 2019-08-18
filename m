@@ -2,98 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA11491025
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Aug 2019 12:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B54915FA
+	for <lists+linux-spi@lfdr.de>; Sun, 18 Aug 2019 11:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbfHQKo2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 17 Aug 2019 06:44:28 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:43855 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725784AbfHQKo1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 17 Aug 2019 06:44:27 -0400
-Received: by mail-ed1-f65.google.com with SMTP id h13so7198161edq.10;
-        Sat, 17 Aug 2019 03:44:26 -0700 (PDT)
+        id S1726097AbfHRJv2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 18 Aug 2019 05:51:28 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36376 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726089AbfHRJv2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 18 Aug 2019 05:51:28 -0400
+Received: by mail-pf1-f193.google.com with SMTP id w2so5435264pfi.3
+        for <linux-spi@vger.kernel.org>; Sun, 18 Aug 2019 02:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LF5Ug8gWxI6H2xb/E/SdUzqI4ChF9q52pqIFSSBLhXg=;
-        b=KHFXb6vGMrTrAkGENpnON204JGQkrNm9iV0L+8DWlvRAQfXs43VDGFqAAyufqLbSws
-         wSl6InxpK7Xrf8fkrnktcKm/HPeRhSI4PEfSaRwh99EI+37pwwUJ59OgeRmqu2kEUJuH
-         TUokXCWM2E8jwmIHoJvF0GAvXnu+O3u9VU2ot+TkyVFfLMNQuq9S8SYdFRjZ+cA+KYLc
-         O0X8MNOM+z4Bs7o9lEPoLmBlho/g2jd+NjDPDviGc9OM1ROkYeZlOTg0eUpytiPDJ++N
-         EIqy7sWdpIDsFiS71UzGsR8gG8iRNUVNF7PfXmMghs9Jtwg+lPOPskw4JdmpVcIRhLtG
-         NsNg==
+        d=ingics-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fPFwCZoR+0RfxABah+OM05It7kpLvC0foG3il7KX154=;
+        b=Zj7X6NrLuEUJqmZRqJ5jLUufow80BiJ4nT/gAmJ32eCfAj4hrkYoA7VfdC7+9hNWkA
+         gLGdnC8bU5FErbKMKjvLer9grsQYgcFpKMwvOO6qWsQpxgjvopot4QYNDZ8LXEViMWBs
+         foPKXvDqTTXOul+cohKI9Il5Vr0ExIk34v/Zn0+X/+7kP1AWh2QxkdIvttb5FW0XFqz9
+         1n6oyWkrT5yTvEIRqM9By42Ndmr9J311fw7auUizjKAuTunSIDSfkax2wpldoAM/LuQg
+         dhdeVqD0zJ+HZ13ndw/7bcpWcX4HfrWaOHsFOmYLF9h+9U3s8exeC7HvMnTcUOsbKS45
+         lC+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LF5Ug8gWxI6H2xb/E/SdUzqI4ChF9q52pqIFSSBLhXg=;
-        b=O+EDzUOT7vvq1Ek4pO2V8t5USqpzhXbpYU0jcnhYJYTwN5eGnBb08erl5LPv3CTzMu
-         +1i60Vcdren/QO8hxCWrsSx/m8S9zao1RnDiXicp/av9xT9GfCUJjUjNShvy+B1cxD+H
-         kGJwtqXWWGs8X6dqaG8zPo4ektAooB6l8k8F2AshM91501ZrYQUmCmriCN9L2miaojtt
-         oURGhm6JHI8+uakafjqpxfaEOWsvaLYn0FD+x5ic8Hc8UHvmkVP15WsfAAmaKeLx9snX
-         FyUdhukupmtXZV81bhSRgqa3F1Xy1ctUQU/EwJa33w8zEJRnfzjAz/F8JYj0A/qXaADd
-         XiCQ==
-X-Gm-Message-State: APjAAAXHsSIF0Hf/wSX2aPifTLTbd0RxLMIPS7ZeveY3J6maO6GdY3Ud
-        TUEB8jv/OGzIwDhOviI1zifW5rceUAmKTA4ixHQ=
-X-Google-Smtp-Source: APXvYqzgnxsnAlGut7FIsqp6mXVN9pu1wXZ0KuF/LjBQUuevWXxoyH72zSuVasgVdua8jDw3Xh+T9VRKHcoDJO6kAbE=
-X-Received: by 2002:a17:906:c445:: with SMTP id ck5mr4624139ejb.15.1566038666154;
- Sat, 17 Aug 2019 03:44:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190816004449.10100-1-olteanv@gmail.com> <20190816004449.10100-5-olteanv@gmail.com>
- <20190816122103.GE4039@sirena.co.uk> <CA+h21hoP3t6j2mTd2BLwizqbFap+9Z2vdxQ4ahHS3-7Vr31Lxw@mail.gmail.com>
- <20190816125942.GG4039@sirena.co.uk>
-In-Reply-To: <20190816125942.GG4039@sirena.co.uk>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Sat, 17 Aug 2019 13:44:14 +0300
-Message-ID: <CA+h21hr=fZ2XX3BF=YSCS86zfy9rGZDaji-VjFDVWhdcA8ppqw@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next 04/11] spi: spi-fsl-dspi: Cosmetic cleanup
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fPFwCZoR+0RfxABah+OM05It7kpLvC0foG3il7KX154=;
+        b=txpqaU7knbCyOafdCp7Qgsu5AYEQyJLCpx5i9g23Hq4d2Q3igN068tgNmfRWC/jF5H
+         ZbIHjB159ViCn9a3Lh7AeXhmlVmSk76sr87KFlw8KkCxMpUTKuoQ1gZreWNUPt+voyph
+         1WEmYv4LQPyKLR9aYXBR5pUvunI7fNgbjPRaPKpKb8PKVn5m4y+KNOC2vEnxMUfgD+Ro
+         F8myXDx5PKFGUvPiOax3k4pYUccpt1yjVdkbm5cgm2NPhwQ6pt+6uqpyPYJAwBKcMkFx
+         mB/m4pZJWmr/0GpUPHBKW0EUIAa/iDQvpZ03tNxMOFSKkdwuSlV9MIYMptumZySJlUEN
+         XN7g==
+X-Gm-Message-State: APjAAAWgl78r+cNCwIYgM7r4ZOMkLirjUTBDTLgRcBuXbZjE+GFKkm5y
+        ADvoAdykNp89vqZhQONQPErgxw==
+X-Google-Smtp-Source: APXvYqyCBVPN67Etp2d4Z4UMUzanossGvxZde/BprjcHVcrqXWrltSRca87GAVuKDet9K5vh+P84EQ==
+X-Received: by 2002:a63:4522:: with SMTP id s34mr15011368pga.362.1566121887112;
+        Sun, 18 Aug 2019 02:51:27 -0700 (PDT)
+Received: from localhost.localdomain (122-117-179-2.HINET-IP.hinet.net. [122.117.179.2])
+        by smtp.gmail.com with ESMTPSA id v145sm13203521pfc.31.2019.08.18.02.51.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Aug 2019 02:51:26 -0700 (PDT)
+From:   Axel Lin <axel.lin@ingics.com>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Hubert Feurstein <h.feurstein@gmail.com>, mlichvar@redhat.com,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Michal Simek <michal.simek@xilinx.com>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Axel Lin <axel.lin@ingics.com>
+Subject: [PATCH] spi: zynq-qspi: Fix missing spi_unregister_controller when unload module
+Date:   Sun, 18 Aug 2019 17:51:13 +0800
+Message-Id: <20190818095113.2397-1-axel.lin@ingics.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 16 Aug 2019 at 15:59, Mark Brown <broonie@kernel.org> wrote:
->
-> On Fri, Aug 16, 2019 at 03:37:46PM +0300, Vladimir Oltean wrote:
-> > On Fri, 16 Aug 2019 at 15:21, Mark Brown <broonie@kernel.org> wrote:
->
-> > > This is difficult to review since there's a bunch of largely unrelated
-> > > changes all munged into one patch.  It'd be better to split this up so
-> > > each change makes one kind of fix, and better to do this separately to
-> > > the rest of the series.  In particular having alignment changes along
-> > > with other changes hurts reviewability as it's less immediately clear
-> > > what's a like for liken substitution.
->
-> > Yes, the diff of this patch looks relatively bad. But I don't know if
-> > splitting it in more patches isn't in fact going to pollute the git
-> > history, so I can just as well drop it.
->
-> No problem with lots of patches in git history if you want to split it
-> up (and probably split it out of the series).  Like I say it's mainly
-> the alignment changes that it'd be better to pull out, the others really
-> should be but it's easier to cope there.
+Use devm_spi_register_controller to fix missing spi_unregister_controller
+when unload module.
 
-Yes, normally it would make sense to pull these out of the patchset.
-But basically all the future patches I plan to send to net-next for
-this release somehow depend on this dspi driver rework.
-My plan was that once the patchset reaches a stage where you accept
-it, to ask Dave M. to temporarily pull the series into net-next as
-well, so that the tree compiles and I can continue to work on other
-sja1105 stuff. He can then drop it during the merge window. From that
-perspective, even if the entire series takes more time to get accepted
-rather than individual bits, at least there would be 1 single patchset
-for Dave to pull.
-Let me know if there's a better way to handle this.
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ drivers/spi/spi-zynq-qspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
--Vladimir
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index 3155e2cabb1e..4a5326ccf65a 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -694,7 +694,7 @@ static int zynq_qspi_probe(struct platform_device *pdev)
+ 	ctlr->setup = zynq_qspi_setup_op;
+ 	ctlr->max_speed_hz = clk_get_rate(xqspi->refclk) / 2;
+ 	ctlr->dev.of_node = np;
+-	ret = spi_register_controller(ctlr);
++	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "spi_register_master failed\n");
+ 		goto clk_dis_all;
+-- 
+2.20.1
+
