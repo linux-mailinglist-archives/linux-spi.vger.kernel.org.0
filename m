@@ -2,85 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B54915FA
-	for <lists+linux-spi@lfdr.de>; Sun, 18 Aug 2019 11:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C0F91890
+	for <lists+linux-spi@lfdr.de>; Sun, 18 Aug 2019 20:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbfHRJv2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 18 Aug 2019 05:51:28 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36376 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726089AbfHRJv2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 18 Aug 2019 05:51:28 -0400
-Received: by mail-pf1-f193.google.com with SMTP id w2so5435264pfi.3
-        for <linux-spi@vger.kernel.org>; Sun, 18 Aug 2019 02:51:27 -0700 (PDT)
+        id S1726961AbfHRSBX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 18 Aug 2019 14:01:23 -0400
+Received: from mail-wm1-f49.google.com ([209.85.128.49]:37628 "EHLO
+        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726005AbfHRSBX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 18 Aug 2019 14:01:23 -0400
+Received: by mail-wm1-f49.google.com with SMTP id z23so1068980wmf.2
+        for <linux-spi@vger.kernel.org>; Sun, 18 Aug 2019 11:01:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ingics-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fPFwCZoR+0RfxABah+OM05It7kpLvC0foG3il7KX154=;
-        b=Zj7X6NrLuEUJqmZRqJ5jLUufow80BiJ4nT/gAmJ32eCfAj4hrkYoA7VfdC7+9hNWkA
-         gLGdnC8bU5FErbKMKjvLer9grsQYgcFpKMwvOO6qWsQpxgjvopot4QYNDZ8LXEViMWBs
-         foPKXvDqTTXOul+cohKI9Il5Vr0ExIk34v/Zn0+X/+7kP1AWh2QxkdIvttb5FW0XFqz9
-         1n6oyWkrT5yTvEIRqM9By42Ndmr9J311fw7auUizjKAuTunSIDSfkax2wpldoAM/LuQg
-         dhdeVqD0zJ+HZ13ndw/7bcpWcX4HfrWaOHsFOmYLF9h+9U3s8exeC7HvMnTcUOsbKS45
-         lC+A==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=u8XzTVZBfrqeJlvd3wmMlaRx+G+WVfGIT6cw2vvd5hE=;
+        b=dfWS8BzhbaW9DDbY2Y2M/VqBPU+ZIoI2BeHtkz1VWJRyrXeilydI2fJHpE2scCnL+6
+         cMSDgJ9rydiizMAEu0mq1ZjBdnsL2Pkx3Hy7zApdPBSbKGT8OvrEKYlO3H4sA4t4vMZ2
+         LAAp0mNm3XLVgHEATvi1h4RLcAOC6hqDO2RUivAU0INJj6x0OMuMl3GYA5PS9qnWhZDC
+         fWSkvf7YOILK4tM/Cg69zV5YleTsKuBPenEBW08kI36ebq5LmTjYzLoqHyWPP7AQGETp
+         UXciQStqSUP2HPX/AGXHuD8hhvtaBNOzj7S+qYyy4nRFgxT07o5PNXUJgdXSlEs9jduk
+         x51w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fPFwCZoR+0RfxABah+OM05It7kpLvC0foG3il7KX154=;
-        b=txpqaU7knbCyOafdCp7Qgsu5AYEQyJLCpx5i9g23Hq4d2Q3igN068tgNmfRWC/jF5H
-         ZbIHjB159ViCn9a3Lh7AeXhmlVmSk76sr87KFlw8KkCxMpUTKuoQ1gZreWNUPt+voyph
-         1WEmYv4LQPyKLR9aYXBR5pUvunI7fNgbjPRaPKpKb8PKVn5m4y+KNOC2vEnxMUfgD+Ro
-         F8myXDx5PKFGUvPiOax3k4pYUccpt1yjVdkbm5cgm2NPhwQ6pt+6uqpyPYJAwBKcMkFx
-         mB/m4pZJWmr/0GpUPHBKW0EUIAa/iDQvpZ03tNxMOFSKkdwuSlV9MIYMptumZySJlUEN
-         XN7g==
-X-Gm-Message-State: APjAAAWgl78r+cNCwIYgM7r4ZOMkLirjUTBDTLgRcBuXbZjE+GFKkm5y
-        ADvoAdykNp89vqZhQONQPErgxw==
-X-Google-Smtp-Source: APXvYqyCBVPN67Etp2d4Z4UMUzanossGvxZde/BprjcHVcrqXWrltSRca87GAVuKDet9K5vh+P84EQ==
-X-Received: by 2002:a63:4522:: with SMTP id s34mr15011368pga.362.1566121887112;
-        Sun, 18 Aug 2019 02:51:27 -0700 (PDT)
-Received: from localhost.localdomain (122-117-179-2.HINET-IP.hinet.net. [122.117.179.2])
-        by smtp.gmail.com with ESMTPSA id v145sm13203521pfc.31.2019.08.18.02.51.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=u8XzTVZBfrqeJlvd3wmMlaRx+G+WVfGIT6cw2vvd5hE=;
+        b=DncAtc8TDjQIog7S9g3+F/5ipsO1blbLogNeuRXkFJEJDeQqpUzaIDjujb0vnf7z4R
+         cJJTgOKQsAG21WNumNig5xeW5uavAhY92bUFucO9EQJbmp8mo1Ztc2s/tuK/GeDIuEKp
+         UiqxVW+V4H41GK6MTc1D7p0h75AxyJs3NQ9GEaOC0Vj2NU93zV8lFxtwYEne7AEzuhMq
+         QNXcFCw4xXSuAcz9Uk4jWIZurTRFErF7fPAQLcQMVhpRBTbhV+ngmgNoQlC21gtd8gCR
+         Fo97WzseEP+sMwPH7yUKrwMbVY+27pSgSEAYEfnVGMuaPs23E0wzFlR2yO4TOuid2kcc
+         zE9g==
+X-Gm-Message-State: APjAAAWKmHtIneDFjLPkNo1mr3gyykoIIdcnX7YVru7EpTORhEzMg451
+        2NgRH++cnUVkPgSmELoX1BM=
+X-Google-Smtp-Source: APXvYqwaegMAzP9236yUMAr/dwO/i2X6Ar9I0e0IoKjQd0H543PDA2hHdKCrnM3pTT30giOrt8e9mw==
+X-Received: by 2002:a1c:740b:: with SMTP id p11mr16966221wmc.6.1566151280946;
+        Sun, 18 Aug 2019 11:01:20 -0700 (PDT)
+Received: from localhost.localdomain ([188.25.91.80])
+        by smtp.gmail.com with ESMTPSA id x6sm9372246wmf.6.2019.08.18.11.01.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Aug 2019 02:51:26 -0700 (PDT)
-From:   Axel Lin <axel.lin@ingics.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Michal Simek <michal.simek@xilinx.com>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Axel Lin <axel.lin@ingics.com>
-Subject: [PATCH] spi: zynq-qspi: Fix missing spi_unregister_controller when unload module
-Date:   Sun, 18 Aug 2019 17:51:13 +0800
-Message-Id: <20190818095113.2397-1-axel.lin@ingics.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 18 Aug 2019 11:01:20 -0700 (PDT)
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>
+Subject: [PATCH spi for-5.4 00/14] NXP DSPI driver cleanup
+Date:   Sun, 18 Aug 2019 21:01:01 +0300
+Message-Id: <20190818180115.31114-1-olteanv@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use devm_spi_register_controller to fix missing spi_unregister_controller
-when unload module.
+This patchset was broken out of the "Deterministic SPI latency on NXP
+LS1021A-TSN board" series. It contains a few driver cleanups (mostly
+cosmetic).
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- drivers/spi/spi-zynq-qspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Vladimir Oltean (14):
+  spi: spi-fsl-dspi: Fix code alignment
+  spi: spi-fsl-dspi: Remove unused defines and includes
+  spi: spi-fsl-dspi: Use BIT() and GENMASK() macros
+  spi: spi-fsl-dspi: Demistify magic value in SPI_SR_CLEAR
+  spi: spi-fsl-dspi: Change usage pattern of SPI_MCR_* and SPI_CTAR_*
+    macros
+  spi: spi-fsl-dspi: Reduce indentation in dspi_release_dma()
+  spi: spi-fsl-dspi: Remove unused initialization of 'ret' in dspi_probe
+  spi: spi-fsl-dspi: Remove pointless assignment of master->transfer to
+    NULL
+  spi: spi-fsl-dspi: Replace legacy spi_master names with spi_controller
+  spi: spi-fsl-dspi: Use reverse Christmas tree declaration order
+  spi: spi-fsl-dspi: Fix typos
+  spi: spi-fsl-dspi: Move dspi_interrupt above dspi_transfer_one_message
+  spi: spi-fsl-dspi: Reduce indentation level in dspi_interrupt
+  spi: spi-fsl-dspi: Remove impossible to reach error check
 
-diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index 3155e2cabb1e..4a5326ccf65a 100644
---- a/drivers/spi/spi-zynq-qspi.c
-+++ b/drivers/spi/spi-zynq-qspi.c
-@@ -694,7 +694,7 @@ static int zynq_qspi_probe(struct platform_device *pdev)
- 	ctlr->setup = zynq_qspi_setup_op;
- 	ctlr->max_speed_hz = clk_get_rate(xqspi->refclk) / 2;
- 	ctlr->dev.of_node = np;
--	ret = spi_register_controller(ctlr);
-+	ret = devm_spi_register_controller(&pdev->dev, ctlr);
- 	if (ret) {
- 		dev_err(&pdev->dev, "spi_register_master failed\n");
- 		goto clk_dis_all;
+ drivers/spi/spi-fsl-dspi.c | 657 ++++++++++++++++++-------------------
+ 1 file changed, 314 insertions(+), 343 deletions(-)
+
 -- 
-2.20.1
+2.17.1
 
