@@ -2,111 +2,141 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6887894DD3
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2019 21:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDD394E87
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2019 21:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728343AbfHSTWx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Aug 2019 15:22:53 -0400
-Received: from mout.gmx.net ([212.227.15.15]:43601 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728298AbfHSTWx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 19 Aug 2019 15:22:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1566242547;
-        bh=N9MF6iOURGarUJuhWGuXwJyw9uV5DgUhoaU/znm23z8=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=InYxp/4yjITwJwpUomV+wUEi7TrM29FKnirF73SKOVa4L9oSvKqsqr91RkZYpBDhv
-         NMTEjmx4rPJOhu5bxAAQ8KXDIu+RdSs4ChSGVy6Fr6jegnkjPTcx8tFLnCpkiGhzyv
-         PmLDDNc7/B8/QFyTLsbo16DEpeMUHFxuG3do+WJU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.1.162] ([37.4.249.106]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MoO6M-1ib0eZ10um-00okv8; Mon, 19
- Aug 2019 21:22:27 +0200
-Subject: Re: [PATCH 00/10] Raspberry Pi SPI speedups
-To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-spi@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     Eric Anholt <eric@anholt.net>, Nuno Sa <nuno.sa@analog.com>,
-        Martin Sperl <kernel@martin.sperl.org>,
-        Noralf Tronnes <noralf@tronnes.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Florian Kauer <florian.kauer@koalo.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-References: <cover.1564825752.git.lukas@wunner.de>
-From:   Stefan Wahren <wahrenst@gmx.net>
-Message-ID: <1d29e6a3-0528-2b4b-b8d3-c4bb11934661@gmx.net>
-Date:   Mon, 19 Aug 2019 21:22:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728349AbfHSTnM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Aug 2019 15:43:12 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:38085 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727957AbfHSTnM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Aug 2019 15:43:12 -0400
+Received: by mail-qk1-f196.google.com with SMTP id u190so2470018qkh.5
+        for <linux-spi@vger.kernel.org>; Mon, 19 Aug 2019 12:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rlM5AzB9s5TeikF7kk6z1rI+2KL4m9xBg+VneDzDbn8=;
+        b=P6VJoA/a2BjGl5vmP4/jndOuZirS8Yy4veHIaA+17rdRD6KXC5M0yyAReRdXnJkusj
+         oUWqhQcPJxKhLVmQ+cuBThJL1vxXLku20zb0RPwkm5dXyz6rcryo9S508pMhzpvVjA3l
+         A3Z5WDmrTCLuWMOllcC9OD1+/o8TJBDeVrmP3JojyXqKLj0xrKCsUpr1S7q/TVapm4Lm
+         CyqRrHtozeNjGYKxaO9muEUnnb+LlnvxWAna0gwqzmmVXjegZv9SeChR8la+LAHvi6oV
+         9wXqOskTonAEZdTjBYTY5TLLWExzZkNqZJwWCqgWQ4w+s58KSAxq9oXieAJLLkCsfj1n
+         5pXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rlM5AzB9s5TeikF7kk6z1rI+2KL4m9xBg+VneDzDbn8=;
+        b=QA8JceqL3XvfHX0FRJMgOOiM2hYcWhUpzDPepM7qUWTCNL+obyjHWRvl6NoxgFQga3
+         bbkTQ+b6ssXff5xkSrmet2CW4+JaMmyHZsUMsO1gWxEondA+PZiJbxzKUM2i1mJZucIV
+         ZoZojg2IjpJjXwKqIne/XsVyXk61KWEpeTjGz23lGjASxYDB0OBHcNOh+wyCIx3dIKAo
+         9t24uWJFAvdtAZY5NRR+xfM2PJ5SPA5WQDb8ZUCJxwjR4PAdFhOk61kxG0h2tRHIuMzF
+         CGgpzEEddkqUJOis58j0c7AhyZzOZwti1eW0ch4yCF9U9+UtqBIrHZXnNGJqomJcNL71
+         n0NQ==
+X-Gm-Message-State: APjAAAVOFUQPJT4tDAFO1ZJw6Lrr1ZgB0ofdLcDyQv7kasrmrkayCqSd
+        Jltq6Gfn1jWYqZNGxOK2i1JCsjzuk7u1HRCZS3cUMw==
+X-Google-Smtp-Source: APXvYqyRyCND4xFLwaTN72YL3fCEWtw0G/uMrkMebnxPdSdnkd0Xux32IpzoNr7vZ4FpLPDvsdfKScHW8L5zUJbDUQk=
+X-Received: by 2002:a37:61c3:: with SMTP id v186mr21313755qkb.158.1566243791196;
+ Mon, 19 Aug 2019 12:43:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <cover.1564825752.git.lukas@wunner.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:6L5/aXuPy6H9hH8KU97jLb9pvpLYg9y1V3ADPQYxeWFDQMrybkM
- nmEYlnXPr+RZExKgrAvzFVJB9NlMANGygmcFVbTFae1Si3z7o+rPFYiJJn7O5w4qwNHTXGl
- 3eLlaReMuokPHw3XdMvnpAFXFMtf64jCkRR8MKgfoKWjs2y7UuZa1LqGgNb6Zez9bJwO18H
- QPbrJkQybER12HvG7ePcA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZX4s/3I+ioE=:uouJgb2xChRLPpJ3OMdFiN
- o0wWxRQDLvrzUQai7N7Ik7SP0LjzAcWUtwWiQRbIZvHNHVVhRoXN+9zpVoCnWT6LOKpbe+o4/
- yv84Gk7YEizUgsMh1czdJFAZD/UVKAIAYfKsZ2ISRDLQC+SRNASrZqfgDN0Fp4nh0ci+JZNS7
- nmS58+BXwGcby3E/LJ3ZYqMgRH/uyI2QgiB0bxySB69F5eaUEa76qMSF3XPbjpr8X4UKIZQPS
- g9g/DYDt4i6bcq2+qHJgwKp6OjQgUBFjOu2N+4yNo34KILLXYOdk794ZmzGsMTMO9IIWowEtD
- llcJW0ANmmKKhRmCgWjpuCyopfA0T471/m/kczHPcqMfq/NUoUI97sH0Qu73WJxfX1QK3Scew
- +6Xmg9qq6rHkNUIkRw3UZXAK/jRRPdZq5cxA2TpJ6cRXstQYhxAL9xK5/ZvhAnbI3uVYLofhY
- IjN45v0fl9K74EsR8FLkyFS8FJcwFUKbG9fpM6tVboQ9wHkMqMxAFD6gngvosy//FhZoxj70v
- yA7inCKCWiy7usXMIM8e4rJh1j1msXkqUYBZnzMsm9dURrxgxuV9A6aXipkrr2Mf17y2y/2Vl
- SVVvnYU7+JuRmTyHZ6JGr9afPI8AUg+f5Tv0fNiuLVl8IT8AU3oI+1wMGI4uicJDqBiwuUtxs
- oWGPfcVwE5w99XiXyCWCZKsGKM1yQBkk/Uuuyd7WDVmBpQ0k8bD8zF2F3HYgxxoVpHUusvKLu
- C1L1gEXAHQFSwCzfutXQ3IPu+Z/5BVo5iG4MCkv+IljA6tYR822880EZb/fugjdo0NANTHEKk
- bS187+fjaWEcUuBMhK53wxNRKN1g23cu5zZAAPb4/sY+X1ku4u3Y1SV/Yto7R4EBzopybIqgb
- zAsRzGBm4gnGSAASr89QDfbZRHlGYOUn7mHQ++7nWzClC6tS2pi0IwAv55oGUhvjvcEtGTWmJ
- ZhpiAtREkQRCZEdFkzckx/UxFyawELxi0x/gGtFuT2xO4iTkGii6VTJ+B1G0UDDFdy9LF/S0k
- ca5Gea13MVxAznIlaxr4E3VO/cIjT+358X0xQs/HSCA0ZLZ08rCbwnzK1d4N/xd6ecD9xcj/+
- MHYhmCpRwoPFQA903PiZUgUe7jLXDRkC79FzaLRQ1Py3VBujK5ALJ0Iq0cQvQ2E3d0m2C2pEV
- BStbo=
+References: <20190816223333.144924-1-cujomalainey@chromium.org> <b9c7bb4f-e115-670a-99df-af37e7e299b0@linux.intel.com>
+In-Reply-To: <b9c7bb4f-e115-670a-99df-af37e7e299b0@linux.intel.com>
+From:   Curtis Malainey <cujomalainey@google.com>
+Date:   Mon, 19 Aug 2019 12:43:00 -0700
+Message-ID: <CAOReqxhr+Pdvnw6jUY4A9qCUFdhX6ksMCM8U-2SPrJ1H9Bo-RQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: pxa2xx: restore lpss state after resume
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Curtis Malainey <cujomalainey@chromium.org>,
+        linux-spi@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 03.08.19 um 12:10 schrieb Lukas Wunner:
-> So far the BCM2835 SPI driver cannot cope with TX-only and RX-only
-> transfers (rx_buf or tx_buf is NULL) when using DMA:  It relies on
-> the SPI core to convert them to full-duplex transfers by allocating
-> and DMA-mapping a dummy rx_buf or tx_buf.  This costs performance.
+On Sun, Aug 18, 2019 at 11:46 PM Jarkko Nikula
+<jarkko.nikula@linux.intel.com> wrote:
 >
-> Resolve by pre-allocating reusable DMA descriptors which cyclically
-> clear the RX FIFO (for TX-only transfers) or zero-fill the TX FIFO
-> (for RX-only transfers).  Patch [07/10] provides some numbers for
-> the achieved latency improvement and CPU time reduction with an
-> SPI Ethernet controller.  SPI displays should see a similar speedup.
-> I've also made an effort to reduce peripheral and memory bus accesses.
+> On 8/17/19 1:33 AM, Curtis Malainey wrote:
+> > On broadwell machines it has been observed that the registers do not
+> > maintain their state through a suspend resume cycle. This is given that
+> > after a suspend resume cycle the SW CS bit is no longer set. This can
+> > break reads as CS will now be asserted between transmissions in messages
+> > and therefore reset the slave device unintentionally.
+> >
+> > Signed-off-by: Curtis Malainey <cujomalainey@chromium.org>
+> > Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> > ---
+> >   drivers/spi/spi-pxa2xx.c | 3 +++
+> >   1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+> > index fc7ab4b268802..3f313a9755640 100644
+> > --- a/drivers/spi/spi-pxa2xx.c
+> > +++ b/drivers/spi/spi-pxa2xx.c
+> > @@ -1913,6 +1913,9 @@ static int pxa2xx_spi_resume(struct device *dev)
+> >                       return status;
+> >       }
+> >
+> > +     if (is_lpss_ssp(drv_data))
+> > +             lpss_ssp_setup(drv_data);
+> > +
+> >       /* Start the queue running */
+> >       return spi_controller_resume(drv_data->controller);
+> >   }
 >
-> The series is meant to be applied on top of broonie/for-next.
-> It can be applied to Linus' current tree if commit
-> 8d8bef503658 ("spi: bcm2835: Fix 3-wire mode if DMA is enabled")
-> is cherry-picked from broonie's repo beforehand.
+> So there is actually a regression caused by my b53548f9d9e4 ("spi:
+> pxa2xx: Remove LPSS private register restoring during resume").
 >
-> Please review and test.  Thank you.
+> Which suggests to me there may be need to save/restore other private
+> registers too.
 >
-> Lukas Wunner (10):
->   dmaengine: bcm2835: Allow reusable descriptors
->   dmaengine: bcm2835: Allow cyclic transactions without interrupt
->   spi: Guarantee cacheline alignment of driver-private data
->   spi: bcm2835: Drop dma_pending flag
->   spi: bcm2835: Work around DONE bit erratum
->   spi: bcm2835: Cache CS register value for ->prepare_message()
->   spi: bcm2835: Speed up TX-only DMA transfers by clearing RX FIFO
->   dmaengine: bcm2835: Document struct bcm2835_dmadev
->   dmaengine: bcm2835: Avoid accessing memory when copying zeroes
->   spi: bcm2835: Speed up RX-only DMA transfers by zero-filling TX FIFO
+> Do you Andy or Heikki remember why this LPSS context save/restore wasn't
+> implemented for Lynxpoint? I was testing my above commit on a Haswell
+> based machine which didn't need it but apparently Broadwell needs.
 >
-Acked-by: Stefan Wahren <wahrenst@gmx.net>
+> Curtis: would a diff below fix the issue you are seeing? I added context
+> save/restore for I2C and UART controllers too.
+>
 
-Sorry, for this late reply
+I tried that and it worked with SPI for me. It preserved the CS SW bit. :)
+Thanks for the quick response. I'll add a tested-by if you send a patch.
 
+> diff --git a/drivers/acpi/acpi_lpss.c b/drivers/acpi/acpi_lpss.c
+> index d696f165a50e..60bbc5090abe 100644
+> --- a/drivers/acpi/acpi_lpss.c
+> +++ b/drivers/acpi/acpi_lpss.c
+> @@ -219,12 +219,13 @@ static void bsw_pwm_setup(struct lpss_private_data
+> *pdata)
+>   }
+>
+>   static const struct lpss_device_desc lpt_dev_desc = {
+> -       .flags = LPSS_CLK | LPSS_CLK_GATE | LPSS_CLK_DIVIDER | LPSS_LTR,
+> +       .flags = LPSS_CLK | LPSS_CLK_GATE | LPSS_CLK_DIVIDER | LPSS_LTR
+> +                       | LPSS_SAVE_CTX,
+>         .prv_offset = 0x800,
+>   };
+>
+>   static const struct lpss_device_desc lpt_i2c_dev_desc = {
+> -       .flags = LPSS_CLK | LPSS_CLK_GATE | LPSS_LTR,
+> +       .flags = LPSS_CLK | LPSS_CLK_GATE | LPSS_LTR | LPSS_SAVE_CTX,
+>         .prv_offset = 0x800,
+>   };
+>
+> @@ -236,7 +237,8 @@ static struct property_entry uart_properties[] = {
+>   };
+>
+>   static const struct lpss_device_desc lpt_uart_dev_desc = {
+> -       .flags = LPSS_CLK | LPSS_CLK_GATE | LPSS_CLK_DIVIDER | LPSS_LTR,
+> +       .flags = LPSS_CLK | LPSS_CLK_GATE | LPSS_CLK_DIVIDER | LPSS_LTR
+> +                       | LPSS_SAVE_CTX,
+>         .clk_con_id = "baudclk",
+>         .prv_offset = 0x800,
+>         .setup = lpss_uart_setup,
