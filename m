@@ -2,34 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A98F495FA0
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 15:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBF395FA4
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 15:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729970AbfHTNOb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S1729981AbfHTNOb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 20 Aug 2019 09:14:31 -0400
-Received: from mail-wr1-f98.google.com ([209.85.221.98]:33177 "EHLO
-        mail-wr1-f98.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729978AbfHTNOa (ORCPT
+Received: from mail-ed1-f99.google.com ([209.85.208.99]:33586 "EHLO
+        mail-ed1-f99.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729977AbfHTNOa (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 09:14:30 -0400
-Received: by mail-wr1-f98.google.com with SMTP id u16so12363252wrr.0
+Received: by mail-ed1-f99.google.com with SMTP id s15so6282321edx.0
         for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 06:14:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:message-id:date;
-        bh=tghGK/IpypiS95FEbFLX9SDLqBUwGKtyO3Shfplc7JM=;
-        b=AeJpurPDy9BhpWvKvpjcYZxbAGVEoJcg/MbDNmmH1s2sFffGZf8C+VVEpd0kLfj5Zn
-         QLsL5nfcpM5IJ/J7f2bX7iNOWIqYZWB9OOy6ou/8Hv5NNmDoT0MN7G/ZvaBDg4oX7xIW
-         8K+tQd5ABTo9K1GP0hpGuRfGiw4IQ07mi40EmMxLdZAROaZjovB4XBtTuctkWXLyuJx/
-         LeR65rAh9QtiloRyOmtIWWqiGRC5NYnawfn6qRU6/ns1CEBxARPXNz8cukKCfyTOVJEY
-         vo1LfF3N8DKTW+4RetpNZNScH3CfVq/JAVVwCBq8X2YyJMGMyQQ/+IENz23p+BPz9WsT
-         +Mfw==
-X-Gm-Message-State: APjAAAWhDOR6OgJyMOX/hWr/M+/rneVVIJS9bn3SQGxZLcxk4m0/s8ah
-        OySIGCyezDaMjMaw++R57GBwf4VTYLNaIYJcq/3lVQN9tCmS/0Oqie90YF762z8InA==
-X-Google-Smtp-Source: APXvYqw3pE7zcjTKlIyQft0ik3raqTrTVYVcQRJtwytSJdjm71YXvLlwm0l+rz4t3AmUhY3YJu7teSKdOibW
-X-Received: by 2002:adf:fa42:: with SMTP id y2mr34557284wrr.170.1566306868408;
+        bh=qIM7DP1hff4WJ5PVmq5akQhWbafrN7JarSuD6v/Lhnk=;
+        b=gPrcKQX8rhXGuFOL6DnVuNd7hs6MDh40LUiVmrmsd/JY1tSBx8Zs21fgE0NvqUQYxX
+         b/ZhtB1VbHxPACGG7VAetdfrmfAT+HuVbROm+u9p+h8C8smlxpnHPa/OFTt6wvr1RFur
+         tHdUBXgtiROxy1N4V8EbjEkascGz0VS0++kBu17skB49uXES8upTcEgn1paflpclsH6z
+         htAoF9DrO8j/TVoXAXm5aEjP23BJoETT57EMLNJVnDe0Luho+gUEupDjaBV/ID/ZjEvj
+         5ERcd8gDh3/W4USqcXH/EXvnaA6xOmkXKIS0wo/G93GFamx7bJsuEIHWkyPAWR7PurS2
+         c5iA==
+X-Gm-Message-State: APjAAAUWUNZ0Eh4jMHcp8K1q0NsLOIVt9HPfnJPfb/T4Z43E/79ja8cm
+        3x+0ggcwjLWGitJGBEeA8z1uv+KhqG8EKp1Ap8z/t8pTusvHSBUqrJ9KI1rwfssovg==
+X-Google-Smtp-Source: APXvYqxab0LOPw2P0VewWMjkGx7suZwcpKwVpCJF4rTZTrNM6vcPHadvPx2F5J4CjFyEIXQArllHHpldLf0K
+X-Received: by 2002:a50:fd82:: with SMTP id o2mr31240167edt.80.1566306868312;
         Tue, 20 Aug 2019 06:14:28 -0700 (PDT)
 Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
-        by smtp-relay.gmail.com with ESMTPS id i17sm320262wrn.5.2019.08.20.06.14.28
+        by smtp-relay.gmail.com with ESMTPS id f12sm86360ejf.39.2019.08.20.06.14.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 20 Aug 2019 06:14:28 -0700 (PDT)
 X-Relaying-Domain: sirena.org.uk
@@ -37,17 +37,17 @@ Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i03y0-0002MA-3V; Tue, 20 Aug 2019 13:14:28 +0000
+        id 1i03xz-0002M6-Tu; Tue, 20 Aug 2019 13:14:28 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 995D42742ABD; Tue, 20 Aug 2019 14:14:27 +0100 (BST)
+        id 6C6E2274314F; Tue, 20 Aug 2019 14:14:27 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spi-fsl-dspi: Demistify magic value in SPI_SR_CLEAR" to the spi tree
-In-Reply-To: <20190818180115.31114-5-olteanv@gmail.com>
+Subject: Applied "spi: spi-fsl-dspi: Change usage pattern of SPI_MCR_* and SPI_CTAR_* macros" to the spi tree
+In-Reply-To: <20190818180115.31114-6-olteanv@gmail.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20190820131427.995D42742ABD@ypsilon.sirena.org.uk>
+Message-Id: <20190820131427.6C6E2274314F@ypsilon.sirena.org.uk>
 Date:   Tue, 20 Aug 2019 14:14:27 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -56,7 +56,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-fsl-dspi: Demistify magic value in SPI_SR_CLEAR
+   spi: spi-fsl-dspi: Change usage pattern of SPI_MCR_* and SPI_CTAR_* macros
 
 has been applied to the spi tree at
 
@@ -81,47 +81,96 @@ to this mail.
 Thanks,
 Mark
 
-From 9e6f784e66cb865de25a1f5fd1706a45d9e298a7 Mon Sep 17 00:00:00 2001
+From 06d5dd29976fb49f3236b1e66142680619ea259d Mon Sep 17 00:00:00 2001
 From: Vladimir Oltean <olteanv@gmail.com>
-Date: Sun, 18 Aug 2019 21:01:05 +0300
-Subject: [PATCH] spi: spi-fsl-dspi: Demistify magic value in SPI_SR_CLEAR
+Date: Sun, 18 Aug 2019 21:01:06 +0300
+Subject: [PATCH] spi: spi-fsl-dspi: Change usage pattern of SPI_MCR_* and
+ SPI_CTAR_* macros
 
-This patch adds the field definitions for the SPI_SR register. The SPI
-status register is write-1-to-clear and this value is written at init
-time.
+These are macros that accept 0 or 1 as argument (a boolean value). Their
+use encourages the abuse of complex ternary operations inside their
+argument list, which detracts from the code readability. Replace these
+with simple if-else statements.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20190818180115.31114-5-olteanv@gmail.com
+Link: https://lore.kernel.org/r/20190818180115.31114-6-olteanv@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-dspi.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ drivers/spi/spi-fsl-dspi.c | 37 +++++++++++++++++++++----------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 179a9818619f..923ee414d1ae 100644
+index 923ee414d1ae..b0c546841260 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -57,7 +57,19 @@
- #define SPI_SR				0x2c
- #define SPI_SR_TCFQF			BIT(31)
- #define SPI_SR_EOQF			BIT(28)
--#define SPI_SR_CLEAR			0x9aaf0000
-+#define SPI_SR_TFUF			BIT(27)
-+#define SPI_SR_TFFF			BIT(25)
-+#define SPI_SR_CMDTCF			BIT(23)
-+#define SPI_SR_SPEF			BIT(21)
-+#define SPI_SR_RFOF			BIT(19)
-+#define SPI_SR_TFIWF			BIT(18)
-+#define SPI_SR_RFDF			BIT(17)
-+#define SPI_SR_CMDFFF			BIT(16)
-+#define SPI_SR_CLEAR			(SPI_SR_TCFQF | SPI_SR_EOQF | \
-+					SPI_SR_TFUF | SPI_SR_TFFF | \
-+					SPI_SR_CMDTCF | SPI_SR_SPEF | \
-+					SPI_SR_RFOF | SPI_SR_TFIWF | \
-+					SPI_SR_RFDF | SPI_SR_CMDFFF)
+@@ -39,9 +39,9 @@
  
- #define SPI_RSER_TFFFE			BIT(25)
- #define SPI_RSER_TFFFD			BIT(24)
+ #define SPI_CTAR(x)			(0x0c + (((x) & GENMASK(1, 0)) * 4))
+ #define SPI_CTAR_FMSZ(x)		(((x) << 27) & GENMASK(30, 27))
+-#define SPI_CTAR_CPOL(x)		(((x) << 26) & GENMASK(26, 26))
+-#define SPI_CTAR_CPHA(x)		(((x) << 25) & GENMASK(25, 25))
+-#define SPI_CTAR_LSBFE(x)		(((x) << 24) & GENMASK(24, 24))
++#define SPI_CTAR_CPOL			BIT(26)
++#define SPI_CTAR_CPHA			BIT(25)
++#define SPI_CTAR_LSBFE			BIT(24)
+ #define SPI_CTAR_PCSSCK(x)		(((x) << 22) & GENMASK(23, 22))
+ #define SPI_CTAR_PASC(x)		(((x) << 20) & GENMASK(21, 20))
+ #define SPI_CTAR_PDT(x)			(((x) << 18) & GENMASK(19, 18))
+@@ -587,7 +587,7 @@ static void dspi_tcfq_write(struct fsl_dspi *dspi)
+ 		 */
+ 		u32 data = dspi_pop_tx(dspi);
+ 
+-		if (dspi->cur_chip->ctar_val & SPI_CTAR_LSBFE(1)) {
++		if (dspi->cur_chip->ctar_val & SPI_CTAR_LSBFE) {
+ 			/* LSB */
+ 			tx_fifo_write(dspi, data & 0xFFFF);
+ 			tx_fifo_write(dspi, data >> 16);
+@@ -791,18 +791,22 @@ static int dspi_setup(struct spi_device *spi)
+ 	/* Set After SCK delay scale values */
+ 	ns_delay_scale(&pasc, &asc, sck_cs_delay, clkrate);
+ 
+-	chip->ctar_val = SPI_CTAR_CPOL(spi->mode & SPI_CPOL ? 1 : 0)
+-		| SPI_CTAR_CPHA(spi->mode & SPI_CPHA ? 1 : 0);
++	chip->ctar_val = 0;
++	if (spi->mode & SPI_CPOL)
++		chip->ctar_val |= SPI_CTAR_CPOL;
++	if (spi->mode & SPI_CPHA)
++		chip->ctar_val |= SPI_CTAR_CPHA;
+ 
+ 	if (!spi_controller_is_slave(dspi->master)) {
+-		chip->ctar_val |= SPI_CTAR_LSBFE(spi->mode &
+-						 SPI_LSB_FIRST ? 1 : 0)
+-			| SPI_CTAR_PCSSCK(pcssck)
+-			| SPI_CTAR_CSSCK(cssck)
+-			| SPI_CTAR_PASC(pasc)
+-			| SPI_CTAR_ASC(asc)
+-			| SPI_CTAR_PBR(pbr)
+-			| SPI_CTAR_BR(br);
++		chip->ctar_val |= SPI_CTAR_PCSSCK(pcssck) |
++				  SPI_CTAR_CSSCK(cssck) |
++				  SPI_CTAR_PASC(pasc) |
++				  SPI_CTAR_ASC(asc) |
++				  SPI_CTAR_PBR(pbr) |
++				  SPI_CTAR_BR(br);
++
++		if (spi->mode & SPI_LSB_FIRST)
++			chip->ctar_val |= SPI_CTAR_LSBFE;
+ 	}
+ 
+ 	spi_set_ctldata(spi, chip);
+@@ -968,9 +972,10 @@ static const struct regmap_config dspi_xspi_regmap_config[] = {
+ 
+ static void dspi_init(struct fsl_dspi *dspi)
+ {
+-	unsigned int mcr = SPI_MCR_PCSIS |
+-		(dspi->devtype_data->xspi_mode ? SPI_MCR_XSPI : 0);
++	unsigned int mcr = SPI_MCR_PCSIS;
+ 
++	if (dspi->devtype_data->xspi_mode)
++		mcr |= SPI_MCR_XSPI;
+ 	if (!spi_controller_is_slave(dspi->master))
+ 		mcr |= SPI_MCR_MASTER;
+ 
 -- 
 2.20.1
 
