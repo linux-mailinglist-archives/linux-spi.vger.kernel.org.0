@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B5895FA2
+	by mail.lfdr.de (Postfix) with ESMTP id 2474795FA1
 	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 15:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729137AbfHTNOb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S1729978AbfHTNOb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 20 Aug 2019 09:14:31 -0400
-Received: from mail-ed1-f97.google.com ([209.85.208.97]:40528 "EHLO
-        mail-ed1-f97.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729984AbfHTNOa (ORCPT
+Received: from mail-wm1-f98.google.com ([209.85.128.98]:33078 "EHLO
+        mail-wm1-f98.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729981AbfHTNOa (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 09:14:30 -0400
-Received: by mail-ed1-f97.google.com with SMTP id h8so6281005edv.7
+Received: by mail-wm1-f98.google.com with SMTP id p77so2392410wme.0
         for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 06:14:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:message-id:date;
-        bh=ddlRjYGFuPCRLL+HMlf2aoDenNuiOTzQL3nZr4Qfrhs=;
-        b=gCU+ZKtMDcyC2+pK1KMgf+jSxFI5x2I0+QkyocuMKnh2iobyENhUKp+HEFRxFAtGwI
-         HmyO4fVRaa2CPwQnRu7uwRn2gPnQnVd1QVTUqiGdX31qXuh8zS0AY12VhA6JEybYok2U
-         QUkrPqPyFbZ48uy1oQRrVABPNKpAzMwDms+zvbansTKhFno9MXH+Nc3wvP5GNio+67bx
-         /J6+VtQVTc3DufRbgJ9p7Xve1MROgArviVMoIzkw2eJUQiZ3Os7pSTKnqKdSlLIowpvO
-         l10WFm96PRxPsz7gT8oAEMZGYBJg9N24vlrWBPE4CcYvH0GJE1k2Pfp+t5ZVHELLwkd1
-         F8LA==
-X-Gm-Message-State: APjAAAXnKg1a5+TrlneaNxJUxHplxpwKPIMXfNDm+1SVUtdLtqjYNfGN
-        zf6Hr0+suhHZSoDT/x3GzWzpUCJKjAJK666EO1rnHD2b7Fud39wowQoC+45ceprLNg==
-X-Google-Smtp-Source: APXvYqyu7PTuS5YVUZ1szpWjWqSgBpjBcDLzHr+NOCrXqqgD3DBu5BhOWspQv/0OeTB8SmWRHgdX0wXl+O02
-X-Received: by 2002:a17:906:bcf5:: with SMTP id op21mr26065164ejb.190.1566306868907;
+        bh=knOH35nIeGCDLJtaM+9WDyxWbBA4WGHvUCPF2svlFWA=;
+        b=Ve0NYrQSOWgqKbZY7yN2hI10Lnny3WepvldduHGOi1M/xvHCaYaay+kp8jhiRNwKri
+         I2e/nHbL2wV7WH4WS/BvEtCc2KBKSZAz/0sxrOoju84139cvhX1apkVMFagcHX0KMiRi
+         4n6Pl0c5Z6AnVwO7hsx6Cp6X66x24bIqk+e/0JQtMG2VcA/L/YcFGNZQp1RuWhQTzS5d
+         I/8u/fluIf4aDVrTlX5T59os5aXYZ5DTCSLako69dSGbmWiasukba8HPo4+f+VaH+vol
+         aSwJb4fdQ1cju6NUvfqGxS+Yx+RcMKvqNWdJkbOvUkl4Fdw6tD+J4kkmcdV+X66ir4fB
+         oPmA==
+X-Gm-Message-State: APjAAAWz5rKbN+b0RXbRKFtW1ruP2Wc69J76D3+0Y/0l/Ee4SsWn9Vzc
+        wBF3Sd1TsrK1v3vbe1njEzAE+TF8XNUhoGC9tvojlhTjKIuqpJyZ9EKCzlOCR1VI2Q==
+X-Google-Smtp-Source: APXvYqyzIWDGlT8hN8qeEXlNv95ioCA3Qki1HYKsfysczwq6jrqF3KTANFc7iOVd6cbdgm3jJaXVTt1PjDK1
+X-Received: by 2002:a1c:6c0d:: with SMTP id h13mr23922634wmc.74.1566306868662;
         Tue, 20 Aug 2019 06:14:28 -0700 (PDT)
 Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
-        by smtp-relay.gmail.com with ESMTPS id me6sm117662ejb.79.2019.08.20.06.14.28
+        by smtp-relay.gmail.com with ESMTPS id s15sm295757wru.34.2019.08.20.06.14.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 20 Aug 2019 06:14:28 -0700 (PDT)
 X-Relaying-Domain: sirena.org.uk
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i03y0-0002MF-Kx; Tue, 20 Aug 2019 13:14:28 +0000
+        id 1i03y0-0002MB-AD; Tue, 20 Aug 2019 13:14:28 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 0332C2743150; Tue, 20 Aug 2019 14:14:27 +0100 (BST)
+        id C64E7274314C; Tue, 20 Aug 2019 14:14:27 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spi-fsl-dspi: Remove unused defines and includes" to the spi tree
-In-Reply-To: <20190818180115.31114-3-olteanv@gmail.com>
+Subject: Applied "spi: spi-fsl-dspi: Use BIT() and GENMASK() macros" to the spi tree
+In-Reply-To: <20190818180115.31114-4-olteanv@gmail.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20190820131428.0332C2743150@ypsilon.sirena.org.uk>
+Message-Id: <20190820131427.C64E7274314C@ypsilon.sirena.org.uk>
 Date:   Tue, 20 Aug 2019 14:14:27 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -56,7 +56,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-fsl-dspi: Remove unused defines and includes
+   spi: spi-fsl-dspi: Use BIT() and GENMASK() macros
 
 has been applied to the spi tree at
 
@@ -81,93 +81,114 @@ to this mail.
 Thanks,
 Mark
 
-From 5782a17fe528ce596eb5de66777a73b16f4f1549 Mon Sep 17 00:00:00 2001
+From b2655196cf9ce783d0b6cfec1f47ac4ecf3dcf95 Mon Sep 17 00:00:00 2001
 From: Vladimir Oltean <olteanv@gmail.com>
-Date: Sun, 18 Aug 2019 21:01:03 +0300
-Subject: [PATCH] spi: spi-fsl-dspi: Remove unused defines and includes
+Date: Sun, 18 Aug 2019 21:01:04 +0300
+Subject: [PATCH] spi: spi-fsl-dspi: Use BIT() and GENMASK() macros
 
-This is a cosmetic patch.
+Switch to using more idiomatic register field definitions, which makes
+it easier to look them up in the datasheet. Cosmetic patch.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20190818180115.31114-3-olteanv@gmail.com
+Link: https://lore.kernel.org/r/20190818180115.31114-4-olteanv@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-dspi.c | 26 --------------------------
- 1 file changed, 26 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 58 +++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 0adfff9cedd1..358b381839fb 100644
+index 358b381839fb..179a9818619f 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -9,24 +9,14 @@
- #include <linux/delay.h>
- #include <linux/dmaengine.h>
- #include <linux/dma-mapping.h>
--#include <linux/err.h>
--#include <linux/errno.h>
- #include <linux/interrupt.h>
--#include <linux/io.h>
- #include <linux/kernel.h>
--#include <linux/math64.h>
- #include <linux/module.h>
--#include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/pinctrl/consumer.h>
--#include <linux/platform_device.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
--#include <linux/sched.h>
- #include <linux/spi/spi.h>
- #include <linux/spi/spi-fsl-dspi.h>
--#include <linux/spi/spi_bitbang.h>
--#include <linux/time.h>
+@@ -28,35 +28,35 @@
+ #define DSPI_DMA_BUFSIZE		(DSPI_FIFO_SIZE * 1024)
  
- #define DRIVER_NAME			"fsl-dspi"
+ #define SPI_MCR				0x00
+-#define SPI_MCR_MASTER			(1 << 31)
++#define SPI_MCR_MASTER			BIT(31)
+ #define SPI_MCR_PCSIS			(0x3F << 16)
+-#define SPI_MCR_CLR_TXF			(1 << 11)
+-#define SPI_MCR_CLR_RXF			(1 << 10)
+-#define SPI_MCR_XSPI			(1 << 3)
++#define SPI_MCR_CLR_TXF			BIT(11)
++#define SPI_MCR_CLR_RXF			BIT(10)
++#define SPI_MCR_XSPI			BIT(3)
  
-@@ -80,21 +70,14 @@
+ #define SPI_TCR				0x08
+-#define SPI_TCR_GET_TCNT(x)		(((x) & 0xffff0000) >> 16)
+-
+-#define SPI_CTAR(x)			(0x0c + (((x) & 0x3) * 4))
+-#define SPI_CTAR_FMSZ(x)		(((x) & 0x0000000f) << 27)
+-#define SPI_CTAR_CPOL(x)		((x) << 26)
+-#define SPI_CTAR_CPHA(x)		((x) << 25)
+-#define SPI_CTAR_LSBFE(x)		((x) << 24)
+-#define SPI_CTAR_PCSSCK(x)		(((x) & 0x00000003) << 22)
+-#define SPI_CTAR_PASC(x)		(((x) & 0x00000003) << 20)
+-#define SPI_CTAR_PDT(x)			(((x) & 0x00000003) << 18)
+-#define SPI_CTAR_PBR(x)			(((x) & 0x00000003) << 16)
+-#define SPI_CTAR_CSSCK(x)		(((x) & 0x0000000f) << 12)
+-#define SPI_CTAR_ASC(x)			(((x) & 0x0000000f) << 8)
+-#define SPI_CTAR_DT(x)			(((x) & 0x0000000f) << 4)
+-#define SPI_CTAR_BR(x)			((x) & 0x0000000f)
++#define SPI_TCR_GET_TCNT(x)		(((x) & GENMASK(31, 16)) >> 16)
++
++#define SPI_CTAR(x)			(0x0c + (((x) & GENMASK(1, 0)) * 4))
++#define SPI_CTAR_FMSZ(x)		(((x) << 27) & GENMASK(30, 27))
++#define SPI_CTAR_CPOL(x)		(((x) << 26) & GENMASK(26, 26))
++#define SPI_CTAR_CPHA(x)		(((x) << 25) & GENMASK(25, 25))
++#define SPI_CTAR_LSBFE(x)		(((x) << 24) & GENMASK(24, 24))
++#define SPI_CTAR_PCSSCK(x)		(((x) << 22) & GENMASK(23, 22))
++#define SPI_CTAR_PASC(x)		(((x) << 20) & GENMASK(21, 20))
++#define SPI_CTAR_PDT(x)			(((x) << 18) & GENMASK(19, 18))
++#define SPI_CTAR_PBR(x)			(((x) << 16) & GENMASK(17, 16))
++#define SPI_CTAR_CSSCK(x)		(((x) << 12) & GENMASK(15, 12))
++#define SPI_CTAR_ASC(x)			(((x) << 8) & GENMASK(11, 8))
++#define SPI_CTAR_DT(x)			(((x) << 4) & GENMASK(7, 4))
++#define SPI_CTAR_BR(x)			((x) & GENMASK(3, 0))
+ #define SPI_CTAR_SCALE_BITS		0xf
+ 
+ #define SPI_CTAR0_SLAVE			0x0c
+ 
+ #define SPI_SR				0x2c
+-#define SPI_SR_EOQF			0x10000000
+-#define SPI_SR_TCFQF			0x80000000
++#define SPI_SR_TCFQF			BIT(31)
++#define SPI_SR_EOQF			BIT(28)
+ #define SPI_SR_CLEAR			0x9aaf0000
+ 
+ #define SPI_RSER_TFFFE			BIT(25)
+@@ -65,15 +65,15 @@
+ #define SPI_RSER_RFDFD			BIT(16)
+ 
+ #define SPI_RSER			0x30
+-#define SPI_RSER_EOQFE			0x10000000
+-#define SPI_RSER_TCFQE			0x80000000
++#define SPI_RSER_TCFQE			BIT(31)
++#define SPI_RSER_EOQFE			BIT(28)
  
  #define SPI_PUSHR			0x34
- #define SPI_PUSHR_CMD_CONT		(1 << 15)
--#define SPI_PUSHR_CONT			(SPI_PUSHR_CMD_CONT << 16)
- #define SPI_PUSHR_CMD_CTAS(x)		(((x) & 0x0003) << 12)
--#define SPI_PUSHR_CTAS(x)		(SPI_PUSHR_CMD_CTAS(x) << 16)
- #define SPI_PUSHR_CMD_EOQ		(1 << 11)
--#define SPI_PUSHR_EOQ			(SPI_PUSHR_CMD_EOQ << 16)
- #define SPI_PUSHR_CMD_CTCNT		(1 << 10)
--#define SPI_PUSHR_CTCNT			(SPI_PUSHR_CMD_CTCNT << 16)
- #define SPI_PUSHR_CMD_PCS(x)		((1 << x) & 0x003f)
--#define SPI_PUSHR_PCS(x)		(SPI_PUSHR_CMD_PCS(x) << 16)
--#define SPI_PUSHR_TXDATA(x)		((x) & 0x0000ffff)
+-#define SPI_PUSHR_CMD_CONT		(1 << 15)
+-#define SPI_PUSHR_CMD_CTAS(x)		(((x) & 0x0003) << 12)
+-#define SPI_PUSHR_CMD_EOQ		(1 << 11)
+-#define SPI_PUSHR_CMD_CTCNT		(1 << 10)
+-#define SPI_PUSHR_CMD_PCS(x)		((1 << x) & 0x003f)
++#define SPI_PUSHR_CMD_CONT		BIT(15)
++#define SPI_PUSHR_CMD_CTAS(x)		(((x) << 12 & GENMASK(14, 12)))
++#define SPI_PUSHR_CMD_EOQ		BIT(11)
++#define SPI_PUSHR_CMD_CTCNT		BIT(10)
++#define SPI_PUSHR_CMD_PCS(x)		(BIT(x) & GENMASK(5, 0))
  
  #define SPI_PUSHR_SLAVE			0x34
  
- #define SPI_POPR			0x38
--#define SPI_POPR_RXDATA(x)		((x) & 0x0000ffff)
+@@ -88,7 +88,7 @@
+ #define SPI_RXFR2			0x84
+ #define SPI_RXFR3			0x88
  
- #define SPI_TXFR0			0x3c
- #define SPI_TXFR1			0x40
-@@ -112,21 +95,12 @@
- #define SPI_SREX			0x13c
+-#define SPI_CTARE(x)			(0x11c + (((x) & 0x3) * 4))
++#define SPI_CTARE(x)			(0x11c + (((x) & GENMASK(1, 0)) * 4))
+ #define SPI_CTARE_FMSZE(x)		(((x) & 0x1) << 16)
+ #define SPI_CTARE_DTCP(x)		((x) & 0x7ff)
  
- #define SPI_FRAME_BITS(bits)		SPI_CTAR_FMSZ((bits) - 1)
--#define SPI_FRAME_BITS_MASK		SPI_CTAR_FMSZ(0xf)
--#define SPI_FRAME_BITS_16		SPI_CTAR_FMSZ(0xf)
--#define SPI_FRAME_BITS_8		SPI_CTAR_FMSZ(0x7)
--
- #define SPI_FRAME_EBITS(bits)		SPI_CTARE_FMSZE(((bits) - 1) >> 4)
--#define SPI_FRAME_EBITS_MASK		SPI_CTARE_FMSZE(1)
- 
- /* Register offsets for regmap_pushr */
- #define PUSHR_CMD			0x0
- #define PUSHR_TX			0x2
- 
--#define SPI_CS_INIT			0x01
--#define SPI_CS_ASSERT			0x02
--#define SPI_CS_DROP			0x04
--
- #define DMA_COMPLETION_TIMEOUT		msecs_to_jiffies(3000)
- 
- struct chip_data {
 -- 
 2.20.1
 
