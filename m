@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A61595F9F
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 15:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B5895FA2
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 15:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729948AbfHTNOa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Aug 2019 09:14:30 -0400
-Received: from mail-ed1-f100.google.com ([209.85.208.100]:38280 "EHLO
-        mail-ed1-f100.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729970AbfHTNOa (ORCPT
+        id S1729137AbfHTNOb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Aug 2019 09:14:31 -0400
+Received: from mail-ed1-f97.google.com ([209.85.208.97]:40528 "EHLO
+        mail-ed1-f97.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729984AbfHTNOa (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 09:14:30 -0400
-Received: by mail-ed1-f100.google.com with SMTP id r12so6274810edo.5
-        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 06:14:28 -0700 (PDT)
+Received: by mail-ed1-f97.google.com with SMTP id h8so6281005edv.7
+        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 06:14:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:message-id:date;
-        bh=kZN1xGhe7NRh5ocVdefS5+GR42RBFAUM2s+vxBnEibM=;
-        b=HBpdZixp5uq8BoqqErRqXGlH835F5TCP+jPnZjxBl2BbDJBL8EuRot8yJEUtVwFArm
-         Vzl8GQD/Jx4vwkKWQCSqb5UFyL0wFpgLI9M8cA0zkwXoS15E3CONhlltLOlO3ziaZeA0
-         wLq4COfppeNaIlN0/9yiwsiLuhbLCF33Ysp98gUevXse6YKk0S37WlgXbNdbnfZvhloS
-         hHn6i23fD11taLHTkLV1Aqa5UyEurI2aOyKbo/yDPODsVE/dKKrFbnVl7HEyxR9SKQwj
-         N9nKV2IrajohpGFWK8k6Bqamz9KsYR7mM4dG7xhbjcQWAbmWiXOPo6YBnQ/DjEIrhuF2
-         h35g==
-X-Gm-Message-State: APjAAAVVaD2VjZIyrOZ8euxeC4CVO1bLihr6Gwhk5jb8wk3Rc+AADF2/
-        ykmq7O0f1izDZEHPNAj3B7sydvkg/Nv0mb/ZMVoqwGHxOy+WlhuOqZaOPjC411Iy/w==
-X-Google-Smtp-Source: APXvYqxwhg/wMr94TT9htLzvpBKClDRroAuXmumW9TaewpGSV0PrmW2xiI6MPRcwczeb2NHnOZX/tDHldEks
-X-Received: by 2002:aa7:c5ca:: with SMTP id h10mr31221928eds.48.1566306867812;
-        Tue, 20 Aug 2019 06:14:27 -0700 (PDT)
+        bh=ddlRjYGFuPCRLL+HMlf2aoDenNuiOTzQL3nZr4Qfrhs=;
+        b=gCU+ZKtMDcyC2+pK1KMgf+jSxFI5x2I0+QkyocuMKnh2iobyENhUKp+HEFRxFAtGwI
+         HmyO4fVRaa2CPwQnRu7uwRn2gPnQnVd1QVTUqiGdX31qXuh8zS0AY12VhA6JEybYok2U
+         QUkrPqPyFbZ48uy1oQRrVABPNKpAzMwDms+zvbansTKhFno9MXH+Nc3wvP5GNio+67bx
+         /J6+VtQVTc3DufRbgJ9p7Xve1MROgArviVMoIzkw2eJUQiZ3Os7pSTKnqKdSlLIowpvO
+         l10WFm96PRxPsz7gT8oAEMZGYBJg9N24vlrWBPE4CcYvH0GJE1k2Pfp+t5ZVHELLwkd1
+         F8LA==
+X-Gm-Message-State: APjAAAXnKg1a5+TrlneaNxJUxHplxpwKPIMXfNDm+1SVUtdLtqjYNfGN
+        zf6Hr0+suhHZSoDT/x3GzWzpUCJKjAJK666EO1rnHD2b7Fud39wowQoC+45ceprLNg==
+X-Google-Smtp-Source: APXvYqyu7PTuS5YVUZ1szpWjWqSgBpjBcDLzHr+NOCrXqqgD3DBu5BhOWspQv/0OeTB8SmWRHgdX0wXl+O02
+X-Received: by 2002:a17:906:bcf5:: with SMTP id op21mr26065164ejb.190.1566306868907;
+        Tue, 20 Aug 2019 06:14:28 -0700 (PDT)
 Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
-        by smtp-relay.gmail.com with ESMTPS id l18sm23184edw.10.2019.08.20.06.14.27
+        by smtp-relay.gmail.com with ESMTPS id me6sm117662ejb.79.2019.08.20.06.14.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 06:14:27 -0700 (PDT)
+        Tue, 20 Aug 2019 06:14:28 -0700 (PDT)
 X-Relaying-Domain: sirena.org.uk
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i03xz-0002Lx-HW; Tue, 20 Aug 2019 13:14:27 +0000
+        id 1i03y0-0002MF-Kx; Tue, 20 Aug 2019 13:14:28 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 0E7C4274314C; Tue, 20 Aug 2019 14:14:27 +0100 (BST)
+        id 0332C2743150; Tue, 20 Aug 2019 14:14:27 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spi-fsl-dspi: Remove unused initialization of 'ret' in dspi_probe" to the spi tree
-In-Reply-To: <20190818180115.31114-8-olteanv@gmail.com>
+Subject: Applied "spi: spi-fsl-dspi: Remove unused defines and includes" to the spi tree
+In-Reply-To: <20190818180115.31114-3-olteanv@gmail.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20190820131427.0E7C4274314C@ypsilon.sirena.org.uk>
+Message-Id: <20190820131428.0332C2743150@ypsilon.sirena.org.uk>
 Date:   Tue, 20 Aug 2019 14:14:27 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -56,7 +56,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-fsl-dspi: Remove unused initialization of 'ret' in dspi_probe
+   spi: spi-fsl-dspi: Remove unused defines and includes
 
 has been applied to the spi tree at
 
@@ -81,36 +81,93 @@ to this mail.
 Thanks,
 Mark
 
-From 9b536d3647ee1348860657c239d247364e4374ec Mon Sep 17 00:00:00 2001
+From 5782a17fe528ce596eb5de66777a73b16f4f1549 Mon Sep 17 00:00:00 2001
 From: Vladimir Oltean <olteanv@gmail.com>
-Date: Sun, 18 Aug 2019 21:01:08 +0300
-Subject: [PATCH] spi: spi-fsl-dspi: Remove unused initialization of 'ret' in
- dspi_probe
+Date: Sun, 18 Aug 2019 21:01:03 +0300
+Subject: [PATCH] spi: spi-fsl-dspi: Remove unused defines and includes
 
-There is no code path for reaching 'return ret;' without it first being
-assigned to an error code. Therefore the initialization with 0 is
-pointless.
+This is a cosmetic patch.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20190818180115.31114-8-olteanv@gmail.com
+Link: https://lore.kernel.org/r/20190818180115.31114-3-olteanv@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-dspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-fsl-dspi.c | 26 --------------------------
+ 1 file changed, 26 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index c07525a9fd34..c5d99f4d5e3d 100644
+index 0adfff9cedd1..358b381839fb 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -996,7 +996,7 @@ static int dspi_probe(struct platform_device *pdev)
- 	const struct regmap_config *regmap_config;
- 	void __iomem *base;
- 	struct fsl_dspi_platform_data *pdata;
--	int ret = 0, cs_num, bus_num;
-+	int ret, cs_num, bus_num;
+@@ -9,24 +9,14 @@
+ #include <linux/delay.h>
+ #include <linux/dmaengine.h>
+ #include <linux/dma-mapping.h>
+-#include <linux/err.h>
+-#include <linux/errno.h>
+ #include <linux/interrupt.h>
+-#include <linux/io.h>
+ #include <linux/kernel.h>
+-#include <linux/math64.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/pinctrl/consumer.h>
+-#include <linux/platform_device.h>
+-#include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+-#include <linux/sched.h>
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi-fsl-dspi.h>
+-#include <linux/spi/spi_bitbang.h>
+-#include <linux/time.h>
  
- 	master = spi_alloc_master(&pdev->dev, sizeof(struct fsl_dspi));
- 	if (!master)
+ #define DRIVER_NAME			"fsl-dspi"
+ 
+@@ -80,21 +70,14 @@
+ 
+ #define SPI_PUSHR			0x34
+ #define SPI_PUSHR_CMD_CONT		(1 << 15)
+-#define SPI_PUSHR_CONT			(SPI_PUSHR_CMD_CONT << 16)
+ #define SPI_PUSHR_CMD_CTAS(x)		(((x) & 0x0003) << 12)
+-#define SPI_PUSHR_CTAS(x)		(SPI_PUSHR_CMD_CTAS(x) << 16)
+ #define SPI_PUSHR_CMD_EOQ		(1 << 11)
+-#define SPI_PUSHR_EOQ			(SPI_PUSHR_CMD_EOQ << 16)
+ #define SPI_PUSHR_CMD_CTCNT		(1 << 10)
+-#define SPI_PUSHR_CTCNT			(SPI_PUSHR_CMD_CTCNT << 16)
+ #define SPI_PUSHR_CMD_PCS(x)		((1 << x) & 0x003f)
+-#define SPI_PUSHR_PCS(x)		(SPI_PUSHR_CMD_PCS(x) << 16)
+-#define SPI_PUSHR_TXDATA(x)		((x) & 0x0000ffff)
+ 
+ #define SPI_PUSHR_SLAVE			0x34
+ 
+ #define SPI_POPR			0x38
+-#define SPI_POPR_RXDATA(x)		((x) & 0x0000ffff)
+ 
+ #define SPI_TXFR0			0x3c
+ #define SPI_TXFR1			0x40
+@@ -112,21 +95,12 @@
+ #define SPI_SREX			0x13c
+ 
+ #define SPI_FRAME_BITS(bits)		SPI_CTAR_FMSZ((bits) - 1)
+-#define SPI_FRAME_BITS_MASK		SPI_CTAR_FMSZ(0xf)
+-#define SPI_FRAME_BITS_16		SPI_CTAR_FMSZ(0xf)
+-#define SPI_FRAME_BITS_8		SPI_CTAR_FMSZ(0x7)
+-
+ #define SPI_FRAME_EBITS(bits)		SPI_CTARE_FMSZE(((bits) - 1) >> 4)
+-#define SPI_FRAME_EBITS_MASK		SPI_CTARE_FMSZE(1)
+ 
+ /* Register offsets for regmap_pushr */
+ #define PUSHR_CMD			0x0
+ #define PUSHR_TX			0x2
+ 
+-#define SPI_CS_INIT			0x01
+-#define SPI_CS_ASSERT			0x02
+-#define SPI_CS_DROP			0x04
+-
+ #define DMA_COMPLETION_TIMEOUT		msecs_to_jiffies(3000)
+ 
+ struct chip_data {
 -- 
 2.20.1
 
