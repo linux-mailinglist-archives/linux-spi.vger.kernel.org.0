@@ -2,116 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B40D595F41
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 14:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EDC95F44
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 14:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728248AbfHTMzE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Aug 2019 08:55:04 -0400
-Received: from mail-wr1-f100.google.com ([209.85.221.100]:35003 "EHLO
-        mail-wr1-f100.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729827AbfHTMzD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 08:55:03 -0400
-Received: by mail-wr1-f100.google.com with SMTP id k2so12292573wrq.2
-        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 05:55:01 -0700 (PDT)
+        id S1729819AbfHTM4A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Aug 2019 08:56:00 -0400
+Received: from mail-ed1-f99.google.com ([209.85.208.99]:45820 "EHLO
+        mail-ed1-f99.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729458AbfHTM4A (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 08:56:00 -0400
+Received: by mail-ed1-f99.google.com with SMTP id x19so6194674eda.12
+        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 05:55:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:message-id:date;
-        bh=RKXbUzu1kRheoPwSAkue89bMPLcxfeHfz/VAPnv9H28=;
-        b=NNFH8gQEaNqyMWv9eOhGD4SCBHLxI7CkXqrQa5bo/Sauh60w92luKifgCAIxAR8e+y
-         4AzWnt7iMnLmdM9mArHacWFlpynckrG0cZpYb+cI88poVkQgYjs0wqw7/u961OKrecrV
-         6ZhNedIKIN7whzh5a+jD90bIhC+QBe+RVJgwprvEHrK4GOkGzRedxzmibY+9B+9LgC/r
-         OA3Y9MLxRoPVo0R7SjwL4KmmduoBVWZ6/KLEpC/eTq7ubiZm9jdvum8bdGt2d4UrH+TT
-         IdQYXLIORScMWN8K++zPLpk9PW6QwAmei+4iJDvrv42IfrvujEUv1djygwgre6F7D3Aq
-         TyGg==
-X-Gm-Message-State: APjAAAWbqC4h7pTWoLRzVobvWBhFMPFh1xbWSyWvQpnhUwmwRDxdypTa
-        SWcpiEWZtJQG9yrwoSNtZ3RD31lOkapP9g/jpbsqcIE3hFOVAFOrt2EqWu0HmT7E2w==
-X-Google-Smtp-Source: APXvYqzr6d7Jo1fLhXXIs7tv09nFOW/0aRO+946vXqOAFs7NCqricpsmUlH1EaGfhsDssInmBHVS9iBuZQqg
-X-Received: by 2002:adf:cd11:: with SMTP id w17mr35742727wrm.297.1566305700607;
-        Tue, 20 Aug 2019 05:55:00 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sTNITPURPb4r/eqB5oSrUPyoCIQAB00GeOT0IVjNBUQ=;
+        b=Fecq2H8XxYfIpbKKe6YsFV0jXrV1boHP/IQgabeoIEO//RsikoOf/mXv6QVHQMV515
+         gEIGGM0RdF5DqVC0cDa/dpnrBjX2rctkAy1MtlAsJupQ4dQoWwx86rF9QOxEyXhKWF52
+         nHV4t5FYldqcmZ++BUbGrFQS8LMZ39kPV/Rh0yG7N5OfxuRWCXqDQIVIa5dyDgLsxHp6
+         v2zOOeCvADpcVo0ZsaPaAhu7B5622Ipu6UufsjwZAkJ3elqrKrUf61I6oTwQoGQwvy6R
+         W9aN0R8r27LjXJprKnfhmh+BUCD373Y0bUnC8fQp6fNtqLKjzfH06Wtj2egDeF5n1Gpj
+         0DIw==
+X-Gm-Message-State: APjAAAUUVHbkjRG5BQLwcsrgInwmS6tBfcRp2mR02XjQoLIFs5Mvytfd
+        x+Lz4gdmvUPPuPbUXAba9DYMe9YIukaZq8WM4yzmkLl0X73IXzI64hLV7Obv/bQaMg==
+X-Google-Smtp-Source: APXvYqytjtPULfzeO/6Q1HzRiHGCA74gB4Fkqu7AGrV+3JIcj0woBeciNthIExcMV0YcOejFzWV2BPHfY5hA
+X-Received: by 2002:a17:906:94d3:: with SMTP id d19mr26260995ejy.298.1566305758183;
+        Tue, 20 Aug 2019 05:55:58 -0700 (PDT)
 Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
-        by smtp-relay.gmail.com with ESMTPS id o11sm305378wrx.68.2019.08.20.05.55.00
+        by smtp-relay.gmail.com with ESMTPS id p15sm84519ejb.24.2019.08.20.05.55.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 05:55:00 -0700 (PDT)
+        Tue, 20 Aug 2019 05:55:58 -0700 (PDT)
 X-Relaying-Domain: sirena.org.uk
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i03fA-0002Dq-Af; Tue, 20 Aug 2019 12:55:00 +0000
+        id 1i03g5-0002EB-Sn; Tue, 20 Aug 2019 12:55:57 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id B15E9274314C; Tue, 20 Aug 2019 13:54:59 +0100 (BST)
+        id 5ADFE2742ABD; Tue, 20 Aug 2019 13:55:57 +0100 (BST)
+Date:   Tue, 20 Aug 2019 13:55:57 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Axel Lin <axel.lin@ingics.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Applied "spi: zynq-qspi: Fix missing spi_unregister_controller when unload module" to the spi tree
-In-Reply-To: <20190818095113.2397-1-axel.lin@ingics.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190820125459.B15E9274314C@ypsilon.sirena.org.uk>
-Date:   Tue, 20 Aug 2019 13:54:59 +0100 (BST)
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Hubert Feurstein <h.feurstein@gmail.com>, mlichvar@redhat.com,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
+Subject: Re: [RFC PATCH net-next 03/11] spi: Add a PTP system timestamp to
+ the transfer structure
+Message-ID: <20190820125557.GB4738@sirena.co.uk>
+References: <20190816004449.10100-1-olteanv@gmail.com>
+ <20190816004449.10100-4-olteanv@gmail.com>
+ <20190816121837.GD4039@sirena.co.uk>
+ <CA+h21hqatTeS2shV9QSiPzkjSeNj2Z4SOTrycffDjRHj=9s=nQ@mail.gmail.com>
+ <20190816125820.GF4039@sirena.co.uk>
+ <CA+h21hrZbun_j+oABJFP+P+V3zHP2x0mAhv-1ocF38miCvZHew@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DBIVS5p969aUjpLe"
+Content-Disposition: inline
+In-Reply-To: <CA+h21hrZbun_j+oABJFP+P+V3zHP2x0mAhv-1ocF38miCvZHew@mail.gmail.com>
+X-Cookie: It's the thought, if any, that counts!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
 
-   spi: zynq-qspi: Fix missing spi_unregister_controller when unload module
+--DBIVS5p969aUjpLe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been applied to the spi tree at
+On Fri, Aug 16, 2019 at 05:05:53PM +0300, Vladimir Oltean wrote:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
+> I'm not sure how to respond to this, because I don't know anything
+> about the timing of DMA transfers.
+> Maybe snapshotting DMA transfers the same way is not possible (if at
+> all). Maybe they are not exactly adequate for this sort of application
+> anyway. Maybe it depends.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+DMA transfers generally proceed without any involvement from the CPU,
+this is broadly the point of DMA.  You *may* be able to split into
+multiple transactions but it's not reliable that you'd be able to do so
+on byte boundaries and there will be latency getting notified of
+completions.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> In other words, from a purely performance perspective, I am against
+> limiting the API to just snapshotting the first and last byte. At this
+> level of "zoom", if I change the offset of the byte to anything other
+> than 3, the synchronization offset refuses to converge towards zero,
+> because the snapshot is incurring a constant offset that the servo
+> loop from userspace (phc2sys) can't compensate for.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+> Maybe the SPI master driver should just report what sort of
+> snapshotting capability it can offer, ranging from none (default
+> unless otherwise specified), to transfer-level (DMA style) or
+> byte-level.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+That does then have the consequence that the majority of controllers
+aren't going to be usable with the API which isn't great.
 
-Thanks,
-Mark
+> I'm afraid more actual experimentation is needed with DMA-based
+> controllers to understand what can be expected from them, and as a
+> result, how the API should map around them.
+> MDIO bus controllers are in a similar situation (with Hubert's patch)
+> but at least there the frame size is fixed and I haven't heard of an
+> MDIO controller to use DMA.
 
-From 8eb2fd00f65a96143ed1535bdbf4ca4e129d30d1 Mon Sep 17 00:00:00 2001
-From: Axel Lin <axel.lin@ingics.com>
-Date: Sun, 18 Aug 2019 17:51:13 +0800
-Subject: [PATCH] spi: zynq-qspi: Fix missing spi_unregister_controller when
- unload module
+I'm not 100% clear what the problem you're trying to solve is, or if
+it's a sensible problem to try to solve for that matter.
 
-Use devm_spi_register_controller to fix missing spi_unregister_controller
-when unload module.
+--DBIVS5p969aUjpLe
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-Link: https://lore.kernel.org/r/20190818095113.2397-1-axel.lin@ingics.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-zynq-qspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index c6bee67decb5..d812a215ae5c 100644
---- a/drivers/spi/spi-zynq-qspi.c
-+++ b/drivers/spi/spi-zynq-qspi.c
-@@ -695,7 +695,7 @@ static int zynq_qspi_probe(struct platform_device *pdev)
- 	ctlr->setup = zynq_qspi_setup_op;
- 	ctlr->max_speed_hz = clk_get_rate(xqspi->refclk) / 2;
- 	ctlr->dev.of_node = np;
--	ret = spi_register_controller(ctlr);
-+	ret = devm_spi_register_controller(&pdev->dev, ctlr);
- 	if (ret) {
- 		dev_err(&pdev->dev, "spi_register_master failed\n");
- 		goto clk_dis_all;
--- 
-2.20.1
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1b7dwACgkQJNaLcl1U
+h9Dwjwf/dbqcU17zGra+YlgRKo6DqR3lr7Zs78XeUA8t53b61L28+ZuDRE1j6wYZ
+9OR/cjPU20FZ5KSjqpHsGbGvvJh6M0/v5az8EBm0e3vpglKcTRNGJ5dsZHLbOyPb
+uEhweMwaanElatxIvhQJvnL6aicGZhl4CQeWqLglAfxvmnfxDzAluYoalAMBk5+c
+pjUunBGPtX3bIDuSS/TGeoAtP1+wu/pNS8Nr6+rJ6IIclLlxrm9m3UqxxU8Gg48o
+Wxlm31t+Byb5sp8BgweEStjxUzKgwFr4yrgVXCP/mPNpdUv6ViqAq5usdN0SlNsS
+ph2TXu+C7V/RLrSsXeCjjbK+STc2Xg==
+=wLY1
+-----END PGP SIGNATURE-----
 
+--DBIVS5p969aUjpLe--
