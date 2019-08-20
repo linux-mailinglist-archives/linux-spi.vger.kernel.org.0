@@ -2,139 +2,289 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5F796194
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 15:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E95A965AC
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 17:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730334AbfHTNsw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Aug 2019 09:48:52 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:34523 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729833AbfHTNsw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 09:48:52 -0400
-Received: by mail-ed1-f67.google.com with SMTP id s49so6417742edb.1;
-        Tue, 20 Aug 2019 06:48:51 -0700 (PDT)
+        id S1726981AbfHTP5Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Aug 2019 11:57:24 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:42338 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725971AbfHTP5Y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 11:57:24 -0400
+Received: by mail-ed1-f66.google.com with SMTP id m44so6890956edd.9;
+        Tue, 20 Aug 2019 08:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=m+JdZSXD0D2c02Imv40GB5KWh8cWJNBa36c7pON1v6s=;
-        b=hqY92RF0L3162rzl/kU0ZJ+pZpjLuw8SBGXb0Z3uxTPvLjmtNi34GyPjhNAdbElXuu
-         ppp1IZKQ2QMWwgeEJ08aTY+0bWJqKkolN25kwPTgVKRgbcDQ5/+UXM++2O5iAiMcy+Ht
-         4VPlGY0LiK/INND7svw/fKBgPCOc6nzIYA9qE87kCV6t+pipJyYl9ZC+eAAr5LR05YwT
-         9OLVrR7b75OTiEwgJHtUQGEXMxIPlJC+t3+2uvdlcm0eYOmfVAYCsF2saV056s8ZRD/z
-         2Ik9318u9FYKcaRBddGyq8e+ErrezwjNV7Zn8CVCuBexa74W8f5acKZ10YOosPI6+2kt
-         12gQ==
+        bh=isl3LbKr7fl1A/LITi+ciLQC1pyxL9RhGx1tZE0VEYY=;
+        b=fcdkBu/vRNQWDSv2mTUTfleV+vCAAHY2q8YK8aaj59xev43S7e0aTkxECZqOyMQgCO
+         LwUyL2jYelnwIbEEix/T3PDsdOn7v4CJLBekvo//RM9PSaRmbyaw7NQY6aTOt4fLh/CH
+         k/ObGYGOdeMaD8hEPkv+2P9qhU+x4atLaHyA5MSAp1PkDKoS/j1h2aRZ9TlIZweON69+
+         1usgGupIqbi2zxfJ4WDdSYa9WaH0adlopP/AgxUtbZ2VrKXFFEchmpHemlcPGAFhZ4WM
+         +3ALm6d9HbFGImBVwmArKAeA57+mXWyiGZCC7GT5VIbzlA6nOcE0wqX8HnCLTTnMEVFD
+         Xl4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=m+JdZSXD0D2c02Imv40GB5KWh8cWJNBa36c7pON1v6s=;
-        b=SfGUZR+oFesUXqVg9WGHkn1oXM1lN8qSlhuPo7E/bcgjBSeJO2kAtx6EJ+PrDmUK0X
-         jNpMZUqVSnsCT6hMCGkuNhoMYmOVc//qlKRwoFLi7GCCpiDjvRlBkgUBcT6Gn8bhRJB/
-         cGbLY9jZL5L1j7rCOKytPnoDV1n9LdqjiMjvVDfeFmXgst8opqW8iiWj8rOvpzJDzcUC
-         uz9x6cKfrLRUuxIpf15lQFoehOkoan01VaBGwFA79vHATCi7kyDZmHAdPo8f/VJ7HMAQ
-         WA50rELQgHsAgnv9FP43CXrpb+qgCAa8nGVqAvhF7d8Y07Wnw9u5tLhWEIOpeGR3J/+l
-         55GA==
-X-Gm-Message-State: APjAAAX6boJAQtKXnv+CT4vs9xcoKkToUO8mI+SJLjvNvx2cZzkxXW1k
-        HAJRgUqYxY6ZmwuTMOwPFcqTUy8kIRa0vgGqbqw=
-X-Google-Smtp-Source: APXvYqzUZIKwnbDgamVnX9gB78XfXRD3TsYr5rvVNhkOU18V0B78GCOJnJ6SGd5MKO0bVNaUzRkH38cnHCbn0lSZaig=
-X-Received: by 2002:a17:906:4683:: with SMTP id a3mr25606222ejr.47.1566308930492;
- Tue, 20 Aug 2019 06:48:50 -0700 (PDT)
+        bh=isl3LbKr7fl1A/LITi+ciLQC1pyxL9RhGx1tZE0VEYY=;
+        b=jPHe51fq3YMsTUrxYFJ4mqGWMTtItPD8dQne+4CL98IwTuF66pgw30C46f9r4Gw82t
+         EdCV+4K5tRSga0quV89jF6O6xmaCTuUqiCg24E2eGKvnoglyjeLbvZOaOVdW+WwN+9bS
+         cqN2HFbHSbD2dYfv0TFNvpGIo2fOci44+/v3Q82sWKxHB6tRLkFU+L+/95+W/P8UTJnM
+         WO8ZeTgf861TPngCqimG2e20MzguIbfKCCoA/XuXB4nrTya+qRT/p/OC3hMjWkzM74+T
+         u68xJbujcNPwh5uKAOAwPTh7xaw3pWXauEoXdmsnxGWW0uRYLtl2B88bzcsaZ4UAGoFd
+         a1Tw==
+X-Gm-Message-State: APjAAAXv4xQ/FY5Rc/+mF+05RMPLR09cS840BBSB4GAj7HHHdmNsF7HZ
+        sehpCe1P2Gns7oyHHJ8pIK9uO0dtEhfd7jPTalY=
+X-Google-Smtp-Source: APXvYqxD0jQqHkQGlcQZCstMOvbsJYWZ1TS6t72OShznkUka94rvMymMBtP9+uJHQsL9ftWKq1ljOSqopmo2jID5RcQ=
+X-Received: by 2002:a50:9dc8:: with SMTP id l8mr32092030edk.108.1566316641907;
+ Tue, 20 Aug 2019 08:57:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190816004449.10100-1-olteanv@gmail.com> <20190816004449.10100-4-olteanv@gmail.com>
- <20190816121837.GD4039@sirena.co.uk> <CA+h21hqatTeS2shV9QSiPzkjSeNj2Z4SOTrycffDjRHj=9s=nQ@mail.gmail.com>
- <20190816125820.GF4039@sirena.co.uk> <CA+h21hrZbun_j+oABJFP+P+V3zHP2x0mAhv-1ocF38miCvZHew@mail.gmail.com>
- <20190820125557.GB4738@sirena.co.uk>
-In-Reply-To: <20190820125557.GB4738@sirena.co.uk>
+References: <20190818182600.3047-1-olteanv@gmail.com>
+In-Reply-To: <20190818182600.3047-1-olteanv@gmail.com>
 From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Tue, 20 Aug 2019 16:48:39 +0300
-Message-ID: <CA+h21hr653oqOPxoJKWkP9ZhTywNR8EBjWV7U9LHwPRz=PJXsw@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next 03/11] spi: Add a PTP system timestamp to the
- transfer structure
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Hubert Feurstein <h.feurstein@gmail.com>, mlichvar@redhat.com,
+Date:   Tue, 20 Aug 2019 18:57:10 +0300
+Message-ID: <CA+h21hr4UcoJK7upNJjG0ibtX7CkF=akxVdrb--1AJn6-z=sUQ@mail.gmail.com>
+Subject: Re: [PATCH spi for-5.4 0/5] Deterministic SPI latency with NXP DSPI driver
+To:     Mark Brown <broonie@kernel.org>,
+        Hubert Feurstein <h.feurstein@gmail.com>, mlichvar@redhat.com,
         Richard Cochran <richardcochran@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+On Sun, 18 Aug 2019 at 21:26, Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> This patchset proposes an interface from the SPI subsystem for
+> software timestamping SPI transfers. There is a default implementation
+> provided in the core, as well as a mechanism for SPI slave drivers to
+> check which byte was in fact timestamped post-facto. The patchset also
+> adds the first user of this interface (the NXP DSPI driver in TCFQ mode).
+>
+> The interface is somewhat similar to Hubert Feurstein's proposal for the
+> MDIO subsystem: https://lkml.org/lkml/2019/8/16/638
+>
+> Original cover letter below. Also provided at the end some results with
+> an extra test (J - phc2sys using the timestamps taken by the SPI core).
+>
+> ===========================================================
+>
+> Continuing the discussion created by Hubert Feurstein around the
+> mv88e6xxx driver for MDIO-controlled switches
+> (https://lkml.org/lkml/2019/8/2/1364), this patchset takes a similar
+> approach for the NXP LS1021A-TSN board, which has a SPI-controlled DSA
+> switch (SJA1105).
+>
+> The patchset is motivated by some experiments done with a logic
+> analyzer, trying to understand the source of latency (and especially of
+> the jitter). SJA1105 SPI messages for reading the PTP clock are 12 bytes
+> in length: 4 for the SPI header and 8 for the timestamp. When looking at
+> the messages with a scope, there's jitter basically everywhere: between
+> bits of a frame and between frames in a transfer. The inter-bit jitter
+> is hardware and impacts us to a lesser extend (is smaller and caused by
+> the PVT stability of the oscillators, PLLs, etc). We will focus on the
+> latency between consecutive SPI frames within a 12-byte transfer.
+>
+> As a preface, revisions of the DSPI controller IP are integrated in many
+> Freescale/NXP devices. As a result, the driver has 3 modes of operation:
+> - TCFQ (Transfer Complete Flag mode): The controller signals software
+>   that data has been sent/received after each individual word.
+> - EOQ (End of Queue mode): The driver can implement batching by making
+>   use of the controller's 4-word deep FIFO.
+> - DMA (Direct Memory Access mode): The SPI controller's FIFO is no
+>   longer in direct interaction with the driver, but is used to trigger
+>   the RX and TX channels of the eDMA module on the SoC.
+>
+> In LS1021A, the driver works in the least efficient mode of the 3
+> (TCFQ). There is a well-known errata that the DSPI controller is broken
+> in conjunction with the eDMA module. As for the EOQ mode, I have tried
+> unsuccessfully for a few days to make use of the 4 entry FIFO, and the
+> hardware simply fails to reliably acknowledge the transmission when the
+> FIFO gets full. So it looks like we're stuck with the TCFQ mode.
+>
+> The problem with phc2sys on the LS1021A-TSN board is that in order for
+> the gettime64() call to complete on the sja1105, the system has to
+> service 12 IRQs. Intuitively that is excessive and is the main source of
+> jitter, but let's not get ahead of ourselves.
+>
+> An outline of the experiments that were done (unless otherwise
+> mentioned, all of these ran for 120 seconds):
+>
+> A. First I have measured the (poor) performance of phc2sys under current
+>    conditions. (DSPI driver in IRQ mode, no PTP system timestamping)
+>
+>    offset: min -53310 max 16107 mean -1737.18 std dev 11444.3
+>    delay: min 163680 max 237360 mean 201149 std dev 22446.6
+>    lost servo lock 1 times
+>
+> B. I switched the .gettime64 callback to .gettimex64, snapshotting the
+>    PTP system timestamp within the sja1105 driver.
+>
+>    offset: min -48923 max 64217 mean -904.137 std dev 17358.1
+>    delay: min 149600 max 203840 mean 169045 std dev 17993.3
+>    lost servo lock 8 times
+>
+> C. I patched "struct spi_transfer" to contain the PTP system timestamp,
+>    and from the sja1105 driver, I passed this structure to be
+>    snapshotted by the SPI controller's driver (spi-fsl-dspi). This is
+>    the "transfer-level" snapshot.
+>
+>    offset: min -64979 max 38979 mean -416.197 std dev 15367.9
+>    delay: min 125120 max 168320 mean 150286 std dev 17675.3
+>    lost servo lock 10 times
+>
+> D. I changed the placement of the transfer snapshotting within the DSPI
+>    driver, from "transfer-level" to "byte-level".
+>
+>    offset: min -9021 max 7149 mean -0.418803 std dev 3529.81
+>    delay: min 7840 max 23920 mean 14493.7 std dev 5982.17
+>    lost servo lock 0 times
+>
+> E. I moved the DSPI driver to poll mode. I went back to collecting the
+>    PTP system timestamps from the sja1105 driver (same as B).
+>
+>    offset: min -4199 max 46643 mean 418.214 std dev 4554.01
+>    delay: min 84000 max 194000 mean 99463.2 std dev 12936.5
+>    lost servo lock 1 times
+>
+> F. Transfer-level snapshotting in the DSPI driver (same as C), but in
+>    poll mode.
+>
+>    offset: min -24244 max 1115 mean -230.478 std dev 2297.28
+>    delay: min 69440 max 119040 mean 70312.9 std dev 8065.34
+>    lost servo lock 1 times
+>
+> G. Byte-level snapshotting (same as D) but in poll mode.
+>
+>    offset: min -314 max 288 mean -2.48718 std dev 118.045
+>    delay: min 4880 max 6000 mean 5118.63 std dev 507.258
+>    lost servo lock 0 times
+>
+>    This seemed suspiciously good to me, so I let it run for longer
+>    (58 minutes):
+>
+>    offset: min -26251 max 16416 mean -21.8672 std dev 863.416
+>    delay: min 4720 max 57280 mean 5182.49 std dev 1607.19
+>    lost servo lock 3 times
+>
+> H. Transfer-level snapshotting (same as F), but with IRQs disabled.
+>    This ran for 86 minutes.
+>
+>    offset: min -1927 max 1843 mean -0.209203 std dev 529.398
+>    delay: min 85440 max 93680 mean 88245 std dev 1454.71
+>    lost servo lock 0 times
+>
+> I. Byte-level snapshotting (same as G), but with IRQs disabled.
+>    This ran for 102 minutes.
+>
+>    offset: min -378 max 381 mean -0.0083089 std dev 101.495
+>    delay: min 4720 max 5920 mean 5129.38 std dev 154.899
+>    lost servo lock 0 times
+>
+> J. Default snapshotting taken by the SPI core, with the DSPI driver
+>    running in poll mode, IRQs enabled. This ran for 274 minutes.
+>
+>    offset: min -42568 max 44576 mean 2.91646 std dev 947.467
+>    delay: min 58480 max 171040 mean 80750.7 std dev 2001.61
+>    lost servo lock 3 times
+>
+> As a result, this patchset proposes the implementation of scenario I.
+> The others were done through temporary patches which are not presented
+> here due to the difficulty of presenting a coherent git history without
+> resorting to reverts etc. The gist of each experiment should be clear
+> though.
+>
+> The raw data is available for dissection at
+> https://drive.google.com/open?id=1r9raU9ZeqOqkqts6Lb-ISf5ubLDLP3wk.
+> The logic analyzer captures can be opened with a free-as-in-beer program
+> provided by Saleae: https://www.saleae.com/downloads/.
+>
+> In the capture data one can find the MOSI, SCK SPI signals, as well as a
+> debug GPIO which was toggled at the same time as the PTP system
+> timestamp was taken, to give the viewer an impression of what the
+> software is capturing compared to the actual timing of the SPI transfer.
+>
+> Attached are also some close-up screenshots of transfers where there is
+> a clear and huge delay in-between frames of the same 12-byte SPI
+> transfer. As it turns out, these were all caused by the CPU getting
+> interrupted by some other IRQ. Approaches H and I are the only ones that
+> get rid of these glitches. In theory, the byte-level snapshotting should
+> be less vulnerable to an IRQ interrupting the SPI transfer (because the
+> time window is much smaller) but as the 58 minutes experiment shows, it
+> is not immune.
+>
+> Vladimir Oltean (5):
+>   spi: Use an abbreviated pointer to ctlr->cur_msg in
+>     __spi_pump_messages
+>   spi: Add a PTP system timestamp to the transfer structure
+>   spi: spi-fsl-dspi: Use poll mode in case the platform IRQ is missing
+>   spi: spi-fsl-dspi: Implement the PTP system timestamping for TCFQ mode
+>   spi: spi-fsl-dspi: Disable interrupts and preemption during poll mode
+>     transfer
+>
+>  drivers/spi/spi-fsl-dspi.c | 117 +++++++++++++++++++++++++++++++------
+>  drivers/spi/spi.c          |  85 +++++++++++++++++++++++----
+>  include/linux/spi/spi.h    |  38 ++++++++++++
+>  3 files changed, 210 insertions(+), 30 deletions(-)
+>
+> --
+> 2.17.1
+>
 
-On Tue, 20 Aug 2019 at 15:55, Mark Brown <broonie@kernel.org> wrote:
->
-> On Fri, Aug 16, 2019 at 05:05:53PM +0300, Vladimir Oltean wrote:
->
-> > I'm not sure how to respond to this, because I don't know anything
-> > about the timing of DMA transfers.
-> > Maybe snapshotting DMA transfers the same way is not possible (if at
-> > all). Maybe they are not exactly adequate for this sort of application
-> > anyway. Maybe it depends.
->
-> DMA transfers generally proceed without any involvement from the CPU,
-> this is broadly the point of DMA.  You *may* be able to split into
-> multiple transactions but it's not reliable that you'd be able to do so
-> on byte boundaries and there will be latency getting notified of
-> completions.
->
-> > In other words, from a purely performance perspective, I am against
-> > limiting the API to just snapshotting the first and last byte. At this
-> > level of "zoom", if I change the offset of the byte to anything other
-> > than 3, the synchronization offset refuses to converge towards zero,
-> > because the snapshot is incurring a constant offset that the servo
-> > loop from userspace (phc2sys) can't compensate for.
->
-> > Maybe the SPI master driver should just report what sort of
-> > snapshotting capability it can offer, ranging from none (default
-> > unless otherwise specified), to transfer-level (DMA style) or
-> > byte-level.
->
-> That does then have the consequence that the majority of controllers
-> aren't going to be usable with the API which isn't great.
->
+To the PTP/DSA people copied,
 
-Can we continue this discussion on this thread:
-https://www.spinics.net/lists/netdev/msg593772.html
-The whole point there is that if there's nothing that the driver can
-do, the SPI core will take the timestamps and record their (bad)
-precision.
+It's possible that I'm going to get a lot of hate for saying this, but
+I think we're all missing the forest for the trees with these
+ptp_system_timestamp patches.
+I'm going to start off with 4 truisms:
+- The best software timestamp is worse than a hardware timestamp
+- DSA switches are switches that are connected to their host over Ethernet
+- Ethernet has support for hardware timestamping
+- The mess of taking precise hardware timestamps is well hidden from the kernel
 
-> > I'm afraid more actual experimentation is needed with DMA-based
-> > controllers to understand what can be expected from them, and as a
-> > result, how the API should map around them.
-> > MDIO bus controllers are in a similar situation (with Hubert's patch)
-> > but at least there the frame size is fixed and I haven't heard of an
-> > MDIO controller to use DMA.
->
-> I'm not 100% clear what the problem you're trying to solve is, or if
-> it's a sensible problem to try to solve for that matter.
+You might see where I'm going.
+Maybe this is all really a DSA-specific problem, and should be treated
+as such (kept contained).
+The claimed goal is to synchronize the DSA switches' time with phc2sys
+to/from something else. The problem is that there is latency for
+reading the PHC on a DSA device that is a discrete chip.
+What if all we need is just a mini-"phc2sys-over-Ethernet" that runs
+on a kernel thread internally to DSA? We say that DSA switches are
+"slave" to the "master" netdevice - their PTP clock can be the same.
+I am fairly confident that the sja1105 at least can be configured in
+hardware to work in this mode. One just needs to enable the CPU port
+in its own reachability matrix. None of the switch ports is really a
+"CPU port" hardware speaking.
+- TX timestamps are taken by installing a management route with a
+specified port destination. That destination can be the port the frame
+came from (the CPU port) if the above condition is met.
+- RX timestamps are taken by the switch for frames matching one of 2
+MAC filters. Then a short Ethernet frame containing metadata (RX
+timestamp) is created and sent to the CPU port. If I enable RX
+timestamping on the CPU port, then every management frame sent from
+Linux will also generate an RX timestamp (as well as a TX timestamp,
+but that is irrelevant).
+I believe something similar should be possible on other hardware as well.
 
-The problem can simply be summarized as: you're trying to read a clock
-over SPI, but there's so much timing jitter in you doing that, that
-you have a high degree of uncertainty in the actual precision of the
-readout you took.
-The solution has two parts:
-- Make the SPI access itself more predictable in terms of latency.
-This is always going to have to be dealt with on a driver-by-driver,
-hardware-by-hardware basis.
-- Provide a way of taking a software timestamp in the time interval
-when the latency is predictable, and as close as possible to the
-moment when the SPI slave will receive the request. Disabling
-interrupts and preemption always helps to snapshot that critical
-section. Again, the SPI core can't do that. And finding the correct
-"pre" and "post" hooks that surround the hardware transfer in a
-deterministic fashion is crucial. If you read the cover letter, I used
-a GPIO pin to make sure the timestamps are where they should be, and
-that they don't vary in width (post - pre) - there are also some
-screenshots on Gdrive. Maybe something similar is not impossible for a
-DMA transfer, although the problem formulation so far is too vague to
-emit a more clear statement.
-If you know when the SPI slave's clock was actually read, you have a
-better idea of what time it was.
+The kernel thread can loop back an Ethernet frame and use the 4
+collected timestamps to calculate offset and delay.
+The only question is how to manage the sync direction (DSA switch to
+master, or vice-versa).
+It is assumed that the master netdevice supports hardware timestamping
+and has a PHC with lower access jitter. That might be a more common
+thing than an MDIO or SPI controller with polled I/O and software
+timestamping implemented.
 
-Regards,
+Looking forward to comments. If I'm wrong and we do need to extend the
+SPI and MDIO subsystems, then I'd better be wrong in any way we look
+at the problem, because the alternative is rather intrusive and
+tedious to do right (not to mention, not very reusable).
+
+Thanks,
 -Vladimir
