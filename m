@@ -2,82 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 258FE95DD2
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 13:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AE895E13
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 14:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729868AbfHTLuL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Aug 2019 07:50:11 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45061 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729421AbfHTLuL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 07:50:11 -0400
-Received: by mail-pf1-f193.google.com with SMTP id w26so3232599pfq.12
-        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 04:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=V62B7MzFnAQFSzASsarq3v0djmwNSddXSYLopfjS1Eo=;
-        b=ScEWrsJXHGFfgfFMY2FsWP9lREzHrPxfZO9vf5D6sHuSaUmaFMTy3r4xIei2Xn3YGf
-         zBA0axb3AXgu+onhYcy2goP2JUTH9W2S8Uc1ASn4y8PVGf/ELCU1M3phdGE1RBLquzQx
-         AdIPKgETAzzbisuI3l7jTCMBDOSvohxLdXno2aBhpKyPjpTCJ7aPVzD8HxLPgmV5R7Zl
-         Mec6MPgw7hrCnaEUAnKw+DCBl6TAio9THMD80bJxvZDH50kGEVt8OXPW/eKPbJJF47LS
-         Wx30u62HO6/i88zEdENBGt1aDnqr6dDhmV626NFEDA7ytMhNur8YA1+I5swpn6vWWG6m
-         lLfQ==
+        id S1728366AbfHTMFv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Aug 2019 08:05:51 -0400
+Received: from mail-ed1-f100.google.com ([209.85.208.100]:35967 "EHLO
+        mail-ed1-f100.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728595AbfHTMFv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 08:05:51 -0400
+Received: by mail-ed1-f100.google.com with SMTP id p28so6023862edi.3
+        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 05:05:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=V62B7MzFnAQFSzASsarq3v0djmwNSddXSYLopfjS1Eo=;
-        b=anZJzaq+6AfYu9lESjqjUH0Zaxfi5bzWchgzREbaUfE88R+nG4Lnif0VX0o7FFa87Z
-         nuz8K2MuEV7TVinaambkm4yFrR3/ciuSahqYkKweN6bJRNPr7BzMumHPU10lduBIOgIE
-         oiQMRtft0mhOSoadbT/36hFG5jGwdH65bVprawj3ZbQeWMCQU0lX11+RqGxZ6doFvrmg
-         TxGYL63ZPe91gXI7iH292bgQgyXbALB+UvozqtwtJ1Kl/Pw4K6X2rcXwMhscrXmPHdjT
-         n0Ie6wcKBUDAEVbeRh0c270kzuJqsQyy2xr7ACLKYHDBo6JLBTAQfnunVwV7xsXeyZzr
-         7hyw==
-X-Gm-Message-State: APjAAAVfv8zERQatU+rAlxZqdh96KHU5bfjGXwOg2q8NJThbVk1O00fj
-        MDPwLDiAwQ9zGGudHEgczkiswDCGEw==
-X-Google-Smtp-Source: APXvYqyIq9u46qpIg74Hhl59xxqv6vSE/u8JTB2HQGcXLhPhYLNXH9xyP2FFRD2/Z8o7wjdiQbI8zg==
-X-Received: by 2002:a63:7205:: with SMTP id n5mr16649825pgc.443.1566301810071;
-        Tue, 20 Aug 2019 04:50:10 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4072:8e:d798:d100:fbc2:f9c1:80f4])
-        by smtp.googlemail.com with ESMTPSA id e10sm23454832pfj.151.2019.08.20.04.50.06
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eE6gZQF2ER9hZ6A9hgkSkDoNLmLgYWTJNw8Y60IMAz4=;
+        b=GsNuQCk0T6s3VuXtaozkRsiowHBcG8ndW6DmSWqY8ERaF6BoBm8fUNepGXCrrx2E26
+         YBBkdK47dS3xPsBSBHSBx/GMD4L9K2dk40jPNI63ngzTM/eHzev2U6EMgycniG0JRkOA
+         LMLR/AMxu1p2j1amhujqHHE+DnDSbibJLgO1s07ihgz03mOW+zAjrAAYZPjY6GJqkmSd
+         bsMnoDRrZcv1LS6G/kTS9uVwvLkxITLdFVy+aLh8YBFTSn7uFWOi+2kbLCtYqME9zxW5
+         TlVDamZkHV9jlYLPfmaUK+km9cQi6Qt1zCWMhPl3Qywvv8JHX0kZLJwGsxQ4Lw9qNAkl
+         Co+g==
+X-Gm-Message-State: APjAAAVZ+QLCv1iZTP908szaosnKJo6mGpbIeJO+NC8HrihHUb4xB6DL
+        nz+KiAEck4+ivHV0koScswz+z37ub3ZDvPoevqB+3QV1C+S9FzW+ggd80AAU+Of+dw==
+X-Google-Smtp-Source: APXvYqxUHm8nkJ6hG/35gl6LaLISAhEaymUX6Aha2ZOpAibGjBsVDnsokSZ84fJuax4F9OI9v4NdIcGzfzXX
+X-Received: by 2002:a50:f4c3:: with SMTP id v3mr30525317edm.115.1566302749969;
+        Tue, 20 Aug 2019 05:05:49 -0700 (PDT)
+Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
+        by smtp-relay.gmail.com with ESMTPS id n20sm97522ejr.72.2019.08.20.05.05.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 04:50:08 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     broonie@kernel.org, robh+dt@kernel.org
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] dt-bindings: spi: Fix the number of CS lines documented as an example
-Date:   Tue, 20 Aug 2019 17:20:00 +0530
-Message-Id: <20190820115000.32041-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Tue, 20 Aug 2019 05:05:49 -0700 (PDT)
+X-Relaying-Domain: sirena.org.uk
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1i02tZ-00020I-GQ; Tue, 20 Aug 2019 12:05:49 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id BCED5274314C; Tue, 20 Aug 2019 13:05:47 +0100 (BST)
+Date:   Tue, 20 Aug 2019 13:05:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: spi: Fix the number of CS lines documented
+ as an example
+Message-ID: <20190820120547.GA4738@sirena.co.uk>
+References: <20190820115000.32041-1-manivannan.sadhasivam@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uAKRQypu60I7Lcqm"
+Content-Disposition: inline
+In-Reply-To: <20190820115000.32041-1-manivannan.sadhasivam@linaro.org>
+X-Cookie: It's the thought, if any, that counts!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The number of CS lines is mentioned as 2 in the spi-controller binding
-but however in the example, 4 cs-gpios are used. Hence fix that to
-mention 4.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- Documentation/devicetree/bindings/spi/spi-controller.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--uAKRQypu60I7Lcqm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-index a02e2fe2bfb2..732339275848 100644
---- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-@@ -31,7 +31,7 @@ properties:
-       If that property is used, the number of chip selects will be
-       increased automatically with max(cs-gpios, hardware chip selects).
- 
--      So if, for example, the controller has 2 CS lines, and the
-+      So if, for example, the controller has 4 CS lines, and the
-       cs-gpios looks like this
-         cs-gpios = <&gpio1 0 0>, <0>, <&gpio1 1 0>, <&gpio1 2 0>;
- 
--- 
-2.17.1
+On Tue, Aug 20, 2019 at 05:20:00PM +0530, Manivannan Sadhasivam wrote:
+> The number of CS lines is mentioned as 2 in the spi-controller binding
+> but however in the example, 4 cs-gpios are used. Hence fix that to
+> mention 4.
 
+Please use subject lines matching the style for the subsystem.  This
+makes it easier for people to identify relevant patches.
+
+--uAKRQypu60I7Lcqm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1b4hgACgkQJNaLcl1U
+h9CaTAf+NDDtCxFNPDyqiudCbpGsmAOBaem3UqwpTZRbK9vy7b0ePoD9WJKWG+2O
+1VxpcQp243Ardj1r8k9gZPYeWpolHmFen00GoakMDJiP7HLfjUIj/qReHkvbY23k
+6f0+DWwWlW6dNYOTzunzeqihVNB8Ca+IRADgp6S89o9fMD/2KbIAsNrSKOJwuhAG
+qtELaiaIKSFFbibjD1kLAjhcvcSZ6kYeF6sA6dNXvgvH9VgAuoWxcJTR092lPPDd
+3f1T/MKZQyo3yal/0WJ9O5rKdUe7HAinhnc8ptUm11hvog21k+sWQkMFgELcJ3Ci
+tVI+DaUHu+fv61YcaPMmvHPb8hITEA==
+=qfh+
+-----END PGP SIGNATURE-----
+
+--uAKRQypu60I7Lcqm--
