@@ -2,92 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AE895E13
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 14:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4650C95F3E
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2019 14:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728366AbfHTMFv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Aug 2019 08:05:51 -0400
-Received: from mail-ed1-f100.google.com ([209.85.208.100]:35967 "EHLO
-        mail-ed1-f100.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728595AbfHTMFv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 08:05:51 -0400
-Received: by mail-ed1-f100.google.com with SMTP id p28so6023862edi.3
-        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 05:05:50 -0700 (PDT)
+        id S1729024AbfHTMzC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Aug 2019 08:55:02 -0400
+Received: from mail-wm1-f100.google.com ([209.85.128.100]:55942 "EHLO
+        mail-wm1-f100.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729825AbfHTMzB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 08:55:01 -0400
+Received: by mail-wm1-f100.google.com with SMTP id f72so2519009wmf.5
+        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 05:55:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eE6gZQF2ER9hZ6A9hgkSkDoNLmLgYWTJNw8Y60IMAz4=;
-        b=GsNuQCk0T6s3VuXtaozkRsiowHBcG8ndW6DmSWqY8ERaF6BoBm8fUNepGXCrrx2E26
-         YBBkdK47dS3xPsBSBHSBx/GMD4L9K2dk40jPNI63ngzTM/eHzev2U6EMgycniG0JRkOA
-         LMLR/AMxu1p2j1amhujqHHE+DnDSbibJLgO1s07ihgz03mOW+zAjrAAYZPjY6GJqkmSd
-         bsMnoDRrZcv1LS6G/kTS9uVwvLkxITLdFVy+aLh8YBFTSn7uFWOi+2kbLCtYqME9zxW5
-         TlVDamZkHV9jlYLPfmaUK+km9cQi6Qt1zCWMhPl3Qywvv8JHX0kZLJwGsxQ4Lw9qNAkl
-         Co+g==
-X-Gm-Message-State: APjAAAVZ+QLCv1iZTP908szaosnKJo6mGpbIeJO+NC8HrihHUb4xB6DL
-        nz+KiAEck4+ivHV0koScswz+z37ub3ZDvPoevqB+3QV1C+S9FzW+ggd80AAU+Of+dw==
-X-Google-Smtp-Source: APXvYqxUHm8nkJ6hG/35gl6LaLISAhEaymUX6Aha2ZOpAibGjBsVDnsokSZ84fJuax4F9OI9v4NdIcGzfzXX
-X-Received: by 2002:a50:f4c3:: with SMTP id v3mr30525317edm.115.1566302749969;
-        Tue, 20 Aug 2019 05:05:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:message-id:date;
+        bh=BdZ3c/necGDxLfFb1+nhbPyR5/R0A9R2K/u32/exq+M=;
+        b=hSoojA6opavicZ3PW2E14jcYC+PQOkopkcFv8rkcjxcS8I5oVlTPebVUWWQsKrLmYq
+         JTqgIsBxf6KdI0dNDnIgGJVRQ+aHeAXfKMo57rO13KevbJnB95gRVZIaU/Wh5pYgP0xy
+         Ph6OQ7lcwmDwfkiffz+EqU4nMTUXAJJIV+Ly0yEVM8E3aGGvXiifICsNu0BECDAGN7Cw
+         Au1wO0Bac2mLimhTSKSKj1c+qygfOPAW9PuD9oJyhhMvnm8nAN9cAynl3o7mt3T3phkP
+         kd5Lt546qgVSktm5w/qrXpXCXt3FXxuWqyN+Q0S+AnboxgG3kZbBT5nH9XGH6jkEzseH
+         1Ctg==
+X-Gm-Message-State: APjAAAXtibV8ngyToWYFcIF14uWX4nwE1PjGBuvT4Jmj9PSse+bfqcpQ
+        SiF4QxHbNFrt64hiHnkeB+maO4DEMZc9cDyUhNHv+OicxkMDPLrjcpC07RXKqaL18Q==
+X-Google-Smtp-Source: APXvYqzhTrD/hOszChMAnJxemDv/II1NLndmIl1OVvzu7rnCD4ezxJI9ITOEKuVAdn3XK8uTlXbJnhgKzeti
+X-Received: by 2002:a1c:7914:: with SMTP id l20mr26443271wme.130.1566305700532;
+        Tue, 20 Aug 2019 05:55:00 -0700 (PDT)
 Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
-        by smtp-relay.gmail.com with ESMTPS id n20sm97522ejr.72.2019.08.20.05.05.49
+        by smtp-relay.gmail.com with ESMTPS id b17sm276029wru.15.2019.08.20.05.55.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 05:05:49 -0700 (PDT)
+        Tue, 20 Aug 2019 05:55:00 -0700 (PDT)
 X-Relaying-Domain: sirena.org.uk
 Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i02tZ-00020I-GQ; Tue, 20 Aug 2019 12:05:49 +0000
+        id 1i03fA-0002Dp-8k; Tue, 20 Aug 2019 12:55:00 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id BCED5274314C; Tue, 20 Aug 2019 13:05:47 +0100 (BST)
-Date:   Tue, 20 Aug 2019 13:05:47 +0100
+        id 867A42742ABD; Tue, 20 Aug 2019 13:54:59 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: spi: Fix the number of CS lines documented
- as an example
-Message-ID: <20190820120547.GA4738@sirena.co.uk>
-References: <20190820115000.32041-1-manivannan.sadhasivam@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uAKRQypu60I7Lcqm"
-Content-Disposition: inline
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, robh+dt@kernel.org
+Subject: Applied "spi: Fix the number of CS lines documented as an example" to the spi tree
 In-Reply-To: <20190820115000.32041-1-manivannan.sadhasivam@linaro.org>
-X-Cookie: It's the thought, if any, that counts!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Patchwork-Hint: ignore
+Message-Id: <20190820125459.867A42742ABD@ypsilon.sirena.org.uk>
+Date:   Tue, 20 Aug 2019 13:54:59 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The patch
 
---uAKRQypu60I7Lcqm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+   spi: Fix the number of CS lines documented as an example
 
-On Tue, Aug 20, 2019 at 05:20:00PM +0530, Manivannan Sadhasivam wrote:
-> The number of CS lines is mentioned as 2 in the spi-controller binding
-> but however in the example, 4 cs-gpios are used. Hence fix that to
-> mention 4.
+has been applied to the spi tree at
 
-Please use subject lines matching the style for the subsystem.  This
-makes it easier for people to identify relevant patches.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.3
 
---uAKRQypu60I7Lcqm
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1b4hgACgkQJNaLcl1U
-h9CaTAf+NDDtCxFNPDyqiudCbpGsmAOBaem3UqwpTZRbK9vy7b0ePoD9WJKWG+2O
-1VxpcQp243Ardj1r8k9gZPYeWpolHmFen00GoakMDJiP7HLfjUIj/qReHkvbY23k
-6f0+DWwWlW6dNYOTzunzeqihVNB8Ca+IRADgp6S89o9fMD/2KbIAsNrSKOJwuhAG
-qtELaiaIKSFFbibjD1kLAjhcvcSZ6kYeF6sA6dNXvgvH9VgAuoWxcJTR092lPPDd
-3f1T/MKZQyo3yal/0WJ9O5rKdUe7HAinhnc8ptUm11hvog21k+sWQkMFgELcJ3Ci
-tVI+DaUHu+fv61YcaPMmvHPb8hITEA==
-=qfh+
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---uAKRQypu60I7Lcqm--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 7f01494fd85f3ac40635bc2a7bf005b607084c96 Mon Sep 17 00:00:00 2001
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Date: Tue, 20 Aug 2019 17:20:00 +0530
+Subject: [PATCH] spi: Fix the number of CS lines documented as an example
+
+The number of CS lines is mentioned as 2 in the spi-controller binding
+but however in the example, 4 cs-gpios are used. Hence fix that to
+mention 4.
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Link: https://lore.kernel.org/r/20190820115000.32041-1-manivannan.sadhasivam@linaro.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ Documentation/devicetree/bindings/spi/spi-controller.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+index a02e2fe2bfb2..732339275848 100644
+--- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+@@ -31,7 +31,7 @@ properties:
+       If that property is used, the number of chip selects will be
+       increased automatically with max(cs-gpios, hardware chip selects).
+ 
+-      So if, for example, the controller has 2 CS lines, and the
++      So if, for example, the controller has 4 CS lines, and the
+       cs-gpios looks like this
+         cs-gpios = <&gpio1 0 0>, <0>, <&gpio1 1 0>, <&gpio1 2 0>;
+ 
+-- 
+2.20.1
+
