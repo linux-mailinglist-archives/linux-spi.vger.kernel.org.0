@@ -2,66 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B72E9830B
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Aug 2019 20:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3189856B
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Aug 2019 22:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727266AbfHUSeO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Aug 2019 14:34:14 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:44311 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727255AbfHUSeN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Aug 2019 14:34:13 -0400
-Received: by mail-oi1-f193.google.com with SMTP id k22so2347599oiw.11;
-        Wed, 21 Aug 2019 11:34:13 -0700 (PDT)
+        id S1730399AbfHUURg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Aug 2019 16:17:36 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:42120 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730394AbfHUURg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Aug 2019 16:17:36 -0400
+Received: by mail-ed1-f66.google.com with SMTP id m44so4417502edd.9;
+        Wed, 21 Aug 2019 13:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ruBGqBHEZj6R/n/UictnSOt4uBIxPDwxz3lLXAx5KwQ=;
+        b=TjtYqJXGB/ykDyoql5KzZMYJtSqAkzKLEoLN0oIw+TDOyLXtUwISXHkbgAE6kSaB0O
+         BD/OqrB+EkVTCs5dStJPFud36VrgCh6S0cCSVIewHN6bWX9FJoRfNS9w3iqMpyZM7+fE
+         vNHTf+6giCBptFtOyyugGBc4oNrzzVxptwRFR7Q+4Y6lp7NJ3T5LSjeGRz/VAJ8cbkRJ
+         GfAo27UhPUUBTA1MXHtc45G3AE1K9XusnvJpWvYu1jRf6ZRw8HcvZRyUkrxYlMBNdMIr
+         32KNZraY7X68nEwxm8V5rpp1gS79Fi6rKWpTR7zW6shhi+D62tqAlBeFXgEL/48c1XhH
+         PX2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gi2BZPRlk0uA2JzVWQCJU+s6t1qhy8lKwkC+6999UAg=;
-        b=IsOv291JMyHDIF/Ml4tt/YNVWOBn6d86CqQUZZmPH7RbzjseJ34W7FXtuzs+Wm0YOD
-         SeekYwZKyUzfpoTG0HiWdQNLIyO8fM4Yg18KNGN1fNqutNqiLqGKpZFHyOMm3TyniTEL
-         zvo6MykN311SB27l8taZCELBSXLgdlZZ1b8BZctSReSYRbcuAAPvIlzgZ4OT31paSxuF
-         wCZA4SSIc8H89vu1SXYDA7T1gtvTcM6rnfJOPqulGiF0qDmBpXZ73KbQrM5S3ea5yf0i
-         jOJXmoe5+vqWVOz0GphNufXctte+0kPAcSNuAcUq1qgJJTBI23WCck/LXXXtXzVmNW3a
-         hDpw==
-X-Gm-Message-State: APjAAAXJn7o01Fm9E6F3E+GynBhVdKg58+7tuOXLAy19frPe8hrnHR5V
-        AoD/CCqrQUSKF3PkOlS47Q==
-X-Google-Smtp-Source: APXvYqx3DnJdbJxJ1b1jmrQ8KW6WnZtAF9psvXnB9Q4r34aJ0FaUBKFmSuJmxrnz4HGTVJO0BtdgUQ==
-X-Received: by 2002:aca:4f48:: with SMTP id d69mr1082979oib.74.1566412453047;
-        Wed, 21 Aug 2019 11:34:13 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v5sm8044571otk.64.2019.08.21.11.34.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 11:34:12 -0700 (PDT)
-Date:   Wed, 21 Aug 2019 13:34:11 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chuanhua Han <chuanhua.han@nxp.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        shawnguo@kernel.org, leoyang.li@nxp.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Chuanhua Han <chuanhua.han@nxp.com>
-Subject: Re: [PATCH 1/3] dt-bindings: fsl: dspi: Add fsl,ls1088a-dspi
- compatible string
-Message-ID: <20190821183411.GA26478@bogus>
-References: <20190801083105.30102-1-chuanhua.han@nxp.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ruBGqBHEZj6R/n/UictnSOt4uBIxPDwxz3lLXAx5KwQ=;
+        b=tLT26rqPJ07R0CkGfl9BI1L/CT2BYjs7VwdELHBwcuGGA2K2peenWMRZK24vImOhpP
+         bk3E04YGUXle3T9F+xeDG9SCMURIxTf8/9Xflvzwh2TNFFSV/co8VXTucW9baTnvveK8
+         vcwFeBr9ZXT9dv9HelhXUx5X7bql+gZwwEN7XhNxhsPHXst5u/JNdliRNWkygkj2gIxI
+         YZpJRmOuoy4dYjcNVhCo7F6xUSsQJW4rKyKmaQaBP+tGQmNv/4QCFdScLgr+cee9lz1k
+         U5gO8EoLBkW436mx3khNcBHyEF0kdvojjrzYjrZLW6dssypVtz6xO+Juqfqt85k8Xb4d
+         5cDQ==
+X-Gm-Message-State: APjAAAV4Lt8QB4uOJlI2NA6QhlP7+YNodQ4bfvGOpYd554jRwG8+ubJi
+        XxjITO3vwNGCZhsgSBWjloOVs1D7mtBbPIW2QKytVWWraoOovg==
+X-Google-Smtp-Source: APXvYqwrP74wLb8m1ilmOXBfMt5Dg1EAdXEgveAHXhEDWzyQtEPWsxKC1sjKAnqCQRyTeXPVKbPDcO8XqmsG9w7J0xY=
+X-Received: by 2002:a17:906:c445:: with SMTP id ck5mr23858690ejb.15.1566418654176;
+ Wed, 21 Aug 2019 13:17:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190801083105.30102-1-chuanhua.han@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190818182600.3047-1-olteanv@gmail.com> <CA+h21hr4UcoJK7upNJjG0ibtX7CkF=akxVdrb--1AJn6-z=sUQ@mail.gmail.com>
+ <20190821043845.GB1332@localhost> <20190821140815.GA1447@localhost>
+In-Reply-To: <20190821140815.GA1447@localhost>
+From:   Vladimir Oltean <olteanv@gmail.com>
+Date:   Wed, 21 Aug 2019 23:17:23 +0300
+Message-ID: <CA+h21hrtzU1XL-0m+BG5TYZvVh8WN6hgcM7CV5taHyq2MsR5dw@mail.gmail.com>
+Subject: Re: [PATCH spi for-5.4 0/5] Deterministic SPI latency with NXP DSPI driver
+To:     Richard Cochran <richardcochran@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Hubert Feurstein <h.feurstein@gmail.com>,
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu,  1 Aug 2019 16:31:03 +0800, Chuanhua Han wrote:
-> new compatible string: "fsl,ls1088a-dspi".
-> 
-> Signed-off-by: Chuanhua Han <chuanhua.han@nxp.com>
-> ---
->  Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Hi Richard,
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Wed, 21 Aug 2019 at 17:08, Richard Cochran <richardcochran@gmail.com> wrote:
+>
+> On Tue, Aug 20, 2019 at 09:38:45PM -0700, Richard Cochran wrote:
+> > Overall, the PTP switch use case is well supported by Linux.  The
+> > synchronization of the management CPU to the PTP, while nice to have,
+> > is not required to implement a Transparent Clock.  Your specific
+> > application might require it, but honestly, if the management CPU
+> > needs good synchronization, then you really aught to feed a PPS from
+> > the switch into a gpio (for example) on the CPU.
+>
+> Another way to achieve this is to have a second MAC interface on the
+> management CPU connected to a spare port on the switch.  Then time
+> stamping, PHC, ptp4l, and phc2sys work as expected.
+>
+> Thanks,
+> Richard
+
+Of course PPS with a dedicated hardware receiver that can take input
+compare timestamps is always preferable. However non-Ethernet
+synchronization in the field looks to me like "make do with whatever
+you can". I'm not sure a plain GPIO that raises an interrupt is better
+than an interrupt-driven serial protocol controller - it's (mostly)
+the interrupts that throw off the precision of the software timestamp.
+And use Miroslav's pps-gpio-poll module and you're back from where you
+started (try to make a sw timestamp as precise as possible).
+As for dedicating a second interface pair in (basically) loopback just
+for sync, that's how I'm testing PTP when I don't have a second board
+and hence how the idea occurred to me. I can imagine this even getting
+deployed and I can also probably name an example, but it certainly
+wouldn't be my first choice. But DSA could have that built-in, and
+with the added latency benefit of a MAC-to-MAC connection.
+Too bad the mv88e6xxx driver can't do loopback timestamping, that's
+already 50% of the DSA drivers that support PTP at all. An embedded
+solution for this is less compelling now.
+
+Regards,
+-Vladimir
