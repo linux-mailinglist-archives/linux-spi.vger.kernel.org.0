@@ -2,81 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B86C96C90
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Aug 2019 00:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F1A97130
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Aug 2019 06:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfHTW5o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Aug 2019 18:57:44 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:42676 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbfHTW5o (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Aug 2019 18:57:44 -0400
-Received: by mail-ed1-f68.google.com with SMTP id m44so584057edd.9
-        for <linux-spi@vger.kernel.org>; Tue, 20 Aug 2019 15:57:43 -0700 (PDT)
+        id S1727172AbfHUEit (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Aug 2019 00:38:49 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40906 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725787AbfHUEit (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Aug 2019 00:38:49 -0400
+Received: by mail-pl1-f196.google.com with SMTP id h3so619666pls.7;
+        Tue, 20 Aug 2019 21:38:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=07iW9OsevzlS5I3et5+zU0iR4z/1YzAmleuCQeuJJF4=;
-        b=Gwd8DHU3cBtgZ3mZfij4abNm4neUMRFcD2jq0Lo0BUiGTDK2WgUkk5fflJkFtyuXVu
-         qdJ2oxCpckIWmdY9D2C7GX3yfJRFZKf4Ueoj+y7Zz7cCq9iI5W/UqB3efa4/fPo/xaF3
-         NMVM6Zrgi8UovDRHhf51XThB+zFJpRD6cpTX0FJCYApm/bmhy03dKyusza4gcHL7CsBe
-         vGy5KLGVT7zXZ88DWnZbOSKaSZZlBtbNxMyjXIDkPhs+RVeIxYQSiHpaQAmc+Ltoo0hd
-         xAv7mjxVUVxyFCJIGCYKvR6EBXeoKgOLvZl5MswEdnpRGDE37KqlrRg7MsVhDNmrJ4y9
-         42gQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TCRzSo2+YmALi9PZyz5wD52AgU/Uh3WkVnPqoJEWQQw=;
+        b=e+TGLLWGYWt0SDDKEqwe2WROAYLoMCVytYe9yQy77KeHIhr1fJ2oJZcSJWzezDc6Zk
+         NFO1XTG8DfQZdPwg4zjUnpnJx2NIsQ2uFdaf+nrSQ/7rg8WP5b02gTPTBvkePmQqfE2v
+         MqJTcfd+v9ntiFpInF/uBiuIDAn47EAr1dm2q9EgcrDYC7wK8oNO3o3a8B1MjZopWHQ0
+         BXCgCaltL7eE3UnZ5XuENpMuFcMnmmygzcqPFyGSNajGEBfIomshK2lt93QNOeDvUiWv
+         3ThQJOPFK3kS28sT6iis7zLn/4AZYiH3xP8PKRySrNOfhR9L2N5fORgJl25b3MGOlEcK
+         k7aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=07iW9OsevzlS5I3et5+zU0iR4z/1YzAmleuCQeuJJF4=;
-        b=L2xq6WbnXR9KBPjnKb9FuntXkDPhPm69rmc+WU3waeG35vNgiDo85yzyOgmlpAENKK
-         EERFAbMLZEyHJMoIXKzfJ+2RZTlPDZSyAzW/oKjWzKHIpDHkoxNvLn+ow0F1aFGC0i8D
-         sr8DUpErGzrGA7QOKH9HhU2VSeNj6+xPYjAunYbDD/d8pYpo+7XOzaL8ZvaFDymhlcWK
-         LK1dGFdQ0eDblu/28ezw0NWp0YWpq42MWw9mw7oK7+chYMFZM5GQQwM+l83lzLvIbY1C
-         cWioQrwK4nP8nvKgLKZnDXLQ7/LhTQ5ZJ+9/wk2eRFnuDqSS+NBMGb4O66jNZACJQSu8
-         mFPA==
-X-Gm-Message-State: APjAAAWKjXkGbzTdEA82hu2LC17ueF1jjFpf+NJ9wMh0r5oDcHmIOFaQ
-        137LHnSL/2m7bi8ZcVXA8OlFXUUrN9SnzTz5pbo=
-X-Google-Smtp-Source: APXvYqznkyXL1qoBCh3/hd2iI422dceLxLnlSIeBetpmQDzoAeHBmGrnZfuf/GaLYkvjVT0NOFP+CvFzkDMMVYAqZeA=
-X-Received: by 2002:a17:906:f746:: with SMTP id jp6mr27919570ejb.32.1566341366240;
- Tue, 20 Aug 2019 15:49:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TCRzSo2+YmALi9PZyz5wD52AgU/Uh3WkVnPqoJEWQQw=;
+        b=UsWY3G/EMZrEoGJPrMQUDt6/f2hkvU4hJgP1TWKitIekHUH0I6SsUjFpR33GpvL4W5
+         yfUwS4eLpA/YkPv/OFCtEEKwVMZHlgzBR7gXADGVtLtqP9BO2P0nfmmkIrkjsW0cJ342
+         DTEmOrQZ/UgoJY6tdjiRBOEm9ccq7TpI2J0fyYKhADOtUAGr6YS7jrOoEfVlBEj5Lkiv
+         /ZHPgk1k6mP3L7rtcjFO5jxnWDGiPfPqb0bwC9phPeULWZJRXRZiXOEHwPQmPasu25Ol
+         rEK3Kn3GospmOkUlFFf+cITDK0QAwGcN171BsabPm+oDGnSSD71am2cSgF8ggpe7qrwJ
+         vGrQ==
+X-Gm-Message-State: APjAAAUCHB0CdP/ln4sau2xsENkaytcSmPwMfWStydyt5I34gDaghzAF
+        Xl0ed4iO4hPV5Snv601S4YIrZN/p
+X-Google-Smtp-Source: APXvYqxA1/bLdDKvrBgXA8vYsRSbgsbcegGf2i/C/IkGtomaF8gB+ewvM3+eoBWwHNN33yMJYfPciA==
+X-Received: by 2002:a17:902:9b90:: with SMTP id y16mr28580615plp.17.1566362328969;
+        Tue, 20 Aug 2019 21:38:48 -0700 (PDT)
+Received: from localhost (c-73-222-71-142.hsd1.ca.comcast.net. [73.222.71.142])
+        by smtp.gmail.com with ESMTPSA id g2sm39921718pfq.88.2019.08.20.21.38.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2019 21:38:47 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 21:38:45 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Hubert Feurstein <h.feurstein@gmail.com>, mlichvar@redhat.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH spi for-5.4 0/5] Deterministic SPI latency with NXP DSPI
+ driver
+Message-ID: <20190821043845.GB1332@localhost>
+References: <20190818182600.3047-1-olteanv@gmail.com>
+ <CA+h21hr4UcoJK7upNJjG0ibtX7CkF=akxVdrb--1AJn6-z=sUQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20190818180115.31114-1-olteanv@gmail.com> <20190818180115.31114-14-olteanv@gmail.com>
- <20190820130257.GD4738@sirena.co.uk> <CA+h21hqCyJ4WQgP31gcMq21k6wG8YQmbg0BZKwh_2YKvWKY5RA@mail.gmail.com>
-In-Reply-To: <CA+h21hqCyJ4WQgP31gcMq21k6wG8YQmbg0BZKwh_2YKvWKY5RA@mail.gmail.com>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Wed, 21 Aug 2019 01:49:15 +0300
-Message-ID: <CA+h21hoYv=a5qm4ewB7ey2K2N5Uv5Wm9G2fELX_0ukJZcdXbQQ@mail.gmail.com>
-Subject: Re: [PATCH spi for-5.4 13/14] spi: spi-fsl-dspi: Reduce indentation
- level in dspi_interrupt
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+h21hr4UcoJK7upNJjG0ibtX7CkF=akxVdrb--1AJn6-z=sUQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 21 Aug 2019 at 01:43, Vladimir Oltean <olteanv@gmail.com> wrote:
->
-> On Tue, 20 Aug 2019 at 16:02, Mark Brown <broonie@kernel.org> wrote:
-> >
-> > On Sun, Aug 18, 2019 at 09:01:14PM +0300, Vladimir Oltean wrote:
-> > > There is no point in checking which interrupt source was triggered in
-> > > SPI_SR, since only EOQ and TCFQ modes trigger interrupts anyway (see the
-> > > writes to SPI_RSER). In DMA mode, the RSER is configured for RFDF_DIRS=1
-> > > and TFFF_DIRS=1, aka FIFO events generate eDMA requests and not CPU
-> > > interrupts.
-> >
-> > It's also good to check interrupt sources in case the interrupt line
-> > might be shared, that means that it's possible that the interrupt
-> > handler will be called when there's no interrupt at all from the IP.  It
-> > also helps with robustness in case there's some system error though
-> > that's (hopefully!) a lot less common.  This driver does set IRQF_SHARED
-> > so it does support that, I don't know how many systems could do it but
-> > it seems a shame to remove the support from the driver.
->
-> Ok, I hadn't thought of that, I'll add the check back.
+On Tue, Aug 20, 2019 at 06:57:10PM +0300, Vladimir Oltean wrote:
+> What if all we need is just a mini-"phc2sys-over-Ethernet" that runs
+> on a kernel thread internally to DSA? We say that DSA switches are
+> "slave" to the "master" netdevice - their PTP clock can be the same.
+> I am fairly confident that the sja1105 at least can be configured in
+> hardware to work in this mode. One just needs to enable the CPU port
+> in its own reachability matrix. None of the switch ports is really a
+> "CPU port" hardware speaking.
 
-But shouldn't it be returning IRQ_NONE in that case? Right now it's
-returning IRQ_HANDLED.
+I did consider this method when working on an early version of the
+marvell driver.  At least for that chip, there was no way to get the
+time stamps on the port attached to the CPU port.
+
+The DSA system (as I understand it) does not allow using the Linux
+interface acting as the CPU port in a way that would allow taking time
+stamps with the existing code base.  You might find a way, but I guess
+it won't be easy.
+
+Overall, the PTP switch use case is well supported by Linux.  The
+synchronization of the management CPU to the PTP, while nice to have,
+is not required to implement a Transparent Clock.  Your specific
+application might require it, but honestly, if the management CPU
+needs good synchronization, then you really aught to feed a PPS from
+the switch into a gpio (for example) on the CPU.
+
+Using SPI or MDIO or I2C or UART as a synchronization bus is not a
+wise solution.
+
+Having said that, I don't oppose improving the situation for these
+slow, non-deterministic serial buses, but you will have to sell your
+solution to the maintainers of said buses.
+
+Thanks,
+Richard
