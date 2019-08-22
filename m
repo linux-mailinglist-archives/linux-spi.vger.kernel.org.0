@@ -2,91 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A69993B1
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2019 14:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709949961B
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2019 16:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388621AbfHVMdZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Aug 2019 08:33:25 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39252 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387721AbfHVMdZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Aug 2019 08:33:25 -0400
-Received: by mail-lj1-f195.google.com with SMTP id x4so5372803ljj.6
-        for <linux-spi@vger.kernel.org>; Thu, 22 Aug 2019 05:33:24 -0700 (PDT)
+        id S2387674AbfHVOQq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Aug 2019 10:16:46 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34828 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387673AbfHVOQp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Aug 2019 10:16:45 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n4so3772323pgv.2;
+        Thu, 22 Aug 2019 07:16:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=iVbicIO0p0gRad2mojfMoXPK1bvee8m7TQDWF1D1ACPE9HqmNhL2GBY+oHjfleXep+
-         wlwnOwIGGXywTfWnwFY2sQ2+h7NA0iPrPVMp/fpPZz0TCkDtzEkceGvTPOs+5VsA+PDA
-         bog9JENsSaOIYx1EC+/cR0/9HBbgj+daWMstdn5zms4O325GD0AQaD/ms3ETHmSt6uto
-         Q6665qufcUQQcAyfjYrg0fnfHXit5ax05ENYUjOrRwG/w//Vr5t0ubPdCTC7BmhWIJWz
-         mQQKKeL+2FnzNGwY3o/OwTiNkaLGMTHC1jVl8gl5NMf5tKp3Dcziy6EpzKOnIMzsAz/Z
-         Gt/Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5VZDP+zY9UFzHwVTHjDjM0azlGZus3k3oidB4OI3cp0=;
+        b=Ryud04X97qBBwO3cdJNnMtMYp+2s2M6RK8p8MjuFtFJf1781kRwwTA3CI6mb/zBB4R
+         RqrhfzelNgFLsoxsBNLKFqRr5iUHQO0XunibnVotaoMsgghk2+LKb60U8LeYCoLBGJnT
+         4eg7Tn0RjgcfGDtsfuCHSKixxjJ9tdZGDIQxdy9eCn6QjrKGH5ubBnwLPxjwKK9JHEZR
+         929yatg4EyAov3rFB5K1Y5FqESRVsy2oa3DYBSBhY6l32ixeTjb4pP/MD9yHscI3DLLL
+         la3b6Nh4/9psru4bcE4CvJrIGRHXnc1LSYfzp5shonQDun/zw+NhWrM9al1GDroBh6Ik
+         Lw0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=s2+sWVVY29P2bYEtVHlLAt9eTcbIfLTimWiMope7OIURWUfyzHkImECP2eHj1CHD1f
-         pbMX6U/1URoDSWZhVzJVcm9nIFO6233ytsES0j+0Yj/j3XFhUWwsshJ3AHeUK93UWwBa
-         Wk7KNBkLvoGGJMGQ5WFsixSugf7jt6TDtdSb/QPpTVSUm4B9aTaY9INKmrqfKWZrP+2f
-         zZ9W7VmBa3Hslh2jRpbXg//lgl4TvbhuZ2mXk87NnEjiG+zMLqyvJwxcWLwPLidsE8ND
-         1qupoXWIpT2uFuWESM0+qOgHejSMc2icYgs+zIPcnSIVnBWthEX1kK5I8LikPaJf0mP1
-         A2sg==
-X-Gm-Message-State: APjAAAWnA8Jkp/I9xu/aYJQlx950r2XITP+heH22zL+WMRo7YL4UvUqU
-        DPbLmP6i11jUnwd2cD96VNx7MQOC/nSyeVU+NcM=
-X-Google-Smtp-Source: APXvYqzw94KeAGRPQVwAh+UJFBQ7DOYzf35Giv9H76e1wjU00JCNb63boziaVgpph5IBHV5hsn94tmvSTLyQYtVZmJc=
-X-Received: by 2002:a2e:63cd:: with SMTP id s74mr17881307lje.3.1566477203899;
- Thu, 22 Aug 2019 05:33:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5VZDP+zY9UFzHwVTHjDjM0azlGZus3k3oidB4OI3cp0=;
+        b=XWYxXYoo6YVQexsrIzaE+0+C7IwT5Hs/AGIHT31vfy67IOUqFOB8y9YAWJUtoZyYpZ
+         Xy0iXB1KsMrz0gU9O4jelcI6gZHmo1EgLDR5wwTaeA61WdCJQ5MlKMQUfupwzntH51eY
+         6mwJ2b/l/3G+eOLVtm7QCulZeaj/XkRKaofSnpesuAsNwNNy8Ob38uoBpR2fJ7MKqfuZ
+         1Cv/gQL8HsyeGxOwygFbvSE9kyHlJIa0G/ufnTjcrj+i/3pmhObsdDju4qTGHEBBsBza
+         KJpI7Jila1zycVdznT+W8seNYbmYpQBeK7tuCwuGNcE9DIlEwYZJnYmWbRfxlH8qa14m
+         Yonw==
+X-Gm-Message-State: APjAAAX33EmMJ8gj8eXWL6UoMSg7wZRz2BIw7jdmbSBv9kBiWYZN01GV
+        XE3egiV/7Fft4GyHOhtS5s0=
+X-Google-Smtp-Source: APXvYqwhgVaaVhTig6IyVqy/taAffsMHHT8ArQW7IweA0ynp6c6lmfMrSCZ2c8rEngPQP4deOL/Npg==
+X-Received: by 2002:a63:1e06:: with SMTP id e6mr14347523pge.185.1566483404879;
+        Thu, 22 Aug 2019 07:16:44 -0700 (PDT)
+Received: from localhost (c-73-222-71-142.hsd1.ca.comcast.net. [73.222.71.142])
+        by smtp.gmail.com with ESMTPSA id e9sm26328184pge.39.2019.08.22.07.16.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2019 07:16:43 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 07:16:41 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Hubert Feurstein <h.feurstein@gmail.com>,
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH spi for-5.4 0/5] Deterministic SPI latency with NXP DSPI
+ driver
+Message-ID: <20190822141641.GB1437@localhost>
+References: <20190818182600.3047-1-olteanv@gmail.com>
+ <CA+h21hr4UcoJK7upNJjG0ibtX7CkF=akxVdrb--1AJn6-z=sUQ@mail.gmail.com>
+ <20190821043845.GB1332@localhost>
+ <20190821140815.GA1447@localhost>
+ <CA+h21hrtzU1XL-0m+BG5TYZvVh8WN6hgcM7CV5taHyq2MsR5dw@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:33:23
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
-Date:   Thu, 22 Aug 2019 12:33:23 +0000
-Message-ID: <CAN-_bTaBz=R_5Eq36MajojFPC316zxdyXEEVzKzzZgeSdGG98A@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+h21hrtzU1XL-0m+BG5TYZvVh8WN6hgcM7CV5taHyq2MsR5dw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+On Wed, Aug 21, 2019 at 11:17:23PM +0300, Vladimir Oltean wrote:
+> Of course PPS with a dedicated hardware receiver that can take input
+> compare timestamps is always preferable. However non-Ethernet
+> synchronization in the field looks to me like "make do with whatever
+> you can". I'm not sure a plain GPIO that raises an interrupt is better
+> than an interrupt-driven serial protocol controller - it's (mostly)
+> the interrupts that throw off the precision of the software timestamp.
+> And use Miroslav's pps-gpio-poll module and you're back from where you
+> started (try to make a sw timestamp as precise as possible).
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+Right, it might be better, might not.  You can consider hacking a
+local time stamp into the ISR.  Also, if one of your MACs has a input
+event pin, you can feed the switch's PPS output in there.
+
+> wouldn't be my first choice. But DSA could have that built-in, and
+> with the added latency benefit of a MAC-to-MAC connection.
+> Too bad the mv88e6xxx driver can't do loopback timestamping, that's
+> already 50% of the DSA drivers that support PTP at all. An embedded
+> solution for this is less compelling now.
+
+Let me back track on my statement about mv88e6xxx.  At the time, I
+didn't see any practical way to use the CPU port for synchronization,
+but I forget exactly the details.  Maybe it is indeed possible,
+somehow.  If you can find a way that will work on your switch and on
+the Marvell, then I'd like to hear about it.
+
+Thinking back...
+
+One problem is this.  PTP requires a delay measurement.  You can send
+a delay request from the host, but there will never be a reply.
+
+Another problem is this.  A Sync message arriving on an external port
+is time stamped there, but then it is encapsulated as a tagged DSA
+management message and delivered out the CPU port.  At this point, it
+is no longer a PTP frame and will not be time stamped at the CPU port
+on egress.
+
+Thanks,
+Richard
