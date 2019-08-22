@@ -2,115 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA67F9A1F1
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2019 23:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE53D9A21F
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2019 23:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391230AbfHVVQC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Aug 2019 17:16:02 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:33605 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390414AbfHVVP4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Aug 2019 17:15:56 -0400
-Received: by mail-wr1-f68.google.com with SMTP id u16so6731589wrr.0;
-        Thu, 22 Aug 2019 14:15:54 -0700 (PDT)
+        id S2393369AbfHVVZA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Aug 2019 17:25:00 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:36639 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732609AbfHVVZA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Aug 2019 17:25:00 -0400
+Received: by mail-wm1-f67.google.com with SMTP id g67so7128882wme.1;
+        Thu, 22 Aug 2019 14:24:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=W1FNCrNnXxN2/QCtRCe8rujqC6nAfE/fwtvSmwo86ho=;
-        b=u9uG4WzXRi7xfjev4QAdR8xBQJZYDnOSV5fPq+Zc6cQ6e5CNNjHCOTFWAeqsXhGwQk
-         kitD/MjaSnyLmuF+vG6X5hSBpoBqud6VpyOgceFQfqfb4c+YC83XgqqqU/Jb4G44PT3d
-         xjnHF90r6dV0NF6oRIwzLa1IVH3VwXMw1pnHRZR/cwg9ve6coCbyqA+3wOsBouPSLxBw
-         Z3YN1xGTujZSEmi+ywKoUh+3EmP9ZPumdmYnBiQ00ytatyLGd+JQqxMGmro/+RJSlI5c
-         Fj70VZ1q2dTA+Qcc8kdn81beUXlg+44wu+0Ykntim7kurc6PNCowwgil9m6qops48WmX
-         7TnQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=2wGo/YiSTpvz565aGzvgcGHwqI5KdtM5ozK5uEe+N3Y=;
+        b=iVX3BDMDjmfIMXh8OHrZZ7TxSTuvuFoMI91e+NfQ6KUH++d4e/rnepDjb+r31kLBbo
+         phuXCSM7lV+bACavBKAS8TnO3ELkdqXwPzoL3NlkgAXqdNhy2xqbJ4s4A5whN1sfktOp
+         4jpuInf1iF2dVJkLqbxAvrJraFo1GpBr12PLdHfqBYhgdr8JqGgKJbiWBKGEOVxs34Rc
+         cXYXkBs0lFjnNRezTPpVHlKBPPOnW+KDfPBDZGoFU7xKq8+n6xXy5olBnmeH9aGshKX1
+         9h2wGdrV17QCafI3KP0Lynun4PuESiKiQe+yAIqPcLHGvEGZO5dO9CXom3pl/fhYBCff
+         B/3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=W1FNCrNnXxN2/QCtRCe8rujqC6nAfE/fwtvSmwo86ho=;
-        b=cpSIWwoG3/agDcy1cbpj/AyCxMAqfyqxRKUFCQY0LZJvLbOUIZXgwpIUABmdajml2m
-         0YN9V+7vKL6SkgBWa5uUQJv5JTHIKEPdyrbfBP5kIEGtGzA10CuSBFY5UtpEg3w+974/
-         TdE02HmxE3f3q0dWOsoimc5sI5sPHKaEGz0c5ZQPhcbYeOFty0SXq0IFJIpzXogv9nBc
-         91oRLh5qAgctEIhrm3UXvjX6YNNe2y1BgkGb4sUngMRupoT0krwjTdg23DCzSBeX0K7G
-         NVh8/8iMXWS1bJTBmXR59NL2WW42IFJUq4DQC4X7nC00MM8/FFXMzNP9SYu4FWsTExxO
-         FBJg==
-X-Gm-Message-State: APjAAAVq7CCxZe9Z4RtTuOnE/duLF95Ni+DiWSyXKfMQxg4WAcvtVXQl
-        UX2PJkY9qgHRHkIGycAkGI8=
-X-Google-Smtp-Source: APXvYqxrNYl9VM7eGVqaMg5RDku84AwmuFLk1/8d2JGDiD9bPciaIQIeUKMpHERycQmQMNJb5IOwAQ==
-X-Received: by 2002:adf:eac3:: with SMTP id o3mr911812wrn.264.1566508553725;
-        Thu, 22 Aug 2019 14:15:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=2wGo/YiSTpvz565aGzvgcGHwqI5KdtM5ozK5uEe+N3Y=;
+        b=Zz5zV/icR8kyi9ixrsqfDsDP8YAV6+K6vcKSqZUNiYqPErnFnJxAjP23tE2+O1ci0U
+         bypTb0o5oFUbnJ8CazDeAJyQ6byBYFaS/7Ros1DAyf8tc1BvQcRGv7VmLUZyUnpVE6Lk
+         f/riKBuQ+JS2w4deV0AWJRYyQptn0YiC2qTHoAS9q9EkORt3gtA+1stIzFUoDBBOBvtl
+         7qpJhXQDE4t3XnB32PVmiyNlA84TflXMZxp1Qe4CYyCDnBFpgwxtrqSsppInzUJTRTNq
+         t5Vt7YgutOJsXWJ/0FLAOqtr03vWdJFpTWtEDXieVbPzT/XqJopmn3cF9Vpv3FSNgLCU
+         /5Xw==
+X-Gm-Message-State: APjAAAXWzC0TvbJ75FcnR5JBpj9c0IRFo7ULT2KjcaHWAuPtLs1SX4qV
+        cugdcVtMdbwhrp5Z966uCQ0=
+X-Google-Smtp-Source: APXvYqxueUWCUlYoVPBGUkE2tTXhggnOdrMAbzDqVQRDyWliszgA22N14x9MoOYEdy9fFO2yfzQ1TQ==
+X-Received: by 2002:a7b:cd06:: with SMTP id f6mr1171095wmj.66.1566509098187;
+        Thu, 22 Aug 2019 14:24:58 -0700 (PDT)
 Received: from localhost.localdomain ([86.126.25.232])
-        by smtp.gmail.com with ESMTPSA id g197sm578488wme.30.2019.08.22.14.15.52
+        by smtp.gmail.com with ESMTPSA id 7sm463135wmj.46.2019.08.22.14.24.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 14:15:53 -0700 (PDT)
+        Thu, 22 Aug 2019 14:24:57 -0700 (PDT)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH v2 5/5] ARM: dts: ls1021a-tsn: Use the DSPI controller in poll mode
-Date:   Fri, 23 Aug 2019 00:15:14 +0300
-Message-Id: <20190822211514.19288-6-olteanv@gmail.com>
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: [PATCH 0/1] Fix shared IRQ behavior in spi-fsl-dspi
+Date:   Fri, 23 Aug 2019 00:24:49 +0300
+Message-Id: <20190822212450.21420-1-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190822211514.19288-1-olteanv@gmail.com>
-References: <20190822211514.19288-1-olteanv@gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Connected to the LS1021A DSPI is the SJA1105 DSA switch. This
-constitutes 4 of the 6 Ethernet ports on this board.
+This patch is taken out of the "Poll mode for NXP DSPI driver" series
+and respun against the "for-4.20" branch.
+$(git describe --tags 13aed2392741) shows:
+v4.20-rc1-18-g13aed2392741
 
-As the SJA1105 is a PTP switch, constant disciplining of its PTP clock
-is necessary, and that translates into a lot of SPI I/O even when
-otherwise idle.
+Vladimir Oltean (1):
+  spi: spi-fsl-dspi: Exit the ISR with IRQ_NONE when it's not ours
 
-Switching to using the DSPI in poll mode has several distinct
-benefits:
+ drivers/spi/spi-fsl-dspi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-- With interrupts, the DSPI driver in TCFQ mode raises an IRQ after each
-  transmitted byte. There is more time wasted for the "waitq" event than
-  for actual I/O. And the DSPI IRQ count is by far the largest in
-  /proc/interrupts on this board (larger than Ethernet). I should
-  mention that due to various LS1021A errata, other operating modes than
-  TCFQ are not available.
-
-- The SPI I/O time is both lower, and more consistently so. For a TSN
-  switch it is important that all SPI transfers take a deterministic
-  time to complete.
-  Reading the PTP clock is an important example.
-  Egressing through the switch requires some setup in advance (an SPI
-  write command). Without this patch, that operation required a
-  --tx_timestamp_timeout 50 (ms), now it can be done with
-  --tx_timestamp_timeout 10.
-  Yet another example is reconstructing timestamps, which has a hard
-  deadline because the PTP timestamping counter wraps around in 0.135
-  seconds. Combined with other I/O needed for that to happen, there is
-  a real risk that the deadline is not always met.
-
-See drivers/net/dsa/sja1105/ for more info about the above.
-
-Cc: Rob Herring <robh@kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
----
- arch/arm/boot/dts/ls1021a-tsn.dts | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/boot/dts/ls1021a-tsn.dts b/arch/arm/boot/dts/ls1021a-tsn.dts
-index 5b7689094b70..1c09cfc766af 100644
---- a/arch/arm/boot/dts/ls1021a-tsn.dts
-+++ b/arch/arm/boot/dts/ls1021a-tsn.dts
-@@ -33,6 +33,7 @@
- };
- 
- &dspi0 {
-+	/delete-property/ interrupts;
- 	bus-num = <0>;
- 	status = "okay";
- 
 -- 
 2.17.1
 
