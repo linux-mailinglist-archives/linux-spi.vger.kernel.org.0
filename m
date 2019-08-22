@@ -2,129 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C52998EE
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2019 18:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D57F99E94
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2019 20:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730647AbfHVQNZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Aug 2019 12:13:25 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:44479 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726894AbfHVQNZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Aug 2019 12:13:25 -0400
-Received: by mail-ed1-f66.google.com with SMTP id a21so8685289edt.11;
-        Thu, 22 Aug 2019 09:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LExFqvIj1L+lDrOhkqY8R7J2HYM/Yxh/uJYyKhG/Ah0=;
-        b=VWr5YElxR1FIc45g10qGJUHBbf3l81WFOmr1Xc6pXNvanaEalwXu1viXjtf6Fw/2I1
-         Zp2OgRI+YB8k4L5AiaJFGsriaLfddC7DFfrscgYn9C7P4RwLWBxAXacXgJG3TR0VQ9j0
-         q4oKfoDfgoMKaBCl/hojh3Hrw5H2hgdMMIrnI4zChEiAVb1HxVIp/m40dd6ERFSjhcvF
-         j7FBbH1ZN7FpCgM2XMHKqJDHV24FBYXHZ0Fzu6Yqi1fb8l07Sneef5xEchUw8riF1QcB
-         MR8awG+RQ2lnBKLvLtuuOA80UZzIhAuviAjrPR6Qap/6VoB82Qw4DLc4Y3SfLiSKPcQd
-         KuGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LExFqvIj1L+lDrOhkqY8R7J2HYM/Yxh/uJYyKhG/Ah0=;
-        b=N3z4QUoRSxSbNEi7iXvl6bW3Pl/FD2dhroqD5pIIGTJaWLOH8VD1wJwYZVMAXS1Mu8
-         LkB0/skOxySa5+29ADmza5jNRIBlvkaqCxWAjLr9YsB946eP5Qkvw0h72gkoaKCPkT+A
-         5aqHmDMP18M9uZyUlQbwJ+zsIn5TIOUFdQqbYmrPJqDIsV5Tip5kYVaEITBRxsTH0GOw
-         61m09HluPTV35Y7lzfc8axB9YKkyDYX3tkAC1nqCIwUnXGyEUoj9hOwa9yZ8dCBME05N
-         db2COQwPWGGYtFsbOfzY0sS5Lzr+jwuKdfRZ9IztPSLtl2KIra+znKv/1FaElBg3JfUD
-         r5mA==
-X-Gm-Message-State: APjAAAUKAcPbU4LDVksaRQXJSmqd7gEj5mEQ0MInw8lRYUPtM044FWvk
-        HXBNgHIiK98s4GW8MQZYvhXYXkXi9O3111zCXGM=
-X-Google-Smtp-Source: APXvYqwySjEhNPsVj2cU8MdMv8/L10CUMmqa9kbGgex13CjHuIYPLbz9Jdg8Dp9V2g+VPgRpFl6kksvfxxwGe/+j+Gw=
-X-Received: by 2002:a17:906:4683:: with SMTP id a3mr56211ejr.47.1566490403846;
- Thu, 22 Aug 2019 09:13:23 -0700 (PDT)
+        id S1731425AbfHVSTq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Aug 2019 14:19:46 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48746 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728493AbfHVSTq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Aug 2019 14:19:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Resent-To:
+        Resent-Message-ID:Resent-Date:Resent-From:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Sender:
+        Resent-Cc:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=5Z2SosjvkZ1nQ9T8O5LbKIz7Ppc6knjwo45eqJZ9RQQ=; b=e
+        dmIcIXMOdJWjhj/E+TjSBWlgE82w6NTI+xFmqsxasLDkNIBHTgul6JpnS8Ei/i/GFrJMXAsbMBqJ2
+        /sjXfGDOTZGVt+aDGMiMePaSaihkq5YFZUXcOeELQ+37zOPxZELIFEvIVWu4U5CUvjOsACJxOyq4x
+        rQG1gK49UsJPQgfo=;
+Received: from 92.40.26.78.threembb.co.uk ([92.40.26.78] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i0rgU-0007cX-6Z; Thu, 22 Aug 2019 18:19:42 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id DA54ED02CB0; Thu, 22 Aug 2019 19:19:39 +0100 (BST)
+Date:   Thu, 22 Aug 2019 18:11:37 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     h.feurstein@gmail.com, mlichvar@redhat.com,
+        richardcochran@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
+        linux-spi@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH spi for-5.4 2/5] spi: Add a PTP system timestamp to the
+ transfer structure
+Message-ID: <20190822171137.GB23391@sirena.co.uk>
+References: <20190818182600.3047-1-olteanv@gmail.com>
+ <20190818182600.3047-3-olteanv@gmail.com>
 MIME-Version: 1.0
-References: <20190818182600.3047-1-olteanv@gmail.com> <CA+h21hr4UcoJK7upNJjG0ibtX7CkF=akxVdrb--1AJn6-z=sUQ@mail.gmail.com>
- <20190821043845.GB1332@localhost> <20190821140815.GA1447@localhost>
- <CA+h21hrtzU1XL-0m+BG5TYZvVh8WN6hgcM7CV5taHyq2MsR5dw@mail.gmail.com>
- <20190822141641.GB1437@localhost> <CA+h21hpJm-3svfV93pYYrpoiV12jDjuROHCgvCjPivAjXTB_VA@mail.gmail.com>
- <20190822160521.GC4522@localhost>
-In-Reply-To: <20190822160521.GC4522@localhost>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Thu, 22 Aug 2019 19:13:12 +0300
-Message-ID: <CA+h21hrELeUKbfGD3n=BL741QN9m3SaoJJ0y+q_uthdxvSFVRg@mail.gmail.com>
-Subject: Re: [PATCH spi for-5.4 0/5] Deterministic SPI latency with NXP DSPI driver
-To:     Richard Cochran <richardcochran@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Hubert Feurstein <h.feurstein@gmail.com>,
-        Miroslav Lichvar <mlichvar@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BwCQnh7xodEAoBMC"
+Content-Disposition: inline
+In-Reply-To: <20190818182600.3047-3-olteanv@gmail.com>
+X-Cookie: Don't SANFORIZE me!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 22 Aug 2019 at 19:05, Richard Cochran <richardcochran@gmail.com> wrote:
->
-> On Thu, Aug 22, 2019 at 05:58:49PM +0300, Vladimir Oltean wrote:
-> > I don't think I understand the problem here.
->
-> On the contrary, I do.
->
 
-You do think that I understand the problem? But I don't!
+--BwCQnh7xodEAoBMC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > You'd have something like this:
-> >
-> > Master (DSA master port)         Slave (switch CPU port)
-> >
-> >     |                            |         Tstamps known
-> >     |                            |         to slave
-> >     |       Local_sync_req       |
-> >  t1 |------\                     |         t1
-> >     |       \-----\              |
-> >     |              \-----\       |
-> >     |                     \----->| t2      t1, t2
-> >     |                            |
-> >     |     Local_sync_resp /------| t3      t1, t2, t3
-> >     |              /-----/       |
-> >     |       /-----/              |
-> >  t4 |<-----/                     |         t1, t2, t3, t4
-> >     |                            |
-> >     |                            |
-> >     v           time             v
->
-> And who generates Local_sync_resp?
->
+On Sun, Aug 18, 2019 at 09:25:57PM +0300, Vladimir Oltean wrote:
 
-Local_sync_resp is the same as Local_sync_req except maybe with a
-custom tag added by the switch. Irrelevant as long as the DSA master
-can timestamp it.
+> @@ -1391,6 +1402,13 @@ static void __spi_pump_messages(struct spi_control=
+ler *ctlr, bool in_kthread)
+>  		goto out;
+>  	}
+> =20
+> +	if (!ctlr->ptp_sts_supported) {
+> +		list_for_each_entry(xfer, &mesg->transfers, transfer_list) {
+> +			xfer->ptp_sts_word_pre =3D 0;
+> +			ptp_read_system_prets(xfer->ptp_sts);
+> +		}
+> +	}
+> +
 
-> Also, what sort of frame is it?  PTP has no Sync request or response.
->
+We can do better than this for controllers which use transfer_one().
 
-A frame that can be timestamped on RX and TX by the DSA switch and
-master, that is not a PTP frame.
+> +const void *spi_xfer_ptp_sts_word(struct spi_transfer *xfer, bool pre)
+> +{
 
-> > But you don't mean a TX timestamp at the egress of swp4 here, do you?
->
-> Yes, I do.
->
-> > Why would that matter?
->
-> Because in order to synchronize to an external GM, you need to measure
-> two things:
->
-> 1. the (unchanging) delay from MAC to MAC
-> 2. the (per-packet) switch residence time
->
+xfer can be const here too.
 
-But since when are we discussing the synchronization to an external
-grandmaster? I don't see the connection.
+> + * @ptp_sts_supported: If the driver sets this to true, it must provide a
+> + *	time snapshot in @spi_transfer->ptp_sts as close as possible to the
+> + *	moment in time when @spi_transfer->ptp_sts_word_pre and
+> + *	@spi_transfer->ptp_sts_word_post were transmitted.
+> + *	If the driver does not set this, the SPI core takes the snapshot as
+> + *	close to the driver hand-over as possible.
 
-> Thanks,
-> Richard
+A couple of issues here.  The big one is that for PIO transfers
+this is going to either complicate the code or introduce overhead
+in individual drivers for an extremely niche use case.  I guess
+most drivers won't implement it which makes this a bit moot but
+then this is a concern that pushes back against the idea of
+implementing the feature.
 
-Regards,
--Vladimir
+The other is that it's not 100% clear what you're looking to
+timestamp here - is it when the data goes on the wire, is it when
+the data goes on the FIFO (which could be relatively large)?  I'm
+guessing you're looking for the physical transfer here, if that's
+the case should there be some effort to compensate for the delays
+in the controller?
+
+--BwCQnh7xodEAoBMC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1ezMgACgkQJNaLcl1U
+h9Dtlwf8D458UfQqr72thVWI+Ey8aogmoV90iL49JqGttusBMDAzjT53BuOcQqwH
+qnhIsIhw5c9GntD5ecx5US51xCJspCBd2krEL6xkadG2zAUFbjM7IAZogNzSHSe7
+4AycBeqzcABbZU1ajW1AEg/KDJ9RVryh15rxsDKPrvCq29lFTTD/GOG9DJOMfR1/
+KusCvjkIe7KN8y84i//XaugzufS2H+M66d1w1gka84/ML3tpnpLRKdqmXL2fbrN2
+3kH1ntk0zeV/EpHR/LYCZ3dRy8vesTfNRCFbm2iUGQuLCe9Jsv3+vdWBBQ6YQLqv
+2erPwB/lwaAUM9kXu/xkbtTOl+GryQ==
+=j++/
+-----END PGP SIGNATURE-----
+
+--BwCQnh7xodEAoBMC--
