@@ -2,49 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD11299EAA
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2019 20:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F79199F2C
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2019 20:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbfHVSVt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Aug 2019 14:21:49 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52204 "EHLO
+        id S2388948AbfHVSth (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Aug 2019 14:49:37 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:58810 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727685AbfHVSVt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Aug 2019 14:21:49 -0400
+        with ESMTP id S1730918AbfHVSth (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Aug 2019 14:49:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Resent-To:
-        Resent-Message-ID:Resent-Date:Resent-From:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Sender:
-        Resent-Cc:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=rrMRoDUoFIzRligDCD6l+cGG8OCJYmuN1e5r0s0RK60=; b=K
-        dVjmt4KUm9S5SkBOIhQ+6xxrYnYUsLiq0AOWiZ2tUm+jeLHMTt2Zv3tyAbkRFydlZLdWDsVDxFVG2
-        CGdFaet0aMOLYyuYyXTVe1BVt/ZKRyHnn6uQwx/7mJxNEkAq7qOPBB1Pstxsk5HL3x5v0pFIvLKzL
-        P6crv8WyWHC/hoxc=;
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ZFdAsAhKZXbTwipyAaLFn+KZWfn8XNc9r15goIeXnEQ=; b=U1CQNO/Rb0Iyz0z+3cgPPSD5t
+        yhIw97sY5teyyLY4Jx428leYLZS5iPxcA7I/uM5iE/KFbA/y+8SCkf4tgj5SDwGOdvM7hYQPr665k
+        SUqd0tZqSi/DTAM9lJGUC4zZAT3Npzos+gkkK8AdXmfY8lSugZ0ocCSCWvOr319DJmvdc=;
 Received: from 92.40.26.78.threembb.co.uk ([92.40.26.78] helo=fitzroy.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1i0riU-0007d2-6B; Thu, 22 Aug 2019 18:21:46 +0000
+        id 1i0s9N-0007nF-HB; Thu, 22 Aug 2019 18:49:33 +0000
 Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 328C4D02CB0; Thu, 22 Aug 2019 19:21:45 +0100 (BST)
-Date:   Thu, 22 Aug 2019 18:38:46 +0100
+        id 65A7ED02CB0; Thu, 22 Aug 2019 19:49:27 +0100 (BST)
+Date:   Thu, 22 Aug 2019 19:49:27 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     h.feurstein@gmail.com, mlichvar@redhat.com,
-        richardcochran@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        linux-spi@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH spi for-5.4 3/5] spi: spi-fsl-dspi: Use poll mode in case
- the platform IRQ is missing
-Message-ID: <20190822173846.GA24020@sirena.co.uk>
-References: <20190818182600.3047-1-olteanv@gmail.com>
- <20190818182600.3047-4-olteanv@gmail.com>
+To:     Ashish Kumar <ashish.kumar@nxp.com>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>
+Subject: Re: [EXT] Re: [Patch v4 1/3] dt-bindings: spi: spi-fsl-qspi: Add
+ ls2080a compatibility string to bindings
+Message-ID: <20190822184927.GH23391@sirena.co.uk>
+References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
+ <20190821110640.GC5128@sirena.co.uk>
+ <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
+ <VI1PR04MB4015474B3086AE99354FE65395A50@VI1PR04MB4015.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Qxx1br4bt0+wmkIi"
+        protocol="application/pgp-signature"; boundary="YToU2i3Vx8H2dn7O"
 Content-Disposition: inline
-In-Reply-To: <20190818182600.3047-4-olteanv@gmail.com>
-X-Cookie: I just had a NOSE JOB!!
+In-Reply-To: <VI1PR04MB4015474B3086AE99354FE65395A50@VI1PR04MB4015.eurprd04.prod.outlook.com>
+X-Cookie: Don't SANFORIZE me!!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -52,32 +58,38 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---Qxx1br4bt0+wmkIi
+--YToU2i3Vx8H2dn7O
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 18, 2019 at 09:25:58PM +0300, Vladimir Oltean wrote:
-> On platforms like LS1021A which use TCFQ mode, an interrupt needs to be
-> processed after each byte is TXed/RXed. I tried to make the DSPI
-> implementation on this SoC operate in other, more efficient modes (EOQ,
-> DMA) but it looks like it simply isn't possible.
+On Thu, Aug 22, 2019 at 06:39:18AM +0000, Ashish Kumar wrote:
 
-This doesn't apply against current code (I guess due to your cleanup
-series), please check and resend.
+> > > Please use subject lines matching the style for the subsystem.  This
+> > > makes it easier for people to identify relevant patches.
+> Hi Mark,
 
---Qxx1br4bt0+wmkIi
+> After looking at some patch in Documentation/devicetree/bindings/spi/
+> I think I should update subject line to
+> dt-bindings: spi: Add ls2080-qspi compatible string for FSL QSPI driver
+> or=20
+> doc: qspi: Add ls2080-qspi compatible to DT bindings for FSL QSPI driver
+
+Drop the dt-bindings:.
+
+--YToU2i3Vx8H2dn7O
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1e0yYACgkQJNaLcl1U
-h9AFmQf8D5Hb+Q/mrXvp1IGUl8mX3fimwGOyB0PKBjy55JhqF+9D9cP267sDeH4X
-e9KOiLuQwASl9W/HRwOUAlw8kkq48mo3T20cdQ9BsoLAOf44RLf5WhKK+CQ+B+X0
-BmFgdA2yIfAfBKTP0Gpse5Ow8Y3ueCuV+3yyyuDy7uXYvNlFQ2QkyWIq74AuRO6K
-xK8mHj1M5dcg0YW/FGaRJ7zc4tI9UlOrlgqEx+0EgU6yM3Jxld36l+Rto5nUvr4v
-V0ZoB+T4bbO/fw6mp6+x0wGqVYwsyZZ3jyfjJor+3XFDdz8bLT0bCBflgewThjzZ
-2lRScmn82sShWw2HnkFfVv9mdSikTA==
-=RUOQ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1e47YACgkQJNaLcl1U
+h9A7uQf/dNBtSbaZ/Q4CmLrmJW1+t4b2gh+ryETbQz8vNiKnPlKBeQLF7W8KiJ+h
+DYG8qCiWwyHsIV4wo/hTUfViQJLPVnnabfoilcj46ZfB3SZrXk2i3h5dV1MZcHXx
+6CpWEUv56ti/1XoKXIfzcXYF9jcBjtD7gI87Ee8alit5X9a5FCl1s0HLXaivtgOa
+OqxL3SXPUt/KaKVY9/zGhN7bQ5pgH7xwWUQjJPKwY13/pbkBYyDzQAnxryap0KJ8
+vrUol7hPBtAmn3YZuuSXj+fRaWZ0F9snmRz1dglCedX4YMcwWOHH/v+Kn4sUg0sW
+k9a5KRX73AGlnwVjb9khqyuA163Byg==
+=Lzgd
 -----END PGP SIGNATURE-----
 
---Qxx1br4bt0+wmkIi--
+--YToU2i3Vx8H2dn7O--
