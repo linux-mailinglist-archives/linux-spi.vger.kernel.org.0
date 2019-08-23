@@ -2,93 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 218F39A706
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2019 07:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDA59AD18
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2019 12:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391742AbfHWFWV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Aug 2019 01:22:21 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:37593 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391792AbfHWFWU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 23 Aug 2019 01:22:20 -0400
-Received: by mail-pl1-f196.google.com with SMTP id bj8so4890127plb.4;
-        Thu, 22 Aug 2019 22:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lMXMx2vDpjNMDIWQ7QSQ6S8z7ajpHm6PRPm15ov737I=;
-        b=KeaE7QBzkb3jKyzk60frx2nmGc53sHhcgj4GiTpkE5V+yt+i2UhHwO+i5JZLv2+vvK
-         Er45DVGCzzFFKLZbGhkbgnuNHNkCtZOAeD+ry4E+7yqYbpDSDNzUUBGTyQF3WRgwpvNW
-         LiVDbx/bk9dxioU/yyIVmxAac9fZ1tb8LF27sFd2qRipKrZ+sAkZhA7joikuu3ThX1z1
-         3occALxywoENdOSkR5qr00GCmcRCtuAznyq63/XEemQJM1Nc5zcYzDYsdyiQA8lso6iA
-         KpFwX/AvhtUbddB1x7Qd8Up/8JA+9OtS/OBWzklpYSYwcefCSV/k5i4K7SwOVVGsjhgr
-         vW+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lMXMx2vDpjNMDIWQ7QSQ6S8z7ajpHm6PRPm15ov737I=;
-        b=Zvldfv3by7j7/i4YLkdbLfDM+XGbZdk5HXpo5KHWGZlxE5zNlCe5ct/Jb2PVjRibWe
-         HyyFVFDoNnsGop8OgVDdLjHMqeOljpZPy/Z4mJ86tlh0JD1ogOk8T5OM5nWXalqifOkj
-         U2leEpdPO9oeauwjZS16BD6F+5F141ei6kLd/rTHp2xy1UUYb1mCsFbMErRQCqxHd8qJ
-         fT4d24fbCI/Ot8UrcskOG0bykf/ZGHx2ksevZYgf2Xb2u09NKpi/SIh+Knv/FbToa9mz
-         vPgUSxD8jwKT+tBxMTl0HFh5IoP2h4uPV3D3HDlw5XGpBTxX9vu75Jp+AFtd48LSQNT6
-         HS6g==
-X-Gm-Message-State: APjAAAXFd1TNUBxbh8vzcMzeJW6qOyldt+WjeOnl77hEhiZ7sUp8qu1f
-        +sh+VoCSfDvvkXo1naasqpA=
-X-Google-Smtp-Source: APXvYqzPpjd79hrCDg9pFpJZaiCK1tp4m/eK9Ybw2SvjavGGMsL0Av8sXWq5CTkdttLcr36xbzW0jw==
-X-Received: by 2002:a17:902:2f43:: with SMTP id s61mr2640572plb.22.1566537740206;
-        Thu, 22 Aug 2019 22:22:20 -0700 (PDT)
-Received: from localhost (c-73-222-71-142.hsd1.ca.comcast.net. [73.222.71.142])
-        by smtp.gmail.com with ESMTPSA id o67sm1625121pfb.39.2019.08.22.22.22.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 22:22:19 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 22:22:17 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
+        id S1731768AbfHWK2T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 23 Aug 2019 06:28:19 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:55448 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731002AbfHWK2T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 23 Aug 2019 06:28:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=/E5JUjiVVTZL1/2NgiVKzh6rSDnh6yNikPOcBaHVxFQ=; b=NDsUSsnr95zSwKVYQ3WivbAxp
+        nxEjNHJjq5bl9MbaBxUkWhwzEv1O1o6KoHcw7hVZs5QW/H3TE2kjXqHy454n/mkmfpizXc4yyP1kt
+        uFOqkG0tZRE/NQJGuVEjlz4StMNKfsJ0+RYPJ369e4eA/gd7U+Nd8bRi8Q5FZ3oj/+jfs=;
+Received: from [92.54.175.117] (helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i16no-0002jC-VF; Fri, 23 Aug 2019 10:28:16 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id A8203D02CD0; Fri, 23 Aug 2019 11:28:16 +0100 (BST)
+Date:   Fri, 23 Aug 2019 11:28:16 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Hubert Feurstein <h.feurstein@gmail.com>,
-        Miroslav Lichvar <mlichvar@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH spi for-5.4 0/5] Deterministic SPI latency with NXP DSPI
- driver
-Message-ID: <20190823052217.GD2502@localhost>
-References: <20190818182600.3047-1-olteanv@gmail.com>
- <CA+h21hr4UcoJK7upNJjG0ibtX7CkF=akxVdrb--1AJn6-z=sUQ@mail.gmail.com>
- <20190821043845.GB1332@localhost>
- <20190821140815.GA1447@localhost>
- <CA+h21hrtzU1XL-0m+BG5TYZvVh8WN6hgcM7CV5taHyq2MsR5dw@mail.gmail.com>
- <20190822141641.GB1437@localhost>
- <CA+h21hpJm-3svfV93pYYrpoiV12jDjuROHCgvCjPivAjXTB_VA@mail.gmail.com>
- <20190822160521.GC4522@localhost>
- <CA+h21hrELeUKbfGD3n=BL741QN9m3SaoJJ0y+q_uthdxvSFVRg@mail.gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] spi: spi-fsl-dspi: Exit the ISR with IRQ_NONE
+ when it's not ours
+Message-ID: <20190823102816.GN23391@sirena.co.uk>
+References: <20190822211514.19288-1-olteanv@gmail.com>
+ <20190822211514.19288-3-olteanv@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SLfjTIIQuAzj8yil"
 Content-Disposition: inline
-In-Reply-To: <CA+h21hrELeUKbfGD3n=BL741QN9m3SaoJJ0y+q_uthdxvSFVRg@mail.gmail.com>
+In-Reply-To: <20190822211514.19288-3-olteanv@gmail.com>
+X-Cookie: Don't SANFORIZE me!!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 07:13:12PM +0300, Vladimir Oltean wrote:
-> You do think that I understand the problem? But I don't!
 
-;^)
+--SLfjTIIQuAzj8yil
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > And who generates Local_sync_resp?
-> >
-> 
-> Local_sync_resp is the same as Local_sync_req except maybe with a
-> custom tag added by the switch. Irrelevant as long as the DSA master
-> can timestamp it.
+On Fri, Aug 23, 2019 at 12:15:11AM +0300, Vladimir Oltean wrote:
+> The DSPI interrupt can be shared between two controllers at least on the
+> LX2160A. In that case, the driver for one controller might misbehave and
+> consume the other's interrupt. Fix this by actually checking if any of
+> the bits in the status register have been asserted.
 
-So this is point why it won't work.  The time stamping logic in the
-switch only recognizes PTP frames.
- 
-Thanks,
-Richard
+It would be better to have done this as the first patch before
+the restructuring, that way we could send this as a fix - the
+refactoring while good doesn't really fit with stable.
+
+--SLfjTIIQuAzj8yil
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1fv78ACgkQJNaLcl1U
+h9Cv4gf+PlempNcDKec7OiBxdWny+wFPRO1wq7OKtAEtzU2wFvuZYAjGYbCciUyw
+cKlSUJ9T9Lg4Rq9PTM7CbmY3FobaqJyqTeZT6cADZE1QZoTJD78lQxB8XmJtRBu1
+r8z6XPbgLbRnws9lzRQIDdRvdIX4DO9sFiY/M+9nbbMGbGbkYKbHNk5461pHEV45
+c9lCEgHX62vJerrt0jxfomw50W8tEaqhZ9q6dg1zXwuXjXMmPBPQNnTkexYuco8L
+PIfr5fq2cFMOH0hvXdim2H8spTU3tizQQlZS7NeXkaC8tgE4vBYibF1BYnoCfuos
+AYL6TZxFXh9I5JM/fUCBs+qbLtbneg==
+=lQOn
+-----END PGP SIGNATURE-----
+
+--SLfjTIIQuAzj8yil--
