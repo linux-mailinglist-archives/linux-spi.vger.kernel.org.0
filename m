@@ -2,60 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C23649BD94
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Aug 2019 14:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A969BDB7
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Aug 2019 14:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728065AbfHXMNQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 24 Aug 2019 08:13:16 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:35613 "EHLO
+        id S1728068AbfHXMi3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 24 Aug 2019 08:38:29 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:36505 "EHLO
         mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728042AbfHXMNP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Aug 2019 08:13:15 -0400
-Received: by mail-ed1-f67.google.com with SMTP id t50so18203209edd.2;
-        Sat, 24 Aug 2019 05:13:14 -0700 (PDT)
+        with ESMTP id S1727779AbfHXMi3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Aug 2019 08:38:29 -0400
+Received: by mail-ed1-f67.google.com with SMTP id p28so18250124edi.3;
+        Sat, 24 Aug 2019 05:38:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qrbwbvMintEfbN3O8x/1+iStK6WU41doMdz4JBoT9mI=;
-        b=Ru8DfersM4wIvcsmJvGjFZ5M6BQxkAmj+F7ABByrV06/XTMCL7jyL6TPg51jHDHTEO
-         trOrgskHumIk/k3s21dO4cNp+Pu/piOP8hRxCzg1W1xmIkLU/OuLLUv4rHL8em5QqkyX
-         0oAp80f6vbj1n9X8iATF3FZmtGv1DOisaF+iJNTaY37kLNHZNYrVLo0KbgE/kLI0v+Ck
-         Tnt7FCef8fACk8UnAct1aNiOIL54aqVYspSTi/yZDfo7qXCa0msMyz3ZdUNZ0ced79BN
-         /9SDFN+66YMp3vaqtbGC+XPl9zP9OQZeJ+jwTMLIYPjHdnGe6SReEi8jDNv2WHDGQMC7
-         XxHg==
+        bh=z3RGGepD7q6g4K/N/3B+QEz7ZEYK/+6U1W3tHf0Pa6g=;
+        b=TU0t6FG5aGrwAIzADGUZe3ZYqxOJFYSPXAwuRaSs+4FnfPBojgmqJo4+OJW974LtwD
+         YY5Dphf/KpS8Q7P8zAnWg9qFyEQ8Q9eAOvQdVxfvo6JYatv9GhakUXsyLFi4x+dx2Qay
+         DPARX50Vul1W73g5YDVaSo6dLghpPs8qByufihJf7WpvGVJHcVcYCyG7GN82qgAeIXOy
+         OB92Tkm55OGb7p0Vskhd5rPDAnLeU5qxUWytje5qBF/cXVJD+4IyA0PneT4CLL/JMLb+
+         z3TTOi/StKM9Lkf78uNwTeXiPMJ3Hv/ic1Pkavt/4OsqNcLUoSW7EkLH8WzNELdU2Unf
+         9bzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qrbwbvMintEfbN3O8x/1+iStK6WU41doMdz4JBoT9mI=;
-        b=fyADXj0yQU733weT5Qa9X0FEIqar/6WALX3WwGRU94EOF6G7GFpd10dQOHKKQVYOKG
-         cIQIFl2zHy6tuyMBbRajyUrew4z5W+KNGloRas+OuSu4gRT6GJDjrG3dgNJI9fpGBWly
-         N/QQn+z+G9mDHHL7tB5utj9xBbfz/yGw1nhc2p2xdekXUmUlzkXUvZZhXPxFENkxYKtz
-         j5mkDdMiSKO0WfuO/MMgFNbHdBlX/5j4qp8FuLn5cIrOLPn1toAbVDqQDMbXZ4mJM+Gt
-         qLr8nhMHBAGasll618M2LW1W3EIPmsX/hAH88q1AEbXBesyCx+wb++njQ2p9N4IiX2HY
-         Hx7w==
-X-Gm-Message-State: APjAAAWzETseZMF9pOD7kY/1fJLd9BwnqMlBRErDv8BbMhl74LOzjKSa
-        O++h5FRIG6idhbIg6OwtviyCG4lywJgFLjRNJ4c=
-X-Google-Smtp-Source: APXvYqyco6vgDk8O5il3NETaH+LBIBxotnk/iCuXINfwfRlj6Eho5VLzGHCjZQrgFppyTGCr3e9GtuUMTUuA94VM7vk=
-X-Received: by 2002:a05:6402:124f:: with SMTP id l15mr9205396edw.140.1566648793847;
- Sat, 24 Aug 2019 05:13:13 -0700 (PDT)
+        bh=z3RGGepD7q6g4K/N/3B+QEz7ZEYK/+6U1W3tHf0Pa6g=;
+        b=rDVhh4WyfT1Yt+gxUe8lAPg0E0BO3TsccNkN1uDKzlS6o4aN662bU0KnKl1LkStceq
+         TbrlYWd+PmV+sXtHii9+QWTudqR2Cl9vk8+fZ6DhcosPpROMVsSqiM7u8/WJTroR3RLS
+         OYFPsuuDqHSo5s8tIMb0jrHAanzrASWqOm2alsMaQ0DrJ3HyXq8wIXiFIgsXUUq2Wyvv
+         HZCUpTI7+BNbA96c/45FMgFtI5fMPcbIdfnTExeacAyijVzVX5zbgvSHfOXMoSt4lvpb
+         952n3uUDkrJSPBmigE5kNzx3yRHhFKhEmqfG28kunLUfO4nj4APn2Q+fHp2OVtskWSUx
+         dieg==
+X-Gm-Message-State: APjAAAXy/1r8woZkuvnQHdfdkBnmS5nuk/aZCyosdx2cZ4I9lK7hnzYp
+        cxys8sTRqIvytyYWSnih1YBwgKrhLyF+4H5Go8vA0k+dESA=
+X-Google-Smtp-Source: APXvYqzAJmLsMren3HoTje7W5KiQGmXUUi3Mz8ryV8E/K6ldTiA0wbYamC8al5UGNFVC/KkT7f7qKRhqXkxc4no6j+w=
+X-Received: by 2002:a17:906:d298:: with SMTP id ay24mr8758870ejb.230.1566650307279;
+ Sat, 24 Aug 2019 05:38:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190818182600.3047-1-olteanv@gmail.com> <CA+h21hr4UcoJK7upNJjG0ibtX7CkF=akxVdrb--1AJn6-z=sUQ@mail.gmail.com>
- <20190821043845.GB1332@localhost> <20190821140815.GA1447@localhost>
- <CA+h21hrtzU1XL-0m+BG5TYZvVh8WN6hgcM7CV5taHyq2MsR5dw@mail.gmail.com>
- <20190822141641.GB1437@localhost> <CA+h21hpJm-3svfV93pYYrpoiV12jDjuROHCgvCjPivAjXTB_VA@mail.gmail.com>
- <20190822160521.GC4522@localhost> <CA+h21hrELeUKbfGD3n=BL741QN9m3SaoJJ0y+q_uthdxvSFVRg@mail.gmail.com>
- <20190823052217.GD2502@localhost>
-In-Reply-To: <20190823052217.GD2502@localhost>
+References: <20190818182600.3047-1-olteanv@gmail.com> <20190818182600.3047-3-olteanv@gmail.com>
+ <20190822171137.GB23391@sirena.co.uk>
+In-Reply-To: <20190822171137.GB23391@sirena.co.uk>
 From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Sat, 24 Aug 2019 15:13:02 +0300
-Message-ID: <CA+h21hpUytc2S=NmEbjDiQo4wRrKJiE5ZT+jVgCyocUb2RMYNg@mail.gmail.com>
-Subject: Re: [PATCH spi for-5.4 0/5] Deterministic SPI latency with NXP DSPI driver
-To:     Richard Cochran <richardcochran@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Hubert Feurstein <h.feurstein@gmail.com>,
+Date:   Sat, 24 Aug 2019 15:38:16 +0300
+Message-ID: <CA+h21hrwJi1ftJn56RrfobdkcCpsKZGy1VV1+ANWpxoKxwRmwA@mail.gmail.com>
+Subject: Re: [PATCH spi for-5.4 2/5] spi: Add a PTP system timestamp to the
+ transfer structure
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Hubert Feurstein <h.feurstein@gmail.com>,
         Miroslav Lichvar <mlichvar@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
         linux-spi@vger.kernel.org, netdev <netdev@vger.kernel.org>
@@ -65,52 +62,74 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 23 Aug 2019 at 08:22, Richard Cochran <richardcochran@gmail.com> wrote:
+On Thu, 22 Aug 2019 at 21:19, Mark Brown <broonie@kernel.org> wrote:
 >
-> On Thu, Aug 22, 2019 at 07:13:12PM +0300, Vladimir Oltean wrote:
-> > You do think that I understand the problem? But I don't!
+> On Sun, Aug 18, 2019 at 09:25:57PM +0300, Vladimir Oltean wrote:
 >
-> ;^)
->
-> > > And who generates Local_sync_resp?
-> > >
+> > @@ -1391,6 +1402,13 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
+> >               goto out;
+> >       }
 > >
-> > Local_sync_resp is the same as Local_sync_req except maybe with a
-> > custom tag added by the switch. Irrelevant as long as the DSA master
-> > can timestamp it.
+> > +     if (!ctlr->ptp_sts_supported) {
+> > +             list_for_each_entry(xfer, &mesg->transfers, transfer_list) {
+> > +                     xfer->ptp_sts_word_pre = 0;
+> > +                     ptp_read_system_prets(xfer->ptp_sts);
+> > +             }
+> > +     }
+> > +
 >
-> So this is point why it won't work.  The time stamping logic in the
-> switch only recognizes PTP frames.
+> We can do better than this for controllers which use transfer_one().
 >
-> Thanks,
-> Richard
 
-So to summarize the pros and cons of a PHC-to-PHC loopback sync:
-Pros:
-- At least two orders of magnitude improvement in offset compared to a
-software timestamping solution, even in the situation where the
-software timestamp is fully optimized
-- Does not depend on the availability of PPS hardware
-- In the case where both MACs support this, the synchronization can
-simply reuse the DSA link with no dedicated circuitry
-Cons:
-- DSA framework for retrieving timestamps would need to be reworked
-- The solution would have to be implemented in the kernel
-- A separate protocol from PTP would have to be devised
-- Not all DSA masters support hardware timestamping. Of those that do,
-not all may support timestamping generic frames
-- Not all PTP-capable DSA switches support timestamping generic frames
-- Not all DSA switches may be able to loop back traffic from their CPU
-port. I think this is called "hairpinning".
-- The solution only covers the sync of the top-most switch in the DSA
-tree. The hairpinning described above would need to be selective as
-well, not just possible.
+You mean I should guard this "if", and the one below, with "&&
+!ctlr->transfer_one"?
 
-So at this point, the solution is not generic enough for me to be
-compelled to prototype it. Taking system clock timestamps in the SPI
-driver is "good enough". We'll just need to work out a way with Mark
-that this can be added to the SPI subsystem, given the valid
-objections already expressed.
+> > +const void *spi_xfer_ptp_sts_word(struct spi_transfer *xfer, bool pre)
+> > +{
+>
+> xfer can be const here too.
+>
+> > + * @ptp_sts_supported: If the driver sets this to true, it must provide a
+> > + *   time snapshot in @spi_transfer->ptp_sts as close as possible to the
+> > + *   moment in time when @spi_transfer->ptp_sts_word_pre and
+> > + *   @spi_transfer->ptp_sts_word_post were transmitted.
+> > + *   If the driver does not set this, the SPI core takes the snapshot as
+> > + *   close to the driver hand-over as possible.
+>
+> A couple of issues here.  The big one is that for PIO transfers
+> this is going to either complicate the code or introduce overhead
+> in individual drivers for an extremely niche use case.  I guess
+> most drivers won't implement it which makes this a bit moot but
+> then this is a concern that pushes back against the idea of
+> implementing the feature.
+>
 
-Thanks,
+The concern is the overhead in terms of code, or runtime performance?
+Arguably the applications that require deterministic latency are
+actually going to push for overall less overhead at runtime, even if
+that comes at a cost in terms of code size. The spi-fsl-dspi driver
+does not perform worse by any metric after this rework.
+
+> The other is that it's not 100% clear what you're looking to
+> timestamp here - is it when the data goes on the wire, is it when
+> the data goes on the FIFO (which could be relatively large)?  I'm
+> guessing you're looking for the physical transfer here, if that's
+> the case should there be some effort to compensate for the delays
+> in the controller?
+
+The goal is to timestamp the moment when the SPI slave sees word N of
+the data. Luckily the DSPI driver raises the TCF (Transfer Complete
+Flag) once that word has been transmitted, which I used to my
+advantage. The EOQ mode behaves similarly, but has a granularity of 4
+words. The controller delays are hence implicitly included in the
+software timestamp.
+But the question is valid and I expect that such compensation might be
+needed for some hardware, provided that it can be measured and
+guaranteed. In fact Hubert did add such logic to the v3 of his MDIO
+patch: https://lkml.org/lkml/2019/8/20/195 There were some objections
+mainly related to the certainty of those offset corrections. I don't
+want to "future-proof" the API now with features I have no use of, but
+such compensation logic might come in the future.
+
+Regards,
 -Vladimir
