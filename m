@@ -2,151 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0BE9B7FC
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2019 23:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D2B9BD07
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Aug 2019 12:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406181AbfHWVD7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Aug 2019 17:03:59 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:51266 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731003AbfHWVD7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 23 Aug 2019 17:03:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ivYzwFDnFB6dEbOKWm2Jn7GdkzO9PknPkaIHs7XYuW4=; b=Fgximarup8qYnZgGwykU9zYqc
-        Mf11VXqJSHaY0XLTYJOcOUhgWuHRfbVBfb2M1cFFxXYn4AHfiLh8rOFvOEu7v32Yc0qUz5x56uM/b
-        Mo8HNNqsQK2reR6Yk8Ln+wf+gesP810MCyxv6BPtzkSEt4BbphgKXj037/rZDk+ejgbkk=;
-Received: from [92.54.175.117] (helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1i1Giy-0005Ju-Et; Fri, 23 Aug 2019 21:03:56 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 255B4D02CD1; Fri, 23 Aug 2019 22:03:56 +0100 (BST)
-Date:   Fri, 23 Aug 2019 22:03:56 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     linux-spi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 2/5] spi: spi-fsl-dspi: Exit the ISR with IRQ_NONE
- when it's not ours
-Message-ID: <20190823210356.GU23391@sirena.co.uk>
-References: <20190822211514.19288-1-olteanv@gmail.com>
- <20190822211514.19288-3-olteanv@gmail.com>
- <20190823102816.GN23391@sirena.co.uk>
- <CA+h21hoUfbW8Gpyfa+a-vqVp_qARYoq1_eyFfZFh-5USNGNE2g@mail.gmail.com>
- <20190823105044.GO23391@sirena.co.uk>
- <20190823105949.GQ23391@sirena.co.uk>
- <CA+h21hrj6VjceGJFz7XuS9DFjy=Fb5SHTYUuOWkagtsWf0Egbg@mail.gmail.com>
+        id S1726793AbfHXKdk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 24 Aug 2019 06:33:40 -0400
+Received: from bmailout2.hostsharing.net ([83.223.78.240]:40433 "EHLO
+        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbfHXKdj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 24 Aug 2019 06:33:39 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 40EC728000DF1;
+        Sat, 24 Aug 2019 12:33:37 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 0F24316F35; Sat, 24 Aug 2019 12:33:37 +0200 (CEST)
+Date:   Sat, 24 Aug 2019 12:33:36 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Stefan Wahren <wahrenst@gmx.net>, linux-spi@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     Eric Anholt <eric@anholt.net>, Nuno Sa <nuno.sa@analog.com>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        Noralf Tronnes <noralf@tronnes.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Florian Kauer <florian.kauer@koalo.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Subject: Re: [PATCH 00/10] Raspberry Pi SPI speedups
+Message-ID: <20190824103336.splslj4jqihzfi23@wunner.de>
+References: <cover.1564825752.git.lukas@wunner.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="25rOlkxR6a4U87uN"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CA+h21hrj6VjceGJFz7XuS9DFjy=Fb5SHTYUuOWkagtsWf0Egbg@mail.gmail.com>
-X-Cookie: Don't SANFORIZE me!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1564825752.git.lukas@wunner.de>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Dear Marc,
 
---25rOlkxR6a4U87uN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+to alleviate you of having to add all the Acked-by and Tested-by tags
+to this series, I've prepared a "prêt-à-porter" branch complete with
+all tags which you can cherry-pick or merge from.
 
-On Fri, Aug 23, 2019 at 03:06:52PM +0300, Vladimir Oltean wrote:
+If you decide to instead apply the patches yourself, you can double-check
+the result by comparing it to my branch with "git range-diff".
 
-> - You left change requests in the initial patchset I submitted, but
-> you partially applied the series anyway. You didn't give me a chance
-> to respin the whole series and put the shared IRQ fix on top, so it
-> applies on old trees as well. No problem, I sent two versions of the
-> patch.
+If you have any comments on the series or would like to have anything
+changed, please let me know.
 
-Right, and this is fine.  A big part of this is that it's just
-generally bad practice to not have fixes at the front of the
-series, I'd flag this up as a problem even if the code was all
-new and there was no question of applying as a bug fix.  It's
-something that's noticable just at the level of looking at the
-shape of the series without even looking at the contents of the
-patches, if the fix is actually a good one or anything like that.
-In the context of this it made it look like the reason you'd had
-to do two versions.
+Thanks!
 
-> So I didn't put any target version in the patch titles this time,
-> although arguably it would have been clearer to you that there's a
-> patch for-5.4 and another version of it for-4.20 (which i *think* is
-> how I should submit a fix, I don't see any branch for inclusion in
-> stable trees per se).
+----------------------------------------------------------------
 
-Not for 4.20, for v5.3 - we basically only fix Linus' tree
-directly, anything else gets backported from there unless it's
-super important.  I don't think anyone is updating v4.20 at all
-these days, the version number change from v4 to v5 was totally
-arbatrary.
+The following changes since commit c55be305915974db160ce6472722ff74f45b8d4e:
 
-> Yes, I did send a cover letter for a single patch. I thought it's
-> harder to miss than a note hidden under patch 2/5 of one series, and
-> in the note section of the other's. I think you could have also made
+  spi: spi-fsl-dspi: Use poll mode in case the platform IRQ is missing (2019-08-23 12:01:44 +0100)
 
-If you're sending a multi-patch series it's of course good to
-send a cover letter, it's just single patches where it's adding
-overhead.
+are available in the git repository at:
 
-> No problem, you missed the link between the two. I sent you a link to
-> the lkml archive. You said "I'm not online enough to readily follow
-> that link right now". Please teach me - I really don't know - how can
+  https://github.com/l1k/linux bcm2835_spi_simplex_v1
 
-It's not that I missed the link between them, it's that what I'd
-expected to see was the fix being the first patch in the series
-for -next and for that fix to look substantially the same with at
-most some context difference.  I wasn't expecting to see a
-completely different patch that wasn't at the start of the
-series, had the fix been at the start of the series it'd have
-been fairly clear what was going on but the refactoring patch
-looked like the main reason you'd needed different versions (it's
-certainly why they don't visually resemble each other).
+for you to fetch changes up to 37ad33d4bee27d9a24f1deffd675e327d1bb899e:
 
-In other words it looked like you'd sent a different fix because
-the fix you'd done for -next was based on the first patch in the
-series rather than there also being some context changes.
+  spi: bcm2835: Speed up RX-only DMA transfers by zero-filling TX FIFO (2019-08-24 11:54:11 +0200)
 
-> I make links between patchsets easier for you to follow, if you don't
-> read cover letters and you can't access lkml? I promise I'll use that
-> method next time.
+----------------------------------------------------------------
+So far the BCM2835 SPI driver cannot cope with TX-only and RX-only
+transfers (rx_buf or tx_buf is NULL) when using DMA:  It relies on
+the SPI core to convert them to full-duplex transfers by allocating
+and DMA-mapping a dummy rx_buf or tx_buf.  This costs performance.
 
-Like I said include a plain text description of what you're
-linking to (eg, the subject line from a mail).
+Resolve by pre-allocating reusable DMA descriptors which cyclically
+clear the RX FIFO (for TX-only transfers) or zero-fill the TX FIFO
+(for RX-only transfers).  Commit fecf4ba3f248 provides some numbers
+for the achieved latency improvement and CPU time reduction with an
+SPI Ethernet controller.  SPI displays should see a similar speedup.
+I've also made an effort to reduce peripheral and memory bus accesses.
+----------------------------------------------------------------
+Lukas Wunner (10):
+      dmaengine: bcm2835: Allow reusable descriptors
+      dmaengine: bcm2835: Allow cyclic transactions without interrupt
+      spi: Guarantee cacheline alignment of driver-private data
+      spi: bcm2835: Drop dma_pending flag
+      spi: bcm2835: Work around DONE bit erratum
+      spi: bcm2835: Cache CS register value for ->prepare_message()
+      spi: bcm2835: Speed up TX-only DMA transfers by clearing RX FIFO
+      dmaengine: bcm2835: Document struct bcm2835_dmadev
+      dmaengine: bcm2835: Avoid accessing memory when copying zeroes
+      spi: bcm2835: Speed up RX-only DMA transfers by zero-filling TX FIFO
 
-> > I do frequently catch up on my mail on flights or while otherwise
-> > travelling so this is even more pressing for me than just being about
-> > making things a bit easier to read.
-
-> Maybe you simply should do something else while traveling, just saying.
-
-I could also add in the coffee shop I sometimes work from which
-doesn't have WiFi or mobile coverage.  Besides, like that part of
-the text does say it's also a usability thing, having to fire up
-a web browser to figure out what's being described is a stumbling
-block.
-
---25rOlkxR6a4U87uN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1gVLsACgkQJNaLcl1U
-h9B2pAf+OqEH0c/ir0i5HzOOu3foBEg4ijLDLobzCWquMYtExGnWzATCgFiBeNua
-ukOy2G0NaRiaIVws5VQXj5y9+okcAFfjfVVwMIKTjqT6CwmTmGZb9Xlg/mgk1yJs
-OzKiKXM2b+vc3QyIFHI1EqmLqdz750Pdh6Lnulsl9TYm6zdsv7ecc2lIlnnRP79d
-eWCN2wNbGO8WUXLr/W83nXUfm03qs6KVes765JTaYqDLeYx8QoIV9Lf4UqPFtLDI
-iWT2+NUTPUP2oR7wokomqY8Ql7woJYFr5Okbl33288iJL1XLmM1j8BKxWg+207Cj
-BgnfvF9wzTpzBVO6dTlqlOZK7s6SQA==
-=vtug
------END PGP SIGNATURE-----
-
---25rOlkxR6a4U87uN--
+ drivers/dma/bcm2835-dma.c |  38 ++++-
+ drivers/spi/spi-bcm2835.c | 408 ++++++++++++++++++++++++++++++++++++++--------
+ drivers/spi/spi.c         |  18 +-
+ 3 files changed, 390 insertions(+), 74 deletions(-)
