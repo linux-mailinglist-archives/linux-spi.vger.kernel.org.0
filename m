@@ -2,84 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2750C9EF69
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2019 17:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3989F204
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2019 20:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729377AbfH0PuI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Aug 2019 11:50:08 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:42151 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbfH0PuI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Aug 2019 11:50:08 -0400
-Received: by mail-ot1-f67.google.com with SMTP id j7so19113568ota.9;
-        Tue, 27 Aug 2019 08:50:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qYug+8A/OHB6xQ/Ambyfj+28FmEVXD07tPk7WO6HC3Y=;
-        b=Kf5LxI3IoXvREjjgXrfbR5kPTGN9hKsTJRrQJAtT0j59m83wMzylY/PD500IHduPt/
-         gPVyu7hOSeZnjEm2ZIccMrP/YBrTM/b1zpSKy3BTmnMS9AkcL5eJ3gvSkjIzVWYJP3MW
-         J0HOuSkmBPAn98RPJ6oVt3dEbvPTkUPJzqPJPJvXLnF0PT70qHYLYRcKTt/6ICp34FoJ
-         qRJlQcuVwYYRGA+hc7sVTcldtBSHGv/whVMNdNEU8rJ1kowCiEMIrHhCLQq1RKBC4Asj
-         ng4tfuRhk1UkvreSFSArU45wgJLHL69VLgdEmMx0Jqv6yFASsSbvXmki8dRyJT6CgyZH
-         /kAw==
-X-Gm-Message-State: APjAAAUbgsbD2KSPnedMwgQiZ9qNeRTOm87KyS4UsvXfbagX7l7jqRH/
-        w8REN4SEZ06UnvUbGKoPrg==
-X-Google-Smtp-Source: APXvYqyQsr3HFBe8hthN1uJ3CQ2iXfwZPpOybLyrFsnNasFsgN+n7AhakqmuQnHfxjBkmOE1nELixg==
-X-Received: by 2002:a9d:7dc4:: with SMTP id k4mr20904237otn.171.1566921006959;
-        Tue, 27 Aug 2019 08:50:06 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id a22sm5137067otr.3.2019.08.27.08.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 08:50:06 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 10:50:05 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Ashish Kumar <ashish.kumar@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        id S1730376AbfH0SD0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Aug 2019 14:03:26 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52640 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727064AbfH0SDZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Aug 2019 14:03:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=KbdXuUIb1PofA8gj3PpnmyfX3/C/zewyEqvqL3YUumE=; b=hzIztPaz4hj+uqKUNVeEA2H4S
+        LkVkxGz8+v+KyMZ8HRUurKWnprzMY74/tjUb0ckNVXo3z1yrfZ0YNLGCKedxNsAnyyB1alfNotzcU
+        HTZJz1n3eHvZVn0vV+GpFWj9N3a+3yCFFqIKeg2MC4+nOUPNYvcEk+Uf9EBgjLhFgl17A=;
+Received: from 92.41.142.151.threembb.co.uk ([92.41.142.151] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i2foP-0000rz-Ee; Tue, 27 Aug 2019 18:03:21 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 1FBBBD02CE6; Tue, 27 Aug 2019 19:03:20 +0100 (BST)
+Date:   Tue, 27 Aug 2019 19:03:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ashish Kumar <ashish.kumar@nxp.com>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
         Kuldeep Singh <kuldeep.singh@nxp.com>
 Subject: Re: [EXT] Re: [Patch v4 1/3] dt-bindings: spi: spi-fsl-qspi: Add
  ls2080a compatibility string to bindings
-Message-ID: <20190827155005.GA18581@bogus>
+Message-ID: <20190827180320.GE23391@sirena.co.uk>
 References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
  <20190821110640.GC5128@sirena.co.uk>
  <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
- <VI1PR04MB4015474B3086AE99354FE65395A50@VI1PR04MB4015.eurprd04.prod.outlook.com>
- <20190822184927.GH23391@sirena.co.uk>
+ <20190822190507.GI23391@sirena.co.uk>
+ <DB7PR04MB4011C9785D8D9CDFE9BC62DD95A10@DB7PR04MB4011.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KC8n6y+EC4k2kdZR"
 Content-Disposition: inline
-In-Reply-To: <20190822184927.GH23391@sirena.co.uk>
+In-Reply-To: <DB7PR04MB4011C9785D8D9CDFE9BC62DD95A10@DB7PR04MB4011.eurprd04.prod.outlook.com>
+X-Cookie: Don't SANFORIZE me!!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 07:49:27PM +0100, Mark Brown wrote:
-> On Thu, Aug 22, 2019 at 06:39:18AM +0000, Ashish Kumar wrote:
-> 
-> > > > Please use subject lines matching the style for the subsystem.  This
-> > > > makes it easier for people to identify relevant patches.
-> > Hi Mark,
-> 
-> > After looking at some patch in Documentation/devicetree/bindings/spi/
-> > I think I should update subject line to
-> > dt-bindings: spi: Add ls2080-qspi compatible string for FSL QSPI driver
-> > or 
-> > doc: qspi: Add ls2080-qspi compatible to DT bindings for FSL QSPI driver
-> 
-> Drop the dt-bindings:.
 
-If you do 'git log --oneline Documentation/devicetree/bindings/' you'll 
-notice that SPI and ASoC are the oddballs now. I don't really care
-except it does add to tribal knowledge needed regarding maintainers' 
-requirements.
+--KC8n6y+EC4k2kdZR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Rob
+On Mon, Aug 26, 2019 at 06:19:53AM +0000, Ashish Kumar wrote:
+
+> For Patch-2, I intended to use this in arm64/boot/dts/freescale/fsl-ls1088a.dtsi (please see below), since both ls1088 and ls2080 has same QSPI controller.
+> So I had introduced new compatible
+> +                "fsl,ls1012a-qspi" followed by "fsl,ls1021a-qspi"
+> +                "fsl,ls1088a-qspi" followed by "fsl,ls2080a-qspi"
+
+Even if the compatible is supposed to be used in conjunction with
+other fallbacks it should still explicitly be there in case
+someone forgets or decides not to do that for some reason.
+
+--KC8n6y+EC4k2kdZR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1lcGUACgkQJNaLcl1U
+h9AO3wf+JCKT+OSIxSc0gdf/Uy1kGqqqZk0sJcNYIa8GbyIxvlUIyXI7fn0HYhs7
+HeUX5hJxYc8xodd8CTzWXCdXFeXpV6weWYidbcvBDYLAQGEhnCQY7LoKFQdWBBse
+GNwuCT4SMuAUXHutf6GZaTPv8SIXGrNaZqawtlrOg4TFzUmL74MjlCQvpMn5j15g
+v9rmk4kF310PIxuIPFKHgU0gyJdJ7gcr7uYCfUJA1/EtEWHfVoOnyZ+IG0Di9rPC
+sPa6VYx6Wv376zRTNMPBJEt0Sn87KEPnz7A0afRbmNhs5OxuK1kXXIhib5u6MvGj
+neVEamNf4Dxb+u9KverWRMgfQFCSSw==
+=mBNE
+-----END PGP SIGNATURE-----
+
+--KC8n6y+EC4k2kdZR--
