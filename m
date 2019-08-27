@@ -2,73 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F77A9E886
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2019 15:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2750C9EF69
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2019 17:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbfH0NBz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Aug 2019 09:01:55 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:37865 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725920AbfH0NBz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Aug 2019 09:01:55 -0400
-Received: by mail-io1-f68.google.com with SMTP id q22so46061493iog.4;
-        Tue, 27 Aug 2019 06:01:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IznHIM7UUcW+U6jbG68Psd8PjmPl9stA3Rx33w0vCtU=;
-        b=NMfDUzq/oGmjvEZQalfLkgJQ0KTEEHVUJ8inbz5dQ1VwCoy3DLaY7BGX7cRGP0uizY
-         rbujxNQD2w94ycp9m0xbHsRyVFk20/aQsOHE2ArvRynyqFoTyMnSrvWvycBabbodMFEE
-         ZTsl+hXBugp6Kd99FCcE4oZ65LEW4kIC4yIjbfnv8KqVofy+XDOqJAGLcOIuvIS8KKs0
-         n9sGsaDOE3g7crd3d+LMCHl8u2qWpaWTHNPLk51Pk130nzq9MmVM9CE8aBRl1VI6lbHc
-         zOn8wQS4mjr/deaoLhbJEUdPjIH2suuLIw3TXZyEEjmcfxM70fwyajMXQim50cIsfEij
-         GE3w==
+        id S1729377AbfH0PuI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Aug 2019 11:50:08 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42151 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726871AbfH0PuI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Aug 2019 11:50:08 -0400
+Received: by mail-ot1-f67.google.com with SMTP id j7so19113568ota.9;
+        Tue, 27 Aug 2019 08:50:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IznHIM7UUcW+U6jbG68Psd8PjmPl9stA3Rx33w0vCtU=;
-        b=N8B3SAvLJOgPzfMrtavHPROg+4dK9iXZ8fVWvq8cEX3sjzYnAHq0RL+N6XrNZcpmOf
-         PoxLc6fDf4G95HPF9y/JRA15dQM4f/WVt93ZUYaXDFOO7RvAXS+cnMWqjzeMDORcIHp6
-         k2afD3pvgmR/SaWMP933GeHU7gZEmC2DbW3KIg99diKQsBMKFR9kRMHLEMGI2fr3NwRo
-         t26h/W7R82B+ngAYRMQkxiBWGd2joJlG5+wIIxjJLUepZ7hCWGgWM2ZQ0w181WHtNTdN
-         V7gMsHGpD3helswZi9kHXu9QLQ/LY97gdtXohDepkso6QdJCChv9Y6BUExPa9n3xgC/v
-         JtjA==
-X-Gm-Message-State: APjAAAWj/fJ032tMA1IFUw4qn+5Bm2O0CJ31UtJuD832BnLtTcIRCA9H
-        fEdefB5kb08cevZSN1LGSYteAycEoLeWNrJ6UbA=
-X-Google-Smtp-Source: APXvYqx8kBnA5ruJH8OlJoI5fk/vdh4Qpj7WVCds4knz8N4LWkH4lMW3wUDEKrlB5gw870GmMKAgv2o+T+3BHJ9PSuM=
-X-Received: by 2002:a02:9981:: with SMTP id a1mr23331194jal.17.1566910914814;
- Tue, 27 Aug 2019 06:01:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <1565086474-4461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
- <20190806121612.GB4527@sirena.org.uk>
-In-Reply-To: <20190806121612.GB4527@sirena.org.uk>
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
-Date:   Tue, 27 Aug 2019 09:01:42 -0400
-Message-ID: <CAC=U0a2VsdrjypcLQCJTROmbF9ojuJ2rA4Og7XXeR48LAjrArA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] spi: bcm-qspi: Make BSPI default mode
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qYug+8A/OHB6xQ/Ambyfj+28FmEVXD07tPk7WO6HC3Y=;
+        b=Kf5LxI3IoXvREjjgXrfbR5kPTGN9hKsTJRrQJAtT0j59m83wMzylY/PD500IHduPt/
+         gPVyu7hOSeZnjEm2ZIccMrP/YBrTM/b1zpSKy3BTmnMS9AkcL5eJ3gvSkjIzVWYJP3MW
+         J0HOuSkmBPAn98RPJ6oVt3dEbvPTkUPJzqPJPJvXLnF0PT70qHYLYRcKTt/6ICp34FoJ
+         qRJlQcuVwYYRGA+hc7sVTcldtBSHGv/whVMNdNEU8rJ1kowCiEMIrHhCLQq1RKBC4Asj
+         ng4tfuRhk1UkvreSFSArU45wgJLHL69VLgdEmMx0Jqv6yFASsSbvXmki8dRyJT6CgyZH
+         /kAw==
+X-Gm-Message-State: APjAAAUbgsbD2KSPnedMwgQiZ9qNeRTOm87KyS4UsvXfbagX7l7jqRH/
+        w8REN4SEZ06UnvUbGKoPrg==
+X-Google-Smtp-Source: APXvYqyQsr3HFBe8hthN1uJ3CQ2iXfwZPpOybLyrFsnNasFsgN+n7AhakqmuQnHfxjBkmOE1nELixg==
+X-Received: by 2002:a9d:7dc4:: with SMTP id k4mr20904237otn.171.1566921006959;
+        Tue, 27 Aug 2019 08:50:06 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a22sm5137067otr.3.2019.08.27.08.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 08:50:06 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 10:50:05 -0500
+From:   Rob Herring <robh@kernel.org>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Ashish Kumar <ashish.kumar@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>
+Subject: Re: [EXT] Re: [Patch v4 1/3] dt-bindings: spi: spi-fsl-qspi: Add
+ ls2080a compatibility string to bindings
+Message-ID: <20190827155005.GA18581@bogus>
+References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
+ <20190821110640.GC5128@sirena.co.uk>
+ <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
+ <VI1PR04MB4015474B3086AE99354FE65395A50@VI1PR04MB4015.eurprd04.prod.outlook.com>
+ <20190822184927.GH23391@sirena.co.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190822184927.GH23391@sirena.co.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The spi-nor controller defaults to BSPI mode. So its being put to its
-default mode.
+On Thu, Aug 22, 2019 at 07:49:27PM +0100, Mark Brown wrote:
+> On Thu, Aug 22, 2019 at 06:39:18AM +0000, Ashish Kumar wrote:
+> 
+> > > > Please use subject lines matching the style for the subsystem.  This
+> > > > makes it easier for people to identify relevant patches.
+> > Hi Mark,
+> 
+> > After looking at some patch in Documentation/devicetree/bindings/spi/
+> > I think I should update subject line to
+> > dt-bindings: spi: Add ls2080-qspi compatible string for FSL QSPI driver
+> > or 
+> > doc: qspi: Add ls2080-qspi compatible to DT bindings for FSL QSPI driver
+> 
+> Drop the dt-bindings:.
 
+If you do 'git log --oneline Documentation/devicetree/bindings/' you'll 
+notice that SPI and ASoC are the oddballs now. I don't really care
+except it does add to tribal knowledge needed regarding maintainers' 
+requirements.
 
-Kamal
-
-On Tue, Aug 6, 2019 at 8:16 AM Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Aug 06, 2019 at 03:44:34PM +0530, Rayagonda Kokatanur wrote:
-> > Switch back to BSPI mode after MSPI operations (write and erase)
-> > are completed. This change will keep qpsi in BSPI mode by default.
->
-> Why?
+Rob
