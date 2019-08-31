@@ -2,106 +2,146 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1AAA42DD
-	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2019 08:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F06A45B2
+	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2019 20:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725953AbfHaGs6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 31 Aug 2019 02:48:58 -0400
-Received: from mail.andi.de1.cc ([85.214.55.253]:37274 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725899AbfHaGs6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 31 Aug 2019 02:48:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rnTIfzRXS5Ir3AL9qhqZWwty0d60IscoDBzfov0jLUU=; b=d7bhxDGRoaRHuEc26WzHmmVfC/
-        ogQzkqh7yDgFK/luVkUpsOeqKZJ0qCMSmiDP5qL5Wrb/Y3R7XL4mkd6+Vpr6mMNM0n4wdoyGE9dZz
-        dugfTMV43zOzVFZzKnCYLvrCC1eAjpJk6TMBiL9sb2TY+1miRmCEERIAiSk685qrv2ZE=;
-Received: from p5dc58eeb.dip0.t-ipconnect.de ([93.197.142.235] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1i3xBs-0007Yb-VQ; Sat, 31 Aug 2019 08:48:53 +0200
-Date:   Sat, 31 Aug 2019 08:48:52 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
-        Rob Herring <robh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
+        id S1728507AbfHaSFT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 31 Aug 2019 14:05:19 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36150 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728481AbfHaSFT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 31 Aug 2019 14:05:19 -0400
+Received: by mail-wm1-f66.google.com with SMTP id p13so10683640wmh.1;
+        Sat, 31 Aug 2019 11:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cg1fwu+MPCpI46o99kUNkk3DzcQuLSSfn5/pLPnlQmk=;
+        b=cCG3ij4HsfNRBMeQSagh82b3Q6Pdr6zuOM9F+AM3QFjejedmyBrhGd+AV9x2Gq2Hom
+         NX5CXWPhXX8vsQz77lsPbU2JztNpVBgJvBi1xwrQ3aoNWZ67sHsGg9kxrxn+CGy+4VPp
+         R6xXPhYHfEOGG2aUZJqXbIn8Xzhea1nnH8oKFnSDd0YZ0UE39VRtvL2ymuvSWx1RqwQ6
+         tFFaQhCbxa8n5iNNap36PlPAVUUJFn4A2cflOEqkVBV401AbpVy5CvBiyOFzUMyr2rRn
+         ZVgO3E3qadGKak87yGbS1Hzlgj1Y+IijkhaTQs4W169pflSX1rtvKAXd/IKRX2PwpjRs
+         PyJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cg1fwu+MPCpI46o99kUNkk3DzcQuLSSfn5/pLPnlQmk=;
+        b=gX4thH0l9eJxOxVhHkvpBaUkXzV8QpICRoqaHAjbGp4z7nw77g2Ak1qGuOR6KplvPn
+         G2xt00P+0OJZ7wCsZjkVrHadhKz3GUJO4q+9I2DtOVafbRM+9xgmC2aPFeNTINhOQ/LZ
+         bR8dKROhihaAd4S8NzCfPR/J5APMteIsnVL61FkUGSsyeAXpCGwzyD1/RaW8jEG367zt
+         sTU6umGJ5tGdwMvbL0GWC3VzgPR2Gp4puHUVkm6cv85dgP1QZFLsys2gaop0HJV3YBhD
+         MtlvEOETSH5l+wi822/ADD6q1+WhbONcP/UWbalBT5ebqNNKDHsMBCa1cnR+X0p1zVEs
+         CcEg==
+X-Gm-Message-State: APjAAAUC12WjGw+oxa9hOkEkDNug7TeMKrzCsnxtfUvrAEikw3j6B6ch
+        MZaFo3T2BJD0APsyO18KfxE=
+X-Google-Smtp-Source: APXvYqzaEIjD33uuFBMH28zOJch9FGQc20lyBYMjfo0iWKI8qyrhysZgJUwV0aYFwXnzbTGmPQZ2Fg==
+X-Received: by 2002:a7b:ca5a:: with SMTP id m26mr24394720wml.134.1567274716535;
+        Sat, 31 Aug 2019 11:05:16 -0700 (PDT)
+Received: from giga-mm.localdomain ([195.245.49.151])
+        by smtp.gmail.com with ESMTPSA id 20sm10471642wmj.45.2019.08.31.11.05.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Aug 2019 11:05:15 -0700 (PDT)
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        =?UTF-8?B?QmVub8OudA==?= Cousson <bcousson@baylibre.com>
-Subject: Re: [Letux-kernel] [PATCH 2/2] DTS: ARM: gta04: introduce legacy
- spi-cs-high to make display work again
-Message-ID: <20190831084852.5e726cfa@aktux>
-In-Reply-To: <CACRpkdY0AVnkRa8sV_Z54qfX9SYufvaYYhU0k2+LitXo0sLx2w@mail.gmail.com>
-References: <cover.1562597164.git.hns@goldelico.com>
-        <8ae7cf816b22ef9cecee0d789fcf9e8a06495c39.1562597164.git.hns@goldelico.com>
-        <20190724194259.GA25847@bogus>
-        <2EA06398-E45B-481B-9A26-4DD2E043BF9C@goldelico.com>
-        <CAL_JsqLe_Y9Z6MRt7ojgSVKAb9n95S8j=eGidSVNz2T83j-zPQ@mail.gmail.com>
-        <CACRpkdY0AVnkRa8sV_Z54qfX9SYufvaYYhU0k2+LitXo0sLx2w@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>, stable@vger.kernel.org
+Subject: [PATCH] spi: ep93xx: Repair SPI CS lookup tables
+Date:   Sat, 31 Aug 2019 20:04:02 +0200
+Message-Id: <20190831180402.10008-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+The actual device name of the SPI controller being registered on EP93xx is
+"spi0" (as seen by gpiod_find_lookup_table()). This patch fixes all
+relevant lookup tables and the following failure (seen on EDB9302):
 
-On Mon, 5 Aug 2019 12:29:19 +0200
-Linus Walleij <linus.walleij@linaro.org> wrote:
+ep93xx-spi ep93xx-spi.0: failed to register SPI master
+ep93xx-spi: probe of ep93xx-spi.0 failed with error -22
 
-> On Fri, Jul 26, 2019 at 12:43 AM Rob Herring <robh@kernel.org> wrote:
-> > On Thu, Jul 25, 2019 at 12:23 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:  
-> 
-> > > I tried to convince Linus that this is the right way but he convinced
-> > > me that a fix that handles all cases does not exist.
-> > >
-> > > There seem to be embedded devices with older DTB (potentially in ROM)
-> > > which provide a plain 0 value for a gpios definition. And either with
-> > > or without spi-cs-high.
-> > >
-> > > Since "0" is the same as "GPIO_ACTIVE_HIGH", the absence of
-> > > spi-cs-high was and must be interpreted as active low for these
-> > > devices. This leads to the inversion logic in code.
-> > >
-> > > AFAIR it boils down to the question if gpiolib and the bindings
-> > > should still support such legacy devices with out-of tree DTB,
-> > > but force in-tree DTS to add the legacy spi-cs-high property.
-> > >
-> > > Or if we should fix the 2 or 3 cases of in-tree legacy cases
-> > > and potentially break out-of tree DTBs.  
-> >
-> > If it is small number of platforms, then the kernel could handle those
-> > cases explicitly as needed.
-> >  
-> > > IMHO it is more general to keep the out-of-tree DTBs working
-> > > and "fix" what we can control (in-tree DTS).  
-> >
-> > If we do this, then we need to not call spi-cs-high legacy because
-> > we're stuck with it forever.  
-> 
-> I agree. The background on it is here:
-> https://lkml.org/lkml/2019/4/2/4
-> 
-> Not using the negatively defined (i.e. if it is no there, the line is
-> by default active low) spi-cs-high would break
-> PowerPC, who were AFAICT using this to ship devices.
-> 
-is this thing now just waiting for someone to do a s/legacy//?
+Fixes: 1dfbf334f1236 ("spi: ep93xx: Convert to use CS GPIO descriptors")
+Cc: stable@vger.kernel.org
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ arch/arm/mach-ep93xx/edb93xx.c       | 2 +-
+ arch/arm/mach-ep93xx/simone.c        | 2 +-
+ arch/arm/mach-ep93xx/ts72xx.c        | 4 ++--
+ arch/arm/mach-ep93xx/vision_ep9307.c | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-Regards,
-Andreas
+diff --git a/arch/arm/mach-ep93xx/edb93xx.c b/arch/arm/mach-ep93xx/edb93xx.c
+index 1f0da76a39de..7b7280c21ee0 100644
+--- a/arch/arm/mach-ep93xx/edb93xx.c
++++ b/arch/arm/mach-ep93xx/edb93xx.c
+@@ -103,7 +103,7 @@ static struct spi_board_info edb93xx_spi_board_info[] __initdata = {
+ };
+ 
+ static struct gpiod_lookup_table edb93xx_spi_cs_gpio_table = {
+-	.dev_id = "ep93xx-spi.0",
++	.dev_id = "spi0",
+ 	.table = {
+ 		GPIO_LOOKUP("A", 6, "cs", GPIO_ACTIVE_LOW),
+ 		{ },
+diff --git a/arch/arm/mach-ep93xx/simone.c b/arch/arm/mach-ep93xx/simone.c
+index e2658e22bba1..8a53b74dc4b2 100644
+--- a/arch/arm/mach-ep93xx/simone.c
++++ b/arch/arm/mach-ep93xx/simone.c
+@@ -73,7 +73,7 @@ static struct spi_board_info simone_spi_devices[] __initdata = {
+  * v1.3 parts will still work, since the signal on SFRMOUT is automatic.
+  */
+ static struct gpiod_lookup_table simone_spi_cs_gpio_table = {
+-	.dev_id = "ep93xx-spi.0",
++	.dev_id = "spi0",
+ 	.table = {
+ 		GPIO_LOOKUP("A", 1, "cs", GPIO_ACTIVE_LOW),
+ 		{ },
+diff --git a/arch/arm/mach-ep93xx/ts72xx.c b/arch/arm/mach-ep93xx/ts72xx.c
+index 582e06e104fd..e0e1b11032f1 100644
+--- a/arch/arm/mach-ep93xx/ts72xx.c
++++ b/arch/arm/mach-ep93xx/ts72xx.c
+@@ -267,7 +267,7 @@ static struct spi_board_info bk3_spi_board_info[] __initdata = {
+  * goes through CPLD
+  */
+ static struct gpiod_lookup_table bk3_spi_cs_gpio_table = {
+-	.dev_id = "ep93xx-spi.0",
++	.dev_id = "spi0",
+ 	.table = {
+ 		GPIO_LOOKUP("F", 3, "cs", GPIO_ACTIVE_LOW),
+ 		{ },
+@@ -316,7 +316,7 @@ static struct spi_board_info ts72xx_spi_devices[] __initdata = {
+ };
+ 
+ static struct gpiod_lookup_table ts72xx_spi_cs_gpio_table = {
+-	.dev_id = "ep93xx-spi.0",
++	.dev_id = "spi0",
+ 	.table = {
+ 		/* DIO_17 */
+ 		GPIO_LOOKUP("F", 2, "cs", GPIO_ACTIVE_LOW),
+diff --git a/arch/arm/mach-ep93xx/vision_ep9307.c b/arch/arm/mach-ep93xx/vision_ep9307.c
+index a88a1d807b32..cbcba3136d74 100644
+--- a/arch/arm/mach-ep93xx/vision_ep9307.c
++++ b/arch/arm/mach-ep93xx/vision_ep9307.c
+@@ -242,7 +242,7 @@ static struct spi_board_info vision_spi_board_info[] __initdata = {
+ };
+ 
+ static struct gpiod_lookup_table vision_spi_cs_gpio_table = {
+-	.dev_id = "ep93xx-spi.0",
++	.dev_id = "spi0",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("A", 6, "cs", 0, GPIO_ACTIVE_LOW),
+ 		GPIO_LOOKUP_IDX("A", 7, "cs", 1, GPIO_ACTIVE_LOW),
+-- 
+2.21.0
+
