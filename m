@@ -2,133 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7B3A650C
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2019 11:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56813A66EB
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2019 12:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728128AbfICJVv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Sep 2019 05:21:51 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38311 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728122AbfICJVu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Sep 2019 05:21:50 -0400
-Received: by mail-pg1-f193.google.com with SMTP id d10so4237139pgo.5
-        for <linux-spi@vger.kernel.org>; Tue, 03 Sep 2019 02:21:50 -0700 (PDT)
+        id S1728571AbfICK5Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Sep 2019 06:57:24 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38372 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728749AbfICK5X (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Sep 2019 06:57:23 -0400
+Received: by mail-wr1-f66.google.com with SMTP id l11so8144665wrx.5;
+        Tue, 03 Sep 2019 03:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=TyYF4HJF77AIuVV1Bjov7W0KtMIkm8+Fv+VcPqtMV64=;
-        b=XEijOfV/WbGDpLAQk2+XGBJiepAPdqtCOrHF517ZvFuaWU5t3wYJEbs7q/oQqEOxBx
-         G3v6tid6q2J3wKqfITkITB69Tkzu2r1V8eej9fogpm30SqQFWpysnvAheM5OmBgHcx7y
-         C2dTIBq6Vw5jIbNUrC3awjJg4HM1qUY1znsbW0EULTUNP4vi7WaW5amw2c6b3lbbZb/I
-         KSv0b11y6Yq7iEgajviatEcm+3p8bqVMo2MXSJW22hMlLRMAyktuVNApC+6Oj32FOkj5
-         hw3Qp2n0g4ZIfpfASrYhveIek5pMJTeBfcQQzgKa6aWiiYp32BCF/NERj//9K7rosEvY
-         kNNg==
+        bh=itJJvwat1ZzdUKCW7HBECx8xflq282h9g6c0CkxJ03Q=;
+        b=uHkbm2fi4XultRlk6FjQPFKo3sR9RbTFlJElLA8Uz1rnZjqLwSWsTvf8qCHclyoUPE
+         VHmlFjmwmOsqjGbiu5EG3H1B+Rb40x5q7MuyMKtDVNgFzUF9kePyT2+euFV+cLupGFcJ
+         wcASy+eJpfXTA4quApjhjNRFrWjAgkg749J0NXxresQZUb1l7KcJ+qipZo6e8Z4cMq+9
+         sRAHYfgMDtnhZ9csYslCkFcg+HNVHuuxFLzuak+LxMFLzS/MHpeKSm/mKITmR2e5MgR9
+         s4domngpc87p1co6hqNDXCq2m9JMyyAb5VzTYUtSlrU3yXe91iPHJleiyz8l2uxoLpVz
+         VTZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=TyYF4HJF77AIuVV1Bjov7W0KtMIkm8+Fv+VcPqtMV64=;
-        b=cC5RG+VKNpi86SqOk+UPhEfWNaE2zwFiFE6ALLqqa/n+tcpFru/mILPMb1SOImgKJ4
-         O/ojsZWJeVcW+I/AuL8nzX88ncFIuMAnCl3Ywx07HnpR9D1O8intB0QfCJ+Kv4FvGR3i
-         Tivh668+FzmsXGCKnA8yCXnZMYZzKk+HmqjOJ/FNRBDJBr7jw+h3jYC+odQFjVdBcGIK
-         gewxhe49UD4BKuGIScS6eIaCb7O/3RmQtehN3GmPabA3DXmMKuLGvylXIXIlbj6BGzUi
-         2Ddi9Ooqts8Q0TB+ONJnZFuQ9w+iL0emu9pHuAzBAaqIESLgYAmO43DDWT16ERVD8RY/
-         r2hw==
-X-Gm-Message-State: APjAAAXNQgSbW5YJivg4QSUEToo0c/XSqYFg089QhB+GmnUK3kAMPYSt
-        xAY+uLKhJVdbfKj3ht+gLwjkLZ2vMks=
-X-Google-Smtp-Source: APXvYqxgeN+ULUqjSbBQLImzjcCzYTcyLICC938B9LYcc5RwYOh7wRYWEdWwCZMckBC/lKFNyB6gjQ==
-X-Received: by 2002:aa7:8bc2:: with SMTP id s2mr16529135pfd.13.1567502509789;
-        Tue, 03 Sep 2019 02:21:49 -0700 (PDT)
-Received: from localhost ([121.95.100.191])
-        by smtp.gmail.com with ESMTPSA id c6sm11889180pgd.66.2019.09.03.02.21.48
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 03 Sep 2019 02:21:49 -0700 (PDT)
-From:   Masahisa Kojima <masahisa.kojima@linaro.org>
-To:     linux-spi@vger.kernel.org
-Cc:     ard.biesheuvel@linaro.org, jaswinder.singh@linaro.org,
-        masahisa.kojima@linaro.org
-Subject: [PATCH] spi: spi-synquacer: fix set_cs handling
-Date:   Tue,  3 Sep 2019 18:21:18 +0900
-Message-Id: <20190903092118.4818-1-masahisa.kojima@linaro.org>
-X-Mailer: git-send-email 2.14.2
+        bh=itJJvwat1ZzdUKCW7HBECx8xflq282h9g6c0CkxJ03Q=;
+        b=ZuWSsOFH/BfDjXFo2aByWc1bXsTQHp/OdIuURwGJzR5DBUi2wz75OF12slJJLeTB95
+         EgNvYLYJ5BJYniTcRcKN2VI6Cp0GFrhkPKLcym4n2Q9TuIOXX4++mgDK6HZc5EZgs3O2
+         d8gizqt5ZTR1RX9PFSN+IzVxdq/jlBwGizBqg+iHbTUCVEhjFKRhH2XAH6J/L+1Jh7/7
+         3XVrqrm1GV4kNUCfRUTEPAJ2zdZeMaprCCjth/Rt9+Tzcp5MGCmZGt+AJngKtRIbvfh8
+         GYxht/egM6ZSGR9IIv4pPeaS+krhBuzM9RbGQ7GIlDhULiUFpBgUlEh/5RWwGxyGqySv
+         q1hA==
+X-Gm-Message-State: APjAAAXs5XivCPS5DCcefe6GVKCtaYZqP2mXWNxDxxF+6kVXDUHgiKzW
+        AQUfxVQKKycmPmtfDx+Lxj4=
+X-Google-Smtp-Source: APXvYqxTSETBqUn2trqP/0D4rt67cUkegxIBjW0deREiAzLj7zwworFS45VMj+Jf3/dasIJxaRayNw==
+X-Received: by 2002:adf:ef44:: with SMTP id c4mr20998859wrp.216.1567508241709;
+        Tue, 03 Sep 2019 03:57:21 -0700 (PDT)
+Received: from localhost.localdomain ([86.126.25.232])
+        by smtp.gmail.com with ESMTPSA id o12sm973493wmh.43.2019.09.03.03.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Sep 2019 03:57:21 -0700 (PDT)
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: [PATCH] spi: spi-fsl-dspi: Fix race condition in TCFQ/EOQ interrupt
+Date:   Tue,  3 Sep 2019 13:57:08 +0300
+Message-Id: <20190903105708.32273-1-olteanv@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-DMSTOP register must be updated when the slave is
-selected/desected.
-RXFIFO needs to be cleaned to safely deselect the device.
+When the driver is working in TCFQ/EOQ mode (i.e. interacts with the SPI
+controller's FIFOs directly) the following sequence of operations
+happens:
 
-Fixes: b0823ee35cf9b ("spi: Add spi driver for Socionext SynQuacer platform")
-Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+- The first byte of the tx buffer gets pushed to the TX FIFO (dspi->len
+  gets decremented). This triggers the train of interrupts that handle
+  the rest of the bytes.
+
+- The dspi_interrupt handles a TX confirmation event. It reads the newly
+  available byte from the RX FIFO, checks the dspi->len exit condition,
+  and if there's more to be done, it kicks off the next interrupt in the
+  train by writing the next byte to the TX FIFO.
+
+Now the problem is that the wait queue is woken up one byte too early,
+because dspi->len becomes 0 as soon as the byte has been pushed into the
+TX FIFO. Its interrupt has not yet been processed and the RX byte has
+not been put from the FIFO into the buffer.
+
+Depending on the timing of the wait queue wakeup vs the handling of the
+last dspi_interrupt, it can happen that the main SPI message pump thread
+has already returned back into the spi_device driver. When the rx buffer
+is on stack (which it can be, because in this mode, the DSPI doesn't do
+DMA), the last interrupt will perform a memory write into an rx buffer
+that has been freed. This manifests as stack corruption.
+
+The solution is to only wake up the wait queue when dspi_rxtx says so,
+i.e. after it has processed the last TX confirmation interrupt and
+collected the last RX byte.
+
+Fixes: c55be3059159 ("spi: spi-fsl-dspi: Use poll mode in case the platform IRQ is missing")
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 ---
- drivers/spi/spi-synquacer.c | 35 ++++++++++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 11 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
-index f99abd85c50a..3905d1e1dea6 100644
---- a/drivers/spi/spi-synquacer.c
-+++ b/drivers/spi/spi-synquacer.c
-@@ -454,22 +454,12 @@ static int synquacer_spi_transfer_one(struct spi_master *master,
- 	}
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index 77db43f1290f..bec758e978fb 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -710,9 +710,7 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
+ 	if (!(spi_sr & (SPI_SR_EOQF | SPI_SR_TCFQF)))
+ 		return IRQ_NONE;
  
- 	if (xfer->rx_buf) {
--		u32 buf[SYNQUACER_HSSPI_FIFO_DEPTH];
+-	dspi_rxtx(dspi);
 -
- 		val = SYNQUACER_HSSPI_RXE_FIFO_MORE_THAN_THRESHOLD |
- 		      SYNQUACER_HSSPI_RXE_SLAVE_RELEASED;
- 		writel(val, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
- 		status = wait_for_completion_timeout(&sspi->transfer_done,
- 			msecs_to_jiffies(SYNQUACER_HSSPI_TRANSFER_TMOUT_MSEC));
- 		writel(0, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
--
--		/* stop RX and clean RXFIFO */
--		val = readl(sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
--		val |= SYNQUACER_HSSPI_DMSTOP_STOP;
--		writel(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
--		sspi->rx_buf = buf;
--		sspi->rx_words = SYNQUACER_HSSPI_FIFO_DEPTH;
--		read_fifo(sspi);
+-	if (!dspi->len) {
++	if (dspi_rxtx(dspi) == 0) {
+ 		dspi->waitflags = 1;
+ 		wake_up_interruptible(&dspi->waitq);
  	}
- 
- 	if (status < 0) {
-@@ -485,12 +475,35 @@ static void synquacer_spi_set_cs(struct spi_device *spi, bool enable)
- {
- 	struct synquacer_spi *sspi = spi_master_get_devdata(spi->master);
- 	u32 val;
-+	bool selected;
- 
- 	val = readl(sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
- 	val &= ~(SYNQUACER_HSSPI_DMPSEL_CS_MASK <<
- 		 SYNQUACER_HSSPI_DMPSEL_CS_SHIFT);
- 	val |= spi->chip_select << SYNQUACER_HSSPI_DMPSEL_CS_SHIFT;
--	writel(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
-+
-+	if (spi->mode & SPI_CS_HIGH)
-+		selected = enable;
-+	else
-+		selected = !enable;
-+
-+	if (selected) {
-+		val &= ~SYNQUACER_HSSPI_DMSTOP_STOP;
-+		writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
-+	} else {
-+		u32 buf[SYNQUACER_HSSPI_FIFO_DEPTH];
-+
-+		/*
-+		 * Stop transaction and cleanup RXFIFO to safely deselect
-+		 * the device.
-+		 */
-+		val |= SYNQUACER_HSSPI_DMSTOP_STOP;
-+		writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
-+
-+		sspi->rx_buf = buf;
-+		sspi->rx_words = SYNQUACER_HSSPI_FIFO_DEPTH;
-+		read_fifo(sspi);
-+	}
- }
- 
- static int synquacer_spi_wait_status_update(struct synquacer_spi *sspi,
 -- 
-2.14.2
+2.17.1
 
