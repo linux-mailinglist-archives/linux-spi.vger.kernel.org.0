@@ -2,40 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BED41A67E7
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2019 13:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5DEA67E9
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2019 13:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726936AbfICL5y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Sep 2019 07:57:54 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52930 "EHLO
+        id S1729056AbfICL55 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Sep 2019 07:57:57 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:53128 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727077AbfICL5v (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Sep 2019 07:57:51 -0400
+        with ESMTP id S1727077AbfICL54 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Sep 2019 07:57:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=Xg0WTUeN+jYfK1+m1b37wnEGgFLPO5Z6ot6Ky5LT0BA=; b=TfBXTvCdKIWZ
-        Hva3PRAuAZ8jsJG/NaWDs3y5/SYSq2uRT8NchmWsLqrfXlIK8BEAo4WZeag6+2CmZ/da57YqQaqkS
-        l0avL7MuTuuzGxqeu4oYzYvaf4oJqOMXVdgRta7neF2HzbRngssD5rLanFr0utVJjfcusP8ZU/B5T
-        7Nx/k=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        List-Archive; bh=1sZR0jM6bSKmi2RDe14AoOgOh3ZcP38nZLHlmDYc7z8=; b=msNKnC9/TNrR
+        UlW226Cz+yKvUAC86LEjs3KYAnXCDCXeYLouIltTnS/EVUrdG3b+QMX+SP/GllbYwrlxRZ7yMNn1T
+        k59Q8GzHYkbfLm9mKpgYmZabOYarOdIducgyDlrzo+Me4GUvQ10unTQsWn/1P0ERCft8G5eX8ScpN
+        Dh9k4=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i57RV-0008Lx-3W; Tue, 03 Sep 2019 11:57:49 +0000
+        id 1i57RV-0008Ly-Cv; Tue, 03 Sep 2019 11:57:49 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id A1DA72742D32; Tue,  3 Sep 2019 12:57:48 +0100 (BST)
+        id D6F002742D39; Tue,  3 Sep 2019 12:57:48 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spi-fsl-dspi: Fix race condition in TCFQ/EOQ interrupt" to the spi tree
-In-Reply-To: <20190903105708.32273-1-olteanv@gmail.com>
+To:     Keiji Hayashibara <hayashibara.keiji@socionext.com>
+Cc:     broonie@kernel.org, hayashibara.keiji@socionext.com,
+        jaswinder.singh@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, masami.hiramatsu@linaro.org,
+        yamada.masahiro@socionext.com
+Subject: Applied "spi: uniphier: introduce polling mode" to the spi tree
+In-Reply-To: <1567488661-11428-4-git-send-email-hayashibara.keiji@socionext.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20190903115748.A1DA72742D32@ypsilon.sirena.org.uk>
+Message-Id: <20190903115748.D6F002742D39@ypsilon.sirena.org.uk>
 Date:   Tue,  3 Sep 2019 12:57:48 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -44,7 +47,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-fsl-dspi: Fix race condition in TCFQ/EOQ interrupt
+   spi: uniphier: introduce polling mode
 
 has been applied to the spi tree at
 
@@ -69,63 +72,156 @@ to this mail.
 Thanks,
 Mark
 
-From e327364948492f6a4e866417d3d4d17d95fed285 Mon Sep 17 00:00:00 2001
-From: Vladimir Oltean <olteanv@gmail.com>
-Date: Tue, 3 Sep 2019 13:57:08 +0300
-Subject: [PATCH] spi: spi-fsl-dspi: Fix race condition in TCFQ/EOQ interrupt
+From 37ffab81709805c674f164948e03ba0d3fe371b6 Mon Sep 17 00:00:00 2001
+From: Keiji Hayashibara <hayashibara.keiji@socionext.com>
+Date: Tue, 3 Sep 2019 14:31:01 +0900
+Subject: [PATCH] spi: uniphier: introduce polling mode
 
-When the driver is working in TCFQ/EOQ mode (i.e. interacts with the SPI
-controller's FIFOs directly) the following sequence of operations
-happens:
+Introduce new polling mode for short size transfer. Either the estimated
+transfer time is estimated to exceed 200us, or polling loop actually exceeds
+200us, it switches to irq mode.
 
-- The first byte of the tx buffer gets pushed to the TX FIFO (dspi->len
-  gets decremented). This triggers the train of interrupts that handle
-  the rest of the bytes.
-
-- The dspi_interrupt handles a TX confirmation event. It reads the newly
-  available byte from the RX FIFO, checks the dspi->len exit condition,
-  and if there's more to be done, it kicks off the next interrupt in the
-  train by writing the next byte to the TX FIFO.
-
-Now the problem is that the wait queue is woken up one byte too early,
-because dspi->len becomes 0 as soon as the byte has been pushed into the
-TX FIFO. Its interrupt has not yet been processed and the RX byte has
-not been put from the FIFO into the buffer.
-
-Depending on the timing of the wait queue wakeup vs the handling of the
-last dspi_interrupt, it can happen that the main SPI message pump thread
-has already returned back into the spi_device driver. When the rx buffer
-is on stack (which it can be, because in this mode, the DSPI doesn't do
-DMA), the last interrupt will perform a memory write into an rx buffer
-that has been freed. This manifests as stack corruption.
-
-The solution is to only wake up the wait queue when dspi_rxtx says so,
-i.e. after it has processed the last TX confirmation interrupt and
-collected the last RX byte.
-
-Fixes: c55be3059159 ("spi: spi-fsl-dspi: Use poll mode in case the platform IRQ is missing")
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20190903105708.32273-1-olteanv@gmail.com
+Signed-off-by: Keiji Hayashibara <hayashibara.keiji@socionext.com>
+Link: https://lore.kernel.org/r/1567488661-11428-4-git-send-email-hayashibara.keiji@socionext.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-dspi.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/spi/spi-uniphier.c | 81 +++++++++++++++++++++++++++++++-------
+ 1 file changed, 66 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 77db43f1290f..bec758e978fb 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -710,9 +710,7 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
- 	if (!(spi_sr & (SPI_SR_EOQF | SPI_SR_TCFQF)))
- 		return IRQ_NONE;
+diff --git a/drivers/spi/spi-uniphier.c b/drivers/spi/spi-uniphier.c
+index 226f8508bff2..938f8873e63f 100644
+--- a/drivers/spi/spi-uniphier.c
++++ b/drivers/spi/spi-uniphier.c
+@@ -7,6 +7,7 @@
+ #include <linux/bitfield.h>
+ #include <linux/bitops.h>
+ #include <linux/clk.h>
++#include <linux/delay.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+@@ -16,6 +17,7 @@
+ #include <asm/unaligned.h>
  
--	dspi_rxtx(dspi);
+ #define SSI_TIMEOUT_MS		2000
++#define SSI_POLL_TIMEOUT_US	200
+ #define SSI_MAX_CLK_DIVIDER	254
+ #define SSI_MIN_CLK_DIVIDER	4
+ 
+@@ -289,21 +291,23 @@ static void uniphier_spi_recv(struct uniphier_spi_priv *priv)
+ 
+ static void uniphier_spi_fill_tx_fifo(struct uniphier_spi_priv *priv)
+ {
+-	unsigned int tx_count;
++	unsigned int fifo_threshold, fill_bytes;
+ 	u32 val;
+ 
+-	tx_count = DIV_ROUND_UP(priv->tx_bytes,
++	fifo_threshold = DIV_ROUND_UP(priv->rx_bytes,
+ 				bytes_per_word(priv->bits_per_word));
+-	tx_count = min(tx_count, SSI_FIFO_DEPTH);
++	fifo_threshold = min(fifo_threshold, SSI_FIFO_DEPTH);
++
++	fill_bytes = fifo_threshold - (priv->rx_bytes - priv->tx_bytes);
+ 
+ 	/* set fifo threshold */
+ 	val = readl(priv->base + SSI_FC);
+ 	val &= ~(SSI_FC_TXFTH_MASK | SSI_FC_RXFTH_MASK);
+-	val |= FIELD_PREP(SSI_FC_TXFTH_MASK, tx_count);
+-	val |= FIELD_PREP(SSI_FC_RXFTH_MASK, tx_count);
++	val |= FIELD_PREP(SSI_FC_TXFTH_MASK, fifo_threshold);
++	val |= FIELD_PREP(SSI_FC_RXFTH_MASK, fifo_threshold);
+ 	writel(val, priv->base + SSI_FC);
+ 
+-	while (tx_count--)
++	while (fill_bytes--)
+ 		uniphier_spi_send(priv);
+ }
+ 
+@@ -322,20 +326,14 @@ static void uniphier_spi_set_cs(struct spi_device *spi, bool enable)
+ 	writel(val, priv->base + SSI_FPS);
+ }
+ 
+-static int uniphier_spi_transfer_one(struct spi_master *master,
+-				     struct spi_device *spi,
+-				     struct spi_transfer *t)
++static int uniphier_spi_transfer_one_irq(struct spi_master *master,
++					 struct spi_device *spi,
++					 struct spi_transfer *t)
+ {
+ 	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
+ 	struct device *dev = master->dev.parent;
+ 	unsigned long time_left;
+ 
+-	/* Terminate and return success for 0 byte length transfer */
+-	if (!t->len)
+-		return 0;
 -
--	if (!dspi->len) {
-+	if (dspi_rxtx(dspi) == 0) {
- 		dspi->waitflags = 1;
- 		wake_up_interruptible(&dspi->waitq);
- 	}
+-	uniphier_spi_setup_transfer(spi, t);
+-
+ 	reinit_completion(&priv->xfer_done);
+ 
+ 	uniphier_spi_fill_tx_fifo(priv);
+@@ -355,6 +353,59 @@ static int uniphier_spi_transfer_one(struct spi_master *master,
+ 	return priv->error;
+ }
+ 
++static int uniphier_spi_transfer_one_poll(struct spi_master *master,
++					  struct spi_device *spi,
++					  struct spi_transfer *t)
++{
++	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
++	int loop = SSI_POLL_TIMEOUT_US * 10;
++
++	while (priv->tx_bytes) {
++		uniphier_spi_fill_tx_fifo(priv);
++
++		while ((priv->rx_bytes - priv->tx_bytes) > 0) {
++			while (!(readl(priv->base + SSI_SR) & SSI_SR_RNE)
++								&& loop--)
++				ndelay(100);
++
++			if (loop == -1)
++				goto irq_transfer;
++
++			uniphier_spi_recv(priv);
++		}
++	}
++
++	return 0;
++
++irq_transfer:
++	return uniphier_spi_transfer_one_irq(master, spi, t);
++}
++
++static int uniphier_spi_transfer_one(struct spi_master *master,
++				     struct spi_device *spi,
++				     struct spi_transfer *t)
++{
++	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
++	unsigned long threshold;
++
++	/* Terminate and return success for 0 byte length transfer */
++	if (!t->len)
++		return 0;
++
++	uniphier_spi_setup_transfer(spi, t);
++
++	/*
++	 * If the transfer operation will take longer than
++	 * SSI_POLL_TIMEOUT_US, it should use irq.
++	 */
++	threshold = DIV_ROUND_UP(SSI_POLL_TIMEOUT_US * priv->speed_hz,
++					USEC_PER_SEC * BITS_PER_BYTE);
++	if (t->len > threshold)
++		return uniphier_spi_transfer_one_irq(master, spi, t);
++	else
++		return uniphier_spi_transfer_one_poll(master, spi, t);
++}
++
+ static int uniphier_spi_prepare_transfer_hardware(struct spi_master *master)
+ {
+ 	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
 -- 
 2.20.1
 
