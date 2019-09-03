@@ -2,66 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8263A6896
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2019 14:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFA6A6C34
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2019 17:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728992AbfICM2S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Sep 2019 08:28:18 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:44437 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728288AbfICM2R (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Sep 2019 08:28:17 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
-        (Exim 4.76)
-        (envelope-from <colin.king@canonical.com>)
-        id 1i57uu-00069F-Q7; Tue, 03 Sep 2019 12:28:12 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Mark Brown <broonie@kernel.org>, openbmc@lists.ozlabs.org,
-        linux-spi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][spi-next] spi: npcm-fiu: fix spelling mistake "frequancy" -> "frequency"
-Date:   Tue,  3 Sep 2019 13:28:12 +0100
-Message-Id: <20190903122812.3986-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.20.1
+        id S1728122AbfICPHF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Sep 2019 11:07:05 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:43724 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727941AbfICPHF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Sep 2019 11:07:05 -0400
+Received: by mail-ot1-f66.google.com with SMTP id 90so13190890otg.10;
+        Tue, 03 Sep 2019 08:07:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ESEycbkGEsTf561HdtK9W+JMPb2DaqG5d3IDc2e1GG4=;
+        b=gT7CpYeMWEJCGw+VbQwfn5wErprIG3SSBokyScYjprdRza1k7XOUUhzbuMh/uN9Cn5
+         83UbEg2mITWzjpfzSZ1YGwJH+J/E1izU2fzi3TDGJlgbnetGskBDLT4pxH20QIHbsfBQ
+         HCkleKIxe2TKhPKBH3ZIOtbbOoH9b27sFkXUrAWRpXNjMHJfxjIezY8kLjtH3nS6HdUO
+         1a9MO4qcywkxw+C0X3bfB65LRUo73PSr0jrVsinfokGUs4IVqTj259nivSEX57beq1y9
+         iazM0ezgdloDG+YbSgXpBP/v5MkxMJKC9xQXvs/K8u4sM9noMH5tMJJV3jOILx8hM+ve
+         LQsQ==
+X-Gm-Message-State: APjAAAXGqwXNnr3oFkFNGOcOqXR3GAtWSUFo1EVcYWPX/H0Vb60y8qqH
+        TPIKC7Z39HLHbUeaai0P+5hOdMLzZJxEMRiDR1g=
+X-Google-Smtp-Source: APXvYqxA9MC/Nx8W7llobkbX6NluWUXF0YQ9719X7MRA85ibLXQx6GzR3vQgyLYDbPoIeefD+uw420FZJO2CBcdT6z4=
+X-Received: by 2002:a9d:68c5:: with SMTP id i5mr12305575oto.250.1567523224339;
+ Tue, 03 Sep 2019 08:07:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20190330141637.22632-1-boris.brezillon@collabora.com> <20190425194451.GA14552@kroah.com>
+In-Reply-To: <20190425194451.GA14552@kroah.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 Sep 2019 17:06:52 +0200
+Message-ID: <CAMuHMdViBLGurV+w=EN4TMOsDey9vC=YS6qoX6wA4gwvirOoAA@mail.gmail.com>
+Subject: Re: [PATCH] eeprom: at25: Convert the driver to the spi-mem interface
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Thu, Apr 25, 2019 at 9:44 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Sat, Mar 30, 2019 at 03:16:37PM +0100, Boris Brezillon wrote:
+> > The AT25 protocol fits pretty well in the spi-mem model. Convert the
+> > at25 spi driver to a spi-mem driver and use the dirmap API instead of
+> > forging SPI messages manually.
+> > This makes the driver compatible with spi-mem-only controllers
+> > (controllers implementing only the spi_mem ops).
+> >
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+> > ---
+> >  drivers/misc/eeprom/at25.c | 282 +++++++++++++++++++++++--------------
+> >  1 file changed, 176 insertions(+), 106 deletions(-)
+>
+> Will there be a new version of this to fix up the problems that 0-day
+> found in it?
 
-There is a spelling mistake in a dev_warning message. Fix it. Also
-break line to clear up checkpatch warning.
+gmail-whitespace-damaged fix:
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/spi/spi-npcm-fiu.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+diff --git a/drivers/misc/eeprom/Kconfig b/drivers/misc/eeprom/Kconfig
+index f2abe27010eff133..98145d7d43d0c728 100644
+--- a/drivers/misc/eeprom/Kconfig
++++ b/drivers/misc/eeprom/Kconfig
+@@ -36,6 +36,7 @@ config EEPROM_AT25
+        depends on SPI && SYSFS
+        select NVMEM
+        select NVMEM_SYSFS
++       select SPI_MEM
+        help
+          Enable this driver to get read/write support to most SPI EEPROMs,
+          after you configure the board init code to know about each eeprom
 
-diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
-index 3ea1ec68147e..d9e2f58b104b 100644
---- a/drivers/spi/spi-npcm-fiu.c
-+++ b/drivers/spi/spi-npcm-fiu.c
-@@ -544,7 +544,8 @@ static int npcm_fiu_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	if (fiu->clkrate != chip->clkrate) {
- 		ret = clk_set_rate(fiu->clk, chip->clkrate);
- 		if (ret < 0)
--			dev_warn(fiu->dev, "Failed setting %lu frequancy, stay at %lu frequancy\n", chip->clkrate, fiu->clkrate);
-+			dev_warn(fiu->dev, "Failed setting %lu frequency, stay at %lu frequency\n",
-+				 chip->clkrate, fiu->clkrate);
- 		else
- 			fiu->clkrate = chip->clkrate;
- 	}
+Boris: what's the plan?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
