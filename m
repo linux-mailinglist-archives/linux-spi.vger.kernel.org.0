@@ -2,118 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19050A88F3
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEADA8949
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731091AbfIDOmS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Sep 2019 10:42:18 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:6210 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729965AbfIDOmS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 4 Sep 2019 10:42:18 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id AF49BB8E4149F22B28EE;
-        Wed,  4 Sep 2019 22:42:15 +0800 (CST)
-Received: from [127.0.0.1] (10.133.213.239) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 22:42:10 +0800
-Subject: Re: [PATCH -next 25/36] spi: s3c24xx: use
- devm_platform_ioremap_resource() to simplify code
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-References: <20190904135918.25352-1-yuehaibing@huawei.com>
- <20190904135918.25352-26-yuehaibing@huawei.com>
- <CAJKOXPdq4as1Oe3U+9znkvP0RA=sxUoiWVBCSbzf_wq_um2t=w@mail.gmail.com>
-CC:     <broonie@kernel.org>, <f.fainelli@gmail.com>, <rjui@broadcom.com>,
-        <sbranden@broadcom.com>, <eric@anholt.net>, <wahrenst@gmx.net>,
-        <shc_work@mail.ru>, <agross@kernel.org>, <khilman@baylibre.com>,
-        <matthias.bgg@gmail.com>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
-        <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
-        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <kgene@kernel.org>,
-        Andi Shyti <andi@etezian.org>, <palmer@sifive.com>,
-        <paul.walmsley@sifive.com>, <baohua@kernel.org>,
-        <mripard@kernel.org>, <wens@csie.org>, <ldewangan@nvidia.com>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <yamada.masahiro@socionext.com>, <michal.simek@xilinx.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-spi@vger.kernel.org>,
+        id S1731169AbfIDPKA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Sep 2019 11:10:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45850 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730173AbfIDPJ7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Sep 2019 11:09:59 -0400
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A1A5E2342D;
+        Wed,  4 Sep 2019 15:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567609799;
+        bh=NqqPlIXhQO92I7kvb7x3or16fY9V13TR0NCZAUTlJWQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Pv3zIIc/sUvIamdwv4iXpRUltzR4Lt/8nO72lfiLWHJEJD/J84GmVfW9ZUGl4n7xw
+         +SCVrmabCw4FJk9IIE26iwahrygp6t0Z9woX00HVqiGqOaKLp3ORKSVFfUDzFM+Q90
+         figeioc8KZ6vY17KwwDm3Fw1WY+tfbFHaBV2wi5U=
+Received: by mail-lf1-f51.google.com with SMTP id u29so16213613lfk.7;
+        Wed, 04 Sep 2019 08:09:58 -0700 (PDT)
+X-Gm-Message-State: APjAAAWTeqrx9oN8jMXoFVY1OmyFdVtDLbe2zcYmmBIQFmRyydjEOosw
+        S7f3QrEHa1put9aTQf15NnTXAR1jxRq4+G68WDU=
+X-Google-Smtp-Source: APXvYqyPSaOFdTAZs9Jlj3fYyUPiQ+i5JR3LIfqaMYnX+qGBlZPtuYUs9/i9kuI0c87VBPXwtFxNFox7lL+fRxUp36w=
+X-Received: by 2002:a05:6512:25b:: with SMTP id b27mr12719024lfo.60.1567609796654;
+ Wed, 04 Sep 2019 08:09:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190904135918.25352-1-yuehaibing@huawei.com> <20190904135918.25352-26-yuehaibing@huawei.com>
+ <CAJKOXPdq4as1Oe3U+9znkvP0RA=sxUoiWVBCSbzf_wq_um2t=w@mail.gmail.com> <20190904143928.GB4348@sirena.co.uk>
+In-Reply-To: <20190904143928.GB4348@sirena.co.uk>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 4 Sep 2019 17:09:45 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPeRtbAvmR-=8Qa8ukGXt-cCj3ud_7y1Z4LgRpX3YCeumg@mail.gmail.com>
+Message-ID: <CAJKOXPeRtbAvmR-=8Qa8ukGXt-cCj3ud_7y1Z4LgRpX3YCeumg@mail.gmail.com>
+Subject: Re: [PATCH -next 25/36] spi: s3c24xx: use devm_platform_ioremap_resource()
+ to simplify code
+To:     Mark Brown <broonie@kernel.org>
+Cc:     YueHaibing <yuehaibing@huawei.com>, f.fainelli@gmail.com,
+        rjui@broadcom.com, sbranden@broadcom.com, eric@anholt.net,
+        wahrenst@gmx.net, shc_work@mail.ru, agross@kernel.org,
+        khilman@baylibre.com, matthias.bgg@gmail.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
+        benjaminfair@google.com, kgene@kernel.org,
+        Andi Shyti <andi@etezian.org>, palmer@sifive.com,
+        paul.walmsley@sifive.com, baohua@kernel.org, mripard@kernel.org,
+        wens@csie.org, ldewangan@nvidia.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, yamada.masahiro@socionext.com,
+        michal.simek@xilinx.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-spi@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <openbmc@lists.ozlabs.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
         "linux-samsung-soc@vger.kernel.org" 
         <linux-samsung-soc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-tegra@vger.kernel.org>
-From:   Yuehaibing <yuehaibing@huawei.com>
-Message-ID: <3595bac1-e426-b4f9-4e24-01e104fdfe5d@huawei.com>
-Date:   Wed, 4 Sep 2019 22:42:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
-MIME-Version: 1.0
-In-Reply-To: <CAJKOXPdq4as1Oe3U+9znkvP0RA=sxUoiWVBCSbzf_wq_um2t=w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+        linux-riscv@lists.infradead.org, linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2019/9/4 22:28, Krzysztof Kozlowski wrote:
-> On Wed, 4 Sep 2019 at 16:00, YueHaibing <yuehaibing@huawei.com> wrote:
->>
->> Use devm_platform_ioremap_resource() to simplify the code a bit.
->> This is detected by coccinelle.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
-> 
-> This tag does not look real... First of all where is the report?
+On Wed, 4 Sep 2019 at 16:39, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Sep 04, 2019 at 04:28:29PM +0200, Krzysztof Kozlowski wrote:
+> > On Wed, 4 Sep 2019 at 16:00, YueHaibing <yuehaibing@huawei.com> wrote:
+>
+> > > Reported-by: Hulk Robot <hulkci@huawei.com>
+>
+> > This tag does not look real... First of all where is the report?
+> > Second, it was reported by coccinelle.
+> > Reported-by should be use to give real credits.
+>
+> I think it's reasonable, it's giving credit to the automated system
+> they've got running coccinelle (which they do mention in their commit
+> logs).  It doesn't really hurt anyone and lets people see their system
+> is finding stuff.
 
-It is our internal CI robot, which is unavailable to external temporarily.
+Running internally coccinelle is already credited with commit author.
+The credits are coming with "From:" field.
+Otherwise for commits I send I could use:
+  From: krzk
+  ...
+  Reported-by: www.krzk.eu
+  Signed-off-by: krzk
+To me it is ridiculous.
 
-> Second, it was reported by coccinelle.
-> Reported-by should be use to give real credits.
-> 
-> Best regards,
-> Krzysztof
-> 
->> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->> ---
->>  drivers/spi/spi-s3c24xx.c | 4 +---
->>  1 file changed, 1 insertion(+), 3 deletions(-)
->>
->> diff --git a/drivers/spi/spi-s3c24xx.c b/drivers/spi/spi-s3c24xx.c
->> index aea8fd9..2d6e37f 100644
->> --- a/drivers/spi/spi-s3c24xx.c
->> +++ b/drivers/spi/spi-s3c24xx.c
->> @@ -487,7 +487,6 @@ static int s3c24xx_spi_probe(struct platform_device *pdev)
->>         struct s3c2410_spi_info *pdata;
->>         struct s3c24xx_spi *hw;
->>         struct spi_master *master;
->> -       struct resource *res;
->>         int err = 0;
->>
->>         master = spi_alloc_master(&pdev->dev, sizeof(struct s3c24xx_spi));
->> @@ -536,8 +535,7 @@ static int s3c24xx_spi_probe(struct platform_device *pdev)
->>         dev_dbg(hw->dev, "bitbang at %p\n", &hw->bitbang);
->>
->>         /* find and map our resources */
->> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> -       hw->regs = devm_ioremap_resource(&pdev->dev, res);
->> +       hw->regs = devm_platform_ioremap_resource(pdev, 0);
->>         if (IS_ERR(hw->regs)) {
->>                 err = PTR_ERR(hw->regs);
->>                 goto err_no_pdata;
->> --
->> 2.7.4
->>
->>
-> 
-> .
-> 
+Different thing is that Reported-by is for fixing bugs or issues.
+There is no bug here. There is no problem solved except making the
+code smaller. That's not what is Reported-by for.
 
+Best regards,
+Krzysztof
