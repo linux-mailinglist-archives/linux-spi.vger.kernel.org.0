@@ -2,21 +2,21 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2047A87B4
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6123EA87BC
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730679AbfIDOAE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Sep 2019 10:00:04 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6652 "EHLO huawei.com"
+        id S1730716AbfIDOAK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Sep 2019 10:00:10 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:52608 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730648AbfIDOAD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 4 Sep 2019 10:00:03 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 8E759E7B11A11781131B;
-        Wed,  4 Sep 2019 21:59:55 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 21:59:48 +0800
+        id S1730606AbfIDOAJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Sep 2019 10:00:09 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 3B16BB1DB7029390B610;
+        Wed,  4 Sep 2019 22:00:01 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
+ 21:59:52 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
 To:     <broonie@kernel.org>, <f.fainelli@gmail.com>, <rjui@broadcom.com>,
         <sbranden@broadcom.com>, <eric@anholt.net>, <wahrenst@gmx.net>,
@@ -42,9 +42,9 @@ CC:     <bcm-kernel-feedback-list@broadcom.com>,
         <linux-samsung-soc@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
         YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next 07/36] spi: bcm63xx-hsspi: use devm_platform_ioremap_resource() to simplify code
-Date:   Wed, 4 Sep 2019 21:58:49 +0800
-Message-ID: <20190904135918.25352-8-yuehaibing@huawei.com>
+Subject: [PATCH -next 08/36] spi: cadence: use devm_platform_ioremap_resource() to simplify code
+Date:   Wed, 4 Sep 2019 21:58:50 +0800
+Message-ID: <20190904135918.25352-9-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 In-Reply-To: <20190904135918.25352-1-yuehaibing@huawei.com>
 References: <20190904135918.25352-1-yuehaibing@huawei.com>
@@ -63,31 +63,31 @@ This is detected by coccinelle.
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/spi/spi-bcm63xx-hsspi.c | 4 +---
+ drivers/spi/spi-cadence.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
-index 373cb53..c6836a9 100644
---- a/drivers/spi/spi-bcm63xx-hsspi.c
-+++ b/drivers/spi/spi-bcm63xx-hsspi.c
-@@ -330,7 +330,6 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
- {
+diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
+index 1c35eaa..c36587b 100644
+--- a/drivers/spi/spi-cadence.c
++++ b/drivers/spi/spi-cadence.c
+@@ -474,7 +474,6 @@ static int cdns_spi_probe(struct platform_device *pdev)
+ 	int ret = 0, irq;
  	struct spi_master *master;
- 	struct bcm63xx_hsspi *bs;
--	struct resource *res_mem;
- 	void __iomem *regs;
- 	struct device *dev = &pdev->dev;
- 	struct clk *clk, *pll_clk = NULL;
-@@ -341,8 +340,7 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
+ 	struct cdns_spi *xspi;
+-	struct resource *res;
+ 	u32 num_cs;
  
--	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	regs = devm_ioremap_resource(dev, res_mem);
-+	regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(regs))
- 		return PTR_ERR(regs);
+ 	master = spi_alloc_master(&pdev->dev, sizeof(*xspi));
+@@ -485,8 +484,7 @@ static int cdns_spi_probe(struct platform_device *pdev)
+ 	master->dev.of_node = pdev->dev.of_node;
+ 	platform_set_drvdata(pdev, master);
  
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	xspi->regs = devm_ioremap_resource(&pdev->dev, res);
++	xspi->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(xspi->regs)) {
+ 		ret = PTR_ERR(xspi->regs);
+ 		goto remove_master;
 -- 
 2.7.4
 
