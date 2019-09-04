@@ -2,21 +2,21 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09361A884A
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA46A87EC
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730673AbfIDOCP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Sep 2019 10:02:15 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6656 "EHLO huawei.com"
+        id S1730873AbfIDOAj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Sep 2019 10:00:39 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:53608 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730330AbfIDOAm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 4 Sep 2019 10:00:42 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 1D921DA8F8A009239BCC;
-        Wed,  4 Sep 2019 22:00:33 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 22:00:24 +0800
+        id S1730473AbfIDOAi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Sep 2019 10:00:38 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 6DEEA87C3895A6B5B070;
+        Wed,  4 Sep 2019 22:00:35 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
+ 22:00:27 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
 To:     <broonie@kernel.org>, <f.fainelli@gmail.com>, <rjui@broadcom.com>,
         <sbranden@broadcom.com>, <eric@anholt.net>, <wahrenst@gmx.net>,
@@ -42,9 +42,9 @@ CC:     <bcm-kernel-feedback-list@broadcom.com>,
         <linux-samsung-soc@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
         YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next 19/36] spi: npcm: use devm_platform_ioremap_resource() to simplify code
-Date:   Wed, 4 Sep 2019 21:59:01 +0800
-Message-ID: <20190904135918.25352-20-yuehaibing@huawei.com>
+Subject: [PATCH -next 20/36] spi: nuc900: use devm_platform_ioremap_resource() to simplify code
+Date:   Wed, 4 Sep 2019 21:59:02 +0800
+Message-ID: <20190904135918.25352-21-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 In-Reply-To: <20190904135918.25352-1-yuehaibing@huawei.com>
 References: <20190904135918.25352-1-yuehaibing@huawei.com>
@@ -63,31 +63,31 @@ This is detected by coccinelle.
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/spi/spi-npcm-pspi.c | 4 +---
+ drivers/spi/spi-nuc900.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-npcm-pspi.c b/drivers/spi/spi-npcm-pspi.c
-index 5c56cae..b191d57 100644
---- a/drivers/spi/spi-npcm-pspi.c
-+++ b/drivers/spi/spi-npcm-pspi.c
-@@ -341,7 +341,6 @@ static int npcm_pspi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-nuc900.c b/drivers/spi/spi-nuc900.c
+index f65a029e..6140035 100644
+--- a/drivers/spi/spi-nuc900.c
++++ b/drivers/spi/spi-nuc900.c
+@@ -327,7 +327,6 @@ static int nuc900_spi_probe(struct platform_device *pdev)
  {
- 	struct npcm_pspi *priv;
+ 	struct nuc900_spi *hw;
  	struct spi_master *master;
 -	struct resource *res;
- 	unsigned long clk_hz;
- 	struct device_node *np = pdev->dev.of_node;
- 	int num_cs, i;
-@@ -368,8 +367,7 @@ static int npcm_pspi_probe(struct platform_device *pdev)
- 	priv->is_save_param = false;
- 	priv->id = pdev->id;
+ 	int err = 0;
+ 
+ 	master = spi_alloc_master(&pdev->dev, sizeof(struct nuc900_spi));
+@@ -358,8 +357,7 @@ static int nuc900_spi_probe(struct platform_device *pdev)
+ 	hw->bitbang.chipselect     = nuc900_spi_chipsel;
+ 	hw->bitbang.txrx_bufs      = nuc900_spi_txrx;
  
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->base = devm_ioremap_resource(&pdev->dev, res);
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(priv->base)) {
- 		ret = PTR_ERR(priv->base);
- 		goto out_master_put;
+-	hw->regs = devm_ioremap_resource(&pdev->dev, res);
++	hw->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(hw->regs)) {
+ 		err = PTR_ERR(hw->regs);
+ 		goto err_pdata;
 -- 
 2.7.4
 
