@@ -2,21 +2,21 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F28FAA87B0
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5F4A87AC
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730655AbfIDOAB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Sep 2019 10:00:01 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6650 "EHLO huawei.com"
+        id S1730631AbfIDN76 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Sep 2019 09:59:58 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6651 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730606AbfIDOAA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 4 Sep 2019 10:00:00 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 5AC0B9810AA2A1D82DEB;
-        Wed,  4 Sep 2019 21:59:51 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 21:59:43 +0800
+        id S1730607AbfIDN75 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Sep 2019 09:59:57 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 729EE5833AF8F1FAC38D;
+        Wed,  4 Sep 2019 21:59:52 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
+ 21:59:46 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
 To:     <broonie@kernel.org>, <f.fainelli@gmail.com>, <rjui@broadcom.com>,
         <sbranden@broadcom.com>, <eric@anholt.net>, <wahrenst@gmx.net>,
@@ -42,9 +42,9 @@ CC:     <bcm-kernel-feedback-list@broadcom.com>,
         <linux-samsung-soc@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
         YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next 05/36] spi: bcm2835aux: use devm_platform_ioremap_resource() to simplify code
-Date:   Wed, 4 Sep 2019 21:58:47 +0800
-Message-ID: <20190904135918.25352-6-yuehaibing@huawei.com>
+Subject: [PATCH -next 06/36] spi: bcm2835: use devm_platform_ioremap_resource() to simplify code
+Date:   Wed, 4 Sep 2019 21:58:48 +0800
+Message-ID: <20190904135918.25352-7-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 In-Reply-To: <20190904135918.25352-1-yuehaibing@huawei.com>
 References: <20190904135918.25352-1-yuehaibing@huawei.com>
@@ -63,31 +63,31 @@ This is detected by coccinelle.
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/spi/spi-bcm2835aux.c | 4 +---
+ drivers/spi/spi-bcm2835.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-bcm2835aux.c b/drivers/spi/spi-bcm2835aux.c
-index b18ce69..a2162ff 100644
---- a/drivers/spi/spi-bcm2835aux.c
-+++ b/drivers/spi/spi-bcm2835aux.c
-@@ -491,7 +491,6 @@ static int bcm2835aux_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index fd2bfb4..fbd6d1a 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1001,7 +1001,6 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
  {
- 	struct spi_master *master;
- 	struct bcm2835aux_spi *bs;
+ 	struct spi_controller *ctlr;
+ 	struct bcm2835_spi *bs;
 -	struct resource *res;
- 	unsigned long clk_hz;
  	int err;
  
-@@ -524,8 +523,7 @@ static int bcm2835aux_spi_probe(struct platform_device *pdev)
- 	bs = spi_master_get_devdata(master);
+ 	ctlr = spi_alloc_master(&pdev->dev, sizeof(*bs));
+@@ -1022,8 +1021,7 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
  
- 	/* the main area */
+ 	bs = spi_controller_get_devdata(ctlr);
+ 
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 -	bs->regs = devm_ioremap_resource(&pdev->dev, res);
 +	bs->regs = devm_platform_ioremap_resource(pdev, 0);
  	if (IS_ERR(bs->regs)) {
  		err = PTR_ERR(bs->regs);
- 		goto out_master_put;
+ 		goto out_controller_put;
 -- 
 2.7.4
 
