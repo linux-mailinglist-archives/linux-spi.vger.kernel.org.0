@@ -2,21 +2,21 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B12BAA883C
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB72A8817
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2019 21:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730633AbfIDOBs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Sep 2019 10:01:48 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:54724 "EHLO huawei.com"
+        id S1731070AbfIDOBJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Sep 2019 10:01:09 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:51618 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730995AbfIDOBH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 4 Sep 2019 10:01:07 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 131DF14E6B83A55738C4;
-        Wed,  4 Sep 2019 22:01:03 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 22:00:53 +0800
+        id S1731061AbfIDOBJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Sep 2019 10:01:09 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 65D85D2556F9941EA3F0;
+        Wed,  4 Sep 2019 22:01:07 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
+ 22:00:56 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
 To:     <broonie@kernel.org>, <f.fainelli@gmail.com>, <rjui@broadcom.com>,
         <sbranden@broadcom.com>, <eric@anholt.net>, <wahrenst@gmx.net>,
@@ -42,9 +42,9 @@ CC:     <bcm-kernel-feedback-list@broadcom.com>,
         <linux-samsung-soc@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
         YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next 29/36] spi: sun4i: use devm_platform_ioremap_resource() to simplify code
-Date:   Wed, 4 Sep 2019 21:59:11 +0800
-Message-ID: <20190904135918.25352-30-yuehaibing@huawei.com>
+Subject: [PATCH -next 30/36] spi: sun6i: use devm_platform_ioremap_resource() to simplify code
+Date:   Wed, 4 Sep 2019 21:59:12 +0800
+Message-ID: <20190904135918.25352-31-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 In-Reply-To: <20190904135918.25352-1-yuehaibing@huawei.com>
 References: <20190904135918.25352-1-yuehaibing@huawei.com>
@@ -63,22 +63,22 @@ This is detected by coccinelle.
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/spi/spi-sun4i.c | 4 +---
+ drivers/spi/spi-sun6i.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
-index 92e5c66..cbfac65 100644
---- a/drivers/spi/spi-sun4i.c
-+++ b/drivers/spi/spi-sun4i.c
-@@ -428,7 +428,6 @@ static int sun4i_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+index 1cf3051..ec7967b 100644
+--- a/drivers/spi/spi-sun6i.c
++++ b/drivers/spi/spi-sun6i.c
+@@ -435,7 +435,6 @@ static int sun6i_spi_probe(struct platform_device *pdev)
  {
  	struct spi_master *master;
- 	struct sun4i_spi *sspi;
+ 	struct sun6i_spi *sspi;
 -	struct resource	*res;
  	int ret = 0, irq;
  
- 	master = spi_alloc_master(&pdev->dev, sizeof(struct sun4i_spi));
-@@ -440,8 +439,7 @@ static int sun4i_spi_probe(struct platform_device *pdev)
+ 	master = spi_alloc_master(&pdev->dev, sizeof(struct sun6i_spi));
+@@ -447,8 +446,7 @@ static int sun6i_spi_probe(struct platform_device *pdev)
  	platform_set_drvdata(pdev, master);
  	sspi = spi_master_get_devdata(master);
  
