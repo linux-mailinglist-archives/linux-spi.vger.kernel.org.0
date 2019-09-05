@@ -2,105 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 554DFAA9AE
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2019 19:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209A0AAA31
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2019 19:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732307AbfIERGd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Sep 2019 13:06:33 -0400
-Received: from mail-eopbgr1410109.outbound.protection.outlook.com ([40.107.141.109]:44675
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730485AbfIERGd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 5 Sep 2019 13:06:33 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N1qXX3fzRnQuiqWmGbMI3bQ+2yTIGSEk1UXNoddKpWAQq3/RDnmPc2n2SudINvYselSGWo6GSkhd2BxCiEh78D4b70Qig1lR8UuVo3H6RGMVNhc85X0L2A7AaOigXonsW0PDb4Cn2MrvelO9QKEInZbcJyd54PbNucQW6tEqC7skvnTC6MiRUTwHNCQOP5Bm8UxuY21KE6IOrecMtOcei0QpHYmGb15WnLJbujuZcKGw0u7I7r3wjZa76QJLcpd1gJAEnORt61rEUlNLhmyvEIP5BSlg0kb3CNqCapiH2ynJV6t4Fv/3KnS4CudzabPX+HAWEFpU0ywGvFDv3Am4Rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IUIuRaqJvGEob7n5Rgn9bGM9mt+vyeAUh1uVs9VP8P4=;
- b=GM5b3859nGs3uiI1ey0uVLG1pQNevf1Sbws4NfB8eNYqtJdMtLVzrfeTCXKMroIyMtfTSdL9rWk9BdpmnQII7re6aK66fK+Qu+5cWjMSK9FU3QfNZ6eDUtt0jWvEO94C38e7t1k7cCDg/GZX3UIqoB9OK6n9oM+5qSXGkWuK1wn2jv3IhhbFS/Ix1EHKYQiBbhhS1jJQbFzGhy6vo/RT1CKQ4fvwOpBrpT+m76mf0dAVi4wEJbhkhO1Mg0NTYQ29ALPyyX1iT6RncX2glLP6gh+VQJDQtlttYPBkIkc648shj41b6uVTr3I7tlxspk3uP2hB7iYN2tyyJc71QPj3Hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IUIuRaqJvGEob7n5Rgn9bGM9mt+vyeAUh1uVs9VP8P4=;
- b=MeeedePMr0d8TwJ/lo269EtCoB21JalkoDynlO3mX1Lygm+Umf5HWTnaMgF7k+8RAeeJ7hTwMFEz3Wpjo3O1pZQ9+YN6hvmYXfVv/ahJ3Om/xwbXJ/EgdqheEokObEI5c1x1wbOx4fatIFvZyGch6bocy0EBXp/dPJfrb3mI9tQ=
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
- TY1PR01MB1625.jpnprd01.prod.outlook.com (52.133.162.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.22; Thu, 5 Sep 2019 17:06:30 +0000
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::24ad:bfbf:53bc:f509]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::24ad:bfbf:53bc:f509%7]) with mapi id 15.20.2241.014; Thu, 5 Sep 2019
- 17:06:30 +0000
-From:   Chris Brandt <Chris.Brandt@renesas.com>
-To:     "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [RFC] Is runtime_pm in the RSPI driver broken?
-Thread-Topic: [RFC] Is runtime_pm in the RSPI driver broken?
-Thread-Index: AdVkC8Du3CsXm98ySyCQaW7xvH0UUg==
-Date:   Thu, 5 Sep 2019 17:06:29 +0000
-Message-ID: <TY1PR01MB1562DB9AB5D516662204C1CF8ABB0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctN2ViZTE5NmMtY2ZmZi0xMWU5LThkYTktNWNjNWQ0NjFlNzI0XGFtZS10ZXN0XDdlYmUxOTZkLWNmZmYtMTFlOS04ZGE5LTVjYzVkNDYxZTcyNGJvZHkudHh0IiBzej0iNjQ1IiB0PSIxMzIxMjE3Njc4NzM1NDAwOTYiIGg9IlB2UXdWcVlIcFBUdWxHSnFBZlRmRUgrclh4ST0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Chris.Brandt@renesas.com; 
-x-originating-ip: [24.206.39.126]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 95187b95-4921-4b6a-2756-08d732236545
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1625;
-x-ms-traffictypediagnostic: TY1PR01MB1625:
-x-microsoft-antispam-prvs: <TY1PR01MB1625D359529C5319E369E6F18ABB0@TY1PR01MB1625.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:663;
-x-forefront-prvs: 015114592F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(136003)(366004)(376002)(346002)(39860400002)(199004)(189003)(74316002)(8936002)(9686003)(4744005)(53936002)(110136005)(55016002)(76116006)(66476007)(66556008)(8676002)(52536014)(66946007)(99286004)(81166006)(81156014)(6116002)(478600001)(3846002)(316002)(14454004)(5660300002)(102836004)(7736002)(71190400001)(71200400001)(305945005)(2906002)(6506007)(26005)(66066001)(86362001)(2501003)(64756008)(66446008)(33656002)(486006)(256004)(7696005)(186003)(476003)(6436002)(25786009);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1625;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: vQrrxXKgpzGB6lfn/Pt6YmJd/2TULIi5UieKpH9Zi8Pa9i+3fhtEGwyt+Gf3tp+cypnqPnIr22qS9NbkYHaPowCnaKSDGm94dt26eQMXG9oc/h9yE56jg/OwOUBA3wevfyXBiMJyjh8GpTyBLQnJNS3FL3X5woePo/rKdH3F+Kxy01AGeaRStcoIgfDHQWftTFEhbs58yeRS/+iTR+8h4+Lq3VOK1jz6tsc9lxWeYcjmSUMT9StkkauuQXXk8pZVqV6QIj0G2S6dw9WGNu8VXaLmVhOjIa2Re3nB/leuQoeP5sFxXqns9AgSFKwxpOCAe1krRWq34QgytaYdRZKCSI91K1wfRiXeeNCUO5EjX8Rm8MQ+nHrXO9FlqkGsvQaX0YVBe/eo1bK6ryAKBj6XRdzp4BZWABt9h1O5bjtsIio=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95187b95-4921-4b6a-2756-08d732236545
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2019 17:06:29.9370
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dNhWj5qYRYckU7wWRmOxsBTDhnmLcc3adP7VAS7qsv3yHmzAbLX6RjZEw5so8WwYC6JhNQwb3OfkDvV27p5yoSMFjSWUXsm1DjfMWc9dI/I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1625
+        id S2391042AbfIERjM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Sep 2019 13:39:12 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57744 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391089AbfIERjH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Sep 2019 13:39:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=u/jyKCR0c7O6hZK0BTOZC8fGSA/TBitpvpVeuX5oSeg=; b=X1aHfL7dDGT4
+        4sdiGhPr11mNXThpPVHqTtxeO0JqBg4a8hCYnY6CHEJ9OkelbhUTd+PVE4Dr7sAMWtfzvu4iYkI8B
+        XAo9rw+yB8C2qvPzEOJGG1VQukRA7Tml9rh6TMr59379boExPf1R/lr+FzTDuYdPU0rzNH5JnYszs
+        eFIzg=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1i5vim-0005I9-PM; Thu, 05 Sep 2019 17:39:00 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 4B98F2742D17; Thu,  5 Sep 2019 18:39:00 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     avifishman70@gmail.com, benjaminfair@google.com,
+        broonie@kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        openbmc@lists.ozlabs.org, tali.perry1@gmail.com,
+        tmaimon77@gmail.com, venture@google.com, yuenn@google.com
+Subject: Applied "spi: npcm-fiu: remove set but not used variable 'retlen'" to the spi tree
+In-Reply-To: <20190905072436.23932-1-yuehaibing@huawei.com>
+X-Patchwork-Hint: ignore
+Message-Id: <20190905173900.4B98F2742D17@ypsilon.sirena.org.uk>
+Date:   Thu,  5 Sep 2019 18:39:00 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello SPI and Renesas people (and Geert),
+The patch
 
-Before I submit a patch, is the rspi.c driver really broken or not?
+   spi: npcm-fiu: remove set but not used variable 'retlen'
 
-I'm working with the RZ/A2M at the moment.
+has been applied to the spi tree at
 
-Runtime pm was added by Geert back in 2014. (commit 490c97747d5d)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.4
 
-But I'm noticing now that if I turn off all the clocks in u-boot before=20
-I boot, SPI does not work.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-However, if I add a pm_runtime_get_sync() call do the driver, it works=20
-fine.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-So, am I missing something? It seems that the driver is not going to=20
-work correctly unless pm_runtime_get_sync() gets called.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Thank you,
-Chris
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From a0ce1fd11e587be803eb2f299d478c962df3706f Mon Sep 17 00:00:00 2001
+From: YueHaibing <yuehaibing@huawei.com>
+Date: Thu, 5 Sep 2019 15:24:36 +0800
+Subject: [PATCH] spi: npcm-fiu: remove set but not used variable 'retlen'
+
+drivers/spi/spi-npcm-fiu.c: In function npcm_fiu_read:
+drivers/spi/spi-npcm-fiu.c:472:9: warning:
+ variable retlen set but not used [-Wunused-but-set-variable]
+
+It is never used, so remove it.
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Link: https://lore.kernel.org/r/20190905072436.23932-1-yuehaibing@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-npcm-fiu.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index d9e2f58b104b..cb52fd8008d0 100644
+--- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -469,7 +469,6 @@ static int npcm_fiu_read(struct spi_mem *mem, const struct spi_mem_op *op)
+ {
+ 	u8 *data = op->data.buf.in;
+ 	int i, readlen, currlen;
+-	size_t retlen = 0;
+ 	u8 *buf_ptr;
+ 	u32 addr;
+ 	int ret;
+@@ -494,8 +493,6 @@ static int npcm_fiu_read(struct spi_mem *mem, const struct spi_mem_op *op)
+ 		currlen -= 16;
+ 	} while (currlen > 0);
+ 
+-	retlen = i;
+-
+ 	return 0;
+ }
+ 
+-- 
+2.20.1
 
