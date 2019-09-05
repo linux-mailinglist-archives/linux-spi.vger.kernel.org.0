@@ -2,14 +2,14 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 209A0AAA31
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2019 19:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACEDAAA2B
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2019 19:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391042AbfIERjM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Sep 2019 13:39:12 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57744 "EHLO
+        id S2391106AbfIERjN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Sep 2019 13:39:13 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57712 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391089AbfIERjH (ORCPT
+        with ESMTP id S2391088AbfIERjH (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Sep 2019 13:39:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
@@ -17,28 +17,27 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=u/jyKCR0c7O6hZK0BTOZC8fGSA/TBitpvpVeuX5oSeg=; b=X1aHfL7dDGT4
-        4sdiGhPr11mNXThpPVHqTtxeO0JqBg4a8hCYnY6CHEJ9OkelbhUTd+PVE4Dr7sAMWtfzvu4iYkI8B
-        XAo9rw+yB8C2qvPzEOJGG1VQukRA7Tml9rh6TMr59379boExPf1R/lr+FzTDuYdPU0rzNH5JnYszs
-        eFIzg=;
+        List-Archive; bh=5Im8lfGhMPzBe1GgEqPtOXiyQvNwjK6H+rA08lt0m98=; b=WStFjQGIPgzB
+        Z2zYoqdjsS/D/8NZUtogJHNZQfgzmArsiTKXzok0b58FDUGpFgUicPHvxFzAPW4SBvdzXn7PiUr7E
+        4h3svSVns64FzYRz9o59TjG79esMr1+C5N0lpkFVNHYGy6fGAj6dR8Hk/+YrZa6+KBvr/4QcEpmMC
+        PMmMM=;
 Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i5vim-0005I9-PM; Thu, 05 Sep 2019 17:39:00 +0000
+        id 1i5vim-0005I8-JR; Thu, 05 Sep 2019 17:39:00 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 4B98F2742D17; Thu,  5 Sep 2019 18:39:00 +0100 (BST)
+        id 188DF2742D07; Thu,  5 Sep 2019 18:39:00 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     avifishman70@gmail.com, benjaminfair@google.com,
-        broonie@kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        openbmc@lists.ozlabs.org, tali.perry1@gmail.com,
-        tmaimon77@gmail.com, venture@google.com, yuenn@google.com
-Subject: Applied "spi: npcm-fiu: remove set but not used variable 'retlen'" to the spi tree
-In-Reply-To: <20190905072436.23932-1-yuehaibing@huawei.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     andrew@lunn.ch, broonie@kernel.org, f.fainelli@gmail.com,
+        h.feurstein@gmail.com, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, mlichvar@redhat.com,
+        netdev@vger.kernel.org, richardcochran@gmail.com
+Subject: Applied "spi: Use an abbreviated pointer to ctlr->cur_msg in __spi_pump_messages" to the spi tree
+In-Reply-To: <20190905010114.26718-2-olteanv@gmail.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20190905173900.4B98F2742D17@ypsilon.sirena.org.uk>
+Message-Id: <20190905173900.188DF2742D07@ypsilon.sirena.org.uk>
 Date:   Thu,  5 Sep 2019 18:39:00 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -47,7 +46,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: npcm-fiu: remove set but not used variable 'retlen'
+   spi: Use an abbreviated pointer to ctlr->cur_msg in __spi_pump_messages
 
 has been applied to the spi tree at
 
@@ -72,45 +71,96 @@ to this mail.
 Thanks,
 Mark
 
-From a0ce1fd11e587be803eb2f299d478c962df3706f Mon Sep 17 00:00:00 2001
-From: YueHaibing <yuehaibing@huawei.com>
-Date: Thu, 5 Sep 2019 15:24:36 +0800
-Subject: [PATCH] spi: npcm-fiu: remove set but not used variable 'retlen'
+From d1c44c9342c17e3314371325d9272684a075b65c Mon Sep 17 00:00:00 2001
+From: Vladimir Oltean <olteanv@gmail.com>
+Date: Thu, 5 Sep 2019 04:01:11 +0300
+Subject: [PATCH] spi: Use an abbreviated pointer to ctlr->cur_msg in
+ __spi_pump_messages
 
-drivers/spi/spi-npcm-fiu.c: In function npcm_fiu_read:
-drivers/spi/spi-npcm-fiu.c:472:9: warning:
- variable retlen set but not used [-Wunused-but-set-variable]
+This helps a bit with line fitting now (the list_first_entry call) as
+well as during the next patch which needs to iterate through all
+transfers of ctlr->cur_msg so it timestamps them.
 
-It is never used, so remove it.
-
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-Link: https://lore.kernel.org/r/20190905072436.23932-1-yuehaibing@huawei.com
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Link: https://lore.kernel.org/r/20190905010114.26718-2-olteanv@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-npcm-fiu.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/spi/spi.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
-index d9e2f58b104b..cb52fd8008d0 100644
---- a/drivers/spi/spi-npcm-fiu.c
-+++ b/drivers/spi/spi-npcm-fiu.c
-@@ -469,7 +469,6 @@ static int npcm_fiu_read(struct spi_mem *mem, const struct spi_mem_op *op)
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index aef55acb5ccd..b2890923d256 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1265,8 +1265,9 @@ EXPORT_SYMBOL_GPL(spi_finalize_current_transfer);
+  */
+ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
  {
- 	u8 *data = op->data.buf.in;
- 	int i, readlen, currlen;
--	size_t retlen = 0;
- 	u8 *buf_ptr;
- 	u32 addr;
+-	unsigned long flags;
++	struct spi_message *msg;
+ 	bool was_busy = false;
++	unsigned long flags;
  	int ret;
-@@ -494,8 +493,6 @@ static int npcm_fiu_read(struct spi_mem *mem, const struct spi_mem_op *op)
- 		currlen -= 16;
- 	} while (currlen > 0);
  
--	retlen = i;
--
- 	return 0;
- }
+ 	/* Lock queue */
+@@ -1325,10 +1326,10 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
+ 	}
  
+ 	/* Extract head of queue */
+-	ctlr->cur_msg =
+-		list_first_entry(&ctlr->queue, struct spi_message, queue);
++	msg = list_first_entry(&ctlr->queue, struct spi_message, queue);
++	ctlr->cur_msg = msg;
+ 
+-	list_del_init(&ctlr->cur_msg->queue);
++	list_del_init(&msg->queue);
+ 	if (ctlr->busy)
+ 		was_busy = true;
+ 	else
+@@ -1361,7 +1362,7 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
+ 			if (ctlr->auto_runtime_pm)
+ 				pm_runtime_put(ctlr->dev.parent);
+ 
+-			ctlr->cur_msg->status = ret;
++			msg->status = ret;
+ 			spi_finalize_current_message(ctlr);
+ 
+ 			mutex_unlock(&ctlr->io_mutex);
+@@ -1369,28 +1370,28 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
+ 		}
+ 	}
+ 
+-	trace_spi_message_start(ctlr->cur_msg);
++	trace_spi_message_start(msg);
+ 
+ 	if (ctlr->prepare_message) {
+-		ret = ctlr->prepare_message(ctlr, ctlr->cur_msg);
++		ret = ctlr->prepare_message(ctlr, msg);
+ 		if (ret) {
+ 			dev_err(&ctlr->dev, "failed to prepare message: %d\n",
+ 				ret);
+-			ctlr->cur_msg->status = ret;
++			msg->status = ret;
+ 			spi_finalize_current_message(ctlr);
+ 			goto out;
+ 		}
+ 		ctlr->cur_msg_prepared = true;
+ 	}
+ 
+-	ret = spi_map_msg(ctlr, ctlr->cur_msg);
++	ret = spi_map_msg(ctlr, msg);
+ 	if (ret) {
+-		ctlr->cur_msg->status = ret;
++		msg->status = ret;
+ 		spi_finalize_current_message(ctlr);
+ 		goto out;
+ 	}
+ 
+-	ret = ctlr->transfer_one_message(ctlr, ctlr->cur_msg);
++	ret = ctlr->transfer_one_message(ctlr, msg);
+ 	if (ret) {
+ 		dev_err(&ctlr->dev,
+ 			"failed to transfer one message from queue\n");
 -- 
 2.20.1
 
