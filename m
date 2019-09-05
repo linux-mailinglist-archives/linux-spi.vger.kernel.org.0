@@ -2,136 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E411FA9F43
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2019 12:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554DFAA9AE
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2019 19:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731772AbfIEKJH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Sep 2019 06:09:07 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:39153 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726162AbfIEKJH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Sep 2019 06:09:07 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190905100904euoutp019c3fb88940e131aac2700c13f8fe9444~BgvdSTqE20300203002euoutp01c;
-        Thu,  5 Sep 2019 10:09:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190905100904euoutp019c3fb88940e131aac2700c13f8fe9444~BgvdSTqE20300203002euoutp01c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1567678144;
-        bh=/gWIDZvkTZVAyd2igvpxAXU5UpAa7v1JWESLTLXaxFw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=IfOrNb+kZTkxao1FkAlfYSuc8UYpRuLZkeYTp0AmZWnqYGrhNdC1uJwpM1LUQ0o49
-         3Kw/1TAn0xoy5xgy2Jv1q092BWMiCrVw2rrOy3T1DGkgXu1xSY0zkkhfqa14/d6jag
-         vjigfdntWpwgehGDFmhxbPl55oa+X35ck/BjSiz4=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190905100903eucas1p1283984102bb9a7fb247fbcf34bf5dfcd~Bgvc2KnLq3213432134eucas1p1e;
-        Thu,  5 Sep 2019 10:09:03 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id E8.9C.04374.FBED07D5; Thu,  5
-        Sep 2019 11:09:03 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190905100902eucas1p1ce36a6d769640de92f9ff880728a3d26~BgvbnHTXS3108231082eucas1p15;
-        Thu,  5 Sep 2019 10:09:02 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190905100901eusmtrp1407fd3d63aef001914d4e303eb138f5b~BgvbXMxgv1278212782eusmtrp1k;
-        Thu,  5 Sep 2019 10:09:01 +0000 (GMT)
-X-AuditID: cbfec7f5-4ddff70000001116-92-5d70debf8784
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id B6.F9.04166.DBED07D5; Thu,  5
-        Sep 2019 11:09:01 +0100 (BST)
-Received: from [106.120.51.75] (unknown [106.120.51.75]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190905100859eusmtip21ad6487f711eebd3b0f45bf62944f9e5~BgvZXo8JY1345813458eusmtip2b;
-        Thu,  5 Sep 2019 10:08:59 +0000 (GMT)
-Subject: Re: [PATCH -next 25/36] spi: s3c24xx: use
- devm_platform_ioremap_resource() to simplify code
-To:     YueHaibing <yuehaibing@huawei.com>, broonie@kernel.org,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        eric@anholt.net, wahrenst@gmx.net, shc_work@mail.ru,
-        agross@kernel.org, khilman@baylibre.com, matthias.bgg@gmail.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, kgene@kernel.org,
-        krzk@kernel.org, andi@etezian.org, palmer@sifive.com,
-        paul.walmsley@sifive.com, baohua@kernel.org, mripard@kernel.org,
-        wens@csie.org, ldewangan@nvidia.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, yamada.masahiro@socionext.com,
-        michal.simek@xilinx.com
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-Message-ID: <d3803e7b-4d5a-8260-e999-12465744c2a7@samsung.com>
-Date:   Thu, 5 Sep 2019 12:08:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S1732307AbfIERGd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Sep 2019 13:06:33 -0400
+Received: from mail-eopbgr1410109.outbound.protection.outlook.com ([40.107.141.109]:44675
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730485AbfIERGd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 5 Sep 2019 13:06:33 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N1qXX3fzRnQuiqWmGbMI3bQ+2yTIGSEk1UXNoddKpWAQq3/RDnmPc2n2SudINvYselSGWo6GSkhd2BxCiEh78D4b70Qig1lR8UuVo3H6RGMVNhc85X0L2A7AaOigXonsW0PDb4Cn2MrvelO9QKEInZbcJyd54PbNucQW6tEqC7skvnTC6MiRUTwHNCQOP5Bm8UxuY21KE6IOrecMtOcei0QpHYmGb15WnLJbujuZcKGw0u7I7r3wjZa76QJLcpd1gJAEnORt61rEUlNLhmyvEIP5BSlg0kb3CNqCapiH2ynJV6t4Fv/3KnS4CudzabPX+HAWEFpU0ywGvFDv3Am4Rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IUIuRaqJvGEob7n5Rgn9bGM9mt+vyeAUh1uVs9VP8P4=;
+ b=GM5b3859nGs3uiI1ey0uVLG1pQNevf1Sbws4NfB8eNYqtJdMtLVzrfeTCXKMroIyMtfTSdL9rWk9BdpmnQII7re6aK66fK+Qu+5cWjMSK9FU3QfNZ6eDUtt0jWvEO94C38e7t1k7cCDg/GZX3UIqoB9OK6n9oM+5qSXGkWuK1wn2jv3IhhbFS/Ix1EHKYQiBbhhS1jJQbFzGhy6vo/RT1CKQ4fvwOpBrpT+m76mf0dAVi4wEJbhkhO1Mg0NTYQ29ALPyyX1iT6RncX2glLP6gh+VQJDQtlttYPBkIkc648shj41b6uVTr3I7tlxspk3uP2hB7iYN2tyyJc71QPj3Hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IUIuRaqJvGEob7n5Rgn9bGM9mt+vyeAUh1uVs9VP8P4=;
+ b=MeeedePMr0d8TwJ/lo269EtCoB21JalkoDynlO3mX1Lygm+Umf5HWTnaMgF7k+8RAeeJ7hTwMFEz3Wpjo3O1pZQ9+YN6hvmYXfVv/ahJ3Om/xwbXJ/EgdqheEokObEI5c1x1wbOx4fatIFvZyGch6bocy0EBXp/dPJfrb3mI9tQ=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1625.jpnprd01.prod.outlook.com (52.133.162.147) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2220.22; Thu, 5 Sep 2019 17:06:30 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::24ad:bfbf:53bc:f509]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::24ad:bfbf:53bc:f509%7]) with mapi id 15.20.2241.014; Thu, 5 Sep 2019
+ 17:06:30 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [RFC] Is runtime_pm in the RSPI driver broken?
+Thread-Topic: [RFC] Is runtime_pm in the RSPI driver broken?
+Thread-Index: AdVkC8Du3CsXm98ySyCQaW7xvH0UUg==
+Date:   Thu, 5 Sep 2019 17:06:29 +0000
+Message-ID: <TY1PR01MB1562DB9AB5D516662204C1CF8ABB0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctN2ViZTE5NmMtY2ZmZi0xMWU5LThkYTktNWNjNWQ0NjFlNzI0XGFtZS10ZXN0XDdlYmUxOTZkLWNmZmYtMTFlOS04ZGE5LTVjYzVkNDYxZTcyNGJvZHkudHh0IiBzej0iNjQ1IiB0PSIxMzIxMjE3Njc4NzM1NDAwOTYiIGg9IlB2UXdWcVlIcFBUdWxHSnFBZlRmRUgrclh4ST0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [24.206.39.126]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 95187b95-4921-4b6a-2756-08d732236545
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1625;
+x-ms-traffictypediagnostic: TY1PR01MB1625:
+x-microsoft-antispam-prvs: <TY1PR01MB1625D359529C5319E369E6F18ABB0@TY1PR01MB1625.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:663;
+x-forefront-prvs: 015114592F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(136003)(366004)(376002)(346002)(39860400002)(199004)(189003)(74316002)(8936002)(9686003)(4744005)(53936002)(110136005)(55016002)(76116006)(66476007)(66556008)(8676002)(52536014)(66946007)(99286004)(81166006)(81156014)(6116002)(478600001)(3846002)(316002)(14454004)(5660300002)(102836004)(7736002)(71190400001)(71200400001)(305945005)(2906002)(6506007)(26005)(66066001)(86362001)(2501003)(64756008)(66446008)(33656002)(486006)(256004)(7696005)(186003)(476003)(6436002)(25786009);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1625;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: vQrrxXKgpzGB6lfn/Pt6YmJd/2TULIi5UieKpH9Zi8Pa9i+3fhtEGwyt+Gf3tp+cypnqPnIr22qS9NbkYHaPowCnaKSDGm94dt26eQMXG9oc/h9yE56jg/OwOUBA3wevfyXBiMJyjh8GpTyBLQnJNS3FL3X5woePo/rKdH3F+Kxy01AGeaRStcoIgfDHQWftTFEhbs58yeRS/+iTR+8h4+Lq3VOK1jz6tsc9lxWeYcjmSUMT9StkkauuQXXk8pZVqV6QIj0G2S6dw9WGNu8VXaLmVhOjIa2Re3nB/leuQoeP5sFxXqns9AgSFKwxpOCAe1krRWq34QgytaYdRZKCSI91K1wfRiXeeNCUO5EjX8Rm8MQ+nHrXO9FlqkGsvQaX0YVBe/eo1bK6ryAKBj6XRdzp4BZWABt9h1O5bjtsIio=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20190904135918.25352-26-yuehaibing@huawei.com>
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TbUxbZRj17X1776Wz89LV8Ib5kXQkRjOByX48iQQx4cf9oUH/IYZoHXeM
-        yFdaOt1m4qClCgNWhhPabYBQt1EygcL42viQlRU2oUwCMhmjSAk40xKh6GBjs/R2kX/POc85
-        ec55k5elFFYmks3MyRc0OeosFS3DHTc3XG/2389Li+2clcPYwiMMDQ+XJLBRVS4Bz2AZBVfK
-        hjBU97opODvvoWGgYALBps/BwPxkMhgs9RhsZ7sxnF74i4KNb9ol4HK1MPBjXxOGunO7wL4w
-        JYWK/lEGSjYbKZjoOU/DhP4Ogo41Aw0VMwFttatPAgV/32Wg2G+hodAQB74/U8BYfFEKtwzL
-        GNpMdVIwWl6ARXMbDVuddgy+Jg+C5fYIONMVCT0DBQxs9NRg2Gx/gKB3oBWDc7g4kGfQJYHe
-        +2sI7q0vYTBuXqQTY/jClZs0vzJdxPCWuVGab/mjScr/Zl2l+G7LLMM32Ptpvs6u4w0Or5S3
-        24ppvs36Ne+q/gHx311wSPkyvY/mW31dEv70VuwHylRZfLqQlXlU0MQkfCo70rZsQnmtki/N
-        7h7qJNJLSlAYS7iDZHRxDZcgGavgLiNyyj9Oi8CPyM/fmykRrCFiejiPnlnuVbSFFpcQqf1n
-        XCoCLyK/ls4EVXu4w6Ry1Yq2F0quhCaO9cogoDgzRVzmu/S2iuYOkLKh8qBDziUQT40Bb8+Y
-        iyJLo8ag5kUuhay6b0hFTTgZMXuCmjAunvw0fzXIU1wEKfQ3huZXSaf3fDAf4cplpGzsHCMG
-        TyIj455QiT3kgbM9xL9EbleWYtGgR6T02gwjAhMic866kONtcsN5J3CCDZx4nTT3xIj0u+T6
-        L15mmybcbjLtDRdD7CZnOqookZaTb40KUR1FHtmqQk8fSU55nmITUll2VLPsqGPZUcfy/906
-        hG0oQtBpszMEbVyO8EW0Vp2t1eVkRB/KzbajwN+5/cS53oX6Hn82iDgWqZ6Xuy/kpimk6qPa
-        Y9mDiLCUSilvbs1LU8jT1ceOC5rcTzS6LEE7iPayWBUhP/Gc+2MFl6HOFz4XhDxB82wrYcMi
-        T6Jbw0/zx6MmU/2X7BOXtxQLj6firs1OR23F1e4tsibUZ0oao2c0SenvjdS83xWffGLyyf6a
-        yaJ/X5naFdb5O14ec1QfRtdbEl6u3Z/4judgcspKg5wbxexHqY1vscL0oeNM9D5NbO3cYrfm
-        qw/jlPor4Ulc4ms23b6hvOHm+quVWUoV1h5RH3iD0mjV/wEZcpemNwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf2wTZRjH895d725o43GM7E0TozQmGhM6bqX2GY4Fjc4DiZCoyVQarHBs
-        hHadvRaZEmVb2VxN6abg1hNmBwXCFh1txxiNZaMMUEltZDo1zP1wlU2QTmEmbGNou2Gy/755
-        v59PnudNHpbkO2gNu73MIdnLzBYtvYi6fO/S4PLoYLlpxcCfRvhudIaCI3fGCJhq3EdAMuYh
-        4QvPBQqaosMkHBhJ0tBT2YdgOtXLwMiPG8ClHKag9cAZCryjN0iYqu0gIJE4ycDRs20U+D97
-        AEKj/Spo6I4z4J4+QUJf5CANfdXfI+i87aKh4WqabUqcJaDy718YqJtUaKhy6SH1RzHU1B1T
-        wbeucQrC9X4V1CgPwe++MA2zp0MUpNqSCMY7cuDjLg1EeioZmIo0UzDdcR1BtCdIwaWv69L7
-        xBIERAdvIxj4Z4yCmulj9JpcsWriIi1O/LyXEZWhOC2e/K1NJf4UuEWKZ5RfGfFIqJsW/SGn
-        6Oq9qRJDrXW0GA58ICaaWpC4/1CvSvRUp2gxmOoiRO/sio3Zr+sK7DanQ3q01CY7VmvfECBP
-        J+SDLm9lvk7QG02r8gza3MKCrZJl+07Jnlv4pq40PF6PyoPELt9whNyDqgk3ymIxtxIPNIRJ
-        N1rE8txRhK9VVzFuxKYLDf7cpZ1nluC7/W56nrmB8Mzxe0ymWMJtw5/cCqBMkc25adzoujpH
-        kZyPxO2+v+gMxXMW7B3unxtHcwL2XNiHMlnNFeJks4vKZIp7DI/Fa+b4pVwxPt+l3GcW4298
-        yTkmiyvAX46cUmUyyT2O7zZfIedzDq6aPHH//RF8+uZBsh7xygJdWaAoCxRlgeJHVCvKlpyy
-        tcQqCzrZbJWdZSW6LTZrCKUvtvPiVLgLXQm+HEMci7QPqocP2Uy8yrxTrrDGEGZJbba6PVhu
-        4tVbzRXvSnbbZrvTIskxZEh/roHULN1iS99/mWOzYBCMkC8Y9Ub9U6DNUX/IndvEcyVmh7RD
-        ksol+/8ewWZp9qD1z67zrck1zUZeOd7y9vPtnfHa1QPFRYZJYn3WhgL5xZJ4xcgdU3iSS1mu
-        767ctdZz/t9P98LE7lr+hxeW9egbg4vf8gbcLz1j22bb1F0/U/oEvO9YZhqMFp3yLrfqmcBh
-        /7VzxNNJ1vDae/6hVQ9/tH/HVy1Frz5nu/zOWs0QP+5Zp6XkUrPwJGmXzf8Bw90gF8cDAAA=
-X-CMS-MailID: 20190905100902eucas1p1ce36a6d769640de92f9ff880728a3d26
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190905100902eucas1p1ce36a6d769640de92f9ff880728a3d26
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190905100902eucas1p1ce36a6d769640de92f9ff880728a3d26
-References: <20190904135918.25352-1-yuehaibing@huawei.com>
-        <20190904135918.25352-26-yuehaibing@huawei.com>
-        <CGME20190905100902eucas1p1ce36a6d769640de92f9ff880728a3d26@eucas1p1.samsung.com>
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95187b95-4921-4b6a-2756-08d732236545
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2019 17:06:29.9370
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dNhWj5qYRYckU7wWRmOxsBTDhnmLcc3adP7VAS7qsv3yHmzAbLX6RjZEw5so8WwYC6JhNQwb3OfkDvV27p5yoSMFjSWUXsm1DjfMWc9dI/I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1625
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 9/4/19 15:59, YueHaibing wrote:
-> Use devm_platform_ioremap_resource() to simplify the code a bit.
-> This is detected by coccinelle.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Hello SPI and Renesas people (and Geert),
 
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Before I submit a patch, is the rspi.c driver really broken or not?
+
+I'm working with the RZ/A2M at the moment.
+
+Runtime pm was added by Geert back in 2014. (commit 490c97747d5d)
+
+But I'm noticing now that if I turn off all the clocks in u-boot before=20
+I boot, SPI does not work.
+
+However, if I add a pm_runtime_get_sync() call do the driver, it works=20
+fine.
+
+So, am I missing something? It seems that the driver is not going to=20
+work correctly unless pm_runtime_get_sync() gets called.
+
+Thank you,
+Chris
 
