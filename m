@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 079B6ACCF5
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Sep 2019 14:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAE1ACEB5
+	for <lists+linux-spi@lfdr.de>; Sun,  8 Sep 2019 15:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729738AbfIHMoS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 8 Sep 2019 08:44:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58818 "EHLO mail.kernel.org"
+        id S1729502AbfIHMnf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 8 Sep 2019 08:43:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729735AbfIHMoR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 8 Sep 2019 08:44:17 -0400
+        id S1729431AbfIHMne (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 8 Sep 2019 08:43:34 -0400
 Received: from localhost (unknown [62.28.240.114])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8848421920;
-        Sun,  8 Sep 2019 12:44:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B0E5218AE;
+        Sun,  8 Sep 2019 12:43:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567946657;
-        bh=jaiPO4WwP8gIgvXqmYmnleiQmHpvd5tKNuZEiZG9TLo=;
+        s=default; t=1567946612;
+        bh=YZJIXJ17E7a0+EEK2SrgMQvwGAvnZmivE5QpgZgWL18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E6pfAWU5T9bTWVElJ+z1PWlpPX5uM6C7rb/qEhsxB1vyoOLyMrnNphnNkIBheQbjZ
-         5oSWYr2AWRobd+JlNO74LlTuHXGjaOjGNTw3m1VM/MYihwZVz0p1vEhSGmEY2ESoW2
-         Qan1hTRBIjOCP0lVJckGyiG7e3jhJogNyvNZVNCg=
+        b=sJPQiuctj6q06P97XlnT7X3ZvfZePzwL2AzOgd6W+yTGY0bxENK/gSSq80wm2eode
+         vsG7sGKc3N80gjm4jTzgb4b3H1RfVNA69DwnCCqlU8NeTfjotGMQezjddCYbCQTFfB
+         2UVCp3LBPMvlBuU42pC3Z2FV2tZNJhERcjnLedIw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 18/26] spi: bcm2835aux: ensure interrupts are enabled for shared handler
-Date:   Sun,  8 Sep 2019 13:41:57 +0100
-Message-Id: <20190908121108.502407891@linuxfoundation.org>
+Subject: [PATCH 4.4 17/23] spi: bcm2835aux: ensure interrupts are enabled for shared handler
+Date:   Sun,  8 Sep 2019 13:41:52 +0100
+Message-Id: <20190908121100.841586731@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190908121057.216802689@linuxfoundation.org>
-References: <20190908121057.216802689@linuxfoundation.org>
+In-Reply-To: <20190908121052.898169328@linuxfoundation.org>
+References: <20190908121052.898169328@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+)
 
 diff --git a/drivers/spi/spi-bcm2835aux.c b/drivers/spi/spi-bcm2835aux.c
-index 7428091d3f5b8..bd00b7cc8b78b 100644
+index 7de6f8472a810..6f4c6aa801f14 100644
 --- a/drivers/spi/spi-bcm2835aux.c
 +++ b/drivers/spi/spi-bcm2835aux.c
-@@ -184,6 +184,11 @@ static irqreturn_t bcm2835aux_spi_interrupt(int irq, void *dev_id)
+@@ -187,6 +187,11 @@ static irqreturn_t bcm2835aux_spi_interrupt(int irq, void *dev_id)
  	struct bcm2835aux_spi *bs = spi_master_get_devdata(master);
  	irqreturn_t ret = IRQ_NONE;
  
