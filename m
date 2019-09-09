@@ -2,107 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B96ADAC0
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Sep 2019 16:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A800ADDA8
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Sep 2019 18:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405119AbfIIOI3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Sep 2019 10:08:29 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:42210 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405006AbfIIOI3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Sep 2019 10:08:29 -0400
-Received: by mail-ed1-f67.google.com with SMTP id y91so13063017ede.9;
-        Mon, 09 Sep 2019 07:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=2FS58PggvyWLn/0tFyaU8y/bUOUccAIKQlhkdNJPkXA=;
-        b=l2OZJDs0FLhUj51XKQxR3ruXa0dPYNcVgnUa5Dk2UeYkOv79M1yzY2YKIEuGzV1HaK
-         NCuTprJlgQtYhFDoPNHiu71OZgX2OwOy2xqxvJLXOVF9ydf+oovwcQfAujAmHE66AxkJ
-         oJh/dSsS7tOyQ1j6qZN7VwLtgpyh4UO3taYi5+JrrNmwnlUmIsJNpd+IibaNStJTeVF5
-         +Z0CqsgSDlnQjIfUfQnhsBTMawuUN6NtNIFw5g3l91+JTwvslGsqOknuHLsg+5nthCCf
-         9kLxUOTd9bZs4lav/YqTgmBExUD8+AXV+u0P2vVlDbGqTwfISzwWw7qf5pHlIkLaL2MS
-         6ebA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=2FS58PggvyWLn/0tFyaU8y/bUOUccAIKQlhkdNJPkXA=;
-        b=f1ZU2Bd6Csi6WHaVxnoaohRzIYDH+LfkswjKxZVYKo931IKXogG8MCp1zUcrPOxt2u
-         6aZkfmkPHhh5HUUVnLkY6wXBhImNGhHwugDWqe+iwwBOdSgNoPhdZCyzHYA9kAzVqoGC
-         ljaj45NL6f3+w7OyFXR5CspeXuc8wEO87Usz17PZNG9QKlJFcMM+uoIDM2l45cnRSnIk
-         DHS0WbZ6pdF6JB6A03a9doj3gWhyeoqulMuf83ufC6mXyby374Kswl8TL1UxPbSAeXG1
-         /R9AEkpolGAt2IXx+I66+a7ZWLPEXPemyQz7K8G5FltH2EDpW+B7P9b157JjGr/HB3l/
-         E3hA==
-X-Gm-Message-State: APjAAAW3SlA7efUn9RCPshjnfgzsHMxPiLU6tKSlz/8t1xHoVYdwO0Es
-        XEaHFNzarn7pt7FgNr+v1Cu7x5L5+daRZfKhsRY=
-X-Google-Smtp-Source: APXvYqxsZkWIQW3Up2QDz6jI4dzXNKTXwH/MXVGXYCojbmnkJNFZXebDuAKJNfe+K0+sIBcbwE8ataPCsmXmNdGz+Vk=
-X-Received: by 2002:a17:906:4708:: with SMTP id y8mr19805010ejq.204.1568038107081;
- Mon, 09 Sep 2019 07:08:27 -0700 (PDT)
+        id S2391317AbfIIQ5L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Sep 2019 12:57:11 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:38972 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389693AbfIIQ5L (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Sep 2019 12:57:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=JeapzLONknbsIsXMBwRpGup1Gfl8/DRFGoBUaLJxCH4=; b=vxrTBVmoeFH7R7ls/WxzSinc0
+        CmFtoaXKVc2Uf2ltaFFJudjpL17FBGLwCZAj+gVnBbdi8KJ7/kZoUsJmYjaw3oJdNsXoW/B6W2san
+        6lKFWp6PFhTUf2DGPTK2WuSDoeIxUeRkzmjG9+DS9xYny1f1B+/GV9lAtXi4y03zup97o=;
+Received: from [148.69.85.38] (helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i7MyF-00039w-VW; Mon, 09 Sep 2019 16:56:56 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 4A1A8D02D3E; Mon,  9 Sep 2019 17:56:55 +0100 (BST)
+Date:   Mon, 9 Sep 2019 17:56:55 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     linux-spi@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Eric Anholt <eric@anholt.net>, Nuno Sa <nuno.sa@analog.com>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        Noralf Tronnes <noralf@tronnes.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Florian Kauer <florian.kauer@koalo.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Vinod Koul <vkoul@kernel.org>, Stefan Wahren <wahrenst@gmx.net>
+Subject: Re: [PATCH 00/10] Raspberry Pi SPI speedups
+Message-ID: <20190909165655.GK2036@sirena.org.uk>
+References: <cover.1564825752.git.lukas@wunner.de>
+ <20190907090637.macdahajrzjepluc@wunner.de>
 MIME-Version: 1.0
-Received: by 2002:a17:906:e258:0:0:0:0 with HTTP; Mon, 9 Sep 2019 07:08:26
- -0700 (PDT)
-In-Reply-To: <20190909100618.GC2036@sirena.org.uk>
-References: <20190905010114.26718-1-olteanv@gmail.com> <20190909100618.GC2036@sirena.org.uk>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Mon, 9 Sep 2019 15:08:26 +0100
-Message-ID: <CA+h21hocjvF_-cvGEgank3_tgVBfCQLtp2seLguOCp0S=cx9Jw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Deterministic SPI latency with NXP DSPI driver
-To:     Mark Brown <broonie@kernel.org>
-Cc:     h.feurstein@gmail.com, mlichvar@redhat.com,
-        richardcochran@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        linux-spi@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8jNwmpfkpox/fiJK"
+Content-Disposition: inline
+In-Reply-To: <20190907090637.macdahajrzjepluc@wunner.de>
+X-Cookie: Be careful!  UGLY strikes 9 out of 10!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
 
-On 09/09/2019, Mark Brown <broonie@kernel.org> wrote:
-> On Thu, Sep 05, 2019 at 04:01:10AM +0300, Vladimir Oltean wrote:
->
->> This patchset proposes an interface from the SPI subsystem for
->> software timestamping SPI transfers. There is a default implementation
->> provided in the core, as well as a mechanism for SPI slave drivers to
->> check which byte was in fact timestamped post-facto. The patchset also
->> adds the first user of this interface (the NXP DSPI driver in TCFQ mode).
->
-> I think this is about as good as we're going to get but we're
-> very near the merge window now so I'll leave this until after the
-> merge window is done in case there's more review comments before
-> applying.  I need to reread the implementation code a bit as
-> well, it looked fine on a first scan through but it's possible I
-> might spot something later.
->
+--8jNwmpfkpox/fiJK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There's one thing I still don't like, and that is the fact that the
-delay for sending one SPI word is so low, I can't actually capture it
-precisely with a "pre" and a "post" system clock timestamp. What
-actually happens is that I'm actually measuring the timing of the (too
-loose) CPU loop. Normally that's not bad, because the guarantee that
-the transfer happened between "pre" and "post" is still kept. But I'm
-introducing a false jitter in the delays I'm reporting ("post" -
-"pre") that does not actually depend upon the hardware phenomenon, but
-on the CPU frequency :) At maximum CPU frequency (performance
-governor) the reported latency is always constant, but still larger
-than the SPI transfer time. In fact it's constant exactly _because_
-the CPU frequency is constant. When the CPU goes at lower frequencies,
-user space gets confused about the varying delay and my control loop
-doesn't keep lock as well.
-So in fact I wonder whether I'm using the PTP system timestamping API
-properly. One idea I had was to just timestamp the write to the TX
-FIFO, and add a constant delay based on bytes_per_word * (NSEC_PER_SEC
-/ speed_hz). IMHO that correction should logically be applied to both
-"pre" and "post". Then say that the "post" is equal to the "pre". But
-that would mean I'm reporting a delay of zero, and losing the
-guarantee that the transfer actually happens between the reported
-"pre" and "post". On the other hand, introducing a static correction
-option could potentially help with the drivers that just get notified
-of a DMA completion.
-The other idea was to just push the PTP system timestamping all the
-way into regmap_write, and just minimize the governor effect by making
-sure the timestamped area of code is really short. I don't really
-know.
+On Sat, Sep 07, 2019 at 11:06:37AM +0200, Lukas Wunner wrote:
+
+> Just a gentle ping, this patch set was posted to the list 5 weeks ago,
+> has all necessary acks and has been tested successfully by 2 people
+> besides myself.
+
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
+
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
+
+--8jNwmpfkpox/fiJK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl12hFQACgkQJNaLcl1U
+h9AZAgf9HF8aiqKbT5IOAlR/2xEzTkcyzKvE3+zhPqm66Hxe168PWgGEEC5HVlSO
+8bh2BYYDcdOby4OH46Z76DiQVK+WejzbnmK1Yh7NPeA1YrXQx2c6f6hWzL0NefLi
+FciD1hOvUu9D69GQlbymHkFfioMiSCebi0qzvqjZHJ2FCKLQerB49PilwOAPBnvV
+9XcOlsmPGUcXs6obLXUjtvcvzUA278s6SQ91/diATUNiSwkvxxVBJeb2cTx+T48l
+SPVb8zTgEw5at6TF+p7MMsms2NJinkIT+mGjlSuyM/ZmEqu4xxQ1ps6KV4teaN7t
+pg8xLVKBXypqLNryNpDnmf5zeAwRgw==
+=WEZW
+-----END PGP SIGNATURE-----
+
+--8jNwmpfkpox/fiJK--
