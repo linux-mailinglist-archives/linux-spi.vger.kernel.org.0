@@ -2,70 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C16AD632
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Sep 2019 11:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31FC1AD64C
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Sep 2019 12:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729324AbfIIJ64 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Sep 2019 05:58:56 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:34614 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728206AbfIIJ64 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Sep 2019 05:58:56 -0400
-Received: by mail-ot1-f67.google.com with SMTP id z26so2597572oto.1;
-        Mon, 09 Sep 2019 02:58:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hlpDfZePYVovMOgYxyTZv3r/AVbPjpMO1Fr6zFVJef8=;
-        b=iAi2ciUkl4AceL7TC9mhev1QELpqVMbC4VeRkwyWU3hTv3DW3/+eHJYPnHseHQ9bBP
-         yAnBkuxxu2LeZjWKdH0bBi/EVZchtTT0/VQfZqXgiqM/PmdzUnD3L6TLYE1USsqp4XjR
-         l4cbB0nTJrECy8cvsKqbR/NsX9RrAUSwq44sQD4CO7sqmD1eyw8RChmq4gPZ2Pz76Tbe
-         VVmAeX9U2K34jmdhjDdO+VooTifrlIDo5CGrSFDsrxL4WuRub1it0zhhK/ZRR/yId2UA
-         RVKh9v5cK/PiuGay8sbShRUdo9VBh/d91xRGvXIM2DiNDoBTX791xPpIl+U/2nbrnBkg
-         qPrA==
-X-Gm-Message-State: APjAAAXJbIdIjwsq333o6OxHn+FcFOCd346CBks7x+YV2N9AzsYxaRLU
-        4V3Fd18enJ4xvKviKaWU+FocVxun0WEx+oadexkomw==
-X-Google-Smtp-Source: APXvYqxnbUay5PiRGlAk1ZYomVlAdiyOVo02nv/J8yNZnhIS1OWHceNsLa/CuscQP9WJ+Ear0a9O2Nxlub7TP0r2NBo=
-X-Received: by 2002:a9d:2cc:: with SMTP id 70mr18636821otl.145.1568023135226;
- Mon, 09 Sep 2019 02:58:55 -0700 (PDT)
+        id S1729588AbfIIKGY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Sep 2019 06:06:24 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54168 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729534AbfIIKGX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Sep 2019 06:06:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=fkpQ/WnJG4BHTDw2UZJG4B9CDF+LMucc4j8mJ3xRKZQ=; b=NH71n7TTQD3MpNfIzitbOvNlG
+        A67cXE07Kf5Zgy2SSuXhFJQUc0GHUSFBTUMb1QZwqqWeEK4SS64JJoRZrfNrm/Q7KABblRoog6Wvn
+        8x2UFhb8reEg3ZdW4+uGXuflGZ7OTL5gxFcXtZjdV7l8aqUtZrZ+K+1uYC7I/L1+p9Ax4=;
+Received: from [148.69.85.38] (helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i7GYt-0001qX-9q; Mon, 09 Sep 2019 10:06:19 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 4C05FD02D18; Mon,  9 Sep 2019 11:06:18 +0100 (BST)
+Date:   Mon, 9 Sep 2019 11:06:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     h.feurstein@gmail.com, mlichvar@redhat.com,
+        richardcochran@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
+        linux-spi@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Deterministic SPI latency with NXP DSPI driver
+Message-ID: <20190909100618.GC2036@sirena.org.uk>
+References: <20190905010114.26718-1-olteanv@gmail.com>
 MIME-Version: 1.0
-References: <b2dd074a-1693-3aea-42b4-da1f5ec155c4@web.de>
-In-Reply-To: <b2dd074a-1693-3aea-42b4-da1f5ec155c4@web.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 Sep 2019 11:58:44 +0200
-Message-ID: <CAMuHMdWkPFBphjKQf686LgW6ZE35MYM3A3TmUaY-PJYajSwuyw@mail.gmail.com>
-Subject: Re: [PATCH] spi-gpio: Use PTR_ERR_OR_ZERO() in spi_gpio_request()
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jousvV0MzM2p6OtC"
+Content-Disposition: inline
+In-Reply-To: <20190905010114.26718-1-olteanv@gmail.com>
+X-Cookie: Be careful!  UGLY strikes 9 out of 10!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Sep 8, 2019 at 2:46 PM Markus Elfring <Markus.Elfring@web.de> wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Sat, 7 Sep 2019 13:51:16 +0200
->
-> Simplify this function implementation by using a known function.
->
-> Generated by: scripts/coccinelle/api/ptr_ret.cocci
->
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+--jousvV0MzM2p6OtC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Gr{oetje,eeting}s,
+On Thu, Sep 05, 2019 at 04:01:10AM +0300, Vladimir Oltean wrote:
 
-                        Geert
+> This patchset proposes an interface from the SPI subsystem for
+> software timestamping SPI transfers. There is a default implementation
+> provided in the core, as well as a mechanism for SPI slave drivers to
+> check which byte was in fact timestamped post-facto. The patchset also
+> adds the first user of this interface (the NXP DSPI driver in TCFQ mode).
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I think this is about as good as we're going to get but we're
+very near the merge window now so I'll leave this until after the
+merge window is done in case there's more review comments before
+applying.  I need to reread the implementation code a bit as
+well, it looked fine on a first scan through but it's possible I
+might spot something later.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--jousvV0MzM2p6OtC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl12JBkACgkQJNaLcl1U
+h9A12AgAgjBaLkxqsVW5TL56eMjLxX9dEojMe22QzVUBeRfLcXLRQ0M/5AJqvzf4
+AEmOsHlPLqh/SKRoVfOa4Xr2h/Zaiz6wzCcvsLxe3B9P7MYg0/9kyHiDEjGExuq4
+X1r18hLuMKsWjBmrWoojtSGlQd5pbpmRdVPDseF+ved5Gp4S78KKx2gDZxYGuiy6
+JB9LDRvsELfSndCxCJAC6s5BTb4uSmlVOB4gyzWR31XZXtNwIT4lz0eLUlaI0UBW
+ckxeMzTSeBRrQ5vQMm/1ZwjYh7hdhQYlWn3minuDj5FWwgVj754fdoi/2+rW7FaU
+27xyj6cr4VIcQXWmU3DylfAbe+qE8Q==
+=eS/Q
+-----END PGP SIGNATURE-----
+
+--jousvV0MzM2p6OtC--
