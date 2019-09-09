@@ -2,109 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAE1ACEB5
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Sep 2019 15:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C16AD632
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Sep 2019 11:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729502AbfIHMnf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 8 Sep 2019 08:43:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57414 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729431AbfIHMne (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 8 Sep 2019 08:43:34 -0400
-Received: from localhost (unknown [62.28.240.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1B0E5218AE;
-        Sun,  8 Sep 2019 12:43:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567946612;
-        bh=YZJIXJ17E7a0+EEK2SrgMQvwGAvnZmivE5QpgZgWL18=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sJPQiuctj6q06P97XlnT7X3ZvfZePzwL2AzOgd6W+yTGY0bxENK/gSSq80wm2eode
-         vsG7sGKc3N80gjm4jTzgb4b3H1RfVNA69DwnCCqlU8NeTfjotGMQezjddCYbCQTFfB
-         2UVCp3LBPMvlBuU42pC3Z2FV2tZNJhERcjnLedIw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Graf <agraf@suse.de>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Mark Brown <broonie@kernel.org>, Eric Anholt <eric@anholt.net>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 17/23] spi: bcm2835aux: ensure interrupts are enabled for shared handler
-Date:   Sun,  8 Sep 2019 13:41:52 +0100
-Message-Id: <20190908121100.841586731@linuxfoundation.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190908121052.898169328@linuxfoundation.org>
-References: <20190908121052.898169328@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1729324AbfIIJ64 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Sep 2019 05:58:56 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:34614 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728206AbfIIJ64 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Sep 2019 05:58:56 -0400
+Received: by mail-ot1-f67.google.com with SMTP id z26so2597572oto.1;
+        Mon, 09 Sep 2019 02:58:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hlpDfZePYVovMOgYxyTZv3r/AVbPjpMO1Fr6zFVJef8=;
+        b=iAi2ciUkl4AceL7TC9mhev1QELpqVMbC4VeRkwyWU3hTv3DW3/+eHJYPnHseHQ9bBP
+         yAnBkuxxu2LeZjWKdH0bBi/EVZchtTT0/VQfZqXgiqM/PmdzUnD3L6TLYE1USsqp4XjR
+         l4cbB0nTJrECy8cvsKqbR/NsX9RrAUSwq44sQD4CO7sqmD1eyw8RChmq4gPZ2Pz76Tbe
+         VVmAeX9U2K34jmdhjDdO+VooTifrlIDo5CGrSFDsrxL4WuRub1it0zhhK/ZRR/yId2UA
+         RVKh9v5cK/PiuGay8sbShRUdo9VBh/d91xRGvXIM2DiNDoBTX791xPpIl+U/2nbrnBkg
+         qPrA==
+X-Gm-Message-State: APjAAAXJbIdIjwsq333o6OxHn+FcFOCd346CBks7x+YV2N9AzsYxaRLU
+        4V3Fd18enJ4xvKviKaWU+FocVxun0WEx+oadexkomw==
+X-Google-Smtp-Source: APXvYqxnbUay5PiRGlAk1ZYomVlAdiyOVo02nv/J8yNZnhIS1OWHceNsLa/CuscQP9WJ+Ear0a9O2Nxlub7TP0r2NBo=
+X-Received: by 2002:a9d:2cc:: with SMTP id 70mr18636821otl.145.1568023135226;
+ Mon, 09 Sep 2019 02:58:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <b2dd074a-1693-3aea-42b4-da1f5ec155c4@web.de>
+In-Reply-To: <b2dd074a-1693-3aea-42b4-da1f5ec155c4@web.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 9 Sep 2019 11:58:44 +0200
+Message-ID: <CAMuHMdWkPFBphjKQf686LgW6ZE35MYM3A3TmUaY-PJYajSwuyw@mail.gmail.com>
+Subject: Re: [PATCH] spi-gpio: Use PTR_ERR_OR_ZERO() in spi_gpio_request()
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-[ Upstream commit bc519d9574618e47a0c788000fb78da95e18d953 ]
+On Sun, Sep 8, 2019 at 2:46 PM Markus Elfring <Markus.Elfring@web.de> wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Sat, 7 Sep 2019 13:51:16 +0200
+>
+> Simplify this function implementation by using a known function.
+>
+> Generated by: scripts/coccinelle/api/ptr_ret.cocci
+>
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-The BCM2835 AUX SPI has a shared interrupt line (with AUX UART).
-Downstream fixes this with an AUX irqchip to demux the IRQ sources and a
-DT change which breaks compatibility with older kernels. The AUX irqchip
-was already rejected for upstream[1] and the DT change would break
-working systems if the DTB is updated to a newer one. The latter issue
-was brought to my attention by Alex Graf.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-The root cause however is a bug in the shared handler. Shared handlers
-must check that interrupts are actually enabled before servicing the
-interrupt. Add a check that the TXEMPTY or IDLE interrupts are enabled.
+Gr{oetje,eeting}s,
 
-[1] https://patchwork.kernel.org/patch/9781221/
+                        Geert
 
-Cc: Alexander Graf <agraf@suse.de>
-Cc: Marc Zyngier <marc.zyngier@arm.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Eric Anholt <eric@anholt.net>
-Cc: Stefan Wahren <stefan.wahren@i2se.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ray Jui <rjui@broadcom.com>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: bcm-kernel-feedback-list@broadcom.com
-Cc: linux-spi@vger.kernel.org
-Cc: linux-rpi-kernel@lists.infradead.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Eric Anholt <eric@anholt.net>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-bcm2835aux.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/spi/spi-bcm2835aux.c b/drivers/spi/spi-bcm2835aux.c
-index 7de6f8472a810..6f4c6aa801f14 100644
---- a/drivers/spi/spi-bcm2835aux.c
-+++ b/drivers/spi/spi-bcm2835aux.c
-@@ -187,6 +187,11 @@ static irqreturn_t bcm2835aux_spi_interrupt(int irq, void *dev_id)
- 	struct bcm2835aux_spi *bs = spi_master_get_devdata(master);
- 	irqreturn_t ret = IRQ_NONE;
- 
-+	/* IRQ may be shared, so return if our interrupts are disabled */
-+	if (!(bcm2835aux_rd(bs, BCM2835_AUX_SPI_CNTL1) &
-+	      (BCM2835_AUX_SPI_CNTL1_TXEMPTY | BCM2835_AUX_SPI_CNTL1_IDLE)))
-+		return ret;
-+
- 	/* check if we have data to read */
- 	while (bs->rx_len &&
- 	       (!(bcm2835aux_rd(bs, BCM2835_AUX_SPI_STAT) &
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
