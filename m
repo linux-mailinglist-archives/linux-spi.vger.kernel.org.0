@@ -2,31 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0C7AFA44
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 12:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B31BAFA9B
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 12:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727079AbfIKKZZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Sep 2019 06:25:25 -0400
-Received: from mailout1.hostsharing.net ([83.223.95.204]:46855 "EHLO
-        mailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726702AbfIKKZZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 06:25:25 -0400
-X-Greylist: delayed 563 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Sep 2019 06:25:24 EDT
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        id S1726696AbfIKKj7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Sep 2019 06:39:59 -0400
+Received: from mailout2.hostsharing.net ([83.223.78.233]:42841 "EHLO
+        mailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbfIKKj7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 06:39:59 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout1.hostsharing.net (Postfix) with ESMTPS id D39DB101903B3;
-        Wed, 11 Sep 2019 12:16:00 +0200 (CEST)
+        by mailout2.hostsharing.net (Postfix) with ESMTPS id CE39D10189CE9;
+        Wed, 11 Sep 2019 12:34:12 +0200 (CEST)
 Received: from localhost (p57BD772B.dip0.t-ipconnect.de [87.189.119.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 98ABC6124A0B;
-        Wed, 11 Sep 2019 12:16:00 +0200 (CEST)
-X-Mailbox-Line: From f45920af18dbf06e34129bbc406f53dc9c5d1075 Mon Sep 17 00:00:00 2001
-Message-Id: <cover.1568187525.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 80D8261255CE;
+        Wed, 11 Sep 2019 12:34:12 +0200 (CEST)
+X-Mailbox-Line: From bfc98a38225bbec4158440ad06cb9eee675e3e6f Mon Sep 17 00:00:00 2001
+Message-Id: <bfc98a38225bbec4158440ad06cb9eee675e3e6f.1568187525.git.lukas@wunner.de>
+In-Reply-To: <cover.1568187525.git.lukas@wunner.de>
+References: <cover.1568187525.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
 Date:   Wed, 11 Sep 2019 12:15:30 +0200
-Subject: [PATCH v2 00/10] Speed up SPI simplex transfers on Raspberry Pi
+Subject: [PATCH v2 01/10] dmaengine: bcm2835: Allow reusable descriptors
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -37,46 +38,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Extend the BCM2835 SPI driver to handle simplex transfers internally,
-thereby reducing their latency and CPU usage and obviating the need to
-have the SPI core convert to full-duplex via SPI_CONTROLLER_MUST_TX/RX.
+The DMA engine API requires DMA drivers to explicitly allow that
+descriptors are prepared once and reused multiple times. Only a
+single driver makes use of this functionality so far (pxa_dma.c,
+to speed up pxa_camera.c).
 
+We're about to add another use case for reusable descriptors in
+the BCM2835 SPI driver, so allow that in the BCM2835 DMA driver.
 
-Changes since v2:
+Tested-by: Nuno Sá <nuno.sa@analog.com>
+Tested-by: Noralf Trønnes <noralf@tronnes.org>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Acked-by: Vinod Koul <vkoul@kernel.org>
+Acked-by: Stefan Wahren <wahrenst@gmx.net>
+Acked-by: Martin Sperl <kernel@martin.sperl.org>
+Cc: Florian Kauer <florian.kauer@koalo.de>
+Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+---
+ drivers/dma/bcm2835-dma.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-* Patch [03/10]: Round up struct spi_controller to cacheline size
-  instead of putting it behind the driver-private data. (Mark Brown)
-
-* Move patch "spi: bcm2835: Work around DONE bit erratum" to the front
-  of the series to ease backporting to stable. (Mark Brown)
-  (I don't think it's necessary to backport it, hence it's not marked
-  for stable, but it might be autoselected by Sasha Levin's AI.)
-
-* Add all collected Acked-by and Tested-by tags, rebase on for-5.4.
-
-
-Link to v1:
-
-https://lore.kernel.org/dmaengine/20190910112141.GM2036@sirena.org.uk/T/#t
-
-
-Lukas Wunner (10):
-  dmaengine: bcm2835: Allow reusable descriptors
-  dmaengine: bcm2835: Allow cyclic transactions without interrupt
-  spi: Guarantee cacheline alignment of driver-private data
-  spi: bcm2835: Work around DONE bit erratum
-  spi: bcm2835: Drop dma_pending flag
-  spi: bcm2835: Cache CS register value for ->prepare_message()
-  spi: bcm2835: Speed up TX-only DMA transfers by clearing RX FIFO
-  dmaengine: bcm2835: Document struct bcm2835_dmadev
-  dmaengine: bcm2835: Avoid accessing memory when copying zeroes
-  spi: bcm2835: Speed up RX-only DMA transfers by zero-filling TX FIFO
-
- drivers/dma/bcm2835-dma.c |  38 +++-
- drivers/spi/spi-bcm2835.c | 407 +++++++++++++++++++++++++++++++-------
- drivers/spi/spi.c         |  11 +-
- 3 files changed, 384 insertions(+), 72 deletions(-)
-
+diff --git a/drivers/dma/bcm2835-dma.c b/drivers/dma/bcm2835-dma.c
+index 8101ff2f05c1..523c507ad69e 100644
+--- a/drivers/dma/bcm2835-dma.c
++++ b/drivers/dma/bcm2835-dma.c
+@@ -907,6 +907,7 @@ static int bcm2835_dma_probe(struct platform_device *pdev)
+ 	od->ddev.directions = BIT(DMA_DEV_TO_MEM) | BIT(DMA_MEM_TO_DEV) |
+ 			      BIT(DMA_MEM_TO_MEM);
+ 	od->ddev.residue_granularity = DMA_RESIDUE_GRANULARITY_BURST;
++	od->ddev.descriptor_reuse = true;
+ 	od->ddev.dev = &pdev->dev;
+ 	INIT_LIST_HEAD(&od->ddev.channels);
+ 
 -- 
 2.23.0
 
