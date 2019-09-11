@@ -2,85 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E11DEAF9CB
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 12:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0C7AFA44
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 12:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727436AbfIKKDP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Sep 2019 06:03:15 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33760 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbfIKKDP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 06:03:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=a0Kkj21KsvH+4VqiIM/Zj1XZfe1a49Milh3+Rqzxq0c=; b=Oe3vlnwfQYHbmzzSlu1stRVmc
-        vWirk4HKb/ywIzeJRQYjTKfIQPMP/aAkdDXPaTUVTgtRSMpvr3Yzx3Xpugpe77qC2BpIUz8pcJh8/
-        BRdmqfi1HirizyKZ/xZiYXIVVHLZf+75AhRCXgpPLg+y0o+dlX13L2cz++BPN1eEuqT6M=;
-Received: from [148.69.85.38] (helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1i7zSu-0007X1-Kw; Wed, 11 Sep 2019 10:03:08 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id C2AEFD02D76; Wed, 11 Sep 2019 11:03:07 +0100 (BST)
-Date:   Wed, 11 Sep 2019 11:03:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Luhua Xu <luhua.xu@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH 3/3] spi: mediatek: support large PA
-Message-ID: <20190911100307.GR2036@sirena.org.uk>
-References: <1568195731-3239-1-git-send-email-luhua.xu@mediatek.com>
- <1568195731-3239-4-git-send-email-luhua.xu@mediatek.com>
+        id S1727079AbfIKKZZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Sep 2019 06:25:25 -0400
+Received: from mailout1.hostsharing.net ([83.223.95.204]:46855 "EHLO
+        mailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726702AbfIKKZZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 06:25:25 -0400
+X-Greylist: delayed 563 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Sep 2019 06:25:24 EDT
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by mailout1.hostsharing.net (Postfix) with ESMTPS id D39DB101903B3;
+        Wed, 11 Sep 2019 12:16:00 +0200 (CEST)
+Received: from localhost (p57BD772B.dip0.t-ipconnect.de [87.189.119.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 98ABC6124A0B;
+        Wed, 11 Sep 2019 12:16:00 +0200 (CEST)
+X-Mailbox-Line: From f45920af18dbf06e34129bbc406f53dc9c5d1075 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1568187525.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Wed, 11 Sep 2019 12:15:30 +0200
+Subject: [PATCH v2 00/10] Speed up SPI simplex transfers on Raspberry Pi
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="By57YlnFViWR/M0S"
-Content-Disposition: inline
-In-Reply-To: <1568195731-3239-4-git-send-email-luhua.xu@mediatek.com>
-X-Cookie: Be careful!  UGLY strikes 9 out of 10!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Extend the BCM2835 SPI driver to handle simplex transfers internally,
+thereby reducing their latency and CPU usage and obviating the need to
+have the SPI core convert to full-duplex via SPI_CONTROLLER_MUST_TX/RX.
 
---By57YlnFViWR/M0S
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Wed, Sep 11, 2019 at 05:55:31AM -0400, Luhua Xu wrote:
+Changes since v2:
 
-> +	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(addr_bits));
-> +	if (ret)
-> +		dev_notice(&pdev->dev, "SPI dma_set_mask(%d) failed, ret:%d\n",
-> +			   addr_bits, ret);
+* Patch [03/10]: Round up struct spi_controller to cacheline size
+  instead of putting it behind the driver-private data. (Mark Brown)
 
-Not sure why you picked dev_notice() over dev_err() here?
-Otherwise this looks good so I'll go ahead and apply.
+* Move patch "spi: bcm2835: Work around DONE bit erratum" to the front
+  of the series to ease backporting to stable. (Mark Brown)
+  (I don't think it's necessary to backport it, hence it's not marked
+  for stable, but it might be autoselected by Sasha Levin's AI.)
 
---By57YlnFViWR/M0S
-Content-Type: application/pgp-signature; name="signature.asc"
+* Add all collected Acked-by and Tested-by tags, rebase on for-5.4.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl14xlsACgkQJNaLcl1U
-h9BbAwf/WPyI6V+J0eXXtuhrkDPyjT7RRzxv1xzvLZx1r1SL66BLPAJce+D1yrmY
-VNBKLZ8pS9tW6rmkDJEQVeeFJ+vQRJGca0DJxgiww9332H2aacH7gkw21eM/Zmi5
-b1ziPC3WDTN4LAjDaGmPUq91NcXI3yzc1u+mUAsUEk/3oy/WzrqduSq1K8O2eBhV
-vAAKEn+rE33sTz2BYQzMx8LbHaflmHYKxqT+HK111Cbq+ecGEOke7ItpZx/zVrFU
-nJS3vxD35VwGQstEMIMgeXWsNGtD4y+sf2d2T/7DejwYWX9adSmPRdGSkyhCDLBG
-hWBq3cFtRpYeF/ox+P+R1Zqr+y/J+w==
-=+5QQ
------END PGP SIGNATURE-----
+Link to v1:
 
---By57YlnFViWR/M0S--
+https://lore.kernel.org/dmaengine/20190910112141.GM2036@sirena.org.uk/T/#t
+
+
+Lukas Wunner (10):
+  dmaengine: bcm2835: Allow reusable descriptors
+  dmaengine: bcm2835: Allow cyclic transactions without interrupt
+  spi: Guarantee cacheline alignment of driver-private data
+  spi: bcm2835: Work around DONE bit erratum
+  spi: bcm2835: Drop dma_pending flag
+  spi: bcm2835: Cache CS register value for ->prepare_message()
+  spi: bcm2835: Speed up TX-only DMA transfers by clearing RX FIFO
+  dmaengine: bcm2835: Document struct bcm2835_dmadev
+  dmaengine: bcm2835: Avoid accessing memory when copying zeroes
+  spi: bcm2835: Speed up RX-only DMA transfers by zero-filling TX FIFO
+
+ drivers/dma/bcm2835-dma.c |  38 +++-
+ drivers/spi/spi-bcm2835.c | 407 +++++++++++++++++++++++++++++++-------
+ drivers/spi/spi.c         |  11 +-
+ 3 files changed, 384 insertions(+), 72 deletions(-)
+
+-- 
+2.23.0
+
