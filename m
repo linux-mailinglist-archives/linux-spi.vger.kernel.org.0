@@ -2,98 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F63AE926
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2019 13:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B089AF5E2
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 08:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730484AbfIJL3g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Sep 2019 07:29:36 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45162 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728618AbfIJL3f (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Sep 2019 07:29:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=wgIQgAvUrwptuky0KxuYuEfEm9DxQ/ou+hkqf/1K8sc=; b=pV7lK0yHBFHYmggetiQx0qLE0
-        OMLiGbI/uzb/K9cl+jUWdcgv19DNq2VtbJ+Kbqz5b1co5p722filQenw7dIiGRMmPtC9/2Qwomt0D
-        LgkSoNPl8svcuZeh72IiVDaPebDneIE5DZIPLIHtJwIoza2I7O3k03NTvSUugVF7X5a2M=;
-Received: from [148.69.85.38] (helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1i7eKp-0006xV-NC; Tue, 10 Sep 2019 11:29:23 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 131B8D02D76; Tue, 10 Sep 2019 12:29:23 +0100 (BST)
-Date:   Tue, 10 Sep 2019 12:29:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Vinod Koul <vkoul@kernel.org>, Stefan Wahren <wahrenst@gmx.net>,
-        linux-spi@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Eric Anholt <eric@anholt.net>, Nuno Sa <nuno.sa@analog.com>,
-        Martin Sperl <kernel@martin.sperl.org>,
-        Noralf Tronnes <noralf@tronnes.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Florian Kauer <florian.kauer@koalo.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Subject: Re: [PATCH 03/10] spi: Guarantee cacheline alignment of
- driver-private data
-Message-ID: <20190910112923.GN2036@sirena.org.uk>
-References: <cover.1564825752.git.lukas@wunner.de>
- <69faaeb305582ab7dca65fa08635edfa1a39b3fa.1564825752.git.lukas@wunner.de>
+        id S1726735AbfIKGeC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Sep 2019 02:34:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37966 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726390AbfIKGeC (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 11 Sep 2019 02:34:02 -0400
+Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A1F7B21D79;
+        Wed, 11 Sep 2019 06:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568183641;
+        bh=nILqRGanKyWCsHzEVK8odXbwKzmEyjYx6QNVTLEWPxI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hdiGnsYABZmVcA3qsJpOxGkwJMtLvaWrreihk580l8Bdua269dMT9TuUPCKFcKfHp
+         +WhR12Ze+NzXy0ixqQA0GNZVk17CK3kfBB3iwU9+hkHQStxz+N0YKHGiymxkG8aSpn
+         NjoHWrIMmv05+LjhyeVwUE8PVyePFUEFqRn7W2hQ=
+Date:   Wed, 11 Sep 2019 14:33:51 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 5/5] ARM: dts: ls1021a-tsn: Use the DSPI controller in
+ poll mode
+Message-ID: <20190911063350.GB17142@dragon>
+References: <20190822211514.19288-1-olteanv@gmail.com>
+ <20190822211514.19288-6-olteanv@gmail.com>
+ <CA+h21hqWGDCfTg813W1WaXFnRsMdE30WnaXw5TJvpkSp0-w5JA@mail.gmail.com>
+ <20190827180502.GF23391@sirena.co.uk>
+ <CA+h21hr3qmTG1LyWsEp+hZZW2NJFtg9Dh1k6SXVDd+A_YSQjjw@mail.gmail.com>
+ <20190827181318.GG23391@sirena.co.uk>
+ <CA+h21hqMVdsUjBdtiHKtKGpyvuaOf25tc4h-GdDEBQqa3EB7tw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HL3CiL6n73+IAdG4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <69faaeb305582ab7dca65fa08635edfa1a39b3fa.1564825752.git.lukas@wunner.de>
-X-Cookie: Be careful!  UGLY strikes 9 out of 10!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CA+h21hqMVdsUjBdtiHKtKGpyvuaOf25tc4h-GdDEBQqa3EB7tw@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Aug 27, 2019 at 09:16:39PM +0300, Vladimir Oltean wrote:
+> On Tue, 27 Aug 2019 at 21:13, Mark Brown <broonie@kernel.org> wrote:
+> >
+> > On Tue, Aug 27, 2019 at 09:06:14PM +0300, Vladimir Oltean wrote:
+> > > On Tue, 27 Aug 2019 at 21:05, Mark Brown <broonie@kernel.org> wrote:
+> > > > On Mon, Aug 26, 2019 at 04:10:51PM +0300, Vladimir Oltean wrote:
+> >
+> > > > > I noticed you skipped applying this patch, and I'm not sure that Shawn
+> > > > > will review it/take it.
+> > > > > Do you have a better suggestion how I can achieve putting the DSPI
+> > > > > driver in poll mode for this board? A Kconfig option maybe?
+> >
+> > > > DT changes go through the relevant platform trees, not the
+> > > > subsystem trees, so it's not something I'd expect to apply.
+> >
+> > > But at least is it something that you expect to see done through a
+> > > device tree change?
+> >
+> > Well, it's not ideal - if it performs better all the time the
+> > driver should probably just do it unconditionally.  If there's
+> > some threashold where it tends to perform better then the driver
+> > should check for that but IIRC it sounds like the interrupt just
+> > isn't at all helpful here.
+> 
+> I can't seem to find any situation where it performs worse. Hence my
+> question on whether it's a better idea to condition this behavior on a
+> Kconfig option rather than a DT blob which may or may not be in sync.
 
---HL3CiL6n73+IAdG4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+DT is a description of hardware not condition for software behavior,
+where module parameter is usually used for.
 
-On Sat, Aug 03, 2019 at 12:10:00PM +0200, Lukas Wunner wrote:
-> __spi_alloc_controller() uses a single allocation to accommodate struct
->=20
-> Reverse the order.  A forthcoming commit leverages this to grant DMA
-> access to driver-private data of the BCM2835 SPI master.
-
-That's just shuffling the problem around, the same issues will
-then apply to the controller struct and you'll take a performance
-penalty on architectures that don't like unaligned accesses.
-
-> An alternative approach would be to round up struct spi_controller to
-> cacheline size, at the expense of some wasted memory.
-
-That would seem more logical, or just do two alloacations.  It's
-not like we allocate huge numbers of SPI controllers.
-
---HL3CiL6n73+IAdG4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl13iRIACgkQJNaLcl1U
-h9CbxwgAg4jjd1KJdTBT4e6p6KE9w/p5UJ0GGEXa8Jkt7PnhdYsUJY5Q5Qn6X4M9
-JDBbkQL60QbtYcHfw8KOSKmpuMOBcERliowOajWGKEGkwMP43u1ebTgVDjuUDAzO
-+xqQnUUz9I68js5OOT4Ha67QFwYsPrteM+PHgvt1cf8Lx/JJOXOoNn+FAtUdbGRo
-+BNEqIC4uvaPESXbfteHq9YT9gnl2zgHP+wX5Gds10V2tFkmqbDHJ9G61MI5OM0n
-d0KQxrL+mEfi35s4RvdUAKAH4OYFVRLLUpsp/cFs/tKsO7sVn1+p1GPALhkpLaRW
-I57TaHuRcc9SfYm58Sr03r90Aa9ajg==
-=rzgq
------END PGP SIGNATURE-----
-
---HL3CiL6n73+IAdG4--
+Shawn
