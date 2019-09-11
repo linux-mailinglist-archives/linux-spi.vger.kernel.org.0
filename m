@@ -2,33 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0413AFAA3
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 12:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5A1AFAC1
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 12:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726657AbfIKKmU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Sep 2019 06:42:20 -0400
-Received: from mailout1.hostsharing.net ([83.223.95.204]:40061 "EHLO
-        mailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbfIKKmU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 06:42:20 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        id S1726341AbfIKKsF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Sep 2019 06:48:05 -0400
+Received: from mailout2.hostsharing.net ([83.223.78.233]:50051 "EHLO
+        mailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbfIKKsF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 06:48:05 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout1.hostsharing.net (Postfix) with ESMTPS id 26FA1101903B3;
-        Wed, 11 Sep 2019 12:42:19 +0200 (CEST)
+        by mailout2.hostsharing.net (Postfix) with ESMTPS id D081410189D0E;
+        Wed, 11 Sep 2019 12:48:02 +0200 (CEST)
 Received: from localhost (p57BD772B.dip0.t-ipconnect.de [87.189.119.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id D98726124A1A;
-        Wed, 11 Sep 2019 12:42:18 +0200 (CEST)
-X-Mailbox-Line: From 01625b9b26b93417fb09d2c15ad02dfe9cdbbbe5 Mon Sep 17 00:00:00 2001
-Message-Id: <01625b9b26b93417fb09d2c15ad02dfe9cdbbbe5.1568187525.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 874156138D2F;
+        Wed, 11 Sep 2019 12:48:02 +0200 (CEST)
+X-Mailbox-Line: From 062b03b7f86af77a13ce0ec3b22e0bdbfcfba10d Mon Sep 17 00:00:00 2001
+Message-Id: <062b03b7f86af77a13ce0ec3b22e0bdbfcfba10d.1568187525.git.lukas@wunner.de>
 In-Reply-To: <cover.1568187525.git.lukas@wunner.de>
 References: <cover.1568187525.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
 Date:   Wed, 11 Sep 2019 12:15:30 +0200
-Subject: [PATCH v2 03/10] spi: Guarantee cacheline alignment of driver-private
- data
+Subject: [PATCH v2 05/10] spi: bcm2835: Drop dma_pending flag
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
 Sender: linux-spi-owner@vger.kernel.org
@@ -36,66 +38,113 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-__spi_alloc_controller() uses a single allocation to accommodate struct
-spi_controller and the driver-private data, but places the latter behind
-the former.  This order does not guarantee cacheline alignment of the
-driver-private data.  (It does guarantee cacheline alignment of struct
-spi_controller but the structure doesn't make any use of that property.)
+The BCM2835 SPI driver uses a flag to keep track of whether a DMA
+transfer is in progress.
 
-Round up struct spi_controller to cacheline size.  A forthcoming commit
-leverages this to grant DMA access to driver-private data of the BCM2835
-SPI master.
+The flag is used to avoid terminating DMA channels multiple times if a
+transfer finishes orderly while simultaneously the SPI core invokes the
+->handle_err() callback because the transfer took too long.  However
+terminating DMA channels multiple times is perfectly fine, so the flag
+is unnecessary for this particular purpose.
 
-An alternative, less economical approach would be to use two allocations.
+The flag is also used to avoid invoking bcm2835_spi_undo_prologue()
+multiple times under this race condition.  However multiple *concurrent*
+invocations can no longer happen since commit 2527704d8411 ("spi:
+bcm2835: Synchronize with callback on DMA termination") because the
+->handle_err() callback now uses the _sync() variant when terminating
+DMA channels.
 
-A third approach consists of reversing the order to conserve memory.
-But Mark Brown is concerned that it may result in a performance penalty
-on architectures that don't like unaligned accesses.
+The only raison d'être of the flag is therefore that
+bcm2835_spi_undo_prologue() cannot cope with multiple *sequential*
+invocations.  Achieve that by setting tx_prologue to 0 at the end of
+the function.  Subsequent invocations thus become no-ops.
 
+With that, the dma_pending flag becomes unnecessary, so drop it.
+
+Tested-by: Nuno Sá <nuno.sa@analog.com>
+Tested-by: Noralf Trønnes <noralf@tronnes.org>
 Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Acked-by: Stefan Wahren <wahrenst@gmx.net>
+Acked-by: Martin Sperl <kernel@martin.sperl.org>
 ---
- drivers/spi/spi.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/spi/spi-bcm2835.c | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index b2890923d256..f8b4654a57d3 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2188,8 +2188,10 @@ extern struct class spi_slave_class;	/* dummy */
-  * __spi_alloc_controller - allocate an SPI master or slave controller
-  * @dev: the controller, possibly using the platform_bus
-  * @size: how much zeroed driver-private data to allocate; the pointer to this
-- *	memory is in the driver_data field of the returned device,
-- *	accessible with spi_controller_get_devdata().
-+ *	memory is in the driver_data field of the returned device, accessible
-+ *	with spi_controller_get_devdata(); the memory is cacheline aligned;
-+ *	drivers granting DMA access to portions of their private data need to
-+ *	round up @size using ALIGN(size, dma_get_cache_alignment()).
-  * @slave: flag indicating whether to allocate an SPI master (false) or SPI
-  *	slave (true) controller
-  * Context: can sleep
-@@ -2211,11 +2213,12 @@ struct spi_controller *__spi_alloc_controller(struct device *dev,
- 					      unsigned int size, bool slave)
- {
- 	struct spi_controller	*ctlr;
-+	size_t ctlr_size = ALIGN(sizeof(*ctlr), dma_get_cache_alignment());
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index f79f04ea42e5..532c58bcfd45 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -94,7 +94,6 @@ MODULE_PARM_DESC(polling_limit_us,
+  * @rx_prologue: bytes received without DMA if first RX sglist entry's
+  *	length is not a multiple of 4 (to overcome hardware limitation)
+  * @tx_spillover: whether @tx_prologue spills over to second TX sglist entry
+- * @dma_pending: whether a DMA transfer is in progress
+  * @debugfs_dir: the debugfs directory - neede to remove debugfs when
+  *      unloading the module
+  * @count_transfer_polling: count of how often polling mode is used
+@@ -117,7 +116,6 @@ struct bcm2835_spi {
+ 	int tx_prologue;
+ 	int rx_prologue;
+ 	unsigned int tx_spillover;
+-	unsigned int dma_pending;
  
- 	if (!dev)
- 		return NULL;
+ 	struct dentry *debugfs_dir;
+ 	u64 count_transfer_polling;
+@@ -551,6 +549,8 @@ static void bcm2835_spi_undo_prologue(struct bcm2835_spi *bs)
+ 		sg_dma_address(&tfr->tx_sg.sgl[1]) -= 4;
+ 		sg_dma_len(&tfr->tx_sg.sgl[1])     += 4;
+ 	}
++
++	bs->tx_prologue = 0;
+ }
  
--	ctlr = kzalloc(size + sizeof(*ctlr), GFP_KERNEL);
-+	ctlr = kzalloc(size + ctlr_size, GFP_KERNEL);
- 	if (!ctlr)
- 		return NULL;
+ static void bcm2835_spi_dma_done(void *data)
+@@ -566,10 +566,8 @@ static void bcm2835_spi_dma_done(void *data)
+ 	 * is called the tx-dma must have finished - can't get to this
+ 	 * situation otherwise...
+ 	 */
+-	if (cmpxchg(&bs->dma_pending, true, false)) {
+-		dmaengine_terminate_async(ctlr->dma_tx);
+-		bcm2835_spi_undo_prologue(bs);
+-	}
++	dmaengine_terminate_async(ctlr->dma_tx);
++	bcm2835_spi_undo_prologue(bs);
  
-@@ -2229,7 +2232,7 @@ struct spi_controller *__spi_alloc_controller(struct device *dev,
- 		ctlr->dev.class = &spi_master_class;
- 	ctlr->dev.parent = dev;
- 	pm_suspend_ignore_children(&ctlr->dev, true);
--	spi_controller_set_devdata(ctlr, &ctlr[1]);
-+	spi_controller_set_devdata(ctlr, (void *)ctlr + ctlr_size);
+ 	/* and mark as completed */;
+ 	complete(&ctlr->xfer_completion);
+@@ -644,9 +642,6 @@ static int bcm2835_spi_transfer_one_dma(struct spi_controller *ctlr,
+ 	/* start TX early */
+ 	dma_async_issue_pending(ctlr->dma_tx);
  
- 	return ctlr;
+-	/* mark as dma pending */
+-	bs->dma_pending = 1;
+-
+ 	/* set the DMA length */
+ 	bcm2835_wr(bs, BCM2835_SPI_DLEN, bs->tx_len);
+ 
+@@ -662,7 +657,6 @@ static int bcm2835_spi_transfer_one_dma(struct spi_controller *ctlr,
+ 	if (ret) {
+ 		/* need to reset on errors */
+ 		dmaengine_terminate_sync(ctlr->dma_tx);
+-		bs->dma_pending = false;
+ 		goto err_reset_hw;
+ 	}
+ 
+@@ -927,11 +921,10 @@ static void bcm2835_spi_handle_err(struct spi_controller *ctlr,
+ 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+ 
+ 	/* if an error occurred and we have an active dma, then terminate */
+-	if (cmpxchg(&bs->dma_pending, true, false)) {
+-		dmaengine_terminate_sync(ctlr->dma_tx);
+-		dmaengine_terminate_sync(ctlr->dma_rx);
+-		bcm2835_spi_undo_prologue(bs);
+-	}
++	dmaengine_terminate_sync(ctlr->dma_tx);
++	dmaengine_terminate_sync(ctlr->dma_rx);
++	bcm2835_spi_undo_prologue(bs);
++
+ 	/* and reset */
+ 	bcm2835_spi_reset_hw(ctlr);
  }
 -- 
 2.23.0
