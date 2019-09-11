@@ -2,73 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B9AAFBF1
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 13:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85032AFC04
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 13:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbfIKLxa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Sep 2019 07:53:30 -0400
-Received: from bmailout1.hostsharing.net ([83.223.95.100]:49853 "EHLO
-        bmailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726702AbfIKLxa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 07:53:30 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 76B0E3000CA22;
-        Wed, 11 Sep 2019 13:53:28 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 4F3F430C9E9; Wed, 11 Sep 2019 13:53:28 +0200 (CEST)
-Date:   Wed, 11 Sep 2019 13:53:28 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mark Brown <broonie@kernel.org>
+        id S1726930AbfIKL7c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Sep 2019 07:59:32 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:60046 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726702AbfIKL7c (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 07:59:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=tK0JR9oNjstb9FQfTR2pCydHBSMT54MQKglFzHOPGBo=; b=afFRogvBvedLbX+TNVz+KvzgQ
+        mz0+OBWqrRfumTS5Ds0ZHMoGK8UXa0nGhET+Ogu4W620uJ5AJLXpJhv2RGPzId1T3qv6/swLu38pq
+        2yOLEtNYfSrbtYAwlhYA/ozrEK/LkeCaeK3NloVuXWE3Il4GjQ0UaNIk2ydU8bFAsI284=;
+Received: from [148.69.85.38] (helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i81HU-0000P6-So; Wed, 11 Sep 2019 11:59:28 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 3D00AD00486; Wed, 11 Sep 2019 12:59:28 +0100 (BST)
+Date:   Wed, 11 Sep 2019 12:59:28 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
 Cc:     linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 04/10] spi: bcm2835: Work around DONE bit erratum
-Message-ID: <20190911115328.zcfphci2abukfgvs@wunner.de>
+Subject: Re: [PATCH v2 00/10] Speed up SPI simplex transfers on Raspberry Pi
+Message-ID: <20190911115928.GE2036@sirena.org.uk>
 References: <cover.1568187525.git.lukas@wunner.de>
- <7ceb98f154cdcf72c577615fa312df41adea5f47.1568187525.git.lukas@wunner.de>
- <20190911112522.GD2036@sirena.org.uk>
+ <20190911104721.GX2036@sirena.org.uk>
+ <20190911114352.w2htkzfi5v6zl7nq@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Lg8eXa+brxrbjAbR"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190911112522.GD2036@sirena.org.uk>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190911114352.w2htkzfi5v6zl7nq@wunner.de>
+X-Cookie: Be careful!  UGLY strikes 9 out of 10!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 12:25:22PM +0100, Mark Brown wrote:
-> On Wed, Sep 11, 2019 at 12:15:30PM +0200, Lukas Wunner wrote:
-> > Commit 3bd7f6589f67 ("spi: bcm2835: Overcome sglist entry length
-> > limitation") amended the BCM2835 SPI driver with support for DMA
-> > transfers whose buffers are not aligned to 4 bytes and require more than
-> > one sglist entry.
-> 
-> You said in the cover letter that this was at the start of the
-> series but it's actually patch 4
 
-All preceding patches do not touch spi-bcm2835.c,
-that's what I meant with "front of the series".
+--Lg8eXa+brxrbjAbR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Wed, Sep 11, 2019 at 01:43:52PM +0200, Lukas Wunner wrote:
 
-> and in any case it was already applied so
-> I'm not clear why you're resending it.
+> I use "git format-patch --thread=shallow", then use a Perl script
+> to change the Date: header and send out the raw messages with msmtp.
 
-I based the series on your for-5.4 branch and didn't notice that you had
-already applied this one to for-5.3.  This wasn't really meant as a fix
-and it's not necessary for it to to be applied to for-5.3, though there's
-no harm either as long as it lands in Linus' tree before the other
-patches in this series.
+Sounds like your perl script could just be git send-email?
 
+> I suspect the incorrect order may be because all messages use the
+> same Date: header and you're using "sort_aux=date-sent" in Mutt.
 
-> If there's any difference
-> from the previous version please send an incremental fix for it
-> instead.
+or that the messages are getting reordered in transit by the
+intervening MTAs and it's falling back on delivery order lacking
+any other information.
 
-There is no difference aside from a Tested-by tag for Noralf Trønnes
-which is missing from the commit on your for-5.3 branch.
+--Lg8eXa+brxrbjAbR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
-Lukas
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl144Z0ACgkQJNaLcl1U
+h9CiGgf+IZkFNPyHBjwAVwbah4Xor1XYDP/HVn9fnXlcm4hxeMSuYkCdimjnkwFy
+NBEgTw0samr7jvJtNwoU8GIOuntj2nbkPyQRTRktAfUX7hwXoPnWXyo6CKmBlGKY
+kL1CZhQa62BVgS8p8a/0e9q4oE4hUo/7zTqNrNw11kMcIA1SSs+h6dtWtT65RidS
+YZsY4IJclh+qZpnERxE9ceRCOuviz7bIEcGz8H0ZA7/nftR+9va8vjmYgwjnW0ir
+5pel+Me4nixf0+fYorS97DvGGq2puMhUfwwajDAaFYa6shsNjea2EbBho5BpqIH5
+JBsy+0Z93PeNmUEGgvfprEGmbnpxxw==
+=CdYe
+-----END PGP SIGNATURE-----
+
+--Lg8eXa+brxrbjAbR--
