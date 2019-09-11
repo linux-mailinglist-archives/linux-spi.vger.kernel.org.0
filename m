@@ -2,150 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5A1AFAC1
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 12:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC46EAFABF
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2019 12:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbfIKKsF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Sep 2019 06:48:05 -0400
-Received: from mailout2.hostsharing.net ([83.223.78.233]:50051 "EHLO
-        mailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbfIKKsF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 06:48:05 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout2.hostsharing.net (Postfix) with ESMTPS id D081410189D0E;
-        Wed, 11 Sep 2019 12:48:02 +0200 (CEST)
-Received: from localhost (p57BD772B.dip0.t-ipconnect.de [87.189.119.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 874156138D2F;
-        Wed, 11 Sep 2019 12:48:02 +0200 (CEST)
-X-Mailbox-Line: From 062b03b7f86af77a13ce0ec3b22e0bdbfcfba10d Mon Sep 17 00:00:00 2001
-Message-Id: <062b03b7f86af77a13ce0ec3b22e0bdbfcfba10d.1568187525.git.lukas@wunner.de>
-In-Reply-To: <cover.1568187525.git.lukas@wunner.de>
-References: <cover.1568187525.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Wed, 11 Sep 2019 12:15:30 +0200
-Subject: [PATCH v2 05/10] spi: bcm2835: Drop dma_pending flag
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     Mark Brown <broonie@kernel.org>
+        id S1726579AbfIKKrX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Sep 2019 06:47:23 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:51562 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbfIKKrX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Sep 2019 06:47:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=obMQBjQk21sSrNDQ9pzr5Lrl4+GQWjmyi37MqvNhcFo=; b=BkFtIyszpUZQvUpa0xiEd9+lT
+        Kz9hqZEbQG09bwIxmytYOdk69zUPPadkXKecfaQ4MuexvS0BH6jL1q0o/FH26jN5ljfLwwpDaYIUw
+        SuelNo3itJ87mtHGb/Gn3M9zxwL8c9e29uxUvuOaMVwysuy91N+UyaeSvGpbdM/y6HY74=;
+Received: from [148.69.85.38] (helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i809h-0008Hf-Sl; Wed, 11 Sep 2019 10:47:21 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 3A04CD00330; Wed, 11 Sep 2019 11:47:21 +0100 (BST)
+Date:   Wed, 11 Sep 2019 11:47:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
 Cc:     linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 00/10] Speed up SPI simplex transfers on Raspberry Pi
+Message-ID: <20190911104721.GX2036@sirena.org.uk>
+References: <cover.1568187525.git.lukas@wunner.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sBvc846/5FzkyDmz"
+Content-Disposition: inline
+In-Reply-To: <cover.1568187525.git.lukas@wunner.de>
+X-Cookie: Be careful!  UGLY strikes 9 out of 10!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The BCM2835 SPI driver uses a flag to keep track of whether a DMA
-transfer is in progress.
 
-The flag is used to avoid terminating DMA channels multiple times if a
-transfer finishes orderly while simultaneously the SPI core invokes the
-->handle_err() callback because the transfer took too long.  However
-terminating DMA channels multiple times is perfectly fine, so the flag
-is unnecessary for this particular purpose.
+--sBvc846/5FzkyDmz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The flag is also used to avoid invoking bcm2835_spi_undo_prologue()
-multiple times under this race condition.  However multiple *concurrent*
-invocations can no longer happen since commit 2527704d8411 ("spi:
-bcm2835: Synchronize with callback on DMA termination") because the
-->handle_err() callback now uses the _sync() variant when terminating
-DMA channels.
+On Wed, Sep 11, 2019 at 12:15:30PM +0200, Lukas Wunner wrote:
+> Extend the BCM2835 SPI driver to handle simplex transfers internally,
+> thereby reducing their latency and CPU usage and obviating the need to
+> have the SPI core convert to full-duplex via SPI_CONTROLLER_MUST_TX/RX.
 
-The only raison d'être of the flag is therefore that
-bcm2835_spi_undo_prologue() cannot cope with multiple *sequential*
-invocations.  Achieve that by setting tx_prologue to 0 at the end of
-the function.  Subsequent invocations thus become no-ops.
+Whatever you're doing to send these is still not sending the
+patches in order:
 
-With that, the dma_pending flag becomes unnecessary, so drop it.
+    779 N T 09/11 Lukas Wunner    (1.6K) [PATCH v2 00/10] Speed up SPI simp=
+lex t
+    780 N T 09/11 Lukas Wunner    (2.1K) =E2=94=9C=E2=94=80>[PATCH v2 02/10=
+] dmaengine: bcm2835:
+    781 N T 09/11 Lukas Wunner    (1.3K) =E2=94=9C=E2=94=80>[PATCH v2 01/10=
+] dmaengine: bcm2835:
+    782 N T 09/11 Lukas Wunner    (2.6K) =E2=94=9C=E2=94=80>[PATCH v2 03/10=
+] spi: Guarantee cac
 
-Tested-by: Nuno Sá <nuno.sa@analog.com>
-Tested-by: Noralf Trønnes <noralf@tronnes.org>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Acked-by: Stefan Wahren <wahrenst@gmx.net>
-Acked-by: Martin Sperl <kernel@martin.sperl.org>
----
- drivers/spi/spi-bcm2835.c | 23 ++++++++---------------
- 1 file changed, 8 insertions(+), 15 deletions(-)
+--sBvc846/5FzkyDmz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index f79f04ea42e5..532c58bcfd45 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -94,7 +94,6 @@ MODULE_PARM_DESC(polling_limit_us,
-  * @rx_prologue: bytes received without DMA if first RX sglist entry's
-  *	length is not a multiple of 4 (to overcome hardware limitation)
-  * @tx_spillover: whether @tx_prologue spills over to second TX sglist entry
-- * @dma_pending: whether a DMA transfer is in progress
-  * @debugfs_dir: the debugfs directory - neede to remove debugfs when
-  *      unloading the module
-  * @count_transfer_polling: count of how often polling mode is used
-@@ -117,7 +116,6 @@ struct bcm2835_spi {
- 	int tx_prologue;
- 	int rx_prologue;
- 	unsigned int tx_spillover;
--	unsigned int dma_pending;
- 
- 	struct dentry *debugfs_dir;
- 	u64 count_transfer_polling;
-@@ -551,6 +549,8 @@ static void bcm2835_spi_undo_prologue(struct bcm2835_spi *bs)
- 		sg_dma_address(&tfr->tx_sg.sgl[1]) -= 4;
- 		sg_dma_len(&tfr->tx_sg.sgl[1])     += 4;
- 	}
-+
-+	bs->tx_prologue = 0;
- }
- 
- static void bcm2835_spi_dma_done(void *data)
-@@ -566,10 +566,8 @@ static void bcm2835_spi_dma_done(void *data)
- 	 * is called the tx-dma must have finished - can't get to this
- 	 * situation otherwise...
- 	 */
--	if (cmpxchg(&bs->dma_pending, true, false)) {
--		dmaengine_terminate_async(ctlr->dma_tx);
--		bcm2835_spi_undo_prologue(bs);
--	}
-+	dmaengine_terminate_async(ctlr->dma_tx);
-+	bcm2835_spi_undo_prologue(bs);
- 
- 	/* and mark as completed */;
- 	complete(&ctlr->xfer_completion);
-@@ -644,9 +642,6 @@ static int bcm2835_spi_transfer_one_dma(struct spi_controller *ctlr,
- 	/* start TX early */
- 	dma_async_issue_pending(ctlr->dma_tx);
- 
--	/* mark as dma pending */
--	bs->dma_pending = 1;
--
- 	/* set the DMA length */
- 	bcm2835_wr(bs, BCM2835_SPI_DLEN, bs->tx_len);
- 
-@@ -662,7 +657,6 @@ static int bcm2835_spi_transfer_one_dma(struct spi_controller *ctlr,
- 	if (ret) {
- 		/* need to reset on errors */
- 		dmaengine_terminate_sync(ctlr->dma_tx);
--		bs->dma_pending = false;
- 		goto err_reset_hw;
- 	}
- 
-@@ -927,11 +921,10 @@ static void bcm2835_spi_handle_err(struct spi_controller *ctlr,
- 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
- 
- 	/* if an error occurred and we have an active dma, then terminate */
--	if (cmpxchg(&bs->dma_pending, true, false)) {
--		dmaengine_terminate_sync(ctlr->dma_tx);
--		dmaengine_terminate_sync(ctlr->dma_rx);
--		bcm2835_spi_undo_prologue(bs);
--	}
-+	dmaengine_terminate_sync(ctlr->dma_tx);
-+	dmaengine_terminate_sync(ctlr->dma_rx);
-+	bcm2835_spi_undo_prologue(bs);
-+
- 	/* and reset */
- 	bcm2835_spi_reset_hw(ctlr);
- }
--- 
-2.23.0
+-----BEGIN PGP SIGNATURE-----
 
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl140LYACgkQJNaLcl1U
+h9CJuAf40t7iOsCtCUCgOGIXB+YibWRckLCGnZaxx9lO8FpS02JKK8a1kZ7BzmBu
+KUB9QEeaKj5mR76HSW9ptzpbLt2Dhgy92E9In/53UHZK8w7xCRzpngrLvLy/ngg9
+BKxBDoUN5rANRRMIhK18StZ4TKHqviLnTyfFlFkchbmu9KH3bQpwV1v+t0Mv4TqS
+rbeE860BfkVkR6iCMCt/vTlIi+XwRxoTVgjLUWPIphox2CzAYX0ChmRuuX+lXfz3
+t1LJLptjNXavM3z03a/6EeLrgjIvTlc0EmXJNb2YpjSl4w2Lfhtiy8saxwuwXa1s
+UIApc9MXI4DnImX3tQ8K1ZWo2qJq
+=9QgI
+-----END PGP SIGNATURE-----
+
+--sBvc846/5FzkyDmz--
