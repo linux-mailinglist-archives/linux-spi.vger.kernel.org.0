@@ -2,64 +2,152 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0D4B1D29
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2019 14:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D42B1D97
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2019 14:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729805AbfIMMNE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Sep 2019 08:13:04 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:46470 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729760AbfIMMNE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Sep 2019 08:13:04 -0400
-X-IronPort-AV: E=Sophos;i="5.64,501,1559487600"; 
-   d="scan'208";a="26313271"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 13 Sep 2019 21:13:03 +0900
-Received: from renesas-VirtualBox.ree.adwin.renesas.com (unknown [10.226.37.56])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 04D1D4001DDD;
-        Fri, 13 Sep 2019 21:13:01 +0900 (JST)
-From:   Gareth Williams <gareth.williams.jx@renesas.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Subject: [PATCH 3/3] spi: dw: Add compatible string for Renesas RZ/N1 SPI  Controller
-Date:   Fri, 13 Sep 2019 13:12:00 +0100
-Message-Id: <1568376720-7402-4-git-send-email-gareth.williams.jx@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1568376720-7402-1-git-send-email-gareth.williams.jx@renesas.com>
-References: <1568376720-7402-1-git-send-email-gareth.williams.jx@renesas.com>
+        id S1728666AbfIMMWC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 13 Sep 2019 08:22:02 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:53332 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726771AbfIMMWC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Sep 2019 08:22:02 -0400
+Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id CBE5625AED5;
+        Fri, 13 Sep 2019 22:21:59 +1000 (AEST)
+Received: by reginn.horms.nl (Postfix, from userid 7100)
+        id BEC26940513; Fri, 13 Sep 2019 14:21:57 +0200 (CEST)
+From:   Simon Horman <horms+renesas@verge.net.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Simon Horman <horms+renesas@verge.net.au>
+Subject: [PATCH] dt-bindings: hspi: Convert bindings to json-schema
+Date:   Fri, 13 Sep 2019 14:21:51 +0200
+Message-Id: <20190913122151.20264-1-horms+renesas@verge.net.au>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Phil Edworthy <phil.edworthy@renesas.com>
+Convert Renesas HSPI bindings documentation to json-schema.
+Also name bindings documentation file according to the compat string
+being documented.
 
-The Renesas RZ/N1 SPI Controller is based on the Synopsys DW SSI, but has
-additional registers for software CS control and DMA. This patch does not
-address the changes required for DMA support, it simply adds the compatible
-string. The CS registers are not needed as Linux can use gpios for the CS
-signals.
+As a side effect of this change all currently supported/used compat
+strings are listed while no while card compat string is documented.
+This, in my opinion, is desirable as only supported hardware should
+be documented.
 
-Signed-off-by: Gareth Williams <gareth.williams.jx@renesas.com>
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
 ---
- drivers/spi/spi-dw-mmio.c | 1 +
- 1 file changed, 1 insertion(+)
+Based on v5.3-rc1
+Tested using:
+  make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+---
+ .../devicetree/bindings/spi/renesas,hspi.yaml      | 54 ++++++++++++++++++++++
+ Documentation/devicetree/bindings/spi/sh-hspi.txt  | 26 -----------
+ 2 files changed, 54 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/sh-hspi.txt
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index edb3cf6..3640b01 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -225,6 +225,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "mscc,ocelot-spi", .data = dw_spi_mscc_ocelot_init},
- 	{ .compatible = "mscc,jaguar2-spi", .data = dw_spi_mscc_jaguar2_init},
- 	{ .compatible = "amazon,alpine-dw-apb-ssi", .data = dw_spi_alpine_init},
-+	{ .compatible = "renesas,rzn1-spi", },
- 	{ /* end of table */}
- };
- MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
+diff --git a/Documentation/devicetree/bindings/spi/renesas,hspi.yaml b/Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+new file mode 100644
+index 000000000000..94a64a33daf4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/renesas,hspi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas HSPI
++
++maintainers:
++  - Geert Uytterhoeven <geert+renesas@glider.be>
++
++properties:
++  compatible:
++    items:
++      - enum:
++        - renesas,hspi-r8a7778 # R-Car M1A
++        - renesas,hspi-r8a7779 # R-Car H1
++      - const: renesas,hspi
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  # Pinctrl properties might be needed, too.
++  # See Documentation/devicetree/bindings/pinctrl/renesas,*.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - '#address-cells'
++  - '#size-cells'
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    hspi0: spi@fffc7000 {
++        compatible = "renesas,hspi-r8a7778", "renesas,hspi";
++        reg = <0xfffc7000 0x18>;
++        interrupt-parent = <&gic>;
++        interrupts = <0 63 IRQ_TYPE_LEVEL_HIGH>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
++
+diff --git a/Documentation/devicetree/bindings/spi/sh-hspi.txt b/Documentation/devicetree/bindings/spi/sh-hspi.txt
+deleted file mode 100644
+index b9d1e4d11a77..000000000000
+--- a/Documentation/devicetree/bindings/spi/sh-hspi.txt
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Renesas HSPI.
+-
+-Required properties:
+-- compatible       : "renesas,hspi-<soctype>", "renesas,hspi" as fallback.
+-		     Examples with soctypes are:
+-		       - "renesas,hspi-r8a7778" (R-Car M1)
+-		       - "renesas,hspi-r8a7779" (R-Car H1)
+-- reg              : Offset and length of the register set for the device
+-- interrupts       : Interrupt specifier
+-- #address-cells   : Must be <1>
+-- #size-cells      : Must be <0>
+-
+-Pinctrl properties might be needed, too.  See
+-Documentation/devicetree/bindings/pinctrl/renesas,*.
+-
+-Example:
+-
+-	hspi0: spi@fffc7000 {
+-		compatible = "renesas,hspi-r8a7778", "renesas,hspi";
+-		reg = <0xfffc7000 0x18>;
+-		interrupt-parent = <&gic>;
+-		interrupts = <0 63 IRQ_TYPE_LEVEL_HIGH>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-	};
+-
 -- 
-2.7.4
+2.11.0
 
