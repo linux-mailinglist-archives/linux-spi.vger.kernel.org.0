@@ -2,29 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6055B19FF
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2019 10:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97D5B1A40
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2019 10:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387834AbfIMIrD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Sep 2019 04:47:03 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:39290 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387581AbfIMIq6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Sep 2019 04:46:58 -0400
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8D8gds8001890;
-        Fri, 13 Sep 2019 04:46:53 -0400
-Received: from nam05-co1-obe.outbound.protection.outlook.com (mail-co1nam05lp2055.outbound.protection.outlook.com [104.47.48.55])
-        by mx0a-00128a01.pphosted.com with ESMTP id 2uytdfsa8m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Sep 2019 04:46:52 -0400
+        id S2387721AbfIMI4F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 13 Sep 2019 04:56:05 -0400
+Received: from mx0b-00128a01.pphosted.com ([148.163.139.77]:11062 "EHLO
+        mx0b-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387615AbfIMI4E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Sep 2019 04:56:04 -0400
+Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
+        by mx0b-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8D8rF0X004206;
+        Fri, 13 Sep 2019 04:56:00 -0400
+Received: from nam03-by2-obe.outbound.protection.outlook.com (mail-by2nam03lp2055.outbound.protection.outlook.com [104.47.42.55])
+        by mx0b-00128a01.pphosted.com with ESMTP id 2uytd1h9q8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 13 Sep 2019 04:56:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QcwrP4QnIjetMkoH5NLf0ibgB9XU8/pdiylNwS3t6rOtwBkduCCGpuk8Is56K34nb1SPkn6hIr62CBxeabWWWoGVvdRzxMbl1wb3C7tZuslc6373drm33AhmhZhm1zxKX3+Bn1sYH1SfxwgQdL6dim+cb6x2pP/KWXn0qq3FhgOKFKyGi70igoDXwMCEGI8uN/idIXAeIBq6jlFlLAy0o1Xy1hAndD0hM4P79+CqH3eX7556mNJ+cJR3UZlayCx4yO+LDRJ3u2zwFX5z9W6TQ6TXGLS4CpLqq/jZjcOKmN0MJWImEgFhHCNEiOk4uIt4iAy6ssjDSS1BXUY/faWnag==
+ b=ENrAZRUGzaLj6r+kJMec8TyHBmWlOTfk21H878Kxjr+mSESRW+BuAkrnpjKFjKqSXANmN+p0VmFDV8c+5fGRhXUuVaGwQ0hUZvk4KFki2yIiSlwWtkHRvV7uQK6xGHPK4oUoVI1DQR4gSWFVxPpfdS5qDOfM7kuBqMvXRI4o5bPa4HDnBbibOmnGnrDeJ/WieW5B7ObQ3rqzULzJvYV8KFhknhxsy1hEMdj7vMZACFsMgxkNWLkTUpL6QYqZHh2Ks7fr2UkUnHeVb6C5jdDc8Qg2YQ9SNqV1UuQfj9BD5jzn0gv7OyYOcoW0zXT1TJMFJaZXJ84RfnFF9e2mwc0Ftw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8SJm80TJlRotqx116nuGen8V9eGqdAKty0mbD7a8DOQ=;
- b=XNga6HYc2Kcgx5P195thaxhG2CSVGlOnmHVy4vYEZETvUGQbLxbtRVzIRuZB0mcz/LlkVb220hmQ45kQ2wwvcDrJK1ioVIpN8bstPT95hmI7nXBVNutKrPnw899YH+IrwSXLWJ1x1oJgjFGkHhcFadGnw/rZS9eEpE0sbTTop04o+nfYLlEKHcPYe6d2jIdaphDz+zFnM3X9ky/84TPRvrs8i0xtnHfXjrbJ8X+DOvGHoLOM4FqDuiEjV0rBoahBWC3b98hkv5gOgCaacelQ6aB9ZMtZXbEbk2R72bdmmKztnVhpZzeoe14AQSr0TKrRsJgB87Rii0c582j82kGHzA==
+ bh=B4GXGw4Jaaq3D79dD1RYpAnWd2NUfIitSayBe0mznlk=;
+ b=OCGwjknjjKsB8rBZB07Mo84QYrBqUHHBy2dsJ88sji7Bzv+YNHv6R7RSTgomYrRvrfWNmPOr9qWG2kTExcWAPVjd7ZyeuigIqJXzAYoIP/SAQrAnBVj3PyfuOxvhy2+bt8ESjRaEDSqAqANg7FVSILfmURk0ENWChEo+R7DYw8kdYFzs8s/VMrrFWs6pN+TaXQ0/sgDNC8EOjPq4SIjJ39eRT/DcOv5cvBRkkVaJxEZllB+l/+p7VjLnheNUQwJgVOcpUHJibox96sBsMnXWLRRefAbn7N6WmayhMhZX79H8AIRWXzb0XhpdMIIewMntysrcg1ehulCccy8n+KJ6Xw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  137.71.25.57) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=analog.com;
  dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
@@ -32,212 +32,110 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8SJm80TJlRotqx116nuGen8V9eGqdAKty0mbD7a8DOQ=;
- b=YMfbWMvCIS24KwC8FESpwzHFLIw802RdIEKduP+Iq7T/elCOnj0tBGgkvSahy5x6SCV9RHaI6M/vOh8g0hrLpa5rRYVBDOJZq9kEe2jlFrl4s3XPtUTRXlKOZKGnKhbfYh+z0SsC3ueGfOLJMWCs/dDw7yOZJUZkMBJ9wuHmiL4=
-Received: from BN6PR03CA0072.namprd03.prod.outlook.com (2603:10b6:404:4c::34)
- by MN2PR03MB4669.namprd03.prod.outlook.com (2603:10b6:208:ab::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2241.18; Fri, 13 Sep
- 2019 08:46:51 +0000
-Received: from CY1NAM02FT031.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::207) by BN6PR03CA0072.outlook.office365.com
- (2603:10b6:404:4c::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2263.13 via Frontend
- Transport; Fri, 13 Sep 2019 08:46:50 +0000
+ bh=B4GXGw4Jaaq3D79dD1RYpAnWd2NUfIitSayBe0mznlk=;
+ b=D2WPk703vl6pq0lZKKHRPAIgGrnYkDy3KL57yI7tiX7hTe2xSm0bcX7ryiv/PJyb3WkAfSTKpKW0cgPu4wf6T7KNQJsL8kwvk6xJ74z9y5jkqzTqLE94Qgu2r6y6bk/dxN0D4+CYAp/5H7/L4gXU4hbuLnedBqLFqO8zZnCNARA=
+Received: from CY1PR03CA0002.namprd03.prod.outlook.com (2603:10b6:600::12) by
+ BY5PR03MB5235.namprd03.prod.outlook.com (2603:10b6:a03:21b::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2263.15; Fri, 13 Sep 2019 08:55:58 +0000
+Received: from CY1NAM02FT003.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::207) by CY1PR03CA0002.outlook.office365.com
+ (2603:10b6:600::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2263.17 via Frontend
+ Transport; Fri, 13 Sep 2019 08:55:58 +0000
 Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
  137.71.25.57 as permitted sender) receiver=protection.outlook.com;
  client-ip=137.71.25.57; helo=nwd2mta2.analog.com;
 Received: from nwd2mta2.analog.com (137.71.25.57) by
- CY1NAM02FT031.mail.protection.outlook.com (10.152.75.180) with Microsoft SMTP
+ CY1NAM02FT003.mail.protection.outlook.com (10.152.74.151) with Microsoft SMTP
  Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2263.17
- via Frontend Transport; Fri, 13 Sep 2019 08:46:50 +0000
+ via Frontend Transport; Fri, 13 Sep 2019 08:55:57 +0000
 Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
-        by nwd2mta2.analog.com (8.13.8/8.13.8) with ESMTP id x8D8kjL3030753
+        by nwd2mta2.analog.com (8.13.8/8.13.8) with ESMTP id x8D8tqkk000398
         (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Fri, 13 Sep 2019 01:46:45 -0700
+        Fri, 13 Sep 2019 01:55:52 -0700
 Received: from saturn.ad.analog.com (10.48.65.123) by
  NWD2HUBCAS7.ad.analog.com (10.64.69.107) with Microsoft SMTP Server id
- 14.3.408.0; Fri, 13 Sep 2019 04:46:49 -0400
+ 14.3.408.0; Fri, 13 Sep 2019 04:55:56 -0400
 From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-spi@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bcm-kernel-feedback-list@broadcom.com>
-CC:     <jic23@kernel.org>, <broonie@kernel.org>, <f.fainelli@gmail.com>,
-        <linus.walleij@linaro.org>, <orsonzhai@gmail.com>,
-        <baolin.wang@linaro.org>, <zhang.lyra@gmail.com>,
+To:     <linux-iio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <jic23@kernel.org>, <broonie@kernel.org>,
         Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [RFC PATCH 15/15] spi: implement SW control for CS times
-Date:   Fri, 13 Sep 2019 14:45:50 +0300
-Message-ID: <20190913114550.956-16-alexandru.ardelean@analog.com>
+Subject: [PATCH v2 0/4] spi: introduce `struct spi_delay` data-type 
+Date:   Fri, 13 Sep 2019 14:55:45 +0300
+Message-ID: <20190913115549.3823-1-alexandru.ardelean@analog.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190913114550.956-1-alexandru.ardelean@analog.com>
-References: <20190913114550.956-1-alexandru.ardelean@analog.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ADIRoutedOnPrem: True
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:137.71.25.57;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(346002)(396003)(136003)(39860400002)(376002)(189003)(199004)(476003)(2870700001)(70206006)(44832011)(6666004)(50226002)(356004)(336012)(316002)(47776003)(76176011)(7416002)(70586007)(8936002)(305945005)(478600001)(51416003)(186003)(48376002)(5660300002)(50466002)(1076003)(26005)(14444005)(2201001)(86362001)(7696005)(54906003)(36756003)(107886003)(126002)(486006)(4326008)(2616005)(2906002)(11346002)(446003)(110136005)(7636002)(246002)(106002)(426003)(8676002)(2101003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR03MB4669;H:nwd2mta2.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail11.analog.com;MX:1;A:1;
+X-Forefront-Antispam-Report: CIP:137.71.25.57;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(136003)(396003)(346002)(376002)(39860400002)(199004)(189003)(54534003)(1076003)(316002)(478600001)(486006)(26005)(14444005)(70206006)(70586007)(107886003)(186003)(4743002)(47776003)(966005)(6306002)(305945005)(2616005)(126002)(54906003)(426003)(7636002)(106002)(246002)(336012)(50226002)(2870700001)(4326008)(44832011)(5660300002)(110136005)(51416003)(50466002)(2201001)(8676002)(86362001)(48376002)(36756003)(7696005)(6666004)(8936002)(476003)(2906002)(356004)(81973001);DIR:OUT;SFP:1101;SCL:1;SRVR:BY5PR03MB5235;H:nwd2mta2.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail11.analog.com;A:1;MX:1;
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e1bd2e00-ffbe-4a16-3d62-08d73826eb84
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(4709080)(1401327)(4618075)(2017052603328);SRVR:MN2PR03MB4669;
-X-MS-TrafficTypeDiagnostic: MN2PR03MB4669:
-X-Microsoft-Antispam-PRVS: <MN2PR03MB4669DA5A59EFFA12608DBBFBF9B30@MN2PR03MB4669.namprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Office365-Filtering-Correlation-Id: 64204954-c98e-4c0e-b6f6-08d7382831b8
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(4709080)(1401327)(4618075)(2017052603328);SRVR:BY5PR03MB5235;
+X-MS-TrafficTypeDiagnostic: BY5PR03MB5235:
+X-MS-Exchange-PUrlCount: 1
+X-Microsoft-Antispam-PRVS: <BY5PR03MB52356F0AEF106FE19EEE1440F9B30@BY5PR03MB5235.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-Forefront-PRVS: 0159AC2B97
 X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: MtOCtlAqxM26bNa3hsjw+2gnJn3dlX2tC865y3toh/UR92xJvEcH4zTQ3qBcIvlw51PFY6rbQmo3et2T7zrak2eQP2GTXm6MKiXnJQn4tlpXXCz1BQQajZfAj/O2Gv5phiZujog/UPXp8UYrupPM8E1UEIcHsr/RpxnwQ7PO7Tq4omIKmf9GsH/3N3Ivpz4LhkB/+o6UDTqgxPUaQCpIoSlEhlFURksYMMdL7LFZtVFx8AN+kg60kHgON2/RZNrffzjZYDOustViWlCUWcXWopu90ZIZAW/bDdQbvJOOIoQQjnrR4PyZLkNy/EpFRPXwistSZaFdrW76bkVKWGqhUziPjdKx60sFL2OFyW1FWrEUyhR+c1Ep1T+BFpYRT8c2Mb2/PdJFw3zdR6rXAPBjjY5nTQKiUIofQVGWXf3vjto=
+X-Microsoft-Antispam-Message-Info: SDp3Rfp8iwiDGI5i0EGQ7pcwj/6So+SFgExpTtwNu7HVcG328sIuaXq/7VZmv5g1y8+LHxqybLAARM7vZPJKqZ84ASj8HSAdHK02OCMlZc7mOJqgUT0R1IHFrgSq0ZmWrUa/RGhUPeGWF0PIgTW87ibnozz4b6S1Q2JX4fslEzLsmLxolZQ/p9zpgUVNHG6DjaBAsnOErYITPn76aBWicb8IBVRbbiTvv79UdNG4ryx2jbOKKWbpgsFieA2bGOq9c2TGuIjrvRRphHO42I/I1XFGm/W4puabjo2D5qV+IPB1DjaKOgZAxvRlqe2IQHISgAGV/Lz/BGS/HAyXzPTi0bMUcq46Tv9F2W12e9MG9T6QtlLaIlmacpmuEpBHUWhH+nziSOWH9qfKsDgeJYt2pkPbjhFHm/8czhbQUEYhnd0=
 X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2019 08:46:50.6098
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2019 08:55:57.9019
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1bd2e00-ffbe-4a16-3d62-08d73826eb84
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64204954-c98e-4c0e-b6f6-08d7382831b8
 X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.57];Helo=[nwd2mta2.analog.com]
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR03MB4669
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR03MB5235
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
  definitions=2019-09-13_05:2019-09-11,2019-09-13 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 priorityscore=1501 suspectscore=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 spamscore=0 adultscore=0 mlxscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1909130083
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ mlxscore=0 phishscore=0 impostorscore=0 suspectscore=0 mlxlogscore=881
+ clxscore=1015 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1909130085
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This change implements CS control for setup, hold & inactive delays.
+Discussion reference:
+  https://lore.kernel.org/lkml/20190913114550.956-1-alexandru.ardelean@analog.com/
 
-The `cs_setup` delay is completely new, and can help with cases where
-asserting the CS, also brings the device out of power-sleep, where there
-needs to be a longer (than usual), before transferring data.
+This changeset introduces an `spi_delay` struct/data-type and makes the
+IIO ADIS driver library the first user of this.
 
-The `cs_hold` time can overlap with the `delay` (or `delay_usecs`) from an
-SPI transfer. The main difference is that `cs_hold` implies that CS will be
-de-asserted.
+The patchset base is Jonathan's `iio/togreg` branch, but it also applies on
+Mark's `spi/for-next` branch.
 
-The `cs_inactive` delay does not have a clear use-case yet. It has been
-implemented mostly because the `spi_set_cs_timing()` function implements
-it. To some degree, this could overlap or replace `cs_change_delay`, but
-this will require more consideration/investigation in the future.
+The reasons for choosing `cs_change_delay`, is:
+1. this change introduces delay units
+2. it is not yet widely used, meaning it can still be changed 
 
-All these delays have been added to the `spi_controller` struct, as they
-would typically be configured by calling `spi_set_cs_timing()` after an
-`spi_setup()` call.
+Some delays like `delay` from `spi_transfer` would require a longer
+update-time change & discussion.
 
-Software-mode for CS control, implies that the `set_cs_timing()` hook has
-not been provided for the `spi_controller` object.
+Alexandru Ardelean (4):
+  spi: move `cs_change_delay` backwards compat logic outside switch
+  spi: introduce spi_delay struct as "value + unit" &  spi_delay_exec()
+  spi: make `cs_change_delay` the first user of the `spi_delay` logic
+  iio: imu: adis: convert cs_change_delay to spi_delay struct
 
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- drivers/spi/spi.c       | 50 ++++++++++++++++++++++++++++++++++++++++-
- include/linux/spi/spi.h |  5 +++++
- 2 files changed, 54 insertions(+), 1 deletion(-)
+ drivers/iio/imu/adis.c  | 24 +++++++--------
+ drivers/spi/spi.c       | 68 +++++++++++++++++++++++++++++++----------
+ include/linux/spi/spi.h | 22 +++++++++----
+ 3 files changed, 80 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 54d00c0a26d2..acbbfee837ed 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -775,6 +775,15 @@ int spi_register_board_info(struct spi_board_info const *info, unsigned n)
- 
- static void spi_set_cs(struct spi_device *spi, bool enable)
- {
-+	bool enable1 = enable;
-+
-+	if (!spi->controller->set_cs_timing) {
-+		if (enable1)
-+			spi_delay_exec(&spi->controller->cs_setup, NULL);
-+		else
-+			spi_delay_exec(&spi->controller->cs_hold, NULL);
-+	}
-+
- 	if (spi->mode & SPI_CS_HIGH)
- 		enable = !enable;
- 
-@@ -800,6 +809,11 @@ static void spi_set_cs(struct spi_device *spi, bool enable)
- 	} else if (spi->controller->set_cs) {
- 		spi->controller->set_cs(spi, !enable);
- 	}
-+
-+	if (!spi->controller->set_cs_timing) {
-+		if (!enable1)
-+			spi_delay_exec(&spi->controller->cs_inactive, NULL);
-+	}
- }
- 
- #ifdef CONFIG_HAS_DMA
-@@ -3144,6 +3158,11 @@ int spi_setup(struct spi_device *spi)
- }
- EXPORT_SYMBOL_GPL(spi_setup);
- 
-+static inline bool _spi_delay_clock_cycles(struct spi_delay *d)
-+{
-+	return d && d->unit == SPI_DELAY_UNIT_SCK;
-+}
-+
- /**
-  * spi_set_cs_timing - configure CS setup, hold, and inactive delays
-  * @spi: the device that requires specific CS timing configuration
-@@ -3156,10 +3175,39 @@ EXPORT_SYMBOL_GPL(spi_setup);
- int spi_set_cs_timing(struct spi_device *spi, struct spi_delay *setup,
- 		      struct spi_delay *hold, struct spi_delay *inactive)
- {
-+	size_t len;
-+
- 	if (spi->controller->set_cs_timing)
- 		return spi->controller->set_cs_timing(spi, setup, hold,
- 						      inactive);
--	return -ENOTSUPP;
-+
-+	if (_spi_delay_clock_cycles(setup) ||
-+	    _spi_delay_clock_cycles(hold) ||
-+	    _spi_delay_clock_cycles(inactive)) {
-+		dev_err(&spi->dev,
-+			"Clock-cycle delays for CS not supported in SW mode\n");
-+		return -ENOTSUPP;
-+	}
-+
-+	len = sizeof(struct spi_delay);
-+
-+	/* copy delays to controller */
-+	if (setup)
-+		memcpy(&spi->controller->cs_setup, setup, len);
-+	else
-+		memset(&spi->controller->cs_setup, 0, len);
-+
-+	if (hold)
-+		memcpy(&spi->controller->cs_hold, hold, len);
-+	else
-+		memset(&spi->controller->cs_hold, 0, len);
-+
-+	if (inactive)
-+		memcpy(&spi->controller->cs_inactive, inactive, len);
-+	else
-+		memset(&spi->controller->cs_inactive, 0, len);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(spi_set_cs_timing);
- 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 292e752ce34a..def49a76299f 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -602,6 +602,11 @@ struct spi_controller {
- 	/* Optimized handlers for SPI memory-like operations. */
- 	const struct spi_controller_mem_ops *mem_ops;
- 
-+	/* CS delays */
-+	struct spi_delay	cs_setup;
-+	struct spi_delay	cs_hold;
-+	struct spi_delay	cs_inactive;
-+
- 	/* gpio chip select */
- 	int			*cs_gpios;
- 	struct gpio_desc	**cs_gpiods;
 -- 
+
+Changelog v1 -> v2:
+* split away from the RFC patchset, which aims to be a broader explanation
+  for this changeset; parts of v1 are not 100% defined yet, and may require
+  some discussion and refinement.
+
 2.20.1
 
