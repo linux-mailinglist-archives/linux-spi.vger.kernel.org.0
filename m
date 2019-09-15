@@ -2,156 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C18E6B2699
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2019 22:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414F6B2F82
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Sep 2019 12:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730749AbfIMUWY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Sep 2019 16:22:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50330 "EHLO mail.kernel.org"
+        id S1726247AbfIOKOs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Sep 2019 06:14:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55114 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726558AbfIMUWX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 13 Sep 2019 16:22:23 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726131AbfIOKOs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 15 Sep 2019 06:14:48 -0400
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8194E20830;
-        Fri, 13 Sep 2019 20:22:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC23A20830;
+        Sun, 15 Sep 2019 10:14:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568406142;
-        bh=vG37y5t0pRhDhnEVmbp4aTMVf299qtNOZ0ybiETShm0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uK4fmBeujfaCJZ/pxsdoELSElBZAdQ/FGtvLdn898bNBHcdUm4sU4KL8vY5yNSlsy
-         4PE4WXB82sagGyZtqkl6PUaHMbXZBXEJPjmAjTki/MQ+lC30vj0tRsz0kENcZ0Grjt
-         43h5LgaxvAG6S1LWp1Iazs9zyGwIsy+IYFX0p70A=
-Received: by mail-qt1-f174.google.com with SMTP id g16so1864048qto.9;
-        Fri, 13 Sep 2019 13:22:22 -0700 (PDT)
-X-Gm-Message-State: APjAAAX08Ra25YMVhSmJ202dNCmBN9sau43vI+6Xs/b95DRuiReZr9lf
-        mDs88IijP6N+Ch/fRX69Po74z+mQdv2Vu0F10A==
-X-Google-Smtp-Source: APXvYqypKBIONVth3RhCgDbUSsYMBwnT1E0liGyv5ml3WrSBUn9HwNCvUTY0EwpTbwvYuNmQpEaSbvAM/qk/XYoCD2w=
-X-Received: by 2002:a0c:9e20:: with SMTP id p32mr19851394qve.39.1568406141652;
- Fri, 13 Sep 2019 13:22:21 -0700 (PDT)
+        s=default; t=1568542486;
+        bh=mUjjCdVtQEY5PULCjlGlyPg9stI7X2VqcSFOCcPSTBM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ps9OR+Wifm4BEjnEmgjNwrZlQKM94dXX8lTVQYYHJK2+O/nh6wTRvW/cHP/Zbdt7E
+         WTxbTaUrJfVAzrbUlALMgkIil9WLyXAnvvCUoFZpPEMlEPVD0Tcg6mKcdbnDcn9jJS
+         WN4Vkqjw6TIWb7t5Bdmoo1pn5xboOcHalBgoA5bk=
+Date:   Sun, 15 Sep 2019 11:14:42 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     <linux-iio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <broonie@kernel.org>
+Subject: Re: [PATCH v2 4/4] iio: imu: adis: convert cs_change_delay to
+ spi_delay struct
+Message-ID: <20190915111442.27e3c221@archlinux>
+In-Reply-To: <20190913115549.3823-5-alexandru.ardelean@analog.com>
+References: <20190913115549.3823-1-alexandru.ardelean@analog.com>
+        <20190913115549.3823-5-alexandru.ardelean@analog.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20190913122151.20264-1-horms+renesas@verge.net.au>
-In-Reply-To: <20190913122151.20264-1-horms+renesas@verge.net.au>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 13 Sep 2019 15:22:10 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKEym4i74AuTFvawBaB0_zBeh5KcBOY_OFheUV1oF4yEg@mail.gmail.com>
-Message-ID: <CAL_JsqKEym4i74AuTFvawBaB0_zBeh5KcBOY_OFheUV1oF4yEg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: hspi: Convert bindings to json-schema
-To:     Simon Horman <horms+renesas@verge.net.au>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Sep 13, 2019 at 7:22 AM Simon Horman <horms+renesas@verge.net.au> wrote:
->
-> Convert Renesas HSPI bindings documentation to json-schema.
-> Also name bindings documentation file according to the compat string
-> being documented.
->
-> As a side effect of this change all currently supported/used compat
-> strings are listed while no while card compat string is documented.
-> This, in my opinion, is desirable as only supported hardware should
-> be documented.
->
-> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+On Fri, 13 Sep 2019 14:55:49 +0300
+Alexandru Ardelean <alexandru.ardelean@analog.com> wrote:
+
+> The ADIS library is one of the few users of the new `cs_change_delay`
+> parameter for an spi_transfer.
+> 
+> The introduction of the `spi_delay` struct, requires that the users of of
+> `cs_change_delay` get an update. This change updates the ADIS library.
+> 
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+
+Looks to me like the build is broken between patches 3 and 4.
+Don't do that as it breaks bisectability.
+
+If you are changing an interface like this it has to occur in one patch,
+of you have to have intermediate code that deals with the smooth transition.
+
+Otherwise, looks like a sensible bit of rework to me.
+
+Jonathan
+
 > ---
-> Based on v5.3-rc1
-> Tested using:
->   make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/renesas,hspi.yaml
-> ---
->  .../devicetree/bindings/spi/renesas,hspi.yaml      | 54 ++++++++++++++++++++++
->  Documentation/devicetree/bindings/spi/sh-hspi.txt  | 26 -----------
->  2 files changed, 54 insertions(+), 26 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/renesas,hspi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/sh-hspi.txt
->
-> diff --git a/Documentation/devicetree/bindings/spi/renesas,hspi.yaml b/Documentation/devicetree/bindings/spi/renesas,hspi.yaml
-> new file mode 100644
-> index 000000000000..94a64a33daf4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/renesas,hspi.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/renesas,hspi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas HSPI
-> +
-> +maintainers:
-> +  - Geert Uytterhoeven <geert+renesas@glider.be>
+>  drivers/iio/imu/adis.c | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/iio/imu/adis.c b/drivers/iio/imu/adis.c
+> index 1631c255deab..2cd2cc2316c6 100644
+> --- a/drivers/iio/imu/adis.c
+> +++ b/drivers/iio/imu/adis.c
+> @@ -39,24 +39,24 @@ int adis_write_reg(struct adis *adis, unsigned int reg,
+>  			.len = 2,
+>  			.cs_change = 1,
+>  			.delay_usecs = adis->data->write_delay,
+> -			.cs_change_delay = adis->data->cs_change_delay,
+> -			.cs_change_delay_unit = SPI_DELAY_UNIT_USECS,
+> +			.cs_change_delay.value = adis->data->cs_change_delay,
+> +			.cs_change_delay.unit = SPI_DELAY_UNIT_USECS,
+>  		}, {
+>  			.tx_buf = adis->tx + 2,
+>  			.bits_per_word = 8,
+>  			.len = 2,
+>  			.cs_change = 1,
+>  			.delay_usecs = adis->data->write_delay,
+> -			.cs_change_delay = adis->data->cs_change_delay,
+> -			.cs_change_delay_unit = SPI_DELAY_UNIT_USECS,
+> +			.cs_change_delay.value = adis->data->cs_change_delay,
+> +			.cs_change_delay.unit = SPI_DELAY_UNIT_USECS,
+>  		}, {
+>  			.tx_buf = adis->tx + 4,
+>  			.bits_per_word = 8,
+>  			.len = 2,
+>  			.cs_change = 1,
+>  			.delay_usecs = adis->data->write_delay,
+> -			.cs_change_delay = adis->data->cs_change_delay,
+> -			.cs_change_delay_unit = SPI_DELAY_UNIT_USECS,
+> +			.cs_change_delay.value = adis->data->cs_change_delay,
+> +			.cs_change_delay.unit = SPI_DELAY_UNIT_USECS,
+>  		}, {
+>  			.tx_buf = adis->tx + 6,
+>  			.bits_per_word = 8,
+> @@ -139,16 +139,16 @@ int adis_read_reg(struct adis *adis, unsigned int reg,
+>  			.len = 2,
+>  			.cs_change = 1,
+>  			.delay_usecs = adis->data->write_delay,
+> -			.cs_change_delay = adis->data->cs_change_delay,
+> -			.cs_change_delay_unit = SPI_DELAY_UNIT_USECS,
+> +			.cs_change_delay.value = adis->data->cs_change_delay,
+> +			.cs_change_delay.unit = SPI_DELAY_UNIT_USECS,
+>  		}, {
+>  			.tx_buf = adis->tx + 2,
+>  			.bits_per_word = 8,
+>  			.len = 2,
+>  			.cs_change = 1,
+>  			.delay_usecs = adis->data->read_delay,
+> -			.cs_change_delay = adis->data->cs_change_delay,
+> -			.cs_change_delay_unit = SPI_DELAY_UNIT_USECS,
+> +			.cs_change_delay.value = adis->data->cs_change_delay,
+> +			.cs_change_delay.unit = SPI_DELAY_UNIT_USECS,
+>  		}, {
+>  			.tx_buf = adis->tx + 4,
+>  			.rx_buf = adis->rx,
+> @@ -156,8 +156,8 @@ int adis_read_reg(struct adis *adis, unsigned int reg,
+>  			.len = 2,
+>  			.cs_change = 1,
+>  			.delay_usecs = adis->data->read_delay,
+> -			.cs_change_delay = adis->data->cs_change_delay,
+> -			.cs_change_delay_unit = SPI_DELAY_UNIT_USECS,
+> +			.cs_change_delay.value = adis->data->cs_change_delay,
+> +			.cs_change_delay.unit = SPI_DELAY_UNIT_USECS,
+>  		}, {
+>  			.rx_buf = adis->rx + 2,
+>  			.bits_per_word = 8,
 
-Add:
-
-allOf:
-  - $ref: spi-controller.yaml#
-
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +        - renesas,hspi-r8a7778 # R-Car M1A
-> +        - renesas,hspi-r8a7779 # R-Car H1
-> +      - const: renesas,hspi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-
-And then these 2 can be dropped.
-
-> +
-> +  # Pinctrl properties might be needed, too.
-> +  # See Documentation/devicetree/bindings/pinctrl/renesas,*.
-
-If only a single state, you don't. For multiple states, we need to
-document the names.
-
-If not present, then they get added automagically so that
-'additionalProperties: false' works. But you can't use that here as
-you'll have child nodes.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    hspi0: spi@fffc7000 {
-> +        compatible = "renesas,hspi-r8a7778", "renesas,hspi";
-> +        reg = <0xfffc7000 0x18>;
-> +        interrupt-parent = <&gic>;
-> +        interrupts = <0 63 IRQ_TYPE_LEVEL_HIGH>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +    };
-> +
