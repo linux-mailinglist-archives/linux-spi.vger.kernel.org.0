@@ -2,125 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC57B2F8A
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Sep 2019 12:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56267B2FA3
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Sep 2019 13:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbfIOKWN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Sep 2019 06:22:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59234 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725892AbfIOKWM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 15 Sep 2019 06:22:12 -0400
-Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 07FD220692;
-        Sun, 15 Sep 2019 10:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568542931;
-        bh=jQ+dE0FqCn4YmPt8H5tQ6UZBzpg1F2BEc20j8Ptglzk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y5BbD16mnzz7OhM8IfFnS1ggxaS2GA7BFcYFp/ccokTArfJNqni/tOl8YgI7yBU1a
-         02MB/74LKXFKXF/CZtGJW3ui1b5ObbJmJeNgeAeV4H9IUbuVJb7IUfH4AHojzPQ2RJ
-         MHoECe9e7kfh2HZwSU+AzNE8mmhDT2tYuMWweIsI=
-Date:   Sun, 15 Sep 2019 11:22:05 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     <linux-spi@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bcm-kernel-feedback-list@broadcom.com>, <broonie@kernel.org>,
-        <f.fainelli@gmail.com>, <linus.walleij@linaro.org>,
-        <orsonzhai@gmail.com>, <baolin.wang@linaro.org>,
-        <zhang.lyra@gmail.com>
-Subject: Re: [RFC PATCH 00/15] Unify SPI delays into an `struct spi_delay`
-Message-ID: <20190915112205.0007d62d@archlinux>
-In-Reply-To: <20190913114550.956-1-alexandru.ardelean@analog.com>
-References: <20190913114550.956-1-alexandru.ardelean@analog.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726301AbfIOLAp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Sep 2019 07:00:45 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33544 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725997AbfIOLAp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Sep 2019 07:00:45 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q10so20703654pfl.0;
+        Sun, 15 Sep 2019 04:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d9ULWGyjTvRvcs+e2Yr9L/eBPsXri8OnRsYgrDC1xvs=;
+        b=p20pBb4MLemTqg/ZyR8Z/+eIeXKniDpVbE7ullthIp+Qa8BvEWzgsKvto/w8qBIAzL
+         O8YYczWHbxeJU2s1FuN2ribAKzxhXNTfDKxT2r+DL8fVPqSsPo9PGz5cBszy+t/qkUXR
+         0l3wTsNCXGfhZuAjLolWwc9oGKo/IGP6z6kHTt3Nkty1NESIn/6ekdlgL+DVlLhsW76/
+         eZ4lqrclHSnXfPcr1qS63K9TPgvdIMPQVCD6JhElfMc3squMbcaXMSr8BDW8trES2MwQ
+         bWinlFSKlhHMSXawG/CEtqhk4igbqnoPo/FamITlpgHidQVoMaVh4q5nawDO4SoYIoqe
+         T/Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d9ULWGyjTvRvcs+e2Yr9L/eBPsXri8OnRsYgrDC1xvs=;
+        b=cvmiE1dnvRe3roTb1J1bu2R+DEYgQ+s9meq9lMZ5zOkH8tjEEgyUi4C+y2Ai2pRfHi
+         TqgwnWcYPwzMNgjF2HcLWuu3lhSTqJC0jfZYvtWfHKnCwbsRZ4qy+zRSu/vc6pPGLbuJ
+         E67RRx1v8ku7lEhPYdaDbUxXpFNVGDhpE5CfcE0x2Kfc8dycUnJufHqhttk1h8dAieaX
+         0VFXq5Ehq8hxvz2DA8Q0jMnoxHneKGFibTBDXBlyJRz7ozNfWt+YoE15kU7i9LTyyrmX
+         LcOLsEsTMFB1XT5lBD3wM74LfbMOOL3Tq579wsLHW0bzBeQ74MkvVGuqfxZi/kBXK15D
+         bkUQ==
+X-Gm-Message-State: APjAAAUjM6gDpDpPwQE4jPWM4dgKyvJ+aYiXyPK0qzJzd1/sc4hvnIIv
+        TSujCwZ+G3vI+7/RhYm1pswBEeA2MzYM9lVBr/k=
+X-Google-Smtp-Source: APXvYqzRqqT1Z8Iy+S3yNqh4wOlL8hurOD1p5+F2vaROQJ7IE7fxo9xSAo0aZoLYWfU/dVg5Y//7g8epoVhT/faDPX4=
+X-Received: by 2002:aa7:811a:: with SMTP id b26mr9020046pfi.151.1568545244830;
+ Sun, 15 Sep 2019 04:00:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <1568376720-7402-1-git-send-email-gareth.williams.jx@renesas.com> <1568376720-7402-4-git-send-email-gareth.williams.jx@renesas.com>
+In-Reply-To: <1568376720-7402-4-git-send-email-gareth.williams.jx@renesas.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 15 Sep 2019 14:00:33 +0300
+Message-ID: <CAHp75VeJY44oqYPhb-E8U1Uz5tKEJ1wZfmsGYEDttLzypHEAHA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] spi: dw: Add compatible string for Renesas RZ/N1 SPI Controller
+To:     Gareth Williams <gareth.williams.jx@renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 13 Sep 2019 14:45:35 +0300
-Alexandru Ardelean <alexandru.ardelean@analog.com> wrote:
+On Fri, Sep 13, 2019 at 3:14 PM Gareth Williams
+<gareth.williams.jx@renesas.com> wrote:
+>
+> From: Phil Edworthy <phil.edworthy@renesas.com>
+>
+> The Renesas RZ/N1 SPI Controller is based on the Synopsys DW SSI, but has
+> additional registers for software CS control and DMA. This patch does not
+> address the changes required for DMA support, it simply adds the compatible
+> string. The CS registers are not needed as Linux can use gpios for the CS
+> signals.
 
-> Initially, I started this patchset thinking: "we need a new delay for
-> something-something" (in case someone is curios, we need a CS-hold-time for
-> the first transfer, because the CS wakes a chip from sleep-mode).
-> 
-> Then I added the delay, and felt a bit dirty-inside about adding a new one
-> (just like that), and decided to look at maybe cleaning things up a bit,
-> and a few days later, I got here.
-> 
-> Full disclaimer: this patchset is not complete. It's an RFC.
-> It's based on top of Jonathan's `iio/togreg` branch which also includes the
-> ADIS driver library changes and also includes `cs_change_delay`.
-> 
-> I'll send a V2 patchset, which just the first 4 patches, since I feel that
-> those are a bit more complete.
-> 
-> I thought about just sending the first 4 patches on-their-own, but I
-> figured that the whole series (even if not complete) serves as a better
-> explanation about the whole "why?".
-> 
-> Hopefully, this can sort-of-explain things.
-> I'll reference this RFC on the next series.
+> +       { .compatible = "renesas,rzn1-spi", },
 
-General approach looks sensible to me. Over to SPI specialists on
-whether this is a sensible bit of unification to do.
+Can't you simple use in DT something like
+  compatible = "renesas,rzn1-spi", "snps,dw-apb-ssi"
+?
 
-Jonathan
-
-> 
-> Thanks
-> 
-> Alexandru Ardelean (15):
->   spi: move `cs_change_delay` backwards compat logic outside switch
->   spi: introduce spi_delay struct as "value + unit" &  spi_delay_exec()
->   spi: make `cs_change_delay` the first user of the `spi_delay` logic
->   iio: imu: adis: convert cs_change_delay to spi_delay struct
->   spi: sprd: convert transfer word delay to spi_delay struct
->   spi: orion: use new `word_delay` field for SPI transfers
->   spi: spidev: use new `word_delay` field for spi transfers
->   spi: core,atmel: convert `word_delay_usecs` -> `word_delay` for
->     spi_device
->   spi: introduce `delay` field for `spi_transfer` + spi_transfer_exec()
->   spi: use new `spi_transfer_delay` helper where straightforward
->   spi: tegra114: use `spi_transfer_delay` helper
->   spi: spi-loopback-test: use new `delay` field
->   spi: spidev: use new `delay` field for spi transfers
->   spi: tegra114: change format for `spi_set_cs_timing()` function
->   spi: implement SW control for CS times
-> 
->  drivers/iio/imu/adis.c           |  24 ++---
->  drivers/spi/spi-atmel.c          |  29 +++++-
->  drivers/spi/spi-bcm63xx-hsspi.c  |   3 +-
->  drivers/spi/spi-cavium.c         |   3 +-
->  drivers/spi/spi-fsl-dspi.c       |   3 +-
->  drivers/spi/spi-fsl-espi.c       |   3 +-
->  drivers/spi/spi-fsl-spi.c        |   3 +-
->  drivers/spi/spi-loopback-test.c  |  12 ++-
->  drivers/spi/spi-mpc512x-psc.c    |   3 +-
->  drivers/spi/spi-mpc52xx-psc.c    |   3 +-
->  drivers/spi/spi-omap-100k.c      |   3 +-
->  drivers/spi/spi-orion.c          |   6 +-
->  drivers/spi/spi-pl022.c          |  25 +++--
->  drivers/spi/spi-sc18is602.c      |   3 +-
->  drivers/spi/spi-sh-hspi.c        |   3 +-
->  drivers/spi/spi-sprd.c           |  11 ++-
->  drivers/spi/spi-tegra114.c       |  39 +++++---
->  drivers/spi/spi-tegra20-sflash.c |   2 +-
->  drivers/spi/spi-topcliff-pch.c   |   7 +-
->  drivers/spi/spi-txx9.c           |   3 +-
->  drivers/spi/spi-xcomm.c          |   3 +-
->  drivers/spi/spi.c                | 162 +++++++++++++++++++++++++------
->  drivers/spi/spidev.c             |   6 +-
->  include/linux/spi/spi.h          |  65 ++++++++++---
->  24 files changed, 293 insertions(+), 131 deletions(-)
-> 
-
+-- 
+With Best Regards,
+Andy Shevchenko
