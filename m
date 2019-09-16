@@ -2,48 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E27B3AE9
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2019 15:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633DDB3BA9
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2019 15:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732867AbfIPNE4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Sep 2019 09:04:56 -0400
-Received: from mx0b-00128a01.pphosted.com ([148.163.139.77]:50188 "EHLO
-        mx0b-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732825AbfIPNE4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Sep 2019 09:04:56 -0400
-Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
-        by mx0b-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8GD3c2C032011;
-        Mon, 16 Sep 2019 09:04:45 -0400
-Received: from nam05-by2-obe.outbound.protection.outlook.com (mail-by2nam05lp2052.outbound.protection.outlook.com [104.47.50.52])
-        by mx0b-00128a01.pphosted.com with ESMTP id 2v0sy940ff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Sep 2019 09:04:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UvYshs4xpvv9dUHXQhncNztiM8OxelqXrRMhGM+uVZ7KcYR3jWUaVpk3FHkh6C5tzQTuYFTER6bJ10YriF6xSwboHCBdgxQisG0jbY7ubGDa7e4HOOJpssLpU7NmQK9E0ggLH0LIzf7ocRrDPBa+HT+vP9s796fCTSC6mdi/JFRRYquZ7bW9OVfD2s17sURSVvvSzpbW8lU/7atGaFuNAISwlQFxHjUQujO01CDyexvTDAZdzdDbKpCZ1vEDWsXdVo7d/aUqsd0sthglhjYNy+hulRP1FtnD+5pXiUz+GV6LyUaK385dLRots+VRQ27SfSS7/pGN95e4+1ZwzD4MRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GfeMMJPbYZAcXKpxWO09idCTGnT4Y/Xu/vzucFArCPI=;
- b=d/QKZs89AxB5L9zXRv8TPcIhVExI2yqdy5Q1yorm8WGjgJl1EUl+5oT1L0c21xsAVLVWsI+1Y9Y7TInTzErI3D+OYCDhuzpYAqd+M2cvqXGuD1GY2Z03HTwiylo1yvRRdhWxk1jFK7Ol4zCYGEFRtI4qUtYSbeR7/+DmsnJ6yCvvZTgVznvvCc20k0hzT4XzeSVBKjm06rctXgetyWhe6D+xNP3q95D7EAnLbYYO+NikXwwPiupIAtmeS5akbqMAmUx1G1hIe4nOKbGHf1eKlrzSc8ThPB5v5efDhb8g4WtSvkpGRkN3cXRtCnifcmm4Txl5YV0ZuklKiae8ZLzoPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GfeMMJPbYZAcXKpxWO09idCTGnT4Y/Xu/vzucFArCPI=;
- b=7XY4FOrA+4zE1HtDWJDmwt1G9LjkhXDM77pWe4K7XspGqRlNzq5XnPi5cCDq01Kv5zrMDnoFLtEln4xVTvCozo9gxcgP8IZZfECqZlwk0AEPG5uGGiAv1ALBVRTdqv7CLeoWhWdKIHYpR89+5koS0SWLSTHGeftFCiTKL+fUmTc=
-Received: from CH2PR03MB5192.namprd03.prod.outlook.com (20.180.12.152) by
- CH2PR03MB5269.namprd03.prod.outlook.com (20.180.12.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2263.17; Mon, 16 Sep 2019 13:04:42 +0000
-Received: from CH2PR03MB5192.namprd03.prod.outlook.com
- ([fe80::344d:7f50:49a3:db1b]) by CH2PR03MB5192.namprd03.prod.outlook.com
- ([fe80::344d:7f50:49a3:db1b%3]) with mapi id 15.20.2263.023; Mon, 16 Sep 2019
- 13:04:42 +0000
-From:   "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        id S1733237AbfIPNn1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Sep 2019 09:43:27 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:55130 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387912AbfIPNnQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Sep 2019 09:43:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Z423eE0xltB3vRPrKrPJm5Vb6e31D3Z/WMIdhED2ET0=; b=tvH+odcCIft2As/zfFGQE6S56
+        PH2NK9V+SzVy3MI3204Qje10JQhIAz8/XxDooZRLx63PmOrlm9tTf9JsvcBWzQ02Nq14Cd1mdP96d
+        RgqFstRj6EGLt+sB1pDTD2fvgN4T97KCNVhurDhKGQqX5/8Ga2EENE6VEzFdrbhTNMAX4=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1i9rHa-0004c7-FY; Mon, 16 Sep 2019 13:43:10 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id F0EF92741A0D; Mon, 16 Sep 2019 14:43:09 +0100 (BST)
+Date:   Mon, 16 Sep 2019 14:43:09 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "baolin.wang@linaro.org" <baolin.wang@linaro.org>,
         "bcm-kernel-feedback-list@broadcom.com" 
         <bcm-kernel-feedback-list@broadcom.com>,
@@ -59,75 +46,66 @@ CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>
 Subject: Re: [RFC PATCH 03/15] spi: make `cs_change_delay` the first user of
  the `spi_delay` logic
-Thread-Topic: [RFC PATCH 03/15] spi: make `cs_change_delay` the first user of
- the `spi_delay` logic
-Thread-Index: AQHVag+8uWmQQq3ExEyRd/qnwNwICqcuP2sAgAADYYCAAALHAIAABOiA
-Date:   Mon, 16 Sep 2019 13:04:42 +0000
-Message-ID: <458cbb212fbd04c157c9861501f51c03ea958302.camel@analog.com>
+Message-ID: <20190916134309.GH4352@sirena.co.uk>
 References: <20190913114550.956-1-alexandru.ardelean@analog.com>
-         <20190913114550.956-4-alexandru.ardelean@analog.com>
-         <20190916122505.GC4352@sirena.co.uk>
-         <ae469c65828443524f9ff0409f1c7a81bf64cf6b.camel@analog.com>
-         <20190916124707.GD4352@sirena.co.uk>
-In-Reply-To: <20190916124707.GD4352@sirena.co.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [137.71.226.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8939395b-52bb-4b6a-37b7-08d73aa670db
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:CH2PR03MB5269;
-x-ms-traffictypediagnostic: CH2PR03MB5269:
-x-microsoft-antispam-prvs: <CH2PR03MB5269BE0BAE3E579672D045F7F98C0@CH2PR03MB5269.namprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0162ACCC24
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(376002)(39860400002)(136003)(396003)(346002)(189003)(199004)(76176011)(5640700003)(6436002)(2616005)(118296001)(229853002)(446003)(7736002)(36756003)(305945005)(8676002)(6512007)(66946007)(66476007)(66556008)(64756008)(66446008)(86362001)(11346002)(5660300002)(81166006)(81156014)(6916009)(6486002)(4326008)(316002)(486006)(3846002)(6116002)(476003)(1730700003)(66066001)(8936002)(2351001)(25786009)(256004)(54906003)(2906002)(186003)(71200400001)(6246003)(102836004)(478600001)(71190400001)(76116006)(14454004)(6506007)(7416002)(26005)(2501003)(99286004)(4744005)(53936002)(81973001);DIR:OUT;SFP:1101;SCL:1;SRVR:CH2PR03MB5269;H:CH2PR03MB5192.namprd03.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: analog.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 22GJVKUCLBXhIhs9DrxYQ6911xoz1i2ve2T2K0nwTBNmBSELS6ce/OjVQO8BhuMOpOugKz+0Di6doxduQwXQDS5BGQBIUDPGoDksLFUz+kVNhQdBba2UdWsH0X7yBbdb3NzG1k9n48lh+o4Zrx9jhJhJd1LpqEQfzvjCXcERDAnKZCbEoU85KalxnyuAUq7fPAReaeVwgH/cRXzOaIWF/ptxT2II8MK+i6zQ2eZOsA4KsEdPnDVoj/iGahPXQnGDX2jj6AIDevEdn+my9arHrXx/SpNGEtyyg8u1Q6evUxML1bemvhS+cGPkurn3gH6lgiKxLIsCi6rvE9FfZuGoQYFxujtNVhTgeDjDW8i6LiypWaxCB5GYJAbPj54HLnCSzBvfZWkHg0ryQ/66m9tA7qXJ09nkuXlrg2T4xaZujPI=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D9A871C55AD7F64187978CE710CCCF5B@namprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <20190913114550.956-4-alexandru.ardelean@analog.com>
+ <20190916122505.GC4352@sirena.co.uk>
+ <ae469c65828443524f9ff0409f1c7a81bf64cf6b.camel@analog.com>
+ <20190916124707.GD4352@sirena.co.uk>
+ <458cbb212fbd04c157c9861501f51c03ea958302.camel@analog.com>
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8939395b-52bb-4b6a-37b7-08d73aa670db
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2019 13:04:42.7160
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ka4JQAwThyPWodAKoINqRUcSdRj66j+f3pqCF3nC3IgzfSHG8zysZ3Uk7m4OB0KJcX8ecYq3PYo8/wXY0OkQER+Xd40fw6qUSVXWumBBp2I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR03MB5269
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
- definitions=2019-09-16_06:2019-09-11,2019-09-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 spamscore=0 suspectscore=0 mlxlogscore=865 bulkscore=0
- mlxscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 impostorscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1909160140
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u0lqphHC8S+ob1K0"
+Content-Disposition: inline
+In-Reply-To: <458cbb212fbd04c157c9861501f51c03ea958302.camel@analog.com>
+X-Cookie: Man and wife make one fool.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gTW9uLCAyMDE5LTA5LTE2IGF0IDEzOjQ3ICswMTAwLCBNYXJrIEJyb3duIHdyb3RlOg0KPiBb
-RXh0ZXJuYWxdDQo+IA0KPiBPbiBNb24sIFNlcCAxNiwgMjAxOSBhdCAxMjozNzoxMlBNICswMDAw
-LCBBcmRlbGVhbiwgQWxleGFuZHJ1IHdyb3RlOg0KPiANCj4gPiA+IFRoaXMgYnJlYWtzIHRoZSBi
-dWlsZCBhcyB0aGVyZSBpcyBhIHVzZXIgb2YgdGhpcyBpbnRlcmZhY2UuDQo+ID4gQWNrLg0KPiA+
-IEpvbmF0aGFuIHBvaW50ZWQgdGhpcyBvdXQuDQo+ID4gVGhlcmUncyBhIFYzIHRoYXQgY2hhbmdl
-cyBib3RoIHRoaXMgYW5kIGl0J3MgdXNlciAoaW4gSUlPKS4NCj4gDQo+IFRoYXQgdjMgc2VlbXMg
-dG8gYmUgYSBzbWFsbCBzdWJzZXQgb2YgdGhpcyBzZXJpZXM/DQoNCkFjay4NClYzIGlzIHRoZSBm
-aXJzdCA0IHBhdGNoZXMgZnJvbSB0aGlzIHNlcmllcy4NCldlbGwsIHBhdGNoZXMgMyAmIDQgYXJl
-IHNxdWFzaGVkLg0KDQpJIGFtIDEwMCUgY29udmluY2VkIHRoYXQgdGhlIGVudGlyZSBzZXJpZXMg
-aXMgYSBnb29kIGlkZWEuDQpJbiB0aGUgc2Vuc2UgdGhhdCBhIGBzdHJ1Y3Qgc3BpX2RlbGF5YCBt
-YXkgYmUgYSBnb29kIGlkZWEsIGJ1dCBhdCB0aGUgc2FtZSB0aW1lLCBpdCBtYXkgYmUgdW4tbmVl
-ZGVkLg0KDQpBbGwgSSB3YW50ZWQgdG8gZG8sIHdhcyB0byBhZGQgYW5vdGhlciBkZWxheSBzb21l
-d2hlcmUsIGFuZCBnb3QgbG9zdCBpbiB0aGUgcmV3b3JrIG9mIGN1cnJlbnQgZGVsYXlzLg0KSSB0
-aG91Z2h0IGFib3V0IHByb3Bvc2luZyBqdXN0IHRoZSBmaXJzdCA0IHBhdGNoZXMgW29uIHRoZWly
-IG93bl0sIGJ1dCBJIHRob3VnaHQgdGhhdCBzaG93aW5nIHRoZSBjdXJyZW50IHNlcmllcyBhcy1p
-cw0Kbm93LCBtYXkgYmUgYSBnb29kIGlkZWEgYXMgd2VsbCBbdG8gZ2F0aGVyIHNvbWUgZmVlZGJh
-Y2tdLg0K
+
+--u0lqphHC8S+ob1K0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Sep 16, 2019 at 01:04:42PM +0000, Ardelean, Alexandru wrote:
+> On Mon, 2019-09-16 at 13:47 +0100, Mark Brown wrote:
+
+> > That v3 seems to be a small subset of this series?
+
+> Ack.
+> V3 is the first 4 patches from this series.
+> Well, patches 3 & 4 are squashed.
+
+> I am 100% convinced that the entire series is a good idea.
+> In the sense that a `struct spi_delay` may be a good idea, but at the same time, it may be un-needed.
+
+> All I wanted to do, was to add another delay somewhere, and got lost in the rework of current delays.
+> I thought about proposing just the first 4 patches [on their own], but I thought that showing the current series as-is
+> now, may be a good idea as well [to gather some feedback].
+
+I think it makes more sense to review as a whole series rather than only
+a part of the conversion, it doesn't really help to only do part of it.
+
+Please fix your mail client to word wrap within paragraphs at something
+substantially less than 80 columns.  Doing this makes your messages much
+easier to read and reply to.
+
+--u0lqphHC8S+ob1K0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1/kW0ACgkQJNaLcl1U
+h9AhYQf/a5Mv8ax53FhE2w2Iee+bq5bvfdkZRudCki/iqJxBUwCNKGfc62eBUwGY
+qva3K4T6zi4pbX0dWNMojeJ5lQ7Viu2bnR20voTcVJhOmplIgWhH57tVxRU5bnRt
+9205UV5Uc2FNDE1P60lC6Msts6I+8Rzx/a20fZ8pyXlVwOW4n0xxEkiMxYgg5mpo
+BbGVM5rYkasqqmq8KjbIKWYl/XwcWDIKw8mlyAuLAq4Vh8KRGfu+kRUY3IqNzDIj
+puzpCj6MJZW/8pzNfi/z6Lelkhtvmn04gEu0pMN2C1u9ILeUxixwtqQPv64qTR7I
+ySxA++9//Vej3QKiuzfu/u+eDK6+WA==
+=nPuT
+-----END PGP SIGNATURE-----
+
+--u0lqphHC8S+ob1K0--
