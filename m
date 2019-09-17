@@ -2,120 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0288FB4791
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Sep 2019 08:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5ABBB4A16
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Sep 2019 11:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404104AbfIQGgO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Sep 2019 02:36:14 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:37441 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729094AbfIQGgN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Sep 2019 02:36:13 -0400
-Received: by mail-ot1-f68.google.com with SMTP id s28so2062185otd.4;
-        Mon, 16 Sep 2019 23:36:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VA/5M2S2lqIzcsMp1DPf/Sv28rPk2HKwJRxSgrZ6sG0=;
-        b=nm7ZFOvF7l2OnsjPSy7l28t10rId/mSWGcjP8M6h/x5CLjNRq3JSZ7LpCkOS1scS1f
-         /dKKENIJsM1pm3WNC3SF9JhOoEdYda29YrszQ3uC88/C0d5qJP7uaD2UxrGx+5gDNv4q
-         YO/robCU6ZRwuF2xxptdWR3pFHPzkRETnfchB/WbdzFSDpLUM/oxog3GMHs/KFCxxNhQ
-         SLuCrXiSvAGj2IjbbhjhRnsBvYDx6A2PW4E38u2wqOaEvRqiVES8m5vYey+2cVdNQPmE
-         sWGCH5afJ4oURlTqlxkpiN1iX/2o91sfHC1XtFFkfYSnbLby9Tl9uWMsSnOhY/JxmAGh
-         QV3w==
-X-Gm-Message-State: APjAAAXL5VSh0wI2H5AziHCksKBs7rxkUMmeg9nH3RaITru6AWqPVcPi
-        MPIM+vNqXqC7QUu39ST0MdH6tCBgKWEQNhPEm90=
-X-Google-Smtp-Source: APXvYqyzliy8aN4mUPDnslQqjjAc6HBGtMP/9mirV4GtW01sd8kN+3jplqulEdGp/El2AoHzaEfa+9yxYwadW99stJY=
-X-Received: by 2002:a9d:12ca:: with SMTP id g68mr1489740otg.145.1568702172994;
- Mon, 16 Sep 2019 23:36:12 -0700 (PDT)
+        id S1726512AbfIQJMY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Sep 2019 05:12:24 -0400
+Received: from mail-40132.protonmail.ch ([185.70.40.132]:48377 "EHLO
+        mail-40132.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726292AbfIQJMX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Sep 2019 05:12:23 -0400
+Date:   Tue, 17 Sep 2019 09:12:14 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aurabindo.in;
+        s=protonmail; t=1568711541;
+        bh=ZKYIzKdgRRtrB7OyOmWDzTMGg6uay9ipjlu1WQonyTU=;
+        h=Date:To:From:Cc:Reply-To:Subject:Feedback-ID:From;
+        b=eQjSy21KM5OSXxxHfL1Q0qHO98l3ynqXu8fnUA4rHJu0AHrC6MQbLJr3PyVby+VLd
+         HftIbwWlow6/FRq+UwbpO4l5ArWqYTCd+B5WEmp/Ozjw7Y/szu+/yOmVBRq/qx4u4A
+         NkAgdHx082bP+SO2K8f2zMj/58ejxv+TrWH7LCa4=
+To:     broonie@kernel.org, palmer@sifive.com, paul.walmsley@sifive.com
+From:   Aurabindo Jayamohanan <mail@aurabindo.in>
+Cc:     linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Aurabindo Jayamohanan <mail@aurabindo.in>
+Subject: [PATCH] spi: sifive: check return value for platform_get_resource()
+Message-ID: <20190917091207.4925-1-mail@aurabindo.in>
+Feedback-ID: D1Wwva8zb0UdpJtanaReRLGO3iCsewpGmDn8ZDKmpao-Gnxd2qXPmwwrSQ99r5Q15lmK-D8x6vKzqhUKCgzweA==:Ext:ProtonMail
 MIME-Version: 1.0
-References: <1568376720-7402-1-git-send-email-gareth.williams.jx@renesas.com>
- <1568376720-7402-3-git-send-email-gareth.williams.jx@renesas.com>
- <CAMuHMdUnzmYEcp0B5MG7itB1JHtNL7Stj9S2EFB0U0y_naQVBQ@mail.gmail.com> <TY2PR01MB2924AA1B012C2D305EE5C9B7DF8C0@TY2PR01MB2924.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY2PR01MB2924AA1B012C2D305EE5C9B7DF8C0@TY2PR01MB2924.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 17 Sep 2019 08:36:01 +0200
-Message-ID: <CAMuHMdX9ZdLMmpHGqm2wmajwEDjuTY7s19PqwQ3kaVu8WLLykA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] spi: dw: Add basic runtime PM support
-To:     Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF autolearn=ham
+        autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.protonmail.ch
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Gareth,
+platform_get_resource() may return NULL. If it is so, return -ENXIO
 
-On Mon, Sep 16, 2019 at 6:14 PM Gareth Williams
-<gareth.williams.jx@renesas.com> wrote:
-> > On Mon, Sep 16, 2019 at 15:36 PM Geert Uytterhoeven
-> > <geert@linux-m68k.org> wrote:
-> > On Fri, Sep 13, 2019 at 2:13 PM Gareth Williams
-> > <gareth.williams.jx@renesas.com> wrote:
-> > > From: Phil Edworthy <phil.edworthy@renesas.com>
-> > >
-> > > Enable runtime PM so that the clock used to access the registers in
-> > > the peripheral is turned on using a clock domain.
-> > >
-> > > Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> > > Signed-off-by: Gareth Williams <gareth.williams.jx@renesas.com>
-> >
-> > Thanks for your patch!
-> >
-> > > --- a/drivers/spi/spi-dw.c
-> > > +++ b/drivers/spi/spi-dw.c
-> > > @@ -10,6 +10,7 @@
-> > >  #include <linux/module.h>
-> > >  #include <linux/highmem.h>
-> > >  #include <linux/delay.h>
-> > > +#include <linux/pm_runtime.h>
-> > >  #include <linux/slab.h>
-> > >  #include <linux/spi/spi.h>
-> > >
-> > > @@ -497,6 +498,9 @@ int dw_spi_add_host(struct device *dev, struct
-> > dw_spi *dws)
-> > >         if (dws->set_cs)
-> > >                 master->set_cs = dws->set_cs;
-> > >
-> > > +       pm_runtime_enable(dev);
-> > > +       pm_runtime_get_sync(dev);
-> >
-> > The second line keeps the device powered all the time.
-> > What about setting spi_controller.auto_runtime_pm = true, so the SPI code
-> > can manage its Runtime PM status?
->
-> That makes sense and works on target, I will change this for V2.
+Signed-off-by: Aurabindo Jayamohanan <mail@aurabindo.in>
+---
+ drivers/spi/spi-sifive.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> > I assume this will be called from drivers/spi/spi-dw-mmio.c, which already
-> > enables the clock explicitly all the timer?
-> Yes, spi-dw-mmio.c already enables the bus clock, however we want to use clock
->
-> domain to enable the clock and not explicitly provide pclk in the dts. If there are
-> no other uses of that pclk, we can remove that later on.
+diff --git a/drivers/spi/spi-sifive.c b/drivers/spi/spi-sifive.c
+index 93ec2c6cdbfd..67485067a694 100644
+--- a/drivers/spi/spi-sifive.c
++++ b/drivers/spi/spi-sifive.c
+@@ -308,6 +308,12 @@ static int sifive_spi_probe(struct platform_device *pd=
+ev)
+ =09platform_set_drvdata(pdev, master);
+=20
+ =09res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
++=09if (!res) {
++=09=09dev_err(&pdev->dev, "no IOMEM resource found\n");
++=09=09ret =3D -ENXIO;
++=09=09goto put_master;
++=09}
++
+ =09spi->regs =3D devm_ioremap_resource(&pdev->dev, res);
+ =09if (IS_ERR(spi->regs)) {
+ =09=09ret =3D PTR_ERR(spi->regs);
+--=20
+2.23.0
 
-IC, that's useful sideband information.
 
-"pclk" is indeed an optional clock.
-"ssi_clk" must be first.
-
-However, to make use of the clock domain code, you still have to list "pclk"
-in DT, but use a different name, to avoid spi-dw-mmio.c enabling it all the
-time? Or do you plan to modify spi-dw-mmio.c for that?
-In the former case, you should document that in your bindings, which
-currently build on top of snps,dw-apb-ssi.txt, thus include "pclk".
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
