@@ -2,101 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF00B4D9A
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Sep 2019 14:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96A6B4E78
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Sep 2019 14:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727151AbfIQMPa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Sep 2019 08:15:30 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:44122 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727016AbfIQMPa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Sep 2019 08:15:30 -0400
-Received: by mail-wr1-f66.google.com with SMTP id i18so2858615wru.11
-        for <linux-spi@vger.kernel.org>; Tue, 17 Sep 2019 05:15:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=XTkEiDr+Efjwc1YXx3Nos3anR5keJEKk4IdJ0xKDQqQ=;
-        b=Z9hnNWDFFYfXXZtUmieLU1+17tbedb1QQZe6lQmZlJi2KQTfmukKD4mYpdD87AKp8f
-         v70NBwT1bNf0l7pPBtJvRwMbn7MYuKKKse4TSQISZwzayJC9r8gAKN1GrfvJSpGbK4Uo
-         GBJK4yaLWvNwxUgm7MCh4HBPOox79mFdatyuKM/5FekdfhyBWmA4WUDaUWaRr9e6kgTv
-         jDwR02MeGt/Xy7yV59hUfxxvUUW6pVx5yexGyMQQJnVvoyxRh0Y+8dc0O4qz+qHYQMF6
-         W3/hvjexZH5ZkAGfaKExu73hfGrho6DTILoKAqHFq2saAtrhIzT8FBGHMakAm1Hf09Tk
-         ubQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=XTkEiDr+Efjwc1YXx3Nos3anR5keJEKk4IdJ0xKDQqQ=;
-        b=QJBQRehGbCtewfKkoyxhJ5p5TB4AzSwKWtlmtS//RStaQ6CzMDdwlkH4WxbzuH60iP
-         GoJintKIAgChlTxIK2XhS+7Cf222cZvA0Wj8T5wX2D+5oRyXjPyewxslKuXAg6H5NO7G
-         lZwRsNL3WO2GUliTcNrkSSdZ6srv6/H6gVFKo4ND/rkrKAX9Hi+jgAXKx/E2cItwRAO5
-         2a3aaoWOUhJ46rFVDxRPiZYaj/uSohPO9DPXwxGRad5tQ+V75zGr2hEaaYF/uUqXlvWe
-         fxJg/X3WFEDFzNDkMUqK6hBOFnh1DjtpoDsBJsyMzZJ6lr7RGYgc6wKlMAlc+3p3PJt8
-         skqg==
-X-Gm-Message-State: APjAAAVvCHYc2Wa6PEgHgHDgoWVAdaMt9d3J9zA4c91gQn9JluIBEq3Q
-        hV5vkREQ+SuRWy/1Zjk0NPlG0g==
-X-Google-Smtp-Source: APXvYqybIIJ4Qs9uNxPcmswpxKdrs6cGATqMPNepsGv9voMWM8blurF16GmXEfIxIJJPNBriP4ED2Q==
-X-Received: by 2002:adf:f150:: with SMTP id y16mr2587728wro.71.1568722528223;
-        Tue, 17 Sep 2019 05:15:28 -0700 (PDT)
-Received: from localhost ([195.200.173.126])
-        by smtp.gmail.com with ESMTPSA id y186sm4139994wmb.41.2019.09.17.05.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2019 05:15:27 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 05:15:26 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Baolin Wang <baolin.wang@linaro.org>,
-        Aurabindo Jayamohanan <mail@aurabindo.in>
-cc:     Mark Brown <broonie@kernel.org>, palmer@sifive.com,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: sifive: check return value for
- platform_get_resource()
-In-Reply-To: <CAMz4kuJczzjTPSohQ=kbZ0Pr7U_9-hzXk-jPgKk79PENOM1-dA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.9999.1909170514130.11980@viisi.sifive.com>
-References: <20190917085627.4562-1-mail@aurabindo.in> <CAMz4kuJczzjTPSohQ=kbZ0Pr7U_9-hzXk-jPgKk79PENOM1-dA@mail.gmail.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        id S1725920AbfIQMvn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Sep 2019 08:51:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45220 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725917AbfIQMvn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Sep 2019 08:51:43 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29D4F218AE;
+        Tue, 17 Sep 2019 12:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568724702;
+        bh=8HTUssJ30wmJ3525tuBKRrrjnbwk2zySpokpgctlMDU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=1uHhAjUQjIlqvRMEcXRDWSXV5OxlxLAP4lEsXxfuLJJxX9TZ49AOIIL/GEZ9FkwXq
+         1xevUYBmoOhmyK+PXmWYvHF/OYI9FtRZpT01pd6svZGxau07u4gNPXRbLdRvP8qFUr
+         nKsF3HK/cDUfoppvfOOMYiKL5qMG16PbCOs00RLQ=
+Received: by mail-qk1-f179.google.com with SMTP id 4so3817741qki.6;
+        Tue, 17 Sep 2019 05:51:42 -0700 (PDT)
+X-Gm-Message-State: APjAAAXDetFZflOijPeC//k4tMqt2oPxajjqSZt/UzJ896CtHFF+HdtQ
+        6o6S+33tL+4y/DadlpKucF0y7grMkbPG9HjLag==
+X-Google-Smtp-Source: APXvYqzGZsXAlPhiYh2alH7jD4hHEpI33KIoVHXQC9xRmxchQF6hwXrY16sEph5+/s5f2sKazHtQfHO0iFuWVh1oZd8=
+X-Received: by 2002:a37:682:: with SMTP id 124mr3420891qkg.393.1568724701388;
+ Tue, 17 Sep 2019 05:51:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20190916075352.32108-1-horms+renesas@verge.net.au>
+In-Reply-To: <20190916075352.32108-1-horms+renesas@verge.net.au>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 17 Sep 2019 07:51:29 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLq7sUyh=E=D-Lk+Q=JrrKdsHkfsF88p=703mn-gwiLSA@mail.gmail.com>
+Message-ID: <CAL_JsqLq7sUyh=E=D-Lk+Q=JrrKdsHkfsF88p=703mn-gwiLSA@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: hspi: Convert bindings to json-schema
+To:     Simon Horman <horms+renesas@verge.net.au>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
+        <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 17 Sep 2019, Baolin Wang wrote:
+On Mon, Sep 16, 2019 at 2:54 AM Simon Horman <horms+renesas@verge.net.au> wrote:
+>
+> Convert Renesas HSPI bindings documentation to json-schema.
+> Also name bindings documentation file according to the compat string
+> being documented.
+>
+> As a side effect of this change all currently supported/used compat
+> strings are listed while no while card compat string is documented.
+> This, in my opinion, is desirable as only supported hardware should
+> be documented.
+>
+> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+> ---
+> Based on v5.3-rc1
+> Tested using:
+>   ARCH=arm make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+>
+> v2
+> - reference spi-controller.yaml# and thus do not document
+>   #address-cells and #size-cells properties.
+>   These properties are still listed as required.
+> - Drop comment regarding pinctrl properties.
+>   These are not needed as only one state, "default", is supported
+> - Document clocks and power-domains properties.
+>   The clocks property is required. Add these properties to the example.
+> - Drop unnecessary interrupt-parent property from example.
+> ---
+>  .../devicetree/bindings/spi/renesas,hspi.yaml      | 57 ++++++++++++++++++++++
+>  Documentation/devicetree/bindings/spi/sh-hspi.txt  | 26 ----------
+>  2 files changed, 57 insertions(+), 26 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/sh-hspi.txt
 
-> On Tue, 17 Sep 2019 at 17:12, Aurabindo Jayamohanan <mail@aurabindo.in> wrote:
-> >
-> > platform_get_resource() may return NULL. If it is so, return -ENXIO
-> >
-> > Signed-off-by: Aurabindo Jayamohanan <mail@aurabindo.in>
-> > ---
-> >  drivers/spi/spi-sifive.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/spi/spi-sifive.c b/drivers/spi/spi-sifive.c
-> > index 93ec2c6cdbfd..67485067a694 100644
-> > --- a/drivers/spi/spi-sifive.c
-> > +++ b/drivers/spi/spi-sifive.c
-> > @@ -308,6 +308,12 @@ static int sifive_spi_probe(struct platform_device *pdev)
-> >         platform_set_drvdata(pdev, master);
-> >
-> >         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +       if (!res) {
-> > +               dev_err(&pdev->dev, "no IOMEM resource found\n");
-> > +               ret = -ENXIO;
-> > +               goto put_master;
-> > +       }
-> 
-> Seems unnecessary, the devm_ioremap_resource() already validated if
-> the resource is available.
-
-Just doublechecked lib/devres.c and I agree with you.
-
-Aurobindo, is this a patch for a real problem that you've encountered?
-
-
-- Paul
+Reviewed-by: Rob Herring <robh@kernel.org>
