@@ -2,67 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6228FB5E92
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2019 10:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E84AB5EF2
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2019 10:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbfIRIFj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Sep 2019 04:05:39 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:42668 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725298AbfIRIFj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Sep 2019 04:05:39 -0400
-X-IronPort-AV: E=Sophos;i="5.64,519,1559487600"; 
-   d="scan'208";a="26877426"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 18 Sep 2019 17:05:38 +0900
-Received: from renesas-VirtualBox.ree.adwin.renesas.com (unknown [10.226.37.56])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id DF00B41CA6D1;
-        Wed, 18 Sep 2019 17:05:36 +0900 (JST)
-From:   Gareth Williams <gareth.williams.jx@renesas.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Subject: [PATCH v2 4/4] spi: dw: Add compatible string for Renesas RZ/N1 SPI Controller
-Date:   Wed, 18 Sep 2019 09:04:36 +0100
-Message-Id: <1568793876-9009-5-git-send-email-gareth.williams.jx@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1568793876-9009-1-git-send-email-gareth.williams.jx@renesas.com>
-References: <1568793876-9009-1-git-send-email-gareth.williams.jx@renesas.com>
+        id S1730071AbfIRIUI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Sep 2019 04:20:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57388 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730047AbfIRIUI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 18 Sep 2019 04:20:08 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568794807;
+        bh=uF8GdYsTc7cuA8voZQYqK4OjEnJyzX31Hu6AtCVr9TQ=;
+        h=Subject:From:Date:To:From;
+        b=DTyAZupsLVdFaKK2yYYYveBZvE0bCti0AATrj5aQEk8HpZE9opl6hzIWv2JXdt5w0
+         ZRZgC5yH7fWC3EkLSPo+CtNlvcVhFYF2syXB5zKpUUepXyApYxeqErJaf8uXRPKWIP
+         DcZ+AiDsEinlkBLjdSP81bg3T1JEfb5Uhn53Icc0=
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+linux-spi@kernel.org
+Message-Id: <156879480779.28961.3339130054233540956.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 18 Sep 2019 08:20:07 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Phil Edworthy <phil.edworthy@renesas.com>
+Latest series: [v2] spi: dw: Add basic runtime PM support (2019-09-18T08:04:32)
+  Superseding: [v1] spi: dw: Add basic runtime PM support (2019-09-13T12:11:57):
+    [1/3] dt: spi: Add Renesas RZ/N1 binding documentation
+    [2/3] spi: dw: Add basic runtime PM support
+    [3/3] spi: dw: Add compatible string for Renesas RZ/N1 SPI Controller
 
-The Renesas RZ/N1 SPI Controller is based on the Synopsys DW SSI, but has
-additional registers for software CS control and DMA. This patch does not
-address the changes required for DMA support, it simply adds the compatible
-string. The CS registers are not needed as Linux can use gpios for the CS
-signals.
 
-Signed-off-by: Gareth Williams <gareth.williams.jx@renesas.com>
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
----
-v2: no changes
----
- drivers/spi/spi-dw-mmio.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index edb3cf6..3640b01 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -225,6 +225,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "mscc,ocelot-spi", .data = dw_spi_mscc_ocelot_init},
- 	{ .compatible = "mscc,jaguar2-spi", .data = dw_spi_mscc_jaguar2_init},
- 	{ .compatible = "amazon,alpine-dw-apb-ssi", .data = dw_spi_alpine_init},
-+	{ .compatible = "renesas,rzn1-spi", },
- 	{ /* end of table */}
- };
- MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
 -- 
-2.7.4
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/pwbot
