@@ -2,73 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CFFB64F3
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2019 15:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0F5B6781
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2019 17:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727263AbfIRNoy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Sep 2019 09:44:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51258 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727123AbfIRNoy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 18 Sep 2019 09:44:54 -0400
-Received: from mail-yw1-f46.google.com (mail-yw1-f46.google.com [209.85.161.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 18A7C21925;
-        Wed, 18 Sep 2019 13:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568814293;
-        bh=NsTNEQ9pNzRNy7TB1KzHS8aqTaRQ1Xa/uYBY9oHJ228=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pFhYuyuXLzsolpe52rmJvLGjKw+WqQHA+IXHkmK3FQY5OJW6t8t5r513QDLen1/A8
-         8Bl4ZRpXnW5TB9BM15e37DNN2AcaofIOB3kFt4OonPv9/3t5Pc8vH5FyvEnVgQ4Sde
-         ideuQ5H2ClWdR+Vs9SwvJ/hq9qYksSqwwxI5i3n0=
-Received: by mail-yw1-f46.google.com with SMTP id x82so2461689ywd.12;
-        Wed, 18 Sep 2019 06:44:53 -0700 (PDT)
-X-Gm-Message-State: APjAAAW7nCJjmlGA4rOUZW+SBtyIlxwtnO4hViMiUOLm+8vW4wqhbKMN
-        N/nQ7imcNE78jrBlEwEcPFYX0zjkWVYRR6BsJg==
-X-Google-Smtp-Source: APXvYqzAWf80PXPbYa5YFe71i5C6DTZvSwAPx2GlseUyJKphr7cVsIZ3oHwMTHgheYaO/eC4h5CybbQoMaq3TLVKRw4=
-X-Received: by 2002:a81:9182:: with SMTP id i124mr3297116ywg.279.1568814292316;
- Wed, 18 Sep 2019 06:44:52 -0700 (PDT)
+        id S1727193AbfIRPwH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Sep 2019 11:52:07 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41829 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbfIRPwH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Sep 2019 11:52:07 -0400
+Received: by mail-pl1-f194.google.com with SMTP id t10so139423plr.8;
+        Wed, 18 Sep 2019 08:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hgDF40EJKMi1lbTCtoI7X1hwyDhhh6fltKUSKOUxbr0=;
+        b=iHP90SdEbgkC/O+srbBHe66wt/JC9A2blIYPnV14CtXzAXg8TTVAqvwuaEHrtJmci8
+         /WUPYUBCtE8eeS462HuopL5XULobH5M++G1PTuQb1ZcBpqQSTuwcsWQxXoncm8Ns2er4
+         YVDcaGtu/6QD65uy/MyRal2EkXpOOJ9xw5jVuvMkmJHEgX3I5qtTgBT53ti/iJKEHLnE
+         VErgEGPkB1o2ve590N4+23LT9++nunwfRd0BjPO7gtip1E6/X17cHVYfwDe5xUZFGKJv
+         5cnGDKUeSZlIXlSPW3XeFIjIFywqn3EZ8VU8eQ9lETgavLKlrdI5arpjXsfMqCnBQvW0
+         l8uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hgDF40EJKMi1lbTCtoI7X1hwyDhhh6fltKUSKOUxbr0=;
+        b=Hnb/Hnz56RAlaAU3ioBV2Iba1cXJWVcyL67ETuJYqP5DNOfAgfmVedlCRE4VeOzvF4
+         s/HLCcnxXcw3hiHyy3/M9pogq9oxcfC7tzzebvCVBnBPeOCfOEgwNKKuRbe2i0wX7qVg
+         Cl868jLJi33jYu9op3UkisZed29fQstdoRitCWCcFIECeqLGHtqBGichupQyDD4qrnkj
+         G2ppqkA8I9zVx8BUMUPo/wOGXv0fnyRP5kwioTs0dh5wkywKEFU+bP0oTbg1cFXF/oL5
+         c3Y3XZAiqE6nuwvodjHuiNZNinP+HaqQJjRyaFHmR8RvFKMMKd9NpVxMIMsHulGz6CW8
+         BmaQ==
+X-Gm-Message-State: APjAAAXyZj+hwTPkOVO6T5uAp3ksOOxdvIZeX6Ru16w1K6JipTC+FwuK
+        i//g5g/cCw5YRTnBVUTW5HBNx+AkpvM=
+X-Google-Smtp-Source: APXvYqyr2yRSweOeqQCiVv6VpIO24r8Vx3T3ovM+f2mC3+xHG1g8iWqR29BYCclecTJHLU4+xe4UDg==
+X-Received: by 2002:a17:902:7401:: with SMTP id g1mr4962495pll.20.1568821925689;
+        Wed, 18 Sep 2019 08:52:05 -0700 (PDT)
+Received: from P65xSA.lan ([2001:250:3002:22c0:d407:4304:c30b:1a00])
+        by smtp.gmail.com with ESMTPSA id y144sm8572779pfb.188.2019.09.18.08.52.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Sep 2019 08:52:05 -0700 (PDT)
+From:   DENG Qingfang <dqfext@gmail.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>, stable@vger.kernel.org
+Subject: [PATCH] spi: spi-gpio: fix crash when num-chipselects is 0
+Date:   Wed, 18 Sep 2019 23:52:00 +0800
+Message-Id: <20190918155200.12614-1-dqfext@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <1568804927-13565-1-git-send-email-pragnesh.patel@sifive.com>
-In-Reply-To: <1568804927-13565-1-git-send-email-pragnesh.patel@sifive.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 18 Sep 2019 08:44:39 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJhH2x6xto9yJ+0V5YiYn9J_Y_bABG4_N6MK0M3XFCPqg@mail.gmail.com>
-Message-ID: <CAL_JsqJhH2x6xto9yJ+0V5YiYn9J_Y_bABG4_N6MK0M3XFCPqg@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: dt-bindings: Convert spi-sifive binding to json-schema
-To:     Pragnesh Patel <pragnesh.patel@sifive.com>
-Cc:     Palmer Dabbelt <palmer@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 6:10 AM Pragnesh Patel
-<pragnesh.patel@sifive.com> wrote:
->
-> Convert the spi-sifive binding to DT schema format.
->
-> Signed-off-by: Pragnesh Patel <pragnesh.patel@sifive.com>
-> ---
->
-> Changes in v2:
-> - Remove address-cells and size-cells property
-> - Added valid values for sifive,fifo-depth and sifive,max-bits-per-word
->   property
->
->  .../devicetree/bindings/spi/spi-sifive.txt         | 37 ----------
->  .../devicetree/bindings/spi/spi-sifive.yaml        | 86 ++++++++++++++++++++++
->  2 files changed, 86 insertions(+), 37 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-sifive.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/spi-sifive.yaml
+If an spi-gpio was specified with num-chipselects = <0> in dts, kernel will crash:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Unable to handle kernel paging request at virtual address 32697073
+pgd = (ptrval)
+[32697073] *pgd=00000000
+Internal error: Oops: 5 [# 1] SMP ARM
+Modules linked in:
+CPU: 2 PID: 1 Comm: swapper/0 Not tainted 4.19.72 #0
+Hardware name: Generic DT based system
+PC is at validate_desc+0x28/0x80
+LR is at gpiod_direction_output+0x14/0x128
+...
+[<c0544db4>] (validate_desc) from [<c0545228>] (gpiod_direction_output+0x14/0x128)
+[<c0545228>] (gpiod_direction_output) from [<c05fa714>] (spi_gpio_setup+0x58/0x64)
+[<c05fa714>] (spi_gpio_setup) from [<c05f7258>] (spi_setup+0x12c/0x148)
+[<c05f7258>] (spi_setup) from [<c05f7330>] (spi_add_device+0xbc/0x12c)
+[<c05f7330>] (spi_add_device) from [<c05f7f74>] (spi_register_controller+0x838/0x924)
+[<c05f7f74>] (spi_register_controller) from [<c05fa494>] (spi_bitbang_start+0x108/0x120)
+[<c05fa494>] (spi_bitbang_start) from [<c05faa34>] (spi_gpio_probe+0x314/0x338)
+[<c05faa34>] (spi_gpio_probe) from [<c05a844c>] (platform_drv_probe+0x34/0x70)
+
+The cause is spi_gpio_setup() did not check if the spi-gpio has chipselect pins
+before setting their direction and results in derefing an invalid pointer.
+
+The bug is spotted in kernel 4.19.72 on OpenWrt, and does not occur in 4.14.
+
+There is a similar fix upstream 249e2632dcd0509b8f8f296f5aabf4d48dfd6da8.
+
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: DENG Qingfang <dqfext@gmail.com>
+---
+ drivers/spi/spi-gpio.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
+index 77838d8fd..3b7f0d077 100644
+--- a/drivers/spi/spi-gpio.c
++++ b/drivers/spi/spi-gpio.c
+@@ -242,10 +242,12 @@ static int spi_gpio_setup(struct spi_device *spi)
+ 	 * The CS GPIOs have already been
+ 	 * initialized from the descriptor lookup.
+ 	 */
+-	cs = spi_gpio->cs_gpios[spi->chip_select];
+-	if (!spi->controller_state && cs)
+-		status = gpiod_direction_output(cs,
+-						!(spi->mode & SPI_CS_HIGH));
++	if (spi_gpio->has_cs) {
++		cs = spi_gpio->cs_gpios[spi->chip_select];
++		if (!spi->controller_state && cs)
++			status = gpiod_direction_output(cs,
++						  !(spi->mode & SPI_CS_HIGH));
++	}
+ 
+ 	if (!status)
+ 		status = spi_bitbang_setup(spi);
+-- 
+2.23.0
+
