@@ -2,80 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E3CB5B7D
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2019 07:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F4BB5E85
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2019 10:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726755AbfIRF7K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Sep 2019 01:59:10 -0400
-Received: from mga09.intel.com ([134.134.136.24]:19499 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725834AbfIRF7K (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 18 Sep 2019 01:59:10 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Sep 2019 22:59:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,519,1559545200"; 
-   d="scan'208";a="189161370"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 17 Sep 2019 22:59:09 -0700
-Received: from [10.226.38.20] (unknown [10.226.38.20])
-        by linux.intel.com (Postfix) with ESMTP id 645335800B9;
-        Tue, 17 Sep 2019 22:59:07 -0700 (PDT)
-Subject: Re: [PATCH v1 2/2] spi: cadence-qspi: Add QSPI support for Intel LGM
- SoC
-To:     Mark Brown <broonie@kernel.org>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
+        id S1727257AbfIRIEt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Sep 2019 04:04:49 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:16147 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726814AbfIRIEt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Sep 2019 04:04:49 -0400
+X-IronPort-AV: E=Sophos;i="5.64,519,1559487600"; 
+   d="scan'208";a="26658074"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 18 Sep 2019 17:04:47 +0900
+Received: from renesas-VirtualBox.ree.adwin.renesas.com (unknown [10.226.37.56])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 079B341C9BD7;
+        Wed, 18 Sep 2019 17:04:44 +0900 (JST)
+From:   Gareth Williams <gareth.williams.jx@renesas.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cheol.yong.kim@intel.com,
-        qi-ming.wu@intel.com
-References: <20190916073843.39618-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20190916073843.39618-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20190916113255.GA4352@sirena.co.uk>
- <466b41c1-3d65-0bf4-6db7-d3b3e06b107b@linux.intel.com>
- <20190917153650.GF3524@sirena.co.uk>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <eeefa79b-0a3b-5d62-3a1b-c1e9dcb03aa7@linux.intel.com>
-Date:   Wed, 18 Sep 2019 13:59:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20190917153650.GF3524@sirena.co.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] spi: dw: Add basic runtime PM support
+Date:   Wed, 18 Sep 2019 09:04:32 +0100
+Message-Id: <1568793876-9009-1-git-send-email-gareth.williams.jx@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+The Renesas RZ/N1 SPI Controller is based on the Synopsys DW SSI. This
+series enables power mode in the driver so the clock domain will enable
+the bus clock, adds the compatible string and updates the associated bindings
+documentation.
 
-    Thank you for the review comments.
+v2:
+ - Note that pclk should be renamed when using a clock domain in the
+   bindings documentation.
+ - Set spi_controller.auto_runtime_pm instead of using
+   pm_runtime_get_sync.
+ - Added pm_runtime_disable calls to dw_spi_remove_host and the error
+   condition of dw_spi_add_host.
 
-On 17/9/2019 11:36 PM, Mark Brown wrote:
-> On Tue, Sep 17, 2019 at 10:11:28AM +0800, Ramuthevar, Vadivel MuruganX wrote:
->
->> *    spi-cadence.c* in *drivers/spi/*, which supports very old legacy
->> cadence-spi based devices(normal)
->> *    cadence-quadspi.c(drivers/mtd/spi-nor/)* : specific support to SPI-NOR
->> flash with new spi-nor layer.
->>      all the API's in this driver purely on spi-nor specific, so couldn't
->> proceed to adapt.
-> Are these completely separate IPs or are they just different versions of
-> the same IP?
+Gareth Williams (1):
+  dt-bindings: snps,dw-apb-ssi: Add optional clock domain information
 
-These are same IPs , but different features Enabled/Disabled depends 
-upon the SoC vendors.
+Phil Edworthy (3):
+  dt: spi: Add Renesas RZ/N1 binding documentation
+  spi: dw: Add basic runtime PM support
+  spi: dw: Add compatible string for Renesas RZ/N1 SPI Controller
 
-for e.g: Intel LGM SoC uses the same IP, but without DMA and Direct 
-access controller.
+ Documentation/devicetree/bindings/spi/renesas,rzn1-spi.txt | 11 +++++++++++
+ Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt  |  3 ++-
+ drivers/spi/spi-dw-mmio.c                                  |  1 +
+ drivers/spi/spi-dw.c                                       |  8 ++++++++
+ 4 files changed, 22 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/renesas,rzn1-spi.txt
 
-also dedicated support to flash devices.
-
-Best regards
-
-Vadivel
+-- 
+2.7.4
 
