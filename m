@@ -2,84 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 973D5B7EB2
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Sep 2019 18:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68637B7FEF
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Sep 2019 19:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389863AbfISQDY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Sep 2019 12:03:24 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:36700 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389371AbfISQDY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Sep 2019 12:03:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=vJRSj0yJ0nGMQ7A04jXbedZdlDHcAN0hBrzP50Ruo6g=; b=enEiR9C8pobypGbm3Yy3RH5U8
-        TsGirkqhrEOn7G+4Oldowb8anNJrWFpFbamtEgD5TksYWJ9AKr9t7Z8AERxiv/Z0WkZy4cjQkKbeb
-        m/nxq4q6tjVQFHarK9iHDf4DSp32U593EVhKKIJf7WhoWNqGNj22cAXlRHkgcb0BOwBIw=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iAyto-0004MD-Ol; Thu, 19 Sep 2019 16:03:16 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id A09802741D3A; Thu, 19 Sep 2019 17:03:15 +0100 (BST)
-Date:   Thu, 19 Sep 2019 17:03:15 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S1731387AbfISRXy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Sep 2019 13:23:54 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:35725 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730219AbfISRXy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Sep 2019 13:23:54 -0400
+X-Originating-IP: 90.65.161.137
+Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 090811BF210;
+        Thu, 19 Sep 2019 17:23:51 +0000 (UTC)
+Date:   Thu, 19 Sep 2019 19:23:50 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Ludovic Desroches <ludovic.desroches@microchip.com>,
         linux-arm-kernel@lists.infradead.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         stable@vger.kernel.org
 Subject: Re: [PATCH] spi: atmel: Fix crash when using more than 4 gpio CS
-Message-ID: <20190919160315.GQ3642@sirena.co.uk>
+Message-ID: <20190919172350.GZ21254@piout.net>
 References: <20190919153847.7179-1-gregory.clement@bootlin.com>
+ <20190919160315.GQ3642@sirena.co.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Vxa5joy26gVGOrvU"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190919153847.7179-1-gregory.clement@bootlin.com>
-X-Cookie: I'll be Grateful when they're Dead.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190919160315.GQ3642@sirena.co.uk>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 19/09/2019 17:03:15+0100, Mark Brown wrote:
+> On Thu, Sep 19, 2019 at 05:38:47PM +0200, Gregory CLEMENT wrote:
+> 
+> > With this patch, when using a gpio CS, the hardware CS0 is always
+> > used. Thanks to this, there is no more limitation for the number of
+> > gpio CS we can use.
+> 
+> This is going to break any system where we use both a GPIO chip select
+> and chip select 0.  Ideally we'd try to figure out an unused chip select
+> to use here...
 
---Vxa5joy26gVGOrvU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The point is that this use case is already broken and this patch fixes
+the crash and is easily backportable.
 
-On Thu, Sep 19, 2019 at 05:38:47PM +0200, Gregory CLEMENT wrote:
+Fixing the CS + gpio CS should probably be done in a separate patch.
 
-> With this patch, when using a gpio CS, the hardware CS0 is always
-> used. Thanks to this, there is no more limitation for the number of
-> gpio CS we can use.
-
-This is going to break any system where we use both a GPIO chip select
-and chip select 0.  Ideally we'd try to figure out an unused chip select
-to use here...
-
---Vxa5joy26gVGOrvU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2DpsIACgkQJNaLcl1U
-h9DKfgf+Jsooil74xOpQ+umzYyZp8Qb3FEcyImIlX60lGCNBSHiEvAhRajJ6+AXX
-CsWEWs+bSzrHgo4y5RRwOrtp7RXbEJARgR2ke9JZ0l9P9qdU3oW/m8A8Ghq4Q8z/
-3w+GW4UoWkqUuDjK/LZeOvBtmq1+viYePqq+wOLg12uVCc+aifI1qZlTJHFaGJUf
-EJDxnopv92Ct66G3ZcQ8lMmujukMAuk6Z7+H6SJqvhIDOQLd8Ryt955+6v198wcq
-M8zO5suWI6sTMK0HpsN6L3K/WOe7vOUOPYyyLtKBSAA4+Piy9EaQcVsWv1mVLJfp
-SO2Y3XYEQykklvv+yX+7XlZxS6QYAg==
-=WMib
------END PGP SIGNATURE-----
-
---Vxa5joy26gVGOrvU--
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
