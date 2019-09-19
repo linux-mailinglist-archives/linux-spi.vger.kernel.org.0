@@ -2,70 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A760B8138
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Sep 2019 21:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DFDB8262
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Sep 2019 22:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392295AbfISTNL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Sep 2019 15:13:11 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:51347 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392291AbfISTNL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Sep 2019 15:13:11 -0400
-X-Originating-IP: 90.76.216.45
-Received: from windsurf (lfbn-1-2159-45.w90-76.abo.wanadoo.fr [90.76.216.45])
-        (Authenticated sender: thomas.petazzoni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id EE207240008;
-        Thu, 19 Sep 2019 19:13:08 +0000 (UTC)
-Date:   Thu, 19 Sep 2019 21:13:08 +0200
-From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] spi: atmel: Remove AVR32 leftover
-Message-ID: <20190919211308.56c9503e@windsurf>
-In-Reply-To: <20190919172453.GA21254@piout.net>
-References: <20190919154034.7489-1-gregory.clement@bootlin.com>
-        <20190919172453.GA21254@piout.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2404637AbfISUZL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Sep 2019 16:25:11 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:37451 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404462AbfISUZL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Sep 2019 16:25:11 -0400
+X-Originating-IP: 91.224.148.103
+Received: from localhost.localdomain (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 9A3091BF204;
+        Thu, 19 Sep 2019 20:25:07 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Julien Su <juliensu@mxic.com.tw>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/4] spi: mxic: Fix transmit path
+Date:   Thu, 19 Sep 2019 22:25:01 +0200
+Message-Id: <20190919202504.9619-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: yes
+X-Spam-Level: **************************
+X-GND-Spam-Score: 400
+X-GND-Status: SPAM
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 19 Sep 2019 19:24:53 +0200
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+In certain circumstances, it is needed to check INT_TX_EMPTY and
+INT_RX_NOT_EMPTY in the transmit path, not only in the receive
+path. In both cases, the delay penalty is negligible.
 
-> On 19/09/2019 17:40:34+0200, Gregory CLEMENT wrote:
-> > AV32 support has been from the kernel a few release ago, but there was  
-> AVR32 and  missing word^
-> 
-> > still some specific macro for this architecture in this driver. Lets
-> > remove it.
+Fixes: b942d80b0a39 ("spi: Add MXIC controller driver")
+Cc: stable@vger.kernel.org
+Suggested-by: Mason Yang <masonccyang@mxic.com.tw>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+ drivers/spi/spi-mxic.c | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
-If you want to actually be pedantic, there are a few other typos in the
-commit. Hopefully the below text has all of them fixed (and does not
-introduce any new one):
-
-==
-
-AVR32 support has been removed from the kernel a few releases ago, but
-there were still some specific macros for this architecture in this
-driver. Let's remove them.
-
-==
-
-Best regards,
-
-Thomas
+diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
+index f48563c09b97..eaa7a6a9044d 100644
+--- a/drivers/spi/spi-mxic.c
++++ b/drivers/spi/spi-mxic.c
+@@ -304,25 +304,21 @@ static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
+ 
+ 		writel(data, mxic->regs + TXD(nbytes % 4));
+ 
++		ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
++					 sts & INT_TX_EMPTY, 0, USEC_PER_SEC);
++		if (ret)
++			return ret;
++
++		ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
++					 sts & INT_RX_NOT_EMPTY, 0,
++					 USEC_PER_SEC);
++		if (ret)
++			return ret;
++
++		data = readl(mxic->regs + RXD);
+ 		if (rxbuf) {
+-			ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
+-						 sts & INT_TX_EMPTY, 0,
+-						 USEC_PER_SEC);
+-			if (ret)
+-				return ret;
+-
+-			ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
+-						 sts & INT_RX_NOT_EMPTY, 0,
+-						 USEC_PER_SEC);
+-			if (ret)
+-				return ret;
+-
+-			data = readl(mxic->regs + RXD);
+ 			data >>= (8 * (4 - nbytes));
+ 			memcpy(rxbuf + pos, &data, nbytes);
+-			WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
+-		} else {
+-			readl(mxic->regs + RXD);
+ 		}
+ 		WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
+
