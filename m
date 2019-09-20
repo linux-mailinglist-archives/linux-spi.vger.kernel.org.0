@@ -2,115 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA034B949F
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2019 17:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C77B94F6
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2019 18:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404321AbfITPzj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Sep 2019 11:55:39 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:10280 "EHLO
+        id S2388781AbfITQLg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Sep 2019 12:11:36 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.168]:23170 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404245AbfITPzj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Sep 2019 11:55:39 -0400
-X-Greylist: delayed 327 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Sep 2019 11:55:37 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1568994936;
+        with ESMTP id S2388473AbfITQLg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Sep 2019 12:11:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1568995893;
         s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=uUMbCnYSLXnGdgjLVbP4VbN11g3hGGb6cdy/jR7kWKU=;
-        b=YYnvNrszAMBNzWybl7WI00EEtYBWeVGt0g9xswUI0lSgDvbVY3nxU9Uj0bHS9xq9pi
-        rLgBeZYj2scIo9MGFIfW7AFFh1XEY0f4Zmu9MS75s/p3KQhx6RKsos3O1IRRQDFbyU5k
-        eysXpSbr37FEUr2Wuq6uk/eV0nPnx7WTkERCpvlIeYyg78EcWsPLElOMJ52fmJxjz8/b
-        /Oz7nOo6rDL1Ppv4Xemnb+FEujTJwu2TMIm1cwQr6x3V4PsfCSOIjVDKY7L4DbwYIsU+
-        Ms+cmPgr7LnLAyrb9x8hy8P2DWceoVBnbjRDJUT7a5CoMrFb/oPfb9s6NajusmRuhYrC
-        awAQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGHPrpwDCpeWQ="
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=pMuJS7ZxGerg+itWYAGiO02bP41ocHFhwtgwC16Oy+4=;
+        b=hGBWKLKzjWq3O6h9+xukeP0VNFzjSOGlXzAbD90kDzOf6DTvEQbgUQX3w7HREfAIfq
+        Y35h0dABORrrcyTE02T2xt8VEkxoYBg2LU67Yd6zKLqTyMEYVYsYMRCet11YxBb8pcex
+        Y43ANkTglCf7V9Hy/SxbLzmjW4BnBJnH6wntosDZObE/UaL7ojL6dyV4+knHRTkhER1W
+        K1NHNXLk62k8igubIjX4iNEFUiRmubjHHoXHQ5H6buDbRpAoTbvxdkQ34+6JV2Y83e1N
+        S6ihrJV01pq8BFOCsYKRDXF6JsgPFsl7tm3M1yFWsBpMxuqEmLfhtfgzGejR7pPNbwNu
+        LNOg==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2AyPw8lBX+A"
 X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
+Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
-        with ESMTPSA id u036f9v8KFtUpEA
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        with ESMTPSA id u036f9v8KGBFpHV
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
         (Client did not present a certificate);
-        Fri, 20 Sep 2019 17:55:30 +0200 (CEST)
-Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: [Letux-kernel] [PATCH 2/2] DTS: ARM: gta04: introduce legacy spi-cs-high to make display work again
+        Fri, 20 Sep 2019 18:11:15 +0200 (CEST)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <96E62EC2-2A3E-4722-A9DE-3F320B0A98B0@goldelico.com>
-Date:   Fri, 20 Sep 2019 17:55:30 +0200
-Cc:     Andreas Kemnade <andreas@kemnade.info>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         Tony Lindgren <tony@atomide.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Linux-OMAP <linux-omap@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9FCCE3A0-6223-44EC-868D-76018B6F5CD5@goldelico.com>
-References: <20190724194259.GA25847@bogus> <2EA06398-E45B-481B-9A26-4DD2E043BF9C@goldelico.com> <CAL_JsqLe_Y9Z6MRt7ojgSVKAb9n95S8j=eGidSVNz2T83j-zPQ@mail.gmail.com> <CACRpkdY0AVnkRa8sV_Z54qfX9SYufvaYYhU0k2+LitXo0sLx2w@mail.gmail.com> <20190831084852.5e726cfa@aktux> <ED6A6797-D1F9-473B-ABFF-B6951A924BC1@goldelico.com> <CACRpkdZQgPVvB=78vOFsHe5n45Vwe4N6JJOcm1_vz5FbAw9CYA@mail.gmail.com> <1624298A-C51B-418A-96C3-EA09367A010D@goldelico.com> <CACRpkdZvpPOM1Ug-=GHf7Z-2VEbJz3Cuo7+0yDFuNm5ShXK8=Q@mail.gmail.com> <7DF102BC-C818-4D27-988F-150C7527E6CC@goldelico.com> <20190920142059.GO5610@atomide.com> <633E7AD9-A909-4619-BBD7-8CFD965FDFF7@goldelico.com> <20190920172947.51c1fdec@aktux> <96E62EC2-2A3E-4722-A9DE-3F320B0A98B0@goldelico.com>
-To:     Discussions about the Letux Kernel <letux-kernel@openphoenux.org>
-X-Mailer: Apple Mail (2.3124)
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, broonie@kernel.org,
+        linus.walleij@linaro.org
+Cc:     stable@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH v2] DTS: ARM: gta04: introduce legacy spi-cs-high to make display work again
+Date:   Fri, 20 Sep 2019 18:11:15 +0200
+Message-Id: <c031340840daba810bb2a612c35eea7fab307e56.1568995874.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.19.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+commit 6953c57ab172 "gpio: of: Handle SPI chipselect legacy bindings"
 
-> Am 20.09.2019 um 17:50 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->=20
->=20
->> Am 20.09.2019 um 17:29 schrieb Andreas Kemnade =
-<andreas@kemnade.info>:
->>=20
->> On Fri, 20 Sep 2019 16:54:18 +0200
->> "H. Nikolaus Schaller" <hns@goldelico.com> wrote:
->>=20
->>>> Am 20.09.2019 um 16:20 schrieb Tony Lindgren <tony@atomide.com>:
->>>>=20
->>>> * H. Nikolaus Schaller <hns@goldelico.com> [190920 09:19]: =20
->>>>>> Am 20.09.2019 um 10:55 schrieb Linus Walleij =
-<linus.walleij@linaro.org>:
->>>>>> I suggest to go both way:
->>>>>> apply this oneliner and tag for stable so that GTA04 works
->>>>>> again.
->>>>>>=20
->>>>>> Then for the next kernel think about a possible more abitious
->>>>>> whitelist solution and after adding that remove *all* =
-"spi-cs-high"
->>>>>> flags from all device trees in the kernel after fixing them
->>>>>> all up. =20
->>>>>=20
->>>>> Ok, that looks like a viable path. =20
->>>>=20
->>>> Please repost the oneline so people can ack easily. At least
->>>> I've already lost track of this thread. =20
->>>=20
->>> It is all here:
->>>=20
->>> https://patchwork.kernel.org/patch/11035253/
->>>=20
->> It is the full one (incl. documentation), not the oneline and does =
-not
->> apply.
->=20
-> Looks as if it was sitting too long in the queue and linux-next has =
-changed
-> the basis in the meantime, while v5.3 has not yet.
->=20
-> Documentation/devicetree/bindings/spi/spi-bus.txt -> =
-spi-controller.yaml
->=20
-> So it should still apply for v5.3.1 and earlier and we need both =
-versions.
-> One for stable and one for linux-next. I don't know how to handle such =
-cases.
+did introduce logic to centrally handle the legacy spi-cs-high property
+in combination with cs-gpios. This assumes that the polarity
+of the CS has to be inverted if spi-cs-high is missing, even
+and especially if non-legacy GPIO_ACTIVE_HIGH is specified.
 
-Ok, here is a correction of this statement:
+The DTS for the GTA04 was orginally introduced under the assumption
+that there is no need for spi-cs-high if the gpio is defined with
+proper polarity GPIO_ACTIVE_HIGH.
 
-It applies fine to v5.2 and v5.3 already uses the spi-controller.yaml
+This was not a problem until gpiolib changed the interpretation of
+GPIO_ACTIVE_HIGH and missing spi-cs-high.
+
+The effect is that the missing spi-cs-high is now interpreted as CS being
+low (despite GPIO_ACTIVE_HIGH) which turns off the SPI interface when the
+panel is to be programmed by the panel driver.
+
+Therefore, we have to add the redundant and legacy spi-cs-high property
+to properly activate CS.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+---
+ arch/arm/boot/dts/omap3-gta04.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
+index b295f6fad2a5..954c216140ad 100644
+--- a/arch/arm/boot/dts/omap3-gta04.dtsi
++++ b/arch/arm/boot/dts/omap3-gta04.dtsi
+@@ -120,6 +120,7 @@
+ 			spi-max-frequency = <100000>;
+ 			spi-cpol;
+ 			spi-cpha;
++			spi-cs-high;
+ 
+ 			backlight= <&backlight>;
+ 			label = "lcd";
+-- 
+2.19.1
 
