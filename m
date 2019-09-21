@@ -2,26 +2,26 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A404B9DE7
-	for <lists+linux-spi@lfdr.de>; Sat, 21 Sep 2019 14:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311DBB9E04
+	for <lists+linux-spi@lfdr.de>; Sat, 21 Sep 2019 15:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437805AbfIUMxT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 21 Sep 2019 08:53:19 -0400
-Received: from mout.web.de ([217.72.192.78]:35987 "EHLO mout.web.de"
+        id S2394150AbfIUNTw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 21 Sep 2019 09:19:52 -0400
+Received: from mout.web.de ([212.227.17.12]:37869 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405593AbfIUMxS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 21 Sep 2019 08:53:18 -0400
+        id S2388184AbfIUNTw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 21 Sep 2019 09:19:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1569070372;
-        bh=SCl+tmJdStyw0CQO6h+KnwtHmTZWrvSg11wccT6qzvA=;
+        s=dbaedf251592; t=1569071969;
+        bh=9+xypCKN1krYc4zKOAM4qOYGemsp2J5T/csTgm4F+nU=;
         h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
-        b=SMkRdRql9mpRjvontaJ7T//NZvV2XujWQ5rGPM4hjcwKvKu//XH1ytIrp9H9X0ITy
-         B+p5gZfkO/f42zN5JEvyMbHXuNfd74Hp344MB/B0kfYKL79P2tWSazYlgZ97cV90lr
-         78ahxggoNLXscqDO/GfIVcZNR8eCyu1qqXmGk8o0=
+        b=M/l0d6XNFA2n1ffP/eTG/nEFMak1qvkmHaL6HvfTr0xqg3xk8iJgiBD4CJrPl0p/u
+         Bue1T+qo6Q5oj2G3F2pTc4rzNsOwrJM0G/f/5laAzoBziwr69yVPulQUAKTLwoluPQ
+         I9UH20vaW82uazoNc25R1sbwIqXnCgDk/m4vXHg0=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
 Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb101
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MLPaA-1iB6un3bdK-000g3v; Sat, 21
- Sep 2019 14:52:51 +0200
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MK1s1-1iAqLk2YAX-001V9W; Sat, 21
+ Sep 2019 15:19:29 +0200
 To:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         Leilk Liu <leilk.liu@mediatek.com>,
@@ -31,7 +31,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         kernel-janitors@vger.kernel.org
 From:   Markus Elfring <Markus.Elfring@web.de>
 Subject: [PATCH] spi: mediatek: Use devm_platform_ioremap_resource() in
- mtk_spi_probe()
+ mtk_spi_slave_probe()
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
  +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
@@ -75,45 +75,45 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <478e0df1-e800-8cf1-f9b3-d72f8e26aa0b@web.de>
-Date:   Sat, 21 Sep 2019 14:52:50 +0200
+Message-ID: <225b76ca-a367-4bef-d8ce-42c7af9242a5@web.de>
+Date:   Sat, 21 Sep 2019 15:19:27 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2RAnMwsq6u90y8BSolpVHIxB4gUiIhUjbOBK55jXz4stVkILt2a
- yGGEi2R00Bq3dxmuNkPXstj2HSdiOCHrpdNoT/ZGn74n3BCVVOS+gfnEAUw0DP7tknUIqAo
- TXd/4i8i/hNUzTZhvJYvy873vGLUAZRh3pcvGIGlWznESPzchGN//b54okAoGBOwnCRV7L8
- 8neBn4GVoIsUNOJYFNhqA==
+X-Provags-ID: V03:K1:xO8Z1pvpI8iq6eY4ur2wGPtzGdYEW++YUJqtJjR+6Kw0WD8rx0O
+ pWBRCZFfeyG5rlD7dWW4cy2qv3Kewcv/OYeKzPI9IHrLYNuM6MRqb00V80W0LIm5LXjZ/Vu
+ zTnB8DGGA0n58FxVPBZQPlbKhLWm96My7g76aWvPqnoWaUF7FZKsl3V4Guz/JnKcSH45vFu
+ dBKMRsXwkUPeR4ZjZHHMw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:H5uIZOtSvkE=:PM1Chy/hXGWgXhW8TIHvFO
- auEeQsBYt861j7vJYVEjZ98t/b6H+E5x/yDo/JNu1K/TvHMFhI6n2jz1C5W/zWo5uyGn+dFKO
- ccsEiC7Oz5+L6VMl2oejfz1YhEUu39+AtKp9dI7K2DAI/H0kVPzXI/RNXUeN4OJIAjjUt9/hW
- EWSU3xtjxhA7/BGLfGhMpzjOYyy9fRZnaRpmLHLkPf3+HmN8TNFjJoDbadHmbBN1Z54sTHhHp
- ScT8/97SKofTt33RBtFPFIAv5A4x86p+jDR9vIx1QQemh6I5afiunCd5WNnsACgNIt3UfOXkp
- ZJw/bkWA8s8fPFn6yNV0BaSBFaH/3uuYxZ+y0tn6+5FrENNX4ufEzO3zX0ndukseXcERg5L91
- HnPcfI7dhUyU9NCxwITOcHcdPKyW3IHgJaXtNgUQ7Xi9bwzz7dYAo6u0erZOA4c0Sdbfp8eNw
- vm4kUlIFuwBsdnTHRR/6pDgqKr3+8ROGx9v+H19ZA8CMmEnO+jAKe6vJonfzfEXwf/KGMqIwn
- lNPAxfnRab2IhfhErmLSrA3gSVCPNhmPmEJgPySRlo/8mkYM7M7qkU1m3/yKGjLN97DPcA8+h
- utJvqY3ZYnkmZY69WNuNERsmh1eS+YcQaeWQkaHj/VBPOP28waSziI6qqj62cjHShClQmL6Aw
- aHJm1pvEHsEsitL3Qv/Nw/4AUPuMTXr2vK4hyjHudDdlqy/g2qsalg7jsi422bD8ZrDncK8/v
- 8t9waijpT+NNzOPJN4/GXaJO1SnzsvYdpkgfx94BqDs9OiM+5DLDJpe7CaZNsL9leGLhQO51w
- p9wVB02ALGA42+rPjLW++TqUskkINd84ape9paAKNMgyebj2Nk+57jpzUEZ1aapeYOX7JBO+r
- QtRY81nOtWxA+PMJ0ya/ecWA02toqd9imjdniONBXyPYEC8Prr31ETr7lUmhgXpNwgHcpc4B7
- pC3aan87vDhNQlwszvabLXDuxp7Ry2ODPRW+gnB+lAIfj2IygUzNUCrRJhduVj/vkpwwqBwzF
- moJDdYNKP1gH2Afmqrq6X6svNuIE1EIp8XdMh/+YM790WICN/U3KGvO/HQ/mM9GyLQZwNC51P
- xgHtCvKDk6UqDYQy546bx69gfMhHsZC+SluvJi+C77HhLFO3xLGNjA3XDG8qkHQ5NhZ4y/aY+
- h3PXgUOS4ts80Jn/Y7ToU/N6OAlDbOcikN6ycqW4NCfg+jmbMRhEPmOaqPM2P8mVVvxSsbYvQ
- 8iyF6iMH+ET2kaMZDiwUTVkr0yEmeW/ZHnmxsPCF3R22+RSNrdG2OHyR/dCA=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LxqNktLQJF8=:oZDmTDmllwpA/Y/Crx0yds
+ ZYddq+LrxZzlUls5ftPyKA5Vg9nUXHS2wphRXeRDhQp/9qRisUNcGeROlHMMgRMOq5D6x8v4y
+ uxiXjdEPKoDV+CWIW7VgiEfU+coXSMk2C59PcQ44gpbuiNXLooAt8usgtPbRCUG2zSzOkb9tO
+ m3i1BszfxXPkKL3W82NEdIyZUKHy2isX3dV/UUqxjkXK7uE9jwqVGyqbeRZaDZW7s/7LmY9mR
+ ub+TL7xcMzXRcOYfvALLai4nObRdkqbUPNLBtiNuEqRox0MqGgYDal7sRmFbhAiVfKKLgKD4m
+ n155qUIW8On8xH7ZD6U0IMa/oGkJFPgc1DzFJq7jYLXOw8I62QwQsJ6NqsXB6If9dPUQ6fwUv
+ /ITcvCIrmt+CxQ4uExb6a2PPjqPHtd81+oiMSztHgQDxm3RTyMVgBiPmc9Gal+3//wP1MEBRj
+ h8lxd39ezu2Kz9s/d2UTLsP9PpYcdhjFEDNKPN9U32oP+JeqVmdZX58F6d5btUGycEnJiJKET
+ pCCYMG+NcVv5UxIlUHMXth5VmlOUtzvggGK8wr8UqXcBLyOGB13tUqK1b3u3DQrnsw92X/cZ7
+ 4UeaQRHD9tCEkIzBSh/mAtZifzqcs7rYcl+BfYvwFcG5Fwnn0zSYCT0wNKV8pngStzC73mEGg
+ y5Vi6kSo+dyOz623uOqep2hD/JMGr/M/RJTb/AzNyDGQtS/DmFQfcKyjLteJd6HD8jrRsy900
+ I4dWF0+wLSqT1uUccAJ9H6CG7XemrrMjs1iZ3YXE+wgypFg2pQXlxmpOyFRs61vU0JGHxt9qx
+ Zh++6bTTXYjLulxIh7O5blr/CZqwpo0rjJAvUg+jTVpSAbWTQHuZa7n4TyGE+6DMXiaZMig88
+ TAXDw9MxqmOLgAvPSA8piM7HroHmnGkrbIP7ce9IBRm7njR9CwgI3J831rf0YPWAu3Br+20jx
+ la2UN8eCmhZrakRr/+8Y3ZIVqbF6Zx5BNgeUws3T/TmRfzUd3DPeYRfYvRvfDYKxHwtkPWj7O
+ 0MLC07o09LSOwq5EJKs5JOrNDPXLP8HA7sALIXy53NAWCCi5+cmOS3gYVBLvQLdZbF9txroao
+ NwYLnb7tBe+d7nWYCQrlT4J/yyrzoQU6VIYBwFF9nX3am+PtfAr/J+wBYqzRo9y5FPW6K+0tX
+ JxFM8IGXTMR17LbiOcVsnw528kmS0myrZ5Pus/8zS27ikyPGVkMVGOIKK9igSyXmHbQykn1VY
+ vO5rBcglVrVm7Wy/8rtPTu9LR9Krldu0unXInGwxb4sS9e/Sv0LljQsVfBp4=
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 21 Sep 2019 14:45:40 +0200
+Date: Sat, 21 Sep 2019 15:12:33 +0200
 
 Simplify this function implementation by using a known wrapper function.
 
@@ -121,39 +121,43 @@ This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 =2D--
- drivers/spi/spi-mt65xx.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ drivers/spi/spi-slave-mt27xx.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 6888a4dcff6d..25fe149a8d9a 100644
-=2D-- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -619,7 +619,6 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 	struct spi_master *master;
- 	struct mtk_spi *mdata;
- 	const struct of_device_id *of_id;
+diff --git a/drivers/spi/spi-slave-mt27xx.c b/drivers/spi/spi-slave-mt27xx=
+.c
+index 61bc43b0fe57..44edaa360405 100644
+=2D-- a/drivers/spi/spi-slave-mt27xx.c
++++ b/drivers/spi/spi-slave-mt27xx.c
+@@ -368,7 +368,6 @@ static int mtk_spi_slave_probe(struct platform_device =
+*pdev)
+ {
+ 	struct spi_controller *ctlr;
+ 	struct mtk_spi_slave *mdata;
 -	struct resource *res;
- 	int i, irq, ret, addr_bits;
+ 	int irq, ret;
 
- 	master =3D spi_alloc_master(&pdev->dev, sizeof(*mdata));
-@@ -682,15 +681,7 @@ static int mtk_spi_probe(struct platform_device *pdev=
-)
- 	}
+ 	ctlr =3D spi_alloc_slave(&pdev->dev, sizeof(*mdata));
+@@ -392,17 +391,8 @@ static int mtk_spi_slave_probe(struct platform_device=
+ *pdev)
+ 	platform_set_drvdata(pdev, ctlr);
 
- 	platform_set_drvdata(pdev, master);
+ 	init_completion(&mdata->xfer_done);
 -
 -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
 -	if (!res) {
 -		ret =3D -ENODEV;
 -		dev_err(&pdev->dev, "failed to determine base address\n");
--		goto err_put_master;
+-		goto err_put_ctlr;
 -	}
+-
+ 	mdata->dev =3D &pdev->dev;
 -
 -	mdata->base =3D devm_ioremap_resource(&pdev->dev, res);
 +	mdata->base =3D devm_platform_ioremap_resource(pdev, 0);
  	if (IS_ERR(mdata->base)) {
  		ret =3D PTR_ERR(mdata->base);
- 		goto err_put_master;
+ 		goto err_put_ctlr;
 =2D-
 2.23.0
 
