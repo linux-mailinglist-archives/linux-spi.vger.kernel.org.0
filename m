@@ -2,36 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 311DBB9E04
-	for <lists+linux-spi@lfdr.de>; Sat, 21 Sep 2019 15:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1340BB9E17
+	for <lists+linux-spi@lfdr.de>; Sat, 21 Sep 2019 15:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394150AbfIUNTw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 21 Sep 2019 09:19:52 -0400
-Received: from mout.web.de ([212.227.17.12]:37869 "EHLO mout.web.de"
+        id S2394211AbfIUNkp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 21 Sep 2019 09:40:45 -0400
+Received: from mout.web.de ([212.227.17.11]:45101 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388184AbfIUNTw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 21 Sep 2019 09:19:52 -0400
+        id S2394165AbfIUNko (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 21 Sep 2019 09:40:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1569071969;
-        bh=9+xypCKN1krYc4zKOAM4qOYGemsp2J5T/csTgm4F+nU=;
-        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
-        b=M/l0d6XNFA2n1ffP/eTG/nEFMak1qvkmHaL6HvfTr0xqg3xk8iJgiBD4CJrPl0p/u
-         Bue1T+qo6Q5oj2G3F2pTc4rzNsOwrJM0G/f/5laAzoBziwr69yVPulQUAKTLwoluPQ
-         I9UH20vaW82uazoNc25R1sbwIqXnCgDk/m4vXHg0=
+        s=dbaedf251592; t=1569073239;
+        bh=n8hG64qo0b1FTqu8LVo1QtX1Ic9Wgl5C3AZxhcpCf6U=;
+        h=X-UI-Sender-Class:To:From:Subject:Cc:Date;
+        b=pHAVdobHXNhAIMUi1UzmKCFv864gtGFazqK65vx7lAvMiGx6UFulMSDEs8aGUUI74
+         C+bAivYYIBz+sLKHYGwjqwjBKRdISqNEqLBlEg70387RPDO3NDR5qakAy4hm0a1H7h
+         O0qADRwzVS8sUm07Oo+sCOu2vfhQAAOb+CFMqALo=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb101
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MK1s1-1iAqLk2YAX-001V9W; Sat, 21
- Sep 2019 15:19:29 +0200
-To:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
+Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb103
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0LilJB-1hdyyA0D1R-00cuuF; Sat, 21
+ Sep 2019 15:40:39 +0200
+To:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>
 From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] spi: mediatek: Use devm_platform_ioremap_resource() in
- mtk_spi_slave_probe()
+Subject: [PATCH] spi: xtensa-xtfpga: Use devm_platform_ioremap_resource() in
+ xtfpga_spi_probe()
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
  +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
@@ -75,45 +70,47 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <225b76ca-a367-4bef-d8ce-42c7af9242a5@web.de>
-Date:   Sat, 21 Sep 2019 15:19:27 +0200
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Message-ID: <178bb78e-714f-645f-d819-5732870c4272@web.de>
+Date:   Sat, 21 Sep 2019 15:40:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:xO8Z1pvpI8iq6eY4ur2wGPtzGdYEW++YUJqtJjR+6Kw0WD8rx0O
- pWBRCZFfeyG5rlD7dWW4cy2qv3Kewcv/OYeKzPI9IHrLYNuM6MRqb00V80W0LIm5LXjZ/Vu
- zTnB8DGGA0n58FxVPBZQPlbKhLWm96My7g76aWvPqnoWaUF7FZKsl3V4Guz/JnKcSH45vFu
- dBKMRsXwkUPeR4ZjZHHMw==
+X-Provags-ID: V03:K1:q9fUZ1U9yec7EIOvmhZTHcJuoy3N8lqdynht22stsooOhVB9O6Z
+ Nq4VGKa/GQfkbb6h76H5iYZKrdp5nMBmTE4X48M10qESevv2bqdeGaHNPwtjHEOZj7RanTS
+ 9PLo+KqTwqNxBrZrtfn2fTL4c1prFqLowI8hTzZxh+8XyrPjpCYr/Eit1oYMxTlZXa2kVGF
+ W4XUFGNIpi1bgYjcpDO7w==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LxqNktLQJF8=:oZDmTDmllwpA/Y/Crx0yds
- ZYddq+LrxZzlUls5ftPyKA5Vg9nUXHS2wphRXeRDhQp/9qRisUNcGeROlHMMgRMOq5D6x8v4y
- uxiXjdEPKoDV+CWIW7VgiEfU+coXSMk2C59PcQ44gpbuiNXLooAt8usgtPbRCUG2zSzOkb9tO
- m3i1BszfxXPkKL3W82NEdIyZUKHy2isX3dV/UUqxjkXK7uE9jwqVGyqbeRZaDZW7s/7LmY9mR
- ub+TL7xcMzXRcOYfvALLai4nObRdkqbUPNLBtiNuEqRox0MqGgYDal7sRmFbhAiVfKKLgKD4m
- n155qUIW8On8xH7ZD6U0IMa/oGkJFPgc1DzFJq7jYLXOw8I62QwQsJ6NqsXB6If9dPUQ6fwUv
- /ITcvCIrmt+CxQ4uExb6a2PPjqPHtd81+oiMSztHgQDxm3RTyMVgBiPmc9Gal+3//wP1MEBRj
- h8lxd39ezu2Kz9s/d2UTLsP9PpYcdhjFEDNKPN9U32oP+JeqVmdZX58F6d5btUGycEnJiJKET
- pCCYMG+NcVv5UxIlUHMXth5VmlOUtzvggGK8wr8UqXcBLyOGB13tUqK1b3u3DQrnsw92X/cZ7
- 4UeaQRHD9tCEkIzBSh/mAtZifzqcs7rYcl+BfYvwFcG5Fwnn0zSYCT0wNKV8pngStzC73mEGg
- y5Vi6kSo+dyOz623uOqep2hD/JMGr/M/RJTb/AzNyDGQtS/DmFQfcKyjLteJd6HD8jrRsy900
- I4dWF0+wLSqT1uUccAJ9H6CG7XemrrMjs1iZ3YXE+wgypFg2pQXlxmpOyFRs61vU0JGHxt9qx
- Zh++6bTTXYjLulxIh7O5blr/CZqwpo0rjJAvUg+jTVpSAbWTQHuZa7n4TyGE+6DMXiaZMig88
- TAXDw9MxqmOLgAvPSA8piM7HroHmnGkrbIP7ce9IBRm7njR9CwgI3J831rf0YPWAu3Br+20jx
- la2UN8eCmhZrakRr/+8Y3ZIVqbF6Zx5BNgeUws3T/TmRfzUd3DPeYRfYvRvfDYKxHwtkPWj7O
- 0MLC07o09LSOwq5EJKs5JOrNDPXLP8HA7sALIXy53NAWCCi5+cmOS3gYVBLvQLdZbF9txroao
- NwYLnb7tBe+d7nWYCQrlT4J/yyrzoQU6VIYBwFF9nX3am+PtfAr/J+wBYqzRo9y5FPW6K+0tX
- JxFM8IGXTMR17LbiOcVsnw528kmS0myrZ5Pus/8zS27ikyPGVkMVGOIKK9igSyXmHbQykn1VY
- vO5rBcglVrVm7Wy/8rtPTu9LR9Krldu0unXInGwxb4sS9e/Sv0LljQsVfBp4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SRNDSBcUT2I=:L1dx8VSnXNHHpYSgcznlDH
+ 5KK5ALjsRvcCIrI6sB9xvKhBgt13gjO0PZp5xP9J30zuoKWzYCNvW+1dlC8ZxgHETDdbVAkyb
+ LaLwxNonH39R0BIcBitpK+wObJ0dlYi+497XZqky01OCt7QQhnVl+jvQj4IHnZfsy/a5sJuP3
+ KPtb0MZMf4cuC7mAe/SCQrmgWZjNK7lhtcUBHU8iQ47XLtNOFTquJehenz4wjX7cXf39hvKuK
+ TifM5+SDNAGzztNzqdqoFejFi8MRtOOUnmrS4XbtQQjBJfUKWMk/E1mKR0mS02Z3H+Z3RonyQ
+ 2yapTmrMaxATRPpwzfp+p+uCFf//DnIHAQFUEv/d5R3wHHeSfMUeF5ZRqX1yAKdnLmEptZt1Q
+ 5JKo8Sx8fdotjMt49GQi5MxtqU9RJ5b981MUxdxQB9YsxQnv2z/NTOvzCR4zesPURdGS+Y1QS
+ hJDIZJgJOp7/NHbceGKkh6K1xYlfd8xLycr7irQme08FpjQiHaK97g+GYgh8aFOUUVgWqGW1j
+ 2vMZ6jTAkXwgX9zgQg1ukpXQ+dx8FkDKbQYqyDq4mdRsiTsjRJGEEPIiKMjurgvWvghPLNWYS
+ fSUSF5028k4fC4B7MhOHl9LCf9qVab+26bd5q+b5jVk8wqPcpK/ZHdMRnkxRKutrfpR4Kt1Gy
+ /R4HfAce5d37l+pXmuzACLzSFpB0kgRsCiMUTzX9+EFjlt6GB0jKal8zr4fHShrdZ9dJL8Ikc
+ 0Jha1k6N/njV9SZkDKby/KwBWQWMU4gD37IhJtntzirmWJTd4d9+1C3FrQCYCIS+dO8yxOg00
+ ZC+9bKqdcFK3iuFhVIf1WEd8DglkHc1Ms33EHAh81ipwjv1mfvjQV9Hw5fyo3rdho9YSbRUAd
+ 2QU0X3z0c1LLLZDJipIIbhbA4pgfkApeTd0X4ocWsneXBPTfNcKLIApaahx743YL4YNgohzpd
+ EYaB1pKkz3m2ZXK+SiTHLJ1QkQA19ES7UgjsXpeJi2FB5xKABln7sE9BzsaAUZmTM3t92YeLz
+ Kk3flQ+f3N0OPem7FnzqxL8eR20KcFqW9J2c+l+d09woZQLo2Ata6dOsXsjMUH2fddHw3wFhb
+ fHG1sXiG57msQeYhgqFyUfnLdZBwK65E3JmQfx41horiAqlAgvsbh7uyaEeZvic3U/icYd/dq
+ PrRMjtMwMlL/imV0gsXJoHXN40A9Xywfp9tZN1kAnoI9x0xCDL3/0ckUe3wYifok9nRZJw39R
+ G0hKFEJEGgQFPlozDxoa4ej2SQ+K/eBRkLAOWAr/E3bFRjXn81WSKnW+W4Io=
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 21 Sep 2019 15:12:33 +0200
+Date: Sat, 21 Sep 2019 15:35:08 +0200
 
 Simplify this function implementation by using a known wrapper function.
 
@@ -121,43 +118,40 @@ This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 =2D--
- drivers/spi/spi-slave-mt27xx.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ drivers/spi/spi-xtensa-xtfpga.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-slave-mt27xx.c b/drivers/spi/spi-slave-mt27xx=
-.c
-index 61bc43b0fe57..44edaa360405 100644
-=2D-- a/drivers/spi/spi-slave-mt27xx.c
-+++ b/drivers/spi/spi-slave-mt27xx.c
-@@ -368,7 +368,6 @@ static int mtk_spi_slave_probe(struct platform_device =
-*pdev)
+diff --git a/drivers/spi/spi-xtensa-xtfpga.c b/drivers/spi/spi-xtensa-xtfp=
+ga.c
+index 86516eb1e143..fc2b5eb7d614 100644
+=2D-- a/drivers/spi/spi-xtensa-xtfpga.c
++++ b/drivers/spi/spi-xtensa-xtfpga.c
+@@ -80,7 +80,6 @@ static void xtfpga_spi_chipselect(struct spi_device *spi=
+, int is_on)
+ static int xtfpga_spi_probe(struct platform_device *pdev)
  {
- 	struct spi_controller *ctlr;
- 	struct mtk_spi_slave *mdata;
--	struct resource *res;
- 	int irq, ret;
+ 	struct xtfpga_spi *xspi;
+-	struct resource *mem;
+ 	int ret;
+ 	struct spi_master *master;
 
- 	ctlr =3D spi_alloc_slave(&pdev->dev, sizeof(*mdata));
-@@ -392,17 +391,8 @@ static int mtk_spi_slave_probe(struct platform_device=
- *pdev)
- 	platform_set_drvdata(pdev, ctlr);
-
- 	init_completion(&mdata->xfer_done);
+@@ -97,14 +96,7 @@ static int xtfpga_spi_probe(struct platform_device *pde=
+v)
+ 	xspi->bitbang.master =3D master;
+ 	xspi->bitbang.chipselect =3D xtfpga_spi_chipselect;
+ 	xspi->bitbang.txrx_word[SPI_MODE_0] =3D xtfpga_spi_txrx_word;
 -
--	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
+-	mem =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!mem) {
+-		dev_err(&pdev->dev, "No memory resource\n");
 -		ret =3D -ENODEV;
--		dev_err(&pdev->dev, "failed to determine base address\n");
--		goto err_put_ctlr;
+-		goto err;
 -	}
--
- 	mdata->dev =3D &pdev->dev;
--
--	mdata->base =3D devm_ioremap_resource(&pdev->dev, res);
-+	mdata->base =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(mdata->base)) {
- 		ret =3D PTR_ERR(mdata->base);
- 		goto err_put_ctlr;
+-	xspi->regs =3D devm_ioremap_resource(&pdev->dev, mem);
++	xspi->regs =3D devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(xspi->regs)) {
+ 		ret =3D PTR_ERR(xspi->regs);
+ 		goto err;
 =2D-
 2.23.0
 
