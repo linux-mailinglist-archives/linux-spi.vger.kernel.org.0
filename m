@@ -2,85 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2BFBAAB0
-	for <lists+linux-spi@lfdr.de>; Sun, 22 Sep 2019 21:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E31BBA97
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Sep 2019 19:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728544AbfIVT3q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 22 Sep 2019 15:29:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46570 "EHLO mail.kernel.org"
+        id S2440189AbfIWReq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 23 Sep 2019 13:34:46 -0400
+Received: from muru.com ([72.249.23.125]:34244 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392417AbfIVStd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:49:33 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EC3B921A4C;
-        Sun, 22 Sep 2019 18:49:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178172;
-        bh=HlnVsCceNYZyYai/sxKuhEPWoP8UASBPHV6OlRRXLRg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fhmv5FT4IqX8/Rn+E5x1sgf2sCNxHshmSe8mQLKHCLa3aG8XSM5XtaUFTB8lJi80a
-         Eytuvv5XJI1eb6Kou+qp649qUlItZJuwemuIdEzv9UD62ITR/E2omgvwmq7Ekh73VK
-         3v/eP6QTYHw9JGLEXMSXnw+8V0J5A/fHw69MGixc=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 005/185] spi: dw-mmio: Clock should be shut when error occurs
-Date:   Sun, 22 Sep 2019 14:46:23 -0400
-Message-Id: <20190922184924.32534-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
-References: <20190922184924.32534-1-sashal@kernel.org>
+        id S2389167AbfIWReq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 23 Sep 2019 13:34:46 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id C7A37809F;
+        Mon, 23 Sep 2019 17:35:16 +0000 (UTC)
+Date:   Mon, 23 Sep 2019 10:34:41 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, broonie@kernel.org,
+        linus.walleij@linaro.org, stable@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com
+Subject: Re: [PATCH v2] DTS: ARM: gta04: introduce legacy spi-cs-high to make
+ display work again
+Message-ID: <20190923173441.GV5610@atomide.com>
+References: <c031340840daba810bb2a612c35eea7fab307e56.1568995874.git.hns@goldelico.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c031340840daba810bb2a612c35eea7fab307e56.1568995874.git.hns@goldelico.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+* H. Nikolaus Schaller <hns@goldelico.com> [190920 09:12]:
+> commit 6953c57ab172 "gpio: of: Handle SPI chipselect legacy bindings"
+> 
+> did introduce logic to centrally handle the legacy spi-cs-high property
+> in combination with cs-gpios. This assumes that the polarity
+> of the CS has to be inverted if spi-cs-high is missing, even
+> and especially if non-legacy GPIO_ACTIVE_HIGH is specified.
+> 
+> The DTS for the GTA04 was orginally introduced under the assumption
+> that there is no need for spi-cs-high if the gpio is defined with
+> proper polarity GPIO_ACTIVE_HIGH.
+> 
+> This was not a problem until gpiolib changed the interpretation of
+> GPIO_ACTIVE_HIGH and missing spi-cs-high.
+> 
+> The effect is that the missing spi-cs-high is now interpreted as CS being
+> low (despite GPIO_ACTIVE_HIGH) which turns off the SPI interface when the
+> panel is to be programmed by the panel driver.
+> 
+> Therefore, we have to add the redundant and legacy spi-cs-high property
+> to properly activate CS.
 
-[ Upstream commit 3da9834d9381dd99273f2ad4e6d096c9187dc4f2 ]
+Thanks applying into fixes.
 
-When optional clock requesting fails, the main clock is still up and running,
-we should shut it down in such caee.
-
-Fixes: 560ee7e91009 ("spi: dw: Add support for an optional interface clock")
-Cc: Phil Edworthy <phil.edworthy@renesas.com>
-Cc: Gareth Williams <gareth.williams.jx@renesas.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Gareth Williams <gareth.williams.jx@renesas.com>
-Link: https://lore.kernel.org/r/20190710114243.30101-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-dw-mmio.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 18c06568805e7..86789dbaf5771 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -172,8 +172,10 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 
- 	/* Optional clock needed to access the registers */
- 	dwsmmio->pclk = devm_clk_get_optional(&pdev->dev, "pclk");
--	if (IS_ERR(dwsmmio->pclk))
--		return PTR_ERR(dwsmmio->pclk);
-+	if (IS_ERR(dwsmmio->pclk)) {
-+		ret = PTR_ERR(dwsmmio->pclk);
-+		goto out_clk;
-+	}
- 	ret = clk_prepare_enable(dwsmmio->pclk);
- 	if (ret)
- 		goto out_clk;
--- 
-2.20.1
-
+Tony
