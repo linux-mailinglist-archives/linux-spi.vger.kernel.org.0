@@ -2,97 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83529BC636
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2019 13:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B85BC843
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2019 14:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504594AbfIXLGH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Sep 2019 07:06:07 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:49980 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440787AbfIXLGG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Sep 2019 07:06:06 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 46cyzc5kdSz1rfPb;
-        Tue, 24 Sep 2019 13:06:04 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 46cyzc5Ccnz1qqkG;
-        Tue, 24 Sep 2019 13:06:04 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id KSEhBv7eP1Lw; Tue, 24 Sep 2019 13:06:03 +0200 (CEST)
-X-Auth-Info: eyM5Q0Dr3N3YNpW8ob4ovzSqRloWo3F6apmpXF6YFyQ=
-Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Tue, 24 Sep 2019 13:06:03 +0200 (CEST)
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzk@kernel.org, Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH 2/2] spi: Introduce dspi_slave_abort() function for NXP's dspi SPI driver
-Date:   Tue, 24 Sep 2019 13:05:47 +0200
-Message-Id: <20190924110547.14770-3-lukma@denx.de>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190924110547.14770-1-lukma@denx.de>
-References: <20190924110547.14770-1-lukma@denx.de>
+        id S2441018AbfIXMzF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Sep 2019 08:55:05 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:33586 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2395416AbfIXMzF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Sep 2019 08:55:05 -0400
+Received: by mail-io1-f66.google.com with SMTP id z19so4160919ior.0;
+        Tue, 24 Sep 2019 05:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=j85U1Aj6ub7pEd0ovZLyWptkNvNoeCayQWG+j7kUjTo=;
+        b=Ydsd8+I1J2OFwPusF708emHzCWsCSLR3Bcm9GCbmgSIq9qzwgWBHqkz6u4isb0OS2F
+         aBwNfQSsK7nEEaW3GwYQrmeSFqO3tF3yxHDFZhSgPe1BcqXdo8DmRVs4O/UlHg9eXTjV
+         tif5WWrs2ArAtSaNBLpeITgzIBsUCHVu0RS+ZoLKPMet9N5tj+jAPwXTPbudswAIzgDZ
+         Bi4EE+CrxEeiu2dxM+uqZybuO/UgN2Fv+p7fqy0/MJ7nAZTStPDAJpVzuz8ND72UjjIw
+         AzIuUtvgQKrXeBvkfC5g3znvifrFzdAOCsed+HmYNSxVyNAp9pZ8SMdy08bywcy/eOqo
+         3Axg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=j85U1Aj6ub7pEd0ovZLyWptkNvNoeCayQWG+j7kUjTo=;
+        b=KyECwM/EGU67ZOUbvIpjqTU1hUg0NulPCVQVkqvA+713X6YWn5yLBJzg3DTg2RiZmm
+         rLdkR0ELXWsrLnujrfwWuV38ZBV5Xbc5CEbml6OWzF3XIp0FniUlcAcx5bmHZVdCckPC
+         0XKh02xGk4VR0oV8FkIj7NgRFszpwEV7oSXkCUg/GWRXmqI9A5ShtbtjboEGeWh/yprI
+         XMnJ/mjbP1ax0Ird/jU6Qi11KNye+n47FHfqEW89laFKfcJmUp032NGyl/IyOeHl15XC
+         ngnWK/r1XYlzg1BkCtHMHZfnNHR1Met99rB3sfVkBUZwl7ys5K6QRFFQOyAOLboKwwfQ
+         RO2w==
+X-Gm-Message-State: APjAAAUpN6Rxv0Z/PAPMLnKYSRkb3GfsRmgGtsPSoZU2nNoLDvUjKPgb
+        S1fAGhkv3qTzOD+SM+IT6WDF+yDCEmBScMAA1c1XTVUaL5c=
+X-Google-Smtp-Source: APXvYqwyv2E3qhm/cjwCumad6QE+zLrmWXG65RF1yS9ImOMq/NKg/Fx/kGLocvUJMRr8ZmRcMYj6zeXWZZOx+tfuPdk=
+X-Received: by 2002:a5d:9f15:: with SMTP id q21mr3384378iot.130.1569329704301;
+ Tue, 24 Sep 2019 05:55:04 -0700 (PDT)
+MIME-Version: 1.0
+From:   Claus Stovgaard <claus.stovgaard@gmail.com>
+Date:   Tue, 24 Sep 2019 14:54:54 +0200
+Message-ID: <CAHirDJ9Q1QBhbMDVRtpcmJN2PdCkW9jix0wUNw-DcJSz7F+J8A@mail.gmail.com>
+Subject: 
+To:     devicetree <devicetree@vger.kernel.org>, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This change provides the dspi_slave_abort() function, which is a callback
-for slave_abort() method of SPI controller generic driver.
+Hi All.
 
-As in the SPI slave mode the transmission is driven by master, any
-distortion may cause the slave to enter undefined internal state.
-To avoid this problem the dspi_slave_abort() terminates all pending and
-ongoing DMA transactions (with sync) and clears internal FIFOs.
+Will like to discuss the current state of using spidev from devicetree.
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
----
- drivers/spi/spi-fsl-dspi.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+I am working with some custom hardware having a Xilinx ZynqMP as main
+device with some added programmable logic accessible via SPI. As the
+SPI communication depend on what is loaded in the programmable device,
+and when it is loaded, it is handled solely by user space, because it
+is the user space application there decided when to load the FPGA and
+with what.
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index bec758e978fb..2c0f211eed87 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -1006,6 +1006,25 @@ static void dspi_init(struct fsl_dspi *dspi)
- 			     SPI_CTARE_FMSZE(0) | SPI_CTARE_DTCP(1));
- }
- 
-+static int dspi_slave_abort(struct spi_master *master)
-+{
-+	struct fsl_dspi *dspi = spi_master_get_devdata(master);
-+
-+	/*
-+	 * Terminate all pending DMA transactions for the SPI working
-+	 * in SLAVE mode.
-+	 */
-+	dmaengine_terminate_sync(dspi->dma->chan_rx);
-+	dmaengine_terminate_sync(dspi->dma->chan_tx);
-+
-+	/* Clear the internal DSPI RX and TX FIFO buffers */
-+	regmap_update_bits(dspi->regmap, SPI_MCR,
-+			   SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF,
-+			   SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF);
-+
-+	return 0;
-+}
-+
- static int dspi_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
-@@ -1030,6 +1049,7 @@ static int dspi_probe(struct platform_device *pdev)
- 	ctlr->dev.of_node = pdev->dev.of_node;
- 
- 	ctlr->cleanup = dspi_cleanup;
-+	ctlr->slave_abort = dspi_slave_abort;
- 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
- 
- 	pdata = dev_get_platdata(&pdev->dev);
--- 
-2.20.1
+So currently I am using a small patch just adding a simple compatible
+for spidev, on our 4.19 kernel.
+{ .compatible = "linux,spidev" },
+And assign it in the devicetree for the spislave of the programmable
+logic so it can be accessed using spidev.
 
+I would prefer not to have patches for something like this, and I
+think this is trivial and should be a feature from Linux. Many in my
+situation might just reuse one of the "compatible" lines already
+present om spidev.c for their devicetree even though it does not fit
+the hardware. I don't just think it is a very nice solution.
+
+Then I was thinking about creating a patch with a compatible string
+like "unknown,custom-hardware" or similar. Something which can
+indicate that there is a custom spislave, and create an interface for
+accessing via the kernel, but don't have a better option when loading
+devicetree.
+
+What is yours response to the idea of creating a custom-hardware
+binding for spidev, intended to be used for programmable hardware
+unknown at the devicetree time.
+
+Or is there a better way for creating spidev interfaces in this situation.
+
+Regards
+Claus
