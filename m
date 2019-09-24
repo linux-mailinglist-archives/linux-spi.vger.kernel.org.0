@@ -2,78 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E0DBD0EE
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2019 19:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D92BD34E
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2019 22:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728460AbfIXRuk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Sep 2019 13:50:40 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:36700 "EHLO
+        id S1728566AbfIXUIQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Sep 2019 16:08:16 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:42134 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726910AbfIXRuk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Sep 2019 13:50:40 -0400
+        with ESMTP id S1728405AbfIXUIQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Sep 2019 16:08:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=w1/8bGByujMGBxY7WOdtfIlR1B3nsSl2LOvw1SymH6M=; b=JeDXDKe2r+Y61Qg0LubTrvz4D
-        CNPychaF1OZcz0kczc5YHHZQhcWC7bzYYue+nMdkb7kVCuYzx9McCu42CUWG3mFQc7xYVnSIguDfY
-        CdiCraKXiRG8M315TiwareUbq//7AVwVL97W9zN0C5lxYn5sTIHsUHBC+JVnA8gDg7CCs=;
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=LXgcIicO7dupiaW2u2O3Xige+E9f1qfvrT5g/0DqOC4=; b=g0SZYSyu2QrR
+        c4FlMWw9z7jrhgbiPkjOxd47dHN2A4jatjw7VnP84VwKeaPR8R+1Td3WKLpRbSoXLFy0e6T0dQKqC
+        H3bVPKZecxNh5WekOzpWOIm0ZEFWZTtybWSFCbrmBlyPBeW5XKyyE+WY87Dplh/y0KdiMXaABpun2
+        9qRaw=;
 Received: from [12.157.10.118] (helo=fitzroy.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1iCoxS-0002Ii-6A; Tue, 24 Sep 2019 17:50:38 +0000
+        id 1iCr6Z-0003EU-Sa; Tue, 24 Sep 2019 20:08:12 +0000
 Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 99FEFD02FC7; Tue, 24 Sep 2019 18:50:36 +0100 (BST)
-Date:   Tue, 24 Sep 2019 10:50:36 -0700
+        id 52B49D02FC7; Tue, 24 Sep 2019 21:08:10 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Claus Stovgaard <claus.stovgaard@gmail.com>
-Cc:     devicetree <devicetree@vger.kernel.org>, linux-spi@vger.kernel.org
-Subject: Re: State of spidev from devicetree
-Message-ID: <20190924175036.GA2036@sirena.org.uk>
-References: <CAHirDJ_gtrjL_nq0T2qvn_kv9-UweL+=bc7EBLrTfNfNkVn0QA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1MV0VfA6Y2yiVCnw"
-Content-Disposition: inline
-In-Reply-To: <CAHirDJ_gtrjL_nq0T2qvn_kv9-UweL+=bc7EBLrTfNfNkVn0QA@mail.gmail.com>
-X-Cookie: Be careful!  UGLY strikes 9 out of 10!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     krzk@kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: Add call to spi_slave_abort() function when spidev driver is released" to the spi tree
+In-Reply-To: <20190924110547.14770-2-lukma@denx.de>
+X-Patchwork-Hint: ignore
+Message-Id: <20190924200810.52B49D02FC7@fitzroy.sirena.org.uk>
+Date:   Tue, 24 Sep 2019 21:08:10 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The patch
 
---1MV0VfA6Y2yiVCnw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+   spi: Add call to spi_slave_abort() function when spidev driver is released
 
-On Tue, Sep 24, 2019 at 02:52:59PM +0200, Claus Stovgaard wrote:
+has been applied to the spi tree at
 
-> What is yours response to the idea of creating a custom-hardware binding
-> for spidev, intended to be used for programmable hardware unknown at the
-> devicetree time.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.4
 
-You should use a device tree overlay to describe whatever
-hardware you've instantiated on your FPGA then load the overlay
-along with your FPGA image.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
---1MV0VfA6Y2yiVCnw
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2KV2sACgkQJNaLcl1U
-h9CfCAgAgpnOWa5r0/h0bsDj1diMrHbB1YVhM8iVST3lb2eMpq9dySrQ+Kx1gbsh
-CMpV+HUNlDP+ktOapuiKUr+NWd46ov4szfeSp+dHBrkA/yMwWVhIpAAcasC9pqoZ
-ss6h4n7FlxJa2vUHEK90CW247hITTHW64jyrQUt3pSJ6jjZYhpwY4vkcjsawSUfq
-EtnI0fW0eQXs8Pi4vsnGDm8Sb0qfgxomN1J9eusuqrodvkYJi0iAKzV5PUymEQIH
-6d4qsK9SRjskX2PoFAK3hLyKJnYz6d/BkC7oFhKiMmntDuSZSqic/Esr7r0KbnOJ
-XGYH9RzoXqUk4iXf4Ky3vIpZWHTfUA==
-=dyAF
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---1MV0VfA6Y2yiVCnw--
+Thanks,
+Mark
+
+From bf390d25e03b38248a0a4f7d0002bbb495a82fe9 Mon Sep 17 00:00:00 2001
+From: Lukasz Majewski <lukma@denx.de>
+Date: Tue, 24 Sep 2019 13:05:46 +0200
+Subject: [PATCH] spi: Add call to spi_slave_abort() function when spidev
+ driver is released
+
+This change is necessary for spidev devices (e.g. /dev/spidev3.0) working
+in the slave mode (like NXP's dspi driver for Vybrid SoC).
+
+When SPI HW works in this mode - the master is responsible for providing
+CS and CLK signals. However, when some fault happens - like for example
+distortion on SPI lines - the SPI Linux driver needs a chance to recover
+from this abnormal situation and prepare itself for next (correct)
+transmission.
+
+This change doesn't pose any threat on drivers working in master mode as
+spi_slave_abort() function checks if SPI slave mode is supported.
+
+Signed-off-by: Lukasz Majewski <lukma@denx.de>
+Link: https://lore.kernel.org/r/20190924110547.14770-2-lukma@denx.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spidev.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 255786f2e844..fe9ea7e55e5b 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -627,6 +627,7 @@ static int spidev_release(struct inode *inode, struct file *filp)
+ 		if (dofree)
+ 			kfree(spidev);
+ 	}
++	spi_slave_abort(spidev->spi);
+ 	mutex_unlock(&device_list_lock);
+ 
+ 	return 0;
+-- 
+2.20.1
+
