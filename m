@@ -2,42 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D96BF0AF
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2019 13:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05C4BF1D1
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2019 13:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725789AbfIZLAI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Sep 2019 07:00:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49690 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725784AbfIZLAI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 26 Sep 2019 07:00:08 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569495608;
-        bh=YX+1/CTJUxw5Kyr6/muDI+fvz7PGwNBmRLlxLeDOoSM=;
-        h=Subject:From:Date:To:From;
-        b=AwVI0/jwjN1gTvauzHCotx+KMmtWxf1BFoa1SkVqhkIsIU/ZJC3WJHv6CGAKUQWEP
-         0eZWUlMsuDn58TJPEEJNQK4OQGLoqDlG0ZdOY7zTODa1BFMvgQQsS0086htWvpbt4I
-         lpJcO7WNuJ+qPt4bAQQ1CWc/PSFZZ5w4q2AxjFTs=
+        id S1725920AbfIZLhE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Sep 2019 07:37:04 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:53943 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfIZLhD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Sep 2019 07:37:03 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1iDS50-0005PK-2u; Thu, 26 Sep 2019 11:37:02 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: fsl-lpspi: clean up indentation issue
+Date:   Thu, 26 Sep 2019 12:37:01 +0100
+Message-Id: <20190926113701.26986-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <156949560823.21236.1856938876951365916.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 26 Sep 2019 11:00:08 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v4] spi: introduce `struct spi_delay` data-type (2019-09-26T10:51:28)
-  Superseding: [v3] spi: introduce `struct spi_delay` data-type (2019-09-16T07:10:21):
-    [v3,1/3] spi: move `cs_change_delay` backwards compat logic outside switch
-    [v3,2/3] spi: introduce spi_delay struct as "value + unit" & spi_delay_exec()
-    [v3,3/3] spi: make `cs_change_delay` the first user of the `spi_delay` logic
+From: Colin Ian King <colin.king@canonical.com>
 
+The complete call is indented incorrectly, remove the extraneous tabs.
 
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/spi/spi-fsl-lpspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index d08e9324140e..5efd73cd0ead 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -779,7 +779,7 @@ static irqreturn_t fsl_lpspi_isr(int irq, void *dev_id)
+ 
+ 	if (temp_SR & SR_FCF && (temp_IER & IER_FCIE)) {
+ 		writel(SR_FCF, fsl_lpspi->base + IMX7ULP_SR);
+-			complete(&fsl_lpspi->xfer_done);
++		complete(&fsl_lpspi->xfer_done);
+ 		return IRQ_HANDLED;
+ 	}
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+2.20.1
+
