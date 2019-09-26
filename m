@@ -2,146 +2,159 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A43D5BECFB
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2019 09:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18F6BEF26
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2019 12:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbfIZH7r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Sep 2019 03:59:47 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:54771 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727701AbfIZH7r (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Sep 2019 03:59:47 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 46f6lh06K4z1rQYn;
-        Thu, 26 Sep 2019 09:59:43 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 46f6lg6YKtz1qqkL;
-        Thu, 26 Sep 2019 09:59:43 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 0ZxA9ZV_k4tv; Thu, 26 Sep 2019 09:59:42 +0200 (CEST)
-X-Auth-Info: HfnPDiM+3Ll2KMuyM8YcqLFRGVX3LUDByNYxi9mVV+w=
-Received: from jawa (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Thu, 26 Sep 2019 09:59:42 +0200 (CEST)
-Date:   Thu, 26 Sep 2019 09:59:41 +0200
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 1/2] spi: Add call to spi_slave_abort() function when
- spidev driver is released
-Message-ID: <20190926095941.0615f335@jawa>
-In-Reply-To: <CAMuHMdXseZppE74D8XW=5ZWNNNLXZFLTSiqqe_qoZ8C1rAFQSg@mail.gmail.com>
-References: <20190924110547.14770-1-lukma@denx.de>
-        <20190924110547.14770-2-lukma@denx.de>
-        <CAMuHMdXseZppE74D8XW=5ZWNNNLXZFLTSiqqe_qoZ8C1rAFQSg@mail.gmail.com>
-Organization: denx.de
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+        id S1725306AbfIZKAV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Sep 2019 06:00:21 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:49840 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725802AbfIZKAV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Sep 2019 06:00:21 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1iDQZP-0005ym-MF; Thu, 26 Sep 2019 10:00:19 +0000
+To:     Lukasz Majewski <lukma@denx.de>, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org
+From:   Colin Ian King <colin.king@canonical.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
+ 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
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: re: spi: Add call to spi_slave_abort() function when spidev driver is
+ released
+Message-ID: <f4db4595-7673-f2ae-4222-cbb9c2d771f9@canonical.com>
+Date:   Thu, 26 Sep 2019 11:00:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/5s0ODXtpIoabspOUcWPgLRh"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---Sig_/5s0ODXtpIoabspOUcWPgLRh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi Geert,
+Static analysis with Coverity has detected an potential dereference of a
+free'd object with commit:
 
-> Hi Lukasz,
->=20
-> On Thu, Sep 26, 2019 at 3:33 AM Lukasz Majewski <lukma@denx.de> wrote:
-> > This change is necessary for spidev devices (e.g. /dev/spidev3.0)
-> > working in the slave mode (like NXP's dspi driver for Vybrid SoC).
-> >
-> > When SPI HW works in this mode - the master is responsible for
-> > providing CS and CLK signals. However, when some fault happens -
-> > like for example distortion on SPI lines - the SPI Linux driver
-> > needs a chance to recover from this abnormal situation and prepare
-> > itself for next (correct) transmission.
-> >
-> > This change doesn't pose any threat on drivers working in master
-> > mode as spi_slave_abort() function checks if SPI slave mode is
-> > supported.
-> >
-> > Signed-off-by: Lukasz Majewski <lukma@denx.de> =20
->=20
-> Thanks for your patch!
->=20
-> Yesterday I saw this appear on spi/for-next, but I couldn't find the
-> email in my mbox.  Today it has arrived. Looks like gmail had some
-> troubles ("Delivered after 138401 seconds", ugh).
+commit 9f918a728cf86b2757b6a7025e1f46824bfe3155
+Author: Lukasz Majewski <lukma@denx.de>
+Date:   Wed Sep 25 11:11:42 2019 +0200
 
-I've already sent v2 of this patch, as Intel Linux test setup spot the
-error with lack of #define guards.
+    spi: Add call to spi_slave_abort() function when spidev driver is
+released
 
->=20
-> > --- a/drivers/spi/spidev.c
-> > +++ b/drivers/spi/spidev.c
-> > @@ -627,6 +627,7 @@ static int spidev_release(struct inode *inode,
-> > struct file *filp) if (dofree)
-> >                         kfree(spidev);
-> >         }
-> > +       spi_slave_abort(spidev->spi); =20
->=20
-> Looks good to me.  Just wondering if this should be done for the last
-> user only, i.e. in the "if" block above, like resetting speed_hz?
+In spidev_release() in drivers/spi/spidev.c the analysis is as follows:
 
-I also thought about this. However, from my use case the user must end
-the transmission with CTRL+C on his user space program, which in turn
-communicate via SPI with /dev/spidev3.0.
+600static int spidev_release(struct inode *inode, struct file *filp)
+601{
+602        struct spidev_data      *spidev;
+603
+604        mutex_lock(&device_list_lock);
 
-There might be many (potential) programs using the /dev/spidev3.0 at the
-same time, so the usage count may be not one.
+   1. alias: Assigning: spidev = filp->private_data. Now both point to
+the same storage.
 
-For the above reason I've moved it outside the above if().
+605        spidev = filp->private_data;
+606        filp->private_data = NULL;
+607
+608        /* last close? */
+609        spidev->users--;
 
->=20
-> >         mutex_unlock(&device_list_lock);
-> >
-> >         return 0; =20
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
+   2. Condition !spidev->users, taking true branch.
 
+610        if (!spidev->users) {
+611                int             dofree;
+612
+613                kfree(spidev->tx_buffer);
+614                spidev->tx_buffer = NULL;
+615
+616                kfree(spidev->rx_buffer);
+617                spidev->rx_buffer = NULL;
+618
+619                spin_lock_irq(&spidev->spi_lock);
 
+   3. Condition spidev->spi, taking false branch.
 
+620                if (spidev->spi)
+621                        spidev->speed_hz = spidev->spi->max_speed_hz;
+622
+623                /* ... after we unbound from the underlying device? */
 
-Best regards,
+   4. Condition spidev->spi == NULL, taking true branch.
 
-Lukasz Majewski
+624                dofree = (spidev->spi == NULL);
+625                spin_unlock_irq(&spidev->spi_lock);
+626
 
---
+   5. Condition dofree, taking true branch.
 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+627                if (dofree)
 
---Sig_/5s0ODXtpIoabspOUcWPgLRh
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+   6. freed_arg: kfree frees spidev.
 
------BEGIN PGP SIGNATURE-----
+628                        kfree(spidev);
+629        }
+630#ifdef CONFIG_SPI_SLAVE
 
-iQEzBAEBCAAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAl2Mb+0ACgkQAR8vZIA0
-zr18ogf+Nkm6YALkd0PZS43sKVKplV00GjN15f39tfe1iYqHDzToQk2HTKQgJYFJ
-q713F216HIdJTpNDTpc+EZkMARIlPAAse5HphE0WIUUk41ZW6Gi038tJtzrgJFRF
-xkgQSVPFy3mIfheTBenYzYgvF0CKCDl0hOScBsmXoYQ4A6doQXZoniENZp1f3ybc
-vb+ruj9PjepQyp/jHjYO7KiQC9nPY+azM3qkp8AHkYXY9iN3SnIrFg5hqCE2zSnZ
-NyCgt+380i6WlXpLua0oxvp5ypxSbufWFkKjIo0mjU67A/cgWe1WUZWCIkrG+J+y
-Y/g3fKvcaeW6LwWO5Jc67yBQ3HQm2g==
-=cdef
------END PGP SIGNATURE-----
+   CID 89726 (#1 of 1): Read from pointer after free (USE_AFTER_FREE)
+7. deref_after_free: Dereferencing freed pointer spidev.
 
---Sig_/5s0ODXtpIoabspOUcWPgLRh--
+631        spi_slave_abort(spidev->spi);
+632#endif
+633        mutex_unlock(&device_list_lock);
+634
+635        return 0;
+636}
+
+The call to spi_slave_abort() on spidev is reading an earlier kfree'd
+spidev.
+
+Colin
+
