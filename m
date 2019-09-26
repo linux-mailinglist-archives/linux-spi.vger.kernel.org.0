@@ -2,109 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B09BF5B5
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2019 17:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243CDBFB55
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Sep 2019 00:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbfIZPR6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Sep 2019 11:17:58 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48188 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbfIZPR5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Sep 2019 11:17:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=WG3KME36uGwnmNkDpJ7Cwc7H808xTEZgOi18tajCQPw=; b=QPpkRSVTGaDweroR6KJzhb/Jr
-        41ejv9lx8KatS4zgnYS5Tt4vYyQPyR+ov1UwXmH3i2wxp4CG14mC6Rti6rICQI8XfiYJ0m4FaiPo8
-        ZOeOIr5sbrTA5hOHR9lU9aeg4kBKuW+hXSKZr8m6ZPlZfyusSe1YYQe1mUiEyGhb3B5Lw=;
-Received: from [12.157.10.118] (helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1iDVWk-0003tw-J1; Thu, 26 Sep 2019 15:17:54 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id B3924D02CFF; Thu, 26 Sep 2019 16:17:52 +0100 (BST)
-Date:   Thu, 26 Sep 2019 08:17:52 -0700
-From:   Mark Brown <broonie@kernel.org>
-To:     Lukasz Majewski <lukma@denx.de>
+        id S1727821AbfIZWiz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Sep 2019 18:38:55 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:37737 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725871AbfIZWiz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Sep 2019 18:38:55 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 46fVG32DL0z1rHDN;
+        Fri, 27 Sep 2019 00:38:51 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 46fVG31ZWQz1qqkK;
+        Fri, 27 Sep 2019 00:38:51 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id eoUNuvpdoF09; Fri, 27 Sep 2019 00:38:50 +0200 (CEST)
+X-Auth-Info: T4gi+k/J81z1w6C5CCVuXCM2o5ZnJe6B4J3WO0ShyCU=
+Received: from jawa (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri, 27 Sep 2019 00:38:50 +0200 (CEST)
+Date:   Fri, 27 Sep 2019 00:38:49 +0200
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Colin Ian King <colin.king@canonical.com>,
         linux-spi <linux-spi@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: spi: Add call to spi_slave_abort() function when spidev driver
  is released
-Message-ID: <20190926151752.GU2036@sirena.org.uk>
+Message-ID: <20190927003849.0c9e4335@jawa>
+In-Reply-To: <20190926151752.GU2036@sirena.org.uk>
 References: <f4db4595-7673-f2ae-4222-cbb9c2d771f9@canonical.com>
- <20190926121438.655f1f10@jawa>
- <CAMuHMdVBrKnA3TJnOEG0G0FVKf7VwQUvLzkmJc7DAX4kvHYWYQ@mail.gmail.com>
- <20190926144342.327a3c66@jawa>
- <CAMuHMdXm+vUB4iRTsTq64Kg2KC2p7AA1TwFgjc7FuCeiS9EG=Q@mail.gmail.com>
- <20190926160645.0a2623fa@jawa>
+        <20190926121438.655f1f10@jawa>
+        <CAMuHMdVBrKnA3TJnOEG0G0FVKf7VwQUvLzkmJc7DAX4kvHYWYQ@mail.gmail.com>
+        <20190926144342.327a3c66@jawa>
+        <CAMuHMdXm+vUB4iRTsTq64Kg2KC2p7AA1TwFgjc7FuCeiS9EG=Q@mail.gmail.com>
+        <20190926160645.0a2623fa@jawa>
+        <20190926151752.GU2036@sirena.org.uk>
+Organization: denx.de
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ksG33M87StcVQX10"
-Content-Disposition: inline
-In-Reply-To: <20190926160645.0a2623fa@jawa>
-X-Cookie: Be careful!  UGLY strikes 9 out of 10!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ boundary="Sig_/MWul8reh.Rz47nd.lOSx1tl"; protocol="application/pgp-signature"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---ksG33M87StcVQX10
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--Sig_/MWul8reh.Rz47nd.lOSx1tl
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 26, 2019 at 04:06:45PM +0200, Lukasz Majewski wrote:
-> > On Thu, Sep 26, 2019 at 2:49 PM Lukasz Majewski <lukma@denx.de> wrote:
+Hi Mark, Geert,
 
-> > > The question is if we shall call the spi_slave_abort() when
-> > > cleaning up spi after releasing last reference, or each time
-> > > release callback is called ? =20
+> On Thu, Sep 26, 2019 at 04:06:45PM +0200, Lukasz Majewski wrote:
+> > > On Thu, Sep 26, 2019 at 2:49 PM Lukasz Majewski <lukma@denx.de>
+> > > wrote: =20
+>=20
+> > > > The question is if we shall call the spi_slave_abort() when
+> > > > cleaning up spi after releasing last reference, or each time
+> > > > release callback is called ?   =20
+>=20
+> > > TBH, I don't know.  Is it realistic that there are multiple
+> > > opens? =20
+>=20
+> > I'm using on my setup only one test program to use /dev/spidevX.Y
+> > and /dev/spidevA.B (loopback with wired connection). =20
+>=20
+> > However, you also shall be able to connect via ssh and run the same
+> > setup in parallel... =20
+>=20
+> It doesn't seem entirely realistic, but I can imagine cases like
+> fork()/exec() where we end up with two copies of the file open
+> but end up immediately closing one.
+>=20
+> > > That means the abort is called only for the last user.
+> > > And only if the underlying device still exists.  Which means that
+> > > if it has disappeared (how can that happen? spidev unbind?), =20
+>=20
+> > In my case, I just disconnect some SPI signals and the test program
+> > just hangs. I do need to ctrl+c to stop it (or use timeout).  =20
+>=20
+> > From my debugging the .release callback is called each time the
+> > program is aborted (either with ctrl+c or timeout). =20
+>=20
+> Should be on file close IIRC.
 
-> > TBH, I don't know.  Is it realistic that there are multiple opens?
+Any ideas on how to solve this issue?
 
-> I'm using on my setup only one test program to use /dev/spidevX.Y and
-> /dev/spidevA.B (loopback with wired connection).
+Maybe, it would be sufficient for now to move the spi_slave_abort() in
+spi_release() before we decrease (spidev->users--) the use count?
 
-> However, you also shall be able to connect via ssh and run the same
-> setup in parallel...
 
-It doesn't seem entirely realistic, but I can imagine cases like
-fork()/exec() where we end up with two copies of the file open
-but end up immediately closing one.
+Best regards,
 
-> > That means the abort is called only for the last user.
-> > And only if the underlying device still exists.  Which means that if
-> > it has disappeared (how can that happen? spidev unbind?),
+Lukasz Majewski
 
-> In my case, I just disconnect some SPI signals and the test program
-> just hangs. I do need to ctrl+c to stop it (or use timeout).=20
+--
 
-> From my debugging the .release callback is called each time the program
-> is aborted (either with ctrl+c or timeout).
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
 
-Should be on file close IIRC.
-
---ksG33M87StcVQX10
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/MWul8reh.Rz47nd.lOSx1tl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2M1p8ACgkQJNaLcl1U
-h9Bsuwf/TlamYDm91mr1XHOC0hjSttkgh7Ert2fFhfaEAohEeAJN0x/rC8/LkLHD
-XovhNkcxgUTfwfmU3mvS29CPqI5+bweRlut92TYTwqz8rPFJC2l9XxlKOI7uQVlr
-p5+A8L7oIJcgWEjtKezRGh8YWRKJJVRkwUe4LyX2TstNVXtXLxZAIdtf6pdQEfoU
-amOsXhJEG0nCtvXh/aay47c/wqs1WGHVrfTtVmUSsWaE7uXC46aDlTJLeGC1pCQC
-3Vd/ZHtnneCngsCCxXOzg6lxFXTshzjltHBzhR4qQXlCAg+LqyEAHS4u4+6BrySI
-x4UI4SRNKp9gkxM42VwNXzxBv+1qAg==
-=WTW0
+iQEzBAEBCAAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAl2NPfkACgkQAR8vZIA0
+zr021wgAiv7whL2JbgJhEsGJ7+wE8+VstDmdil3dJj2370tZ1TV6dToiTi/UcAIt
+ivYET/WG1RxKE0W58RfOvjo/D24kad2MT+RIujWZoWyu3kVVyGOpS1cQe6QUocXx
+jXiCRBavxoCn9CEFOmJZ/ypxea62I4gKFQ/VAeGuJJLBCNQnuzZAcAADPfQMKkCj
+l0ZYOLF6yQbz47gRdgHxuunPpUDjqw9sdlc7Hv2zMEcW021bi4pYni9Hb6ZAeIJ9
+geoh0ep5tWNoS8Vvw+TuG5jGOigRDEazqX1X8uVuRVa1wu3B6wXLjMMwBSUC2rE9
+sUS5ctBukWrLZndmHt3CiYIaDz1Rmg==
+=nmDF
 -----END PGP SIGNATURE-----
 
---ksG33M87StcVQX10--
+--Sig_/MWul8reh.Rz47nd.lOSx1tl--
