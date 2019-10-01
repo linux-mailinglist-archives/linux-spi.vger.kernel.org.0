@@ -2,93 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6D0C3EA0
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 19:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC65C3F1C
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 19:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727228AbfJARcx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 13:32:53 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:37848 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726463AbfJARcw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 13:32:52 -0400
-Received: by mail-io1-f66.google.com with SMTP id b19so22005345iob.4;
-        Tue, 01 Oct 2019 10:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ME9JERHhVrbe9bZKOQu8b1hgHngZbw7UvQiOYqhf3AE=;
-        b=K4u9RUQTlRAzpP4lzQfqEmLquc9JpM8ygSmmaYvctHChiQieDW4heA1Z0Ur4HDWvIb
-         fbZWY/NIzFubV9g6dDf0LUC2ScRvY1ZyiGr7c1aZUTGlr7ZLDSVh/z6mWHHMCsXhdOv6
-         k+/evVW0UNKvTM9upXIQLF+Bb7eYUXOX0z9A800GhjXe7ihOgiiv8fl5pVVfydjKBLvl
-         nsEM8toqBhnEN2jhh2vLdYYP7P4EAjn7TV24Fc0q2qiWOSW7sphMV0uZBphI0gyuE1AY
-         7xUcJiVTrbNjThUXpR85oIekm59z42fPyrEEZKHMHJ1tx5SP6dRD75s/7toh5bgxkZoP
-         qC0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ME9JERHhVrbe9bZKOQu8b1hgHngZbw7UvQiOYqhf3AE=;
-        b=MCyn8hIFTE6qZYNHCnIJZuhoTuwKinq/DUzRrpmrPnF+yr1eQs5r0uAhttqbrj/Sae
-         4Fb+8cgG70bbxKiV7WbnNLdrjlg8dqdCD6ua5yJabWPUFOUIlOlKGd7NRDpDZe+TUboE
-         XZE8/EY5hFGHGtkyQ0QXbFPAhpUugtYyMhh5/0X1cE6CiFTsZF2D9qIs9r4O7ujFnIsz
-         XIyRyt9/DtvtEwXlUITKrJ5oqbuO5o48abdOMXQR+X+HNKnyRxedvDE5UbkOnYm0T0F+
-         XANk6z6YutI2n7a/L9XIZ4QH5P/4iZ6o+btHvMWRlgrq9xB+bhwm4Cgiy09IYEOuKmaA
-         D+6Q==
-X-Gm-Message-State: APjAAAUuV6Glqwur4cXuiYq8bxyx1i60Fyx7xYgR+ks6s/bjpQOrBCAL
-        QazVLoMr4E1tp3tsL+3xNEMX/AMrabgWUHCfCBM=
-X-Google-Smtp-Source: APXvYqyYxMAY5xQEu8G8vVHN+ATd4tNlLzhw/LbXbd0+G/Y0WbtHvI9gQ28fXhdaQVTfcMo0yQSeNiuKOf21ktWtsTA=
-X-Received: by 2002:a5d:8143:: with SMTP id f3mr22230939ioo.294.1569951171833;
- Tue, 01 Oct 2019 10:32:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190930205241.5483-1-navid.emamdoost@gmail.com> <6b55e753-5797-2bdc-fae6-f575a0ef8186@web.de>
-In-Reply-To: <6b55e753-5797-2bdc-fae6-f575a0ef8186@web.de>
-From:   Navid Emamdoost <navid.emamdoost@gmail.com>
-Date:   Tue, 1 Oct 2019 12:32:41 -0500
-Message-ID: <CAEkB2ES3-gotqS9184izf0fKOigFaFUetBiqekmYJPBgPWbSBQ@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: gpio: prevent memory leak in spi_gpio_probe
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-spi@vger.kernel.org, Navid Emamdoost <emamd001@umn.edu>,
-        Kangjie Lu <kjlu@umn.edu>, Stephen McCamant <smccaman@umn.edu>,
-        Mark Brown <broonie@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1731479AbfJAR5F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 13:57:05 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52168 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731374AbfJAR5E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 13:57:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=5evgdi+hKJNNIVg+JL95Ig6MYbcR//o/SL1HYubNOpE=; b=mB3/bkwuwbZW
+        FTzCeQuKI6lIgjo2NTA4xUpnS3NVBjPxS5tZ2QBhJQ8M9r9DY7SeYEevamR2tHiIhtuvvjrxQxbPo
+        gD5z/ax9hkzCOnoI1+1++8i8I43zWDUqlj8EjXa9o4EwRV8nSV1F/vVSVitsaMCT1gGNNX+AG5fhw
+        IXotI=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iFMOT-0005v3-FA; Tue, 01 Oct 2019 17:57:01 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id EB5F227429C0; Tue,  1 Oct 2019 18:57:00 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Applied "SPI: designware: pci: Switch over to MSI interrupts" to the spi tree
+In-Reply-To: <20191001081405.764161-1-felipe.balbi@linux.intel.com>
+X-Patchwork-Hint: ignore
+Message-Id: <20191001175700.EB5F227429C0@ypsilon.sirena.org.uk>
+Date:   Tue,  1 Oct 2019 18:57:00 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Markus, thanks for your suggestions for improving the quality of
-the patch. At the moment I prefer first get a confirmation from
-contributors about the leak and then work on any possible improvements
-for the patch.
+The patch
+
+   SPI: designware: pci: Switch over to MSI interrupts
+
+has been applied to the spi tree at
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Navid.
+Mark
 
-On Tue, Oct 1, 2019 at 4:11 AM Markus Elfring <Markus.Elfring@web.de> wrote=
-:
->
-> > =E2=80=A6 In order to avoid leak spi_contriller_put must
-> > be called in case of failure for devm_add_action_or_reset.
->
-> How does this wording fit to the diff display that you would like
-> to add the function call =E2=80=9Cspi_master_put(master)=E2=80=9D in
-> one if branch?
->
->
-> > Fixes: 8b797490b4db ("spi: gpio: Make sure spi_master_put() is called i=
-n every error path")
->
-> Is there a need to complete the corresponding exception handling
-> at any more source code places?
->
-> Regards,
-> Markus
+From 8f5c285f3ef5ab3c7cf5288d63bdaa3549be2118 Mon Sep 17 00:00:00 2001
+From: Felipe Balbi <felipe.balbi@linux.intel.com>
+Date: Tue, 1 Oct 2019 11:14:05 +0300
+Subject: [PATCH] SPI: designware: pci: Switch over to MSI interrupts
 
+Some devices support MSI interrupts. Let's at least try to use them in
+platforms that provide MSI capability.
 
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Link: https://lore.kernel.org/r/20191001081405.764161-1-felipe.balbi@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-dw-pci.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
---=20
-Navid.
+diff --git a/drivers/spi/spi-dw-pci.c b/drivers/spi/spi-dw-pci.c
+index 140644913e6c..7ab53f4d04b9 100644
+--- a/drivers/spi/spi-dw-pci.c
++++ b/drivers/spi/spi-dw-pci.c
+@@ -57,13 +57,18 @@ static int spi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	/* Get basic io resource and map it */
+ 	dws->paddr = pci_resource_start(pdev, pci_bar);
++	pci_set_master(pdev);
+ 
+ 	ret = pcim_iomap_regions(pdev, 1 << pci_bar, pci_name(pdev));
+ 	if (ret)
+ 		return ret;
+ 
++	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
++	if (ret < 0)
++		return ret;
++
+ 	dws->regs = pcim_iomap_table(pdev)[pci_bar];
+-	dws->irq = pdev->irq;
++	dws->irq = pci_irq_vector(pdev, 0);
+ 
+ 	/*
+ 	 * Specific handling for platforms, like dma setup,
+@@ -80,12 +85,15 @@ static int spi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 				return ret;
+ 		}
+ 	} else {
++		pci_free_irq_vectors(pdev);
+ 		return -ENODEV;
+ 	}
+ 
+ 	ret = dw_spi_add_host(&pdev->dev, dws);
+-	if (ret)
++	if (ret) {
++		pci_free_irq_vectors(pdev);
+ 		return ret;
++	}
+ 
+ 	/* PCI hook and SPI hook use the same drv data */
+ 	pci_set_drvdata(pdev, dws);
+@@ -101,6 +109,7 @@ static void spi_pci_remove(struct pci_dev *pdev)
+ 	struct dw_spi *dws = pci_get_drvdata(pdev);
+ 
+ 	dw_spi_remove_host(dws);
++	pci_free_irq_vectors(pdev);
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+-- 
+2.20.1
+
