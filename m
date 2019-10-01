@@ -2,45 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD69C3307
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6586EC3310
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732990AbfJALlp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 07:41:45 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41312 "EHLO
+        id S2387762AbfJALlz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 07:41:55 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41208 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387651AbfJALlO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:14 -0400
+        with ESMTP id S2387636AbfJALlM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=JiGt1yEYk797Tl22LhrJU1LZAH62oQR2ZxhFZ2ZqV0E=; b=hY9FQG+jAY/Y
-        ICgMK59EI959H2L3JegmSaTZIq+jueOkE/8wTjpywqp9DsF72hkrSn/eSIKP50ZwpfLJEGok0y6kA
-        1erNSm+PjNRZOyLrj8JbI3xisVrGVf5e0Z/6FoZWSOc/0tBhi/5JY9Hzm1MBz83FCyXeCNAQiBAda
-        kjLxI=;
+        List-Archive; bh=yaTBvOc4ub9EBgFT0t4N5VA/W6AvqgGon1ddgd0Obko=; b=asOmVkcdJioS
+        gwHRains2VilIGctACLH36Kwc3Q+tnLzkeg5IUKwlCN2sYyF9wwtqNX0lbrEiqDhI2loS/KSvxxYG
+        2nZdX2IfAvhp+m4CW/p3IClasB4s/BSSrYEVlujiYCGrPGsszbSrwMV5Jm8qdBagCN/+pd7DcBNMo
+        HcYhU=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iFGWh-0004Yt-B1; Tue, 01 Oct 2019 11:41:07 +0000
+        id 1iFGWg-0004Yo-Vi; Tue, 01 Oct 2019 11:41:07 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id C716F27429C0; Tue,  1 Oct 2019 12:41:06 +0100 (BST)
+        id 6CD7D2742A30; Tue,  1 Oct 2019 12:41:06 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Julien Su <juliensu@mxic.com.tw>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Applied "spi: mxic: Ensure width is respected in spi-mem operations" to the spi tree
-In-Reply-To: <20190919202504.9619-2-miquel.raynal@bootlin.com>
+To:     Markus Elfring <elfring@users.sourceforge.net>
+Cc:     Daniel Schwierzeck <daniel.schwierzeck@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: lantiq-ssc: Use devm_platform_ioremap_resource() in lantiq_ssc_probe()" to the spi tree
+In-Reply-To: <230495a7-b754-bc6a-05e0-059a6b6c643d@web.de>
 X-Patchwork-Hint: ignore
-Message-Id: <20191001114106.C716F27429C0@ypsilon.sirena.org.uk>
+Message-Id: <20191001114106.6CD7D2742A30@ypsilon.sirena.org.uk>
 Date:   Tue,  1 Oct 2019 12:41:06 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -49,7 +47,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: mxic: Ensure width is respected in spi-mem operations
+   spi: lantiq-ssc: Use devm_platform_ioremap_resource() in lantiq_ssc_probe()
 
 has been applied to the spi tree at
 
@@ -74,35 +72,58 @@ to this mail.
 Thanks,
 Mark
 
-From 539ff2488af87f25f2c090fd74ced55bd966e5a9 Mon Sep 17 00:00:00 2001
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Thu, 19 Sep 2019 22:25:02 +0200
-Subject: [PATCH] spi: mxic: Ensure width is respected in spi-mem operations
+From 22262695f46b68659ba98a12e275df388c74968c Mon Sep 17 00:00:00 2001
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Sat, 21 Sep 2019 14:16:49 +0200
+Subject: [PATCH] spi: lantiq-ssc: Use devm_platform_ioremap_resource() in
+ lantiq_ssc_probe()
 
-Make use of a core helper to ensure the desired width is respected
-when calling spi-mem operators.
+Simplify this function implementation by using a known wrapper function.
 
-Suggested-by: Boris Brezillon <bbrezillon@kernel.org>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/r/20190919202504.9619-2-miquel.raynal@bootlin.com
+This issue was detected by using the Coccinelle software.
+
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+Link: https://lore.kernel.org/r/230495a7-b754-bc6a-05e0-059a6b6c643d@web.de
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-mxic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-lantiq-ssc.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
-index f48563c09b97..409bfa163647 100644
---- a/drivers/spi/spi-mxic.c
-+++ b/drivers/spi/spi-mxic.c
-@@ -346,7 +346,7 @@ static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
- 	if (op->addr.nbytes > 7)
- 		return false;
+diff --git a/drivers/spi/spi-lantiq-ssc.c b/drivers/spi/spi-lantiq-ssc.c
+index 9dfe8b04e688..1fd7ee53d451 100644
+--- a/drivers/spi/spi-lantiq-ssc.c
++++ b/drivers/spi/spi-lantiq-ssc.c
+@@ -797,7 +797,6 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct spi_master *master;
+-	struct resource *res;
+ 	struct lantiq_ssc_spi *spi;
+ 	const struct lantiq_ssc_hwcfg *hwcfg;
+ 	const struct of_device_id *match;
+@@ -812,12 +811,6 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
+ 	}
+ 	hwcfg = match->data;
  
--	return true;
-+	return spi_mem_default_supports_op(mem, op);
- }
- 
- static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
+-		dev_err(dev, "failed to get resources\n");
+-		return -ENXIO;
+-	}
+-
+ 	rx_irq = platform_get_irq_byname(pdev, LTQ_SPI_RX_IRQ_NAME);
+ 	if (rx_irq < 0)
+ 		return -ENXIO;
+@@ -839,8 +832,7 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
+ 	spi->dev = dev;
+ 	spi->hwcfg = hwcfg;
+ 	platform_set_drvdata(pdev, spi);
+-
+-	spi->regbase = devm_ioremap_resource(dev, res);
++	spi->regbase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(spi->regbase)) {
+ 		err = PTR_ERR(spi->regbase);
+ 		goto err_master_put;
 -- 
 2.20.1
 
