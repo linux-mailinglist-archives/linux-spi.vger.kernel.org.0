@@ -2,42 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF265C3313
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1FCC32FB
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731931AbfJALmC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 07:42:02 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41042 "EHLO
+        id S2387670AbfJALlQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 07:41:16 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41282 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387606AbfJALlJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:09 -0400
+        with ESMTP id S2387650AbfJALlP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=t5quOLTmLgJSTTvC1obcfZ2uC+grOuMX9vfWHkSc+cI=; b=pJk9GhdXqRRd
-        IMQ75CJDtyq3Lmmr7/gLZjw7SjnI5+/THZ83bTnm9euB/HSpS5IBBJ98IM4FLLInUb5fuvHe4D6E1
-        6PRnHjuODYqPBtaRIHlgVet1EbNA0cEp+FshaGYPrMdw1YH2UzLwFN0NJ9kMqle2hbkgfbX2APmUZ
-        YOr+E=;
+        List-Archive; bh=z6hLIza3q6cYchvVHYiHKN/ZHrei8SPlYx9ockTASYE=; b=m96scqtLNyc6
+        h7zycSmfCjk8HcAr5pjagGXNgf3F26sVMHXmBbFWwr+7GRl4aFIMGM3zuhSQyFMdNY0gLQVl3qn4B
+        +nq26LmeHKsoxfSx908CLa6DAOK+AdVxbXx9lHUWQC1AnJ/KFoLZt0sXyp6c87LEFTAGZv8ixZjy2
+        9Mp8o=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iFGWg-0004Ya-78; Tue, 01 Oct 2019 11:41:06 +0000
+        id 1iFGWg-0004Yg-FL; Tue, 01 Oct 2019 11:41:06 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id AF4BB2742A30; Tue,  1 Oct 2019 12:41:05 +0100 (BST)
+        id EAA1C27429C0; Tue,  1 Oct 2019 12:41:05 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Markus Elfring <elfring@users.sourceforge.net>
-Cc:     kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org,
+Cc:     kernel-janitors@vger.kernel.org,
+        Leilk Liu <leilk.liu@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: Applied "spi: xtensa-xtfpga: Use devm_platform_ioremap_resource() in xtfpga_spi_probe()" to the spi tree
-In-Reply-To: <178bb78e-714f-645f-d819-5732870c4272@web.de>
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Applied "spi: mediatek: Use devm_platform_ioremap_resource() in mtk_spi_slave_probe()" to the spi tree
+In-Reply-To: <225b76ca-a367-4bef-d8ce-42c7af9242a5@web.de>
 X-Patchwork-Hint: ignore
-Message-Id: <20191001114105.AF4BB2742A30@ypsilon.sirena.org.uk>
+Message-Id: <20191001114105.EAA1C27429C0@ypsilon.sirena.org.uk>
 Date:   Tue,  1 Oct 2019 12:41:05 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -46,7 +49,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: xtensa-xtfpga: Use devm_platform_ioremap_resource() in xtfpga_spi_probe()
+   spi: mediatek: Use devm_platform_ioremap_resource() in mtk_spi_slave_probe()
 
 has been applied to the spi tree at
 
@@ -71,51 +74,54 @@ to this mail.
 Thanks,
 Mark
 
-From 3f049e7df22e563b04fd576bdc37e6b3e2c7a996 Mon Sep 17 00:00:00 2001
+From 6cdcb5d394413d906773f1ae2efaa86485d6d6e1 Mon Sep 17 00:00:00 2001
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 21 Sep 2019 15:35:08 +0200
-Subject: [PATCH] spi: xtensa-xtfpga: Use devm_platform_ioremap_resource() in
- xtfpga_spi_probe()
+Date: Sat, 21 Sep 2019 15:12:33 +0200
+Subject: [PATCH] spi: mediatek: Use devm_platform_ioremap_resource() in
+ mtk_spi_slave_probe()
 
 Simplify this function implementation by using a known wrapper function.
 
 This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-Link: https://lore.kernel.org/r/178bb78e-714f-645f-d819-5732870c4272@web.de
+Link: https://lore.kernel.org/r/225b76ca-a367-4bef-d8ce-42c7af9242a5@web.de
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-xtensa-xtfpga.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ drivers/spi/spi-slave-mt27xx.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/drivers/spi/spi-xtensa-xtfpga.c b/drivers/spi/spi-xtensa-xtfpga.c
-index 86516eb1e143..fc2b5eb7d614 100644
---- a/drivers/spi/spi-xtensa-xtfpga.c
-+++ b/drivers/spi/spi-xtensa-xtfpga.c
-@@ -80,7 +80,6 @@ static void xtfpga_spi_chipselect(struct spi_device *spi, int is_on)
- static int xtfpga_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-slave-mt27xx.c b/drivers/spi/spi-slave-mt27xx.c
+index 61bc43b0fe57..44edaa360405 100644
+--- a/drivers/spi/spi-slave-mt27xx.c
++++ b/drivers/spi/spi-slave-mt27xx.c
+@@ -368,7 +368,6 @@ static int mtk_spi_slave_probe(struct platform_device *pdev)
  {
- 	struct xtfpga_spi *xspi;
--	struct resource *mem;
- 	int ret;
- 	struct spi_master *master;
+ 	struct spi_controller *ctlr;
+ 	struct mtk_spi_slave *mdata;
+-	struct resource *res;
+ 	int irq, ret;
  
-@@ -97,14 +96,7 @@ static int xtfpga_spi_probe(struct platform_device *pdev)
- 	xspi->bitbang.master = master;
- 	xspi->bitbang.chipselect = xtfpga_spi_chipselect;
- 	xspi->bitbang.txrx_word[SPI_MODE_0] = xtfpga_spi_txrx_word;
+ 	ctlr = spi_alloc_slave(&pdev->dev, sizeof(*mdata));
+@@ -392,17 +391,8 @@ static int mtk_spi_slave_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, ctlr);
+ 
+ 	init_completion(&mdata->xfer_done);
 -
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!mem) {
--		dev_err(&pdev->dev, "No memory resource\n");
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
 -		ret = -ENODEV;
--		goto err;
+-		dev_err(&pdev->dev, "failed to determine base address\n");
+-		goto err_put_ctlr;
 -	}
--	xspi->regs = devm_ioremap_resource(&pdev->dev, mem);
-+	xspi->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(xspi->regs)) {
- 		ret = PTR_ERR(xspi->regs);
- 		goto err;
+-
+ 	mdata->dev = &pdev->dev;
+-
+-	mdata->base = devm_ioremap_resource(&pdev->dev, res);
++	mdata->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(mdata->base)) {
+ 		ret = PTR_ERR(mdata->base);
+ 		goto err_put_ctlr;
 -- 
 2.20.1
 
