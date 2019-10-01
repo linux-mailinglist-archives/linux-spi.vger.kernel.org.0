@@ -2,141 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40375C2F67
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 10:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B9CC2FA4
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 11:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727785AbfJAI7c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 04:59:32 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:49236 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729031AbfJAI7c (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 1 Oct 2019 04:59:32 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1D0501A001A;
-        Tue,  1 Oct 2019 10:59:30 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E328B1A091F;
-        Tue,  1 Oct 2019 10:59:26 +0200 (CEST)
-Received: from lsv03124.swis.in-blr01.nxp.com (lsv03124.swis.in-blr01.nxp.com [92.120.146.121])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E31954029A;
-        Tue,  1 Oct 2019 16:59:22 +0800 (SGT)
-From:   Kuldeep Singh <kuldeep.singh@nxp.com>
-To:     han.xu@nxp.com, broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Kuldeep Singh <kuldeep.singh@nxp.com>,
-        Suresh Gupta <suresh.gupta@nxp.com>
-Subject: [PATCH] spi: spi-fsl-qspi: Introduce variable to fix different invalid master Id
-Date:   Tue,  1 Oct 2019 14:29:16 +0530
-Message-Id: <1569920356-8953-1-git-send-email-kuldeep.singh@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1729916AbfJAJHO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 05:07:14 -0400
+Received: from mail-out.m-online.net ([212.18.0.10]:60603 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729642AbfJAJHO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 05:07:14 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 46jD1D0RNWz1rgDj;
+        Tue,  1 Oct 2019 11:07:12 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 46jD1C664xz1qqkb;
+        Tue,  1 Oct 2019 11:07:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id 0VAN4JYGdG0K; Tue,  1 Oct 2019 11:07:10 +0200 (CEST)
+X-Auth-Info: F+LKSSdXzI2pXTv5WUICbbnV81SyqaH7V/PX0VhRB3Q=
+Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Tue,  1 Oct 2019 11:07:10 +0200 (CEST)
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        linux-spi@vger.kernel.org, krzk@kernel.org,
+        linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>,
+        kbuild test robot <lkp@intel.com>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH] spi: Avoid calling spi_slave_abort() with kfreed spidev
+Date:   Tue,  1 Oct 2019 11:06:57 +0200
+Message-Id: <20191001090657.25721-1-lukma@denx.de>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Different platforms have different Master with different SourceID on
-AHB bus. The 0X0E Master ID is used by cluster 3 in case of LS2088A.
-So, patch introduce an invalid master id variable to fix invalid
-mastered on different platforms.
+Call spi_slave_abort() only when the spidev->spi is !NULL and the
+structure hasn't already been kfreed.
 
-Signed-off-by: Suresh Gupta <suresh.gupta@nxp.com>
-Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Lukasz Majewski <lukma@denx.de>
+
 ---
- drivers/spi/spi-fsl-qspi.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+This fix applies on:
+repo: https://kernel.googlesource.com/pub/scm/linux/kernel/git/broonie/spi.git
+branch: for-5.4
+SHA1: 6b04e47b73f2a0d2c330cecca99f8e2cb8f85b34
+---
+ drivers/spi/spidev.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
-index c02e24c..51385b0 100644
---- a/drivers/spi/spi-fsl-qspi.c
-+++ b/drivers/spi/spi-fsl-qspi.c
-@@ -63,6 +63,11 @@
- #define QUADSPI_IPCR			0x08
- #define QUADSPI_IPCR_SEQID(x)		((x) << 24)
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 3ea9d8a3e6e8..2c6d4dbeebac 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -600,15 +600,16 @@ static int spidev_open(struct inode *inode, struct file *filp)
+ static int spidev_release(struct inode *inode, struct file *filp)
+ {
+ 	struct spidev_data	*spidev;
++	int dofree;
  
-+#define QUADSPI_BUF0CR                  0x10
-+#define QUADSPI_BUF1CR                  0x14
-+#define QUADSPI_BUF2CR                  0x18
-+#define QUADSPI_BUFXCR_INVALID_MSTRID   0xe
-+
- #define QUADSPI_BUF3CR			0x1c
- #define QUADSPI_BUF3CR_ALLMST_MASK	BIT(31)
- #define QUADSPI_BUF3CR_ADATSZ(x)	((x) << 8)
-@@ -184,6 +189,7 @@
- struct fsl_qspi_devtype_data {
- 	unsigned int rxfifo;
- 	unsigned int txfifo;
-+	int invalid_mstrid;
- 	unsigned int ahb_buf_size;
- 	unsigned int quirks;
- 	bool little_endian;
-@@ -192,6 +198,7 @@ struct fsl_qspi_devtype_data {
- static const struct fsl_qspi_devtype_data vybrid_data = {
- 	.rxfifo = SZ_128,
- 	.txfifo = SZ_64,
-+	.invalid_mstrid = QUADSPI_BUFXCR_INVALID_MSTRID,
- 	.ahb_buf_size = SZ_1K,
- 	.quirks = QUADSPI_QUIRK_SWAP_ENDIAN,
- 	.little_endian = true,
-@@ -200,6 +207,7 @@ static const struct fsl_qspi_devtype_data vybrid_data = {
- static const struct fsl_qspi_devtype_data imx6sx_data = {
- 	.rxfifo = SZ_128,
- 	.txfifo = SZ_512,
-+	.invalid_mstrid = QUADSPI_BUFXCR_INVALID_MSTRID,
- 	.ahb_buf_size = SZ_1K,
- 	.quirks = QUADSPI_QUIRK_4X_INT_CLK | QUADSPI_QUIRK_TKT245618,
- 	.little_endian = true,
-@@ -208,6 +216,7 @@ static const struct fsl_qspi_devtype_data imx6sx_data = {
- static const struct fsl_qspi_devtype_data imx7d_data = {
- 	.rxfifo = SZ_128,
- 	.txfifo = SZ_512,
-+	.invalid_mstrid = QUADSPI_BUFXCR_INVALID_MSTRID,
- 	.ahb_buf_size = SZ_1K,
- 	.quirks = QUADSPI_QUIRK_TKT253890 | QUADSPI_QUIRK_4X_INT_CLK,
- 	.little_endian = true,
-@@ -216,6 +225,7 @@ static const struct fsl_qspi_devtype_data imx7d_data = {
- static const struct fsl_qspi_devtype_data imx6ul_data = {
- 	.rxfifo = SZ_128,
- 	.txfifo = SZ_512,
-+	.invalid_mstrid = QUADSPI_BUFXCR_INVALID_MSTRID,
- 	.ahb_buf_size = SZ_1K,
- 	.quirks = QUADSPI_QUIRK_TKT253890 | QUADSPI_QUIRK_4X_INT_CLK,
- 	.little_endian = true,
-@@ -224,6 +234,7 @@ static const struct fsl_qspi_devtype_data imx6ul_data = {
- static const struct fsl_qspi_devtype_data ls1021a_data = {
- 	.rxfifo = SZ_128,
- 	.txfifo = SZ_64,
-+	.invalid_mstrid = QUADSPI_BUFXCR_INVALID_MSTRID,
- 	.ahb_buf_size = SZ_1K,
- 	.quirks = 0,
- 	.little_endian = false,
-@@ -233,6 +244,7 @@ static const struct fsl_qspi_devtype_data ls2080a_data = {
- 	.rxfifo = SZ_128,
- 	.txfifo = SZ_64,
- 	.ahb_buf_size = SZ_1K,
-+	.invalid_mstrid = 0x0,
- 	.quirks = QUADSPI_QUIRK_TKT253890 | QUADSPI_QUIRK_BASE_INTERNAL,
- 	.little_endian = true,
- };
-@@ -615,6 +627,7 @@ static int fsl_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	void __iomem *base = q->iobase;
- 	u32 addr_offset = 0;
- 	int err = 0;
-+	int invalid_mstrid = q->devtype_data->invalid_mstrid;
+ 	mutex_lock(&device_list_lock);
+ 	spidev = filp->private_data;
+ 	filp->private_data = NULL;
++	dofree = 0;
  
- 	mutex_lock(&q->lock);
+ 	/* last close? */
+ 	spidev->users--;
+ 	if (!spidev->users) {
+-		int		dofree;
  
-@@ -638,6 +651,10 @@ static int fsl_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	qspi_writel(q, QUADSPI_SPTRCLR_BFPTRC | QUADSPI_SPTRCLR_IPPTRC,
- 		    base + QUADSPI_SPTRCLR);
+ 		kfree(spidev->tx_buffer);
+ 		spidev->tx_buffer = NULL;
+@@ -628,7 +629,8 @@ static int spidev_release(struct inode *inode, struct file *filp)
+ 			kfree(spidev);
+ 	}
+ #ifdef CONFIG_SPI_SLAVE
+-	spi_slave_abort(spidev->spi);
++	if (!dofree)
++		spi_slave_abort(spidev->spi);
+ #endif
+ 	mutex_unlock(&device_list_lock);
  
-+	qspi_writel(q, invalid_mstrid, base + QUADSPI_BUF0CR);
-+	qspi_writel(q, invalid_mstrid, base + QUADSPI_BUF1CR);
-+	qspi_writel(q, invalid_mstrid, base + QUADSPI_BUF2CR);
-+
- 	fsl_qspi_prepare_lut(q, op);
- 
- 	/*
 -- 
-2.7.4
+2.20.1
 
