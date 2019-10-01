@@ -2,130 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A68C4202
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 22:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CA3C4279
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 23:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbfJAUwc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 16:52:32 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:40633 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725942AbfJAUwc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 16:52:32 -0400
-Received: by mail-wr1-f67.google.com with SMTP id l3so17108143wru.7;
-        Tue, 01 Oct 2019 13:52:28 -0700 (PDT)
+        id S1727337AbfJAVQi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 17:16:38 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:45182 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726681AbfJAVQh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 17:16:37 -0400
+Received: by mail-ed1-f65.google.com with SMTP id h33so13285586edh.12;
+        Tue, 01 Oct 2019 14:16:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=YdRHcVFToHIZbvkxUNJPK19pypp2Z2yOIgvmAjENZz0=;
-        b=CZBkuUYHqE3ivHd6F1I66DMYJ2YMY706bvqkad/lOPVvMwKUwiUoZ/zRolnJbuFgsd
-         vsdgeiGloPIWskOjaWPQL/Lw0HcGMwMcDXGhRlMkw3txfz6ZXdtdIG3MTM2GXlzEnbC4
-         fM8+iq9dYFXk96hlc+oW8gN6C/mUv3ocKDFjeq0jxuvEtg3wfKIjGWPYbiTj09p0uwuo
-         8GmsMwEskqskeuMFqVtIeqW0PoAF6X4Df1trUbLTin6GfCsfS9zTjDNPaupyK2pin9Ey
-         5Cn/WMXDFYE0Wg5jUSSFbfd1OfosGjodmpSN9LNxozr1Q/L2NlDTUfnUtsUm67AgRzRV
-         GgUg==
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=/OEKYUmWcpAh+ee4kxhBhTQSHV/hiw7BMd9ell97Mok=;
+        b=FDTdi9DJ1U+cIJBw7YfDE4fzF6vK4qeAz/28YIvQXk6KaLHtoV9HTOJwinUuLAxech
+         QsRhuJS8kD9Toj16aiMktp9LJx5bex/SqJuVeM5q8kKONkENWRRzo1fpMWQqzHMmI/8K
+         geVbn60pMoBRvo8+/tx4kZDCh7fN/4oKiHjaxk3Ei/nKpZjbf7nyUC4FtAiv0spC9iJp
+         Kx5Nu4pFmZjkHVoL7n8z3LsL4Mxi1c9LR9ZNxxNlxyvzfbU/wLTsZrLGPWDRKpyvGfi8
+         6vVaQM0zLiUb7Q3CdaBNknr/2zHOPRJ/rC2hxp0g6TaeLXa7b5P1Jh2O0pHhZtzXetIs
+         eKjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=YdRHcVFToHIZbvkxUNJPK19pypp2Z2yOIgvmAjENZz0=;
-        b=k2B86yBpSCXKOtNlwH0CaiKI0y5mDnV70J6wxEYfpKmjRW3oXfcZFk3jzBRof+y9do
-         jnfLxHqmM7WYBL7DVBbdWxuW2Uf2rjxSodKALDzOO2G3VZrX7Mrn0k4gHy4SV3pxz+Vv
-         +OISrnEA4ebHKG3fcz7YTFmynPrFGPN6jGSHn8E+PT8wTMjZbN+A7JaOaTlDhm7yyD1i
-         PN2P1UwyR2XBoxl+7gHL/ZeczsmJBEJK6x/kZ2Iz5Vlt4fIAmFZtpTIqGrA8lYwlMAdY
-         UxN1Weku7ftZ5AFmDwL3uLzO29ulSTUiIOllr6n1zdKrznkS++Ya6WbcYiIWtiyuAFbh
-         4vtQ==
-X-Gm-Message-State: APjAAAUxBtIaZ590ABtud0URGxGN17Kt1O1XMaDt5WPfXgd5Nxjs6Ofw
-        qnRpoTnfai/YVxYYoV+Yg5o=
-X-Google-Smtp-Source: APXvYqxkB68UDBZMJnWyKXg3gFOPUhWrTyeISJjqxdeI58U/o4a7897AxfLSCcjzW1MLdXsAVJ7VYA==
-X-Received: by 2002:a5d:62c8:: with SMTP id o8mr18999590wrv.350.1569963147806;
-        Tue, 01 Oct 2019 13:52:27 -0700 (PDT)
-Received: from localhost.localdomain ([86.124.196.40])
-        by smtp.gmail.com with ESMTPSA id y13sm26680057wrg.8.2019.10.01.13.52.26
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=/OEKYUmWcpAh+ee4kxhBhTQSHV/hiw7BMd9ell97Mok=;
+        b=F0jghGjoIci8h7kp4A5mr542YK83zgu84oIvte0gMYOsf5IbFhTvk3ds3Tayu8jr+G
+         hp6PUzjZS8J2UQKfJifLRWs9ASiNv3T8TdFNTmpvbeS4gfG+6pus5zAMoiCAdPJaltNG
+         D4/i0+tXG/eLbEfjfrEwlKlYj1/whkNviVFvb21kMLFrL9SsmZKIztY3Z6meB8sSKJ9+
+         kZS6qlJsjDf60cXQYGuLCR1uK+s6cyKY6mLGrG+BtFJxsaeWbj+xwaR72Fx3DzG6F3pY
+         1EV/mihmgRZ54qgzezUmnn4nm9Sc+SHyoWqlOHzjwfimSWk5dsZVDFoBpuqw8puxyvNW
+         qokw==
+X-Gm-Message-State: APjAAAWpF3Im5FL/p6mUxCj5n+p7SZ9TmwgCPV9WuH0yD7CHOUMuxYr2
+        mIKB+cgZRf1nP13O40UaPBX5qBrEbT4=
+X-Google-Smtp-Source: APXvYqwb8yUmjOuhb90A6LbhFYDPlVmUGrUboDMvf82vhDiVF/dIFUzLMSrxkHrY7bYzJGqYTLELFA==
+X-Received: by 2002:a05:6402:13c2:: with SMTP id a2mr277615edx.21.1569964594541;
+        Tue, 01 Oct 2019 14:16:34 -0700 (PDT)
+Received: from [192.168.1.60] (0126800801.0.fullrate.ninja. [2.110.44.75])
+        by smtp.gmail.com with ESMTPSA id i30sm3395920ede.32.2019.10.01.14.16.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2019 13:52:27 -0700 (PDT)
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: [PATCH] spi: spi-fsl-dspi: Always use the TCFQ devices in poll mode
-Date:   Tue,  1 Oct 2019 23:52:16 +0300
-Message-Id: <20191001205216.32115-1-olteanv@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 01 Oct 2019 14:16:33 -0700 (PDT)
+Message-ID: <89dc7df9f1544417dfadea3ead72dcbbc60d5ebd.camel@gmail.com>
+Subject: Re: State of spidev from devicetree
+From:   claus.stovgaard@gmail.com
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Date:   Tue, 01 Oct 2019 23:16:32 +0200
+In-Reply-To: <CAMuHMdXbRQXarvV=86rssSiRnuKMSFWJLRbU3VH9tcCV_FeOGQ@mail.gmail.com>
+References: <CAHirDJ_gtrjL_nq0T2qvn_kv9-UweL+=bc7EBLrTfNfNkVn0QA@mail.gmail.com>
+         <20190924175036.GA2036@sirena.org.uk>
+         <CAMuHMdXbRQXarvV=86rssSiRnuKMSFWJLRbU3VH9tcCV_FeOGQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-With this patch, the "interrupts" property from the device tree bindings
-is ignored, even if present, if the driver runs in TCFQ mode.
+On tor, 2019-09-26 at 14:21 +0200, Geert Uytterhoeven wrote:
+> On Thu, Sep 26, 2019 at 12:50 PM Mark Brown <broonie@kernel.org>
+> wrote:
+> > On Tue, Sep 24, 2019 at 02:52:59PM +0200, Claus Stovgaard wrote:
+> > 
+> > > What is yours response to the idea of creating a custom-hardware
+> > > binding
+> > > for spidev, intended to be used for programmable hardware unknown
+> > > at the
+> > > devicetree time.
+> > 
+> > You should use a device tree overlay to describe whatever
+> > hardware you've instantiated on your FPGA then load the overlay
+> > along with your FPGA image.
+> 
+> And after that, you can bind spidev to the device in the overlay
+> using
+> sysfs, cfr. commit 5039563e7c25eccd ("spi: Add driver_override SPI
+> device
+> attribute").
 
-Switching to using the DSPI in poll mode has several distinct
-benefits:
+I know this is a bit old, but will still thank you for the replays.
 
-- With interrupts, the DSPI driver in TCFQ mode raises an IRQ after each
-  transmitted word. There is more time wasted for the "waitq" event than
-  for actual I/O. And the DSPI IRQ count can easily get the largest in
-  /proc/interrupts on Freescale boards with attached SPI devices.
+Regarding overlays and binding via sysfs. I understand your answer and
+proposal for solution. Though in our situation with a very basic
+embedded system it is just extra overhead and added complexity,
+compared to just having a spidev from initial devicetree. Without
+giving anything as I see it. So would still have preferred some-kind of
+custom string in the .compatible inside spidev.
 
-- The SPI I/O time is both lower, and more consistently so. Attached to
-  some Freescale devices are either PTP switches, or SPI RTCs. For
-  reading time off of a SPI slave device, it is important that all SPI
-  transfers take a deterministic time to complete.
-
-- In poll mode there is much less time spent by the CPU in hardirq
-  context, which helps with the response latency of the system, and at
-  the same time there is more control over when interrupts must be
-  disabled (to get a precise timestamp measurement, which will come in a
-  future patch): win-win.
-
-On the LS1021A-TSN board, where the SPI device is a SJA1105 PTP switch
-(with a bits_per_word=8 driver), I created a "benchmark" where I
-periodically transferred a 12-byte message once per second, for 120
-seconds. I then recorded the time before putting the first byte in the
-TX FIFO, and the time after reading the last byte from the RX FIFO. That
-is the transfer delay in nanoseconds.
-
-Interrupt mode:
-
-  delay: min 125120 max 168320 mean 150286 std dev 17675.3
-
-Poll mode:
-
-  delay: min 69440 max 119040 mean 70312.9 std dev 8065.34
-
-Both the mean latency and the standard deviation are more than 50% lower
-in poll mode than in interrupt mode, and the 'max' in poll mode is lower
-than the 'min' in interrupt mode. This is with an 'ondemand' governor on
-an otherwise idle system - therefore running mostly at 600 MHz out of a
-max of 1200 MHz.
-
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
----
- drivers/spi/spi-fsl-dspi.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index bec758e978fb..7bb018eb67d0 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -707,7 +707,7 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
- 	regmap_read(dspi->regmap, SPI_SR, &spi_sr);
- 	regmap_write(dspi->regmap, SPI_SR, spi_sr);
- 
--	if (!(spi_sr & (SPI_SR_EOQF | SPI_SR_TCFQF)))
-+	if (!(spi_sr & SPI_SR_EOQF))
- 		return IRQ_NONE;
- 
- 	if (dspi_rxtx(dspi) == 0) {
-@@ -1114,6 +1114,9 @@ static int dspi_probe(struct platform_device *pdev)
- 
- 	dspi_init(dspi);
- 
-+	if (dspi->devtype_data->trans_mode == DSPI_TCFQ_MODE)
-+		goto poll_mode;
-+
- 	dspi->irq = platform_get_irq(pdev, 0);
- 	if (dspi->irq <= 0) {
- 		dev_info(&pdev->dev,
--- 
-2.17.1
+Thanks
+Claus
 
