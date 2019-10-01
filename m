@@ -2,41 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2F1C32F0
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F149C3303
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387594AbfJALlK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 07:41:10 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41030 "EHLO
+        id S2387710AbfJALlc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 07:41:32 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41314 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387600AbfJALlK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:10 -0400
+        with ESMTP id S2387652AbfJALlP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=frM2JsTVe3jb5WiWwu7ktf9Jc8bbbMxoSVuWP1vincI=; b=KFeL27be0KdS
-        RdCLZ7pZZHlD4j+kYZwXdDBRtEaVRKWnZbnuZ82Q4ZfMEluAu6Mt/GKBf9M7mEk8H3/brDw6SUxco
-        frHPTwS03rVTQAMbkdlXfgSgW3iKOzkmu05xx66EjRJ49Nt/pMr2Cm0jjJjqIM3YzOfaHzdawridi
-        A9qBI=;
+        List-Archive; bh=v0/05wFK2YCFSSHAfKo2XXn6kgAZA94ncAdxzXief3k=; b=izjFGZlkdPFM
+        0pxQZKFqpYpjVlIMBGjenYxcmBF/v1nvKfr9F2EJvIZfVgJNtqLv2HICgutojI9OIaVMX9zktZPBk
+        UHGMHIWtT+3HYiNdXzZ5CCUFbcu1dgIHxtLgySi3sdTO/s+qR2HPQq7+32YDSEITwe23g0GssJ8JT
+        Gk9/g=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iFGWf-0004YV-V3; Tue, 01 Oct 2019 11:41:06 +0000
+        id 1iFGWg-0004Yl-Ng; Tue, 01 Oct 2019 11:41:06 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 7830D2742A10; Tue,  1 Oct 2019 12:41:05 +0100 (BST)
+        id 2FA1C2742A10; Tue,  1 Oct 2019 12:41:06 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     krzk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: Introduce dspi_slave_abort() function for NXP's dspi SPI driver" to the spi tree
-In-Reply-To: <20190924110547.14770-3-lukma@denx.de>
+To:     Markus Elfring <elfring@users.sourceforge.net>
+Cc:     kernel-janitors@vger.kernel.org,
+        Leilk Liu <leilk.liu@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Applied "spi: mediatek: Use devm_platform_ioremap_resource() in mtk_spi_probe()" to the spi tree
+In-Reply-To: <478e0df1-e800-8cf1-f9b3-d72f8e26aa0b@web.de>
 X-Patchwork-Hint: ignore
-Message-Id: <20191001114105.7830D2742A10@ypsilon.sirena.org.uk>
-Date:   Tue,  1 Oct 2019 12:41:05 +0100 (BST)
+Message-Id: <20191001114106.2FA1C2742A10@ypsilon.sirena.org.uk>
+Date:   Tue,  1 Oct 2019 12:41:06 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -44,7 +49,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: Introduce dspi_slave_abort() function for NXP's dspi SPI driver
+   spi: mediatek: Use devm_platform_ioremap_resource() in mtk_spi_probe()
 
 has been applied to the spi tree at
 
@@ -69,65 +74,52 @@ to this mail.
 Thanks,
 Mark
 
-From f4b323905d8b3e28b2a9cef9325dbec1b0f7f064 Mon Sep 17 00:00:00 2001
-From: Lukasz Majewski <lukma@denx.de>
-Date: Tue, 24 Sep 2019 13:05:47 +0200
-Subject: [PATCH] spi: Introduce dspi_slave_abort() function for NXP's dspi SPI
- driver
+From 5dd381e71994ab554f711afe89b5a6157bdcd19d Mon Sep 17 00:00:00 2001
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Sat, 21 Sep 2019 14:45:40 +0200
+Subject: [PATCH] spi: mediatek: Use devm_platform_ioremap_resource() in
+ mtk_spi_probe()
 
-This change provides the dspi_slave_abort() function, which is a callback
-for slave_abort() method of SPI controller generic driver.
+Simplify this function implementation by using a known wrapper function.
 
-As in the SPI slave mode the transmission is driven by master, any
-distortion may cause the slave to enter undefined internal state.
-To avoid this problem the dspi_slave_abort() terminates all pending and
-ongoing DMA transactions (with sync) and clears internal FIFOs.
+This issue was detected by using the Coccinelle software.
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
-Link: https://lore.kernel.org/r/20190924110547.14770-3-lukma@denx.de
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+Link: https://lore.kernel.org/r/478e0df1-e800-8cf1-f9b3-d72f8e26aa0b@web.de
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-dspi.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/spi/spi-mt65xx.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index bec758e978fb..2c0f211eed87 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -1006,6 +1006,25 @@ static void dspi_init(struct fsl_dspi *dspi)
- 			     SPI_CTARE_FMSZE(0) | SPI_CTARE_DTCP(1));
- }
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 6888a4dcff6d..25fe149a8d9a 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -619,7 +619,6 @@ static int mtk_spi_probe(struct platform_device *pdev)
+ 	struct spi_master *master;
+ 	struct mtk_spi *mdata;
+ 	const struct of_device_id *of_id;
+-	struct resource *res;
+ 	int i, irq, ret, addr_bits;
  
-+static int dspi_slave_abort(struct spi_master *master)
-+{
-+	struct fsl_dspi *dspi = spi_master_get_devdata(master);
-+
-+	/*
-+	 * Terminate all pending DMA transactions for the SPI working
-+	 * in SLAVE mode.
-+	 */
-+	dmaengine_terminate_sync(dspi->dma->chan_rx);
-+	dmaengine_terminate_sync(dspi->dma->chan_tx);
-+
-+	/* Clear the internal DSPI RX and TX FIFO buffers */
-+	regmap_update_bits(dspi->regmap, SPI_MCR,
-+			   SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF,
-+			   SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF);
-+
-+	return 0;
-+}
-+
- static int dspi_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
-@@ -1030,6 +1049,7 @@ static int dspi_probe(struct platform_device *pdev)
- 	ctlr->dev.of_node = pdev->dev.of_node;
+ 	master = spi_alloc_master(&pdev->dev, sizeof(*mdata));
+@@ -682,15 +681,7 @@ static int mtk_spi_probe(struct platform_device *pdev)
+ 	}
  
- 	ctlr->cleanup = dspi_cleanup;
-+	ctlr->slave_abort = dspi_slave_abort;
- 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
- 
- 	pdata = dev_get_platdata(&pdev->dev);
+ 	platform_set_drvdata(pdev, master);
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
+-		ret = -ENODEV;
+-		dev_err(&pdev->dev, "failed to determine base address\n");
+-		goto err_put_master;
+-	}
+-
+-	mdata->base = devm_ioremap_resource(&pdev->dev, res);
++	mdata->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(mdata->base)) {
+ 		ret = PTR_ERR(mdata->base);
+ 		goto err_put_master;
 -- 
 2.20.1
 
