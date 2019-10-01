@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C38C332C
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A27C33A7
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 14:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733193AbfJALnH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 07:43:07 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:43857 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732551AbfJALnH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:43:07 -0400
-Received: by mail-ot1-f66.google.com with SMTP id o44so11219832ota.10;
-        Tue, 01 Oct 2019 04:43:07 -0700 (PDT)
+        id S1731291AbfJAMCF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 08:02:05 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:41021 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfJAMCF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 08:02:05 -0400
+Received: by mail-oi1-f195.google.com with SMTP id w65so1321201oiw.8;
+        Tue, 01 Oct 2019 05:02:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qBJxEX/eYnXyleU23su6cmwpDx2vW/AsucVLt4T1oY4=;
-        b=SrsvjXJAyeqsNBsGElZzT0KGkSpYuK7sgq24G1As8ftzrIo5rti/JbqiykhlyXFgf5
-         JiFMXxcYB46QQFKQLv51qlcLKR76vvmZMb850QW7WDRNCv1NaxCNfhN2NIpuCsEwtQRA
-         JYZ11SzpZo2SicOb9h7OS9vCAlbNGmdFze4CGAGhwV0j4O0j/rpfoiv/+o2MnCtivnfR
-         wOPs4SM40cggEScQYnNGPwtxAehpP1Tv1FczsjQINj/xGtGPVshdS9ySoOiEKKNcWYuu
-         itY6TkXQOduNJ0j/lIG1r7bOP4MKbPQ72ef0+U50YJ1YHj7gVznkrbm1d37kUAjurMrI
-         8TXQ==
-X-Gm-Message-State: APjAAAXQ56GkXLcwBCBnG/O/fGmPNIHRqrJcbGnjZ9X5LtmjBGifsg+b
-        6oHsot2LswliCmgOb6DWkFS3Xu+4Wg==
-X-Google-Smtp-Source: APXvYqzG8a5/BqVOShp3MMjA8cBOESjkC8SFtqntj1uGWf40TDhUIGK4H9QgRbGE2/PDdzHrHHNLYw==
-X-Received: by 2002:a9d:3b26:: with SMTP id z35mr17205216otb.182.1569930186825;
-        Tue, 01 Oct 2019 04:43:06 -0700 (PDT)
+        bh=0vk+axt7MtTNP8zJtVF1vqgIMglVNkEgAAeax/JHomA=;
+        b=cxtL3eRK0KTlOEbxnGbKqPRIUPCtWzG8nKLAIHuVSo1ujzhpWDpUf7Iq0ZyI6zpl1i
+         g8b555vEtyHWd9rrUMen5AEFAHGoUYpI0ufvveoy8AcqgGMOI0oeLG6scSXSyDO7hzu3
+         OLyObYxibjGK1HFZ9B62wtv2vEUmm7L34inTWTrrmYBAl4WVOnnCKB7oksoDJukp45CU
+         nDY7yVcvzVMFD8afU0Cmds0gi5LjI4bMeaJUwpNOj+CX9jrp6JkVaTEsZZEtKYBLiLsN
+         NKTBl/OTJgCjj+TaAIPYaS+o3SdWYzMs+Qnd0iSKmHhVssZt6F2m45eRBDB34dPsxXuu
+         nlrg==
+X-Gm-Message-State: APjAAAX6hxKf9vl9pGsRl2XaHMD4szJr+Nz8JVFohyAvacpss60oO0Db
+        zPUs2eDCfoxXGVmUIrTZiA==
+X-Google-Smtp-Source: APXvYqwlEUzV4nhqIYSd1t2SDaN/XUENGs6M0vVKo9abXPpm7/8BdWeJ6O50/RLsD2OVG+1YY8VqFA==
+X-Received: by 2002:aca:32d5:: with SMTP id y204mr3465772oiy.59.1569931324623;
+        Tue, 01 Oct 2019 05:02:04 -0700 (PDT)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q199sm5116011oic.16.2019.10.01.04.43.06
+        by smtp.gmail.com with ESMTPSA id n17sm4575249otk.5.2019.10.01.05.02.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2019 04:43:06 -0700 (PDT)
-Date:   Tue, 1 Oct 2019 06:43:05 -0500
+        Tue, 01 Oct 2019 05:02:04 -0700 (PDT)
+Date:   Tue, 1 Oct 2019 07:02:03 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Gareth Williams <gareth.williams.jx@renesas.com>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -41,47 +41,53 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Phil Edworthy <phil.edworthy@renesas.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Subject: Re: [PATCH v2 1/4] dt: spi: Add Renesas RZ/N1 binding documentation
-Message-ID: <20191001114305.GA27944@bogus>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] dt-bindings: snps,dw-apb-ssi: Add optional clock
+ domain information
+Message-ID: <20191001120203.GA28106@bogus>
 References: <1568793876-9009-1-git-send-email-gareth.williams.jx@renesas.com>
- <1568793876-9009-2-git-send-email-gareth.williams.jx@renesas.com>
+ <1568793876-9009-3-git-send-email-gareth.williams.jx@renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1568793876-9009-2-git-send-email-gareth.williams.jx@renesas.com>
+In-Reply-To: <1568793876-9009-3-git-send-email-gareth.williams.jx@renesas.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 18 Sep 2019 09:04:33 +0100, Gareth Williams wrote:
-> From: Phil Edworthy <phil.edworthy@renesas.com>
-> 
-> The Renesas RZ/N1 SPI Controller is based on the Synopsys DW SSI, but has
-> additional registers for software CS control and DMA. This patch does not
-> address the changes required for DMA support, it simply adds the compatible
-> string. The CS functionality is not very useful and also not needed as
-> Linux can use gpios for the CS signals.
-> 
-> Add a compatible string to handle any unforeseen issues that may arise, and
-> pave the way for DMA support.
+On Wed, Sep 18, 2019 at 09:04:34AM +0100, Gareth Williams wrote:
+> Note in the bindings documentation that pclk should be renamed if a clock
+> domain is used to enable the optional bus clock.
 > 
 > Signed-off-by: Gareth Williams <gareth.williams.jx@renesas.com>
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
 > ---
-> Note: All the other manufacturers detail their compatible strings in
-> snps,dw-apb-ssi.txt. I think it makes sense for rzn1 to be in it's own file
-> due to the changes made to the peripheral for DMA support.
-> 
-> v2:
->  - No changes.
+> v2: Introduced this patch.
 > ---
->  Documentation/devicetree/bindings/spi/renesas,rzn1-spi.txt | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/renesas,rzn1-spi.txt
+>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+> index f54c8c3..3ed08ee 100644
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+> @@ -16,7 +16,8 @@ Required properties:
+>  Optional properties:
+>  - clock-names : Contains the names of the clocks:
+>      "ssi_clk", for the core clock used to generate the external SPI clock.
+> -    "pclk", the interface clock, required for register access.
+> +    "pclk", the interface clock, required for register access. If a clock domain
+> +     used to enable this clock then it should be named "pclk_clkdomain".
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+What's a clock domain?
+
+Unless this is a h/w difference in the IP block, then this change 
+doesn't make sense.
+
+>  - cs-gpios : Specifies the gpio pins to be used for chipselects.
+>  - num-cs : The number of chipselects. If omitted, this will default to 4.
+>  - reg-io-width : The I/O register width (in bytes) implemented by this
+> -- 
+> 2.7.4
+> 
