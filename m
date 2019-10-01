@@ -2,46 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E972DC3308
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99F0C32F6
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387743AbfJALlp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 07:41:45 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41274 "EHLO
+        id S2387656AbfJALlO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 07:41:14 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41242 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387600AbfJALlO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:14 -0400
+        with ESMTP id S2387639AbfJALlN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=9NIlts5ITrK/8oZVl5gsv5OBvh8S90fAOctaSex1Ztk=; b=fd0dXYto4V/D
-        ehOlK0fbO4lt2yZ+DyDyqD+KFMqaqYW5f4XwtWj5YkNT+E0UuJ4IBhvvnezFE3aPPzDr7PJEKm0Ew
-        qjYPLssafBMkO+SNZ5iT7u5F6KFFSaNdC21633KR9VeEobiCA/bDeHfBj5/j1r9UozUr4zMrqN7j7
-        Oomxo=;
+        List-Archive; bh=OCrO7F+Q4EMqWzna+2ATTFpi6NFCoH1Jp9Nac69dYYA=; b=MqTjx+TBlDvZ
+        AMZm/UPkLbInMVYZOxqKEtXkohTw/22y+dNmB0cD32k7kvNPCGnGtZnrYrSngyBpm2bKMDQgc3gUe
+        y+O5Nn93aCHcXk5YOoVf8x8k/QfdYvR+F11+lGW/zMIuZvWdgcXodAAm1RQJFWXV5h6KjI5xTlutC
+        /hx1A=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iFGWj-0004Zf-11; Tue, 01 Oct 2019 11:41:09 +0000
+        id 1iFGWi-0004ZV-Ma; Tue, 01 Oct 2019 11:41:08 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 76E6B274299F; Tue,  1 Oct 2019 12:41:08 +0100 (BST)
+        id 2D26327429C0; Tue,  1 Oct 2019 12:41:08 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Simon Horman <horms+renesas@verge.net.au>
-Cc:     devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
+To:     Pragnesh Patel <pragnesh.patel@sifive.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Kaneko <ykaneko0929@gmail.com>
-Subject: Applied "dt-bindings: hspi: Convert bindings to json-schema" to the spi tree
-In-Reply-To: <20190916075352.32108-1-horms+renesas@verge.net.au>
+        Mark Rutland <mark.rutland@arm.com>, palmer@sifive.com,
+        paul.walmsley@sifive.com, Rob Herring <robh+dt@kernel.org>
+Subject: Applied "spi: dt-bindings: Convert spi-sifive binding to json-schema" to the spi tree
+In-Reply-To: <1568804927-13565-1-git-send-email-pragnesh.patel@sifive.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191001114108.76E6B274299F@ypsilon.sirena.org.uk>
+Message-Id: <20191001114108.2D26327429C0@ypsilon.sirena.org.uk>
 Date:   Tue,  1 Oct 2019 12:41:08 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -50,7 +47,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   dt-bindings: hspi: Convert bindings to json-schema
+   spi: dt-bindings: Convert spi-sifive binding to json-schema
 
 has been applied to the spi tree at
 
@@ -75,61 +72,112 @@ to this mail.
 Thanks,
 Mark
 
-From 85d27be81e39323c8e3c1151e4858b26d7e1b20d Mon Sep 17 00:00:00 2001
-From: Simon Horman <horms+renesas@verge.net.au>
-Date: Mon, 16 Sep 2019 09:53:52 +0200
-Subject: [PATCH] dt-bindings: hspi: Convert bindings to json-schema
+From 9c12e34a3be127454b26054043c3b302bca08fdc Mon Sep 17 00:00:00 2001
+From: Pragnesh Patel <pragnesh.patel@sifive.com>
+Date: Wed, 18 Sep 2019 16:38:39 +0530
+Subject: [PATCH] spi: dt-bindings: Convert spi-sifive binding to json-schema
 
-Convert Renesas HSPI bindings documentation to json-schema.
-Also name bindings documentation file according to the compat string
-being documented.
+Convert the spi-sifive binding to DT schema format.
 
-As a side effect of this change all currently supported/used compat
-strings are listed while no while card compat string is documented.
-This, in my opinion, is desirable as only supported hardware should
-be documented.
-
-Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+Signed-off-by: Pragnesh Patel <pragnesh.patel@sifive.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20190916075352.32108-1-horms+renesas@verge.net.au
+Link: https://lore.kernel.org/r/1568804927-13565-1-git-send-email-pragnesh.patel@sifive.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../devicetree/bindings/spi/renesas,hspi.yaml | 57 +++++++++++++++++++
- .../devicetree/bindings/spi/sh-hspi.txt       | 26 ---------
- 2 files changed, 57 insertions(+), 26 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/renesas,hspi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/sh-hspi.txt
+ .../devicetree/bindings/spi/spi-sifive.txt    | 37 --------
+ .../devicetree/bindings/spi/spi-sifive.yaml   | 86 +++++++++++++++++++
+ 2 files changed, 86 insertions(+), 37 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-sifive.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-sifive.yaml
 
-diff --git a/Documentation/devicetree/bindings/spi/renesas,hspi.yaml b/Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+diff --git a/Documentation/devicetree/bindings/spi/spi-sifive.txt b/Documentation/devicetree/bindings/spi/spi-sifive.txt
+deleted file mode 100644
+index 3f5c6e438972..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-sifive.txt
++++ /dev/null
+@@ -1,37 +0,0 @@
+-SiFive SPI controller Device Tree Bindings
+-------------------------------------------
+-
+-Required properties:
+-- compatible		: Should be "sifive,<chip>-spi" and "sifive,spi<version>".
+-			  Supported compatible strings are:
+-			  "sifive,fu540-c000-spi" for the SiFive SPI v0 as integrated
+-			  onto the SiFive FU540 chip, and "sifive,spi0" for the SiFive
+-			  SPI v0 IP block with no chip integration tweaks.
+-			  Please refer to sifive-blocks-ip-versioning.txt for details
+-- reg			: Physical base address and size of SPI registers map
+-			  A second (optional) range can indicate memory mapped flash
+-- interrupts		: Must contain one entry
+-- interrupt-parent	: Must be core interrupt controller
+-- clocks		: Must reference the frequency given to the controller
+-- #address-cells	: Must be '1', indicating which CS to use
+-- #size-cells		: Must be '0'
+-
+-Optional properties:
+-- sifive,fifo-depth		: Depth of hardware queues; defaults to 8
+-- sifive,max-bits-per-word	: Maximum bits per word; defaults to 8
+-
+-SPI RTL that corresponds to the IP block version numbers can be found here:
+-https://github.com/sifive/sifive-blocks/tree/master/src/main/scala/devices/spi
+-
+-Example:
+-	spi: spi@10040000 {
+-		compatible = "sifive,fu540-c000-spi", "sifive,spi0";
+-		reg = <0x0 0x10040000 0x0 0x1000 0x0 0x20000000 0x0 0x10000000>;
+-		interrupt-parent = <&plic>;
+-		interrupts = <51>;
+-		clocks = <&tlclk>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		sifive,fifo-depth = <8>;
+-		sifive,max-bits-per-word = <8>;
+-	};
+diff --git a/Documentation/devicetree/bindings/spi/spi-sifive.yaml b/Documentation/devicetree/bindings/spi/spi-sifive.yaml
 new file mode 100644
-index 000000000000..c429cf4bea5b
+index 000000000000..140e4351a19f
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/renesas,hspi.yaml
-@@ -0,0 +1,57 @@
++++ b/Documentation/devicetree/bindings/spi/spi-sifive.yaml
+@@ -0,0 +1,86 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/spi/renesas,hspi.yaml#
++$id: http://devicetree.org/schemas/spi/spi-sifive.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Renesas HSPI
++title: SiFive SPI controller
 +
 +maintainers:
-+  - Geert Uytterhoeven <geert+renesas@glider.be>
++  - Pragnesh Patel <pragnesh.patel@sifive.com>
++  - Paul Walmsley  <paul.walmsley@sifive.com>
++  - Palmer Dabbelt <palmer@sifive.com>
 +
 +allOf:
-+  - $ref: spi-controller.yaml#
++  - $ref: "spi-controller.yaml#"
 +
 +properties:
 +  compatible:
 +    items:
-+      - enum:
-+        - renesas,hspi-r8a7778 # R-Car M1A
-+        - renesas,hspi-r8a7779 # R-Car H1
-+      - const: renesas,hspi
++      - const: sifive,fu540-c000-spi
++      - const: sifive,spi0
++
++    description:
++      Should be "sifive,<chip>-spi" and "sifive,spi<version>".
++      Supported compatible strings are -
++      "sifive,fu540-c000-spi" for the SiFive SPI v0 as integrated
++      onto the SiFive FU540 chip, and "sifive,spi0" for the SiFive
++      SPI v0 IP block with no chip integration tweaks.
++      Please refer to sifive-blocks-ip-versioning.txt for details
++
++      SPI RTL that corresponds to the IP block version numbers can be found here -
++      https://github.com/sifive/sifive-blocks/tree/master/src/main/scala/devices/spi
 +
 +  reg:
 +    maxItems: 1
++
++    description:
++      Physical base address and size of SPI registers map
++      A second (optional) range can indicate memory mapped flash
 +
 +  interrupts:
 +    maxItems: 1
@@ -137,64 +185,46 @@ index 000000000000..c429cf4bea5b
 +  clocks:
 +    maxItems: 1
 +
-+  power-domains:
-+    maxItems: 1
++    description:
++      Must reference the frequency given to the controller
++
++  sifive,fifo-depth:
++    description:
++      Depth of hardware queues; defaults to 8
++    allOf:
++      - $ref: "/schemas/types.yaml#/definitions/uint32"
++      - enum: [ 8 ]
++      - default: 8
++
++  sifive,max-bits-per-word:
++    description:
++      Maximum bits per word; defaults to 8
++    allOf:
++      - $ref: "/schemas/types.yaml#/definitions/uint32"
++      - enum: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
++      - default: 8
 +
 +required:
 +  - compatible
 +  - reg
 +  - interrupts
 +  - clocks
-+  - '#address-cells'
-+  - '#size-cells'
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/r8a7778-clock.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    hspi0: spi@fffc7000 {
-+        compatible = "renesas,hspi-r8a7778", "renesas,hspi";
-+        reg = <0xfffc7000 0x18>;
-+        interrupts = <0 63 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&mstp0_clks R8A7778_CLK_HSPI>;
-+        power-domains = <&cpg_clocks>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++    spi: spi@10040000 {
++      compatible = "sifive,fu540-c000-spi", "sifive,spi0";
++      reg = <0x0 0x10040000 0x0 0x1000 0x0 0x20000000 0x0 0x10000000>;
++      interrupt-parent = <&plic>;
++      interrupts = <51>;
++      clocks = <&tlclk>;
++      #address-cells = <1>;
++      #size-cells = <0>;
++      sifive,fifo-depth = <8>;
++      sifive,max-bits-per-word = <8>;
 +    };
 +
-diff --git a/Documentation/devicetree/bindings/spi/sh-hspi.txt b/Documentation/devicetree/bindings/spi/sh-hspi.txt
-deleted file mode 100644
-index b9d1e4d11a77..000000000000
---- a/Documentation/devicetree/bindings/spi/sh-hspi.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Renesas HSPI.
--
--Required properties:
--- compatible       : "renesas,hspi-<soctype>", "renesas,hspi" as fallback.
--		     Examples with soctypes are:
--		       - "renesas,hspi-r8a7778" (R-Car M1)
--		       - "renesas,hspi-r8a7779" (R-Car H1)
--- reg              : Offset and length of the register set for the device
--- interrupts       : Interrupt specifier
--- #address-cells   : Must be <1>
--- #size-cells      : Must be <0>
--
--Pinctrl properties might be needed, too.  See
--Documentation/devicetree/bindings/pinctrl/renesas,*.
--
--Example:
--
--	hspi0: spi@fffc7000 {
--		compatible = "renesas,hspi-r8a7778", "renesas,hspi";
--		reg = <0xfffc7000 0x18>;
--		interrupt-parent = <&gic>;
--		interrupts = <0 63 IRQ_TYPE_LEVEL_HIGH>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--	};
--
++...
 -- 
 2.20.1
 
