@@ -2,46 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D221C330D
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E972DC3308
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732692AbfJALlv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 07:41:51 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41204 "EHLO
+        id S2387743AbfJALlp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 07:41:45 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41274 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387633AbfJALlN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:13 -0400
+        with ESMTP id S2387600AbfJALlO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=CX+gGn0ulj8a8xwxiDkqA33F/I+QW8zBsiOoBhNf9xY=; b=RuAYOK3rUhXn
-        IzkI03E9zhw4HUdJ2iRpLTMz/cGsSgFpZPpp/4vSs0VpxgIGnyWxOQYCbA9qctKpj9MihunuLRcH4
-        yfkarbQl0M6VTb864ffF6xv/sdPSpwjJ5ugpgVMYZ+KkJgbypu0hnHCEwWJxcXD42JLow2XanvIbG
-        5uOUQ=;
+        List-Archive; bh=9NIlts5ITrK/8oZVl5gsv5OBvh8S90fAOctaSex1Ztk=; b=fd0dXYto4V/D
+        ehOlK0fbO4lt2yZ+DyDyqD+KFMqaqYW5f4XwtWj5YkNT+E0UuJ4IBhvvnezFE3aPPzDr7PJEKm0Ew
+        qjYPLssafBMkO+SNZ5iT7u5F6KFFSaNdC21633KR9VeEobiCA/bDeHfBj5/j1r9UozUr4zMrqN7j7
+        Oomxo=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iFGWi-0004ZF-8E; Tue, 01 Oct 2019 11:41:08 +0000
+        id 1iFGWj-0004Zf-11; Tue, 01 Oct 2019 11:41:09 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id ACF3F2742A10; Tue,  1 Oct 2019 12:41:07 +0100 (BST)
+        id 76E6B274299F; Tue,  1 Oct 2019 12:41:08 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Gareth Williams <gareth.williams.jx@renesas.com>
+To:     Simon Horman <horms+renesas@verge.net.au>
 Cc:     devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Applied "dt-bindings: snps,dw-apb-ssi: Add optional clock domain information" to the spi tree
-In-Reply-To: <1568793876-9009-3-git-send-email-gareth.williams.jx@renesas.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Kaneko <ykaneko0929@gmail.com>
+Subject: Applied "dt-bindings: hspi: Convert bindings to json-schema" to the spi tree
+In-Reply-To: <20190916075352.32108-1-horms+renesas@verge.net.au>
 X-Patchwork-Hint: ignore
-Message-Id: <20191001114107.ACF3F2742A10@ypsilon.sirena.org.uk>
-Date:   Tue,  1 Oct 2019 12:41:07 +0100 (BST)
+Message-Id: <20191001114108.76E6B274299F@ypsilon.sirena.org.uk>
+Date:   Tue,  1 Oct 2019 12:41:08 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -49,7 +50,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   dt-bindings: snps,dw-apb-ssi: Add optional clock domain information
+   dt-bindings: hspi: Convert bindings to json-schema
 
 has been applied to the spi tree at
 
@@ -74,36 +75,126 @@ to this mail.
 Thanks,
 Mark
 
-From 47cf13bc763c891c6192184c5e5aa8c1b331b2ff Mon Sep 17 00:00:00 2001
-From: Gareth Williams <gareth.williams.jx@renesas.com>
-Date: Wed, 18 Sep 2019 09:04:34 +0100
-Subject: [PATCH] dt-bindings: snps,dw-apb-ssi: Add optional clock domain
- information
+From 85d27be81e39323c8e3c1151e4858b26d7e1b20d Mon Sep 17 00:00:00 2001
+From: Simon Horman <horms+renesas@verge.net.au>
+Date: Mon, 16 Sep 2019 09:53:52 +0200
+Subject: [PATCH] dt-bindings: hspi: Convert bindings to json-schema
 
-Note in the bindings documentation that pclk should be renamed if a clock
-domain is used to enable the optional bus clock.
+Convert Renesas HSPI bindings documentation to json-schema.
+Also name bindings documentation file according to the compat string
+being documented.
 
-Signed-off-by: Gareth Williams <gareth.williams.jx@renesas.com>
-Link: https://lore.kernel.org/r/1568793876-9009-3-git-send-email-gareth.williams.jx@renesas.com
+As a side effect of this change all currently supported/used compat
+strings are listed while no while card compat string is documented.
+This, in my opinion, is desirable as only supported hardware should
+be documented.
+
+Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20190916075352.32108-1-horms+renesas@verge.net.au
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/spi/renesas,hspi.yaml | 57 +++++++++++++++++++
+ .../devicetree/bindings/spi/sh-hspi.txt       | 26 ---------
+ 2 files changed, 57 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/sh-hspi.txt
 
-diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-index f54c8c36395e..3ed08ee9feba 100644
---- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-+++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-@@ -16,7 +16,8 @@ Required properties:
- Optional properties:
- - clock-names : Contains the names of the clocks:
-     "ssi_clk", for the core clock used to generate the external SPI clock.
--    "pclk", the interface clock, required for register access.
-+    "pclk", the interface clock, required for register access. If a clock domain
-+     used to enable this clock then it should be named "pclk_clkdomain".
- - cs-gpios : Specifies the gpio pins to be used for chipselects.
- - num-cs : The number of chipselects. If omitted, this will default to 4.
- - reg-io-width : The I/O register width (in bytes) implemented by this
+diff --git a/Documentation/devicetree/bindings/spi/renesas,hspi.yaml b/Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+new file mode 100644
+index 000000000000..c429cf4bea5b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/renesas,hspi.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/renesas,hspi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas HSPI
++
++maintainers:
++  - Geert Uytterhoeven <geert+renesas@glider.be>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++        - renesas,hspi-r8a7778 # R-Car M1A
++        - renesas,hspi-r8a7779 # R-Car H1
++      - const: renesas,hspi
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - '#address-cells'
++  - '#size-cells'
++
++examples:
++  - |
++    #include <dt-bindings/clock/r8a7778-clock.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    hspi0: spi@fffc7000 {
++        compatible = "renesas,hspi-r8a7778", "renesas,hspi";
++        reg = <0xfffc7000 0x18>;
++        interrupts = <0 63 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&mstp0_clks R8A7778_CLK_HSPI>;
++        power-domains = <&cpg_clocks>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
++
+diff --git a/Documentation/devicetree/bindings/spi/sh-hspi.txt b/Documentation/devicetree/bindings/spi/sh-hspi.txt
+deleted file mode 100644
+index b9d1e4d11a77..000000000000
+--- a/Documentation/devicetree/bindings/spi/sh-hspi.txt
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Renesas HSPI.
+-
+-Required properties:
+-- compatible       : "renesas,hspi-<soctype>", "renesas,hspi" as fallback.
+-		     Examples with soctypes are:
+-		       - "renesas,hspi-r8a7778" (R-Car M1)
+-		       - "renesas,hspi-r8a7779" (R-Car H1)
+-- reg              : Offset and length of the register set for the device
+-- interrupts       : Interrupt specifier
+-- #address-cells   : Must be <1>
+-- #size-cells      : Must be <0>
+-
+-Pinctrl properties might be needed, too.  See
+-Documentation/devicetree/bindings/pinctrl/renesas,*.
+-
+-Example:
+-
+-	hspi0: spi@fffc7000 {
+-		compatible = "renesas,hspi-r8a7778", "renesas,hspi";
+-		reg = <0xfffc7000 0x18>;
+-		interrupt-parent = <&gic>;
+-		interrupts = <0 63 IRQ_TYPE_LEVEL_HIGH>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-	};
+-
 -- 
 2.20.1
 
