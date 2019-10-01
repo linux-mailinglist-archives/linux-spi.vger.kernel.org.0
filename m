@@ -2,45 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1FCC32FB
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA0EC32EE
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 13:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387670AbfJALlQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 07:41:16 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41282 "EHLO
+        id S2387607AbfJALlI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 07:41:08 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40942 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387650AbfJALlP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:15 -0400
+        with ESMTP id S2387594AbfJALlH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 07:41:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=z6hLIza3q6cYchvVHYiHKN/ZHrei8SPlYx9ockTASYE=; b=m96scqtLNyc6
-        h7zycSmfCjk8HcAr5pjagGXNgf3F26sVMHXmBbFWwr+7GRl4aFIMGM3zuhSQyFMdNY0gLQVl3qn4B
-        +nq26LmeHKsoxfSx908CLa6DAOK+AdVxbXx9lHUWQC1AnJ/KFoLZt0sXyp6c87LEFTAGZv8ixZjy2
-        9Mp8o=;
+        List-Archive; bh=t6QaYLUtMP7FT0N0YeWXRrrbr9pVC1Hq/x3bsn93qgA=; b=RmgGI0h4dbDT
+        v9IbUcKRZ2319gI6qJ8piygWiCVx6sI4jy+hikrJQq+alDHCFH2m8Pq2rZFfcf/rlrS5eH6BcyU8l
+        3PAIdIwpvDlpxa3XhoZqm6yyurwY+wVGMtquNNRgYPpCH886LWZ5rNSLQehAAZbo8cxkszmp+CNCt
+        0jD/4=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iFGWg-0004Yg-FL; Tue, 01 Oct 2019 11:41:06 +0000
+        id 1iFGWf-0004YU-Ov; Tue, 01 Oct 2019 11:41:05 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id EAA1C27429C0; Tue,  1 Oct 2019 12:41:05 +0100 (BST)
+        id 4111927429C0; Tue,  1 Oct 2019 12:41:05 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Markus Elfring <elfring@users.sourceforge.net>
-Cc:     kernel-janitors@vger.kernel.org,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Applied "spi: mediatek: Use devm_platform_ioremap_resource() in mtk_spi_slave_probe()" to the spi tree
-In-Reply-To: <225b76ca-a367-4bef-d8ce-42c7af9242a5@web.de>
+To:     Colin Ian King <colin.king@canonical.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: fsl-lpspi: clean up indentation issue" to the spi tree
+In-Reply-To: <20190926113701.26986-1-colin.king@canonical.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191001114105.EAA1C27429C0@ypsilon.sirena.org.uk>
+Message-Id: <20191001114105.4111927429C0@ypsilon.sirena.org.uk>
 Date:   Tue,  1 Oct 2019 12:41:05 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -49,7 +44,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: mediatek: Use devm_platform_ioremap_resource() in mtk_spi_slave_probe()
+   spi: fsl-lpspi: clean up indentation issue
 
 has been applied to the spi tree at
 
@@ -74,54 +69,33 @@ to this mail.
 Thanks,
 Mark
 
-From 6cdcb5d394413d906773f1ae2efaa86485d6d6e1 Mon Sep 17 00:00:00 2001
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 21 Sep 2019 15:12:33 +0200
-Subject: [PATCH] spi: mediatek: Use devm_platform_ioremap_resource() in
- mtk_spi_slave_probe()
+From 1b0a2b2d3ccb98cf998816d87f7193139d54579e Mon Sep 17 00:00:00 2001
+From: Colin Ian King <colin.king@canonical.com>
+Date: Thu, 26 Sep 2019 12:37:01 +0100
+Subject: [PATCH] spi: fsl-lpspi: clean up indentation issue
 
-Simplify this function implementation by using a known wrapper function.
+The complete call is indented incorrectly, remove the extraneous tabs.
 
-This issue was detected by using the Coccinelle software.
-
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-Link: https://lore.kernel.org/r/225b76ca-a367-4bef-d8ce-42c7af9242a5@web.de
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Link: https://lore.kernel.org/r/20190926113701.26986-1-colin.king@canonical.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-slave-mt27xx.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ drivers/spi/spi-fsl-lpspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-slave-mt27xx.c b/drivers/spi/spi-slave-mt27xx.c
-index 61bc43b0fe57..44edaa360405 100644
---- a/drivers/spi/spi-slave-mt27xx.c
-+++ b/drivers/spi/spi-slave-mt27xx.c
-@@ -368,7 +368,6 @@ static int mtk_spi_slave_probe(struct platform_device *pdev)
- {
- 	struct spi_controller *ctlr;
- 	struct mtk_spi_slave *mdata;
--	struct resource *res;
- 	int irq, ret;
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index d08e9324140e..5efd73cd0ead 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -779,7 +779,7 @@ static irqreturn_t fsl_lpspi_isr(int irq, void *dev_id)
  
- 	ctlr = spi_alloc_slave(&pdev->dev, sizeof(*mdata));
-@@ -392,17 +391,8 @@ static int mtk_spi_slave_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, ctlr);
+ 	if (temp_SR & SR_FCF && (temp_IER & IER_FCIE)) {
+ 		writel(SR_FCF, fsl_lpspi->base + IMX7ULP_SR);
+-			complete(&fsl_lpspi->xfer_done);
++		complete(&fsl_lpspi->xfer_done);
+ 		return IRQ_HANDLED;
+ 	}
  
- 	init_completion(&mdata->xfer_done);
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		ret = -ENODEV;
--		dev_err(&pdev->dev, "failed to determine base address\n");
--		goto err_put_ctlr;
--	}
--
- 	mdata->dev = &pdev->dev;
--
--	mdata->base = devm_ioremap_resource(&pdev->dev, res);
-+	mdata->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(mdata->base)) {
- 		ret = PTR_ERR(mdata->base);
- 		goto err_put_ctlr;
 -- 
 2.20.1
 
