@@ -2,112 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91023C3811
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 16:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6D0C3EA0
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2019 19:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389014AbfJAOvO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Oct 2019 10:51:14 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:42766 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388925AbfJAOvO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 10:51:14 -0400
-Received: by mail-oi1-f194.google.com with SMTP id i185so14615189oif.9;
-        Tue, 01 Oct 2019 07:51:13 -0700 (PDT)
+        id S1727228AbfJARcx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Oct 2019 13:32:53 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:37848 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbfJARcw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Oct 2019 13:32:52 -0400
+Received: by mail-io1-f66.google.com with SMTP id b19so22005345iob.4;
+        Tue, 01 Oct 2019 10:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ME9JERHhVrbe9bZKOQu8b1hgHngZbw7UvQiOYqhf3AE=;
+        b=K4u9RUQTlRAzpP4lzQfqEmLquc9JpM8ygSmmaYvctHChiQieDW4heA1Z0Ur4HDWvIb
+         fbZWY/NIzFubV9g6dDf0LUC2ScRvY1ZyiGr7c1aZUTGlr7ZLDSVh/z6mWHHMCsXhdOv6
+         k+/evVW0UNKvTM9upXIQLF+Bb7eYUXOX0z9A800GhjXe7ihOgiiv8fl5pVVfydjKBLvl
+         nsEM8toqBhnEN2jhh2vLdYYP7P4EAjn7TV24Fc0q2qiWOSW7sphMV0uZBphI0gyuE1AY
+         7xUcJiVTrbNjThUXpR85oIekm59z42fPyrEEZKHMHJ1tx5SP6dRD75s/7toh5bgxkZoP
+         qC0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wjkwwfTfjq2moCLwkeTZGb6uXp0wkFlLr8cpTn6l27M=;
-        b=pyX7yAyfQGDwy+LAL4AlxcNrPM5m11R3UE1Duj0cP/MA1Y+LoYkWNgOgEdiXK9LVve
-         yt3dlDoA9aZPma7fb7qyTHOrcEeTECv70cA2GAph0M2HqHX4AslXvH6GCR7V0Y+MoMqf
-         NEPU0TdYqf8i0KRvX+kNI0Q/rVMBKIe/z2wQgGrnvvIit80bsJ9I1GcWBw4jLjVZvMER
-         w3lgyeN+y6tA33lW2vB2cf0peCioIbhnBYPtzQUdIMK4Tq1Wx+v3UdRB7eCBzkw8hhkl
-         tl4ZaRFmCrQQI7pD5bb9uRCHKAQIJS03jZFDHDY2mgtsEaN22ckkqTsX9v5dIgeqddAF
-         uWvQ==
-X-Gm-Message-State: APjAAAX1fqzd+VUdgm1/ApH8k8rxSEvAMmDVlM6tTdSm1ZAd7I7VEjjx
-        JIrOf5BRY7Tu+NLspdPWHs/vRJQ/PbOYi/LXwvHmHVEE
-X-Google-Smtp-Source: APXvYqwqIHUrEtXdoPbVnpLxwh2KqCzpzklP7J9yGOYytQ/1LS8BXr/JDl/k0iY/xzLs23owgZnP3oGCrG/oa+Ym31s=
-X-Received: by 2002:aca:b654:: with SMTP id g81mr3826040oif.153.1569941473256;
- Tue, 01 Oct 2019 07:51:13 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ME9JERHhVrbe9bZKOQu8b1hgHngZbw7UvQiOYqhf3AE=;
+        b=MCyn8hIFTE6qZYNHCnIJZuhoTuwKinq/DUzRrpmrPnF+yr1eQs5r0uAhttqbrj/Sae
+         4Fb+8cgG70bbxKiV7WbnNLdrjlg8dqdCD6ua5yJabWPUFOUIlOlKGd7NRDpDZe+TUboE
+         XZE8/EY5hFGHGtkyQ0QXbFPAhpUugtYyMhh5/0X1cE6CiFTsZF2D9qIs9r4O7ujFnIsz
+         XIyRyt9/DtvtEwXlUITKrJ5oqbuO5o48abdOMXQR+X+HNKnyRxedvDE5UbkOnYm0T0F+
+         XANk6z6YutI2n7a/L9XIZ4QH5P/4iZ6o+btHvMWRlgrq9xB+bhwm4Cgiy09IYEOuKmaA
+         D+6Q==
+X-Gm-Message-State: APjAAAUuV6Glqwur4cXuiYq8bxyx1i60Fyx7xYgR+ks6s/bjpQOrBCAL
+        QazVLoMr4E1tp3tsL+3xNEMX/AMrabgWUHCfCBM=
+X-Google-Smtp-Source: APXvYqyYxMAY5xQEu8G8vVHN+ATd4tNlLzhw/LbXbd0+G/Y0WbtHvI9gQ28fXhdaQVTfcMo0yQSeNiuKOf21ktWtsTA=
+X-Received: by 2002:a5d:8143:: with SMTP id f3mr22230939ioo.294.1569951171833;
+ Tue, 01 Oct 2019 10:32:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <1568793876-9009-1-git-send-email-gareth.williams.jx@renesas.com>
- <1568793876-9009-3-git-send-email-gareth.williams.jx@renesas.com>
- <20191001120203.GA28106@bogus> <TY2PR01MB292460F29AE0664CFFD70EFDDF9D0@TY2PR01MB2924.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY2PR01MB292460F29AE0664CFFD70EFDDF9D0@TY2PR01MB2924.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 1 Oct 2019 16:51:02 +0200
-Message-ID: <CAMuHMdXBfgC=x7H_mnLb_s0gMOBS7r9h8vqbiSU+168VKs9q1w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] dt-bindings: snps,dw-apb-ssi: Add optional clock
- domain information
-To:     Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20190930205241.5483-1-navid.emamdoost@gmail.com> <6b55e753-5797-2bdc-fae6-f575a0ef8186@web.de>
+In-Reply-To: <6b55e753-5797-2bdc-fae6-f575a0ef8186@web.de>
+From:   Navid Emamdoost <navid.emamdoost@gmail.com>
+Date:   Tue, 1 Oct 2019 12:32:41 -0500
+Message-ID: <CAEkB2ES3-gotqS9184izf0fKOigFaFUetBiqekmYJPBgPWbSBQ@mail.gmail.com>
+Subject: Re: [PATCH v2] spi: gpio: prevent memory leak in spi_gpio_probe
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-spi@vger.kernel.org, Navid Emamdoost <emamd001@umn.edu>,
+        Kangjie Lu <kjlu@umn.edu>, Stephen McCamant <smccaman@umn.edu>,
+        Mark Brown <broonie@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Gareth,
+Hi Markus, thanks for your suggestions for improving the quality of
+the patch. At the moment I prefer first get a confirmation from
+contributors about the leak and then work on any possible improvements
+for the patch.
 
-On Tue, Oct 1, 2019 at 3:50 PM Gareth Williams
-<gareth.williams.jx@renesas.com> wrote:
-> On Tue, Oct 01, 2019 at 13:02:34AM +0100, Rob Herring wrote:
-> > On Wed, Sep 18, 2019 at 09:04:34AM +0100, Gareth Williams wrote:
-> > > Note in the bindings documentation that pclk should be renamed if a
-> > > clock domain is used to enable the optional bus clock.
-> > >
-> > > Signed-off-by: Gareth Williams <gareth.williams.jx@renesas.com>
-> > > ---
-> > > v2: Introduced this patch.
-> > > ---
-> > >  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-> > > b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-> > > index f54c8c3..3ed08ee 100644
-> > > --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-> > > +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-> > > @@ -16,7 +16,8 @@ Required properties:
-> > >  Optional properties:
-> > >  - clock-names : Contains the names of the clocks:
-> > >      "ssi_clk", for the core clock used to generate the external SPI clock.
-> > > -    "pclk", the interface clock, required for register access.
-> > > +    "pclk", the interface clock, required for register access. If a clock domain
-> > > +     used to enable this clock then it should be named "pclk_clkdomain".
-> >
-> > What's a clock domain?
-> >
-> > Unless this is a h/w difference in the IP block, then this change doesn't make
-> > sense.
-> This is a reference to the use of clock domains that are implemented through
-> generic power domains. The domain is implemented in
-> drivers/clk/renesas/r9a06g032-clocks.c and general details of clock domains
-> can be found at
-> https://elinux.org/images/1/14/Last_One_Out%2C_Turn_Off_The_Lights.pdf
+Thanks,
+Navid.
 
-Rob is right: the clock domain is an SoC integration detail, not specific to
-the snps,dw-apb-ssi block.
-Remember, DT describes hardware, not implementation details.
+On Tue, Oct 1, 2019 at 4:11 AM Markus Elfring <Markus.Elfring@web.de> wrote=
+:
+>
+> > =E2=80=A6 In order to avoid leak spi_contriller_put must
+> > be called in case of failure for devm_add_action_or_reset.
+>
+> How does this wording fit to the diff display that you would like
+> to add the function call =E2=80=9Cspi_master_put(master)=E2=80=9D in
+> one if branch?
+>
+>
+> > Fixes: 8b797490b4db ("spi: gpio: Make sure spi_master_put() is called i=
+n every error path")
+>
+> Is there a need to complete the corresponding exception handling
+> at any more source code places?
+>
+> Regards,
+> Markus
 
-So the Linux snps,dw-apb-ssi driver should take care of it.
 
-Which brings us back to an old discussion topic: power-domains properties
-describe integration, and thus should be documented at a higher level than
-in individual binding documents, just like e.g. interrupt-parent.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=20
+Navid.
