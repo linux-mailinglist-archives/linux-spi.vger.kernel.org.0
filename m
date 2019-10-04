@@ -2,47 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04683CA686
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Oct 2019 18:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496ACCB64B
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2019 10:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404961AbfJCQoh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 3 Oct 2019 12:44:37 -0400
-Received: from mail.umc.edu.ve ([190.202.0.214]:54313 "EHLO mail.umc.edu.ve"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404088AbfJCQof (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Oct 2019 12:44:35 -0400
-X-Greylist: delayed 1460 seconds by postgrey-1.27 at vger.kernel.org; Thu, 03 Oct 2019 12:44:35 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.umc.edu.ve (Postfix) with ESMTP id 94ACD46AF66C;
-        Thu,  3 Oct 2019 12:12:16 -0400 (BOT)
-X-Virus-Scanned: amavisd-new at mail.umc.edu.ve
-Received: from mail.umc.edu.ve ([127.0.0.1])
-        by localhost (mail.umc.edu.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id evaqpipkpCpL; Thu,  3 Oct 2019 12:12:16 -0400 (BOT)
-Received: from [10.10.10.88] (unknown [91.93.58.154])
-        by mail.umc.edu.ve (Postfix) with ESMTPSA id 8586246AF650;
-        Thu,  3 Oct 2019 12:12:08 -0400 (BOT)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Darlehensangebot
-To:     Recipients <rgonzalez@umc.edu.ve>
-From:   "Jesse Peterson" <rgonzalez@umc.edu.ve>
-Date:   Thu, 03 Oct 2019 19:11:28 +0300
-Reply-To: jessepetersonltd@gmail.com
-Message-Id: <20191003161208.8586246AF650@mail.umc.edu.ve>
+        id S1728942AbfJDIfp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Oct 2019 04:35:45 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:3139 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726024AbfJDIfo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Oct 2019 04:35:44 -0400
+X-IronPort-AV: E=Sophos;i="5.67,255,1566831600"; 
+   d="scan'208";a="28068753"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 04 Oct 2019 17:35:41 +0900
+Received: from fabrizio-dev.ree.adwin.renesas.com (unknown [10.226.36.196])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id D0EDB41E561A;
+        Fri,  4 Oct 2019 17:35:36 +0900 (JST)
+From:   Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Simon Horman <horms@verge.net.au>,
+        Magnus Damm <magnus.damm@gmail.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>, xu_shunji@hoperun.com
+Subject: [PATCH 0/7] Add RZ/G2N MSIOF/RWDT/PCIEC support
+Date:   Fri,  4 Oct 2019 09:35:26 +0100
+Message-Id: <1570178133-21532-1-git-send-email-fabrizio.castro@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Wir bieten Privatpersonen und Firmen Kredite zu niedrigen Zinssätzen von 2% an. Wir vergeben Darlehen für Schuldenkonsolidierung, Renovierung, Autokauf, ein neues Zuhause, Investition / Geschäftserweiterung oder sogar für einen Urlaub. 
+Dear All,
 
-In unserem Darlehensprogramm haben sowohl lokale als auch internationale Kunden die Garantie, von diesem Unternehmen ein Darlehen in Form einer ungesicherten internationalen Offshore-Finanzierung zu erhalten, was bedeutet, dass für diesen Prozess keine Sicherheiten erforderlich sind. 
+this series adds MSDIF/RWDT/PCIEC support to the HiHope RZ/G2N.
 
-Hinweis für weitere Anfragen zum Ausleihen senden Sie bitte eine E-Mail an jessepetersonltd@gmail.com
+This series depends on the following series and patches:
+* https://patchwork.kernel.org/cover/11166155/
+* https://patchwork.kernel.org/cover/11157129/
+* https://patchwork.kernel.org/cover/11158259/
+* https://patchwork.kernel.org/patch/11166327/
+* https://patchwork.kernel.org/cover/11171325/
+* https://patchwork.kernel.org/patch/11162283/
 
-Grüße 
-Jesse Peterson 
-jessepetersonltd@gmail.com
+Thanks,
+Fab
+
+Fabrizio Castro (7):
+  dt-bindings: watchdog: renesas-wdt: Document r8a774b1 support
+  dt-bindings: spi: sh-msiof: Add r8a774b1 support
+  dt-bindings: PCI: rcar: Add device tree support for r8a774b1
+  arm64: dts: renesas: r8a774b1: Add RWDT node
+  arm64: dts: renesas: r8a774b1: Add all MSIOF nodes
+  arm64: dts: renesas: r8a774b1: Add PCIe device nodes
+  arm64: dts: renesas: hihope-rzg2-ex: Let the board specific DT decide
+    about pciec1
+
+ Documentation/devicetree/bindings/pci/rcar-pci.txt |   1 +
+ .../devicetree/bindings/spi/renesas,sh-msiof.yaml  |   1 +
+ .../devicetree/bindings/watchdog/renesas,wdt.txt   |   1 +
+ arch/arm64/boot/dts/renesas/hihope-rzg2-ex.dtsi    |   4 -
+ .../boot/dts/renesas/r8a774a1-hihope-rzg2m-ex.dts  |   4 +
+ arch/arm64/boot/dts/renesas/r8a774b1.dtsi          | 111 ++++++++++++++++++++-
+ 6 files changed, 115 insertions(+), 7 deletions(-)
+
+-- 
+2.7.4
+
