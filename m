@@ -2,83 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28557CE072
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Oct 2019 13:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F35CE290
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Oct 2019 15:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727561AbfJGL3i (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Oct 2019 07:29:38 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:41216 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727496AbfJGL3i (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Oct 2019 07:29:38 -0400
-Received: by mail-ot1-f65.google.com with SMTP id g13so10617842otp.8;
-        Mon, 07 Oct 2019 04:29:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=az517lk7l2JjiWVDEoNmqTwk0kRxY6zy3XGdpUQGK/8=;
-        b=LkTKZ1jkTeR9yI8V0jI2BMS4vWkM1lrdRGvFjv2U/v9CUsNia4pyTKepMgQfyCb8xq
-         2x6q8JWXETwICqM0pE9CwEOgojNWw2BawBHFz6+vpnYNn0hK0Jy5rjFaZkYX9QgzSiXi
-         22O/9liKNXmhrKZouwa5RvTQQwF8ujXVy772raIrcj82tuc3C52wbovFNYPOQZB7N2yr
-         N+GsgYbTzdokG5j2HUghX20zk6E9uQo5wB9oYz4xEZGQf66uVn08bQ0Pco7fVBHtPssK
-         99TAzno7dYIWzIRsK4t/rBJwyNwbaPDczv55PfXt1Ic/vw9HAdNrmGxdhLnZGLNzxYb0
-         jfJg==
-X-Gm-Message-State: APjAAAVpWTK8hUhhsaTcy8Jp2UmHsePaUZT825Pdkxr0wB0pTGGfbbVH
-        R7Iy3k683Qnv9Vfnft7C/WkKqamieL30sAeQtNM=
-X-Google-Smtp-Source: APXvYqxRQNEZnEmH0p+/FXVlkwQGADEscR1yu73btXK3QB7lvmhgAJErpoReSODDZljCt9iJfWcgiO2rZ6AK2ADzaic=
-X-Received: by 2002:a9d:730d:: with SMTP id e13mr1096381otk.145.1570447776392;
- Mon, 07 Oct 2019 04:29:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <1570178133-21532-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570178133-21532-4-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570178133-21532-4-git-send-email-fabrizio.castro@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 7 Oct 2019 13:29:25 +0200
-Message-ID: <CAMuHMdX4P_5Bu2dO_kVtFFyOOTycm2jFqk8qNAzH3XEeePfG0Q@mail.gmail.com>
-Subject: Re: [PATCH 3/7] dt-bindings: PCI: rcar: Add device tree support for r8a774b1
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Simon Horman <horms@verge.net.au>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>, xu_shunji@hoperun.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1727715AbfJGNDe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Oct 2019 09:03:34 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49656 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728145AbfJGNDd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Oct 2019 09:03:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=aWgEWqgOX8lfxgUwmjfcjaxZhFTTqWI3Qo+BIGk677c=; b=DtpUlH5GNKaP
+        XeIV9r3sQ0JHgVyRc0qxQxw+ChyUpdsxOzb/1fXjx4XXGS2kGuvB+n6nyDClzB28UuJPDlEjeb4bR
+        sMeA5GpHxzlsUmK/23a/HTgvK4CVyXeoCPTOfbG0R06WhWhmryoSSjkqvklbLWKyqPB7XPgekVpsM
+        PBVgs=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iHSfh-0003TE-Qp; Mon, 07 Oct 2019 13:03:29 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 47D48274162F; Mon,  7 Oct 2019 14:03:29 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, <linux-spi@vger.kernel.org>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Applied "spi: gpio: Look for a device node instead of match" to the spi tree
+In-Reply-To: <20191004214334.149976-9-swboyd@chromium.org>
+X-Patchwork-Hint: ignore
+Message-Id: <20191007130329.47D48274162F@ypsilon.sirena.org.uk>
+Date:   Mon,  7 Oct 2019 14:03:29 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Oct 4, 2019 at 10:35 AM Fabrizio Castro
-<fabrizio.castro@bp.renesas.com> wrote:
-> Add PCIe support for the RZ/G2N (a.k.a. R8A774B1).
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+The patch
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+   spi: gpio: Look for a device node instead of match
 
-Gr{oetje,eeting}s,
+has been applied to the spi tree at
 
-                        Geert
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 62217f8b084a05dd2d84781a8ca065098df21ec7 Mon Sep 17 00:00:00 2001
+From: Stephen Boyd <swboyd@chromium.org>
+Date: Fri, 4 Oct 2019 14:43:32 -0700
+Subject: [PATCH] spi: gpio: Look for a device node instead of match
+
+This driver doesn't do anything with the match for the device node. The
+logic is the same as looking to see if a device node exists or not
+because this driver wouldn't probe unless there is a device node match
+when the device is created from DT. Just test for the presence of the
+device node to simplify and avoid referencing a potentially undefined
+match table when CONFIG_OF=n.
+
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: <linux-spi@vger.kernel.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lore.kernel.org/r/20191004214334.149976-9-swboyd@chromium.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-gpio.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
+index 1d3e23ec20a6..42f4d82e9c5a 100644
+--- a/drivers/spi/spi-gpio.c
++++ b/drivers/spi/spi-gpio.c
+@@ -362,9 +362,6 @@ static int spi_gpio_probe(struct platform_device *pdev)
+ 	struct spi_gpio			*spi_gpio;
+ 	struct device			*dev = &pdev->dev;
+ 	struct spi_bitbang		*bb;
+-	const struct of_device_id	*of_id;
+-
+-	of_id = of_match_device(spi_gpio_dt_ids, &pdev->dev);
+ 
+ 	master = spi_alloc_master(dev, sizeof(*spi_gpio));
+ 	if (!master)
+@@ -374,7 +371,7 @@ static int spi_gpio_probe(struct platform_device *pdev)
+ 	if (status)
+ 		return status;
+ 
+-	if (of_id)
++	if (pdev->dev.of_node)
+ 		status = spi_gpio_probe_dt(pdev, master);
+ 	else
+ 		status = spi_gpio_probe_pdata(pdev, master);
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.20.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
