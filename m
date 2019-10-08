@@ -2,93 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7370CF577
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2019 11:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8BDCF5FE
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2019 11:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730093AbfJHJAk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Oct 2019 05:00:40 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:36825 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729847AbfJHJAk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Oct 2019 05:00:40 -0400
-Received: by mail-oi1-f193.google.com with SMTP id k20so14181739oih.3
-        for <linux-spi@vger.kernel.org>; Tue, 08 Oct 2019 02:00:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pYgIWTJVvflHeQL1iNyNFtgdqyVj+u3ySrKIccmsHP0=;
-        b=Ur14RhBZPxmOZ5DPb9N0SsGqk+Ts4+9DnEoYosaxjwJv9kOJMCrBxWm7rDa6Cjo0Mo
-         4O7hZeZqjPeub104OhYPXFiOTl5xKcqggAn3l9QN6KeqI5vF4ImNXqMCymH3wJZozcN0
-         8aJ+Tg27ktWJz248YVBLI9MYZzBMliYbVylxyIpkiHsa+XrrYFuEo3/W9E2jqaQl5tPs
-         DaOA788XOaFYAjCqprOmnqTQ74oWXMrc9n9U6fTFBFXliT5AgKJ6Sv9uAmMWCois3cgR
-         iDpKSFT9P2HsYVODU0bFIfkzCRDoNIPhPQmn17iTPtz8UrNymQeW40gq7zyX/5UXybau
-         hhQA==
-X-Gm-Message-State: APjAAAVCISu2kP+zNt7W3+cr5g5AeEtMs0+hlbSPvVQVD/2YkwcP4zhK
-        nTcF10SceVrSfQuGGR8Yut8w6Y5Rg3yZHv1gwhrupiFp
-X-Google-Smtp-Source: APXvYqxWCeuiIlVCXddRHAdaOAvWKyE6qpTAvn7ni7dMHSRXR86qSlCRs/CU2d2eWf6M3twjx2GXPgsThlpvzWskEWM=
-X-Received: by 2002:aca:f305:: with SMTP id r5mr2872124oih.131.1570525239790;
- Tue, 08 Oct 2019 02:00:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <1570523497-112804-1-git-send-email-zhengbin13@huawei.com> <1570523497-112804-3-git-send-email-zhengbin13@huawei.com>
-In-Reply-To: <1570523497-112804-3-git-send-email-zhengbin13@huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 8 Oct 2019 11:00:28 +0200
-Message-ID: <CAMuHMdVTH1=nZLKqaAtb4RhVZU2dGra4RSAzRhsescetLAEKbA@mail.gmail.com>
+        id S1729928AbfJHJ1W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Oct 2019 05:27:22 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3269 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729624AbfJHJ1W (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 8 Oct 2019 05:27:22 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id D64BF9B2AE150A1924E9;
+        Tue,  8 Oct 2019 17:27:19 +0800 (CST)
+Received: from [127.0.0.1] (10.184.213.217) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Tue, 8 Oct 2019
+ 17:27:18 +0800
 Subject: Re: [PATCH 2/2] spi: npcm: Remove set but not used variable 'val'
-To:     zhengbin <zhengbin13@huawei.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Mark Brown <broonie@kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <1570523497-112804-1-git-send-email-zhengbin13@huawei.com>
+ <1570523497-112804-3-git-send-email-zhengbin13@huawei.com>
+ <CAMuHMdVTH1=nZLKqaAtb4RhVZU2dGra4RSAzRhsescetLAEKbA@mail.gmail.com>
+From:   "zhengbin (A)" <zhengbin13@huawei.com>
+Message-ID: <56658b8a-2a30-a762-1520-1da2719e5b29@huawei.com>
+Date:   Tue, 8 Oct 2019 17:27:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
+MIME-Version: 1.0
+In-Reply-To: <CAMuHMdVTH1=nZLKqaAtb4RhVZU2dGra4RSAzRhsescetLAEKbA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.184.213.217]
+X-CFilter-Loop: Reflected
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Zhengbin,
 
-On Tue, Oct 8, 2019 at 10:25 AM zhengbin <zhengbin13@huawei.com> wrote:
-> Fixes gcc '-Wunused-but-set-variable' warning:
+On 2019/10/8 17:00, Geert Uytterhoeven wrote:
+> Hi Zhengbin,
 >
-> drivers/spi/spi-npcm-pspi.c: In function npcm_pspi_handler:
-> drivers/spi/spi-npcm-pspi.c:296:6: warning: variable val set but not used [-Wunused-but-set-variable]
+> On Tue, Oct 8, 2019 at 10:25 AM zhengbin <zhengbin13@huawei.com> wrote:
+>> Fixes gcc '-Wunused-but-set-variable' warning:
+>>
+>> drivers/spi/spi-npcm-pspi.c: In function npcm_pspi_handler:
+>> drivers/spi/spi-npcm-pspi.c:296:6: warning: variable val set but not used [-Wunused-but-set-variable]
+>>
+>> It is not used since commit 2a22f1b30cee ("spi:
+>> npcm: add NPCM PSPI controller driver")
+>>
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: zhengbin <zhengbin13@huawei.com>
+> Have you tested this on actual hardware?
+> Are you sure the hardware does not require reading this register to work
+> properly?
+
+oops, my mistake, sorry for the noise.
+
+marybe we can just remove val, and call  ioread8(NPCM_PSPI_DATA + priv->base); ?
+
+to avoid this warning?
+
+
+>> --- a/drivers/spi/spi-npcm-pspi.c
+>> +++ b/drivers/spi/spi-npcm-pspi.c
+>> @@ -293,7 +293,6 @@ static void npcm_pspi_reset_hw(struct npcm_pspi *priv)
+>>  static irqreturn_t npcm_pspi_handler(int irq, void *dev_id)
+>>  {
+>>         struct npcm_pspi *priv = dev_id;
+>> -       u16 val;
+>>         u8 stat;
+>>
+>>         stat = ioread8(priv->base + NPCM_PSPI_STAT);
+>> @@ -303,7 +302,6 @@ static irqreturn_t npcm_pspi_handler(int irq, void *dev_id)
+>>
+>>         if (priv->tx_buf) {
+>>                 if (stat & NPCM_PSPI_STAT_RBF) {
+>> -                       val = ioread8(NPCM_PSPI_DATA + priv->base);
+>>                         if (priv->tx_bytes == 0) {
+>>                                 npcm_pspi_disable(priv);
+>>                                 complete(&priv->xfer_done);
+> Gr{oetje,eeting}s,
 >
-> It is not used since commit 2a22f1b30cee ("spi:
-> npcm: add NPCM PSPI controller driver")
+>                         Geert
 >
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: zhengbin <zhengbin13@huawei.com>
 
-Have you tested this on actual hardware?
-Are you sure the hardware does not require reading this register to work
-properly?
-
-> --- a/drivers/spi/spi-npcm-pspi.c
-> +++ b/drivers/spi/spi-npcm-pspi.c
-> @@ -293,7 +293,6 @@ static void npcm_pspi_reset_hw(struct npcm_pspi *priv)
->  static irqreturn_t npcm_pspi_handler(int irq, void *dev_id)
->  {
->         struct npcm_pspi *priv = dev_id;
-> -       u16 val;
->         u8 stat;
->
->         stat = ioread8(priv->base + NPCM_PSPI_STAT);
-> @@ -303,7 +302,6 @@ static irqreturn_t npcm_pspi_handler(int irq, void *dev_id)
->
->         if (priv->tx_buf) {
->                 if (stat & NPCM_PSPI_STAT_RBF) {
-> -                       val = ioread8(NPCM_PSPI_DATA + priv->base);
->                         if (priv->tx_bytes == 0) {
->                                 npcm_pspi_disable(priv);
->                                 complete(&priv->xfer_done);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
