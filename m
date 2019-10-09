@@ -2,40 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8A8D0F1B
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Oct 2019 14:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FBAD129F
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Oct 2019 17:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729699AbfJIMsN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Oct 2019 08:48:13 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:43391 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727219AbfJIMsN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Oct 2019 08:48:13 -0400
-Received: by mail-oi1-f193.google.com with SMTP id t84so1593131oih.10;
-        Wed, 09 Oct 2019 05:48:12 -0700 (PDT)
+        id S1731333AbfJIP2T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Oct 2019 11:28:19 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:45566 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731370AbfJIP2S (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Oct 2019 11:28:18 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 41so2047487oti.12;
+        Wed, 09 Oct 2019 08:28:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=F9sihoD8xtf+xJJ/YN8Ttpi/IAoGkmrDo73SAP7wiuU=;
-        b=lEq7dDjBTWi1L0HDF0T6p3dbSb+HAbjN6m5Mf+PcNG0MsuYTZ7Xjr/aD21nEj9AC2P
-         4L3FCi2qaCH2IpFNdSd1PYxZ1OPns9imP12ZC5R908G4P8oBtFFR4GUkWmcyB9GQkwFA
-         +d9R26M2C/4VNN03pDfCHiefVwTxj6qmqGxDCfWoOeHkSBb1Oy5Ht24l24amHFXNLmgr
-         uj/2RUxy/HP4WRizxKIf8weBwSp9LV0kX9zQpIDoLz8pGmLkkrXo6XWwAAN3D+xrX15V
-         A8RD4f1yf8aWLwOTyJgTA7J5ONzQ9MhLOwzMyBgDaz6YckvA3HovRpkXI+UgcgVKnf+0
-         tlIA==
-X-Gm-Message-State: APjAAAUgbxOSP4IiYOtbUHEVvFRwqjggYVy6zwk6JAYi1yWTCan3MQJ+
-        i0TEhVwBK8gy6tS42cY7k405n2/SmZ9wGVvEcuE=
-X-Google-Smtp-Source: APXvYqz8RkrMAo1aVETLuTwYrdB2hkzhyiOgT81nepAIJT5UFEWrRqAdCBYAgc1IF85bemnI+YynzlBidICme1Cn/Nc=
-X-Received: by 2002:aca:4bd2:: with SMTP id y201mr2187936oia.102.1570625292202;
- Wed, 09 Oct 2019 05:48:12 -0700 (PDT)
+        bh=oNZ+n3OtX3na0ohvcbS8SQf8eEI7FgG1atzrBqih6OY=;
+        b=hHZBNA6AIRTAdcd+DXUoxT4nD9PZ6SC1UsCuCZwx+/74MuPXgSB9nXwDR8b9uBBzxt
+         +M97SuGSgdGxK70GZi05s84hH3CtKSAUUb6pQubhdnNG4u25z056e2EM1XYqntDYua3M
+         V1VuH9UA5TEmXnFAE/TYosbVSQfmgQPy7SWXViSyTTzcIxX6ioVbLFVEEDvAfjwnSzHB
+         /xgm159cfYsWy9ZIbMyXB6tD5Z0UKjUlZBEaWSRTlgnszkKJj9RNSL+tTQVk2WCvLkfl
+         xfnwgvBXkDXiaUxfbxoz3v9EcbkIbByHe+fRwPB8YVW0rxnbaKOwPIVujqx33esTcOQW
+         Th/g==
+X-Gm-Message-State: APjAAAV0eDWNqrd0OKY6Pnld1ZpGG+Fp7Y+MwOQzV8/tMC23cZ5qpgmJ
+        5T/bwTdO/x4sgTivoyOROO8xMGE4esza+SzmNlM=
+X-Google-Smtp-Source: APXvYqw3ZyNq6jFBTnHzS5gssLfE4DTID8I3qd8m84Q2kJvxaTWtxYsQx05sqIr5tsbvXGxgM7EoCiB2ZB97ZSP64/I=
+X-Received: by 2002:a9d:7a82:: with SMTP id l2mr3423323otn.297.1570634897533;
+ Wed, 09 Oct 2019 08:28:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <1570178133-21532-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570178133-21532-7-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570178133-21532-7-git-send-email-fabrizio.castro@bp.renesas.com>
+References: <1570178133-21532-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570178133-21532-8-git-send-email-fabrizio.castro@bp.renesas.com>
+In-Reply-To: <1570178133-21532-8-git-send-email-fabrizio.castro@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Oct 2019 14:48:01 +0200
-Message-ID: <CAMuHMdWNmzWyUkHsJbY9A8of1B61SCcy3J8Friw0JDCctJa2=Q@mail.gmail.com>
-Subject: Re: [PATCH 6/7] arm64: dts: renesas: r8a774b1: Add PCIe device nodes
+Date:   Wed, 9 Oct 2019 17:28:06 +0200
+Message-ID: <CAMuHMdVh2=84=BaEw+aTvXC35K6A0KG2-18sgbvTxtqaan275Q@mail.gmail.com>
+Subject: Re: [PATCH 7/7] arm64: dts: renesas: hihope-rzg2-ex: Let the board
+ specific DT decide about pciec1
 To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -64,7 +65,10 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 On Fri, Oct 4, 2019 at 10:36 AM Fabrizio Castro
 <fabrizio.castro@bp.renesas.com> wrote:
-> This patch adds PCIe{0,1} device nodes for R8A774B1 SoC.
+> The plan for the HiHope RZ/G2N board is to enable pciec0 by default,
+> and use pciec1 physical interface for SATA (as SATA and PCIE1 share
+> the same physical interface), therefore move pciec1 enabling away
+> from hihope-rzg2-ex.
 >
 > Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
 
