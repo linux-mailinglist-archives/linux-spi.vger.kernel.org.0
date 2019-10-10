@@ -2,113 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CD3D1C52
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2019 00:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C761CD1E0B
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2019 03:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732302AbfJIW5j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Oct 2019 18:57:39 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:44636 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730815AbfJIW5i (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Oct 2019 18:57:38 -0400
-Received: by mail-ed1-f66.google.com with SMTP id r16so3614419edq.11;
-        Wed, 09 Oct 2019 15:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TLKAB20NJ4mG79AwI1Zw5Vd419N/hLfm1s9oXYim4aQ=;
-        b=j8gwvtYlNfvlgcQ5D1sETxQxUnyN9H7oHHT8mZFThK5rhUkKIRZN7tzU+ulJvmo5dJ
-         6YkCah47L5JIeZx0/roqO0U37ivmO6+36tnNzmR7GCJGyuyg/WII4+rSj1ocvtflwu+v
-         LVFvzBmRRVkUKf/kO52MIFVqtwYxESrjWOIZSvPzK2NLFRJCkB/ZqtGzYqBJE5qt+Aed
-         M+dAoAjbws5s1SIn7WXC7ZD7gkZridUvLN29AvxJnQLvyL98W3If1zm6S/D2eRagbmdm
-         gENfd3MYTgHDMEyVHY37S1Z75tVxIjLRtY/leVau37sPLemzO8vYL6zA2/lsCfqx9aFT
-         nawA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TLKAB20NJ4mG79AwI1Zw5Vd419N/hLfm1s9oXYim4aQ=;
-        b=PoLinT6dhuofVJ3/zRk+zjnejMjWs8+Txc3+twiXpHhcaszlwgPqR8NasdZy/3ak6z
-         XmkJ5KMX9/ufE9jCsJM1FiBk1/tn/KLfSsDyIgQmJ+U8jlxKFACpAQb9Sjxw3JRDZZKs
-         vvhpc9Y9thwUYaFDsxVioyro6HIOB4ZrtEUxWEvHGMcCrZZqbbamyBxHFGXZ7C5EsXk9
-         8QPTwyvlXRxeBiodXBnXTjT3GuxCNUy/xyoinU4qXJNtQewMbv1MqgaNrNysHPNRnP4D
-         hMFc8B9fIltot7LpcQEtbCRHGggzTDIB0VjIclhp8NEnGa/igt7sMgIDdK94EcAgnw77
-         kdGw==
-X-Gm-Message-State: APjAAAUHW+HKj6tpgP6oWivzNhcbZ+h3B4bfYmHFdN2anPEE33yqkLaC
-        dSBl8RGK/ba8J+qpnfWPe8GMxJNm8tcbAajFKhA=
-X-Google-Smtp-Source: APXvYqwYUsKHv7PThKGpnEpqXfpkOPngRiW9gzxpeqrSnk/roSAAFnQQITw3Bv4rByly/JmvWMye1kNWtprDV41TtZo=
-X-Received: by 2002:a17:906:28ce:: with SMTP id p14mr5246086ejd.164.1570661856358;
- Wed, 09 Oct 2019 15:57:36 -0700 (PDT)
+        id S1731553AbfJJBeu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Oct 2019 21:34:50 -0400
+Received: from mga06.intel.com ([134.134.136.31]:50444 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731134AbfJJBeu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 9 Oct 2019 21:34:50 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 18:34:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,278,1566889200"; 
+   d="scan'208";a="393873539"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Oct 2019 18:34:48 -0700
+Received: from [10.226.38.27] (unknown [10.226.38.27])
+        by linux.intel.com (Postfix) with ESMTP id 9DAFF5803E4;
+        Wed,  9 Oct 2019 18:34:45 -0700 (PDT)
+Subject: Re: [PATCH v1 0/2] spi: cadence-qspi: Add cadence-qspi support for
+ Intel LGM SoC
+To:     Vignesh Raghavendra <vigneshr@ti.com>, broonie@kernel.org
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cheol.yong.kim@intel.com,
+        qi-ming.wu@intel.com
+References: <20190916073843.39618-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <c4555df5-89d5-e8a6-bed4-887c23ac4f0f@ti.com>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <89e49834-8697-2917-d666-769969f074a4@linux.intel.com>
+Date:   Thu, 10 Oct 2019 09:34:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20190905010114.26718-3-olteanv@gmail.com> <20191008105254.99A6D274299F@ypsilon.sirena.org.uk>
- <CA+h21hoid_bQ37qC30fDt62ces40PwSQ2v=KHTGkadV_ycrd5A@mail.gmail.com>
- <20191008164259.GQ4382@sirena.co.uk> <20191009151348.2e2e2383@cakuba.netronome.com>
-In-Reply-To: <20191009151348.2e2e2383@cakuba.netronome.com>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Thu, 10 Oct 2019 01:57:25 +0300
-Message-ID: <CA+h21hoDAuKwLj--pbm=TGaO0PKwUeTUFDu=36KjDN+XwP80jw@mail.gmail.com>
-Subject: Re: Applied "spi: Add a PTP system timestamp to the transfer
- structure" to the spi tree
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hubert Feurstein <h.feurstein@gmail.com>,
-        linux-spi@vger.kernel.org, Miroslav Lichvar <mlichvar@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <c4555df5-89d5-e8a6-bed4-887c23ac4f0f@ti.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 10 Oct 2019 at 01:14, Jakub Kicinski
-<jakub.kicinski@netronome.com> wrote:
->
-> On Tue, 8 Oct 2019 17:42:59 +0100, Mark Brown wrote:
-> > On Tue, Oct 08, 2019 at 03:58:51PM +0300, Vladimir Oltean wrote:
-> >
-> > > Dave, do you think you can somehow integrate this patch into net-next
-> > > as well, so that I can send some further patches that depend on the
-> > > newly introduced ptp_sts member of struct spi_transfer without waiting
-> > > for another kernel release?
-> >
-> > Ugh, it'd have been good to have been more aware of this before applying
-> > things since I put them on the one development branch (I used to make
-> > more topic branches but Linus doesn't like them).  I've pulled things
-> > out into a branch with a signed tag for merging into other trees:
-> >
-> > The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c:
-> >
-> >   Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
-> >
-> > are available in the Git repository at:
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-ptp-api
-> >
-> > for you to fetch changes up to 79591b7db21d255db158afaa48c557dcab631a1c:
-> >
-> >   spi: Add a PTP system timestamp to the transfer structure (2019-10-08 17:38:15 +0100)
-> >
-> > ----------------------------------------------------------------
-> > spi: Add a PTP API
-> >
-> > For detailed timestamping of operations.
-> >
-> > ----------------------------------------------------------------
-> > Vladimir Oltean (1):
-> >       spi: Add a PTP system timestamp to the transfer structure
-> >
-> >  drivers/spi/spi.c       | 127 ++++++++++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/spi/spi.h |  61 +++++++++++++++++++++++
-> >  2 files changed, 188 insertions(+)
->
-> Thanks for the branch, I pulled it into net-next, it should show up once
-> build testing is done.
+HI Vignesh,
 
-Thanks to both of you, Jakub and Mark!
+On 17/9/2019 12:50 AM, Vignesh Raghavendra wrote:
+> Hi,
+>
+> On 16/09/19 1:08 PM, Ramuthevar,Vadivel MuruganX wrote:
+>> patch 1: Add YAML for cadence-qspi devicetree cdocumentation.
+>> patch 2: cadence-qspi controller driver to support QSPI-NAND flash
+>> using existing spi-nand framework with legacy spi protocol.
+> Nope, you cannot have two drivers for the same IP (i.e Cadence QSPI)
+> just to support to different types of SPI memories. This is the reason
+> why spi_mem_ops was introduced.
+>
+> Please rewrite this driver over to use spi_mem_ops (instead of using
+> generic SPI xfers) so that same driver supports both SPI-NOR and
+> SPI-NAND flashes. Once that's done drivers/mtd/spi-nor/cadence-quadspi.c
+> can be deleted.
+>
+> There are few existing examples of spi_mem_ops users in drivers/spi/
+> (git grep spi_mem_ops) and materials here on how to write such a driver:
+>
+> [1]
+> https://bootlin.com/blog/spi-mem-bringing-some-consistency-to-the-spi-memory-ecosystem/
+> [2] https://www.youtube.com/watch?v=PkWbuLM_gmU
+As per Mark Brown and your suggestion,  I have started adapting 
+cadence-qaudspi driver with spi_mem_ops framework to work
+QSPI-NAND/NOR as a generic driver(completely removed the legacy 
+SPI-XFERS),  is in progress on Intel LGM SoC.
+QSPI-IP on Intel LGM  do not have DMA  support and also not part of QSPI 
+IP, so couldn't able to validate DMA related.
+will adapt the DMA things which are existing in cadence-quadspi.c as it is.
 
--Vladimir
+currently TI and Altera SoC's use this Cadence-qspi IP , both are not 
+using DMA as per my understanding (correct me if it is wrong).
+confirmed through device tree entry.
+
+what is your opinion on DMA related stuff? also using macronix(QSPI-NOR) 
+flash/Micron(QSPI-NAND).
+---
+With Regards
+Vadivel
+>> Ramuthevar Vadivel Murugan (2):
+>>    dt-bindings: spi: Add support for cadence-qspi IP Intel LGM SoC
+>>    spi: cadence-qspi: Add QSPI support for Intel LGM SoC
+>>
+>>   .../devicetree/bindings/spi/cadence,qspi-nand.yaml |  84 +++
+>>   drivers/spi/Kconfig                                |   9 +
+>>   drivers/spi/Makefile                               |   1 +
+>>   drivers/spi/spi-cadence-qspi-apb.c                 | 644 +++++++++++++++++++++
+>>   drivers/spi/spi-cadence-qspi-apb.h                 | 174 ++++++
+>>   drivers/spi/spi-cadence-qspi.c                     | 461 +++++++++++++++
+>>   drivers/spi/spi-cadence-qspi.h                     |  73 +++
+>>   7 files changed, 1446 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/cadence,qspi-nand.yaml
+>>   create mode 100644 drivers/spi/spi-cadence-qspi-apb.c
+>>   create mode 100644 drivers/spi/spi-cadence-qspi-apb.h
+>>   create mode 100644 drivers/spi/spi-cadence-qspi.c
+>>   create mode 100644 drivers/spi/spi-cadence-qspi.h
+>>
