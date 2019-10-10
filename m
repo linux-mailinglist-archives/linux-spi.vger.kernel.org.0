@@ -2,212 +2,162 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DC0D3287
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2019 22:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F58D3290
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2019 22:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbfJJUit (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Oct 2019 16:38:49 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:58855 "EHLO
+        id S1727367AbfJJUjp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Oct 2019 16:39:45 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:55947 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726132AbfJJUis (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Oct 2019 16:38:48 -0400
+        with ESMTP id S1726132AbfJJUjp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Oct 2019 16:39:45 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MvKTJ-1i0io918NN-00rJAB; Thu, 10 Oct 2019 22:38:12 +0200
+ 1MEUaQ-1iKKzT1KnK-00FzQO; Thu, 10 Oct 2019 22:39:37 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Kukjin Kim <kgene@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Sangbeom Kim <sbkim73@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>
 Cc:     linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Olof Johansson <olof@lixom.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Faiz Abbas <faiz_abbas@ti.com>, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: [PATCH 11/36] ARM: s5pv210: split from plat-samsung
-Date:   Thu, 10 Oct 2019 22:29:55 +0200
-Message-Id: <20191010203043.1241612-11-arnd@arndb.de>
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH 13/36] ARM: s3c: move regs-spi.h into spi driver
+Date:   Thu, 10 Oct 2019 22:29:57 +0200
+Message-Id: <20191010203043.1241612-13-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20191010203043.1241612-1-arnd@arndb.de>
 References: <20191010202802.1132272-1-arnd@arndb.de>
  <20191010203043.1241612-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:DeCWCHOpOlptkpY1Z/HIZH2sQ5vntA19TvDZ7kwzXVESbUwtDT/
- nya/g+yk9RmYCdn7Mnh6OP8xv47pVGRSws4DiX1LHA12gXOzQ1qn6lxQpZRRKqP7iAcdbOu
- l8p40rlKc+olt+OUsDEnNqYSWkVcmXc0U/jNtH57wqSdtcs66pZwaDfNStTfnXSHjMdAuUp
- DXP4NCRq3Rv4Wl6NcQjBg==
+X-Provags-ID: V03:K1:3w1t9KxRpboazCGFbUHHyRTgq8anB+CB4R77jmnunv3b/xUCHB4
+ q6DgNwffa+vbuyjv196/F+Tm4Xg7oOWOO704mQ9rv1LSA39GWM20GfooqrVAYwAuO4hxESt
+ DnhdUneq160nDqisp9FQkSUE4x8mw9aJZUv/WkZ2HjFJp47SwG33/0dfw5rF5NMZnlAERre
+ lLAQaHwWHBUzD2nFdeb+w==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KPFFi7urTwk=:P0VUAx0mQV0RyAkge1tOF5
- Z/OBFZSRG+nwpOLZGYULeoFGwoagH/2P2LEXzhRAW5zMvDhMqbJQ9mzjtzfnRNeEhVZ0gDYDJ
- CykC+d1CzLd+aW2GVrWocU5wdIZKVAUw2oYck3ZT1FdLuisDLLRlQ7ooz86osiHPW71TBFJ6t
- WXuQ3fwfJAgQ9rIth2pQBuJ1gpMig4USaOiJ3vhpUL65WUmTBdpPHyfLsHUmlLgcpvbvqIIfv
- n4P7ECrvi49H/eGtb18RgiEGiHPLzJO807ZMamHJapIyHua/szElJoTQFCPKNuYdAjV9DeTYk
- RdNLLkZNBGKwKMtKs4zm1QcO1qnkxdXIbrUY8PU7BWG4wBuLTwpgxMaapIiZF/bwwg8JJ6/6a
- 8y8/iEHqyoJ9xKOaKtfljEBDENzJN1GqRuyTpwv/12cIfBczoHDZQpbAb5rFd/bnswKf1lu0a
- dVVJpLcnkD6ihqNhDimLNkuOiK8TxYEwSj6KAnp7ExU955M50aatPaOjHGHXac0JTa7Mm/Kfp
- gJp/qGkOHKTLJW/vCb8IwwHfs7GYXefBiiwjIqkaLeIi/KYEL2VF9Mg0HTU42gmIPKD3Wqe95
- q8txmDV6AE20P3VWTv0S2OIbEACrqPRaBu4im4BNZtZG7LcyBV3JkeK3B30+N5qCkfvZt8qKj
- U2QVc5t/ZrUMYEk7nZcq8nF4p5vJT/AkVOXRmnXLHMHkwxkVfuUWgeKebZ62c/HhMMtJ0QQ3a
- mtytbdoOtXYX3+AwX13fJNiqZrvW34Yt48Wg4UQbbwxucTrepEGTomVXxdK9NZ7NWFSnMnEUy
- h1MUWk7gsGxTlCkbcZ3fj1Sg+w94MIdMWSb6xCLtIHMV3Io+qK/kbjhlHaRiP/LqBeq61X6GA
- 5dQG3dEGuSPEkJVAfh0A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:D2Xpu3hJhjQ=:UlYrBdqu61lE6ufO+d561Q
+ Bfw1XUpkKtAj070fPyGOPGjL7n7thPkZvxlq6FJqHfGBuMWhNQtVlNK3qQCxx7TIJpxXGBO55
+ S2tSfftKBXA1zvPo9DVrSkPn14yvUwhRNoMJHVhmf1dNTyiYMYBPK8YIu2JgDVKbE6ueZRFyP
+ CwNwZXKQb4SgL8zCdYvI2KdOV5FdySqN0yhnDhzwKkVPwOzpzyh3BG36SfQ5HDDhdOneDmK7b
+ LHe3+SbLc/mHgIE5Gncs+lYo98vEQJ04siZUWGEyqKNT6am1gI5xHZYMo/vdgaCwhGj8hceQI
+ 0StPryl7h1jIKdThg3Pj2XiDEdzhdM+1vAivgH2i6aDk7+v+petjoJfLjTIfLupqjUE5BeSU5
+ jroS8Pu/PuUyzqHGYtfCLw6/Gd7X3AkSpgBX0EQX2qSGW4dgYFfRmqj8LIbNb6WPo1gxS5IFn
+ D4jXIyXnrTRYnOv1j466yYllfqSQI/PDaOUXrZfd4Fmmzr9ACHb6ufFNT8ZK7zJ8fVFpliHR4
+ bDy8ACybE/Xy77m5qD03tsZQ0ow+oYUtvLZI5FxC+7Z07LwDR291mk5MOczTNtaP9laPz7xF/
+ xI1WcX7OJLa52/KgWZKTwireyfx73pbanE43U6sJ7mNgLwCS79xQysGOylpMoUGOC6FZPi4Qt
+ O/F/Rue9E4yI5q1nn97/HVXh20N/LBU4xVXHavk0J8mwmpD/UedJkT3MvV2nxwjATmI1tlu3w
+ 3dt2fUlJP1wsblfsMHy8Yt4BPMG2Zb29XzZ3C1gAsEVVMOGGhfdo+BvcWofCSDocCn2Q162Z/
+ ijP/Ek03rpUSCYREBVJ3vU8Jm7E1a7EQsqeYKVMp8KH/dTm0Je+BDd/amA3vTRFE5GlhsIA7x
+ I1a+2suH/zaEx0hJqmfg==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-These can be build completely independently, so split
-the two Kconfig symbols.
+The file is mostly specific to the driver, the few bits that
+are actually used by the platform code get moved to mach/map.h
+instead.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/Kconfig.debug        | 6 +++---
- arch/arm/Makefile             | 1 -
- arch/arm/plat-samsung/Kconfig | 2 +-
- drivers/mmc/host/Kconfig      | 2 +-
- drivers/pwm/Kconfig           | 2 +-
- drivers/spi/Kconfig           | 2 +-
- drivers/tty/serial/Kconfig    | 2 +-
- sound/soc/samsung/Kconfig     | 2 +-
- 8 files changed, 9 insertions(+), 10 deletions(-)
+ arch/arm/mach-s3c24xx/include/mach/map.h                      | 2 ++
+ arch/arm/mach-s3c24xx/s3c2412.c                               | 1 -
+ arch/arm/plat-samsung/devs.c                                  | 1 -
+ drivers/spi/spi-s3c24xx-fiq.S                                 | 4 +++-
+ .../include/plat/regs-spi.h => drivers/spi/spi-s3c24xx-regs.h | 3 ---
+ drivers/spi/spi-s3c24xx.c                                     | 3 +--
+ 6 files changed, 6 insertions(+), 8 deletions(-)
+ rename arch/arm/plat-samsung/include/plat/regs-spi.h => drivers/spi/spi-s3c24xx-regs.h (95%)
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 9c4f2d6deb06..4c4e97ae4fcb 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -998,7 +998,7 @@ choice
- 		  via SCIFA4 on Renesas SH-Mobile AG5 (SH73A0).
+diff --git a/arch/arm/mach-s3c24xx/include/mach/map.h b/arch/arm/mach-s3c24xx/include/mach/map.h
+index bca93112f57d..a20c9fd0d855 100644
+--- a/arch/arm/mach-s3c24xx/include/mach/map.h
++++ b/arch/arm/mach-s3c24xx/include/mach/map.h
+@@ -86,6 +86,8 @@
+ #define S3C2410_PA_SPI	   (0x59000000)
+ #define S3C2443_PA_SPI0		(0x52000000)
+ #define S3C2443_PA_SPI1		S3C2410_PA_SPI
++#define S3C2410_SPI1		(0x20)
++#define S3C2412_SPI1		(0x100)
  
- 	config DEBUG_S3C_UART0
--		depends on PLAT_SAMSUNG || ARCH_EXYNOS
-+		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
- 		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
- 		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
- 		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
-@@ -1010,7 +1010,7 @@ choice
- 		  by the boot-loader before use.
+ /* SDI */
+ #define S3C2410_PA_SDI	   (0x5A000000)
+diff --git a/arch/arm/mach-s3c24xx/s3c2412.c b/arch/arm/mach-s3c24xx/s3c2412.c
+index 8fe4d4670dcb..c3fb3e6c0dd8 100644
+--- a/arch/arm/mach-s3c24xx/s3c2412.c
++++ b/arch/arm/mach-s3c24xx/s3c2412.c
+@@ -37,7 +37,6 @@
+ #include <plat/cpu-freq.h>
+ #include <plat/devs.h>
+ #include <plat/pm.h>
+-#include <plat/regs-spi.h>
  
- 	config DEBUG_S3C_UART1
--		depends on PLAT_SAMSUNG || ARCH_EXYNOS
-+		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
- 		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
- 		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
- 		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
-@@ -1022,7 +1022,7 @@ choice
- 		  by the boot-loader before use.
+ #include "common.h"
+ #include "nand-core.h"
+diff --git a/arch/arm/plat-samsung/devs.c b/arch/arm/plat-samsung/devs.c
+index 6e4c1cb07104..fd94a35e22f8 100644
+--- a/arch/arm/plat-samsung/devs.c
++++ b/arch/arm/plat-samsung/devs.c
+@@ -59,7 +59,6 @@
+ #include <linux/platform_data/usb-s3c2410_udc.h>
+ #include <linux/platform_data/usb-ohci-s3c2410.h>
+ #include <plat/usb-phy.h>
+-#include <plat/regs-spi.h>
+ #include <linux/platform_data/asoc-s3c.h>
+ #include <linux/platform_data/spi-s3c64xx.h>
  
- 	config DEBUG_S3C_UART2
--		depends on PLAT_SAMSUNG || ARCH_EXYNOS
-+		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
- 		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
- 		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
- 		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index f492d7c338fe..a1bc15cda751 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -235,7 +235,6 @@ machine-$(CONFIG_PLAT_SPEAR)		+= spear
- # by CONFIG_* macro name.
- plat-$(CONFIG_ARCH_OMAP)	+= omap
- plat-$(CONFIG_ARCH_S3C64XX)	+= samsung
--plat-$(CONFIG_ARCH_S5PV210)	+= samsung
- plat-$(CONFIG_PLAT_ORION)	+= orion
- plat-$(CONFIG_PLAT_PXA)		+= pxa
- plat-$(CONFIG_PLAT_S3C24XX)	+= samsung
-diff --git a/arch/arm/plat-samsung/Kconfig b/arch/arm/plat-samsung/Kconfig
-index 740bdb23f38a..1530946cc672 100644
---- a/arch/arm/plat-samsung/Kconfig
-+++ b/arch/arm/plat-samsung/Kconfig
-@@ -4,7 +4,7 @@
+diff --git a/drivers/spi/spi-s3c24xx-fiq.S b/drivers/spi/spi-s3c24xx-fiq.S
+index e95d6282109e..9d5f8f1e5e81 100644
+--- a/drivers/spi/spi-s3c24xx-fiq.S
++++ b/drivers/spi/spi-s3c24xx-fiq.S
+@@ -12,10 +12,12 @@
  
- config PLAT_SAMSUNG
- 	bool
--	depends on PLAT_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210
-+	depends on PLAT_S3C24XX || ARCH_S3C64XX
- 	default y
- 	select GENERIC_IRQ_CHIP
- 	select NO_IOPORT_MAP
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index 400a581c918c..16a0e5430b44 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -275,7 +275,7 @@ config MMC_SDHCI_TEGRA
+ #include <mach/map.h>
+ #include <mach/regs-irq.h>
+-#include <plat/regs-spi.h>
  
- config MMC_SDHCI_S3C
- 	tristate "SDHCI support on Samsung S3C SoC"
--	depends on MMC_SDHCI && (PLAT_SAMSUNG || ARCH_EXYNOS)
-+	depends on MMC_SDHCI && (PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS)
- 	help
- 	  This selects the Secure Digital Host Controller Interface (SDHCI)
- 	  often referrered to as the HSMMC block in some of the Samsung S3C
-diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-index e3a2518503ed..8eb738cac0c7 100644
---- a/drivers/pwm/Kconfig
-+++ b/drivers/pwm/Kconfig
-@@ -394,7 +394,7 @@ config PWM_ROCKCHIP
+ #include "spi-s3c24xx-fiq.h"
  
- config PWM_SAMSUNG
- 	tristate "Samsung PWM support"
--	depends on PLAT_SAMSUNG || ARCH_EXYNOS
-+	depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
- 	help
- 	  Generic PWM framework driver for Samsung.
++#define S3C2410_SPTDAT           (0x10)
++#define S3C2410_SPRDAT           (0x14)
++
+ 	.text
  
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 6f7fdcbb9151..355391ee643d 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -625,7 +625,7 @@ config SPI_S3C24XX_FIQ
+ 	@ entry to these routines is as follows, with the register names
+diff --git a/arch/arm/plat-samsung/include/plat/regs-spi.h b/drivers/spi/spi-s3c24xx-regs.h
+similarity index 95%
+rename from arch/arm/plat-samsung/include/plat/regs-spi.h
+rename to drivers/spi/spi-s3c24xx-regs.h
+index 607844311566..37b93ff7c7fe 100644
+--- a/arch/arm/plat-samsung/include/plat/regs-spi.h
++++ b/drivers/spi/spi-s3c24xx-regs.h
+@@ -8,9 +8,6 @@
+ #ifndef __ASM_ARCH_REGS_SPI_H
+ #define __ASM_ARCH_REGS_SPI_H
  
- config SPI_S3C64XX
- 	tristate "Samsung S3C64XX series type SPI"
--	depends on (PLAT_SAMSUNG || ARCH_EXYNOS || COMPILE_TEST)
-+	depends on (PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST)
- 	help
- 	  SPI driver for Samsung S3C64XX and newer SoCs.
+-#define S3C2410_SPI1		(0x20)
+-#define S3C2412_SPI1		(0x100)
+-
+ #define S3C2410_SPCON		(0x00)
  
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 4789b5d62f63..17f01cf3009c 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -237,7 +237,7 @@ config SERIAL_CLPS711X_CONSOLE
+ #define S3C2410_SPCON_SMOD_DMA	(2 << 5)	/* DMA mode */
+diff --git a/drivers/spi/spi-s3c24xx.c b/drivers/spi/spi-s3c24xx.c
+index 2d6e37f25e2d..2f395e4861f6 100644
+--- a/drivers/spi/spi-s3c24xx.c
++++ b/drivers/spi/spi-s3c24xx.c
+@@ -21,10 +21,9 @@
+ #include <linux/spi/s3c24xx.h>
+ #include <linux/module.h>
  
- config SERIAL_SAMSUNG
- 	tristate "Samsung SoC serial support"
--	depends on PLAT_SAMSUNG || ARCH_EXYNOS
-+	depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
- 	select SERIAL_CORE
- 	help
- 	  Support for the on-chip UARTs on the Samsung S3C24XX series CPUs,
-diff --git a/sound/soc/samsung/Kconfig b/sound/soc/samsung/Kconfig
-index 638983123d8f..7a0035dd9995 100644
---- a/sound/soc/samsung/Kconfig
-+++ b/sound/soc/samsung/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- menuconfig SND_SOC_SAMSUNG
- 	tristate "ASoC support for Samsung"
--	depends on PLAT_SAMSUNG || ARCH_EXYNOS || COMPILE_TEST
-+	depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
- 	depends on COMMON_CLK
- 	select SND_SOC_GENERIC_DMAENGINE_PCM
- 	---help---
+-#include <plat/regs-spi.h>
+-
+ #include <asm/fiq.h>
+ 
++#include "spi-s3c24xx-regs.h"
+ #include "spi-s3c24xx-fiq.h"
+ 
+ /**
 -- 
 2.20.0
 
