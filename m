@@ -2,148 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBC0D38ED
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Oct 2019 07:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C50FD44D9
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Oct 2019 18:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727321AbfJKFwa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Oct 2019 01:52:30 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43903 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727329AbfJKFwa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Oct 2019 01:52:30 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iInqC-0008KX-1r; Fri, 11 Oct 2019 07:51:52 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iInq9-0001Vy-3U; Fri, 11 Oct 2019 07:51:49 +0200
-Date:   Fri, 11 Oct 2019 07:51:49 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Sangbeom Kim <sbkim73@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Olof Johansson <olof@lixom.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Faiz Abbas <faiz_abbas@ti.com>, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 11/36] ARM: s5pv210: split from plat-samsung
-Message-ID: <20191011055149.4dudr4tk2znpt65u@pengutronix.de>
-References: <20191010202802.1132272-1-arnd@arndb.de>
- <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-11-arnd@arndb.de>
+        id S1726910AbfJKQBO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Oct 2019 12:01:14 -0400
+Received: from mail-pf1-f171.google.com ([209.85.210.171]:33347 "EHLO
+        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbfJKQBO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Oct 2019 12:01:14 -0400
+Received: by mail-pf1-f171.google.com with SMTP id q10so6363239pfl.0;
+        Fri, 11 Oct 2019 09:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=itQoi2dgqCgMSiWT5e6lfORl7lgUJoSIb5pqH2SRdb8=;
+        b=EE48D9SvWa4Y7ktBRPyGiJaOJitENY9e4a+b3iU214qrQtkjkdd5J8p0xVi1lSqLtB
+         ykuxzJhICU9bhPoAq2AvypqBylXUp1e+UQs/wnq7TnOGY20q/VGxZVYy8QomZ2rxf8d/
+         QVgHdWUC2Df2hnhkyRPRdBbRsH9ZBhx7lHXxzl2Awanb2kIAEPeY4OuPvnxunRdaQIHq
+         uDdvPLmA48EB2uzgmbLlDJKxTH4GKYavhSQC2D8DDIvmbkbE8S4wePLK4EWdno9DNWh8
+         z7WSK4Mg7Kiir0wAa+Fq+RipQSGF1EpPei+luszijXebtRkRB1/M1NxFiaJ/MQL7ED65
+         Ns1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=itQoi2dgqCgMSiWT5e6lfORl7lgUJoSIb5pqH2SRdb8=;
+        b=jtd1vW0Gt+gfqUKNu2dd/3FdDwTdqYDP2OfogkySH8aNcS4EF6Y2TU4ZRm8A62Dp6W
+         dKBs9Avfvalt5XRCqpYd9puryFeVFZbHGOgSmdNUbu0muZq4AXNtbctCVw7tb0DVnNKZ
+         Nw1Zt0ujYvOIo1D8gjWn2/M4z3CKirRQFsipHHSQpmsx1Z/dI9+4+ZRBinUD3RzCP2lC
+         TePGZ+3PbQvGHOadVDy0d5Nj/AUsj7pa3fPRCwwzSqCBejr3iQ3c3tEp25tU0J91t2Fs
+         GAt0+xUshG/9cdgVW6LAB72hAiWLehB2WgJtINXfDjA8IN3fW6FwsLcxhxcM9DT9MlkO
+         2QPQ==
+X-Gm-Message-State: APjAAAWmngMoeGkfE8joqJsWvETXUuUMNxjUlUUMa1bHz7CKtOi/Wfq2
+        oxSP3w59OraRWv9AXAOLAgIzHG8I
+X-Google-Smtp-Source: APXvYqytD3kiUVj/n9RgfT3nJvTuGMHAhCgy20cz+KMDm2IZ22jcZi7jUehEPkoqNqvwexRDVPYYXg==
+X-Received: by 2002:a17:90a:a781:: with SMTP id f1mr18939245pjq.29.1570809673513;
+        Fri, 11 Oct 2019 09:01:13 -0700 (PDT)
+Received: from ?IPv6:2620:15c:2c1:200:55c7:81e6:c7d8:94b? ([2620:15c:2c1:200:55c7:81e6:c7d8:94b])
+        by smtp.gmail.com with ESMTPSA id y2sm10375535pfe.126.2019.10.11.09.01.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Oct 2019 09:01:11 -0700 (PDT)
+Subject: Re: Potential NULL pointer deference in spi
+To:     Yizhuo Zhai <yzhai003@ucr.edu>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhiyun Qian <zhiyunq@cs.ucr.edu>,
+        Chengyu Song <csong@cs.ucr.edu>
+References: <CABvMjLToYzmCue-TiDhR4Yu4v3+Z+-UV9WhixV7uvwoMh2m5Lw@mail.gmail.com>
+ <f3ce1620-c421-b41f-440b-efe3ff6e91fe@gmail.com>
+ <CABvMjLTrGprdgFTP-+2XC_p+vE+tVWeYvyuLGkKj1dY7KR+JDg@mail.gmail.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <214886b4-ec40-3959-35ff-f9b5a2507300@gmail.com>
+Date:   Fri, 11 Oct 2019 09:01:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191010203043.1241612-11-arnd@arndb.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+In-Reply-To: <CABvMjLTrGprdgFTP-+2XC_p+vE+tVWeYvyuLGkKj1dY7KR+JDg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 10:29:55PM +0200, Arnd Bergmann wrote:
-> These can be build completely independently, so split
-> the two Kconfig symbols.
+
+
+On 10/10/19 10:31 PM, Yizhuo Zhai wrote:
+> Hi Eric:
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> My apologies for bothering, we got those report via static analysis
+> and haven't got a good method to verify the path to trigger them.
+> Therefore I sent those email to you maintainers first since you
+> know much better about the details. Sorry again for your time and
+> I take your suggestions.
 
-I'd mention the two symbols' names you're working on in the commit log.
-I guess it's about PLAT_SAMSUNG and ARCH_S5PV210. And I wouldn't call it
-"split" which IMHO suggests there was only one symbol before.
+My suggestion is that you need to make deep investigations on your own,
+before sending mails to lkml@, reaching thousands of people on the planet.
 
-Maybe:
+Static analysis tools having too many false positive are not worth
+the time spent by humans.
 
-	Don't imply PLAT_SAMSUNG if ARCH_S5PV210 is enabled
+I knew nothing about drivers/spi/spi.c, but after few minutes reading the code,
+it was clear your report was wrong.
 
-would be a better subject line?
+Do not ask us to do what you should do yourself.
 
-> ---
->  arch/arm/Kconfig.debug        | 6 +++---
->  arch/arm/Makefile             | 1 -
->  arch/arm/plat-samsung/Kconfig | 2 +-
->  drivers/mmc/host/Kconfig      | 2 +-
->  drivers/pwm/Kconfig           | 2 +-
->  drivers/spi/Kconfig           | 2 +-
->  drivers/tty/serial/Kconfig    | 2 +-
->  sound/soc/samsung/Kconfig     | 2 +-
->  8 files changed, 9 insertions(+), 10 deletions(-)
+Thanks.
+
 > 
-> diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-> index 9c4f2d6deb06..4c4e97ae4fcb 100644
-> --- a/arch/arm/Kconfig.debug
-> +++ b/arch/arm/Kconfig.debug
-> @@ -998,7 +998,7 @@ choice
->  		  via SCIFA4 on Renesas SH-Mobile AG5 (SH73A0).
->  
->  	config DEBUG_S3C_UART0
-> -		depends on PLAT_SAMSUNG || ARCH_EXYNOS
-> +		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
->  		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
->  		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
->  		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
-> @@ -1010,7 +1010,7 @@ choice
->  		  by the boot-loader before use.
->  
->  	config DEBUG_S3C_UART1
-> -		depends on PLAT_SAMSUNG || ARCH_EXYNOS
-> +		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
->  		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
->  		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
->  		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
-> @@ -1022,7 +1022,7 @@ choice
->  		  by the boot-loader before use.
->  
->  	config DEBUG_S3C_UART2
-> -		depends on PLAT_SAMSUNG || ARCH_EXYNOS
-> +		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
->  		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
->  		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
->  		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
-> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-> index f492d7c338fe..a1bc15cda751 100644
-> --- a/arch/arm/Makefile
-> +++ b/arch/arm/Makefile
-> @@ -235,7 +235,6 @@ machine-$(CONFIG_PLAT_SPEAR)		+= spear
->  # by CONFIG_* macro name.
->  plat-$(CONFIG_ARCH_OMAP)	+= omap
->  plat-$(CONFIG_ARCH_S3C64XX)	+= samsung
-> -plat-$(CONFIG_ARCH_S5PV210)	+= samsung
-
-Would it make more sense to make this
-
-	plat-$(PLAT_SAMSUNG) += samsung
-
-(in a separate patch)? Hmm, it seems there is no plat-y for
-PLAT_S3C24XX=y builds. Is this intended? If yes, the directory name
-containing "samsung" suggests something that seems untrue.
-
-Best regards
-Uwe
-
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+> On Wed, Oct 9, 2019 at 10:48 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
+>>
+>>
+>>
+>> On 10/9/19 10:37 PM, Yizhuo Zhai wrote:
+>>> Hi All:
+>>>
+>>> drivers/spi/spi.c:
+>>>
+>>> The function to_spi_device() could return NULL, but some callers
+>>> in this file does not check the return value while directly dereference
+>>> it, which seems potentially unsafe.
+>>>
+>>> Such callers include spidev_release(),  spi_dev_check(),
+>>> driver_override_store(), etc.
+>>>
+>>>
+>>
+>>
+>> Many of your reports are completely bogus.
+>>
+>> I suggest you spend more time before sending such emails to very large audience
+>> and risk being ignored at some point.
+>>
+>> Thanks.
+> 
+> 
+> 
