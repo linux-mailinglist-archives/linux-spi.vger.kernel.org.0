@@ -2,149 +2,148 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6980D38BA
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Oct 2019 07:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBC0D38ED
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Oct 2019 07:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfJKFj2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Oct 2019 01:39:28 -0400
-Received: from mx4.ucr.edu ([138.23.248.66]:5809 "EHLO mx4.ucr.edu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726116AbfJKFj1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 11 Oct 2019 01:39:27 -0400
-X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Fri, 11 Oct 2019 01:39:27 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1570772367; x=1602308367;
-  h=mime-version:references:in-reply-to:from:date:message-id:
-   subject:to:cc;
-  bh=yJ5YGvrPcyRX5zC7jVyQFboOGLnco0MT2oGaJMlgWhA=;
-  b=baFozJllJ5HYEyjG0sfEW5cXWRCApGlYd52OL3VtqowUY0UwuSmtSTuQ
-   4gToD6D/AUsN9MlDePEp+HEtKHO0KsoJu9TLYCIpL5SzU4lVRwNLVQIg9
-   GfrTzOOeNOj28KkXXb5JZEueHDul698F1nziq5ymC/TkQQKNQQD/tzbNN
-   UzP7E7ACOgH7l7GHnsYKxwzqDkDAjmbWX71+oSJbSOZy9ZG24riV2AUit
-   TomJMcCDsFAtvttS6SC3cGkgwlgBLaUfS9DGpUaA/GeXr691cmm1B7Q/0
-   BVIKm16+spFwU0yUHbjIarQJfGyfNC2EV7hO25zIB4W0uosyvu5OmBbOZ
-   A==;
-IronPort-SDR: TqNLhww2vtAs7VY6FKO1UJGWTX9eQSCJMRrxH89pho7fCtSOMp0fT3vOlCFhMW0a6CXEynyRKG
- 3ZvDK1yOKXHqGHsyguTFRicGk4tC1GSRLcs+TBZaTe7tdVopJjWeC/UJLNFe1VWSje7e7uzYyc
- 0mZXkle5cAVT0q98nOfHFJCoKakIwN5keiTGBevhUZQXErXLzCY7foQC9vB1SjzlkVEI4FJZXB
- HkFxBKGtSgHGX4QysOqxCOFCEsjQ0Oyzadt+UcwKnhc0q744wbn6LyiOB8tWhfnJraaBvch5XM
- shw=
-IronPort-PHdr: =?us-ascii?q?9a23=3ARvnlXR1/LYHtLOuZsmDT+DRfVm0co7zxezQtwd?=
- =?us-ascii?q?8Zse0RLPad9pjvdHbS+e9qxAeQG9mCsLQa16GH7ujJYi8p2d65qncMcZhBBV?=
- =?us-ascii?q?cuqP49uEgeOvODElDxN/XwbiY3T4xoXV5h+GynYwAOQJ6tL1LdrWev4jEMBx?=
- =?us-ascii?q?7xKRR6JvjvGo7Vks+7y/2+94fcbglVijexe7J/IRq5oQjVtsQdnJdvJLs2xh?=
- =?us-ascii?q?bVuHVDZv5YxXlvJVKdnhb84tm/8Zt++ClOuPwv6tBNX7zic6s3UbJXAjImM3?=
- =?us-ascii?q?so5MLwrhnMURGP5noHXWoIlBdDHhXI4wv7Xpf1tSv6q/Z91SyHNsD4Ubw4RT?=
- =?us-ascii?q?Kv5LpwRRT2lCkIKSI28GDPisxxkq1bpg6hpwdiyILQeY2ZKeZycr/Ycd4cWG?=
- =?us-ascii?q?FPXNteVzZZD4yzYYsADeoPM+hboYfguVUBsQCzBRWwCO711jNEmmP60K883u?=
- =?us-ascii?q?88EQ/GxgsgH9cWvXvWrdX0NacSUf2yzKLVzjrDb+lZ2Tbg44XPchEgoPGMUq?=
- =?us-ascii?q?hxccbN1UUiGRjIjkiMpoz/JT+ayPkCs3WC4udmSOmhiHYnphlvrjSzwsogkI?=
- =?us-ascii?q?rEi4IPxlza6Sl0w5w5KcC8RUN/Z9OvDYFeuDuAN4RsR8MvW2RouCEnxbIYoZ?=
- =?us-ascii?q?O7Zy0KyIg/xx7YdvyHb5CE4hL9W+aVJjd1nHdld6i+hxa26ESgzu/8WtSt3F?=
- =?us-ascii?q?ZEsyZIlt3BumoC1xzU7ciHRf998Vm71TmT0ADT7/lIIUEylaXFN54s2qA8mo?=
- =?us-ascii?q?YXvEjZHSL7mF/6gLGKekgn4OSk9uDqb7H+qp+ZLYB0iwX+Mqo0msy4BOQ1Kg?=
- =?us-ascii?q?gPXmmb+eum1b3v4VH1TbtRg/0rjqbZqorWKtoGqa6kGwNVyJos6w6jDze619?=
- =?us-ascii?q?QVhX0HLFNDeBKagInlIkrOIOj5DfqknVSsnylkx+rcMr3iHJrNNH7Dn6nlfb?=
- =?us-ascii?q?pn7E5c0gUznphj4Md5ELAKaN7uX0bjucCQWhIjMgfyz/viAcdwyqsRXGuOBu?=
- =?us-ascii?q?mSN6aE4nGS4ed6EuieZJIS8AT9Ivlts+/8jXY4wQdGVbSix90aZG3uTacuGF?=
- =?us-ascii?q?mQfXe52oRJKmwNpAdrCbWy0FA=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2HTAwCbE6Bdh8fQVdFlHgELHIYMKoQ?=
- =?us-ascii?q?jjl2CD4lpj1WBZwEIAQEBDi8BAYRAAoJdIzgTAgMJAQEFAQEBAQEFBAEBAhA?=
- =?us-ascii?q?BAQEIDQkIKYVAgjopAYM9AQEBAxIRVhALCw0CAiYCAiEBEgEFARwGEyKDAIJ?=
- =?us-ascii?q?HAy4FpH2BAzyLJoEyiBINTAEJDYFIEnoojA6CF4ERgmQuPoIagXcBEgGDLYJ?=
- =?us-ascii?q?eBIE5AQEBizeJeJYXQAEGAoIQFIxUhD2ECBuZQJhdjx8PI4FGgQpxMxolfwZ?=
- =?us-ascii?q?ngU5QEBSBaY5MJDCOMYJFAQE?=
-X-IPAS-Result: =?us-ascii?q?A2HTAwCbE6Bdh8fQVdFlHgELHIYMKoQjjl2CD4lpj1WBZ?=
- =?us-ascii?q?wEIAQEBDi8BAYRAAoJdIzgTAgMJAQEFAQEBAQEFBAEBAhABAQEIDQkIKYVAg?=
- =?us-ascii?q?jopAYM9AQEBAxIRVhALCw0CAiYCAiEBEgEFARwGEyKDAIJHAy4FpH2BAzyLJ?=
- =?us-ascii?q?oEyiBINTAEJDYFIEnoojA6CF4ERgmQuPoIagXcBEgGDLYJeBIE5AQEBizeJe?=
- =?us-ascii?q?JYXQAEGAoIQFIxUhD2ECBuZQJhdjx8PI4FGgQpxMxolfwZngU5QEBSBaY5MJ?=
- =?us-ascii?q?DCOMYJFAQE?=
-X-IronPort-AV: E=Sophos;i="5.67,282,1566889200"; 
-   d="scan'208";a="82087557"
-Received: from mail-lj1-f199.google.com ([209.85.208.199])
-  by smtpmx4.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Oct 2019 22:31:58 -0700
-Received: by mail-lj1-f199.google.com with SMTP id i18so1494016ljg.14
-        for <linux-spi@vger.kernel.org>; Thu, 10 Oct 2019 22:31:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tv2M3bVEOwTFf6PpVjYYQE3JCPAHcwi1kAhVSyKoUk8=;
-        b=jOsTAV4XPjXxxUorAcp2FLbtV6+ELpmMCT0BRw+T+0UnHGc80+AWaufFS8X72SOnZQ
-         ffiJ2HUlqd43ZatbAI/+WngoQx9llWAdv/ah9oNA51Dqx5MW3+lqeWai/tDVwqBoSePr
-         upSEKXgaO0OaOPhcRfPzHchdbLMmSMxcoW2Tw1LPG3TpUOPkSXOi24RdNAM9Edkg9u3b
-         boIjY6rRSi2ziRBHbBF/1Bxfk3aS4zS+BlblU3ToBc/wd/RC9761phVaFEI436IAHuRt
-         ztvhk63WXK+m0Gh+3PWmg9y1CpZRjXbvTUs1KZEF5fB9VWRAuY/lMFYlJorwkTZF2+WJ
-         pVww==
-X-Gm-Message-State: APjAAAWyZ3qCOqTyd7Eu+D63w42eh/KWPsmF+CM909bpJKvzdvlNW6Io
-        Yg3ijkBDSOERdW2IVMWKkK9mrWvNT9mEjLjBi+xcFUJ8iNscbtkWgHjF4qyhtOFFwwfDuRN+8do
-        zLYB0hrynd2PO6o33KqFI5bUMmNDRwSVqr1KT2A==
-X-Received: by 2002:a2e:9890:: with SMTP id b16mr8212623ljj.181.1570771916657;
-        Thu, 10 Oct 2019 22:31:56 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyHP44PVHjs0kFISU2ps2cAigGwbjhhimKB33YZ1L/BeZfqzW5I3WsJw/QcMLDk/A8RKn0EguzvxM0b+UUoSQQ=
-X-Received: by 2002:a2e:9890:: with SMTP id b16mr8212613ljj.181.1570771916412;
- Thu, 10 Oct 2019 22:31:56 -0700 (PDT)
+        id S1727321AbfJKFwa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Oct 2019 01:52:30 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43903 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727329AbfJKFwa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Oct 2019 01:52:30 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1iInqC-0008KX-1r; Fri, 11 Oct 2019 07:51:52 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1iInq9-0001Vy-3U; Fri, 11 Oct 2019 07:51:49 +0200
+Date:   Fri, 11 Oct 2019 07:51:49 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Sangbeom Kim <sbkim73@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Olof Johansson <olof@lixom.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Faiz Abbas <faiz_abbas@ti.com>, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 11/36] ARM: s5pv210: split from plat-samsung
+Message-ID: <20191011055149.4dudr4tk2znpt65u@pengutronix.de>
+References: <20191010202802.1132272-1-arnd@arndb.de>
+ <20191010203043.1241612-1-arnd@arndb.de>
+ <20191010203043.1241612-11-arnd@arndb.de>
 MIME-Version: 1.0
-References: <CABvMjLToYzmCue-TiDhR4Yu4v3+Z+-UV9WhixV7uvwoMh2m5Lw@mail.gmail.com>
- <f3ce1620-c421-b41f-440b-efe3ff6e91fe@gmail.com>
-In-Reply-To: <f3ce1620-c421-b41f-440b-efe3ff6e91fe@gmail.com>
-From:   Yizhuo Zhai <yzhai003@ucr.edu>
-Date:   Thu, 10 Oct 2019 22:31:28 -0700
-Message-ID: <CABvMjLTrGprdgFTP-+2XC_p+vE+tVWeYvyuLGkKj1dY7KR+JDg@mail.gmail.com>
-Subject: Re: Potential NULL pointer deference in spi
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhiyun Qian <zhiyunq@cs.ucr.edu>,
-        Chengyu Song <csong@cs.ucr.edu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191010203043.1241612-11-arnd@arndb.de>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Eric:
+On Thu, Oct 10, 2019 at 10:29:55PM +0200, Arnd Bergmann wrote:
+> These can be build completely independently, so split
+> the two Kconfig symbols.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-My apologies for bothering, we got those report via static analysis
-and haven't got a good method to verify the path to trigger them.
-Therefore I sent those email to you maintainers first since you
-know much better about the details. Sorry again for your time and
-I take your suggestions.
+I'd mention the two symbols' names you're working on in the commit log.
+I guess it's about PLAT_SAMSUNG and ARCH_S5PV210. And I wouldn't call it
+"split" which IMHO suggests there was only one symbol before.
 
-On Wed, Oct 9, 2019 at 10:48 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
->
->
->
-> On 10/9/19 10:37 PM, Yizhuo Zhai wrote:
-> > Hi All:
-> >
-> > drivers/spi/spi.c:
-> >
-> > The function to_spi_device() could return NULL, but some callers
-> > in this file does not check the return value while directly dereference
-> > it, which seems potentially unsafe.
-> >
-> > Such callers include spidev_release(),  spi_dev_check(),
-> > driver_override_store(), etc.
-> >
-> >
->
->
-> Many of your reports are completely bogus.
->
-> I suggest you spend more time before sending such emails to very large audience
-> and risk being ignored at some point.
->
-> Thanks.
+Maybe:
 
+	Don't imply PLAT_SAMSUNG if ARCH_S5PV210 is enabled
 
+would be a better subject line?
+
+> ---
+>  arch/arm/Kconfig.debug        | 6 +++---
+>  arch/arm/Makefile             | 1 -
+>  arch/arm/plat-samsung/Kconfig | 2 +-
+>  drivers/mmc/host/Kconfig      | 2 +-
+>  drivers/pwm/Kconfig           | 2 +-
+>  drivers/spi/Kconfig           | 2 +-
+>  drivers/tty/serial/Kconfig    | 2 +-
+>  sound/soc/samsung/Kconfig     | 2 +-
+>  8 files changed, 9 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+> index 9c4f2d6deb06..4c4e97ae4fcb 100644
+> --- a/arch/arm/Kconfig.debug
+> +++ b/arch/arm/Kconfig.debug
+> @@ -998,7 +998,7 @@ choice
+>  		  via SCIFA4 on Renesas SH-Mobile AG5 (SH73A0).
+>  
+>  	config DEBUG_S3C_UART0
+> -		depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>  		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>  		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>  		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> @@ -1010,7 +1010,7 @@ choice
+>  		  by the boot-loader before use.
+>  
+>  	config DEBUG_S3C_UART1
+> -		depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>  		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>  		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>  		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> @@ -1022,7 +1022,7 @@ choice
+>  		  by the boot-loader before use.
+>  
+>  	config DEBUG_S3C_UART2
+> -		depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +		depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>  		select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>  		select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>  		select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index f492d7c338fe..a1bc15cda751 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -235,7 +235,6 @@ machine-$(CONFIG_PLAT_SPEAR)		+= spear
+>  # by CONFIG_* macro name.
+>  plat-$(CONFIG_ARCH_OMAP)	+= omap
+>  plat-$(CONFIG_ARCH_S3C64XX)	+= samsung
+> -plat-$(CONFIG_ARCH_S5PV210)	+= samsung
+
+Would it make more sense to make this
+
+	plat-$(PLAT_SAMSUNG) += samsung
+
+(in a separate patch)? Hmm, it seems there is no plat-y for
+PLAT_S3C24XX=y builds. Is this intended? If yes, the directory name
+containing "samsung" suggests something that seems untrue.
+
+Best regards
+Uwe
 
 -- 
-Kind Regards,
-
-Yizhuo Zhai
-
-Computer Science, Graduate Student
-University of California, Riverside
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
