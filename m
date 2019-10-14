@@ -2,82 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DA6D6A64
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Oct 2019 21:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0ECBD6A7E
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Oct 2019 21:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730036AbfJNTyx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Oct 2019 15:54:53 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:45014 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730006AbfJNTyx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Oct 2019 15:54:53 -0400
-Received: by mail-oi1-f194.google.com with SMTP id w6so14723009oie.11;
-        Mon, 14 Oct 2019 12:54:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XhCUwO3XcoZWA0lhfOAn10hxUA8j/Rc+tU2JUBRZEKU=;
-        b=tvYZw0/lkF64Ipy5K1yVlyJvZuKF/yhAqiiBFEyXdoZNDztEljli5UiMsxrUdkzKpC
-         wmzd8xueC642KrWXouyXRe8JLB2ACennDARQMhDaYmP3HcWhgRmmU5gGPDzZWN0yk9uz
-         WtIYKC+jAQUhfU2iXfNvDYohu95ORkE6XyoKhME4Eq980iL6cGqu/Y1rcMyW1BQeFuds
-         1bJ3FqAc/dsZQHSncWPLay1OyNzTzkipIPnFh+y/4jY+BIvuowBYX6QSWmXDNGy8fG5Q
-         YjSEaofEFAn7nfJrzZjDsGFg/sa5Q2se8S70AhdyLNW3b1mxXV1552yyPfeiXPI63DIe
-         NgPw==
-X-Gm-Message-State: APjAAAXNFgNQxh3lkOhPiYyawCOceauSdj2Zg1PEH3Pjqj+FxOGKzsT1
-        zf2TK+0OwaEHZO1u8Kg9ofalTn0=
-X-Google-Smtp-Source: APXvYqy7yioDgEjsKi7M+Drs+tKhyYVoxvGwwlK2NnsmyJlGPTvC1ZoVjbk4nW2xEVfwkPG5JYzE0w==
-X-Received: by 2002:aca:eac2:: with SMTP id i185mr26462013oih.9.1571082892264;
-        Mon, 14 Oct 2019 12:54:52 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b31sm6014243otc.70.2019.10.14.12.54.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 12:54:51 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 14:54:51 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Simon Horman <horms+renesas@verge.net.au>
-Cc:     Mark Brown <broonie@kernel.org>,
+        id S1731131AbfJNT6w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Oct 2019 15:58:52 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:39916 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730952AbfJNT6w (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Oct 2019 15:58:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=g3RRw/yKtnYRVxDPDjF4v6M8SrfAWxoHlnr95tgPxXs=; b=ME+Wvu3sesrlzWd3V3o00Ze45
+        bDl19yBTurheyQvlM+JgH09dozvSK43jx2xcdglEO5gSKgvYPxyHp7ANIwxLg8RhLRBD5tnkmK4O/
+        jSRLPUZYkv8KpaP192Ew/MfdjdEQpeIC5PhVWmbeKTbmhT4SePh03B22haUOZxLaco0cc=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iK6UP-0000Gx-VK; Mon, 14 Oct 2019 19:58:46 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 072892741EF2; Mon, 14 Oct 2019 20:58:44 +0100 (BST)
+Date:   Mon, 14 Oct 2019 20:58:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Simon Horman <horms+renesas@verge.net.au>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Mark Rutland <mark.rutland@arm.com>,
         Magnus Damm <magnus.damm@gmail.com>,
         Yoshihiro Kaneko <ykaneko0929@gmail.com>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
-        Simon Horman <horms+renesas@verge.net.au>,
         "hange-folder>?" <toggle-mailboxes@bogus>
 Subject: Re: [PATCH] dt-bindings: spi: sh-msiof: Convert bindings to
  json-schema
-Message-ID: <20191014195451.GA22084@bogus>
+Message-ID: <20191014195844.GE4826@sirena.co.uk>
 References: <20190926102533.17829-1-horms+renesas@verge.net.au>
+ <20191014195451.GA22084@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GLp9dJVi+aaipsRk"
 Content-Disposition: inline
-In-Reply-To: <20190926102533.17829-1-horms+renesas@verge.net.au>
+In-Reply-To: <20191014195451.GA22084@bogus>
+X-Cookie: Androphobia:
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 26 Sep 2019 12:25:33 +0200, Simon Horman wrote:
-> Convert Renesas HSPI bindings documentation to json-schema.
-> Also name bindings documentation file according to the compat string
-> being documented.
-> 
-> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
-> ---
-> Based on v5.3
-> Tested using:
->   ARCH=arm   make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
->   ARCH=arm64 make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> ---
->  .../devicetree/bindings/spi/renesas,sh-msiof.yaml  | 158 +++++++++++++++++++++
->  Documentation/devicetree/bindings/spi/sh-msiof.txt | 105 --------------
->  2 files changed, 158 insertions(+), 105 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/sh-msiof.txt
-> 
 
-Applied, thanks.
+--GLp9dJVi+aaipsRk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Rob
+On Mon, Oct 14, 2019 at 02:54:51PM -0500, Rob Herring wrote:
+> On Thu, 26 Sep 2019 12:25:33 +0200, Simon Horman wrote:
+> > Convert Renesas HSPI bindings documentation to json-schema.
+> > Also name bindings documentation file according to the compat string
+> > being documented.
+
+> Applied, thanks.
+
+I've been sitting on this (and another ASoC conversion) waiting for you
+to review them - in particular with this one I've got another patch
+queued up which depends on it so it'd be good to apply it to my tree.
+
+--GLp9dJVi+aaipsRk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2k03QACgkQJNaLcl1U
+h9AhSQf+MPj1Uq18yB8rOagb9gJHay04o39fQ11wHnGsU3Xcj7gXPz7wvsNQkavf
+2ZdRD2Z71GAX1DUJxW2Rgtd3Fif219z9UeYam53DIlg6+hgNq/J1GAiLkiPGIwGa
+fWwCFNpFqiBDy+FY1fVkRSjvob+ne6WfQCh5pLOVtc67/xQRXTwQST0C446FaTgJ
+Sc6JeEARI3OTYhSbUMDNBsn80xJAVJT5GJ8rQ9hPzbalymxQmDTPALbfjJL/CUJ/
+slWSDzvZZlCy1ELUWosDGJi1IYSIvwHi4kCN8KPt7ktWrp/tqx6rllS5G12TLOCG
+/fnQPIFNSNLQr5hJKGwCFyQyv5WLbQ==
+=bj4O
+-----END PGP SIGNATURE-----
+
+--GLp9dJVi+aaipsRk--
