@@ -2,40 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED030D7457
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2019 13:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D102D749A
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2019 13:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731750AbfJOLM1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Oct 2019 07:12:27 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:50264 "EHLO
+        id S1729190AbfJOLNW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Oct 2019 07:13:22 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:50408 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728769AbfJOLM0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Oct 2019 07:12:26 -0400
+        with ESMTP id S1731748AbfJOLM3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Oct 2019 07:12:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=hBbz2YMw4mWZNYFfDdAkK1J+CjKJ2UJbISIx0WfGlq4=; b=qaApRJgATEqF
-        3xuhl6uK45ubPQlUDEzy7sQutPYENuVjOvWHUhrS5K8lCjV6qgD8Cb4pVD/WnC2FWspJsgW9xOKcG
-        Fk7w1Z7j4l0qlc8XRJ84gNk9hcgf/4MMjkfgKyFOAQ71RtQq92+k0qAm6kc9MlmhD+lwIJqUWDjqc
-        6zYkE=;
+        List-Archive; bh=1DVh9UecgU3Om0hFKJyJzEeWH8DVtuUEIaWKy+MoWsU=; b=RmpxbFRFtO0q
+        qzCPcOfZMyyV6hHCr8XsBUAwEEsDrwfVD3JZrsoCOMLE1iX8iY7xnQxEfN13D3Uc2gWlwTDIJ5WTY
+        n9Ukkac2qxjVg74uPyfkyDOZVmglFzfD79I5dWvSK80HVRAjthW/xfQcunojJgFA7L5vLtp3G2nR5
+        zTn5A=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iKKkX-00020a-WA; Tue, 15 Oct 2019 11:12:22 +0000
+        id 1iKKkZ-00020s-Gl; Tue, 15 Oct 2019 11:12:23 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 6B2EE27419E4; Tue, 15 Oct 2019 12:12:21 +0100 (BST)
+        id EA4622741DCA; Tue, 15 Oct 2019 12:12:22 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: use new `spi_transfer_delay_exec` helper where straightforward" to the spi tree
-In-Reply-To: 
+Cc:     baolin.wang@linaro.org, bcm-kernel-feedback-list@broadcom.com,
+        broonie@kernel.org, f.fainelli@gmail.com, jic23@kernel.org,
+        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com
+Subject: Applied "spi: implement SW control for CS times" to the spi tree
+In-Reply-To: <20190926105147.7839-16-alexandru.ardelean@analog.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191015111221.6B2EE27419E4@ypsilon.sirena.org.uk>
-Date:   Tue, 15 Oct 2019 12:12:21 +0100 (BST)
+Message-Id: <20191015111222.EA4622741DCA@ypsilon.sirena.org.uk>
+Date:   Tue, 15 Oct 2019 12:12:22 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -43,11 +49,11 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: use new `spi_transfer_delay_exec` helper where straightforward
+   spi: implement SW control for CS times
 
 has been applied to the spi tree at
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
@@ -68,296 +74,130 @@ to this mail.
 Thanks,
 Mark
 
-From e74dc5c763448004ec8add422e9db53ee246acce Mon Sep 17 00:00:00 2001
+From 25093bdeb6bcae728e12e3795261dbd3677060a9 Mon Sep 17 00:00:00 2001
 From: Alexandru Ardelean <alexandru.ardelean@analog.com>
-Date: Thu, 26 Sep 2019 13:51:37 +0300
-Subject: [PATCH] spi: use new `spi_transfer_delay_exec` helper where
- straightforward
+Date: Thu, 26 Sep 2019 13:51:43 +0300
+Subject: [PATCH] spi: implement SW control for CS times
 
-For many places in the spi drivers, using the new `spi_transfer_delay`
-helper is straightforward.
-It's just replacing:
-```
-  if (t->delay_usecs)
-     udelay(t->delay_usecs);
-```
-with `spi_transfer_delay(t)` which handles both `delay_usecs` and the new
-`delay` field.
+This change implements CS control for setup, hold & inactive delays.
 
-This change replaces in all places (in the spi drivers)  where this change
-is simple.
+The `cs_setup` delay is completely new, and can help with cases where
+asserting the CS, also brings the device out of power-sleep, where there
+needs to be a longer (than usual), before transferring data.
+
+The `cs_hold` time can overlap with the `delay` (or `delay_usecs`) from an
+SPI transfer. The main difference is that `cs_hold` implies that CS will be
+de-asserted.
+
+The `cs_inactive` delay does not have a clear use-case yet. It has been
+implemented mostly because the `spi_set_cs_timing()` function implements
+it. To some degree, this could overlap or replace `cs_change_delay`, but
+this will require more consideration/investigation in the future.
+
+All these delays have been added to the `spi_controller` struct, as they
+would typically be configured by calling `spi_set_cs_timing()` after an
+`spi_setup()` call.
+
+Software-mode for CS control, implies that the `set_cs_timing()` hook has
+not been provided for the `spi_controller` object.
 
 Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-Link: https://lore.kernel.org/r/20190926105147.7839-10-alexandru.ardelean@analog.com
+Link: https://lore.kernel.org/r/20190926105147.7839-16-alexandru.ardelean@analog.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-atmel.c         |  3 +--
- drivers/spi/spi-bcm63xx-hsspi.c |  3 +--
- drivers/spi/spi-cavium.c        |  3 +--
- drivers/spi/spi-fsl-dspi.c      |  3 +--
- drivers/spi/spi-fsl-espi.c      |  3 +--
- drivers/spi/spi-fsl-spi.c       |  3 +--
- drivers/spi/spi-mpc512x-psc.c   |  3 +--
- drivers/spi/spi-mpc52xx-psc.c   |  3 +--
- drivers/spi/spi-omap-100k.c     |  3 +--
- drivers/spi/spi-pl022.c         | 25 +++++++++++--------------
- drivers/spi/spi-sc18is602.c     |  3 +--
- drivers/spi/spi-sh-hspi.c       |  3 +--
- drivers/spi/spi-topcliff-pch.c  |  7 +------
- drivers/spi/spi-txx9.c          |  3 +--
- drivers/spi/spi-xcomm.c         |  3 +--
- 15 files changed, 25 insertions(+), 46 deletions(-)
+ drivers/spi/spi.c       | 45 ++++++++++++++++++++++++++++++++++++++++-
+ include/linux/spi/spi.h |  5 +++++
+ 2 files changed, 49 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
-index 1471b049f99a..e34ab587b980 100644
---- a/drivers/spi/spi-atmel.c
-+++ b/drivers/spi/spi-atmel.c
-@@ -1366,8 +1366,7 @@ static int atmel_spi_one_transfer(struct spi_master *master,
- 		&& as->use_pdc)
- 		atmel_spi_dma_unmap_xfer(master, xfer);
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 6beeb363515c..21628b0728f1 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -775,6 +775,15 @@ int spi_register_board_info(struct spi_board_info const *info, unsigned n)
  
--	if (xfer->delay_usecs)
--		udelay(xfer->delay_usecs);
-+	spi_transfer_delay_exec(xfer);
+ static void spi_set_cs(struct spi_device *spi, bool enable)
+ {
++	bool enable1 = enable;
++
++	if (!spi->controller->set_cs_timing) {
++		if (enable1)
++			spi_delay_exec(&spi->controller->cs_setup, NULL);
++		else
++			spi_delay_exec(&spi->controller->cs_hold, NULL);
++	}
++
+ 	if (spi->mode & SPI_CS_HIGH)
+ 		enable = !enable;
  
- 	if (xfer->cs_change) {
- 		if (list_is_last(&xfer->transfer_list,
-diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
-index c6836a931dbf..7327309ea3d5 100644
---- a/drivers/spi/spi-bcm63xx-hsspi.c
-+++ b/drivers/spi/spi-bcm63xx-hsspi.c
-@@ -291,8 +291,7 @@ static int bcm63xx_hsspi_transfer_one(struct spi_master *master,
- 
- 		msg->actual_length += t->len;
- 
--		if (t->delay_usecs)
--			udelay(t->delay_usecs);
-+		spi_transfer_delay_exec(t);
- 
- 		if (t->cs_change)
- 			bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
-diff --git a/drivers/spi/spi-cavium.c b/drivers/spi/spi-cavium.c
-index 5aaf21582cb5..6854c3ce423b 100644
---- a/drivers/spi/spi-cavium.c
-+++ b/drivers/spi/spi-cavium.c
-@@ -119,8 +119,7 @@ static int octeon_spi_do_transfer(struct octeon_spi *p,
- 			*rx_buf++ = (u8)v;
- 		}
- 
--	if (xfer->delay_usecs)
--		udelay(xfer->delay_usecs);
-+	spi_transfer_delay_exec(xfer);
- 
- 	return xfer->len;
+@@ -800,6 +809,11 @@ static void spi_set_cs(struct spi_device *spi, bool enable)
+ 	} else if (spi->controller->set_cs) {
+ 		spi->controller->set_cs(spi, !enable);
+ 	}
++
++	if (!spi->controller->set_cs_timing) {
++		if (!enable1)
++			spi_delay_exec(&spi->controller->cs_inactive, NULL);
++	}
  }
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index c0e96cc7fc51..442cff71a0d2 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -827,8 +827,7 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
- 			dev_err(&dspi->pdev->dev,
- 				"Waiting for transfer to complete failed!\n");
  
--		if (transfer->delay_usecs)
--			udelay(transfer->delay_usecs);
-+		spi_transfer_delay_exec(transfer);
- 	}
- 
- out:
-diff --git a/drivers/spi/spi-fsl-espi.c b/drivers/spi/spi-fsl-espi.c
-index f72daf66f3f3..e60581283a24 100644
---- a/drivers/spi/spi-fsl-espi.c
-+++ b/drivers/spi/spi-fsl-espi.c
-@@ -427,8 +427,7 @@ static int fsl_espi_trans(struct spi_message *m, struct spi_transfer *trans)
- 
- 	ret = fsl_espi_bufs(spi, trans);
- 
--	if (trans->delay_usecs)
--		udelay(trans->delay_usecs);
-+	spi_transfer_delay_exec(trans);
- 
- 	return ret;
+ #ifdef CONFIG_HAS_DMA
+@@ -3278,10 +3292,39 @@ EXPORT_SYMBOL_GPL(spi_setup);
+ int spi_set_cs_timing(struct spi_device *spi, struct spi_delay *setup,
+ 		      struct spi_delay *hold, struct spi_delay *inactive)
+ {
++	size_t len;
++
+ 	if (spi->controller->set_cs_timing)
+ 		return spi->controller->set_cs_timing(spi, setup, hold,
+ 						      inactive);
+-	return -ENOTSUPP;
++
++	if ((setup && setup->unit == SPI_DELAY_UNIT_SCK) ||
++	    (hold && hold->unit == SPI_DELAY_UNIT_SCK) ||
++	    (inactive && inactive->unit == SPI_DELAY_UNIT_SCK)) {
++		dev_err(&spi->dev,
++			"Clock-cycle delays for CS not supported in SW mode\n");
++		return -ENOTSUPP;
++	}
++
++	len = sizeof(struct spi_delay);
++
++	/* copy delays to controller */
++	if (setup)
++		memcpy(&spi->controller->cs_setup, setup, len);
++	else
++		memset(&spi->controller->cs_setup, 0, len);
++
++	if (hold)
++		memcpy(&spi->controller->cs_hold, hold, len);
++	else
++		memset(&spi->controller->cs_hold, 0, len);
++
++	if (inactive)
++		memcpy(&spi->controller->cs_inactive, inactive, len);
++	else
++		memset(&spi->controller->cs_inactive, 0, len);
++
++	return 0;
  }
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index 4b80ace1d137..114801a32371 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -416,8 +416,7 @@ static int fsl_spi_do_one_msg(struct spi_master *master,
- 		}
- 		m->actual_length += t->len;
+ EXPORT_SYMBOL_GPL(spi_set_cs_timing);
  
--		if (t->delay_usecs)
--			udelay(t->delay_usecs);
-+		spi_transfer_delay_exec(t);
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index f9b4ba2db08d..cfd87b18f077 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -609,6 +609,11 @@ struct spi_controller {
+ 	/* Optimized handlers for SPI memory-like operations. */
+ 	const struct spi_controller_mem_ops *mem_ops;
  
- 		if (cs_change) {
- 			ndelay(nsecs);
-diff --git a/drivers/spi/spi-mpc512x-psc.c b/drivers/spi/spi-mpc512x-psc.c
-index a337b842ae8c..ea1b07953d38 100644
---- a/drivers/spi/spi-mpc512x-psc.c
-+++ b/drivers/spi/spi-mpc512x-psc.c
-@@ -311,8 +311,7 @@ static int mpc512x_psc_spi_msg_xfer(struct spi_master *master,
- 			break;
- 		m->actual_length += t->len;
- 
--		if (t->delay_usecs)
--			udelay(t->delay_usecs);
-+		spi_transfer_delay_exec(t);
- 
- 		if (cs_change)
- 			mpc512x_psc_spi_deactivate_cs(spi);
-diff --git a/drivers/spi/spi-mpc52xx-psc.c b/drivers/spi/spi-mpc52xx-psc.c
-index c7e478b9b586..17935e71b02f 100644
---- a/drivers/spi/spi-mpc52xx-psc.c
-+++ b/drivers/spi/spi-mpc52xx-psc.c
-@@ -234,8 +234,7 @@ static void mpc52xx_psc_spi_work(struct work_struct *work)
- 				break;
- 			m->actual_length += t->len;
- 
--			if (t->delay_usecs)
--				udelay(t->delay_usecs);
-+			spi_transfer_delay_exec(t);
- 
- 			if (cs_change)
- 				mpc52xx_psc_spi_deactivate_cs(spi);
-diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
-index 43a4785fc89b..5c704ba6d8ea 100644
---- a/drivers/spi/spi-omap-100k.c
-+++ b/drivers/spi/spi-omap-100k.c
-@@ -321,8 +321,7 @@ static int omap1_spi100k_transfer_one_message(struct spi_master *master,
- 			}
- 		}
- 
--		if (t->delay_usecs)
--			udelay(t->delay_usecs);
-+		spi_transfer_delay_exec(t);
- 
- 		/* ignore the "leave it on after last xfer" hint */
- 
-diff --git a/drivers/spi/spi-pl022.c b/drivers/spi/spi-pl022.c
-index 7fedea67159c..3024c30e7f2e 100644
---- a/drivers/spi/spi-pl022.c
-+++ b/drivers/spi/spi-pl022.c
-@@ -485,12 +485,11 @@ static void giveback(struct pl022 *pl022)
- 					struct spi_transfer, transfer_list);
- 
- 	/* Delay if requested before any change in chip select */
--	if (last_transfer->delay_usecs)
--		/*
--		 * FIXME: This runs in interrupt context.
--		 * Is this really smart?
--		 */
--		udelay(last_transfer->delay_usecs);
-+	/*
-+	 * FIXME: This runs in interrupt context.
-+	 * Is this really smart?
-+	 */
-+	spi_transfer_delay_exec(last_transfer);
- 
- 	if (!last_transfer->cs_change) {
- 		struct spi_message *next_msg;
-@@ -1401,12 +1400,11 @@ static void pump_transfers(unsigned long data)
- 		previous = list_entry(transfer->transfer_list.prev,
- 					struct spi_transfer,
- 					transfer_list);
--		if (previous->delay_usecs)
--			/*
--			 * FIXME: This runs in interrupt context.
--			 * Is this really smart?
--			 */
--			udelay(previous->delay_usecs);
-+		/*
-+		 * FIXME: This runs in interrupt context.
-+		 * Is this really smart?
-+		 */
-+		spi_transfer_delay_exec(previous);
- 
- 		/* Reselect chip select only if cs_change was requested */
- 		if (previous->cs_change)
-@@ -1520,8 +1518,7 @@ static void do_polling_transfer(struct pl022 *pl022)
- 			previous =
- 			    list_entry(transfer->transfer_list.prev,
- 				       struct spi_transfer, transfer_list);
--			if (previous->delay_usecs)
--				udelay(previous->delay_usecs);
-+			spi_transfer_delay_exec(previous);
- 			if (previous->cs_change)
- 				pl022_cs_control(pl022, SSP_CHIP_SELECT);
- 		} else {
-diff --git a/drivers/spi/spi-sc18is602.c b/drivers/spi/spi-sc18is602.c
-index 11acddc83304..5497eeb3bf3e 100644
---- a/drivers/spi/spi-sc18is602.c
-+++ b/drivers/spi/spi-sc18is602.c
-@@ -211,8 +211,7 @@ static int sc18is602_transfer_one(struct spi_master *master,
- 		}
- 		status = 0;
- 
--		if (t->delay_usecs)
--			udelay(t->delay_usecs);
-+		spi_transfer_delay_exec(t);
- 	}
- 	m->status = status;
- 	spi_finalize_current_message(master);
-diff --git a/drivers/spi/spi-sh-hspi.c b/drivers/spi/spi-sh-hspi.c
-index 7f73f91d412a..a62034e2a7cb 100644
---- a/drivers/spi/spi-sh-hspi.c
-+++ b/drivers/spi/spi-sh-hspi.c
-@@ -190,8 +190,7 @@ static int hspi_transfer_one_message(struct spi_controller *ctlr,
- 
- 		msg->actual_length += t->len;
- 
--		if (t->delay_usecs)
--			udelay(t->delay_usecs);
-+		spi_transfer_delay_exec(t);
- 
- 		if (cs_change) {
- 			ndelay(nsecs);
-diff --git a/drivers/spi/spi-topcliff-pch.c b/drivers/spi/spi-topcliff-pch.c
-index f88cbb94ce12..223353fa2d8a 100644
---- a/drivers/spi/spi-topcliff-pch.c
-+++ b/drivers/spi/spi-topcliff-pch.c
-@@ -1229,12 +1229,7 @@ static void pch_spi_process_messages(struct work_struct *pwork)
- 			"%s:data->current_msg->actual_length=%d\n",
- 			__func__, data->current_msg->actual_length);
- 
--		/* check for delay */
--		if (data->cur_trans->delay_usecs) {
--			dev_dbg(&data->master->dev, "%s:delay in usec=%d\n",
--				__func__, data->cur_trans->delay_usecs);
--			udelay(data->cur_trans->delay_usecs);
--		}
-+		spi_transfer_delay_exec(data->cur_trans);
- 
- 		spin_lock(&data->lock);
- 
-diff --git a/drivers/spi/spi-txx9.c b/drivers/spi/spi-txx9.c
-index 51759d3fd45f..83daaa597acc 100644
---- a/drivers/spi/spi-txx9.c
-+++ b/drivers/spi/spi-txx9.c
-@@ -248,8 +248,7 @@ static void txx9spi_work_one(struct txx9spi *c, struct spi_message *m)
- 			len -= count * wsize;
- 		}
- 		m->actual_length += t->len;
--		if (t->delay_usecs)
--			udelay(t->delay_usecs);
-+		spi_transfer_delay_exec(t);
- 
- 		if (!cs_change)
- 			continue;
-diff --git a/drivers/spi/spi-xcomm.c b/drivers/spi/spi-xcomm.c
-index a3496c46cc1b..1d9b3f03d986 100644
---- a/drivers/spi/spi-xcomm.c
-+++ b/drivers/spi/spi-xcomm.c
-@@ -188,8 +188,7 @@ static int spi_xcomm_transfer_one(struct spi_master *master,
- 		}
- 		status = 0;
- 
--		if (t->delay_usecs)
--			udelay(t->delay_usecs);
-+		spi_transfer_delay_exec(t);
- 
- 		is_first = false;
- 	}
++	/* CS delays */
++	struct spi_delay	cs_setup;
++	struct spi_delay	cs_hold;
++	struct spi_delay	cs_inactive;
++
+ 	/* gpio chip select */
+ 	int			*cs_gpios;
+ 	struct gpio_desc	**cs_gpiods;
 -- 
 2.20.1
 
