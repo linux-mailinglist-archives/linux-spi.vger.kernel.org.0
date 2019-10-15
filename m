@@ -2,121 +2,236 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE472D7464
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2019 13:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9691ED7826
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2019 16:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731866AbfJOLMl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Oct 2019 07:12:41 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:50890 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731903AbfJOLMl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Oct 2019 07:12:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=HxCw+GrSFAjIDABzZL5hlFUSN3/Z4sQnIyk1p1c3V9o=; b=xg2pQfOmcooJ
-        4JAirHEZx2LJXvvRwu2jLT98sArjuGfJ6Vv2q2DBDgRJzElWIwXgR3VYyzJ0hyuPpWnp9cDidcvRy
-        42aD6hF4rIWxagTMPBJpvh2aYxO9OVBAdLfthyE2/wVSowC1NKzQ0hGShSRLPMJB7JUjwasETD8/Z
-        tmNJw=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iKKkf-000234-Ec; Tue, 15 Oct 2019 11:12:29 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id E15C92741DCA; Tue, 15 Oct 2019 12:12:28 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     baolin.wang@linaro.org, bcm-kernel-feedback-list@broadcom.com,
-        broonie@kernel.org, f.fainelli@gmail.com, jic23@kernel.org,
-        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, orsonzhai@gmail.com,
-        zhang.lyra@gmail.com
-Subject: Applied "spi: move `cs_change_delay` backwards compat logic outside switch" to the spi tree
-In-Reply-To: <20190926105147.7839-2-alexandru.ardelean@analog.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191015111228.E15C92741DCA@ypsilon.sirena.org.uk>
-Date:   Tue, 15 Oct 2019 12:12:28 +0100 (BST)
+        id S1732598AbfJOONx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Oct 2019 10:13:53 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:42015 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732550AbfJOONl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Oct 2019 10:13:41 -0400
+Received: by mail-vs1-f66.google.com with SMTP id m22so13222878vsl.9
+        for <linux-spi@vger.kernel.org>; Tue, 15 Oct 2019 07:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b/eFKQ/v4cr/yPgp0izVLyHlXJnLa4HICmgwi01lXvc=;
+        b=y1zTKzdTdmsrc43HicE1W4OcK2myObdXuvjFUiN6jPSz0v4CsQcuh/7ktoHHvscwUe
+         WAwmr+69J8UQWkzDEau4wVhaYHdaO4IdBaGAc7OY4t7+8gjIaturNOu7H8P+woacKeaX
+         Q2AZx29vX20cH0G+wE6lGHbjFqhEgd6TDQt5NFwoEMYBFVyy98pBTsVcCU/gKEmrlJdN
+         kXucwpHKaYU3S/aY7SwELglpgMrbYVpYBXYvalu8VW/Qx9KsRMtEKMtH8+zawqcSiAaB
+         Tm6cWyWtdfchVHsvvoCwiwb379LpR2fZ0vwCzFIUCU3Atp7GrKAl4d9J2wJ6rvb4hXrN
+         eWsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b/eFKQ/v4cr/yPgp0izVLyHlXJnLa4HICmgwi01lXvc=;
+        b=jhyotPG+D+Libdm0qTflzK9gORt8neK9cwRXeOnbl1NFvvXsBCvvlnyNE4kKP6j+/O
+         LcXTcJn+UyjuIJ53eQx5jVOntWC2rjUl6MIeJJtGY9wHj3Ggn1pHVlLhaggJo9rT/2l/
+         sPqM+xF64FOj0kR5S69h9PZghlo3FKgrfZLE8HA4xEEZ9azY9sxKCKrgoSikpY2oCtZE
+         asorLdjO5uZrVHfFko71MNGa5srOU04Vp4IStEewb+zVBN236990SjZjxC0DCg7BQd7P
+         qF3l597XhqF9tehhGhHLf7Ej6TrgjVBzijs9TxOS3p7IN4w3JfZ9/dYqa+NFyp3qUnSy
+         k7Eg==
+X-Gm-Message-State: APjAAAUHb94PpLj3EkWMkUZd8RxskHto7A/BXsrZF4Z9RUSFxHfCxHYq
+        7T3mCQ32/BjKk0mZBvVndA6weAE+tdG3kEDRetihkA==
+X-Google-Smtp-Source: APXvYqxluszvLcVxMEdWdPelTTF58EOAxfZDkgM4jA/rH5H2Cc2i74AuIVwFlZIgVdMLDs2o7gG3CCQM2jc+SegK0h8=
+X-Received: by 2002:a05:6102:5e1:: with SMTP id w1mr4153604vsf.191.1571148818927;
+ Tue, 15 Oct 2019 07:13:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
+ <20191010203043.1241612-11-arnd@arndb.de>
+In-Reply-To: <20191010203043.1241612-11-arnd@arndb.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 15 Oct 2019 16:13:02 +0200
+Message-ID: <CAPDyKFqkRApT-q4ssi1Hn2cmLY=0K7bKXdo-D42q+xACFcC9dQ@mail.gmail.com>
+Subject: Re: [PATCH 11/36] ARM: s5pv210: split from plat-samsung
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Sangbeom Kim <sbkim73@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-pwm@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Faiz Abbas <faiz_abbas@ti.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        linux-serial@vger.kernel.org,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Olof Johansson <olof@lixom.net>,
+        linux-spi@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Thu, 10 Oct 2019 at 22:38, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> These can be build completely independently, so split
+> the two Kconfig symbols.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/Kconfig.debug        | 6 +++---
+>  arch/arm/Makefile             | 1 -
+>  arch/arm/plat-samsung/Kconfig | 2 +-
+>  drivers/mmc/host/Kconfig      | 2 +-
+>  drivers/pwm/Kconfig           | 2 +-
+>  drivers/spi/Kconfig           | 2 +-
+>  drivers/tty/serial/Kconfig    | 2 +-
+>  sound/soc/samsung/Kconfig     | 2 +-
+>  8 files changed, 9 insertions(+), 10 deletions(-)
 
-   spi: move `cs_change_delay` backwards compat logic outside switch
+For the mmc parts:
 
-has been applied to the spi tree at
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+Kind regards
+Uffe
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 6b3f236a998550dba91a46a22feb1cc02f39fb06 Mon Sep 17 00:00:00 2001
-From: Alexandru Ardelean <alexandru.ardelean@analog.com>
-Date: Thu, 26 Sep 2019 13:51:29 +0300
-Subject: [PATCH] spi: move `cs_change_delay` backwards compat logic outside
- switch
-
-The `cs_change_delay` backwards compatibility value could be moved outside
-of the switch statement.
-The only reason to do it, is to make the next patches easier to diff.
-
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-Link: https://lore.kernel.org/r/20190926105147.7839-2-alexandru.ardelean@analog.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 9bb36c32cbf9..7ba981cdb86b 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1114,16 +1114,15 @@ static void _spi_transfer_cs_change_delay(struct spi_message *msg,
- 	u32 hz;
- 
- 	/* return early on "fast" mode - for everything but USECS */
--	if (!delay && unit != SPI_DELAY_UNIT_USECS)
-+	if (!delay) {
-+		if (unit == SPI_DELAY_UNIT_USECS)
-+			_spi_transfer_delay_ns(10000);
- 		return;
-+	}
- 
- 	switch (unit) {
- 	case SPI_DELAY_UNIT_USECS:
--		/* for compatibility use default of 10us */
--		if (!delay)
--			delay = 10000;
--		else
--			delay *= 1000;
-+		delay *= 1000;
- 		break;
- 	case SPI_DELAY_UNIT_NSECS: /* nothing to do here */
- 		break;
--- 
-2.20.1
-
+>
+> diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+> index 9c4f2d6deb06..4c4e97ae4fcb 100644
+> --- a/arch/arm/Kconfig.debug
+> +++ b/arch/arm/Kconfig.debug
+> @@ -998,7 +998,7 @@ choice
+>                   via SCIFA4 on Renesas SH-Mobile AG5 (SH73A0).
+>
+>         config DEBUG_S3C_UART0
+> -               depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +               depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>                 select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>                 select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>                 select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> @@ -1010,7 +1010,7 @@ choice
+>                   by the boot-loader before use.
+>
+>         config DEBUG_S3C_UART1
+> -               depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +               depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>                 select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>                 select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>                 select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> @@ -1022,7 +1022,7 @@ choice
+>                   by the boot-loader before use.
+>
+>         config DEBUG_S3C_UART2
+> -               depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +               depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>                 select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>                 select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>                 select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index f492d7c338fe..a1bc15cda751 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -235,7 +235,6 @@ machine-$(CONFIG_PLAT_SPEAR)                += spear
+>  # by CONFIG_* macro name.
+>  plat-$(CONFIG_ARCH_OMAP)       += omap
+>  plat-$(CONFIG_ARCH_S3C64XX)    += samsung
+> -plat-$(CONFIG_ARCH_S5PV210)    += samsung
+>  plat-$(CONFIG_PLAT_ORION)      += orion
+>  plat-$(CONFIG_PLAT_PXA)                += pxa
+>  plat-$(CONFIG_PLAT_S3C24XX)    += samsung
+> diff --git a/arch/arm/plat-samsung/Kconfig b/arch/arm/plat-samsung/Kconfig
+> index 740bdb23f38a..1530946cc672 100644
+> --- a/arch/arm/plat-samsung/Kconfig
+> +++ b/arch/arm/plat-samsung/Kconfig
+> @@ -4,7 +4,7 @@
+>
+>  config PLAT_SAMSUNG
+>         bool
+> -       depends on PLAT_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210
+> +       depends on PLAT_S3C24XX || ARCH_S3C64XX
+>         default y
+>         select GENERIC_IRQ_CHIP
+>         select NO_IOPORT_MAP
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index 400a581c918c..16a0e5430b44 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -275,7 +275,7 @@ config MMC_SDHCI_TEGRA
+>
+>  config MMC_SDHCI_S3C
+>         tristate "SDHCI support on Samsung S3C SoC"
+> -       depends on MMC_SDHCI && (PLAT_SAMSUNG || ARCH_EXYNOS)
+> +       depends on MMC_SDHCI && (PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS)
+>         help
+>           This selects the Secure Digital Host Controller Interface (SDHCI)
+>           often referrered to as the HSMMC block in some of the Samsung S3C
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index e3a2518503ed..8eb738cac0c7 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -394,7 +394,7 @@ config PWM_ROCKCHIP
+>
+>  config PWM_SAMSUNG
+>         tristate "Samsung PWM support"
+> -       depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +       depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>         help
+>           Generic PWM framework driver for Samsung.
+>
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index 6f7fdcbb9151..355391ee643d 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -625,7 +625,7 @@ config SPI_S3C24XX_FIQ
+>
+>  config SPI_S3C64XX
+>         tristate "Samsung S3C64XX series type SPI"
+> -       depends on (PLAT_SAMSUNG || ARCH_EXYNOS || COMPILE_TEST)
+> +       depends on (PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST)
+>         help
+>           SPI driver for Samsung S3C64XX and newer SoCs.
+>
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index 4789b5d62f63..17f01cf3009c 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -237,7 +237,7 @@ config SERIAL_CLPS711X_CONSOLE
+>
+>  config SERIAL_SAMSUNG
+>         tristate "Samsung SoC serial support"
+> -       depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +       depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>         select SERIAL_CORE
+>         help
+>           Support for the on-chip UARTs on the Samsung S3C24XX series CPUs,
+> diff --git a/sound/soc/samsung/Kconfig b/sound/soc/samsung/Kconfig
+> index 638983123d8f..7a0035dd9995 100644
+> --- a/sound/soc/samsung/Kconfig
+> +++ b/sound/soc/samsung/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  menuconfig SND_SOC_SAMSUNG
+>         tristate "ASoC support for Samsung"
+> -       depends on PLAT_SAMSUNG || ARCH_EXYNOS || COMPILE_TEST
+> +       depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+>         depends on COMMON_CLK
+>         select SND_SOC_GENERIC_DMAENGINE_PCM
+>         ---help---
+> --
+> 2.20.0
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
