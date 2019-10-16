@@ -2,79 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD3DD8034
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2019 21:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74515D93E6
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Oct 2019 16:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732145AbfJOTZm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Oct 2019 15:25:42 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:45908 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731968AbfJOTZl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Oct 2019 15:25:41 -0400
-Received: by mail-ot1-f67.google.com with SMTP id 41so17979879oti.12;
-        Tue, 15 Oct 2019 12:25:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SGcPWV+a3flesjj4mbDC6c0zlcD6MWrmIaFVWNKrxv8=;
-        b=RbCZ51114p98bZDl1nBqp70LCGm/OWBxOpeLQlX34680N69zPq1N5yuJDNt1yYhiVZ
-         1ebrJ9tMa8EQVoIwcz5mWfu17qy6LYtR+pGpwIoWWbHqBP2DIQJ5QBdN7l264LryIPTD
-         4tv1jyT2aLDaoGWXO+8Flk71Aw3OJXpKI6kHV16m2sIVrukRdsHfIzjGuQZfs0fNNsrm
-         mKktOQ9LerVQH4Zs3EGfDkV7rDKO0fr9aYW1vBG3ra5ihhG7CSi4L7wcD/tBl6QawF2+
-         K69QTaJavfLWJdLyqM83YWhxHifnzIzDpsIUvM9I2beNRkAJv0f/ISjII7FtRD2H+KZy
-         NbNg==
-X-Gm-Message-State: APjAAAUdFi7YwuEMMV5ABMl/3hMvIn59/zT4ImTckQtWVVZWOIjG+G5f
-        gpKpusIHPjEt/nBffVfArQ==
-X-Google-Smtp-Source: APXvYqwzb/cAnrXU5arNN28F0oXmazdVgAUawVvNKIfx6DNM+H5v1g+C5k2gwX/8EP5dl/+KZVzOOg==
-X-Received: by 2002:a05:6830:45b:: with SMTP id d27mr7145687otc.367.1571167540551;
-        Tue, 15 Oct 2019 12:25:40 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 13sm6309372oij.25.2019.10.15.12.25.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 12:25:39 -0700 (PDT)
-Date:   Tue, 15 Oct 2019 14:25:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Simon Horman <horms@verge.net.au>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>, xu_shunji@hoperun.com
-Subject: Re: [PATCH 3/7] dt-bindings: PCI: rcar: Add device tree support for
- r8a774b1
-Message-ID: <20191015192539.GA1694@bogus>
-References: <1570178133-21532-1-git-send-email-fabrizio.castro@bp.renesas.com>
- <1570178133-21532-4-git-send-email-fabrizio.castro@bp.renesas.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570178133-21532-4-git-send-email-fabrizio.castro@bp.renesas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2392471AbfJPObF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Oct 2019 10:31:05 -0400
+Received: from michel.telenet-ops.be ([195.130.137.88]:59182 "EHLO
+        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393025AbfJPObF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Oct 2019 10:31:05 -0400
+Received: from ramsan ([84.194.98.4])
+        by michel.telenet-ops.be with bizsmtp
+        id EEX22100F05gfCL06EX2rS; Wed, 16 Oct 2019 16:31:04 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iKkKM-0003mx-Ee; Wed, 16 Oct 2019 16:31:02 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iKkKM-0007UF-C8; Wed, 16 Oct 2019 16:31:02 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] spi: rspi: Use platform_get_irq_byname_optional() for optional irqs
+Date:   Wed, 16 Oct 2019 16:31:01 +0200
+Message-Id: <20191016143101.28738-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri,  4 Oct 2019 09:35:29 +0100, Fabrizio Castro wrote:
-> Add PCIe support for the RZ/G2N (a.k.a. R8A774B1).
-> 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/pci/rcar-pci.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+As platform_get_irq_byname() now prints an error when the interrupt
+does not exist, scary warnings may be printed for optional interrupts:
 
-Applied, thanks.
+    renesas_spi e6b10000.spi: IRQ rx not found
+    renesas_spi e6b10000.spi: IRQ mux not found
 
-Rob
+Fix this by calling platform_get_irq_byname_optional() instead.
+Remove the no longer needed printing of platform_get_irq errors, as the
+remaining calls to platform_get_irq() and platform_get_irq_byname() take
+care of that.
+
+Fixes: 7723f4c5ecdb8d83 ("driver core: platform: Add an error message to platform_get_irq*()")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+This is a fix for v5.4.
+---
+ drivers/spi/spi-rspi.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
+index 15f5723d9f9524d9..7222c7689c3c4cea 100644
+--- a/drivers/spi/spi-rspi.c
++++ b/drivers/spi/spi-rspi.c
+@@ -1257,9 +1257,9 @@ static int rspi_probe(struct platform_device *pdev)
+ 	ctlr->flags = ops->flags;
+ 	ctlr->dev.of_node = pdev->dev.of_node;
+ 
+-	ret = platform_get_irq_byname(pdev, "rx");
++	ret = platform_get_irq_byname_optional(pdev, "rx");
+ 	if (ret < 0) {
+-		ret = platform_get_irq_byname(pdev, "mux");
++		ret = platform_get_irq_byname_optional(pdev, "mux");
+ 		if (ret < 0)
+ 			ret = platform_get_irq(pdev, 0);
+ 		if (ret >= 0)
+@@ -1270,10 +1270,6 @@ static int rspi_probe(struct platform_device *pdev)
+ 		if (ret >= 0)
+ 			rspi->tx_irq = ret;
+ 	}
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "platform_get_irq error\n");
+-		goto error2;
+-	}
+ 
+ 	if (rspi->rx_irq == rspi->tx_irq) {
+ 		/* Single multiplexed interrupt */
+-- 
+2.17.1
+
