@@ -2,98 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE0CD9DB2
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Oct 2019 23:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D38DA220
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Oct 2019 01:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394764AbfJPVtd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Oct 2019 17:49:33 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:39620 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394721AbfJPVtc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Oct 2019 17:49:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ZufvcA61v5agVfmRZclKpGS8RTRtaYHF1QkCoX0ETPs=; b=l51SxgSoH+eyfT2mm1rmGeBDT
-        yhHObXSSp07I53kvAtlsoaAsFbOHIxbXQ+5WvPbqdFhqeM5Btng1ceKWOY/GqEEy2ZUfVTEoxRXTa
-        1c+E9q1JTFuFWhzN0HvBdTIi9uijXihuIrT+FpqUqznByX6wziQTTDR7YCaC4sXshvUbk=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iKrAV-0006KC-UE; Wed, 16 Oct 2019 21:49:19 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id EB915274325C; Wed, 16 Oct 2019 22:49:18 +0100 (BST)
-Date:   Wed, 16 Oct 2019 22:49:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: pxa2xx: Set controller->max_transfer_size in dma
- mode
-Message-ID: <20191016214918.GA11473@sirena.co.uk>
-References: <20191016195721.3714-1-daniel.vetter@ffwll.ch>
- <36610873-fa30-a286-d05c-5eceb3cbcb57@tronnes.org>
+        id S2437662AbfJPX0C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Oct 2019 19:26:02 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:39563 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406711AbfJPX0B (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Oct 2019 19:26:01 -0400
+Received: by mail-pg1-f193.google.com with SMTP id p12so151706pgn.6
+        for <linux-spi@vger.kernel.org>; Wed, 16 Oct 2019 16:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:from:to:cc:subject:user-agent:date;
+        bh=Qrvxi8VNIEP80MdoyXCLvX2dInmjYNYid6pa9CMx9/Y=;
+        b=C1LD66Kn8oz6QcB4JFdprXZte3otJEvF9M2x3YmxrvIbQz6oHdj2oYpj6OogvYQljn
+         rf6QL47fvOLb9HjbUEL+2zH59ECPYOgGXzagCFaZwp5GT1KcjTwrwM9pucVnjfhIlqBD
+         ciUxzWRdllOfvxfpCZ3JK+oraf4kD0CEdfFdU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:from:to:cc:subject
+         :user-agent:date;
+        bh=Qrvxi8VNIEP80MdoyXCLvX2dInmjYNYid6pa9CMx9/Y=;
+        b=lsbE4Ag4AwKA25InIghncRdJkc2QGz7SjUWBU8eKhkIKJH9xZtlz7M5BTPPBJ2JFKx
+         h4wXNfK7/Cz8ypN/gp58IBd/nBc0pk+Nf92SqlA/1WaflSojsG5CqoyjXWjP3cWIRyfj
+         ljtKxl15ybZ4QLhqGLrosXcvOV9UHmr+v7tLGky4Z7nYAzujqIt70dFHOs1QE5nD9ZdU
+         DPoJaTGFLMUCBYXXmWqlRjVmpXFKh4s68cTBCbSWHcFgWWQyJWgzpdAamSf4v5w2t4Ur
+         rKnpqznBuNKF5wgc7KYsY0Em3G/Sq9yyndf+osy8HplhK3ZPY5WzokZ5quVzGW7ugedQ
+         GKaA==
+X-Gm-Message-State: APjAAAX7TRFlyDi5BmCKm3C7UMgSILAyMWBqBmEh4wHLmLtlFddWkQOj
+        lbSjh9nDWeRMMqq9HcT5C0g/2Q==
+X-Google-Smtp-Source: APXvYqzwan96igiVoJXoXnp0dlhIkgKisPOSNOslthiLl2WjZnd3MQpnyD29PbzVpemNzqdv3BAF4A==
+X-Received: by 2002:a65:644c:: with SMTP id s12mr708041pgv.319.1571268358755;
+        Wed, 16 Oct 2019 16:25:58 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id y6sm182241pfp.82.2019.10.16.16.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2019 16:25:58 -0700 (PDT)
+Message-ID: <5da7a706.1c69fb81.7818.0cfe@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
-Content-Disposition: inline
-In-Reply-To: <36610873-fa30-a286-d05c-5eceb3cbcb57@tronnes.org>
-X-Cookie: Auction:
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191016143101.28738-1-geert+renesas@glider.be>
+References: <20191016143101.28738-1-geert+renesas@glider.be>
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH] spi: rspi: Use platform_get_irq_byname_optional() for optional irqs
+User-Agent: alot/0.8.1
+Date:   Wed, 16 Oct 2019 16:25:57 -0700
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Quoting Geert Uytterhoeven (2019-10-16 07:31:01)
+> As platform_get_irq_byname() now prints an error when the interrupt
+> does not exist, scary warnings may be printed for optional interrupts:
+>=20
+>     renesas_spi e6b10000.spi: IRQ rx not found
+>     renesas_spi e6b10000.spi: IRQ mux not found
+>=20
+> Fix this by calling platform_get_irq_byname_optional() instead.
+> Remove the no longer needed printing of platform_get_irq errors, as the
+> remaining calls to platform_get_irq() and platform_get_irq_byname() take
+> care of that.
+>=20
+> Fixes: 7723f4c5ecdb8d83 ("driver core: platform: Add an error message to =
+platform_get_irq*()")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
---yrj/dFKFPuw6o+aM
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-On Wed, Oct 16, 2019 at 11:30:51PM +0200, Noralf Tr=F8nnes wrote:
-
-> As Andy mentioned, ->max_transfer_size is a callback:
-
-> struct spi_controller {
-> 	/*
-> 	 * on some hardware transfer / message size may be constrained
-> 	 * the limit may depend on device transfer settings
-> 	 */
-> 	size_t (*max_transfer_size)(struct spi_device *spi);
-
-> (I looked at its users and they all return a static or probe time value
-> so not sure why it's a callback.)
-
-Huh, I wonder why we did that...  I can't find any clear record, and
-like you say nothing is using it so we should probably fix it - however
-that's best done separately to this :/  Sorry for the confusion, I
-didn't register what Andy was saying as being pointing out the current
-state of the code.
-
---yrj/dFKFPuw6o+aM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2nkF4ACgkQJNaLcl1U
-h9A+Pwf/W+TqlKqBacstyeP18KY0oRQ7ySrj544UYjH8VdN93ZMgWCSCZ5FgL9tv
-APkLEB1mXcpDeqLbLHKrNBS+8yMpCzqOVIYjmA1COIRm627P28BGBF1IKaFaPg2N
-fjG5vu2nWcgpCjPneFPOdCP0RLEiRd0qWLCbPv4VpKJpYHK4U44/m7bN8iuM9cHB
-Chd4H3kndisVKQXkwsAT6emauaPLaf17Hbhovoar5TlHECfIwOYKanPDPIYqgol6
-uOFs93BJbfky2Wj5rbCNh1F6T2zKpG8ctOvrPrDVvNcVF2vv0+EIlESSGM+aON42
-h/DQKS+S9hNCPnEKRtbjv++nzuZbow==
-=+n2p
------END PGP SIGNATURE-----
-
---yrj/dFKFPuw6o+aM--
