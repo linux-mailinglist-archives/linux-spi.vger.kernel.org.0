@@ -2,109 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AFBD98D2
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Oct 2019 20:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F889D9A84
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Oct 2019 21:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394204AbfJPSBW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Oct 2019 14:01:22 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:51688 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390034AbfJPSBW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Oct 2019 14:01:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=831oddvIWDaezyLXT0EnzHzEYss/MUysoe0QwJq3uNQ=; b=gAFB/hHicc7uy5LIn8t9nPyB/
-        qeAS4PGIEL6BtBtRC9ZN9rXJgQ94wgGK5g44/LpjQpTSG/TSCY0jjpcp7114PLlmkU2JDiuAhRxDr
-        MBiGt+IONZ7aCEvA8wGU88NXDqSAnRoK/VfQEfsf3jYzF+M3tnGfpHzewAiLqI4BrayOA=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iKnaw-0005xp-G2; Wed, 16 Oct 2019 18:00:22 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 822562741FCE; Wed, 16 Oct 2019 19:00:21 +0100 (BST)
-Date:   Wed, 16 Oct 2019 19:00:21 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        id S1730816AbfJPT5c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Oct 2019 15:57:32 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34008 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730603AbfJPT5c (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Oct 2019 15:57:32 -0400
+Received: by mail-wr1-f68.google.com with SMTP id j11so29458158wrp.1
+        for <linux-spi@vger.kernel.org>; Wed, 16 Oct 2019 12:57:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NG+1N8pqfTQP+Jc9hKyg5BqhDrJd8BVaVZCbMzcwzpQ=;
+        b=YOxOhnYlgzS2Tk4VK481ftR03oNVQw/9Gepa5WfUSzlqM+BqFzjdDM+kWHO2jePcGR
+         1gDaEiYOejp+n93yW2HQFyRFRpAx7JDMeWoWz3Twfzv4Uhk8qXrU22BVHzR13vWuKqrK
+         2u/LkjnBoN7Ec2egjOnU/zC9SUKH+fi5FsSCY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NG+1N8pqfTQP+Jc9hKyg5BqhDrJd8BVaVZCbMzcwzpQ=;
+        b=sbUOcFanC+TNZpennPkQ36KgzA1eNEkv0WDiQTeyfgyAOCGs9g3eUY/yqgwfWBrrD8
+         w89+XeVcZQvCdBwdcAE2AzjMZxB3/RVMXbbzuvDsWv+z1l5W9dKEH1CWZvPtrqeVid29
+         WVKYmn25FmL+aePEWrzugyNmx/OhFjm2LYu8X6fM3zTBVhM2nTY/2pgbFZ9mWJN6o/x2
+         8+z6QvmaCkDqUaEYOIPpSqaGfSjIti+sQIf8cb5nOrjaRhfcxLaO8mTgVcGX2VP0ctL1
+         VqoEw2VwqjPtmu91jp/BkAsOutis+bV1OH0efDyUglnIc+/Z3q32varGqHYIx4XFjqA6
+         1rYA==
+X-Gm-Message-State: APjAAAXb/TtxPn7QgwnaHdliv1Fn/tBcVo6J4NsW8fYddUn57+Z47ZG7
+        r4K6M5oxrv+fHkT/umqMROzb2A==
+X-Google-Smtp-Source: APXvYqzEDG6NFRpskcNp9TxpoXWvKld+9QHPgfTTWr0lWHp9luHTpO7e8V8TrlMGUFE74OMWti9u+w==
+X-Received: by 2002:adf:f90f:: with SMTP id b15mr4197296wrr.76.1571255848864;
+        Wed, 16 Oct 2019 12:57:28 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-96.fiber7.init7.net. [212.51.149.96])
+        by smtp.gmail.com with ESMTPSA id t13sm52362928wra.70.2019.10.16.12.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2019 12:57:28 -0700 (PDT)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
         Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Lechner <david@lechnology.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 05/11] drm/tinydrm: Remove
- tinydrm_spi_max_transfer_size()
-Message-ID: <20191016180021.GF4881@sirena.co.uk>
-References: <20190719155916.62465-1-noralf@tronnes.org>
- <20190719155916.62465-6-noralf@tronnes.org>
- <20191015143236.GA5363@smile.fi.intel.com>
- <253aec49-e51c-b35b-4e7d-53a8a948655d@tronnes.org>
- <20191015155720.GQ11828@phenom.ffwll.local>
- <20191016161300.GW32742@smile.fi.intel.com>
- <CAKMK7uEp39uvLtgyTTj31u-GYVoPiVJDTVbUThtn7NU_EoKk3A@mail.gmail.com>
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: [PATCH] spi: pxa2xx: Set controller->max_transfer_size in dma mode
+Date:   Wed, 16 Oct 2019 21:57:21 +0200
+Message-Id: <20191016195721.3714-1-daniel.vetter@ffwll.ch>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fwqqG+mf3f7vyBCB"
-Content-Disposition: inline
-In-Reply-To: <CAKMK7uEp39uvLtgyTTj31u-GYVoPiVJDTVbUThtn7NU_EoKk3A@mail.gmail.com>
-X-Cookie: Serenity through viciousness.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+In DMA mode we have a maximum transfer size, past that the driver
+falls back to PIO (see the check at the top of pxa2xx_spi_transfer_one).
+Falling back to PIO for big transfers defeats the point of a dma engine,
+hence set the max transfer size to inform spi clients that they need
+to do something smarter.
 
---fwqqG+mf3f7vyBCB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This was uncovered by the drm_mipi_dbi spi panel code, which does
+large spi transfers, but stopped splitting them after:
 
-On Wed, Oct 16, 2019 at 07:44:51PM +0200, Daniel Vetter wrote:
-> On Wed, Oct 16, 2019 at 6:13 PM Andy Shevchenko
-> > On Tue, Oct 15, 2019 at 05:57:20PM +0200, Daniel Vetter wrote:
+commit e143364b4c1774f68e923a5a0bb0fca28ac25888
+Author: Noralf Trønnes <noralf@tronnes.org>
+Date:   Fri Jul 19 17:59:10 2019 +0200
 
-> > > Something like this, as a test patch.
+    drm/tinydrm: Remove tinydrm_spi_max_transfer_size()
 
-> > max_transfer_size should be a function. In that case it works.
+After this commit the code relied on the spi core to split transfers
+into max dma-able blocks, which also papered over the PIO fallback issue.
 
-> Why do you want to make it a function? At least from my reading of the
-> code, the dma vs pio decision seems to be done once. So no need to
-> change this at runtime. Changing at runtime would also be a pretty big
-> surprise I think for users of spi.
+Fix this by setting the overall max transfer size to the DMA limit,
+but only when the controller runs in DMA mode.
 
-Yeah, I'd expect it to be a fixed property of the hardware that doesn't
-vary at runtime though I'm sure there must be some innovation out there
-which challenges that assumption.
+Fixes: e143364b4c17 ("drm/tinydrm: Remove tinydrm_spi_max_transfer_size()")
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: Noralf Trønnes <noralf@tronnes.org>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+Reported-and-tested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Daniel Mack <daniel@zonque.org>
+Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-spi@vger.kernel.org
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+---
+ drivers/spi/spi-pxa2xx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > However I'm not sure it's the best approach, thus, Cc to SPI PXA people.
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index bb6a14d1ab0f..f77201915033 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -1707,6 +1707,7 @@ static int pxa2xx_spi_probe(struct platform_device *pdev)
+ 		} else {
+ 			controller->can_dma = pxa2xx_spi_can_dma;
+ 			controller->max_dma_len = MAX_DMA_LEN;
++			controller->max_transfer_size = MAX_DMA_LEN;
+ 		}
+ 	}
+ 
+-- 
+2.23.0
 
-> Hm didn't spot the pxa people, added them. Mark, should I just go
-> ahead and bake this into a proper patch for discussion? Or
-> fundamentally wrong approach?
-
-That seems sensible enough, it should certainly fix the immediate issue.
-
---fwqqG+mf3f7vyBCB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2nWrQACgkQJNaLcl1U
-h9ACpgf9FYcLQbfzOaqA6bv23GWM5kYHA1UQOKHgZlYLGC2Aw2IeM1XqAs7af+EZ
-fzW3MX3jF1BIV508BV4aPBDjos8meM4SQLXnHHzAn1Kvtfky92yyKuQJuz3/S8Q8
-kU6Eg9MYfC32v/Ii1T8Xo/Du9uNI9cmdBkO7D3jteSBIztHjJGWKbD4zvJ7DZIfO
-pA3aKflUVJoigqGqpCC/DCiksKAlcLVML61jwSDl611fibVqYSOmfsjsTl9M+FMm
-REE2KZdwbugKtbhrNA0oLIJqG8lEVbx23IFjHixlGJfOmHk/Aqw8yF75f/DIofxt
-lXwPoa9S1SUlO1mBG3bonq/CynXuZg==
-=Ib+9
------END PGP SIGNATURE-----
-
---fwqqG+mf3f7vyBCB--
