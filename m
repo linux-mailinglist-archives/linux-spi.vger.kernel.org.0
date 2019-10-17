@@ -2,92 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1023DAFC2
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Oct 2019 16:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBBADBAA1
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 02:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440046AbfJQOUb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Oct 2019 10:20:31 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:50449 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440027AbfJQOUb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Oct 2019 10:20:31 -0400
-X-Originating-IP: 86.207.98.53
-Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
-        (Authenticated sender: gregory.clement@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id B2D26E000A;
-        Thu, 17 Oct 2019 14:20:28 +0000 (UTC)
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH 7/7] spi: atmel: Improve CS0 case support on AT91RM9200
-Date:   Thu, 17 Oct 2019 16:18:46 +0200
-Message-Id: <20191017141846.7523-8-gregory.clement@bootlin.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191017141846.7523-1-gregory.clement@bootlin.com>
-References: <20191017141846.7523-1-gregory.clement@bootlin.com>
+        id S2503956AbfJRAU2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Oct 2019 20:20:28 -0400
+Received: from zaovasilisa.ru ([88.200.194.99]:49001 "EHLO usrv.lan"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2503926AbfJRAU1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 17 Oct 2019 20:20:27 -0400
+X-Greylist: delayed 22562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Oct 2019 20:20:19 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by usrv.lan (Postfix) with SMTP id E44FB186481;
+        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
+Received: from (HELO zlba) [49.155.13.191] by 127.0.0.1 id 08foBMeDLK33 for <linux-nvme@lists.infradead.org>; Thu, 17 Oct 2019 10:59:51 -0200
+Message-ID: <9$4n3z523f$d$rou@1wu6v8t.44r>
+From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+To:     linux-nvme@lists.infradead.org
+Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
+Date:   Thu, 17 Oct 19 10:59:51 GMT
+X-Mailer: MIME-tools 5.503 (Entity 5.501)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/alternative;
+        boundary="EFA7_FB09FAD2"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Thanks to the recent change in this driver, it is now possible to
-prevent using the CS0 with GPIO during setup. It then allows to remove
-the special handling of this case in the cs_activate() and
-cs_deactivate() functions.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
- drivers/spi/spi-atmel.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+--EFA7_FB09FAD2
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
-index ac5e2ddf9e1b..d88e2aa64839 100644
---- a/drivers/spi/spi-atmel.c
-+++ b/drivers/spi/spi-atmel.c
-@@ -371,7 +371,7 @@ static void cs_activate(struct atmel_spi *as, struct spi_device *spi)
- 
- 		mr = spi_readl(as, MR);
- 		mr = SPI_BFINS(PCS, ~(1 << chip_select), mr);
--		if (spi->cs_gpiod && spi->chip_select != 0)
-+		if (spi->cs_gpiod)
- 			gpiod_set_value(spi->cs_gpiod, 1);
- 		spi_writel(as, MR, mr);
- 	}
-@@ -402,7 +402,7 @@ static void cs_deactivate(struct atmel_spi *as, struct spi_device *spi)
- 
- 	if (!spi->cs_gpiod)
- 		spi_writel(as, CR, SPI_BIT(LASTXFER));
--	else if (atmel_spi_is_v2(as) || spi->chip_select != 0)
-+	else
- 		gpiod_set_value(spi->cs_gpiod, 0);
- }
- 
-@@ -1193,7 +1193,16 @@ static void initialize_native_cs_for_gpio(struct atmel_spi *as)
- 	if (!master->cs_gpiods)
- 		return; /* No CS GPIO */
- 
--	for (i = 0; i < 4; i++)
-+	/*
-+	 * On the first version of the controller (AT91RM9200), CS0
-+	 * can't be used associated with GPIO
-+	 */
-+	if (atmel_spi_is_v2(as))
-+		i = 0;
-+	else
-+		i = 1;
-+
-+	for (; i < 4; i++)
- 		if (master->cs_gpiods[i])
- 			as->native_cs_free |= BIT(i);
- 
--- 
-2.23.0
+Dear Sir / Madam
+
+
+
+Since ever we left your country back to Canada , we have gotten Government=
+ approval and we have been busying planning for the less privilege Childre=
+n projects.
+
+We are planning to release first batch of the funds $2,990,000.00 within 1=
+4 days for building an estate for motherless children in your city.
+
+I want you to use my mother;s company name to register this charity projec=
+t in your country after receiving the project funds.
+
+It must be registered as { Bayraktar Group Homeless Children Ltd }.
+
+
+Can you handle and supervise this big project ?
+Can you manager all the workers as a senior supervisor ?
+We want to be sure you can handle it before we proceed with this project.
+
+
+Please call me if you want to hear from us + 1-917 580 4919.
+Please can you manage such project please Kindly reply for further details=
+.
+
+Your full names-----------
+
+
+
+Ekrem Bayraktar.
+Bayraktar Shipping Group
+
+--EFA7_FB09FAD2--
 
