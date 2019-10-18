@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7572ADCD68
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 20:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B060DCD6E
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 20:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2634546AbfJRSHq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Oct 2019 14:07:46 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45362 "EHLO
+        id S2634399AbfJRSHT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Oct 2019 14:07:19 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45320 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505743AbfJRSHT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 14:07:19 -0400
+        with ESMTP id S2505757AbfJRSHR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 14:07:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=+ZlHeGfrpTjU6PQ+KNMsRurvdye1OzjdR9gSL9BV4SI=; b=H3r14kUnkG0l
-        U1iBqWReaeJqBm21j0q+n2hHSJ0LuU3dI1tGjzx190rpeKfL1bJdIqtNpF6062wW5H11AjyBc+Pmc
-        m2lOlH5B62G6ZdF2IxA6bDcvmikWRbw6WshgxPR8LjFpIWYFbeUUlmcSPFq1T+LpPWVTMDbWunVGs
-        VBtdo=;
+        List-Archive; bh=UWYU2hlp/17q+ZNz6t8G1ig3ksQwGbwgwvY2Lux56Yk=; b=JqPCc9ztbqfq
+        YSnIrMln6LZiMJrCkj5Yq128E60d+oXbv7oWH0G0CtqD0z3X+lROeWhcIjkT10OY59dEvCKncns10
+        0rZk1rwVRh1AtMJjGNWPfBzgvpN5lX1MLg1Hqd4xAQpqaAOWdOIvH9pb9QkfrBVCycfL+kW83BCEC
+        mJSR0=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iLWeb-0004HK-Ig; Fri, 18 Oct 2019 18:07:09 +0000
+        id 1iLWec-0004I2-Rf; Fri, 18 Oct 2019 18:07:10 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 17FD42743259; Fri, 18 Oct 2019 19:07:09 +0100 (BST)
+        id 4E1912743259; Fri, 18 Oct 2019 19:07:10 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Gregory CLEMENT <gregory.clement@bootlin.com>
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -36,12 +36,13 @@ Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Ludovic Desroches <ludovic.desroches@microchip.com>,
         Mark Brown <broonie@kernel.org>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
+        <stable@vger.kernel.org>, stable@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Applied "spi: atmel: Remove and fix erroneous comments" to the spi tree
-In-Reply-To: <20191017141846.7523-2-gregory.clement@bootlin.com>
+Subject: Applied "spi: Fix SPI_CS_HIGH setting when using native and GPIO CS" to the spi tree
+In-Reply-To: <20191018152929.3287-1-gregory.clement@bootlin.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191018180709.17FD42743259@ypsilon.sirena.org.uk>
-Date:   Fri, 18 Oct 2019 19:07:09 +0100 (BST)
+Message-Id: <20191018180710.4E1912743259@ypsilon.sirena.org.uk>
+Date:   Fri, 18 Oct 2019 19:07:10 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -49,11 +50,11 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: atmel: Remove and fix erroneous comments
+   spi: Fix SPI_CS_HIGH setting when using native and GPIO CS
 
 has been applied to the spi tree at
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
@@ -74,49 +75,66 @@ to this mail.
 Thanks,
 Mark
 
-From 4d8672d17450b457c0dbbcfe9868438036b4647c Mon Sep 17 00:00:00 2001
+From 3e5ec1db8bfee845d9f8560d1c64aeaccd586398 Mon Sep 17 00:00:00 2001
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Thu, 17 Oct 2019 16:18:40 +0200
-Subject: [PATCH] spi: atmel: Remove and fix erroneous comments
+Date: Fri, 18 Oct 2019 17:29:29 +0200
+Subject: [PATCH] spi: Fix SPI_CS_HIGH setting when using native and GPIO CS
 
-Since CSAAT functionality support has been added. Some comments become
-wrong. Fix them to match the current driver behavior.
+When improving the CS GPIO support at core level, the SPI_CS_HIGH
+has been enabled for all the CS lines used for a given SPI controller.
 
+However, the SPI framework allows to have on the same controller native
+CS and GPIO CS. The native CS may not support the SPI_CS_HIGH, so they
+should not be setup automatically.
+
+With this patch the setting is done only for the CS that will use a
+GPIO as CS
+
+Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Link: https://lore.kernel.org/r/20191017141846.7523-2-gregory.clement@bootlin.com
+Link: https://lore.kernel.org/r/20191018152929.3287-1-gregory.clement@bootlin.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-atmel.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/spi/spi.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
-index e34ab587b980..7a17c3e2a8ee 100644
---- a/drivers/spi/spi-atmel.c
-+++ b/drivers/spi/spi-atmel.c
-@@ -312,11 +312,9 @@ static bool atmel_spi_is_v2(struct atmel_spi *as)
-  * transmitted")  Not so!  Workaround uses nCSx pins as GPIOs; or newer
-  * controllers have CSAAT and friends.
-  *
-- * Since the CSAAT functionality is a bit weird on newer controllers as
-- * well, we use GPIO to control nCSx pins on all controllers, updating
-- * MR.PCS to avoid confusing the controller.  Using GPIOs also lets us
-- * support active-high chipselects despite the controller's belief that
-- * only active-low devices/systems exists.
-+ * Even controller newer than ar91rm9200, using GPIOs can make sens as
-+ * it lets us support active-high chipselects despite the controller's
-+ * belief that only active-low devices/systems exists.
-  *
-  * However, at91rm9200 has a second erratum whereby nCS0 doesn't work
-  * right when driven with GPIO.  ("Mode Fault does not allow more than one
-@@ -1193,8 +1191,6 @@ static int atmel_spi_setup(struct spi_device *spi)
- 	if (!as->use_cs_gpios)
- 		csr |= SPI_BIT(CSAAT);
- 
--	/* DLYBS is mostly irrelevant since we manage chipselect using GPIOs.
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index f8b4654a57d3..d07517151340 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1711,15 +1711,7 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 		spi->mode |= SPI_3WIRE;
+ 	if (of_property_read_bool(nc, "spi-lsb-first"))
+ 		spi->mode |= SPI_LSB_FIRST;
+-
+-	/*
+-	 * For descriptors associated with the device, polarity inversion is
+-	 * handled in the gpiolib, so all chip selects are "active high" in
+-	 * the logical sense, the gpiolib will invert the line if need be.
 -	 */
- 	csr |= SPI_BF(DLYBS, 0);
+-	if (ctlr->use_gpio_descriptors)
+-		spi->mode |= SPI_CS_HIGH;
+-	else if (of_property_read_bool(nc, "spi-cs-high"))
++	if (of_property_read_bool(nc, "spi-cs-high"))
+ 		spi->mode |= SPI_CS_HIGH;
  
- 	word_delay_csr = atmel_word_delay_csr(spi, as);
+ 	/* Device DUAL/QUAD mode */
+@@ -1783,6 +1775,14 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 	}
+ 	spi->chip_select = value;
+ 
++	/*
++	 * For descriptors associated with the device, polarity inversion is
++	 * handled in the gpiolib, so all gpio chip selects are "active high"
++	 * in the logical sense, the gpiolib will invert the line if need be.
++	 */
++	if ((ctlr->use_gpio_descriptors) && ctlr->cs_gpiods[spi->chip_select])
++		spi->mode |= SPI_CS_HIGH;
++
+ 	/* Device speed */
+ 	rc = of_property_read_u32(nc, "spi-max-frequency", &value);
+ 	if (rc) {
 -- 
 2.20.1
 
