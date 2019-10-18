@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A0ADCD79
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 20:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4470DCD71
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 20:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505821AbfJRSIX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Oct 2019 14:08:23 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45250 "EHLO
+        id S2505788AbfJRSIH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Oct 2019 14:08:07 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45394 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505749AbfJRSHP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 14:07:15 -0400
+        with ESMTP id S2505766AbfJRSHS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 14:07:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=KLzPw8Xsa4mTj7W5XGM0fv889qZfAC//m7Lpyu4FikE=; b=dndlkP61ea9f
-        ZlOWbCDTs6GOupq8DvM97k1zxXnTYb0YNyn0gvk/FVY4yq+LBMtGmIn1S58/J0crbGaH0lxt/Hy6J
-        wg23RM1E2DAfpnwG+snGzmF07sV0iblSD3r10YILz2HFyJjAdlYlPUniARWAZWNYbYCxOzpL/NPCr
-        2FkV0=;
+        List-Archive; bh=6OLawQSqK81xzP4HuvY/4eKlvEfofNZTR3ny2vEIaSE=; b=R7V5aLOUCrwT
+        iSzdAwE5I/Q1zcSDYocrvBhgoOUp0LB51unN2EIya735X7smxBIscTp+co/GgGwmqm1YJKqlddFxD
+        OcjrJxAVxa+KxL5N9fEmEdp73t4uqyFgBuYQdz3cL1o9oFcOkDvzYLIB2CLhS9er5h9NtLiZDRbUP
+        Lh+Cg=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iLWeb-0004HC-D6; Fri, 18 Oct 2019 18:07:09 +0000
+        id 1iLWea-0004H3-QA; Fri, 18 Oct 2019 18:07:08 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id D914D2741DEA; Fri, 18 Oct 2019 19:07:08 +0100 (BST)
+        id 500EB2743259; Fri, 18 Oct 2019 19:07:08 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Gregory CLEMENT <gregory.clement@bootlin.com>
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -36,12 +36,11 @@ Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Ludovic Desroches <ludovic.desroches@microchip.com>,
         Mark Brown <broonie@kernel.org>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
-        <stable@vger.kernel.org>, stable@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Applied "spi: atmel: Fix CS high support" to the spi tree
-In-Reply-To: <20191017141846.7523-3-gregory.clement@bootlin.com>
+Subject: Applied "spi: atmel: Remove useless private field" to the spi tree
+In-Reply-To: <20191017141846.7523-5-gregory.clement@bootlin.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191018180708.D914D2741DEA@ypsilon.sirena.org.uk>
+Message-Id: <20191018180708.500EB2743259@ypsilon.sirena.org.uk>
 Date:   Fri, 18 Oct 2019 19:07:08 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -50,7 +49,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: atmel: Fix CS high support
+   spi: atmel: Remove useless private field
 
 has been applied to the spi tree at
 
@@ -75,50 +74,85 @@ to this mail.
 Thanks,
 Mark
 
-From 7cbb16b2122c09f2ae393a1542fed628505b9da6 Mon Sep 17 00:00:00 2001
+From 60086e23e64f7b3b60d957471cfd10948e25648e Mon Sep 17 00:00:00 2001
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Thu, 17 Oct 2019 16:18:41 +0200
-Subject: [PATCH] spi: atmel: Fix CS high support
+Date: Thu, 17 Oct 2019 16:18:43 +0200
+Subject: [PATCH] spi: atmel: Remove useless private field
 
-Until a few years ago, this driver was only used with CS GPIO. The
-only exception is CS0 on AT91RM9200 which has to use internal CS. A
-limitation of the internal CS is that they don't support CS High.
+Since the conversion to GPIO descriptor, the GPIO used as chip select,
+can be directly access from the spi_device struct. So there is no need
+to keep the field npcs_pin.
 
-So by using the CS GPIO the CS high configuration was available except
-for the particular case CS0 on RM9200.
-
-When the support for the internal chip-select was added, the check of
-the CS high support was not updated. Due to this the driver accepts
-this configuration for all the SPI controller v2 (used by all SoCs
-excepting the AT91RM9200) whereas the hardware doesn't support it for
-infernal CS.
-
-This patch fixes the test to match the hardware capabilities.
-
-Fixes: 4820303480a1 ("spi: atmel: add support for the internal chip-select of the spi controller")
-Cc: <stable@vger.kernel.org>
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Link: https://lore.kernel.org/r/20191017141846.7523-3-gregory.clement@bootlin.com
+Link: https://lore.kernel.org/r/20191017141846.7523-5-gregory.clement@bootlin.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-atmel.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/spi/spi-atmel.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
-index 7a17c3e2a8ee..6e08ae539bc0 100644
+index b511df6a4846..19600de40422 100644
 --- a/drivers/spi/spi-atmel.c
 +++ b/drivers/spi/spi-atmel.c
-@@ -1176,10 +1176,8 @@ static int atmel_spi_setup(struct spi_device *spi)
- 	as = spi_master_get_devdata(spi->master);
+@@ -284,7 +284,6 @@ struct atmel_spi {
  
- 	/* see notes above re chipselect */
--	if (!atmel_spi_is_v2(as)
--			&& spi->chip_select == 0
--			&& (spi->mode & SPI_CS_HIGH)) {
--		dev_dbg(&spi->dev, "setup: can't be active-high\n");
-+	if (!as->use_cs_gpios && (spi->mode & SPI_CS_HIGH)) {
-+		dev_warn(&spi->dev, "setup: non GPIO CS can't be active-high\n");
- 		return -EINVAL;
+ /* Controller-specific per-slave state */
+ struct atmel_spi_device {
+-	struct gpio_desc	*npcs_pin;
+ 	u32			csr;
+ };
+ 
+@@ -347,8 +346,8 @@ static void cs_activate(struct atmel_spi *as, struct spi_device *spi)
+ 		}
+ 
+ 		mr = spi_readl(as, MR);
+-		if (asd->npcs_pin)
+-			gpiod_set_value(asd->npcs_pin, 1);
++		if (spi->cs_gpiod)
++			gpiod_set_value(spi->cs_gpiod, 1);
+ 	} else {
+ 		u32 cpol = (spi->mode & SPI_CPOL) ? SPI_BIT(CPOL) : 0;
+ 		int i;
+@@ -364,8 +363,8 @@ static void cs_activate(struct atmel_spi *as, struct spi_device *spi)
+ 
+ 		mr = spi_readl(as, MR);
+ 		mr = SPI_BFINS(PCS, ~(1 << spi->chip_select), mr);
+-		if (asd->npcs_pin && spi->chip_select != 0)
+-			gpiod_set_value(asd->npcs_pin, 1);
++		if (spi->cs_gpiod && spi->chip_select != 0)
++			gpiod_set_value(spi->cs_gpiod, 1);
+ 		spi_writel(as, MR, mr);
+ 	}
+ 
+@@ -374,7 +373,6 @@ static void cs_activate(struct atmel_spi *as, struct spi_device *spi)
+ 
+ static void cs_deactivate(struct atmel_spi *as, struct spi_device *spi)
+ {
+-	struct atmel_spi_device *asd = spi->controller_state;
+ 	u32 mr;
+ 
+ 	/* only deactivate *this* device; sometimes transfers to
+@@ -388,10 +386,10 @@ static void cs_deactivate(struct atmel_spi *as, struct spi_device *spi)
+ 
+ 	dev_dbg(&spi->dev, "DEactivate NPCS, mr %08x\n", mr);
+ 
+-	if (!asd->npcs_pin)
++	if (!spi->cs_gpiod)
+ 		spi_writel(as, CR, SPI_BIT(LASTXFER));
+ 	else if (atmel_spi_is_v2(as) || spi->chip_select != 0)
+-		gpiod_set_value(asd->npcs_pin, 0);
++		gpiod_set_value(spi->cs_gpiod, 0);
+ }
+ 
+ static void atmel_spi_lock(struct atmel_spi *as) __acquires(&as->lock)
+@@ -1205,9 +1203,6 @@ static int atmel_spi_setup(struct spi_device *spi)
+ 		if (!asd)
+ 			return -ENOMEM;
+ 
+-		if (spi->cs_gpiod)
+-			asd->npcs_pin = spi->cs_gpiod;
+-
+ 		spi->controller_state = asd;
  	}
  
 -- 
