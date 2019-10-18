@@ -2,98 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEDDDC6DB
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 16:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15891DC872
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 17:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408714AbfJROEf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Oct 2019 10:04:35 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38163 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408654AbfJROEe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 10:04:34 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w3so3446857pgt.5;
-        Fri, 18 Oct 2019 07:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XDsR3uMfXkgF7u6HALnY0iXOM6iF9eRUOFTw+nG58FU=;
-        b=s/332UPVcH1YG4ye19Mtt+q/dq09kM3b0whWofT6iOrvdLjKeNJSYkEGYFV41HwrJ+
-         NWTQw49T0F9jwGWvwScp1UZ2t847mGaAFXXulMv9mGQAJLsG3dKWHgREe0FpOs6jVYWK
-         cppS7aPIqstVZHnSUo3gHthlzVCgIAjPKB5T0vMa1tMxCUgxWuDmLC+RQT/E6RHfjHDC
-         AqSTsQDXzjEWd/gfhgAYV3UjuuJtrtpN/6tAuKaAU/ghmYpCssDi7ZljlQIV/F5zRKrX
-         TWEOv8hq5IVZpBOqM1H9GQ9T/oMyHsN53zFGEZmTr+uA1ka0S8bMJoWEGMXfMR0uDHxe
-         aVkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XDsR3uMfXkgF7u6HALnY0iXOM6iF9eRUOFTw+nG58FU=;
-        b=M1g3JUbOoZsVDjdyERFUL8jVd7PIfRJQynGrwPzRSG1M9wbGBRflDgLhpiFIvIXBCc
-         liCcKlyxKYlMBYebpC/ggiwm7skM/8ZZmz8vxDQICpBbK5tz/JUaAXNoGZU8EDcGEJhc
-         0FMi5nyxo2o0B8UcrkvWlRsgR1lrl3mM02nrd0KzU4hQtUVZLPaMSuWBJQknyP7+B5vE
-         Pl8VxJ3XfpcL3Hz/8Am+lDC4ZTLp74KnXl/TTiOmvm2keuZ5Bl4bfb15lpkwan7l7vjH
-         LAnMPgyek5FT3MIYtD2lZD1dJbkQ7XZNTlovuuBeRHcoMIcIHLi3Qy8Fcy9GDQxCx6+m
-         +m5w==
-X-Gm-Message-State: APjAAAUMfS4d4f+Li92/M+FWk+VcuOYxXxHreJ/l++u+AjmKAxtr2Fja
-        27Kd8nY1A5Nja6zKE7l+ckcee+uC6bB3Yv/T65M=
-X-Google-Smtp-Source: APXvYqwnOvM20v2TXGRKh+0hhjR67QeiaXXXTMLJTzrrZMqLeIyDAtaDXT+eB8luNhsXXvgzPPPobaNa8D5T/VNq5xk=
-X-Received: by 2002:a17:90a:9416:: with SMTP id r22mr11549632pjo.20.1571407473810;
- Fri, 18 Oct 2019 07:04:33 -0700 (PDT)
+        id S2405744AbfJRP3h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Oct 2019 11:29:37 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:48873 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393138AbfJRP3h (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 11:29:37 -0400
+Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
+        (Authenticated sender: gregory.clement@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id A7A76200004;
+        Fri, 18 Oct 2019 15:29:33 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] spi: Fix SPI_CS_HIGH setting when using native and GPIO CS
+Date:   Fri, 18 Oct 2019 17:29:29 +0200
+Message-Id: <20191018152929.3287-1-gregory.clement@bootlin.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <20191017025058.31528-1-hslester96@gmail.com> <CAHp75Vd2SMERjtvNumxAF1HSp8GSThmcyx96zkFzUXKwnD5d2Q@mail.gmail.com>
- <CANhBUQ2yxGbjk_DgXbip=TPT=evzA5naoJSY9t1_Ep47e9oupw@mail.gmail.com>
- <CAHp75VeLyTi=gqfNr-=Tg36yQs_fYG__iQAxAEKdks0mqsTbug@mail.gmail.com> <CANhBUQ1CnCHiY8tkCMcXZ3DAPcfnQZgfA_Fj4qf3yYBKGg10Wg@mail.gmail.com>
-In-Reply-To: <CANhBUQ1CnCHiY8tkCMcXZ3DAPcfnQZgfA_Fj4qf3yYBKGg10Wg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 18 Oct 2019 17:04:22 +0300
-Message-ID: <CAHp75Vdb19w02zKHo1tqAtF8TmT=z6Ye2YFfxVw_TGtO3VxfLA@mail.gmail.com>
-Subject: Re: [PATCH] spi: pxa2xx: Add missed security checks
-To:     Chuhong Yuan <hslester96@gmail.com>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 2:37 PM Chuhong Yuan <hslester96@gmail.com> wrote:
-> On Fri, Oct 18, 2019 at 7:14 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Fri, Oct 18, 2019 at 1:39 PM Chuhong Yuan <hslester96@gmail.com> wrote:
-> > > On Fri, Oct 18, 2019 at 5:35 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Fri, Oct 18, 2019 at 8:59 AM Chuhong Yuan <hslester96@gmail.com> wrote:
+When improving the CS GPIO support at core level, the SPI_CS_HIGH
+has been enabled for all the CS lines used for a given SPI controller.
 
-> > > > I'm not sure they are mandatory for all platforms.
-> > > > To be on the safe side, you simple need to add _optional() to the both
-> > > > call along with above change.
-> > > >
-> > >
-> > > As I know, this is the only one in spi which does not have a check for
-> > > devm_clk_get.
-> >
-> > For some it still may be optional. That's why better to check it and
-> > mention in the commit message.
-> >
-> > > Even if add _optional(), they still may return errors and need security checks.
-> >
-> > Of course, see "along with" in my previous comment.
-> >
->
-> Got it. I will send version 2 in which both _optional() and security
-> checks will be added.
+However, the SPI framework allows to have on the same controller native
+CS and GPIO CS. The native CS may not support the SPI_CS_HIGH, so they
+should not be setup automatically.
 
-Let me be clear. I didn't check if _optional() needed or not. You need
-to investigate this before sending new verison.
-And in either case this should be explained in commit message.
+With this patch the setting is done only for the CS that will use a
+GPIO as CS
 
+Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+---
+ drivers/spi/spi.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5414a10afd65..1b68acc28c8f 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1880,15 +1880,7 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 		spi->mode |= SPI_3WIRE;
+ 	if (of_property_read_bool(nc, "spi-lsb-first"))
+ 		spi->mode |= SPI_LSB_FIRST;
+-
+-	/*
+-	 * For descriptors associated with the device, polarity inversion is
+-	 * handled in the gpiolib, so all chip selects are "active high" in
+-	 * the logical sense, the gpiolib will invert the line if need be.
+-	 */
+-	if (ctlr->use_gpio_descriptors)
+-		spi->mode |= SPI_CS_HIGH;
+-	else if (of_property_read_bool(nc, "spi-cs-high"))
++	if (of_property_read_bool(nc, "spi-cs-high"))
+ 		spi->mode |= SPI_CS_HIGH;
+ 
+ 	/* Device DUAL/QUAD mode */
+@@ -1952,6 +1944,14 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 	}
+ 	spi->chip_select = value;
+ 
++	/*
++	 * For descriptors associated with the device, polarity inversion is
++	 * handled in the gpiolib, so all gpio chip selects are "active high"
++	 * in the logical sense, the gpiolib will invert the line if need be.
++	 */
++	if ((ctlr->use_gpio_descriptors) && ctlr->cs_gpiods[spi->chip_select])
++		spi->mode |= SPI_CS_HIGH;
++
+ 	/* Device speed */
+ 	rc = of_property_read_u32(nc, "spi-max-frequency", &value);
+ 	if (rc) {
 -- 
-With Best Regards,
-Andy Shevchenko
+2.23.0
+
