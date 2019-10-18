@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FE5DCD5C
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 20:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA035DCD54
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 20:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2634526AbfJRSHZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Oct 2019 14:07:25 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45574 "EHLO
+        id S2505763AbfJRSHQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Oct 2019 14:07:16 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45248 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2634507AbfJRSHZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 14:07:25 -0400
+        with ESMTP id S2505743AbfJRSHP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 14:07:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=TAo9yk+ODQykf7+bvZAj2kUivCR7dyFpgBIQM5brJ9k=; b=ZmQnt+eEhkgg
-        O7IKbdWy0MryxJyt34EqbHmcbksgpM6MmIzy4n76aL9Q2RwyO8wpduItQCcLmbmg4qHvpbkOvQjvC
-        ahQbZVkzauus1zyoLirnxxlaNkMjFAmwi8swdiSS8BByuP8A0i92hMMrj4xuSbVI7HlxKNL/NU5HO
-        JePJ8=;
+        List-Archive; bh=t/gffXnLEnapErkIM7XMWv5utc8YEivVkOgKwMKPBdM=; b=hHurjcxQzNRI
+        6WpaH4hMHMHxuU3WbZPyQtbF3fAjI53z84Il8FNt9q0I7+xo5gTNBvTxQgqzxj/LXMOI+o9v093xa
+        cNwhP4WaCg79z8VWNwQK0zs/zeXhDHaGMfyjr2jsuC5FCDVpoJq+4QqPwgtg8sL/GPugjQqO+ikyQ
+        znL8o=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iLWec-0004Hl-Db; Fri, 18 Oct 2019 18:07:10 +0000
+        id 1iLWeb-0004HQ-U5; Fri, 18 Oct 2019 18:07:09 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id DC1D52743273; Fri, 18 Oct 2019 19:07:09 +0100 (BST)
+        id 490C22743276; Fri, 18 Oct 2019 19:07:09 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Daniel Mack <daniel@zonque.org>,
@@ -35,10 +35,10 @@ Cc:     Daniel Mack <daniel@zonque.org>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
         Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Applied "spi: pxa2xx: Sort headers" to the spi tree
-In-Reply-To: <20191018105429.82782-2-andriy.shevchenko@linux.intel.com>
+Subject: Applied "spi: pxa2xx: Replace of_device.h with mod_devicetable.h and of.h" to the spi tree
+In-Reply-To: <20191018105429.82782-5-andriy.shevchenko@linux.intel.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191018180709.DC1D52743273@ypsilon.sirena.org.uk>
+Message-Id: <20191018180709.490C22743276@ypsilon.sirena.org.uk>
 Date:   Fri, 18 Oct 2019 19:07:09 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -47,7 +47,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: pxa2xx: Sort headers
+   spi: pxa2xx: Replace of_device.h with mod_devicetable.h and of.h
 
 has been applied to the spi tree at
 
@@ -72,65 +72,36 @@ to this mail.
 Thanks,
 Mark
 
-From 5ce2570513bc012020e1faaa20333a6955845f06 Mon Sep 17 00:00:00 2001
+From ae8fbf1d2403bc187a5d8fe82fbf2205d89cdb60 Mon Sep 17 00:00:00 2001
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Fri, 18 Oct 2019 13:54:26 +0300
-Subject: [PATCH] spi: pxa2xx: Sort headers
+Date: Fri, 18 Oct 2019 13:54:29 +0300
+Subject: [PATCH] spi: pxa2xx: Replace of_device.h with mod_devicetable.h and
+ of.h
 
-Sort the headers in alphabetic order in order to ease the maintenance
-for this part.
+There is nothing in use from of_device.h. The definitions and macros
+are available thru mod_devicetable.h and of.h.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20191018105429.82782-2-andriy.shevchenko@linux.intel.com
+Link: https://lore.kernel.org/r/20191018105429.82782-5-andriy.shevchenko@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-pxa2xx.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/spi/spi-pxa2xx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 59d1406a9c96..670734b3d56a 100644
+index 684a5585ac7f..443c1f4d2a9a 100644
 --- a/drivers/spi/spi-pxa2xx.c
 +++ b/drivers/spi/spi-pxa2xx.c
-@@ -4,27 +4,27 @@
-  * Copyright (C) 2013, Intel Corporation
-  */
- 
-+#include <linux/acpi.h>
- #include <linux/bitops.h>
--#include <linux/init.h>
--#include <linux/module.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
- #include <linux/device.h>
--#include <linux/ioport.h>
--#include <linux/errno.h>
- #include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/gpio.h>
-+#include <linux/init.h>
- #include <linux/interrupt.h>
-+#include <linux/ioport.h>
+@@ -18,7 +18,8 @@
+ #include <linux/ioport.h>
  #include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/of.h>
  #include <linux/pci.h>
  #include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/slab.h>
- #include <linux/spi/pxa2xx_spi.h>
- #include <linux/spi/spi.h>
--#include <linux/delay.h>
--#include <linux/gpio.h>
--#include <linux/gpio/consumer.h>
--#include <linux/slab.h>
--#include <linux/clk.h>
--#include <linux/pm_runtime.h>
--#include <linux/acpi.h>
--#include <linux/of_device.h>
- 
- #include "spi-pxa2xx.h"
- 
+ #include <linux/pm_runtime.h>
 -- 
 2.20.1
 
