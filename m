@@ -2,74 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBBADBAA1
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 02:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C4EDC128
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 11:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503956AbfJRAU2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Oct 2019 20:20:28 -0400
-Received: from zaovasilisa.ru ([88.200.194.99]:49001 "EHLO usrv.lan"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2503926AbfJRAU1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 17 Oct 2019 20:20:27 -0400
-X-Greylist: delayed 22562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Oct 2019 20:20:19 EDT
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by usrv.lan (Postfix) with SMTP id E44FB186481;
-        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
-Received: from (HELO zlba) [49.155.13.191] by 127.0.0.1 id 08foBMeDLK33 for <linux-nvme@lists.infradead.org>; Thu, 17 Oct 2019 10:59:51 -0200
-Message-ID: <9$4n3z523f$d$rou@1wu6v8t.44r>
-From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-To:     linux-nvme@lists.infradead.org
-Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
-Date:   Thu, 17 Oct 19 10:59:51 GMT
-X-Mailer: MIME-tools 5.503 (Entity 5.501)
+        id S1728507AbfJRJfD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Oct 2019 05:35:03 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46873 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727917AbfJRJfD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 05:35:03 -0400
+Received: by mail-pl1-f196.google.com with SMTP id q24so2558877plr.13;
+        Fri, 18 Oct 2019 02:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zr8X80FCYGX3NS6q9lz/ERKNDbQdTzcOLi07a/VkvfQ=;
+        b=RAcZMOWD82a0s6I1gcxzhmBdLU4sVZdK3yGz6Jjs25y3EznSN5eVKpll2358Hrj84u
+         APlxx26N4fwfgRJiFJ3sc5LoxBXcNQRTt/vElvG+W7kkosg66YwJWoZkFCz0xTfMvR6f
+         Cbjd+SgRLI8/CUJ1oQ20/w7/U3I+PL006t8sQWvLz38Yc2tf9QieGrjd592HdCGX69Cg
+         74loV0t60w65irSxdkjPdEWFSMhshoRMFOVGmFBnebKIMvqsp5MvdTjjjRGoCG0iFtiU
+         h1wO5yRg6ve6/4y64whxVgtn/1JdbbSxx2ZSNWTw0Q0U4by3x1tJ6j6655oXad9I+dDE
+         rJ8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zr8X80FCYGX3NS6q9lz/ERKNDbQdTzcOLi07a/VkvfQ=;
+        b=sq22LqApW9FEsoqV0aGahv+YquuRg3W1xSqEhhMXOMX5agYTJQNmmFQOdlSDdhCi0I
+         xKbXIpW27Mgev8H7nnuEVMScEK187JYnDnloD/EGGLmvGIHENDBn84SbQYnCzaUPjQIq
+         IqclwSuVIW6ZVyDxBLNE1V1xQVHDJrLZCw3v/DpLqtKEB6QgspTSaXHo0PCc8HQ5ghgA
+         M39wUSHe2JOJsCCxOYx0GkaAo/bvxtBZ/jw+2luwZmS/BFIo0Rt7q/caJDLUbh+JDb5Y
+         jEoDXjyAu4quiWBwNIPImYbVk+mWcIBDm5JQE4hCghXKBkgBu6vb8KNCOrMkAxZuR4xt
+         WD7A==
+X-Gm-Message-State: APjAAAV13qLqKf5vpAkBg/2jm2C5/5EA5xJf9EPfGZM9svTPWWpNUtFZ
+        2XVGAxOBXKbUI/p5LVpoiXxi1L5+qASpDRo0nmw=
+X-Google-Smtp-Source: APXvYqw4nAZfs4DJx1QtvaqZHEiRDgYXllfSaC8wgJ0IuaKqJS3EAvQxq6VuFyH8PluuguPVcRUER8YMtjWt98dTnbE=
+X-Received: by 2002:a17:902:b110:: with SMTP id q16mr8804423plr.262.1571391302793;
+ Fri, 18 Oct 2019 02:35:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="EFA7_FB09FAD2"
-X-Priority: 3
-X-MSMail-Priority: Normal
+References: <20191017025058.31528-1-hslester96@gmail.com>
+In-Reply-To: <20191017025058.31528-1-hslester96@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 18 Oct 2019 12:34:52 +0300
+Message-ID: <CAHp75Vd2SMERjtvNumxAF1HSp8GSThmcyx96zkFzUXKwnD5d2Q@mail.gmail.com>
+Subject: Re: [PATCH] spi: pxa2xx: Add missed security checks
+To:     Chuhong Yuan <hslester96@gmail.com>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Oct 18, 2019 at 8:59 AM Chuhong Yuan <hslester96@gmail.com> wrote:
+>
+> pxa2xx_spi_init_pdata misses checks for devm_clk_get and
+> platform_get_irq.
+> Add checks for them to fix the bugs.
+>
+> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+> ---
+>  drivers/spi/spi-pxa2xx.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+> index bb6a14d1ab0f..2e73d75a6ac5 100644
+> --- a/drivers/spi/spi-pxa2xx.c
+> +++ b/drivers/spi/spi-pxa2xx.c
+> @@ -1565,7 +1565,13 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
+>  #endif
+>
+>         ssp->clk = devm_clk_get(&pdev->dev, NULL);
+> +       if (IS_ERR(ssp->clk))
+> +               return NULL;
+> +
+>         ssp->irq = platform_get_irq(pdev, 0);
+> +       if (ssp->irq < 0)
+> +               return NULL;
 
---EFA7_FB09FAD2
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+I'm not sure they are mandatory for all platforms.
+To be on the safe side, you simple need to add _optional() to the both
+call along with above change.
 
-Dear Sir / Madam
-
-
-
-Since ever we left your country back to Canada , we have gotten Government=
- approval and we have been busying planning for the less privilege Childre=
-n projects.
-
-We are planning to release first batch of the funds $2,990,000.00 within 1=
-4 days for building an estate for motherless children in your city.
-
-I want you to use my mother;s company name to register this charity projec=
-t in your country after receiving the project funds.
-
-It must be registered as { Bayraktar Group Homeless Children Ltd }.
-
-
-Can you handle and supervise this big project ?
-Can you manager all the workers as a senior supervisor ?
-We want to be sure you can handle it before we proceed with this project.
-
-
-Please call me if you want to hear from us + 1-917 580 4919.
-Please can you manage such project please Kindly reply for further details=
-.
-
-Your full names-----------
-
-
-
-Ekrem Bayraktar.
-Bayraktar Shipping Group
-
---EFA7_FB09FAD2--
-
+-- 
+With Best Regards,
+Andy Shevchenko
