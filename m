@@ -2,210 +2,220 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FDDDCD5F
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2019 20:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC32DD6EB
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Oct 2019 08:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505779AbfJRSHc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Oct 2019 14:07:32 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:45692 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505772AbfJRSH2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Oct 2019 14:07:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=IHyWJGNBUTMdcL9Rp2c8fG/a+rMZTdcE8MzTuFppp+I=; b=QT0lH+GMu2NO
-        ybLk1tB16S+0aAVQLMVfGa24ACWypAUcuvzk7FJt+dahTwZvrtqsGZHg6WKmn3u4GaifOadGq8PHL
-        6R3bhrI+zo2SUGjYcsoxJuh0plzabbKo446lDehsL4kHsiibrYIgcZDzsdWvSFfypwvwpRZ4lPAql
-        PLRh0=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iLWec-0004Hv-Mw; Fri, 18 Oct 2019 18:07:10 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 1F19A2741DEA; Fri, 18 Oct 2019 19:07:10 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Takashi Iwai <tiwai@suse.com>
-Subject: Applied "spi: pxa2xx: No need to keep pointer to platform device" to the spi tree
-In-Reply-To: <20191018105429.82782-1-andriy.shevchenko@linux.intel.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191018180710.1F19A2741DEA@ypsilon.sirena.org.uk>
-Date:   Fri, 18 Oct 2019 19:07:10 +0100 (BST)
+        id S1727144AbfJSGYR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 19 Oct 2019 02:24:17 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:42845 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbfJSGYR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Oct 2019 02:24:17 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n14so8332705wrw.9
+        for <linux-spi@vger.kernel.org>; Fri, 18 Oct 2019 23:24:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from:cc;
+        bh=NaB317VPEWYoyCGfauf4XqD6zwPbIGUmflkZmicnPS8=;
+        b=YbLnBkcTmO9kH2rGbc7u6GFXiaa7dIYcNYn9BAtlqlGUuyV+V4IWG3nWOYeC4px9Oj
+         iqUS9AZ2IoytDFN37+dS2zP5xfkR+7d+kiLTAWX+JKE+E5O/NZt31rCPl79/tAQesSf1
+         pxb7wAYiIchzjqonPfKuKR21VwY5KXLqXlNJAqaX0fn94nCJvVGakiJhcI9EzIICckqZ
+         /YDkX++zmLoT0fN0YLXbkZy1ezi8SASkViEFw5jDsGj3w8dR2lYscZ9FJfh0bU6b9nLx
+         iVGnF67CcFQLU/CPSkvDGpF7BSDusQ6cc2+ME9fEC083UJkf8QtTrrHeDoE9avumggJ9
+         nS0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from:cc;
+        bh=NaB317VPEWYoyCGfauf4XqD6zwPbIGUmflkZmicnPS8=;
+        b=RWq6LD7HVtrUc9CcKwjGI9cRFR6aM2DpRml/V3qviKc9HpSY9N6A3g6o6Ucamuee7s
+         CAZTCj290aaLL+nY+k2daEx4aM4kGEhf2PNVRF3Phv5es0e0HGwI+Ydw2uHELkuLMlXX
+         QHio5bw2Ceqe/Ys9qHqp+MnNEHINcFuljDPUhcPcE9R6v+TfnKOsAdxa7CZNXeXb8sip
+         eDWFTzl2oM4AQXlFLmZB4PJj0eXy/9kMzkil7c/7d/YFmPFE568zXg4GKQntWuTEaeEB
+         xJLmx8gqOs1wXzDcNeq+wnSCrYZm8INzu9TtNO2Xr4m+Anmu1kz/ZuQ/ceAI/Uze9od8
+         /CHg==
+X-Gm-Message-State: APjAAAVmzGWH65J27DmBhwFjXENa5xZpKHPSdIBguSvsIEaNj8BRqPKC
+        KazYN/q70CVZ4EkSw/oHg7534Q==
+X-Google-Smtp-Source: APXvYqxbRXnH9dhmc0b7p235t7/I3YoheY6CeABtmWPImtm2uAGk8R19vGzSr5lr/aNIHxPiNaL+7w==
+X-Received: by 2002:adf:fd08:: with SMTP id e8mr4905652wrr.42.1571466254197;
+        Fri, 18 Oct 2019 23:24:14 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id a14sm6594678wmm.44.2019.10.18.23.24.13
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Oct 2019 23:24:13 -0700 (PDT)
+Message-ID: <5daaac0d.1c69fb81.12761.2a24@mx.google.com>
+Date:   Fri, 18 Oct 2019 23:24:13 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Lab-Name: lab-collabora
+X-Kernelci-Branch: for-next
+X-Kernelci-Tree: broonie-spi
+X-Kernelci-Report-Type: bisect
+X-Kernelci-Kernel: v5.4-rc3-73-gc673f2d99c3d
+Subject: broonie-spi/for-next boot bisection: v5.4-rc3-73-gc673f2d99c3d on
+ jetson-tk1
+To:     Mark Brown <broonie@kernel.org>, tomeu.vizoso@collabora.com,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        guillaume.tucker@collabora.com, mgalka@collabora.com,
+        broonie@kernel.org, matthew.hart@linaro.org, khilman@baylibre.com,
+        enric.balletbo@collabora.com
+From:   "kernelci.org bot" <bot@kernelci.org>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+* This automated bisection report was sent to you on the basis  *
+* that you may be involved with the breaking commit it has      *
+* found.  No manual investigation has been done to verify it,   *
+* and the root cause of the problem may be somewhere else.      *
+*                                                               *
+* If you do send a fix, please include this trailer:            *
+*   Reported-by: "kernelci.org bot" <bot@kernelci.org>          *
+*                                                               *
+* Hope this helps!                                              *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-   spi: pxa2xx: No need to keep pointer to platform device
+broonie-spi/for-next boot bisection: v5.4-rc3-73-gc673f2d99c3d on jetson-tk1
 
-has been applied to the spi tree at
+Summary:
+  Start:      c673f2d99c3d Merge remote-tracking branch 'spi/topic/ptp' int=
+o spi-next
+  Details:    https://kernelci.org/boot/id/5daa485f59b5142f647525a0
+  Plain log:  https://storage.kernelci.org//broonie-spi/for-next/v5.4-rc3-7=
+3-gc673f2d99c3d/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+oot-tegra124-jetson-tk1.txt
+  HTML log:   https://storage.kernelci.org//broonie-spi/for-next/v5.4-rc3-7=
+3-gc673f2d99c3d/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+oot-tegra124-jetson-tk1.html
+  Result:     3e5ec1db8bfe spi: Fix SPI_CS_HIGH setting when using native a=
+nd GPIO CS
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+Checks:
+  revert:     PASS
+  verify:     PASS
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+Parameters:
+  Tree:       broonie-spi
+  URL:        https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.g=
+it
+  Branch:     for-next
+  Target:     jetson-tk1
+  CPU arch:   arm
+  Lab:        lab-collabora
+  Compiler:   gcc-8
+  Config:     multi_v7_defconfig+CONFIG_SMP=3Dn
+  Test suite: boot
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Breaking commit found:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+---------------------------------------------------------------------------=
+----
+commit 3e5ec1db8bfee845d9f8560d1c64aeaccd586398
+Author: Gregory CLEMENT <gregory.clement@bootlin.com>
+Date:   Fri Oct 18 17:29:29 2019 +0200
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+    spi: Fix SPI_CS_HIGH setting when using native and GPIO CS
+    =
 
-Thanks,
-Mark
+    When improving the CS GPIO support at core level, the SPI_CS_HIGH
+    has been enabled for all the CS lines used for a given SPI controller.
+    =
 
-From 4f3d957718e7f0ac2b033dbf48c7cddecd0a8dd3 Mon Sep 17 00:00:00 2001
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Fri, 18 Oct 2019 13:54:25 +0300
-Subject: [PATCH] spi: pxa2xx: No need to keep pointer to platform device
+    However, the SPI framework allows to have on the same controller native
+    CS and GPIO CS. The native CS may not support the SPI_CS_HIGH, so they
+    should not be setup automatically.
+    =
 
-There is no need to keep a pointer to the platform device. Currently there are
-no users of it directly, and if there will be in the future we may restore it
-from pointer to the struct device.
+    With this patch the setting is done only for the CS that will use a
+    GPIO as CS
+    =
 
-Convert all users at the same time.
+    Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs=
+")
+    Cc: <stable@vger.kernel.org>
+    Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+    Link: https://lore.kernel.org/r/20191018152929.3287-1-gregory.clement@b=
+ootlin.com
+    Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20191018105429.82782-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm/plat-pxa/ssp.c    |  4 ++--
- drivers/spi/spi-pxa2xx.c   |  2 +-
- include/linux/pxa2xx_ssp.h |  2 +-
- sound/soc/pxa/mmp-sspa.c   |  2 +-
- sound/soc/pxa/pxa-ssp.c    | 10 +++++-----
- 5 files changed, 10 insertions(+), 10 deletions(-)
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index f8b4654a57d3..d07517151340 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1711,15 +1711,7 @@ static int of_spi_parse_dt(struct spi_controller *ct=
+lr, struct spi_device *spi,
+ 		spi->mode |=3D SPI_3WIRE;
+ 	if (of_property_read_bool(nc, "spi-lsb-first"))
+ 		spi->mode |=3D SPI_LSB_FIRST;
+-
+-	/*
+-	 * For descriptors associated with the device, polarity inversion is
+-	 * handled in the gpiolib, so all chip selects are "active high" in
+-	 * the logical sense, the gpiolib will invert the line if need be.
+-	 */
+-	if (ctlr->use_gpio_descriptors)
+-		spi->mode |=3D SPI_CS_HIGH;
+-	else if (of_property_read_bool(nc, "spi-cs-high"))
++	if (of_property_read_bool(nc, "spi-cs-high"))
+ 		spi->mode |=3D SPI_CS_HIGH;
+ =
 
-diff --git a/arch/arm/plat-pxa/ssp.c b/arch/arm/plat-pxa/ssp.c
-index 9a6e4923bd69..563440315acd 100644
---- a/arch/arm/plat-pxa/ssp.c
-+++ b/arch/arm/plat-pxa/ssp.c
-@@ -89,7 +89,7 @@ void pxa_ssp_free(struct ssp_device *ssp)
- 		ssp->use_count--;
- 		ssp->label = NULL;
- 	} else
--		dev_err(&ssp->pdev->dev, "device already free\n");
-+		dev_err(ssp->dev, "device already free\n");
- 	mutex_unlock(&ssp_lock);
- }
- EXPORT_SYMBOL(pxa_ssp_free);
-@@ -118,7 +118,7 @@ static int pxa_ssp_probe(struct platform_device *pdev)
- 	if (ssp == NULL)
- 		return -ENOMEM;
- 
--	ssp->pdev = pdev;
-+	ssp->dev = dev;
- 
- 	ssp->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(ssp->clk))
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index bb6a14d1ab0f..59d1406a9c96 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1567,7 +1567,7 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 	ssp->clk = devm_clk_get(&pdev->dev, NULL);
- 	ssp->irq = platform_get_irq(pdev, 0);
- 	ssp->type = type;
--	ssp->pdev = pdev;
-+	ssp->dev = &pdev->dev;
- 	ssp->port_id = pxa2xx_spi_get_port_id(adev);
- 
- 	pdata->is_slave = of_property_read_bool(pdev->dev.of_node, "spi-slave");
-diff --git a/include/linux/pxa2xx_ssp.h b/include/linux/pxa2xx_ssp.h
-index a5d1837e4f35..6facf27865f9 100644
---- a/include/linux/pxa2xx_ssp.h
-+++ b/include/linux/pxa2xx_ssp.h
-@@ -206,7 +206,7 @@ enum pxa_ssp_type {
- };
- 
- struct ssp_device {
--	struct platform_device *pdev;
-+	struct device	*dev;
- 	struct list_head	node;
- 
- 	struct clk	*clk;
-diff --git a/sound/soc/pxa/mmp-sspa.c b/sound/soc/pxa/mmp-sspa.c
-index e3e5425b5c62..e701637a9ae9 100644
---- a/sound/soc/pxa/mmp-sspa.c
-+++ b/sound/soc/pxa/mmp-sspa.c
-@@ -177,7 +177,7 @@ static int mmp_sspa_set_dai_fmt(struct snd_soc_dai *cpu_dai,
- 	/* we can only change the settings if the port is not in use */
- 	if ((mmp_sspa_read_reg(sspa, SSPA_TXSP) & SSPA_SP_S_EN) ||
- 	    (mmp_sspa_read_reg(sspa, SSPA_RXSP) & SSPA_SP_S_EN)) {
--		dev_err(&sspa->pdev->dev,
-+		dev_err(sspa->dev,
- 			"can't change hardware dai format: stream is in use\n");
- 		return -EINVAL;
+ 	/* Device DUAL/QUAD mode */
+@@ -1783,6 +1775,14 @@ static int of_spi_parse_dt(struct spi_controller *ct=
+lr, struct spi_device *spi,
  	}
-diff --git a/sound/soc/pxa/pxa-ssp.c b/sound/soc/pxa/pxa-ssp.c
-index 5fdd1a24c232..6c5201431f6e 100644
---- a/sound/soc/pxa/pxa-ssp.c
-+++ b/sound/soc/pxa/pxa-ssp.c
-@@ -52,11 +52,11 @@ struct ssp_priv {
- 
- static void dump_registers(struct ssp_device *ssp)
- {
--	dev_dbg(&ssp->pdev->dev, "SSCR0 0x%08x SSCR1 0x%08x SSTO 0x%08x\n",
-+	dev_dbg(ssp->dev, "SSCR0 0x%08x SSCR1 0x%08x SSTO 0x%08x\n",
- 		 pxa_ssp_read_reg(ssp, SSCR0), pxa_ssp_read_reg(ssp, SSCR1),
- 		 pxa_ssp_read_reg(ssp, SSTO));
- 
--	dev_dbg(&ssp->pdev->dev, "SSPSP 0x%08x SSSR 0x%08x SSACD 0x%08x\n",
-+	dev_dbg(ssp->dev, "SSPSP 0x%08x SSSR 0x%08x SSACD 0x%08x\n",
- 		 pxa_ssp_read_reg(ssp, SSPSP), pxa_ssp_read_reg(ssp, SSSR),
- 		 pxa_ssp_read_reg(ssp, SSACD));
- }
-@@ -223,7 +223,7 @@ static int pxa_ssp_set_dai_sysclk(struct snd_soc_dai *cpu_dai,
- 		clk_id = PXA_SSP_CLK_EXT;
- 	}
- 
--	dev_dbg(&ssp->pdev->dev,
-+	dev_dbg(ssp->dev,
- 		"pxa_ssp_set_dai_sysclk id: %d, clk_id %d, freq %u\n",
- 		cpu_dai->id, clk_id, freq);
- 
-@@ -316,7 +316,7 @@ static int pxa_ssp_set_pll(struct ssp_priv *priv, unsigned int freq)
- 
- 			ssacd |= (0x6 << 4);
- 
--			dev_dbg(&ssp->pdev->dev,
-+			dev_dbg(ssp->dev,
- 				"Using SSACDD %x to supply %uHz\n",
- 				val, freq);
- 			break;
-@@ -687,7 +687,7 @@ static int pxa_ssp_hw_params(struct snd_pcm_substream *substream,
- 	 * - complain loudly and fail if they've not been set up yet.
- 	 */
- 	if ((sscr0 & SSCR0_MOD) && !ttsa) {
--		dev_err(&ssp->pdev->dev, "No TDM timeslot configured\n");
-+		dev_err(ssp->dev, "No TDM timeslot configured\n");
- 		return -EINVAL;
- 	}
- 
--- 
-2.20.1
+ 	spi->chip_select =3D value;
+ =
 
++	/*
++	 * For descriptors associated with the device, polarity inversion is
++	 * handled in the gpiolib, so all gpio chip selects are "active high"
++	 * in the logical sense, the gpiolib will invert the line if need be.
++	 */
++	if ((ctlr->use_gpio_descriptors) && ctlr->cs_gpiods[spi->chip_select])
++		spi->mode |=3D SPI_CS_HIGH;
++
+ 	/* Device speed */
+ 	rc =3D of_property_read_u32(nc, "spi-max-frequency", &value);
+ 	if (rc) {
+---------------------------------------------------------------------------=
+----
+
+
+Git bisection log:
+
+---------------------------------------------------------------------------=
+----
+git bisect start
+# good: [4f5cafb5cb8471e54afdc9054d973535614f7675] Linux 5.4-rc3
+git bisect good 4f5cafb5cb8471e54afdc9054d973535614f7675
+# bad: [c673f2d99c3d644733cc1b0ceabdec47047bbe80] Merge remote-tracking bra=
+nch 'spi/topic/ptp' into spi-next
+git bisect bad c673f2d99c3d644733cc1b0ceabdec47047bbe80
+# good: [b2c98153f45fc17b9fcb241000f2d131ddea6030] spi: introduce spi_delay=
+ struct as "value + unit" & spi_delay_exec()
+git bisect good b2c98153f45fc17b9fcb241000f2d131ddea6030
+# good: [4f3d957718e7f0ac2b033dbf48c7cddecd0a8dd3] spi: pxa2xx: No need to =
+keep pointer to platform device
+git bisect good 4f3d957718e7f0ac2b033dbf48c7cddecd0a8dd3
+# good: [1cb84b02bf130f34ee81f99bc7dee5bca2943ed7] spi: atmel: Remove platf=
+orm data support
+git bisect good 1cb84b02bf130f34ee81f99bc7dee5bca2943ed7
+# bad: [fed8d8c7a6dc2a76d7764842853d81c770b0788e] spi: atmel: fix handling =
+of cs_change set on non-last xfer
+git bisect bad fed8d8c7a6dc2a76d7764842853d81c770b0788e
+# bad: [3e5ec1db8bfee845d9f8560d1c64aeaccd586398] spi: Fix SPI_CS_HIGH sett=
+ing when using native and GPIO CS
+git bisect bad 3e5ec1db8bfee845d9f8560d1c64aeaccd586398
+# good: [b2662a164f9dc48da8822e56600686d639056282] spi: pxa2xx: Set control=
+ler->max_transfer_size in dma mode
+git bisect good b2662a164f9dc48da8822e56600686d639056282
+# first bad commit: [3e5ec1db8bfee845d9f8560d1c64aeaccd586398] spi: Fix SPI=
+_CS_HIGH setting when using native and GPIO CS
+---------------------------------------------------------------------------=
+----
