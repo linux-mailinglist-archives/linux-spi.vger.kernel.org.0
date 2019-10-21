@@ -2,81 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5BEDE9BF
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2019 12:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B6DDEA6E
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2019 13:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbfJUKga (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Oct 2019 06:36:30 -0400
-Received: from mga14.intel.com ([192.55.52.115]:61641 "EHLO mga14.intel.com"
+        id S1727805AbfJULJC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Oct 2019 07:09:02 -0400
+Received: from mga11.intel.com ([192.55.52.93]:39824 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728384AbfJUKg3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 21 Oct 2019 06:36:29 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1727433AbfJULJC (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 21 Oct 2019 07:09:02 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Oct 2019 03:36:28 -0700
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Oct 2019 04:09:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,323,1566889200"; 
-   d="scan'208";a="191069665"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 21 Oct 2019 03:36:26 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 020D4D0; Mon, 21 Oct 2019 13:36:25 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Mack <daniel@zonque.org>,
+   d="scan'208";a="398626868"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Oct 2019 04:08:58 -0700
+Received: from andy by smile with local (Exim 4.92.2)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1iMVYX-0003ab-7l; Mon, 21 Oct 2019 14:08:57 +0300
+Date:   Mon, 21 Oct 2019 14:08:57 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] spi: pxa2xx: Drop extra check of platform_get_resource() returned value
-Date:   Mon, 21 Oct 2019 13:36:25 +0300
-Message-Id: <20191021103625.4250-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191021103625.4250-1-andriy.shevchenko@linux.intel.com>
-References: <20191021103625.4250-1-andriy.shevchenko@linux.intel.com>
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: pxa2xx: Set controller->max_transfer_size in dma
+ mode
+Message-ID: <20191021110857.GR32742@smile.fi.intel.com>
+References: <20191016195721.3714-1-daniel.vetter@ffwll.ch>
+ <20191017064426.30814-1-daniel.vetter@ffwll.ch>
+ <20191017070638.GB32742@smile.fi.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191017070638.GB32742@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The devm_ioremap_resource() has already a check for resource pointer
-being NULL. No need to double check this.
+On Thu, Oct 17, 2019 at 10:06:38AM +0300, Andy Shevchenko wrote:
+> On Thu, Oct 17, 2019 at 08:44:26AM +0200, Daniel Vetter wrote:
+> > In DMA mode we have a maximum transfer size, past that the driver
+> > falls back to PIO (see the check at the top of pxa2xx_spi_transfer_one).
+> > Falling back to PIO for big transfers defeats the point of a dma engine,
+> > hence set the max transfer size to inform spi clients that they need
+> > to do something smarter.
+> > 
+> > This was uncovered by the drm_mipi_dbi spi panel code, which does
+> > large spi transfers, but stopped splitting them after:
+> > 
+> > commit e143364b4c1774f68e923a5a0bb0fca28ac25888
+> > Author: Noralf Trønnes <noralf@tronnes.org>
+> > Date:   Fri Jul 19 17:59:10 2019 +0200
+> > 
+> >     drm/tinydrm: Remove tinydrm_spi_max_transfer_size()
+> > 
+> > After this commit the code relied on the spi core to split transfers
+> > into max dma-able blocks, which also papered over the PIO fallback issue.
+> > 
+> > Fix this by setting the overall max transfer size to the DMA limit,
+> > but only when the controller runs in DMA mode.
+> > 
+> 
+> Thank you, Daniel!
 
-Drop extra check of platform_get_resource() returned value.
+Mark, can be this applied?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 02daba3dbd0d..3a440ab9a841 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1537,17 +1537,15 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 	if (!pdata)
- 		return NULL;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return NULL;
--
- 	ssp = &pdata->ssp;
- 
--	ssp->phys_base = res->start;
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	ssp->mmio_base = devm_ioremap_resource(&pdev->dev, res);
- 	if (IS_ERR(ssp->mmio_base))
- 		return NULL;
- 
-+	ssp->phys_base = res->start;
-+
- #ifdef CONFIG_PCI
- 	if (pcidev_id) {
- 		pdata->tx_param = parent;
 -- 
-2.23.0
+With Best Regards,
+Andy Shevchenko
+
 
