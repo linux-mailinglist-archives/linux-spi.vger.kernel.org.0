@@ -2,94 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB283E072A
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Oct 2019 17:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1430FE07FE
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Oct 2019 17:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387979AbfJVPUm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Oct 2019 11:20:42 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:44112 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387497AbfJVPUm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Oct 2019 11:20:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=mOECADj6Dicthl/XJszjH7ZcS62Tu0/dvZtSt6Fycls=; b=bNvd0K5lrvwhT7MBg70/o2x0j
-        abAgj+hZD9TRPcqSkDBo/iFaf9DWdZCx/bMHYBMi3ZZirLd8SUbZb75hMWl4pt0L6LzDfxfLUsV+z
-        AK+I7DQs0oTEKnLjNzM/1JjCthjOYFNuWfmELJetq+hta7EbN81E3DYFT6O136sfejd3A=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id S2388863AbfJVPxz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Oct 2019 11:53:55 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47121 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388827AbfJVPxy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Oct 2019 11:53:54 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iMvxg-0006uB-BV; Tue, 22 Oct 2019 15:20:40 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 81BD32743259; Tue, 22 Oct 2019 16:20:39 +0100 (BST)
-Date:   Tue, 22 Oct 2019 16:20:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-Cc:     Michal Simek <michal.simek@xilinx.com>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: xilinx: Add DT support for selecting transfer word
- width
-Message-ID: <20191022152039.GH5554@sirena.co.uk>
-References: <20191022090007.15147-1-alvaro.gamez@hazent.com>
- <20191022102007.GA5554@sirena.co.uk>
- <20191022102859.GA1928@salem.gmr.ssr.upm.es>
- <20191022112600.GD5554@sirena.co.uk>
- <20191022120610.GA28659@salem.gmr.ssr.upm.es>
+        (envelope-from <ukl@pengutronix.de>)
+        id 1iMwT7-0006Ja-Jx; Tue, 22 Oct 2019 17:53:09 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1iMwT5-0002EX-5J; Tue, 22 Oct 2019 17:53:07 +0200
+Date:   Tue, 22 Oct 2019 17:53:07 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Sangbeom Kim <sbkim73@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Olof Johansson <olof@lixom.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Faiz Abbas <faiz_abbas@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-serial@vger.kernel.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 11/36] ARM: s5pv210: split from plat-samsung
+Message-ID: <20191022155307.izh4ryorm7thw7tq@pengutronix.de>
+References: <20191010202802.1132272-1-arnd@arndb.de>
+ <20191010203043.1241612-1-arnd@arndb.de>
+ <20191010203043.1241612-11-arnd@arndb.de>
+ <20191011055149.4dudr4tk2znpt65u@pengutronix.de>
+ <CAK8P3a1st8gR7u+8-oyP6HrzZdmrzhq7PRonYuz0a5O8rfKaSA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bpVaumkpfGNUagdU"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20191022120610.GA28659@salem.gmr.ssr.upm.es>
-X-Cookie: Whip it, whip it good!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8P3a1st8gR7u+8-oyP6HrzZdmrzhq7PRonYuz0a5O8rfKaSA@mail.gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello,
 
---bpVaumkpfGNUagdU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, Oct 22, 2019 at 04:01:12PM +0200, Arnd Bergmann wrote:
+> > > @@ -235,7 +235,6 @@ machine-$(CONFIG_PLAT_SPEAR)              += spear
+> > >  # by CONFIG_* macro name.
+> > >  plat-$(CONFIG_ARCH_OMAP)     += omap
+> > >  plat-$(CONFIG_ARCH_S3C64XX)  += samsung
+> > > -plat-$(CONFIG_ARCH_S5PV210)  += samsung
+> >
+> > Would it make more sense to make this
+> >
+> >         plat-$(PLAT_SAMSUNG) += samsung
+> >
+> > (in a separate patch)? Hmm, it seems there is no plat-y for
+> > PLAT_S3C24XX=y builds. Is this intended? If yes, the directory name
+> > containing "samsung" suggests something that seems untrue.
+> 
+> By the end of the series, the plat-samsung directory is completely
+> removed (folded into mach-s3c), so that would only add more
+> churn for the same result I think.
 
-On Tue, Oct 22, 2019 at 02:06:11PM +0200, Alvaro Gamez Machado wrote:
-> On Tue, Oct 22, 2019 at 12:26:00PM +0100, Mark Brown wrote:
+fine for me. The background of my question was me wondering if builds
+for PLAT_S3C24XX=y (before your patch series) don't need plat-samsung.
 
-> > This is still something that should be configured by the client driver,
-> > if you send data with a different word size to that the client intends
-> > it'll just get corrupted.
+Best regards
+Uwe
 
-> The problem is that Xilinx's AXI Quad SPI core doesn't allow this. When
-> instantiating the core you must choose *the* transfer width, not the
-> *maximum* transfer width. So in my example above, no matter how I configure
-> my IP core, linux'll believe that its datawidth is 8. I could override it
-> hardcoding a 32 in spi-xilinx.c, but then what would happen with my other
-> IP core that needs a datawidth of 8? Client code cannot configure IP core
-> with a different datawidth because it simply does not allow it.
-
-If the SPI controller can't cope with sending anything but 32 bits
-that's fine, the slave still needs to know that it's supposed to be
-handing the host controller data laid out in 32 bit words.  All the
-components need to agree about how the data is supposed to be
-interpreted.
-
---bpVaumkpfGNUagdU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2vHkYACgkQJNaLcl1U
-h9DkFgf/T650X+w2L+/cNUgH9NS8yG/VU6E4kDyv+5ynCIPPkaLAUPDcPpG5OwH8
-CaFcJ7hD2tkjnXAw4J3d7qYOyD3ePhfJR2yASyKBDP6rR6NDRwStNPAMgg87n+vr
-yHEQCh+ZNKvdl7F16/qcZD69RfJCuLsIBov0KpYRUb99irIUwH3epftArxM5cRep
-T6rBJvr0htBrGpzqOMRKNidY/8pCPBBPm7xxsBg/Yu+Ne1HyWqdTApuHUVame4+M
-qwFFh3dxAz5JK7MAmD3tzymycoJZ2HEou8Z5Q4tg/dyw6kWTEkF49C+uVJ7opETN
-PrrdzOpAUJlcTFXoRhuxVqeEgarGgg==
-=acn7
------END PGP SIGNATURE-----
-
---bpVaumkpfGNUagdU--
+-- 
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
