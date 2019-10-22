@@ -2,98 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E679E089E
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Oct 2019 18:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B98AE0B43
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Oct 2019 20:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732215AbfJVQVC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 22 Oct 2019 12:21:02 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:57715 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731795AbfJVQVB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Oct 2019 12:21:01 -0400
-Received: from mail-qt1-f173.google.com ([209.85.160.173]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MS3zP-1iSkhU2FY3-00TUuV; Tue, 22 Oct 2019 18:20:59 +0200
-Received: by mail-qt1-f173.google.com with SMTP id e14so7848020qto.1;
-        Tue, 22 Oct 2019 09:20:58 -0700 (PDT)
-X-Gm-Message-State: APjAAAUEAGN4gaRKmWrYNcXWxxrjr9EpakHb0V6ccEo0QzQadSWzAwwv
-        gi0XGRiecf2QPS6ja97yKeDLEfmUA3j4tbdrYnA=
-X-Google-Smtp-Source: APXvYqyoLKHktNxYMbHgU6oEzWDucDHxX3DzLUXc70BjhpXFB5K+Mcs4VGMIh8ghBPfcQzJ4zkTEBWIuMQ3o+13CFPs=
-X-Received: by 2002:ac8:33d4:: with SMTP id d20mr4201539qtb.204.1571761258010;
- Tue, 22 Oct 2019 09:20:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-11-arnd@arndb.de> <20191011055149.4dudr4tk2znpt65u@pengutronix.de>
- <CAK8P3a1st8gR7u+8-oyP6HrzZdmrzhq7PRonYuz0a5O8rfKaSA@mail.gmail.com> <20191022155307.izh4ryorm7thw7tq@pengutronix.de>
-In-Reply-To: <20191022155307.izh4ryorm7thw7tq@pengutronix.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 22 Oct 2019 18:20:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1mvbss6Q-CQBYRAf7ozYgyOu3WFGkoaSaoJriUbuRACA@mail.gmail.com>
-Message-ID: <CAK8P3a1mvbss6Q-CQBYRAf7ozYgyOu3WFGkoaSaoJriUbuRACA@mail.gmail.com>
-Subject: Re: [PATCH 11/36] ARM: s5pv210: split from plat-samsung
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Sangbeom Kim <sbkim73@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Olof Johansson <olof@lixom.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:xTdslASVHIHUrHhldeTRZ3xwo4TLBMkIDaRn2OpT7m/YuhjhG+R
- XGtLKP+rAYVQiiYn/reZitmB/yJfTdP5fj6vMJUJFpaR5pumcjBEOGsubcXG0r84wqo5Vjy
- oPlP0Md5i33LzD8vXTAQWgxCYETGOKt/+y1WK7gZy58SMqd960JFgp3qz3CXZlZ4EMlJ59A
- 5yJ1p/dha+zR44g0r7y6Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NJVNCE6D9/4=:bQGwHELXkragiXw7Rw7/m4
- cHgkoRcooelGES7hld6EZ6U3fPNI4aQcn2SzNGd1oxjRjSBfC42rcMDeSqjLJi03n9AVA/pXH
- QHlMuSwVgihQOffzuDk9O5VPAq5Qfas81/sgr7ZOZNtf1R/cjPX0dk0F2yCWzFbU8rTEBY27C
- ShF/6dAHu7qwO7BoBwm24P/B8U2olEHn8+iuaMLTd8utDAy0dk0mdsza8yVFoqODzpALUTBtg
- oPPJGBik0a9OjAb0DA8YEW6NmX1EQCUr/5pVQjH/HTSQ4Z0R8NFmelbccjIPAwWpCm6NoGk+Q
- 8DqCRptOiP7sk+WvgIs7nIbEh8IQBN+u9HGIhLoKMUn6ej1QlOSaauLdRCfuVwOHpS3XuM1yy
- k7jdRuRC++5kMpIbjnLic9McD2VL+BB8q0CJqKBa9tetAZcnsO2cRrcqML/187XpJaIsuPj+E
- jbrPVbjqKOjvRCkme/fMeAq+SCUK5q17S+Smc35ARQ1UK++KS5vWD98uhH3sQL57lLM5D8J5c
- ZlXey4O0CH1rEt5ujM5dbf+Y1cBFHxfxDDqTVb1bRnVf6ftgbh2w4WT8+gwXeONDdieFsDhdt
- jnry3ZefwYP/WCamKpQ5MGN7ycwY8j09z7bBQK8xjMQORv0LJTo01vCyTStmHqhQ/DUmIV1Xb
- /MG8pQ0LzLbNVFWedHIXfivsczUsdG32euwZ5/z+bIPT+XZ35hQSc9TWJuupODk5qK778jkB+
- NLOEjcM9133PGsomXQTIgpgnDo8xv0c0lWj1V5ecvMH2/9wj2YmLVPGhL1ptIuWnJwk5WKg04
- D/sgim9q7VMsNDuoaAjMA+iTJM+tzsUmNuDIioG5BY6EmhPHiKdm9TxLSA+uSxQUKBooQ0aQP
- fybl0M2Y7nN//7Hhcm4A==
+        id S1727226AbfJVSQB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Oct 2019 14:16:01 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56876 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730305AbfJVSQA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Oct 2019 14:16:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=WpDk5Ulj+JwiMZYHjvM/hrCJ4esW8lkbG5QgDJwyqyk=; b=YeovjC/4jJN9
+        +gp0PMfQEK5ecGKoEDrK109Waz/KgyOQ1f0fM472lFEvQ3gcCyOg5QiP6QfwW7TaqlGmKxEgQyWB5
+        jeZf2jUa/4/EwTRsJfXRZOZKyjluwCxWBiYq+G/XdErtPeA2xHycK/6+T1O2EisnPpXLFVtPMA3QE
+        IH0xQ=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iMyhG-0007Cn-F6; Tue, 22 Oct 2019 18:15:54 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id DD46D274326D; Tue, 22 Oct 2019 19:15:53 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Raymond Tan <raymond.tan@intel.com>
+Subject: Applied "spi: dw: Move runtime PM enable/disable from common to platform driver part" to the spi tree
+In-Reply-To: <20191018132131.31608-1-jarkko.nikula@linux.intel.com>
+X-Patchwork-Hint: ignore
+Message-Id: <20191022181553.DD46D274326D@ypsilon.sirena.org.uk>
+Date:   Tue, 22 Oct 2019 19:15:53 +0100 (BST)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 5:53 PM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
-> The background of my question was me wondering if builds
-> for PLAT_S3C24XX=y (before your patch series) don't need plat-samsung.
+The patch
 
-What I found is that the DT-based platforms (exynos and s5p) need almost nothing
-from plat-samsung, while the board files and the s3c24xx/s3c64xx power
-management
-needs almost all of it.
+   spi: dw: Move runtime PM enable/disable from common to platform driver part
 
-      Arnd
+has been applied to the spi tree at
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.4
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From b9fc2d207e547664271030c1f99fc08c92fcf3f8 Mon Sep 17 00:00:00 2001
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Date: Fri, 18 Oct 2019 16:21:29 +0300
+Subject: [PATCH] spi: dw: Move runtime PM enable/disable from common to
+ platform driver part
+
+After commit 1e6959832510 ("spi: dw: Add basic runtime PM support")
+there is following warning from PCI enumerated DesignWare SPI controller
+during probe:
+
+	dw_spi_pci 0000:00:13.0: Unbalanced pm_runtime_enable!
+
+Runtime PM is already enabled for PCI devices by the PCI core and doing
+it again in common DW SPI code leads to unbalanced enable calls.
+
+Fix this by moving the runtime PM enable/disable calls to the platform
+driver part of the driver.
+
+Cc: Phil Edworthy <phil.edworthy@renesas.com>
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20191018132131.31608-1-jarkko.nikula@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-dw-mmio.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index bd46fca3f094..db896475b8d1 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -9,6 +9,7 @@
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+ #include <linux/spi/spi.h>
+ #include <linux/scatterlist.h>
+@@ -193,6 +194,8 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+ 			goto out;
+ 	}
+ 
++	pm_runtime_enable(&pdev->dev);
++
+ 	ret = dw_spi_add_host(&pdev->dev, dws);
+ 	if (ret)
+ 		goto out;
+@@ -201,6 +204,7 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ out:
++	pm_runtime_disable(&pdev->dev);
+ 	clk_disable_unprepare(dwsmmio->pclk);
+ out_clk:
+ 	clk_disable_unprepare(dwsmmio->clk);
+@@ -212,6 +216,7 @@ static int dw_spi_mmio_remove(struct platform_device *pdev)
+ 	struct dw_spi_mmio *dwsmmio = platform_get_drvdata(pdev);
+ 
+ 	dw_spi_remove_host(&dwsmmio->dws);
++	pm_runtime_disable(&pdev->dev);
+ 	clk_disable_unprepare(dwsmmio->pclk);
+ 	clk_disable_unprepare(dwsmmio->clk);
+ 
+-- 
+2.20.1
+
