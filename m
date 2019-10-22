@@ -2,99 +2,169 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 979C2DEB09
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2019 13:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA139DFF74
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Oct 2019 10:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727832AbfJULf7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Oct 2019 07:35:59 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41156 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727571AbfJULf7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Oct 2019 07:35:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ItaU+MbAHgCye1IVUzSWHuGcjVdE+bPZonoTIyYtvSk=; b=TTDPyWToHHh8T4S3VKE3aoBSF
-        9/nETwlA1TAi62o0j35cfOjNsIGpvP2N3gwweRO1tcfqGICQxXQOQWZl3j4InuMXp6RjDj9OVIDhg
-        Pdos0yIfN39tLJcWV9IRFWmsc0RYPlOacXAryIlo9g8CHfO/EZqUVJrE4zdsYRNwKAl0k=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iMVyM-00042v-H1; Mon, 21 Oct 2019 11:35:38 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 00689274301C; Mon, 21 Oct 2019 12:35:37 +0100 (BST)
-Date:   Mon, 21 Oct 2019 12:35:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: pxa2xx: Set controller->max_transfer_size in dma
- mode
-Message-ID: <20191021113537.GB4691@sirena.co.uk>
-References: <20191016195721.3714-1-daniel.vetter@ffwll.ch>
- <20191017064426.30814-1-daniel.vetter@ffwll.ch>
- <20191017070638.GB32742@smile.fi.intel.com>
- <20191021110857.GR32742@smile.fi.intel.com>
+        id S2388061AbfJVIck (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Oct 2019 04:32:40 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40377 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388329AbfJVIck (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Oct 2019 04:32:40 -0400
+Received: by mail-pf1-f196.google.com with SMTP id x127so10187897pfb.7
+        for <linux-spi@vger.kernel.org>; Tue, 22 Oct 2019 01:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cZdKvxj9Z8mPzGBO8PqqxkjEAPdgCzeXSdguPbyi3Og=;
+        b=C4WER7itN+32dDA/eOYziidUp/8t8hZ1k9flcdFpUqdKezCFeEjR8iRyegBn5OLVRz
+         NSqyVPngBTqzIPx3tnE2/Ucz/RmLWlZ6ha8hYy17Wv9mNxZk9+YsQsFhpbH1V2zo+bPE
+         lT/nn1p70NJHjxYDSs1kU/dtoC3WsGWGoQSKyeZ4yR9fPswBLTxiEZIFy7VGo99eJfsR
+         Rnb66yIOe34lLUzJRt7aDB/waUtrz4XpUNqhuQoo8FgWhMONGBte3ZGYdjR5Ss/ofBJI
+         gmMTZbsROgjQ1ullrB19+08w7rM7TRSlnbOzyH7FMlMUKWNONvsED65puK6JETZiSCCn
+         Zkaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cZdKvxj9Z8mPzGBO8PqqxkjEAPdgCzeXSdguPbyi3Og=;
+        b=qAG8fpwy2QZ/QHEyc75EqqnTCjybM0/JfErB7R2z6IMg5TRtTi+kIMCQJtOfzq6zEp
+         RPMwBd3cyO0ttCaK7R0e7HZnfEE5y3ag1dFjUpicjgaaaaXfsbVRjS0iS+/oZXod77t1
+         Vgp+fciX9LJjOD0JpUDW32mPnj5EEM6+Nes7ihA96uqrj5gizgTClYVMMZYRShrXvjgz
+         J6ZvpH8sXI9oKdHtjkk6mo5n7d/6IXt2mYmSdt/Y0In5I23tM+ZPYOaDcgbe7U9RZ7bG
+         vnPXihVQYtnyXmznHxap+pa5T0vp7Bj5796B01ZwY5lb07/PPXqYFPXVpKt9COokGpw7
+         shgA==
+X-Gm-Message-State: APjAAAUh0QzEgbUP3D+iMZHTeZwzNy9Y6yLwzkHbs/Kp9QmX0L3ThbSL
+        HQ/ZDhe1oXNOTvfoHYKPjZAR3IQjUFN/T0SUxd6qfCgrFR4=
+X-Google-Smtp-Source: APXvYqytu5mRrbjVxvAST0m4zxpLJza9xsDHfDmYv2scNpVkq8ZV+4y2MQ0hJ72PfhvoU6VQb9ZaSHr99e2tSX2rf/o=
+X-Received: by 2002:a17:90a:9416:: with SMTP id r22mr3252646pjo.20.1571733158042;
+ Tue, 22 Oct 2019 01:32:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rS8CxjVDS/+yyDmU"
-Content-Disposition: inline
-In-Reply-To: <20191021110857.GR32742@smile.fi.intel.com>
-X-Cookie: Why are you so hard to ignore?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191018132131.31608-1-jarkko.nikula@linux.intel.com>
+In-Reply-To: <20191018132131.31608-1-jarkko.nikula@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 22 Oct 2019 11:32:27 +0300
+Message-ID: <CAHp75Vci+XKozjUsZHnQsr=ekg2x-zBUjFqMSp0d0rLiKq=E+A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] spi: dw: Move runtime PM enable/disable from common
+ to platform driver part
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Raymond Tan <raymond.tan@intel.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Sat, Oct 19, 2019 at 11:26 AM Jarkko Nikula
+<jarkko.nikula@linux.intel.com> wrote:
+>
+> After commit 1e6959832510 ("spi: dw: Add basic runtime PM support")
+> there is following warning from PCI enumerated DesignWare SPI controller
+> during probe:
+>
+>         dw_spi_pci 0000:00:13.0: Unbalanced pm_runtime_enable!
+>
+> Runtime PM is already enabled for PCI devices by the PCI core and doing
+> it again in common DW SPI code leads to unbalanced enable calls.
+>
+> Fix this by moving the runtime PM enable/disable calls to the platform
+> driver part of the driver.
+>
 
---rS8CxjVDS/+yyDmU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-On Mon, Oct 21, 2019 at 02:08:57PM +0300, Andy Shevchenko wrote:
+> Cc: Phil Edworthy <phil.edworthy@renesas.com>
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+>  drivers/spi/spi-dw-mmio.c | 5 +++++
+>  drivers/spi/spi-dw.c      | 7 -------
+>  2 files changed, 5 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index b5ce8bd58d9e..384a3ab6dc2d 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/err.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+>  #include <linux/spi/spi.h>
+>  #include <linux/scatterlist.h>
+> @@ -193,6 +194,8 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+>                         goto out;
+>         }
+>
+> +       pm_runtime_enable(&pdev->dev);
+> +
+>         ret = dw_spi_add_host(&pdev->dev, dws);
+>         if (ret)
+>                 goto out;
+> @@ -201,6 +204,7 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+>         return 0;
+>
+>  out:
+> +       pm_runtime_disable(&pdev->dev);
+>         clk_disable_unprepare(dwsmmio->pclk);
+>  out_clk:
+>         clk_disable_unprepare(dwsmmio->clk);
+> @@ -212,6 +216,7 @@ static int dw_spi_mmio_remove(struct platform_device *pdev)
+>         struct dw_spi_mmio *dwsmmio = platform_get_drvdata(pdev);
+>
+>         dw_spi_remove_host(&dwsmmio->dws);
+> +       pm_runtime_disable(&pdev->dev);
+>         clk_disable_unprepare(dwsmmio->pclk);
+>         clk_disable_unprepare(dwsmmio->clk);
+>
+> diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+> index 54ed6eb3e252..466f5c67843b 100644
+> --- a/drivers/spi/spi-dw.c
+> +++ b/drivers/spi/spi-dw.c
+> @@ -10,7 +10,6 @@
+>  #include <linux/module.h>
+>  #include <linux/highmem.h>
+>  #include <linux/delay.h>
+> -#include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+>  #include <linux/spi/spi.h>
+>
+> @@ -499,8 +498,6 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+>         if (dws->set_cs)
+>                 master->set_cs = dws->set_cs;
+>
+> -       pm_runtime_enable(dev);
+> -
+>         /* Basic HW init */
+>         spi_hw_init(dev, dws);
+>
+> @@ -529,7 +526,6 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+>         spi_enable_chip(dws, 0);
+>         free_irq(dws->irq, master);
+>  err_free_master:
+> -       pm_runtime_disable(dev);
+>         spi_controller_put(master);
+>         return ret;
+>  }
+> @@ -544,9 +540,6 @@ void dw_spi_remove_host(struct dw_spi *dws)
+>
+>         spi_shutdown_chip(dws);
+>
+> -       if (dws->master)
+> -               pm_runtime_disable(&dws->master->dev);
+> -
+>         free_irq(dws->irq, dws->master);
+>  }
+>  EXPORT_SYMBOL_GPL(dw_spi_remove_host);
+> --
+> 2.23.0
+>
 
-> Mark, can be this applied?
 
-b2662a164f9dc48d
-
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
-
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
-
---rS8CxjVDS/+yyDmU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2tmAkACgkQJNaLcl1U
-h9Bmiwf+LpkNRvFDHKJlEidZWltSZa/YXEUiHkXF+RPQ50Dg7H7u4mTpMHYE6p4j
-GzZoajbCmd20mLDAY/AV+PQc5AmjFdXmMk5/3vqbYPWL92Wmlfx/2pIX+O8NV/dz
-MUaCFgYJf8ZStxwwsEKGYSxPzdkVi+e57w7GQZMZP8JKm1VfRjxHCBNV22ZmXD2L
-WGxdBr9lIPfs34GplBpk2Gr3Y5dlDbHC03tgsxf1qcDQlRiG9HaX8zEiRF5CsnAh
-XK2lkJmT86hCJiqRNP6QnT1SmjqahHwHbUXakBNNmS5nr1JYYZb3hCgSWPrdpbbg
-UP2goIpeqbEN0JAhJNMQA9OQGT58kw==
-=2kIE
------END PGP SIGNATURE-----
-
---rS8CxjVDS/+yyDmU--
+-- 
+With Best Regards,
+Andy Shevchenko
