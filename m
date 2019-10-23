@@ -2,85 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CF5E1C4D
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2019 15:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46E4E1CEE
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2019 15:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405663AbfJWNVr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Oct 2019 09:21:47 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:41639 "EHLO
+        id S2405949AbfJWNjz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 23 Oct 2019 09:39:55 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:43825 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405607AbfJWNVr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Oct 2019 09:21:47 -0400
-Received: from mail-qt1-f182.google.com ([209.85.160.182]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1N3Kc6-1hxWBf1L2Q-010NK1; Wed, 23 Oct 2019 15:21:45 +0200
-Received: by mail-qt1-f182.google.com with SMTP id w14so32187382qto.9;
-        Wed, 23 Oct 2019 06:21:44 -0700 (PDT)
-X-Gm-Message-State: APjAAAV4evTZkc8QvVs46EuK469NNe0FS1T629zeVTpLUL9czu/hcklm
-        d/ciWCbECtxeVlWsxqAfEC3n8f1z5sfcMG6koNI=
-X-Google-Smtp-Source: APXvYqwM2qEEMnGfHv8Zjb1lutdzumiJLhReXUDt54qECGm5JtGOI75fA1JAhUI8HrWZ9XEpyPDWgXHf+8DP7KS9kXc=
-X-Received: by 2002:a0c:d0e1:: with SMTP id b30mr8768414qvh.197.1571836904019;
- Wed, 23 Oct 2019 06:21:44 -0700 (PDT)
+        with ESMTP id S2392089AbfJWNjy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Oct 2019 09:39:54 -0400
+Received: from mail-qt1-f177.google.com ([209.85.160.177]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1Mf0Nm-1hmXPR1EIE-00gboz; Wed, 23 Oct 2019 15:39:51 +0200
+Received: by mail-qt1-f177.google.com with SMTP id o49so24470171qta.7;
+        Wed, 23 Oct 2019 06:39:49 -0700 (PDT)
+X-Gm-Message-State: APjAAAU6rjuILI+dBSQWkepJeZcFXjrhStzYWyvwa71wsCNVgYufVnZt
+        iHt9MtJEPLOwsEVZaopkvY4n9SDmIlf2VoWvAbc=
+X-Google-Smtp-Source: APXvYqyt7m8OnGbGOfKvN6UapNf8Y0PixnD+b/5MFVO15QeK4AzpoE5xCHBxjuJT4OWklHgs4L5FWsrmt4sucJ53v+g=
+X-Received: by 2002:ac8:18eb:: with SMTP id o40mr9289234qtk.304.1571837989082;
+ Wed, 23 Oct 2019 06:39:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-13-arnd@arndb.de> <20191023123200.GC11048@pi3>
-In-Reply-To: <20191023123200.GC11048@pi3>
+References: <20191010202802.1132272-1-arnd@arndb.de> <20191023131049.GG11048@pi3>
+In-Reply-To: <20191023131049.GG11048@pi3>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Oct 2019 15:21:27 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2LnsqfFf4X2XrBMHBuBKZOHYQtwv4_Hj7RFC1wkPAwqQ@mail.gmail.com>
-Message-ID: <CAK8P3a2LnsqfFf4X2XrBMHBuBKZOHYQtwv4_Hj7RFC1wkPAwqQ@mail.gmail.com>
-Subject: Re: [PATCH 13/36] ARM: s3c: move regs-spi.h into spi driver
+Date:   Wed, 23 Oct 2019 15:39:32 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1v2-+geD+JbNP-t418ZjntQNSte4rt8c7N6sJdpb3+DQ@mail.gmail.com>
+Message-ID: <CAK8P3a1v2-+geD+JbNP-t418ZjntQNSte4rt8c7N6sJdpb3+DQ@mail.gmail.com>
+Subject: Re: [PATCH 00/36] ARM: samsung platform cleanup
 To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-leds@vger.kernel.org,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
         <linux-samsung-soc@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Lihua Yao <ylhuajnu@outlook.com>,
+        Kukjin Kim <kgene@kernel.org>, linux-serial@vger.kernel.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Sergio Prado <sergio.prado@e-labworks.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Lihua Yao <ylhuajnu@163.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Andi Shyti <andi@etezian.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+        linux-spi <linux-spi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Kc2/umFPU3EEwzXXPT72ODcqpU+joczmHFtSKx9N5mJF5DFQ12p
- vPv8kEtNG0xYf9QUQfRsVKvlRhX8lOtb2CTGBPzT8SNmbk87y8O9qqhi9v5Zbg4q+8ZzfOu
- h28JSiQqFR9Fd6pfWlIRYYJ1+ktLjB56UwKDNJaG6oKAFCIShXnnBfBKtTea196rs5ikmu7
- A+ePvMU9lAE2oPOJVP+kA==
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:NLof35stNYTGVLCCiBOj5shE8fEwjZaac7cdAu2nrrmym/kOcjv
+ Qnfa/3i0a5qyJkyMXctYodBV7VP0bHQaFrXIBjwV/gpmENyzPTQE7+sVihuV4liYROCT33b
+ 9WO8+gy5V2fG2DuQgIo6thaPwkDMewwBExepC4yasYMIPkDiS0zr+8kJODaOpU4HPFc7gMV
+ MPShUYeuOvxdtdljHgfJg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pW7bVROir+Q=:TOf6c1fpXBhnVHIBkHUqo9
- i0st8ZnEh/m3972sds/I6F1jGt2uPv7GuiYY9aOWim1Uc8Kl9HXafWjDRFmvsVVnj0Su/k8pt
- MqfJwqYo1xEz7OYH0j18csrGnPVrJWuQAgDb/0KcSNFP1lVzKMvuCsDozcCI5gC6YvXXvaLUK
- GrSx4IY3Fhh0y7PQM+uDf+R7Ek0h1vTCoHWk0zpVW9rLPjm7jTQybsvlk2E6dvI08xX5+WUJ6
- MGrx72k34cdkj71trJX+Fbi6EM/2jxiFb6LVPZNM8nmXsfEbdknpABRsmdx+2DoP+x/Bvi65W
- rzUr4rGhqfBgWpvBN/Bs4MJFJVARzk927TKjGPRz1LDNM67HpN/o0cFjo4AD+5nY+6J/mWk2a
- 2HKgRWXTg10g5GwdDW8Eub8OFknhDR/LBm9lD8+CuYJBvwluf4Rl61DbylJAS2HvjqOUCSRdV
- WEZu8ROIMnhhH0X/O5hIr9ycU3MgKSC8L1H1DrhEnCWsSOVwUMHut/qoaM4x0BlswVn+KzjcG
- TkmZ9w+QmpPqycveV+vL139k/dG8DI9mFBsEwO44SRCFpypKmXJrkzvDokPp7k9UzmEQ3tNua
- XtYAAT7H3x3k/l2jSzVdIlYNS0JlAXaVgKJ5PlGUh0AyClFppTZmSn8gadtPk6N2iW4jhJcjS
- BUOz822VODCjeTUXHYc+ErdIeTlOHcPTBvjPf6CBMGWk92AGRjma6VwNPgBiPXAlj/ieFz/Ij
- x7id9jNf5GJme7GZNBQX6Yt7Vg3222RtIrR5DTTw97p9VJDcbYfM3Oyw/t+dIdAI2jKWnERug
- 9xgJd2HTLFBUGebysFj33bja3OqSgc2X7WzVUZALoT3enSizPaWKs3/usfYNAY/ceO89AStgR
- p9pqdAp3ak2r4qrUoFLQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DaQc5ZGaJsY=:F603/POvpKLPXWa0X1lFEH
+ aQjxfOCxGD/pIMHmKlHcbcFD80Nc+ewErQWmvj+Qgp6xaAE5MxfbNNNrin9LMgRKve0v8GrHu
+ BPPYcLBIJd/tRGzy7EoHKzi1xCTWBRKPuZW+NRo5Q3c4o6tNWGjXzPGUI9xyOYPIzGuB4sxow
+ ECbUMNeq+vtLAQSVxvpHOttzchCbbhPJcjfvA+bQAYJp52FgAuxb7i+4FvHbE4PKIBUfZrfn7
+ RTWpJntJNT2FyPouWE44kX34NjZBTj4rpIcCKzq/vJGEBiexW1JIi5IKVdXZvOH5f6ayOyfG4
+ N5aMRdit65bReN0guN1SsKJ7uFbD0kzxYt0bE1Mf25djeRlbjBl6eNdESrSyRRUYp5EHOfQ/A
+ Sa10vMW4Ena5av/pF9Ivtanmnx43oe8gg/n1e283kgsPXqMvxru3WC5Nzl6w8FtOo8cSrKeIA
+ 4cwYy4vh4ukZW7IvGkXi8VTyHR5QO0uX/EIi41POGGpNZfuz2RZFE3OQuaZ2ZAWDyKIDIkMiS
+ w6MOzO71LwFlzMud8Juwt083ioitXDvT/9TIYbAIAmfnUtb8NIa87LZjq9LnymQfMT/771jDX
+ Pv0pU2J8yDYscI2Ar/9iY65bLYD1odSzwo1yupcBRkEYBk2LtDP2ofqM/FtIHQxHEgUCSL8BF
+ +DQWO4nbj5c/D8V8Rcbk6xIsj3dpX/eZmDwcjBHzixCuvxTtC6bkTqxwxXemSc09w9sXO96BH
+ 8wrLVBqppvA4u9/3mwzDk1TPdUl264mBZECZMuP2bwYmiOyo6CZ+bMP0dYsot7zDsLQZk6JM2
+ zgDILD/0tZiVRCT1r1eA1ueLWwCTN+MFNjGnfX1TAxma6wIGEoHuP9Uzto3sTth328X/tkiaT
+ tiL3D4xHp9lUaPHnTz2w==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 2:36 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Thu, Oct 10, 2019 at 10:29:57PM +0200, Arnd Bergmann wrote:
-
-> > diff --git a/arch/arm/plat-samsung/include/plat/regs-spi.h b/drivers/spi/spi-s3c24xx-regs.h
-> > similarity index 95%
-> > rename from arch/arm/plat-samsung/include/plat/regs-spi.h
-> > rename to drivers/spi/spi-s3c24xx-regs.h
-> > index 607844311566..37b93ff7c7fe 100644
-> > --- a/arch/arm/plat-samsung/include/plat/regs-spi.h
-> > +++ b/drivers/spi/spi-s3c24xx-regs.h
-> > @@ -8,9 +8,6 @@
-> >  #ifndef __ASM_ARCH_REGS_SPI_H
-> >  #define __ASM_ARCH_REGS_SPI_H
+On Wed, Oct 23, 2019 at 3:11 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> On Thu, Oct 10, 2019 at 10:28:02PM +0200, Arnd Bergmann wrote:
+> > The contents are available for testing in
+> >
+> > git://kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git s3c-multiplatform
 >
-> Can you also update the guard name?
+> When sending v2, can you Cc:
+>
+> Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
+> Lihua Yao <ylhuajnu@outlook.com>
+> (or Lihua Yao <ylhuajnu@163.com> if outlook.com bounces)
+> Sergio Prado <sergio.prado@e-labworks.com>
+> Sylwester Nawrocki <s.nawrocki@samsung.com>
+>
+> These are folks which to my knowledge had working S3C and S5P boards
+> so maybe they could provide testing.
 
-Ok, changed to __SPI_S3C2410_H, this seems to be the most common format
-in spi drivers.
+Ok, will do. I've uploaded the modified version based on your comments to
+the above URL for now.
 
-       Arnd
+I'll probably give it a little more time before resending, but they
+could already
+start testing that version.
+
+Thanks a lot for the review!
+
+      Arnd
