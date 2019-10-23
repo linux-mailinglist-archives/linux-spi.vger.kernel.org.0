@@ -2,99 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF92BE1AF9
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2019 14:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180ABE1BDA
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2019 15:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391429AbfJWMmU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Oct 2019 08:42:20 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:20758 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2389887AbfJWMmU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Oct 2019 08:42:20 -0400
-X-UUID: 35fdebd5099745e5b87bf119d7f48853-20191023
-X-UUID: 35fdebd5099745e5b87bf119d7f48853-20191023
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
-        (envelope-from <luhua.xu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1724853019; Wed, 23 Oct 2019 20:42:16 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 23 Oct 2019 20:42:11 +0800
-Received: from localhost.localdomain (10.15.20.246) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 23 Oct 2019 20:42:11 +0800
-From:   Luhua Xu <luhua.xu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
-        <luhua.xu@mediatek.com>
-Subject: [PATCH 1/1] spi: mediatek: add power control when set_cs
-Date:   Wed, 23 Oct 2019 08:38:42 -0400
-Message-ID: <1571834322-1121-2-git-send-email-luhua.xu@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1571834322-1121-1-git-send-email-luhua.xu@mediatek.com>
-References: <1571834322-1121-1-git-send-email-luhua.xu@mediatek.com>
+        id S2405618AbfJWNK5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 23 Oct 2019 09:10:57 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35592 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726032AbfJWNK4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Oct 2019 09:10:56 -0400
+Received: by mail-ed1-f68.google.com with SMTP id k2so5018362edx.2;
+        Wed, 23 Oct 2019 06:10:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=lzwXfyhUE7yc9zrzbjqMe71sKuHvjq9U3aqm0Bd1AoI=;
+        b=S/A3aIGnph7/r49FdcX/+rOROLnuReURWi9z5AaaiFgwNDyHNguoHy2jLTKIg0AobS
+         Ii8Aob7iyqUE9px3EJl+QbMXPlHqS2i4AJjUkEXgVYMOpJB5ylqfR28AxSRz0LGrE0oN
+         dz0N+b0G4A1+WoZyqXNpZC27TiMgZrwh3OQIocjQVBgN+3XtOoyCaMvlIaqATpBbxqeb
+         aH+TRLRapqnj+ldkTcAZ0Bi9oR73bzEGJ0oLBkEdJwU7OEXluqUoH1Bhl4rcsWPwWDMa
+         DGF3xhA2WaMsusqyac2NzMIPJnBzhBlKnq/yDYu7/oI4+szOWAtVn2bNxBf1GiYtQfaY
+         jRtQ==
+X-Gm-Message-State: APjAAAXIBu2F0LkRRidZBYch85DAr88A/27wF1+klG85knTLuwFmQPUI
+        Ki2dfON5MI5tkKTRGbG4ylA=
+X-Google-Smtp-Source: APXvYqyft44OcCGb0xN0+fC1gmfK8usNRgvA/I5KY4vuTv2zLifQ5kptU9qNo1AQahi2rM4m7Aa/dg==
+X-Received: by 2002:aa7:c595:: with SMTP id g21mr36717915edq.79.1571836252860;
+        Wed, 23 Oct 2019 06:10:52 -0700 (PDT)
+Received: from pi3 ([194.230.155.217])
+        by smtp.googlemail.com with ESMTPSA id b12sm785479edq.75.2019.10.23.06.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2019 06:10:52 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 15:10:49 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kukjin Kim <kgene@kernel.org>, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        Lihua Yao <ylhuajnu@163.com>,
+        =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>,
+        Lihua Yao <ylhuajnu@outlook.com>,
+        Sergio Prado <sergio.prado@e-labworks.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: Re: [PATCH 00/36] ARM: samsung platform cleanup
+Message-ID: <20191023131049.GG11048@pi3>
+References: <20191010202802.1132272-1-arnd@arndb.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20191010202802.1132272-1-arnd@arndb.de>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: "luhua.xu" <luhua.xu@mediatek.com>
+On Thu, Oct 10, 2019 at 10:28:02PM +0200, Arnd Bergmann wrote:
+> I've spent some time looking at the remaining ARMv4/ARMv5 platforms
+> that are not part of ARCH_MULTIPLATFORM, and tried to get them closer
+> to that. Here is what came out of that for the samsung platforms:
+> 
+> * Exynos and s5pv210 are made independent of plat-samsung
+> * device drivers stop using mach/*.h headers for s3c24xx
+>   (and other platforms not in this series)
+> * s3c24xx and s3c64xx get merged into mach-s3c, removing
+>   the need for plat-samsung (I have other patches for the
+>   remaining plat-* directories)
+> * mach/io.h gets cleaned up to only be needed for BAST
+>   PC104 mode (looking for ideas to proceed)
+> * mach/irqs.h remains for now, this still needs to be converted
+>   to sparse IRQs.
+> 
+> Some bits are a little ugly, but overall I think this a big
+> improvement.
+> 
+> The contents are available for testing in
+> 
+> git://kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git s3c-multiplatform
 
-Use runtime PM to power spi when set_cs
-As set_cs may be called from interrupt context,
-set runtime PM IRQ safe for spi.
+When sending v2, can you Cc:
 
-Signed-off-by: luhua.xu <luhua.xu@mediatek.com>
----
- drivers/spi/spi-mt65xx.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
+Lihua Yao <ylhuajnu@outlook.com>
+(or Lihua Yao <ylhuajnu@163.com> if outlook.com bounces)
+Sergio Prado <sergio.prado@e-labworks.com>
+Sylwester Nawrocki <s.nawrocki@samsung.com>
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 6888a4d..039b67d 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -262,8 +262,16 @@ static int mtk_spi_prepare_message(struct spi_master *master,
- static void mtk_spi_set_cs(struct spi_device *spi, bool enable)
- {
- 	u32 reg_val;
-+	int ret;
- 	struct mtk_spi *mdata = spi_master_get_devdata(spi->master);
- 
-+	ret = pm_runtime_get_sync(spi->master->dev.parent);
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(spi->master->dev.parent);
-+		dev_err(&spi->dev, "failed to power device(%d)\n", ret);
-+		return;
-+	}
-+
- 	reg_val = readl(mdata->base + SPI_CMD_REG);
- 	if (!enable) {
- 		reg_val |= SPI_CMD_PAUSE_EN;
-@@ -274,6 +282,9 @@ static void mtk_spi_set_cs(struct spi_device *spi, bool enable)
- 		mdata->state = MTK_SPI_IDLE;
- 		mtk_spi_reset(mdata);
- 	}
-+
-+	pm_runtime_mark_last_busy(spi->master->dev.parent);
-+	pm_runtime_put_autosuspend(spi->master->dev.parent);
- }
- 
- static void mtk_spi_prepare_transfer(struct spi_master *master,
-@@ -749,6 +760,7 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 	clk_disable_unprepare(mdata->spi_clk);
- 
- 	pm_runtime_enable(&pdev->dev);
-+	pm_runtime_irq_safe(&pdev->dev);
- 
- 	ret = devm_spi_register_master(&pdev->dev, master);
- 	if (ret) {
--- 
-2.6.4
+These are folks which to my knowledge had working S3C and S5P boards
+so maybe they could provide testing.
+
+Best regards,
+Krzysztof
 
