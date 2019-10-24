@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA1AE2FF5
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 13:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F9BE2FF6
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 13:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbfJXLIJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Oct 2019 07:08:09 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:32985 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392305AbfJXLIJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 07:08:09 -0400
-Received: by mail-wr1-f66.google.com with SMTP id s1so16823923wro.0
-        for <linux-spi@vger.kernel.org>; Thu, 24 Oct 2019 04:08:07 -0700 (PDT)
+        id S2407906AbfJXLIM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Oct 2019 07:08:12 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52512 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404755AbfJXLIM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 07:08:12 -0400
+Received: by mail-wm1-f67.google.com with SMTP id p21so893863wmg.2
+        for <linux-spi@vger.kernel.org>; Thu, 24 Oct 2019 04:08:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=hazent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=crqpJF/gwHkmsomaDb8OpyO/FffTCuDAexg/TaLh4BA=;
-        b=fEC4Tv4PTMH7uhAUOrLRmfrjzOIjEAo80TJRvbjAe0+PBa9ZsbWovwYosARMsOsKU0
-         ax3a/Qn8GrdCM1hVoth6F/J9gYdu7oSOFJINMLxSjPMy6znHJ0i4Dk6jXPHcHLNu3Jt2
-         g8ovXhJ/VULZ7Vj7abgJRQaI6Bv0ZEEbg8cLJX7fsUOHzSpoP5LgMk8m4YuGiJ2S2jQL
-         0lVDqFMvKkmzN/yaVNfSnIiBVUe6NTidS6xfQiF50GllIp4OETjlCuOpN4YMERuXsibv
-         GCTH7mOX1NSJbzXt18qgnhep/hA1GFgqpDltF9LrXgp1tQqAb3s6Qw8JJkSQ0zFtvPRg
-         8V+A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ty8HHdcW1xvpVQo6VQZi9Y9fVgubaIPP2DR3ADcakl8=;
+        b=pQNPianmV7IjonXNmeflG5c+WCkIuqaPqZ4p3cyxn14O1MgtIo5k8qBTT0tfhXrlQI
+         dNg3eD2MUw3Uz3a//cTkzi7OZs8rhWnkFg9Q4MLhB+RapLWOHQROf4fYU2xlMmLjDaKr
+         PBi987cnum89TArNKqYuyyaPij7CrJ5gHIxwW/X3VvwnW/2tZadszYTa6wTut0kLeCkK
+         p9Ij8ujlm6/keBSF8TNdDcpdS+BCZG2DQ2Kmh5QG5RdEEnpFt/vJ55otJgsrWVPtyvCE
+         ElpuaSdjTqxQ8TEHShrtI8yZIw9POby52bFrWjmVu1FXngL4Tknu7SSV4df08ESEsSE8
+         /Qtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=crqpJF/gwHkmsomaDb8OpyO/FffTCuDAexg/TaLh4BA=;
-        b=HqX+36NTnc4KpiDV87TFi8wYWyzXXH00WDMGpTqcZzjjOV0VINTA8T3IyfRQGwCJQ6
-         thOEgd6bM4M8RkibQxbF2nmuHUkEHHp44iDOYKndLc6C/RK/WR1Wd2b/A7WCs+XzJY6J
-         81iy9Q6CGLAjNCJouRuFcJDPi59ABkS8eeWMRDeRKG+h7MijXcHOyg4UsD4fusFyR+rz
-         cXjlgoVHbNGy4e0w6Pz66k0KWk5ABF3hFejAzkgJrNN+Sqk5nQVi6r+JR+7X3GBkwr03
-         cQaUVEFnlJr6twYDNF1S/pvkAdxY53bMfGedg7mJqyrhFyStmeqEyFQgfuUQHE/tIdf6
-         X00g==
-X-Gm-Message-State: APjAAAW8RUP/7/HxnruVlvq3EnWAkdG0bkQK4fBDWcEYFDt/9D4bXomb
-        T55SKdhlaSMDV6QDuUR3QVfNXqjUdkA=
-X-Google-Smtp-Source: APXvYqzyzUJN8n1oom1/IBXRdUqoiC3M42qRkqVkBeyNaoa+BBzO4nLXhb9mUSbNw78q4yC5OYQaJg==
-X-Received: by 2002:adf:9044:: with SMTP id h62mr1491565wrh.91.1571915286700;
-        Thu, 24 Oct 2019 04:08:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ty8HHdcW1xvpVQo6VQZi9Y9fVgubaIPP2DR3ADcakl8=;
+        b=uaT/V4HLiLcQgRQDFKi45Tr9ME+W9KggmcWc2RwxaaPjPsJ6DFyekGxj6SzsJ1RrfH
+         mE0iejAK/XfAY9LeGNIDDJnNWpT7x7qPb6DKgIlbVjRZNv6hAkYwqUR11Vb+/kwdxrTB
+         7rFAV/qzkOi89N8JAKntHyyoDTWJLdXG3ziXllSUC/k1tVgGTfIjHdFQUuj6TemMI82F
+         bnRVpmn9d/pt8trJDqBh4KgO+2G7QPkGURfLlvBi0mIdgiYISK7jCt6Hc4HyNn7s4aOe
+         2wkx48DmKFLQmVYHeWJawolG5NOX9/r27+UD7O6UVrFhvQPjwP2N/I9ZtF0pM8r5ROp4
+         64wA==
+X-Gm-Message-State: APjAAAV1j03RWZ6FSAJN/DLD+N0pABz5y7T+k0ObbW7VrV810elsb0P6
+        O+OBwqkQSMllB6sqimCXcDfrzg==
+X-Google-Smtp-Source: APXvYqwfcYBAe0pxGxppfimumQnVKkIUoG6mqibJ7hjFg868IcC9SwwecN0gfhV9zIvnvN7CSOSKZQ==
+X-Received: by 2002:a1c:2008:: with SMTP id g8mr4118311wmg.34.1571915290370;
+        Thu, 24 Oct 2019 04:08:10 -0700 (PDT)
 Received: from salem.gmr.ssr.upm.es (salem.gmr.ssr.upm.es. [138.4.36.7])
-        by smtp.gmail.com with ESMTPSA id 26sm2420473wmi.17.2019.10.24.04.08.04
+        by smtp.gmail.com with ESMTPSA id 26sm2420473wmi.17.2019.10.24.04.08.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2019 04:08:05 -0700 (PDT)
+        Thu, 24 Oct 2019 04:08:09 -0700 (PDT)
 From:   Alvaro Gamez Machado <alvaro.gamez@hazent.com>
 To:     Michal Simek <michal.simek@xilinx.com>,
         Mark Brown <broonie@kernel.org>,
@@ -51,10 +51,12 @@ To:     Michal Simek <michal.simek@xilinx.com>,
         linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org
 Cc:     Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-Subject: [PATCH] Allowing Xilinx's AXI Quad widths different than 8 bits on userspace
-Date:   Thu, 24 Oct 2019 13:07:54 +0200
-Message-Id: <20191024110757.25820-1-alvaro.gamez@hazent.com>
+Subject: [PATCH] spi: xilinx: add description of new property xlnx,num-transfer-bits
+Date:   Thu, 24 Oct 2019 13:07:55 +0200
+Message-Id: <20191024110757.25820-2-alvaro.gamez@hazent.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191024110757.25820-1-alvaro.gamez@hazent.com>
+References: <20191024110757.25820-1-alvaro.gamez@hazent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
@@ -62,40 +64,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+This property is used to set the number of bits per transfer (bits_per_word).
 
-We had a couple of days ago a nice discussion [1] about a patch that I sent
-that was in need of clarification. I've taken into consideration all the
-conversation and I believe this small series will manage my ultimate goal
-(being able to use from user space a 32 bits wordwidth SPI slave with
-Xilinx's AXI IP core) while being explained enough and through the proper
-procedure.
+Xilinx' IP core allows either 8, 16 or 32, and is non changeable on runtime,
+only when instantiating the core.
 
-I assume there may still need to be some discussion to go on with this, but
-I thought it'd be clearer if we all had the code upfront in its current
-state.
-
-First patch documents the new device tree property, while the second one
-implements it.
-
-The third patch, that could be applied on its own regardless of the first
-two, solves a bug that appears only in combination of spidev usage and a
-master SPI device that does not support 8 bits as datawidth.
-
-[1] I have not been able to find a link to the archives of linux-spi, sorry
-
-Thanks,
-
-Alvaro Gamez Machado (3):
-  spi: xilinx: add description of new property xlnx,num-transfer-bits
-  spi: xilinx: Add DT support for selecting transfer word width
-  spi: set bits_per_word based on controller's bits_per_word_mask
-
+Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+---
  Documentation/devicetree/bindings/spi/spi-xilinx.txt | 4 +++-
- drivers/spi/spi-xilinx.c                             | 7 ++++++-
- drivers/spi/spi.c                                    | 2 ++
- 3 files changed, 11 insertions(+), 2 deletions(-)
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.txt b/Documentation/devicetree/bindings/spi/spi-xilinx.txt
+index dc924a5f71db..5f4ed3e5c994 100644
+--- a/Documentation/devicetree/bindings/spi/spi-xilinx.txt
++++ b/Documentation/devicetree/bindings/spi/spi-xilinx.txt
+@@ -8,7 +8,8 @@ Required properties:
+ 			  number.
+ 
+ Optional properties:
+-- xlnx,num-ss-bits	: Number of chip selects used.
++- xlnx,num-ss-bits	 : Number of chip selects used.
++- xlnx,num-transfer-bits : Number of bits per transfer. This will be 8 if not specified
+ 
+ Example:
+ 	axi_quad_spi@41e00000 {
+@@ -17,5 +18,6 @@ Example:
+ 			interrupts = <0 31 1>;
+ 			reg = <0x41e00000 0x10000>;
+ 			xlnx,num-ss-bits = <0x1>;
++			xlnx,num-transfer-bits = <32>;
+ 	};
+ 
 -- 
 2.23.0
 
