@@ -2,117 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A31AFE319F
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 13:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAF0E3323
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 14:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409254AbfJXL6B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Oct 2019 07:58:01 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:53666 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2409253AbfJXL6A (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 07:58:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=NwY0+e/21+fQpJVaYWikXqj2GnmkWOwotVlTdrqTWwg=; b=Zlacs+o0ZY4D
-        9KwJbesgdEuhb2xJ33sV0tFBqG+zqVDoRdaGm29/sgcZV9qU/NtUMU/psmyknRFodNppEYkjMdmzy
-        kgH/8/F8d424sNP1RsnnJCB0gYmhePV8X1GOs2yF6atOFUbMnpDqxCBFdTIunlXAiNw93nCJh6h50
-        DZHRU=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iNbkb-0003Rh-TL; Thu, 24 Oct 2019 11:57:57 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 5EB4C274293C; Thu, 24 Oct 2019 12:57:57 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>
-Subject: Applied "spi: xilinx: Add DT support for selecting transfer word width" to the spi tree
-In-Reply-To: <20191024110757.25820-3-alvaro.gamez@hazent.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191024115757.5EB4C274293C@ypsilon.sirena.org.uk>
-Date:   Thu, 24 Oct 2019 12:57:57 +0100 (BST)
+        id S1730002AbfJXMym (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Oct 2019 08:54:42 -0400
+Received: from salem.gmr.ssr.upm.es ([138.4.36.7]:37958 "EHLO
+        salem.gmr.ssr.upm.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729336AbfJXMym (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 08:54:42 -0400
+Received: by salem.gmr.ssr.upm.es (Postfix, from userid 1000)
+        id 828CDAC0077; Thu, 24 Oct 2019 14:54:37 +0200 (CEST)
+Date:   Thu, 24 Oct 2019 14:54:37 +0200
+From:   Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] spi: set bits_per_word based on controller's
+ bits_per_word_mask
+Message-ID: <20191024125436.GA8878@salem.gmr.ssr.upm.es>
+References: <20191024110757.25820-1-alvaro.gamez@hazent.com>
+ <20191024110757.25820-4-alvaro.gamez@hazent.com>
+ <20191024111300.GD5207@sirena.co.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191024111300.GD5207@sirena.co.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Thu, Oct 24, 2019 at 12:13:00PM +0100, Mark Brown wrote:
+> On Thu, Oct 24, 2019 at 01:07:57PM +0200, Alvaro Gamez Machado wrote:
+> > By leaving this value unset, a default value of 8 was being set later on.
+> > 
+> > If it happens that the SPI master driver doesn't support this value of 8,
+> > there will be an initial inconsistency between the SPI master and the device
+> > itself. This isn't a problem for most devices because kernel drivers
+> 
+> This will break things, client devices are working on the basis that the
+> default transfer width is 8 bits.  As I've repeatedly said if we have
+> different parts of the system with different ideas about the word size
+> we're going to end up with data corruption.  Please take this feedback
+> on board.
 
-   spi: xilinx: Add DT support for selecting transfer word width
+Oh, ok. I didn't understand this cleary from previous mails, now I see what
+you mean.
 
-has been applied to the spi tree at
+I think then the only way this would be feasible is to check if 8 bits is an
+acceptable number for the master and, if it isn't, apply the lowest
+available data width. I believe this cannot break anything, as it leaves 8
+as the default unless the master can't work with that number, in which case
+it really doesn't matter what client device wants because the hardware can't
+provide it.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+Thanks!
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From e58f7d15e6beb255b3907054a0536db77c979a31 Mon Sep 17 00:00:00 2001
-From: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-Date: Thu, 24 Oct 2019 13:07:56 +0200
-Subject: [PATCH] spi: xilinx: Add DT support for selecting transfer word width
-
-This core supports either 8, 16 or 32 bits as word width. This value is only
-settable on instantiation, and thus we need to support any of them by means
-of the device tree.
-
-Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-Link: https://lore.kernel.org/r/20191024110757.25820-3-alvaro.gamez@hazent.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-xilinx.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
-index d5f9d5fbb3e8..8dd2bb99cb4d 100644
---- a/drivers/spi/spi-xilinx.c
-+++ b/drivers/spi/spi-xilinx.c
-@@ -391,7 +391,7 @@ static int xilinx_spi_probe(struct platform_device *pdev)
- 	struct xilinx_spi *xspi;
- 	struct xspi_platform_data *pdata;
- 	struct resource *res;
--	int ret, num_cs = 0, bits_per_word = 8;
-+	int ret, num_cs = 0, bits_per_word;
- 	struct spi_master *master;
- 	u32 tmp;
- 	u8 i;
-@@ -403,6 +403,11 @@ static int xilinx_spi_probe(struct platform_device *pdev)
- 	} else {
- 		of_property_read_u32(pdev->dev.of_node, "xlnx,num-ss-bits",
- 					  &num_cs);
-+		ret = of_property_read_u32(pdev->dev.of_node,
-+					   "xlnx,num-transfer-bits",
-+					   &bits_per_word);
-+		if (ret)
-+			bits_per_word = 8;
- 	}
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 794e20e54237..4e26ac79e133 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3079,8 +3079,12 @@ int spi_setup(struct spi_device *spi)
+                return -EINVAL;
+        }
  
- 	if (!num_cs) {
--- 
-2.20.1
+-       if (!spi->bits_per_word)
+-               spi->bits_per_word = 8;
++       if (!spi->bits_per_word) {
++               if (spi->controller->bits_per_word_mask & SPI_BPW_MASK(8))
++                       spi->bits_per_word = 8;
++               else
++                       spi->bits_per_word = ffs(spi->controller->bits_per_word_mask);
++       }
+ 
+        status = __spi_validate_bits_per_word(spi->controller,
+                                              spi->bits_per_word);
 
+
+
+
+
+-- 
+Alvaro G. M.
