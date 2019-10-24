@@ -2,82 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2E3E2EB5
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 12:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA1AE2FF5
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 13:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407656AbfJXKXx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Oct 2019 06:23:53 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:36720 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407344AbfJXKXx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 06:23:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=8n+XLVyUobbc+/UmO7NjLUyrQevv80urDK3GZxqpQ8E=; b=c4+X8gj4RYEx2KngkvDNoMu8B
-        Qjg8qvJqJ3godFzdWeP6qKmKU+4+ZXMinY7nH0VPiUWYYsybJmHa79Yv8qBIA4h0mUODNGCSWskBX
-        D9pHA2GDiVOGL+wQfolwtQX6/P6W3bTxSSiGofTNVMneqBFVInRgAx3OVY5YQ9vS1h7WQ=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iNaHT-0003IF-Ey; Thu, 24 Oct 2019 10:23:47 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id C583027428E5; Thu, 24 Oct 2019 11:23:46 +0100 (BST)
-Date:   Thu, 24 Oct 2019 11:23:46 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     luhua xu <luhua.xu@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH 1/1] spi: mediatek: add power control when set_cs
-Message-ID: <20191024102346.GB5207@sirena.co.uk>
-References: <1571834322-1121-1-git-send-email-luhua.xu@mediatek.com>
- <1571834322-1121-2-git-send-email-luhua.xu@mediatek.com>
- <20191023151121.GC5723@sirena.co.uk>
- <1571898319.4311.3.camel@mbjsdccf07>
+        id S1726120AbfJXLIJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Oct 2019 07:08:09 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:32985 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392305AbfJXLIJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 07:08:09 -0400
+Received: by mail-wr1-f66.google.com with SMTP id s1so16823923wro.0
+        for <linux-spi@vger.kernel.org>; Thu, 24 Oct 2019 04:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hazent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=crqpJF/gwHkmsomaDb8OpyO/FffTCuDAexg/TaLh4BA=;
+        b=fEC4Tv4PTMH7uhAUOrLRmfrjzOIjEAo80TJRvbjAe0+PBa9ZsbWovwYosARMsOsKU0
+         ax3a/Qn8GrdCM1hVoth6F/J9gYdu7oSOFJINMLxSjPMy6znHJ0i4Dk6jXPHcHLNu3Jt2
+         g8ovXhJ/VULZ7Vj7abgJRQaI6Bv0ZEEbg8cLJX7fsUOHzSpoP5LgMk8m4YuGiJ2S2jQL
+         0lVDqFMvKkmzN/yaVNfSnIiBVUe6NTidS6xfQiF50GllIp4OETjlCuOpN4YMERuXsibv
+         GCTH7mOX1NSJbzXt18qgnhep/hA1GFgqpDltF9LrXgp1tQqAb3s6Qw8JJkSQ0zFtvPRg
+         8V+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=crqpJF/gwHkmsomaDb8OpyO/FffTCuDAexg/TaLh4BA=;
+        b=HqX+36NTnc4KpiDV87TFi8wYWyzXXH00WDMGpTqcZzjjOV0VINTA8T3IyfRQGwCJQ6
+         thOEgd6bM4M8RkibQxbF2nmuHUkEHHp44iDOYKndLc6C/RK/WR1Wd2b/A7WCs+XzJY6J
+         81iy9Q6CGLAjNCJouRuFcJDPi59ABkS8eeWMRDeRKG+h7MijXcHOyg4UsD4fusFyR+rz
+         cXjlgoVHbNGy4e0w6Pz66k0KWk5ABF3hFejAzkgJrNN+Sqk5nQVi6r+JR+7X3GBkwr03
+         cQaUVEFnlJr6twYDNF1S/pvkAdxY53bMfGedg7mJqyrhFyStmeqEyFQgfuUQHE/tIdf6
+         X00g==
+X-Gm-Message-State: APjAAAW8RUP/7/HxnruVlvq3EnWAkdG0bkQK4fBDWcEYFDt/9D4bXomb
+        T55SKdhlaSMDV6QDuUR3QVfNXqjUdkA=
+X-Google-Smtp-Source: APXvYqzyzUJN8n1oom1/IBXRdUqoiC3M42qRkqVkBeyNaoa+BBzO4nLXhb9mUSbNw78q4yC5OYQaJg==
+X-Received: by 2002:adf:9044:: with SMTP id h62mr1491565wrh.91.1571915286700;
+        Thu, 24 Oct 2019 04:08:06 -0700 (PDT)
+Received: from salem.gmr.ssr.upm.es (salem.gmr.ssr.upm.es. [138.4.36.7])
+        by smtp.gmail.com with ESMTPSA id 26sm2420473wmi.17.2019.10.24.04.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2019 04:08:05 -0700 (PDT)
+From:   Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+To:     Michal Simek <michal.simek@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+Subject: [PATCH] Allowing Xilinx's AXI Quad widths different than 8 bits on userspace
+Date:   Thu, 24 Oct 2019 13:07:54 +0200
+Message-Id: <20191024110757.25820-1-alvaro.gamez@hazent.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tsOsTdHNUZQcU9Ye"
-Content-Disposition: inline
-In-Reply-To: <1571898319.4311.3.camel@mbjsdccf07>
-X-Cookie: What foods these morsels be!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
---tsOsTdHNUZQcU9Ye
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+We had a couple of days ago a nice discussion [1] about a patch that I sent
+that was in need of clarification. I've taken into consideration all the
+conversation and I believe this small series will manage my ultimate goal
+(being able to use from user space a 32 bits wordwidth SPI slave with
+Xilinx's AXI IP core) while being explained enough and through the proper
+procedure.
 
-On Thu, Oct 24, 2019 at 02:25:19PM +0800, luhua xu wrote:
+I assume there may still need to be some discussion to go on with this, but
+I thought it'd be clearer if we all had the code upfront in its current
+state.
 
-> Spi framework provideds  spi_setup() to modify spi settings for spi
-> device (maybe spi is runtime idle now), and this will call
-> spi_controller->set_cs() accessing registers.
+First patch documents the new device tree property, while the second one
+implements it.
 
-OK, so fix that so it takes the power at the setup() level then.
+The third patch, that could be applied on its own regardless of the first
+two, solves a bug that appears only in combination of spidev usage and a
+master SPI device that does not support 8 bits as datawidth.
 
---tsOsTdHNUZQcU9Ye
-Content-Type: application/pgp-signature; name="signature.asc"
+[1] I have not been able to find a link to the archives of linux-spi, sorry
 
------BEGIN PGP SIGNATURE-----
+Thanks,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2xe7EACgkQJNaLcl1U
-h9BupAf/enXFS1bm5HhfceiQntahs4gT3FPXaEDsQ+rJ2S90V4JwcUbi1oSpDvWj
-w2OeywscDvkZdcEaQtre4ZASwvSefR01VajXmtigEOPry80kECDHAKGiSKVXBSJ/
-9V9Qf/dFBi0ej5+/Nw+3wEGXN75TgQ472XrOoHykyWerqXI4qjnUWyCXTQXO7Asn
-hzr9BF9bL/1BGCUG+eK86VPC7sG9bCaQL8pvn3VFHiTgiSfCdMlIIK24LfAMjS7x
-/NfY0ARLNoF1MvvTbBHHGHbG1d1pp+FeqEo+Yj+5CgIvo390+KgCjSqhzTv+PQ4Z
-RglXSQMhEAM9OExTQLMO86LCuoiC+Q==
-=Qdg5
------END PGP SIGNATURE-----
+Alvaro Gamez Machado (3):
+  spi: xilinx: add description of new property xlnx,num-transfer-bits
+  spi: xilinx: Add DT support for selecting transfer word width
+  spi: set bits_per_word based on controller's bits_per_word_mask
 
---tsOsTdHNUZQcU9Ye--
+ Documentation/devicetree/bindings/spi/spi-xilinx.txt | 4 +++-
+ drivers/spi/spi-xilinx.c                             | 7 ++++++-
+ drivers/spi/spi.c                                    | 2 ++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+-- 
+2.23.0
+
