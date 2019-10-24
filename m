@@ -2,140 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 116DFE3993
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 19:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8686CE3A3C
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 19:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439958AbfJXRNX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Oct 2019 13:13:23 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:9280 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439946AbfJXRNX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 13:13:23 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5db1dbba0002>; Thu, 24 Oct 2019 10:13:30 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 24 Oct 2019 10:13:21 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 24 Oct 2019 10:13:21 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 24 Oct
- 2019 17:13:20 +0000
-Received: from [10.21.133.51] (172.20.13.39) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 24 Oct
- 2019 17:13:18 +0000
-Subject: Re: [PATCH] spi: Fix SPI_CS_HIGH setting when using native and GPIO
- CS
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        <stable@vger.kernel.org>, linux-tegra <linux-tegra@vger.kernel.org>
-References: <20191018152929.3287-1-gregory.clement@bootlin.com>
- <dfabf9eb-4f81-91e5-55dc-caea0cdabd2d@nvidia.com> <87zhhqp4wf.fsf@FE-laptop>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <4be58f82-eeb1-83a5-4c83-1e86f3b82769@nvidia.com>
-Date:   Thu, 24 Oct 2019 18:13:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2503899AbfJXRkh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Oct 2019 13:40:37 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:36548 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729458AbfJXRkh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 13:40:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=38D6aIWXdpZobEE28Qe0pvULa8PgIjrmUVlYVr/Dtzo=; b=UrwC+/oXjoR9QUbfvRsF7a4pX
+        LfjSZFwkmu2MObkuAZHsxv8PkjFtmBacGXrvSyCqaTZ70Qhj27VgQacMQg2u9RtmsVAPCx4L5wDoB
+        dK+rNLl2zl0v1qrq3r2xL0r1Eig61JeWco/XrWDcIk4mAYpf0t8WlVJS+aMoBg+d22UeE=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iNh6A-0003qE-EO; Thu, 24 Oct 2019 17:40:34 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 6BD46274293C; Thu, 24 Oct 2019 18:40:33 +0100 (BST)
+Date:   Thu, 24 Oct 2019 18:40:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] spi: set bits_per_word based on controller's
+ bits_per_word_mask
+Message-ID: <20191024174033.GG46373@sirena.co.uk>
+References: <20191024110757.25820-1-alvaro.gamez@hazent.com>
+ <20191024110757.25820-4-alvaro.gamez@hazent.com>
+ <20191024111300.GD5207@sirena.co.uk>
+ <20191024125436.GA8878@salem.gmr.ssr.upm.es>
+ <20191024131129.GE46373@sirena.co.uk>
+ <20191024131856.GA32609@salem.gmr.ssr.upm.es>
+ <20191024134116.GF46373@sirena.co.uk>
+ <20191024140731.GA2950@salem.gmr.ssr.upm.es>
 MIME-Version: 1.0
-In-Reply-To: <87zhhqp4wf.fsf@FE-laptop>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1571937210; bh=IGHxywHeWHbvWN/dGZiODRU1Pgz0qNdz6PS2iL/zybc=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=MM/18hyCWxGXMxY6YT9ReV/7/ZgXYKVgBZMHvbH4pc2hpiV43cLaFtS00fWFPWRDL
-         erOSBvWRwITrxAmnu2xrjxMScAx1CyoARtjFmjxmuecIcturc7XchVXhRhRHkK1EhZ
-         RUa/+fsDshDTE0sfaPU98V/ztsOr5bWkKCNLPzlDx2xEQGuwFGCB4vYCaWyOgFVAze
-         b2qg3RWIFVcZwaqmRVm02T8T6xHLsg6CP2Bvz7tZfhgr3LQRfn9Mq1vr652b1mczLM
-         t3YFFCZdh8Yaz054QJzum2+fA47872r3mtNIn1caKFtR/05p0aoV4hRfHuuav11qYR
-         4tTyid1yiKBpQ==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iJXiJc/TAIT2rh2r"
+Content-Disposition: inline
+In-Reply-To: <20191024140731.GA2950@salem.gmr.ssr.upm.es>
+X-Cookie: Filmed before a live audience.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On 24/10/2019 15:57, Gregory CLEMENT wrote:
-> Hello Jon,
-> 
->> On 18/10/2019 16:29, Gregory CLEMENT wrote:
->>> When improving the CS GPIO support at core level, the SPI_CS_HIGH
->>> has been enabled for all the CS lines used for a given SPI controller.
->>>
->>> However, the SPI framework allows to have on the same controller native
->>> CS and GPIO CS. The native CS may not support the SPI_CS_HIGH, so they
->>> should not be setup automatically.
->>>
->>> With this patch the setting is done only for the CS that will use a
->>> GPIO as CS
->>>
->>> Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
->>> Cc: <stable@vger.kernel.org>
->>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->>> ---
->>>  drivers/spi/spi.c | 18 +++++++++---------
->>>  1 file changed, 9 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
->>> index 5414a10afd65..1b68acc28c8f 100644
->>> --- a/drivers/spi/spi.c
->>> +++ b/drivers/spi/spi.c
->>> @@ -1880,15 +1880,7 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
->>>  		spi->mode |= SPI_3WIRE;
->>>  	if (of_property_read_bool(nc, "spi-lsb-first"))
->>>  		spi->mode |= SPI_LSB_FIRST;
->>> -
->>> -	/*
->>> -	 * For descriptors associated with the device, polarity inversion is
->>> -	 * handled in the gpiolib, so all chip selects are "active high" in
->>> -	 * the logical sense, the gpiolib will invert the line if need be.
->>> -	 */
->>> -	if (ctlr->use_gpio_descriptors)
->>> -		spi->mode |= SPI_CS_HIGH;
->>> -	else if (of_property_read_bool(nc, "spi-cs-high"))
->>> +	if (of_property_read_bool(nc, "spi-cs-high"))
->>>  		spi->mode |= SPI_CS_HIGH;
->>>  
->>>  	/* Device DUAL/QUAD mode */
->>> @@ -1952,6 +1944,14 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
->>>  	}
->>>  	spi->chip_select = value;
->>>  
->>> +	/*
->>> +	 * For descriptors associated with the device, polarity inversion is
->>> +	 * handled in the gpiolib, so all gpio chip selects are "active high"
->>> +	 * in the logical sense, the gpiolib will invert the line if need be.
->>> +	 */
->>> +	if ((ctlr->use_gpio_descriptors) && ctlr->cs_gpiods[spi->chip_select])
->>> +		spi->mode |= SPI_CS_HIGH;
->>> +
->>
->> This patch is causing a boot regression on one of our Tegra boards. 
->> Bisect is pointing to this commit and reverting on top of today's -next
->> fixes the problem. 
->>
->> This patch is causing the following NULL pointer crash which I assume is
->> because we have not checked if 'ctlr->cs_gpiods' is valid before
->> dereferencing ...
-> 
-> I've just submitted a fixe for it
-> 
-> https://patchwork.kernel.org/patch/11209839/
+--iJXiJc/TAIT2rh2r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Great! Thanks, Jon
+On Thu, Oct 24, 2019 at 04:07:32PM +0200, Alvaro Gamez Machado wrote:
 
--- 
-nvpublic
+> I guess there could be some workarounds to help in that situation. But I see
+> that as an hypothetical occurrence whereas I have with me a physical board
+> that needs 32 bits in both master and slave that I want to access using
+> spidev and cannot. Lots of I's in that sentence, I know :)
+
+If you want to access this using spidev then add support for changing
+the word size to spidev and use that as I think Geert already suggested.
+
+--iJXiJc/TAIT2rh2r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2x4hAACgkQJNaLcl1U
+h9BOTQf/Y7I13e4P1YBoPchD6sUtdfHEdI1LvdVkRsWIXam2Vock1GHBwIl8bF4F
+ydXeyJLBc40t4HvXLhFKIGG/09jwhtmlQhRaHJVAHlms6XjOFB1gNAXcA2m6HKxJ
+5nxRGXhtoNIjDIIkSVCzmamNTQhG4qXreZU174YAsdLFKAvJji+izwZpXd3GLBs9
+1lJy/3fjaAsHOwWVNrHwO2s4VmzA1pjzMq6CpbU0swPiud3/w7QdoCvNFnBglPMN
+e7Rd3B4FBRYkky8v/4W6OtnfOrtJu4mOeh6qprLVUYZ6wv97fzb6w3M7RKVQ5IJU
+6g03ZyB6h65BMkOgSJYoA22h3Iwi8A==
+=RPG/
+-----END PGP SIGNATURE-----
+
+--iJXiJc/TAIT2rh2r--
