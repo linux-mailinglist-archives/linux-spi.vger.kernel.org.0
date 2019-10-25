@@ -2,126 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68173E4840
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2019 12:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BABDE4A93
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2019 13:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409013AbfJYKMY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Oct 2019 06:12:24 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37734 "EHLO
+        id S2393573AbfJYL47 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Oct 2019 07:56:59 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:44184 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2409087AbfJYKMX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Oct 2019 06:12:23 -0400
+        with ESMTP id S1726484AbfJYL47 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Oct 2019 07:56:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=FCyaW1h6YmYfLVUrS2i2UstE8axQ1ggqDbIlUuO3a8w=; b=UDCFhcfEyPZw
-        AnRsfjDN2F0VIkH41SmS/d2YpiXasbdDvygscSgjHvB6uJeKtUZWnOLDj0vEnEPdJzSwocZgAMwMo
-        VWcX8xsmmjwUvkEmPd+Wwob8EpWgF7oJtEWTh1hPn942TO+D6pufilT04iDrYHLxK3zJocu8E35Yr
-        Hlve0=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=x/6eiM9BhqvxQhK00NRhiUmYBu8gULRPzd+UFzEpnsc=; b=lySZxGyzza2R5r11U7yL7TzQy
+        mTnQyAl06jrTNSOWQlx5iXyKBFJGrEo/FAz9vlEZXbECYwIjhsbFA/kWXbS5EWYHaXBJs4g5LC7xj
+        2eCgWHrPMzdm/AQ3Zj/oSZzQG9HP5h54YcRzpw4bU61tHwGDVGDWT5BwcTulr11MOEHVc=;
+Received: from 188.30.141.58.threembb.co.uk ([188.30.141.58] helo=fitzroy.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iNwZv-0006fG-CT; Fri, 25 Oct 2019 10:12:19 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id D8076274326E; Fri, 25 Oct 2019 11:12:18 +0100 (BST)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1iNyDA-0006qe-No; Fri, 25 Oct 2019 11:56:56 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id AF78ED020A1; Fri, 25 Oct 2019 12:56:55 +0100 (BST)
+Date:   Fri, 25 Oct 2019 12:56:55 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Applied "spi: pxa2xx: Introduce temporary variables to increase readability" to the spi tree
-In-Reply-To: <20191021103625.4250-1-andriy.shevchenko@linux.intel.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191025101218.D8076274326E@ypsilon.sirena.org.uk>
-Date:   Fri, 25 Oct 2019 11:12:18 +0100 (BST)
+To:     Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] spi: set bits_per_word based on controller's
+ bits_per_word_mask
+Message-ID: <20191025115655.GA4568@sirena.org.uk>
+References: <20191024110757.25820-1-alvaro.gamez@hazent.com>
+ <20191024110757.25820-4-alvaro.gamez@hazent.com>
+ <20191024111300.GD5207@sirena.co.uk>
+ <20191024125436.GA8878@salem.gmr.ssr.upm.es>
+ <20191024131129.GE46373@sirena.co.uk>
+ <20191024131856.GA32609@salem.gmr.ssr.upm.es>
+ <20191024134116.GF46373@sirena.co.uk>
+ <20191024140731.GA2950@salem.gmr.ssr.upm.es>
+ <20191024174033.GG46373@sirena.co.uk>
+ <20191025063947.GA19665@salem.gmr.ssr.upm.es>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sm4nu43k4a2Rpi4c"
+Content-Disposition: inline
+In-Reply-To: <20191025063947.GA19665@salem.gmr.ssr.upm.es>
+X-Cookie: Keep out of the sunlight.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
 
-   spi: pxa2xx: Introduce temporary variables to increase readability
+--sm4nu43k4a2Rpi4c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been applied to the spi tree at
+On Fri, Oct 25, 2019 at 08:39:48AM +0200, Alvaro Gamez Machado wrote:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+> to claim the specific SPI slave. It may be spidev as in my use case, or it
+> may really be any other driver. But its probe() function is never going to
+> be called because the error is not raised inside the driver, but immediately
+> after forcibly setting the default value to 8 in spi.c
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+Then you need to extend the validation the core is doing here to
+skip this parameter when registering the device and only enforce
+it after a driver is bound, we don't have a driver at the time we
+initially register the device so we can't enforce this.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> I can't modify spidev because spidev doesn't even know this is happening.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+You are, at some point, going to need to set your spidev to 32
+bits per word (spidev does already support this).
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+--sm4nu43k4a2Rpi4c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Mark
+-----BEGIN PGP SIGNATURE-----
 
-From 6fb7427d84f6ed064776434436485cfb0f6711e9 Mon Sep 17 00:00:00 2001
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 21 Oct 2019 13:36:24 +0300
-Subject: [PATCH] spi: pxa2xx: Introduce temporary variables to increase
- readability
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2y4wUACgkQJNaLcl1U
+h9BpgQf/XNJ5nBjhjdIb2Tnl7FFtf6n6D1axZ7AGYAlnL5KAiV+sXtRT4oWE4DGr
++FxtPUOTroHbqtBB7BBqexVPNw1xQYsGFxYbD3gz2Il7USTBzMMDJ/8YVCRtSXzr
+pFZrd7uFHokcKl9r2ca/dPuNWnO5z/7jqnpq4syJ0A+bGJE/DgUmmzdpeBRY42eh
+dAbnJrNF7DWZRcFzXXr6nwYNjFQBWiTwPXAEdCuQp+5G4FrEQMWoAbm4/7xg9IdY
+Cb46HR8VkmtyUCafWgQBeUjVGrMPgsewcFMevjO3WDshe9HOLjFRcgymTgaE0Ds/
+5uFapLE00/Cu2/K8NPYDgmOCaSH6ZQ==
+=9y3V
+-----END PGP SIGNATURE-----
 
-The current conditional for PCI ID matching is hard to read.
-Introduce couple of temporary variables to increase readability
-of the code.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20191021103625.4250-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-pxa2xx.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 443c1f4d2a9a..6eb6805ee51d 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1516,13 +1516,14 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 	struct pxa2xx_spi_controller *pdata;
- 	struct ssp_device *ssp;
- 	struct resource *res;
-+	struct device *parent = pdev->dev.parent;
-+	struct pci_dev *pcidev = dev_is_pci(parent) ? to_pci_dev(parent) : NULL;
- 	const struct pci_device_id *pcidev_id = NULL;
- 	enum pxa_ssp_type type;
- 	const void *match;
- 
--	if (dev_is_pci(pdev->dev.parent))
--		pcidev_id = pci_match_id(pxa2xx_spi_pci_compound_match,
--					 to_pci_dev(pdev->dev.parent));
-+	if (pcidev)
-+		pcidev_id = pci_match_id(pxa2xx_spi_pci_compound_match, pcidev);
- 
- 	match = device_get_match_data(&pdev->dev);
- 	if (match)
-@@ -1549,8 +1550,8 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 
- #ifdef CONFIG_PCI
- 	if (pcidev_id) {
--		pdata->tx_param = pdev->dev.parent;
--		pdata->rx_param = pdev->dev.parent;
-+		pdata->tx_param = parent;
-+		pdata->rx_param = parent;
- 		pdata->dma_filter = pxa2xx_spi_idma_filter;
- 	}
- #endif
--- 
-2.20.1
-
+--sm4nu43k4a2Rpi4c--
