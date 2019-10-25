@@ -2,98 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 612EDE3C07
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2019 21:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4659E43A7
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2019 08:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732494AbfJXTcc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Oct 2019 15:32:32 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:55344 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405801AbfJXTcc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Oct 2019 15:32:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=vttDbr1v3prfmmWDLzJK+9NKCnOd94v+/MHN5g7eafo=; b=CbE96/yh2YdFVA3lDo3rtgUW1
-        1nKGHL5oUytt+gNKSOzQltYdAVrbAYGCVdJRDWR5ElYjyGcNuSfoi39rOSctuCSd82zqjizgevvl/
-        RItWIKeeCoaAlflHirdSRmTem7K9x/GW5JqAO0MdF/ne4ysAJoQm40sjHSG8N3Yunv5xU=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iNiqP-0003zz-Rk; Thu, 24 Oct 2019 19:32:25 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 55273274293C; Thu, 24 Oct 2019 20:32:25 +0100 (BST)
-Date:   Thu, 24 Oct 2019 20:32:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        "kernelci.org bot" <bot@kernelci.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] spi: Fix NULL pointer when setting SPI_CS_HIGH for GPIO
- CS
-Message-ID: <20191024193225.GM46373@sirena.co.uk>
-References: <20191024141309.22434-1-gregory.clement@bootlin.com>
+        id S2393165AbfJYGjv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Oct 2019 02:39:51 -0400
+Received: from salem.gmr.ssr.upm.es ([138.4.36.7]:42704 "EHLO
+        salem.gmr.ssr.upm.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388287AbfJYGjv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Oct 2019 02:39:51 -0400
+Received: by salem.gmr.ssr.upm.es (Postfix, from userid 1000)
+        id CE7B6AC007D; Fri, 25 Oct 2019 08:39:48 +0200 (CEST)
+Date:   Fri, 25 Oct 2019 08:39:48 +0200
+From:   Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] spi: set bits_per_word based on controller's
+ bits_per_word_mask
+Message-ID: <20191025063947.GA19665@salem.gmr.ssr.upm.es>
+References: <20191024110757.25820-1-alvaro.gamez@hazent.com>
+ <20191024110757.25820-4-alvaro.gamez@hazent.com>
+ <20191024111300.GD5207@sirena.co.uk>
+ <20191024125436.GA8878@salem.gmr.ssr.upm.es>
+ <20191024131129.GE46373@sirena.co.uk>
+ <20191024131856.GA32609@salem.gmr.ssr.upm.es>
+ <20191024134116.GF46373@sirena.co.uk>
+ <20191024140731.GA2950@salem.gmr.ssr.upm.es>
+ <20191024174033.GG46373@sirena.co.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0+35XlDF45POFHfm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191024141309.22434-1-gregory.clement@bootlin.com>
-X-Cookie: Filmed before a live audience.
+In-Reply-To: <20191024174033.GG46373@sirena.co.uk>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, Oct 24, 2019 at 06:40:33PM +0100, Mark Brown wrote:
+> On Thu, Oct 24, 2019 at 04:07:32PM +0200, Alvaro Gamez Machado wrote:
+> 
+> > I guess there could be some workarounds to help in that situation. But I see
+> > that as an hypothetical occurrence whereas I have with me a physical board
+> > that needs 32 bits in both master and slave that I want to access using
+> > spidev and cannot. Lots of I's in that sentence, I know :)
+> 
+> If you want to access this using spidev then add support for changing
+> the word size to spidev and use that as I think Geert already suggested.
 
---0+35XlDF45POFHfm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've been trying to do so for a couple hours and I've reached a conclusion.
 
-On Thu, Oct 24, 2019 at 04:13:09PM +0200, Gregory CLEMENT wrote:
-> Even if the flag use_gpio_descriptors is set, it is possible that
-> cs_gpiods was not allocated, which leads to a kernel crash:
->=20
-> Unable to handle kernel NULL pointer dereference at virtual address 00000=
-000
-> pgd =3D (ptrval)
-> [00000000] *pgd=3D00000000
-> Internal error: Oops: 5 [#1] ARM
-> Modules linked in:
-> CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.4.0-rc3 #1
-> Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
-> PC is at of_register_spi_device+0x20c/0x38c
-> LR is at __of_find_property+0x3c/0x60
-> pc : [<c09b45dc>]    lr : [<c0c47a98>]    psr: 20000013
+I've been too focused on my personal use case (too many I's indeed) and
+thought that the problem was in fact in spidev as Geert indicated, but now
+I think it isn't, so I must present my excuses for mistakenly drive the
+conversation in that direction. Geert also thought this could be an SPI core
+bug, and he was right on that, I think.
 
-Please think hard before including complete backtraces in upstream
-reports, they are very large and contain almost no useful information
-relative to their size so often obscure the relevant content in your
-message. If part of the backtrace is usefully illustrative then it's
-usually better to pull out the relevant sections.
+In fact, not a single line of spidev is being executed when the error
+message is printed:
 
---0+35XlDF45POFHfm
-Content-Type: application/pgp-signature; name="signature.asc"
+xilinx_spi 44a00000.spi: at 0x44A00000 mapped to 0x(ptrval), irq=3
+xilinx_spi 44a10000.spi: can't setup spi1.0, status -22
+spi_master spi1: spi_device register error /amba_pl/spi@44a10000/spidev@0
+spi_master spi1: Failed to create SPI device for /amba_pl/spi@44a10000/spidev@0
 
------BEGIN PGP SIGNATURE-----
+This does not come from spidev but directly from spi. What is happening is
+that when SPI slaves are defined via DT, their bits_per_word value is always
+unset (as 0), which turns later on in a default value of 8.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2x/EgACgkQJNaLcl1U
-h9Dc+Qf7BOBELW73o6MOZxD5Uq2/Eahp26z5rN7PMc+EvRwda/BzHGhUTsTrotmX
-ppdm6tsBosW3dH8P6tbwXIIJHO11BO4ma/pbO5ZZloEqeo3Zvxt89+AxZD4roa26
-GEnDMWLNn2Y3L0YENJzNelC3RMBY7sIv7wMgiGZR7qadTFrx6Y3v+VLAEEEsSnA6
-f3AmuiyCWtiNyuhi1gIst/hGeDzLyNOGVJuNfH7SV4RbQVN51k9Cam5JEaBB6NjK
-PTKDGt0u2CGaKQxTZRHb8al+SznFqEk0eKU06KEWpdcPJAOPW24cLVXl2YAb6b2l
-yg1Wz4gE+9D908qKFUl3e+fimC6N+A==
-=pES0
------END PGP SIGNATURE-----
+Inside spi_setup function immediately after setting this default value to 8,
+__spi_validate_bits_per_word is called, that checks whether bits_per_word for
+the slave matches the controller available bitwidths:
 
---0+35XlDF45POFHfm--
+	if (!spi->bits_per_word)
+		spi->bits_per_word = 8;
+
+	status = __spi_validate_bits_per_word(spi->controller,
+					      spi->bits_per_word);
+
+	if (status)
+		return status;
+
+
+This means that it doesn't really matter which is the driver that is going
+to claim the specific SPI slave. It may be spidev as in my use case, or it
+may really be any other driver. But its probe() function is never going to
+be called because the error is not raised inside the driver, but immediately
+after forcibly setting the default value to 8 in spi.c
+
+I can't modify spidev because spidev doesn't even know this is happening.
+
+I was completely wrong in my blaming of spidev, but now I'm reassured that
+my previous patches were going to core of the issue, regardless of my
+mistaken initial diagnostic.
+
+Thanks,
+
+-- 
+Alvaro G. M.
