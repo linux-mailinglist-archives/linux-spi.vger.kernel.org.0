@@ -2,14 +2,14 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DF4E742E
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Oct 2019 15:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5D9E742D
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Oct 2019 15:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390428AbfJ1O45 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S2390482AbfJ1O45 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Mon, 28 Oct 2019 10:56:57 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40088 "EHLO
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40120 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390461AbfJ1O44 (ORCPT
+        with ESMTP id S2390462AbfJ1O44 (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Oct 2019 10:56:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
@@ -17,17 +17,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=le0uDCgGujH8CUVq/g9+3lWEiEFwcja0kTihGY6f+ic=; b=qqJ1uci6dSdK
-        xT4wb+ckK/TxS2XswsvYaKZ0cQFhSbNytK+Dgbs8yg3AyCdAT8W87Dtk9W9u3rheKL1ETKcxQd0ku
-        3Ujgleaq2Tw8PB3vVMu9H9jgbfWhvU2WVXP9gBruNVxQAMQTPQnrh2LqX+bv+WzpDQ5o4dU0TFlhv
-        6UUmQ=;
+        List-Archive; bh=fhBvWtiG5AkvXJoQu4Sk0v43zUYuwbBg8njCoI45aaQ=; b=ERor1d7EYaK6
+        1hX4DbuhxvUkGSGkFx92Dp9uPkE32lk8e9RS4RwYaX5sZNF9rU9jntFeukqVwhXKP5WxI8N7EOK1e
+        htysfS7faUjn01WvhLt6LYk/I5XwiYaQVphwxQ0OezZh4eRNQmWw/Fd3x5LTl6/EW8t36ankVi8fN
+        4QNzc=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iP6Ru-0008Tn-QH; Mon, 28 Oct 2019 14:56:50 +0000
+        id 1iP6Rv-0008Tp-1K; Mon, 28 Oct 2019 14:56:51 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 137E127403E4; Mon, 28 Oct 2019 14:56:49 +0000 (GMT)
+        id 4A9B627403EE; Mon, 28 Oct 2019 14:56:50 +0000 (GMT)
 From:   Mark Brown <broonie@kernel.org>
 To:     Lingling Xu <ling_ling.xu@unisoc.com>
 Cc:     baolin.wang7@gmail.com, Baolin Wang <baolin.wang@linaro.org>,
@@ -35,11 +35,11 @@ Cc:     baolin.wang7@gmail.com, Baolin Wang <baolin.wang@linaro.org>,
         ling_ling.xu@unisoc.com, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         orsonzhai@gmail.com, zhang.lyra@gmail.com
-Subject: Applied "spi: sprd: adi: Set BIT_WDG_NEW bit when rebooting" to the spi tree
-In-Reply-To: <5655318a7252c9ea518c2f7950a61228ab8f42bf.1572257085.git.baolin.wang@linaro.org>
+Subject: Applied "spi: sprd: adi: Add missing lock protection when rebooting" to the spi tree
+In-Reply-To: <7b04711127434555e3a1a86bc6be99860cd86668.1572257085.git.baolin.wang@linaro.org>
 X-Patchwork-Hint: ignore
-Message-Id: <20191028145650.137E127403E4@ypsilon.sirena.org.uk>
-Date:   Mon, 28 Oct 2019 14:56:49 +0000 (GMT)
+Message-Id: <20191028145650.4A9B627403EE@ypsilon.sirena.org.uk>
+Date:   Mon, 28 Oct 2019 14:56:50 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -47,7 +47,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: sprd: adi: Set BIT_WDG_NEW bit when rebooting
+   spi: sprd: adi: Add missing lock protection when rebooting
 
 has been applied to the spi tree at
 
@@ -72,50 +72,37 @@ to this mail.
 Thanks,
 Mark
 
-From 1d00a67c2da2d8d82e6dcc5b398d9f6db656d9be Mon Sep 17 00:00:00 2001
+From 91ea1d70607e374b014b4b9bea771ce661f9f64b Mon Sep 17 00:00:00 2001
 From: Lingling Xu <ling_ling.xu@unisoc.com>
-Date: Mon, 28 Oct 2019 18:10:31 +0800
-Subject: [PATCH] spi: sprd: adi: Set BIT_WDG_NEW bit when rebooting
+Date: Mon, 28 Oct 2019 18:10:30 +0800
+Subject: [PATCH] spi: sprd: adi: Add missing lock protection when rebooting
 
-When rebooting system, the PMIC watchdog time loading may not be loaded
-correctly when another system is feeding the PMIC watchdog, since we did
-not check the watchdog busy status before loading time values.
-
-Thus we should set the BIT_WDG_NEW bit before loading time values, that
-can support multiple loads without checking busy status to make sure the
-time values can be loaded successfully to avoid this potential issue.
+When rebooting the system, we should lock the watchdog after
+configuration to make sure the watchdog can reboot the system
+successfully.
 
 Signed-off-by: Lingling Xu <ling_ling.xu@unisoc.com>
 Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
-Link: https://lore.kernel.org/r/5655318a7252c9ea518c2f7950a61228ab8f42bf.1572257085.git.baolin.wang@linaro.org
+Link: https://lore.kernel.org/r/7b04711127434555e3a1a86bc6be99860cd86668.1572257085.git.baolin.wang@linaro.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-sprd-adi.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/spi/spi-sprd-adi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index 9613cfe3c0a2..87dadb6b8ebf 100644
+index 9a051286f120..9613cfe3c0a2 100644
 --- a/drivers/spi/spi-sprd-adi.c
 +++ b/drivers/spi/spi-sprd-adi.c
-@@ -77,6 +77,7 @@
+@@ -393,6 +393,9 @@ static int sprd_adi_restart_handler(struct notifier_block *this,
+ 	val |= BIT_WDG_RUN | BIT_WDG_RST;
+ 	sprd_adi_write(sadi, sadi->slave_pbase + REG_WDG_CTRL, val);
  
- /* Bits definitions for register REG_WDG_CTRL */
- #define BIT_WDG_RUN			BIT(1)
-+#define BIT_WDG_NEW			BIT(2)
- #define BIT_WDG_RST			BIT(3)
- 
- /* Registers definitions for PMIC */
-@@ -383,6 +384,10 @@ static int sprd_adi_restart_handler(struct notifier_block *this,
- 	/* Unlock the watchdog */
- 	sprd_adi_write(sadi, sadi->slave_pbase + REG_WDG_LOCK, WDG_UNLOCK_KEY);
- 
-+	sprd_adi_read(sadi, sadi->slave_pbase + REG_WDG_CTRL, &val);
-+	val |= BIT_WDG_NEW;
-+	sprd_adi_write(sadi, sadi->slave_pbase + REG_WDG_CTRL, val);
++	/* Lock the watchdog */
++	sprd_adi_write(sadi, sadi->slave_pbase + REG_WDG_LOCK, ~WDG_UNLOCK_KEY);
 +
- 	/* Load the watchdog timeout value, 50ms is always enough. */
- 	sprd_adi_write(sadi, sadi->slave_pbase + REG_WDG_LOAD_LOW,
- 		       WDG_LOAD_VAL & WDG_LOAD_MASK);
+ 	mdelay(1000);
+ 
+ 	dev_emerg(sadi->dev, "Unable to restart system\n");
 -- 
 2.20.1
 
