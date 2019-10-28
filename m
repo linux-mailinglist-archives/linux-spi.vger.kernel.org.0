@@ -2,98 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BABDE4A93
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2019 13:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044B3E6A88
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Oct 2019 02:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393573AbfJYL47 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Oct 2019 07:56:59 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:44184 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726484AbfJYL47 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Oct 2019 07:56:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=x/6eiM9BhqvxQhK00NRhiUmYBu8gULRPzd+UFzEpnsc=; b=lySZxGyzza2R5r11U7yL7TzQy
-        mTnQyAl06jrTNSOWQlx5iXyKBFJGrEo/FAz9vlEZXbECYwIjhsbFA/kWXbS5EWYHaXBJs4g5LC7xj
-        2eCgWHrPMzdm/AQ3Zj/oSZzQG9HP5h54YcRzpw4bU61tHwGDVGDWT5BwcTulr11MOEHVc=;
-Received: from 188.30.141.58.threembb.co.uk ([188.30.141.58] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1iNyDA-0006qe-No; Fri, 25 Oct 2019 11:56:56 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id AF78ED020A1; Fri, 25 Oct 2019 12:56:55 +0100 (BST)
-Date:   Fri, 25 Oct 2019 12:56:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>,
-        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] spi: set bits_per_word based on controller's
- bits_per_word_mask
-Message-ID: <20191025115655.GA4568@sirena.org.uk>
-References: <20191024110757.25820-1-alvaro.gamez@hazent.com>
- <20191024110757.25820-4-alvaro.gamez@hazent.com>
- <20191024111300.GD5207@sirena.co.uk>
- <20191024125436.GA8878@salem.gmr.ssr.upm.es>
- <20191024131129.GE46373@sirena.co.uk>
- <20191024131856.GA32609@salem.gmr.ssr.upm.es>
- <20191024134116.GF46373@sirena.co.uk>
- <20191024140731.GA2950@salem.gmr.ssr.upm.es>
- <20191024174033.GG46373@sirena.co.uk>
- <20191025063947.GA19665@salem.gmr.ssr.upm.es>
+        id S1727419AbfJ1BiN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 27 Oct 2019 21:38:13 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:36802 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727028AbfJ1BiN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Oct 2019 21:38:13 -0400
+Received: by mail-ed1-f68.google.com with SMTP id bm15so6625842edb.3;
+        Sun, 27 Oct 2019 18:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zncCQd975Gz2HvK2SjXCCS9OAbsNjkyZCeZT6yaW7zQ=;
+        b=MJFVIuDrAyz9pDLgpUUl9PU1eZbzKuPQNiEAzcQW1qYjBZjuoWDjrqGy9uWwBC66Cd
+         dI3yEdlYrJi9nlHlHzafl7i8WvKj/XLHxPbDWEtsBpUBMumEUFvInIYQnVTLK+ti+7tO
+         BA7mgqjIeTWS1O1WIN27xKabnFwlPMrDCiIPvQUPLPAq7HMw8gsza012bODYpDuy2/vD
+         taxlG8IqDmUdHTSnMyFv5PMGM92EtSdVF5rDTJo3CJh1YqlOtU4Zj+9HaR42o5jK8e3s
+         jenl27VKb6t9BWfqRxFCO0FEO8G9hJFf5yNF0aRrMh28ErjfYLPp42bc4NbualuBRcp/
+         eA5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zncCQd975Gz2HvK2SjXCCS9OAbsNjkyZCeZT6yaW7zQ=;
+        b=DFGzwfx7yteJn42AglkjGVDhQhojYv2DjzleECKTqc+pztvOGPfEXA2d/5tk0/DXf3
+         HefSkC8lA/107Ewu5E22Y0uIfSTrESpKRjVSwlgoXCvMW+cgMZ0qdSLfOE+5kLm9Alhm
+         /4MM0aSIw9E3u2qXLBQQoKrrOPbeA3HNcsW5+atPv1nzMQ2/8pZgebnfjEnKzOY5fjOX
+         9UINNcm0IVC647VWr5Vzm+iavjy+EBhq7MsYZS6DS975daPXxiM+C4Fd/LkwpuosR5eR
+         UA9zAcynxlZDh1L75MPCDbVhvCXK7W7pKxHG4x74cC+PXN++eZDivoxyPJlbCIYylIto
+         fSIQ==
+X-Gm-Message-State: APjAAAW29Is33njqt1Ai7j8xIc+++cMRXFCaEr5PkdeZyamW+iAz96H+
+        op0WMfVM4sbGdlkNso32CAYkfylr1hBmYe8yGmaskbsfjpE=
+X-Google-Smtp-Source: APXvYqzgnaDiUcH3IYDfQVBOpeExgcPu32wDgAZkOKAPutypEopBXKs6avGlVlBxf+yhnsEi3FfGHSOF7QMkbQk2/Ug=
+X-Received: by 2002:a17:906:1d4d:: with SMTP id o13mr10006173ejh.196.1572226690648;
+ Sun, 27 Oct 2019 18:38:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sm4nu43k4a2Rpi4c"
-Content-Disposition: inline
-In-Reply-To: <20191025063947.GA19665@salem.gmr.ssr.upm.es>
-X-Cookie: Keep out of the sunlight.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191017025058.31528-1-hslester96@gmail.com> <CAHp75Vd2SMERjtvNumxAF1HSp8GSThmcyx96zkFzUXKwnD5d2Q@mail.gmail.com>
+ <CANhBUQ2yxGbjk_DgXbip=TPT=evzA5naoJSY9t1_Ep47e9oupw@mail.gmail.com>
+ <CAHp75VeLyTi=gqfNr-=Tg36yQs_fYG__iQAxAEKdks0mqsTbug@mail.gmail.com>
+ <CANhBUQ1CnCHiY8tkCMcXZ3DAPcfnQZgfA_Fj4qf3yYBKGg10Wg@mail.gmail.com> <CAHp75Vdb19w02zKHo1tqAtF8TmT=z6Ye2YFfxVw_TGtO3VxfLA@mail.gmail.com>
+In-Reply-To: <CAHp75Vdb19w02zKHo1tqAtF8TmT=z6Ye2YFfxVw_TGtO3VxfLA@mail.gmail.com>
+From:   Chuhong Yuan <hslester96@gmail.com>
+Date:   Mon, 28 Oct 2019 09:38:00 +0800
+Message-ID: <CANhBUQ2WJaFrk5JBDbTjaTM5mv0ebwdcHBoR8ODm28X_mOukLA@mail.gmail.com>
+Subject: Re: [PATCH] spi: pxa2xx: Add missed security checks
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Oct 18, 2019 at 10:04 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Fri, Oct 18, 2019 at 2:37 PM Chuhong Yuan <hslester96@gmail.com> wrote:
+> > On Fri, Oct 18, 2019 at 7:14 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Fri, Oct 18, 2019 at 1:39 PM Chuhong Yuan <hslester96@gmail.com> wrote:
+> > > > On Fri, Oct 18, 2019 at 5:35 PM Andy Shevchenko
+> > > > <andy.shevchenko@gmail.com> wrote:
+> > > > > On Fri, Oct 18, 2019 at 8:59 AM Chuhong Yuan <hslester96@gmail.com> wrote:
+>
+> > > > > I'm not sure they are mandatory for all platforms.
+> > > > > To be on the safe side, you simple need to add _optional() to the both
+> > > > > call along with above change.
+> > > > >
+> > > >
+> > > > As I know, this is the only one in spi which does not have a check for
+> > > > devm_clk_get.
+> > >
+> > > For some it still may be optional. That's why better to check it and
+> > > mention in the commit message.
+> > >
+> > > > Even if add _optional(), they still may return errors and need security checks.
+> > >
+> > > Of course, see "along with" in my previous comment.
+> > >
+> >
+> > Got it. I will send version 2 in which both _optional() and security
+> > checks will be added.
+>
+> Let me be clear. I didn't check if _optional() needed or not. You need
+> to investigate this before sending new verison.
+> And in either case this should be explained in commit message.
+>
 
---sm4nu43k4a2Rpi4c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I have checked this file again and found ssp->clk is used by clk_get_rate in
+pxa2xx_spi_probe.
+Therefore, it should not be NULL and _optional cannot be used here.
+Besides, ssp->irq is also used in pxa2xx_spi_probe.
+Hence, I think this patch is fine.
 
-On Fri, Oct 25, 2019 at 08:39:48AM +0200, Alvaro Gamez Machado wrote:
+Regards,
+Chuhong
 
-> to claim the specific SPI slave. It may be spidev as in my use case, or it
-> may really be any other driver. But its probe() function is never going to
-> be called because the error is not raised inside the driver, but immediately
-> after forcibly setting the default value to 8 in spi.c
-
-Then you need to extend the validation the core is doing here to
-skip this parameter when registering the device and only enforce
-it after a driver is bound, we don't have a driver at the time we
-initially register the device so we can't enforce this.
-
-> I can't modify spidev because spidev doesn't even know this is happening.
-
-You are, at some point, going to need to set your spidev to 32
-bits per word (spidev does already support this).
-
---sm4nu43k4a2Rpi4c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2y4wUACgkQJNaLcl1U
-h9BpgQf/XNJ5nBjhjdIb2Tnl7FFtf6n6D1axZ7AGYAlnL5KAiV+sXtRT4oWE4DGr
-+FxtPUOTroHbqtBB7BBqexVPNw1xQYsGFxYbD3gz2Il7USTBzMMDJ/8YVCRtSXzr
-pFZrd7uFHokcKl9r2ca/dPuNWnO5z/7jqnpq4syJ0A+bGJE/DgUmmzdpeBRY42eh
-dAbnJrNF7DWZRcFzXXr6nwYNjFQBWiTwPXAEdCuQp+5G4FrEQMWoAbm4/7xg9IdY
-Cb46HR8VkmtyUCafWgQBeUjVGrMPgsewcFMevjO3WDshe9HOLjFRcgymTgaE0Ds/
-5uFapLE00/Cu2/K8NPYDgmOCaSH6ZQ==
-=9y3V
------END PGP SIGNATURE-----
-
---sm4nu43k4a2Rpi4c--
+> --
+> With Best Regards,
+> Andy Shevchenko
