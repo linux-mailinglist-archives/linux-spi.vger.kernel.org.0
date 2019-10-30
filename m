@@ -2,104 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6112FE88D0
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2019 13:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 874CDE973B
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2019 08:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387868AbfJ2M5P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Oct 2019 08:57:15 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56730 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729253AbfJ2M5P (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Oct 2019 08:57:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=HiiOYWMUxA0B+iewG6kImbKPRDdIMwQfpgE+oPxuO8k=; b=lHhfsjgW1dXF
-        tChCvAdzIGJPnNtNMu7HJQqPWQT/wv+91A5jk1GrLqopukVXweRqdcqjlkp/lfrDA1DieU8jIf6CT
-        6eittQtAkWi9aSNtIRzH9iUhMntKgHT2Rl7nNLJMW9T2zYYp4naHHIJAIkzfqSZlQX27LFgQ5ofQq
-        /fi3Y=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iPR3f-0002Ed-7A; Tue, 29 Oct 2019 12:57:11 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id C21E52742157; Tue, 29 Oct 2019 12:57:10 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Applied "spi: pxa2xx: Add support for Intel Comet Lake-H" to the spi tree
-In-Reply-To: <20191029115802.6779-1-jarkko.nikula@linux.intel.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191029125710.C21E52742157@ypsilon.sirena.org.uk>
-Date:   Tue, 29 Oct 2019 12:57:10 +0000 (GMT)
+        id S1726032AbfJ3HgX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Oct 2019 03:36:23 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43958 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725923AbfJ3HgX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Oct 2019 03:36:23 -0400
+Received: by mail-lf1-f65.google.com with SMTP id j5so740094lfh.10
+        for <linux-spi@vger.kernel.org>; Wed, 30 Oct 2019 00:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IHuCfvtvtoewtzJbmoH93KQaYqaLyKZ5qZchPWveUls=;
+        b=VNQoZ8DHXVhvWoiFUj2EmkeZ1wzcYyE9OkPWbiX7vZ99XdGblKH4JCQW2eAx+SuxSZ
+         LpgzIz+D0fkHbN1+QTf1QDnpV+kSuEsWrBk36m1h0VWilthuli/bZOmC1PIamAuj8vsm
+         sqWP1mYQaSyTtL7kxgeKJBst90WA3C0fXaUTpCRzQxCgDjlJYOCxUNHU/wmafoedeQmk
+         eOt+wKT2Vgx5E0gES+tX1TymLC4rwUNDEC0xzbt5mtU6FfylrC3g9NXAyDyHw4lqeYbU
+         Cy5LMUF/nF7tkfH2OQC3Y2Vqx42aspxuXj0k4vJK18bk2sv2kpyd5iLKZE8W2Dltqoyk
+         83sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IHuCfvtvtoewtzJbmoH93KQaYqaLyKZ5qZchPWveUls=;
+        b=cdvvCqDRsa1biFdZllEO0yOBF39YtTf7m70DyeaIVcd3nJiylBMooG+Wa8O05emJJe
+         G3/+iFh4N7aDkuUG0FOIwpV87ueozEJ4S1LeiLKhk0mYofPxqMff+Mz3Uct/hHguXGnN
+         E558AzKHdVETOtx+2cvP1MdRAdGzpVHSuNkE1rLfXOkxm0S9djoFjZBDVbz2fUBKMd0i
+         gV2zJUmJxwnlsz84TgHStXolfG4FGq1HL75T3vXHm/7U0TLStY1/205srvxSQjIQjHDU
+         WzQ5tR34uIGuliyV8XaiLXNVvQGcJrRINWoPhTV+U4Bn2Prdoop4iWK7SDVxX/taW5wV
+         uCOw==
+X-Gm-Message-State: APjAAAUndan064lMTt6Qh4P2vQUfYVRTXJC2t4HYE+gUqcORCzsavVe6
+        Udwkxd9MedGmaA5H+E0ybXfpeQ==
+X-Google-Smtp-Source: APXvYqwDg5xFnFWqtFtLDN4LDJeiy3PZwK164nqdc3Qs8+CH3I7Ai6mTHc5lo0FNMQgkE11ds6kJ+Q==
+X-Received: by 2002:a19:ad4a:: with SMTP id s10mr5036054lfd.159.1572420981150;
+        Wed, 30 Oct 2019 00:36:21 -0700 (PDT)
+Received: from localhost.localdomain (c-79c8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.200.121])
+        by smtp.gmail.com with ESMTPSA id d27sm779413lfb.3.2019.10.30.00.36.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2019 00:36:19 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] spi: dw: Drop GPIO header
+Date:   Wed, 30 Oct 2019 08:34:18 +0100
+Message-Id: <20191030073418.23717-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+The DW driver does not use the legacy GPIO header so drop
+it from the spi-dw.h include.
 
-   spi: pxa2xx: Add support for Intel Comet Lake-H
-
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.4
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From f0cf17ed76cffa365001d263ced1f130ec794917 Mon Sep 17 00:00:00 2001
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Date: Tue, 29 Oct 2019 13:58:02 +0200
-Subject: [PATCH] spi: pxa2xx: Add support for Intel Comet Lake-H
-
-Add Intel Comet Lake-H LPSS SPI PCI IDs.
-
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Link: https://lore.kernel.org/r/20191029115802.6779-1-jarkko.nikula@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/spi/spi-pxa2xx.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/spi/spi-dw.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 4249bcaf77bd..1e0091259259 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1457,6 +1457,10 @@ static const struct pci_device_id pxa2xx_spi_pci_compound_match[] = {
- 	{ PCI_VDEVICE(INTEL, 0x02aa), LPSS_CNL_SSP },
- 	{ PCI_VDEVICE(INTEL, 0x02ab), LPSS_CNL_SSP },
- 	{ PCI_VDEVICE(INTEL, 0x02fb), LPSS_CNL_SSP },
-+	/* CML-H */
-+	{ PCI_VDEVICE(INTEL, 0x06aa), LPSS_CNL_SSP },
-+	{ PCI_VDEVICE(INTEL, 0x06ab), LPSS_CNL_SSP },
-+	{ PCI_VDEVICE(INTEL, 0x06fb), LPSS_CNL_SSP },
- 	/* TGL-LP */
- 	{ PCI_VDEVICE(INTEL, 0xa0aa), LPSS_CNL_SSP },
- 	{ PCI_VDEVICE(INTEL, 0xa0ab), LPSS_CNL_SSP },
+diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+index c9c15881e982..38c7de1f0aa9 100644
+--- a/drivers/spi/spi-dw.h
++++ b/drivers/spi/spi-dw.h
+@@ -4,7 +4,6 @@
+ 
+ #include <linux/io.h>
+ #include <linux/scatterlist.h>
+-#include <linux/gpio.h>
+ 
+ /* Register offsets */
+ #define DW_SPI_CTRL0			0x00
 -- 
-2.20.1
+2.21.0
 
