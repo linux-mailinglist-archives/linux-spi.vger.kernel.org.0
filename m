@@ -2,93 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF9CE9ACD
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2019 12:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B2EE9AD7
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2019 12:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbfJ3Lbn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Oct 2019 07:31:43 -0400
-Received: from mga11.intel.com ([192.55.52.93]:49596 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726065AbfJ3Lbn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 30 Oct 2019 07:31:43 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 04:31:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,247,1569308400"; 
-   d="scan'208";a="190250642"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.55])
-  by orsmga007.jf.intel.com with ESMTP; 30 Oct 2019 04:31:41 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        id S1726551AbfJ3Ldl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Oct 2019 07:33:41 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49014 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726225AbfJ3Ldk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Oct 2019 07:33:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=/yC7rc3ICYIiVvJnwOMAmhVT5UNkYFhGQmUy97pmbG0=; b=iGWV1IFDD6anUoyPD/gJ75nCI
+        8bARNA3ppX5+74wEISzzYBx51kPW3S49zvhTSMTtYRDk4DKi5S86AVw5wTh54DPXHu4KQzvaGzfZ+
+        zgrVBLyfI9jgdYPKC69wQ97CzuPIR0M+ZJnR7ccCt84JrbP3jUC9hS0qACMNd5MPXWEts=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iPmEJ-0004ot-S9; Wed, 30 Oct 2019 11:33:35 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 79DAA27420F4; Wed, 30 Oct 2019 11:33:34 +0000 (GMT)
+Date:   Wed, 30 Oct 2019 11:33:34 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-spi@vger.kernel.org,
         Phil Edworthy <phil.edworthy@renesas.com>
-Subject: [PATCH] spi: dw: Remove runtime PM enable/disable from common part of the driver
-Date:   Wed, 30 Oct 2019 13:31:37 +0200
-Message-Id: <20191030113137.15459-1-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.24.0.rc1
+Subject: Re: [PATCH] spi: dw: Remove runtime PM enable/disable from common
+ part of the driver
+Message-ID: <20191030113334.GA6693@sirena.co.uk>
+References: <20191030113137.15459-1-jarkko.nikula@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vtzGhvizbBRQ85DL"
+Content-Disposition: inline
+In-Reply-To: <20191030113137.15459-1-jarkko.nikula@linux.intel.com>
+X-Cookie: Walk softly and carry a BFG-9000.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Committed version of the commit b9fc2d207e54 ("spi: dw: Move runtime PM
-enable/disable from common to platform driver part") does not include by
-some reason changes to drivers/spi/spi-dw.c that were part of the original
-patch sent to the mailing list.
 
-Complete the code move by doing those changes now.
+--vtzGhvizbBRQ85DL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fixes: b9fc2d207e54 ("spi: dw: Move runtime PM enable/disable from common to platform driver part")
-Cc: Phil Edworthy <phil.edworthy@renesas.com>
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
- drivers/spi/spi-dw.c | 7 -------
- 1 file changed, 7 deletions(-)
+On Wed, Oct 30, 2019 at 01:31:37PM +0200, Jarkko Nikula wrote:
+> Committed version of the commit b9fc2d207e54 ("spi: dw: Move runtime PM
+> enable/disable from common to platform driver part") does not include by
+> some reason changes to drivers/spi/spi-dw.c that were part of the original
+> patch sent to the mailing list.
 
-diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
-index 54ed6eb3e252..466f5c67843b 100644
---- a/drivers/spi/spi-dw.c
-+++ b/drivers/spi/spi-dw.c
-@@ -10,7 +10,6 @@
- #include <linux/module.h>
- #include <linux/highmem.h>
- #include <linux/delay.h>
--#include <linux/pm_runtime.h>
- #include <linux/slab.h>
- #include <linux/spi/spi.h>
- 
-@@ -499,8 +498,6 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 	if (dws->set_cs)
- 		master->set_cs = dws->set_cs;
- 
--	pm_runtime_enable(dev);
--
- 	/* Basic HW init */
- 	spi_hw_init(dev, dws);
- 
-@@ -529,7 +526,6 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 	spi_enable_chip(dws, 0);
- 	free_irq(dws->irq, master);
- err_free_master:
--	pm_runtime_disable(dev);
- 	spi_controller_put(master);
- 	return ret;
- }
-@@ -544,9 +540,6 @@ void dw_spi_remove_host(struct dw_spi *dws)
- 
- 	spi_shutdown_chip(dws);
- 
--	if (dws->master)
--		pm_runtime_disable(&dws->master->dev);
--
- 	free_irq(dws->irq, dws->master);
- }
- EXPORT_SYMBOL_GPL(dw_spi_remove_host);
--- 
-2.24.0.rc1
+This will be because they look like already applied changes on the
+branch...
 
+--vtzGhvizbBRQ85DL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl25dQsACgkQJNaLcl1U
+h9Dougf+JLHZn4+vrlPAS0ndjsbwl63eaN09KrittDvjx9giYOIofJ4Lb9v9tljz
+SG6TEMs9SAuwrSXcnm97rSe9pAc+kr0fGNJACmfbe88FYxWiqCuoeM1qQ60eBT8B
+4dkES9SKVmeCcx52I+nglxYdDx4ACtjzgctbJNFIhVb2gF6wsrq3EM5y1/+StH85
+cib48F65SMoUs/OJptWh1o0oyA4iqdjnkR4MHkSfnQUIot/xrAY5tAIQXxBIYZ6/
+g3kHtznUpcle0tLkSz+0Ptz6sJPp5/xQ0jGkPhrSjjEOfcTxf9FQ5i1s5t1siCNc
+KYfc9k81dlrQH0tBPuvxFQUhP46hUw==
+=jmtK
+-----END PGP SIGNATURE-----
+
+--vtzGhvizbBRQ85DL--
