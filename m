@@ -2,88 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45879E98CA
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2019 10:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8BEE9912
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2019 10:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbfJ3JD4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Oct 2019 05:03:56 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:21613 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726177AbfJ3JD4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Oct 2019 05:03:56 -0400
-X-UUID: 5c5d35fef1344567b3c5a1e569a2523a-20191030
-X-UUID: 5c5d35fef1344567b3c5a1e569a2523a-20191030
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <luhua.xu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 26910532; Wed, 30 Oct 2019 17:03:51 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 30 Oct 2019 17:03:47 +0800
-Received: from localhost.localdomain (10.15.20.246) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 30 Oct 2019 17:03:47 +0800
-From:   Luhua Xu <luhua.xu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>,
-        Luhua Xu <luhua.xu@mediatek.com>
-Subject: [PATCH V2] spi: add power control when set_cs
-Date:   Wed, 30 Oct 2019 17:03:54 +0800
-Message-ID: <1572426234-30019-1-git-send-email-luhua.xu@mediatek.com>
-X-Mailer: git-send-email 2.6.4
+        id S1726513AbfJ3JUT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Oct 2019 05:20:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39362 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726028AbfJ3JUS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 30 Oct 2019 05:20:18 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572427218;
+        bh=VYX4tI0plMExXR+83UyGqGU60JXPp5IuYl0nrwxhFGw=;
+        h=Subject:From:Date:To:From;
+        b=zRfjyCpTB6Ih5Gx+CEdyd5XgSauzY7GV40wHTrTxtbH6xuu1cu0nHIZGWvrqYBZUJ
+         XI7WWAGKyG1XTKpHYRasCxwU9tSGzbZ9mBKyb4fUPwbyxuRFf8BDm1ui7gsDdAfe9w
+         k0uU7AmjxwB+tHEwD05G4Xcnthrq+s1MlRHOpcNo=
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+linux-spi@kernel.org
+Message-Id: <157242721835.31480.16145043784088733218.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 30 Oct 2019 09:20:18 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: "Luhua Xu" <luhua.xu@mediatek.com>
-
-As to set_cs takes effect immediately, power spi
-is needed when setup spi.
-
-Cc: Mark Brown <broonie@kernel.org>
-Signed-off-by: Luhua Xu <luhua.xu@mediatek.com>
----
-V2:
-- move set_cs PM control from .set_cs callback in
-  vendor driver to spi_setup in spi framework.
+Latest series: [v2] spi: add power control when set_cs (2019-10-30T09:03:54)
+  Superseding: [v2] spi: add power control when set_cs (2019-10-30T08:08:16):
+    [V2] spi: add power control when set_cs
 
 
- drivers/spi/spi.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index f9502db..19007e0 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3091,7 +3091,20 @@ int spi_setup(struct spi_device *spi)
- 	if (spi->controller->setup)
- 		status = spi->controller->setup(spi);
- 
--	spi_set_cs(spi, false);
-+	if (spi->controller->auto_runtime_pm && spi->controller->set_cs) {
-+		status = pm_runtime_get_sync(spi->controller->dev.parent);
-+		if (status < 0) {
-+			pm_runtime_put_noidle(spi->controller->dev.parent);
-+			dev_err(&spi->controller->dev, "Failed to power device: %d\n",
-+				status);
-+			return status;
-+		}
-+		spi_set_cs(spi, false);
-+		pm_runtime_mark_last_busy(spi->controller->dev.parent);
-+		pm_runtime_put_autosuspend(spi->controller->dev.parent);
-+	} else {
-+		spi_set_cs(spi, false);
-+	}
- 
- 	if (spi->rt && !spi->controller->rt) {
- 		spi->controller->rt = true;
 -- 
-2.6.4
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/pwbot
