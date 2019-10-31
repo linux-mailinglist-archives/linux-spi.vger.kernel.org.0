@@ -2,42 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4E2E9D44
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2019 15:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D78EB118
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2019 14:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfJ3OQk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Oct 2019 10:16:40 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40734 "EHLO
+        id S1726540AbfJaNXt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 31 Oct 2019 09:23:49 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56112 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbfJ3OQk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Oct 2019 10:16:40 -0400
+        with ESMTP id S1726462AbfJaNXs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Oct 2019 09:23:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=arqxMi88MBiSEInSEZEypfHhNxzzThSdI00pF4lUVT0=; b=EavzXq5gngeu
-        zTsIBhIXrSwyqEUuwZlO8REZkRW+pdRZp0jwSRa60GcMsEa7DFYyYdVYmvv/n3D9M5zVdiuf/ZswI
-        tFtACuUAE0U3MZa0eKXFXpUdm/3tCviTjlsef1tDe4eSj2ISkouLpHKlbEAQb6v6NYfomtDmFJ0SJ
-        rc+kM=;
-Received: from [195.11.164.221] (helo=fitzroy.sirena.org.uk)
+        List-Archive; bh=cX2GQwx79KGhyI+8o2ddFRP7SU55uxLjju8Bx0zNqbU=; b=w1GXU7OLZ6V9
+        NOlCeGWK+uVSClvkjcRzuo/o3l28fh9fTqmntUC3CxAMXZbyyEhVLz8thrd9JSq8WC+IZJcgUheOy
+        AswowT/c5ZDEURBcNqn1LcApNg7ae2XT2Rahmf+6bGkCr7jeSdXSFfIcLmWo8tdC2FrqIB2gHcbzX
+        fViD0=;
+Received: from [91.217.168.176] (helo=fitzroy.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1iPom4-0005Cz-HP; Wed, 30 Oct 2019 14:16:36 +0000
+        id 1iQAQQ-0007p7-C8; Thu, 31 Oct 2019 13:23:42 +0000
 Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 3015CD020A7; Wed, 30 Oct 2019 14:16:36 +0000 (GMT)
+        id 100F1D020AA; Thu, 31 Oct 2019 13:23:42 +0000 (GMT)
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: dw: Drop GPIO header" to the spi tree
-In-Reply-To: <20191030073418.23717-1-linus.walleij@linaro.org>
+To:     Luhua Xu <luhua.xu@mediatek.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        wsd_upstream@mediatek.com
+Subject: Applied "spi: add power control when set_cs" to the spi tree
+In-Reply-To: <1572426234-30019-1-git-send-email-luhua.xu@mediatek.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191030141636.3015CD020A7@fitzroy.sirena.org.uk>
-Date:   Wed, 30 Oct 2019 14:16:36 +0000 (GMT)
+Message-Id: <20191031132342.100F1D020AA@fitzroy.sirena.org.uk>
+Date:   Thu, 31 Oct 2019 13:23:42 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -45,7 +47,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: dw: Drop GPIO header
+   spi: add power control when set_cs
 
 has been applied to the spi tree at
 
@@ -70,33 +72,48 @@ to this mail.
 Thanks,
 Mark
 
-From 26fa680ba9a13d6b05df201b3dfd946a7d915644 Mon Sep 17 00:00:00 2001
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 30 Oct 2019 08:34:18 +0100
-Subject: [PATCH] spi: dw: Drop GPIO header
+From d948e6ca189985495a21cd622c31e30e72b6b688 Mon Sep 17 00:00:00 2001
+From: Luhua Xu <luhua.xu@mediatek.com>
+Date: Wed, 30 Oct 2019 17:03:54 +0800
+Subject: [PATCH] spi: add power control when set_cs
 
-The DW driver does not use the legacy GPIO header so drop
-it from the spi-dw.h include.
+As to set_cs takes effect immediately, power spi
+is needed when setup spi.
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20191030073418.23717-1-linus.walleij@linaro.org
+Cc: Mark Brown <broonie@kernel.org>
+Signed-off-by: Luhua Xu <luhua.xu@mediatek.com>
+Link: https://lore.kernel.org/r/1572426234-30019-1-git-send-email-luhua.xu@mediatek.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-dw.h | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/spi/spi.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index c9c15881e982..38c7de1f0aa9 100644
---- a/drivers/spi/spi-dw.h
-+++ b/drivers/spi/spi-dw.h
-@@ -4,7 +4,6 @@
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5ba19ef809c2..294d0038eea6 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3261,7 +3261,20 @@ int spi_setup(struct spi_device *spi)
+ 	if (spi->controller->setup)
+ 		status = spi->controller->setup(spi);
  
- #include <linux/io.h>
- #include <linux/scatterlist.h>
--#include <linux/gpio.h>
+-	spi_set_cs(spi, false);
++	if (spi->controller->auto_runtime_pm && spi->controller->set_cs) {
++		status = pm_runtime_get_sync(spi->controller->dev.parent);
++		if (status < 0) {
++			pm_runtime_put_noidle(spi->controller->dev.parent);
++			dev_err(&spi->controller->dev, "Failed to power device: %d\n",
++				status);
++			return status;
++		}
++		spi_set_cs(spi, false);
++		pm_runtime_mark_last_busy(spi->controller->dev.parent);
++		pm_runtime_put_autosuspend(spi->controller->dev.parent);
++	} else {
++		spi_set_cs(spi, false);
++	}
  
- /* Register offsets */
- #define DW_SPI_CTRL0			0x00
+ 	if (spi->rt && !spi->controller->rt) {
+ 		spi->controller->rt = true;
 -- 
 2.20.1
 
