@@ -2,118 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D78EB118
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2019 14:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA32FEC2A2
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2019 13:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbfJaNXt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Oct 2019 09:23:49 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56112 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726462AbfJaNXs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Oct 2019 09:23:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=cX2GQwx79KGhyI+8o2ddFRP7SU55uxLjju8Bx0zNqbU=; b=w1GXU7OLZ6V9
-        NOlCeGWK+uVSClvkjcRzuo/o3l28fh9fTqmntUC3CxAMXZbyyEhVLz8thrd9JSq8WC+IZJcgUheOy
-        AswowT/c5ZDEURBcNqn1LcApNg7ae2XT2Rahmf+6bGkCr7jeSdXSFfIcLmWo8tdC2FrqIB2gHcbzX
-        fViD0=;
-Received: from [91.217.168.176] (helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1iQAQQ-0007p7-C8; Thu, 31 Oct 2019 13:23:42 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 100F1D020AA; Thu, 31 Oct 2019 13:23:42 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Luhua Xu <luhua.xu@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        wsd_upstream@mediatek.com
-Subject: Applied "spi: add power control when set_cs" to the spi tree
-In-Reply-To: <1572426234-30019-1-git-send-email-luhua.xu@mediatek.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191031132342.100F1D020AA@fitzroy.sirena.org.uk>
-Date:   Thu, 31 Oct 2019 13:23:42 +0000 (GMT)
+        id S1727989AbfKAMSM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Nov 2019 08:18:12 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55557 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730637AbfKAMSM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Nov 2019 08:18:12 -0400
+Received: by mail-wm1-f68.google.com with SMTP id g24so9151142wmh.5;
+        Fri, 01 Nov 2019 05:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZOoIzpG2z8fi2GZrvyp00RYzBAVVduBNjTY7LDpDnDA=;
+        b=WMGeLp/AVcDchEPwD5VJFbDRfoXly9LNsd0siehQ54HLKyIZ8qz9gi8KhSFn/ECKpG
+         4taW6nS3xhiwjHUhlKwrUKHiRbPhs2tXHJbH1qNcz50q5vHK3RsSKuYORB7lqzRv+kKs
+         hlzTPidpqQOgpmDIDqPQWVRFFc279Bdiwn3Fo+zG7ZmOK3rWuWObm1y60wX26Y0lLe2R
+         rxYZZwUwn6q4AWS6avO/Ttxqrm9T9MPIkI6l8saqG21Hm3uzAKNsJTZk8gGvFL4ZXobX
+         QQ84THyc3nfF1poe9cx5U0FWZlISf+jXrv+zA2bXISGSyXsVB4eUT5G0vYx3eZZY9NgO
+         xZAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZOoIzpG2z8fi2GZrvyp00RYzBAVVduBNjTY7LDpDnDA=;
+        b=X+szGtX8jeFdstKdfMaH1J95SPYF8sBc5Ghi0kjVSxaHv6QSZwljCCZvGibrY+iFB+
+         ijH4TxZM93MCBxdhwx0vZAw24WldRr7QytgKjW6ffZ+TjpSY01cTjCyJPju5kjoYoQ1i
+         kNUILBH5zDW8YjWTRy0hxCICO6vSA5B/NmPIwgPJKamY1q4piHDP3K7SOwuJkGKkq43k
+         omjvq87/LccgyX96GpBkPSOz/tzlUWbD45n0EvVJd2yLu74ShVuE7g+1TDNBXYz4GMLQ
+         QcM1HI1QYX4HqhQsjtnYl8J9NYXlOagOPfcWi/dyhW9gzlv3mzPGpZawKJPrFfaCcVWF
+         rXcg==
+X-Gm-Message-State: APjAAAUjWUuy50qOWuqb2B4I3XJ/54hzGGENieIdgIW8Wmlusmeh5+wM
+        W+lInhw/scll9ArGzVEorhQ=
+X-Google-Smtp-Source: APXvYqyYGMPZVOcwrT99SjO70XvqnXNb10RZu4lXx7hjfGuoisqKxZ/u5JHTJkzyPdKNoiU5Az3ORw==
+X-Received: by 2002:a1c:1d53:: with SMTP id d80mr6277323wmd.88.1572610690236;
+        Fri, 01 Nov 2019 05:18:10 -0700 (PDT)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id p15sm7759400wrs.94.2019.11.01.05.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Nov 2019 05:18:09 -0700 (PDT)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] spi: sifive: disable clk when probe fails and remove
+Date:   Fri,  1 Nov 2019 20:17:45 +0800
+Message-Id: <20191101121745.13413-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+The driver forgets to disable and unprepare clk when probe fails and
+remove.
+Add the calls to fix the problem.
 
-   spi: add power control when set_cs
-
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From d948e6ca189985495a21cd622c31e30e72b6b688 Mon Sep 17 00:00:00 2001
-From: Luhua Xu <luhua.xu@mediatek.com>
-Date: Wed, 30 Oct 2019 17:03:54 +0800
-Subject: [PATCH] spi: add power control when set_cs
-
-As to set_cs takes effect immediately, power spi
-is needed when setup spi.
-
-Cc: Mark Brown <broonie@kernel.org>
-Signed-off-by: Luhua Xu <luhua.xu@mediatek.com>
-Link: https://lore.kernel.org/r/1572426234-30019-1-git-send-email-luhua.xu@mediatek.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 ---
- drivers/spi/spi.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ drivers/spi/spi-sifive.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 5ba19ef809c2..294d0038eea6 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3261,7 +3261,20 @@ int spi_setup(struct spi_device *spi)
- 	if (spi->controller->setup)
- 		status = spi->controller->setup(spi);
+diff --git a/drivers/spi/spi-sifive.c b/drivers/spi/spi-sifive.c
+index 35254bdc42c4..f7c1e20432e0 100644
+--- a/drivers/spi/spi-sifive.c
++++ b/drivers/spi/spi-sifive.c
+@@ -357,14 +357,14 @@ static int sifive_spi_probe(struct platform_device *pdev)
+ 	if (!cs_bits) {
+ 		dev_err(&pdev->dev, "Could not auto probe CS lines\n");
+ 		ret = -EINVAL;
+-		goto put_master;
++		goto disable_clk;
+ 	}
  
--	spi_set_cs(spi, false);
-+	if (spi->controller->auto_runtime_pm && spi->controller->set_cs) {
-+		status = pm_runtime_get_sync(spi->controller->dev.parent);
-+		if (status < 0) {
-+			pm_runtime_put_noidle(spi->controller->dev.parent);
-+			dev_err(&spi->controller->dev, "Failed to power device: %d\n",
-+				status);
-+			return status;
-+		}
-+		spi_set_cs(spi, false);
-+		pm_runtime_mark_last_busy(spi->controller->dev.parent);
-+		pm_runtime_put_autosuspend(spi->controller->dev.parent);
-+	} else {
-+		spi_set_cs(spi, false);
-+	}
+ 	num_cs = ilog2(cs_bits) + 1;
+ 	if (num_cs > SIFIVE_SPI_MAX_CS) {
+ 		dev_err(&pdev->dev, "Invalid number of spi slaves\n");
+ 		ret = -EINVAL;
+-		goto put_master;
++		goto disable_clk;
+ 	}
  
- 	if (spi->rt && !spi->controller->rt) {
- 		spi->controller->rt = true;
+ 	/* Define our master */
+@@ -393,7 +393,7 @@ static int sifive_spi_probe(struct platform_device *pdev)
+ 			       dev_name(&pdev->dev), spi);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Unable to bind to interrupt\n");
+-		goto put_master;
++		goto disable_clk;
+ 	}
+ 
+ 	dev_info(&pdev->dev, "mapped; irq=%d, cs=%d\n",
+@@ -402,11 +402,13 @@ static int sifive_spi_probe(struct platform_device *pdev)
+ 	ret = devm_spi_register_master(&pdev->dev, master);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "spi_register_master failed\n");
+-		goto put_master;
++		goto disable_clk;
+ 	}
+ 
+ 	return 0;
+ 
++disable_clk:
++	clk_disable_unprepare(spi->clk);
+ put_master:
+ 	spi_master_put(master);
+ 
+@@ -420,6 +422,7 @@ static int sifive_spi_remove(struct platform_device *pdev)
+ 
+ 	/* Disable all the interrupts just in case */
+ 	sifive_spi_write(spi, SIFIVE_SPI_REG_IE, 0);
++	clk_disable_unprepare(spi->clk);
+ 
+ 	return 0;
+ }
 -- 
-2.20.1
+2.23.0
 
