@@ -2,17 +2,17 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D91EE540
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Nov 2019 17:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B04EE53E
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Nov 2019 17:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729194AbfKDQy4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Nov 2019 11:54:56 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:45770 "EHLO huawei.com"
+        id S1728709AbfKDQyy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Nov 2019 11:54:54 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:45774 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727861AbfKDQy4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 4 Nov 2019 11:54:56 -0500
+        id S1728482AbfKDQyy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 4 Nov 2019 11:54:54 -0500
 Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 2F009202F7ED87065250;
+        by Forcepoint Email with ESMTP id 333B7E8E6EA2833A00DB;
         Tue,  5 Nov 2019 00:54:52 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
@@ -24,10 +24,12 @@ CC:     <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>,
         <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
         <xuejiancheng@hisilicon.com>, <fengsheng5@huawei.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH 0/3] HiSilicon v3xx SFC driver
-Date:   Tue, 5 Nov 2019 00:51:34 +0800
-Message-ID: <1572886297-45400-1-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 1/3] mtd: spi-nor: hisi-sfc: Try to provide some clarity on which SFC we are
+Date:   Tue, 5 Nov 2019 00:51:35 +0800
+Message-ID: <1572886297-45400-2-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
+In-Reply-To: <1572886297-45400-1-git-send-email-john.garry@huawei.com>
+References: <1572886297-45400-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.58]
@@ -37,41 +39,53 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patchset introduces support for the HiSilicon SFC V3XX driver.
+The driver is for the HiSilicon FMC (Flash Memory Controller), which
+supports SPI NOR in addition other memory technologies, like SPI NAND.
 
-Whilst the kernel tree already includes support for a "HiSilicon SFC
-driver", that is for different HW. Indeed, as mentioned in patch #1, the
-naming for that driver could be better, as it should support more memory
-technologies than SPI NOR (as I have been told), and it is actually known
-internally as FMC. As such, maybe "hisi-fmc" would have been better, but
-we can't change that now.
+Indeed, the naming in the driver is a little inappropriate, especially
+considering that there is already another HiSilicon SPI NOR flash
+controller (which I believe the FMC is derived from).
 
-I used V3XX in this driver name, as that is the unique versioning for
-this HW.
+Since we now want to provide software support for this other HiSilicon
+controller, update code comments to at least try to make it clear that
+this driver is for the FMC.
 
-As for the driver itself, it is quite simple. Only ACPI firmware is
-supported, and we assume m25p80 compatible SPI NOR part will be used.
+Signed-off-by: John Garry <john.garry@huawei.com>
+---
+ drivers/mtd/spi-nor/Kconfig    | 4 ++--
+ drivers/mtd/spi-nor/hisi-sfc.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-DMA is not supported, and we just use polling mode for operation
-completion notification. The driver uses the SPI MEM OPs.
-
-Tested against 5.4-rc4.
-
-John Garry (3):
-  mtd: spi-nor: hisi-sfc: Try to provide some clarity on which SFC we
-    are
-  spi: Add HiSilicon v3xx SPI NOR flash controller driver
-  MAINTAINERS: Add a maintainer for the HiSilicon v3xx SFC driver
-
- MAINTAINERS                     |   6 +
- drivers/mtd/spi-nor/Kconfig     |   4 +-
- drivers/mtd/spi-nor/hisi-sfc.c  |   2 +-
- drivers/spi/Kconfig             |   9 +
- drivers/spi/Makefile            |   1 +
- drivers/spi/spi-hisi-sfc-v3xx.c | 287 ++++++++++++++++++++++++++++++++
- 6 files changed, 306 insertions(+), 3 deletions(-)
- create mode 100644 drivers/spi/spi-hisi-sfc-v3xx.c
-
+diff --git a/drivers/mtd/spi-nor/Kconfig b/drivers/mtd/spi-nor/Kconfig
+index f237fcdf7f86..c1eda67d1ad2 100644
+--- a/drivers/mtd/spi-nor/Kconfig
++++ b/drivers/mtd/spi-nor/Kconfig
+@@ -46,11 +46,11 @@ config SPI_CADENCE_QUADSPI
+ 	  Flash as an MTD device.
+ 
+ config SPI_HISI_SFC
+-	tristate "Hisilicon SPI-NOR Flash Controller(SFC)"
++	tristate "Hisilicon FMC SPI-NOR Flash Controller(SFC)"
+ 	depends on ARCH_HISI || COMPILE_TEST
+ 	depends on HAS_IOMEM
+ 	help
+-	  This enables support for hisilicon SPI-NOR flash controller.
++	  This enables support for HiSilicon FMC SPI-NOR flash controller.
+ 
+ config SPI_MTK_QUADSPI
+ 	tristate "MediaTek Quad SPI controller"
+diff --git a/drivers/mtd/spi-nor/hisi-sfc.c b/drivers/mtd/spi-nor/hisi-sfc.c
+index 6dac9dd8bf42..edc0c6164061 100644
+--- a/drivers/mtd/spi-nor/hisi-sfc.c
++++ b/drivers/mtd/spi-nor/hisi-sfc.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * HiSilicon SPI Nor Flash Controller Driver
++ * HiSilicon FMC SPI-NOR flash controller driver
+  *
+  * Copyright (c) 2015-2016 HiSilicon Technologies Co., Ltd.
+  */
 -- 
 2.17.1
 
