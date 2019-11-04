@@ -2,137 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A752EE843
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Nov 2019 20:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F651EE924
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Nov 2019 21:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728321AbfKDTYT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Nov 2019 14:24:19 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37206 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728174AbfKDTYT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Nov 2019 14:24:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=14g9oyYQ5ejwP+HUIBS3ppdCvtef/yyJ/Ou2n23wvc8=; b=DaH6+BIfshQ0a09JXhFX+7+Ve
-        ocWCl5jQjr0NcdEy7TAyfTb4PkflhPzkycnSRVOxppcwKPJgCThtZXdwIC+3UW5otE5O93Wbp9uo+
-        RFJ4CMQU7IT9Tqv/kQCjkrtpLI2UgDhQhr51Zq28U63aFosnxyo8xS13oNy1rZLN2mdes=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iRhxR-00030B-2u; Mon, 04 Nov 2019 19:24:09 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 6231A274301E; Mon,  4 Nov 2019 19:24:06 +0000 (GMT)
-Date:   Mon, 4 Nov 2019 19:24:06 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     marek.vasut@gmail.com, tudor.ambarus@microchip.com,
-        linuxarm@huawei.com, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        xuejiancheng@hisilicon.com, fengsheng5@huawei.com
-Subject: Re: [PATCH 2/3] spi: Add HiSilicon v3xx SPI NOR flash controller
- driver
-Message-ID: <20191104192406.GH5238@sirena.co.uk>
-References: <1572886297-45400-1-git-send-email-john.garry@huawei.com>
- <1572886297-45400-3-git-send-email-john.garry@huawei.com>
+        id S1728377AbfKDUGt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Nov 2019 15:06:49 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:44458 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728409AbfKDUGs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Nov 2019 15:06:48 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9209B8365A;
+        Tue,  5 Nov 2019 09:06:43 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1572898003;
+        bh=QjHD60cXYGA5rwMrtKgTa0FglpM0ZLFA0lhaMxRCaA0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=hvDu86LFPoy8xj/nPMCjWh3hLLJi9h8IsOfWCaoDVTzeB9pO2ok01VlECOdYIn/Om
+         RB6BTNTNDbN5GkVnGwKl+C2V0ox0bRsQKEeH1k8pgNtsuwbsq9Z2S/XpYWpZ2sfN37
+         YvlIuWoCC4Om3Em9L6FpDVNC4scfUdKg1LKMKZFoo7PvdeQHdeZ21AIanJCmDOsQvF
+         4Wjlk/MEkkirsKgXzIy/QBWg41XsEUzNoFMxNpjIIK69loPzXr3cFouQViLT9R7bv/
+         OsMqjNysZSArxrvctcb7pQJ1gwcAtRJ0IMXcsuZ0min32EckNqM6MEFzOeOR/SYDH6
+         rUJ3GeGJAqBQg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5dc084d40000>; Tue, 05 Nov 2019 09:06:44 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1156.6; Tue, 5 Nov 2019 09:06:43 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1156.000; Tue, 5 Nov 2019 09:06:43 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "broonie@kernel.org" <broonie@kernel.org>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: spi-mem and gpio chipselects
+Thread-Topic: spi-mem and gpio chipselects
+Thread-Index: AQHVkqe/99KPV78Qa0mRy221SIO+EKd6HAYAgAB7fAA=
+Date:   Mon, 4 Nov 2019 20:06:42 +0000
+Message-ID: <039edb7cdd9114ad7a14e27f869db6c85d756418.camel@alliedtelesis.co.nz>
+References: <cbe69f5457c4dd1c2cc96a247c6c6fca61c0d43c.camel@alliedtelesis.co.nz>
+         <20191104124444.GB5238@sirena.co.uk>
+In-Reply-To: <20191104124444.GB5238@sirena.co.uk>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2001:df5:b000:22:d0c9:dea8:da1e:f79e]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CBD24C53A2CF2E449E990610426137AD@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Rn7IEEq3VEzCw+ji"
-Content-Disposition: inline
-In-Reply-To: <1572886297-45400-3-git-send-email-john.garry@huawei.com>
-X-Cookie: This page intentionally left blank.
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---Rn7IEEq3VEzCw+ji
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Nov 05, 2019 at 12:51:36AM +0800, John Garry wrote:
-
-> Only ACPI firmware is supported.
-
-There's no ACPI dependency though?  If the driver only works with ACPI
-I'd expect to see one with an || COMPILE_TEST like the architecture
-dependency.
-
-> @@ -0,0 +1,287 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * HiSilicon SPI NOR V3XX Flash Controller Driver for hi16xx chipsets
-> + *
-
-Please make the entire comment a C++ one for neatness.
-
-> + * Copyright (c) 2019 HiSilicon Technologies Co., Ltd.
-> + * Author: John Garry <john.garry@huawei.com>
-> + */
-> +//#define DEBUG 1
-
-Please remove this.
-
-> +#define GLOBAL_CFG (0x100)
-> +
-> +#define BUS_CFG1 (0x200)
-> +#define BUS_CFG2 (0x204)
-> +#define BUS_FLASH_SIZE (0x210)
-> +
-> +#define VERSION (0x1f8)
-
-These could use some namespacing, especially the last one - it seems
-quite likely there'll be some collisions at some point.
-
-> +#define HISI_SFC_V3XX_WAIT_TIMEOUT_US		1000000
-> +#define HISI_SFC_V3XX_WAIT_POLL_INTERVAL_US	10
-
-Plus if we've got these long prefixes here it'd be good to be
-consistent.
-
-> +	if (IS_ALIGNED((uintptr_t)to, 4)) {
-> +		int words = len / 4;
-> +
-> +		__ioread32_copy(to, host->regbase + CMD_DATABUF(0), words);
-> +
-> +		len -= words * 4;
-> +		if (len) {
-> +			u32 val;
-> +
-> +			val = __raw_readl(host->regbase + CMD_DATABUF(words));
-> +
-> +			to += words * 4;
-> +			for (i = 0; i < len; i++, val >>= 8, to++)
-> +				*to = (u8)val;
-> +		}
-> +	} else {
-> +		for (i = 0; i < DIV_ROUND_UP(len, 4); i++) {
-> +			u32 val = __raw_readl(host->regbase + CMD_DATABUF(i));
-> +			int j;
-
-The more usual pattern for these would be to do some unaligned accesses
-for the start/end of the buffer to get to alignment and then transfer
-the rest as aligned data.
-
---Rn7IEEq3VEzCw+ji
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3AetUACgkQJNaLcl1U
-h9AUDggAhbUOC9Q2ExVskNhuRVMVMw5Xq0UlE6+60CYcvZfy1w/TQvgxMcP5764e
-+EhXHAQ8BZ+JleaTtcuIoAg7OyBF1OOTQLEsSJ5AE5UOidvK1ft1Pud5D5rIXgYK
-kUxszOb2BCfW/rZMaLiKB2ydw1o1TsUEH76COG9+J8rVnLoLC/BwcMat7DVFtnPW
-orgevaNjPRUzmWOb7HuSziDLA+okmX+nLF+buquH1LR585JXMbTJd+1cgDk0aJFx
-bojmWsK0E1Ra52pwKO7qFdJS9mIzFN6GOVUqT47XhZm3BVmUkTHiugVun+AKT7el
-YpZbCCyYdb2H27r96NdBA3Ns3o/fJg==
-=PHLm
------END PGP SIGNATURE-----
-
---Rn7IEEq3VEzCw+ji--
+T24gTW9uLCAyMDE5LTExLTA0IGF0IDEyOjQ0ICswMDAwLCBNYXJrIEJyb3duIHdyb3RlOg0KPiBP
+biBNb24sIE5vdiAwNCwgMjAxOSBhdCAxMjozNToyNEFNICswMDAwLCBDaHJpcyBQYWNraGFtIHdy
+b3RlOg0KPiANCj4gPiBJJ20gd29ya2luZyBvbiBhIHBsYXRmb3JtIHRoYXQgaGFzIGEgc2xpZ2h0
+bHkgY29tcGxpY2F0ZWQgc2NoZW1lIGZvcg0KPiA+IFNQSSBjaGlwLXNlbGVjdHMgdXNpbmcgZ3Bp
+b3NbMV0uIFRoZSBzcGkgY29udHJvbGxlciBkcml2ZXIgaW4gdGhpcyBjYXNlDQo+ID4gc3VwcG9y
+dHMgdGhlIHNwaS1tZW0gb3BlcmF0aW9ucyB3aGljaCBhcHBlYXIgdG8gYnlwYXNzIHRoZSBnZW5l
+cmljDQo+ID4gc3BpX3NldF9jcygpLg0KPiA+IFdvdWxkIHRoZXJlIGJlIGFueSBoYXJtIGluIGFk
+ZGluZyBjYWxscyB0byBzcGlfc2V0X2NzKCkgdG8gc3BpLW1lbS5jPw0KPiA+IE5haXZlbHkgc3Bp
+X21lbV9hY2Nlc3Nfc3RhcnQoKSBhbmQgc3BpX21lbV9hY2Nlc3NfZW5kKCkgc2VlbSBsaWtlDQo+
+ID4gY29udmVuaWVudCBwbGFjZXMgdG8gc3RhcnQuDQo+IA0KPiBUaGF0J3Mgb25seSBnb2luZyB0
+byB3b3JrIGluIGNhc2VzIHdoZXJlIHRoZSBjb250cm9sbGVyIHRyYW5zbGF0ZXMNCj4gdGhpbmdz
+IGludG8gYSBzaW5nbGUgU1BJIG9wZXJhdGlvbiBvbiB0aGUgZmxhc2ggd2hpY2ggSSdtIG5vdCBz
+dXJlIGlzDQo+IGFsd2F5cyBnb2luZyB0byBiZSB0aGUgY2FzZS4gIFdlJ2QgbmVlZCBhIHdheSB0
+byBndWFyYW50ZWUgdGhhdCB0aGUNCj4gY29udHJvbGxlciBpcyBnb2luZyB0byBkbyB0aGF0IGlu
+IG9yZGVyIHRvIGF2b2lkIGRhdGEgY29ycnVwdGlvbiBpc3N1ZXMuDQoNCkluIG15IHBhcnRpY3Vs
+YXIgY2FzZSAoc3BpLWJjbS1xc3BpLmMpIGJjbV9xc3BpX2JzcGlfZXhlY19tZW1fb3AoKSBkb2Vz
+DQpzZWVtIHRvIGFzc2VydCB0aGUgbmF0aXZlIGNoaXAtc2VsZWN0IHRoZW4gZG8gaXQncyBvcGVy
+YXRpb24uIEFzIEkNCnVuZGVyc3RhbmQgdGhlIHdhaXRfZm9yX2NvbXBsZXRpb25fdGltZW91dCgp
+IHdpbGwgc2NoZWR1bGUgc28gb3RoZXINCnRhc2tzIG1heSBydW4gYnV0IHNwaV9tZW1fYWNjZXNz
+X3N0YXJ0KCkgaGFzIHRha2VuIGFuIGlvX211dGV4IHNvDQphbnl0aGluZyB0aGF0IGFjY2Vzc2Vz
+IHRoYXQgc3BpIGJ1cyB3aWxsIGJsb2NrLg0K
