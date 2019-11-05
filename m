@@ -2,94 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3125EFC97
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Nov 2019 12:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FDAF0230
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Nov 2019 17:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730804AbfKELmd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Nov 2019 06:42:33 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:43078 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730797AbfKELmd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Nov 2019 06:42:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=1VvOv5GWuCii/3i1LPuPX+IHlPj4QKMT48lK4e/IvbA=; b=CsyG9LqWuyOGheijEzh5KOYzq
-        h2E+lYVLyOM1RpoSP0ShYu+aHVKj2frXlIG0NntIohBtKlroxadRFHQsdJ1IGOIhwyvRm0M9nvnnW
-        tWDr+PwxzM7TUFxu5LbBvs1yi1fqG9gkL1EXWUbemjJSiO+l7kHuDFhiTQbClGnkcS8HE=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iRxEC-0006PG-BU; Tue, 05 Nov 2019 11:42:28 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 6FD6C274301E; Tue,  5 Nov 2019 11:42:27 +0000 (GMT)
-Date:   Tue, 5 Nov 2019 11:42:27 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: spi-mem and gpio chipselects
-Message-ID: <20191105114227.GB4500@sirena.co.uk>
-References: <cbe69f5457c4dd1c2cc96a247c6c6fca61c0d43c.camel@alliedtelesis.co.nz>
- <20191104124444.GB5238@sirena.co.uk>
- <039edb7cdd9114ad7a14e27f869db6c85d756418.camel@alliedtelesis.co.nz>
+        id S2390118AbfKEQER (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Nov 2019 11:04:17 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2072 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2390116AbfKEQEQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 5 Nov 2019 11:04:16 -0500
+Received: from LHREML711-CAH.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id B003DAE6B949189B4146;
+        Tue,  5 Nov 2019 16:04:10 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ LHREML711-CAH.china.huawei.com (10.201.108.34) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 5 Nov 2019 16:04:10 +0000
+Received: from [127.0.0.1] (10.202.226.46) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5; Tue, 5 Nov 2019
+ 16:04:09 +0000
+Subject: Re: [PATCH 2/3] spi: Add HiSilicon v3xx SPI NOR flash controller
+ driver
+To:     Mark Brown <broonie@kernel.org>
+CC:     <marek.vasut@gmail.com>, <tudor.ambarus@microchip.com>,
+        <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <xuejiancheng@hisilicon.com>, <fengsheng5@huawei.com>
+References: <1572886297-45400-1-git-send-email-john.garry@huawei.com>
+ <1572886297-45400-3-git-send-email-john.garry@huawei.com>
+ <20191104192406.GH5238@sirena.co.uk>
+ <855a67dc-1356-a763-e374-540f6ac400ab@huawei.com>
+ <20191105110504.GA4500@sirena.co.uk>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <da389dda-ab38-1e68-557e-ac8c83f4ecd8@huawei.com>
+Date:   Tue, 5 Nov 2019 16:04:09 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oLBj+sq0vYjzfsbl"
-Content-Disposition: inline
-In-Reply-To: <039edb7cdd9114ad7a14e27f869db6c85d756418.camel@alliedtelesis.co.nz>
-X-Cookie: Genius is pain.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191105110504.GA4500@sirena.co.uk>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.46]
+X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 05/11/2019 11:05, Mark Brown wrote:
+> On Tue, Nov 05, 2019 at 10:58:39AM +0000, John Garry wrote:
+>> On 04/11/2019 19:24, Mark Brown wrote:
+>>> On Tue, Nov 05, 2019 at 12:51:36AM +0800, John Garry wrote:
+> 
+>>>> +		if (len) {
+>>>> +			u32 val;
+>>>> +
+>>>> +			val = __raw_readl(host->regbase + CMD_DATABUF(words));
+>>>> +
+>>>> +			to += words * 4;
+>>>> +			for (i = 0; i < len; i++, val >>= 8, to++)
+>>>> +				*to = (u8)val;
+>>>> +		}
+>>>> +	} else {
+>>>> +		for (i = 0; i < DIV_ROUND_UP(len, 4); i++) {
+>>>> +			u32 val = __raw_readl(host->regbase + CMD_DATABUF(i));
+>>>> +			int j;
+> 
+>>> The more usual pattern for these would be to do some unaligned accesses
+>>> for the start/end of the buffer to get to alignment and then transfer
+>>> the rest as aligned data.
+> 
+>> Yeah, I understand you, but for that I would need to generate multiple
+>> transactions in the driver, and I wanted to keep 1x transaction per
+>> spi_controller_mem_ops.exec_op call.
+> 
 
---oLBj+sq0vYjzfsbl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Mark,
 
-On Mon, Nov 04, 2019 at 08:06:42PM +0000, Chris Packham wrote:
-> On Mon, 2019-11-04 at 12:44 +0000, Mark Brown wrote:
+>> So maybe I can do some trickery in my adjust_op_size method to generate
+>> these multiple transactions: a. any unaligned start data b. the 32b-aligned
+>> data b. unaligned end. I think that the HW should be able to handle that.
+> 
+> Right, that's what I was expecting.
+> 
 
-> > That's only going to work in cases where the controller translates
-> > things into a single SPI operation on the flash which I'm not sure is
-> > always going to be the case.  We'd need a way to guarantee that the
-> > controller is going to do that in order to avoid data corruption issues.
+So that should work for xfer data commands, but generally the read/write 
+reg commands in the SPI NOR layer would not use 
+spi_mem_adjust_op_size(), like spi-nor.c:spi_nor_read_id(), as an example.
 
-> In my particular case (spi-bcm-qspi.c) bcm_qspi_bspi_exec_mem_op() does
-> seem to assert the native chip-select then do it's operation. As I
-> understand the wait_for_completion_timeout() will schedule so other
+For these, I should be able to guarantee start alignment (since the 
+buffer is kmalloc'ed), but not end alignment, so would still require 
+4-byte + single byte copies for these.
 
-The issue is what happens if the hardware translates the operations it's
-being asked to do into multiple physical operations on the bus for some
-reason.  It sounds like yours won't but we can't just unconditionally
-push the chip select control out to software even if the normal SPI
-modes support it.
+Thanks,
+John
 
-> tasks may run but spi_mem_access_start() has taken an io_mutex so
-> anything that accesses that spi bus will block.
-
-That's guaranteed.
-
---oLBj+sq0vYjzfsbl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3BYCIACgkQJNaLcl1U
-h9DUGAf6AgYGHHtC8fjKSGW1POmrYB0mCJNdi6rKRYZinsVOIroYP0LIhjZUqUNP
-ZxMkM9qsd0D6LWIJSsBjInHzKMP1JnD/Wv8eKsfkmU/vXQ4zpGWtnJ7fKEgGUZOE
-MMLj5vfAHtvwKMBdAHzAZn4/iRw8U0EgDnXA0KtlmACpxKUgPxJ4RAuxeDIDygc8
-OSmebFYqYVOvJeCI+mokjyv6MNQqUuZW6u7WDAQp4vHp8JbHFULXuGOtLFNwXdv9
-6JD7FcEXG1Q5QP3CkrrnPs7a3wTVCZllbNvZLQM7xI8+vVjwQFxqOyELnAmc/+uX
-JdHNYU7Wd+KlbLB9SpXBPCpufwIi5Q==
-=MtHO
------END PGP SIGNATURE-----
-
---oLBj+sq0vYjzfsbl--
