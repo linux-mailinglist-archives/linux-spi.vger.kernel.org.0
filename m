@@ -2,62 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB7CF06C5
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Nov 2019 21:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1B8F088C
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Nov 2019 22:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbfKEUUX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Nov 2019 15:20:23 -0500
-Received: from mga18.intel.com ([134.134.136.126]:64357 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726368AbfKEUUX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 5 Nov 2019 15:20:23 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Nov 2019 12:20:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,271,1569308400"; 
-   d="scan'208";a="376815162"
-Received: from tthayer-hp-z620.an.intel.com ([10.122.105.146])
-  by orsmga005.jf.intel.com with ESMTP; 05 Nov 2019 12:20:18 -0800
-From:   thor.thayer@linux.intel.com
+        id S1729907AbfKEVls (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Nov 2019 16:41:48 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:46372 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729680AbfKEVlr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Nov 2019 16:41:47 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 39B858365A;
+        Wed,  6 Nov 2019 10:41:44 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1572990104;
+        bh=qCCum7Y7ylZunEZTc0mEN2AR+w9a1L5cSW5bKWxjglM=;
+        h=From:To:Cc:Subject:Date;
+        b=NJPB8zmU/4e80+N03rFjRr4ub/wYH2eXncfm4tVERnJhchxSdULhYJcVBFNMqqORW
+         1gykRjWIdqQJMBfty97g/eOUg+JUyD2BkACUWkgTvjSbla+14Aql/xMD9B02xOOzOZ
+         y3NYy7IPzO7mFhwtrptxul8ZVWkJ2VJv6ycOwlHmh3HWHw3FyJLBv3A//SJmHrjyW6
+         pJ8SSmWESaY4c5bZFLceeKSGN5yWnOElqm/B/h5Ty/gPIX4MKx54ZNcQCJf9THoHu3
+         cJ7xUQbPEMkBnSaOqgnlDadelYJEFOFuFhBZ5n7nFNZlOFLxqzA+J7hYmfVr+a6F9I
+         UfQsCMrCrWrWg==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5dc1ec970000>; Wed, 06 Nov 2019 10:41:44 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id E0D1513EEEB;
+        Wed,  6 Nov 2019 10:41:41 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id F409528005F; Wed,  6 Nov 2019 10:41:42 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
 To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thor Thayer <thor.thayer@linux.intel.com>
-Subject: [PATCH] spi: dw: Fix Designware SPI loopback
-Date:   Tue,  5 Nov 2019 14:22:10 -0600
-Message-Id: <1572985330-5525-1-git-send-email-thor.thayer@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
+Cc:     trivial@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] spi: bcm2835: fix typo in comment
+Date:   Wed,  6 Nov 2019 10:41:34 +1300
+Message-Id: <20191105214134.25142-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.24.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Thor Thayer <thor.thayer@linux.intel.com>
+GPIOS_OUT_LOW should be GPIOD_OUT_LOW.
 
-The SPI_LOOP is set in spi->mode but not propagated to the register.
-A previous patch removed the bit during a cleanup.
-
-Fixes: e1bc204894ea ("spi: dw: fix potential variable assignment error")
-Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
- drivers/spi/spi-dw.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/spi/spi-bcm2835.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
-index 9a49e073e8b7..076652d3d051 100644
---- a/drivers/spi/spi-dw.c
-+++ b/drivers/spi/spi-dw.c
-@@ -308,7 +308,8 @@ static int dw_spi_transfer_one(struct spi_controller *master,
- 	cr0 = (transfer->bits_per_word - 1)
- 		| (chip->type << SPI_FRF_OFFSET)
- 		| ((((spi->mode & SPI_CPOL) ? 1 : 0) << SPI_SCOL_OFFSET) |
--			(((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET))
-+			(((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET) |
-+			(((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET))
- 		| (chip->tmode << SPI_TMOD_OFFSET);
- 
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index b4070c0de3df..fb61a620effc 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1248,7 +1248,7 @@ static int bcm2835_spi_setup(struct spi_device *spi=
+)
  	/*
--- 
-2.7.4
+ 	 * Retrieve the corresponding GPIO line used for CS.
+ 	 * The inversion semantics will be handled by the GPIO core
+-	 * code, so we pass GPIOS_OUT_LOW for "unasserted" and
++	 * code, so we pass GPIOD_OUT_LOW for "unasserted" and
+ 	 * the correct flag for inversion semantics. The SPI_CS_HIGH
+ 	 * on spi->mode cannot be checked for polarity in this case
+ 	 * as the flag use_gpio_descriptors enforces SPI_CS_HIGH.
+--=20
+2.24.0
 
