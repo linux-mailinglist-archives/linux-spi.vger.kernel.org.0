@@ -2,104 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55283F1B13
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Nov 2019 17:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9CB4F26A6
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Nov 2019 05:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732138AbfKFQWB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Nov 2019 11:22:01 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:53442 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728462AbfKFQWB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Nov 2019 11:22:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=CGgaROaaaA1kcCTZbTkbd3PjQEAz1ZDGj0CbBNL/ZKE=; b=n8mwbBIFPWIV
-        IOq+5KYrZVB8Jg7g8chQYCTOfBw/rr6xRDmiMJlW9868HE3dxkM0wSA85ils4VPrZq3V02tFU5qPW
-        k7OqyYTYD750lvWwmNUjcAwJv0bqMfcfYK1pfuHtyJHNLONR/PUDegQ5KcT0QlHt2lRInvJFfS0vg
-        y/pF8=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iSO4C-0001pP-Rb; Wed, 06 Nov 2019 16:21:56 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 5B0D82743035; Wed,  6 Nov 2019 16:21:56 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Pan Bian <bianpan2016@163.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: img-spfi: fix potential double release" to the spi tree
-In-Reply-To: <1573007769-20131-1-git-send-email-bianpan2016@163.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191106162156.5B0D82743035@ypsilon.sirena.org.uk>
-Date:   Wed,  6 Nov 2019 16:21:56 +0000 (GMT)
+        id S1733212AbfKGEmk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Nov 2019 23:42:40 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:49728 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733201AbfKGEmk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Nov 2019 23:42:40 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0410D886BF;
+        Thu,  7 Nov 2019 17:42:38 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1573101758;
+        bh=StLCXVge82VbJcyGSyaE6MC1vdSTbQKfxMGAum6myqU=;
+        h=From:To:Cc:Subject:Date;
+        b=gg136++WSYzW3ddjXJvecj4jSi0Cc326NAvyMSn6Y4vxV6UYnDhrC6IUokAzmnTIo
+         ovfrqcXctmnfZbXbXf6/84yvDadOOt24g7VNxznhRcK6xionwdVKWgXe0MX/B84cRX
+         7ZW2C+7R64StrFWxzrpHHcscwZ4d6pmlts82OXMrRZAjL4s20ABokXUB873Z7XTqd1
+         t5SPB/+V6Dn81XsLfz/961ci1Tc3AtDmafd0RZN5fZg4jO1MOtbZ7SGIJvC8PkiO8n
+         SZnDmSE65I+3TIgDX5hUNlYAwStfEIE+mzwZKs0WxEMHyvWtoZvNRWujCSKjjhYGVb
+         7IbOMvJtwhcsA==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5dc3a0be0000>; Thu, 07 Nov 2019 17:42:38 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id 2D9CB13EEEB;
+        Thu,  7 Nov 2019 17:42:37 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id A694228005F; Thu,  7 Nov 2019 17:42:37 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     broonie@kernel.org, kdasu.kdev@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] spi: more GPIO CS work
+Date:   Thu,  7 Nov 2019 17:42:33 +1300
+Message-Id: <20191107044235.4864-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.24.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+I've got a platform using the BCM 58525 CPU. The hardware design
+connects to two SPI devices using a slightly odd arrangement of
+GPIOs and native chip select. These patches however should be
+relevant to any platform using that CPU with "normal" CS GPIOs
 
-   spi: img-spfi: fix potential double release
+Chris Packham (2):
+  spi: bcm-qspi: Convert to use CS GPIO descriptors
+  spi: spi-mem: fallback to using transfers when CS gpios are used
 
-has been applied to the spi tree at
+ drivers/spi/spi-bcm-qspi.c | 7 +++++--
+ drivers/spi/spi-mem.c      | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From e9a8ba9769a0e354341bc6cc01b98aadcea1dfe9 Mon Sep 17 00:00:00 2001
-From: Pan Bian <bianpan2016@163.com>
-Date: Wed, 6 Nov 2019 10:36:09 +0800
-Subject: [PATCH] spi: img-spfi: fix potential double release
-
-The channels spfi->tx_ch and spfi->rx_ch are not set to NULL after they
-are released. As a result, they will be released again, either on the
-error handling branch in the same function or in the corresponding
-remove function, i.e. img_spfi_remove(). This patch fixes the bug by
-setting the two members to NULL.
-
-Signed-off-by: Pan Bian <bianpan2016@163.com>
-Link: https://lore.kernel.org/r/1573007769-20131-1-git-send-email-bianpan2016@163.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-img-spfi.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
-index 439b01e4a2c8..f4a8f470aecc 100644
---- a/drivers/spi/spi-img-spfi.c
-+++ b/drivers/spi/spi-img-spfi.c
-@@ -673,6 +673,8 @@ static int img_spfi_probe(struct platform_device *pdev)
- 			dma_release_channel(spfi->tx_ch);
- 		if (spfi->rx_ch)
- 			dma_release_channel(spfi->rx_ch);
-+		spfi->tx_ch = NULL;
-+		spfi->rx_ch = NULL;
- 		dev_warn(spfi->dev, "Failed to get DMA channels, falling back to PIO mode\n");
- 	} else {
- 		master->dma_tx = spfi->tx_ch;
--- 
-2.20.1
+--=20
+2.24.0
 
