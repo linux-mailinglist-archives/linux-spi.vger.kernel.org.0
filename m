@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 316A1F52C7
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2019 18:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD82F52C8
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2019 18:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727148AbfKHRpu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Nov 2019 12:45:50 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37502 "EHLO
+        id S1726232AbfKHRpv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Nov 2019 12:45:51 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37536 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726232AbfKHRpu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Nov 2019 12:45:50 -0500
+        with ESMTP id S1726349AbfKHRpv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Nov 2019 12:45:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=YYCLXF1oV8zvZZPrT6FMd2ouZinjg9kcL02wPvjPTa0=; b=QqUEIz7ASjCq
-        Y1G40/SoHQanp4IfjnQKuusLELLpSY0tlfPzkcjOLuCon/4cdEX+doAMONovMx2X0gDJb9xlV4dzp
-        nM3sZLPyKRTDJSC0n/HLisSZbHLnXAhC4tvbyxxvD64b1K6wKWtqZQCLEaN9J0FvgxMXrnAhAYelt
-        pqVk4=;
+        List-Archive; bh=DMUVFTdCbC7Gxi5sCnOhp5LoH9fF6ZNavOGSLsOo8EM=; b=MpCdeyALQ1b8
+        l1ZcztoM2Sh6pgjU25g3x65GQiOK7DXRBDAJE6pRhpukakFQa62cdk88IKAiOi580CCJwZqi2sxxm
+        Az+lY1mgVs/u64EMr2FrFElRGnTnWbLtXIrS6fzLHSkymN3nqr5hE1dFG3ejgTvAbc5FWEvntFH4l
+        u0zi8=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iT8KO-0007qL-9G; Fri, 08 Nov 2019 17:45:44 +0000
+        id 1iT8KN-0007qI-Rn; Fri, 08 Nov 2019 17:45:43 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id B52C92741704; Fri,  8 Nov 2019 17:45:43 +0000 (GMT)
+        id 40D712741702; Fri,  8 Nov 2019 17:45:43 +0000 (GMT)
 From:   Mark Brown <broonie@kernel.org>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
@@ -36,10 +36,10 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Tudor Ambarus <Tudor.Ambarus@microchip.com>
-Subject: Applied "spi: zynq-qspi: Enhance the Linear CFG bit definitions" to the spi tree
-In-Reply-To: <20191108140744.1734-5-miquel.raynal@bootlin.com>
+Subject: Applied "spi: zynq-qspi: Do the actual hardware initialization later in the probe" to the spi tree
+In-Reply-To: <20191108140744.1734-7-miquel.raynal@bootlin.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191108174543.B52C92741704@ypsilon.sirena.org.uk>
+Message-Id: <20191108174543.40D712741702@ypsilon.sirena.org.uk>
 Date:   Fri,  8 Nov 2019 17:45:43 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -48,7 +48,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: zynq-qspi: Enhance the Linear CFG bit definitions
+   spi: zynq-qspi: Do the actual hardware initialization later in the probe
 
 has been applied to the spi tree at
 
@@ -73,40 +73,56 @@ to this mail.
 Thanks,
 Mark
 
-From 044ac826200f08adebe3207a618d829279e9f3b1 Mon Sep 17 00:00:00 2001
+From 8f16292d8b492ca6b0d58ac0769de1c1a7bbb544 Mon Sep 17 00:00:00 2001
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 8 Nov 2019 15:07:41 +0100
-Subject: [PATCH] spi: zynq-qspi: Enhance the Linear CFG bit definitions
+Date: Fri, 8 Nov 2019 15:07:43 +0100
+Subject: [PATCH] spi: zynq-qspi: Do the actual hardware initialization later
+ in the probe
 
-Using masks makes sense when manipulating fields of several bits. When
-only one bit is involved, it is usual to just use the BIT() macro but
-in this case using the term mask is abusive. Fix the #define macros
-and their comments.
+Supporting more than one CS will need some tweaking of the linear
+configuration register which is (rightfully) initialized in the
+hardware initialization helper. The extra initialization needs the
+knowledge of the actual number of CS, which is retrieved by reading
+the value of the num-cs DT property.
+
+As the initialization helper is called pretty early and might be
+called much later in the probe without side effect, let's delay it a
+bit so that the number of CS will be available when running this
+helper. This way, adding support for multiple CS lines in a next patch
+will be eased.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/r/20191108140744.1734-5-miquel.raynal@bootlin.com
+Link: https://lore.kernel.org/r/20191108140744.1734-7-miquel.raynal@bootlin.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-zynq-qspi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/spi/spi-zynq-qspi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index 530533b6c974..70ecefd817f7 100644
+index 80e51c894eaa..e76f9c9738f0 100644
 --- a/drivers/spi/spi-zynq-qspi.c
 +++ b/drivers/spi/spi-zynq-qspi.c
-@@ -98,9 +98,9 @@
-  * It is named Linear Configuration but it controls other modes when not in
-  * linear mode also.
-  */
--#define ZYNQ_QSPI_LCFG_TWO_MEM_MASK	BIT(30) /* LQSPI Two memories Mask */
--#define ZYNQ_QSPI_LCFG_SEP_BUS_MASK	BIT(29) /* LQSPI Separate bus Mask */
--#define ZYNQ_QSPI_LCFG_U_PAGE_MASK	BIT(28) /* LQSPI Upper Page Mask */
-+#define ZYNQ_QSPI_LCFG_TWO_MEM		BIT(30) /* LQSPI Two memories */
-+#define ZYNQ_QSPI_LCFG_SEP_BUS		BIT(29) /* LQSPI Separate bus */
-+#define ZYNQ_QSPI_LCFG_U_PAGE		BIT(28) /* LQSPI Upper Page */
+@@ -657,9 +657,6 @@ static int zynq_qspi_probe(struct platform_device *pdev)
+ 		goto clk_dis_pclk;
+ 	}
  
- #define ZYNQ_QSPI_LCFG_DUMMY_SHIFT	8
- 
+-	/* QSPI controller initializations */
+-	zynq_qspi_init_hw(xqspi);
+-
+ 	xqspi->irq = platform_get_irq(pdev, 0);
+ 	if (xqspi->irq <= 0) {
+ 		ret = -ENXIO;
+@@ -690,6 +687,10 @@ static int zynq_qspi_probe(struct platform_device *pdev)
+ 	ctlr->setup = zynq_qspi_setup_op;
+ 	ctlr->max_speed_hz = clk_get_rate(xqspi->refclk) / 2;
+ 	ctlr->dev.of_node = np;
++
++	/* QSPI controller initializations */
++	zynq_qspi_init_hw(xqspi);
++
+ 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "spi_register_master failed\n");
 -- 
 2.20.1
 
