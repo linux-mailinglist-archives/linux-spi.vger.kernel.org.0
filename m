@@ -2,144 +2,157 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C73BF452F
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2019 11:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C3DF4A27
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2019 13:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731264AbfKHK7b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Nov 2019 05:59:31 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:45975 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727573AbfKHK7b (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Nov 2019 05:59:31 -0500
-X-Originating-IP: 86.206.246.123
-Received: from localhost.localdomain (lfbn-tou-1-421-123.w86-206.abo.wanadoo.fr [86.206.246.123])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 59E5AE001C;
-        Fri,  8 Nov 2019 10:59:29 +0000 (UTC)
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 7/7] spi: zynq-qspi: Support two chip selects
-Date:   Fri,  8 Nov 2019 11:59:20 +0100
-Message-Id: <20191108105920.19014-8-miquel.raynal@bootlin.com>
+        id S1733103AbfKHMHI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Nov 2019 07:07:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54098 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389104AbfKHLlB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:41:01 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB27921D7F;
+        Fri,  8 Nov 2019 11:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573213259;
+        bh=P4rExky2npgISVzRQqzkSOojSANeuOI8O1f1A/oAhMs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=yxurgVqGhoFaWtpav6d0MvrKLUvmCpsfsQTB4dsRr9IuJtyPW7TCqzDpKYvbp/Jzp
+         ja7k3tNauJjmAO5A028hXx3sXUskOkTKuySTDQ0+1SB3q6Ic2/6BiiNXOh8GjVT0K/
+         yyG3Pkk0Yl+DDJF75oce0QylElqBYv8zqTIHHEwc=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sasha Levin <sashal@kernel.org>, linux-gpio@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 124/205] gpio: of: Handle SPI chipselect legacy bindings
+Date:   Fri,  8 Nov 2019 06:36:31 -0500
+Message-Id: <20191108113752.12502-124-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191108105920.19014-1-miquel.raynal@bootlin.com>
-References: <20191108105920.19014-1-miquel.raynal@bootlin.com>
+In-Reply-To: <20191108113752.12502-1-sashal@kernel.org>
+References: <20191108113752.12502-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Zynq QSPI controller features 2 CS. When the num-cs DT property
-is set to 2, the hardware will be initialized to support having two
-devices connected over each CS.
+From: Linus Walleij <linus.walleij@linaro.org>
 
-In this case, both CS lines are driven by the state of the U_PAGE
-(upper page) bit. When unset, the lower page (CS0) is selected,
-otherwise it is the upper page (CS1).
+[ Upstream commit 6953c57ab1721ce57914fc5741d0ce0568756bb0 ]
 
-Change tested on a custom design featuring two SPI-NORs with different
-CS on the Zynq-7000 QSPI bus.
+The SPI chipselects are assumed to be active low in the current
+binding, so when we want to use GPIO descriptors and handle
+the active low/high semantics in gpiolib, we need a special
+parsing quirk to deal with this.
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+We check for the property "spi-cs-high" and if that is
+NOT present we assume the CS line is active low.
+
+If the line is tagged as active low in the device tree and
+has no "spi-cs-high" property all is fine, the device
+tree and the SPI bindings are in agreement.
+
+If the line is tagged as active high in the device tree with
+the second cell flag and has no "spi-cs-high" property we
+enforce active low semantics (as this is the exception we can
+just tag on the flag).
+
+If the line is tagged as active low with the second cell flag
+AND tagged with "spi-cs-high" the SPI active high property
+takes precedence and we print a warning.
+
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-zynq-qspi.c | 33 +++++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 8 deletions(-)
+ drivers/gpio/gpiolib-of.c | 50 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 48 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index 68e0515e1791..121253cf5266 100644
---- a/drivers/spi/spi-zynq-qspi.c
-+++ b/drivers/spi/spi-zynq-qspi.c
-@@ -115,8 +115,8 @@
-  */
- #define MODEBITS			(SPI_CPOL | SPI_CPHA)
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index e0f149bdf98ff..fa212c2a7577c 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -58,7 +58,8 @@ static struct gpio_desc *of_xlate_and_get_gpiod_flags(struct gpio_chip *chip,
+ }
  
--/* Default number of chip selects */
--#define ZYNQ_QSPI_DEFAULT_NUM_CS	1
-+/* Maximum number of chip selects */
-+#define ZYNQ_QSPI_MAX_NUM_CS		2
- 
- /**
-  * struct zynq_qspi - Defines qspi driver instance
-@@ -160,6 +160,7 @@ static inline void zynq_qspi_write(struct zynq_qspi *xqspi, u32 offset,
- /**
-  * zynq_qspi_init_hw - Initialize the hardware
-  * @xqspi:	Pointer to the zynq_qspi structure
-+ * @num_cs:	Number of connected CS (to enable dual memories if needed)
-  *
-  * The default settings of the QSPI controller's configurable parameters on
-  * reset are
-@@ -177,7 +178,7 @@ static inline void zynq_qspi_write(struct zynq_qspi *xqspi, u32 offset,
-  *	- Set the little endian mode of TX FIFO and
-  *	- Enable the QSPI controller
-  */
--static void zynq_qspi_init_hw(struct zynq_qspi *xqspi)
-+static void zynq_qspi_init_hw(struct zynq_qspi *xqspi, unsigned int num_cs)
+ static void of_gpio_flags_quirks(struct device_node *np,
+-				 enum of_gpio_flags *flags)
++				 enum of_gpio_flags *flags,
++				 int index)
  {
- 	u32 config_reg;
- 
-@@ -185,7 +186,12 @@ static void zynq_qspi_init_hw(struct zynq_qspi *xqspi)
- 	zynq_qspi_write(xqspi, ZYNQ_QSPI_IDIS_OFFSET, ZYNQ_QSPI_IXR_ALL_MASK);
- 
- 	/* Disable linear mode as the boot loader may have used it */
--	zynq_qspi_write(xqspi, ZYNQ_QSPI_LINEAR_CFG_OFFSET, 0);
-+	config_reg = 0;
-+	/* At the same time, enable dual mode if more than 1 CS is available */
-+	if (num_cs > 1)
-+		config_reg |= ZYNQ_QSPI_LCFG_TWO_MEM;
+ 	/*
+ 	 * Some GPIO fixed regulator quirks.
+@@ -92,6 +93,51 @@ static void of_gpio_flags_quirks(struct device_node *np,
+ 		pr_info("%s uses legacy open drain flag - update the DTS if you can\n",
+ 			of_node_full_name(np));
+ 	}
 +
-+	zynq_qspi_write(xqspi, ZYNQ_QSPI_LINEAR_CFG_OFFSET, config_reg);
- 
- 	/* Clear the RX FIFO */
- 	while (zynq_qspi_read(xqspi, ZYNQ_QSPI_STATUS_OFFSET) &
-@@ -312,6 +318,17 @@ static void zynq_qspi_chipselect(struct spi_device *spi, bool assert)
- 	struct zynq_qspi *xqspi = spi_controller_get_devdata(ctlr);
- 	u32 config_reg;
- 
-+	/* Select the lower (CS0) or upper (CS1) memory */
-+	if (ctlr->num_chipselect > 1) {
-+		config_reg = zynq_qspi_read(xqspi, ZYNQ_QSPI_LINEAR_CFG_OFFSET);
-+		if (!spi->chip_select)
-+			config_reg &= ~ZYNQ_QSPI_LCFG_U_PAGE;
-+		else
-+			config_reg |= ZYNQ_QSPI_LCFG_U_PAGE;
++	/*
++	 * Legacy handling of SPI active high chip select. If we have a
++	 * property named "cs-gpios" we need to inspect the child node
++	 * to determine if the flags should have inverted semantics.
++	 */
++	if (IS_ENABLED(CONFIG_SPI_MASTER) &&
++	    of_property_read_bool(np, "cs-gpios")) {
++		struct device_node *child;
++		u32 cs;
++		int ret;
 +
-+		zynq_qspi_write(xqspi, ZYNQ_QSPI_LINEAR_CFG_OFFSET, config_reg);
++		for_each_child_of_node(np, child) {
++			ret = of_property_read_u32(child, "reg", &cs);
++			if (!ret)
++				continue;
++			if (cs == index) {
++				/*
++				 * SPI children have active low chip selects
++				 * by default. This can be specified negatively
++				 * by just omitting "spi-cs-high" in the
++				 * device node, or actively by tagging on
++				 * GPIO_ACTIVE_LOW as flag in the device
++				 * tree. If the line is simultaneously
++				 * tagged as active low in the device tree
++				 * and has the "spi-cs-high" set, we get a
++				 * conflict and the "spi-cs-high" flag will
++				 * take precedence.
++				 */
++				if (of_property_read_bool(np, "spi-cs-high")) {
++					if (*flags & OF_GPIO_ACTIVE_LOW) {
++						pr_warn("%s GPIO handle specifies active low - ignored\n",
++							of_node_full_name(np));
++						*flags &= ~OF_GPIO_ACTIVE_LOW;
++					}
++				} else {
++					if (!(*flags & OF_GPIO_ACTIVE_LOW))
++						pr_info("%s enforce active low on chipselect handle\n",
++							of_node_full_name(np));
++					*flags |= OF_GPIO_ACTIVE_LOW;
++				}
++				break;
++			}
++		}
 +	}
-+
- 	/* Ground the line to assert the CS */
- 	config_reg = zynq_qspi_read(xqspi, ZYNQ_QSPI_CONFIG_OFFSET);
- 	if (assert)
-@@ -697,9 +714,9 @@ static int zynq_qspi_probe(struct platform_device *pdev)
- 	ret = of_property_read_u32(pdev->dev.of_node, "num-cs",
- 				   &num_cs);
- 	if (ret < 0) {
--		ctlr->num_chipselect = ZYNQ_QSPI_DEFAULT_NUM_CS;
--	} else if (num_cs > ZYNQ_QSPI_DEFAULT_NUM_CS) {
--		dev_err(&pdev->dev, "anything but CS0 is not yet supported\n");
-+		ctlr->num_chipselect = 1;
-+	} else if (num_cs > ZYNQ_QSPI_MAX_NUM_CS) {
-+		dev_err(&pdev->dev, "only 2 chip selects are available\n");
- 		goto remove_master;
- 	} else {
- 		ctlr->num_chipselect = num_cs;
-@@ -713,7 +730,7 @@ static int zynq_qspi_probe(struct platform_device *pdev)
- 	ctlr->dev.of_node = np;
+ }
  
- 	/* QSPI controller initializations */
--	zynq_qspi_init_hw(xqspi);
-+	zynq_qspi_init_hw(xqspi, ctlr->num_chipselect);
+ /**
+@@ -132,7 +178,7 @@ struct gpio_desc *of_get_named_gpiod_flags(struct device_node *np,
+ 		goto out;
  
- 	ret = spi_register_controller(ctlr);
- 	if (ret) {
+ 	if (flags)
+-		of_gpio_flags_quirks(np, flags);
++		of_gpio_flags_quirks(np, flags, index);
+ 
+ 	pr_debug("%s: parsed '%s' property of node '%pOF[%d]' - status (%d)\n",
+ 		 __func__, propname, np, index,
 -- 
 2.20.1
 
