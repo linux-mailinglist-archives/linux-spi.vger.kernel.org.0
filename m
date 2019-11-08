@@ -2,14 +2,14 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD82F52C8
+	by mail.lfdr.de (Postfix) with ESMTP id BD744F52C9
 	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2019 18:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbfKHRpv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S1726349AbfKHRpv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Fri, 8 Nov 2019 12:45:51 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37536 "EHLO
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37568 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726349AbfKHRpv (ORCPT
+        with ESMTP id S1726587AbfKHRpv (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Nov 2019 12:45:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
@@ -17,17 +17,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=DMUVFTdCbC7Gxi5sCnOhp5LoH9fF6ZNavOGSLsOo8EM=; b=MpCdeyALQ1b8
-        l1ZcztoM2Sh6pgjU25g3x65GQiOK7DXRBDAJE6pRhpukakFQa62cdk88IKAiOi580CCJwZqi2sxxm
-        Az+lY1mgVs/u64EMr2FrFElRGnTnWbLtXIrS6fzLHSkymN3nqr5hE1dFG3ejgTvAbc5FWEvntFH4l
-        u0zi8=;
+        List-Archive; bh=JKTfmpSbVBqbZWbMm4R+jzpwWjaKYvvCqN2w5M/OpNs=; b=L0W6e9ERLt2r
+        JqpHHi0qzrZxKhfRIC+jqikX6FCaQxa6UP6F5m1gNacq4vUy3v4Nw9mmIV3pC8GQT0O+gYjdXlmOy
+        4/k/6TeNQwO9ZZohLjsxGSfC2zGKSiyEAxwKzeIuh909vRCxbt9d8fg16R3VenqiuTWUIlD+XNUMY
+        983Tw=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iT8KN-0007qI-Rn; Fri, 08 Nov 2019 17:45:43 +0000
+        id 1iT8KO-0007qQ-Gj; Fri, 08 Nov 2019 17:45:44 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 40D712741702; Fri,  8 Nov 2019 17:45:43 +0000 (GMT)
+        id F28452741702; Fri,  8 Nov 2019 17:45:43 +0000 (GMT)
 From:   Mark Brown <broonie@kernel.org>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
@@ -36,10 +36,10 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Tudor Ambarus <Tudor.Ambarus@microchip.com>
-Subject: Applied "spi: zynq-qspi: Do the actual hardware initialization later in the probe" to the spi tree
-In-Reply-To: <20191108140744.1734-7-miquel.raynal@bootlin.com>
+Subject: Applied "spi: zynq-qspi: Keep the bitfields naming consistent" to the spi tree
+In-Reply-To: <20191108140744.1734-4-miquel.raynal@bootlin.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191108174543.40D712741702@ypsilon.sirena.org.uk>
+Message-Id: <20191108174543.F28452741702@ypsilon.sirena.org.uk>
 Date:   Fri,  8 Nov 2019 17:45:43 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -48,7 +48,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: zynq-qspi: Do the actual hardware initialization later in the probe
+   spi: zynq-qspi: Keep the bitfields naming consistent
 
 has been applied to the spi tree at
 
@@ -73,56 +73,69 @@ to this mail.
 Thanks,
 Mark
 
-From 8f16292d8b492ca6b0d58ac0769de1c1a7bbb544 Mon Sep 17 00:00:00 2001
+From 941be723735113028361c4664cd10134d3d27006 Mon Sep 17 00:00:00 2001
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 8 Nov 2019 15:07:43 +0100
-Subject: [PATCH] spi: zynq-qspi: Do the actual hardware initialization later
- in the probe
+Date: Fri, 8 Nov 2019 15:07:40 +0100
+Subject: [PATCH] spi: zynq-qspi: Keep the bitfields naming consistent
 
-Supporting more than one CS will need some tweaking of the linear
-configuration register which is (rightfully) initialized in the
-hardware initialization helper. The extra initialization needs the
-knowledge of the actual number of CS, which is retrieved by reading
-the value of the num-cs DT property.
+Most of the bits/bitfields #define'd in this driver are composed with:
+1/ the driver prefix
+2/ the name of the register they apply to
 
-As the initialization helper is called pretty early and might be
-called much later in the probe without side effect, let's delay it a
-bit so that the number of CS will be available when running this
-helper. This way, adding support for multiple CS lines in a next patch
-will be eased.
+Keep the naming consistent by applying this rule to the CONFIG register
+internals. These definitions will be used in a following change set.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/r/20191108140744.1734-7-miquel.raynal@bootlin.com
+Link: https://lore.kernel.org/r/20191108140744.1734-4-miquel.raynal@bootlin.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-zynq-qspi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/spi/spi-zynq-qspi.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index 80e51c894eaa..e76f9c9738f0 100644
+index 9f53ea08adf7..530533b6c974 100644
 --- a/drivers/spi/spi-zynq-qspi.c
 +++ b/drivers/spi/spi-zynq-qspi.c
-@@ -657,9 +657,6 @@ static int zynq_qspi_probe(struct platform_device *pdev)
- 		goto clk_dis_pclk;
- 	}
+@@ -60,9 +60,9 @@
+  * These are the values used in the calculation of baud rate divisor and
+  * setting the slave select.
+  */
+-#define ZYNQ_QSPI_BAUD_DIV_MAX		GENMASK(2, 0) /* Baud rate maximum */
+-#define ZYNQ_QSPI_BAUD_DIV_SHIFT	3 /* Baud rate divisor shift in CR */
+-#define ZYNQ_QSPI_SS_SHIFT		10 /* Slave Select field shift in CR */
++#define ZYNQ_QSPI_CONFIG_BAUD_DIV_MAX	GENMASK(2, 0) /* Baud rate maximum */
++#define ZYNQ_QSPI_CONFIG_BAUD_DIV_SHIFT	3 /* Baud rate divisor shift */
++#define ZYNQ_QSPI_CONFIG_PCS		10 /* Peripheral Chip Select */
  
--	/* QSPI controller initializations */
--	zynq_qspi_init_hw(xqspi);
--
- 	xqspi->irq = platform_get_irq(pdev, 0);
- 	if (xqspi->irq <= 0) {
- 		ret = -ENXIO;
-@@ -690,6 +687,10 @@ static int zynq_qspi_probe(struct platform_device *pdev)
- 	ctlr->setup = zynq_qspi_setup_op;
- 	ctlr->max_speed_hz = clk_get_rate(xqspi->refclk) / 2;
- 	ctlr->dev.of_node = np;
-+
-+	/* QSPI controller initializations */
-+	zynq_qspi_init_hw(xqspi);
-+
- 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
- 	if (ret) {
- 		dev_err(&pdev->dev, "spi_register_master failed\n");
+ /*
+  * QSPI Interrupt Registers bit Masks
+@@ -292,7 +292,7 @@ static void zynq_qspi_chipselect(struct spi_device *spi, bool assert)
+ 		/* Select the slave */
+ 		config_reg &= ~ZYNQ_QSPI_CONFIG_SSCTRL_MASK;
+ 		config_reg |= (((~(BIT(spi->chip_select))) <<
+-				ZYNQ_QSPI_SS_SHIFT) &
++				ZYNQ_QSPI_CONFIG_PCS) &
+ 				ZYNQ_QSPI_CONFIG_SSCTRL_MASK);
+ 	} else {
+ 		config_reg |= ZYNQ_QSPI_CONFIG_SSCTRL_MASK;
+@@ -331,7 +331,7 @@ static int zynq_qspi_config_op(struct zynq_qspi *xqspi, struct spi_device *spi)
+ 	 *      ----------------
+ 	 *      111 - divide by 256
+ 	 */
+-	while ((baud_rate_val < ZYNQ_QSPI_BAUD_DIV_MAX)  &&
++	while ((baud_rate_val < ZYNQ_QSPI_CONFIG_BAUD_DIV_MAX)  &&
+ 	       (clk_get_rate(xqspi->refclk) / (2 << baud_rate_val)) >
+ 		spi->max_speed_hz)
+ 		baud_rate_val++;
+@@ -347,7 +347,7 @@ static int zynq_qspi_config_op(struct zynq_qspi *xqspi, struct spi_device *spi)
+ 		config_reg |= ZYNQ_QSPI_CONFIG_CPOL_MASK;
+ 
+ 	config_reg &= ~ZYNQ_QSPI_CONFIG_BDRATE_MASK;
+-	config_reg |= (baud_rate_val << ZYNQ_QSPI_BAUD_DIV_SHIFT);
++	config_reg |= (baud_rate_val << ZYNQ_QSPI_CONFIG_BAUD_DIV_SHIFT);
+ 	zynq_qspi_write(xqspi, ZYNQ_QSPI_CONFIG_OFFSET, config_reg);
+ 
+ 	return 0;
 -- 
 2.20.1
 
