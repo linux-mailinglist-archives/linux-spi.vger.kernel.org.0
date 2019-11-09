@@ -2,215 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3881FF5D52
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Nov 2019 05:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F819F5DEC
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Nov 2019 08:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbfKIESB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Nov 2019 23:18:01 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:36062 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbfKIESB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Nov 2019 23:18:01 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA94HwI5068334;
-        Fri, 8 Nov 2019 22:17:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1573273078;
-        bh=BcLZxjKCYy7idf+cwghwWhjBpSuGjAGVoOYlDIaxvzU=;
-        h=From:To:CC:Subject:Date;
-        b=gcAA41+IzzX6zI0mKXErMDaY51m0A/al4QEGy5pgcU/Ov4avi81bO9BmwBS2KXy8F
-         8fmPNG9ZPtHEPNw0u8EkU6u+TpAcOnMwR+jepLZPzmYodzgVu0UQoAaVDg8og6Lfu8
-         6aMkal6tb5wwRPsRcnpL/jcGYNNESxYQa8T5bwMs=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA94Hwnt128669
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 8 Nov 2019 22:17:58 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 8 Nov
- 2019 22:17:42 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Fri, 8 Nov 2019 22:17:42 -0600
-Received: from a0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA94HuN7119007;
-        Fri, 8 Nov 2019 22:17:56 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>
-Subject: [PATCH] spi: omap2-mcspi: Remove redundant checks
-Date:   Sat, 9 Nov 2019 09:48:27 +0530
-Message-ID: <20191109041827.26934-1-vigneshr@ti.com>
-X-Mailer: git-send-email 2.24.0
+        id S1726426AbfKIHz1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 9 Nov 2019 02:55:27 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36007 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbfKIHz0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 9 Nov 2019 02:55:26 -0500
+Received: by mail-pf1-f194.google.com with SMTP id v19so6710517pfm.3;
+        Fri, 08 Nov 2019 23:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5y5F8DyE69ir1OM2CEfkdK02+fKl+DjTDmsukenqfiQ=;
+        b=AjKVLIINbCyCGNErBDVArFPlefHe1A9QAXdVJsH4glXRTAM7nSeef9BnXN8p72bfa7
+         corH8nuZlhOXK74kPezTad4pPF0AzamWbusEt5KjXcM/6Spcdh54y6IMT9UGO7YggpRH
+         y92Bv3qegbd3qjWpZGkiTs/5O34uCH/sgdOQSgBIvC0dyV2Jls1v+fMW37D8eGBjrjSY
+         WwXjYg7gkmJb2oajXjq8VXtPGGWOWjaLMYva6TwbNu8mKifVL8xFcTFQh7Gq1rQODDsx
+         psfytab/67cpvJxKrzTbk9jtsBLj+vzMO3OIIy7JWYLprBiHWfoANVnPBNs3TIO84FdW
+         6pLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5y5F8DyE69ir1OM2CEfkdK02+fKl+DjTDmsukenqfiQ=;
+        b=sfdZtWmza9Z20HUlVtwHw77RitybI39SXtRgWNdOSc1Kg2mvwdMLd1+ts743ZBpjEM
+         6b28sIZop4v791GEIp2FTeo1IFBsPpybi4NgGafKvB6yGCAT43x158EldiC05MZB5B1L
+         HS92IkuOcXwLdMQhR3NJfPIflOadpH4/IVOf53W+HADoQYvCPnqlL5XG4eMTk0J0XwjB
+         thglGxpiECPqoEJvzabyWpuwgo9pztWim5UBynwTGkKu0dPXzbRlBMEjuFF90tWzsniG
+         9sD/0VEHqSLVBdyG/0W9mJiiw1w2aY4iRiytm1CRmRAMbUjccGtnoFy3Q0dzAAutE1lu
+         yu9Q==
+X-Gm-Message-State: APjAAAUKhQ130DsRLjG6GKhSjriHlmp4z5cMzoDD9WKVP66lGObtNGxL
+        Lohel+3bhzVALtgg1aRENrE=
+X-Google-Smtp-Source: APXvYqx2cSGRXqlwVfsdvlPuBSmwxQE4SAkZEgfrpY6nWMX1WSSN1/90gegiaDpT10gY/JXx/Rzuxw==
+X-Received: by 2002:a63:a747:: with SMTP id w7mr1130998pgo.310.1573286126256;
+        Fri, 08 Nov 2019 23:55:26 -0800 (PST)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id b17sm9474030pfr.17.2019.11.08.23.55.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Nov 2019 23:55:25 -0800 (PST)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Ashish Kumar <ashish.kumar@nxp.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] spi: nxp-fspi: Use devm API to fix missed unregistration of controller
+Date:   Sat,  9 Nov 2019 15:55:17 +0800
+Message-Id: <20191109075517.29988-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Both omap2_mcspi_tx_dma() and omap2_mcspi_rx_dma() are only called from
-omap2_mcspi_txrx_dma() and omap2_mcspi_txrx_dma() is always called after
-making sure that mcspi_dma->dma_rx and mcspi_dma->dma_tx are not NULL
-(see omap2_mcspi_transfer_one()).
-Therefore remove redundant NULL checks for omap2_mcspi->dma_tx and
-omap2_mcspi->dma_rx pointers in omap2_mcspi_tx_dma() and
-omap2_mcspi_rx_dma() respectively.
+This driver forgets to unregister controller when remove.
+Use devm API to unregister it automatically to fix it.
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 ---
- drivers/spi/spi-omap2-mcspi.c | 105 +++++++++++++++-------------------
- 1 file changed, 47 insertions(+), 58 deletions(-)
+ drivers/spi/spi-nxp-fspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index 848e03e5f42d..7e2292c11d12 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -397,30 +397,26 @@ static void omap2_mcspi_tx_dma(struct spi_device *spi,
- {
- 	struct omap2_mcspi	*mcspi;
- 	struct omap2_mcspi_dma  *mcspi_dma;
-+	struct dma_async_tx_descriptor *tx;
+diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
+index 501b923f2c27..c36bb1bb464e 100644
+--- a/drivers/spi/spi-nxp-fspi.c
++++ b/drivers/spi/spi-nxp-fspi.c
+@@ -1027,7 +1027,7 @@ static int nxp_fspi_probe(struct platform_device *pdev)
  
- 	mcspi = spi_master_get_devdata(spi->master);
- 	mcspi_dma = &mcspi->dma_channels[spi->chip_select];
+ 	ctlr->dev.of_node = np;
  
--	if (mcspi_dma->dma_tx) {
--		struct dma_async_tx_descriptor *tx;
-+	dmaengine_slave_config(mcspi_dma->dma_tx, &cfg);
+-	ret = spi_register_controller(ctlr);
++	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+ 	if (ret)
+ 		goto err_destroy_mutex;
  
--		dmaengine_slave_config(mcspi_dma->dma_tx, &cfg);
--
--		tx = dmaengine_prep_slave_sg(mcspi_dma->dma_tx, xfer->tx_sg.sgl,
--					     xfer->tx_sg.nents,
--					     DMA_MEM_TO_DEV,
--					     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
--		if (tx) {
--			tx->callback = omap2_mcspi_tx_callback;
--			tx->callback_param = spi;
--			dmaengine_submit(tx);
--		} else {
--			/* FIXME: fall back to PIO? */
--		}
-+	tx = dmaengine_prep_slave_sg(mcspi_dma->dma_tx, xfer->tx_sg.sgl,
-+				     xfer->tx_sg.nents,
-+				     DMA_MEM_TO_DEV,
-+				     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-+	if (tx) {
-+		tx->callback = omap2_mcspi_tx_callback;
-+		tx->callback_param = spi;
-+		dmaengine_submit(tx);
-+	} else {
-+		/* FIXME: fall back to PIO? */
- 	}
- 	dma_async_issue_pending(mcspi_dma->dma_tx);
- 	omap2_mcspi_set_dma_req(spi, 0, 1);
--
- }
- 
- static unsigned
-@@ -439,6 +435,7 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
- 	int			word_len, element_count;
- 	struct omap2_mcspi_cs	*cs = spi->controller_state;
- 	void __iomem		*chstat_reg = cs->base + OMAP2_MCSPI_CHSTAT0;
-+	struct dma_async_tx_descriptor *tx;
- 
- 	mcspi = spi_master_get_devdata(spi->master);
- 	mcspi_dma = &mcspi->dma_channels[spi->chip_select];
-@@ -462,55 +459,47 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
- 	else /* word_len <= 32 */
- 		element_count = count >> 2;
- 
--	if (mcspi_dma->dma_rx) {
--		struct dma_async_tx_descriptor *tx;
- 
--		dmaengine_slave_config(mcspi_dma->dma_rx, &cfg);
-+	dmaengine_slave_config(mcspi_dma->dma_rx, &cfg);
- 
-+	/*
-+	 *  Reduce DMA transfer length by one more if McSPI is
-+	 *  configured in turbo mode.
-+	 */
-+	if ((l & OMAP2_MCSPI_CHCONF_TURBO) && mcspi->fifo_depth == 0)
-+		transfer_reduction += es;
-+
-+	if (transfer_reduction) {
-+		/* Split sgl into two. The second sgl won't be used. */
-+		sizes[0] = count - transfer_reduction;
-+		sizes[1] = transfer_reduction;
-+		nb_sizes = 2;
-+	} else {
- 		/*
--		 *  Reduce DMA transfer length by one more if McSPI is
--		 *  configured in turbo mode.
-+		 * Don't bother splitting the sgl. This essentially
-+		 * clones the original sgl.
- 		 */
--		if ((l & OMAP2_MCSPI_CHCONF_TURBO) && mcspi->fifo_depth == 0)
--			transfer_reduction += es;
--
--		if (transfer_reduction) {
--			/* Split sgl into two. The second sgl won't be used. */
--			sizes[0] = count - transfer_reduction;
--			sizes[1] = transfer_reduction;
--			nb_sizes = 2;
--		} else {
--			/*
--			 * Don't bother splitting the sgl. This essentially
--			 * clones the original sgl.
--			 */
--			sizes[0] = count;
--			nb_sizes = 1;
--		}
-+		sizes[0] = count;
-+		nb_sizes = 1;
-+	}
- 
--		ret = sg_split(xfer->rx_sg.sgl, xfer->rx_sg.nents,
--			       0, nb_sizes,
--			       sizes,
--			       sg_out, out_mapped_nents,
--			       GFP_KERNEL);
-+	ret = sg_split(xfer->rx_sg.sgl, xfer->rx_sg.nents, 0, nb_sizes,
-+		       sizes, sg_out, out_mapped_nents, GFP_KERNEL);
- 
--		if (ret < 0) {
--			dev_err(&spi->dev, "sg_split failed\n");
--			return 0;
--		}
-+	if (ret < 0) {
-+		dev_err(&spi->dev, "sg_split failed\n");
-+		return 0;
-+	}
- 
--		tx = dmaengine_prep_slave_sg(mcspi_dma->dma_rx,
--					     sg_out[0],
--					     out_mapped_nents[0],
--					     DMA_DEV_TO_MEM,
--					     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
--		if (tx) {
--			tx->callback = omap2_mcspi_rx_callback;
--			tx->callback_param = spi;
--			dmaengine_submit(tx);
--		} else {
--				/* FIXME: fall back to PIO? */
--		}
-+	tx = dmaengine_prep_slave_sg(mcspi_dma->dma_rx, sg_out[0],
-+				     out_mapped_nents[0], DMA_DEV_TO_MEM,
-+				     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-+	if (tx) {
-+		tx->callback = omap2_mcspi_rx_callback;
-+		tx->callback_param = spi;
-+		dmaengine_submit(tx);
-+	} else {
-+		/* FIXME: fall back to PIO? */
- 	}
- 
- 	dma_async_issue_pending(mcspi_dma->dma_rx);
 -- 
-2.24.0
+2.23.0
 
