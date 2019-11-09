@@ -2,113 +2,215 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC42F52CA
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2019 18:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3881FF5D52
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Nov 2019 05:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbfKHRpv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Nov 2019 12:45:51 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37566 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726446AbfKHRpv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Nov 2019 12:45:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=b3C7gijS/8kKmdHw0Z9BScpM80WNvZGBHgxJyi74e4w=; b=kWYYL+yr8lt5
-        ojW52H7Al0bOFfMD9+FpIl4i0Rm2RVSZwQIDl7sOEqpHv6sA269A1ppVp0AroJD6Kl8kgLB/Bwsrj
-        NSRCBySkXlEMUYFBCLkhS5LphiA4YLkbosTjxz79DAUxpct8yEK2IU/HZtDZoGD6WXJn0oow+Pl1N
-        f68dI=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iT8KO-0007qU-NI; Fri, 08 Nov 2019 17:45:44 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 3BA1A2741460; Fri,  8 Nov 2019 17:45:44 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>
-Subject: Applied "spi: zynq-qspi: Anything else than CS0 is not supported yet" to the spi tree
-In-Reply-To: <20191108140744.1734-2-miquel.raynal@bootlin.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191108174544.3BA1A2741460@ypsilon.sirena.org.uk>
-Date:   Fri,  8 Nov 2019 17:45:44 +0000 (GMT)
+        id S1726050AbfKIESB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Nov 2019 23:18:01 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:36062 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726019AbfKIESB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Nov 2019 23:18:01 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA94HwI5068334;
+        Fri, 8 Nov 2019 22:17:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573273078;
+        bh=BcLZxjKCYy7idf+cwghwWhjBpSuGjAGVoOYlDIaxvzU=;
+        h=From:To:CC:Subject:Date;
+        b=gcAA41+IzzX6zI0mKXErMDaY51m0A/al4QEGy5pgcU/Ov4avi81bO9BmwBS2KXy8F
+         8fmPNG9ZPtHEPNw0u8EkU6u+TpAcOnMwR+jepLZPzmYodzgVu0UQoAaVDg8og6Lfu8
+         6aMkal6tb5wwRPsRcnpL/jcGYNNESxYQa8T5bwMs=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA94Hwnt128669
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 8 Nov 2019 22:17:58 -0600
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 8 Nov
+ 2019 22:17:42 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Fri, 8 Nov 2019 22:17:42 -0600
+Received: from a0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA94HuN7119007;
+        Fri, 8 Nov 2019 22:17:56 -0600
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>
+Subject: [PATCH] spi: omap2-mcspi: Remove redundant checks
+Date:   Sat, 9 Nov 2019 09:48:27 +0530
+Message-ID: <20191109041827.26934-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.24.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+Both omap2_mcspi_tx_dma() and omap2_mcspi_rx_dma() are only called from
+omap2_mcspi_txrx_dma() and omap2_mcspi_txrx_dma() is always called after
+making sure that mcspi_dma->dma_rx and mcspi_dma->dma_tx are not NULL
+(see omap2_mcspi_transfer_one()).
+Therefore remove redundant NULL checks for omap2_mcspi->dma_tx and
+omap2_mcspi->dma_rx pointers in omap2_mcspi_tx_dma() and
+omap2_mcspi_rx_dma() respectively.
 
-   spi: zynq-qspi: Anything else than CS0 is not supported yet
-
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 087622d09472f96f1f5d6ced36ca75c92e86af21 Mon Sep 17 00:00:00 2001
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 8 Nov 2019 15:07:38 +0100
-Subject: [PATCH] spi: zynq-qspi: Anything else than CS0 is not supported yet
-
-Unlike what the driver is currently advertizing, CS0 only can be used,
-CS1 is not supported at all. Prevent people to use CS1.
-
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/r/20191108140744.1734-2-miquel.raynal@bootlin.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 ---
- drivers/spi/spi-zynq-qspi.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/spi/spi-omap2-mcspi.c | 105 +++++++++++++++-------------------
+ 1 file changed, 47 insertions(+), 58 deletions(-)
 
-diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index b1c56e9d7c94..9f53ea08adf7 100644
---- a/drivers/spi/spi-zynq-qspi.c
-+++ b/drivers/spi/spi-zynq-qspi.c
-@@ -680,10 +680,14 @@ static int zynq_qspi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index 848e03e5f42d..7e2292c11d12 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -397,30 +397,26 @@ static void omap2_mcspi_tx_dma(struct spi_device *spi,
+ {
+ 	struct omap2_mcspi	*mcspi;
+ 	struct omap2_mcspi_dma  *mcspi_dma;
++	struct dma_async_tx_descriptor *tx;
  
- 	ret = of_property_read_u32(np, "num-cs",
- 				   &num_cs);
--	if (ret < 0)
-+	if (ret < 0) {
- 		ctlr->num_chipselect = ZYNQ_QSPI_DEFAULT_NUM_CS;
--	else
-+	} else if (num_cs > ZYNQ_QSPI_DEFAULT_NUM_CS) {
-+		dev_err(&pdev->dev, "anything but CS0 is not yet supported\n");
-+		goto remove_master;
+ 	mcspi = spi_master_get_devdata(spi->master);
+ 	mcspi_dma = &mcspi->dma_channels[spi->chip_select];
+ 
+-	if (mcspi_dma->dma_tx) {
+-		struct dma_async_tx_descriptor *tx;
++	dmaengine_slave_config(mcspi_dma->dma_tx, &cfg);
+ 
+-		dmaengine_slave_config(mcspi_dma->dma_tx, &cfg);
+-
+-		tx = dmaengine_prep_slave_sg(mcspi_dma->dma_tx, xfer->tx_sg.sgl,
+-					     xfer->tx_sg.nents,
+-					     DMA_MEM_TO_DEV,
+-					     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+-		if (tx) {
+-			tx->callback = omap2_mcspi_tx_callback;
+-			tx->callback_param = spi;
+-			dmaengine_submit(tx);
+-		} else {
+-			/* FIXME: fall back to PIO? */
+-		}
++	tx = dmaengine_prep_slave_sg(mcspi_dma->dma_tx, xfer->tx_sg.sgl,
++				     xfer->tx_sg.nents,
++				     DMA_MEM_TO_DEV,
++				     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
++	if (tx) {
++		tx->callback = omap2_mcspi_tx_callback;
++		tx->callback_param = spi;
++		dmaengine_submit(tx);
 +	} else {
- 		ctlr->num_chipselect = num_cs;
++		/* FIXME: fall back to PIO? */
+ 	}
+ 	dma_async_issue_pending(mcspi_dma->dma_tx);
+ 	omap2_mcspi_set_dma_req(spi, 0, 1);
+-
+ }
+ 
+ static unsigned
+@@ -439,6 +435,7 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
+ 	int			word_len, element_count;
+ 	struct omap2_mcspi_cs	*cs = spi->controller_state;
+ 	void __iomem		*chstat_reg = cs->base + OMAP2_MCSPI_CHSTAT0;
++	struct dma_async_tx_descriptor *tx;
+ 
+ 	mcspi = spi_master_get_devdata(spi->master);
+ 	mcspi_dma = &mcspi->dma_channels[spi->chip_select];
+@@ -462,55 +459,47 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
+ 	else /* word_len <= 32 */
+ 		element_count = count >> 2;
+ 
+-	if (mcspi_dma->dma_rx) {
+-		struct dma_async_tx_descriptor *tx;
+ 
+-		dmaengine_slave_config(mcspi_dma->dma_rx, &cfg);
++	dmaengine_slave_config(mcspi_dma->dma_rx, &cfg);
+ 
++	/*
++	 *  Reduce DMA transfer length by one more if McSPI is
++	 *  configured in turbo mode.
++	 */
++	if ((l & OMAP2_MCSPI_CHCONF_TURBO) && mcspi->fifo_depth == 0)
++		transfer_reduction += es;
++
++	if (transfer_reduction) {
++		/* Split sgl into two. The second sgl won't be used. */
++		sizes[0] = count - transfer_reduction;
++		sizes[1] = transfer_reduction;
++		nb_sizes = 2;
++	} else {
+ 		/*
+-		 *  Reduce DMA transfer length by one more if McSPI is
+-		 *  configured in turbo mode.
++		 * Don't bother splitting the sgl. This essentially
++		 * clones the original sgl.
+ 		 */
+-		if ((l & OMAP2_MCSPI_CHCONF_TURBO) && mcspi->fifo_depth == 0)
+-			transfer_reduction += es;
+-
+-		if (transfer_reduction) {
+-			/* Split sgl into two. The second sgl won't be used. */
+-			sizes[0] = count - transfer_reduction;
+-			sizes[1] = transfer_reduction;
+-			nb_sizes = 2;
+-		} else {
+-			/*
+-			 * Don't bother splitting the sgl. This essentially
+-			 * clones the original sgl.
+-			 */
+-			sizes[0] = count;
+-			nb_sizes = 1;
+-		}
++		sizes[0] = count;
++		nb_sizes = 1;
 +	}
  
- 	ctlr->mode_bits =  SPI_RX_DUAL | SPI_RX_QUAD |
- 			    SPI_TX_DUAL | SPI_TX_QUAD;
+-		ret = sg_split(xfer->rx_sg.sgl, xfer->rx_sg.nents,
+-			       0, nb_sizes,
+-			       sizes,
+-			       sg_out, out_mapped_nents,
+-			       GFP_KERNEL);
++	ret = sg_split(xfer->rx_sg.sgl, xfer->rx_sg.nents, 0, nb_sizes,
++		       sizes, sg_out, out_mapped_nents, GFP_KERNEL);
+ 
+-		if (ret < 0) {
+-			dev_err(&spi->dev, "sg_split failed\n");
+-			return 0;
+-		}
++	if (ret < 0) {
++		dev_err(&spi->dev, "sg_split failed\n");
++		return 0;
++	}
+ 
+-		tx = dmaengine_prep_slave_sg(mcspi_dma->dma_rx,
+-					     sg_out[0],
+-					     out_mapped_nents[0],
+-					     DMA_DEV_TO_MEM,
+-					     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+-		if (tx) {
+-			tx->callback = omap2_mcspi_rx_callback;
+-			tx->callback_param = spi;
+-			dmaengine_submit(tx);
+-		} else {
+-				/* FIXME: fall back to PIO? */
+-		}
++	tx = dmaengine_prep_slave_sg(mcspi_dma->dma_rx, sg_out[0],
++				     out_mapped_nents[0], DMA_DEV_TO_MEM,
++				     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
++	if (tx) {
++		tx->callback = omap2_mcspi_rx_callback;
++		tx->callback_param = spi;
++		dmaengine_submit(tx);
++	} else {
++		/* FIXME: fall back to PIO? */
+ 	}
+ 
+ 	dma_async_issue_pending(mcspi_dma->dma_rx);
 -- 
-2.20.1
+2.24.0
 
