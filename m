@@ -2,39 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2DCF6316
-	for <lists+linux-spi@lfdr.de>; Sun, 10 Nov 2019 03:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEA1F66E9
+	for <lists+linux-spi@lfdr.de>; Sun, 10 Nov 2019 04:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729447AbfKJCt2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 9 Nov 2019 21:49:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58706 "EHLO mail.kernel.org"
+        id S1726958AbfKJCkf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 9 Nov 2019 21:40:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33742 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729443AbfKJCt1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:49:27 -0500
+        id S1726927AbfKJCke (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:40:34 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E55FF22582;
-        Sun, 10 Nov 2019 02:49:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7014A222CB;
+        Sun, 10 Nov 2019 02:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573354166;
-        bh=aVKmmzuDZ5QTQRCW128cpPdiooGGRAKbQA6riTvUBew=;
+        s=default; t=1573353633;
+        bh=YqZWzUQJTKdmC1hV7IUxf49LhrQKLeopy1rzr6WQcL4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aiXePIOc5+cZRgZIxrOeJ6Ap3RoFpUv2qZHOeCRTaNIsgtW5iRoVThC7mT/5YMVez
-         y8oWFAxhC6za0ma1987nr7FxeCrRXJLdk4NNEfqMunLWiR2xM4LrZtRr6V486hTwJW
-         cissVaaVuY/TyMKryogOKE56/JRwSzpk/dRZbkxM=
+        b=Q4yU7ws9aAGoFBBRcTQ4OIhcxzn06ZTHpHFQ79+H8UPHO0o6xJTsRWF6NzVS+/ZJJ
+         wbmFsKD4Xp9tiiVRwQzlk4rc6GAbdqBnHqLx5kYIz4eXunZD2ckl8H/iuXy8KiT2jO
+         hNToqWmCUMHbJc5FtXeM9rJgiKFr/vYioGYbGOgA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.9 23/66] spi: pic32: Use proper enum in dmaengine_prep_slave_rg
-Date:   Sat,  9 Nov 2019 21:48:02 -0500
-Message-Id: <20191110024846.32598-23-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 016/191] spi/bcm63xx-hsspi: keep pll clk enabled
+Date:   Sat,  9 Nov 2019 21:37:18 -0500
+Message-Id: <20191110024013.29782-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110024846.32598-1-sashal@kernel.org>
-References: <20191110024846.32598-1-sashal@kernel.org>
+In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
+References: <20191110024013.29782-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,57 +43,113 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Jonas Gorski <jonas.gorski@gmail.com>
 
-[ Upstream commit 8cfde7847d5ed0bb77bace41519572963e43cd17 ]
+[ Upstream commit 0fd85869c2a9c8723a98bc1f56a876e8383649f4 ]
 
-Clang warns when one enumerated type is converted implicitly to another:
+If the pll clock needs to be enabled to get its rate, it will also need
+to be enabled to provide it. So ensure it is kept enabled through the
+lifetime of the device.
 
-drivers/spi/spi-pic32.c:323:8: warning: implicit conversion from
-enumeration type 'enum dma_data_direction' to different enumeration type
-'enum dma_transfer_direction' [-Wenum-conversion]
-                                          DMA_FROM_DEVICE,
-                                          ^~~~~~~~~~~~~~~
-drivers/spi/spi-pic32.c:333:8: warning: implicit conversion from
-enumeration type 'enum dma_data_direction' to different enumeration type
-'enum dma_transfer_direction' [-Wenum-conversion]
-                                          DMA_TO_DEVICE,
-                                          ^~~~~~~~~~~~~
-2 warnings generated.
-
-Use the proper enums from dma_transfer_direction (DMA_FROM_DEVICE =
-DMA_DEV_TO_MEM = 2, DMA_TO_DEVICE = DMA_MEM_TO_DEV = 1) to satify Clang.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/159
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Fixes: 0d7412ed1f5dc ("spi/bcm63xx-hspi: Enable the clock before calling clk_get_rate().")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-pic32.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-bcm63xx-hsspi.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
-index fefb688a34328..2f4df804c4d80 100644
---- a/drivers/spi/spi-pic32.c
-+++ b/drivers/spi/spi-pic32.c
-@@ -320,7 +320,7 @@ static int pic32_spi_dma_transfer(struct pic32_spi *pic32s,
- 	desc_rx = dmaengine_prep_slave_sg(master->dma_rx,
- 					  xfer->rx_sg.sgl,
- 					  xfer->rx_sg.nents,
--					  DMA_FROM_DEVICE,
-+					  DMA_DEV_TO_MEM,
- 					  DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
- 	if (!desc_rx) {
- 		ret = -EINVAL;
-@@ -330,7 +330,7 @@ static int pic32_spi_dma_transfer(struct pic32_spi *pic32s,
- 	desc_tx = dmaengine_prep_slave_sg(master->dma_tx,
- 					  xfer->tx_sg.sgl,
- 					  xfer->tx_sg.nents,
--					  DMA_TO_DEVICE,
-+					  DMA_MEM_TO_DEV,
- 					  DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
- 	if (!desc_tx) {
- 		ret = -EINVAL;
+diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
+index c23849f7aa7bc..9a06ffdb73b88 100644
+--- a/drivers/spi/spi-bcm63xx-hsspi.c
++++ b/drivers/spi/spi-bcm63xx-hsspi.c
+@@ -101,6 +101,7 @@ struct bcm63xx_hsspi {
+ 
+ 	struct platform_device *pdev;
+ 	struct clk *clk;
++	struct clk *pll_clk;
+ 	void __iomem *regs;
+ 	u8 __iomem *fifo;
+ 
+@@ -332,7 +333,7 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
+ 	struct resource *res_mem;
+ 	void __iomem *regs;
+ 	struct device *dev = &pdev->dev;
+-	struct clk *clk;
++	struct clk *clk, *pll_clk = NULL;
+ 	int irq, ret;
+ 	u32 reg, rate, num_cs = HSSPI_SPI_MAX_CS;
+ 
+@@ -358,7 +359,7 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
+ 
+ 	rate = clk_get_rate(clk);
+ 	if (!rate) {
+-		struct clk *pll_clk = devm_clk_get(dev, "pll");
++		pll_clk = devm_clk_get(dev, "pll");
+ 
+ 		if (IS_ERR(pll_clk)) {
+ 			ret = PTR_ERR(pll_clk);
+@@ -373,19 +374,20 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
+ 		clk_disable_unprepare(pll_clk);
+ 		if (!rate) {
+ 			ret = -EINVAL;
+-			goto out_disable_clk;
++			goto out_disable_pll_clk;
+ 		}
+ 	}
+ 
+ 	master = spi_alloc_master(&pdev->dev, sizeof(*bs));
+ 	if (!master) {
+ 		ret = -ENOMEM;
+-		goto out_disable_clk;
++		goto out_disable_pll_clk;
+ 	}
+ 
+ 	bs = spi_master_get_devdata(master);
+ 	bs->pdev = pdev;
+ 	bs->clk = clk;
++	bs->pll_clk = pll_clk;
+ 	bs->regs = regs;
+ 	bs->speed_hz = rate;
+ 	bs->fifo = (u8 __iomem *)(bs->regs + HSSPI_FIFO_REG(0));
+@@ -440,6 +442,8 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
+ 
+ out_put_master:
+ 	spi_master_put(master);
++out_disable_pll_clk:
++	clk_disable_unprepare(pll_clk);
+ out_disable_clk:
+ 	clk_disable_unprepare(clk);
+ 	return ret;
+@@ -453,6 +457,7 @@ static int bcm63xx_hsspi_remove(struct platform_device *pdev)
+ 
+ 	/* reset the hardware and block queue progress */
+ 	__raw_writel(0, bs->regs + HSSPI_INT_MASK_REG);
++	clk_disable_unprepare(bs->pll_clk);
+ 	clk_disable_unprepare(bs->clk);
+ 
+ 	return 0;
+@@ -465,6 +470,7 @@ static int bcm63xx_hsspi_suspend(struct device *dev)
+ 	struct bcm63xx_hsspi *bs = spi_master_get_devdata(master);
+ 
+ 	spi_master_suspend(master);
++	clk_disable_unprepare(bs->pll_clk);
+ 	clk_disable_unprepare(bs->clk);
+ 
+ 	return 0;
+@@ -480,6 +486,12 @@ static int bcm63xx_hsspi_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
++	if (bs->pll_clk) {
++		ret = clk_prepare_enable(bs->pll_clk);
++		if (ret)
++			return ret;
++	}
++
+ 	spi_master_resume(master);
+ 
+ 	return 0;
 -- 
 2.20.1
 
