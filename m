@@ -2,35 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEA1F66E9
-	for <lists+linux-spi@lfdr.de>; Sun, 10 Nov 2019 04:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE662F66E5
+	for <lists+linux-spi@lfdr.de>; Sun, 10 Nov 2019 04:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbfKJCkf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 9 Nov 2019 21:40:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33742 "EHLO mail.kernel.org"
+        id S1726978AbfKJCki (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 9 Nov 2019 21:40:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726927AbfKJCke (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:40:34 -0500
+        id S1726952AbfKJCkf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:40:35 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7014A222CB;
-        Sun, 10 Nov 2019 02:40:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 77AA4215EA;
+        Sun, 10 Nov 2019 02:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573353633;
-        bh=YqZWzUQJTKdmC1hV7IUxf49LhrQKLeopy1rzr6WQcL4=;
+        s=default; t=1573353634;
+        bh=2/j4KmKRBuQKRP03CURvKCeNJQx6DOj4oH59pezYbNs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q4yU7ws9aAGoFBBRcTQ4OIhcxzn06ZTHpHFQ79+H8UPHO0o6xJTsRWF6NzVS+/ZJJ
-         wbmFsKD4Xp9tiiVRwQzlk4rc6GAbdqBnHqLx5kYIz4eXunZD2ckl8H/iuXy8KiT2jO
-         hNToqWmCUMHbJc5FtXeM9rJgiKFr/vYioGYbGOgA=
+        b=PEFI1hqAgIWouxrMj9I6za4wxfbDstRkEUCj1w6qaxOB9bmN1mO2foLE45R1xI73Y
+         d9cNu33se1wDuAR45QJVqBn4tnREnnSgOwkcoR1lIFCsVO77kvt2QwM1gDBG+xubYC
+         QPax9qlattkulAIJw9pxdyHBhVNSYVAz2/fKkXjY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+Cc:     Peter Shih <pihsun@chromium.org>, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 016/191] spi/bcm63xx-hsspi: keep pll clk enabled
-Date:   Sat,  9 Nov 2019 21:37:18 -0500
-Message-Id: <20191110024013.29782-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 017/191] spi: mediatek: Don't modify spi_transfer when transfer.
+Date:   Sat,  9 Nov 2019 21:37:19 -0500
+Message-Id: <20191110024013.29782-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
 References: <20191110024013.29782-1-sashal@kernel.org>
@@ -43,113 +42,117 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Jonas Gorski <jonas.gorski@gmail.com>
+From: Peter Shih <pihsun@chromium.org>
 
-[ Upstream commit 0fd85869c2a9c8723a98bc1f56a876e8383649f4 ]
+[ Upstream commit 00bca73bfca4fb0ab089b94cad0fc83d8b49c25f ]
 
-If the pll clock needs to be enabled to get its rate, it will also need
-to be enabled to provide it. So ensure it is kept enabled through the
-lifetime of the device.
+Mediatek SPI driver modifies some fields (tx_buf, rx_buf, len, tx_dma,
+rx_dma) of the spi_transfer* passed in when doing transfer_one and in
+interrupt handler. This is somewhat unexpected, and there are some
+caller (e.g. Cr50 spi driver) that reuse the spi_transfer for multiple
+messages. Add a field to record how many bytes have been transferred,
+and calculate the right len / buffer based on it instead.
 
-Fixes: 0d7412ed1f5dc ("spi/bcm63xx-hspi: Enable the clock before calling clk_get_rate().")
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
+
+Change-Id: I23e218cd964f16c0b2b26127d4a5ca6529867673
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-bcm63xx-hsspi.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/spi/spi-mt65xx.c | 37 +++++++++++++++++++++----------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
-index c23849f7aa7bc..9a06ffdb73b88 100644
---- a/drivers/spi/spi-bcm63xx-hsspi.c
-+++ b/drivers/spi/spi-bcm63xx-hsspi.c
-@@ -101,6 +101,7 @@ struct bcm63xx_hsspi {
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 86bf45667a040..3dc31627c6558 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -98,6 +98,7 @@ struct mtk_spi {
+ 	struct clk *parent_clk, *sel_clk, *spi_clk;
+ 	struct spi_transfer *cur_transfer;
+ 	u32 xfer_len;
++	u32 num_xfered;
+ 	struct scatterlist *tx_sgl, *rx_sgl;
+ 	u32 tx_sgl_len, rx_sgl_len;
+ 	const struct mtk_spi_compatible *dev_comp;
+@@ -385,6 +386,7 @@ static int mtk_spi_fifo_transfer(struct spi_master *master,
  
- 	struct platform_device *pdev;
- 	struct clk *clk;
-+	struct clk *pll_clk;
- 	void __iomem *regs;
- 	u8 __iomem *fifo;
+ 	mdata->cur_transfer = xfer;
+ 	mdata->xfer_len = min(MTK_SPI_MAX_FIFO_SIZE, xfer->len);
++	mdata->num_xfered = 0;
+ 	mtk_spi_prepare_transfer(master, xfer);
+ 	mtk_spi_setup_packet(master);
  
-@@ -332,7 +333,7 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
- 	struct resource *res_mem;
- 	void __iomem *regs;
- 	struct device *dev = &pdev->dev;
--	struct clk *clk;
-+	struct clk *clk, *pll_clk = NULL;
- 	int irq, ret;
- 	u32 reg, rate, num_cs = HSSPI_SPI_MAX_CS;
+@@ -415,6 +417,7 @@ static int mtk_spi_dma_transfer(struct spi_master *master,
+ 	mdata->tx_sgl_len = 0;
+ 	mdata->rx_sgl_len = 0;
+ 	mdata->cur_transfer = xfer;
++	mdata->num_xfered = 0;
  
-@@ -358,7 +359,7 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
+ 	mtk_spi_prepare_transfer(master, xfer);
  
- 	rate = clk_get_rate(clk);
- 	if (!rate) {
--		struct clk *pll_clk = devm_clk_get(dev, "pll");
-+		pll_clk = devm_clk_get(dev, "pll");
+@@ -482,7 +485,7 @@ static int mtk_spi_setup(struct spi_device *spi)
  
- 		if (IS_ERR(pll_clk)) {
- 			ret = PTR_ERR(pll_clk);
-@@ -373,19 +374,20 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
- 		clk_disable_unprepare(pll_clk);
- 		if (!rate) {
- 			ret = -EINVAL;
--			goto out_disable_clk;
-+			goto out_disable_pll_clk;
+ static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
+ {
+-	u32 cmd, reg_val, cnt, remainder;
++	u32 cmd, reg_val, cnt, remainder, len;
+ 	struct spi_master *master = dev_id;
+ 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+ 	struct spi_transfer *trans = mdata->cur_transfer;
+@@ -497,36 +500,38 @@ static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
+ 		if (trans->rx_buf) {
+ 			cnt = mdata->xfer_len / 4;
+ 			ioread32_rep(mdata->base + SPI_RX_DATA_REG,
+-				     trans->rx_buf, cnt);
++				     trans->rx_buf + mdata->num_xfered, cnt);
+ 			remainder = mdata->xfer_len % 4;
+ 			if (remainder > 0) {
+ 				reg_val = readl(mdata->base + SPI_RX_DATA_REG);
+-				memcpy(trans->rx_buf + (cnt * 4),
+-					&reg_val, remainder);
++				memcpy(trans->rx_buf +
++					mdata->num_xfered +
++					(cnt * 4),
++					&reg_val,
++					remainder);
+ 			}
  		}
- 	}
  
- 	master = spi_alloc_master(&pdev->dev, sizeof(*bs));
- 	if (!master) {
- 		ret = -ENOMEM;
--		goto out_disable_clk;
-+		goto out_disable_pll_clk;
- 	}
+-		trans->len -= mdata->xfer_len;
+-		if (!trans->len) {
++		mdata->num_xfered += mdata->xfer_len;
++		if (mdata->num_xfered == trans->len) {
+ 			spi_finalize_current_transfer(master);
+ 			return IRQ_HANDLED;
+ 		}
  
- 	bs = spi_master_get_devdata(master);
- 	bs->pdev = pdev;
- 	bs->clk = clk;
-+	bs->pll_clk = pll_clk;
- 	bs->regs = regs;
- 	bs->speed_hz = rate;
- 	bs->fifo = (u8 __iomem *)(bs->regs + HSSPI_FIFO_REG(0));
-@@ -440,6 +442,8 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
+-		if (trans->tx_buf)
+-			trans->tx_buf += mdata->xfer_len;
+-		if (trans->rx_buf)
+-			trans->rx_buf += mdata->xfer_len;
+-
+-		mdata->xfer_len = min(MTK_SPI_MAX_FIFO_SIZE, trans->len);
++		len = trans->len - mdata->num_xfered;
++		mdata->xfer_len = min(MTK_SPI_MAX_FIFO_SIZE, len);
+ 		mtk_spi_setup_packet(master);
  
- out_put_master:
- 	spi_master_put(master);
-+out_disable_pll_clk:
-+	clk_disable_unprepare(pll_clk);
- out_disable_clk:
- 	clk_disable_unprepare(clk);
- 	return ret;
-@@ -453,6 +457,7 @@ static int bcm63xx_hsspi_remove(struct platform_device *pdev)
+-		cnt = trans->len / 4;
+-		iowrite32_rep(mdata->base + SPI_TX_DATA_REG, trans->tx_buf, cnt);
++		cnt = len / 4;
++		iowrite32_rep(mdata->base + SPI_TX_DATA_REG,
++				trans->tx_buf + mdata->num_xfered, cnt);
  
- 	/* reset the hardware and block queue progress */
- 	__raw_writel(0, bs->regs + HSSPI_INT_MASK_REG);
-+	clk_disable_unprepare(bs->pll_clk);
- 	clk_disable_unprepare(bs->clk);
+-		remainder = trans->len % 4;
++		remainder = len % 4;
+ 		if (remainder > 0) {
+ 			reg_val = 0;
+-			memcpy(&reg_val, trans->tx_buf + (cnt * 4), remainder);
++			memcpy(&reg_val,
++				trans->tx_buf + (cnt * 4) + mdata->num_xfered,
++				remainder);
+ 			writel(reg_val, mdata->base + SPI_TX_DATA_REG);
+ 		}
  
- 	return 0;
-@@ -465,6 +470,7 @@ static int bcm63xx_hsspi_suspend(struct device *dev)
- 	struct bcm63xx_hsspi *bs = spi_master_get_devdata(master);
- 
- 	spi_master_suspend(master);
-+	clk_disable_unprepare(bs->pll_clk);
- 	clk_disable_unprepare(bs->clk);
- 
- 	return 0;
-@@ -480,6 +486,12 @@ static int bcm63xx_hsspi_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
-+	if (bs->pll_clk) {
-+		ret = clk_prepare_enable(bs->pll_clk);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	spi_master_resume(master);
- 
- 	return 0;
 -- 
 2.20.1
 
