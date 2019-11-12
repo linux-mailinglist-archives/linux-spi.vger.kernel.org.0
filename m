@@ -2,134 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B7AF8846
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2019 06:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6321F8F31
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2019 13:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbfKLFyT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Nov 2019 00:54:19 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35712 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726986AbfKLFyS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Nov 2019 00:54:18 -0500
-Received: by mail-pl1-f194.google.com with SMTP id s10so8920217plp.2;
-        Mon, 11 Nov 2019 21:54:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PfLpTXwmTko+wTungBc02PKeDQN7UmUMa4lSWShWaZw=;
-        b=g8smE6MUyrhWi+O5jT2tC9pxowb4qn4mvEpn4T2Ps4ARa51BvJvvwNDVbFfrgzehOE
-         dDPjz47NDeo0D25zWiWzlepCPlCt/Edlx+4ls7viapwtvf3VlIk1S8OazqbLpEXmciP6
-         lcyqWuX/P3Z4v/irj4tncveAn/kJ87aGMkG5X8HrqFTtdUNYzb3q4KRzWrIoOClj9gkl
-         5H2sqPUSww16MOmZ1G2Fldav3orxtwev1eZHxavYd4hoIk9yuPHQ2IiEn6Zq2rqAuODb
-         62y35ef5CH39Rg15KuRhuQBzYTBpAVENwxcy3l6+i8oVXGS+kFiSQXkOJHpjNOQdqGol
-         v1xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PfLpTXwmTko+wTungBc02PKeDQN7UmUMa4lSWShWaZw=;
-        b=qQPqqw+/Z96OdpX34acRjdUk4g8AzAPCbH8/5oNEhxU46MRKgplH49jweXBxrJn60O
-         7nReq7GWdlcEejwxmHisbkWHTqD7amrB7o8ya4OcBKPchEi1hWScEe1N6Rnt7hjSXiXY
-         ti0XgR1jL4IWrxHLiyuv6zvgRF7HozVOqHl0HkDzpbpdNrh38mXB4wPrwRxp3YW6Qu97
-         xxpRqZFgxRsqSamRjB2HRECYeEGsvnilhquER6h9tu7nDqtmQnmsLjqw+tb9eFHxx+Re
-         duIwlMFpJ++BvuOvqDY1wCV0ioNLkw4D1rfEA3DE6s7KDcEuR9n060tVN7J720+W4eLw
-         4phQ==
-X-Gm-Message-State: APjAAAWoDVAyLwbncrL8zysaVJDBkayRaQkGOzidXVAFjeMvrYXdvhle
-        dI+wdcuRGObZuLYfHp8XfVI=
-X-Google-Smtp-Source: APXvYqyRtF8pUyuEwxg+/DQ6H/oW0ptK8vemrlPtYyErFrLgoAQb7atWgILkZafNapbyUiYM4fJyrw==
-X-Received: by 2002:a17:902:6e02:: with SMTP id u2mr30148678plk.234.1573538057420;
-        Mon, 11 Nov 2019 21:54:17 -0800 (PST)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id d139sm23160178pfd.162.2019.11.11.21.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 21:54:16 -0800 (PST)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH 2/2] spi: wire up wakeup-source/wakeirq handling
-Date:   Mon, 11 Nov 2019 21:54:11 -0800
-Message-Id: <20191112055412.192675-3-dmitry.torokhov@gmail.com>
-X-Mailer: git-send-email 2.24.0.rc1.363.gb1bccd3e3d-goog
-In-Reply-To: <20191112055412.192675-1-dmitry.torokhov@gmail.com>
+        id S1725881AbfKLMDL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Nov 2019 07:03:11 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49370 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725865AbfKLMDL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Nov 2019 07:03:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=zS7SJkCQ2rdagNsuqJLgPUeeYlkcUDxC+YCP79gVVcs=; b=Vm6tHbcRwmv0hiGTfkXpgbLW2
+        uX+VpT9VP7e91k9JhGcOSvlfk/wVbJZ6XBa1L4t3JYyWL+Kftf82r0gMOIVxxUMbei9/FpcOpKaPM
+        bpiascTWFPsi0jEkuVHNzHC/i4K7RF8DRn1PCe28Ty+L9Tz+Q0vVlCEXadSktGy/KYABY=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iUUt2-0007nq-39; Tue, 12 Nov 2019 12:03:08 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 18A45274299F; Tue, 12 Nov 2019 12:03:07 +0000 (GMT)
+Date:   Tue, 12 Nov 2019 12:03:07 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: dt-bindings: spi-controller: add wakeup-source
+ and interrupts
+Message-ID: <20191112120307.GB5195@sirena.co.uk>
 References: <20191112055412.192675-1-dmitry.torokhov@gmail.com>
+ <20191112055412.192675-2-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NDin8bjvE/0mNLFQ"
+Content-Disposition: inline
+In-Reply-To: <20191112055412.192675-2-dmitry.torokhov@gmail.com>
+X-Cookie: As famous as the unknown soldier.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Many SPI drivers need to configure their devices for waking up the
-system. Instead of forcing them to reimplement wakeup handling, let's
-mirror what I2C core is doing and handle "wakeup-source" device property
-in SPI core.
 
-Also, let's allow naming device's interrupt lines as "irq" and "wakeup"
-and automatically configure the right one as wakeirq when device is
-supposed to be a wakeup source.
+--NDin8bjvE/0mNLFQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Implementing this is very helpful for drivers that use both I2C and SPI
-for transport, such as tsc2004/tsc2005.
+On Mon, Nov 11, 2019 at 09:54:10PM -0800, Dmitry Torokhov wrote:
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> +      interrupts:
+> +        items:
+> +          - description: main interrupt (attention) line.
+> +          - description: dedicated wakeup interrupt.
+> +        minItems: 1 # The wakeup interrupt is optional.
+> +        description:
+> +          Specifies interrupt lines a device is connected to. Typically a
+> +          device is wired to a single interrupt line that is used as
+> +          "attention" signal and also to wake up system when device is
+> +          set up as wakeup source. However on some systems a dedicated
+> +          wakeup line might be used.
 
----
+> +      interrupt-names:
+> +        items:
+> +          - const: irq
+> +          - const: wakeup
+> +        minItems: 1
 
- drivers/spi/spi.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+How will this interact with a SPI device that defines interrupts at the
+device level, possibly more than one of them?  Especially if the device
+has its own idea what the interrupts should be called.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 50769a8475d66..baa7aac300d9f 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -22,6 +22,7 @@
- #include <linux/gpio/consumer.h>
- #include <linux/pm_runtime.h>
- #include <linux/pm_domain.h>
-+#include <linux/pm_wakeirq.h>
- #include <linux/property.h>
- #include <linux/export.h>
- #include <linux/sched/rt.h>
-@@ -394,13 +395,37 @@ static int spi_drv_probe(struct device *dev)
- 		return ret;
- 
- 	if (dev->of_node) {
--		spi->irq = of_irq_get(dev->of_node, 0);
-+		spi->irq = of_irq_get_byname(dev->of_node, "irq");
-+		if (spi->irq == -EINVAL || spi->irq == -ENODATA)
-+			spi->irq = of_irq_get(dev->of_node, 0);
- 		if (spi->irq == -EPROBE_DEFER)
- 			return -EPROBE_DEFER;
- 		if (spi->irq < 0)
- 			spi->irq = 0;
- 	}
- 
-+	if (device_property_read_bool(dev, "wakeup-source")) {
-+		int wakeirq = -ENOENT;
-+
-+		if (dev->of_node) {
-+			wakeirq = of_irq_get_byname(dev->of_node, "wakeup");
-+			if (wakeirq == -EPROBE_DEFER)
-+				return wakeirq;
-+		}
-+
-+		device_init_wakeup(dev, true);
-+
-+		if (wakeirq > 0 && wakeirq != spi->irq)
-+			ret = dev_pm_set_dedicated_wake_irq(dev, wakeirq);
-+		else if (spi->irq > 0)
-+			ret = dev_pm_set_wake_irq(dev, spi->irq);
-+		else
-+			ret = 0;
-+
-+		if (ret)
-+			dev_warn(dev, "failed to set up wakeup irq: %d\n", ret);
-+	}
-+
- 	ret = dev_pm_domain_attach(dev, true);
- 	if (ret)
- 		return ret;
--- 
-2.24.0.rc1.363.gb1bccd3e3d-goog
+--NDin8bjvE/0mNLFQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3Kn3oACgkQJNaLcl1U
+h9BxwQf9ECv4xZZXn5i2YxaBGMMCIQQ7dBHBaf+RX9PyyxRVwrhqaJb0Bn/Q2jfX
+SUx5ocQAvXxWnQfWzcG/i6CsMSbwO5sRJhofRLcU2picVhHROMiYrjNcuXJD77SE
+/te7BqRLAXWPCjR3Hi1KGnDLFa347byoeW2WV3txN7SWSKssa43NooJ2E/ahyeKY
+nRiz2uivJ6utzuXNjwK6PdQtX+KboYNp3AgwbTBL0kDhLtwNPLoPUb76im4lYqvt
+UVj3XRXlLxL1sVpy7Z6IUKezWxiCOUMl3winPd7gxZNgvyCz6dKnIFqtDc//cikO
+GWsgGR1j7SZ92kVg0pEvgUNrr8X/iA==
+=kE98
+-----END PGP SIGNATURE-----
+
+--NDin8bjvE/0mNLFQ--
