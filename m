@@ -2,128 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 940DCF9909
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2019 19:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E7CF994A
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2019 20:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726965AbfKLSrX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Nov 2019 13:47:23 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:51396 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726912AbfKLSrX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Nov 2019 13:47:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=fh7ErhK5kWtXa9xlJgNgIE+9NFeL2CofE3HNjsCnVy8=; b=WDofDLQ1RLSY
-        rYz6vxvpU+kmZCTkUokfnWmCx/CZPsVCTWem9oYwPRe+No8eblqXvpx+EkSZvHIKerX4q4idzt3Q6
-        MbGAc7bpkiMObDd8NLxEoEHS+dzuO6YiStoHSE8AG38P5utvyGUEz9NYik9WHgCod3l+9T2n7v9AZ
-        utOtc=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iUbCB-00005V-1Q; Tue, 12 Nov 2019 18:47:19 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 7CE43274299F; Tue, 12 Nov 2019 18:47:18 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
-        Luhua Xu <luhua.xu@mediatek.com>,
-        Mark Brown <broonie@kernel.org>, wsd_upstream@mediatek.com
-Subject: Applied "spi: Fix regression to return zero on success instead of positive value" to the spi tree
-In-Reply-To: <20191111195334.44833-1-tony@atomide.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20191112184718.7CE43274299F@ypsilon.sirena.org.uk>
-Date:   Tue, 12 Nov 2019 18:47:18 +0000 (GMT)
+        id S1726994AbfKLTDd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Nov 2019 14:03:33 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36236 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726952AbfKLTDd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Nov 2019 14:03:33 -0500
+Received: by mail-pf1-f195.google.com with SMTP id b19so1723311pfd.3;
+        Tue, 12 Nov 2019 11:03:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5NNf6zdVT6mP8Um+2RYbDsAkGh7WYrFJZpmTUvbeT/k=;
+        b=GLqqpAeopH3E+ejZdaWis3YyjkkX3qOMeutfBnD7CofrAQD7KMVjptgwv1z1ZdfOst
+         b+t/J6edk1gf5Onsu4b2T+oCe/MqwSHhSMjT+XcC9HlmztIFQu9yteXGBrgm2KwULpH6
+         HL3vH0FLZze4bwWtBEOxk2i8HcspOAeGXIBpqYzcMQxBo9gue2kSTCgzsLHTOHcJWrnI
+         ggf5B8AepwwHrwIXKdTAFYZnWF7c/QkpLp8W1+O0+L6orQ/qXki8xXbOZ+tzGws3kEng
+         l/XacGyKurR8Q17PAKtY+voM5gL9paU7d49ReJsUe2jctq/Bh+qQdXc+r6LFwKzdCGRK
+         ePrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5NNf6zdVT6mP8Um+2RYbDsAkGh7WYrFJZpmTUvbeT/k=;
+        b=rCJCAt9FSGmMidEFQxPz3wVNouAIzUasY3FE8j1dLr/j5dxbjJnDuafSe84fhyxRFK
+         U2nf2qUvXC28kqd98DWYrle8WldweVWDDOYVkjtE3NjgtRTqS7bP24QqmdNb9OGqmt43
+         lC+lX8BzpolTcAJq3DoHj6T6we3d7V9vmC7U6MhJwfEB9hRj/m+sNtlAUmDUYNx3IIow
+         WibH+L7AQmZg9JEbFCvK4HujsaIYHEqd/ho9u5/x6xp3AC+wYytqej/6g431PcVFMazy
+         X65IrtxIIcObIPxrB+9FgnPYYwn1Fc5lxfLlBHON2CMRpHDIeo1aAMOllgUBVwFX3CLu
+         7BYQ==
+X-Gm-Message-State: APjAAAXkx+ZC70Lszye323jWrWJbkUJrl7BcTWk0Zx1hI6U3wjGzjZpu
+        p26PnHXbVB+UjMcPFvdUW2A=
+X-Google-Smtp-Source: APXvYqyh7XFBVz7TZ5S+fL8LIywhf+W6Le4Pt2PHuj4UZVu0JCasmMizfUOmaxkz/gY/O/7kC6D6YQ==
+X-Received: by 2002:a63:4501:: with SMTP id s1mr36796538pga.5.1573585411920;
+        Tue, 12 Nov 2019 11:03:31 -0800 (PST)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id n72sm3341657pjc.4.2019.11.12.11.03.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2019 11:03:31 -0800 (PST)
+Date:   Tue, 12 Nov 2019 11:03:28 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: dt-bindings: spi-controller: add wakeup-source
+ and interrupts
+Message-ID: <20191112190328.GA199853@dtor-ws>
+References: <20191112055412.192675-1-dmitry.torokhov@gmail.com>
+ <20191112055412.192675-2-dmitry.torokhov@gmail.com>
+ <20191112120307.GB5195@sirena.co.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191112120307.GB5195@sirena.co.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Tue, Nov 12, 2019 at 12:03:07PM +0000, Mark Brown wrote:
+> On Mon, Nov 11, 2019 at 09:54:10PM -0800, Dmitry Torokhov wrote:
+> 
+> > +      interrupts:
+> > +        items:
+> > +          - description: main interrupt (attention) line.
+> > +          - description: dedicated wakeup interrupt.
+> > +        minItems: 1 # The wakeup interrupt is optional.
+> > +        description:
+> > +          Specifies interrupt lines a device is connected to. Typically a
+> > +          device is wired to a single interrupt line that is used as
+> > +          "attention" signal and also to wake up system when device is
+> > +          set up as wakeup source. However on some systems a dedicated
+> > +          wakeup line might be used.
+> 
+> > +      interrupt-names:
+> > +        items:
+> > +          - const: irq
+> > +          - const: wakeup
+> > +        minItems: 1
+> 
+> How will this interact with a SPI device that defines interrupts at the
+> device level, possibly more than one of them?  Especially if the device
+> has its own idea what the interrupts should be called.
 
-   spi: Fix regression to return zero on success instead of positive value
+My understanding that individual drivers should be able to override
+whatever the default behavior core has configured, and the device can
+establish their own mapping. We have this in I2C and I believe this
+works well.
 
-has been applied to the spi tree at
+Is the concern about the device tree scheme or SPI core handling?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+Thanks.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 57a9460705f105e1d79d1410c5cfe285beda8986 Mon Sep 17 00:00:00 2001
-From: Tony Lindgren <tony@atomide.com>
-Date: Mon, 11 Nov 2019 11:53:34 -0800
-Subject: [PATCH] spi: Fix regression to return zero on success instead of
- positive value
-
-Commit d948e6ca1899 ("spi: add power control when set_cs") added generic
-runtime PM handling, but also changed the return value to be 1 instead
-of 0 that we had earlier as pm_runtime_get functions return a positve
-value on success.
-
-This causes SPI devices to return errors for cases where they do:
-
-ret = spi_setup(spi);
-if (ret)
-	return ret;
-
-As in many cases the SPI devices do not check for if (ret < 0).
-
-Let's fix this by setting the status to 0 on succeess after the
-runtime PM calls. Let's not return 0 at the end of the function
-as this might break again later on if the function changes and
-starts returning status again.
-
-Fixes: d948e6ca1899 ("spi: add power control when set_cs")
-Cc: Luhua Xu <luhua.xu@mediatek.com>
-Cc: wsd_upstream@mediatek.com
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Link: https://lore.kernel.org/r/20191111195334.44833-1-tony@atomide.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 294d0038eea6..0d40953b463c 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3269,6 +3269,15 @@ int spi_setup(struct spi_device *spi)
- 				status);
- 			return status;
- 		}
-+
-+		/*
-+		 * We do not want to return positive value from pm_runtime_get,
-+		 * there are many instances of devices calling spi_setup() and
-+		 * checking for a non-zero return value instead of a negative
-+		 * return value.
-+		 */
-+		status = 0;
-+
- 		spi_set_cs(spi, false);
- 		pm_runtime_mark_last_busy(spi->controller->dev.parent);
- 		pm_runtime_put_autosuspend(spi->controller->dev.parent);
 -- 
-2.20.1
-
+Dmitry
