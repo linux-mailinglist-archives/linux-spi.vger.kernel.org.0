@@ -2,85 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAABF99F2
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2019 20:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEC6FA06A
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Nov 2019 02:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbfKLTm2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Nov 2019 14:42:28 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59338 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726936AbfKLTm2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Nov 2019 14:42:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Ufx9abnjCFiZMkVc20QJGrLEI8zqDpsCCQpJg7qZuQ8=; b=eHvg7pxsDGBwmo1U4d5XHq7xW
-        rKM3wfPDvmwmlE1ODBu+LBSTLAnsPJv5MdFu7SlsbQnoAC0HHZgIBzzL045C54yvF4jeO/nkVZtHf
-        fR64RtElxiBkXUuEXpbUCNjFRr05A80wccLu+AYjJ7NbHK6SRnwRY9baflXj/JxVYv5EA=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iUc3U-0000Hz-So; Tue, 12 Nov 2019 19:42:24 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id E3B79274299F; Tue, 12 Nov 2019 19:42:23 +0000 (GMT)
-Date:   Tue, 12 Nov 2019 19:42:23 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] spi: dt-bindings: spi-controller: add wakeup-source
- and interrupts
-Message-ID: <20191112194223.GM5195@sirena.co.uk>
-References: <20191112055412.192675-1-dmitry.torokhov@gmail.com>
- <20191112055412.192675-2-dmitry.torokhov@gmail.com>
- <20191112120307.GB5195@sirena.co.uk>
- <20191112190328.GA199853@dtor-ws>
- <20191112191547.GK5195@sirena.co.uk>
- <20191112193653.GB13374@dtor-ws>
+        id S1727041AbfKMBou (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Nov 2019 20:44:50 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37743 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727021AbfKMBou (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Nov 2019 20:44:50 -0500
+Received: by mail-lj1-f195.google.com with SMTP id d5so643749ljl.4
+        for <linux-spi@vger.kernel.org>; Tue, 12 Nov 2019 17:44:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TSetjMkcf4RpuPYXlFbAM0zaTljwaDUanV3PLKAWDpw=;
+        b=Gx9/4wLyPBmCchNwrslkyoWt00c+XPhTBrtJRbJaQthp30BZrJ0iqN1q5jOKigdLIS
+         TMxaZcP9iVEuxOhzinjmVT4Y+80rqdy7XN8YBtK5Qk4XgW1U2Ufoqy7Hl0+O+r5FJvH9
+         pUgtMI6o2fbew8jPafNEBEyf1Tg8exaG55ESxXy2zs39Cs7lXPuCo5XJ2wMcLTBXLh9K
+         uVhlE/lDu7PjVrlKD44Ue2/cUaYZPWvzGIB1lD/IvAa6uHvVHad+s/h+fzg4fkGk0wBM
+         vPbXsSCVEAgA441J0C4I8L2Kjb8/VCG2MSDx1mb1AJYo89N0gRRF43oy9qBv5J5w7dNP
+         ARlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TSetjMkcf4RpuPYXlFbAM0zaTljwaDUanV3PLKAWDpw=;
+        b=WgbDOSHeo80tVE9uhk/2gnKzrGEY564w9Dt6wUUISbcLFeXgb+VwXfhGdjtHyPnvKr
+         tLQ4qf9KnyZHeaAaarKITHh3raiJEw6JdS7hMCW0VLXdcsIT1aP6l2N2EEwRBSqFKcLD
+         SB35KdDELxeU7+BbwvgpANMxWAtLp/3qZ2SQelDMOzX8CMGhcbfNE7EzwC8Vaz0o7ENN
+         jiHdxlBtSqedmUGq9w5r/n63hqkimj2zdymHihS+KFmrQeVGLn6GK6VOuAFNTWSxZsFN
+         1TvXAGBUuelTT5RJy+84882f9u2/Xz5KWrZjHZ1jA2++wzFPouq8kFJMCorGoaLEIJC4
+         C0xQ==
+X-Gm-Message-State: APjAAAUmvLaPK2Pc2SOr7EPvwSsEQAxtIgfW0UbK7H1ZwHkyHkeHWBal
+        P7hfRWSN0sqYJ1wiNWTIMu2ROOeV85ygXw==
+X-Google-Smtp-Source: APXvYqwCX2MBzMEReXX1xV3jUFGB08L4MJtEtvR5BzsZ84X6TT2Gnq8chd6RudqzVPTvjBW857cnqQ==
+X-Received: by 2002:a05:651c:87:: with SMTP id 7mr506151ljq.20.1573609487372;
+        Tue, 12 Nov 2019 17:44:47 -0800 (PST)
+Received: from localhost.bredbandsbolaget (c-79c8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.200.121])
+        by smtp.gmail.com with ESMTPSA id n19sm190440lfl.85.2019.11.12.17.44.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2019 17:44:46 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: [PATCH] spi: fsl-cpm: Correct the free:ing
+Date:   Wed, 13 Nov 2019 02:44:42 +0100
+Message-Id: <20191113014442.12100-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pFpMklMRdxwSC3Yi"
-Content-Disposition: inline
-In-Reply-To: <20191112193653.GB13374@dtor-ws>
-X-Cookie: As famous as the unknown soldier.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The fsl_spi_cpm_free() function does not make the same
+checks as the error path in fsl_spi_cpm_init() leading
+to crashes on error.
 
---pFpMklMRdxwSC3Yi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Cc: Fabio Estevam <festevam@gmail.com>
+Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/spi/spi-fsl-cpm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-On Tue, Nov 12, 2019 at 11:36:53AM -0800, Dmitry Torokhov wrote:
+diff --git a/drivers/spi/spi-fsl-cpm.c b/drivers/spi/spi-fsl-cpm.c
+index 858f0544289e..54ad0ac121e5 100644
+--- a/drivers/spi/spi-fsl-cpm.c
++++ b/drivers/spi/spi-fsl-cpm.c
+@@ -392,7 +392,8 @@ void fsl_spi_cpm_free(struct mpc8xxx_spi *mspi)
+ 	dma_unmap_single(dev, mspi->dma_dummy_rx, SPI_MRBLR, DMA_FROM_DEVICE);
+ 	dma_unmap_single(dev, mspi->dma_dummy_tx, PAGE_SIZE, DMA_TO_DEVICE);
+ 	cpm_muram_free(cpm_muram_offset(mspi->tx_bd));
+-	cpm_muram_free(cpm_muram_offset(mspi->pram));
++	if (!(mspi->flags & SPI_CPM1))
++		cpm_muram_free(cpm_muram_offset(mspi->pram));
+ 	fsl_spi_free_dummy_rx();
+ }
+ EXPORT_SYMBOL_GPL(fsl_spi_cpm_free);
+-- 
+2.21.0
 
-> As far as scheme goes - I hope that Rob could confirm that we can
-> override number of interrupts and names in consumers of the binding, as
-> needed.
-
-Yes, I think that's the main worry here - if there's issue with the
-framework bit we should be able to sort that.
-
---pFpMklMRdxwSC3Yi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3LCx8ACgkQJNaLcl1U
-h9CsMQf9EiGfHZdWSXq6DKiXomGkOIZ+BC27XAQ9dHxneP99B19i4vn584IKaeok
-EcBi6YqjpD1oIf2KBBixy/vaTlJuA07QV5NoORICvMR75gWy4XvWYt0UCZxGs1vY
-BNduo6rLmePAoRKjoBVT4e3H07cLkDxkZ6V4r0jZJIwleLZOsi5mDXlS8Rwd0C0k
-p8YLQBgmFFqiVqiJae/WgxzWuYCU0PgX93YXIGlLZgyDav2SQ62nyYcK5iMEwU4q
-15Y6cdvRZd4iRiMZJOaAW6cLdj607FKp7fj4Hh/uZKs7FzNnskcL0b+YpxNaRDIr
-g1kjE11Jqb1i/tG8C42S5ylH7HdDiQ==
-=MTTr
------END PGP SIGNATURE-----
-
---pFpMklMRdxwSC3Yi--
