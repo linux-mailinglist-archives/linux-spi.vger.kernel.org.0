@@ -2,79 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC2AFA244
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Nov 2019 03:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBA6FAD34
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Nov 2019 10:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730218AbfKMCCv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Nov 2019 21:02:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59754 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730198AbfKMCCu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 12 Nov 2019 21:02:50 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F704222C9;
-        Wed, 13 Nov 2019 02:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610570;
-        bh=w2R0AhNPNW/ElN+upJgmEjLUW3sR9jsv/BbJNxPSCw8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0YWL4NVk1YdiQWHDlM4lJek/7nTtAhDlDntkvC5WkjtEbvwSvtR0CbwfYZ3DRW02w
-         LkfbmjJl/H/K/OW3wRbxaJY8MLXQiv2KjKYswCQPCz0Iy5RTn91vlJijnRusXqnDzk
-         bWhZm68dIjajNbpSLwhdpkxg5bf2j3UBitgR/7bw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Huibin Hong <huibin.hong@rock-chips.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.4 47/48] spi: rockchip: initialize dma_slave_config properly
-Date:   Tue, 12 Nov 2019 21:01:30 -0500
-Message-Id: <20191113020131.13356-47-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113020131.13356-1-sashal@kernel.org>
-References: <20191113020131.13356-1-sashal@kernel.org>
+        id S1726991AbfKMJmR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Nov 2019 04:42:17 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:48458 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725996AbfKMJmR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Nov 2019 04:42:17 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAD9fj21122267;
+        Wed, 13 Nov 2019 03:41:45 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573638105;
+        bh=wWJNZTFuNZCcK7Gn/PoNwIYOeJyEw7kXPqGfgVe5Kjc=;
+        h=From:To:CC:Subject:Date;
+        b=qzhwgSI41DHaPdsyG2pybK58nnrYlcNzOwFvAEJ8zErgmDrcjk1MfdN+sJjRHHzmw
+         TZ55lqmjSWXuIVOxk6d4EruLhRJTbRGG67gVQsMgQ3oFAmnm5kC4sSmDrv3I4Shnsw
+         aDqVx4jgrSYEmfOnxHZ1iTygLNmBbocseB2cbO/0=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xAD9fjAM080798
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 Nov 2019 03:41:45 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 13
+ Nov 2019 03:41:27 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 13 Nov 2019 03:41:27 -0600
+Received: from feketebors.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAD9feM0072663;
+        Wed, 13 Nov 2019 03:41:41 -0600
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+To:     <broonie@kernel.org>, <radu_nicolae.pirea@upb.ro>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <linus.walleij@linaro.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <andi@etezian.org>,
+        <ldewangan@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>
+CC:     <vkoul@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <alexandre.belloni@bootlin.com>,
+        <linux-arm-msm@vger.kernel.org>, <kgene@kernel.org>,
+        <krzk@kernel.org>, <linux-tegra@vger.kernel.org>
+Subject: [PATCH 0/9] spi: Use dma_request_chan() directly for channel request
+Date:   Wed, 13 Nov 2019 11:42:47 +0200
+Message-ID: <20191113094256.1108-1-peter.ujfalusi@ti.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Huibin Hong <huibin.hong@rock-chips.com>
+Hi,
 
-[ Upstream commit dd8fd2cbc73f8650f651da71fc61a6e4f30c1566 ]
+I'm going through the tree to remove dma_request_slave_channel_reason() as it
+is just:
+#define dma_request_slave_channel_reason(dev, name) \
+	dma_request_chan(dev, name)
 
-The rxconf and txconf structs are allocated on the
-stack, so make sure we zero them before filling out
-the relevant fields.
-
-Signed-off-by: Huibin Hong <huibin.hong@rock-chips.com>
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Regards,
+Peter
 ---
- drivers/spi/spi-rockchip.c | 3 +++
- 1 file changed, 3 insertions(+)
+Peter Ujfalusi (9):
+  spi: at91-usart: Use dma_request_chan() directly for channel request
+  spi: atmel: Use dma_request_chan() directly for channel request
+  spi: fsl-lpspi: Use dma_request_chan() directly for channel request
+  spi: imx: Use dma_request_chan() directly for channel request
+  spi: pl022: Use dma_request_chan() directly for channel request
+  spi: qup: Use dma_request_chan() directly for channel request
+  spi: s3c64xx: Use dma_request_chan() directly for channel request
+  spi: tegra114: Use dma_request_chan() directly for channel request
+  spi: tegra20-slink: Use dma_request_chan() directly for channel
+    request
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 035767c020720..f42ae9efb255c 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -444,6 +444,9 @@ static void rockchip_spi_prepare_dma(struct rockchip_spi *rs)
- 	struct dma_slave_config rxconf, txconf;
- 	struct dma_async_tx_descriptor *rxdesc, *txdesc;
- 
-+	memset(&rxconf, 0, sizeof(rxconf));
-+	memset(&txconf, 0, sizeof(txconf));
-+
- 	spin_lock_irqsave(&rs->lock, flags);
- 	rs->state &= ~RXBUSY;
- 	rs->state &= ~TXBUSY;
+ drivers/spi/spi-at91-usart.c    | 4 ++--
+ drivers/spi/spi-atmel.c         | 2 +-
+ drivers/spi/spi-fsl-lpspi.c     | 4 ++--
+ drivers/spi/spi-imx.c           | 4 ++--
+ drivers/spi/spi-pl022.c         | 4 ++--
+ drivers/spi/spi-qup.c           | 4 ++--
+ drivers/spi/spi-s3c64xx.c       | 6 ++----
+ drivers/spi/spi-tegra114.c      | 3 +--
+ drivers/spi/spi-tegra20-slink.c | 3 +--
+ 9 files changed, 15 insertions(+), 19 deletions(-)
+
 -- 
-2.20.1
+Peter
+
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
 
