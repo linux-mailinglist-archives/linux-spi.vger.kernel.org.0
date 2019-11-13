@@ -2,39 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A12DEFA499
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Nov 2019 03:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722FEFA4D0
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Nov 2019 03:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729129AbfKMBzb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Nov 2019 20:55:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47176 "EHLO mail.kernel.org"
+        id S1727725AbfKMCSv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Nov 2019 21:18:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47206 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729121AbfKMBza (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:55:30 -0500
+        id S1729144AbfKMBzc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 12 Nov 2019 20:55:32 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7E037222D3;
-        Wed, 13 Nov 2019 01:55:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8634620674;
+        Wed, 13 Nov 2019 01:55:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610130;
-        bh=dONCx61Ia/sj7WTQHEcMz5HEIkjAqNopjr/Sy89EPhA=;
+        s=default; t=1573610132;
+        bh=ZhaejBiZlZmk0+HgH9Jh1GY+ficYYpHrDSmFxd6848E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y8uB09/UzUVjU3lmpTr1iI92t9Bj58/0yiTOW62ZlYm3Uy0sduIcSH3laolYl6kq/
-         IWT8WcUObWrr9loPBZTq7sEswJbrljabRRHHVsl/A3bPWiWmTQFX73WjseNnHUCjfT
-         eSQHnDPeyzgMarYPbwE7Y4eFc1w3nbHbciJJQXmA=
+        b=ydqmGvdCvF8nbVNkEuDo01Bol3hEkE8e+36FOvmAehtV7tNx/EVSCBG0VsSwg1SHG
+         VGytAbb9LtfwZ/5fDYKITFlfdA3NorRO7p+xn6YKuRDwYiZbc2XzYZcqOb4pfiSL8G
+         7TZSpdb8rY6dxSugAgg60cjQHmmrSOEfL4rCKHno=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hieu Tran Dang <dangtranhieu2012@gmail.com>,
+Cc:     Trent Piepho <tpiepho@impinj.com>,
+        =?UTF-8?q?Jan=20Kundr=C3=83=C2=A1t?= <jan.kundrat@cesnet.cz>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 180/209] spi: fsl-lpspi: Prevent FIFO under/overrun by default
-Date:   Tue, 12 Nov 2019 20:49:56 -0500
-Message-Id: <20191113015025.9685-180-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 182/209] spi: spidev: Fix OF tree warning logic
+Date:   Tue, 12 Nov 2019 20:49:58 -0500
+Message-Id: <20191113015025.9685-182-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
 References: <20191113015025.9685-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -43,37 +46,50 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Hieu Tran Dang <dangtranhieu2012@gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
 
-[ Upstream commit de8978c388c66b8fca192213ec9f0727e964c652 ]
+[ Upstream commit 605b3bec73cbd74b4ac937b580cd0b47d1300484 ]
 
-Certain devices don't work well when a transmit FIFO underrun or
-receive FIFO overrun occurs. Example is the SAF400x radio chip when
-running at high speed which leads to garbage being sent to/received from
-the chip. In which case, it should stall waiting for further data to be
-available before proceeding. This patch unset the NOSTALL bit in CFGR1
-by default to prevent this issue.
+spidev will make a big fuss if a device tree node binds a device by
+using "spidev" as the node's compatible property.
 
-Signed-off-by: Hieu Tran Dang <dangtranhieu2012@gmail.com>
+However, the logic for this isn't looking for "spidev" in the
+compatible, but rather checking that the device is NOT compatible with
+spidev's list of devices.
+
+This causes a false positive if a device not named "rohm,dh2228fv", etc.
+binds to spidev, even if a means other than putting "spidev" in the
+device tree was used.  E.g., the sysfs driver_override attribute.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Reviewed-by: Jan KundrÃ¡t <jan.kundrat@cesnet.cz>
+Tested-by: Jan KundrÃ¡t <jan.kundrat@cesnet.cz>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-fsl-lpspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spidev.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index e6d5cc6ab108b..51670976faa35 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -276,7 +276,7 @@ static int fsl_lpspi_config(struct fsl_lpspi_data *fsl_lpspi)
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index cda10719d1d1b..c5fe08bc34a0a 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -724,11 +724,9 @@ static int spidev_probe(struct spi_device *spi)
+ 	 * compatible string, it is a Linux implementation thing
+ 	 * rather than a description of the hardware.
+ 	 */
+-	if (spi->dev.of_node && !of_match_device(spidev_dt_ids, &spi->dev)) {
+-		dev_err(&spi->dev, "buggy DT: spidev listed directly in DT\n");
+-		WARN_ON(spi->dev.of_node &&
+-			!of_match_device(spidev_dt_ids, &spi->dev));
+-	}
++	WARN(spi->dev.of_node &&
++	     of_device_is_compatible(spi->dev.of_node, "spidev"),
++	     "%pOF: buggy DT: spidev listed directly in DT\n", spi->dev.of_node);
  
- 	fsl_lpspi_set_watermark(fsl_lpspi);
+ 	spidev_probe_acpi(spi);
  
--	temp = CFGR1_PCSCFG | CFGR1_MASTER | CFGR1_NOSTALL;
-+	temp = CFGR1_PCSCFG | CFGR1_MASTER;
- 	if (fsl_lpspi->config.mode & SPI_CS_HIGH)
- 		temp |= CFGR1_PCSPOL;
- 	writel(temp, fsl_lpspi->base + IMX7ULP_CFGR1);
 -- 
 2.20.1
 
