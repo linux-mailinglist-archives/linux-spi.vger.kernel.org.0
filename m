@@ -2,79 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10114FC273
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Nov 2019 10:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21405FD0EC
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Nov 2019 23:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbfKNJSe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 Nov 2019 04:18:34 -0500
-Received: from 5.mo69.mail-out.ovh.net ([46.105.43.105]:49304 "EHLO
-        5.mo69.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726115AbfKNJSe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Nov 2019 04:18:34 -0500
-X-Greylist: delayed 338 seconds by postgrey-1.27 at vger.kernel.org; Thu, 14 Nov 2019 04:18:33 EST
-Received: from player773.ha.ovh.net (unknown [10.108.35.12])
-        by mo69.mail-out.ovh.net (Postfix) with ESMTP id 38CF171E82
-        for <linux-spi@vger.kernel.org>; Thu, 14 Nov 2019 10:12:54 +0100 (CET)
-Received: from etezian.org (81-175-223-118.bb.dnainternet.fi [81.175.223.118])
-        (Authenticated sender: andi@etezian.org)
-        by player773.ha.ovh.net (Postfix) with ESMTPSA id 9889BC17ABBB;
-        Thu, 14 Nov 2019 09:12:31 +0000 (UTC)
-Date:   Thu, 14 Nov 2019 11:12:30 +0200
-From:   Andi Shyti <andi@etezian.org>
-To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
-Cc:     Andi Shyti <andi@etezian.org>, linus.walleij@linaro.org,
-        kgene@kernel.org, alexandre.belloni@bootlin.com,
-        linux-arm-msm@vger.kernel.org, radu_nicolae.pirea@upb.ro,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzk@kernel.org, bjorn.andersson@linaro.org, vkoul@kernel.org,
-        agross@kernel.org, ldewangan@nvidia.com, broonie@kernel.org,
-        linux-tegra@vger.kernel.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 7/9] spi: s3c64xx: Use dma_request_chan() directly for
- channel request
-Message-ID: <20191114091230.GB1249@jack.zhora.eu>
-References: <20191113094256.1108-1-peter.ujfalusi@ti.com>
- <20191113094256.1108-8-peter.ujfalusi@ti.com>
- <20191113234049.GA1249@jack.zhora.eu>
- <e453c716-7658-a9fd-324d-4d95ff1aa29c@ti.com>
+        id S1727063AbfKNW0z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 Nov 2019 17:26:55 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:35610 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726319AbfKNW0z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Nov 2019 17:26:55 -0500
+Received: by mail-ot1-f68.google.com with SMTP id n19so2538452otk.2;
+        Thu, 14 Nov 2019 14:26:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=i/iNq2b5ltR+9fYOihLUMFxATvvS7Fy9uMXgDlcEfQM=;
+        b=NVE+HRebP3baz91eW+CjVuW7RNFTm0rJGKz+FuM6X+QpcaCe7ABOF6PPXsWZy/D7OK
+         b8ESzFmGDIm2dlFUsI84ZxO+qAxlJx7hRyCa0cYdr8hBnWgGh18H6YShCMlCyxgr2Dou
+         c++/FscfdosaRQlcWqyNRhsHSSjeiZHMO/D+uu3jTv0LwuWZt2IjJK0Rq4jyU29PHKmd
+         HeM/RJZOJpLKaM9OmEUGccl5f877n2Tpkq3J8M8KVGK725n2TEOHKxFq/+0Vt3xsJ9Mo
+         WwzupHea42+RbjGahNrwV/IXVIOTA+fAvZ7ncyaWCINT2kdjhM477n4y+qHOTMTuv4RS
+         NMSw==
+X-Gm-Message-State: APjAAAVCEwVA06TPLvQB78A8T9tfzZlTsCYrx+THysdNfKJoEFfNG+bA
+        7xwslNgRGFlIS3djD6x1YQ==
+X-Google-Smtp-Source: APXvYqxsoZ0hyPff9ybgafyqCaAsP+RfF8L2i8yn9ePNs1IgLIi7Gjm2T8DnmYbHet+4hyZrOQyCVQ==
+X-Received: by 2002:a05:6830:215a:: with SMTP id r26mr8512506otd.136.1573770413826;
+        Thu, 14 Nov 2019 14:26:53 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y4sm2257755oie.42.2019.11.14.14.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2019 14:26:52 -0800 (PST)
+Date:   Thu, 14 Nov 2019 16:26:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: dt-bindings: spi-controller: add wakeup-source
+ and interrupts
+Message-ID: <20191114222652.GA7517@bogus>
+References: <20191112055412.192675-1-dmitry.torokhov@gmail.com>
+ <20191112055412.192675-2-dmitry.torokhov@gmail.com>
+ <20191112120307.GB5195@sirena.co.uk>
+ <20191112190328.GA199853@dtor-ws>
+ <20191112191547.GK5195@sirena.co.uk>
+ <20191112193653.GB13374@dtor-ws>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e453c716-7658-a9fd-324d-4d95ff1aa29c@ti.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
-X-Ovh-Tracer-Id: 1915718693274174139
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedufedrudeffedgtddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdqfffguegfifdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughisegvthgviihirghnrdhorhhgqeenucfkpheptddrtddrtddrtddpkedurddujeehrddvvdefrdduudeknecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejjeefrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedt
+In-Reply-To: <20191112193653.GB13374@dtor-ws>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Peter,
-
-> >>  	if (!is_polling(sdd)) {
-> >>  		/* Acquire DMA channels */
-> >> -		sdd->rx_dma.ch = dma_request_slave_channel_reason(&pdev->dev,
-> >> -								  "rx");
-> >> +		sdd->rx_dma.ch = dma_request_chan(&pdev->dev, "rx");
+On Tue, Nov 12, 2019 at 11:36:53AM -0800, Dmitry Torokhov wrote:
+> On Tue, Nov 12, 2019 at 07:15:47PM +0000, Mark Brown wrote:
+> > On Tue, Nov 12, 2019 at 11:03:28AM -0800, Dmitry Torokhov wrote:
+> > > On Tue, Nov 12, 2019 at 12:03:07PM +0000, Mark Brown wrote:
+> > > > On Mon, Nov 11, 2019 at 09:54:10PM -0800, Dmitry Torokhov wrote:
 > > 
-> > I have a little concern here. We have two funcions
-> > 'dma_request_chan' and  'dma_request_channel' don't we end up
-> > making some confusion here?
+> > > > > +      interrupts:
+> > > > > +        items:
+> > > > > +          - description: main interrupt (attention) line.
+> > > > > +          - description: dedicated wakeup interrupt.
+> > > > > +        minItems: 1 # The wakeup interrupt is optional.
 > > 
-> > Wouldn't it make more sense renaming 'dma_request_chan' to
-> > 'dma_request_slave_channel_reason'?
+> > > > > +      interrupt-names:
+> > > > > +        items:
+> > > > > +          - const: irq
+> > > > > +          - const: wakeup
+> > > > > +        minItems: 1
+> > 
+> > > > How will this interact with a SPI device that defines interrupts at the
+> > > > device level, possibly more than one of them?  Especially if the device
+> > > > has its own idea what the interrupts should be called.
+> > 
+> > > My understanding that individual drivers should be able to override
+> > > whatever the default behavior core has configured, and the device can
+> > > establish their own mapping. We have this in I2C and I believe this
+> > > works well.
+> > 
+> > > Is the concern about the device tree scheme or SPI core handling?
+> > 
+> > Both really.
 > 
-> The dma_request_channel() should go away. It was the old API before we
-> got the dma_slave_map for non DT (and non ACPI) platforms so we can get
-> rid of the filter function exports from DMA drivers to clients all over
-> the place.
+> So as I mentioned, the driver is not forced to use the interrupt
+> supplied by the SPI core, and the worst thing is that the core
+> configures the main IRQ as wakeirq and driver would need to call
+> dev_pm_clear_wake_irq() before switching to correct one. I expect there
+> will be just a few drivers needing that and many more would benefit from
+> the default behavior and not needing to repeat the same boilerplate
+> code.
+> 
+> As far as scheme goes - I hope that Rob could confirm that we can
+> override number of interrupts and names in consumers of the binding, as
+> needed.
 
-Yes, I agree... thanks!
+This won't work. A device schema doesn't override what's defined here, 
+but just further constrains this schema.
 
-Acked-by: Andi Shyti <andi@etezian.org>
+You could define a "spi irq" schema which devices can include if they 
+want to, but I don't think this pattern is that common to SPI devices. 
+There's not any spec behind compared to say alert irq for SMBus. 
 
-Thanks,
-Andi
+The 'wakeup' irq name is standardized (for DT), but that's not SPI 
+specific. About all we could define there is 'wakeup-source' is boolean 
+and if there is more than one interrupt, one should be named 'wakeup'.
+
+Rob
+
