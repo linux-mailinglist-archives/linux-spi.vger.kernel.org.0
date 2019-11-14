@@ -2,101 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 220EBFC086
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Nov 2019 08:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC35FC12F
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Nov 2019 09:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726057AbfKNHGj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 Nov 2019 02:06:39 -0500
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:5961 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725852AbfKNHGj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Nov 2019 02:06:39 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dccfcc60000>; Wed, 13 Nov 2019 23:05:43 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 13 Nov 2019 23:06:38 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 13 Nov 2019 23:06:38 -0800
-Received: from [10.26.11.169] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 14 Nov
- 2019 07:06:34 +0000
-Subject: Re: [PATCH 9/9] spi: tegra20-slink: Use dma_request_chan() directly
- for channel request
-To:     Peter Ujfalusi <peter.ujfalusi@ti.com>, <broonie@kernel.org>,
-        <radu_nicolae.pirea@upb.ro>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <linus.walleij@linaro.org>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <andi@etezian.org>, <ldewangan@nvidia.com>,
-        <thierry.reding@gmail.com>
-CC:     <vkoul@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <alexandre.belloni@bootlin.com>,
-        <linux-arm-msm@vger.kernel.org>, <kgene@kernel.org>,
-        <krzk@kernel.org>, <linux-tegra@vger.kernel.org>
+        id S1725920AbfKNII5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 Nov 2019 03:08:57 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:59376 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725838AbfKNII5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Nov 2019 03:08:57 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAE88TAI087495;
+        Thu, 14 Nov 2019 02:08:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573718909;
+        bh=39b7nZ1qRF2Y+FLYhjNIYsRZV7qmctGWElYWFg7WX+c=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=jz3+gAJ3tZEIyJcZzYoDt3ibitF3wiUAMwOW2S5lRPPY58xnjxyQg4oFQkUEHkTUk
+         3TUmRmXZAr4W+u8/Rwj3JafK+izUYxskI6nlAaLVuwLwSdjSJQZdhhMgEEaqdda8nJ
+         iO4BKurruUwtjfW9CuZlD+vuGD4UGU9pZ6l3e74k=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAE88SDs112761;
+        Thu, 14 Nov 2019 02:08:28 -0600
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 14
+ Nov 2019 02:08:22 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 14 Nov 2019 02:08:22 -0600
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAE88H8G125696;
+        Thu, 14 Nov 2019 02:08:17 -0600
+Subject: Re: [PATCH 7/9] spi: s3c64xx: Use dma_request_chan() directly for
+ channel request
+To:     Andi Shyti <andi@etezian.org>
+CC:     <linus.walleij@linaro.org>, <kgene@kernel.org>,
+        <alexandre.belloni@bootlin.com>, <linux-arm-msm@vger.kernel.org>,
+        <radu_nicolae.pirea@upb.ro>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <krzk@kernel.org>,
+        <bjorn.andersson@linaro.org>, <vkoul@kernel.org>,
+        <agross@kernel.org>, <ldewangan@nvidia.com>, <broonie@kernel.org>,
+        <linux-tegra@vger.kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <linux-arm-kernel@lists.infradead.org>
 References: <20191113094256.1108-1-peter.ujfalusi@ti.com>
- <20191113094256.1108-10-peter.ujfalusi@ti.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <45f7645b-0272-cbfa-51ed-0e75844f180d@nvidia.com>
-Date:   Thu, 14 Nov 2019 07:06:31 +0000
+ <20191113094256.1108-8-peter.ujfalusi@ti.com>
+ <20191113234049.GA1249@jack.zhora.eu>
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+Message-ID: <e453c716-7658-a9fd-324d-4d95ff1aa29c@ti.com>
+Date:   Thu, 14 Nov 2019 10:09:33 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191113094256.1108-10-peter.ujfalusi@ti.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
+In-Reply-To: <20191113234049.GA1249@jack.zhora.eu>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1573715143; bh=IthYYP0v5yyasYpHTwN5FlnHy/Du3BXnlBVhiOd+EC0=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=Ff9Fjmm0AKXSeC1pnL+HyneQlQA2mLiYUk7rrPwx4Q/rBvCFvW63vqG22rMQLxBvP
-         HT/rcFOoBLLswFyE+8rxVdBb8BuCHGFH3k3aqFaOtUbn0ruhKj7l4LJ2eLt/2ceYYX
-         C+7z/9HBY4JL/IDLZGiyVNaQ9c5OWV/fe55DPvDypxYLoH4qmVL5sbvrJToB744tMg
-         fHB4blgBbNPeKbADcUacMSJsC00g1ER5vU67F5lAbt7OcQSfjzM+p/KMnGDTliFXF9
-         T44/Uoz+w5Euc0s+gfFHshspjv8S95EVjdFn7rCJXktdMnoO7V8xeqgexbw28u1noZ
-         LRdDRGpeKmWUA==
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On 13/11/2019 09:42, Peter Ujfalusi wrote:
-> dma_request_slave_channel_reason() is:
-> #define dma_request_slave_channel_reason(dev, name) \
-> 	dma_request_chan(dev, name)
+
+On 14/11/2019 1.40, Andi Shyti wrote:
+> Hi Peter,
 > 
-> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-> ---
->  drivers/spi/spi-tegra20-slink.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>>  	if (!is_polling(sdd)) {
+>>  		/* Acquire DMA channels */
+>> -		sdd->rx_dma.ch = dma_request_slave_channel_reason(&pdev->dev,
+>> -								  "rx");
+>> +		sdd->rx_dma.ch = dma_request_chan(&pdev->dev, "rx");
 > 
-> diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-> index 111fffc91435..51573f41ed12 100644
-> --- a/drivers/spi/spi-tegra20-slink.c
-> +++ b/drivers/spi/spi-tegra20-slink.c
-> @@ -599,8 +599,7 @@ static int tegra_slink_init_dma_param(struct tegra_slink_data *tspi,
->  	int ret;
->  	struct dma_slave_config dma_sconfig;
->  
-> -	dma_chan = dma_request_slave_channel_reason(tspi->dev,
-> -						dma_to_memory ? "rx" : "tx");
-> +	dma_chan = dma_request_chan(tspi->dev, dma_to_memory ? "rx" : "tx");
->  	if (IS_ERR(dma_chan)) {
->  		ret = PTR_ERR(dma_chan);
->  		if (ret != -EPROBE_DEFER)
+> I have a little concern here. We have two funcions
+> 'dma_request_chan' and  'dma_request_channel' don't we end up
+> making some confusion here?
+> 
+> Wouldn't it make more sense renaming 'dma_request_chan' to
+> 'dma_request_slave_channel_reason'?
+
+The dma_request_channel() should go away. It was the old API before we
+got the dma_slave_map for non DT (and non ACPI) platforms so we can get
+rid of the filter function exports from DMA drivers to clients all over
+the place.
+
+I know there are users where they provide dummy filter function.
+
+At the end the main API to request slave DMA channel should be
+dma_request_chan()
+For non slave channels (not HW triggered) we have dma_request_chan_by_mask()
+
+Imoh the dma_request_slave_channel_compat() should also go away with time.
+
+> 
+> Thanks,
+> Andi
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 > 
 
-Acked-by: Jon Hunter <jonathanh@nvidia.com>
+- Péter
 
-Cheers!
-Jon
-
--- 
-nvpublic
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
