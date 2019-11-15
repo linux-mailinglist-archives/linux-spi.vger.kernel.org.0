@@ -2,49 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B70FCFDD9F
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Nov 2019 13:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED81FDDA5
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Nov 2019 13:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727884AbfKOM0C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Nov 2019 07:26:02 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33488 "EHLO
+        id S1727774AbfKOMZ2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 Nov 2019 07:25:28 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33402 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727770AbfKOMZ3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Nov 2019 07:25:29 -0500
+        with ESMTP id S1727767AbfKOMZ1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Nov 2019 07:25:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
         Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=QN4aYBjvPkYWcAEdyVdCD60J+0aOlMsoc1odzZylDvY=; b=HlDYky63BVWE
-        xiYEScODyHPKkmDKxC9aQ84WkNBRAde9qVkfxAYoRwTD5rGqehP9jdghXR85TOTcbH2RlotY95xj4
-        xLRqZ4guJty9FOhO0IZRRRjd6IDIFIDmoJ9nUXDqrlpqlPwkSHnbu1biwEQF3sgMgQx96Du8U2Zc8
-        udpqE=;
+        List-Archive; bh=fWOoEWrncpp1tBUkmKh+q/SzDQz68gyKjX3HADQBBAg=; b=wZ6Hnf8RqUCF
+        vNEOfIUKj482smxvOpBKHA71fxQ/5J+thkYLPYLJ2tJVQ1O/WXEpt13+0ZJnK+zb7TcJIBcxsa85m
+        Ya3fGE+4hP86h/Ky2aG1zR7Jqas3fz6gh064GpzPFZZX46fYzyko4AF7T0wc5m00IZGz8X/GyAe8Z
+        LiOf8=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iVaf5-0000Lw-FI; Fri, 15 Nov 2019 12:25:15 +0000
+        id 1iVaf5-0000Ls-4F; Fri, 15 Nov 2019 12:25:15 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id E3EF42741609; Fri, 15 Nov 2019 12:25:14 +0000 (GMT)
+        id 9A80B27415A7; Fri, 15 Nov 2019 12:25:14 +0000 (GMT)
 From:   Mark Brown <broonie@kernel.org>
 To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
 Cc:     agross@kernel.org, alexandre.belloni@bootlin.com, andi@etezian.org,
-        Andi Shyti <andi@etezian.org>, bjorn.andersson@linaro.org,
-        broonie@kernel.org, jonathanh@nvidia.com, kgene@kernel.org,
-        krzk@kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        ldewangan@nvidia.com, linus.walleij@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
+        bjorn.andersson@linaro.org, broonie@kernel.org,
+        jonathanh@nvidia.com, Jon Hunter <jonathanh@nvidia.com>,
+        kgene@kernel.org, krzk@kernel.org, ldewangan@nvidia.com,
+        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
         Mark Brown <broonie@kernel.org>, radu_nicolae.pirea@upb.ro,
         s.hauer@pengutronix.de, shawnguo@kernel.org,
         thierry.reding@gmail.com, vkoul@kernel.org
-Subject: Applied "spi: s3c64xx: Use dma_request_chan() directly for channel request" to the spi tree
-In-Reply-To: <20191113094256.1108-8-peter.ujfalusi@ti.com>
+Subject: Applied "spi: tegra114: Use dma_request_chan() directly for channel request" to the spi tree
+In-Reply-To: <20191113094256.1108-9-peter.ujfalusi@ti.com>
 X-Patchwork-Hint: ignore
-Message-Id: <20191115122514.E3EF42741609@ypsilon.sirena.org.uk>
+Message-Id: <20191115122514.9A80B27415A7@ypsilon.sirena.org.uk>
 Date:   Fri, 15 Nov 2019 12:25:14 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -53,7 +52,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: s3c64xx: Use dma_request_chan() directly for channel request
+   spi: tegra114: Use dma_request_chan() directly for channel request
 
 has been applied to the spi tree at
 
@@ -78,10 +77,10 @@ to this mail.
 Thanks,
 Mark
 
-From df1b0141788527c032a9851c0589a1712d7e46b8 Mon Sep 17 00:00:00 2001
+From 4c973b98cdd3b413216fdb9655a420737c46a4cb Mon Sep 17 00:00:00 2001
 From: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Date: Wed, 13 Nov 2019 11:42:54 +0200
-Subject: [PATCH] spi: s3c64xx: Use dma_request_chan() directly for channel
+Date: Wed, 13 Nov 2019 11:42:55 +0200
+Subject: [PATCH] spi: tegra114: Use dma_request_chan() directly for channel
  request
 
 dma_request_slave_channel_reason() is:
@@ -89,36 +88,27 @@ dma_request_slave_channel_reason() is:
 	dma_request_chan(dev, name)
 
 Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-Acked-by: Andi Shyti <andi@etezian.org>
-Link: https://lore.kernel.org/r/20191113094256.1108-8-peter.ujfalusi@ti.com
+Acked-by: Jon Hunter <jonathanh@nvidia.com>
+Link: https://lore.kernel.org/r/20191113094256.1108-9-peter.ujfalusi@ti.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-s3c64xx.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/spi/spi-tegra114.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 7b7151ec14c8..cf67ea60dc0e 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1154,15 +1154,13 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
+index e6a450d9b4f0..fc40ab146c86 100644
+--- a/drivers/spi/spi-tegra114.c
++++ b/drivers/spi/spi-tegra114.c
+@@ -666,8 +666,7 @@ static int tegra_spi_init_dma_param(struct tegra_spi_data *tspi,
+ 	dma_addr_t dma_phys;
+ 	int ret;
  
- 	if (!is_polling(sdd)) {
- 		/* Acquire DMA channels */
--		sdd->rx_dma.ch = dma_request_slave_channel_reason(&pdev->dev,
--								  "rx");
-+		sdd->rx_dma.ch = dma_request_chan(&pdev->dev, "rx");
- 		if (IS_ERR(sdd->rx_dma.ch)) {
- 			dev_err(&pdev->dev, "Failed to get RX DMA channel\n");
- 			ret = PTR_ERR(sdd->rx_dma.ch);
- 			goto err_disable_io_clk;
- 		}
--		sdd->tx_dma.ch = dma_request_slave_channel_reason(&pdev->dev,
--								  "tx");
-+		sdd->tx_dma.ch = dma_request_chan(&pdev->dev, "tx");
- 		if (IS_ERR(sdd->tx_dma.ch)) {
- 			dev_err(&pdev->dev, "Failed to get TX DMA channel\n");
- 			ret = PTR_ERR(sdd->tx_dma.ch);
+-	dma_chan = dma_request_slave_channel_reason(tspi->dev,
+-					dma_to_memory ? "rx" : "tx");
++	dma_chan = dma_request_chan(tspi->dev, dma_to_memory ? "rx" : "tx");
+ 	if (IS_ERR(dma_chan)) {
+ 		ret = PTR_ERR(dma_chan);
+ 		if (ret != -EPROBE_DEFER)
 -- 
 2.20.1
 
