@@ -2,153 +2,223 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F23FDF5C
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Nov 2019 14:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D40FDFF7
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Nov 2019 15:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727417AbfKONwg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Nov 2019 08:52:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727411AbfKONwg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 15 Nov 2019 08:52:36 -0500
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AADD22073B;
-        Fri, 15 Nov 2019 13:52:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573825954;
-        bh=byccjQGKDp78Hpig9iIFTYDmZ2hi5+wPX21QztoMffQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jksCRt0n9nFcU+ZExUEHHKzIWbgnbV8XdpoR7rkhnQF7ZMS5HoKM7k5PLGDMp44++
-         qoEFF4fDOqnYCRvWSl5sBsoW141oAQ743jD66MGXoOROWargZKeIEkpQ4BoOMKsz0k
-         QTBZmrmAK7yVvtks+VlhPdIEc6bjs6iXSZYioSso=
-Received: by mail-qv1-f48.google.com with SMTP id d3so3771388qvs.11;
-        Fri, 15 Nov 2019 05:52:34 -0800 (PST)
-X-Gm-Message-State: APjAAAVkguIokj3sxK8IwJ/87xHXNpmKtESsZpjn/KB5RxpvHH6e4tYf
-        w6xHU81FBHGGo49syK5aqFU6jiCfMy0zWLZhNA==
-X-Google-Smtp-Source: APXvYqwWnpvZlkGEaU+MoyCE0QcbXaYmkR1k9FsQYEefvYoJDNpv7HxUniQpMKCZFcqXCVK++8fwMkHnwAevVKIkZj8=
-X-Received: by 2002:a0c:edcc:: with SMTP id i12mr1964139qvr.20.1573825953731;
- Fri, 15 Nov 2019 05:52:33 -0800 (PST)
+        id S1727427AbfKOOXd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 Nov 2019 09:23:33 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:21076 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727380AbfKOOXd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Nov 2019 09:23:33 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAFEHMxo008650;
+        Fri, 15 Nov 2019 15:23:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=T9/nzrbSzNCSSlIAj0mf6EvFLY/5Hd6RIjHy97kGKZM=;
+ b=kd1P0HB6DnaONOLWJlRhCm9vzD9lGiDZBguHaM1gRDGLAd3nuzS25QA+iKR2WcEu9xRw
+ AZXBRUyw/t/AkAGb2AchogBvd/NZ1NzTi+yzDEKkNeb50x6Hs3m0toFpkD5jqlmD+lbG
+ ID7emAPLHY2JlbrCLVNJR92uGvaGTeIC01sPD2lFdUPuQXbmkzHiK/tytl+kPE+/zaZH
+ HDuguw88w31NzzdNN/jy2KxzFq7GWX1m13F7NbONEL0tNmxKKU42Y4XACaX5IT+rWSNn
+ flBWHsobQfn2KPH78RDpD9DTeNzPAYRrZS40OdfNokfZaOI7axTNmwIyhCj6ETv6kdi6 hQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2w7psfmrn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Nov 2019 15:23:21 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C3EBC10002A;
+        Fri, 15 Nov 2019 15:23:20 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AB8182BEC75;
+        Fri, 15 Nov 2019 15:23:20 +0100 (CET)
+Received: from localhost (10.75.127.46) by SFHDAG3NODE3.st.com (10.75.127.9)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 15 Nov 2019 15:23:19
+ +0100
+From:   Benjamin Gaignard <benjamin.gaignard@st.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <alexandre.torgue@st.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: [PATCH] dt-bindings: crypto: Convert stm32 QSPI bindings to json-schema
+Date:   Fri, 15 Nov 2019 15:23:18 +0100
+Message-ID: <20191115142318.2909-1-benjamin.gaignard@st.com>
+X-Mailer: git-send-email 2.15.0
 MIME-Version: 1.0
-References: <20191112055412.192675-1-dmitry.torokhov@gmail.com>
- <20191112055412.192675-2-dmitry.torokhov@gmail.com> <20191112120307.GB5195@sirena.co.uk>
- <20191112190328.GA199853@dtor-ws> <20191112191547.GK5195@sirena.co.uk>
- <20191112193653.GB13374@dtor-ws> <20191114222652.GA7517@bogus> <CAKdAkRQBrKOUTW8puakA26ODYW9=0H4VhwFhGQAqMs-cMmj3CQ@mail.gmail.com>
-In-Reply-To: <CAKdAkRQBrKOUTW8puakA26ODYW9=0H4VhwFhGQAqMs-cMmj3CQ@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 15 Nov 2019 07:52:22 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKUXPTC-fmUowpaHQpuKTfgfQ6D2n7kOZgkYt+MS7OfaA@mail.gmail.com>
-Message-ID: <CAL_JsqKUXPTC-fmUowpaHQpuKTfgfQ6D2n7kOZgkYt+MS7OfaA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: dt-bindings: spi-controller: add wakeup-source
- and interrupts
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        DTML <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE3.st.com
+ (10.75.127.9)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-15_04:2019-11-15,2019-11-15 signatures=0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 5:09 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> On Thu, Nov 14, 2019 at 2:26 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Tue, Nov 12, 2019 at 11:36:53AM -0800, Dmitry Torokhov wrote:
-> > > On Tue, Nov 12, 2019 at 07:15:47PM +0000, Mark Brown wrote:
-> > > > On Tue, Nov 12, 2019 at 11:03:28AM -0800, Dmitry Torokhov wrote:
-> > > > > On Tue, Nov 12, 2019 at 12:03:07PM +0000, Mark Brown wrote:
-> > > > > > On Mon, Nov 11, 2019 at 09:54:10PM -0800, Dmitry Torokhov wrote:
-> > > >
-> > > > > > > +      interrupts:
-> > > > > > > +        items:
-> > > > > > > +          - description: main interrupt (attention) line.
-> > > > > > > +          - description: dedicated wakeup interrupt.
-> > > > > > > +        minItems: 1 # The wakeup interrupt is optional.
-> > > >
-> > > > > > > +      interrupt-names:
-> > > > > > > +        items:
-> > > > > > > +          - const: irq
-> > > > > > > +          - const: wakeup
-> > > > > > > +        minItems: 1
-> > > >
-> > > > > > How will this interact with a SPI device that defines interrupts at the
-> > > > > > device level, possibly more than one of them?  Especially if the device
-> > > > > > has its own idea what the interrupts should be called.
-> > > >
-> > > > > My understanding that individual drivers should be able to override
-> > > > > whatever the default behavior core has configured, and the device can
-> > > > > establish their own mapping. We have this in I2C and I believe this
-> > > > > works well.
-> > > >
-> > > > > Is the concern about the device tree scheme or SPI core handling?
-> > > >
-> > > > Both really.
-> > >
-> > > So as I mentioned, the driver is not forced to use the interrupt
-> > > supplied by the SPI core, and the worst thing is that the core
-> > > configures the main IRQ as wakeirq and driver would need to call
-> > > dev_pm_clear_wake_irq() before switching to correct one. I expect there
-> > > will be just a few drivers needing that and many more would benefit from
-> > > the default behavior and not needing to repeat the same boilerplate
-> > > code.
-> > >
-> > > As far as scheme goes - I hope that Rob could confirm that we can
-> > > override number of interrupts and names in consumers of the binding, as
-> > > needed.
-> >
-> > This won't work. A device schema doesn't override what's defined here,
-> > but just further constrains this schema.
-> >
-> > You could define a "spi irq" schema which devices can include if they
-> > want to, but I don't think this pattern is that common to SPI devices.
-> > There's not any spec behind compared to say alert irq for SMBus.
-> >
-> > The 'wakeup' irq name is standardized (for DT), but that's not SPI
-> > specific. About all we could define there is 'wakeup-source' is boolean
-> > and if there is more than one interrupt, one should be named 'wakeup'.
->
-> OK, so what I am hearing is "interrupt"/"interrupt-names" properties
-> should be defined in individual device's bindings, and wakeup-source
-> can stay in spi-controller.yaml, right?
+Convert the STM32 QSPI binding to DT schema format using json-schema
 
-It could, but it's not SPI specific. I think we should convert
-bindings/power/wakeup-source.txt instead. Something like this:
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+---
+ .../devicetree/bindings/spi/spi-stm32-qspi.txt     | 47 -----------
+ .../devicetree/bindings/spi/st,stm32-qspi.yaml     | 91 ++++++++++++++++++++++
+ 2 files changed, 91 insertions(+), 47 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
 
-select: true
+diff --git a/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt b/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
+deleted file mode 100644
+index bfc038b9478d..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
++++ /dev/null
+@@ -1,47 +0,0 @@
+-* STMicroelectronics Quad Serial Peripheral Interface(QSPI)
+-
+-Required properties:
+-- compatible: should be "st,stm32f469-qspi"
+-- reg: the first contains the register location and length.
+-       the second contains the memory mapping address and length
+-- reg-names: should contain the reg names "qspi" "qspi_mm"
+-- interrupts: should contain the interrupt for the device
+-- clocks: the phandle of the clock needed by the QSPI controller
+-- A pinctrl must be defined to set pins in mode of operation for QSPI transfer
+-
+-Optional properties:
+-- resets: must contain the phandle to the reset controller.
+-
+-A spi flash (NOR/NAND) must be a child of spi node and could have some
+-properties. Also see jedec,spi-nor.txt.
+-
+-Required properties:
+-- reg: chip-Select number (QSPI controller may connect 2 flashes)
+-- spi-max-frequency: max frequency of spi bus
+-
+-Optional properties:
+-- spi-rx-bus-width: see ./spi-bus.txt for the description
+-- dmas: DMA specifiers for tx and rx dma. See the DMA client binding,
+-Documentation/devicetree/bindings/dma/dma.txt.
+-- dma-names: DMA request names should include "tx" and "rx" if present.
+-
+-Example:
+-
+-qspi: spi@a0001000 {
+-	compatible = "st,stm32f469-qspi";
+-	reg = <0xa0001000 0x1000>, <0x90000000 0x10000000>;
+-	reg-names = "qspi", "qspi_mm";
+-	interrupts = <91>;
+-	resets = <&rcc STM32F4_AHB3_RESET(QSPI)>;
+-	clocks = <&rcc 0 STM32F4_AHB3_CLOCK(QSPI)>;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_qspi0>;
+-
+-	flash@0 {
+-		compatible = "jedec,spi-nor";
+-		reg = <0>;
+-		spi-rx-bus-width = <4>;
+-		spi-max-frequency = <108000000>;
+-		...
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+new file mode 100644
+index 000000000000..955405d39966
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+@@ -0,0 +1,91 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/st,stm32-qspi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics STM32 Quad Serial Peripheral Interface (QSPI) bindings
++
++maintainers:
++  - Christophe Kerello <christophe.kerello@st.com>
++  - Patrice Chotard <patrice.chotard@st.com>
++
++allOf:
++  - $ref: "spi-controller.yaml#"
++
++properties:
++  compatible:
++    const: st,stm32f469-qspi
++
++  reg:
++    items:
++      - description: registers
++      - description: memory mapping
++    minItems: 2
++    maxItems: 2
++
++  reg-names:
++    items:
++     - const: qspi
++     - const: qspi_mm
++    minItems: 2
++    maxItems: 2
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  dmas:
++    items:
++      - description: tx DMA channel
++      - description: rx DMA channel
++    minItems: 2
++    maxItems: 2
++
++  dma-names:
++    items:
++      - const: tx
++      - const: rx
++    minItems: 2
++    maxItems: 2
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - interrupts
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/stm32mp1-clks.h>
++    #include <dt-bindings/reset/stm32mp1-resets.h>
++    spi@58003000 {
++      compatible = "st,stm32f469-qspi";
++      reg = <0x58003000 0x1000>, <0x70000000 0x10000000>;
++      reg-names = "qspi", "qspi_mm";
++      interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
++      dmas = <&mdma1 22 0x10 0x100002 0x0 0x0>,
++             <&mdma1 22 0x10 0x100008 0x0 0x0>;
++      dma-names = "tx", "rx";
++      clocks = <&rcc QSPI_K>;
++      resets = <&rcc QSPI_R>;
++
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      flash@0 {
++        compatible = "jedec,spi-nor";
++        reg = <0>;
++        spi-rx-bus-width = <4>;
++        spi-max-frequency = <108000000>;
++      };
++    };
++
++...
+-- 
+2.15.0
 
-properties:
-  wakeup-source:
-    type: boolean
-    description: ...
-
-if:
-  properties:
-    interrupt-names:
-      contains:
-        const: wakeup
-  required:
-    - interrupt-names
-then:
-  required:
-    - wakeup-source
-
-dependencies:
-  wakeup-source: [ interrupts ]
-
-
-Rob
-
-> And as far as SPI core goes, we can still do what I proposed, because
-> we already handle "first" interrupt as the default one and the drivers
-> can override as needed anyway...
->
-> Thanks.
->
-> --
-> Dmitry
