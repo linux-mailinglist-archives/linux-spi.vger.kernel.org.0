@@ -2,211 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D416FDA57
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Nov 2019 11:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278EDFDDAD
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Nov 2019 13:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbfKOKEB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Nov 2019 05:04:01 -0500
-Received: from twhmllg3.macronix.com ([122.147.135.201]:20680 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726920AbfKOKEB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Nov 2019 05:04:01 -0500
-Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id xAF8xp4i046911
-        for <linux-spi@vger.kernel.org>; Fri, 15 Nov 2019 16:59:51 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from localhost.localdomain ([172.17.195.96])
-        by TWHMLLG3.macronix.com with ESMTP id xAF8wWGx046218;
-        Fri, 15 Nov 2019 16:58:36 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-From:   Mason Yang <masonccyang@mxic.com.tw>
-To:     broonie@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        marek.vasut@gmail.com, dwmw2@infradead.org,
-        computersforpeace@gmail.com, vigneshr@ti.com,
-        bbrezillon@kernel.org, tudor.ambarus@microchip.com
-Cc:     juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH 4/4] spi: mxic: Add support for Octal 8D-8D-8D mode
-Date:   Fri, 15 Nov 2019 16:58:08 +0800
-Message-Id: <1573808288-19365-5-git-send-email-masonccyang@mxic.com.tw>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1573808288-19365-1-git-send-email-masonccyang@mxic.com.tw>
-References: <1573808288-19365-1-git-send-email-masonccyang@mxic.com.tw>
-X-MAIL: TWHMLLG3.macronix.com xAF8wWGx046218
+        id S1727725AbfKOMZT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 Nov 2019 07:25:19 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33046 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727587AbfKOMZS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Nov 2019 07:25:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=Re2hQTtNAD8CYEK6W+NpLcveT//8Obo4//e0YXTuxTc=; b=jFUZ7q7H99n3
+        xPQxQwwN0FSWoZ4uDzb52Mb2epbh5Dk1Pu4v30mUzg4m2Tg2ytDV1g9i9KMQcFA0tV4ikY96WpUep
+        tX7rbioDKzEJGCoLKywvVyc3NG+AnZxUhoiVokGz3Dua7cWzwUduasdtTK+DBdmn6tpeLNEJwsC0S
+        jakRc=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iVaf4-0000Lk-F0; Fri, 15 Nov 2019 12:25:14 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id EF8D427415A7; Fri, 15 Nov 2019 12:25:13 +0000 (GMT)
+From:   Mark Brown <broonie@kernel.org>
+To:     Chuhong Yuan <hslester96@gmail.com>
+Cc:     "Cc:"@sirena.co.uk, "Cc:"@sirena.co.uk,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Applied "spi: tegra20-slink: add missed clk_unprepare" to the spi tree
+In-Reply-To: <20191115083122.12278-1-hslester96@gmail.com>
+X-Patchwork-Hint: ignore
+Message-Id: <20191115122513.EF8D427415A7@ypsilon.sirena.org.uk>
+Date:   Fri, 15 Nov 2019 12:25:13 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-patch driver for 8-8-8 and 8D-8D-8D mode support.
+The patch
 
-Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
+   spi: tegra20-slink: add missed clk_unprepare
+
+has been applied to the spi tree at
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 04358e40ba96d687c0811c21d9dede73f5244a98 Mon Sep 17 00:00:00 2001
+From: Chuhong Yuan <hslester96@gmail.com>
+Date: Fri, 15 Nov 2019 16:31:22 +0800
+Subject: [PATCH] spi: tegra20-slink: add missed clk_unprepare
+
+The driver misses calling clk_unprepare in probe failure and remove.
+Add the calls to fix it.
+
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+Link: https://lore.kernel.org/r/20191115083122.12278-1-hslester96@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-mxic.c | 98 ++++++++++++++++++++++++++++++++++----------------
- 1 file changed, 67 insertions(+), 31 deletions(-)
+ drivers/spi/spi-tegra20-slink.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
-index f48563c..50e2055 100644
---- a/drivers/spi/spi-mxic.c
-+++ b/drivers/spi/spi-mxic.c
-@@ -280,10 +280,58 @@ static void mxic_spi_hw_init(struct mxic_spi *mxic)
- 	       mxic->regs + HC_CFG);
- }
+diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
+index 51573f41ed12..7f4d932dade7 100644
+--- a/drivers/spi/spi-tegra20-slink.c
++++ b/drivers/spi/spi-tegra20-slink.c
+@@ -1072,7 +1072,7 @@ static int tegra_slink_probe(struct platform_device *pdev)
+ 	ret = clk_enable(tspi->clk);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "Clock enable failed %d\n", ret);
+-		goto exit_free_master;
++		goto exit_clk_unprepare;
+ 	}
  
-+static u32 mxic_spi_mem_prep_op_cfg(const struct spi_mem_op *op)
-+{
-+	u32 cfg =  OP_CMD_BYTES(op->cmd.nbytes) |
-+		   OP_CMD_BUSW(fls(op->cmd.buswidth) - 1) |
-+		   (op->cmd.dtr ? OP_CMD_DDR : 0);
-+
-+	if (op->addr.nbytes)
-+		cfg |= OP_ADDR_BYTES(op->addr.nbytes) |
-+		       OP_ADDR_BUSW(fls(op->addr.buswidth) - 1) |
-+		       (op->addr.dtr ? OP_ADDR_DDR : 0);
-+
-+	if (op->dummy.nbytes)
-+		cfg |= OP_DUMMY_CYC(op->dummy.nbytes);
-+
-+	if (op->data.nbytes) {
-+		cfg |= OP_DATA_BUSW(fls(op->data.buswidth) - 1) |
-+		      (op->data.dtr ? OP_DATA_DDR : 0);
-+		if (op->data.dir == SPI_MEM_DATA_IN) {
-+			cfg |= OP_READ;
-+			if (op->data.dtr == OP_DATA_DDR)
-+				cfg |= OP_DQS_EN;
-+		}
-+	}
-+
-+	return cfg;
-+}
-+
-+static void mxic_spi_set_hc_cfg(struct spi_device *spi, u32 flags)
-+{
-+	struct mxic_spi *mxic = spi_master_get_devdata(spi->master);
-+	int nio = 1;
-+
-+	if (spi->mode & (SPI_RX_OCTAL | SPI_TX_OCTAL))
-+		nio = 8;
-+	else if (spi->mode & (SPI_TX_QUAD | SPI_RX_QUAD))
-+		nio = 4;
-+	else if (spi->mode & (SPI_TX_DUAL | SPI_RX_DUAL))
-+		nio = 2;
-+
-+	writel(flags | HC_CFG_NIO(nio) |
-+	       HC_CFG_TYPE(spi->chip_select, HC_CFG_TYPE_SPI_NOR) |
-+	       HC_CFG_SLV_ACT(spi->chip_select) | HC_CFG_IDLE_SIO_LVL(1),
-+	       mxic->regs + HC_CFG);
-+}
-+
- static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
- 			      void *rxbuf, unsigned int len)
- {
- 	unsigned int pos = 0;
-+	bool dtr_enabled;
-+
-+	dtr_enabled = (readl(mxic->regs + SS_CTRL(0)) & OP_DATA_DDR);
+ 	spi_irq = platform_get_irq(pdev, 0);
+@@ -1145,6 +1145,8 @@ static int tegra_slink_probe(struct platform_device *pdev)
+ 	free_irq(spi_irq, tspi);
+ exit_clk_disable:
+ 	clk_disable(tspi->clk);
++exit_clk_unprepare:
++	clk_unprepare(tspi->clk);
+ exit_free_master:
+ 	spi_master_put(master);
+ 	return ret;
+@@ -1158,6 +1160,7 @@ static int tegra_slink_remove(struct platform_device *pdev)
+ 	free_irq(tspi->irq, tspi);
  
- 	while (pos < len) {
- 		unsigned int nbytes = len - pos;
-@@ -302,6 +350,9 @@ static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
- 		if (ret)
- 			return ret;
+ 	clk_disable(tspi->clk);
++	clk_unprepare(tspi->clk);
  
-+		if (dtr_enabled && len & 0x1)
-+			nbytes++;
-+
- 		writel(data, mxic->regs + TXD(nbytes % 4));
- 
- 		if (rxbuf) {
-@@ -319,6 +370,8 @@ static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
- 
- 			data = readl(mxic->regs + RXD);
- 			data >>= (8 * (4 - nbytes));
-+			if (dtr_enabled && len & 0x1)
-+				nbytes++;
- 			memcpy(rxbuf + pos, &data, nbytes);
- 			WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
- 		} else {
-@@ -335,8 +388,8 @@ static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
- static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
- 				     const struct spi_mem_op *op)
- {
--	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
--	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
-+	if (op->data.buswidth > 8 || op->addr.buswidth > 8 ||
-+	    op->dummy.buswidth > 8 || op->cmd.buswidth > 8)
- 		return false;
- 
- 	if (op->data.nbytes && op->dummy.nbytes &&
-@@ -353,47 +406,29 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
- 				const struct spi_mem_op *op)
- {
- 	struct mxic_spi *mxic = spi_master_get_devdata(mem->spi->master);
--	int nio = 1, i, ret;
--	u32 ss_ctrl;
-+	int i, ret;
- 	u8 addr[8];
-+	u8 cmd[2];
- 
- 	ret = mxic_spi_set_freq(mxic, mem->spi->max_speed_hz);
- 	if (ret)
- 		return ret;
- 
--	if (mem->spi->mode & (SPI_TX_QUAD | SPI_RX_QUAD))
--		nio = 4;
--	else if (mem->spi->mode & (SPI_TX_DUAL | SPI_RX_DUAL))
--		nio = 2;
-+	mxic_spi_set_hc_cfg(mem->spi, HC_CFG_MAN_CS_EN);
- 
--	writel(HC_CFG_NIO(nio) |
--	       HC_CFG_TYPE(mem->spi->chip_select, HC_CFG_TYPE_SPI_NOR) |
--	       HC_CFG_SLV_ACT(mem->spi->chip_select) | HC_CFG_IDLE_SIO_LVL(1) |
--	       HC_CFG_MAN_CS_EN,
--	       mxic->regs + HC_CFG);
- 	writel(HC_EN_BIT, mxic->regs + HC_EN);
- 
--	ss_ctrl = OP_CMD_BYTES(1) | OP_CMD_BUSW(fls(op->cmd.buswidth) - 1);
--
--	if (op->addr.nbytes)
--		ss_ctrl |= OP_ADDR_BYTES(op->addr.nbytes) |
--			   OP_ADDR_BUSW(fls(op->addr.buswidth) - 1);
--
--	if (op->dummy.nbytes)
--		ss_ctrl |= OP_DUMMY_CYC(op->dummy.nbytes);
--
--	if (op->data.nbytes) {
--		ss_ctrl |= OP_DATA_BUSW(fls(op->data.buswidth) - 1);
--		if (op->data.dir == SPI_MEM_DATA_IN)
--			ss_ctrl |= OP_READ;
--	}
--
--	writel(ss_ctrl, mxic->regs + SS_CTRL(mem->spi->chip_select));
-+	writel(mxic_spi_mem_prep_op_cfg(op),
-+	       mxic->regs + SS_CTRL(mem->spi->chip_select));
- 
- 	writel(readl(mxic->regs + HC_CFG) | HC_CFG_MAN_CS_ASSERT,
- 	       mxic->regs + HC_CFG);
- 
--	ret = mxic_spi_data_xfer(mxic, &op->cmd.opcode, NULL, 1);
-+	cmd[0] = op->cmd.opcode;
-+	if (op->cmd.nbytes == 2)
-+		cmd[1] = op->cmd.ext_opcode;
-+
-+	ret = mxic_spi_data_xfer(mxic, cmd, NULL, op->cmd.nbytes);
- 	if (ret)
- 		goto out;
- 
-@@ -566,7 +601,8 @@ static int mxic_spi_probe(struct platform_device *pdev)
- 	master->bits_per_word_mask = SPI_BPW_MASK(8);
- 	master->mode_bits = SPI_CPOL | SPI_CPHA |
- 			SPI_RX_DUAL | SPI_TX_DUAL |
--			SPI_RX_QUAD | SPI_TX_QUAD;
-+			SPI_RX_QUAD | SPI_TX_QUAD |
-+			SPI_RX_OCTAL | SPI_TX_OCTAL;
- 
- 	mxic_spi_hw_init(mxic);
- 
+ 	if (tspi->tx_dma_chan)
+ 		tegra_slink_deinit_dma_param(tspi, false);
 -- 
-1.9.1
+2.20.1
 
