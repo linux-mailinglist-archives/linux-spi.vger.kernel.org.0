@@ -2,36 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37503FF2CE
-	for <lists+linux-spi@lfdr.de>; Sat, 16 Nov 2019 17:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD403FF1EC
+	for <lists+linux-spi@lfdr.de>; Sat, 16 Nov 2019 17:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728794AbfKPQV2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 16 Nov 2019 11:21:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47500 "EHLO mail.kernel.org"
+        id S1728119AbfKPQPx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 16 Nov 2019 11:15:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53746 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728738AbfKPPnb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:43:31 -0500
+        id S1729638AbfKPPrJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:47:09 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E157320815;
-        Sat, 16 Nov 2019 15:43:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8574320815;
+        Sat, 16 Nov 2019 15:47:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919011;
-        bh=v07zbc7vShP28g0iL9bjsCC4WxDrC1Mp4bhpHU4L4qA=;
+        s=default; t=1573919228;
+        bh=k+aeY3djTXrMWJV296qj1JOi9SAAWVq/Vc2rki06J+w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iEK037BfSHhBFty++qGjzYyEQu/KxU+dCxUTFzIYt712bIc5dfalT6V9NYgThTMP0
-         dV/sfWPggheOVOCP4EQ++7Zq4tOT0hZ6Qba6WGY2rM0scwqFoxA4wLVF0sJkMok/Ge
-         IrfsKevIYM8keufkBpo+6o0wJbfM6ys7oAJC5xjU=
+        b=AoTcALhZnUU6DHdBVsWu+BOuEHBIWz/OrXI4Xq81riGUc/PSu4YcZYA6G+ebiKvOX
+         ucdVY3OZpZIZclRAWIeo3d7zQrsJQ5qs72xdYRKxj1AU65/CasT1mCTrqSnEOSvn8Z
+         TEIVxpNElNVc5G2fLlTTLCoxQJhpnqGYRuvN/HJI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Keiji Hayashibara <hayashibara.keiji@socionext.com>,
+Cc:     Vignesh R <vigneshr@ti.com>, David Lechner <david@lechnology.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 115/237] spi: uniphier: fix incorrect property items
-Date:   Sat, 16 Nov 2019 10:39:10 -0500
-Message-Id: <20191116154113.7417-115-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 233/237] spi: omap2-mcspi: Fix DMA and FIFO event trigger size mismatch
+Date:   Sat, 16 Nov 2019 10:41:08 -0500
+Message-Id: <20191116154113.7417-233-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
@@ -44,54 +43,47 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Keiji Hayashibara <hayashibara.keiji@socionext.com>
+From: Vignesh R <vigneshr@ti.com>
 
-[ Upstream commit 3511ba7d4ca6f39e2d060bb94e42a41ad1fee7bf ]
+[ Upstream commit baf8b9f8d260c55a86405f70a384c29cda888476 ]
 
-This commit fixes incorrect property because it was different
-from the actual.
-The parameters of '#address-cells' and '#size-cells' were removed,
-and 'interrupts', 'pinctrl-names' and 'pinctrl-0' were added.
+Commit b682cffa3ac6 ("spi: omap2-mcspi: Set FIFO DMA trigger level to word length")
+broke SPI transfers where bits_per_word != 8. This is because of
+mimsatch between McSPI FIFO level event trigger size (SPI word length) and
+DMA request size(word length * maxburst). This leads to data
+corruption, lockup and errors like:
 
-Fixes: 4dcd5c2781f3 ("spi: add DT bindings for UniPhier SPI controller")
-Signed-off-by: Keiji Hayashibara <hayashibara.keiji@socionext.com>
+	spi1.0: EOW timed out
+
+Fix this by setting DMA maxburst size to 1 so that
+McSPI FIFO level event trigger size matches DMA request size.
+
+Fixes: b682cffa3ac6 ("spi: omap2-mcspi: Set FIFO DMA trigger level to word length")
+Cc: stable@vger.kernel.org
+Reported-by: David Lechner <david@lechnology.com>
+Tested-by: David Lechner <david@lechnology.com>
+Signed-off-by: Vignesh R <vigneshr@ti.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../devicetree/bindings/spi/spi-uniphier.txt       | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/spi/spi-omap2-mcspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-uniphier.txt b/Documentation/devicetree/bindings/spi/spi-uniphier.txt
-index 504a4ecfc7b16..b04e66a52de5d 100644
---- a/Documentation/devicetree/bindings/spi/spi-uniphier.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-uniphier.txt
-@@ -5,18 +5,20 @@ UniPhier SoCs have SCSSI which supports SPI single channel.
- Required properties:
-  - compatible: should be "socionext,uniphier-scssi"
-  - reg: address and length of the spi master registers
-- - #address-cells: must be <1>, see spi-bus.txt
-- - #size-cells: must be <0>, see spi-bus.txt
-- - clocks: A phandle to the clock for the device.
-- - resets: A phandle to the reset control for the device.
-+ - interrupts: a single interrupt specifier
-+ - pinctrl-names: should be "default"
-+ - pinctrl-0: pin control state for the default mode
-+ - clocks: a phandle to the clock for the device
-+ - resets: a phandle to the reset control for the device
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index f50cb8a4b4138..eb2d2de172af3 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -607,8 +607,8 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
+ 	cfg.dst_addr = cs->phys + OMAP2_MCSPI_TX0;
+ 	cfg.src_addr_width = width;
+ 	cfg.dst_addr_width = width;
+-	cfg.src_maxburst = es;
+-	cfg.dst_maxburst = es;
++	cfg.src_maxburst = 1;
++	cfg.dst_maxburst = 1;
  
- Example:
- 
- spi0: spi@54006000 {
- 	compatible = "socionext,uniphier-scssi";
- 	reg = <0x54006000 0x100>;
--	#address-cells = <1>;
--	#size-cells = <0>;
-+	interrupts = <0 39 4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi0>;
- 	clocks = <&peri_clk 11>;
- 	resets = <&peri_rst 11>;
- };
+ 	rx = xfer->rx_buf;
+ 	tx = xfer->tx_buf;
 -- 
 2.20.1
 
