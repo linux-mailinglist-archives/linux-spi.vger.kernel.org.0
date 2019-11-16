@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF61FEEFE
-	for <lists+linux-spi@lfdr.de>; Sat, 16 Nov 2019 16:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69AAFF3BE
+	for <lists+linux-spi@lfdr.de>; Sat, 16 Nov 2019 17:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730199AbfKPPzq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 16 Nov 2019 10:55:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37810 "EHLO mail.kernel.org"
+        id S1727950AbfKPQ10 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 16 Nov 2019 11:27:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731618AbfKPPzh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:55:37 -0500
+        id S1727941AbfKPPlh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:41:37 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7528B21844;
-        Sat, 16 Nov 2019 15:55:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B3041207DD;
+        Sat, 16 Nov 2019 15:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919736;
-        bh=awQvIKTfUYWNu69iro6jB5+ZflEGxlK8ruMsEgXoNEc=;
+        s=default; t=1573918897;
+        bh=BNG1lRWcivrcVSSJ5JADbls1JW9lsGLGjJzIes5u76M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xNagl4Lx2cJMaeOghVcJoo/GgO40a9t7tPMXVvrjQBffCS9VrYLvVapgAUyD5OviO
-         8+00ugnZmaDmOOMvshhuuxaBydfSw6npGfwXM8BUlqz6c69ykQv0Hna6XlMar5BndS
-         VuPtyxpaFulhuDZVK8YbFvIlvFltaUf/cA9z7i4A=
+        b=Vj6id7x1gbWWMmLcGbW+YWHyVXmVAMiK/uB94I5SJiziJun67hdQGbC1fYl6HlKDs
+         Z63PM5FgkPEU8m7ZC/QbYMuTfn1Au6DeojXEslmf5dN6xTEe15Dnje9wypHIWL8Zx6
+         +I3o00JmakNnLUSdxEDXdmwkCkIUfEriuBMcjxxE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vignesh R <vigneshr@ti.com>, David Lechner <david@lechnology.com>,
+Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 77/77] spi: omap2-mcspi: Fix DMA and FIFO event trigger size mismatch
-Date:   Sat, 16 Nov 2019 10:53:39 -0500
-Message-Id: <20191116155339.11909-77-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 023/237] spi: sh-msiof: fix deferred probing
+Date:   Sat, 16 Nov 2019 10:37:38 -0500
+Message-Id: <20191116154113.7417-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116155339.11909-1-sashal@kernel.org>
-References: <20191116155339.11909-1-sashal@kernel.org>
+In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
+References: <20191116154113.7417-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,47 +43,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Vignesh R <vigneshr@ti.com>
+From: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
 
-[ Upstream commit baf8b9f8d260c55a86405f70a384c29cda888476 ]
+[ Upstream commit f34c6e6257aa477cdfe7e9bbbecd3c5648ecda69 ]
 
-Commit b682cffa3ac6 ("spi: omap2-mcspi: Set FIFO DMA trigger level to word length")
-broke SPI transfers where bits_per_word != 8. This is because of
-mimsatch between McSPI FIFO level event trigger size (SPI word length) and
-DMA request size(word length * maxburst). This leads to data
-corruption, lockup and errors like:
+Since commit 9ec36cafe43b ("of/irq: do irq resolution in platform_get_irq")
+platform_get_irq() can return -EPROBE_DEFER. However, the driver overrides
+an error returned by that function with -ENOENT which breaks the deferred
+probing. Propagate upstream an error code returned by platform_get_irq()
+and remove the bogus "platform" from the error message, while at it...
 
-	spi1.0: EOW timed out
-
-Fix this by setting DMA maxburst size to 1 so that
-McSPI FIFO level event trigger size matches DMA request size.
-
-Fixes: b682cffa3ac6 ("spi: omap2-mcspi: Set FIFO DMA trigger level to word length")
-Cc: stable@vger.kernel.org
-Reported-by: David Lechner <david@lechnology.com>
-Tested-by: David Lechner <david@lechnology.com>
-Signed-off-by: Vignesh R <vigneshr@ti.com>
+Fixes: 9ec36cafe43b ("of/irq: do irq resolution in platform_get_irq")
+Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-omap2-mcspi.c | 4 ++--
+ drivers/spi/spi-sh-msiof.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index 2e35fc735ba6a..79fa237f76c42 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -593,8 +593,8 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
- 	cfg.dst_addr = cs->phys + OMAP2_MCSPI_TX0;
- 	cfg.src_addr_width = width;
- 	cfg.dst_addr_width = width;
--	cfg.src_maxburst = es;
--	cfg.dst_maxburst = es;
-+	cfg.src_maxburst = 1;
-+	cfg.dst_maxburst = 1;
+diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
+index 101cd6aae2ea5..30ea0a2068e09 100644
+--- a/drivers/spi/spi-sh-msiof.c
++++ b/drivers/spi/spi-sh-msiof.c
+@@ -1343,8 +1343,8 @@ static int sh_msiof_spi_probe(struct platform_device *pdev)
  
- 	rx = xfer->rx_buf;
- 	tx = xfer->tx_buf;
+ 	i = platform_get_irq(pdev, 0);
+ 	if (i < 0) {
+-		dev_err(&pdev->dev, "cannot get platform IRQ\n");
+-		ret = -ENOENT;
++		dev_err(&pdev->dev, "cannot get IRQ\n");
++		ret = i;
+ 		goto err1;
+ 	}
+ 
 -- 
 2.20.1
 
