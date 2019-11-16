@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C49DFF1C4
-	for <lists+linux-spi@lfdr.de>; Sat, 16 Nov 2019 17:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF0AFF073
+	for <lists+linux-spi@lfdr.de>; Sat, 16 Nov 2019 17:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729777AbfKPPro (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 16 Nov 2019 10:47:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54502 "EHLO mail.kernel.org"
+        id S1730713AbfKPQFe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 16 Nov 2019 11:05:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729773AbfKPPrn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:47:43 -0500
+        id S1730701AbfKPPvP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:51:15 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 18FF0208CC;
-        Sat, 16 Nov 2019 15:47:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 117592184B;
+        Sat, 16 Nov 2019 15:51:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919263;
-        bh=mFIBF4zkhKQuS/73jWsWHvsc1rz6ROijEQbrtvRlYf8=;
+        s=default; t=1573919475;
+        bh=qls5kbsWPuCDNYYjX0eEPWKHkVav8I4/1tEG+ikA4aA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CSZeGT55fci8JoTs/2uMUlw+9SevXPHtztgTkBWyVaScw6cwFVbj8gmCJ9c37/Z3K
-         OF9wQ8y24viH2+v+2TDN3aaXs6+vD5e8ZC9lgnuEHutpp+M/ojLV6CEwMeMlz1yEkp
-         ccx14Ylxe9zxxlAxxHZ3Ia8v5VIGpsWsa6TZU4wA=
+        b=JAcu5bxGZSMDVslU8MZc2qHQpZgj2zfpJkU/Gh06xElMACqRyGYfpCGi5yX09AHBZ
+         q7y9CWwZaXtlx5Q46wCFjZ1lRPbVMm/3EZDxJdXbUNVR8sIJMpZ12Fn10tq24fZFb/
+         B3Px2yZMswFvUYYNlBiJlkTcWvxWEoUk0qG+L9oU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 014/150] spi: sh-msiof: fix deferred probing
-Date:   Sat, 16 Nov 2019 10:45:12 -0500
-Message-Id: <20191116154729.9573-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 09/99] spi: sh-msiof: fix deferred probing
+Date:   Sat, 16 Nov 2019 10:49:32 -0500
+Message-Id: <20191116155103.10971-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116154729.9573-1-sashal@kernel.org>
-References: <20191116154729.9573-1-sashal@kernel.org>
+In-Reply-To: <20191116155103.10971-1-sashal@kernel.org>
+References: <20191116155103.10971-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
-index db2a529accae8..a7bd3c92356be 100644
+index 711ea523b3251..8a69148a962a8 100644
 --- a/drivers/spi/spi-sh-msiof.c
 +++ b/drivers/spi/spi-sh-msiof.c
-@@ -1283,8 +1283,8 @@ static int sh_msiof_spi_probe(struct platform_device *pdev)
+@@ -1198,8 +1198,8 @@ static int sh_msiof_spi_probe(struct platform_device *pdev)
  
  	i = platform_get_irq(pdev, 0);
  	if (i < 0) {
