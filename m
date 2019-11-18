@@ -2,133 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C81FFDA5
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Nov 2019 05:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7A8100AC7
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Nov 2019 18:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbfKRE6S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 17 Nov 2019 23:58:18 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:42192 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726314AbfKRE6S (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 17 Nov 2019 23:58:18 -0500
-X-UUID: a73adb0b35aa410785b12fa22b005973-20191118
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UHP1TLO/xSCKu2mOHO9OAMb60Y2rR1gXwyO+sDfrAaA=;
-        b=c6hqaBV7JLWC4660XgazL+JWbzP67gEOP1k/tGFMf5PSfR+jmb+A96ufMxT/PcPAcyab1UsydpWMmiPn0O8cmoqp2OFkwITbrDAusx6GPOSLtsue7rCb+3C97adYyTiFWzOw8LXKiUuQy7v8hWIfL7GwGw4wolUE4G10owYuxhI=;
-X-UUID: a73adb0b35aa410785b12fa22b005973-20191118
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <luhua.xu@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1066876529; Mon, 18 Nov 2019 12:58:05 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 18 Nov 2019 12:58:01 +0800
-Received: from localhost.localdomain (10.15.20.246) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 18 Nov 2019 12:57:52 +0800
-From:   Luhua Xu <luhua.xu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Allison Randal <allison@lohutok.net>,
+        id S1726336AbfKRRtE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Nov 2019 12:49:04 -0500
+Received: from foss.arm.com ([217.140.110.172]:37906 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726314AbfKRRtD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 18 Nov 2019 12:49:03 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EE9EDA7;
+        Mon, 18 Nov 2019 09:49:03 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72FE23F703;
+        Mon, 18 Nov 2019 09:49:02 -0800 (PST)
+Date:   Mon, 18 Nov 2019 17:49:00 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Luhua Xu <luhua.xu@mediatek.com>
+Cc:     Allison Randal <allison@lohutok.net>,
         Enrico Weigelt <info@metux.net>,
         Kate Stewart <kstewart@linuxfoundation.org>,
         Leilk Liu <leilk.liu@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Luhua Xu <luhua.xu@mediatek.com>
-Subject: [PATCH 2/2] spi: mediatek: add cs timing configuration support
-Date:   Mon, 18 Nov 2019 12:57:17 +0800
-Message-ID: <1574053037-26721-3-git-send-email-luhua.xu@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1574053037-26721-1-git-send-email-luhua.xu@mediatek.com>
-References: <1574053037-26721-1-git-send-email-luhua.xu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 626524C0662AC8EB3D01DB687214712F64B2E88F0CAD8E749B2E550F40EB27E92000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Subject: Applied "spi: mediatek: add SPI_CS_HIGH support" to the spi tree
+In-Reply-To: <1574053037-26721-2-git-send-email-luhua.xu@mediatek.com>
+Message-Id: <applied-1574053037-26721-2-git-send-email-luhua.xu@mediatek.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-QWRkIGNvbmZpZ3VyZSBTUEkgQ1Mgc2V0dXAvaG9sZC9pZGxlIGRlbGF5cyBpbiB0ZXJtcw0Kb2Yg
-Y2xrIGNvdW50IHN1cHBvcnQsIGFuZCB1c2Ugb25lIHBlcmlvZCBvZiBjdXJyZW50DQpzcGkgc3Bl
-ZWQgYXMgZGVmYXVsdCBpZiBzZXR1cC9ob2xkL2lkbGUgbm90IGluZGljYXRlZC4NCg0KU2lnbmVk
-LW9mZi1ieTogTHVodWEgWHUgPGx1aHVhLnh1QG1lZGlhdGVrLmNvbT4NCi0tLQ0KIGRyaXZlcnMv
-c3BpL3NwaS1tdDY1eHguYyAgICAgICAgICAgICAgICAgfCA0MSArKysrKysrKysrKysrKysrKysr
-KysrKysrLS0tLS0tLQ0KIGluY2x1ZGUvbGludXgvcGxhdGZvcm1fZGF0YS9zcGktbXQ2NXh4Lmgg
-fCAgNSArKysrDQogMiBmaWxlcyBjaGFuZ2VkLCAzNyBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9u
-cygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9zcGkvc3BpLW10NjV4eC5jIGIvZHJpdmVycy9z
-cGkvc3BpLW10NjV4eC5jDQppbmRleCBmNTk5Y2NlLi45OGRmOWQxIDEwMDY0NA0KLS0tIGEvZHJp
-dmVycy9zcGkvc3BpLW10NjV4eC5jDQorKysgYi9kcml2ZXJzL3NwaS9zcGktbXQ2NXh4LmMNCkBA
-IC0xNDAsNiArMTQwLDkgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBtdGtfc3BpX2NvbXBhdGlibGUg
-bXQ4MTgzX2NvbXBhdCA9IHsNCiAgKi8NCiBzdGF0aWMgY29uc3Qgc3RydWN0IG10a19jaGlwX2Nv
-bmZpZyBtdGtfZGVmYXVsdF9jaGlwX2luZm8gPSB7DQogCS5zYW1wbGVfc2VsID0gMCwNCisJLnNl
-dHVwX2NudCA9IDAsDQorCS5ob2xkX2NudCA9IDAsDQorCS5pZGxlX2NudCA9IDAsDQogfTsNCiAN
-CiBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtdGtfc3BpX29mX21hdGNoW10gPSB7
-DQpAQCAtMjgxLDEwICsyODQsMTMgQEAgc3RhdGljIHZvaWQgbXRrX3NwaV9zZXRfY3Moc3RydWN0
-IHNwaV9kZXZpY2UgKnNwaSwgYm9vbCBlbmFibGUpDQogfQ0KIA0KIHN0YXRpYyB2b2lkIG10a19z
-cGlfcHJlcGFyZV90cmFuc2ZlcihzdHJ1Y3Qgc3BpX21hc3RlciAqbWFzdGVyLA0KLQkJCQkgICAg
-IHN0cnVjdCBzcGlfdHJhbnNmZXIgKnhmZXIpDQorCQkJCSAgICAgc3RydWN0IHNwaV90cmFuc2Zl
-ciAqeGZlciwNCisJCQkJICAgICBzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpKQ0KIHsNCiAJdTMyIHNw
-aV9jbGtfaHosIGRpdiwgc2NrX3RpbWUsIGNzX3RpbWUsIHJlZ192YWwgPSAwOw0KIAlzdHJ1Y3Qg
-bXRrX3NwaSAqbWRhdGEgPSBzcGlfbWFzdGVyX2dldF9kZXZkYXRhKG1hc3Rlcik7DQorCXN0cnVj
-dCBtdGtfY2hpcF9jb25maWcgKmNoaXBfY29uZmlnID0gc3BpLT5jb250cm9sbGVyX2RhdGE7DQor
-CXUzMiBjc19zZXR1cCwgY3NfaG9sZCwgY3NfaWRsZTsNCiANCiAJc3BpX2Nsa19oeiA9IGNsa19n
-ZXRfcmF0ZShtZGF0YS0+c3BpX2Nsayk7DQogCWlmICh4ZmVyLT5zcGVlZF9oeiA8IHNwaV9jbGtf
-aHogLyAyKQ0KQEAgLTI5NSwyOSArMzAxLDQ2IEBAIHN0YXRpYyB2b2lkIG10a19zcGlfcHJlcGFy
-ZV90cmFuc2ZlcihzdHJ1Y3Qgc3BpX21hc3RlciAqbWFzdGVyLA0KIAlzY2tfdGltZSA9IChkaXYg
-KyAxKSAvIDI7DQogCWNzX3RpbWUgPSBzY2tfdGltZSAqIDI7DQogDQorCWlmIChjaGlwX2NvbmZp
-Zy0+c2V0dXBfY250KQ0KKwkJY3Nfc2V0dXAgPSBjaGlwX2NvbmZpZy0+c2V0dXBfY250Ow0KKwll
-bHNlDQorCQljc19zZXR1cCA9IGNzX3RpbWU7DQorDQorCWlmIChjaGlwX2NvbmZpZy0+aG9sZF9j
-bnQpDQorCQljc19ob2xkID0gY2hpcF9jb25maWctPmhvbGRfY250Ow0KKwllbHNlDQorCQljc19o
-b2xkID0gY3NfdGltZTsNCisNCisJaWYgKGNoaXBfY29uZmlnLT5pZGxlX2NudCkNCisJCWNzX2lk
-bGUgPSBjaGlwX2NvbmZpZy0+aWRsZV9jbnQ7DQorCWVsc2UNCisJCWNzX2lkbGUgPSBjc190aW1l
-Ow0KKw0KIAlpZiAobWRhdGEtPmRldl9jb21wLT5lbmhhbmNlX3RpbWluZykgew0KLQkJcmVnX3Zh
-bCB8PSAoKChzY2tfdGltZSAtIDEpICYgMHhmZmZmKQ0KKwkJcmVnX3ZhbCA9ICgoKHNja190aW1l
-IC0gMSkgJiAweGZmZmYpDQogCQkJICAgPDwgU1BJX0NGRzBfU0NLX0hJR0hfT0ZGU0VUKTsNCiAJ
-CXJlZ192YWwgfD0gKCgoc2NrX3RpbWUgLSAxKSAmIDB4ZmZmZikNCiAJCQkgICA8PCBTUElfQURK
-VVNUX0NGRzBfU0NLX0xPV19PRkZTRVQpOw0KIAkJd3JpdGVsKHJlZ192YWwsIG1kYXRhLT5iYXNl
-ICsgU1BJX0NGRzJfUkVHKTsNCi0JCXJlZ192YWwgfD0gKCgoY3NfdGltZSAtIDEpICYgMHhmZmZm
-KQ0KKw0KKwkJcmVnX3ZhbCA9ICgoKGNzX2hvbGQgLSAxKSAmIDB4ZmZmZikNCiAJCQkgICA8PCBT
-UElfQURKVVNUX0NGRzBfQ1NfSE9MRF9PRkZTRVQpOw0KLQkJcmVnX3ZhbCB8PSAoKChjc190aW1l
-IC0gMSkgJiAweGZmZmYpDQorCQlyZWdfdmFsIHw9ICgoKGNzX3NldHVwIC0gMSkgJiAweGZmZmYp
-DQogCQkJICAgPDwgU1BJX0FESlVTVF9DRkcwX0NTX1NFVFVQX09GRlNFVCk7DQogCQl3cml0ZWwo
-cmVnX3ZhbCwgbWRhdGEtPmJhc2UgKyBTUElfQ0ZHMF9SRUcpOw0KIAl9IGVsc2Ugew0KIAkJcmVn
-X3ZhbCB8PSAoKChzY2tfdGltZSAtIDEpICYgMHhmZikNCiAJCQkgICA8PCBTUElfQ0ZHMF9TQ0tf
-SElHSF9PRkZTRVQpOw0KIAkJcmVnX3ZhbCB8PSAoKChzY2tfdGltZSAtIDEpICYgMHhmZikgPDwg
-U1BJX0NGRzBfU0NLX0xPV19PRkZTRVQpOw0KLQkJcmVnX3ZhbCB8PSAoKChjc190aW1lIC0gMSkg
-JiAweGZmKSA8PCBTUElfQ0ZHMF9DU19IT0xEX09GRlNFVCk7DQotCQlyZWdfdmFsIHw9ICgoKGNz
-X3RpbWUgLSAxKSAmIDB4ZmYpIDw8IFNQSV9DRkcwX0NTX1NFVFVQX09GRlNFVCk7DQorCQlyZWdf
-dmFsIHw9ICgoKGNzX2hvbGQgLSAxKSAmIDB4ZmYpIDw8IFNQSV9DRkcwX0NTX0hPTERfT0ZGU0VU
-KTsNCisJCXJlZ192YWwgfD0gKCgoY3Nfc2V0dXAgLSAxKSAmIDB4ZmYpDQorCQkJICAgPDwgU1BJ
-X0NGRzBfQ1NfU0VUVVBfT0ZGU0VUKTsNCiAJCXdyaXRlbChyZWdfdmFsLCBtZGF0YS0+YmFzZSAr
-IFNQSV9DRkcwX1JFRyk7DQogCX0NCiANCiAJcmVnX3ZhbCA9IHJlYWRsKG1kYXRhLT5iYXNlICsg
-U1BJX0NGRzFfUkVHKTsNCiAJcmVnX3ZhbCAmPSB+U1BJX0NGRzFfQ1NfSURMRV9NQVNLOw0KLQly
-ZWdfdmFsIHw9ICgoKGNzX3RpbWUgLSAxKSAmIDB4ZmYpIDw8IFNQSV9DRkcxX0NTX0lETEVfT0ZG
-U0VUKTsNCisJcmVnX3ZhbCB8PSAoKChjc19pZGxlIC0gMSkgJiAweGZmKSA8PCBTUElfQ0ZHMV9D
-U19JRExFX09GRlNFVCk7DQogCXdyaXRlbChyZWdfdmFsLCBtZGF0YS0+YmFzZSArIFNQSV9DRkcx
-X1JFRyk7DQogfQ0KIA0KQEAgLTQyNiw3ICs0NDksNyBAQCBzdGF0aWMgaW50IG10a19zcGlfZmlm
-b190cmFuc2ZlcihzdHJ1Y3Qgc3BpX21hc3RlciAqbWFzdGVyLA0KIAltZGF0YS0+Y3VyX3RyYW5z
-ZmVyID0geGZlcjsNCiAJbWRhdGEtPnhmZXJfbGVuID0gbWluKE1US19TUElfTUFYX0ZJRk9fU0la
-RSwgeGZlci0+bGVuKTsNCiAJbWRhdGEtPm51bV94ZmVyZWQgPSAwOw0KLQltdGtfc3BpX3ByZXBh
-cmVfdHJhbnNmZXIobWFzdGVyLCB4ZmVyKTsNCisJbXRrX3NwaV9wcmVwYXJlX3RyYW5zZmVyKG1h
-c3RlciwgeGZlciwgc3BpKTsNCiAJbXRrX3NwaV9zZXR1cF9wYWNrZXQobWFzdGVyKTsNCiANCiAJ
-Y250ID0geGZlci0+bGVuIC8gNDsNCkBAIC00NTgsNyArNDgxLDcgQEAgc3RhdGljIGludCBtdGtf
-c3BpX2RtYV90cmFuc2ZlcihzdHJ1Y3Qgc3BpX21hc3RlciAqbWFzdGVyLA0KIAltZGF0YS0+Y3Vy
-X3RyYW5zZmVyID0geGZlcjsNCiAJbWRhdGEtPm51bV94ZmVyZWQgPSAwOw0KIA0KLQltdGtfc3Bp
-X3ByZXBhcmVfdHJhbnNmZXIobWFzdGVyLCB4ZmVyKTsNCisJbXRrX3NwaV9wcmVwYXJlX3RyYW5z
-ZmVyKG1hc3RlciwgeGZlciwgc3BpKTsNCiANCiAJY21kID0gcmVhZGwobWRhdGEtPmJhc2UgKyBT
-UElfQ01EX1JFRyk7DQogCWlmICh4ZmVyLT50eF9idWYpDQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9s
-aW51eC9wbGF0Zm9ybV9kYXRhL3NwaS1tdDY1eHguaCBiL2luY2x1ZGUvbGludXgvcGxhdGZvcm1f
-ZGF0YS9zcGktbXQ2NXh4LmgNCmluZGV4IDY1ZmQ1ZmZkMi4uODBkMjgwZSAxMDA2NDQNCi0tLSBh
-L2luY2x1ZGUvbGludXgvcGxhdGZvcm1fZGF0YS9zcGktbXQ2NXh4LmgNCisrKyBiL2luY2x1ZGUv
-bGludXgvcGxhdGZvcm1fZGF0YS9zcGktbXQ2NXh4LmgNCkBAIC0xMiw1ICsxMiwxMCBAQA0KIC8q
-IEJvYXJkIHNwZWNpZmljIHBsYXRmb3JtX2RhdGEgKi8NCiBzdHJ1Y3QgbXRrX2NoaXBfY29uZmln
-IHsNCiAJdTMyIHNhbXBsZV9zZWw7DQorDQorCS8qIENTIHRpbWluZyBjb25maWd1cmF0aW9uIGlu
-IHRlcm1zIG9mIGNsb2NrIGNvdW50ICovDQorCXUxNiBzZXR1cF9jbnQ7DQorCXUxNiBob2xkX2Nu
-dDsNCisJdTggIGlkbGVfY250Ow0KIH07DQogI2VuZGlmDQotLSANCjIuNi40DQo=
+The patch
+
+   spi: mediatek: add SPI_CS_HIGH support
+
+has been applied to the spi tree at
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From ae7c2d342a10dbef1e054482f46498b6282a1df0 Mon Sep 17 00:00:00 2001
+From: Luhua Xu <luhua.xu@mediatek.com>
+Date: Mon, 18 Nov 2019 12:57:16 +0800
+Subject: [PATCH] spi: mediatek: add SPI_CS_HIGH support
+
+Change to use SPI_CS_HIGH to support spi CS polarity setting
+for chips support enhance_timing.
+
+Signed-off-by: Luhua Xu <luhua.xu@mediatek.com>
+Link: https://lore.kernel.org/r/1574053037-26721-2-git-send-email-luhua.xu@mediatek.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-mt65xx.c                 | 12 ++++++++++--
+ include/linux/platform_data/spi-mt65xx.h |  1 -
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 25fe149a8d9a..6783e12c40c2 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -139,7 +139,6 @@ static const struct mtk_spi_compatible mt8183_compat = {
+  * supplies it.
+  */
+ static const struct mtk_chip_config mtk_default_chip_info = {
+-	.cs_pol = 0,
+ 	.sample_sel = 0,
+ };
+ 
+@@ -230,10 +229,12 @@ static int mtk_spi_prepare_message(struct spi_master *master,
+ #endif
+ 
+ 	if (mdata->dev_comp->enhance_timing) {
+-		if (chip_config->cs_pol)
++		/* set CS polarity */
++		if (spi->mode & SPI_CS_HIGH)
+ 			reg_val |= SPI_CMD_CS_POL;
+ 		else
+ 			reg_val &= ~SPI_CMD_CS_POL;
++
+ 		if (chip_config->sample_sel)
+ 			reg_val |= SPI_CMD_SAMPLE_SEL;
+ 		else
+@@ -264,6 +265,9 @@ static void mtk_spi_set_cs(struct spi_device *spi, bool enable)
+ 	u32 reg_val;
+ 	struct mtk_spi *mdata = spi_master_get_devdata(spi->master);
+ 
++	if (spi->mode & SPI_CS_HIGH)
++		enable = !enable;
++
+ 	reg_val = readl(mdata->base + SPI_CMD_REG);
+ 	if (!enable) {
+ 		reg_val |= SPI_CMD_PAUSE_EN;
+@@ -646,6 +650,10 @@ static int mtk_spi_probe(struct platform_device *pdev)
+ 
+ 	mdata = spi_master_get_devdata(master);
+ 	mdata->dev_comp = of_id->data;
++
++	if (mdata->dev_comp->enhance_timing)
++		master->mode_bits |= SPI_CS_HIGH;
++
+ 	if (mdata->dev_comp->must_tx)
+ 		master->flags = SPI_MASTER_MUST_TX;
+ 
+diff --git a/include/linux/platform_data/spi-mt65xx.h b/include/linux/platform_data/spi-mt65xx.h
+index f0e6d6483e62..65fd5ffd257c 100644
+--- a/include/linux/platform_data/spi-mt65xx.h
++++ b/include/linux/platform_data/spi-mt65xx.h
+@@ -11,7 +11,6 @@
+ 
+ /* Board specific platform_data */
+ struct mtk_chip_config {
+-	u32 cs_pol;
+ 	u32 sample_sel;
+ };
+ #endif
+-- 
+2.20.1
 
