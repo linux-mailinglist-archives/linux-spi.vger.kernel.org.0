@@ -2,88 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7F3FEFA8
-	for <lists+linux-spi@lfdr.de>; Sat, 16 Nov 2019 17:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA876FFD34
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Nov 2019 03:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730358AbfKPQAU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 16 Nov 2019 11:00:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34594 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731254AbfKPPxb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:53:31 -0500
-Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 99F1E21882;
-        Sat, 16 Nov 2019 15:53:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919610;
-        bh=1obXavLzHsCeZUAaQ/cIka7JXtrr6Qjcv2jjQ2VJJkw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SS/gvfnI1VU2qi7F8Jg1XMgKd1aiN/fHw6g3dNNCx+hwMJKxFO89v+z0WYqO1Ru5b
-         N5sAWWBfQQU5dFiyze3lJm+myG/CH5BAY2pGIBLU4EvP1kg6AUxRpQHqMbcOU1Kqd3
-         fzdP8K+OI1ESFoeJNEVluXWuvM2KYyhXvweXcgOI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vignesh R <vigneshr@ti.com>, David Lechner <david@lechnology.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 97/99] spi: omap2-mcspi: Fix DMA and FIFO event trigger size mismatch
-Date:   Sat, 16 Nov 2019 10:51:00 -0500
-Message-Id: <20191116155103.10971-97-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116155103.10971-1-sashal@kernel.org>
-References: <20191116155103.10971-1-sashal@kernel.org>
+        id S1726322AbfKRCtA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 17 Nov 2019 21:49:00 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:37136 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726168AbfKRCs7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 17 Nov 2019 21:48:59 -0500
+Received: by mail-pg1-f196.google.com with SMTP id b10so355854pgd.4;
+        Sun, 17 Nov 2019 18:48:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LY0ciWZ7+/HWoOPqeE3fOE/KjwyTIZZkb5n5YhlaRJk=;
+        b=IFQomFFd376wV893dfuRQSFo6YfIrqUTyUNBbHCHuOkQ5xaMAc3en/4gtkXJqZDO8S
+         dxsWJGGbL6cOvN4qT5XUIsu6Drl2ucEq4jmrSiBoCNFYS8GPH4j8mWAVE6SVAHJSGgWC
+         2mU/Zyu46UvlQ1Z5LOgR4QctEr/QQIKPR2TZQScR91mp+5YxeTO3mRH4vWzgqDumq4D4
+         Rth1GqmAZdEDIacmM0WoKo0rjmrWeO/KNNQBejuqvgdH/FB9nswQ8T8jgnyZVuPKX7cl
+         +PH5m4rIJ9/arOzsfPktqjk3yll3gbTvjXjGyMrntNJfnogtxUL8hNTsKAAuRXk/426f
+         lAhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LY0ciWZ7+/HWoOPqeE3fOE/KjwyTIZZkb5n5YhlaRJk=;
+        b=Y/WCHyZWUK/F997BKr8NZsObW/yudQHwef+372QC8nxPN6j88V0bdzdBRCMVChDBNK
+         NguxLoHecrEVLKmDeY8FDW1PszZoTEws0bxxttQSfMWIRSFi4G/VQ5Axul4EPR8Q2V72
+         ZdCGpBOboE/eSBtb34Sa8U9DCg7lzA2tKI32R4fml9DLjCbaZK6SQ+DEJzYy0nRwYlv1
+         M+XqJyQhRwXew51WZI2FLRFnPRsCKmdgSATGk+6O3k6/JuWAfr/jenN33TArg9Bp37WD
+         Ae+8e5KQQTA1mxh0bJobtn5wJbPkh9gbUbGVWa5dQwnR8p9yMzKvqyCeawc4h/rsLlws
+         OxRQ==
+X-Gm-Message-State: APjAAAVKXwDxdvAydStYZqnPv0WbPnJ5X5W0N1dYesZoVDFjNBXidwp5
+        3c5J+VieyxX7XJnHdFtiU04=
+X-Google-Smtp-Source: APXvYqxi8pFJQRP6n7Wkg+KGy1ZCT0Nr6cre6xagurHdcY9EdUtzZwFHL0IVgvO+4zKFHvHSmMExuw==
+X-Received: by 2002:a63:588:: with SMTP id 130mr30852672pgf.148.1574045339235;
+        Sun, 17 Nov 2019 18:48:59 -0800 (PST)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id h5sm17286589pjc.9.2019.11.17.18.48.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Nov 2019 18:48:58 -0800 (PST)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] spi: st-ssc4: add missed pm_runtime_disable
+Date:   Mon, 18 Nov 2019 10:48:48 +0800
+Message-Id: <20191118024848.21645-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Vignesh R <vigneshr@ti.com>
+The driver forgets to call pm_runtime_disable in probe failure
+and remove.
+Add the missed calls to fix it.
 
-[ Upstream commit baf8b9f8d260c55a86405f70a384c29cda888476 ]
-
-Commit b682cffa3ac6 ("spi: omap2-mcspi: Set FIFO DMA trigger level to word length")
-broke SPI transfers where bits_per_word != 8. This is because of
-mimsatch between McSPI FIFO level event trigger size (SPI word length) and
-DMA request size(word length * maxburst). This leads to data
-corruption, lockup and errors like:
-
-	spi1.0: EOW timed out
-
-Fix this by setting DMA maxburst size to 1 so that
-McSPI FIFO level event trigger size matches DMA request size.
-
-Fixes: b682cffa3ac6 ("spi: omap2-mcspi: Set FIFO DMA trigger level to word length")
-Cc: stable@vger.kernel.org
-Reported-by: David Lechner <david@lechnology.com>
-Tested-by: David Lechner <david@lechnology.com>
-Signed-off-by: Vignesh R <vigneshr@ti.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 ---
- drivers/spi/spi-omap2-mcspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-st-ssc4.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index bc136fe3a2829..ccb6f98550da4 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -625,8 +625,8 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
- 	cfg.dst_addr = cs->phys + OMAP2_MCSPI_TX0;
- 	cfg.src_addr_width = width;
- 	cfg.dst_addr_width = width;
--	cfg.src_maxburst = es;
--	cfg.dst_maxburst = es;
-+	cfg.src_maxburst = 1;
-+	cfg.dst_maxburst = 1;
+diff --git a/drivers/spi/spi-st-ssc4.c b/drivers/spi/spi-st-ssc4.c
+index 0c24c494f386..77d26d64541a 100644
+--- a/drivers/spi/spi-st-ssc4.c
++++ b/drivers/spi/spi-st-ssc4.c
+@@ -381,6 +381,7 @@ static int spi_st_probe(struct platform_device *pdev)
+ 	return 0;
  
- 	rx = xfer->rx_buf;
- 	tx = xfer->tx_buf;
+ clk_disable:
++	pm_runtime_disable(&pdev->dev);
+ 	clk_disable_unprepare(spi_st->clk);
+ put_master:
+ 	spi_master_put(master);
+@@ -392,6 +393,8 @@ static int spi_st_remove(struct platform_device *pdev)
+ 	struct spi_master *master = platform_get_drvdata(pdev);
+ 	struct spi_st *spi_st = spi_master_get_devdata(master);
+ 
++	pm_runtime_disable(&pdev->dev);
++
+ 	clk_disable_unprepare(spi_st->clk);
+ 
+ 	pinctrl_pm_select_sleep_state(&pdev->dev);
 -- 
-2.20.1
+2.24.0
 
