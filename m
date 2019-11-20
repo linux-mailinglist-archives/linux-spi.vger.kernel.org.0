@@ -2,45 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D21B9103BFB
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2019 14:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E0C1041F3
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2019 18:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728585AbfKTNjU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Nov 2019 08:39:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46940 "EHLO mail.kernel.org"
+        id S1730778AbfKTRSr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Nov 2019 12:18:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:43450 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728541AbfKTNjU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 20 Nov 2019 08:39:20 -0500
-Received: from localhost.localdomain (unknown [118.189.143.39])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DB547224FA;
-        Wed, 20 Nov 2019 13:39:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574257160;
-        bh=vPa/cGDp8ajSRH9qXDMIZ1zWolJE48+30OeYlmw91PI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AiIyy8tMchHKypt4TqS430UZZ4z974P/RBkg+n9kle5s69qZUyNaO5w4lmWyXSkf0
-         rBiUDW2kChzjbce4MHlRM1gSTfsiQBTzD2uKUOgI1q6KwhpNM8d3mbxxrgskd+b78T
-         2c1xFuv9CUGrRhpi6ASFeFp4uyN++bzZ6IHHQVbY=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH] spi: Fix Kconfig indentation
-Date:   Wed, 20 Nov 2019 21:39:16 +0800
-Message-Id: <20191120133916.13595-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1728183AbfKTRSq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 20 Nov 2019 12:18:46 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C3D81045;
+        Wed, 20 Nov 2019 09:18:45 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09FC83F703;
+        Wed, 20 Nov 2019 09:18:44 -0800 (PST)
+Date:   Wed, 20 Nov 2019 17:18:43 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: Fix Kconfig indentation" to the spi tree
+In-Reply-To: <20191120133916.13595-1-krzk@kernel.org>
+Message-Id: <applied-20191120133916.13595-1-krzk@kernel.org>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
+
+The patch
+
+   spi: Fix Kconfig indentation
+
+has been applied to the spi tree at
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 554bbe726ce0ef692cd95fedd5730c69c1189138 Mon Sep 17 00:00:00 2001
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Date: Wed, 20 Nov 2019 21:39:16 +0800
+Subject: [PATCH] spi: Fix Kconfig indentation
 
 Adjust indentation from spaces to tab (+optional two spaces) as in
 coding style with command like:
 	$ sed -e 's/^        /\t/' -i */Kconfig
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Link: https://lore.kernel.org/r/20191120133916.13595-1-krzk@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
  drivers/spi/Kconfig | 18 +++++++++---------
  1 file changed, 9 insertions(+), 9 deletions(-)
@@ -90,5 +119,5 @@ index 6c0c1f55bd71..870f7797b56b 100644
  config SPI_MXS
  	tristate "Freescale MXS SPI controller"
 -- 
-2.17.1
+2.20.1
 
