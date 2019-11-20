@@ -2,122 +2,183 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E0C1041F3
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2019 18:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1E51042D0
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2019 19:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730778AbfKTRSr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Nov 2019 12:18:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:43450 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728183AbfKTRSq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 20 Nov 2019 12:18:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C3D81045;
-        Wed, 20 Nov 2019 09:18:45 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09FC83F703;
-        Wed, 20 Nov 2019 09:18:44 -0800 (PST)
-Date:   Wed, 20 Nov 2019 17:18:43 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: Fix Kconfig indentation" to the spi tree
-In-Reply-To: <20191120133916.13595-1-krzk@kernel.org>
-Message-Id: <applied-20191120133916.13595-1-krzk@kernel.org>
-X-Patchwork-Hint: ignore
+        id S1727696AbfKTSEG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Nov 2019 13:04:06 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:43368 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727644AbfKTSEG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Nov 2019 13:04:06 -0500
+Received: by mail-oi1-f196.google.com with SMTP id l20so571507oie.10;
+        Wed, 20 Nov 2019 10:04:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wn4WhuGPefkkdG2RHoEX8ty8q6GNTGVjdrwviU5xCaA=;
+        b=XZOa5HNXdPL1e0SmmnCz/SXjen9dD2ci1KMSX3icc/9nLWukAkW9UtgLIrKKWVvQAh
+         TURMqnb9TXwq56E4MvQ2mVqIdeSBZQantviC4qVWtqEwkbQragFcVwENNX1BfbZ3x/1G
+         ULQ+wobhTDuOYTwywJSdi7hDuUmghOhYBhQ85HyW4txXX7TEdYzSokNmgkWTCou6s4MN
+         AH7B3/ALddfFkZdtplljE3J048r7oKEud6KXC2Bz6RHQEPl+/WStBneJWoxe5k/NKrI4
+         DW4sbk7jKOBbEdPe1wGPK7ECYb2ZW+lfeq5wPtqCR+z5nxpa82YWbw0IxtSFo3mrVK9s
+         2BmA==
+X-Gm-Message-State: APjAAAXVucfLtvSwG1iZF3f2wsbN6PVIkTQ2JP8Isl61EOqI52wph7tr
+        PcQOxMw4Ig24Z4caKQRa8g==
+X-Google-Smtp-Source: APXvYqw6wtYV4YE9M25DCBt2w6sGKd1fC52lp5UjSjGEUK/AJNWBT/0Aw17mdvBlm+2sqn+sfEMYqQ==
+X-Received: by 2002:aca:b602:: with SMTP id g2mr3811454oif.7.1574273044608;
+        Wed, 20 Nov 2019 10:04:04 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id z66sm8838593ota.54.2019.11.20.10.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Nov 2019 10:04:04 -0800 (PST)
+Date:   Wed, 20 Nov 2019 12:04:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc:     broonie@kernel.org, mark.rutland@arm.com, alexandre.torgue@st.com,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: crypto: Convert stm32 QSPI bindings to
+ json-schema
+Message-ID: <20191120180403.GA11687@bogus>
+References: <20191115142318.2909-1-benjamin.gaignard@st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191115142318.2909-1-benjamin.gaignard@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Fri, Nov 15, 2019 at 03:23:18PM +0100, Benjamin Gaignard wrote:
+> Convert the STM32 QSPI binding to DT schema format using json-schema
 
-   spi: Fix Kconfig indentation
+Leftover 'crypto' in the subject.
 
-has been applied to the spi tree at
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> ---
+>  .../devicetree/bindings/spi/spi-stm32-qspi.txt     | 47 -----------
+>  .../devicetree/bindings/spi/st,stm32-qspi.yaml     | 91 ++++++++++++++++++++++
+>  2 files changed, 91 insertions(+), 47 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+[...]
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+> new file mode 100644
+> index 000000000000..955405d39966
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+> @@ -0,0 +1,91 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/st,stm32-qspi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STMicroelectronics STM32 Quad Serial Peripheral Interface (QSPI) bindings
+> +
+> +maintainers:
+> +  - Christophe Kerello <christophe.kerello@st.com>
+> +  - Patrice Chotard <patrice.chotard@st.com>
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    const: st,stm32f469-qspi
+> +
+> +  reg:
+> +    items:
+> +      - description: registers
+> +      - description: memory mapping
+> +    minItems: 2
+> +    maxItems: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Implied by the 'items' length.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+> +
+> +  reg-names:
+> +    items:
+> +     - const: qspi
+> +     - const: qspi_mm
+> +    minItems: 2
+> +    maxItems: 2
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Implied by the 'items' length.
 
-Thanks,
-Mark
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  dmas:
+> +    items:
+> +      - description: tx DMA channel
+> +      - description: rx DMA channel
+> +    minItems: 2
+> +    maxItems: 2
 
-From 554bbe726ce0ef692cd95fedd5730c69c1189138 Mon Sep 17 00:00:00 2001
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Date: Wed, 20 Nov 2019 21:39:16 +0800
-Subject: [PATCH] spi: Fix Kconfig indentation
+Implied by the 'items' length.
 
-Adjust indentation from spaces to tab (+optional two spaces) as in
-coding style with command like:
-	$ sed -e 's/^        /\t/' -i */Kconfig
+> +
+> +  dma-names:
+> +    items:
+> +      - const: tx
+> +      - const: rx
+> +    minItems: 2
+> +    maxItems: 2
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Link: https://lore.kernel.org/r/20191120133916.13595-1-krzk@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/Kconfig | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Implied by the 'items' length.
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 6c0c1f55bd71..870f7797b56b 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -144,7 +144,7 @@ config SPI_BCM63XX
- 	tristate "Broadcom BCM63xx SPI controller"
- 	depends on BCM63XX || COMPILE_TEST
- 	help
--          Enable support for the SPI controller on the Broadcom BCM63xx SoCs.
-+	  Enable support for the SPI controller on the Broadcom BCM63xx SoCs.
- 
- config SPI_BCM63XX_HSSPI
- 	tristate "Broadcom BCM63XX HS SPI controller driver"
-@@ -235,11 +235,11 @@ config SPI_DLN2
-        tristate "Diolan DLN-2 USB SPI adapter"
-        depends on MFD_DLN2
-        help
--         If you say yes to this option, support will be included for Diolan
--         DLN2, a USB to SPI interface.
-+	 If you say yes to this option, support will be included for Diolan
-+	 DLN2, a USB to SPI interface.
- 
--         This driver can also be built as a module.  If so, the module
--         will be called spi-dln2.
-+	 This driver can also be built as a module.  If so, the module
-+	 will be called spi-dln2.
- 
- config SPI_EFM32
- 	tristate "EFM32 SPI controller"
-@@ -748,10 +748,10 @@ config SPI_SYNQUACER
- 	  It also supports the new dual-bit and quad-bit SPI protocol.
- 
- config SPI_MXIC
--        tristate "Macronix MX25F0A SPI controller"
--        depends on SPI_MASTER
--        help
--          This selects the Macronix MX25F0A SPI controller driver.
-+	tristate "Macronix MX25F0A SPI controller"
-+	depends on SPI_MASTER
-+	help
-+	  This selects the Macronix MX25F0A SPI controller driver.
- 
- config SPI_MXS
- 	tristate "Freescale MXS SPI controller"
--- 
-2.20.1
-
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/stm32mp1-clks.h>
+> +    #include <dt-bindings/reset/stm32mp1-resets.h>
+> +    spi@58003000 {
+> +      compatible = "st,stm32f469-qspi";
+> +      reg = <0x58003000 0x1000>, <0x70000000 0x10000000>;
+> +      reg-names = "qspi", "qspi_mm";
+> +      interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
+> +      dmas = <&mdma1 22 0x10 0x100002 0x0 0x0>,
+> +             <&mdma1 22 0x10 0x100008 0x0 0x0>;
+> +      dma-names = "tx", "rx";
+> +      clocks = <&rcc QSPI_K>;
+> +      resets = <&rcc QSPI_R>;
+> +
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      flash@0 {
+> +        compatible = "jedec,spi-nor";
+> +        reg = <0>;
+> +        spi-rx-bus-width = <4>;
+> +        spi-max-frequency = <108000000>;
+> +      };
+> +    };
+> +
+> +...
+> -- 
+> 2.15.0
+> 
