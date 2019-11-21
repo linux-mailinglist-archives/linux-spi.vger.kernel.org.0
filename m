@@ -2,130 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AFF104D67
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Nov 2019 09:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BABD7104DF2
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Nov 2019 09:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbfKUIKA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Nov 2019 03:10:00 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:57718 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbfKUIKA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Nov 2019 03:10:00 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAL89wKX097906;
-        Thu, 21 Nov 2019 02:09:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1574323798;
-        bh=dK4eXj5EEvgO3cvsnxwNSK/prItfj2cpptJ431X4p6w=;
-        h=From:To:CC:Subject:Date;
-        b=WyrA3cO5ub0tzCAqcHvcs6l8MWNvjwcMWjWiOWXyDvp52csnf5YGZA2qimMgxomjK
-         Q3vYgo5GHu24KaDtJagBpMlbsHNOB86ZsaB1bWr6I6dnquQenOYhKE944/tXy7z33+
-         vKtIkbDu51/fP9UubUwx/ZBOQv+5Y+4QzBEMTVTs=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xAL89wgt034493
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 21 Nov 2019 02:09:58 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 21
- Nov 2019 02:09:56 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 21 Nov 2019 02:09:56 -0600
-Received: from feketebors.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAL89sYk028502;
-        Thu, 21 Nov 2019 02:09:55 -0600
-From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
-To:     <broonie@kernel.org>
-CC:     <vkoul@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] spi: pic32: Retire dma_request_slave_channel_compat()
-Date:   Thu, 21 Nov 2019 10:09:54 +0200
-Message-ID: <20191121080954.14915-1-peter.ujfalusi@ti.com>
-X-Mailer: git-send-email 2.24.0
+        id S1726574AbfKUIar (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Nov 2019 03:30:47 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40954 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726132AbfKUIaq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Nov 2019 03:30:46 -0500
+Received: by mail-oi1-f196.google.com with SMTP id d22so2440684oic.7;
+        Thu, 21 Nov 2019 00:30:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5+g9mn+AxAnxlklqw4XxoiWzE23UWdDQPBVvzz3xiQM=;
+        b=TGhylNBCc9abQIyDXjCjh2uu+Q5IWIXMpA9HFLxBbd0GATUqEnEunZNOePubC/dLFn
+         gRl00cHzNMphnflP/pNE+n3zHoICAuI4pR2WcEybXslon3bmWUD+9o+CN+FT3gp9XwPx
+         gQAAh37M2EIKT2ywqXkdWwW5G5lAlbXCEnCENV1fqfMF6qzZbNt5OVed3D2T8j8k1dHT
+         NhOdekI0Wh9/N5upsgz3yCOSuCNVtFV2XFKqGaayGdH7oldfQ2TCdSVWCkUZ0zRhGdRl
+         0W9qE4vf0zxPiwSOKsKfvjNdUPBrG2WcbkROzQ97dqGPRmcXmsOdMGj4BtyhYCymYA67
+         R1mQ==
+X-Gm-Message-State: APjAAAWxD3UNS0JCZ7+vDyrsNr4gX7NKx/qHX+eXMOdsev2sntuZzQLk
+        Sv9SIW82VkUkzVjuglf80kV5TsH8G0R05ZRTN+HujrbS
+X-Google-Smtp-Source: APXvYqzwAEwQE8y3WagjTaTpbSvwgwfMUmNZLcr2Mjs4tqEXzf4mm17YJlel19amaVosOqgQ+d0NWn+SQpISFnk/VlA=
+X-Received: by 2002:aca:3a86:: with SMTP id h128mr6308515oia.131.1574325045753;
+ Thu, 21 Nov 2019 00:30:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20191121080954.14915-1-peter.ujfalusi@ti.com>
+In-Reply-To: <20191121080954.14915-1-peter.ujfalusi@ti.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 Nov 2019 09:30:34 +0100
+Message-ID: <CAMuHMdVWCM_LQ5Fx+3NMhyd21LSpYQWCX2pmtkU2tHvtzDzUzw@mail.gmail.com>
+Subject: Re: [PATCH] spi: pic32: Retire dma_request_slave_channel_compat()
+To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
+Cc:     Mark Brown <broonie@kernel.org>, Vinod <vkoul@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-There is no reason to use the dma_request_slave_channel_compat() as no
-filter function and parameter is provided.
+Hi Peter,
 
-Switch the driver to use dma_request_chan() instead.
+On Thu, Nov 21, 2019 at 9:11 AM Peter Ujfalusi <peter.ujfalusi@ti.com> wrote:
+> There is no reason to use the dma_request_slave_channel_compat() as no
+> filter function and parameter is provided.
+>
+> Switch the driver to use dma_request_chan() instead.
+>
+> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
 
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
----
-Hi,
+> --- a/drivers/spi/spi-pic32.c
+> +++ b/drivers/spi/spi-pic32.c
+> @@ -609,22 +609,18 @@ static void pic32_spi_cleanup(struct spi_device *spi)
+>  static void pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
+>  {
+>         struct spi_master *master = pic32s->master;
+> -       dma_cap_mask_t mask;
+>
+> -       dma_cap_zero(mask);
+> -       dma_cap_set(DMA_SLAVE, mask);
+> -
+> -       master->dma_rx = dma_request_slave_channel_compat(mask, NULL, NULL,
+> -                                                         dev, "spi-rx");
+> -       if (!master->dma_rx) {
+> +       master->dma_rx = dma_request_chan(dev, "spi-rx");
 
-Trying to crack down on the dma_request_slave_channel_compat() in the tree...
+Why not dma_request_slave_channel()?
+That way you...
 
-Only compile tested!
+> +       if (IS_ERR(master->dma_rx)) {
 
-Regards,
-Peter
+... don't have to change the NULL check here, and...
 
- drivers/spi/spi-pic32.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+>                 dev_warn(dev, "RX channel not found.\n");
+> +               master->dma_rx = NULL;
 
-diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
-index 69f517ec59c6..2f90ca5118af 100644
---- a/drivers/spi/spi-pic32.c
-+++ b/drivers/spi/spi-pic32.c
-@@ -609,22 +609,18 @@ static void pic32_spi_cleanup(struct spi_device *spi)
- static void pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
- {
- 	struct spi_master *master = pic32s->master;
--	dma_cap_mask_t mask;
- 
--	dma_cap_zero(mask);
--	dma_cap_set(DMA_SLAVE, mask);
--
--	master->dma_rx = dma_request_slave_channel_compat(mask, NULL, NULL,
--							  dev, "spi-rx");
--	if (!master->dma_rx) {
-+	master->dma_rx = dma_request_chan(dev, "spi-rx");
-+	if (IS_ERR(master->dma_rx)) {
- 		dev_warn(dev, "RX channel not found.\n");
-+		master->dma_rx = NULL;
- 		goto out_err;
- 	}
- 
--	master->dma_tx = dma_request_slave_channel_compat(mask, NULL, NULL,
--							  dev, "spi-tx");
--	if (!master->dma_tx) {
-+	master->dma_tx = dma_request_chan(dev, "spi-tx");
-+	if (IS_ERR(master->dma_tx)) {
- 		dev_warn(dev, "TX channel not found.\n");
-+		master->dma_tx = NULL;
- 		goto out_err;
- 	}
- 
-@@ -637,11 +633,15 @@ static void pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
- 	return;
- 
- out_err:
--	if (master->dma_rx)
-+	if (master->dma_rx) {
- 		dma_release_channel(master->dma_rx);
-+		master->dma_rx = NULL;
-+	}
- 
--	if (master->dma_tx)
-+	if (master->dma_tx) {
- 		dma_release_channel(master->dma_tx);
-+		master->dma_tx = NULL;
-+	}
- }
- 
- static void pic32_spi_dma_unprep(struct pic32_spi *pic32s)
+...  don't have to override by NULL here.
+
+(same for TX below).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-Peter
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
