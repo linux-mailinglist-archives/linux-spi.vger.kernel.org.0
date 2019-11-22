@@ -2,33 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 309F9107912
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Nov 2019 20:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED7B107916
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Nov 2019 20:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727296AbfKVTzo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Nov 2019 14:55:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:52174 "EHLO foss.arm.com"
+        id S1727821AbfKVTzr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 Nov 2019 14:55:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:52186 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726546AbfKVTzo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 Nov 2019 14:55:44 -0500
+        id S1726546AbfKVTzq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 Nov 2019 14:55:46 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CE56113E;
-        Fri, 22 Nov 2019 11:55:43 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 172C61396;
+        Fri, 22 Nov 2019 11:55:46 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A5BF3F6C4;
-        Fri, 22 Nov 2019 11:55:42 -0800 (PST)
-Date:   Fri, 22 Nov 2019 19:55:41 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 885AF3F6C4;
+        Fri, 22 Nov 2019 11:55:45 -0800 (PST)
+Date:   Fri, 22 Nov 2019 19:55:44 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     alexandre.torgue@st.com, broonie@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
+Cc:     broonie@kernel.org, geert@linux-m68k.org,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Mark Brown <broonie@kernel.org>, mark.rutland@arm.com,
-        robh+dt@kernel.org
-Subject: Applied "dt-bindings: spi: Convert stm32 QSPI bindings to json-schema" to the spi tree
-In-Reply-To: <20191120194444.10540-1-benjamin.gaignard@st.com>
-Message-Id: <applied-20191120194444.10540-1-benjamin.gaignard@st.com>
+        Mark Brown <broonie@kernel.org>, vkoul@kernel.org
+Subject: Applied "spi: pic32: Retire dma_request_slave_channel_compat()" to the spi tree
+In-Reply-To: <20191121092703.30465-1-peter.ujfalusi@ti.com>
+Message-Id: <applied-20191121092703.30465-1-peter.ujfalusi@ti.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -37,7 +34,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   dt-bindings: spi: Convert stm32 QSPI bindings to json-schema
+   spi: pic32: Retire dma_request_slave_channel_compat()
 
 has been applied to the spi tree at
 
@@ -62,166 +59,108 @@ to this mail.
 Thanks,
 Mark
 
-From ffa119f7c42d29be2dd759bb18cc4d1f45804c6b Mon Sep 17 00:00:00 2001
-From: Benjamin Gaignard <benjamin.gaignard@st.com>
-Date: Wed, 20 Nov 2019 20:44:44 +0100
-Subject: [PATCH] dt-bindings: spi: Convert stm32 QSPI bindings to json-schema
+From eb7e6dc6d9ffcce129ac04d4e7bd2dc015bd45a5 Mon Sep 17 00:00:00 2001
+From: Peter Ujfalusi <peter.ujfalusi@ti.com>
+Date: Thu, 21 Nov 2019 11:27:03 +0200
+Subject: [PATCH] spi: pic32: Retire dma_request_slave_channel_compat()
 
-Convert the STM32 QSPI binding to DT schema format using json-schema
+There is no reason to use the dma_request_slave_channel_compat() as no
+filter function and parameter is provided.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20191120194444.10540-1-benjamin.gaignard@st.com
+Switch the driver to use dma_request_chan() instead and add support for
+deferred probing against DMA channel.
+
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+Link: https://lore.kernel.org/r/20191121092703.30465-1-peter.ujfalusi@ti.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../bindings/spi/spi-stm32-qspi.txt           | 47 -----------
- .../bindings/spi/st,stm32-qspi.yaml           | 83 +++++++++++++++++++
- 2 files changed, 83 insertions(+), 47 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
- create mode 100644 Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+ drivers/spi/spi-pic32.c | 46 +++++++++++++++++++++++++++--------------
+ 1 file changed, 30 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt b/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
-deleted file mode 100644
-index bfc038b9478d..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
-+++ /dev/null
-@@ -1,47 +0,0 @@
--* STMicroelectronics Quad Serial Peripheral Interface(QSPI)
--
--Required properties:
--- compatible: should be "st,stm32f469-qspi"
--- reg: the first contains the register location and length.
--       the second contains the memory mapping address and length
--- reg-names: should contain the reg names "qspi" "qspi_mm"
--- interrupts: should contain the interrupt for the device
--- clocks: the phandle of the clock needed by the QSPI controller
--- A pinctrl must be defined to set pins in mode of operation for QSPI transfer
--
--Optional properties:
--- resets: must contain the phandle to the reset controller.
--
--A spi flash (NOR/NAND) must be a child of spi node and could have some
--properties. Also see jedec,spi-nor.txt.
--
--Required properties:
--- reg: chip-Select number (QSPI controller may connect 2 flashes)
--- spi-max-frequency: max frequency of spi bus
--
--Optional properties:
--- spi-rx-bus-width: see ./spi-bus.txt for the description
--- dmas: DMA specifiers for tx and rx dma. See the DMA client binding,
--Documentation/devicetree/bindings/dma/dma.txt.
--- dma-names: DMA request names should include "tx" and "rx" if present.
--
--Example:
--
--qspi: spi@a0001000 {
--	compatible = "st,stm32f469-qspi";
--	reg = <0xa0001000 0x1000>, <0x90000000 0x10000000>;
--	reg-names = "qspi", "qspi_mm";
--	interrupts = <91>;
--	resets = <&rcc STM32F4_AHB3_RESET(QSPI)>;
--	clocks = <&rcc 0 STM32F4_AHB3_CLOCK(QSPI)>;
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_qspi0>;
--
--	flash@0 {
--		compatible = "jedec,spi-nor";
--		reg = <0>;
--		spi-rx-bus-width = <4>;
--		spi-max-frequency = <108000000>;
--		...
--	};
--};
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-new file mode 100644
-index 000000000000..3665a5fe6b7f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-@@ -0,0 +1,83 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/st,stm32-qspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
+index 69f517ec59c6..156961b4ca86 100644
+--- a/drivers/spi/spi-pic32.c
++++ b/drivers/spi/spi-pic32.c
+@@ -606,25 +606,30 @@ static void pic32_spi_cleanup(struct spi_device *spi)
+ 	gpio_direction_output(spi->cs_gpio, !(spi->mode & SPI_CS_HIGH));
+ }
+ 
+-static void pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
++static int pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
+ {
+ 	struct spi_master *master = pic32s->master;
+-	dma_cap_mask_t mask;
++	int ret = 0;
+ 
+-	dma_cap_zero(mask);
+-	dma_cap_set(DMA_SLAVE, mask);
++	master->dma_rx = dma_request_chan(dev, "spi-rx");
++	if (IS_ERR(master->dma_rx)) {
++		if (PTR_ERR(master->dma_rx) == -EPROBE_DEFER)
++			ret = -EPROBE_DEFER;
++		else
++			dev_warn(dev, "RX channel not found.\n");
+ 
+-	master->dma_rx = dma_request_slave_channel_compat(mask, NULL, NULL,
+-							  dev, "spi-rx");
+-	if (!master->dma_rx) {
+-		dev_warn(dev, "RX channel not found.\n");
++		master->dma_rx = NULL;
+ 		goto out_err;
+ 	}
+ 
+-	master->dma_tx = dma_request_slave_channel_compat(mask, NULL, NULL,
+-							  dev, "spi-tx");
+-	if (!master->dma_tx) {
+-		dev_warn(dev, "TX channel not found.\n");
++	master->dma_tx = dma_request_chan(dev, "spi-tx");
++	if (IS_ERR(master->dma_tx)) {
++		if (PTR_ERR(master->dma_tx) == -EPROBE_DEFER)
++			ret = -EPROBE_DEFER;
++		else
++			dev_warn(dev, "TX channel not found.\n");
 +
-+title: STMicroelectronics STM32 Quad Serial Peripheral Interface (QSPI) bindings
++		master->dma_tx = NULL;
+ 		goto out_err;
+ 	}
+ 
+@@ -634,14 +639,20 @@ static void pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
+ 	/* DMA chnls allocated and prepared */
+ 	set_bit(PIC32F_DMA_PREP, &pic32s->flags);
+ 
+-	return;
++	return 0;
+ 
+ out_err:
+-	if (master->dma_rx)
++	if (master->dma_rx) {
+ 		dma_release_channel(master->dma_rx);
++		master->dma_rx = NULL;
++	}
+ 
+-	if (master->dma_tx)
++	if (master->dma_tx) {
+ 		dma_release_channel(master->dma_tx);
++		master->dma_tx = NULL;
++	}
 +
-+maintainers:
-+  - Christophe Kerello <christophe.kerello@st.com>
-+  - Patrice Chotard <patrice.chotard@st.com>
++	return ret;
+ }
+ 
+ static void pic32_spi_dma_unprep(struct pic32_spi *pic32s)
+@@ -776,7 +787,10 @@ static int pic32_spi_probe(struct platform_device *pdev)
+ 	master->unprepare_transfer_hardware	= pic32_spi_unprepare_hardware;
+ 
+ 	/* optional DMA support */
+-	pic32_spi_dma_prep(pic32s, &pdev->dev);
++	ret = pic32_spi_dma_prep(pic32s, &pdev->dev);
++	if (ret)
++		goto err_bailout;
 +
-+allOf:
-+  - $ref: "spi-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    const: st,stm32f469-qspi
-+
-+  reg:
-+    items:
-+      - description: registers
-+      - description: memory mapping
-+
-+  reg-names:
-+    items:
-+     - const: qspi
-+     - const: qspi_mm
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  dmas:
-+    items:
-+      - description: tx DMA channel
-+      - description: rx DMA channel
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - interrupts
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/stm32mp1-clks.h>
-+    #include <dt-bindings/reset/stm32mp1-resets.h>
-+    spi@58003000 {
-+      compatible = "st,stm32f469-qspi";
-+      reg = <0x58003000 0x1000>, <0x70000000 0x10000000>;
-+      reg-names = "qspi", "qspi_mm";
-+      interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
-+      dmas = <&mdma1 22 0x10 0x100002 0x0 0x0>,
-+             <&mdma1 22 0x10 0x100008 0x0 0x0>;
-+      dma-names = "tx", "rx";
-+      clocks = <&rcc QSPI_K>;
-+      resets = <&rcc QSPI_R>;
-+
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      flash@0 {
-+        compatible = "jedec,spi-nor";
-+        reg = <0>;
-+        spi-rx-bus-width = <4>;
-+        spi-max-frequency = <108000000>;
-+      };
-+    };
-+
-+...
+ 	if (test_bit(PIC32F_DMA_PREP, &pic32s->flags))
+ 		master->can_dma	= pic32_spi_can_dma;
+ 
 -- 
 2.20.1
 
