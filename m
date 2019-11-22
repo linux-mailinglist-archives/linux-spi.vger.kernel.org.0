@@ -2,73 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB681054A4
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Nov 2019 15:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D011F105F3B
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Nov 2019 05:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbfKUOi6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Nov 2019 09:38:58 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:44790 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726623AbfKUOi5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Nov 2019 09:38:57 -0500
-Received: by mail-ot1-f67.google.com with SMTP id c19so3066435otr.11;
-        Thu, 21 Nov 2019 06:38:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0blBAL3wZkz50HycghqiK2pciwvxeqAeMTt/kJRNm5g=;
-        b=qbz3JTU/Fm0TUnxowGxCiuSAU+NDoYoSMxXGSD1+YybXUE1vLhZ0EMZY+Fe0UXUuvw
-         UWj8Z/lBY20URlXdRcXUXC2C0GYxDsGOf8EPpVKBXtl8ZSefVC9uq3PuKLjvgyL88SEe
-         0Q1LZea0QZ+67AjozVVQf++mpE9AUmtyz4IL5IdAoWmFjl08BsZY90kGVOgQvgUxLUw5
-         +1HdfoeKCJ0Rv3PwTg2AVtNrXCkJrPuU8NRS9exfjscZrGv+VA6RISiso52A0c6L3Bcj
-         x3tuQ2t4S8i6Pa4Bj33RGmQSQuyuZ3WOFaT5L60pSw3lkywBaXwJKOK4OzKQGYHlt8fd
-         bt3A==
-X-Gm-Message-State: APjAAAUrKxCNHgnIthpSGJM4OUuJJtKsVhxvJnYuwovplVkxY/J9qWNL
-        qx5WkW0qIphwVg5Ya7eF6JgxO/0=
-X-Google-Smtp-Source: APXvYqwnaGGSvHw3eVxDSnMv1fQxO7SKEamfp9zxy8HwVAD1LSiD/kDoELucP/RnyFz5AWlq8jVXBQ==
-X-Received: by 2002:a9d:7a93:: with SMTP id l19mr6448599otn.314.1574347136596;
-        Thu, 21 Nov 2019 06:38:56 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h39sm1055423oth.9.2019.11.21.06.38.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2019 06:38:56 -0800 (PST)
-Date:   Thu, 21 Nov 2019 08:38:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        alexandre.torgue@st.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: Re: [PATCH v2] dt-bindings: spi: Convert stm32 QSPI bindings to
- json-schema
-Message-ID: <20191121143855.GA23685@bogus>
-References: <20191120194444.10540-1-benjamin.gaignard@st.com>
+        id S1726529AbfKVEeH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Nov 2019 23:34:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55770 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726500AbfKVEeG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 21 Nov 2019 23:34:06 -0500
+Received: from localhost (unknown [171.61.94.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7CB4320704;
+        Fri, 22 Nov 2019 04:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574397246;
+        bh=RbVhcnfxDZXYbq5FrYM2h68FLrNpgIh467ix1PTKw1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=avS4p66UA4nU92G88TOUa4dZerKvnZcw9sfXPjNIWCxyz78jSEoHODin8INeG3195
+         7Wv0lY8ZkKRXZ80CdyM566gwHXKrjw9p4BySG+iNQFprnRi9xCF9b+Tdg/3u9l1rh3
+         xOIB4eswglMDrpRZ9C4lg8A7sTCOIyNYWQvQmIpc=
+Date:   Fri, 22 Nov 2019 10:04:02 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
+Cc:     broonie@kernel.org, geert@linux-m68k.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] spi: pic32: Retire dma_request_slave_channel_compat()
+Message-ID: <20191122043402.GJ82508@vkoul-mobl>
+References: <20191121092703.30465-1-peter.ujfalusi@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191120194444.10540-1-benjamin.gaignard@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191121092703.30465-1-peter.ujfalusi@ti.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Nov 2019 20:44:44 +0100, Benjamin Gaignard wrote:
-> Convert the STM32 QSPI binding to DT schema format using json-schema
+On 21-11-19, 11:27, Peter Ujfalusi wrote:
+> There is no reason to use the dma_request_slave_channel_compat() as no
+> filter function and parameter is provided.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> ---
-> changes in version 2:
-> - fix subject
-> - remove useless minItems and maxItems
->  .../devicetree/bindings/spi/spi-stm32-qspi.txt     | 47 ------------
->  .../devicetree/bindings/spi/st,stm32-qspi.yaml     | 83 ++++++++++++++++++++++
->  2 files changed, 83 insertions(+), 47 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-stm32-qspi.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-> 
+> Switch the driver to use dma_request_chan() instead and add support for
+> deferred probing against DMA channel.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+
+-- 
+~Vinod
