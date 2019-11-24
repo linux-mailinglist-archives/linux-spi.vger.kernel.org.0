@@ -2,165 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED7B107916
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Nov 2019 20:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0858310848C
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2019 20:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727821AbfKVTzr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Nov 2019 14:55:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:52186 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726546AbfKVTzq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 Nov 2019 14:55:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 172C61396;
-        Fri, 22 Nov 2019 11:55:46 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 885AF3F6C4;
-        Fri, 22 Nov 2019 11:55:45 -0800 (PST)
-Date:   Fri, 22 Nov 2019 19:55:44 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
-Cc:     broonie@kernel.org, geert@linux-m68k.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, vkoul@kernel.org
-Subject: Applied "spi: pic32: Retire dma_request_slave_channel_compat()" to the spi tree
-In-Reply-To: <20191121092703.30465-1-peter.ujfalusi@ti.com>
-Message-Id: <applied-20191121092703.30465-1-peter.ujfalusi@ti.com>
-X-Patchwork-Hint: ignore
+        id S1726842AbfKXTCl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 24 Nov 2019 14:02:41 -0500
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:45120 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726833AbfKXTCl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Nov 2019 14:02:41 -0500
+Received: by mail-yb1-f196.google.com with SMTP id i3so5097321ybe.12
+        for <linux-spi@vger.kernel.org>; Sun, 24 Nov 2019 11:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=q9slGwaiprNeaVOYpUrrFRdd09JHtIAMIBk2HK3gZec=;
+        b=mpVr4aIStS+vCpDBZTh1b42zMWn6NBg16e3xZjobH2VmonwTV0A6H9awF+qpSVyzUc
+         +gQp611QPi5VJPvbjJm+WJu8J5666SwEHuBrZUNTPo9oibYPNnNiOw6XFiUlnGBfTW6B
+         InkO6zKOb9B7hOOiEKiAcpDr/qw7U39/dxc3TTcq4JSLJkUvH1TTvLNYNxgXYYxT4o+F
+         Oa952IySgwqmpjd2fzSAiAJ2Masay4eDvEwB5AWEp5tC2mkY6vu+ru/OyyZcws/kdaoL
+         ujItn2y3TO0Z1i3TSpNxQq33H75rVzyEnwSXW2OlbPkJifHdXHQGFR5D0w1rAZq45Fuj
+         tgpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=q9slGwaiprNeaVOYpUrrFRdd09JHtIAMIBk2HK3gZec=;
+        b=BO5kJoLU61rN8EPNE6ibZeUArRWNXwfkSJNSb/AsLbonf8ZDzRq9SR6e4S97EQRtas
+         G4PvyrVQcV98gXnLg+iJrXCEKvPGNbViqh5Ii9uAke63mL/Jj/UXac0Q9EmwNIdFegvI
+         5tb2xUpoJS5IJkN/6LbRr1AG1vznkduNZR45T0v2Y1EkIIDFUfzspryqpa9i7tkgiDNZ
+         /9niGo6FxuToOp2bfS1BWEbGh8qjtvGNQaLTyW41Q+fv2BBlgxjmt/srLk5Tma2p4cLv
+         jMPdlnWqdLDJf9AmqDXQJkT9PVSzFiJ+f16SKVV/QA6ucmL7fDmq2KwGMKN2+zZQIumY
+         U6ug==
+X-Gm-Message-State: APjAAAUGngH6OKijAWKQ5dSEWkkJMAyY5JAUvq9TsUH5/HkDV835Y8/J
+        c0BfrWpyQjQC+sQ4jAbMtcv31z41G2/eumPSkXg=
+X-Google-Smtp-Source: APXvYqy8s7rwfs5gYN0vwoRwVwsFd0/7dwZHBFzZJwmPMFAUqJrWtHVeXa00C6QGZNx3U3NpN7Bi7fZLwvD6vspqXrI=
+X-Received: by 2002:a25:bccd:: with SMTP id l13mr20295863ybm.240.1574622160307;
+ Sun, 24 Nov 2019 11:02:40 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a25:aa24:0:0:0:0:0 with HTTP; Sun, 24 Nov 2019 11:02:39
+ -0800 (PST)
+Reply-To: brianjesse343@gmail.com
+From:   brianjesse <wu9919411@gmail.com>
+Date:   Sun, 24 Nov 2019 19:02:39 +0000
+Message-ID: <CAE6j1-Nw36JEHK2R2KXU8Go3QtcmSMEpC6HYQzfR5v6RuA2tYA@mail.gmail.com>
+Subject: Hl
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
-
-   spi: pic32: Retire dma_request_slave_channel_compat()
-
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From eb7e6dc6d9ffcce129ac04d4e7bd2dc015bd45a5 Mon Sep 17 00:00:00 2001
-From: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Date: Thu, 21 Nov 2019 11:27:03 +0200
-Subject: [PATCH] spi: pic32: Retire dma_request_slave_channel_compat()
-
-There is no reason to use the dma_request_slave_channel_compat() as no
-filter function and parameter is provided.
-
-Switch the driver to use dma_request_chan() instead and add support for
-deferred probing against DMA channel.
-
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
-Link: https://lore.kernel.org/r/20191121092703.30465-1-peter.ujfalusi@ti.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-pic32.c | 46 +++++++++++++++++++++++++++--------------
- 1 file changed, 30 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
-index 69f517ec59c6..156961b4ca86 100644
---- a/drivers/spi/spi-pic32.c
-+++ b/drivers/spi/spi-pic32.c
-@@ -606,25 +606,30 @@ static void pic32_spi_cleanup(struct spi_device *spi)
- 	gpio_direction_output(spi->cs_gpio, !(spi->mode & SPI_CS_HIGH));
- }
- 
--static void pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
-+static int pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
- {
- 	struct spi_master *master = pic32s->master;
--	dma_cap_mask_t mask;
-+	int ret = 0;
- 
--	dma_cap_zero(mask);
--	dma_cap_set(DMA_SLAVE, mask);
-+	master->dma_rx = dma_request_chan(dev, "spi-rx");
-+	if (IS_ERR(master->dma_rx)) {
-+		if (PTR_ERR(master->dma_rx) == -EPROBE_DEFER)
-+			ret = -EPROBE_DEFER;
-+		else
-+			dev_warn(dev, "RX channel not found.\n");
- 
--	master->dma_rx = dma_request_slave_channel_compat(mask, NULL, NULL,
--							  dev, "spi-rx");
--	if (!master->dma_rx) {
--		dev_warn(dev, "RX channel not found.\n");
-+		master->dma_rx = NULL;
- 		goto out_err;
- 	}
- 
--	master->dma_tx = dma_request_slave_channel_compat(mask, NULL, NULL,
--							  dev, "spi-tx");
--	if (!master->dma_tx) {
--		dev_warn(dev, "TX channel not found.\n");
-+	master->dma_tx = dma_request_chan(dev, "spi-tx");
-+	if (IS_ERR(master->dma_tx)) {
-+		if (PTR_ERR(master->dma_tx) == -EPROBE_DEFER)
-+			ret = -EPROBE_DEFER;
-+		else
-+			dev_warn(dev, "TX channel not found.\n");
-+
-+		master->dma_tx = NULL;
- 		goto out_err;
- 	}
- 
-@@ -634,14 +639,20 @@ static void pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
- 	/* DMA chnls allocated and prepared */
- 	set_bit(PIC32F_DMA_PREP, &pic32s->flags);
- 
--	return;
-+	return 0;
- 
- out_err:
--	if (master->dma_rx)
-+	if (master->dma_rx) {
- 		dma_release_channel(master->dma_rx);
-+		master->dma_rx = NULL;
-+	}
- 
--	if (master->dma_tx)
-+	if (master->dma_tx) {
- 		dma_release_channel(master->dma_tx);
-+		master->dma_tx = NULL;
-+	}
-+
-+	return ret;
- }
- 
- static void pic32_spi_dma_unprep(struct pic32_spi *pic32s)
-@@ -776,7 +787,10 @@ static int pic32_spi_probe(struct platform_device *pdev)
- 	master->unprepare_transfer_hardware	= pic32_spi_unprepare_hardware;
- 
- 	/* optional DMA support */
--	pic32_spi_dma_prep(pic32s, &pdev->dev);
-+	ret = pic32_spi_dma_prep(pic32s, &pdev->dev);
-+	if (ret)
-+		goto err_bailout;
-+
- 	if (test_bit(PIC32F_DMA_PREP, &pic32s->flags))
- 		master->can_dma	= pic32_spi_can_dma;
- 
--- 
-2.20.1
-
+Hello,  Kindly be informed that this email that came to your mailbox is not
+an error but was specifically addressed to you for your consideration. I
+have a proposal of ($7.500.000.00) left by my late client Engineer Carlos
+who bears the same name with you, who used to work and lived here in Lome
+Togo My late client and family were involved in a car accident that took
+their lives. I am contacting you as the next of kin to the deceased so you
+could receive the funds upon claims. Upon your speedy response I will
+inform you the modes of the execution of this covenant.contact me on this
+(brianjesse343@gmail.com)
