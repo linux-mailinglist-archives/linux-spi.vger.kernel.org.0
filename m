@@ -2,78 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AE3109F8E
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Nov 2019 14:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E7A109FA9
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Nov 2019 14:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbfKZNvk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Nov 2019 08:51:40 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:55860 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726672AbfKZNvk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Nov 2019 08:51:40 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAQDp1dI006493;
-        Tue, 26 Nov 2019 13:51:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
- message-id : date : from : to : cc : subject : references : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=7yJkXZVLo+rQD+I2GCanRtU1zAWl5iCI0qmDBmeoVQM=;
- b=l925XKIYIJFXM0HQdqAHS/rG3ajWwLwwCRVbcv/luUq63nFQ5XIf+ytg7oqWPugS80+G
- 4vU3mUx76Hlq5pky6Ts1LOXQPacYzPIddQ4WHa7WjpKypU99AaWG4ShnPz0lkUAb+RnW
- 5ZjmIsvbbaMsxKK0OR7TrIuOgz1oHrtvqZ8eMiz0fruyeVbHqInT6A/63IkxYhduSYqV
- 6CxEe6+JfvaGxNCk3D4u3WZuF4CX6aFA+jm1i9N/0TetydUo+7rwN+zg/dJSumqFS1kh
- exwKraSQDcFLzIcvFrw0XlhmDqJXoGfJ21uF52uGDxiec0PBiUzP/Ff1ZTaccbS/IiBS /w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2wev6u6w4x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Nov 2019 13:51:25 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAQDmNYQ047344;
-        Tue, 26 Nov 2019 13:51:24 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2wh0rbu8r6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Nov 2019 13:51:24 +0000
-Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xAQDpNtb024515;
-        Tue, 26 Nov 2019 13:51:23 GMT
-Received: from kadam (/129.205.23.165) by default (Oracle Beehive Gateway
- v4.0) with ESMTP ; Tue, 26 Nov 2019 05:51:00 -0800
-USER-AGENT: Mutt/1.9.4 (2018-02-28)
+        id S1727316AbfKZNzf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Nov 2019 08:55:35 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:34540 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727029AbfKZNzf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Nov 2019 08:55:35 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAQDtQCo038496;
+        Tue, 26 Nov 2019 07:55:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1574776526;
+        bh=9FV2sAVgknfN3arcofI7VcstThGCGrOn8LgD3FMXUUY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=J5OU5FHtEiEldWF/yYKmORz95Jxr978D7pvt5ooqHG0r3gjRmRoq1Cd6T8GeWjuSN
+         W5B5lZkf+yBti6XwK0ex2XPBiejKP5UfMXbNZXo1UU2RXYQa/BraYTQEyi60UtrIVX
+         e89KqkZD1flHleHSyesiThNaG5NoYCY6aEJI3bRk=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xAQDtQRx043203
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 Nov 2019 07:55:26 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 26
+ Nov 2019 07:55:26 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 26 Nov 2019 07:55:26 -0600
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAQDtO0m066088;
+        Tue, 26 Nov 2019 07:55:25 -0600
+Subject: Re: [PATCH] spi: pic32: Add a comment in pic32_spi_dma_prep()
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        <kernel-janitors@vger.kernel.org>
+References: <20191126135025.mligekonmv2u6dcl@kili.mountain>
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+Message-ID: <67ddc7f2-c67e-708b-0932-af425db04604@ti.com>
+Date:   Tue, 26 Nov 2019 15:55:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Message-ID: <20191126135051.GB1759@kadam>
-Date:   Tue, 26 Nov 2019 13:50:52 +0000 (UTC)
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] spi: pic32: Fix an error code in pic32_spi_dma_prep()
-References: <20191126122324.v3rj7oscvjobhjxo@kili.mountain>
- <CAMuHMdX52phf_dSQh3vK8QGJtvmUwDiY_0f6d7xAJ_xF2vKNfg@mail.gmail.com>
- <a22ba950-f65b-b80e-948a-eddfa0a7d431@ti.com>
-In-Reply-To: <a22ba950-f65b-b80e-948a-eddfa0a7d431@ti.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9452 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=771
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1911260124
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9452 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=833 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1911260124
+In-Reply-To: <20191126135025.mligekonmv2u6dcl@kili.mountain>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Ah.  Thanks Peter.
+Hi Dan,
 
-regards,
-dan carpenter
+On 26/11/2019 15.50, Dan Carpenter wrote:
+> This code triggers a static checker warning about missed error codes.
+> It's slightly tricky that we fall back to PIO so let's silence the
+> checker and add a comment for anyone who is confused.
+> 
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+> I won't feel offended at all if people don't think it's worth applying
+> this patch.
+> 
+>  drivers/spi/spi-pic32.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
+> index 156961b4ca86..835380ab8bf2 100644
+> --- a/drivers/spi/spi-pic32.c
+> +++ b/drivers/spi/spi-pic32.c
+> @@ -633,8 +633,10 @@ static int pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
+>  		goto out_err;
+>  	}
+>  
+> -	if (pic32_spi_dma_config(pic32s, DMA_SLAVE_BUSWIDTH_1_BYTE))
+> +	if (pic32_spi_dma_config(pic32s, DMA_SLAVE_BUSWIDTH_1_BYTE)) {
+> +		ret = 0;  /* Fall back to PIO if DMA fails. */
 
+The 'ret' is initialized to 0 in the function to handle this.
+After looking at the code again I see that pic32_spi_dma_config() does
+error prints for failures.
+
+A comment might be enough here if it is even needed.
+
+>  		goto out_err;
+> +	}
+>  
+>  	/* DMA chnls allocated and prepared */
+>  	set_bit(PIC32F_DMA_PREP, &pic32s->flags);
+> 
+
+- Péter
+
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
