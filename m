@@ -2,112 +2,196 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91617109FBD
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Nov 2019 15:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBD810A0E4
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Nov 2019 16:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727664AbfKZOCb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Nov 2019 09:02:31 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:43340 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727719AbfKZOCb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Nov 2019 09:02:31 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAQDxMpj014966;
-        Tue, 26 Nov 2019 14:02:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=0KmEc5xPHzqBJVfLF5aZg5q51UGChEdbv2XLgUktmpM=;
- b=boUgzl5nwQxhp6UPWxDqvbKRCbefx/ibarVNgJtjx/rqJ0xtHAc+4RHIHE9SrvhYjNoj
- 8nBRAz+B55X8KEwM9WhMXtE9Oc5aff35JOuA5Obxh24R7zMvvo467vBysDDmRtX/bsxh
- SVLNMS2+hyihhG4118M+0ZdW1L4NIEZ8RgMPC8mPcYjjP9+vVyhJU402OK3F6JL0/nmd
- A6ptNdiTV2m60CNH7Gg5vcoEloKtXwmjvh40gVcgki8MMygah84beUbE/x+wxtARqJGz
- 4zgLYqbC8HdRJe8M4e8bFxTaLsx9UG/EojPxKsMXQh3lhl1opt7DLJ441KVmGf3A03fj sw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2wev6u6yp6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Nov 2019 14:02:22 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAQDwuBU073881;
-        Tue, 26 Nov 2019 14:02:21 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2wh0rbw7ed-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Nov 2019 14:02:21 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xAQE2Jbk031353;
-        Tue, 26 Nov 2019 14:02:19 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 26 Nov 2019 06:02:19 -0800
-Date:   Tue, 26 Nov 2019 17:02:12 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Vinod Koul <vkoul@kernel.org>, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] spi: pic32: Add a comment in pic32_spi_dma_prep()
-Message-ID: <20191126140212.GC1759@kadam>
-References: <20191126135025.mligekonmv2u6dcl@kili.mountain>
- <67ddc7f2-c67e-708b-0932-af425db04604@ti.com>
+        id S1728333AbfKZPBf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Nov 2019 10:01:35 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:35274 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726049AbfKZPBf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 26 Nov 2019 10:01:35 -0500
+Received: from localhost (mailhub1-ext [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 47MnDC595Fz9txhn;
+        Tue, 26 Nov 2019 16:01:31 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=dW4NJllj; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id T-c2i2NdXBCZ; Tue, 26 Nov 2019 16:01:31 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47MnDC40Tvz9txh9;
+        Tue, 26 Nov 2019 16:01:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1574780491; bh=pQS+OX75K22sSC732+xuiO3aoDDQEY8BnQkKmXqrFv0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=dW4NJlljOhocaB5mPe0Pn1U3kc8EEt9vdU+jsh6LXp0m6s98w55HmCWf0I4BWaq/f
+         kNhrCsV6ZAmZtx7M0cV0MbomFL4WvKFMvdsdaV39NK3Llynf8zN5rTaZXxvu+HAta6
+         /MJER1WlfRIWx3mGRuJhYq7/9R0QfXBQmKg8UAOU=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id DB9F88B817;
+        Tue, 26 Nov 2019 16:01:32 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id cs0LcZFxTeSo; Tue, 26 Nov 2019 16:01:32 +0100 (CET)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 47F0E8B809;
+        Tue, 26 Nov 2019 16:01:32 +0100 (CET)
+Subject: Re: Boot failure with 5.4-rc5, bisected to 0f0581b24bd0 ("spi: fsl:
+ Convert to use CS GPIO descriptors")
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+References: <e9981d69-2a33-fec9-7d12-15fcb948364d@c-s.fr>
+ <CACRpkdYLEibwyK_BGO3gsJ_aQFWZNJCky-GezHVmHfRSzD2zBg@mail.gmail.com>
+ <1efb797c-e3c1-25a4-0e81-78b5bbadb355@c-s.fr>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <d144f86e-48ff-384a-2937-639c0c6dd3d8@c-s.fr>
+Date:   Tue, 26 Nov 2019 16:01:32 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67ddc7f2-c67e-708b-0932-af425db04604@ti.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9452 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1911260126
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9452 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1911260126
+In-Reply-To: <1efb797c-e3c1-25a4-0e81-78b5bbadb355@c-s.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Nov 26, 2019 at 03:55:25PM +0200, Peter Ujfalusi wrote:
-> Hi Dan,
-> 
-> On 26/11/2019 15.50, Dan Carpenter wrote:
-> > This code triggers a static checker warning about missed error codes.
-> > It's slightly tricky that we fall back to PIO so let's silence the
-> > checker and add a comment for anyone who is confused.
-> > 
-> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > ---
-> > I won't feel offended at all if people don't think it's worth applying
-> > this patch.
-> > 
-> >  drivers/spi/spi-pic32.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
-> > index 156961b4ca86..835380ab8bf2 100644
-> > --- a/drivers/spi/spi-pic32.c
-> > +++ b/drivers/spi/spi-pic32.c
-> > @@ -633,8 +633,10 @@ static int pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
-> >  		goto out_err;
-> >  	}
-> >  
-> > -	if (pic32_spi_dma_config(pic32s, DMA_SLAVE_BUSWIDTH_1_BYTE))
-> > +	if (pic32_spi_dma_config(pic32s, DMA_SLAVE_BUSWIDTH_1_BYTE)) {
-> > +		ret = 0;  /* Fall back to PIO if DMA fails. */
-> 
-> The 'ret' is initialized to 0 in the function to handle this.
-> After looking at the code again I see that pic32_spi_dma_config() does
-> error prints for failures.
-> 
-> A comment might be enough here if it is even needed.
+Hi Linus,
 
-Yeah.  The "ret = 0;" is just to silence static checkers.  It doesn't
-change the object code (except line numbers).  I'm not emotionally
-invested in this patch so if it's too much then that's fine.
+Le 08/11/2019 à 14:34, Christophe Leroy a écrit :
+> 
+> 
+> Le 08/11/2019 à 14:09, Linus Walleij a écrit :
+>> On Fri, Nov 8, 2019 at 1:33 PM Christophe Leroy 
+>> <christophe.leroy@c-s.fr> wrote:
+>>
+>>> [    3.227053] NIP [c0249054] gen_pool_free_owner+0xfc/0x100
+>>> [    3.232377] LR [c0249054] gen_pool_free_owner+0xfc/0x100
+>>> [    3.237588] Call Trace:
+>>> [    3.240037] [c60e1d08] [c0249054] gen_pool_free_owner+0xfc/0x100
+>>> (unreliable)
+>>> [    3.247113] [c60e1d38] [c0299020] cpm_muram_free+0x84/0xf4
+>>> [    3.252517] [c60e1d58] [c030e7a4] fsl_spi_cpm_free+0x94/0x100
+>>> [    3.258198] [c60e1d68] [c030f2d4] of_fsl_spi_probe+0x260/0x3a0
+>>
+>> Since fsl_spi_cpm_free() is called from of_fsl_spi_probe() and doesn't
+>> even exist on the errorpath of this function I suppose it is some kind
+>> inlining of_fsl_spi_probe() which goes on the errorpath and
+>> crashes there. I suspect EPROBE_DEFER (-517) to be behind this
+>> but it is just a guess.
+>>
+>> What happens if you add this:
+>>
+>> diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+>> index 4b80ace1d137..a26b5e542006 100644
+>> --- a/drivers/spi/spi-fsl-spi.c
+>> +++ b/drivers/spi/spi-fsl-spi.c
+>> @@ -678,6 +678,7 @@ static struct spi_master * fsl_spi_probe(struct 
+>> device *dev,
+>>          return master;
+>>
+>>   err_probe:
+>> +       dev_info(dev, "bail out with error code %d\n", ret);
+>>          fsl_spi_cpm_free(mpc8xxx_spi);
+>>   err_cpm_init:
+>>          spi_master_put(master);
+>>
+>> I am assuming that the errorpath inside spi-fsl-cpm.c is crashing,
+>> as cpm_muram_free() is called under the wrong conditions,
+>> or simply not really working.
+>>
+>> So fixing the errorpath is a separate problem in itself.
+>>
+>> By just looking at the code and not understanding any more than
+>> that the error path on fsl_spi_cpm_free() should probably
+>> equal that of fsl_spi_cpm_init() I guess maybe this could
+>> fix it, could you test?
+>>
+>> diff --git a/drivers/spi/spi-fsl-cpm.c b/drivers/spi/spi-fsl-cpm.c
+>> index 858f0544289e..54ad0ac121e5 100644
+>> --- a/drivers/spi/spi-fsl-cpm.c
+>> +++ b/drivers/spi/spi-fsl-cpm.c
+>> @@ -392,7 +392,8 @@ void fsl_spi_cpm_free(struct mpc8xxx_spi *mspi)
+>>          dma_unmap_single(dev, mspi->dma_dummy_rx, SPI_MRBLR, 
+>> DMA_FROM_DEVICE);
+>>          dma_unmap_single(dev, mspi->dma_dummy_tx, PAGE_SIZE, 
+>> DMA_TO_DEVICE);
+>>          cpm_muram_free(cpm_muram_offset(mspi->tx_bd));
+>> -       cpm_muram_free(cpm_muram_offset(mspi->pram));
+>> +       if (!(mspi->flags & SPI_CPM1))
+>> +               cpm_muram_free(cpm_muram_offset(mspi->pram));
+>>          fsl_spi_free_dummy_rx();
+>>   }
+>>   EXPORT_SYMBOL_GPL(fsl_spi_cpm_free);
+>>
+>>> Reverting 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
+>>> solves the issue.
+>>
+>> I hope we can fix the errorpath so we can see what the real problem
+>> is with this patch.
+> 
+> With the two above changes, I get:
+> [    3.143014] fsl_spi ff000a80.spi: bail out with error code -22
+> [    3.148879] ------------[ cut here ]------------
+> [    3.153261] remove_proc_entry: removing non-empty directory 'irq/43', 
+> leaking at least 'fsl_spi'
+> [    3.162473] WARNING: CPU: 0 PID: 1 at fs/proc/generic.c:684 
+> remove_proc_entry+0x1a0/0x1c8
+> [    3.170324] CPU: 0 PID: 1 Comm: swapper Not tainted 
+> 5.4.0-rc5-s3k-dev-00785-gab26ba2f2775-dirty #2475
+> [    3.179420] NIP:  c017f138 LR: c017f138 CTR: c0047d24
+> [    3.184421] REGS: c60e1c20 TRAP: 0700   Not tainted 
+> (5.4.0-rc5-s3k-dev-00785-gab26ba2f2775-dirty)
+> [    3.193259] MSR:  00029032 <EE,ME,IR,DR,RI>  CR: 22008222  XER: 00000000
+> [    3.199885]
+> [    3.199885] GPR00: c017f138 c60e1cd8 c60d4000 00000054 00000000 
+> 00000000 0000c350 00000010
+> [    3.199885] GPR08: c0775030 00000800 00000000 00001032 22000408 
+> 00000000 c0003890 00000000
+> [    3.199885] GPR16: 00000000 00000000 00000000 00000000 00000000 
+> 00000000 c0800000 0000009e
+> [    3.199885] GPR24: c0852778 c6211c50 c61f2210 c07793b8 00000001 
+> c60d3863 c60d08e3 c60d3800
+> [    3.234623] NIP [c017f138] remove_proc_entry+0x1a0/0x1c8
+> [    3.239861] LR [c017f138] remove_proc_entry+0x1a0/0x1c8
+> [    3.244979] Call Trace:
+> [    3.247435] [c60e1cd8] [c017f138] remove_proc_entry+0x1a0/0x1c8 
+> (unreliable)
+> [    3.254425] [c60e1d08] [c005d904] unregister_irq_proc+0x5c/0x70
+> [    3.260252] [c60e1d28] [c0055978] free_desc+0x4c/0x90
+> [    3.265245] [c60e1d48] [c0055be0] irq_free_descs+0x70/0xa8
+> [    3.270670] [c60e1d68] [c030f154] of_fsl_spi_probe+0xc0/0x3b4
+> [    3.276349] [c60e1db8] [c02c5458] platform_drv_probe+0x44/0xa4
+> [    3.282141] [c60e1dc8] [c02c35fc] really_probe+0x1ac/0x418
+> [    3.287547] [c60e1df8] [c02c407c] device_driver_attach+0x88/0x90
+> [    3.293484] [c60e1e18] [c02c4124] __driver_attach+0xa0/0x154
+> [    3.299076] [c60e1e38] [c02c165c] bus_for_each_dev+0x64/0xb4
+> [    3.304670] [c60e1e68] [c02c2038] bus_add_driver+0xe0/0x218
+> [    3.310166] [c60e1e88] [c02c48dc] driver_register+0x84/0x148
+> [    3.315776] [c60e1e98] [c06d8d30] do_one_initcall+0x8c/0x1cc
+> [    3.321362] [c60e1ef8] [c06d8fac] kernel_init_freeable+0x13c/0x1ec
+> [    3.327469] [c60e1f28] [c00038a4] kernel_init+0x14/0x110
+> [    3.332726] [c60e1f38] [c000e1cc] ret_from_kernel_thread+0x14/0x1c
+> [    3.338784] Instruction dump:
+> [    3.341720] 2c030000 4182004c 3863ffb0 3c80c05a 80e3005c 388477d0 
+> 3c60c068 7fa6eb78
+> [    3.349377] 7fc5f378 38840280 386333e4 4be9e7a1 <0fe00000> 4bffff7c 
+> 3c60c06c 7fc4f378
+> [    3.357237] ---[ end trace 722649f68cd7c34e ]---
+> [    3.362333] fsl_spi: probe of ff000a80.spi failed with error -22
+> 
+> 
 
-regards,
-dan carpenter
+How can we progress on that ? Problem is still present in 5.4
+
+Christophe
