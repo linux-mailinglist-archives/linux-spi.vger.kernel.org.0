@@ -2,83 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A4D10A1F3
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Nov 2019 17:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBDC10A258
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Nov 2019 17:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727333AbfKZQX5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Nov 2019 11:23:57 -0500
-Received: from foss.arm.com ([217.140.110.172]:36464 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726983AbfKZQX5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 26 Nov 2019 11:23:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0D2A30E;
-        Tue, 26 Nov 2019 08:23:56 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 471DA3F68E;
-        Tue, 26 Nov 2019 08:23:56 -0800 (PST)
-Date:   Tue, 26 Nov 2019 16:23:54 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: Boot failure with 5.4-rc5, bisected to 0f0581b24bd0 ("spi: fsl:
- Convert to use CS GPIO descriptors")
-Message-ID: <20191126162354.GA4205@sirena.org.uk>
-References: <e9981d69-2a33-fec9-7d12-15fcb948364d@c-s.fr>
- <CACRpkdYLEibwyK_BGO3gsJ_aQFWZNJCky-GezHVmHfRSzD2zBg@mail.gmail.com>
- <1efb797c-e3c1-25a4-0e81-78b5bbadb355@c-s.fr>
- <d144f86e-48ff-384a-2937-639c0c6dd3d8@c-s.fr>
- <CAOMZO5DJ+UGuNN-5gZE68Yt2ZTBVZ50teo9H0=c-Rgx+oFAa7A@mail.gmail.com>
+        id S1727820AbfKZQlv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Nov 2019 11:41:51 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:18294 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727754AbfKZQlv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Nov 2019 11:41:51 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAQGZi3p023107;
+        Tue, 26 Nov 2019 10:41:42 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type;
+ s=PODMain02222019; bh=O0ngmniTlhH5g6ai5X/BariiUS7WJ1J63ag8Mvb+HgM=;
+ b=cEj17cxO6l4o9lX498QqrilWCk8/+JFIzWDwo6xbSMyUOcaqrHo5OusLzsPfKE94Opb0
+ ws7gzTYBLVvVXFZxvXIcGyFjqV56rhP/nEIzxecFVRialbVjuOHHBpNlEZwhzVD8woJi
+ 08Oyy3vY66vPegH1eLqCqlX7CpmmLHpNjZnH9b2tWuPph7ccfD4bwJxRFWXA0BFndfDJ
+ H7eqTCFP3s+2sW5M76YW52DMf0y2KWZCar2TbwIzNSGVSa/pIO2av3RElNMYbT0qK6wy
+ 5B1F/FT5T8apEnSw9rk6/MZwv2/bWkl7/pIX8bY+0gHt+MYpJTbnEbiidrzaG5kkARx4 eg== 
+Authentication-Results: ppops.net;
+        spf=fail smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from ediex02.ad.cirrus.com ([5.172.152.52])
+        by mx0b-001ae601.pphosted.com with ESMTP id 2wf22tcgsu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 26 Nov 2019 10:41:42 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 26 Nov
+ 2019 16:42:35 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Tue, 26 Nov 2019 16:42:35 +0000
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 62B292C6;
+        Tue, 26 Nov 2019 16:41:40 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <gregory.clement@bootlin.com>, <linus.walleij@linaro.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] spi: cadence: Correct handling of native chipselect
+Date:   Tue, 26 Nov 2019 16:41:40 +0000
+Message-ID: <20191126164140.6240-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ReaqsoxgOBHFXBhH"
-Content-Disposition: inline
-In-Reply-To: <CAOMZO5DJ+UGuNN-5gZE68Yt2ZTBVZ50teo9H0=c-Rgx+oFAa7A@mail.gmail.com>
-X-Cookie: Where's SANDY DUNCAN?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Proofpoint-SPF-Result: fail
+X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
+ -all
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 clxscore=1011 mlxlogscore=999
+ adultscore=0 suspectscore=1 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911260139
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+To fix a regression on the Cadence SPI driver, this patch reverts
+commit 6046f5407ff0 ("spi: cadence: Fix default polarity of native
+chipselect").
 
---ReaqsoxgOBHFXBhH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch was not the correct fix for the issue. The SPI framework
+calls the set_cs line with the logic level it desires on the chip select
+line, as such the old is_high handling was correct. However, this was
+broken by the fact that before commit 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH
+setting when using native and GPIO CS") all controllers that offered
+the use of a GPIO chip select had SPI_CS_HIGH applied, even for hardware
+chip selects. This caused the value passed into the driver to be inverted.
+Which unfortunately makes it look like a logical enable the chip select
+value.
 
-On Tue, Nov 26, 2019 at 12:35:35PM -0300, Fabio Estevam wrote:
-> On Tue, Nov 26, 2019 at 12:01 PM Christophe Leroy
-> <christophe.leroy@c-s.fr> wrote:
+Since the core was corrected to not unconditionally apply SPI_CS_HIGH,
+the Cadence driver, whilst using the hardware chip select, will deselect
+the chip select every time we attempt to communicate with the device,
+which results in failed communications.
 
-> > How can we progress on that ? Problem is still present in 5.4
+Fixes: 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH setting when using native and GPIO CS")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ drivers/spi/spi-cadence.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Linus has sent the following fix:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20191126&id=c5923243eb3208ea63b5ed7905610039c4ca5201
+diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
+index c36587b42e951..82a0ee09cbe14 100644
+--- a/drivers/spi/spi-cadence.c
++++ b/drivers/spi/spi-cadence.c
+@@ -168,16 +168,16 @@ static void cdns_spi_init_hw(struct cdns_spi *xspi)
+ /**
+  * cdns_spi_chipselect - Select or deselect the chip select line
+  * @spi:	Pointer to the spi_device structure
+- * @enable:	Select (1) or deselect (0) the chip select line
++ * @is_high:	Select(0) or deselect (1) the chip select line
+  */
+-static void cdns_spi_chipselect(struct spi_device *spi, bool enable)
++static void cdns_spi_chipselect(struct spi_device *spi, bool is_high)
+ {
+ 	struct cdns_spi *xspi = spi_master_get_devdata(spi->master);
+ 	u32 ctrl_reg;
+ 
+ 	ctrl_reg = cdns_spi_read(xspi, CDNS_SPI_CR);
+ 
+-	if (!enable) {
++	if (is_high) {
+ 		/* Deselect the slave */
+ 		ctrl_reg |= CDNS_SPI_CR_SSCTRL;
+ 	} else {
+-- 
+2.11.0
 
-> Does this fix the problem?
-
-> If it does I think this need to get into stable too.
-
-Ah, I hadn't registered that that fix was for something already in
-Linus' tree rather than new development otherwise I'd have sent it as a
-fix.
-
---ReaqsoxgOBHFXBhH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3dUZoACgkQJNaLcl1U
-h9Cmwwf9HXe0814A4Tv9PLJBv9iG+wT9Dnv2nJeE/FAwL3lrS9HuGJrU+rmDD3+C
-3Omxaf/pOwaCrisRH1jn7P+/qP5VCBqxo0KfE6h8XH+qMCskGFiwLJsVXi8m5mBd
-SzTMr3qD46uxaIXCFDVIQIAMq6HVk+XF/SWtMRmvYeJe5br6OrGl+fDxd4ltNFuu
-34g5qCJ10yk6aZ5xtFVKYQniQJ7Lk3ZoJT3lEl75a9FQ6bkKPpwRyu4ktZmDLFj9
-VvbXUeu8gxQ3T/MFVmQ1tCeMI9twUq55h/H86FeHDTgiUbfJEJvSql4U2kOkcVFg
-7KANnOyeSSNUnizMqet0tIecGzFuXQ==
-=iom/
------END PGP SIGNATURE-----
-
---ReaqsoxgOBHFXBhH--
