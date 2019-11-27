@@ -2,89 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED14410B09F
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 14:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C564F10B0A6
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 14:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbfK0NwU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Nov 2019 08:52:20 -0500
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:42873 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726603AbfK0NwU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Nov 2019 08:52:20 -0500
-Received: by mail-ua1-f67.google.com with SMTP id 31so6973403uas.9
-        for <linux-spi@vger.kernel.org>; Wed, 27 Nov 2019 05:52:18 -0800 (PST)
+        id S1726603AbfK0NyW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Nov 2019 08:54:22 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:40519 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726320AbfK0NyV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Nov 2019 08:54:21 -0500
+Received: by mail-lf1-f68.google.com with SMTP id y5so4525443lfy.7
+        for <linux-spi@vger.kernel.org>; Wed, 27 Nov 2019 05:54:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LntB4fqzagpM5IcIiBImapoYobXWqqoMQBDgqeQw+Vo=;
-        b=VjcSI9X7YzTDGVYE88ru4wviQfT0x910/5N7cPcA+BBzXt5PHDj5ytmpJGOo3tMw5C
-         dHfz4yyIaPhuEN0kAKjXNJ2djvcQeHPzPAN18TCj93e3WYPDUSw1EKG5j/9BOpDwIMR7
-         hcdMDD6ARN9ZEFATpcNr0mHR0c33PjOVTZHRXDwGHdmpRm7B/RtEQzRyL6AAa7hr7CUy
-         jXxoOOs1wGhUhMuYEQbgKKcWdkKSyIZ7UcTOouaDi33rCYPWlul4Jb55qKgThWxVz7tp
-         W31r5FwT9PX36M18YM3OGsOeADen1I6gW5CHIbsA/oZk7EKD2i55Kdlo607eegad/sMF
-         7YMw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=44702Gw3ZAM2iREdSIkTlwApDDVA5N67h6DOU9Ptf4I=;
+        b=hdOIu4tv6tllw/KWE2yRviLR61rwCfpLpUHi5G9WBuFmm9quzNH+avKQZC7QukVlSd
+         S8Xn9EU5RmJKJTad/mZc3A37j8SMokiwphzSGnB8JmsTgxE5TqbftomZlNUOO1AQhpnm
+         fmtYyWA5ZTxjh0rEymmo3KtvVnU7Rt19yI5/zrXUSAASNS1x0V3b6aPozhO7zrvilji2
+         czH+s90iXRqYlerl5GIt2tLsr1DYsKnd6qFSjyHH3ClCANYXXRrIMZ6MyvDGpKoJ76qL
+         37xS8mnHU9Z+DQdw7ZqJb7SzaeQkHnyCi52rQ9uUlzj1L7i0ifIY2ypUUA2Y6Kn/73xc
+         hMJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LntB4fqzagpM5IcIiBImapoYobXWqqoMQBDgqeQw+Vo=;
-        b=EixWCvcffm9avH91RwmeKPRKGtuGdztCbxCJnxtv16CLa9EKc88fYo1NVAcWq/R8SE
-         9bpNTl4WKWWDx/nwH8F4RPCmr2Erdr7fRpQivQp/LRIyyxy8vrACHb59FppjQhsxalj2
-         QmURvhLEOjBGdxE4By/1FBkf/d9U5uXmpHI45nzSIZ7e8WYx9VktOeyIkvsE5MbwPRV/
-         Q5+CYqC9eHPsz+rNtICHEVSWkUoiW0ox0+k8SVvZtRveiOBmlo4CL6+xn05gAX8UkzR5
-         DBm3BpEsejXD4N3i5FPrImi66R/Y74adL64xKfyL7Kw2pS45vhj6J4Bc7mXB78+oxOAC
-         J8Mg==
-X-Gm-Message-State: APjAAAWxaaRPmHrQABI//hlvr+f5Z5ohfEh1ITVe6R3O66xAzA6gOOk/
-        sJD1j8pG7FtmTr+1YSAECOQ4PFt2QU/IWMp4tD8U+Q==
-X-Google-Smtp-Source: APXvYqxJwbG1hsbUHaj3OB1IIX09a44fffFV/LiEAsz/JqiLdk+YVhgNf7jeJsh7uwehoDDNfjuGEejzSaMw8ClEDqw=
-X-Received: by 2002:ab0:23d5:: with SMTP id c21mr2690910uan.140.1574862738259;
- Wed, 27 Nov 2019 05:52:18 -0800 (PST)
-MIME-Version: 1.0
-References: <e9981d69-2a33-fec9-7d12-15fcb948364d@c-s.fr> <CACRpkdYLEibwyK_BGO3gsJ_aQFWZNJCky-GezHVmHfRSzD2zBg@mail.gmail.com>
- <1efb797c-e3c1-25a4-0e81-78b5bbadb355@c-s.fr> <CACRpkdYUBj+45Jr94kdERKJogVoL96JH6i85o_bVUtjmkTt19g@mail.gmail.com>
- <3c79a8b9-65e4-bfc9-d718-b8530fe1e672@c-s.fr> <b06679da-0332-2322-13f8-07307f611542@c-s.fr>
- <CACRpkdbOzM3X2_BMnf5eSqCt_UsnXo4eXD2fUbTLk6=Uo3gB2g@mail.gmail.com>
- <582b5ccf-8993-6345-94d1-3c2fc94e4d4f@c-s.fr> <CACRpkdawu5DcCA5rnRbOe+meBPtxctL7HuWciqboOEkCHZKA7A@mail.gmail.com>
- <e6a39aba-a41b-d781-966a-647977216b87@c-s.fr> <CACRpkda-wjRm7UYsFTX_xFfNPT29U1PTMyuU4AP=WShiC_vV9g@mail.gmail.com>
- <b2925217-9cbd-2f4e-c92f-9e1c92824193@c-s.fr> <CACRpkdaKg45uHMZ9mz6OGkAUqYX7GzhTrjrAc1feVhn68ZXrqg@mail.gmail.com>
- <748eb503-b692-6d30-bc5e-94539a939b06@c-s.fr> <CACRpkdb15n4DpxAGEw+Av89XZDxi7Amh1XEyJEzWBd4tet7C2Q@mail.gmail.com>
- <8b50ce56-0600-373d-178c-92aa780e5376@c-s.fr>
-In-Reply-To: <8b50ce56-0600-373d-178c-92aa780e5376@c-s.fr>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=44702Gw3ZAM2iREdSIkTlwApDDVA5N67h6DOU9Ptf4I=;
+        b=BWFnm6I6c2ZmhvGk9yqVKhPny1CeHIphJMDE2TB/HOVFUWTY/nEI00GjG2N6Gl3dOA
+         Sw+Pjtj8FJqSMS57SSYh4TkV77TroaqjR0L/88D2fmLC6uWWkyse9DAjZAaiVa/hWIAC
+         t17Vu+yXoLLv57IZCrPfB/AVhHZ06DgAotPH4Z7kJtPmx3lIf+9guinr0fgDcL/svkUC
+         6lMEfpfOKcCk9ia7TPCnmHPkNrjkLJxnpI1kU3y4gU7CiL7m0e7hhhf3qqNk/73XWDOn
+         bX5oEbXGg9L92ChY0a9UbU1r7MVfdMHc65pUidZSp+QFpakK2rxz1bT6VGdYryR1acIN
+         Ib7Q==
+X-Gm-Message-State: APjAAAWDpoSGaK3eypm8ziaMFR7IdRj+aol8eE7jllLtd77X06skg2yU
+        zx0KXoqBL9u+WHY5qyaLv1jTQw==
+X-Google-Smtp-Source: APXvYqzdBzf7ut1/0PTCCMX+tHlGncPt21Pjc/XWXrRIJyp2zmA3XK4MzfHdrJ1WmguGg4CFBTfxtQ==
+X-Received: by 2002:ac2:455c:: with SMTP id j28mr25414287lfm.184.1574862859524;
+        Wed, 27 Nov 2019 05:54:19 -0800 (PST)
+Received: from genomnajs.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id j18sm2343561lfh.6.2019.11.27.05.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Nov 2019 05:54:17 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 27 Nov 2019 14:52:06 +0100
-Message-ID: <CACRpkdZRWojQAgHtBaNWdjKqv8aX3P-KjatgoG+DLCcYeJ7ztg@mail.gmail.com>
-Subject: Re: Boot failure with 5.4-rc5, bisected to 0f0581b24bd0 ("spi: fsl:
- Convert to use CS GPIO descriptors")
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: [PATCH 1/3 v2] spi: fsl: Fix GPIO descriptor support
+Date:   Wed, 27 Nov 2019 14:54:08 +0100
+Message-Id: <20191127135410.156430-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 2:45 PM Christophe Leroy
-<christophe.leroy@c-s.fr> wrote:
-> Le 27/11/2019 =C3=A0 14:00, Linus Walleij a =C3=A9crit :
+This makes the driver actually support looking up GPIO
+descriptor. A coding mistake in the initial descriptor
+support patch was that it was failing to turn on the very
+feature it was implementing. Mea culpa.
 
-> > Try to remove the "spi-cs-high" bool flag from your nodes,
-> > because it seems like the old code was ignoring them.
-> >
-> > Does that solve the problem?
->
-> Yes it does. Many thanks. I let you manage the packaging of fixes.
+Cc: Christophe Leroy <christophe.leroy@c-s.fr>
+Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
+Fixes: 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- New patch fixing this specific problem.
+---
+ drivers/spi/spi-fsl-spi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-OK I will send a final batch of 3 patches fixing this.
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 114801a32371..c87e9c4506c2 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -611,6 +611,7 @@ static struct spi_master * fsl_spi_probe(struct device *dev,
+ 	master->setup = fsl_spi_setup;
+ 	master->cleanup = fsl_spi_cleanup;
+ 	master->transfer_one_message = fsl_spi_do_one_msg;
++	master->use_gpio_descriptors = true;
+ 
+ 	mpc8xxx_spi = spi_master_get_devdata(master);
+ 	mpc8xxx_spi->max_bits_per_word = 32;
+-- 
+2.23.0
 
-Do you have these old device trees deployed so that we
-also need to make sure that old device trees that have this
-ambigous syntax will force precendence for the flag on the
-GPIO line if both are specified for the "fsl,spi" instances?
-
-Yours,
-Linus Walleij
