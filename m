@@ -2,72 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAF710AF3A
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 13:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0D210AF3C
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 13:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbfK0MFA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Nov 2019 07:05:00 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:60849 "EHLO pegase1.c-s.fr"
+        id S1726526AbfK0MFG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Nov 2019 07:05:06 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:4293 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726383AbfK0MFA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 27 Nov 2019 07:05:00 -0500
+        id S1726383AbfK0MFG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 27 Nov 2019 07:05:06 -0500
 Received: from localhost (mailhub1-ext [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 47NKFy1zVqz9tyRL;
-        Wed, 27 Nov 2019 13:04:54 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 47NKG71c7jz9tyv7;
+        Wed, 27 Nov 2019 13:05:03 +0100 (CET)
 Authentication-Results: localhost; dkim=pass
         reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=KYmvJSUg; dkim-adsp=pass;
+        header.d=c-s.fr header.i=@c-s.fr header.b=kMFsqVvn; dkim-adsp=pass;
         dkim-atps=neutral
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 4FMUXxvGT2-E; Wed, 27 Nov 2019 13:04:54 +0100 (CET)
+        with ESMTP id xJiDQkskHK5t; Wed, 27 Nov 2019 13:05:03 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 47NKFy0vZ2z9tyQf;
-        Wed, 27 Nov 2019 13:04:54 +0100 (CET)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47NKG665dhz9tyfW;
+        Wed, 27 Nov 2019 13:05:02 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1574856294; bh=YrapcC/HVg6e8aDsKuBNC2m/96JAN3UPdGnslNUtr+Q=;
+        t=1574856302; bh=cNEO3AfbCBZ1k3I1cXMeAMr7IKJaF85SNYuNfFqaRdw=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KYmvJSUg7KxC1oZgZIuZq8bsZpMJ3r2Z9Md0D12CRHAstrNmLnBCdwnrnfqd2Rr/D
-         Lrjtfj9gFbe/UA/p3AtNdT076AarDAS9/eDxc5PpgyYfNIpqhdYsm1NTvdTScp/T8I
-         s87T2CelqX9kYrl81aad1+GWucr6UTv53V7LSkAw=
+        b=kMFsqVvnpixSht9Cmvn4ch/stxRgdBREwUAEQkUDAq4XFwcOBI6gG2YVpR+LiEqyn
+         06iMBduHn9EYidEhtrm7xgkZdnwU+Z77IQzOKbhjKB0MV3XGT6pbL/O2rzDBfyPEgQ
+         T+8lppSh8O3v1EokIiFCtxEcdtqMR8WO2VqYvGRU=
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 53CA78B856;
-        Wed, 27 Nov 2019 13:04:55 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0D2218B857;
+        Wed, 27 Nov 2019 13:05:04 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ZkzIjcslfA-7; Wed, 27 Nov 2019 13:04:55 +0100 (CET)
+        with ESMTP id Lxt68zDd1QW8; Wed, 27 Nov 2019 13:05:03 +0100 (CET)
 Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id AE0428B855;
-        Wed, 27 Nov 2019 13:04:54 +0100 (CET)
-Subject: Re: Boot failure with 5.4-rc5, bisected to 0f0581b24bd0 ("spi: fsl:
- Convert to use CS GPIO descriptors")
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 89FD08B856;
+        Wed, 27 Nov 2019 13:05:03 +0100 (CET)
+Subject: Re: [PATCH] gpio: Handle counting of Freescale chipselects
 To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-References: <e9981d69-2a33-fec9-7d12-15fcb948364d@c-s.fr>
- <CACRpkdYLEibwyK_BGO3gsJ_aQFWZNJCky-GezHVmHfRSzD2zBg@mail.gmail.com>
- <1efb797c-e3c1-25a4-0e81-78b5bbadb355@c-s.fr>
- <CACRpkdYUBj+45Jr94kdERKJogVoL96JH6i85o_bVUtjmkTt19g@mail.gmail.com>
- <3c79a8b9-65e4-bfc9-d718-b8530fe1e672@c-s.fr>
- <b06679da-0332-2322-13f8-07307f611542@c-s.fr>
- <CACRpkdbOzM3X2_BMnf5eSqCt_UsnXo4eXD2fUbTLk6=Uo3gB2g@mail.gmail.com>
- <582b5ccf-8993-6345-94d1-3c2fc94e4d4f@c-s.fr>
- <CACRpkdawu5DcCA5rnRbOe+meBPtxctL7HuWciqboOEkCHZKA7A@mail.gmail.com>
- <e6a39aba-a41b-d781-966a-647977216b87@c-s.fr>
- <CACRpkda-wjRm7UYsFTX_xFfNPT29U1PTMyuU4AP=WShiC_vV9g@mail.gmail.com>
- <b2925217-9cbd-2f4e-c92f-9e1c92824193@c-s.fr>
- <CACRpkdaKg45uHMZ9mz6OGkAUqYX7GzhTrjrAc1feVhn68ZXrqg@mail.gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+References: <20191127094031.140736-1-linus.walleij@linaro.org>
+ <bcfa8e29-7adf-8a14-43e8-8e1d73df33bc@c-s.fr>
+ <4eed765b-57af-87a0-f713-de1e6bee3d4b@c-s.fr>
+ <9c202a84-16c9-1293-a6a8-674de674d31d@c-s.fr>
+ <CACRpkdYVwV8F0-pp2S4CcSQnDZ00KBvZx2zuTmsFMPUP4cT+yA@mail.gmail.com>
 From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <748eb503-b692-6d30-bc5e-94539a939b06@c-s.fr>
-Date:   Wed, 27 Nov 2019 13:04:54 +0100
+Message-ID: <d7bde5a5-fdb6-5b31-7a7a-d4e515962aad@c-s.fr>
+Date:   Wed, 27 Nov 2019 13:05:03 +0100
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.1
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdaKg45uHMZ9mz6OGkAUqYX7GzhTrjrAc1feVhn68ZXrqg@mail.gmail.com>
+In-Reply-To: <CACRpkdYVwV8F0-pp2S4CcSQnDZ00KBvZx2zuTmsFMPUP4cT+yA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: fr
 Content-Transfer-Encoding: 8bit
@@ -78,96 +67,93 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-Le 27/11/2019 à 11:55, Linus Walleij a écrit :
-> On Wed, Nov 27, 2019 at 11:39 AM Christophe Leroy
+Le 27/11/2019 à 11:59, Linus Walleij a écrit :
+> On Wed, Nov 27, 2019 at 11:25 AM Christophe Leroy
 > <christophe.leroy@c-s.fr> wrote:
->> Le 27/11/2019 à 11:02, Linus Walleij a écrit :
->>> On Wed, Nov 27, 2019 at 10:34 AM Christophe Leroy
->>> <christophe.leroy@c-s.fr> wrote:
+>> Le 27/11/2019 à 11:15, Christophe Leroy a écrit :
+>>> Le 27/11/2019 à 11:07, Christophe Leroy a écrit :
+>>>> Le 27/11/2019 à 10:40, Linus Walleij a écrit :
+>>>>> We have a special quirk to handle the Freescale
+>>>>> nonstandard SPI chipselect GPIOs in the gpiolib-of.c
+>>>>> file, but it currently only handles the case where
+>>>>> the GPIOs are actually requested (gpiod_*get()).
+>>>>>
+>>>>> We also need to handle that the SPI core attempts
+>>>>> to count the GPIOs before use, and that needs a
+>>>>> similar quirk in the OF part of the library.
+>>>>>
+>>>>> Cc: Christophe Leroy <christophe.leroy@c-s.fr>
+>>>>> Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
+>>>>> Fixes: 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
+>>>>> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+>>>>
+>>>> Still getting:
+>>>>
+>>>> [    3.374867] fsl_spi: probe of ff000a80.spi failed with error -22
 >>>
->>>> In the meantime, I have tried changing "gpios" by "cs-gpios" in the
->>>> device tree, and I get the following warning:
->>> (...)
->>>> [    3.156654] WARNING: CPU: 0 PID: 1 at drivers/spi/spi-fsl-spi.c:716
->>>> fsl_spi_cs_control+0x64/0x7c
->>>
->>> That should be this one:
->>>
->>> if (WARN_ON_ONCE(!pinfo->immr_spi_cs))
->>>      return;
->>>
->>> That happens when spi->cs_gpiod is NULL so the
->>> chipselect isn't found and assigned, and the code
->>> goes on to check the native CS and find that this isn't
->>> available either and issues the warning.
+>>> Indeed,  of_spi_get_gpio_numbers() uses of_gpio_named_count(np,
+>>> "cs-gpios") which still returns 0;
 >>
->> That's in spi_add_device(), it is spi->cs_gpio and not spi->cs_gpiod
->> which is assigned, so spi->cs_gpiod remains NULL.
+>> Replacing by of_gpio_named_count(np, "gpios"); , I get further down to
+>> the same spi_fsl_setup() warning as when renaming the property in the DTS.
 > 
-> That's weird, because when ->use_gpio_descriptors is set
-> (as for this driver) the core only attempts to look up
-> spi->cs_gpiods and not spi->cs_gpios, and consequently
-> can only assign spi->cd_gpiod and not spi->cs_gpio:
+> Ah, I got bitten by recursion, sorry.
+> 
+> OK I changed to to "gpios" in my patch too, it's the right way.
+> 
+> Now we need to find the final culprit that makes it not even work when
+> renaming to "cs-gpios"...
+> 
 
-That's it. ->use_gpio_descriptors isn't set for the FSL driver:
+Now that I have added master->use_gpio_descriptors = true; to the fsl 
+driver, this patch crashes:
 
-[root@po16098vm linux-powerpc]# git grep use_gpio_descriptors drivers/spi/
-drivers/spi/spi-ath79.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi-atmel.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi-bcm2835.c:	 * as the flag use_gpio_descriptors enforces 
-SPI_CS_HIGH.
-drivers/spi/spi-bcm2835.c:	ctlr->use_gpio_descriptors = true;
-drivers/spi/spi-cadence.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi-clps711x.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi-davinci.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi-dw.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi-ep93xx.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi-gpio.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi-sh-msiof.c:	ctlr->use_gpio_descriptors = true;
-drivers/spi/spi-tegra114.c:	master->use_gpio_descriptors = true;
-drivers/spi/spi.c:	if (ctlr->use_gpio_descriptors)
-drivers/spi/spi.c:		if (ctlr->use_gpio_descriptors) {
-
-I have now added it, together with the DTS cs-gpios name change (without 
-your counting patch with crashes), and I get something which is almost 
-working: I get temperature back into sensors, but temperature is 0°C !!!
-
-root@vgoip:~# sensors
-lm74-spi-0-5
-Adapter: SPI adapter
-Temperature processeur:   +0.0 C
-
-lm74-spi-0-1
-Adapter: SPI adapter
-Temperature MIAE:   +0.0 C
-
-
-Looking into dmesg, I see:
-
-[    3.153521] lm74@1 GPIO handle specifies active low - ignored
-[    3.178093] lm74@5 GPIO handle specifies active low - ignored
-
-Any link with the problem ?
+[    3.156848] BUG: Kernel NULL pointer dereference on read at 0x00000000
+[    3.163062] Faulting instruction address: 0xc058aadc
+[    3.167982] Oops: Kernel access of bad area, sig: 11 [#1]
+[    3.173322] BE PAGE_SIZE=16K PREEMPT CMPC885
+[    3.177559] CPU: 0 PID: 1 Comm: swapper Not tainted 
+5.4.0-s3k-dev-00899-g749f15aba2c9-dirty #2515
+[    3.186306] NIP:  c058aadc LR: c028973c CTR: 00000000
+[    3.191308] REGS: c60e1b70 TRAP: 0300   Not tainted 
+(5.4.0-s3k-dev-00899-g749f15aba2c9-dirty)
+[    3.199801] MSR:  00009032 <EE,ME,IR,DR,RI>  CR: 24000224  XER: 20000000
+[    3.206433] DAR: 00000000 DSISR: c0000000
+[    3.206433] GPR00: c028963c c60e1c28 c60d4000 ffffffff c06b512b 
+00000000 00000020 c0facf33
+[    3.206433] GPR08: c0609438 00000000 00000000 000affff 24000224 
+00000000 c0003890 00000000
+[    3.206433] GPR16: 00000000 00000000 00000000 00000000 00000000 
+00000000 c0800000 0000009e
+[    3.206433] GPR24: c0856778 c06b512c c61f2210 c624fc00 c0857380 
+00000000 00000000 c624fc00
+[    3.243756] NIP [c058aadc] strcmp+0x10/0x40
+[    3.247867] LR [c028973c] of_gpio_spi_cs_get_count+0x28/0x98
+[    3.253416] Call Trace:
+[    3.255881] [c60e1c28] [c034b920] 
+__of_device_is_compatible+0xe4/0x14c (unreliable)
+[    3.263437] [c60e1c38] [c028963c] of_gpio_get_count+0x24/0xfc
+[    3.269116] [c60e1c88] [c028963c] of_gpio_get_count+0x24/0xfc
+[    3.274831] [c60e1cd8] [c0286c1c] gpiod_count+0x34/0x100
+[    3.280089] [c60e1cf8] [c030c5c0] spi_register_controller+0x14c/0xb50
+[    3.286432] [c60e1d48] [c030d004] devm_spi_register_controller+0x40/0x98
+[    3.293047] [c60e1d68] [c030ee60] of_fsl_spi_probe+0x2e8/0x3a8
+[    3.298813] [c60e1db8] [c02c4f3c] platform_drv_probe+0x44/0xa4
+[    3.304598] [c60e1dc8] [c02c30e0] really_probe+0x1ac/0x418
+[    3.310012] [c60e1df8] [c02c3b60] device_driver_attach+0x88/0x90
+[    3.315948] [c60e1e18] [c02c3c08] __driver_attach+0xa0/0x154
+[    3.321540] [c60e1e38] [c02c1140] bus_for_each_dev+0x64/0xb4
+[    3.327134] [c60e1e68] [c02c1b1c] bus_add_driver+0xe0/0x218
+[    3.332646] [c60e1e88] [c02c43c0] driver_register+0x84/0x148
+[    3.338239] [c60e1e98] [c06d8d30] do_one_initcall+0x8c/0x1cc
+[    3.343824] [c60e1ef8] [c06d8fac] kernel_init_freeable+0x13c/0x1ec
+[    3.349932] [c60e1f28] [c00038a4] kernel_init+0x14/0x110
+[    3.355187] [c60e1f38] [c000e1cc] ret_from_kernel_thread+0x14/0x1c
+[    3.361249] Instruction dump:
+[    3.364183] 39200000 7d3fe9ae 7f43d378 80010024 bb410008 7c0803a6 
+38210020 4e800020
+[    3.371841] 3863ffff 3884ffff 48000008 41960024 <8d230001> 8d440001 
+2e890000 7f895040
+[    3.379710] ---[ end trace 795d948bc094d09f ]---
 
 Christophe
-
-> 
-> if (ctlr->use_gpio_descriptors) {
->      status = spi_get_gpio_descs(ctlr);
-> (...)
-> } else {
-> (....)
->      status = of_spi_get_gpio_numbers(ctlr);
-> }
-> (...)
-> /* Descriptors take precedence */
-> if (ctlr->cs_gpiods)
->      spi->cs_gpiod = ctlr->cs_gpiods[spi->chip_select];
-> else if (ctlr->cs_gpios)
->      spi->cs_gpio = ctlr->cs_gpios[spi->chip_select];
-> 
-> So I'm a bit confused...
-> 
-> Yours,
-> Linus Walleij
-> 
