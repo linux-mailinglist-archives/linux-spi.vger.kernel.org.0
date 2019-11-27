@@ -2,158 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E3610B14F
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 15:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A366E10B288
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 16:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbfK0O3r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Nov 2019 09:29:47 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:10830 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726514AbfK0O3r (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 27 Nov 2019 09:29:47 -0500
-Received: from localhost (mailhub1-ext [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 47NNT410cYz9v0wR;
-        Wed, 27 Nov 2019 15:29:44 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=rYJczCvJ; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 98grrAO57arH; Wed, 27 Nov 2019 15:29:44 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 47NNT373Z1z9v0wP;
-        Wed, 27 Nov 2019 15:29:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1574864984; bh=muXKaZ6jgUY6RAFPnrDsPdJo2Ku8sbUfRybI9HofgPw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=rYJczCvJ98rg+SmmmPAe8DNmT8e4aJZEddPWfQarlac6rPu2LbIObEHmsjBNkGrsI
-         kEXFHyZSnX823EeaIgm1CMG/odu0IMr6ROPhCHPwtPn8sHRuIw1CUj9GQKfAcOplH0
-         2s04Kdnyf047v6qA0J/Up1zpqYY3uEACkxnCCP1Q=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 541218B864;
-        Wed, 27 Nov 2019 15:29:45 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id KlPyQKuJgAWd; Wed, 27 Nov 2019 15:29:45 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 92F258B862;
-        Wed, 27 Nov 2019 15:29:44 +0100 (CET)
-Subject: Re: Boot failure with 5.4-rc5, bisected to 0f0581b24bd0 ("spi: fsl:
- Convert to use CS GPIO descriptors")
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-References: <e9981d69-2a33-fec9-7d12-15fcb948364d@c-s.fr>
- <CACRpkdYUBj+45Jr94kdERKJogVoL96JH6i85o_bVUtjmkTt19g@mail.gmail.com>
- <3c79a8b9-65e4-bfc9-d718-b8530fe1e672@c-s.fr>
- <b06679da-0332-2322-13f8-07307f611542@c-s.fr>
- <CACRpkdbOzM3X2_BMnf5eSqCt_UsnXo4eXD2fUbTLk6=Uo3gB2g@mail.gmail.com>
- <582b5ccf-8993-6345-94d1-3c2fc94e4d4f@c-s.fr>
- <CACRpkdawu5DcCA5rnRbOe+meBPtxctL7HuWciqboOEkCHZKA7A@mail.gmail.com>
- <e6a39aba-a41b-d781-966a-647977216b87@c-s.fr>
- <CACRpkda-wjRm7UYsFTX_xFfNPT29U1PTMyuU4AP=WShiC_vV9g@mail.gmail.com>
- <b2925217-9cbd-2f4e-c92f-9e1c92824193@c-s.fr>
- <CACRpkdaKg45uHMZ9mz6OGkAUqYX7GzhTrjrAc1feVhn68ZXrqg@mail.gmail.com>
- <748eb503-b692-6d30-bc5e-94539a939b06@c-s.fr>
- <CACRpkdb15n4DpxAGEw+Av89XZDxi7Amh1XEyJEzWBd4tet7C2Q@mail.gmail.com>
- <8b50ce56-0600-373d-178c-92aa780e5376@c-s.fr>
- <CACRpkdZRWojQAgHtBaNWdjKqv8aX3P-KjatgoG+DLCcYeJ7ztg@mail.gmail.com>
- <99f48a7e-e4f4-2a77-657c-452d7a656ec5@c-s.fr>
- <CACRpkdat-qtxCn=e1sqPMFF7urue0OoJJcixUwL1=nAT-F+H3Q@mail.gmail.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <c3090d62-d049-5c9b-d48e-380b71755bfb@c-s.fr>
-Date:   Wed, 27 Nov 2019 15:29:44 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1727022AbfK0Pjn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Nov 2019 10:39:43 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:6216 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726729AbfK0Pjm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Nov 2019 10:39:42 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xARFbHET015595;
+        Wed, 27 Nov 2019 09:39:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type;
+ s=PODMain02222019; bh=qPhzR/tuKDv5EnvNIvPBDtlaic74fIMn+6iQRLHqAYY=;
+ b=VY7B9ChhE82YvCEAvKqNftJ6UFvFu34THkDGLnEc03lK01/x8hZxR+zX2l9lmvT4Yc3j
+ UoO0WXrAOfbX4Qs/09FPkv4zrIPoTLkwhKeaKADjHFWJ14zRmrOwbytvSSphKajFE9cb
+ eVZi4xRRtVKSsDj68GlxuEGI8xGtHeApEIIVxGGxmCQ3wgWlEo/uDkeBUD4Olhe3rr6R
+ ZkVCMTFYax7IWz3Loqzs2HEii3FSR5ZJkh+ZKy0iNwCoW5IVgfjjsmE4CFRIo9wTa+u3
+ nNdbLX66guqT79RJHOvblSu0ftnMBJZJm6dLqR47jvn7lR+QaWDHLINIzmnneLIs1hbr qA== 
+Authentication-Results: ppops.net;
+        spf=fail smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from ediex01.ad.cirrus.com ([5.172.152.52])
+        by mx0b-001ae601.pphosted.com with ESMTP id 2whda3s7nv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 27 Nov 2019 09:39:38 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Wed, 27 Nov
+ 2019 15:40:30 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Wed, 27 Nov 2019 15:40:30 +0000
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C47F52C8;
+        Wed, 27 Nov 2019 15:39:36 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <gregory.clement@bootlin.com>, <linus.walleij@linaro.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] spi: dw: Correct handling of native chipselect
+Date:   Wed, 27 Nov 2019 15:39:36 +0000
+Message-ID: <20191127153936.29719-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdat-qtxCn=e1sqPMFF7urue0OoJJcixUwL1=nAT-F+H3Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-SPF-Result: fail
+X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
+ -all
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
+ impostorscore=0 spamscore=0 malwarescore=0 bulkscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911270136
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This patch reverts commit 6e0a32d6f376 ("spi: dw: Fix default polarity
+of native chipselect").
 
+The SPI framework always called the set_cs callback with the logic
+level it desired on the chip select line, which is what the drivers
+original handling supported. commit f3186dd87669 ("spi: Optionally
+use GPIO descriptors for CS GPIOs") changed these symantics, but only
+in the case of drivers that also support GPIO chip selects, to true
+meaning apply slave select rather than logic high. This left things in
+an odd state where a driver that only supports hardware chip selects,
+the core would handle polarity but if the driver supported GPIOs as
+well the driver should handle polarity.  At this point the reverted
+change was applied to change the logic in the driver to match new
+system.
 
-Le 27/11/2019 à 14:56, Linus Walleij a écrit :
-> On Wed, Nov 27, 2019 at 2:54 PM Christophe Leroy
-> <christophe.leroy@c-s.fr> wrote:
->> Le 27/11/2019 à 14:52, Linus Walleij a écrit :
->>> On Wed, Nov 27, 2019 at 2:45 PM Christophe Leroy
->>> <christophe.leroy@c-s.fr> wrote:
->>>> Le 27/11/2019 à 14:00, Linus Walleij a écrit :
->>>
->>>>> Try to remove the "spi-cs-high" bool flag from your nodes,
->>>>> because it seems like the old code was ignoring them.
->>>>>
->>>>> Does that solve the problem?
->>>>
->>>> Yes it does. Many thanks. I let you manage the packaging of fixes.
->>>
->>> OK I will send a final batch of 3 patches fixing this.
->>>
->>> Do you have these old device trees deployed so that we
->>> also need to make sure that old device trees that have this
->>> ambigous syntax will force precendence for the flag on the
->>> GPIO line if both are specified for the "fsl,spi" instances?
->>>
->>
->> No, we deliver device trees together with Linux kernel (embedded in an
->> Uboot ITS/ITB image) so no worry on old device trees.
-> 
-> OK thanks!
-> 
-> I sent three patches, can you apply them on a clean tree
-> and confirm it solves the problem (fingers crossed...)
-> 
-> Thanks a lot for helping me fix this!
+This was then broken by commit 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH
+setting when using native and GPIO CS") which reverted the core back
+to consistently calling set_cs with a logic level.
 
-The series is OK if using 'cs-gpios'.
+This fix reverts the driver code back to its original state to match
+the current core code. This is probably a better fix as a) the set_cs
+callback is always called with consistent symantics and b) the
+inversion for SPI_CS_HIGH can be handled in the core and doesn't need
+to be coded in each driver supporting it.
 
-With 'gpios' in the DTS, I get:
+Fixes: 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH setting when using native and GPIO CS")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
 
-[    3.154747] fsl_spi ff000a80.spi: cs1 >= max 1
-[    3.159207] spi_master spi0: spi_device register error 
-/soc@ff000000/cpm@9c0/spi@a80/lm74@1
-[    3.167344] spi_master spi0: Failed to create SPI device for 
-/soc@ff000000/cpm@9c0/spi@a80/lm74@1
-[    3.176303] fsl_spi ff000a80.spi: cs2 >= max 1
-[    3.180626] spi_master spi0: spi_device register error 
-/soc@ff000000/cpm@9c0/spi@a80/sicofi_gw@2
-[    3.189329] spi_master spi0: Failed to create SPI device for 
-/soc@ff000000/cpm@9c0/spi@a80/sicofi_gw@2
-[    3.198574] fsl_spi ff000a80.spi: cs3 >= max 1
-[    3.202788] spi_master spi0: spi_device register error 
-/soc@ff000000/cpm@9c0/spi@a80/eeprom@3
-[    3.211364] spi_master spi0: Failed to create SPI device for 
-/soc@ff000000/cpm@9c0/spi@a80/eeprom@3
-[    3.220361] fsl_spi ff000a80.spi: cs4 >= max 1
-[    3.224561] spi_master spi0: spi_device register error 
-/soc@ff000000/cpm@9c0/spi@a80/sicofi@4
-[    3.233137] spi_master spi0: Failed to create SPI device for 
-/soc@ff000000/cpm@9c0/spi@a80/sicofi@4
-[    3.242120] fsl_spi ff000a80.spi: cs5 >= max 1
-[    3.246336] spi_master spi0: spi_device register error 
-/soc@ff000000/cpm@9c0/spi@a80/lm74@5
-[    3.254740] spi_master spi0: Failed to create SPI device for 
-/soc@ff000000/cpm@9c0/spi@a80/lm74@5
-[    3.263552] fsl_spi ff000a80.spi: cs6 >= max 1
-[    3.267764] spi_master spi0: spi_device register error 
-/soc@ff000000/cpm@9c0/spi@a80/eeprom@6
-[    3.276342] spi_master spi0: Failed to create SPI device for 
-/soc@ff000000/cpm@9c0/spi@a80/eeprom@6
-[    3.285328] fsl_spi ff000a80.spi: cs7 >= max 1
-[    3.289667] spi_master spi0: spi_device register error 
-/soc@ff000000/cpm@9c0/spi@a80/csfavgw@7
-[    3.298070] spi_master spi0: Failed to create SPI device for 
-/soc@ff000000/cpm@9c0/spi@a80/csfavgw@7
+This is only build tested on my end, and I really think it would
+benefit for someone actually testing it incase I have missed
+something.
 
+Also I have updated the commit message a little over the Cadence
+fix, to include some of the additional information from chatting
+to Linus. So let me know if you would rather I did a respin of the
+Cadence fix with an updated commit message as well.
 
-Christophe
+Thanks,
+Charles
+
+ drivers/spi/spi-dw.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+index a92aa5cd4fbe8..76d6b94a7597f 100644
+--- a/drivers/spi/spi-dw.c
++++ b/drivers/spi/spi-dw.c
+@@ -129,10 +129,11 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
+ 	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
+ 	struct chip_data *chip = spi_get_ctldata(spi);
+ 
++	/* Chip select logic is inverted from spi_set_cs() */
+ 	if (chip && chip->cs_control)
+-		chip->cs_control(enable);
++		chip->cs_control(!enable);
+ 
+-	if (enable)
++	if (!enable)
+ 		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
+ 	else if (dws->cs_override)
+ 		dw_writel(dws, DW_SPI_SER, 0);
+-- 
+2.11.0
+
