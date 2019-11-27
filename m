@@ -2,45 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5BE10AC4F
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 09:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1D010AC64
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 10:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfK0I5r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Nov 2019 03:57:47 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:31627 "EHLO pegase1.c-s.fr"
+        id S1726191AbfK0JHk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Nov 2019 04:07:40 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:19822 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726112AbfK0I5r (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 27 Nov 2019 03:57:47 -0500
+        id S1726149AbfK0JHk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 27 Nov 2019 04:07:40 -0500
 Received: from localhost (mailhub1-ext [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 47NF601J3Vz9tydr;
-        Wed, 27 Nov 2019 09:57:44 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 47NFKP4697z9tydt;
+        Wed, 27 Nov 2019 10:07:37 +0100 (CET)
 Authentication-Results: localhost; dkim=pass
         reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=j0MckliF; dkim-adsp=pass;
+        header.d=c-s.fr header.i=@c-s.fr header.b=U/x/1ocr; dkim-adsp=pass;
         dkim-atps=neutral
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 9m4vZ68HVwkr; Wed, 27 Nov 2019 09:57:44 +0100 (CET)
+        with ESMTP id Nz-sjEBQ0h5w; Wed, 27 Nov 2019 10:07:37 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 47NF5z6jYSz9tydq;
-        Wed, 27 Nov 2019 09:57:43 +0100 (CET)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47NFKP338Nz9tydr;
+        Wed, 27 Nov 2019 10:07:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1574845063; bh=gCwUvDzDURO74LpAmz0JfCZQVgCBaxWbk0sBrkY2YIA=;
+        t=1574845657; bh=rsONdo+K8BfuC4IMj+G4+FoVbNW+lryTfssc6iwUHnE=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=j0MckliFiO0oNqaWcoWNduzvyVeSdqhJwOQ+h9Z68bNCktl8Kmy1yTWKRBo7fFYo4
-         nE/ohXK5512zsbJbGvKgCdFIuG2teUovbhuub6MFpi2X6FBdvnlz9BYiV1ZuB+NcEu
-         w0knGLO08hPpb9I92b/PS/WuuUaSUqYgx6QgG0Ko=
+        b=U/x/1ocrBg9rQRyfU7slf0TKlNC5/YYnvWV3Q9GZTD/O+SiJXuba8FftrdaeUtBcB
+         /W8qqf0/iOLG7JIze7r0gNZgZQyLOIfZE3m9kNCvpwNYpbrBQSoBdi8VujJ55W3vUb
+         cP6bVwmeNQ2JGLbPLB+iP5q/J6+MJWlwO+JXb5yY=
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E98518B770;
-        Wed, 27 Nov 2019 09:57:44 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 701D58B844;
+        Wed, 27 Nov 2019 10:07:38 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id nevtZ_8nwAKs; Wed, 27 Nov 2019 09:57:44 +0100 (CET)
+        with ESMTP id HGo6Um4gICu9; Wed, 27 Nov 2019 10:07:38 +0100 (CET)
 Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7B4DE8B845;
-        Wed, 27 Nov 2019 09:57:44 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1BE108B770;
+        Wed, 27 Nov 2019 10:07:38 +0100 (CET)
 Subject: Re: Boot failure with 5.4-rc5, bisected to 0f0581b24bd0 ("spi: fsl:
  Convert to use CS GPIO descriptors")
 To:     Linus Walleij <linus.walleij@linaro.org>
@@ -56,8 +56,8 @@ References: <e9981d69-2a33-fec9-7d12-15fcb948364d@c-s.fr>
  <b06679da-0332-2322-13f8-07307f611542@c-s.fr>
  <CACRpkdbOzM3X2_BMnf5eSqCt_UsnXo4eXD2fUbTLk6=Uo3gB2g@mail.gmail.com>
 From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <2a65f209-0e69-aaf5-d664-97d7c0c2678e@c-s.fr>
-Date:   Wed, 27 Nov 2019 09:57:44 +0100
+Message-ID: <582b5ccf-8993-6345-94d1-3c2fc94e4d4f@c-s.fr>
+Date:   Wed, 27 Nov 2019 10:07:37 +0100
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.1
 MIME-Version: 1.0
@@ -93,115 +93,32 @@ Le 27/11/2019 à 09:26, Linus Walleij a écrit :
 >         }
 > (...)
 >        master->num_chipselect = pdata->max_chipselect;
+
+I confirm it can't be that .... here I get ngpios = 9
+
 > 
 > But the new code in the core has this:
 > 
 >      nb = gpiod_count(dev, "cs");
+
+However the above is likely the issue. The property in the DTS is 
+'gpios' and not 'cs-gpios'. According to commit e3023bf80639 ("gpio: of: 
+Handle the Freescale SPI CS"), it shouldn't be needed to rename it, and 
+that's also what I understand from commit log of 0f0581b24bd0 ("spi: 
+fsl: Convert to use CS GPIO descriptors")
+
 >      ctlr->num_chipselect = max_t(int, nb, ctlr->num_chipselect);
 > 
 > So it relied on inspecting the device tree and set  this to 1
 > if it didn't find anything.
+
+But it should find something.
+
+Christophe
+
 > 
 > I will send a patch to test!
-> 
 
-I don't think that's the problem. In my device tree I have several gpios 
-defined for the node:
-
-spi: spi@a80 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	cell-index = <0>;
-	compatible = "fsl,spi", "fsl,cpm1-spi";
-	reg = <0xa80 0x30 0x3d80 0x30>;
-	interrupts = <5>;
-	interrupt-parent = <&CPM_PIC>;
-	mode = "cpu";
-	gpios = <&CPM1_PIO_C 4 1	/* SICOFI 1 */
-		 &CPM1_PIO_B 23 1	/* TEMP MCR */
-		 &CPM1_PIO_C 8 1	/* SICOFI 2 */
-		 &CPM1_PIO_C 12 1	/* EEPROM MIAE */
-		 &CPM1_PIO_D 6 1	/* SICOFI 3 */
-		 &CPM1_PIO_B 14 1	/* TEMP MPC885 */
-		 &CPM1_PIO_B 21 1	/* EEPROM CMPC885 */
-		 &FAV_CS_SPI 0 1	/* FAV SPI */
-		 &FAV_CS_SPI 2 1>;	/* FAV POSTE FPGA */
-
-	};
-
-	sicofi@0 {
-		compatible = "infineon,sicofi";
-		spi-max-frequency = <1000000>;
-		reg = <0>;
-		spi-cs-high;
-		spi-cpha;
-	};
-
-	lm74@1 {
-		compatible = "ns,lm74";
-		spi-max-frequency = <1000000>;
-		reg = <1>;
-		spi-cs-high;
-	};
-
-	sicofi@2 {
-		compatible = "infineon,sicofi";
-		spi-max-frequency = <1000000>;
-		reg = <2>;
-		spi-cs-high;
-		spi-cpha;
-	};
-
-	eeprom@3 {
-		compatible = "atmel,at25";
-		spi-max-frequency = <1000000>;
-		reg = <3>;
-		spi-cs-high;
-		at25,byte-len = <1024>;
-		at25,addr-mode = <2>;
-		at25,page-size = <32>;
-	};
-
-	sicofi@4 {
-		compatible = "infineon,sicofi";
-		spi-max-frequency = <1000000>;
-		reg = <4>;
-		spi-cs-high;
-		spi-cpha;
-	};
-
-	lm74@5 {
-		compatible = "ns,lm74";
-		spi-max-frequency = <1000000>;
-		reg = <5>;
-		spi-cs-high;
-	};
-
-	eeprom@6 {
-		compatible = "atmel,at25";
-		spi-max-frequency = <1000000>;
-		reg = <6>;
-		spi-cs-high;
-		at25,byte-len = <1024>;
-		at25,addr-mode = <2>;
-		at25,page-size = <32>;
-	};
-
-	iio: csfav@7 {
-		compatible = "iio,ad7923";
-		spi-max-frequency = <1000000>;
-		reg = <7>;
-		spi-cs-high;
-		spi-cpol;
-		#io-channel-cells = <1>;
-	};
-
-	csfavfpga@8 {
-		compatible = "cs,fpga-poste";
-		spi-max-frequency = <1000000>;
-		reg = <8>;
-		spi-cs-high;
-	};
-};
+Is it worth testing your new patch ?
 
 Christophe
