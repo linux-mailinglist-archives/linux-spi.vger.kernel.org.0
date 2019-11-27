@@ -2,110 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B21610ADF4
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 11:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C5510ADFE
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 11:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbfK0Kk4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Nov 2019 05:40:56 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:45798 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727141AbfK0Kjp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 27 Nov 2019 05:39:45 -0500
-Received: from localhost (mailhub1-ext [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 47NHMf0FdNz9tytq;
-        Wed, 27 Nov 2019 11:39:42 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=kWIzEDNT; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id jwb7r-R0sh0X; Wed, 27 Nov 2019 11:39:41 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 47NHMd6J22z9tytm;
-        Wed, 27 Nov 2019 11:39:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1574851181; bh=YAoJUkpNn9+eoDMhzZkqkbOPlQd5fIZwb21M8VPkm7I=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kWIzEDNTFSkjgnsk54jyYFFOgrsYvv+iXZmsqpRfXC3mdfTIhVux8bxFN4dNsZ0w7
-         rxI3Iqz/WDsbIX0MRMy9IzIHrwFZfsGK7fzoRzMD1KF1CWSJ88uom94BF2M3QmnDaC
-         riWbAHoEy0zqCKc0gKX8909G5oG3aPcd4Ulf2ucM=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C6DAB8B847;
-        Wed, 27 Nov 2019 11:39:42 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id Z-yqxHs69KXl; Wed, 27 Nov 2019 11:39:42 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 488B18B84E;
-        Wed, 27 Nov 2019 11:39:42 +0100 (CET)
-Subject: Re: Boot failure with 5.4-rc5, bisected to 0f0581b24bd0 ("spi: fsl:
- Convert to use CS GPIO descriptors")
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-References: <e9981d69-2a33-fec9-7d12-15fcb948364d@c-s.fr>
- <CACRpkdYLEibwyK_BGO3gsJ_aQFWZNJCky-GezHVmHfRSzD2zBg@mail.gmail.com>
- <1efb797c-e3c1-25a4-0e81-78b5bbadb355@c-s.fr>
- <CACRpkdYUBj+45Jr94kdERKJogVoL96JH6i85o_bVUtjmkTt19g@mail.gmail.com>
- <3c79a8b9-65e4-bfc9-d718-b8530fe1e672@c-s.fr>
- <b06679da-0332-2322-13f8-07307f611542@c-s.fr>
- <CACRpkdbOzM3X2_BMnf5eSqCt_UsnXo4eXD2fUbTLk6=Uo3gB2g@mail.gmail.com>
- <582b5ccf-8993-6345-94d1-3c2fc94e4d4f@c-s.fr>
- <CACRpkdawu5DcCA5rnRbOe+meBPtxctL7HuWciqboOEkCHZKA7A@mail.gmail.com>
- <e6a39aba-a41b-d781-966a-647977216b87@c-s.fr>
- <CACRpkda-wjRm7UYsFTX_xFfNPT29U1PTMyuU4AP=WShiC_vV9g@mail.gmail.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <b2925217-9cbd-2f4e-c92f-9e1c92824193@c-s.fr>
-Date:   Wed, 27 Nov 2019 11:39:42 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1726537AbfK0KnB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Nov 2019 05:43:01 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35064 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726426AbfK0KnB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Nov 2019 05:43:01 -0500
+Received: by mail-lf1-f65.google.com with SMTP id r15so13808333lff.2
+        for <linux-spi@vger.kernel.org>; Wed, 27 Nov 2019 02:43:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4bSZtYSKRzzSpgbvHLlRlvm4/VSvnoysG6GlVXihnl0=;
+        b=ggKnvTb3rsJToKxbuhyxwAbfRBemmGkw8JZt/E9J/1dva2aqZ56jv3tvhwXZI/lTDT
+         5f6wo5LpHRqnMAejwyytGjAdGro3Cq2DWfIJWELdiBbag2RHMjmZqhl3kDypKRaBPnqM
+         Y/f6UBfRriLjYDBLpmql0qGv/rDbQfWjp7BJg9bgwQeF/jMHPwXEa4GWTnYiPAwhPb5e
+         XD7b98K1+F/mjCoL4AWYXhzzo03som5qUjjmDPIcZMy4w8Vou9qns3GllacfRtdsQKPt
+         nDWvssfwI5q+Ay/+b6l+10d/cA3oC9alMPeAj31Wd8lTnp1uiRm7OmJOUySUV3n1Z8BF
+         n7yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4bSZtYSKRzzSpgbvHLlRlvm4/VSvnoysG6GlVXihnl0=;
+        b=IT64Ny667FAuFCiXxHClU31Vo2Bw2Y1jDPboKkcNS+C2gfqCbGGqj7swARIYq9wpNd
+         K8jytfINyP6Ku8VVILliI9w3wPmS2Abu4kW+ligTuXtmDdEBqEadIzYUCFrCckfPd629
+         Qr9xQDLl6tBSnb5/DnXHn0hb75KGJxBuLegKAJJ06gAyCpQNz+vgaqu8fWJYXLg5PCac
+         6H0M6UiWbI/EGnrL/jBjd473Ev6wO/HybltQJs5ldYILbXVdtbTdHgR4jP5OYTtPy2fA
+         Uzj4KW7TrJhKTrIYKeMAfhOpJrhgPJguuuo1gZs63PG7FJrIUKfXySJtEqs2LvSjTH9a
+         YZ2Q==
+X-Gm-Message-State: APjAAAV8AYI8sqaNFM5Tx54YuRGJVO9ygmcEjnNactTKCQR5PxJq1IAT
+        OQ6nItK+9wEsHJS0ym1xDSaJsqkkVbEpPcT2PKnOU/+5ky9fAw==
+X-Google-Smtp-Source: APXvYqw0axWlyE9Xf7qKCdQKDA51b0gvm1OnGchTmMmRVTBeWX1iAOF60Ns4IfePT38SeObuWmaWludZTP46LMj/Nog=
+X-Received: by 2002:a19:7d02:: with SMTP id y2mr26825678lfc.86.1574851379646;
+ Wed, 27 Nov 2019 02:42:59 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CACRpkda-wjRm7UYsFTX_xFfNPT29U1PTMyuU4AP=WShiC_vV9g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+References: <20191126164140.6240-1-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20191126164140.6240-1-ckeepax@opensource.cirrus.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 27 Nov 2019 11:42:47 +0100
+Message-ID: <CACRpkdYc=2vWte+gFp0m6RvWSu=+qT=WWUzag0N1FUBmbSCOOw@mail.gmail.com>
+Subject: Re: [PATCH] spi: cadence: Correct handling of native chipselect
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Gregory Clement <gregory.clement@bootlin.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Charles!
 
+Thanks for finding this!
 
-Le 27/11/2019 à 11:02, Linus Walleij a écrit :
-> On Wed, Nov 27, 2019 at 10:34 AM Christophe Leroy
-> <christophe.leroy@c-s.fr> wrote:
-> 
->> In the meantime, I have tried changing "gpios" by "cs-gpios" in the
->> device tree, and I get the following warning:
-> (...)
->> [    3.156654] WARNING: CPU: 0 PID: 1 at drivers/spi/spi-fsl-spi.c:716
->> fsl_spi_cs_control+0x64/0x7c
-> 
-> That should be this one:
-> 
-> if (WARN_ON_ONCE(!pinfo->immr_spi_cs))
->     return;
-> 
-> That happens when spi->cs_gpiod is NULL so the
-> chipselect isn't found and assigned, and the code
-> goes on to check the native CS and find that this isn't
-> available either and issues the warning.
+On Tue, Nov 26, 2019 at 5:41 PM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
 
-That's in spi_add_device(), it is spi->cs_gpio and not spi->cs_gpiod 
-which is assigned, so spi->cs_gpiod remains NULL.
+> To fix a regression on the Cadence SPI driver, this patch reverts
+> commit 6046f5407ff0 ("spi: cadence: Fix default polarity of native
+> chipselect").
+>
+> This patch was not the correct fix for the issue. The SPI framework
+> calls the set_cs line with the logic level it desires on the chip select
+> line, as such the old is_high handling was correct. However, this was
+> broken by the fact that before commit 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH
+> setting when using native and GPIO CS") all controllers that offered
+> the use of a GPIO chip select had SPI_CS_HIGH applied, even for hardware
+> chip selects. This caused the value passed into the driver to be inverted.
+> Which unfortunately makes it look like a logical enable the chip select
+> value.
+>
+> Since the core was corrected to not unconditionally apply SPI_CS_HIGH,
+> the Cadence driver, whilst using the hardware chip select, will deselect
+> the chip select every time we attempt to communicate with the device,
+> which results in failed communications.
+>
+> Fixes: 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH setting when using native and GPIO CS")
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Christophe
+I kind of get it... I think.
 
-> 
-> That one is a bit puzzling because I know we have this
-> working with other "cs-gpios" consumer drivers working
-> just fine. :/
-> 
-> Yours,
-> Linus Walleij
-> 
+I see it fixes a patch that I was not CC:ed on, which is a bit unfortunate
+as it tries to fix something I wrote, but such things happen.
+
+The original patch
+f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
+came with the assumption that native chip select handler needed
+was to be converted to always expect a true (1) value to their
+->set_cs() callbacks for asserting chip select, and this was one of
+the drivers augmented to expect that.
+
+As
+3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH setting when using native and GPIO CS")
+essentially undo that semantic change and switches back to
+the old semantic, all the drivers that were converted to expect
+a high input to their ->set_cs() callbacks for asserting CS need
+to be reverted back as well, but that didn't happen.
+
+So we need to fix not just cadence but also any other driver setting
+->use_gpio_descriptors() and also supplying their own
+->set_cs() callback and expecting this behaviour, or the fix
+will have fixed broken a bunch of drivers.
+
+But we are lucky: there aren't many of them.
+In addition to spi-cadence.c this seems to affect only spi-dw.c
+and I suppose that is what Gregory was using? Or
+something else?
+
+Yours,
+Linus Walleij
