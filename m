@@ -2,128 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 191DE10ACB6
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 10:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCAA10AD25
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Nov 2019 11:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbfK0Jkg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Nov 2019 04:40:36 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:47009 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726320AbfK0Jkg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Nov 2019 04:40:36 -0500
-Received: by mail-lj1-f196.google.com with SMTP id e9so23658438ljp.13
-        for <linux-spi@vger.kernel.org>; Wed, 27 Nov 2019 01:40:34 -0800 (PST)
+        id S1726133AbfK0KDG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Nov 2019 05:03:06 -0500
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:43709 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726143AbfK0KDG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Nov 2019 05:03:06 -0500
+Received: by mail-lj1-f178.google.com with SMTP id a13so583368ljm.10
+        for <linux-spi@vger.kernel.org>; Wed, 27 Nov 2019 02:03:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tTTAEtE2wY2oHf3GzlilCh9PFVO17TbKK86LOFQY+Tg=;
-        b=DwspxD201GISdJxtKpeY095XpU/OxDzpuRhcAMD4PpBigTrf+zdm4OPdSrXic24WN7
-         vtPt4t1lI1jtgNTrEoZXHDG7PUmYLcMAYjvidvv4OlPyDgAS+WNGwpey25vPCFReOSHo
-         8nMP8oHewjA44h90zZr1WPaN6kjqrDYtJUV0ig06qoxKDZt1PUBsxFE3Uv/Kt055h7Ss
-         WlSRQLmaQC1h/duTt80IHm21/inDAwoKBAWBocC7LxSACuV9yoU1Ci7E8aIUi/Z3mYaz
-         fV4f/vy4rIVtV3mVFit8Kj5FgsItbUQlTYAvypltBIHyhaRWaVBhgAC+NhsC3rXdzmhF
-         nkaQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KE/iCdYHndFpc/Vd1E/rLvIiYAhS927Axg5oqy6mft8=;
+        b=XyWOIv/9cJhWDHogdnraBagGV+6FiaTShU2P+EQDiYk538wtWslWxnTiQo6FX28vRQ
+         MRlg5RlE4ug6Jp+m98l1M4R/I88wvNwLAAGgDHYcV8XliPY0//uo5cfTuANGWRavJtoA
+         dKa7kmFlTzvsCVG6pG5ywKKysJKbWPOJMGeeXwo2oj7s9reohtwhN2D3YAbr74VFjHdu
+         Voym/oSnX5/mOnCpS72tyjpoiLLZYYXCnsSbDi1jg5ktXc+nTu83uXr+iwcdTmXgpx56
+         mJWF/yFCbGR3aKMQ8PpkRVZ+XoZAzDivj3xcHLYCxuCBdi20etSWImu7qqZEhc0+sMHA
+         y0zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tTTAEtE2wY2oHf3GzlilCh9PFVO17TbKK86LOFQY+Tg=;
-        b=IOTAjCVjMJqTYldeAv4iPjI1VRXgGv6R6IW7zQKQagyaAGSCo+VZKeEaI5PED+smbE
-         02S8fiucGoKWMQ3ZOrLFjaGsS2rM5BY0F7lghRhABINEuTDObFQuMVQa6pKmhbQVqu9V
-         9fnhT34QMSJjLVGpuUdf+YIcxnkDfv+QhTwCDU9v/UHN5whEIWD8RGH4wYctBuDlwx/a
-         NDxo23/xjKS27Lch/2G11xx6sw8WY8BQAlDk/vHFUDvlBDYEiD7Vi064eNpQRDTRJ6Ir
-         1NXgs577C6xH+QNa4pxwZP+jmaWaQBBCcIXGwk/yZTRJQ/ShIwjVc+14+U1+3O6MSX7Y
-         o2pw==
-X-Gm-Message-State: APjAAAWRq/jsF8ijJkzZ17dyXIZ/0FRreMFYMsCgkWR0Gm2fiJG/hkMG
-        0U0wHAaGMZ4NmyP63fx7O4Ah6g==
-X-Google-Smtp-Source: APXvYqxosKwpUMt3hX0x/XeOctftbPj2OiJyjGIY1AeUTw6YZPzPVuJtWz4lSZtWXrD12Fl5Ce12Ww==
-X-Received: by 2002:a2e:3a15:: with SMTP id h21mr30205923lja.256.1574847634086;
-        Wed, 27 Nov 2019 01:40:34 -0800 (PST)
-Received: from genomnajs.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id z20sm7007682ljj.85.2019.11.27.01.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2019 01:40:33 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [PATCH] gpio: Handle counting of Freescale chipselects
-Date:   Wed, 27 Nov 2019 10:40:31 +0100
-Message-Id: <20191127094031.140736-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.23.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KE/iCdYHndFpc/Vd1E/rLvIiYAhS927Axg5oqy6mft8=;
+        b=FoY2oMPAZUGyS8SHUJuwusB/kSCFSJi7hxyruEECrzLWyGWCzBJ1ptD0alWe/pp4Ch
+         7rtDImer4rqCVbWNuqrUz7/jrI1cVOTFcVvZBKfMz37CE8/mWvncYf+/RWxBEWovcBM0
+         tlwGEN981jQmPsKABy+x+kC2Rzg+XLQh5K10qwjYhFLOQBHjJBPWMBZWnK43WOkw9d/8
+         JdQNyeZjVwgHbA3QGV/oUXJyxKlzbROtI1+5KQ7BtObR/qKTXQh6n6zdzm5dh7r9pyv5
+         poRFGscHQ2sqLgOfMdIPVrfORqFt29nt/imqwDAym6g22LXux0h4laifOI3psDF133Yq
+         AbUQ==
+X-Gm-Message-State: APjAAAXtlfAQu5e4irBbG2MtBWx6Cqk2hIpjuQVBpm+p/PcvKpdBtqGm
+        g3VKAD7cVC7g/N6ix/+fea1W0soT+l10GtIakhpBpQ==
+X-Google-Smtp-Source: APXvYqzYs76Uwe+UFp5VQj1Em0o54MoZmAIAGfN8OIxLvEYlhfXcFCwZSRJbA50jOUEOA1DKlxAXUuBxKRao9wZ+SJQ=
+X-Received: by 2002:a2e:b4f6:: with SMTP id s22mr17669943ljm.218.1574848982885;
+ Wed, 27 Nov 2019 02:03:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <e9981d69-2a33-fec9-7d12-15fcb948364d@c-s.fr> <CACRpkdYLEibwyK_BGO3gsJ_aQFWZNJCky-GezHVmHfRSzD2zBg@mail.gmail.com>
+ <1efb797c-e3c1-25a4-0e81-78b5bbadb355@c-s.fr> <CACRpkdYUBj+45Jr94kdERKJogVoL96JH6i85o_bVUtjmkTt19g@mail.gmail.com>
+ <3c79a8b9-65e4-bfc9-d718-b8530fe1e672@c-s.fr> <b06679da-0332-2322-13f8-07307f611542@c-s.fr>
+ <CACRpkdbOzM3X2_BMnf5eSqCt_UsnXo4eXD2fUbTLk6=Uo3gB2g@mail.gmail.com>
+ <582b5ccf-8993-6345-94d1-3c2fc94e4d4f@c-s.fr> <CACRpkdawu5DcCA5rnRbOe+meBPtxctL7HuWciqboOEkCHZKA7A@mail.gmail.com>
+ <e6a39aba-a41b-d781-966a-647977216b87@c-s.fr>
+In-Reply-To: <e6a39aba-a41b-d781-966a-647977216b87@c-s.fr>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 27 Nov 2019 11:02:51 +0100
+Message-ID: <CACRpkda-wjRm7UYsFTX_xFfNPT29U1PTMyuU4AP=WShiC_vV9g@mail.gmail.com>
+Subject: Re: Boot failure with 5.4-rc5, bisected to 0f0581b24bd0 ("spi: fsl:
+ Convert to use CS GPIO descriptors")
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We have a special quirk to handle the Freescale
-nonstandard SPI chipselect GPIOs in the gpiolib-of.c
-file, but it currently only handles the case where
-the GPIOs are actually requested (gpiod_*get()).
+On Wed, Nov 27, 2019 at 10:34 AM Christophe Leroy
+<christophe.leroy@c-s.fr> wrote:
 
-We also need to handle that the SPI core attempts
-to count the GPIOs before use, and that needs a
-similar quirk in the OF part of the library.
+> In the meantime, I have tried changing "gpios" by "cs-gpios" in the
+> device tree, and I get the following warning:
+(...)
+> [    3.156654] WARNING: CPU: 0 PID: 1 at drivers/spi/spi-fsl-spi.c:716
+> fsl_spi_cs_control+0x64/0x7c
 
-Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Fixes: 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-Mark: I will merge this through the GPIO tree if
-it fixes the problem.
----
- drivers/gpio/gpiolib-of.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+That should be this one:
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 80ea49f570f4..33e16fa17bd8 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -23,6 +23,29 @@
- #include "gpiolib.h"
- #include "gpiolib-of.h"
- 
-+/**
-+ * of_gpio_spi_cs_get_count() - special GPIO counting for SPI
-+ * Some elder GPIO controllers need special quirks. Currently we handle
-+ * the Freescale GPIO controller with bindings that doesn't use the
-+ * established "cs-gpios" for chip selects but instead rely on
-+ * "gpios" for the chip select lines. If we detect this, we redirect
-+ * the counting of "cs-gpios" to count "gpios" transparent to the
-+ * driver.
-+ */
-+int of_gpio_spi_cs_get_count(struct device *dev, const char *con_id)
-+{
-+	struct device_node *np = dev->of_node;
-+
-+	if (!IS_ENABLED(CONFIG_SPI_MASTER))
-+		return 0;
-+	if (strcmp(con_id, "cs"))
-+		return 0;
-+	if (!of_device_is_compatible(np, "fsl,spi") &&
-+	    !of_device_is_compatible(np, "aeroflexgaisler,spictrl"))
-+		return 0;
-+	return of_gpio_get_count(dev, NULL);
-+}
-+
- /*
-  * This is used by external users of of_gpio_count() from <linux/of_gpio.h>
-  *
-@@ -35,6 +58,10 @@ int of_gpio_get_count(struct device *dev, const char *con_id)
- 	char propname[32];
- 	unsigned int i;
- 
-+	ret = of_gpio_spi_cs_get_count(dev, con_id);
-+	if (ret > 0)
-+		return ret;
-+
- 	for (i = 0; i < ARRAY_SIZE(gpio_suffixes); i++) {
- 		if (con_id)
- 			snprintf(propname, sizeof(propname), "%s-%s",
--- 
-2.23.0
+if (WARN_ON_ONCE(!pinfo->immr_spi_cs))
+   return;
 
+That happens when spi->cs_gpiod is NULL so the
+chipselect isn't found and assigned, and the code
+goes on to check the native CS and find that this isn't
+available either and issues the warning.
+
+That one is a bit puzzling because I know we have this
+working with other "cs-gpios" consumer drivers working
+just fine. :/
+
+Yours,
+Linus Walleij
