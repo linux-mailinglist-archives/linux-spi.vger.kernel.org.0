@@ -2,29 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB1310C953
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2019 14:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DABE10C954
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2019 14:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbfK1NTB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Nov 2019 08:19:01 -0500
-Received: from foss.arm.com ([217.140.110.172]:35296 "EHLO foss.arm.com"
+        id S1726722AbfK1NTD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Nov 2019 08:19:03 -0500
+Received: from foss.arm.com ([217.140.110.172]:35306 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726227AbfK1NTA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 28 Nov 2019 08:19:00 -0500
+        id S1726227AbfK1NTD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 28 Nov 2019 08:19:03 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15CA130E;
-        Thu, 28 Nov 2019 05:19:00 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81B4130E;
+        Thu, 28 Nov 2019 05:19:02 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89C923F52E;
-        Thu, 28 Nov 2019 05:18:59 -0800 (PST)
-Date:   Thu, 28 Nov 2019 13:18:58 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0234A3F52E;
+        Thu, 28 Nov 2019 05:19:01 -0800 (PST)
+Date:   Thu, 28 Nov 2019 13:19:00 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
         linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "gpio: Handle counting of Freescale chipselects" to the spi tree
-In-Reply-To: <20191128083718.39177-2-linus.walleij@linaro.org>
-Message-Id: <applied-20191128083718.39177-2-linus.walleij@linaro.org>
+Subject: Applied "spi: fsl: Fix GPIO descriptor support" to the spi tree
+In-Reply-To: <20191128083718.39177-1-linus.walleij@linaro.org>
+Message-Id: <applied-20191128083718.39177-1-linus.walleij@linaro.org>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -33,7 +33,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   gpio: Handle counting of Freescale chipselects
+   spi: fsl: Fix GPIO descriptor support
 
 has been applied to the spi tree at
 
@@ -58,76 +58,39 @@ to this mail.
 Thanks,
 Mark
 
-From 71b8f600b034c7f5780f6fb311dabfe331c64feb Mon Sep 17 00:00:00 2001
+From f106904968e2a075e64653b9b79dda9f0f070ab5 Mon Sep 17 00:00:00 2001
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 28 Nov 2019 09:37:17 +0100
-Subject: [PATCH] gpio: Handle counting of Freescale chipselects
+Date: Thu, 28 Nov 2019 09:37:16 +0100
+Subject: [PATCH] spi: fsl: Fix GPIO descriptor support
 
-We have a special quirk to handle the Freescale
-nonstandard SPI chipselect GPIOs in the gpiolib-of.c
-file, but it currently only handles the case where
-the GPIOs are actually requested (gpiod_*get()).
-
-We also need to handle that the SPI core attempts
-to count the GPIOs before use, and that needs a
-similar quirk in the OF part of the library.
+This makes the driver actually support looking up GPIO
+descriptor. A coding mistake in the initial descriptor
+support patch was that it was failing to turn on the very
+feature it was implementing. Mea culpa.
 
 Cc: Christophe Leroy <christophe.leroy@c-s.fr>
 Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
 Fixes: 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Tested-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Link: https://lore.kernel.org/r/20191128083718.39177-2-linus.walleij@linaro.org
+Link: https://lore.kernel.org/r/20191128083718.39177-1-linus.walleij@linaro.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/gpio/gpiolib-of.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/spi/spi-fsl-spi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 1eea2c6c2e1d..4b19e7e26b90 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -23,6 +23,29 @@
- #include "gpiolib.h"
- #include "gpiolib-of.h"
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 114801a32371..c87e9c4506c2 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -611,6 +611,7 @@ static struct spi_master * fsl_spi_probe(struct device *dev,
+ 	master->setup = fsl_spi_setup;
+ 	master->cleanup = fsl_spi_cleanup;
+ 	master->transfer_one_message = fsl_spi_do_one_msg;
++	master->use_gpio_descriptors = true;
  
-+/**
-+ * of_gpio_spi_cs_get_count() - special GPIO counting for SPI
-+ * Some elder GPIO controllers need special quirks. Currently we handle
-+ * the Freescale GPIO controller with bindings that doesn't use the
-+ * established "cs-gpios" for chip selects but instead rely on
-+ * "gpios" for the chip select lines. If we detect this, we redirect
-+ * the counting of "cs-gpios" to count "gpios" transparent to the
-+ * driver.
-+ */
-+int of_gpio_spi_cs_get_count(struct device *dev, const char *con_id)
-+{
-+	struct device_node *np = dev->of_node;
-+
-+	if (!IS_ENABLED(CONFIG_SPI_MASTER))
-+		return 0;
-+	if (!con_id || strcmp(con_id, "cs"))
-+		return 0;
-+	if (!of_device_is_compatible(np, "fsl,spi") &&
-+	    !of_device_is_compatible(np, "aeroflexgaisler,spictrl"))
-+		return 0;
-+	return of_gpio_named_count(np, "gpios");
-+}
-+
- /*
-  * This is used by external users of of_gpio_count() from <linux/of_gpio.h>
-  *
-@@ -35,6 +58,10 @@ int of_gpio_get_count(struct device *dev, const char *con_id)
- 	char propname[32];
- 	unsigned int i;
- 
-+	ret = of_gpio_spi_cs_get_count(dev, con_id);
-+	if (ret > 0)
-+		return ret;
-+
- 	for (i = 0; i < ARRAY_SIZE(gpio_suffixes); i++) {
- 		if (con_id)
- 			snprintf(propname, sizeof(propname), "%s-%s",
+ 	mpc8xxx_spi = spi_master_get_devdata(master);
+ 	mpc8xxx_spi->max_bits_per_word = 32;
 -- 
 2.20.1
 
