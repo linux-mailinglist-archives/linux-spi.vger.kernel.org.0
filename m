@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B2A10C53C
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2019 09:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C52910C53D
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2019 09:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727059AbfK1Ih0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Nov 2019 03:37:26 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:40364 "EHLO
+        id S1726937AbfK1Ih3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Nov 2019 03:37:29 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:33865 "EHLO
         mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726558AbfK1Ih0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Nov 2019 03:37:26 -0500
-Received: by mail-lf1-f65.google.com with SMTP id y5so6677893lfy.7
-        for <linux-spi@vger.kernel.org>; Thu, 28 Nov 2019 00:37:25 -0800 (PST)
+        with ESMTP id S1726558AbfK1Ih3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Nov 2019 03:37:29 -0500
+Received: by mail-lf1-f65.google.com with SMTP id l18so1357785lfc.1
+        for <linux-spi@vger.kernel.org>; Thu, 28 Nov 2019 00:37:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AmIR0r6i3Cg87MCPZcep6uMU0wYHv+UUy3ZU/fWShBQ=;
-        b=wrwkh5yd8tU1bsHg+6YhL29svZTmdA/hnLqviWH42bjsRzB4AGo4buiTb5jqGSf/wa
-         J47Lz8cq1AjuKvD/717Td0LSGeEuvDAGqLOs7gfe7wT2H6/dfKdPBxJFaA5Vxd8X1hVh
-         hVhAlpaDz48FrFQDSl1vdQm6hDA9snXF5ApLMCB7NFTIpvgR7Pu/te0xL+WWjvhth6LL
-         uwh5Yd3Ie5fxgWe87XNVapiZvBMHOTq3rKcsmO6FUKBmUnXivDOPPrQjXtvOUNjsXlDu
-         FJ2wrkMMyOTXIiKfahUiobzvc/dk+lb34ET/4gxwP7eOEUhl1sMQ1jNhC2wPdUZ6PHZE
-         HNsg==
+        bh=SPhwT8PnMlXpxw5ygxGJ3XE7+b5kb2zOG+JKAmHXdIw=;
+        b=RmzeZgfmUeniMdXw+V73nAoU9vXOooaDR+OfZBFpxFryTDVMAj4Lc8mVIvTuzS9i2r
+         n1NfS9SpwUjwtK1lkTI80hT+xkxJRFWxhoBImlY2e6Lf+zUT5KoCSuk7S/JJGOies9PD
+         elARO8naQ4L87JTdDqhI83LT/VKGfRF0SfUdttXv/7WFyaBZ3PQqSrGJrGDQ8IlGsw/7
+         c69uTGPnE+XcgSgjrU1Lc/uGwvruQgaK+rzb8DEVtJ1r7F/lor5xeeN6tIqPLI8CCVOC
+         Zyz1VJsqmmFJCIcwS/1Pgv1+7Z9gFLHcVTRwW9xGOZ/VFhXgio4w0eFJIIff/FQPddO/
+         WbVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AmIR0r6i3Cg87MCPZcep6uMU0wYHv+UUy3ZU/fWShBQ=;
-        b=iI3KLUelmB3fT5N5LsBJSZu0trGdRI/c9faI8GL9KIsEVxAuWFpu17KrKxW8uE0yWG
-         Yatti1rRvJAk2s+EYDlxZmYINNgUKoDtkHaMIgyo3aJiFitzzV78N/OcSZ5/fmMTK3th
-         HQ5yRYA0T6s3O5wu1D61j9GPaFAIqegfSR1LkCFYrQm3SrXgABYgkMX3k+Fwwt6Of2gs
-         KDVZe0Fjw47Pjwja3qJG+5ATliB2I3MLyEujPNJ0V/bDXFugTdUkopNa8skipKDCfckC
-         Wz1loRFYJ+66/0DzjzhDDAApK3MkiBsEa7dFErnxpxj9BB77soyhYM7OIxeS3JqZnLOJ
-         BM/A==
-X-Gm-Message-State: APjAAAVL5Rug8Oxx9BSq+C8LE/AxaDczVcbDAToco9B7tD7PyHjQpcB+
-        +gl7EbA9xsSBnlK4dDDilMMhYw==
-X-Google-Smtp-Source: APXvYqzoims5h4zuPb/cbgkP0a1bfJcXC0Loxx5aTIbp0eauJyAZQi98q8p2BkwFpIT7xPD3kfdwzg==
-X-Received: by 2002:ac2:5b0f:: with SMTP id v15mr20076728lfn.99.1574930244455;
-        Thu, 28 Nov 2019 00:37:24 -0800 (PST)
+        bh=SPhwT8PnMlXpxw5ygxGJ3XE7+b5kb2zOG+JKAmHXdIw=;
+        b=BemD9lPwKPeLkE23n1N2v7kw/QxTf6cwehSuES02MUoh0iwh7bCMKGUuYDiiiPa4kI
+         gHHBiYNvEOsRTXkZY0emOV7PwcFXfq1edUn2iuRjtC9E073R8BMI4mQdOAAtkfXdWS9A
+         sLFixZw9S8B8kSBTMnRJa6F+xNv3zPe36HekyTGO6MNZ5wOe1KP5jN1XgHD7zo9UTGzv
+         aeSS9JgeFt/lSpFbB9J/BKsrzkiVa+0D2C+/laOSsOm+DsdC4bdIvfl8eexPBFzZdvej
+         +XcwNoHq6pjKRye93Owrdj7rOulB9PU1Tjj5HxF8x12XjidqtppGjvfyKrq0rRVAkLXw
+         zaqg==
+X-Gm-Message-State: APjAAAUfLZ0STCqzTHxMxCr5bufXrKvvhrBS8CIsnDehLN8ghJGNDXGO
+        Eh5XsITo6wbxbUOEe4AuM9VS6w==
+X-Google-Smtp-Source: APXvYqw7zYaBayF+3RX4e/L8eQvJYMaac/fo0i6ekCr5i+cd9QBJ6zSLHie/tg0ewygSOfzxfl97qw==
+X-Received: by 2002:ac2:4357:: with SMTP id o23mr32178594lfl.51.1574930247027;
+        Thu, 28 Nov 2019 00:37:27 -0800 (PST)
 Received: from genomnajs.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id x193sm3384013lfa.78.2019.11.28.00.37.22
+        by smtp.gmail.com with ESMTPSA id x193sm3384013lfa.78.2019.11.28.00.37.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Nov 2019 00:37:23 -0800 (PST)
+        Thu, 28 Nov 2019 00:37:25 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [PATCH 2/3 v3] gpio: Handle counting of Freescale chipselects
-Date:   Thu, 28 Nov 2019 09:37:17 +0100
-Message-Id: <20191128083718.39177-2-linus.walleij@linaro.org>
+Subject: [PATCH 3/3 v3] spi: fsl: Handle the single hardwired chipselect case
+Date:   Thu, 28 Nov 2019 09:37:18 +0100
+Message-Id: <20191128083718.39177-3-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191128083718.39177-1-linus.walleij@linaro.org>
 References: <20191128083718.39177-1-linus.walleij@linaro.org>
@@ -61,14 +61,21 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We have a special quirk to handle the Freescale
-nonstandard SPI chipselect GPIOs in the gpiolib-of.c
-file, but it currently only handles the case where
-the GPIOs are actually requested (gpiod_*get()).
+The Freescale MPC8xxx had a special quirk for handling a
+single hardwired chipselect, the case when we're using neither
+GPIO nor native chip select: when inspecting the device tree
+and finding zero "cs-gpios" on the device node the code would
+assume we have a single hardwired chipselect that leaves the
+device always selected.
 
-We also need to handle that the SPI core attempts
-to count the GPIOs before use, and that needs a
-similar quirk in the OF part of the library.
+This quirk is not handled by the new core code, so we need
+to check the "cs-gpios" explicitly in the driver and set
+pdata->max_chipselect = 1 which will later fall through to
+the SPI master ->num_chipselect.
+
+Make sure not to assign the chip select handler in this
+case: there is no handling needed since the chip is always
+selected, and this is what the old code did as well.
 
 Cc: Christophe Leroy <christophe.leroy@c-s.fr>
 Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
@@ -76,67 +83,39 @@ Fixes: 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
 ChangeLog v2->v3:
-- Fixed the bug (I hope) as I was counting the number
-  of gpios by checking for "gpios-gpios" and "gpios-gpio"
-  rather than "gpios" (ehm...)
+- Resend with the other patches.
 ChangeLog v1->v2:
-- Hardcode the quirk to look for "gpios" as this is all
-  we support and else the call would just recurse back
-  and fail again.
-- Provide a proper NULL check so we don't upset strcmp().
-
-Mark: I change my mind, better to keep the patches
-together, once Christophe has it working with my
-patch stack let's just merge all of it.
+- Reordered patches.
+- Expanded comment a bit.
 ---
- drivers/gpio/gpiolib-of.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/spi/spi-fsl-spi.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 80ea49f570f4..43ffec3a6fbb 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -23,6 +23,29 @@
- #include "gpiolib.h"
- #include "gpiolib-of.h"
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index c87e9c4506c2..4b70887cf443 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -728,8 +728,18 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
+ 			}
+ 		}
+ #endif
+-
+-		pdata->cs_control = fsl_spi_cs_control;
++		/*
++		 * Handle the case where we have one hardwired (always selected)
++		 * device on the first "chipselect". Else we let the core code
++		 * handle any GPIOs or native chip selects and assign the
++		 * appropriate callback for dealing with the CS lines. This isn't
++		 * supported on the GRLIB variant.
++		 */
++		ret = gpiod_count(dev, "cs");
++		if (ret <= 0)
++			pdata->max_chipselect = 1;
++		else
++			pdata->cs_control = fsl_spi_cs_control;
+ 	}
  
-+/**
-+ * of_gpio_spi_cs_get_count() - special GPIO counting for SPI
-+ * Some elder GPIO controllers need special quirks. Currently we handle
-+ * the Freescale GPIO controller with bindings that doesn't use the
-+ * established "cs-gpios" for chip selects but instead rely on
-+ * "gpios" for the chip select lines. If we detect this, we redirect
-+ * the counting of "cs-gpios" to count "gpios" transparent to the
-+ * driver.
-+ */
-+int of_gpio_spi_cs_get_count(struct device *dev, const char *con_id)
-+{
-+	struct device_node *np = dev->of_node;
-+
-+	if (!IS_ENABLED(CONFIG_SPI_MASTER))
-+		return 0;
-+	if (!con_id || strcmp(con_id, "cs"))
-+		return 0;
-+	if (!of_device_is_compatible(np, "fsl,spi") &&
-+	    !of_device_is_compatible(np, "aeroflexgaisler,spictrl"))
-+		return 0;
-+	return of_gpio_named_count(np, "gpios");
-+}
-+
- /*
-  * This is used by external users of of_gpio_count() from <linux/of_gpio.h>
-  *
-@@ -35,6 +58,10 @@ int of_gpio_get_count(struct device *dev, const char *con_id)
- 	char propname[32];
- 	unsigned int i;
- 
-+	ret = of_gpio_spi_cs_get_count(dev, con_id);
-+	if (ret > 0)
-+		return ret;
-+
- 	for (i = 0; i < ARRAY_SIZE(gpio_suffixes); i++) {
- 		if (con_id)
- 			snprintf(propname, sizeof(propname), "%s-%s",
+ 	ret = of_address_to_resource(np, 0, &mem);
 -- 
 2.23.0
 
