@@ -2,29 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DABE10C954
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2019 14:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 409E710C958
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2019 14:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbfK1NTD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Nov 2019 08:19:03 -0500
-Received: from foss.arm.com ([217.140.110.172]:35306 "EHLO foss.arm.com"
+        id S1726764AbfK1NTF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Nov 2019 08:19:05 -0500
+Received: from foss.arm.com ([217.140.110.172]:35314 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726227AbfK1NTD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 28 Nov 2019 08:19:03 -0500
+        id S1726734AbfK1NTF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 28 Nov 2019 08:19:05 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81B4130E;
-        Thu, 28 Nov 2019 05:19:02 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F122A30E;
+        Thu, 28 Nov 2019 05:19:04 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0234A3F52E;
-        Thu, 28 Nov 2019 05:19:01 -0800 (PST)
-Date:   Thu, 28 Nov 2019 13:19:00 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 701773F52E;
+        Thu, 28 Nov 2019 05:19:04 -0800 (PST)
+Date:   Thu, 28 Nov 2019 13:19:02 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: fsl: Fix GPIO descriptor support" to the spi tree
-In-Reply-To: <20191128083718.39177-1-linus.walleij@linaro.org>
-Message-Id: <applied-20191128083718.39177-1-linus.walleij@linaro.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     broonie@kernel.org, gregory.clement@bootlin.com,
+        linus.walleij@linaro.org, Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: dw: Correct handling of native chipselect" to the spi tree
+In-Reply-To: <20191127153936.29719-1-ckeepax@opensource.cirrus.com>
+Message-Id: <applied-20191127153936.29719-1-ckeepax@opensource.cirrus.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -33,7 +35,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: fsl: Fix GPIO descriptor support
+   spi: dw: Correct handling of native chipselect
 
 has been applied to the spi tree at
 
@@ -58,39 +60,63 @@ to this mail.
 Thanks,
 Mark
 
-From f106904968e2a075e64653b9b79dda9f0f070ab5 Mon Sep 17 00:00:00 2001
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 28 Nov 2019 09:37:16 +0100
-Subject: [PATCH] spi: fsl: Fix GPIO descriptor support
+From ada9e3fcc175db4538f5b5e05abf5dedf626e550 Mon Sep 17 00:00:00 2001
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+Date: Wed, 27 Nov 2019 15:39:36 +0000
+Subject: [PATCH] spi: dw: Correct handling of native chipselect
 
-This makes the driver actually support looking up GPIO
-descriptor. A coding mistake in the initial descriptor
-support patch was that it was failing to turn on the very
-feature it was implementing. Mea culpa.
+This patch reverts commit 6e0a32d6f376 ("spi: dw: Fix default polarity
+of native chipselect").
 
-Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Fixes: 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Tested-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Link: https://lore.kernel.org/r/20191128083718.39177-1-linus.walleij@linaro.org
+The SPI framework always called the set_cs callback with the logic
+level it desired on the chip select line, which is what the drivers
+original handling supported. commit f3186dd87669 ("spi: Optionally
+use GPIO descriptors for CS GPIOs") changed these symantics, but only
+in the case of drivers that also support GPIO chip selects, to true
+meaning apply slave select rather than logic high. This left things in
+an odd state where a driver that only supports hardware chip selects,
+the core would handle polarity but if the driver supported GPIOs as
+well the driver should handle polarity.  At this point the reverted
+change was applied to change the logic in the driver to match new
+system.
+
+This was then broken by commit 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH
+setting when using native and GPIO CS") which reverted the core back
+to consistently calling set_cs with a logic level.
+
+This fix reverts the driver code back to its original state to match
+the current core code. This is probably a better fix as a) the set_cs
+callback is always called with consistent symantics and b) the
+inversion for SPI_CS_HIGH can be handled in the core and doesn't need
+to be coded in each driver supporting it.
+
+Fixes: 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH setting when using native and GPIO CS")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20191127153936.29719-1-ckeepax@opensource.cirrus.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-spi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/spi/spi-dw.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index 114801a32371..c87e9c4506c2 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -611,6 +611,7 @@ static struct spi_master * fsl_spi_probe(struct device *dev,
- 	master->setup = fsl_spi_setup;
- 	master->cleanup = fsl_spi_cleanup;
- 	master->transfer_one_message = fsl_spi_do_one_msg;
-+	master->use_gpio_descriptors = true;
+diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+index 466f5c67843b..9387f60eb496 100644
+--- a/drivers/spi/spi-dw.c
++++ b/drivers/spi/spi-dw.c
+@@ -129,10 +129,11 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
+ 	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
+ 	struct chip_data *chip = spi_get_ctldata(spi);
  
- 	mpc8xxx_spi = spi_master_get_devdata(master);
- 	mpc8xxx_spi->max_bits_per_word = 32;
++	/* Chip select logic is inverted from spi_set_cs() */
+ 	if (chip && chip->cs_control)
+-		chip->cs_control(enable);
++		chip->cs_control(!enable);
+ 
+-	if (enable)
++	if (!enable)
+ 		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
+ 	else if (dws->cs_override)
+ 		dw_writel(dws, DW_SPI_SER, 0);
 -- 
 2.20.1
 
