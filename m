@@ -2,120 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C52910C53D
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2019 09:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9EF10C54D
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2019 09:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726937AbfK1Ih3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Nov 2019 03:37:29 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:33865 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726558AbfK1Ih3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Nov 2019 03:37:29 -0500
-Received: by mail-lf1-f65.google.com with SMTP id l18so1357785lfc.1
-        for <linux-spi@vger.kernel.org>; Thu, 28 Nov 2019 00:37:27 -0800 (PST)
+        id S1726301AbfK1IkU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Nov 2019 03:40:20 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:35428 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727469AbfK1IkU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Nov 2019 03:40:20 -0500
+Received: by mail-lf1-f67.google.com with SMTP id r15so16457598lff.2
+        for <linux-spi@vger.kernel.org>; Thu, 28 Nov 2019 00:40:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SPhwT8PnMlXpxw5ygxGJ3XE7+b5kb2zOG+JKAmHXdIw=;
-        b=RmzeZgfmUeniMdXw+V73nAoU9vXOooaDR+OfZBFpxFryTDVMAj4Lc8mVIvTuzS9i2r
-         n1NfS9SpwUjwtK1lkTI80hT+xkxJRFWxhoBImlY2e6Lf+zUT5KoCSuk7S/JJGOies9PD
-         elARO8naQ4L87JTdDqhI83LT/VKGfRF0SfUdttXv/7WFyaBZ3PQqSrGJrGDQ8IlGsw/7
-         c69uTGPnE+XcgSgjrU1Lc/uGwvruQgaK+rzb8DEVtJ1r7F/lor5xeeN6tIqPLI8CCVOC
-         Zyz1VJsqmmFJCIcwS/1Pgv1+7Z9gFLHcVTRwW9xGOZ/VFhXgio4w0eFJIIff/FQPddO/
-         WbVg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+JqMG1d/lOL1srD0/KuAfIZSpr9D48XI4hlM2DvA188=;
+        b=bZEuPxznYkkUMn6qZgpnuvM4gNag52WWCk/RUTwcK007r3a7ezGpkJ+hXLG8VnipQe
+         tbqFGhp2tyCkXFj1Pc4BF0pO+lQGc6wCc9gWTYbSBR2qvBv0i0wuv5FMBkVuA79+Hawi
+         Czl2kNrVhM7xEMRkSFc81ooawACro7k2n2UQ9WJWwY9UD/2G0s78VvjqKXtCUXSCIZ3+
+         GYcFYDf5b/9VDnpfUz0w2lj14wRRLGGbkcnb32aAXQdgNww0u+ALp9B7mlDguNXxtU41
+         pEZnCG7TjEIE32fOOYuqPLkxo4JrV9w+FakvpbwfTFutOZFAgRyS9fDItvfyWCrtnmKo
+         pw3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SPhwT8PnMlXpxw5ygxGJ3XE7+b5kb2zOG+JKAmHXdIw=;
-        b=BemD9lPwKPeLkE23n1N2v7kw/QxTf6cwehSuES02MUoh0iwh7bCMKGUuYDiiiPa4kI
-         gHHBiYNvEOsRTXkZY0emOV7PwcFXfq1edUn2iuRjtC9E073R8BMI4mQdOAAtkfXdWS9A
-         sLFixZw9S8B8kSBTMnRJa6F+xNv3zPe36HekyTGO6MNZ5wOe1KP5jN1XgHD7zo9UTGzv
-         aeSS9JgeFt/lSpFbB9J/BKsrzkiVa+0D2C+/laOSsOm+DsdC4bdIvfl8eexPBFzZdvej
-         +XcwNoHq6pjKRye93Owrdj7rOulB9PU1Tjj5HxF8x12XjidqtppGjvfyKrq0rRVAkLXw
-         zaqg==
-X-Gm-Message-State: APjAAAUfLZ0STCqzTHxMxCr5bufXrKvvhrBS8CIsnDehLN8ghJGNDXGO
-        Eh5XsITo6wbxbUOEe4AuM9VS6w==
-X-Google-Smtp-Source: APXvYqw7zYaBayF+3RX4e/L8eQvJYMaac/fo0i6ekCr5i+cd9QBJ6zSLHie/tg0ewygSOfzxfl97qw==
-X-Received: by 2002:ac2:4357:: with SMTP id o23mr32178594lfl.51.1574930247027;
-        Thu, 28 Nov 2019 00:37:27 -0800 (PST)
-Received: from genomnajs.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id x193sm3384013lfa.78.2019.11.28.00.37.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Nov 2019 00:37:25 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [PATCH 3/3 v3] spi: fsl: Handle the single hardwired chipselect case
-Date:   Thu, 28 Nov 2019 09:37:18 +0100
-Message-Id: <20191128083718.39177-3-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191128083718.39177-1-linus.walleij@linaro.org>
-References: <20191128083718.39177-1-linus.walleij@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+JqMG1d/lOL1srD0/KuAfIZSpr9D48XI4hlM2DvA188=;
+        b=K+rmACR5euWISndTeJtp6wWrMbEwW2ytNEJIFDMYOBU6uFWTAMgWpjlVoW89MaFBEE
+         uWi75e8ig4lKwtAvfzEwqZibg+QGUVW+59KDGJjI0CHYT+sOr6zR7u5eZrcwBA9Vg44d
+         v3+CNLFLeUA8fMeXqo9vc2BvfBl9u312Oy4YZO9/+68R2C2ccBOoBifQjBhapKyMhGeF
+         qtkALWsS2etx9QCyU63WzgfCoivRriNvHPQefnEwGY2+6LGqYlAEaYRcjiJgznvS8unB
+         XhlmSKumtRh/t+YPczzRkKJofqk6h5oRLI9uhVbHIHVx9Ao96Pmortce5JpRdbMDwqBF
+         UF5g==
+X-Gm-Message-State: APjAAAX2ZFA5V7/P0N9LAM8N1BOmcus2lq0VgQb0JYXzcureYo5UHDCF
+        +pPptq9T+v3n+EUJX3hJsO1se9YJ0h2GlrhzuF7uUQ==
+X-Google-Smtp-Source: APXvYqxtG/gdvoyr7WyQ5q4Y0yE5V49M3E8UCbzdSLCahQX17AzyxDGbF9OSSPKMuehEM57zKAoKWOxxW5wSb1klq2c=
+X-Received: by 2002:ac2:410a:: with SMTP id b10mr4280450lfi.135.1574930415765;
+ Thu, 28 Nov 2019 00:40:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20191127153936.29719-1-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20191127153936.29719-1-ckeepax@opensource.cirrus.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 28 Nov 2019 09:40:04 +0100
+Message-ID: <CACRpkdbSmk0iDBbfCWpsT6FnU6mzynCknfJ8K95VNRqK6=_XyQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: dw: Correct handling of native chipselect
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Freescale MPC8xxx had a special quirk for handling a
-single hardwired chipselect, the case when we're using neither
-GPIO nor native chip select: when inspecting the device tree
-and finding zero "cs-gpios" on the device node the code would
-assume we have a single hardwired chipselect that leaves the
-device always selected.
+On Wed, Nov 27, 2019 at 4:39 PM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
 
-This quirk is not handled by the new core code, so we need
-to check the "cs-gpios" explicitly in the driver and set
-pdata->max_chipselect = 1 which will later fall through to
-the SPI master ->num_chipselect.
+> This patch reverts commit 6e0a32d6f376 ("spi: dw: Fix default polarity
+> of native chipselect").
+>
+> The SPI framework always called the set_cs callback with the logic
+> level it desired on the chip select line, which is what the drivers
+> original handling supported. commit f3186dd87669 ("spi: Optionally
+> use GPIO descriptors for CS GPIOs") changed these symantics, but only
+> in the case of drivers that also support GPIO chip selects, to true
+> meaning apply slave select rather than logic high. This left things in
+> an odd state where a driver that only supports hardware chip selects,
+> the core would handle polarity but if the driver supported GPIOs as
+> well the driver should handle polarity.  At this point the reverted
+> change was applied to change the logic in the driver to match new
+> system.
+>
+> This was then broken by commit 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH
+> setting when using native and GPIO CS") which reverted the core back
+> to consistently calling set_cs with a logic level.
+>
+> This fix reverts the driver code back to its original state to match
+> the current core code. This is probably a better fix as a) the set_cs
+> callback is always called with consistent symantics and b) the
+> inversion for SPI_CS_HIGH can be handled in the core and doesn't need
+> to be coded in each driver supporting it.
+>
+> Fixes: 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH setting when using native and GPIO CS")
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Make sure not to assign the chip select handler in this
-case: there is no handling needed since the chip is always
-selected, and this is what the old code did as well.
+Thanks for looking into this Charles!!
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-Reported-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Fixes: 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v2->v3:
-- Resend with the other patches.
-ChangeLog v1->v2:
-- Reordered patches.
-- Expanded comment a bit.
----
- drivers/spi/spi-fsl-spi.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+I think we should have all regressions covered with
+these two patches.
 
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index c87e9c4506c2..4b70887cf443 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -728,8 +728,18 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
- 			}
- 		}
- #endif
--
--		pdata->cs_control = fsl_spi_cs_control;
-+		/*
-+		 * Handle the case where we have one hardwired (always selected)
-+		 * device on the first "chipselect". Else we let the core code
-+		 * handle any GPIOs or native chip selects and assign the
-+		 * appropriate callback for dealing with the CS lines. This isn't
-+		 * supported on the GRLIB variant.
-+		 */
-+		ret = gpiod_count(dev, "cs");
-+		if (ret <= 0)
-+			pdata->max_chipselect = 1;
-+		else
-+			pdata->cs_control = fsl_spi_cs_control;
- 	}
- 
- 	ret = of_address_to_resource(np, 0, &mem);
--- 
-2.23.0
-
+Yours,
+Linus Walleij
