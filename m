@@ -2,108 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D9A10EA32
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2019 13:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47CC10EAFB
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2019 14:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727362AbfLBMnw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Dec 2019 07:43:52 -0500
-Received: from mx07-00252a01.pphosted.com ([62.209.51.214]:63270 "EHLO
-        mx07-00252a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727354AbfLBMnw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Dec 2019 07:43:52 -0500
-X-Greylist: delayed 2015 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Dec 2019 07:43:50 EST
-Received: from pps.filterd (m0102628.ppops.net [127.0.0.1])
-        by mx07-00252a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB2CADei022598
-        for <linux-spi@vger.kernel.org>; Mon, 2 Dec 2019 12:10:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=raspberrypi.org; h=to : from :
- subject : message-id : date : mime-version : content-type :
- content-transfer-encoding; s=pp;
- bh=Jqjk1YIYJn09xCowXcBKwYry3d3CxcwldaQy0bAF4+Q=;
- b=ye7zMlpJR3K0oiKdI1QMduVk7tY2kJyhnj3y46J0yDCTrDylhzq+JRt02wYbKN6XQfpl
- Y1z6DAt5e+zeOqZjM31VrHxrQukj62ClgFCtCkkIb3Xbgf2r74nMAz9e38cSu+GExJhL
- qCsz+dfL9RoPeQ/QibgLW0xo6cbDAEn2w5+rtAUwQ2dC80NvfCNzwyUhvccRyxoixvwx
- YNTluRn2RDNIchFbkUqzhwDa7ti+iqA+QUJhmlk+edfSJ4HPNy5ptcUIO1KiK8tTX9u0
- xrZIJ2KOgIXNBl91xDdXe3RS/TCKYEFup9x+esvBPAuUAYYiHowXIpgDkAN0Gn6nQY9O tQ== 
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        by mx07-00252a01.pphosted.com with ESMTP id 2wkeq98ybw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK)
-        for <linux-spi@vger.kernel.org>; Mon, 02 Dec 2019 12:10:14 +0000
-Received: by mail-wm1-f69.google.com with SMTP id z3so5849362wmk.1
-        for <linux-spi@vger.kernel.org>; Mon, 02 Dec 2019 04:10:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.org; s=google;
-        h=to:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=Jqjk1YIYJn09xCowXcBKwYry3d3CxcwldaQy0bAF4+Q=;
-        b=FCx0/xtSaEZd5n1dRnLS5YgywVF5YHdqRHUzSIv80/ZUdXam1fBRjDRo0Tohbx3/8s
-         a58nYgK5T0QMJ3NeM9mYoG7dkQituE9MDLZ2HWh71C0kggGxqqDQhCZhtQaQqB7LFfDM
-         RFnlZRfBiyUmF0y0wCUgBBapOjqrvuG8Ph6hFvCAFrsiZvFHIZjZya/eYmQVH4gsjj6k
-         +JjmF6jaozJr0/c0c7WThu27+tMscESWrSGfWAfHbEZVpl3qPmJuRDVEjksQCeMRzPkl
-         u2/TEZafqnV95BUBbd9xpic+rv7fxm/t3jpan5uh9FqL25rqbW71BYciP2qUKCgmc7LA
-         K6ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=Jqjk1YIYJn09xCowXcBKwYry3d3CxcwldaQy0bAF4+Q=;
-        b=BIHNtS7aR0VoFRbaSzTsNt0P1/aAIu/27PTHf7dKUrZHA7543gq71gnkMK0urgQDWg
-         p4SZaXl4wOnM0ZBCMZaR96GQI5zWXn6+IDD0o+UtPp5Ra0ZqMNNMaaeS7j7Ghx/p0k5A
-         AOHv+Ukoc2yK1Bo0hdaZrMB4UcBljN7pXg+hjzNvObbhDkq5VozklUBtHeM3/nP65GSf
-         6jwWNU1d3Ns9sEvg8Q1c9TCAl20iYJlvkpMvITGcOgVJ70LcJyooK8pAtp1yekdTaJEs
-         FVuzef3snT7jEUtgaMdEftWJnGpbKaEQ9UTZHhnTKiCIYL/dz7jpL1vxCfgxmIrdpi7u
-         sjKA==
-X-Gm-Message-State: APjAAAUe96zpvaik2M3gFj5FqzEpeiCnBqf8sEY59R8oJV5ppnLzsbgX
-        u3ShJLE+eSK1I4gL3kgKETn6DH3XutKf0PYkznBm1s+rDzJJXSAzqxz0fJtgz0oLp/iBbQrQ/Ih
-        UuRvgaEIvmmnNIbXbNHFe
-X-Received: by 2002:a7b:c19a:: with SMTP id y26mr26990123wmi.152.1575288613229;
-        Mon, 02 Dec 2019 04:10:13 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwduwi43ZhC6mYLsHsLeSw0dSkkpop68I1FsryXHBy7xeaVzmFCWlAfOi7ks19Ajav/5siL1Q==
-X-Received: by 2002:a7b:c19a:: with SMTP id y26mr26990086wmi.152.1575288612940;
-        Mon, 02 Dec 2019 04:10:12 -0800 (PST)
-Received: from ?IPv6:2a00:1098:3142:14:c5ae:b42a:dc72:b89c? ([2a00:1098:3142:14:c5ae:b42a:dc72:b89c])
-        by smtp.gmail.com with ESMTPSA id d12sm14591659wrp.62.2019.12.02.04.10.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Dec 2019 04:10:12 -0800 (PST)
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        id S1727364AbfLBNn5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Dec 2019 08:43:57 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48160 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727362AbfLBNn4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Dec 2019 08:43:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=v0h467ctDK6eHhvWn3L1ujq+Z/M+fJSuhiqzEb9Jz18=; b=LyISIdOMG1xGEELV3NqRJwzOS
+        LFJoA6wcB4cQMNcTUHxlW+0X/AonlRdMx91Y85MFaVvJV8QNUWaGqmw7kb9Esi6YzcbXp93tgZdhL
+        l0yYvRUzFJ3BmZIOlIZL/CPFTGSsxaMtpQCBv7iuSZvoER/HQSv/hk/x77Qfd4fvj9+iI=;
+Received: from 188.31.173.115.threembb.co.uk ([188.31.173.115] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1iblzO-0003wo-6L; Mon, 02 Dec 2019 13:43:46 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id E6785D05907; Mon,  2 Dec 2019 13:43:44 +0000 (GMT)
+Date:   Mon, 2 Dec 2019 13:43:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Phil Elwell <phil@raspberrypi.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
-From:   Phil Elwell <phil@raspberrypi.org>
-Subject: Side effect of SPI GPIO descriptor usage
-Message-ID: <db6a1e17-49a3-e3ed-7713-56b7763713d6@raspberrypi.org>
-Date:   Mon, 2 Dec 2019 12:10:11 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+Subject: Re: Side effect of SPI GPIO descriptor usage
+Message-ID: <20191202134344.GE1998@sirena.org.uk>
+References: <db6a1e17-49a3-e3ed-7713-56b7763713d6@raspberrypi.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-02_02:2019-11-29,2019-12-02 signatures=0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ey/N+yb7u/X9mFhi"
+Content-Disposition: inline
+In-Reply-To: <db6a1e17-49a3-e3ed-7713-56b7763713d6@raspberrypi.org>
+X-Cookie: Cleanliness is next to impossible.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-A relatively recent patch [1] to the spi-bcm2835 driver modified it to 
-use GPIO descriptors for chip select handling. A side effect of this 
-change is to set the SPI_MODE_CS_HIGH flag for devices connected to the 
-controller, which seems strange since it happens for devices that 
-require the usual active-low chip select.
+--ey/N+yb7u/X9mFhi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This change came to light when a user reported that the SPI-Py library
-(a client of the spidev driver) wasn't working on 5.4, which was traced 
-to it overwriting the SPI mode flags when it was only trying to set the
-CPHA and CPOL flags. This had the affect of inverting the chip select
-line, with the obvious consequences. That corruption of the flags is 
-clearly an error, but what if the application and library were genuinely 
-trying to specify that the attached device required an active-high chip 
-select? Would it now require that they _clear_ the CS_HIGH flag?
+On Mon, Dec 02, 2019 at 12:10:11PM +0000, Phil Elwell wrote:
 
-Thanks,
+> A relatively recent patch [1] to the spi-bcm2835 driver modified it to use
+> GPIO descriptors for chip select handling. A side effect of this change is
+> to set the SPI_MODE_CS_HIGH flag for devices connected to the controller,
+> which seems strange since it happens for devices that require the usual
+> active-low chip select.
 
-Phil
+I take it you mean SPI_CS_HIGH rather than SPI_MODE_CS_HIGH?  I
+can't see anything in that change which sets the flag, can you be
+more specific?  The change no longer acts on SPI_CS_HIGH when
+requesting the GPIO but I can't see anything which *sets* the
+flag.  It does not visbily modify mode at all, nor did the
+original code.
 
-[1] 3bd158c56a56 ("spi: bcm2835: Convert to use CS GPIO descriptors")
+> This change came to light when a user reported that the SPI-Py library
+> (a client of the spidev driver) wasn't working on 5.4, which was traced to
+> it overwriting the SPI mode flags when it was only trying to set the
+> CPHA and CPOL flags. This had the affect of inverting the chip select
+> line, with the obvious consequences. That corruption of the flags is clearly
+> an error, but what if the application and library were genuinely trying to
+> specify that the attached device required an active-high chip select? Would
+> it now require that they _clear_ the CS_HIGH flag?
+
+I can't follow what you're saying here at all, sorry.  Can you
+please be more specific?  You appear to be saying that the issue
+is that the application modified the mode in some way and this
+was acted on apparently not in the expected way.
+
+In general it's a bad idea to modify mode at runtime, and it's a
+bad idea to mix multiple means of configuring the polarity of the
+chip select (eg, mixing DT configuration with other means).
+
+--ey/N+yb7u/X9mFhi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3lFRAACgkQJNaLcl1U
+h9CrIQf9HCV/qWHL5/pcqPbHvmYpq/QkLXAmASYand7ZtsEI0XEYuxucc50dZx8i
+imfB3jXgeXcp7u4Thj5YhmeTbO5EcFvWodHnx2o8Iu/bd/1n2U6TJez8kaL2e+To
+YNjaCe5KiMX/xzcfnupzihe2g46+eSRZpaY3NW2Xcg+8/AVlhCJQPbnj2+mLAVl5
+xnL12QOJt566I0rBkKQCOjIWyTVDc90hPdC9HAoj197Abc29dKNTiYhQ9sQ4Vfj1
+o5rf4YX4dJv6rGJZNAoCyxFya1QWIdZud0W1SRR8qi4m5uVgsdy4pRZHB2MuR9GG
+gQs2hewoUsvDdSr4UYUee5NwattvYA==
+=JZaa
+-----END PGP SIGNATURE-----
+
+--ey/N+yb7u/X9mFhi--
