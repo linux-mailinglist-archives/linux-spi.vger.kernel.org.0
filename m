@@ -2,44 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0305A110483
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Dec 2019 19:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CCF110498
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Dec 2019 19:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727010AbfLCSvP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Dec 2019 13:51:15 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:38255 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726766AbfLCSvP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Dec 2019 13:51:15 -0500
-Received: by mail-ot1-f66.google.com with SMTP id z25so3890277oti.5;
-        Tue, 03 Dec 2019 10:51:14 -0800 (PST)
+        id S1726821AbfLCS5e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Dec 2019 13:57:34 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46028 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726057AbfLCS5d (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Dec 2019 13:57:33 -0500
+Received: by mail-oi1-f196.google.com with SMTP id v10so2264651oiv.12;
+        Tue, 03 Dec 2019 10:57:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4hLOBykbGdw1liJmGR7zdbjWF/AatltGdR05B3u8wIk=;
-        b=gqrckh8oE+u/O1VRq3zxkhVWEFU1z4pM2v8M4ZigFs2dwzSXpdP6H0sRl7vHImUpp7
-         EYI9jG6fPW65oyxIGYhG09K6rjVoCV7VWFBSt3p1zt4bVkj+JEbPvN7/ajHjtHzrSgY0
-         P/CbGH3lXcWj1d/QW9dAF2FDLV8bbaXzEB1GsUR3XAzSdUypDOXOZD9210lImKu4BIxE
-         c4uPDF5NqbXl3leAYwtDOfh5CpK+X2nWKJcdU5jG+DkSDbMc7X5P8CdrWnRdDd6k7yRI
-         CKQCOlcJMvuZvSjJGSYpea1nm3TvbhWB6WW7qeKF+elcReWQod0nt3j4JFZ7SREd+vXv
-         hvUQ==
-X-Gm-Message-State: APjAAAW8h8uFjzqTWaoDa8jCdtHyY2+hf3aAxpovvlzmqGtJ1R3rZQnD
-        p4yxbX6ynxMfF2Wk4IHSEh7YZwugG6mg2FMhzYE=
-X-Google-Smtp-Source: APXvYqzZ4oo2pJfvg5MVOk89f23ud9VOzcxrq1j4J+lTteiIrj46hoyfYObEFueWeAaT1h0ORL8ozymCjJbIhLZXTKY=
-X-Received: by 2002:a9d:3a37:: with SMTP id j52mr4387892otc.39.1575399073988;
- Tue, 03 Dec 2019 10:51:13 -0800 (PST)
+        bh=QbBA1xUeDWozSALaq+ZgoDJg/avbhvBYLtHk3XaCifw=;
+        b=lsEzUPIx61+IoHiy8JrfhUXUZVGP/ZWFjLn6AqNtKxl6iD4RbfSQEkk7Fkwt3bg4Wk
+         UAJX/OxaeKOS/HX7z/IjgB5YfdUCC9HN0r/nYkznbSrQqG9og6S248ij0i2wFKTiaEhg
+         QrhAKfNPtUXulJfTHXFe+cM4PdFFPnebMNOGSoyA0KuyUN3OvKRVEcFTTTif6Xneu9MP
+         uvKpfT1dSejPwT3J85mFuJuXqCbLHsUAgJRWRVtpwD44fDMUB9piyrjVpPWuBkbRv5WV
+         T/dfcEWa6fs7OvS6kFslantWWcK/0id8xuViWrlJo6pKcbOuyGiW8/KEj0qf51EoYExN
+         hO2Q==
+X-Gm-Message-State: APjAAAU9/SmzCLbb9/VwSnfi6RdbkaG0N/QrSCuNnhSt4lKqyBBSrH76
+        bP5/HglNvrKbvbLUfuF7xao5bnfdhTrCiaRZJ8w=
+X-Google-Smtp-Source: APXvYqyKgyiMygfjiXO8XcBZrxs1x7n6N0Y2SMTF6gDNv+MIgPG02RwFvT17WjD20296e3XHU/UN+EWiy7fHSp6VNgs=
+X-Received: by 2002:aca:48cd:: with SMTP id v196mr5098702oia.102.1575399452736;
+ Tue, 03 Dec 2019 10:57:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20191203034519.5640-1-chris.brandt@renesas.com>
- <20191203034519.5640-2-chris.brandt@renesas.com> <CAMuHMdU6NrAk-oeH_tR8Re7bz6HXednfaP=CGsyBt+M4_n95ow@mail.gmail.com>
- <TY1PR01MB156288E89F0F845CDC3831FB8A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY1PR01MB156288E89F0F845CDC3831FB8A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20191203034519.5640-1-chris.brandt@renesas.com> <20191203034519.5640-7-chris.brandt@renesas.com>
+In-Reply-To: <20191203034519.5640-7-chris.brandt@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Dec 2019 19:51:02 +0100
-Message-ID: <CAMuHMdUckOP7m04U0NQ-rDJw4xFD_U4JBgtKzNr8NSmpc1ZLgg@mail.gmail.com>
-Subject: Re: [PATCH 1/6] clk: renesas: mstp: Add critical clock from device
- tree support
-To:     Chris Brandt <Chris.Brandt@renesas.com>
+Date:   Tue, 3 Dec 2019 19:57:21 +0100
+Message-ID: <CAMuHMdVBYpuoK7hcyNLK-mAdpTQz3ohTGXuYdFPHdpU5RoPr6Q@mail.gmail.com>
+Subject: Re: [PATCH 6/6] dt-bindings: spi: Document Renesas SPIBSC bindings
+To:     Chris Brandt <chris.brandt@renesas.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -60,26 +57,52 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Chris,
 
-On Tue, Dec 3, 2019 at 7:46 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
-> On Tue, Dec 3, 2019, Geert Uytterhoeven wrote:
-> > > +       unsigned long flags;
-> >
-> > = 0 here...
-> > >
-> > > +               flags = 0;
-> >
-> > ... instead of here?
+On Tue, Dec 3, 2019 at 4:47 AM Chris Brandt <chris.brandt@renesas.com> wrote:
+> Document the bindings used by the Renesas SPI bus space controller.
 >
-> That was my first thought too...and it was wrong.
->
-> If of_clk_detect_critical does NOT detect a critical clock, it does not
-> touch flags at all.
-> And since it is a loop, what you get is after the first clock is marked
-> as CRITICAL, all the remaining clocks also get marked CRITICAL. In this
-> case, both spibsc0 and spibsc1 get marked critical. That's why I have to
-> reset it for each loop.
+> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
 
-Thanks, I missed this is done inside a loop.
+Thanks for your patch!
+
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/spi-renesas-spibsc.txt
+
+Checkpatch.pl says:
+WARNING: DT bindings should be in DT schema format. See:
+Documentation/devicetree/writing-schema.rst
+
+> @@ -0,0 +1,48 @@
+> +Renesas SPI Bus Space Controller (SPIBSC) Device Tree Bindings
+> +
+> +Otherwise referred to as the "SPI Multi I/O Bus Controller" in SoC hardware
+> +manuals. This controller was designed specifically for accessing SPI flash
+> +devices.
+> +
+> +Required properties:
+> +- compatible: should be an SoC-specific compatible value, followed by
+> +               "renesas,spibsc" as a fallback.
+> +               supported SoC-specific values are:
+> +               "renesas,r7s72100-spibsc"       (RZ/A1)
+> +               "renesas,r7s9210-spibsc"        (RZ/A2)
+
+Is the fallback valid for RZ/A1, which has its own special match entry
+in the driver?
+Will it be valid for R-Car Gen3?
+If not, you may want to drop it completely.
+
+> +- reg: should contain three register areas:
+> +       first for the base address of SPIBSC registers,
+> +       second for the direct mapping read mode
+> +- clocks: should contain the clock phandle/specifier pair for the module clock.
+> +- power-domains: should contain the power domain phandle/specifier pair.
+> +- #address-cells: should be 1
+> +- #size-cells: should be 0
+> +- flash: should be represented by a subnode of the SPIBSC node,
+> +        its "compatible" property contains "jedec,spi-nor" if SPI is used.
+
+What about the "mtd-rom" use for e.g. XIP?
+
+interrupts? RZ/A2M seems to have an SPIBSC interrupt, RZ/A1 hasn't.
 
 Gr{oetje,eeting}s,
 
