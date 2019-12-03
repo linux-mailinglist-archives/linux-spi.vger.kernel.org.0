@@ -2,111 +2,288 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7613311026E
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Dec 2019 17:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F6E110436
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Dec 2019 19:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbfLCQfn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Dec 2019 11:35:43 -0500
-Received: from mail-eopbgr1400117.outbound.protection.outlook.com ([40.107.140.117]:11489
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726105AbfLCQfn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 3 Dec 2019 11:35:43 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dJ+jjv5wxr78SOOkKxCOAbRApNa5QmWb2dVI52+RQzVMcW4yBLxroztel0Qz/xwHs7KqXOk6R6Vn/lH4cxo3dUUReuZMNSDsWCS7yftVU7/TG2HcUt2c7yKJmBBYjGjmskKufd7mhbF2sjP694A/0aZ5Lxcvc+6zJKbf/96ppslWNPm8BAn95O+MzP/rso3Mv/5svhdiWZPa3ZKllGm+zA2k1D2SQx6s0uVmS9+N20iy2G1olGOqj53feMnE1Ug9pkQqwAYzTQ/5XWsk/5H9mR11WOIZDbANX2N58JGv1s12kbSthr/oIqjZMFPvnQ2S1n/odR4ZmQPDIesarqTrqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rx1i0f/Bqyc/K8pskulnB02d9PcGtshw0+86LciV2xI=;
- b=KE9Gh2ru0ryYDwBwn2Tu65Ys8pgAIzHBVb9/Mqsidy6UyNR5Wlr3UvZ07Cm1Z2+dspIr9hysYomwG3vDwO91yVgecy+hr9Ncs89J1IHrFeAsIiOzfEzLoX/gFH9kRWTozWZzvmG6IxSPOygjt/pt+XEmXzcdpR8/r27PZubla7pzoaTT2Pjmx0Gysfzq83q15XGy9GWrCWMu0M3sTCPGtlifAoslm8BM0gWCFYR1tb6mdYT0GEif6fzmoOAriK4MX4b9F8ZpZBMB1WDxWkcEqyyCUbsiT0MqjQVdLk7IObp4aaL8qO4omkHQo1FW3gVBCqbuBIYVYPV8UG2f8/XGVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rx1i0f/Bqyc/K8pskulnB02d9PcGtshw0+86LciV2xI=;
- b=ni8lmd5KjCtLOiuXl/+PTDaEdQu0xZFbUAMbhjxFLRoNpCJnEuKzmlChPuIYysR0PMBFkcbDErYsYqhkI1axyt+uVRyvcvj3+LwquegRKbo9Q8JGkBP4ECpflyWcJ21mxWsdl6CtjK3MOi9c68OWLXKJELRyrCsxqgaU+BLVhv0=
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
- TY1PR01MB1658.jpnprd01.prod.outlook.com (52.133.162.23) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2516.12; Tue, 3 Dec 2019 16:35:40 +0000
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::74db:232e:f59e:83f2]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::74db:232e:f59e:83f2%3]) with mapi id 15.20.2516.003; Tue, 3 Dec 2019
- 16:35:40 +0000
-From:   Chris Brandt <Chris.Brandt@renesas.com>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1726763AbfLCS2l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Dec 2019 13:28:41 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:46559 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726564AbfLCS2l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Dec 2019 13:28:41 -0500
+Received: by mail-ot1-f65.google.com with SMTP id g18so3781308otj.13;
+        Tue, 03 Dec 2019 10:28:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fv7hK3dsMSAwX5HCuemGK+Z9KDZWWG/xHQo0UQoD8U4=;
+        b=HJL38RMz5qzH4XVcXnp9hnuarM9hIWZd4BMFknfuTz5mKQp5U6Gb9WzJmSUTXtb/43
+         r+h93BHg/QnXC8yh4zvoMCNNwyMSdczGqhbYBGuJkanX3E1sX/WCtz6hOBeY468g2V83
+         YIoA5lKpGaX0UZjtswxgRuqtlyH1YGd/p2jZYt6K53PkdpWX6h9eCW5GM5PDlZe5GF+6
+         ilS5NhBAfcvd61WVvAM3K/FKMj5n64zQ0+iqNst7jlykRzjnApGv/CS56nZLw430TtwF
+         TQSCFLiS3UgJxc0FjNqEcpkQ49g5cyZNnQBTrTGLqEI1SeU40BX1nmEF5Ot/kw0TASY5
+         TRJQ==
+X-Gm-Message-State: APjAAAU1/UKzg7n/0+IAjlYjcoqPe5aNV+r5mlGiPFuf6GxfVWScdHjM
+        bPwtNGcl2eRLxRP3N7bDuK3RRpbw+jeC2sd7s94uumu/
+X-Google-Smtp-Source: APXvYqyA+DCAs3/VI5MgeLMWcYKSuUIqmCJm5Yyj2zed+M3ncd0J3s5tbB++PhJ2nC7OuPqasfdaf/2CpX7Z/mP3f6w=
+X-Received: by 2002:a9d:2073:: with SMTP id n106mr4258154ota.145.1575397719725;
+ Tue, 03 Dec 2019 10:28:39 -0800 (PST)
+MIME-Version: 1.0
+References: <20191203034519.5640-1-chris.brandt@renesas.com> <20191203034519.5640-5-chris.brandt@renesas.com>
+In-Reply-To: <20191203034519.5640-5-chris.brandt@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 Dec 2019 19:28:18 +0100
+Message-ID: <CAMuHMdVAZOa7OmT0s=RsVJsny9NujDzpdg4T+QoUXGe0kJjOTw@mail.gmail.com>
+Subject: Re: [PATCH 4/6] spi: Add SPIBSC driver
+To:     Chris Brandt <chris.brandt@renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: RE: [PATCH 6/6] dt-bindings: spi: Document Renesas SPIBSC bindings
-Thread-Topic: [PATCH 6/6] dt-bindings: spi: Document Renesas SPIBSC bindings
-Thread-Index: AQHVqYxRjjQT6EPsk0uhvsHduSJ+e6eoIQoAgAA7ZYCAADdKAIAABRSg
-Date:   Tue, 3 Dec 2019 16:35:40 +0000
-Message-ID: <TY1PR01MB156225E0916668BA4F05F2948A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-References: <20191203034519.5640-1-chris.brandt@renesas.com>
- <20191203034519.5640-7-chris.brandt@renesas.com>
- <17e66541-41fb-26ed-c87b-15c59ab57bef@cogentembedded.com>
- <TY1PR01MB156262E8D33A0624457CAE248A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <6c2cb15b-896c-e749-8b33-02da46fbc222@cogentembedded.com>
-In-Reply-To: <6c2cb15b-896c-e749-8b33-02da46fbc222@cogentembedded.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZWY5YmMyODktMTVlYS0xMWVhLWFhNTEtOTRlNmY3Njc5M2FlXGFtZS10ZXN0XGVmOWJjMjhhLTE1ZWEtMTFlYS1hYTUxLTk0ZTZmNzY3OTNhZWJvZHkudHh0IiBzej0iNjE2IiB0PSIxMzIxOTg2NDUzODUzNDI4MDIiIGg9IlBxSituRHNvKzdrQXdSam04MkQ1QUxvNWNNOD0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-x-dg-rorf: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Chris.Brandt@renesas.com; 
-x-originating-ip: [75.60.247.61]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: ccb9904e-b360-40d3-298b-08d7780ed576
-x-ms-traffictypediagnostic: TY1PR01MB1658:
-x-microsoft-antispam-prvs: <TY1PR01MB165839652C96C2945C2EF26C8A420@TY1PR01MB1658.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 02408926C4
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(346002)(39860400002)(396003)(376002)(366004)(199004)(189003)(99286004)(66946007)(86362001)(256004)(229853002)(76176011)(478600001)(54906003)(7696005)(186003)(316002)(52536014)(110136005)(6436002)(446003)(66556008)(64756008)(66446008)(76116006)(11346002)(66476007)(25786009)(7416002)(6246003)(4744005)(102836004)(6116002)(8936002)(81166006)(81156014)(26005)(3846002)(2906002)(8676002)(7736002)(305945005)(33656002)(74316002)(9686003)(55016002)(14454004)(5660300002)(6506007)(71190400001)(71200400001)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1658;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vut12ucPpQ0beKwrTh0mRAaFewua5KOoN9wQBip+XsxX8csXE2S49eOLtw0BR6Rp3w34K5tffa14JpMqRDaKNOa3v0aEUVDniJ8VuQcwF8dF3U+nm5C+dEaKR09ikNmwg0ExqUAjfb/W21WzDjfzoBVY1RT8HP4ZaCZyGuUlRA27Kl3auNeh9ZfRsxdG2FF+RPIqSnMDTOjiLRyzlrzguO2XqAw2ozxSumhkM+o2bENvlenN5Ku/JdMrZ5wTNcurMwIuxyVSHE/AkTWg+K6+5xAOZwqat72kYtQB9TgYyy8l1THYl5DHdYtzrAwIvtUhyFUlyx/PVyEfbPm+7TwtQHVRoE5CTCHGUhR5kVkZnMflMt4ycwMwfLLeEA4POlsva452CgrIJLX3aPE71KyjxpJHlbdc4+pyYwbgCGf0nj1yj+6CCRXvZHjBCc3mgfig
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ccb9904e-b360-40d3-298b-08d7780ed576
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2019 16:35:40.0471
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VfnDTXM0ZDarLJYneKu9PSMR+RKIJlVxciYAucGM+WsjTnWdaUd7G0JY9dgypljIufwgyACHSwKKVJNm/Z5IbrrHzbh5Wp5rKF93wjvak+4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1658
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gVHVlLCBEZWMgMywgMjAxOSAxLCBTZXJnZWkgU2h0eWx5b3Ygd3JvdGU6DQo+ID4gRG8geW91
-IG1lYW4gb3RoZXIgdHlwZXMgb2YgU1BJIGZsYXNoPw0KPiANCj4gICAgTm8sIEkgbWVhbiBmbGFz
-aGVzIGNvbm5lY3RlZCB2aWEgZGlmZmVyZW50IGJ1c2VzLCBsaWtlIEh5cGVyQnVzIHdpdGggdGhl
-DQo+IGdlbjMgU29DIFJQQy1JRi4NCj4gSWYgU1BJJ3MgdGhlIG9ubHkgYnUgc3VwcG9ydGVkLCB0
-aGVyZSdzIG5vIHBvaW50IHNheWluZyAiaWYgU1BJIGlzIHVzZWQiLg0KDQpPSywgSSBzZWUgeW91
-ciBwb2ludC4gSSB3aWxsIHJlbW92ZSB0aGUgJ2lmJy4NCg0KVGhlIGhhcmR3YXJlIGluIFJaL0Ey
-IGFsc28gc3VwcG9ydHMgSHlwZXJGbGFzaCBhbmQgT2N0YUZsYXNoIChzYW1lIGFzIGdlbjMpLCBi
-dXQNClJaL0ExIG9ubHkgc3VwcG9ydHMgU1BJIGZsYXNoLg0KVGhlcmVmb3JlIHRoaXMgZHJpdmVy
-IGRvZXMgbm90IHRvdWNoIFBIWUNOVC5QSFlNRU0gYW5kIGFzc3VtZXMgaXQgaXMgYXQgMC4NCg0K
-Q2hyaXMNCg==
+Hi Chris,
+
+On Tue, Dec 3, 2019 at 4:46 AM Chris Brandt <chris.brandt@renesas.com> wrote:
+> Add a driver for the SPIBSC controller in Renesas SoC devices.
+>
+> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+
+Thanks for your patch!
+
+> --- /dev/null
+> +++ b/drivers/spi/spi-spibsc.c
+> @@ -0,0 +1,609 @@
+> +// SPDX-License-Identifier: GPL-2.0
+
+GPL-2.0-only
+
+> +static void spibsc_print_data(struct spibsc_priv *sbsc, u8 tx, const u8 *buf,
+> +                             int len)
+> +{
+> +#if defined(DEBUG_PRINT_DATA)
+> +       char line_buffer[3*16+1];
+> +       int i, line_index = 0;
+> +
+> +       if (tx)
+> +               pr_debug("spibsc: send data: ");
+> +       else
+> +               pr_debug("spibsc: recv data: ");
+> +
+> +       for (i = 0; i < len; ) {
+> +               sprintf(line_buffer + line_index, " %02X", buf[i]);
+> +               line_index += 3;
+> +               i++;
+> +               if (i % 16 == 0) {
+> +                       pr_debug(line_buffer);
+> +                       line_index = 0;
+> +               }
+> +       }
+> +       if (i % 16 != 0)
+> +               pr_debug(line_buffer);
+> +       else
+> +               pr_debug("\n");
+> +#endif
+
+print_hex_dump_debug()?
+
+> +}
+> +
+> +static int spibsc_wait_trans_completion(struct spibsc_priv *sbsc)
+> +{
+> +       int t = 256 * 100000;
+> +
+> +       while (t--) {
+> +               if (spibsc_read(sbsc, CMNSR) & CMNSR_TEND)
+> +                       return 0;
+> +               ndelay(1);
+> +       }
+
+So this may busy loop for up to 25.6 ms? Oops...
+
+Can you use the interrupt (SPIHF) instead, signalling a completion?
+
+> +
+> +       dev_err(sbsc->dev, "Timeout waiting for TEND\n");
+> +       return -ETIMEDOUT;
+> +}
+
+
+> +       /* Use 'Option Data' for 3rd-6th bytes */
+> +       switch (tx_len) {
+> +       case 6:
+> +               dropr |= DROPR_OPD0(tx_data[5]);
+> +               opde |= (1 << 0);
+
+Both checkpatch and gcc tell you to add fallthrough coments.
+
+> +       case 5:
+> +               dropr |= DROPR_OPD1(tx_data[4]);
+> +               opde |= (1 << 1);
+> +       case 4:
+> +               dropr |= DROPR_OPD2(tx_data[3]);
+> +               opde |= (1 << 2);
+> +       case 3:
+> +               dropr |= DROPR_OPD3(tx_data[2]);
+> +               opde |= (1 << 3);
+> +               drenr |= DRENR_OPDE(opde);
+> +       }
+
+> +static int spibsc_transfer_one_message(struct spi_controller *master,
+> +                                      struct spi_message *msg)
+> +{
+> +       struct spibsc_priv *sbsc = spi_controller_get_devdata(master);
+> +       struct spi_transfer *t, *t_last;
+> +       u8 tx_data[MAX_CMD_LEN];
+> +       int tx_only;
+> +       u8 tx_len;
+> +       int ret;
+> +
+> +       t_last = list_last_entry(&msg->transfers, struct spi_transfer,
+> +                                transfer_list);
+> +       /* defaults */
+> +       ret = 0;
+> +       sbsc->last_xfer = 0;
+> +       tx_only = 1;
+> +
+> +       /* Analyze the messages */
+> +       t = list_first_entry(&msg->transfers, struct spi_transfer,
+> +                            transfer_list);
+> +       if (t->rx_buf) {
+> +               dev_dbg(sbsc->dev, "Cannot Rx without Tx first!\n");
+> +               return -EIO;
+> +       }
+> +       list_for_each_entry(t, &msg->transfers, transfer_list) {
+> +               if (t->rx_buf) {
+> +                       tx_only = 0;
+> +                       if (t != t_last) {
+> +                               dev_dbg(sbsc->dev, "RX transaction is not the last transaction!\n");
+> +                               return -EIO;
+> +                       }
+> +               }
+> +               if (t->cs_change) {
+> +                       dev_err(sbsc->dev, "cs_change not supported");
+> +                       return -EIO;
+> +               }
+> +       }
+
+If you would do the checks above in .prepare_message()
+(like e.g. rspi does)...
+
+> +
+> +       /* Tx Only (SPI Mode is used) */
+> +       if (tx_only == 1) {
+> +
+> +               dev_dbg(sbsc->dev, "%s: TX only\n", __func__);
+> +
+> +               /* Initialize for SPI Mode */
+> +               spibsc_write(sbsc, CMNCR, CMNCR_INIT);
+> +
+> +               /* Send messages */
+> +               list_for_each_entry(t, &msg->transfers, transfer_list) {
+> +
+> +                       if (t == t_last)
+> +                               sbsc->last_xfer = 1;
+> +
+> +                       ret = spibsc_send_data(sbsc, t->tx_buf, t->len);
+> +                       if (ret)
+> +                               break;
+> +
+> +                       msg->actual_length += t->len;
+> +               }
+> +
+> +               /* Done */
+> +               msg->status = ret;
+> +               spi_finalize_current_message(master);
+> +               return ret;
+> +       }
+> +
+> +       /* Tx, then RX (Data Read Mode is used) */
+> +       dev_dbg(sbsc->dev, "%s: Tx then Rx\n", __func__);
+> +
+> +       /* Buffer up the transmit portion (cmd + addr) so we can send it all at
+> +        * once
+> +        */
+> +       tx_len = 0;
+> +       list_for_each_entry(t, &msg->transfers, transfer_list) {
+> +               if (t->tx_buf) {
+> +                       if ((tx_len + t->len) > sizeof(tx_data)) {
+> +                               dev_dbg(sbsc->dev, "Command too big (%d)\n",
+> +                                       tx_len + t->len);
+> +                               return -EIO;
+> +                       }
+> +                       memcpy(tx_data + tx_len, t->tx_buf, t->len);
+> +                       tx_len += t->len;
+> +               }
+> +
+> +               if (t->rx_buf)
+> +                       ret = spibsc_send_recv_data(sbsc, tx_data, tx_len,
+> +                                                   t->rx_buf,  t->len);
+> +
+> +               msg->actual_length += t->len;
+> +       }
+> +
+> +       msg->status = ret;
+> +       spi_finalize_current_message(master);
+
+... can't you just use .transfer_one(), instead of duplicating the logic
+from spi_transfer_one_message()?
+Or is there some special detail that's not obvious to the casual reviewer?
+
+
+> +static const struct of_device_id of_spibsc_match[] = {
+> +       { .compatible = "renesas,spibsc"},
+> +       { .compatible = "renesas,r7s72100-spibsc", .data = (void *)HAS_SPBCR},
+> +       { .compatible = "renesas,r7s9210-spibsc"},
+
+Do you need to match against all 3 in the driver?
+Does SPIBSC work on RZ/A1 when not setting HAS_SPBCR?
+If not, the fallback to "renesas,spibsc" is not valid for RZ/A1.
+
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_spibsc_match);
+> +
+> +static struct platform_driver spibsc_driver = {
+> +       .probe = spibsc_probe,
+> +       .remove = spibsc_remove,
+> +       .driver = {
+> +               .name = "spibsc",
+> +               .owner = THIS_MODULE,
+> +               .of_match_table = of_spibsc_match,
+> +       },
+> +};
+> +module_platform_driver(spibsc_driver);
+> +
+> +MODULE_DESCRIPTION("Renesas SPIBSC SPI Flash driver");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Chris Brandt");
+> --
+> 2.23.0
+>
+
+
+--
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
