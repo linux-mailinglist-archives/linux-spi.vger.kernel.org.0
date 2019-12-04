@@ -2,99 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA27112B1F
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 13:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9960C112B2B
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 13:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727469AbfLDMOW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Dec 2019 07:14:22 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:42398 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727445AbfLDMOW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 07:14:22 -0500
-Received: by mail-oi1-f195.google.com with SMTP id j22so6611565oij.9;
-        Wed, 04 Dec 2019 04:14:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gyltMSwaGXAux8Z3E1Rs/8+GQsTqCMlqwz9wEprYuxI=;
-        b=qLWp7sO2ECMTDQgb+3QyLoEYzIQ2A9L4W+BG7LhccZqbYaUq8B7EHV9iPcm+Tt+cl1
-         HGC7M9qcFwgW67HyP6dLkgaML7LAiA/YlCq3LV9YMpsRIJ9X6FIAslWWm09oQuNek1k0
-         YfB3vfB42XYC39ua8t+OsoNEsrqZbYCMra9pw2ZpQ0br/wUqL4UnfDzw28AXqovQYtuh
-         y40EUjh0V6pWQnXAdlYIiNVeFJvbRbeYVNbJRtrm1qwpLUIIjqTaMnXVKGeN2MxO4gAt
-         3spc5o1NBP+mLZiUipyfWdqawC55gypORoL5iSvxGfuVwVfM/RQts+D8/FMcZCoVoDMy
-         FUlw==
-X-Gm-Message-State: APjAAAXpEQnGDfdi5t64lRwAbmdrfCcruulzaBN/5DrngQWdKUDAetRi
-        XdVb+NUPstQD1sXy32laY45l3G8e5BqdwnFNdNA=
-X-Google-Smtp-Source: APXvYqw8Fs1+GeWP1j9ni3BiJ585N8x8j9pInrEEwGCzSDYGx3Bebh2yBXnZb5CHErF17b0reE6WRUv9j4VhTCJ0ntE=
-X-Received: by 2002:a05:6808:8ec:: with SMTP id d12mr530181oic.131.1575461661003;
- Wed, 04 Dec 2019 04:14:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20191203034519.5640-1-chris.brandt@renesas.com>
- <20191203034519.5640-5-chris.brandt@renesas.com> <20191203141944.GI1998@sirena.org.uk>
- <CAMuHMdXk5DDebriHxmtz0NWF_zDhBK=fBZugdUfmEAyU0O4zMQ@mail.gmail.com> <20191204112528.GQ1998@sirena.org.uk>
-In-Reply-To: <20191204112528.GQ1998@sirena.org.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 4 Dec 2019 13:14:09 +0100
-Message-ID: <CAMuHMdXY4Po4p0uL_6VU7ia4R7i7F5N+GA4MUaQfhGFvpgLT7g@mail.gmail.com>
-Subject: Re: [PATCH 4/6] spi: Add SPIBSC driver
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Chris Brandt <chris.brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727752AbfLDMPr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Dec 2019 07:15:47 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52604 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727445AbfLDMPq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 07:15:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=RC+7zXRqYsH/Z5uX+H5Hl29YUyIBfWV7tx5prRznMfA=; b=hj2ibWPZpWE1
+        IcPuy11+8LfYQb6ykvMY99RVVIThhNll6CCNgiEB16q0NhUXwQhDvvo0ljO5Y3ZfoFdUST0jX7U6q
+        8KBP7oZKHLs0jiOuM6xvncERo0IM++DASspd4yK094sfbGdzKKSDdXEwDA3m4GsnQs0hBG5eC2pYA
+        F/cek=;
+Received: from fw-tnat-cam3.arm.com ([217.140.106.51] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1icTZF-0000Ag-7X; Wed, 04 Dec 2019 12:15:41 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id EC183D003B4; Wed,  4 Dec 2019 12:15:40 +0000 (GMT)
+From:   Mark Brown <broonie@kernel.org>
+To:     Huanpeng Xin <huanpeng.xin@unisoc.com>
+Cc:     baolin.wang7@gmail.com, Baolin Wang <baolin.wang7@gmail.com>,
+        broonie@kernel.org, huanpeng.xin@unisoc.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com
+Subject: Applied "spi: sprd: Fix the incorrect SPI register" to the spi tree
+In-Reply-To: <b4f7f89ec0fdc595335687bfbd9f962213bc4a1d.1575443510.git.baolin.wang7@gmail.com>
+Message-Id: <applied-b4f7f89ec0fdc595335687bfbd9f962213bc4a1d.1575443510.git.baolin.wang7@gmail.com>
+X-Patchwork-Hint: ignore
+Date:   Wed,  4 Dec 2019 12:15:40 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+The patch
 
-On Wed, Dec 4, 2019 at 12:25 PM Mark Brown <broonie@kernel.org> wrote:
-> On Tue, Dec 03, 2019 at 07:29:45PM +0100, Geert Uytterhoeven wrote:
-> > On Tue, Dec 3, 2019 at 3:19 PM Mark Brown <broonie@kernel.org> wrote:
-> > > > +     pm_runtime_put(&pdev->dev);
-> > > > +     pm_runtime_disable(&pdev->dev);
->
-> > > There seems to be no purpose in the runtime PM code in this
-> > > driver, there's no PM operations of any kind and the driver holds
-> > > a runtime PM reference for the entire lifetime of the device.
->
-> > It matters for the clock domain (assumed the module clock is not always
-> > marked as a critical clock).
->
-> That seems like a problem with what the clock domains are doing
-> surely?  The default is supposed to be that if runtime PM isn't
-> enabled we get the behaviour the driver is manually implementing
+   spi: sprd: Fix the incorrect SPI register
 
-Unfortunately not: if the driver doesn't implement Runtime PM, the
-default is to not do anything.  Later, unused clocks will be disabled,
-and the device will stop functioning.
+has been applied to the spi tree at
 
-> here.  Besides, if this is actually impacting power management
-> I'd expect us to be letting the IP idle rather than holding it
-> powered up all the time.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
 
-That would be better, definitely.  However, that's just an optimization over
-holding it powered up all the time.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-Gr{oetje,eeting}s,
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-                        Geert
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 5e9c5236b7b86779b53b762f7e66240c3f18314b Mon Sep 17 00:00:00 2001
+From: Huanpeng Xin <huanpeng.xin@unisoc.com>
+Date: Wed, 4 Dec 2019 15:13:59 +0800
+Subject: [PATCH] spi: sprd: Fix the incorrect SPI register
+
+The original code used an incorrect SPI register to initialize the SPI
+controller in sprd_spi_init_hw(), thus fix it.
+
+Fixes: e7d973a31c24 ("spi: sprd: Add SPI driver for Spreadtrum SC9860")
+Signed-off-by: Huanpeng Xin <huanpeng.xin@unisoc.com>
+Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
+Link: https://lore.kernel.org/r/b4f7f89ec0fdc595335687bfbd9f962213bc4a1d.1575443510.git.baolin.wang7@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-sprd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-sprd.c b/drivers/spi/spi-sprd.c
+index 2ee1feb41681..6678f1cbc566 100644
+--- a/drivers/spi/spi-sprd.c
++++ b/drivers/spi/spi-sprd.c
+@@ -678,7 +678,7 @@ static int sprd_spi_init_hw(struct sprd_spi *ss, struct spi_transfer *t)
+ 	if (d->unit != SPI_DELAY_UNIT_SCK)
+ 		return -EINVAL;
+ 
+-	val = readl_relaxed(ss->base + SPRD_SPI_CTL7);
++	val = readl_relaxed(ss->base + SPRD_SPI_CTL0);
+ 	val &= ~(SPRD_SPI_SCK_REV | SPRD_SPI_NG_TX | SPRD_SPI_NG_RX);
+ 	/* Set default chip selection, clock phase and clock polarity */
+ 	val |= ss->hw_mode & SPI_CPHA ? SPRD_SPI_NG_RX : SPRD_SPI_NG_TX;
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.20.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
