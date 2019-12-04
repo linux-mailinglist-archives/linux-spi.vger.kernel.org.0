@@ -2,44 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3CD112651
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 10:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F0D112850
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 10:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbfLDJDP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Dec 2019 04:03:15 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:39745 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725994AbfLDJDP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 04:03:15 -0500
-Received: by mail-oi1-f194.google.com with SMTP id a67so6169677oib.6;
-        Wed, 04 Dec 2019 01:03:14 -0800 (PST)
+        id S1727331AbfLDJrx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Dec 2019 04:47:53 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40686 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725971AbfLDJrx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 04:47:53 -0500
+Received: by mail-wr1-f66.google.com with SMTP id c14so7692341wrn.7
+        for <linux-spi@vger.kernel.org>; Wed, 04 Dec 2019 01:47:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=nUdWcCxekLeFMDxvcujgfAEAbAWtlApWfV7PYiJfUJk=;
+        b=Pll/orGq1IfyiAKUYWN6G2acirexQXuI5LIS2uQT6IlXhuW8X1vz7/Dn/gHgOaS6NK
+         huaal0U4LwwRJzu70M7avAlqcfECyJUbP1xzsLbqhYHE0pKKVNaq4/zdJu73r1du0TQB
+         wo3uf0zJeN/w6NoZllZo7EVKSUp6LF7rvA4LYxbI5OLKGKGj7ROn3ouPxZCoF44rQcnP
+         0DtrZcw2+HTiqtkMO2Wpt+73mtY1d1sft0pCcLOZJc6ASQIv3irB2MWFPBQGYpjHTgzW
+         rsDl+R3SFhTbvxla4nZmr0hE5i8K3OnD64QoKnxoC4rHv2dsNH3uIfNnldO8X6BWS4TP
+         cYdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GiimM+vAPJm9W6bXX8wORh+f+Ya7ArJHf1Ny0AsE3FE=;
-        b=I+sFzUmkVNyh8AH+f+UMttJ4b8zfqyjU0FPs+sUkrnksWIgaKPeNvjT6UDOWEQPVKv
-         CkPiaXfafyS6aU6mT0AZzTPvpBuU8yq6NcGDKYbHMgU8umKfgx8ch4ai8DuyEebe6C57
-         92gQ/3OKdR+vAU1fcTAVZ4r6DrazR32zyBY7qYDfliUqwBn9yIqT7GoRonJXpfdMPZJf
-         nvSPq/vRnQYJFDZQJLRtoUB+eRe9npa5BzWmb0BroagOPSGijOeSuyQq7E9AYYaaq0Tb
-         KlAGeao/IbYqMeao2QFaUjG4ROuijEqkryEshflpILq/R5RTiuoSIV5KMHf7f4iSGb34
-         F8RQ==
-X-Gm-Message-State: APjAAAVfP6NkFyg/LuWQ7D3mligYY4DaYefxYqBSQhymyqWZGKOyIOGB
-        7b6rZAEBLICB0YvGMnRc0dd89wVDteudHX01qwM=
-X-Google-Smtp-Source: APXvYqzQXYe4gQCdUWg4G1jBsuzwR+3cpC7tyX1rRK1ihEkgVryFHXzaVwEjpn5VWpFRyxiwDsOp9WBGaMP8rktHGag=
-X-Received: by 2002:aca:36c5:: with SMTP id d188mr1768698oia.54.1575450194036;
- Wed, 04 Dec 2019 01:03:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20191203034519.5640-1-chris.brandt@renesas.com>
- <20191203034519.5640-3-chris.brandt@renesas.com> <CAMuHMdXUVdG_PMQEpz=QWLCaabfK8Mc41zFiymXJ4Rx_C2gzdg@mail.gmail.com>
- <TY1PR01MB1562F44E4FB80788922CE9BE8A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <CAMuHMdX_sD+UHnOF+bdbT99zfK1V92+1kVzGnb9JXJyBd-Y5-w@mail.gmail.com> <20191204083821.GA3468@dell>
-In-Reply-To: <20191204083821.GA3468@dell>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 4 Dec 2019 10:03:02 +0100
-Message-ID: <CAMuHMdXC+=2nH51ASu0u3WUchjM5bC_bROgcYM-OrsM7OgZpbg@mail.gmail.com>
-Subject: Re: [PATCH 2/6] ARM: dts: r7s72100: Add SPIBSC clocks
-To:     Lee Jones <lee.jones@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=nUdWcCxekLeFMDxvcujgfAEAbAWtlApWfV7PYiJfUJk=;
+        b=V70RTqwQe3KkQKuYI2R343BMz8Au2Z7Qug6cgd+S2JgOXGIm9ct87NuzT8bCSspZ4C
+         J+IC6zUt/LZYeB7+fcIqAQB8DmmR45OaQbso5AkuVb/qYevKhqXgEr5Bpa2u9rtpp1tp
+         ks9EXTFDFFQdoJ4pHNPyJOrpqbGRpaOUYOJXogVywzLR2xz6gP2jR2p5DOjv5BpR27Xr
+         vKCO+L9UWQRNReGLM4RiBDFPZGF4lonWoZx1h/RICGSMAIJsxzsI94KkMCdsk/kczhBc
+         7ql6mcc6HD4xoWN3ZPocStAgjRCBlmWc9Uz28XevyXZIIXfRL7jcxDn8gMeh1hwLwdiZ
+         +N5Q==
+X-Gm-Message-State: APjAAAW1qME+94WuTDswN8ut4jcs3MVDbTMDt4JBcx5ZV4KEg5C/UXQk
+        YFHGSMLHY6hAYxHlz4hn/tSH9WmtcUI=
+X-Google-Smtp-Source: APXvYqweyVggL0J5SQNi6hKbn22bvo4CUaUJ5obDRItJYXjMPgmMB/E2hFto2npEuG1XdZ4eBodgyA==
+X-Received: by 2002:a5d:640d:: with SMTP id z13mr2913510wru.181.1575452870670;
+        Wed, 04 Dec 2019 01:47:50 -0800 (PST)
+Received: from dell ([2.27.167.28])
+        by smtp.gmail.com with ESMTPSA id 60sm8178016wrn.86.2019.12.04.01.47.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2019 01:47:50 -0800 (PST)
+Date:   Wed, 4 Dec 2019 09:47:41 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Chris Brandt <Chris.Brandt@renesas.com>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -53,94 +62,123 @@ Cc:     Chris Brandt <Chris.Brandt@renesas.com>,
         linux-clk <linux-clk@vger.kernel.org>,
         Mason Yang <masonccyang@mxic.com.tw>,
         Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 2/6] ARM: dts: r7s72100: Add SPIBSC clocks
+Message-ID: <20191204094741.GC3468@dell>
+References: <20191203034519.5640-1-chris.brandt@renesas.com>
+ <20191203034519.5640-3-chris.brandt@renesas.com>
+ <CAMuHMdXUVdG_PMQEpz=QWLCaabfK8Mc41zFiymXJ4Rx_C2gzdg@mail.gmail.com>
+ <TY1PR01MB1562F44E4FB80788922CE9BE8A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <CAMuHMdX_sD+UHnOF+bdbT99zfK1V92+1kVzGnb9JXJyBd-Y5-w@mail.gmail.com>
+ <20191204083821.GA3468@dell>
+ <CAMuHMdXC+=2nH51ASu0u3WUchjM5bC_bROgcYM-OrsM7OgZpbg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdXC+=2nH51ASu0u3WUchjM5bC_bROgcYM-OrsM7OgZpbg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Lee,
+On Wed, 04 Dec 2019, Geert Uytterhoeven wrote:
 
-On Wed, Dec 4, 2019 at 9:38 AM Lee Jones <lee.jones@linaro.org> wrote:
-> On Tue, 03 Dec 2019, Geert Uytterhoeven wrote:
-> > On Tue, Dec 3, 2019 at 7:58 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
-> > > On Tue, Dec 3, 2019, Geert Uytterhoeven wrote:
-> > > > > +                       reg = <0x3fefa000 0x100>, <0x18000000
-> > > > > + 0x4000000>;
+> Hi Lee,
+> 
+> On Wed, Dec 4, 2019 at 9:38 AM Lee Jones <lee.jones@linaro.org> wrote:
+> > On Tue, 03 Dec 2019, Geert Uytterhoeven wrote:
+> > > On Tue, Dec 3, 2019 at 7:58 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
+> > > > On Tue, Dec 3, 2019, Geert Uytterhoeven wrote:
+> > > > > > +                       reg = <0x3fefa000 0x100>, <0x18000000
+> > > > > > + 0x4000000>;
+> > > > >
+> > > > > The second region conflicts with the XIP flash@18000000 in
+> > > > > arch/arm/boot/dts/r7s72100-gr-peach.dts.
+> > > > > Yes, I know it is the same device ;-)
 > > > >
-> > > > The second region conflicts with the XIP flash@18000000 in
-> > > > arch/arm/boot/dts/r7s72100-gr-peach.dts.
-> > > > Yes, I know it is the same device ;-)
+> > > > Is that just an FYI?? Or do you have some suggestion??
 > > >
-> > > Is that just an FYI?? Or do you have some suggestion??
-> >
-> > Can the flash subnode be compatible with "mtd-rom", even if the parent node
-> > is kept disabled?
-> >
-> > > > > +                       clock-critical = <4>; /* spibsc0 */
+> > > Can the flash subnode be compatible with "mtd-rom", even if the parent node
+> > > is kept disabled?
+> > >
+> > > > > > +                       clock-critical = <4>; /* spibsc0 */
+> > > > >
+> > > > > Iff we go this clock-critical route, I think this should be specified in the
+> > > > > board-specific .dts instead of in the SoC-specific .dtsi.
 > > > >
-> > > > Iff we go this clock-critical route, I think this should be specified in the
-> > > > board-specific .dts instead of in the SoC-specific .dtsi.
+> > > > OK, that's fine. It makes more sense to be in the .dts because it's a board
+> > > > design decision. I will remove it from the patch.
+> > > >
+> > > > The one 'tricky' thing is that the <4> is the index into the number of clocks.
+> > > >
+> > > > So in the Renesas BSP where it includes the VDC5 LCD controllers,
+> > > >
+> > > > clock-output-names = "i2c0", "i2c1", "i2c2", "i2c3", "vdc50", "vdc51", "spibsc0", "spibsc1";
+> > > >
+> > > > the <4> needs to become a <6>.
 > > >
-> > > OK, that's fine. It makes more sense to be in the .dts because it's a board
-> > > design decision. I will remove it from the patch.
+> > > Unless you pass "clkidx" instead of "i" to of_clk_detect_critical() in [1],
+> > > and use "clock-critical = <R7S72100_CLK_SPIBSC0>" in DT?
 > > >
-> > > The one 'tricky' thing is that the <4> is the index into the number of clocks.
-> > >
-> > > So in the Renesas BSP where it includes the VDC5 LCD controllers,
-> > >
-> > > clock-output-names = "i2c0", "i2c1", "i2c2", "i2c3", "vdc50", "vdc51", "spibsc0", "spibsc1";
-> > >
-> > > the <4> needs to become a <6>.
+> > > Unfortunately the exact semantics of clock-critical were never documented.
+> > > Lee?
 > >
-> > Unless you pass "clkidx" instead of "i" to of_clk_detect_critical() in [1],
-> > and use "clock-critical = <R7S72100_CLK_SPIBSC0>" in DT?
+> > /**
+> >  * of_clk_detect_critical() - set CLK_IS_CRITICAL flag from Device Tree
+> >  * @np: Device node pointer associated with clock provider
+> >  * @index: clock index
+> >  * @flags: pointer to top-level framework flags
+> >  *
+> >  * Detects if the clock-critical property exists and, if so, sets the
+> >  * corresponding CLK_IS_CRITICAL flag.
+> >  *
+> >  * Do not use this function. It exists only for legacy Device Tree
+> >  * bindings, such as the one-clock-per-node style that are outdated.
+> >  * Those bindings typically put all clock data into .dts and the Linux
+> >  * driver has no clock data, thus making it impossible to set this flag
+> >  * correctly from the driver. Only those drivers may call
+> >  * of_clk_detect_critical from their setup functions.
+> >  *
+> >  * Return: error code or zero on success
+> >  */
 > >
-> > Unfortunately the exact semantics of clock-critical were never documented.
-> > Lee?
->
-> /**
->  * of_clk_detect_critical() - set CLK_IS_CRITICAL flag from Device Tree
->  * @np: Device node pointer associated with clock provider
->  * @index: clock index
->  * @flags: pointer to top-level framework flags
->  *
->  * Detects if the clock-critical property exists and, if so, sets the
->  * corresponding CLK_IS_CRITICAL flag.
->  *
->  * Do not use this function. It exists only for legacy Device Tree
->  * bindings, such as the one-clock-per-node style that are outdated.
->  * Those bindings typically put all clock data into .dts and the Linux
->  * driver has no clock data, thus making it impossible to set this flag
->  * correctly from the driver. Only those drivers may call
->  * of_clk_detect_critical from their setup functions.
->  *
->  * Return: error code or zero on success
->  */
->
-> If this meets the criteria, the API is pretty simple/self
-> explanatory.  What are you having trouble with?
+> > If this meets the criteria, the API is pretty simple/self
+> > explanatory.  What are you having trouble with?
+> 
+> What exactly is the "index" parameter?  This value is matched against
+> the values of the "clock-critical" (array) property, but it is described
+> nowhere in the DT bindings.
+> stih407-clock.dtsi seems to assume this value is an index into the
+> clock-output-names array?
+> Can we use it as a value of "clock-indices" instead?
 
-What exactly is the "index" parameter?  This value is matched against
-the values of the "clock-critical" (array) property, but it is described
-nowhere in the DT bindings.
-stih407-clock.dtsi seems to assume this value is an index into the
-clock-output-names array?
-Can we use it as a value of "clock-indices" instead?
+of_clk_detect_critical(), the consumer of the device tree property
+'clock-critical', is a helper.  Neither deliver any auto-magical
+functionality.  Simply providing an index into the property will not
+do anything useful.  It's up to the vendor's clock driver to handle.
 
-> > Thanks!
-> >
-> > [1] "[PATCH 1/6] clk: renesas: mstp: Add critical clock from device
-> > tree support"
-> >     https://lore.kernel.org/linux-renesas-soc/20191203034519.5640-2-chris.brandt@renesas.com/
+The vendor driver can call of_clk_detect_critical() with *any* index
+it sees fit.  If it matches a number listed in the 'clock-critical'
+array, the CLK_IS_CRITICAL flag is set in the flags pointed to by the
+3rd function parameter.
 
-Gr{oetje,eeting}s,
+Take a look at some of the call sites in drivers/clk/st/* for further
+clarification.
 
-                        Geert
+> > > Thanks!
+> > >
+> > > [1] "[PATCH 1/6] clk: renesas: mstp: Add critical clock from device
+> > > tree support"
+> > >     https://lore.kernel.org/linux-renesas-soc/20191203034519.5640-2-chris.brandt@renesas.com/
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
