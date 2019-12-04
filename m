@@ -2,41 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CED1125A0
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 09:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB563112617
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 09:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726899AbfLDInr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Dec 2019 03:43:47 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:36302 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726217AbfLDInq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 03:43:46 -0500
-Received: by mail-oi1-f196.google.com with SMTP id c16so6144408oic.3;
-        Wed, 04 Dec 2019 00:43:46 -0800 (PST)
+        id S1725830AbfLDI4m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Dec 2019 03:56:42 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:41311 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbfLDI4m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 03:56:42 -0500
+Received: by mail-oi1-f193.google.com with SMTP id i1so2072085oie.8;
+        Wed, 04 Dec 2019 00:56:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jMNDNoGogs0zIVx0MUjgyWFHFtVdl2mqSYxmc3Nnc/A=;
-        b=ka4CFhdtgXo0SNJV6BwCMJGGTkMyvAzoMgOvQ+5leQlx51WergqpYyBK6NJpgNkaFv
-         vLHb+yZEzpE/xpmWGpmLyXoiZkoTvH3B5rG8wDxWbp9GyPYtHDB/Shqt2xJDTLcveNCn
-         H+/FOurmuGonq1YMKbKc1kUPZxoM9wZZXkFmg9OWMboBD0CH/1DkYTobzcCx4//0Z352
-         CCEYUfhKQgLPDSk081W7HIqQROaWRdv8nVQ0WtcFhImySFrCmfqLuD2siWY73yggCYy7
-         +IbZN09TtaEraVGtV0YtPDGAzJKv3UsvoPBdEs2w7e6+ky7i9anuUUpcs3rQj4S1jJaz
-         jWeQ==
-X-Gm-Message-State: APjAAAXEFWUu+PgcI4t68E3E0rn+WcKfdMsTK6sABRYW7keSqQuewM5d
-        Oj2iS+qpOkiz6c84Lh5nFoEzg7L2nKEeXsu+NZ4=
-X-Google-Smtp-Source: APXvYqyTjUqAw5gnC/dN6OVvFFm1xVywx9M+aTiRF7Kq1tQO+ntIrmuya+yV20NM+jRqU59d2JeUMXa2oYIWMweHYzs=
-X-Received: by 2002:aca:3a86:: with SMTP id h128mr1555087oia.131.1575449025576;
- Wed, 04 Dec 2019 00:43:45 -0800 (PST)
+        bh=LVFymO7RxKc1SH1kxRmoxduL3Qufx6k2WlK1nkDrG/U=;
+        b=peFeKHLOxw2gC0D1QNCodKYJyfXudd/2GxEwysqLFe4Ps/GayXDEbfAq64xatal+2z
+         U9zHPVXGwBLmXZ0IA/OWSyN26Fe1RZZgpF7sI45rEk4U/Vh2R4ef1bJ6asnHsZMc8L6Y
+         9XNR5aelVg2doKo+ZKh6HssFNC9FGmRMypOcYX8XfYx1psE/6vIYRQ+0hi4XG9qNAXXq
+         3Y93aojD6/DJCialMd3rlM5pIZF7319nvolRxXxRTamscq0QMT++A4WGP/jMbxpWdxkV
+         TeQvcCE+TrrHjGwhs8/NxKonRCQPNDs80jYSR7jpYydkBQZWi8+ZnxgH4WeajKX+fffI
+         Z50A==
+X-Gm-Message-State: APjAAAU1jCyKW88x9CGJWHc2n0RmzPVAFVQ99xm4JnzIi1jYXXnX4wKd
+        WbMydUEJ7/IiJAGKHM4QrxFUnS5GxcgH3WwGTY0=
+X-Google-Smtp-Source: APXvYqx8VTTKUMma9S8z5+FJD6ZModoCaejPqlKfXRaFP13Yc0tfRVyCuk5xiXbuC5utxyV2lDAMv963ZB5sv5CFWe4=
+X-Received: by 2002:aca:4a41:: with SMTP id x62mr1579212oia.148.1575449801059;
+ Wed, 04 Dec 2019 00:56:41 -0800 (PST)
 MIME-Version: 1.0
 References: <20191203034519.5640-1-chris.brandt@renesas.com>
  <20191203034519.5640-7-chris.brandt@renesas.com> <CAMuHMdVBYpuoK7hcyNLK-mAdpTQz3ohTGXuYdFPHdpU5RoPr6Q@mail.gmail.com>
- <TY1PR01MB15622365FCCC3C1CB052FD0E8A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY1PR01MB15622365FCCC3C1CB052FD0E8A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <CAMuHMdV7XY7FB9pBsxuWxGsqYaD9n1Y+XZXEJO5OsuigjjUgpw@mail.gmail.com> <TY1PR01MB1562A6AFD8D0807B345B7A208A5D0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY1PR01MB1562A6AFD8D0807B345B7A208A5D0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 4 Dec 2019 09:43:34 +0100
-Message-ID: <CAMuHMdXKSWeBdCDc6u5KWE67nD_9FStr9A_vb_5K=qpQ_y8bSw@mail.gmail.com>
+Date:   Wed, 4 Dec 2019 09:56:29 +0100
+Message-ID: <CAMuHMdUn3h1VjYkARTFBqMij5aYg2mJSVErwceHc0NATBo+_hw@mail.gmail.com>
 Subject: Re: [PATCH 6/6] dt-bindings: spi: Document Renesas SPIBSC bindings
 To:     Chris Brandt <Chris.Brandt@renesas.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -59,63 +59,76 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Chris,
 
-On Tue, Dec 3, 2019 at 11:33 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
+On Wed, Dec 4, 2019 at 3:55 AM Chris Brandt <Chris.Brandt@renesas.com> wrote:
 > On Tue, Dec 3, 2019, Geert Uytterhoeven wrote:
-> > > +++ b/Documentation/devicetree/bindings/spi/spi-renesas-spibsc.txt
-> > > +Required properties:
-> > > +- compatible: should be an SoC-specific compatible value, followed by
-> > > +               "renesas,spibsc" as a fallback.
-> > > +               supported SoC-specific values are:
-> > > +               "renesas,r7s72100-spibsc"       (RZ/A1)
-> > > +               "renesas,r7s9210-spibsc"        (RZ/A2)
+> > > What about the "mtd-rom" use for e.g. XIP?
 > >
-> > Is the fallback valid for RZ/A1, which has its own special match entry in the
-> > driver?
-> > Will it be valid for R-Car Gen3?
-> > If not, you may want to drop it completely.
+> > I gave this some more thought. Basically there are two modes: SPI FLASH and
+> > direct mapped emulation (HyperFLASH could be a third mode).
+> > The bindings described above are for the SPI FLASH use-case.
 >
-> The fallback would still work for RZ/A1, you just would not be able to
-> set the baud rate. But, I have no problem dropping the fallback. I'm fine
-> with having a compatible string for each SoC that is known to work for.
->
-> I have not tried it with Gen3, but I would guess there will be some minor
-> difference that will needed to be accounted for.
+> I would say in general, there are just two modes "SPI Mode" which was
+> intended to do things like discover the attached flash and erase/writing.
+> And direct mapped which was intended only for reading. Both of those
+> modes were intended to be used for QSPI flash, HyperFlash or OctaFlash.
+> There's a register bit you set to tell the PHY what you are talking to.
 
 OK.
 
-> > > +- reg: should contain three register areas:
-> > > +       first for the base address of SPIBSC registers,
-> > > +       second for the direct mapping read mode
-> > > +- clocks: should contain the clock phandle/specifier pair for the module
-> > clock.
-> > > +- power-domains: should contain the power domain phandle/specifier pair.
-> > > +- #address-cells: should be 1
-> > > +- #size-cells: should be 0
-> > > +- flash: should be represented by a subnode of the SPIBSC node,
-> > > +        its "compatible" property contains "jedec,spi-nor" if SPI is used.
-> >
-> > What about the "mtd-rom" use for e.g. XIP?
+> > On the driver side, if your spibsc driver does not find a flash subnode that
+> > is compatible with "jedec,spi-nor", it should return -ENODEV, so
+> > drivers/bus/simple-pm-bus.c can take over for the second mode, if needed.
 >
-> But "mtd-rom" doesn't really have anything to do with the functionality of the
-> driver when it is being used in "SPI mode".
+> I think here is the bigger issue/question/decision.
+>
+> This one IP block supports 3 different types of Flash: QSPI, Hyper, Octa.
+> Also, it runs in 2 mode:
+>  "SPI Mode" for writing and other stuff
+>  "Direct Mode" Read only, but faster and directly accessible.
+>
+>  (QSPI also supports 1-bit,2-bit,4-bit, and 8-bit(dual)....but we'll
+>   forget about that for now )
 
-Correct. But DT describes hardware.  If the FLASH is used in direct mapped
-mode, that should be described in DT.
+To avoid future problems, you probably do want to specify
+spi-tx-bus-width = <4> and spi-rx-bus-width = <4> in DTS now.
 
-> Maybe I just remove any mention of this for now.
+> So the question is if someone really wants to use it in "direct mode"
+> most of the time, but also need to switch back into "SPI mode" to rewrite
+> the flash, should this driver handle both cases?
 >
-> > interrupts? RZ/A2M seems to have an SPIBSC interrupt, RZ/A1 hasn't.
->
-> There was never any interrupts in the SPIBSC.
-> But it looks like when they added HyperFlash and OctaFlash support, they put
-> in some interrupts for that.
-> And now that I look at it, they are for pins labeled RPC_INT, RPC_WC, RPC_RESET.
-> (I just realized that "RPC" stands for "Reduced Pin Count")
->
-> So....am I supposed to add in that interrupt even though I'm not planning on using
-> it??
+> Basically, it's like the 'role switch' in the USB OTG drivers.
 
-DT describes hardware, not driver limitations.
+If you want to do that, both configurations should be described in DT,
+and we need a way to specify what's being used.
+I guess if the direct mapped mode is used, you always want to boot the
+kernel using that mode, and only switch to SPI mode temporarily after
+boot?  So that could be handled by manually unbinding the driver
+from physmap-flash, and forcing a bind to spibsc, all from sysfs.
+(Which cuts the branch the kernel is sitting on in the case of XIP...)
+
+Suggestions are welcome!
+
+> This driver I created was just attempting to cover the "SPI mode" case
+> for those that want to be able to re-write u-boot at run-time. And, it
+> could be extended to support HyperFlash and OctaFlash in SPI mode as well
+> (you use the same registers, but the commands are different).
+
+OK.
+
+> So my suggestion is to forget about trying to 'support' direct mode in
+> this driver at the moment. If you're using this HW for something like
+> XIP, then don't enable this driver at all (which is what we have been
+> doing).
+
+Still, the direct-mapped mode should be described in DT, when used.
+arch/arm/boot/dts/r7s72100-gr-peach.dts does describe the FLASH,
+but fails to describe the exact topology (flash is a child of spibsc,
+and thus relies on the spibsc module clock being turned on).
+
+BTW, when using spibsc in direct-mapped mode: if you turn of and on
+again the module clock, does the spibsc need reprogramming?
+
+Thanks!
 
 Gr{oetje,eeting}s,
 
