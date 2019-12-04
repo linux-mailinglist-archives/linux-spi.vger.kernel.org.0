@@ -2,85 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6E211236D
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 08:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82501123F2
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 08:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727289AbfLDHOm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Dec 2019 02:14:42 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43561 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727286AbfLDHOm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 02:14:42 -0500
-Received: by mail-pf1-f195.google.com with SMTP id h14so3154629pfe.10;
-        Tue, 03 Dec 2019 23:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=yyLimGD4f12DqzRTDHXGiQPmCcJPxnl3/Nn96acsv98=;
-        b=NWPoNEpr+2n1OE+peRK1EqCGnArK/SkCMhZR0QpNKiiv3Rd8vMTzfibhm9vtm1wYK2
-         YqmiYIM2+V/DhvZ/2flVIAn5iHxC7BmgV83d8Aj+YMnmBYH0oRBEFSEeUDPnEby2WtsK
-         owk1Kd4goB65oRfx++EoLTN5ecczZvhZfFFXm4VAKo+QEZ4H63MfEoZ8isDCZ+dEO2oS
-         yPl1tRK/OeDHEW0+onwKbT7CagyjBrAiGWQ+UEzjaserorjprekSAs5fvY0gYpdRcc0r
-         RBEKq6NZNFTR6aC7S7sDs8yFpxZXR8Zte4V00deAY4OQP/7KH3+M8vcFhlimtUAHTiN6
-         BjtA==
+        id S1726166AbfLDH5n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Dec 2019 02:57:43 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45962 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbfLDH5n (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 02:57:43 -0500
+Received: by mail-oi1-f196.google.com with SMTP id v10so3948377oiv.12;
+        Tue, 03 Dec 2019 23:57:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=yyLimGD4f12DqzRTDHXGiQPmCcJPxnl3/Nn96acsv98=;
-        b=PKoJ505LvqgaDnk+WgEaFnUIJSiZXvuVg0qguQaAaYRMi2FSXfPucQcfFTO1UiO248
-         n2Y7gTu6H0LWxfd82pJxS3w7Ro8BqRG8ZWbB2St5h8AqsmOC2lBPx7cWrJVNOjrFCUYi
-         S95Mmepd0fUPXpDyxuVs1xEbu6pZlwz8hzW6aELjlapua1h2V9ltCDwyZo0xOwC01o6P
-         n/m8WvmFh7X5oZg9v3/VRO6nrPxbZR4lP73pACyElKbi70GB8FvhjHfVcmR3I3Vavr5l
-         QqV/5AZyEkNFF78s97/YcA003Ah7JE4n7Jr5wlD9iXWsQDND7x1WZwQci/ZlgROEPNxR
-         S0yw==
-X-Gm-Message-State: APjAAAWzSAZFuEGomEmqmIukqqomrxbya8Emq57TlGl80z5Z+DAx+RJC
-        l7juo6z3/aZAxmOasfaZ8UI=
-X-Google-Smtp-Source: APXvYqwmiSTz4VuzXFxIWjnodDj3ScjphNtZmai9HxMeTn/1ZOshDjZamXqvEzddOsc1Teq19EcqcQ==
-X-Received: by 2002:a62:7b46:: with SMTP id w67mr2080477pfc.113.1575443681576;
-        Tue, 03 Dec 2019 23:14:41 -0800 (PST)
-Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id q12sm848316pfh.158.2019.12.03.23.14.38
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 03 Dec 2019 23:14:40 -0800 (PST)
-From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     broonie@kernel.org
-Cc:     orsonzhai@gmail.com, zhang.lyra@gmail.com, baolin.wang7@gmail.com,
-        huanpeng.xin@unisoc.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: sprd: Fix the incorrect SPI register
-Date:   Wed,  4 Dec 2019 15:13:59 +0800
-Message-Id: <b4f7f89ec0fdc595335687bfbd9f962213bc4a1d.1575443510.git.baolin.wang7@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O4LalYjsnfEaSEeb2Zehe/J93R0bKGaAEEsomnP7Lc4=;
+        b=PRvqFkHg9bv4mpYaE8XKLbG5GEGz7O2LmBAOb0awr22hFcyxza1O0PDVjIJpdGdVHk
+         d31/MqFt7uNNCkMexqygSi45B6yBlCTTN8VAWs8aQ8LbcklnBxASRl4esqhDjxVaxJIe
+         QeU/SGP+0L9wqy5L77nm4gcZSSk1DPyn4ozhi+Yll0tK/lomRrPwwOeLm8LgUAY4yAOx
+         jMD1BFVXNc7xqYEkLlGqh14jceyBAVx/n0hTDOvWaSAGZSQRXov0bIvVEHB4hkX4bPlW
+         27yZSoJ6+f+MRkI/fsHwGb9eFrEPPkYY1+4LzUL1AtULQ0+jX4R0691fggYv+4ZMoiDx
+         t8KA==
+X-Gm-Message-State: APjAAAX8MT75CbnQsq+QicFbCqVwwfCeYx053cIbgIcVlv57jPrHZiVv
+        nVwk1dlI4i7uFyi+/2AvQiVVgtDHL3TFK4azgClJAg==
+X-Google-Smtp-Source: APXvYqzjyb4FJbVQHtyhh2tGF9RdLiHEpGR+02icu52LShy7lvntJoGkd+WARmtOCmx9JC+h7OytDime9XYsdUgzjLY=
+X-Received: by 2002:aca:4e87:: with SMTP id c129mr1455643oib.153.1575446262417;
+ Tue, 03 Dec 2019 23:57:42 -0800 (PST)
+MIME-Version: 1.0
+References: <20191203034519.5640-1-chris.brandt@renesas.com>
+ <20191203034519.5640-6-chris.brandt@renesas.com> <CAMuHMdXS_dSEGdMzHFuYraP=dU5WQFM+9DbPW1rFYH2reG2QhA@mail.gmail.com>
+ <TY1PR01MB1562E550DD31E799446F0FD48A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY1PR01MB1562E550DD31E799446F0FD48A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 4 Dec 2019 08:57:31 +0100
+Message-ID: <CAMuHMdVO2ud70cxVUHpCpvvZiMidHG1091bg3iOoOnFGOqpqWQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] ARM: dts: r7s9210: Add SPIBSC Device support
+To:     Chris Brandt <Chris.Brandt@renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Huanpeng Xin <huanpeng.xin@unisoc.com>
+Hi Chris,
 
-The original code used an incorrect SPI register to initialize the SPI
-controller in sprd_spi_init_hw(), thus fix it.
+On Tue, Dec 3, 2019 at 11:38 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
+> On Tue, Dec 3, 2019, Geert Uytterhoeven wrote:
+> > > +                       reg = <0x1f800000 0x8c>, <0x20000000
+> > > + 0x10000000 >;
+> >
+> > Any specific reason you're using 0x8c, not 0x100?
+>
+> Because....I keep forgetting what is the latest 'correct' size:
+>   A. The exact size of the register range
+> or
+>   B. The size rounded up to look nicer
 
-Fixes: e7d973a31c24 ("spi: sprd: Add SPI driver for Spreadtrum SC9860")
-Signed-off-by: Huanpeng Xin <huanpeng.xin@unisoc.com>
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
----
- drivers/spi/spi-sprd.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+C. The size used by the on-chip address decoder providing the module's
+   select signal? I doubt that's not a power of two ;-)
 
-diff --git a/drivers/spi/spi-sprd.c b/drivers/spi/spi-sprd.c
-index 2ee1feb..6678f1c 100644
---- a/drivers/spi/spi-sprd.c
-+++ b/drivers/spi/spi-sprd.c
-@@ -678,7 +678,7 @@ static int sprd_spi_init_hw(struct sprd_spi *ss, struct spi_transfer *t)
- 	if (d->unit != SPI_DELAY_UNIT_SCK)
- 		return -EINVAL;
- 
--	val = readl_relaxed(ss->base + SPRD_SPI_CTL7);
-+	val = readl_relaxed(ss->base + SPRD_SPI_CTL0);
- 	val &= ~(SPRD_SPI_SCK_REV | SPRD_SPI_NG_TX | SPRD_SPI_NG_RX);
- 	/* Set default chip selection, clock phase and clock polarity */
- 	val |= ss->hw_mode & SPI_CPHA ? SPRD_SPI_NG_RX : SPRD_SPI_NG_TX;
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-1.7.9.5
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
