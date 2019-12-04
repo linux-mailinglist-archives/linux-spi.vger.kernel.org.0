@@ -2,106 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9960C112B2B
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 13:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C35112B5B
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 13:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727752AbfLDMPr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Dec 2019 07:15:47 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52604 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727445AbfLDMPq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 07:15:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=RC+7zXRqYsH/Z5uX+H5Hl29YUyIBfWV7tx5prRznMfA=; b=hj2ibWPZpWE1
-        IcPuy11+8LfYQb6ykvMY99RVVIThhNll6CCNgiEB16q0NhUXwQhDvvo0ljO5Y3ZfoFdUST0jX7U6q
-        8KBP7oZKHLs0jiOuM6xvncERo0IM++DASspd4yK094sfbGdzKKSDdXEwDA3m4GsnQs0hBG5eC2pYA
-        F/cek=;
-Received: from fw-tnat-cam3.arm.com ([217.140.106.51] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1icTZF-0000Ag-7X; Wed, 04 Dec 2019 12:15:41 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id EC183D003B4; Wed,  4 Dec 2019 12:15:40 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Huanpeng Xin <huanpeng.xin@unisoc.com>
-Cc:     baolin.wang7@gmail.com, Baolin Wang <baolin.wang7@gmail.com>,
-        broonie@kernel.org, huanpeng.xin@unisoc.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, orsonzhai@gmail.com,
-        zhang.lyra@gmail.com
-Subject: Applied "spi: sprd: Fix the incorrect SPI register" to the spi tree
-In-Reply-To: <b4f7f89ec0fdc595335687bfbd9f962213bc4a1d.1575443510.git.baolin.wang7@gmail.com>
-Message-Id: <applied-b4f7f89ec0fdc595335687bfbd9f962213bc4a1d.1575443510.git.baolin.wang7@gmail.com>
-X-Patchwork-Hint: ignore
-Date:   Wed,  4 Dec 2019 12:15:40 +0000 (GMT)
+        id S1727811AbfLDMWZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Dec 2019 07:22:25 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:40977 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727818AbfLDMWS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 07:22:18 -0500
+Received: by mail-ed1-f66.google.com with SMTP id c26so6431149eds.8
+        for <linux-spi@vger.kernel.org>; Wed, 04 Dec 2019 04:22:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
+         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
+         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
+         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
+         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
+         4SHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=oYfO0RUMWEUXyyIYETEvyKqNiSzXR7+PM9tRAPv1T/DivdsyBeU7COkueUr+xNEjBC
+         4GYb6gvesAhMkiEDuXGFYCqZIpHpjK0/wYDShjt+Bs27ftlKEwNP+5dNZk9qGClCTtKX
+         QB/hqzPfH574Lb7tu93IVRbU+zHeP5XozOQd028kLE+DHsVsot+CnGEw0hZUmDMyuxq4
+         8ZDp8/jwYpoAcDVnhw6IKcKaH/spCbcDlAobEfhK6tSxez7itTOyj/QttwNax0T0Lhe/
+         Y4QY2SuZLAsykm8F48NzAZkNMSTrDTUiAPuGdD+1dKb0/6Xkd+9rYtoGa1wGILE8JIXn
+         BsIA==
+X-Gm-Message-State: APjAAAVvX3TRXSOfkj5+0hKOK/wM8p+jmZy9YPC7JVcDRdaUKJQF3NEV
+        axPxFBoQaD3PKDAF9t8NmUWOEuN1YL5TcjSQPYCOFvTl
+X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
+X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
+ Wed, 04 Dec 2019 04:22:16 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
+ -0800 (PST)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
+Date:   Wed, 4 Dec 2019 13:22:15 +0100
+Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
+Subject: God has remembered your prayers I have already sent you Money Gram
+ payment of $5000.00 today, MG 1029-8096
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+Attn, dear Beneficiary.
 
-   spi: sprd: Fix the incorrect SPI register
+God has remembered your prayers
+I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
+This is because we have finally concluded to effect your transfer
+funds of $4.8,000.000usd
+through MONEY GRAM International Fund transfer Service
+Each payment will be sending to you by $5000.00 daily until the
+($4.8,000.000usd) is completely transferred
+we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
+So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
 
-has been applied to the spi tree at
+Contact person Mrs. Alan Ude
+Dir. MONEY GRAM Service,Benin
+Phone number: +229 98856728
+E-mail: moneygram.1820@outlook.fr
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
+Ask him to give you the complete mtcn, sender name, question and
+answer to enable you
+pick up the $5000.00 sent today,
+Also you are instructed to re-confirm your information's
+to Mrs.Alan Ude as listed below to avoid wrong transactions.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+(1Your Full name:............................................
+(2 Phone number.....................................................
+(3 Contact address:.....................................
+(4 Age:..................................................................
+(5 Country..............................................
+(6) Sex .................................................................
+(7) your occupation...........................................
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+(8)Passport/By Attach or Drivers License Number:
+Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
+Note please: I have paid service fees for you but the only money you
+are required
+to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
+pick up your transfer today.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Send it to via Money Gram
+Receiver's Name-----Alan Ude
+Country----------Benin
+Address-----------Cotonou
+Quest--------Honest
+Ans-----------Trust
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+I done all my best for you to receive your transfer now ok.
+We need your urgent reply
+Best Regards
+Rev.Dr Emmanuel Okoye
+CEO Ecobank-benin
 
-Thanks,
-Mark
-
-From 5e9c5236b7b86779b53b762f7e66240c3f18314b Mon Sep 17 00:00:00 2001
-From: Huanpeng Xin <huanpeng.xin@unisoc.com>
-Date: Wed, 4 Dec 2019 15:13:59 +0800
-Subject: [PATCH] spi: sprd: Fix the incorrect SPI register
-
-The original code used an incorrect SPI register to initialize the SPI
-controller in sprd_spi_init_hw(), thus fix it.
-
-Fixes: e7d973a31c24 ("spi: sprd: Add SPI driver for Spreadtrum SC9860")
-Signed-off-by: Huanpeng Xin <huanpeng.xin@unisoc.com>
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
-Link: https://lore.kernel.org/r/b4f7f89ec0fdc595335687bfbd9f962213bc4a1d.1575443510.git.baolin.wang7@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-sprd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-sprd.c b/drivers/spi/spi-sprd.c
-index 2ee1feb41681..6678f1cbc566 100644
---- a/drivers/spi/spi-sprd.c
-+++ b/drivers/spi/spi-sprd.c
-@@ -678,7 +678,7 @@ static int sprd_spi_init_hw(struct sprd_spi *ss, struct spi_transfer *t)
- 	if (d->unit != SPI_DELAY_UNIT_SCK)
- 		return -EINVAL;
- 
--	val = readl_relaxed(ss->base + SPRD_SPI_CTL7);
-+	val = readl_relaxed(ss->base + SPRD_SPI_CTL0);
- 	val &= ~(SPRD_SPI_SCK_REV | SPRD_SPI_NG_TX | SPRD_SPI_NG_RX);
- 	/* Set default chip selection, clock phase and clock polarity */
- 	val |= ss->hw_mode & SPI_CPHA ? SPRD_SPI_NG_RX : SPRD_SPI_NG_TX;
--- 
-2.20.1
-
+If we did not receive it urgent from you today,
+I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
+representative.
