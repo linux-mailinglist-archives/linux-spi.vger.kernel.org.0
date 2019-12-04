@@ -2,56 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F0D112850
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 10:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807281129C5
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2019 12:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727331AbfLDJrx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Dec 2019 04:47:53 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40686 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbfLDJrx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Dec 2019 04:47:53 -0500
-Received: by mail-wr1-f66.google.com with SMTP id c14so7692341wrn.7
-        for <linux-spi@vger.kernel.org>; Wed, 04 Dec 2019 01:47:51 -0800 (PST)
+        id S1727473AbfLDLAE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Dec 2019 06:00:04 -0500
+Received: from mail-eopbgr1410111.outbound.protection.outlook.com ([40.107.141.111]:41363
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727268AbfLDLAD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Dec 2019 06:00:03 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kq2jeSAPgEqUZHwVBeCmfpucXlPL4Ro3AAl9z1eHCD+VLsBWk4e+X5aYAmERciTUNc/qzdL69AAfjOy77jJKnvHnITP6J77ncIOe1nQAGWn7M5yH5WXxKcuUt5SZNLkPX8D/vu6s7pmoITaZocskvJl6oODClu60ViCdZdpvpdg6d9PW2V09bZQu766MEVpdeKR/b2gc7pwggOwc93GKVxB2OnXUNSeudee8hjSluJD6qiZL6IYLg1GxWQofoh6pmV4CKHn8bI3YjSl1r+BmbmJOKos5sKcXPOAkbTWKh8iLoBAS/hfKJcDkWJHT5cevVQRKdSEaAlOcDEqtfvVtBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a8dFKkCmWEC4BLsVuqyf665SDE2UGmW2Km2WUdVItng=;
+ b=gtcmE+arSK8/zeHGxEqQGQ8Wwjy/yOOE1GTkJQ3RCYnfd1/7558mQHyEdFRrne0WYEAxpg8pQzhSORT7rMgfG4EcrdieIj8coUBrB815sCJm+JRIIX5gXfFsVX0UqVb0FZZoysGvGNNbkTFU/S5aPYBHUkv7E1oHu4VCM7V0q8230PP3PhbdGniFkoILP9ig9MCmXJqRUYkiTSy62WckQOogJLa1Tocm2Fxzhh80H5pHbbMxVus6yOhBpNZfprRQuEHxv1YB4XOWBr0oFruBjx2yFRugxO6iHcyEtc8+mxDMr2s/GTz8wFFuNnjPk6LprdPxflA/nnTmTPg6rGGyZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=nUdWcCxekLeFMDxvcujgfAEAbAWtlApWfV7PYiJfUJk=;
-        b=Pll/orGq1IfyiAKUYWN6G2acirexQXuI5LIS2uQT6IlXhuW8X1vz7/Dn/gHgOaS6NK
-         huaal0U4LwwRJzu70M7avAlqcfECyJUbP1xzsLbqhYHE0pKKVNaq4/zdJu73r1du0TQB
-         wo3uf0zJeN/w6NoZllZo7EVKSUp6LF7rvA4LYxbI5OLKGKGj7ROn3ouPxZCoF44rQcnP
-         0DtrZcw2+HTiqtkMO2Wpt+73mtY1d1sft0pCcLOZJc6ASQIv3irB2MWFPBQGYpjHTgzW
-         rsDl+R3SFhTbvxla4nZmr0hE5i8K3OnD64QoKnxoC4rHv2dsNH3uIfNnldO8X6BWS4TP
-         cYdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=nUdWcCxekLeFMDxvcujgfAEAbAWtlApWfV7PYiJfUJk=;
-        b=V70RTqwQe3KkQKuYI2R343BMz8Au2Z7Qug6cgd+S2JgOXGIm9ct87NuzT8bCSspZ4C
-         J+IC6zUt/LZYeB7+fcIqAQB8DmmR45OaQbso5AkuVb/qYevKhqXgEr5Bpa2u9rtpp1tp
-         ks9EXTFDFFQdoJ4pHNPyJOrpqbGRpaOUYOJXogVywzLR2xz6gP2jR2p5DOjv5BpR27Xr
-         vKCO+L9UWQRNReGLM4RiBDFPZGF4lonWoZx1h/RICGSMAIJsxzsI94KkMCdsk/kczhBc
-         7ql6mcc6HD4xoWN3ZPocStAgjRCBlmWc9Uz28XevyXZIIXfRL7jcxDn8gMeh1hwLwdiZ
-         +N5Q==
-X-Gm-Message-State: APjAAAW1qME+94WuTDswN8ut4jcs3MVDbTMDt4JBcx5ZV4KEg5C/UXQk
-        YFHGSMLHY6hAYxHlz4hn/tSH9WmtcUI=
-X-Google-Smtp-Source: APXvYqweyVggL0J5SQNi6hKbn22bvo4CUaUJ5obDRItJYXjMPgmMB/E2hFto2npEuG1XdZ4eBodgyA==
-X-Received: by 2002:a5d:640d:: with SMTP id z13mr2913510wru.181.1575452870670;
-        Wed, 04 Dec 2019 01:47:50 -0800 (PST)
-Received: from dell ([2.27.167.28])
-        by smtp.gmail.com with ESMTPSA id 60sm8178016wrn.86.2019.12.04.01.47.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 01:47:50 -0800 (PST)
-Date:   Wed, 4 Dec 2019 09:47:41 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Chris Brandt <Chris.Brandt@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a8dFKkCmWEC4BLsVuqyf665SDE2UGmW2Km2WUdVItng=;
+ b=HKN5qRYWx5jZFqKhCjAyTGAyOz1NPgD23+vyCei35ohfto+djWXrydx1Jt1MJ5nR6ixwXxFEd6hSA191RUi+es+JrWaivqfYmodOgOGtPe9H1JJkkRxztE0I5Wfz9pz2oelXZPy+dkE2Pzt2L2AVBP68J35Fvbna8rOrH9568BQ=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1529.jpnprd01.prod.outlook.com (52.133.160.143) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2495.25; Wed, 4 Dec 2019 11:00:00 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::74db:232e:f59e:83f2]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::74db:232e:f59e:83f2%3]) with mapi id 15.20.2516.003; Wed, 4 Dec 2019
+ 11:00:00 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -62,8 +49,11 @@ Cc:     Chris Brandt <Chris.Brandt@renesas.com>,
         linux-clk <linux-clk@vger.kernel.org>,
         Mason Yang <masonccyang@mxic.com.tw>,
         Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Subject: Re: [PATCH 2/6] ARM: dts: r7s72100: Add SPIBSC clocks
-Message-ID: <20191204094741.GC3468@dell>
+Subject: RE: [PATCH 2/6] ARM: dts: r7s72100: Add SPIBSC clocks
+Thread-Topic: [PATCH 2/6] ARM: dts: r7s72100: Add SPIBSC clocks
+Thread-Index: AQHVqYw5ixK18pdXUUiJIFkvJ+Qioqeov9OAgAAB0RCAAAaVAIAA4QyAgAAG5gCAAAx5gIAAEVBQ
+Date:   Wed, 4 Dec 2019 11:00:00 +0000
+Message-ID: <TY1PR01MB1562A629EE48FE2C88518AAE8A5D0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
 References: <20191203034519.5640-1-chris.brandt@renesas.com>
  <20191203034519.5640-3-chris.brandt@renesas.com>
  <CAMuHMdXUVdG_PMQEpz=QWLCaabfK8Mc41zFiymXJ4Rx_C2gzdg@mail.gmail.com>
@@ -71,114 +61,54 @@ References: <20191203034519.5640-1-chris.brandt@renesas.com>
  <CAMuHMdX_sD+UHnOF+bdbT99zfK1V92+1kVzGnb9JXJyBd-Y5-w@mail.gmail.com>
  <20191204083821.GA3468@dell>
  <CAMuHMdXC+=2nH51ASu0u3WUchjM5bC_bROgcYM-OrsM7OgZpbg@mail.gmail.com>
+ <20191204094741.GC3468@dell>
+In-Reply-To: <20191204094741.GC3468@dell>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMzViY2M1MzUtMTY4NS0xMWVhLWFhNTEtOTRlNmY3Njc5M2FlXGFtZS10ZXN0XDM1YmNjNTM2LTE2ODUtMTFlYS1hYTUxLTk0ZTZmNzY3OTNhZWJvZHkudHh0IiBzej0iNTUyIiB0PSIxMzIxOTkzMDc5ODY3NjU0OTIiIGg9IjVGc1hSU01CMEZENUM2QXUxQnRxaEV3Q2dmST0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+x-dg-rorf: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: c7355d31-8cac-4707-eafd-08d778a91b8f
+x-ms-traffictypediagnostic: TY1PR01MB1529:
+x-microsoft-antispam-prvs: <TY1PR01MB15297C568EAFB2629A76D8888A5D0@TY1PR01MB1529.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0241D5F98C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(189003)(199004)(99286004)(74316002)(54906003)(7736002)(110136005)(8676002)(76116006)(14444005)(86362001)(7696005)(76176011)(6506007)(33656002)(4744005)(71200400001)(64756008)(66446008)(305945005)(11346002)(66556008)(66476007)(5660300002)(26005)(102836004)(186003)(66946007)(52536014)(229853002)(2906002)(9686003)(6246003)(14454004)(6116002)(8936002)(478600001)(316002)(81156014)(55016002)(7416002)(71190400001)(4326008)(3846002)(6436002)(81166006)(25786009);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1529;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: s2djmGL4Rc0RXvAIub/8GreaH6CpOSdM5JpGbn7s+0MyhbjFSH8ijp/0DiGitOTcMzRFedtvCeNlb8t6r456oDaoRdNkJSCdwZEUmsHcYk4EfLjheaUurVEPSxEler4smiIHbR1U3cMU3ZJRjRsVpAozlsbWIN0YkLqc7u0SlPwIMFlSguIfIiC0U7s48w/51JekJfcz48SA/i2iSW5C/3FcU/7QhZ0MtKhaYNUw9U44acUX9P2P1vj9ljQZy1UNT8HI4EsyyHVZPox9mGTdTuikSJGkbL29zqxAw6TzcslMyeti70MAqAaFBN6bzObsgSiaJN757f0O4uw/VqsB4WZKjYsyco+TvUfDulrIb4xRck2VrPxjG/zrZ4dHrFiCsB51XpRCLSUMQWdt/76ZaO2oNPyIVEqHPSSJHt+ACY/1PMGBdiLKCgM9mHZIO4GG
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdXC+=2nH51ASu0u3WUchjM5bC_bROgcYM-OrsM7OgZpbg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7355d31-8cac-4707-eafd-08d778a91b8f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2019 11:00:00.2297
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6zr6ck8FGpsaDGkb8CEDcaFQlnm2qE8ZTPvEBxt4or/+rXfzhJ8MpKRhcy4V0rDtJuMt2OgIit3eCA4bW7Flxoz+5zPx0PjGgd1sN1WDkeg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1529
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 04 Dec 2019, Geert Uytterhoeven wrote:
-
-> Hi Lee,
-> 
-> On Wed, Dec 4, 2019 at 9:38 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > On Tue, 03 Dec 2019, Geert Uytterhoeven wrote:
-> > > On Tue, Dec 3, 2019 at 7:58 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
-> > > > On Tue, Dec 3, 2019, Geert Uytterhoeven wrote:
-> > > > > > +                       reg = <0x3fefa000 0x100>, <0x18000000
-> > > > > > + 0x4000000>;
-> > > > >
-> > > > > The second region conflicts with the XIP flash@18000000 in
-> > > > > arch/arm/boot/dts/r7s72100-gr-peach.dts.
-> > > > > Yes, I know it is the same device ;-)
-> > > >
-> > > > Is that just an FYI?? Or do you have some suggestion??
-> > >
-> > > Can the flash subnode be compatible with "mtd-rom", even if the parent node
-> > > is kept disabled?
-> > >
-> > > > > > +                       clock-critical = <4>; /* spibsc0 */
-> > > > >
-> > > > > Iff we go this clock-critical route, I think this should be specified in the
-> > > > > board-specific .dts instead of in the SoC-specific .dtsi.
-> > > >
-> > > > OK, that's fine. It makes more sense to be in the .dts because it's a board
-> > > > design decision. I will remove it from the patch.
-> > > >
-> > > > The one 'tricky' thing is that the <4> is the index into the number of clocks.
-> > > >
-> > > > So in the Renesas BSP where it includes the VDC5 LCD controllers,
-> > > >
-> > > > clock-output-names = "i2c0", "i2c1", "i2c2", "i2c3", "vdc50", "vdc51", "spibsc0", "spibsc1";
-> > > >
-> > > > the <4> needs to become a <6>.
-> > >
-> > > Unless you pass "clkidx" instead of "i" to of_clk_detect_critical() in [1],
-> > > and use "clock-critical = <R7S72100_CLK_SPIBSC0>" in DT?
-> > >
-> > > Unfortunately the exact semantics of clock-critical were never documented.
-> > > Lee?
-> >
-> > /**
-> >  * of_clk_detect_critical() - set CLK_IS_CRITICAL flag from Device Tree
-> >  * @np: Device node pointer associated with clock provider
-> >  * @index: clock index
-> >  * @flags: pointer to top-level framework flags
-> >  *
-> >  * Detects if the clock-critical property exists and, if so, sets the
-> >  * corresponding CLK_IS_CRITICAL flag.
-> >  *
-> >  * Do not use this function. It exists only for legacy Device Tree
-> >  * bindings, such as the one-clock-per-node style that are outdated.
-> >  * Those bindings typically put all clock data into .dts and the Linux
-> >  * driver has no clock data, thus making it impossible to set this flag
-> >  * correctly from the driver. Only those drivers may call
-> >  * of_clk_detect_critical from their setup functions.
-> >  *
-> >  * Return: error code or zero on success
-> >  */
-> >
-> > If this meets the criteria, the API is pretty simple/self
-> > explanatory.  What are you having trouble with?
-> 
-> What exactly is the "index" parameter?  This value is matched against
-> the values of the "clock-critical" (array) property, but it is described
-> nowhere in the DT bindings.
-> stih407-clock.dtsi seems to assume this value is an index into the
-> clock-output-names array?
-> Can we use it as a value of "clock-indices" instead?
-
-of_clk_detect_critical(), the consumer of the device tree property
-'clock-critical', is a helper.  Neither deliver any auto-magical
-functionality.  Simply providing an index into the property will not
-do anything useful.  It's up to the vendor's clock driver to handle.
-
-The vendor driver can call of_clk_detect_critical() with *any* index
-it sees fit.  If it matches a number listed in the 'clock-critical'
-array, the CLK_IS_CRITICAL flag is set in the flags pointed to by the
-3rd function parameter.
-
-Take a look at some of the call sites in drivers/clk/st/* for further
-clarification.
-
-> > > Thanks!
-> > >
-> > > [1] "[PATCH 1/6] clk: renesas: mstp: Add critical clock from device
-> > > tree support"
-> > >     https://lore.kernel.org/linux-renesas-soc/20191203034519.5640-2-chris.brandt@renesas.com/
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+SGkgTGVlLA0KICBUaGFuayB5b3UuDQoNCkhpIEdlZXJ0LA0KDQpPbiBXZWQsIERlYyA0LCAyMDE5
+LCBMZWUgSm9uZXMgd3JvdGU6DQo+IFRoZSB2ZW5kb3IgZHJpdmVyIGNhbiBjYWxsIG9mX2Nsa19k
+ZXRlY3RfY3JpdGljYWwoKSB3aXRoICphbnkqIGluZGV4IGl0IHNlZXMNCj4gZml0LiAgSWYgaXQg
+bWF0Y2hlcyBhIG51bWJlciBsaXN0ZWQgaW4gdGhlICdjbG9jay1jcml0aWNhbCcNCj4gYXJyYXks
+IHRoZSBDTEtfSVNfQ1JJVElDQUwgZmxhZyBpcyBzZXQgaW4gdGhlIGZsYWdzIHBvaW50ZWQgdG8g
+YnkgdGhlIDNyZA0KPiBmdW5jdGlvbiBwYXJhbWV0ZXIuDQoNClNpbmNlIHRoaXMgaXMgdGhlIGNh
+c2UsIEknbGwgY2hhbmdlIHRoZSBkcml2ZXIgY29kZSBzbyB3ZSBjYW4gdXNlIGl0IGhvdyB3ZQ0K
+cHJlZmVyOg0KaWUsDQogICBjbG9jay1jcml0aWNhbCA9IDxSN1M3MjEwMF9DTEtfU1BJQlNDMD47
+DQoNCkNocmlzDQoNCg==
