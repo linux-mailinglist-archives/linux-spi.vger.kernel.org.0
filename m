@@ -2,86 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DAB114565
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Dec 2019 18:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB131149CD
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2019 00:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729430AbfLERIq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Dec 2019 12:08:46 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43963 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726257AbfLERIq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Dec 2019 12:08:46 -0500
-Received: by mail-pf1-f193.google.com with SMTP id h14so1891970pfe.10
-        for <linux-spi@vger.kernel.org>; Thu, 05 Dec 2019 09:08:45 -0800 (PST)
+        id S1726157AbfLEXXw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Dec 2019 18:23:52 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:35074 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725926AbfLEXXw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Dec 2019 18:23:52 -0500
+X-Greylist: delayed 557 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Dec 2019 18:23:51 EST
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 47TWkp12dsz9vnqp
+        for <linux-spi@vger.kernel.org>; Thu,  5 Dec 2019 23:14:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lO3p4QIU52Ij for <linux-spi@vger.kernel.org>;
+        Thu,  5 Dec 2019 17:14:26 -0600 (CST)
+Received: from mail-yw1-f72.google.com (mail-yw1-f72.google.com [209.85.161.72])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 47TWkp02QWz9vnqw
+        for <linux-spi@vger.kernel.org>; Thu,  5 Dec 2019 17:14:25 -0600 (CST)
+Received: by mail-yw1-f72.google.com with SMTP id x206so3748754ywa.22
+        for <linux-spi@vger.kernel.org>; Thu, 05 Dec 2019 15:14:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k/rXekQHS5OmcamXJRlcX1nMr/U/pWRS/JvOxVvicWg=;
-        b=JiLHjMZatH1xXbOOdV5XH73w1wGgZ28z99UhA815C1L9UpGMWfl48+YMLpa7wA8bMb
-         kuOnBIAW6fBhLJ7bIehmzZHBNogXe5FLojJHEsrn4umabCyI8ikMm4R71m0mSzRQcsSW
-         3dK7iX9BvXCDPgEqwSRxeyLVV37F0GUyEVFzHzSHz0o6O5ZWse+0xjIlXDyQqHl5ak3a
-         97VRVyg/HfwClFf/U3B9T6gRePGmOOB+dsa2xVkU278fDvbNTGKUFdQDlwsmDBccYE9p
-         REYwgObNV9Vsgh+ZHvrShzf4AiHdHNaE4ST28DYIROdbrVKO/l1tDQDphzxugJ91bBtX
-         +wkg==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=oSYnes0/l1u+4rIUZLMW/yKpeiqYc5kOnZtn2XTe1+4=;
+        b=X9WHG7rgvwbxw7JgkQDFD0KoZjBvbTkWObbXVHZ2899dH/a4k32yNqM14o9vSaifdk
+         y0ODLMeZIUC96L+JdSPfLbLcI/yEApv/yVGB3FzktZqL+ZBKQ6NhWKBAmqrmZj1LV/OO
+         14gIkdUKkJXjIXt5L/UC2fKDhoQv6TJPhYX4cjlqmxsQyMime7tgHwuQrqXOJjmUraJV
+         uIRVeyUfyRyLcsC3fA2UTx3a9MsMK9voa5m9oXcbUyeJolSY7MeFSBzkNuOJxmlRcfP5
+         D1tUy8qpYW/YuBUN21HwKjywMavWUB1lT0GyA4mBsMuRwhwm0ULlplKhT4s+s0doRzuz
+         tTEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k/rXekQHS5OmcamXJRlcX1nMr/U/pWRS/JvOxVvicWg=;
-        b=O13dTGCUh1rbCYGA11oCtdTvvCU5BV8QFLdKx4vDgDs7eH6snkWcDCynIs3Aq7oD6h
-         +MacY5vgUl5kOjVujWNs5NAxcf4NIxZgs1WqCkHK4FpESArMb3+V4RER4j7htJwNo5AQ
-         z4182gKEnrFkJXTnjb1FBTZNv2VZ9zfRspZbKwdv+BW1ESC7L66x3n6PTB9RV2WrCfyF
-         tJtBywjgVBVN9oflR+N8dIvOh1jfYGnPvQmDh/+lWwOqBKPZFGYPGmCP5VrEfadkbXeQ
-         ED9x3cqO4Kvcunk8zeKoVHUcT61GJA9B4EaDiZtinr89/giDnN84TgMdCCTL0FnwuGkT
-         5KmA==
-X-Gm-Message-State: APjAAAXQ8hkREcdngMfMG+LPBgbUY9ZxJziUSj7DYoXBZNQ47HP0QITn
-        6KycfxFX82Uoeu6cnFRtjMkvWj1ebM49pOiMz4c=
-X-Google-Smtp-Source: APXvYqxvv/BN8PyOMboKgozg2AK7hqyxcNc6P3+27dfhnApzzlgXjYniZ2dwAF5v7eLLCcZ4CLTiwtrLmB3/B4ZNGnU=
-X-Received: by 2002:a65:490e:: with SMTP id p14mr1542181pgs.4.1575565725246;
- Thu, 05 Dec 2019 09:08:45 -0800 (PST)
-MIME-Version: 1.0
-References: <db6a1e17-49a3-e3ed-7713-56b7763713d6@raspberrypi.org>
- <20191202134344.GE1998@sirena.org.uk> <1e0b7cd6-cf9e-2b68-f875-8015c8ffc326@raspberrypi.org>
- <20191203163521.GM1998@sirena.org.uk> <CACRpkdbqNw+h6MphF7kLAwym-F3G+ZebMDB2BMt0bzA6DfM0OA@mail.gmail.com>
-In-Reply-To: <CACRpkdbqNw+h6MphF7kLAwym-F3G+ZebMDB2BMt0bzA6DfM0OA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 5 Dec 2019 19:08:35 +0200
-Message-ID: <CAHp75VdiTvXm0P5k75oupFck4sQoh--ZY=YvNMFop9k-gZTNZw@mail.gmail.com>
-Subject: Re: Side effect of SPI GPIO descriptor usage
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Phil Elwell <phil@raspberrypi.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oSYnes0/l1u+4rIUZLMW/yKpeiqYc5kOnZtn2XTe1+4=;
+        b=fzRb2fcjDPILEe33yklAeUPWhT8Qmclfy9gHgpamOSOVpKMrv6zpeTUZQUN4DcqYqw
+         x7chg610WEK2GDBX+SdAJgkE5pQlwXoWaM2341bFtTP3t2pap1M4o7/aHMkNSa8fjeTu
+         P5blh5rarW26KGFtw2MDyCf+WBduZjdu2AbIGyMN52dfFFGshru44dkR+79cDpjfuoIR
+         woyQg3ZFEMSkH1X1VVjkTvDE9xTeFVq9J+hqc6TQF3nAmfwVMHopdb33mneN1MR/SdUc
+         GbmreF/m3ce7SG1Qpl/BVTkon2OLFtWp9uCRnjUObWbmkda+3noEQj71HgMLKEV+qnst
+         127w==
+X-Gm-Message-State: APjAAAWykKKVjbu8Vs42bEpq0SrspeZ1m/wgT9dU1lwk7rxy9kQroT8i
+        Kz2KsWS3ARUeSa60fZzuWjXBBVcUcC9cJg4Bs+sHgroXob6JCzKVT0xtrw99Flexp+5wVOEZQHz
+        Xwyg6qGzC5Gqv7Ou4sMyX7Im5
+X-Received: by 2002:a25:7c44:: with SMTP id x65mr7863559ybc.382.1575587665408;
+        Thu, 05 Dec 2019 15:14:25 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyLAnU6KbwAtj46DpMUNEmC9R9ezFXcb1I4FJWdCTx69wIk0nVCGHH0hGfZCalPe1Upg56GnQ==
+X-Received: by 2002:a25:7c44:: with SMTP id x65mr7863541ybc.382.1575587665127;
+        Thu, 05 Dec 2019 15:14:25 -0800 (PST)
+Received: from cs-u-syssec1.dtc.umn.edu (cs-u-syssec1.cs.umn.edu. [128.101.106.66])
+        by smtp.gmail.com with ESMTPSA id e198sm5681470ywa.51.2019.12.05.15.14.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2019 15:14:24 -0800 (PST)
+From:   Aditya Pakki <pakki001@umn.edu>
+To:     pakki001@umn.edu
+Cc:     kjlu@umn.edu, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: dw: Avoid BUG_ON() in case of host failure
+Date:   Thu,  5 Dec 2019 17:14:21 -0600
+Message-Id: <20191205231421.9333-1-pakki001@umn.edu>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Dec 4, 2019 at 4:47 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Tue, Dec 3, 2019 at 5:35 PM Mark Brown <broonie@kernel.org> wrote:
-> > On Mon, Dec 02, 2019 at 02:11:51PM +0000, Phil Elwell wrote:
+If dws is NULL in dw_spi_host_add(), we return the error to the
+upper callers instead of crashing. The patch replaces BUG_ON by
+returning -EINVAL to the caller.
 
+Signed-off-by: Aditya Pakki <pakki001@umn.edu>
+---
+ drivers/spi/spi-dw.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> and I can find one more outlier:
->
-> drivers/mmc/host/mmc_spi.c, function mmc_spi_initsequence()
->
-> This very clearly want the inverse polarity of whatever was the default,
-> but the code assumes that SPI_CS_HIGH implies that this is the
-> actual physical level and forces it high, then low. I will send
-> a patch for this: what they want to achieve is the inverse of
-> whatever was configured.
-
-Linus, hold on.
-MMC SPI is abusing protocol, you can't fix it in logical way.
-I recommend to read the protocol specification.
-
-P.S. I would be glad to be wrong, though.
-
+diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+index a92aa5cd4fbe..a160d9a141ea 100644
+--- a/drivers/spi/spi-dw.c
++++ b/drivers/spi/spi-dw.c
+@@ -460,7 +460,8 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	struct spi_controller *master;
+ 	int ret;
+ 
+-	BUG_ON(dws == NULL);
++	if (!dws)
++		return -EINVAL;
+ 
+ 	master = spi_alloc_master(dev, 0);
+ 	if (!master)
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
