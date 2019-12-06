@@ -2,138 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F5A1156D8
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2019 18:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BA811573C
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2019 19:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726410AbfLFR5g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Dec 2019 12:57:36 -0500
-Received: from muru.com ([72.249.23.125]:44258 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726312AbfLFR5g (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 6 Dec 2019 12:57:36 -0500
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 5BB4B8047;
-        Fri,  6 Dec 2019 17:58:13 +0000 (UTC)
-Date:   Fri, 6 Dec 2019 09:57:31 -0800
-From:   Tony Lindgren <tony@atomide.com>
-To:     Jean Pihet <jean.pihet@newoldbits.com>
-Cc:     Mark Brown <broonie@kernel.org>, Tero Kristo <t-kristo@ti.com>,
-        linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
-        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
-        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>,
-        Vignesh R <vigneshr@ti.com>
-Subject: Re: [PATCH 1/3] TI QSPI: Fix fclk frequency
-Message-ID: <20191206175731.GG35479@atomide.com>
-References: <20191206160007.331801-1-jean.pihet@newoldbits.com>
- <20191206160007.331801-2-jean.pihet@newoldbits.com>
- <20191206162431.GF35479@atomide.com>
- <CAORVsuUBseM3vnZsSajMmUS1O6rEC4U_aa951HwMsGxyEm+t+g@mail.gmail.com>
+        id S1726325AbfLFSki (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Dec 2019 13:40:38 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:44977 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfLFSki (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Dec 2019 13:40:38 -0500
+Received: by mail-lf1-f65.google.com with SMTP id v201so5970628lfa.11
+        for <linux-spi@vger.kernel.org>; Fri, 06 Dec 2019 10:40:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UwMCmr796apltCBLUqhe/A5aREgROqeA/aKGMVOBK5A=;
+        b=ja4FwW0ldHzkgz7cFjZiTR4WwZTx291RUps/Y5tPmXtLWqqXGR/Mt2Sz/eofDjGBYh
+         7RrVqrQ2AQ1PxwrDbhSRFwipbclA3C0ftzK80mIPhUETBx64M6HUSGiW3Y0mIYPAvTki
+         Aq3q6ZLigqXlHZ8lbMwKhmNDmzuGYUpDNCPHfputU6+rkN4gs6iih+lvf09Y1Fcdrg47
+         eZLY1u/DUKVzH58EtI+eRdkMrdLNC0Un7QM69yRcXwDCtYMahx1tLehjRwcCS9iGEJiN
+         Jr6MzYRQ5Q8ytqVsVHVR0p0G/O1HXerBiL7uMqN6V8HWQ7GS7qSg90EwJHg/I/QLOnzU
+         5QgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=UwMCmr796apltCBLUqhe/A5aREgROqeA/aKGMVOBK5A=;
+        b=iSgy/PwupWZCHSSqzEB6WFbyFS0PL5Rhm7uzVy+l8yEa1R5+/nZ4kghWWYSYUx1hB3
+         mPJmMMnCfRFSfOrL9mTFHHdLrZRIogtjuCknDAYHWe5cdpYOj1wMODL53HW/mrdj0gAY
+         T1jyM+/gnTjFgHAjkaT42wrC5oMoVO7ovKWJuYGyS0zO98DEHduM3EWg5Taa1j9kAHZY
+         nrQqNcRG7KeCB49oRCAYrDPZF7+2vQymf7qT++Jano9lq2FSMFL28RLa2JlfITS63vE0
+         MlW6m3UDQc6EYK6rxsTmGXqVYrJmcAR4U4eTQfpD9CBLmWGZb5y2EOZ1RSTSlmjnttu9
+         gRhQ==
+X-Gm-Message-State: APjAAAXPPLc+M+jdB/osw9Pxm7F0g8p2WSvGrvJvPn3CEIFRNVfTT4sT
+        xA+l5uR+Vxg0v7JaMpjoJVUzkg==
+X-Google-Smtp-Source: APXvYqwoiF1L7BhBtSP9Wb2lbIR6oGXDekXGfEbkT9v9ygQo6K88wZj1r41+5B0NKf9UvMHc0EJ3VA==
+X-Received: by 2002:ac2:430e:: with SMTP id l14mr5508779lfh.79.1575657636192;
+        Fri, 06 Dec 2019 10:40:36 -0800 (PST)
+Received: from wasted.cogentembedded.com ([2a00:1fa0:4291:257c:a228:1c89:88a1:5b3b])
+        by smtp.gmail.com with ESMTPSA id l28sm6929760lfk.21.2019.12.06.10.40.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 06 Dec 2019 10:40:35 -0800 (PST)
+Subject: Re: [PATCH v2 3/6] clk: renesas: r7s9210: Add SPIBSC clock
+To:     Chris Brandt <chris.brandt@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Mason Yang <masonccyang@mxic.com.tw>
+References: <20191206134202.18784-1-chris.brandt@renesas.com>
+ <20191206134202.18784-4-chris.brandt@renesas.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <5644c687-7692-53f2-f01e-0e7bf62464ea@cogentembedded.com>
+Date:   Fri, 6 Dec 2019 21:40:33 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAORVsuUBseM3vnZsSajMmUS1O6rEC4U_aa951HwMsGxyEm+t+g@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20191206134202.18784-4-chris.brandt@renesas.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-* Jean Pihet <jean.pihet@newoldbits.com> [191206 16:30]:
-> Hi Tony,
+On 12/06/2019 04:41 PM, Chris Brandt wrote:
+
+> The SPIBSC clocks are marked as critical because for XIP systems, the
+> kernel will be running from QSPI flash and cannot be turned off.
 > 
-> On Fri, Dec 6, 2019 at 5:24 PM Tony Lindgren <tony@atomide.com> wrote:
-> >
-> > Hi Jean,
-> >
-> > * Jean Pihet <jean.pihet@newoldbits.com> [191206 16:01]:
-> > > The QSPI IP is clocked by two clocks:
-> > > - CORE_CLKOUTM4 / 2 (L3) as interface clock,
-> > > - PER_CLKOUTM2 / 4 (L4) as functional clock, which is PER_CLKOUTM2
-> > >   divided by 4, so at 192Mhz / 4 = 48MHz.
-> > >
-> > > Fix the use of the correct fclk by the driver and fix the frequency
-> > > value so that the divider is correctly programmed to generate the
-> > > desired frequency of QSPI_CLK.
-> >
-> > This source clock can be different between the SoC models, the
-> > related fck probably needs to be fixed in the SoC specific dtsi
-> > file.
-> >
-> > Currently qspi it's there only in dra7.dtsi, sounds like you
-> > are using it on am3/am4 based on the clock name?
-> 
-> I am using the AM4376 chipset. Only the interface is fixed in the
-> hwmod data as fck.
-> What is the best solution to add the extra fck?
+> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+> ---
+> v2:
+>  * Removed spibsc from critical clock section
 
-Well the long term solution would be to make it probe with
-ti-sysc interconnect target module driver, then you can specify
-both fck and ick there as needed.
+   So you've removed it from the critical table but left the patch description
+intact?
 
-Care to test with the patch below (without your changes) to see if
-something else is still needed?
+[...]
 
-I only added the fck there, not sure if we should also the l3 ick.
-Eventually this node will be a child of the l3 interconnect, and
-genpd will ensure the l3 ick is in use when pm_runtime_get() is
-done in the qspi driver.
-
-Note that this will produce a boot time warning until the related
-hwmod data is dropped. I'll be posting a proper patch once we
-know what's going on here, not sure what's the right fix for the
-clock issue for v5.5-rc series though.
-
-Regards,
-
-Tony
-
-8< ----------------------
-diff --git a/arch/arm/boot/dts/am4372.dtsi b/arch/arm/boot/dts/am4372.dtsi
---- a/arch/arm/boot/dts/am4372.dtsi
-+++ b/arch/arm/boot/dts/am4372.dtsi
-@@ -302,17 +302,33 @@
- 			status = "disabled";
- 		};
- 
--		qspi: spi@47900000 {
--			compatible = "ti,am4372-qspi";
--			reg = <0x47900000 0x100>,
--			      <0x30000000 0x4000000>;
--			reg-names = "qspi_base", "qspi_mmap";
-+		target-module@47900000 {
-+			compatible = "ti,sysc-omap4", "ti,sysc";
-+			//ti,hwmods = "qspi";
-+			reg = <0x47900000 0x4>,
-+			      <0x47900010 0x4>;
-+			reg-names = "rev", "sysc";
-+			ti,sysc-sidle = <SYSC_IDLE_FORCE>,
-+					<SYSC_IDLE_NO>,
-+					<SYSC_IDLE_SMART>,
-+					<SYSC_IDLE_SMART_WKUP>;
-+			clocks = <&l3s_clkctrl AM4_L3S_QSPI_CLKCTRL 0>;
-+			clock-names = "fck";
- 			#address-cells = <1>;
--			#size-cells = <0>;
--			ti,hwmods = "qspi";
--			interrupts = <0 138 0x4>;
--			num-cs = <4>;
--			status = "disabled";
-+			#size-cells = <1>;
-+			ranges = <0x0 0x47900000 0x1000>,
-+				 <0x30000000 0x30000000 0x4000000>;
-+
-+			qspi: spi@0 {
-+				compatible = "ti,am4372-qspi";
-+				reg = <0 0x100>,
-+				      <0x30000000 0x4000000>;
-+				reg-names = "qspi_base", "qspi_mmap";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				interrupts = <0 138 0x4>;
-+				num-cs = <4>;
-+			};
- 		};
- 
- 		dss: dss@4832a000 {
--- 
-2.24.0
+MBR, Sergei
