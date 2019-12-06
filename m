@@ -2,99 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB131149CD
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2019 00:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E353114CFC
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2019 08:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbfLEXXw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Dec 2019 18:23:52 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:35074 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725926AbfLEXXw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Dec 2019 18:23:52 -0500
-X-Greylist: delayed 557 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Dec 2019 18:23:51 EST
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 47TWkp12dsz9vnqp
-        for <linux-spi@vger.kernel.org>; Thu,  5 Dec 2019 23:14:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lO3p4QIU52Ij for <linux-spi@vger.kernel.org>;
-        Thu,  5 Dec 2019 17:14:26 -0600 (CST)
-Received: from mail-yw1-f72.google.com (mail-yw1-f72.google.com [209.85.161.72])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 47TWkp02QWz9vnqw
-        for <linux-spi@vger.kernel.org>; Thu,  5 Dec 2019 17:14:25 -0600 (CST)
-Received: by mail-yw1-f72.google.com with SMTP id x206so3748754ywa.22
-        for <linux-spi@vger.kernel.org>; Thu, 05 Dec 2019 15:14:25 -0800 (PST)
+        id S1726819AbfLFHzK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Dec 2019 02:55:10 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:33714 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726370AbfLFHzK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Dec 2019 02:55:10 -0500
+Received: by mail-pl1-f193.google.com with SMTP id c13so1757011pls.0;
+        Thu, 05 Dec 2019 23:55:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=oSYnes0/l1u+4rIUZLMW/yKpeiqYc5kOnZtn2XTe1+4=;
-        b=X9WHG7rgvwbxw7JgkQDFD0KoZjBvbTkWObbXVHZ2899dH/a4k32yNqM14o9vSaifdk
-         y0ODLMeZIUC96L+JdSPfLbLcI/yEApv/yVGB3FzktZqL+ZBKQ6NhWKBAmqrmZj1LV/OO
-         14gIkdUKkJXjIXt5L/UC2fKDhoQv6TJPhYX4cjlqmxsQyMime7tgHwuQrqXOJjmUraJV
-         uIRVeyUfyRyLcsC3fA2UTx3a9MsMK9voa5m9oXcbUyeJolSY7MeFSBzkNuOJxmlRcfP5
-         D1tUy8qpYW/YuBUN21HwKjywMavWUB1lT0GyA4mBsMuRwhwm0ULlplKhT4s+s0doRzuz
-         tTEQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N3AOgO5FZbXTW4qKGcd/lNa53gxwSbCk9qmuXzoNq/0=;
+        b=XEyw3nr7x7OH4i7E68PYtLJRHUOmkFtzxK1/Z1X+ix7PaR+Pcy3sTDPC9Wca9K0BXo
+         Yk+9z3qdvX4TbIIi452gFZCUDmSJG3gr265UxvJ6Phjk0K6Bf/h3qgO/9EmFQqRqENQ5
+         xpD14yWtzzWmOvXjHZR99pJ+IyP1yqoi/clmPEmqocrv/winrKmmOO0lNd2Yw4rurKPU
+         h8ENy2oHu+TZq/XXn8tAcZLBxl8fti7hUjzxNNAMMAkPVHqPGsFkTtE/tO1iUG7anj5J
+         sEb4sDGEXZJnD4KEvwG2mGb4hcvQ7mPt1MWVmrwTsbG11qqjULnjFWFhoVPYBoEGiZtO
+         HP4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=oSYnes0/l1u+4rIUZLMW/yKpeiqYc5kOnZtn2XTe1+4=;
-        b=fzRb2fcjDPILEe33yklAeUPWhT8Qmclfy9gHgpamOSOVpKMrv6zpeTUZQUN4DcqYqw
-         x7chg610WEK2GDBX+SdAJgkE5pQlwXoWaM2341bFtTP3t2pap1M4o7/aHMkNSa8fjeTu
-         P5blh5rarW26KGFtw2MDyCf+WBduZjdu2AbIGyMN52dfFFGshru44dkR+79cDpjfuoIR
-         woyQg3ZFEMSkH1X1VVjkTvDE9xTeFVq9J+hqc6TQF3nAmfwVMHopdb33mneN1MR/SdUc
-         GbmreF/m3ce7SG1Qpl/BVTkon2OLFtWp9uCRnjUObWbmkda+3noEQj71HgMLKEV+qnst
-         127w==
-X-Gm-Message-State: APjAAAWykKKVjbu8Vs42bEpq0SrspeZ1m/wgT9dU1lwk7rxy9kQroT8i
-        Kz2KsWS3ARUeSa60fZzuWjXBBVcUcC9cJg4Bs+sHgroXob6JCzKVT0xtrw99Flexp+5wVOEZQHz
-        Xwyg6qGzC5Gqv7Ou4sMyX7Im5
-X-Received: by 2002:a25:7c44:: with SMTP id x65mr7863559ybc.382.1575587665408;
-        Thu, 05 Dec 2019 15:14:25 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyLAnU6KbwAtj46DpMUNEmC9R9ezFXcb1I4FJWdCTx69wIk0nVCGHH0hGfZCalPe1Upg56GnQ==
-X-Received: by 2002:a25:7c44:: with SMTP id x65mr7863541ybc.382.1575587665127;
-        Thu, 05 Dec 2019 15:14:25 -0800 (PST)
-Received: from cs-u-syssec1.dtc.umn.edu (cs-u-syssec1.cs.umn.edu. [128.101.106.66])
-        by smtp.gmail.com with ESMTPSA id e198sm5681470ywa.51.2019.12.05.15.14.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N3AOgO5FZbXTW4qKGcd/lNa53gxwSbCk9qmuXzoNq/0=;
+        b=jGRV4T1wtGlC6TpYyq2jnUnLC5yp3MCo/lxcJbK/veVBfgLW9Md84RoBgDRH9dnvyb
+         HgaJ1B01hVz/qYtSYdpyGmw1xfBgc6ffnSW4Hd1mmlGzImkj1XEg4SecoIR18vgyemvz
+         fo+QNkfW0n8o7Q0pXe00NedLWNIIGwMV/iFCLSTkYPFBTAbyZGJBKBhtwo07RTyg1vAj
+         AVzEV+LWZ7I5j8mB2NnUkBJOyvnRpdidnJJpbrY6mHndbH6/9FWI3ZLegtwZXu56u2+U
+         mQPCU4Xj3irokcWGyaHnEGH98FJjdKQiu5SJOAoIKPLfWBVbsNHtyWGJ4bzSEZl9A81Y
+         m1Jg==
+X-Gm-Message-State: APjAAAUjNs5bRzHW5HbHCoDsqXbW02cQbBQEr7Ot61uX+kxN5Zoh65Vx
+        8diyn/9h/lBgOW9Sxz7ZsUUgbgiWAXI=
+X-Google-Smtp-Source: APXvYqy9MGNiP8Uc3qTb5tfVkwG/Nvlkjd0rWayevjIn7KV2mmkbzTexJ+LkNiwHJ2h/Sg7e6WPLkw==
+X-Received: by 2002:a17:902:724a:: with SMTP id c10mr7029875pll.39.1575618909785;
+        Thu, 05 Dec 2019 23:55:09 -0800 (PST)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id o12sm2155209pjf.19.2019.12.05.23.55.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 15:14:24 -0800 (PST)
-From:   Aditya Pakki <pakki001@umn.edu>
-To:     pakki001@umn.edu
-Cc:     kjlu@umn.edu, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: dw: Avoid BUG_ON() in case of host failure
-Date:   Thu,  5 Dec 2019 17:14:21 -0600
-Message-Id: <20191205231421.9333-1-pakki001@umn.edu>
-X-Mailer: git-send-email 2.17.1
+        Thu, 05 Dec 2019 23:55:09 -0800 (PST)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] spi: spi-cavium-thunderx: Add missing pci_release_regions()
+Date:   Fri,  6 Dec 2019 15:55:00 +0800
+Message-Id: <20191206075500.18525-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.24.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If dws is NULL in dw_spi_host_add(), we return the error to the
-upper callers instead of crashing. The patch replaces BUG_ON by
-returning -EINVAL to the caller.
+The driver forgets to call pci_release_regions() in probe failure
+and remove.
+Add the missed calls to fix it.
 
-Signed-off-by: Aditya Pakki <pakki001@umn.edu>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 ---
- drivers/spi/spi-dw.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/spi/spi-cavium-thunderx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
-index a92aa5cd4fbe..a160d9a141ea 100644
---- a/drivers/spi/spi-dw.c
-+++ b/drivers/spi/spi-dw.c
-@@ -460,7 +460,8 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 	struct spi_controller *master;
- 	int ret;
+diff --git a/drivers/spi/spi-cavium-thunderx.c b/drivers/spi/spi-cavium-thunderx.c
+index d12e149f1a41..fd6b9caffaf0 100644
+--- a/drivers/spi/spi-cavium-thunderx.c
++++ b/drivers/spi/spi-cavium-thunderx.c
+@@ -82,6 +82,7 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
  
--	BUG_ON(dws == NULL);
-+	if (!dws)
-+		return -EINVAL;
+ error:
+ 	clk_disable_unprepare(p->clk);
++	pci_release_regions(pdev);
+ 	spi_master_put(master);
+ 	return ret;
+ }
+@@ -96,6 +97,7 @@ static void thunderx_spi_remove(struct pci_dev *pdev)
+ 		return;
  
- 	master = spi_alloc_master(dev, 0);
- 	if (!master)
+ 	clk_disable_unprepare(p->clk);
++	pci_release_regions(pdev);
+ 	/* Put everything in a known state. */
+ 	writeq(0, p->register_base + OCTEON_SPI_CFG(p));
+ }
 -- 
-2.17.1
+2.24.0
 
