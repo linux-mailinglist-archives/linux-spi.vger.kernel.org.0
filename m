@@ -2,92 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E353114CFC
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2019 08:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1301151C5
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2019 15:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726819AbfLFHzK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Dec 2019 02:55:10 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:33714 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbfLFHzK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Dec 2019 02:55:10 -0500
-Received: by mail-pl1-f193.google.com with SMTP id c13so1757011pls.0;
-        Thu, 05 Dec 2019 23:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N3AOgO5FZbXTW4qKGcd/lNa53gxwSbCk9qmuXzoNq/0=;
-        b=XEyw3nr7x7OH4i7E68PYtLJRHUOmkFtzxK1/Z1X+ix7PaR+Pcy3sTDPC9Wca9K0BXo
-         Yk+9z3qdvX4TbIIi452gFZCUDmSJG3gr265UxvJ6Phjk0K6Bf/h3qgO/9EmFQqRqENQ5
-         xpD14yWtzzWmOvXjHZR99pJ+IyP1yqoi/clmPEmqocrv/winrKmmOO0lNd2Yw4rurKPU
-         h8ENy2oHu+TZq/XXn8tAcZLBxl8fti7hUjzxNNAMMAkPVHqPGsFkTtE/tO1iUG7anj5J
-         sEb4sDGEXZJnD4KEvwG2mGb4hcvQ7mPt1MWVmrwTsbG11qqjULnjFWFhoVPYBoEGiZtO
-         HP4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N3AOgO5FZbXTW4qKGcd/lNa53gxwSbCk9qmuXzoNq/0=;
-        b=jGRV4T1wtGlC6TpYyq2jnUnLC5yp3MCo/lxcJbK/veVBfgLW9Md84RoBgDRH9dnvyb
-         HgaJ1B01hVz/qYtSYdpyGmw1xfBgc6ffnSW4Hd1mmlGzImkj1XEg4SecoIR18vgyemvz
-         fo+QNkfW0n8o7Q0pXe00NedLWNIIGwMV/iFCLSTkYPFBTAbyZGJBKBhtwo07RTyg1vAj
-         AVzEV+LWZ7I5j8mB2NnUkBJOyvnRpdidnJJpbrY6mHndbH6/9FWI3ZLegtwZXu56u2+U
-         mQPCU4Xj3irokcWGyaHnEGH98FJjdKQiu5SJOAoIKPLfWBVbsNHtyWGJ4bzSEZl9A81Y
-         m1Jg==
-X-Gm-Message-State: APjAAAUjNs5bRzHW5HbHCoDsqXbW02cQbBQEr7Ot61uX+kxN5Zoh65Vx
-        8diyn/9h/lBgOW9Sxz7ZsUUgbgiWAXI=
-X-Google-Smtp-Source: APXvYqy9MGNiP8Uc3qTb5tfVkwG/Nvlkjd0rWayevjIn7KV2mmkbzTexJ+LkNiwHJ2h/Sg7e6WPLkw==
-X-Received: by 2002:a17:902:724a:: with SMTP id c10mr7029875pll.39.1575618909785;
-        Thu, 05 Dec 2019 23:55:09 -0800 (PST)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.gmail.com with ESMTPSA id o12sm2155209pjf.19.2019.12.05.23.55.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 23:55:09 -0800 (PST)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] spi: spi-cavium-thunderx: Add missing pci_release_regions()
-Date:   Fri,  6 Dec 2019 15:55:00 +0800
-Message-Id: <20191206075500.18525-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.24.0
+        id S1726259AbfLFOC3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Dec 2019 09:02:29 -0500
+Received: from pbmsgap02.intersil.com ([192.157.179.202]:49374 "EHLO
+        pbmsgap02.intersil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726171AbfLFOC3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Dec 2019 09:02:29 -0500
+X-Greylist: delayed 1176 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Dec 2019 09:02:29 EST
+Received: from pps.filterd (pbmsgap02.intersil.com [127.0.0.1])
+        by pbmsgap02.intersil.com (8.16.0.27/8.16.0.27) with SMTP id xB6DgMJh000675;
+        Fri, 6 Dec 2019 08:42:34 -0500
+Received: from pbmxdp01.intersil.corp (pbmxdp01.pb.intersil.com [132.158.200.222])
+        by pbmsgap02.intersil.com with ESMTP id 2wkkffmn5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 06 Dec 2019 08:42:34 -0500
+Received: from pbmxdp02.intersil.corp (132.158.200.223) by
+ pbmxdp01.intersil.corp (132.158.200.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.1531.3; Fri, 6 Dec 2019 08:42:32 -0500
+Received: from localhost.localdomain (132.158.202.109) by
+ pbmxdp02.intersil.corp (132.158.200.223) with Microsoft SMTP Server id
+ 15.1.1531.3 via Frontend Transport; Fri, 6 Dec 2019 08:42:31 -0500
+From:   Chris Brandt <chris.brandt@renesas.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Chris Brandt <chris.brandt@renesas.com>
+Subject: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
+Date:   Fri, 6 Dec 2019 08:41:56 -0500
+Message-ID: <20191206134202.18784-1-chris.brandt@renesas.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-12-06_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=junk_notspam policy=junk score=0 suspectscore=2 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911200000 definitions=main-1912060118
+X-Proofpoint-Spam-Reason: mlx
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The driver forgets to call pci_release_regions() in probe failure
-and remove.
-Add the missed calls to fix it.
+The Renesas SPI Bus Space Controller (SPIBSC) HW was specifically designed for
+accessing Serial flash devices (QSPI, HyperFlash, Octa Flash). In the hardware
+manuals, it is almost always labeled as the "Renesas SPI Multi I/O Bus Controller".
+However, the HW IP is usually referred to within Renesas as the "SPI BSC".
+Yes, the R-Car team nicknamed it RPC (for "Reduced Pin Count" flash) after HyperFash
+support was added...but I personally think that RPC is not a good name for this
+HW block.
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
- drivers/spi/spi-cavium-thunderx.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-cavium-thunderx.c b/drivers/spi/spi-cavium-thunderx.c
-index d12e149f1a41..fd6b9caffaf0 100644
---- a/drivers/spi/spi-cavium-thunderx.c
-+++ b/drivers/spi/spi-cavium-thunderx.c
-@@ -82,6 +82,7 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
- 
- error:
- 	clk_disable_unprepare(p->clk);
-+	pci_release_regions(pdev);
- 	spi_master_put(master);
- 	return ret;
- }
-@@ -96,6 +97,7 @@ static void thunderx_spi_remove(struct pci_dev *pdev)
- 		return;
- 
- 	clk_disable_unprepare(p->clk);
-+	pci_release_regions(pdev);
- 	/* Put everything in a known state. */
- 	writeq(0, p->register_base + OCTEON_SPI_CFG(p));
- }
+This driver has been tested on an RZ/A1H RSK and RZ/A2M EVB.
+
+The testing mostly consisted of formatting an area as JFFS2 and doing copying
+of files and such.
+
+While the HW changed a little between the RZ/A1 and RZ/A2 generations, the IP
+block in the RZ/A2M was taken from the R-Car H3 design, so in theory this
+driver should work for R-Car Gen3 as well.
+
+=========================
+Version 2 changes
+=========================
+* I got rid of all the critical clock stuff. The idea is is that if you are
+  planning on using the SPI BSC, even in XIP mode, it should be described in DT.
+
+* There is no actual 'runtime pm' implmented in the driver at the moment, and
+  so just the standard enable/disable clock API is used.
+
+* The compatible string "jedec,spi-nor" will be used to determine if a spi controller
+  needs to be regitered or not. At the moment there is no setup needed for
+  running in XIP mode, so we just need to signal that the peripheral clock should
+  be left on and then we're done.
+
+
+
+
+Chris Brandt (6):
+  spi: Add SPIBSC driver
+  dt-bindings: spi: Document Renesas SPIBSC bindings
+  clk: renesas: r7s9210: Add SPIBSC clock
+  ARM: dts: r7s72100: Add SPIBSC devices
+  ARM: dts: r7s9210: Add SPIBSC device
+  ARM: dts: gr-peach: Enable SPIBSC
+
+ .../bindings/spi/renesas,spibsc.yaml          | 115 ++++
+ arch/arm/boot/dts/r7s72100-gr-peach.dts       |   5 +
+ arch/arm/boot/dts/r7s72100.dtsi               |  25 +-
+ arch/arm/boot/dts/r7s9210.dtsi                |  11 +
+ drivers/clk/renesas/r7s9210-cpg-mssr.c        |   1 +
+ drivers/spi/Kconfig                           |   8 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-spibsc.c                      | 612 ++++++++++++++++++
+ 8 files changed, 776 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/renesas,spibsc.yaml
+ create mode 100644 drivers/spi/spi-spibsc.c
+
 -- 
-2.24.0
+2.23.0
 
