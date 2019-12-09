@@ -2,59 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE17116A39
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Dec 2019 10:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79645116A5B
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Dec 2019 10:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727165AbfLIJxm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Dec 2019 04:53:42 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:53352 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725994AbfLIJxm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Dec 2019 04:53:42 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB99r2HG035917;
-        Mon, 9 Dec 2019 03:53:02 -0600
+        id S1727122AbfLIJ7a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Dec 2019 04:59:30 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:54768 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726377AbfLIJ7a (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Dec 2019 04:59:30 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB99xPom093424;
+        Mon, 9 Dec 2019 03:59:25 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1575885182;
-        bh=HQh1TZLTVm5G5fKhCiTmdkbn5flX3Vcfi7oF9Gtg2R4=;
+        s=ti-com-17Q1; t=1575885565;
+        bh=CSBSig8vjO8cxClf/2rRLSow9AcW4rCfkiivSJtNLEU=;
         h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=uPwVdXa2LkR+h/TtP/tEcgRZoUneHHW98+jKZPQe69fHca2oDmJcsHSz7bNu3UKtD
-         tEuH5/DB8L3Nqbsj3qr7qkfdSwRRJ4F6bNuKRtjYxjy1WUaUEVtbJfyugIR3rBAOU7
-         OiUfdkwiW4r2RVFkTyNifIx2jF4XJg34xfyr67Fw=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xB99r24P091285
+        b=wtRlDfX4KBqjXQKni3npFkCev+2QOMCnkEC80DcJNkbQrIso8wb0lMrm1XWYIYadf
+         YZ0vjJfIkjW8p0jELQKb50CpgkOHCC83Q9m6+O490WVC9JFo6ez7mqRaJmXPMwbdTu
+         gYUGhGZ7FzwQB/0HB99uLHT+KZ1DGSYAtKfqXfSo=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xB99xPjd063974
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 9 Dec 2019 03:53:02 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 9 Dec 2019 03:59:25 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 9 Dec
- 2019 03:53:02 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 03:59:25 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Mon, 9 Dec 2019 03:53:02 -0600
+ Frontend Transport; Mon, 9 Dec 2019 03:59:25 -0600
 Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB99qwcX097397;
-        Mon, 9 Dec 2019 03:52:58 -0600
-Subject: Re: [PATCH 2/4] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
-To:     <masonccyang@mxic.com.tw>
-CC:     <bbrezillon@kernel.org>, <juliensu@mxic.com.tw>, <richard@nod.at>,
-        <tudor.ambarus@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <marek.vasut@gmail.com>,
-        <broonie@kernel.org>, <linux-mtd@lists.infradead.org>,
-        <miquel.raynal@bootlin.com>, <computersforpeace@gmail.com>,
-        <dwmw2@infradead.org>
-References: <1573808288-19365-1-git-send-email-masonccyang@mxic.com.tw>
- <1573808288-19365-3-git-send-email-masonccyang@mxic.com.tw>
- <3f514579-d3a4-1319-a55a-265a3f1ce00e@ti.com>
- <OFFE6363DF.95763BC3-ON482584CB.002A47E5-482584CB.002BAA8C@mxic.com.tw>
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB99xMTs113365;
+        Mon, 9 Dec 2019 03:59:23 -0600
+Subject: Re: [PATCH 1/3] TI QSPI: Fix fclk frequency
+To:     Jean Pihet <jean.pihet@newoldbits.com>,
+        Mark Brown <broonie@kernel.org>, Tero Kristo <t-kristo@ti.com>
+CC:     <linux-omap@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
+        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
+References: <20191206160007.331801-1-jean.pihet@newoldbits.com>
+ <20191206160007.331801-2-jean.pihet@newoldbits.com>
 From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <20f3873f-66eb-3af9-c50d-1321a859093d@ti.com>
-Date:   Mon, 9 Dec 2019 15:23:27 +0530
+Message-ID: <451986b2-e4f2-8bb6-fea1-65328b855223@ti.com>
+Date:   Mon, 9 Dec 2019 15:29:51 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <OFFE6363DF.95763BC3-ON482584CB.002A47E5-482584CB.002BAA8C@mxic.com.tw>
+In-Reply-To: <20191206160007.331801-2-jean.pihet@newoldbits.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -64,95 +60,47 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-On 09/12/19 1:26 pm, masonccyang@mxic.com.tw wrote:
-> 
-> Hi Vignesh,
-> 
->>
->> On 15/11/19 2:28 pm, Mason Yang wrote:
->>> According to JESD216C (JEDEC Basic Flash Parameter Table 18th DWORD)
->>> Octal DTR(8D-8D-8D) command and command extension (00b: same, 01b: 
-> inverse)
->>> to add extension command mode in spi_nor struct and to add write_cr2
->>> (Write CFG Reg 2) for 8-8-8/8D-8D-8D mode sequences enable.
->>>
->>
->> But I don't see any code setting "nor->ext_cmd_mode" based on BFPT?
->>
->> Any new feature that we add to spi-nor should make use of autodiscovery
->> feature made possible by SFDP tables. Could you modify the patch to
->> discover capabilities supported by flash and opcodes to be used from
->> SFDP table?
-> 
-> Got it but our device will return a empty SFDP table.
-> 
 
-If flash you tested on does not support JEDEC 216C then don't mention
-about it. Above commit message gives an impression that flash in JEDEC
-216C compliant.
-
->>
->>
->>> Define the relevant macrons and enum to add such modes and make sure
->>> op->xxx.dtr fields, command nbytes and extension command are properly
->>> filled and unmask DTR and X-X-X modes in 
-> spi_nor_spimem_adjust_hwcaps()
->>> so that DTR and X-X-X support detection is done through
->>> spi_mem_supports_op().
->>>
-[...]
->>> @@ -404,6 +436,30 @@ static int read_sr(struct spi_nor *nor)
->>>                 SPI_MEM_OP_NO_DUMMY,
->>>                 SPI_MEM_OP_DATA_IN(1, nor->bouncebuf, 1));
->>>
->>
->> This is not based on the latest tree.
->>
->>> +      if (spi_nor_protocol_is_8_8_8(nor->read_proto)) {
->>> +         op.cmd.buswidth = 8;
->>> +         op.addr.buswidth = 8;
->>> +         op.dummy.buswidth = 8;
->>> +         op.data.buswidth = 8;
->>> +         op.cmd.nbytes = 2;
->>> +         op.addr.nbytes = 4;
->>> +         op.dummy.nbytes = 4;
->>> +         op.addr.val = 0;
->>
->> This is not scalable... There will be bunch of if...else ladders when we
->> want to support other X-X-X modes... Can't these be derived from
->> nor->reg_proto? And then borrow the logic from 
-> spi_nor_spimem_read_data()?
->>
+On 06/12/19 9:30 pm, Jean Pihet wrote:
+> The QSPI IP is clocked by two clocks:
+> - CORE_CLKOUTM4 / 2 (L3) as interface clock,
+> - PER_CLKOUTM2 / 4 (L4) as functional clock, which is PER_CLKOUTM2
+>   divided by 4, so at 192Mhz / 4 = 48MHz.
 > 
-> Got it !
+> Fix the use of the correct fclk by the driver and fix the frequency
+> value so that the divider is correctly programmed to generate the
+> desired frequency of QSPI_CLK.
+> ---
+>  drivers/spi/spi-ti-qspi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->>
->> Could you have a look at Boris's initial submission to add 8-8-8 mode at
->> https://patchwork.kernel.org/cover/10638055/ ?
->> You could use that series as the base for your changes/additions.
+> diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
+> index 3cb65371ae3b..4680dad38ab2 100644
+> --- a/drivers/spi/spi-ti-qspi.c
+> +++ b/drivers/spi/spi-ti-qspi.c
+> @@ -79,7 +79,7 @@ struct ti_qspi {
+>  
+>  #define QSPI_COMPLETION_TIMEOUT		msecs_to_jiffies(2000)
+>  
+> -#define QSPI_FCLK			192000000
+> +#define QSPI_FCLK			48000000
+>  
+
+This macro is unused and should be dropped.
+
+>  /* Clock Control */
+>  #define QSPI_CLK_EN			(1 << 31)
+> @@ -748,7 +748,7 @@ static int ti_qspi_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> -	qspi->fclk = devm_clk_get(&pdev->dev, "fck");
+> +	qspi->fclk = devm_clk_get(&pdev->dev, "dpll_per_m2_div4_ck");
+>  	if (IS_ERR(qspi->fclk)) {
+>  		ret = PTR_ERR(qspi->fclk);
+>  		dev_err(&pdev->dev, "could not get clk: %d\n", ret);
 > 
-> Got it.
-> My idea is to support 8D-8D-8D mode with a minimum patches because 
-> there is no define for 1D-1D-1D, 2D-2D-2D and 4D-4D-4D mode in JEDEC 
-> if I am right.
-> 
-
-JESD251-A1 does talk about 4S-4D-4D right? Also none of the JEDEC
-standards prohibit flash vendors from supporting other X-X-X modes.
-
-I think you haven't thought about bigger picture here. Flash devices
-that support other mode exist today and we would need the framework to
-be built such that these modes can be added in future.
-
-I suggest you start with Boris's series [1] as base and port it to
-latest kernel. Isn't that series alone enough to support Macronix Octal
-flashes at least?
-If required, you could also always include additional patches adding new
-features.
-
-[1] https://patchwork.kernel.org/cover/10638055/
 
 -- 
 Regards
