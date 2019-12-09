@@ -2,250 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5212311674F
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Dec 2019 08:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54BC1167A5
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Dec 2019 08:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727145AbfLIHDd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Dec 2019 02:03:33 -0500
-Received: from twhmllg3.macronix.com ([211.75.127.131]:63393 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbfLIHDa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Dec 2019 02:03:30 -0500
-X-Greylist: delayed 1414 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Dec 2019 02:03:29 EST
-Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id xB96dsEX083103
-        for <linux-spi@vger.kernel.org>; Mon, 9 Dec 2019 14:39:54 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from twhfmlp1.macronix.com (twhfm1p1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id xB96cNWv082301;
-        Mon, 9 Dec 2019 14:38:23 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 83AF2D64DA588A20DB58;
-        Mon,  9 Dec 2019 14:38:23 +0800 (CST)
-In-Reply-To: <1f1a368a-e3d3-4e58-819e-b4dffc3212ef@ti.com>
-References: <1573808288-19365-1-git-send-email-masonccyang@mxic.com.tw> <1573808288-19365-4-git-send-email-masonccyang@mxic.com.tw> <1f1a368a-e3d3-4e58-819e-b4dffc3212ef@ti.com>
-To:     "Vignesh Raghavendra" <vigneshr@ti.com>
-Cc:     bbrezillon@kernel.org,
-        "Boris Brezillon" <boris.brezillon@bootlin.com>,
-        broonie@kernel.org, computersforpeace@gmail.com,
-        dwmw2@infradead.org, juliensu@mxic.com.tw,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, marek.vasut@gmail.com,
-        miquel.raynal@bootlin.com, richard@nod.at,
-        tudor.ambarus@microchip.com
-Subject: Re: [PATCH 3/4] mtd: spi-nor: Add Octal 8D-8D-8D mode support for Macronix
- mx25uw51245g
+        id S1727165AbfLIHnN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Dec 2019 02:43:13 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:19418 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727115AbfLIHnN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 9 Dec 2019 02:43:13 -0500
+Received: from localhost (mailhub1-ext [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 47WZtM2Lbjz9txbc;
+        Mon,  9 Dec 2019 08:43:07 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=H0WxoXel; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id XHi-1B9g5zEx; Mon,  9 Dec 2019 08:43:07 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47WZtM1JtWz9txbb;
+        Mon,  9 Dec 2019 08:43:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1575877387; bh=Y/U88WJLNVaZQ0g+x2F9rdfo/+YMGllZ5DkbndRF/1Y=;
+        h=To:Cc:From:Subject:Date:From;
+        b=H0WxoXelHj726GcpHsp2l8dpRRD4WaaZ7nmHmPyUA957bYaBoHnGvnUQpJtU9E23D
+         pgig2l/8IxG0iQUD7PB9uQFAGhc2xPgw1DlMphjqYhNvGEl3Qp3OBEIqBGCZ+cDRYp
+         kJDwpO2jm3UsYpd7yUqh2yvgjkWP+4r9PA0TT7dU=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B33E68B755;
+        Mon,  9 Dec 2019 08:43:11 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id JQXXvHZdkDvp; Mon,  9 Dec 2019 08:43:11 +0100 (CET)
+Received: from [172.25.230.100] (po15451.idsi0.si.c-s.fr [172.25.230.100])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 859B38B7B1;
+        Mon,  9 Dec 2019 08:43:11 +0100 (CET)
+To:     Liu Xiang <liu.xiang6@zte.com.cn>, Mark Brown <broonie@kernel.org>
+Cc:     linux-spi <linux-spi@vger.kernel.org>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: WARNING: remove_proc_entry: removing non-empty directory 'irq/22',
+ leaking at least 'fsl_spi' [bisected to 500a32abaf81 ("spi: fsl: Call
+ irq_dispose_mapping in err path")]
+Message-ID: <1769abd0-f0e5-83a8-1bf2-b264f7a2a679@c-s.fr>
+Date:   Mon, 9 Dec 2019 08:43:11 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-X-KeepSent: 5C924A21:8A6464DD-482584CB:00232656;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OF5C924A21.8A6464DD-ON482584CB.00232656-482584CB.002479DE@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Mon, 9 Dec 2019 14:38:25 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2019/12/09 PM 02:38:23,
-        Serialize complete at 2019/12/09 PM 02:38:23
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG3.macronix.com xB96cNWv082301
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Liu,
 
-Hi Vignesh,
+While booting latest kernel on by 83xx board, I get the following WARNING.
+Reverting your commit 500a32abaf81 ("spi: fsl: Call irq_dispose_mapping 
+in err path") removes the warning.
 
-> > 
-> >  /*
-> > + * Read configuration register 2, returning its value in the
-> > + * location. Return the configuration register 2 value.
-> > + * Returns negative if error occurred.
-> > + */
-> > +static int read_cr2(struct spi_nor *nor, u32 addr)
-> 
-> Please prefix spi_nor_* for all new functions. 
-> Also, include manf name if its vendor specific.
+I think that's because irq_dispose_mapping() is called too early, before 
+devm frees the irq registered with devm_request_irq() in fsl_spi_probe()
 
-okay, will fix it.
+[    1.510229] ------------[ cut here ]------------
+[    1.514845] remove_proc_entry: removing non-empty directory 'irq/22', 
+leaking at least 'fsl_spi'
+[    1.523852] WARNING: CPU: 0 PID: 1 at fs/proc/generic.c:682 
+remove_proc_entry+0x198/0x1c0
+[    1.532021] CPU: 0 PID: 1 Comm: swapper Not tainted 
+5.4.0-02248-g93532430a4ff-dirty #2559
+[    1.540860] NIP:  c0197694 LR: c0197694 CTR: c0050d80
+[    1.545898] REGS: df4a5af0 TRAP: 0700   Not tainted 
+(5.4.0-s3k-dev-02248-g93532430a4ff-dirty)
+[    1.554472] MSR:  00029032 <EE,ME,IR,DR,RI>  CR: 22028222  XER: 00000000
+[    1.561178]
+[    1.561178] GPR00: c0197694 df4a5ba8 df4a0000 00000054 00000000 
+00000000 00004a38 00000010
+[    1.561178] GPR08: c07c5a30 00000800 00000000 00001032 22000208 
+00000000 c0004b14 00000000
+[    1.561178] GPR16: 00000000 00000000 00000000 00000000 00000000 
+00000000 c0830000 c07fc078
+[    1.561178] GPR24: c08e8ca0 df663d10 fffffdfb c07c9db8 00000001 
+df621ae3 df621a80 df43f8e3
+[    1.595982] NIP [c0197694] remove_proc_entry+0x198/0x1c0
+[    1.601283] LR [c0197694] remove_proc_entry+0x198/0x1c0
+[    1.606484] Call Trace:
+[    1.608935] [df4a5ba8] [c0197694] remove_proc_entry+0x198/0x1c0 
+(unreliable)
+[    1.615977] [df4a5bd8] [c0067acc] unregister_irq_proc+0x5c/0x70
+[    1.621896] [df4a5bf8] [c005fbc4] free_desc+0x3c/0x80
+[    1.626944] [df4a5c18] [c005fe2c] irq_free_descs+0x70/0xa8
+[    1.632437] [df4a5c38] [c033d3fc] of_fsl_spi_probe+0xdc/0x3d0
+[    1.638184] [df4a5c88] [c02f0f64] platform_drv_probe+0x44/0xa4
+[    1.644009] [df4a5c98] [c02eee44] really_probe+0x1ac/0x418
+[    1.649489] [df4a5cc8] [c02ed3e8] bus_for_each_drv+0x64/0xb0
+[    1.655141] [df4a5cf8] [c02ef950] __device_attach+0xd4/0x128
+[    1.660793] [df4a5d28] [c02ed61c] bus_probe_device+0xa0/0xbc
+[    1.666443] [df4a5d48] [c02ebbe8] device_add+0x544/0x74c
+[    1.671756] [df4a5d88] [c0382b7c] 
+of_platform_device_create_pdata+0xa4/0x100
+[    1.678791] [df4a5da8] [c0382cf8] of_platform_bus_create+0x120/0x20c
+[    1.685135] [df4a5df8] [c0382d54] of_platform_bus_create+0x17c/0x20c
+[    1.691479] [df4a5e48] [c0382e8c] of_platform_bus_probe+0x9c/0xf0
+[    1.697568] [df4a5e68] [c0751404] 
+__machine_initcall_cmpcpro_cmpcpro_declare_of_platform_devices+0x74/0x1a4
+[    1.707290] [df4a5e98] [c072a4cc] do_one_initcall+0x8c/0x1d4
+[    1.712944] [df4a5ef8] [c072a768] kernel_init_freeable+0x154/0x204
+[    1.719118] [df4a5f28] [c0004b2c] kernel_init+0x18/0x110
+[    1.724432] [df4a5f38] [c00122ac] ret_from_kernel_thread+0x14/0x1c
+[    1.730590] Instruction dump:
+[    1.733553] 2c030000 4182004c 3863ffb0 3c80c05f 80e3005c 388436a0 
+3c60c06d 7fa6eb78
+[    1.741295] 7fe5fb78 38840280 3863417c 4be8c611 <0fe00000> 4bffff6c 
+3c60c071 7fe4fb78
+[    1.749222] ---[ end trace a98e3613df89cf38 ]---
 
-> 
-> > +{
-> > +   int ret;
-> > +
-> > +   if (nor->spimem) {
-> > +      struct spi_mem_op op =
-> > +         SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDCR2, 1),
-> > +               SPI_MEM_OP_ADDR(4, addr, 1),
-> > +               SPI_MEM_OP_DUMMY(4, 1),
-> > +               SPI_MEM_OP_DATA_IN(1, nor->bouncebuf, 1));
-> > +
-> > +      if (spi_nor_protocol_is_8_8_8(nor->read_proto)) {
-> > +         op.cmd.buswidth = 8;
-> > +         op.addr.buswidth = 8;
-> > +         op.dummy.buswidth = 8;
-> > +         op.data.buswidth = 8;
-> > +         op.cmd.nbytes = 2;
-> > +
-> > +         if (spi_nor_protocol_is_8D_8D_8D(nor->read_proto)) {
-> > +            op.dummy.nbytes *= 2;
-> > +            op.cmd.dtr = true;
-> > +            op.addr.dtr = true;
-> > +            op.dummy.dtr = true;
-> > +            op.data.dtr = true;
-> > +         }
-> > +
-> > +         if (nor->ext_cmd_mode == EXT_CMD_IS_INVERSE)
-> > +            op.cmd.ext_opcode = ~SPINOR_OP_RDCR2;
-> > +         else
-> > +            op.cmd.ext_opcode = SPINOR_OP_RDCR2;
-> > +      }
-> > +
-> > +      ret = spi_mem_exec_op(nor->spimem, &op);
-> > +   } else {
-> > +      ret = -ENOTSUPP;
-> > +   }
-> > +
-> > +   if (ret < 0) {
-> > +      dev_err(nor->dev, "error %d reading CR\n", ret);
-> > +      return ret;
-> > +   }
-> > +
-> > +   return nor->bouncebuf[0];
-> > +}
-> > +
-> > +/*
-> >   * Write configuration register 2 one byte
-> >   * Returns negative if error occurred.
-> >   */
-> > @@ -2275,10 +2325,72 @@ static int spi_nor_spansion_clear_sr_bp(struct 
-spi_nor *nor)
-> >     return 0;
-> >  }
-> > 
-> > +static void
-> > +spi_nor_set_read_settings(struct spi_nor_read_command *read,
-> > +           u8 num_mode_clocks,
-> > +           u8 num_wait_states,
-> > +           u8 opcode,
-> > +           enum spi_nor_protocol proto);
-> > +
-> > +static void
-> > +spi_nor_set_pp_settings(struct spi_nor_pp_command *pp,
-> > +         u8 opcode,
-> > +         enum spi_nor_protocol proto);
-> > +
-> > +static void
-> > +mx25uw51245g_default_init(struct spi_nor *nor)
-> > +{
-> > +   struct spi_nor_flash_parameter *params = &nor->params;
-> > +
-> > +   if (!(nor->spimem->spi->mode & (SPI_RX_OCTAL | SPI_TX_OCTAL)))
-> > +      return;
-> > +
-> > +   /* Octal 8S-8S-8S mode */
-> > +   params->hwcaps.mask |= SNOR_HWCAPS_OPI_FULL_STR;
-> > +   spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_8_8_8],
-> > +              0, 20, SPINOR_OP_READ_8_8_8,
-> > +              SNOR_PROTO_8_8_8);
-> > +
-> > +   spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP_8_8_8],
-> > +            SPINOR_OP_PP_8_8_8, SNOR_PROTO_8_8_8);
-> > +
-> > +   /* Octal 8D-8D-8D mode */
-> > +   params->hwcaps.mask |= SNOR_HWCAPS_OPI_FULL_DTR;
-> > +   spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_8D_8D_8D],
-> > +              0, 20, SPINOR_OP_READ_8D_8D_8D,
-> > +              SNOR_PROTO_8_8_8_DTR);
-> > +
-> > + 
-spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP_8D_8D_8D],
-> > +            SPINOR_OP_PP_8D_8D_8D, SNOR_PROTO_8_8_8_DTR);
-> > +
-> > +   nor->ext_cmd_mode = EXT_CMD_IS_INVERSE;
-> > +}
-> 
-> I don't see anything that is macronix specific here.. Can this be moved 
-to
-> generic code with information parsed from SFDP table?
-
-This mx25uw51245g device support SFDP command but returns an empty SFDP 
-page.
-
-> 
-> > +
-> > +static void
-> > +mx25uw51245g_post_sfdp_fixups(struct spi_nor *nor)
-> > +{
-> > +   struct spi_nor_flash_parameter *params = &nor->params;
-> > +   u8 cr2;
-> > +
-> > +   cr2 = read_cr2(nor, CR2_REG0) & CR2_REG0_MODE_MASK;
-> > +
-> > +   if (params->hwcaps.mask & SNOR_HWCAPS_OPI_FULL_DTR)
-> > +      cr2 |= CR2_REG0_MODE_OPI_DTR;
-> > +   else if (params->hwcaps.mask & SNOR_HWCAPS_OPI_FULL_STR)
-> > +      cr2 |= CR2_REG0_MODE_OPI_STR;
-> > +
-> > +   write_cr2(nor, CR2_REG0, cr2);
-> > +}
-> > +
-> 
-> I see this as a misuse of sfdp_fixups hook:
-> 
->  * @post_sfdp: called after SFDP has been parsed (is also called for SPI 
-NORs
->  *             that do not support RDSFDP). Typically used to tweak 
-various
->  *             parameters that could not be extracted by other means 
-(i.e.
->  *             when information provided by the SFDP/flash_info tables 
-are
->  *             incomplete or wrong).
->  *
-> 
-> 
-> This should only tweak options parsed by SFDP and not be used to
-> configure flash to a different mode. Please add a separate function 
-> to do so. See https://patchwork.kernel.org/patch/10638085/
-> 
-
-okay.
-My idea is that device changed to 8D-8D-8D stateful mode after SFDP 
-parsed. 
-But if SFDP page table is broken in device and driver will just configure 
-the device into 8D-8D-8D mode directly.
-
-
-thanks for your time & comments.
-
-Mason
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
-
-
-============================================================================
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
+Christophe
