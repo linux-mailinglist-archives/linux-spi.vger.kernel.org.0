@@ -2,88 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE58D119C16
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7929119A7F
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727267AbfLJWDJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 17:03:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33038 "EHLO mail.kernel.org"
+        id S1726589AbfLJWB1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 17:01:27 -0500
+Received: from muru.com ([72.249.23.125]:44942 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727235AbfLJWDJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:03:09 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D0C4820637;
-        Tue, 10 Dec 2019 22:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576015388;
-        bh=1P4i5ydWkp/xHksmLQ0jmkGuM1FqCa6Izqh10KYIpUk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ESOjVCL6RcZAIAp0UW1aDWcXEch7KntrpxSZzYCT/y/OM342CjbdmqKihfzmTSuRJ
-         rOPdcz6KV+k+6jLcsNr21jhskkhpfjjO1LXN/cX2jtoQjC3NxpkJ7gPPHLAC4TYAkm
-         vCf3Yu6dNId8gE1n8WM3RNJ2/CFTi5H/iu+i9bT8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lukasz Majewski <lukma@denx.de>, Mark Brown <broonie@kernel.org>,
-        kbuild test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 005/130] spi: Add call to spi_slave_abort() function when spidev driver is released
-Date:   Tue, 10 Dec 2019 17:00:56 -0500
-Message-Id: <20191210220301.13262-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
-References: <20191210220301.13262-1-sashal@kernel.org>
+        id S1726362AbfLJWB1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:01:27 -0500
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 5E76E820B;
+        Tue, 10 Dec 2019 22:02:05 +0000 (UTC)
+Date:   Tue, 10 Dec 2019 14:01:23 -0800
+From:   Tony Lindgren <tony@atomide.com>
+To:     Jean Pihet <jean.pihet@newoldbits.com>
+Cc:     Tero Kristo <t-kristo@ti.com>, Mark Brown <broonie@kernel.org>,
+        linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
+        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
+        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>,
+        Vignesh R <vigneshr@ti.com>
+Subject: Re: [PATCH 1/3] TI QSPI: Fix fclk frequency
+Message-ID: <20191210220123.GO35479@atomide.com>
+References: <20191206160007.331801-1-jean.pihet@newoldbits.com>
+ <20191206160007.331801-2-jean.pihet@newoldbits.com>
+ <20191206162431.GF35479@atomide.com>
+ <CAORVsuUBseM3vnZsSajMmUS1O6rEC4U_aa951HwMsGxyEm+t+g@mail.gmail.com>
+ <20191206175731.GG35479@atomide.com>
+ <CAORVsuXe7SyAmzLv4VoKMsf4jcYV1bKoCixhsgZ3U0rBHFJA4Q@mail.gmail.com>
+ <20191210170329.GM35479@atomide.com>
+ <CAORVsuX_bzzsjh+qg_i_sfc=GR6F=S2wgObZiQTdM=w=ghZ9BA@mail.gmail.com>
+ <20191210210200.GN35479@atomide.com>
+ <CAORVsuV9R-1Yg3YYRUGZ8mQR=ZST+jSLEuSmv0hgSNrLHur-rw@mail.gmail.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAORVsuV9R-1Yg3YYRUGZ8mQR=ZST+jSLEuSmv0hgSNrLHur-rw@mail.gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Lukasz Majewski <lukma@denx.de>
+* Jean Pihet <jean.pihet@newoldbits.com> [191210 21:46]:
+> Tony,
+> 
+> On Tue, Dec 10, 2019 at 10:02 PM Tony Lindgren <tony@atomide.com> wrote:
+> >
+> > * Jean Pihet <jean.pihet@newoldbits.com> [191210 19:22]:
+> > > On Tue, Dec 10, 2019 at 6:03 PM Tony Lindgren <tony@atomide.com> wrote:
+> > > > Well can test again with the patch below to see if that is
+> > > > enough to make it work :)
+> > >
+> > > This patch works OK! The correct clock is in use by the driver. The
+> > > hwmod warning shows up at boot:
+> > > [    0.103567] omap_hwmod: qspi: no dt node
+> > > [    0.103599] ------------[ cut here ]------------
+> > > [    0.103639] WARNING: CPU: 0 PID: 1 at
+> > > arch/arm/mach-omap2/omap_hwmod.c:2414 _init.constprop.29+0x198/0x4a0
+> > > [    0.103654] omap_hwmod: qspi: doesn't have mpu register target base
+> >
+> > OK good to hear. That warning will go away when the legacy platform
+> > data is removed. So the patch needs to initially still keep the
+> > "ti,hwmods" property until we remove the legacy platform data.
+> Can the patch be submitted like it is now? If so I am preparing a v2 series.
 
-[ Upstream commit 9f918a728cf86b2757b6a7025e1f46824bfe3155 ]
+I just posted these two patches with you in Cc:
 
-This change is necessary for spidev devices (e.g. /dev/spidev3.0) working
-in the slave mode (like NXP's dspi driver for Vybrid SoC).
+ARM: OMAP2+: Drop legacy platform data for am4 qspi
+ARM: dts: Configure interconnect target module for am4 qspi
 
-When SPI HW works in this mode - the master is responsible for providing
-CS and CLK signals. However, when some fault happens - like for example
-distortion on SPI lines - the SPI Linux driver needs a chance to recover
-from this abnormal situation and prepare itself for next (correct)
-transmission.
+I'll be adding these two into omap-for-v5.6/dt in few days
+if no comments. It seems the driver changes can be sent
+separately from the dts changes.
 
-This change doesn't pose any threat on drivers working in master mode as
-spi_slave_abort() function checks if SPI slave mode is supported.
+> > > Glad to help to get to the final solution, please let me know how I
+> > > can help on that.
+> >
+> > Well is this needed as a fix or can it wait for the v5.6 merge window?
+> It can wait since this is an improvement, not a bugfix. Does that sound good?
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
-Link: https://lore.kernel.org/r/20190924110547.14770-2-lukma@denx.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reported-by: kbuild test robot <lkp@intel.com>
-Link: https://lore.kernel.org/r/20190925091143.15468-2-lukma@denx.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spidev.c | 3 +++
- 1 file changed, 3 insertions(+)
+OK sounds good to me.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index c5fe08bc34a0a..028725573e632 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -634,6 +634,9 @@ static int spidev_release(struct inode *inode, struct file *filp)
- 		if (dofree)
- 			kfree(spidev);
- 	}
-+#ifdef CONFIG_SPI_SLAVE
-+	spi_slave_abort(spidev->spi);
-+#endif
- 	mutex_unlock(&device_list_lock);
- 
- 	return 0;
--- 
-2.20.1
+> > If it's needed as a fix, some kind of description for the issue
+> > fixed is needed. Any ideas there?
+> >
+> > We know the right clock is not found by the driver, but I'm now
+> > wondering if this ever worked or has there been some bootloader
+> > dependency?
+> The motivation is to optimize the SPI transfer speed, especially for
+> the SPI flash devices.
+> With the current code if a 48MHz SPI clock is required, the effective
+> clock will be at a 16MHz frequency.
+> There is no bootloader dependency afaik, U-Boot uses a macro that
+> defines the fixed 48MHz of the PER clock.
 
+Oh OK, makes sense now. So wrong clock rate, thanks for explaining.
+
+Regards,
+
+Tony
