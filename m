@@ -2,36 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D76C119DCC
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF467119DB1
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727669AbfLJWkX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 17:40:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52474 "EHLO mail.kernel.org"
+        id S1729257AbfLJWcN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 17:32:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52614 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728890AbfLJWcI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:32:08 -0500
+        id S1727549AbfLJWcN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:32:13 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D1E17206EC;
-        Tue, 10 Dec 2019 22:32:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C0B7621D7D;
+        Tue, 10 Dec 2019 22:32:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017127;
-        bh=+d/EPeAnK08Y492IrzqNRX5zak9fQNfVoHVoWmvBVg4=;
+        s=default; t=1576017132;
+        bh=xfqzfHzmDVF2NCNq9omTFPeXuBDsh3yuMnBSW7K8NEY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sBBPdFYuKPEbO8L3m/j4x7wSGy3lABomuDYjWmVxHVJ3RRKci4QASG+sAGQ/Jm2N+
-         U3Up7r3isbHqliyRfHbHzZXmCU6fAYHEhsKot57B4NWuohSmrrRNNlLTpyK7LK0jEV
-         Y1GghDKixHpVcYucYqo6IcS0cUd717yBSkE3AsaI=
+        b=BkxErzxwYMQEbJThb6ANIUn1I0kAS9k3ms0IeqRkYjj4U/f51bXtuydqguJgaQbqG
+         zqGNp0Llq5wuCBQOo4LrdlFi1RK4CiNtZ6WD7OYbIq107h6n/ZhwCBqM5TU2NWysLS
+         SowpNJj3VmovWsGGGtFOPeFpNLLy25mPqS8lGkc0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chuhong Yuan <hslester96@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 77/91] spi: tegra20-slink: add missed clk_unprepare
-Date:   Tue, 10 Dec 2019 17:30:21 -0500
-Message-Id: <20191210223035.14270-77-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 81/91] spi: st-ssc4: add missed pm_runtime_disable
+Date:   Tue, 10 Dec 2019 17:30:25 -0500
+Message-Id: <20191210223035.14270-81-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210223035.14270-1-sashal@kernel.org>
 References: <20191210223035.14270-1-sashal@kernel.org>
@@ -46,49 +45,41 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Chuhong Yuan <hslester96@gmail.com>
 
-[ Upstream commit 04358e40ba96d687c0811c21d9dede73f5244a98 ]
+[ Upstream commit cd050abeba2a95fe5374eec28ad2244617bcbab6 ]
 
-The driver misses calling clk_unprepare in probe failure and remove.
-Add the calls to fix it.
+The driver forgets to call pm_runtime_disable in probe failure
+and remove.
+Add the missed calls to fix it.
 
 Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-Link: https://lore.kernel.org/r/20191115083122.12278-1-hslester96@gmail.com
+Link: https://lore.kernel.org/r/20191118024848.21645-1-hslester96@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-tegra20-slink.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/spi/spi-st-ssc4.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index af2880d0c1126..cf2a329fd8958 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1078,7 +1078,7 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	ret = clk_enable(tspi->clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Clock enable failed %d\n", ret);
--		goto exit_free_master;
-+		goto exit_clk_unprepare;
- 	}
+diff --git a/drivers/spi/spi-st-ssc4.c b/drivers/spi/spi-st-ssc4.c
+index e54b596384582..710adbc2485f5 100644
+--- a/drivers/spi/spi-st-ssc4.c
++++ b/drivers/spi/spi-st-ssc4.c
+@@ -385,6 +385,7 @@ static int spi_st_probe(struct platform_device *pdev)
+ 	return 0;
  
- 	spi_irq = platform_get_irq(pdev, 0);
-@@ -1151,6 +1151,8 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	free_irq(spi_irq, tspi);
- exit_clk_disable:
- 	clk_disable(tspi->clk);
-+exit_clk_unprepare:
-+	clk_unprepare(tspi->clk);
- exit_free_master:
+ clk_disable:
++	pm_runtime_disable(&pdev->dev);
+ 	clk_disable_unprepare(spi_st->clk);
+ put_master:
  	spi_master_put(master);
- 	return ret;
-@@ -1164,6 +1166,7 @@ static int tegra_slink_remove(struct platform_device *pdev)
- 	free_irq(tspi->irq, tspi);
+@@ -396,6 +397,8 @@ static int spi_st_remove(struct platform_device *pdev)
+ 	struct spi_master *master = platform_get_drvdata(pdev);
+ 	struct spi_st *spi_st = spi_master_get_devdata(master);
  
- 	clk_disable(tspi->clk);
-+	clk_unprepare(tspi->clk);
++	pm_runtime_disable(&pdev->dev);
++
+ 	clk_disable_unprepare(spi_st->clk);
  
- 	if (tspi->tx_dma_chan)
- 		tegra_slink_deinit_dma_param(tspi, false);
+ 	pinctrl_pm_select_sleep_state(&pdev->dev);
 -- 
 2.20.1
 
