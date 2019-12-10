@@ -2,34 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C432C119D4A
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2473B119D2A
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729170AbfLJWh2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 17:37:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55212 "EHLO mail.kernel.org"
+        id S1728740AbfLJWgL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 17:36:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55746 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730089AbfLJWeC (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:34:02 -0500
+        id S1730245AbfLJWeW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:34:22 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E30D12073D;
-        Tue, 10 Dec 2019 22:34:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D7A7D222C4;
+        Tue, 10 Dec 2019 22:34:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017241;
-        bh=Yh5o3qCEHfyyfsDwqugSp47lNAkR+RACz42yfcbHDfI=;
+        s=default; t=1576017261;
+        bh=vDiGZiY+5wXd6WRqyAiXilFpRVb/IMEXjNGreTTApFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZdQVT4oh3W0d39h4Z9QvMFZCKseQoj8mfbPEPRvDjakxQUiQsLq5iVyWpkQc7a7KB
-         wiNtxTKdqXj1qLSsAdrnIEuRErjhXNH23va+64yj69rBuWy/Jnhpb5egSBUbZsgNx5
-         +FnB/Ul5ux3Rn7pdJr1BMaOBgfeNlzlkP1/1R2f4=
+        b=cZRt4vK/8H3q4iQcNFQ1JtfLZ64RogRQcAO+nFDCEOOfYoS5uQqKxVW9rjhUTd1Ac
+         NMJWCotSBgBaxopoH4RarPut0zZcfHXB+vLY7XoAcLSp/ryhePAREWJ72x1Ua+kDAS
+         CCSNBbZd4AE6elvdn8ow0LyY3WrPlq0GyNTF1nb4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pan Bian <bianpan2016@163.com>, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 38/71] spi: img-spfi: fix potential double release
-Date:   Tue, 10 Dec 2019 17:32:43 -0500
-Message-Id: <20191210223316.14988-38-sashal@kernel.org>
+Cc:     Chuhong Yuan <hslester96@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 55/71] spi: pxa2xx: Add missed security checks
+Date:   Tue, 10 Dec 2019 17:33:00 -0500
+Message-Id: <20191210223316.14988-55-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
 References: <20191210223316.14988-1-sashal@kernel.org>
@@ -42,37 +44,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Pan Bian <bianpan2016@163.com>
+From: Chuhong Yuan <hslester96@gmail.com>
 
-[ Upstream commit e9a8ba9769a0e354341bc6cc01b98aadcea1dfe9 ]
+[ Upstream commit 5eb263ef08b5014cfc2539a838f39d2fd3531423 ]
 
-The channels spfi->tx_ch and spfi->rx_ch are not set to NULL after they
-are released. As a result, they will be released again, either on the
-error handling branch in the same function or in the corresponding
-remove function, i.e. img_spfi_remove(). This patch fixes the bug by
-setting the two members to NULL.
+pxa2xx_spi_init_pdata misses checks for devm_clk_get and
+platform_get_irq.
+Add checks for them to fix the bugs.
 
-Signed-off-by: Pan Bian <bianpan2016@163.com>
-Link: https://lore.kernel.org/r/1573007769-20131-1-git-send-email-bianpan2016@163.com
+Since ssp->clk and ssp->irq are used in probe, they are mandatory here.
+So we cannot use _optional() for devm_clk_get and platform_get_irq.
+
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+Link: https://lore.kernel.org/r/20191109080943.30428-1-hslester96@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-img-spfi.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/spi/spi-pxa2xx.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
-index 823cbc92d1e75..c46c0738c7340 100644
---- a/drivers/spi/spi-img-spfi.c
-+++ b/drivers/spi/spi-img-spfi.c
-@@ -673,6 +673,8 @@ static int img_spfi_probe(struct platform_device *pdev)
- 			dma_release_channel(spfi->tx_ch);
- 		if (spfi->rx_ch)
- 			dma_release_channel(spfi->rx_ch);
-+		spfi->tx_ch = NULL;
-+		spfi->rx_ch = NULL;
- 		dev_warn(spfi->dev, "Failed to get DMA channels, falling back to PIO mode\n");
- 	} else {
- 		master->dma_tx = spfi->tx_ch;
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index 193aa3da50336..96ed01cb6489f 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -1425,7 +1425,13 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
+ 	}
+ 
+ 	ssp->clk = devm_clk_get(&pdev->dev, NULL);
++	if (IS_ERR(ssp->clk))
++		return NULL;
++
+ 	ssp->irq = platform_get_irq(pdev, 0);
++	if (ssp->irq < 0)
++		return NULL;
++
+ 	ssp->type = type;
+ 	ssp->pdev = pdev;
+ 	ssp->port_id = pxa2xx_spi_get_port_id(adev);
 -- 
 2.20.1
 
