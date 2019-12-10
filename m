@@ -2,37 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 310D3119612
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 22:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A495F1195F1
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 22:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728425AbfLJVYl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 16:24:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32830 "EHLO mail.kernel.org"
+        id S1728695AbfLJVXu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 16:23:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33426 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728614AbfLJVKt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:10:49 -0500
+        id S1728671AbfLJVLF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:11:05 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5AC324697;
-        Tue, 10 Dec 2019 21:10:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4D7CA2077B;
+        Tue, 10 Dec 2019 21:11:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012248;
-        bh=WvEFyyi/O+WRj6bp4PbOSJv1s0e0tDsQyd8Jf5h5W+U=;
+        s=default; t=1576012264;
+        bh=pWi9qhhj81ENv7TajptmcAzqW4lHgpIn41k71w0kQ/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fp0Cif0+NghVk0j7oUceQblI5x8D5PtUkMAbeRgUCKujqBWKqA8MrmekmNSQy03Rc
-         GSN2bxJ9tcBwv9QKquSW63BoLHSChdj0+BJ3Nr+b6gWeZfuop0Y4Gid9SZ8Kl/knUd
-         qttN/RIORF9g3T+4OdPGf6cL7jiuvju/PEDtG//g=
+        b=gxGyVDZIWWwD/ZrAA/2bDUsA2aGFbh2JGPpQIxdmOKRJ6OXWiVKApIdTzqVm5wDKE
+         3dt7WqmqTt93YNcFAHXGAyMwgUaBpgTmzfkhDfnEPbFJYltzeSioRpBT8Rrq09XYB3
+         0vRxib7u4KQg1D7hPyZVIZa1R2jiTyOuKunY13rw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chuhong Yuan <hslester96@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 196/350] spi: sifive: disable clk when probe fails and remove
-Date:   Tue, 10 Dec 2019 16:05:01 -0500
-Message-Id: <20191210210735.9077-157-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 210/350] spi: dw: Fix Designware SPI loopback
+Date:   Tue, 10 Dec 2019 16:05:15 -0500
+Message-Id: <20191210210735.9077-171-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -45,76 +43,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Chuhong Yuan <hslester96@gmail.com>
+From: Thor Thayer <thor.thayer@linux.intel.com>
 
-[ Upstream commit a725272bda77e61c1b4de85c7b0c875b2ea639b6 ]
+[ Upstream commit 1403cfa69d310781f9548951c97725c67ffcf613 ]
 
-The driver forgets to disable and unprepare clk when probe fails and
-remove.
-Add the calls to fix the problem.
+The SPI_LOOP is set in spi->mode but not propagated to the register.
+A previous patch removed the bit during a cleanup.
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-Reviewed-by: Palmer Dabbelt <palmer@dabbelt.com>
-Link: https://lore.kernel.org/r/20191101121745.13413-1-hslester96@gmail.com
+Fixes: e1bc204894ea ("spi: dw: fix potential variable assignment error")
+Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
+Link: https://lore.kernel.org/r/1572985330-5525-1-git-send-email-thor.thayer@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-sifive.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/spi/spi-dw.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-sifive.c b/drivers/spi/spi-sifive.c
-index 35254bdc42c48..f7c1e20432e07 100644
---- a/drivers/spi/spi-sifive.c
-+++ b/drivers/spi/spi-sifive.c
-@@ -357,14 +357,14 @@ static int sifive_spi_probe(struct platform_device *pdev)
- 	if (!cs_bits) {
- 		dev_err(&pdev->dev, "Could not auto probe CS lines\n");
- 		ret = -EINVAL;
--		goto put_master;
-+		goto disable_clk;
- 	}
+diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+index 9a49e073e8b73..076652d3d051e 100644
+--- a/drivers/spi/spi-dw.c
++++ b/drivers/spi/spi-dw.c
+@@ -308,7 +308,8 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+ 	cr0 = (transfer->bits_per_word - 1)
+ 		| (chip->type << SPI_FRF_OFFSET)
+ 		| ((((spi->mode & SPI_CPOL) ? 1 : 0) << SPI_SCOL_OFFSET) |
+-			(((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET))
++			(((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET) |
++			(((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET))
+ 		| (chip->tmode << SPI_TMOD_OFFSET);
  
- 	num_cs = ilog2(cs_bits) + 1;
- 	if (num_cs > SIFIVE_SPI_MAX_CS) {
- 		dev_err(&pdev->dev, "Invalid number of spi slaves\n");
- 		ret = -EINVAL;
--		goto put_master;
-+		goto disable_clk;
- 	}
- 
- 	/* Define our master */
-@@ -393,7 +393,7 @@ static int sifive_spi_probe(struct platform_device *pdev)
- 			       dev_name(&pdev->dev), spi);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Unable to bind to interrupt\n");
--		goto put_master;
-+		goto disable_clk;
- 	}
- 
- 	dev_info(&pdev->dev, "mapped; irq=%d, cs=%d\n",
-@@ -402,11 +402,13 @@ static int sifive_spi_probe(struct platform_device *pdev)
- 	ret = devm_spi_register_master(&pdev->dev, master);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "spi_register_master failed\n");
--		goto put_master;
-+		goto disable_clk;
- 	}
- 
- 	return 0;
- 
-+disable_clk:
-+	clk_disable_unprepare(spi->clk);
- put_master:
- 	spi_master_put(master);
- 
-@@ -420,6 +422,7 @@ static int sifive_spi_remove(struct platform_device *pdev)
- 
- 	/* Disable all the interrupts just in case */
- 	sifive_spi_write(spi, SIFIVE_SPI_REG_IE, 0);
-+	clk_disable_unprepare(spi->clk);
- 
- 	return 0;
- }
+ 	/*
 -- 
 2.20.1
 
