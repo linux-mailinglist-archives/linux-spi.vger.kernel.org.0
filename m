@@ -2,36 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A591198B3
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 22:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 094C51198DC
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 22:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729910AbfLJVeC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 16:34:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38700 "EHLO mail.kernel.org"
+        id S1728904AbfLJVkh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 16:40:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39594 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729904AbfLJVeB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:34:01 -0500
+        id S1729614AbfLJVe2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:34:28 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C3A1B222C4;
-        Tue, 10 Dec 2019 21:33:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7ED962073B;
+        Tue, 10 Dec 2019 21:34:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013640;
-        bh=2Hmia6uVBT0pGAtAMw0KLOxb1KHmx2lNNMAxCv4+9AE=;
+        s=default; t=1576013668;
+        bh=RTb71w6JQiLTCar9gcPlOjum+qxLqkUUOFM4ZXT1ok8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tpLtngDt2oKsTXOBsbMQVcTRDRuMXXhWEKyBx6Gxk3UZppjQ4snuFIPXuULT2ygzq
-         t4h5e7SrWbaZzpUoA8DaAFez0UwPeyPhNUlgkGkXV+GQhLNyvlV923v41Bh7Q1e9eW
-         0PLO0kKz39rJYqi1jVXxvEmdS2PSuqqFaVU+GTn4=
+        b=so1xB12AvBt9Ay5yUsAE/1AXTQ6LNq4mehVf2SSx561WJ1J9iHEyyC2a5qhMANrR1
+         3ZhegeAQW7C3fOe6zJG1dK6MmBJz7lgkfZ9UqHenz4O+VvVP/hlsACchGOlaRVfWe8
+         96GyOW+s8nKLJUywmXQ9O6okr07rFj7ma8Pv+Gts=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lingling Xu <ling_ling.xu@unisoc.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+Cc:     Pan Bian <bianpan2016@163.com>, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 080/177] spi: sprd: adi: Add missing lock protection when rebooting
-Date:   Tue, 10 Dec 2019 16:30:44 -0500
-Message-Id: <20191210213221.11921-80-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 105/177] spi: img-spfi: fix potential double release
+Date:   Tue, 10 Dec 2019 16:31:09 -0500
+Message-Id: <20191210213221.11921-105-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
 References: <20191210213221.11921-1-sashal@kernel.org>
@@ -44,37 +42,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Lingling Xu <ling_ling.xu@unisoc.com>
+From: Pan Bian <bianpan2016@163.com>
 
-[ Upstream commit 91ea1d70607e374b014b4b9bea771ce661f9f64b ]
+[ Upstream commit e9a8ba9769a0e354341bc6cc01b98aadcea1dfe9 ]
 
-When rebooting the system, we should lock the watchdog after
-configuration to make sure the watchdog can reboot the system
-successfully.
+The channels spfi->tx_ch and spfi->rx_ch are not set to NULL after they
+are released. As a result, they will be released again, either on the
+error handling branch in the same function or in the corresponding
+remove function, i.e. img_spfi_remove(). This patch fixes the bug by
+setting the two members to NULL.
 
-Signed-off-by: Lingling Xu <ling_ling.xu@unisoc.com>
-Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
-Link: https://lore.kernel.org/r/7b04711127434555e3a1a86bc6be99860cd86668.1572257085.git.baolin.wang@linaro.org
+Signed-off-by: Pan Bian <bianpan2016@163.com>
+Link: https://lore.kernel.org/r/1573007769-20131-1-git-send-email-bianpan2016@163.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-sprd-adi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/spi/spi-img-spfi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index df5960bddfe61..f1fc2bde6ef30 100644
---- a/drivers/spi/spi-sprd-adi.c
-+++ b/drivers/spi/spi-sprd-adi.c
-@@ -367,6 +367,9 @@ static int sprd_adi_restart_handler(struct notifier_block *this,
- 	val |= BIT_WDG_RUN | BIT_WDG_RST;
- 	sprd_adi_write(sadi, sadi->slave_pbase + REG_WDG_CTRL, val);
- 
-+	/* Lock the watchdog */
-+	sprd_adi_write(sadi, sadi->slave_pbase + REG_WDG_LOCK, ~WDG_UNLOCK_KEY);
-+
- 	mdelay(1000);
- 
- 	dev_emerg(sadi->dev, "Unable to restart system\n");
+diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
+index e6eb979f1b8a0..e4b31d6e6e33e 100644
+--- a/drivers/spi/spi-img-spfi.c
++++ b/drivers/spi/spi-img-spfi.c
+@@ -676,6 +676,8 @@ static int img_spfi_probe(struct platform_device *pdev)
+ 			dma_release_channel(spfi->tx_ch);
+ 		if (spfi->rx_ch)
+ 			dma_release_channel(spfi->rx_ch);
++		spfi->tx_ch = NULL;
++		spfi->rx_ch = NULL;
+ 		dev_warn(spfi->dev, "Failed to get DMA channels, falling back to PIO mode\n");
+ 	} else {
+ 		master->dma_tx = spfi->tx_ch;
 -- 
 2.20.1
 
