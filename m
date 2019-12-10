@@ -2,240 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F5E118C0C
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 16:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C985C118C50
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 16:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727330AbfLJPIg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 10:08:36 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:41647 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727642AbfLJPIf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Dec 2019 10:08:35 -0500
-Received: by mail-lj1-f194.google.com with SMTP id h23so20272616ljc.8
-        for <linux-spi@vger.kernel.org>; Tue, 10 Dec 2019 07:08:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=newoldbits-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wY25iks8fJgWV/3zpHQrx9JVu0mthHmG9auK6uwALnY=;
-        b=fVERc1pnKdmGBv2cbWYya9jrkMgNneTi9IQcC/WQDmOZ3jMSm/qlbvB/AXSgtAz4XB
-         v2ik8F8G8bahGpgEn7TZDn2aVMJBWad57YaB5CbwdBbDXLAfj35ksf/LJJPhMheBj9IR
-         wvC08aF4qUSpM6N0TGbThOMxraCIZ2wOJwQWdDVXMzNZ9aj3dGToBZSahKpjOt+/yxuB
-         P93j/7emG53rYP6Pqd+z1HCgbcw4APZaHMrF/AsEHv3G9ZWe1SZk5oEWepn9SX3/QQTI
-         kZ0z1k9iOZX8FWH2yr55fYaI/9PMJgCvWVE0zf44nrGJ4EU7JjXdhF7bTltMvo6CMJpP
-         heRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wY25iks8fJgWV/3zpHQrx9JVu0mthHmG9auK6uwALnY=;
-        b=mx/tCz7hDZHF/HXXY6z/xXRfHusFhlIrQL9ySjH6fsULExEv2aYY8eAt4wy8fJisWm
-         n8ffbO8w5F74TA4Q1TfCm3ZWFRzMDBquCYJ+4ChGwfV1riwQ8NiNJ6sq6KGVYXTaLebb
-         gnCMM6PlD7ekK7H8Mzd6QkoUQHDnPDv2ZvcC7fxPnUFm0/vVVQgBaWHrbXBE8y0dOrxH
-         Kpo0yxYmA+yqaSBFkRdVbZYMU72P3m+BtTuLlNQLXXn/EtJApDQabViX3Zt9iU0JIV9V
-         2TEStimqNF47fhemL3buFNJbdElAs7K21MM0QgLrGzu0/GPnJsNJX6NOWCZJ2ws1G5jd
-         Q1dw==
-X-Gm-Message-State: APjAAAWgCwtzprV6Inl5lzaMf7JqEIORqozM9FUm82hRe1pWv7V0ap/d
-        GBejL1PeGNJs5Wb86iiNG4bAQG0U598u6LalcOiqqg==
-X-Google-Smtp-Source: APXvYqzthjCcE9Zr5oKmkbiWubbD4WVFzx4CDo7PmlTtn60lZH2RU/KXqgdahf/7GYJkHC59oGbuIfVRpjuGd0BjkIw=
-X-Received: by 2002:a2e:9610:: with SMTP id v16mr21434215ljh.88.1575990513036;
- Tue, 10 Dec 2019 07:08:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20191206160007.331801-1-jean.pihet@newoldbits.com>
- <20191206160007.331801-4-jean.pihet@newoldbits.com> <2efd2981-73d1-6975-a385-871809ec43f1@ti.com>
- <CAORVsuU8b1-50STYAbY7CJ-VkLWXHbEz0dDCfLYfS4YM36vSgg@mail.gmail.com>
- <6d6808af-77b3-72b2-b247-58ed033cb4dc@ti.com> <CAORVsuXehEMi0xy6bm_OZuUowvx0K_Ogp2tXAjeruck3mYX=PQ@mail.gmail.com>
- <b56f079f-9fc0-c745-6c39-384e76896d21@ti.com>
-In-Reply-To: <b56f079f-9fc0-c745-6c39-384e76896d21@ti.com>
-From:   Jean Pihet <jean.pihet@newoldbits.com>
-Date:   Tue, 10 Dec 2019 16:08:21 +0100
-Message-ID: <CAORVsuUj2QFaATk2vvwLAqdyiUVhao8QMn9kSgZza_xSkzLm6w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] TI QSPI: optimize transfers for dual and quad read
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Mark Brown <broonie@kernel.org>, Tero Kristo <t-kristo@ti.com>,
-        linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
-        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
-        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727502AbfLJPRU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 10:17:20 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:4015 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727211AbfLJPRT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 10:17:19 -0500
+Received: from localhost (mailhub1-ext [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 47XNvw0kVZz9txNv;
+        Tue, 10 Dec 2019 16:17:16 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=mhTKaRrQ; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id O5V_lEMKmRWo; Tue, 10 Dec 2019 16:17:16 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47XNvv6k9vz9txNq;
+        Tue, 10 Dec 2019 16:17:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1575991035; bh=Af0DPms5UVaYySKeJ9tzwgtYBkAXclcjA+E2An46M1Q=;
+        h=From:Subject:To:Cc:Date:From;
+        b=mhTKaRrQR2cvIytxVGXv7Am6lG18lbR13OjpPxIYkimM1/ZjNdk1eAoHR3sKLt5lB
+         TiiYNshd7X6zZK1Itr0SDx9fa+B5iBOtFN20Rvclpdi4DA9bzfvSqciiRE29dKhKHz
+         4henJ/7s7a17k+Jh1dd42UUyNlZc/TkabHV8SqvM=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 527558B818;
+        Tue, 10 Dec 2019 16:17:17 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id Gt6OA9HvVgrP; Tue, 10 Dec 2019 16:17:17 +0100 (CET)
+Received: from po16098vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A34A48B754;
+        Tue, 10 Dec 2019 16:17:16 +0100 (CET)
+Received: by localhost.localdomain (Postfix, from userid 0)
+        id E46996373D; Tue, 10 Dec 2019 15:17:15 +0000 (UTC)
+Message-Id: <1cdd0a26d7e1545f32c8bc4dc7458ebecdd6aaed.1575990944.git.christophe.leroy@c-s.fr>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: [PATCH v2 1/2] spi: fsl: don't map irq during probe
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        kbuild test robot <lkp@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 10 Dec 2019 15:17:15 +0000 (UTC)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Vignesh,
+With lastest kernel, the following warning is observed at startup:
 
-On Tue, Dec 10, 2019 at 2:17 PM Vignesh Raghavendra <vigneshr@ti.com> wrote:
->
->
->
-> On 10/12/19 6:31 pm, Jean Pihet wrote:
-> > On Tue, Dec 10, 2019 at 1:55 PM Vignesh Raghavendra <vigneshr@ti.com> wrote:
-> >>
-> >>
-> >>
-> >> On 10/12/19 5:55 pm, Jean Pihet wrote:
-> >>> Hi Vignesh,
-> >>>
-> >>> On Tue, Dec 10, 2019 at 9:40 AM Vignesh Raghavendra <vigneshr@ti.com> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 06/12/19 9:30 pm, Jean Pihet wrote:
-> >>>>> By reading the 32 bits data register and copy the contents to the
-> >>>>> receive buffer, according to the single/dual/quad read mode and
-> >>>>> the data length to read.
-> >>>>>
-> >>>>> The speed improvement is 3.5x using quad read.
-> >>>>> ---
-> >>>>>  drivers/spi/spi-ti-qspi.c | 48 ++++++++++++++++++++++++++-------------
-> >>>>>  1 file changed, 32 insertions(+), 16 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
-> >>>>> index 13916232a959..65ec3bcb25ae 100644
-> >>>>> --- a/drivers/spi/spi-ti-qspi.c
-> >>>>> +++ b/drivers/spi/spi-ti-qspi.c
-> >>>>> @@ -313,24 +313,25 @@ static int qspi_write_msg(struct ti_qspi *qspi, struct spi_transfer *t,
-> >>>>>  static int qspi_read_msg(struct ti_qspi *qspi, struct spi_transfer *t,
-> >>>>>                        int count)
-> >>>>>  {
-> >>>>> -     int wlen;
-> >>>>>       unsigned int cmd;
-> >>>>> +     u32 rx;
-> >>>>>       u8 *rxbuf;
-> >>>>> +     u8 xfer_len;
-> >>>>>
-> >>>>>       rxbuf = t->rx_buf;
-> >>>>>       cmd = qspi->cmd;
-> >>>>> +     /* Optimize the transfers for dual and quad read */
-> >>>>>       switch (t->rx_nbits) {
-> >>>>> -     case SPI_NBITS_DUAL:
-> >>>>> -             cmd |= QSPI_RD_DUAL;
-> >>>>> -             break;
-> >>>>>       case SPI_NBITS_QUAD:
-> >>>>> -             cmd |= QSPI_RD_QUAD;
-> >>>>> +             cmd |= QSPI_RD_QUAD | QSPI_WLEN(32);
-> >>>>
-> >>>> Why does QUAD mode mean 32 bit words?
-> >>> This is based on the assumption that every transfer is multiple of 8
-> >>> clock cycles.
-> >>> For SPI flash devices where bits_per_word is 8, the original code
-> >>> always reads data by 1 byte, which
-> >>> can be optimized.
-> >>>
-> >>>>
-> >>>> IO mode and word size are independent of each other. If you want to
-> >>>> optimize for speed, why not set FLEN field to max and WLEN to max and
-> >>>> use ti_qspi_adjust_op_size to clamp max read size to 4096 words when
-> >>>> required. This should work irrespective of IO modes.
-> >>>> Driver already does something similar to this in the write path.
-> >>>
-> >>> Ok! A new patch series is coming.
-> >>>
-> >>>>
-> >>>>> +             break;
-> >>>>> +     case SPI_NBITS_DUAL:
-> >>>>> +             cmd |= QSPI_RD_DUAL | QSPI_WLEN(16);
-> >>>>>               break;
-> >>>>>       default:
-> >>>>> -             cmd |= QSPI_RD_SNGL;
-> >>>>> +             cmd |= QSPI_RD_SNGL | QSPI_WLEN(8);
-> >>>>>               break;
-> >>>>>       }
-> >>>>> -     wlen = t->bits_per_word >> 3;   /* in bytes */
-> >>>>>
-> >>>>>       while (count) {
-> >>>>>               dev_dbg(qspi->dev, "rx cmd %08x dc %08x\n", cmd, qspi->dc);
-> >>>>> @@ -342,19 +343,34 @@ static int qspi_read_msg(struct ti_qspi *qspi, struct spi_transfer *t,
-> >>>>>                       dev_err(qspi->dev, "read timed out\n");
-> >>>>>                       return -ETIMEDOUT;
-> >>>>>               }
-> >>>>> -             switch (wlen) {
-> >>>>> -             case 1:
-> >>>>> -                     *rxbuf = readb(qspi->base + QSPI_SPI_DATA_REG);
-> >>>>> +
-> >>>>> +             /* Optimize the transfers for dual and quad read */
-> >>>>> +             rx = readl(qspi->base + QSPI_SPI_DATA_REG);
-> >>>>> +             switch (t->rx_nbits) {
-> >>>>> +             case SPI_NBITS_QUAD:
-> >>>>> +                     if (count >= 1)
-> >>>>> +                             *rxbuf++ = rx >> 24;
-> >>>>> +                     if (count >= 2)
-> >>>>> +                             *rxbuf++ = rx >> 16;
-> >>>>> +                     if (count >= 3)
-> >>>>> +                             *rxbuf++ = rx >> 8;
-> >>>>> +                     if (count >= 4)
-> >>>>> +                             *rxbuf++ = rx;
-> >>>>> +                     xfer_len = min(count, 4);
-> >>>>>                       break;
-> >>>>> -             case 2:
-> >>>>> -                     *((u16 *)rxbuf) = readw(qspi->base + QSPI_SPI_DATA_REG);
-> >>>>> +             case SPI_NBITS_DUAL:
-> >>>>> +                     if (count >= 1)
-> >>>>> +                             *rxbuf++ = rx >> 8;
-> >>>>> +                     if (count >= 2)
-> >>>>> +                             *rxbuf++ = rx;
-> >>>>> +                     xfer_len = min(count, 2);
-> >>>>>                       break;
-> >>>>> -             case 4:
-> >>>>> -                     *((u32 *)rxbuf) = readl(qspi->base + QSPI_SPI_DATA_REG);
-> >>>>> +             default:
-> >>>>> +                     *rxbuf++ = rx;
-> >>>>> +                     xfer_len = 1;
-> >>>>>                       break;
-> >>>>
-> >>>> This will fail in case of t->rx_nbits = 1 and t->bits_per_word = 32
-> >>>> (1 bit SPI bus bit slave with 32-bit addressable registers)
-> >>> I do not see why this would fail. If bits_per_word is 32, count (in
-> >>> bytes) is a multiple of 4 and 1 byte will be read every time the loop
-> >>> runs.
-> >>> Is that correct? Can you elaborate more on why this would fail?
-> >>>
-> >>
-> >> With t->rx_nbits = 1 and t->bits_per_word = 32, controller should always
-> >> read in 4 byte chunks on the SPI bus, but we have:
-> >>
-> >>>>> +             cmd |= QSPI_RD_SNGL | QSPI_WLEN(8);
-> >>
-> >> which sets word size to 8 bits and thus breaks the transaction to 1 byte
-> >> chunks on the bus, which is bad.
-> >
-> > In that case there are 4 1-byte reads on the bus, which succeeds. The
-> > trace on the logic analyzer shows 4 times 8 clock cycles.
-> >
->
-> Ah, sorry, there is no CS toggle, so this case will work. Although its
-> less efficient as you could have set WLEN to 32 and read entire
-> QSPI_SPI_DATA_REG in one transaction.
->
-> But this patch definitely changes the behvior when t->rx_nbits = 4 and
-> t->bits_per_word = 32. Previous code did:
->
->                *((u32 *)rxbuf) = readl(qspi->base + QSPI_SPI_DATA_REG);
->
-> This patch does:
->
-> +             rx = readl(qspi->base + QSPI_SPI_DATA_REG);
->                 [...]
-> +             case SPI_NBITS_QUAD:
-> +                     if (count >= 1)
-> +                             *rxbuf++ = rx >> 24;
-> +                     if (count >= 2)
-> +                             *rxbuf++ = rx >> 16;
-> +                     if (count >= 3)
-> +                             *rxbuf++ = rx >> 8;
-> +                     if (count >= 4)
-> +                             *rxbuf++ = rx;
->
->
-> So there is change in the endianess...
-Oh! The cases where bits_per_word is different than 8 definitely needs
-more thinking. I have tested the patches
-with SPI flash only. How to test it with 32 bits per word?
+[    1.500609] ------------[ cut here ]------------
+[    1.505225] remove_proc_entry: removing non-empty directory 'irq/22', leaking at least 'fsl_spi'
+[    1.514234] WARNING: CPU: 0 PID: 1 at fs/proc/generic.c:682 remove_proc_entry+0x198/0x1c0
+[    1.522403] CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.0-s3k-dev-02248-g93532430a4ff #2564
+[    1.530724] NIP:  c0197694 LR: c0197694 CTR: c0050d80
+[    1.535762] REGS: df4a5af0 TRAP: 0700   Not tainted  (5.4.0-02248-g93532430a4ff)
+[    1.543818] MSR:  00029032 <EE,ME,IR,DR,RI>  CR: 22028222  XER: 00000000
+[    1.550524]
+[    1.550524] GPR00: c0197694 df4a5ba8 df4a0000 00000054 00000000 00000000 00004a38 00000010
+[    1.550524] GPR08: c07c5a30 00000800 00000000 00001032 22000208 00000000 c0004b14 00000000
+[    1.550524] GPR16: 00000000 00000000 00000000 00000000 00000000 00000000 c0830000 c07fc078
+[    1.550524] GPR24: c08e8ca0 df665d10 df60ea98 c07c9db8 00000001 df5d5ae3 df5d5a80 df43f8e3
+[    1.585327] NIP [c0197694] remove_proc_entry+0x198/0x1c0
+[    1.590628] LR [c0197694] remove_proc_entry+0x198/0x1c0
+[    1.595829] Call Trace:
+[    1.598280] [df4a5ba8] [c0197694] remove_proc_entry+0x198/0x1c0 (unreliable)
+[    1.605321] [df4a5bd8] [c0067acc] unregister_irq_proc+0x5c/0x70
+[    1.611238] [df4a5bf8] [c005fbc4] free_desc+0x3c/0x80
+[    1.616286] [df4a5c18] [c005fe2c] irq_free_descs+0x70/0xa8
+[    1.621778] [df4a5c38] [c033d3fc] of_fsl_spi_probe+0xdc/0x3cc
+[    1.627525] [df4a5c88] [c02f0f64] platform_drv_probe+0x44/0xa4
+[    1.633350] [df4a5c98] [c02eee44] really_probe+0x1ac/0x418
+[    1.638829] [df4a5cc8] [c02ed3e8] bus_for_each_drv+0x64/0xb0
+[    1.644481] [df4a5cf8] [c02ef950] __device_attach+0xd4/0x128
+[    1.650132] [df4a5d28] [c02ed61c] bus_probe_device+0xa0/0xbc
+[    1.655783] [df4a5d48] [c02ebbe8] device_add+0x544/0x74c
+[    1.661096] [df4a5d88] [c0382b78] of_platform_device_create_pdata+0xa4/0x100
+[    1.668131] [df4a5da8] [c0382cf4] of_platform_bus_create+0x120/0x20c
+[    1.674474] [df4a5df8] [c0382d50] of_platform_bus_create+0x17c/0x20c
+[    1.680818] [df4a5e48] [c0382e88] of_platform_bus_probe+0x9c/0xf0
+[    1.686907] [df4a5e68] [c0751404] __machine_initcall_cmpcpro_cmpcpro_declare_of_platform_devices+0x74/0x1a4
+[    1.696629] [df4a5e98] [c072a4cc] do_one_initcall+0x8c/0x1d4
+[    1.702282] [df4a5ef8] [c072a768] kernel_init_freeable+0x154/0x204
+[    1.708455] [df4a5f28] [c0004b2c] kernel_init+0x18/0x110
+[    1.713769] [df4a5f38] [c00122ac] ret_from_kernel_thread+0x14/0x1c
+[    1.719926] Instruction dump:
+[    1.722889] 2c030000 4182004c 3863ffb0 3c80c05f 80e3005c 388436a0 3c60c06d 7fa6eb78
+[    1.730630] 7fe5fb78 38840280 38634178 4be8c611 <0fe00000> 4bffff6c 3c60c071 7fe4fb78
+[    1.738556] ---[ end trace 05d0720bf2e352e2 ]---
 
-Thanks & regards;
-Jean
+The problem comes from the error path which calls
+irq_dispose_mapping() while the IRQ has been requested with
+devm_request_irq().
 
->
-> --
-> Regards
-> Vignesh
+IRQ doesn't need to be mapped with irq_of_parse_and_map(). The only
+need is to get the IRQ virtual number. For that, use
+of_irq_to_resource() instead of the
+irq_of_parse_and_map()/irq_dispose_mapping() pair.
+
+To avoid build failure on SPARC which has a dummy version of
+irq_of_parse_and_map() but not of of_irq_to_resource(), get this
+driver dependent on OF_IRQ.
+
+Reported-by: kbuild test robot <lkp@intel.com>
+[v2: adding dependency on CONFIG_OF_IRQ]
+Fixes: 500a32abaf81 ("spi: fsl: Call irq_dispose_mapping in err path")
+Cc: stable@vger.kernel.org
+
+Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+---
+ drivers/spi/Kconfig       | 2 +-
+ drivers/spi/spi-fsl-spi.c | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 870f7797b56b..fba933f31d40 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -378,7 +378,7 @@ config SPI_FSL_CPM
+ 
+ config SPI_FSL_SPI
+ 	tristate "Freescale SPI controller and Aeroflex Gaisler GRLIB SPI controller"
+-	depends on OF
++	depends on OF_IRQ
+ 	select SPI_FSL_LIB
+ 	select SPI_FSL_CPM if FSL_SOC
+ 	help
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index e2d878397efd..2d85c81983b1 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -765,8 +765,8 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
+ 	if (ret)
+ 		goto err;
+ 
+-	irq = irq_of_parse_and_map(np, 0);
+-	if (!irq) {
++	irq = of_irq_to_resource(np, 0, NULL);
++	if (irq <= 0) {
+ 		ret = -EINVAL;
+ 		goto err;
+ 	}
+@@ -780,7 +780,6 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
+ 	return 0;
+ 
+ err:
+-	irq_dispose_mapping(irq);
+ 	return ret;
+ }
+ 
+-- 
+2.13.3
+
