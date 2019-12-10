@@ -2,157 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B68118E78
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 18:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C221118F49
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 18:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727562AbfLJRDe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 12:03:34 -0500
-Received: from muru.com ([72.249.23.125]:44646 "EHLO muru.com"
+        id S1727591AbfLJRtr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 12:49:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:52238 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727568AbfLJRDd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 12:03:33 -0500
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 0AF2980E1;
-        Tue, 10 Dec 2019 17:04:10 +0000 (UTC)
-Date:   Tue, 10 Dec 2019 09:03:29 -0800
-From:   Tony Lindgren <tony@atomide.com>
-To:     Jean Pihet <jean.pihet@newoldbits.com>
-Cc:     Tero Kristo <t-kristo@ti.com>, Mark Brown <broonie@kernel.org>,
-        linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
-        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
-        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>,
-        Vignesh R <vigneshr@ti.com>
-Subject: Re: [PATCH 1/3] TI QSPI: Fix fclk frequency
-Message-ID: <20191210170329.GM35479@atomide.com>
-References: <20191206160007.331801-1-jean.pihet@newoldbits.com>
- <20191206160007.331801-2-jean.pihet@newoldbits.com>
- <20191206162431.GF35479@atomide.com>
- <CAORVsuUBseM3vnZsSajMmUS1O6rEC4U_aa951HwMsGxyEm+t+g@mail.gmail.com>
- <20191206175731.GG35479@atomide.com>
- <CAORVsuXe7SyAmzLv4VoKMsf4jcYV1bKoCixhsgZ3U0rBHFJA4Q@mail.gmail.com>
+        id S1727520AbfLJRtr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 12:49:47 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F3C581FB;
+        Tue, 10 Dec 2019 09:49:46 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 71A223F6CF;
+        Tue, 10 Dec 2019 09:49:46 -0800 (PST)
+Date:   Tue, 10 Dec 2019 17:49:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-spi <linux-spi@vger.kernel.org>
+Subject: Re: [spi:for-next 1/2] drivers/spi/spi-fsl-spi.c:749: undefined
+ reference to `of_irq_to_resource'
+Message-ID: <20191210174944.GI6110@sirena.org.uk>
+References: <201912101605.WSMiIcKr%lkp@intel.com>
+ <CAMuHMdVUS+=k0cK-Z9x8JAS=p3BauPXm6C2EmV-umsJDQc1qMg@mail.gmail.com>
+ <af7a7385-4980-ab18-6c91-29ba463a3cde@c-s.fr>
+ <CAMuHMdX86AYi-901H8V1NmuRmA9vLefS57AW0v8Uakuu+COqrQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9s922KAXlWjPfK/Q"
 Content-Disposition: inline
-In-Reply-To: <CAORVsuXe7SyAmzLv4VoKMsf4jcYV1bKoCixhsgZ3U0rBHFJA4Q@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <CAMuHMdX86AYi-901H8V1NmuRmA9vLefS57AW0v8Uakuu+COqrQ@mail.gmail.com>
+X-Cookie: We have ears, earther...FOUR OF THEM!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-* Jean Pihet <jean.pihet@newoldbits.com> [191210 16:24]:
-> On Fri, Dec 6, 2019 at 6:57 PM Tony Lindgren <tony@atomide.com> wrote:
-> > Care to test with the patch below (without your changes) to see if
-> > something else is still needed?
-> 
-> With the patch applied fck still is the ick, not the L4 clock as required.
+--9s922KAXlWjPfK/Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hmm OK so I think we need fck at both the module level and qspi level.
+On Tue, Dec 10, 2019 at 04:06:12PM +0100, Geert Uytterhoeven wrote:
+> On Tue, Dec 10, 2019 at 3:57 PM Christophe Leroy
+> <christophe.leroy@c-s.fr> wrote:
 
-> Could both ick and fck be defined in the DT files, like here below?
->    clocks = <&l3s_clkctrl AM4_L3S_QSPI_CLKCTRL 0>,
->                  <&l4per2_clkctrl AM4_L4PER2_QSPI_CLKCTRL 0>;
->    clock-names = "ick", "fck";
-> The issue is that there is no l4_per for AM4.
+> > Right. That's independent of the present patch though, as the fonction
+> > irq_of_parse_and_map() that's being replaced by of_irq_to_resource() is
+> > also depending on CONFIG_OF_IRQ.
 
-Yes you can configure both fck and ick there, and also additional
-clocks. But the clkctrl clock is the fck clock gate for this module,
-and it's source can be the same as the interface clock for some
-modules.
+> That one does exist on SPARC, and has a dummy for !OF_IRQ:
 
-When I sent the experimental patch I confirmed that just the fck
-as <&l3s_clkctrl AM4_L3S_QSPI_CLKCTRL 0>, ti-sysc.c driver can
-read the qspi module revision register just fine. So that means
-that it's enough for the module, and the spi_clk is another
-clock specific to the child qspi IP in the module.
+> include/linux/of_irq.h:
+> #if defined(CONFIG_OF_IRQ) || defined(CONFIG_SPARC)
+> /*
+>  * irq_of_parse_and_map() is used by all OF enabled platforms; but SPARC
+>  * implements it differently.  However, the prototype is the same for all,
+>  * so declare it here regardless of the CONFIG_OF_IRQ setting.
+>  */
+> extern unsigned int irq_of_parse_and_map(struct device_node *node, int in=
+dex);
 
-So based on that, I think we should set up the clocks in the
-following way for the module and it's qspi child:
+Or can the driver just use platform_get_irq() and not worry about the DT
+specific APIs for this bit?  It looks a lot like this bit is legacy code
+=66rom when DT had totally separate APIs for everything.
 
-target-module@47900000 {
-	...
-	clocks = <&l3s_clkctrl AM4_L3S_QSPI_CLKCTRL 0>;
-	clock-names = "fck";
-	...
+--9s922KAXlWjPfK/Q
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	qspi: spi@0 {
-		...
-		clocks = <&dpll_per_m2_div4_ck>;
-		clock-names = "fck";
-		...
-	};
-};
+-----BEGIN PGP SIGNATURE-----
 
-That way the qspi driver can set the divider on it's fck based
-on "spi-max-frequency" dts property.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3v2rgACgkQJNaLcl1U
+h9AEmQf/f7uPGVTVpBz3BAwpgDHTUOAJ09AU57ZkC+85HGmyXL86djLx7YBchpxV
+DBeE0s/P5urN+b4qTYpNwOQ+WeQ+ORfkxuDq3V1XAU922DDA/MbDbHZJYsichxBL
+ssh0xdas8L3qE6+yWxZPcFaTawaMni4hgVGfImOZ7f9xKyQQqgbu+QdkaI36lO/4
+8w3bXU/kMuYzSfaDQQ1116D4j0MVd8Nd7Q8Jm5cXkT3h5Jzzi/jkXwzhEORY0FyW
+p8CJny0WAAyXcTktsIskH4NFOMmZ54oUn3YrlBK5v9sYmKymtxpv94Xrh7GGSMQK
+iY6DPurlOOENSN5q+1HIteDljrHveA==
+=o05F
+-----END PGP SIGNATURE-----
 
-> Looking at the DRA7 DT files there is an fck defined (in dra7.dtsi):
->    clocks = <&l4per2_clkctrl DRA7_L4PER2_QSPI_CLKCTRL 25>;
->    clock-names = "fck";
-
-Yeah so that's <&l3s_clkctrl AM4_L3S_QSPI_CLKCTRL 0> for
-am437x.
-
-> What is best to do from here?
-
-Well can test again with the patch below to see if that is
-enough to make it work :)
-
-Regards,
-
-Tony
-
-8< -------------------
-diff --git a/arch/arm/boot/dts/am4372.dtsi b/arch/arm/boot/dts/am4372.dtsi
---- a/arch/arm/boot/dts/am4372.dtsi
-+++ b/arch/arm/boot/dts/am4372.dtsi
-@@ -302,17 +302,35 @@ gpmc: gpmc@50000000 {
- 			status = "disabled";
- 		};
- 
--		qspi: spi@47900000 {
--			compatible = "ti,am4372-qspi";
--			reg = <0x47900000 0x100>,
--			      <0x30000000 0x4000000>;
--			reg-names = "qspi_base", "qspi_mmap";
-+		target-module@47900000 {
-+			compatible = "ti,sysc-omap4", "ti,sysc";
-+			//ti,hwmods = "qspi";
-+			reg = <0x47900000 0x4>,
-+			      <0x47900010 0x4>;
-+			reg-names = "rev", "sysc";
-+			ti,sysc-sidle = <SYSC_IDLE_FORCE>,
-+					<SYSC_IDLE_NO>,
-+					<SYSC_IDLE_SMART>,
-+					<SYSC_IDLE_SMART_WKUP>;
-+			clocks = <&l3s_clkctrl AM4_L3S_QSPI_CLKCTRL 0>;
-+			clock-names = "fck";
- 			#address-cells = <1>;
--			#size-cells = <0>;
--			ti,hwmods = "qspi";
--			interrupts = <0 138 0x4>;
--			num-cs = <4>;
--			status = "disabled";
-+			#size-cells = <1>;
-+			ranges = <0x0 0x47900000 0x1000>,
-+				 <0x30000000 0x30000000 0x4000000>;
-+
-+			qspi: spi@0 {
-+				compatible = "ti,am4372-qspi";
-+				reg = <0 0x100>,
-+				      <0x30000000 0x4000000>;
-+				reg-names = "qspi_base", "qspi_mmap";
-+				clocks = <&dpll_per_m2_div4_ck>;
-+				clock-names = "fck";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				interrupts = <0 138 0x4>;
-+				num-cs = <4>;
-+			};
- 		};
- 
- 		dss: dss@4832a000 {
--- 
-2.24.0
+--9s922KAXlWjPfK/Q--
