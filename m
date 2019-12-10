@@ -2,35 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 533D9119DAB
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C432C119D4A
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728478AbfLJWjX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 17:39:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54086 "EHLO mail.kernel.org"
+        id S1729170AbfLJWh2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 17:37:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55212 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728334AbfLJWdW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:33:22 -0500
+        id S1730089AbfLJWeC (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:34:02 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 48C1320836;
-        Tue, 10 Dec 2019 22:33:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E30D12073D;
+        Tue, 10 Dec 2019 22:34:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017202;
-        bh=wLl7Ehs+bVTJdIG5mZkS94SOeaPFy8FIKq6DuJkj17I=;
+        s=default; t=1576017241;
+        bh=Yh5o3qCEHfyyfsDwqugSp47lNAkR+RACz42yfcbHDfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FG2QzvghzWC9vGThOTjdAerWMmDWP85KVJ7e3ymXLAtXRKwfd+dICeuNLGa3XQ2wl
-         iv2sLnqmOBiZLMT9Mqztl6rlkfSV2D0OGv7bL46a9bhX4y44xw34KSgX9xJ/xtO0qp
-         BKi33K+yo9ikLJ6xxljIir5yXCRHCdGT6hvLsyAo=
+        b=ZdQVT4oh3W0d39h4Z9QvMFZCKseQoj8mfbPEPRvDjakxQUiQsLq5iVyWpkQc7a7KB
+         wiNtxTKdqXj1qLSsAdrnIEuRErjhXNH23va+64yj69rBuWy/Jnhpb5egSBUbZsgNx5
+         +FnB/Ul5ux3Rn7pdJr1BMaOBgfeNlzlkP1/1R2f4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lukasz Majewski <lukma@denx.de>, Mark Brown <broonie@kernel.org>,
-        kbuild test robot <lkp@intel.com>,
+Cc:     Pan Bian <bianpan2016@163.com>, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 04/71] spi: Add call to spi_slave_abort() function when spidev driver is released
-Date:   Tue, 10 Dec 2019 17:32:09 -0500
-Message-Id: <20191210223316.14988-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 38/71] spi: img-spfi: fix potential double release
+Date:   Tue, 10 Dec 2019 17:32:43 -0500
+Message-Id: <20191210223316.14988-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
 References: <20191210223316.14988-1-sashal@kernel.org>
@@ -43,47 +42,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Lukasz Majewski <lukma@denx.de>
+From: Pan Bian <bianpan2016@163.com>
 
-[ Upstream commit 9f918a728cf86b2757b6a7025e1f46824bfe3155 ]
+[ Upstream commit e9a8ba9769a0e354341bc6cc01b98aadcea1dfe9 ]
 
-This change is necessary for spidev devices (e.g. /dev/spidev3.0) working
-in the slave mode (like NXP's dspi driver for Vybrid SoC).
+The channels spfi->tx_ch and spfi->rx_ch are not set to NULL after they
+are released. As a result, they will be released again, either on the
+error handling branch in the same function or in the corresponding
+remove function, i.e. img_spfi_remove(). This patch fixes the bug by
+setting the two members to NULL.
 
-When SPI HW works in this mode - the master is responsible for providing
-CS and CLK signals. However, when some fault happens - like for example
-distortion on SPI lines - the SPI Linux driver needs a chance to recover
-from this abnormal situation and prepare itself for next (correct)
-transmission.
-
-This change doesn't pose any threat on drivers working in master mode as
-spi_slave_abort() function checks if SPI slave mode is supported.
-
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
-Link: https://lore.kernel.org/r/20190924110547.14770-2-lukma@denx.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reported-by: kbuild test robot <lkp@intel.com>
-Link: https://lore.kernel.org/r/20190925091143.15468-2-lukma@denx.de
+Signed-off-by: Pan Bian <bianpan2016@163.com>
+Link: https://lore.kernel.org/r/1573007769-20131-1-git-send-email-bianpan2016@163.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spidev.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/spi/spi-img-spfi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index c5f1045561acc..3709088d4d244 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -662,6 +662,9 @@ static int spidev_release(struct inode *inode, struct file *filp)
- 		if (dofree)
- 			kfree(spidev);
- 	}
-+#ifdef CONFIG_SPI_SLAVE
-+	spi_slave_abort(spidev->spi);
-+#endif
- 	mutex_unlock(&device_list_lock);
- 
- 	return 0;
+diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
+index 823cbc92d1e75..c46c0738c7340 100644
+--- a/drivers/spi/spi-img-spfi.c
++++ b/drivers/spi/spi-img-spfi.c
+@@ -673,6 +673,8 @@ static int img_spfi_probe(struct platform_device *pdev)
+ 			dma_release_channel(spfi->tx_ch);
+ 		if (spfi->rx_ch)
+ 			dma_release_channel(spfi->rx_ch);
++		spfi->tx_ch = NULL;
++		spfi->rx_ch = NULL;
+ 		dev_warn(spfi->dev, "Failed to get DMA channels, falling back to PIO mode\n");
+ 	} else {
+ 		master->dma_tx = spfi->tx_ch;
 -- 
 2.20.1
 
