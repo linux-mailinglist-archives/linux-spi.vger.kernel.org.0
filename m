@@ -2,35 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A495F1195F1
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 22:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B98A11195EE
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 22:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728695AbfLJVXu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 16:23:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33426 "EHLO mail.kernel.org"
+        id S1727426AbfLJVXl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 16:23:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728671AbfLJVLF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:11:05 -0500
+        id S1728695AbfLJVLI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:11:08 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4D7CA2077B;
-        Tue, 10 Dec 2019 21:11:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8221D246AA;
+        Tue, 10 Dec 2019 21:11:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012264;
-        bh=pWi9qhhj81ENv7TajptmcAzqW4lHgpIn41k71w0kQ/0=;
+        s=default; t=1576012268;
+        bh=li3AXOeVeqlc3Mu6jNuhxf5fIXOLBal++8saYuL420A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gxGyVDZIWWwD/ZrAA/2bDUsA2aGFbh2JGPpQIxdmOKRJ6OXWiVKApIdTzqVm5wDKE
-         3dt7WqmqTt93YNcFAHXGAyMwgUaBpgTmzfkhDfnEPbFJYltzeSioRpBT8Rrq09XYB3
-         0vRxib7u4KQg1D7hPyZVIZa1R2jiTyOuKunY13rw=
+        b=ypvaqbR7xqerglIGe3qGdGJt5rHzijUprk8Q6mFqZhISkDt9JwMo4a0Aof8autJtS
+         B5V1snjUpxtC2tZ9OIUaMBXCyz3cqXxNwWlzCNe3IDQ06k7XW3vzx5VbKvVyDwFBXx
+         YrYVWLXETuJF+XsierHEerueZcQEpsTHwdSFsmKM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
+Cc:     Pan Bian <bianpan2016@163.com>, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 210/350] spi: dw: Fix Designware SPI loopback
-Date:   Tue, 10 Dec 2019 16:05:15 -0500
-Message-Id: <20191210210735.9077-171-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 213/350] spi: img-spfi: fix potential double release
+Date:   Tue, 10 Dec 2019 16:05:18 -0500
+Message-Id: <20191210210735.9077-174-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -43,36 +42,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Thor Thayer <thor.thayer@linux.intel.com>
+From: Pan Bian <bianpan2016@163.com>
 
-[ Upstream commit 1403cfa69d310781f9548951c97725c67ffcf613 ]
+[ Upstream commit e9a8ba9769a0e354341bc6cc01b98aadcea1dfe9 ]
 
-The SPI_LOOP is set in spi->mode but not propagated to the register.
-A previous patch removed the bit during a cleanup.
+The channels spfi->tx_ch and spfi->rx_ch are not set to NULL after they
+are released. As a result, they will be released again, either on the
+error handling branch in the same function or in the corresponding
+remove function, i.e. img_spfi_remove(). This patch fixes the bug by
+setting the two members to NULL.
 
-Fixes: e1bc204894ea ("spi: dw: fix potential variable assignment error")
-Signed-off-by: Thor Thayer <thor.thayer@linux.intel.com>
-Link: https://lore.kernel.org/r/1572985330-5525-1-git-send-email-thor.thayer@linux.intel.com
+Signed-off-by: Pan Bian <bianpan2016@163.com>
+Link: https://lore.kernel.org/r/1573007769-20131-1-git-send-email-bianpan2016@163.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-dw.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/spi/spi-img-spfi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
-index 9a49e073e8b73..076652d3d051e 100644
---- a/drivers/spi/spi-dw.c
-+++ b/drivers/spi/spi-dw.c
-@@ -308,7 +308,8 @@ static int dw_spi_transfer_one(struct spi_controller *master,
- 	cr0 = (transfer->bits_per_word - 1)
- 		| (chip->type << SPI_FRF_OFFSET)
- 		| ((((spi->mode & SPI_CPOL) ? 1 : 0) << SPI_SCOL_OFFSET) |
--			(((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET))
-+			(((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET) |
-+			(((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET))
- 		| (chip->tmode << SPI_TMOD_OFFSET);
- 
- 	/*
+diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
+index 439b01e4a2c8d..f4a8f470aecc2 100644
+--- a/drivers/spi/spi-img-spfi.c
++++ b/drivers/spi/spi-img-spfi.c
+@@ -673,6 +673,8 @@ static int img_spfi_probe(struct platform_device *pdev)
+ 			dma_release_channel(spfi->tx_ch);
+ 		if (spfi->rx_ch)
+ 			dma_release_channel(spfi->rx_ch);
++		spfi->tx_ch = NULL;
++		spfi->rx_ch = NULL;
+ 		dev_warn(spfi->dev, "Failed to get DMA channels, falling back to PIO mode\n");
+ 	} else {
+ 		master->dma_tx = spfi->tx_ch;
 -- 
 2.20.1
 
