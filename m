@@ -2,99 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6705911B876
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2019 17:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A8511B942
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2019 17:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730226AbfLKQU4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Dec 2019 11:20:56 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35022 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730062AbfLKQU4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Dec 2019 11:20:56 -0500
-Received: by mail-lj1-f194.google.com with SMTP id j6so24762505lja.2
-        for <linux-spi@vger.kernel.org>; Wed, 11 Dec 2019 08:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tD2y5jZ8oTLJe6LbTN27zTEPS2JKCut3FdE1zrzBkUs=;
-        b=XHByjpVpksAhQp6qWGC8ANRLf3D8pRxjhxA0kZBgeoQGbehbI4T4UsJjHdjOSy3qGm
-         lUR2sJZ7SZ8KAasxNhMFG8wLboHF8Zhuv/dN4u9DCZ5V4ZcQbl9wog+i3wbxinYLhBn9
-         MWXrZ28CAqcehkq7JynVp3OljN9N9gEfCTpst2pHJdC3HM3jJEPO1gskys5+aLtTz/0D
-         sZ9MGH3g1KvShyB5NXhEXXirzTrpo14gy5QN41m5YeZTKRpCjKTtkOrWf0IA3LPwDp1W
-         +PsL2xzzi6yBkHO+ybkGzuDYvoNZ/nsonXCW4Er4mOvDb5LTfMggKU4Onf4p87/ZLLUS
-         iNDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=tD2y5jZ8oTLJe6LbTN27zTEPS2JKCut3FdE1zrzBkUs=;
-        b=oULjh5jxbLGugS3hbqP4Vhw8qIHds5lCv/vPETvFssWLVpqP6lGEIEbbDe6ScQBrub
-         5xnXU8nBYqail23IMNBv5Qju6lkcJL4k1llHTCK9JudXMO3M3rPykwoxuNFg6BieQ8bc
-         xTVJh5OlcLyPcEPzuB1a/TrBwoOK7lkSt++eZGW4p5GszQH3ptFX1P9oUJGgZ2cPkaud
-         n8POHFyFiBtsyEcxmKg3ncDuxkgBn+cA0/LOnAsyMOZLyKZB/GWOV/L48Z8VDcqPZNz4
-         KaSEkPon943NcnzLUhxtjEE/KJidVYfLL84Z7RlJF/X/6BtYFKh80tP1f3Xi/YF/z2mJ
-         P55w==
-X-Gm-Message-State: APjAAAWDrDlUVXyaKFJbG7XU3l0ycurb+VVx2zRb5Hy8VxgiBd3WUYD1
-        7SPBF6NtKWGJw0peLi/t9vr9Tf9xbgAw8Q==
-X-Google-Smtp-Source: APXvYqx7JrnjYVzZSKhxIhgqUUFwGRNOWBlKZgUUrH2giZBqcw9jTeOd1HzQIZ2qu+jUtLHmUW373g==
-X-Received: by 2002:a2e:b017:: with SMTP id y23mr2776840ljk.229.1576081254052;
-        Wed, 11 Dec 2019 08:20:54 -0800 (PST)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:8d8:12fe:a87e:d4b8:621e:2b62])
-        by smtp.gmail.com with ESMTPSA id n19sm1434257lfl.85.2019.12.11.08.20.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Dec 2019 08:20:53 -0800 (PST)
-Subject: Re: [PATCH RFC 0/2] Add Renesas RPC-IF support
-To:     Chris Brandt <Chris.Brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-References: <cb7022c9-0059-4eb2-7910-aab42124fa1c@cogentembedded.com>
- <TY1PR01MB156234F5B44BB43D3DCA98128A5A0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <0af05149-78f5-8639-4a23-84edda0073ea@cogentembedded.com>
-Date:   Wed, 11 Dec 2019 19:20:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
-MIME-Version: 1.0
-In-Reply-To: <TY1PR01MB156234F5B44BB43D3DCA98128A5A0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+        id S1730510AbfLKQzN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Dec 2019 11:55:13 -0500
+Received: from foss.arm.com ([217.140.110.172]:39442 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727118AbfLKQzN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 11 Dec 2019 11:55:13 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D622D30E;
+        Wed, 11 Dec 2019 08:55:12 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 56A4E3F52E;
+        Wed, 11 Dec 2019 08:55:12 -0800 (PST)
+Date:   Wed, 11 Dec 2019 16:55:10 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Simon Horman <horms+renesas@verge.net.au>
+Subject: Applied "spi: rspi: Remove obsolete platform_device_id entries" to the spi tree
+In-Reply-To: <20191211131553.23960-1-geert+renesas@glider.be>
+Message-Id: <applied-20191211131553.23960-1-geert+renesas@glider.be>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 12/11/2019 05:33 PM, Chris Brandt wrote:
+The patch
 
->> Here's a set of 2 patches against Linus' repo. Renesas Reduced Pin Count
->> Interface (RPC-IF) allows a SPI flash or HyperFlash connected to the SoC to
->> be accessed via the external address space read mode or the manual mode.
-> 
-> Looking at this driver, all it is are APIs. Meaning another driver is 
-> needed to sit in between the MTD layer and this HW driver layer.
-> 
-> In the driver that I did, if the "RPC" HW is going to be used to control
-> a SPI Flash device, it registered a spi controller and then the MTD 
-> layer could access the device
+   spi: rspi: Remove obsolete platform_device_id entries
 
-   Via the SPI-to-MTD sublayer for (at least) direct mapping -- grep for "dirmap"
-in drivers/mtd/spi-nor/spi-nor.c...
+has been applied to the spi tree at
 
-> just like any other SPI controller driver. No
-> additional drivers are needed.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
 
-   Then why do we have *struct* spi_controller_mem_ops? Do All drivers implement
-such ops?
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-[...]
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-MBR, Sergei
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 851c902fd2d09b2ed85181e74b43477b7a3882be Mon Sep 17 00:00:00 2001
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+Date: Wed, 11 Dec 2019 14:15:53 +0100
+Subject: [PATCH] spi: rspi: Remove obsolete platform_device_id entries
+
+Since commits 05104c266ae9a167 ("ARM: shmobile: r7s72100: genmai: Remove
+legacy board file") and a483dcbfa21f919c ("ARM: shmobile: lager: Remove
+legacy board support", RZ/A1 and R-Car Gen2 SoCs are only supported in
+generic DT-only ARM multi-platform builds.  The driver doesn't need to
+match platform devices by name anymore for these platforms, hence remove
+the corresponding platform_device_id entries.
+
+The platform_device_id entry for "rspi" is retained, as it is used by
+the SH7757 platform, which hasn't been converted to DT yet.
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Simon Horman <horms+renesas@verge.net.au>
+Link: https://lore.kernel.org/r/20191211131553.23960-1-geert+renesas@glider.be
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-rspi.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
+index 7222c7689c3c..74a12f4dee84 100644
+--- a/drivers/spi/spi-rspi.c
++++ b/drivers/spi/spi-rspi.c
+@@ -1314,8 +1314,6 @@ static int rspi_probe(struct platform_device *pdev)
+ 
+ static const struct platform_device_id spi_driver_ids[] = {
+ 	{ "rspi",	(kernel_ulong_t)&rspi_ops },
+-	{ "rspi-rz",	(kernel_ulong_t)&rspi_rz_ops },
+-	{ "qspi",	(kernel_ulong_t)&qspi_ops },
+ 	{},
+ };
+ 
+-- 
+2.20.1
+
