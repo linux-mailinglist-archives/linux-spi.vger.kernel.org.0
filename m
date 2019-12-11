@@ -2,80 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9CA11A864
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2019 10:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7045811A93F
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2019 11:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728872AbfLKJ7B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Dec 2019 04:59:01 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57379 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728027AbfLKJ7B (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Dec 2019 04:59:01 -0500
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ieyll-0002rK-EC; Wed, 11 Dec 2019 10:58:57 +0100
-Message-ID: <60952c5ac36510ff5be0733b15352828e0f2e41f.camel@pengutronix.de>
-Subject: Re: [PATCH RFC 2/2] memory: add Renesas RPC-IF driver
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        linux-spi@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Date:   Wed, 11 Dec 2019 10:58:53 +0100
-In-Reply-To: <4db876ed-1ccc-e3be-311d-30cd52f40259@cogentembedded.com>
-References: <cb7022c9-0059-4eb2-7910-aab42124fa1c@cogentembedded.com>
-         <4db876ed-1ccc-e3be-311d-30cd52f40259@cogentembedded.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
+        id S1728401AbfLKKrl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Dec 2019 05:47:41 -0500
+Received: from foss.arm.com ([217.140.110.172]:53422 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726119AbfLKKrl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 11 Dec 2019 05:47:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A4311FB;
+        Wed, 11 Dec 2019 02:47:40 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 04D693F6CF;
+        Wed, 11 Dec 2019 02:47:39 -0800 (PST)
+Date:   Wed, 11 Dec 2019 10:47:38 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.4 128/350] spi: pxa2xx: Set
+ controller->max_transfer_size in dma mode
+Message-ID: <20191211104738.GA3870@sirena.org.uk>
+References: <20191210210735.9077-1-sashal@kernel.org>
+ <20191210210735.9077-89-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qDbXVdCdHGoSgWSk"
+Content-Disposition: inline
+In-Reply-To: <20191210210735.9077-89-sashal@kernel.org>
+X-Cookie: NOBODY EXPECTS THE SPANISH INQUISITION!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Sergei,
 
-On Tue, 2019-12-10 at 22:39 +0300, Sergei Shtylyov wrote:
-[...]
-> --- /dev/null
-> +++ linux/drivers/memory/renesas-rpc-if.c
-> @@ -0,0 +1,590 @@
-[...]
-> +int rpcif_io_xfer(struct rpcif *rpc)
-> +{
-[...]
-> +	default:
-> +		regmap_write(rpc->regmap, RPCIF_SMENR, rpc->enable);
-> +		regmap_write(rpc->regmap, RPCIF_SMCR,
-> +			     rpc->smcr | RPCIF_SMCR_SPIE);
-> +		ret = wait_msg_xfer_end(rpc);
-> +		if (ret)
-> +			goto err_out;
-> +	}
-> +
-> +exit:
-> +	pm_runtime_put(rpc->dev);
-> +	return ret;
-> +
-> +err_out:
-> +	ret = reset_control_reset(rpc->rstc);
+--qDbXVdCdHGoSgWSk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If wait_msg_xfer_end() returned an error, but the reset succeeds, this
-will cause rpcif_io_xfer() to report success as well. I suspect you do
-not want to overwrite ret at this point.
+On Tue, Dec 10, 2019 at 04:03:53PM -0500, Sasha Levin wrote:
+> From: Daniel Vetter <daniel.vetter@ffwll.ch>
+>=20
+> [ Upstream commit b2662a164f9dc48da8822e56600686d639056282 ]
+>=20
+> In DMA mode we have a maximum transfer size, past that the driver
+> falls back to PIO (see the check at the top of pxa2xx_spi_transfer_one).
+> Falling back to PIO for big transfers defeats the point of a dma engine,
+> hence set the max transfer size to inform spi clients that they need
+> to do something smarter.
 
-> +	rpcif_hw_init(rpc, rpc->bus_size == 2);
-> +	goto exit;
-> +}
-> +EXPORT_SYMBOL(rpcif_io_xfer);
+This won't fix anything by itself, this asks other code to change how it
+behaves which may or may not work in older kernels.
 
-regards
-Philipp
+--qDbXVdCdHGoSgWSk
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3wyUcACgkQJNaLcl1U
+h9B1owf/c2+Di9MxB58DRS++wONQSVLBDBAzhSYBzUcKxUidr6Yieo8WKOq5RnZa
+Xfw5SuLTDnTe7S4iXTo0Gn3ejpU1Eb63YvCGs9+6bM4z3lfcU3wIzXUhW7OsmIxY
+HVSTa7iqOjusoR7WpboRgWRyFUdvcK4Y6jBUxh5roUD5IIojLGuVmk2QQVLlLaSq
+Mpw15lKs5DGIjq5AHQA0vmNDtjAhVdr/mFw3XSqeviIvfQ3H0CTbz6B8RIgiwGZ8
+V9HDm7EeEHvb4H1nbeK9ileA1+Sor/2iGHt1Lwrb1xzKZJ+twuU6dB0NAkWcPv5A
+JCBMe73eK3vBVARzxfKmxEApfO37rQ==
+=C+Pn
+-----END PGP SIGNATURE-----
+
+--qDbXVdCdHGoSgWSk--
