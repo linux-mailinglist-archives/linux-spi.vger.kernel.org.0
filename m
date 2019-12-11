@@ -2,111 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E9B11A133
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2019 03:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9CA11A864
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2019 10:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726685AbfLKCPy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 21:15:54 -0500
-Received: from twhmllg4.macronix.com ([211.75.127.132]:18186 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726665AbfLKCPx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Dec 2019 21:15:53 -0500
-Received: from twhfm1p2.macronix.com (twhfm1p2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id xBB2EbJC009562;
-        Wed, 11 Dec 2019 10:14:37 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id EE442EC2E2E051ECB764;
-        Wed, 11 Dec 2019 10:14:37 +0800 (CST)
-In-Reply-To: <8f2908ec-6e17-dad1-7f2a-ec22647caecb@microchip.com>
-References: <1573808288-19365-1-git-send-email-masonccyang@mxic.com.tw> <8f2908ec-6e17-dad1-7f2a-ec22647caecb@microchip.com>
-To:     <Tudor.Ambarus@microchip.com>
-Cc:     bbrezillon@kernel.org, broonie@kernel.org,
-        computersforpeace@gmail.com, dwmw2@infradead.org,
-        juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        marek.vasut@gmail.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com
-Subject: Re: [PATCH 0/4] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
+        id S1728872AbfLKJ7B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Dec 2019 04:59:01 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57379 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728027AbfLKJ7B (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Dec 2019 04:59:01 -0500
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1ieyll-0002rK-EC; Wed, 11 Dec 2019 10:58:57 +0100
+Message-ID: <60952c5ac36510ff5be0733b15352828e0f2e41f.camel@pengutronix.de>
+Subject: Re: [PATCH RFC 2/2] memory: add Renesas RPC-IF driver
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        linux-spi@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Date:   Wed, 11 Dec 2019 10:58:53 +0100
+In-Reply-To: <4db876ed-1ccc-e3be-311d-30cd52f40259@cogentembedded.com>
+References: <cb7022c9-0059-4eb2-7910-aab42124fa1c@cogentembedded.com>
+         <4db876ed-1ccc-e3be-311d-30cd52f40259@cogentembedded.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-X-KeepSent: B2FEF12D:A2B77CBE-482584CD:000C20E3;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OFB2FEF12D.A2B77CBE-ON482584CD.000C20E3-482584CD.000C5393@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Wed, 11 Dec 2019 10:14:38 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2019/12/11 AM 10:14:37,
-        Serialize complete at 2019/12/11 AM 10:14:37
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG4.macronix.com xBB2EbJC009562
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Sergei,
 
-Hi Tudor,
+On Tue, 2019-12-10 at 22:39 +0300, Sergei Shtylyov wrote:
+[...]
+> --- /dev/null
+> +++ linux/drivers/memory/renesas-rpc-if.c
+> @@ -0,0 +1,590 @@
+[...]
+> +int rpcif_io_xfer(struct rpcif *rpc)
+> +{
+[...]
+> +	default:
+> +		regmap_write(rpc->regmap, RPCIF_SMENR, rpc->enable);
+> +		regmap_write(rpc->regmap, RPCIF_SMCR,
+> +			     rpc->smcr | RPCIF_SMCR_SPIE);
+> +		ret = wait_msg_xfer_end(rpc);
+> +		if (ret)
+> +			goto err_out;
+> +	}
+> +
+> +exit:
+> +	pm_runtime_put(rpc->dev);
+> +	return ret;
+> +
+> +err_out:
+> +	ret = reset_control_reset(rpc->rstc);
 
-> 
-> Re: [PATCH 0/4] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
-> 
-> Hi, Mason,
-> 
-> From the discussion you had with Vignesh, I understand that a v2 will 
-follow. A
-> nit below.
-> 
-> On 11/15/19 10:58 AM, Mason Yang wrote:
-> > Hello,
-> > 
-> > This is repost of patchset from Boris Brezillon's
-> > [RFC,00/18] mtd: spi-nor: Proposal for 8-8-8 mode support [1].
-> > 
-> 
-> [cut]
-> 
-> > Mason Yang (4):
-> 
-> Did you intentionally overwrite Boris's authorship? If yes, would you 
-please
-> describe what changed from Boris's patch set?
+If wait_msg_xfer_end() returned an error, but the reset succeeds, this
+will cause rpcif_io_xfer() to report success as well. I suspect you do
+not want to overwrite ret at this point.
 
-okay, sure.
-I will describe it in v2 patch set.
+> +	rpcif_hw_init(rpc, rpc->bus_size == 2);
+> +	goto exit;
+> +}
+> +EXPORT_SYMBOL(rpcif_io_xfer);
 
-> 
-> Cheers,
-> ta
-
-thanks for your time & comments.
-Mason
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
-
-
-============================================================================
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
+regards
+Philipp
 
