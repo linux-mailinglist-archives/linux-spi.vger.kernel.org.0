@@ -2,93 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8026F119D13
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2019 23:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E9B11A133
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2019 03:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729457AbfLJWfg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Dec 2019 17:35:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55992 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730355AbfLJWeb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:34:31 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D4EA020836;
-        Tue, 10 Dec 2019 22:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017270;
-        bh=+d/EPeAnK08Y492IrzqNRX5zak9fQNfVoHVoWmvBVg4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S0oLChbAuun1I9TXPFZph03frXeUfffTR9K5tgir+VyjR7VddfL9n47Gig6kgynPW
-         e/dJZilTuMJfuXfo8A7bIIX0pekvSDeEmwFY7rJYNuPuFkuyl65qUxmb5+OyjM1wQV
-         tBx+dN1ap6908J78O5bNRgeaXrQGPeangrFXtcPo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chuhong Yuan <hslester96@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 62/71] spi: tegra20-slink: add missed clk_unprepare
-Date:   Tue, 10 Dec 2019 17:33:07 -0500
-Message-Id: <20191210223316.14988-62-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
-References: <20191210223316.14988-1-sashal@kernel.org>
+        id S1726685AbfLKCPy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Dec 2019 21:15:54 -0500
+Received: from twhmllg4.macronix.com ([211.75.127.132]:18186 "EHLO
+        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726665AbfLKCPx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Dec 2019 21:15:53 -0500
+Received: from twhfm1p2.macronix.com (twhfm1p2.macronix.com [172.17.20.92])
+        by TWHMLLG4.macronix.com with ESMTP id xBB2EbJC009562;
+        Wed, 11 Dec 2019 10:14:37 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
+        by Forcepoint Email with ESMTP id EE442EC2E2E051ECB764;
+        Wed, 11 Dec 2019 10:14:37 +0800 (CST)
+In-Reply-To: <8f2908ec-6e17-dad1-7f2a-ec22647caecb@microchip.com>
+References: <1573808288-19365-1-git-send-email-masonccyang@mxic.com.tw> <8f2908ec-6e17-dad1-7f2a-ec22647caecb@microchip.com>
+To:     <Tudor.Ambarus@microchip.com>
+Cc:     bbrezillon@kernel.org, broonie@kernel.org,
+        computersforpeace@gmail.com, dwmw2@infradead.org,
+        juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        marek.vasut@gmail.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com
+Subject: Re: [PATCH 0/4] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-KeepSent: B2FEF12D:A2B77CBE-482584CD:000C20E3;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OFB2FEF12D.A2B77CBE-ON482584CD.000C20E3-482584CD.000C5393@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Wed, 11 Dec 2019 10:14:38 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2019/12/11 AM 10:14:37,
+        Serialize complete at 2019/12/11 AM 10:14:37
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG4.macronix.com xBB2EbJC009562
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Chuhong Yuan <hslester96@gmail.com>
 
-[ Upstream commit 04358e40ba96d687c0811c21d9dede73f5244a98 ]
+Hi Tudor,
 
-The driver misses calling clk_unprepare in probe failure and remove.
-Add the calls to fix it.
+> 
+> Re: [PATCH 0/4] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
+> 
+> Hi, Mason,
+> 
+> From the discussion you had with Vignesh, I understand that a v2 will 
+follow. A
+> nit below.
+> 
+> On 11/15/19 10:58 AM, Mason Yang wrote:
+> > Hello,
+> > 
+> > This is repost of patchset from Boris Brezillon's
+> > [RFC,00/18] mtd: spi-nor: Proposal for 8-8-8 mode support [1].
+> > 
+> 
+> [cut]
+> 
+> > Mason Yang (4):
+> 
+> Did you intentionally overwrite Boris's authorship? If yes, would you 
+please
+> describe what changed from Boris's patch set?
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-Link: https://lore.kernel.org/r/20191115083122.12278-1-hslester96@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-tegra20-slink.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+okay, sure.
+I will describe it in v2 patch set.
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index af2880d0c1126..cf2a329fd8958 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1078,7 +1078,7 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	ret = clk_enable(tspi->clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Clock enable failed %d\n", ret);
--		goto exit_free_master;
-+		goto exit_clk_unprepare;
- 	}
- 
- 	spi_irq = platform_get_irq(pdev, 0);
-@@ -1151,6 +1151,8 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	free_irq(spi_irq, tspi);
- exit_clk_disable:
- 	clk_disable(tspi->clk);
-+exit_clk_unprepare:
-+	clk_unprepare(tspi->clk);
- exit_free_master:
- 	spi_master_put(master);
- 	return ret;
-@@ -1164,6 +1166,7 @@ static int tegra_slink_remove(struct platform_device *pdev)
- 	free_irq(tspi->irq, tspi);
- 
- 	clk_disable(tspi->clk);
-+	clk_unprepare(tspi->clk);
- 
- 	if (tspi->tx_dma_chan)
- 		tegra_slink_deinit_dma_param(tspi, false);
--- 
-2.20.1
+> 
+> Cheers,
+> ta
+
+thanks for your time & comments.
+Mason
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
 
