@@ -2,243 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F28DB11C439
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2019 04:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D0C11C859
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2019 09:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbfLLDlf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Dec 2019 22:41:35 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58520 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727377AbfLLDkA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 11 Dec 2019 22:40:00 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id ECAB9AE40;
-        Thu, 12 Dec 2019 03:39:57 +0000 (UTC)
-From:   =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>
-To:     linux-realtek-soc@lists.infradead.org, linux-leds@vger.kernel.org
-Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: [RFC 04/25] spi: gpio: Implement LSB First bitbang support
-Date:   Thu, 12 Dec 2019 04:39:31 +0100
-Message-Id: <20191212033952.5967-5-afaerber@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191212033952.5967-1-afaerber@suse.de>
-References: <20191212033952.5967-1-afaerber@suse.de>
+        id S1728190AbfLLIkn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Thu, 12 Dec 2019 03:40:43 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:32787 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728130AbfLLIkm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Dec 2019 03:40:42 -0500
+Received: by mail-ot1-f68.google.com with SMTP id d17so1005920otc.0;
+        Thu, 12 Dec 2019 00:40:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AQWN2ilbL/pV9oSuedTqVkyb3PS6uRdUps6Bbw03pBk=;
+        b=HUZ4/wTMw472O2T+Q/MJ7GOQqRE96HOiG64HeAVowLjh9DdoTSz8DwgAoMgbt+Hx5f
+         a/oiQYcHi7sVk/1vHujEYMm8fN8aLc0ECWZqfcCsGrP30fmT1SCbH+Rsznsdh+xuKT9k
+         zQWZLdcimErGaFEdfKT5w32X7kP2fTWTiAU74f3t4rEyiTgvTy8evngNi46UFRHdYwnl
+         oLYch8m1mGu70x5JGfAavh2PqsFiZ4OovMx28321dvR0WW6Ep9EfYhh4Ho13Rw0ndm++
+         Au+87INy5bArQc2fI4W6Ar6BuQp5KcifuycxgwtzKIv6/SP2/ucJ3rLVsnCt2/AyiNsd
+         fCXg==
+X-Gm-Message-State: APjAAAU0ixez0zOsUAgXpAY1TZenFIaZ429kYZuGQaS3nFIY2sLFirCk
+        yGdxJy3dosdoF2qY60UmXeg0p3mok8mhHLEVRJo=
+X-Google-Smtp-Source: APXvYqysUxu8Fvc2fIhN06OFqRY0qpSAEhlRgYRJ7iOByHsa4CbdkD7ZfCNq5icsxrmSiZ5dHtFTX6Xxp+lE34VAdgE=
+X-Received: by 2002:a9d:dc1:: with SMTP id 59mr7036813ots.250.1576140041766;
+ Thu, 12 Dec 2019 00:40:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20191212033952.5967-1-afaerber@suse.de> <20191212033952.5967-5-afaerber@suse.de>
+In-Reply-To: <20191212033952.5967-5-afaerber@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 12 Dec 2019 09:40:20 +0100
+Message-ID: <CAMuHMdWdxJ9AaWhyCW-u8fCpXSDCPd-D6Dx129SF5nRssZsK=g@mail.gmail.com>
+Subject: Re: [RFC 04/25] spi: gpio: Implement LSB First bitbang support
+To:     =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>
+Cc:     linux-realtek-soc@lists.infradead.org, linux-leds@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dan Murphy <dmurphy@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add support for slave DT property spi-lsb-first, i.e., SPI_LSB_FIRST mode.
+Hi Andreas,
 
-Duplicate the inline helpers bitbang_txrx_be_cpha{0,1} as LE versions.
-Make checkpatch.pl happy by changing "unsigned" to "unsigned int".
+On Thu, Dec 12, 2019 at 4:41 AM Andreas Färber <afaerber@suse.de> wrote:
+> Add support for slave DT property spi-lsb-first, i.e., SPI_LSB_FIRST mode.
+>
+> Duplicate the inline helpers bitbang_txrx_be_cpha{0,1} as LE versions.
+> Make checkpatch.pl happy by changing "unsigned" to "unsigned int".
+>
+> Conditionally call them from all the spi-gpio txrx_word callbacks.
+>
+> Signed-off-by: Andreas Färber <afaerber@suse.de>
 
-Conditionally call them from all the spi-gpio txrx_word callbacks.
+Thanks for your patch!
 
-Signed-off-by: Andreas Färber <afaerber@suse.de>
----
- drivers/spi/spi-bitbang-txrx.h | 68 ++++++++++++++++++++++++++++++++++++++++--
- drivers/spi/spi-gpio.c         | 42 ++++++++++++++++++++------
- 2 files changed, 99 insertions(+), 11 deletions(-)
+> --- a/drivers/spi/spi-gpio.c
+> +++ b/drivers/spi/spi-gpio.c
+> @@ -135,25 +135,37 @@ static inline int getmiso(const struct spi_device *spi)
+>  static u32 spi_gpio_txrx_word_mode0(struct spi_device *spi,
+>                 unsigned nsecs, u32 word, u8 bits, unsigned flags)
+>  {
+> -       return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
+> +       if (unlikely(spi->mode & SPI_LSB_FIRST))
+> +               return bitbang_txrx_le_cpha0(spi, nsecs, 0, flags, word, bits);
+> +       else
+> +               return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
+>  }
 
-diff --git a/drivers/spi/spi-bitbang-txrx.h b/drivers/spi/spi-bitbang-txrx.h
-index ae61d72c7d28..999a89325325 100644
---- a/drivers/spi/spi-bitbang-txrx.h
-+++ b/drivers/spi/spi-bitbang-txrx.h
-@@ -45,7 +45,7 @@
- 
- static inline u32
- bitbang_txrx_be_cpha0(struct spi_device *spi,
--		unsigned nsecs, unsigned cpol, unsigned flags,
-+		unsigned int nsecs, unsigned int cpol, unsigned int flags,
- 		u32 word, u8 bits)
- {
- 	/* if (cpol == 0) this is SPI_MODE_0; else this is SPI_MODE_2 */
-@@ -77,7 +77,7 @@ bitbang_txrx_be_cpha0(struct spi_device *spi,
- 
- static inline u32
- bitbang_txrx_be_cpha1(struct spi_device *spi,
--		unsigned nsecs, unsigned cpol, unsigned flags,
-+		unsigned int nsecs, unsigned int cpol, unsigned int flags,
- 		u32 word, u8 bits)
- {
- 	/* if (cpol == 0) this is SPI_MODE_1; else this is SPI_MODE_3 */
-@@ -106,3 +106,67 @@ bitbang_txrx_be_cpha1(struct spi_device *spi,
- 	}
- 	return word;
- }
-+
-+static inline u32
-+bitbang_txrx_le_cpha0(struct spi_device *spi,
-+		unsigned int nsecs, unsigned int cpol, unsigned int flags,
-+		u32 word, u8 bits)
-+{
-+	/* if (cpol == 0) this is SPI_MODE_0; else this is SPI_MODE_2 */
-+
-+	u32 oldbit = !(word & 1);
-+	/* clock starts at inactive polarity */
-+	for (; likely(bits); bits--) {
-+
-+		/* setup LSB (to slave) on trailing edge */
-+		if ((flags & SPI_MASTER_NO_TX) == 0) {
-+			if ((word & 1) != oldbit) {
-+				setmosi(spi, word & 1);
-+				oldbit = word & 1;
-+			}
-+		}
-+		spidelay(nsecs);	/* T(setup) */
-+
-+		setsck(spi, !cpol);
-+		spidelay(nsecs);
-+
-+		/* sample LSB (from slave) on leading edge */
-+		word >>= 1;
-+		if ((flags & SPI_MASTER_NO_RX) == 0)
-+			word |= getmiso(spi) << (bits - 1);
-+		setsck(spi, cpol);
-+	}
-+	return word;
-+}
-+
-+static inline u32
-+bitbang_txrx_le_cpha1(struct spi_device *spi,
-+		unsigned int nsecs, unsigned int cpol, unsigned int flags,
-+		u32 word, u8 bits)
-+{
-+	/* if (cpol == 0) this is SPI_MODE_1; else this is SPI_MODE_3 */
-+
-+	u32 oldbit = !(word & 1);
-+	/* clock starts at inactive polarity */
-+	for (; likely(bits); bits--) {
-+
-+		/* setup LSB (to slave) on leading edge */
-+		setsck(spi, !cpol);
-+		if ((flags & SPI_MASTER_NO_TX) == 0) {
-+			if ((word & 1) != oldbit) {
-+				setmosi(spi, word & 1);
-+				oldbit = word & 1;
-+			}
-+		}
-+		spidelay(nsecs); /* T(setup) */
-+
-+		setsck(spi, cpol);
-+		spidelay(nsecs);
-+
-+		/* sample LSB (from slave) on trailing edge */
-+		word >>= 1;
-+		if ((flags & SPI_MASTER_NO_RX) == 0)
-+			word |= getmiso(spi) << (bits - 1);
-+	}
-+	return word;
-+}
-diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
-index 7ceb0ba27b75..493723eda844 100644
---- a/drivers/spi/spi-gpio.c
-+++ b/drivers/spi/spi-gpio.c
-@@ -135,25 +135,37 @@ static inline int getmiso(const struct spi_device *spi)
- static u32 spi_gpio_txrx_word_mode0(struct spi_device *spi,
- 		unsigned nsecs, u32 word, u8 bits, unsigned flags)
- {
--	return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
-+	if (unlikely(spi->mode & SPI_LSB_FIRST))
-+		return bitbang_txrx_le_cpha0(spi, nsecs, 0, flags, word, bits);
-+	else
-+		return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
- }
- 
- static u32 spi_gpio_txrx_word_mode1(struct spi_device *spi,
- 		unsigned nsecs, u32 word, u8 bits, unsigned flags)
- {
--	return bitbang_txrx_be_cpha1(spi, nsecs, 0, flags, word, bits);
-+	if (unlikely(spi->mode & SPI_LSB_FIRST))
-+		return bitbang_txrx_le_cpha1(spi, nsecs, 0, flags, word, bits);
-+	else
-+		return bitbang_txrx_be_cpha1(spi, nsecs, 0, flags, word, bits);
- }
- 
- static u32 spi_gpio_txrx_word_mode2(struct spi_device *spi,
- 		unsigned nsecs, u32 word, u8 bits, unsigned flags)
- {
--	return bitbang_txrx_be_cpha0(spi, nsecs, 1, flags, word, bits);
-+	if (unlikely(spi->mode & SPI_LSB_FIRST))
-+		return bitbang_txrx_le_cpha0(spi, nsecs, 1, flags, word, bits);
-+	else
-+		return bitbang_txrx_be_cpha0(spi, nsecs, 1, flags, word, bits);
- }
- 
- static u32 spi_gpio_txrx_word_mode3(struct spi_device *spi,
- 		unsigned nsecs, u32 word, u8 bits, unsigned flags)
- {
--	return bitbang_txrx_be_cpha1(spi, nsecs, 1, flags, word, bits);
-+	if (unlikely(spi->mode & SPI_LSB_FIRST))
-+		return bitbang_txrx_le_cpha1(spi, nsecs, 1, flags, word, bits);
-+	else
-+		return bitbang_txrx_be_cpha1(spi, nsecs, 1, flags, word, bits);
- }
- 
- /*
-@@ -170,28 +182,40 @@ static u32 spi_gpio_spec_txrx_word_mode0(struct spi_device *spi,
- 		unsigned nsecs, u32 word, u8 bits, unsigned flags)
- {
- 	flags = spi->master->flags;
--	return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
-+	if (unlikely(spi->mode & SPI_LSB_FIRST))
-+		return bitbang_txrx_le_cpha0(spi, nsecs, 0, flags, word, bits);
-+	else
-+		return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
- }
- 
- static u32 spi_gpio_spec_txrx_word_mode1(struct spi_device *spi,
- 		unsigned nsecs, u32 word, u8 bits, unsigned flags)
- {
- 	flags = spi->master->flags;
--	return bitbang_txrx_be_cpha1(spi, nsecs, 0, flags, word, bits);
-+	if (unlikely(spi->mode & SPI_LSB_FIRST))
-+		return bitbang_txrx_le_cpha1(spi, nsecs, 0, flags, word, bits);
-+	else
-+		return bitbang_txrx_be_cpha1(spi, nsecs, 0, flags, word, bits);
- }
- 
- static u32 spi_gpio_spec_txrx_word_mode2(struct spi_device *spi,
- 		unsigned nsecs, u32 word, u8 bits, unsigned flags)
- {
- 	flags = spi->master->flags;
--	return bitbang_txrx_be_cpha0(spi, nsecs, 1, flags, word, bits);
-+	if (unlikely(spi->mode & SPI_LSB_FIRST))
-+		return bitbang_txrx_le_cpha0(spi, nsecs, 1, flags, word, bits);
-+	else
-+		return bitbang_txrx_be_cpha0(spi, nsecs, 1, flags, word, bits);
- }
- 
- static u32 spi_gpio_spec_txrx_word_mode3(struct spi_device *spi,
- 		unsigned nsecs, u32 word, u8 bits, unsigned flags)
- {
- 	flags = spi->master->flags;
--	return bitbang_txrx_be_cpha1(spi, nsecs, 1, flags, word, bits);
-+	if (unlikely(spi->mode & SPI_LSB_FIRST))
-+		return bitbang_txrx_le_cpha1(spi, nsecs, 1, flags, word, bits);
-+	else
-+		return bitbang_txrx_be_cpha1(spi, nsecs, 1, flags, word, bits);
- }
- 
- /*----------------------------------------------------------------------*/
-@@ -389,7 +413,7 @@ static int spi_gpio_probe(struct platform_device *pdev)
- 
- 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
- 	master->mode_bits = SPI_3WIRE | SPI_3WIRE_HIZ | SPI_CPHA | SPI_CPOL |
--			    SPI_CS_HIGH;
-+			    SPI_CS_HIGH | SPI_LSB_FIRST;
- 	if (!spi_gpio->mosi) {
- 		/* HW configuration without MOSI pin
- 		 *
+Duplicating all functions sounds a bit wasteful to me.
+
+What about reverting the word first, and calling the normal functions?
+
+    if (unlikely(spi->mode & SPI_LSB_FIRST)) {
+            if (bits <= 8)
+                    word = bitrev8(word) >> (bits - 8);
+            else if (bits <= 16)
+                    word = bitrev16(word) >> (bits - 16);
+            else
+                    word = bitrev32(word) >> (bits - 32);
+    }
+    return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.16.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
