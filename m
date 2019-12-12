@@ -2,81 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6786511D84D
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2019 22:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A078B11D9E8
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Dec 2019 00:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731011AbfLLVI1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Dec 2019 16:08:27 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59242 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730812AbfLLVI0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 12 Dec 2019 16:08:26 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D14CDAD95;
-        Thu, 12 Dec 2019 21:08:24 +0000 (UTC)
-Subject: Re: [RFC 04/25] spi: gpio: Implement LSB First bitbang support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-realtek-soc@lists.infradead.org, linux-leds@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dan Murphy <dmurphy@ti.com>
-References: <20191212033952.5967-1-afaerber@suse.de>
- <20191212033952.5967-5-afaerber@suse.de>
- <CAMuHMdWdxJ9AaWhyCW-u8fCpXSDCPd-D6Dx129SF5nRssZsK=g@mail.gmail.com>
- <9b4b6287-c1d9-1b41-88a8-7ac9fe222642@suse.de>
- <20191212171922.GM4310@sirena.org.uk>
-From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
-Organization: SUSE Software Solutions Germany GmbH
-Message-ID: <70bf4954-d7ab-e300-017c-c743a40162a4@suse.de>
-Date:   Thu, 12 Dec 2019 22:08:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
-MIME-Version: 1.0
-In-Reply-To: <20191212171922.GM4310@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1730831AbfLLXUL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Dec 2019 18:20:11 -0500
+Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:48026 "EHLO
+        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726427AbfLLXUK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Dec 2019 18:20:10 -0500
+X-Greylist: delayed 444 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Dec 2019 18:20:10 EST
+Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
+        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 1801D30C047;
+        Thu, 12 Dec 2019 15:08:10 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 1801D30C047
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+        s=dkimrelay; t=1576192090;
+        bh=GUHozoaDgbqjfROjXkEJw092rtDS8++6YoSJnSbvtOs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TJm/Ng73wQ9MRMHSQu23Rs6/CAol/PxhHn5hDL8FSzsi1yUrQ1ZWsQx8DAQKxH5H2
+         hBcjJuA6zXvysnTtThtBA3iGZkLigoAS3Lx+LNkZTmtlzVySXXaiQ3fbq4bBIKW0OT
+         8Vk3JDA/NF5tR/StYpnvUvkOw/YmzBcqWOFzVoJ0=
+Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
+        by mail-irv-17.broadcom.com (Postfix) with ESMTP id E6F7C140069;
+        Thu, 12 Dec 2019 15:12:43 -0800 (PST)
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <ray.jui@broadcom.com>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jim Quinlan <james.quinlan@broadcom.com>
+Subject: [PATCH] spi: bcm2835: don't print error on clk_get() DEFER
+Date:   Thu, 12 Dec 2019 18:12:13 -0500
+Message-Id: <20191212231213.29061-1-jquinlan@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 12.12.19 um 18:19 schrieb Mark Brown:
-> On Thu, Dec 12, 2019 at 04:14:59PM +0100, Andreas Färber wrote:
->> Am 12.12.19 um 09:40 schrieb Geert Uytterhoeven:
->>> On Thu, Dec 12, 2019 at 4:41 AM Andreas Färber <afaerber@suse.de> wrote:
->>>> Add support for slave DT property spi-lsb-first, i.e., SPI_LSB_FIRST mode.
-> 
->>>> Duplicate the inline helpers bitbang_txrx_be_cpha{0,1} as LE versions.
->>>> Make checkpatch.pl happy by changing "unsigned" to "unsigned int".
-> 
-> Separate patch for this?
+Otherwise one may get multiple error messages for normal
+operation of a clock provider.
 
-For the checkpatch cleanup? Or helpers preparation vs. spi-gpio.c usage?
+Signed-off-by: Jim Quinlan <jquinlan@broadcom.com>
+---
+ drivers/spi/spi-bcm2835.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
->> So from that angle I don't see a better way than either duplicating the
->> functions or using some macro magic to #include the header twice. If we
->> wanted to go down that path, we could probably de-duplicate the existing
->> two functions, too, but I was trying to err on the cautious side, since
->> I don't have setups to test all four code paths myself (and a ton of
->> more relevant but less fun patches to flush out ;)).
-> 
-> Yeah, I don't think there's any great options here with the potential
-> performance issues - probably the nicest thing would be to autogenerate
-> lots of variants but I think that's far more trouble than it's worth.
-
-Maybe add another code comment to revisit that idea later then?
-
-Thanks,
-Andreas
-
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index fb61a620effc..6c9addc9f276 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1305,7 +1305,8 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
+ 	bs->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(bs->clk)) {
+ 		err = PTR_ERR(bs->clk);
+-		dev_err(&pdev->dev, "could not get clk: %d\n", err);
++		if (err != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "could not get clk: %d\n", err);
+ 		goto out_controller_put;
+ 	}
+ 
 -- 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 Nürnberg, Germany
-GF: Felix Imendörffer
-HRB 36809 (AG Nürnberg)
+2.17.1
+
