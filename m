@@ -2,124 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1873E11D0A8
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2019 16:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCBA11D103
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2019 16:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728818AbfLLPPD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Dec 2019 10:15:03 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34634 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728654AbfLLPPD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 12 Dec 2019 10:15:03 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A95F9ADDF;
-        Thu, 12 Dec 2019 15:15:00 +0000 (UTC)
-Subject: Re: [RFC 04/25] spi: gpio: Implement LSB First bitbang support
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-realtek-soc@lists.infradead.org, linux-leds@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dan Murphy <dmurphy@ti.com>
-References: <20191212033952.5967-1-afaerber@suse.de>
- <20191212033952.5967-5-afaerber@suse.de>
- <CAMuHMdWdxJ9AaWhyCW-u8fCpXSDCPd-D6Dx129SF5nRssZsK=g@mail.gmail.com>
-From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
-Organization: SUSE Software Solutions Germany GmbH
-Message-ID: <9b4b6287-c1d9-1b41-88a8-7ac9fe222642@suse.de>
-Date:   Thu, 12 Dec 2019 16:14:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1729217AbfLLP3A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Dec 2019 10:29:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:50756 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728992AbfLLP3A (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 12 Dec 2019 10:29:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EB6A30E;
+        Thu, 12 Dec 2019 07:28:59 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7FE313F6CF;
+        Thu, 12 Dec 2019 07:28:58 -0800 (PST)
+Date:   Thu, 12 Dec 2019 15:28:55 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Chris Brandt <Chris.Brandt@renesas.com>
+Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Mason Yang <masonccyang@mxic.com.tw>
+Subject: Re: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
+Message-ID: <20191212152855.GD4310@sirena.org.uk>
+References: <20191206134202.18784-1-chris.brandt@renesas.com>
+ <922cfa46-efb5-9e6d-67ea-3ac505b8211c@cogentembedded.com>
+ <TY1PR01MB156215E8668C0317FA0826B18A580@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <e6a73df5-31c4-3472-f7bc-a0984f1f5380@cogentembedded.com>
+ <TY1PR01MB1562D343E1AB06DCA2973DAC8A550@TY1PR01MB1562.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWdxJ9AaWhyCW-u8fCpXSDCPd-D6Dx129SF5nRssZsK=g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fOHHtNG4YXGJ0yqR"
+Content-Disposition: inline
+In-Reply-To: <TY1PR01MB1562D343E1AB06DCA2973DAC8A550@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+X-Cookie: We have DIFFERENT amounts of HAIR --
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Geert,
 
-Am 12.12.19 um 09:40 schrieb Geert Uytterhoeven:
-> On Thu, Dec 12, 2019 at 4:41 AM Andreas Färber <afaerber@suse.de> wrote:
->> Add support for slave DT property spi-lsb-first, i.e., SPI_LSB_FIRST mode.
->>
->> Duplicate the inline helpers bitbang_txrx_be_cpha{0,1} as LE versions.
->> Make checkpatch.pl happy by changing "unsigned" to "unsigned int".
->>
->> Conditionally call them from all the spi-gpio txrx_word callbacks.
->>
->> Signed-off-by: Andreas Färber <afaerber@suse.de>
-> 
-> Thanks for your patch!
+--fOHHtNG4YXGJ0yqR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-NP. I prefer fixing issues at the source over awkward workarounds. :)
+On Thu, Dec 12, 2019 at 02:29:07PM +0000, Chris Brandt wrote:
+> On Wed, Dec 11, 2019, Sergei Shtylyov wrote:
 
->> --- a/drivers/spi/spi-gpio.c
->> +++ b/drivers/spi/spi-gpio.c
->> @@ -135,25 +135,37 @@ static inline int getmiso(const struct spi_device *spi)
->>  static u32 spi_gpio_txrx_word_mode0(struct spi_device *spi,
->>                 unsigned nsecs, u32 word, u8 bits, unsigned flags)
->>  {
->> -       return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
->> +       if (unlikely(spi->mode & SPI_LSB_FIRST))
->> +               return bitbang_txrx_le_cpha0(spi, nsecs, 0, flags, word, bits);
->> +       else
->> +               return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
->>  }
-> 
-> Duplicating all functions sounds a bit wasteful to me.
+> >    The last word from our BSP people was that JFFS2 doesn't work with the
+> > HyperFLash dedicated BSP driver... :-/
 
-Two functions duplicated, eight function calls duplicated.
+> Is that why this "RPC" patch series is taking so long?
+> It's a fairly simple piece of hardware.
 
-> What about reverting the word first, and calling the normal functions?
-> 
->     if (unlikely(spi->mode & SPI_LSB_FIRST)) {
->             if (bits <= 8)
->                     word = bitrev8(word) >> (bits - 8);
->             else if (bits <= 16)
->                     word = bitrev16(word) >> (bits - 16);
->             else
->                     word = bitrev32(word) >> (bits - 32);
->     }
->     return bitbang_txrx_be_cpha0(spi, nsecs, 0, flags, word, bits);
+The submitter appeared to be having difficulty with feedback from the
+reviewers with knowledge of the hardware, then it looks like the last
+version of the patch set didn't get any comments from any of those
+reviewers.
 
-Hm, wasn't aware of those helpers, so I opted not to loop over the bits
-for reversing myself, as Thomas Gleixner disliked bit loops in irqchip.
-Performance appeared to be a concern here, too.
+--fOHHtNG4YXGJ0yqR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Eight functions duplicated then. I don't like that - at least we should
-pack that into an inline helper or macro, to not copy&paste even more
-lines around. Who knows, maybe we'll get 64-bit support at one point?
+-----BEGIN PGP SIGNATURE-----
 
-Do you think it would be acceptable to instead encapsulate this inside
-the _be inline helpers? That would lead the name ad absurdum, of course,
-but we would then need to do it only twice, not eight times.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3yXLYACgkQJNaLcl1U
+h9CWRAf/d0MNGnB7aK0YH7cmyHB95BuE2Ljgqzl+79JflqVMfGbDEZLG4CqVSalS
+A7r5jUX6nfU3oI5DMuycdYsT6DnEcSeMXikHBTtb3qSt2Why1C7moQ+7yql8l3cN
+icVqnMMLqMLcbEOjsMfZ4Kb3QwlgKbnZjXbpJtTlELz/i2Re3KPhCC2UX3laoYKI
+KGtscAJnfFsf1G6bj3AtVQJk1o7daNFUAE2GTKAGRVKHjMQZW3WbatGNEPdQA6n2
+GoIDVNFOFavSQ174YjzMpQ/5c1Am8h5yTioFtSAQyOcWHFbk8DbX0Pra9xsaD8pc
+rfX4J9WWH3E5nLIRy9z1JZabk85x4w==
+=D3b3
+-----END PGP SIGNATURE-----
 
-However, either way would seem to make the LSB code path slower than MSB
-due to the prepended reversal.
-
-Delays are already stubbed out, with open TODOs for further inlining
-functions that are being dispatched today.
-
-So from that angle I don't see a better way than either duplicating the
-functions or using some macro magic to #include the header twice. If we
-wanted to go down that path, we could probably de-duplicate the existing
-two functions, too, but I was trying to err on the cautious side, since
-I don't have setups to test all four code paths myself (and a ton of
-more relevant but less fun patches to flush out ;)).
-
-Regards,
-Andreas
-
--- 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 Nürnberg, Germany
-GF: Felix Imendörffer
-HRB 36809 (AG Nürnberg)
+--fOHHtNG4YXGJ0yqR--
