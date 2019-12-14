@@ -2,40 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B0011ECEF
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Dec 2019 22:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979E511F0B9
+	for <lists+linux-spi@lfdr.de>; Sat, 14 Dec 2019 08:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbfLMVeV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Dec 2019 16:34:21 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:37772 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbfLMVeV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Dec 2019 16:34:21 -0500
-Received: by mail-ot1-f67.google.com with SMTP id k14so746052otn.4;
-        Fri, 13 Dec 2019 13:34:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CnL0ppP0hu7PBsUqVprgfTmViSxAVBY2hM4t+lEup30=;
-        b=KfLYesjRMXVEv5JsN9TJ0Z8DO4bfG0oqoO18/D4lEYVhPwP/dcaaqB+uIynRrnuOdc
-         Zf9S630/ZLJ9Ub4ftx++e7KHSoZb3hPtkqPSXQV/dLjYyNqXP3kLl15YZlCF90OD57zR
-         SItJXIdOpW4Y6eGFaGcq374RcyjUVK9ftiZKiAFyK26YeISxqt0e+mP5VyJ4sOywJFwd
-         bC8AjB03hZfH2ELBQ1Qiz03d1O0Foc7PO2hVZCC4LzHnY3pJXUxdkS5ISK1Vnuw0WsX2
-         o572auBBovnGBB050+neKe4vrLRqREzpwPUxKshUL17pn3bNNgratq3R18j0K7IWEeXP
-         QwwA==
-X-Gm-Message-State: APjAAAXnULB8J0UaOvzixqyJou9UoRgSm03gGTnUl4bbDCkiJwx5EBAS
-        bb0DnxWZGNX3iixsyHnQrg==
-X-Google-Smtp-Source: APXvYqxtLmwCSQzcGbNdN9x9BipFNkJ2YdICwPsaYd45wZnOrdGRLQWzOOV9fMbVNvAU4hoYVvYkLw==
-X-Received: by 2002:a9d:6181:: with SMTP id g1mr17366399otk.104.1576272860189;
-        Fri, 13 Dec 2019 13:34:20 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id a16sm3798678otd.64.2019.12.13.13.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 13:34:19 -0800 (PST)
-Date:   Fri, 13 Dec 2019 15:34:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
+        id S1725895AbfLNHaO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 14 Dec 2019 02:30:14 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:17387 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725851AbfLNHaO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 14 Dec 2019 02:30:14 -0500
+Received: from localhost (mailhub1-ext [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 47ZfM828F5z9v4kg;
+        Sat, 14 Dec 2019 08:30:12 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=QKTuuexY; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id rXUFt3zZMGyh; Sat, 14 Dec 2019 08:30:12 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47ZfM813fFz9v4kF;
+        Sat, 14 Dec 2019 08:30:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1576308612; bh=jJtG71JXNYzYDF4z7ntC3bwNQLarVarmUswHWhluOuQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=QKTuuexYKKEPVIL8i2FVj9ntngPsKl2SiB7u/7pALV0PsyXDg/Aea96V+3KDifu1Y
+         mslw9qUfpy3D4X6gNwmrP2n8zKN6Y2GPjsXcghjD65vUZkYbppmnD0JQKozphLtqSx
+         LgOdj0j4PXqcDBaUN6qFU0nqsjPcXZIVjMUMutVo=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0C4908B788;
+        Sat, 14 Dec 2019 08:30:13 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id eEW_ZV8vhUP2; Sat, 14 Dec 2019 08:30:12 +0100 (CET)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 228048B755;
+        Sat, 14 Dec 2019 08:30:12 +0100 (CET)
+Subject: Re: [PATCH] powerpc/devicetrees: Change 'gpios' to 'cs-gpios' on
+ fsl,spi nodes
+To:     Rob Herring <robh@kernel.org>
 Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -44,35 +52,46 @@ Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-spi@vger.kernel.org
-Subject: Re: [PATCH] powerpc/devicetrees: Change 'gpios' to 'cs-gpios' on
- fsl,spi nodes
-Message-ID: <20191213213418.GA17361@bogus>
 References: <7556683b57d8ce100855857f03d1cd3d2903d045.1574943062.git.christophe.leroy@c-s.fr>
+ <20191213213418.GA17361@bogus>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <678cdcce-9bad-519a-68a5-a43414c15f94@c-s.fr>
+Date:   Sat, 14 Dec 2019 08:30:11 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7556683b57d8ce100855857f03d1cd3d2903d045.1574943062.git.christophe.leroy@c-s.fr>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191213213418.GA17361@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Nov 28, 2019 at 12:16:35PM +0000, Christophe Leroy wrote:
-> Since commit 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO
-> descriptors"), the prefered way to define chipselect GPIOs is using
-> 'cs-gpios' property instead of the legacy 'gpios' property.
 
-This will break using a new dtb on a kernel without the above commit. Or 
-with any OS that never made the change.
 
-I'm fine with the doc change, but you should keep 'gpios' as deprecated.
+Le 13/12/2019 à 22:34, Rob Herring a écrit :
+> On Thu, Nov 28, 2019 at 12:16:35PM +0000, Christophe Leroy wrote:
+>> Since commit 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO
+>> descriptors"), the prefered way to define chipselect GPIOs is using
+>> 'cs-gpios' property instead of the legacy 'gpios' property.
+> 
+> This will break using a new dtb on a kernel without the above commit. Or
+> with any OS that never made the change.
+
+Why would anybody use a new dtb on an old kernel ? I have not tagged 
+this change for stable, it will only apply to DTBs in new kernels, won't 
+it ?
+
+That's not the first time DTS have to change for new kernels. For 
+instance, some time ago I had to replace all 'gpios' property by a set 
+of 'rdy-gpio', 'nce-gpio', 'ale-gpio' and 'cle-gpio' properties to 
+continue using 'gpio-control-nand' driver.
 
 > 
-> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> ---
->  Documentation/devicetree/bindings/spi/fsl-spi.txt | 8 ++++----
->  arch/powerpc/boot/dts/mgcoge.dts                  | 2 +-
->  arch/powerpc/boot/dts/mpc832x_rdb.dts             | 2 +-
->  arch/powerpc/boot/dts/mpc8610_hpcd.dts            | 2 +-
->  4 files changed, 7 insertions(+), 7 deletions(-)
+> I'm fine with the doc change, but you should keep 'gpios' as deprecated.
+
+Ok
+
+Christophe
