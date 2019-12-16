@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9091204D5
+	by mail.lfdr.de (Postfix) with ESMTP id ED6341204D6
 	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2019 13:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727241AbfLPMGE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Dec 2019 07:06:04 -0500
-Received: from foss.arm.com ([217.140.110.172]:52476 "EHLO foss.arm.com"
+        id S1727605AbfLPMGH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Dec 2019 07:06:07 -0500
+Received: from foss.arm.com ([217.140.110.172]:52498 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727579AbfLPMGE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 16 Dec 2019 07:06:04 -0500
+        id S1727579AbfLPMGG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 16 Dec 2019 07:06:06 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A947D1063;
-        Mon, 16 Dec 2019 04:06:03 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29F8C1FB;
+        Mon, 16 Dec 2019 04:06:06 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E9F513F719;
-        Mon, 16 Dec 2019 04:06:02 -0800 (PST)
-Date:   Mon, 16 Dec 2019 12:06:01 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 759EA3F719;
+        Mon, 16 Dec 2019 04:06:05 -0800 (PST)
+Date:   Mon, 16 Dec 2019 12:06:04 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
 Cc:     alexandre.torgue@st.com, baohua@kernel.org, broonie@kernel.org,
@@ -28,9 +28,9 @@ Cc:     alexandre.torgue@st.com, baohua@kernel.org, broonie@kernel.org,
         Mark Brown <broonie@kernel.org>, mcoquelin.stm32@gmail.com,
         nsaenzjulienne@suse.de, rjui@broadcom.com, sbranden@broadcom.com,
         s.hauer@pengutronix.de, shawnguo@kernel.org, vkoul@kernel.org
-Subject: Applied "spi: stm32-qspi: Use dma_request_chan() instead dma_request_slave_channel()" to the spi tree
-In-Reply-To: <20191212135550.4634-9-peter.ujfalusi@ti.com>
-Message-Id: <applied-20191212135550.4634-9-peter.ujfalusi@ti.com>
+Subject: Applied "spi: spi-fsl-dspi: Use dma_request_chan() instead dma_request_slave_channel()" to the spi tree
+In-Reply-To: <20191212135550.4634-8-peter.ujfalusi@ti.com>
+Message-Id: <applied-20191212135550.4634-8-peter.ujfalusi@ti.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -39,7 +39,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: stm32-qspi: Use dma_request_chan() instead dma_request_slave_channel()
+   spi: spi-fsl-dspi: Use dma_request_chan() instead dma_request_slave_channel()
 
 has been applied to the spi tree at
 
@@ -64,10 +64,10 @@ to this mail.
 Thanks,
 Mark
 
-From 658606ff4cf680ca97380f6ed7295722b0e991b2 Mon Sep 17 00:00:00 2001
+From b5756b777472eceaa84bc180f458f8eaec65da9a Mon Sep 17 00:00:00 2001
 From: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Date: Thu, 12 Dec 2019 15:55:49 +0200
-Subject: [PATCH] spi: stm32-qspi: Use dma_request_chan() instead
+Date: Thu, 12 Dec 2019 15:55:48 +0200
+Subject: [PATCH] spi: spi-fsl-dspi: Use dma_request_chan() instead
  dma_request_slave_channel()
 
 dma_request_slave_channel() is a wrapper on top of dma_request_chan()
@@ -77,85 +77,40 @@ By using dma_request_chan() directly the driver can support deferred
 probing against DMA.
 
 Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Link: https://lore.kernel.org/r/20191212135550.4634-9-peter.ujfalusi@ti.com
+Link: https://lore.kernel.org/r/20191212135550.4634-8-peter.ujfalusi@ti.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-stm32-qspi.c | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 4e726929bb4f..4ef569b47aa6 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -470,10 +470,11 @@ static int stm32_qspi_setup(struct spi_device *spi)
- 	return 0;
- }
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index 442cff71a0d2..52ccd8397c35 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -395,17 +395,17 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 	if (!dma)
+ 		return -ENOMEM;
  
--static void stm32_qspi_dma_setup(struct stm32_qspi *qspi)
-+static int stm32_qspi_dma_setup(struct stm32_qspi *qspi)
- {
- 	struct dma_slave_config dma_cfg;
- 	struct device *dev = qspi->dev;
-+	int ret = 0;
- 
- 	memset(&dma_cfg, 0, sizeof(dma_cfg));
- 
-@@ -484,8 +485,13 @@ static void stm32_qspi_dma_setup(struct stm32_qspi *qspi)
- 	dma_cfg.src_maxburst = 4;
- 	dma_cfg.dst_maxburst = 4;
- 
--	qspi->dma_chrx = dma_request_slave_channel(dev, "rx");
--	if (qspi->dma_chrx) {
-+	qspi->dma_chrx = dma_request_chan(dev, "rx");
-+	if (IS_ERR(qspi->dma_chrx)) {
-+		ret = PTR_ERR(qspi->dma_chrx);
-+		qspi->dma_chrx = NULL;
-+		if (ret == -EPROBE_DEFER)
-+			goto out;
-+	} else {
- 		if (dmaengine_slave_config(qspi->dma_chrx, &dma_cfg)) {
- 			dev_err(dev, "dma rx config failed\n");
- 			dma_release_channel(qspi->dma_chrx);
-@@ -493,8 +499,11 @@ static void stm32_qspi_dma_setup(struct stm32_qspi *qspi)
- 		}
+-	dma->chan_rx = dma_request_slave_channel(dev, "rx");
+-	if (!dma->chan_rx) {
++	dma->chan_rx = dma_request_chan(dev, "rx");
++	if (IS_ERR(dma->chan_rx)) {
+ 		dev_err(dev, "rx dma channel not available\n");
+-		ret = -ENODEV;
++		ret = PTR_ERR(dma->chan_rx);
+ 		return ret;
  	}
  
--	qspi->dma_chtx = dma_request_slave_channel(dev, "tx");
--	if (qspi->dma_chtx) {
-+	qspi->dma_chtx = dma_request_chan(dev, "tx");
-+	if (IS_ERR(qspi->dma_chtx)) {
-+		ret = PTR_ERR(qspi->dma_chtx);
-+		qspi->dma_chtx = NULL;
-+	} else {
- 		if (dmaengine_slave_config(qspi->dma_chtx, &dma_cfg)) {
- 			dev_err(dev, "dma tx config failed\n");
- 			dma_release_channel(qspi->dma_chtx);
-@@ -502,7 +511,13 @@ static void stm32_qspi_dma_setup(struct stm32_qspi *qspi)
- 		}
+-	dma->chan_tx = dma_request_slave_channel(dev, "tx");
+-	if (!dma->chan_tx) {
++	dma->chan_tx = dma_request_chan(dev, "tx");
++	if (IS_ERR(dma->chan_tx)) {
+ 		dev_err(dev, "tx dma channel not available\n");
+-		ret = -ENODEV;
++		ret = PTR_ERR(dma->chan_tx);
+ 		goto err_tx_channel;
  	}
  
-+out:
- 	init_completion(&qspi->dma_completion);
-+
-+	if (ret != -EPROBE_DEFER)
-+		ret = 0;
-+
-+	return ret;
- }
- 
- static void stm32_qspi_dma_free(struct stm32_qspi *qspi)
-@@ -608,7 +623,10 @@ static int stm32_qspi_probe(struct platform_device *pdev)
- 
- 	qspi->dev = dev;
- 	platform_set_drvdata(pdev, qspi);
--	stm32_qspi_dma_setup(qspi);
-+	ret = stm32_qspi_dma_setup(qspi);
-+	if (ret)
-+		goto err;
-+
- 	mutex_init(&qspi->lock);
- 
- 	ctrl->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD
 -- 
 2.20.1
 
