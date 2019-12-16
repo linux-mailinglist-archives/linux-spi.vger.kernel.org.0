@@ -2,31 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF391204CB
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2019 13:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB70E1204CF
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2019 13:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727728AbfLPMGZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Dec 2019 07:06:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:52672 "EHLO foss.arm.com"
+        id S1727737AbfLPMG1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Dec 2019 07:06:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:52688 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727717AbfLPMGY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 16 Dec 2019 07:06:24 -0500
+        id S1727734AbfLPMG0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 16 Dec 2019 07:06:26 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEF891045;
-        Mon, 16 Dec 2019 04:06:23 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23B3A1FB;
+        Mon, 16 Dec 2019 04:06:26 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FEC93F719;
-        Mon, 16 Dec 2019 04:06:23 -0800 (PST)
-Date:   Mon, 16 Dec 2019 12:06:21 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 983313F719;
+        Mon, 16 Dec 2019 04:06:25 -0800 (PST)
+Date:   Mon, 16 Dec 2019 12:06:24 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     devicetree@vger.kernel.org, kbuild test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+To:     Michael Walle <michael@walle.cc>
+Cc:     Ashish Kumar <ashish.kumar@nxp.com>, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        stable@vger.kernel.org
-Subject: Applied "spi: fsl: use platform_get_irq() instead of of_irq_to_resource()" to the spi tree
-In-Reply-To: <091a277fd0b3356dca1e29858c1c96983fc9cb25.1576172743.git.christophe.leroy@c-s.fr>
-Message-Id: <applied-091a277fd0b3356dca1e29858c1c96983fc9cb25.1576172743.git.christophe.leroy@c-s.fr>
+        Yogesh Gaur <yogeshgaur.83@gmail.com>
+Subject: Applied "spi: nxp-fspi: Ensure width is respected in spi-mem operations" to the spi tree
+In-Reply-To: <20191211195730.26794-1-michael@walle.cc>
+Message-Id: <applied-20191211195730.26794-1-michael@walle.cc>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -35,7 +34,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: fsl: use platform_get_irq() instead of of_irq_to_resource()
+   spi: nxp-fspi: Ensure width is respected in spi-mem operations
 
 has been applied to the spi tree at
 
@@ -60,45 +59,40 @@ to this mail.
 Thanks,
 Mark
 
-From 63aa6a692595d47a0785297b481072086b9272d2 Mon Sep 17 00:00:00 2001
-From: Christophe Leroy <christophe.leroy@c-s.fr>
-Date: Thu, 12 Dec 2019 17:47:24 +0000
-Subject: [PATCH] spi: fsl: use platform_get_irq() instead of
- of_irq_to_resource()
+From 007773e16a6f3f49d1439554078c3ba8af131998 Mon Sep 17 00:00:00 2001
+From: Michael Walle <michael@walle.cc>
+Date: Wed, 11 Dec 2019 20:57:30 +0100
+Subject: [PATCH] spi: nxp-fspi: Ensure width is respected in spi-mem
+ operations
 
-Unlike irq_of_parse_and_map() which has a dummy definition on SPARC,
-of_irq_to_resource() hasn't.
+Make use of a core helper to ensure the desired width is respected
+when calling spi-mem operators.
 
-But as platform_get_irq() can be used instead and is generic, use it.
+Otherwise only the SPI controller will be matched with the flash chip,
+which might lead to wrong widths. Also consider the width specified by
+the user in the device tree.
 
-Reported-by: kbuild test robot <lkp@intel.com>
-Suggested-by: Mark Brown <broonie@kernel.org>
-Fixes: 	3194d2533eff ("spi: fsl: don't map irq during probe")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Link: https://lore.kernel.org/r/091a277fd0b3356dca1e29858c1c96983fc9cb25.1576172743.git.christophe.leroy@c-s.fr
+Fixes: a5356aef6a90 ("spi: spi-mem: Add driver for NXP FlexSPI controller")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Link: https://lore.kernel.org/r/20191211195730.26794-1-michael@walle.cc
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-spi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/spi/spi-nxp-fspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index d0ad9709f4a6..fb4159ad6bf6 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -746,9 +746,9 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
- 	if (ret)
- 		goto err;
+diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
+index c36bb1bb464e..8c5084a3a617 100644
+--- a/drivers/spi/spi-nxp-fspi.c
++++ b/drivers/spi/spi-nxp-fspi.c
+@@ -439,7 +439,7 @@ static bool nxp_fspi_supports_op(struct spi_mem *mem,
+ 	    op->data.nbytes > f->devtype_data->txfifo)
+ 		return false;
  
--	irq = of_irq_to_resource(np, 0, NULL);
--	if (irq <= 0) {
--		ret = -EINVAL;
-+	irq = platform_get_irq(ofdev, 0);
-+	if (irq < 0) {
-+		ret = irq;
- 		goto err;
- 	}
+-	return true;
++	return spi_mem_default_supports_op(mem, op);
+ }
  
+ /* Instead of busy looping invoke readl_poll_timeout functionality. */
 -- 
 2.20.1
 
