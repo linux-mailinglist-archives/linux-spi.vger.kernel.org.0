@@ -2,264 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8D5121C24
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2019 22:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1943C121CA9
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2019 23:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbfLPVty (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Dec 2019 16:49:54 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44609 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbfLPVty (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Dec 2019 16:49:54 -0500
-Received: by mail-ot1-f68.google.com with SMTP id x3so10880024oto.11;
-        Mon, 16 Dec 2019 13:49:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HptzT5nDCrwY5+Ndy5nDuVXNd62G0fSk6plJscs64+s=;
-        b=m0a/feoHMgJZRpe3RfWJiWCI+xQQzuDGa92RIjZPxezDfkpSdK3mVMDivsQOfetS5R
-         xi4Y6LVzdKvRsBjunerw4RBkHZ/HWDTcl2tQXQMG/y0YSu9LCKl4oUOpJEAAj4q4D1H9
-         i/X8H8pnMEavb01VIGiGOY47pboA/mJ5xHxevfuQPwh/Nir2lGQ9goF93bYiRpawAiU2
-         xighujP26182mARjuX4v8SGuF3DqgH/hnY5VHD6nCoeHPwUyyHsrLBscSl65a3vXHeEO
-         +ZEnHyICC8ac7+50B81xmSm+6Fe9hq75+mD+yvpaoGQ5IQcxFC1FiJE1arakNqL6Ukii
-         8YkA==
-X-Gm-Message-State: APjAAAXNEnEqzspoawpvv/Kal/L3HdlME+vAE3Evg6QOLDHwUDDeNkcf
-        Dcc7oJQR6H9WqNc2rYc2/DfAwQA=
-X-Google-Smtp-Source: APXvYqxgkaB403WtaFAWNwC6m5B7AcOnZaowDtuEndM91PV4Kl26ED2Pp1qFpLftHvbaAM9KlR57Hw==
-X-Received: by 2002:a05:6830:14d3:: with SMTP id t19mr35544056otq.278.1576532992820;
-        Mon, 16 Dec 2019 13:49:52 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q22sm7146652otm.2.2019.12.16.13.49.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 13:49:51 -0800 (PST)
-Date:   Mon, 16 Dec 2019 15:49:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     broonie@kernel.org, mark.rutland@arm.com, alexandre.torgue@st.com,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Erwan Leray <erwan.leray@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>
-Subject: Re: [PATCH] dt-bindings: spi: Convert stm32 spi bindings to
- json-schema
-Message-ID: <20191216214951.GA9328@bogus>
-References: <20191204153233.791-1-benjamin.gaignard@st.com>
+        id S1727462AbfLPWWI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Dec 2019 17:22:08 -0500
+Received: from mail-eopbgr1410117.outbound.protection.outlook.com ([40.107.141.117]:21568
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725836AbfLPWWH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 16 Dec 2019 17:22:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kQ4mc0e9hk79Ho0knuzRD5mn4fR6wOt5IX3eoK8brUdmlXWBeg4QaJ9+Y7ptl7V/4OLaL/UOQj3OO8mC7vom3EuZGhlm3zR77sujV5gJyTkc6VelgCxQ4jPuHAbV1V5d67FHpXl6yZfD/wbaHXLTbiaSkpn6RtmSxs/tNkRuBmX1mxjuZKQiaHolM+o4Tma9kGzSpEexLsHWU0JtDl9SXlXl2L5F/zY93dsHC9F/E321Oz+DsGXwDQmmqwJb+oK8LidrTujLDy+VGlOSKQOlmDhcynE8VRbTQ4AWq9k9Fxewj79fJ4s8oiAGnvkbekaLtWdsbC/5D3j6aRW7F6nURw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZM7x4/dxpf2yVgpNms5omvMeZY1cUKJkl/IOnV+kAiw=;
+ b=meNDZX5YNB0Uw2wv7Jv1MFEZQUyZ+d+ArNMoSx4TytMRMiP8CNQWvy28Hwf4vWz/5FW1JPSFT4FE2Oo+f0yAVSHQlJ/G5+u3iUAyrQClvikBeM8R4YCWLjsBROdYik1mNF9tgR8OS09bTs12vbyYyq7+Cj/f2HxCdyYb4w6Hl46So7Jr4RL1dW2E/ML5/CU06f4tKjF4eiS7XG1DIdNkB5lumElM3fJozVNM5AobOQQrAMYJNsbE7UQms4jNjO5BA5zowHF7/ZVfOctrTkB8aLahzo5ctub2XLd+DtJGqVWu6GRMfBPJZpgbRbPxWEziUZaMXLlw6+cFrezdUPLOMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZM7x4/dxpf2yVgpNms5omvMeZY1cUKJkl/IOnV+kAiw=;
+ b=bjBTJeplLsg2noH7nEsgihncB1owFwjMRG2fCAB6lMUm9VcuvP9iHAgqlVtvwI0iUMacNz7db8JO31fukuCuvbrc7dC6S+ZUe9CqFgn7g5RXyDW1y1Cggcs7sLDe/FeUDcxr0hHf7/SZlmxRoZz4OEIVSpgcezwAwZ79m4sDkvo=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1596.jpnprd01.prod.outlook.com (52.133.162.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2538.18; Mon, 16 Dec 2019 22:21:24 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::74db:232e:f59e:83f2]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::74db:232e:f59e:83f2%3]) with mapi id 15.20.2538.019; Mon, 16 Dec 2019
+ 22:21:24 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Mason Yang <masonccyang@mxic.com.tw>
+Subject: RE: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
+Thread-Topic: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
+Thread-Index: AQHVrDsFo/XrCnZmIE+HK5Vec6rH7qevIW6AgAK0x/CAA35sAIABOkowgAa4UICAABhMQA==
+Date:   Mon, 16 Dec 2019 22:21:23 +0000
+Message-ID: <TY1PR01MB1562B9EB96818DCA507079808A510@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20191206134202.18784-1-chris.brandt@renesas.com>
+ <922cfa46-efb5-9e6d-67ea-3ac505b8211c@cogentembedded.com>
+ <TY1PR01MB156215E8668C0317FA0826B18A580@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <e6a73df5-31c4-3472-f7bc-a0984f1f5380@cogentembedded.com>
+ <TY1PR01MB1562D343E1AB06DCA2973DAC8A550@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <590840ce-a250-2512-3d04-c2420d83f7da@cogentembedded.com>
+In-Reply-To: <590840ce-a250-2512-3d04-c2420d83f7da@cogentembedded.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNjIyNzMwMDAtMjA1Mi0xMWVhLWFhNTYtOTRlNmY3Njc5M2FlXGFtZS10ZXN0XDYyMjczMDAxLTIwNTItMTFlYS1hYTU2LTk0ZTZmNzY3OTNhZWJvZHkudHh0IiBzej0iMjAzNiIgdD0iMTMyMjEwMDg0ODA1MTIxODc5IiBoPSJ6R3VaZys0bEgxNlZjNVgvcGk1T2ZJa3pxWmc9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: da50c817-175d-4d27-a896-08d782764924
+x-ms-traffictypediagnostic: TY1PR01MB1596:
+x-microsoft-antispam-prvs: <TY1PR01MB15964B0FD39AD7353DA111628A510@TY1PR01MB1596.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 02530BD3AA
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(376002)(366004)(346002)(136003)(39860400002)(199004)(189003)(7416002)(64756008)(76116006)(66946007)(66476007)(66556008)(2906002)(7696005)(86362001)(33656002)(478600001)(4326008)(316002)(8936002)(66446008)(6506007)(9686003)(81166006)(5660300002)(81156014)(26005)(186003)(8676002)(71200400001)(52536014)(54906003)(110136005)(55016002)(582214001);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1596;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9UmYBD3CyCFznE6yCd4LwSw0KLfViR5WxXMCFHtw9/Ux4o2+mgTRMWFRyHcNfLlKm8kd+xZQ9nYoPrcAkRCSeDvVzLKTQCyGwBP9Fqeav9I33ikpBHLbZok3fBnRSRxrXZa2ZTTdSlOAmkH/cFQMtb1s+5UwbVj+5jE294CzVpe2NBUuSU4NWVpas9C9+eiZ3h7jFi1YoSHMrcyDeqkY2o2ATPfI0Nx2phblTYc0Z44faTEszijYfhGBO9OlnSfDt4YwTPnJz/xYOCljGDiNRiFitKfQQExYlOBUCLAJ+3D8n7S6BJUdRqDyJkrAry+EhEpaH2PCGowLslPwbzgpgnSdb/5DvwX/HFT4yXtHyWqHtj4VGYIPdSbWH3PzgU03VsJfCiHu+01RSqRNpXkg5iiPSnmySFvW3bUMbkMhrniCo0196K5pXBzGJaIyKwfacKTFB3//oUS5GJf8McXO4IOi0cANr5J4SvVvBW6RM1Yex4CkJX1pXqb9Y/zqmI5I
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191204153233.791-1-benjamin.gaignard@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da50c817-175d-4d27-a896-08d782764924
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Dec 2019 22:21:23.5029
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7ItarIGcZuAJKi+oYajFT2gmiUC71U8UwGW5tJEYescy00Z/KFfROUk+PnY6BK8bIFNGNNnN2Q4ZGnSP1B18X5p3qhf3cGqtLkmeLgWQZS8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1596
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Dec 04, 2019 at 04:32:33PM +0100, Benjamin Gaignard wrote:
-> Convert the STM32 spi binding to DT schema format using json-schema
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> CC: Erwan Leray <erwan.leray@st.com>
-> CC: Fabrice Gasnier <fabrice.gasnier@st.com>
-> CC: Amelie Delaunay <amelie.delaunay@st.com>
-> ---
->  .../devicetree/bindings/spi/spi-stm32.txt          |  62 ------------
->  .../devicetree/bindings/spi/st,stm32-spi.yaml      | 105 +++++++++++++++++++++
->  2 files changed, 105 insertions(+), 62 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-stm32.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-stm32.txt b/Documentation/devicetree/bindings/spi/spi-stm32.txt
-> deleted file mode 100644
-> index d82755c63eaf..000000000000
-> --- a/Documentation/devicetree/bindings/spi/spi-stm32.txt
-> +++ /dev/null
-> @@ -1,62 +0,0 @@
-> -STMicroelectronics STM32 SPI Controller
-> -
-> -The STM32 SPI controller is used to communicate with external devices using
-> -the Serial Peripheral Interface. It supports full-duplex, half-duplex and
-> -simplex synchronous serial communication with external devices. It supports
-> -from 4 to 32-bit data size. Although it can be configured as master or slave,
-> -only master is supported by the driver.
-> -
-> -Required properties:
-> -- compatible: Should be one of:
-> -  "st,stm32h7-spi"
-> -  "st,stm32f4-spi"
-> -- reg: Offset and length of the device's register set.
-> -- interrupts: Must contain the interrupt id.
-> -- clocks: Must contain an entry for spiclk (which feeds the internal clock
-> -	  generator).
-> -- #address-cells:  Number of cells required to define a chip select address.
-> -- #size-cells: Should be zero.
-> -
-> -Optional properties:
-> -- resets: Must contain the phandle to the reset controller.
-> -- A pinctrl state named "default" may be defined to set pins in mode of
-> -  operation for SPI transfer.
-> -- dmas: DMA specifiers for tx and rx dma. DMA fifo mode must be used. See the
-> -  STM32 DMA bindings, Documentation/devicetree/bindings/dma/stm32-dma.txt.
-> -- dma-names: DMA request names should include "tx" and "rx" if present.
-> -- cs-gpios: list of GPIO chip selects. See the SPI bus bindings,
-> -  Documentation/devicetree/bindings/spi/spi-bus.txt
-> -
-> -
-> -Child nodes represent devices on the SPI bus
-> -  See ../spi/spi-bus.txt
-> -
-> -Optional properties:
-> -- st,spi-midi-ns: Only for STM32H7, (Master Inter-Data Idleness) minimum time
-> -		  delay in nanoseconds inserted between two consecutive data
-> -		  frames.
-> -
-> -
-> -Example:
-> -	spi2: spi@40003800 {
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -		compatible = "st,stm32h7-spi";
-> -		reg = <0x40003800 0x400>;
-> -		interrupts = <36>;
-> -		clocks = <&rcc SPI2_CK>;
-> -		resets = <&rcc 1166>;
-> -		dmas = <&dmamux1 0 39 0x400 0x01>,
-> -		       <&dmamux1 1 40 0x400 0x01>;
-> -		dma-names = "rx", "tx";
-> -		pinctrl-0 = <&spi2_pins_b>;
-> -		pinctrl-names = "default";
-> -		cs-gpios = <&gpioa 11 0>;
-> -
-> -		aardvark@0 {
-> -			compatible = "totalphase,aardvark";
-> -			reg = <0>;
-> -			spi-max-frequency = <4000000>;
-> -			st,spi-midi-ns = <4000>;
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> new file mode 100644
-> index 000000000000..57ef3a0f57e0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> @@ -0,0 +1,105 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/st,stm32-spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STMicroelectronics STM32 SPI Controller bindings
-> +
-> +description: |
-> +  The STM32 SPI controller is used to communicate with external devices using
-> +  the Serial Peripheral Interface. It supports full-duplex, half-duplex and
-> +  simplex synchronous serial communication with external devices. It supports
-> +  from 4 to 32-bit data size.
-> +
-> +maintainers:
-> +  - Erwan Leray <erwan.leray@st.com>
-> +  - Fabrice Gasnier <fabrice.gasnier@st.com>
-> +
-> +allOf:
-> +  - $ref: "spi-controller.yaml#"
-> +  - if:
-> +      properties:
-> +        comptatible:
-> +          constains:
-
-One of the features of json-schema is ignoring unknown keywords like 
-'constains'. I've tried to mitigate this with the meta-schema, but seems 
-this one didn't get caught. But checkpatch.pl caught it.
-
-
-> +            st,stm32f4-spi
-> +    then:
-> +      properties:
-> +        st,spi-midi-ns: false
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - st,stm32f4-spi
-> +      - st,stm32h7-spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  dmas:
-> +    description: |
-> +      DMA specifiers for tx and rx dma. DMA fifo mode must be used. See
-> +      the STM32 DMA bindings Documentation/devicetree/bindings/dma/stm32-dma.txt.
-> +    items:
-> +      - description: rx DMA channel
-> +      - description: tx DMA channel
-> +
-> +  dma-names:
-> +    items:
-> +      - const: rx
-> +      - const: tx
-> +
-> +patternProperties:
-> +  "^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-f]+$":
-> +    type: object
-> +    # SPI slave nodes must be children of the SPI master node and can
-> +    # contain the following properties.
-> +    properties:
-> +      st,spi-midi-ns:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-
-Don't need a type since it has a standard unit. I'd assume there's 
-at least some max less than 2^32 you could define.
-
-> +        description: |
-> +          Only for STM32H7, (Master Inter-Data Idleness) minimum time
-> +          delay in nanoseconds inserted between two consecutive data frames.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - interrupts
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/stm32mp1-clks.h>
-> +    #include <dt-bindings/reset/stm32mp1-resets.h>
-> +    spi@4000b000 {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      compatible = "st,stm32h7-spi";
-> +      reg = <0x4000b000 0x400>;
-> +      interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
-> +      clocks = <&rcc SPI2_K>;
-> +      resets = <&rcc SPI2_R>;
-> +      dmas = <&dmamux1 0 39 0x400 0x05>,
-> +             <&dmamux1 1 40 0x400 0x05>;
-> +      dma-names = "rx", "tx";
-> +      cs-gpios = <&gpioa 11 0>;
-> +
-> +      aardvark@0 {
-> +        compatible = "totalphase,aardvark";
-> +        reg = <0>;
-> +        spi-max-frequency = <4000000>;
-> +        st,spi-midi-ns = <4000>;
-> +      };
-> +    };
-> +
-> +...
-> -- 
-> 2.15.0
-> 
+SGVsbG8NCg0KT24gTW9uLCBEZWMgMTYsIDIwMTksIFNlcmdlaSBTaHR5bHlvdiB3cm90ZToNCj4g
+PiBBcyBhIHNpZGUgbm90ZSwgdGhlcmUgaXMgYW5vdGhlciBIVyBibG9jayBpbiBSZW5lc2FzIHRo
+YXQgZG9lcyB0aGUgc2FtZQ0KPiA+IHRoaW5nIGFzIHRoZSBTUEktQlNDIHRoYXQgdGhleSB1c2Ug
+aW4gdGhlIE1DVSBkZXZpY2VzLiBUaGF0IG9uZSB0aGV5DQo+IA0KPiAgICBNQ1U/DQpZdXAuDQog
+IEJ1dC4uLml0IGhhcyBubyBzaWduaWZpY2FuY2UgdG8gdGhpcyBkaXNjdXNzaW9uIHRob3VnaCA6
+KQ0KDQoNCj4gPiBXaGVuIEkgZmlyc3Qgc2F3IHRoZSBzZXJpZXMgb24gdGhlIG1haWxpbmcgbGlz
+dCwgbXkgcGxhbiB3YXMgdG8ganVzdCB3YWl0DQo+ID4gYW5kIHRoZW4gYWRkIFJaL0ExIGFuZCBS
+Wi9BMiBzdXBwb3J0LiBCdXQuLi4uaXQgbG9va3MgbGlrZSBpdCBhbGwgZGllZC4NCj4gDQo+ICAg
+IE5vLiA6LSkgSXQgd2FzIHdvcmtlZCBvbiBkdXJpbmcgYWxsIHRoZXNlIG1vbnRocy4uLiBJIGp1
+c3QgZmluYWxseSBkZWNpZGVkDQo+IHRvIHN0b3AsIHRha2UgYSBkZWVwIGJyZWF0aCwgYW5kIHBv
+c3Qgd2hhdCBwYXRjaGVzIEkgaGFkIGFjY3VtdWxhdGVkLCB3aXRob3V0DQo+IHRoZSB3aG9sZSBk
+cml2ZXIgc3VpdGUgd29ya2luZyBmaXJzdC4uLiBJJ20gc29ycnkgaXQgdG9vayBzbyBsb25nLi4u
+Lg0KDQpTbyBhdCB0aGUgbW9tZW50LCB0aGVyZSBpcyBub3RoaW5nIHlldCBmb3IgbWUgdG8gJ3Ry
+eScgb24gdGhlIFJaL0Egc2VyaWVzLCBjb3JyZWN0Pw0KDQoNCj4gPiBNeSB1bmRlcnN0YW5kaW5n
+IGlzIHRoYXQgSHlwZXJGbGFzaCB1c2VzIHN0YW5kYXJkIENGSSBjb21tYW5kcywgc28gYWxsDQo+
+IA0KPiAgICBUaGUgQ0ZJIGNvbW1hbmQgc2V0IGRyaXZlciBuZWVkZWQgc29tZSBjaGFuZ2VzIHRv
+byAoZS5nLiB1c2luZyB0aGUgc3RhdHVzDQo+IHJlZ2lzdGVyIHRvIGRldGVybWluZSBpZiBhIGNv
+bW1hbmQgaXMgZG9uZSkuDQoNClNvIHRoZSBleGlzdGluZyBNVEQtU1BJIGxheWVyIGtub3dzIGhv
+dyB0byB0YWxrIHRvIFNQSSBkZXZpY2VzLg0KQW5kLCB5b3UndmUgZml4ZWQgdXAgdGhlIGV4aXN0
+aW5nIENGSSBsYXllciB0byB0YWxrIHRvIEh5cGVyRmxhc2ggZGV2aWNlcy4NCkJ1dCwgeW91IGRv
+IG5vdCB3YW50IHRoZXNlIE1URCBsYXllciB0byB0YWxrIGRpcmVjdGx5IHRvIGEgUmVuZXNhcyBI
+VyBkcml2ZXI/DQpZb3Ugd2FudCB0byBwdXQgYW5vdGhlciBzb2Z0d2FyZSBsYXllciBpbiBiZXR3
+ZWVuPw0KDQoNCkknbSBndWVzc2luZyB0aGF0IGZyb20gdGhpcyBzdGF0ZW1lbnQuLi4uDQoNCj4g
+Pj4+IGxpYnJhcnkgdGhhdCB5b3UgYXJlIHByb3Bvc2luZyBoYXZlIGEgdmVyeSBkaWZmZXJlbnQg
+QVBJIHRoYW4ganVzdA0KPiA+Pj4gJ3NlbmQgYnl0ZXMnIGFuZCAncmVjZWl2ZSBieXRlcyc/DQo+
+ID4+DQo+ID4+ICAgIFRoZXJlJ3MgInByZXBhcmUiIGFuZCAidHJhbnNmZXIiIEFQSXMgYW5kIGFs
+c28gImRpcmVjdCBtYXAgcmVhZCIgQVBJLg0KPiANCj4gICBUaGUgMXN0IG9uZSBwcmVwYXJlcyB0
+aGUgdmFsdWVzIHRvIGJlIHdyaXR0ZW4gaW4gZWl0aGVyIFNQSSBtb2RlIG9yIGRpcmVjdA0KPiBy
+ZWFkIG1vZGUgcmVnaXN0ZXJzLiBUaGVuIHlvdSBjYW4gY2FsbCAidHJhbnNmZXIiIG9yICJkaXJl
+Y3QgbWFvIHJlYWQiIHdoaWNoDQo+IHdvdWxkIHdyaXRlIG91dCB0aGUgcmVnaXN0ZXIgdmFsdWVz
+IGludG8gZWl0aGVyIHNldC4uLg0KDQouLi50aGF0IHlvdSB3YW50IG1vcmUgY29udHJvbCBvZiB0
+aGUgZGF0YSBzdHJlYW0gYmVpbmcgcGFzc2VkIHRvIHRoZSBSUEMtSUYgZHJpdmVyLg0KQ29ycmVj
+dD8/DQoNCkl0IGFsbCBrZWVwcyBzb3VuZGluZyBjb21wbGljYXRlZCwgdW5sZXNzIEknbSBqdXN0
+IG5vdCB1bmRlcnN0YW5kaW5nIHRoZSBjb2RlDQp5b3UgYXJlIHRyeWluZyB0byBpbXBsZW1lbnQu
+DQoNCg0KQ2hyaXMNCg0K
