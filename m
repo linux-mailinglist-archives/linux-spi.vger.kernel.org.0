@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6341204D6
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2019 13:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D78851204D9
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2019 13:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727605AbfLPMGH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Dec 2019 07:06:07 -0500
-Received: from foss.arm.com ([217.140.110.172]:52498 "EHLO foss.arm.com"
+        id S1727629AbfLPMGL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Dec 2019 07:06:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:52522 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727579AbfLPMGG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 16 Dec 2019 07:06:06 -0500
+        id S1727385AbfLPMGJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 16 Dec 2019 07:06:09 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29F8C1FB;
-        Mon, 16 Dec 2019 04:06:06 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1D1641FB;
+        Mon, 16 Dec 2019 04:06:09 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 759EA3F719;
-        Mon, 16 Dec 2019 04:06:05 -0800 (PST)
-Date:   Mon, 16 Dec 2019 12:06:04 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 38A773F719;
+        Mon, 16 Dec 2019 04:06:08 -0800 (PST)
+Date:   Mon, 16 Dec 2019 12:06:06 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
 Cc:     alexandre.torgue@st.com, baohua@kernel.org, broonie@kernel.org,
@@ -28,9 +28,9 @@ Cc:     alexandre.torgue@st.com, baohua@kernel.org, broonie@kernel.org,
         Mark Brown <broonie@kernel.org>, mcoquelin.stm32@gmail.com,
         nsaenzjulienne@suse.de, rjui@broadcom.com, sbranden@broadcom.com,
         s.hauer@pengutronix.de, shawnguo@kernel.org, vkoul@kernel.org
-Subject: Applied "spi: spi-fsl-dspi: Use dma_request_chan() instead dma_request_slave_channel()" to the spi tree
-In-Reply-To: <20191212135550.4634-8-peter.ujfalusi@ti.com>
-Message-Id: <applied-20191212135550.4634-8-peter.ujfalusi@ti.com>
+Subject: Applied "spi: sirf: Use dma_request_chan() instead dma_request_slave_channel()" to the spi tree
+In-Reply-To: <20191212135550.4634-7-peter.ujfalusi@ti.com>
+Message-Id: <applied-20191212135550.4634-7-peter.ujfalusi@ti.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -39,7 +39,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-fsl-dspi: Use dma_request_chan() instead dma_request_slave_channel()
+   spi: sirf: Use dma_request_chan() instead dma_request_slave_channel()
 
 has been applied to the spi tree at
 
@@ -64,10 +64,10 @@ to this mail.
 Thanks,
 Mark
 
-From b5756b777472eceaa84bc180f458f8eaec65da9a Mon Sep 17 00:00:00 2001
+From 401abb764abb6e42f539528e02127457eb0c5b32 Mon Sep 17 00:00:00 2001
 From: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Date: Thu, 12 Dec 2019 15:55:48 +0200
-Subject: [PATCH] spi: spi-fsl-dspi: Use dma_request_chan() instead
+Date: Thu, 12 Dec 2019 15:55:47 +0200
+Subject: [PATCH] spi: sirf: Use dma_request_chan() instead
  dma_request_slave_channel()
 
 dma_request_slave_channel() is a wrapper on top of dma_request_chan()
@@ -77,38 +77,37 @@ By using dma_request_chan() directly the driver can support deferred
 probing against DMA.
 
 Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Link: https://lore.kernel.org/r/20191212135550.4634-8-peter.ujfalusi@ti.com
+Link: https://lore.kernel.org/r/20191212135550.4634-7-peter.ujfalusi@ti.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-dspi.c | 12 ++++++------
+ drivers/spi/spi-sirf.c | 12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 442cff71a0d2..52ccd8397c35 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -395,17 +395,17 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 	if (!dma)
- 		return -ENOMEM;
+diff --git a/drivers/spi/spi-sirf.c b/drivers/spi/spi-sirf.c
+index e1e639191557..8419e6722e17 100644
+--- a/drivers/spi/spi-sirf.c
++++ b/drivers/spi/spi-sirf.c
+@@ -1126,16 +1126,16 @@ static int spi_sirfsoc_probe(struct platform_device *pdev)
+ 	sspi->bitbang.master->dev.of_node = pdev->dev.of_node;
  
--	dma->chan_rx = dma_request_slave_channel(dev, "rx");
--	if (!dma->chan_rx) {
-+	dma->chan_rx = dma_request_chan(dev, "rx");
-+	if (IS_ERR(dma->chan_rx)) {
- 		dev_err(dev, "rx dma channel not available\n");
+ 	/* request DMA channels */
+-	sspi->rx_chan = dma_request_slave_channel(&pdev->dev, "rx");
+-	if (!sspi->rx_chan) {
++	sspi->rx_chan = dma_request_chan(&pdev->dev, "rx");
++	if (IS_ERR(sspi->rx_chan)) {
+ 		dev_err(&pdev->dev, "can not allocate rx dma channel\n");
 -		ret = -ENODEV;
-+		ret = PTR_ERR(dma->chan_rx);
- 		return ret;
++		ret = PTR_ERR(sspi->rx_chan);
+ 		goto free_master;
  	}
- 
--	dma->chan_tx = dma_request_slave_channel(dev, "tx");
--	if (!dma->chan_tx) {
-+	dma->chan_tx = dma_request_chan(dev, "tx");
-+	if (IS_ERR(dma->chan_tx)) {
- 		dev_err(dev, "tx dma channel not available\n");
+-	sspi->tx_chan = dma_request_slave_channel(&pdev->dev, "tx");
+-	if (!sspi->tx_chan) {
++	sspi->tx_chan = dma_request_chan(&pdev->dev, "tx");
++	if (IS_ERR(sspi->tx_chan)) {
+ 		dev_err(&pdev->dev, "can not allocate tx dma channel\n");
 -		ret = -ENODEV;
-+		ret = PTR_ERR(dma->chan_tx);
- 		goto err_tx_channel;
++		ret = PTR_ERR(sspi->tx_chan);
+ 		goto free_rx_dma;
  	}
  
 -- 
