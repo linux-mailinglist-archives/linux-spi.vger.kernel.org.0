@@ -2,74 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5761227B8
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 10:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6792122A41
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 12:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfLQJaw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Dec 2019 04:30:52 -0500
-Received: from mx2.suse.de ([195.135.220.15]:44738 "EHLO mx2.suse.de"
+        id S1727216AbfLQLh7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Dec 2019 06:37:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:33914 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726191AbfLQJaw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Dec 2019 04:30:52 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id A6574ABC7;
-        Tue, 17 Dec 2019 09:30:50 +0000 (UTC)
-Message-ID: <f425ed1a4bf60210ddf9d85261086f29b5869666.camel@suse.de>
-Subject: Re: [PATCH v2 1/1] spi: bcm2835: no dev_err() on clk_get()
- -EPROBE_DEFER
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Jim Quinlan <james.quinlan@broadcom.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        id S1725940AbfLQLh6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Dec 2019 06:37:58 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49C2631B;
+        Tue, 17 Dec 2019 03:37:58 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BCDB83F6CF;
+        Tue, 17 Dec 2019 03:37:57 -0800 (PST)
+Date:   Tue, 17 Dec 2019 11:37:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jim Quinlan <james.quinlan@broadcom.com>
+Cc:     linux-spi@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <ray.jui@broadcom.com>,
         Scott Branden <scott.branden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Tue, 17 Dec 2019 10:30:49 +0100
-In-Reply-To: <20191216230802.45715-2-jquinlan@broadcom.com>
+Subject: Re: [PATCH v2 0/1] spi: bcm2835: no dev_err() on clk_get()
+ -EPROBE_DEFER
+Message-ID: <20191217113756.GA4755@sirena.org.uk>
 References: <20191216230802.45715-1-jquinlan@broadcom.com>
-         <20191216230802.45715-2-jquinlan@broadcom.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-xKJQiabZRc/0guJVF0pi"
-User-Agent: Evolution 3.34.2 
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VbJkn9YxBvnuCH5J"
+Content-Disposition: inline
+In-Reply-To: <20191216230802.45715-1-jquinlan@broadcom.com>
+X-Cookie: Thufir's a Harkonnen now.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---=-xKJQiabZRc/0guJVF0pi
-Content-Type: text/plain; charset="UTF-8"
+--VbJkn9YxBvnuCH5J
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2019-12-16 at 18:08 -0500, Jim Quinlan wrote:
-> Use dev_dbg() on -EPROBE_DEFER and dev_err() on all
-> other errors.
->=20
-> Signed-off-by: Jim Quinlan <jquinlan@broadcom.com>
-
-Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+On Mon, Dec 16, 2019 at 06:08:01PM -0500, Jim Quinlan wrote:
+> Changes in v2:
+> - use dev_dbg() for -EPROBE_DEFER, dev_err() for other errors.
 
 
---=-xKJQiabZRc/0guJVF0pi
+Please don't send cover letters for single patches, if there is anything
+that needs saying put it in the changelog of the patch or after the ---
+if it's administrative stuff.  This reduces mail volume and ensures that=20
+any important information is recorded in the changelog rather than being
+lost.=20
+
+--VbJkn9YxBvnuCH5J
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl34oEkACgkQlfZmHno8
-x/59PggAkwDKDFGnQVLG2P1CPv7wWeI2uWFf+BYGxCC6ihHCZneIrm0GnC2lu/L+
-Cd/pHWawQ7RaCTsD5xaToQcxpmI7SWkxMpGJ5JzgKZ2OviPtyt/GsqCwTImUdr1R
-4Dz3tdm9Ytb1GYSFUK4wYuIVdN5Tzhkxi4SwS2bS7uLHrJt3yROchm/gIPl/QdMI
-ChRgun7gNpqaHG5ETgBTJWcS2Plhg6jCkXr3mx4/0q9BbL3lMBcOYG7qU+9X70d+
-/phe8pXzgr1v9Zm1oFYu5aL6gPtHFszrYRsuvLEpu4RRyOCsQVaNj5ZyvJDMYbtv
-mqRPO8n9wikXES4zBAc5A+XzBztQqw==
-=HbAS
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl34vhAACgkQJNaLcl1U
+h9DCKgf/YoplvcJ+ZiZKO2wNQyrsGbxzLwXcrNuR0JNdf93xNNeuOwmXU7pl6aNy
+QnA+W+ezVelzur13szkX/XNF1/l7r2plXRjxKGk8h9pZgcgeevaoBVXvBwckDb8l
+GmGbvUHgrUUcS3u62tX6swaWq7qr5EXAmJu2yRjJBV33QCcLsMJM+XBavhHPLMLD
+I5JaTqeSomiHfsMOngOSpP+TmbYc93g2q/nLW3ljwGHW8ke0N+AqPvVtnQGCOAvP
+YfxqsNQZQFsApVh+jh/80CqF+sqSKtGQXBPs/a9BQ6dFVZTbTyJlUsX1YONwKzrk
+7UPnQt9K4d905TxNkxjkXhPVqWkNiA==
+=nV6Y
 -----END PGP SIGNATURE-----
 
---=-xKJQiabZRc/0guJVF0pi--
-
+--VbJkn9YxBvnuCH5J--
