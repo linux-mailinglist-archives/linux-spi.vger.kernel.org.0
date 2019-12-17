@@ -2,123 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65746122B47
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 13:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 699BE122B68
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 13:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727519AbfLQMTg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Dec 2019 07:19:36 -0500
-Received: from foss.arm.com ([217.140.110.172]:35106 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727487AbfLQMTf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Dec 2019 07:19:35 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EABF831B;
-        Tue, 17 Dec 2019 04:19:34 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 69DF43F718;
-        Tue, 17 Dec 2019 04:19:34 -0800 (PST)
-Date:   Tue, 17 Dec 2019 12:19:32 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [GIT PULL] SPI fixes for v5.5
-Message-ID: <20191217121932.GD4755@sirena.org.uk>
+        id S1726191AbfLQMY3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Dec 2019 07:24:29 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39512 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726383AbfLQMY3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Dec 2019 07:24:29 -0500
+Received: by mail-lj1-f196.google.com with SMTP id e10so10687483ljj.6
+        for <linux-spi@vger.kernel.org>; Tue, 17 Dec 2019 04:24:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=newoldbits-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MfDMe7NFk0G5MKHhMnGNpWFhGpiba1UDZAj67npG+BM=;
+        b=gmwQRvvuei5h+hof6n8vUwCrGcxrRF/Bk3dtRqx8uKhYMO4F6RzW2vzaGjF5XAgjBB
+         wdDOuLYiG/fCrrPgFncsN1ih3mHyEdUHKFtx421Dek++DBX5QQ9qbiYgG449BnuHIjo9
+         G58fVNv+nWvSygFUHcFHHP7B0Vkjuu7amiyeCgcpiRkNYeMpogkMVYBJqxxjbZi7ldAX
+         HhG0cMjougy0vtlWH/Xi8EVnkN7E5UvMVekJ87j3bNUGed9raYvwYC2/5RxfIaK8Tfj1
+         S/JOIHqTAfkHIxiZO5xUWkGOxSeglQpyp0JsBLfWTdBHXbWPy4Jd+bcjNFBotP4WIg1K
+         qosQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MfDMe7NFk0G5MKHhMnGNpWFhGpiba1UDZAj67npG+BM=;
+        b=VoP9CQgJxemZ2/x/qXvQux9xejApKmyvBck9gPNnC1X/+3bm+mNLHCo9KliQsjzpJe
+         bo8VaJvZgBfvgQ0HJ3YX90sh+IqsrWQC84jXtIhhP9mf63DSnF2jaSLuUavln55eCPNx
+         7w6ES6Jy8jTFEXwSvK9d3DDRRvGNIO1dK0rWqcPlsoq5IzvHKI5c89owwvvfOjd2Mj/v
+         zTY4vjYJQ2Wcm4XpgYfM3DppOv1M48H6RvSMPXKiyfb2w8l4ske03nqJX7aCOxYJHSyE
+         xh8ZQynjUCrfcSdwZyeQVcW6+xrhRAwO2e1dYmvBi7bEw+ZA6XLEKKCxHJqhxFUbBX8I
+         m+kA==
+X-Gm-Message-State: APjAAAWsHwFfrGS/rH6ftfg/PCtNMU2GyhNHUtWPkgmH7zoI8nwNhrPX
+        ePn2sMy2G0Wy/VufsFl9jtmY0RuB6ml0hcEdn1FyhNoAI5g=
+X-Google-Smtp-Source: APXvYqz/kbRAG1F+DL6oUSfgtFAb77+ert0SOkKjupgGM00RRlH9eNuNkR4QLBuM51kVyO2+kAYH/cTZ5psPxcTpKmc=
+X-Received: by 2002:a2e:9cd8:: with SMTP id g24mr2335900ljj.243.1576585466995;
+ Tue, 17 Dec 2019 04:24:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="C+ts3FVlLX8+P6JN"
-Content-Disposition: inline
-X-Cookie: Thufir's a Harkonnen now.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191211193954.747745-1-jean.pihet@newoldbits.com>
+In-Reply-To: <20191211193954.747745-1-jean.pihet@newoldbits.com>
+From:   Jean Pihet <jean.pihet@newoldbits.com>
+Date:   Tue, 17 Dec 2019 13:24:15 +0100
+Message-ID: <CAORVsuUA3KTMFMiLJbFfSMMB3LupCZWm-2BBs46z6scGH45Vdw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] spi: spi-ti-qspi: Support large NOR SPI flash
+To:     Mark Brown <broonie@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
+        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
+        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>,
+        Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Mark, Tony, Vignesh,
 
---C+ts3FVlLX8+P6JN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ping on this series V2. Can you please check the reworked patches?
 
-The following changes since commit ffa119f7c42d29be2dd759bb18cc4d1f45804c6b:
+BR,
+Jean
 
-  dt-bindings: spi: Convert stm32 QSPI bindings to json-schema (2019-11-22 19:54:02 +0000)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.5-rc2
-
-for you to fetch changes up to 63aa6a692595d47a0785297b481072086b9272d2:
-
-  spi: fsl: use platform_get_irq() instead of of_irq_to_resource() (2019-12-16 11:54:55 +0000)
-
-----------------------------------------------------------------
-spi: Fixes for v5.5
-
-A relatively large set of fixes here, the biggest part of it is for
-fallout from the GPIO descriptor rework that affected several of the
-devices with usable native chip select support.  There's also some new
-PCI IDs for Intel Jasper Lake devices.
-
-The conversion to platform_get_irq() in the fsl driver is an incremental
-fix for build errors introduced on SPARC by the earlier fix for error
-handling in probe in that driver.
-
-----------------------------------------------------------------
-Charles Keepax (2):
-      spi: cadence: Correct handling of native chipselect
-      spi: dw: Correct handling of native chipselect
-
-Christophe Leroy (2):
-      spi: fsl: don't map irq during probe
-      spi: fsl: use platform_get_irq() instead of of_irq_to_resource()
-
-Chuhong Yuan (1):
-      spi: spi-cavium-thunderx: Add missing pci_release_regions()
-
-Huanpeng Xin (1):
-      spi: sprd: Fix the incorrect SPI register
-
-Jarkko Nikula (1):
-      spi: pxa2xx: Add support for Intel Jasper Lake
-
-Linus Walleij (3):
-      spi: fsl: Fix GPIO descriptor support
-      gpio: Handle counting of Freescale chipselects
-      spi: fsl: Handle the single hardwired chipselect case
-
-Michael Walle (1):
-      spi: nxp-fspi: Ensure width is respected in spi-mem operations
-
-Vignesh Raghavendra (1):
-      spi: spi-ti-qspi: Fix a bug when accessing non default CS
-
-YueHaibing (1):
-      gpiolib: of: Make of_gpio_spi_cs_get_count static
-
- drivers/gpio/gpiolib-of.c         | 27 +++++++++++++++++++++++++++
- drivers/spi/spi-cadence.c         |  6 +++---
- drivers/spi/spi-cavium-thunderx.c |  2 ++
- drivers/spi/spi-dw.c              |  5 +++--
- drivers/spi/spi-fsl-spi.c         | 22 ++++++++++++++++------
- drivers/spi/spi-nxp-fspi.c        |  2 +-
- drivers/spi/spi-pxa2xx.c          |  4 ++++
- drivers/spi/spi-sprd.c            |  2 +-
- drivers/spi/spi-ti-qspi.c         |  6 +++++-
- 9 files changed, 62 insertions(+), 14 deletions(-)
-
---C+ts3FVlLX8+P6JN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl34x9QACgkQJNaLcl1U
-h9B+JAf/Ylidg086Rnwni1iceLJZ1OWaI4OZ3tuEECH8MqA1zJFkJjTRxDjwPX3O
-oXrB0N3TpyABKLf3qFwugTK3Yta3Kl9q4bfzuLkTkUYX0/RB7XhQc6p6TeyBCrel
-yxcjfiuuC3Vd0EPL5DU+8plmH+o+1XmlY8C2gwVSxppUhRt86rwhLEmP3nuMGZPq
-chbA85wExtGWuU1sCQHNbyeyQSUl4oZb/jeaF8j7H9SL1bpD1NPZ7rmH7TqsiX//
-XyWOcd2kdHFWxZ/VFrSha/UuOBJrKbZ/1kcnPnQbDYuSolhUIJ8hywAnS7Ab7boY
-YlgyZ3d6LIAc9FoL5c8G0z1l6FIcrg==
-=4C1I
------END PGP SIGNATURE-----
-
---C+ts3FVlLX8+P6JN--
+On Wed, Dec 11, 2019 at 8:40 PM Jean Pihet <jean.pihet@newoldbits.com> wrote:
+>
+> v2 release.
+>
+> Large devices are bigger than >64MB in size.
+>
+> - Remove unused macro for fclk rate.
+> - Since the TI QSPI IP block only maps 64MB of MMIO, use MMIO
+>   below the 64MB boundary and software generated transfers above.
+> - Optimize the software generated byte-transfers for dual and quad
+>   I/O read operations. The speed-up is 4.9x for quad I/O reads.
+>
+> Note: depends on Tony's patches for hwmod cleanup, in order to get the
+> desired QSPI clk rate:
+> - [PATCH 1/2] ARM: dts: Configure interconnect target module for am4 qspi
+> - [PATCH 2/2] ARM: OMAP2+: Drop legacy platform data for am4 qspi
+>
+> Tested using raw accesses (mtd_debug) and JFFS2 FS read/write/erase;
+> in single, dual and quad modes.
+> All accesses have been checked on the logic analyzer.
+>
+> Jean Pihet (3):
+>   spi: spi-ti-qspi: Remove unused macro for fclk frequency
+>   spi: spi-ti-qspi: support large flash devices
+>   spi: spi-ti-qspi: optimize byte-transfers
+>
+>  drivers/spi/spi-ti-qspi.c | 84 ++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 79 insertions(+), 5 deletions(-)
+>
+> --
+> 2.23.0
+>
