@@ -2,58 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9C0122458
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 06:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7361D12249A
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 07:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727513AbfLQFyk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Dec 2019 00:54:40 -0500
-Received: from mga17.intel.com ([192.55.52.151]:58382 "EHLO mga17.intel.com"
+        id S1725886AbfLQGYA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Dec 2019 01:24:00 -0500
+Received: from mga06.intel.com ([134.134.136.31]:58637 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726772AbfLQFyj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Dec 2019 00:54:39 -0500
+        id S1725812AbfLQGYA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Dec 2019 01:24:00 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 21:54:36 -0800
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 22:23:58 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,324,1571727600"; 
-   d="scan'208";a="221672321"
+   d="scan'208";a="240295656"
 Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Dec 2019 21:54:36 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 16 Dec 2019 22:23:58 -0800
 Received: from [10.226.38.59] (unknown [10.226.38.59])
-        by linux.intel.com (Postfix) with ESMTP id 59A3B580342;
-        Mon, 16 Dec 2019 21:54:34 -0800 (PST)
+        by linux.intel.com (Postfix) with ESMTP id A8C2F580458;
+        Mon, 16 Dec 2019 22:23:55 -0800 (PST)
 Subject: Re: [PATCH v3 2/2] spi: cadence-quadpsi: Add support for the Cadence
  QSPI controller
-To:     Vignesh Raghavendra <vigneshr@ti.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     broonie@kernel.org, robh+dt@kernel.org, cheol.yong.kim@intel.com,
-        qi-ming.wu@intel.com
+To:     Vignesh Raghavendra <vigneshr@ti.com>
 References: <20191209084035.55603-1-vadivel.muruganx.ramuthevar@linux.intel.com>
  <20191209084035.55603-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <d802642e-253b-cc6f-18ee-9c5e858bd2f9@ti.com>
+ <78db17a1-1f07-9025-50dc-4b4adcf01703@ti.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        broonie@kernel.org, linux-spi@vger.kernel.org,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
 From:   "Ramuthevar, Vadivel MuruganX" 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <504a8010-38f8-b739-e01a-1250517583e2@linux.intel.com>
-Date:   Tue, 17 Dec 2019 13:54:33 +0800
+Message-ID: <a1518c40-fd9f-ca18-2f42-73307e1e2b5c@linux.intel.com>
+Date:   Tue, 17 Dec 2019 14:23:54 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <d802642e-253b-cc6f-18ee-9c5e858bd2f9@ti.com>
+In-Reply-To: <78db17a1-1f07-9025-50dc-4b4adcf01703@ti.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi  Vigensh,
+Hi,
 
-     Thanks for the review and guidance to improve the code a lot.
-
-On 17/12/2019 12:25 PM, Vignesh Raghavendra wrote:
-> Hi,
+On 17/12/2019 1:09 PM, Vignesh Raghavendra wrote:
+> Hi
+>
+> -CC all (Private mail)
 >
 > On 09/12/19 2:10 pm, Ramuthevar,Vadivel MuruganX wrote:
 >> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
@@ -67,12 +67,578 @@ On 17/12/2019 12:25 PM, Vignesh Raghavendra wrote:
 >> mtd/spi-nor/cadence-quadspi.c, the existing driver only support SPI-NOR
 >> flash memory.
 >>
-> Patch looks much better.. I will try to test this patch on TI
-> platforms... Thanks for doing this! Comments inline...
-Thank you :-)
+> Thanks again for doing this change. I would like to accelerate this
+> patch and try to get this series in for next kernel version.
+>
+> I will test this patch on TI platforms and fix up any issues that I see.
+> If a provide a patch adding DMA support and fixup up other comments,
+> would you be willing to squash those changes into your patch?
+Thanks for review and support for validation on TI platform.
+Definitely we will do squash and sent to upstream.
+---
+With Best Regards
+Vadivel
+> Regards
+> Vignesh
+>
 >> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 >> ---
-> [...]
+>>   drivers/spi/Kconfig               |    8 +
+>>   drivers/spi/Makefile              |    1 +
+>>   drivers/spi/spi-cadence-quadspi.c | 1228 +++++++++++++++++++++++++++++++++++++
+>>   drivers/spi/spi-cadence-quadspi.h |  251 ++++++++
+>>   4 files changed, 1488 insertions(+)
+>>   create mode 100644 drivers/spi/spi-cadence-quadspi.c
+>>   create mode 100644 drivers/spi/spi-cadence-quadspi.h
+>>
+>> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+>> index 870f7797b56b..6d48a89737a4 100644
+>> --- a/drivers/spi/Kconfig
+>> +++ b/drivers/spi/Kconfig
+>> @@ -193,6 +193,14 @@ config SPI_CADENCE
+>>   	  This selects the Cadence SPI controller master driver
+>>   	  used by Xilinx Zynq and ZynqMP.
+>>   
+>> +config SPI_CADENCE_QUADSPI
+>> +	tristate "Cadence Quad SPI controller"
+>> +	depends on OF && (ARM || ARM64 || COMPILE_TEST || X86)
+>> +	depends on MTD || MTD_SPI_NOR || MTD_SPI_NAND
+>> +	help
+>> +	  Cadence QSPI is a specialized controller for connecting an SPI
+>> +	  Flash over 1/2/4/8-bit wide bus. This enables support for the Quad SPI
+>> +
+>>   config SPI_CLPS711X
+>>   	tristate "CLPS711X host SPI controller"
+>>   	depends on ARCH_CLPS711X || COMPILE_TEST
+>> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+>> index bb49c9e6d0a0..288f5fa903fe 100644
+>> --- a/drivers/spi/Makefile
+>> +++ b/drivers/spi/Makefile
+>> @@ -29,6 +29,7 @@ obj-$(CONFIG_SPI_BCM_QSPI)		+= spi-iproc-qspi.o spi-brcmstb-qspi.o spi-bcm-qspi.
+>>   obj-$(CONFIG_SPI_BITBANG)		+= spi-bitbang.o
+>>   obj-$(CONFIG_SPI_BUTTERFLY)		+= spi-butterfly.o
+>>   obj-$(CONFIG_SPI_CADENCE)		+= spi-cadence.o
+>> +obj-$(CONFIG_SPI_CADENCE_QUADSPI)	+= spi-cadence-quadspi.o
+>>   obj-$(CONFIG_SPI_CLPS711X)		+= spi-clps711x.o
+>>   obj-$(CONFIG_SPI_COLDFIRE_QSPI)		+= spi-coldfire-qspi.o
+>>   obj-$(CONFIG_SPI_DAVINCI)		+= spi-davinci.o
+>> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+>> new file mode 100644
+>> index 000000000000..e742c160b370
+>> --- /dev/null
+>> +++ b/drivers/spi/spi-cadence-quadspi.c
+>> @@ -0,0 +1,1228 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/*
+>> + * Driver for Cadence QSPI Controller
+>> + *
+>> + * Copyright Altera Corporation (C) 2012-2014. All rights reserved.
+>> + * Copyright Intel Corporation (C) 2019-2020. All rights reserved.
+>> + */
+>> +#include <linux/clk.h>
+>> +#include <linux/completion.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/dma-mapping.h>
+>> +#include <linux/dmaengine.h>
+>> +#include <linux/errno.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/io.h>
+>> +#include <linux/iopoll.h>
+>> +#include <linux/jiffies.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/of.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/of_address.h>
+>> +#include <linux/of_irq.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/spi/spi.h>
+>> +#include <linux/spi/spi-mem.h>
+>> +#include <linux/unaligned/be_byteshift.h>
+>> +
+>> +#include "spi-cadence-quadspi.h"
+>> +
+>> +/* Quirks */
+>> +#define CQSPI_NEEDS_WR_DELAY		BIT(0)
+>> +#define CQSPI_DISABLE_DAC_MODE		BIT(1)
+>> +
+>> +#define CADENCE_QSPI_NAME		"cadence-qspi"
+>> +
+>> +struct cqspi_driver_platdata {
+>> +	u32 hwcaps_mask;
+>> +	u8 quirks;
+>> +};
+>> +
+>> +static int cqspi_wait_for_bit(void __iomem *reg, const u32 mask, bool clr)
+>> +{
+>> +	u32 val;
+>> +
+>> +	return readl_relaxed_poll_timeout(reg, val,
+>> +					  (((clr ? ~val : val) & mask) == mask),
+>> +					  10, CQSPI_TIMEOUT_MS * 1000);
+>> +}
+>> +
+>> +static bool cqspi_is_idle(struct struct_cqspi *cqspi)
+>> +{
+>> +	u32 reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
+>> +
+>> +	return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
+>> +}
+>> +
+>> +static int cqspi_wait_idle(struct struct_cqspi *cqspi)
+>> +{
+>> +	const unsigned int poll_idle_retry = 3;
+>> +	unsigned int count = 0;
+>> +	unsigned long timeout;
+>> +
+>> +	timeout = jiffies + msecs_to_jiffies(CQSPI_TIMEOUT_MS);
+>> +	while (1) {
+>> +		/*
+>> +		 * Read few times in succession to ensure the controller
+>> +		 * is indeed idle, that is, the bit does not transition
+>> +		 * low again.
+>> +		 */
+>> +		if (cqspi_is_idle(cqspi))
+>> +			count++;
+>> +		else
+>> +			count = 0;
+>> +
+>> +		if (count >= poll_idle_retry)
+>> +			return 0;
+>> +
+>> +		if (time_after(jiffies, timeout)) {
+>> +		/* Timeout, in busy mode. */
+>> +			dev_err(&cqspi->pdev->dev,
+>> +				"QSPI is still busy after %dms timeout.\n",
+>> +				CQSPI_TIMEOUT_MS);
+>> +			return -ETIMEDOUT;
+>> +		}
+>> +
+>> +		cpu_relax();
+>> +	}
+>> +}
+>> +
+>> +static irqreturn_t cqspi_irq_handler(int this_irq, void *dev)
+>> +{
+>> +	struct struct_cqspi *cqspi = dev;
+>> +	u32 irq_status;
+>> +
+>> +	/* Read interrupt status */
+>> +	irq_status = readl(cqspi->iobase + CQSPI_REG_IRQSTATUS);
+>> +	if (!irq_status)
+>> +		return IRQ_HANDLED;
+>> +
+>> +	cqspi->irq_status = irq_status;
+>> +
+>> +	/* Clear interrupt */
+>> +	writel(irq_status, cqspi->iobase + CQSPI_REG_IRQSTATUS);
+>> +	if (irq_status)
+>> +		complete(&cqspi->transfer_complete);
+>> +
+>> +	return IRQ_HANDLED;
+>> +}
+>> +
+>> +static u32 cqspi_cmd2addr(const unsigned char *addr_buf, u32 addr_width)
+>> +{
+>> +	unsigned int addr = 0;
+>> +	int i;
+>> +
+>> +	/* Invalid address return zero. */
+>> +	if (addr_width > 4)
+>> +		return 0;
+>> +
+>> +	for (i = 0; i < addr_width; i++) {
+>> +		addr = addr << 8;
+>> +		addr |= addr_buf[i];
+>> +	}
+>> +
+>> +	return addr;
+>> +}
+>> +
+>> +static void cqspi_direct_access_enable(void *reg_base, bool enable)
+>> +{
+>> +	u32 reg;
+>> +
+>> +	reg = readl(reg_base + CQSPI_REG_CONFIG);
+>> +	if (enable)
+>> +		reg |= CQSPI_REG_CONFIG_DIRECT_MASK;
+>> +	else
+>> +		reg &= ~CQSPI_REG_CONFIG_DIRECT_MASK;
+>> +
+>> +	writel(reg, reg_base + CQSPI_REG_CONFIG);
+>> +}
+>> +
+>> +static void cqspi_controller_enable(void *reg_base, bool enable)
+>> +{
+>> +	unsigned int reg;
+>> +
+>> +	reg = readl(reg_base + CQSPI_REG_CONFIG);
+>> +	if (enable)
+>> +		reg |= CQSPI_REG_CONFIG_ENABLE_MASK;
+>> +	else
+>> +		reg &= ~CQSPI_REG_CONFIG_ENABLE_MASK;
+>> +
+>> +	writel(reg, reg_base + CQSPI_REG_CONFIG);
+>> +}
+>> +
+>> +static void cqspi_readdata_capture(void *reg_base, u32 bypass, u32 delay)
+>> +{
+>> +	unsigned int reg;
+>> +
+>> +	cqspi_controller_enable(reg_base, 0);
+>> +
+>> +	reg = readl(reg_base + CQSPI_REG_READCAPTURE);
+>> +	if (bypass)
+>> +		reg |= (1 << CQSPI_REG_READCAPTURE_BYPASS_LSB);
+>> +	else
+>> +		reg &= ~(1 << CQSPI_REG_READCAPTURE_BYPASS_LSB);
+>> +
+>> +	reg &= ~(CQSPI_REG_READCAPTURE_DELAY_MASK
+>> +		<< CQSPI_REG_READCAPTURE_DELAY_LSB);
+>> +	reg |= ((delay & CQSPI_REG_READCAPTURE_DELAY_MASK)
+>> +		<< CQSPI_REG_READCAPTURE_DELAY_LSB);
+>> +	writel(reg, reg_base + CQSPI_REG_READCAPTURE);
+>> +
+>> +	cqspi_controller_enable(reg_base, 1);
+>> +}
+>> +
+>> +static void cqspi_config_baudrate_div(void *reg_base, u32 ref_clk_hz, u32 sclk)
+>> +{
+>> +	unsigned int reg, div;
+>> +
+>> +	/* Recalculate the baudrate divisor based on QSPI specification. */
+>> +	div = DIV_ROUND_UP(ref_clk_hz, 2 * sclk) - 1;
+>> +
+>> +	reg = readl(reg_base + CQSPI_REG_CONFIG);
+>> +	reg &= ~(CQSPI_REG_CONFIG_BAUD_MASK << CQSPI_REG_CONFIG_BAUD_LSB);
+>> +	div = (div & CQSPI_REG_CONFIG_BAUD_MASK) << CQSPI_REG_CONFIG_BAUD_LSB;
+>> +	writel(reg, reg_base + CQSPI_REG_CONFIG);
+>> +}
+>> +
+>> +static void cqspi_chip_select(void *reg_base, u32 chip_select, u32 decoder_en)
+>> +{
+>> +	unsigned int reg;
+>> +
+>> +	cqspi_controller_enable(reg_base, 0);
+>> +
+>> +	reg = readl(reg_base + CQSPI_REG_CONFIG);
+>> +	/* decoders */
+>> +	if (decoder_en) {
+>> +		reg |= CQSPI_REG_CONFIG_DECODE_MASK;
+>> +	} else {
+>> +		reg &= ~CQSPI_REG_CONFIG_DECODE_MASK;
+>> +
+>> +		/* Convert CS if without decoder.
+>> +		 * CS0 to 4b'1110
+>> +		 * CS1 to 4b'1101
+>> +		 * CS2 to 4b'1011
+>> +		 * CS3 to 4b'0111
+>> +		 */
+>> +		chip_select = 0xF & ~(1 << chip_select);
+>> +	}
+>> +	reg &= ~(CQSPI_REG_CONFIG_CHIPSELECT_MASK
+>> +			<< CQSPI_REG_CONFIG_CHIPSELECT_LSB);
+>> +	reg |= (chip_select & CQSPI_REG_CONFIG_CHIPSELECT_MASK)
+>> +			<< CQSPI_REG_CONFIG_CHIPSELECT_LSB;
+>> +	writel(reg, reg_base + CQSPI_REG_CONFIG);
+>> +	cqspi_controller_enable(reg_base, 1);
+>> +}
+>> +
+>> +static int cqspi_exec_flash_cmd(struct struct_cqspi *cqspi, unsigned int reg)
+>> +{
+>> +	struct platform_device *pdev = cqspi->pdev;
+>> +	void __iomem *reg_base = cqspi->iobase;
+>> +	int ret;
+>> +
+>> +	/* Write the CMDCTRL without start execution. */
+>> +	writel(reg, reg_base + CQSPI_REG_CMDCTRL);
+>> +	/* Start execute */
+>> +	reg |= CQSPI_REG_CMDCTRL_EXECUTE_MASK;
+>> +	writel(reg, reg_base + CQSPI_REG_CMDCTRL);
+>> +
+>> +	/* Polling for completion. */
+>> +	ret = cqspi_wait_for_bit(reg_base + CQSPI_REG_CMDCTRL,
+>> +				 CQSPI_REG_CMDCTRL_INPROGRESS_MASK, 1);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Flash command execution timed out.\n");
+>> +		return ret;
+>> +	}
+>> +	/* Polling QSPI idle status. */
+>> +	return cqspi_wait_idle(cqspi);
+>> +}
+>> +
+>> +static int cqspi_command_read(struct struct_cqspi *cqspi,
+>> +			      const struct spi_mem_op *op)
+>> +{
+>> +	struct platform_device *pdev = cqspi->pdev;
+>> +	void __iomem *reg_base = cqspi->iobase;
+>> +	size_t rxlen = op->data.nbytes;
+>> +	void *rxbuf = op->data.buf.in;
+>> +	size_t addrlen = op->addr.nbytes;
+>> +	const u8 *addrbuf = (u8 *)op->addr.val;
+>> +	u32 addr_value, read_len, reg;
+>> +	int ret;
+>> +
+>> +	if (rxlen > CQSPI_STIG_DATA_LEN_MAX || !rxbuf) {
+>> +		dev_err(&pdev->dev, "QSPI: rxlen is invalid %zu\n", rxlen);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	reg = op->cmd.opcode << CQSPI_REG_CMDCTRL_OPCODE_LSB;
+>> +	reg |= BIT(CQSPI_REG_CMDCTRL_RD_EN_LSB);
+>> +
+>> +	if (addrlen) {
+>> +		reg |= BIT(CQSPI_REG_CMDCTRL_ADDR_EN_LSB);
+>> +		reg |= ((addrlen - 1) & CQSPI_REG_CMDCTRL_ADD_BYTES_MASK)
+>> +			<< CQSPI_REG_CMDCTRL_ADD_BYTES_LSB;
+>> +		addr_value = cqspi_cmd2addr(&addrbuf[0], addrlen);
+>> +		writel(addr_value, reg_base + CQSPI_REG_CMDADDRESS);
+>> +	}
+>> +	/* 0 means 1 byte. */
+>> +	reg |= (((rxlen - 1) & CQSPI_REG_CMDCTRL_RD_BYTES_MASK)
+>> +		<< CQSPI_REG_CMDCTRL_RD_BYTES_LSB);
+>> +	ret = cqspi_exec_flash_cmd(cqspi, reg);
+>> +	if (ret != 0)
+>> +		return ret;
+>> +
+>> +	reg = readl(reg_base + CQSPI_REG_CMDREADDATALOWER);
+>> +
+>> +	/* Put the read value into rx_buf */
+>> +	read_len = (rxlen > 4) ? 4 : rxlen;
+>> +	memcpy(rxbuf, &reg, read_len);
+>> +	rxbuf += read_len;
+>> +
+>> +	if (rxlen > 4) {
+>> +		reg = readl(reg_base + CQSPI_REG_CMDREADDATAUPPER);
+>> +		read_len = rxlen - read_len;
+>> +		memcpy(rxbuf, &reg, read_len);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cqspi_command_write(struct struct_cqspi *cqspi,
+>> +			       const struct spi_mem_op *op)
+>> +{
+>> +	struct platform_device *pdev = cqspi->pdev;
+>> +	void __iomem *reg_base = cqspi->iobase;
+>> +	size_t txlen = sizeof(op->cmd.opcode);
+>> +	const u8 *databuf = op->data.buf.out;
+>> +	size_t datalen = op->data.nbytes;
+>> +	const u8 *addrbuf = (u8 *)op->addr.val;
+>> +	size_t addrlen = op->addr.nbytes;
+>> +	unsigned int addr_value, reg, data = 0;
+>> +
+>> +	if (txlen > CQSPI_STIG_DATA_LEN_MAX) {
+>> +		dev_err(&pdev->dev, "QSPI: txlen is invalid %zu\n", txlen);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	reg = op->cmd.opcode << CQSPI_REG_CMDCTRL_OPCODE_LSB;
+>> +
+>> +	if (datalen != 0) {
+>> +		reg |= BIT(CQSPI_REG_CMDCTRL_WR_EN_LSB);
+>> +		reg |= ((datalen - 1) & CQSPI_REG_CMDCTRL_WR_BYTES_MASK)
+>> +			<< CQSPI_REG_CMDCTRL_WR_BYTES_LSB;
+>> +		memcpy(&data, databuf, datalen);
+>> +		writel(data, reg_base + CQSPI_REG_CMDWRITEDATALOWER);
+>> +	}
+>> +
+>> +	if (addrlen) {
+>> +		reg |= BIT(CQSPI_REG_CMDCTRL_ADDR_EN_LSB);
+>> +		reg |= ((addrlen - 1) & CQSPI_REG_CMDCTRL_ADD_BYTES_MASK)
+>> +			<< CQSPI_REG_CMDCTRL_ADD_BYTES_LSB;
+>> +		addr_value = cqspi_cmd2addr(&addrbuf[0], addrlen);
+>> +		writel(addr_value, reg_base + CQSPI_REG_CMDADDRESS);
+>> +	}
+>> +
+>> +	return cqspi_exec_flash_cmd(cqspi, reg);
+>> +}
+>> +
+>> +static int cqspi_indirect_read_setup(struct struct_cqspi *cqspi,
+>> +				     const struct spi_mem_op *op,
+>> +				     const u8 *addrbuf)
+>> +{
+>> +	void __iomem *reg_base = cqspi->iobase;
+>> +	size_t addrlen = op->addr.nbytes;
+>> +	size_t dummy_bytes = op->dummy.nbytes;
+>> +	unsigned int addr_value, dummy_clk, reg;
+>> +
+>> +	if (addrlen) {
+>> +		addr_value = cqspi_cmd2addr(&addrbuf[0], addrlen);
+>> +		writel(addr_value, reg_base + CQSPI_REG_INDIRECTRDSTARTADDR);
+>> +	}
+>> +
+>> +	reg = op->cmd.opcode << CQSPI_REG_RD_INSTR_OPCODE_LSB;
+>> +	reg |= (op->addr.buswidth & CQSPI_REG_RD_INSTR_TYPE_DATA_MASK) <<
+>> +		CQSPI_REG_RD_INSTR_TYPE_DATA_LSB;
+>> +
+>> +	if (dummy_bytes) {
+>> +		if (dummy_bytes > CQSPI_DUMMY_BYTES_MAX)
+>> +			dummy_bytes = CQSPI_DUMMY_BYTES_MAX;
+>> +
+>> +		reg |= BIT(CQSPI_REG_RD_INSTR_MODE_EN_LSB);
+>> +
+>> +		writel(0xFF, reg_base + CQSPI_REG_MODE_BIT);
+>> +
+>> +		dummy_clk = dummy_bytes * CQSPI_DUMMY_CLKS_PER_BYTE;
+>> +		dummy_clk -= CQSPI_DUMMY_CLKS_PER_BYTE;
+>> +
+>> +		if (dummy_clk)
+>> +			reg |= (dummy_clk & CQSPI_REG_RD_INSTR_DUMMY_MASK)
+>> +				<< CQSPI_REG_RD_INSTR_DUMMY_LSB;
+>> +	}
+>> +	writel(reg, reg_base + CQSPI_REG_RD_INSTR);
+>> +
+>> +	/* Set device size */
+>> +	reg = readl(reg_base + CQSPI_REG_SIZE);
+>> +	reg &= ~CQSPI_REG_SIZE_ADDRESS_MASK;
+>> +	reg |= (addrlen - 1);
+>> +	writel(reg, reg_base + CQSPI_REG_SIZE);
+>> +
+>> +	/* disable auto-polling */
+>> +	reg = readl(reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
+>> +	reg |= BIT(CQSPI_REG_WR_COMPLETION_DIS_POLLING_FLD_POS);
+>> +	writel(reg, reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cqspi_indirect_read_execute(struct struct_cqspi *cqspi,
+>> +				       const struct spi_mem_op *op, u8 *rxbuf)
+>> +{
+>> +	struct platform_device *pdev = cqspi->pdev;
+>> +	struct cqspi_platform_data *pdata = pdev->dev.platform_data;
+>> +	void *reg_base = cqspi->iobase;
+>> +	void *ahb_base = cqspi->qspi_ahb_virt;
+>> +	u32 rxlen = op->data.nbytes;
+>> +	u8 *rxbuf_end = rxbuf + rxlen;
+>> +	u32 mod_bytes = rxlen % 4;
+>> +	u32 bytes_to_read = 0;
+>> +	int remaining = op->data.nbytes;
+>> +	int ret;
+>> +
+>> +	writel(0, reg_base + CQSPI_REG_INDIRECTRDWATERMARK);
+>> +	writel(0xa, reg_base + CQSPI_INDIRECT_TRIGGER_ADDR_RANGE_REG);
+>> +	writel(remaining, reg_base + CQSPI_REG_INDIRECTRDBYTES);
+>> +
+>> +	mb();/* flush previous writes */
+>> +
+>> +	writel(pdata->fifo_depth - CQSPI_REG_SRAM_RESV_WORDS,
+>> +	       reg_base + CQSPI_REG_SRAMPARTITION);
+>> +	/* Clear all interrupts. */
+>> +	writel(CQSPI_IRQ_STATUS_MASK, reg_base + CQSPI_REG_IRQSTATUS);
+>> +	writel(CQSPI_IRQ_MASK_RD, reg_base + CQSPI_REG_IRQMASK);
+>> +
+>> +	reinit_completion(&cqspi->transfer_complete);
+>> +	writel(CQSPI_REG_INDIRECTRD_START_MASK,
+>> +	       reg_base + CQSPI_REG_INDIRECTRD);
+>> +
+>> +	while (remaining > 0) {
+>> +		if (!wait_for_completion_timeout(&cqspi->transfer_complete,
+>> +						 msecs_to_jiffies(CQSPI_READ_TIMEOUT_MS)))
+>> +		ret = -ETIMEDOUT;
+>> +
+>> +		bytes_to_read = CQSPI_GET_RD_SRAM_LEVEL(reg_base);
+>> +
+>> +		while (bytes_to_read != 0) {
+>> +			unsigned int word_remain = round_down(remaining, 4);
+>> +
+>> +			bytes_to_read *= CQSPI_FIFO_WIDTH;
+>> +			bytes_to_read = bytes_to_read > remaining ?
+>> +						remaining : bytes_to_read;
+>> +			bytes_to_read = round_down(bytes_to_read, 4);
+>> +			if (bytes_to_read) {
+>> +				ioread32_rep(ahb_base, rxbuf,
+>> +					     (bytes_to_read / 4));
+>> +			} else if (!word_remain && mod_bytes) {
+>> +				unsigned int temp = ioread32(ahb_base);
+>> +
+>> +				bytes_to_read = mod_bytes;
+>> +				memcpy(rxbuf, &temp, min((unsigned int)
+>> +				       (rxbuf_end - rxbuf), bytes_to_read));
+>> +			}
+>> +
+>> +			rxbuf += bytes_to_read;
+>> +			remaining -= bytes_to_read;
+>> +			bytes_to_read = CQSPI_GET_RD_SRAM_LEVEL(reg_base);
+>> +		}
+>> +
+>> +		if (remaining < 0)
+>> +			reinit_completion(&cqspi->transfer_complete);
+>> +	}
+>> +
+>> +	/* Check indirect done status */
+>> +	ret = cqspi_wait_for_bit(reg_base + CQSPI_REG_INDIRECTRD,
+>> +				 CQSPI_REG_INDIRECTRD_DONE_MASK, 0);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev,
+>> +			"Indirect read completion error (%i)\n", ret);
+>> +		goto failrd;
+>> +	}
+>> +
+>> +	/* Disable interrupt */
+>> +	writel(0, reg_base + CQSPI_REG_IRQMASK);
+>> +	/* Clear indirect completion status */
+>> +	writel(CQSPI_REG_INDIRECTRD_DONE_MASK, reg_base + CQSPI_REG_INDIRECTRD);
+>> +
+>> +	return 0;
+>> +failrd:
+>> +	/* Disable interrupt */
+>> +	writel(0, reg_base + CQSPI_REG_IRQMASK);
+>> +	/* Cancel the indirect read */
+>> +	writel(CQSPI_REG_INDIRECTWR_CANCEL_MASK,
+>> +	       reg_base + CQSPI_REG_INDIRECTRD);
+>> +	return ret;
+>> +}
+>> +
+>> +static int cqspi_indirect_write_setup(struct struct_cqspi *cqspi,
+>> +				      const struct spi_mem_op *op,
+>> +				      const u8 *addrbuf)
+>> +{
+>> +	struct platform_device *pdev = cqspi->pdev;
+>> +	void __iomem *reg_base = cqspi->iobase;
+>> +	size_t addrlen = op->addr.nbytes;
+>> +	const u8 *txbuf = &op->cmd.opcode;
+>> +	unsigned int reg;
+>> +
+>> +	if (!txbuf) {
+>> +		dev_err(&pdev->dev, "QSPI: Invalid input txbuf\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	reg = readl(reg_base + CQSPI_REG_CONFIG);
+>> +	reg &= ~(CQSPI_REG_CONFIG_DIRECT_MASK);
+>> +	reg &= ~(CQSPI_REG_CONFIG_DMA_MASK);
+>> +	writel(reg, reg_base + CQSPI_REG_CONFIG);
+>> +
+>> +	/* Set opcode. */
+>> +	reg = txbuf[0] << CQSPI_REG_WR_INSTR_OPCODE_LSB;
+>> +	reg |= BIT(CQSPI_REG_WR_CONFIG_WEL_DIS_FLD_POS);
+>> +	/* Configure the quad for address */
+>> +	reg |= (op->addr.buswidth & CQSPI_REG_WR_INSTR_TYPE_ADDR_MASK) <<
+>> +		CQSPI_REG_WR_INSTR_TYPE_ADDR_LSB;
+>> +
+>> +	/* Configure the width for data */
+>> +	reg |= (op->data.buswidth & CQSPI_REG_WR_INSTR_TYPE_DATA_MASK) <<
+>> +		CQSPI_REG_WR_INSTR_TYPE_DATA_LSB;
+>> +	writel(reg, reg_base + CQSPI_REG_WR_INSTR);
+>> +	/* Setup write address. */
+>> +	reg = cqspi_cmd2addr(&addrbuf[0], addrlen);
+>> +	writel(reg, reg_base + CQSPI_REG_INDIRECTWRSTARTADDR);
+>> +	reg = readl(reg_base + CQSPI_REG_SIZE);
+>> +	reg &= ~CQSPI_REG_SIZE_ADDRESS_MASK;
+>> +	reg |= ((addrlen - 1) & CQSPI_REG_SIZE_ADDRESS_MASK);
+>> +	writel(reg, reg_base +  CQSPI_REG_SIZE);
+>> +
+>> +	/* disable auto-polling */
+>> +	reg = readl(reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
+>> +	reg |= BIT(CQSPI_REG_WR_COMPLETION_DIS_POLLING_FLD_POS);
+>> +	writel(reg, reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
+>> +
+>> +	return 0;
+>> +}
 >> +
 >> +static int cqspi_indirect_write_execute(struct struct_cqspi *cqspi,
 >> +					const struct spi_mem_op *op,
@@ -90,17 +656,7 @@ Thank you :-)
 >> +	int ret;
 >> +
 >> +	writel(0xa, reg_base + CQSPI_INDIRECT_TRIGGER_ADDR_RANGE_REG);
-> Does this needs to be done for every write? Can this be moved to
-> cqspi_controller_init(). Also use a macro for constants
->
 >> +	writel(0x0, reg_base + CQSPI_REG_INDIRECTWRWATERMARK);
-> This looks wrong. This was previously set to (cqspi->fifo_depth *
-> cqspi->fifo_width / 2). Why do you need to set this to 0? If this needs
-> to be 0, setup DT properties as required.
-Let me check once it is required or not, then moved to
-
-cqspi_controller_init() function.
-
 >> +	reg = readl(reg_base + CQSPI_REG_SIZE);
 >> +	reg &= ~(CQSPI_REG_SIZE_PAGE_MASK << CQSPI_REG_SIZE_PAGE_LSB);
 >> +	reg &= ~(CQSPI_REG_SIZE_BLOCK_MASK << CQSPI_REG_SIZE_BLOCK_LSB);
@@ -198,8 +754,6 @@ cqspi_controller_init() function.
 >> +}
 >> +
 >> +unsigned int calculate_ticks_for_ns(u32 ref_clk_hz, u32 ns_val)
-> Prefix cqspi_ and make the function static
-Noted, will fix it.
 >> +{
 >> +	unsigned int ticks;
 >> +
@@ -210,8 +764,6 @@ Noted, will fix it.
 >> +}
 >> +
 >> +void cqspi_delay(struct struct_cqspi *cqspi, u32 ref_clk, u32 sclk_hz)
-> static?
-Noted, will fixt it.
 >> +{
 >> +	struct platform_device *pdev = cqspi->pdev;
 >> +	struct cqspi_platform_data *pdata = pdev->dev.platform_data;
@@ -248,8 +800,6 @@ Noted, will fixt it.
 >> +}
 >> +
 >> +void cqspi_switch_chipselect(struct struct_cqspi *cqspi, u32 cs)
-> static?
-Noted, will fixt it.
 >> +{
 >> +	struct platform_device *pdev = cqspi->pdev;
 >> +	struct cqspi_platform_data *pdata = pdev->dev.platform_data;
@@ -280,8 +830,6 @@ Noted, will fixt it.
 >> +
 >> +	if (cqspi->use_dac_mode && (from + len < cqspi->ahb_size)) {
 >> +		memcpy_fromio(buf, cqspi->ahbbase + from, len);
-> Hmm, You have dropped DMA support... This will be a regression :(
-sorry , dont have the setup so understood the code , accordingly changed .
 >> +		if (!cqspi_wait_idle(cqspi))
 >> +			return -EIO;
 >> +		return 0;
@@ -292,8 +840,6 @@ sorry , dont have the setup so understood the code , accordingly changed .
 >> +
 >> +int cqspi_apb_write_execute(struct struct_cqspi *cqspi,
 >> +			    const struct spi_mem_op *op, const u8 *txbuf)
-> static? Please make all functions static if they are local to the module.
-Noted, will fixt it.
 >> +{
 >> +	u32 to = op->addr.val;
 >> +	const void *buf = op->data.buf.out;
@@ -337,11 +883,6 @@ Noted, will fixt it.
 >> +			op->dummy.nbytes;
 >> +
 >> +	tmpbuf = kzalloc(tmpbufsize, GFP_KERNEL | GFP_DMA);
-> I don't understand the need for this buffer and spi_mem_op_cadence..
-> Since, struct spi_mem_op is anyways passed at all places where
-> cmd/data/addr_ops are being used. I think its possible to drop them...
-> See below
-while testing crash happened that's the reason , kept it.
 >> +	if (!tmpbuf)
 >> +		return -ENOMEM;
 >> +
@@ -360,14 +901,6 @@ while testing crash happened that's the reason , kept it.
 >> +			tmpbuf[i + 1] = op->addr.val >>
 >> +					(8 * (op->addr.nbytes - i - 1));
 >> +
-> cqspi_cmd2addr()?
-
-Address alignment for data (read/write) operation in user area, mainly 
-kept this to avoid functionality breakage,
-
-checked other drivers as well which you have referred, same thing they 
-are also doing for aligment of data access.
-
 >> +		ops[n_trans].tx_buf = tmpbuf + 1;
 >> +		ops[n_trans].len = op->addr.nbytes;
 >> +		ops[n_trans].tx_nbits = op->addr.buswidth;
@@ -404,9 +937,6 @@ are also doing for aligment of data access.
 >> +	switch (n_trans) {
 >> +	case 1:
 >> +		cmd_ops = &ops[0];
-> I don't see any cmd_ops being consumed anywhere. So clearly this can be
-> dropped,
-Noted, will fixt it.
 >> +		break;
 >> +	case 2:
 >> +		cmd_ops = &ops[0];
@@ -432,15 +962,11 @@ Noted, will fixt it.
 >> +			mode = CQSPI_STIG_READ;
 >> +		else
 >> +			mode = CQSPI_INDIRECT_READ;
-> Drop INDIRECT in the name... Driver supports both the modes.
-Noted, will fixt it.
 >> +	} else {
 >> +		if (!op->addr.nbytes || !op->data.buf.out)
 >> +			mode = CQSPI_STIG_WRITE;
 >> +		else
 >> +			mode = CQSPI_INDIRECT_WRITE;
-> Same here...
-Noted, will fixt it.
 >> +	}
 >> +
 >> +	sclk = mem->spi->max_speed_hz;
@@ -468,15 +994,7 @@ Noted, will fixt it.
 >> +		break;
 >> +	case CQSPI_INDIRECT_WRITE:
 >> +		err = cqspi_indirect_write_setup(cqspi, op, addr_ops->tx_buf);
-> No need for addr_ops, just move the logic associated with it into above
-> function.
-> Also rename above function to drop reference to indirect mode
-Noted, will fixt it.
 >> +		err = cqspi_apb_write_execute(cqspi, op, data_ops->tx_buf);
->
-> Instead of data_ops, why not just use op->data.buf.out inside
-> cqspi_apb_write_execute()?
-Noted, will fixt it.
 >> +		if (err) {
 >> +			dev_err(&pdev->dev, "QSPI: Write Execution failed!.\n");
 >> +			return err;
@@ -484,12 +1002,7 @@ Noted, will fixt it.
 >> +		break;
 >> +	case CQSPI_INDIRECT_READ:
 >> +		err = cqspi_indirect_read_setup(cqspi, op, addr_ops->tx_buf);
-> Same as above
->
 >> +		err = cqspi_apb_read_execute(cqspi, op, data_ops->rx_buf);
-> Instead of data_ops, why not just use op->data.buf.in inside
-> cqspi_apb_read_execute()?
->
 >> +		if (err) {
 >> +			dev_err(&pdev->dev, "QSPI: Read Execution failed!.\n");
 >> +			return err;
@@ -527,11 +1040,6 @@ Noted, will fixt it.
 >> +		dev_err(&spi->dev, "QSPI: chip_select is out of range\n");
 >> +		return -EINVAL;
 >> +	}
-> This is where driver should setup flash_pdata (i.e call
-> cqspi_of_get_flash_pdata() here)
->
-Noted, will fixt it.
->
 >> +	return 0;
 >> +}
 >> +
@@ -656,13 +1164,6 @@ Noted, will fixt it.
 >> +	master->mode_bits = SPI_CS_HIGH | SPI_CPOL | SPI_CPHA | SPI_TX_QUAD |
 >> +			    SPI_RX_QUAD | SPI_TX_DUAL | SPI_RX_DUAL |
 >> +			    SPI_TX_OCTAL | SPI_RX_OCTAL;
-> Driver does not support Multi IO TX, so lets drop SPI_TX_DUAL,
-> SPI_TX_QUAD and SPI_TX_OCTAL for now. No support for changing polarity,
-> phase or inverted CS (although IP may support these) either... So this
-> should be
->
-> 	master->mode_bits = SPI_RX_QUAD | SPI_TX_DUAL | SPI_RX_DUAL |	SPI_RX_OCTAL;
-Noted, will fixt it.
 >> +	master->setup = cqspi_setup;
 >> +	master->mem_ops = &cqspi_mem_ops;
 >> +	master->dev.of_node = pdev->dev.of_node;
@@ -670,8 +1171,6 @@ Noted, will fixt it.
 >> +	cqspi->pdev = pdev;
 >> +
 >> +	pdata = kmalloc(sizeof(*pdata), GFP_KERNEL);
-> Use devm_kmalloc()
-Noted, will fixt it.
 >> +	if (!pdata) {
 >> +		ret = -ENOMEM;
 >> +		goto err_pdata;
@@ -778,12 +1277,8 @@ Noted, will fixt it.
 >> +
 >> +err_pdata:
 >> +	kfree(pdata);
-> Can be dropped if pdata is devm_kmalloc'd
-Noted, will fixt it.
 >> +err_irq:
 >> +	free_irq(cqspi->irq, cqspi);
-> No need to free explicitly.... IRQ was requested as devm_request_irq()
-Noted, will remove it.
 >> +err_of:
 >> +	spi_master_put(master);
 >> +	dev_err(&pdev->dev, "Cadence QSPI controller probe failed\n");
@@ -796,7 +1291,6 @@ Noted, will remove it.
 >> +	struct struct_cqspi *cadence_qspi = spi_master_get_devdata(master);
 >> +
 >> +	cqspi_controller_enable(cadence_qspi->iobase, 0);
->
 >> +	platform_set_drvdata(pdev, NULL);
 >> +	free_irq(cadence_qspi->irq, cadence_qspi);
 >> +	iounmap(cadence_qspi->iobase);
@@ -806,10 +1300,6 @@ Noted, will remove it.
 >> +	kfree(pdev->dev.platform_data);
 >> +	spi_unregister_master(master);
 >> +	spi_master_put(master);
-> No need for any of these... Since, these resources are allocated (or
-> registered) using devm_* APIs, they are freed automatically on remove.
->
-Agreed!!
 >> +	return 0;
 >> +}
 >> +
@@ -896,9 +1386,6 @@ Agreed!!
 >> +
 >> +#define QUAD_LSB			4
 >> +
-> Drop unused constants, please... I don't see a need to add any more
-> constants than whats already present in old driver...
-Noted, will fixt it.
 >> +/* Operation timeout value */
 >> +#define CQSPI_TIMEOUT_MS			5000
 >> +#define CQSPI_READ_TIMEOUT_MS			10
