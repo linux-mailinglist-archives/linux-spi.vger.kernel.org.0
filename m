@@ -2,36 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B770D122BE2
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 13:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C2C122BE4
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 13:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728196AbfLQMjg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Dec 2019 07:39:36 -0500
-Received: from foss.arm.com ([217.140.110.172]:35672 "EHLO foss.arm.com"
+        id S1728135AbfLQMjl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Dec 2019 07:39:41 -0500
+Received: from foss.arm.com ([217.140.110.172]:35688 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728051AbfLQMjg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Dec 2019 07:39:36 -0500
+        id S1728051AbfLQMji (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Dec 2019 07:39:38 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9169431B;
-        Tue, 17 Dec 2019 04:39:35 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0941E328;
+        Tue, 17 Dec 2019 04:39:38 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11FBF3F718;
-        Tue, 17 Dec 2019 04:39:34 -0800 (PST)
-Date:   Tue, 17 Dec 2019 12:39:33 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CE8C3F718;
+        Tue, 17 Dec 2019 04:39:37 -0800 (PST)
+Date:   Tue, 17 Dec 2019 12:39:35 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jim Quinlan <jquinlan@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+To:     Jean Pihet <jean.pihet@newoldbits.com>
+Cc:     Arnout Vandecappelle <arnout.vandecappelle@essensium.com>,
+        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>,
+        linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Ray Jui <ray.jui@broadcom.com>,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: Applied "spi: bcm2835: no dev_err() on clk_get() -EPROBE_DEFER" to the spi tree
-In-Reply-To: <20191216230802.45715-2-jquinlan@broadcom.com>
-Message-Id: <applied-20191216230802.45715-2-jquinlan@broadcom.com>
+        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Applied "spi: spi-ti-qspi: Remove unused macro for fclk frequency" to the spi tree
+In-Reply-To: <20191211193954.747745-2-jean.pihet@newoldbits.com>
+Message-Id: <applied-20191211193954.747745-2-jean.pihet@newoldbits.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -40,7 +38,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: bcm2835: no dev_err() on clk_get() -EPROBE_DEFER
+   spi: spi-ti-qspi: Remove unused macro for fclk frequency
 
 has been applied to the spi tree at
 
@@ -65,39 +63,36 @@ to this mail.
 Thanks,
 Mark
 
-From f4dc4abdce4cc290555604107c04854a911b9441 Mon Sep 17 00:00:00 2001
-From: Jim Quinlan <james.quinlan@broadcom.com>
-Date: Mon, 16 Dec 2019 18:08:02 -0500
-Subject: [PATCH] spi: bcm2835: no dev_err() on clk_get() -EPROBE_DEFER
+From c1795f7cee026b066485de794cff4e5bb9475a98 Mon Sep 17 00:00:00 2001
+From: Jean Pihet <jean.pihet@newoldbits.com>
+Date: Wed, 11 Dec 2019 20:39:52 +0100
+Subject: [PATCH] spi: spi-ti-qspi: Remove unused macro for fclk frequency
 
-Use dev_dbg() on -EPROBE_DEFER and dev_err() on all
-other errors.
+The fclk and its rate are retrieved from DT.
 
-Signed-off-by: Jim Quinlan <jquinlan@broadcom.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Link: https://lore.kernel.org/r/20191216230802.45715-2-jquinlan@broadcom.com
+Signed-off-by: Jean Pihet <jean.pihet@newoldbits.com>
+Cc: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Cc: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
+Cc: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
+Link: https://lore.kernel.org/r/20191211193954.747745-2-jean.pihet@newoldbits.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-bcm2835.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/spi/spi-ti-qspi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index 69df79914504..b784c9fdf9ec 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -1317,7 +1317,10 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
- 	bs->clk = devm_clk_get(&pdev->dev, NULL);
- 	if (IS_ERR(bs->clk)) {
- 		err = PTR_ERR(bs->clk);
--		dev_err(&pdev->dev, "could not get clk: %d\n", err);
-+		if (err == -EPROBE_DEFER)
-+			dev_dbg(&pdev->dev, "could not get clk: %d\n", err);
-+		else
-+			dev_err(&pdev->dev, "could not get clk: %d\n", err);
- 		goto out_controller_put;
- 	}
+diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
+index 3cb65371ae3b..a18835128ad0 100644
+--- a/drivers/spi/spi-ti-qspi.c
++++ b/drivers/spi/spi-ti-qspi.c
+@@ -79,8 +79,6 @@ struct ti_qspi {
  
+ #define QSPI_COMPLETION_TIMEOUT		msecs_to_jiffies(2000)
+ 
+-#define QSPI_FCLK			192000000
+-
+ /* Clock Control */
+ #define QSPI_CLK_EN			(1 << 31)
+ #define QSPI_CLK_DIV_MAX		0xffff
 -- 
 2.20.1
 
