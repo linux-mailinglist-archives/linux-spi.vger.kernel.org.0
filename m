@@ -2,99 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 699BE122B68
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 13:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B770D122BE2
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2019 13:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726191AbfLQMY3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Dec 2019 07:24:29 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39512 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726383AbfLQMY3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Dec 2019 07:24:29 -0500
-Received: by mail-lj1-f196.google.com with SMTP id e10so10687483ljj.6
-        for <linux-spi@vger.kernel.org>; Tue, 17 Dec 2019 04:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=newoldbits-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MfDMe7NFk0G5MKHhMnGNpWFhGpiba1UDZAj67npG+BM=;
-        b=gmwQRvvuei5h+hof6n8vUwCrGcxrRF/Bk3dtRqx8uKhYMO4F6RzW2vzaGjF5XAgjBB
-         wdDOuLYiG/fCrrPgFncsN1ih3mHyEdUHKFtx421Dek++DBX5QQ9qbiYgG449BnuHIjo9
-         G58fVNv+nWvSygFUHcFHHP7B0Vkjuu7amiyeCgcpiRkNYeMpogkMVYBJqxxjbZi7ldAX
-         HhG0cMjougy0vtlWH/Xi8EVnkN7E5UvMVekJ87j3bNUGed9raYvwYC2/5RxfIaK8Tfj1
-         S/JOIHqTAfkHIxiZO5xUWkGOxSeglQpyp0JsBLfWTdBHXbWPy4Jd+bcjNFBotP4WIg1K
-         qosQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MfDMe7NFk0G5MKHhMnGNpWFhGpiba1UDZAj67npG+BM=;
-        b=VoP9CQgJxemZ2/x/qXvQux9xejApKmyvBck9gPNnC1X/+3bm+mNLHCo9KliQsjzpJe
-         bo8VaJvZgBfvgQ0HJ3YX90sh+IqsrWQC84jXtIhhP9mf63DSnF2jaSLuUavln55eCPNx
-         7w6ES6Jy8jTFEXwSvK9d3DDRRvGNIO1dK0rWqcPlsoq5IzvHKI5c89owwvvfOjd2Mj/v
-         zTY4vjYJQ2Wcm4XpgYfM3DppOv1M48H6RvSMPXKiyfb2w8l4ske03nqJX7aCOxYJHSyE
-         xh8ZQynjUCrfcSdwZyeQVcW6+xrhRAwO2e1dYmvBi7bEw+ZA6XLEKKCxHJqhxFUbBX8I
-         m+kA==
-X-Gm-Message-State: APjAAAWsHwFfrGS/rH6ftfg/PCtNMU2GyhNHUtWPkgmH7zoI8nwNhrPX
-        ePn2sMy2G0Wy/VufsFl9jtmY0RuB6ml0hcEdn1FyhNoAI5g=
-X-Google-Smtp-Source: APXvYqz/kbRAG1F+DL6oUSfgtFAb77+ert0SOkKjupgGM00RRlH9eNuNkR4QLBuM51kVyO2+kAYH/cTZ5psPxcTpKmc=
-X-Received: by 2002:a2e:9cd8:: with SMTP id g24mr2335900ljj.243.1576585466995;
- Tue, 17 Dec 2019 04:24:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20191211193954.747745-1-jean.pihet@newoldbits.com>
-In-Reply-To: <20191211193954.747745-1-jean.pihet@newoldbits.com>
-From:   Jean Pihet <jean.pihet@newoldbits.com>
-Date:   Tue, 17 Dec 2019 13:24:15 +0100
-Message-ID: <CAORVsuUA3KTMFMiLJbFfSMMB3LupCZWm-2BBs46z6scGH45Vdw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] spi: spi-ti-qspi: Support large NOR SPI flash
-To:     Mark Brown <broonie@kernel.org>, Tony Lindgren <tony@atomide.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
-        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
-        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>,
-        Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728196AbfLQMjg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Dec 2019 07:39:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:35672 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728051AbfLQMjg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Dec 2019 07:39:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9169431B;
+        Tue, 17 Dec 2019 04:39:35 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11FBF3F718;
+        Tue, 17 Dec 2019 04:39:34 -0800 (PST)
+Date:   Tue, 17 Dec 2019 12:39:33 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jim Quinlan <james.quinlan@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jim Quinlan <jquinlan@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Ray Jui <ray.jui@broadcom.com>,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: Applied "spi: bcm2835: no dev_err() on clk_get() -EPROBE_DEFER" to the spi tree
+In-Reply-To: <20191216230802.45715-2-jquinlan@broadcom.com>
+Message-Id: <applied-20191216230802.45715-2-jquinlan@broadcom.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark, Tony, Vignesh,
+The patch
 
-Ping on this series V2. Can you please check the reworked patches?
+   spi: bcm2835: no dev_err() on clk_get() -EPROBE_DEFER
 
-BR,
-Jean
+has been applied to the spi tree at
 
-On Wed, Dec 11, 2019 at 8:40 PM Jean Pihet <jean.pihet@newoldbits.com> wrote:
->
-> v2 release.
->
-> Large devices are bigger than >64MB in size.
->
-> - Remove unused macro for fclk rate.
-> - Since the TI QSPI IP block only maps 64MB of MMIO, use MMIO
->   below the 64MB boundary and software generated transfers above.
-> - Optimize the software generated byte-transfers for dual and quad
->   I/O read operations. The speed-up is 4.9x for quad I/O reads.
->
-> Note: depends on Tony's patches for hwmod cleanup, in order to get the
-> desired QSPI clk rate:
-> - [PATCH 1/2] ARM: dts: Configure interconnect target module for am4 qspi
-> - [PATCH 2/2] ARM: OMAP2+: Drop legacy platform data for am4 qspi
->
-> Tested using raw accesses (mtd_debug) and JFFS2 FS read/write/erase;
-> in single, dual and quad modes.
-> All accesses have been checked on the logic analyzer.
->
-> Jean Pihet (3):
->   spi: spi-ti-qspi: Remove unused macro for fclk frequency
->   spi: spi-ti-qspi: support large flash devices
->   spi: spi-ti-qspi: optimize byte-transfers
->
->  drivers/spi/spi-ti-qspi.c | 84 ++++++++++++++++++++++++++++++++++++---
->  1 file changed, 79 insertions(+), 5 deletions(-)
->
-> --
-> 2.23.0
->
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From f4dc4abdce4cc290555604107c04854a911b9441 Mon Sep 17 00:00:00 2001
+From: Jim Quinlan <james.quinlan@broadcom.com>
+Date: Mon, 16 Dec 2019 18:08:02 -0500
+Subject: [PATCH] spi: bcm2835: no dev_err() on clk_get() -EPROBE_DEFER
+
+Use dev_dbg() on -EPROBE_DEFER and dev_err() on all
+other errors.
+
+Signed-off-by: Jim Quinlan <jquinlan@broadcom.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Link: https://lore.kernel.org/r/20191216230802.45715-2-jquinlan@broadcom.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-bcm2835.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 69df79914504..b784c9fdf9ec 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1317,7 +1317,10 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
+ 	bs->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(bs->clk)) {
+ 		err = PTR_ERR(bs->clk);
+-		dev_err(&pdev->dev, "could not get clk: %d\n", err);
++		if (err == -EPROBE_DEFER)
++			dev_dbg(&pdev->dev, "could not get clk: %d\n", err);
++		else
++			dev_err(&pdev->dev, "could not get clk: %d\n", err);
+ 		goto out_controller_put;
+ 	}
+ 
+-- 
+2.20.1
+
