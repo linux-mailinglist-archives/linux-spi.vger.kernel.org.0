@@ -2,269 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8301252AD
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2019 21:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E44126722
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2019 17:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbfLRUGn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Dec 2019 15:06:43 -0500
-Received: from foss.arm.com ([217.140.110.172]:59542 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726831AbfLRUGn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 18 Dec 2019 15:06:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E419D1FB;
-        Wed, 18 Dec 2019 12:06:42 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FE5D3F67D;
-        Wed, 18 Dec 2019 12:06:42 -0800 (PST)
-Date:   Wed, 18 Dec 2019 20:06:40 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     alexandre.torgue@st.com, Amelie Delaunay <amelie.delaunay@st.com>,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        Erwan Leray <erwan.leray@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Mark Brown <broonie@kernel.org>, mark.rutland@arm.com,
-        robh+dt@kernel.org
-Subject: Applied "dt-bindings: spi: Convert stm32 spi bindings to json-schema" to the spi tree
-In-Reply-To: <20191217090715.13334-1-benjamin.gaignard@st.com>
-Message-Id: <applied-20191217090715.13334-1-benjamin.gaignard@st.com>
-X-Patchwork-Hint: ignore
+        id S1726947AbfLSQct (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Dec 2019 11:32:49 -0500
+Received: from mail-eopbgr1410092.outbound.protection.outlook.com ([40.107.141.92]:37204
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726855AbfLSQct (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 19 Dec 2019 11:32:49 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JUOeryutKHXDDSpiW0KzlKxiR1SBY58ws+y5gfXucbORuuMdJgbYCl5bI6luO0ZIhHGj9Vabyye4aCgS49yZjxDpoBXGix/vOYl0l5bJ72utXtmCdp3oHTi4OzLCBWftvm//zkvHdl2QdX/FEYGXAnKFn47rYJj8O5DikEs7y6DDH+ju0JLdlc+n9S5VcPcy3Ak7gZ959iZftniEbZEq54piMAw4HfjpjLED8T51tymLxWVE9PQWXvih/SggC08XGAREwNC0NM30/SlGjwqqRBKW5tBjGy80rD+olXAIla/a5pfrufb+goBTb/zMlEhtl9lfTd7+j2MhxOKUJRsFCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xsDsGDCxFAcxH7fBRpH8TDjVByJIH9m0oOhlBMBddzs=;
+ b=fRu5lpYuHOww82L05ec3/H9vT+qM2himmkCfgeJ3ZynlbVnsI89ePrDT2KSIW6PNfdOECFipDmu0OvsArHc14bvLGQkIbgjgpX6XiRGb7Km/uhO8XF1+y18nxhbnzhAvrW0W4p78CvyYA4n+Bh+3R6n6ElLKuzhLy+WaAgFZQBYR/v4AJXDSCQ7UOHkCZ3H6UOI2WQG85ZatPqB2XjlYexAbOUFYpHC9FAR8kV6ntL0Yl+PbxpHO7Dc3KnSmTzcPFRHeHPPsmYsIQD95X/ltEeTvzlEaMlquzuiSRRPnsb+HmW77KD0lLO9/8z/BS1rOcljif/FXYOVnOMgDdB6pHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xsDsGDCxFAcxH7fBRpH8TDjVByJIH9m0oOhlBMBddzs=;
+ b=QqABxJRAaVJ08OMrBZ5fzW0RHoeY/A4audzX+p0nb6x5sH8xlc5PLvmzZGJQ7sNTIZ95ib5vmdyUgN3ZbLjAAj9WjVRdMjB1nr3zc3T0ua2Wt4O2HRJvsyPDoYMe/Bu+6rCjNnVm8A0hSkhP3++SYIrWAXQcttQZS0WEdFs2ebs=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1563.jpnprd01.prod.outlook.com (52.133.160.144) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2538.20; Thu, 19 Dec 2019 16:32:45 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::74db:232e:f59e:83f2]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::74db:232e:f59e:83f2%3]) with mapi id 15.20.2538.019; Thu, 19 Dec 2019
+ 16:32:45 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Boris Brezillon <bbrezillon@kernel.org>
+Subject: RE: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
+Thread-Topic: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
+Thread-Index: AQHVrDsFo/XrCnZmIE+HK5Vec6rH7qevIW6AgAK0x/CAA35sAIABOkowgAa4UICAAYUHAIAA0FQAgAIeaDA=
+Date:   Thu, 19 Dec 2019 16:32:45 +0000
+Message-ID: <TY1PR01MB1562B2779EAB8CEA09F7B18E8A520@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20191206134202.18784-1-chris.brandt@renesas.com>
+        <922cfa46-efb5-9e6d-67ea-3ac505b8211c@cogentembedded.com>
+        <TY1PR01MB156215E8668C0317FA0826B18A580@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+        <e6a73df5-31c4-3472-f7bc-a0984f1f5380@cogentembedded.com>
+        <TY1PR01MB1562D343E1AB06DCA2973DAC8A550@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+        <590840ce-a250-2512-3d04-c2420d83f7da@cogentembedded.com>
+        <90164352-6b74-ff78-261c-374f51f83330@cogentembedded.com>
+ <20191218090952.4c9f02a1@collabora.com>
+In-Reply-To: <20191218090952.4c9f02a1@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMmRlODEyMGQtMjI3ZC0xMWVhLWFhNTgtOTRlNmY3Njc5M2FlXGFtZS10ZXN0XDJkZTgxMjBmLTIyN2QtMTFlYS1hYTU4LTk0ZTZmNzY3OTNhZWJvZHkudHh0IiBzej0iMzMzIiB0PSIxMzIyMTI0Njc2MzQ5MjExNzgiIGg9IkVSOGp0aEtra1NNSjM1SWJMMi9YYWR3WVVJWT0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+x-dg-rorf: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: fe6fd247-4598-4209-d7ab-08d784a113ef
+x-ms-traffictypediagnostic: TY1PR01MB1563:
+x-microsoft-antispam-prvs: <TY1PR01MB1563DA4B1C3622F72E7A1BDC8A520@TY1PR01MB1563.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0256C18696
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(39850400004)(346002)(376002)(366004)(136003)(189003)(199004)(7696005)(81166006)(81156014)(71200400001)(26005)(2906002)(86362001)(186003)(6506007)(9686003)(52536014)(64756008)(558084003)(5660300002)(33656002)(66556008)(7416002)(66476007)(54906003)(110136005)(66946007)(76116006)(316002)(8936002)(66446008)(478600001)(4326008)(55016002)(8676002);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1563;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lHSq5ZrLGL/E1U9YEnWMzinUO2v3AcyP3U6Xn/vRfc9mye4Bx6lvPhxyjikJDrQkDBcTI3tkkPMG8Q0dBs4xTi6/KryMaqUybrAQc9KAfw9d4NiRRvA/ZCsWVMVdPCCMFdZQmbhjoT1zX6QFro2pMRaurE+SIpawCV/EjS/Y2GulE5U1nYcBJ1ctAEzB4h6G6SCYUm3Cym8pXK+bqhO8DCtMKCYpckKeWRuJv4ig/JmUv9mLJslLAklLsGxq6g8mT5z/kf4pnAFrSxeJCn7X3dq48oDeVxQ7ca3tWxR1U9GSlMCOhkswf2eNEhNYgSE7gL9HxeOdX5JyjUfi3SBqrL3sytsCjk5bQAVIBDKaZD+R2wD4WSYCckmN6pIsTiSrPILXg8Z9BOVnX2gw1/V2XyBkOVDUb2PpyfFKbzt8ptgEnvR3FtJ5Hydk/kyp4EEM
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe6fd247-4598-4209-d7ab-08d784a113ef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2019 16:32:45.4101
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2VS3Uvj6pysGM3xLuBPM/04wCv4Im9CHGr7vvQPryOeefF/kQeIMOl2rf/ANwfvSjqKLGvhyJ4jCSyaX0UgUUUlvSAVlW1lZhzhJS5g2i0k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1563
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Wed, Dec 18, 2019, Boris Brezillon wrote:
+> The dirmap API has not been designed with XIP in mind (though we could
+> theoretically extend it to support XIP). The main reason we added this
+[snip]
 
-   dt-bindings: spi: Convert stm32 spi bindings to json-schema
+Boris,
 
-has been applied to the spi tree at
+Thank you for explaining.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From ef32b63bf13e531479a3b1ef6eb2daaf4fcf787a Mon Sep 17 00:00:00 2001
-From: Benjamin Gaignard <benjamin.gaignard@st.com>
-Date: Tue, 17 Dec 2019 10:07:15 +0100
-Subject: [PATCH] dt-bindings: spi: Convert stm32 spi bindings to json-schema
-
-Convert the STM32 spi binding to DT schema format using json-schema
-
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-CC: Erwan Leray <erwan.leray@st.com>
-CC: Fabrice Gasnier <fabrice.gasnier@st.com>
-CC: Amelie Delaunay <amelie.delaunay@st.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20191217090715.13334-1-benjamin.gaignard@st.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../devicetree/bindings/spi/spi-stm32.txt     |  62 -----------
- .../devicetree/bindings/spi/st,stm32-spi.yaml | 105 ++++++++++++++++++
- 2 files changed, 105 insertions(+), 62 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-stm32.txt
- create mode 100644 Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-stm32.txt b/Documentation/devicetree/bindings/spi/spi-stm32.txt
-deleted file mode 100644
-index d82755c63eaf..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-stm32.txt
-+++ /dev/null
-@@ -1,62 +0,0 @@
--STMicroelectronics STM32 SPI Controller
--
--The STM32 SPI controller is used to communicate with external devices using
--the Serial Peripheral Interface. It supports full-duplex, half-duplex and
--simplex synchronous serial communication with external devices. It supports
--from 4 to 32-bit data size. Although it can be configured as master or slave,
--only master is supported by the driver.
--
--Required properties:
--- compatible: Should be one of:
--  "st,stm32h7-spi"
--  "st,stm32f4-spi"
--- reg: Offset and length of the device's register set.
--- interrupts: Must contain the interrupt id.
--- clocks: Must contain an entry for spiclk (which feeds the internal clock
--	  generator).
--- #address-cells:  Number of cells required to define a chip select address.
--- #size-cells: Should be zero.
--
--Optional properties:
--- resets: Must contain the phandle to the reset controller.
--- A pinctrl state named "default" may be defined to set pins in mode of
--  operation for SPI transfer.
--- dmas: DMA specifiers for tx and rx dma. DMA fifo mode must be used. See the
--  STM32 DMA bindings, Documentation/devicetree/bindings/dma/stm32-dma.txt.
--- dma-names: DMA request names should include "tx" and "rx" if present.
--- cs-gpios: list of GPIO chip selects. See the SPI bus bindings,
--  Documentation/devicetree/bindings/spi/spi-bus.txt
--
--
--Child nodes represent devices on the SPI bus
--  See ../spi/spi-bus.txt
--
--Optional properties:
--- st,spi-midi-ns: Only for STM32H7, (Master Inter-Data Idleness) minimum time
--		  delay in nanoseconds inserted between two consecutive data
--		  frames.
--
--
--Example:
--	spi2: spi@40003800 {
--		#address-cells = <1>;
--		#size-cells = <0>;
--		compatible = "st,stm32h7-spi";
--		reg = <0x40003800 0x400>;
--		interrupts = <36>;
--		clocks = <&rcc SPI2_CK>;
--		resets = <&rcc 1166>;
--		dmas = <&dmamux1 0 39 0x400 0x01>,
--		       <&dmamux1 1 40 0x400 0x01>;
--		dma-names = "rx", "tx";
--		pinctrl-0 = <&spi2_pins_b>;
--		pinctrl-names = "default";
--		cs-gpios = <&gpioa 11 0>;
--
--		aardvark@0 {
--			compatible = "totalphase,aardvark";
--			reg = <0>;
--			spi-max-frequency = <4000000>;
--			st,spi-midi-ns = <4000>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-new file mode 100644
-index 000000000000..f0d979664f07
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-@@ -0,0 +1,105 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/st,stm32-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STM32 SPI Controller bindings
-+
-+description: |
-+  The STM32 SPI controller is used to communicate with external devices using
-+  the Serial Peripheral Interface. It supports full-duplex, half-duplex and
-+  simplex synchronous serial communication with external devices. It supports
-+  from 4 to 32-bit data size.
-+
-+maintainers:
-+  - Erwan Leray <erwan.leray@st.com>
-+  - Fabrice Gasnier <fabrice.gasnier@st.com>
-+
-+allOf:
-+  - $ref: "spi-controller.yaml#"
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: st,stm32f4-spi
-+
-+    then:
-+      properties:
-+        st,spi-midi-ns: false
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stm32f4-spi
-+      - st,stm32h7-spi
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  dmas:
-+    description: |
-+      DMA specifiers for tx and rx dma. DMA fifo mode must be used. See
-+      the STM32 DMA bindings Documentation/devicetree/bindings/dma/stm32-dma.txt.
-+    items:
-+      - description: rx DMA channel
-+      - description: tx DMA channel
-+
-+  dma-names:
-+    items:
-+      - const: rx
-+      - const: tx
-+
-+patternProperties:
-+  "^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-f]+$":
-+    type: object
-+    # SPI slave nodes must be children of the SPI master node and can
-+    # contain the following properties.
-+    properties:
-+      st,spi-midi-ns:
-+        description: |
-+          Only for STM32H7, (Master Inter-Data Idleness) minimum time
-+          delay in nanoseconds inserted between two consecutive data frames.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/stm32mp1-clks.h>
-+    #include <dt-bindings/reset/stm32mp1-resets.h>
-+    spi@4000b000 {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      compatible = "st,stm32h7-spi";
-+      reg = <0x4000b000 0x400>;
-+      interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&rcc SPI2_K>;
-+      resets = <&rcc SPI2_R>;
-+      dmas = <&dmamux1 0 39 0x400 0x05>,
-+             <&dmamux1 1 40 0x400 0x05>;
-+      dma-names = "rx", "tx";
-+      cs-gpios = <&gpioa 11 0>;
-+
-+      aardvark@0 {
-+        compatible = "totalphase,aardvark";
-+        reg = <0>;
-+        spi-max-frequency = <4000000>;
-+        st,spi-midi-ns = <4000>;
-+      };
-+    };
-+
-+...
--- 
-2.20.1
-
+Chris
