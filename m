@@ -2,103 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC601276CD
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2019 08:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEA3127A60
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2019 12:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727167AbfLTH4B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Dec 2019 02:56:01 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:33277 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbfLTH4B (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Dec 2019 02:56:01 -0500
-Received: by mail-ot1-f66.google.com with SMTP id b18so10822787otp.0;
-        Thu, 19 Dec 2019 23:56:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uPJ1KIA9H7OXgnE4YWq2fYmCEnqTsEmR4nOQ4sQoQq8=;
-        b=jPl3AgVxcuk8K1PQsRqf9lj77LKiozKTcYOt6wZ2n1yDa5HLf/jwZDtKjeE9F+dc+e
-         nVeYzWj+DLuOZOYeW53I8jpQfNnappvo7DCmn6XEs3S9zyFfsT1YvXx8GgjlU92exbyD
-         OX+F56WgWOhn2InJlZuO/N4ZjD0HplwEJHJ++WN9+bFVFRts4vZ2e7m45tI0Js+z5JTK
-         OfBcUu39MoCKP1CJNyXXxpGbjmMZNj43jsdjHznN3IArGMPLQgQJ/eQloM3a2s3M48Qq
-         jKuE8ZoIyW5qD3hY7mdfVs6NSwBDn5YCqBEc5zIDSAakHSSSffon2qOsnXm+F7Pke1d5
-         5opQ==
-X-Gm-Message-State: APjAAAVhBSnMa0/jmZg2np7A+WHIBXcPIke6yVjQM21ovfDa7ugX6Kmu
-        bR8vWsbIRVLulJtmHNM5fzXhIczpoy3O8xyphD11cg==
-X-Google-Smtp-Source: APXvYqxuuKbcqN+HnU6d2ZXGY1ikEbezmoM4iRsqjjm9bC7yzpsuZdyz1+8RyndHnTH6dHaaDblodY5LuOgwuTGOb8k=
-X-Received: by 2002:a9d:2073:: with SMTP id n106mr3808625ota.145.1576828560332;
- Thu, 19 Dec 2019 23:56:00 -0800 (PST)
+        id S1727241AbfLTL7c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Dec 2019 06:59:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:49974 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727177AbfLTL7b (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 20 Dec 2019 06:59:31 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14EAA30E;
+        Fri, 20 Dec 2019 03:59:31 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81DEB3F719;
+        Fri, 20 Dec 2019 03:59:30 -0800 (PST)
+Date:   Fri, 20 Dec 2019 11:59:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jean Pihet <jean.pihet@newoldbits.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-spi@vger.kernel.org,
+        Ryan Barnett <ryan.barnett@rockwellcollins.com>,
+        Conrad Ratschan <conrad.ratschan@rockwellcollins.com>,
+        Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
+Subject: Re: [PATCH 0/3] spi: spi-ti-qspi: Support large NOR SPI flash
+Message-ID: <20191220115928.GA4790@sirena.org.uk>
+References: <20191211193954.747745-1-jean.pihet@newoldbits.com>
+ <CAORVsuUA3KTMFMiLJbFfSMMB3LupCZWm-2BBs46z6scGH45Vdw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20191206134202.18784-1-chris.brandt@renesas.com>
- <922cfa46-efb5-9e6d-67ea-3ac505b8211c@cogentembedded.com> <TY1PR01MB156215E8668C0317FA0826B18A580@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <e6a73df5-31c4-3472-f7bc-a0984f1f5380@cogentembedded.com> <TY1PR01MB1562D343E1AB06DCA2973DAC8A550@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <590840ce-a250-2512-3d04-c2420d83f7da@cogentembedded.com> <TY1PR01MB1562B9EB96818DCA507079808A510@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <bb630141-021c-5618-f266-b98b29956fa8@cogentembedded.com> <TY1PR01MB1562E196AB1C582F186CC74B8A520@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <6f4c5d92-3ca4-2d1d-47c4-cbd52ad428b0@cogentembedded.com> <OF3F92D76C.33FFFBFC-ON482584D6.00093DAC-482584D6.0009A51D@mxic.com.tw>
-In-Reply-To: <OF3F92D76C.33FFFBFC-ON482584D6.00093DAC-482584D6.0009A51D@mxic.com.tw>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 20 Dec 2019 08:55:48 +0100
-Message-ID: <CAMuHMdVtDbxyrZL=F_o4xCuM96B4yw7WrUMOZ7jeWh5GHV6aAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
-To:     Mason Yang <masonccyang@mxic.com.tw>
-Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LZvS9be/3tNcYl/X"
+Content-Disposition: inline
+In-Reply-To: <CAORVsuUA3KTMFMiLJbFfSMMB3LupCZWm-2BBs46z6scGH45Vdw@mail.gmail.com>
+X-Cookie: I think we're in trouble.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mason,
 
-On Fri, Dec 20, 2019 at 2:45 AM <masonccyang@mxic.com.tw> wrote:
-> > On 12/19/2019 07:57 PM, Chris Brandt wrote:
-> > >>> So at the moment, there is nothing yet for me to 'try' on the RZ/A
-> series,
-> > >> correct?
-> > >>
-> > >>    Why, I can send you a working version of the SPI driver, and even
-> HF one
-> > >> if you're
-> > >> interested.
-> > >
-> > > The point of this whole discussion is to determine if we should have 2
-> drivers
-> > > for the same Renesas HW IP.
-> > >
-> > > There was a RPC-IF patch series that made it to v17....and is now
-> dead.
->
-> It's under review by Geert Uytterhoeven
->
-> https://patchwork.kernel.org/project/linux-renesas-soc/list/?submitter=181859
->
->
-> https://patchwork.kernel.org/patch/11078131/
-> https://patchwork.kernel.org/patch/11078133/
+--LZvS9be/3tNcYl/X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It's marked "Under Review" in patchwork, as there haven't been any comments
-on v17 yet.
+On Tue, Dec 17, 2019 at 01:24:15PM +0100, Jean Pihet wrote:
+> Hi Mark, Tony, Vignesh,
+>=20
+> Ping on this series V2. Can you please check the reworked patches?
 
-Gr{oetje,eeting}s,
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
 
-                        Geert
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+--LZvS9be/3tNcYl/X
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl38t54ACgkQJNaLcl1U
+h9Aaogf/WuUttHC80Y9Ni4mFv9SvJBial9ZQaebF3n1tvNzRkHZMGCtAj9cQ+zCE
+9eLgFFJX8gtKGJE9+BrZD4+L0cUUVyT3ZN33hxZQ/AEabjhdX9W1M6ofPQZ0BPKn
+ZOv6JTDrhPTA9bspRgO9grd0JizLZRGfeYneRq+ZvCYcDof7nO/Tha7XyQeWYpxF
+5FsjekdG/mgrb8LXxOtMwCzChU2NQYkzVYi4UHNDsXd/Ab5ghIsnJna1merDrmDF
+SF71vi/OgYUf5acGVo9fU8VxK5lnVDBGKpd4zcdUiLNaydFcxsvZNyGw4m4YxS3C
+ZWC0jqzFumBqveyki9wd3vnkviOKkA==
+=fdM+
+-----END PGP SIGNATURE-----
+
+--LZvS9be/3tNcYl/X--
