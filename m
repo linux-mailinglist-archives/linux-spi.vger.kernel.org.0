@@ -2,24 +2,24 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3883B129C2C
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2019 01:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0787129C28
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2019 01:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbfLXA67 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 23 Dec 2019 19:58:59 -0500
-Received: from mx.socionext.com ([202.248.49.38]:23640 "EHLO mx.socionext.com"
+        id S1726833AbfLXA6u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 23 Dec 2019 19:58:50 -0500
+Received: from mx.socionext.com ([202.248.49.38]:23643 "EHLO mx.socionext.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727030AbfLXA6u (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        id S1727040AbfLXA6u (ORCPT <rfc822;linux-spi@vger.kernel.org>);
         Mon, 23 Dec 2019 19:58:50 -0500
 Received: from unknown (HELO iyokan-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 24 Dec 2019 09:58:48 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan-ex.css.socionext.com (Postfix) with ESMTP id C4C45603AB;
-        Tue, 24 Dec 2019 09:58:48 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 24 Dec 2019 09:59:28 +0900
+  by mx.socionext.com with ESMTP; 24 Dec 2019 09:58:49 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan-ex.css.socionext.com (Postfix) with ESMTP id 71F43603AB;
+        Tue, 24 Dec 2019 09:58:49 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 24 Dec 2019 09:59:39 +0900
 Received: from plum.e01.socionext.com (unknown [10.213.132.32])
-        by kinkan.css.socionext.com (Postfix) with ESMTP id 4149E1A01CF;
-        Tue, 24 Dec 2019 09:58:48 +0900 (JST)
+        by kinkan.css.socionext.com (Postfix) with ESMTP id 126851A01CF;
+        Tue, 24 Dec 2019 09:58:49 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -28,9 +28,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Masami Hiramatsu <masami.hiramatsu@linaro.org>,
         Jassi Brar <jaswinder.singh@linaro.org>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH 3/5] spi: uniphier: Add handle_err callback function
-Date:   Tue, 24 Dec 2019 09:58:25 +0900
-Message-Id: <1577149107-30670-4-git-send-email-hayashi.kunihiko@socionext.com>
+Subject: [PATCH 4/5] spi: uniphier: Add SPI_LOOP to the capabilities
+Date:   Tue, 24 Dec 2019 09:58:26 +0900
+Message-Id: <1577149107-30670-5-git-send-email-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1577149107-30670-1-git-send-email-hayashi.kunihiko@socionext.com>
 References: <1577149107-30670-1-git-send-email-hayashi.kunihiko@socionext.com>
@@ -39,49 +39,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This adds master->handle_err() callback function to stop transfer due to
-error. The function also resets FIFOs and disables interrupt.
+Add SPI_LOOP to the capabilities to support loopback mode.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- drivers/spi/spi-uniphier.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/spi/spi-uniphier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-uniphier.c b/drivers/spi/spi-uniphier.c
-index 3859649..c4e3b96 100644
+index c4e3b96..caf0446 100644
 --- a/drivers/spi/spi-uniphier.c
 +++ b/drivers/spi/spi-uniphier.c
-@@ -432,6 +432,22 @@ static int uniphier_spi_unprepare_transfer_hardware(struct spi_master *master)
- 	return 0;
- }
+@@ -543,7 +543,8 @@ static int uniphier_spi_probe(struct platform_device *pdev)
  
-+static void uniphier_spi_handle_err(struct spi_master *master,
-+				    struct spi_message *msg)
-+{
-+	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
-+	u32 val;
-+
-+	/* stop running spi transfer */
-+	writel(0, priv->base + SSI_CTL);
-+
-+	/* reset FIFOs */
-+	val = SSI_FC_TXFFL | SSI_FC_RXFFL;
-+	writel(val, priv->base + SSI_FC);
-+
-+	uniphier_spi_irq_disable(priv, SSI_IE_RCIE | SSI_IE_RORIE);
-+}
-+
- static irqreturn_t uniphier_spi_handler(int irq, void *dev_id)
- {
- 	struct uniphier_spi_priv *priv = dev_id;
-@@ -538,6 +554,7 @@ static int uniphier_spi_probe(struct platform_device *pdev)
- 				= uniphier_spi_prepare_transfer_hardware;
- 	master->unprepare_transfer_hardware
- 				= uniphier_spi_unprepare_transfer_hardware;
-+	master->handle_err = uniphier_spi_handle_err;
- 	master->num_chipselect = 1;
- 
- 	ret = devm_spi_register_master(&pdev->dev, master);
+ 	master->max_speed_hz = DIV_ROUND_UP(clk_rate, SSI_MIN_CLK_DIVIDER);
+ 	master->min_speed_hz = DIV_ROUND_UP(clk_rate, SSI_MAX_CLK_DIVIDER);
+-	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
++	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST |
++			    SPI_LOOP;
+ 	master->dev.of_node = pdev->dev.of_node;
+ 	master->bus_num = pdev->id;
+ 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
 -- 
 2.7.4
 
