@@ -2,14 +2,14 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 894FE12A8D2
+	by mail.lfdr.de (Postfix) with ESMTP id 1639512A8D1
 	for <lists+linux-spi@lfdr.de>; Wed, 25 Dec 2019 19:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726410AbfLYSWM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S1726353AbfLYSWM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Wed, 25 Dec 2019 13:22:12 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:34834 "EHLO
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:34832 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726899AbfLYSWL (ORCPT
+        with ESMTP id S1726896AbfLYSWL (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Dec 2019 13:22:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
@@ -17,25 +17,25 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
         List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=0JGBQkJET3eDkmeMRDMfgTxBjwJlRQZhgJaiFsRFXBM=; b=pgGgAHur3GH5
-        jUdOEd9k2DtLFWekUb8FcLsuWdr7HLVLibWd28uw3JWLvnYF/N9OXt9DQNYHEwh7zbpr5Ug6/bfdG
-        0wrudzDG5OOf8ZF8cGnqOv19J6Vv0pSgS1uOwyveSbfjpdLiYmWbj6sdvLp1fzeRBUPTItV2NK7R2
-        8wl10=;
+        List-Archive; bh=yNeFxbY6ktE6pdGxR4Z7NfgPDZEau3aG7QfcsaLQcd8=; b=QEcbc3GZxdup
+        0sqDZB7YIgMi1GWl+DQ9q68Kv9PN81/m9Fy2VbzpbqT4mQgmDQ5eUe5ZC5z5DPGPnLn+nJLO5Cy3A
+        WLDXfO2AcwZ/Jhbjyt61149ZCcS7euNJUA4GFOF17hPIy4mwGinAqmD/6AOhnVVT5tKHIhgG65p1z
+        VNE0E=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=fitzroy.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1ikBIN-0001oz-DJ; Wed, 25 Dec 2019 18:22:07 +0000
+        id 1ikBIN-0001oy-8w; Wed, 25 Dec 2019 18:22:07 +0000
 Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id DDB7DD01A50; Wed, 25 Dec 2019 18:22:06 +0000 (GMT)
+        id C3EC3D01A4F; Wed, 25 Dec 2019 18:22:06 +0000 (GMT)
 From:   Mark Brown <broonie@kernel.org>
 To:     zhengbin <zhengbin13@huawei.com>
 Cc:     broonie@kernel.org, Hulk Robot <hulkci@huawei.com>,
         linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         zhengbin13@huawei.com
-Subject: Applied "spi: fsl-lpspi: use true,false for bool variable" to the spi tree
-In-Reply-To: <1577159526-33689-2-git-send-email-zhengbin13@huawei.com>
-Message-Id: <applied-1577159526-33689-2-git-send-email-zhengbin13@huawei.com>
+Subject: Applied "spi: imx: use true,false for bool variable" to the spi tree
+In-Reply-To: <1577159526-33689-3-git-send-email-zhengbin13@huawei.com>
+Message-Id: <applied-1577159526-33689-3-git-send-email-zhengbin13@huawei.com>
 X-Patchwork-Hint: ignore
 Date:   Wed, 25 Dec 2019 18:22:06 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
@@ -45,7 +45,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: fsl-lpspi: use true,false for bool variable
+   spi: imx: use true,false for bool variable
 
 has been applied to the spi tree at
 
@@ -70,40 +70,40 @@ to this mail.
 Thanks,
 Mark
 
-From a68735d7975dde1392f408417c6b5f24c6bf9358 Mon Sep 17 00:00:00 2001
+From e6a8b2cc514ccacb9e1885dcc7be0a3251ab4843 Mon Sep 17 00:00:00 2001
 From: zhengbin <zhengbin13@huawei.com>
-Date: Tue, 24 Dec 2019 11:52:04 +0800
-Subject: [PATCH] spi: fsl-lpspi: use true,false for bool variable
+Date: Tue, 24 Dec 2019 11:52:05 +0800
+Subject: [PATCH] spi: imx: use true,false for bool variable
 
 Fixes coccicheck warning:
 
-drivers/spi/spi-fsl-lpspi.c:472:2-19: WARNING: Assignment of 0/1 to bool variable
-drivers/spi/spi-fsl-lpspi.c:474:2-19: WARNING: Assignment of 0/1 to bool variable
+drivers/spi/spi-imx.c:1233:2-17: WARNING: Assignment of 0/1 to bool variable
+drivers/spi/spi-imx.c:1235:2-17: WARNING: Assignment of 0/1 to bool variable
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: zhengbin <zhengbin13@huawei.com>
-Link: https://lore.kernel.org/r/1577159526-33689-2-git-send-email-zhengbin13@huawei.com
+Link: https://lore.kernel.org/r/1577159526-33689-3-git-send-email-zhengbin13@huawei.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-lpspi.c | 4 ++--
+ drivers/spi/spi-imx.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 2cc0ddb4a988..56855d5e9e8b 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -469,9 +469,9 @@ static int fsl_lpspi_setup_transfer(struct spi_controller *controller,
- 		fsl_lpspi->watermark = fsl_lpspi->txfifosize;
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 49f0099db0cb..f4f28a400a96 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -1230,9 +1230,9 @@ static int spi_imx_setupxfer(struct spi_device *spi,
+ 	}
  
- 	if (fsl_lpspi_can_dma(controller, spi, t))
--		fsl_lpspi->usedma = 1;
-+		fsl_lpspi->usedma = true;
+ 	if (spi_imx_can_dma(spi_imx->bitbang.master, spi, t))
+-		spi_imx->usedma = 1;
++		spi_imx->usedma = true;
  	else
--		fsl_lpspi->usedma = 0;
-+		fsl_lpspi->usedma = false;
+-		spi_imx->usedma = 0;
++		spi_imx->usedma = false;
  
- 	return fsl_lpspi_config(fsl_lpspi);
- }
+ 	if (is_imx53_ecspi(spi_imx) && spi_imx->slave_mode) {
+ 		spi_imx->rx = mx53_ecspi_rx_slave;
 -- 
 2.20.1
 
