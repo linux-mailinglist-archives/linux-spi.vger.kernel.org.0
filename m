@@ -2,271 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1854C12A85B
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Dec 2019 15:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE33212A8BD
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Dec 2019 19:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbfLYOtz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Dec 2019 09:49:55 -0500
-Received: from mga02.intel.com ([134.134.136.20]:63639 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726353AbfLYOtz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 25 Dec 2019 09:49:55 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Dec 2019 06:49:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,355,1571727600"; 
-   d="scan'208";a="392133335"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Dec 2019 06:49:51 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1ik7yw-000Gty-MV; Wed, 25 Dec 2019 22:49:50 +0800
-Date:   Wed, 25 Dec 2019 22:49:04 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, broonie@kernel.org, vigneshr@ti.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Subject: Re: [PATCH v4 2/2] spi: cadence-quadpsi: Add support for the Cadence
- QSPI controller
-Message-ID: <201912252223.wQ8jMSLg%lkp@intel.com>
-References: <20191223063003.26579-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+        id S1726399AbfLYSBs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Dec 2019 13:01:48 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56930 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726353AbfLYSBr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Dec 2019 13:01:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Bq+UAHBLC8Yr9R0oLnqOKgljdZDdLqNGM6yBAh/5KII=; b=G5VKURfpViKG43vYhpo+eMr1e
+        Z5LBDMi61V+PSTSnYgw2bNDEb5B5aUFFK6mhH/oo4OYqVzhTReT5TK2Z0EEiOHlO8fmoy1wmkZKfE
+        M9DG6tdAaLXtDLm1ttVb0dqM5SZndP1vi1/ueBizRHUALU7HOKhPjk42cb3dd8XIEZxvo=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1ikAyc-0001lO-HO; Wed, 25 Dec 2019 18:01:42 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 0D103D01A24; Wed, 25 Dec 2019 18:01:42 +0000 (GMT)
+Date:   Wed, 25 Dec 2019 18:01:42 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
+        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>
+Subject: Re: [PATCH 4/5] spi: uniphier: Add SPI_LOOP to the capabilities
+Message-ID: <20191225180142.GD27497@sirena.org.uk>
+References: <1577149107-30670-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1577149107-30670-5-git-send-email-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fOHHtNG4YXGJ0yqR"
 Content-Disposition: inline
-In-Reply-To: <20191223063003.26579-3-vadivel.muruganx.ramuthevar@linux.intel.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <1577149107-30670-5-git-send-email-hayashi.kunihiko@socionext.com>
+X-Cookie: I have many CHARTS and DIAGRAMS..
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi "Ramuthevar,Vadivel,
 
-Thank you for the patch! Perhaps something to improve:
+--fOHHtNG4YXGJ0yqR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[auto build test WARNING on spi/for-next]
-[also build test WARNING on v5.5-rc3 next-20191220]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+On Tue, Dec 24, 2019 at 09:58:26AM +0900, Kunihiko Hayashi wrote:
+> Add SPI_LOOP to the capabilities to support loopback mode.
 
-url:    https://github.com/0day-ci/linux/commits/Ramuthevar-Vadivel-MuruganX/spi-cadence-quadpsi-Add-support-for-the-Cadence-QSPI-controller/20191225-040310
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-129-g341daf20-dirty
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
+>  	master->min_speed_hz = DIV_ROUND_UP(clk_rate, SSI_MAX_CLK_DIVIDER);
+> -	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
+> +	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST |
+> +			    SPI_LOOP;
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
+I'd expect to see a matching change that configures the hardware
+in loopback mode when the driver is in SPI_MODE?  There's nothing
+in the existing driver.
 
+--fOHHtNG4YXGJ0yqR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-sparse warnings: (new ones prefixed by >>)
+-----BEGIN PGP SIGNATURE-----
 
->> drivers/spi/spi-cadence-quadspi.c:133:30: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:133:30: sparse:    expected void const volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:133:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:139:30: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:139:30: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:139:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:146:30: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:146:30: sparse:    expected void const volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:146:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:152:30: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:152:30: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:152:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:161:30: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:161:30: sparse:    expected void const volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:161:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:171:30: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:171:30: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:171:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:183:30: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:183:30: sparse:    expected void const volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:183:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:186:30: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:186:30: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:186:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:195:30: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:195:30: sparse:    expected void const volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:195:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:214:30: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:214:30: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:214:30: sparse:    got void *
->> drivers/spi/spi-cadence-quadspi.c:383:31: sparse: sparse: incorrect type in initializer (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:383:31: sparse:    expected void *reg_base
-   drivers/spi/spi-cadence-quadspi.c:383:31: sparse:    got void [noderef] <asn:2> *iobase
-   drivers/spi/spi-cadence-quadspi.c:384:31: sparse: sparse: incorrect type in initializer (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:384:31: sparse:    expected void *ahb_base
-   drivers/spi/spi-cadence-quadspi.c:384:31: sparse:    got void [noderef] <asn:2> *qspi_ahb_virt
-   drivers/spi/spi-cadence-quadspi.c:393:36: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:393:36: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:393:36: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:398:25: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:398:25: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:398:25: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:400:48: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:400:48: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:400:48: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:401:44: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:401:44: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:401:44: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:405:25: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:405:25: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:405:25: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:413:33: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:413:33: sparse:    expected void const volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:413:33: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:423:46: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:423:46: sparse:    expected void [noderef] <asn:2> *port
-   drivers/spi/spi-cadence-quadspi.c:423:46: sparse:    got void *ahb_base
-   drivers/spi/spi-cadence-quadspi.c:426:62: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:426:62: sparse:    expected void [noderef] <asn:2> *
-   drivers/spi/spi-cadence-quadspi.c:426:62: sparse:    got void *ahb_base
-   drivers/spi/spi-cadence-quadspi.c:435:41: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:435:41: sparse:    expected void const volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:435:41: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:443:43: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:443:43: sparse:    expected void [noderef] <asn:2> *reg
-   drivers/spi/spi-cadence-quadspi.c:443:43: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:452:28: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:452:28: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:452:28: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:454:57: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:454:57: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:454:57: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:459:28: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:459:28: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:459:28: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:462:25: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:462:25: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:462:25: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:519:31: sparse: sparse: incorrect type in initializer (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:519:31: sparse:    expected void *reg_base
-   drivers/spi/spi-cadence-quadspi.c:519:31: sparse:    got void [noderef] <asn:2> *iobase
-   drivers/spi/spi-cadence-quadspi.c:520:31: sparse: sparse: incorrect type in initializer (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:520:31: sparse:    expected void *ahb_base
-   drivers/spi/spi-cadence-quadspi.c:520:31: sparse:    got void [noderef] <asn:2> *qspi_ahb_virt
-   drivers/spi/spi-cadence-quadspi.c:527:30: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:527:30: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:527:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:528:30: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:528:30: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:528:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:529:30: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:529:30: sparse:    expected void const volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:529:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:534:30: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:534:30: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:534:30: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:536:36: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:536:36: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:536:36: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:537:54: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:537:54: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:537:54: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:539:48: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:539:48: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:539:48: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:540:44: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:540:44: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:540:44: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:543:25: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:543:25: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:543:25: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:557:39: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:557:39: sparse:    expected void [noderef] <asn:2> *port
-   drivers/spi/spi-cadence-quadspi.c:557:39: sparse:    got void *ahb_base
-   drivers/spi/spi-cadence-quadspi.c:564:41: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:564:41: sparse:    expected void [noderef] <asn:2> *
-   drivers/spi/spi-cadence-quadspi.c:564:41: sparse:    got void *ahb_base
-   drivers/spi/spi-cadence-quadspi.c:579:43: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:579:43: sparse:    expected void [noderef] <asn:2> *reg
-   drivers/spi/spi-cadence-quadspi.c:579:43: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:590:28: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:590:28: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:590:28: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:592:57: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:592:57: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:592:57: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:597:33: sparse: sparse: incorrect type in argument 2 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:597:33: sparse:    expected void volatile [noderef] <asn:2> *addr
-   drivers/spi/spi-cadence-quadspi.c:597:33: sparse:    got void *
-   drivers/spi/spi-cadence-quadspi.c:607:38: sparse: sparse: incorrect type in argument 1 (different address spaces)
-   drivers/spi/spi-cadence-quadspi.c:607:38: sparse:    expected void *reg_base
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl4DpAUACgkQJNaLcl1U
+h9DGCwf8CErpoN6/aSizdxhROvbaxbMpt+6Wh6FxMDWHCl0b/S5wOEioBxEI6mnD
+8xn4n0sNUZ9qnymFxuGoDrNN/qNl3UnJ9QyjxRCNg6fC6PI10I+SfzIZwe9BFDs5
+RrDvozuG4OGgJbuE5BWHtaBTVP2afnzeFla+yszRxI7/j7Urg1Qlm7wUZjueXRd3
+ifEjUTZNjmH3nx8+CV8WiiP0KFlzgQM/r0Gcjoj8NwW8UZj7Kepxg+XUs6vrOvwv
+0i2iZwE/zFSKnDav0Whjjstv9HDwO17W1swi6bQbZanUkjzghYSLqdGOQm7vqB2r
+aVLi2EgBy54qeK1Zg5zKZ56TK8PexQ==
+=XK8L
+-----END PGP SIGNATURE-----
 
-vim +133 drivers/spi/spi-cadence-quadspi.c
-
-   128	
-   129	static void cqspi_direct_access_enable(void *reg_base, bool enable)
-   130	{
-   131		u32 reg;
-   132	
- > 133		reg = readl(reg_base + CQSPI_REG_CONFIG);
-   134		if (enable)
-   135			reg |= CQSPI_REG_CONFIG_DIRECT_MASK;
-   136		else
-   137			reg &= ~CQSPI_REG_CONFIG_DIRECT_MASK;
-   138	
-   139		writel(reg, reg_base + CQSPI_REG_CONFIG);
-   140	}
-   141	
-   142	static void cqspi_controller_enable(void *reg_base, bool enable)
-   143	{
-   144		unsigned int reg;
-   145	
-   146		reg = readl(reg_base + CQSPI_REG_CONFIG);
-   147		if (enable)
-   148			reg |= CQSPI_REG_CONFIG_ENABLE_MASK;
-   149		else
-   150			reg &= ~CQSPI_REG_CONFIG_ENABLE_MASK;
-   151	
-   152		writel(reg, reg_base + CQSPI_REG_CONFIG);
-   153	}
-   154	
-   155	static void cqspi_readdata_capture(void *reg_base, u32 bypass, u32 delay)
-   156	{
-   157		unsigned int reg;
-   158	
-   159		cqspi_controller_enable(reg_base, 0);
-   160	
-   161		reg = readl(reg_base + CQSPI_REG_READCAPTURE);
-   162		if (bypass)
-   163			reg |= (1 << CQSPI_REG_READCAPTURE_BYPASS_LSB);
-   164		else
-   165			reg &= ~(1 << CQSPI_REG_READCAPTURE_BYPASS_LSB);
-   166	
-   167		reg &= ~(CQSPI_REG_READCAPTURE_DELAY_MASK
-   168			<< CQSPI_REG_READCAPTURE_DELAY_LSB);
-   169		reg |= ((delay & CQSPI_REG_READCAPTURE_DELAY_MASK)
-   170			<< CQSPI_REG_READCAPTURE_DELAY_LSB);
-   171		writel(reg, reg_base + CQSPI_REG_READCAPTURE);
-   172	
-   173		cqspi_controller_enable(reg_base, 1);
-   174	}
-   175	
-   176	static void cqspi_config_baudrate_div(void *reg_base, u32 ref_clk_hz, u32 sclk)
-   177	{
-   178		unsigned int reg, div;
-   179	
-   180		/* Recalculate the baudrate divisor based on QSPI specification. */
-   181		div = DIV_ROUND_UP(ref_clk_hz, 2 * sclk) - 1;
-   182	
-   183		reg = readl(reg_base + CQSPI_REG_CONFIG);
-   184		reg &= ~(CQSPI_REG_CONFIG_BAUD_MASK << CQSPI_REG_CONFIG_BAUD_LSB);
-   185		div = (div & CQSPI_REG_CONFIG_BAUD_MASK) << CQSPI_REG_CONFIG_BAUD_LSB;
- > 186		writel(reg, reg_base + CQSPI_REG_CONFIG);
-   187	}
-   188	
-
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+--fOHHtNG4YXGJ0yqR--
