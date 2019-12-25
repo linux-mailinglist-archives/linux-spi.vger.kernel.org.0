@@ -2,121 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2830712A349
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2019 17:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C503512A517
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Dec 2019 01:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726213AbfLXQ6Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Dec 2019 11:58:25 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:45698 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726183AbfLXQ6Z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Dec 2019 11:58:25 -0500
-Received: by mail-lf1-f67.google.com with SMTP id 203so15420942lfa.12
-        for <linux-spi@vger.kernel.org>; Tue, 24 Dec 2019 08:58:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J9xVipWdZ9ewXXkBZXIrSrABSMZzc9X1MMnhoAbWXlE=;
-        b=W0hlLL5DhTEpCFv0TCctzYOTXyobKMI6Y6UJK8+lDzVhnHItHqQwaIpn680DfYumSV
-         L8WcWNVtAVhspp+9zGEG05NY2Th2BRK8yr/LBjNXiqAM/JFXdq2isbMLHBZPrMvXg/n0
-         pF/574ew1QU8lMu8AA68vrFTMlZwzN43O4YFR0soGdns80TeDSeZlF/mUZ1fMejn/WEj
-         BkgoETEWv70bXzccrBSJ1DQ4IYDU3/uJLE1qGrL0sJyHHXvZSlpG7TKjSdqmBnzcNne/
-         mhRNJ6DrtfIb3G8kzyuQlh3QToM5aJZTIlslg0SRb1VYd9JUY0o5Ayl8xO3zpTXgisBm
-         PoIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=J9xVipWdZ9ewXXkBZXIrSrABSMZzc9X1MMnhoAbWXlE=;
-        b=f3eP7oXSk6H30s0wmpyo2ReMtcGLVF6nQzgGnf0Lo96dLUnRhgSq+K+wG2WEt6eIPx
-         4UkCS4LEmX02o4zsvKkYN1cMqsJyf4ui9ygqhpZnHz2ti/NS3GhTxNEFrkkH4hTYhhXL
-         TuST5E/clXjVMDaknevdsk1AVaqD7LHsmuTjyH64OeOhxIaoBwMFSx63ZUkmJnorNfRv
-         oMBZwoPUgqU13v7yp21MburZ5CCd2dhuI6ZrUT+7e/UPyjtyc6VVNMuwC5p52P9yZoA6
-         p1M7x3dGObADcEHZlLu+kAc/vNhPJgqjDSZ2I15xs3Jr0pqswqSFxi73CI4ExMGYT8A1
-         tc1Q==
-X-Gm-Message-State: APjAAAWLCpXXesMpxBtB+L4b78EoSHa7rANoYbh6VAUAduppS+PSWCz5
-        eFmLHlwJbI8hVCrnw6/olZYnWA==
-X-Google-Smtp-Source: APXvYqwV8IVoVjnuRZBeIW/7BCYcFzMxWYQyUyZDt6oXFV1ZN/xkagQ1KHils7pYZlCWzv9yW2hdjA==
-X-Received: by 2002:a19:c1c1:: with SMTP id r184mr20571865lff.128.1577206703390;
-        Tue, 24 Dec 2019 08:58:23 -0800 (PST)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:441d:5f5:f336:feb9:305c:b1aa])
-        by smtp.gmail.com with ESMTPSA id x21sm10232507ljd.2.2019.12.24.08.58.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 24 Dec 2019 08:58:22 -0800 (PST)
-Subject: Re: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
-To:     masonccyang@mxic.com.tw
-Cc:     Mark Brown <broonie@kernel.org>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-References: <20191206134202.18784-1-chris.brandt@renesas.com>
- <922cfa46-efb5-9e6d-67ea-3ac505b8211c@cogentembedded.com>
- <TY1PR01MB156215E8668C0317FA0826B18A580@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <e6a73df5-31c4-3472-f7bc-a0984f1f5380@cogentembedded.com>
- <TY1PR01MB1562D343E1AB06DCA2973DAC8A550@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <590840ce-a250-2512-3d04-c2420d83f7da@cogentembedded.com>
- <TY1PR01MB1562B9EB96818DCA507079808A510@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <bb630141-021c-5618-f266-b98b29956fa8@cogentembedded.com>
- <TY1PR01MB1562E196AB1C582F186CC74B8A520@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <6f4c5d92-3ca4-2d1d-47c4-cbd52ad428b0@cogentembedded.com>
- <OF3F92D76C.33FFFBFC-ON482584D6.00093DAC-482584D6.0009A51D@mxic.com.tw>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <bac1f4db-302d-0dd7-3b66-341a74f67a6b@cogentembedded.com>
-Date:   Tue, 24 Dec 2019 19:58:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
-MIME-Version: 1.0
-In-Reply-To: <OF3F92D76C.33FFFBFC-ON482584D6.00093DAC-482584D6.0009A51D@mxic.com.tw>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+        id S1726325AbfLYAJ2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Dec 2019 19:09:28 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33774 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726946AbfLYAJ0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Dec 2019 19:09:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=XHO12lr1qLB4FKdbh6ys7+jy8rW61hg1/mw41eet/vI=; b=Mtpl63TU2Fv6
+        qcc+jUPgG3t3sObYqw3qJntc+jQ4uZINU2M1k868I2OCc5Pud3blFUcYCeHQIkBzsOsgptBIZ54Cj
+        ZWXWfzCq8Qz+RUCkV5eUOepHvLvxwtoNAl0nxJRNCa3qrtS83ZQXcggQNxHstk4cbci6icVmJdT6e
+        x6aVo=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1ijuEp-0007N2-Fd; Wed, 25 Dec 2019 00:09:19 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 00AA5D01963; Wed, 25 Dec 2019 00:09:18 +0000 (GMT)
+From:   Mark Brown <broonie@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Jassi Brar <jaswinder.singh@linaro.org>,
+        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Masami Hiramatsu <masami.hiramatsu@linaro.org>
+Subject: Applied "spi: uniphier: Change argument of irq functions to private structure" to the spi tree
+In-Reply-To: <1577149107-30670-3-git-send-email-hayashi.kunihiko@socionext.com>
+Message-Id: <applied-1577149107-30670-3-git-send-email-hayashi.kunihiko@socionext.com>
+X-Patchwork-Hint: ignore
+Date:   Wed, 25 Dec 2019 00:09:18 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello!
+The patch
 
-On 12/20/2019 04:45 AM, masonccyang@mxic.com.tw wrote:
+   spi: uniphier: Change argument of irq functions to private structure
 
->>>>> So at the moment, there is nothing yet for me to 'try' on the RZ/A series,
->>>> correct?
->>>>
->>>>    Why, I can send you a working version of the SPI driver, and even HF one
->>>> if you're
->>>> interested.
->>>
->>> The point of this whole discussion is to determine if we should have 2 drivers
->>> for the same Renesas HW IP.
->>>
->>> There was a RPC-IF patch series that made it to v17....and is now dead.
-> 
-> It's under review by Geert Uytterhoeven
-> 
-> https://patchwork.kernel.org/project/linux-renesas-soc/list/?submitter=181859 
-> https://patchwork.kernel.org/patch/11078131/ 
-> https://patchwork.kernel.org/patch/11078133/
+has been applied to the spi tree at
 
-https://patchwork.kernel.org/patch/11078137/
-https://patchwork.kernel.org/patch/11078139/ 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
 
-   It doesn't matter much what's in the renesas-soc patchwork, the patch would
-be merged thru the linux-spi repo, and in their patchwork the status of your v17
-patches is "New, archived"...
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-> thanks & best regards,
-> Mason
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-MBR, Sergei
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 9859db51387df8a7e8564a211158ff8bf263b0a8 Mon Sep 17 00:00:00 2001
+From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Date: Tue, 24 Dec 2019 09:58:24 +0900
+Subject: [PATCH] spi: uniphier: Change argument of irq functions to private
+ structure
+
+This changes each argument of functions uniphier_irq_{enable,disable}()
+to uniphier_spi_priv because these functions are used not only for
+spi_device but also for the entire controller.
+
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Link: https://lore.kernel.org/r/1577149107-30670-3-git-send-email-hayashi.kunihiko@socionext.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-uniphier.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/spi/spi-uniphier.c b/drivers/spi/spi-uniphier.c
+index 47cde1864630..a44a1a5fb7b0 100644
+--- a/drivers/spi/spi-uniphier.c
++++ b/drivers/spi/spi-uniphier.c
+@@ -93,9 +93,9 @@ static inline unsigned int bytes_per_word(unsigned int bits)
+ 	return bits <= 8 ? 1 : (bits <= 16 ? 2 : 4);
+ }
+ 
+-static inline void uniphier_spi_irq_enable(struct spi_device *spi, u32 mask)
++static inline void uniphier_spi_irq_enable(struct uniphier_spi_priv *priv,
++					   u32 mask)
+ {
+-	struct uniphier_spi_priv *priv = spi_master_get_devdata(spi->master);
+ 	u32 val;
+ 
+ 	val = readl(priv->base + SSI_IE);
+@@ -103,9 +103,9 @@ static inline void uniphier_spi_irq_enable(struct spi_device *spi, u32 mask)
+ 	writel(val, priv->base + SSI_IE);
+ }
+ 
+-static inline void uniphier_spi_irq_disable(struct spi_device *spi, u32 mask)
++static inline void uniphier_spi_irq_disable(struct uniphier_spi_priv *priv,
++					    u32 mask)
+ {
+-	struct uniphier_spi_priv *priv = spi_master_get_devdata(spi->master);
+ 	u32 val;
+ 
+ 	val = readl(priv->base + SSI_IE);
+@@ -339,12 +339,12 @@ static int uniphier_spi_transfer_one_irq(struct spi_master *master,
+ 
+ 	uniphier_spi_fill_tx_fifo(priv);
+ 
+-	uniphier_spi_irq_enable(spi, SSI_IE_RCIE | SSI_IE_RORIE);
++	uniphier_spi_irq_enable(priv, SSI_IE_RCIE | SSI_IE_RORIE);
+ 
+ 	time_left = wait_for_completion_timeout(&priv->xfer_done,
+ 					msecs_to_jiffies(SSI_TIMEOUT_MS));
+ 
+-	uniphier_spi_irq_disable(spi, SSI_IE_RCIE | SSI_IE_RORIE);
++	uniphier_spi_irq_disable(priv, SSI_IE_RCIE | SSI_IE_RORIE);
+ 
+ 	if (!time_left) {
+ 		dev_err(dev, "transfer timeout.\n");
+-- 
+2.20.1
+
