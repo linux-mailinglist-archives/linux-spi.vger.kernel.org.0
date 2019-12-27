@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2461412B623
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 18:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE0512B8FB
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 18:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbfL0R3P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 27 Dec 2019 12:29:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33240 "EHLO mail.kernel.org"
+        id S1727033AbfL0RlC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 27 Dec 2019 12:41:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726379AbfL0R3P (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:29:15 -0500
+        id S1726379AbfL0RlA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:41:00 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A73932173E;
-        Fri, 27 Dec 2019 17:29:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E845A2173E;
+        Fri, 27 Dec 2019 17:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577467754;
+        s=default; t=1577468459;
         bh=2/AR+100ByIuaMU3kpLIuFMXpkvzl8NCXRQQ5iDGItk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hc1wndU8awgaj0weMcAblVZcg6umTqjV64GQDWX4dCjuqFIJLDzYkIx54NxA1OPpv
-         ToS6utxa5KTu8u165Dt5/pI/wLUfqc10+waRZONMHp/f1HxgDib4qAnPz0CWuXWVqD
-         8PKFel+Im9ttPa17hd5pLGkU6KFH76u0TlBULGew=
+        b=EFvKpnEHjK08oIEwsO5tVLkbYio/x3j/cRcpooDy2xWpKUSgfWGQguPacWw76qs+8
+         qjGnSVtOJKa/6YX28LkKP4NCnFS9ZvPP1FwLhJlrxf2wjAQtXKx14TOlz6ldqfPwYs
+         LKxy2u3h+Gi6MTqDRJrLJkh8Appw/2Xl11QJRdX8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
@@ -30,11 +30,11 @@ Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
 Subject: [PATCH AUTOSEL 5.4 002/187] spi: pxa2xx: Add support for Intel Jasper Lake
-Date:   Fri, 27 Dec 2019 12:26:06 -0500
-Message-Id: <20191227172911.4430-2-sashal@kernel.org>
+Date:   Fri, 27 Dec 2019 12:37:50 -0500
+Message-Id: <20191227174055.4923-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227172911.4430-1-sashal@kernel.org>
-References: <20191227172911.4430-1-sashal@kernel.org>
+In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
+References: <20191227174055.4923-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
