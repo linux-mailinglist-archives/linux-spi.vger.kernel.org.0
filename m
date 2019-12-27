@@ -2,37 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B0412B7CB
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 18:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C8812B6AB
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 18:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbfL0RvY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 27 Dec 2019 12:51:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40938 "EHLO mail.kernel.org"
+        id S1728465AbfL0Ro1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 27 Dec 2019 12:44:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42504 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727282AbfL0RnZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:43:25 -0500
+        id S1728460AbfL0Ro1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:44:27 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2DC4E24125;
-        Fri, 27 Dec 2019 17:43:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E982421927;
+        Fri, 27 Dec 2019 17:44:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468604;
-        bh=w1xY86k7o2X3acrxEgJ49Coa7QPmcFApXCnQ410bYkU=;
+        s=default; t=1577468666;
+        bh=rn+RqjIAdDdOswpcLXNztAWhWJuyC+dPZFWOqYFTTr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gII4N7y/AMMDBz+paF6LyzzfNHh5HTp4FUcYhRcz9P8++44E+fao8vFEmvCw35nBd
-         Cv3xAtACqHji6RP5VbyjIVznzY039hyEkxeFSC5k3VEVwt9sqkvIoauuoVI16rzNIw
-         Ou1TIeYdYcUExeOllQ1ToMd0qYrB8dg1R1q6Oe80=
+        b=fahlmtfbuzA5SuJV0o7lsq+Vwp+epVOP6IzbbppypOsg64xtXKJ74d5citj9Z5/q+
+         TPAXgnxx8/P6gYyAZBZxvkSwMSNjpAb/y3nPjX4GyjwPCH9X7ty6kEXjZNd1NOYv+3
+         QW6XRm21TJ9tbWSXZ5yOfYIGGezPI/7Vl5lOIu2s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Walle <michael@walle.cc>, Mark Brown <broonie@kernel.org>,
+Cc:     Chuhong Yuan <hslester96@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 125/187] spi: nxp-fspi: Ensure width is respected in spi-mem operations
-Date:   Fri, 27 Dec 2019 12:39:53 -0500
-Message-Id: <20191227174055.4923-125-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 27/84] spi: spi-cavium-thunderx: Add missing pci_release_regions()
+Date:   Fri, 27 Dec 2019 12:42:55 -0500
+Message-Id: <20191227174352.6264-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
-References: <20191227174055.4923-1-sashal@kernel.org>
+In-Reply-To: <20191227174352.6264-1-sashal@kernel.org>
+References: <20191227174352.6264-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,39 +43,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Chuhong Yuan <hslester96@gmail.com>
 
-[ Upstream commit 007773e16a6f3f49d1439554078c3ba8af131998 ]
+[ Upstream commit a841e2853e1afecc2ee692b8cc5bff606bc84e4c ]
 
-Make use of a core helper to ensure the desired width is respected
-when calling spi-mem operators.
+The driver forgets to call pci_release_regions() in probe failure
+and remove.
+Add the missed calls to fix it.
 
-Otherwise only the SPI controller will be matched with the flash chip,
-which might lead to wrong widths. Also consider the width specified by
-the user in the device tree.
-
-Fixes: a5356aef6a90 ("spi: spi-mem: Add driver for NXP FlexSPI controller")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20191211195730.26794-1-michael@walle.cc
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+Link: https://lore.kernel.org/r/20191206075500.18525-1-hslester96@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-nxp-fspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-cavium-thunderx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-index 501b923f2c27..28ae5229f889 100644
---- a/drivers/spi/spi-nxp-fspi.c
-+++ b/drivers/spi/spi-nxp-fspi.c
-@@ -439,7 +439,7 @@ static bool nxp_fspi_supports_op(struct spi_mem *mem,
- 	    op->data.nbytes > f->devtype_data->txfifo)
- 		return false;
+diff --git a/drivers/spi/spi-cavium-thunderx.c b/drivers/spi/spi-cavium-thunderx.c
+index 877937706240..828fbbebc3c4 100644
+--- a/drivers/spi/spi-cavium-thunderx.c
++++ b/drivers/spi/spi-cavium-thunderx.c
+@@ -81,6 +81,7 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
  
--	return true;
-+	return spi_mem_default_supports_op(mem, op);
+ error:
+ 	clk_disable_unprepare(p->clk);
++	pci_release_regions(pdev);
+ 	spi_master_put(master);
+ 	return ret;
  }
+@@ -95,6 +96,7 @@ static void thunderx_spi_remove(struct pci_dev *pdev)
+ 		return;
  
- /* Instead of busy looping invoke readl_poll_timeout functionality. */
+ 	clk_disable_unprepare(p->clk);
++	pci_release_regions(pdev);
+ 	/* Put everything in a known state. */
+ 	writeq(0, p->register_base + OCTEON_SPI_CFG(p));
+ }
 -- 
 2.20.1
 
