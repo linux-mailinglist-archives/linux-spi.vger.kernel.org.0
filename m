@@ -2,83 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 157EC12BA86
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 19:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4792112BBC0
+	for <lists+linux-spi@lfdr.de>; Sat, 28 Dec 2019 00:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727423AbfL0SOu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 27 Dec 2019 13:14:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39208 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727393AbfL0SOu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 27 Dec 2019 13:14:50 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DEAF120CC7;
-        Fri, 27 Dec 2019 18:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577470489;
-        bh=rn+RqjIAdDdOswpcLXNztAWhWJuyC+dPZFWOqYFTTr8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tV9GlbA+7Vz8OCta+3MkdbPUToWQ6ASmW2HebJChqOccRxgwqIxI1/lw2E7IqoLso
-         dq1K0GTuYU1vQFVwXsH17DZqU0R+HnptfBBxnG3BRtS8+mpB44PVnezmrH9iShqbnl
-         WI6ZwbyklZMSeIvqE0DqNJ1i/nUmj8u4V0F5s4bc=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chuhong Yuan <hslester96@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 10/38] spi: spi-cavium-thunderx: Add missing pci_release_regions()
-Date:   Fri, 27 Dec 2019 13:14:07 -0500
-Message-Id: <20191227181435.7644-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227181435.7644-1-sashal@kernel.org>
-References: <20191227181435.7644-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1725957AbfL0XGE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 27 Dec 2019 18:06:04 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:42742 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbfL0XGE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 Dec 2019 18:06:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=a/Omcxi51q/doRd8pPO1rXZXChkD1R3YfPIl5nLLstE=; b=lsh3zrKuvN3z
+        12Du2KnpZhUIdu9Cczg7CJlRm9+SpTMR6kT2uSdterKX6BfmZZ7fVedjb9Jxe3QhFnUrwjs4V0Pxl
+        zlbuGzY7UpDIv7dQH33lRxaW7BfQwl0ICE9oAdIWDQ+7/PRB1EyK4gyzvFJYzXorD3jnI6mEUV3tn
+        m3OtI=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1ikyZ8-0006c7-Il; Fri, 27 Dec 2019 22:58:42 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 118BED01A22; Fri, 27 Dec 2019 22:58:42 +0000 (GMT)
+From:   Mark Brown <broonie@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, netdev@vger.kernel.org
+Subject: Applied "spi: Catch improper use of PTP system timestamping API" to the spi tree
+In-Reply-To: <20191227012444.1204-1-olteanv@gmail.com>
+Message-Id: <applied-20191227012444.1204-1-olteanv@gmail.com>
+X-Patchwork-Hint: ignore
+Date:   Fri, 27 Dec 2019 22:58:42 +0000 (GMT)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Chuhong Yuan <hslester96@gmail.com>
+The patch
 
-[ Upstream commit a841e2853e1afecc2ee692b8cc5bff606bc84e4c ]
+   spi: Catch improper use of PTP system timestamping API
 
-The driver forgets to call pci_release_regions() in probe failure
-and remove.
-Add the missed calls to fix it.
+has been applied to the spi tree at
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-Link: https://lore.kernel.org/r/20191206075500.18525-1-hslester96@gmail.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From f971a2074447726ec9a3feee3648a2e157f08248 Mon Sep 17 00:00:00 2001
+From: Vladimir Oltean <olteanv@gmail.com>
+Date: Fri, 27 Dec 2019 03:24:44 +0200
+Subject: [PATCH] spi: Catch improper use of PTP system timestamping API
+
+We can catch whether the SPI controller has declared it can take care of
+software timestamping transfers, but didn't. So do it.
+
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Link: https://lore.kernel.org/r/20191227012444.1204-1-olteanv@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-cavium-thunderx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/spi/spi.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/spi/spi-cavium-thunderx.c b/drivers/spi/spi-cavium-thunderx.c
-index 877937706240..828fbbebc3c4 100644
---- a/drivers/spi/spi-cavium-thunderx.c
-+++ b/drivers/spi/spi-cavium-thunderx.c
-@@ -81,6 +81,7 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5e4c4532f7f3..5485ef89197c 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1680,6 +1680,13 @@ void spi_finalize_current_message(struct spi_controller *ctlr)
+ 		}
+ 	}
  
- error:
- 	clk_disable_unprepare(p->clk);
-+	pci_release_regions(pdev);
- 	spi_master_put(master);
- 	return ret;
- }
-@@ -95,6 +96,7 @@ static void thunderx_spi_remove(struct pci_dev *pdev)
- 		return;
++	if (unlikely(ctlr->ptp_sts_supported)) {
++		list_for_each_entry(xfer, &mesg->transfers, transfer_list) {
++			WARN_ON_ONCE(xfer->ptp_sts && !xfer->timestamped_pre);
++			WARN_ON_ONCE(xfer->ptp_sts && !xfer->timestamped_post);
++		}
++	}
++
+ 	spi_unmap_msg(ctlr, mesg);
  
- 	clk_disable_unprepare(p->clk);
-+	pci_release_regions(pdev);
- 	/* Put everything in a known state. */
- 	writeq(0, p->register_base + OCTEON_SPI_CFG(p));
- }
+ 	if (ctlr->cur_msg_prepared && ctlr->unprepare_message) {
 -- 
 2.20.1
 
