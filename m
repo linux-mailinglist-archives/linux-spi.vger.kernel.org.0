@@ -2,258 +2,230 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9AB12B01C
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 02:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A960212B02C
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 02:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbfL0BI7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Dec 2019 20:08:59 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59806 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726193AbfL0BI7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Dec 2019 20:08:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=b03zOjt9P+AZI2QZFUJujmUEa0hmUd9esIUWfw7SCxc=; b=O2THKGMod/Ti
-        uFel1P6OU4ZmBaSnw5Y4u+es3R34NbLqWbCYEZQDWMvwrtTWom4iNORObduM6CaRb1Qbnbg+5bdW+
-        2fUVFJpeWDT8VF4vL5GdYMFc9TqUEYGPxCBi0ULmylOkJa4tqWs16tKrclkWyl6pvfHFKIeDbKIJ4
-        Kalew=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1ike7b-00049d-NX; Fri, 27 Dec 2019 01:08:55 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 3CC56D01A22; Fri, 27 Dec 2019 01:08:55 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Thomas Chou <thomas@wytron.com.tw>
-Subject: Applied "spi: oc-tiny: Use GPIO descriptors" to the spi tree
-In-Reply-To: <20191205092411.64341-1-linus.walleij@linaro.org>
-Message-Id: <applied-20191205092411.64341-1-linus.walleij@linaro.org>
-X-Patchwork-Hint: ignore
-Date:   Fri, 27 Dec 2019 01:08:55 +0000 (GMT)
+        id S1727016AbfL0BYY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Dec 2019 20:24:24 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41741 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726806AbfL0BYY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Dec 2019 20:24:24 -0500
+Received: by mail-wr1-f65.google.com with SMTP id c9so24890700wrw.8;
+        Thu, 26 Dec 2019 17:24:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=bVUkShIVYz0GYkvp4Nh+Gg7c7ljJk23j8BGGZQ1teIk=;
+        b=aHZOXDejBhYLGyCj6Ch72AKMAfMMdXoYzUaw+aiVdzIloMwWDTUy1UTzd8RIG8pyO9
+         hhjR6eEYcWgXzGa+91jXh1HrDOB6QQ8U7fUaKXhXRyGGBNYBUaIEKae4f/OY+0Bwmilx
+         dmqwH4bUHnTYfU21kRhhHxylwNBHtWQaPQnKQCPbiEBTMRYB0OVfQrcQZDgn9XgGJTiC
+         wtPZ7ZEJ0Es2E09kNbRWdfa2XXDhMQk3449c+LRmcUpT4UwflDD7GGC4Mz93DEgxk2MM
+         zrEximcOeKrlbvaAOlnqVvNT3gCT5S8r+zw6a0fBjFPeCLdoiQ4wa0ZeIzuHC82wGfTk
+         DnqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=bVUkShIVYz0GYkvp4Nh+Gg7c7ljJk23j8BGGZQ1teIk=;
+        b=EvLptjfrZsdhbm1FgSk1sfhfCHEl9/0Ftfy0QRoqC8TzeGpelmAkc4Zz132Pvb7CoF
+         ZhmdXO4Ob6DmOvXfsCWwkKMuiwixZt4m1L/yf6F0qTzxkxxhzo3HwSTkFYGIh6VYw5TC
+         PvcULkJ48gLJ+8JqTE/rfMYtknS0Biq+unnmTc8+I3k2aN/vmmZP0QVByLG4FPSqNAaV
+         lq5IFd5iYasUko/OXzvEYw9/tI2x8eehZoah3j6kR2bqgkMEeuzkeG5jYHGCVpeyj5VT
+         uPkYc7W1svRT6rFsCVJK8z/P3ALYAbQW0nuwS0zKOg0aEvxXPzzYJ01cuXQoX/Kg443s
+         J7OQ==
+X-Gm-Message-State: APjAAAUcWwfBExl4O1lwf5+GzrElZ+pDqkeQmsZNTG/DdXLKrZwnTiND
+        RzgiyZqkaiLXpFiMlydLuzk+JMnK
+X-Google-Smtp-Source: APXvYqyDVh3BeBUpcKVw/mom+KUNYCCGDqr8smKYZUVF0qIB/v2W8rD+egCiPnzMYH6+pwEyr0/xTg==
+X-Received: by 2002:adf:ff8a:: with SMTP id j10mr12780825wrr.312.1577409861657;
+        Thu, 26 Dec 2019 17:24:21 -0800 (PST)
+Received: from localhost.localdomain ([188.25.254.226])
+        by smtp.gmail.com with ESMTPSA id k7sm9580233wmi.19.2019.12.26.17.24.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Dec 2019 17:24:21 -0800 (PST)
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, netdev@vger.kernel.org,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: [PATCH spi] spi: Don't look at TX buffer for PTP system timestamping
+Date:   Fri, 27 Dec 2019 03:24:17 +0200
+Message-Id: <20191227012417.1057-1-olteanv@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+The API for PTP system timestamping (associating a SPI transaction with
+the system time at which it was transferred) is flawed: it assumes that
+the xfer->tx_buf pointer will always be present.
 
-   spi: oc-tiny: Use GPIO descriptors
+This is, of course, not always the case.
 
-has been applied to the spi tree at
+So introduce a "progress" variable that denotes how many word have been
+transferred.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
+Fix the Freescale DSPI driver, the only user of the API so far, in the
+same patch.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From f03ee2042b2dc46e3452e87324d90f147de4a944 Mon Sep 17 00:00:00 2001
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 5 Dec 2019 10:24:11 +0100
-Subject: [PATCH] spi: oc-tiny: Use GPIO descriptors
-
-Switch the OC Tiny driver over to handling CS GPIOs using
-GPIO descriptors in the core.
-
-This driver is entirely relying on GPIOs to be used for
-chipselect, so let the core pick these out using either
-device tree or machine descriptors.
-
-There are no in-tree users of this driver so no board files
-need to be patched, out-of-tree boardfiles can use machine
-descriptor tables, c.f. commit 1dfbf334f123.
-
-Cc: Thomas Chou <thomas@wytron.com.tw>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20191205092411.64341-1-linus.walleij@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: b42faeee718c ("spi: Add a PTP system timestamp to the transfer structure")
+Fixes: d6b71dfaeeba ("spi: spi-fsl-dspi: Implement the PTP system timestamping for TCFQ mode")
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 ---
- drivers/spi/spi-oc-tiny.c       | 50 +--------------------------------
- include/linux/spi/spi_oc_tiny.h |  4 ---
- 2 files changed, 1 insertion(+), 53 deletions(-)
+Sorry, resent because I had a typo in the address of the mailing list
+the first time.
 
-diff --git a/drivers/spi/spi-oc-tiny.c b/drivers/spi/spi-oc-tiny.c
-index e2331eb7b47a..9df7c5979c29 100644
---- a/drivers/spi/spi-oc-tiny.c
-+++ b/drivers/spi/spi-oc-tiny.c
-@@ -20,7 +20,6 @@
- #include <linux/spi/spi_bitbang.h>
- #include <linux/spi/spi_oc_tiny.h>
- #include <linux/io.h>
--#include <linux/gpio.h>
- #include <linux/of.h>
+ drivers/spi/spi-fsl-dspi.c |  9 ++++++---
+ drivers/spi/spi.c          | 22 ++++++++--------------
+ include/linux/spi/spi.h    |  4 ++--
+ 3 files changed, 16 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index 217320376c2d..f9377730e3d8 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -185,6 +185,7 @@ struct fsl_dspi {
+ 	struct spi_transfer			*cur_transfer;
+ 	struct spi_message			*cur_msg;
+ 	struct chip_data			*cur_chip;
++	size_t					progress;
+ 	size_t					len;
+ 	const void				*tx;
+ 	void					*rx;
+@@ -641,7 +642,7 @@ static int dspi_rxtx(struct fsl_dspi *dspi)
+ 	u32 spi_tcr;
  
- #define DRV_NAME "spi_oc_tiny"
-@@ -50,8 +49,6 @@ struct tiny_spi {
- 	unsigned int txc, rxc;
- 	const u8 *txp;
- 	u8 *rxp;
--	int gpio_cs_count;
--	int *gpio_cs;
- };
+ 	spi_take_timestamp_post(dspi->ctlr, dspi->cur_transfer,
+-				dspi->tx - dspi->bytes_per_word, !dspi->irq);
++				dspi->progress, !dspi->irq);
  
- static inline struct tiny_spi *tiny_spi_to_hw(struct spi_device *sdev)
-@@ -66,16 +63,6 @@ static unsigned int tiny_spi_baud(struct spi_device *spi, unsigned int hz)
- 	return min(DIV_ROUND_UP(hw->freq, hz * 2), (1U << hw->baudwidth)) - 1;
- }
+ 	/* Get transfer counter (in number of SPI transfers). It was
+ 	 * reset to 0 when transfer(s) were started.
+@@ -650,6 +651,7 @@ static int dspi_rxtx(struct fsl_dspi *dspi)
+ 	spi_tcnt = SPI_TCR_GET_TCNT(spi_tcr);
+ 	/* Update total number of bytes that were transferred */
+ 	msg->actual_length += spi_tcnt * dspi->bytes_per_word;
++	dspi->progress += spi_tcnt;
  
--static void tiny_spi_chipselect(struct spi_device *spi, int is_active)
--{
--	struct tiny_spi *hw = tiny_spi_to_hw(spi);
--
--	if (hw->gpio_cs_count > 0) {
--		gpio_set_value(hw->gpio_cs[spi->chip_select],
--			(spi->mode & SPI_CS_HIGH) ? is_active : !is_active);
--	}
--}
--
- static int tiny_spi_setup_transfer(struct spi_device *spi,
- 				   struct spi_transfer *t)
- {
-@@ -203,24 +190,10 @@ static int tiny_spi_of_probe(struct platform_device *pdev)
- {
- 	struct tiny_spi *hw = platform_get_drvdata(pdev);
- 	struct device_node *np = pdev->dev.of_node;
--	unsigned int i;
- 	u32 val;
- 
- 	if (!np)
+ 	trans_mode = dspi->devtype_data->trans_mode;
+ 	if (trans_mode == DSPI_EOQ_MODE)
+@@ -662,7 +664,7 @@ static int dspi_rxtx(struct fsl_dspi *dspi)
  		return 0;
--	hw->gpio_cs_count = of_gpio_count(np);
--	if (hw->gpio_cs_count > 0) {
--		hw->gpio_cs = devm_kcalloc(&pdev->dev,
--				hw->gpio_cs_count, sizeof(unsigned int),
--				GFP_KERNEL);
--		if (!hw->gpio_cs)
--			return -ENOMEM;
--	}
--	for (i = 0; i < hw->gpio_cs_count; i++) {
--		hw->gpio_cs[i] = of_get_gpio_flags(np, i, NULL);
--		if (hw->gpio_cs[i] < 0)
--			return -ENODEV;
--	}
- 	hw->bitbang.master->dev.of_node = pdev->dev.of_node;
- 	if (!of_property_read_u32(np, "clock-frequency", &val))
- 		hw->freq = val;
-@@ -240,7 +213,6 @@ static int tiny_spi_probe(struct platform_device *pdev)
- 	struct tiny_spi_platform_data *platp = dev_get_platdata(&pdev->dev);
- 	struct tiny_spi *hw;
- 	struct spi_master *master;
--	unsigned int i;
- 	int err = -ENODEV;
  
- 	master = spi_alloc_master(&pdev->dev, sizeof(struct tiny_spi));
-@@ -249,9 +221,9 @@ static int tiny_spi_probe(struct platform_device *pdev)
+ 	spi_take_timestamp_pre(dspi->ctlr, dspi->cur_transfer,
+-			       dspi->tx, !dspi->irq);
++			       dspi->progress, !dspi->irq);
  
- 	/* setup the master state. */
- 	master->bus_num = pdev->id;
--	master->num_chipselect = 255;
- 	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
- 	master->setup = tiny_spi_setup;
-+	master->use_gpio_descriptors = true;
+ 	if (trans_mode == DSPI_EOQ_MODE)
+ 		dspi_eoq_write(dspi);
+@@ -751,6 +753,7 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+ 		dspi->rx = transfer->rx_buf;
+ 		dspi->rx_end = dspi->rx + transfer->len;
+ 		dspi->len = transfer->len;
++		dspi->progress = 0;
+ 		/* Validated transfer specific frame size (defaults applied) */
+ 		dspi->bits_per_word = transfer->bits_per_word;
+ 		dspi->bytes_per_word = DIV_ROUND_UP(dspi->bits_per_word, 8);
+@@ -767,7 +770,7 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+ 				     SPI_CTARE_DTCP(1));
  
- 	hw = spi_master_get_devdata(master);
- 	platform_set_drvdata(pdev, hw);
-@@ -259,7 +231,6 @@ static int tiny_spi_probe(struct platform_device *pdev)
- 	/* setup the state for the bitbang driver */
- 	hw->bitbang.master = master;
- 	hw->bitbang.setup_transfer = tiny_spi_setup_transfer;
--	hw->bitbang.chipselect = tiny_spi_chipselect;
- 	hw->bitbang.txrx_bufs = tiny_spi_txrx_bufs;
+ 		spi_take_timestamp_pre(dspi->ctlr, dspi->cur_transfer,
+-				       dspi->tx, !dspi->irq);
++				       dspi->progress, !dspi->irq);
  
- 	/* find and map our resources */
-@@ -279,12 +250,6 @@ static int tiny_spi_probe(struct platform_device *pdev)
- 	}
- 	/* find platform data */
- 	if (platp) {
--		hw->gpio_cs_count = platp->gpio_cs_count;
--		hw->gpio_cs = platp->gpio_cs;
--		if (platp->gpio_cs_count && !platp->gpio_cs) {
--			err = -EBUSY;
--			goto exit;
--		}
- 		hw->freq = platp->freq;
- 		hw->baudwidth = platp->baudwidth;
- 	} else {
-@@ -292,13 +257,6 @@ static int tiny_spi_probe(struct platform_device *pdev)
- 		if (err)
- 			goto exit;
- 	}
--	for (i = 0; i < hw->gpio_cs_count; i++) {
--		err = gpio_request(hw->gpio_cs[i], dev_name(&pdev->dev));
--		if (err)
--			goto exit_gpio;
--		gpio_direction_output(hw->gpio_cs[i], 1);
--	}
--	hw->bitbang.master->num_chipselect = max(1, hw->gpio_cs_count);
- 
- 	/* register our spi controller */
- 	err = spi_bitbang_start(&hw->bitbang);
-@@ -308,9 +266,6 @@ static int tiny_spi_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
--exit_gpio:
--	while (i-- > 0)
--		gpio_free(hw->gpio_cs[i]);
- exit:
- 	spi_master_put(master);
- 	return err;
-@@ -320,11 +275,8 @@ static int tiny_spi_remove(struct platform_device *pdev)
- {
- 	struct tiny_spi *hw = platform_get_drvdata(pdev);
- 	struct spi_master *master = hw->bitbang.master;
--	unsigned int i;
- 
- 	spi_bitbang_stop(&hw->bitbang);
--	for (i = 0; i < hw->gpio_cs_count; i++)
--		gpio_free(hw->gpio_cs[i]);
- 	spi_master_put(master);
- 	return 0;
- }
-diff --git a/include/linux/spi/spi_oc_tiny.h b/include/linux/spi/spi_oc_tiny.h
-index a3ecf2feadf2..284872ac130c 100644
---- a/include/linux/spi/spi_oc_tiny.h
-+++ b/include/linux/spi/spi_oc_tiny.h
-@@ -6,16 +6,12 @@
-  * struct tiny_spi_platform_data - platform data of the OpenCores tiny SPI
-  * @freq:	input clock freq to the core.
-  * @baudwidth:	baud rate divider width of the core.
-- * @gpio_cs_count:	number of gpio pins used for chipselect.
-- * @gpio_cs:	array of gpio pins used for chipselect.
-  *
-  * freq and baudwidth are used only if the divider is programmable.
+ 		trans_mode = dspi->devtype_data->trans_mode;
+ 		switch (trans_mode) {
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5e4c4532f7f3..8994545367a2 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1499,8 +1499,7 @@ static void spi_pump_messages(struct kthread_work *work)
+  *			    advances its @tx buffer pointer monotonically.
+  * @ctlr: Pointer to the spi_controller structure of the driver
+  * @xfer: Pointer to the transfer being timestamped
+- * @tx: Pointer to the current word within the xfer->tx_buf that the driver is
+- *	preparing to transmit right now.
++ * @progress: How many words (not bytes) have been transferred so far
+  * @irqs_off: If true, will disable IRQs and preemption for the duration of the
+  *	      transfer, for less jitter in time measurement. Only compatible
+  *	      with PIO drivers. If true, must follow up with
+@@ -1510,21 +1509,19 @@ static void spi_pump_messages(struct kthread_work *work)
   */
- struct tiny_spi_platform_data {
- 	unsigned int freq;
- 	unsigned int baudwidth;
--	unsigned int gpio_cs_count;
--	int *gpio_cs;
- };
+ void spi_take_timestamp_pre(struct spi_controller *ctlr,
+ 			    struct spi_transfer *xfer,
+-			    const void *tx, bool irqs_off)
++			    size_t progress, bool irqs_off)
+ {
+-	u8 bytes_per_word = DIV_ROUND_UP(xfer->bits_per_word, 8);
+-
+ 	if (!xfer->ptp_sts)
+ 		return;
  
- #endif /* _LINUX_SPI_SPI_OC_TINY_H */
+ 	if (xfer->timestamped_pre)
+ 		return;
+ 
+-	if (tx < (xfer->tx_buf + xfer->ptp_sts_word_pre * bytes_per_word))
++	if (progress < xfer->ptp_sts_word_pre)
+ 		return;
+ 
+ 	/* Capture the resolution of the timestamp */
+-	xfer->ptp_sts_word_pre = (tx - xfer->tx_buf) / bytes_per_word;
++	xfer->ptp_sts_word_pre = progress;
+ 
+ 	xfer->timestamped_pre = true;
+ 
+@@ -1546,23 +1543,20 @@ EXPORT_SYMBOL_GPL(spi_take_timestamp_pre);
+  *			     timestamped.
+  * @ctlr: Pointer to the spi_controller structure of the driver
+  * @xfer: Pointer to the transfer being timestamped
+- * @tx: Pointer to the current word within the xfer->tx_buf that the driver has
+- *	just transmitted.
++ * @progress: How many words (not bytes) have been transferred so far
+  * @irqs_off: If true, will re-enable IRQs and preemption for the local CPU.
+  */
+ void spi_take_timestamp_post(struct spi_controller *ctlr,
+ 			     struct spi_transfer *xfer,
+-			     const void *tx, bool irqs_off)
++			     size_t progress, bool irqs_off)
+ {
+-	u8 bytes_per_word = DIV_ROUND_UP(xfer->bits_per_word, 8);
+-
+ 	if (!xfer->ptp_sts)
+ 		return;
+ 
+ 	if (xfer->timestamped_post)
+ 		return;
+ 
+-	if (tx < (xfer->tx_buf + xfer->ptp_sts_word_post * bytes_per_word))
++	if (progress < xfer->ptp_sts_word_post)
+ 		return;
+ 
+ 	ptp_read_system_postts(xfer->ptp_sts);
+@@ -1573,7 +1567,7 @@ void spi_take_timestamp_post(struct spi_controller *ctlr,
+ 	}
+ 
+ 	/* Capture the resolution of the timestamp */
+-	xfer->ptp_sts_word_post = (tx - xfer->tx_buf) / bytes_per_word;
++	xfer->ptp_sts_word_post = progress;
+ 
+ 	xfer->timestamped_post = true;
+ }
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 98fe8663033a..3a67a7e45633 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -689,10 +689,10 @@ extern void spi_finalize_current_transfer(struct spi_controller *ctlr);
+ /* Helper calls for driver to timestamp transfer */
+ void spi_take_timestamp_pre(struct spi_controller *ctlr,
+ 			    struct spi_transfer *xfer,
+-			    const void *tx, bool irqs_off);
++			    size_t progress, bool irqs_off);
+ void spi_take_timestamp_post(struct spi_controller *ctlr,
+ 			     struct spi_transfer *xfer,
+-			     const void *tx, bool irqs_off);
++			     size_t progress, bool irqs_off);
+ 
+ /* the spi driver core manages memory for the spi_controller classdev */
+ extern struct spi_controller *__spi_alloc_controller(struct device *host,
 -- 
-2.20.1
+2.17.1
 
