@@ -2,85 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4341D12B02F
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 02:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2461412B623
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Dec 2019 18:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbfL0BYw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Dec 2019 20:24:52 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:32984 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726193AbfL0BYv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Dec 2019 20:24:51 -0500
-Received: by mail-wm1-f67.google.com with SMTP id d139so5980608wmd.0;
-        Thu, 26 Dec 2019 17:24:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=R+uckJGNala33NMmXRczdflH+UHpS2SgqeFgbFnBl88=;
-        b=kxtkHo621a4sPzJLjzffPydjrnf85sQqOMuLbLAtRtdwbUzEPRPzetheF4mIzDoxue
-         74KNaBKELpzeywJnEdmR/ZRdwsSIuX7Mc3NxJNAqpD47D7dekMB/OPe07tgU9bRzV8me
-         gSbK3ZR/++Wh4SL0KcHHwNEIuoCPgofGtBLrzHaCss7MWr2EAoaDr02eQaemFhjNgCX3
-         eCrH2t2bGWmSuiW7xbfddnG/T3I664j5FCZF7BqmDjCxSKtrDMLbVcITld4fuqo3DdgI
-         /VaminP61T4Vkk5AOODuU6pAh/tW3WXAICKiZW52C34D++lepOpDhHuHRap9C4EEU+RR
-         xTuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=R+uckJGNala33NMmXRczdflH+UHpS2SgqeFgbFnBl88=;
-        b=A2g1FU496lhyvjy7iIONNvtMCgpoEmkmQCiFs22CyIEu7S0P32NFGwoHFHMI43htWt
-         j9sr4juiq0WKnlyMSEQpBkpw6j+3U5TGEy1y5svXa4C8g7pi3oXj5hB+40z4APz6bLuL
-         kUnlBP5B6WvRVCpqoHkMqWmmysEdLC6lOy1VtT1ZLdpNGHLlINueA4EyqU/7e4DHIknI
-         jAYodQuyzE82E7YlkO7YjYnmNMco4Gsbc7wrmFSlsW3LGl60bUDtZfyUR4VGBu4fVFnB
-         ycpZ6KS1o/4KHfHOeBgIBsAxdaZE0l9j3re5C6J0Pv64jpz2TcuRZduAzZqJWaEeGvG4
-         C90A==
-X-Gm-Message-State: APjAAAXJ/unamkcdMk7elqnUpFA5ozbKzZXsmHMRH3+TAHfgQJwuKirf
-        fEjuanLWr+WUzY8fWofxazko8NDh
-X-Google-Smtp-Source: APXvYqyFPrM1I4SqjbUUrawWiFa5w6NMRtFk3hrtNvIUNsnzt90H6lfQOsyLv9UWnm0SMUzhHDu3FA==
-X-Received: by 2002:a1c:6605:: with SMTP id a5mr16143378wmc.112.1577409889626;
-        Thu, 26 Dec 2019 17:24:49 -0800 (PST)
-Received: from localhost.localdomain ([188.25.254.226])
-        by smtp.gmail.com with ESMTPSA id l15sm32818215wrv.39.2019.12.26.17.24.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Dec 2019 17:24:49 -0800 (PST)
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, netdev@vger.kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: [PATCH spi] spi: Catch improper use of PTP system timestamping API
-Date:   Fri, 27 Dec 2019 03:24:44 +0200
-Message-Id: <20191227012444.1204-1-olteanv@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726982AbfL0R3P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 27 Dec 2019 12:29:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33240 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726379AbfL0R3P (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:29:15 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A73932173E;
+        Fri, 27 Dec 2019 17:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577467754;
+        bh=2/AR+100ByIuaMU3kpLIuFMXpkvzl8NCXRQQ5iDGItk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Hc1wndU8awgaj0weMcAblVZcg6umTqjV64GQDWX4dCjuqFIJLDzYkIx54NxA1OPpv
+         ToS6utxa5KTu8u165Dt5/pI/wLUfqc10+waRZONMHp/f1HxgDib4qAnPz0CWuXWVqD
+         8PKFel+Im9ttPa17hd5pLGkU6KFH76u0TlBULGew=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 002/187] spi: pxa2xx: Add support for Intel Jasper Lake
+Date:   Fri, 27 Dec 2019 12:26:06 -0500
+Message-Id: <20191227172911.4430-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191227172911.4430-1-sashal@kernel.org>
+References: <20191227172911.4430-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We can catch whether the SPI controller has declared it can take care of
-software timestamping transfers, but didn't. So do it.
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+[ Upstream commit 9c7315c9fca5de203538163cf42699bb10328902 ]
+
+LPSS SPI on Intel Jasper Lake is compatible with Intel Ice Lake which
+follows Intel Cannon Lake. Add PCI IDs of Jasper Lake.
+
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Link: https://lore.kernel.org/r/20191125125159.15404-1-jarkko.nikula@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/spi/spi-pxa2xx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 8994545367a2..dc4538963271 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1674,6 +1674,13 @@ void spi_finalize_current_message(struct spi_controller *ctlr)
- 		}
- 	}
- 
-+	if (unlikely(ctlr->ptp_sts_supported)) {
-+		list_for_each_entry(xfer, &mesg->transfers, transfer_list) {
-+			WARN_ON_ONCE(xfer->ptp_sts && !xfer->timestamped_pre);
-+			WARN_ON_ONCE(xfer->ptp_sts && !xfer->timestamped_post);
-+		}
-+	}
-+
- 	spi_unmap_msg(ctlr, mesg);
- 
- 	if (ctlr->cur_msg_prepared && ctlr->unprepare_message) {
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index bb6a14d1ab0f..3580a551c038 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -1441,6 +1441,10 @@ static const struct pci_device_id pxa2xx_spi_pci_compound_match[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x4b2a), LPSS_BXT_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x4b2b), LPSS_BXT_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x4b37), LPSS_BXT_SSP },
++	/* JSL */
++	{ PCI_VDEVICE(INTEL, 0x4daa), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0x4dab), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0x4dfb), LPSS_CNL_SSP },
+ 	/* APL */
+ 	{ PCI_VDEVICE(INTEL, 0x5ac2), LPSS_BXT_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x5ac4), LPSS_BXT_SSP },
 -- 
-2.17.1
+2.20.1
 
