@@ -2,63 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C80912D90B
-	for <lists+linux-spi@lfdr.de>; Tue, 31 Dec 2019 14:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA22E12E4E8
+	for <lists+linux-spi@lfdr.de>; Thu,  2 Jan 2020 11:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727064AbfLaNeA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 Dec 2019 08:34:00 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:43895 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfLaNeA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Dec 2019 08:34:00 -0500
-Received: by mail-ot1-f68.google.com with SMTP id p8so13907932oth.10
-        for <linux-spi@vger.kernel.org>; Tue, 31 Dec 2019 05:34:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=VhP+OMXryP+de6nbfGNIuYXmoIjEcq797S9r6fnDsw8=;
-        b=eG3PFW3SWcS8IGjKJ4YZuxwgU/xoWJypDmBrXxhg8W7b+U7MAg9jYdC+yKXHAzrPZ1
-         PCsKSMTzeFH9kn4wgJbiWezo78254TEQDzQoSR7RBtmiz8owEgq9s3CEUA8BP8+1gxcr
-         R8YflD1WZgHVpaXOuLCAziMZ2fBOTldyDGDVvX1WuaDnvkuSXODFPjIBy49oF8MUaiQQ
-         KH1k7trJQAwoRLYL6jxZ1/GRR07M5oIkiD/qgF1J1QEHULpIJqhsq7Z2Osrl+LHHgmU0
-         vh1JTeK3y3rBS3OjlNzqzWTiFxv7j6EJ3hLXpynupL4QwoL1vAfCPU31GmZJzJERSepk
-         VTEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=VhP+OMXryP+de6nbfGNIuYXmoIjEcq797S9r6fnDsw8=;
-        b=oG1E5gun5uqC7QFMByHXxq5Aig1l6wilQw4haMfPlsKEZMGbVV1giGIq8BIEXMRL5y
-         KMgOmzJV6Zcmf5C7Z9sbkhfLKZOpwDyzB0u1Uh2hZUHYPGlWmuBtAke2Am6y0kCuKppQ
-         E2L09B+Wk657SNv1t2lcbhqRmZJtUnJAVtXYJNetA+I1RhROjRTpVnGY6vnotw2DbM1c
-         Bv4NSYhAtlq0HvptowEZEnDqH3Y/PlejAIsANJRbC0iFUi6xxw/2Jpc8L83OynL0Di/n
-         DzzcVIWH5AN43qD3V/cXcpZwreTOfKeKm0K+Nu0JOjPiFVTlR5zCflJVMdtgbsq5tU/L
-         GuIQ==
-X-Gm-Message-State: APjAAAUnoier+5QDihbbggbMrLbH1f7voZtAqdW/D4DD99nZX9c1GbLr
-        vwaQH+/XDgXlCC9vhv8Vy9logt5GSoHHnTSnDEc=
-X-Google-Smtp-Source: APXvYqx7C9J/bdqpyHrGpApDG8Qtjk5snMwfQLWWeyIa6N49EVN7aFc+ECc50VxdjxQJV6u4QtmIvdzzEfPQZJxyrwc=
-X-Received: by 2002:a9d:7:: with SMTP id 7mr75882373ota.26.1577799239905; Tue,
- 31 Dec 2019 05:33:59 -0800 (PST)
+        id S1728054AbgABKU7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 2 Jan 2020 05:20:59 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:32886 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728033AbgABKU7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Jan 2020 05:20:59 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 002AKroY087456;
+        Thu, 2 Jan 2020 04:20:53 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1577960453;
+        bh=NNAFSiZet0q9H7dCqZQEuNd5IpHuJ08LE1cBBRQAp+o=;
+        h=From:To:CC:Subject:Date;
+        b=MNW3kx/JpfFeSpgL1rOKLujMRiYt0xlIb130ejENEl6A0VdrCeP9bW34DOTnb/7hu
+         c4yWXjjvgyyDtZXS+TcifqA3qEZ5J7psVkMNCRgZmOvcw1T6eTr9uDZny8w7fBx+bb
+         iuGY/gat9g3fJeTIGwwHOA0b89brsNORTZClkslI=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 002AKrqg084456;
+        Thu, 2 Jan 2020 04:20:53 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 2 Jan
+ 2020 04:20:53 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 2 Jan 2020 04:20:53 -0600
+Received: from a0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 002AKmJt026697;
+        Thu, 2 Jan 2020 04:20:49 -0600
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: [PATCH] spi: Document Octal mode as valid SPI bus width
+Date:   Thu, 2 Jan 2020 15:51:18 +0530
+Message-ID: <20200102102118.23318-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Received: by 2002:a4a:c407:0:0:0:0:0 with HTTP; Tue, 31 Dec 2019 05:33:59
- -0800 (PST)
-Reply-To: michellegoodman45@gmail.com
-From:   Shayma <shaymamarwan03@gmail.com>
-Date:   Tue, 31 Dec 2019 13:33:59 +0000
-Message-ID: <CANMGuejc-4V+3nJ0jE1oAGpx8dw_0G=DYn+U3Zb67LzgK6a7eA@mail.gmail.com>
-Subject: From Michelle
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Cze=C5=9B=C4=87 Liebling, ich hoffe, to wszystko gut mit re=C5=BC
-und deine Familie? Ich habe eine wichtige Vereinbarung mit Ihnen zu besprec=
-hen
-Bitte antworten Sie mir umgehend.
-Danke re=C5=BC
-Michelle
+SPI core supports Octal SPI controllers which have 8 IO lines.
+Therefore document 8 as a valid option for spi-tx{rx}-bus-width
+
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+---
+ Documentation/devicetree/bindings/spi/spi-controller.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+index 732339275848..1e0ca6ccf64b 100644
+--- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+@@ -111,7 +111,7 @@ patternProperties:
+       spi-rx-bus-width:
+         allOf:
+           - $ref: /schemas/types.yaml#/definitions/uint32
+-          - enum: [ 1, 2, 4 ]
++          - enum: [ 1, 2, 4, 8 ]
+           - default: 1
+         description:
+           Bus width to the SPI bus used for MISO.
+@@ -123,7 +123,7 @@ patternProperties:
+       spi-tx-bus-width:
+         allOf:
+           - $ref: /schemas/types.yaml#/definitions/uint32
+-          - enum: [ 1, 2, 4 ]
++          - enum: [ 1, 2, 4, 8 ]
+           - default: 1
+         description:
+           Bus width to the SPI bus used for MOSI.
+-- 
+2.24.1
+
