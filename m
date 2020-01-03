@@ -2,112 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB7A12F28F
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2020 02:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3CE12F2B9
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2020 02:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727225AbgACBF5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Jan 2020 20:05:57 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:51618 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727158AbgACBF4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Jan 2020 20:05:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=g+wWEWkvQoOBjR0Vk+qKtSqMF6zrj4x2Z/l+Cp7rLrk=; b=gkz3Vsnvjmb4
-        07YbcVXSq587LPHvfPabZsFchQF/+BWmFSW1JYHXpNAfLOY5E/3TULMJUWKhSQ/wYtLqJtzZIQ3Pq
-        IYSP34ZlY9hZtHGPYft0kAT4klybAev7RHVFNvHAbn2i7WwAyy8zlzvrCRREpVGSxGsCPrgBnshml
-        OJiTE=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1inBPU-0003Na-G3; Fri, 03 Jan 2020 01:05:52 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 07C5FD057C6; Fri,  3 Jan 2020 01:05:52 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Applied "spi: Document Octal mode as valid SPI bus width" to the spi tree
-In-Reply-To: <20200102102118.23318-1-vigneshr@ti.com>
-Message-Id: <applied-20200102102118.23318-1-vigneshr@ti.com>
-X-Patchwork-Hint: ignore
-Date:   Fri,  3 Jan 2020 01:05:52 +0000 (GMT)
+        id S1725933AbgACBeo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 2 Jan 2020 20:34:44 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8659 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725872AbgACBeo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 2 Jan 2020 20:34:44 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 2C7D0E5B6DDB8F977E82;
+        Fri,  3 Jan 2020 09:34:42 +0800 (CST)
+Received: from [127.0.0.1] (10.57.64.164) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.439.0; Fri, 3 Jan 2020
+ 09:34:34 +0800
+Subject: Re: [PATCH] spi: dw: use "smp_mb()" to avoid sending spi data error
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, fengsheng <fengsheng5@huawei.com>,
+        kXinwei Kong <kong.kongxinwei@hisilicon.com>
+References: <1577352088-35856-1-git-send-email-kong.kongxinwei@hisilicon.com>
+ <20191227002239.GH27497@sirena.org.uk>
+ <afad8a97-6159-bf7e-466a-fdbaf0a07d4a@hisilicon.com>
+ <20200103010409.GG3897@sirena.org.uk>
+From:   kongxinwei <kong.kongxinwei@hisilicon.com>
+Message-ID: <fca15988-22eb-2ba9-037e-7f7f51221fe4@hisilicon.com>
+Date:   Fri, 3 Jan 2020 09:34:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20200103010409.GG3897@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.57.64.164]
+X-CFilter-Loop: Reflected
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
 
-   spi: Document Octal mode as valid SPI bus width
 
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 09b6636cea4f8e419d7cca4155e8695e462535a6 Mon Sep 17 00:00:00 2001
-From: Vignesh Raghavendra <vigneshr@ti.com>
-Date: Thu, 2 Jan 2020 15:51:18 +0530
-Subject: [PATCH] spi: Document Octal mode as valid SPI bus width
-
-SPI core supports Octal SPI controllers which have 8 IO lines.
-Therefore document 8 as a valid option for spi-tx{rx}-bus-width
-
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-Link: https://lore.kernel.org/r/20200102102118.23318-1-vigneshr@ti.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- Documentation/devicetree/bindings/spi/spi-controller.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-index 732339275848..1e0ca6ccf64b 100644
---- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-@@ -111,7 +111,7 @@ patternProperties:
-       spi-rx-bus-width:
-         allOf:
-           - $ref: /schemas/types.yaml#/definitions/uint32
--          - enum: [ 1, 2, 4 ]
-+          - enum: [ 1, 2, 4, 8 ]
-           - default: 1
-         description:
-           Bus width to the SPI bus used for MISO.
-@@ -123,7 +123,7 @@ patternProperties:
-       spi-tx-bus-width:
-         allOf:
-           - $ref: /schemas/types.yaml#/definitions/uint32
--          - enum: [ 1, 2, 4 ]
-+          - enum: [ 1, 2, 4, 8 ]
-           - default: 1
-         description:
-           Bus width to the SPI bus used for MOSI.
--- 
-2.20.1
+On 2020/1/3 9:04, Mark Brown wrote:
+> On Sat, Dec 28, 2019 at 04:31:53PM +0800, kongxinwei wrote:
+> 
+>>> I'd be much more comfortable here if I understood what this was
+>>> supposed to be syncing - what exactly gets flushed here and why
+>>> is a memory barrier enough to ensure it's synced?  A comment in
+>>> the code would be especially good so anyone modifying the code
+>>> understands this in future.
+> 
+>> Because of out-of-order execution about some CPU architecture,
+>> In this debug stage we find Completing spi interrupt enable ->
+>> prodrucing TXEI interrupt -> running "interrupt_transfer" function
+>> will prior to set "dw->rx and dws->rx_end" data, so it will result
+>> in SPI sending error
+> 
+> Could you update the commit message to say that, and ideally also
+> add a comment saying something like "Ensure dw->rx and dw->rx_end
+> are visible" please?
+> 
+OK, i WILL update it.
 
