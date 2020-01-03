@@ -2,106 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E55F812E6FB
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Jan 2020 15:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF0712F287
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2020 02:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728393AbgABOEn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Jan 2020 09:04:43 -0500
-Received: from michel.telenet-ops.be ([195.130.137.88]:58538 "EHLO
-        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728429AbgABOEn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Jan 2020 09:04:43 -0500
-Received: from ramsan ([84.195.182.253])
-        by michel.telenet-ops.be with bizsmtp
-        id lS4g210085USYZQ06S4g6J; Thu, 02 Jan 2020 15:04:41 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1in15c-0006GP-Dv; Thu, 02 Jan 2020 15:04:40 +0100
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1in0gG-0007ea-JH; Thu, 02 Jan 2020 14:38:28 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Chris Brandt <chris.brandt@renesas.com>,
-        =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 6/6] spi: rspi: Add support for GPIO chip selects
-Date:   Thu,  2 Jan 2020 14:38:22 +0100
-Message-Id: <20200102133822.29346-7-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200102133822.29346-1-geert+renesas@glider.be>
-References: <20200102133822.29346-1-geert+renesas@glider.be>
+        id S1727255AbgACBEV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 2 Jan 2020 20:04:21 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48846 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726089AbgACBET (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Jan 2020 20:04:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ozic6TqYruSpEFOoFH0HYCbh75txsD2Py+nk3nYG6TY=; b=GUSzzbSipkopZxcOEAsxR1eXx
+        +naIE9vf2wwM0xnkUQ4Z2N4Bo6DVI2m2mNhzq0GmRjcyej8pOkgi5liUyMIjKQ3lDEElkLYINxpjV
+        TmUKS7jJtgGh3BkRKS20HozIzTdKDvJVL3FCRY+ajYYX0nsPVrYjh3K20F2RcIVsdLo2k=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1inBNq-0003Mk-Mz; Fri, 03 Jan 2020 01:04:10 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 14FA9D057C6; Fri,  3 Jan 2020 01:04:09 +0000 (GMT)
+Date:   Fri, 3 Jan 2020 01:04:09 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     kongxinwei <kong.kongxinwei@hisilicon.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, fengsheng <fengsheng5@huawei.com>
+Subject: Re: [PATCH] spi: dw: use "smp_mb()" to avoid sending spi data error
+Message-ID: <20200103010409.GG3897@sirena.org.uk>
+References: <1577352088-35856-1-git-send-email-kong.kongxinwei@hisilicon.com>
+ <20191227002239.GH27497@sirena.org.uk>
+ <afad8a97-6159-bf7e-466a-fdbaf0a07d4a@hisilicon.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1giRMj6yz/+FOIRq"
+Content-Disposition: inline
+In-Reply-To: <afad8a97-6159-bf7e-466a-fdbaf0a07d4a@hisilicon.com>
+X-Cookie: Programming is an unnatural act.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add support for GPIO chip selects using GPIO descriptors.  As the RSPI
-controller always drives a native chip select when performing a
-transfer, at least one native chip select must be left unused.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/spi/spi-rspi.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+--1giRMj6yz/+FOIRq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
-index 2f5a856a93192702..85575d45901cee1b 100644
---- a/drivers/spi/spi-rspi.c
-+++ b/drivers/spi/spi-rspi.c
-@@ -242,6 +242,7 @@ struct spi_ops {
- 	u16 mode_bits;
- 	u16 flags;
- 	u16 fifo_size;
-+	u8 num_hw_ss;
- };
- 
- /*
-@@ -934,7 +935,8 @@ static int rspi_prepare_message(struct spi_controller *ctlr,
- 		rspi->spcmd |= SPCMD_CPHA;
- 
- 	/* Configure slave signal to assert */
--	rspi->spcmd |= SPCMD_SSLA(spi->chip_select);
-+	rspi->spcmd |= SPCMD_SSLA(spi->cs_gpiod ? rspi->ctlr->unused_native_cs
-+						: spi->chip_select);
- 
- 	/* CMOS output mode and MOSI signal from previous transfer */
- 	rspi->sppcr = 0;
-@@ -1123,6 +1125,7 @@ static const struct spi_ops rspi_ops = {
- 	.mode_bits =		SPI_CPHA | SPI_CPOL | SPI_LOOP,
- 	.flags =		SPI_CONTROLLER_MUST_TX,
- 	.fifo_size =		8,
-+	.num_hw_ss =		2,
- };
- 
- static const struct spi_ops rspi_rz_ops = {
-@@ -1131,6 +1134,7 @@ static const struct spi_ops rspi_rz_ops = {
- 	.mode_bits =		SPI_CPHA | SPI_CPOL | SPI_LOOP,
- 	.flags =		SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX,
- 	.fifo_size =		8,	/* 8 for TX, 32 for RX */
-+	.num_hw_ss =		1,
- };
- 
- static const struct spi_ops qspi_ops = {
-@@ -1141,6 +1145,7 @@ static const struct spi_ops qspi_ops = {
- 				SPI_RX_DUAL | SPI_RX_QUAD,
- 	.flags =		SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX,
- 	.fifo_size =		32,
-+	.num_hw_ss =		1,
- };
- 
- #ifdef CONFIG_OF
-@@ -1256,6 +1261,8 @@ static int rspi_probe(struct platform_device *pdev)
- 	ctlr->mode_bits = ops->mode_bits;
- 	ctlr->flags = ops->flags;
- 	ctlr->dev.of_node = pdev->dev.of_node;
-+	ctlr->use_gpio_descriptors = true;
-+	ctlr->max_native_cs = rspi->ops->num_hw_ss;
- 
- 	ret = platform_get_irq_byname_optional(pdev, "rx");
- 	if (ret < 0) {
--- 
-2.17.1
+On Sat, Dec 28, 2019 at 04:31:53PM +0800, kongxinwei wrote:
 
+> > I'd be much more comfortable here if I understood what this was
+> > supposed to be syncing - what exactly gets flushed here and why
+> > is a memory barrier enough to ensure it's synced?  A comment in
+> > the code would be especially good so anyone modifying the code
+> > understands this in future.
+
+> Because of out-of-order execution about some CPU architecture,
+> In this debug stage we find Completing spi interrupt enable ->
+> prodrucing TXEI interrupt -> running "interrupt_transfer" function
+> will prior to set "dw->rx and dws->rx_end" data, so it will result
+> in SPI sending error
+
+Could you update the commit message to say that, and ideally also
+add a comment saying something like "Ensure dw->rx and dw->rx_end
+are visible" please?
+
+--1giRMj6yz/+FOIRq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl4OkwgACgkQJNaLcl1U
+h9AkFgf/fypiFJ4eRlJVOmkAYnGY01lAChSELOS/91cDAaOXJSQhz/hwB/cdeHjq
+2KYpCiICZDeG8FB6y6dvAWUMCkVxGH0WVGS9/OlnmI+aDoPjqyiyJ5R1a+bRBAcE
+YAaX12ARLr0uj9l9Fh6hhZxScRgit+ZKRB12T77pdyFFcoCh4kJLSD58D+78OmEO
+YUXkkBxX7cayLE5CKvl2UrQp8K18T4EKZ4YX7jDCUuY4wXkoScvm7G3ik25DhEJR
+jenBxAnbnw0De745jFhdI5VJygGUOF3caiWT3wc2tOIQwI1LJThI0cp4d3DRbphU
+XpWJcoIuRXqY+TfLjulA4WjTtGsDew==
+=Xa85
+-----END PGP SIGNATURE-----
+
+--1giRMj6yz/+FOIRq--
