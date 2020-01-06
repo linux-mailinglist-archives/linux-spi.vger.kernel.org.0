@@ -2,113 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C44313114B
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2020 12:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D966113129D
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2020 14:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbgAFLTb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Jan 2020 06:19:31 -0500
-Received: from mga14.intel.com ([192.55.52.115]:23966 "EHLO mga14.intel.com"
+        id S1726292AbgAFNMg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Jan 2020 08:12:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:43894 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726155AbgAFLTb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 6 Jan 2020 06:19:31 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jan 2020 03:19:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,402,1571727600"; 
-   d="scan'208";a="232798628"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 06 Jan 2020 03:19:31 -0800
-Received: from [10.226.38.20] (unknown [10.226.38.20])
-        by linux.intel.com (Postfix) with ESMTP id 2907E580297;
-        Mon,  6 Jan 2020 03:19:28 -0800 (PST)
-Subject: Re: [PATCH v6 2/2] spi: cadence-quadpsi: Add support for the Cadence
- QSPI controller
-To:     Vignesh Raghavendra <vigneshr@ti.com>, broonie@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     robh+dt@kernel.org, dan.carpenter@oracle.com,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20191230074102.50982-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20191230074102.50982-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <e89cf037-217b-cd61-79ee-a11e2a118c01@ti.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <66b9f427-83c2-f56c-3d38-fa955429118d@linux.intel.com>
-Date:   Mon, 6 Jan 2020 19:19:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1726173AbgAFNMf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 6 Jan 2020 08:12:35 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7F3B328;
+        Mon,  6 Jan 2020 05:12:34 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 600723F534;
+        Mon,  6 Jan 2020 05:12:34 -0800 (PST)
+Date:   Mon, 6 Jan 2020 13:12:32 +0000
+From:   Mark Brown <broonie@kerenl.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [GIT PULL] spi fixes for v5.5
+Message-ID: <20200106131232.GC6448@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <e89cf037-217b-cd61-79ee-a11e2a118c01@ti.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jy6Sn24JjFx/iggw"
+Content-Disposition: inline
+X-Cookie: It's later than you think.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-Thank you for the review comments.
+--jy6Sn24JjFx/iggw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 6/1/2020 6:40 PM, Vignesh Raghavendra wrote:
-> Hi,
->
-> On 30/12/19 1:11 pm, Ramuthevar,Vadivel MuruganX wrote:
-> [...]
->> +static u32 cqspi_cmd2addr(const unsigned char *addr_buf, u32 addr_width)
->> +{
->> +	unsigned int addr = 0;
->> +	int i;
->> +
->> +	/* Invalid address return zero. */
->> +	if (addr_width > 4)
->> +		return 0;
->> +
->> +	for (i = 0; i < addr_width; i++) {
->> +		addr = addr << 8;
->> +		addr |= addr_buf[i];
->> +	}
->> +
->> +	return addr;
->> +}
->> +
-> [...]
->> +static int cqspi_apb_read_setup(struct struct_cqspi *cqspi,
->> +				const struct spi_mem_op *op,
->> +				const u8 *addrbuf)
->> +{
->> +	void __iomem *reg_base = cqspi->iobase;
->> +	size_t addrlen = op->addr.nbytes;
->> +	size_t dummy_bytes = op->dummy.nbytes;
->> +	unsigned int addr_value, dummy_clk, reg;
->> +
->> +	if (addrlen) {
->> +		addr_value = cqspi_cmd2addr(&addrbuf[0], addrlen);
->> +		writel(addr_value, reg_base + CQSPI_REG_INDIRECTRDSTARTADDR);
->> +	}
->> +
-> Why do you need to swap the address bytes to SPI bus order?
-Yes , you are right to align with spi bus order swap is done .
->   You are
-> writing to a controller register that accepts 24 bit or 32 bit address.
-32bit address.
->> +	reg = op->cmd.opcode << CQSPI_REG_RD_INSTR_OPCODE_LSB;
->> +	reg |= (op->data.buswidth & CQSPI_REG_RD_INSTR_TYPE_DATA_MASK) <<
->> +		CQSPI_REG_RD_INSTR_TYPE_DATA_LSB;
->> +
-> This is wrong... op->data.buswidth's range is 1 to 8 whereas
-> CQSPI_REG_RD_INSTR_TYPE range is 0 to 3. I wonder whether you tested
-> dual/quad mode with this driver?
-Yes I have tested with Quad mode since Cadence-IP supports dual/quad on 
-my platform, used to validate
-before sending the patch that's  standard procedure here.
-please let me know if you have any further queries.
+The following changes since commit 63aa6a692595d47a0785297b481072086b9272d2:
 
----
-Best Regards
-Vadivel
-> I am still unable to get this series to work on my platform. Will
-> continue to debug...
->
+  spi: fsl: use platform_get_irq() instead of of_irq_to_resource() (2019-12-16 11:54:55 +0000)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.5-rc5
+
+for you to fetch changes up to 09b6636cea4f8e419d7cca4155e8695e462535a6:
+
+  spi: Document Octal mode as valid SPI bus width (2020-01-03 01:02:11 +0000)
+
+----------------------------------------------------------------
+spi: Fixes for v5.5
+
+A small collection of fixes here, one to make the newly added PTP
+timestamping code more accurate, a few driver fixes and a fix for the
+core DT binding to document the fact that we support eight wire buses.
+
+----------------------------------------------------------------
+Kunihiko Hayashi (1):
+      spi: uniphier: Fix FIFO threshold
+
+Vignesh Raghavendra (1):
+      spi: Document Octal mode as valid SPI bus width
+
+Vladimir Oltean (2):
+      spi: Don't look at TX buffer for PTP system timestamping
+      spi: spi-fsl-dspi: Fix 16-bit word order in 32-bit XSPI mode
+
+wuxu.wu (1):
+      spi: spi-dw: Add lock protect dw_spi rx/tx to prevent concurrent calls
+
+ .../devicetree/bindings/spi/spi-controller.yaml    |  4 +--
+ drivers/spi/spi-dw.c                               | 15 ++++++++---
+ drivers/spi/spi-dw.h                               |  1 +
+ drivers/spi/spi-fsl-dspi.c                         | 24 +++++++----------
+ drivers/spi/spi-uniphier.c                         | 31 +++++++++++++---------
+ drivers/spi/spi.c                                  | 22 ++++++---------
+ include/linux/spi/spi.h                            |  4 +--
+ 7 files changed, 54 insertions(+), 47 deletions(-)
+
+--jy6Sn24JjFx/iggw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl4TMkAACgkQJNaLcl1U
+h9Avjgf9GlqKPfiuEc9tJ7BwdeCWC5muNQl/ME0FOwxBZr1pmup24A5ZiL+/6r+G
+dpdWZbGeiM90jsbcGqSDVjsg+v8brmKM0G6WJH8YQiZEBFzbrZ5kOqC8xYXoKaOi
+LX9yvAQKrIfl+eKltGZ4Mspnu+fUfF4Xa5ZiK5nXkbfZPN/B0zaPH8NvnjoQnwro
+oQnsKixrp3Q1A9MHZi4HgUrBha1wHZwjpS3Z9u2QmKRGXjuyxJHPSb57VoYXtb42
+hDVd/5BWreHe4z2LeIQVsvQPXx4fgmZCi25nEOdfYDzkBT30zJA15c1GtmkW6j5J
+9fSTGiOc2oRuLFG+itKtwSkx/stKcg==
+=OS15
+-----END PGP SIGNATURE-----
+
+--jy6Sn24JjFx/iggw--
