@@ -2,113 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 213DA132C53
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2020 17:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AB0132FE4
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2020 20:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728513AbgAGQ5J (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jan 2020 11:57:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728485AbgAGQ5J (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 7 Jan 2020 11:57:09 -0500
-Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 64EFE206DB;
-        Tue,  7 Jan 2020 16:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578416228;
-        bh=mJ/9WP+tR5lcnCTCzGvdHWqArdEzjQzaXJuXAt1ih5I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ro26xBWp9TDKqUKhfsmqxXZ27nrNvcKH9rXQO5233NkfiUBq/hHoINrCe8IJ+h+FF
-         MN4oNwov3YTX6PhpnEYJ7ZBBpH+VHVQa9yiFRKaWWRXZDE+ozDV5IoPbNPcM1wUODx
-         Q58hiwtq/a9O3TgKLK1LFzxIbtsSugPzx8J7JYaM=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Stephen Boyd <swboyd@chromium.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] spi: sh-msiof: Do not redefine STR while compile testing
-Date:   Tue,  7 Jan 2020 17:56:58 +0100
-Message-Id: <1578416218-11112-1-git-send-email-krzk@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1728654AbgAGTyV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jan 2020 14:54:21 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:38893 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728645AbgAGTyU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jan 2020 14:54:20 -0500
+Received: by mail-ed1-f67.google.com with SMTP id i16so621376edr.5
+        for <linux-spi@vger.kernel.org>; Tue, 07 Jan 2020 11:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
+        b=rePy6dvW+ZH47h+1V5ZzhOdHt3hyIpKxcBqRG6Yxugb8Ug55qYyaTQK4+wINdwq55f
+         jyS7yVvOQ5iMzNISAd+yiqtmzzFVbayzDS39QWeF/dmepISKDIrC01/Pyd16Jkxknswo
+         ZxY/mmXagT/Q6hX/41m7OLd2SMfr8CZO7Ci1IzWbi02KR9YYzIjtqbyhfstjO3po9RzC
+         tRdf7rgiUAYJtfRgzdFxSV7Qq5Jehd/t/PYuqt0rxIFlDCGzailtByweOtMj5bqBnwVk
+         IjZK4uPjcTNDDRooC9FKrWtSPPIiz9LQ6akzqbAN2ioBe4cx30eADGCJ98dfGgAz0k84
+         86YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
+        b=d2rpc85Fx9o/TX8Gnf147VIau5LgTHZtAs1ACxwAesI3AKQeZxWJDA/yP+AN5zv+zh
+         ChO19Ux443/0OEBRsORnTeSQGBlGrh2p7RZwk8g6eo5s5vrtG28h95R7P5g7epeIkMkl
+         KgUxGa1mSK3ApPg7AJbClr+TTIDBiB5W2cnPZIP1pHiqLAoshFuFdeojfODzNoqyaVEl
+         QxQo4ypF+RAJfmJeo+7MGYpbnPA23whfb+oF/rVSV5gaZSEXd3b3C7zKhN50A2md1dTm
+         hgeloNLyVtRIcscglOj7UhBO+i0Wl6tTb/Y65di9QfdFG0lIgo6scrl9aJGrc07XfqYM
+         w5qg==
+X-Gm-Message-State: APjAAAVmSPTzSa9RlanrQ/PLZpCHMAuT7s+hZoj51NbcdnLyWBC1Gppc
+        AQqlmt8jpOdyyF1LSmtiR1hw29+qBJnf9CAQ/QM=
+X-Google-Smtp-Source: APXvYqx1uh7JY9TsleWmDC3UVv1ETHY9DfduKRb8/JpOu+/AEBPnllkLYgtKF65Y7XFrgtyDYVY72zE2SUwJXZDirUk=
+X-Received: by 2002:a17:906:2894:: with SMTP id o20mr1108577ejd.199.1578426859045;
+ Tue, 07 Jan 2020 11:54:19 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:54:18
+ -0800 (PST)
+Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
+From:   "Dr. William Johnson" <currency1000000@gmail.com>
+Date:   Tue, 7 Jan 2020 20:54:18 +0100
+Message-ID: <CAPqfnSFyOwF0m-QsrOdcFV_PCC3TSBr=YQHoQHvH0baKHfeF6Q@mail.gmail.com>
+Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
+ worth $15.8Million US DOLLARS now.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-STR is a well-known stringify macro so it should be avoided in drivers
-to avoid warnings like this (MIPS architecture while compile testing):
-
-    drivers/spi/spi-sh-msiof.c:76:0: warning: "STR" redefined
-     #define STR 0x40 /* Status Register */
-    arch/mips/include/asm/mipsregs.h:30:0: note: this is the location of the previous definition
-     #define STR(x) __STR(x)
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/spi/spi-sh-msiof.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
-index 8f134735291f..f36f0d5165f6 100644
---- a/drivers/spi/spi-sh-msiof.c
-+++ b/drivers/spi/spi-sh-msiof.c
-@@ -73,7 +73,7 @@ struct sh_msiof_spi_priv {
- #define RSCR	0x22	/* Receive Clock Select Register (SH, A1, APE6) */
- #define CTR	0x28	/* Control Register */
- #define FCTR	0x30	/* FIFO Control Register */
--#define STR	0x40	/* Status Register */
-+#define STATR	0x40	/* Status Register */
- #define IER	0x44	/* Interrupt Enable Register */
- #define TDR1	0x48	/* Transmit Control Data Register 1 (SH, A1) */
- #define TDR2	0x4c	/* Transmit Control Data Register 2 (SH, A1) */
-@@ -161,19 +161,19 @@ struct sh_msiof_spi_priv {
- #define FCTR_RFUA_SHIFT	4
- #define FCTR_RFUA(i)	((i) << FCTR_RFUA_SHIFT)
- 
--/* STR */
--#define STR_TFEMP	BIT(29) /* Transmit FIFO Empty */
--#define STR_TDREQ	BIT(28) /* Transmit Data Transfer Request */
--#define STR_TEOF	BIT(23) /* Frame Transmission End */
--#define STR_TFSERR	BIT(21) /* Transmit Frame Synchronization Error */
--#define STR_TFOVF	BIT(20) /* Transmit FIFO Overflow */
--#define STR_TFUDF	BIT(19) /* Transmit FIFO Underflow */
--#define STR_RFFUL	BIT(13) /* Receive FIFO Full */
--#define STR_RDREQ	BIT(12) /* Receive Data Transfer Request */
--#define STR_REOF	BIT(7)  /* Frame Reception End */
--#define STR_RFSERR	BIT(5)  /* Receive Frame Synchronization Error */
--#define STR_RFUDF	BIT(4)  /* Receive FIFO Underflow */
--#define STR_RFOVF	BIT(3)  /* Receive FIFO Overflow */
-+/* STATR */
-+#define STATR_TFEMP	BIT(29) /* Transmit FIFO Empty */
-+#define STATR_TDREQ	BIT(28) /* Transmit Data Transfer Request */
-+#define STATR_TEOF	BIT(23) /* Frame Transmission End */
-+#define STATR_TFSERR	BIT(21) /* Transmit Frame Synchronization Error */
-+#define STATR_TFOVF	BIT(20) /* Transmit FIFO Overflow */
-+#define STATR_TFUDF	BIT(19) /* Transmit FIFO Underflow */
-+#define STATR_RFFUL	BIT(13) /* Receive FIFO Full */
-+#define STATR_RDREQ	BIT(12) /* Receive Data Transfer Request */
-+#define STATR_REOF	BIT(7)  /* Frame Reception End */
-+#define STATR_RFSERR	BIT(5)  /* Receive Frame Synchronization Error */
-+#define STATR_RFUDF	BIT(4)  /* Receive FIFO Underflow */
-+#define STATR_RFOVF	BIT(3)  /* Receive FIFO Overflow */
- 
- /* IER */
- #define IER_TDMAE	BIT(31) /* Transmit Data DMA Transfer Req. Enable */
-@@ -403,8 +403,8 @@ static void sh_msiof_spi_set_mode_regs(struct sh_msiof_spi_priv *p,
- 
- static void sh_msiof_reset_str(struct sh_msiof_spi_priv *p)
- {
--	sh_msiof_write(p, STR,
--		       sh_msiof_read(p, STR) & ~(STR_TDREQ | STR_RDREQ));
-+	sh_msiof_write(p, STATR,
-+		       sh_msiof_read(p, STATR) & ~(STATR_TDREQ | STATR_RDREQ));
- }
- 
- static void sh_msiof_spi_write_fifo_8(struct sh_msiof_spi_priv *p,
--- 
-2.7.4
-
+ATTN Dear Beneficiary.
+Goodnews
+I have Registered your Prepaid ATM Master Card
+worth $15.800,000.00 US DOLLARS Courier company asigned to deliver it
+to you today.
+So contact Dhl office New York to receive your Prepaid ATM Master Card
+worth $15.8Million US DOLLARS now.
+Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
+Email. dhlexpresscouriercompany.nyusa@gmail.com
+Call the office +(202) 890-8752
+Rec-Confirmed your mailing address to the office as I listed below.
+Your Full Name--------------
+House Address-----------
+Your working Phone Number----------------
+ID copy-------------------------
+Sex-----------------------------
+Note,delivery fee to your address is only $50.00. send it to this
+company urgent on itunes card today so that DHL will deliver this
+Prepaid ATM Master Card to you today according to our finally
+agreement.
+Thanks for coperations,
+Dr. William Johnson
