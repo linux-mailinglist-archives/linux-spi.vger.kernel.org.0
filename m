@@ -2,43 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A34D513628E
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2020 22:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A451136294
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2020 22:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728983AbgAIVbI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jan 2020 16:31:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:37060 "EHLO foss.arm.com"
+        id S1725791AbgAIVbK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jan 2020 16:31:10 -0500
+Received: from foss.arm.com ([217.140.110.172]:37090 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725763AbgAIVbI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 9 Jan 2020 16:31:08 -0500
+        id S1725763AbgAIVbK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 9 Jan 2020 16:31:10 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59B6931B;
-        Thu,  9 Jan 2020 13:31:07 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7C631007;
+        Thu,  9 Jan 2020 13:31:09 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB1DB3F534;
-        Thu,  9 Jan 2020 13:31:06 -0800 (PST)
-Date:   Thu, 09 Jan 2020 21:31:05 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F4273F534;
+        Thu,  9 Jan 2020 13:31:09 -0800 (PST)
+Date:   Thu, 09 Jan 2020 21:31:07 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, eugen.hristev@microchip.com,
-        jic23@kernel.org, knaack.h@gmx.de, lars@metafoo.de,
-        lee.jones@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, ludovic.desroches@microchip.com,
-        Mark Brown <broonie@kernel.org>, mark.rutland@arm.com,
-        mchehab@kernel.org, miquel.raynal@bootlin.com, mkl@pengutronix.de,
-        netdev@vger.kernel.org, nicolas.ferre@microchip.com,
-        pmeerw@pmeerw.net, radu_nicolae.pirea@upb.ro,
-        richard.genoud@gmail.com, richard@nod.at, robh+dt@kernel.org,
-        tudor.ambarus@microchip.com, vigneshr@ti.com, vkoul@kernel.org,
-        wg@grandegger.com
-Subject: Applied "dt-bindings: spi_atmel: add microchip,sam9x60-spi" to the spi tree
-In-Reply-To: <1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com>
-Message-Id: <applied-1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: Applied "spi: bcm2835: Raise maximum number of slaves to 4" to the spi tree
+In-Reply-To: <01453fd062de2d49bd74a847e13a0781cbf8143d.1578572268.git.lukas@wunner.de>
+Message-Id: <applied-01453fd062de2d49bd74a847e13a0781cbf8143d.1578572268.git.lukas@wunner.de>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -47,7 +34,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   dt-bindings: spi_atmel: add microchip,sam9x60-spi
+   spi: bcm2835: Raise maximum number of slaves to 4
 
 has been applied to the spi tree at
 
@@ -72,33 +59,36 @@ to this mail.
 Thanks,
 Mark
 
-From 0a1eb761ff30cdc089bcc94e1bd540b6956487c5 Mon Sep 17 00:00:00 2001
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
-Date: Wed, 8 Jan 2020 14:55:19 +0200
-Subject: [PATCH] dt-bindings: spi_atmel: add microchip,sam9x60-spi
+From 603e92ff10a81b965ac41dc9fb3d287408e834fb Mon Sep 17 00:00:00 2001
+From: Lukas Wunner <lukas@wunner.de>
+Date: Thu, 9 Jan 2020 13:23:41 +0100
+Subject: [PATCH] spi: bcm2835: Raise maximum number of slaves to 4
 
-Add microchip,sam9x60-spi to DT bindings documentation.
+The "RevPi Connect Flat" PLC offered by KUNBUS has 4 slaves attached
+to the BCM2835 SPI master.  Raise the maximum number of slaves in the
+driver accordingly.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Link: https://lore.kernel.org/r/01453fd062de2d49bd74a847e13a0781cbf8143d.1578572268.git.lukas@wunner.de
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/devicetree/bindings/spi/spi_atmel.txt | 2 +-
+ drivers/spi/spi-bcm2835.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi_atmel.txt b/Documentation/devicetree/bindings/spi/spi_atmel.txt
-index f99c733d75c1..5bb4a8f1df7a 100644
---- a/Documentation/devicetree/bindings/spi/spi_atmel.txt
-+++ b/Documentation/devicetree/bindings/spi/spi_atmel.txt
-@@ -1,7 +1,7 @@
- Atmel SPI device
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index b784c9fdf9ec..11c235879bb7 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -68,7 +68,7 @@
+ #define BCM2835_SPI_FIFO_SIZE		64
+ #define BCM2835_SPI_FIFO_SIZE_3_4	48
+ #define BCM2835_SPI_DMA_MIN_LENGTH	96
+-#define BCM2835_SPI_NUM_CS		3   /* raise as necessary */
++#define BCM2835_SPI_NUM_CS		4   /* raise as necessary */
+ #define BCM2835_SPI_MODE_BITS	(SPI_CPOL | SPI_CPHA | SPI_CS_HIGH \
+ 				| SPI_NO_CS | SPI_3WIRE)
  
- Required properties:
--- compatible : should be "atmel,at91rm9200-spi".
-+- compatible : should be "atmel,at91rm9200-spi" or "microchip,sam9x60-spi".
- - reg: Address and length of the register set for the device
- - interrupts: Should contain spi interrupt
- - cs-gpios: chipselects (optional for SPI controller version >= 2 with the
 -- 
 2.20.1
 
