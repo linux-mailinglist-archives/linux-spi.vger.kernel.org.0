@@ -2,83 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B8E136273
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2020 22:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A34D513628E
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2020 22:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725791AbgAIV2o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jan 2020 16:28:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:36910 "EHLO foss.arm.com"
+        id S1728983AbgAIVbI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jan 2020 16:31:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:37060 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725763AbgAIV2o (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 9 Jan 2020 16:28:44 -0500
+        id S1725763AbgAIVbI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 9 Jan 2020 16:31:08 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4802A31B;
-        Thu,  9 Jan 2020 13:28:44 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59B6931B;
+        Thu,  9 Jan 2020 13:31:07 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C301F3F534;
-        Thu,  9 Jan 2020 13:28:43 -0800 (PST)
-Date:   Thu, 9 Jan 2020 21:28:42 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB1DB3F534;
+        Thu,  9 Jan 2020 13:31:06 -0800 (PST)
+Date:   Thu, 09 Jan 2020 21:31:05 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     marek.vasut@gmail.com, tudor.ambarus@microchip.com,
-        linuxarm@huawei.com, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        xuejiancheng@hisilicon.com, fengsheng5@huawei.com,
-        chenxiang66@hisilicon.com
-Subject: Re: [PATCH v2 2/3] spi: Add HiSilicon v3xx SPI NOR flash controller
- driver
-Message-ID: <20200109212842.GK3702@sirena.org.uk>
-References: <1575900490-74467-1-git-send-email-john.garry@huawei.com>
- <1575900490-74467-3-git-send-email-john.garry@huawei.com>
- <0dc5cb2e-b765-9e13-b05e-9e3c835c5985@huawei.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yiup30KVCQiHUZFC"
-Content-Disposition: inline
-In-Reply-To: <0dc5cb2e-b765-9e13-b05e-9e3c835c5985@huawei.com>
-X-Cookie: Killing turkeys causes winter.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, eugen.hristev@microchip.com,
+        jic23@kernel.org, knaack.h@gmx.de, lars@metafoo.de,
+        lee.jones@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, ludovic.desroches@microchip.com,
+        Mark Brown <broonie@kernel.org>, mark.rutland@arm.com,
+        mchehab@kernel.org, miquel.raynal@bootlin.com, mkl@pengutronix.de,
+        netdev@vger.kernel.org, nicolas.ferre@microchip.com,
+        pmeerw@pmeerw.net, radu_nicolae.pirea@upb.ro,
+        richard.genoud@gmail.com, richard@nod.at, robh+dt@kernel.org,
+        tudor.ambarus@microchip.com, vigneshr@ti.com, vkoul@kernel.org,
+        wg@grandegger.com
+Subject: Applied "dt-bindings: spi_atmel: add microchip,sam9x60-spi" to the spi tree
+In-Reply-To: <1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com>
+Message-Id: <applied-1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The patch
 
---yiup30KVCQiHUZFC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+   dt-bindings: spi_atmel: add microchip,sam9x60-spi
 
-On Thu, Jan 09, 2020 at 03:54:00PM +0000, John Garry wrote:
+has been applied to the spi tree at
 
-> From checking acpi_spi_add_resource() or anywhere else, I cannot see how
-> SPI_RX_DUAL or the others are set for spi_device.mode. What am I missing?
-> Are these just not supported yet for ACPI? Or should the spi-nor code not be
-> relying on this since we should be able to get this info from the SPI NOR
-> part?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
 
-I'm not aware of any work on integrating this sort of stuff into ACPI
-platforms so I think it's just not yet supported in ACPI.  I'm not
-really sure what would be idiomatic for ACPI, figuring it out from what
-the part supports might well be idiomatic there though I don't know how
-common it is for people not to wire up all the data lines even if both
-controller and device support wider transfers.  I've got a horrible
-feeling that the idiomatic thing is a combination of that and a bunch of
-per-device quirks.  There may be a spec I'm not aware of though I'd be a
-bit surprised.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
---yiup30KVCQiHUZFC
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl4XmwkACgkQJNaLcl1U
-h9DSmwf/cxqR58GjrThK9SdQjRi/lDgE2Zvu+klgcyq4qaE5CzctPqfdcJvyMn3D
-8dnuZ0QZ/u4P/6nbc1FfGXfqeV7B0KeZ7yZbzklrjD1ehohvg3H46K52oVsVjF4H
-xsjPdJDNeTtFBIgHGy1M4AIYVC58nRYX/6S7qLRKdyE5OOL4uHv/ZXSzBfhh+XPe
-UtVTZNNfcXxdkWOTsmFo3qo0hnb8FxD/K0Rg++9C6XHLftNqmsXJcpzLaYKEBkor
-FuQEwWTfDc4x3bq3cjsBqEURrEBAhUSMwZlfwgBJgX4GZfgR7pBv1IDZvXCwff0W
-o8LOG/PgA593X83a55IjHs2w5oIGoQ==
-=Vjtj
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---yiup30KVCQiHUZFC--
+Thanks,
+Mark
+
+From 0a1eb761ff30cdc089bcc94e1bd540b6956487c5 Mon Sep 17 00:00:00 2001
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
+Date: Wed, 8 Jan 2020 14:55:19 +0200
+Subject: [PATCH] dt-bindings: spi_atmel: add microchip,sam9x60-spi
+
+Add microchip,sam9x60-spi to DT bindings documentation.
+
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ Documentation/devicetree/bindings/spi/spi_atmel.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi_atmel.txt b/Documentation/devicetree/bindings/spi/spi_atmel.txt
+index f99c733d75c1..5bb4a8f1df7a 100644
+--- a/Documentation/devicetree/bindings/spi/spi_atmel.txt
++++ b/Documentation/devicetree/bindings/spi/spi_atmel.txt
+@@ -1,7 +1,7 @@
+ Atmel SPI device
+ 
+ Required properties:
+-- compatible : should be "atmel,at91rm9200-spi".
++- compatible : should be "atmel,at91rm9200-spi" or "microchip,sam9x60-spi".
+ - reg: Address and length of the register set for the device
+ - interrupts: Should contain spi interrupt
+ - cs-gpios: chipselects (optional for SPI controller version >= 2 with the
+-- 
+2.20.1
+
