@@ -2,88 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3657313596D
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2020 13:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE8113597F
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2020 13:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727945AbgAIMnA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jan 2020 07:43:00 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:35216 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727876AbgAIMnA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jan 2020 07:43:00 -0500
-Received: by mail-oi1-f196.google.com with SMTP id k4so5739988oik.2;
-        Thu, 09 Jan 2020 04:42:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5b8WOilK1IrwHRtFhRNVvo/rjsABUHvrgsqsBsmDLI4=;
-        b=OpnSb96NqXphNgETqeDdw7kiNUT7Qh4gmVRUoVaBMHakM1XLYLIrHAJU+4g7NUMT2O
-         i8xtERQ+yMnpxXMZnaF0Z+Wm488lEM+MgoU2/n8ZZaxW22Bf+Ia0ADVPodRgVc8fU+QS
-         3+ZYY+sx4NyKrV23m71oNBw3zqL1KkUmrhCenYO/wiO134IeR1D5T3+Jofr4kDPz6A4R
-         eP/K74Nz77ZIaV7OmlZr2pgyTwiSDkk7xJ7uDW+GL/WPm2aDj+Kenpbt6Rbc/MK8ie9W
-         1fnt34gm1uFz5or7PbqczU1f4UV/9GsxdeZtPPG7OZFtr4IUK+usXsVvM/R81uV9mOPk
-         H9Rg==
-X-Gm-Message-State: APjAAAVcqipVa9BTyw7lvnhsjrBgDR13NxS8+gNKxyIzcOTuVqaJ5hWb
-        KoSlN6giCZ8QPl57kygiB78PB/P/ZbrD51lHhaw=
-X-Google-Smtp-Source: APXvYqyjPciL5ImdOhy2RbmXSWJK2wsv8b//9lehF3BjfcAPF2PyCJE2VWEqA3KnOaS4ZJpUqXiQ1hujiPrv9qZnE00=
-X-Received: by 2002:aca:5905:: with SMTP id n5mr3014582oib.54.1578573779420;
- Thu, 09 Jan 2020 04:42:59 -0800 (PST)
+        id S1728293AbgAIMxJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jan 2020 07:53:09 -0500
+Received: from mx2.suse.de ([195.135.220.15]:44292 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725308AbgAIMxJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 9 Jan 2020 07:53:09 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id A79A5B236B;
+        Thu,  9 Jan 2020 12:52:56 +0000 (UTC)
+Message-ID: <b0f26f7f4c265dc9b14fba1cb4b0d4546da1f45a.camel@suse.de>
+Subject: Re: [PATCH] spi: bcm2835: Raise maximum number of slaves to 4
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
+Date:   Thu, 09 Jan 2020 13:52:54 +0100
+In-Reply-To: <01453fd062de2d49bd74a847e13a0781cbf8143d.1578572268.git.lukas@wunner.de>
+References: <01453fd062de2d49bd74a847e13a0781cbf8143d.1578572268.git.lukas@wunner.de>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-dIc7VbFbXRwHFM7LWXk+"
+User-Agent: Evolution 3.34.2 
 MIME-Version: 1.0
-References: <20200108194319.3171-1-krzk@kernel.org>
-In-Reply-To: <20200108194319.3171-1-krzk@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Jan 2020 13:42:48 +0100
-Message-ID: <CAMuHMdWM97k7iG_Er=VCLF0EPo6R1sK7+ZsSwjQB0b4WO88U6A@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: sh-msiof: Do not redefine STR while compile testing
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Krzysztof,
 
-On Wed, Jan 8, 2020 at 8:43 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> STR is a well-known stringify macro so it should be avoided in drivers
-> to avoid warnings like this (MIPS architecture while compile testing):
->
->     drivers/spi/spi-sh-msiof.c:76:0: warning: "STR" redefined
->      #define STR 0x40 /* Status Register */
->     arch/mips/include/asm/mipsregs.h:30:0: note: this is the location of the previous definition
->      #define STR(x) __STR(x)
->
-> To maintain consistency between all register names add a SI prefix to
-> all of them.  This also matches register names in datasheet.
->
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
->
+--=-dIc7VbFbXRwHFM7LWXk+
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, 2020-01-09 at 13:23 +0100, Lukas Wunner wrote:
+> The "RevPi Connect Flat" PLC offered by KUNBUS has 4 slaves attached
+> to the BCM2835 SPI master.  Raise the maximum number of slaves in the
+> driver accordingly.
+>=20
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
 > ---
->
-> Changes since v1:
-> 1. Use SI prefix,
-> 2. Adjust all register names.
 
-Thanks for the update!
+Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks!
 
-No changes in object file, so:
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>  drivers/spi/spi-bcm2835.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+> index b784c9fdf9ec..11c235879bb7 100644
+> --- a/drivers/spi/spi-bcm2835.c
+> +++ b/drivers/spi/spi-bcm2835.c
+> @@ -68,7 +68,7 @@
+>  #define BCM2835_SPI_FIFO_SIZE		64
+>  #define BCM2835_SPI_FIFO_SIZE_3_4	48
+>  #define BCM2835_SPI_DMA_MIN_LENGTH	96
+> -#define BCM2835_SPI_NUM_CS		3   /* raise as necessary */
+> +#define BCM2835_SPI_NUM_CS		4   /* raise as necessary */
+>  #define BCM2835_SPI_MODE_BITS	(SPI_CPOL | SPI_CPHA | SPI_CS_HIGH \
+>  				| SPI_NO_CS | SPI_3WIRE)
+> =20
 
-Gr{oetje,eeting}s,
 
-                        Geert
+--=-dIc7VbFbXRwHFM7LWXk+
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl4XIiYACgkQlfZmHno8
+x/53xAgAhpR+IrNKIWkC+R2shaCd4Yj99SBmS3YeSC0RCOwUUDvuXeVsqsIhZ1eT
+GFY11ghFtnI1JoRLEoXl+M5G+8d1CQpERaIDWwBkkbZ3IENfieGiqY0a5qRetXIs
+w5fWpUkPfZYa44uAwcsXLQ2E8b9dQTopGJlWUk1waFq3H1b0A4AFUD9TqVpg5t+e
+QsLTEeYrRNd7HoKy2m9tSF++hpscCGWwYxZYQIBFO0OazrTx73H7x9+Cn+kqjpNd
+DFKqhEM+N+TWryl5KcEomerNRlXMT+4UB3xTY9FGWW6PFyIP3/Dq9udiUHHFD7En
+GwLzxT78n05uEF0l/QsYdAQ2hlX3OQ==
+=gJlq
+-----END PGP SIGNATURE-----
+
+--=-dIc7VbFbXRwHFM7LWXk+--
+
