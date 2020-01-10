@@ -2,91 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7B4136C82
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2020 12:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706C3136E4A
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2020 14:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727960AbgAJLzm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jan 2020 06:55:42 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2251 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727858AbgAJLzl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 10 Jan 2020 06:55:41 -0500
-Received: from lhreml701-cah.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id AFF0FA5C9FD9699058BD;
-        Fri, 10 Jan 2020 11:55:39 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml701-cah.china.huawei.com (10.201.108.42) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Fri, 10 Jan 2020 11:55:39 +0000
-Received: from [127.0.0.1] (10.202.226.43) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Fri, 10 Jan
- 2020 11:55:39 +0000
-Subject: Re: [PATCH v2 2/3] spi: Add HiSilicon v3xx SPI NOR flash controller
- driver
-To:     Mark Brown <broonie@kernel.org>
-CC:     <marek.vasut@gmail.com>, <tudor.ambarus@microchip.com>,
-        <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <xuejiancheng@hisilicon.com>, <fengsheng5@huawei.com>,
-        <chenxiang66@hisilicon.com>
-References: <1575900490-74467-1-git-send-email-john.garry@huawei.com>
- <1575900490-74467-3-git-send-email-john.garry@huawei.com>
- <0dc5cb2e-b765-9e13-b05e-9e3c835c5985@huawei.com>
- <20200109212842.GK3702@sirena.org.uk>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <df67b562-7d82-19f6-7581-680190a7772d@huawei.com>
-Date:   Fri, 10 Jan 2020 11:55:37 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1727901AbgAJNkP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jan 2020 08:40:15 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:33685 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727639AbgAJNkO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Jan 2020 08:40:14 -0500
+Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 29C1E240016;
+        Fri, 10 Jan 2020 13:40:01 +0000 (UTC)
+Date:   Fri, 10 Jan 2020 14:40:01 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
+        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
+        vkoul@kernel.org, eugen.hristev@microchip.com, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+        mchehab@kernel.org, lee.jones@linaro.org, richard.genoud@gmail.com,
+        radu_nicolae.pirea@upb.ro, tudor.ambarus@microchip.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        wg@grandegger.com, mkl@pengutronix.de, a.zummo@towertech.it,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 03/16] dt-bindings: atmel-tcb: add microchip,<chip>-tcb
+Message-ID: <20200110134001.GD1027187@piout.net>
+References: <1578488123-26127-1-git-send-email-claudiu.beznea@microchip.com>
+ <1578488123-26127-4-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <20200109212842.GK3702@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.43]
-X-ClientProxiedBy: lhreml729-chm.china.huawei.com (10.201.108.80) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1578488123-26127-4-git-send-email-claudiu.beznea@microchip.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 09/01/2020 21:28, Mark Brown wrote:
-> On Thu, Jan 09, 2020 at 03:54:00PM +0000, John Garry wrote:
+On 08/01/2020 14:55:10+0200, Claudiu Beznea wrote:
+> Add microchip,<chip>-tcb to DT bindings documentation. This is for
+> microchip,sam9x60-tcb.
 > 
->>  From checking acpi_spi_add_resource() or anywhere else, I cannot see how
->> SPI_RX_DUAL or the others are set for spi_device.mode. What am I missing?
->> Are these just not supported yet for ACPI? Or should the spi-nor code not be
->> relying on this since we should be able to get this info from the SPI NOR
->> part?
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/atmel-tcb.txt | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel-tcb.txt b/Documentation/devicetree/bindings/mfd/atmel-tcb.txt
+> index c4a83e364cb6..e1713e41f6e0 100644
+> --- a/Documentation/devicetree/bindings/mfd/atmel-tcb.txt
+> +++ b/Documentation/devicetree/bindings/mfd/atmel-tcb.txt
+> @@ -1,6 +1,7 @@
+>  * Device tree bindings for Atmel Timer Counter Blocks
+> -- compatible: Should be "atmel,<chip>-tcb", "simple-mfd", "syscon".
+> -  <chip> can be "at91rm9200" or "at91sam9x5"
+> +- compatible: Should be "atmel,<chip>-tcb", "microchip,<chip>-tcb",
+> +  "simple-mfd", "syscon".
+> +  <chip> can be "at91rm9200", "at91sam9x5" or "sam9x60"
 
-Hi Mark,
+atmel,sam9x60-tcb, microchip,at91rm9200-tcb and microchip,at91sam9x5-tcb
+are not allowed and the documentation should reflect that.
 
-> I'm not aware of any work on integrating this sort of stuff into ACPI
-> platforms so I think it's just not yet supported in ACPI.  I'm not
-> really sure what would be idiomatic for ACPI, figuring it out from what
-> the part supports might well be idiomatic there though I don't know how
-> common it is for people not to wire up all the data lines even if both
-> controller and device support wider transfers. 
+It would probably be easier to do that on top of the yaml conversion
+here:
+https://lore.kernel.org/lkml/20191009224006.5021-2-alexandre.belloni@bootlin.com/
 
-OK, so I guess that is why we require the width property from the FW and 
-can't blindly rely on SFDP.
-
-  I've got a horrible
-> feeling that the idiomatic thing is a combination of that and a bunch of
-> per-device quirks.  There may be a spec I'm not aware of though I'd be a
-> bit surprised.
-> 
-
-I'm not sure on that. I don't see anything in the ACPI spec.
-
-I will note that PRP0001+"jedec,spi-nor" compatible DSD seems to be the 
-defacto method to describe the SPI NOR-compat part for ACPI - that's 
-what I'm using. We could add properties there, but that seems improper.
-
-I'll continue to look....
-
-Thanks,
-John
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
