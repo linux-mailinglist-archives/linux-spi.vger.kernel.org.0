@@ -2,100 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C651137741
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2020 20:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAF6137798
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2020 21:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728901AbgAJTbX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jan 2020 14:31:23 -0500
-Received: from mga11.intel.com ([192.55.52.93]:47059 "EHLO mga11.intel.com"
+        id S1728602AbgAJUAA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jan 2020 15:00:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:50568 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729182AbgAJTbW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 10 Jan 2020 14:31:22 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jan 2020 11:31:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,418,1571727600"; 
-   d="scan'208";a="422217933"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Jan 2020 11:31:18 -0800
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1iq007-0003bl-4D; Fri, 10 Jan 2020 21:31:19 +0200
-Date:   Fri, 10 Jan 2020 21:31:19 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1727650AbgAJT7F (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 10 Jan 2020 14:59:05 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D051E328;
+        Fri, 10 Jan 2020 11:59:04 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5615D3F534;
+        Fri, 10 Jan 2020 11:59:04 -0800 (PST)
+Date:   Fri, 10 Jan 2020 19:59:02 +0000
+From:   Mark Brown <broonie@kernel.org>
 To:     John Garry <john.garry@huawei.com>
-Cc:     Mark Brown <broonie@kernel.org>, tudor.ambarus@microchip.com,
-        linux-kernel@vger.kernel.org, chenxiang66@hisilicon.com,
-        linuxarm@huawei.com, linux-spi@vger.kernel.org,
-        marek.vasut@gmail.com, linux-mtd@lists.infradead.org,
-        xuejiancheng@hisilicon.com, fengsheng5@huawei.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        wanghuiqiang <wanghuiqiang@huawei.com>, liusimin4@huawei.com
-Subject: Re: [PATCH v2 2/3] spi: Add HiSilicon v3xx SPI NOR flash controller
- driver
-Message-ID: <20200110193119.GI32742@smile.fi.intel.com>
-References: <1575900490-74467-1-git-send-email-john.garry@huawei.com>
- <1575900490-74467-3-git-send-email-john.garry@huawei.com>
- <0dc5cb2e-b765-9e13-b05e-9e3c835c5985@huawei.com>
- <20200109212842.GK3702@sirena.org.uk>
- <df67b562-7d82-19f6-7581-680190a7772d@huawei.com>
- <20200110140726.GB5889@sirena.org.uk>
- <6db83881-927c-d11c-9c77-23a45892ddab@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6db83881-927c-d11c-9c77-23a45892ddab@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Cc:     broonie@kernel.org, chenxiang66@hisilicon.com,
+        fengsheng5@huawei.com, linuxarm@huawei.com,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, marek.vasut@gmail.com,
+        Mark Brown <broonie@kernel.org>, tudor.ambarus@microchip.com,
+        xuejiancheng@hisilicon.com
+Subject: Applied "MAINTAINERS: Add a maintainer for the HiSilicon v3xx SFC driver" to the spi tree
+In-Reply-To: <1575900490-74467-4-git-send-email-john.garry@huawei.com>
+Message-Id: <applied-1575900490-74467-4-git-send-email-john.garry@huawei.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jan 10, 2020 at 02:58:54PM +0000, John Garry wrote:
-> On 10/01/2020 14:07, Mark Brown wrote:
-> > On Fri, Jan 10, 2020 at 11:55:37AM +0000, John Garry wrote: >
+The patch
 
-...
+   MAINTAINERS: Add a maintainer for the HiSilicon v3xx SFC driver
 
-> > > I will note that PRP0001+"jedec,spi-nor" compatible DSD seems to be the
-> > > defacto method to describe the SPI NOR-compat part for ACPI - that's what
-> > > I'm using. We could add properties there, but that seems improper.
-> > 
-> > OK, so that's just reusing the DT binding in which case everything
-> > that's valid for the DT binding should also be valid for ACPI - I
-> > thought that actually worked automatically without you having to do
-> > anything in the code but ICBW.
-> 
-> I thought that it would be improper as we could be mixing ACPI methods to
-> describe the serial bus (SPI Serial Bus Connection Resource Descriptor) and
-> also DT properties which could conflict, like CS active high.
-> 
-> However I do see extra properties than "compatible" being added in DSD for
-> PRP0001:
-> https://patchwork.ozlabs.org/patch/662813/ (see EEPROM part)
+has been applied to the spi tree at
 
-PRP method is only for vendors to *test* the hardware in ACPI environment.
-The proper method is to allocate correct ACPI ID.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
 
-Properties (_DSD in ACPI) may be used in the same way as for DT if we have no
-other means in ACPI specification for them.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-> And if we were to do this, I think that we would need to add some
-> device_property_read_u32("spi-rx-bus-width", ...), etc calls in the SPI FW
-> parsing for ACPI path - I couldn't see that.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-It's okay as long as you have ACPI ID.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-P.S. Most of the sensor drivers were updated in order to support ACPI PRP
-method due to DIY hobbyist on IoT sector and embedded devices. This should not
-be an official way how we support hardware on ACPI-based platforms.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
+Thanks,
+Mark
+
+From 99eb0a1221ac1083b8c87932c438ef016abdaa05 Mon Sep 17 00:00:00 2001
+From: John Garry <john.garry@huawei.com>
+Date: Mon, 9 Dec 2019 22:08:10 +0800
+Subject: [PATCH] MAINTAINERS: Add a maintainer for the HiSilicon v3xx SFC
+ driver
+
+Set John Garry @ Huawei as the maintainer.
+
+Signed-off-by: John Garry <john.garry@huawei.com>
+Link: https://lore.kernel.org/r/1575900490-74467-4-git-send-email-john.garry@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bd5847e802de..8c119bd4f687 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7492,6 +7492,12 @@ S:	Supported
+ F:	drivers/scsi/hisi_sas/
+ F:	Documentation/devicetree/bindings/scsi/hisilicon-sas.txt
+ 
++HISILICON V3XX SPI NOR FLASH Controller Driver
++M:	John Garry <john.garry@huawei.com>
++W:	http://www.hisilicon.com
++S:	Maintained
++F:	drivers/spi/spi-hisi-sfc-v3xx.c
++
+ HISILICON QM AND ZIP Controller DRIVER
+ M:	Zhou Wang <wangzhou1@hisilicon.com>
+ L:	linux-crypto@vger.kernel.org
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.20.1
 
