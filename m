@@ -2,93 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3E3137F22
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Jan 2020 11:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A077813829C
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Jan 2020 18:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730407AbgAKKQt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 11 Jan 2020 05:16:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60336 "EHLO mail.kernel.org"
+        id S1730556AbgAKR0n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 11 Jan 2020 12:26:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45558 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729229AbgAKKQr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 11 Jan 2020 05:16:47 -0500
-Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        id S1730533AbgAKR0n (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 11 Jan 2020 12:26:43 -0500
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E34AB20673;
-        Sat, 11 Jan 2020 10:16:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AA2B6206ED;
+        Sat, 11 Jan 2020 17:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578737807;
-        bh=cWDB7LJUkZzYeNN+RNZaHLYw/EuP9iPySeFRixVAIjA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0qhrTvJ622zuqqpkVY6pldy0gCLgzoi6fLpEKdLGssA+K+q3Fav7TZlYrzPTGIIBl
-         TVokV2Sr087WkhwqRXpD6MVH1E4QUO9n4BX+xy9AuCHloJLmKQFiIN3G08ewL08zRg
-         Je0b8p1WKEiuZZW1e3Yt6xXOhhTJXUYByXAEcbvI=
-Date:   Sat, 11 Jan 2020 10:16:38 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <vkoul@kernel.org>,
-        <eugen.hristev@microchip.com>, <knaack.h@gmx.de>,
-        <lars@metafoo.de>, <pmeerw@pmeerw.net>, <mchehab@kernel.org>,
-        <lee.jones@linaro.org>, <radu_nicolae.pirea@upb.ro>,
-        <richard.genoud@gmail.com>, <tudor.ambarus@microchip.com>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <wg@grandegger.com>, <mkl@pengutronix.de>, <a.zummo@towertech.it>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <linux-can@vger.kernel.org>, <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH v2 06/17] dt-bindings: at91-sama5d2_adc: add
- microchip,sam9x60-adc
-Message-ID: <20200111101638.7920f26c@archlinux>
-In-Reply-To: <1578673089-3484-7-git-send-email-claudiu.beznea@microchip.com>
-References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
-        <1578673089-3484-7-git-send-email-claudiu.beznea@microchip.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        s=default; t=1578763602;
+        bh=ktFS9YWjiT6ht7tc+v11qTbRy7B1vTvUdZZhKJ0Egnw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MVi3m3sZJlBPvA51bmf/sgXDrDsOxKOQ3pU47IiGlF7fi3vkjBCtPAK/evnvnIW0b
+         N/SukqfHK00DO9Ix+FNtpuGle7O6iweMUvBkPN1rhwNke2cKxyRlMapRr32lo+/7M0
+         RZy/zc7DJGUoa0MATrwjwkCRusi9Lwsxx0M2bLKM=
+Date:   Sat, 11 Jan 2020 18:26:39 +0100
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@googlegroups.com, Icenowy Zheng <icenowy@aosc.xyz>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH 1/2] arm64: dts: sun50i: H6: Add SPI controllers nodes
+ and pinmuxes
+Message-ID: <20200111172639.to3lhzros6ca5hj2@gilmour.lan>
+References: <20200108101006.150706-1-andre.przywara@arm.com>
+ <20200108101006.150706-2-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200108101006.150706-2-andre.przywara@arm.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 10 Jan 2020 18:17:58 +0200
-Claudiu Beznea <claudiu.beznea@microchip.com> wrote:
-
-> Add microchip,sam9x60-adc to DT bindings documentation.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-I'm assuming this lot of binding changes will all go via Rob.
-Let me know if you are expecting it to go via the various
-individual trees.
-
-Thanks,
-
-Jonathan
-
-
+On Wed, Jan 08, 2020 at 10:10:05AM +0000, Andre Przywara wrote:
+> The Allwinner H6 SoC contains two SPI controllers similar to the H3/A64,
+> but with the added capability of 3-wire and 4-wire operation modes.
+> For now the driver does not support those, but the SPI registers are
+> fully backwards-compatible, just adding bits and registers which were
+> formerly reserved. So we can use the existing driver for the "normal" SPI
+> modes, for instance to access the SPI NOR flash soldered on the PineH64
+> board.
+> We use an H6 specific compatible string in addition to the existing H3
+> string, so when the driver later gains Quad SPI support, it should work
+> automatically without any DT changes.
+>
+> Tested by accessing the SPI flash on a Pine H64 board (SPI0), also
+> connecting another SPI flash to the SPI1 header pins.
+>
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 > ---
->  Documentation/devicetree/bindings/iio/adc/at91-sama5d2_adc.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/at91-sama5d2_adc.txt b/Documentation/devicetree/bindings/iio/adc/at91-sama5d2_adc.txt
-> index 4a3c1d496e1a..07c59f301b31 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/at91-sama5d2_adc.txt
-> +++ b/Documentation/devicetree/bindings/iio/adc/at91-sama5d2_adc.txt
-> @@ -1,7 +1,7 @@
->  * AT91 SAMA5D2 Analog to Digital Converter (ADC)
->  
->  Required properties:
-> -  - compatible: Should be "atmel,sama5d2-adc".
-> +  - compatible: Should be "atmel,sama5d2-adc" or "microchip,sam9x60-adc".
->    - reg: Should contain ADC registers location and length.
->    - interrupts: Should contain the IRQ line for the ADC.
->    - clocks: phandle to device clock.
+>  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 54 ++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> index 3329283e38ab..40835850893e 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> @@ -338,6 +338,30 @@
+>  				bias-pull-up;
+>  			};
+>
+> +			/omit-if-no-ref/
+> +			spi0_pins: spi0-pins {
+> +				pins = "PC0", "PC2", "PC3";
+> +				function = "spi0";
+> +			};
+> +
+> +			/omit-if-no-ref/
+> +			spi0_cs_pin: spi0-cs-pin {
+> +				pins = "PC5";
+> +				function = "spi0";
+> +			};
 
+It seems suspicious to use it in the Pine H64, since PC5 is also used
+by the eMMC (and this prevents either the SPI or the emmc controller
+to probe, depending on which probed first).
+
+Maxime
