@@ -2,103 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D07139B4F
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Jan 2020 22:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FC7139BF3
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Jan 2020 22:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbgAMVVy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Jan 2020 16:21:54 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:43576 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728665AbgAMVVy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Jan 2020 16:21:54 -0500
-Received: by mail-lj1-f195.google.com with SMTP id a13so11770769ljm.10
-        for <linux-spi@vger.kernel.org>; Mon, 13 Jan 2020 13:21:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
-        b=nGlZB+kmYCFVkWgGiGizF0iYMx6fc08SyNenEi1ie1BH6O9A7leQ+E1z8gmkHTjOpr
-         nOoqdrML0dZbAGO5UFtshGU/OWD6f6f0F/veZ5aCAM986QlXq24ftad1qHaX9i4q98Wg
-         EoYjC5Oyb3t1NQaQxIOk0nTQslTThixJMUhhDGvDRQHs0do2h9LwZvDqK3AIdzZpAM0R
-         CvzgjSLXZdR1AH7tbS5NH6zqqD94GYqcZTUj1pzBtDCZpZMBOHCY3HvooaxZobtr/kB6
-         NQhaW0mcftRzL8qnqQIP50jYeo/WnjE9xL+LH+Nk1uyDoDfsZ2XvtnUMEGk1p21ER/Rt
-         PVAQ==
+        id S1727382AbgAMVzK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Jan 2020 16:55:10 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36885 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728801AbgAMVzK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Jan 2020 16:55:10 -0500
+Received: by mail-ot1-f65.google.com with SMTP id k14so10519095otn.4
+        for <linux-spi@vger.kernel.org>; Mon, 13 Jan 2020 13:55:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
-        b=YRZ2Z+tc2vKJSjE+vatK7HPwRzhI0SbgoQ6Qd4h035vl6ESKxWC4TsMcWY9z+rYtYL
-         4Y4sRVMcxy3P4om7NZJtAbLRDvGiHzTZ1eI6AEnynLNoGfg9tOh+2z1dA288bIK/gMEC
-         3sU9Y9+YnkdHz7ZLX3pqt2UDxNZ2YxThZUIRxDFs6VldUJ1wjhlhJNORCxenuYf3bTUy
-         py/A2CglGgGRCPyhRQ4wfQgdAsCT7MlCZCbUoFLqrm9BHLcVfr68k6S7c7J/7g5pYOd3
-         jul+UtnFUmxV1qV2DxMo8r5s4vejK7VbGTRdj8kZ8FihYs2MXIFdng+01LffvKmHGjb5
-         j3XQ==
-X-Gm-Message-State: APjAAAXbuHejCazeOQCOPTZC0lLVTxvj3Rv6WHhciYAC3ypmj7N+0o4F
-        cPizLaPMflFLl9ipqq1GBjYxxO0mxHZU7mgtGLo=
-X-Google-Smtp-Source: APXvYqwJ/b8MnFX6qGdbe6KhaLPoA7/BeUW0PPYYIJ1mHO8USQIQaLJkgTT9NUU5/zUO7MBmyAI4TrPoI3UxJUdMMW8=
-X-Received: by 2002:a2e:9e4c:: with SMTP id g12mr12150442ljk.15.1578950512647;
- Mon, 13 Jan 2020 13:21:52 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pxveT8kmVAy+6NNs/m6VYBrLz6raLXBMbZxaVD7AKwA=;
+        b=NZ+l6tNcNOpBzWMsZwMQbnRWOCqhRNoXhY2XAVjZpMHRGg2BWbGzcmVp4fhjSpjWpq
+         Rlnaue0kof86XO5ULTm85omgyJXsm4tU+xtzFF2Mk6fimCkTp7OJfs/sbkjt22TH6ka5
+         fKna/Oh4ysq2rJCSF2KQeEnARK/j2MjRAGhUooDY1BjYIVe5yyYZjEP2OiMRQ2tkLQ+r
+         m/C22kkeSaGl6q07cof7Z5DTEjcrcfAQQfjA1rYQS/t6OCvBQ815SBsZ1H5BRoOxKt9P
+         6PS6vHx06E9kol9UUdSD9Yvn3mzm+tyT3Y43sOAQd3+WB5aw/zmgyFEO59ZdUe3CZCcw
+         B1dw==
+X-Gm-Message-State: APjAAAXxFfCZ2QTZww9QO+YpnHS7uGVzNPisPj9ZcKs1R3XnY8Kt2fKl
+        UDmcItktCzV7v8fFiVWcoMAPpKI=
+X-Google-Smtp-Source: APXvYqxdW8mTZtmhc3CLA0AyGqtsEabFA95ZApgtMNDKaPXomnCk0xMkK6Pj3r9tPj+BoRHGUakRHw==
+X-Received: by 2002:a9d:4d8d:: with SMTP id u13mr13944513otk.299.1578952509267;
+        Mon, 13 Jan 2020 13:55:09 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s83sm3938102oif.33.2020.01.13.13.55.08
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2020 13:55:09 -0800 (PST)
+Received: from rob (uid 1000)
+        (envelope-from rob@rob-hp-laptop)
+        id 22198d
+        by rob-hp-laptop (DragonFly Mail Agent v0.11);
+        Mon, 13 Jan 2020 15:47:36 -0600
+Date:   Mon, 13 Jan 2020 15:47:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, vkoul@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, ulf.hansson@linaro.org,
+        srinivas.kandagatla@linaro.org, broonie@kernel.org,
+        manivannan.sadhasivam@linaro.org, andrew.smirnov@gmail.com,
+        rjones@gateworks.com, marcel.ziswiler@toradex.com,
+        sebastien.szymanski@armadeus.com, aisheng.dong@nxp.com,
+        richard.hu@technexion.com, angus@akkea.ca, cosmin.stoica@nxp.com,
+        l.stach@pengutronix.de, rabeeh@solid-run.com,
+        leonard.crestez@nxp.com, daniel.baluta@nxp.com, jun.li@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH V2 7/7] dt-bindings: arm: imx: Add the i.MX8MP EVK board
+Message-ID: <20200113214736.GA12301@bogus>
+References: <1578893602-14395-1-git-send-email-Anson.Huang@nxp.com>
+ <1578893602-14395-7-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
-Reply-To: mrsanna.h.bruun119@gmail.com
-Received: by 2002:ac2:4a9d:0:0:0:0:0 with HTTP; Mon, 13 Jan 2020 13:21:52
- -0800 (PST)
-From:   "Mrs. Anna H. Bruun" <mrsanna.h.bruun119@gmail.com>
-Date:   Mon, 13 Jan 2020 13:21:52 -0800
-X-Google-Sender-Auth: OgFXnPtFSZTyLXaS-XP0YuYAmlo
-Message-ID: <CAEv_75a3rq65fdm=kAmcgVfwsaASntdBv6-YFC2YYLg4EOGa9A@mail.gmail.com>
-Subject: My Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1578893602-14395-7-git-send-email-Anson.Huang@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-My Dear
+On Mon, 13 Jan 2020 13:33:22 +0800, Anson Huang wrote:
+> Add board binding for i.MX8MP EVK board.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+> No change.
+> ---
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-My Name is Mrs. Anna H. Bruun, from Norway. I know that this message
-will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun,
-A gold merchant who owns a small gold Mine in Burkina Faso; He died of
-Cardiovascular Disease in mid-March 2011. During his life time he
-deposited the sum of =E2=82=AC 8.5 Million Euro) Eight million, Five hundre=
-d
-thousand Euros in a bank in Ouagadougou the capital city of Burkina
-Faso. The deposited money was from the sale of the shares, death
-benefits payment and entitlements of my deceased husband by his
-company.
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-I am sending this message to you praying that it will reach you in
-good health, since I am not in good health condition in which I sleep
-every night without knowing if I may be alive to see the next day. I
-am suffering from long time cancer and presently i am partially
-suffering from a stroke illness which has become almost impossible for
-me to move around. I am married to my late husband for over 4 years
-before he died and is unfortunately that we don't have a child, my
-doctor confided in me that i have less chance to live. Having known my
-health condition, I decided to contact you to claim the fund since I
-don't have any relation I grew up from the orphanage home,
-
-I have decided to donate what I have to you for the support of helping
-Motherless babies/Less privileged/Widows' because I am dying and
-diagnosed of cancer for about 2 years ago. I have been touched by God
-Almighty to donate from what I have inherited from my late husband to
-you for good work of God Almighty. I have asked Almighty God to
-forgive me and believe he has, because He is a Merciful God I will be
-going in for an operation surgery soon
-
-This is the reason i need your services to stand as my next of kin or
-an executor to claim the funds for charity purposes. If this money
-remains unclaimed after my death, the bank executives or the
-government will take the money as unclaimed fund and maybe use it for
-selfish and worthless ventures, I need a very honest person who can
-claim this money and use it for Charity works, for orphanages, widows
-and also build schools for less privilege that will be named after my
-late husband and my name; I need your urgent answer to know if you
-will be able to execute this project, and I will give you more
-Information on how the fund will be transferred to your bank account.
-
-Thanks
-Mrs. Anna H.
+If a tag was not added on purpose, please state why and what changed.
