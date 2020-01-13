@@ -2,132 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B9C139482
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Jan 2020 16:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D07139B4F
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Jan 2020 22:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgAMPNe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Jan 2020 10:13:34 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:36044 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729152AbgAMPNd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Jan 2020 10:13:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=ppr818tdebi0ZdaBDntiSTiKbFXycDBN/XtB4wtugXc=; b=J+dA8yLoo1OR
-        APdJcYcXtV+ZGhRWZaVqyfUnbCJ/4OBfmB/tpwbUV+m165Kjt5Wmi915Ns7a0HwGA0x2S5M/TD2Vi
-        283NKv98K3nX2J26nrQva3lwaNCSh8pY4OcekFDrMBQx2R7FOTcoIzZEdDbMa/9WwPs2iJ0SpQIEe
-        fWw84=;
-Received: from fw-tnat-cam7.arm.com ([217.140.106.55] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1ir1PE-0003O7-75; Mon, 13 Jan 2020 15:13:28 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id E595DD01965; Mon, 13 Jan 2020 15:13:27 +0000 (GMT)
-From:   Mark Brown <broonie@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Girish Mahadevan <girishm@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: Applied "spi: spi-qcom-qspi: Use device managed memory for clk_bulk_data" to the spi tree
-In-Reply-To: <20200108133948.1.I35ceb4db3ad8cfab78f7cd51494aeff4891339f5@changeid>
-Message-Id: <applied-20200108133948.1.I35ceb4db3ad8cfab78f7cd51494aeff4891339f5@changeid>
-X-Patchwork-Hint: ignore
-Date:   Mon, 13 Jan 2020 15:13:27 +0000 (GMT)
+        id S1726488AbgAMVVy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Jan 2020 16:21:54 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43576 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728665AbgAMVVy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Jan 2020 16:21:54 -0500
+Received: by mail-lj1-f195.google.com with SMTP id a13so11770769ljm.10
+        for <linux-spi@vger.kernel.org>; Mon, 13 Jan 2020 13:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
+        b=nGlZB+kmYCFVkWgGiGizF0iYMx6fc08SyNenEi1ie1BH6O9A7leQ+E1z8gmkHTjOpr
+         nOoqdrML0dZbAGO5UFtshGU/OWD6f6f0F/veZ5aCAM986QlXq24ftad1qHaX9i4q98Wg
+         EoYjC5Oyb3t1NQaQxIOk0nTQslTThixJMUhhDGvDRQHs0do2h9LwZvDqK3AIdzZpAM0R
+         CvzgjSLXZdR1AH7tbS5NH6zqqD94GYqcZTUj1pzBtDCZpZMBOHCY3HvooaxZobtr/kB6
+         NQhaW0mcftRzL8qnqQIP50jYeo/WnjE9xL+LH+Nk1uyDoDfsZ2XvtnUMEGk1p21ER/Rt
+         PVAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
+        b=YRZ2Z+tc2vKJSjE+vatK7HPwRzhI0SbgoQ6Qd4h035vl6ESKxWC4TsMcWY9z+rYtYL
+         4Y4sRVMcxy3P4om7NZJtAbLRDvGiHzTZ1eI6AEnynLNoGfg9tOh+2z1dA288bIK/gMEC
+         3sU9Y9+YnkdHz7ZLX3pqt2UDxNZ2YxThZUIRxDFs6VldUJ1wjhlhJNORCxenuYf3bTUy
+         py/A2CglGgGRCPyhRQ4wfQgdAsCT7MlCZCbUoFLqrm9BHLcVfr68k6S7c7J/7g5pYOd3
+         jul+UtnFUmxV1qV2DxMo8r5s4vejK7VbGTRdj8kZ8FihYs2MXIFdng+01LffvKmHGjb5
+         j3XQ==
+X-Gm-Message-State: APjAAAXbuHejCazeOQCOPTZC0lLVTxvj3Rv6WHhciYAC3ypmj7N+0o4F
+        cPizLaPMflFLl9ipqq1GBjYxxO0mxHZU7mgtGLo=
+X-Google-Smtp-Source: APXvYqwJ/b8MnFX6qGdbe6KhaLPoA7/BeUW0PPYYIJ1mHO8USQIQaLJkgTT9NUU5/zUO7MBmyAI4TrPoI3UxJUdMMW8=
+X-Received: by 2002:a2e:9e4c:: with SMTP id g12mr12150442ljk.15.1578950512647;
+ Mon, 13 Jan 2020 13:21:52 -0800 (PST)
+MIME-Version: 1.0
+Reply-To: mrsanna.h.bruun119@gmail.com
+Received: by 2002:ac2:4a9d:0:0:0:0:0 with HTTP; Mon, 13 Jan 2020 13:21:52
+ -0800 (PST)
+From:   "Mrs. Anna H. Bruun" <mrsanna.h.bruun119@gmail.com>
+Date:   Mon, 13 Jan 2020 13:21:52 -0800
+X-Google-Sender-Auth: OgFXnPtFSZTyLXaS-XP0YuYAmlo
+Message-ID: <CAEv_75a3rq65fdm=kAmcgVfwsaASntdBv6-YFC2YYLg4EOGa9A@mail.gmail.com>
+Subject: My Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+My Dear
 
-   spi: spi-qcom-qspi: Use device managed memory for clk_bulk_data
+My Name is Mrs. Anna H. Bruun, from Norway. I know that this message
+will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun,
+A gold merchant who owns a small gold Mine in Burkina Faso; He died of
+Cardiovascular Disease in mid-March 2011. During his life time he
+deposited the sum of =E2=82=AC 8.5 Million Euro) Eight million, Five hundre=
+d
+thousand Euros in a bank in Ouagadougou the capital city of Burkina
+Faso. The deposited money was from the sale of the shares, death
+benefits payment and entitlements of my deceased husband by his
+company.
 
-has been applied to the spi tree at
+I am sending this message to you praying that it will reach you in
+good health, since I am not in good health condition in which I sleep
+every night without knowing if I may be alive to see the next day. I
+am suffering from long time cancer and presently i am partially
+suffering from a stroke illness which has become almost impossible for
+me to move around. I am married to my late husband for over 4 years
+before he died and is unfortunately that we don't have a child, my
+doctor confided in me that i have less chance to live. Having known my
+health condition, I decided to contact you to claim the fund since I
+don't have any relation I grew up from the orphanage home,
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
+I have decided to donate what I have to you for the support of helping
+Motherless babies/Less privileged/Widows' because I am dying and
+diagnosed of cancer for about 2 years ago. I have been touched by God
+Almighty to donate from what I have inherited from my late husband to
+you for good work of God Almighty. I have asked Almighty God to
+forgive me and believe he has, because He is a Merciful God I will be
+going in for an operation surgery soon
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+This is the reason i need your services to stand as my next of kin or
+an executor to claim the funds for charity purposes. If this money
+remains unclaimed after my death, the bank executives or the
+government will take the money as unclaimed fund and maybe use it for
+selfish and worthless ventures, I need a very honest person who can
+claim this money and use it for Charity works, for orphanages, widows
+and also build schools for less privilege that will be named after my
+late husband and my name; I need your urgent answer to know if you
+will be able to execute this project, and I will give you more
+Information on how the fund will be transferred to your bank account.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From b8d40d7712f10475effc4552eda96b9d44822cfb Mon Sep 17 00:00:00 2001
-From: Matthias Kaehlcke <mka@chromium.org>
-Date: Wed, 8 Jan 2020 13:40:32 -0800
-Subject: [PATCH] spi: spi-qcom-qspi: Use device managed memory for
- clk_bulk_data
-
-Currrently the memory for the clk_bulk_data of the QSPI controller
-is allocated with spi_alloc_master(). The bulk data pointer is passed
-to devm_clk_bulk_get() which saves it in clk_bulk_devres->clks. When
-the device is removed later devm_clk_bulk_release() is called and
-uses the bulk data referenced by the pointer to release the clocks.
-For this driver this results in accessing memory that has already
-been freed, since the memory allocated with spi_alloc_master() is
-released by spi_controller_release(), which is called before the
-managed resources are released.
-
-Use device managed memory for the clock bulk data to fix the issue
-described above.
-
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20200108133948.1.I35ceb4db3ad8cfab78f7cd51494aeff4891339f5@changeid
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-qcom-qspi.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index 250fd60e1678..3c4f83bf7084 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -137,7 +137,7 @@ enum qspi_clocks {
- struct qcom_qspi {
- 	void __iomem *base;
- 	struct device *dev;
--	struct clk_bulk_data clks[QSPI_NUM_CLKS];
-+	struct clk_bulk_data *clks;
- 	struct qspi_xfer xfer;
- 	/* Lock to protect xfer and IRQ accessed registers */
- 	spinlock_t lock;
-@@ -445,6 +445,13 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 		goto exit_probe_master_put;
- 	}
- 
-+	ctrl->clks = devm_kcalloc(dev, QSPI_NUM_CLKS,
-+				  sizeof(*ctrl->clks), GFP_KERNEL);
-+	if (!ctrl->clks) {
-+		ret = -ENOMEM;
-+		goto exit_probe_master_put;
-+	}
-+
- 	ctrl->clks[QSPI_CLK_CORE].id = "core";
- 	ctrl->clks[QSPI_CLK_IFACE].id = "iface";
- 	ret = devm_clk_bulk_get(dev, QSPI_NUM_CLKS, ctrl->clks);
--- 
-2.20.1
-
+Thanks
+Mrs. Anna H.
