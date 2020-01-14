@@ -2,56 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8E113A792
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2020 11:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FFB13A7A1
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2020 11:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729199AbgANKkO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Jan 2020 05:40:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35912 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725956AbgANKkO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 14 Jan 2020 05:40:14 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578998414;
-        bh=v8vnVpz1eJdXhASFrWh8GTR9L6gw6nFx/xiPHAkOBtY=;
-        h=Subject:From:Date:To:From;
-        b=oxuZpXOvmzwiQxJpbuU/PH14f89DiG3PJ4vUald2qLKha/JuK8eGTVzHghGn+b6p6
-         8VSh7zfdMwZTSpG4TXki1/E4Bu2jmURD4buf7qteq3RdTB1Q5oOUzai/X3T6pBes7x
-         YhBmJPERgZm7hLX4iATZ4j5mNVIeTi7jKhWGuOYM=
+        id S1726053AbgANKmk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Jan 2020 05:42:40 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:42287 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbgANKmk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Jan 2020 05:42:40 -0500
+Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 5F75A240015;
+        Tue, 14 Jan 2020 10:42:37 +0000 (UTC)
+Date:   Tue, 14 Jan 2020 11:42:37 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     robh+dt@kernel.org, lee.jones@linaro.org, mark.rutland@arm.com,
+        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        a.zummo@towertech.it, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 4/7] dt-bindings: atmel-usart: remove wildcard
+Message-ID: <20200114104237.GM3137@piout.net>
+References: <1578997397-23165-1-git-send-email-claudiu.beznea@microchip.com>
+ <1578997397-23165-5-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <157899841429.4970.9863839801681820375.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 14 Jan 2020 10:40:14 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1578997397-23165-5-git-send-email-claudiu.beznea@microchip.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] add device tree for SAM9X60 SoC and SAM9X60-EK board (2020-01-14T10:23:10)
-  Superseding: [v2] add device tree for SAM9X60 SoC and SAM9X60-EK board (2020-01-10T16:17:52):
-    [v2,01/17] dt-bindings: at_xdmac: remove wildcard
-    [v2,02/17] dt-bindings: at_xdmac: add microchip,sam9x60-dma
-    [v2,03/17] dt-bindings: atmel-can: add microchip,sam9x60-can
-    [v2,04/17] dt-bindings: atmel-tcb: add microchip,sam9x60-tcb
-    [v2,05/17] dt-bindings: atmel-isi: add microchip,sam9x60-isi
-    [v2,06/17] dt-bindings: at91-sama5d2_adc: add microchip,sam9x60-adc
-    [v2,07/17] dt-bindings: atmel-matrix: add microchip,sam9x60-matrix
-    [v2,08/17] dt-bindings: atmel-nand: add microchip,sam9x60-pmecc
-    [v2,09/17] dt-bindings: atmel-sysreg: add microchip,sam9x60-ddramc
-    [v2,10/17] dt-bindings: atmel-smc: add microchip,sam9x60-smc
-    [v2,11/17] dt-bindings: atmel-gpbr: add microchip,sam9x60-gpbr
-    [v2,12/17] dt-bindings: atmel,at91rm9200-rtc: add microchip,sam9x60-rtc
-    [v2,13/17] dt-bindings: atmel-usart: remove wildcard
-    [v2,14/17] dt-bindings: atmel-usart: add microchip,sam9x60-{usart, dbgu}
-    [v2,15/17] dt-bindings: arm: add sam9x60-ek board
-    [v2,16/17] ARM: at91/defconfig: enable MMC_SDHCI_OF_AT91 and MICROCHIP_PIT64B
-    [v2,17/17] ARM: dts: at91: sam9x60: add device tree for soc and board
+On 14/01/2020 12:23:14+0200, Claudiu Beznea wrote:
+> Remove chip whildcard and introduce the list of compatibles instead.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/atmel-usart.txt | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel-usart.txt b/Documentation/devicetree/bindings/mfd/atmel-usart.txt
+> index 699fd3c9ace8..778e8310606a 100644
+> --- a/Documentation/devicetree/bindings/mfd/atmel-usart.txt
+> +++ b/Documentation/devicetree/bindings/mfd/atmel-usart.txt
+> @@ -1,10 +1,9 @@
+>  * Atmel Universal Synchronous Asynchronous Receiver/Transmitter (USART)
+>  
+>  Required properties for USART:
+> -- compatible: Should be "atmel,<chip>-usart" or "atmel,<chip>-dbgu"
+> -  The compatible <chip> indicated will be the first SoC to support an
+> -  additional mode or an USART new feature.
+> -  For the dbgu UART, use "atmel,<chip>-dbgu", "atmel,<chip>-usart"
+> +- compatible: Should be one of the following:
+> +	- "atmel,at91rm9200-dbgu", "atmel,at91rm9200-usart"
+> +	- "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart"
 
+All the uarts are not dbgus, so this need to be:
+
+ - "atmel,at91rm9200-usart"
+ - "atmel,at91sam9260-usart"
+ - "atmel,at91rm9200-dbgu", "atmel,at91rm9200-usart"
+ - "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart"
+
+Also, you need to update drivers/soc/atmel/soc.c
+
+>  - reg: Should contain registers location and length
+>  - interrupts: Should contain interrupt
+>  - clock-names: tuple listing input clock names.
+> -- 
+> 2.7.4
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
