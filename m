@@ -2,79 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E3D13ADC1
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2020 16:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7FF13ADF5
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2020 16:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727044AbgANPfQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Jan 2020 10:35:16 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:36214 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726342AbgANPfP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Jan 2020 10:35:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=TnevzhVUZF4pyGCopDfMXcwhuhw/gLXqKk9L1QZKo8Y=; b=OfpfFDbwC+s7nxwz+wOkEdDGR
-        pRZxN38c9nl2FWne4V8pximq6dGeG1L3rFOGWY3bz8QR3EpC7b55OK/qApDpSmeRwglL5ACd/Xjxp
-        DY1Qz6Dbr5/ywscSBhqCrLy7KHZbvbEwBeAoNNiAhQvhUWNXTjzQORNayiNpx+u7N3aWc=;
-Received: from fw-tnat-cam7.arm.com ([217.140.106.55] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1irODk-0000DR-LB; Tue, 14 Jan 2020 15:35:08 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 48FC8D04DF5; Tue, 14 Jan 2020 15:35:08 +0000 (GMT)
-Date:   Tue, 14 Jan 2020 15:35:08 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        kbuild test robot <lkp@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2 2/2] spi: fsl: simplify error path in
- of_fsl_spi_probe()
-Message-ID: <20200114153508.GY3897@sirena.org.uk>
-References: <1cdd0a26d7e1545f32c8bc4dc7458ebecdd6aaed.1575990944.git.christophe.leroy@c-s.fr>
- <539a3b82463f64e8055f166c915f0e90f752c7b0.1575990944.git.christophe.leroy@c-s.fr>
+        id S1726375AbgANPq1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Jan 2020 10:46:27 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:36367 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726265AbgANPq0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Jan 2020 10:46:26 -0500
+Received: from mwalle01.sab.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id F0EF622F54;
+        Tue, 14 Jan 2020 16:46:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1579016784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L/5pDwGZbj6GR9oEQi1uXOUKGfs66wphp2lm7VKi6uE=;
+        b=BWLoroo8D/Gz43X6laSOsgvYokIjzevwp5IpfXZW62ged+4AnURg+2ofM/saYcVKGgHofb
+        2AepK1rBvBXug8qT0wZAwpLz/Ps8uVWnCyPOCsYPVMZkL9ZG/YrXeYSwOuiccBUDeIwehU
+        C+uCE34dHzPqV1KWrb62yot2YdChUE4=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Cc:     Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>,
+        Yogesh Gaur <yogeshnarayan.gaur@nxp.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] spi: spi-fsl-qspi: Ensure width is respected in spi-mem operations
+Date:   Tue, 14 Jan 2020 16:46:13 +0100
+Message-Id: <20200114154613.8195-1-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mlvFMpb4NrD3AMcD"
-Content-Disposition: inline
-In-Reply-To: <539a3b82463f64e8055f166c915f0e90f752c7b0.1575990944.git.christophe.leroy@c-s.fr>
-X-Cookie: Programming is an unnatural act.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: ++++
+X-Spam-Level: ****
+X-Rspamd-Server: web
+X-Spam-Status: No, score=4.90
+X-Spam-Score: 4.90
+X-Rspamd-Queue-Id: F0EF622F54
+X-Spamd-Result: default: False [4.90 / 15.00];
+         ARC_NA(0.00)[];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         R_MISSING_CHARSET(2.50)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         BROKEN_CONTENT_TYPE(1.50)[];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_SEVEN(0.00)[8];
+         MID_CONTAINS_FROM(1.00)[];
+         NEURAL_HAM(-0.00)[-0.903];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:12941, ipnet:213.135.0.0/19, country:DE]
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Make use of a core helper to ensure the desired width is respected
+when calling spi-mem operators.
 
---mlvFMpb4NrD3AMcD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Otherwise only the SPI controller will be matched with the flash chip,
+which might lead to wrong widths. Also consider the width specified by
+the user in the device tree.
 
-On Tue, Dec 10, 2019 at 03:17:16PM +0000, Christophe Leroy wrote:
-> No need to 'goto err;' for just doing a return.
-> return directly from where the error happens.
+Fixes: 84d043185dbe ("spi: Add a driver for the Freescale/NXP QuadSPI controller")
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/spi/spi-fsl-qspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This doesn't apply against current code, please check and resend.
+diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
+index 79b1558b74b8..e8a499cd1f13 100644
+--- a/drivers/spi/spi-fsl-qspi.c
++++ b/drivers/spi/spi-fsl-qspi.c
+@@ -410,7 +410,7 @@ static bool fsl_qspi_supports_op(struct spi_mem *mem,
+ 	    op->data.nbytes > q->devtype_data->txfifo)
+ 		return false;
+ 
+-	return true;
++	return spi_mem_default_supports_op(mem, op);
+ }
+ 
+ static void fsl_qspi_prepare_lut(struct fsl_qspi *q,
+-- 
+2.20.1
 
---mlvFMpb4NrD3AMcD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl4d36sACgkQJNaLcl1U
-h9C3zQf/cMvkTc+QF3yMKYXxlmxQDKATcaQNF7uNysSG2s4+eOCqDd8drWV92HRz
-AM7/spEm4cUKbeKJNtl5fXAnxI89PdE/e0bDH316EkA5L7NOJAI2dGjHDVJcgKMu
-azrTo4dbu1+bt2JXOtHrTO9nIU8IRbQL9QcuLG/52cqD0wB3xWb4LE6ToQftfMoC
-+96ALK3iJyYK8dhJI4Ip+oXBQGE2Fu2YU/C1lTvHnsrgqwnolt2u9z+HEXGu8rkE
-DGmxnns+uSmLrCbSETb5ooxW3GVnis5IlROQKGBXZ+LDdTA41owEQLdqXIaeaIDu
-Fiz2D//oT5xGwJgH7rM8LpEcSnodNA==
-=EOzq
------END PGP SIGNATURE-----
-
---mlvFMpb4NrD3AMcD--
