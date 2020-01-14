@@ -2,75 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6884E13B5C3
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 00:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C7413B5FC
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 00:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728880AbgANX1C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Jan 2020 18:27:02 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:35992 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728774AbgANX1C (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Jan 2020 18:27:02 -0500
-Received: by mail-ot1-f65.google.com with SMTP id m2so9570669otq.3
-        for <linux-spi@vger.kernel.org>; Tue, 14 Jan 2020 15:27:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ttZMLAqDhxSTsHlfd8sLeyc9soxLzGATxjf7nZzKPPw=;
-        b=G+kIFIWGhWmVSqRI3p19g4jhEM53GhaSu87oyD7LLn9n44ztNdzNAS+tJvrJbwucn3
-         PvEK67S2G4K6z/GeuXT4phiR3GxDZPhdi6kKhkH2fgDK5VQ3ALW5cgaQ4Hnk8iJx1eWh
-         deHV6j0kkwFjSI4m9SJX0r+2NX0p42qDLZPRJh0dePGBxTEZV1DwZuTUe+b/5AnW8CKb
-         3xyLnTlzfLgGQs+dEWq5TcEh/wUsQ/xktm+t65MDKvl2iJuIgs/YKD9KbAw7xX5VJsgI
-         gZjlB3DSgnsQ8XMx+4/z8E50Xkj918+OdKWymoEqM82G3ah9C1lokT4oYVXAI2p12mMj
-         86Yw==
-X-Gm-Message-State: APjAAAW3BiyW8Ym6TmU4xTTWml4F0fSKMzrsImr24ltYAbTl52OUTCSm
-        HijYDcc1dgnVUKWnATXp7jBDX/M=
-X-Google-Smtp-Source: APXvYqx+H6LZIzAsxLSbvD6H0a5VgaYBa/QfYro/v7cTDVgm1ANeFgJ3HKH6W36QnyoDeSmuruDcsQ==
-X-Received: by 2002:a05:6830:194:: with SMTP id q20mr702341ota.92.1579044421262;
-        Tue, 14 Jan 2020 15:27:01 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q13sm5896242otc.5.2020.01.14.15.27.00
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2020 15:27:00 -0800 (PST)
-Received: from rob (uid 1000)
-        (envelope-from rob@rob-hp-laptop)
-        id 221a3a
-        by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Tue, 14 Jan 2020 17:26:59 -0600
-Date:   Tue, 14 Jan 2020 17:26:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     robh+dt@kernel.org, lee.jones@linaro.org, mark.rutland@arm.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, radu_nicolae.pirea@upb.ro,
-        richard.genoud@gmail.com, a.zummo@towertech.it,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH v3 2/7] dt-bindings: atmel-tcb: add microchip,sam9x60-tcb
-Message-ID: <20200114232659.GA16642@bogus>
-References: <1578997397-23165-1-git-send-email-claudiu.beznea@microchip.com>
- <1578997397-23165-3-git-send-email-claudiu.beznea@microchip.com>
+        id S1728904AbgANXjL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Jan 2020 18:39:11 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:51172 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728896AbgANXjL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Jan 2020 18:39:11 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E6C8F886BF;
+        Wed, 15 Jan 2020 12:39:09 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1579045149;
+        bh=AlrvdzgXjpGDa7SNMjyhBnNMn4axze8b5Yq4/Y8xnRk=;
+        h=From:To:Cc:Subject:Date;
+        b=Lg0rW4rlK/jlRXPm8U0gngunNAFrHWqT1ZgaqLyIxfSYRd840vuA5N7RJQWoETPsm
+         4dAkWkj/wWuusOLS6QqgBLWvz+7lHz1mdKKCceXk4f+srRZ1hoWhtyu/t/YzYvQ1Ad
+         Phxy6P7b2+PhhyaUb+SJECL9aqZPAqeVLuP8BuwAhkDUORFNR2cXhv3ZWcMNLmMnmE
+         ajI8lPqwy5TCA6t6Pzv+Y5cIHYN5VSA4+zcjKFS+/7GdAlVk8azyiTwLIhxNhZMn4S
+         +N0z21B/1qQJDlcnYW2mUoFi+c5pag9cAPoKR3vO1m+lamlr/M+Gye3+cQmt0tfvn2
+         CVDBqFmiCkHPg==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e1e511c0000>; Wed, 15 Jan 2020 12:39:08 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id 1227613EC73;
+        Wed, 15 Jan 2020 12:39:08 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 5FAEA280071; Wed, 15 Jan 2020 12:39:08 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com
+Cc:     anthony.derosa@syscall7.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] SPI bus multiplexing
+Date:   Wed, 15 Jan 2020 12:38:54 +1300
+Message-Id: <20200114233857.25933-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1578997397-23165-3-git-send-email-claudiu.beznea@microchip.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 14 Jan 2020 12:23:12 +0200, Claudiu Beznea wrote:
-> Add microchip,sam9x60-tcb to DT bindings documentation.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  Documentation/devicetree/bindings/mfd/atmel-tcb.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+This is a revisit of two earlier efforts to add more complex mutliplexing=
+ to
+SPI busses.
 
-Acked-by: Rob Herring <robh@kernel.org>
+https://patchwork.kernel.org/patch/2706151/
+https://patchwork.kernel.org/patch/10897255/
+
+This version makes use of the general purpose mux controller which simpli=
+fies
+things greatly.
+
+Chris Packham (2):
+  dt-bindings: spi: Document binding for generic SPI multiplexer
+  spi: Add generic SPI multiplexer
+
+ .../devicetree/bindings/spi/spi-mux.yaml      |  82 ++++++++
+ drivers/spi/Kconfig                           |  12 ++
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-mux.c                         | 189 ++++++++++++++++++
+ 4 files changed, 284 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-mux.yaml
+ create mode 100644 drivers/spi/spi-mux.c
+
+--=20
+2.25.0
+
