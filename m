@@ -2,55 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3864413BE41
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 12:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F1E13BE4D
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 12:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729746AbgAOLOV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jan 2020 06:14:21 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:35885 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbgAOLOV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jan 2020 06:14:21 -0500
-X-Originating-IP: 90.65.102.129
-Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 9C6A5240010;
-        Wed, 15 Jan 2020 11:14:13 +0000 (UTC)
-Date:   Wed, 15 Jan 2020 12:14:13 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
-        lee.jones@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
-        a.zummo@towertech.it, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] dt-bindings: atmel,at91rm9200-rtc: add
- microchip,sam9x60-rtc
-Message-ID: <20200115111413.GE100374@piout.net>
-References: <1579085987-13976-1-git-send-email-claudiu.beznea@microchip.com>
- <1579085987-13976-2-git-send-email-claudiu.beznea@microchip.com>
+        id S1729057AbgAOLUM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jan 2020 06:20:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49858 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726045AbgAOLUM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 15 Jan 2020 06:20:12 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579087211;
+        bh=RUjH8lk+QqGnso5mr0tjm+DBoPTLzrWCWY1Qsn57dxw=;
+        h=Subject:From:Date:To:From;
+        b=IbkfYKRGv5ztyMdaOuxpm4UxzxNABOGfjcb99Pa1CDrlhkzn1nxtvbBX+QeMKIQ+C
+         PxP2Jca1RlTOtzJ0FDpXIGgRRPbNlUpLEcQ8RdswoqLTeXpnC1u6bpKJvA7cXM1oaA
+         FjnVG4IJwVb0SqNkRgRQvWbC7AKrdlN+q4enD/dI=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1579085987-13976-2-git-send-email-claudiu.beznea@microchip.com>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+linux-spi@kernel.org
+Message-Id: <157908721151.32343.11816369276484605501.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 15 Jan 2020 11:20:11 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 15/01/2020 12:59:43+0200, Claudiu Beznea wrote:
-> Add microchip,sam9x60-rtc to DT bindings documentation.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-Applied, thanks.
+Latest series: [v4] add device tree for SAM9X60 SoC and SAM9X60-EK board (2020-01-15T10:59:42)
+  Superseding: [v3] add device tree for SAM9X60 SoC and SAM9X60-EK board (2020-01-14T10:23:10):
+    [v3,1/7] dt-bindings: atmel-tcb: remove wildcard
+    [v3,2/7] dt-bindings: atmel-tcb: add microchip,sam9x60-tcb
+    [v3,3/7] dt-bindings: atmel,at91rm9200-rtc: add microchip,sam9x60-rtc
+    [v3,4/7] dt-bindings: atmel-usart: remove wildcard
+    [v3,5/7] dt-bindings: atmel-usart: add microchip,sam9x60-{usart, dbgu}
+    [v3,6/7] ARM: at91/defconfig: enable MMC_SDHCI_OF_AT91 and MICROCHIP_PIT64B
+    [v3,7/7] ARM: dts: at91: sam9x60: add device tree for soc and board
+
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/pwbot
