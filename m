@@ -2,88 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4AF13B976
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 07:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DF413BA9C
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 09:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728882AbgAOGVO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jan 2020 01:21:14 -0500
-Received: from mga05.intel.com ([192.55.52.43]:6993 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726473AbgAOGVN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 15 Jan 2020 01:21:13 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jan 2020 22:21:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,321,1574150400"; 
-   d="scan'208";a="248298629"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jan 2020 22:21:12 -0800
-Received: from [10.226.38.22] (unknown [10.226.38.22])
-        by linux.intel.com (Postfix) with ESMTP id 19E965802B0;
-        Tue, 14 Jan 2020 22:21:10 -0800 (PST)
-Subject: Re: [PATCH v6 0/2] spi: cadence-quadpsi: Add support for the Cadence
- QSPI controller
-To:     Vignesh Raghavendra <vigneshr@ti.com>, broonie@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     robh+dt@kernel.org, dan.carpenter@oracle.com,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20191230074102.50982-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <860aecbc-22d3-c9ce-3570-44115d6e81b2@ti.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <1aa6033a-c9e1-579b-0916-25037c07654d@linux.intel.com>
-Date:   Wed, 15 Jan 2020 14:21:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1728993AbgAOIAn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jan 2020 03:00:43 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:39880 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728931AbgAOIAn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jan 2020 03:00:43 -0500
+Received: by mail-wm1-f65.google.com with SMTP id 20so16653823wmj.4
+        for <linux-spi@vger.kernel.org>; Wed, 15 Jan 2020 00:00:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=GYF/DnlQgs0gWW5ovHy/i9c/eiB+rqjkrsxQJeg0VgE=;
+        b=OSL13EnCr58+/Jy2CAY7JUMNaer6GjpBYGtcO8Lm6VXlpX7/sjRVrcEpHJrWt3MXao
+         sOMFij5RVNC/vB2rBhf2PpSRyBxSMMrVXFj/ZuClHUlB4zeP1xvKnpBMJjZC896upMDx
+         pdMzyIjLqI6TXr0D0N+3qK7bLO6rmMZMg3o2Ovle3wcyv6xSRPfnKDapqr2oaN79UNuR
+         lo15fKsiOQxDn8My+q+RIDFTY9EPZKyvD/DS6s2dTp5oREvoBEelzwmPJMimNa345pSS
+         C4ytCDLYb5xpLNle2SWtZzbMuemq3sDt77k7Y2QN63t/r5djh4IpdruTiVp5w58ZOp82
+         GX+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=GYF/DnlQgs0gWW5ovHy/i9c/eiB+rqjkrsxQJeg0VgE=;
+        b=Z6psAM5F9LsGlBitMGGSwnR4q/7ITAZ1Z7cz8yJ9vAyhmhydX2XLAE6/mbTYB3ATve
+         BO9VHTLpqg82YlJnLbTNnPQs9fiVJnxCIYjGjF1EH3H7uRKBglgW4X5dCC2Ep+KICQO5
+         6EbOKsn67iDOJ2ZNF/svl5VGmlkN7uW76bfzTDZ3D1uvPiM7/oIoInBuRqx/IPin2wZn
+         OWv9iqBfqp3lIfOd84VCnpMjU6vk5Iujy4zR7fzw+7UHGkRqq9XuUMCs89hkg47uSRXS
+         0ODe/lwCxr9cAhLB+6Y4rUzRQuJzjeI5lNRcrMnB5mohGaANC+Swemeq1Sk4lVzjpMOm
+         lMZw==
+X-Gm-Message-State: APjAAAXLTZkiL96NkqsdGmHJfRKSbIg8NTkN6V9FmJ/gFGx7wWBCcSiw
+        j0bQN1tUijU08XYA9KA+0ExZhg==
+X-Google-Smtp-Source: APXvYqxVBHePDZFSLFy/b/HLtH4cLhZKLLeFdGF56PzZlj4pOAw+avsLwlunjnJ0XyKdMeObyl6u5A==
+X-Received: by 2002:a1c:3dd5:: with SMTP id k204mr31244611wma.92.1579075241550;
+        Wed, 15 Jan 2020 00:00:41 -0800 (PST)
+Received: from dell ([2.27.35.221])
+        by smtp.gmail.com with ESMTPSA id w13sm23148601wru.38.2020.01.15.00.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2020 00:00:40 -0800 (PST)
+Date:   Wed, 15 Jan 2020 08:00:53 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, nicolas.ferre@microchip.com,
+        ludovic.desroches@microchip.com, vkoul@kernel.org,
+        eugen.hristev@microchip.com, jic23@kernel.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, mchehab@kernel.org,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        tudor.ambarus@microchip.com, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, wg@grandegger.com,
+        mkl@pengutronix.de, a.zummo@towertech.it,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 10/17] dt-bindings: atmel-smc: add
+ microchip,sam9x60-smc
+Message-ID: <20200115080053.GC325@dell>
+References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
+ <1578673089-3484-11-git-send-email-claudiu.beznea@microchip.com>
+ <20200114095538.GJ3137@piout.net>
 MIME-Version: 1.0
-In-Reply-To: <860aecbc-22d3-c9ce-3570-44115d6e81b2@ti.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200114095538.GJ3137@piout.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+On Tue, 14 Jan 2020, Alexandre Belloni wrote:
 
-On 15/1/2020 2:13 PM, Vignesh Raghavendra wrote:
-> Hi,
->
-> On 12/30/2019 1:11 PM, Ramuthevar,Vadivel MuruganX wrote:
->> Add support for the Cadence QSPI controller. This controller is
->> present in the Intel Lightning Mountain(LGM) SoCs, Altera and TI SoCs.
->> This driver has been tested on the Intel LGM SoCs.
->>
->> This driver does not support generic SPI and also the implementation
->> only supports spi-mem interface to replace the existing driver in
->> mtd/spi-nor/cadence-quadspi.c, the existing driver only support SPI-NOR
->> flash memory.
->>
->
->
-> I am finally able to get spi-mem based cadence-quaspi driver working on
-> TI platforms with DMA and DAC mode. I have also incorporated changes to
-> disable DAC and autopolling for your intel SoC:
+> On 10/01/2020 18:18:02+0200, Claudiu Beznea wrote:
+> > Add microchip,sam9x60-smc to DT bindings documentation.
+> > 
+> > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> > ---
+> >  Documentation/devicetree/bindings/mfd/atmel-smc.txt | 1 +
+> >  1 file changed, 1 insertion(+)
+> Applied, thanks.
 
-Thanks! a lot for the confirmation, with your changes it is working on 
-TI platform.
+Remind me why you are applying this patch please?
 
-> https://github.com/r-vignesh/linux/commits/qspi
->
-> (Top two patches are of interest)
->
-> I have tested both DAC and INDAC mode with s25fl flash and everything
-> seems to be fine. Could you re test the driver on your SoC? Feel free to
-> fold it into your series if everything works.
-sure, I will test on Intel SoC with your changes .
-
-Regards
-Vadivel
-> Regards
-> Vignesh
->
->
->
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
