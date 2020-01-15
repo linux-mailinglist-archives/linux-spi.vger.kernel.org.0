@@ -2,53 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DF413BA9C
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 09:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7566F13BB62
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 09:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728993AbgAOIAn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jan 2020 03:00:43 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:39880 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728931AbgAOIAn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jan 2020 03:00:43 -0500
-Received: by mail-wm1-f65.google.com with SMTP id 20so16653823wmj.4
-        for <linux-spi@vger.kernel.org>; Wed, 15 Jan 2020 00:00:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=GYF/DnlQgs0gWW5ovHy/i9c/eiB+rqjkrsxQJeg0VgE=;
-        b=OSL13EnCr58+/Jy2CAY7JUMNaer6GjpBYGtcO8Lm6VXlpX7/sjRVrcEpHJrWt3MXao
-         sOMFij5RVNC/vB2rBhf2PpSRyBxSMMrVXFj/ZuClHUlB4zeP1xvKnpBMJjZC896upMDx
-         pdMzyIjLqI6TXr0D0N+3qK7bLO6rmMZMg3o2Ovle3wcyv6xSRPfnKDapqr2oaN79UNuR
-         lo15fKsiOQxDn8My+q+RIDFTY9EPZKyvD/DS6s2dTp5oREvoBEelzwmPJMimNa345pSS
-         C4ytCDLYb5xpLNle2SWtZzbMuemq3sDt77k7Y2QN63t/r5djh4IpdruTiVp5w58ZOp82
-         GX+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=GYF/DnlQgs0gWW5ovHy/i9c/eiB+rqjkrsxQJeg0VgE=;
-        b=Z6psAM5F9LsGlBitMGGSwnR4q/7ITAZ1Z7cz8yJ9vAyhmhydX2XLAE6/mbTYB3ATve
-         BO9VHTLpqg82YlJnLbTNnPQs9fiVJnxCIYjGjF1EH3H7uRKBglgW4X5dCC2Ep+KICQO5
-         6EbOKsn67iDOJ2ZNF/svl5VGmlkN7uW76bfzTDZ3D1uvPiM7/oIoInBuRqx/IPin2wZn
-         OWv9iqBfqp3lIfOd84VCnpMjU6vk5Iujy4zR7fzw+7UHGkRqq9XuUMCs89hkg47uSRXS
-         0ODe/lwCxr9cAhLB+6Y4rUzRQuJzjeI5lNRcrMnB5mohGaANC+Swemeq1Sk4lVzjpMOm
-         lMZw==
-X-Gm-Message-State: APjAAAXLTZkiL96NkqsdGmHJfRKSbIg8NTkN6V9FmJ/gFGx7wWBCcSiw
-        j0bQN1tUijU08XYA9KA+0ExZhg==
-X-Google-Smtp-Source: APXvYqxVBHePDZFSLFy/b/HLtH4cLhZKLLeFdGF56PzZlj4pOAw+avsLwlunjnJ0XyKdMeObyl6u5A==
-X-Received: by 2002:a1c:3dd5:: with SMTP id k204mr31244611wma.92.1579075241550;
-        Wed, 15 Jan 2020 00:00:41 -0800 (PST)
-Received: from dell ([2.27.35.221])
-        by smtp.gmail.com with ESMTPSA id w13sm23148601wru.38.2020.01.15.00.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 00:00:40 -0800 (PST)
-Date:   Wed, 15 Jan 2020 08:00:53 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+        id S1729163AbgAOInG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jan 2020 03:43:06 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:56057 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728927AbgAOInG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jan 2020 03:43:06 -0500
+X-Originating-IP: 90.65.102.129
+Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 71552E0008;
+        Wed, 15 Jan 2020 08:43:00 +0000 (UTC)
+Date:   Wed, 15 Jan 2020 09:43:00 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
         mark.rutland@arm.com, nicolas.ferre@microchip.com,
         ludovic.desroches@microchip.com, vkoul@kernel.org,
@@ -65,36 +35,41 @@ Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
         linux-can@vger.kernel.org, linux-rtc@vger.kernel.org
 Subject: Re: [PATCH v2 10/17] dt-bindings: atmel-smc: add
  microchip,sam9x60-smc
-Message-ID: <20200115080053.GC325@dell>
+Message-ID: <20200115084300.GU3137@piout.net>
 References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
  <1578673089-3484-11-git-send-email-claudiu.beznea@microchip.com>
  <20200114095538.GJ3137@piout.net>
+ <20200115080053.GC325@dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200114095538.GJ3137@piout.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200115080053.GC325@dell>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 14 Jan 2020, Alexandre Belloni wrote:
+On 15/01/2020 08:00:53+0000, Lee Jones wrote:
+> On Tue, 14 Jan 2020, Alexandre Belloni wrote:
+> 
+> > On 10/01/2020 18:18:02+0200, Claudiu Beznea wrote:
+> > > Add microchip,sam9x60-smc to DT bindings documentation.
+> > > 
+> > > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/mfd/atmel-smc.txt | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > Applied, thanks.
+> 
+> Remind me why you are applying this patch please?
+> 
 
-> On 10/01/2020 18:18:02+0200, Claudiu Beznea wrote:
-> > Add microchip,sam9x60-smc to DT bindings documentation.
-> > 
-> > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> > ---
-> >  Documentation/devicetree/bindings/mfd/atmel-smc.txt | 1 +
-> >  1 file changed, 1 insertion(+)
-> Applied, thanks.
+Because the last patch of the series has a soft dependency on this
+patch. I can remove it from the at91 and let you apply it if you think
+this is necessary.
 
-Remind me why you are applying this patch please?
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
