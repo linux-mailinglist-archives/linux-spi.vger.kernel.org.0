@@ -2,44 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A0913C816
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 16:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1620013C834
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 16:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729014AbgAOPk0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jan 2020 10:40:26 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:33029 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728896AbgAOPk0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jan 2020 10:40:26 -0500
-Received: by mail-oi1-f193.google.com with SMTP id q81so934350oig.0
-        for <linux-spi@vger.kernel.org>; Wed, 15 Jan 2020 07:40:26 -0800 (PST)
+        id S1726550AbgAOPmx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jan 2020 10:42:53 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45664 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726483AbgAOPmx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jan 2020 10:42:53 -0500
+Received: by mail-oi1-f196.google.com with SMTP id n16so15751898oie.12
+        for <linux-spi@vger.kernel.org>; Wed, 15 Jan 2020 07:42:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=h8tviBIGxzG0M2SWVlzB/ZX7WYO/ibSFmw3TBS+98tw=;
-        b=Pab/oORkOYemY0tItaEP+j8UmHVoBlQZu4Nza8rrECieQNvAbGWo46HI58adIeqx1t
-         mIGPOtdCRl5Qqz8Q9zFLoyxt+5c43TfwQ9QNrpiEbXTGXBW7zDM9J4MVoeCgQcF/+nsd
-         MSe6eR+LJmawFzAvUzKHRnNOR5Neh/N+kWmfsKubm2rANmhc3GxsjeaQw6Srqffkqmzc
-         XHZyQRFFpZdJpBvMdvjA8GRD58QhLh3I02GRHuB1zcmiqNMcq6OqJf+w7PwB3JZvvOpv
-         RzxH3O1H4uwOWCU5S6mwD4i9msHbaEauwRKnPBlxwSf4XuW3k10Eq1v2Z83Mpaca8DSf
-         9T9w==
-X-Gm-Message-State: APjAAAUQ1g58Kiz7XU441rFHaGCEKrx0p3gLdyuMqbi6SIEoRjMTaRjP
-        z5a6Nn/3RO5NXF/A2h4PLTkWldU=
-X-Google-Smtp-Source: APXvYqwH0lWXRq2d0At7D4JWvZaokKJ2CRAPTl01aSpF0wKRUJ+1EOXOT14wkKqkTz2/xZ7GiIXxag==
-X-Received: by 2002:aca:b7c5:: with SMTP id h188mr306386oif.100.1579102825516;
-        Wed, 15 Jan 2020 07:40:25 -0800 (PST)
+        bh=RUBHE4XJm85NFA8oPl1FMyCsYkpngZCS0u/hs5fFTfs=;
+        b=a7ZrdS3NHR+eeHaA7429OgMNGnXfnE0wTmnudy8zSPT/YDeBLqAwf/1rADYz/05uQb
+         1WbQs4Tb/sc8hFFB+Su4axS97xkUwHcLhnpLuGzZLIOXOc448asiYsgf7vj0yPADI/g1
+         JcEsMTT7O1znl7kOWJc9W2/m6Uvse/s7j9l3d3BIfRcuh5YOZwJdOazRigIlO++3A61q
+         JC7AmOqVhqvusj0w71JzWNZlrJJ0gyHtWc0GKTQ618YS1G87Id0YlDxKouUu2nRqWVq/
+         tOW62jsPD1G6fnebXb1zTZ1BSRAGgASmSLfHh8chmqiBt53whVcJB80c8QDCtyrj2VuR
+         Iwww==
+X-Gm-Message-State: APjAAAUgJQbVYwQo60ReK1250Qr9SELPo2pEHh05T/Kvev3/XZDKUPZt
+        nxHoEEtR9G79SM60oio8W4AM4D0=
+X-Google-Smtp-Source: APXvYqzxwm5tG51CkPf+cWYFce914nJQNrMfNIt3bgIH82yz2cnTMXHvYa/Cd6MSY1zQUbNh1GD9Ag==
+X-Received: by 2002:aca:1011:: with SMTP id 17mr328307oiq.72.1579102971884;
+        Wed, 15 Jan 2020 07:42:51 -0800 (PST)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id r63sm5699369oib.56.2020.01.15.07.40.23
+        by smtp.gmail.com with ESMTPSA id m68sm5747945oig.50.2020.01.15.07.42.50
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 07:40:24 -0800 (PST)
+        Wed, 15 Jan 2020 07:42:51 -0800 (PST)
 Received: from rob (uid 1000)
         (envelope-from rob@rob-hp-laptop)
-        id 220379
+        id 22093b
         by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Wed, 15 Jan 2020 09:40:22 -0600
-Date:   Wed, 15 Jan 2020 09:40:22 -0600
+        Wed, 15 Jan 2020 09:42:50 -0600
+Date:   Wed, 15 Jan 2020 09:42:50 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Anson Huang <Anson.Huang@nxp.com>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com, vkoul@kernel.org,
@@ -56,29 +56,29 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com, vkoul@kernel.org,
         dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
         Linux-imx@nxp.com
-Subject: Re: [PATCH V2 1/7] dt-bindings: fsl-imx-sdma: Add
- i.MX8MM/i.MX8MN/i.MX8MP compatible string
-Message-ID: <20200115154022.GA10946@bogus>
+Subject: Re: [PATCH V2 3/7] dt-bindings: imx-ocotp: Add i.MX8MP compatible
+Message-ID: <20200115154249.GA15419@bogus>
 References: <1578893602-14395-1-git-send-email-Anson.Huang@nxp.com>
+ <1578893602-14395-3-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1578893602-14395-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1578893602-14395-3-git-send-email-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 13 Jan 2020 13:33:16 +0800, Anson Huang wrote:
-> Add imx8mm/imx8mn/imx8mp sdma support.
+On Mon, 13 Jan 2020 13:33:18 +0800, Anson Huang wrote:
+> Add compatible and description for i.MX8MP.
 > 
 > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 > ---
 > New patch
 > ---
->  Documentation/devicetree/bindings/dma/fsl-imx-sdma.txt | 3 +++
->  1 file changed, 3 insertions(+)
+>  Documentation/devicetree/bindings/nvmem/imx-ocotp.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
