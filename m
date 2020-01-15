@@ -2,306 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A164513B603
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 00:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82F313B95F
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2020 07:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728892AbgANXjS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Jan 2020 18:39:18 -0500
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:51183 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728899AbgANXjM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Jan 2020 18:39:12 -0500
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1F38A891A9;
-        Wed, 15 Jan 2020 12:39:10 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1579045150;
-        bh=2gBER1PvepW7C/LmCCkcdmnlievV9RChs4q6y2glIWI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ShJCmUzMKbd8oSdsPgEnQ5avBWUFdaVdlM0bBCSYD8lLYOh8r9maUFNpwZptdTGRA
-         TQVKo30T1zJe1QyziXtB1cSFI2DU219HXUlWHe1xxw/O3bMH8A2t49eTpxgnVlMB9T
-         PXNJpm3ssh1xT4JcbIyqNgFPDY14qvm+XQzUwvbeHiFkSSzslJq5fuyQQSGFXGcfX5
-         vA8NpuzlRcoXaiHLepzkDKiC4zDZ5Z06HvasTG1gWShd6Ekku5D+BewIa0K2QQJ3G3
-         v+q3cEVaB4LpNWdrryBqC0imJd1rfAYtcZmNyVCRMdyifBDYjSREUUpOh3+odfZyYH
-         GhhuYtqUP+C7w==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5e1e511d0000>; Wed, 15 Jan 2020 12:39:09 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id 73FDB13EF62;
-        Wed, 15 Jan 2020 12:39:08 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id C37E7280071; Wed, 15 Jan 2020 12:39:08 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com
-Cc:     anthony.derosa@syscall7.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 2/2] spi: Add generic SPI multiplexer
-Date:   Wed, 15 Jan 2020 12:38:56 +1300
-Message-Id: <20200114233857.25933-3-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200114233857.25933-1-chris.packham@alliedtelesis.co.nz>
-References: <20200114233857.25933-1-chris.packham@alliedtelesis.co.nz>
+        id S1725999AbgAOGNx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jan 2020 01:13:53 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:58618 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbgAOGNw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jan 2020 01:13:52 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00F6DU9g079483;
+        Wed, 15 Jan 2020 00:13:30 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1579068810;
+        bh=6ErZheo3CWGhZ2ZZ3TOwWdBo8wbw7aegRQVfbsnMC+U=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=cSn9hQGbSJKA7g/x0S69FYOMVzXf5biDoRCFijkk84skr8qLLAG4y9KjOadmp6+hc
+         p5MbEAntSqWiB49+rUwlK4dGTvaClGgPKURPdU/qgALIuZ7x+UKjsoBkPATlFsDlbm
+         +rDrGC4g8Jdv7vIxlG340MV90YFZgcwNr8mM4N14=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 00F6DUtc101258
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 Jan 2020 00:13:30 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 15
+ Jan 2020 00:13:30 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 15 Jan 2020 00:13:30 -0600
+Received: from [10.250.133.94] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00F6DQ3R023371;
+        Wed, 15 Jan 2020 00:13:27 -0600
+Subject: Re: [PATCH v6 0/2] spi: cadence-quadpsi: Add support for the Cadence
+ QSPI controller
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <dan.carpenter@oracle.com>,
+        <cheol.yong.kim@intel.com>, <qi-ming.wu@intel.com>
+References: <20191230074102.50982-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <860aecbc-22d3-c9ce-3570-44115d6e81b2@ti.com>
+Date:   Wed, 15 Jan 2020 11:43:26 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+In-Reply-To: <20191230074102.50982-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add a SPI device driver that sits in-band and provides a SPI controller
-which supports chip selects via a mux-control. This enables extra SPI
-devices to be connected with limited native chip selects.
+Hi,
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- drivers/spi/Kconfig   |  12 +++
- drivers/spi/Makefile  |   1 +
- drivers/spi/spi-mux.c | 189 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 202 insertions(+)
- create mode 100644 drivers/spi/spi-mux.c
+On 12/30/2019 1:11 PM, Ramuthevar,Vadivel MuruganX wrote:
+> Add support for the Cadence QSPI controller. This controller is
+> present in the Intel Lightning Mountain(LGM) SoCs, Altera and TI SoCs.
+> This driver has been tested on the Intel LGM SoCs.
+> 
+> This driver does not support generic SPI and also the implementation
+> only supports spi-mem interface to replace the existing driver in
+> mtd/spi-nor/cadence-quadspi.c, the existing driver only support SPI-NOR
+> flash memory.
+> 
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 870f7797b56b..90df945490d9 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -880,6 +880,18 @@ config SPI_ZYNQMP_GQSPI
- #
- # Add new SPI master controllers in alphabetical order above this line
- #
-+#
-+
-+comment "SPI Multiplexer support"
-+
-+config SPI_MUX
-+	tristate "SPI multiplexer support"
-+	select MULTIPLEXER
-+	help
-+	  This adds support for SPI multiplexers. Each SPI mux will be
-+	  accessible as a SPI controller, the devices behind the mux will appea=
-r
-+	  to be chip selects on this controller. It is still necessary to
-+	  select one or more specific mux-controller drivers.
-=20
- #
- # There are lots of SPI device types, with sensors and memory
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index bb49c9e6d0a0..5f7593c84210 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -11,6 +11,7 @@ obj-$(CONFIG_SPI_MASTER)		+=3D spi.o
- obj-$(CONFIG_SPI_MEM)			+=3D spi-mem.o
- obj-$(CONFIG_SPI_SPIDEV)		+=3D spidev.o
- obj-$(CONFIG_SPI_LOOPBACK_TEST)		+=3D spi-loopback-test.o
-+obj-$(CONFIG_SPI_MUX)			+=3D spi-mux.o
-=20
- # SPI master controller drivers (bus)
- obj-$(CONFIG_SPI_ALTERA)		+=3D spi-altera.o
-diff --git a/drivers/spi/spi-mux.c b/drivers/spi/spi-mux.c
-new file mode 100644
-index 000000000000..8481067be5ae
---- /dev/null
-+++ b/drivers/spi/spi-mux.c
-@@ -0,0 +1,189 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * General Purpose SPI multiplexer
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/err.h>
-+#include <linux/slab.h>
-+#include <linux/spi/spi.h>
-+#include <linux/mux/consumer.h>
-+
-+#define SPI_MUX_NO_CS	((unsigned int)-1)
-+
-+/**
-+ * DOC: Driver description
-+ *
-+ * This driver supports a MUX on an SPI bus. This can be useful when you=
- need
-+ * more chip selects than the hardware peripherals support, or than are
-+ * available in a particular board setup.
-+ *
-+ * The driver will create an additional SPI controller. Devices added un=
-der the
-+ * mux will be handled as 'chip selects' on this controller.
-+ */
-+
-+/**
-+ * struct spi_mux_priv - the basic spi_mux structure
-+ * @spi:		pointer to the device struct attached to the parent
-+ *			spi controller
-+ * @current_cs:		The current chip select set in the mux
-+ * @child_mesg_complete: The mux replaces the complete callback in the c=
-hild's
-+ *			message to its own callback; this field is used by the
-+ *			driver to store the child's callback during a transfer
-+ * @child_mesg_context: Used to store the child's context to the callbac=
-k
-+ * @child_mesg_dev:	Used to store the spi_device pointer to the child
-+ * @mux:		mux_control structure used to provide chip selects for
-+ *			downstream spi devices
-+ */
-+struct spi_mux_priv {
-+	struct spi_device	*spi;
-+	unsigned int		current_cs;
-+
-+	void			(*child_mesg_complete)(void *context);
-+	void			*child_mesg_context;
-+	struct spi_device	*child_mesg_dev;
-+	struct mux_control	*mux;
-+};
-+
-+/* should not get called when the parent controller is doing a transfer =
-*/
-+static int spi_mux_select(struct spi_device *spi)
-+{
-+	struct spi_mux_priv *priv =3D spi_controller_get_devdata(spi->controlle=
-r);
-+	int ret =3D 0;
-+
-+	if (priv->current_cs !=3D spi->chip_select) {
-+		dev_dbg(&priv->spi->dev,
-+			"setting up the mux for cs %d\n",
-+			spi->chip_select);
-+
-+		/* copy the child device's settings except for the cs */
-+		priv->spi->max_speed_hz =3D spi->max_speed_hz;
-+		priv->spi->mode =3D spi->mode;
-+		priv->spi->bits_per_word =3D spi->bits_per_word;
-+
-+		ret =3D mux_control_select(priv->mux, spi->chip_select);
-+		if (ret)
-+			return ret;
-+
-+		priv->current_cs =3D spi->chip_select;
-+	}
-+
-+	return ret;
-+}
-+
-+static int spi_mux_setup(struct spi_device *spi)
-+{
-+	struct spi_mux_priv *priv =3D spi_controller_get_devdata(spi->controlle=
-r);
-+
-+	/*
-+	 * can be called multiple times, won't do a valid setup now but we will
-+	 * change the settings when we do a transfer (necessary because we
-+	 * can't predict from which device it will be anyway)
-+	 */
-+	return spi_setup(priv->spi);
-+}
-+
-+static void spi_mux_complete_cb(void *context)
-+{
-+	struct spi_mux_priv *priv =3D (struct spi_mux_priv *)context;
-+	struct spi_controller *ctlr =3D spi_get_drvdata(priv->spi);
-+	struct spi_message *m =3D ctlr->cur_msg;
-+
-+	m->complete =3D priv->child_mesg_complete;
-+	m->context =3D priv->child_mesg_context;
-+	m->spi =3D priv->child_mesg_dev;
-+	spi_finalize_current_message(ctlr);
-+	mux_control_deselect(priv->mux);
-+}
-+
-+static int spi_mux_transfer_one_message(struct spi_controller *ctlr,
-+						struct spi_message *m)
-+{
-+	struct spi_mux_priv *priv =3D spi_controller_get_devdata(ctlr);
-+	struct spi_device *spi =3D m->spi;
-+	int ret;
-+
-+	ret =3D spi_mux_select(spi);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Replace the complete callback, context and spi_device with our own
-+	 * pointers. Save originals
-+	 */
-+	priv->child_mesg_complete =3D m->complete;
-+	priv->child_mesg_context =3D m->context;
-+	priv->child_mesg_dev =3D m->spi;
-+
-+	m->complete =3D spi_mux_complete_cb;
-+	m->context =3D priv;
-+	m->spi =3D priv->spi;
-+
-+	/* do the transfer */
-+	ret =3D spi_async(priv->spi, m);
-+	return ret;
-+}
-+
-+static int spi_mux_probe(struct spi_device *spi)
-+{
-+	struct spi_controller *ctlr;
-+	struct spi_mux_priv *priv;
-+	int ret;
-+
-+	ctlr =3D spi_alloc_master(&spi->dev, sizeof(*priv));
-+	if (!ctlr)
-+		return -ENOMEM;
-+
-+	spi_set_drvdata(spi, ctlr);
-+	priv =3D spi_controller_get_devdata(ctlr);
-+	priv->spi =3D spi;
-+
-+	priv->mux =3D devm_mux_control_get(&spi->dev, NULL);
-+	ret =3D PTR_ERR_OR_ZERO(priv->mux);
-+	if (ret) {
-+		if (ret !=3D -EPROBE_DEFER)
-+			dev_err(&spi->dev, "failed to get control-mux\n");
-+		goto err_put_ctlr;
-+	}
-+
-+	priv->current_cs =3D SPI_MUX_NO_CS;
-+
-+	/* supported modes are the same as our parent's */
-+	ctlr->mode_bits =3D spi->controller->mode_bits;
-+	ctlr->flags =3D spi->controller->flags;
-+	ctlr->transfer_one_message =3D spi_mux_transfer_one_message;
-+	ctlr->setup =3D spi_mux_setup;
-+	ctlr->num_chipselect =3D mux_control_states(priv->mux);
-+	ctlr->bus_num =3D -1;
-+	ctlr->dev.of_node =3D spi->dev.of_node;
-+
-+	ret =3D devm_spi_register_controller(&spi->dev, ctlr);
-+	if (ret)
-+		goto err_put_ctlr;
-+
-+	return ret;
-+
-+err_put_ctlr:
-+	spi_controller_put(ctlr);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id spi_mux_of_match[] =3D {
-+	{ .compatible =3D "spi-mux" },
-+	{ },
-+};
-+
-+static struct spi_driver spi_mux_driver =3D {
-+	.probe  =3D spi_mux_probe,
-+	.driver =3D {
-+		.name   =3D "spi-mux",
-+		.of_match_table =3D spi_mux_of_match,
-+	},
-+};
-+
-+module_spi_driver(spi_mux_driver);
-+
-+MODULE_DESCRIPTION("SPI multiplexer");
-+MODULE_LICENSE("GPL");
---=20
-2.25.0
+
+
+I am finally able to get spi-mem based cadence-quaspi driver working on
+TI platforms with DMA and DAC mode. I have also incorporated changes to
+disable DAC and autopolling for your intel SoC:
+
+https://github.com/r-vignesh/linux/commits/qspi
+
+(Top two patches are of interest)
+
+I have tested both DAC and INDAC mode with s25fl flash and everything
+seems to be fine. Could you re test the driver on your SoC? Feel free to
+fold it into your series if everything works.
+
+Regards
+Vignesh
+
+
 
