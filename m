@@ -2,39 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 319E813F158
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 19:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2FC13F094
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 19:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388477AbgAPS2P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jan 2020 13:28:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34744 "EHLO mail.kernel.org"
+        id S2404046AbgAPR12 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jan 2020 12:27:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37308 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403871AbgAPR0N (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:26:13 -0500
+        id S2404036AbgAPR10 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:27:26 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78C5D246BE;
-        Thu, 16 Jan 2020 17:26:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15BF0246D3;
+        Thu, 16 Jan 2020 17:27:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195572;
-        bh=mwhEdmkbM4fEVCkSGlL/oVNz+TJTmE1F+zNFLP58JAo=;
+        s=default; t=1579195645;
+        bh=CkuyHy+LTnuMc8iztfegljcTXrOlV57qafrOQbbVHqw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lpyFtSw6I/tSuwwUWE2P9rQK8efHacBSlO7zzD7am7G5SULXzLuIpc3ISzMa0Dbqn
-         tGMpvgSyOgQGBBsF6dUxKXAYBSQtg5wo/g5SR7w9EDuZq0cmIkoB45ay4EMRBL5m++
-         1JL7Njvps0ROzM6QwCBcEVEIKcPRD6rLmVwGYryE=
+        b=X+1wdNZBOSu2WiRKtaeospNgcm9KEh7+HpMzO/4idp9OYDJVTAu7LQ9jI+AQ/AIHu
+         PXLfBHDboLS4FlX1T1LHj2yvwx+287vulXZ2IkSDXwL+VKtR3taTNy/IFXfNMYIMWc
+         rodFJVvfIR3JHSo3+i9VWLG0PfNf/dv/PQt9td4Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Martin Sperl <kernel@martin.sperl.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.14 156/371] spi: bcm2835aux: fix driver to not allow 65535 (=-1) cs-gpios
-Date:   Thu, 16 Jan 2020 12:20:28 -0500
-Message-Id: <20200116172403.18149-99-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 209/371] spi: spi-fsl-spi: call spi_finalize_current_message() at the end
+Date:   Thu, 16 Jan 2020 12:21:21 -0500
+Message-Id: <20200116172403.18149-152-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
 References: <20200116172403.18149-1-sashal@kernel.org>
@@ -47,59 +43,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Martin Sperl <kernel@martin.sperl.org>
+From: Christophe Leroy <christophe.leroy@c-s.fr>
 
-[ Upstream commit 509c583620e9053e43d611bf1614fc3d3abafa96 ]
+[ Upstream commit 44a042182cb1e9f7916e015c836967bf638b33c4 ]
 
-The original driver by default defines num_chipselects as -1.
-This actually allicates an array of 65535 entries in
-of_spi_register_master.
+spi_finalize_current_message() shall be called once all
+actions are finished, otherwise the last actions might
+step over a newly started transfer.
 
-There is a side-effect for buggy device trees that (contrary to
-dt-binding documentation) have no cs-gpio defined.
-
-This mode was never supported by the driver due to limitations
-of native cs and additional code complexity and is explicitly
-not stated to be implemented.
-
-To keep backwards compatibility with such buggy DTs we limit
-the number of chip_selects to 1, as for all practical purposes
-it is only ever realistic to use a single chip select in
-native cs mode without negative side-effects.
-
-Fixes: 1ea29b39f4c812ec ("spi: bcm2835aux: add bcm2835 auxiliary spi device...")
-Signed-off-by: Martin Sperl <kernel@martin.sperl.org>
-Acked-by: Stefan Wahren <stefan.wahren@i2se.com>
+Fixes: c592becbe704 ("spi: fsl-(e)spi: migrate to generic master queueing")
+Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-bcm2835aux.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ drivers/spi/spi-fsl-spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-bcm2835aux.c b/drivers/spi/spi-bcm2835aux.c
-index 5c89bbb05441..e075712c501e 100644
---- a/drivers/spi/spi-bcm2835aux.c
-+++ b/drivers/spi/spi-bcm2835aux.c
-@@ -416,7 +416,18 @@ static int bcm2835aux_spi_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, master);
- 	master->mode_bits = (SPI_CPOL | SPI_CS_HIGH | SPI_NO_CS);
- 	master->bits_per_word_mask = SPI_BPW_MASK(8);
--	master->num_chipselect = -1;
-+	/* even though the driver never officially supported native CS
-+	 * allow a single native CS for legacy DT support purposes when
-+	 * no cs-gpio is configured.
-+	 * Known limitations for native cs are:
-+	 * * multiple chip-selects: cs0-cs2 are all simultaniously asserted
-+	 *     whenever there is a transfer -  this even includes SPI_NO_CS
-+	 * * SPI_CS_HIGH: is ignores - cs are always asserted low
-+	 * * cs_change: cs is deasserted after each spi_transfer
-+	 * * cs_delay_usec: cs is always deasserted one SCK cycle after
-+	 *     a spi_transfer
-+	 */
-+	master->num_chipselect = 1;
- 	master->transfer_one = bcm2835aux_spi_transfer_one;
- 	master->handle_err = bcm2835aux_spi_handle_err;
- 	master->prepare_message = bcm2835aux_spi_prepare_message;
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 8b79e36fab21..cd784552de7f 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -407,7 +407,6 @@ static int fsl_spi_do_one_msg(struct spi_master *master,
+ 	}
+ 
+ 	m->status = status;
+-	spi_finalize_current_message(master);
+ 
+ 	if (status || !cs_change) {
+ 		ndelay(nsecs);
+@@ -415,6 +414,7 @@ static int fsl_spi_do_one_msg(struct spi_master *master,
+ 	}
+ 
+ 	fsl_spi_setup_transfer(spi, NULL);
++	spi_finalize_current_message(master);
+ 	return 0;
+ }
+ 
 -- 
 2.20.1
 
