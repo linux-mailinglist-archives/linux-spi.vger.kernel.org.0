@@ -2,41 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E5913E19F
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 17:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 167EF13E2D1
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 17:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729883AbgAPQrY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jan 2020 11:47:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57174 "EHLO mail.kernel.org"
+        id S1730346AbgAPQ6X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jan 2020 11:58:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729899AbgAPQrT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:47:19 -0500
+        id S1733199AbgAPQ5s (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jan 2020 11:57:48 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1045C20663;
-        Thu, 16 Jan 2020 16:47:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D298B2467E;
+        Thu, 16 Jan 2020 16:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193239;
-        bh=rcYIMCE5yV481ejhTQhSw3zfGdUsTqdOppxNsySLqak=;
+        s=default; t=1579193867;
+        bh=50JiBXz4aVsgDputPHW/Z9vKrc8bWmLSNSFpXsJ2W3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S4xjjtzTydL+ELTHZtFGtWWKZ3OeLcInKwivNY5eBiER/JUHsBa8wpZwz2c4X5wYg
-         HUZT1bvJnxv2L3okb5ZYmoFEZWNvQ3JCnvOHm/qut4Cyj0CEzz8wQSUM9kLjiOxvDS
-         6UPvRZub2SSbbTueahgUeEIku6gJxWFRQmn9VqTk=
+        b=UbooVXytUOfMlwpkbNcF/6yCAheKfY/C6luzYdVAzb0SC/dCJ12XdSLkoS9zy8Cfb
+         oBVKT51n0F0kfUKnANpPYo0vhYrlW3gM9fZSwTwa5vnE4WC1NeZ99mCVIYNDshaswL
+         m+CDmuFN61VYhIRrgYoyvMLDBq9GE6kGOnBvBMRc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mans Rullgard <mans@mansr.com>,
-        Nicolas Ferre <nicolas.ferre@atmel.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 052/205] spi: atmel: fix handling of cs_change set on non-last xfer
-Date:   Thu, 16 Jan 2020 11:40:27 -0500
-Message-Id: <20200116164300.6705-52-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 113/671] spi: cadence: Correct initialisation of runtime PM
+Date:   Thu, 16 Jan 2020 11:45:44 -0500
+Message-Id: <20200116165502.8838-113-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
-References: <20200116164300.6705-1-sashal@kernel.org>
+In-Reply-To: <20200116165502.8838-1-sashal@kernel.org>
+References: <20200116165502.8838-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,65 +43,61 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Mans Rullgard <mans@mansr.com>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit fed8d8c7a6dc2a76d7764842853d81c770b0788e ]
+[ Upstream commit 734882a8bf984c2ac8a57d8ac3ee53230bd0bed8 ]
 
-The driver does the wrong thing when cs_change is set on a non-last
-xfer in a message.  When cs_change is set, the driver deactivates the
-CS and leaves it off until a later xfer again has cs_change set whereas
-it should be briefly toggling CS off and on again.
+Currently the driver calls pm_runtime_put_autosuspend but without ever
+having done a pm_runtime_get, this causes the reference count in the pm
+runtime core to become -1. The bad reference count causes the core to
+sometimes suspend whilst an active SPI transfer is in progress.
 
-This patch brings the behaviour of the driver back in line with the
-documentation and common sense.  The delay of 10 us is the same as is
-used by the default spi_transfer_one_message() function in spi.c.
-[gregory: rebased on for-5.5 from spi tree]
-Fixes: 8090d6d1a415 ("spi: atmel: Refactor spi-atmel to use SPI framework queue")
-Signed-off-by: Mans Rullgard <mans@mansr.com>
-Acked-by: Nicolas Ferre <nicolas.ferre@atmel.com>
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Link: https://lore.kernel.org/r/20191018153504.4249-1-gregory.clement@bootlin.com
+arizona spi0.1: SPI transfer timed out
+spi_master spi0: failed to transfer one message from queue
+
+The correct proceedure is to do all the initialisation that requires the
+hardware to be powered up before enabling the PM runtime, then enable
+the PM runtime having called pm_runtime_set_active to inform it that the
+hardware is currently powered up. The core will then power it down at
+it's leisure and no explicit pm_runtime_put is required.
+
+Fixes: d36ccd9f7ea4 ("spi: cadence: Runtime pm adaptation")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-atmel.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/spi/spi-cadence.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
-index ba8eff41b746..abbc1582f457 100644
---- a/drivers/spi/spi-atmel.c
-+++ b/drivers/spi/spi-atmel.c
-@@ -302,7 +302,6 @@ struct atmel_spi {
- 	bool			use_cs_gpios;
- 
- 	bool			keep_cs;
--	bool			cs_active;
- 
- 	u32			fifo_size;
- };
-@@ -1374,11 +1373,9 @@ static int atmel_spi_one_transfer(struct spi_master *master,
- 				 &msg->transfers)) {
- 			as->keep_cs = true;
- 		} else {
--			as->cs_active = !as->cs_active;
--			if (as->cs_active)
--				cs_activate(as, msg->spi);
--			else
--				cs_deactivate(as, msg->spi);
-+			cs_deactivate(as, msg->spi);
-+			udelay(10);
-+			cs_activate(as, msg->spi);
- 		}
+diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
+index 7c88f74f7f47..94cc0a152449 100644
+--- a/drivers/spi/spi-cadence.c
++++ b/drivers/spi/spi-cadence.c
+@@ -584,11 +584,6 @@ static int cdns_spi_probe(struct platform_device *pdev)
+ 		goto clk_dis_apb;
  	}
  
-@@ -1401,7 +1398,6 @@ static int atmel_spi_transfer_one_message(struct spi_master *master,
- 	atmel_spi_lock(as);
- 	cs_activate(as, spi);
+-	pm_runtime_use_autosuspend(&pdev->dev);
+-	pm_runtime_set_autosuspend_delay(&pdev->dev, SPI_AUTOSUSPEND_TIMEOUT);
+-	pm_runtime_set_active(&pdev->dev);
+-	pm_runtime_enable(&pdev->dev);
+-
+ 	ret = of_property_read_u32(pdev->dev.of_node, "num-cs", &num_cs);
+ 	if (ret < 0)
+ 		master->num_chipselect = CDNS_SPI_DEFAULT_NUM_CS;
+@@ -603,8 +598,10 @@ static int cdns_spi_probe(struct platform_device *pdev)
+ 	/* SPI controller initializations */
+ 	cdns_spi_init_hw(xspi);
  
--	as->cs_active = true;
- 	as->keep_cs = false;
+-	pm_runtime_mark_last_busy(&pdev->dev);
+-	pm_runtime_put_autosuspend(&pdev->dev);
++	pm_runtime_set_active(&pdev->dev);
++	pm_runtime_enable(&pdev->dev);
++	pm_runtime_use_autosuspend(&pdev->dev);
++	pm_runtime_set_autosuspend_delay(&pdev->dev, SPI_AUTOSUSPEND_TIMEOUT);
  
- 	msg->status = 0;
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq <= 0) {
 -- 
 2.20.1
 
