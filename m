@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAF113F293
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 19:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A203713F76A
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 20:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390796AbgAPSgR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jan 2020 13:36:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58458 "EHLO mail.kernel.org"
+        id S2387642AbgAPRAC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jan 2020 12:00:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49324 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391704AbgAPRYQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:24:16 -0500
+        id S2387618AbgAPRAB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:00:01 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2BF8824684;
-        Thu, 16 Jan 2020 17:24:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 643E622525;
+        Thu, 16 Jan 2020 17:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195455;
+        s=default; t=1579194001;
         bh=i/V3gk9PEcJrPo97JdmBI9EBn/+Wp7cEy9/qDwLVC2k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JI7ekaI0wc218nQhJ2oBn/yoRDBiailb1q+mhIwBKKPyhlxPh5hMc6TLbYSEPifmd
-         doEgMjH86LvrXSusaW2KRhgZnOUwel8Yo8y1YYt4DT7akfzpW8iUlnkMaleUgtRzbU
-         fvG/CmFOAsNmc418YRnpGiocLZDB4BxV7kRz9rPw=
+        b=gIHpmzlcKdhCPKt9LXfo/JPdNE7TMSTVqcABQqGMri18I+5KBx+Wx9VA/XZgcqCE8
+         4EAOvzs7T5EA4UZud7lgWbuGPiq0wmYHOYBS0jjqiDryCVbQb4R7vqjlfvtvKCnKbD
+         Y5TlloBzqSumcB1px5jIb4JtZS2OInRpdHzQrA1E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     YueHaibing <yuehaibing@huawei.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 065/371] spi/topcliff_pch: Fix potential NULL dereference on allocation error
-Date:   Thu, 16 Jan 2020 12:18:57 -0500
-Message-Id: <20200116172403.18149-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 128/671] spi/topcliff_pch: Fix potential NULL dereference on allocation error
+Date:   Thu, 16 Jan 2020 11:50:37 -0500
+Message-Id: <20200116165940.10720-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
+In-Reply-To: <20200116165940.10720-1-sashal@kernel.org>
+References: <20200116165940.10720-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
