@@ -2,36 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1D713E774
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 18:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A3713E84B
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 18:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391765AbgAPR0D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jan 2020 12:26:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34320 "EHLO mail.kernel.org"
+        id S2387893AbgAPRbb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jan 2020 12:31:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43136 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392221AbgAPR0D (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:26:03 -0500
+        id S2404485AbgAPRac (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:30:32 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 80B5724653;
-        Thu, 16 Jan 2020 17:26:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1981E24718;
+        Thu, 16 Jan 2020 17:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195562;
-        bh=BbhYBKR4UIhlaNuwGxzS3sKtVv2MUrrSn2DNGZG68xs=;
+        s=default; t=1579195831;
+        bh=5ppPyUoZj93D1NH4PD1olqQR8A4S937YORs68MOu7eA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yjSHlOAJrt/qrYnI0l/EJ/lq2RdODbczZ14s9t6g3oQQG+jPGupg2yeOLiVzTyr6K
-         DLBWQXSkxOq12ikK2TkqU6Naej3pzJdF6pU2UtpoP1Xc1zRyB6Bgxai79BKrgcHR7h
-         lxuVPVcKSEpG8KvZqDW5FGudmsL2yicnhD2jBHxU=
+        b=mMNhIcimMLVIy6x5FkIajRqogI9A+acay1MlPFyuX599chQnS4Fhg7KWzHw93VYtt
+         WKs9fR+9N8nwbLb6hhdYTzyA0BCeFnPlmisr1M3cx54dfFa8nXVUwM/O/t+VP7U9YN
+         Apkx5piVw0mb95rx7M3LDwANiAGa9yRwV6iXnZug=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+Cc:     Mans Rullgard <mans@mansr.com>,
+        Nicolas Ferre <nicolas.ferre@atmel.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 149/371] spi: tegra114: clear packed bit for unpacked mode
-Date:   Thu, 16 Jan 2020 12:20:21 -0500
-Message-Id: <20200116172403.18149-92-sashal@kernel.org>
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.14 337/371] spi: atmel: fix handling of cs_change set on non-last xfer
+Date:   Thu, 16 Jan 2020 12:23:29 -0500
+Message-Id: <20200116172403.18149-280-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
 References: <20200116172403.18149-1-sashal@kernel.org>
@@ -44,36 +46,65 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Sowjanya Komatineni <skomatineni@nvidia.com>
+From: Mans Rullgard <mans@mansr.com>
 
-[ Upstream commit 7b3d10cdf54b8bc1dc0da21faed9789ac4da3684 ]
+[ Upstream commit fed8d8c7a6dc2a76d7764842853d81c770b0788e ]
 
-Fixes: Clear packed bit when not using packed mode.
+The driver does the wrong thing when cs_change is set on a non-last
+xfer in a message.  When cs_change is set, the driver deactivates the
+CS and leaves it off until a later xfer again has cs_change set whereas
+it should be briefly toggling CS off and on again.
 
-Packed bit is not cleared when not using packed mode. This results
-in transfer timeouts for the unpacked mode transfers followed by the
-packed mode transfers.
-
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+This patch brings the behaviour of the driver back in line with the
+documentation and common sense.  The delay of 10 us is the same as is
+used by the default spi_transfer_one_message() function in spi.c.
+[gregory: rebased on for-5.5 from spi tree]
+Fixes: 8090d6d1a415 ("spi: atmel: Refactor spi-atmel to use SPI framework queue")
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+Acked-by: Nicolas Ferre <nicolas.ferre@atmel.com>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Link: https://lore.kernel.org/r/20191018153504.4249-1-gregory.clement@bootlin.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-tegra114.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/spi/spi-atmel.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
-index 2ad04796ef29..3a6b202dfffe 100644
---- a/drivers/spi/spi-tegra114.c
-+++ b/drivers/spi/spi-tegra114.c
-@@ -730,6 +730,8 @@ static int tegra_spi_start_transfer_one(struct spi_device *spi,
+diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
+index d19331b66222..7b739c449227 100644
+--- a/drivers/spi/spi-atmel.c
++++ b/drivers/spi/spi-atmel.c
+@@ -301,7 +301,6 @@ struct atmel_spi {
+ 	bool			use_cs_gpios;
  
- 	if (tspi->is_packed)
- 		command1 |= SPI_PACKED;
-+	else
-+		command1 &= ~SPI_PACKED;
+ 	bool			keep_cs;
+-	bool			cs_active;
  
- 	command1 &= ~(SPI_CS_SEL_MASK | SPI_TX_EN | SPI_RX_EN);
- 	tspi->cur_direction = 0;
+ 	u32			fifo_size;
+ };
+@@ -1338,11 +1337,9 @@ static int atmel_spi_one_transfer(struct spi_master *master,
+ 				 &msg->transfers)) {
+ 			as->keep_cs = true;
+ 		} else {
+-			as->cs_active = !as->cs_active;
+-			if (as->cs_active)
+-				cs_activate(as, msg->spi);
+-			else
+-				cs_deactivate(as, msg->spi);
++			cs_deactivate(as, msg->spi);
++			udelay(10);
++			cs_activate(as, msg->spi);
+ 		}
+ 	}
+ 
+@@ -1365,7 +1362,6 @@ static int atmel_spi_transfer_one_message(struct spi_master *master,
+ 	atmel_spi_lock(as);
+ 	cs_activate(as, spi);
+ 
+-	as->cs_active = true;
+ 	as->keep_cs = false;
+ 
+ 	msg->status = 0;
 -- 
 2.20.1
 
