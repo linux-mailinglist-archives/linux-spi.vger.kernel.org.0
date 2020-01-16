@@ -2,104 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 224BF13F636
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 20:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAC913FCBE
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2020 00:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388531AbgAPRF3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jan 2020 12:05:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34132 "EHLO mail.kernel.org"
+        id S1729728AbgAPXMG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jan 2020 18:12:06 -0500
+Received: from foss.arm.com ([217.140.110.172]:34032 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388668AbgAPRF0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:05:26 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0CE0F20728;
-        Thu, 16 Jan 2020 17:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194326;
-        bh=jhZBndIEXfFfqNHQqvIk54IIrJOpLd4mLt31hke5ZfQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pQvC+2KN0yDUYgXDRpUSjUxHmSJAJQmVHpLgOrTu8AXQSjJ8/XlLlMJV46xeZo9Yb
-         yOolaBniftDebZvAI06AlLIQP7yzLK6qr9M6+Rroq64gBTXiZfuqERwNOYaG/ixG7N
-         5j8Ej9hceVsoJrvvMY/CeTnqhV3Q4RLmFqBG6zgQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Martin Sperl <kernel@martin.sperl.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 274/671] spi: bcm2835aux: fix driver to not allow 65535 (=-1) cs-gpios
-Date:   Thu, 16 Jan 2020 11:58:32 -0500
-Message-Id: <20200116170509.12787-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
-References: <20200116170509.12787-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1729336AbgAPXMG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jan 2020 18:12:06 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8C3D11D4;
+        Thu, 16 Jan 2020 15:12:05 -0800 (PST)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 009423F68E;
+        Thu, 16 Jan 2020 15:12:03 -0800 (PST)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Icenowy Zheng <icenowy@aosc.xyz>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
+        devicetree@vger.kernel.org
+Subject: [PATCH v3 0/3] arm64: dts: sun50i: H6: Enable SPI controller
+Date:   Thu, 16 Jan 2020 23:11:45 +0000
+Message-Id: <20200116231148.1490-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.14.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Martin Sperl <kernel@martin.sperl.org>
+Even though the SPI controller in the Allwinner H6 SoC is more advanced
+than in the previous generations (it supports 3-wire and 4-wire mode),
+the register set stays backwards-compatible. So we can use the existing
+driver to use the "normal" SPI mode, for instance to access the SPI
+flash soldered on the Pine H64 board.
 
-[ Upstream commit 509c583620e9053e43d611bf1614fc3d3abafa96 ]
+These two patches allow this by adding the SPI controller nodes to the
+DT. The compatible strings include an H6 specific name, so that any
+future 4-wire enhancements for instance would be automatically usable
+once the driver learns this new trick. For now we use the H3 fallback
+name to bind the current driver.
 
-The original driver by default defines num_chipselects as -1.
-This actually allicates an array of 65535 entries in
-of_spi_register_master.
+This time I tested this actual branch  (on top of sunxi/dt-for-5.6),
+on a Pine H64, both the internal SPI flash as well with SPI flash
+connected to the other SPI controller available on the GPIO headers.
 
-There is a side-effect for buggy device trees that (contrary to
-dt-binding documentation) have no cs-gpio defined.
+As the SPI0-CS0 pin clashes with the eMMC CMD pin, we keep this
+node disabled by default, to avoid losing the eMMC if it probes last.
+People (or U-Boot) can enable it if needed.
 
-This mode was never supported by the driver due to limitations
-of native cs and additional code complexity and is explicitly
-not stated to be implemented.
+Cheers,
+Andre.
 
-To keep backwards compatibility with such buggy DTs we limit
-the number of chip_selects to 1, as for all practical purposes
-it is only ever realistic to use a single chip select in
-native cs mode without negative side-effects.
+Changelog v2 ... v3:
+- use a more maintainable compatible description in the dt-bindings
 
-Fixes: 1ea29b39f4c812ec ("spi: bcm2835aux: add bcm2835 auxiliary spi device...")
-Signed-off-by: Martin Sperl <kernel@martin.sperl.org>
-Acked-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-bcm2835aux.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Changelog v1 ... v2:
+- comment on pinmux clash between eMMC and SPI
+- disable Pine H64 SPI flash node by default
+- add binding doc for the new compatible string
 
-diff --git a/drivers/spi/spi-bcm2835aux.c b/drivers/spi/spi-bcm2835aux.c
-index 12c1fa5b06c5..c63ed402cf86 100644
---- a/drivers/spi/spi-bcm2835aux.c
-+++ b/drivers/spi/spi-bcm2835aux.c
-@@ -416,7 +416,18 @@ static int bcm2835aux_spi_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, master);
- 	master->mode_bits = (SPI_CPOL | SPI_CS_HIGH | SPI_NO_CS);
- 	master->bits_per_word_mask = SPI_BPW_MASK(8);
--	master->num_chipselect = -1;
-+	/* even though the driver never officially supported native CS
-+	 * allow a single native CS for legacy DT support purposes when
-+	 * no cs-gpio is configured.
-+	 * Known limitations for native cs are:
-+	 * * multiple chip-selects: cs0-cs2 are all simultaniously asserted
-+	 *     whenever there is a transfer -  this even includes SPI_NO_CS
-+	 * * SPI_CS_HIGH: is ignores - cs are always asserted low
-+	 * * cs_change: cs is deasserted after each spi_transfer
-+	 * * cs_delay_usec: cs is always deasserted one SCK cycle after
-+	 *     a spi_transfer
-+	 */
-+	master->num_chipselect = 1;
- 	master->transfer_one = bcm2835aux_spi_transfer_one;
- 	master->handle_err = bcm2835aux_spi_handle_err;
- 	master->prepare_message = bcm2835aux_spi_prepare_message;
+Andre Przywara (3):
+  arm64: dts: sun50i: H6: Add SPI controllers nodes and pinmuxes
+  arm64: dts: allwinner: h6: Pine H64: Add SPI flash node
+  dt-bindings: spi: sunxi: Document new compatible strings
+
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml      | 11 +++--
+ .../boot/dts/allwinner/sun50i-h6-pine-h64.dts      | 19 ++++++++
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi       | 55 ++++++++++++++++++++++
+ 3 files changed, 82 insertions(+), 3 deletions(-)
+
 -- 
-2.20.1
+2.14.5
 
