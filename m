@@ -2,35 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BAB13F545
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 19:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D1E13F3E9
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 19:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389222AbgAPSzL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jan 2020 13:55:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40088 "EHLO mail.kernel.org"
+        id S2389930AbgAPRKZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jan 2020 12:10:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729370AbgAPRHo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:07:44 -0500
+        id S2389925AbgAPRKY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:10:24 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1374205F4;
-        Thu, 16 Jan 2020 17:07:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22F2624685;
+        Thu, 16 Jan 2020 17:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194463;
-        bh=CkuyHy+LTnuMc8iztfegljcTXrOlV57qafrOQbbVHqw=;
+        s=default; t=1579194623;
+        bh=w1jX+ttb2O1VrMqXuDjPtF6jrBRp+Hy3JQ3mwfxfj/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x7hzQEg58aqyNnOl5EIlKVHTWlZDjJcfRJ3XnCmgcsA8E7Jl2YY/aGNjGkwATK5VR
-         A9f1FN57kz9/1H2huHIMyTSnOFNeGcOLoCZ5mzO9Ck4YW57piLX61gGlW01xUwZsbM
-         HqB8578wGrc9ROrKHLU0TNQDaD98vHaw9+yJJyak=
+        b=h/B2fNxaEO8MFblqCSQ0idG3j6BvFzEKjn8m7185f6exYBJG9SNh/r3QCbvhUE3qo
+         OJ8wZ3ZFOfQTf9nN5Fhbj3qqlYXDI3glwH7dVvb4E5+AXcDr2rHcZCO8Tq/0YtB4YF
+         9WTFG2phXIMgDuhJ2JmFEx4mmzN/jOo/RT6fOn3U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
+Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 370/671] spi: spi-fsl-spi: call spi_finalize_current_message() at the end
-Date:   Thu, 16 Jan 2020 12:00:08 -0500
-Message-Id: <20200116170509.12787-107-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 484/671] spi: bcm-qspi: Fix BSPI QUAD and DUAL mode support when using flex mode
+Date:   Thu, 16 Jan 2020 12:02:02 -0500
+Message-Id: <20200116170509.12787-221-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
@@ -43,42 +43,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@c-s.fr>
+From: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 
-[ Upstream commit 44a042182cb1e9f7916e015c836967bf638b33c4 ]
+[ Upstream commit 79629d0f7ce5b38515c1716911a0181f01b91102 ]
 
-spi_finalize_current_message() shall be called once all
-actions are finished, otherwise the last actions might
-step over a newly started transfer.
+Fix data transfer width settings based on DT field 'spi-rx-bus-width'
+to configure BSPI in single, dual or quad mode by using data width
+and not the command width.
 
-Fixes: c592becbe704 ("spi: fsl-(e)spi: migrate to generic master queueing")
-Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+Fixes: 5f195ee7d830c ("spi: bcm-qspi: Implement the spi_mem interface")
+
+Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Link: https://lore.kernel.org/r/1565086070-28451-1-git-send-email-rayagonda.kokatanur@broadcom.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-fsl-spi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-bcm-qspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index 8b79e36fab21..cd784552de7f 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -407,7 +407,6 @@ static int fsl_spi_do_one_msg(struct spi_master *master,
- 	}
+diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
+index 584bcb018a62..285a6f463013 100644
+--- a/drivers/spi/spi-bcm-qspi.c
++++ b/drivers/spi/spi-bcm-qspi.c
+@@ -354,7 +354,7 @@ static int bcm_qspi_bspi_set_flex_mode(struct bcm_qspi *qspi,
+ {
+ 	int bpc = 0, bpp = 0;
+ 	u8 command = op->cmd.opcode;
+-	int width  = op->cmd.buswidth ? op->cmd.buswidth : SPI_NBITS_SINGLE;
++	int width = op->data.buswidth ? op->data.buswidth : SPI_NBITS_SINGLE;
+ 	int addrlen = op->addr.nbytes;
+ 	int flex_mode = 1;
  
- 	m->status = status;
--	spi_finalize_current_message(master);
+@@ -992,7 +992,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
+ 	if (mspi_read)
+ 		return bcm_qspi_mspi_exec_mem_op(spi, op);
  
- 	if (status || !cs_change) {
- 		ndelay(nsecs);
-@@ -415,6 +414,7 @@ static int fsl_spi_do_one_msg(struct spi_master *master,
- 	}
+-	ret = bcm_qspi_bspi_set_mode(qspi, op, -1);
++	ret = bcm_qspi_bspi_set_mode(qspi, op, 0);
  
- 	fsl_spi_setup_transfer(spi, NULL);
-+	spi_finalize_current_message(master);
- 	return 0;
- }
- 
+ 	if (!ret)
+ 		ret = bcm_qspi_bspi_exec_mem_op(spi, op);
 -- 
 2.20.1
 
