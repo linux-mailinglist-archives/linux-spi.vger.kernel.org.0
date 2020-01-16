@@ -2,38 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A203713F76A
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 20:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC6713F62F
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 20:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387642AbgAPRAC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jan 2020 12:00:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49324 "EHLO mail.kernel.org"
+        id S2388633AbgAPRFQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jan 2020 12:05:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33608 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387618AbgAPRAB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:00:01 -0500
+        id S2388554AbgAPRFP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:05:15 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 643E622525;
-        Thu, 16 Jan 2020 17:00:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C8AD224653;
+        Thu, 16 Jan 2020 17:05:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194001;
-        bh=i/V3gk9PEcJrPo97JdmBI9EBn/+Wp7cEy9/qDwLVC2k=;
+        s=default; t=1579194314;
+        bh=aaiAing3n5kCaciPCBMEpNxh5HMv1XnDrzTj/LLN8to=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gIHpmzlcKdhCPKt9LXfo/JPdNE7TMSTVqcABQqGMri18I+5KBx+Wx9VA/XZgcqCE8
-         4EAOvzs7T5EA4UZud7lgWbuGPiq0wmYHOYBS0jjqiDryCVbQb4R7vqjlfvtvKCnKbD
-         Y5TlloBzqSumcB1px5jIb4JtZS2OInRpdHzQrA1E=
+        b=rCnzUGshN/u3e0jHqMCdoxxx/76gtuwgc8VMUZQj7mRm28IFJEwRWNdWDoOxtWX1m
+         mAGdATsYyMKR2F2k05QMhbWOvFl3vXA7m0/hGst1+abUQuQkoiazZGQ2v2SGaV/tOp
+         r6iIqF+cdsaafatveq9J5O0SKOD71g6w3vDBykiY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YueHaibing <yuehaibing@huawei.com>,
+Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 128/671] spi/topcliff_pch: Fix potential NULL dereference on allocation error
-Date:   Thu, 16 Jan 2020 11:50:37 -0500
-Message-Id: <20200116165940.10720-11-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 266/671] spi: tegra114: clear packed bit for unpacked mode
+Date:   Thu, 16 Jan 2020 11:58:24 -0500
+Message-Id: <20200116170509.12787-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116165940.10720-1-sashal@kernel.org>
-References: <20200116165940.10720-1-sashal@kernel.org>
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,45 +44,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: YueHaibing <yuehaibing@huawei.com>
+From: Sowjanya Komatineni <skomatineni@nvidia.com>
 
-[ Upstream commit e902cdcb5112b89ee445588147964723fd69ffb4 ]
+[ Upstream commit 7b3d10cdf54b8bc1dc0da21faed9789ac4da3684 ]
 
-In pch_spi_handle_dma, it doesn't check for NULL returns of kcalloc
-so it would result in an Oops.
+Fixes: Clear packed bit when not using packed mode.
 
-Fixes: c37f3c2749b5 ("spi/topcliff_pch: DMA support")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Packed bit is not cleared when not using packed mode. This results
+in transfer timeouts for the unpacked mode transfers followed by the
+packed mode transfers.
+
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-topcliff-pch.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/spi/spi-tegra114.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-topcliff-pch.c b/drivers/spi/spi-topcliff-pch.c
-index 4389ab80c23e..fa730a871d25 100644
---- a/drivers/spi/spi-topcliff-pch.c
-+++ b/drivers/spi/spi-topcliff-pch.c
-@@ -1008,6 +1008,9 @@ static void pch_spi_handle_dma(struct pch_spi_data *data, int *bpw)
+diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
+index a1888dc6a938..fd039cab768a 100644
+--- a/drivers/spi/spi-tegra114.c
++++ b/drivers/spi/spi-tegra114.c
+@@ -730,6 +730,8 @@ static int tegra_spi_start_transfer_one(struct spi_device *spi,
  
- 	/* RX */
- 	dma->sg_rx_p = kcalloc(num, sizeof(*dma->sg_rx_p), GFP_ATOMIC);
-+	if (!dma->sg_rx_p)
-+		return;
-+
- 	sg_init_table(dma->sg_rx_p, num); /* Initialize SG table */
- 	/* offset, length setting */
- 	sg = dma->sg_rx_p;
-@@ -1068,6 +1071,9 @@ static void pch_spi_handle_dma(struct pch_spi_data *data, int *bpw)
- 	}
+ 	if (tspi->is_packed)
+ 		command1 |= SPI_PACKED;
++	else
++		command1 &= ~SPI_PACKED;
  
- 	dma->sg_tx_p = kcalloc(num, sizeof(*dma->sg_tx_p), GFP_ATOMIC);
-+	if (!dma->sg_tx_p)
-+		return;
-+
- 	sg_init_table(dma->sg_tx_p, num); /* Initialize SG table */
- 	/* offset, length setting */
- 	sg = dma->sg_tx_p;
+ 	command1 &= ~(SPI_CS_SEL_MASK | SPI_TX_EN | SPI_RX_EN);
+ 	tspi->cur_direction = 0;
 -- 
 2.20.1
 
