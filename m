@@ -2,41 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6894F13ED46
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 19:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BAB13F545
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2020 19:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393780AbgAPRlX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jan 2020 12:41:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59000 "EHLO mail.kernel.org"
+        id S2389222AbgAPSzL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jan 2020 13:55:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40088 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393776AbgAPRlX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:41:23 -0500
+        id S1729370AbgAPRHo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:07:44 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A85AA246A1;
-        Thu, 16 Jan 2020 17:41:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F1374205F4;
+        Thu, 16 Jan 2020 17:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196482;
-        bh=fPlNpHQvfkloCcuCGF/dUff98NWTDSU1o9YkuNNxshY=;
+        s=default; t=1579194463;
+        bh=CkuyHy+LTnuMc8iztfegljcTXrOlV57qafrOQbbVHqw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qi52rk/1xV1cgwWrIPskE/FYQjKpEtFwUmC55y438bRaKM7QdaAjUqf9m8qmJ96+h
-         R+H5iaKYI1cErJyASqmTmK+oQFqh2Nvf9l93jgmwcyTxU08N6Zplz7fcYqJEZnvw2/
-         j8DJsW2rHtmBREopBtEzxCMqFDy2yxyHanOnz+sU=
+        b=x7hzQEg58aqyNnOl5EIlKVHTWlZDjJcfRJ3XnCmgcsA8E7Jl2YY/aGNjGkwATK5VR
+         A9f1FN57kz9/1H2huHIMyTSnOFNeGcOLoCZ5mzO9Ck4YW57piLX61gGlW01xUwZsbM
+         HqB8578wGrc9ROrKHLU0TNQDaD98vHaw9+yJJyak=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mans Rullgard <mans@mansr.com>,
-        Nicolas Ferre <nicolas.ferre@atmel.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.9 229/251] spi: atmel: fix handling of cs_change set on non-last xfer
-Date:   Thu, 16 Jan 2020 12:36:18 -0500
-Message-Id: <20200116173641.22137-189-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 370/671] spi: spi-fsl-spi: call spi_finalize_current_message() at the end
+Date:   Thu, 16 Jan 2020 12:00:08 -0500
+Message-Id: <20200116170509.12787-107-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
-References: <20200116173641.22137-1-sashal@kernel.org>
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,65 +43,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Mans Rullgard <mans@mansr.com>
+From: Christophe Leroy <christophe.leroy@c-s.fr>
 
-[ Upstream commit fed8d8c7a6dc2a76d7764842853d81c770b0788e ]
+[ Upstream commit 44a042182cb1e9f7916e015c836967bf638b33c4 ]
 
-The driver does the wrong thing when cs_change is set on a non-last
-xfer in a message.  When cs_change is set, the driver deactivates the
-CS and leaves it off until a later xfer again has cs_change set whereas
-it should be briefly toggling CS off and on again.
+spi_finalize_current_message() shall be called once all
+actions are finished, otherwise the last actions might
+step over a newly started transfer.
 
-This patch brings the behaviour of the driver back in line with the
-documentation and common sense.  The delay of 10 us is the same as is
-used by the default spi_transfer_one_message() function in spi.c.
-[gregory: rebased on for-5.5 from spi tree]
-Fixes: 8090d6d1a415 ("spi: atmel: Refactor spi-atmel to use SPI framework queue")
-Signed-off-by: Mans Rullgard <mans@mansr.com>
-Acked-by: Nicolas Ferre <nicolas.ferre@atmel.com>
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Link: https://lore.kernel.org/r/20191018153504.4249-1-gregory.clement@bootlin.com
+Fixes: c592becbe704 ("spi: fsl-(e)spi: migrate to generic master queueing")
+Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-atmel.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/spi/spi-fsl-spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
-index 691c04b3e5b6..938840af9c50 100644
---- a/drivers/spi/spi-atmel.c
-+++ b/drivers/spi/spi-atmel.c
-@@ -315,7 +315,6 @@ struct atmel_spi {
- 	struct atmel_spi_dma	dma;
- 
- 	bool			keep_cs;
--	bool			cs_active;
- 
- 	u32			fifo_size;
- };
-@@ -1404,11 +1403,9 @@ static int atmel_spi_one_transfer(struct spi_master *master,
- 				 &msg->transfers)) {
- 			as->keep_cs = true;
- 		} else {
--			as->cs_active = !as->cs_active;
--			if (as->cs_active)
--				cs_activate(as, msg->spi);
--			else
--				cs_deactivate(as, msg->spi);
-+			cs_deactivate(as, msg->spi);
-+			udelay(10);
-+			cs_activate(as, msg->spi);
- 		}
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 8b79e36fab21..cd784552de7f 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -407,7 +407,6 @@ static int fsl_spi_do_one_msg(struct spi_master *master,
  	}
  
-@@ -1431,7 +1428,6 @@ static int atmel_spi_transfer_one_message(struct spi_master *master,
- 	atmel_spi_lock(as);
- 	cs_activate(as, spi);
+ 	m->status = status;
+-	spi_finalize_current_message(master);
  
--	as->cs_active = true;
- 	as->keep_cs = false;
+ 	if (status || !cs_change) {
+ 		ndelay(nsecs);
+@@ -415,6 +414,7 @@ static int fsl_spi_do_one_msg(struct spi_master *master,
+ 	}
  
- 	msg->status = 0;
+ 	fsl_spi_setup_transfer(spi, NULL);
++	spi_finalize_current_message(master);
+ 	return 0;
+ }
+ 
 -- 
 2.20.1
 
