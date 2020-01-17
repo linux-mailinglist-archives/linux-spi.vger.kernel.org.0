@@ -2,15 +2,15 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED0C140955
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2020 12:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F05140958
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2020 12:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbgAQL6g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jan 2020 06:58:36 -0500
+        id S1726991AbgAQL6k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jan 2020 06:58:40 -0500
 Received: from esa6.microchip.iphmx.com ([216.71.154.253]:28377 "EHLO
         esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726785AbgAQL6g (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jan 2020 06:58:36 -0500
+        with ESMTP id S1726785AbgAQL6j (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jan 2020 06:58:39 -0500
 Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
   Claudiu.Beznea@microchip.com designates 198.175.253.82 as
   permitted sender) identity=mailfrom;
@@ -30,22 +30,22 @@ Received-SPF: None (esa6.microchip.iphmx.com: no sender
   x-sender="postmaster@email.microchip.com";
   x-conformance=spf_only
 Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: FgvdYU/Gcd1OKOqQOfFME9o+87htsyBdSmJirRmi7ZNkdbypGQULhOZNsmLahpU25dsmt70bkK
- ZccR+CmD1IVrua4ZyCdfWZ+giPIGEdMZNeLc2e5eoFd4lpwm2st7cdJfaDiYjIU1ZMi8yiMVGh
- Za4MnLokUPZMY1P6a1FhgWGRIhHchezjp6NiPWQ3nMhjPSYSEmds0WESgzpciFiwuRiToQfld4
- WEZia90k4ssTUf/f4Vgg3ICZXZYiMXha3bOA8Tl6QptvBmekUcILZuxWl9sSVurS7Y6OV5F2Ep
- 10Y=
+IronPort-SDR: FBf7ISwKvlL9ISo/nWJB+l+2tOfpaKc18cFcHPMKdQzXED5eA2EljKWYdg/k8C/umgLG8YQDRr
+ PeMbOeRAOLh59IYylkX9AKBhoyqagO9nEW4//L1TO6ug0uLUaqlttTyyA+8hVjVG6snXhYYcQ7
+ CswTmJv2v9dI7Z4KwGqhU+rEl6gEsbjEr/xLvzpHXp0HZQY0x1ieOtjI2bXpHYgbYaN3E7kPR8
+ wI0539AuGydVFiN3ps5Y+23ZusDhgbqQWs9GQVKg3QCC9aPFtP5M31/6weUWcYqBaU7UFZYAw0
+ tbU=
 X-IronPort-AV: E=Sophos;i="5.70,330,1574146800"; 
-   d="scan'208";a="61130320"
+   d="scan'208";a="61130327"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jan 2020 04:58:35 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jan 2020 04:58:39 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 17 Jan 2020 04:58:35 -0700
+ 15.1.1713.5; Fri, 17 Jan 2020 04:58:38 -0700
 Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.85.251) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Fri, 17 Jan 2020 04:58:31 -0700
+ 15.1.1713.5 via Frontend Transport; Fri, 17 Jan 2020 04:58:35 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
         <lee.jones@linaro.org>, <robh+dt@kernel.org>,
@@ -55,10 +55,12 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v5 0/2] add device tree for SAM9X60 SoC and SAM9X60-EK board
-Date:   Fri, 17 Jan 2020 13:58:27 +0200
-Message-ID: <1579262309-6542-1-git-send-email-claudiu.beznea@microchip.com>
+Subject: [PATCH v5 1/2] dt-bindings: atmel-usart: remove wildcard
+Date:   Fri, 17 Jan 2020 13:58:28 +0200
+Message-ID: <1579262309-6542-2-git-send-email-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1579262309-6542-1-git-send-email-claudiu.beznea@microchip.com>
+References: <1579262309-6542-1-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: linux-spi-owner@vger.kernel.org
@@ -66,63 +68,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+Remove chip whildcard and introduce the list of compatibles instead.
 
-This series contains only DT binding documentation for
-microchip,sam9x60-usart and add microchip,sam9x60-dbgu. I kept its
-title and versioning for reference. Only these 2 patches in this
-version left. The other were applied by Alexandre.
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ Documentation/devicetree/bindings/mfd/atmel-usart.txt | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Thank you,
-Claudiu Beznea
-
-Changes in v5:
-- remove patches:
-	- dt-bindings: atmel,at91rm9200-rtc: add microchip,sam9x60-rtc
-	- ARM: at91/defconfig: enable MMC_SDHCI_OF_AT91 and MICROCHIP_PIT64B
-	- ARM: dts: at91: sam9x60: add device tree for soc and board
-  as they were applied.
-- collected Acked-for-mfd-by
-
-Changes in v4:
-- remove patches:
-	- dt-bindings: atmel-tcb: remove wildcard
-	- dt-bindings: atmel-tcb: add microchip,sam9x60-tcb
-  since they were applied
-- address review comments
-- fix compatible list for dbug in sam9x60.dtsi
-
-Changes in v3:
-- remove applied patches from series
-- split patch "dt-bindings: atmel-tcb: add microchip,sam9x60-tcb" in two patches:
-	- dt-bindings: atmel-tcb: add microchip,sam9x60-tcb
-	- dt-bindings: atmel-tcb: remove wildcard
-- split patch "dt-bindings: atmel-usart: remove wildcard" in two patches:
-	- dt-bindings: atmel-usart: add microchip,sam9x60-{usart, dbgu}
-	- dt-bindings: atmel-usart: remove wildcard
-  and adapt them as per review comments
-- collect acked-by tags
-
-Changes in v2:
-- replace patch "dt-bindings: at_xdmac: add entry for microchip compatibles"
-  by patches:
-	- dt-bindings: at_xdmac: add microchip,sam9x60-dma
-	- dt-bindings: at_xdmac: remove wildcard.
-- replace patch "dt-bindings: atmel-usart: add microchip,<chip>-usart"
-  by patches:
-	- dt-bindings: atmel-usart: add microchip,sam9x60-{usart, dbgu}
-	- dt-bindings: atmel-usart: remove wildcard
-- remove patch "dt-bindings: spi_atmel: add microchip,sam9x60-spi"
-  as it was accepted
-- collect reviewed-by tags
-
-Claudiu Beznea (2):
-  dt-bindings: atmel-usart: remove wildcard
-  dt-bindings: atmel-usart: add microchip,sam9x60-{usart, dbgu}
-
- Documentation/devicetree/bindings/mfd/atmel-usart.txt | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/mfd/atmel-usart.txt b/Documentation/devicetree/bindings/mfd/atmel-usart.txt
+index 699fd3c9ace8..614a14b5d205 100644
+--- a/Documentation/devicetree/bindings/mfd/atmel-usart.txt
++++ b/Documentation/devicetree/bindings/mfd/atmel-usart.txt
+@@ -1,10 +1,11 @@
+ * Atmel Universal Synchronous Asynchronous Receiver/Transmitter (USART)
+ 
+ Required properties for USART:
+-- compatible: Should be "atmel,<chip>-usart" or "atmel,<chip>-dbgu"
+-  The compatible <chip> indicated will be the first SoC to support an
+-  additional mode or an USART new feature.
+-  For the dbgu UART, use "atmel,<chip>-dbgu", "atmel,<chip>-usart"
++- compatible: Should be one of the following:
++	- "atmel,at91rm9200-usart"
++	- "atmel,at91sam9260-usart"
++	- "atmel,at91rm9200-dbgu", "atmel,at91rm9200-usart"
++	- "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart"
+ - reg: Should contain registers location and length
+ - interrupts: Should contain interrupt
+ - clock-names: tuple listing input clock names.
 -- 
 2.7.4
 
