@@ -2,86 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 571B3141A61
-	for <lists+linux-spi@lfdr.de>; Sun, 19 Jan 2020 00:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F504141F62
+	for <lists+linux-spi@lfdr.de>; Sun, 19 Jan 2020 19:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727561AbgARXJC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 18 Jan 2020 18:09:02 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:47033 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbgARXI7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 18 Jan 2020 18:08:59 -0500
-Received: by mail-wr1-f65.google.com with SMTP id z7so25940278wrl.13;
-        Sat, 18 Jan 2020 15:08:58 -0800 (PST)
+        id S1727372AbgASSoW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 19 Jan 2020 13:44:22 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:38106 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727243AbgASSoU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Jan 2020 13:44:20 -0500
+Received: by mail-pf1-f193.google.com with SMTP id x185so14638855pfc.5
+        for <linux-spi@vger.kernel.org>; Sun, 19 Jan 2020 10:44:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=zieK1rZ40R+8dR9w9wxIfPfmZcLHznAHvHJSGV+7afI=;
-        b=WcOPjCFxbQWN8I82H5+ql2IT5LtNNZEE54Ef1UQEznrAlFFQXvjOAAp7l95UefDFNS
-         sM8rfr3puhtQih9QwjB8lgLbpQW+1pl84qKR1dtOyHoj80fgXj14bSdwyBPtD4nCBgAu
-         r4JKfQzwqy/2UdJotQ4fW8GH+X3hrxLYIAmUk8XmbYO67tu4LW/XAwM3qUfWN6L4jWVi
-         uLNlfl1Bqm7jOCu8h76EFoIQkUw8VSsfYlFjJ8qj0gZ+6vmWVgbnVEB+ZG5tk2ovR5AQ
-         VWv4+iOzUpx7qNTcWQhFq02mgr0DZvKT89oxZ7tRKJ8XbA8m5m/BtpgAU6aHzrPrFkiy
-         Lmgw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
+         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
+         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
+         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
+         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
+         Gp1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=zieK1rZ40R+8dR9w9wxIfPfmZcLHznAHvHJSGV+7afI=;
-        b=k9d05YY1R+Oldzoj5eAqKOugxY398vK0rMbavKOAOFs8lpfQQNpbIPNmFcQFDzSJ7V
-         rQ+yQxoX2BEqmbnmDnTSJYbmB/sNeq27Wgbq3h6A6M/iFSafVXGdC0eneZVgHhudhUkh
-         MYFKhsmhI/WPIaqNBS8Pw6i1bS8bldAz2i+Gd67G2r49+CU+EvYHYR1B6AjQSRw/7R+z
-         41ziMIvxpqQ/Ziwo3EeylGUszVYDknaNNoLzdt7AlqVTmcth0tRU5lyDA1JHoYCJ4EGS
-         f4iLkqn0qnDCiBlVqi2eLxuCq4Nsvy13qCEK9LE4o05bm/73DH/jeoO6iG9AxaKTpMeG
-         y2og==
-X-Gm-Message-State: APjAAAWoTNxOuD18BenqFzpJCmzu1R9A6NoyqaFpHA6L639QcjTb8sfV
-        +IJtCfpnQP/Ord4mzYba5mM=
-X-Google-Smtp-Source: APXvYqwUVkfqKTEe+IdcTJGpN/Oh1StsZugRXWPB63ViZ0Prt/rRHknvczy59Jrcs1kniRrGyk/cBw==
-X-Received: by 2002:a5d:46c7:: with SMTP id g7mr10351910wrs.11.1579388937355;
-        Sat, 18 Jan 2020 15:08:57 -0800 (PST)
-Received: from debian.home (ip51ccf9cd.speed.planet.nl. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id x16sm5746408wmk.35.2020.01.18.15.08.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 18 Jan 2020 15:08:56 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     broonie@kernel.org
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, heiko@sntech.de,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 3/3] dt-bindings: spi: spi-rockchip: add description for rk3328
-Date:   Sun, 19 Jan 2020 00:08:48 +0100
-Message-Id: <20200118230848.15326-3-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200118230848.15326-1-jbx6244@gmail.com>
-References: <20200118230848.15326-1-jbx6244@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=MqVCUheyPcMCUKl39M40Y1+DMFb8bt+TwP5hkOFcNYb3xjxSsrWI9PHYg35WhXcT23
+         7e2YB17Or9oNoi49TOXJLpcRX6ic6821Cxbm2tAhtGn1KNtIA01caHUX12tlQk86PMvB
+         xYDQYuzt4Nt6n8sDmSGc0OiERWEp7sen3zRkvQMVvQ3V78GX5wKHbsJcG347Jkr947h9
+         9Xti2wsRfvo7kR1Drae+rFX3Cmdk9Z2JG8CzGuiJ0ouj372GvyIR2SNeP+00TwvaApUr
+         I+69nI11AATq9y/TSI3BUpnzcuPcZ7yTmnO/5NVnhr7RLAQ6GJX8q/uzqxZyLdnDg8Cg
+         LZbw==
+X-Gm-Message-State: APjAAAXSOKwrqX070JMLmTl3G+Wvshkh2oNeE8qbgg5xqTzdvIxt8Xpu
+        dtSOpNMuRaqLLUzQu6vHoXpoznNpJc+A4CmnH3TSErngam5kdw==
+X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
+X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
+ Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
+ -0800 (PST)
+Reply-To: favordens@email.com
+From:   Favor Desmond <contecindy5@gmail.com>
+Date:   Sun, 19 Jan 2020 18:44:18 +0000
+Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The description below is already in use for rk3328.dtsi,
-but was somehow never added to a document, so add
-"rockchip,rk3328-spi", "rockchip,rk3066-spi"
-for spi nodes on a rk3328 platform to spi-rockchip.yaml.
-
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-index 24d9567a6..27b2d1df9 100644
---- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-@@ -30,6 +30,7 @@ properties:
-             - rockchip,rk3188-spi  #for rk3188 SoCs.
-             - rockchip,rk3288-spi  #for rk3288 SoCs.
-             - rockchip,rk3308-spi  #for rk3308 SoCs.
-+            - rockchip,rk3328-spi  #for rk3328 SoCs.
-             - rockchip,rk3368-spi  #for rk3368 SoCs.
-             - rockchip,rk3399-spi  #for rk3399 SoCs.
-           - const: rockchip,rk3066-spi
--- 
-2.11.0
-
+Hello Dear
+Greetings to you,I am Favor Desmond from Ivory coast currently living
+in  Togo Republic,I would like to know you more, so that i can tell
+you little amount myself and my photo, email address is
+favordens@email.com
+Thanks
+Favor
