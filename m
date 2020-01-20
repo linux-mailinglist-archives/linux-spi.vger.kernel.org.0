@@ -2,62 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F504141F62
-	for <lists+linux-spi@lfdr.de>; Sun, 19 Jan 2020 19:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4D91425DC
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Jan 2020 09:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727372AbgASSoW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 19 Jan 2020 13:44:22 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38106 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727243AbgASSoU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Jan 2020 13:44:20 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x185so14638855pfc.5
-        for <linux-spi@vger.kernel.org>; Sun, 19 Jan 2020 10:44:20 -0800 (PST)
+        id S1726798AbgATIiz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Jan 2020 03:38:55 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:37947 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbgATIiz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Jan 2020 03:38:55 -0500
+Received: by mail-wr1-f68.google.com with SMTP id y17so28552876wrh.5
+        for <linux-spi@vger.kernel.org>; Mon, 20 Jan 2020 00:38:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
-         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
-         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
-         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
-         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
-         Gp1A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=rQFcL2jcWZJExt1pJvgNmGZQG6G5eQtrXtrdmESpdhU=;
+        b=rN0DdGff7euhnoh1U14uSXN28jZJpMISMBspCPJ/TDrYW7d/NN9zt+tsw71ueCKIi0
+         2ka2QOCL+c5VAo1YwQ5Swlyn00EvFHOsxpOBH1pw2vJ2V8eqe49plmXXI4gchWm84bD8
+         x/0hz2EZ+d4SqZrMrww3SR345LtI0qBaAwiEQmvxapGkqaxS8DDyASll4c9R6U7NMiCU
+         fkjkHToX/+l+h84FFOF3KUqJXiLcYTY1+CazuTEmixtHes4S9njkn4hkWD0jzjnIH/mi
+         7lWToqDLao0YD5J7RqFW2lAqFRhlcvQFFROq5MxDWZPlA3PI9ie/uzv46MZN5hAh41tT
+         PwdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=MqVCUheyPcMCUKl39M40Y1+DMFb8bt+TwP5hkOFcNYb3xjxSsrWI9PHYg35WhXcT23
-         7e2YB17Or9oNoi49TOXJLpcRX6ic6821Cxbm2tAhtGn1KNtIA01caHUX12tlQk86PMvB
-         xYDQYuzt4Nt6n8sDmSGc0OiERWEp7sen3zRkvQMVvQ3V78GX5wKHbsJcG347Jkr947h9
-         9Xti2wsRfvo7kR1Drae+rFX3Cmdk9Z2JG8CzGuiJ0ouj372GvyIR2SNeP+00TwvaApUr
-         I+69nI11AATq9y/TSI3BUpnzcuPcZ7yTmnO/5NVnhr7RLAQ6GJX8q/uzqxZyLdnDg8Cg
-         LZbw==
-X-Gm-Message-State: APjAAAXSOKwrqX070JMLmTl3G+Wvshkh2oNeE8qbgg5xqTzdvIxt8Xpu
-        dtSOpNMuRaqLLUzQu6vHoXpoznNpJc+A4CmnH3TSErngam5kdw==
-X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
-X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
- Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=rQFcL2jcWZJExt1pJvgNmGZQG6G5eQtrXtrdmESpdhU=;
+        b=QNh6xDqGVTELyZE8kgf52fVlWhCt+deO4rc1q7YRUBpZRCUr0CqNHCnQHpIG+ZEXUz
+         7bDgzLGKDze8xg7j83BNbpCXZahJHHTa72ptkKZve+o7rl3saDqVcH5uQYG8uj6oAn6a
+         eS4gLiWcIX/lrbGgsupwcM6zGVvjrzLFuK1gUcqRJJKfpDWP/z1aOQ41WjqNQQ3tbqWx
+         KHjj+aSET+A/dOXdxucVgRLu2k0whMXseVADJ+qthRKVZtKlcnkacK+DqpNyoCDSp1wv
+         PmXeExbJ+OEBW0Wt+iZa+Ph+o2A0zEs5UToHHyFvkXIiMwFcj7h7ZCMOd8KH8zjT6+LT
+         Btpw==
+X-Gm-Message-State: APjAAAXvs6F4l+egJRrzhiUEfoxrXtk8ad90GsQddg01dmcODtH0Nn7L
+        6E+QuQsmmLmi4SatXkCFdtliqA==
+X-Google-Smtp-Source: APXvYqzeVB7HzioVZsHsLXa6sKg0B7Lo1W1Bz8s9/s9W1MM97QSS0Z9RkuMkfW2z8/7a0vF9xowEaw==
+X-Received: by 2002:a5d:6144:: with SMTP id y4mr16714639wrt.15.1579509533039;
+        Mon, 20 Jan 2020 00:38:53 -0800 (PST)
+Received: from dell ([2.27.35.227])
+        by smtp.gmail.com with ESMTPSA id x11sm47604751wre.68.2020.01.20.00.38.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jan 2020 00:38:52 -0800 (PST)
+Date:   Mon, 20 Jan 2020 08:39:08 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        robh+dt@kernel.org, mark.rutland@arm.com,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: atmel-usart: remove wildcard
+Message-ID: <20200120083908.GT15507@dell>
+References: <1579262309-6542-1-git-send-email-claudiu.beznea@microchip.com>
+ <1579262309-6542-2-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
- -0800 (PST)
-Reply-To: favordens@email.com
-From:   Favor Desmond <contecindy5@gmail.com>
-Date:   Sun, 19 Jan 2020 18:44:18 +0000
-Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1579262309-6542-2-git-send-email-claudiu.beznea@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Dear
-Greetings to you,I am Favor Desmond from Ivory coast currently living
-in  Togo Republic,I would like to know you more, so that i can tell
-you little amount myself and my photo, email address is
-favordens@email.com
-Thanks
-Favor
+On Fri, 17 Jan 2020, Claudiu Beznea wrote:
+
+> Remove chip whildcard and introduce the list of compatibles instead.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/atmel-usart.txt | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+
+Applied, thanks.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
