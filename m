@@ -2,40 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD98143284
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Jan 2020 20:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7324314395A
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2020 10:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgATTkL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Jan 2020 14:40:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54722 "EHLO mail.kernel.org"
+        id S1728712AbgAUJUf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jan 2020 04:20:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726642AbgATTkL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 20 Jan 2020 14:40:11 -0500
-Content-Type: text/plain; charset="utf-8"
+        id S1725789AbgAUJUf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Jan 2020 04:20:35 -0500
+Received: from localhost (unknown [171.76.119.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BBB3F20882;
+        Tue, 21 Jan 2020 09:20:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579549211;
-        bh=JFfQeUemZKRJAY29dnP+9IoFFUIVq4HTQjxex3i5BDk=;
-        h=Subject:From:Date:To:From;
-        b=sFBXvYMJe0A+D8k5Rkxtx197rLf4PlvLHvybv1ArWHjdITyPWB01cQJplwVUVFl3i
-         conGZ/fr7u8U7f6o+i9Qoo7gdM6/EUd/nvh6KESMYiYxDK6SqBdlRqCFnDhVqP13Ar
-         QtbmTZ9P++4/dmJ++xrLYwoF1tva+ua44kH4vWFU=
+        s=default; t=1579598434;
+        bh=qKSs/AtoxyANBpnuD1dUfh98+h8YxgyT8YLAkX1kDFs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eakjcS4TLsnD2uLcQ03IDSCX17gGY77o2clXE3dmRPsaB3uOHoLJL6zRKBhR0JONB
+         WY5yYdde1Qd9DV+6BkIx5HaLpbeHfyDeKqo/08VM1N3qVVAtnXYNV7TuT/flb0g1hd
+         slm/8xW6AM665mcymWrVyW8GAp/H4+SrHtSxY50I=
+Date:   Tue, 21 Jan 2020 14:50:30 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        ulf.hansson@linaro.org, srinivas.kandagatla@linaro.org,
+        broonie@kernel.org, manivannan.sadhasivam@linaro.org,
+        andrew.smirnov@gmail.com, rjones@gateworks.com,
+        marcel.ziswiler@toradex.com, sebastien.szymanski@armadeus.com,
+        aisheng.dong@nxp.com, richard.hu@technexion.com, angus@akkea.ca,
+        cosmin.stoica@nxp.com, l.stach@pengutronix.de,
+        rabeeh@solid-run.com, leonard.crestez@nxp.com,
+        daniel.baluta@nxp.com, jun.li@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, Linux-imx@nxp.com
+Subject: Re: [PATCH V2 1/7] dt-bindings: fsl-imx-sdma: Add
+ i.MX8MM/i.MX8MN/i.MX8MP compatible string
+Message-ID: <20200121092030.GH2841@vkoul-mobl>
+References: <1578893602-14395-1-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <157954921109.12143.8223074753347052785.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 20 Jan 2020 19:40:11 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1578893602-14395-1-git-send-email-Anson.Huang@nxp.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v1] spi: spi-ti-qspi: Support large NOR SPI flash (2020-01-14T12:41:23)
-  Superseding: [v1] spi: spi-ti-qspi: Support large NOR SPI flash (2019-12-11T19:39:51):
-    [1/3] spi: spi-ti-qspi: Remove unused macro for fclk frequency
+On 13-01-20, 13:33, Anson Huang wrote:
+> Add imx8mm/imx8mn/imx8mp sdma support.
 
+Applied, thanks
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+~Vinod
