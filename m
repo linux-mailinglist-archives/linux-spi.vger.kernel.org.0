@@ -2,60 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7324314395A
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2020 10:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD3D143C3C
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2020 12:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728712AbgAUJUf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jan 2020 04:20:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37964 "EHLO mail.kernel.org"
+        id S1729437AbgAULrR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jan 2020 06:47:17 -0500
+Received: from mga17.intel.com ([192.55.52.151]:61041 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725789AbgAUJUf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Jan 2020 04:20:35 -0500
-Received: from localhost (unknown [171.76.119.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BBB3F20882;
-        Tue, 21 Jan 2020 09:20:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579598434;
-        bh=qKSs/AtoxyANBpnuD1dUfh98+h8YxgyT8YLAkX1kDFs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eakjcS4TLsnD2uLcQ03IDSCX17gGY77o2clXE3dmRPsaB3uOHoLJL6zRKBhR0JONB
-         WY5yYdde1Qd9DV+6BkIx5HaLpbeHfyDeKqo/08VM1N3qVVAtnXYNV7TuT/flb0g1hd
-         slm/8xW6AM665mcymWrVyW8GAp/H4+SrHtSxY50I=
-Date:   Tue, 21 Jan 2020 14:50:30 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        ulf.hansson@linaro.org, srinivas.kandagatla@linaro.org,
-        broonie@kernel.org, manivannan.sadhasivam@linaro.org,
-        andrew.smirnov@gmail.com, rjones@gateworks.com,
-        marcel.ziswiler@toradex.com, sebastien.szymanski@armadeus.com,
-        aisheng.dong@nxp.com, richard.hu@technexion.com, angus@akkea.ca,
-        cosmin.stoica@nxp.com, l.stach@pengutronix.de,
-        rabeeh@solid-run.com, leonard.crestez@nxp.com,
-        daniel.baluta@nxp.com, jun.li@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH V2 1/7] dt-bindings: fsl-imx-sdma: Add
- i.MX8MM/i.MX8MN/i.MX8MP compatible string
-Message-ID: <20200121092030.GH2841@vkoul-mobl>
-References: <1578893602-14395-1-git-send-email-Anson.Huang@nxp.com>
+        id S1729416AbgAULrR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Jan 2020 06:47:17 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jan 2020 03:47:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,345,1574150400"; 
+   d="scan'208";a="228796761"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jan 2020 03:47:16 -0800
+Received: from [10.226.38.27] (unknown [10.226.38.27])
+        by linux.intel.com (Postfix) with ESMTP id 6FBE95802A3;
+        Tue, 21 Jan 2020 03:47:14 -0800 (PST)
+Subject: Re: [PATCH v6 0/2] spi: cadence-quadpsi: Add support for the Cadence
+ QSPI controller
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>, broonie@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     robh+dt@kernel.org, dan.carpenter@oracle.com,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
+References: <20191230074102.50982-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <860aecbc-22d3-c9ce-3570-44115d6e81b2@ti.com>
+ <1aa6033a-c9e1-579b-0916-25037c07654d@linux.intel.com>
+Message-ID: <3118e6d5-84f3-cbcf-6a42-761b0d23cb72@linux.intel.com>
+Date:   Tue, 21 Jan 2020 19:47:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1578893602-14395-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1aa6033a-c9e1-579b-0916-25037c07654d@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 13-01-20, 13:33, Anson Huang wrote:
-> Add imx8mm/imx8mn/imx8mp sdma support.
+Hi,
 
-Applied, thanks
+On 15/1/2020 2:21 PM, Ramuthevar, Vadivel MuruganX wrote:
+> Hi,
+>
+> On 15/1/2020 2:13 PM, Vignesh Raghavendra wrote:
+>> Hi,
+>>
+>> On 12/30/2019 1:11 PM, Ramuthevar,Vadivel MuruganX wrote:
+>>> Add support for the Cadence QSPI controller. This controller is
+>>> present in the Intel Lightning Mountain(LGM) SoCs, Altera and TI SoCs.
+>>> This driver has been tested on the Intel LGM SoCs.
+>>>
+>>> This driver does not support generic SPI and also the implementation
+>>> only supports spi-mem interface to replace the existing driver in
+>>> mtd/spi-nor/cadence-quadspi.c, the existing driver only support SPI-NOR
+>>> flash memory.
+>>>
+>>
+>>
+>> I am finally able to get spi-mem based cadence-quaspi driver working on
+>> TI platforms with DMA and DAC mode. I have also incorporated changes to
+>> disable DAC and autopolling for your intel SoC:
+>
+> Thanks! a lot for the confirmation, with your changes it is working on 
+> TI platform.
+>
+>> https://github.com/r-vignesh/linux/commits/qspi
+>>
+>> (Top two patches are of interest)
+>>
+>> I have tested both DAC and INDAC mode with s25fl flash and everything
+>> seems to be fine. Could you re test the driver on your SoC? 
 
--- 
-~Vinod
+while re-testing QSPI_NOR/NAND both didn't work, after few changes from 
+patchV6 followed by your changes,
+
+now QSPI-NOR started working,  soon will be sending updated patch 
+version which includes your changes as well as my changes
+
+without affecting both the platforms(TI and Intel).
+
+BTW,  Have you tested QSPI-NAND on your platform ? with our patches.
+
+Thanks! for your review and support.
+
+Regards
+Vadivel
+>> Feel free to
+>> fold it into your series if everything works.
+> sure, I will test on Intel SoC with your changes .
+>
+> Regards
+> Vadivel
+>> Regards
+>> Vignesh
+>>
+>>
+>>
