@@ -2,108 +2,228 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD3D143C3C
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2020 12:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AC6144330
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2020 18:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729437AbgAULrR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jan 2020 06:47:17 -0500
-Received: from mga17.intel.com ([192.55.52.151]:61041 "EHLO mga17.intel.com"
+        id S1729108AbgAUR3R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jan 2020 12:29:17 -0500
+Received: from foss.arm.com ([217.140.110.172]:46556 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729416AbgAULrR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Jan 2020 06:47:17 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jan 2020 03:47:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,345,1574150400"; 
-   d="scan'208";a="228796761"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 21 Jan 2020 03:47:16 -0800
-Received: from [10.226.38.27] (unknown [10.226.38.27])
-        by linux.intel.com (Postfix) with ESMTP id 6FBE95802A3;
-        Tue, 21 Jan 2020 03:47:14 -0800 (PST)
-Subject: Re: [PATCH v6 0/2] spi: cadence-quadpsi: Add support for the Cadence
- QSPI controller
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>, broonie@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     robh+dt@kernel.org, dan.carpenter@oracle.com,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20191230074102.50982-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <860aecbc-22d3-c9ce-3570-44115d6e81b2@ti.com>
- <1aa6033a-c9e1-579b-0916-25037c07654d@linux.intel.com>
-Message-ID: <3118e6d5-84f3-cbcf-6a42-761b0d23cb72@linux.intel.com>
-Date:   Tue, 21 Jan 2020 19:47:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
-MIME-Version: 1.0
-In-Reply-To: <1aa6033a-c9e1-579b-0916-25037c07654d@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        id S1728186AbgAUR3R (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Jan 2020 12:29:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3A17328;
+        Tue, 21 Jan 2020 09:29:16 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 20E3B3F6C4;
+        Tue, 21 Jan 2020 09:29:15 -0800 (PST)
+Date:   Tue, 21 Jan 2020 17:29:14 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Applied "spi: pxa2xx: Avoid touching SSCR0_SSE on MMP2" to the spi tree
+In-Reply-To: <20200118094031.327373-1-lkundrak@v3.sk>
+Message-Id: <applied-20200118094031.327373-1-lkundrak@v3.sk>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+The patch
 
-On 15/1/2020 2:21 PM, Ramuthevar, Vadivel MuruganX wrote:
-> Hi,
->
-> On 15/1/2020 2:13 PM, Vignesh Raghavendra wrote:
->> Hi,
->>
->> On 12/30/2019 1:11 PM, Ramuthevar,Vadivel MuruganX wrote:
->>> Add support for the Cadence QSPI controller. This controller is
->>> present in the Intel Lightning Mountain(LGM) SoCs, Altera and TI SoCs.
->>> This driver has been tested on the Intel LGM SoCs.
->>>
->>> This driver does not support generic SPI and also the implementation
->>> only supports spi-mem interface to replace the existing driver in
->>> mtd/spi-nor/cadence-quadspi.c, the existing driver only support SPI-NOR
->>> flash memory.
->>>
->>
->>
->> I am finally able to get spi-mem based cadence-quaspi driver working on
->> TI platforms with DMA and DAC mode. I have also incorporated changes to
->> disable DAC and autopolling for your intel SoC:
->
-> Thanks! a lot for the confirmation, with your changes it is working on 
-> TI platform.
->
->> https://github.com/r-vignesh/linux/commits/qspi
->>
->> (Top two patches are of interest)
->>
->> I have tested both DAC and INDAC mode with s25fl flash and everything
->> seems to be fine. Could you re test the driver on your SoC? 
+   spi: pxa2xx: Avoid touching SSCR0_SSE on MMP2
 
-while re-testing QSPI_NOR/NAND both didn't work, after few changes from 
-patchV6 followed by your changes,
+has been applied to the spi tree at
 
-now QSPI-NOR started working,  soon will be sending updated patch 
-version which includes your changes as well as my changes
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.5
 
-without affecting both the platforms(TI and Intel).
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-BTW,  Have you tested QSPI-NAND on your platform ? with our patches.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Thanks! for your review and support.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Regards
-Vadivel
->> Feel free to
->> fold it into your series if everything works.
-> sure, I will test on Intel SoC with your changes .
->
-> Regards
-> Vadivel
->> Regards
->> Vignesh
->>
->>
->>
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 29d7e05c5f75fc2ebf3608743b6809aa0ff56800 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sat, 18 Jan 2020 10:40:31 +0100
+Subject: [PATCH] spi: pxa2xx: Avoid touching SSCR0_SSE on MMP2
+
+A read from a Winbond W25Q32FV SPI NOR memory chip on my MMP2 returns
+wrong data.
+
+It seems like SSE doesn't do the right thing on MMP2 at all. After
+enabling the SPI port back again, the FIFO reads return garbage. Things
+can be brought back to order by telling the PMU to reset the block.
+
+Here's a good transaction with said chip:
+
+  # busybox devmem 0xd4035000 32 0x00001987 # SSCR0
+  # echo 0 >/sys/class/gpio/gpio46/value    # (assert CS)
+  # busybox devmem 0xd4035010 32 0x0000009f # SSDR (read ID command)
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ff
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ef                                # Correct response
+  # busybox devmem 0xd4035010               # SSDR
+  0x00000040
+  # busybox devmem 0xd4035010               # SSDR
+  0x00000016
+  # busybox devmem 0xd4035010               # SSDR
+  0x00000000
+  # busybox devmem 0xd4035010               # SSDR
+  0x00000000
+  # busybox devmem 0xd4035010               # SSDR
+  0x00000000
+  # echo 1 >/sys/class/gpio/gpio46/value # (deassert CS)
+  #
+
+Flipping off an on SSE, then running another transaction:
+
+  # busybox devmem 0xd4035000 32 0x00001907 # SSCR0, SSE off
+  # busybox devmem 0xd4035000 32 0x00001987 # SSCR0, SSE on
+  # echo 0 >/sys/class/gpio/gpio46/value    # (assert CS)
+  # busybox devmem 0xd4035010 32 0x0000009f # SSDR (read ID command)
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010 32 0x00000000 # SSDR
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ff
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ff                                # Garbage!
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ff                                # Oh no
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ff
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ff
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ff
+  # busybox devmem 0xd4035010               # SSDR
+  0x000000ff
+  # echo 1 >/sys/class/gpio/gpio46/value # (deassert CS)
+  #
+
+Sometimes the response is not just ones, but something that looks like
+bits of a response from a previous transaction.
+
+I can't see a fix other than not touching the SSE altogether after the
+device is first brought up.
+
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Link: https://lore.kernel.org/r/20200118094031.327373-1-lkundrak@v3.sk
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-pxa2xx.c | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index 8114d3289fdc..0408782c7ed0 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -461,6 +461,16 @@ int pxa2xx_spi_flush(struct driver_data *drv_data)
+ 	return limit;
+ }
+ 
++static void pxa2xx_spi_off(struct driver_data *drv_data)
++{
++	/* On MMP, disabling SSE seems to corrupt the rx fifo */
++	if (drv_data->ssp_type == MMP2_SSP)
++		return;
++
++	pxa2xx_spi_write(drv_data, SSCR0,
++			 pxa2xx_spi_read(drv_data, SSCR0) & ~SSCR0_SSE);
++}
++
+ static int null_writer(struct driver_data *drv_data)
+ {
+ 	u8 n_bytes = drv_data->n_bytes;
+@@ -587,8 +597,7 @@ static void int_error_stop(struct driver_data *drv_data, const char* msg)
+ 	if (!pxa25x_ssp_comp(drv_data))
+ 		pxa2xx_spi_write(drv_data, SSTO, 0);
+ 	pxa2xx_spi_flush(drv_data);
+-	pxa2xx_spi_write(drv_data, SSCR0,
+-			 pxa2xx_spi_read(drv_data, SSCR0) & ~SSCR0_SSE);
++	pxa2xx_spi_off(drv_data);
+ 
+ 	dev_err(&drv_data->pdev->dev, "%s\n", msg);
+ 
+@@ -686,8 +695,7 @@ static irqreturn_t interrupt_transfer(struct driver_data *drv_data)
+ 
+ static void handle_bad_msg(struct driver_data *drv_data)
+ {
+-	pxa2xx_spi_write(drv_data, SSCR0,
+-			 pxa2xx_spi_read(drv_data, SSCR0) & ~SSCR0_SSE);
++	pxa2xx_spi_off(drv_data);
+ 	pxa2xx_spi_write(drv_data, SSCR1,
+ 			 pxa2xx_spi_read(drv_data, SSCR1) & ~drv_data->int_cr1);
+ 	if (!pxa25x_ssp_comp(drv_data))
+@@ -1062,7 +1070,8 @@ static int pxa2xx_spi_transfer_one(struct spi_controller *controller,
+ 	    || (pxa2xx_spi_read(drv_data, SSCR1) & change_mask)
+ 	    != (cr1 & change_mask)) {
+ 		/* stop the SSP, and update the other bits */
+-		pxa2xx_spi_write(drv_data, SSCR0, cr0 & ~SSCR0_SSE);
++		if (drv_data->ssp_type != MMP2_SSP)
++			pxa2xx_spi_write(drv_data, SSCR0, cr0 & ~SSCR0_SSE);
+ 		if (!pxa25x_ssp_comp(drv_data))
+ 			pxa2xx_spi_write(drv_data, SSTO, chip->timeout);
+ 		/* first set CR1 without interrupt and service enables */
+@@ -1118,8 +1127,7 @@ static int pxa2xx_spi_slave_abort(struct spi_controller *controller)
+ 	if (!pxa25x_ssp_comp(drv_data))
+ 		pxa2xx_spi_write(drv_data, SSTO, 0);
+ 	pxa2xx_spi_flush(drv_data);
+-	pxa2xx_spi_write(drv_data, SSCR0,
+-			 pxa2xx_spi_read(drv_data, SSCR0) & ~SSCR0_SSE);
++	pxa2xx_spi_off(drv_data);
+ 
+ 	dev_dbg(&drv_data->pdev->dev, "transfer aborted\n");
+ 
+@@ -1135,8 +1143,7 @@ static void pxa2xx_spi_handle_err(struct spi_controller *controller,
+ 	struct driver_data *drv_data = spi_controller_get_devdata(controller);
+ 
+ 	/* Disable the SSP */
+-	pxa2xx_spi_write(drv_data, SSCR0,
+-			 pxa2xx_spi_read(drv_data, SSCR0) & ~SSCR0_SSE);
++	pxa2xx_spi_off(drv_data);
+ 	/* Clear and disable interrupts and service requests */
+ 	write_SSSR_CS(drv_data, drv_data->clear_sr);
+ 	pxa2xx_spi_write(drv_data, SSCR1,
+@@ -1161,8 +1168,7 @@ static int pxa2xx_spi_unprepare_transfer(struct spi_controller *controller)
+ 	struct driver_data *drv_data = spi_controller_get_devdata(controller);
+ 
+ 	/* Disable the SSP now */
+-	pxa2xx_spi_write(drv_data, SSCR0,
+-			 pxa2xx_spi_read(drv_data, SSCR0) & ~SSCR0_SSE);
++	pxa2xx_spi_off(drv_data);
+ 
+ 	return 0;
+ }
+-- 
+2.20.1
+
