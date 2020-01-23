@@ -2,45 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD00146046
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Jan 2020 02:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AB2146047
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Jan 2020 02:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbgAWBY1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S1726871AbgAWBY1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Wed, 22 Jan 2020 20:24:27 -0500
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:36155 "EHLO
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:36150 "EHLO
         gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726204AbgAWBY1 (ORCPT
+        with ESMTP id S1726026AbgAWBY1 (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Jan 2020 20:24:27 -0500
 Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 25550886BF;
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1B1E883640;
         Thu, 23 Jan 2020 14:24:25 +1300 (NZDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
         s=mail181024; t=1579742665;
-        bh=kmiDiaKiwZNr3ZUWD2bOHX6HuBV/rQF0LIqOia8udp0=;
+        bh=2gBER1PvepW7C/LmCCkcdmnlievV9RChs4q6y2glIWI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=aDDTHRR4URHuZS3fjfF7HTgM8A8ts02wm/nzU8sO2/1+9l2wzyZafWNTT3a68ONbl
-         ZHa4qo/B9UCiNLMSWvNiv0PrgN7vcugYrMPk7Lc8YF6w2sK8nSk4XmgzgDGOoYbMKV
-         r+0zGkJEPTPYJoNA62iOBwT/NM/lz8tObaebPoiEmZ4l3akgWLL+S9lVAH7FivX3Uu
-         tlgqRHeI/iR8ObyELObQKYXSYwmJ+AgDXsAfotgMPG3I+DxbO5cUTgl5qwQdYIo59i
-         KvRnFk9FQutyDZRzPt8FF+ToKSIUAEfrznyzFSBK7HPGImm1dFgj6wEHBpDB529yiz
-         sQ9pc3N4gm8Tw==
+        b=pjkIA38ZB5aUZtzAvBfkJfF/9RlOXtV7rSfh1FSvaZ2NPaebxek3u5f6pdb2MQOd/
+         nvyZmTsYLALDJG8bzbyXUkohjbOAVU5dqeESueCruDKwLNrIgMW/j/yo+uYdGe1vxo
+         ryrE9B3arko2Y25VoICqs8baRI5pSUJGuXgVH3gWViQjSetCkUysWW0ZnRCrkFg+L1
+         wLrxR2v7VfpP8n6hc7mruoydKdtENs4bkEezdXEsTbmzVqx5sgYBiR5HUfYuGqvBbm
+         Zg5U3Vj7LSjVNqbKkV3tjMbv5Kq7ImVz/I5+N25w6bufEn0gZY2P5JT5IEjB78ubWY
+         hIyljr4YE0vpg==
 Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5e28f58c0001>; Thu, 23 Jan 2020 14:23:28 +1300
+        id <B5e28f58d0000>; Thu, 23 Jan 2020 14:23:28 +1300
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id 42B3213EF28;
+        by smtp (Postfix) with ESMTP id 7FB5613EF90;
         Thu, 23 Jan 2020 14:23:23 +1300 (NZDT)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id A1F9E280071; Thu, 23 Jan 2020 14:23:24 +1300 (NZDT)
+        id DD717280071; Thu, 23 Jan 2020 14:23:24 +1300 (NZDT)
 From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
 To:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com
 Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2 1/2] dt-bindings: spi: Document binding for generic SPI multiplexer
-Date:   Thu, 23 Jan 2020 14:23:16 +1300
-Message-Id: <20200123012317.14808-2-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v2 2/2] spi: Add generic SPI multiplexer
+Date:   Thu, 23 Jan 2020 14:23:17 +1300
+Message-Id: <20200123012317.14808-3-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200123012317.14808-1-chris.packham@alliedtelesis.co.nz>
 References: <20200123012317.14808-1-chris.packham@alliedtelesis.co.nz>
@@ -52,129 +52,256 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add binding documentation for the spi-mux driver. This allows a generic
-multiplexer to be used to provide access to multiple SPI devices.
+Add a SPI device driver that sits in-band and provides a SPI controller
+which supports chip selects via a mux-control. This enables extra SPI
+devices to be connected with limited native chip selects.
 
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
+ drivers/spi/Kconfig   |  12 +++
+ drivers/spi/Makefile  |   1 +
+ drivers/spi/spi-mux.c | 189 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 202 insertions(+)
+ create mode 100644 drivers/spi/spi-mux.c
 
-Notes:
-    Changes in v2:
-    - update license
-    - make dt_binding_check clean
-
- .../devicetree/bindings/spi/spi-mux.yaml      | 84 +++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/spi/spi-mux.yaml
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-mux.yaml b/Documen=
-tation/devicetree/bindings/spi/spi-mux.yaml
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 870f7797b56b..90df945490d9 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -880,6 +880,18 @@ config SPI_ZYNQMP_GQSPI
+ #
+ # Add new SPI master controllers in alphabetical order above this line
+ #
++#
++
++comment "SPI Multiplexer support"
++
++config SPI_MUX
++	tristate "SPI multiplexer support"
++	select MULTIPLEXER
++	help
++	  This adds support for SPI multiplexers. Each SPI mux will be
++	  accessible as a SPI controller, the devices behind the mux will appea=
+r
++	  to be chip selects on this controller. It is still necessary to
++	  select one or more specific mux-controller drivers.
+=20
+ #
+ # There are lots of SPI device types, with sensors and memory
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index bb49c9e6d0a0..5f7593c84210 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_SPI_MASTER)		+=3D spi.o
+ obj-$(CONFIG_SPI_MEM)			+=3D spi-mem.o
+ obj-$(CONFIG_SPI_SPIDEV)		+=3D spidev.o
+ obj-$(CONFIG_SPI_LOOPBACK_TEST)		+=3D spi-loopback-test.o
++obj-$(CONFIG_SPI_MUX)			+=3D spi-mux.o
+=20
+ # SPI master controller drivers (bus)
+ obj-$(CONFIG_SPI_ALTERA)		+=3D spi-altera.o
+diff --git a/drivers/spi/spi-mux.c b/drivers/spi/spi-mux.c
 new file mode 100644
-index 000000000000..4bdb31e2257e
+index 000000000000..8481067be5ae
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/spi-mux.yaml
-@@ -0,0 +1,84 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/spi-mux.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/spi/spi-mux.c
+@@ -0,0 +1,189 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * General Purpose SPI multiplexer
++ */
 +
-+title: Generic SPI Multiplexer
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/err.h>
++#include <linux/slab.h>
++#include <linux/spi/spi.h>
++#include <linux/mux/consumer.h>
 +
-+description: |
-+  This binding describes a SPI bus multiplexer to route the SPI chip sel=
-ect
-+  signals. This can be used when you need more devices than the SPI cont=
-roller
-+  has chip selects available. An example setup is shown in ASCII art; th=
-e actual
-+  setting of the multiplexer to a channel needs to be done by a specific=
- SPI mux
-+  driver.
++#define SPI_MUX_NO_CS	((unsigned int)-1)
 +
-+        MOSI /--------------------------------+--------+--------+-------=
--\
-+        MISO |/------------------------------+|-------+|-------+|-------=
-\|
-+         SCL ||/----------------------------+||------+||------+||------\=
-||
-+             |||                            |||      |||      |||      |=
-||
-+      +------------+                        |||      |||      |||      |=
-||
-+      | SoC  |||   |                      +-+++-+  +-+++-+  +-+++-+  +-+=
-++-+
-+      |      |||   |                      | dev |  | dev |  | dev |  | d=
-ev |
-+      |   +--+++-+ | CS-X  +------+\      +--+--+  +--+--+  +--+--+  +--=
-+--+
-+      |   | SPI  +-|-------+ Mux  |\\   CS-0 |        |        |        =
-|
-+      |   +------+ |       +--+---+\\\-------/   CS-1 |        |        =
-|
-+      |            |          |    \\\----------------/   CS-2 |        =
-|
-+      |   +------+ |          |     \\-------------------------/   CS-3 =
-|
-+      |   | ?    +-|----------/      \----------------------------------=
-/
-+      |   +------+ |
-+      +------------+
++/**
++ * DOC: Driver description
++ *
++ * This driver supports a MUX on an SPI bus. This can be useful when you=
+ need
++ * more chip selects than the hardware peripherals support, or than are
++ * available in a particular board setup.
++ *
++ * The driver will create an additional SPI controller. Devices added un=
+der the
++ * mux will be handled as 'chip selects' on this controller.
++ */
 +
-+allOf:
-+  - $ref: "/schemas/spi/spi-controller.yaml#"
++/**
++ * struct spi_mux_priv - the basic spi_mux structure
++ * @spi:		pointer to the device struct attached to the parent
++ *			spi controller
++ * @current_cs:		The current chip select set in the mux
++ * @child_mesg_complete: The mux replaces the complete callback in the c=
+hild's
++ *			message to its own callback; this field is used by the
++ *			driver to store the child's callback during a transfer
++ * @child_mesg_context: Used to store the child's context to the callbac=
+k
++ * @child_mesg_dev:	Used to store the spi_device pointer to the child
++ * @mux:		mux_control structure used to provide chip selects for
++ *			downstream spi devices
++ */
++struct spi_mux_priv {
++	struct spi_device	*spi;
++	unsigned int		current_cs;
 +
-+maintainers:
-+  - Chris Packham <chris.packham@alliedtelesis.co.nz>
++	void			(*child_mesg_complete)(void *context);
++	void			*child_mesg_context;
++	struct spi_device	*child_mesg_dev;
++	struct mux_control	*mux;
++};
 +
-+properties:
-+  compatible:
-+    const: spi-mux
++/* should not get called when the parent controller is doing a transfer =
+*/
++static int spi_mux_select(struct spi_device *spi)
++{
++	struct spi_mux_priv *priv =3D spi_controller_get_devdata(spi->controlle=
+r);
++	int ret =3D 0;
 +
-+  mux-controls:
-+    maxItems: 1
++	if (priv->current_cs !=3D spi->chip_select) {
++		dev_dbg(&priv->spi->dev,
++			"setting up the mux for cs %d\n",
++			spi->chip_select);
 +
-+required:
-+   - compatible
-+   - reg
-+   - spi-max-frequency
-+   - mux-controls
++		/* copy the child device's settings except for the cs */
++		priv->spi->max_speed_hz =3D spi->max_speed_hz;
++		priv->spi->mode =3D spi->mode;
++		priv->spi->bits_per_word =3D spi->bits_per_word;
 +
-+examples:
-+   - |
-+     mux: mux-controller {
-+       compatible =3D "gpio-mux";
-+       #mux-control-cells =3D <0>;
++		ret =3D mux_control_select(priv->mux, spi->chip_select);
++		if (ret)
++			return ret;
 +
-+       mux-gpios =3D <&gpio0 3 GPIO_ACTIVE_HIGH>;
-+     };
++		priv->current_cs =3D spi->chip_select;
++	}
 +
-+     spi {
-+       spi-mux@0 {
-+         compatible =3D "spi-mux";
-+         #address-cells =3D <1>;
-+         #size-cells =3D <0>;
-+         reg =3D <0>;
-+         spi-max-frequency =3D <100000000>;
++	return ret;
++}
 +
-+         mux-controls =3D <&mux>
++static int spi_mux_setup(struct spi_device *spi)
++{
++	struct spi_mux_priv *priv =3D spi_controller_get_devdata(spi->controlle=
+r);
 +
-+         spi-flash@0 {
-+           compatible =3D "jedec,spi-nor";
-+           #address-cells =3D <1>;
-+           #size-cells =3D <1>;
-+           reg =3D <0>;
-+           spi-max-frequency =3D <40000000>;
-+         };
++	/*
++	 * can be called multiple times, won't do a valid setup now but we will
++	 * change the settings when we do a transfer (necessary because we
++	 * can't predict from which device it will be anyway)
++	 */
++	return spi_setup(priv->spi);
++}
 +
-+         spi-device@1 {
-+           compatible =3D "lineartechnology,ltc2488";
-+           reg =3D <1>;
-+           spi-max-frequency =3D <10000000>;
-+         };
-+       };
-+     };
++static void spi_mux_complete_cb(void *context)
++{
++	struct spi_mux_priv *priv =3D (struct spi_mux_priv *)context;
++	struct spi_controller *ctlr =3D spi_get_drvdata(priv->spi);
++	struct spi_message *m =3D ctlr->cur_msg;
++
++	m->complete =3D priv->child_mesg_complete;
++	m->context =3D priv->child_mesg_context;
++	m->spi =3D priv->child_mesg_dev;
++	spi_finalize_current_message(ctlr);
++	mux_control_deselect(priv->mux);
++}
++
++static int spi_mux_transfer_one_message(struct spi_controller *ctlr,
++						struct spi_message *m)
++{
++	struct spi_mux_priv *priv =3D spi_controller_get_devdata(ctlr);
++	struct spi_device *spi =3D m->spi;
++	int ret;
++
++	ret =3D spi_mux_select(spi);
++	if (ret)
++		return ret;
++
++	/*
++	 * Replace the complete callback, context and spi_device with our own
++	 * pointers. Save originals
++	 */
++	priv->child_mesg_complete =3D m->complete;
++	priv->child_mesg_context =3D m->context;
++	priv->child_mesg_dev =3D m->spi;
++
++	m->complete =3D spi_mux_complete_cb;
++	m->context =3D priv;
++	m->spi =3D priv->spi;
++
++	/* do the transfer */
++	ret =3D spi_async(priv->spi, m);
++	return ret;
++}
++
++static int spi_mux_probe(struct spi_device *spi)
++{
++	struct spi_controller *ctlr;
++	struct spi_mux_priv *priv;
++	int ret;
++
++	ctlr =3D spi_alloc_master(&spi->dev, sizeof(*priv));
++	if (!ctlr)
++		return -ENOMEM;
++
++	spi_set_drvdata(spi, ctlr);
++	priv =3D spi_controller_get_devdata(ctlr);
++	priv->spi =3D spi;
++
++	priv->mux =3D devm_mux_control_get(&spi->dev, NULL);
++	ret =3D PTR_ERR_OR_ZERO(priv->mux);
++	if (ret) {
++		if (ret !=3D -EPROBE_DEFER)
++			dev_err(&spi->dev, "failed to get control-mux\n");
++		goto err_put_ctlr;
++	}
++
++	priv->current_cs =3D SPI_MUX_NO_CS;
++
++	/* supported modes are the same as our parent's */
++	ctlr->mode_bits =3D spi->controller->mode_bits;
++	ctlr->flags =3D spi->controller->flags;
++	ctlr->transfer_one_message =3D spi_mux_transfer_one_message;
++	ctlr->setup =3D spi_mux_setup;
++	ctlr->num_chipselect =3D mux_control_states(priv->mux);
++	ctlr->bus_num =3D -1;
++	ctlr->dev.of_node =3D spi->dev.of_node;
++
++	ret =3D devm_spi_register_controller(&spi->dev, ctlr);
++	if (ret)
++		goto err_put_ctlr;
++
++	return ret;
++
++err_put_ctlr:
++	spi_controller_put(ctlr);
++
++	return ret;
++}
++
++static const struct of_device_id spi_mux_of_match[] =3D {
++	{ .compatible =3D "spi-mux" },
++	{ },
++};
++
++static struct spi_driver spi_mux_driver =3D {
++	.probe  =3D spi_mux_probe,
++	.driver =3D {
++		.name   =3D "spi-mux",
++		.of_match_table =3D spi_mux_of_match,
++	},
++};
++
++module_spi_driver(spi_mux_driver);
++
++MODULE_DESCRIPTION("SPI multiplexer");
++MODULE_LICENSE("GPL");
 --=20
 2.25.0
 
