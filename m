@@ -2,41 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F051460A9
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Jan 2020 03:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9390E1460C2
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Jan 2020 03:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725924AbgAWCQi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Jan 2020 21:16:38 -0500
-Received: from mga11.intel.com ([192.55.52.93]:56725 "EHLO mga11.intel.com"
+        id S1725933AbgAWCcx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Jan 2020 21:32:53 -0500
+Received: from mga02.intel.com ([134.134.136.20]:17071 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725911AbgAWCQh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 Jan 2020 21:16:37 -0500
+        id S1726231AbgAWCcx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Jan 2020 21:32:53 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 18:16:36 -0800
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 18:32:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,352,1574150400"; 
-   d="scan'208";a="400197161"
+   d="scan'208";a="285858775"
 Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jan 2020 18:16:35 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 22 Jan 2020 18:32:47 -0800
 Received: from [10.226.38.32] (unknown [10.226.38.32])
-        by linux.intel.com (Postfix) with ESMTP id 8C8FC58033E;
-        Wed, 22 Jan 2020 18:16:32 -0800 (PST)
+        by linux.intel.com (Postfix) with ESMTP id BAEAE58033E;
+        Wed, 22 Jan 2020 18:32:43 -0800 (PST)
 Subject: Re: [PATCH v7 2/2] spi: cadence-quadpsi: Add support for the Cadence
  QSPI controller
 To:     Simon Goldschmidt <simon.k.r.goldschmidt@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         Vignesh R <vigneshr@ti.com>, Rob Herring <robh+dt@kernel.org>,
         dan.carpenter@oracle.com, cheol.yong.kim@intel.com,
-        "qi-ming.wu@intel.com; ley.foon.tan@intel.com; grmoore"@opensource.altera.com
+        qi-ming.wu@intel.com, grmoore@opensource.altera.com,
+        lftan@intel.com
 References: <20200122091340.43986-1-vadivel.muruganx.ramuthevar@linux.intel.com>
  <20200122091340.43986-3-vadivel.muruganx.ramuthevar@linux.intel.com>
  <CAAh8qswkbD2bc2QBzt=pHd5OyT00sYqffoEYe4Aiij_vMWxZZw@mail.gmail.com>
 From:   "Ramuthevar, Vadivel MuruganX" 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <197d5054-f595-02ab-a987-7f47ebcf278f@linux.intel.com>
-Date:   Thu, 23 Jan 2020 10:16:31 +0800
+Message-ID: <d0d80059-00d5-f5d3-830f-84a6620af1eb@linux.intel.com>
+Date:   Thu, 23 Jan 2020 10:32:42 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.1
 MIME-Version: 1.0
@@ -87,7 +88,6 @@ Thanks! a lot for Query
 
 Regards
 Vadivel
->
 > Regards,
 > Simon
 >
