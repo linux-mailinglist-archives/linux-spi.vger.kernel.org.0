@@ -2,168 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F691469C8
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Jan 2020 14:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B17147689
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jan 2020 02:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729074AbgAWNvz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Jan 2020 08:51:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37964 "EHLO mail.kernel.org"
+        id S1730353AbgAXBUb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Jan 2020 20:20:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726792AbgAWNvw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 23 Jan 2020 08:51:52 -0500
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        id S1730396AbgAXBRX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 23 Jan 2020 20:17:23 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9B7902467E;
-        Thu, 23 Jan 2020 13:51:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2C7D72087E;
+        Fri, 24 Jan 2020 01:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579787511;
-        bh=vLvMBfKBDUNVaF/aoU4PfN2HEsbDc54gpbCoCV6eEbk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b1iJ2GrWbJ6sOxtCE6X6YZSNhYFzNIpM/kQYgA7f2/wGJ1koX74CO1m1w/MCm5No0
-         BPLG4NXoQP5wOgn4QhptHUFzhR6166fKfS6Kxce1LEQd9yrrm3KsQU88+1pGGo0Au7
-         LREyoiAW0bRXR/meubXNdV6fucp7AraKrvthmWK0=
-Received: by mail-qk1-f171.google.com with SMTP id d10so3470716qke.1;
-        Thu, 23 Jan 2020 05:51:51 -0800 (PST)
-X-Gm-Message-State: APjAAAWtw3Red/ht3cdA8QN6luNT0Uj5cczoElWDB42a0jS4cHNLWSdV
-        bS0ZbErdlCANEm2Grher6dMU8XN/gz5pdItuHQ==
-X-Google-Smtp-Source: APXvYqwfO87Q0/W6AzS8yzHZDgljp8mtFonCDEPSQx1uYWjdYoPARCRWT3YmVbhrRhH7b66Aa6HwT9mSNtLWLu4ZXEM=
-X-Received: by 2002:a05:620a:135b:: with SMTP id c27mr14856515qkl.119.1579787510715;
- Thu, 23 Jan 2020 05:51:50 -0800 (PST)
+        s=default; t=1579828642;
+        bh=z0Eloz/7uH30N/JaCMyrHQ6PHSsN/zgQzEJaOUFKGCk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jccYSLQ1LmqUy9YDf/7GAgZnou0SKt+kEvDD4Dy/t8PjhkdataAD3TuzWbA4Mksha
+         zNnhBZmmmCcmqbwvc1S09wIAQmN0P4T9u18yofnNB25PWCHgnojVavQusuLPO/WbYs
+         OC0DRiB4ipNTllwizMrJCZ0CJt8T59GLd2owa7y8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 12/33] spi: pxa2xx: Add support for Intel Comet Lake-H
+Date:   Thu, 23 Jan 2020 20:16:47 -0500
+Message-Id: <20200124011708.18232-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200124011708.18232-1-sashal@kernel.org>
+References: <20200124011708.18232-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20200123012317.14808-1-chris.packham@alliedtelesis.co.nz> <20200123012317.14808-2-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20200123012317.14808-2-chris.packham@alliedtelesis.co.nz>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 23 Jan 2020 07:51:37 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLvM34WSBE29beBgJj0jLA6P_UwQUbTuEQcYJgrkg3v1A@mail.gmail.com>
-Message-ID: <CAL_JsqLvM34WSBE29beBgJj0jLA6P_UwQUbTuEQcYJgrkg3v1A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: spi: Document binding for generic SPI multiplexer
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jan 22, 2020 at 7:24 PM Chris Packham
-<chris.packham@alliedtelesis.co.nz> wrote:
->
-> Add binding documentation for the spi-mux driver. This allows a generic
-> multiplexer to be used to provide access to multiple SPI devices.
->
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->
-> Notes:
->     Changes in v2:
->     - update license
->     - make dt_binding_check clean
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-Sure about that?
+[ Upstream commit f0cf17ed76cffa365001d263ced1f130ec794917 ]
 
->
->  .../devicetree/bindings/spi/spi-mux.yaml      | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/spi-mux.yaml
->
-> diff --git a/Documentation/devicetree/bindings/spi/spi-mux.yaml b/Documentation/devicetree/bindings/spi/spi-mux.yaml
-> new file mode 100644
-> index 000000000000..4bdb31e2257e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/spi-mux.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/spi-mux.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic SPI Multiplexer
-> +
-> +description: |
-> +  This binding describes a SPI bus multiplexer to route the SPI chip select
-> +  signals. This can be used when you need more devices than the SPI controller
-> +  has chip selects available. An example setup is shown in ASCII art; the actual
-> +  setting of the multiplexer to a channel needs to be done by a specific SPI mux
-> +  driver.
-> +
-> +        MOSI /--------------------------------+--------+--------+--------\
-> +        MISO |/------------------------------+|-------+|-------+|-------\|
-> +         SCL ||/----------------------------+||------+||------+||------\||
-> +             |||                            |||      |||      |||      |||
-> +      +------------+                        |||      |||      |||      |||
-> +      | SoC  |||   |                      +-+++-+  +-+++-+  +-+++-+  +-+++-+
-> +      |      |||   |                      | dev |  | dev |  | dev |  | dev |
-> +      |   +--+++-+ | CS-X  +------+\      +--+--+  +--+--+  +--+--+  +--+--+
-> +      |   | SPI  +-|-------+ Mux  |\\   CS-0 |        |        |        |
-> +      |   +------+ |       +--+---+\\\-------/   CS-1 |        |        |
-> +      |            |          |    \\\----------------/   CS-2 |        |
-> +      |   +------+ |          |     \\-------------------------/   CS-3 |
-> +      |   | ?    +-|----------/      \----------------------------------/
-> +      |   +------+ |
-> +      +------------+
-> +
-> +allOf:
-> +  - $ref: "/schemas/spi/spi-controller.yaml#"
-> +
-> +maintainers:
-> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
-> +
-> +properties:
-> +  compatible:
-> +    const: spi-mux
-> +
-> +  mux-controls:
-> +    maxItems: 1
-> +
-> +required:
-> +   - compatible
-> +   - reg
-> +   - spi-max-frequency
-> +   - mux-controls
-> +
-> +examples:
-> +   - |
-> +     mux: mux-controller {
-> +       compatible = "gpio-mux";
-> +       #mux-control-cells = <0>;
-> +
-> +       mux-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
-> +     };
-> +
-> +     spi {
-> +       spi-mux@0 {
-> +         compatible = "spi-mux";
-> +         #address-cells = <1>;
-> +         #size-cells = <0>;
-> +         reg = <0>;
-> +         spi-max-frequency = <100000000>;
-> +
-> +         mux-controls = <&mux>
+Add Intel Comet Lake-H LPSS SPI PCI IDs.
 
-Missing semicolon.
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Link: https://lore.kernel.org/r/20191029115802.6779-1-jarkko.nikula@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-pxa2xx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> +
-> +         spi-flash@0 {
-> +           compatible = "jedec,spi-nor";
-> +           #address-cells = <1>;
-> +           #size-cells = <1>;
-> +           reg = <0>;
-> +           spi-max-frequency = <40000000>;
-> +         };
-> +
-> +         spi-device@1 {
-> +           compatible = "lineartechnology,ltc2488";
-> +           reg = <1>;
-> +           spi-max-frequency = <10000000>;
-> +         };
-> +       };
-> +     };
-> --
-> 2.25.0
->
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index 9f92165fe09f8..2fd843b18297d 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -1461,6 +1461,10 @@ static const struct pci_device_id pxa2xx_spi_pci_compound_match[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x02aa), LPSS_CNL_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x02ab), LPSS_CNL_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0x02fb), LPSS_CNL_SSP },
++	/* CML-H */
++	{ PCI_VDEVICE(INTEL, 0x06aa), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0x06ab), LPSS_CNL_SSP },
++	{ PCI_VDEVICE(INTEL, 0x06fb), LPSS_CNL_SSP },
+ 	/* TGL-LP */
+ 	{ PCI_VDEVICE(INTEL, 0xa0aa), LPSS_CNL_SSP },
+ 	{ PCI_VDEVICE(INTEL, 0xa0ab), LPSS_CNL_SSP },
+-- 
+2.20.1
+
