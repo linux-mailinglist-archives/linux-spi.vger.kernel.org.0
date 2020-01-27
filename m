@@ -2,82 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BECA14A939
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2020 18:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECF914AA6B
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2020 20:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725989AbgA0Rrj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jan 2020 12:47:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:47592 "EHLO foss.arm.com"
+        id S1727964AbgA0TZF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jan 2020 14:25:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725893AbgA0Rrj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 27 Jan 2020 12:47:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBF0231B;
-        Mon, 27 Jan 2020 09:47:38 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6462C3F67D;
-        Mon, 27 Jan 2020 09:47:37 -0800 (PST)
-Date:   Mon, 27 Jan 2020 17:47:36 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-spi@vger.kernel.org, han.xu@nxp.com,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Ashish Kumar <ashish.kumar@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/5] spi: fspi: enable fspi on imx8qxp and imx8mm
-Message-ID: <20200127174736.GE3763@sirena.org.uk>
-References: <20200126140913.2139260-1-aford173@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="47eKBCiAZYFK5l32"
-Content-Disposition: inline
-In-Reply-To: <20200126140913.2139260-1-aford173@gmail.com>
-X-Cookie: Hangover, n.:
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726004AbgA0TZE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 27 Jan 2020 14:25:04 -0500
+Subject: Re: [GIT PULL] SPI updates for v5.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580153104;
+        bh=7DFYdclrfs8T8hz/KSdLIycCPrSQZi+dHkRQ/z312wU=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=YPSsqlhAuUV6ke1Ld2lU479c/wQJ7D6nC/3ZgPI3wY73ZNvORVtUEJiweYJumXR/f
+         xmLzFiMxC7C+VmUOo9S8kIkiWWkr8uU+k4zo71BxrD1dWEDK+haB5k0ZuyMyRNrvRe
+         9+5uTHIWFaBcLL94tSoVn7v+2v7oHcE0odMjkb+4=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200127170454.GC3763@sirena.org.uk>
+References: <20200127170454.GC3763@sirena.org.uk>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200127170454.GC3763@sirena.org.uk>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.6
+X-PR-Tracked-Commit-Id: 754a36a58c29718bf5e28b8789b17bffbb60e8a6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1e1ab4ba4747afad3e44a77dded1bab4cb77049e
+Message-Id: <158015310421.9462.12849884534711052397.pr-tracker-bot@kernel.org>
+Date:   Mon, 27 Jan 2020 19:25:04 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The pull request you sent on Mon, 27 Jan 2020 17:04:54 +0000:
 
---47eKBCiAZYFK5l32
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.6
 
-On Sun, Jan 26, 2020 at 08:09:08AM -0600, Adam Ford wrote:
-> From: Han Xu <han.xu@nxp.com>
->=20
-> Pull in this patch from NXP's upstream repo to
-> enable fspi on imx8qxp and imx8mm
->=20
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Signed-off-by: Han Xu <han.xu@nxp.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1e1ab4ba4747afad3e44a77dded1bab4cb77049e
 
-If you're sending a patch from someone else your signoff is supposed to
-go after theirs to show the chain of people who forwarded the patch.
+Thank you!
 
---47eKBCiAZYFK5l32
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl4vIjcACgkQJNaLcl1U
-h9A2iAf9E/LfcLBnilsSxkzczDqr1cpeIKWq/wymH+9z0UeY97TMIJB53KX8wO/U
-MqeJv4vs1mbnFr9nTYm5Fwgbw+HzCpW/bzFRGQYZZIMc0ANudhUdpLMwUirsnGOo
-YU/t5uPyi1TRJlh53nGXj9qFN5HhDBNbgT1wmGY6EzsqlSW0f4foJCR1qxoneyX7
-1arf2u6JnQIe10iFkoOQAoSPs4iuoZ6P3MtUZolBL86j31R9GnC0IlWaZJJQrcbO
-SCcgqGywY9mjN4aGc89RsKyMMPSIXoW1CCJ9NQC+Widz6IM6YIGI0OobQDKP+hSl
-/88QWVJtZljwIHJ1jCETbEpXoJns+g==
-=aRZ3
------END PGP SIGNATURE-----
-
---47eKBCiAZYFK5l32--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
