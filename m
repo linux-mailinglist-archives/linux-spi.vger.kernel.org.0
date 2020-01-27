@@ -2,137 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F17E1149E7B
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2020 05:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BF114A581
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2020 14:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgA0EVT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 26 Jan 2020 23:21:19 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:44488 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726545AbgA0EVS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 26 Jan 2020 23:21:18 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00R4L47e048559;
-        Sun, 26 Jan 2020 22:21:04 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1580098864;
-        bh=0wPXLjmKNP//bAx84i37NKL7d7tEzpelNwIa2cKvRW4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Sjkv/xVdIUqxLoa5NBZcWHdu8LPqsjUgpUyeUvevxcehSgzDIjtK5ITQk8NiDUIA4
-         ax5OC/VxdKobTQt0Fb+HpnHVR2/BwVZS2tQ1BDBm+e8NMF9oEA2JcH9IvD6Bp0eHNc
-         8pkk/WZlke/4NbRhiSm9TmlY2C3agjatsX7zs8Wk=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00R4L4ck001425;
-        Sun, 26 Jan 2020 22:21:04 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Sun, 26
- Jan 2020 22:21:04 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Sun, 26 Jan 2020 22:21:03 -0600
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00R4L0oJ074810;
-        Sun, 26 Jan 2020 22:21:01 -0600
-Subject: Re: [EXT] Re: [PATCH v6 0/2] spi: cadence-quadpsi: Add support for
- the Cadence QSPI controller
-To:     Kuldeep Singh <kuldeep.singh@nxp.com>,
-        "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "cheol.yong.kim@intel.com" <cheol.yong.kim@intel.com>,
-        "qi-ming.wu@intel.com" <qi-ming.wu@intel.com>
-References: <20191230074102.50982-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <860aecbc-22d3-c9ce-3570-44115d6e81b2@ti.com>
- <AM0PR0402MB355668F205AD711D2059CDB5E00F0@AM0PR0402MB3556.eurprd04.prod.outlook.com>
- <40ee10f1-0b30-155c-c165-1baa57a22109@ti.com>
- <AM6PR0402MB35573B2313C7FB81D747ABA6E00F0@AM6PR0402MB3557.eurprd04.prod.outlook.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <3afe0dde-02f7-8f75-4410-efbdb5f91499@ti.com>
-Date:   Mon, 27 Jan 2020 09:51:28 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1728583AbgA0N4Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jan 2020 08:56:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52510 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726303AbgA0N4Y (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 27 Jan 2020 08:56:24 -0500
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E581214DB;
+        Mon, 27 Jan 2020 13:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580133384;
+        bh=KFdI1sxRWI/2dtuDU11fPSoWr08vmKPYeU9ITQQ9ZIk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hmMAFYI47H7UB2oHw1uvUHdzYfFag5mnHsqxphBqSAxmL8StKnfVnAzwCDe4jPdp3
+         eqZQu1TiReU0t6WKHz5YGXumNxqwetImsY2BOuCRhbQmigjuJt81RO/vExa54m1UBV
+         vI60xLhAVYD+SkZmse5ohM2knL1HLrJnKq5Mi6vM=
+Received: by mail-qk1-f181.google.com with SMTP id s187so9624210qke.8;
+        Mon, 27 Jan 2020 05:56:24 -0800 (PST)
+X-Gm-Message-State: APjAAAXJYQKGdvoU9TnNbjpEA5ETMbElJnFqQloj6plmHCw4tUcNmRmn
+        K3yHW0hcxaFf0gtgVSkGTZw+3dqL0+lrOhoyWw==
+X-Google-Smtp-Source: APXvYqzIhu1/LOnm7n6ODE3yUi0ivUKcaHREkhij1unVeO3mXUrUJz8/Fh93k2W+bAJvuLutueErXRU/tajZTDUPFs8=
+X-Received: by 2002:ae9:f205:: with SMTP id m5mr16781000qkg.152.1580133383359;
+ Mon, 27 Jan 2020 05:56:23 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <AM6PR0402MB35573B2313C7FB81D747ABA6E00F0@AM6PR0402MB3557.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20200123012317.14808-1-chris.packham@alliedtelesis.co.nz>
+ <20200123012317.14808-2-chris.packham@alliedtelesis.co.nz>
+ <CAL_JsqLvM34WSBE29beBgJj0jLA6P_UwQUbTuEQcYJgrkg3v1A@mail.gmail.com> <651803fbdea412ecde7cd352b080d41d9f0a2a33.camel@alliedtelesis.co.nz>
+In-Reply-To: <651803fbdea412ecde7cd352b080d41d9f0a2a33.camel@alliedtelesis.co.nz>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 27 Jan 2020 07:56:11 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJHYwH28jkg4h0GivOz=GywxFkGpxLywt9HEqKy3pdVRQ@mail.gmail.com>
+Message-ID: <CAL_JsqJHYwH28jkg4h0GivOz=GywxFkGpxLywt9HEqKy3pdVRQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: Document binding for generic SPI multiplexer
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+On Sun, Jan 26, 2020 at 2:24 PM Chris Packham
+<Chris.Packham@alliedtelesis.co.nz> wrote:
+>
+> On Thu, 2020-01-23 at 07:51 -0600, Rob Herring wrote:
+> > On Wed, Jan 22, 2020 at 7:24 PM Chris Packham
+> > <chris.packham@alliedtelesis.co.nz> wrote:
+> > >
+> > > Add binding documentation for the spi-mux driver. This allows a generic
+> > > multiplexer to be used to provide access to multiple SPI devices.
+> > >
+> > > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > > ---
+> > >
+> > > Notes:
+> > >     Changes in v2:
+> > >     - update license
+> > >     - make dt_binding_check clean
+> >
+> > Sure about that?
+> >
+>
+> I was when I wrote that, but now I think I need to consult my spell
+> book.
+>
+> It appears the incantation I should be using is
+>
+>   make ARCH=arm defconfig
+>   make ARCH=arm dt_binding_check \
+>      DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/spi-mux.yaml
 
-On 23/01/20 5:07 pm, Kuldeep Singh wrote:
-> Hi Vignesh,
-> 
-[...]
->> I did test with s25fl512s with UBIFS and did not see any issue. 
-> 
-> Thanks Vignesh for this confirmation.
-> 
->> Could you try with latest linux master or linux next? There were couple of fixes in the last -rc
->> related to spansion flashes?
-> 
-> Yes, I have already applied those patches and still facing this issue.
-> I am testing with s25fs512s and only able to make it work on 1bit mode and that too by skipping SFDP.
+Note that you need to run this also without DT_SCHEMA_FILES set so the
+example is checked against all schema. With that, the 'spi' node is
+going to need #address-cells and #size-cells.
 
-Hmm, why would you need to skip SFDP parsing in 1 bit mode? What
-actually fails when SFDP is parsed? Read/write/erase? BTW, did s25fs512s
-flash ever with you controller before (i.e is this a regression)?
+>
+> I can see the simple failures (not sure how I missed them). But one
+> that remains is:
+>
+> Warning (spi_bus_bridge): /example-0/spi/spi-mux@0: node name for SPI
+> buses should be 'spi'
+>
+> I could fix that by having
+>
+>  spi {
+>     spi@0 {
+>        compatible = "spi-mux";
+>     };
+>  };
+>
+> Is that what we want? Or should I be adding awareness of spi-muxes to
+> dtc?
 
-> Basic read/write works on other modes but not FS utilities.
-> Could you please share any pointer to look into which direction. Thanks in advance.
-> 
+We should probably relax dtc, but for now I'd just use 'spi'.
 
-If 1 bit mode works fine, then probably flash FS in 1 bit mode and they
-try read only mount in quad mode. Thus try and narrow down if the issue
-is in read path vs write path.
-
-Regards
-Vignesh
-
-> Thanks
-> Kuldeep
-> 
->>
->> [1]
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kerne
->> l.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fmtd%2Flinux.git%2Fcommit
->> %2F%3Fh%3Dmtd%2Ffixes%26id%3D440b6d50254bdbd84c2a665c7f53ec69dd
->> 741a4f&amp;data=02%7C01%7Ckuldeep.singh%40nxp.com%7Cee345bdf9f654
->> 4ac9f4508d79fd863d9%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7
->> C637153624041330774&amp;sdata=OyKGl2jn5JDq5KCaVrxAnUh4qSynmAhS%
->> 2FeFiOxJSKtU%3D&amp;reserved=0
->> [2]https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.ker
->> nel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fmtd%2Flinux.git%2Fcomm
->> it%2F%3Fh%3Dmtd%2Ffixes%26id%3Dda2ef8124f20b4ce18d1d3d24fc7b88e68
->> 7e10bb&amp;data=02%7C01%7Ckuldeep.singh%40nxp.com%7Cee345bdf9f65
->> 44ac9f4508d79fd863d9%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%
->> 7C637153624041330774&amp;sdata=BTRzWWY2z6nZncyktDDIdJFwYTp41S%2
->> Buh99QaJ60e1M%3D&amp;reserved=0
->>
->>> Thanks
->>> Kuldeep
->>>
->>>>
->>>> Regards
->>>> Vignesh
->>>>
->>>>
->>>
->>
->> --
->> Regards
->> Vignesh
-
--- 
-Regards
-Vignesh
+Rob
