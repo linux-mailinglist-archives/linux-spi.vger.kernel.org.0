@@ -2,81 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A161814F379
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Jan 2020 21:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C8014FCFD
+	for <lists+linux-spi@lfdr.de>; Sun,  2 Feb 2020 13:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726199AbgAaU4d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 31 Jan 2020 15:56:33 -0500
-Received: from mail-wm1-f53.google.com ([209.85.128.53]:50298 "EHLO
-        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbgAaU4d (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 31 Jan 2020 15:56:33 -0500
-Received: by mail-wm1-f53.google.com with SMTP id a5so9448214wmb.0
-        for <linux-spi@vger.kernel.org>; Fri, 31 Jan 2020 12:56:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qeqPjZUqrP7rylxuw1Ghw9c98ZrrLm2fQathxhc6jqM=;
-        b=FwB+T6/XymHVOg/RJNzQ3uvyWhwLnB7+ZNaT1TN5lwQSy4P8QRJq3GOdftG1B3flY/
-         IoQwC63ESUbfc9iLP30kjxQqdzAgTH9MY7E0lc555R64bCE/fxqpa4XDbaUUv4ak5o1+
-         SLBhaBbfjeAfgsaN0d+G8eIy1BoUR0SNZyQrgANh56HdlEkj+AnE+TnuSPVWNDjCYspO
-         OK95migr+EZ+m8erSGSk+d0ITe7oaK3tnWV8xjKUhyJL20GLRLoVlj0mLekPM0qEH1/j
-         qR+A2Wz1+KvHXZEvnWbACgKx3n3+NNQxyEDl+jh98BKedisUejpFeFQ9m5n/3FcogxMF
-         SaCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qeqPjZUqrP7rylxuw1Ghw9c98ZrrLm2fQathxhc6jqM=;
-        b=kiWTCAZc9Q6jKKCq7T0futaicd0X842dsyut+EtFaMQSruowcwzLR1HkiPne7X/p8w
-         K3tPZk4qVVjdAhlAzmK7HwBYMyNNu/ZlBXK8bMTvb4g7GQOQPa7vtz5ZBSaEG2B5FU02
-         Cnfg/p/E+HVg0Jp+5LGd8FZV9/FoIelg799wcxzlP9fIB1+d2dMZzlrOBKawnUnqoRsK
-         t0eZ0qlpTSAUGOd6IWZhAAfvkvUPtgILg2TpOcWRe2omteGyx1ollq2cQXnJXUJz8G3U
-         Ha5VKfDZb+r+m7SSV7t83u8Bx+mN+qjcN69FuopxgweYXi0YVdfN5rQtngJVQVVICz+H
-         X0Ng==
-X-Gm-Message-State: APjAAAX3IwQagVC3Ftc8E6V8/AhD46SU/O48VGBlk0tIiQtnJOBJXCWN
-        YIRqxiy4A77xCoGR6i+5AWiY9G+h
-X-Google-Smtp-Source: APXvYqzgkcKcHvzIFGYZ67ZijQnCqwji2XOmv3rZzqJXMDHztVVfL+ruzwhORp1V4kB0dEmEQcKYCQ==
-X-Received: by 2002:a7b:c934:: with SMTP id h20mr13841260wml.103.1580504191187;
-        Fri, 31 Jan 2020 12:56:31 -0800 (PST)
-Received: from ?IPv6:2003:ea:8f29:6000:8922:4c51:f8d2:7862? (p200300EA8F29600089224C51F8D27862.dip0.t-ipconnect.de. [2003:ea:8f29:6000:8922:4c51:f8d2:7862])
-        by smtp.googlemail.com with ESMTPSA id z10sm11674967wmk.31.2020.01.31.12.56.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jan 2020 12:56:30 -0800 (PST)
-Subject: Re: spi-fsl-espi driver issue
-To:     Andrij Abyzov <drolevar@gmail.com>
-References: <CADQNx5QsXRSyrJxEXLQr3oYyy+-xnYrH_txbA+37macNVZkHcw@mail.gmail.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <712e53ad-9482-d767-7995-35634e58e5bd@gmail.com>
-Date:   Fri, 31 Jan 2020 21:48:47 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1726044AbgBBMAr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 2 Feb 2020 07:00:47 -0500
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:57122 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726907AbgBBMAr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 2 Feb 2020 07:00:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=h7E2UaKOVX1aD/zQdXr3brFbm+K+Dp4X6pCQvTffYRk=; b=OfVWWu0JCHbYAyfezgu1tH+VP
+        xnqyb0yrlt9o5GwiUYRZObeQlGr4HN0MI+HmlZupvtTnAYJd1YVDWXosXbexKO+LeY48Xgik2/mGi
+        3SbPaPtnQ3MPhs5Scu6FapchiQk260HBaBZrJ9GulAt3Cyvf8aMXnkcdPAsztDgl6bAGc=;
+Received: from [151.216.144.116] (helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1iyDvT-0006po-EI; Sun, 02 Feb 2020 12:00:31 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 6E272D01A54; Sat,  1 Feb 2020 11:32:50 +0000 (GMT)
+Date:   Sat, 1 Feb 2020 11:32:50 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     John Garry <john.garry@huawei.com>, chenxiang66@hisilicon.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        liusimin4@huawei.com, Linuxarm <linuxarm@huawei.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        tudor.ambarus@microchip.com,
+        Jiancheng Xue <xuejiancheng@hisilicon.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        wanghuiqiang <wanghuiqiang@huawei.com>, fengsheng5@huawei.com
+Subject: Re: [PATCH v2 2/3] spi: Add HiSilicon v3xx SPI NOR flash controller
+ driver
+Message-ID: <20200201113250.GT3897@sirena.org.uk>
+References: <20200113114256.GH3897@sirena.org.uk>
+ <6dd45da9-9ccf-45f7-ed12-8f1406a0a56b@huawei.com>
+ <20200113140627.GJ3897@sirena.org.uk>
+ <CAHp75VfepiiVFLLmCwdBS0Z6tmR+XKBaOLg1qPPuz1McLjS=4Q@mail.gmail.com>
+ <20200113142754.GL3897@sirena.org.uk>
+ <20200113143403.GQ32742@smile.fi.intel.com>
+ <0252a76d-7e2b-2c70-8b1b-0d041d972098@huawei.com>
+ <CAHp75Ve=ZwJe2XV8Y1UN6sMe1ZHOBwUtRUD=aGqhR4Gc7BNUcg@mail.gmail.com>
+ <136bd652-dcb9-3efa-a92f-2263cbf840ad@huawei.com>
+ <CAHp75Vd=TY0tPfSHMSLTh1Pgg-E7MCP5Gym1yjpLgH0Tx-2xSg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CADQNx5QsXRSyrJxEXLQr3oYyy+-xnYrH_txbA+37macNVZkHcw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fDWuavwabVZ6mXOJ"
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vd=TY0tPfSHMSLTh1Pgg-E7MCP5Gym1yjpLgH0Tx-2xSg@mail.gmail.com>
+X-Cookie: Programming is an unnatural act.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 31.01.2020 10:34, Andrij Abyzov wrote:
-> Heiner,
-> 
-> I'm having a strange issue with the spi-fsl-espi driver when updating the firmware on Lattice MachXO2 FPGA.
-> It worked fine with the version 4.9, however one of the subsequent changes has led to the issue, that the read result is shifted right by 1 bit.
-> I understand this could be something due to polarity, phase or frequency, but it did work fine with 4.9 and before.
-> Now I'm trying to localize the issue by bisection, but that's a lengthy process and I thought that maybe you could have some insights.
-> 
-I'm not the maintainer of this driver, so better set the linux-spi list on cc.
 
-Which device tree config is used? Or do you set a specific mode manually?
+--fDWuavwabVZ6mXOJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Best regards,
-> Andrij Abyzov
+On Fri, Jan 31, 2020 at 05:46:39PM +0200, Andy Shevchenko wrote:
+> On Fri, Jan 31, 2020 at 2:03 PM John Garry <john.garry@huawei.com> wrote:
+> > On 31/01/2020 11:39, Andy Shevchenko wrote:
 
-Heiner
+> > > DataBitLength is the size, in bits, of the smallest transfer unit for
+> > > this connection. _LEN is automatically
+> > > created to refer to this portion of the resource descriptor.
+
+> > > Is it what you are looking for? (As far as I know most of the
+> > > firmwares simple abuse this field among others)
+
+> > I didn't think so - I thought that there was a distinction between width
+> > and length in SPI terms.
+
+> My interpretation of this field is a data width of the slave.
+> Basically what we have as transfer->size inside SPI in the Linux
+> kernel.
+
+This discussion is about the number of data lines, SPI_TX_QUAD
+and friends.
+
+>      1 SpiSerialBusV2(0x0000,PolarityLow,FourWireMode,0x08,
+>     36 SpiSerialBusV2(0x0000,PolarityLow,FourWireMode,0x10,
+>     35 SpiSerialBusV2(0x0000,PolarityLow,FourWireMode,0x18,
+>     35 SpiSerialBusV2(0x0000,PolarityLow,FourWireMode,0x20,
+>      1 SpiSerialBusV2(0x0000,PolarityLow,ThreeWireMode,0x10,
+>      8 SpiSerialBusV2(0x0001,PolarityLow,FourWireMode,0x08,
+>      1 SpiSerialBusV2(0x0001,PolarityLow,FourWireMode,0x10,
+
+> So, it seems I stand corrected, the field is in right use, although
+> cases like 0x10 and 0x20 should be carefully checked.
+
+Those look like they're mainly controlling SPI_3WIRE so it does
+look like a reasonable fit, yes.
+
+--fDWuavwabVZ6mXOJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl41YeEACgkQJNaLcl1U
+h9C+bQf9H0e8FvkTjz4ZUrRo0CSS5uWHyG8Ip87aiypFpHhI6CUAyHdGFwyLCrr9
+EE93J+iOOuXq/xO7PMU5mD5LQ5MJlOUeOEeUHvldsQg6snP76Cf4U0U3RIifoBe8
+tNMlneq9czEifmRnptwx0MFaW03kpgeX68wYT3p5HuWtjyOfrVOwk3jiz9PSR5BJ
+oPwOWzvyBKskSYYXGDtuHMtFqM9SjobrbHHK6rWlmr5xAqOUXAyRBTX22PYI5hi9
+r45kq+3FL3V0ayJZi5jZT5+VZsXCsUC41cwacJpl0aIUp7YRm+Xv1SV644y82AyW
+B8pYHbZNJ2tpXjEJOH38LZ94cRYOJg==
+=OiRO
+-----END PGP SIGNATURE-----
+
+--fDWuavwabVZ6mXOJ--
