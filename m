@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E0614FD1C
-	for <lists+linux-spi@lfdr.de>; Sun,  2 Feb 2020 14:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D53E14FD1F
+	for <lists+linux-spi@lfdr.de>; Sun,  2 Feb 2020 14:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbgBBNAD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 2 Feb 2020 08:00:03 -0500
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:43336 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726198AbgBBNAD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 2 Feb 2020 08:00:03 -0500
-Received: by mail-yw1-f68.google.com with SMTP id f204so9471670ywc.10;
-        Sun, 02 Feb 2020 05:00:02 -0800 (PST)
+        id S1726679AbgBBNAH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 2 Feb 2020 08:00:07 -0500
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:36475 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726198AbgBBNAG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 2 Feb 2020 08:00:06 -0500
+Received: by mail-yw1-f65.google.com with SMTP id n184so10516379ywc.3;
+        Sun, 02 Feb 2020 05:00:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AH44IHY8LM9hNPEbRtsEm9RIhekLfcrQmhRGmajQBHY=;
-        b=JgIz0s5wSKGBK+tfeB5/vDAeI091XJabpzldKR9UAgT7pUXlJhhRG5HCDBI5LeKfic
-         Czkl7Js+nI6YwGu4UXoN9oPjZqLGLeDYTnn+m2bo3FGLo4OzdYElucGW886I+Rz3JdC9
-         OX1yzKc/bUZyKyP3MdPowqOhhdcpiN+8WIHZ1l5quntT1INEmQ2oaeLEOBBMBegZbvbc
-         jHlXkx4UL7Snn9psqzZa+EPnLs7z1hbAaU4xuxTWP0t9VgawcsH3vtNergQT5pFOER57
-         aOmCkJpKdgjgN0JpMWCwHkid8uEPyhFBjusCkDfrShvbsvthHYTMKNbX33rnbe5f99g6
-         qgUw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=e6rN6yJZ4eWmG/f569Zn9OH6A2Ob5WD1MTBuZuc6gi8=;
+        b=BcLLBaeoTaZLKReT7xF4F380ZCod3MrDwYOq1eGTKZIqQMNmr/gbg7LiBc2mA2N0iG
+         WFS59R7WRetlc/VIrBYgx7UAHtA5axveGDhJDGDTKfxjTZr5i8n9fTCYYGGiF1FsRTj/
+         7g1c8UYiok0vKv/IDcAXqKagTPllBhPvvG40EgkYEABz+U0iGnZf/YwWnmQnzVGmNOqe
+         oJVfDLUqkBD1frBo0JfA+4FYGgFai5IO5sAzpX6MdM46TgBXUIt5O1eYstP2Vq8FKf7i
+         E2pvLkUffEnd4hICkRz/YirAScywfADg/ll1QZ0CXZoXVfHHPVhIHuJ25hWb4ms+mOsh
+         ckRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AH44IHY8LM9hNPEbRtsEm9RIhekLfcrQmhRGmajQBHY=;
-        b=UGtYqyJNqisoB3+OX6VQGEqtWroxiJwJB6Wh3RWfanYpvqOXIjU9nxxX0eFVCiz3Fg
-         +6AobjhDwUNQaz3+W34yMBL1wNzbcZnmkRaq2cB+MhlvLSQjxmCg+F4IOfiPeVb5nc/B
-         EH6f3BeQMl5kEdQar83kCOQrOHH2HpKhExS+jwP+Yo4Xd9RzC0RbksRtDF4n8v35eZed
-         CpNPy4H5S0WlgYtAmMacyduouHa4Q/Gw87TKdoGUrF5Oui8cSZXLCDehiBBK41xd6V4x
-         jJh1p+BnWo2z+DjOkl7sAqkFF42tRTmAAcgA9kV2VLKEo8i7vCPhds3KMqALtUt0rASK
-         v7Gw==
-X-Gm-Message-State: APjAAAUy+vMIWljeBI7+2OaxLg2W/PfqyOoIRGIgo1zmrHC8c+BIOqak
-        1Ks5BlFvVlWjxjsmoVnkkgGuisYaMHI=
-X-Google-Smtp-Source: APXvYqy+sjtTqD37PK/Ym1JLqM0bJO+tVP/hDjqdMipCl/DoBz8JAHptrKJ0YAzBNhEkhgjpLJA9RA==
-X-Received: by 2002:a0d:d1c6:: with SMTP id t189mr14350608ywd.393.1580648401835;
-        Sun, 02 Feb 2020 05:00:01 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=e6rN6yJZ4eWmG/f569Zn9OH6A2Ob5WD1MTBuZuc6gi8=;
+        b=kO6bt//qkML27/CIsr5X8eZVC/II3EJObnIrJl/aIAcBBHp7927WUTG6jM07Eb9g1q
+         quMGWpxJocdvnjsy7MFUoqM7UaR843PEBSoDCAyxrWko2sg1wtnMuDdC4SneuEEifepZ
+         dVZtlZVdFs/Qt+fOYZbFQYa0SkZrsheB1Y9IYE2+QilP8Im1RfJArm5oWAH1aAs4KO3c
+         xKdDGV1CAYm7ITHRtn6df+Zc5rL0hSYNOOWxGVA/i1WpSzuMqnHeODxvPSidumxMRFzX
+         /1JK3XG6dgAC+l2sMVc2g/r0pG+eOA5ByrPpFohb32hjV0KpRc64V32whfJhCYUb4hD6
+         Pbvw==
+X-Gm-Message-State: APjAAAVlfzHyjs+MFF5PPXqMRQ3HGg1J8nHk1vYaRG4Vfgm4dxv8IVI4
+        QnTkhb8EhHMZVf5uMGkLheGUr5QEmD8=
+X-Google-Smtp-Source: APXvYqx70kY7wgGOPXJWRZfeWiF9DHnZy7tefw85FuCVEcE9QFZkCaWdjfQvnlYHtM2j9I6yKoVLNA==
+X-Received: by 2002:a81:6055:: with SMTP id u82mr9702017ywb.35.1580648403893;
+        Sun, 02 Feb 2020 05:00:03 -0800 (PST)
 Received: from localhost.localdomain (c-73-37-219-234.hsd1.mn.comcast.net. [73.37.219.234])
-        by smtp.gmail.com with ESMTPSA id m137sm7090013ywd.108.2020.02.02.05.00.00
+        by smtp.gmail.com with ESMTPSA id m137sm7090013ywd.108.2020.02.02.05.00.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Feb 2020 05:00:01 -0800 (PST)
+        Sun, 02 Feb 2020 05:00:03 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-spi@vger.kernel.org
 Cc:     Han Xu <han.xu@nxp.com>, Adam Ford <aford173@gmail.com>,
@@ -59,10 +59,12 @@ Cc:     Han Xu <han.xu@nxp.com>, Adam Ford <aford173@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH V2 1/5] spi: fspi: enable fspi on imx8qxp and imx8mm
-Date:   Sun,  2 Feb 2020 06:59:46 -0600
-Message-Id: <20200202125950.1825013-1-aford173@gmail.com>
+Subject: [PATCH V2 2/5] spi: fspi: dynamically alloc AHB memory
+Date:   Sun,  2 Feb 2020 06:59:47 -0600
+Message-Id: <20200202125950.1825013-2-aford173@gmail.com>
 X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20200202125950.1825013-1-aford173@gmail.com>
+References: <20200202125950.1825013-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
@@ -72,8 +74,8 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Han Xu <han.xu@nxp.com>
 
-Pull in this patch from NXP's upstream repo to
-enable fspi on imx8qxp and imx8mm
+Apply patch from NXP upstream repo to
+dynamically allocate AHB memory as needed.
 
 Signed-off-by: Han Xu <han.xu@nxp.com>
 Signed-off-by: Adam Ford <aford173@gmail.com>
@@ -81,41 +83,95 @@ Signed-off-by: Adam Ford <aford173@gmail.com>
 V2: Reorder s-o-b lines to give credit in proper order.
 
 diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-index 8c5084a3a617..00c7899428a1 100644
+index 00c7899428a1..23abf5ae318e 100644
 --- a/drivers/spi/spi-nxp-fspi.c
 +++ b/drivers/spi/spi-nxp-fspi.c
-@@ -324,6 +324,22 @@ static const struct nxp_fspi_devtype_data lx2160a_data = {
- 	.little_endian = true,  /* little-endian    */
- };
+@@ -307,6 +307,7 @@
  
-+static const struct nxp_fspi_devtype_data imx8mm_data = {
-+	.rxfifo = SZ_512,       /* (64  * 64 bits)  */
-+	.txfifo = SZ_1K,        /* (128 * 64 bits)  */
-+	.ahb_buf_size = SZ_2K,  /* (256 * 64 bits)  */
-+	.quirks = 0,
-+	.little_endian = true,  /* little-endian    */
-+};
-+
-+static const struct nxp_fspi_devtype_data imx8qxp_data = {
-+	.rxfifo = SZ_512,       /* (64  * 64 bits)  */
-+	.txfifo = SZ_1K,        /* (128 * 64 bits)  */
-+	.ahb_buf_size = SZ_2K,  /* (256 * 64 bits)  */
-+	.quirks = 0,
-+	.little_endian = true,  /* little-endian    */
-+};
-+
- struct nxp_fspi {
- 	void __iomem *iobase;
+ #define POLL_TOUT		5000
+ #define NXP_FSPI_MAX_CHIPSELECT		4
++#define NXP_FSPI_MIN_IOMAP	SZ_4M
+ 
+ struct nxp_fspi_devtype_data {
+ 	unsigned int rxfifo;
+@@ -345,6 +346,8 @@ struct nxp_fspi {
  	void __iomem *ahb_addr;
-@@ -1076,6 +1092,8 @@ static int nxp_fspi_resume(struct device *dev)
+ 	u32 memmap_phy;
+ 	u32 memmap_phy_size;
++	u32 memmap_start;
++	u32 memmap_len;
+ 	struct clk *clk, *clk_en;
+ 	struct device *dev;
+ 	struct completion c;
+@@ -657,12 +660,35 @@ static void nxp_fspi_select_mem(struct nxp_fspi *f, struct spi_device *spi)
+ 	f->selected = spi->chip_select;
+ }
  
- static const struct of_device_id nxp_fspi_dt_ids[] = {
- 	{ .compatible = "nxp,lx2160a-fspi", .data = (void *)&lx2160a_data, },
-+	{ .compatible = "nxp,imx8mm-fspi", .data = (void *)&imx8mm_data, },
-+	{ .compatible = "nxp,imx8qxp-fspi", .data = (void *)&imx8qxp_data, },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, nxp_fspi_dt_ids);
+-static void nxp_fspi_read_ahb(struct nxp_fspi *f, const struct spi_mem_op *op)
++static int nxp_fspi_read_ahb(struct nxp_fspi *f, const struct spi_mem_op *op)
+ {
++	u32 start = op->addr.val;
+ 	u32 len = op->data.nbytes;
+ 
++	/* if necessary, ioremap before AHB read */
++	if ((!f->ahb_addr) || start < f->memmap_start ||
++	     start + len > f->memmap_start + f->memmap_len) {
++		if (f->ahb_addr)
++			iounmap(f->ahb_addr);
++
++		f->memmap_start = start;
++		f->memmap_len = len > NXP_FSPI_MIN_IOMAP ?
++				len : NXP_FSPI_MIN_IOMAP;
++
++		f->ahb_addr = ioremap_wc(f->memmap_phy + f->memmap_start,
++					 f->memmap_len);
++
++		if (!f->ahb_addr) {
++			dev_err(f->dev, "failed to alloc memory\n");
++			return -ENOMEM;
++		}
++	}
++
+ 	/* Read out the data directly from the AHB buffer. */
+-	memcpy_fromio(op->data.buf.in, (f->ahb_addr + op->addr.val), len);
++	memcpy_fromio(op->data.buf.in,
++		      f->ahb_addr + start - f->memmap_start, len);
++
++	return 0;
+ }
+ 
+ static void nxp_fspi_fill_txfifo(struct nxp_fspi *f,
+@@ -822,7 +848,7 @@ static int nxp_fspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	 */
+ 	if (op->data.nbytes > (f->devtype_data->rxfifo - 4) &&
+ 	    op->data.dir == SPI_MEM_DATA_IN) {
+-		nxp_fspi_read_ahb(f, op);
++		err = nxp_fspi_read_ahb(f, op);
+ 	} else {
+ 		if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_OUT)
+ 			nxp_fspi_fill_txfifo(f, op);
+@@ -992,9 +1018,8 @@ static int nxp_fspi_probe(struct platform_device *pdev)
+ 
+ 	/* find the resources - controller memory mapped space */
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "fspi_mmap");
+-	f->ahb_addr = devm_ioremap_resource(dev, res);
+-	if (IS_ERR(f->ahb_addr)) {
+-		ret = PTR_ERR(f->ahb_addr);
++	if (IS_ERR(res)) {
++		ret = PTR_ERR(res);
+ 		goto err_put_ctrl;
+ 	}
+ 
+@@ -1073,6 +1098,9 @@ static int nxp_fspi_remove(struct platform_device *pdev)
+ 
+ 	mutex_destroy(&f->lock);
+ 
++	if (f->ahb_addr)
++		iounmap(f->ahb_addr);
++
+ 	return 0;
+ }
+ 
 -- 
 2.24.0
 
