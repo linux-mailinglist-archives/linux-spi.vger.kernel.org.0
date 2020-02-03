@@ -2,176 +2,374 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7051507BF
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2020 14:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D46215110B
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2020 21:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbgBCNvV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Feb 2020 08:51:21 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:11190 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728199AbgBCNvV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Feb 2020 08:51:21 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 013Dlotp027606;
-        Mon, 3 Feb 2020 14:51:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=2R3886/w6q71uZmE3lqE7gZfMtiidQ+pH7InOJfEqaA=;
- b=pYxJkcwpclhdj3teUM+ERViKiYiNKqnogvchmFlaycWKi5e1kEoEC7GZZ99ppL7rzGAC
- j/ppCsni1GqQbeo0ULFZJmH+tiTSnsP3ydim6TTkXLTXuGbpCjK1CCpIp8BUvblV3YUj
- +JtGCFDJZD9Uo2x/7r+uY6L72w2q2hkoxYlV8aAY2eY4Z19gyD3wxbkI/6v6tA4bEXKX
- vE0pXnUIAmhTORpTlt3m8fyePTDoGrAxB/AabbkUy3JvRz0rIcbOH9zAFSaGYatVX60Y
- SZLHk4jc/BEjotXDWTsCfVGqj5PZjTjW9yzbLvvtV6sx4Nn7tO65mF6zEqQE3UnmxQrZ TA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2xvybdsmtv-1
+        id S1726325AbgBCUdV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Feb 2020 15:33:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:6736 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726224AbgBCUdU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Feb 2020 15:33:20 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 013KIeG4082304;
+        Mon, 3 Feb 2020 15:33:15 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xxhf74kqd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Feb 2020 14:51:13 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E48E410002A;
-        Mon,  3 Feb 2020 14:51:08 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag6node3.st.com [10.75.127.18])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D8BA72BE228;
-        Mon,  3 Feb 2020 14:51:08 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG6NODE3.st.com (10.75.127.18)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 3 Feb 2020 14:51:08
- +0100
-From:   <patrice.chotard@st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <patrice.chotard@st.com>, <christophe.kerello@st.com>,
-        Lionel Debieve <lionel.debieve@st.com>,
-        Etienne Carriere <etienne.carriere@st.com>
-Subject: [PATCH 2/2] spi: stm32-qspi: properly manage probe errors
-Date:   Mon, 3 Feb 2020 14:50:48 +0100
-Message-ID: <20200203135048.1299-3-patrice.chotard@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200203135048.1299-1-patrice.chotard@st.com>
-References: <20200203135048.1299-1-patrice.chotard@st.com>
+        Mon, 03 Feb 2020 15:33:14 -0500
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 013KJwVV085345;
+        Mon, 3 Feb 2020 15:33:14 -0500
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xxhf74kq1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Feb 2020 15:33:14 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 013KVbGB027428;
+        Mon, 3 Feb 2020 20:33:13 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma02dal.us.ibm.com with ESMTP id 2xw0y6gpe0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Feb 2020 20:33:13 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 013KXCOU52298216
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Feb 2020 20:33:12 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D0C65112067;
+        Mon,  3 Feb 2020 20:33:12 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4BF94112063;
+        Mon,  3 Feb 2020 20:33:12 +0000 (GMT)
+Received: from [9.41.103.158] (unknown [9.41.103.158])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Feb 2020 20:33:12 +0000 (GMT)
+Subject: Re: [PATCH] spi: Add FSI-attached SPI controller driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>
+References: <1580328504-436-1-git-send-email-eajames@linux.ibm.com>
+ <CAHp75VeNs9Zr1vayO8TwVq6=B8fwvv0chOt0in6Dw+WLCezL2g@mail.gmail.com>
+From:   Eddie James <eajames@linux.vnet.ibm.com>
+Message-ID: <29f6cc86-69ca-bc88-b6ae-2b1a24c0dae3@linux.vnet.ibm.com>
+Date:   Mon, 3 Feb 2020 14:33:11 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG6NODE3.st.com
- (10.75.127.18)
+In-Reply-To: <CAHp75VeNs9Zr1vayO8TwVq6=B8fwvv0chOt0in6Dw+WLCezL2g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-03_04:2020-02-02,2020-02-03 signatures=0
+ definitions=2020-02-03_06:2020-02-02,2020-02-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 clxscore=1011 mlxlogscore=999 spamscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 impostorscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2002030146
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Lionel Debieve <lionel.debieve@st.com>
 
-Fix resource release issues when driver probe operation fails.
+On 1/30/20 10:37 AM, Andy Shevchenko wrote:
+> On Wed, Jan 29, 2020 at 10:09 PM Eddie James <eajames@linux.ibm.com> wrote:
+>> There exists a set of SPI controllers on some POWER processors that may
+>> be accessed through the FSI bus. Add a driver to traverse the FSI CFAM
+>> engine that can access and drive the SPI controllers. This driver would
+>> typically be used by a baseboard management controller (BMC).
+> ...
+>
+>> +#include <linux/bitfield.h>
+>> +#include <linux/bits.h>
+>> +#include <linux/of.h>
+> ...
+>
+>> +struct fsi_spi {
+>> +       struct device *dev;
+> Isn't fsl->dev the same?
+> Perhaps kernel doc to explain the difference?
 
-Signed-off-by: Lionel Debieve <lionel.debieve@st.com>
-Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
-Signed-off-by: Patrice Chotard <patrice.chotard@st.com>
----
- drivers/spi/spi-stm32-qspi.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 13bb64bf4c8f..d066f5144c3e 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -565,7 +565,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
- 	qspi->io_base = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(qspi->io_base)) {
- 		ret = PTR_ERR(qspi->io_base);
--		goto err;
-+		goto err_master_put;
- 	}
- 
- 	qspi->phys_base = res->start;
-@@ -574,24 +574,26 @@ static int stm32_qspi_probe(struct platform_device *pdev)
- 	qspi->mm_base = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(qspi->mm_base)) {
- 		ret = PTR_ERR(qspi->mm_base);
--		goto err;
-+		goto err_master_put;
- 	}
- 
- 	qspi->mm_size = resource_size(res);
- 	if (qspi->mm_size > STM32_QSPI_MAX_MMAP_SZ) {
- 		ret = -EINVAL;
--		goto err;
-+		goto err_master_put;
- 	}
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
-+	if (irq < 0) {
-+		ret = irq;
-+		goto err_master_put;
-+	}
- 
- 	ret = devm_request_irq(dev, irq, stm32_qspi_irq, 0,
- 			       dev_name(dev), qspi);
- 	if (ret) {
- 		dev_err(dev, "failed to request irq\n");
--		goto err;
-+		goto err_master_put;
- 	}
- 
- 	init_completion(&qspi->data_completion);
-@@ -599,26 +601,26 @@ static int stm32_qspi_probe(struct platform_device *pdev)
- 	qspi->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(qspi->clk)) {
- 		ret = PTR_ERR(qspi->clk);
--		goto err;
-+		goto err_master_put;
- 	}
- 
- 	qspi->clk_rate = clk_get_rate(qspi->clk);
- 	if (!qspi->clk_rate) {
- 		ret = -EINVAL;
--		goto err;
-+		goto err_master_put;
- 	}
- 
- 	ret = clk_prepare_enable(qspi->clk);
- 	if (ret) {
- 		dev_err(dev, "can not enable the clock\n");
--		goto err;
-+		goto err_master_put;
- 	}
- 
- 	rstc = devm_reset_control_get_exclusive(dev, NULL);
- 	if (IS_ERR(rstc)) {
- 		ret = PTR_ERR(rstc);
- 		if (ret == -EPROBE_DEFER)
--			goto err;
-+			goto err_qspi_release;
- 	} else {
- 		reset_control_assert(rstc);
- 		udelay(2);
-@@ -629,7 +631,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, qspi);
- 	ret = stm32_qspi_dma_setup(qspi);
- 	if (ret)
--		goto err;
-+		goto err_qspi_release;
- 
- 	mutex_init(&qspi->lock);
- 
-@@ -645,8 +647,9 @@ static int stm32_qspi_probe(struct platform_device *pdev)
- 	if (!ret)
- 		return 0;
- 
--err:
-+err_qspi_release:
- 	stm32_qspi_release(qspi);
-+err_master_put:
- 	spi_master_put(qspi->ctrl);
- 
- 	return ret;
--- 
-2.17.1
+No, it's not the same, as dev here is the SPI controller. I'll add a 
+comment.
 
+
+>
+>> +       struct fsi_device *fsi;
+>> +       u32 base;
+>> +};
+> ...
+>
+>> +static int fsi_spi_read_reg(struct fsi_spi *ctx, u32 offset, u64 *value)
+>> +{
+>> +       int rc;
+>> +       __be32 cmd_be;
+>> +       __be32 data_be;
+>> +       *value = 0ULL;
+> Usually the pattern is don't pollute output on error condition. Any
+> reason why you zeroing output beforehand?
+
+
+Well otherwise I have to store another 64 bit int and do another 
+assignment at the end. This is an internal function and all the users 
+below know what's happening.
+
+
+>
+>> +       cmd_be = cpu_to_be32(offset + ctx->base);
+>> +       rc = fsi_device_write(ctx->fsi, FSI2SPI_CMD, &cmd_be, sizeof(cmd_be));
+>> +       if (rc)
+>> +               return rc;
+>> +       return 0;
+>> +}
+> ...
+>
+>> +       data_be = cpu_to_be32((value >> 32) & 0xFFFFFFFF);
+> Redundant & 0xff... part.
+>
+>> +       data_be = cpu_to_be32(value & 0xFFFFFFFF);
+> Ditto.
+>
+> You may use upper_32_bits() / lower_32_bits() instead.
+
+
+OK, thanks.
+
+
+>
+> ...
+>
+>> +static int fsi_spi_data_in(u64 in, u8 *rx, int len)
+>> +{
+>> +       int i;
+>> +       int num_bytes = len > 8 ? 8 : len;
+> min(len, 8);
+
+
+Sure.
+
+
+>
+>> +       for (i = 0; i < num_bytes; ++i)
+>> +               rx[i] = (u8)((in >> (8 * ((num_bytes - 1) - i))) & 0xffULL);
+> Redundant & 0xffULL part.
+>
+> Isn't it NIH of get_unalinged_be64 / le64 or something similar?
+
+
+No, these are shift in/out operations. The read register will also have 
+previous operations data in them and must be extracted with only the 
+correct number of bytes.
+
+
+>
+>> +       return num_bytes;
+>> +}
+>> +static int fsi_spi_data_out(u64 *out, const u8 *tx, int len)
+>> +{
+> Ditto as for above function. (put_unaligned ...)
+>
+>> +}
+> ...
+>
+>> +       dev_info(ctx->dev, "Resetting SPI controller.\n");
+> info?! Why?
+>
+>> +       rc = fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
+>> +                              SPI_FSI_CLOCK_CFG_RESET2);
+>> +       return rc;
+> return fsi_spi_write_reg();
+>
+> ...
+>
+>> +       return ((64 - seq->bit) / 8) - 2;
+> Too many parentheses.
+
+
+I prefer using 2 extra characters to make it much clearer at a glance.
+
+
+>
+> ...
+>
+>> +static int fsi_spi_sequence_transfer(struct fsi_spi *ctx,
+>> +                                    struct fsi_spi_sequence *seq,
+>> +                                    struct spi_transfer *transfer)
+>> +{
+>> +       int loops = 1;
+>> +       int idx = 0;
+>> +       int rc;
+>> +       u8 len;
+>> +       u8 rem = 0;
+>> +       if (transfer->len > 8) {
+>> +               loops = transfer->len / 8;
+>> +               rem = transfer->len - (loops * 8);
+>> +               len = 8;
+>> +       } else {
+>> +               len = transfer->len;
+>> +       }
+> len = min(transfer->len, 8);
+>
+> loops = transfer->len / len;
+> rem = transfer->len % len;
+
+
+Sure.
+
+
+>
+> (I think compiler is clever enough to find out that the division can be avoided)
+>
+> ...and drop assignments in definition block.
+>
+> I didn't look carefully in the implementation, but I believe there is
+> still room for improvement / optimization.
+>
+>> +       if (loops > 1) {
+>> +               rc = fsi_spi_write_reg(ctx, SPI_FSI_COUNTER_CFG,
+>> +                                      SPI_FSI_COUNTER_CFG_LOOPS(loops - 1));
+>> +               if (rc) {
+>> +                       /* Ensure error returns < 0 in this case. */
+> I didn't get why this case is special? Why not to be consistent with
+> return value?
+
+
+Sure, will fix, this was leftover from some testing.
+
+
+>
+>> +                       if (rc > 0)
+>> +                               rc = -rc;
+>> +
+>> +                       return rc;
+>> +               }
+>> +               return loops;
+> If we return here the amount of loops...
+>
+>> +       }
+>> +
+>> +       return 0;
+> ...why here is 0?
+>
+> I think more consistency is required.
+
+
+Will refactor.
+
+
+>
+>> +}
+> ...
+>
+>> +static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+>> +                                struct spi_transfer *transfer)
+>> +{
+> Can you refactor to tx and rx parts?
+
+
+Why?
+
+
+>
+>> +       return 0;
+>> +}
+> ...
+>
+>> +       do {
+>> +               rc = fsi_spi_read_reg(ctx, SPI_FSI_STATUS, &status);
+>> +               if (rc)
+>> +                       return rc;
+>> +
+>> +               if (status & (SPI_FSI_STATUS_ANY_ERROR |
+>> +                             SPI_FSI_STATUS_TDR_FULL |
+>> +                             SPI_FSI_STATUS_RDR_FULL)) {
+>> +                       rc = fsi_spi_reset(ctx);
+>> +                       if (rc)
+>> +                               return rc;
+>> +
+>> +                       continue;
+> I forgot if this to be infinite loop or if it's going to check
+> previous seq_state value. In any case this code is a bit fishy. Needs
+> comments / refactoring.
+
+
+I'll add a timeout.
+
+
+>
+>> +               }
+>> +
+>> +               seq_state = status & SPI_FSI_STATUS_SEQ_STATE;
+>> +       } while (seq_state && (seq_state != SPI_FSI_STATUS_SEQ_STATE_IDLE));
+> ...
+>
+>> +       if ((clock_cfg & (SPI_FSI_CLOCK_CFG_MM_ENABLE |
+>> +                         SPI_FSI_CLOCK_CFG_ECC_DISABLE |
+>> +                         SPI_FSI_CLOCK_CFG_MODE |
+>> +                         SPI_FSI_CLOCK_CFG_SCK_RECV_DEL |
+>> +                         SPI_FSI_CLOCK_CFG_SCK_DIV)) != wanted_clock_cfg)
+>> +               rc = fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
+>> +                                      wanted_clock_cfg);
+> Missed {} ?
+
+
+No? It's one line under the if.
+
+
+>
+>> +
+>> +       return rc;
+>> +}
+> ...
+>
+>> +       rc = fsi_slave_read(fsi->slave, 0x2860, &root_ctrl_8,
+> What is this magic for?
+
+
+Added comment.
+
+
+>
+>> +                           sizeof(root_ctrl_8));
+>> +       if (rc)
+>> +               return rc;
+> ...
+>
+>> +static int fsi_spi_remove(struct device *dev)
+>> +{
+>> +       return 0;
+>> +}
+> Why do you need this?
+
+
+Will drop it.
+
+
+Thanks for the review!
+
+Eddie
+
+
+>
+> ...
+>
+>> +static struct fsi_driver fsi_spi_driver = {
+>> +       .id_table = fsi_spi_ids,
+>> +       .drv = {
+>> +               .name = "spi-fsi",
+>> +               .bus = &fsi_bus_type,
+> Why is it not in the module_fsi_driver() macro?
+>
+>> +               .probe = fsi_spi_probe,
+>> +               .remove = fsi_spi_remove,
+>> +       },
+>> +};
+>> +
+>> +module_fsi_driver(fsi_spi_driver);
