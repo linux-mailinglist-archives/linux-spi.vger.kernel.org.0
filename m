@@ -2,98 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BB1150498
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2020 11:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5B61507B7
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2020 14:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727594AbgBCKxr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Feb 2020 05:53:47 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:39632 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726992AbgBCKxq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Feb 2020 05:53:46 -0500
-Received: by mail-il1-f195.google.com with SMTP id f70so12202055ill.6;
-        Mon, 03 Feb 2020 02:53:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xA1slDoqBq1wNtrTR0f7nXbBTEQEIlnapNwEpNkpg9g=;
-        b=EMf4Er6vqgT1LOu6aLpORiIOn63hrGTH1Ch3gUJjIQPtn4zvJLO1f4XvBdHLgVMazs
-         PCdP5/YS/l7nIqgEai6oruDRAMmnWD9C48rHgg7GWqW37JolnCJq3wE6kna+JVHd2zSe
-         agq3KnmnbYp5WkMsKS81aK6SE9V1mTQBvfAWuxAARuia+kwb6QGPqOOBIDIhTa/Wcptt
-         kzR938ls/FRk/232pMp8Ox5SVYXE1TlnxUczlSroKOUNxqm7aZRMdKqBTnKG5kSzSn+C
-         9qu3NJD23C3BbaNtTrOZa1sw01EQHv6NzfFxRESsTaYnyLSrA1uFEPHHsKoOXFpkhIA0
-         fQZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xA1slDoqBq1wNtrTR0f7nXbBTEQEIlnapNwEpNkpg9g=;
-        b=OxvMyGfxV1KXczUFyE0jQf5IehD5Ecgw5n0Hz/7NeBhgyxC2SF0ZXyVIwzJ7LSz/jf
-         ys190/iyfezZmN+sBixaWMbgLg5FfvUJa3jrCGPAaMURRQIyu1XDqoE3sPSFqCWevcZx
-         XSHpQsBo1zdJ6jnDertEPRQXS30JrowHPaBi8kuLsHAlLXQOHpl/8emzNgUipE7p4URW
-         xJeDCEGCdVZO81s84I9vAxUtoglo44uTq5XJXyQSc2iOD/PdXgPhggTLxctE+RqNfMO6
-         iPHYPfFP4g2mYMauznEuuEziLJIMHyOqXH+WZMoqqtFhaLh3yOhYLMWZkdl7YtorhSbL
-         jjcw==
-X-Gm-Message-State: APjAAAVnVuClf6L8PnkjQ4jo4kMLqGgulc6UI0SYfIcC9sxJq48UxZPS
-        r8VyW1MCQcuUuItXWMCJLSpEceT8MIw2gS3D3oypDH5T
-X-Google-Smtp-Source: APXvYqwi2e+OZzwE+GaVgXvx0G8DUeuHxSXqJptgRY6pVJihSlOnoWPfMoYbRYTuQT20fciXDKoALEGsg78SgS3s+JY=
-X-Received: by 2002:a92:1547:: with SMTP id v68mr20312779ilk.58.1580727225757;
- Mon, 03 Feb 2020 02:53:45 -0800 (PST)
+        id S1727851AbgBCNvQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Feb 2020 08:51:16 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:34066 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726561AbgBCNvQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Feb 2020 08:51:16 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 013DlF9f029759;
+        Mon, 3 Feb 2020 14:51:05 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=Ig25JM6AtLTyb9X/mlnTXxZt7Y+zkIOmGtydqVrayJs=;
+ b=aSkQ4DYsgfbRahVkwk8D7CxrED9yYNQvDOnQJHucmtrL/zf+JUpP0VBGVdJn44iELHut
+ tyLy54mwCouffI03OS2slRHBJ/luuxNZdzZ8Pg309EojHQiGnKuuvIse/do03yh9IrQT
+ 0BPWT0dlwlqARNRqxR61/czTFdYsElGpxJPpReKmKlM3dabQaOBMWeWQdbQUfxHPrNr2
+ ojf8o/oIsBDIGW94igYVeE9iSdirO1aFim0N7lU4mS1qAwVnDaHy8TSOWmWOG3zeIjZK
+ Pz9AbmANKFig0GOqbrPgqIXadBw3wBCuXxPg+y+CIWHBZXKEDGXBDaeYDWRrwa2kY71U BA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2xw13nh9f6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Feb 2020 14:51:05 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 22EC210002A;
+        Mon,  3 Feb 2020 14:51:05 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag6node3.st.com [10.75.127.18])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 122C02BC7CF;
+        Mon,  3 Feb 2020 14:51:05 +0100 (CET)
+Received: from localhost (10.75.127.46) by SFHDAG6NODE3.st.com (10.75.127.18)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 3 Feb 2020 14:51:04
+ +0100
+From:   <patrice.chotard@st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <patrice.chotard@st.com>, <christophe.kerello@st.com>
+Subject: [PATCH 0/2] spi: stm32-qspi: rework probe error path
+Date:   Mon, 3 Feb 2020 14:50:46 +0100
+Message-ID: <20200203135048.1299-1-patrice.chotard@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20200202125950.1825013-1-aford173@gmail.com> <20200202125950.1825013-2-aford173@gmail.com>
- <CAOMZO5D3emrAk84wDS04qJC-3AyvFnqodhoMsXO-ukHnYsU+PQ@mail.gmail.com>
-In-Reply-To: <CAOMZO5D3emrAk84wDS04qJC-3AyvFnqodhoMsXO-ukHnYsU+PQ@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 3 Feb 2020 04:53:34 -0600
-Message-ID: <CAHCN7xJyZRwJhnWW2mAbOeGyrMsB7Au_e6AvwiNmNS8gFUfSyw@mail.gmail.com>
-Subject: Re: [PATCH V2 2/5] spi: fspi: dynamically alloc AHB memory
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     linux-spi <linux-spi@vger.kernel.org>, Han Xu <han.xu@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Ashish Kumar <ashish.kumar@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To SFHDAG6NODE3.st.com
+ (10.75.127.18)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-03_04:2020-02-02,2020-02-03 signatures=0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Feb 2, 2020 at 10:39 AM Fabio Estevam <festevam@gmail.com> wrote:
->
-> On Sun, Feb 2, 2020 at 10:00 AM Adam Ford <aford173@gmail.com> wrote:
-> >
-> > From: Han Xu <han.xu@nxp.com>
-> >
-> > Apply patch from NXP upstream repo to
-> > dynamically allocate AHB memory as needed.
->
-> The commit log could be improved here. What is the motivation for doing this?
+From: Patrice Chotard <patrice.chotard@st.com>
 
-My motivation is to get the flexspi on the i.MX8MM to work, and I did
-a list of the patches applied on the NXP branch to see what was
-applied on top of their 4.19 kernel and this patch series generated
-from that list.  Most of the NXP commits are one-line commits, and I
-don't know the motivation for what's happening.  NXP did it, and I
-know it works on the Flexspi driver.
+This series is fixing the probe error path of spi-stm32-qspi driver: 
+  - it allows to defer probe if reset controller driver is not yet probed.
+  - if fixes the error path in releasing only allocated ressouces in case of error.
 
-Maybe Han Xu can comment, since it's really his patch.
+Etienne Carriere (1):
+  spi: stm32-qspi: defer probe for reset controller
 
+Lionel Debieve (1):
+  spi: stm32-qspi: properly manage probe errors
 
-adam
->
-> > +               if (!f->ahb_addr) {
-> > +                       dev_err(f->dev, "failed to alloc memory\n");
->
-> There is no need for this error message as the MM core will take care of it.
+ drivers/spi/spi-stm32-qspi.c | 31 +++++++++++++++++++------------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
+
+-- 
+2.17.1
+
