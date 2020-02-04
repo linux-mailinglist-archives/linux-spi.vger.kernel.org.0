@@ -2,75 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E95151938
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2020 12:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE0A151940
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2020 12:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbgBDLFh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Feb 2020 06:05:37 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33167 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726845AbgBDLFg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Feb 2020 06:05:36 -0500
-Received: by mail-pg1-f194.google.com with SMTP id 6so9508669pgk.0;
-        Tue, 04 Feb 2020 03:05:36 -0800 (PST)
+        id S1726883AbgBDLH5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Feb 2020 06:07:57 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38305 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726741AbgBDLH5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Feb 2020 06:07:57 -0500
+Received: by mail-pg1-f193.google.com with SMTP id a33so9490085pgm.5;
+        Tue, 04 Feb 2020 03:07:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GxykDE+DcSQ1crfYhERdL+BbFmIFCQ49WGPIUjHJPuI=;
-        b=PjRmx6CLUbaArMl7uReXuzNpRv2gR74IIlHJCMoKq1qCFS6axGVFPV2TJGlq1C+3N0
-         7bmCb2k5wItR1sZ7GtTNnFO5OULU6VbGPODrBq4NFI7QF6K8ZhP4wcjTxA4eAakPWZ2C
-         FtMmYpNsbW0XS9nxOlwg0GcugRb4CNfOdTWYi7wR8vvAkOV+S3OXZyqPbWjJI5iMARt6
-         cqYhJqkBK9nb0FQA54S0EZjue6wnkVy3CxVeB1f3Zu8JbS7cMenEDDtBAALQBmKDKpFN
-         pM8OZU293sEX9mYR15FBqyNVTJFpKPee5kwRsnLPpGnvKoOKN/V2n/pl4T8E7UkQuPIW
-         wNjQ==
+        bh=ESHQtDlIcqtlfd+NGPSAxf7TiL0GDSX0Vx2MqLzOZw8=;
+        b=CRyxYkhua7wqf0UmXQPzq2KQXbrAz9m4mVtTNrv2cRwBLNqziFULS+46m1H0OU+DOt
+         5YZK19o0bVR+jIfRuIK2NuRu5lObnKIwqtXBvtR5LxB0dUzWVBkCmDqdD5a6Xc2ZdyeD
+         v2zSLltYTJSJsfDfYJgJURvpv809LiznmqL5dwlmSLA51wqDruR/vYMNvo7Wp3vjSODC
+         5UutoOkZ1X1hveYWu3qzbSsII+qkXVidqTt1mxtYyW+fEyOBPhkq+CA+2lQlgFfwVm1P
+         BeNQIVmNeLSHwVS9Qc8moooCkvdI6MK3rJJ3Jp55ofZ/L996+QKK7WvlUrqm2x/wHiwM
+         nw4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GxykDE+DcSQ1crfYhERdL+BbFmIFCQ49WGPIUjHJPuI=;
-        b=aprHGfbNWlwzeEv+rsVqDoIbkZkYIUKrPXE99CF5GcO+qzXmGI/ChDfJV2rEiN30bz
-         CfnFTJBCyDG2iemMjjgRG7hAa77hHHnCH/EN0yxKYrL1gSnbRj13MBtCCxB2+dyAeiaj
-         NdBXnU53kIB/sJshQQT4GzFovLEB6Cc+KSHJhwF8kGNEOCfRFnKAsk5AdbnBOJnBeMmP
-         UR/3wGcpJyeipQdia+il0wsDU+iMB5D0X7yK+biVIu/x/QJatYyhd8o8ME9ZCQ2ucMku
-         ksZKg1uyuc8wh0TW2YMxaQqg3TtvhtcIDnTprs8LtCJb7pEye36jk0ZhyJydVHZ3u+Y6
-         /9DA==
-X-Gm-Message-State: APjAAAW6Kim/kGTbS3ylrcUeaWKt774xFQcJOx14oKNYd/PwzdIsdrHT
-        GwDlRI4OxR2uU32wRtNlrrN/CD6/AwJQ3nKNGqxF+akSqYQ=
-X-Google-Smtp-Source: APXvYqx2OK4gV7xlnE3taG7vOCZL2ndsFgf07QjvdlOnwm6k0NWOdOBJooLzABA1idpH5vCPxgWevny8Z+JU3e8kh7E=
-X-Received: by 2002:a62:52d0:: with SMTP id g199mr29444152pfb.241.1580814336043;
- Tue, 04 Feb 2020 03:05:36 -0800 (PST)
+        bh=ESHQtDlIcqtlfd+NGPSAxf7TiL0GDSX0Vx2MqLzOZw8=;
+        b=FDh28kNJtC3AkLraELOeYNqOzFWDVcZAt9bpGz+HrQoN6NASpexAKYzxYiqC/6gLpb
+         ZMuKuzHzWBpYh3khgh+LpcyksyyeJha4W//i8UboRiVSkcSI8149GGfm9Fl0Q4+UzJLW
+         r8cLUVtP+xhTgwDtkNRR3me0DcgKTKcN3vroJym8BxXwJPwJsrN6ul5AZTqedNlWdNCY
+         7IpvXaGRLupHJZ9uOeLnc0jninXtq5RRhxnMUyPwcprBAtx8X8L1jb3jbflG52yC4+mj
+         tILyoqeSbyYpqB7HYW4g8w3jj9cTGT+HcE8TMStgltWMECKwu/Jvvqfrozg+bNwFKa9+
+         HDyw==
+X-Gm-Message-State: APjAAAXKyArdZ710P0YljW/JsiI3fE9Ift+sMIWRRX4fUJN9tHvEHGcp
+        tF/N0XRjs9aBQ3xojwR5xHBaaju04keZ52tJtLzi8TjqBdk=
+X-Google-Smtp-Source: APXvYqyPQ+yETkyt1/TkchmZ3n6Rdzgwtsf/ny9fnoHapXSiK5r4dCz5U/ntSbFw4vm7r9QH01Z0RYz3v7l6Imiw3FU=
+X-Received: by 2002:a65:4685:: with SMTP id h5mr32173510pgr.203.1580814476576;
+ Tue, 04 Feb 2020 03:07:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20200203223003.4567-1-eajames@linux.ibm.com>
-In-Reply-To: <20200203223003.4567-1-eajames@linux.ibm.com>
+References: <20200131023433.12133-1-chris.packham@alliedtelesis.co.nz>
+ <20200131023433.12133-3-chris.packham@alliedtelesis.co.nz>
+ <CAHp75VfT=KNM6J1bP5cPsLw7Z776opcB9Kf6qhNCZukY-7g=pQ@mail.gmail.com> <86509a5e6656c4f560ee6f6514ab00a232994957.camel@alliedtelesis.co.nz>
+In-Reply-To: <86509a5e6656c4f560ee6f6514ab00a232994957.camel@alliedtelesis.co.nz>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 4 Feb 2020 13:05:28 +0200
-Message-ID: <CAHp75VfHAS46-kMyg7Ky4jn7zmkht6wd9ayCfn+rrO0R6aNr6A@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: Add FSI-attached SPI controller driver
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>
+Date:   Tue, 4 Feb 2020 13:07:48 +0200
+Message-ID: <CAHp75VdRYDrTeBy9+TbbE8y3jt_Fntr6fnXon3CuqCZFYQ7Maw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] spi: Add generic SPI multiplexer
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Feb 4, 2020 at 12:30 AM Eddie James <eajames@linux.ibm.com> wrote:
->
-> There exists a set of SPI controllers on some POWER processors that may
-> be accessed through the FSI bus. Add a driver to traverse the FSI CFAM
-> engine that can access and drive the SPI controllers. This driver would
-> typically be used by a baseboard management controller (BMC).
->
-> The SPI controllers operate by means of programming a sequencing engine
-> which automatically manages the usual SPI protocol buses. The driver
-> programs each transfer into the sequencer as various operations
-> specifying the slave chip and shifting data in and out on the lines.
+On Mon, Feb 3, 2020 at 11:12 PM Chris Packham
+<Chris.Packham@alliedtelesis.co.nz> wrote:
+> On Mon, 2020-02-03 at 11:50 +0200, Andy Shevchenko wrote:
 
-Some comments left unsettled in v1, thus applicable here.
+...
+
+> > > +       priv->mux = devm_mux_control_get(&spi->dev, NULL);
+> > > +       ret = PTR_ERR_OR_ZERO(priv->mux);
+> >
+> > This is a bit complicated.
+> >
+> > > +       if (ret) {
+> >
+> > Why not simple do
+> >
+> >   if (IS_ERR(priv->mux)) {
+> >     ret = PTR_ERR(...);
+> >     ...
+> >   }
+> >
+> > ?
+>
+> I've had other maintainers/reviewers suggest the opposite for patches
+> I've submitted to other subsystems which is why I went with
+> PTR_ERR_OR_ZERO. It also works well with the goto err_put_ctlr; which
+> needs ret to be set. It's not exactly a common pattern in the spi code
+> so I'd be happy to go the other way if that's the desired convention
+> for spi.
+
+Either way is the same amount of lines. The slight difference, that we
+don't check for 0. Can you check if generated code is different in
+these cases?
 
 -- 
 With Best Regards,
