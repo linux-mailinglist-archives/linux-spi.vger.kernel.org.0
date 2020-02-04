@@ -2,182 +2,191 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9F8151DBA
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2020 16:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DB0151DCE
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2020 17:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727311AbgBDP5o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Feb 2020 10:57:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727297AbgBDP5o (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 4 Feb 2020 10:57:44 -0500
-Received: from [192.168.1.32] (cpe-70-114-128-244.austin.res.rr.com [70.114.128.244])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 21D8C2084E;
-        Tue,  4 Feb 2020 15:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580831863;
-        bh=g8HMHr9zNb7pwPbXgTl3NCZrwNVAu/yZtqlC5lUflyM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ed48RRYJBvc6dXMeKafRE6EQlt2V0XIfLCQFPzuEI6uGNs708ba6Dyx2HzowTy99+
-         PIbz5V6c9lQf2BzQJnw8X/fYdMHaR+fmqKMMDwa/vvPwR2Urd8Di5ZkSpuytboh9EJ
-         07pylRJ8Ntx8KnDa2O6azfsDdtABD+/TzcnhH8d0=
-Subject: Re: [PATCH v8 2/2] spi: cadence-quadpsi: Add support for the Cadence
- QSPI controller
-To:     "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        Simon Goldschmidt <simon.k.r.goldschmidt@gmail.com>,
-        Tien-Fong Chee <tien.fong.chee@intel.com>,
-        Marek Vasut <marex@denx.de>
-Cc:     Mark Brown <broonie@kernel.org>, Vignesh R <vigneshr@ti.com>,
-        linux-spi@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, dan.carpenter@oracle.com,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20200129072455.35807-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200129072455.35807-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <CAAh8qszwQ5sJw4G_fM5vKjYu24xs03CuW371gyFE4G0hNJHdXw@mail.gmail.com>
- <abaae0fa-c2b8-bbe0-b64d-0ee4c95c1479@linux.intel.com>
- <CAAh8qsxRPx8KDyqvp=8zcrGCE82YJ_9O9cJXrgKdH7VwXeGQgg@mail.gmail.com>
- <0f079cf6-c146-8941-5bdd-f978ff3455ab@linux.intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-Autocrypt: addr=dinguyen@kernel.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <d938fcc6-3e9b-2b5d-bf6c-1de7c8649798@kernel.org>
-Date:   Tue, 4 Feb 2020 09:57:40 -0600
+        id S1727297AbgBDQGd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Feb 2020 11:06:33 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29358 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727290AbgBDQGd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Feb 2020 11:06:33 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 014FiTWa023326;
+        Tue, 4 Feb 2020 11:06:27 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xxy9jdgs8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Feb 2020 11:06:25 -0500
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 014Fj5ak027405;
+        Tue, 4 Feb 2020 11:06:25 -0500
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xxy9jdgr8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Feb 2020 11:06:25 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 014G4xDi005541;
+        Tue, 4 Feb 2020 16:06:24 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02dal.us.ibm.com with ESMTP id 2xw0y6sb97-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Feb 2020 16:06:24 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 014G6NYb33292792
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Feb 2020 16:06:23 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 70639112065;
+        Tue,  4 Feb 2020 16:06:23 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A8AB6112063;
+        Tue,  4 Feb 2020 16:06:22 +0000 (GMT)
+Received: from [9.163.68.178] (unknown [9.163.68.178])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Feb 2020 16:06:22 +0000 (GMT)
+Subject: Re: [PATCH] spi: Add FSI-attached SPI controller driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Eddie James <eajames@linux.vnet.ibm.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>
+References: <1580328504-436-1-git-send-email-eajames@linux.ibm.com>
+ <CAHp75VeNs9Zr1vayO8TwVq6=B8fwvv0chOt0in6Dw+WLCezL2g@mail.gmail.com>
+ <29f6cc86-69ca-bc88-b6ae-2b1a24c0dae3@linux.vnet.ibm.com>
+ <CAHp75Vf3NCkbw39E+d_nf+AyViG2o-u5HxrCjXXmbGk4LaFLog@mail.gmail.com>
+From:   Eddie James <eajames@linux.ibm.com>
+Message-ID: <744f0019-8656-eec1-cb9a-7e70cd042587@linux.ibm.com>
+Date:   Tue, 4 Feb 2020 10:06:22 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <0f079cf6-c146-8941-5bdd-f978ff3455ab@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <CAHp75Vf3NCkbw39E+d_nf+AyViG2o-u5HxrCjXXmbGk4LaFLog@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-04_05:2020-02-04,2020-02-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ mlxscore=0 suspectscore=0 phishscore=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2002040107
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi
 
-On 1/29/20 9:41 PM, Ramuthevar, Vadivel MuruganX wrote:
-> Hi Simon,
-> 
-> On 29/1/2020 8:01 PM, Simon Goldschmidt wrote:
->> + some people possibly interested in this for the Altera platforms
->> (see below)
+On 2/4/20 5:02 AM, Andy Shevchenko wrote:
+> On Mon, Feb 3, 2020 at 10:33 PM Eddie James <eajames@linux.vnet.ibm.com> wrote:
+>> On 1/30/20 10:37 AM, Andy Shevchenko wrote:
+>>> On Wed, Jan 29, 2020 at 10:09 PM Eddie James <eajames@linux.ibm.com> wrote:
+> ...
+>
+>>>> +       struct device *dev;
+>>> Isn't fsl->dev the same?
+>>> Perhaps kernel doc to explain the difference?
 >>
->> Hi all,
->>
->> This is about moving the cadence qspi driver (which is used on TI,
->> Altera FPGAs
->> and a new Intel SoC) to spi-mem.Vadivel asked me to include some
->> Altera people
->> in the loop (see below), as this is the only platform currently untested,
->> I think.
->>
->> Right now, I'm not in the position to test this myself as we're
->> currently stuck
->> on an older RT kernel, so I cannot test with HEAD.
->>
->> Feel free to involve other Intel/Altera if you're interested in that
->> peripheral
->> not being broke for socfpga in one of the next releases :-)
->>
->> On Wed, Jan 29, 2020 at 10:18 AM Ramuthevar, Vadivel MuruganX
->> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
->>> Hi,
->>>
->>>    Thank you for the query and confirmation.
->>>
->>> On 29/1/2020 4:31 PM, Simon Goldschmidt wrote:
->>>
->>> On Wed, Jan 29, 2020 at 8:25 AM Ramuthevar,Vadivel MuruganX
->>> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
->>>
->>> From: Ramuthevar Vadivel Murugan
->>> <vadivel.muruganx.ramuthevar@linux.intel.com>
->>>
->>> Add support for the Cadence QSPI controller. This controller is
->>> present in the Intel Lightning Mountain(LGM) SoCs, Altera and TI SoCs.
->>> This driver has been tested on the Intel LGM SoCs.
->>>
->>> So it has been tested on LGM and Vignesh gave his ok for TI. Is there
->>> anyone
->>> in the loop by now checking that this is valid for the 3rd platform
->>> using this
->>> (Altera)?
->>>
->>> Or am I wrong in thinking that this driver is meant to replace
->>> drivers/mtd/spi-nor/cadence-quadspi.c used on that platform?
->>>
->>> Absolutely , You are right, this driver is meant to replace to
->>> drivers/mtd/spi-nor/cadence-quadspi.c
->>> for Intel, TI and Altera SoC's using Cadence-QSPI IP.
->>>
->>> Meanwhile we have adapted to spi-mem framework (to support
->>> spi-nor/nand)and also didn't change the existing
->>> functionalities of spi-nor flash operations like
->>> hw_init/read/write/erase in drivers/mtd/spi-nor/cadence-quadspi.c,
->>> so it works fine (might be in Altera as well).
->>>
->>> Already I checked that Graham Moore <grmoore@opensource.altera.com>
->>> who has submitted the existing driver patches to upstream,
->>> His mail-id is bouncing back, then I decided that you are the right
->>> person to ask, could you please add them in loop if you know the team
->>> (socfpga platform engineers).
+>> No, it's not the same, as dev here is the SPI controller. I'll add a
+>> comment.
+> Why to have duplication then?
 
-Thanks for including Graham, but he's moved on to a different career
-that no longer includes Linux.
 
->> OK, done that. I mainly know them from U-Boot development, so I'm not
->> sure
->> who's responsible for the Linux drivers...
-> Thank you for adding the team and respective members, let's see.
-> 
+Nothing is being duplicated, the two variables are storing entirely 
+different information, both of which are necessary for each SPI 
+controller that this driver is driving.
 
-I don't have the original patch series, but will monitor going forward.
-As long as the new driver does not break legacy SoCFPGA products that
-use the cadence-quadspi driver then it should be ok.
 
-Dinh
+>
+>>>> +       struct fsi_device *fsi;
+> ...
+>
+>>>> +       for (i = 0; i < num_bytes; ++i)
+>>>> +               rx[i] = (u8)((in >> (8 * ((num_bytes - 1) - i))) & 0xffULL);
+>>> Redundant & 0xffULL part.
+>>>
+>>> Isn't it NIH of get_unalinged_be64 / le64 or something similar?
+>>
+>> No, these are shift in/out operations. The read register will also have
+>> previous operations data in them and must be extracted with only the
+>> correct number of bytes.
+> Why not to call put_unaligned() how the tail in this case (it's 0 or
+> can be easily made to be 0) will affect the result?
+
+
+The shift-in is not the same as any byte-swap or unaligned operation. 
+For however many bytes we've read, we start at that many bytes 
+left-shifted in the register and copy out to our buffer, moving right 
+for each next byte... I don't think there is an existing function for 
+this operation.
+
+
+>
+>>>> +       return num_bytes;
+>>>> +}
+>>>> +static int fsi_spi_data_out(u64 *out, const u8 *tx, int len)
+>>>> +{
+>>> Ditto as for above function. (put_unaligned ...)
+> Ditto.
+
+
+I don't understand how this could work for transfers of less than 8 
+bytes, any put_unaligned would access memory that it doesn't own.
+
+
+>
+>>>> +}
+> ...
+>
+>>>> +static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+>>>> +                                struct spi_transfer *transfer)
+>>>> +{
+>>> Can you refactor to tx and rx parts?
+>>
+>> Why?
+> It's way too long function to read. Indentation level also can improve
+> readability.
+> That's basically what refactoring is for.
+
+
+The body is 65 lines, I don't think it is too long.
+
+Since the function is used multiple times I think it makes more sense to 
+encapsulate the check for tx/rx in the function rather than split it and 
+have to check each time the functions are used.
+
+
+>
+>>>> +       return 0;
+>>>> +}
+> ...
+>
+>>>> +       if ((clock_cfg & (SPI_FSI_CLOCK_CFG_MM_ENABLE |
+>>>> +                         SPI_FSI_CLOCK_CFG_ECC_DISABLE |
+>>>> +                         SPI_FSI_CLOCK_CFG_MODE |
+>>>> +                         SPI_FSI_CLOCK_CFG_SCK_RECV_DEL |
+>>>> +                         SPI_FSI_CLOCK_CFG_SCK_DIV)) != wanted_clock_cfg)
+>>>> +               rc = fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
+>>>> +                                      wanted_clock_cfg);
+>>> Missed {} ?
+>>
+>> No? It's one line under the if.
+> One statement, but *two* lines.
+> What does checkpatch.pl tell you about this?
+
+
+Right.
+
+checkpatch.pl says nothing about this, I think it meets the coding 
+standards as is.
+
+
+Thanks for the review,
+
+Eddie
+
+
+>
