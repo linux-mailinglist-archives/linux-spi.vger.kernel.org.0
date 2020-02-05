@@ -2,87 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F441521B3
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2020 22:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA88215257C
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2020 05:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727468AbgBDVIQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Feb 2020 16:08:16 -0500
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:43929 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727445AbgBDVIQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Feb 2020 16:08:16 -0500
-Received: by mail-ua1-f65.google.com with SMTP id o42so7557uad.10
-        for <linux-spi@vger.kernel.org>; Tue, 04 Feb 2020 13:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WSnbwBgsFio2ehfBChAWyJkxbhcuFHyXVUzB6wC6EcE=;
-        b=FjYS2MR55uToDI5C+GzDlpxU8rd/BFpp55zY9ZUHZkqHH9XTRMqccWRxImQ42ROmuA
-         /DEwp9VP5G5lN6LVdd05687vXMcaxB2Pt8lvrpLz6l7VHcX1haY9aYROuZgCs/b9sGuG
-         CweceSZSCraRJ1FanI0mhXLFKn3I+UBA5uK98=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WSnbwBgsFio2ehfBChAWyJkxbhcuFHyXVUzB6wC6EcE=;
-        b=ENI6pMqzsmuxlW2BwGzHbPdMyX95gOTT85c83TUDL9B4AaKS8X5hK8YBCJ0jLMV+dd
-         8mckqhnytZoCNuMQ5lENLgJ8PztaeNFFWsp2eLlJ6Cz/ym/iuYyNpu05FCldXZQkYNoh
-         ekkwch266R3a4USWQCqHYuW/PpEZmWbms+O66DEKUyby7+urNpYnQVmlj/QzR265qzk2
-         jiHGqBO0TgB7NDLnzYvxWGrfXzJrpI1ZgW97/PfcUZsb56cUXqqp25RBXmRalgqORnMQ
-         WbyjY32yMMJrEXiB5mwk94+iM65RrD9xVXp7Q23P1P0eaA5eJ7CDewpHA+Nph/E268tK
-         H9qA==
-X-Gm-Message-State: APjAAAUW9f7njx2kcVaJj6M6gdbZUajgzqjvBELoe7PS1yUe5K3hIqEk
-        FawnjSDSdYPgTd/I5Yy3mIs+zeIHEOg=
-X-Google-Smtp-Source: APXvYqyx5gh2vJpX+Vq3sEKE8jVD1P/dR4hrb/gtKog67DLYBseWDs57hyLV1w4EbU7Idh0fcOQmMA==
-X-Received: by 2002:ab0:74ce:: with SMTP id f14mr18226109uaq.118.1580850494906;
-        Tue, 04 Feb 2020 13:08:14 -0800 (PST)
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
-        by smtp.gmail.com with ESMTPSA id l193sm7673300vki.42.2020.02.04.13.08.14
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Feb 2020 13:08:14 -0800 (PST)
-Received: by mail-vk1-f175.google.com with SMTP id w67so5619989vkf.1
-        for <linux-spi@vger.kernel.org>; Tue, 04 Feb 2020 13:08:14 -0800 (PST)
-X-Received: by 2002:a1f:a9d0:: with SMTP id s199mr18378566vke.40.1580850493870;
- Tue, 04 Feb 2020 13:08:13 -0800 (PST)
+        id S1727836AbgBEEIU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Feb 2020 23:08:20 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:36570 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727832AbgBEEIT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Feb 2020 23:08:19 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01547abQ083641;
+        Tue, 4 Feb 2020 22:07:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1580875656;
+        bh=CAV1QR8slHije4jUH3qk7JjiH6cRqY6xGNy7DYePN78=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=exxoYmLnAqlMeO2ENd1TcPHzdytE7GInT8mptXJXaRVWFZ5AhYTkJg/ImLeksCuik
+         DT18+jmJEStTV0Wjym+VR2X35a+yIdkC19WEiGMoa0487VtVpYgwAfdJ+E6Vb+OPdk
+         t2JLIeJOJWORUr4+4q0uciX2Dl4mkyLE58/ryx9k=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01547aSb127351;
+        Tue, 4 Feb 2020 22:07:36 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 4 Feb
+ 2020 22:07:36 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 4 Feb 2020 22:07:36 -0600
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01547WAK040074;
+        Tue, 4 Feb 2020 22:07:33 -0600
+Subject: Re: [PATCH v8 2/2] spi: cadence-quadpsi: Add support for the Cadence
+ QSPI controller
+To:     Dinh Nguyen <dinguyen@kernel.org>,
+        "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        Simon Goldschmidt <simon.k.r.goldschmidt@gmail.com>,
+        Tien-Fong Chee <tien.fong.chee@intel.com>,
+        Marek Vasut <marex@denx.de>
+CC:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <dan.carpenter@oracle.com>,
+        <cheol.yong.kim@intel.com>, <qi-ming.wu@intel.com>
+References: <20200129072455.35807-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200129072455.35807-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <CAAh8qszwQ5sJw4G_fM5vKjYu24xs03CuW371gyFE4G0hNJHdXw@mail.gmail.com>
+ <abaae0fa-c2b8-bbe0-b64d-0ee4c95c1479@linux.intel.com>
+ <CAAh8qsxRPx8KDyqvp=8zcrGCE82YJ_9O9cJXrgKdH7VwXeGQgg@mail.gmail.com>
+ <0f079cf6-c146-8941-5bdd-f978ff3455ab@linux.intel.com>
+ <d938fcc6-3e9b-2b5d-bf6c-1de7c8649798@kernel.org>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <9fc3e36d-18c2-c5fb-2fed-7ffcef817692@ti.com>
+Date:   Wed, 5 Feb 2020 09:38:11 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20200204191206.97036-1-swboyd@chromium.org> <20200204191206.97036-4-swboyd@chromium.org>
-In-Reply-To: <20200204191206.97036-4-swboyd@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 4 Feb 2020 13:08:02 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XLP4Rz9gW4hHDJRf54qFqnYJeXH259_B2Fd5ObTPZUeA@mail.gmail.com>
-Message-ID: <CAD=FV=XLP4Rz9gW4hHDJRf54qFqnYJeXH259_B2Fd5ObTPZUeA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] spi: spi-geni-qcom: Drop of.h include
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Girish Mahadevan <girishm@codeaurora.org>,
-        Dilip Kota <dkota@codeaurora.org>,
-        Alok Chauhan <alokc@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <d938fcc6-3e9b-2b5d-bf6c-1de7c8649798@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+Hi Dinh,
 
-On Tue, Feb 4, 2020 at 11:12 AM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> This driver doesn't call any DT functions like of_get_property(). Remove
-> the of.h include as it isn't used.
->
-> Cc: Girish Mahadevan <girishm@codeaurora.org>
-> Cc: Dilip Kota <dkota@codeaurora.org>
-> Cc: Alok Chauhan <alokc@codeaurora.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/spi/spi-geni-qcom.c | 1 -
->  1 file changed, 1 deletion(-)
+On 04/02/20 9:27 pm, Dinh Nguyen wrote:
+[...]
+>>>> Already I checked that Graham Moore <grmoore@opensource.altera.com>
+>>>> who has submitted the existing driver patches to upstream,
+>>>> His mail-id is bouncing back, then I decided that you are the right
+>>>> person to ask, could you please add them in loop if you know the team
+>>>> (socfpga platform engineers).
+> 
+> Thanks for including Graham, but he's moved on to a different career
+> that no longer includes Linux.
+> 
+>>> OK, done that. I mainly know them from U-Boot development, so I'm not
+>>> sure
+>>> who's responsible for the Linux drivers...
+>> Thank you for adding the team and respective members, let's see.
+>>
+> 
+> I don't have the original patch series, but will monitor going forward.
+> As long as the new driver does not break legacy SoCFPGA products that
+> use the cadence-quadspi driver then it should be ok.
+> 
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+The legacy driver under drivers/mtd/spi-nor will be removed as we cannot
+support both SPI NOR and SPI NAND with single driver if its under
+spi-nor. New driver should be functionally equivalent to existing one.
+So I suggest you test this driver on legcay SoCFPGA products.
+
+
+-- 
+Regards
+Vignesh
