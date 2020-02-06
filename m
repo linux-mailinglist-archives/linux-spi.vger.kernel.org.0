@@ -2,92 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAA415457C
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2020 14:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92FD154709
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2020 16:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727361AbgBFNyH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Feb 2020 08:54:07 -0500
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:42910 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726765AbgBFNyH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Feb 2020 08:54:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=GCzxJGLDhyzAc2+59nJJJlFFQZG+KekwiRcn/IX7tEw=; b=OQWErEdDb/s7SaXS1CW0VBVGO
-        zsh/6D9z+LcFFmHYN/TIyNXdiSVzPvzGz+DXiucYa9JFU5a8V1Zkk+deq/vRR4sMtgYiGw/r4IHnX
-        2qg+E3luQg91bzTitvqbqjY1NeeTiz3KlQyKLAbRRBwiEFVETeqx3WX56J6iPCTo2IApw=;
-Received: from fw-tnat-cam2.arm.com ([217.140.106.50] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1izhbY-0002Fm-Dn; Thu, 06 Feb 2020 13:54:04 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id E3403D01D7F; Thu,  6 Feb 2020 13:54:03 +0000 (GMT)
-Date:   Thu, 6 Feb 2020 13:54:03 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-spi@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
+        id S1727481AbgBFPGk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Feb 2020 10:06:40 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:35699 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727379AbgBFPGj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Feb 2020 10:06:39 -0500
+Received: by mail-pg1-f193.google.com with SMTP id l24so2893974pgk.2;
+        Thu, 06 Feb 2020 07:06:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UZFkCGZVwQwduBtZ/3jHg/ruPMYP9eMWaKEsW4KMUwM=;
+        b=UigLDjPkKII20d9oN18ihCRA+NuoxXY3ObqaZ3RjhodSH0/6ueflU0o61aPlfgCwIh
+         KglkR2y2S/Jx8gTz7VHx0B/3vQMbZ61/yPmmNFGOLO6zJediuida0L5lvNLgQyn+7aqJ
+         HfqZs3VpeTq1FRz5YjYJwIRf1za1q5C8cSzCHWnMdR0NxdbjbNuxiny+ZK9obbGHVBgV
+         OEYJB8WYCqHm2zG7aCcKjxGLHc2SHP1NPlncruJd/Ly3NPUXanWA7cmQq0CRtMU5yvup
+         Lyt49IGP7x7afuVLBE+PIWcT8IfXv0rSwioT0FBXNJFzbgKjPhYiMFjit3U2I6yn87St
+         ZFTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UZFkCGZVwQwduBtZ/3jHg/ruPMYP9eMWaKEsW4KMUwM=;
+        b=MJeRrkTO9rifDIWhjHe6jgNSkYa28CedvSf5fYEZ77z+hlK/I8NgtsJxr3T0ulnV4h
+         XpLryuwMFnheWKny52OrwCEw63QHkiwSDuAqzwgzsUGO4JX/DhkvgT2J3wpMVCKrN1HZ
+         DkGbZP/o67Jn0g5KsgbKWbhFV5wcNjnijfRvetnhHFr2xPzwDzlhr6FgIExBfR9dqqBB
+         Ziq0c+DVi7SGOXF2gPbChIc9d7TXB5Fb8z6BiKc6jmvldSTVQIsOgwFDkcWw2Q2ZQ08O
+         5+9BTa4Qye+EEH5z/9LHbVYqEkaOjY9PRMg5ZZsX8C3UYJvMBVNBGIYDWKynbk9rorl5
+         NyPA==
+X-Gm-Message-State: APjAAAX+ewA7uJvOqQ7pRd+2to1Vsya68uWhat7KzAoxJmpccKCPVJ2x
+        W3hS7rgN7/B8b1QYkLkz3i4oMdiCc54=
+X-Google-Smtp-Source: APXvYqyL2WFmNAXlCFyO7pKJgnGP32rmFdvVLLTr21oEjc7gLrKgr9uC/DhbXqHRZ5LRPK397UR/Ow==
+X-Received: by 2002:a63:778c:: with SMTP id s134mr3964066pgc.451.1581001598790;
+        Thu, 06 Feb 2020 07:06:38 -0800 (PST)
+Received: from localhost.localdomain ([2001:19f0:7001:2668:5400:1ff:fe62:2bbd])
+        by smtp.gmail.com with ESMTPSA id 64sm3748157pfd.48.2020.02.06.07.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2020 07:06:38 -0800 (PST)
+From:   Chuanhong Guo <gch981213@gmail.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH resend 1/2] spi: add driver for ar934x spi controller
-Message-ID: <20200206135403.GP3897@sirena.org.uk>
-References: <20200206084443.209719-1-gch981213@gmail.com>
- <20200206084443.209719-2-gch981213@gmail.com>
- <20200206113158.GK3897@sirena.org.uk>
- <CAJsYDVKnOv+4NT8V+9fFy_0KE7QSoeTL0jHTdq31Z=88vBzHgQ@mail.gmail.com>
- <CAJsYDV+C+-uqurM+yTS3XXXrEDe+G3XFrpYEAaZLvzECLNoF+A@mail.gmail.com>
+        devicetree@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>
+Subject: [PATCH v2 0/2] spi: add driver for ar934x spi controller
+Date:   Thu,  6 Feb 2020 23:06:24 +0800
+Message-Id: <20200206150626.708649-1-gch981213@gmail.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T6OnZCvW5HcnivXR"
-Content-Disposition: inline
-In-Reply-To: <CAJsYDV+C+-uqurM+yTS3XXXrEDe+G3XFrpYEAaZLvzECLNoF+A@mail.gmail.com>
-X-Cookie: Programming is an unnatural act.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This controller is a superset of the already supported qca,ar7100-spi.
+Besides the bit-bang mode in spi-ath79.c, this new controller added
+a new "shift register" mode, allowing faster spi operations.
+This mode doesn't need all the bit-bang code in spi-ath79.c and needs
+a different clock setup, so I decided to write a new driver for it
+instead of extending current spi-ath79 driver.
 
---T6OnZCvW5HcnivXR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Changes since v1:
+1. change comment at the beginning to C++ style
+2. rename ar934x_spi_transfer_one to ar934x_spi_transfer_one_message
 
-On Thu, Feb 06, 2020 at 08:33:33PM +0800, Chuanhong Guo wrote:
-> On Thu, Feb 6, 2020 at 8:30 PM Chuanhong Guo <gch981213@gmail.com> wrote:
+Chuanhong Guo (2):
+  spi: add driver for ar934x spi controller
+  dt-binding: spi: add bindings for spi-ar934x
 
-> > Chipselect is also handled during transfer. Controller asserts
-> > corresponding chipselect in SHIFT_CTRL register, and if SHIFT_TERM bit
-> > is set, controller will deassert chipselect after current transfer is
-> > done. I need to know whether this is the last transfer and set
-> > SHIFT_TERM accordingly.
+ .../bindings/spi/qca,ar934x-spi.yaml          |  40 +++
+ drivers/spi/Kconfig                           |   7 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-ar934x.c                      | 229 ++++++++++++++++++
+ 4 files changed, 277 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/qca,ar934x-spi.yaml
+ create mode 100644 drivers/spi/spi-ar934x.c
 
-> Oh, I remembered that I saw transfer_one function name somewhere and
-> thought maybe I could shorten the function name a bit. I'll correct
-> this back to ar934x_spi_transfer_one_message in v2.
+-- 
+2.24.1
 
-OK, sounds good - I see the chip select handling now.
-
---T6OnZCvW5HcnivXR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl48GnkACgkQJNaLcl1U
-h9Abxwf/bD6z7Zyx5ZcODXIHhsjroI14CG3xmml4eA/SkHeU5P02YglZOlXrAjQK
-AxJfhBpbiDy+R/eKMrzK4bsFjEOWsVLBiJ9HItN0qnnUmTXwfm5hyyxgw5qeHejb
-Uzu6XVVf5KmUS9XrOZ4p4JIIO5HWitOpmCtrfMQtvjp7hi+5NIjApdSw5nCMZYxb
-edOMq+0DDhXeMdLytbsQOehx6Vflyi7nEZS9TNEeLYG1zQPotBJccAiHypEtU0P0
-l/T1U624W5dSwFkSARM+Ko6HNSVgriPTMS1ZVqz4RHnfB+U3g3IsnjAdNgU1nUQP
-okovYCXjjOzLRa1fubeUMcjxNrRaZg==
-=fyFm
------END PGP SIGNATURE-----
-
---T6OnZCvW5HcnivXR--
