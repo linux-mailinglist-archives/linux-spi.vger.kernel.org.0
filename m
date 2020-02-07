@@ -2,125 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 999B7156101
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2020 23:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB53156154
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2020 23:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727117AbgBGWEm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 7 Feb 2020 17:04:42 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36013 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727031AbgBGWEm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 Feb 2020 17:04:42 -0500
-Received: by mail-pl1-f195.google.com with SMTP id a6so299321plm.3;
-        Fri, 07 Feb 2020 14:04:41 -0800 (PST)
+        id S1727075AbgBGWgr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 7 Feb 2020 17:36:47 -0500
+Received: from mail-eopbgr1400127.outbound.protection.outlook.com ([40.107.140.127]:54144
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727031AbgBGWgr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 7 Feb 2020 17:36:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FBlSrZDc/G88KvsLNlJw9z7OYIlmHIXw8r17zn2IWHOqF9HZ0AOUqu7DhAvGPdqF4U7214TScmcwDJSL7TsmLQ0sZLMObjlp2piVl19KvwsVfFtxrWkbLAbdaOFLIoA/hkXDAdMk9L0Qdh7RVppn7rNEuTHcUyQW96pG6P6E7omohs8nTc9SyCvF3QB6XS3JYST5PtUb3/0a5jUfJtqz1fzTPw4rmuxU6r1ygQprSdY2CdYFixDiVf6OSE6zZYtHR8pGdyu+OonWT6sQSxf5Vu3C3Zi/hiZiwtwJXuzy37R77zSzyFCpFVipSUoZMYgXM9q4PFB6HnihI4hVLbthfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4GnDXechib9ke13HZIpyH4LJ8HcIN1J2o7jgtTSQVIE=;
+ b=iMAchrHsk4DzHaIHVJwLdv+l59Bgizx0WqbTCygOx6XTyQjbq1InmjsG3HMRDfXPz+yNSA1O0H9y1MqFT0MhxcjVJOMiJDTVvBGPQMGQ4HW5vPyPYyMoIUDzmQNqhgDGbPeAPw7PlmyFxrCp/NNQF6ExXxwAnNbM541cK0/Mqll7HbDxKC/x7Zn1noCYUgT0kxrZ2Tiv1QyZaHDnyuxYItmr6VayqChXiRPBerB0n48yTGFUSP8lDx5JlWJyIzwi1PExU6AFp4BcaMnrCcNiV1tz6H1Hz5uetvGQbSEppoRw4OFIz2fHc7rL4aCPD54uQXi/ebJmry0PP2z2hz81gA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zPDmhswiBJE1QLstk4ChpHjPj5mjGrF+m5q4SUTfNEg=;
-        b=U3MjPxbM1K7k+8ZkbpekkqbvP1T3T9jED5khnh21/XhANQP7Wbgi80pEsmDkZwPHbl
-         37lP5zlxvJpTjbYI1q6Oek5OnQnKNiru74FBLjRlHlUVKvW27Ktv5dvu36vGWvWTZ3jU
-         4WY7XUcG9dCOy6Qca+R7E01Q/AfcWBP6uXOWrNhjpn8l7+cycHqBGDeHouyKWCkNfxgK
-         c7gWN7a9HnL4uMLFC6JbjujSVUqxJnvUlNpB5bFQBjxRKncNHxmRkAVGKyxqm5WhJIkz
-         CGMvrwf0/LCCTL/P5Y/ilk+OAXpbYIkLEpu2m8dcT46JTayEeTGAgWfPATDr2Jve2E86
-         DAMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zPDmhswiBJE1QLstk4ChpHjPj5mjGrF+m5q4SUTfNEg=;
-        b=Nwb1Uj48HN6cMhZibTR7Oo5JDREqjOcBcmowKfpzScbfYSfPB9Fp5nKpEjCA9YZKR2
-         pfpAnp7rWoWi5cEjT9ASEe+lf3OGKxxw7Kcn3sMMIyw8qleIZdK4trqZGjCGmJOp4S5w
-         v2FOpQIKcXvNl9x4/7x3a6JF7oGSRmE4OLCIH4u0gi3bS88ROXUVel3emXV30mqBp5gc
-         LAb1vlZMi132hE+cf25TIizkLPdFQpmePXzms0SyH+0lK3GEmfKWTAHsuuW5iouXHwgt
-         M1XPthipazyRcsC+dqv163CrhbsezuScK64/1mxl5hyAO4ES6/oCRbOe4M2iacub5mZw
-         o0NQ==
-X-Gm-Message-State: APjAAAX8BGg+Nd/+6Kzgim7k9SbFriHV2gZFPWywASSyMfo7EQE0SjxG
-        Z7/Lf3pSdBgdByai20JzN1e5FUxfbNOemUM/4zA=
-X-Google-Smtp-Source: APXvYqwUGO/t9jLS9CaSuQuKmDq6P8+bwQMpcMN5kIypEPaCtb9UXqltBm4E05L20vsp5xsi56TmgrSZ0H6BHE4UsLU=
-X-Received: by 2002:a17:90a:2004:: with SMTP id n4mr6351388pjc.20.1581113080425;
- Fri, 07 Feb 2020 14:04:40 -0800 (PST)
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4GnDXechib9ke13HZIpyH4LJ8HcIN1J2o7jgtTSQVIE=;
+ b=JLAC3xTkdDz8Cz31lH0m+DrugXstOuYkG3bNrEVTvaoi3NUtdebZM5Ksqz7WDUGiM0tz9ANfRb+v2Olvf5fgucwRTEMtePF5tovRqrMm5JKk7DMtAeE3k5KwZ6yOTHDBro7JYoV5S8pK+Z920afpQbgiHprszfRUoBcqTC+uTPc=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1482.jpnprd01.prod.outlook.com (52.133.163.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2707.24; Fri, 7 Feb 2020 22:36:42 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::8870:97e4:a63c:67ea]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::8870:97e4:a63c:67ea%7]) with mapi id 15.20.2707.020; Fri, 7 Feb 2020
+ 22:36:42 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>
+CC:     Mason Yang <masonccyang@mxic.com.tw>
+Subject: RE: [PATCH v2] spi: add Renesas RPC-IF driver
+Thread-Topic: [PATCH v2] spi: add Renesas RPC-IF driver
+Thread-Index: AQHVy+TviPn/l/o2I0KvRtYPATdXYagQb3lw
+Date:   Fri, 7 Feb 2020 22:36:42 +0000
+Message-ID: <TY1PR01MB1562509AEBD0B4460D3FEC798A1C0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <ad503d6e-4739-9744-64b4-fd13f44ea6fe@cogentembedded.com>
+ <6515c5ec-8432-0b20-426d-0428bbdf3712@cogentembedded.com>
+In-Reply-To: <6515c5ec-8432-0b20-426d-0428bbdf3712@cogentembedded.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNGU4YjMzNGYtNDlmYS0xMWVhLWFhNWItOTRlNmY3Njc5M2FlXGFtZS10ZXN0XDRlOGIzMzUwLTQ5ZmEtMTFlYS1hYTViLTk0ZTZmNzY3OTNhZWJvZHkudHh0IiBzej0iMTMxMCIgdD0iMTMyMjU1ODg2MDA4MTA3MjMwIiBoPSJQK0N5TjVITzk2bkgvRklCa2RaTDJ6VVc5Zlk9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 1b4cfc37-275f-47a4-1f13-08d7ac1e343c
+x-ms-traffictypediagnostic: TY1PR01MB1482:
+x-microsoft-antispam-prvs: <TY1PR01MB1482FA1BC59D7C33A9F753268A1C0@TY1PR01MB1482.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0306EE2ED4
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(136003)(376002)(39830400003)(396003)(346002)(189003)(199004)(55016002)(9686003)(478600001)(5660300002)(66446008)(66946007)(81166006)(52536014)(64756008)(6506007)(66556008)(76116006)(33656002)(81156014)(8676002)(66476007)(8936002)(186003)(4326008)(71200400001)(86362001)(110136005)(26005)(316002)(2906002)(7696005);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1482;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: d90KVP53aZqY52XspJXm/sjeB72ezhQ1oav/EYkF1NG8HdMZn3lGY9bumqAhsIsBM8V893WxQsWb+5RhI32EOG6fMrz72/1BjLYws9w939P40zA6vRdDiTZjNGLwx1R+CBeA+JuoYcGEBuaa0+J4TVZXbt7d116rxgdIVkK6xRnPcvairRt8603oItOAwzKFRp3AjOWvqYy2QHM3GnKUbT52ey3+wvHksQ9EnBAFpPXC0C/rg2obBQgZbLCpfuzpmnpKUkeOQmGvU4L48gpiXnXT59P+9MzXAE6D+1SczalTlpaN9AJH/st3jxu1boJIL4Ghjzkz7otkZFZeTUmERH6jYiVvWQaFwmWZEa2n27cE+MqnWO0EkGm8Oe39AZMgFZA3Ij5X5pSXRPPyHiaLUnsgX08gCFYkm7Z5xETGIBghInOiZd6LUGMRAOybrwdv
+x-ms-exchange-antispam-messagedata: a78k8B0nLcpX+GB20pRtvtDSjnE/o1xpzLh3/y806I5H/HiKd0Q4GqdxzKUkntgr4o9iNIQecHByEjvBQwB3KF4i2LKS/FhSZ+Mr1snlAWHheyKoILEOytxBHSsJGnhKPDjbeoVDtlGwPqH0ZUPzLQ==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <1580328504-436-1-git-send-email-eajames@linux.ibm.com>
- <CAHp75VeNs9Zr1vayO8TwVq6=B8fwvv0chOt0in6Dw+WLCezL2g@mail.gmail.com>
- <29f6cc86-69ca-bc88-b6ae-2b1a24c0dae3@linux.vnet.ibm.com> <CAHp75Vf3NCkbw39E+d_nf+AyViG2o-u5HxrCjXXmbGk4LaFLog@mail.gmail.com>
- <744f0019-8656-eec1-cb9a-7e70cd042587@linux.ibm.com> <CAHp75VfOM5Rd3LRBtvyT96G=+J4KxTRoSVUcQTj+RxrGyZMMnQ@mail.gmail.com>
- <90973143-bd0a-33cf-9eb8-a83be1a9b415@linux.vnet.ibm.com> <CAHp75Vf6HJw=SpK9_HUgcMaaabs5pZEybP4SS-gc1wz5GRcqeg@mail.gmail.com>
- <cd8a7279-beb2-39e6-58e6-6ea505665547@linux.vnet.ibm.com> <CAHp75VdO2+Kkgo1Nv3EJXTMqP6Y7XgLVXtRvURk6Zz0p=R9zNQ@mail.gmail.com>
- <ca8a832e-ceeb-3ce1-9807-96ee41e0f166@linux.vnet.ibm.com>
-In-Reply-To: <ca8a832e-ceeb-3ce1-9807-96ee41e0f166@linux.vnet.ibm.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 8 Feb 2020 00:04:29 +0200
-Message-ID: <CAHp75VduJn=kMuriGNAGk1ZrL4b2LpqEn5c8AC=PHFKrgoz=vg@mail.gmail.com>
-Subject: Re: [PATCH] spi: Add FSI-attached SPI controller driver
-To:     Eddie James <eajames@linux.vnet.ibm.com>
-Cc:     Eddie James <eajames@linux.ibm.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b4cfc37-275f-47a4-1f13-08d7ac1e343c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2020 22:36:42.0426
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wntCnswTsAjn1Icy28IHyvB3CWslBx32w13TMtE7HdSa73cUEBU2uofKyepBhhGmpdmtmFZeSlgd39ypHhvrEy0PE7SGHwXA4dkWODAzP2c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1482
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Feb 7, 2020 at 11:04 PM Eddie James <eajames@linux.vnet.ibm.com> wrote:
-> On 2/7/20 2:34 PM, Andy Shevchenko wrote:
-> > On Fri, Feb 7, 2020 at 10:04 PM Eddie James <eajames@linux.vnet.ibm.com> wrote:
-> >> On 2/7/20 1:39 PM, Andy Shevchenko wrote:
-> >>> On Fri, Feb 7, 2020 at 9:28 PM Eddie James <eajames@linux.vnet.ibm.com> wrote:
-> >>>> On 2/5/20 9:51 AM, Andy Shevchenko wrote:
-> >>>>> On Tue, Feb 4, 2020 at 6:06 PM Eddie James <eajames@linux.ibm.com> wrote:
-> >>>>>> On 2/4/20 5:02 AM, Andy Shevchenko wrote:
-> >>>>>>> On Mon, Feb 3, 2020 at 10:33 PM Eddie James <eajames@linux.vnet.ibm.com> wrote:
-> >>>>>>>> On 1/30/20 10:37 AM, Andy Shevchenko wrote:
-> >
-> >>>>>>>>>> +       for (i = 0; i < num_bytes; ++i)
-> >>>>>>>>>> +               rx[i] = (u8)((in >> (8 * ((num_bytes - 1) - i))) & 0xffULL);
-> >>>>>>>>> Redundant & 0xffULL part.
-> >>>>> For me it looks like
-> >>>>>
-> >>>>>      u8 tmp[8];
-> >>>>>
-> >>>>>      put_unaligned_be64(in, tmp);
-> >>>>>      memcpy(rx, tmp, num_bytes);
-> >>>>>
-> >>>>> put_unaligned*() is just a method to unroll the value to the u8 buffer.
-> >>>>> See, for example, linux/unaligned/be_byteshift.h implementation.
-> >>>> Unforunately it is not the same. put_unaligned_be64 will take the
-> >>>> highest 8 bits (0xff00000000000000) and move it into tmp[0]. Then
-> >>>> 0x00ff000000000000 into tmp[1], etc. This is only correct for this
-> >>>> driver IF my transfer is 8 bytes. If, for example, I transfer 5 bytes,
-> >>>> then I need 0x000000ff00000000 into tmp[0], 0x00000000ff000000 into
-> >>>> tmp[1], etc. So I think my current implementation is correct.
-> >>> Yes, I missed correction of the start address in memcpy(). Otherwise
-> >>> it's still the same what I was talking about.
-> >>
-> >> I see now, yes, thanks.
-> >>
-> >> Do you think this is worth a v3? Perhaps put_unaligned is slightly more
-> >> optimized than the loop but there is more memory copy with that way too.
-> > I already forgot the entire context when this has been called. Can you
-> > summarize what the sequence(s) of num_bytes are expected usually.
-> >
-> > IIUC if packets small, less than 8 bytes, than num_bytes will be that value.
-> > Otherwise it will be something like 8 + 8 + 8 ... + tail. Is it
-> > correct assumption?
->
->
-> Yes, it will typically be 8 + 8 +... remainder. Basically, on any RX,
-> the driver polls for the rx register full. Once full, it will read
-> however much data is left to be transferred. Since we use min(len, 8)
-> then we read 8 usually, until we get to the end.
-
-I asked that because we might have a better optimization, i.e, call
-directly put_unaligned_be64() when we know that length is 8 bytes. For
-the rest your approach might be simpler. Similar for the TX case.
-
-> >>>>>>>>>> +       return num_bytes;
-> >>>>>>>>>> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
+T24gV2VkLCBKYW4gMTUsIDIwMjAsIFNlcmdlaSBTaHR5bHlvdiB3cm90ZToNCj4gQWRkIHRoZSBT
+UEkgZHJpdmVyIGZvciB0aGUgUmVuZXNhcyBSUEMtSUYuICBJdCdzIHRoZSAiZnJvbnQgZW5kIiBk
+cml2ZXINCj4gdXNpbmcgdGhlICJiYWNrIGVuZCIgQVBJcyBpbiB0aGUgbWFpbiBkcml2ZXIgdG8g
+dGFsayB0byB0aGUgcmVhbCBoYXJkd2FyZS4NCj4gV2Ugb25seSBpbXBsZW1lbnQgdGhlICdzcGkt
+bWVtJyBpbnRlcmZhY2UgLS0gdGhlcmUncyBubyBuZWVkIHRvIGltcGxlbWVidA0KPiB0aGUgdXN1
+YWwgU1BJIGRyaXZlciBtZXRob2RzLi4uDQoNCkkgdHJpZWQgdGhlc2UgcGF0Y2hlcyBvbiBhbiBS
+Wi9BMUggUlNLIGJvYXJkLg0KDQpBdCBmaXJzdCwgdGhpbmdzIHdlcmUgbG9va2luZyBnb29kLiBJ
+dCB3b3VsZCBwcm9iZSB0aGUgU1BJIGZsYXNoIGNvcnJlY3RseQ0KYW5kIEkgY291bGQgcmVhZCBv
+dXQgZGF0YS4NCg0KQnV0LCB3aGVuIEkgd2VudCB0byB0cnkgYW5kIGRvIGFuIGVyYXNlLCBpdCBh
+bGwgd2VudCBiYWQuDQpMb29raW5nIGF0IHRoZSBhY3R1YWwgU1BJIGxpbmVzLCB0aGUgY29tbWFu
+ZHMgY29taW5nIG91dCBkb24ndCBsb29rIGxpa2Ugd2hhdA0KSSB3b3VsZCBleHBlY3QgZnJvbSBh
+biBNVEQgZGV2aWNlLg0KDQpGb3IgZXhhbXBsZSwgSSBkbyBhIA0KICAkIGZsYXNoX2VyYXNlYWxs
+IC9kZXYvbXRkMw0KYW5kIGFsbCB0aGF0IGNvbWVzIG91dCBhcmUgUmVhZCBTdGF0dXMgY29tbWFu
+ZHMgKDB4MDUpLg0KQWxsIHRoZSB3cml0ZSBlbmFibGVzIGFuZCBlcmFzZSBjb21tYW5kcyBhcmUg
+bWlzc2luZy4NCg0KU28sIGl0IGxvb2tzIGxpa2UgYW55IGNvbW1hbmQgdGhhdCBpcyBhIHdyaXRl
+LW9ubHkgbmV2ZXIgYWN0dWFsbHkgc2VuZHMNCmFueXRoaW5nLg0KDQpJIGRpZCB0cnkgYW5kIGRv
+IGEgcGFnZSBwcm9ncmFtIGNvbW1hbmQ6DQogICQgZWNobyBoZWxsbyA+ICAvZGV2L210ZDMNCkl0
+IHNlbnQgdGhlIHBhZ2UgcHJvZ3JhbSBjb21tYW5kICgweDEyKSwgYnV0IGluIHRoaXMgY2FzZSwg
+aXQgc3RpbGwgZGlkbid0IHdvcmsNCmJlY2F1c2UgYSB3cml0ZSBlbmFibGUgY29tbWFuZCB3YXMg
+bm90IHNlbnQgZmlyc3QuDQpJIGFzc3VtZSB0aGUgTVREIGxheWVyIGlzIHJlcXVlc3RpbmcgdGhl
+IGNvcnJlY3Qgc2VxdWVuY2Ugb2YgY29tbWFuZHMsIGJ1dA0KU29tZWhvdyB0aGlzIG5ldyBkcml2
+ZXIgaXMgZHJvcHBpbmcgb2YgdGhlbS4NCg0KQ2hyaXMNCg0KDQo=
