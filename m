@@ -2,58 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A67156E06
+	by mail.lfdr.de (Postfix) with ESMTP id E042F156E07
 	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2020 04:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727398AbgBJDmR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 9 Feb 2020 22:42:17 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43808 "EHLO
+        id S1727041AbgBJDm0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 9 Feb 2020 22:42:26 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42019 "EHLO
         mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbgBJDmR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 9 Feb 2020 22:42:17 -0500
-Received: by mail-pg1-f195.google.com with SMTP id u131so3143586pgc.10;
-        Sun, 09 Feb 2020 19:42:17 -0800 (PST)
+        with ESMTP id S1726950AbgBJDm0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 9 Feb 2020 22:42:26 -0500
+Received: by mail-pg1-f195.google.com with SMTP id w21so3147969pgl.9;
+        Sun, 09 Feb 2020 19:42:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PVQEipw/V1PQdbjb6en5Z/xUaGnvev/S0+E9pKZWIS0=;
-        b=FBwUU0EayhWh6m7f/Slaih/Rk3y2igeCeNTgiT46TI3WzaePHxJfR/FGXk2G5QpHl5
-         waETacbFWZzlzcun0cB/l9T1Shzzs95/kbZXeo5UWUCYYtqIldMBC/UeekPdtjrHlVwt
-         qWsIPljMUmrSDw7JAtVKEtC9T+YnchWHEuXTccnyukNpGPHs7iHfDuTyLdALdOEOf2GD
-         532Yz4kGIfvRdjvik8/VUovmUgY03ea3z9I0G0/aPf4GnAkzZRb18oR02MV2VktV1p82
-         mJHJ7S105sFGIZB2X3i//f+75P9y1jlcP5Mc62/ObeBtwRlQWAmaHu0+aWMkUHp8WiaJ
-         mD4w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Aa+lex8h1nyuOHVjMjvYuZuMD1fFVRm0ti0ithVkAe8=;
+        b=MS02nbjDy5yWnVfjgfyT4wUrhv2ONrWaoNDODMjXYOocOAlMW+zhJ03+oGQjDxbpSE
+         tyFfW/zqz/ipHljHPIYKr5pYmclxz2O/G86FJroZcpZN7B7Ci915vzKfiv6N4shxL/Wa
+         6y03qM8Rh/LA5eXzKjYga7Ca6hdTDgYnB1t0OdB/0vK2UvsuKh+21iF3ffG/bfRjqc/L
+         L1zxw83j8sv/TSYuE/qn+ySliEf6vIXz/pSvDKF9h2FWb3gjvaubgcuv4RVmn1rB6Gsl
+         6OxkSxvSo1tIuJ7nrevDZvSWX0MEWjcJuGWWrZLHSMWeyeiIeAOIZQPgQ/DK4DfROA2d
+         zrCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PVQEipw/V1PQdbjb6en5Z/xUaGnvev/S0+E9pKZWIS0=;
-        b=DvlkFyMiM2Czadr5fzQL3YY9Qi0J2W8HuLBrVLHIHqGa5s8Vj1aOduuYM4TPOiGg69
-         9Kgy/P6v/DfP9hMelfVsQhftQYUleuIlT9DagcBdgYBP6iTZRmA3SkJFTPQit4EOf2XG
-         tQF9ZvL0MYzpLsAnOy3GNG5WtP2Bav/pF8YQ/bYtmhTV2HA7Upf0V6oMlKmDUPzpJBKn
-         y9JBLhKgODokzmbtWDHLqUOF21j3Jk6EVXaFsENzin9bKWJ2LFwKkxV8NZIys01j6uDn
-         FsXK30J2mDHGiCQKwEBHTQ5Z4a5EcN9tGuZcRA6yBSqUwPZFs5MJxMGVWNFm2hoHniS5
-         v51g==
-X-Gm-Message-State: APjAAAUReejd28RrqnStcZVFEuOhEuJLfh9T3nNJ2i3g5QtYNYnkrUzQ
-        RkZmL8Czv8ncESRsMaUTFwF6ymcwrc8=
-X-Google-Smtp-Source: APXvYqzudRw6ObqKjB1jeC2DAZO04Vm2f+aQBDuW+Nv/Fc10RTwkTAka+gCQLj1QqvzLBwBWkUoGXw==
-X-Received: by 2002:a63:c846:: with SMTP id l6mr12136278pgi.144.1581306136810;
-        Sun, 09 Feb 2020 19:42:16 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Aa+lex8h1nyuOHVjMjvYuZuMD1fFVRm0ti0ithVkAe8=;
+        b=CoGnVXnDjwIoMN0TkIc2hOhWxzkHxD4J2+2enfXwHi4zwDiRSSdCQCkrS3jXp3E1rO
+         TM/aw4yrvOvefEzXfGwrAsf627tR0ng+UbMGMMI2GWNxa/a2ECrsALM6lEIcPFpwpKSb
+         bL5b0SxRnAGcYZW5XhzSLBo427NsRJjWiXDLgD1CeI/nTJE2d+ZVY2fTALTRGcslFom2
+         XrbUhWim9ot6hdLIogf+j2q9ZEVhT5Xg6iSEICwQ1wssjUtIyDk3CNzyxfE9O5N0ykbH
+         RldyZ1yC2PQBwNWsArRyMwn4pZWbxoTiyVw9oQajx1tDo1bb930Zycn7qbRIIABVtJf/
+         WzUQ==
+X-Gm-Message-State: APjAAAW9tIAk6KHEMM2Fc/WgxsYzwgPVnR8lDOzMxbjInWUsk/jEK8OX
+        0x8305jgPghMk9QbGvZSEjh5h/HM7Uc=
+X-Google-Smtp-Source: APXvYqxpZeytz2O2ywG0BHbI0CO0bW2OstJY+tUMIzG8ux7qqWc7NjAPOlahgzRNMiDz3CpvDpMHUQ==
+X-Received: by 2002:a62:cd89:: with SMTP id o131mr11327009pfg.100.1581306144586;
+        Sun, 09 Feb 2020 19:42:24 -0800 (PST)
 Received: from localhost.localdomain ([240e:379:947:2855::fa3])
-        by smtp.gmail.com with ESMTPSA id j14sm10179880pgs.57.2020.02.09.19.42.10
+        by smtp.gmail.com with ESMTPSA id j14sm10179880pgs.57.2020.02.09.19.42.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Feb 2020 19:42:16 -0800 (PST)
+        Sun, 09 Feb 2020 19:42:24 -0800 (PST)
 From:   Chuanhong Guo <gch981213@gmail.com>
 To:     linux-spi@vger.kernel.org
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         devicetree@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>
-Subject: [PATCH v4 0/2] spi: add driver for ar934x spi controller
-Date:   Mon, 10 Feb 2020 11:41:50 +0800
-Message-Id: <20200210034152.49063-1-gch981213@gmail.com>
+Subject: [PATCH v4 1/2] spi: add driver for ar934x spi controller
+Date:   Mon, 10 Feb 2020 11:41:51 +0800
+Message-Id: <20200210034152.49063-2-gch981213@gmail.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200210034152.49063-1-gch981213@gmail.com>
+References: <20200210034152.49063-1-gch981213@gmail.com>
 MIME-Version: 1.0
 X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
@@ -62,38 +64,301 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This patch adds driver for SPI controller found in Qualcomm Atheros
+AR934x/QCA95xx SoCs.
 This controller is a superset of the already supported qca,ar7100-spi.
 Besides the bit-bang mode in spi-ath79.c, this new controller added
 a new "shift register" mode, allowing faster spi operations.
-This mode doesn't need all the bit-bang code in spi-ath79.c and needs
-a different clock setup, so I decided to write a new driver for it
-instead of extending current spi-ath79 driver.
 
-Changes since v3:
-1. restore pin state in probe to terminate unfinished SPI transfer
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+---
+Change since v3:
+   restore pin state in probe to terminate unfinished SPI transfer
    done by bootloader.
-2. replace clock binding with ath79 pll as this is the actual
-   clock binding used in all SoC supported by this driver.
 
-Change since v2:
-fix binding documentation check.
+Change since v2: none.
 
 Changes since v1:
 1. change comment at the beginning to C++ style
 2. rename ar934x_spi_transfer_one to ar934x_spi_transfer_one_message
 
-Chuanhong Guo (2):
-  spi: add driver for ar934x spi controller
-  dt-binding: spi: add bindings for spi-ar934x
-
- .../bindings/spi/qca,ar934x-spi.yaml          |  41 +++
- drivers/spi/Kconfig                           |   7 +
- drivers/spi/Makefile                          |   1 +
- drivers/spi/spi-ar934x.c                      | 235 ++++++++++++++++++
- 4 files changed, 284 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/spi/qca,ar934x-spi.yaml
+ drivers/spi/Kconfig      |   7 ++
+ drivers/spi/Makefile     |   1 +
+ drivers/spi/spi-ar934x.c | 235 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 243 insertions(+)
  create mode 100644 drivers/spi/spi-ar934x.c
 
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index d6ed0c355954..0434614d8201 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -62,6 +62,13 @@ config SPI_ALTERA
+ 	help
+ 	  This is the driver for the Altera SPI Controller.
+ 
++config SPI_AR934X
++	tristate "Qualcomm Atheros AR934X/QCA95XX SPI controller driver"
++	depends on ATH79 || COMPILE_TEST
++	help
++	  This enables support for the SPI controller present on the
++	  Qualcomm Atheros AR934X/QCA95XX SoCs.
++
+ config SPI_ATH79
+ 	tristate "Atheros AR71XX/AR724X/AR913X SPI controller driver"
+ 	depends on ATH79 || COMPILE_TEST
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 9b65ec5afc5e..9892bdfab15e 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -14,6 +14,7 @@ obj-$(CONFIG_SPI_LOOPBACK_TEST)		+= spi-loopback-test.o
+ 
+ # SPI master controller drivers (bus)
+ obj-$(CONFIG_SPI_ALTERA)		+= spi-altera.o
++obj-$(CONFIG_SPI_AR934X)		+= spi-ar934x.o
+ obj-$(CONFIG_SPI_ARMADA_3700)		+= spi-armada-3700.o
+ obj-$(CONFIG_SPI_ATMEL)			+= spi-atmel.o
+ obj-$(CONFIG_SPI_ATMEL_QUADSPI)		+= atmel-quadspi.o
+diff --git a/drivers/spi/spi-ar934x.c b/drivers/spi/spi-ar934x.c
+new file mode 100644
+index 000000000000..d08dec09d423
+--- /dev/null
++++ b/drivers/spi/spi-ar934x.c
+@@ -0,0 +1,235 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// SPI controller driver for Qualcomm Atheros AR934x/QCA95xx SoCs
++//
++// Copyright (C) 2020 Chuanhong Guo <gch981213@gmail.com>
++//
++// Based on spi-mt7621.c:
++// Copyright (C) 2011 Sergiy <piratfm@gmail.com>
++// Copyright (C) 2011-2013 Gabor Juhos <juhosg@openwrt.org>
++// Copyright (C) 2014-2015 Felix Fietkau <nbd@nbd.name>
++
++#include <linux/clk.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/spi/spi.h>
++
++#define DRIVER_NAME "spi-ar934x"
++
++#define AR934X_SPI_REG_FS		0x00
++#define AR934X_SPI_ENABLE		BIT(0)
++
++#define AR934X_SPI_REG_IOC		0x08
++#define AR934X_SPI_IOC_INITVAL		0x70000
++
++#define AR934X_SPI_REG_CTRL		0x04
++#define AR934X_SPI_CLK_MASK		GENMASK(5, 0)
++
++#define AR934X_SPI_DATAOUT		0x10
++
++#define AR934X_SPI_REG_SHIFT_CTRL	0x14
++#define AR934X_SPI_SHIFT_EN		BIT(31)
++#define AR934X_SPI_SHIFT_CS(n)		BIT(28 + (n))
++#define AR934X_SPI_SHIFT_TERM		26
++#define AR934X_SPI_SHIFT_VAL(cs, term, count)			\
++	(AR934X_SPI_SHIFT_EN | AR934X_SPI_SHIFT_CS(cs) |	\
++	(term) << AR934X_SPI_SHIFT_TERM | (count))
++
++#define AR934X_SPI_DATAIN 0x18
++
++struct ar934x_spi {
++	struct spi_controller *ctlr;
++	void __iomem *base;
++	struct clk *clk;
++	unsigned int clk_freq;
++};
++
++static inline int ar934x_spi_clk_div(struct ar934x_spi *sp, unsigned int freq)
++{
++	int div = DIV_ROUND_UP(sp->clk_freq, freq * 2) - 1;
++
++	if (div < 0)
++		return 0;
++	else if (div > AR934X_SPI_CLK_MASK)
++		return -EINVAL;
++	else
++		return div;
++}
++
++static int ar934x_spi_setup(struct spi_device *spi)
++{
++	struct ar934x_spi *sp = spi_controller_get_devdata(spi->master);
++
++	if ((spi->max_speed_hz == 0) ||
++	    (spi->max_speed_hz > (sp->clk_freq / 2))) {
++		spi->max_speed_hz = sp->clk_freq / 2;
++	} else if (spi->max_speed_hz < (sp->clk_freq / 128)) {
++		dev_err(&spi->dev, "spi clock is too low\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int ar934x_spi_transfer_one_message(struct spi_controller *master,
++					   struct spi_message *m)
++{
++	struct ar934x_spi *sp = spi_controller_get_devdata(master);
++	struct spi_transfer *t = NULL;
++	struct spi_device *spi = m->spi;
++	unsigned long trx_done, trx_cur;
++	int stat = 0;
++	u8 term = 0;
++	int div, i;
++	u32 reg;
++	const u8 *tx_buf;
++	u8 *buf;
++
++	m->actual_length = 0;
++	list_for_each_entry(t, &m->transfers, transfer_list) {
++		if (t->speed_hz)
++			div = ar934x_spi_clk_div(sp, t->speed_hz);
++		else
++			div = ar934x_spi_clk_div(sp, spi->max_speed_hz);
++		if (div < 0) {
++			stat = -EIO;
++			goto msg_done;
++		}
++
++		reg = ioread32(sp->base + AR934X_SPI_REG_CTRL);
++		reg &= ~AR934X_SPI_CLK_MASK;
++		reg |= div;
++		iowrite32(reg, sp->base + AR934X_SPI_REG_CTRL);
++		iowrite32(0, sp->base + AR934X_SPI_DATAOUT);
++
++		for (trx_done = 0; trx_done < t->len; trx_done += 4) {
++			trx_cur = t->len - trx_done;
++			if (trx_cur > 4)
++				trx_cur = 4;
++			else if (list_is_last(&t->transfer_list, &m->transfers))
++				term = 1;
++
++			if (t->tx_buf) {
++				tx_buf = t->tx_buf + trx_done;
++				reg = tx_buf[0];
++				for (i = 1; i < trx_cur; i++)
++					reg = reg << 8 | tx_buf[i];
++				iowrite32(reg, sp->base + AR934X_SPI_DATAOUT);
++			}
++
++			reg = AR934X_SPI_SHIFT_VAL(spi->chip_select, term,
++						   trx_cur * 8);
++			iowrite32(reg, sp->base + AR934X_SPI_REG_SHIFT_CTRL);
++			stat = readl_poll_timeout(
++				sp->base + AR934X_SPI_REG_SHIFT_CTRL, reg,
++				!(reg & AR934X_SPI_SHIFT_EN), 0, 5);
++			if (stat < 0)
++				goto msg_done;
++
++			if (t->rx_buf) {
++				reg = ioread32(sp->base + AR934X_SPI_DATAIN);
++				buf = t->rx_buf + trx_done;
++				for (i = 0; i < trx_cur; i++) {
++					buf[trx_cur - i - 1] = reg & 0xff;
++					reg >>= 8;
++				}
++			}
++		}
++		m->actual_length += t->len;
++	}
++
++msg_done:
++	m->status = stat;
++	spi_finalize_current_message(master);
++
++	return 0;
++}
++
++static const struct of_device_id ar934x_spi_match[] = {
++	{ .compatible = "qca,ar934x-spi" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, ar934x_spi_match);
++
++static int ar934x_spi_probe(struct platform_device *pdev)
++{
++	struct spi_controller *ctlr;
++	struct ar934x_spi *sp;
++	void __iomem *base;
++	struct clk *clk;
++	int ret;
++
++	base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
++
++	clk = devm_clk_get(&pdev->dev, NULL);
++	if (IS_ERR(clk)) {
++		dev_err(&pdev->dev, "failed to get clock\n");
++		return PTR_ERR(clk);
++	}
++
++	ret = clk_prepare_enable(clk);
++	if (ret)
++		return ret;
++
++	ctlr = spi_alloc_master(&pdev->dev, sizeof(*sp));
++	if (!ctlr) {
++		dev_info(&pdev->dev, "failed to allocate spi controller\n");
++		return -ENOMEM;
++	}
++
++	/* disable flash mapping and expose spi controller registers */
++	iowrite32(AR934X_SPI_ENABLE, base + AR934X_SPI_REG_FS);
++	/* restore pins to default state: CSn=1 DO=CLK=0 */
++	iowrite32(AR934X_SPI_IOC_INITVAL, base + AR934X_SPI_REG_IOC);
++
++	ctlr->mode_bits = SPI_LSB_FIRST;
++	ctlr->setup = ar934x_spi_setup;
++	ctlr->transfer_one_message = ar934x_spi_transfer_one_message;
++	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
++	ctlr->dev.of_node = pdev->dev.of_node;
++	ctlr->num_chipselect = 3;
++
++	dev_set_drvdata(&pdev->dev, ctlr);
++
++	sp = spi_controller_get_devdata(ctlr);
++	sp->base = base;
++	sp->clk = clk;
++	sp->clk_freq = clk_get_rate(clk);
++	sp->ctlr = ctlr;
++
++	return devm_spi_register_controller(&pdev->dev, ctlr);
++}
++
++static int ar934x_spi_remove(struct platform_device *pdev)
++{
++	struct spi_controller *ctlr;
++	struct ar934x_spi *sp;
++
++	ctlr = dev_get_drvdata(&pdev->dev);
++	sp = spi_controller_get_devdata(ctlr);
++
++	clk_disable_unprepare(sp->clk);
++
++	return 0;
++}
++
++static struct platform_driver ar934x_spi_driver = {
++	.driver = {
++		.name = DRIVER_NAME,
++		.of_match_table = ar934x_spi_match,
++	},
++	.probe = ar934x_spi_probe,
++	.remove = ar934x_spi_remove,
++};
++
++module_platform_driver(ar934x_spi_driver);
++
++MODULE_DESCRIPTION("SPI controller driver for Qualcomm Atheros AR934x/QCA95xx");
++MODULE_AUTHOR("Chuanhong Guo <gch981213@gmail.com>");
++MODULE_LICENSE("GPL v2");
++MODULE_ALIAS("platform:" DRIVER_NAME);
 -- 
 2.24.1
 
