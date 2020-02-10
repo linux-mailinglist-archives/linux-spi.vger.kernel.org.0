@@ -2,80 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF92E1563A6
-	for <lists+linux-spi@lfdr.de>; Sat,  8 Feb 2020 10:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A67156E06
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2020 04:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbgBHJhJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 8 Feb 2020 04:37:09 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35283 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726918AbgBHJhJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 8 Feb 2020 04:37:09 -0500
-Received: by mail-ot1-f67.google.com with SMTP id r16so1743125otd.2;
-        Sat, 08 Feb 2020 01:37:09 -0800 (PST)
+        id S1727398AbgBJDmR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 9 Feb 2020 22:42:17 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43808 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726958AbgBJDmR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 9 Feb 2020 22:42:17 -0500
+Received: by mail-pg1-f195.google.com with SMTP id u131so3143586pgc.10;
+        Sun, 09 Feb 2020 19:42:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5rJ2S6x3Li3urw2c5apAzgdC849J3cdRPfTG5d829aI=;
-        b=tcdbu6hr89izleZN1Bg7imlFCVQ5ick9fmynJtu0wwzeis+3+0+R7VzIrT99NeVKkB
-         j0Tvp+asUYQqIzR6fOadt64vpykQxFNspsZfD9KqShBtwss4vm52osVTcMTcl+WmGXz0
-         oJoYO9E3gTuvCB1mCh3KDcCE3rzuSsHdmmXEeZZYkyeSVxNlvW4pcasGEgujCItABpxu
-         GUW2eUHu+5rPi/L8qQiZBFaHrE1IoE/XLJVXumvx24mEbaYjrfgAST2MNcPJlz9a1lfC
-         gfnQ11MOxwbuJjtgaWnzWljavs8zmrLDbcr6xwxhRqLJn4IxmJz7woyJJp3fDey7IHwg
-         0O7Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PVQEipw/V1PQdbjb6en5Z/xUaGnvev/S0+E9pKZWIS0=;
+        b=FBwUU0EayhWh6m7f/Slaih/Rk3y2igeCeNTgiT46TI3WzaePHxJfR/FGXk2G5QpHl5
+         waETacbFWZzlzcun0cB/l9T1Shzzs95/kbZXeo5UWUCYYtqIldMBC/UeekPdtjrHlVwt
+         qWsIPljMUmrSDw7JAtVKEtC9T+YnchWHEuXTccnyukNpGPHs7iHfDuTyLdALdOEOf2GD
+         532Yz4kGIfvRdjvik8/VUovmUgY03ea3z9I0G0/aPf4GnAkzZRb18oR02MV2VktV1p82
+         mJHJ7S105sFGIZB2X3i//f+75P9y1jlcP5Mc62/ObeBtwRlQWAmaHu0+aWMkUHp8WiaJ
+         mD4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5rJ2S6x3Li3urw2c5apAzgdC849J3cdRPfTG5d829aI=;
-        b=Mr254kgIsMSZXMDT7unA4q2V0Wd8mf375HcTJywfp5Z7ZKHBFF0IaBzhuz4Q3p+mrw
-         WEJDIIDnZzuDomKeoFADhor7QYCDp1NIRHXMUzw0b9jSNaPuHm1uz8ZBPy1xZphTzyj2
-         POI+00UzD3FcY19l36haSKBDr7IDawgii6Buwk4yaaAvo24Y1kyaEB8RZ6GaYAoKep9t
-         Ttljxp5cetSwKIor9UHAZAsDZsxTcQZGaecBjcDc47O0zmcPiNSSjm4jkMI2WTkjEq8z
-         8hwfhW/kZPgSxi2zzw1vBE/rGGiUOFR3We1wNyvMHff38UiTKPCzGJDElxdvFZNv59Ot
-         uSBA==
-X-Gm-Message-State: APjAAAW2YKx6sretJT7niI+wKe1OhL4NsPMau4h/UNenBcs0XEgX072O
-        j1UEDPdEjVgCtQcPD+bGmrPbi0VwycIXL3VxGPU=
-X-Google-Smtp-Source: APXvYqxBlIEr7h40H0E21tzciM+gdFeVQAsg7X9G/3jnCKm8uAZQWU6EWwc85VXixcZ/mCa3lr/kkt9wifhJjT+u5t8=
-X-Received: by 2002:a9d:3e43:: with SMTP id h3mr2736578otg.84.1581154629023;
- Sat, 08 Feb 2020 01:37:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20200206150626.708649-1-gch981213@gmail.com> <20200206150626.708649-3-gch981213@gmail.com>
- <20200206205551.GA15172@bogus> <CAJsYDVKXvAkQawwayX8JVrjvEKPuTyQXE8rw=BRiyVROKrdWrg@mail.gmail.com>
- <7f53a397-0237-4c68-e284-d92adf19c368@gmail.com>
-In-Reply-To: <7f53a397-0237-4c68-e284-d92adf19c368@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PVQEipw/V1PQdbjb6en5Z/xUaGnvev/S0+E9pKZWIS0=;
+        b=DvlkFyMiM2Czadr5fzQL3YY9Qi0J2W8HuLBrVLHIHqGa5s8Vj1aOduuYM4TPOiGg69
+         9Kgy/P6v/DfP9hMelfVsQhftQYUleuIlT9DagcBdgYBP6iTZRmA3SkJFTPQit4EOf2XG
+         tQF9ZvL0MYzpLsAnOy3GNG5WtP2Bav/pF8YQ/bYtmhTV2HA7Upf0V6oMlKmDUPzpJBKn
+         y9JBLhKgODokzmbtWDHLqUOF21j3Jk6EVXaFsENzin9bKWJ2LFwKkxV8NZIys01j6uDn
+         FsXK30J2mDHGiCQKwEBHTQ5Z4a5EcN9tGuZcRA6yBSqUwPZFs5MJxMGVWNFm2hoHniS5
+         v51g==
+X-Gm-Message-State: APjAAAUReejd28RrqnStcZVFEuOhEuJLfh9T3nNJ2i3g5QtYNYnkrUzQ
+        RkZmL8Czv8ncESRsMaUTFwF6ymcwrc8=
+X-Google-Smtp-Source: APXvYqzudRw6ObqKjB1jeC2DAZO04Vm2f+aQBDuW+Nv/Fc10RTwkTAka+gCQLj1QqvzLBwBWkUoGXw==
+X-Received: by 2002:a63:c846:: with SMTP id l6mr12136278pgi.144.1581306136810;
+        Sun, 09 Feb 2020 19:42:16 -0800 (PST)
+Received: from localhost.localdomain ([240e:379:947:2855::fa3])
+        by smtp.gmail.com with ESMTPSA id j14sm10179880pgs.57.2020.02.09.19.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Feb 2020 19:42:16 -0800 (PST)
 From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Sat, 8 Feb 2020 17:36:57 +0800
-Message-ID: <CAJsYDVJ3RfMh9MrMGsS=9=XayJjkatwnVa6DRjf6KmYp8JS9SQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-binding: spi: add bindings for spi-ar934x
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>
+Subject: [PATCH v4 0/2] spi: add driver for ar934x spi controller
+Date:   Mon, 10 Feb 2020 11:41:50 +0800
+Message-Id: <20200210034152.49063-1-gch981213@gmail.com>
+X-Mailer: git-send-email 2.24.1
+MIME-Version: 1.0
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Feb 8, 2020 at 7:54 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> On 2/6/20 9:55 PM, Chuanhong Guo wrote:
-> > It's caused by "clocks = <&pll ATH79_CLK_AHB>" where ATH79_CLK_AHB
-> > isn't defined without a include of dt-bindings/clock/ath79-clk.h
-> > I'll replace this with a bogus "clocks = <&spi_clock>" instead in v3.
->
-> You can include ath79-clk.h in your example, see for instance
-> Documentation/devicetree/bindings/pci/intel-gw-pcie.yaml
+This controller is a superset of the already supported qca,ar7100-spi.
+Besides the bit-bang mode in spi-ath79.c, this new controller added
+a new "shift register" mode, allowing faster spi operations.
+This mode doesn't need all the bit-bang code in spi-ath79.c and needs
+a different clock setup, so I decided to write a new driver for it
+instead of extending current spi-ath79 driver.
 
-Oh. But I've already sent v3 out yesterday :(
+Changes since v3:
+1. restore pin state in probe to terminate unfinished SPI transfer
+   done by bootloader.
+2. replace clock binding with ath79 pll as this is the actual
+   clock binding used in all SoC supported by this driver.
 
-I think this is just cosmetic changes and doesn't make much difference
-so I'd like to keep v3 as-is now and if there are other comments for
-me to send a v4 I'll change this one as well.
+Change since v2:
+fix binding documentation check.
 
-Regards,
-Chuanhong Guo
+Changes since v1:
+1. change comment at the beginning to C++ style
+2. rename ar934x_spi_transfer_one to ar934x_spi_transfer_one_message
+
+Chuanhong Guo (2):
+  spi: add driver for ar934x spi controller
+  dt-binding: spi: add bindings for spi-ar934x
+
+ .../bindings/spi/qca,ar934x-spi.yaml          |  41 +++
+ drivers/spi/Kconfig                           |   7 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-ar934x.c                      | 235 ++++++++++++++++++
+ 4 files changed, 284 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/qca,ar934x-spi.yaml
+ create mode 100644 drivers/spi/spi-ar934x.c
+
+-- 
+2.24.1
+
