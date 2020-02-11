@@ -2,103 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D21EE1593ED
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 16:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2711597AA
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 19:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729876AbgBKPv6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Feb 2020 10:51:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:48988 "EHLO foss.arm.com"
+        id S1731150AbgBKSFO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Feb 2020 13:05:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35796 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730680AbgBKPv6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 Feb 2020 10:51:58 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF54330E;
-        Tue, 11 Feb 2020 07:51:57 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53B8D3F68E;
-        Tue, 11 Feb 2020 07:51:57 -0800 (PST)
-Date:   Tue, 11 Feb 2020 15:51:55 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Alok Chauhan <alokc@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dilip Kota <dkota@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Girish Mahadevan <girishm@codeaurora.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spi-geni-qcom: Let firmware specify irq trigger flags" to the spi tree
-In-Reply-To: <20200204191206.97036-2-swboyd@chromium.org>
-Message-Id: <applied-20200204191206.97036-2-swboyd@chromium.org>
-X-Patchwork-Hint: ignore
+        id S1731149AbgBKSFO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 Feb 2020 13:05:14 -0500
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 91814208C3;
+        Tue, 11 Feb 2020 18:05:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581444313;
+        bh=6PE1cQDVRluOgEBrX4BbGhN0yYnAPz0zqhe0TovaI5o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=l1Sa6LV29Nk2K2rAs5pOGEdWBrK7blZ394zkXkcKtGeTSea4pto6xOb1UC68LvoCb
+         rQcQkopTRHIkdvHboYFj7gcwFDBRV0Ay8v9AXIo6AahAcEAMIjHAGoo+hvdXaboJ8K
+         /FUJ5aUHuqo8wnpZQT4pyg7N6GzSzhJ0h0lMCm4M=
+Received: by mail-qk1-f175.google.com with SMTP id z19so7940554qkj.5;
+        Tue, 11 Feb 2020 10:05:13 -0800 (PST)
+X-Gm-Message-State: APjAAAUerb4PgCnHvqiurxiUKNCN4ViBEFdeAoWL/EKVCNB4guzu5ron
+        cES1qOx3XUZE2lpGa2Jvg21D8B/6Vx5vCs37pw==
+X-Google-Smtp-Source: APXvYqzAAdsaAknJAJ5NQJ1yPYP+6XiEu2QBieclv1o0pXq2SzMkQhREIj0fKiHyiUC2B4XLKseSBuDPfByqgqJIuII=
+X-Received: by 2002:a37:85c4:: with SMTP id h187mr7476483qkd.223.1581444312635;
+ Tue, 11 Feb 2020 10:05:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20200202125950.1825013-1-aford173@gmail.com> <20200202125950.1825013-4-aford173@gmail.com>
+ <20200206184030.GA11381@bogus> <CAHCN7x+uCwyJ60ZG_0m5SgNmqUAyEwxqXVTL7nQzJLXxXrh+Tw@mail.gmail.com>
+In-Reply-To: <CAHCN7x+uCwyJ60ZG_0m5SgNmqUAyEwxqXVTL7nQzJLXxXrh+Tw@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 11 Feb 2020 12:05:01 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLJweVLgYhoU-3cmg1aFwRNtAehx2-Euy-cwUsRy2jsgw@mail.gmail.com>
+Message-ID: <CAL_JsqLJweVLgYhoU-3cmg1aFwRNtAehx2-Euy-cwUsRy2jsgw@mail.gmail.com>
+Subject: Re: [PATCH V2 4/5] dt-bindings: spi: spi-nxp-fspi: Add support for
+ imx8mm, imx8qxp
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Ashish Kumar <ashish.kumar@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Tue, Feb 11, 2020 at 4:49 AM Adam Ford <aford173@gmail.com> wrote:
+>
+> On Thu, Feb 6, 2020 at 2:46 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Sun, Feb 02, 2020 at 06:59:49AM -0600, Adam Ford wrote:
+> > > Add support for nxp,imx8qxp-fspi and nxp,imx8mm-fspi do the bindings
+> >
+> > s/do/to/
+>
+> Oops.  Thanks for catching that.
+>
+> >
+> > > document.
+> > >
+> > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > > ---
+> > > V2: No change
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
+> > > index 2cd67eb727d4..7ac60d9fe357 100644
+> > > --- a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
+> > > +++ b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
+> > > @@ -2,6 +2,9 @@
+> > >
+> > >  Required properties:
+> > >    - compatible : Should be "nxp,lx2160a-fspi"
+> > > +                         "nxp,imx8qxp-fspi"
+> > > +                         "nxp,imx8mm-fspi"
+> >
+> > All 3 are different and no compatibility?
+>
+> This was all based on a series from NXP's repo where they have some
+> data tables all associated to the various compatible entries, and they
+> created a place holder for quirks.  Based on an older NXP repo, it
+> seems like there might be some quirks associated to the different
+> families, but the newer repo where I got this patch series didn't
+> implement them, however, it's possible the quirks may enhance
+> functionality later. If that's true, I think this is the best solution
+> for future enhancements without having to change the compatibility
+> names down the road.  Maybe someone from NXP can comment?  I am just
+> trying to help push things upstream so we can support QSPI flash.  I
+> would prefer to keep them separate for now, because we might have
+> these improvements later. However, I'll do what you request.  Do you
+> want me to drop the additional compatible flags and just use the
+> original, or create a new one that's a bit more generic?
 
-   spi: spi-geni-qcom: Let firmware specify irq trigger flags
+Neither.
 
-has been applied to the spi tree at
+If you already know that they have differences, then as-is is fine.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.7
+If they are believed to be 'the same', then you do:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+compatible = "nxp,imx8qxp-fspi", "nxp,imx8mm-fspi";
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+assuming i.MX8MM was the first version.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+This allows a MX8QXP to work without OS changes if the driver already
+supports the previous chip. And if any quirks are found, then the OS
+can handle them without a DT change.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From ece9ef3b60cbc36237138af456b236d3d1d9b771 Mon Sep 17 00:00:00 2001
-From: Stephen Boyd <swboyd@chromium.org>
-Date: Tue, 4 Feb 2020 11:12:04 -0800
-Subject: [PATCH] spi: spi-geni-qcom: Let firmware specify irq trigger flags
-
-We don't need to force IRQF_TRIGGER_HIGH here as the DT or ACPI tables
-should take care of this for us. Just use 0 instead so that we use the
-flags from the firmware.
-
-Cc: Girish Mahadevan <girishm@codeaurora.org>
-Cc: Dilip Kota <dkota@codeaurora.org>
-Cc: Alok Chauhan <alokc@codeaurora.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20200204191206.97036-2-swboyd@chromium.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-geni-qcom.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 6f3d64a1a2b3..46e501fc87f3 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -585,8 +585,7 @@ static int spi_geni_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto spi_geni_probe_runtime_disable;
- 
--	ret = request_irq(mas->irq, geni_spi_isr,
--			IRQF_TRIGGER_HIGH, "spi_geni", spi);
-+	ret = request_irq(mas->irq, geni_spi_isr, 0, dev_name(&pdev->dev), spi);
- 	if (ret)
- 		goto spi_geni_probe_runtime_disable;
- 
--- 
-2.20.1
-
+Rob
