@@ -2,122 +2,140 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2711597AA
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 19:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7138159C3E
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 23:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731150AbgBKSFO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Feb 2020 13:05:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35796 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731149AbgBKSFO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 Feb 2020 13:05:14 -0500
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 91814208C3;
-        Tue, 11 Feb 2020 18:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581444313;
-        bh=6PE1cQDVRluOgEBrX4BbGhN0yYnAPz0zqhe0TovaI5o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=l1Sa6LV29Nk2K2rAs5pOGEdWBrK7blZ394zkXkcKtGeTSea4pto6xOb1UC68LvoCb
-         rQcQkopTRHIkdvHboYFj7gcwFDBRV0Ay8v9AXIo6AahAcEAMIjHAGoo+hvdXaboJ8K
-         /FUJ5aUHuqo8wnpZQT4pyg7N6GzSzhJ0h0lMCm4M=
-Received: by mail-qk1-f175.google.com with SMTP id z19so7940554qkj.5;
-        Tue, 11 Feb 2020 10:05:13 -0800 (PST)
-X-Gm-Message-State: APjAAAUerb4PgCnHvqiurxiUKNCN4ViBEFdeAoWL/EKVCNB4guzu5ron
-        cES1qOx3XUZE2lpGa2Jvg21D8B/6Vx5vCs37pw==
-X-Google-Smtp-Source: APXvYqzAAdsaAknJAJ5NQJ1yPYP+6XiEu2QBieclv1o0pXq2SzMkQhREIj0fKiHyiUC2B4XLKseSBuDPfByqgqJIuII=
-X-Received: by 2002:a37:85c4:: with SMTP id h187mr7476483qkd.223.1581444312635;
- Tue, 11 Feb 2020 10:05:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20200202125950.1825013-1-aford173@gmail.com> <20200202125950.1825013-4-aford173@gmail.com>
- <20200206184030.GA11381@bogus> <CAHCN7x+uCwyJ60ZG_0m5SgNmqUAyEwxqXVTL7nQzJLXxXrh+Tw@mail.gmail.com>
-In-Reply-To: <CAHCN7x+uCwyJ60ZG_0m5SgNmqUAyEwxqXVTL7nQzJLXxXrh+Tw@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 11 Feb 2020 12:05:01 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLJweVLgYhoU-3cmg1aFwRNtAehx2-Euy-cwUsRy2jsgw@mail.gmail.com>
-Message-ID: <CAL_JsqLJweVLgYhoU-3cmg1aFwRNtAehx2-Euy-cwUsRy2jsgw@mail.gmail.com>
-Subject: Re: [PATCH V2 4/5] dt-bindings: spi: spi-nxp-fspi: Add support for
- imx8mm, imx8qxp
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Ashish Kumar <ashish.kumar@nxp.com>,
+        id S1727199AbgBKWe0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Feb 2020 17:34:26 -0500
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:35625 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727054AbgBKWe0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Feb 2020 17:34:26 -0500
+Received: by mail-pf1-f202.google.com with SMTP id q1so125580pfg.2
+        for <linux-spi@vger.kernel.org>; Tue, 11 Feb 2020 14:34:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=tCp39nGmh6jfHffZt6h0GnEI2p4k3vAcc1eu6SXs2AA=;
+        b=EZ9WVyoWLXE02i7Y/3ZJ4Tadn7u6Jh16ATWGwkj4iIcfHwD6Q5PrJgiyF1fLolo1kf
+         G8+VB/3TXt0o6s5jORy1pmkNdIgEo2rudsmW28fXSpBvk2bDJXn5wor3+PopK+lhGOpT
+         fGINzh3d/4wTeGBHoleb+loZ5Zvh1hNd5icRXHQJAlq3JL2gqYaiiK1gHegOUUBdr2H4
+         /M7q3pkkn3WrdTSSc51R32H1A0VnyC+yTWtXSOyHl3gB3BmUwN7q5a0Ta4lLoEMHgYDT
+         ODjfkXMYEV9NwI0CJ/++R2ZzKrhzUtAMmPyX62TafJ0zLyLAjT5y37KT6uzcF1zN8T6+
+         EHKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=tCp39nGmh6jfHffZt6h0GnEI2p4k3vAcc1eu6SXs2AA=;
+        b=hM8HCADkwsskdnVXiwsUWCZL7SyCgYXT51s15OupDJvDfZYFitRZkp9KL/C34qzNmG
+         7+hnbq+wU+rEjNVEkryQ7cKbGNXG5WW7Q1z0FbYbR4gk5V+g3+JJV2RO2bCJJxfpoCj2
+         Uw7Azk7e3kxPCWeKXcjzINWQarLynKYeuUGhz1UV5Rgx0pApLOmZwrtdT0dubL9ACSLx
+         v95+WBLdLWLMJkDTsUHpwWL/g4wyXSX7ShxycY18bX6lHJbcxyic9RFBeIJAoSbApLEp
+         L6S5ohmM9S6A37tfRsuh8B5drIkv0C04uqmA/PKl22vvMOCV1Bkdh/KlTY6wLBRpNvOO
+         vNEg==
+X-Gm-Message-State: APjAAAWf+VPg4u2dZJyXC9OsCaMceA5BsL/ejMVsQpzqMeBYvtbMli+q
+        wGZ8z1SaZyLrQ1rOQLLG4bpS9VMeSGTK
+X-Google-Smtp-Source: APXvYqzL+9Pb948p0Oh4VuEriyt9PtxXSCFN9TUUDh3yeG1rALRrce/dUGXJG8xbwe+qbGzOAhmWir/vouDB
+X-Received: by 2002:a63:2266:: with SMTP id t38mr9426357pgm.145.1581460465371;
+ Tue, 11 Feb 2020 14:34:25 -0800 (PST)
+Date:   Tue, 11 Feb 2020 14:34:00 -0800
+Message-Id: <20200211223400.107604-1-rajatja@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.0.225.g125e21ebc7-goog
+Subject: 
+From:   Rajat Jain <rajatja@google.com>
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
         Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Evan Green <evgreen@chromium.org>, rajatja@google.com,
+        rajatxjain@gmail.com, evgreen@google.com,
+        shobhit.srivastava@intel.com, porselvan.muthukrishnan@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Feb 11, 2020 at 4:49 AM Adam Ford <aford173@gmail.com> wrote:
->
-> On Thu, Feb 6, 2020 at 2:46 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Sun, Feb 02, 2020 at 06:59:49AM -0600, Adam Ford wrote:
-> > > Add support for nxp,imx8qxp-fspi and nxp,imx8mm-fspi do the bindings
-> >
-> > s/do/to/
->
-> Oops.  Thanks for catching that.
->
-> >
-> > > document.
-> > >
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > ---
-> > > V2: No change
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
-> > > index 2cd67eb727d4..7ac60d9fe357 100644
-> > > --- a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
-> > > +++ b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
-> > > @@ -2,6 +2,9 @@
-> > >
-> > >  Required properties:
-> > >    - compatible : Should be "nxp,lx2160a-fspi"
-> > > +                         "nxp,imx8qxp-fspi"
-> > > +                         "nxp,imx8mm-fspi"
-> >
-> > All 3 are different and no compatibility?
->
-> This was all based on a series from NXP's repo where they have some
-> data tables all associated to the various compatible entries, and they
-> created a place holder for quirks.  Based on an older NXP repo, it
-> seems like there might be some quirks associated to the different
-> families, but the newer repo where I got this patch series didn't
-> implement them, however, it's possible the quirks may enhance
-> functionality later. If that's true, I think this is the best solution
-> for future enhancements without having to change the compatibility
-> names down the road.  Maybe someone from NXP can comment?  I am just
-> trying to help push things upstream so we can support QSPI flash.  I
-> would prefer to keep them separate for now, because we might have
-> these improvements later. However, I'll do what you request.  Do you
-> want me to drop the additional compatible flags and just use the
-> original, or create a new one that's a bit more generic?
+From: Evan Green <evgreen@chromium.org>
 
-Neither.
+Date: Wed, 29 Jan 2020 13:54:16 -0800
+Subject: [PATCH] spi: pxa2xx: Add CS control clock quirk
 
-If you already know that they have differences, then as-is is fine.
+In some circumstances on Intel LPSS controllers, toggling the LPSS
+CS control register doesn't actually cause the CS line to toggle.
+This seems to be failure of dynamic clock gating that occurs after
+going through a suspend/resume transition, where the controller
+is sent through a reset transition. This ruins SPI transactions
+that either rely on delay_usecs, or toggle the CS line without
+sending data.
 
-If they are believed to be 'the same', then you do:
+Whenever CS is toggled, momentarily set the clock gating register
+to "Force On" to poke the controller into acting on CS.
 
-compatible = "nxp,imx8qxp-fspi", "nxp,imx8mm-fspi";
+Signed-off-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Rajat Jain <rajatja@google.com>
+---
+ drivers/spi/spi-pxa2xx.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-assuming i.MX8MM was the first version.
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index 4c7a71f0fb3e..2e318158fca9 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -70,6 +70,10 @@ MODULE_ALIAS("platform:pxa2xx-spi");
+ #define LPSS_CAPS_CS_EN_SHIFT			9
+ #define LPSS_CAPS_CS_EN_MASK			(0xf << LPSS_CAPS_CS_EN_SHIFT)
+ 
++#define LPSS_PRIV_CLOCK_GATE 0x38
++#define LPSS_PRIV_CLOCK_GATE_CLK_CTL_MASK 0x3
++#define LPSS_PRIV_CLOCK_GATE_CLK_CTL_FORCE_ON 0x3
++
+ struct lpss_config {
+ 	/* LPSS offset from drv_data->ioaddr */
+ 	unsigned offset;
+@@ -86,6 +90,8 @@ struct lpss_config {
+ 	unsigned cs_sel_shift;
+ 	unsigned cs_sel_mask;
+ 	unsigned cs_num;
++	/* Quirks */
++	unsigned cs_clk_stays_gated : 1;
+ };
+ 
+ /* Keep these sorted with enum pxa_ssp_type */
+@@ -156,6 +162,7 @@ static const struct lpss_config lpss_platforms[] = {
+ 		.tx_threshold_hi = 56,
+ 		.cs_sel_shift = 8,
+ 		.cs_sel_mask = 3 << 8,
++		.cs_clk_stays_gated = true,
+ 	},
+ };
+ 
+@@ -383,6 +390,22 @@ static void lpss_ssp_cs_control(struct spi_device *spi, bool enable)
+ 	else
+ 		value |= LPSS_CS_CONTROL_CS_HIGH;
+ 	__lpss_ssp_write_priv(drv_data, config->reg_cs_ctrl, value);
++	if (config->cs_clk_stays_gated) {
++		u32 clkgate;
++
++		/*
++		 * Changing CS alone when dynamic clock gating is on won't
++		 * actually flip CS at that time. This ruins SPI transfers
++		 * that specify delays, or have no data. Toggle the clock mode
++		 * to force on briefly to poke the CS pin to move.
++		 */
++		clkgate = __lpss_ssp_read_priv(drv_data, LPSS_PRIV_CLOCK_GATE);
++		value = (clkgate & ~LPSS_PRIV_CLOCK_GATE_CLK_CTL_MASK) |
++			LPSS_PRIV_CLOCK_GATE_CLK_CTL_FORCE_ON;
++
++		__lpss_ssp_write_priv(drv_data, LPSS_PRIV_CLOCK_GATE, value);
++		__lpss_ssp_write_priv(drv_data, LPSS_PRIV_CLOCK_GATE, clkgate);
++	}
+ }
+ 
+ static void cs_assert(struct spi_device *spi)
+-- 
+2.25.0.225.g125e21ebc7-goog
 
-This allows a MX8QXP to work without OS changes if the driver already
-supports the previous chip. And if any quirks are found, then the OS
-can handle them without a DT change.
-
-Rob
