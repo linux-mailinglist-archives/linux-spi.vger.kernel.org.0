@@ -2,35 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD1C1593E6
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 16:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 660001593EA
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 16:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730630AbgBKPvw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Feb 2020 10:51:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:48946 "EHLO foss.arm.com"
+        id S1730661AbgBKPvy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Feb 2020 10:51:54 -0500
+Received: from foss.arm.com ([217.140.110.172]:48962 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730647AbgBKPvv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 Feb 2020 10:51:51 -0500
+        id S1730657AbgBKPvx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 Feb 2020 10:51:53 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D032030E;
-        Tue, 11 Feb 2020 07:51:50 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D1EA31B;
+        Tue, 11 Feb 2020 07:51:53 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 563D13F68E;
-        Tue, 11 Feb 2020 07:51:50 -0800 (PST)
-Date:   Tue, 11 Feb 2020 15:51:48 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A73DF3F68E;
+        Tue, 11 Feb 2020 07:51:52 -0800 (PST)
+Date:   Tue, 11 Feb 2020 15:51:51 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Alok Chauhan <alokc@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dilip Kota <dkota@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Girish Mahadevan <girishm@codeaurora.org>,
+To:     Etienne Carriere <etienne.carriere@st.com>
+Cc:     Alexandre Torgue <alexandre.torgue@st.com>,
+        christophe.kerello@st.com, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spi-geni-qcom: Drop of.h include" to the spi tree
-In-Reply-To: <20200204191206.97036-4-swboyd@chromium.org>
-Message-Id: <applied-20200204191206.97036-4-swboyd@chromium.org>
+        linux-stm32@st-md-mailman.stormreply.com,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        patrice.chotard@st.com
+Subject: Applied "spi: stm32-qspi: defer probe for reset controller" to the spi tree
+In-Reply-To: <20200203135048.1299-2-patrice.chotard@st.com>
+Message-Id: <applied-20200203135048.1299-2-patrice.chotard@st.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -39,7 +39,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-geni-qcom: Drop of.h include
+   spi: stm32-qspi: defer probe for reset controller
 
 has been applied to the spi tree at
 
@@ -64,38 +64,40 @@ to this mail.
 Thanks,
 Mark
 
-From 875014cb79ea4251e8800994640be1a8012b4133 Mon Sep 17 00:00:00 2001
-From: Stephen Boyd <swboyd@chromium.org>
-Date: Tue, 4 Feb 2020 11:12:06 -0800
-Subject: [PATCH] spi: spi-geni-qcom: Drop of.h include
+From 8196f7bcc2adf21f83d82691d537fcef7abaa1c7 Mon Sep 17 00:00:00 2001
+From: Etienne Carriere <etienne.carriere@st.com>
+Date: Mon, 3 Feb 2020 14:50:47 +0100
+Subject: [PATCH] spi: stm32-qspi: defer probe for reset controller
 
-This driver doesn't call any DT functions like of_get_property(). Remove
-the of.h include as it isn't used.
+Changes stm32 QSPI driver to defer its probe operation when a reset
+controller device have not yet probed but is registered in the
+system.
 
-Cc: Girish Mahadevan <girishm@codeaurora.org>
-Cc: Dilip Kota <dkota@codeaurora.org>
-Cc: Alok Chauhan <alokc@codeaurora.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20200204191206.97036-4-swboyd@chromium.org
+Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@st.com>
+Link: https://lore.kernel.org/r/20200203135048.1299-2-patrice.chotard@st.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-geni-qcom.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/spi/spi-stm32-qspi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index f0ca7f5ae714..c3972424af71 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -6,7 +6,6 @@
- #include <linux/io.h>
- #include <linux/log2.h>
- #include <linux/module.h>
--#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/qcom-geni-se.h>
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 4ef569b47aa6..13bb64bf4c8f 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -615,7 +615,11 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	rstc = devm_reset_control_get_exclusive(dev, NULL);
+-	if (!IS_ERR(rstc)) {
++	if (IS_ERR(rstc)) {
++		ret = PTR_ERR(rstc);
++		if (ret == -EPROBE_DEFER)
++			goto err;
++	} else {
+ 		reset_control_assert(rstc);
+ 		udelay(2);
+ 		reset_control_deassert(rstc);
 -- 
 2.20.1
 
