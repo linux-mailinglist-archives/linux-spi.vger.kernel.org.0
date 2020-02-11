@@ -2,41 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A50001593DB
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 16:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DB81593DF
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 16:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730586AbgBKPvm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Feb 2020 10:51:42 -0500
-Received: from foss.arm.com ([217.140.110.172]:48880 "EHLO foss.arm.com"
+        id S1730618AbgBKPvp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Feb 2020 10:51:45 -0500
+Received: from foss.arm.com ([217.140.110.172]:48906 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730453AbgBKPvm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 Feb 2020 10:51:42 -0500
+        id S1730613AbgBKPvo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 Feb 2020 10:51:44 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8139430E;
-        Tue, 11 Feb 2020 07:51:41 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D193131B;
+        Tue, 11 Feb 2020 07:51:43 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52893F68E;
-        Tue, 11 Feb 2020 07:51:40 -0800 (PST)
-Date:   Tue, 11 Feb 2020 15:51:39 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 579803F68E;
+        Tue, 11 Feb 2020 07:51:43 -0800 (PST)
+Date:   Tue, 11 Feb 2020 15:51:41 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     aisheng.dong@nxp.com, andrew.smirnov@gmail.com, angus@akkea.ca,
-        broonie@kernel.org, cosmin.stoica@nxp.com, daniel.baluta@nxp.com,
-        devicetree@vger.kernel.org, festevam@gmail.com,
-        gary.bisson@boundarydevices.com, jun.li@nxp.com,
-        kernel@pengutronix.de, leonard.crestez@nxp.com,
-        linux-arm-kernel@lists.infradead.org, Linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        l.stach@pengutronix.de, manivannan.sadhasivam@linaro.org,
-        marcel.ziswiler@toradex.com, Mark Brown <broonie@kernel.org>,
-        mark.rutland@arm.com, pramod.kumar_1@nxp.com, rabeeh@solid-run.com,
-        rjones@gateworks.com, robh+dt@kernel.org,
-        Rob Herring <robh@kernel.org>,
-        sebastien.szymanski@armadeus.com, s.hauer@pengutronix.de,
-        shawnguo@kernel.org
-Subject: Applied "dt-bindings: spi: imx: Add i.MX8MM/i.MX8MN/i.MX8MP compatible" to the spi tree
-In-Reply-To: <1581425307-18567-1-git-send-email-Anson.Huang@nxp.com>
-Message-Id: <applied-1581425307-18567-1-git-send-email-Anson.Huang@nxp.com>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Applied "dt-binding: spi: add bindings for spi-ar934x" to the spi tree
+In-Reply-To: <20200210034152.49063-3-gch981213@gmail.com>
+Message-Id: <applied-20200210034152.49063-3-gch981213@gmail.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -45,7 +35,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   dt-bindings: spi: imx: Add i.MX8MM/i.MX8MN/i.MX8MP compatible
+   dt-binding: spi: add bindings for spi-ar934x
 
 has been applied to the spi tree at
 
@@ -70,37 +60,69 @@ to this mail.
 Thanks,
 Mark
 
-From 1565e8e8ef0bbccabf62152b93c6505b8041b1e5 Mon Sep 17 00:00:00 2001
-From: Anson Huang <Anson.Huang@nxp.com>
-Date: Tue, 11 Feb 2020 20:48:24 +0800
-Subject: [PATCH] dt-bindings: spi: imx: Add i.MX8MM/i.MX8MN/i.MX8MP compatible
+From 78af6edf180d4f007561fba735d0c5dbd1739e90 Mon Sep 17 00:00:00 2001
+From: Chuanhong Guo <gch981213@gmail.com>
+Date: Mon, 10 Feb 2020 11:41:52 +0800
+Subject: [PATCH] dt-binding: spi: add bindings for spi-ar934x
 
-Add compatible for imx8mm/imx8mn/imx8mp.
+Add binding documentation for SPI controller in Qualcomm Atheros
+AR934x/QCA95xx SoCs.
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/1581425307-18567-1-git-send-email-Anson.Huang@nxp.com
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+Link: https://lore.kernel.org/r/20200210034152.49063-3-gch981213@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../bindings/spi/qca,ar934x-spi.yaml          | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/qca,ar934x-spi.yaml
 
-diff --git a/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt b/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
-index 2d3264140cc5..33bc58f4cf4b 100644
---- a/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
-+++ b/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
-@@ -10,7 +10,10 @@ Required properties:
-   - "fsl,imx35-cspi" for SPI compatible with the one integrated on i.MX35
-   - "fsl,imx51-ecspi" for SPI compatible with the one integrated on i.MX51
-   - "fsl,imx53-ecspi" for SPI compatible with the one integrated on i.MX53 and later Soc
--  - "fsl,imx8mq-ecspi" for SPI compatible with the one integrated on i.MX8M
-+  - "fsl,imx8mq-ecspi" for SPI compatible with the one integrated on i.MX8MQ
-+  - "fsl,imx8mm-ecspi" for SPI compatible with the one integrated on i.MX8MM
-+  - "fsl,imx8mn-ecspi" for SPI compatible with the one integrated on i.MX8MN
-+  - "fsl,imx8mp-ecspi" for SPI compatible with the one integrated on i.MX8MP
- - reg : Offset and length of the register set for the device
- - interrupts : Should contain CSPI/eCSPI interrupt
- - clocks : Clock specifiers for both ipg and per clocks.
+diff --git a/Documentation/devicetree/bindings/spi/qca,ar934x-spi.yaml b/Documentation/devicetree/bindings/spi/qca,ar934x-spi.yaml
+new file mode 100644
+index 000000000000..2aa766759d59
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/qca,ar934x-spi.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/qca,ar934x-spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Atheros AR934x/QCA95xx SoC SPI controller
++
++maintainers:
++  - Chuanhong Guo <gch981213@gmail.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    const: qca,ar934x-spi
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - '#address-cells'
++  - '#size-cells'
++
++examples:
++  - |
++    #include <dt-bindings/clock/ath79-clk.h>
++    spi: spi@1f000000 {
++        compatible = "qca,ar934x-spi";
++        reg = <0x1f000000 0x1c>;
++        clocks = <&pll ATH79_CLK_AHB>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
 -- 
 2.20.1
 
