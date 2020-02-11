@@ -2,36 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EACF715939B
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 16:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50001593DB
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2020 16:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730259AbgBKPtZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Feb 2020 10:49:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:48492 "EHLO foss.arm.com"
+        id S1730586AbgBKPvm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Feb 2020 10:51:42 -0500
+Received: from foss.arm.com ([217.140.110.172]:48880 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730377AbgBKPtZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 Feb 2020 10:49:25 -0500
+        id S1730453AbgBKPvm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 Feb 2020 10:51:42 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD3F531B;
-        Tue, 11 Feb 2020 07:49:24 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8139430E;
+        Tue, 11 Feb 2020 07:51:41 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 329183F68E;
-        Tue, 11 Feb 2020 07:49:24 -0800 (PST)
-Date:   Tue, 11 Feb 2020 15:49:22 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52893F68E;
+        Tue, 11 Feb 2020 07:51:40 -0800 (PST)
+Date:   Tue, 11 Feb 2020 15:51:39 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     alsa-devel@alsa-project.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     aisheng.dong@nxp.com, andrew.smirnov@gmail.com, angus@akkea.ca,
+        broonie@kernel.org, cosmin.stoica@nxp.com, daniel.baluta@nxp.com,
+        devicetree@vger.kernel.org, festevam@gmail.com,
+        gary.bisson@boundarydevices.com, jun.li@nxp.com,
+        kernel@pengutronix.de, leonard.crestez@nxp.com,
+        linux-arm-kernel@lists.infradead.org, Linux-imx@nxp.com,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>
-Subject: Applied "spi: pxa2xx: Enable support for compile-testing" to the asoc tree
-In-Reply-To: <20200210093027.6672-1-geert@linux-m68k.org>
-Message-Id: <applied-20200210093027.6672-1-geert@linux-m68k.org>
+        l.stach@pengutronix.de, manivannan.sadhasivam@linaro.org,
+        marcel.ziswiler@toradex.com, Mark Brown <broonie@kernel.org>,
+        mark.rutland@arm.com, pramod.kumar_1@nxp.com, rabeeh@solid-run.com,
+        rjones@gateworks.com, robh+dt@kernel.org,
+        Rob Herring <robh@kernel.org>,
+        sebastien.szymanski@armadeus.com, s.hauer@pengutronix.de,
+        shawnguo@kernel.org
+Subject: Applied "dt-bindings: spi: imx: Add i.MX8MM/i.MX8MN/i.MX8MP compatible" to the spi tree
+In-Reply-To: <1581425307-18567-1-git-send-email-Anson.Huang@nxp.com>
+Message-Id: <applied-1581425307-18567-1-git-send-email-Anson.Huang@nxp.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -40,11 +45,11 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: pxa2xx: Enable support for compile-testing
+   dt-bindings: spi: imx: Add i.MX8MM/i.MX8MN/i.MX8MP compatible
 
-has been applied to the asoc tree at
+has been applied to the spi tree at
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-5.7
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
@@ -65,45 +70,37 @@ to this mail.
 Thanks,
 Mark
 
-From 0d4416446897a91bb19ba837b97b607caea59a8f Mon Sep 17 00:00:00 2001
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 10 Feb 2020 10:30:27 +0100
-Subject: [PATCH] spi: pxa2xx: Enable support for compile-testing
+From 1565e8e8ef0bbccabf62152b93c6505b8041b1e5 Mon Sep 17 00:00:00 2001
+From: Anson Huang <Anson.Huang@nxp.com>
+Date: Tue, 11 Feb 2020 20:48:24 +0800
+Subject: [PATCH] dt-bindings: spi: imx: Add i.MX8MM/i.MX8MN/i.MX8MP compatible
 
-m68k/allmodconfig:
+Add compatible for imx8mm/imx8mn/imx8mp.
 
-    WARNING: unmet direct dependencies detected for SPI_PXA2XX
-      Depends on [n]: SPI [=y] && SPI_MASTER [=y] && (ARCH_PXA || ARCH_MMP || PCI [=n] || ACPI)
-      Selected by [m]:
-      - SND_SOC_INTEL_BDW_RT5677_MACH [=m] && SOUND [=m] && !UML && SND [=m] && SND_SOC [=m] && SND_SOC_INTEL_MACH [=y] && (SND_SOC_INTEL_HASWELL [=n] || SND_SOC_SOF_BROADWELL [=m]) && I2C [=m] && (I2C_DESIGNWARE_PLATFORM [=m] || COMPILE_TEST [=y]) && (GPIOLIB [=y] || COMPILE_TEST [=y]) && (X86_INTEL_LPSS || COMPILE_TEST [=y]) && SPI_MASTER [=y]
-
-This happens because SND_SOC_INTEL_BDW_RT5677_MACH selects SPI_PXA2XX,
-and the former depends on COMPILE_TEST, while the latter does not.
-
-Fix this by enabling compile-testing for SPI_PXA2XX.
-
-Fixes: 630db1549356f644 ("ASoC: Intel: bdw-rt5677: fix Kconfig dependencies")
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20200210093027.6672-1-geert@linux-m68k.org
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/1581425307-18567-1-git-send-email-Anson.Huang@nxp.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index d6ed0c355954..912cd6e35726 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -551,7 +551,7 @@ config SPI_PPC4xx
- 
- config SPI_PXA2XX
- 	tristate "PXA2xx SSP SPI master"
--	depends on (ARCH_PXA || ARCH_MMP || PCI || ACPI)
-+	depends on ARCH_PXA || ARCH_MMP || PCI || ACPI || COMPILE_TEST
- 	select PXA_SSP if ARCH_PXA || ARCH_MMP
- 	help
- 	  This enables using a PXA2xx or Sodaville SSP port as a SPI master
+diff --git a/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt b/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
+index 2d3264140cc5..33bc58f4cf4b 100644
+--- a/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
++++ b/Documentation/devicetree/bindings/spi/fsl-imx-cspi.txt
+@@ -10,7 +10,10 @@ Required properties:
+   - "fsl,imx35-cspi" for SPI compatible with the one integrated on i.MX35
+   - "fsl,imx51-ecspi" for SPI compatible with the one integrated on i.MX51
+   - "fsl,imx53-ecspi" for SPI compatible with the one integrated on i.MX53 and later Soc
+-  - "fsl,imx8mq-ecspi" for SPI compatible with the one integrated on i.MX8M
++  - "fsl,imx8mq-ecspi" for SPI compatible with the one integrated on i.MX8MQ
++  - "fsl,imx8mm-ecspi" for SPI compatible with the one integrated on i.MX8MM
++  - "fsl,imx8mn-ecspi" for SPI compatible with the one integrated on i.MX8MN
++  - "fsl,imx8mp-ecspi" for SPI compatible with the one integrated on i.MX8MP
+ - reg : Offset and length of the register set for the device
+ - interrupts : Should contain CSPI/eCSPI interrupt
+ - clocks : Clock specifiers for both ipg and per clocks.
 -- 
 2.20.1
 
