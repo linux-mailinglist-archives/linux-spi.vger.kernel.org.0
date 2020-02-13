@@ -2,88 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8F915C94F
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2020 18:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE0815CAA3
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2020 19:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728513AbgBMRSj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Feb 2020 12:18:39 -0500
-Received: from mga12.intel.com ([192.55.52.136]:8689 "EHLO mga12.intel.com"
+        id S1727761AbgBMSq2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Feb 2020 13:46:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:52204 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727781AbgBMRSi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 13 Feb 2020 12:18:38 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Feb 2020 09:18:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,437,1574150400"; 
-   d="scan'208";a="267204517"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Feb 2020 09:18:35 -0800
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1j2I8K-001B0E-Ab; Thu, 13 Feb 2020 19:18:36 +0200
-Date:   Thu, 13 Feb 2020 19:18:36 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Srivastava, Shobhit" <shobhit.srivastava@intel.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Rajat Jain <rajatja@google.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        "rajatxjain@gmail.com" <rajatxjain@gmail.com>,
-        "evgreen@google.com" <evgreen@google.com>,
-        "Muthukrishnan, Porselvan" <porselvan.muthukrishnan@intel.com>
-Subject: Re: Re: [PATCH] spi: pxa2xx: Add CS control clock quirk
-Message-ID: <20200213171836.GD10400@smile.fi.intel.com>
-References: <CB4ED07B85D6BB40B8B44F6D5442E4F6572C1523@BGSMSX101.gar.corp.intel.com>
+        id S1727725AbgBMSq1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 13 Feb 2020 13:46:27 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F84B328;
+        Thu, 13 Feb 2020 10:46:27 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 842C93F68E;
+        Thu, 13 Feb 2020 10:46:26 -0800 (PST)
+Date:   Thu, 13 Feb 2020 18:46:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>, Han Xu <han.xu@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Ashish Kumar <ashish.kumar@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH V2 2/5] spi: fspi: dynamically alloc AHB memory
+Message-ID: <20200213184624.GK4333@sirena.org.uk>
+References: <20200202125950.1825013-1-aford173@gmail.com>
+ <20200202125950.1825013-2-aford173@gmail.com>
+ <CAOMZO5D3emrAk84wDS04qJC-3AyvFnqodhoMsXO-ukHnYsU+PQ@mail.gmail.com>
+ <CAHCN7xJyZRwJhnWW2mAbOeGyrMsB7Au_e6AvwiNmNS8gFUfSyw@mail.gmail.com>
+ <20200212120753.GF4028@sirena.org.uk>
+ <CAHCN7x+5bACfYVX49Lib+fmNq-dEOkcyi0gXt7rtYxrGaYbH1Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ah40dssYA/cDqAW1"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CB4ED07B85D6BB40B8B44F6D5442E4F6572C1523@BGSMSX101.gar.corp.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAHCN7x+5bACfYVX49Lib+fmNq-dEOkcyi0gXt7rtYxrGaYbH1Q@mail.gmail.com>
+X-Cookie: Academicians care, that's who.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 04:57:24PM +0000, Srivastava, Shobhit wrote:
-> > On 2/12/20 12:34 AM, Rajat Jain wrote:
 
-...
+--Ah40dssYA/cDqAW1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > I wonder is it enough to have this quick toggling only or is time or actually
-> > number of clock cycles dependent? Now there is no delay between but I'm
-> > thinking if it needs certain number cycles does this still work when using low
-> > ssp_clk rates similar than in commit d0283eb2dbc1 ("spi:
-> > pxa2xx: Add output control for multiple Intel LPSS chip selects").
-> > 
-> > I'm thinking can this be done only once after resume and may other LPSS
-> > blocks need the same? I.e. should this be done in drivers/mfd/intel-lpss.c?
+On Wed, Feb 12, 2020 at 07:08:49AM -0600, Adam Ford wrote:
 
-> This behavior is seen after S0ix resume, but it is not seen after S3 resume.
+> The original author was copied on the initial commit.  I literally
+> generated the patch from NXP's branch,  added my notes, and pushed
+> them to the mailing lists after testing them on the  the Linux master
+> branch.   I am a bit disappointed that NXP's author hasn't responded
+> to any of the comments or feedback.  NXP knows their hardware and
 
-I already commented in the other thread about this.
+Bear in mind that it's been the spring festival and there's been quite a
+bit of delay in getting back to work in China resulting from coronavirus
+stuff so hopefully it's just a delay in replying.
 
-Have you checked what's going on in intel_lpss_suspend() and
-intel_lpss_resume() for your case?
+--Ah40dssYA/cDqAW1
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Is intel_lpss_prepare() called during S0ix exit?
+-----BEGIN PGP SIGNATURE-----
 
-> I am thinking that it happens because we are not enabling the SSP after resume. 
-> It is deferred until we need to send data. By enabling the SSP in resume, I don’t see the issue.
-> For S3, I think BIOS re-enables the SSP in resume flow.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5FmYAACgkQJNaLcl1U
+h9BIJQf/YCuS+PbvoZjpzEq+oZbCnmY0R0BkFrp7Sc1PV9zHgjKqGmQAr9RVSeSI
+kfalZEPSUkUEpxgouX+I3VVvKPpQhDEhj46+y+IXYWH/Y0QA58bDv7ctWOhIBn+Q
+vW7iTl/+CHsJdTptylbI5K0TiVP3D5wDGbiym/rvAjIGpe7FXzd9WUteXNKeLJMy
+QmhJg6z+gAVwf/mYiyM03MRx1Gn1c5C/cMkan6s189g77et3avP4nEfKb6UyApgi
+FY+BqvQCyBK7OSErmJ7H+NpqM9Rq0b7xJLknFwbfOLTpqvG8iRhGzvQyNg3uPAqt
+aAm0o3dppPZAbuc4HFV4OF5n2YoGBA==
+=r4u7
+-----END PGP SIGNATURE-----
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--Ah40dssYA/cDqAW1--
