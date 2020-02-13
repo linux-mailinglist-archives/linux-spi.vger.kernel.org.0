@@ -2,41 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBB415BABD
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2020 09:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C249C15BAC3
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2020 09:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729428AbgBMI0b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Feb 2020 03:26:31 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:43044 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726232AbgBMI0a (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Feb 2020 03:26:30 -0500
-Received: by mail-ot1-f68.google.com with SMTP id p8so4741849oth.10;
-        Thu, 13 Feb 2020 00:26:30 -0800 (PST)
+        id S1729494AbgBMI2E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Feb 2020 03:28:04 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:37369 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729401AbgBMI2E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Feb 2020 03:28:04 -0500
+Received: by mail-oi1-f195.google.com with SMTP id q84so4971053oic.4;
+        Thu, 13 Feb 2020 00:28:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FFkQl6NOscQuei7LQaq+MljWAEd7BswkSjJA8CjWHao=;
-        b=PkyfVK2rszYo2MQgvsm/NKRAHgph4VaKIZBvSkggz2FOagg5GewlEA35x2zDpJcvXO
-         YhN70584fV1K1WTt4lV2XRFLFuDL6/K148P+cB5+Xj6Qm7vDkcYL19E/a9PFm7bNkmNx
-         kbYVlL8C7lGCm/YzC1qZ4GtP0tgTy+Z8ebDZy+cwMChLRoMn4IGQXJYiFFkIPzCnn7P/
-         Vn73pa+Fo0+FcDveaWIYlV9ZSauZRtzIGo30LQeUnTLaMcb/FCO46X37FsqNRAB5IvfK
-         Npyerb5em7T1hRRrJkVtQmc+T3c23vSqXW5zai+dPnzzNTb6OOXjw+nzN7WENiz/NZ4E
-         CvNg==
-X-Gm-Message-State: APjAAAUKp5C/9aIJDG1OAKXNYXeldAH88xsJXyjzIcoSLiGx28rJxs/k
-        5KXq7TSwvMpGNrraTRADFfOS/fAEOcI2m6jnHiMI+/4W
-X-Google-Smtp-Source: APXvYqyiMHu10QaIdyNLPnx1fzKkFpgHJA8E8PC1EeL8qUGj2ImyP3UpKCF1uUxEz8CnnAzWAH/VazxDRwbP/sPvJG0=
-X-Received: by 2002:a05:6830:1d55:: with SMTP id p21mr12410749oth.145.1581582390035;
- Thu, 13 Feb 2020 00:26:30 -0800 (PST)
+        bh=XUdfEmpu25mRYOfIJZi8kyE6tBIrXeyCx0UzQu32/XA=;
+        b=AQySvvjEjlb1uUFdUtPLjHAUs6j1M3BPfSGpjUFjTWq1vbN2A5/m4qasmx8wZkojdS
+         KVgXsmC1RolIE9v3Q3PuHzCw83krVvrZ42KoORr/bh0IaeC1D58sXT1CjVABOnyEY80T
+         5FuXi/SAVVxQnshE5THi9tqVYACV84vZSFZE+Vw5YQ9qlAByJAxymsttlOw/4BK3bFfb
+         F4SeISd7w0EmZRPK34oGsdiFFTLqZ5Qa0QnfS09Me3CqSSPbRu1WDs5RRJ9Ca6eZ0+cE
+         CEv+VnMolWazD7ugDRvq5S0FVvatmmua68dldm8VW5JvDVwMV6j8ig2qKoBSeu9R5+J9
+         ixQA==
+X-Gm-Message-State: APjAAAUGppuYg/4FSeI0RBCSK874NtzoGm1kPhS68UjITjlROa0g3FSi
+        dVUvfe0vZQp+3gen8y9rOJ6VS+O7XbUh6m1U19E=
+X-Google-Smtp-Source: APXvYqzeMYQ5gY/uBVauBiLyeVV9ChtdJB+OknQWQXs1t4BPSV9IamFUEpgUgmXJJJ4OBpq1W8fJl+UT1b2y2UWEx1I=
+X-Received: by 2002:a54:4707:: with SMTP id k7mr1994108oik.153.1581582483924;
+ Thu, 13 Feb 2020 00:28:03 -0800 (PST)
 MIME-Version: 1.0
-References: <1581567368-8055-1-git-send-email-yangtiezhu@loongson.cn> <1581567368-8055-2-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1581567368-8055-2-git-send-email-yangtiezhu@loongson.cn>
+References: <1581567368-8055-1-git-send-email-yangtiezhu@loongson.cn> <1581567368-8055-3-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1581567368-8055-3-git-send-email-yangtiezhu@loongson.cn>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 13 Feb 2020 09:26:19 +0100
-Message-ID: <CAMuHMdXi4ieMvZY1J8RjuOeR+vKrTmASq-40MK27xutZPv4deQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] spi: spidev_test: Check input_tx and input_file first
- after parse options
+Date:   Thu, 13 Feb 2020 09:27:52 +0100
+Message-ID: <CAMuHMdWb2ZxtFQC0ukCVbPhX2M50k0aQ0nvmRfD02FAksEJOfQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] spi: spidev_test: Use perror() only if errno is not 0
 To:     Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc:     Mark Brown <broonie@kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
@@ -47,34 +46,25 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Tiezhu,
-
 On Thu, Feb 13, 2020 at 5:17 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> It is better to check input_tx and input_file first after parse options.
-> Otherwise, it will do some useless operations when both -p and --input
-> are selected.
+> It is better to use perror() only if errno is not 0, it should use printf()
+> when errno is 0, otherwise there exists redudant ": Success".
+>
+> E.g. without this patch:
+>
+> $ ./spidev_test -p 1234 --input test.bin
+> only one of -p and --input may be selected: Success
+> Aborted (core dumped)
+>
+> With this patch:
+>
+> $ ./spidev_test -p 1234 --input test.bin
+> only one of -p and --input may be selected
+> Aborted (core dumped)
 >
 > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-Thanks for your patch!
-
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/tools/spi/spidev_test.c
-> +++ b/tools/spi/spidev_test.c
-> @@ -404,6 +404,9 @@ int main(int argc, char *argv[])
->
->         parse_opts(argc, argv);
->
-> +       if (input_tx && input_file)
-> +               pabort("only one of -p and --input may be selected");
-> +
-
-Alternatively, this check could be moved to the end of parse_opts().
-
->         fd = open(device, O_RDWR);
->         if (fd < 0)
->                 pabort("can't open device");
 
 Gr{oetje,eeting}s,
 
