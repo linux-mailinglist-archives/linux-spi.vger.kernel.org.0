@@ -2,29 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2906115BF64
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2020 14:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E382315BF67
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2020 14:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729674AbgBMNc3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Feb 2020 08:32:29 -0500
-Received: from foss.arm.com ([217.140.110.172]:46690 "EHLO foss.arm.com"
+        id S1730031AbgBMNcb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Feb 2020 08:32:31 -0500
+Received: from foss.arm.com ([217.140.110.172]:46694 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729588AbgBMNc3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 13 Feb 2020 08:32:29 -0500
+        id S1729588AbgBMNcb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 13 Feb 2020 08:32:31 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DCC391045;
-        Thu, 13 Feb 2020 05:32:28 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E3E81063;
+        Thu, 13 Feb 2020 05:32:31 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6063D3F6CF;
-        Thu, 13 Feb 2020 05:32:28 -0800 (PST)
-Date:   Thu, 13 Feb 2020 13:32:26 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B5DD83F6CF;
+        Thu, 13 Feb 2020 05:32:30 -0800 (PST)
+Date:   Thu, 13 Feb 2020 13:32:29 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spidev_test: Remove the whole "include" directory when make clean" to the spi tree
-In-Reply-To: <1581567368-8055-4-git-send-email-yangtiezhu@loongson.cn>
-Message-Id: <applied-1581567368-8055-4-git-send-email-yangtiezhu@loongson.cn>
+Subject: Applied "spi: spidev_test: Use perror() only if errno is not 0" to the spi tree
+In-Reply-To: <1581567368-8055-3-git-send-email-yangtiezhu@loongson.cn>
+Message-Id: <applied-1581567368-8055-3-git-send-email-yangtiezhu@loongson.cn>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -33,7 +33,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spidev_test: Remove the whole "include" directory when make clean
+   spi: spidev_test: Use perror() only if errno is not 0
 
 has been applied to the spi tree at
 
@@ -58,36 +58,59 @@ to this mail.
 Thanks,
 Mark
 
-From aea7afd9079f2e43b05790241d748ff0537ec917 Mon Sep 17 00:00:00 2001
+From 470a072e12200576788dc622d58894609feae2d7 Mon Sep 17 00:00:00 2001
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Date: Thu, 13 Feb 2020 12:16:08 +0800
-Subject: [PATCH] spi: spidev_test: Remove the whole "include" directory when
- make clean
+Date: Thu, 13 Feb 2020 12:16:07 +0800
+Subject: [PATCH] spi: spidev_test: Use perror() only if errno is not 0
 
-In the current code, it only removes "include/linux/spi/spidev.h" file
-when make clean and there still exists useless "include/linux/spi/"
-directory, just remove it.
+It is better to use perror() only if errno is not 0, it should use printf()
+when errno is 0, otherwise there exists redudant ": Success".
+
+E.g. without this patch:
+
+$ ./spidev_test -p 1234 --input test.bin
+only one of -p and --input may be selected: Success
+Aborted (core dumped)
+
+With this patch:
+
+$ ./spidev_test -p 1234 --input test.bin
+only one of -p and --input may be selected
+Aborted (core dumped)
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Link: https://lore.kernel.org/r/1581567368-8055-4-git-send-email-yangtiezhu@loongson.cn
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/1581567368-8055-3-git-send-email-yangtiezhu@loongson.cn
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/spi/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/spi/spidev_test.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/spi/Makefile b/tools/spi/Makefile
-index 5c342e655e55..2249a1546cc1 100644
---- a/tools/spi/Makefile
-+++ b/tools/spi/Makefile
-@@ -51,7 +51,7 @@ $(OUTPUT)spidev_fdx: $(SPIDEV_FDX_IN)
+diff --git a/tools/spi/spidev_test.c b/tools/spi/spidev_test.c
+index 5866178cdcc9..27967dd90f8f 100644
+--- a/tools/spi/spidev_test.c
++++ b/tools/spi/spidev_test.c
+@@ -13,6 +13,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <errno.h>
+ #include <getopt.h>
+ #include <fcntl.h>
+ #include <time.h>
+@@ -26,7 +27,11 @@
  
- clean:
- 	rm -f $(ALL_PROGRAMS)
--	rm -f $(OUTPUT)include/linux/spi/spidev.h
-+	rm -rf $(OUTPUT)include/
- 	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
+ static void pabort(const char *s)
+ {
+-	perror(s);
++	if (errno != 0)
++		perror(s);
++	else
++		printf("%s\n", s);
++
+ 	abort();
+ }
  
- install: $(ALL_PROGRAMS)
 -- 
 2.20.1
 
