@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D59115EED9
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2020 18:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148D015F431
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2020 19:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387531AbgBNRno (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Feb 2020 12:43:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50158 "EHLO mail.kernel.org"
+        id S2390059AbgBNST2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Feb 2020 13:19:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54550 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389577AbgBNQDP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:03:15 -0500
+        id S1729781AbgBNPu2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:50:28 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A08152467E;
-        Fri, 14 Feb 2020 16:03:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AF4962467E;
+        Fri, 14 Feb 2020 15:50:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696194;
-        bh=qXBQpGHuxOcxtmfWos87rZV4Lw8QLXlsO+sJcM2OHFU=;
+        s=default; t=1581695427;
+        bh=m4jyVE18pfZq4qi+TJEPKig9Dd0guUKdRgNJXmVZibI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1sP4er29ICfXGHblPpe5ok5IerGeDMvkCBfXPfEsICaiyiw8vYujJvwpSd1hjPULx
-         VYT2vEZFysUQYJ855gjRiqGt/vcT7tC6ll/Vy9ISETmk8qHVWdM9MvVAPXZrd5OPIi
-         U6nHk4V+V+Z/oM/fGm8L59F2vl6uTNsx79K+fHzE=
+        b=dZr/O+vnE8G4O7dcz2WBPSln8ZtVCNay0xOrOwOEM7YOGA9mH4No0ceUgBJFeSgiF
+         JoBltEAnY0f58S9FUE4/wiuL7LOHxgSOs8kfCssloMx1dyFmHddtNzt1+g57S8vIyZ
+         7z68xbNYtMwP9mfnTW58PyPSJN9SdfCDnX/gzD3U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 062/459] spi: fsl-lpspi: fix only one cs-gpio working
-Date:   Fri, 14 Feb 2020 10:55:12 -0500
-Message-Id: <20200214160149.11681-62-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 071/542] spi: fsl-lpspi: fix only one cs-gpio working
+Date:   Fri, 14 Feb 2020 10:41:03 -0500
+Message-Id: <20200214154854.6746-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
-References: <20200214160149.11681-1-sashal@kernel.org>
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,7 +69,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 3528ed5eea9b5..92e460d4f3d10 100644
+index 2cc0ddb4a9889..1375bdfc587bf 100644
 --- a/drivers/spi/spi-fsl-lpspi.c
 +++ b/drivers/spi/spi-fsl-lpspi.c
 @@ -862,6 +862,22 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
