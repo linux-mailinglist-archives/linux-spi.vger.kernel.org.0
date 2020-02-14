@@ -2,95 +2,162 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A897A15D7A8
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2020 13:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3493F15D7FA
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2020 14:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728173AbgBNMu4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Feb 2020 07:50:56 -0500
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:35579 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728062AbgBNMu4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Feb 2020 07:50:56 -0500
-Received: by mail-vs1-f65.google.com with SMTP id x123so6163029vsc.2;
-        Fri, 14 Feb 2020 04:50:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YfI+Uxxh/VfHkmQ0LRtfuf8KZr2lKr4QwAFen6h03ik=;
-        b=DVKyEU+GnBaKKqP71klCRTUVWyd8UlLuGATHM8PQf1cs6w+JuWbXkqq3aTPVBuN7fW
-         PM6JL0p+ncls8I72Olm6eG609Hk7Yk+Dl/0ZWiCNPUkZA0ylNc6P4F5ar9laxNiy0D+O
-         /Q07+EC49BWHoHuss762lz3tOoy11ivwY1I5yT/6550hXP+LNV59H845IFnRNmpGENGX
-         ExRGw6LfKbcH5rCIc+GvIU0YExpW9BN4IAHaP6TIB0LyqRPEPxegNrdm2ME7f0gf7Ehv
-         UIu/e1SsIDWJajDwWgkrQyMQaE5z8LUhKc23Ktn910SFaB7dmHHmvXp++wGLoE4GrJyB
-         JkDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YfI+Uxxh/VfHkmQ0LRtfuf8KZr2lKr4QwAFen6h03ik=;
-        b=JxWpn0ElzD+n3k+AuywgWCBTPXgM3Bl2UDxeW7FXWBhepQceF78e9LT0bxKW2fPvcG
-         VTjG07TyFuB+VtbBjQoAL29GRuf2DwCqRr3L9TPu0mvcQZhY+iC10vQaqgckchMZbEyU
-         yJKgmo2iRXHGN1pBB9U8aUpaf4uwPYIiFi9NAntvWD7foDwzag0E5k127d2Uwm1flQL2
-         7WJK/Cr0+WeG3Gh5cr+IByJV6paiIMRx0/6z1t6Vlk0JU/oeVv3SoKSEbDdafqeudEJr
-         I5nU5LQgO2amRn7i7qcbvobqGlQcZ1MCy9DFMRt3HBY/lvYVzaxKx2oRSfwGeAw2vQsR
-         Kcqg==
-X-Gm-Message-State: APjAAAUuzb3TUAiX2HNCUnaYBl4RWELAPPk2KbnVIFdf6NUFEekbQQFe
-        AsAzwLA8W/XtkgBci3B4FWm8eYI1ly/V92ETNv0=
-X-Google-Smtp-Source: APXvYqydl0OQh4w0yGWu+8OFaoA5y1yt42vbxh0IO7hLH1yYx3PU0cYmEM8KRoXTWRsVGBYd0VAGSMi89mjuQrpG/Tg=
-X-Received: by 2002:a67:2f06:: with SMTP id v6mr1237125vsv.12.1581684655278;
- Fri, 14 Feb 2020 04:50:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20200214114618.29704-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <CAAh8qsxnRSwonuEPrriuS=gUMTjt8ddUVy5HxegmoCk-FoE4qg@mail.gmail.com> <20200214121145.GF4827@sirena.org.uk>
-In-Reply-To: <20200214121145.GF4827@sirena.org.uk>
-From:   Simon Goldschmidt <simon.k.r.goldschmidt@gmail.com>
-Date:   Fri, 14 Feb 2020 13:50:44 +0100
-Message-ID: <CAAh8qsxmYmpyAg-FQJLnEwvKKFZYg6VQenKf83_TJ4oF0GyMsA@mail.gmail.com>
-Subject: Re: [PATCH v9 0/2] spi: cadence-quadpsi: Add support for the Cadence
- QSPI controller
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-spi@vger.kernel.org, Vignesh R <vigneshr@ti.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, dan.carpenter@oracle.com,
+        id S1728369AbgBNNJy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Feb 2020 08:09:54 -0500
+Received: from foss.arm.com ([217.140.110.172]:32886 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726191AbgBNNJy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 14 Feb 2020 08:09:54 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31AA91FB;
+        Fri, 14 Feb 2020 05:09:54 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A84A23F68F;
+        Fri, 14 Feb 2020 05:09:53 -0800 (PST)
+Date:   Fri, 14 Feb 2020 13:09:52 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        vigneshr@ti.com, mark.rutland@arm.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, dan.carpenter@oracle.com,
         cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v9 2/2] spi: cadence-quadpsi: Add support for the Cadence
+ QSPI controller
+Message-ID: <20200214130952.GI4827@sirena.org.uk>
+References: <20200214114618.29704-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200214114618.29704-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GBuTPvBEOL0MYPgd"
+Content-Disposition: inline
+In-Reply-To: <20200214114618.29704-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Cookie: Shipping not included.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 1:11 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Fri, Feb 14, 2020 at 01:02:22PM +0100, Simon Goldschmidt wrote:
-> > On Fri, Feb 14, 2020 at 12:46 PM Ramuthevar,Vadivel MuruganX
-> > <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
->
-> > > Add support for the Cadence QSPI controller. This controller is
-> > > present in the Intel Lightning Mountain(LGM) SoCs, Altera and TI SoCs.
-> > > This driver has been tested on the Intel LGM SoCs.
->
-> > This is v9 and still, none of the altera maintainers are on CC?
-> > How will it be ensured that this doesn't break altera if it is merged?
->
-> Given that this is a new driver I'd be very surprised if it broke other
-> users?  I can imagine it might not work for them and it would definitely
-> be much better to get their review but it shouldn't be any worse than
-> the current lack of support.
 
-It is a new driver, but the hardware it supports is not currently unsupported.
-Both Vadivel and Vignesh have stated that this driver merely moves the existing
-generic spi driver to the spi-mem interface and should replace the existing
-driver.
+--GBuTPvBEOL0MYPgd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-So please correct me if I'm wrong, but to me it seems like if this driver won't
-work on altera, and after merging it the currently working driver will be
-removed, altera will be broken.
+On Fri, Feb 14, 2020 at 07:46:18PM +0800, Ramuthevar,Vadivel MuruganX wrote:
 
-Regards,
-Simon
+> +static irqreturn_t cqspi_irq_handler(int this_irq, void *dev)
+> +{
+> +	struct cqspi_st *cqspi = dev;
+> +	unsigned int irq_status;
+> +
+> +	/* Read interrupt status */
+> +	irq_status = readl(cqspi->iobase + CQSPI_REG_IRQSTATUS);
+> +
+> +	/* Clear interrupt */
+> +	writel(irq_status, cqspi->iobase + CQSPI_REG_IRQSTATUS);
+> +
+> +	irq_status &= CQSPI_IRQ_MASK_RD | CQSPI_IRQ_MASK_WR;
+> +
+> +	if (irq_status)
+> +		complete(&cqspi->transfer_complete);
+> +
+> +	return IRQ_HANDLED;
+> +}
+
+This will unconditionally handle the interrupt regardless of if the
+hardware was actually flagging an interrupt which will break shared
+interrupts and the fault handling code in genirq.
+
+> +	tmpbufsize = op->addr.nbytes + op->dummy.nbytes;
+> +	tmpbuf = kzalloc(tmpbufsize, GFP_KERNEL | GFP_DMA);
+> +	if (!tmpbuf)
+> +		return -ENOMEM;
+
+I'm not clear where tmpbuf gets freed or passed out of this function?
+
+> +
+> +	if (op->addr.nbytes) {
+> +		for (i = 0; i < op->addr.nbytes; i++)
+> +			tmpbuf[i] = op->addr.val >> (8 * (op->addr.nbytes - i - 1));
+> +
+> +		addr_buf = tmpbuf;
+
+We assign tmpbuf to addr_buf here but addr_buf just gets read from so
+it's not via that AFAICT.
+
+> +	}
+> +	/* Invalid address return zero. */
+
+Missing blank line.
+
+> +static void cqspi_chipselect(struct cqspi_flash_pdata *f_pdata)
+> +{
+> +	struct cqspi_st *cqspi = f_pdata->cqspi;
+> +	void __iomem *reg_base = cqspi->iobase;
+> +	unsigned int chip_select = f_pdata->cs;
+> +	unsigned int reg;
+> +
+> +	reg = readl(reg_base + CQSPI_REG_CONFIG);
+> +	reg &= ~CQSPI_REG_CONFIG_DECODE_MASK;
+> +
+> +	/* Convert CS if without decoder.
+> +	 * CS0 to 4b'1110
+> +	 * CS1 to 4b'1101
+> +	 * CS2 to 4b'1011
+> +	 * CS3 to 4b'0111
+> +	 */
+> +	chip_select = 0xF & ~(1 << chip_select);
+
+This says "if without decoder" but there's no conditionals here, what if
+we do have a decoder?
+
+> +	cqspi->master_ref_clk_hz = clk_get_rate(cqspi->clk);
+> +	ddata  = of_device_get_match_data(dev);
+> +	if (ddata) {
+> +		if (ddata->quirks & CQSPI_NEEDS_WR_DELAY)
+> +			cqspi->wr_delay = 5 * DIV_ROUND_UP(NSEC_PER_SEC,
+> +						cqspi->master_ref_clk_hz);
+> +		if (ddata->hwcaps_mask & CQSPI_SUPPORTS_OCTAL)
+> +			master->mode_bits |= SPI_RX_OCTAL;
+> +		if (!(ddata->quirks & CQSPI_DISABLE_DAC_MODE))
+> +			cqspi->use_dac_mode = true;
+> +		if (ddata->quirks & CQSPI_NEEDS_ADDR_SWAP) {
+> +			master->bus_num = 0;
+> +			master->num_chipselect = 2;
+> +		}
+> +	}
+
+Given that the driver appears to unconditionally dereference match data
+in other places I'd expect this to return an error if there's none,
+otherwise we'll oops in those other code paths later on.
+
+> +	ret = devm_request_irq(dev, irq, cqspi_irq_handler, 0,
+> +			       pdev->name, cqspi);
+> +	if (ret) {
+> +		dev_err(dev, "Cannot request IRQ.\n");
+> +		goto probe_reset_failed;
+> +	}
+
+Are you sure that it's safe to use devm_request_irq() - what happens if
+the interrupt fires in the process of removing the device?
+
+--GBuTPvBEOL0MYPgd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5GnB8ACgkQJNaLcl1U
+h9C+fgf+Om+8sIQDPfShzyjlZsc5xBZOp8oDvh4pUB/LyqN2yM/zEyliKQW+lWOK
+fR7W7t5WsTnJaHGyniMVPQs3duaCXpHKZYZgM9U7dhvrMnsX+6A6OZgsJDc3HwfZ
++Z1qQ5vEIOjv2A41gp26X6yp6rlG/7HyT2clyKL4fuoszBQQn231DLOYlh2rzIHN
+hpgIOR2aNl0tz9HybLexivn6d5CmqYxrvvpRavkxpFTii9ReX9xNVhGz9BZRCrr0
+xFqXz1MjYnTrB0HdEMjVn+RfT8TbdT5BcmNp4SRc9OigZuQrtraC0NNvrUxZfuIS
+z8eVTgg4kHixNvaVrt5uWJ49071S5g==
+=5DCl
+-----END PGP SIGNATURE-----
+
+--GBuTPvBEOL0MYPgd--
