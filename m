@@ -2,140 +2,147 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A85D715FF31
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Feb 2020 17:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE94F1606BF
+	for <lists+linux-spi@lfdr.de>; Sun, 16 Feb 2020 22:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgBOQOj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 15 Feb 2020 11:14:39 -0500
-Received: from mail-eopbgr40064.outbound.protection.outlook.com ([40.107.4.64]:6405
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726143AbgBOQOi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 15 Feb 2020 11:14:38 -0500
+        id S1726719AbgBPVkZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 16 Feb 2020 16:40:25 -0500
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:43565 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726043AbgBPVkY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Feb 2020 16:40:24 -0500
+Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
+  Tudor.Ambarus@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Tudor.Ambarus@microchip.com";
+  x-sender="Tudor.Ambarus@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa2.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Tudor.Ambarus@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Tudor.Ambarus@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: HwJsLreoM3GJOJsKKE8ZNlAdFmJHtmBLtM/Pa5baj1Q38pHGnjttInKReV34FxSbqjNxxMZ9Fg
+ FkiBwiYqgEpOkvC9ArEopSvJpkwcvkvY36H6dB764BJX+we1C2MKC3b8/oW1+vDvAitWFAITe+
+ 62QKw/eZZK7QzoTMd0Jaz4VRRhsajBEkCFJlXXdQCPLjECrEttZDA0oXXKKuuQ3XMWUoW4fMhh
+ h29U4zfWeBmkK38kK9JXOyvK3n2Jb0c7FInWuYmEyo4jFHB8es0J58pgmMguRwagPNqXQQPkPR
+ 10Y=
+X-IronPort-AV: E=Sophos;i="5.70,450,1574146800"; 
+   d="scan'208";a="66075685"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Feb 2020 14:40:23 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sun, 16 Feb 2020 14:40:22 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Sun, 16 Feb 2020 14:40:26 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F/L5YMfCimskt8ViBJvLBrHhfZN56FcF3BG/WMl5KTFvTsLrzyWkUz43MSFp0lwm8xIbNuIufwnz3uTdkcAhE4GlzXCeA3rJugwmisoLYSs9dbvwr4YCmfo0wtEyqqSFhqvHVaTe3U3XIQSh9AO/dXimc/UJNM4VEU3MQ/FK+1QqoHarJBXBU2VtRBFSp4SbFaXcuAopHBPBPxfKh/Z/rHm344/Xs8DLMLhSZXugOW5dP4Dya1dQPs1gLR975IOyqEz9EvB1lHAyiyV2mLwuDnLeyXjI5Bd4o/vmgqohKbFXfjw5u15ezOJX1ibRkmyXLRAt7gBeDN5rdyt3UVVgsQ==
+ b=DGHHZOULJRc3dS9+8pO5JNvhU5wjREzu2Ov72LHkK9WI1Uqx5ZvZQ/ZJ5RXJrd/agSfgIk5gKZZopQA1nAKA919fwleJtoA1pdyc5EF79hU7COxVY1EAJOtYPAyIUBv2WqGCcQJll5B04pQh4ta9A/xyjXiTk3XsfWDp1mKtKeActJDWFrEap0H/GtHxmzuD3r8/sRwdiC2VAUPyQIwZ8FCdVUoc95bKt6wfjxEcJsrTp4bG3OaXYKMvsvTbPR6BmF4x9eJLlbu3rT2H5K3d3Mo7UzK8CS5bMmxZbXRR6a82w1+sTnWJXYKDAyJkuCRS6ZV12qXGClpjMMHRGhBZIQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WmXxEH/nYGbMvOHz9SDe3eMDOZicL+itSktJRIe4czM=;
- b=hE6S5VuceXa75hjgvEXKVlybSwGNrggx6TpCzX3vQJpPfcNIATpSP6CNm0da0hyCUwDQFeS2JOsfSxwY/0XGLBTZRxX9/nyRYnvW0cuZfE/MglF5wZd+PIzefQ4tJbvtbTHtWOylEHU8jwHFfubiCKPSYf0wPJmdnUznsGJtmMHJfXdNhLzXiiiZiLGvvj2mD3Mj9Fwuh2Q8+3/uziz7qbNWrpMFyjtKbAIkNyGA0nhv0GFM5xjMutCBxVQjMjkLdWERX1itQU4x1cUgWzOQzoKP0JYV+a2+1Ed3vEXFj6OvP+5UAaI722TIskIsPQD5UppbqcJ4oyvPdXs6u+JMPw==
+ bh=yNqC3PjT7KdICI6GIvvUjpLNt7PlCCj5RuJm8lbo33o=;
+ b=VKNF1JQDY9X8wGvKcOrspfQaHzEiCFKVrTtHAtcJo2b99q2l7pftgol1vvHNBTGVqbvskydOO1ichIWlel5Uw9G+tOrCM4mQHNA0vSQklnBtXqPyZu/SMZUej2iBtBGjVvrv4NVXhxV7uKM235wBvBQV4Khdr1AjkOheUwYlC6qjoI5fRV0c9p+cwrGSxc8H3XPfTLJ7NCKk/1da//7aVCNQ2KbL2utOzBxTlsglXfWt8QIwQcbFbvrKdaxP6EsblN4XEKAnI4Q7NTlpxXg08+LESDjTxYsxJa9j8em4yuNmFgjD5cscOCNo1UY6SCyboA9uje422pdwzVw+PMFA6w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WmXxEH/nYGbMvOHz9SDe3eMDOZicL+itSktJRIe4czM=;
- b=meIbvhfMNPu2/iXCniEHLrAeCjrPM1EOOvcIqkQ5BEjKRN4Xo9BPIvULDe2tzA1f+FHFyXfLWp1nWhHYD5gs9loCl3H52IIl0m57bLVyOzxx8/521EAJ7upIR3h+fEbgTIV53Gw7BykVlLUWMBXo12uerq01+ZC/l72pkn77dNM=
-Received: from AM6PR04MB4967.eurprd04.prod.outlook.com (20.177.34.75) by
- AM6PR04MB6312.eurprd04.prod.outlook.com (20.179.18.79) with Microsoft SMTP
+ bh=yNqC3PjT7KdICI6GIvvUjpLNt7PlCCj5RuJm8lbo33o=;
+ b=fLb15wCmNUW5oprYvd/B5FJhxq0N3ThBRiQo+W9VUXU0GDmFLfLT7wZiLksG1zSxUdimll2XBa/EcWdQ+wlDO8ae8QpYZuxS9nbJi+ovqRH8fAgL77vcaIiUy1ckw+FZ6kCWT4fhPc73HsWUg6Y7x6DYhudtSETypsJD4qrOfmM=
+Received: from MN2PR11MB4448.namprd11.prod.outlook.com (52.135.39.157) by
+ MN2PR11MB4397.namprd11.prod.outlook.com (52.135.38.212) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2729.25; Sat, 15 Feb 2020 16:14:31 +0000
-Received: from AM6PR04MB4967.eurprd04.prod.outlook.com
- ([fe80::4426:8bb9:a0c4:a177]) by AM6PR04MB4967.eurprd04.prod.outlook.com
- ([fe80::4426:8bb9:a0c4:a177%7]) with mapi id 15.20.2707.034; Sat, 15 Feb 2020
- 16:14:31 +0000
-From:   Han Xu <han.xu@nxp.com>
-To:     Mark Brown <broonie@kernel.org>, Adam Ford <aford173@gmail.com>
-CC:     Fabio Estevam <festevam@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Ashish Kumar <ashish.kumar@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [EXT] Re: [PATCH V2 2/5] spi: fspi: dynamically alloc AHB memory
-Thread-Topic: [EXT] Re: [PATCH V2 2/5] spi: fspi: dynamically alloc AHB memory
-Thread-Index: AQHV2edkeGKVMAKPPEyU5J2cfrXZpKgJTI0AgA45v4CAABEGgIAB8KiAgAL5rSA=
-Date:   Sat, 15 Feb 2020 16:14:31 +0000
-Message-ID: <AM6PR04MB4967BE79DAAC140162B3D22497140@AM6PR04MB4967.eurprd04.prod.outlook.com>
-References: <20200202125950.1825013-1-aford173@gmail.com>
- <20200202125950.1825013-2-aford173@gmail.com>
- <CAOMZO5D3emrAk84wDS04qJC-3AyvFnqodhoMsXO-ukHnYsU+PQ@mail.gmail.com>
- <CAHCN7xJyZRwJhnWW2mAbOeGyrMsB7Au_e6AvwiNmNS8gFUfSyw@mail.gmail.com>
- <20200212120753.GF4028@sirena.org.uk>
- <CAHCN7x+5bACfYVX49Lib+fmNq-dEOkcyi0gXt7rtYxrGaYbH1Q@mail.gmail.com>
- <20200213184624.GK4333@sirena.org.uk>
-In-Reply-To: <20200213184624.GK4333@sirena.org.uk>
+ 15.20.2729.23; Sun, 16 Feb 2020 21:40:18 +0000
+Received: from MN2PR11MB4448.namprd11.prod.outlook.com
+ ([fe80::3c8f:7a55:cbd:adfb]) by MN2PR11MB4448.namprd11.prod.outlook.com
+ ([fe80::3c8f:7a55:cbd:adfb%5]) with mapi id 15.20.2729.031; Sun, 16 Feb 2020
+ 21:40:18 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Tudor.Ambarus@microchip.com>
+Subject: [PATCH trivial] spi: spi-mem: Fix typo, s/fallback/falls back
+Thread-Topic: [PATCH trivial] spi: spi-mem: Fix typo, s/fallback/falls back
+Thread-Index: AQHV5RGuUkBRwIGtrEiFoJhzWraU4w==
+Date:   Sun, 16 Feb 2020 21:40:17 +0000
+Message-ID: <20200216214012.1106658-1-tudor.ambarus@microchip.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=han.xu@nxp.com; 
-x-originating-ip: [70.112.23.252]
+x-originating-ip: [94.177.32.156]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 54957130-6a61-4c77-c6f0-08d7b23223fa
-x-ms-traffictypediagnostic: AM6PR04MB6312:|AM6PR04MB6312:
+x-ms-office365-filtering-correlation-id: c8f4f487-16bf-4851-c27f-08d7b328d12d
+x-ms-traffictypediagnostic: MN2PR11MB4397:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB6312666D32EBD6A91432FEF497140@AM6PR04MB6312.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:765;
-x-forefront-prvs: 03142412E2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(376002)(136003)(396003)(366004)(189003)(199004)(26005)(7416002)(55016002)(186003)(9686003)(44832011)(7696005)(110136005)(54906003)(316002)(478600001)(5660300002)(71200400001)(81166006)(8676002)(8936002)(4326008)(81156014)(76116006)(66446008)(52536014)(66556008)(64756008)(66946007)(66476007)(6506007)(53546011)(33656002)(86362001)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR04MB6312;H:AM6PR04MB4967.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
+x-microsoft-antispam-prvs: <MN2PR11MB43977C76FCB012D2A5893A8BF0170@MN2PR11MB4397.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 03152A99FF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(376002)(39850400004)(346002)(136003)(199004)(189003)(54906003)(2906002)(6486002)(26005)(6506007)(478600001)(1076003)(107886003)(2616005)(36756003)(316002)(81156014)(8936002)(76116006)(64756008)(5660300002)(86362001)(71200400001)(6916009)(186003)(4326008)(66556008)(91956017)(66476007)(66946007)(6512007)(81166006)(8676002)(66446008);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR11MB4397;H:MN2PR11MB4448.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GxOOn2529jeUJusdVCUuT90j7Ram9dcmrAyaAFzBDcJ7Uv3WEG/IfJGTjtfNoh8SQ3lu1KsXb++Me1kCzxriXK3R/ilSsCtoqbE2+Lgbus2WrzyFrSzYsC9ZeCPLpNigBYguYCTefQSOhy65phyJsUg9TK0p6gwtmYV0VPiaNLHwMuQJZ9T1T2OqHXLN70WcqTIoJSIawpHCBaAH5FSKlrKD/eoPJtHHpC8rzeSE+jXjJB07TuZPW0o16knJqTr1NoINbX9M8Zv3Qw6TKaET8azb5SmgiUDcEg1GjzwD1i1zy8zSzQ34dSpUufpiq2vqg/fp5ghMXiwpt0JdBX3eO5V3Zfz/v0Rf5sPm2K9IWK40ixHzBFNBtMEeMcHvXEyc7KFhiLAAYlqtY1GIP8F8WPNtIoGnLtTIn5rYvXy2PUAKCmWavqdrib4XsYnyUuxp
-x-ms-exchange-antispam-messagedata: JNfopH8grHP0O1/XLJcguqW/RpxFWfqWplMn6/28y2mKNIFwQE2be3Fl1ev41f+FHeNnML7L+OTZUelt6/wJCYTC5LKfYuJ9WQutB0h1tbwLG10vyiZUqj5NSg2KCEUAczd64jeeLnpcAhXLqHRirA==
-Content-Type: text/plain; charset="us-ascii"
+x-microsoft-antispam-message-info: 0O1zZ/11XhZC8+W6LHaSQFOBrJACQJezSqgmzHNsRi4G8B2xngH0aNPhqLhCmTK1vnqCPKRFXZU08dKdC+kMIz5nBglp4/vmUpgWOi3maUFUcsqgXHajnistOdkUjFx6N2/9W+TzTlmPvqtF5pu9ajp00eSuiUmsjfcVGUmvyyhvFSVqIvRMTwOexC4DxIV5nosPCY8R/cSSOGnsN14R/GTGdj3UOFle5Qgmoi1iwoB6GRhfO2lH89mceoOFxj3a531y6meude2vZhgF/h2b2Kt2xTAPNCOpzFUq5YFU9w7DJ9OGV6y5NEOM2J1Hjj3eFDpx2PD+EPFvymdre9Y2fDHkt3co0aXD3rD4HWtP4gICa4CZ6b+PatfFCM0oaMb1vlemFQYHyyNE0DwZtpzrjlACAq6Hcx8byKrLmmB2Un16yoP05IyhlEsF+6ug4LdY
+x-ms-exchange-antispam-messagedata: WHpoZFzf8tk4Zhx3g4lnVD7TMzeXQ0TV1UIQxGPayJ+b+rnYGXhhSVzALayq9kLgnTnHcSbD3AiS2KyJheP0nrCAAA7CtZaxet5tbEbNo7irafYiZKfDJaG78ZBg9OUXXBqig5Hb7ujUNa1Ms55lJw==
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54957130-6a61-4c77-c6f0-08d7b23223fa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2020 16:14:31.6461
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8f4f487-16bf-4851-c27f-08d7b328d12d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2020 21:40:18.2587
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rb1AFSI88NJ4JtDxueAqNs0aZjYIQ6NXrrvmyZbPjEIeN5o6U6SMP20i/Pft7FQ7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6312
+X-MS-Exchange-CrossTenant-userprincipalname: PshbvJICZ/5sAJfM7gyVpw5wWY4R2i2bqxF9WHdpAkbRdvGWiBcgBs/UeOB6T/VoO1Us8ZbLBBGRRyDi9U5Ujey7rv9Qt+bYJyDWQcKkorg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4397
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
+"Fallback" in one word is a noun. "Fall back" is two separate words,
+a verb and an adverb. Use the latter.
 
-> -----Original Message-----
-> From: Mark Brown <broonie@kernel.org>
-> Sent: Thursday, February 13, 2020 12:46 PM
-> To: Adam Ford <aford173@gmail.com>
-> Cc: Fabio Estevam <festevam@gmail.com>; linux-spi <linux-spi@vger.kernel.=
-org>;
-> Han Xu <han.xu@nxp.com>; Yogesh Gaur <yogeshgaur.83@gmail.com>; Ashish
-> Kumar <ashish.kumar@nxp.com>; Rob Herring <robh+dt@kernel.org>; Mark
-> Rutland <mark.rutland@arm.com>; Shawn Guo <shawnguo@kernel.org>; Sascha
-> Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> <kernel@pengutronix.de>; dl-linux-imx <linux-imx@nxp.com>; open list:OPEN
-> FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
-> <devicetree@vger.kernel.org>; linux-kernel <linux-kernel@vger.kernel.org>=
-;
-> moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE <linux-arm-
-> kernel@lists.infradead.org>
-> Subject: [EXT] Re: [PATCH V2 2/5] spi: fspi: dynamically alloc AHB memory
->=20
-> On Wed, Feb 12, 2020 at 07:08:49AM -0600, Adam Ford wrote:
->=20
-> > The original author was copied on the initial commit.  I literally
-> > generated the patch from NXP's branch,  added my notes, and pushed
-> > them to the mailing lists after testing them on the  the Linux master
-> > branch.   I am a bit disappointed that NXP's author hasn't responded
-> > to any of the comments or feedback.  NXP knows their hardware and
->=20
-> Bear in mind that it's been the spring festival and there's been quite a =
-bit of delay
-> in getting back to work in China resulting from coronavirus stuff so hope=
-fully it's
-> just a delay in replying.
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ drivers/spi/spi-mem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The FSPI is a shared IP with other NXP BU. We are debugging an issue may re=
-lated to this patch. I will resend the patch set after the root cause found=
-.
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index e5a46f0eb93b..3c46747bacb1 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -487,7 +487,7 @@ static ssize_t spi_mem_no_dirmap_write(struct spi_mem_d=
+irmap_desc *desc,
+  * This function is creating a direct mapping descriptor which can then be=
+ used
+  * to access the memory using spi_mem_dirmap_read() or spi_mem_dirmap_writ=
+e().
+  * If the SPI controller driver does not support direct mapping, this func=
+tion
+- * fallback to an implementation using spi_mem_exec_op(), so that the call=
+er
++ * falls back to an implementation using spi_mem_exec_op(), so that the ca=
+ller
+  * doesn't have to bother implementing a fallback on his own.
+  *
+  * Return: a valid pointer in case of success, and ERR_PTR() otherwise.
+--=20
+2.23.0
