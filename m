@@ -2,92 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B241622DC
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2020 09:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE96D16250D
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2020 11:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726266AbgBRI4g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Feb 2020 03:56:36 -0500
-Received: from mga06.intel.com ([134.134.136.31]:38072 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726186AbgBRI4g (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 18 Feb 2020 03:56:36 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Feb 2020 00:56:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,456,1574150400"; 
-   d="scan'208";a="314991670"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 18 Feb 2020 00:56:35 -0800
-Received: from [10.226.38.30] (unknown [10.226.38.30])
-        by linux.intel.com (Postfix) with ESMTP id 2ABC458033E;
-        Tue, 18 Feb 2020 00:56:31 -0800 (PST)
-Subject: Re: [PATCH v9 0/2] spi: cadence-quadpsi: Add support for the Cadence
- QSPI controller
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Simon Goldschmidt <simon.k.r.goldschmidt@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-spi@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, dan.carpenter@oracle.com,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
-        dinguyen@kernel.org, tien.fong.chee@intel.com
-References: <20200214114618.29704-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <CAAh8qsxnRSwonuEPrriuS=gUMTjt8ddUVy5HxegmoCk-FoE4qg@mail.gmail.com>
- <20200214121145.GF4827@sirena.org.uk>
- <4712cdc4-34cd-990b-3d53-3d394ae1250b@linux.intel.com>
- <20200217115213.GA9304@sirena.org.uk>
- <f5f868e5-a977-7487-9395-a76dd5e7c963@ti.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <49bc16bc-297f-d58c-5b93-6397edf1fbda@linux.intel.com>
-Date:   Tue, 18 Feb 2020 16:56:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1726528AbgBRK5F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Feb 2020 05:57:05 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43236 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726496AbgBRK5F (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Feb 2020 05:57:05 -0500
+Received: by mail-oi1-f195.google.com with SMTP id p125so19642114oif.10;
+        Tue, 18 Feb 2020 02:57:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xfa6hP9vzbmQbDBcIM+/XCkbFHlGpgKlLUtHMFECOoc=;
+        b=ZxRqMdfHqSjyhxpnVG45N8+0kXmfSpoZeqWit75xvjkCxtBkzAPs5ZUTieY4/yu9vh
+         TEoYHqEq13u0Bj0wAlRAh4an6l9Pnk5JAKO2yHOyhLD1c83oLNL+Db7He9BFmsI0aJNt
+         8RIPG2hck/OesGosZQ/8WYCpDtlHmWPYGpQHFl9o6VJtbmCadobJyQXNIMQgaP00AJh2
+         qnqIsd/a0M7ClR849AVO9mKfb8dDuIy7SiKc3i5DDXTtSGcgKNfoQzrgKRgbNrxOxg8K
+         BZKZPb/lpnVgeDXDo+tyeAGS6arFE3iw0VQjdm+Scp9fz4/Kdght4e7bnhKa/YzYef+D
+         gSew==
+X-Gm-Message-State: APjAAAVQmPPj6w4jzuFHTGFU6bKfQfEiHG+1sc/E/QB9ZS7hNMvGg7rb
+        63bVV6+puska8XgbHNa4eWJKlA8pAjss+sD0nm0=
+X-Google-Smtp-Source: APXvYqzeFu9EMu/mSkMblDwtbhxXeLk6RZlyMokY2IhOLYaDpg5DOfwcUxWkCUViiQQUOz5D9IaLC2RgIIJr97jBZ30=
+X-Received: by 2002:aca:c4d2:: with SMTP id u201mr855233oif.54.1582023423863;
+ Tue, 18 Feb 2020 02:57:03 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <f5f868e5-a977-7487-9395-a76dd5e7c963@ti.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <1554282541-8952-1-git-send-email-na-hoan@jinso.co.jp>
+In-Reply-To: <1554282541-8952-1-git-send-email-na-hoan@jinso.co.jp>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Feb 2020 11:56:52 +0100
+Message-ID: <CAMuHMdXQvjWDNh+qogw+3a4=U97rq_GPnYYJNqHiDZNPWJU4sA@mail.gmail.com>
+Subject: Re: [PATCH] spi: rspi: Add configuration for LSB/MSB
+To:     Nguyen An Hoan <na-hoan@jinso.co.jp>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        =?UTF-8?B?56iy5ZCJ?= <h-inayoshi@jinso.co.jp>,
+        =?UTF-8?B?44Kr44Kq44O744O044Kh44Oz44O744OJ44Oz?= 
+        <cv-dong@jinso.co.jp>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Vignesh,
+Hi Hoan-san,
 
-On 17/2/2020 8:18 PM, Vignesh Raghavendra wrote:
-> Hi Vadivel,
+On Wed, Apr 3, 2019 at 11:09 AM Nguyen An Hoan <na-hoan@jinso.co.jp> wrote:
+> From: Hoan Nguyen An <na-hoan@jinso.co.jp>
 >
-> On 17/02/20 5:22 pm, Mark Brown wrote:
->> On Mon, Feb 17, 2020 at 05:28:38PM +0800, Ramuthevar, Vadivel MuruganX wrote:
->>> On 14/2/2020 8:11 PM, Mark Brown wrote:
->>>> Given that this is a new driver I'd be very surprised if it broke other
->>>> users?  I can imagine it might not work for them and it would definitely
->>>> be much better to get their review but it shouldn't be any worse than
->>>> the current lack of support.
->>> *[Vignesh]*  The legacy driver under drivers/mtd/spi-nor will be removed as
->>> we cannot
->>> support both SPI NOR and SPI NAND with single driver if its under
->>> spi-nor. New driver should be functionally equivalent to existing one.
->>> So I suggest you test this driver on legcay SoCFPGA products.
->> You're not actually removing the driver here, you're adding another
->> driver for the same thing.
->>
-> I agree with Mark here.
+> SPI controllers can support LSB or MSB depending on
+> the structure of the message that Slave requires,
+> Add support.
 >
-> I realized that you are using same CONFIG option as the old one to build
-> this driver. This causes new driver to fail to probe as old driver would
-> bind to the node instead (both drivers will be built into the kernel and
-> both drivers have same compatible).
->
-> So, you should remove the old driver. Could you also include patches
-> removing old driver? New driver and bindings are anyways backward
-> compatible with existing one
-Sure , will remove the existing driver and sending single patch, Thanks!
+> Signed-off-by: Hoan Nguyen An <na-hoan@jinso.co.jp>
 
-Regards
-Vadivel
+Thanks for your patch!
+
+> --- a/drivers/spi/spi-rspi.c
+> +++ b/drivers/spi/spi-rspi.c
+> @@ -950,6 +950,8 @@ static int rspi_prepare_message(struct spi_controller *ctlr,
+>                 rspi->spcmd |= SPCMD_CPOL;
+>         if (spi->mode & SPI_CPHA)
+>                 rspi->spcmd |= SPCMD_CPHA;
+> +       if (spi->mode & SPI_LSB_FIRST)
+> +               rspi->spcmd |= SPCMD_LSBF;
+>
+>         /* CMOS output mode and MOSI signal from previous transfer */
+>         rspi->sppcr = 0;
+
+Unfortunately this is not sufficient.  The driver should also inform the
+SPI core that it supports this flag. Will fix.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
