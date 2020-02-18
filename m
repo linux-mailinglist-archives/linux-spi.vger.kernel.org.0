@@ -2,75 +2,169 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5435E162764
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2020 14:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F95216363B
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2020 23:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726475AbgBRNuY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Feb 2020 08:50:24 -0500
-Received: from foss.arm.com ([217.140.110.172]:52690 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726347AbgBRNuY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 18 Feb 2020 08:50:24 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BAC021FB;
-        Tue, 18 Feb 2020 05:50:23 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3ECE63F6CF;
-        Tue, 18 Feb 2020 05:50:23 -0800 (PST)
-Date:   Tue, 18 Feb 2020 13:50:21 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Shobhit Srivastava <shobhit.srivastava@intel.com>
-Cc:     daniel@zonque.org, haojian.zhuang@gmail.com,
-        robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        furquan@google.com, rajatja@google.com, evgreen@google.com,
-        andriy.shevchenko@linux.intel.com
-Subject: Re: [PATCH 0/1] Enable SSP controller for CS toggle
-Message-ID: <20200218135021.GI4232@sirena.org.uk>
-References: <20200218134906.25458-1-shobhit.srivastava@intel.com>
+        id S1726475AbgBRWex (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Feb 2020 17:34:53 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:36001 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726617AbgBRWex (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Feb 2020 17:34:53 -0500
+Received: by mail-pj1-f66.google.com with SMTP id gv17so1630595pjb.1
+        for <linux-spi@vger.kernel.org>; Tue, 18 Feb 2020 14:34:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2eKXLdS2SZDwMdln7XhHDX3a3+819OaM4/wB+easctg=;
+        b=UdvCc28GYQs6m40ZXxJ3q6FDb0m33BsrjUc/CPdR1o9n5xyA+FAgsxOGOBAWTUdDWe
+         n1SFmNeodzj4qU3RuxrvUWvAtj7oAtKcOS59IHI4M9ySisy3rZtLt4NkRXSjv7NoBYRJ
+         moTU3/iM4xOtiA8zT8vT/PoO19KfiXP/2iKGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2eKXLdS2SZDwMdln7XhHDX3a3+819OaM4/wB+easctg=;
+        b=npf3DjnDg7DZ6aor7bRf+qlto+ndcfx2cxo6Ts+UJ5foZczHrlgGbFJtouh1895Xnd
+         OBpr56Diish3IiiOhNtORZicsyblMjj2TJKAc228GlJP9jtL+iM18uSuWbfjU0uew+bX
+         D2/d38hjaMbF0f3SCat0gLTniLYL7h9bS1byRS4Mn1Xp4FlBrM6r+KrZKYh2ObAdR/z6
+         Stf0/VlT5ROggJtkPrrRKmFEXcx87sdgGpRyUw2ytQEtmUKSo+QQmwXNOVoomuAFuo4H
+         we3YeT1gxYN6jF6vmXEQfz8a+Z9PBSuWKDsf2Lyzu0FFgw45T46J9VvSf8rPJI2q1o1Y
+         0uiA==
+X-Gm-Message-State: APjAAAVEgDYOyOaKl8EdGRAZg0IXT70zuAzxnEJ+tlKpEBr4EnCfrl+0
+        x0ybv2ReA4GhAi657kuwa0oKbQ==
+X-Google-Smtp-Source: APXvYqzber3G1fDzSXxp/hMZGp+hlW3bIrQzQO+2dgbacLrctSydXRQwbTAiQI7JCjGq8z+fCcnjDQ==
+X-Received: by 2002:a17:90a:d807:: with SMTP id a7mr5507545pjv.15.1582065292004;
+        Tue, 18 Feb 2020 14:34:52 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id f3sm5781941pga.38.2020.02.18.14.34.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Feb 2020 14:34:51 -0800 (PST)
+Date:   Tue, 18 Feb 2020 14:34:50 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org
+Subject: Re: [PATCH 2/6] tty: serial: qcom_geni_serial: Add interconnect
+ support
+Message-ID: <20200218223450.GE15781@google.com>
+References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
+ <1581946205-27189-3-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e5GLnnZ8mDMEwH4V"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200218134906.25458-1-shobhit.srivastava@intel.com>
-X-Cookie: No alcohol, dogs or horses.
+In-Reply-To: <1581946205-27189-3-git-send-email-akashast@codeaurora.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Feb 17, 2020 at 07:00:01PM +0530, Akash Asthana wrote:
+> Get the interconnect paths for Uart based Serial Engine device
+> and vote according to the baud rate requirement of the driver.
+> 
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 84 ++++++++++++++++++++++++++++++-----
+>  1 file changed, 74 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index 191abb1..a8fb2b7 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -174,6 +174,35 @@ static struct qcom_geni_serial_port qcom_geni_console_port = {
+>  	},
+>  };
+>  
+> +static int geni_serial_icc_get(struct geni_se *se)
+> +{
+> +	if (!se)
+> +		return -EINVAL;
+> +
+> +	se->icc_path[GENI_TO_CORE] = of_icc_get(se->dev, "qup-core");
+> +	if (IS_ERR(se->icc_path[GENI_TO_CORE]))
+> +		return PTR_ERR(se->icc_path[GENI_TO_CORE]);
+> +
+> +	se->icc_path[CPU_TO_GENI] = of_icc_get(se->dev, "qup-config");
+> +	if (IS_ERR(se->icc_path[CPU_TO_GENI])) {
+> +		icc_put(se->icc_path[GENI_TO_CORE]);
+> +		se->icc_path[GENI_TO_CORE] = NULL;
+> +		return PTR_ERR(se->icc_path[CPU_TO_GENI]);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +void geni_serial_icc_put(struct geni_se *se)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(se->icc_path); i++) {
+> +		icc_put(se->icc_path[i]);
+> +		se->icc_path[i] = NULL;
+> +	}
+> +}
+> +
+>  static int qcom_geni_serial_request_port(struct uart_port *uport)
+>  {
+>  	struct platform_device *pdev = to_platform_device(uport->dev);
+> @@ -949,6 +978,12 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+>  	ser_clk_cfg = SER_CLK_EN;
+>  	ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
+>  
+> +	/* Put BW vote only on CPU path as driver supports FIFO mode only */
+> +	port->se.avg_bw_cpu = Bps_to_icc(baud);
+> +	port->se.peak_bw_cpu = Bps_to_icc(2 * baud);
+> +	icc_set_bw(port->se.icc_path[CPU_TO_GENI], port->se.avg_bw_cpu,
+> +			port->se.peak_bw_cpu);
+> +
+>  	/* parity */
+>  	tx_trans_cfg = readl(uport->membase + SE_UART_TX_TRANS_CFG);
+>  	tx_parity_cfg = readl(uport->membase + SE_UART_TX_PARITY_CFG);
+> @@ -1179,11 +1214,20 @@ static void qcom_geni_serial_pm(struct uart_port *uport,
+>  	if (old_state == UART_PM_STATE_UNDEFINED)
+>  		old_state = UART_PM_STATE_OFF;
+>  
+> -	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF)
+> +	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF) {
+> +		/* Put BW vote for core clocks and CPU */
+> +		icc_set_bw(port->se.icc_path[GENI_TO_CORE],
+> +			port->se.avg_bw_core, port->se.peak_bw_core);
+> +		icc_set_bw(port->se.icc_path[CPU_TO_GENI], port->se.avg_bw_cpu,
+> +			port->se.peak_bw_cpu);
+>  		geni_se_resources_on(&port->se);
+> -	else if (new_state == UART_PM_STATE_OFF &&
+> -			old_state == UART_PM_STATE_ON)
+> +	} else if (new_state == UART_PM_STATE_OFF &&
+> +			old_state == UART_PM_STATE_ON) {
+>  		geni_se_resources_off(&port->se);
+> +		/* Remove BW vote from core clocks and CPU */
+> +		icc_set_bw(port->se.icc_path[GENI_TO_CORE], 0, 0);
+> +		icc_set_bw(port->se.icc_path[CPU_TO_GENI], 0, 0);
+> +	}
+>  }
+>  
+>  static const struct uart_ops qcom_geni_console_pops = {
+> @@ -1274,15 +1318,30 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+>  	port->rx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
+>  	port->tx_fifo_width = DEF_FIFO_WIDTH_BITS;
+>  
+> +	ret = geni_serial_icc_get(&port->se);
+> +	if (ret)
+> +		return ret;
+> +	/* Set the bus quota to a reasonable value */
+> +	port->se.avg_bw_core = console ? Bps_to_icc(1000) :
+> +		Bps_to_icc(CORE_2X_50_MHZ);
+> +	port->se.peak_bw_core = console ? Bps_to_icc(1000) :
+> +		Bps_to_icc(CORE_2X_100_MHZ);
+> +	port->se.avg_bw_cpu = Bps_to_icc(1000);
+> +	port->se.avg_bw_cpu = Bps_to_icc(1000);
 
---e5GLnnZ8mDMEwH4V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Feb 18, 2020 at 07:19:05PM +0530, Shobhit Srivastava wrote:
->=20
-> SPI CS assert may not always be accompanied by data. There are cases
-> where we want to assert CS, wait and then deassert CS. There is no
-> clocking or reading required. On Intel CNL LPSS controller, it was
-
-Please don't send cover letters for single patches, if there is anything
-that needs saying put it in the changelog of the patch or after the ---
-if it's administrative stuff.  This reduces mail volume and ensures that=20
-any important information is recorded in the changelog rather than being
-lost.=20
-
---e5GLnnZ8mDMEwH4V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5L650ACgkQJNaLcl1U
-h9ADRgf+ICIk+9HogX5my0zjXhvZfYd0hbmxco9LskbJW49ggOsx15biJ4X4Zq3K
-lZ89OD8Y6+pqvLZnNorTACnqoP/aq/zfBow5ULHUefblv8NWIQeRJ6D/N9f/ZAIo
-JWuyV6Qbrtthji+3ZoMTf9N/dX3mleiGWLBvWnDsz+gYba7LM+CNS9/oHroIycdB
-j7zrZRatG7+x7zO270HN0bga1PBxIfSyP16VELeL4MJ9eoquvqVnUkOWQ6S2NFSz
-Z1j6w/pKmmt3DzoSzzCBrT7p6HddBGFTRvprSJtQvaFaT5FMvPflNGagP8zC8VRN
-TvcVZjSOu5bf7lYCTQViJwWKIocyWw==
-=00VJ
------END PGP SIGNATURE-----
-
---e5GLnnZ8mDMEwH4V--
+I guess you mean 'peak_bw_cpu'?
