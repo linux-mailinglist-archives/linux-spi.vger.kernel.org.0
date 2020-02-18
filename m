@@ -2,89 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6030162688
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2020 13:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1C316275B
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2020 14:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726116AbgBRMz7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Feb 2020 07:55:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:51652 "EHLO foss.arm.com"
+        id S1726582AbgBRNtM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Feb 2020 08:49:12 -0500
+Received: from mga09.intel.com ([134.134.136.24]:35526 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726043AbgBRMz7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 18 Feb 2020 07:55:59 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 316511FB;
-        Tue, 18 Feb 2020 04:55:59 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A616F3F703;
-        Tue, 18 Feb 2020 04:55:58 -0800 (PST)
-Date:   Tue, 18 Feb 2020 12:55:57 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] rewrite mtk-quadspi spi-nor driver with spi-mem
-Message-ID: <20200218125557.GD4232@sirena.org.uk>
-References: <20200215065826.739102-1-gch981213@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/3yNEOqWowh/8j+e"
-Content-Disposition: inline
-In-Reply-To: <20200215065826.739102-1-gch981213@gmail.com>
-X-Cookie: No alcohol, dogs or horses.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726347AbgBRNtL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 18 Feb 2020 08:49:11 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Feb 2020 05:49:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,456,1574150400"; 
+   d="scan'208";a="268760941"
+Received: from unknown (HELO srivasta-NUC7i7BNH.iind.intel.com) ([10.223.163.113])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Feb 2020 05:49:07 -0800
+From:   Shobhit Srivastava <shobhit.srivastava@intel.com>
+To:     daniel@zonque.org, haojian.zhuang@gmail.com,
+        robert.jarzmik@free.fr, broonie@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     furquan@google.com, rajatja@google.com, evgreen@google.com,
+        andriy.shevchenko@linux.intel.com
+Subject: [PATCH 0/1] Enable SSP controller for CS toggle
+Date:   Tue, 18 Feb 2020 19:19:05 +0530
+Message-Id: <20200218134906.25458-1-shobhit.srivastava@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---/3yNEOqWowh/8j+e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+SPI CS assert may not always be accompanied by data. There are cases
+where we want to assert CS, wait and then deassert CS. There is no
+clocking or reading required. On Intel CNL LPSS controller, it was
+observed that the above flow is broken after an S0ix cycle. There
+is no issue after S3 flow.
+https://patchwork.kernel.org/patch/11377019/ is an attempt to fix
+this and it does fix the issue. However we are unsure if that is
+the actual rootcause for the issue. As per the LPSS spec, to
+propagate the retained CS to output,  SPI controller needs to be
+enabled. The below patch tries to do the same and it fixes the issue.
+The reason why there is no issue after S3 flow is because during
+resume, BIOS re-initializes and enables SPI before doing kernel hand-off.
+To test this issue we are probing the SPI_CS line on CRO. This is
+because, even though the mmio writes to CS_CONTROL register sticks,
+it doesnt toggle the CS line. Physically probing is the best way
+to identify the fix.
 
-On Sat, Feb 15, 2020 at 02:58:24PM +0800, Chuanhong Guo wrote:
 
-> To keep patchset small for easier reviewing, there will be 3 patchsets
-> including this one.
-> 1. add the new driver, which is this patchset.
-> 2. update existing dts for the new driver:
->    spi-max-frequency is missing in current mtk-quadspi binding. Old
->    driver parses child node manually so it doesn't need this, but
->    new spi-mem driver is probed via spi subsystem which requires the
->    presence of spi-max-frequency. Since this doesn't break old driver
->    support, I'll send this separately as a standalone patch.
+Shobhit Srivastava (1):
+  spi: pxa2xx: Enable SSP controller for CS toggle
 
-This is an ABI break so you shouldn't be doing this, if the existing
-binding works it should continue to work.
+ drivers/spi/spi-pxa2xx.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-> 3. removing the old driver. I'll create this commit after 1 and 2 are
->    applied to avoid possible rebasing due to any changes in the old
->    driver.
+-- 
+2.17.1
 
-This isn't great as it means we have a period with two drivers for the
-same thing in tree which is at best going to be confusing.  There's no
-advantage to splitting this out.
-
---/3yNEOqWowh/8j+e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5L3twACgkQJNaLcl1U
-h9CQ0Af/bCSGtGQh9O/SezBLGjZ59DSJjcG/kJ2CB/e5Ub3WkveUKq3prcIpbWRZ
-j7LZ1+3P0+IQJC2b4wWFTf6xOOoucP4Qb1qVBc1HyBt9SrqrrZ3SdEXzhbsYJ1Zq
-tLGrQ37qdRhfSpspLm1N3FN+EBZuVW3tYPclxUjkHTE50mu0wmMAk4OXtrbyBKp7
-H046klgqVPBXzTlP8mFTtp0/E/hYhrBUTqcEcUBTAw3nCMBMiVxUjdxRx+tB41CR
-TBBlM9+VwbxRbrzZC9IL5S+l+Bi9EW2axbZ2zFG7vOTc+AoCIT/PxwyZBshr8Xoh
-A7hM2b6D+BSbpRcPwjpZLi3E11d0ug==
-=CyQ7
------END PGP SIGNATURE-----
-
---/3yNEOqWowh/8j+e--
