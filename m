@@ -2,110 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC53164D5C
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2020 19:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1CB16533F
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Feb 2020 00:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgBSSJy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Feb 2020 13:09:54 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43943 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726645AbgBSSJx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Feb 2020 13:09:53 -0500
-Received: by mail-pf1-f193.google.com with SMTP id s1so443505pfh.10
-        for <linux-spi@vger.kernel.org>; Wed, 19 Feb 2020 10:09:52 -0800 (PST)
+        id S1726736AbgBSX6T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Feb 2020 18:58:19 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40141 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbgBSX6T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Feb 2020 18:58:19 -0500
+Received: by mail-oi1-f195.google.com with SMTP id a142so25705086oii.7;
+        Wed, 19 Feb 2020 15:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=DT9b2JqUNcas1GieQOO1UADd6ZveitNnuHA65yQ4esE=;
-        b=gNqxcpByNWRFu0kl0YvLf68XNvjty9vaYNkQyj4UDT0CK1Ig4GRS+PwQznc7FIMoK6
-         TgXzwabcsTBPFnXM77EN8+5Zku0ln7/W1A8zwCJHQiwcJA/d9ndPnODOU14PDRDcC6ai
-         7moER/4RsiWjejAX48uDiH3/nQWS4BpmwI9qA=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BX9+oiU9NUzGK1+aV9/Uah0G+lhW9/DtCwBAHxWnn3I=;
+        b=KU1uqUYVxkoQfS26YEi+ztZu7uQD6NmCYAjnD4WbMrS3FbUgBPMQxL4cToOQRD6Uov
+         nHqZX7QwUxnmIRKEcKaP8NEsh/58I2e78+wWxDrpu1BXApMDiJMolk2hwg9CzqcOf9sW
+         YE4tYRCZaEyh/x1674lcZY1l/H0F0ArPvwmZIxON3DfEjagSV1uN/AxJKPXKBeA241xL
+         WqwyGwfYPVg0aO9XUojnJGQxro+u25NEoqXrbNR09NiA6eBYzNO4I80Q2dLPiRbdLZkb
+         04tkTaqeTm6+rrMCyLbyFF+HCBtuFvxa0v0YSX5dAdbBWko9TEenvJpgjmfSY9CevQ+/
+         hitw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DT9b2JqUNcas1GieQOO1UADd6ZveitNnuHA65yQ4esE=;
-        b=rDIE1PBiXhWwqUE4oozsHOEil2KReeiINkca40wi36Wq13Pyu1pukorFthdJCqYyd/
-         FNkYAOVKib1w68PiZinaMoRmWL765X833pNrGVne1UI5U6v81LXaDEZKGulfb9eASMrz
-         PHCaajc49PDKiGh4lFy9EVkOGe05eHa5AHFIouD3UPTPRKxUDUwJ70FUG1xE9Wl/fEoL
-         7w5CJHnVvriZx2DPLXgJCaovPs/hbk9s5B/FV3jIx4xgVjUVqO8QRKSoN9BhGHTPGfJg
-         wTmW+15WT09jrnNvMLBDrw+fGSGuaXPjL7lxxw5SDVv37kxnVvWca6UqS0wSxRPQ6RIT
-         tBqw==
-X-Gm-Message-State: APjAAAWky73ClH2KnqwEiwOaqtNByO85m8C8HGPl8/Ad2mQMgRdRbMgH
-        B+pROozK2sLpy73OorUZRgkdXQ==
-X-Google-Smtp-Source: APXvYqyBuOdfaFMKcgQz2InWVMXt9wu5jkvAcdKhlsUWQ2aZek1+MLFnc2VNa4KJ8eoMdzeMh4L0gg==
-X-Received: by 2002:aa7:96b6:: with SMTP id g22mr27963352pfk.206.1582135791976;
-        Wed, 19 Feb 2020 10:09:51 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id q21sm281382pff.105.2020.02.19.10.09.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Feb 2020 10:09:51 -0800 (PST)
-Date:   Wed, 19 Feb 2020 10:09:50 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org
-Subject: Re: [PATCH 4/6] spi: spi-geni-qcom: Add interconnect support
-Message-ID: <20200219180950.GA24720@google.com>
-References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
- <1581946205-27189-5-git-send-email-akashast@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BX9+oiU9NUzGK1+aV9/Uah0G+lhW9/DtCwBAHxWnn3I=;
+        b=M/VKtYr5IUMKwGD5odp0XvHvaoe8o3lESFzKYG/iV6lwy8S7p3dq+jrdlt5Ef71VT9
+         yMuM7Xb683bDcg6i+VnR+pfPJfXq391UVdiZQDnjn+/MRArlIdLJeh6qErvA3983LPud
+         vBcz4FDJLqP7zmqb6r6U18o05NFCtlX3MVMjxWEv+bS/8L+dvZFkvQOJgzugwOjMhA3V
+         gXJxcZRcHmcozN/9D9WxHlsvo0H2Tsy8nF5Dqa0A2qftHA7KNgVPsarsX9PV0RBt/mW5
+         yWF7eNPP9kEGjwWyTWqlMQtWcB3ulG3cV1AeKpX82boBIyxTjGU56HohsLBZN59iWIsd
+         pA3g==
+X-Gm-Message-State: APjAAAVAGhtbVde3ljRursK6Ova5VxM0tbgd8SJAuYAz++mPCDY0s0Wo
+        6avAN6w5llkezO2tQg7Rin2FwtNnZ2fTi4GHEM4=
+X-Google-Smtp-Source: APXvYqwRxzwlvasanDAZCzqmiAcIi+8du+kTb0XmBWuXgm+lcYoRDBqJdLFMRLpwiKeOks5taARgUtmAle4aHBvqjI0=
+X-Received: by 2002:aca:ddc2:: with SMTP id u185mr185041oig.24.1582156697455;
+ Wed, 19 Feb 2020 15:58:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1581946205-27189-5-git-send-email-akashast@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200215065826.739102-1-gch981213@gmail.com> <20200218125557.GD4232@sirena.org.uk>
+In-Reply-To: <20200218125557.GD4232@sirena.org.uk>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Thu, 20 Feb 2020 07:58:06 +0800
+Message-ID: <CAJsYDVL03KJv7eewGekBPCfpbOuTX0tJ6qZaydvJnBDzZ5vEwg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] rewrite mtk-quadspi spi-nor driver with spi-mem
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 07:00:03PM +0530, Akash Asthana wrote:
-> Get the interconnect paths for SPI based Serial Engine device
-> and vote according to the current bus speed of the driver.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
->  drivers/spi/spi-geni-qcom.c | 65 ++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 62 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> index c397242..a066ef26 100644
-> --- a/drivers/spi/spi-geni-qcom.c
-> +++ b/drivers/spi/spi-geni-qcom.c
-> @@ -608,16 +653,25 @@ static int spi_geni_remove(struct platform_device *pdev)
->  	spi_unregister_master(spi);
->  
->  	free_irq(mas->irq, spi);
-> +	geni_spi_icc_put(&mas->se);
->  	pm_runtime_disable(&pdev->dev);
->  	return 0;
->  }
->  
->  static int __maybe_unused spi_geni_runtime_suspend(struct device *dev)
->  {
-> +	int ret;
->  	struct spi_master *spi = dev_get_drvdata(dev);
->  	struct spi_geni_master *mas = spi_master_get_devdata(spi);
->  
-> -	return geni_se_resources_off(&mas->se);
-> +	ret = geni_se_resources_off(&mas->se);
-> +	if (ret)
-> +		return ret;
-> +
-> +	icc_set_bw(mas->se.icc_path[GENI_TO_CORE], 0, 0);
+Hi!
 
-This causes my SC7180 system to reset at boot time:
+On Tue, Feb 18, 2020 at 8:55 PM Mark Brown <broonie@kernel.org> wrote:
+> This is an ABI break so you shouldn't be doing this, if the existing
+> binding works it should continue to work.
 
-[    3.509652] qcom-qmp-phy 88e9000.phy-wrapper: Registered Qcom-QMP phy
-[    3.516956] qcom-qusb2-phy 88e3000.phy: Registered Qcom-QUSB2 phy
-[    3.524450] geni_se_qup 8c0000.geniqup: Adding to iommu group 4
-[    3.533896] spi_master spi0: will run message pump with realtime priority
-<reset>
+The missing spi-max-frequency is the only part preventing old
+device tree to work with this driver.
+If the goal is to make existing dt binding work, I could patch dt using
+of_add_property in v2. I saw similar device tree patching for legacy
+bindings in pinctrl-single driver.
 
-The system does not reset when passing 'Bps_to_icc(1000)' (=> 1) instead of 0.
+>
+> > 3. removing the old driver. I'll create this commit after 1 and 2 are
+> >    applied to avoid possible rebasing due to any changes in the old
+> >    driver.
+>
+> This isn't great as it means we have a period with two drivers for the
+> same thing in tree which is at best going to be confusing.  There's no
+> advantage to splitting this out.
+
+Got it. I'll add this patch in v2.
+
+--
+Regards,
+Chuanhong Guo
