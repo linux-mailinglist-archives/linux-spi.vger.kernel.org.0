@@ -2,90 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 846C81645F3
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2020 14:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B2116491C
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2020 16:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726551AbgBSNtf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Feb 2020 08:49:35 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:48501 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726671AbgBSNtf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Feb 2020 08:49:35 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582120175; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=nlOJ2QjC76fp//IJNgKlJ1in/DYwlbd9Ta/pZD7AXdY=; b=eWU2Onnn1AsrQ+041+29v7u78pF5evyL9tBYjye8p/xYVlmajmUo/eR4wGLMuWfYHC7IaqaH
- Ym0IwMdMJoPUgRWO8Zx2GxtTDZj62XkZD2sg8GhpyB4UWbhT5h5Kz/Woj+gQnRGU7+e7FANt
- Z5yUFyEZ8x4CpnFrt04nGKmd7+E=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e4d3ce1.7fe2ec9228f0-smtp-out-n01;
- Wed, 19 Feb 2020 13:49:21 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4EA97C447A0; Wed, 19 Feb 2020 13:49:20 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.252.222.65] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 555F8C43383;
-        Wed, 19 Feb 2020 13:49:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 555F8C43383
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH 6/6] arm64: dts: sc7180: Add interconnect for QUP and QSPI
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org, wsa@the-dreams.de,
-        broonie@kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org
-References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
- <1581946205-27189-7-git-send-email-akashast@codeaurora.org>
- <20200218031830.GX955802@ripper>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <f82a28c7-63a4-b0e8-3902-5614dfed0f78@codeaurora.org>
-Date:   Wed, 19 Feb 2020 19:19:11 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726717AbgBSPsD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Feb 2020 10:48:03 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:38334 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726609AbgBSPsD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Feb 2020 10:48:03 -0500
+Received: by mail-lj1-f195.google.com with SMTP id w1so873600ljh.5
+        for <linux-spi@vger.kernel.org>; Wed, 19 Feb 2020 07:48:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W3yuhBwBhCc9hCUhqdt5niSoYLTGtNRD8nOw8aCAMcg=;
+        b=C5w5jfM37duj6h3MarZLMvydqmOEdwP3mguPoYitURrIjM+jkFQaJqNpLZpMEevUCI
+         nbPJJNOhYl4ujjTGWb865cBi+Mx8xuwTCPNVEI9FuYXwvfHv5diu7z6MVUtixx50gLEz
+         9SEN4epH1j1FjTAdspJpO7a40J8sMdloUUgZl6/9SPReB88BstUSS8hY3fDVT0L1zx1H
+         +7+7iH7olOFc47PyPYVGOsnBMOcmTBYsLfD8MvjTJ+y5N7DL+/1/uw09qrvSu7AB3aT5
+         TURe0eLbeJy4yWcKrO5D91hr4toNj8ZW1q2rdPtCLLLOHbhVZdHrn50I5uoUvGeveuYy
+         Cx6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W3yuhBwBhCc9hCUhqdt5niSoYLTGtNRD8nOw8aCAMcg=;
+        b=T3j+sDhM4VVak4rssK25Thgd11//v855EvdcnHDa0NRYULBgOzbkJJZKR2JVOZqVA0
+         VBS3poVbz4QA3sqp8TE+JY18Qdsfs59tfUrhMXTHaaciDvg1HxgGIn4dQEjUPicvTvYi
+         j4sc2LEBssbOFFJjlomAFsQ9K4V0QbFhsMJvlSoCjNeNXEGjVYXhaA2lLYKjRcMyJAUt
+         srO8GooRj++pi2F9RxfcnnVgrxKuXs23REO/Oxa4EYkTeFOYk3hIVU1crzyncAhQHZTD
+         NpeuKKa9NLs5K6cCoDWtKkKEy72ocQBxOPono49i03pHiNsWZB7389aipRfN67MbEg8k
+         oXOQ==
+X-Gm-Message-State: APjAAAU1cpz2g969Yn+28AlIql4fgPbS0C/LlRB3mCoONDS5+YfOhp2b
+        2S+Xpd18PfsSvityHvet3mQirpA8SEIho5YzXjvCRQ==
+X-Google-Smtp-Source: APXvYqzKennu9chASiLD3tKb71xmHQKMdOOMof8TH7xg/nh0DZzv5XsUJVqhYHIkqIXBmuyXfRHq7LqcNWN0fAo1N+E=
+X-Received: by 2002:a2e:7d0c:: with SMTP id y12mr16959673ljc.39.1582127281257;
+ Wed, 19 Feb 2020 07:48:01 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200218031830.GX955802@ripper>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <fca3ba7cdc930cd36854666ceac4fbcf01b89028.1582027457.git.lukas@wunner.de>
+In-Reply-To: <fca3ba7cdc930cd36854666ceac4fbcf01b89028.1582027457.git.lukas@wunner.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 19 Feb 2020 16:47:50 +0100
+Message-ID: <CACRpkdZmzL_bDRuiBehmd-QC93K_xJ5VHM0HaypCFXLU6sZvkQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: spidev: Fix CS polarity if GPIO descriptors are used
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Simon Han <z.han@kunbus.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Bjorn,
+On Tue, Feb 18, 2020 at 1:08 PM Lukas Wunner <lukas@wunner.de> wrote:
 
->> +				interconnects = <&qup_virt MASTER_QUP_CORE_0
->> +						&qup_virt SLAVE_QUP_CORE_0>,
->> +						<&gem_noc MASTER_APPSS_PROC
->> +						&config_noc SLAVE_QUP_0>,
->> +						<&aggre1_noc MASTER_QUP_0
->> +						&mc_virt SLAVE_EBI1>;
-> Please ignore the 80-char "limit" and write this as:
-> 				interconnects = <&qup_virt MASTER_QUP_CORE_0 &qup_virt SLAVE_QUP_CORE_0>,
-> 						<&gem_noc ...>,
-> 						<&aggre1_noc ...>;
+> Commit f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
+> amended of_spi_parse_dt() to always set SPI_CS_HIGH for SPI slaves whose
+> Chip Select is defined by a "cs-gpios" devicetree property.
 >
-> Regards,
-> Bjorn
+> This change broke userspace applications which issue an SPI_IOC_WR_MODE
+> ioctl() to an spidev:  Chip Select polarity will be incorrect unless the
+> application is changed to set SPI_CS_HIGH.  And once changed, it will be
+> incompatible with kernels not containing the commit.
+>
+> Fix by setting SPI_CS_HIGH in spidev_ioctl() (under the same conditions
+> as in of_spi_parse_dt()).
+>
+> Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
+> Reported-by: Simon Han <z.han@kunbus.com>
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Cc: stable@vger.kernel.org # v5.1+
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+(...)
 
-ok
+Nit: I would also insert a comment in the code to tell what is going on.
 
-Regards,
+> +                       if (ctlr->use_gpio_descriptors && ctlr->cs_gpiods &&
+> +                           ctlr->cs_gpiods[spi->chip_select])
+> +                               tmp |= SPI_CS_HIGH;
 
-Akash
+Should this be tmp ^= SPI_CS_HIGH?
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+If the device tree node for cs-gpios is actually active high, which
+happens, then you probably want the opposite of what was
+requested, right?
+
+Yours,
+Linus Walleij
