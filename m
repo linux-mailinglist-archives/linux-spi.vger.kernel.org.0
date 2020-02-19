@@ -2,93 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B2116491C
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2020 16:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC53164D5C
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2020 19:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726717AbgBSPsD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Feb 2020 10:48:03 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:38334 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726609AbgBSPsD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Feb 2020 10:48:03 -0500
-Received: by mail-lj1-f195.google.com with SMTP id w1so873600ljh.5
-        for <linux-spi@vger.kernel.org>; Wed, 19 Feb 2020 07:48:02 -0800 (PST)
+        id S1726707AbgBSSJy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Feb 2020 13:09:54 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:43943 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726645AbgBSSJx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Feb 2020 13:09:53 -0500
+Received: by mail-pf1-f193.google.com with SMTP id s1so443505pfh.10
+        for <linux-spi@vger.kernel.org>; Wed, 19 Feb 2020 10:09:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W3yuhBwBhCc9hCUhqdt5niSoYLTGtNRD8nOw8aCAMcg=;
-        b=C5w5jfM37duj6h3MarZLMvydqmOEdwP3mguPoYitURrIjM+jkFQaJqNpLZpMEevUCI
-         nbPJJNOhYl4ujjTGWb865cBi+Mx8xuwTCPNVEI9FuYXwvfHv5diu7z6MVUtixx50gLEz
-         9SEN4epH1j1FjTAdspJpO7a40J8sMdloUUgZl6/9SPReB88BstUSS8hY3fDVT0L1zx1H
-         +7+7iH7olOFc47PyPYVGOsnBMOcmTBYsLfD8MvjTJ+y5N7DL+/1/uw09qrvSu7AB3aT5
-         TURe0eLbeJy4yWcKrO5D91hr4toNj8ZW1q2rdPtCLLLOHbhVZdHrn50I5uoUvGeveuYy
-         Cx6w==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DT9b2JqUNcas1GieQOO1UADd6ZveitNnuHA65yQ4esE=;
+        b=gNqxcpByNWRFu0kl0YvLf68XNvjty9vaYNkQyj4UDT0CK1Ig4GRS+PwQznc7FIMoK6
+         TgXzwabcsTBPFnXM77EN8+5Zku0ln7/W1A8zwCJHQiwcJA/d9ndPnODOU14PDRDcC6ai
+         7moER/4RsiWjejAX48uDiH3/nQWS4BpmwI9qA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W3yuhBwBhCc9hCUhqdt5niSoYLTGtNRD8nOw8aCAMcg=;
-        b=T3j+sDhM4VVak4rssK25Thgd11//v855EvdcnHDa0NRYULBgOzbkJJZKR2JVOZqVA0
-         VBS3poVbz4QA3sqp8TE+JY18Qdsfs59tfUrhMXTHaaciDvg1HxgGIn4dQEjUPicvTvYi
-         j4sc2LEBssbOFFJjlomAFsQ9K4V0QbFhsMJvlSoCjNeNXEGjVYXhaA2lLYKjRcMyJAUt
-         srO8GooRj++pi2F9RxfcnnVgrxKuXs23REO/Oxa4EYkTeFOYk3hIVU1crzyncAhQHZTD
-         NpeuKKa9NLs5K6cCoDWtKkKEy72ocQBxOPono49i03pHiNsWZB7389aipRfN67MbEg8k
-         oXOQ==
-X-Gm-Message-State: APjAAAU1cpz2g969Yn+28AlIql4fgPbS0C/LlRB3mCoONDS5+YfOhp2b
-        2S+Xpd18PfsSvityHvet3mQirpA8SEIho5YzXjvCRQ==
-X-Google-Smtp-Source: APXvYqzKennu9chASiLD3tKb71xmHQKMdOOMof8TH7xg/nh0DZzv5XsUJVqhYHIkqIXBmuyXfRHq7LqcNWN0fAo1N+E=
-X-Received: by 2002:a2e:7d0c:: with SMTP id y12mr16959673ljc.39.1582127281257;
- Wed, 19 Feb 2020 07:48:01 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DT9b2JqUNcas1GieQOO1UADd6ZveitNnuHA65yQ4esE=;
+        b=rDIE1PBiXhWwqUE4oozsHOEil2KReeiINkca40wi36Wq13Pyu1pukorFthdJCqYyd/
+         FNkYAOVKib1w68PiZinaMoRmWL765X833pNrGVne1UI5U6v81LXaDEZKGulfb9eASMrz
+         PHCaajc49PDKiGh4lFy9EVkOGe05eHa5AHFIouD3UPTPRKxUDUwJ70FUG1xE9Wl/fEoL
+         7w5CJHnVvriZx2DPLXgJCaovPs/hbk9s5B/FV3jIx4xgVjUVqO8QRKSoN9BhGHTPGfJg
+         wTmW+15WT09jrnNvMLBDrw+fGSGuaXPjL7lxxw5SDVv37kxnVvWca6UqS0wSxRPQ6RIT
+         tBqw==
+X-Gm-Message-State: APjAAAWky73ClH2KnqwEiwOaqtNByO85m8C8HGPl8/Ad2mQMgRdRbMgH
+        B+pROozK2sLpy73OorUZRgkdXQ==
+X-Google-Smtp-Source: APXvYqyBuOdfaFMKcgQz2InWVMXt9wu5jkvAcdKhlsUWQ2aZek1+MLFnc2VNa4KJ8eoMdzeMh4L0gg==
+X-Received: by 2002:aa7:96b6:: with SMTP id g22mr27963352pfk.206.1582135791976;
+        Wed, 19 Feb 2020 10:09:51 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id q21sm281382pff.105.2020.02.19.10.09.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Feb 2020 10:09:51 -0800 (PST)
+Date:   Wed, 19 Feb 2020 10:09:50 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org
+Subject: Re: [PATCH 4/6] spi: spi-geni-qcom: Add interconnect support
+Message-ID: <20200219180950.GA24720@google.com>
+References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
+ <1581946205-27189-5-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-References: <fca3ba7cdc930cd36854666ceac4fbcf01b89028.1582027457.git.lukas@wunner.de>
-In-Reply-To: <fca3ba7cdc930cd36854666ceac4fbcf01b89028.1582027457.git.lukas@wunner.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 19 Feb 2020 16:47:50 +0100
-Message-ID: <CACRpkdZmzL_bDRuiBehmd-QC93K_xJ5VHM0HaypCFXLU6sZvkQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: spidev: Fix CS polarity if GPIO descriptors are used
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Simon Han <z.han@kunbus.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1581946205-27189-5-git-send-email-akashast@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Feb 18, 2020 at 1:08 PM Lukas Wunner <lukas@wunner.de> wrote:
+On Mon, Feb 17, 2020 at 07:00:03PM +0530, Akash Asthana wrote:
+> Get the interconnect paths for SPI based Serial Engine device
+> and vote according to the current bus speed of the driver.
+> 
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> ---
+>  drivers/spi/spi-geni-qcom.c | 65 ++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 62 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index c397242..a066ef26 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
+> @@ -608,16 +653,25 @@ static int spi_geni_remove(struct platform_device *pdev)
+>  	spi_unregister_master(spi);
+>  
+>  	free_irq(mas->irq, spi);
+> +	geni_spi_icc_put(&mas->se);
+>  	pm_runtime_disable(&pdev->dev);
+>  	return 0;
+>  }
+>  
+>  static int __maybe_unused spi_geni_runtime_suspend(struct device *dev)
+>  {
+> +	int ret;
+>  	struct spi_master *spi = dev_get_drvdata(dev);
+>  	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+>  
+> -	return geni_se_resources_off(&mas->se);
+> +	ret = geni_se_resources_off(&mas->se);
+> +	if (ret)
+> +		return ret;
+> +
+> +	icc_set_bw(mas->se.icc_path[GENI_TO_CORE], 0, 0);
 
-> Commit f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
-> amended of_spi_parse_dt() to always set SPI_CS_HIGH for SPI slaves whose
-> Chip Select is defined by a "cs-gpios" devicetree property.
->
-> This change broke userspace applications which issue an SPI_IOC_WR_MODE
-> ioctl() to an spidev:  Chip Select polarity will be incorrect unless the
-> application is changed to set SPI_CS_HIGH.  And once changed, it will be
-> incompatible with kernels not containing the commit.
->
-> Fix by setting SPI_CS_HIGH in spidev_ioctl() (under the same conditions
-> as in of_spi_parse_dt()).
->
-> Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
-> Reported-by: Simon Han <z.han@kunbus.com>
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Cc: stable@vger.kernel.org # v5.1+
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-(...)
+This causes my SC7180 system to reset at boot time:
 
-Nit: I would also insert a comment in the code to tell what is going on.
+[    3.509652] qcom-qmp-phy 88e9000.phy-wrapper: Registered Qcom-QMP phy
+[    3.516956] qcom-qusb2-phy 88e3000.phy: Registered Qcom-QUSB2 phy
+[    3.524450] geni_se_qup 8c0000.geniqup: Adding to iommu group 4
+[    3.533896] spi_master spi0: will run message pump with realtime priority
+<reset>
 
-> +                       if (ctlr->use_gpio_descriptors && ctlr->cs_gpiods &&
-> +                           ctlr->cs_gpiods[spi->chip_select])
-> +                               tmp |= SPI_CS_HIGH;
-
-Should this be tmp ^= SPI_CS_HIGH?
-
-If the device tree node for cs-gpios is actually active high, which
-happens, then you probably want the opposite of what was
-requested, right?
-
-Yours,
-Linus Walleij
+The system does not reset when passing 'Bps_to_icc(1000)' (=> 1) instead of 0.
