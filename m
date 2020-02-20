@@ -2,93 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1CB16533F
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Feb 2020 00:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AE1165434
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Feb 2020 02:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbgBSX6T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Feb 2020 18:58:19 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:40141 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbgBSX6T (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Feb 2020 18:58:19 -0500
-Received: by mail-oi1-f195.google.com with SMTP id a142so25705086oii.7;
-        Wed, 19 Feb 2020 15:58:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BX9+oiU9NUzGK1+aV9/Uah0G+lhW9/DtCwBAHxWnn3I=;
-        b=KU1uqUYVxkoQfS26YEi+ztZu7uQD6NmCYAjnD4WbMrS3FbUgBPMQxL4cToOQRD6Uov
-         nHqZX7QwUxnmIRKEcKaP8NEsh/58I2e78+wWxDrpu1BXApMDiJMolk2hwg9CzqcOf9sW
-         YE4tYRCZaEyh/x1674lcZY1l/H0F0ArPvwmZIxON3DfEjagSV1uN/AxJKPXKBeA241xL
-         WqwyGwfYPVg0aO9XUojnJGQxro+u25NEoqXrbNR09NiA6eBYzNO4I80Q2dLPiRbdLZkb
-         04tkTaqeTm6+rrMCyLbyFF+HCBtuFvxa0v0YSX5dAdbBWko9TEenvJpgjmfSY9CevQ+/
-         hitw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BX9+oiU9NUzGK1+aV9/Uah0G+lhW9/DtCwBAHxWnn3I=;
-        b=M/VKtYr5IUMKwGD5odp0XvHvaoe8o3lESFzKYG/iV6lwy8S7p3dq+jrdlt5Ef71VT9
-         yMuM7Xb683bDcg6i+VnR+pfPJfXq391UVdiZQDnjn+/MRArlIdLJeh6qErvA3983LPud
-         vBcz4FDJLqP7zmqb6r6U18o05NFCtlX3MVMjxWEv+bS/8L+dvZFkvQOJgzugwOjMhA3V
-         gXJxcZRcHmcozN/9D9WxHlsvo0H2Tsy8nF5Dqa0A2qftHA7KNgVPsarsX9PV0RBt/mW5
-         yWF7eNPP9kEGjwWyTWqlMQtWcB3ulG3cV1AeKpX82boBIyxTjGU56HohsLBZN59iWIsd
-         pA3g==
-X-Gm-Message-State: APjAAAVAGhtbVde3ljRursK6Ova5VxM0tbgd8SJAuYAz++mPCDY0s0Wo
-        6avAN6w5llkezO2tQg7Rin2FwtNnZ2fTi4GHEM4=
-X-Google-Smtp-Source: APXvYqwRxzwlvasanDAZCzqmiAcIi+8du+kTb0XmBWuXgm+lcYoRDBqJdLFMRLpwiKeOks5taARgUtmAle4aHBvqjI0=
-X-Received: by 2002:aca:ddc2:: with SMTP id u185mr185041oig.24.1582156697455;
- Wed, 19 Feb 2020 15:58:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20200215065826.739102-1-gch981213@gmail.com> <20200218125557.GD4232@sirena.org.uk>
-In-Reply-To: <20200218125557.GD4232@sirena.org.uk>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Thu, 20 Feb 2020 07:58:06 +0800
-Message-ID: <CAJsYDVL03KJv7eewGekBPCfpbOuTX0tJ6qZaydvJnBDzZ5vEwg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] rewrite mtk-quadspi spi-nor driver with spi-mem
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727208AbgBTBXr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Feb 2020 20:23:47 -0500
+Received: from mga12.intel.com ([192.55.52.136]:49776 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726784AbgBTBXr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 19 Feb 2020 20:23:47 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Feb 2020 17:23:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,462,1574150400"; 
+   d="scan'208";a="382987388"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by orsmga004.jf.intel.com with ESMTP; 19 Feb 2020 17:23:43 -0800
+From:   "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     broonie@kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, vigneshr@ti.com
+Cc:     robh+dt@kernel.org, simon.k.r.goldschmidt@gmail.com,
+        dinguyen@kernel.org, tien.fong.chee@intel.com, marex@denx.de,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
+        "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v10 0/2] spi: cadence-quadspi: Add support for the Cadence QSPI controller
+Date:   Thu, 20 Feb 2020 09:23:33 +0800
+Message-Id: <20200220012335.7059-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi!
+Add support for the Cadence QSPI controller. This controller is
+present in the Intel Lightning Mountain(LGM) SoCs, Altera and TI SoCs.
+This driver has been tested on the Intel LGM SoCs.
 
-On Tue, Feb 18, 2020 at 8:55 PM Mark Brown <broonie@kernel.org> wrote:
-> This is an ABI break so you shouldn't be doing this, if the existing
-> binding works it should continue to work.
+This driver does not support generic SPI and also the implementation
+only supports spi-mem interface to replace the existing driver in
+mtd/spi-nor/cadence-quadspi.c, the existing driver only support SPI-NOR
+flash memory.
 
-The missing spi-max-frequency is the only part preventing old
-device tree to work with this driver.
-If the goal is to make existing dt binding work, I could patch dt using
-of_add_property in v2. I saw similar device tree patching for legacy
-bindings in pinctrl-single driver.
+Thanks Mark and Vignesh for the review, suggestion to optimize the patch.
+Tested with mx25u12835f on LGM platform.
 
->
-> > 3. removing the old driver. I'll create this commit after 1 and 2 are
-> >    applied to avoid possible rebasing due to any changes in the old
-> >    driver.
->
-> This isn't great as it means we have a period with two drivers for the
-> same thing in tree which is at best going to be confusing.  There's no
-> advantage to splitting this out.
+changes from v9:
+ -- Mark's review comments address
+ -- add check to shared interrupt handler
+ -- add check decoder if present
+ -- add error check for quirks capability data
+ -- remove the existing cadence_quadspi.c from drivers/mtd/spi-nor path
+ -- remove CONFIG macro from Kconfig in the above path
+ -- remove cadence_quadspi.o build option from Makefile in the above path
 
-Got it. I'll add this patch in v2.
+changes from v8:
+ -- remove the depends MTD macro
+ -- comment into C++ style
+ -- remove spaces and tabs where not applicable.
+ -- align the macro string as same as existing one.
+ -- replace QUAD to op->data.buswidth variable.
+ -- add CQSPI_NEEDS_ADDR_SWAP instead of soc_selection variable
 
---
-Regards,
-Chuanhong Guo
+changes from v7:
+ -- remove addr_buf kept like as original
+ -- drop bus-num, chipselect variable
+ -- add soc_selection varible to differetiate the features
+ -- replace dev->ddev in dma function
+ -- add seperate function to handle the 24bit slave device address
+    translation for lgm soc
+ -- correct sentence seems incomplete in Kconfig
+ -- add cqspi->soc_selection check to keep the original TI platform
+    working code.
+
+changes from v6:
+ -- Add the Signed-off-by Vignesh in commit message
+ -- bus_num, num_chipselect added to avoid the garbage bus number
+    during the probe and spi_register.
+ -- master mode bits updated
+ -- address sequence is different from TI and Intel SoC Ip handling
+    so modified as per Intel and differentiating by use_dac_mode variable.
+ -- dummy cycles also different b/w two platforms, so keeping separate check
+ -- checkpatch errors which are intentional left as is for better readability
+
+changes from v5:
+ -- kbuild test robot warnings fixed
+ -- Add Reported-By: Dan Carpenter <dan.carpenter@oracle.com>
+
+changes from v4:
+ -- kbuild test robot warnings fixed
+ -- Add Reborted-by: tag
+
+changes from v3:
+spi-cadence-quadspi.c
+ -- static to all functions wrt to local to the file.
+ -- Prefix cqspi_ and make the function static
+ -- cmd_ops, data_ops and dummy_ops dropped
+ -- addr_ops kept since it is required for address calculation.
+ -- devm_ used for supported functions , removed legacy API's
+ -- removed "indirect" name from functions
+ -- replaced by master->mode_bits = SPI_RX_QUAD | SPI_TX_DUAL | SPI_RX_DUAL | SPI_RX_OCTAL;
+    as per Vignesh susggestion
+ -- removed free functions since devm_ handles automatically.
+ -- dropped all unused Macros
+
+YAML file update:
+ -- cadence,qspi.yaml file name replace by cdns,qspi-nor.yaml
+ -- compatible string updated as per Vignesh suggestion
+ -- for single entry, removed descriptions
+ -- removed optional parameters
+  Build Result:
+   linux$ make DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml dt_binding_check
+    CHKDT   Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+    SCHEMA  Documentation/devicetree/bindings/processed-schema.yaml
+    DTC     Documentation/devicetree/bindings/spi/cdns,qspi-nor.example.dt.yaml
+    CHECK   Documentation/devicetree/bindings/spi/cdns,qspi-nor.example.dt.yaml
+
+Ramuthevar Vadivel Murugan (2):
+  dt-bindings: spi: Add schema for Cadence QSPI Controller driver
+  spi: cadence-quadpsi: Add support for the Cadence QSPI controller
+
+ .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 147 +++++
+ drivers/mtd/spi-nor/Kconfig                        |  11 -
+ drivers/mtd/spi-nor/Makefile                       |   1 -
+ drivers/spi/Kconfig                                |   8 +
+ drivers/spi/Makefile                               |   1 +
+ .../spi-cadence-quadspi.c}                         | 641 ++++++++++-----------
+ 6 files changed, 459 insertions(+), 350 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+ rename drivers/{mtd/spi-nor/cadence-quadspi.c => spi/spi-cadence-quadspi.c} (73%)
+
+-- 
+2.11.0
+
