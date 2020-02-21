@@ -2,85 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B86166781
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Feb 2020 20:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B1F166B90
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Feb 2020 01:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728865AbgBTTvZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Feb 2020 14:51:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:50438 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728514AbgBTTvZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 20 Feb 2020 14:51:25 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D90DF30E;
-        Thu, 20 Feb 2020 11:51:24 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4EF083F68F;
-        Thu, 20 Feb 2020 11:51:24 -0800 (PST)
-Date:   Thu, 20 Feb 2020 19:51:22 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] rewrite mtk-quadspi spi-nor driver with spi-mem
-Message-ID: <20200220195122.GL3926@sirena.org.uk>
-References: <20200215065826.739102-1-gch981213@gmail.com>
- <20200218125557.GD4232@sirena.org.uk>
- <CAJsYDVL03KJv7eewGekBPCfpbOuTX0tJ6qZaydvJnBDzZ5vEwg@mail.gmail.com>
+        id S1729441AbgBUAYD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Feb 2020 19:24:03 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:55035 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729495AbgBUAYD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Feb 2020 19:24:03 -0500
+Received: by mail-pj1-f67.google.com with SMTP id dw13so221504pjb.4
+        for <linux-spi@vger.kernel.org>; Thu, 20 Feb 2020 16:24:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=N+W2ETEjDh4VNtgtmLh/TfEkNqYr/Dj+9ajtDJm9neY=;
+        b=RC1y9Ev8yYPshv4Bs732//4TwtEKj4z/RU6pjfL30nYLsKEse7Ahw4+tlJLRCJcYPi
+         QHtBOyv+Qik/4Nn8QKBRwMA1A2R4jCmYA0rQDE6KXO24k4yzHT0fiCIEnPMExEWZiWXA
+         ag7DzPHT64h0fZaJAQjYG6clhowVsW+2rW6h0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=N+W2ETEjDh4VNtgtmLh/TfEkNqYr/Dj+9ajtDJm9neY=;
+        b=HMTiy7qMCuGuDpu64w/oNu9ZXloFjEJLYGT8FJEvap3KymbjY4oygFTDdPxL5ckzOx
+         oMqtstN9PSh8PBIXqei7K6SYQil6i6q5AyjO0WuKxwHboQaV+9gcNZ5QqIRGgGXOqaQx
+         3xx2pDMWyCojkGv7t+eKmxWfEGuK7GMd7qDSalUP0aiOH6Cv/FSgSK+fyT5hpo8hSFaB
+         8hZYFFnJE39LWAVzY24pycpf/vB9ZvFepQiQHMth+vdUM5s/f1Ki1TEgfDV7N+tBq09T
+         o0JqZ3WCRSSRl4o6DHMyQjS9o6J3tKj0fRPkRNsqA0qy4crcSrn5KFO3Pq/dbxYa6kYW
+         0RYg==
+X-Gm-Message-State: APjAAAXQ9I5C571to9t38iK7TkYT0hrHZeFbxmYmJdpj5ED3ILdFihkY
+        qK4722HW8OmusIq89JgMsbS0VA==
+X-Google-Smtp-Source: APXvYqyocUfmVHntXz0Jeoqt9gMILke4bXLLeHZVx9N6jDKA2rov2r0w1ZLTo07S4ZMWTAhuiB+C2Q==
+X-Received: by 2002:a17:902:9a4c:: with SMTP id x12mr32244576plv.297.1582244642055;
+        Thu, 20 Feb 2020 16:24:02 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id f127sm726701pfa.112.2020.02.20.16.24.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Feb 2020 16:24:01 -0800 (PST)
+Date:   Thu, 20 Feb 2020 16:24:00 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org
+Subject: Re: [PATCH 3/6] i2c: i2c-qcom-geni: Add interconnect support
+Message-ID: <20200221002400.GD24720@google.com>
+References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
+ <1581946205-27189-4-git-send-email-akashast@codeaurora.org>
+ <20200218224709.GF15781@google.com>
+ <84a7d97a-4e10-5509-9c87-af8a545c7385@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kaF1vgn83Aa7CiXN"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJsYDVL03KJv7eewGekBPCfpbOuTX0tJ6qZaydvJnBDzZ5vEwg@mail.gmail.com>
-X-Cookie: You are number 6!  Who is number one?
+In-Reply-To: <84a7d97a-4e10-5509-9c87-af8a545c7385@codeaurora.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Akash,
 
---kaF1vgn83Aa7CiXN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, Feb 19, 2020 at 07:17:44PM +0530, Akash Asthana wrote:
+> Hi Matthias,
+> 
+> On 2/19/2020 4:17 AM, Matthias Kaehlcke wrote:
+> > On Mon, Feb 17, 2020 at 07:00:02PM +0530, Akash Asthana wrote:
+> > > Get the interconnect paths for I2C based Serial Engine device
+> > > and vote according to the bus speed of the driver.
+> > > 
+> > > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> > > ---
+> > >   drivers/i2c/busses/i2c-qcom-geni.c | 84 ++++++++++++++++++++++++++++++++++++--
+> > >   1 file changed, 80 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> > > index 17abf60c..5de10a1 100644
+> > > --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> > > +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> > >
+> > >   static void geni_i2c_err_misc(struct geni_i2c_dev *gi2c)
+> > >   {
+> > >   	u32 m_cmd = readl_relaxed(gi2c->se.base + SE_GENI_M_CMD0);
+> > > @@ -563,17 +601,34 @@ static int geni_i2c_probe(struct platform_device *pdev)
+> > >   	gi2c->adap.dev.of_node = pdev->dev.of_node;
+> > >   	strlcpy(gi2c->adap.name, "Geni-I2C", sizeof(gi2c->adap.name));
+> > > +	ret = geni_i2c_icc_get(&gi2c->se);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +	/* Set the bus quota to a reasonable value */
+> > > +	gi2c->se.avg_bw_core = Bps_to_icc(1000);
+> > > +	gi2c->se.peak_bw_core = Bps_to_icc(CORE_2X_100_MHZ);
+> > > +	gi2c->se.avg_bw_cpu = Bps_to_icc(1000);
+> > > +	gi2c->se.peak_bw_cpu = Bps_to_icc(1000);
+> > > +	gi2c->se.avg_bw_ddr = Bps_to_icc(gi2c->clk_freq_out);
+> > > +	gi2c->se.peak_bw_ddr = Bps_to_icc(2 * gi2c->clk_freq_out);
+> > > +
+> > > +	/* Vote for core clocks and CPU for register access */
+> > > +	icc_set_bw(gi2c->se.icc_path[GENI_TO_CORE], gi2c->se.avg_bw_core,
+> > > +				gi2c->se.peak_bw_core);
+> > > +	icc_set_bw(gi2c->se.icc_path[CPU_TO_GENI], gi2c->se.avg_bw_cpu,
+> > > +				gi2c->se.peak_bw_cpu);
+> > error handling needed?
+> 
+> I will add error handling for GENI_TO_CORE path in all the drivers. Will it
+> be okay if we don't handle errors for CPU_TO_GENI and GENI_TO_DDR path
+> 
+> as CPU and DDR will be running at much higher frequency?
 
-On Thu, Feb 20, 2020 at 07:58:06AM +0800, Chuanhong Guo wrote:
-> On Tue, Feb 18, 2020 at 8:55 PM Mark Brown <broonie@kernel.org> wrote:
+It may still work, but you might never know that there was a problem. I
+would be inclined to check the return value of all invocations of icc_set_bw()
+- including runtime suspend/resume - and log a message if a problem is
+detected. For runtime suspend/resume it would probably be wise to use
+dev_err_ratelimited(), to avoid spamming the system log too much in case of
+a persistent problem.
 
-> > This is an ABI break so you shouldn't be doing this, if the existing
-> > binding works it should continue to work.
+If others think that error checking all icc_set_bw() calls is overkill
+please speak up :)
 
-> The missing spi-max-frequency is the only part preventing old
-> device tree to work with this driver.
-> If the goal is to make existing dt binding work, I could patch dt using
-> of_add_property in v2. I saw similar device tree patching for legacy
-> bindings in pinctrl-single driver.
+Thanks
 
-That's fine I think, so long as old DTs continue to work.
-
---kaF1vgn83Aa7CiXN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5O4zkACgkQJNaLcl1U
-h9CnhQf/csTFVBvPtYuq5Xz1OdgQcpPuRzKFr7JAXvgpfAUv5qPV/34M4juJxze6
-ei2b2s9UlxK2Naa8GFKqAEKOK79jnk5HrI7QkELb2UpQPSJQKubjc8iHzDsQ8rgC
-V7Qf/2Lv2J/NW4R2XzC0ZXMeSnEMBQepx/pUCQnwXOqReWiy/l2X7pLEJsI4J4pR
-ba9BzEWWAXYoP4SYj/cVlqhWrBh807h6owmwTlV86VrwRRh2cxosTUZVMx6nRNq6
-MBFLZ/vayfFd9LF7BQ5r2isKv+BUrZZ8bd06Gt8vZrrLBoH4YiGhXDLL3CGWvFhk
-6M/bBGLDrkTKwSBb6zMaLOsygszigQ==
-=rZ8a
------END PGP SIGNATURE-----
-
---kaF1vgn83Aa7CiXN--
+Matthias
