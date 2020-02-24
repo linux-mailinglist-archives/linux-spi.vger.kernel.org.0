@@ -2,165 +2,269 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 885C316AFD8
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2020 19:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CD616B234
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2020 22:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727755AbgBXS7O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Feb 2020 13:59:14 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:35624 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727644AbgBXS7L (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Feb 2020 13:59:11 -0500
-Received: by mail-lf1-f66.google.com with SMTP id l16so7585433lfg.2
-        for <linux-spi@vger.kernel.org>; Mon, 24 Feb 2020 10:59:08 -0800 (PST)
+        id S1726722AbgBXV2m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Feb 2020 16:28:42 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:34838 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727716AbgBXV2l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Feb 2020 16:28:41 -0500
+Received: by mail-lj1-f193.google.com with SMTP id q8so11739573ljb.2
+        for <linux-spi@vger.kernel.org>; Mon, 24 Feb 2020 13:28:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DWIogKdup7RNMEQuGw4ZK8XOOx0NelgD6LsQ23lIpno=;
-        b=K9J9F9PV+48ev9LK8v98rsnmW179zWtfmyhq0RgD2gPng7rPjM11KvxdB0vwPZrecW
-         0ZJF5dYneiH+au5KOHmBFw8QF4N1Iw0/mEd0A4jiiAmFWHtE10cFS2ov5YWqcR8A1iQI
-         mwaMkZjCY275H3YMSHT1FGGlzaQMZq2r8t+H+r02QFlVgLD0bAdWKCSdlnHeb6+hJa/H
-         bYm9F7ScwA5B9K38urOwf0g27uW+omFOWqIExTILY1vP7BE3BjaBkQhCHcByfQO8ous3
-         BaL+XAofK48p2a7X4Q5zgSzweH+XZ1Skoi3bGvhmgg6p6RhDeI74kPpMFgXTm4l0GzvA
-         07jQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wMq54bZLHLBxwerxfl5UdZbeQNMpBUzRLZDC5/TbRIY=;
+        b=ul+tuP8hNyxbq61sLOa5xbwQ7/XPUTNhLBUIsVq9THoGlu5au+JstGRYswaXd/MUTw
+         hu9d5BAJPb4t+0cMGSZwpXvVh6Pey7rjt0uIgLftfaXUf66ZMhVvdPqDMUodI6W9/zce
+         1Ago9YPv5KrEGabrnWcoa4YoekrXCq2VOt8t7hTf1vVpAmYaHShQjJPVmrLX2PyW24GM
+         hL0R9NYz8TJbeJwoww5veP3k7M812CxhUm2IG0CJyX8lcmA/uvRYE9hLLIRaD3/Lx4Mq
+         5oneJ47hRL2HUUltE44vFewYmAhzAXZNIb9C2vm7nz8eSn+Tbes3K+fpCtir3k677MW7
+         iAJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=DWIogKdup7RNMEQuGw4ZK8XOOx0NelgD6LsQ23lIpno=;
-        b=j/45ihGjcTwyCEBhHTsS+IMsBKvV5hbTOV+Hqwz4azUvSZUQS/L7c36wdX1bW/qZGY
-         EBlYk429XQXfcwtFxdYcEo9hUw51rgSvogIwaYccL/6xCFIFVJXfyT9Ddzu+vPSfseGE
-         p2dAXyufCghcVq46lbisoSAYsOz/nYKz5S6T+7WpXSdB8cdFUo8TOPzPcNspxBAhEJah
-         e6xjg1LXMupFNe/2Ezb+HBHqlgK8ZoR8JAlYZEldzlCYxnxD7csN7u5xlIlYaVCoU7Uv
-         MiCf3hjrHWxhTR3Y92G7Pn8NMletYV+q71PUM4U6UqcGQTolLcVwnFsWar6NWXLlcjIH
-         aROg==
-X-Gm-Message-State: APjAAAXI8AiN6F0RqrPHlQvY99D5kF5yAUv6RAlobdKLHMzECJ//GKIP
-        PHiipqB0ZTyq5cFDHOaIJ4usNg==
-X-Google-Smtp-Source: APXvYqy0tBQh6NrjPUVDkFA+Xh7MQuqHB2EeKfbvVtje8TT1bP0hItq13fx2MA+evvjyvRSeln3ZBw==
-X-Received: by 2002:ac2:489b:: with SMTP id x27mr27518111lfc.130.1582570747459;
-        Mon, 24 Feb 2020 10:59:07 -0800 (PST)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:4845:f7d3:88db:d8d1:c530:4d4])
-        by smtp.gmail.com with ESMTPSA id a3sm2281419lfo.70.2020.02.24.10.59.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Feb 2020 10:59:06 -0800 (PST)
-Subject: Re: [PATCH RFC 2/2] memory: add Renesas RPC-IF driver
-To:     "Behme Dirk (CM/ESO2)" <dirk.behme@de.bosch.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        linux-spi@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <cb7022c9-0059-4eb2-7910-aab42124fa1c@cogentembedded.com>
- <4db876ed-1ccc-e3be-311d-30cd52f40259@cogentembedded.com>
- <5760bcdb-e44b-6f18-7262-9526684e5780@de.bosch.com>
- <5603f393-554d-e2a8-c2d8-6bafc20f4169@cogentembedded.com>
- <cba1e2ec-4896-23ef-ef7b-0f80d4310127@de.bosch.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <ec545462-54ed-9e23-049e-1807d24ec084@cogentembedded.com>
-Date:   Mon, 24 Feb 2020 21:59:05 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wMq54bZLHLBxwerxfl5UdZbeQNMpBUzRLZDC5/TbRIY=;
+        b=KPA8pQsgqCS2hFpBus8WwwBK1ROYAhF2gJ0+9wFondQEpPPa39GzxG+cVrDyIV8pRx
+         P0Rou4VQTlSSKrzAumUCV9EvN+hUwpVtKBXJwf/YIU/JqUGTyxogGlS1JKstDxa2L3PX
+         6BUzA0CmLlhqswFIZhs/tGWAzmG8AspHFEqjK56jlmjJ6J8x0hl94YkztgkbqPW28KYL
+         lwCzS1OCgOKx4bw3NB5FgKHGTM/lAalVmJapggglBh8VINdCr0bizRqQ+bhNt2SHpaZJ
+         TKuFWi7lcMYvi21xZ4MzJo9wx/Ml8Aqh/323JkqHzHrmgvJSPg2z4Aengl5y/X6mbQaG
+         +8PA==
+X-Gm-Message-State: APjAAAVpx6Okfd4SNhKhkb5qr7/G0ILtc8Scg6lpaX3yE4CznnH33qdD
+        yWdw0wFVQ5NsqLB8KzuxNPnpho9T+WZSlZajzjCaBg==
+X-Google-Smtp-Source: APXvYqyMq9T/Fn06rswpyz1B/AfyB+fUsnls6uep+5LChqSuZ6hFNZZLf/LdzRRYS6HbAYOSrOhxs7mPuYEtE8MwsxM=
+X-Received: by 2002:a2e:e12:: with SMTP id 18mr32538691ljo.123.1582579718004;
+ Mon, 24 Feb 2020 13:28:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <cba1e2ec-4896-23ef-ef7b-0f80d4310127@de.bosch.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+References: <CB4ED07B85D6BB40B8B44F6D5442E4F6572C1523@BGSMSX101.gar.corp.intel.com>
+In-Reply-To: <CB4ED07B85D6BB40B8B44F6D5442E4F6572C1523@BGSMSX101.gar.corp.intel.com>
+From:   Evan Green <evgreen@google.com>
+Date:   Mon, 24 Feb 2020 13:28:01 -0800
+Message-ID: <CAE=gft5JOwvha6e0RC+6=e444QUxfYyjNs7uq=3bhHMwFmCfmw@mail.gmail.com>
+Subject: Re: Re: [PATCH] spi: pxa2xx: Add CS control clock quirk
+To:     "Srivastava, Shobhit" <shobhit.srivastava@intel.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Rajat Jain <rajatja@google.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rajatxjain@gmail.com" <rajatxjain@gmail.com>,
+        "Muthukrishnan, Porselvan" <porselvan.muthukrishnan@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello!
+ 0x
 
-On 02/24/2020 08:46 AM, Behme Dirk (CM/ESO2) wrote:
+On Thu, Feb 13, 2020 at 8:57 AM Srivastava, Shobhit
+<shobhit.srivastava@intel.com> wrote:
+>
+>
+> > Hi
+> >
+> > + Andy
+> >
+> > On 2/12/20 12:34 AM, Rajat Jain wrote:
+> > > From: Evan Green <evgreen@chromium.org>
+> > >
+> > > Date: Wed, 29 Jan 2020 13:54:16 -0800
+> > > Subject: [PATCH] spi: pxa2xx: Add CS control clock quirk
+> > >
+> > This patch subject is missing from mail subject.
+> >
+> Added
+>
+> > > In some circumstances on Intel LPSS controllers, toggling the LPSS CS
+> > > control register doesn't actually cause the CS line to toggle.
+> > > This seems to be failure of dynamic clock gating that occurs after
+> > > going through a suspend/resume transition, where the controller is
+> > > sent through a reset transition. This ruins SPI transactions that
+> > > either rely on delay_usecs, or toggle the CS line without sending
+> > > data.
+> > >
+> > > Whenever CS is toggled, momentarily set the clock gating register to
+> > > "Force On" to poke the controller into acting on CS.
+> > >
+> > Could you share the test case how to trigger this? What's the platform =
+here?
+> > I'd like to check does this reproduce on other Intel LPSS platforms so =
+is there
+> > need to add quirk for them too.
+> >
+> This is on a CometLake platform. We are probing the SPI_CS line on a scop=
+e.
+> Even though the writes to SPI_CS_CONTROL register are successful, it does=
+n=E2=80=99t toggle the CS line.
+> Hence checking on a scope is better.
+>
+> Easy way to test this is to program the cs control register via iotools a=
+nd see if the CS line toggles.
 
->>>> Add the memory driver for Renesas RPC-IF which registers either SPI or
->>>> HyperFLash device depending on the contents of the device tree subnode.
->>>> It also provides the absract "back end" device APIs that can be used by
->>>> the "front end" SPI/MTD drivers to talk to the real hardware.
->>>>
->>>> Based on the original patch by Mason Yang <masonccyang@mxic.com.tw>.
->>>>
->>>> Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
->>>
->>>
->>> FYI, please find below [1] the changes I did locally on this driver. It seems to read & write successfully on my custom M3 (R8A7796) device, now.
->>
->>     Not for me...
->>     BTW, your patch had whitespace ruined, I had to apply it by hand, you'd better
->> attach the patches, not paste. :-/
-> 
-> 
-> Ok. There are other mailing lists complaining about attachments ;)
+Yes, as Shobhit says, this can be observed by watching the voltage of
+the CS line during a SPI transaction with no data (but a delay set).
+For us, this happens when we toggle the CS line to our security chip
+as a way to wake it up before talking to it [1]:
 
-   All Linux MLs prefer patches inline. :-)
-   But you seem to paste the patches to the mail edited in some MUA (which does ruin
-whitespace). Don't do that, it's better to just attach.
+/* Assert CS, wait 1 msec, deassert CS */
+struct spi_transfer spi_cs_wake =3D { .delay_usecs =3D 1000 };
+spi_sync_transfer(phy->spi_device, &spi_cs_wake, 1);
 
-> Even better, maybe we should put what we have so far publicly anywhere, e.g. github.
+[1] https://chromium.googlesource.com/chromiumos/third_party/kernel/+/refs/=
+heads/chromeos-4.19/drivers/char/tpm/cr50_spi.c#151
 
-  Cogent has an accout there, I'll try asking the management if it could also be used...
+We're finding that the line does not in fact toggle in this
+transaction, even though the register changes appear to stick.
 
->>> Best regards
->>>
->>> Dirk
->>>
->>> [1]
->>>
->>>  From d72b805cc461ab1e9747c973e9be84e7abb8f828 Mon Sep 17 00:00:00 2001
->>> From: Dirk Behme <dirk.behme@de.bosch.com>
->>> Date: Tue, 4 Feb 2020 08:39:31 +0100
->>> Subject: [PATCH] memory: renesas-rpc-if: Correct the STRTIM and some other
->>>   clean up
->>>
->>> This is required to make the driver work correctly in my M3 environment.
->>>
->>> Signed-off-by: Dirk Behme <dirk.behme@de.bosch.com>
->>> ---
->>>   drivers/memory/renesas-rpc-if.c | 42 ++++++++++++++++++++-------------
->>>   1 file changed, 25 insertions(+), 17 deletions(-)
->>>
->>> diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
->>> index 04be92b64bfa..f4356b066384 100644
->>> --- a/drivers/memory/renesas-rpc-if.c
->>> +++ b/drivers/memory/renesas-rpc-if.c
->> [...]
->>> @@ -513,19 +525,15 @@ ssize_t rpcif_dirmap_read(struct rpcif *rpc, u64 offs, size_t len, void *buf)
->>>       pm_runtime_get_sync(rpc->dev);
->>>
->>>       regmap_update_bits(rpc->regmap, RPCIF_CMNCR, RPCIF_CMNCR_MD, 0);
->>> -    regmap_write(rpc->regmap, RPCIF_DRCR,
->>> -             RPCIF_DRCR_RBURST(32) | RPCIF_DRCR_RBE);
->>> -    regmap_write(rpc->regmap, RPCIF_DRCMR, rpc->command);
->>> -    regmap_write(rpc->regmap, RPCIF_DREAR,
->>> -             RPCIF_DREAR_EAV(offs >> 25) | RPCIF_DREAR_EAC(1));
->>> -    regmap_write(rpc->regmap, RPCIF_DROPR, rpc->option);
->>> -    regmap_write(rpc->regmap, RPCIF_DRENR,
->>> -             rpc->enable & ~RPCIF_SMENR_SPIDE(0xF));
->>> -    regmap_write(rpc->regmap, RPCIF_DRDMCR, rpc->dummy);
->>> -    regmap_write(rpc->regmap, RPCIF_DRDRENR, rpc->ddr);
->>
->>     The driver somehow works only with this left in place (with 2 bytes eaten
->> as before), otherwise all the flash reads all 0xff (via dirmap).
-> 
-> 
-> Do you boot from hyperflash?
+> This has to be done after one cycle of S0ix.
 
-   No, I have arewto say 'cpld write 30 1' in U-Boot before a boot a kernel.
-Normally, the V3x Starter Kit boards are wired for the QSPI flash chips.
+I don't know about runtime S0ix, but for me this is more related to
+runtime PM of the device. For instance, I do this to experiment:
 
-> The system I'm using for testing boots from hyperflash. So most probably all registers
-> I don't touch in the driver are put into a reasonable state by the boot code, already.
-> If you don't boot from hyperflash, that at least would explain our different behavior.
+# echo on > /sys/devices/pci0000\:00/0000\:00\:1e.2/power/control
+# mem_read32 0xd1226224
+0x00001003
+# mem_write32 0xd1226224 0x1001 ## This write sticks in the register,
+but CS doesn't toggle.
+# mem_write32 0xd1226238 0x3 ## Force clock gating on
+# mem_write32 0xd1226224 0x1001
+# mem_write32 0xd1226224 0x1003 ## Now the writes will both stick and
+make it to the CS line.
 
-   Yes. Mind dumping the registers and sending to me?
+Interestingly, I can switch clock gating back to auto (0), and writes
+continue to make it to the CS line until I re-enable runtime PM.
 
-> Best regards
-> 
-> Dirk
+Shobhit submitted a patch here for the same bug:
+https://patchwork.kernel.org/patch/11388471/
 
-MBR, Sergei
+Interestingly, I notice that the effect seems the same: once you flip
+the _SSE bit on, you can also flip it back off and writes will
+continue to work until runtime PM is re-enabled.
+
+I don't have the in-depth knowledge of how this controller works, but
+my gut says my patch more accurately addresses the underlying problem
+by briefly forcing the controller to clock, whereas the other patch
+pokes the _SSE enable bit, which forces clocking more as a side
+effect. Although, the fact that I can set clock gating back to auto
+and things still work until the next runtime suspend makes me feel
+like I don't fully understand the issue either. I'm hoping someone
+with more internal knowledge can weigh in as to the right approach.
+
+Andy, to answer your other question, I'm unsure whether or not this
+needs a delay of a device clock cycle or two to be observed, though in
+my experiments it seems like that's not needed. I'm also not sure if
+this affects other LPSS blocks, though maybe SPI is special since it
+has this externally observable but out-of-band CS line that's not
+directly tied to the serial engine.
+-Evan
+
+
+>
+> > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > > ---
+> > >   drivers/spi/spi-pxa2xx.c | 23 +++++++++++++++++++++++
+> > >   1 file changed, 23 insertions(+)
+> > >
+> > > diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c inde=
+x
+> > > 4c7a71f0fb3e..2e318158fca9 100644
+> > > --- a/drivers/spi/spi-pxa2xx.c
+> > > +++ b/drivers/spi/spi-pxa2xx.c
+> > > @@ -70,6 +70,10 @@ MODULE_ALIAS("platform:pxa2xx-spi");
+> > >   #define LPSS_CAPS_CS_EN_SHIFT                     9
+> > >   #define LPSS_CAPS_CS_EN_MASK                      (0xf <<
+> > LPSS_CAPS_CS_EN_SHIFT)
+> > >
+> > > +#define LPSS_PRIV_CLOCK_GATE 0x38
+> > > +#define LPSS_PRIV_CLOCK_GATE_CLK_CTL_MASK 0x3 #define
+> > > +LPSS_PRIV_CLOCK_GATE_CLK_CTL_FORCE_ON 0x3
+> > > +
+> > >   struct lpss_config {
+> > >     /* LPSS offset from drv_data->ioaddr */
+> > >     unsigned offset;
+> > > @@ -86,6 +90,8 @@ struct lpss_config {
+> > >     unsigned cs_sel_shift;
+> > >     unsigned cs_sel_mask;
+> > >     unsigned cs_num;
+> > > +   /* Quirks */
+> > > +   unsigned cs_clk_stays_gated : 1;
+> > >   };
+> > >
+> > >   /* Keep these sorted with enum pxa_ssp_type */ @@ -156,6 +162,7 @@
+> > > static const struct lpss_config lpss_platforms[] =3D {
+> > >             .tx_threshold_hi =3D 56,
+> > >             .cs_sel_shift =3D 8,
+> > >             .cs_sel_mask =3D 3 << 8,
+> > > +           .cs_clk_stays_gated =3D true,
+> > >     },
+> > >   };
+> > >
+> > > @@ -383,6 +390,22 @@ static void lpss_ssp_cs_control(struct spi_devic=
+e
+> > *spi, bool enable)
+> > >     else
+> > >             value |=3D LPSS_CS_CONTROL_CS_HIGH;
+> > >     __lpss_ssp_write_priv(drv_data, config->reg_cs_ctrl, value);
+> > > +   if (config->cs_clk_stays_gated) {
+> > > +           u32 clkgate;
+> > > +
+> > > +           /*
+> > > +            * Changing CS alone when dynamic clock gating is on won'=
+t
+> > > +            * actually flip CS at that time. This ruins SPI transfer=
+s
+> > > +            * that specify delays, or have no data. Toggle the clock=
+ mode
+> > > +            * to force on briefly to poke the CS pin to move.
+> > > +            */
+> > > +           clkgate =3D __lpss_ssp_read_priv(drv_data,
+> > LPSS_PRIV_CLOCK_GATE);
+> > > +           value =3D (clkgate & ~LPSS_PRIV_CLOCK_GATE_CLK_CTL_MASK)
+> > |
+> > > +                   LPSS_PRIV_CLOCK_GATE_CLK_CTL_FORCE_ON;
+> > > +
+> > > +           __lpss_ssp_write_priv(drv_data, LPSS_PRIV_CLOCK_GATE,
+> > value);
+> > > +           __lpss_ssp_write_priv(drv_data, LPSS_PRIV_CLOCK_GATE,
+> > clkgate);
+> > > +   }
+> > >   }
+> > >
+> > I wonder is it enough to have this quick toggling only or is time or ac=
+tually
+> > number of clock cycles dependent? Now there is no delay between but I'm
+> > thinking if it needs certain number cycles does this still work when us=
+ing low
+> > ssp_clk rates similar than in commit d0283eb2dbc1 ("spi:
+> > pxa2xx: Add output control for multiple Intel LPSS chip selects").
+> >
+> > I'm thinking can this be done only once after resume and may other LPSS
+> > blocks need the same? I.e. should this be done in drivers/mfd/intel-lps=
+s.c?
+> >
+> This behavior is seen after S0ix resume, but it is not seen after S3 resu=
+me.
+> I am thinking that it happens because we are not enabling the SSP after r=
+esume.
+> It is deferred until we need to send data. By enabling the SSP in resume,=
+ I don=E2=80=99t see the issue.
+> For S3, I think BIOS re-enables the SSP in resume flow.
+>
+> > Jarkko
+>
+> Regards,
+> Shobhit
