@@ -2,94 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B51AB16AF12
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2020 19:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4B116AFBC
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2020 19:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727854AbgBXS15 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Feb 2020 13:27:57 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:34240 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727483AbgBXS15 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Feb 2020 13:27:57 -0500
-Received: by mail-oi1-f195.google.com with SMTP id l136so9885896oig.1;
-        Mon, 24 Feb 2020 10:27:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8b3MliEDFbDrUpBm8jGhwYqreoGs6m8FNnF/yNIueEU=;
-        b=BkRg2/6gEsYakveiAVaz5/SLu28xZ5uKrq6Zg22HgyTQAjavyWMUPy8gNAfUV4xorW
-         E++f5oMa/9O5R6BH3cxB/tP1qodo6qjrXebTii0dtv0aI9Q4qcn7fuXtC8DF8A1HGlOI
-         0PcZFnSVYDSJxwgi4xl53s550fCKeqh4rmkcykM17IsyJn1MZU6Po3uujNL1SWDFxkOW
-         kYRia9cw9SWa0lSLVJ49ng5z4RTTDYDuISpOExK1XcLnn8CDW6Mf41jIX/p+3KkGJsAS
-         Bvw4iR593L59oPXqYg2TPTOHhHwZ+YqmzHe9ip0zWM6ZdYyD3HIRnBed5GKcYXh/TRBL
-         +kmw==
-X-Gm-Message-State: APjAAAWzU2PAOj6NnKUk0FWL4zDcNmVEmfkyRHNsA2p6PVA9OADeof/1
-        CyzdZRNMreOwTzLvaZqPjQ==
-X-Google-Smtp-Source: APXvYqyzy4iiGXu+ZZ3t2yBP3j4K/yU2pKb0H/blTr6+iujeHVCL8mJihe7tO3CjLAVcADKqUCNWGQ==
-X-Received: by 2002:aca:bfc2:: with SMTP id p185mr318449oif.57.1582568876626;
-        Mon, 24 Feb 2020 10:27:56 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v10sm4255017oic.32.2020.02.24.10.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 10:27:56 -0800 (PST)
-Received: (nullmailer pid 13156 invoked by uid 1000);
-        Mon, 24 Feb 2020 18:27:55 -0000
-Date:   Mon, 24 Feb 2020 12:27:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Piotr Sroka <piotrs@cadence.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Olivier Moysan <olivier.moysan@st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devel@driverdev.osuosl.org
-Subject: Re: [PATCH] docs: dt: fix several broken doc references
-Message-ID: <20200224182755.GB27161@bogus>
-References: <0e530494349b37eb2eab4a8eccf56626e0b18e6d.1582448388.git.mchehab+huawei@kernel.org>
+        id S1727479AbgBXSyR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Feb 2020 13:54:17 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5614 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727426AbgBXSyR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Feb 2020 13:54:17 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01OInH56098826;
+        Mon, 24 Feb 2020 13:54:12 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2yb1b7mteb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Feb 2020 13:54:12 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 01OIpFKU104621;
+        Mon, 24 Feb 2020 13:54:11 -0500
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2yb1b7mtdt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Feb 2020 13:54:11 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01OIorM7004201;
+        Mon, 24 Feb 2020 18:54:11 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02dal.us.ibm.com with ESMTP id 2yaux6k9r0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Feb 2020 18:54:11 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01OIsAi810420644
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Feb 2020 18:54:10 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4201EB205F;
+        Mon, 24 Feb 2020 18:54:10 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C38D2B2064;
+        Mon, 24 Feb 2020 18:54:09 +0000 (GMT)
+Received: from [9.41.103.158] (unknown [9.41.103.158])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Feb 2020 18:54:09 +0000 (GMT)
+Subject: Re: [PATCH v2] spi: Add FSI-attached SPI controller driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>
+References: <20200203223003.4567-1-eajames@linux.ibm.com>
+ <CAHp75VfHAS46-kMyg7Ky4jn7zmkht6wd9ayCfn+rrO0R6aNr6A@mail.gmail.com>
+From:   Eddie James <eajames@linux.vnet.ibm.com>
+Message-ID: <fab0fdf2-6ce7-7635-178e-9bd090d03dc0@linux.vnet.ibm.com>
+Date:   Mon, 24 Feb 2020 12:54:09 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0e530494349b37eb2eab4a8eccf56626e0b18e6d.1582448388.git.mchehab+huawei@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAHp75VfHAS46-kMyg7Ky4jn7zmkht6wd9ayCfn+rrO0R6aNr6A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-24_07:2020-02-21,2020-02-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ adultscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002240137
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Feb 23, 2020 at 09:59:53AM +0100, Mauro Carvalho Chehab wrote:
-> There are several DT doc references that require manual fixes.
-> I found 3 cases fixed on this patch:
-> 
-> 	- directory named "binding/" instead of "bindings/";
-> 	- .txt to .yaml renames;
-> 	- file renames (still on txt format);
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  .../devicetree/bindings/mtd/cadence-nand-controller.txt       | 2 +-
->  .../devicetree/bindings/net/brcm,bcm7445-switch-v4.0.txt      | 2 +-
->  Documentation/devicetree/bindings/sound/st,stm32-sai.txt      | 2 +-
->  Documentation/devicetree/bindings/sound/st,stm32-spdifrx.txt  | 2 +-
->  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml       | 2 +-
->  MAINTAINERS                                                   | 4 ++--
->  .../devicetree/bindings/net/wireless/siliabs,wfx.txt          | 2 +-
->  7 files changed, 8 insertions(+), 8 deletions(-)
 
-Applied.
+On 2/4/20 5:05 AM, Andy Shevchenko wrote:
+> On Tue, Feb 4, 2020 at 12:30 AM Eddie James <eajames@linux.ibm.com> wrote:
+>> There exists a set of SPI controllers on some POWER processors that may
+>> be accessed through the FSI bus. Add a driver to traverse the FSI CFAM
+>> engine that can access and drive the SPI controllers. This driver would
+>> typically be used by a baseboard management controller (BMC).
+>>
+>> The SPI controllers operate by means of programming a sequencing engine
+>> which automatically manages the usual SPI protocol buses. The driver
+>> programs each transfer into the sequencer as various operations
+>> specifying the slave chip and shifting data in and out on the lines.
+> Some comments left unsettled in v1, thus applicable here.
 
-Rob
+
+I think I addressed all of Andy's comments on v1 now, if Andy agreed 
+about leaving the byte shifting as-is in fsi_spi_data_in/out.
+
+
+Thanks,
+
+Eddie
+
+
+>
