@@ -2,109 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A81A916AD5E
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2020 18:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51AB16AF12
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2020 19:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727673AbgBXR2t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Feb 2020 12:28:49 -0500
-Received: from mail-eopbgr1410133.outbound.protection.outlook.com ([40.107.141.133]:2673
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727644AbgBXR2t (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 Feb 2020 12:28:49 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QY7DxX0iJqZ+tsukUf3WyrbGnQ+tnBt3FLk2UY4KCQsR5GitR8DJOub+HCsUIJpJWSoL1MS2j8xMUXaw3vMPUUPxjR/2N91gfNiqHZTPoiPaDvEnzdubj464AW9ESU1clOT8JBlY4kEh0n2ZHkeNBU5q1D3St8g7PGkNuor5TEbp/r4QDYaIo+zWVYpq2SXItoLl+pF5cL4mLURMrv6Rnmot0h0JMP6sgTt9p/yv0oIbz+b/uMWC9OppjquApK/AC1UR/L3unKi0GM2VNODf8zcypDi0vAZOGQkQa69hFNc5nO1V8Z5QD5DUlpFEvr8Poi5K+yG1g1ybtjAjljUFpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AFlFCTTda4chxHpUkvyeAlQH+voauOQTNgW+C8lL0VM=;
- b=oIkqj8JbTG+OmjEzlnH/vPl/b2BVxu7DTuC0VwcT6frRVOSZKe4sAEz1kJ+Sk6V7aZJHnR7hjDPSGzTLw3clyVO/TpMoauG0ibuJmGNSK3oVOn7mEQM7i5yEt9zZuwAT1rUYopG2PLQUXpdKDhd6GMnC5lBzReVNLvwVUBq0HKr5bfIwXfzOpqO8NYWgorZ9pw9URuyvUTrhrWI/nQ/7iMJWMsIZlccMwtxcp1p19WqM5j+MObC021psn/6oK/Ycbn91jfi0ExOwj4s7xnmvEwPjX6w6sP7u/xHHjUIzWxNeHMKZye6f5r+ieuNsampA0VD+vyzFI5E/jRGJMwFzmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AFlFCTTda4chxHpUkvyeAlQH+voauOQTNgW+C8lL0VM=;
- b=ULPqMWuXSNFx7ipohxo8gC6lHmD6elyYxskUk71n42Wkd1rUL9i8HVOoHdgHRh6EErI58ja+fnR9Gz5/MA6S37zEXK1t0CwHAfu0WA28Snkpk7zkTYwi4qkrvkL1DnQW8+sZ813YBmw/ngI49I9twXWn/ubaT5yEhbd3ubBcxXw=
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
- TY1PR01MB1612.jpnprd01.prod.outlook.com (52.133.160.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2750.21; Mon, 24 Feb 2020 17:28:44 +0000
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::8870:97e4:a63c:67ea]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::8870:97e4:a63c:67ea%7]) with mapi id 15.20.2750.021; Mon, 24 Feb 2020
- 17:28:44 +0000
-From:   Chris Brandt <Chris.Brandt@renesas.com>
-To:     "REE dirk.behme@de.bosch.com" <dirk.behme@de.bosch.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH RFC 2/2] memory: add Renesas RPC-IF driver
-Thread-Topic: [PATCH RFC 2/2] memory: add Renesas RPC-IF driver
-Thread-Index: AQHVr5Gax3utlknyaU2JKDcLrJZnRqgUmJAAgBOJewCAAipPgIAAwo8w
-Date:   Mon, 24 Feb 2020 17:28:44 +0000
-Message-ID: <TY1PR01MB15620153764A0D4035080B638AEC0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-References: <cb7022c9-0059-4eb2-7910-aab42124fa1c@cogentembedded.com>
- <4db876ed-1ccc-e3be-311d-30cd52f40259@cogentembedded.com>
- <5760bcdb-e44b-6f18-7262-9526684e5780@de.bosch.com>
- <5603f393-554d-e2a8-c2d8-6bafc20f4169@cogentembedded.com>
- <cba1e2ec-4896-23ef-ef7b-0f80d4310127@de.bosch.com>
-In-Reply-To: <cba1e2ec-4896-23ef-ef7b-0f80d4310127@de.bosch.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMTllNjBiYmUtNTcyYi0xMWVhLWFhNWQtOTRlNmY3Njc5M2FlXGFtZS10ZXN0XDE5ZTYwYmJmLTU3MmItMTFlYS1hYTVkLTk0ZTZmNzY3OTNhZWJvZHkudHh0IiBzej0iNjQ1IiB0PSIxMzIyNzAzODkyMjg3MjYyNDkiIGg9ImQ1TTk1L3RaVFVoS216a2lqbGFkRkxEUDZIYz0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-x-dg-rorf: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Chris.Brandt@renesas.com; 
-x-originating-ip: [24.206.39.126]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9d978d6b-821c-4919-e4a4-08d7b94effbb
-x-ms-traffictypediagnostic: TY1PR01MB1612:|TY1PR01MB1612:
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-microsoft-antispam-prvs: <TY1PR01MB16128BA4CAFDA845C48F84A38AEC0@TY1PR01MB1612.jpnprd01.prod.outlook.com>
-x-ms-exchange-transport-forked: True
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 032334F434
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(136003)(39860400002)(376002)(396003)(366004)(189003)(199004)(33656002)(4326008)(71200400001)(8936002)(478600001)(81166006)(2906002)(26005)(52536014)(81156014)(8676002)(4744005)(6506007)(9686003)(55016002)(316002)(64756008)(7696005)(186003)(66946007)(5660300002)(76116006)(86362001)(110136005)(66476007)(66556008)(66446008)(54906003);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1612;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Yq3Bv3KLR/vQuXiUOJCDl46Vg8h35RZg0iAwqslVmlPoFMdDbWLnMAIjiSEL5MwyNXjIA7BZyvo34EOBeMYg2cmGfTBHREhxwymrP67l7GO7xdTLN6xWAo/vuHZNTKbp4IgYfrWnUOtNMnjItyXyo/QZO9DXi85lWFHKxvCi3vXfFj9HnA/7EHSbq4BqEi0VAnt8CUD1ENvZux7Gh/AZfZO/v7JzzOIsvqtEkaxe4zITvlSCfzqUbdhyO2ZCIw7GqGXmoN5k6bk6WjbLHBrxNzaVhy/j6FZWq1/al5acPT6tw8tcXGrXH7E7apfy+9UV2HhvMqXgvnAytf3UcIvKJkPIwslp4qd91KeqrjP4xKSZgZQO2FKO7gGHWEgkx1IrfScQKOlnOJds0UnakxK2IhVGTn8rkMlivSz6Ut0iInv0qpqgH8+LMbapn/w0+/Rp
-x-ms-exchange-antispam-messagedata: G0MEB7gEM9YB2PuO3JuBfeJtNIDCgDjg1WbVKKDib0Kuo7Nuwf9dT3OttQ6OKiiKVED1v2O2A8GUHn+55AURDE3oBnpAV9/AboL98kVmfIt3A7cObO6GktCjbqiKT3YJivElWZHMrozZC1AQgDfkHQ==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727854AbgBXS15 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Feb 2020 13:27:57 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34240 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727483AbgBXS15 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Feb 2020 13:27:57 -0500
+Received: by mail-oi1-f195.google.com with SMTP id l136so9885896oig.1;
+        Mon, 24 Feb 2020 10:27:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8b3MliEDFbDrUpBm8jGhwYqreoGs6m8FNnF/yNIueEU=;
+        b=BkRg2/6gEsYakveiAVaz5/SLu28xZ5uKrq6Zg22HgyTQAjavyWMUPy8gNAfUV4xorW
+         E++f5oMa/9O5R6BH3cxB/tP1qodo6qjrXebTii0dtv0aI9Q4qcn7fuXtC8DF8A1HGlOI
+         0PcZFnSVYDSJxwgi4xl53s550fCKeqh4rmkcykM17IsyJn1MZU6Po3uujNL1SWDFxkOW
+         kYRia9cw9SWa0lSLVJ49ng5z4RTTDYDuISpOExK1XcLnn8CDW6Mf41jIX/p+3KkGJsAS
+         Bvw4iR593L59oPXqYg2TPTOHhHwZ+YqmzHe9ip0zWM6ZdYyD3HIRnBed5GKcYXh/TRBL
+         +kmw==
+X-Gm-Message-State: APjAAAWzU2PAOj6NnKUk0FWL4zDcNmVEmfkyRHNsA2p6PVA9OADeof/1
+        CyzdZRNMreOwTzLvaZqPjQ==
+X-Google-Smtp-Source: APXvYqyzy4iiGXu+ZZ3t2yBP3j4K/yU2pKb0H/blTr6+iujeHVCL8mJihe7tO3CjLAVcADKqUCNWGQ==
+X-Received: by 2002:aca:bfc2:: with SMTP id p185mr318449oif.57.1582568876626;
+        Mon, 24 Feb 2020 10:27:56 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v10sm4255017oic.32.2020.02.24.10.27.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2020 10:27:56 -0800 (PST)
+Received: (nullmailer pid 13156 invoked by uid 1000);
+        Mon, 24 Feb 2020 18:27:55 -0000
+Date:   Mon, 24 Feb 2020 12:27:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Piotr Sroka <piotrs@cadence.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: Re: [PATCH] docs: dt: fix several broken doc references
+Message-ID: <20200224182755.GB27161@bogus>
+References: <0e530494349b37eb2eab4a8eccf56626e0b18e6d.1582448388.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d978d6b-821c-4919-e4a4-08d7b94effbb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2020 17:28:44.4216
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: x1/B7uR99zlAfGMHgZaisWmB/5u6jbiiUi+nZTKpDUKtsjpf3RExw/H82rLClptOAhv/6Oyv9lh4AsTJJFuaMN36vRYqDrhHnlv0txD1ZrY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1612
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0e530494349b37eb2eab4a8eccf56626e0b18e6d.1582448388.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gTW9uLCBGZWIgMjQsIDIwMjAgMSwgQmVobWUgRGlyayAoQ00vRVNPMikgd3JvdGU6DQo+ID4g
-ICAgIEJUVywgeW91ciBwYXRjaCBoYWQgd2hpdGVzcGFjZSBydWluZWQsIEkgaGFkIHRvIGFwcGx5
-IGl0IGJ5IGhhbmQsIHlvdSdkDQo+IGJldHRlcg0KPiA+IGF0dGFjaCB0aGUgcGF0Y2hlcywgbm90
-IHBhc3RlLiA6LS8NCj4gDQo+IA0KPiBPay4gVGhlcmUgYXJlIG90aGVyIG1haWxpbmcgbGlzdHMg
-Y29tcGxhaW5pbmcgYWJvdXQgYXR0YWNobWVudHMgOykNCj4gDQo+IEV2ZW4gYmV0dGVyLCBtYXli
-ZSB3ZSBzaG91bGQgcHV0IHdoYXQgd2UgaGF2ZSBzbyBmYXIgcHVibGljbHkgYW55d2hlcmUsDQo+
-IGUuZy4gZ2l0aHViLg0KDQpUaGF0IHdvdWxkIGJlIGdvb2QgZm9yIG1lIGFzIHdlbGwgc2luY2Ug
-SSdtIGFsc28gdHJ5aW5nIHRvIG1ha2Ugc3VyZSB0aGUNClNQSSBtb2RlIHdvcmtzIHdpdGggdGhl
-IFJaL0EgZGV2aWNlcywgYW5kIEkndmUgYWxyZWFkeSBwb2ludGVkIG91dCBzb21lDQpjaGFuZ2Vz
-IHRoYXQgYXJlIG5lZWRlZCBpbiB0aGUgY29kZSBmb3IgdGhhdC4NCg0KQ2hyaXMNCg==
+On Sun, Feb 23, 2020 at 09:59:53AM +0100, Mauro Carvalho Chehab wrote:
+> There are several DT doc references that require manual fixes.
+> I found 3 cases fixed on this patch:
+> 
+> 	- directory named "binding/" instead of "bindings/";
+> 	- .txt to .yaml renames;
+> 	- file renames (still on txt format);
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  .../devicetree/bindings/mtd/cadence-nand-controller.txt       | 2 +-
+>  .../devicetree/bindings/net/brcm,bcm7445-switch-v4.0.txt      | 2 +-
+>  Documentation/devicetree/bindings/sound/st,stm32-sai.txt      | 2 +-
+>  Documentation/devicetree/bindings/sound/st,stm32-spdifrx.txt  | 2 +-
+>  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml       | 2 +-
+>  MAINTAINERS                                                   | 4 ++--
+>  .../devicetree/bindings/net/wireless/siliabs,wfx.txt          | 2 +-
+>  7 files changed, 8 insertions(+), 8 deletions(-)
+
+Applied.
+
+Rob
