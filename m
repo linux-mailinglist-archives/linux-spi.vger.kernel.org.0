@@ -2,132 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5776B16B3C9
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2020 23:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C124216B87F
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 05:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727895AbgBXWWa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Feb 2020 17:22:30 -0500
-Received: from foss.arm.com ([217.140.110.172]:43584 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727219AbgBXWW3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 Feb 2020 17:22:29 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AB2330E;
-        Mon, 24 Feb 2020 14:22:29 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A46033F534;
-        Mon, 24 Feb 2020 14:22:28 -0800 (PST)
-Date:   Mon, 24 Feb 2020 22:22:27 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Applied "spi: pxa2xx: Return error codes from pxa2xx_spi_init_pdata()" to the spi tree
-In-Reply-To:  <20200224154556.11627-1-andriy.shevchenko@linux.intel.com>
-Message-Id:  <applied-20200224154556.11627-1-andriy.shevchenko@linux.intel.com>
-X-Patchwork-Hint: ignore
+        id S1728866AbgBYEWv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Feb 2020 23:22:51 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:43034 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728846AbgBYEWv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Feb 2020 23:22:51 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01P4McYq094534;
+        Mon, 24 Feb 2020 22:22:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1582604558;
+        bh=8NLi7cw0d43h3KP2wLcX6Hi+4ea89ZXHogFykOYGuUA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=earoyNgH28VwWk9S7AOl+5+V19RAaxqD54D2fl24aYeO0yOAllab6mwDjUtIU01+w
+         UsSXMwoGfJdg7FDrhuEnWWTh8fhgm7Cm6Ph/CIxXOYc2XNAsxSWwgxFwPeatDwTG27
+         Iug2Vi58QU3r0TflbskLY+442+39e4i6UDlMP61k=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01P4Mc3B015312
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Feb 2020 22:22:38 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 24
+ Feb 2020 22:22:37 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 24 Feb 2020 22:22:37 -0600
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01P4MX6o075757;
+        Mon, 24 Feb 2020 22:22:34 -0600
+Subject: Re: [PATCH v10 0/2] spi: cadence-quadpsi: Add support for the Cadence
+ QSPI controller
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <broonie@kernel.org>
+CC:     <robh+dt@kernel.org>, <simon.k.r.goldschmidt@gmail.com>,
+        <dinguyen@kernel.org>, <tien.fong.chee@intel.com>, <marex@denx.de>,
+        <cheol.yong.kim@intel.com>, <qi-ming.wu@intel.com>
+References: <20200219022852.28065-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <99f7e23f-268d-f32b-086f-4a46fc232ce9@ti.com>
+Date:   Tue, 25 Feb 2020 09:53:12 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
+MIME-Version: 1.0
+In-Reply-To: <20200219022852.28065-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+Hi,
 
-   spi: pxa2xx: Return error codes from pxa2xx_spi_init_pdata()
+On 19/02/20 7:58 am, Ramuthevar,Vadivel MuruganX wrote:
+[...]
+>     CHECK   Documentation/devicetree/bindings/spi/cdns,qspi-nor.example.dt.yaml
+> 
+> Ramuthevar Vadivel Murugan (2):
+>   dt-bindings: spi: Add schema for Cadence QSPI Controller driver
+>   spi: cadence-quadpsi: Add support for the Cadence QSPI controller
+> 
+>  .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 147 +++++
+>  drivers/mtd/spi-nor/Kconfig                        |  11 -
+>  drivers/mtd/spi-nor/Makefile                       |   1 -
+>  drivers/spi/Kconfig                                |   8 +
+>  drivers/spi/Makefile                               |   1 +
+>  .../spi-cadence-quadspi.c}                         | 641 ++++++++++-----------
+>  6 files changed, 459 insertions(+), 350 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
 
-has been applied to the spi tree at
+You will have to remove old bindings as well. Also please CC linux-mtd
+list as these patches touch drivers/mtd/*
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+Just run scripts/get_maintainer.pl on your patches to get list of
+mailing list and people to CC
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+>  rename drivers/{mtd/spi-nor/cadence-quadspi.c => spi/spi-cadence-quadspi.c} (73%)
+> 
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 14af1df3b03309f6204661e12c40cdf71bc8f773 Mon Sep 17 00:00:00 2001
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 24 Feb 2020 17:45:55 +0200
-Subject: [PATCH] spi: pxa2xx: Return error codes from pxa2xx_spi_init_pdata()
-
-For better understanding what's going on on error path,
-return distinguished error codes instead of NULL pointer.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20200224154556.11627-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-pxa2xx.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 4c7a71f0fb3e..934bfe2c8a90 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1548,18 +1548,18 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 	else if (pcidev_id)
- 		type = (enum pxa_ssp_type)pcidev_id->driver_data;
- 	else
--		return NULL;
-+		return ERR_PTR(-EINVAL);
- 
- 	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
- 	if (!pdata)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 
- 	ssp = &pdata->ssp;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	ssp->mmio_base = devm_ioremap_resource(&pdev->dev, res);
- 	if (IS_ERR(ssp->mmio_base))
--		return NULL;
-+		return ERR_CAST(ssp->mmio_base);
- 
- 	ssp->phys_base = res->start;
- 
-@@ -1573,11 +1573,11 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 
- 	ssp->clk = devm_clk_get(&pdev->dev, NULL);
- 	if (IS_ERR(ssp->clk))
--		return NULL;
-+		return ERR_CAST(ssp->clk);
- 
- 	ssp->irq = platform_get_irq(pdev, 0);
- 	if (ssp->irq < 0)
--		return NULL;
-+		return ERR_PTR(ssp->irq);
- 
- 	ssp->type = type;
- 	ssp->dev = &pdev->dev;
-@@ -1634,9 +1634,9 @@ static int pxa2xx_spi_probe(struct platform_device *pdev)
- 	platform_info = dev_get_platdata(dev);
- 	if (!platform_info) {
- 		platform_info = pxa2xx_spi_init_pdata(pdev);
--		if (!platform_info) {
-+		if (IS_ERR(platform_info)) {
- 			dev_err(&pdev->dev, "missing platform data\n");
--			return -ENODEV;
-+			return PTR_ERR(platform_info);
- 		}
- 	}
- 
 -- 
-2.20.1
-
+Regards
+Vignesh
