@@ -2,94 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD4516BF3A
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 12:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C28CF16C02F
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 13:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728913AbgBYLAN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Feb 2020 06:00:13 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:38062 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726916AbgBYLAM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 06:00:12 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01PAxki2096227;
-        Tue, 25 Feb 2020 04:59:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582628386;
-        bh=4SXC0So5Cf5UBNuGctQdmvRSYNGGE7hSlqUpZblF06M=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=mJps6WqQVeD5qiy57T3qc/hTqJRxnP2d4kJ6JIPQC/BmTDl3bIch8c4OiqY0++6oc
-         hiIk9nyjxnaB0i4+ST4E6v/UkVYbOhD0XlP6rD3Fk+/pvDsoXGq6NeJvcyUvUsAvvm
-         pqQNlImsDzmsXN0abhGSPhnPktDVRJAkGd6JkI58=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01PAxkTd077900
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Feb 2020 04:59:46 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 25
- Feb 2020 04:59:46 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 25 Feb 2020 04:59:46 -0600
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01PAxg21055523;
-        Tue, 25 Feb 2020 04:59:43 -0600
-Subject: Re: [PATCH v10 1/2] dt-bindings: spi: Add schema for Cadence QSPI
- Controller driver
-To:     "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        <simon.k.r.goldschmidt@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>, <tien.fong.chee@intel.com>,
-        =?UTF-8?Q?Marek_Va=c5=a1ut?= <marex@denx.de>,
-        <cheol.yong.kim@intel.com>, <qi-ming.wu@intel.com>
-References: <20200219022852.28065-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200219022852.28065-2-vadivel.muruganx.ramuthevar@linux.intel.com>
- <CAL_JsqKJky=y4nhECUFVzTYvEpjFoOH_6UY9uZG5bvBVWq=SYQ@mail.gmail.com>
- <64b7ab12-0c11-df25-95e7-ee62227ec7ec@linux.intel.com>
- <85178128-4906-8b1a-e3f1-ab7a36ff8c23@ti.com>
- <c119a70d-b7ef-ab1b-4590-7ac77395297f@linux.intel.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <8c329860-84fd-463b-782f-83a788998878@ti.com>
-Date:   Tue, 25 Feb 2020 16:30:21 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1729163AbgBYMEl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Feb 2020 07:04:41 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39474 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725851AbgBYMEj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 07:04:39 -0500
+Received: by mail-wr1-f65.google.com with SMTP id y17so5610885wrn.6
+        for <linux-spi@vger.kernel.org>; Tue, 25 Feb 2020 04:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=bZwPA3RGwD8pU8aBxNxgLZ7Z78acc8f6Au1L1blgYZs=;
+        b=RuoVrntUjxMkKp/DGeRRH5Rb5SXvh1z9Wy2+xBsTVq2/lFj3Qyfff8+z8IZnBoQmCH
+         FapxQbhdbn2R3+qqRbZhYIGEspdsBHPiAqb65ZqMo8dQ/QMicsv+/Xt7v6EB7ZisEBIE
+         UH/xvfPTryCOIvUPfsjvlOm3teoD4vITJU3gUKPjT/0xkxfLvU0AFfEe4l5xjogXTGwK
+         44vkbO20tfpFJ50TbtNoTd3/INyWHxpy4wluLMMPzx2E4jhWZPAxBEyYLl2STTlVYOSW
+         v0VYNBNYWkwKoJhVZ1DY+3nDH1XoFfKGfr+bx4WiZwRyWiw3Iy403k11rEWQWI1q4tT0
+         jcAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=bZwPA3RGwD8pU8aBxNxgLZ7Z78acc8f6Au1L1blgYZs=;
+        b=lzFM+Sxt/vgEWAquTsJ/7TErP6C+jRoz5lfd9XuSgaA8GYiyp6BQPwugcWyh89gwi5
+         oIVAX2qjrVvOYbF3xr5r7BFOkc8humWFMTSfhz0vfXhJKpRLzIajr7Aa+GlCJAFNbq8t
+         IQzcYZ/JYp2eV4E9jio1P33wvm5b0A6HcbKPDXz9113eJIw+ksCHZ32Vn9S0fQAEjItd
+         MkVXwegSru2uEM/CClPnbBdAM2UH2I9UjUdOX7NVjZOkRWP1zT562rcWUH8Dee7YM69b
+         23TtUd6mKNjDfe9IsedyHxr7lyp2VxvCuqqjRdes9ndzvGaX8Buu84ypl4vzfVCUrdrh
+         newg==
+X-Gm-Message-State: APjAAAXaUVk11om6TqsP+NIvrI6YMyYFOUNlihLSwBT7tBJpgCtnIqHp
+        2MVv1NyxBqWxn1CesjD4jf6Plog6FtA7dyvXjj0=
+X-Google-Smtp-Source: APXvYqzhhXfMcw+Nub2bB882QV+q7F54yGp2AN9SL9LoGAFkbvFuljzIiYIrVRFi5H52UKNV3rcW39ZTQlfWgnNQtn4=
+X-Received: by 2002:a05:6000:149:: with SMTP id r9mr68666027wrx.147.1582632277159;
+ Tue, 25 Feb 2020 04:04:37 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <c119a70d-b7ef-ab1b-4590-7ac77395297f@linux.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Received: by 2002:a5d:4b82:0:0:0:0:0 with HTTP; Tue, 25 Feb 2020 04:04:36
+ -0800 (PST)
+From:   "fedmfiinance10@gmail.com" <fedmfiinance10@gmail.com>
+Date:   Tue, 25 Feb 2020 12:04:36 +0000
+Message-ID: <CAHbjaFD9V_JZW4BW+ugqEi6JqHb=8fgfTLuhhJqB-QwehYA=EA@mail.gmail.com>
+Subject: Prompt reply would be greatly appreciated
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+RE: LOAN FACILITY
 
+Have you been trying to obtain a Loan from any of the Banks or Loan
+Companies and they have refused to grant you Loan due to bad credit?.
+We have Loan facility at a low Interest Rate of 3% annually for a
+duration of 15 years with 24 months moratorium period.
 
-On 25/02/20 1:08 pm, Ramuthevar, Vadivel MuruganX wrote:
->>>>> +
->>>>> +  cdns,fifo-depth:
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +    description:
->>>>> +      Size of the data FIFO in words.
->>>> A 4GB fifo is valid? Add some constraints.
->>> 128 is valid, will update.
->> Nope, the width of this field is 8bits -> 256 bytes 
-> 
-> correct me if I am wrong, the width of this field is 4bits -> 128 bytes
-> (based on QUAD mode) .
+The categories of Loan facility offered include but not limited to:
+Business Loan, Personal Loan, Company Loan, Mortgage Loan, Debt
+consolidation and financial funding for both turnkey and mega projects
+etc.
 
-This has nothing to do with quad-mode. Its about how much SRAM amount of
-SRAM is present to buffer INDAC mode data. For TI platforms this is 256
-bytes.
-See CQSPI_REG_SRAMPARTITION definition in your datasheet.
+Should you find this interesting, kindly get in touch with your
+business plan for details, terms and conditions and share your
+WhatsApp line for easy communication.
 
--- 
-Regards
-Vignesh
+Prompt reply would be greatly appreciated
+
+Best Regards,
+Mr. Shabab Isaac
+CONSULTANTS OF FINANCIAL SERVICES LIMITED
+57 Frederick Road, Sutton, Surrey,
+SM1 2HP United Kingdom
+Company number: 08898840
+Phone: +44-7452379198  / WhatsApp: +44-7978379923
