@@ -2,73 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A903916EA98
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 16:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7B516EC8B
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 18:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730957AbgBYPx5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Feb 2020 10:53:57 -0500
-Received: from foss.arm.com ([217.140.110.172]:52506 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730309AbgBYPx5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 25 Feb 2020 10:53:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B96681FB;
-        Tue, 25 Feb 2020 07:53:56 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DF223F703;
-        Tue, 25 Feb 2020 07:53:56 -0800 (PST)
-Date:   Tue, 25 Feb 2020 15:53:54 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "Herbrechtsmeier Dr.-Ing. , Stefan" 
-        <stefan.herbrechtsmeier-oss@weidmueller.com>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: Execute spi transfers inside FIQ (NMI) or panic
-Message-ID: <20200225155354.GF4633@sirena.org.uk>
-References: <b22800b8-9c03-63a5-7ade-d8b63c562580@weidmueller.com>
+        id S1728515AbgBYRbk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Feb 2020 12:31:40 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:46036 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728200AbgBYRbk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 12:31:40 -0500
+Received: by mail-ot1-f66.google.com with SMTP id 59so232706otp.12;
+        Tue, 25 Feb 2020 09:31:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QS0K6caHcm4ENnIoTn05eBvdx/7W9kVs7Tic77EWV3U=;
+        b=nXTVk2CXW9DCWQZJahPfRuzJORSuUNQh5tK+WuM03Ex0gW/O9MLcJW2beosFG3oqOg
+         Rpa60w76YL7vppNDVffMtu4kktDjN36kUcLW3lf31MAZcePrNjFH1uKYQb1Inxi6Apgn
+         B2321KO8isIV4jB9M2DVTqwADyjxC/4bfIFjkOirCoia/pgo8R6SQWJuqloWbCm5hBKX
+         JSyi6MlC9NGqJO7ZuQ6fDquN+pNf8HEvVFPoBIVwS1NvOiDQdCa9Gi8LhClma21ZoNXA
+         IcBqGYpJP9G2iEuWcO1o4QfhAdCCwMPS7nupLXB8grIQ3nTXgcV++2f3YnfesQmTsJ88
+         TFFA==
+X-Gm-Message-State: APjAAAVl1M16Mq41ffapx9X7XtPRUvMdal+Ov80n/bQwPSXJYuZmY5BX
+        KjJU+sUmFwNQ2kSQyphyXQ==
+X-Google-Smtp-Source: APXvYqwB2+0s7QgvbO4hUWGFqaHT7kZzFUz3IlneivicGP+fTVhYNubNwANumJrX5ONqlNtblqsZ9g==
+X-Received: by 2002:a9d:7559:: with SMTP id b25mr44320296otl.189.1582651899014;
+        Tue, 25 Feb 2020 09:31:39 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l12sm5915266oth.9.2020.02.25.09.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2020 09:31:38 -0800 (PST)
+Received: (nullmailer pid 2861 invoked by uid 1000);
+        Tue, 25 Feb 2020 17:31:37 -0000
+Date:   Tue, 25 Feb 2020 11:31:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] rewrite mtk-quadspi spi-nor driver with spi-mem
+Message-ID: <20200225173137.GA31830@bogus>
+References: <20200215065826.739102-1-gch981213@gmail.com>
+ <20200218125557.GD4232@sirena.org.uk>
+ <CAJsYDVL03KJv7eewGekBPCfpbOuTX0tJ6qZaydvJnBDzZ5vEwg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z+pzSjdB7cqptWpS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b22800b8-9c03-63a5-7ade-d8b63c562580@weidmueller.com>
-X-Cookie: Booths for two or more.
+In-Reply-To: <CAJsYDVL03KJv7eewGekBPCfpbOuTX0tJ6qZaydvJnBDzZ5vEwg@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, Feb 20, 2020 at 07:58:06AM +0800, Chuanhong Guo wrote:
+> Hi!
+> 
+> On Tue, Feb 18, 2020 at 8:55 PM Mark Brown <broonie@kernel.org> wrote:
+> > This is an ABI break so you shouldn't be doing this, if the existing
+> > binding works it should continue to work.
+> 
+> The missing spi-max-frequency is the only part preventing old
+> device tree to work with this driver.
+> If the goal is to make existing dt binding work, I could patch dt using
+> of_add_property in v2. I saw similar device tree patching for legacy
+> bindings in pinctrl-single driver.
 
---z+pzSjdB7cqptWpS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+You should should really only need 'spi-max-frequency' if the max freq 
+is less than the minimum of the host and device max freq.
 
-On Tue, Feb 25, 2020 at 02:27:27PM +0100, Herbrechtsmeier Dr.-Ing. , Stefan wrote:
-
-> would it be acceptable to add an additional function to the struct
-> spi_controller which handle a transfer inside a NMI context or a panic? The
-> new function will transfer data via register polling without any lock.
-
-That would need to happen as part of a wider change that made it
-possible to use such an interface safely and did so, off the top of my
-head it's not immediately obvious how one would do that.  You'd need to
-get the hardware into a sensible state and then do whatever needs doing
-with some cooperation from the client driver in all this which is a bit
-of an ask.  It's not a trivial bit of work, but I do see the use case
-and it's absolutely valid.
-
---z+pzSjdB7cqptWpS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5VQxEACgkQJNaLcl1U
-h9BInAf/QelYi6vedS0fjXl7PL92uXstsOeFOuEGEl/vYzP803jTtV9R0y9+kmoX
-eeKw19ZFzYETL46DA/qGVExWzl4QX2Gx/fE47+v6Fg0G+Cp9hvWztHmXzP+hGAWF
-fPYSkkHON5jwV7vk0kw0WsPJs5dhtghRVWtHv2IY2VoA6582rPJzJ/y1ZLcMrFDv
-JDQJ1hF/vDDZ5SLp5/9VLhVOypzC67KeVYqA/FLlM842afPApvG6K++dPHEosRzg
-L+BzEPP7xSBh3zTNbJghvwSwiHFYFvNTadJ85pFcBLi+nsPebkpmPhzuH3UBkOfp
-H4TNpg+SjABi7ZtHh2MBiBnO2kGj0w==
-=Er1+
------END PGP SIGNATURE-----
-
---z+pzSjdB7cqptWpS--
+Rob
