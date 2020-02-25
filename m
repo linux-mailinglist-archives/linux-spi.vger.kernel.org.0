@@ -2,158 +2,272 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F7716BB5E
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 08:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0CC16BD56
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 10:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729124AbgBYH4g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Feb 2020 02:56:36 -0500
-Received: from mail-mw2nam12on2069.outbound.protection.outlook.com ([40.107.244.69]:9505
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729065AbgBYH4g (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 25 Feb 2020 02:56:36 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZMDn0bgmxAK4IzKRwOvdB8jzFNQaTNdCxoPIkGMnJA7uCboZV3KGSi1Oc5CIXmayhNNAeO9AzH0mY8jj4ybRv7oPPmWne/lzCeibI7CmpHFRtACpXkYMbZwWvDGuS/o05i3Y69XiuX/pf3bP7HPWLd/oqPicXvE+KUoOopI9hIJk76yCXeT9sngiBGnDmxV0WzqZA6O1Fi0IB9YVzQJT7p7JWqZNScKrfmK/fY853ULodoBX/K6R8egiKXkX9Wx539VRfnbKIf4F5pQFBtNtiymedLkgMwyM9g5Ap2x8MnZfIygc0FQoB9Z2xI4Q6b1oeHsJc4PODOvcUTgCCgZqCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6hBoBTh/5Ex/Qx85Xj2py8+sSuNp75X1TF4ineXm2tM=;
- b=edeqzw5la5LXSQCaKbK3bKDeUVZ1GNxvIsmjcvwiHHXYpzfpwWRfCieDhwMv8WUpO3UCyZl6Dwcv80MrjouxYf5ZbZRgGwTRS9f/4/qBKl1Sly29Gsvfxp1Sv/sAE+tWTWH/dtChR9FjVzpGTTiPaQAwogKGx0shXmXDv548qkKvzcdrm0nOGsd+oB/zrzE2vEVstA6IaqeY6CMZwvYLho1FOyNS9AeHtg4dgptad5UfZVggIPUL2J/xFk7kxwkrmeeXaqGSL+OWwMAbMC0sDtVqlNj4R2/gXZMv5Kvem/ywVJNHmEDdQxXOnkAG99hB/8yPqvdM8ZfsCDmAKVpo/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=gmail.com smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6hBoBTh/5Ex/Qx85Xj2py8+sSuNp75X1TF4ineXm2tM=;
- b=qmJDTyot2QUvkZU+i2XCmbwJ9tJwreWPYuN0STR/NFvMxMZ3gL/fSmFuwfbOC64tRPH1FTg0qAsSCaVH1hLFDWsVTRgNzQS7hbTfs+XHLs7By5bOLRgR2lKVyj6koLe59OUuYsvf8QVEUQV3bK97W61Yo0QV6qhkHiWSeFvZ9ME=
-Received: from CY4PR06CA0026.namprd06.prod.outlook.com (2603:10b6:903:77::12)
- by SN6PR02MB5439.namprd02.prod.outlook.com (2603:10b6:805:e6::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2750.21; Tue, 25 Feb
- 2020 07:56:32 +0000
-Received: from CY1NAM02FT064.eop-nam02.prod.protection.outlook.com
- (2603:10b6:903:77:cafe::d6) by CY4PR06CA0026.outlook.office365.com
- (2603:10b6:903:77::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2750.18 via Frontend
- Transport; Tue, 25 Feb 2020 07:56:32 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- CY1NAM02FT064.mail.protection.outlook.com (10.152.74.64) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2750.19
- via Frontend Transport; Tue, 25 Feb 2020 07:56:32 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1j6V4x-0001SH-J2; Mon, 24 Feb 2020 23:56:31 -0800
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1j6V4s-00052G-GE; Mon, 24 Feb 2020 23:56:26 -0800
-Received: from xsj-pvapsmtp01 (maildrop.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 01P7uOrg028738;
-        Mon, 24 Feb 2020 23:56:24 -0800
-Received: from [172.30.17.108]
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <michals@xilinx.com>)
-        id 1j6V4p-000529-Tr; Mon, 24 Feb 2020 23:56:24 -0800
-Subject: Re: [PATCH] spi/zynqmp: remove entry that causes a cs glitch
-To:     Thommy Jakobsson <thommyj@gmail.com>, broonie@kernel.org,
-        michal.simek@xilinx.com, linux-spi@vger.kernel.org,
-        naga sureshkumar relli <naga.sureshkumar.relli@xilinx.com>
-References: <20200224162643.29102-1-thommyj@gmail.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <b705ab09-b4ce-29f2-448f-cca5556f848c@xilinx.com>
-Date:   Tue, 25 Feb 2020 08:56:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729306AbgBYJdR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Feb 2020 04:33:17 -0500
+Received: from de-out1.bosch-org.com ([139.15.230.186]:49508 "EHLO
+        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727114AbgBYJdR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 04:33:17 -0500
+X-Greylist: delayed 100007 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Feb 2020 04:33:13 EST
+Received: from fe0vm1649.rbesz01.com (unknown [139.15.230.188])
+        by fe0vms0186.rbdmz01.com (Postfix) with ESMTPS id 48RYdM2T2Hz1XLFrl;
+        Tue, 25 Feb 2020 10:33:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
+        s=key3-intmail; t=1582623191;
+        bh=WQzLc8ik3inJZMK5lCJ26mkvaboYo4pT75ge25HpFt4=; l=10;
+        h=Subject:From:From:Reply-To:Sender;
+        b=U1ERJ/S2r91Id0F5sgo60BDJXyoxBx6MgP93B4JlySLPvqOn8QfGFDe3QjKbJJ/54
+         Vctb/Q5pJMCgaWGoxBdD1M1/m0iyH1k3ZaQViyLLOg3NyW6+3uZ7wY1ircIa+vRFXv
+         s5aEsGGqJuanrGXtV/2+b8rPE+cOX6N1mz5QFUg8=
+Received: from fe0vm1740.rbesz01.com (unknown [10.58.172.176])
+        by fe0vm1649.rbesz01.com (Postfix) with ESMTPS id 48RYdM2CG1z1xD;
+        Tue, 25 Feb 2020 10:33:11 +0100 (CET)
+X-AuditID: 0a3aad14-a97ff700000047f7-00-5e54e9d61bdb
+Received: from si0vm1949.rbesz01.com ( [10.58.173.29])
+        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by fe0vm1740.rbesz01.com (SMG Outbound) with SMTP id 04.0F.18423.7D9E45E5; Tue, 25 Feb 2020 10:33:11 +0100 (CET)
+Received: from FE-HUB2000.de.bosch.com (fe-hub2000.de.bosch.com [10.4.103.109])
+        by si0vm1949.rbesz01.com (Postfix) with ESMTPS id 48RYdL6W4Fz6CjZNt;
+        Tue, 25 Feb 2020 10:33:10 +0100 (CET)
+Received: from [10.34.222.178] (10.34.222.178) by FE-HUB2000.de.bosch.com
+ (10.4.103.109) with Microsoft SMTP Server id 15.1.1847.3; Tue, 25 Feb 2020
+ 10:33:10 +0100
+Subject: Re: [PATCH RFC 2/2] memory: add Renesas RPC-IF driver
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        <linux-spi@vger.kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        <linux-renesas-soc@vger.kernel.org>
+References: <cb7022c9-0059-4eb2-7910-aab42124fa1c@cogentembedded.com>
+ <4db876ed-1ccc-e3be-311d-30cd52f40259@cogentembedded.com>
+ <5760bcdb-e44b-6f18-7262-9526684e5780@de.bosch.com>
+ <5603f393-554d-e2a8-c2d8-6bafc20f4169@cogentembedded.com>
+ <cba1e2ec-4896-23ef-ef7b-0f80d4310127@de.bosch.com>
+ <ec545462-54ed-9e23-049e-1807d24ec084@cogentembedded.com>
+From:   "Behme Dirk (CM/ESO2)" <dirk.behme@de.bosch.com>
+Message-ID: <3a182ac7-8d41-cdc7-2b87-7c503f68a426@de.bosch.com>
+Date:   Tue, 25 Feb 2020 10:33:10 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200224162643.29102-1-thommyj@gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <ec545462-54ed-9e23-049e-1807d24ec084@cogentembedded.com>
+Content-Type: multipart/mixed;
+        boundary="------------A266F512431D32413D4D0BF3"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(136003)(396003)(346002)(39860400002)(376002)(189003)(199004)(356004)(316002)(2616005)(44832011)(5660300002)(70586007)(26005)(186003)(6636002)(8936002)(426003)(9786002)(36756003)(478600001)(31696002)(336012)(2906002)(110136005)(8676002)(70206006)(31686004)(81166006)(81156014);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR02MB5439;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9ff0956f-d4d8-4868-2eb5-08d7b9c83a77
-X-MS-TrafficTypeDiagnostic: SN6PR02MB5439:
-X-Microsoft-Antispam-PRVS: <SN6PR02MB5439476F46EF31B5D57D7FD3C6ED0@SN6PR02MB5439.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-Forefront-PRVS: 0324C2C0E2
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4wC/kPIHUAE3jQ6YoqaVAEtk46bGi+BFb4RtjIMjD/RiuecHFvB/G0iIcd03vWwbKP33SV+E5QNcKY7mAop2yruaZ1+eb3VvwZKP92cgD6N1kh+XvZmnJVMSYeu+y0etyQ1BXMiWuSckFBqvnqPQEkQ0dtXORB07krYL5UNey8ZYQscg3jf3+Sh7Yv832sF01Stmo9jo6w1gWNapuUa5Ys+ffl7oWOJ0nf559pL9ghLigGudeRN19Nady4wBxly3T+HxU0XpXo0cXEwLAxJtgqDSqcU5i7Da0CVuf4CRDaaALfECtD7xmkugFlaSjSUdJcahPWtPqtulnipEwUER9v+hvQwN6ikmHh6xoA03yuFvak2zdprMzX56WFSzY0Ysc0df4/mZAOz/g3trKKyhKH8qlRX7Om/BdhvBBm7Rgl5OTrzDO8wgTKiG03uH5bOp
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2020 07:56:32.0410
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ff0956f-d4d8-4868-2eb5-08d7b9c83a77
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB5439
+X-Originating-IP: [10.34.222.178]
+X-Brightmail-Tracker: H4sIAAAAAAAAA21TfUwTdxjmd73Sa8e560HltSKERrLEOCzqtkYX3D9zTZZFM82WMMGVcaUd
+        0GJbnLAv2AJiRT6GgBQsG6uToI2EzYE6Hal1sYwBUzYYH4KEDSiIHwRlImN3XLFNtn/ePL/n
+        fZ/n/bgcIaAnCDmhN1gYk0GTrgiW4JJtznXP907uTVKWFSBVXdUxXFXn7hSqbl6sDVadn5zB
+        VHn3/xCpjvw0hVRDt67jqo7GftErhHqkYglTdzucweqSRaX6YUcZrp5tjtwtTJC8nMKk6w8y
+        pk3x70p0BdZiLLPhjUMPB4rxXOTZaUViAqitMHmuJdiKJARNVWHw26MSEf+4gqD47je+x2kE
+        3950CDhJKBUP0/kFQg6HUSoYyqvHuSIBtYTg3oVCxCv+xOBc07CIqwqmXoQphw1xmKR2wI2G
+        XIzDOBUDVV1Ty1hGJUJfdSHG10jBUz3GuhKEmNoJLQMxHC2gdsPtvxpEPA6H/rE6jN8hGs4P
+        HReVIqktQG0LkNgCJDxWQXVdF+JxFLTcqRXwOBM67k0LeRwNx4/e9mnfh/HefB8+AP0FV7H/
+        1nwCRZcLhV+iZxqRTMsoD2bEvbRVGWtKZsw5yrjY94wZzYj/ymGtaMGldSGMQC70AoEpZCQa
+        2ZtEr0o2pmTrNGbdflNWOmNWyMlPp48k0qFPaXNWcobebNYbDS60nu042nSmG8lxg9HAKMLI
+        19GbSTSZosnOYUxG3sKF1hK4IpxMJXbto6lUjYVJY5hMxrSS3U4QCiAHJ9jmUhOTyhzS6tMt
+        K2nFOhIFBQXRqwMzgSNghNiFthAhbO+iUdaCNGdqMsz6VJ98DS+nV1i/tB29Q0w7HfUC4s5y
+        dJ88xcaCW0NsPMxFenkneTh5NoP1pTgHXZbh6WTyCNJOs8vKAhJ+dy/qQwRShJKJ3F4h7C/m
+        nwnIXO6kUh/pF212sBrqAgn2z0zgHfYgWLg8iMDeOoegz1sqgB7nrwKwdZ3EwfNzMw7uS5VC
+        6J9vEsK1szMs8hSJ4MZFmwjmBttEUP5DOQH2+W4xjD6YEUPN1w/EUHuqNASuVC6EQFPNExLm
+        R75/FrxL5RS42gqlMDhbJoW5S600uCt6aZj80R0GJ1pPA8x81boWPD31EZD/S0mkl703xt77
+        zJM93L0tGsv/3NvH+peT5yKX0ij7Dotoe63zat7m3z/oxXQnNiZEz/2zuLhqg9rafm04ZmFf
+        1I7OdkNao7hyPOtj5+ED9mNbsJQP3x5fQ6n/nrVWrk54HCm3tCTj15/7oqYUbd//uaUHv5vz
+        1key+qNj8/clVn3N+j3batI3PtIujby6Keqx1ikYSMuumDDOxMbnKnCzThO3QWAya/4FVm96
+        CPsEAAA=
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 24. 02. 20 17:26, Thommy Jakobsson wrote:
-> In the public interface for chipselect, there is always an entry
-> commented as "Dummy generic FIFO entry" pushed down to the fifo right
-> after the activate/deactivate command. The dummy entry is 0x0,
-> irregardless if the intention was to activate or deactive the cs. This
-> causes the cs line to glitch rather than beeing activated in the case
-> when there was an activate command.
-> 
-> This has been observed on oscilloscope, and have caused problems for at
-> least one specific flash device type connected to the qspi port. After
-> the change the glitch is gone and cs goes active when intended.
-> 
-> The reason why this worked before (except for the glitch) was because
-> when sending the actual data, the CS bits are once again set. Since
-> most flashes uses mode 0, there is always a half clk period anyway for
-> cs to clk active setup time. If someone would rely on timing from a
-> chip_select call to a transfer_one, it would fail though.
-> 
-> It is unknown why the dummy entry was there in the first place, git log
-> seems to be of no help in this case. The reference manual gives no
-> indication of the necessity of this. In fact the lower 8 bits are a
-> setup (or hold in case of deactivate) time expressed in cycles. So this
-> should not be needed to fulfill any setup/hold timings.
-> 
-> Signed-off-by: Thommy Jakobsson <thommyj@gmail.com>
-> ---
->  drivers/spi/spi-zynqmp-gqspi.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-> index 60c4de4e4485..7412a3042a8d 100644
-> --- a/drivers/spi/spi-zynqmp-gqspi.c
-> +++ b/drivers/spi/spi-zynqmp-gqspi.c
-> @@ -401,9 +401,6 @@ static void zynqmp_qspi_chipselect(struct spi_device *qspi, bool is_high)
->  
->  	zynqmp_gqspi_write(xqspi, GQSPI_GEN_FIFO_OFST, genfifoentry);
->  
-> -	/* Dummy generic FIFO entry */
-> -	zynqmp_gqspi_write(xqspi, GQSPI_GEN_FIFO_OFST, 0x0);
-> -
->  	/* Manually start the generic FIFO command */
->  	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST,
->  			zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST) |
-> 
+--------------A266F512431D32413D4D0BF3
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Naga: Can you please review this?
+On 24.02.2020 19:59, Sergei Shtylyov wrote:
+>>>>   From d72b805cc461ab1e9747c973e9be84e7abb8f828 Mon Sep 17 00:00:00 2001
+>>>> From: Dirk Behme <dirk.behme@de.bosch.com>
+>>>> Date: Tue, 4 Feb 2020 08:39:31 +0100
+>>>> Subject: [PATCH] memory: renesas-rpc-if: Correct the STRTIM and some other
+>>>>    clean up
+>>>>
+>>>> This is required to make the driver work correctly in my M3 environment.
+>>>>
+>>>> Signed-off-by: Dirk Behme <dirk.behme@de.bosch.com>
+>>>> ---
+>>>>    drivers/memory/renesas-rpc-if.c | 42 ++++++++++++++++++++-------------
+>>>>    1 file changed, 25 insertions(+), 17 deletions(-)
+>>>>
+>>>> diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+>>>> index 04be92b64bfa..f4356b066384 100644
+>>>> --- a/drivers/memory/renesas-rpc-if.c
+>>>> +++ b/drivers/memory/renesas-rpc-if.c
+>>> [...]
+>>>> @@ -513,19 +525,15 @@ ssize_t rpcif_dirmap_read(struct rpcif *rpc, u64 offs, size_t len, void *buf)
+>>>>        pm_runtime_get_sync(rpc->dev);
+>>>>
+>>>>        regmap_update_bits(rpc->regmap, RPCIF_CMNCR, RPCIF_CMNCR_MD, 0);
+>>>> -    regmap_write(rpc->regmap, RPCIF_DRCR,
+>>>> -             RPCIF_DRCR_RBURST(32) | RPCIF_DRCR_RBE);
+>>>> -    regmap_write(rpc->regmap, RPCIF_DRCMR, rpc->command);
+>>>> -    regmap_write(rpc->regmap, RPCIF_DREAR,
+>>>> -             RPCIF_DREAR_EAV(offs >> 25) | RPCIF_DREAR_EAC(1));
+>>>> -    regmap_write(rpc->regmap, RPCIF_DROPR, rpc->option);
+>>>> -    regmap_write(rpc->regmap, RPCIF_DRENR,
+>>>> -             rpc->enable & ~RPCIF_SMENR_SPIDE(0xF));
+>>>> -    regmap_write(rpc->regmap, RPCIF_DRDMCR, rpc->dummy);
+>>>> -    regmap_write(rpc->regmap, RPCIF_DRDRENR, rpc->ddr);
+>>>
+>>>      The driver somehow works only with this left in place (with 2 bytes eaten
+>>> as before), otherwise all the flash reads all 0xff (via dirmap).
+>>
+>>
+>> Do you boot from hyperflash?
+> 
+>     No, I have arewto say 'cpld write 30 1' in U-Boot before a boot a kernel.
+> Normally, the V3x Starter Kit boards are wired for the QSPI flash chips.
+> 
+>> The system I'm using for testing boots from hyperflash. So most probably all registers
+>> I don't touch in the driver are put into a reasonable state by the boot code, already.
+>> If you don't boot from hyperflash, that at least would explain our different behavior.
+> 
+>     Yes. Mind dumping the registers and sending to me?
 
-Thanks,
-Michal
+
+Using the attached debug patch 
+(0001-memory-renesas-rpc-if-DEBUG-Dump-register-content.patch) on a 
+r8a7796 system booting from Hyperflash with above register dropping 
+reverted (i.e. including touching these registers) I get
+
+Before:
+RPCIF_DRCR:    0x00000000
+RPCIF_DRCMR:   0x00a00000
+RPCIF_DREAR:   0x00000000
+RPCIF_DROPR:   0x00000000
+RPCIF_DRENR:   0xa222d400
+RPCIF_DRDMCR:  0x0000000e
+RPCIF_DRDRENR: 0x00005101
+
+After:
+RPCIF_DRCR:    0x001f0100
+RPCIF_DRCMR:   0x00a00000
+RPCIF_DREAR:   0x00010001
+RPCIF_DROPR:   0x00000000
+RPCIF_DRENR:   0xa202d400
+RPCIF_DRDMCR:  0x0000000e
+RPCIF_DRDRENR: 0x00005101
+
+Comparing that, just 3 registers are different between my working 
+version ("Before") and the version which shows the 2-byte offset 
+("After"): RPCIF_DRCR, RPCIF_DREAR and RPCIF_DRENR. With try & error, at 
+least in my setup, I was able to reduce this to just RPCIF_DRCR. 
+Dropping the burst mode I was able to 'fix' the two byte offset issue.
+
+Do you like to give the attached 
+0001-memory-renesas-rpc-if-Don-t-use-burst-mode-on-read.patch a try in 
+your setup?
+
+Best regards
+
+Dirk
+
+
+--------------A266F512431D32413D4D0BF3
+Content-Type: text/plain; charset="UTF-8";
+	name="0001-memory-renesas-rpc-if-DEBUG-Dump-register-content.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+	filename="0001-memory-renesas-rpc-if-DEBUG-Dump-register-content.patch"
+
+RnJvbSA4OTQyYzc3MWY4ZWE4OTU3YTE0ZmM2ZjZlNDQ0MzY3NWM0YjZiMjYwIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBEaXJrIEJlaG1lIDxkaXJrLmJlaG1lQGRlLmJvc2No
+LmNvbT4KRGF0ZTogVHVlLCAyNSBGZWIgMjAyMCAwNzo1NzoxMiArMDEwMApTdWJqZWN0OiBb
+UEFUQ0hdIG1lbW9yeTogcmVuZXNhcy1ycGMtaWY6IERFQlVHOiBEdW1wIHJlZ2lzdGVyIGNv
+bnRlbnQKCkR1bXAgcmVnaXN0ZXIgY29udGVudCBiZWZvcmUgYW5kIGFmdGVyIGJlaW5nIG1v
+ZGlmaWVkIGJ5IHRoZSBkcml2ZXIuCgpTaWduZWQtb2ZmLWJ5OiBEaXJrIEJlaG1lIDxkaXJr
+LmJlaG1lQGRlLmJvc2NoLmNvbT4KLS0tCiBkcml2ZXJzL21lbW9yeS9yZW5lc2FzLXJwYy1p
+Zi5jIHwgMjEgKysrKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgMjEgaW5z
+ZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVtb3J5L3JlbmVzYXMtcnBjLWlm
+LmMgYi9kcml2ZXJzL21lbW9yeS9yZW5lc2FzLXJwYy1pZi5jCmluZGV4IDQ4NTNlN2Y3ODk4
+NS4uNDQ4NmRlMGI1MTdiIDEwMDY0NAotLS0gYS9kcml2ZXJzL21lbW9yeS9yZW5lc2FzLXJw
+Yy1pZi5jCisrKyBiL2RyaXZlcnMvbWVtb3J5L3JlbmVzYXMtcnBjLWlmLmMKQEAgLTUxNywx
+MiArNTE3LDIzIEBAIHNzaXplX3QgcnBjaWZfZGlybWFwX3JlYWQoc3RydWN0IHJwY2lmICpy
+cGMsIHU2NCBvZmZzLCBzaXplX3QgbGVuLCB2b2lkICpidWYpCiB7CiAJbG9mZl90IGZyb20g
+PSBvZmZzICYgKFJQQ0lGX0RJUk1BUF9TSVpFIC0gMSk7CiAJc2l6ZV90IHNpemUgPSBSUENJ
+Rl9ESVJNQVBfU0laRSAtIGZyb207CisJdTMyIGRhdGE7CiAKIAlpZiAobGVuID4gc2l6ZSkK
+IAkJbGVuID0gc2l6ZTsKIAogCXBtX3J1bnRpbWVfZ2V0X3N5bmMocnBjLT5kZXYpOwogCisJ
+cHJfZXJyKCJCZWZvcmU6XG4iKTsKKwlyZWdtYXBfcmVhZChycGMtPnJlZ21hcCwgUlBDSUZf
+Q01OQ1IsICZkYXRhKTsgICBwcl9lcnIoIlJQQ0lGX0NNTkNSOiAgIDB4JTA4eFxuIiwgZGF0
+YSk7CisJcmVnbWFwX3JlYWQocnBjLT5yZWdtYXAsIFJQQ0lGX0RSQ1IsICZkYXRhKTsgICAg
+cHJfZXJyKCJSUENJRl9EUkNSOiAgICAweCUwOHhcbiIsIGRhdGEpOworCXJlZ21hcF9yZWFk
+KHJwYy0+cmVnbWFwLCBSUENJRl9EUkNNUiwgJmRhdGEpOyAgIHByX2VycigiUlBDSUZfRFJD
+TVI6ICAgMHglMDh4XG4iLCBkYXRhKTsKKwlyZWdtYXBfcmVhZChycGMtPnJlZ21hcCwgUlBD
+SUZfRFJFQVIsICZkYXRhKTsgICBwcl9lcnIoIlJQQ0lGX0RSRUFSOiAgIDB4JTA4eFxuIiwg
+ZGF0YSk7CisJcmVnbWFwX3JlYWQocnBjLT5yZWdtYXAsIFJQQ0lGX0RST1BSLCAmZGF0YSk7
+ICAgcHJfZXJyKCJSUENJRl9EUk9QUjogICAweCUwOHhcbiIsIGRhdGEpOworCXJlZ21hcF9y
+ZWFkKHJwYy0+cmVnbWFwLCBSUENJRl9EUkVOUiwgJmRhdGEpOyAgIHByX2VycigiUlBDSUZf
+RFJFTlI6ICAgMHglMDh4XG4iLCBkYXRhKTsKKwlyZWdtYXBfcmVhZChycGMtPnJlZ21hcCwg
+UlBDSUZfRFJETUNSLCAmZGF0YSk7ICBwcl9lcnIoIlJQQ0lGX0RSRE1DUjogIDB4JTA4eFxu
+IiwgZGF0YSk7CisJcmVnbWFwX3JlYWQocnBjLT5yZWdtYXAsIFJQQ0lGX0RSRFJFTlIsICZk
+YXRhKTsgcHJfZXJyKCJSUENJRl9EUkRSRU5SOiAweCUwOHhcbiIsIGRhdGEpOworCiAJcmVn
+bWFwX3VwZGF0ZV9iaXRzKHJwYy0+cmVnbWFwLCBSUENJRl9DTU5DUiwgUlBDSUZfQ01OQ1Jf
+TUQsIDApOwogCXJlZ21hcF93cml0ZShycGMtPnJlZ21hcCwgUlBDSUZfRFJDUiwKIAkJICAg
+ICBSUENJRl9EUkNSX1JCVVJTVCgzMikgfCBSUENJRl9EUkNSX1JCRSk7CkBAIC01MzUsNiAr
+NTQ2LDE2IEBAIHNzaXplX3QgcnBjaWZfZGlybWFwX3JlYWQoc3RydWN0IHJwY2lmICpycGMs
+IHU2NCBvZmZzLCBzaXplX3QgbGVuLCB2b2lkICpidWYpCiAJcmVnbWFwX3dyaXRlKHJwYy0+
+cmVnbWFwLCBSUENJRl9EUkRNQ1IsIHJwYy0+ZHVtbXkpOwogCXJlZ21hcF93cml0ZShycGMt
+PnJlZ21hcCwgUlBDSUZfRFJEUkVOUiwgcnBjLT5kZHIpOwogCisJcHJfZXJyKCJBZnRlcjpc
+biIpOworCXJlZ21hcF9yZWFkKHJwYy0+cmVnbWFwLCBSUENJRl9DTU5DUiwgJmRhdGEpOyAg
+IHByX2VycigiUlBDSUZfQ01OQ1I6ICAgMHglMDh4XG4iLCBkYXRhKTsKKwlyZWdtYXBfcmVh
+ZChycGMtPnJlZ21hcCwgUlBDSUZfRFJDUiwgJmRhdGEpOyAgICBwcl9lcnIoIlJQQ0lGX0RS
+Q1I6ICAgIDB4JTA4eFxuIiwgZGF0YSk7CisJcmVnbWFwX3JlYWQocnBjLT5yZWdtYXAsIFJQ
+Q0lGX0RSQ01SLCAmZGF0YSk7ICAgcHJfZXJyKCJSUENJRl9EUkNNUjogICAweCUwOHhcbiIs
+IGRhdGEpOworCXJlZ21hcF9yZWFkKHJwYy0+cmVnbWFwLCBSUENJRl9EUkVBUiwgJmRhdGEp
+OyAgIHByX2VycigiUlBDSUZfRFJFQVI6ICAgMHglMDh4XG4iLCBkYXRhKTsKKwlyZWdtYXBf
+cmVhZChycGMtPnJlZ21hcCwgUlBDSUZfRFJPUFIsICZkYXRhKTsgICBwcl9lcnIoIlJQQ0lG
+X0RST1BSOiAgIDB4JTA4eFxuIiwgZGF0YSk7CisJcmVnbWFwX3JlYWQocnBjLT5yZWdtYXAs
+IFJQQ0lGX0RSRU5SLCAmZGF0YSk7ICAgcHJfZXJyKCJSUENJRl9EUkVOUjogICAweCUwOHhc
+biIsIGRhdGEpOworCXJlZ21hcF9yZWFkKHJwYy0+cmVnbWFwLCBSUENJRl9EUkRNQ1IsICZk
+YXRhKTsgIHByX2VycigiUlBDSUZfRFJETUNSOiAgMHglMDh4XG4iLCBkYXRhKTsKKwlyZWdt
+YXBfcmVhZChycGMtPnJlZ21hcCwgUlBDSUZfRFJEUkVOUiwgJmRhdGEpOyBwcl9lcnIoIlJQ
+Q0lGX0RSRFJFTlI6IDB4JTA4eFxuIiwgZGF0YSk7CisKIAltZW1jcHlfZnJvbWlvKGJ1Ziwg
+cnBjLT5kaXJtYXAgKyBmcm9tLCBsZW4pOwogCiAJcG1fcnVudGltZV9wdXQocnBjLT5kZXYp
+OwotLSAKMi4yMC4wCgo=
+--------------A266F512431D32413D4D0BF3
+Content-Type: text/plain; charset="UTF-8";
+	name="0001-memory-renesas-rpc-if-Don-t-use-burst-mode-on-read.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+	filename*0="0001-memory-renesas-rpc-if-Don-t-use-burst-mode-on-read.patc";
+	filename*1="h"
+
+RnJvbSAxODlkMzBhOGU5NjcwZjFhNWExZTlkM2IyNTdmMTRiN2RmN2JjMTcyIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBEaXJrIEJlaG1lIDxkaXJrLmJlaG1lQGRlLmJvc2No
+LmNvbT4KRGF0ZTogVHVlLCAyNSBGZWIgMjAyMCAwODo0MTowNiArMDEwMApTdWJqZWN0OiBb
+UEFUQ0hdIG1lbW9yeTogcmVuZXNhcy1ycGMtaWY6IERvbid0IHVzZSBidXJzdCBtb2RlIG9u
+IHJlYWQKClRlc3Rpbmcgc2hvd3MgdGhhdCBlbmFibGluZyB0aGUgYnVyc3QgbW9kZSByZXN1
+bHRzIGluIGEgIjItYnl0ZSBvZmZzZXQiCmluIHJlYWQgZGF0YS4gRHJvcHBpbmcgdGhlIGJ1
+cnN0IG1vZGUgc2VlbXMgdG8gZml4IHRoaXMuCgpTaWduZWQtb2ZmLWJ5OiBEaXJrIEJlaG1l
+IDxkaXJrLmJlaG1lQGRlLmJvc2NoLmNvbT4KLS0tCiBkcml2ZXJzL21lbW9yeS9yZW5lc2Fz
+LXJwYy1pZi5jIHwgMyArLS0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMiBk
+ZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL21lbW9yeS9yZW5lc2FzLXJwYy1p
+Zi5jIGIvZHJpdmVycy9tZW1vcnkvcmVuZXNhcy1ycGMtaWYuYwppbmRleCA0ODUzZTdmNzg5
+ODUuLjJkNzdlY2E3YWFhNSAxMDA2NDQKLS0tIGEvZHJpdmVycy9tZW1vcnkvcmVuZXNhcy1y
+cGMtaWYuYworKysgYi9kcml2ZXJzL21lbW9yeS9yZW5lc2FzLXJwYy1pZi5jCkBAIC01MjQs
+OCArNTI0LDcgQEAgc3NpemVfdCBycGNpZl9kaXJtYXBfcmVhZChzdHJ1Y3QgcnBjaWYgKnJw
+YywgdTY0IG9mZnMsIHNpemVfdCBsZW4sIHZvaWQgKmJ1ZikKIAlwbV9ydW50aW1lX2dldF9z
+eW5jKHJwYy0+ZGV2KTsKIAogCXJlZ21hcF91cGRhdGVfYml0cyhycGMtPnJlZ21hcCwgUlBD
+SUZfQ01OQ1IsIFJQQ0lGX0NNTkNSX01ELCAwKTsKLQlyZWdtYXBfd3JpdGUocnBjLT5yZWdt
+YXAsIFJQQ0lGX0RSQ1IsCi0JCSAgICAgUlBDSUZfRFJDUl9SQlVSU1QoMzIpIHwgUlBDSUZf
+RFJDUl9SQkUpOworCXJlZ21hcF93cml0ZShycGMtPnJlZ21hcCwgUlBDSUZfRFJDUiwgMCk7
+CiAJcmVnbWFwX3dyaXRlKHJwYy0+cmVnbWFwLCBSUENJRl9EUkNNUiwgcnBjLT5jb21tYW5k
+KTsKIAlyZWdtYXBfd3JpdGUocnBjLT5yZWdtYXAsIFJQQ0lGX0RSRUFSLAogCQkgICAgIFJQ
+Q0lGX0RSRUFSX0VBVihvZmZzID4+IDI1KSB8IFJQQ0lGX0RSRUFSX0VBQygxKSk7Ci0tIAoy
+LjIwLjAKCg==
+--------------A266F512431D32413D4D0BF3--
