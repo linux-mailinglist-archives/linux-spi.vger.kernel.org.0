@@ -2,322 +2,242 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8592516B8BF
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 06:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA0D16B9AB
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 07:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgBYFIq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Feb 2020 00:08:46 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:44501 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726974AbgBYFIp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 00:08:45 -0500
-Received: by mail-qt1-f193.google.com with SMTP id j23so8230478qtr.11;
-        Mon, 24 Feb 2020 21:08:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OYzEu19BNaQZ+QEcaavvFcdfHL+hwTV/fYQk0Icyp4w=;
-        b=DP04zKHVzLp004O+gVK8ynNltFZXaXiHlKcCAWi5DP02PQiDsSrNBukFKw0xBypYYS
-         swgYiEzTw+2HOB3+ZyGVNM8awYivRfitziRhcgBYG4Xgz5NA1OgiVdohx1dUMSuj3prB
-         xHiHQk4oBhLuFRBZNQFNu5vK6OyRNrcrxyCv4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OYzEu19BNaQZ+QEcaavvFcdfHL+hwTV/fYQk0Icyp4w=;
-        b=Vb1oNFCEso6T/ou96q/CNz7e4eMBeedVoIfOkrRnK2vBnzQLkK/aCMirITEKBYPHqP
-         UucJWiIMdbK5QxCoo0R3TYOFLJn6dnfX+TqLQc0+vBLBWBgtx9Q/fpuRSaUn1WYv1gic
-         rB3FZrbkB9MaG4WVWBkKPvgxl6LeBtdzZtfWiwVHkrSqH65/i4Cjf3RyGLgOpMGgf12t
-         ivsdITV49O6zagVZIkecHEIhDHXd4IneYTgUW4gxTV60FewjHD0tZMCrvt+ltcm7W6vg
-         EB62LRBcA1yEmS0qPJiXEuC1XiYQtQ2tHV7jE9tKXzS08Phr6Mi8gFuiWYBP4av8Pbth
-         RB0A==
-X-Gm-Message-State: APjAAAUw0Vv0Xf89SBrBuEBlOMWvzVtBIyp3JgT47tp4tXTTTCmzEegs
-        r3/BnhB+hsk9O5nGKMHBvzFLKfIAfFQP5ZqbMJE=
-X-Google-Smtp-Source: APXvYqwNNUXiFQiIlA5GjBvdgTXw/RNU4AmIj/D0xW5/uLDGR/PwMCWZFNkG2mtSTp++mJ6GGrA8RBG0mnryW+N3q/0=
-X-Received: by 2002:ac8:4244:: with SMTP id r4mr50733467qtm.169.1582607324570;
- Mon, 24 Feb 2020 21:08:44 -0800 (PST)
+        id S1729093AbgBYGYO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Feb 2020 01:24:14 -0500
+Received: from mga05.intel.com ([192.55.52.43]:52909 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729074AbgBYGYO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 25 Feb 2020 01:24:14 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Feb 2020 22:24:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,483,1574150400"; 
+   d="scan'208";a="384372054"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga004.jf.intel.com with ESMTP; 24 Feb 2020 22:24:11 -0800
+Received: from [10.226.38.25] (unknown [10.226.38.25])
+        by linux.intel.com (Postfix) with ESMTP id 78FC158052E;
+        Mon, 24 Feb 2020 22:24:08 -0800 (PST)
+Subject: Re: [PATCH v10 1/2] dt-bindings: spi: Add schema for Cadence QSPI
+ Controller driver
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, Vignesh R <vigneshr@ti.com>,
+        simon.k.r.goldschmidt@gmail.com, Dinh Nguyen <dinguyen@kernel.org>,
+        tien.fong.chee@intel.com,
+        =?UTF-8?Q?Marek_Va=c5=a1ut?= <marex@denx.de>,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
+References: <20200219022852.28065-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200219022852.28065-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <CAL_JsqKJky=y4nhECUFVzTYvEpjFoOH_6UY9uZG5bvBVWq=SYQ@mail.gmail.com>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <64b7ab12-0c11-df25-95e7-ee62227ec7ec@linux.intel.com>
+Date:   Tue, 25 Feb 2020 14:24:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-References: <20200203223003.4567-1-eajames@linux.ibm.com>
-In-Reply-To: <20200203223003.4567-1-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 25 Feb 2020 05:08:32 +0000
-Message-ID: <CACPK8XdmdksFctYk96x46XJcxe3yQD3HfAzC8gdF_GXWJHeu2A@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: Add FSI-attached SPI controller driver
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-spi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-fsi@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAL_JsqKJky=y4nhECUFVzTYvEpjFoOH_6UY9uZG5bvBVWq=SYQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Eddie,
+Hi Rob,
 
-Some comments below. For the most part it looks good.
+      Thank you for the review comments...
 
-On Mon, 3 Feb 2020 at 22:30, Eddie James <eajames@linux.ibm.com> wrote:
+On 24/2/2020 11:54 PM, Rob Herring wrote:
+> On Tue, Feb 18, 2020 at 8:29 PM Ramuthevar,Vadivel MuruganX
+> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
+>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> Cc the DT list if you want this reviewed.
+Sorry,  next patch will add DT list in CC.
+>> Add dt-bindings documentation for Cadence-QSPI controller to support
+>> spi based flash memories.
+>>
+>> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>> ---
+>>   .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 147 +++++++++++++++++++++
+>>   1 file changed, 147 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>> new file mode 100644
+>> index 000000000000..1a4d6e8d0d0b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+>> @@ -0,0 +1,147 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/spi/cdns,qspi-nor.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: Cadence QSPI Flash Controller support
+>> +
+>> +maintainers:
+>> +  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>> +
+>> +allOf:
+>> +  - $ref: "spi-controller.yaml#"
+>> +
+>> +description: |
+>> +  Binding Documentation for Cadence QSPI controller,This controller is
+>> +  present in the Intel LGM, Altera SoCFPGA and TI SoCs and this driver
+>> +  has been tested On Intel's LGM SoC.
+>> +
+>> +  - compatible : should be one of the following:
+>> +        Generic default - "cdns,qspi-nor".
+>> +        For TI 66AK2G SoC - "ti,k2g-qspi", "cdns,qspi-nor".
+>> +        For TI AM654 SoC  - "ti,am654-ospi", "cdns,qspi-nor".
+>> +        For Intel LGM SoC - "intel,lgm-qspi", "cdns,qspi-nor".
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +      - items:
+>> +        - enum:
+>> +           - ti,k2g-qspi
+>> +        - const: cdns,qspi-nor
+>> +
+>> +      - items:
+>> +        - enum:
+>> +           - ti,am654-ospi
+>> +        - const: cdns,qspi-nor
+>> +
+>> +      - items:
+>> +        - enum:
+>> +           - intel,lgm-qspi
+>> +        - const: cdns,qspi-nor
+>> +
+>> +      - items:
+>> +        - const: cdns,qspi-nor
+>> +
+>> +  reg:
+>> +    maxItems: 2
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  cdns,fifo-depth:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Size of the data FIFO in words.
+> A 4GB fifo is valid? Add some constraints.
+128 is valid, will update.
+>> +
+>> +  cdns,fifo-width:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Bus width of the data FIFO in bytes.
+> Add some constraints.
+4 is valid , will fix it.
+>> +
+>> +  cdns,trigger-address:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      32-bit indirect AHB trigger address.
+>> +
+>> +  cdns,rclk-en:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: |
+>> +      Flag to indicate that QSPI return clock is used to latch the read data
+>> +      rather than the QSPI clock. Make sure that QSPI return clock is populated
+>> +      on the board before using this property.
+>> +
+>> +# subnode's properties
+>> +patternProperties:
+>> +  "^.*@[0-9a-fA-F]+$":
+>> +    type: object
+>> +    description:
+>> +      flash device uses the subnodes below defined properties.
+>> +
+>> +  cdns,read-delay:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Delay for read capture logic, in clock cycles.
+> 4 billion clock delay is valid?
+based on the ref_clk , will add it.
+>> +
+>> +  cdns,tshsl-ns:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> You can drop this, anything with a standard unit suffix already has a type.
+sure , will drop it.
+>> +    description: |
+>> +      Delay in nanoseconds for the length that the master mode chip select
+>> +      outputs are de-asserted between transactions.
+> Constraints...?
 
-> +FSI-ATTACHED SPI DRIVER
-> +M:     Eddie James <eajames@linux.ibm.com>
-> +L:     linux-spi@vger.kernel.org
+50ns, will add it.
 
-Add linux-fsi@lists.ozlabs.org too
-
-> +S:     Maintained
-> +F:     drivers/spi/spi-fsi.c
-
-> +static int fsi_spi_write_reg(struct fsi_spi *ctx, u32 offset, u64 value)
-> +{
-> +       int rc;
-> +       __be32 cmd_be;
-> +       __be32 data_be;
-> +
-> +       dev_dbg(ctx->dev, "Write %02x[%016llx].\n", offset, value);
-> +
-> +       data_be =3D cpu_to_be32(upper_32_bits(value));
-> +       rc =3D fsi_device_write(ctx->fsi, FSI2SPI_DATA0, &data_be,
-> +                             sizeof(data_be));
-> +       if (rc)
-> +               return rc;
-> +
-> +       data_be =3D cpu_to_be32(lower_32_bits(value));
-
-The lower_32_bits cast is redundant (but harmless).
-
-> +       rc =3D fsi_device_write(ctx->fsi, FSI2SPI_DATA1, &data_be,
-> +                             sizeof(data_be));
-> +       if (rc)
-> +               return rc;
-> +
-> +       cmd_be =3D cpu_to_be32((offset + ctx->base) | FSI2SPI_CMD_WRITE);
-
-offset + ctx->base must be less than 2 ^ 31 otherwise the top bit of
-the address collides with the write command. Should we introduce a
-check for that?
-
-> +       rc =3D fsi_device_write(ctx->fsi, FSI2SPI_CMD, &cmd_be, sizeof(cm=
-d_be));
-> +       if (rc)
-> +               return rc;
-> +
-> +       return fsi_spi_check_status(ctx);
-> +}
-> +
-> +static int fsi_spi_data_in(u64 in, u8 *rx, int len)
-> +{
-> +       int i;
-> +       int num_bytes =3D min(len, 8);
-> +
-> +       for (i =3D 0; i < num_bytes; ++i)
-> +               rx[i] =3D (u8)(in >> (8 * ((num_bytes - 1) - i)));
-> +
-> +       return num_bytes;
-> +}
-> +
-> +static int fsi_spi_data_out(u64 *out, const u8 *tx, int len)
-> +{
-> +       int i;
-> +       int num_bytes =3D min(len, 8);
-> +
-> +       *out =3D 0ULL;
-> +
-> +       for (i =3D 0; i < num_bytes; ++i)
-> +               *out |=3D (u64)tx[i] << (8 * (8 - (i + 1)));
-
-Did this work with non-8 byte transfers? I think the second 8 should
-be num_bytes.
-
-The loop requires careful reading to check. I wonder if we could do
-this instead, which eliminates a lot duplicated loads and stores and
-is easier to read:
-
-       uint8_t *outp =3D (uint8_t *)out;
-
-       for (i =3D 0; i < num_bytes; ++i) {
-               outp[num_bytes - (i + 1)] =3D tx[i];
-       }
-
-> +
-> +       return num_bytes;
-> +}
-> +
-> +static int fsi_spi_reset(struct fsi_spi *ctx)
-> +{
-> +       int rc;
-> +
-> +       dev_dbg(ctx->dev, "Resetting SPI controller.\n");
-> +
-> +       rc =3D fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
-> +                              SPI_FSI_CLOCK_CFG_RESET1);
-> +       if (rc)
-> +               return rc;
-> +
-> +       return fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
-> +                                SPI_FSI_CLOCK_CFG_RESET2);
-> +}
-> +
-> +static int fsi_spi_sequence_add(struct fsi_spi_sequence *seq, u8 val)
-> +{
-> +       seq->data |=3D (u64)val << seq->bit;
-> +       seq->bit -=3D 8;
-> +
-> +       return ((64 - seq->bit) / 8) - 2;
-
-I have no idea what this is doing. Add a comment?
-
-> +}
-
-> +
-> +static int fsi_spi_transfer_init(struct fsi_spi *ctx)
-> +{
-> +       int rc;
-> +       bool reset =3D false;
-> +       unsigned long end;
-> +       u64 seq_state;
-> +       u64 clock_cfg =3D 0ULL;
-> +       u64 status =3D 0ULL;
-> +       u64 wanted_clock_cfg =3D SPI_FSI_CLOCK_CFG_ECC_DISABLE |
-> +               SPI_FSI_CLOCK_CFG_SCK_NO_DEL |
-> +               FIELD_PREP(SPI_FSI_CLOCK_CFG_SCK_DIV, 4);
-> +
-> +       end =3D jiffies + msecs_to_jiffies(SPI_FSI_INIT_TIMEOUT_MS);
-> +       do {
-> +               if (time_after(jiffies, end))
-> +                       return -ETIMEDOUT;
-
-How tightly does this loop spin?
-
-Should there be a delay inside of it?
-
-> +
-> +               rc =3D fsi_spi_read_reg(ctx, SPI_FSI_STATUS, &status);
-> +               if (rc)
-> +                       return rc;
-> +
-> +               if (status & (SPI_FSI_STATUS_ANY_ERROR |
-> +                             SPI_FSI_STATUS_TDR_FULL |
-> +                             SPI_FSI_STATUS_RDR_FULL)) {
-> +                       if (reset)
-> +                               return -EIO;
-> +
-> +                       rc =3D fsi_spi_reset(ctx);
-> +                       if (rc)
-> +                               return rc;
-> +
-> +                       reset =3D true;
-> +                       continue;
-> +               }
-> +
-> +               seq_state =3D status & SPI_FSI_STATUS_SEQ_STATE;
-> +       } while (seq_state && (seq_state !=3D SPI_FSI_STATUS_SEQ_STATE_ID=
-LE));
-
-../drivers/spi/spi-fsi.c: In function =E2=80=98fsi_spi_transfer_one_message=
-=E2=80=99:
-../drivers/spi/spi-fsi.c:363:11: warning: =E2=80=98seq_state=E2=80=99 may b=
-e used
-uninitialized in this function [-Wmaybe-uninitialized]
-  363 |  } while (seq_state && (seq_state !=3D SPI_FSI_STATUS_SEQ_STATE_IDL=
-E));
-      |           ^~~~~~~~~
-
-
-> +
-> +       rc =3D fsi_spi_read_reg(ctx, SPI_FSI_CLOCK_CFG, &clock_cfg);
-> +       if (rc)
-> +               return rc;
-> +
-> +       if ((clock_cfg & (SPI_FSI_CLOCK_CFG_MM_ENABLE |
-> +                         SPI_FSI_CLOCK_CFG_ECC_DISABLE |
-> +                         SPI_FSI_CLOCK_CFG_MODE |
-> +                         SPI_FSI_CLOCK_CFG_SCK_RECV_DEL |
-> +                         SPI_FSI_CLOCK_CFG_SCK_DIV)) !=3D wanted_clock_c=
-fg)
-> +               rc =3D fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
-> +                                      wanted_clock_cfg);
-> +
-> +       return rc;
-> +}
-
-> +static int fsi_spi_probe(struct device *dev)
-> +{
-> +       int rc;
-> +       u32 root_ctrl_8;
-> +       struct device_node *np;
-> +       int num_controllers_registered =3D 0;
-> +       struct fsi_device *fsi =3D to_fsi_dev(dev);
-> +
-> +       /*
-> +        * Check the SPI mux before attempting to probe. If the mux isn't=
- set
-> +        * then the SPI controllers can't access their slave devices.
-> +        */
-> +       rc =3D fsi_slave_read(fsi->slave, FSI_MBOX_ROOT_CTRL_8, &root_ctr=
-l_8,
-> +                           sizeof(root_ctrl_8));
-
-Is it correct to stop probing if the mux is not set?
-
-I assume it changes at runtime depending on the state of the host.
-This could mean the driver probes correctly, but fails to work (if the
-mux was set at BMC boot, but then changes).
-
-Should it instead block reads/writes when the mux is in the incorrect state=
-?
-
-> +       if (rc)
-> +               return rc;
-> +
-> +       if (!root_ctrl_8) {
-> +               dev_dbg(dev, "SPI mux not set, aborting probe.\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       for_each_available_child_of_node(dev->of_node, np) {
-> +               u32 base;
-> +               struct fsi_spi *ctx;
-> +               struct spi_controller *ctlr;
-> +
-> +               if (of_property_read_u32(np, "reg", &base))
-
-It looks like this has a device tree binding. Can you add a document
-describing it too?
-
-> +                       continue;
-> +
-> +               ctlr =3D spi_alloc_master(dev, sizeof(*ctx));
-> +               if (!ctlr)
-> +                       break;
-> +
-> +               ctlr->dev.of_node =3D np;
-> +               ctlr->num_chipselect =3D of_get_available_child_count(np)=
- ?: 1;
-> +               ctlr->flags =3D SPI_CONTROLLER_HALF_DUPLEX;
-> +               ctlr->max_transfer_size =3D fsi_spi_max_transfer_size;
-> +               ctlr->transfer_one_message =3D fsi_spi_transfer_one_messa=
-ge;
-> +
-> +               ctx =3D spi_controller_get_devdata(ctlr);
-> +               ctx->dev =3D &ctlr->dev;
-> +               ctx->fsi =3D fsi;
-> +               ctx->base =3D base + SPI_FSI_BASE;
-> +
-> +               rc =3D devm_spi_register_controller(dev, ctlr);
-> +               if (rc)
-> +                       spi_controller_put(ctlr);
-> +               else
-> +                       num_controllers_registered++;
-> +       }
-> +
-> +       if (!num_controllers_registered)
-> +               return -ENODEV;
-> +
-> +       return 0;
-> +}
+Regards
+Vadivel
+>> +
+>> +  cdns,tsd2d-ns:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: |
+>> +      Delay in nanoseconds between one chip select being de-activated
+>> +      and the activation of another.
+>> +
+>> +  cdns,tchsh-ns:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: |
+>> +      Delay in nanoseconds between last bit of current transaction and
+>> +      deasserting the device chip select (qspi_n_ss_out).
+>> +
+>> +  cdns,tslch-ns:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: |
+>> +      Delay in nanoseconds between setting qspi_n_ss_out low and
+>> +      first bit transfer.
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - clocks
+>> +  - cdns,fifo-depth
+>> +  - cdns,fifo-width
+>> +  - cdns,trigger-address
+>> +
+>> +examples:
+>> +  - |
+>> +    qspi: spi@ff705000 {
+>> +          compatible = "cdns,qspi-nor";
+>> +          #address-cells = <1>;
+>> +          #size-cells = <0>;
+>> +          reg = <0xff705000 0x1000>,
+>> +                <0xffa00000 0x1000>;
+>> +          interrupts = <0 151 4>;
+>> +          clocks = <&qspi_clk>;
+>> +          cdns,fifo-depth = <128>;
+>> +          cdns,fifo-width = <4>;
+>> +          cdns,trigger-address = <0x00000000>;
+>> +
+>> +          flash0: n25q00@0 {
+>> +              compatible = "jedec,spi-nor";
+>> +              reg = <0x0>;
+>> +              cdns,read-delay = <4>;
+>> +              cdns,tshsl-ns = <50>;
+>> +              cdns,tsd2d-ns = <50>;
+>> +              cdns,tchsh-ns = <4>;
+>> +              cdns,tslch-ns = <4>;
+>> +          };
+>> +    };
+>> +
+>> --
+>> 2.11.0
+>>
