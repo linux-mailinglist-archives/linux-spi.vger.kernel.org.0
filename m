@@ -2,377 +2,187 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C13016EF56
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 20:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E0716F048
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 21:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731565AbgBYTpe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Feb 2020 14:45:34 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20580 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731553AbgBYTpd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 14:45:33 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01PJU3uV072772;
-        Tue, 25 Feb 2020 14:45:23 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2yd98bhbks-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Feb 2020 14:45:23 -0500
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 01PJUL4Y078289;
-        Tue, 25 Feb 2020 14:45:22 -0500
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2yd98bhbke-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Feb 2020 14:45:22 -0500
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01PJf5mQ022793;
-        Tue, 25 Feb 2020 19:45:21 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma02dal.us.ibm.com with ESMTP id 2yaux6x62s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Feb 2020 19:45:21 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01PJjLKJ52953500
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Feb 2020 19:45:21 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0525228058;
-        Tue, 25 Feb 2020 19:45:21 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4FC352805C;
-        Tue, 25 Feb 2020 19:45:20 +0000 (GMT)
-Received: from [9.163.29.251] (unknown [9.163.29.251])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Feb 2020 19:45:20 +0000 (GMT)
-Subject: Re: [PATCH v2] spi: Add FSI-attached SPI controller driver
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     linux-spi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-fsi@lists.ozlabs.org
-References: <20200203223003.4567-1-eajames@linux.ibm.com>
- <CACPK8XdmdksFctYk96x46XJcxe3yQD3HfAzC8gdF_GXWJHeu2A@mail.gmail.com>
-From:   Eddie James <eajames@linux.ibm.com>
-Message-ID: <afb1b854-5950-c5bb-501f-8c1ee366c13e@linux.ibm.com>
-Date:   Tue, 25 Feb 2020 13:45:19 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729189AbgBYUlu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Feb 2020 15:41:50 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:35050 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729182AbgBYUlt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 15:41:49 -0500
+Received: by mail-lj1-f196.google.com with SMTP id q8so418285ljb.2
+        for <linux-spi@vger.kernel.org>; Tue, 25 Feb 2020 12:41:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=from:subject:to:cc:references:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=f1wxzQHgzbozsllzgNDGZLVCDjLuH9+6YSKgsfnh4N0=;
+        b=J0Lq4tpycMq9o8u1bSrvUCSf0FdOD2Nyvd3Uo9ooIZeu3cp8b0a+4H56oOncPBS1R7
+         GOw5V3B9Wt5Tn3PA/+5Y5Nw2El7pOACROliHYypQ2usaadr00To1fDV+i9SaaBPq8KF9
+         JnLOYV2nhi7LSFyFMQGJZASywoO+ZoZa0qUB4jDWDyVWKuz8s5syYf4/3ASmAzLLMLGl
+         2XBkjNhxfl4ATAYxSjNFijwCURknw0D0Eq3rjhgqAPpORoXGk/M6dd+Pfb+I2kA7bUV9
+         z6Ho8xi5Wm3Q5qSVPjiqkTE+HPGGKN5NYjpnnQEsD5o969WyJ/RkywxbNHjHFmN694ta
+         nyRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=f1wxzQHgzbozsllzgNDGZLVCDjLuH9+6YSKgsfnh4N0=;
+        b=g5otOiqgR0gQemdI8qVt7z/Sq95Xre9i0K5NObxIBZ21EDeX9wHKYfiFyijA5eFXk0
+         pOWJTEFy2QeBtFtFpjDIfTt7ZQ+b+sgnEzOFXJVWW0DtYR6OA9x/QqntVgnPLBFjJPzh
+         WOBBWLkHsNT+DqbN1iwYGX/XK6SIdwkmntUxFmKDuuFFlMD4GuTQlZqn89icA3V6kbF4
+         37oSQm4Wv2Y8EEOiL/66936diVJ8el6inqFfn/JmPVlwjXFt8ALYnZ/wi1nBXIuPXAAv
+         wvH+/2mnofavxsOO+uaXRRwK+EIc5HZ2M/hsHWWiS8uBej2fZ7AOcKbo+2PzPLlncZdu
+         l+qw==
+X-Gm-Message-State: APjAAAX0K4bG2NchxudkfTw2ZcFMjjGMW7t2OyAOvN9hwn0QwcBGu/Is
+        3vU2xjwrjsQ9aTGQp0+keKN4bw==
+X-Google-Smtp-Source: ADFU+vsMS3caqJMbwRsF+MEpr24wt3YBnbgXGcWdeW2WuNzdWjviBCz6CpLXlq5tWMkXPS/oSyZFgw==
+X-Received: by 2002:a2e:5854:: with SMTP id x20mr453488ljd.287.1582663307339;
+        Tue, 25 Feb 2020 12:41:47 -0800 (PST)
+Received: from wasted.cogentembedded.com ([2a00:1fa0:2ac:dee3:544c:cd2b:7405:7aec])
+        by smtp.gmail.com with ESMTPSA id f14sm4247328lfh.40.2020.02.25.12.41.45
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Feb 2020 12:41:46 -0800 (PST)
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Subject: Re: [PATCH RFC 2/2] memory: add Renesas RPC-IF driver
+To:     "Behme Dirk (CM/ESO2)" <dirk.behme@de.bosch.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        linux-spi@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+References: <cb7022c9-0059-4eb2-7910-aab42124fa1c@cogentembedded.com>
+ <4db876ed-1ccc-e3be-311d-30cd52f40259@cogentembedded.com>
+ <5760bcdb-e44b-6f18-7262-9526684e5780@de.bosch.com>
+ <5603f393-554d-e2a8-c2d8-6bafc20f4169@cogentembedded.com>
+ <cba1e2ec-4896-23ef-ef7b-0f80d4310127@de.bosch.com>
+ <ec545462-54ed-9e23-049e-1807d24ec084@cogentembedded.com>
+ <3a182ac7-8d41-cdc7-2b87-7c503f68a426@de.bosch.com>
+Organization: Cogent Embedded
+Message-ID: <f21a9444-9541-6558-f5f5-ca0b733768ff@cogentembedded.com>
+Date:   Tue, 25 Feb 2020 23:41:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-In-Reply-To: <CACPK8XdmdksFctYk96x46XJcxe3yQD3HfAzC8gdF_GXWJHeu2A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-25_07:2020-02-25,2020-02-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 spamscore=0 clxscore=1011 phishscore=0 malwarescore=0
- bulkscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002250137
+In-Reply-To: <3a182ac7-8d41-cdc7-2b87-7c503f68a426@de.bosch.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 02/25/2020 12:33 PM, Behme Dirk (CM/ESO2) wrote:
 
-On 2/24/20 11:08 PM, Joel Stanley wrote:
-> Hi Eddie,
->
-> Some comments below. For the most part it looks good.
->
-> On Mon, 3 Feb 2020 at 22:30, Eddie James <eajames@linux.ibm.com> wrote:
->
->> +FSI-ATTACHED SPI DRIVER
->> +M:     Eddie James <eajames@linux.ibm.com>
->> +L:     linux-spi@vger.kernel.org
-> Add linux-fsi@lists.ozlabs.org too
->
->> +S:     Maintained
->> +F:     drivers/spi/spi-fsi.c
->> +static int fsi_spi_write_reg(struct fsi_spi *ctx, u32 offset, u64 value)
->> +{
->> +       int rc;
->> +       __be32 cmd_be;
->> +       __be32 data_be;
->> +
->> +       dev_dbg(ctx->dev, "Write %02x[%016llx].\n", offset, value);
->> +
->> +       data_be = cpu_to_be32(upper_32_bits(value));
->> +       rc = fsi_device_write(ctx->fsi, FSI2SPI_DATA0, &data_be,
->> +                             sizeof(data_be));
->> +       if (rc)
->> +               return rc;
->> +
->> +       data_be = cpu_to_be32(lower_32_bits(value));
-> The lower_32_bits cast is redundant (but harmless).
->
->> +       rc = fsi_device_write(ctx->fsi, FSI2SPI_DATA1, &data_be,
->> +                             sizeof(data_be));
->> +       if (rc)
->> +               return rc;
->> +
->> +       cmd_be = cpu_to_be32((offset + ctx->base) | FSI2SPI_CMD_WRITE);
-> offset + ctx->base must be less than 2 ^ 31 otherwise the top bit of
-> the address collides with the write command. Should we introduce a
-> check for that?
+>>>>>   From d72b805cc461ab1e9747c973e9be84e7abb8f828 Mon Sep 17 00:00:00 2001
+>>>>> From: Dirk Behme <dirk.behme@de.bosch.com>
+>>>>> Date: Tue, 4 Feb 2020 08:39:31 +0100
+>>>>> Subject: [PATCH] memory: renesas-rpc-if: Correct the STRTIM and some other
+>>>>>    clean up
+>>>>>
+>>>>> This is required to make the driver work correctly in my M3 environment.
+>>>>>
+>>>>> Signed-off-by: Dirk Behme <dirk.behme@de.bosch.com>
+>>>>> ---
+>>>>>    drivers/memory/renesas-rpc-if.c | 42 ++++++++++++++++++++-------------
+>>>>>    1 file changed, 25 insertions(+), 17 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+>>>>> index 04be92b64bfa..f4356b066384 100644
+>>>>> --- a/drivers/memory/renesas-rpc-if.c
+>>>>> +++ b/drivers/memory/renesas-rpc-if.c
+>>>> [...]
+>>>>> @@ -513,19 +525,15 @@ ssize_t rpcif_dirmap_read(struct rpcif *rpc, u64 offs, size_t len, void *buf)
+>>>>>        pm_runtime_get_sync(rpc->dev);
+>>>>>
+>>>>>        regmap_update_bits(rpc->regmap, RPCIF_CMNCR, RPCIF_CMNCR_MD, 0);
+>>>>> -    regmap_write(rpc->regmap, RPCIF_DRCR,
+>>>>> -             RPCIF_DRCR_RBURST(32) | RPCIF_DRCR_RBE);
+>>>>> -    regmap_write(rpc->regmap, RPCIF_DRCMR, rpc->command);
+>>>>> -    regmap_write(rpc->regmap, RPCIF_DREAR,
+>>>>> -             RPCIF_DREAR_EAV(offs >> 25) | RPCIF_DREAR_EAC(1));
+>>>>> -    regmap_write(rpc->regmap, RPCIF_DROPR, rpc->option);
+>>>>> -    regmap_write(rpc->regmap, RPCIF_DRENR,
+>>>>> -             rpc->enable & ~RPCIF_SMENR_SPIDE(0xF));
+>>>>> -    regmap_write(rpc->regmap, RPCIF_DRDMCR, rpc->dummy);
+>>>>> -    regmap_write(rpc->regmap, RPCIF_DRDRENR, rpc->ddr);
+>>>>
+>>>>      The driver somehow works only with this left in place (with 2 bytes eaten
+>>>> as before), otherwise all the flash reads all 0xff (via dirmap).
+>>>
+>>>
+>>> Do you boot from hyperflash?
+>>
+>>     No, I have arewto say 'cpld write 30 1' in U-Boot before a boot a kernel.
 
+   s/arewto/to/. :-)
 
-Sure, good idea.
+>> Normally, the V3x Starter Kit boards are wired for the QSPI flash chips.
+>>
+>>> The system I'm using for testing boots from hyperflash. So most probably all registers
+>>> I don't touch in the driver are put into a reasonable state by the boot code, already.
+>>> If you don't boot from hyperflash, that at least would explain our different behavior.
+>>
+>>     Yes. Mind dumping the registers and sending to me?
+> 
+> Using the attached debug patch (0001-memory-renesas-rpc-if-DEBUG-Dump-register-
+> content.patch) on a r8a7796 system booting from Hyperflash with above register
+dropping reverted (i.e. including touching these registers) I get
+> 
+> Before:
+> RPCIF_DRCR:    0x00000000
+> RPCIF_DRCMR:   0x00a00000
+> RPCIF_DREAR:   0x00000000
+> RPCIF_DROPR:   0x00000000
+> RPCIF_DRENR:   0xa222d400
+> RPCIF_DRDMCR:  0x0000000e
+> RPCIF_DRDRENR: 0x00005101
+> 
+> After:
+> RPCIF_DRCR:    0x001f0100
+> RPCIF_DRCMR:   0x00a00000
+> RPCIF_DREAR:   0x00010001
+> RPCIF_DROPR:   0x00000000
+> RPCIF_DRENR:   0xa202d400
+> RPCIF_DRDMCR:  0x0000000e
+> RPCIF_DRDRENR: 0x00005101
+> 
+> Comparing that, just 3 registers are different between my working version ("Before") and the version which shows the 2-byte offset ("After"): RPCIF_DRCR, RPCIF_DREAR and RPCIF_DRENR. With try & error, at least in my setup, I was able to reduce this to just RPCIF_DRCR. Dropping the burst mode I was able to 'fix' the two byte offset issue.
 
+   ACK! Thanks a lot for finding it! :-)
+   That's what I get on the first dirmap read:
 
->
->> +       rc = fsi_device_write(ctx->fsi, FSI2SPI_CMD, &cmd_be, sizeof(cmd_be));
->> +       if (rc)
->> +               return rc;
->> +
->> +       return fsi_spi_check_status(ctx);
->> +}
->> +
->> +static int fsi_spi_data_in(u64 in, u8 *rx, int len)
->> +{
->> +       int i;
->> +       int num_bytes = min(len, 8);
->> +
->> +       for (i = 0; i < num_bytes; ++i)
->> +               rx[i] = (u8)(in >> (8 * ((num_bytes - 1) - i)));
->> +
->> +       return num_bytes;
->> +}
->> +
->> +static int fsi_spi_data_out(u64 *out, const u8 *tx, int len)
->> +{
->> +       int i;
->> +       int num_bytes = min(len, 8);
->> +
->> +       *out = 0ULL;
->> +
->> +       for (i = 0; i < num_bytes; ++i)
->> +               *out |= (u64)tx[i] << (8 * (8 - (i + 1)));
-> Did this work with non-8 byte transfers? I think the second 8 should
-> be num_bytes.
+Before:
+RPCIF_CMNCR:   0x81fff301
+RPCIF_DRCR:    0x00000000
+RPCIF_DRCMR:   0x00030000
+RPCIF_DREAR:   0x00000000
+RPCIF_DROPR:   0x00000000
+RPCIF_DRENR:   0x00004700
+RPCIF_DRDMCR:  0x00000000
+RPCIF_DRDRENR: 0x00000000
 
+After:                                                                          
+RPCIF_CMNCR:   0x01fff301                                                       
+RPCIF_DRCR:    0x001f0100                                                       
+RPCIF_DRCMR:   0x00800000                                                       
+RPCIF_DREAR:   0x00000001                                                       
+RPCIF_DROPR:   0x00000000                                                       
+RPCIF_DRENR:   0xa202d400                                                       
+RPCIF_DRDMCR:  0x0000000e                                                       
+RPCIF_DRDRENR: 0x00005101                                                       
 
-No it should be 8. From the spec, "The value written to this register 
-has to be left aligned." So to send 0x5a (1 byte) should write 
-0x5a00000000000000. I've tested this with 1-7 byte writes and obtained 
-the correct result.
+> Do you like to give the attached 0001-memory-renesas-rpc-if-Don-t-use-burst-mode-on-read.patch a try in your setup?
 
+   Works like charm! :-)
+   Unfortunately, the SPI dirmap and/or writes are still broken.
 
->
-> The loop requires careful reading to check. I wonder if we could do
-> this instead, which eliminates a lot duplicated loads and stores and
-> is easier to read:
->
->         uint8_t *outp = (uint8_t *)out;
->
->         for (i = 0; i < num_bytes; ++i) {
->                 outp[num_bytes - (i + 1)] = tx[i];
->         }
+> Best regards
+> 
+> Dirk
 
-
-Yes that should also work (using 8 instead of num_bytes in the assignment).
-
-
->
->> +
->> +       return num_bytes;
->> +}
->> +
->> +static int fsi_spi_reset(struct fsi_spi *ctx)
->> +{
->> +       int rc;
->> +
->> +       dev_dbg(ctx->dev, "Resetting SPI controller.\n");
->> +
->> +       rc = fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
->> +                              SPI_FSI_CLOCK_CFG_RESET1);
->> +       if (rc)
->> +               return rc;
->> +
->> +       return fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
->> +                                SPI_FSI_CLOCK_CFG_RESET2);
->> +}
->> +
->> +static int fsi_spi_sequence_add(struct fsi_spi_sequence *seq, u8 val)
->> +{
->> +       seq->data |= (u64)val << seq->bit;
->> +       seq->bit -= 8;
->> +
->> +       return ((64 - seq->bit) / 8) - 2;
-> I have no idea what this is doing. Add a comment?
-
-
-Sure. It's adding the next command to the sequence register and 
-incrementing it's counter.
-
-
->
->> +}
->> +
->> +static int fsi_spi_transfer_init(struct fsi_spi *ctx)
->> +{
->> +       int rc;
->> +       bool reset = false;
->> +       unsigned long end;
->> +       u64 seq_state;
->> +       u64 clock_cfg = 0ULL;
->> +       u64 status = 0ULL;
->> +       u64 wanted_clock_cfg = SPI_FSI_CLOCK_CFG_ECC_DISABLE |
->> +               SPI_FSI_CLOCK_CFG_SCK_NO_DEL |
->> +               FIELD_PREP(SPI_FSI_CLOCK_CFG_SCK_DIV, 4);
->> +
->> +       end = jiffies + msecs_to_jiffies(SPI_FSI_INIT_TIMEOUT_MS);
->> +       do {
->> +               if (time_after(jiffies, end))
->> +                       return -ETIMEDOUT;
-> How tightly does this loop spin?
->
-> Should there be a delay inside of it?
-
-
-Well, very tightly but I haven't seen it ever do more than a couple of 
-iterations. And the timeout is 1 second. Not sure if we need a delay?
-
-
->
->> +
->> +               rc = fsi_spi_read_reg(ctx, SPI_FSI_STATUS, &status);
->> +               if (rc)
->> +                       return rc;
->> +
->> +               if (status & (SPI_FSI_STATUS_ANY_ERROR |
->> +                             SPI_FSI_STATUS_TDR_FULL |
->> +                             SPI_FSI_STATUS_RDR_FULL)) {
->> +                       if (reset)
->> +                               return -EIO;
->> +
->> +                       rc = fsi_spi_reset(ctx);
->> +                       if (rc)
->> +                               return rc;
->> +
->> +                       reset = true;
->> +                       continue;
->> +               }
->> +
->> +               seq_state = status & SPI_FSI_STATUS_SEQ_STATE;
->> +       } while (seq_state && (seq_state != SPI_FSI_STATUS_SEQ_STATE_IDLE));
-> ../drivers/spi/spi-fsi.c: In function ‘fsi_spi_transfer_one_message’:
-> ../drivers/spi/spi-fsi.c:363:11: warning: ‘seq_state’ may be used
-> uninitialized in this function [-Wmaybe-uninitialized]
->    363 |  } while (seq_state && (seq_state != SPI_FSI_STATUS_SEQ_STATE_IDLE));
->        |           ^~~~~~~~~
->
-
-Strange that I don't see this when I compile. I'll move the seq_state 
-assignment up.
-
-
->> +
->> +       rc = fsi_spi_read_reg(ctx, SPI_FSI_CLOCK_CFG, &clock_cfg);
->> +       if (rc)
->> +               return rc;
->> +
->> +       if ((clock_cfg & (SPI_FSI_CLOCK_CFG_MM_ENABLE |
->> +                         SPI_FSI_CLOCK_CFG_ECC_DISABLE |
->> +                         SPI_FSI_CLOCK_CFG_MODE |
->> +                         SPI_FSI_CLOCK_CFG_SCK_RECV_DEL |
->> +                         SPI_FSI_CLOCK_CFG_SCK_DIV)) != wanted_clock_cfg)
->> +               rc = fsi_spi_write_reg(ctx, SPI_FSI_CLOCK_CFG,
->> +                                      wanted_clock_cfg);
->> +
->> +       return rc;
->> +}
->> +static int fsi_spi_probe(struct device *dev)
->> +{
->> +       int rc;
->> +       u32 root_ctrl_8;
->> +       struct device_node *np;
->> +       int num_controllers_registered = 0;
->> +       struct fsi_device *fsi = to_fsi_dev(dev);
->> +
->> +       /*
->> +        * Check the SPI mux before attempting to probe. If the mux isn't set
->> +        * then the SPI controllers can't access their slave devices.
->> +        */
->> +       rc = fsi_slave_read(fsi->slave, FSI_MBOX_ROOT_CTRL_8, &root_ctrl_8,
->> +                           sizeof(root_ctrl_8));
-> Is it correct to stop probing if the mux is not set?
->
-> I assume it changes at runtime depending on the state of the host.
-> This could mean the driver probes correctly, but fails to work (if the
-> mux was set at BMC boot, but then changes).
-
-
-Right, it could change as the host switches the mux. I'm not sure what 
-the correct option here is.
-
-
->
-> Should it instead block reads/writes when the mux is in the incorrect state?
-
-
-I see a couple of problems with this.
-
-1) you'd have to check the state of the mux each time you try an operation?
-
-2) how do slave devices (eeproms, etc) get probed up? They'd fail at 
-first since operations are blocked, but then your master is probed with 
-no easy way to probe the slave?
-
-
->
->> +       if (rc)
->> +               return rc;
->> +
->> +       if (!root_ctrl_8) {
->> +               dev_dbg(dev, "SPI mux not set, aborting probe.\n");
->> +               return -ENODEV;
->> +       }
->> +
->> +       for_each_available_child_of_node(dev->of_node, np) {
->> +               u32 base;
->> +               struct fsi_spi *ctx;
->> +               struct spi_controller *ctlr;
->> +
->> +               if (of_property_read_u32(np, "reg", &base))
-> It looks like this has a device tree binding. Can you add a document
-> describing it too?
-
-
-Sure.
-
-
->
->> +                       continue;
->> +
->> +               ctlr = spi_alloc_master(dev, sizeof(*ctx));
->> +               if (!ctlr)
->> +                       break;
->> +
->> +               ctlr->dev.of_node = np;
->> +               ctlr->num_chipselect = of_get_available_child_count(np) ?: 1;
->> +               ctlr->flags = SPI_CONTROLLER_HALF_DUPLEX;
->> +               ctlr->max_transfer_size = fsi_spi_max_transfer_size;
->> +               ctlr->transfer_one_message = fsi_spi_transfer_one_message;
->> +
->> +               ctx = spi_controller_get_devdata(ctlr);
->> +               ctx->dev = &ctlr->dev;
->> +               ctx->fsi = fsi;
->> +               ctx->base = base + SPI_FSI_BASE;
->> +
->> +               rc = devm_spi_register_controller(dev, ctlr);
->> +               if (rc)
->> +                       spi_controller_put(ctlr);
->> +               else
->> +                       num_controllers_registered++;
->> +       }
->> +
->> +       if (!num_controllers_registered)
->> +               return -ENODEV;
->> +
->> +       return 0;
->> +}
+MBR, Sergei
