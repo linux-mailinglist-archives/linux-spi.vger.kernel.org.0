@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A91A416FAF9
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2020 10:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4D316FAFC
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2020 10:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728063AbgBZJiA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Feb 2020 04:38:00 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:40678 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727457AbgBZJh7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Feb 2020 04:37:59 -0500
+        id S1728079AbgBZJiD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Feb 2020 04:38:03 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:45698 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727457AbgBZJiC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Feb 2020 04:38:02 -0500
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9blW6019846;
-        Wed, 26 Feb 2020 03:37:47 -0600
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9bpYG048469;
+        Wed, 26 Feb 2020 03:37:51 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582709867;
-        bh=n523ZBNSyrlp74g4Ue51E774uonFnpFhlNalpFEKaCk=;
+        s=ti-com-17Q1; t=1582709872;
+        bh=f73KydanqCBfpggGnWafdMQaZ6wiesDHl1RvZlVeYSw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Ye0aMPvC3N3BHNDkYq8jh+n26j6USlZt3ASaU/dy3r/fHsEmZelzrLqsNL/UFx/dW
-         yVE1LPfyh+oJXlR3bERU4pkjiEwfiWooA/6rtmJOdQl+3agNMo3F0UUsh4odMrAFkJ
-         2yt6oeCovCC5Z7CL8NLxkinzjdty2HTIM74p1/T4=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01Q9bl3A119161
+        b=No0k3OIxU014MkfBvJ/fgCEQgTU7Z/CIgPHeLbBZuNxg97HCQabtuGeyb9bWOr/+H
+         NBRwuOutUGuYTPlp9TIJ63sj5HHaz5l+8TMVBu76ri4gs1VS+EqUgVtcuc4F55DO+J
+         1sLHBaf1ZOvmd1rXzk0+7N8QkkBuz9qMjSA0Imuc=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01Q9bpPI119216
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 Feb 2020 03:37:47 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 26 Feb 2020 03:37:51 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 26
- Feb 2020 03:37:47 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2020 03:37:51 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 26 Feb 2020 03:37:47 -0600
+ Frontend Transport; Wed, 26 Feb 2020 03:37:51 -0600
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9b4AE110613;
-        Wed, 26 Feb 2020 03:37:43 -0600
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9b4AF110613;
+        Wed, 26 Feb 2020 03:37:47 -0600
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -47,9 +47,9 @@ To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
 CC:     Pratyush Yadav <p.yadav@ti.com>, <linux-mtd@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>, Sekhar Nori <nsekhar@ti.com>
-Subject: [PATCH v2 09/11] mtd: spi-nor: use dummy cycle and address width info from SFDP
-Date:   Wed, 26 Feb 2020 15:07:01 +0530
-Message-ID: <20200226093703.19765-10-p.yadav@ti.com>
+Subject: [PATCH v2 10/11] mtd: spi-nor: enable octal DTR mode when possible
+Date:   Wed, 26 Feb 2020 15:07:02 +0530
+Message-ID: <20200226093703.19765-11-p.yadav@ti.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200226093703.19765-1-p.yadav@ti.com>
 References: <20200226093703.19765-1-p.yadav@ti.com>
@@ -62,52 +62,84 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The xSPI Profile 1.0 table specifies how many dummy cycles and address
-bytes are needed for the Read Status Register command in octal DTR mode.
-Use that information to send the correct Read SR command.
+Allow flashes to specify a hook to enable octal DTR mode. Use this hook
+whenever possible to get optimal transfer speeds.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/spi-nor.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/mtd/spi-nor/spi-nor.c | 31 +++++++++++++++++++++++++++++++
+ include/linux/mtd/spi-nor.h   |  2 ++
+ 2 files changed, 33 insertions(+)
 
 diff --git a/drivers/mtd/spi-nor/spi-nor.c b/drivers/mtd/spi-nor/spi-nor.c
-index 22784c403d77..06cfc525260c 100644
+index 06cfc525260c..fdcc1b4abc3f 100644
 --- a/drivers/mtd/spi-nor/spi-nor.c
 +++ b/drivers/mtd/spi-nor/spi-nor.c
-@@ -525,6 +525,8 @@ static int spi_nor_write_disable(struct spi_nor *nor)
- static int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
+@@ -5184,6 +5184,31 @@ static void spi_nor_init_params(struct spi_nor *nor)
+ 	spi_nor_late_init_params(nor);
+ }
+ 
++/** spi_nor_octal_dtr_enable() - enable Octal DTR I/O if needed
++ * @nor:                 pointer to a 'struct spi_nor'
++ *
++ * Return: 0 on success, -errno otherwise.
++ */
++static int spi_nor_octal_dtr_enable(struct spi_nor *nor)
++{
++	int ret;
++
++	if (!nor->params.octal_dtr_enable)
++		return 0;
++
++	if (!(spi_nor_get_protocol_width(nor->read_proto) == 8 ||
++	      spi_nor_get_protocol_width(nor->write_proto) == 8))
++		return 0;
++
++	ret = nor->params.octal_dtr_enable(nor);
++	if (ret)
++		return ret;
++
++	nor->reg_proto = SNOR_PROTO_8_8_8_DTR;
++
++	return 0;
++}
++
+ /**
+  * spi_nor_quad_enable() - enable Quad I/O if needed.
+  * @nor:                pointer to a 'struct spi_nor'
+@@ -5223,6 +5248,12 @@ static int spi_nor_init(struct spi_nor *nor)
  {
- 	int ret;
-+	u8 addr_bytes = nor->params.rdsr_addr_nbytes;
-+	u8 dummy = nor->params.rdsr_dummy;
+ 	int err;
  
- 	if (nor->spimem) {
- 		struct spi_mem_op op =
-@@ -533,10 +535,21 @@ static int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
- 				   SPI_MEM_OP_NO_DUMMY,
- 				   SPI_MEM_OP_DATA_IN(1, sr, 1));
- 
-+		if (spi_nor_protocol_is_dtr(nor->reg_proto)) {
-+			op.addr.nbytes = addr_bytes;
-+			op.addr.val = 0;
-+			op.dummy.nbytes = dummy;
-+		}
++	err = spi_nor_octal_dtr_enable(nor);
++	if (err) {
++		dev_dbg(nor->dev, "octal mode not supported\n");
++		return err;
++	}
 +
-+		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-+
- 		ret = spi_mem_exec_op(nor->spimem, &op);
- 	} else {
--		ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDSR,
--						    sr, 1);
-+		if (spi_nor_protocol_is_dtr(nor->reg_proto))
-+			ret = -ENOTSUPP;
-+		else
-+			ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDSR,
-+							    sr, 1);
- 	}
+ 	err = spi_nor_quad_enable(nor);
+ 	if (err) {
+ 		dev_dbg(nor->dev, "quad mode not supported\n");
+diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
+index f54dbd0f86ab..c653f6713cfc 100644
+--- a/include/linux/mtd/spi-nor.h
++++ b/include/linux/mtd/spi-nor.h
+@@ -526,6 +526,7 @@ struct spi_nor_locking_ops {
+  *                      higher index in the array, the higher priority.
+  * @erase_map:		the erase map parsed from the SFDP Sector Map Parameter
+  *                      Table.
++ * @octal_dtr_enable:	enables SPI NOR octal DTR mode.
+  * @quad_enable:	enables SPI NOR quad mode.
+  * @set_4byte:		puts the SPI NOR in 4 byte addressing mode.
+  * @convert_addr:	converts an absolute address into something the flash
+@@ -549,6 +550,7 @@ struct spi_nor_flash_parameter {
  
- 	if (ret)
+ 	struct spi_nor_erase_map        erase_map;
+ 
++	int (*octal_dtr_enable)(struct spi_nor *nor);
+ 	int (*quad_enable)(struct spi_nor *nor);
+ 	int (*set_4byte)(struct spi_nor *nor, bool enable);
+ 	u32 (*convert_addr)(struct spi_nor *nor, u32 addr);
 -- 
 2.25.0
 
