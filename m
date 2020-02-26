@@ -2,107 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A66816F14B
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2020 22:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8E316F50C
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2020 02:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729062AbgBYVnC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Feb 2020 16:43:02 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:34054 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728979AbgBYVnC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 16:43:02 -0500
-Received: by mail-wm1-f65.google.com with SMTP id i10so1997483wmd.1
-        for <linux-spi@vger.kernel.org>; Tue, 25 Feb 2020 13:43:01 -0800 (PST)
+        id S1729395AbgBZBbp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Feb 2020 20:31:45 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:35484 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729170AbgBZBbp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Feb 2020 20:31:45 -0500
+Received: by mail-ot1-f66.google.com with SMTP id r16so1484774otd.2;
+        Tue, 25 Feb 2020 17:31:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=easyb-ch.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=kEVJ1n2NxQ1glfbZ9e15foebWC3MxMe0p/5A/jyD6H0=;
-        b=oveJUVfN4mGmIby/KrplpWvi32NOCpmb1Fej6u+eU25j1sso9bxSCmnS1HYlP5k+TS
-         MN55kLyOOXTrI5QiCGtP00bRnkJxE6q+aUpqdFsAsXwQh0dvu55FS/TXrAVS/ae6mu1l
-         NAlvopKlSspPGtPCVj0mdTNuFv+ZfhgIinLqRNatsNKvQI8KxR0B1VAiDYp321L4gtUZ
-         g8u+mkFIDr2NdhUV2f4JbQ3BTA7fhSsIoCINRAOSYNlefs7F0PuxzSG5YkiVtBklT+fO
-         oaD/MUhWA0PqDh9MWO9s+RAgppI/P3ICunuQwVb2PDrJVH31q6jq8+vTKG+aECdrMlUL
-         Kc9g==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m69OUPpDCFCPc/oa2eyFJo4I++z0wlZi/kprUKpLj3Y=;
+        b=nA2f+OLzY/0xumh5TuXz4ftOJdyLWFEddIBk66xJxkReDm94lliWkpwvPZ4a2z3aL+
+         7F+sqVUc1AzH4De2HzKgueukRv45rp0BhL1+N00JyaUl0pf8w2HajjUgeCkoJF7IJOlA
+         ggEwGRbikFgBXKyJuSgVOcXhbcpJCTQKeyo/nw/xbjt6rWvnKRe6cB5I1Zh31qnj988D
+         ZkrhLAL1NuHixK58f6i/pdi/eHNF5m+KjXIhJbAzoqxI3ZfMK2b0tUyDtQ86XgSM/Yq1
+         8gK34CHyXzjHzraPQJFoD50QgHtNUe9dEYNAgyQra9e7EQzFbKF/kURdvfMeW7/ka4B6
+         +tGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=kEVJ1n2NxQ1glfbZ9e15foebWC3MxMe0p/5A/jyD6H0=;
-        b=T1kxpEgk/NfpsCZv6iwiMxqalLswFWWOHEV9ANThWqJnbzGToJpIv2TVB0D9Qb62ln
-         LFilplv6uii3Y6iRec7gPlBAss5+DTrwyPvyE7+wwnu5X4pDoD4IVNA1v8xxF42s39hP
-         MA3a4Dt9jqp1nI1LXuIAALgl7l00JJt1m8hAkY4a+Tb6nu18b5bl+d20QkNcyb8X7NNV
-         AIjZxyaojo1HITHiX+L5EpvWYMxLckqWDU+d93ps4R1XNjW9O8mVCDh+ancszeG79hnE
-         BBYsM3B9rJLAQzOf4cLr8B/v+71HR4XtZ2G6ITEZ0agfMNREejwlEcrL8u5uUeBBazA5
-         dc/w==
-X-Gm-Message-State: APjAAAXRYlF/5vnekqq26rKk4oRTbx8O5S7v4qfTDG5kiSpHhsJ/vG4f
-        W6OKODF64FEpg1PLLW26VoZIfg==
-X-Google-Smtp-Source: APXvYqzT6vU3uivqK3LFISSNim+ES8rBV5I3PSPpMQoyPtAT6binkjIz4QcxUjjxxm7ATqtLrWgIdA==
-X-Received: by 2002:a1c:7ec5:: with SMTP id z188mr1188559wmc.52.1582666980570;
-        Tue, 25 Feb 2020 13:43:00 -0800 (PST)
-Received: from ?IPv6:2001:1715:4e22:c580:ed96:156f:9663:e7e4? ([2001:1715:4e22:c580:ed96:156f:9663:e7e4])
-        by smtp.gmail.com with ESMTPSA id f1sm212602wro.85.2020.02.25.13.42.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Feb 2020 13:43:00 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.1\))
-Subject: Re: [RFC 00/25] arm64: realtek: Add Xnano X5 and implement
- TM1628/FD628/AiP1618 LED controllers
-From:   Ezra Buehler <ezra@easyb.ch>
-In-Reply-To: <04e7d7cd-a8bc-621b-9205-1a058521cabe@arm.com>
-Date:   Tue, 25 Feb 2020 22:42:57 +0100
-Cc:     linux-realtek-soc@lists.infradead.org, linux-leds@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        csd@princeton.com.tw, devicetree@vger.kernel.org, sales@fdhisi.com,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, zypeng@titanmec.com,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, Dan Murphy <dmurphy@ti.com>,
-        linux-rockchip@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E33E27B9-D33C-4182-A5B1-C72FA40470BC@easyb.ch>
-References: <20191212033952.5967-1-afaerber@suse.de>
- <7110806f-ddbd-f055-e107-7a1f7e223102@arm.com>
- <c86c6bc0-b0e5-c46e-da87-9d910b95f9f3@suse.de>
- <04e7d7cd-a8bc-621b-9205-1a058521cabe@arm.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        =?utf-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>
-X-Mailer: Apple Mail (2.3445.9.1)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m69OUPpDCFCPc/oa2eyFJo4I++z0wlZi/kprUKpLj3Y=;
+        b=KJQ8jt2HgPtLxfqvnaJc7gIHrnRmN+23m4cnYRYAEi7l7rN/hSbJUoYWzYDdL7mKGf
+         +abaZzNu89E0+PNEy5D5YqBReo41egOjPV4uW+WTvb6D6VcM5Iys4kqhw86hJr+wsp46
+         2G21oQ8DCMRtvXEtJM9ALJwi8f3DJGgQQfM1rT5dtKw1LMczbSdNX+padXHtuOpnIuNG
+         xcTHRvb7anJ/OQxJ73ThyO9cbjrxxpCKtcaHlH8bYxK5mksSlFnpWICZKTn0c/RHlQr6
+         GVtCWz0bowEa8Hi7hHcgt0XFhP+Wvj5q7OP1r4x8NVVPVgmYWXtlfWe72k4b1WY+oA77
+         6VZw==
+X-Gm-Message-State: APjAAAXS2Lq5qhEWfyKw2ZxGWQJrJJuWg3VZn6bHKJjqPOnC2+qlM1Dm
+        XN52MejeXm3LJuvevzVzfRrk8VZgD8n7CvSAFq8=
+X-Google-Smtp-Source: APXvYqx4k8rPNcqHzRcAhaiCXWJ4jVniE5gHoAh/s13hkt4+EPZPVv3r7htQo04hdVYPzVU1U3PK6wlRKTZrD779bTc=
+X-Received: by 2002:a9d:6a4f:: with SMTP id h15mr1129292otn.86.1582680704677;
+ Tue, 25 Feb 2020 17:31:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20200215065826.739102-1-gch981213@gmail.com> <20200218125557.GD4232@sirena.org.uk>
+ <CAJsYDVL03KJv7eewGekBPCfpbOuTX0tJ6qZaydvJnBDzZ5vEwg@mail.gmail.com> <20200225173137.GA31830@bogus>
+In-Reply-To: <20200225173137.GA31830@bogus>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Wed, 26 Feb 2020 09:31:33 +0800
+Message-ID: <CAJsYDVKqcd-ytLLf5zKqs8DfjPAa5ELCX53OiPDAi-tDnLd=Eg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] rewrite mtk-quadspi spi-nor driver with spi-mem
+To:     Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Robin,
-Hi Andreas,
+Hi!
 
-> On 13 Dec 2019, at 15:07, Robin Murphy <robin.murphy@arm.com> wrote:
->=20
-> I also have one of the H96 Max boxes (which I picked up out of =
-curiosity
-> for the mysterious RK3318) with an FD6551, although I've not attacked
-> that one with the logic analyser yet to see how similar it is.
+On Wed, Feb 26, 2020 at 1:31 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Feb 20, 2020 at 07:58:06AM +0800, Chuanhong Guo wrote:
+> > Hi!
+> >
+> > On Tue, Feb 18, 2020 at 8:55 PM Mark Brown <broonie@kernel.org> wrote:
+> > > This is an ABI break so you shouldn't be doing this, if the existing
+> > > binding works it should continue to work.
+> >
+> > The missing spi-max-frequency is the only part preventing old
+> > device tree to work with this driver.
+> > If the goal is to make existing dt binding work, I could patch dt using
+> > of_add_property in v2. I saw similar device tree patching for legacy
+> > bindings in pinctrl-single driver.
 
-I have a T9 (RK3328) TV box with the same chip in it. The FD6551 uses an
-I2C-like protocol. Every digit (and the symbols) have an I2C address,
-but, the display does not signal ACK. AFAIK the FD650 and FD655 which
-are used in other boxes (Amlogic) are very similar.
+I just noticed that of_add_property isn't a exported symbol, which means that
+device tree patching isn't possible unless driver is builtin.
 
-So far, I have whipped up a proof-of-cocept driver that uses i2c-gpio.
-The digits seem to be rotated by 180 degrees. So, in order to use
-map_to_7segment.h I had to define the BIT_SEG7_* constants differently.
-My display also has multiple symbols (WIFI, network, pause, play, USB,
-alarm) that are controlled by writing to the same address as for the
-colon.
+>
+> You should should really only need 'spi-max-frequency' if the max freq
+> is less than the minimum of the host and device max freq.
 
-I=E2=80=99d love to work on a driver (similar to Andreas=E2=80=99 SPI =
-based driver) for
-these I2C connected chips.
+But current spi framework forces that a "spi-max-frequency" property
+is present. [0]
+Should we patch spi framework then?
 
-Cheers,
-Ezra.
-
+[0] https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi.c#L1951
+-- 
+Regards,
+Chuanhong Guo
