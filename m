@@ -2,39 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC9416FAEF
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2020 10:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C897316FAF3
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2020 10:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbgBZJhp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Feb 2020 04:37:45 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:45652 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbgBZJho (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Feb 2020 04:37:44 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9bMXC048392;
-        Wed, 26 Feb 2020 03:37:22 -0600
+        id S1728028AbgBZJh4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Feb 2020 04:37:56 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:37304 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727998AbgBZJhv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Feb 2020 04:37:51 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9bQ06108032;
+        Wed, 26 Feb 2020 03:37:26 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582709842;
-        bh=2l+gbPh3UsxLnnwcIelUMPvT/YEvl2c/dQvOKdwacuQ=;
+        s=ti-com-17Q1; t=1582709846;
+        bh=UK9ViJ8/KnZTmqsh0WaZJUAW35YfoP4ZW7jL8CyJPoQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=HhaDEMx64ozp/WxJ5VYGDzXmcJVkmcGFqgdH/RVfu6gRmEj4N2MmLODZ2ka6AWONC
-         g4hfh09oT7jzPWmzSHKEN7fF4hM0eGNHGJkihHXIo7kFR8v7krMjmnBE6IFoXKi5G+
-         MrM3sZR4ePD9TaRCJKkygIl1Plk26u+PKlooGVdU=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9bMFn086529;
-        Wed, 26 Feb 2020 03:37:22 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+        b=GC3+4ikYVuIib89/kVsUWrJZzTCfta5uFhsQ1rmOJebR3ekvGJGeZ/1/IltvlnZ3b
+         1B7gis80R3HV0fd0WoUUl8MBUIm9j83v2hKHf1gn3oxlGbVRwx6L0/EUnWrtTHLrud
+         uHENnCYDJ3D4byp3UnfSnxEEeMQh0Hbmkkz3SmfU=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01Q9bQqZ118902
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Feb 2020 03:37:26 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 26
- Feb 2020 03:37:21 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2020 03:37:25 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 26 Feb 2020 03:37:21 -0600
+ Frontend Transport; Wed, 26 Feb 2020 03:37:25 -0600
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9b4A8110613;
-        Wed, 26 Feb 2020 03:37:17 -0600
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01Q9b4A9110613;
+        Wed, 26 Feb 2020 03:37:22 -0600
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -46,9 +47,9 @@ To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
 CC:     Pratyush Yadav <p.yadav@ti.com>, <linux-mtd@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>, Sekhar Nori <nsekhar@ti.com>
-Subject: [PATCH v2 03/11] spi: spi-mem: allow specifying whether an op is DTR or not
-Date:   Wed, 26 Feb 2020 15:06:55 +0530
-Message-ID: <20200226093703.19765-4-p.yadav@ti.com>
+Subject: [PATCH v2 04/11] spi: spi-mem: allow specifying a command's extension
+Date:   Wed, 26 Feb 2020 15:06:56 +0530
+Message-ID: <20200226093703.19765-5-p.yadav@ti.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200226093703.19765-1-p.yadav@ti.com>
 References: <20200226093703.19765-1-p.yadav@ti.com>
@@ -61,111 +62,107 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Each phase is given a separate 'is_dtr' field so mixed protocols like
-4S-4D-4D can be supported.
-
-Also add the mode bits SPI_RX_DTR and SPI_TX_DTR so controllers can
-specify whether they support DTR modes or not.
+In xSPI mode, flashes expect 2-byte opcodes. The second byte is called
+the "command extension". There can be 3 types of extensions in xSPI:
+repeat, invert, and hex. When the extension type is "repeat", the same
+opcode is sent twice. When it is "invert", the second byte is the
+inverse of the opcode. When it is "hex" an additional opcode byte based
+is sent with the command whose value can be anything.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
  drivers/spi/spi-mem.c       | 23 +++++++++++++++++++++++
- include/linux/spi/spi-mem.h |  8 ++++++++
- 2 files changed, 31 insertions(+)
+ include/linux/spi/spi-mem.h | 24 ++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
 diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index e5a46f0eb93b..cb13e0878b95 100644
+index cb13e0878b95..3838ddc9aeec 100644
 --- a/drivers/spi/spi-mem.c
 +++ b/drivers/spi/spi-mem.c
-@@ -99,6 +99,16 @@ void spi_controller_dma_unmap_mem_op_data(struct spi_controller *ctlr,
+@@ -462,6 +462,29 @@ int spi_mem_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
  }
- EXPORT_SYMBOL_GPL(spi_controller_dma_unmap_mem_op_data);
+ EXPORT_SYMBOL_GPL(spi_mem_adjust_op_size);
  
-+static int spi_check_dtr_req(struct spi_mem *mem, bool tx)
++int spi_mem_get_cmd_ext(const struct spi_mem_op *op, u8 *ext)
 +{
-+	u32 mode = mem->spi->mode;
++	switch (op->cmd.ext_type) {
++	case SPI_MEM_EXT_INVERT:
++		*ext = ~op->cmd.opcode;
++		break;
 +
-+	if ((tx && (mode & SPI_TX_DTR)) || (!tx && (mode & SPI_RX_DTR)))
-+		return 0;
++	case SPI_MEM_EXT_REPEAT:
++		*ext = op->cmd.opcode;
++		break;
 +
-+	return -ENOTSUPP;
++	case SPI_MEM_EXT_HEX:
++		*ext = op->cmd.ext;
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
 +}
++EXPORT_SYMBOL_GPL(spi_mem_get_cmd_ext);
 +
- static int spi_check_buswidth_req(struct spi_mem *mem, u8 buswidth, bool tx)
+ static ssize_t spi_mem_no_dirmap_read(struct spi_mem_dirmap_desc *desc,
+ 				      u64 offs, size_t len, void *buf)
  {
- 	u32 mode = mem->spi->mode;
-@@ -154,6 +164,19 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
- 				   op->data.dir == SPI_MEM_DATA_OUT))
- 		return false;
- 
-+	if (op->cmd.is_dtr && spi_check_dtr_req(mem, true))
-+		return false;
-+
-+	if (op->addr.is_dtr && spi_check_dtr_req(mem, true))
-+		return false;
-+
-+	if (op->dummy.is_dtr && spi_check_dtr_req(mem, true))
-+		return false;
-+
-+	if (op->data.dir != SPI_MEM_NO_DATA && op->data.is_dtr &&
-+	    spi_check_dtr_req(mem, op->data.dir == SPI_MEM_DATA_OUT))
-+		return false;
-+
- 	return true;
- }
- EXPORT_SYMBOL_GPL(spi_mem_default_supports_op);
 diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-index af9ff2f0f1b2..4669082b4e3b 100644
+index 4669082b4e3b..06ccab17e4d0 100644
 --- a/include/linux/spi/spi-mem.h
 +++ b/include/linux/spi/spi-mem.h
-@@ -71,6 +71,7 @@ enum spi_mem_data_dir {
+@@ -67,11 +67,31 @@ enum spi_mem_data_dir {
+ 	SPI_MEM_DATA_OUT,
+ };
+ 
++/**
++ * enum spi_mem_cmd_ext - describes the command opcode extension in DTR mode
++ * @SPI_MEM_EXT_NONE: no extension. This is the default, and is used in Legacy
++ *		      SPI mode
++ * @SPI_MEM_EXT_REPEAT: the extension is same as the opcode
++ * @SPI_MEM_EXT_INVERT: the extension is the bitwise inverse of the opcode
++ * @SPI_MEM_EXT_HEX: the extension is any hex value. The command and opcode
++ *		     combine to form a 16-bit opcode.
++ */
++enum spi_mem_cmd_ext {
++	SPI_MEM_EXT_NONE = 0,
++	SPI_MEM_EXT_REPEAT,
++	SPI_MEM_EXT_INVERT,
++	SPI_MEM_EXT_HEX,
++};
++
+ /**
   * struct spi_mem_op - describes a SPI memory operation
   * @cmd.buswidth: number of IO lines used to transmit the command
   * @cmd.opcode: operation opcode
-+ * @cmd.is_dtr: whether the command opcode should be sent in DTR mode or not
+  * @cmd.is_dtr: whether the command opcode should be sent in DTR mode or not
++ * @cmd.ext_type: type of the command opcode extension in DTR mode
++ * @cmd.ext: value of the command opcode extension in DTR mode. It is
++ *	     only set when 'ext_type' is 'SPI_MEM_EXT_HEX'. In all other
++ *	     cases, the extension can be directly derived from the opcode.
   * @addr.nbytes: number of address bytes to send. Can be zero if the operation
   *		 does not need to send an address
   * @addr.buswidth: number of IO lines used to transmit the address cycles
-@@ -78,10 +79,13 @@ enum spi_mem_data_dir {
-  *	      Note that only @addr.nbytes are taken into account in this
-  *	      address value, so users should make sure the value fits in the
-  *	      assigned number of bytes.
-+ * @addr.is_dtr: whether the address should be sent in DTR mode or not
-  * @dummy.nbytes: number of dummy bytes to send after an opcode or address. Can
-  *		  be zero if the operation does not require dummy bytes
-  * @dummy.buswidth: number of IO lanes used to transmit the dummy bytes
-+ * @dummy.is_dtr: whether the dummy bytes should be sent in DTR mode or not
-  * @data.buswidth: number of IO lanes used to send/receive the data
-+ * @data.is_dtr: whether the data should be sent in DTR mode or not
-  * @data.dir: direction of the transfer
-  * @data.nbytes: number of data bytes to send/receive. Can be zero if the
-  *		 operation does not involve transferring data
-@@ -92,21 +96,25 @@ struct spi_mem_op {
- 	struct {
+@@ -97,6 +117,8 @@ struct spi_mem_op {
  		u8 buswidth;
  		u8 opcode;
-+		bool is_dtr;
+ 		bool is_dtr;
++		enum spi_mem_cmd_ext ext_type;
++		u8 ext;
  	} cmd;
  
  	struct {
- 		u8 nbytes;
- 		u8 buswidth;
- 		u64 val;
-+		bool is_dtr;
- 	} addr;
+@@ -361,6 +383,8 @@ int spi_mem_driver_register_with_owner(struct spi_mem_driver *drv,
  
- 	struct {
- 		u8 nbytes;
- 		u8 buswidth;
-+		bool is_dtr;
- 	} dummy;
+ void spi_mem_driver_unregister(struct spi_mem_driver *drv);
  
- 	struct {
- 		u8 buswidth;
-+		bool is_dtr;
- 		enum spi_mem_data_dir dir;
- 		unsigned int nbytes;
- 		union {
++int spi_mem_get_cmd_ext(const struct spi_mem_op *op, u8 *ext);
++
+ #define spi_mem_driver_register(__drv)                                  \
+ 	spi_mem_driver_register_with_owner(__drv, THIS_MODULE)
+ 
 -- 
 2.25.0
 
