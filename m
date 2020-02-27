@@ -2,159 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCEC1723BE
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2020 17:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3095C1723C3
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2020 17:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729774AbgB0QoS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Feb 2020 11:44:18 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39850 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729146AbgB0QoS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Feb 2020 11:44:18 -0500
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 09D71296435;
-        Thu, 27 Feb 2020 16:44:09 +0000 (GMT)
-Date:   Thu, 27 Feb 2020 17:44:06 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1730336AbgB0Qo2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Feb 2020 11:44:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:54650 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729146AbgB0Qo2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 27 Feb 2020 11:44:28 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C6DD1FB;
+        Thu, 27 Feb 2020 08:44:27 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6EA63F7B4;
+        Thu, 27 Feb 2020 08:44:26 -0800 (PST)
+Date:   Thu, 27 Feb 2020 16:44:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, Sekhar Nori <nsekhar@ti.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 04/11] spi: spi-mem: allow specifying a command's
- extension
-Message-ID: <20200227174406.66bf6f84@collabora.com>
-In-Reply-To: <20200226093703.19765-5-p.yadav@ti.com>
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: Re: [PATCH v2 01/11] dt-bindings: spi: allow expressing DTR
+ capability
+Message-ID: <20200227164425.GF4062@sirena.org.uk>
 References: <20200226093703.19765-1-p.yadav@ti.com>
-        <20200226093703.19765-5-p.yadav@ti.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+ <20200226093703.19765-2-p.yadav@ti.com>
+ <20200227171147.32cc6fcf@collabora.com>
+ <20200227162842.GE4062@sirena.org.uk>
+ <CAMuHMdWMCDzQm0tjpybJZyHy4imbC9NqRXP5d4C0xgxQx-Pf8g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1Ow488MNN9B9o/ov"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWMCDzQm0tjpybJZyHy4imbC9NqRXP5d4C0xgxQx-Pf8g@mail.gmail.com>
+X-Cookie: Edwin Meese made me wear CORDOVANS!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 26 Feb 2020 15:06:56 +0530
-Pratyush Yadav <p.yadav@ti.com> wrote:
 
-> In xSPI mode, flashes expect 2-byte opcodes. The second byte is called
-> the "command extension". There can be 3 types of extensions in xSPI:
-> repeat, invert, and hex. When the extension type is "repeat", the same
-> opcode is sent twice. When it is "invert", the second byte is the
-> inverse of the opcode. When it is "hex" an additional opcode byte based
-> is sent with the command whose value can be anything.
-> 
-> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> ---
->  drivers/spi/spi-mem.c       | 23 +++++++++++++++++++++++
->  include/linux/spi/spi-mem.h | 24 ++++++++++++++++++++++++
->  2 files changed, 47 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> index cb13e0878b95..3838ddc9aeec 100644
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -462,6 +462,29 @@ int spi_mem_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
->  }
->  EXPORT_SYMBOL_GPL(spi_mem_adjust_op_size);
->  
-> +int spi_mem_get_cmd_ext(const struct spi_mem_op *op, u8 *ext)
-> +{
-> +	switch (op->cmd.ext_type) {
-> +	case SPI_MEM_EXT_INVERT:
-> +		*ext = ~op->cmd.opcode;
-> +		break;
-> +
-> +	case SPI_MEM_EXT_REPEAT:
-> +		*ext = op->cmd.opcode;
-> +		break;
-> +
-> +	case SPI_MEM_EXT_HEX:
-> +		*ext = op->cmd.ext;
-> +		break;
-> +
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(spi_mem_get_cmd_ext);
-> +
->  static ssize_t spi_mem_no_dirmap_read(struct spi_mem_dirmap_desc *desc,
->  				      u64 offs, size_t len, void *buf)
->  {
-> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> index 4669082b4e3b..06ccab17e4d0 100644
-> --- a/include/linux/spi/spi-mem.h
-> +++ b/include/linux/spi/spi-mem.h
-> @@ -67,11 +67,31 @@ enum spi_mem_data_dir {
->  	SPI_MEM_DATA_OUT,
->  };
->  
-> +/**
-> + * enum spi_mem_cmd_ext - describes the command opcode extension in DTR mode
-> + * @SPI_MEM_EXT_NONE: no extension. This is the default, and is used in Legacy
-> + *		      SPI mode
-> + * @SPI_MEM_EXT_REPEAT: the extension is same as the opcode
-> + * @SPI_MEM_EXT_INVERT: the extension is the bitwise inverse of the opcode
-> + * @SPI_MEM_EXT_HEX: the extension is any hex value. The command and opcode
-> + *		     combine to form a 16-bit opcode.
-> + */
-> +enum spi_mem_cmd_ext {
-> +	SPI_MEM_EXT_NONE = 0,
-> +	SPI_MEM_EXT_REPEAT,
-> +	SPI_MEM_EXT_INVERT,
-> +	SPI_MEM_EXT_HEX,
-> +};
-> +
->  /**
->   * struct spi_mem_op - describes a SPI memory operation
->   * @cmd.buswidth: number of IO lines used to transmit the command
->   * @cmd.opcode: operation opcode
->   * @cmd.is_dtr: whether the command opcode should be sent in DTR mode or not
-> + * @cmd.ext_type: type of the command opcode extension in DTR mode
-> + * @cmd.ext: value of the command opcode extension in DTR mode. It is
-> + *	     only set when 'ext_type' is 'SPI_MEM_EXT_HEX'. In all other
-> + *	     cases, the extension can be directly derived from the opcode.
->   * @addr.nbytes: number of address bytes to send. Can be zero if the operation
->   *		 does not need to send an address
->   * @addr.buswidth: number of IO lines used to transmit the address cycles
-> @@ -97,6 +117,8 @@ struct spi_mem_op {
->  		u8 buswidth;
->  		u8 opcode;
->  		bool is_dtr;
-> +		enum spi_mem_cmd_ext ext_type;
-> +		u8 ext;
+--1Ow488MNN9B9o/ov
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Could we instead make opcode an u16 (or u8[2]) and pass the number of
-bytes, as done for the other addr? Mode can be extracted from the
-opcode/nbytes values if really needed, and the caller would be
-responsible for filling those fields properly (which shouldn't be too
-hard)
+On Thu, Feb 27, 2020 at 05:40:31PM +0100, Geert Uytterhoeven wrote:
+> On Thu, Feb 27, 2020 at 5:28 PM Mark Brown <broonie@kernel.org> wrote:
 
->  	} cmd;
->  
->  	struct {
-> @@ -361,6 +383,8 @@ int spi_mem_driver_register_with_owner(struct spi_mem_driver *drv,
->  
->  void spi_mem_driver_unregister(struct spi_mem_driver *drv);
->  
-> +int spi_mem_get_cmd_ext(const struct spi_mem_op *op, u8 *ext);
-> +
->  #define spi_mem_driver_register(__drv)                                  \
->  	spi_mem_driver_register_with_owner(__drv, THIS_MODULE)
->  
+> > It's what we do for other properties, and if this is anything like the
+> > other things adding extra wiring you can't assume that the ability to
+> > use the feature for TX implies RX.
 
+> Double Transfer Rate uses the same wire.
+
+But is it still on either the TX or RX signals?
+
+> But as you sample at both the rising and the falling edges of the clock, this
+> makes the cpha setting meaningless for such transfers, I think ;-)
+
+Might affect what the first bit is possibly?
+
+> However, as the future may bring us QDR, perhaps this should not be a
+> boolean flag, but an integer value?
+> Cfr. spi-tx-bus-width vs. the original spi-tx-dual/spi-tx-quad proposal.
+
+> What would be a good name (as we only need one)? spi-data-phases?
+
+Sounds reasonable, apart from the increasingly vague connection with
+something that's recognizably SPI :P
+
+--1Ow488MNN9B9o/ov
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5X8egACgkQJNaLcl1U
+h9BzNQf+NjXmaGigWO8AYKixlBbcKDms48SbjmC3B/TKWN72uzEK1Ir+m0zbDH/k
+3rRhBD0UEIitRKr7B3yHGk5dJY0A3yZuSqsmXm6EW05qo65DwU2595xG4Q7lAk35
+enegdQQEG9axlL02UaRgms5zlb7znVK/DqAqzjLB6NUv4AjBs8OJVK2RCLwXhvx3
+c1W2kmWHZ5i9EXY21cCmQytqMlkJnOnHfYLoafYvVeqLFS1ddty4GNFsXdY+F14Z
+EpXoakYtdKqZyX5SFRw6ymAZUU/O6qPiyv6ipnpOfu/pFazvJ+NByzx8FDy6bUEt
+uOZ2YaN/cmD3HqhSb6dp4iTXWLLzzQ==
+=jCkC
+-----END PGP SIGNATURE-----
+
+--1Ow488MNN9B9o/ov--
