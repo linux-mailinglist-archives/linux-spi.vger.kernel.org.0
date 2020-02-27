@@ -2,96 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F77D17234E
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2020 17:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D14172362
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2020 17:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729263AbgB0Q0B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Feb 2020 11:26:01 -0500
-Received: from mga12.intel.com ([192.55.52.136]:62468 "EHLO mga12.intel.com"
+        id S1729950AbgB0Q2r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Feb 2020 11:28:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:54412 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729169AbgB0Q0B (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 27 Feb 2020 11:26:01 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Feb 2020 08:26:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,492,1574150400"; 
-   d="scan'208";a="317834825"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 27 Feb 2020 08:25:58 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1CB6714B; Thu, 27 Feb 2020 18:25:56 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] spi: pxa2xx: Introduce is_mmp2_ssp() helper
-Date:   Thu, 27 Feb 2020 18:25:56 +0200
-Message-Id: <20200227162556.3152-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.25.0
+        id S1729263AbgB0Q2r (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 27 Feb 2020 11:28:47 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 858671FB;
+        Thu, 27 Feb 2020 08:28:44 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F12813F7B4;
+        Thu, 27 Feb 2020 08:28:43 -0800 (PST)
+Date:   Thu, 27 Feb 2020 16:28:42 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Pratyush Yadav <p.yadav@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, Sekhar Nori <nsekhar@ti.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 01/11] dt-bindings: spi: allow expressing DTR
+ capability
+Message-ID: <20200227162842.GE4062@sirena.org.uk>
+References: <20200226093703.19765-1-p.yadav@ti.com>
+ <20200226093703.19765-2-p.yadav@ti.com>
+ <20200227171147.32cc6fcf@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y2zxS2PfCDLh6JVG"
+Content-Disposition: inline
+In-Reply-To: <20200227171147.32cc6fcf@collabora.com>
+X-Cookie: Edwin Meese made me wear CORDOVANS!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Introduce is_mmp2_ssp() helper to be consistent with the rest
-helper function to distinguish SSP type.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+--y2zxS2PfCDLh6JVG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 19d43c7ed1a0..b9db6bbd03e0 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -185,6 +185,11 @@ static bool is_quark_x1000_ssp(const struct driver_data *drv_data)
- 	return drv_data->ssp_type == QUARK_X1000_SSP;
- }
- 
-+static bool is_mmp2_ssp(const struct driver_data *drv_data)
-+{
-+	return drv_data->ssp_type == MMP2_SSP;
-+}
-+
- static u32 pxa2xx_spi_get_ssrc1_change_mask(const struct driver_data *drv_data)
- {
- 	switch (drv_data->ssp_type) {
-@@ -463,8 +468,8 @@ int pxa2xx_spi_flush(struct driver_data *drv_data)
- 
- static void pxa2xx_spi_off(struct driver_data *drv_data)
- {
--	/* On MMP, disabling SSE seems to corrupt the rx fifo */
--	if (drv_data->ssp_type == MMP2_SSP)
-+	/* On MMP, disabling SSE seems to corrupt the Rx FIFO */
-+	if (is_mmp2_ssp(drv_data))
- 		return;
- 
- 	pxa2xx_spi_write(drv_data, SSCR0,
-@@ -1070,7 +1075,7 @@ static int pxa2xx_spi_transfer_one(struct spi_controller *controller,
- 	    || (pxa2xx_spi_read(drv_data, SSCR1) & change_mask)
- 	    != (cr1 & change_mask)) {
- 		/* stop the SSP, and update the other bits */
--		if (drv_data->ssp_type != MMP2_SSP)
-+		if (!is_mmp2_ssp(drv_data))
- 			pxa2xx_spi_write(drv_data, SSCR0, cr0 & ~SSCR0_SSE);
- 		if (!pxa25x_ssp_comp(drv_data))
- 			pxa2xx_spi_write(drv_data, SSTO, chip->timeout);
-@@ -1084,7 +1089,7 @@ static int pxa2xx_spi_transfer_one(struct spi_controller *controller,
- 			pxa2xx_spi_write(drv_data, SSTO, chip->timeout);
- 	}
- 
--	if (drv_data->ssp_type == MMP2_SSP) {
-+	if (is_mmp2_ssp(drv_data)) {
- 		u8 tx_level = (pxa2xx_spi_read(drv_data, SSSR)
- 					& SSSR_TFL_MASK) >> 8;
- 
--- 
-2.25.0
+On Thu, Feb 27, 2020 at 05:11:47PM +0100, Boris Brezillon wrote:
+> Pratyush Yadav <p.yadav@ti.com> wrote:
 
+> > Allow spi devices to express DTR receive and transmit capabilities via
+> > the properties "spi-rx-dtr" and "spi-tx-dtr".
+
+> Is the RX/TX granularity really useful?
+
+It's what we do for other properties, and if this is anything like the
+other things adding extra wiring you can't assume that the ability to
+use the feature for TX implies RX.
+
+--y2zxS2PfCDLh6JVG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5X7jcACgkQJNaLcl1U
+h9A5kgf/Y0DRJYdf4AUiGakcZO9I33l1RhLd5LtXAlID2YL52F81QjI/Uh6tRy8r
+6otcXAH1qzNwt2nV9Rsns7oy/Em4FpAf248Syn9SZiGE5JtiAS3opEuoAxKeJ604
+JNMbbAB/6AdKeIN3HrtjEb560Ht2WF9EEkrA5L45YYC6uHNf3YD1QseYg5l88d/K
+0g/2qCx8TpynDd2YEKAxBjExG6u4MK2pRtJBMZSAO/Ky3foUaUxUy/jBne/8IF+8
+6/YhGyxrXmJoklyW8KFJsPYNuR6pKAyl769Gy0w9KNvvs+O4cuBrVMxP+EUOwWbt
+OdSZ0ur//F4vDI6KkaOrG2YCg2r7Nw==
+=OoLn
+-----END PGP SIGNATURE-----
+
+--y2zxS2PfCDLh6JVG--
