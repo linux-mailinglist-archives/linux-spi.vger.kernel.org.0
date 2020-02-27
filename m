@@ -2,101 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3095C1723C3
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2020 17:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CC0172421
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2020 17:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730336AbgB0Qo2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Feb 2020 11:44:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:54650 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729146AbgB0Qo2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 27 Feb 2020 11:44:28 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C6DD1FB;
-        Thu, 27 Feb 2020 08:44:27 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6EA63F7B4;
-        Thu, 27 Feb 2020 08:44:26 -0800 (PST)
-Date:   Thu, 27 Feb 2020 16:44:25 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
+        id S1729214AbgB0Q6p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Feb 2020 11:58:45 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40026 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729174AbgB0Q6p (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Feb 2020 11:58:45 -0500
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 01505296437;
+        Thu, 27 Feb 2020 16:58:43 +0000 (GMT)
+Date:   Thu, 27 Feb 2020 17:58:41 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH v2 01/11] dt-bindings: spi: allow expressing DTR
- capability
-Message-ID: <20200227164425.GF4062@sirena.org.uk>
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, Sekhar Nori <nsekhar@ti.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 06/11] mtd: spi-nor: add support for DTR protocol
+Message-ID: <20200227175841.51435e3f@collabora.com>
+In-Reply-To: <20200226093703.19765-7-p.yadav@ti.com>
 References: <20200226093703.19765-1-p.yadav@ti.com>
- <20200226093703.19765-2-p.yadav@ti.com>
- <20200227171147.32cc6fcf@collabora.com>
- <20200227162842.GE4062@sirena.org.uk>
- <CAMuHMdWMCDzQm0tjpybJZyHy4imbC9NqRXP5d4C0xgxQx-Pf8g@mail.gmail.com>
+        <20200226093703.19765-7-p.yadav@ti.com>
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1Ow488MNN9B9o/ov"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWMCDzQm0tjpybJZyHy4imbC9NqRXP5d4C0xgxQx-Pf8g@mail.gmail.com>
-X-Cookie: Edwin Meese made me wear CORDOVANS!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 26 Feb 2020 15:06:58 +0530
+Pratyush Yadav <p.yadav@ti.com> wrote:
 
---1Ow488MNN9B9o/ov
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Double Transfer Rate (DTR) is SPI protocol in which data is transferred
+> on each clock edge as opposed to on each clock cycle. Make
+> framework-level changes to allow supporting flashes in DTR mode.
+> 
+> Right now, mixed DTR modes are not supported. So, for example a mode
+> like 4S-4D-4D will not work. All phases need to be either DTR or STR.
 
-On Thu, Feb 27, 2020 at 05:40:31PM +0100, Geert Uytterhoeven wrote:
-> On Thu, Feb 27, 2020 at 5:28 PM Mark Brown <broonie@kernel.org> wrote:
+Didn't go deep into the patch but at first glance you don't seem to
+extend the framework to support stateful modes as I tried to do here
+[1]. That's really something we should address before considering
+supporting xD-xD-xD modes, unless the SPI-NOR only supports one
+stateful mode. If we don't do that first, we might face all sort of
+unpleasant issues:
 
-> > It's what we do for other properties, and if this is anything like the
-> > other things adding extra wiring you can't assume that the ability to
-> > use the feature for TX implies RX.
+* kexec not working correctly because the previous kernel left the NOR
+  in an unknown state
+* suspend/resume not working properly
+* linux not booting properly because the bootloader left the device in
+  its non-default mode
+* ...
 
-> Double Transfer Rate uses the same wire.
+[1]https://patchwork.kernel.org/cover/10638055/
 
-But is it still on either the TX or RX signals?
-
-> But as you sample at both the rising and the falling edges of the clock, this
-> makes the cpha setting meaningless for such transfers, I think ;-)
-
-Might affect what the first bit is possibly?
-
-> However, as the future may bring us QDR, perhaps this should not be a
-> boolean flag, but an integer value?
-> Cfr. spi-tx-bus-width vs. the original spi-tx-dual/spi-tx-quad proposal.
-
-> What would be a good name (as we only need one)? spi-data-phases?
-
-Sounds reasonable, apart from the increasingly vague connection with
-something that's recognizably SPI :P
-
---1Ow488MNN9B9o/ov
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5X8egACgkQJNaLcl1U
-h9BzNQf+NjXmaGigWO8AYKixlBbcKDms48SbjmC3B/TKWN72uzEK1Ir+m0zbDH/k
-3rRhBD0UEIitRKr7B3yHGk5dJY0A3yZuSqsmXm6EW05qo65DwU2595xG4Q7lAk35
-enegdQQEG9axlL02UaRgms5zlb7znVK/DqAqzjLB6NUv4AjBs8OJVK2RCLwXhvx3
-c1W2kmWHZ5i9EXY21cCmQytqMlkJnOnHfYLoafYvVeqLFS1ddty4GNFsXdY+F14Z
-EpXoakYtdKqZyX5SFRw6ymAZUU/O6qPiyv6ipnpOfu/pFazvJ+NByzx8FDy6bUEt
-uOZ2YaN/cmD3HqhSb6dp4iTXWLLzzQ==
-=jCkC
------END PGP SIGNATURE-----
-
---1Ow488MNN9B9o/ov--
