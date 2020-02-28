@@ -2,31 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09221173F83
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2020 19:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E92173F85
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2020 19:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgB1SZk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Feb 2020 13:25:40 -0500
-Received: from foss.arm.com ([217.140.110.172]:42650 "EHLO foss.arm.com"
+        id S1726910AbgB1SZp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Feb 2020 13:25:45 -0500
+Received: from foss.arm.com ([217.140.110.172]:42664 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbgB1SZk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 28 Feb 2020 13:25:40 -0500
+        id S1725730AbgB1SZp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 28 Feb 2020 13:25:45 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3A4B31B;
-        Fri, 28 Feb 2020 10:25:39 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47134FEC;
+        Fri, 28 Feb 2020 10:25:44 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 47EE23F7B4;
-        Fri, 28 Feb 2020 10:25:39 -0800 (PST)
-Date:   Fri, 28 Feb 2020 18:25:37 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE8503F7B4;
+        Fri, 28 Feb 2020 10:25:43 -0800 (PST)
+Date:   Fri, 28 Feb 2020 18:25:42 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     andriy.shevchenko@linux.intel.com, broonie@kernel.org,
-        linuxarm@huawei.com, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: Allow SPI controller override device buswidth" to the spi tree
-In-Reply-To:  <1582903131-160033-2-git-send-email-john.garry@huawei.com>
-Message-Id:  <applied-1582903131-160033-2-git-send-email-john.garry@huawei.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     alexandre.belloni@bootlin.com, broonie@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        Ludovic.Desroches@microchip.com, Mark Brown <broonie@kernel.org>,
+        Nicolas.Ferre@microchip.com, Tudor.Ambarus@microchip.com
+Subject: Applied "spi: atmel-quadspi: fix possible MMIO window size overrun" to the spi tree
+In-Reply-To:  <20200228155437.1558219-1-tudor.ambarus@microchip.com>
+Message-Id:  <applied-20200228155437.1558219-1-tudor.ambarus@microchip.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -35,7 +35,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: Allow SPI controller override device buswidth
+   spi: atmel-quadspi: fix possible MMIO window size overrun
 
 has been applied to the spi tree at
 
@@ -60,70 +60,65 @@ to this mail.
 Thanks,
 Mark
 
-From ea23578611dce2eeaf31dcfe12cd7130cf3d1411 Mon Sep 17 00:00:00 2001
-From: John Garry <john.garry@huawei.com>
-Date: Fri, 28 Feb 2020 23:18:49 +0800
-Subject: [PATCH] spi: Allow SPI controller override device buswidth
+From 8e093ea4d3593379be46b845b9e823179558047e Mon Sep 17 00:00:00 2001
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
+Date: Fri, 28 Feb 2020 15:55:32 +0000
+Subject: [PATCH] spi: atmel-quadspi: fix possible MMIO window size overrun
 
-Currently ACPI firmware description for a SPI device does not have any
-method to describe the data buswidth on the board.
+The QSPI controller memory space is limited to 128MB:
+0x9000_00000-0x9800_00000/0XD000_0000--0XD800_0000.
 
-So even through the controller and device may support higher modes than
-standard SPI, it cannot be assumed that the board does - as such, that
-device is limited to standard SPI in such a circumstance.
+There are nor flashes that are bigger in size than the memory size
+supported by the controller: Micron MT25QL02G (256 MB).
 
-As a workaround, allow the controller driver supply buswidth override bits,
-which are used inform the core code that the controller driver knows the
-buswidth supported on that board for that device.
+Check if the address exceeds the MMIO window size. An improvement
+would be to add support for regular SPI mode and fall back to it
+when the flash memories overrun the controller's memory space.
 
-A host controller driver might know this info from DMI tables, for example.
-
-Signed-off-by: John Garry <john.garry@huawei.com>
-Link: https://lore.kernel.org/r/1582903131-160033-2-git-send-email-john.garry@huawei.com
+Fixes: 0e6aae08e9ae ("spi: Add QuadSPI driver for Atmel SAMA5D2")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Link: https://lore.kernel.org/r/20200228155437.1558219-1-tudor.ambarus@microchip.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi.c       | 4 +++-
- include/linux/spi/spi.h | 3 +++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ drivers/spi/atmel-quadspi.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 38b4c78df506..292f26807b41 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -510,6 +510,7 @@ struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
- 	spi->dev.bus = &spi_bus_type;
- 	spi->dev.release = spidev_release;
- 	spi->cs_gpio = -ENOENT;
-+	spi->mode = ctlr->buswidth_override_bits;
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index fd8007ebb145..13def7f78b9e 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -149,6 +149,7 @@ struct atmel_qspi {
+ 	struct clk		*qspick;
+ 	struct platform_device	*pdev;
+ 	const struct atmel_qspi_caps *caps;
++	resource_size_t		mmap_size;
+ 	u32			pending;
+ 	u32			mr;
+ 	u32			scr;
+@@ -329,6 +330,14 @@ static int atmel_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	u32 sr, offset;
+ 	int err;
  
- 	spin_lock_init(&spi->statistics.lock);
- 
-@@ -2181,9 +2182,10 @@ static acpi_status acpi_register_spi_device(struct spi_controller *ctlr,
- 		return AE_NO_MEMORY;
++	/*
++	 * Check if the address exceeds the MMIO window size. An improvement
++	 * would be to add support for regular SPI mode and fall back to it
++	 * when the flash memories overrun the controller's memory space.
++	 */
++	if (op->addr.val + op->data.nbytes > aq->mmap_size)
++		return -ENOTSUPP;
++
+ 	err = atmel_qspi_set_cfg(aq, op, &offset);
+ 	if (err)
+ 		return err;
+@@ -480,6 +489,8 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ 		goto exit;
  	}
  
++	aq->mmap_size = resource_size(res);
 +
- 	ACPI_COMPANION_SET(&spi->dev, adev);
- 	spi->max_speed_hz	= lookup.max_speed_hz;
--	spi->mode		= lookup.mode;
-+	spi->mode		|= lookup.mode;
- 	spi->irq		= lookup.irq;
- 	spi->bits_per_word	= lookup.bits_per_word;
- 	spi->chip_select	= lookup.chip_select;
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 6d16ba01ff5a..600e3793303e 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -481,6 +481,9 @@ struct spi_controller {
- 	/* spi_device.mode flags understood by this controller driver */
- 	u32			mode_bits;
- 
-+	/* spi_device.mode flags override flags for this controller */
-+	u32			buswidth_override_bits;
-+
- 	/* bitmask of supported bits_per_word for transfers */
- 	u32			bits_per_word_mask;
- #define SPI_BPW_MASK(bits) BIT((bits) - 1)
+ 	/* Get the peripheral clock */
+ 	aq->pclk = devm_clk_get(&pdev->dev, "pclk");
+ 	if (IS_ERR(aq->pclk))
 -- 
 2.20.1
 
