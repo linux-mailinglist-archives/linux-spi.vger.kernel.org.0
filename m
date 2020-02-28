@@ -2,31 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41906173F7B
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2020 19:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D25F173F7C
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2020 19:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725827AbgB1SZW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Feb 2020 13:25:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:42604 "EHLO foss.arm.com"
+        id S1725805AbgB1SZ1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Feb 2020 13:25:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:42616 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbgB1SZW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 28 Feb 2020 13:25:22 -0500
+        id S1725730AbgB1SZ1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 28 Feb 2020 13:25:27 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF5B7FEC;
-        Fri, 28 Feb 2020 10:25:21 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50DB8FEC;
+        Fri, 28 Feb 2020 10:25:26 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5286D3F7B4;
-        Fri, 28 Feb 2020 10:25:21 -0800 (PST)
-Date:   Fri, 28 Feb 2020 18:25:19 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C74853F7B4;
+        Fri, 28 Feb 2020 10:25:25 -0800 (PST)
+Date:   Fri, 28 Feb 2020 18:25:24 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Applied "spi: pxa2xx: Introduce is_mmp2_ssp() helper" to the spi tree
-In-Reply-To: <20200227162556.3152-1-andriy.shevchenko@linux.intel.com>
-Message-Id: <applied-20200227162556.3152-1-andriy.shevchenko@linux.intel.com>
+        Tudor.Ambarus@microchip.com
+Subject: Applied "spi: spi-mem: Compute length only when needed" to the spi tree
+In-Reply-To:  <20200228160735.1565047-1-tudor.ambarus@microchip.com>
+Message-Id:  <applied-20200228160735.1565047-1-tudor.ambarus@microchip.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -35,11 +34,11 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: pxa2xx: Introduce is_mmp2_ssp() helper
+   spi: spi-mem: Compute length only when needed
 
 has been applied to the spi tree at
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.7
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
@@ -60,65 +59,40 @@ to this mail.
 Thanks,
 Mark
 
-From 41c9884170c54013edd2481978cae917f94d40b4 Mon Sep 17 00:00:00 2001
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Thu, 27 Feb 2020 18:25:56 +0200
-Subject: [PATCH] spi: pxa2xx: Introduce is_mmp2_ssp() helper
+From c0e035ac56680e74b27fc218c07e70f4b9b8b7a5 Mon Sep 17 00:00:00 2001
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
+Date: Fri, 28 Feb 2020 16:07:44 +0000
+Subject: [PATCH] spi: spi-mem: Compute length only when needed
 
-Introduce is_mmp2_ssp() helper to be consistent with the rest
-helper function to distinguish SSP type.
+When adjust_op_size is defined, len is never used. Move the len
+computation where it's actually used.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20200227162556.3152-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Link: https://lore.kernel.org/r/20200228160735.1565047-1-tudor.ambarus@microchip.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-pxa2xx.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/spi/spi-mem.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 8e8e18023ded..aa93bbf0e1d4 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -185,6 +185,11 @@ static bool is_quark_x1000_ssp(const struct driver_data *drv_data)
- 	return drv_data->ssp_type == QUARK_X1000_SSP;
- }
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 3c46747bacb1..adaa0c49f966 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -418,12 +418,13 @@ int spi_mem_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
+ 	struct spi_controller *ctlr = mem->spi->controller;
+ 	size_t len;
  
-+static bool is_mmp2_ssp(const struct driver_data *drv_data)
-+{
-+	return drv_data->ssp_type == MMP2_SSP;
-+}
+-	len = sizeof(op->cmd.opcode) + op->addr.nbytes + op->dummy.nbytes;
+-
+ 	if (ctlr->mem_ops && ctlr->mem_ops->adjust_op_size)
+ 		return ctlr->mem_ops->adjust_op_size(mem, op);
+ 
+ 	if (!ctlr->mem_ops || !ctlr->mem_ops->exec_op) {
++		len = sizeof(op->cmd.opcode) + op->addr.nbytes +
++		      op->dummy.nbytes;
 +
- static u32 pxa2xx_spi_get_ssrc1_change_mask(const struct driver_data *drv_data)
- {
- 	switch (drv_data->ssp_type) {
-@@ -463,8 +468,8 @@ int pxa2xx_spi_flush(struct driver_data *drv_data)
- 
- static void pxa2xx_spi_off(struct driver_data *drv_data)
- {
--	/* On MMP, disabling SSE seems to corrupt the rx fifo */
--	if (drv_data->ssp_type == MMP2_SSP)
-+	/* On MMP, disabling SSE seems to corrupt the Rx FIFO */
-+	if (is_mmp2_ssp(drv_data))
- 		return;
- 
- 	pxa2xx_spi_write(drv_data, SSCR0,
-@@ -1070,7 +1075,7 @@ static int pxa2xx_spi_transfer_one(struct spi_controller *controller,
- 	    || (pxa2xx_spi_read(drv_data, SSCR1) & change_mask)
- 	    != (cr1 & change_mask)) {
- 		/* stop the SSP, and update the other bits */
--		if (drv_data->ssp_type != MMP2_SSP)
-+		if (!is_mmp2_ssp(drv_data))
- 			pxa2xx_spi_write(drv_data, SSCR0, cr0 & ~SSCR0_SSE);
- 		if (!pxa25x_ssp_comp(drv_data))
- 			pxa2xx_spi_write(drv_data, SSTO, chip->timeout);
-@@ -1084,7 +1089,7 @@ static int pxa2xx_spi_transfer_one(struct spi_controller *controller,
- 			pxa2xx_spi_write(drv_data, SSTO, chip->timeout);
- 	}
- 
--	if (drv_data->ssp_type == MMP2_SSP) {
-+	if (is_mmp2_ssp(drv_data)) {
- 		u8 tx_level = (pxa2xx_spi_read(drv_data, SSSR)
- 					& SSSR_TFL_MASK) >> 8;
+ 		if (len > spi_max_transfer_size(mem->spi))
+ 			return -EINVAL;
  
 -- 
 2.20.1
