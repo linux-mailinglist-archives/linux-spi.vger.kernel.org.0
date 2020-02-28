@@ -2,85 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05039173E30
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2020 18:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41906173F7B
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2020 19:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726682AbgB1RRX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Feb 2020 12:17:23 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2481 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725730AbgB1RRX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 28 Feb 2020 12:17:23 -0500
-Received: from lhreml705-cah.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 3B93C3EC7F4F8817DCB1;
-        Fri, 28 Feb 2020 17:17:21 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml705-cah.china.huawei.com (10.201.108.46) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Fri, 28 Feb 2020 17:17:20 +0000
-Received: from [127.0.0.1] (10.210.169.120) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5; Fri, 28 Feb
- 2020 17:17:19 +0000
-Subject: Re: [PATCH RFC 3/3] spi: HiSilicon v3xx: Use DMI quirk to set
- controller buswidth override bits
-To:     Mark Brown <broonie@kernel.org>
-CC:     <linuxarm@huawei.com>, <andriy.shevchenko@linux.intel.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>
-References: <1582903131-160033-1-git-send-email-john.garry@huawei.com>
- <1582903131-160033-4-git-send-email-john.garry@huawei.com>
- <20200228162057.GC4956@sirena.org.uk>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <a3b1711b-ed70-59d0-3326-991f1531db2b@huawei.com>
-Date:   Fri, 28 Feb 2020 17:17:18 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
-MIME-Version: 1.0
-In-Reply-To: <20200228162057.GC4956@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.169.120]
-X-ClientProxiedBy: lhreml707-chm.china.huawei.com (10.201.108.56) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+        id S1725827AbgB1SZW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Feb 2020 13:25:22 -0500
+Received: from foss.arm.com ([217.140.110.172]:42604 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725730AbgB1SZW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 28 Feb 2020 13:25:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF5B7FEC;
+        Fri, 28 Feb 2020 10:25:21 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5286D3F7B4;
+        Fri, 28 Feb 2020 10:25:21 -0800 (PST)
+Date:   Fri, 28 Feb 2020 18:25:19 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Applied "spi: pxa2xx: Introduce is_mmp2_ssp() helper" to the spi tree
+In-Reply-To: <20200227162556.3152-1-andriy.shevchenko@linux.intel.com>
+Message-Id: <applied-20200227162556.3152-1-andriy.shevchenko@linux.intel.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 28/02/2020 16:20, Mark Brown wrote:
-> On Fri, Feb 28, 2020 at 11:18:51PM +0800, John Garry wrote:
->> The Huawei D06 board (and variants) can support Quad mode of operation.
->>
->> Since we have no current method in ACPI SPI bus device resource description
->> to describe this information, use DMI to detect the board, and set the
->> controller buswidth override bits.
-> 
-> Hopefully this is something that the ACPI people will be looking to
-> address going forwards :/
-> 
+The patch
 
-Yeah, well I did mention the bugzilla [0] I raised for this in the cover 
-letter; but I think that the new process workflows to raise feature 
-requests in this way still needs to be formalized, so this may be 
-blocked for now [1].
+   spi: pxa2xx: Introduce is_mmp2_ssp() helper
 
-And unfortunately I can't actively participate in relevant standards WGs 
-either, so if anyone else would like to assist, then that would great...
+has been applied to the spi tree at
 
-BTW, I think that it might also be good to request a generic 
-jedec-compatible SPI NOR part ACPI HID/CID here also.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.7
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-John
+Mark
 
-[0] https://bugzilla.tianocore.org/show_bug.cgi?id=2557
-[1] https://edk2.groups.io/g/devel/message/53420
+From 41c9884170c54013edd2481978cae917f94d40b4 Mon Sep 17 00:00:00 2001
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Thu, 27 Feb 2020 18:25:56 +0200
+Subject: [PATCH] spi: pxa2xx: Introduce is_mmp2_ssp() helper
 
-> 
-> ______________________________________________________
-> Linux MTD discussion mailing list
-> http://lists.infradead.org/mailman/listinfo/linux-mtd/
-> 
+Introduce is_mmp2_ssp() helper to be consistent with the rest
+helper function to distinguish SSP type.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20200227162556.3152-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-pxa2xx.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index 8e8e18023ded..aa93bbf0e1d4 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -185,6 +185,11 @@ static bool is_quark_x1000_ssp(const struct driver_data *drv_data)
+ 	return drv_data->ssp_type == QUARK_X1000_SSP;
+ }
+ 
++static bool is_mmp2_ssp(const struct driver_data *drv_data)
++{
++	return drv_data->ssp_type == MMP2_SSP;
++}
++
+ static u32 pxa2xx_spi_get_ssrc1_change_mask(const struct driver_data *drv_data)
+ {
+ 	switch (drv_data->ssp_type) {
+@@ -463,8 +468,8 @@ int pxa2xx_spi_flush(struct driver_data *drv_data)
+ 
+ static void pxa2xx_spi_off(struct driver_data *drv_data)
+ {
+-	/* On MMP, disabling SSE seems to corrupt the rx fifo */
+-	if (drv_data->ssp_type == MMP2_SSP)
++	/* On MMP, disabling SSE seems to corrupt the Rx FIFO */
++	if (is_mmp2_ssp(drv_data))
+ 		return;
+ 
+ 	pxa2xx_spi_write(drv_data, SSCR0,
+@@ -1070,7 +1075,7 @@ static int pxa2xx_spi_transfer_one(struct spi_controller *controller,
+ 	    || (pxa2xx_spi_read(drv_data, SSCR1) & change_mask)
+ 	    != (cr1 & change_mask)) {
+ 		/* stop the SSP, and update the other bits */
+-		if (drv_data->ssp_type != MMP2_SSP)
++		if (!is_mmp2_ssp(drv_data))
+ 			pxa2xx_spi_write(drv_data, SSCR0, cr0 & ~SSCR0_SSE);
+ 		if (!pxa25x_ssp_comp(drv_data))
+ 			pxa2xx_spi_write(drv_data, SSTO, chip->timeout);
+@@ -1084,7 +1089,7 @@ static int pxa2xx_spi_transfer_one(struct spi_controller *controller,
+ 			pxa2xx_spi_write(drv_data, SSTO, chip->timeout);
+ 	}
+ 
+-	if (drv_data->ssp_type == MMP2_SSP) {
++	if (is_mmp2_ssp(drv_data)) {
+ 		u8 tx_level = (pxa2xx_spi_read(drv_data, SSSR)
+ 					& SSSR_TFL_MASK) >> 8;
+ 
+-- 
+2.20.1
 
