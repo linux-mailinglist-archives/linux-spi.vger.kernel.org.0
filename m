@@ -2,31 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E92173F85
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2020 19:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054F6173F86
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2020 19:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbgB1SZp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Feb 2020 13:25:45 -0500
-Received: from foss.arm.com ([217.140.110.172]:42664 "EHLO foss.arm.com"
+        id S1726918AbgB1SZt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Feb 2020 13:25:49 -0500
+Received: from foss.arm.com ([217.140.110.172]:42672 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbgB1SZp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 28 Feb 2020 13:25:45 -0500
+        id S1726917AbgB1SZt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 28 Feb 2020 13:25:49 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47134FEC;
-        Fri, 28 Feb 2020 10:25:44 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE13D31B;
+        Fri, 28 Feb 2020 10:25:48 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE8503F7B4;
-        Fri, 28 Feb 2020 10:25:43 -0800 (PST)
-Date:   Fri, 28 Feb 2020 18:25:42 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 518663F7B4;
+        Fri, 28 Feb 2020 10:25:48 -0800 (PST)
+Date:   Fri, 28 Feb 2020 18:25:46 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     alexandre.belloni@bootlin.com, broonie@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Ludovic.Desroches@microchip.com, Mark Brown <broonie@kernel.org>,
-        Nicolas.Ferre@microchip.com, Tudor.Ambarus@microchip.com
-Subject: Applied "spi: atmel-quadspi: fix possible MMIO window size overrun" to the spi tree
-In-Reply-To:  <20200228155437.1558219-1-tudor.ambarus@microchip.com>
-Message-Id:  <applied-20200228155437.1558219-1-tudor.ambarus@microchip.com>
+To:     Thommy Jakobsson <thommyj@gmail.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, michal.simek@xilinx.com
+Subject: Applied "spi/zynqmp: remove entry that causes a cs glitch" to the spi tree
+In-Reply-To:  <20200224162643.29102-1-thommyj@gmail.com>
+Message-Id:  <applied-20200224162643.29102-1-thommyj@gmail.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -35,7 +33,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: atmel-quadspi: fix possible MMIO window size overrun
+   spi/zynqmp: remove entry that causes a cs glitch
 
 has been applied to the spi tree at
 
@@ -60,65 +58,56 @@ to this mail.
 Thanks,
 Mark
 
-From 8e093ea4d3593379be46b845b9e823179558047e Mon Sep 17 00:00:00 2001
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
-Date: Fri, 28 Feb 2020 15:55:32 +0000
-Subject: [PATCH] spi: atmel-quadspi: fix possible MMIO window size overrun
+From 5dd8304981ecffa77bb72b1c57c4be5dfe6cfae9 Mon Sep 17 00:00:00 2001
+From: Thommy Jakobsson <thommyj@gmail.com>
+Date: Mon, 24 Feb 2020 17:26:43 +0100
+Subject: [PATCH] spi/zynqmp: remove entry that causes a cs glitch
 
-The QSPI controller memory space is limited to 128MB:
-0x9000_00000-0x9800_00000/0XD000_0000--0XD800_0000.
+In the public interface for chipselect, there is always an entry
+commented as "Dummy generic FIFO entry" pushed down to the fifo right
+after the activate/deactivate command. The dummy entry is 0x0,
+irregardless if the intention was to activate or deactive the cs. This
+causes the cs line to glitch rather than beeing activated in the case
+when there was an activate command.
 
-There are nor flashes that are bigger in size than the memory size
-supported by the controller: Micron MT25QL02G (256 MB).
+This has been observed on oscilloscope, and have caused problems for at
+least one specific flash device type connected to the qspi port. After
+the change the glitch is gone and cs goes active when intended.
 
-Check if the address exceeds the MMIO window size. An improvement
-would be to add support for regular SPI mode and fall back to it
-when the flash memories overrun the controller's memory space.
+The reason why this worked before (except for the glitch) was because
+when sending the actual data, the CS bits are once again set. Since
+most flashes uses mode 0, there is always a half clk period anyway for
+cs to clk active setup time. If someone would rely on timing from a
+chip_select call to a transfer_one, it would fail though.
 
-Fixes: 0e6aae08e9ae ("spi: Add QuadSPI driver for Atmel SAMA5D2")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20200228155437.1558219-1-tudor.ambarus@microchip.com
+It is unknown why the dummy entry was there in the first place, git log
+seems to be of no help in this case. The reference manual gives no
+indication of the necessity of this. In fact the lower 8 bits are a
+setup (or hold in case of deactivate) time expressed in cycles. So this
+should not be needed to fulfill any setup/hold timings.
+
+Signed-off-by: Thommy Jakobsson <thommyj@gmail.com>
+Reviewed-by: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
+Link: https://lore.kernel.org/r/20200224162643.29102-1-thommyj@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/atmel-quadspi.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/spi/spi-zynqmp-gqspi.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index fd8007ebb145..13def7f78b9e 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -149,6 +149,7 @@ struct atmel_qspi {
- 	struct clk		*qspick;
- 	struct platform_device	*pdev;
- 	const struct atmel_qspi_caps *caps;
-+	resource_size_t		mmap_size;
- 	u32			pending;
- 	u32			mr;
- 	u32			scr;
-@@ -329,6 +330,14 @@ static int atmel_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	u32 sr, offset;
- 	int err;
+diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+index 60c4de4e4485..7412a3042a8d 100644
+--- a/drivers/spi/spi-zynqmp-gqspi.c
++++ b/drivers/spi/spi-zynqmp-gqspi.c
+@@ -401,9 +401,6 @@ static void zynqmp_qspi_chipselect(struct spi_device *qspi, bool is_high)
  
-+	/*
-+	 * Check if the address exceeds the MMIO window size. An improvement
-+	 * would be to add support for regular SPI mode and fall back to it
-+	 * when the flash memories overrun the controller's memory space.
-+	 */
-+	if (op->addr.val + op->data.nbytes > aq->mmap_size)
-+		return -ENOTSUPP;
-+
- 	err = atmel_qspi_set_cfg(aq, op, &offset);
- 	if (err)
- 		return err;
-@@ -480,6 +489,8 @@ static int atmel_qspi_probe(struct platform_device *pdev)
- 		goto exit;
- 	}
+ 	zynqmp_gqspi_write(xqspi, GQSPI_GEN_FIFO_OFST, genfifoentry);
  
-+	aq->mmap_size = resource_size(res);
-+
- 	/* Get the peripheral clock */
- 	aq->pclk = devm_clk_get(&pdev->dev, "pclk");
- 	if (IS_ERR(aq->pclk))
+-	/* Dummy generic FIFO entry */
+-	zynqmp_gqspi_write(xqspi, GQSPI_GEN_FIFO_OFST, 0x0);
+-
+ 	/* Manually start the generic FIFO command */
+ 	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST,
+ 			zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST) |
 -- 
 2.20.1
 
