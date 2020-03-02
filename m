@@ -2,105 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C04F1175F27
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Mar 2020 17:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F61175F42
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Mar 2020 17:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727322AbgCBQF0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Mar 2020 11:05:26 -0500
-Received: from foss.arm.com ([217.140.110.172]:34698 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727154AbgCBQF0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 2 Mar 2020 11:05:26 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE0782F;
-        Mon,  2 Mar 2020 08:05:25 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CCD53F534;
-        Mon,  2 Mar 2020 08:05:25 -0800 (PST)
-Date:   Mon, 02 Mar 2020 16:05:23 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     bcm-kernel-feedback-list@broadcom.com, broonie@kernel.org,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: bcm63xx-hsspi: Really keep pll clk enabled" to the spi tree
-In-Reply-To:  <20200228213838.7124-1-christophe.jaillet@wanadoo.fr>
-Message-Id:  <applied-20200228213838.7124-1-christophe.jaillet@wanadoo.fr>
-X-Patchwork-Hint: ignore
+        id S1727054AbgCBQMk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Mar 2020 11:12:40 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34317 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727049AbgCBQMk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Mar 2020 11:12:40 -0500
+Received: by mail-ot1-f66.google.com with SMTP id j16so10285685otl.1;
+        Mon, 02 Mar 2020 08:12:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IBU1ngp7AZThDbUbO+cKAdOQ9eyjciNaYONj1CU5V7s=;
+        b=Us9zSfUJl5C9CRN4cvegRENR/wzVQDIMXSA7wWrhque0TUD2q68OBHFXX7OW50bj1o
+         SSdAfmZ47/Lht6W2GDXx7y013dBuK/OtbD/vprh0Hgj0fuea3Tb5Ds2XAltAKCIHJudU
+         tysxxQBWAcz+ua38NcC2HQHG3ZsW1iU6L7lBA5MJQ/PjQn005BuRWxh0+He0mQoU8AaP
+         K2MQwovpU24MMPg7RTgipWgamdIlI9i9HqE2TyHy1zgp9EsXmd5EOQtsnFiZDBLs+uUR
+         nxjaFU8Jv3u/pP0w86OEQCsCFGkpvGovGCTV7qPrrgLMx9jmGKBkPxoenciskDcSONOP
+         B3SQ==
+X-Gm-Message-State: ANhLgQ3b9KR+klb0ynt1K2v435HpvV0cU2vsGH/Euf2iu5mtJ7uSCPJS
+        zV4bIeMEP0iJksE8ycGPNf+czcpyAbNQ6DxeK58=
+X-Google-Smtp-Source: ADFU+vvg6cWqaPv6sfkzgh4uXnbYNGWltt0N4bOdGNKjXE/BLlkVjwI45QAekHnzDWDL4MznTQXJzZftVEs/EUTFqwg=
+X-Received: by 2002:a05:6830:1e9c:: with SMTP id n28mr623596otr.107.1583165559752;
+ Mon, 02 Mar 2020 08:12:39 -0800 (PST)
+MIME-Version: 1.0
+References: <1582903131-160033-1-git-send-email-john.garry@huawei.com> <1582903131-160033-2-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1582903131-160033-2-git-send-email-john.garry@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 2 Mar 2020 17:12:05 +0100
+Message-ID: <CAMuHMdV9v-7eRqi3JjcNaOBpRrC2-gLDCizYOJwhQCjZiLr5dA@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/3] spi: Allow SPI controller override device buswidth
+To:     John Garry <john.garry@huawei.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+Hi John,
 
-   spi: bcm63xx-hsspi: Really keep pll clk enabled
+Thanks for your patch!
 
-has been applied to the spi tree at
+On Fri, Feb 28, 2020 at 4:23 PM John Garry <john.garry@huawei.com> wrote:
+> Currently ACPI firmware description for a SPI device does not have any
+> method to describe the data buswidth on the board.
+>
+> So even through the controller and device may support higher modes than
+> standard SPI, it cannot be assumed that the board does - as such, that
+> device is limited to standard SPI in such a circumstance.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+Indeed.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+> As a workaround, allow the controller driver supply buswidth override bits,
+> which are used inform the core code that the controller driver knows the
+> buswidth supported on that board for that device.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+I feel this is a bit dangerous, and might bite us one day.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+> A host controller driver might know this info from DMI tables, for example.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Can't acpi_register_spi_device() obtain that info from DMI tables,
+to avoid contaminating the generic code?
 
-Thanks,
-Mark
+> Signed-off-by: John Garry <john.garry@huawei.com>
 
-From 51bddd4501bc414b8b1e8f4d096b4a5304068169 Mon Sep 17 00:00:00 2001
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Date: Fri, 28 Feb 2020 22:38:38 +0100
-Subject: [PATCH] spi: bcm63xx-hsspi: Really keep pll clk enabled
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -510,6 +510,7 @@ struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
+>         spi->dev.bus = &spi_bus_type;
+>         spi->dev.release = spidev_release;
+>         spi->cs_gpio = -ENOENT;
+> +       spi->mode = ctlr->buswidth_override_bits;
 
-The purpose of commit 0fd85869c2a9 ("spi/bcm63xx-hsspi: keep pll clk enabled")
-was to keep the pll clk enabled through the lifetime of the device.
+This could just be moved to acpi_register_spi_device(), right?
 
-In order to do that, some 'clk_prepare_enable()'/'clk_disable_unprepare()'
-calls have been added in the error handling path of the probe function, in
-the remove function and in the suspend and resume functions.
+>
+>         spin_lock_init(&spi->statistics.lock);
+>
+> @@ -2181,9 +2182,10 @@ static acpi_status acpi_register_spi_device(struct spi_controller *ctlr,
+>                 return AE_NO_MEMORY;
+>         }
+>
+> +
+>         ACPI_COMPANION_SET(&spi->dev, adev);
+>         spi->max_speed_hz       = lookup.max_speed_hz;
+> -       spi->mode               = lookup.mode;
+> +       spi->mode               |= lookup.mode;
+>         spi->irq                = lookup.irq;
+>         spi->bits_per_word      = lookup.bits_per_word;
+>         spi->chip_select        = lookup.chip_select;
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 6d16ba01ff5a..600e3793303e 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -481,6 +481,9 @@ struct spi_controller {
+>         /* spi_device.mode flags understood by this controller driver */
+>         u32                     mode_bits;
+>
+> +       /* spi_device.mode flags override flags for this controller */
+> +       u32                     buswidth_override_bits;
 
-However, a 'clk_disable_unprepare()' call has been unfortunately left in
-the probe function. So the commit seems to be more or less a no-op.
+And I'd be happy if we could avoid adding this here ;-)
 
-Axe it now, so that the pll clk is left enabled through the lifetime of
-the device, as described in the commit.
+> +
+>         /* bitmask of supported bits_per_word for transfers */
+>         u32                     bits_per_word_mask;
+>  #define SPI_BPW_MASK(bits) BIT((bits) - 1)
 
-Fixes: 0fd85869c2a9 ("spi/bcm63xx-hsspi: keep pll clk enabled")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Acked-by: Jonas Gorski <jonas.gorski@gmail.com>
-Link: https://lore.kernel.org/r/20200228213838.7124-1-christophe.jaillet@wanadoo.fr
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-bcm63xx-hsspi.c | 1 -
- 1 file changed, 1 deletion(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
-index 7327309ea3d5..6c235306c0e4 100644
---- a/drivers/spi/spi-bcm63xx-hsspi.c
-+++ b/drivers/spi/spi-bcm63xx-hsspi.c
-@@ -366,7 +366,6 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
- 			goto out_disable_clk;
- 
- 		rate = clk_get_rate(pll_clk);
--		clk_disable_unprepare(pll_clk);
- 		if (!rate) {
- 			ret = -EINVAL;
- 			goto out_disable_pll_clk;
+                        Geert
+
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
