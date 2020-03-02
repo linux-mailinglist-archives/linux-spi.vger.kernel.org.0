@@ -2,40 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC26F175A5F
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Mar 2020 13:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796EB175AAA
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Mar 2020 13:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727361AbgCBMWW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Mar 2020 07:22:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:60180 "EHLO foss.arm.com"
+        id S1727720AbgCBMjC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Mar 2020 07:39:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:60334 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727267AbgCBMWW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 2 Mar 2020 07:22:22 -0500
+        id S1727361AbgCBMjC (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 2 Mar 2020 07:39:02 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2BAA52F;
-        Mon,  2 Mar 2020 04:22:22 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0F172F;
+        Mon,  2 Mar 2020 04:39:01 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A3AB73F534;
-        Mon,  2 Mar 2020 04:22:21 -0800 (PST)
-Date:   Mon, 2 Mar 2020 12:22:20 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 444823F534;
+        Mon,  2 Mar 2020 04:39:01 -0800 (PST)
+Date:   Mon, 2 Mar 2020 12:38:59 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        linux-mtd@lists.infradead.org, linuxarm@huawei.com,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH RFC 1/3] spi: Allow SPI controller override device
- buswidth
-Message-ID: <20200302122220.GA4166@sirena.org.uk>
-References: <1582903131-160033-1-git-send-email-john.garry@huawei.com>
- <1582903131-160033-2-git-send-email-john.garry@huawei.com>
- <52ecb988-d842-c04b-a0e8-93e8850009c4@cogentembedded.com>
- <07bb2213-5543-0ef0-9585-be83026c1199@huawei.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        jonas.gorski@gmail.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] spi: bcm63xx-hsspi: Really keep pll clk enabled
+Message-ID: <20200302123859.GC4166@sirena.org.uk>
+References: <20200228213838.7124-1-christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MGYHOYXEY6WxJCY8"
+        protocol="application/pgp-signature"; boundary="ZmUaFz6apKcXQszQ"
 Content-Disposition: inline
-In-Reply-To: <07bb2213-5543-0ef0-9585-be83026c1199@huawei.com>
+In-Reply-To: <20200228213838.7124-1-christophe.jaillet@wanadoo.fr>
 X-Cookie: Whistler's mother is off her rocker.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
@@ -44,29 +40,38 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---MGYHOYXEY6WxJCY8
+--ZmUaFz6apKcXQszQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Mar 02, 2020 at 09:30:08AM +0000, John Garry wrote:
+On Fri, Feb 28, 2020 at 10:38:38PM +0100, Christophe JAILLET wrote:
 
-> Do you want me to do anything about the above superfluous newline?
+> To be honest, I don't see why we need to keep pll clk, or hsspi clk
+> enabled during the lifetime of the driver. My understanding of the code is
+> that it is only used to get the 'speed_hz' value in the probe function.
+> This value is never refreshed afterwards.
+> I don't see the point in enabling/disabling the clks. I think that they
+> both could be disabled in the probe function, without the need to keep
+> track in the bcm63xx_hsspi structure, neither during pm cycles or the
+> remove fucntion.
 
-Whatever you prefer, I don't really care either way.
+If the device has a clock there's a good chance it's needed for the
+device to operate and that disabling it will save a little power when
+the device isn't doing anything.
 
---MGYHOYXEY6WxJCY8
+--ZmUaFz6apKcXQszQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5c+nUACgkQJNaLcl1U
-h9A0cAgAhO/A6BTXUMWdGAfjAzNW8PGJ9Lj4J+5Bx5ztCAo0mIWdqA6Rvvo0jCqj
-+rqUFeBsR4ym3KMc/r7piRdyd+G/o1ocRMMsV4A65kZ0LDAfMrvnYriUbRiJ/Esq
-czu2tBBtbmHHD+j+LK4vl93h55XPm8L/Jk0Zc6mbwEWm59wNDePbIjxsugiY/bzc
-wU0OjmZVIXAi7ydgkXmEzDMgd5hg8uVIVatw5tLqwPtVBJE0WJS8vBtk9yo9GMmh
-5A5HJDcTPoxU16RlR/KbVbxr+HYxP2tCBTHe3xpUgGxijuFpIMcvdkGoA9UVAdVU
-oBL1j2g7XpgsNnryB6+dxQ2FR52DYQ==
-=yrZR
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5c/mMACgkQJNaLcl1U
+h9Cwewf+LaiDuAFWakLpTKZ/xUwqWqdMeVhPJMgEYCToIfMYYsMsBLLvE57s71+Z
+Se4OYGwCbmz75sJq7KZTHEt7TStQ0Wfwtb2VTQ6e1nhoT0q6Vh/p0Xos0dapsFkw
+sERlnAbZzf0t9rrXQB6yLjBPnU9X8iS/tatAOYylTZb3g2KO31ZxT1/jg6op1+us
+bK4fcoLF+8W2G5leWAr9rn0YOTycey9CtBLnsyB6YUWGkUBx7rGhdW6sO2VWFcpy
+WkrryYV+AudPf1OU0PEtdS8acdzB6QCxIzTjyXwZXDyDlcYF9VVMrAuvMZy/XoPn
+rb3dzStyqbqmU+y0ZF4jWo+HDIeKig==
+=mNDy
 -----END PGP SIGNATURE-----
 
---MGYHOYXEY6WxJCY8--
+--ZmUaFz6apKcXQszQ--
