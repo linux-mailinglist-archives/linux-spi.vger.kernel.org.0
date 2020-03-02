@@ -2,78 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFCF17514E
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Mar 2020 01:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A25175151
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Mar 2020 01:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726822AbgCBAUL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 1 Mar 2020 19:20:11 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:50285 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726562AbgCBAUL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 Mar 2020 19:20:11 -0500
-Received: by mail-wm1-f66.google.com with SMTP id a5so9278983wmb.0;
-        Sun, 01 Mar 2020 16:20:10 -0800 (PST)
+        id S1726875AbgCBAUM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 1 Mar 2020 19:20:12 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41998 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726621AbgCBAUM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 Mar 2020 19:20:12 -0500
+Received: by mail-wr1-f67.google.com with SMTP id z11so1583000wro.9;
+        Sun, 01 Mar 2020 16:20:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=zdwK/B8mKTq0VMWQVkh/w9fFJQy4cxw1iSTUyvAZiQk=;
-        b=MOK3LB2EUWCaB72BWzrocUE1fbxy2fM391XEI5EDmoaZfYexKMgDLJj4RtpBl674rw
-         NdQpo2oakpIwYb3IVJoyCMa3VfBvbnqlzgsh7pCTPw1SJuIq1f2mVcKw0CmuSKWCnUw3
-         JTr10+0zc09Mfp6IxS5JAYTABvcFZr0WYqG2NvdMCR/w0oLTwMRmJLET65j+SIKgPCGa
-         74G0CyHQ/dKs2Xz/y1PQUixGxqX4SjUTRvHSvag/bUetwKsIbx/vLnVTSifb1p+RaszI
-         /p8qfb2Lj8pbnUn6HZbZnMMNL/yctU91uRx2Z11d0IkVtbYX0SMn8UC59iyy5nyAzm/7
-         lo1Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=jwhY+knTdQifg64CQcyFlmXWmsjzGep6/zqhcI9bJvM=;
+        b=UEYXrGzkRs5DtYBt/rn6AQsmMC/2Z9xKSVunv1RGBVw6cAikyysRPrb65690a71+bs
+         kWztWGQTn33hcIcRINH81JDbnieZvQ0r4aUruqit/laHDkzI1G203Pf4RQBnTx6Jbihd
+         musKu5Lq4Ur7mkf3+urjMjin/dxeqbd9SEfrNp4cSXV3YikI3jrQ7sR2dkw89TxZdo68
+         o7wu2taZdQXEXPC1+QYjPKUkRMN03MCqWjcNW2UclCfnsQN8LX5139Eo9iALtz8IWeyl
+         YKBNk4tinRBG3PTXOUDWSI9mIpqlmnBS7srQDebEfcZWG1xdaDwav3w2pVXt+9JQgrJZ
+         xofA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zdwK/B8mKTq0VMWQVkh/w9fFJQy4cxw1iSTUyvAZiQk=;
-        b=m/wb2E42JfHKxgrzYfk3SbxTz0YEigE+Hjf6wN1MZJEbo7rIiZGS2ecHzjF3f+Hlx1
-         925/2ZfBLAClsmoKwSfXjufZG530w4jPS2aVfrjuE/3iEYCKTO3hAV61aJVRnDgKS5qb
-         0X0oA0ejb7b+829r7LBOmHDhBED3w+O1L/t+tzmJNAEp1lgBAwnuSyg41xhyGPmWOIwt
-         lSsNH7KK51hM5ja1Pl5fQWZJj+ZoWAaokwN/yQ0TzHLUjuFbvUhavzfbhLK5W9Zvzr9F
-         aRhXjGk66+lZRFdkKghLteDdha70xl02c42XoKS8O/sXOY69fl1Z9aMda0tR/txlnbIq
-         CDPA==
-X-Gm-Message-State: APjAAAUktC6ImuZpsKqgkKkfPXjmI9tDQWpmXPOOWGqZWeCIsGKkPtzh
-        GyQ4WaEHYrmum+y5HtvzMKo=
-X-Google-Smtp-Source: APXvYqyLB4J0gNqgTsoLlyTvOkO1cIqILGWdkt+jgMW/Q+KiknE8Z5pxkEjW47kgRZTNc75p+mWViQ==
-X-Received: by 2002:a1c:6a17:: with SMTP id f23mr16573163wmc.33.1583108409735;
-        Sun, 01 Mar 2020 16:20:09 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=jwhY+knTdQifg64CQcyFlmXWmsjzGep6/zqhcI9bJvM=;
+        b=bI3osHsFzwpRMSJCWDnKNz/26KLuBk2cghUbIKZljCYffhQzt19rW5xrBD13damtai
+         44/3bUzgKAsIabo+5vL6adQ7w8Pvas1lGU75pKtN1Kvf0mvbi04FGoa68riCw8LDq8Bn
+         hV/tM308gDCUjYT6dFmlNUcZR1+MLOOH9r8beGIwNyZ72Zeci0AVEfgmN81YN1jZIvv8
+         lRyR7p6UxpBSciuavh9VjdqGni3u+LgfSavEZBylOiOovKmzC5b3gQnmtnH2oEO8NW9/
+         3tv17qtdG6YKD2ksV/eckQ4/ckQF3DtEOY+eujnMjoyo0Z0DZPNpWz2W2CosceNz7lfx
+         fb+A==
+X-Gm-Message-State: APjAAAUvm47VvNZw1dKdZl7fODcurHI8uaCALAnavlHm25JM3VOBy/ME
+        JhzuCmzD5pvpKNMNvCO/1BcF/2bM
+X-Google-Smtp-Source: APXvYqxv7k5QTum7D+PAa3XIZQelSvxMB/afGjTLGnBe6kljV+v8gm3/OqrURI0kfLQ52cz1sJg4Zg==
+X-Received: by 2002:adf:e9cc:: with SMTP id l12mr17152540wrn.131.1583108410561;
+        Sun, 01 Mar 2020 16:20:10 -0800 (PST)
 Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id k16sm25428417wrd.17.2020.03.01.16.20.08
+        by smtp.gmail.com with ESMTPSA id k16sm25428417wrd.17.2020.03.01.16.20.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Mar 2020 16:20:09 -0800 (PST)
+        Sun, 01 Mar 2020 16:20:10 -0800 (PST)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/6] Compatible string consolidation for NXP DSPI driver
-Date:   Mon,  2 Mar 2020 02:19:52 +0200
-Message-Id: <20200302001958.11105-1-olteanv@gmail.com>
+Subject: [PATCH 1/6] doc: spi-fsl-dspi: Add specific compatibles for all Layerscape SoCs
+Date:   Mon,  2 Mar 2020 02:19:53 +0200
+Message-Id: <20200302001958.11105-2-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200302001958.11105-1-olteanv@gmail.com>
+References: <20200302001958.11105-1-olteanv@gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This series makes room in the driver for differentiation between the
-controllers which currently operate in TCFQ mode. Most of these are
-actually capable of a lot more in terms of throughput. This is in
-preparation of a second series which will convert the remaining users of
-TCFQ mode altogether to XSPI mode with command cycling.
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Vladimir Oltean (6):
-  doc: spi-fsl-dspi: Add specific compatibles for all Layerscape SoCs
-  spi: spi-fsl-dspi: Use specific compatible strings for all SoC
-    instantiations
-  spi: spi-fsl-dspi: Parameterize the FIFO size and DMA buffer size
-  spi: spi-fsl-dspi: LS2080A and LX2160A support XSPI mode
-  spi: spi-fsl-dspi: Support SPI software timestamping in all non-DMA
-    modes
-  spi: spi-fsl-dspi: Convert the instantiations that support it to DMA
+Make the second compatible string optional for LS1012A, LS1088A and
+LS2080A. Old versions of the spi-fsl-dspi.c driver still need to probe
+on the old, generic compatible string for these controllers (such as
+"fsl,ls1021a-v1.0-dspi") which provides less functionality.
 
- .../devicetree/bindings/spi/spi-fsl-dspi.txt  |  17 +-
- drivers/spi/spi-fsl-dspi.c                    | 162 +++++++++++++-----
- 2 files changed, 128 insertions(+), 51 deletions(-)
+Document the device tree bindings for LS1043A and LS1046A, whose
+bindings are already in use in fsl-ls1043a.dtsi and fsl-ls1046a.dtsi.
 
+Introduce new compatible strings for LS1028A and LX2160A. There will be
+no second compatible string for these.
+
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ .../devicetree/bindings/spi/spi-fsl-dspi.txt    | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt b/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
+index 162e024b95a0..99b94cfe1623 100644
+--- a/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
++++ b/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
+@@ -1,12 +1,17 @@
+ ARM Freescale DSPI controller
+ 
+ Required properties:
+-- compatible : "fsl,vf610-dspi", "fsl,ls1021a-v1.0-dspi",
+-		"fsl,ls2085a-dspi"
+-		or
+-		"fsl,ls2080a-dspi" followed by "fsl,ls2085a-dspi"
+-		"fsl,ls1012a-dspi" followed by "fsl,ls1021a-v1.0-dspi"
+-		"fsl,ls1088a-dspi" followed by "fsl,ls1021a-v1.0-dspi"
++- compatible : must be one of:
++	"fsl,vf610-dspi",
++	"fsl,ls1021a-v1.0-dspi",
++	"fsl,ls1012a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
++	"fsl,ls1028a-dspi",
++	"fsl,ls1043a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
++	"fsl,ls1046a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
++	"fsl,ls1088a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
++	"fsl,ls2080a-dspi" (optionally followed by "fsl,ls2085a-dspi"),
++	"fsl,ls2085a-dspi",
++	"fsl,lx2160a-dspi",
+ - reg : Offset and length of the register set for the device
+ - interrupts : Should contain SPI controller interrupt
+ - clocks: from common clock binding: handle to dspi clock.
 -- 
 2.17.1
 
