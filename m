@@ -2,114 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E782177CD3
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Mar 2020 18:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B293F178489
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Mar 2020 22:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729570AbgCCRIW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Mar 2020 12:08:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:49994 "EHLO foss.arm.com"
+        id S1732310AbgCCVFZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Mar 2020 16:05:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45768 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729041AbgCCRIW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 3 Mar 2020 12:08:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 646CC2F;
-        Tue,  3 Mar 2020 09:08:22 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DC64F3F534;
-        Tue,  3 Mar 2020 09:08:21 -0800 (PST)
-Date:   Tue, 03 Mar 2020 17:08:20 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
-Cc:     Igor Opanyuk <igor.opanyuk@toradex.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-spi@vger.kernel.org,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Oleksandr Suvorov <cryosay@gmail.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>
-Subject: Applied "spi: fsl-lpspi: remove unneeded array" to the spi tree
-In-Reply-To:  <20200220141143.3902922-2-oleksandr.suvorov@toradex.com>
-Message-Id:  <applied-20200220141143.3902922-2-oleksandr.suvorov@toradex.com>
-X-Patchwork-Hint: ignore
+        id S1729880AbgCCVFY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 3 Mar 2020 16:05:24 -0500
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 41D7B2146E;
+        Tue,  3 Mar 2020 21:05:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583269524;
+        bh=l0YEzEcw/Z/MYavxZmPE44wKNAPCOgQiZ1klzLxOAEo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bu7CXHIxoexZXi91bDRNmminmj11m9NGuJWAUh6fJPiEIyhr3NrgwT0n9WgjdPl0K
+         XA83YUpc/J0wtR0XKC34qXEyN9RAtKaLFmCqlNKnRV7RBbJPBo9e6YReXQaKqbRaok
+         0bZVTsVciEc9A2mq6KtPt7e2s3i4LF8bn0pZ13TM=
+Received: by mail-qt1-f181.google.com with SMTP id j23so3975663qtr.11;
+        Tue, 03 Mar 2020 13:05:24 -0800 (PST)
+X-Gm-Message-State: ANhLgQ33YFuaY+EZmQ/dYZFbAx9DlI9T7ynCMsfLn1gS62jxVxzeT2NE
+        80g/jpMJyIPcquJB/VinMZ+ZiGEspKb3oV4OSA==
+X-Google-Smtp-Source: ADFU+vviKc+PiHIAnxb4cNOMK3iEsnPkdMlcEhwKIVwZqSFfJWBHvRreL4SqLdVlJWVtxMojJWLWnBDtd51l9VcKzWA=
+X-Received: by 2002:aed:2344:: with SMTP id i4mr6376332qtc.136.1583269523329;
+ Tue, 03 Mar 2020 13:05:23 -0800 (PST)
+MIME-Version: 1.0
+References: <20200303094522.23180-1-geert+renesas@glider.be> <20200303094522.23180-2-geert+renesas@glider.be>
+In-Reply-To: <20200303094522.23180-2-geert+renesas@glider.be>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 3 Mar 2020 15:05:10 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL+9Tcqm_bsorRwqvWZyJXAZmJhXb=EmJ+nZ44kCFp6Kg@mail.gmail.com>
+Message-ID: <CAL_JsqL+9Tcqm_bsorRwqvWZyJXAZmJhXb=EmJ+nZ44kCFp6Kg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] spi: dt-bindings: spi-controller: Fix
+ #address-cells for slave mode
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
+        <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+On Tue, Mar 3, 2020 at 3:45 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> Currently, the DT bindings for an SPI controller specify that
+> "#address-cells" must be fixed to one.  However, that applies to an SPI
+> controller in master mode only.  When running in SPI slave mode,
+> "#address-cells" should be zero.
+>
+> Fix this making the value of "#address-cells" dependent on the presence
+> of "spi-slave".
+>
+> Fixes: 0a1b929356830257 ("spi: Add YAML schemas for the generic SPI options")
+> Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v2:
+>   - Use "enum: [0, 1]" instead of min/max limit,
+>   - use "- spi-slave" instead of "[ spi-slave ]".
+>
+> As of dtc commit 403cc79f06a135ae ("checks: Update SPI bus check for
+> 'spi-slave'") and Linux commit c2e7075ca8303631 ("scripts/dtc: Update to
+> upstream version v1.4.7-57-gf267e674d145"), dtc knows about SPI slave.
+>
+> However, when using "#address-cells = <0>" with W=1:
+>
+>     Warning (avoid_unnecessary_addr_size): /soc/spi@e6e10000: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
 
-   spi: fsl-lpspi: remove unneeded array
+What was the point in having #address-cells in the first place for
+slaves? Seems like we should make it mutually exclusive with
+'spi-slave'.
 
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 2fa98705a9289c758b6154a22174aa8d4041a285 Mon Sep 17 00:00:00 2001
-From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
-Date: Thu, 20 Feb 2020 14:11:48 +0000
-Subject: [PATCH] spi: fsl-lpspi: remove unneeded array
-
-- replace the array with the shift operation
-- remove the extra comparing operation.
-
-Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
-Link: https://lore.kernel.org/r/20200220141143.3902922-2-oleksandr.suvorov@toradex.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi-fsl-lpspi.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index d0b8cc741a24..298329b781d2 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -86,8 +86,6 @@
- #define TCR_RXMSK	BIT(19)
- #define TCR_TXMSK	BIT(18)
- 
--static int clkdivs[] = {1, 2, 4, 8, 16, 32, 64, 128};
--
- struct lpspi_config {
- 	u8 bpw;
- 	u8 chip_select;
-@@ -331,15 +329,14 @@ static int fsl_lpspi_set_bitrate(struct fsl_lpspi_data *fsl_lpspi)
- 	}
- 
- 	for (prescale = 0; prescale < 8; prescale++) {
--		scldiv = perclk_rate /
--			 (clkdivs[prescale] * config.speed_hz) - 2;
-+		scldiv = perclk_rate / config.speed_hz / (1 << prescale) - 2;
- 		if (scldiv < 256) {
- 			fsl_lpspi->config.prescale = prescale;
- 			break;
- 		}
- 	}
- 
--	if (prescale == 8 && scldiv >= 256)
-+	if (scldiv >= 256)
- 		return -EINVAL;
- 
- 	writel(scldiv | (scldiv << 8) | ((scldiv >> 1) << 16),
--- 
-2.20.1
-
+Rob
