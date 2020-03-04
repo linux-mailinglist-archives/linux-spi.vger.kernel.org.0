@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E962179B7D
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 23:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B44C179B76
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 23:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388520AbgCDWCb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Mar 2020 17:02:31 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:51124 "EHLO
+        id S2388503AbgCDWCC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Mar 2020 17:02:02 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:55887 "EHLO
         mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388281AbgCDWCB (ORCPT
+        with ESMTP id S2388483AbgCDWCB (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Mar 2020 17:02:01 -0500
-Received: by mail-wm1-f66.google.com with SMTP id a5so3980974wmb.0;
-        Wed, 04 Mar 2020 14:01:59 -0800 (PST)
+Received: by mail-wm1-f66.google.com with SMTP id 6so3981242wmi.5;
+        Wed, 04 Mar 2020 14:02:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=T/l0focuCxU+0lWxK9yvmCbc/6KKaIJvq1+i8TBaK8g=;
-        b=ajmDo6wH9aduuzFZRphrtOLa+jl30EGDPklWmmfDte8+9N+cSnNu0V7DXDBjipjMBU
-         Nd+hvpvkn1ikWs6dL5YYPKKRhcNJ4B7S+cMKjXlpF9/0tDuyxPYOPbHaBKC5Ku8NSN7R
-         /j/I8etoksIS3XMU9bB+6g6R04LcG62b6+mB/rN4OrBpSLONkvCnpRU2sI9jklPlfNJz
-         ckPIRJZdoSWkhn4JfI+klM5119iY4HIBTUfmiGNSmEN6wlyueI8q65ykZ8Vfi0IrS/n2
-         oqGkDfc5IOqtG2W/Ja419uyC27HzUwnZwIewtxpYVR+lVjPx9SgSpDuL/MBwp5ccN/kd
-         dYBw==
+        bh=7usjeEtnLelRZFqfBWE5WZWkvf+bS5tSXzwRcAo6Mj8=;
+        b=J4SVbPYSzmVam37DjyguQpOymuECa5BijnCH9xLTjm92LsrT3Bqp9T59mK4qpqEmpv
+         NFipA1l0LfQhwwWZO8TNynkv4OeU18HB4lAi5DtMesOGeTxc9anMMw2+4TqyaV19XCv+
+         lRAKsQDzrkSZUJQPTbn25mll9LiIU9vKUySc0T7UcBuIDeQ1BrJ6hlLNumuXbFyDSpfO
+         zlPKrAKhlVrZV4EuQIOvxvO+XiBU/wVv7kst3v6wO4tXsEGUYzC0SZPCQIgwWVpPQZon
+         Rz5IFpVnSlbWMpoRFrINm/AmQvLUzagy395sQvEQjMy3a9XJjPAysaIDbQhfg1lEaq3o
+         nz/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=T/l0focuCxU+0lWxK9yvmCbc/6KKaIJvq1+i8TBaK8g=;
-        b=WO++NQ3YIK2VpxoE+HwrrPIk1YBobRkENFOBhqHrhHnHt/mnnS8rZaLYsvdwgQtA0p
-         VANK2Q4buTHUuD51sdbVYq5ycyKgoEX1CagYME6nKsRkvnUnnFx8VIs22vdAgYaiMxIJ
-         CsqEi8W1gM3IbLG02tov/YLR35mSBNuioL3qpypwGqsSq7Vb2ZhYRTPHXf9JMEF2RLaY
-         fWxgd7Nb04nMkSXUX6BTKgaDCU2Az2yXxCzWHdUjCle6BFo0oZDMX2jdTiK4G8kjZf5i
-         nWcjR4jq8hq+mwztzD1GI/IUSNinKUG9uh3s6gX2GRn23/mZwvAPuVjlHjnuuhJGn/uK
-         D72Q==
-X-Gm-Message-State: ANhLgQ0g3Ep8HQFy0rsZerCAXtKb5oNAzzhG1VIKsmC+Jb/wsUD2DGr4
-        sR+SlHaqzIkbNUdKeQr56X+00ayb
-X-Google-Smtp-Source: ADFU+vtLjzFP70YoMuO9LYP02avhUML631vsNZch4eudLOzu7eOEacvy5fJcyroV37UmvHxi6oDc+A==
-X-Received: by 2002:a1c:e206:: with SMTP id z6mr5184526wmg.141.1583359319182;
-        Wed, 04 Mar 2020 14:01:59 -0800 (PST)
+        bh=7usjeEtnLelRZFqfBWE5WZWkvf+bS5tSXzwRcAo6Mj8=;
+        b=KRgkzD45FSBnOymw91q5C7n+/Y6RdX2Ii5HH4VrmKX+JCN/zMXDzt4Rj+dAbkcdAJb
+         ctliom3/pZ+iXHTpIjBrNrcDzCptAYYJNNoXJpT5+4b+6lCkyXxtgW+MK75uyK7Wt2yq
+         n0/UVB1xoAp9SOAEGHkHSCpFoeqlJq9y0p0ui5dL4d5X/WZpveK3A5l6oQctc4Cwm25Y
+         6vwe8w5vPvtTMM4Tnc9XqZCYhS6RYuQvQLnfsIetJNIypKpfJbQcRmbixl713EyOKspx
+         AQ3yuoBBSbvM7VLU8Z4uZTEDDWiUwiOVybz2UL9p7ZwrEycW//cQGkkMqE/OA5lp1pZH
+         IG5A==
+X-Gm-Message-State: ANhLgQ113RLmoCU3UviFpf9btiOa6RGZRuzi9Yg27CTA9b7qVjOyYu5A
+        cxTT5XAuytrBHxkz6nMWfAw=
+X-Google-Smtp-Source: ADFU+vs6REbQIkGOj+OTlmaB4siXuM1v/v23pW3AjDLVW6ldBzqWTtmjYTqUJXJ912bqGN/BwDSPng==
+X-Received: by 2002:a1c:4805:: with SMTP id v5mr5575917wma.80.1583359320233;
+        Wed, 04 Mar 2020 14:02:00 -0800 (PST)
 Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id z2sm36776402wrq.95.2020.03.04.14.01.58
+        by smtp.gmail.com with ESMTPSA id z2sm36776402wrq.95.2020.03.04.14.01.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 14:01:58 -0800 (PST)
+        Wed, 04 Mar 2020 14:01:59 -0800 (PST)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         eha@deif.com, angelo@sysam.it, andrew.smirnov@gmail.com,
         gustavo@embeddedor.com, weic@nvidia.com, mhosny@nvidia.com
-Subject: [PATCH 04/12] spi: spi-fsl-dspi: Add comments around dspi_pop_tx and dspi_push_rx functions
-Date:   Thu,  5 Mar 2020 00:00:36 +0200
-Message-Id: <20200304220044.11193-5-olteanv@gmail.com>
+Subject: [PATCH 05/12] spi: spi-fsl-dspi: Rename fifo_{read,write} and {tx,cmd}_fifo_write
+Date:   Thu,  5 Mar 2020 00:00:37 +0200
+Message-Id: <20200304220044.11193-6-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200304220044.11193-1-olteanv@gmail.com>
 References: <20200304220044.11193-1-olteanv@gmail.com>
@@ -61,46 +61,93 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Their names are confusing, since dspi_pop_tx prepares a word to be
-written to the PUSHR register, and dspi_push_rx gets a word from the
-POPR register.
+These function names are very generic and it is easy to get confused.
+Rename them after the hardware register that they are accessing.
 
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/spi/spi-fsl-dspi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/spi/spi-fsl-dspi.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index b92c2b84a94b..a8077d4903c7 100644
+index a8077d4903c7..f37090ad7ad1 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -245,6 +245,10 @@ struct fsl_dspi {
- 	struct fsl_dspi_dma			*dma;
- };
- 
-+/*
-+ * Pop one word from the TX buffer for pushing into the
-+ * PUSHR register (TX FIFO)
-+ */
- static u32 dspi_pop_tx(struct fsl_dspi *dspi)
- {
- 	u32 txdata = 0;
-@@ -257,6 +261,7 @@ static u32 dspi_pop_tx(struct fsl_dspi *dspi)
- 	return txdata;
+@@ -601,12 +601,12 @@ static void ns_delay_scale(char *psc, char *sc, int delay_ns,
+ 	}
  }
  
-+/* Prepare one TX FIFO entry (txdata plus cmd) */
- static u32 dspi_pop_tx_pushr(struct fsl_dspi *dspi)
+-static void fifo_write(struct fsl_dspi *dspi)
++static void dspi_pushr_write(struct fsl_dspi *dspi)
  {
- 	u16 cmd = dspi->tx_cmd, data = dspi_pop_tx(dspi);
-@@ -269,6 +274,7 @@ static u32 dspi_pop_tx_pushr(struct fsl_dspi *dspi)
- 	return cmd << 16 | data;
+ 	regmap_write(dspi->regmap, SPI_PUSHR, dspi_pop_tx_pushr(dspi));
  }
  
-+/* Push one word to the RX buffer from the POPR register (RX FIFO) */
- static void dspi_push_rx(struct fsl_dspi *dspi, u32 rxdata)
+-static void cmd_fifo_write(struct fsl_dspi *dspi)
++static void dspi_pushr_cmd_write(struct fsl_dspi *dspi)
  {
- 	if (!dspi->rx)
+ 	u16 cmd = dspi->tx_cmd;
+ 
+@@ -615,7 +615,7 @@ static void cmd_fifo_write(struct fsl_dspi *dspi)
+ 	regmap_write(dspi->regmap_pushr, PUSHR_CMD, cmd);
+ }
+ 
+-static void tx_fifo_write(struct fsl_dspi *dspi, u16 txdata)
++static void dspi_pushr_txdata_write(struct fsl_dspi *dspi, u16 txdata)
+ {
+ 	regmap_write(dspi->regmap_pushr, PUSHR_TX, txdata);
+ }
+@@ -631,18 +631,18 @@ static void dspi_tcfq_write(struct fsl_dspi *dspi)
+ 		 */
+ 		u32 data = dspi_pop_tx(dspi);
+ 
+-		cmd_fifo_write(dspi);
+-		tx_fifo_write(dspi, data & 0xFFFF);
+-		tx_fifo_write(dspi, data >> 16);
++		dspi_pushr_cmd_write(dspi);
++		dspi_pushr_txdata_write(dspi, data & 0xFFFF);
++		dspi_pushr_txdata_write(dspi, data >> 16);
+ 	} else {
+ 		/* Write one entry to both TX FIFO and CMD FIFO
+ 		 * simultaneously.
+ 		 */
+-		fifo_write(dspi);
++		dspi_pushr_write(dspi);
+ 	}
+ }
+ 
+-static u32 fifo_read(struct fsl_dspi *dspi)
++static u32 dspi_popr_read(struct fsl_dspi *dspi)
+ {
+ 	u32 rxdata = 0;
+ 
+@@ -652,7 +652,7 @@ static u32 fifo_read(struct fsl_dspi *dspi)
+ 
+ static void dspi_tcfq_read(struct fsl_dspi *dspi)
+ {
+-	dspi_push_rx(dspi, fifo_read(dspi));
++	dspi_push_rx(dspi, dspi_popr_read(dspi));
+ }
+ 
+ static void dspi_eoq_write(struct fsl_dspi *dspi)
+@@ -670,7 +670,7 @@ static void dspi_eoq_write(struct fsl_dspi *dspi)
+ 		if (fifo_size == (dspi->devtype_data->fifo_size - 1))
+ 			dspi->tx_cmd |= SPI_PUSHR_CMD_CTCNT;
+ 		/* Write combined TX FIFO and CMD FIFO entry */
+-		fifo_write(dspi);
++		dspi_pushr_write(dspi);
+ 	}
+ }
+ 
+@@ -680,7 +680,7 @@ static void dspi_eoq_read(struct fsl_dspi *dspi)
+ 
+ 	/* Read one FIFO entry and push to rx buffer */
+ 	while ((dspi->rx < dspi->rx_end) && fifo_size--)
+-		dspi_push_rx(dspi, fifo_read(dspi));
++		dspi_push_rx(dspi, dspi_popr_read(dspi));
+ }
+ 
+ static int dspi_rxtx(struct fsl_dspi *dspi)
 -- 
 2.17.1
 
