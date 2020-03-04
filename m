@@ -2,29 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A781797E7
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 19:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B451797EA
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 19:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730212AbgCDS3a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Mar 2020 13:29:30 -0500
-Received: from foss.arm.com ([217.140.110.172]:38316 "EHLO foss.arm.com"
+        id S1730205AbgCDS3f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Mar 2020 13:29:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:38322 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730205AbgCDS3a (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 4 Mar 2020 13:29:30 -0500
+        id S1730075AbgCDS3e (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Mar 2020 13:29:34 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFCFB31B;
-        Wed,  4 Mar 2020 10:29:29 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E6B131B;
+        Wed,  4 Mar 2020 10:29:34 -0800 (PST)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40C593F6C4;
-        Wed,  4 Mar 2020 10:29:29 -0800 (PST)
-Date:   Wed, 04 Mar 2020 18:29:27 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B30553F6C4;
+        Wed,  4 Mar 2020 10:29:33 -0800 (PST)
+Date:   Wed, 04 Mar 2020 18:29:32 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Vladimir Oltean <vladimir.oltean@nxp.com>
 Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: spi-fsl-dspi: Parameterize the FIFO size and DMA buffer size" to the spi tree
-In-Reply-To:  <20200302001958.11105-4-olteanv@gmail.com>
-Message-Id:  <applied-20200302001958.11105-4-olteanv@gmail.com>
+Subject: Applied "spi: spi-fsl-dspi: Use specific compatible strings for all SoC instantiations" to the spi tree
+In-Reply-To:  <20200302001958.11105-3-olteanv@gmail.com>
+Message-Id:  <applied-20200302001958.11105-3-olteanv@gmail.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -33,7 +33,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-fsl-dspi: Parameterize the FIFO size and DMA buffer size
+   spi: spi-fsl-dspi: Use specific compatible strings for all SoC instantiations
 
 has been applied to the spi tree at
 
@@ -58,203 +58,186 @@ to this mail.
 Thanks,
 Mark
 
-From 1d8b4c95c37ccccfc18adef7a13b79fbc3e1557e Mon Sep 17 00:00:00 2001
+From d35054010b571486596f9da159f798fc38628683 Mon Sep 17 00:00:00 2001
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
-Date: Mon, 2 Mar 2020 02:19:55 +0200
-Subject: [PATCH] spi: spi-fsl-dspi: Parameterize the FIFO size and DMA buffer
- size
+Date: Mon, 2 Mar 2020 02:19:54 +0200
+Subject: [PATCH] spi: spi-fsl-dspi: Use specific compatible strings for all
+ SoC instantiations
 
-Get rid of the ifdef for Coldfire and make these hardware
-characteristics part of dspi->devtype_data.
+Currently, the device tree bindings submitted in mainline for Layerscape
+SoCs look like this:
+
+LS1021A:
+compatible = "fsl,ls1021a-v1.0-dspi";
+
+LS1012A:
+compatible = "fsl,ls1012a-dspi", "fsl,ls1021a-v1.0-dspi";
+
+LS2085A:
+compatible = "fsl,ls2085a-dspi";
+
+LS2088A:
+compatible = "fsl,ls2080a-dspi", "fsl,ls2085a-dspi";
+
+LX2160A:
+compatible = "fsl,lx2160a-dspi", "fsl,ls2085a-dspi";
+
+LS1043A:
+compatible = "fsl,ls1043a-dspi", "fsl,ls1021a-v1.0-dspi";
+
+LS1046A:
+compatible = "fsl,ls1021a-v1.0-dspi";
+
+Due to a lack of a more specific compatible string, LS1012A, LS1043A and
+LS1046A will fall under the LS1021A umbrella, and LS2088A and LX2160A
+under the LS2085A umbrella.
+
+They do work in those modes, but there are slight differences in the
+hardware instantiations, mostly related to FIFO sizes (with the more
+specific compatible strings, the FIFO size can be increased properly).
 
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Message-Id: <20200302001958.11105-4-olteanv@gmail.com>
+Message-Id: <20200302001958.11105-3-olteanv@gmail.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-fsl-dspi.c | 48 ++++++++++++++++++++++----------------
- 1 file changed, 28 insertions(+), 20 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 108 +++++++++++++++++++++++++++++--------
+ 1 file changed, 85 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 021c658886d4..55ccb3d0f683 100644
+index 6ec2dcb8c57a..021c658886d4 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -20,13 +20,6 @@
- 
- #define DRIVER_NAME			"fsl-dspi"
- 
--#ifdef CONFIG_M5441x
--#define DSPI_FIFO_SIZE			16
--#else
--#define DSPI_FIFO_SIZE			4
--#endif
--#define DSPI_DMA_BUFSIZE		(DSPI_FIFO_SIZE * 1024)
--
- #define SPI_MCR				0x00
- #define SPI_MCR_MASTER			BIT(31)
- #define SPI_MCR_PCSIS			(0x3F << 16)
-@@ -131,6 +124,8 @@ struct fsl_dspi_devtype_data {
- 	u8			max_clock_factor;
- 	bool			ptp_sts_supported;
+@@ -133,27 +133,66 @@ struct fsl_dspi_devtype_data {
  	bool			xspi_mode;
-+	int			fifo_size;
-+	int			dma_bufsize;
  };
  
- enum {
-@@ -149,54 +144,64 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
- 	[VF610] = {
- 		.trans_mode		= DSPI_DMA_MODE,
- 		.max_clock_factor	= 2,
-+		.dma_bufsize		= 4096,
-+		.fifo_size		= 4,
- 	},
- 	[LS1021A] = {
- 		.trans_mode		= DSPI_TCFQ_MODE,
- 		.max_clock_factor	= 8,
- 		.ptp_sts_supported	= true,
- 		.xspi_mode		= true,
-+		.fifo_size		= 4,
- 	},
- 	[LS1012A] = {
- 		.trans_mode		= DSPI_TCFQ_MODE,
- 		.max_clock_factor	= 8,
- 		.ptp_sts_supported	= true,
- 		.xspi_mode		= true,
-+		.fifo_size		= 16,
- 	},
- 	[LS1043A] = {
- 		.trans_mode		= DSPI_TCFQ_MODE,
- 		.max_clock_factor	= 8,
- 		.ptp_sts_supported	= true,
- 		.xspi_mode		= true,
-+		.fifo_size		= 16,
- 	},
- 	[LS1046A] = {
- 		.trans_mode		= DSPI_TCFQ_MODE,
- 		.max_clock_factor	= 8,
- 		.ptp_sts_supported	= true,
- 		.xspi_mode		= true,
-+		.fifo_size		= 16,
- 	},
- 	[LS2080A] = {
- 		.trans_mode		= DSPI_TCFQ_MODE,
- 		.max_clock_factor	= 8,
- 		.ptp_sts_supported	= true,
-+		.fifo_size		= 4,
- 	},
- 	[LS2085A] = {
- 		.trans_mode		= DSPI_TCFQ_MODE,
- 		.max_clock_factor	= 8,
- 		.ptp_sts_supported	= true,
-+		.fifo_size		= 4,
- 	},
- 	[LX2160A] = {
- 		.trans_mode		= DSPI_TCFQ_MODE,
- 		.max_clock_factor	= 8,
- 		.ptp_sts_supported	= true,
-+		.fifo_size		= 4,
- 	},
- 	[MCF5441X] = {
- 		.trans_mode		= DSPI_EOQ_MODE,
- 		.max_clock_factor	= 8,
-+		.fifo_size		= 16,
- 	},
+-static const struct fsl_dspi_devtype_data vf610_data = {
+-	.trans_mode		= DSPI_DMA_MODE,
+-	.max_clock_factor	= 2,
++enum {
++	LS1021A,
++	LS1012A,
++	LS1043A,
++	LS1046A,
++	LS2080A,
++	LS2085A,
++	LX2160A,
++	MCF5441X,
++	VF610,
+ };
+ 
+-static const struct fsl_dspi_devtype_data ls1021a_v1_data = {
+-	.trans_mode		= DSPI_TCFQ_MODE,
+-	.max_clock_factor	= 8,
+-	.ptp_sts_supported	= true,
+-	.xspi_mode		= true,
+-};
+-
+-static const struct fsl_dspi_devtype_data ls2085a_data = {
+-	.trans_mode		= DSPI_TCFQ_MODE,
+-	.max_clock_factor	= 8,
+-	.ptp_sts_supported	= true,
+-};
+-
+-static const struct fsl_dspi_devtype_data coldfire_data = {
+-	.trans_mode		= DSPI_EOQ_MODE,
+-	.max_clock_factor	= 8,
++static const struct fsl_dspi_devtype_data devtype_data[] = {
++	[VF610] = {
++		.trans_mode		= DSPI_DMA_MODE,
++		.max_clock_factor	= 2,
++	},
++	[LS1021A] = {
++		.trans_mode		= DSPI_TCFQ_MODE,
++		.max_clock_factor	= 8,
++		.ptp_sts_supported	= true,
++		.xspi_mode		= true,
++	},
++	[LS1012A] = {
++		.trans_mode		= DSPI_TCFQ_MODE,
++		.max_clock_factor	= 8,
++		.ptp_sts_supported	= true,
++		.xspi_mode		= true,
++	},
++	[LS1043A] = {
++		.trans_mode		= DSPI_TCFQ_MODE,
++		.max_clock_factor	= 8,
++		.ptp_sts_supported	= true,
++		.xspi_mode		= true,
++	},
++	[LS1046A] = {
++		.trans_mode		= DSPI_TCFQ_MODE,
++		.max_clock_factor	= 8,
++		.ptp_sts_supported	= true,
++		.xspi_mode		= true,
++	},
++	[LS2080A] = {
++		.trans_mode		= DSPI_TCFQ_MODE,
++		.max_clock_factor	= 8,
++		.ptp_sts_supported	= true,
++	},
++	[LS2085A] = {
++		.trans_mode		= DSPI_TCFQ_MODE,
++		.max_clock_factor	= 8,
++		.ptp_sts_supported	= true,
++	},
++	[LX2160A] = {
++		.trans_mode		= DSPI_TCFQ_MODE,
++		.max_clock_factor	= 8,
++		.ptp_sts_supported	= true,
++	},
++	[MCF5441X] = {
++		.trans_mode		= DSPI_EOQ_MODE,
++		.max_clock_factor	= 8,
++	},
  };
  
  struct fsl_dspi_dma {
--	/* Length of transfer in words of DSPI_FIFO_SIZE */
-+	/* Length of transfer in words of dspi->fifo_size */
- 	u32					curr_xfer_len;
- 
- 	u32					*tx_dma_buf;
-@@ -397,7 +402,8 @@ static int dspi_dma_xfer(struct fsl_dspi *dspi)
- 	int ret = 0;
- 
- 	curr_remaining_bytes = dspi->len;
--	bytes_per_buffer = DSPI_DMA_BUFSIZE / DSPI_FIFO_SIZE;
-+	bytes_per_buffer = dspi->devtype_data->dma_bufsize /
-+			   dspi->devtype_data->fifo_size;
- 	while (curr_remaining_bytes) {
- 		/* Check if current transfer fits the DMA buffer */
- 		dma->curr_xfer_len = curr_remaining_bytes
-@@ -449,14 +455,14 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 		goto err_tx_channel;
- 	}
- 
--	dma->tx_dma_buf = dma_alloc_coherent(dev, DSPI_DMA_BUFSIZE,
-+	dma->tx_dma_buf = dma_alloc_coherent(dev, dspi->devtype_data->dma_bufsize,
- 					     &dma->tx_dma_phys, GFP_KERNEL);
- 	if (!dma->tx_dma_buf) {
- 		ret = -ENOMEM;
- 		goto err_tx_dma_buf;
- 	}
- 
--	dma->rx_dma_buf = dma_alloc_coherent(dev, DSPI_DMA_BUFSIZE,
-+	dma->rx_dma_buf = dma_alloc_coherent(dev, dspi->devtype_data->dma_bufsize,
- 					     &dma->rx_dma_phys, GFP_KERNEL);
- 	if (!dma->rx_dma_buf) {
- 		ret = -ENOMEM;
-@@ -493,11 +499,11 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 	return 0;
- 
- err_slave_config:
--	dma_free_coherent(dev, DSPI_DMA_BUFSIZE,
--			dma->rx_dma_buf, dma->rx_dma_phys);
-+	dma_free_coherent(dev, dspi->devtype_data->dma_bufsize,
-+			  dma->rx_dma_buf, dma->rx_dma_phys);
- err_rx_dma_buf:
--	dma_free_coherent(dev, DSPI_DMA_BUFSIZE,
--			dma->tx_dma_buf, dma->tx_dma_phys);
-+	dma_free_coherent(dev, dspi->devtype_data->dma_bufsize,
-+			  dma->tx_dma_buf, dma->tx_dma_phys);
- err_tx_dma_buf:
- 	dma_release_channel(dma->chan_tx);
- err_tx_channel:
-@@ -519,13 +525,15 @@ static void dspi_release_dma(struct fsl_dspi *dspi)
- 
- 	if (dma->chan_tx) {
- 		dma_unmap_single(dev, dma->tx_dma_phys,
--				 DSPI_DMA_BUFSIZE, DMA_TO_DEVICE);
-+				 dspi->devtype_data->dma_bufsize,
-+				 DMA_TO_DEVICE);
- 		dma_release_channel(dma->chan_tx);
- 	}
- 
- 	if (dma->chan_rx) {
- 		dma_unmap_single(dev, dma->rx_dma_phys,
--				 DSPI_DMA_BUFSIZE, DMA_FROM_DEVICE);
-+				 dspi->devtype_data->dma_bufsize,
-+				 DMA_FROM_DEVICE);
- 		dma_release_channel(dma->chan_rx);
- 	}
+@@ -909,9 +948,31 @@ static void dspi_cleanup(struct spi_device *spi)
  }
-@@ -657,7 +665,7 @@ static void dspi_tcfq_read(struct fsl_dspi *dspi)
  
- static void dspi_eoq_write(struct fsl_dspi *dspi)
- {
--	int fifo_size = DSPI_FIFO_SIZE;
-+	int fifo_size = dspi->devtype_data->fifo_size;
- 	u16 xfer_cmd = dspi->tx_cmd;
+ static const struct of_device_id fsl_dspi_dt_ids[] = {
+-	{ .compatible = "fsl,vf610-dspi", .data = &vf610_data, },
+-	{ .compatible = "fsl,ls1021a-v1.0-dspi", .data = &ls1021a_v1_data, },
+-	{ .compatible = "fsl,ls2085a-dspi", .data = &ls2085a_data, },
++	{
++		.compatible = "fsl,vf610-dspi",
++		.data = &devtype_data[VF610],
++	}, {
++		.compatible = "fsl,ls1021a-v1.0-dspi",
++		.data = &devtype_data[LS1021A],
++	}, {
++		.compatible = "fsl,ls1012a-dspi",
++		.data = &devtype_data[LS1012A],
++	}, {
++		.compatible = "fsl,ls1043a-dspi",
++		.data = &devtype_data[LS1043A],
++	}, {
++		.compatible = "fsl,ls1046a-dspi",
++		.data = &devtype_data[LS1046A],
++	}, {
++		.compatible = "fsl,ls2080a-dspi",
++		.data = &devtype_data[LS2080A],
++	}, {
++		.compatible = "fsl,ls2085a-dspi",
++		.data = &devtype_data[LS2085A],
++	}, {
++		.compatible = "fsl,lx2160a-dspi",
++		.data = &devtype_data[LX2160A],
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, fsl_dspi_dt_ids);
+@@ -1064,7 +1125,8 @@ static int dspi_probe(struct platform_device *pdev)
+ 		ctlr->num_chipselect = pdata->cs_num;
+ 		ctlr->bus_num = pdata->bus_num;
  
- 	/* Fill TX FIFO with as many transfers as possible */
-@@ -667,7 +675,7 @@ static void dspi_eoq_write(struct fsl_dspi *dspi)
- 		if (dspi->len == dspi->bytes_per_word || fifo_size == 0)
- 			dspi->tx_cmd |= SPI_PUSHR_CMD_EOQ;
- 		/* Clear transfer count for first transfer in FIFO */
--		if (fifo_size == (DSPI_FIFO_SIZE - 1))
-+		if (fifo_size == (dspi->devtype_data->fifo_size - 1))
- 			dspi->tx_cmd |= SPI_PUSHR_CMD_CTCNT;
- 		/* Write combined TX FIFO and CMD FIFO entry */
- 		fifo_write(dspi);
-@@ -676,7 +684,7 @@ static void dspi_eoq_write(struct fsl_dspi *dspi)
+-		dspi->devtype_data = &coldfire_data;
++		/* Only Coldfire uses platform data */
++		dspi->devtype_data = &devtype_data[MCF5441X];
+ 	} else {
  
- static void dspi_eoq_read(struct fsl_dspi *dspi)
- {
--	int fifo_size = DSPI_FIFO_SIZE;
-+	int fifo_size = dspi->devtype_data->fifo_size;
- 
- 	/* Read one FIFO entry and push to rx buffer */
- 	while ((dspi->rx < dspi->rx_end) && fifo_size--)
+ 		ret = of_property_read_u32(np, "spi-num-chipselects", &cs_num);
 -- 
 2.20.1
 
