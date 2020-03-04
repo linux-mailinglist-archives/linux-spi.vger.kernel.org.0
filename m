@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39040179B6B
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 23:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC46E179B69
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 23:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388541AbgCDWCI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Mar 2020 17:02:08 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:36582 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388511AbgCDWCH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Mar 2020 17:02:07 -0500
-Received: by mail-wm1-f68.google.com with SMTP id g83so3503934wme.1;
-        Wed, 04 Mar 2020 14:02:06 -0800 (PST)
+        id S2388546AbgCDWCJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Mar 2020 17:02:09 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36582 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388539AbgCDWCI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Mar 2020 17:02:08 -0500
+Received: by mail-wm1-f66.google.com with SMTP id g83so3503989wme.1;
+        Wed, 04 Mar 2020 14:02:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=UjBK8tKR5AcH0e1lqcZHMqMV2tpdAhqsgcfBSll5C30=;
-        b=qpZa/IUeNxOuXyfe26nAWxrm5BQRIyLkhqaUG78muxIPvdRWpobfujY9IQLpIrExat
-         iee1mB1RGO76HJX/XD56tka4lFzMGqxg80pvngJzb4YrHgF450jSHSSO8bXV7P9fN5fh
-         PHT0YVEJbpEbAJrSS6ptzsLxBrEDPUi50959YmiCFwfOW3LqBCEBQO1xkwwMMXNaoQ8R
-         W2P+DRfL5bPOQJGDf/uD3OgkuMLe3DodJw9zS1UzLMeQJ4zj0ft+JdFOXvI00VaKfbP3
-         qch0nNctEqWdK2QdxpNPqL2jk2ld4QYQ1MIKTJKHPVUK+NdNeBVB1905m7lBc2A/ZvYq
-         t19g==
+        bh=vzn44GYWIDseGnHDTXhrNsjH7nM5qe+h4ik7P6IWnpI=;
+        b=ZowA7PC40wqYnLNe77kaKCvBeyY8/5FZ3VwVbtl/PjeBdO0KKd+LEyf6ee7o45+E5G
+         6VEwCYuC3zOwlnUMB+fphG8jRcQOPZszxQwIOdPK5pKGOcpNJeSJhiuM6DsR5OflJnpF
+         5mYnLoBP2Hh0V2zkX+kIBXys1px6/virmFC5MUV90c1RnA1EyfnIklzrtowMLUfHlit/
+         Dd12XwcJJT0Fnj/ZMlOj7k8f4p+qH5mKmZCUYwOZjqDHSucA1718os1GIxjNtxnSZt8y
+         RFfSeO9c8a4JYMBl2GlBRuKr3xk0KsODnp0zsTutYEFtuGob104WRNXgv829i/y9KlIL
+         jgxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=UjBK8tKR5AcH0e1lqcZHMqMV2tpdAhqsgcfBSll5C30=;
-        b=AWurrJAYsXhgr+ZRGy8SGzP2d+QEiqDV+RXbBqPVdG8VoAvAkoTkoxXeu44cPQIgnc
-         Y3meOLFQfQnAuD/M6wdZrfz6G4KBXCxPisRWSOYtiYPxAikP+SOjV7z+Mh8i+ydiqT1R
-         1IaXETSJcgfUySQ92vUHZT5gBhQp7VsrL9iFFEqgQ9Av9doxmKrURWpRMO5TSqC3Js46
-         zjCebV1Mts/a38W8+sof4BKuSz4FPmMYPxaPRya1ga9bb83Ige7jObEF2bhYu+o4Xzpq
-         RiRzdB8ZrieWWmSK6s21xtuECAtf3MaZhAbRxDMqYDj8cMyd3bVk/u73qY7OS+ovXokB
-         //2w==
-X-Gm-Message-State: ANhLgQ38GAcCny6MVhZu4f9gyiB4ykQ+3eqh7yzTMO/KYSVog4Vzl7NP
-        3gGWtpiy1V6Lv47Q8fAFVh8=
-X-Google-Smtp-Source: ADFU+vv8mVb+tYL9DUyPWHmEwJmvnIU0YQxJ/lDEH0WQEqUCv+ttU3wtIQ5+4FjXgkMvdEgp3ftFng==
-X-Received: by 2002:a1c:2686:: with SMTP id m128mr5405096wmm.123.1583359325807;
-        Wed, 04 Mar 2020 14:02:05 -0800 (PST)
+        bh=vzn44GYWIDseGnHDTXhrNsjH7nM5qe+h4ik7P6IWnpI=;
+        b=FSdi0atq0uWKxjmE7gsbhrQpznYbCL/IMv9xA71EmFTmyhXkawCmmdsTN75BD4t9pC
+         EXlDHWGIausXC5za4jxLcwD6oYyrxh/Nbv6ExUCLElCm+n8MQ4HkkKKsiteX6fva3OT5
+         Lh8qX0m5muW7dSSO83t0B9ss1lHM7B4ogYjoSunYEBfKqHzjWvWJfvt2AIK7/PI7rQtJ
+         q3qc1xnqVe2d9v3yAT9rrtw0lGmbqSKyOI6I35laTimOfSUEd7KwX0IK1alvXBhQgn7i
+         NuQSd6yv6DuTYZx1dnUIAMHb45io2n1Zd6UIF4m7Lg9iLiZLfeDRAjYChx9DgFrh0HWs
+         ce+Q==
+X-Gm-Message-State: ANhLgQ3drYiMIjYV4h7HQKb3LfktoiGCWTwhL8Xm/c8PMdfHaHyEBLIO
+        qB43vKGD+BFzD8sMSWnXCos=
+X-Google-Smtp-Source: ADFU+vvAVgNyGEyzThxT/2NXaun3XlIMxRKGIdmtJBQU086Mi28uzDeNkk90IEsBe9a5eCnI+eFBEw==
+X-Received: by 2002:a05:600c:23cd:: with SMTP id p13mr5333266wmb.28.1583359326844;
+        Wed, 04 Mar 2020 14:02:06 -0800 (PST)
 Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id z2sm36776402wrq.95.2020.03.04.14.02.04
+        by smtp.gmail.com with ESMTPSA id z2sm36776402wrq.95.2020.03.04.14.02.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 14:02:05 -0800 (PST)
+        Wed, 04 Mar 2020 14:02:06 -0800 (PST)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         eha@deif.com, angelo@sysam.it, andrew.smirnov@gmail.com,
         gustavo@embeddedor.com, weic@nvidia.com, mhosny@nvidia.com
-Subject: [PATCH 10/12] spi: spi-fsl-dspi: Optimize dspi_setup_accel for lowest interrupt count
-Date:   Thu,  5 Mar 2020 00:00:42 +0200
-Message-Id: <20200304220044.11193-11-olteanv@gmail.com>
+Subject: [PATCH 11/12] spi: spi-fsl-dspi: Use EOQ for last word in buffer even for XSPI mode
+Date:   Thu,  5 Mar 2020 00:00:43 +0200
+Message-Id: <20200304220044.11193-12-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200304220044.11193-1-olteanv@gmail.com>
 References: <20200304220044.11193-1-olteanv@gmail.com>
@@ -61,95 +61,98 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Currently, a SPI transfer that is not multiple of the highest supported
-word width (e.g. 4 bytes) will be transmitted as follows (assume a
-30-byte buffer transmitted through a 32-bit wide FIFO that is 32 bytes
-deep):
+The EOQ mode has a hardware limitation in that it stops the transmission
+(including the deassertion of the chip select signal) once the host CPU
+requests end-of-queue for a particular word in the TX FIFO.
 
- - First 28 bytes are sent as 7 words of 32 bits each
- - Last 2 bytes are sent as 1 word of 16 bits size
+And XSPI mode has a limitation in that we need a separate CMD FIFO entry
+for the last byte in the buffer, where the chip select signal needs to
+be deasserted. It's not a functional limitation, but it's rather clunky
+and the fact that we need to halt the pipeline and write a single entry
+to the TX FIFO whenever a buffer ends brings the throughput down when
+transmitting small buffers.
 
-But if the dspi_setup_accel function had decided to use a lower
-oper_bits_per_word value (16 instead of 32), there would have been
-enough space in the TX FIFO to fit the entire buffer in one go (15 words
-of 16 bits each).
+So the idea here is to use EOQ's limitation in our favor when using XSPI
+mode. Stop special-casing that final word in the buffer, and just kill
+the chip select signal by issuing an EOQ for that last word. Now it can
+be mixed in with all the other words in the current TX FIFO train.
 
-What we're actually trying to avoid is mixing word sizes within the same
-run with the TX FIFO, since there is an erratum surrounding this, and
-invalid data might get transmitted.
-
-So this patch adds special cases for when the remaining length of the
-buffer can be sent in one go as 8-bit or 16-bit words, otherwise it
-falls back to the standard logic of sending as many bytes as possible at
-the highest oper_bits_per_word value possible.
-
-The benefit is that there will be one less CMDFQ/EOQ interrupt to
-service when the entire buffer is transmitted during a single go, and
-that will improve the overall latency of the transfer.
+A small trick here is that we still keep using the XSPI-specific
+signaling via the CMDTCFQ interrupt in RSER, and not enabling the EOQ
+interrupt, in order to avoid hardware weirdness (potential races with
+separate interrupts being raised for CMDTCFQ and EOQ for what is in fact
+the end of the same transmission). That is just theoretical, but it's
+good to be cautious, and the EOQ interrupt isn't needed.
 
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/spi/spi-fsl-dspi.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index f5b802070d29..df4944353ed5 100644
+index df4944353ed5..d5983be32180 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -775,20 +775,34 @@ static void dspi_fifo_read(struct fsl_dspi *dspi)
- static void dspi_setup_accel(struct fsl_dspi *dspi)
+@@ -656,10 +656,8 @@ static void dspi_pushr_write(struct fsl_dspi *dspi)
+ 	regmap_write(dspi->regmap, SPI_PUSHR, dspi_pop_tx_pushr(dspi));
+ }
+ 
+-static void dspi_pushr_cmd_write(struct fsl_dspi *dspi)
++static void dspi_pushr_cmd_write(struct fsl_dspi *dspi, u16 cmd)
  {
- 	struct spi_transfer *xfer = dspi->cur_transfer;
-+	bool odd = !!(dspi->len & 1);
+-	u16 cmd = dspi->tx_cmd;
+-
+ 	/*
+ 	 * The only time when the PCS doesn't need continuation after this word
+ 	 * is when it's last. We need to look ahead, because we actually call
+@@ -680,8 +678,13 @@ static void dspi_pushr_txdata_write(struct fsl_dspi *dspi, u16 txdata)
+ 	regmap_write(dspi->regmap_pushr, PUSHR_TX, txdata);
+ }
  
--	/* Start off with maximum supported by hardware */
--	if (dspi->devtype_data->trans_mode == DSPI_XSPI_MODE)
--		dspi->oper_bits_per_word = 32;
--	else
-+	/* No accel for frames not multiple of 8 bits at the moment */
-+	if (xfer->bits_per_word % 8)
-+		goto no_accel;
+-static void dspi_xspi_write(struct fsl_dspi *dspi, int cnt)
++static void dspi_xspi_write(struct fsl_dspi *dspi, int cnt, bool eoq)
+ {
++	u16 tx_cmd = dspi->tx_cmd;
 +
-+	if (!odd && dspi->len <= dspi->devtype_data->fifo_size * 2) {
- 		dspi->oper_bits_per_word = 16;
-+	} else if (odd && dspi->len <= dspi->devtype_data->fifo_size) {
-+		dspi->oper_bits_per_word = 8;
-+	} else {
-+		/* Start off with maximum supported by hardware */
-+		if (dspi->devtype_data->trans_mode == DSPI_XSPI_MODE)
-+			dspi->oper_bits_per_word = 32;
-+		else
-+			dspi->oper_bits_per_word = 16;
++	if (eoq)
++		tx_cmd |= SPI_PUSHR_CMD_EOQ;
++
+ 	/* Update CTARE */
+ 	regmap_write(dspi->regmap, SPI_CTARE(0),
+ 		     SPI_FRAME_EBITS(dspi->oper_bits_per_word) |
+@@ -691,7 +694,7 @@ static void dspi_xspi_write(struct fsl_dspi *dspi, int cnt)
+ 	 * Write the CMD FIFO entry first, and then the two
+ 	 * corresponding TX FIFO entries (or one...).
+ 	 */
+-	dspi_pushr_cmd_write(dspi);
++	dspi_pushr_cmd_write(dspi, tx_cmd);
  
--	/* And go down only if the buffer can't be sent with words this big */
--	do {
--		if (dspi->len >= DIV_ROUND_UP(dspi->oper_bits_per_word, 8))
--			break;
-+		/*
-+		 * And go down only if the buffer can't be sent with
-+		 * words this big
-+		 */
-+		do {
-+			if (dspi->len >= DIV_ROUND_UP(dspi->oper_bits_per_word, 8))
-+				break;
+ 	/* Fill TX FIFO with as many transfers as possible */
+ 	while (cnt--) {
+@@ -707,6 +710,7 @@ static void dspi_xspi_fifo_write(struct fsl_dspi *dspi)
+ {
+ 	int num_fifo_entries = dspi->devtype_data->fifo_size;
+ 	int bytes_in_flight;
++	bool eoq = false;
  
--		dspi->oper_bits_per_word /= 2;
--	} while (dspi->oper_bits_per_word > 8);
-+			dspi->oper_bits_per_word /= 2;
-+		} while (dspi->oper_bits_per_word > 8);
-+	}
+ 	/* In XSPI mode each 32-bit word occupies 2 TX FIFO entries */
+ 	if (dspi->oper_word_size == 4)
+@@ -732,11 +736,11 @@ static void dspi_xspi_fifo_write(struct fsl_dspi *dspi)
+ 	 * So send one word less during this go, to force a split and a command
+ 	 * with a single word next time, when CONT will be unset.
+ 	 */
+-	if (bytes_in_flight == dspi->len && dspi->words_in_flight > 1 &&
+-	    !(dspi->tx_cmd & SPI_PUSHR_CMD_CONT))
+-		dspi->words_in_flight--;
++	if (!(dspi->tx_cmd & SPI_PUSHR_CMD_CONT) &&
++	    bytes_in_flight == dspi->len)
++		eoq = true;
  
- 	if (xfer->bits_per_word == 8 && dspi->oper_bits_per_word == 32) {
- 		dspi->dev_to_host = dspi_8on32_dev_to_host;
-@@ -800,7 +814,7 @@ static void dspi_setup_accel(struct fsl_dspi *dspi)
- 		dspi->dev_to_host = dspi_16on32_dev_to_host;
- 		dspi->host_to_dev = dspi_16on32_host_to_dev;
- 	} else {
--		/* No acceleration needed (8<N<=16 on 16, 16<N<=32 on 32) */
-+no_accel:
- 		dspi->dev_to_host = dspi_native_dev_to_host;
- 		dspi->host_to_dev = dspi_native_host_to_dev;
- 		dspi->oper_bits_per_word = xfer->bits_per_word;
+-	dspi_xspi_write(dspi, dspi->words_in_flight);
++	dspi_xspi_write(dspi, dspi->words_in_flight, eoq);
+ }
+ 
+ static void dspi_eoq_fifo_write(struct fsl_dspi *dspi)
 -- 
 2.17.1
 
