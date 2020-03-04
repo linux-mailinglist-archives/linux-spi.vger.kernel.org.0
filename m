@@ -2,158 +2,171 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB41D1785DE
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Mar 2020 23:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B0B178F71
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 12:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727429AbgCCWrJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Mar 2020 17:47:09 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:32836 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726766AbgCCWrJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Mar 2020 17:47:09 -0500
-Received: by mail-ot1-f65.google.com with SMTP id a20so121783otl.0;
-        Tue, 03 Mar 2020 14:47:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Z0du2wcxyjg7iRH0s/qpIMsj7X0YCwaBDvE2vsxIrbk=;
-        b=ptKay2zTXDuwv4sLGKm+yU3NkVByKaqrWKWW8+yMBqmbO7bGEAsTuOxCR9dOc1Mopm
-         qpnJxckMJyfIvQgVZw6JW85HJpsVJMWhhUe0bqiNX2JUp2dU8N3+fx34f7MbEHkSZwyA
-         5GUOMeaVzIiq1084X6YvAC6NH+tuklJF1c5nPBGj81i9cZWGx7CFzFRcsT+6XGGTODsN
-         KRxwYnvQKbs7gNQsr+mRquu4PkSmkCuVhoM7vTTpZAkSBfdUEgk9PiV2HzRQJ9IAmhtx
-         kvJhfmAch4hWexgOHY5W3VI/ddbI8+2c7/kQyRq6Gylyqvsv0fwgRz231c8UcLqPKO9k
-         Ehew==
-X-Gm-Message-State: ANhLgQ21VIBHaKa3T+u+yr7vPTojh5vTOw9jtx4qb5MQnU9Vwh3PiZri
-        ARfE9upaUW6Un71mAgWMHA==
-X-Google-Smtp-Source: ADFU+vuU+JCOVQpYg1AlYEQdEKGSsg5SLhgtKZoaS1dScWhKEQWMAhE4l5CbjQlxM9gWy34zkZG6zg==
-X-Received: by 2002:a9d:4c92:: with SMTP id m18mr129586otf.168.1583275628368;
-        Tue, 03 Mar 2020 14:47:08 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b2sm5879600oii.20.2020.03.03.14.47.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 14:47:07 -0800 (PST)
-Received: (nullmailer pid 32174 invoked by uid 1000);
-        Tue, 03 Mar 2020 22:47:06 -0000
-Date:   Tue, 3 Mar 2020 16:47:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/4] dt-bindings: convert mtk-quadspi binding doc for
- spi-mtk-nor
-Message-ID: <20200303224706.GA22867@bogus>
-References: <20200228043636.559915-1-gch981213@gmail.com>
- <20200228043636.559915-4-gch981213@gmail.com>
+        id S2387751AbgCDLSC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Mar 2020 06:18:02 -0500
+Received: from mail-db8eur05on2117.outbound.protection.outlook.com ([40.107.20.117]:17953
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387488AbgCDLSB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Mar 2020 06:18:01 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nNkLO6okuSlfBblzjKHWxnSo4VrpIyYpfIKh8vgwQYsBG/t/HaLiwAINrZgoGfeoSe1hKdzcKzuZJTMdk8oNS0GXC/ciJrZJKfqjrOkP5YLuvRbVJuMhuwHrI78TSm+cvWpCju2uCN0Ha3oYWcO8TiOiO0OYfcdm+T7hzgUjEWTszbZej40ltEIl7gGXWHJSp8AcqXeok5rPTaKMwaaRREJtYzfvEHqZ+ERX5JLudeFTKZRFZIZKM0Tbi0/YBshR36enE8YBSKUsZgF3AEDIaz7b/my9pqxgkjDIUWdQWKe4Me5x5mhznVP0934bS9VnXUZcvGpFa5+2RmlZgHo+Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nRjKmxvKahZusgK/nxLKQ03jFcuBZyHmlBuOM4g34+8=;
+ b=GFby5gV04QEIH6aQTzTuHFMcOAcWUeuQya/xL332VH8ooaF2YvwDEMZOb+gck+eBliPqVWieBei1uHD1i0LoiX6XIP8A7sF6zJ6JwsYHd9pOgZPtP4cjxaNMkO/IzJeknAzSa5FQMURWglDc395FMfWEP04oAJxZoJZFYkW1idw6QJNcpbJKXTET9oVZQcBzQjNhXrZZHF+sJI1HVcK/AZfRX5I4fm7b8QQHD9EKz4jgQZgjswAFlB/VnV6KvdEziS1r59pmxysDHlXFqX1SdxiFZGN3//VkqFoTG1MCgw97TWFFuCnACzNSuF28mQJ5JBx5sQt1KsMBoOcr4vSUwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nRjKmxvKahZusgK/nxLKQ03jFcuBZyHmlBuOM4g34+8=;
+ b=BlKPKuyOOzaqKsHcnRgdaqWzYLBOVWWAk2lix+l+gaIUHpdW3qeizvy2O39HckM7W3ZkLRN6oWLv8gw9ZXQPReGR6bGlvbMeCtcITWooLlkqY4gLUeGPRHqZDTPcmy42KGfKc8IxGS/aiEt4VlvC894uHI0ZguemNK2tdCGgRQk=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=aaro.koskinen@nokia.com; 
+Received: from VI1PR07MB6174.eurprd07.prod.outlook.com (20.178.9.83) by
+ VI1PR07MB4000.eurprd07.prod.outlook.com (52.134.25.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2793.9; Wed, 4 Mar 2020 11:17:47 +0000
+Received: from VI1PR07MB6174.eurprd07.prod.outlook.com
+ ([fe80::7514:700c:669b:3c8f]) by VI1PR07MB6174.eurprd07.prod.outlook.com
+ ([fe80::7514:700c:669b:3c8f%7]) with mapi id 15.20.2793.011; Wed, 4 Mar 2020
+ 11:17:47 +0000
+From:   aaro.koskinen@nokia.com
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Aaro Koskinen <aaro.koskinen@nokia.com>
+Subject: [PATCH] spi: spi_register_controller(): free bus id on error paths
+Date:   Wed,  4 Mar 2020 13:17:40 +0200
+Message-Id: <20200304111740.27915-1-aaro.koskinen@nokia.com>
+X-Mailer: git-send-email 2.11.0
+Content-Type: text/plain
+X-ClientProxiedBy: HE1PR0802CA0003.eurprd08.prod.outlook.com
+ (2603:10a6:3:bd::13) To VI1PR07MB6174.eurprd07.prod.outlook.com
+ (2603:10a6:803:a5::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200228043636.559915-4-gch981213@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from ak-desktop.emea.nsn-net.net (131.228.2.28) by HE1PR0802CA0003.eurprd08.prod.outlook.com (2603:10a6:3:bd::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2772.14 via Frontend Transport; Wed, 4 Mar 2020 11:17:46 +0000
+X-Mailer: git-send-email 2.11.0
+X-Originating-IP: [131.228.2.28]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 6babef46-ed13-4e9a-4dac-08d7c02daac1
+X-MS-TrafficTypeDiagnostic: VI1PR07MB4000:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VI1PR07MB4000335C7583E449E715A81EF4E50@VI1PR07MB4000.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1332;
+X-Forefront-PRVS: 0332AACBC3
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(39860400002)(136003)(396003)(346002)(376002)(199004)(189003)(316002)(81156014)(6506007)(5660300002)(1076003)(478600001)(107886003)(81166006)(66946007)(2616005)(956004)(2906002)(52116002)(8936002)(6486002)(8676002)(66556008)(86362001)(6512007)(26005)(36756003)(16526019)(186003)(66476007)(9686003)(6666004)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR07MB4000;H:VI1PR07MB6174.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+Received-SPF: None (protection.outlook.com: nokia.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PF+x1/4cHJcTkkkhq1QpuLUJwNDhquuo76Sat9SJ+KzULwCZxkL2h9rB7+IkqsamNfqJhPoNZ4/z8Elp7XkH7SlvQMFj2KmjLD9xkM1MUIMDAiQ2oiE6a9A8xrvTbhROGyJd1moLA+oD8zvNfu/SHR3MR+6SFBdOrgRBwpTk/BVMU9PtSV2QofWhu01io8T5nNn2nAkGfiSTlZBVAj6mYNQbMdu0ARHiFS1Gu4/Y0naqxq+ple/J/pL0P0BRvIOw5TFZ/tTwUDZineztDnYdpfSySI6pJ71FFw1fdJcigOikcdptky+y4q4TaD8PhLIe0LGrvoj7QpBSBo6kNNg6JprTUnQaqg1QbV1YFqQkzxHnUGjgBZ7ma8ciDF4c5FxJKpS6Z+4qnGftHZasUFHPIQD4QSOFDASNVIh+mP81C1lD+qkEru2pdyIiTgDlBuCi
+X-MS-Exchange-AntiSpam-MessageData: dnllcsd9VJCrQAH4kDNH7cHsteKJ0jUpFJeaiM59i7sjp0vng4vHNNnyzIlmO6FIbBtPzuG4cvFR/VDCcPEOmMIqTtVswSJRsTmkY7CBACbCEHjYJyoEk9gXzOhs8wYayy8ZwyIu9AewQdXFWyChtQ==
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6babef46-ed13-4e9a-4dac-08d7c02daac1
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2020 11:17:46.9349
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SAoFH3NlF6PdlLL7ZHyS+svO4c1cZdZmq8PTC5Kt7Y94mo0T47XcGmSdhLoNCI3PerEJnINFU777OAqKpFvwPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB4000
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 12:36:35PM +0800, Chuanhong Guo wrote:
-> spi-mtk-nor is a driver to replace mtk-quadspi and they have almost
-> the same device-tree bindings. Reuse this binding documentation and
-> convert it for new driver:
-> 
-> 1. "Mediatek SoCs" -> "Mediatek ARM SoCs" because MTK MIPS SoCs
->    use different controllers.
-> 2. document "interrupts" as a required property because it's
->    available on all SoCs with this controller and new driver takes
->    advantages of it. It's implemented as optional only to maintain
->    backward compatibility.
-> 3. replace binding example with a mt7629 one because this is the
->    only one I know the interrupt assignment.
+From: Aaro Koskinen <aaro.koskinen@nokia.com>
 
-That doesn't really matter. It would be less churn without that change 
-and examples are just examples.
+Some error paths leave the bus id allocated. As a result the IDR
+allocation will fail after a deferred probe. Fix by freeing the bus id
+always on error.
 
-> 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> ---
-> Change since v1:
->  none
-> 
->  .../mtk-quadspi.txt => spi/spi-mtk-nor.txt}   | 34 ++++++++-----------
->  1 file changed, 15 insertions(+), 19 deletions(-)
->  rename Documentation/devicetree/bindings/{mtd/mtk-quadspi.txt => spi/spi-mtk-nor.txt} (62%)
-> 
-> diff --git a/Documentation/devicetree/bindings/mtd/mtk-quadspi.txt b/Documentation/devicetree/bindings/spi/spi-mtk-nor.txt
-> similarity index 62%
-> rename from Documentation/devicetree/bindings/mtd/mtk-quadspi.txt
-> rename to Documentation/devicetree/bindings/spi/spi-mtk-nor.txt
-> index a12e3b5c495d..829da480b9a9 100644
-> --- a/Documentation/devicetree/bindings/mtd/mtk-quadspi.txt
-> +++ b/Documentation/devicetree/bindings/spi/spi-mtk-nor.txt
-> @@ -1,4 +1,4 @@
-> -* Serial NOR flash controller for MediaTek SoCs
-> +* SPI NOR flash controller for MediaTek ARM SoCs
->  
->  Required properties:
->  - compatible: 	  For mt8173, compatible should be "mediatek,mt8173-nor",
-> @@ -13,6 +13,7 @@ Required properties:
->  		  "mediatek,mt7629-nor", "mediatek,mt8173-nor"
->  		  "mediatek,mt8173-nor"
->  - reg: 		  physical base address and length of the controller's register
-> +- interrupts:	  Interrupt number used by the controller.
->  - clocks: 	  the phandle of the clocks needed by the nor controller
->  - clock-names: 	  the names of the clocks
->  		  the clocks should be named "spi" and "sf". "spi" is used for spi bus,
-> @@ -22,29 +23,24 @@ Required properties:
->  - #address-cells: should be <1>
->  - #size-cells:	  should be <0>
->  
-> -The SPI flash must be a child of the nor_flash node and must have a
-> -compatible property. Also see jedec,spi-nor.txt.
-> -
-> -Required properties:
-> -- compatible:	  May include a device-specific string consisting of the manufacturer
-> -		  and name of the chip. Must also include "jedec,spi-nor" for any
-> -		  SPI NOR flash that can be identified by the JEDEC READ ID opcode (0x9F).
-> -- reg :		  Chip-Select number
-> +There should be only one spi slave device following generic spi bindings.
-> +It's not recommended to use this controller for devices other than SPI NOR
-> +flash due to limited transfer capability of this controller.
->  
->  Example:
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/clock/mt7629-clk.h>
->  
-> -nor_flash: spi@1100d000 {
-> -	compatible = "mediatek,mt8173-nor";
-> -	reg = <0 0x1100d000 0 0xe0>;
-> -	clocks = <&pericfg CLK_PERI_SPI>,
-> -		 <&topckgen CLK_TOP_SPINFI_IFR_SEL>;
-> +spi_nor: spi@11014000 {
-> +	compatible = "mediatek,mt7629-nor",
-> +		     "mediatek,mt8173-nor";
-> +	reg = <0x11014000 0xe0>;
-> +	interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_LOW>;
-> +	clocks = <&pericfg CLK_PERI_FLASH_PD>,
-> +		 <&topckgen CLK_TOP_FLASH_SEL>;
->  	clock-names = "spi", "sf";
->  	#address-cells = <1>;
->  	#size-cells = <0>;
-> -
-> -	flash@0 {
-> -		compatible = "jedec,spi-nor";
-> -		reg = <0>;
-> -	};
+Signed-off-by: Aaro Koskinen <aaro.koskinen@nokia.com>
+---
+ drivers/spi/spi.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
-Better to leave this in the example IMO.
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 38b4c78df506..755221bc3745 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2639,7 +2639,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 		if (ctlr->use_gpio_descriptors) {
+ 			status = spi_get_gpio_descs(ctlr);
+ 			if (status)
+-				return status;
++				goto free_bus_id;
+ 			/*
+ 			 * A controller using GPIO descriptors always
+ 			 * supports SPI_CS_HIGH if need be.
+@@ -2649,7 +2649,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 			/* Legacy code path for GPIOs from DT */
+ 			status = of_spi_get_gpio_numbers(ctlr);
+ 			if (status)
+-				return status;
++				goto free_bus_id;
+ 		}
+ 	}
+ 
+@@ -2657,17 +2657,14 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	 * Even if it's just one always-selected device, there must
+ 	 * be at least one chipselect.
+ 	 */
+-	if (!ctlr->num_chipselect)
+-		return -EINVAL;
++	if (!ctlr->num_chipselect) {
++		status = -EINVAL;
++		goto free_bus_id;
++	}
+ 
+ 	status = device_add(&ctlr->dev);
+-	if (status < 0) {
+-		/* free bus id */
+-		mutex_lock(&board_lock);
+-		idr_remove(&spi_master_idr, ctlr->bus_num);
+-		mutex_unlock(&board_lock);
+-		goto done;
+-	}
++	if (status < 0)
++		goto free_bus_id;
+ 	dev_dbg(dev, "registered %s %s\n",
+ 			spi_controller_is_slave(ctlr) ? "slave" : "master",
+ 			dev_name(&ctlr->dev));
+@@ -2683,11 +2680,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 		status = spi_controller_initialize_queue(ctlr);
+ 		if (status) {
+ 			device_del(&ctlr->dev);
+-			/* free bus id */
+-			mutex_lock(&board_lock);
+-			idr_remove(&spi_master_idr, ctlr->bus_num);
+-			mutex_unlock(&board_lock);
+-			goto done;
++			goto free_bus_id;
+ 		}
+ 	}
+ 	/* add statistics */
+@@ -2702,7 +2695,12 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	/* Register devices from the device tree and ACPI */
+ 	of_register_spi_devices(ctlr);
+ 	acpi_register_spi_devices(ctlr);
+-done:
++	return status;
++
++free_bus_id:
++	mutex_lock(&board_lock);
++	idr_remove(&spi_master_idr, ctlr->bus_num);
++	mutex_unlock(&board_lock);
+ 	return status;
+ }
+ EXPORT_SYMBOL_GPL(spi_register_controller);
+-- 
+2.11.0
 
-Rob
