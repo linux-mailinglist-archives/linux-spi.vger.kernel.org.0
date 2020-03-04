@@ -2,111 +2,151 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 107C81790A7
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 13:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A459179258
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Mar 2020 15:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388029AbgCDMuy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Mar 2020 07:50:54 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:33463 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387776AbgCDMux (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Mar 2020 07:50:53 -0500
-Received: by mail-oi1-f193.google.com with SMTP id q81so1975981oig.0;
-        Wed, 04 Mar 2020 04:50:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p7FRqJyhTEmACxJGCDQAplfiTQ67K8Njaui3NWndKCk=;
-        b=AXhO9OlY0lVdID/ecpqIIVtrBJfdkmicPE/BTRJuf0v7qQX2m0V4pXMlTNiRDL+NNK
-         LXHAv2aOfA9rum/wy9l7C/XhiMkIvnmruFIJTOfx9lJijPjU9TtVIr3VN+Bru3lunpDR
-         zTvbV7lV41JoMu1KDDoAjqjmjBWCoq35yfjuOeEgTsL+E2+pKZqRlSSxY89nNOrOJFGP
-         foS4i8ggUDa2Uyh205kKeWGgt/peVO/UAOxE2PsVT6zS9PG3t40TnO+JDkEmD99I9FGb
-         A3Ujst9m8loyNR7LN73Pueniwn+3Z55BdvlX9Rw2SXVJkSzPmELW3j46VA05BmSG8s84
-         0SGA==
-X-Gm-Message-State: ANhLgQ1qi75F/o3QoB9MrkZUF/qHg/i4OtnBiNIsBnsvMGTA9CpPJ+Do
-        oHOPU2vXnMj0GImMu9XI/fJ41YWEdhCUJtQEoy+Zv+kX
-X-Google-Smtp-Source: ADFU+vtS15MEGVq3XbpQbW8c0fcWWTHigWSJb+9KT3nHpA8xJ67V9+ALPr8+cGI2pKL0qKyotbflbp2ioN9nMIjOtNo=
-X-Received: by 2002:aca:ed04:: with SMTP id l4mr1648104oih.54.1583326253059;
- Wed, 04 Mar 2020 04:50:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20200303094522.23180-1-geert+renesas@glider.be>
- <20200303094522.23180-2-geert+renesas@glider.be> <CAL_JsqL+9Tcqm_bsorRwqvWZyJXAZmJhXb=EmJ+nZ44kCFp6Kg@mail.gmail.com>
-In-Reply-To: <CAL_JsqL+9Tcqm_bsorRwqvWZyJXAZmJhXb=EmJ+nZ44kCFp6Kg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 4 Mar 2020 13:50:41 +0100
-Message-ID: <CAMuHMdUBTVZGNtdc0dhUz5d+P2_Fr89MvBCz8=9oQK1EOi7s2w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] spi: dt-bindings: spi-controller: Fix
- #address-cells for slave mode
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729488AbgCDO3L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Mar 2020 09:29:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:35018 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729484AbgCDO3L (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Mar 2020 09:29:11 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFC6B31B;
+        Wed,  4 Mar 2020 06:29:10 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51E353F6CF;
+        Wed,  4 Mar 2020 06:29:10 -0800 (PST)
+Date:   Wed, 04 Mar 2020 14:29:08 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Aaro Koskinen <aaro.koskinen@nokia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: spi_register_controller(): free bus id on error paths" to the spi tree
+In-Reply-To:  <20200304111740.27915-1-aaro.koskinen@nokia.com>
+Message-Id:  <applied-20200304111740.27915-1-aaro.koskinen@nokia.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+The patch
 
-On Tue, Mar 3, 2020 at 10:05 PM Rob Herring <robh+dt@kernel.org> wrote:
-> On Tue, Mar 3, 2020 at 3:45 AM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> > Currently, the DT bindings for an SPI controller specify that
-> > "#address-cells" must be fixed to one.  However, that applies to an SPI
-> > controller in master mode only.  When running in SPI slave mode,
-> > "#address-cells" should be zero.
-> >
-> > Fix this making the value of "#address-cells" dependent on the presence
-> > of "spi-slave".
-> >
-> > Fixes: 0a1b929356830257 ("spi: Add YAML schemas for the generic SPI options")
-> > Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > v2:
-> >   - Use "enum: [0, 1]" instead of min/max limit,
-> >   - use "- spi-slave" instead of "[ spi-slave ]".
-> >
-> > As of dtc commit 403cc79f06a135ae ("checks: Update SPI bus check for
-> > 'spi-slave'") and Linux commit c2e7075ca8303631 ("scripts/dtc: Update to
-> > upstream version v1.4.7-57-gf267e674d145"), dtc knows about SPI slave.
-> >
-> > However, when using "#address-cells = <0>" with W=1:
-> >
-> >     Warning (avoid_unnecessary_addr_size): /soc/spi@e6e10000: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
->
-> What was the point in having #address-cells in the first place for
-> slaves?
+   spi: spi_register_controller(): free bus id on error paths
 
-I don't know, commit a8830cb19cfea04e ("spi: Document DT bindings for
-SPI controllers in slave mode") doesn't require any #address-cells for
-slave mode.
+has been applied to the spi tree at
 
-Perhaps because node_addr_cells() in dtc defaults to 2?
-Or because of_bus_n_addr_cells() walks up the parent chain and thus
-defaults to the first found parent value?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
 
-> Seems like we should make it mutually exclusive with 'spi-slave'.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-Sounds like a good idea. How to express that in yaml?
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Thanks!
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Gr{oetje,eeting}s,
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-                        Geert
+Thanks,
+Mark
 
+From f9981d4f50b475d7dbb70f3022b87a3c8bba9fd6 Mon Sep 17 00:00:00 2001
+From: Aaro Koskinen <aaro.koskinen@nokia.com>
+Date: Wed, 4 Mar 2020 13:17:40 +0200
+Subject: [PATCH] spi: spi_register_controller(): free bus id on error paths
+
+Some error paths leave the bus id allocated. As a result the IDR
+allocation will fail after a deferred probe. Fix by freeing the bus id
+always on error.
+
+Signed-off-by: Aaro Koskinen <aaro.koskinen@nokia.com>
+Message-Id: <20200304111740.27915-1-aaro.koskinen@nokia.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 197c9e0ac2a6..94145b25f446 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2645,7 +2645,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 		if (ctlr->use_gpio_descriptors) {
+ 			status = spi_get_gpio_descs(ctlr);
+ 			if (status)
+-				return status;
++				goto free_bus_id;
+ 			/*
+ 			 * A controller using GPIO descriptors always
+ 			 * supports SPI_CS_HIGH if need be.
+@@ -2655,7 +2655,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 			/* Legacy code path for GPIOs from DT */
+ 			status = of_spi_get_gpio_numbers(ctlr);
+ 			if (status)
+-				return status;
++				goto free_bus_id;
+ 		}
+ 	}
+ 
+@@ -2663,17 +2663,14 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	 * Even if it's just one always-selected device, there must
+ 	 * be at least one chipselect.
+ 	 */
+-	if (!ctlr->num_chipselect)
+-		return -EINVAL;
++	if (!ctlr->num_chipselect) {
++		status = -EINVAL;
++		goto free_bus_id;
++	}
+ 
+ 	status = device_add(&ctlr->dev);
+-	if (status < 0) {
+-		/* free bus id */
+-		mutex_lock(&board_lock);
+-		idr_remove(&spi_master_idr, ctlr->bus_num);
+-		mutex_unlock(&board_lock);
+-		goto done;
+-	}
++	if (status < 0)
++		goto free_bus_id;
+ 	dev_dbg(dev, "registered %s %s\n",
+ 			spi_controller_is_slave(ctlr) ? "slave" : "master",
+ 			dev_name(&ctlr->dev));
+@@ -2689,11 +2686,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 		status = spi_controller_initialize_queue(ctlr);
+ 		if (status) {
+ 			device_del(&ctlr->dev);
+-			/* free bus id */
+-			mutex_lock(&board_lock);
+-			idr_remove(&spi_master_idr, ctlr->bus_num);
+-			mutex_unlock(&board_lock);
+-			goto done;
++			goto free_bus_id;
+ 		}
+ 	}
+ 	/* add statistics */
+@@ -2708,7 +2701,12 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	/* Register devices from the device tree and ACPI */
+ 	of_register_spi_devices(ctlr);
+ 	acpi_register_spi_devices(ctlr);
+-done:
++	return status;
++
++free_bus_id:
++	mutex_lock(&board_lock);
++	idr_remove(&spi_master_idr, ctlr->bus_num);
++	mutex_unlock(&board_lock);
+ 	return status;
+ }
+ EXPORT_SYMBOL_GPL(spi_register_controller);
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.20.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
