@@ -2,86 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0FB17A5F5
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Mar 2020 14:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB94117A62A
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Mar 2020 14:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbgCENEv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Mar 2020 08:04:51 -0500
-Received: from foss.arm.com ([217.140.110.172]:48310 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725880AbgCENEv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 5 Mar 2020 08:04:51 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 902B71FB;
-        Thu,  5 Mar 2020 05:04:50 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0FA033F6CF;
-        Thu,  5 Mar 2020 05:04:49 -0800 (PST)
-Date:   Thu, 5 Mar 2020 13:04:48 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
+        id S1726222AbgCENOH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Mar 2020 08:14:07 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:43278 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726220AbgCENOG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Mar 2020 08:14:06 -0500
+Received: by mail-ed1-f65.google.com with SMTP id dc19so6687875edb.10;
+        Thu, 05 Mar 2020 05:14:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CkATtzmCc/55ZtDteZe+aqBcT/L3UipcnWyo2K/KElI=;
+        b=U20IY018FngDDTtrHwz6S7AFYsJDlOokY3ys2AXG6qWreb2I14L6ivnmCEsdbr9dhS
+         3Mxc9vjhfMkMvQszbj3ka5sMDxlmVkw9m59hYWEH90lFtd0V8J/LuANd+mFx2nWlVukT
+         qPxjQJ4KV0+IPiFn048o/+RRwUzRF/yZbVVIQRlJ0hvihVx9XBS3012SgP42qr2oVeIO
+         avPJV5WYcDxZEJvgq+Auc6q3+nxmnoFnyvhFIJneIjvROFuE0Th9JRK08e66c/465N7M
+         KOl46EYg6dDhxfRlW3PQ7iGfTe4SWb9bcci3paW2BLF4gxOaBMpF0XaUnyrLEAkxw8LK
+         WKqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CkATtzmCc/55ZtDteZe+aqBcT/L3UipcnWyo2K/KElI=;
+        b=LxpQxZmu7nPxlXCIDsR+LVRkcCzU2mppssL2LUro4mi6u5W+mZtrYqt6sB5zMSqo3c
+         yxKNl1pQlbiaz7FYFN0b5vDKS+2dAVGxri9QYnNg5AcyMwNGXaZeDSM/wxeHiTeGcrGJ
+         eb+L3K6CywGGxhmHz4w7Xyo5yhsPS88RyvP0Ws9JRvLRAurLcxh7wLmrUt1StZgnPghx
+         BfvWJsiOYnph7WdUEfrK+L36oJac+GeWHo1LuvKuNdMpxhuMQ4PatXkc5qjgQhbWU+O5
+         PGjBCIN79bmYHrmYJS9Xg2wJoDO1ar1sneOItgZ2xM+XQKXFPiafiZAB+Hf65RV3APWo
+         8Ktg==
+X-Gm-Message-State: ANhLgQ03SIuwmw7Sy+zczWiK1CuR4v/wVdbTAvC/hdfof0Rt23gZqFdU
+        t6DhVa2II8RcuON25LjqGO6NnvJu8AsFIOWezO7Z+g==
+X-Google-Smtp-Source: ADFU+vuIxyP9i7lL6OCCspJnFjux+SJUqMkwULBhwgGnG5zFboIo5vlgv/Rf+LiYjgucxB+IdM4UPfuHwriXFyQP2WY=
+X-Received: by 2002:a17:906:1e48:: with SMTP id i8mr6999237ejj.189.1583414044713;
+ Thu, 05 Mar 2020 05:14:04 -0800 (PST)
+MIME-Version: 1.0
+References: <20200304220044.11193-1-olteanv@gmail.com> <20200304220044.11193-8-olteanv@gmail.com>
+ <20200305121202.GB4046@sirena.org.uk> <CA+h21hq8c50AjuzgpxyPQDCFiAdezJuqgY0+u26qBRx9FnYnig@mail.gmail.com>
+ <20200305130448.GC4046@sirena.org.uk>
+In-Reply-To: <20200305130448.GC4046@sirena.org.uk>
+From:   Vladimir Oltean <olteanv@gmail.com>
+Date:   Thu, 5 Mar 2020 15:13:53 +0200
+Message-ID: <CA+h21hrSe-jT_R9jCW1XA6aZ=vjMX=b7HLq3KJdfxi9OOFW5ag@mail.gmail.com>
+Subject: Re: [PATCH 07/12] spi: Do spi_take_timestamp_pre for as many times as necessary
+To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
         Esben Haabendal <eha@deif.com>, angelo@sysam.it,
         andrew.smirnov@gmail.com,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         Wei Chen <weic@nvidia.com>, Mohamed Hosny <mhosny@nvidia.com>
-Subject: Re: [PATCH 07/12] spi: Do spi_take_timestamp_pre for as many times
- as necessary
-Message-ID: <20200305130448.GC4046@sirena.org.uk>
-References: <20200304220044.11193-1-olteanv@gmail.com>
- <20200304220044.11193-8-olteanv@gmail.com>
- <20200305121202.GB4046@sirena.org.uk>
- <CA+h21hq8c50AjuzgpxyPQDCFiAdezJuqgY0+u26qBRx9FnYnig@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z4+8/lEcDcG5Ke9S"
-Content-Disposition: inline
-In-Reply-To: <CA+h21hq8c50AjuzgpxyPQDCFiAdezJuqgY0+u26qBRx9FnYnig@mail.gmail.com>
-X-Cookie: When among apes, one must play the ape.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 5 Mar 2020 at 15:04, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Thu, Mar 05, 2020 at 03:00:22PM +0200, Vladimir Oltean wrote:
+> > On Thu, 5 Mar 2020 at 14:12, Mark Brown <broonie@kernel.org> wrote:
+>
+> > > This is a fix and so should have been at the start of the series to make
+> > > sure there aren't any dependencies.
+>
+> > My reasoning for not submitting it as a fix is:
+> > - The only driver that uses the functionality so far - spi-fsl-dspi -
+> > has worked thus far even with the limitation that only byte-by-byte
+> > transfers were supported properly.
+> > - I removed the limitation before actually changing the operating mode
+> > of spi-fsl-dspi. Therefore the limitation is effectively never seen.
+> > - New SPI drivers that would want to make use of software timestamping
+> > would do so through your SPI for-next branch anyway, where the
+> > limitation would be, again, fixed.
+>
+> That's mostly all true but it's still better to pull fixes like this (or
+> the patch limiting the size) forwards and not have to think if it's safe
+> to not apply them as a fix, it's less effort all round.
 
---z4+8/lEcDcG5Ke9S
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Mar 05, 2020 at 03:00:22PM +0200, Vladimir Oltean wrote:
-> On Thu, 5 Mar 2020 at 14:12, Mark Brown <broonie@kernel.org> wrote:
-
-> > This is a fix and so should have been at the start of the series to make
-> > sure there aren't any dependencies.
-
-> My reasoning for not submitting it as a fix is:
-> - The only driver that uses the functionality so far - spi-fsl-dspi -
-> has worked thus far even with the limitation that only byte-by-byte
-> transfers were supported properly.
-> - I removed the limitation before actually changing the operating mode
-> of spi-fsl-dspi. Therefore the limitation is effectively never seen.
-> - New SPI drivers that would want to make use of software timestamping
-> would do so through your SPI for-next branch anyway, where the
-> limitation would be, again, fixed.
-
-That's mostly all true but it's still better to pull fixes like this (or
-the patch limiting the size) forwards and not have to think if it's safe
-to not apply them as a fix, it's less effort all round.
-
---z4+8/lEcDcG5Ke9S
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5g+O8ACgkQJNaLcl1U
-h9A7pwf/XZVDWjQSxu5rxN8xVzJtVaBPgpdSXOfAxk82nRdHh7AI/SoMIe/GElEL
-heL+Cu8F+ufVKbPZDbP6mS2DYQKgg5Xt5+Y07ShJfLK8WrqkU+WihtsRw9fkgp53
-R4QwW3IfXPmfL7U7EHa4Ri7IbdpWiaAw6PWoFcRCcslI17FWWWpnB0L1NaXzlAp1
-Hzf9OAzmW0HWqVdSI2lgxM3Rm9qqjQAF6fjV+yZkSHkCzKjl+Pjl1KVbjznmNe5c
-uauBl5vQ/2TKZSqeQpix91rf/nio4YSNUiKBI2PFzMXXx0GK/BfXWHTA9MjlOpVp
-keVlQduGvzfUHCT7G1GjlZV+LXgInw==
-=WInA
------END PGP SIGNATURE-----
-
---z4+8/lEcDcG5Ke9S--
+So do you want me to do something about it now?
