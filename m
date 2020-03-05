@@ -2,128 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7197B17A7DC
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Mar 2020 15:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C85917A8C3
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Mar 2020 16:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727392AbgCEOiF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Mar 2020 09:38:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:49522 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726204AbgCEOiE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 5 Mar 2020 09:38:04 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFC664B2;
-        Thu,  5 Mar 2020 06:38:03 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 642A93F534;
-        Thu,  5 Mar 2020 06:38:03 -0800 (PST)
-Date:   Thu, 05 Mar 2020 14:38:01 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     andrew.smirnov@gmail.com, angelo@sysam.it, broonie@kernel.org,
-        eha@deif.com, gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        mhosny@nvidia.com, weic@nvidia.com
-Subject: Applied "spi: spi-fsl-dspi: Simplify bytes_per_word gymnastics" to the spi tree
-In-Reply-To:  <20200304220044.11193-2-olteanv@gmail.com>
-Message-Id:  <applied-20200304220044.11193-2-olteanv@gmail.com>
-X-Patchwork-Hint: ignore
+        id S1726390AbgCEPWw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Mar 2020 10:22:52 -0500
+Received: from smtprelay0034.hostedemail.com ([216.40.44.34]:36813 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726413AbgCEPWw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Mar 2020 10:22:52 -0500
+X-Greylist: delayed 323 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 10:22:52 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id 8F1B41802B4A2
+        for <linux-spi@vger.kernel.org>; Thu,  5 Mar 2020 15:17:30 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 2F716182CF66B;
+        Thu,  5 Mar 2020 15:17:29 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:800:960:968:973:988:989:1260:1277:1311:1313:1314:1345:1437:1515:1516:1518:1534:1539:1568:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3865:3870:5007:6691:8957:10004:10400:10848:11026:11473:11658:11914:12296:12297:12555:12760:13069:13311:13357:13439:14096:14097:14181:14394:14659:14721:21080:21627:30054,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: hour30_413e0a59f4f56
+X-Filterd-Recvd-Size: 1485
+Received: from XPS-9350.home (unknown [47.151.143.254])
+        (Authenticated sender: joe@perches.com)
+        by omf14.hostedemail.com (Postfix) with ESMTPA;
+        Thu,  5 Mar 2020 15:17:28 +0000 (UTC)
+Message-ID: <f8ac6b32a29b9a05b58a7e58ffe8b780642abbf1.camel@perches.com>
+Subject: [PATCH] spi: Remove CONFIG_ prefix from Kconfig select
+From:   Joe Perches <joe@perches.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Thu, 05 Mar 2020 07:15:53 -0800
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+commit a2ca53b52e00 ("spi: Add HiSilicon v3xx SPI NOR flash
+controller driver") likely inadvertently used a select statement
+with a CONFIG_ prefix, remove the prefix.
 
-   spi: spi-fsl-dspi: Simplify bytes_per_word gymnastics
-
-has been applied to the spi tree at
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 53fadb4d90c762b560a9d0983bb5894129057ea1 Mon Sep 17 00:00:00 2001
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-Date: Thu, 5 Mar 2020 00:00:33 +0200
-Subject: [PATCH] spi: spi-fsl-dspi: Simplify bytes_per_word gymnastics
-
-Reduce the if-then-else-if-then-else sequence to:
- - a simple division in the case of bytes_per_word calculation
- - a memcpy command with a variable size. The semantics of larger-than-8
-   xfer->bits_per_word is that those words are to be interpreted and
-   transmitted in CPU native endianness.
-
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/r/20200304220044.11193-2-olteanv@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Joe Perches <joe@perches.com>
 ---
- drivers/spi/spi-fsl-dspi.c | 21 +++------------------
- 1 file changed, 3 insertions(+), 18 deletions(-)
+ drivers/spi/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index c357c3247232..896d7a0f45b0 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -252,12 +252,7 @@ static u32 dspi_pop_tx(struct fsl_dspi *dspi)
- 	u32 txdata = 0;
- 
- 	if (dspi->tx) {
--		if (dspi->bytes_per_word == 1)
--			txdata = *(u8 *)dspi->tx;
--		else if (dspi->bytes_per_word == 2)
--			txdata = *(u16 *)dspi->tx;
--		else  /* dspi->bytes_per_word == 4 */
--			txdata = *(u32 *)dspi->tx;
-+		memcpy(&txdata, dspi->tx, dspi->bytes_per_word);
- 		dspi->tx += dspi->bytes_per_word;
- 	}
- 	dspi->len -= dspi->bytes_per_word;
-@@ -284,12 +279,7 @@ static void dspi_push_rx(struct fsl_dspi *dspi, u32 rxdata)
- 	/* Mask off undefined bits */
- 	rxdata &= (1 << dspi->bits_per_word) - 1;
- 
--	if (dspi->bytes_per_word == 1)
--		*(u8 *)dspi->rx = rxdata;
--	else if (dspi->bytes_per_word == 2)
--		*(u16 *)dspi->rx = rxdata;
--	else /* dspi->bytes_per_word == 4 */
--		*(u32 *)dspi->rx = rxdata;
-+	memcpy(dspi->rx, &rxdata, dspi->bytes_per_word);
- 	dspi->rx += dspi->bytes_per_word;
- }
- 
-@@ -814,12 +804,7 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
- 		dspi->progress = 0;
- 		/* Validated transfer specific frame size (defaults applied) */
- 		dspi->bits_per_word = transfer->bits_per_word;
--		if (transfer->bits_per_word <= 8)
--			dspi->bytes_per_word = 1;
--		else if (transfer->bits_per_word <= 16)
--			dspi->bytes_per_word = 2;
--		else
--			dspi->bytes_per_word = 4;
-+		dspi->bytes_per_word = DIV_ROUND_UP(dspi->bits_per_word, 8);
- 
- 		regmap_update_bits(dspi->regmap, SPI_MCR,
- 				   SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF,
--- 
-2.20.1
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 82177d..2dc7bd 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -292,7 +292,7 @@ config SPI_HISI_SFC_V3XX
+ 	tristate "HiSilicon SPI-NOR Flash Controller for Hi16XX chipsets"
+ 	depends on (ARM64 && ACPI) || COMPILE_TEST
+ 	depends on HAS_IOMEM
+-	select CONFIG_MTD_SPI_NOR
++	select MTD_SPI_NOR
+ 	help
+ 	  This enables support for HiSilicon v3xx SPI-NOR flash controller
+ 	  found in hi16xx chipsets.
+
 
