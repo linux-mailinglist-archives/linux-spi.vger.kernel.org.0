@@ -2,37 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5C917D5BE
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Mar 2020 19:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C50CB17DA51
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 09:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgCHS6N (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 8 Mar 2020 14:58:13 -0400
-Received: from ns1.bdren.net.bd ([163.47.37.11]:43236 "EHLO dn1.bdren.net.bd"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726318AbgCHS6N (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 8 Mar 2020 14:58:13 -0400
-X-Greylist: delayed 4920 seconds by postgrey-1.27 at vger.kernel.org; Sun, 08 Mar 2020 14:58:06 EDT
-Received: from User ([156.96.45.188])
-        (authenticated bits=0)
-        by dn1.bdren.net.bd (8.14.4/8.14.4) with ESMTP id 028HWv59022119;
-        Sun, 8 Mar 2020 23:33:00 +0600
-Message-Id: <202003081733.028HWv59022119@dn1.bdren.net.bd>
-Reply-To: <francoispiniault@gmail.com>
-From:   "Francois Pinault" <francioispinaul@gmail.com>
-Subject: Re:
-Date:   Sun, 8 Mar 2020 13:33:22 -0400
+        id S1726469AbgCIIJX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Mar 2020 04:09:23 -0400
+Received: from paleo.ru ([195.178.204.132]:39817 "EHLO mail.paleo.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725796AbgCIIJX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 9 Mar 2020 04:09:23 -0400
+X-Greylist: delayed 1122 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Mar 2020 04:09:21 EDT
+Received: from mail.paleo.ru (paleo.ru [195.178.204.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.paleo.ru (Postfix) with ESMTPSA id 885271D524C;
+        Mon,  9 Mar 2020 07:34:56 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
+Date:   Mon, 09 Mar 2020 09:34:56 +0200
+From:   "Michael J. Weirsky" <mikhailov@paleo.ru>
+To:     undisclosed-recipients:;
+Reply-To: micjsky@aol.com
+Mail-Reply-To: micjsky@aol.com
+Message-ID: <c9fe6ad1f251265fbddc64f90d5d8ad7@paleo.ru>
+X-Sender: mikhailov@paleo.ru
+User-Agent: Roundcube Webmail/1.3.9
+X-Spam: Yes
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-A donation was made in your favour by Francois Pinault, reply for more details.
+
+
+-- 
+My name is Michael J. Weirsky, I'm an unemployed Handy man , winner of 
+$273million Jackpot in March 8, 2019. I donate $1.000.000,00 to you. 
+Contact me via email: micjsky@aol.com for info / claim.
+Continue reading: 
+https://abcnews.go.com/WNT/video/jersey-handyman-forward-273m-lottery-winner-61544244
