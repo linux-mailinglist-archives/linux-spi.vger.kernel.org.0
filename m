@@ -2,46 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7F817EACA
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 22:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D015A17EADC
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 22:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgCIVIp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Mar 2020 17:08:45 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53932 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgCIVIp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 17:08:45 -0400
-Received: by mail-wm1-f68.google.com with SMTP id g134so1070268wme.3;
-        Mon, 09 Mar 2020 14:08:43 -0700 (PDT)
+        id S1726954AbgCIVIt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Mar 2020 17:08:49 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:33136 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726157AbgCIVIq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 17:08:46 -0400
+Received: by mail-wm1-f66.google.com with SMTP id r7so898999wmg.0;
+        Mon, 09 Mar 2020 14:08:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=+kMv15yJUTEdNPrEZ0z7ORWq3Tt1uXx0pRgX3Sxz6MY=;
-        b=jfRwWnu0XJu4lBt57XtZvLsh3KSPGbukCDMT//jHqaa2rhkmArh/mxjA2HP1RR76LW
-         lAayDslY1iBBJGOOvXPL/0rjP1epF3rdC/zgyxVh4tqGjvt9Sm0PbH4vtM0Ip0qsoH8I
-         reCHYam7ryG+dZkD76WVLZ0aDG1ckt25u9YsIK65fN6qjmyWr9sdr+G5XHzuNx6L7EFT
-         w4DyETuQvZ4C1m0FmVRytoecUz2ef3bP53nBqyxJd7xmm+5zu11MS9d0XyhRYeWCIBGG
-         ZNFvDuxHkJaTvULHZib1bo4wJGv7RPKGhacUvlzCmDM+UemM/hH5ynejst+gC2/hyxIg
-         BLCg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=CfDH5kEUG81plCORDpkFLQzd1G9WILL1xGRX2zS0AUk=;
+        b=CrwxY7ZR6In1d7iROlEuUzpfNKBFDbpZPqCUkocPVZNOENXBw4jC/JJtoLAnjKMBmS
+         mzYGwac2GkF2j7iRFopyVzjbnAhAHPHOMBo6CR89ffaUr05/kAXqILQsylkErvr2d6vg
+         JZxTUVFytnkEXDKTZXxEjMrZSiUlztjjRzrUGMYKgkD6GWVlfrgeAf9urCwk5u7dcBDh
+         xJunIrKr7TLh3yJfcBDfz1vBuiPdqH2KE3D8vtbUXFg+JcDcmAkfTzrXz0/eFs1hlMWB
+         rAV5o4AkQun/4Ggpwlnaxxj4+0JSZts6v20CzvIE0wzDgH0Vu0T6YDkY18qRgmNhCgm2
+         suKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+kMv15yJUTEdNPrEZ0z7ORWq3Tt1uXx0pRgX3Sxz6MY=;
-        b=BTweVPK84qCu50A7PhMPenu7ahsPZbh3n38VgYHktUEzwhM/+48I60H2gWZO3iEH2F
-         cUlSuwW/bAteKPTZy0E8fwAZZbgTv2L7idH8Aq0vm7J7MYOpuPVxZ1wpETcw2nPGGMbr
-         f/+ovMNPHhyiDFgbvaTxssv/eLqRK/uLcTw3vwnAWnaAwkSkYcOMLoX1fRrX0H2FShSI
-         RCg2fZSBGPtNxkk0pgG9SXAhTlel49fJ3TOGnCG2VvfgVY9X4zDoaUKlQNrdmFOBwETz
-         R4+j8TwdcRiRHPUOfI7BE+5RY+euD7a0aaljC2dHVGqm9s54A+YRo/lvgG9wNP+mBp20
-         oFKA==
-X-Gm-Message-State: ANhLgQ2tjbnMPdlkBH8hLUKAUX2iI47Ce8N6AI2xPJJ2HrcA6j8SPfB6
-        DdcVWVug7YoktqTIpAfthB8vkdcVPAM=
-X-Google-Smtp-Source: ADFU+vuKHbngmBiwEfQY4TReuY49PKt2j7g7NspKCa21VTD882ngCnQipd4A6DaTIWLvjKT+IMUMLw==
-X-Received: by 2002:a1c:a345:: with SMTP id m66mr1153698wme.114.1583788122973;
-        Mon, 09 Mar 2020 14:08:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=CfDH5kEUG81plCORDpkFLQzd1G9WILL1xGRX2zS0AUk=;
+        b=ebTHPyk+sF0OyNcP1D0fh3ftdNjz2rJoKLGIyBBGWC8bOZeDlycTdM4sskAk3+HwQe
+         h5PlhagrFBLm2KVb7qSXbtIk7zJrf2k11H2KL0MUogFrpIWYssgw3KpVYsttgnICpXyR
+         g8x1D7JYxoQF3CvdupJYSZwWTz01NXt1dMTvxxS/nbfx18m17/S0rk1n80rWhXyVQb+e
+         W8mAXDucv3rtP9euaCQe/sxOWOFFoW0KwU05ycw/Jdyv/gmkagDPv96CYii03KggJiul
+         Krjk6/ciFwMz+A5awJvwzCKyNNglBM92qaA8hQtxbjVa3/IZOIHDWenoEca9kMI1w+vk
+         r3lg==
+X-Gm-Message-State: ANhLgQ29Hz68a3e8r4v7k3kJ+LyqZBEnbIkbKpC1g6V3AdhIZX+iiO63
+        azS1YWQYB2rv39nJNwW2Nug=
+X-Google-Smtp-Source: ADFU+vsumCQXCdxuwgBJelhAJ2sOygVZNVEmCBkTrHMsyvrvvC9USb/FjvggJwneWGdkvyCY/dJ6CQ==
+X-Received: by 2002:a05:600c:4107:: with SMTP id j7mr1044307wmi.169.1583788124508;
+        Mon, 09 Mar 2020 14:08:44 -0700 (PDT)
 Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id j205sm1016275wma.42.2020.03.09.14.08.41
+        by smtp.gmail.com with ESMTPSA id j205sm1016275wma.42.2020.03.09.14.08.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 14:08:42 -0700 (PDT)
+        Mon, 09 Mar 2020 14:08:44 -0700 (PDT)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -49,46 +50,61 @@ Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, eha@deif.com, angelo@sysam.it,
         andrew.smirnov@gmail.com, gustavo@embeddedor.com, weic@nvidia.com,
         mhosny@nvidia.com, michael@walle.cc, peng.ma@nxp.com
-Subject: [PATCH v2 0/6] NXP DSPI bugfixes and support for LS1028A
-Date:   Mon,  9 Mar 2020 23:07:49 +0200
-Message-Id: <20200309210755.6759-1-olteanv@gmail.com>
+Subject: [PATCH v2 1/6] spi: spi-fsl-dspi: Don't access reserved fields in SPI_MCR
+Date:   Mon,  9 Mar 2020 23:07:50 +0200
+Message-Id: <20200309210755.6759-2-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200309210755.6759-1-olteanv@gmail.com>
+References: <20200309210755.6759-1-olteanv@gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This series addresses a few issues that were missed during the previous
-series "[PATCH 00/12] TCFQ to XSPI migration for NXP DSPI driver", on
-SoCs other than LS1021A and LS1043A. DMA mode has been completely broken
-by that series, and XSPI mode never worked on little-endian controllers.
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Then it introduces support for the LS1028A chip, whose compatible has
-recently been documented here:
+The SPI_MCR_PCSIS macro assumes that the controller has a number of chip
+select signals equal to 6. That is not always the case, but actually is
+described through the driver-specific "spi-num-chipselects" device tree
+binding. LS1028A for example only has 4 chip selects.
 
-https://lore.kernel.org/linux-devicetree/20200218171418.18297-1-michael@walle.cc/
+Don't write to the upper bits of the PCSIS field, which are reserved in
+the reference manual.
 
-The device tree for the LS1028A SoC is extended with DMA channels
-definition, such that even though the default operating mode is XSPI,
-one can simply change DSPI_XSPI_MODE to DSPI_DMA_MODE in the
-devtype_data structure of the driver and use that instead.
+Fixes: 349ad66c0ab0 ("spi:Add Freescale DSPI driver for Vybrid VF610 platform")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+Changes in v2:
+Remove duplicate phrase in commit message.
 
-For testing, benchmarking and debugging, the mikroBUS connector on the
-LS1028A-RDB is made available via spidev.
+ drivers/spi/spi-fsl-dspi.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Vladimir Oltean (6):
-  spi: spi-fsl-dspi: Don't access reserved fields in SPI_MCR
-  spi: spi-fsl-dspi: Fix little endian access to PUSHR CMD and TXDATA
-  spi: spi-fsl-dspi: Fix oper_word_size of zero for DMA mode
-  spi: spi-fsl-dspi: Add support for LS1028A
-  arm64: dts: ls1028a: Specify the DMA channels for the DSPI controllers
-  arm64: dts: ls1028a-rdb: Add a spidev node for the mikroBUS
-
- .../boot/dts/freescale/fsl-ls1028a-rdb.dts    | 14 ++++++
- .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |  6 +++
- drivers/spi/spi-fsl-dspi.c                    | 50 +++++++++++++++----
- 3 files changed, 60 insertions(+), 10 deletions(-)
-
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index 0683a3fbd48c..0ce26c1cbf62 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -22,7 +22,7 @@
+ 
+ #define SPI_MCR				0x00
+ #define SPI_MCR_MASTER			BIT(31)
+-#define SPI_MCR_PCSIS			(0x3F << 16)
++#define SPI_MCR_PCSIS(x)		((x) << 16)
+ #define SPI_MCR_CLR_TXF			BIT(11)
+ #define SPI_MCR_CLR_RXF			BIT(10)
+ #define SPI_MCR_XSPI			BIT(3)
+@@ -1197,7 +1197,10 @@ static const struct regmap_config dspi_xspi_regmap_config[] = {
+ 
+ static void dspi_init(struct fsl_dspi *dspi)
+ {
+-	unsigned int mcr = SPI_MCR_PCSIS;
++	unsigned int mcr;
++
++	/* Set idle states for all chip select signals to high */
++	mcr = SPI_MCR_PCSIS(GENMASK(dspi->ctlr->num_chipselect - 1, 0));
+ 
+ 	if (dspi->devtype_data->trans_mode == DSPI_XSPI_MODE)
+ 		mcr |= SPI_MCR_XSPI;
 -- 
 2.17.1
 
