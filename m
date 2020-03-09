@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8563A17E780
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 19:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E812017E783
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 19:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbgCISuu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Mar 2020 14:50:50 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:34339 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727334AbgCISut (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 14:50:49 -0400
-Received: by mail-ed1-f65.google.com with SMTP id c21so13276025edt.1;
-        Mon, 09 Mar 2020 11:50:48 -0700 (PDT)
+        id S1727432AbgCISvX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Mar 2020 14:51:23 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:34439 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727391AbgCISvX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 14:51:23 -0400
+Received: by mail-ed1-f66.google.com with SMTP id c21so13277849edt.1;
+        Mon, 09 Mar 2020 11:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/xfK+6B9GgktOd4QAvIfaiRVFeF6Yy/6P4gRBOJz6Jk=;
-        b=BuXaDMqxOY5cZiRqst6Eg2nUc/SMwVspp0e8SpLgOtyAtLwc8QBcSOGut9W8DlI3MF
-         gN30T0l3lqCG7u3kxIgiq7ITuWnu2/xxS6ABdyrvSJSHC0y/0VD9L2RngW3F1TQotjNg
-         hOFmdporU7526cqMdLZ9wi/1DLJnYxpk/QtEIL8Emp69m33fActqpj2Wuy+QUPCU4bwG
-         KghvS40vLUcLN9/bu+hTbFJLSwV0AAN8ezbyjtrpnn9xW2+IXAUzanWVTl3KJdWt/Xj/
-         0umwWGWpBcYnzb6nFQN5ya+uZeIAm316A+ebgdNUVEnccyEpcLfnQMmpTcOsIzbE1KR7
-         78GA==
+        bh=clm3ma+lW+rgLiuhiXicUwTpVbExG2Z9wddCYQg0RBY=;
+        b=Vpo8dbHLf0dmQTuU1Izi7Z6u49fsMS0yQVI1374A8t4XxDNlmVMDZYhUwW5xS5OsSB
+         8KLBOE9JnnkURKRFwJHMqfOGlI3FEAUq95PWtNXM0m8W32pSqvOrjla7AAryTTkv6k4k
+         teEJf/R7lHiXON9br1q47+XiEyr1WWGqCN7NmsQ5ou0vbZXxMFOAOFPg6q24jeoSzMIi
+         Pp6610o1EOFE6YsoFC686/SnJVGCd06s6jvVOkbkuQU+kDV7jFid2eJD9SMo0x03TYjW
+         nNoJb9JGukxUTiwicGIHBhS5KbBzVQCNc1Yy2p54w9xEkScRJjk0LVPyFPo82fCGTrIs
+         PAMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/xfK+6B9GgktOd4QAvIfaiRVFeF6Yy/6P4gRBOJz6Jk=;
-        b=BLPt9Tuu1aud22DwFKSignZ9FTpmZtD1bZyRAfYOvMbSCJjFVCtL/qRTLh2+U8rVOW
-         8RkdDCi0ZYLtLZZgCCgtDUSIiC0BRDCsNiv273XWb5PcUAHPr483rErJC9t4UtsErMfG
-         oyi+o5K6cPbu7n75vQESrwOTM4Ll40CXFe9zRCob+hWji6gsZUZFDHf20ruRaqEYXILv
-         /d5wCyIFLnpWwyUwuKUuXsuQjNNYb3RBTwqbhUuIUzwdiv1EtvFASnXoEt5Yblo+4RZ7
-         AGPCi+q/BK138l4uO8OcNnRfWeB4HaZwCK3GB8+bkwEb3BJg+gf6ZEqG8hrEeMVc81Ad
-         w7bQ==
-X-Gm-Message-State: ANhLgQ0WrcZv9HHvROJ+dv+BAnnxtv6xcREGkDLAdvRK2fmSOmrA6XzM
-        rQoD/sjcsTzA0vFl7tH5shjffGLiqju1YuHnOKg=
-X-Google-Smtp-Source: ADFU+vssDbKpyYTB6G50aADPJkJHC6Lziczxie8Ijt2LaoWXikyy3y5tBPojHrHVibUsMhIM7hMFP3Ws5Ee2XMhxpmI=
-X-Received: by 2002:a50:9b07:: with SMTP id o7mr18048658edi.139.1583779847412;
- Mon, 09 Mar 2020 11:50:47 -0700 (PDT)
+        bh=clm3ma+lW+rgLiuhiXicUwTpVbExG2Z9wddCYQg0RBY=;
+        b=dT7UC8EMAFUHmQViFXWNX8LQGBLQKZeP9ZfyuPRRGeUNn/82E2wrpVcCl3XPeU9TXo
+         39roGdEMT/bKoiMfJ3yD+t6rZbAHf4KXRBrrHHI0maqxy2WtR2WYBbB2pUCTPYuzuBNw
+         2jd+86EwiGMUAp3q8/cqX5ygXUgU5MWX6LFbaHxxTN8US7mGSvo2Qn7zPlJSoqXPrTfR
+         VCa+jsYiLITKuoSeTqAJtydEaPIwQNNIU98CwiGGCg1ngc/bWY8PFeRFfhacZkzHuoNl
+         oLpC0xaFZ8jjoyyAmPsNz/BJ0WSJP+xEmq2WKDBYTOdx9WiLqOrATrGo78X3Vlj1Mze1
+         R1hg==
+X-Gm-Message-State: ANhLgQ2zfJfISg9sCd+ZSQL7VY+L2QHJVNEJZU1UMTCzh/POLZJhkYWu
+        OPRc95HXcgblWr1jS+2LGeQWKeHSFkKkXrPsQJI=
+X-Google-Smtp-Source: ADFU+vuseX5BEjC97MIGq7PYnoQDZLuXCsj6A+R2Y/EAXARggxkZ+Xi6oBkK68P3pMQm94X2XgRZ0HRkKfEEO9QFY14=
+X-Received: by 2002:a17:906:76c6:: with SMTP id q6mr15722099ejn.176.1583779879971;
+ Mon, 09 Mar 2020 11:51:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200309145624.10026-1-olteanv@gmail.com> <20200309145624.10026-7-olteanv@gmail.com>
- <f213388d924b63d0fe265a2d731647be@walle.cc>
-In-Reply-To: <f213388d924b63d0fe265a2d731647be@walle.cc>
+References: <20200309145624.10026-1-olteanv@gmail.com> <20200309145624.10026-5-olteanv@gmail.com>
+ <02a2816d2f39bf621dfee543ed612ae0@walle.cc>
+In-Reply-To: <02a2816d2f39bf621dfee543ed612ae0@walle.cc>
 From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Mon, 9 Mar 2020 20:50:36 +0200
-Message-ID: <CA+h21hqOhM9+k9cKXoA8coYpxNFWpgD+FjETeB6uWLbsfrx0uw@mail.gmail.com>
-Subject: Re: [PATCH 6/6] arm64: dts: ls1028a-rdb: Add a spidev node for the mikroBUS
+Date:   Mon, 9 Mar 2020 20:51:09 +0200
+Message-ID: <CA+h21hoqmXfBdhGBg6TLLqLeXJTE3wZKzQpsZJRsOhqWCO9gJQ@mail.gmail.com>
+Subject: Re: [PATCH 4/6] spi: spi-fsl-dspi: Add support for LS1028A
 To:     Michael Walle <michael@walle.cc>
 Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         lkml <linux-kernel@vger.kernel.org>,
@@ -65,61 +65,76 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 9 Mar 2020 at 20:35, Michael Walle <michael@walle.cc> wrote:
+On Mon, 9 Mar 2020 at 20:38, Michael Walle <michael@walle.cc> wrote:
 >
 > Am 2020-03-09 15:56, schrieb Vladimir Oltean:
 > > From: Vladimir Oltean <vladimir.oltean@nxp.com>
 > >
-> > For debugging, it is useful to have access to the DSPI controller
-> > signals. On the reference design board, these are exported to either
-> > the
-> > mikroBUS1 or mikroBUS2 connector (according to the CPLD register
-> > BRDCFG3[SPI3]).
+> > This is similar to the DSPI instantiation on LS1028A, except that:
+> >  - The A-011218 erratum has been fixed, so DMA works
+> >  - The endianness is different, which has implications on XSPI mode
+> >
+> > Some benchmarking with the following command:
+> >
+> > spidev_test --device /dev/spidev2.0 --bpw 8 --size 256 --cpha --iter
+> > 10000000 --speed 20000000
+> >
+> > shows that in DMA mode, it can achieve around 2400 kbps, and in XSPI
+> > mode, the same command goes up to 4700 kbps. This is somewhat to be
+> > expected, since the DMA buffer size is extremely small at 8 bytes, the
+> > winner becomes whomever can prepare the buffers for transmission
+> > quicker, and DMA mode has higher overhead there. So XSPI FIFO mode has
+> > been chosen as the operating mode for this chip.
 > >
 > > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 > > ---
-> >  arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
+> >  drivers/spi/spi-fsl-dspi.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
 > >
-> > diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > index bb7ba3bcbe56..43f403b30dae 100644
-> > --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > @@ -83,6 +83,20 @@
-> >       };
-> >  };
-> >
-> > +&dspi2 {
-> > +     bus-num = <2>;
-> > +     status = "okay";
-> > +
-> > +     /* mikroBUS1 */
-> > +     spidev@0 {
-> > +             compatible = "spidev";
+> > diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+> > index 5624b9ee77db..264d184e7296 100644
+> > --- a/drivers/spi/spi-fsl-dspi.c
+> > +++ b/drivers/spi/spi-fsl-dspi.c
+> > @@ -131,6 +131,7 @@ struct fsl_dspi_devtype_data {
+> >  enum {
+> >       LS1021A,
+> >       LS1012A,
+> > +     LS1028A,
+> >       LS1043A,
+> >       LS1046A,
+> >       LS2080A,
+> > @@ -163,6 +164,14 @@ static const struct fsl_dspi_devtype_data
+> > devtype_data[] = {
+> >               .pushr_cmd              = 0,
+> >               .pushr_tx               = 2,
+> >       },
+> > +     [LS1028A] = {
+> > +             .trans_mode             = DSPI_DMA_MODE,
 >
-> As far as I know this throws a warning at boot that you
-> shouldn't use the compatible = "spidev", doesn't it?
+> shouldn't this be DSPI_XSPI_MODE according to your cover letter?
 >
-> /*
->   * spidev should never be referenced in DT without a specific
->   * compatible string, it is a Linux implementation thing
->   * rather than a description of the hardware.
->   */
->
-
-If this is supposed to mean that the "spidev" string is less
-adequate/expressive than "rohm,dh2228fv", then ok, I'll use that.
-
 > -michael
 >
-> > +             reg = <0>;
-> > +             spi-max-frequency = <20000000>;
-> > +             fsl,spi-cs-sck-delay = <100>;
-> > +             fsl,spi-sck-cs-delay = <100>;
-> > +     };
-> > +};
-> > +
-> >  &esdhc {
-> >       sd-uhs-sdr104;
-> >       sd-uhs-sdr50;
+
+Yes, sorry, I forgot to change it back after testing it both ways.
+
+> > +             .dma_bufsize            = 8,
+> > +             .max_clock_factor       = 8,
+> > +             .fifo_size              = 4,
+> > +             .pushr_cmd              = 2,
+> > +             .pushr_tx               = 0,
+> > +     },
+> >       [LS1043A] = {
+> >               /* Has A-011218 DMA erratum */
+> >               .trans_mode             = DSPI_XSPI_MODE,
+> > @@ -1113,6 +1122,9 @@ static const struct of_device_id
+> > fsl_dspi_dt_ids[] = {
+> >       }, {
+> >               .compatible = "fsl,ls1012a-dspi",
+> >               .data = &devtype_data[LS1012A],
+> > +     }, {
+> > +             .compatible = "fsl,ls1028a-dspi",
+> > +             .data = &devtype_data[LS1028A],
+> >       }, {
+> >               .compatible = "fsl,ls1043a-dspi",
+> >               .data = &devtype_data[LS1043A],
