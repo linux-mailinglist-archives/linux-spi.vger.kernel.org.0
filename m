@@ -2,102 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0835B17E2D7
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 15:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACED117E321
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 16:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727067AbgCIO44 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Mar 2020 10:56:56 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54505 "EHLO
+        id S1726715AbgCIPKP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Mar 2020 11:10:15 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:33148 "EHLO
         mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727026AbgCIO4v (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 10:56:51 -0400
-Received: by mail-wm1-f65.google.com with SMTP id n8so6263484wmc.4;
-        Mon, 09 Mar 2020 07:56:49 -0700 (PDT)
+        with ESMTP id S1726617AbgCIPKP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 11:10:15 -0400
+Received: by mail-wm1-f65.google.com with SMTP id r7so229264wmg.0;
+        Mon, 09 Mar 2020 08:10:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=F5xGOMrKR7nRaer20Yd2rHcTxjWiG6/1ok5vvsb80V0=;
-        b=LnxcutiSyt+4+ax/l6fYQlvScEOAtPeUZkg3WDm8wUksnP5MaicBF902dwohEJK5Tg
-         caDF2VoLkiIS30mVAB8BnrEc1gyN/vUFh4KR9oWJh1/Sw8WnyMz8lDHMbWo7xeE/qppX
-         daYFMwtZn5+/f0ajspbn2j4Spg8xfrgZCXTE+pAAJwsY9e1LILEDszN2TTzBd/QQgVal
-         QlFGnVHg1nFHBV3ldUhy1bXJAaeRi2XKKqE31DV0CCUZe7CmvQtP9euNzV+k+bVdjQBJ
-         KifFwRGDwXsFnV3Y+Kptal7+pnrwnbxopbtXM5aNB+OH3d+l7ZhESOdRflRV7chgivrX
-         speA==
+        h=from:to:cc:subject:date:message-id;
+        bh=U+y57M/rwky9fHeiAUJqwYXLvMGk7Mr/fhYU7FCY2u8=;
+        b=tZTrZa0oNuLyQv11zAAcrtq0grxpPYhp1zxIKI4a0VIs8CL8ZLdsS3z8zCRsAnfvD1
+         Fh2B/GNWvhu4MK7xZI8iHZDz6EyMT2KsbATqZuuZEYSSzpf+uzf/dklsVS5ske/33bOU
+         n03FPaEswHbiQ3crXKvQh17YXognajHPvTACDe/zyzsiwRIvJYpYLGLak4KiYjvei8nN
+         89h4Gm7U67nwWgnmvW3mjBctNi2T6O5ECa+NfmmOZB+0QE4b+c3wLtyZ2uxUDNdHeZIl
+         hbgEyUUIElBp2CPNd9z8RJejneRPkAfWYQTXZeOzbv4Tq2GSt6ttGxVeng+g0GPVvlU2
+         gnpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=F5xGOMrKR7nRaer20Yd2rHcTxjWiG6/1ok5vvsb80V0=;
-        b=R15YAIwd6syBODkNwIAtJ/JeTTOOYQ2T+1YQjVeX0U1r9+DC6oV7DzwVNZncMTYh1E
-         W6PFfZRiBqNGcIMVof63PFMSPvyCe7K7AU1GNkte8XSLQr2zG60ZHqxBkD6nPGs3jzl0
-         D7uqfCeT8PFykMjBvu89DkX8eYFfWQV5oxOxYsavFi+HXZmOZX5VolC6rWK9iNlnX7v6
-         GGLn0Qm3BZhbFOyu9JTez8nnj3S251zitvosTFld5s7UVjJ9n99Hl8Aq/nrrR2r0akdk
-         CRMU5NIcTLnBfslqXSXb38zfw9Da85Q0XRS3uwu3pQmUtjgVyqINbc1ee+o9LcY6306R
-         vkYQ==
-X-Gm-Message-State: ANhLgQ3Kmo+Yucalk5uDZZNGwC4NYInIAJqWnfg9ouy8Ki372HqicwrA
-        x6gFPFjfRxVuzlGJ9KJ7LSI=
-X-Google-Smtp-Source: ADFU+vvdcC9S2BjzcTV5FyFgh74913dDChlPyTA7kO1hx1my1611by5thvJ2klLYkuyY/hdwQz3x/A==
-X-Received: by 2002:a05:600c:2056:: with SMTP id p22mr19526931wmg.136.1583765808589;
-        Mon, 09 Mar 2020 07:56:48 -0700 (PDT)
-Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id w22sm26905374wmk.34.2020.03.09.07.56.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 07:56:47 -0700 (PDT)
-From:   Vladimir Oltean <olteanv@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=U+y57M/rwky9fHeiAUJqwYXLvMGk7Mr/fhYU7FCY2u8=;
+        b=Fvwia3voDyRJL3jnRfcMfQ71KaVcnMqQoTfEair1gv5acR9YzZhMH1Z9BuR7y0K5Mc
+         S7kSNq6xNoGLtOBjn9XsWYVjzksMtEZpLBMMyND9JSsR2Dfntqc55skdz9RWNDR8XBGg
+         D857sPVn9RhABeJpNM5W6VN2auai48BtXU/eb3Y6gygbmCNTJGFS6SOsYGFsOjE6wVC1
+         kQ0GqtjPPlAOoRq518Yv60cxgVqzksmBfnXoQi+9f7luppHTamIDEHLBTcDfIZHGGgSv
+         n7jWsi3jU388PLCH74Vp7O6w45dkyzsZEEKKIQJGxKoUb1/JQBKj6npWNMQZDoRKAaTd
+         bO/Q==
+X-Gm-Message-State: ANhLgQ0S4M6LgmNOhzyDDryd7TFBucBCvdtkb2yAJcdxw3lGPygyPLRf
+        BjkTbZDazExSP5j5VCtLwaPGJ1lu
+X-Google-Smtp-Source: ADFU+vuIh8QwHVhJYbv7DsubaXn6DdBzZV5DDINm8Si5KimyjUsAHlSO6/pgcWLTb0gby2sl9svLyA==
+X-Received: by 2002:a1c:ba85:: with SMTP id k127mr18161799wmf.63.1583766612973;
+        Mon, 09 Mar 2020 08:10:12 -0700 (PDT)
+Received: from debian.home (ip51ccf9cd.speed.planet.nl. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id q7sm7969813wrd.54.2020.03.09.08.10.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 09 Mar 2020 08:10:12 -0700 (PDT)
+From:   Johan Jonker <jbx6244@gmail.com>
 To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shawnguo@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, eha@deif.com, angelo@sysam.it,
-        andrew.smirnov@gmail.com, gustavo@embeddedor.com, weic@nvidia.com,
-        mhosny@nvidia.com, michael@walle.cc, peng.ma@nxp.com
-Subject: [PATCH 6/6] arm64: dts: ls1028a-rdb: Add a spidev node for the mikroBUS
-Date:   Mon,  9 Mar 2020 16:56:24 +0200
-Message-Id: <20200309145624.10026-7-olteanv@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200309145624.10026-1-olteanv@gmail.com>
-References: <20200309145624.10026-1-olteanv@gmail.com>
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: rockchip: add compatible string for px30 rk3308 rk3328
+Date:   Mon,  9 Mar 2020 16:10:03 +0100
+Message-Id: <20200309151004.7780-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+The Rockchip spi binding is updated to yaml and new models
+were added. The spi on px30,rk3308 and rk3328 are the same as
+other Rockchip based SoCs, so add compatible string for it.
 
-For debugging, it is useful to have access to the DSPI controller
-signals. On the reference design board, these are exported to either the
-mikroBUS1 or mikroBUS2 connector (according to the CPLD register
-BRDCFG3[SPI3]).
-
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/spi/spi-rockchip.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-index bb7ba3bcbe56..43f403b30dae 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-@@ -83,6 +83,20 @@
- 	};
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 2cc6d9951..70ef63e0b 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -843,14 +843,17 @@ static const struct dev_pm_ops rockchip_spi_pm = {
  };
  
-+&dspi2 {
-+	bus-num = <2>;
-+	status = "okay";
-+
-+	/* mikroBUS1 */
-+	spidev@0 {
-+		compatible = "spidev";
-+		reg = <0>;
-+		spi-max-frequency = <20000000>;
-+		fsl,spi-cs-sck-delay = <100>;
-+		fsl,spi-sck-cs-delay = <100>;
-+	};
-+};
-+
- &esdhc {
- 	sd-uhs-sdr104;
- 	sd-uhs-sdr50;
+ static const struct of_device_id rockchip_spi_dt_match[] = {
+-	{ .compatible = "rockchip,rv1108-spi", },
++	{ .compatible = "rockchip,px30-spi", },
+ 	{ .compatible = "rockchip,rk3036-spi", },
+ 	{ .compatible = "rockchip,rk3066-spi", },
+ 	{ .compatible = "rockchip,rk3188-spi", },
+ 	{ .compatible = "rockchip,rk3228-spi", },
+ 	{ .compatible = "rockchip,rk3288-spi", },
++	{ .compatible = "rockchip,rk3308-spi", },
++	{ .compatible = "rockchip,rk3328-spi", },
+ 	{ .compatible = "rockchip,rk3368-spi", },
+ 	{ .compatible = "rockchip,rk3399-spi", },
++	{ .compatible = "rockchip,rv1108-spi", },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, rockchip_spi_dt_match);
 -- 
-2.17.1
+2.11.0
 
