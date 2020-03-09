@@ -2,79 +2,129 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0786A17E734
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 19:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF59F17E741
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 19:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727471AbgCISbg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Mar 2020 14:31:36 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:43291 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727468AbgCISbg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 14:31:36 -0400
-Received: by mail-ed1-f65.google.com with SMTP id dc19so13164492edb.10;
-        Mon, 09 Mar 2020 11:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AQBQVzvdlwXN9vrpi/RnrrU9UTxK/Wco2Vk/EQR1DlA=;
-        b=bDvak1MfyWU3fu2fK4+sOjHaqNuqCfAYCEpo25Yi2xgrft9SZGtp08cJmXLZbOrJy+
-         iEOi0R/4PFbcWcGj/Cc7q6WU1ZVkD8LeYIelydQo6f8cAPODVySFo6lHYrrmfAKWSrTU
-         p/e8lZ+pAbI8NEbqOh93YU/rxVjNWfNp57gYjpOwhdydadgSmtv63qJ+69l/tBEDXy7C
-         QZlAWp4HeFar4ApF99o2dogfNBm84gF9HRUMVAeDXtlpU/3IQmBdY+P1EWu6ardHp7jH
-         LSNumM1ZyigqLFvANj4KFll2roG+Ve/eL4WlZ0qyrNVM+jvA8GpWPxeQu+h0x6FGoIuS
-         mx/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AQBQVzvdlwXN9vrpi/RnrrU9UTxK/Wco2Vk/EQR1DlA=;
-        b=JDTd+LOFUzf6fZDoLG5oOsVKzgbuY5S+5dN7D2UXiTCCBf6nXJKgGO9PCTtt4FFxDw
-         +m0TvkzbO0lx+kSMZW6CRBPlnafLJuc58uIyi5JNzOPYbZyNGfbQXVsWOsIO2MUPO5J9
-         qiOyR7JReTu3iLjFnaa3HD2ni/dGlleou0C0JooC6gMDLRB46+MbGlNokJKi82DcFGZO
-         2WmvODvJtUaxoMbGCW/3AP/QK6M2BVm5m3MItJrqvA2TfdHs7HMxjz3wwbigfueh0kci
-         AFYgRCs/B9B98r5C0nzdpwjvbc6KsHkggPUCwaPJeXW9YFcrSjIHwIuLe+URoKZyIBnF
-         lfcg==
-X-Gm-Message-State: ANhLgQ3dUvzKuNtiz7nVSNgNyEQKnP0lFbNiIE+yCGjBsn+FMu8UwS3k
-        paFRfKDIdN9gEtEeVrxkUzqxclbQL63qYpJ9gXc=
-X-Google-Smtp-Source: ADFU+vsvahqTTbRVTo+rXvRbRch6Hm9UF2s1HMnYN2jVbP5JOl8ilePH2rluLrl1BfWrHYZfM0DtuDcQZfZSp3ImGeM=
-X-Received: by 2002:a17:906:4089:: with SMTP id u9mr16031550ejj.184.1583778693969;
- Mon, 09 Mar 2020 11:31:33 -0700 (PDT)
+        id S1727380AbgCISfM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Mar 2020 14:35:12 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:52419 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727357AbgCISfM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 14:35:12 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 0187923EDA;
+        Mon,  9 Mar 2020 19:35:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1583778909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UKBQm/CELdZbYxZDawLpP5aml1WS/d0wkEXfjOmg9+8=;
+        b=KqHUijx7VNI9rkxedjbCgevBb5ZDckL6Uci7Et7zDL9mWzI7vBtPeeJh/8n9kA1oJGIOLy
+        I1De77amAgvB+bBBf+cDSdNjNlbaA279EmQqe2PyyFsgC2PChEgmG5YxP8/LbbxAkxSbAk
+        dc/eFs5+lh/mI3hvwsA4KlZ1E5jwaYE=
 MIME-Version: 1.0
-References: <20200309145624.10026-1-olteanv@gmail.com> <20200309145624.10026-3-olteanv@gmail.com>
- <d8e39e402328b962cdbc25316a27eac8@walle.cc> <CA+h21hp4vC1c00rCgZo_hwQz3cE4dLBHjcgTHvf-+fS9a9VfxQ@mail.gmail.com>
- <a709dc91aac9124ed37ac1e7fcb7e105@walle.cc>
-In-Reply-To: <a709dc91aac9124ed37ac1e7fcb7e105@walle.cc>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Mon, 9 Mar 2020 20:31:22 +0200
-Message-ID: <CA+h21hodaPyY54fwRFNhmksg+9ugVvW7hndMCCc=cBG39D7jdQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] spi: spi-fsl-dspi: Fix little endian access to PUSHR
- CMD and TXDATA
-To:     Michael Walle <michael@walle.cc>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, Esben Haabendal <eha@deif.com>,
-        angelo@sysam.it, andrew.smirnov@gmail.com,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Wei Chen <weic@nvidia.com>, Mohamed Hosny <mhosny@nvidia.com>,
-        peng.ma@nxp.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 09 Mar 2020 19:35:08 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
+        robh+dt@kernel.org, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, eha@deif.com, angelo@sysam.it,
+        andrew.smirnov@gmail.com, gustavo@embeddedor.com, weic@nvidia.com,
+        mhosny@nvidia.com, peng.ma@nxp.com
+Subject: Re: [PATCH 6/6] arm64: dts: ls1028a-rdb: Add a spidev node for the
+ mikroBUS
+In-Reply-To: <20200309145624.10026-7-olteanv@gmail.com>
+References: <20200309145624.10026-1-olteanv@gmail.com>
+ <20200309145624.10026-7-olteanv@gmail.com>
+Message-ID: <f213388d924b63d0fe265a2d731647be@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
+X-Spam-Level: *
+X-Rspamd-Server: web
+X-Spam-Status: No, score=1.40
+X-Spam-Score: 1.40
+X-Rspamd-Queue-Id: 0187923EDA
+X-Spamd-Result: default: False [1.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         DBL_PROHIBIT(0.00)[0.0.0.0:email];
+         RCPT_COUNT_TWELVE(0.00)[15];
+         NEURAL_HAM(-0.00)[-0.371];
+         FREEMAIL_TO(0.00)[gmail.com];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,arm.com,deif.com,sysam.it,gmail.com,embeddedor.com,nvidia.com,nxp.com];
+         MID_RHS_MATCH_FROM(0.00)[];
+         SUSPICIOUS_RECIPS(1.50)[]
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 9 Mar 2020 at 20:19, Michael Walle <michael@walle.cc> wrote:
->
+Am 2020-03-09 15:56, schrieb Vladimir Oltean:
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> 
+> For debugging, it is useful to have access to the DSPI controller
+> signals. On the reference design board, these are exported to either 
+> the
+> mikroBUS1 or mikroBUS2 connector (according to the CPLD register
+> BRDCFG3[SPI3]).
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+> b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+> index bb7ba3bcbe56..43f403b30dae 100644
+> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+> @@ -83,6 +83,20 @@
+>  	};
+>  };
+> 
+> +&dspi2 {
+> +	bus-num = <2>;
+> +	status = "okay";
+> +
+> +	/* mikroBUS1 */
+> +	spidev@0 {
+> +		compatible = "spidev";
 
-> Eg. is it big-endian or little-endian if there is no property at all?
->
+As far as I know this throws a warning at boot that you
+shouldn't use the compatible = "spidev", doesn't it?
 
-I think it is "native endianness" in that case, i.e. big endian on big
-endian CPU and little endian on little endian CPU.
+/*
+  * spidev should never be referenced in DT without a specific
+  * compatible string, it is a Linux implementation thing
+  * rather than a description of the hardware.
+  */
 
-Thanks,
--Vladimir
+-michael
+
+> +		reg = <0>;
+> +		spi-max-frequency = <20000000>;
+> +		fsl,spi-cs-sck-delay = <100>;
+> +		fsl,spi-sck-cs-delay = <100>;
+> +	};
+> +};
+> +
+>  &esdhc {
+>  	sd-uhs-sdr104;
+>  	sd-uhs-sdr50;
