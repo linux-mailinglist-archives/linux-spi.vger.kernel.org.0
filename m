@@ -2,52 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D0B17E67B
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 19:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED75B17E696
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 19:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727222AbgCISJ7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Mar 2020 14:09:59 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:42262 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726169AbgCISJ7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 14:09:59 -0400
-Received: by mail-ed1-f66.google.com with SMTP id n18so13087258edw.9;
-        Mon, 09 Mar 2020 11:09:56 -0700 (PDT)
+        id S1727263AbgCISPD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Mar 2020 14:15:03 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:38609 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726594AbgCISPD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 14:15:03 -0400
+Received: by mail-ed1-f65.google.com with SMTP id h5so2782203edn.5;
+        Mon, 09 Mar 2020 11:15:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3ymUyoWzRfb02+hfegg+QB7d5gLRotDje0gN7Rw97jE=;
-        b=aZUNB8/m4hdNxkjniWKBlD+2MNKKa8FM0iAAyRr/tFj5vtS0wP6Ib6paQTtK8MAhVL
-         mxAsKJ5m9jlp4m2rwl57ZYIzPSaeBMEDy4dFXzgZFZr8aP0wOClYQamk+pPvCstbhL59
-         LhKjmZz+19wpA9/1HsXmOMEyvfJFo7OiM5vJxKCXi/fAo+jrhyjr+UCPw6n/z9QXqMho
-         1MbhnVKh1XMVgyC+OqWGEN4928e0teCk/kJqTX9/ggkscXhos6nT9OT/9kXjREIoOnLY
-         1mW6JoULcOEZr7p+xTvcZoFH6yduxJOZly3f5MZBY/F1xwFmHLX1YSn+FkGrRhnsOOdK
-         5+Xg==
+        bh=Xs7r2b9IzlfpQAdeExaqPyMiu2aaclTGgziI7uZf/6s=;
+        b=WxvkAOQAuO/cEOwxhw7vHKPvtV7dDzQ2lSV3UO+Y2iakzmbUhmOn8ttTAmVMqHqxnu
+         kz/P0iP+Hy9cOSqm5mWZVPTFXWtnp9ZZQ9huvu34iprmrCNI4RynlJnsa7MNM/2+Qslf
+         ou18g7F1YhoYvN4/8kcY32A7z1E8/qlUFEpUZWo0q8OwGkTIamUiXPF5mex5yBO4d+4b
+         jxq/fhATTHRb/y0xJAoGleyuyOVLCIIFnMUc5eoKSZQ5EdJUASXlcMxpLz949twscU3D
+         7yqvDrBptKaJA5i4BGrahUtW+cJHELsGxtneCTRlNwJ6JIj7gIioNCXeTRPRejqb3wgK
+         n0uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3ymUyoWzRfb02+hfegg+QB7d5gLRotDje0gN7Rw97jE=;
-        b=oZCcV1GeZ9bolHcciGXM9AZUPT8ZGjBu2v7xgFMAwpd3CtQWHcqOxWu38WmGzd2daz
-         m7lLT+jGWolEioDRf3jxHvRNWrvoD5onHN/P2DlvACMYzUYI1Ky/SC4BB+g78Frgk7hX
-         FndEvsrFxGkkwgicibg9f+vla3dQBkCnsghtTDGwQYeZeKi9ip8oB3GNqEQx354kq7SS
-         4o7W1JyRXlqkReUwGQzmotQ6djfKdMUWB13oQmZF8fbKUqk91pixBtoH0Now/LARZ/uw
-         dUpLA7Lukhv3oaxCcecgm99EQmBpeCKogTr6FK4x3c2FHu87GiAjjWjr4839GNviLK91
-         HzZQ==
-X-Gm-Message-State: ANhLgQ3lZH36tRFgtWQHxZpN56meiqIAp6v2GE1WAuGkxRzoBN4fKX9q
-        HPYmIEvI/Xzk7KYZVU1Jxir5ju4SY91sInCh/5U=
-X-Google-Smtp-Source: ADFU+vtiWM2hCTGldMzIEsZsmgDjW6xnZcnOLWNAFcwYZS5ihirWrPk0G2791uJ2wPG1rSuLGjegnUwNdP8AshjEvV4=
-X-Received: by 2002:a05:6402:128c:: with SMTP id w12mr18684596edv.368.1583777395945;
- Mon, 09 Mar 2020 11:09:55 -0700 (PDT)
+        bh=Xs7r2b9IzlfpQAdeExaqPyMiu2aaclTGgziI7uZf/6s=;
+        b=pnu3b2LHpLJlAevcsxZdzbpW9cVEccyklrtlJRk5BMZE+mIm1ZSvKPSLZ1eT07eAhu
+         s9hM7CLMeiqoF7XRWhqCtD4zPRmfwLqOA8Xy0cPAqflXWDmNnaltMpRXCgzEaqJ9JSzQ
+         VhqeN/cFGJyAVXJ0yzT29dfINQhCMjPHMTCvSvokksTzkUI/AADvg3Yozbb+PkFxVxSA
+         NE2Ov7CoNo6OWYUpTwov/oua4cO740frcbN7O0tpuH2Ivks0k5dCEAp3zSUkJETWLhPN
+         IsjUkk7UbaMXruDcI6n7DfIXOSm01J7VikUmhwj83D+l8PEIpqc0+7Kpu1YjQmvESLqr
+         dSDA==
+X-Gm-Message-State: ANhLgQ1HvRTpfK2d/NFOyXv4jQBgkKmEcA1lCVQ0JakPo9+rPi1RcGsM
+        2ul2ze6XKS8kOUTpR4yqYoXfHIZmsrtQiRBUKhk=
+X-Google-Smtp-Source: ADFU+vuX+135JLR5eV9PzpXXV/FHyVLVYOJHZDWbj5zoXjOcs3HBVAiRwWM+dfvSFmxVVm5OhztF1vU44B3a0Ykb2kg=
+X-Received: by 2002:a17:906:f49:: with SMTP id h9mr16437041ejj.6.1583777701665;
+ Mon, 09 Mar 2020 11:15:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200309145624.10026-1-olteanv@gmail.com> <20200309145624.10026-2-olteanv@gmail.com>
- <c35b3c34123b43b26204a2cf360e7ec1@walle.cc>
-In-Reply-To: <c35b3c34123b43b26204a2cf360e7ec1@walle.cc>
+References: <20200309145624.10026-1-olteanv@gmail.com> <f530a0740f34b2cf26a8055d4eae2527@walle.cc>
+In-Reply-To: <f530a0740f34b2cf26a8055d4eae2527@walle.cc>
 From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Mon, 9 Mar 2020 20:09:44 +0200
-Message-ID: <CA+h21hquwbP-qg21EJKW6BpAVRSm0WE6OUWeg-zsorZrCFT=dQ@mail.gmail.com>
-Subject: Re: [PATCH 1/6] spi: spi-fsl-dspi: Don't access reserved fields in SPI_MCR
+Date:   Mon, 9 Mar 2020 20:14:50 +0200
+Message-ID: <CA+h21hrSezjwKJDCd1wN8qk5koWfPmwT0Mx+sR7fHxo1sCGcjw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] NXP DSPI bugfixes and support for LS1028A
 To:     Michael Walle <michael@walle.cc>
 Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         lkml <linux-kernel@vger.kernel.org>,
@@ -65,21 +64,72 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 9 Mar 2020 at 20:05, Michael Walle <michael@walle.cc> wrote:
->
+On Mon, 9 Mar 2020 at 20:03, Michael Walle <michael@walle.cc> wrote:
 > Am 2020-03-09 15:56, schrieb Vladimir Oltean:
 > > From: Vladimir Oltean <vladimir.oltean@nxp.com>
 > >
-> > The SPI_MCR_PCSIS macro assumes that the controller has a number of
-> > chip
-> > select signals equal to 6. That is not always the case, but actually is
-> > described through the driver-specific " signals equal to 6. That is not
-> > always the case, but actually is described through the driver-specific
-> > "spi-num-chipselects" device tree binding.
+> > This series addresses a few issues that were missed during the previous
+> > series "[PATCH 00/12] TCFQ to XSPI migration for NXP DSPI driver", on
+> > SoCs other than LS1021A and LS1043A. DMA mode has been completely
+> > broken
+> > by that series, and XSPI mode never worked on little-endian
+> > controllers.
+> >
+> > Then it introduces support for the LS1028A chip, whose compatible has
+> > recently been documented here:
+> >
+> > https://lore.kernel.org/linux-devicetree/20200218171418.18297-1-michael@walle.cc/
 >
-> Repeated sentence? Was this your intention?
+> If it is not compatible with the LS1021A the second compatible string
+> should be removed. Depending on the other remark about the endianess,
+> it might still be compatible, though.
 >
 
-No, I must have tripped over my vim shortcuts. Sorry.
+Please feel free to remove it. I wasn't actually planning to add it in
+the first place, but now it that it's there it doesn't really bother
+anybody either.
 
+>
+> > The device tree for the LS1028A SoC is extended with DMA channels
+> > definition, such that even though the default operating mode is XSPI,
+> > one can simply change DSPI_XSPI_MODE to DSPI_DMA_MODE in the
+> > devtype_data structure of the driver and use that instead.
+>
+> wouldn't it make more sense, to use DMA is the dma node is present
+> in the device tree? otherwise use XSPI mode? I don't think it is
+> really handy to change the mode inside the driver.
+>
+
+Let's keep it simple. The driver should configure the hardware in the
+most efficient and least buggy mode available. Right now that is XSPI.
+The hardware description (aka the device tree) is a separate topic. If
+there ever arises any situation where there are corner cases with XSPI
+mode, it's good to have a fallback in the form of DMA mode, and not
+have to worry about yet another problem (which is that there are 2
+sets of device tree blobs in deployment).
+
+TL;DR: These DMA channels don't really bother anybody but you never
+know when they might come in handy.
+
+> -michael
+>
+> >
+> > For testing, benchmarking and debugging, the mikroBUS connector on the
+> > LS1028A-RDB is made available via spidev.
+> >
+> > Vladimir Oltean (6):
+> >   spi: spi-fsl-dspi: Don't access reserved fields in SPI_MCR
+> >   spi: spi-fsl-dspi: Fix little endian access to PUSHR CMD and TXDATA
+> >   spi: spi-fsl-dspi: Fix oper_word_size of zero for DMA mode
+> >   spi: spi-fsl-dspi: Add support for LS1028A
+> >   arm64: dts: ls1028a: Specify the DMA channels for the DSPI
+> > controllers
+> >   arm64: dts: ls1028a-rdb: Add a spidev node for the mikroBUS
+> >
+> >  .../boot/dts/freescale/fsl-ls1028a-rdb.dts    | 14 +++++
+> >  .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |  6 +++
+> >  drivers/spi/spi-fsl-dspi.c                    | 54 +++++++++++++++----
+> >  3 files changed, 64 insertions(+), 10 deletions(-)
+
+Thanks,
 -Vladimir
