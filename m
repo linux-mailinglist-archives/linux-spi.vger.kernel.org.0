@@ -2,139 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E812017E783
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 19:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C816617E79E
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Mar 2020 19:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727432AbgCISvX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Mar 2020 14:51:23 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:34439 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727391AbgCISvX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 14:51:23 -0400
-Received: by mail-ed1-f66.google.com with SMTP id c21so13277849edt.1;
-        Mon, 09 Mar 2020 11:51:20 -0700 (PDT)
+        id S1727421AbgCISyg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Mar 2020 14:54:36 -0400
+Received: from mail-qt1-f177.google.com ([209.85.160.177]:45433 "EHLO
+        mail-qt1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727416AbgCISyf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Mar 2020 14:54:35 -0400
+Received: by mail-qt1-f177.google.com with SMTP id a4so7791888qto.12
+        for <linux-spi@vger.kernel.org>; Mon, 09 Mar 2020 11:54:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=clm3ma+lW+rgLiuhiXicUwTpVbExG2Z9wddCYQg0RBY=;
-        b=Vpo8dbHLf0dmQTuU1Izi7Z6u49fsMS0yQVI1374A8t4XxDNlmVMDZYhUwW5xS5OsSB
-         8KLBOE9JnnkURKRFwJHMqfOGlI3FEAUq95PWtNXM0m8W32pSqvOrjla7AAryTTkv6k4k
-         teEJf/R7lHiXON9br1q47+XiEyr1WWGqCN7NmsQ5ou0vbZXxMFOAOFPg6q24jeoSzMIi
-         Pp6610o1EOFE6YsoFC686/SnJVGCd06s6jvVOkbkuQU+kDV7jFid2eJD9SMo0x03TYjW
-         nNoJb9JGukxUTiwicGIHBhS5KbBzVQCNc1Yy2p54w9xEkScRJjk0LVPyFPo82fCGTrIs
-         PAMw==
+        d=ossystems-com-br.20150623.gappssmtp.com; s=20150623;
+        h=from:mime-version:date:message-id:subject:to;
+        bh=gW+iriUdtxlZCcttcADThfqktlutCqmObVsZzeSTfPY=;
+        b=v2chXXaRVG5vuD5kFLHQEDXvsMGK7uIFfVzTpEx4AhLStQHihyDwaC77PFehhKa/wG
+         D5EyVVhEEUautHa79a2pTHhObnj5dHWkr7paCh+GgcmJuRYzApZHvrXOHR43/a5K4J4d
+         b/Y3Rnr+mTwYV5ryUhPBulYrGmMv6t2ELiC6KFi0pqgl0qy6DlyfPVNMMGhj4jxuwyBX
+         NwXSLl72YQM1B12SSU8om0b2c9UML098raw/p3q2Gc7Um84j85VmGKFyuoiOgYuZJB2N
+         FhHswBvNDGaC2AaCtVkEwhRw8xZj6/15iBTAMH9fggJTZhFt+vTySFcL/5ZmEJpJHHjZ
+         4JTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=clm3ma+lW+rgLiuhiXicUwTpVbExG2Z9wddCYQg0RBY=;
-        b=dT7UC8EMAFUHmQViFXWNX8LQGBLQKZeP9ZfyuPRRGeUNn/82E2wrpVcCl3XPeU9TXo
-         39roGdEMT/bKoiMfJ3yD+t6rZbAHf4KXRBrrHHI0maqxy2WtR2WYBbB2pUCTPYuzuBNw
-         2jd+86EwiGMUAp3q8/cqX5ygXUgU5MWX6LFbaHxxTN8US7mGSvo2Qn7zPlJSoqXPrTfR
-         VCa+jsYiLITKuoSeTqAJtydEaPIwQNNIU98CwiGGCg1ngc/bWY8PFeRFfhacZkzHuoNl
-         oLpC0xaFZ8jjoyyAmPsNz/BJ0WSJP+xEmq2WKDBYTOdx9WiLqOrATrGo78X3Vlj1Mze1
-         R1hg==
-X-Gm-Message-State: ANhLgQ2zfJfISg9sCd+ZSQL7VY+L2QHJVNEJZU1UMTCzh/POLZJhkYWu
-        OPRc95HXcgblWr1jS+2LGeQWKeHSFkKkXrPsQJI=
-X-Google-Smtp-Source: ADFU+vuseX5BEjC97MIGq7PYnoQDZLuXCsj6A+R2Y/EAXARggxkZ+Xi6oBkK68P3pMQm94X2XgRZ0HRkKfEEO9QFY14=
-X-Received: by 2002:a17:906:76c6:: with SMTP id q6mr15722099ejn.176.1583779879971;
- Mon, 09 Mar 2020 11:51:19 -0700 (PDT)
+        h=x-gm-message-state:from:mime-version:date:message-id:subject:to;
+        bh=gW+iriUdtxlZCcttcADThfqktlutCqmObVsZzeSTfPY=;
+        b=MC2TOXOqRZcUCEwU/7YbcY8XThLFz18OFEdy+Zss72M4MdKsY8OnOkF96OWR+FuQoJ
+         j9TLEPyydQ0HYsRXRyHkwFIQc9AYw/D8BX6MPTEXWwZ8xfwhDsn+52RHWiitMnuEDTYX
+         F5MyCSwCWxY2JdCx7DJaNnaMjzvA7xCrViDabvaDCJ2vNOOgNN+spk2scUIsr+f3kAE1
+         IdHnokbs8SEt/P/ZcBJW0mYc9tkC2x/koHv3s7UsYwvC8zbuBERw7pxIbDOC8G4EhHl0
+         8lE/74bgP/dFjnLhOtJNgxEXJmqmFZYGOw1mQ1xqrtaI9f+eIeDwgNHxB2vCQOjefIUW
+         PbRQ==
+X-Gm-Message-State: ANhLgQ0TAHTT2hXcug9BMITyHf+UNkanwcRSRkDzmkXt2BOmlAOUyS0C
+        /xfX9MB4OGB8TjIST13T3PQswDwKHmHd7g==
+X-Google-Smtp-Source: ADFU+vuZgAuizDuScmVjSGX3IdB0FZmlBeoVIiZmCf+5MIxh786aNzPiTT3cxVzp93UXefCUjS1u7w==
+X-Received: by 2002:ac8:4d97:: with SMTP id a23mr11956040qtw.176.1583780074221;
+        Mon, 09 Mar 2020 11:54:34 -0700 (PDT)
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com. [209.85.160.170])
+        by smtp.gmail.com with ESMTPSA id l12sm6130430qtp.44.2020.03.09.11.54.32
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Mar 2020 11:54:33 -0700 (PDT)
+From:   Otavio Salvador <otavio.salvador@ossystems.com.br>
+X-Google-Original-From: Otavio Salvador <otavio@ossystems.com.br>
+Received: by mail-qt1-f170.google.com with SMTP id h16so7797212qtr.11
+        for <linux-spi@vger.kernel.org>; Mon, 09 Mar 2020 11:54:32 -0700 (PDT)
+X-Received: by 2002:ac8:607:: with SMTP id d7mr15667506qth.271.1583780072098;
+ Mon, 09 Mar 2020 11:54:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200309145624.10026-1-olteanv@gmail.com> <20200309145624.10026-5-olteanv@gmail.com>
- <02a2816d2f39bf621dfee543ed612ae0@walle.cc>
-In-Reply-To: <02a2816d2f39bf621dfee543ed612ae0@walle.cc>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Mon, 9 Mar 2020 20:51:09 +0200
-Message-ID: <CA+h21hoqmXfBdhGBg6TLLqLeXJTE3wZKzQpsZJRsOhqWCO9gJQ@mail.gmail.com>
-Subject: Re: [PATCH 4/6] spi: spi-fsl-dspi: Add support for LS1028A
-To:     Michael Walle <michael@walle.cc>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, Esben Haabendal <eha@deif.com>,
-        angelo@sysam.it, andrew.smirnov@gmail.com,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Wei Chen <weic@nvidia.com>, Mohamed Hosny <mhosny@nvidia.com>,
-        peng.ma@nxp.com
+Date:   Mon, 9 Mar 2020 15:54:20 -0300
+X-Gmail-Original-Message-ID: <CAP9ODKpW=h6SVtsn-uuDQ4+TgR0NnjBW==8vwyQD4+x_dbFzRQ@mail.gmail.com>
+Message-ID: <CAP9ODKpW=h6SVtsn-uuDQ4+TgR0NnjBW==8vwyQD4+x_dbFzRQ@mail.gmail.com>
+Subject: SPI irq regression
+To:     kernel@esmil.dk, Heiko Stuebner <heiko@sntech.de>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 9 Mar 2020 at 20:38, Michael Walle <michael@walle.cc> wrote:
->
-> Am 2020-03-09 15:56, schrieb Vladimir Oltean:
-> > From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> >
-> > This is similar to the DSPI instantiation on LS1028A, except that:
-> >  - The A-011218 erratum has been fixed, so DMA works
-> >  - The endianness is different, which has implications on XSPI mode
-> >
-> > Some benchmarking with the following command:
-> >
-> > spidev_test --device /dev/spidev2.0 --bpw 8 --size 256 --cpha --iter
-> > 10000000 --speed 20000000
-> >
-> > shows that in DMA mode, it can achieve around 2400 kbps, and in XSPI
-> > mode, the same command goes up to 4700 kbps. This is somewhat to be
-> > expected, since the DMA buffer size is extremely small at 8 bytes, the
-> > winner becomes whomever can prepare the buffers for transmission
-> > quicker, and DMA mode has higher overhead there. So XSPI FIFO mode has
-> > been chosen as the operating mode for this chip.
-> >
-> > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> > ---
-> >  drivers/spi/spi-fsl-dspi.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-> > index 5624b9ee77db..264d184e7296 100644
-> > --- a/drivers/spi/spi-fsl-dspi.c
-> > +++ b/drivers/spi/spi-fsl-dspi.c
-> > @@ -131,6 +131,7 @@ struct fsl_dspi_devtype_data {
-> >  enum {
-> >       LS1021A,
-> >       LS1012A,
-> > +     LS1028A,
-> >       LS1043A,
-> >       LS1046A,
-> >       LS2080A,
-> > @@ -163,6 +164,14 @@ static const struct fsl_dspi_devtype_data
-> > devtype_data[] = {
-> >               .pushr_cmd              = 0,
-> >               .pushr_tx               = 2,
-> >       },
-> > +     [LS1028A] = {
-> > +             .trans_mode             = DSPI_DMA_MODE,
->
-> shouldn't this be DSPI_XSPI_MODE according to your cover letter?
->
-> -michael
->
+Hi,
 
-Yes, sorry, I forgot to change it back after testing it both ways.
+Since commit:
 
-> > +             .dma_bufsize            = 8,
-> > +             .max_clock_factor       = 8,
-> > +             .fifo_size              = 4,
-> > +             .pushr_cmd              = 2,
-> > +             .pushr_tx               = 0,
-> > +     },
-> >       [LS1043A] = {
-> >               /* Has A-011218 DMA erratum */
-> >               .trans_mode             = DSPI_XSPI_MODE,
-> > @@ -1113,6 +1122,9 @@ static const struct of_device_id
-> > fsl_dspi_dt_ids[] = {
-> >       }, {
-> >               .compatible = "fsl,ls1012a-dspi",
-> >               .data = &devtype_data[LS1012A],
-> > +     }, {
-> > +             .compatible = "fsl,ls1028a-dspi",
-> > +             .data = &devtype_data[LS1028A],
-> >       }, {
-> >               .compatible = "fsl,ls1043a-dspi",
-> >               .data = &devtype_data[LS1043A],
+commit 01b59ce5dac856323a0c13c1d51d99a819f32efe
+Author: Emil Renner Berthing <kernel@esmil.dk>
+Date:   Wed Oct 31 11:57:09 2018 +0100
+
+    spi: rockchip: use irq rather than polling
+
+    Register an interrupt handler to fill/empty the
+    tx and rx fifos rather than busy-looping.
+
+    Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+    Tested-by: Heiko Stuebner <heiko@sntech.de>
+    Signed-off-by: Mark Brown <broonie@kernel.org>
+
+SPI is no longer functional on a RV1108 Elgin board.
+
+The error messages are:
+
+[   46.186916] spidev spi0.0: SPI transfer timed out
+[   46.187435] spi_master spi0: failed to transfer one message from queue
+
+Reverting this commit makes SPI to work again.
+
+Any ideas on how we can properly fix this regression?
+
+-- 
+Otavio Salvador                             O.S. Systems
+http://www.ossystems.com.br        http://code.ossystems.com.br
+Mobile: +55 (53) 9 9981-7854          Mobile: +1 (347) 903-9750
