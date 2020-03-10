@@ -2,116 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC58F17FFE6
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 15:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C502718002E
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 15:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgCJOMs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Mar 2020 10:12:48 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:35035 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726463AbgCJOMs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 10:12:48 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 0CFAA23ECA;
-        Tue, 10 Mar 2020 15:12:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1583849565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hEWql192yhW7vtj33Ar2ueUuqZzJlfD7KDs4yhM6yuY=;
-        b=PQ+UEguI+6SdYnqx6Rtn22RYead+fBmeyqt/n8R9DqO///TzSh9elzyIUB3fkJAb0eDZkH
-        LWEdFzv03wvcW/kGvWMN7I+dWJRmr4aT5cBkoKjGHrgK+MmtC/QZH3j6F5n8VhXFi9rds0
-        nYmd9aodavlaShm5p5AGAcONE0ELWCI=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 10 Mar 2020 15:12:45 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     linux-spi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH] spi: spi-fsl-dspi: fix DMA mapping
-In-Reply-To: <CA+h21hqMoPhbq8YG0UeV1kP0iXApYsJvb9MZjPGX54dm2U-KnQ@mail.gmail.com>
-References: <20200310073313.21277-1-michael@walle.cc>
- <4beb5200a76f2d817be7276444543de4@walle.cc>
- <ea6ffa30ddc2459d07935e5e61a41172@walle.cc>
- <CA+h21hqMoPhbq8YG0UeV1kP0iXApYsJvb9MZjPGX54dm2U-KnQ@mail.gmail.com>
-Message-ID: <76923af394f334337a3cac125c270087@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: /
-X-Spam-Status: No, score=-0.10
-X-Rspamd-Server: web
-X-Spam-Score: -0.10
-X-Rspamd-Queue-Id: 0CFAA23ECA
-X-Spamd-Result: default: False [-0.10 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_SEVEN(0.00)[9];
-         NEURAL_HAM(-0.00)[-0.597];
-         FREEMAIL_TO(0.00)[gmail.com];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         MID_RHS_MATCH_FROM(0.00)[]
+        id S1726591AbgCJObK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Mar 2020 10:31:10 -0400
+Received: from foss.arm.com ([217.140.110.172]:37794 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726252AbgCJObJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Mar 2020 10:31:09 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 778C830E;
+        Tue, 10 Mar 2020 07:31:09 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E90CB3F6CF;
+        Tue, 10 Mar 2020 07:31:08 -0700 (PDT)
+Date:   Tue, 10 Mar 2020 14:31:07 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Qiujun Huang <hqjagain@gmail.com>
+Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: update the structure documentation" to the spi tree
+In-Reply-To:  <1583774179-30736-1-git-send-email-hqjagain@gmail.com>
+Message-Id:  <applied-1583774179-30736-1-git-send-email-hqjagain@gmail.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2020-03-10 14:02, schrieb Vladimir Oltean:
-> On Tue, 10 Mar 2020 at 10:12, Michael Walle <michael@walle.cc> wrote:
->> 
->> Am 2020-03-10 08:40, schrieb Michael Walle:
->> > Am 2020-03-10 08:33, schrieb Michael Walle:
->> >> Use the correct device to request the DMA mapping. Otherwise the IOMMU
->> >> doesn't get the mapping and it will generate a page fault.
->> >>
->> >> The error messages look like:
->> >> [    3.008452] arm-smmu 5000000.iommu: Unhandled context fault:
->> >> fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
->> >> [    3.020123] arm-smmu 5000000.iommu: Unhandled context fault:
->> >> fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
->> >>
->> >> This was tested on a custom board with a LS1028A SoC.
->> >
->> > Oh fu.. please disregard this patch. DMA mapping still isn't working.
->> > Somehow I missed that the transfer mode was turned back to its default
->> > XSPI mode.
->> 
->> Damn. I need more coffee.. this patch IS working. Only the first probe
->> fails due to EPROBE_DEFER.
->> 
->> [    2.539706] fsl-dspi 2120000.spi: rx dma channel not available 
->> (-517)
->> [    2.546200] fsl-dspi 2120000.spi: can't get dma channels
->> [    3.622774] spi-nor spi1.0: w25q128fw (16384 Kbytes)
->> 
->> -michael
-> 
-> I'm testing LS1028A with IOMMU_DEFAULT_PASSTHROUGH=y and I didn't have
-> time to change my setup now. I've also sent a v3 to my patch series
-> which is going to conflict with this one, sorry.
+The patch
 
-No worries, its easy enough to rebase.
+   spi: update the structure documentation
 
-> I would have picked
-> your patch up with my series but I didn't have the right environment
-> to test it.
+has been applied to the spi tree at
 
-I'll resend a v2 once your series is working.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
 
--michael
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 7a86a419ff62c69f91544ea95f4ae6ef83880dcc Mon Sep 17 00:00:00 2001
+From: Qiujun Huang <hqjagain@gmail.com>
+Date: Tue, 10 Mar 2020 01:16:19 +0800
+Subject: [PATCH] spi: update the structure documentation
+
+some members were not described in documentation.
+
+Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
+Link: https://lore.kernel.org/r/1583774179-30736-1-git-send-email-hqjagain@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ include/linux/spi/spi.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 87105272879b..38286de779e3 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -135,6 +135,8 @@ extern int spi_delay_exec(struct spi_delay *_delay, struct spi_transfer *xfer);
+  * @modalias: Name of the driver to use with this device, or an alias
+  *	for that name.  This appears in the sysfs "modalias" attribute
+  *	for driver coldplugging, and in uevents used for hotplugging
++ * @driver_override: If the name of a driver is written to this attribute, then
++ *	the device will bind to the named driver and only the named driver.
+  * @cs_gpio: LEGACY: gpio number of the chipselect line (optional, -ENOENT when
+  *	not using a GPIO line) use cs_gpiod in new drivers by opting in on
+  *	the spi_master.
+@@ -443,6 +445,7 @@ static inline void spi_unregister_driver(struct spi_driver *sdrv)
+  *	@spi_transfer->ptp_sts_word_post were transmitted.
+  *	If the driver does not set this, the SPI core takes the snapshot as
+  *	close to the driver hand-over as possible.
++ * @irq_flags: Interrupt enable state during PTP system timestamping
+  *
+  * Each SPI controller can communicate with one or more @spi_device
+  * children.  These make a small bus, sharing MOSI, MISO and SCK signals
+-- 
+2.20.1
+
