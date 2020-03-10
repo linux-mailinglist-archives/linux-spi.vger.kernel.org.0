@@ -2,145 +2,140 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5C817F10F
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 08:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C889217F11D
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 08:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbgCJHdb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Mar 2020 03:33:31 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:53173 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726195AbgCJHdb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 03:33:31 -0400
-Received: from mwalle01.sab.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 70E5923EDA;
-        Tue, 10 Mar 2020 08:33:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1583825609;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mGzo69y07vEikBiBYw51X7LqR4nXAnMjmqLFsIzeY0g=;
-        b=iBIzRz5537ewx9ux46LYo3F+UVQAT5T+jWgeQUuy0Z2+rqVnvLuzdJdGcrHnuJm57LNSI7
-        wv+B3Bz284fy9Fm5iJfq/n7ztHPr6dGnAFwWVgtNGWWahZ1FbKW7uq9FePGHSwf9oxpa25
-        ChDL8L9SrCV4wdUYnlf0H7omv4G++f0=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH] spi: spi-fsl-dspi: fix DMA mapping
-Date:   Tue, 10 Mar 2020 08:33:13 +0100
-Message-Id: <20200310073313.21277-1-michael@walle.cc>
-X-Mailer: git-send-email 2.20.1
+        id S1726205AbgCJHjl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Mar 2020 03:39:41 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51767 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726224AbgCJHjk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 03:39:40 -0400
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jBZU3-0001OK-GJ; Tue, 10 Mar 2020 08:39:23 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jBZU0-00089j-OU; Tue, 10 Mar 2020 08:39:20 +0100
+Date:   Tue, 10 Mar 2020 08:39:20 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     vkoul@kernel.org, shawnguo@kernel.org,
+        u.kleine-koenig@pengutronix.de, broonie@kernel.org,
+        robh+dt@kernel.org, festevam@gmail.com, dan.j.williams@intel.com,
+        mark.rutland@arm.com, catalin.marinas@arm.com, will.deacon@arm.com,
+        l.stach@pengutronix.de, martin.fuzzey@flowbird.group,
+        kernel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [RESEND v6  06/13] spi: imx: fix ERR009165
+Message-ID: <20200310073920.GR3335@pengutronix.de>
+References: <1583839922-22699-1-git-send-email-yibin.gong@nxp.com>
+ <1583839922-22699-7-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++
-X-Spam-Level: ****
-X-Rspamd-Server: web
-X-Spam-Status: No, score=4.90
-X-Spam-Score: 4.90
-X-Rspamd-Queue-Id: 70E5923EDA
-X-Spamd-Result: default: False [4.90 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         R_MISSING_CHARSET(2.50)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         NEURAL_SPAM(0.00)[0.643];
-         BROKEN_CONTENT_TYPE(1.50)[];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_SEVEN(0.00)[9];
-         MID_CONTAINS_FROM(1.00)[];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:12941, ipnet:213.135.0.0/19, country:DE]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1583839922-22699-7-git-send-email-yibin.gong@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:28:52 up 19 days, 14:59, 43 users,  load average: 0.01, 0.14,
+ 0.20
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use the correct device to request the DMA mapping. Otherwise the IOMMU
-doesn't get the mapping and it will generate a page fault.
+On Tue, Mar 10, 2020 at 07:31:55PM +0800, Robin Gong wrote:
+> Change to XCH  mode even in dma mode, please refer to the below
+> errata:
+> https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf
+> 
+> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> ---
+>  drivers/spi/spi-imx.c | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+> index f4f28a4..842a86e 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -585,8 +585,9 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+>  	ctrl |= mx51_ecspi_clkdiv(spi_imx, t->speed_hz, &clk);
+>  	spi_imx->spi_bus_clk = clk;
+>  
+> +	/* ERR009165: work in XHC mode as PIO */
+>  	if (spi_imx->usedma)
+> -		ctrl |= MX51_ECSPI_CTRL_SMC;
+> +		ctrl &= ~MX51_ECSPI_CTRL_SMC;
 
-The error messages look like:
-[    3.008452] arm-smmu 5000000.iommu: Unhandled context fault: fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
-[    3.020123] arm-smmu 5000000.iommu: Unhandled context fault: fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
+'ctrl' was read from the hardware. In the dma case it was set
+explicitly, but it was never cleared for a PIO transfer. This looked
+wrong before this patch. Now with this patch it looks even more wrong:
+We clear a bit that has never been set and we only do this for DMA, when
+for the PIO case it definitly must be cleared. Drop the if clause.
 
-This was tested on a custom board with a LS1028A SoC.
+>  
+>  	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
+>  
+> @@ -612,12 +613,14 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+>  
+>  static void mx51_setup_wml(struct spi_imx_data *spi_imx)
+>  {
+> +	u32 tx_wml = 0;
+> +
+>  	/*
+>  	 * Configure the DMA register: setup the watermark
+>  	 * and enable DMA request.
+>  	 */
+>  	writel(MX51_ECSPI_DMA_RX_WML(spi_imx->wml - 1) |
+> -		MX51_ECSPI_DMA_TX_WML(spi_imx->wml) |
+> +		MX51_ECSPI_DMA_TX_WML(tx_wml) |
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/spi/spi-fsl-dspi.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+tx_wml is never assigned any other value than 0. Drop the variable.
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index cf8a141bbaf2..ad63804ef690 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -510,14 +510,16 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 		goto err_tx_channel;
- 	}
- 
--	dma->tx_dma_buf = dma_alloc_coherent(dev, dspi->devtype_data->dma_bufsize,
-+	dma->tx_dma_buf = dma_alloc_coherent(dma->chan_tx->device->dev,
-+					     dspi->devtype_data->dma_bufsize,
- 					     &dma->tx_dma_phys, GFP_KERNEL);
- 	if (!dma->tx_dma_buf) {
- 		ret = -ENOMEM;
- 		goto err_tx_dma_buf;
- 	}
- 
--	dma->rx_dma_buf = dma_alloc_coherent(dev, dspi->devtype_data->dma_bufsize,
-+	dma->rx_dma_buf = dma_alloc_coherent(dma->chan_rx->device->dev,
-+					     dspi->devtype_data->dma_bufsize,
- 					     &dma->rx_dma_phys, GFP_KERNEL);
- 	if (!dma->rx_dma_buf) {
- 		ret = -ENOMEM;
-@@ -554,10 +556,12 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 	return 0;
- 
- err_slave_config:
--	dma_free_coherent(dev, dspi->devtype_data->dma_bufsize,
-+	dma_free_coherent(dma->chan_rx->device->dev,
-+			  dspi->devtype_data->dma_bufsize,
- 			  dma->rx_dma_buf, dma->rx_dma_phys);
- err_rx_dma_buf:
--	dma_free_coherent(dev, dspi->devtype_data->dma_bufsize,
-+	dma_free_coherent(dma->chan_tx->device->dev,
-+			  dspi->devtype_data->dma_bufsize,
- 			  dma->tx_dma_buf, dma->tx_dma_phys);
- err_tx_dma_buf:
- 	dma_release_channel(dma->chan_tx);
-@@ -573,20 +577,19 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- static void dspi_release_dma(struct fsl_dspi *dspi)
- {
- 	struct fsl_dspi_dma *dma = dspi->dma;
--	struct device *dev = &dspi->pdev->dev;
- 
- 	if (!dma)
- 		return;
- 
- 	if (dma->chan_tx) {
--		dma_unmap_single(dev, dma->tx_dma_phys,
-+		dma_unmap_single(dma->chan_tx->device->dev, dma->tx_dma_phys,
- 				 dspi->devtype_data->dma_bufsize,
- 				 DMA_TO_DEVICE);
- 		dma_release_channel(dma->chan_tx);
- 	}
- 
- 	if (dma->chan_rx) {
--		dma_unmap_single(dev, dma->rx_dma_phys,
-+		dma_unmap_single(dma->chan_rx->device->dev, dma->rx_dma_phys,
- 				 dspi->devtype_data->dma_bufsize,
- 				 DMA_FROM_DEVICE);
- 		dma_release_channel(dma->chan_rx);
+>  		MX51_ECSPI_DMA_RXT_WML(spi_imx->wml) |
+>  		MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN |
+>  		MX51_ECSPI_DMA_RXTDEN, spi_imx->base + MX51_ECSPI_DMA);
+> @@ -1171,7 +1174,11 @@ static int spi_imx_dma_configure(struct spi_master *master)
+>  	tx.direction = DMA_MEM_TO_DEV;
+>  	tx.dst_addr = spi_imx->base_phys + MXC_CSPITXDATA;
+>  	tx.dst_addr_width = buswidth;
+> -	tx.dst_maxburst = spi_imx->wml;
+> +	/*
+> +	 * For ERR009165 with tx_wml = 0 could enlarge burst size to fifo size
+> +	 * to speed up fifo filling as possible.
+> +	 */
+> +	tx.dst_maxburst = spi_imx->devtype_data->fifo_size;
+>  	ret = dmaengine_slave_config(master->dma_tx, &tx);
+>  	if (ret) {
+>  		dev_err(spi_imx->dev, "TX dma configuration failed with %d\n", ret);
+> @@ -1265,10 +1272,6 @@ static int spi_imx_sdma_init(struct device *dev, struct spi_imx_data *spi_imx,
+>  {
+>  	int ret;
+>  
+> -	/* use pio mode for i.mx6dl chip TKT238285 */
+> -	if (of_machine_is_compatible("fsl,imx6dl"))
+> -		return 0;
+
+So with this patch it becomes possible to do DMA on i.MX6dl, but it is
+mentioned nowhere.
+
+Sascha
+
 -- 
-2.20.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
