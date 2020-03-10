@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FC617FD21
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 14:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9248417FD24
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 14:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729591AbgCJM4B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Mar 2020 08:56:01 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:55179 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729197AbgCJM4A (ORCPT
+        id S1728346AbgCJM4A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Mar 2020 08:56:00 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52110 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729595AbgCJM4A (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 08:56:00 -0400
-Received: by mail-wm1-f67.google.com with SMTP id n8so1273847wmc.4;
-        Tue, 10 Mar 2020 05:55:56 -0700 (PDT)
+Received: by mail-wm1-f68.google.com with SMTP id a132so1283995wme.1;
+        Tue, 10 Mar 2020 05:55:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=uB7g92zSkyc4Tyrv/IlzK5Cjo/ddDsP0TZyadbno/Zs=;
-        b=eo1lo0gKBnsvDHxgStrGIkqtGTP/q7vSn9rg+GGvsDw6vH4kSQ0D8Cv8nD5fCbWkxX
-         LkDLwhl+2GLmNUUVu0maS+50QpH/2WNZza5OnzcFk13MSRFbazJc2dKqcVYiptzUmXVK
-         d8rjnS59LmlNwh1odB0MAG5FeHjki0RhYeLPAJvnX25uVtz1a81UEU5DC7/6CNHVsTEE
-         VzuIL5EMBIXPZkRunhkAsXLH4V2tyjxyPhQeDLvG5oo7SUtul3ktYUG4bEm9aWtyFCF2
-         ZkWkVmgqsO+3ZqCq4F/uJ7S4OFoVBr3lwZlbSPWVHBdGQCyln6GnSYr6jl4rv8EzMPbL
-         FyNw==
+        bh=+42PHEu2nzu+7aU3KuglcC8e8R1+npX/kGMj4laVVPo=;
+        b=ievYGuImn8W/Xz5H1brEG0ti8LVpmS9U0yDebUXjEh7ZBc6K8XrJXNucFPjaXzYjAs
+         cnNCgPG/O+8sReBqqWY7v8lZs4PsYiiegeKvwL8H3T7OR5xWm8bqPBla5anQe9azOqjN
+         wCyMwEoMx/Es/1JUIpiikPkA8SXMshl93gR998hyp25C39Pr1EnU8PRmiX6STuMztMb9
+         tXMsTOJAOCM1xIWBXOuX4X1MnrfrLjbrOnscA09ETbjF0fWPZMvCWxDf/sJsm0xqe/I1
+         CzeOI5Vu2T3GC4kiyoEs9uv3lU5LZtZ/TjF4nylr6jcJstWcFKaEw00J5UpbLTr0erql
+         e9pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=uB7g92zSkyc4Tyrv/IlzK5Cjo/ddDsP0TZyadbno/Zs=;
-        b=S14D/CCjgMFUgPg4skSsjFMii6TQp0oHgEg0DeiFVBjHcnV6vHDs6Z9l3iYuRvK0fX
-         qTzqdxbJnxbjWopQcDaZ0qEm6OuN+XVtm16FEYJo7PU6SWcJnDVXAUbz76M3YzwUBTR3
-         0hy8uYCyCbGkKq6igva7xtcEC7BGjpEYH7bLxpAc4fVnPNZSSSTAImEhyOK/oMRNuFFF
-         5Ly3FerIQdZ5r/1fXkF5/t4JaaAnHyBI8ucTgie53n8dWL9Gfxlkhy3SuS+AH2W8Z17R
-         KWyUcUWPucglSnTQ+jSOCZRRa5n/u+ckOkSDg5oRWypGLHELbUrl2OGpvce1AUOCqP5S
-         hhGA==
-X-Gm-Message-State: ANhLgQ0Vsw/gq6zzfi+cqZPBpZq5MwYVLAPexrD21izDfBBIgqh/LFbn
-        9S9Ezfk0z6jn0O278TIWy0E7ziUtOAk=
-X-Google-Smtp-Source: ADFU+vuhmnR9pAQBOTGsK/B+rEMl1zK1w8TAzrBYjiyeKZ9qBtGblqtfVv39BW0tJutHBhRbXRswjg==
-X-Received: by 2002:a05:600c:350:: with SMTP id u16mr2056964wmd.168.1583844955860;
-        Tue, 10 Mar 2020 05:55:55 -0700 (PDT)
+        bh=+42PHEu2nzu+7aU3KuglcC8e8R1+npX/kGMj4laVVPo=;
+        b=jXl3p95LqX7JKH0CIzIqQi/Z2zIXBr+xJ/6m9eVvsQAAFO5cF4jd5uKJn4nBl32zen
+         etYvAXr3l8ueaNDYXJGo6v5K/KHJNx7v99HvaUehaq99LshkNwKJKWtC/MPgWV93xqbI
+         U+SYdr2Tb8VhN+hcUMCloEvfYV5hZFWnTJtvD0Pn4b2Qz/E4nirOfFWHEssFpKUNwcLM
+         e32TqeAuGuXO9Fe3FQykjI/voYBzL92r4JA/kMKtYpybLcv7k4vuSNEviGU+sMD4pbBq
+         c7xUoqiyA32fa3EmyoGUMo0LopkYVZa9tfp1d4YE4EbR1aS5xEQR3SSzBFbhieTZr8Tg
+         HeSg==
+X-Gm-Message-State: ANhLgQ37PF9C4Joyyiaq/MF3KfZz+tnwT9zEV+wmNPmqaoFK9R1XDg8G
+        HgTmv3rp7zojzcx4d8lmhRU=
+X-Google-Smtp-Source: ADFU+vssI3snvYLDt64fQ12Iv00nSeq9e551GRAKRZ0Pjqb0f/yUw5mTVLEhaeiJiniGO6MErnpaow==
+X-Received: by 2002:a05:600c:2f01:: with SMTP id r1mr2038917wmn.31.1583844957697;
+        Tue, 10 Mar 2020 05:55:57 -0700 (PDT)
 Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id t81sm4018594wmb.15.2020.03.10.05.55.54
+        by smtp.gmail.com with ESMTPSA id t81sm4018594wmb.15.2020.03.10.05.55.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 05:55:55 -0700 (PDT)
+        Tue, 10 Mar 2020 05:55:57 -0700 (PDT)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,9 +50,9 @@ Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, eha@deif.com, angelo@sysam.it,
         andrew.smirnov@gmail.com, gustavo@embeddedor.com, weic@nvidia.com,
         mhosny@nvidia.com, michael@walle.cc, peng.ma@nxp.com
-Subject: [PATCH v3 4/7] spi: spi-fsl-dspi: Fix bits-per-word acceleration in DMA mode
-Date:   Tue, 10 Mar 2020 14:55:39 +0200
-Message-Id: <20200310125542.5939-5-olteanv@gmail.com>
+Subject: [PATCH v3 5/7] spi: spi-fsl-dspi: Add support for LS1028A
+Date:   Tue, 10 Mar 2020 14:55:40 +0200
+Message-Id: <20200310125542.5939-6-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200310125542.5939-1-olteanv@gmail.com>
 References: <20200310125542.5939-1-olteanv@gmail.com>
@@ -63,252 +63,66 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-In DMA mode, dspi_setup_accel does not get called, which results in the
-dspi->oper_word_size variable (which is used by dspi_dma_xfer) to not be
-initialized properly.
+This is similar to the DSPI instantiation on LS1028A, except that:
+ - The A-011218 erratum has been fixed, so DMA works
+ - The endianness is different, which has implications on XSPI mode
 
-Because oper_word_size is zero, a few calculations end up being
-incorrect, and the DMA transfer eventually times out instead of sending
-anything on the wire.
+Some benchmarking with the following command:
 
-Set up native transfers (or 8-on-16 acceleration) using dspi_setup_accel
-for DMA mode too.
+spidev_test --device /dev/spidev2.0 --bpw 8 --size 256 --cpha --iter 10000000 --speed 20000000
 
-Also take the opportunity and simplify the DMA buffer handling a little
-bit.
+shows that in DMA mode, it can achieve around 2400 kbps, and in XSPI
+mode, the same command goes up to 4700 kbps. This is somewhat to be
+expected, since the DMA buffer size is extremely small at 8 bytes, the
+winner becomes whomever can prepare the buffers for transmission
+quicker, and DMA mode has higher overhead there. So XSPI FIFO mode has
+been chosen as the operating mode for this chip.
 
-Fixes: 6c1c26ecd9a3 ("spi: spi-fsl-dspi: Accelerate transfers using larger word size if possible")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
 Changes in v3:
-Pretty much re-did the patch. Before, dspi_setup_accel was called just
-once at the beginning of dspi_dma_xfer. Now it is called in the while
-loop. Everything else is just refactoring that follows along.
+Removed the dma_bufsize variable (obsoleted by 4/7).
 
 Changes in v2:
-None.
+Switch to DSPI_XSPI_MODE.
 
- drivers/spi/spi-fsl-dspi.c | 7 +++++--
- drivers/spi/spi-fsl-dspi.c | 83 +++++++++++++++++++-------------------
- 1 file changed, 42 insertions(+), 41 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index c59b68592283..8f5d18dc78d5 100644
+index 8f5d18dc78d5..fd1f04b996f7 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -119,7 +119,6 @@ struct fsl_dspi_devtype_data {
- 	enum dspi_trans_mode	trans_mode;
- 	u8			max_clock_factor;
- 	int			fifo_size;
--	int			dma_bufsize;
- };
- 
+@@ -124,6 +124,7 @@ struct fsl_dspi_devtype_data {
  enum {
-@@ -138,7 +137,6 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
- 	[VF610] = {
- 		.trans_mode		= DSPI_DMA_MODE,
- 		.max_clock_factor	= 2,
--		.dma_bufsize		= 4096,
- 		.fifo_size		= 4,
- 	},
- 	[LS1021A] = {
-@@ -167,19 +165,16 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
- 	},
- 	[LS2080A] = {
- 		.trans_mode		= DSPI_DMA_MODE,
--		.dma_bufsize		= 8,
+ 	LS1021A,
+ 	LS1012A,
++	LS1028A,
+ 	LS1043A,
+ 	LS1046A,
+ 	LS2080A,
+@@ -151,6 +152,11 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
  		.max_clock_factor	= 8,
- 		.fifo_size		= 4,
+ 		.fifo_size		= 16,
  	},
- 	[LS2085A] = {
- 		.trans_mode		= DSPI_DMA_MODE,
--		.dma_bufsize		= 8,
- 		.max_clock_factor	= 8,
- 		.fifo_size		= 4,
- 	},
- 	[LX2160A] = {
- 		.trans_mode		= DSPI_DMA_MODE,
--		.dma_bufsize		= 8,
- 		.max_clock_factor	= 8,
- 		.fifo_size		= 4,
- 	},
-@@ -191,9 +186,6 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
- };
- 
- struct fsl_dspi_dma {
--	/* Length of transfer in words of dspi->fifo_size */
--	u32					curr_xfer_len;
--
- 	u32					*tx_dma_buf;
- 	struct dma_chan				*chan_tx;
- 	dma_addr_t				tx_dma_phys;
-@@ -352,7 +344,7 @@ static void dspi_rx_dma_callback(void *arg)
- 	int i;
- 
- 	if (dspi->rx) {
--		for (i = 0; i < dma->curr_xfer_len; i++)
-+		for (i = 0; i < dspi->words_in_flight; i++)
- 			dspi_push_rx(dspi, dspi->dma->rx_dma_buf[i]);
- 	}
- 
-@@ -366,12 +358,12 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
- 	int time_left;
- 	int i;
- 
--	for (i = 0; i < dma->curr_xfer_len; i++)
-+	for (i = 0; i < dspi->words_in_flight; i++)
- 		dspi->dma->tx_dma_buf[i] = dspi_pop_tx_pushr(dspi);
- 
- 	dma->tx_desc = dmaengine_prep_slave_single(dma->chan_tx,
- 					dma->tx_dma_phys,
--					dma->curr_xfer_len *
-+					dspi->words_in_flight *
- 					DMA_SLAVE_BUSWIDTH_4_BYTES,
- 					DMA_MEM_TO_DEV,
- 					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-@@ -389,7 +381,7 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
- 
- 	dma->rx_desc = dmaengine_prep_slave_single(dma->chan_rx,
- 					dma->rx_dma_phys,
--					dma->curr_xfer_len *
-+					dspi->words_in_flight *
- 					DMA_SLAVE_BUSWIDTH_4_BYTES,
- 					DMA_DEV_TO_MEM,
- 					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-@@ -437,46 +429,56 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
- 	return 0;
- }
- 
-+static void dspi_setup_accel(struct fsl_dspi *dspi);
-+
- static int dspi_dma_xfer(struct fsl_dspi *dspi)
- {
- 	struct spi_message *message = dspi->cur_msg;
- 	struct device *dev = &dspi->pdev->dev;
--	struct fsl_dspi_dma *dma = dspi->dma;
--	int curr_remaining_bytes;
--	int bytes_per_buffer;
-+	int bytes_in_flight = dspi->len;
-+	int chunk_size;
- 	int ret = 0;
- 
--	curr_remaining_bytes = dspi->len;
--	bytes_per_buffer = dspi->devtype_data->dma_bufsize /
--			   dspi->devtype_data->fifo_size;
--	while (curr_remaining_bytes) {
-+	/*
-+	 * dspi->len gets decremented by dspi_pop_tx_pushr in
-+	 * dspi_next_xfer_dma_submit
-+	 */
-+	while (dspi->len) {
-+		/* Figure out operational bits-per-word for this chunk */
-+		dspi_setup_accel(dspi);
-+
-+		/*
-+		 * If the 16-bit TXDATA of the PUSHR is underutilized, then
-+		 * each DMA buffer will be able to hold only up to fifo_size
-+		 * useful bytes.
-+		 */
-+		if (dspi->oper_word_size == 1)
-+			chunk_size = dspi->devtype_data->fifo_size;
-+		else
-+			chunk_size = dspi->devtype_data->fifo_size * 2;
-+
- 		/* Check if current transfer fits the DMA buffer */
--		dma->curr_xfer_len = curr_remaining_bytes /
--				     dspi->oper_word_size;
--		if (dma->curr_xfer_len > bytes_per_buffer)
--			dma->curr_xfer_len = bytes_per_buffer;
-+		bytes_in_flight = dspi->len;
-+		if (bytes_in_flight > chunk_size)
-+			bytes_in_flight = chunk_size;
-+
-+		dspi->words_in_flight = bytes_in_flight / dspi->oper_word_size;
- 
- 		ret = dspi_next_xfer_dma_submit(dspi);
- 		if (ret) {
- 			dev_err(dev, "DMA transfer failed\n");
--			goto exit;
--
--		} else {
--			const int len = dma->curr_xfer_len *
--					dspi->oper_word_size;
--			curr_remaining_bytes -= len;
--			message->actual_length += len;
--			if (curr_remaining_bytes < 0)
--				curr_remaining_bytes = 0;
-+			break;
- 		}
-+
-+		message->actual_length += bytes_in_flight;
- 	}
- 
--exit:
- 	return ret;
- }
- 
- static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- {
-+	int dma_bufsize = dspi->devtype_data->fifo_size * 2;
- 	struct device *dev = &dspi->pdev->dev;
- 	struct dma_slave_config cfg;
- 	struct fsl_dspi_dma *dma;
-@@ -500,14 +502,14 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 		goto err_tx_channel;
- 	}
- 
--	dma->tx_dma_buf = dma_alloc_coherent(dev, dspi->devtype_data->dma_bufsize,
-+	dma->tx_dma_buf = dma_alloc_coherent(dev, dma_bufsize,
- 					     &dma->tx_dma_phys, GFP_KERNEL);
- 	if (!dma->tx_dma_buf) {
- 		ret = -ENOMEM;
- 		goto err_tx_dma_buf;
- 	}
- 
--	dma->rx_dma_buf = dma_alloc_coherent(dev, dspi->devtype_data->dma_bufsize,
-+	dma->rx_dma_buf = dma_alloc_coherent(dev, dma_bufsize,
- 					     &dma->rx_dma_phys, GFP_KERNEL);
- 	if (!dma->rx_dma_buf) {
- 		ret = -ENOMEM;
-@@ -544,10 +546,10 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 	return 0;
- 
- err_slave_config:
--	dma_free_coherent(dev, dspi->devtype_data->dma_bufsize,
-+	dma_free_coherent(dev, dma_bufsize,
- 			  dma->rx_dma_buf, dma->rx_dma_phys);
- err_rx_dma_buf:
--	dma_free_coherent(dev, dspi->devtype_data->dma_bufsize,
-+	dma_free_coherent(dev, dma_bufsize,
- 			  dma->tx_dma_buf, dma->tx_dma_phys);
- err_tx_dma_buf:
- 	dma_release_channel(dma->chan_tx);
-@@ -562,6 +564,7 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 
- static void dspi_release_dma(struct fsl_dspi *dspi)
- {
-+	int dma_bufsize = dspi->devtype_data->fifo_size * 2;
- 	struct fsl_dspi_dma *dma = dspi->dma;
- 	struct device *dev = &dspi->pdev->dev;
- 
-@@ -570,15 +573,13 @@ static void dspi_release_dma(struct fsl_dspi *dspi)
- 
- 	if (dma->chan_tx) {
- 		dma_unmap_single(dev, dma->tx_dma_phys,
--				 dspi->devtype_data->dma_bufsize,
--				 DMA_TO_DEVICE);
-+				 dma_bufsize, DMA_TO_DEVICE);
- 		dma_release_channel(dma->chan_tx);
- 	}
- 
- 	if (dma->chan_rx) {
- 		dma_unmap_single(dev, dma->rx_dma_phys,
--				 dspi->devtype_data->dma_bufsize,
--				 DMA_FROM_DEVICE);
-+				 dma_bufsize, DMA_FROM_DEVICE);
- 		dma_release_channel(dma->chan_rx);
- 	}
- }
++	[LS1028A] = {
++		.trans_mode		= DSPI_XSPI_MODE,
++		.max_clock_factor	= 8,
++		.fifo_size		= 4,
++	},
+ 	[LS1043A] = {
+ 		/* Has A-011218 DMA erratum */
+ 		.trans_mode		= DSPI_XSPI_MODE,
+@@ -1112,6 +1118,9 @@ static const struct of_device_id fsl_dspi_dt_ids[] = {
+ 	}, {
+ 		.compatible = "fsl,ls1012a-dspi",
+ 		.data = &devtype_data[LS1012A],
++	}, {
++		.compatible = "fsl,ls1028a-dspi",
++		.data = &devtype_data[LS1028A],
+ 	}, {
+ 		.compatible = "fsl,ls1043a-dspi",
+ 		.data = &devtype_data[LS1043A],
 -- 
 2.17.1
 
