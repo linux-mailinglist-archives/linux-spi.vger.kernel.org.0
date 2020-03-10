@@ -2,140 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C889217F11D
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 08:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3A117F12E
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 08:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726205AbgCJHjl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Mar 2020 03:39:41 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51767 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgCJHjk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 03:39:40 -0400
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1jBZU3-0001OK-GJ; Tue, 10 Mar 2020 08:39:23 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1jBZU0-00089j-OU; Tue, 10 Mar 2020 08:39:20 +0100
-Date:   Tue, 10 Mar 2020 08:39:20 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     vkoul@kernel.org, shawnguo@kernel.org,
-        u.kleine-koenig@pengutronix.de, broonie@kernel.org,
-        robh+dt@kernel.org, festevam@gmail.com, dan.j.williams@intel.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, will.deacon@arm.com,
-        l.stach@pengutronix.de, martin.fuzzey@flowbird.group,
-        kernel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [RESEND v6  06/13] spi: imx: fix ERR009165
-Message-ID: <20200310073920.GR3335@pengutronix.de>
-References: <1583839922-22699-1-git-send-email-yibin.gong@nxp.com>
- <1583839922-22699-7-git-send-email-yibin.gong@nxp.com>
+        id S1726504AbgCJHkb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Mar 2020 03:40:31 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:53765 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbgCJHkb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 03:40:31 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id DE44123EDA;
+        Tue, 10 Mar 2020 08:40:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1583826028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JRZcHvgvLH/G0fKRtKlNaPs+QGkfcGvNQB9hzhsnhBg=;
+        b=c51c6shN/c0FIr4+mKsyzcFl89c9rYlfnOpudXT37KFluN9MilPkLrxaap/grE1XAkqrvu
+        rVuR8SXPMgzDHhUEdxOqETq6rTS73RoDT696p/KTcq86dgy397nD/skC9Y3fR3ZOxikH3s
+        aYoXZZRZRQPKMZ6OmI0/F8pFSN5lOtg=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1583839922-22699-7-git-send-email-yibin.gong@nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:28:52 up 19 days, 14:59, 43 users,  load average: 0.01, 0.14,
- 0.20
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 10 Mar 2020 08:40:28 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH] spi: spi-fsl-dspi: fix DMA mapping
+In-Reply-To: <20200310073313.21277-1-michael@walle.cc>
+References: <20200310073313.21277-1-michael@walle.cc>
+Message-ID: <4beb5200a76f2d817be7276444543de4@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: /
+X-Spam-Status: No, score=-0.10
+X-Rspamd-Server: web
+X-Spam-Score: -0.10
+X-Rspamd-Queue-Id: DE44123EDA
+X-Spamd-Result: default: False [-0.10 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_SEVEN(0.00)[8];
+         NEURAL_HAM(-0.00)[-0.593];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         MID_RHS_MATCH_FROM(0.00)[]
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 07:31:55PM +0800, Robin Gong wrote:
-> Change to XCH  mode even in dma mode, please refer to the below
-> errata:
-> https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf
+Am 2020-03-10 08:33, schrieb Michael Walle:
+> Use the correct device to request the DMA mapping. Otherwise the IOMMU
+> doesn't get the mapping and it will generate a page fault.
 > 
-> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> ---
->  drivers/spi/spi-imx.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
+> The error messages look like:
+> [    3.008452] arm-smmu 5000000.iommu: Unhandled context fault:
+> fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
+> [    3.020123] arm-smmu 5000000.iommu: Unhandled context fault:
+> fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
 > 
-> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-> index f4f28a4..842a86e 100644
-> --- a/drivers/spi/spi-imx.c
-> +++ b/drivers/spi/spi-imx.c
-> @@ -585,8 +585,9 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
->  	ctrl |= mx51_ecspi_clkdiv(spi_imx, t->speed_hz, &clk);
->  	spi_imx->spi_bus_clk = clk;
->  
-> +	/* ERR009165: work in XHC mode as PIO */
->  	if (spi_imx->usedma)
-> -		ctrl |= MX51_ECSPI_CTRL_SMC;
-> +		ctrl &= ~MX51_ECSPI_CTRL_SMC;
+> This was tested on a custom board with a LS1028A SoC.
 
-'ctrl' was read from the hardware. In the dma case it was set
-explicitly, but it was never cleared for a PIO transfer. This looked
-wrong before this patch. Now with this patch it looks even more wrong:
-We clear a bit that has never been set and we only do this for DMA, when
-for the PIO case it definitly must be cleared. Drop the if clause.
+Oh fu.. please disregard this patch. DMA mapping still isn't working.
+Somehow I missed that the transfer mode was turned back to its default
+XSPI mode.
 
->  
->  	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
->  
-> @@ -612,12 +613,14 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
->  
->  static void mx51_setup_wml(struct spi_imx_data *spi_imx)
->  {
-> +	u32 tx_wml = 0;
-> +
->  	/*
->  	 * Configure the DMA register: setup the watermark
->  	 * and enable DMA request.
->  	 */
->  	writel(MX51_ECSPI_DMA_RX_WML(spi_imx->wml - 1) |
-> -		MX51_ECSPI_DMA_TX_WML(spi_imx->wml) |
-> +		MX51_ECSPI_DMA_TX_WML(tx_wml) |
+-michael
 
-tx_wml is never assigned any other value than 0. Drop the variable.
-
->  		MX51_ECSPI_DMA_RXT_WML(spi_imx->wml) |
->  		MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN |
->  		MX51_ECSPI_DMA_RXTDEN, spi_imx->base + MX51_ECSPI_DMA);
-> @@ -1171,7 +1174,11 @@ static int spi_imx_dma_configure(struct spi_master *master)
->  	tx.direction = DMA_MEM_TO_DEV;
->  	tx.dst_addr = spi_imx->base_phys + MXC_CSPITXDATA;
->  	tx.dst_addr_width = buswidth;
-> -	tx.dst_maxburst = spi_imx->wml;
-> +	/*
-> +	 * For ERR009165 with tx_wml = 0 could enlarge burst size to fifo size
-> +	 * to speed up fifo filling as possible.
-> +	 */
-> +	tx.dst_maxburst = spi_imx->devtype_data->fifo_size;
->  	ret = dmaengine_slave_config(master->dma_tx, &tx);
->  	if (ret) {
->  		dev_err(spi_imx->dev, "TX dma configuration failed with %d\n", ret);
-> @@ -1265,10 +1272,6 @@ static int spi_imx_sdma_init(struct device *dev, struct spi_imx_data *spi_imx,
->  {
->  	int ret;
->  
-> -	/* use pio mode for i.mx6dl chip TKT238285 */
-> -	if (of_machine_is_compatible("fsl,imx6dl"))
-> -		return 0;
-
-So with this patch it becomes possible to do DMA on i.MX6dl, but it is
-mentioned nowhere.
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
