@@ -2,152 +2,147 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2DF17F2CE
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 10:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A5317F36E
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 10:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726205AbgCJJLl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Mar 2020 05:11:41 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:14303 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726195AbgCJJLl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 05:11:41 -0400
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Tudor.Ambarus@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Tudor.Ambarus@microchip.com";
-  x-sender="Tudor.Ambarus@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Tudor.Ambarus@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Tudor.Ambarus@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: XxKKmE25ESPkZgu2VAU3GX4jV3voFctP1o1zMwyiO2Eh97tpE/abWSzXUC4e7sQL/WD0QUlXVa
- qj8un4w3W+wv2srzCwv/xxOQJtGI+/bVSAr/KH//XRZiTX98gwJawIUg7XvU2GDkF+qxL4Q78r
- zx5RvMCgwYfS+AEsV2LscKHhsNRlFPQ4I4RJtyu8SYd4FRT2kpx7TnMgKfuVcNYL7IRhjD6KTy
- jBGWKI2QhChPTLZ7MqcpG9spihiouzsYX0gdrXsNPzQuOoJ4xpa2qHGGkaF0Mngk7vcQ4bdb1P
- 9t4=
-X-IronPort-AV: E=Sophos;i="5.70,535,1574146800"; 
-   d="scan'208";a="68436198"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2020 02:11:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 10 Mar 2020 02:11:30 -0700
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Tue, 10 Mar 2020 02:11:30 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UN2WCLbD5YExkEmWsQfOANoGURMIkv6SliqmYjhEdbqUZPMLLYsqvjLUvrjbGgpBwuCqCv0cVWRyM8JD9Jz2LNmOMHIAgW4Mu0Bg09oIZ4OkAecOOMHu5OKvGp0bKTLgvA9BYy+rHR+vS9HW5s0yc0wtG3euoRjJx41WRDRbnG21htH1BMFJyeogUDkrnXeGeEyRaeW51zypXSAZdE0aDhyeYCe2Jxqhc4MahX8xXqlGtXS7EhiiTh9FfXv+CxGZHy0qbN9+a6gMwrPUVX/GhkwYgZYk7QWWY4b1G1+SPrYbmOezQpFUiZXf+v2MBl3G+CGohp38M74bfCzxtfzeHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6TjrazLyAOHtSJfTv/H3RPDYCZWCjGyADmeo32JDQzw=;
- b=UxybyO63Z7lJL8QMRtR5FR6s/vhKkppZIE0jZLkWiXjVgA/t8VHY18N8dVkKZGBAO7eNVYmbgXQtPs3UAorw3JlaHHU4sllJh4qFIot7c99SJSfbf/h4OuRgOIRg49c4IGMjT6jttCMtx+aNMr3R2Ab8He+vhm/Z4fk74x6kMLYrqhPhHUnQ5RPCYFXYQ1+3MVHQ4Ovo3khjPssJ/2D3kyxJal0JNdMPRnE3D8WvpzLWFiOrk6IFP1/a4p1+MYEemfPxT54ooH1pgZoiuVNQ3adtVSE0hKcblfo5WS7k+a0jmRNi0sJiooty0K6QOtUouLOS3oe3finklUzEtAbtKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6TjrazLyAOHtSJfTv/H3RPDYCZWCjGyADmeo32JDQzw=;
- b=CVR66d1IhIoc71rMrRs2r//SR9Y5B+numHSlX6o2A46o3qoVdE4eTeWHpxL4N1IOTtZkBdxie3T3ZLYXH08jZXxmrMkJuM1dCW7RzLfwhOoOm6ja6V59UsIiQxddPyj4KFeKYg+CdB15prBlf9ZbNoKb7ZVdi6RX17k9AEaErzU=
-Received: from MN2PR11MB4448.namprd11.prod.outlook.com (2603:10b6:208:193::29)
- by MN2PR11MB4632.namprd11.prod.outlook.com (2603:10b6:208:24f::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.16; Tue, 10 Mar
- 2020 09:11:30 +0000
-Received: from MN2PR11MB4448.namprd11.prod.outlook.com
- ([fe80::3c8f:7a55:cbd:adfb]) by MN2PR11MB4448.namprd11.prod.outlook.com
- ([fe80::3c8f:7a55:cbd:adfb%5]) with mapi id 15.20.2793.013; Tue, 10 Mar 2020
- 09:11:29 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <linux-mtd@lists.infradead.org>
-CC:     <broonie@kernel.org>, <devicetree@vger.kernel.org>,
-        <vigneshr@ti.com>, <richard@nod.at>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <robh+dt@kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <miquel.raynal@bootlin.com>, <matthias.bgg@gmail.com>,
-        <gch981213@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 4/4] mtd: spi-nor: remove mtk-quadspi driver
-Thread-Topic: [PATCH v3 4/4] mtd: spi-nor: remove mtk-quadspi driver
-Thread-Index: AQHV9q9NZuWbRCDn2EGRyTtBWaWZX6hBimQA
-Date:   Tue, 10 Mar 2020 09:11:29 +0000
-Message-ID: <4427171.IzkiAjLLdB@localhost.localdomain>
-References: <20200306085052.28258-1-gch981213@gmail.com>
- <20200309121020.GD4101@sirena.org.uk>
- <2471214.x7VzW1FXlQ@localhost.localdomain>
-In-Reply-To: <2471214.x7VzW1FXlQ@localhost.localdomain>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e5706ea5-d72f-4dc1-19fe-08d7c4d30522
-x-ms-traffictypediagnostic: MN2PR11MB4632:
-x-microsoft-antispam-prvs: <MN2PR11MB463239E204BD9771194DF6B2F0FF0@MN2PR11MB4632.namprd11.prod.outlook.com>
-x-bypassexternaltag: True
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-forefront-prvs: 033857D0BD
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(366004)(376002)(136003)(39860400002)(189003)(199004)(9686003)(6512007)(6916009)(71200400001)(86362001)(7416002)(2906002)(4326008)(66946007)(186003)(478600001)(81156014)(81166006)(8936002)(76116006)(91956017)(26005)(316002)(5660300002)(4744005)(6486002)(6506007)(966005)(53546011)(8676002)(66556008)(64756008)(66446008)(66476007)(54906003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR11MB4632;H:MN2PR11MB4448.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4xG+vTlFHhktw6qC8bdH5mrEPmpYBIbZPPeLbzZz3DbCFlUznMHAM1yBk64ejQraBAbuX5YSUfd01Y0GqjdsG7XAH+DCTC09fdMifF1dLlKadh/hHDXU9jjKvzOthFthO1Enh1J1o1Tju73GC2/IMjLykj6+0Ebd2qNFftQGCsuZqZAMxIr9HYUK6VdHUa785Lynu9iTqLZhoOK0FGtk+N7T2Cv1pGYZxDGA+k/1MsoIPkY8uciHBfIU3SXVgo7an/ZTbqI+kE6hWH9vttXy8UMPOxvzh8KAVUCPjQVrbgqhTfVwOd1ZPxWUNoPrA6FaLK+e0NJNDMJhlfRXYfK2VoZzzSK1jEST2EA9Et0PVqAQjOr5oODyLJScO+8+jc6HZf+kaxp5MHcI0Y7U6AObQxfKqTKNpS0VSDAJZZ2sas8S/E6M9OQ05nRtMdLMuCBP
-x-ms-exchange-antispam-messagedata: l+qVsaW4u0YTCQagYBQItNPHTTihDBQIFQx6zT7O5eYehN6SH+EirV4TaUysrF2joC5GfxM61VutEIwkZ4EzXUuQot4Ow7VgrD8ykqm3UE39DPlmn01MRuVq64mo6K39mfu2fOXL4Wi9/xPmYXctIQ==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <854A8A8A2CF8664186B41C8FB21DB83F@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726202AbgCJJZw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Mar 2020 05:25:52 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51703 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbgCJJZv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 05:25:51 -0400
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jBb8q-00066g-Ok; Tue, 10 Mar 2020 10:25:36 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jBb8n-0006XS-8W; Tue, 10 Mar 2020 10:25:33 +0100
+Date:   Tue, 10 Mar 2020 10:25:33 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     "vkoul@kernel.org" <vkoul@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "martin.fuzzey@flowbird.group" <martin.fuzzey@flowbird.group>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [RESEND v6  07/13] spi: imx: remove ERR009165 workaround on
+ i.mx6ul
+Message-ID: <20200310092533.GV3335@pengutronix.de>
+References: <1583839922-22699-1-git-send-email-yibin.gong@nxp.com>
+ <1583839922-22699-8-git-send-email-yibin.gong@nxp.com>
+ <20200310080240.GS3335@pengutronix.de>
+ <VE1PR04MB66384342F94C7B789C980F7A89FF0@VE1PR04MB6638.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5706ea5-d72f-4dc1-19fe-08d7c4d30522
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2020 09:11:29.8729
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FF/D4fLbZT5e+YmbkeAsq/3yheQD0NAl9i0Rs2HNZko/p9sTHCCa5vOaY/XbmNWsaDNPIpi5HuY0pbOAgWLLi38Wuw485YvBYuoo0y3YpQY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4632
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <VE1PR04MB66384342F94C7B789C980F7A89FF0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:08:54 up 19 days, 16:39, 58 users,  load average: 0.05, 0.18,
+ 0.20
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tuesday, March 10, 2020 9:41:26 AM EET Tudor.Ambarus@microchip.com wrote=
-:
-> Hi, Mark,
->=20
-> On Monday, March 9, 2020 2:10:20 PM EET Mark Brown wrote:
-> > > This driver is superseded by the new spi-mtk-nor driver.
-> > >=20
-> > > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> >=20
-> > Is this move OK from a MTD point of view - should I apply this when the
-> > rest goes in?  The patch was in prior versions too and is obviously
-> > straightforward.
->=20
-> If you find the rest of the patches ok, this can go through the spi tree,
-> feel free to add my
-> Acked-by: Tudor Ambarus <tudor.ambarus@microchip.com>
->=20
-> There will be a conflict with the following patch https://
-> patchwork.ozlabs.org/patch/1247791/, but nothing that we can't handle.
+On Tue, Mar 10, 2020 at 08:43:10AM +0000, Robin Gong wrote:
+> On 2020/03/10 Sascha Hauer <s.hauer@pengutronix.de> wrote:
+> > On Tue, Mar 10, 2020 at 07:31:56PM +0800, Robin Gong wrote:
+> > > ERR009165 fixed on i.mx6ul/6ull/6sll. All other i.mx6/7 and i.mx8m/8mm
+> > > still need this errata. Please refer to nxp official errata document
+> > > from
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.nx
+> > p.com%2F&amp;data=02%7C01%7Cyibin.gong%40nxp.com%7Cf73bfc11a68c4
+> > 2f5f6d308d7c4c96efa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7C
+> > 637194241755109112&amp;sdata=xzIUP8qZkrlDXX0yjTcUNZB6zDrevTdHFg1o4
+> > PZZd8E%3D&amp;reserved=0 .
+> > >
+> > > For removing workaround on those chips. Add new i.mx6ul type.
+> > >
+> > > Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+> > > Acked-by: Mark Brown <broonie@kernel.org>
+> > > ---
+> > >  drivers/spi/spi-imx.c | 50
+> > > +++++++++++++++++++++++++++++++++++++++++++++-----
+> > >  1 file changed, 45 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
+> > > 842a86e..f7ee2ec 100644
+> > > --- a/drivers/spi/spi-imx.c
+> > > +++ b/drivers/spi/spi-imx.c
+> > > @@ -57,6 +57,7 @@ enum spi_imx_devtype {
+> > >  	IMX35_CSPI,	/* CSPI on all i.mx except above */
+> > >  	IMX51_ECSPI,	/* ECSPI on i.mx51 */
+> > >  	IMX53_ECSPI,	/* ECSPI on i.mx53 and later */
+> > > +	IMX6UL_ECSPI,	/* ERR009165 fix from i.mx6ul */
+> > >  };
+> > >
+> > >  struct spi_imx_data;
+> > > @@ -75,6 +76,11 @@ struct spi_imx_devtype_data {
+> > >  	bool has_slavemode;
+> > >  	unsigned int fifo_size;
+> > >  	bool dynamic_burst;
+> > > +	/*
+> > > +	 * ERR009165 fixed or not:
+> > > +	 *
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.nx
+> > p.com%2Fdocs%2Fen%2Ferrata%2FIMX6DQCE.pdf&amp;data=02%7C01%7Cyi
+> > bin.gong%40nxp.com%7Cf73bfc11a68c42f5f6d308d7c4c96efa%7C686ea1d3bc
+> > 2b4c6fa92cd99c5c301635%7C0%7C1%7C637194241755109112&amp;sdata=m
+> > uw4HL5nMDjREJwVd885Wrxka0moMaaZ%2BhJgsAgY3eo%3D&amp;reserved=
+> > 0
+> > > +	 */
+> > > +	bool tx_glitch_fixed;
+> > >  	enum spi_imx_devtype devtype;
+> > >  };
+> > >
+> > > @@ -128,7 +134,8 @@ static inline int is_imx35_cspi(struct
+> > > spi_imx_data *d)
+> > >
+> > >  static inline int is_imx51_ecspi(struct spi_imx_data *d)  {
+> > > -	return d->devtype_data->devtype == IMX51_ECSPI;
+> > > +	return d->devtype_data->devtype == IMX51_ECSPI ||
+> > > +	       d->devtype_data->devtype == IMX6UL_ECSPI;
+> > >  }
+> > 
+> > Erm, no. A i.MX51 ECSPI is a i.MX51 ECSPI and not a i.MX6UL ECSPI. If you want
+> > to handle them equally somewhere then explicitly test for i.MX6ul *and*
+> > i.MX51 there.
+> But all i.mx6 chips including i.MX53 ECSPI are almost same as i.MX51 ECSPI, and ERR00915 is fixed from i.mx6ul....
 
-You can also create an immutable tag that I can merge in my spi-nor/next=20
-branch, so that Linus doesn't have to deal with the conflict.
+You introduce .devtype = IMX6UL_ECSPI in this series, so apparently it
+is *not* the same as IMX51_ECSPI, then please also don't introduce a
+function which claims they are the same.
 
-ta
+Sascha
 
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
