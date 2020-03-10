@@ -2,93 +2,183 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 323A517F17B
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 09:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08B217F1A9
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 09:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgCJIKi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Mar 2020 04:10:38 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:46571 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726295AbgCJIKi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 04:10:38 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id D55B52250D;
-        Tue, 10 Mar 2020 09:10:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1583827836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h5zjFnWSZZGx36PVprkBxRg0bKg0yM9IvC4/63Yogcs=;
-        b=Y4AI3mw/kxeIm7NYuuLPFJP5WA+KIpr8S8hPZfBvwYps8IZwbqetSECzCQf27vCUB23K9r
-        hTO1y+nZMwYcsT6gBoLoqCCk/Gpc57S/zAbJohnYzKrRLo0QyoYbxUGis/bn15i6PQy/7j
-        qg4BexoCiRSRsMB+p8GoXkWFywQbK30=
+        id S1726395AbgCJITy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Mar 2020 04:19:54 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:52473 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726220AbgCJITx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 04:19:53 -0400
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jBa6p-00069G-Gm; Tue, 10 Mar 2020 09:19:27 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jBa6n-0002TP-9h; Tue, 10 Mar 2020 09:19:25 +0100
+Date:   Tue, 10 Mar 2020 09:19:25 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     vkoul@kernel.org, shawnguo@kernel.org,
+        u.kleine-koenig@pengutronix.de, broonie@kernel.org,
+        robh+dt@kernel.org, festevam@gmail.com, dan.j.williams@intel.com,
+        mark.rutland@arm.com, catalin.marinas@arm.com, will.deacon@arm.com,
+        l.stach@pengutronix.de, martin.fuzzey@flowbird.group,
+        kernel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [RESEND v6  09/13] dmaengine: imx-sdma: remove ERR009165 on
+ i.mx6ul
+Message-ID: <20200310081925.GT3335@pengutronix.de>
+References: <1583839922-22699-1-git-send-email-yibin.gong@nxp.com>
+ <1583839922-22699-10-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 10 Mar 2020 09:10:35 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH] spi: spi-fsl-dspi: fix DMA mapping
-In-Reply-To: <4beb5200a76f2d817be7276444543de4@walle.cc>
-References: <20200310073313.21277-1-michael@walle.cc>
- <4beb5200a76f2d817be7276444543de4@walle.cc>
-Message-ID: <ea6ffa30ddc2459d07935e5e61a41172@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: /
-X-Spam-Status: No, score=-0.10
-X-Rspamd-Server: web
-X-Spam-Score: -0.10
-X-Rspamd-Queue-Id: D55B52250D
-X-Spamd-Result: default: False [-0.10 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_SEVEN(0.00)[8];
-         NEURAL_HAM(-0.00)[-0.597];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         MID_RHS_MATCH_FROM(0.00)[]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1583839922-22699-10-git-send-email-yibin.gong@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:04:16 up 19 days, 15:34, 45 users,  load average: 0.11, 0.18,
+ 0.17
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2020-03-10 08:40, schrieb Michael Walle:
-> Am 2020-03-10 08:33, schrieb Michael Walle:
->> Use the correct device to request the DMA mapping. Otherwise the IOMMU
->> doesn't get the mapping and it will generate a page fault.
->> 
->> The error messages look like:
->> [    3.008452] arm-smmu 5000000.iommu: Unhandled context fault:
->> fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
->> [    3.020123] arm-smmu 5000000.iommu: Unhandled context fault:
->> fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
->> 
->> This was tested on a custom board with a LS1028A SoC.
+On Tue, Mar 10, 2020 at 07:31:58PM +0800, Robin Gong wrote:
+> ECSPI issue fixed from i.mx6ul at hardware level, no need
+> ERR009165 anymore on those chips such as i.mx8mq. Add i.mx6sx
+> from where i.mx6ul source.
 > 
-> Oh fu.. please disregard this patch. DMA mapping still isn't working.
-> Somehow I missed that the transfer mode was turned back to its default
-> XSPI mode.
+> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+> Acked-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  drivers/dma/imx-sdma.c | 51 +++++++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 50 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+> index 56288d8..5ae7237 100644
+> --- a/drivers/dma/imx-sdma.c
+> +++ b/drivers/dma/imx-sdma.c
+> @@ -419,6 +419,13 @@ struct sdma_driver_data {
+>  	int num_events;
+>  	struct sdma_script_start_addrs	*script_addrs;
+>  	bool check_ratio;
+> +	/*
+> +	 * ecspi ERR009165 fixed should be done in sdma script
+> +	 * and it has been fixed in soc from i.mx6ul.
+> +	 * please get more information from the below link:
+> +	 * https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf
+> +	 */
+> +	bool ecspi_fixed;
+>  };
+>  
+>  struct sdma_engine {
+> @@ -539,6 +546,31 @@ static struct sdma_driver_data sdma_imx6q = {
+>  	.script_addrs = &sdma_script_imx6q,
+>  };
+>  
+> +static struct sdma_script_start_addrs sdma_script_imx6sx = {
+> +	.ap_2_ap_addr = 642,
+> +	.uart_2_mcu_addr = 817,
+> +	.mcu_2_app_addr = 747,
+> +	.uartsh_2_mcu_addr = 1032,
+> +	.mcu_2_shp_addr = 960,
+> +	.app_2_mcu_addr = 683,
+> +	.shp_2_mcu_addr = 891,
+> +	.spdif_2_mcu_addr = 1100,
+> +	.mcu_2_spdif_addr = 1134,
+> +};
+> +
+> +static struct sdma_driver_data sdma_imx6sx = {
+> +	.chnenbl0 = SDMA_CHNENBL0_IMX35,
+> +	.num_events = 48,
+> +	.script_addrs = &sdma_script_imx6sx,
+> +};
+> +
+> +static struct sdma_driver_data sdma_imx6ul = {
+> +	.chnenbl0 = SDMA_CHNENBL0_IMX35,
+> +	.num_events = 48,
+> +	.script_addrs = &sdma_script_imx6sx,
+> +	.ecspi_fixed = true,
+> +};
+> +
+>  static struct sdma_script_start_addrs sdma_script_imx7d = {
+>  	.ap_2_ap_addr = 644,
+>  	.uart_2_mcu_addr = 819,
+> @@ -584,9 +616,15 @@ static const struct platform_device_id sdma_devtypes[] = {
+>  		.name = "imx6q-sdma",
+>  		.driver_data = (unsigned long)&sdma_imx6q,
+>  	}, {
+> +		.name = "imx6sx-sdma",
+> +		.driver_data = (unsigned long)&sdma_imx6sx,
+> +	}, {
 
-Damn. I need more coffee.. this patch IS working. Only the first probe
-fails due to EPROBE_DEFER.
+Now the i.MX6sx uses a new sdma_script_start_addrs entry which is the same
+as the i.MX6q one we used before with one exception: it lacks the
+per_2_per_addr = 6331 entry. This is only used for IMX_DMATYPE_ASRC and
+IMX_DMATYPE_ASRC_SP, both are entirely unused in the mainline kernel. So
+why must the i.MX6sx changed here and what has this to do with ECSPI?
 
-[    2.539706] fsl-dspi 2120000.spi: rx dma channel not available (-517)
-[    2.546200] fsl-dspi 2120000.spi: can't get dma channels
-[    3.622774] spi-nor spi1.0: w25q128fw (16384 Kbytes)
+Sascha
 
--michael
+>  		.name = "imx7d-sdma",
+>  		.driver_data = (unsigned long)&sdma_imx7d,
+>  	}, {
+> +		.name = "imx6ul-sdma",
+> +		.driver_data = (unsigned long)&sdma_imx6ul,
+> +	}, {
+>  		.name = "imx8mq-sdma",
+>  		.driver_data = (unsigned long)&sdma_imx8mq,
+>  	}, {
+> @@ -602,7 +640,9 @@ static const struct of_device_id sdma_dt_ids[] = {
+>  	{ .compatible = "fsl,imx35-sdma", .data = &sdma_imx35, },
+>  	{ .compatible = "fsl,imx31-sdma", .data = &sdma_imx31, },
+>  	{ .compatible = "fsl,imx25-sdma", .data = &sdma_imx25, },
+> +	{ .compatible = "fsl,imx6sx-sdma", .data = &sdma_imx6sx, },
+>  	{ .compatible = "fsl,imx7d-sdma", .data = &sdma_imx7d, },
+> +	{ .compatible = "fsl,imx6ul-sdma", .data = &sdma_imx6ul, },
+>  	{ .compatible = "fsl,imx8mq-sdma", .data = &sdma_imx8mq, },
+>  	{ /* sentinel */ }
+>  };
+> @@ -1169,8 +1209,17 @@ static int sdma_config_channel(struct dma_chan *chan)
+>  			if (sdmac->peripheral_type == IMX_DMATYPE_ASRC_SP ||
+>  			    sdmac->peripheral_type == IMX_DMATYPE_ASRC)
+>  				sdma_set_watermarklevel_for_p2p(sdmac);
+> -		} else
+> +		} else {
+> +			/*
+> +			 * ERR009165 fixed from i.mx6ul, no errata need,
+> +			 * set bit31 to let sdma script skip the errata.
+> +			 */
+> +			if (sdmac->peripheral_type == IMX_DMATYPE_CSPI &&
+> +			    sdmac->direction == DMA_MEM_TO_DEV &&
+> +			    sdmac->sdma->drvdata->ecspi_fixed)
+> +				__set_bit(31, &sdmac->watermark_level);
+>  			__set_bit(sdmac->event_id0, sdmac->event_mask);
+> +		}
+>  
+>  		/* Address */
+>  		sdmac->shp_addr = sdmac->per_address;
+> -- 
+> 2.7.4
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
