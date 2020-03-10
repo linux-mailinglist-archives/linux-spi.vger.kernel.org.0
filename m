@@ -2,114 +2,145 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7815717EF47
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 04:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5C817F10F
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 08:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbgCJDb5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Mar 2020 23:31:57 -0400
-Received: from mail-eopbgr80053.outbound.protection.outlook.com ([40.107.8.53]:12903
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726265AbgCJDb4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 9 Mar 2020 23:31:56 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BXGqGFY/oJb0psAMJTVwvos3HWv79F5jaCljLL9P3TsjJ3F5SyKtqf7X3Bb8AWuQ73Bl4gZc1DFeP4YXJz2HXqXH+SRgDGuRD1mD35ofYGZhbOT+ZwpsdKKQ4f3DZEapsUKqGwOcgmnQ9oNL8hF6Ac6DNBPnm6GLoB8Hzh/g5Jb6NnFQIc0c4yh6Oeow38A8c4DKqOrILajlGr43tBq4Gifhgfp8XHo7k7s1nisXD5Rm5TMIYUQtxST8e9bP2/6DQ0zsPs2uTnC3uQINWLxhRr2OW21WTu52l8532MXmoNbgpbgf6hDhoyBpR9MwacCqktQghP55OgzXt10ZlClbKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jFMiMbOLM2v65YRlJ+RXVBgXYhwuGIUpMeWPV7yKShw=;
- b=efyAGKkwQdYUVmWKqcRtOm5rz9N4pfAmzX5jH0c8GGH+mOpxKkQT3ByquWVgWkT9uI9kfJx1g+7VuytUTcSpOwI1QPeuDrvltu28tPWlz2RPxSWTNZGRMJ2f0h2eSIFYquKbUYCRmVWBu2YfzczKWcbNV3Foo7kBarSPf1kVLCJi9Oy+u81yZEZiHXZL/43kwYFvbQxlTXwsZfFxU47rCVTenGDYI/cXzl3CmETW235CPHl8zOFjOqLIkiQV9ZCCM3WzDPqc7mNR1xIAgAy4aj1Yur91vUyVP962mAGDOx1A4T5oaAtMVq4nboi9lQR1XdWjaROWSwkqCUOTeUthJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jFMiMbOLM2v65YRlJ+RXVBgXYhwuGIUpMeWPV7yKShw=;
- b=LyLsxOJmu16EBocBjuGkTMBHMid2HUxp22L6nyrLz31iQGzwMDofd9zPyafEw1idUBPrgDFKwmYcphB/l4cJ/NCkDOo7lTv57nv407aPcScmyXIdG3bsjAc2/UlQxJEubtUSAkpNFn8LD3jNOYIMRGxaUnFmeVw5aIxoObjIneE=
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=yibin.gong@nxp.com; 
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (20.179.232.15) by
- VE1PR04MB6621.eurprd04.prod.outlook.com (20.179.234.213) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2793.17; Tue, 10 Mar 2020 03:31:53 +0000
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::490:6caa:24b:4a31]) by VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::490:6caa:24b:4a31%6]) with mapi id 15.20.2793.013; Tue, 10 Mar 2020
- 03:31:53 +0000
-From:   Robin Gong <yibin.gong@nxp.com>
-To:     s.hauer@pengutronix.de, vkoul@kernel.org, shawnguo@kernel.org,
-        u.kleine-koenig@pengutronix.de, broonie@kernel.org,
-        robh+dt@kernel.org, festevam@gmail.com, dan.j.williams@intel.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, will.deacon@arm.com,
-        l.stach@pengutronix.de, martin.fuzzey@flowbird.group
-Cc:     kernel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [RESEND v6  13/13] Revert "dmaengine: imx-sdma: fix context cache"
-Date:   Tue, 10 Mar 2020 19:32:02 +0800
-Message-Id: <1583839922-22699-14-git-send-email-yibin.gong@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1583839922-22699-1-git-send-email-yibin.gong@nxp.com>
-References: <1583839922-22699-1-git-send-email-yibin.gong@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0241.apcprd06.prod.outlook.com
- (2603:1096:4:ac::25) To VE1PR04MB6638.eurprd04.prod.outlook.com
- (2603:10a6:803:119::15)
+        id S1726202AbgCJHdb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Mar 2020 03:33:31 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:53173 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbgCJHdb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 03:33:31 -0400
+Received: from mwalle01.sab.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 70E5923EDA;
+        Tue, 10 Mar 2020 08:33:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1583825609;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mGzo69y07vEikBiBYw51X7LqR4nXAnMjmqLFsIzeY0g=;
+        b=iBIzRz5537ewx9ux46LYo3F+UVQAT5T+jWgeQUuy0Z2+rqVnvLuzdJdGcrHnuJm57LNSI7
+        wv+B3Bz284fy9Fm5iJfq/n7ztHPr6dGnAFwWVgtNGWWahZ1FbKW7uq9FePGHSwf9oxpa25
+        ChDL8L9SrCV4wdUYnlf0H7omv4G++f0=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] spi: spi-fsl-dspi: fix DMA mapping
+Date:   Tue, 10 Mar 2020 08:33:13 +0100
+Message-Id: <20200310073313.21277-1-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from robin-OptiPlex-790.ap.freescale.net (119.31.174.66) by SG2PR06CA0241.apcprd06.prod.outlook.com (2603:1096:4:ac::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2793.15 via Frontend Transport; Tue, 10 Mar 2020 03:31:47 +0000
-X-Mailer: git-send-email 2.7.4
-X-Originating-IP: [119.31.174.66]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 1f8382d6-54c9-4693-f51b-08d7c4a39352
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6621:|VE1PR04MB6621:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VE1PR04MB6621CB430E614EB2024E33A589FF0@VE1PR04MB6621.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:59;
-X-Forefront-PRVS: 033857D0BD
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(346002)(366004)(376002)(396003)(199004)(189003)(4326008)(8936002)(6666004)(8676002)(81156014)(81166006)(4744005)(2906002)(5660300002)(2616005)(7416002)(36756003)(66556008)(66946007)(6506007)(52116002)(316002)(956004)(26005)(478600001)(16526019)(186003)(66476007)(86362001)(6486002)(6512007)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6621;H:VE1PR04MB6638.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-Received-SPF: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K0T+rsMusn3LlXYy1TcndzbdDeiGOtx8JsShRHKAQnUukbChGGVvafU7MfAaS4Vl8Y+K8QTossCWYHdoe10R9f2CdRTfjpe2SirdQp5l1XoPypgbbiFpS2uAQhCoY/ciuvXV8A3d4dPiN0PX5rBTm4pDaE1Th30abnOfXvI9Jzd7Iy+JSLYmPSy9pzCsXKQDF/wKKdZexWVafeEZef8M4rWoo6PaZHBMNs+Lvp4pxXr/hOu0K1HPFtGWCpo8zEsWD2vNcwu4sFheJYjQJhhrQyaOlOjuqe4gzuUwQPAEdvXNRo32Xc/oUB/odQkKuy8bt8MPBax00Ol3aGScOhkCZ7+nwMHhyWi1LfmKkLwepA5a8/KaC78Xx93oCTTXUr3KFGm8vRlYqwD8hP6oHIxQn5LrxdeKqE2JWuVXOQ6jDZ689KMUhNvCc9Ij+0djid1mCxnj7cJzv8eFjL2T27+lf60nf+hqbj/ZyiPUkw2/ZzDPLAbJt+mc6D0vfb9+RT51
-X-MS-Exchange-AntiSpam-MessageData: kIhhF7v49IKXnFLL8lgtUjsMyj7cr8oOEVztSRU2zsvMZ263E9EKENiKSqLs4ofswlLeyPLaJmDeqP6ruxKsvGAqxdBImneEQIiqBMwi2tRVeYTg4YJmyonwLgzMGW24vWd6lZqGsS559dwYMl1/qw==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f8382d6-54c9-4693-f51b-08d7c4a39352
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2020 03:31:53.1722
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A+X3vln9vz1zwgs2JQNWmWmXRBa3wksjjbt7lLLUKWRVCyCFC/Tfxm/+KKbceXF5f5ipWOQume63mmWe2PHnnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6621
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: ++++
+X-Spam-Level: ****
+X-Rspamd-Server: web
+X-Spam-Status: No, score=4.90
+X-Spam-Score: 4.90
+X-Rspamd-Queue-Id: 70E5923EDA
+X-Spamd-Result: default: False [4.90 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         R_MISSING_CHARSET(2.50)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         NEURAL_SPAM(0.00)[0.643];
+         BROKEN_CONTENT_TYPE(1.50)[];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_SEVEN(0.00)[9];
+         MID_CONTAINS_FROM(1.00)[];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:12941, ipnet:213.135.0.0/19, country:DE]
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This reverts commit d288bddd8374e0a043ac9dde64a1ae6a09411d74, since
-'context_loaded' finally removed.
+Use the correct device to request the DMA mapping. Otherwise the IOMMU
+doesn't get the mapping and it will generate a page fault.
 
-Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+The error messages look like:
+[    3.008452] arm-smmu 5000000.iommu: Unhandled context fault: fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
+[    3.020123] arm-smmu 5000000.iommu: Unhandled context fault: fsr=0x402, iova=0xf9800000, fsynr=0x3f0022, cbfrsynra=0x828, cb=8
+
+This was tested on a custom board with a LS1028A SoC.
+
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- drivers/dma/imx-sdma.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/spi/spi-fsl-dspi.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-index 042cfbf..1abe4bd 100644
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -1380,7 +1380,6 @@ static void sdma_free_chan_resources(struct dma_chan *chan)
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index cf8a141bbaf2..ad63804ef690 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -510,14 +510,16 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 		goto err_tx_channel;
+ 	}
  
- 	sdmac->event_id0 = 0;
- 	sdmac->event_id1 = 0;
--	sdmac->context_loaded = false;
+-	dma->tx_dma_buf = dma_alloc_coherent(dev, dspi->devtype_data->dma_bufsize,
++	dma->tx_dma_buf = dma_alloc_coherent(dma->chan_tx->device->dev,
++					     dspi->devtype_data->dma_bufsize,
+ 					     &dma->tx_dma_phys, GFP_KERNEL);
+ 	if (!dma->tx_dma_buf) {
+ 		ret = -ENOMEM;
+ 		goto err_tx_dma_buf;
+ 	}
  
- 	sdma_set_channel_priority(sdmac, 0);
+-	dma->rx_dma_buf = dma_alloc_coherent(dev, dspi->devtype_data->dma_bufsize,
++	dma->rx_dma_buf = dma_alloc_coherent(dma->chan_rx->device->dev,
++					     dspi->devtype_data->dma_bufsize,
+ 					     &dma->rx_dma_phys, GFP_KERNEL);
+ 	if (!dma->rx_dma_buf) {
+ 		ret = -ENOMEM;
+@@ -554,10 +556,12 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 	return 0;
  
+ err_slave_config:
+-	dma_free_coherent(dev, dspi->devtype_data->dma_bufsize,
++	dma_free_coherent(dma->chan_rx->device->dev,
++			  dspi->devtype_data->dma_bufsize,
+ 			  dma->rx_dma_buf, dma->rx_dma_phys);
+ err_rx_dma_buf:
+-	dma_free_coherent(dev, dspi->devtype_data->dma_bufsize,
++	dma_free_coherent(dma->chan_tx->device->dev,
++			  dspi->devtype_data->dma_bufsize,
+ 			  dma->tx_dma_buf, dma->tx_dma_phys);
+ err_tx_dma_buf:
+ 	dma_release_channel(dma->chan_tx);
+@@ -573,20 +577,19 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ static void dspi_release_dma(struct fsl_dspi *dspi)
+ {
+ 	struct fsl_dspi_dma *dma = dspi->dma;
+-	struct device *dev = &dspi->pdev->dev;
+ 
+ 	if (!dma)
+ 		return;
+ 
+ 	if (dma->chan_tx) {
+-		dma_unmap_single(dev, dma->tx_dma_phys,
++		dma_unmap_single(dma->chan_tx->device->dev, dma->tx_dma_phys,
+ 				 dspi->devtype_data->dma_bufsize,
+ 				 DMA_TO_DEVICE);
+ 		dma_release_channel(dma->chan_tx);
+ 	}
+ 
+ 	if (dma->chan_rx) {
+-		dma_unmap_single(dev, dma->rx_dma_phys,
++		dma_unmap_single(dma->chan_rx->device->dev, dma->rx_dma_phys,
+ 				 dspi->devtype_data->dma_bufsize,
+ 				 DMA_FROM_DEVICE);
+ 		dma_release_channel(dma->chan_rx);
 -- 
-2.7.4
+2.20.1
 
