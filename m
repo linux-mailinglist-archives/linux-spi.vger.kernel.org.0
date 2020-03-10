@@ -2,150 +2,152 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B40517F2A0
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 10:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2DF17F2CE
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Mar 2020 10:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgCJJCN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Mar 2020 05:02:13 -0400
-Received: from mail-eopbgr50081.outbound.protection.outlook.com ([40.107.5.81]:53731
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726389AbgCJJCN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Mar 2020 05:02:13 -0400
+        id S1726205AbgCJJLl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Mar 2020 05:11:41 -0400
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:14303 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbgCJJLl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Mar 2020 05:11:41 -0400
+Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
+  Tudor.Ambarus@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Tudor.Ambarus@microchip.com";
+  x-sender="Tudor.Ambarus@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa2.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Tudor.Ambarus@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Tudor.Ambarus@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: XxKKmE25ESPkZgu2VAU3GX4jV3voFctP1o1zMwyiO2Eh97tpE/abWSzXUC4e7sQL/WD0QUlXVa
+ qj8un4w3W+wv2srzCwv/xxOQJtGI+/bVSAr/KH//XRZiTX98gwJawIUg7XvU2GDkF+qxL4Q78r
+ zx5RvMCgwYfS+AEsV2LscKHhsNRlFPQ4I4RJtyu8SYd4FRT2kpx7TnMgKfuVcNYL7IRhjD6KTy
+ jBGWKI2QhChPTLZ7MqcpG9spihiouzsYX0gdrXsNPzQuOoJ4xpa2qHGGkaF0Mngk7vcQ4bdb1P
+ 9t4=
+X-IronPort-AV: E=Sophos;i="5.70,535,1574146800"; 
+   d="scan'208";a="68436198"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2020 02:11:33 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 10 Mar 2020 02:11:30 -0700
+Received: from NAM04-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Tue, 10 Mar 2020 02:11:30 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DCXQyxpaLT+WkrtRxVDRdgbcsaIxVen22sGb9V8uA9TjFYd96L3Z6RglW2nHbRHiR2jUxAv0+LM7Du4UrwYDV4H75OsgAwAGVZSYeTjce/NcyIUG856W8m9Tqnx5DDRCLwhkL1i7lT7DPGSzDWt6G9pV41zEjQpLOb2fpnM7m0WtISY+IhsRkIe77N6MvCBhZkqwH2pcEvacweAnAl1ZS+pHN8bu0b0pVZN84uoeppVdAw7rOjdGQFV6mPW95QBMnl347wu5mlrlezpSvqIXa0yio2C1ELr8fsfWv6kv4ygJSjIXVhoJ8gao7Pf7pLHluz432tPC8xQx6Fdu/16zKw==
+ b=UN2WCLbD5YExkEmWsQfOANoGURMIkv6SliqmYjhEdbqUZPMLLYsqvjLUvrjbGgpBwuCqCv0cVWRyM8JD9Jz2LNmOMHIAgW4Mu0Bg09oIZ4OkAecOOMHu5OKvGp0bKTLgvA9BYy+rHR+vS9HW5s0yc0wtG3euoRjJx41WRDRbnG21htH1BMFJyeogUDkrnXeGeEyRaeW51zypXSAZdE0aDhyeYCe2Jxqhc4MahX8xXqlGtXS7EhiiTh9FfXv+CxGZHy0qbN9+a6gMwrPUVX/GhkwYgZYk7QWWY4b1G1+SPrYbmOezQpFUiZXf+v2MBl3G+CGohp38M74bfCzxtfzeHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fCrgOZ0DeDIjIMZC/9xKzqmm+35+mySyLhnDR1fMF7Y=;
- b=clTv9f7H93ZN4vzxce2JJjc3gsGFS0wvoI3CZFzLSDO8zTil0UCeNbzXfIpAP6IllqQ39p/rs2Ypr7LSXs46NJ3SImo7TJauk55XRo6Jg2WFnEMjKZbljsRDUV8kXsr+7FNN+uZiXn05/tYwQpFZgykb8bGzGUjDjjuFhvW1KB7JjfMQYaAT0EKaC1pXpX/3WtU83Y9Jyavkpr0d5Wc8pW57wTNl3utjHSnvKaeyMVXQEzt3MS87qz5QfhRd5a4N5SswT1d5+Hky5ElyJmWf9/xaDllOD+aangqQiBuyjueGhS0UnLPQhUE8urpq8Ur5O8FUxLbG/47qE8SBjwXn3g==
+ bh=6TjrazLyAOHtSJfTv/H3RPDYCZWCjGyADmeo32JDQzw=;
+ b=UxybyO63Z7lJL8QMRtR5FR6s/vhKkppZIE0jZLkWiXjVgA/t8VHY18N8dVkKZGBAO7eNVYmbgXQtPs3UAorw3JlaHHU4sllJh4qFIot7c99SJSfbf/h4OuRgOIRg49c4IGMjT6jttCMtx+aNMr3R2Ab8He+vhm/Z4fk74x6kMLYrqhPhHUnQ5RPCYFXYQ1+3MVHQ4Ovo3khjPssJ/2D3kyxJal0JNdMPRnE3D8WvpzLWFiOrk6IFP1/a4p1+MYEemfPxT54ooH1pgZoiuVNQ3adtVSE0hKcblfo5WS7k+a0jmRNi0sJiooty0K6QOtUouLOS3oe3finklUzEtAbtKA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fCrgOZ0DeDIjIMZC/9xKzqmm+35+mySyLhnDR1fMF7Y=;
- b=qgbv5wUkaW3ebLVLwzy8XZ+Lepjes8xweWqGEn3LqX+CkXwIyUhPW4t+AkglAsI/0SAtSyJKs593NUxvFhYhFrAA50H8nbyNwEqky/r9nuLbwS9qmma6wXkdQFhs0R5IIRZtDZHd2TAsnHXWlGewuRWGg+M+fgMbirjVW2c/fN0=
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (20.179.232.15) by
- VE1PR04MB6749.eurprd04.prod.outlook.com (10.255.118.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2793.17; Tue, 10 Mar 2020 09:02:09 +0000
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::490:6caa:24b:4a31]) by VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::490:6caa:24b:4a31%6]) with mapi id 15.20.2793.013; Tue, 10 Mar 2020
- 09:02:09 +0000
-From:   Robin Gong <yibin.gong@nxp.com>
-To:     =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Sascha Hauer <s.hauer@pengutronix.de>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "martin.fuzzey@flowbird.group" <martin.fuzzey@flowbird.group>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [RESEND v6  06/13] spi: imx: fix ERR009165
-Thread-Topic: [RESEND v6  06/13] spi: imx: fix ERR009165
-Thread-Index: AQHV9oxXftoGpg9l0ka8yr0vqbewZqhBcOwAgAAKFSCAAAYlgIAABlYA
-Date:   Tue, 10 Mar 2020 09:02:08 +0000
-Message-ID: <VE1PR04MB6638B911F4767D238B16279289FF0@VE1PR04MB6638.eurprd04.prod.outlook.com>
-References: <1583839922-22699-1-git-send-email-yibin.gong@nxp.com>
- <1583839922-22699-7-git-send-email-yibin.gong@nxp.com>
- <20200310073920.GR3335@pengutronix.de>
- <VE1PR04MB66384DA6732A840FE1D80C1989FF0@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200310083725.sb6cufp5wznvxcji@pengutronix.de>
-In-Reply-To: <20200310083725.sb6cufp5wznvxcji@pengutronix.de>
+ bh=6TjrazLyAOHtSJfTv/H3RPDYCZWCjGyADmeo32JDQzw=;
+ b=CVR66d1IhIoc71rMrRs2r//SR9Y5B+numHSlX6o2A46o3qoVdE4eTeWHpxL4N1IOTtZkBdxie3T3ZLYXH08jZXxmrMkJuM1dCW7RzLfwhOoOm6ja6V59UsIiQxddPyj4KFeKYg+CdB15prBlf9ZbNoKb7ZVdi6RX17k9AEaErzU=
+Received: from MN2PR11MB4448.namprd11.prod.outlook.com (2603:10b6:208:193::29)
+ by MN2PR11MB4632.namprd11.prod.outlook.com (2603:10b6:208:24f::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.16; Tue, 10 Mar
+ 2020 09:11:30 +0000
+Received: from MN2PR11MB4448.namprd11.prod.outlook.com
+ ([fe80::3c8f:7a55:cbd:adfb]) by MN2PR11MB4448.namprd11.prod.outlook.com
+ ([fe80::3c8f:7a55:cbd:adfb%5]) with mapi id 15.20.2793.013; Tue, 10 Mar 2020
+ 09:11:29 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <linux-mtd@lists.infradead.org>
+CC:     <broonie@kernel.org>, <devicetree@vger.kernel.org>,
+        <vigneshr@ti.com>, <richard@nod.at>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <robh+dt@kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <miquel.raynal@bootlin.com>, <matthias.bgg@gmail.com>,
+        <gch981213@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 4/4] mtd: spi-nor: remove mtk-quadspi driver
+Thread-Topic: [PATCH v3 4/4] mtd: spi-nor: remove mtk-quadspi driver
+Thread-Index: AQHV9q9NZuWbRCDn2EGRyTtBWaWZX6hBimQA
+Date:   Tue, 10 Mar 2020 09:11:29 +0000
+Message-ID: <4427171.IzkiAjLLdB@localhost.localdomain>
+References: <20200306085052.28258-1-gch981213@gmail.com>
+ <20200309121020.GD4101@sirena.org.uk>
+ <2471214.x7VzW1FXlQ@localhost.localdomain>
+In-Reply-To: <2471214.x7VzW1FXlQ@localhost.localdomain>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yibin.gong@nxp.com; 
-x-originating-ip: [92.121.68.129]
+x-originating-ip: [94.177.32.156]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 72b9ad52-1ecd-43ff-f5a0-08d7c4d1b6dd
-x-ms-traffictypediagnostic: VE1PR04MB6749:|VE1PR04MB6749:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VE1PR04MB67490CCCF13A35B93381F84289FF0@VE1PR04MB6749.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2582;
+x-ms-office365-filtering-correlation-id: e5706ea5-d72f-4dc1-19fe-08d7c4d30522
+x-ms-traffictypediagnostic: MN2PR11MB4632:
+x-microsoft-antispam-prvs: <MN2PR11MB463239E204BD9771194DF6B2F0FF0@MN2PR11MB4632.namprd11.prod.outlook.com>
+x-bypassexternaltag: True
+x-ms-oob-tlc-oobclassifiers: OLM:4502;
 x-forefront-prvs: 033857D0BD
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(376002)(136003)(39860400002)(346002)(199004)(189003)(81156014)(66476007)(8936002)(64756008)(66556008)(66446008)(76116006)(66946007)(8676002)(54906003)(186003)(71200400001)(26005)(7696005)(316002)(81166006)(66574012)(6506007)(4326008)(7416002)(478600001)(966005)(45080400002)(2906002)(6916009)(33656002)(52536014)(5660300002)(86362001)(9686003)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6749;H:VE1PR04MB6638.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(366004)(376002)(136003)(39860400002)(189003)(199004)(9686003)(6512007)(6916009)(71200400001)(86362001)(7416002)(2906002)(4326008)(66946007)(186003)(478600001)(81156014)(81166006)(8936002)(76116006)(91956017)(26005)(316002)(5660300002)(4744005)(6486002)(6506007)(966005)(53546011)(8676002)(66556008)(64756008)(66446008)(66476007)(54906003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR11MB4632;H:MN2PR11MB4448.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bhKnSoLwZCTBQpoDUd/QHyDXqZgdNNYvuR38libsVOK1iu7XFcHDaeqy4PdwRk6fHAxheXJJLRDquOZeEO2Ta4znYqjcB483O/sYzwbp1E69UajzplFcG9pe1pWCVBfQ807/gbZVYO48q4nV3BzVHdQgRpHJHEGOaO1AOml+cjI8AlcTlvUC9nG6YYgXvNO9KhkNLFM5HTwqJc4V03FcIBY0XhVwo89ZJaWb5XRtTzDhAjCHVuEMRZ4rirLhRw790NFUs04NVMZ2XkOdRBzEdP0JR+eDcfW0epk2N5EKykHrZnTDHqVa7PanGuFySCbPlPrXNh3TplLEPJ7tCN2sku9tTIw1UbG7rsyIFsF/Ce02x+mcgvzr01c8zUo57Wq4nVr1eHbjJ3Pkgpf2n6940EUYjundh5tBPNa0HI6gjyl4oAINA2M+Jcc8EIOouE1/Es/apODdbH56q4P8NBOuqQt2VNBJ+BY4NxGoy6WsTOBFA3xvNgXEbsX8E/hOHyMcjnuBoDPNEcz5DBKCbVkGZg==
-x-ms-exchange-antispam-messagedata: jxTSNTu9eneTnlaC2cDz1Sl/j9hqaLwEVIQp+0hm/6SCv5Iv6Zni8R7gx70bq29I41BGOOiYg3wp0wUVd4HxCPrInwzMn60fCLOexBNaoqOLLXLqKKjuMoho6Gttreve3L4yZ7YsFYYIux3GEl94FA==
-Content-Type: text/plain; charset="iso-8859-1"
+x-microsoft-antispam-message-info: 4xG+vTlFHhktw6qC8bdH5mrEPmpYBIbZPPeLbzZz3DbCFlUznMHAM1yBk64ejQraBAbuX5YSUfd01Y0GqjdsG7XAH+DCTC09fdMifF1dLlKadh/hHDXU9jjKvzOthFthO1Enh1J1o1Tju73GC2/IMjLykj6+0Ebd2qNFftQGCsuZqZAMxIr9HYUK6VdHUa785Lynu9iTqLZhoOK0FGtk+N7T2Cv1pGYZxDGA+k/1MsoIPkY8uciHBfIU3SXVgo7an/ZTbqI+kE6hWH9vttXy8UMPOxvzh8KAVUCPjQVrbgqhTfVwOd1ZPxWUNoPrA6FaLK+e0NJNDMJhlfRXYfK2VoZzzSK1jEST2EA9Et0PVqAQjOr5oODyLJScO+8+jc6HZf+kaxp5MHcI0Y7U6AObQxfKqTKNpS0VSDAJZZ2sas8S/E6M9OQ05nRtMdLMuCBP
+x-ms-exchange-antispam-messagedata: l+qVsaW4u0YTCQagYBQItNPHTTihDBQIFQx6zT7O5eYehN6SH+EirV4TaUysrF2joC5GfxM61VutEIwkZ4EzXUuQot4Ow7VgrD8ykqm3UE39DPlmn01MRuVq64mo6K39mfu2fOXL4Wi9/xPmYXctIQ==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <854A8A8A2CF8664186B41C8FB21DB83F@namprd11.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72b9ad52-1ecd-43ff-f5a0-08d7c4d1b6dd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2020 09:02:09.0213
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5706ea5-d72f-4dc1-19fe-08d7c4d30522
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2020 09:11:29.8729
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ojr/6iNY6CL0R+gsu7DaB+7f9xJLgXGET1HN0goQTSDCSSwvPwmke2eN69iILeWkV32zIABiL9Y7Gj2WGCP1aA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6749
+X-MS-Exchange-CrossTenant-userprincipalname: FF/D4fLbZT5e+YmbkeAsq/3yheQD0NAl9i0Rs2HNZko/p9sTHCCa5vOaY/XbmNWsaDNPIpi5HuY0pbOAgWLLi38Wuw485YvBYuoo0y3YpQY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4632
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2020/03/10 Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> wrote:
+On Tuesday, March 10, 2020 9:41:26 AM EET Tudor.Ambarus@microchip.com wrote=
+:
+> Hi, Mark,
 >=20
-> Hello,
+> On Monday, March 9, 2020 2:10:20 PM EET Mark Brown wrote:
+> > > This driver is superseded by the new spi-mtk-nor driver.
+> > >=20
+> > > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> >=20
+> > Is this move OK from a MTD point of view - should I apply this when the
+> > rest goes in?  The patch was in prior versions too and is obviously
+> > straightforward.
 >=20
-> On Tue, Mar 10, 2020 at 08:27:41AM +0000, Robin Gong wrote:
-> > On 2020/03/10 Sascha Hauer <s.hauer@pengutronix.de> wrote:
-> > > On Tue, Mar 10, 2020 at 07:31:55PM +0800, Robin Gong wrote:
-> > > >  	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
-> > > >
-> > > > @@ -612,12 +613,14 @@ static int mx51_ecspi_prepare_transfer(struct
-> > > > spi_imx_data *spi_imx,
-> > > >
-> > > >  static void mx51_setup_wml(struct spi_imx_data *spi_imx)  {
-> > > > +	u32 tx_wml =3D 0;
-> > > > +
-> > > >  	/*
-> > > >  	 * Configure the DMA register: setup the watermark
-> > > >  	 * and enable DMA request.
-> > > >  	 */
-> > > >  	writel(MX51_ECSPI_DMA_RX_WML(spi_imx->wml - 1) |
-> > > > -		MX51_ECSPI_DMA_TX_WML(spi_imx->wml) |
-> > > > +		MX51_ECSPI_DMA_TX_WML(tx_wml) |
-> > >
-> > > tx_wml is never assigned any other value than 0. Drop the variable.
-> > That's prepared for 07/13 patch which may assign spi_imx->wml to tx_wml=
-.
+> If you find the rest of the patches ok, this can go through the spi tree,
+> feel free to add my
+> Acked-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 >=20
-> Then this belongs into patch 7, right?
-Okay, understood your concern. Then I'll drop tx_wml to make it clear.
->=20
-> Best regards
-> Uwe
->=20
-> --
-> Pengutronix e.K.                           | Uwe Kleine-K=F6nig
-> |
-> Industrial Linux Solutions                 |
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fwww.p
-> engutronix.de%2F&amp;data=3D02%7C01%7Cyibin.gong%40nxp.com%7Cca6f14
-> 28f4224fa79f1d08d7c4ce4a41%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0
-> %7C0%7C637194262606339591&amp;sdata=3DkI9HAyC%2FG3qmrIrLmfUDJ7dac
-> %2FOEDBtDm4oeRyak1xE%3D&amp;reserved=3D0 |
+> There will be a conflict with the following patch https://
+> patchwork.ozlabs.org/patch/1247791/, but nothing that we can't handle.
+
+You can also create an immutable tag that I can merge in my spi-nor/next=20
+branch, so that Linus doesn't have to deal with the conflict.
+
+ta
+
