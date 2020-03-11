@@ -2,188 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BABAC1814A7
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Mar 2020 10:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A6A18190D
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Mar 2020 14:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728146AbgCKJWX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 11 Mar 2020 05:22:23 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:59845 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726097AbgCKJWX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Mar 2020 05:22:23 -0400
-X-Originating-IP: 90.89.41.158
-Received: from xps13 (lfbn-tou-1-1473-158.w90-89.abo.wanadoo.fr [90.89.41.158])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 296831BF20B;
-        Wed, 11 Mar 2020 09:22:20 +0000 (UTC)
-Date:   Wed, 11 Mar 2020 10:22:19 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        marek.vasut@gmail.com, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, ryder.lee@mediatek.com,
-        sean.wang@mediatek.com,
-        "Benliang Zhao (=?UTF-8?B?6LW15pys5Lqu?=)" 
-        <benliang.zhao@mediatek.com>,
-        "Bayi Cheng (=?UTF-8?B?56iL5YWr5oSP?=)" <bayi.cheng@mediatek.com>,
-        linux-mediatek@lists.infradead.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 3/3] spi: spi-mem: MediaTek: Add SPI NAND Flash
- interface driver for MediaTek MT7622
-Message-ID: <20200311102219.419feb66@xps13>
-In-Reply-To: <CAJsYDVJeZGpz6K2w1JuBVXM+zdFca9qp3+=PERTE2avehw6LXg@mail.gmail.com>
-References: <1536716612-24610-1-git-send-email-xiangsheng.hou@mediatek.com>
-        <1536716612-24610-4-git-send-email-xiangsheng.hou@mediatek.com>
-        <20181023075247.004982c9@bbrezillon>
-        <1540532796.24602.11.camel@mhfsdcap03>
-        <20181026080833.2fedbd94@bbrezillon>
-        <CAJsYDV+dAikBZ4gg_3u7z_jgV2ZehhyWyRQ709dNQV0XdDOUbQ@mail.gmail.com>
-        <CAJsYDV+ACknTVAhVJ-R-8p7H0B3XdP9nnrRZ+erJ=vbqt_VeKw@mail.gmail.com>
-        <20200311091813.41b55a97@collabora.com>
-        <CAJsYDVJeZGpz6K2w1JuBVXM+zdFca9qp3+=PERTE2avehw6LXg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1729461AbgCKNDC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Mar 2020 09:03:02 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:10631 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729370AbgCKNDB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Mar 2020 09:03:01 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1583931781; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=f7e0eWxDfW7nEaHlYSKRi90iftgXxefmOtrDot6oFE0=; b=OzyT8G5maR+SLIXpWDtc/taW8IjnZTtT+Nv8bvH2N3NpMZPVCP8V5EcfYSdOxCSBdzEivnwk
+ X8I5aGLD7SDml3pAn6pGtAvOVo9Z2tpKccS2v27NPlzXM+eMB8EgoVNr7ZDBUdteITPAurps
+ dMEp8MdBCCli2J2LbBPHAgl/aiY=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e68e184.7f6a583953e8-smtp-out-n02;
+ Wed, 11 Mar 2020 13:03:00 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8C30AC433CB; Wed, 11 Mar 2020 13:02:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.252.222.65] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 28AAFC433D2;
+        Wed, 11 Mar 2020 13:02:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 28AAFC433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH 0/6] Add interconnect support to UART, I2C, SPI and QSPI
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
+ <20200309175954.GX24720@google.com>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <9e0afe90-5480-2db5-48fb-39cd8db6e8d1@codeaurora.org>
+Date:   Wed, 11 Mar 2020 18:32:44 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200309175954.GX24720@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Chuanhong,
 
-Chuanhong Guo <gch981213@gmail.com> wrote on Wed, 11 Mar 2020 17:15:38
-+0800:
+On 3/9/2020 11:29 PM, Matthias Kaehlcke wrote:
+> Hi Akash,
+>
+> do you plan to re-spin this series in the near future?
+>
+> Thanks
+>
+> Matthias
 
-> Hi!
-> 
-> On Wed, Mar 11, 2020 at 4:18 PM Boris Brezillon
-> <boris.brezillon@collabora.com> wrote:
-> >
-> > +Miquel who worked on the ECC engine abstraction [3] recently.
-> >
-> > Hello Chuanhong,
-> >
-> > On Wed, 11 Mar 2020 15:35:43 +0800
-> > Chuanhong Guo <gch981213@gmail.com> wrote:
-> >  
-> > > Hi Boris!
-> > >
-> > > [resend to you because of the wrong mail address in previous one.]
-> > >
-> > > I'm about to pick this driver up and start upstream it in the future.
-> > > So I'm answering
-> > > your questions below and would like to get your further suggestions.
-> > >
-> > > On Fri, Oct 26, 2018 at 2:09 PM Boris Brezillon
-> > > <boris.brezillon@bootlin.com> wrote:  
-> > > > > > There's a fundamental issue with this driver: spi-mem was designed to be
-> > > > > > memory agnostic, and you seem to have a SPI controller that supports
-> > > > > > only SPI NANDs. Is that correct, or is it just that you developed the
-> > > > > > driver with SPI NANDs in  mind?
-> > > > > >  
-> > > > > Yes, this driver supports only SPI NANDs.
-> > > > > Actually, Mediatek's controller is designed for NAND specifically, which
-> > > > > can support SPI NANDs and PARALLEL NANDs,and this driver is just for SPI
-> > > > > NANDs.  
-> > > >
-> > > > Hm, I'm not so sure about that (I might be wrong though), it seems you
-> > > > can send any command you want, not only SPI NAND related ones. Maybe the
-> > > > controller is optimized for SPI NANDs but can do all kind of SPI
-> > > > transfers.  
-> > >
-> > > You are correct here. This controller can perform generic spi-mem operations,
-> > > and it has special routines for page cache R/W that utilize controller's ECC
-> > > functionality.  
-> >
-> > Sounds similar to the way the MXIC controller works, and that's
-> > actually what Miquel is trying to support with his ECC engine
-> > abstraction series [3].
-> >  
-> > > I think the purpose of this is to provide better ECC capability
-> > > for some SPI NANDs with worse ECC algorithm on chip.  
-> >
-> > Yep, or make it faster. Actually the reason doesn't matter, I think
-> > we all agree that we'll have to support external ECC for SPI NANDs at
-> > some point, hence the work Miquel has been doing.
-> >  
-> > >  
-> > > > > > Don't know what's possible to do with your controller, and maybe it's
-> > > > > > not able to execute random SPI memory operations, but in this case we
-> > > > > > should consider a different solution to support this driver.
-> > > > > >
-> > > > > > Do you have a public datasheet I can look at?
-> > > > > >  
-> > > > > We do not have a public datasheet for Mediatek controller currently.  
-> > > >
-> > > > Unfortunately, there's not much I can do without a clear understanding
-> > > > of how the controller works.
-> > > >  
-> > >
-> > > I found a public datasheet [0] on wiki page for Banana Pi R64 [1].
-> > > Register description is available under "NAND flash interface" section
-> > > starting at page 592.
-> > > There's a hackier version of this driver in OpenWrt [2] which checks
-> > > opcode and use controller routine for page cache R/W.
-> > >
-> > > ECC part of this controller can also be used as a standalone ECC
-> > > algorithm and perform ECC operations on data provided by CPU.  
-> 
-> The solution I'm referring to here is:
-> 1. read uncorrected data to host directly from SPI NAND
-> 2. start an ECC correction separately
-> 
-> > > But I think if it's implement this way, we wasted the page cache
-> > > R/W routines in this controller.  
-> >
-> > Oh, you probably don't want the page cache to be active anyway. When
-> > the framework reads a NAND page, it also checks the number of ECC
-> > errors, if the page is held in some internal cache, you won't see
-> > the evolution of this number. Note that the FS should do some caching,
-> > so caching things at the HW level is probably useless.  
-> 
-> It doesn't cache anything in controller. The R/W routine I refer to is:
-> When we issue a request to read page cache on SPI NAND:
-> 1. host programs a DMA-able memory area for receiving data.
-> 2. controller reads the page cache from SPI NAND
-> 3. controller get the data and start ECC correction
-> 4. corrected data will be sent back to host via DMA
-> 5. host could check ECC status
-> 
-> writing of page cache goes similarly.
-> There's no need for a separated ECC request comparing to previous
-> one.
-> 
-> >  
-> > >
-> > > I have two other initial thoughts:
-> > > 1. abstract some kind of ECC functionality in spi-mem interface
-> > >     I haven't really learned ECC stuff so I don't know whether this is
-> > >     possible and what kind of argument we needs for it.  
-> >
-> > Nope, spi-mem should stay focused on SPI transfers, nothing
-> > memory-specific should leak there.
-> >  
-> > > 2. modify SPI-NAND core to add support for special SPI-NAND controller.
-> > >     This limits controller's ability and adds extra burden for future extention
-> > >     of SPI-NAND framework.  
-> >
-> > That doesn't work either as some ECC engines are shared between the
-> > raw NAND and spi-mem IPs.
-> >  
-> > >
-> > > Which way would you prefer and do you have other suggestions?  
-> >
-> > See [3]. I think you can already base your work on Miquel's series, but
-> > maybe he has a more up-to-date version to share. I'll let you sync with
-> > him.  
+Hi  Matthias,
 
-I am actively working on it, this series is adding an "ECC engine
-framework" that could potentially fit any architecture. I am currently
-working with a Macronix external ECC engine, I will "soon" send a new
-version of it, I'll copy you.
+I will re-spin the series by 3/13.
 
-Thanks,
-Miquèl
+Regards,
+
+Akash
+
+>
+> On Mon, Feb 17, 2020 at 06:59:59PM +0530, Akash Asthana wrote:
+>> dt-binding patch for UART, I2C and SPI.
+>>   - https://patchwork.kernel.org/patch/11385965/ [Convert QUP bindings
+>> 	to YAML and add ICC, pin swap doc]
+>>
+>> dt-binding patch for QSPI.
+>>   - https://patchwork.kernel.org/cover/11386003/ [Convert QSPI binding
+>> 	to YAML and add interconnect doc]
+>>
+>> Akash Asthana (6):
+>>    soc: qcom: geni: Support for ICC voting
+>>    tty: serial: qcom_geni_serial: Add interconnect support
+>>    i2c: i2c-qcom-geni: Add interconnect support
+>>    spi: spi-geni-qcom: Add interconnect support
+>>    spi: spi-qcom-qspi: Add interconnect support
+>>    arm64: dts: sc7180: Add interconnect for QUP and QSPI
+>>
+>>   arch/arm64/boot/dts/qcom/sc7180.dtsi  | 199 ++++++++++++++++++++++++++++++++++
+>>   drivers/i2c/busses/i2c-qcom-geni.c    |  84 +++++++++++++-
+>>   drivers/spi/spi-geni-qcom.c           |  65 ++++++++++-
+>>   drivers/spi/spi-qcom-qspi.c           |  38 ++++++-
+>>   drivers/tty/serial/qcom_geni_serial.c |  84 ++++++++++++--
+>>   include/linux/qcom-geni-se.h          |  31 ++++++
+>>   6 files changed, 481 insertions(+), 20 deletions(-)
+>>
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
