@@ -2,115 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A6A18190D
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Mar 2020 14:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E5A181FAD
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Mar 2020 18:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729461AbgCKNDC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Mar 2020 09:03:02 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:10631 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729370AbgCKNDB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Mar 2020 09:03:01 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1583931781; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=f7e0eWxDfW7nEaHlYSKRi90iftgXxefmOtrDot6oFE0=; b=OzyT8G5maR+SLIXpWDtc/taW8IjnZTtT+Nv8bvH2N3NpMZPVCP8V5EcfYSdOxCSBdzEivnwk
- X8I5aGLD7SDml3pAn6pGtAvOVo9Z2tpKccS2v27NPlzXM+eMB8EgoVNr7ZDBUdteITPAurps
- dMEp8MdBCCli2J2LbBPHAgl/aiY=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e68e184.7f6a583953e8-smtp-out-n02;
- Wed, 11 Mar 2020 13:03:00 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 8C30AC433CB; Wed, 11 Mar 2020 13:02:59 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.252.222.65] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 28AAFC433D2;
-        Wed, 11 Mar 2020 13:02:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 28AAFC433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH 0/6] Add interconnect support to UART, I2C, SPI and QSPI
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
- <20200309175954.GX24720@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <9e0afe90-5480-2db5-48fb-39cd8db6e8d1@codeaurora.org>
-Date:   Wed, 11 Mar 2020 18:32:44 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1730235AbgCKRjW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Mar 2020 13:39:22 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:11629 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729852AbgCKRjW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 11 Mar 2020 13:39:22 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 43322579B4F62CF1EA02;
+        Thu, 12 Mar 2020 01:39:17 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 12 Mar 2020 01:39:08 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <rdunlap@infradead.org>,
+        <linux-next@vger.kernel.org>, <joe@perches.com>,
+        <Tudor.Ambarus@microchip.com>, <sfr@canb.auug.org.au>,
+        <chenxiang66@hisilicon.com>, John Garry <john.garry@huawei.com>
+Subject: [PATCH] spi: Stop selecting MTD_SPI_NOR for SPI_HISI_SFC_V3XX
+Date:   Thu, 12 Mar 2020 01:35:15 +0800
+Message-ID: <1583948115-239907-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-In-Reply-To: <20200309175954.GX24720@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+By selecting MTD_SPI_NOR for SPI_HISI_SFC_V3XX, we may introduce unmet
+dependencies:
 
-On 3/9/2020 11:29 PM, Matthias Kaehlcke wrote:
-> Hi Akash,
->
-> do you plan to re-spin this series in the near future?
->
-> Thanks
->
-> Matthias
+WARNING: unmet direct dependencies detected for MTD_SPI_NOR
+  Depends on [m]: MTD [=m] && SPI_MASTER [=y]
+  Selected by [y]:
+  - SPI_HISI_SFC_V3XX [=y] && SPI [=y] && SPI_MASTER [=y] && (ARM64 && ACPI [=y] || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
 
-Hi  Matthias,
+Since MTD_SPI_NOR is only selected by SPI_HISI_SFC_V3XX for practical
+reasons - slave devices use the spi-nor driver, enabled by MTD_SPI_NOR -
+just drop it.
 
-I will re-spin the series by 3/13.
+Signed-off-by: John Garry <john.garry@huawei.com>
 
-Regards,
-
-Akash
-
->
-> On Mon, Feb 17, 2020 at 06:59:59PM +0530, Akash Asthana wrote:
->> dt-binding patch for UART, I2C and SPI.
->>   - https://patchwork.kernel.org/patch/11385965/ [Convert QUP bindings
->> 	to YAML and add ICC, pin swap doc]
->>
->> dt-binding patch for QSPI.
->>   - https://patchwork.kernel.org/cover/11386003/ [Convert QSPI binding
->> 	to YAML and add interconnect doc]
->>
->> Akash Asthana (6):
->>    soc: qcom: geni: Support for ICC voting
->>    tty: serial: qcom_geni_serial: Add interconnect support
->>    i2c: i2c-qcom-geni: Add interconnect support
->>    spi: spi-geni-qcom: Add interconnect support
->>    spi: spi-qcom-qspi: Add interconnect support
->>    arm64: dts: sc7180: Add interconnect for QUP and QSPI
->>
->>   arch/arm64/boot/dts/qcom/sc7180.dtsi  | 199 ++++++++++++++++++++++++++++++++++
->>   drivers/i2c/busses/i2c-qcom-geni.c    |  84 +++++++++++++-
->>   drivers/spi/spi-geni-qcom.c           |  65 ++++++++++-
->>   drivers/spi/spi-qcom-qspi.c           |  38 ++++++-
->>   drivers/tty/serial/qcom_geni_serial.c |  84 ++++++++++++--
->>   include/linux/qcom-geni-se.h          |  31 ++++++
->>   6 files changed, 481 insertions(+), 20 deletions(-)
->>
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
-
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 66c6c0d77ea7..ad1a2547a414 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -299,7 +299,6 @@ config SPI_HISI_SFC_V3XX
+ 	tristate "HiSilicon SPI-NOR Flash Controller for Hi16XX chipsets"
+ 	depends on (ARM64 && ACPI) || COMPILE_TEST
+ 	depends on HAS_IOMEM
+-	select MTD_SPI_NOR
+ 	help
+ 	  This enables support for HiSilicon v3xx SPI-NOR flash controller
+ 	  found in hi16xx chipsets.
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+2.17.1
+
