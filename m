@@ -2,30 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 595411837CA
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Mar 2020 18:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B961837CD
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Mar 2020 18:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbgCLRjQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Mar 2020 13:39:16 -0400
-Received: from foss.arm.com ([217.140.110.172]:38908 "EHLO foss.arm.com"
+        id S1726632AbgCLRjU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Mar 2020 13:39:20 -0400
+Received: from foss.arm.com ([217.140.110.172]:38918 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726127AbgCLRjQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 12 Mar 2020 13:39:16 -0400
+        id S1726127AbgCLRjU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 12 Mar 2020 13:39:20 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 79E0530E;
-        Thu, 12 Mar 2020 10:39:15 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDB8430E;
+        Thu, 12 Mar 2020 10:39:19 -0700 (PDT)
 Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F293F3F6CF;
-        Thu, 12 Mar 2020 10:39:14 -0700 (PDT)
-Date:   Thu, 12 Mar 2020 17:39:13 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 633BB3F6CF;
+        Thu, 12 Mar 2020 10:39:19 -0700 (PDT)
+Date:   Thu, 12 Mar 2020 17:39:17 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Neil Armstrong <narmstrong@baylibre.com>
 Cc:     broonie@kernel.org, linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Applied "spi: meson-spicc: add min sclk for each compatible" to the spi tree
-In-Reply-To:  <20200312133131.26430-6-narmstrong@baylibre.com>
-Message-Id:  <applied-20200312133131.26430-6-narmstrong@baylibre.com>
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Sunny Luo <sunny.luo@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>
+Subject: Applied "spi: meson-spicc: support max 80MHz clock" to the spi tree
+In-Reply-To:  <20200312133131.26430-5-narmstrong@baylibre.com>
+Message-Id:  <applied-20200312133131.26430-5-narmstrong@baylibre.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -34,7 +36,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: meson-spicc: add min sclk for each compatible
+   spi: meson-spicc: support max 80MHz clock
 
 has been applied to the spi tree at
 
@@ -59,54 +61,68 @@ to this mail.
 Thanks,
 Mark
 
-From 8791068dab979819e01f41736953b9b2e462867b Mon Sep 17 00:00:00 2001
+From 3196816ff64bb3a21fbda89e7355b6b87c3f50a0 Mon Sep 17 00:00:00 2001
 From: Neil Armstrong <narmstrong@baylibre.com>
-Date: Thu, 12 Mar 2020 14:31:27 +0100
-Subject: [PATCH] spi: meson-spicc: add min sclk for each compatible
+Date: Thu, 12 Mar 2020 14:31:26 +0100
+Subject: [PATCH] spi: meson-spicc: support max 80MHz clock
 
-The G12A SPICC controller variant takes the source clock from a specific
-clock instead of the bus clock.
-The minimal clock calculus won't work with the G12A support, thus add the
-minimal supported clock for each variant and pass this to the SPI core.
+The SPICC controller in Meson-AXG is capable of running at 80M clock.
+The ASIC IP is improved and the clock is actually running higher than
+previous old SoCs.
 
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20200312133131.26430-6-narmstrong@baylibre.com
+Signed-off-by: Yixun Lan <yixun.lan@amlogic.com>
+Signed-off-by: Sunny Luo <sunny.luo@amlogic.com>
+Link: https://lore.kernel.org/r/20200312133131.26430-5-narmstrong@baylibre.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-meson-spicc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/spi/spi-meson-spicc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index 710b4e780daa..b5bd3a897e8f 100644
+index bd434d9055d9..710b4e780daa 100644
 --- a/drivers/spi/spi-meson-spicc.c
 +++ b/drivers/spi/spi-meson-spicc.c
-@@ -132,6 +132,7 @@
+@@ -35,7 +35,6 @@
+  *   to have a CS go down over the full transfer
+  */
+ 
+-#define SPICC_MAX_FREQ	30000000
+ #define SPICC_MAX_BURST	128
+ 
+ /* Register Map */
+@@ -132,6 +131,7 @@
+ #define SPICC_FIFO_HALF 10
  
  struct meson_spicc_data {
- 	unsigned int			max_speed_hz;
-+	unsigned int			min_speed_hz;
++	unsigned int			max_speed_hz;
  	bool				has_oen;
  	bool				has_enhance_clk_div;
  };
-@@ -685,7 +686,7 @@ static int meson_spicc_probe(struct platform_device *pdev)
- 				     SPI_BPW_MASK(16) |
- 				     SPI_BPW_MASK(8);
- 	master->flags = (SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX);
--	master->min_speed_hz = rate >> 9;
-+	master->min_speed_hz = spicc->data->min_speed_hz;
- 	master->setup = meson_spicc_setup;
- 	master->cleanup = meson_spicc_cleanup;
- 	master->prepare_message = meson_spicc_prepare_message;
-@@ -736,10 +737,12 @@ static int meson_spicc_remove(struct platform_device *pdev)
+@@ -693,11 +693,9 @@ static int meson_spicc_probe(struct platform_device *pdev)
+ 	master->transfer_one = meson_spicc_transfer_one;
+ 	master->use_gpio_descriptors = true;
+ 
+-	/* Setup max rate according to the Meson GX datasheet */
+-	if ((rate >> 2) > SPICC_MAX_FREQ)
+-		master->max_speed_hz = SPICC_MAX_FREQ;
+-	else
+-		master->max_speed_hz = rate >> 2;
++	/* Setup max rate according to the Meson datasheet */
++	master->max_speed_hz = min_t(unsigned int, rate >> 1,
++				     spicc->data->max_speed_hz);
+ 
+ 	meson_spicc_oen_enable(spicc);
+ 
+@@ -737,9 +735,11 @@ static int meson_spicc_remove(struct platform_device *pdev)
+ }
  
  static const struct meson_spicc_data meson_spicc_gx_data = {
- 	.max_speed_hz		= 30000000,
-+	.min_speed_hz		= 325000,
++	.max_speed_hz		= 30000000,
  };
  
  static const struct meson_spicc_data meson_spicc_axg_data = {
- 	.max_speed_hz		= 80000000,
-+	.min_speed_hz		= 325000,
++	.max_speed_hz		= 80000000,
  	.has_oen		= true,
  	.has_enhance_clk_div	= true,
  };
