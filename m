@@ -2,100 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D95E2182F44
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Mar 2020 12:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3984182F46
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Mar 2020 12:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgCLLcC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Mar 2020 07:32:02 -0400
-Received: from mga09.intel.com ([134.134.136.24]:28073 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725978AbgCLLcB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 12 Mar 2020 07:32:01 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Mar 2020 04:32:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,544,1574150400"; 
-   d="scan'208";a="389575925"
-Received: from wwanmoha-ilbpg2.png.intel.com ([10.88.227.42])
-  by orsmga004.jf.intel.com with ESMTP; 12 Mar 2020 04:31:59 -0700
-From:   Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-To:     broonie@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        wan.ahmad.zainie.wan.mohamad@intel.com
-Subject: [PATCH 7/7] spi: dw: Add support for Intel Keem Bay SPI
-Date:   Thu, 12 Mar 2020 19:31:29 +0800
-Message-Id: <20200312113129.8198-8-wan.ahmad.zainie.wan.mohamad@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200312113129.8198-1-wan.ahmad.zainie.wan.mohamad@intel.com>
-References: <20200312113129.8198-1-wan.ahmad.zainie.wan.mohamad@intel.com>
+        id S1727036AbgCLLcJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Mar 2020 07:32:09 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:47546 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725978AbgCLLcI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Mar 2020 07:32:08 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02CBN1hc117160;
+        Thu, 12 Mar 2020 11:32:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=TJzDJUWEmPBvm/C4lmLKTLoDU+nOfEOzfxoMUaGpdIs=;
+ b=BX/6zlpHKN7/xCdywJXax3iTIQllXUevPrIc8fOuFZ/eex9JzgBP32sNI8WLaTNut8QV
+ G8HMUm6FKX9ogHJV33uEwjCEJ6tjP1Y3gWEqE3RXkcuRQGBQDp56PS8zPZslxqXH+NYl
+ WbatyAkI+mZEVtcPBMBhZZUc7LN0JBYdLPnsG0tMnuhiysgPHrquK+29OmSCh09NeY79
+ 0rgKw6mxMGl5VA3qQpuLhT8eFGIA7IqmymJ4iLupIKolr9yMjTX0GBRonufU1T9e+dQ3
+ w1LDIyBF9fi4Hh0tjBZvPuYzdp/3ww18Kq1GhoMJ79NBPbVQUMky3Nr9ipf4i7pguAQc VA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2yp9v6c4rr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Mar 2020 11:32:02 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02CBMIrq192999;
+        Thu, 12 Mar 2020 11:32:02 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 2yqkvmh4f7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Mar 2020 11:32:01 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02CBW1bD002510;
+        Thu, 12 Mar 2020 11:32:01 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 12 Mar 2020 04:32:00 -0700
+Date:   Thu, 12 Mar 2020 14:31:54 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Yogesh Gaur <yogeshgaur.83@gmail.com>, Han Xu <han.xu@nxp.com>,
+        Adam Ford <aford173@gmail.com>
+Cc:     Ashish Kumar <ashish.kumar@nxp.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] spi: spi-nxp-fspi: Fix a NULL vs IS_ERR() check in probe
+Message-ID: <20200312113154.GC20562@mwanda>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9557 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003120062
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9557 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 adultscore=0 clxscore=1011 impostorscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2003120062
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add support for Intel Keem Bay SPI controller, which uses DesignWare
-DWC_ssi core. Bit 31 of CTRLR0 register is added for Keem Bay, to
-configure the device as a master or as a slave serial peripheral.
+The platform_get_resource_byname() function returns NULL on error, it
+doesn't return error pointers.
 
-Signed-off-by: Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Fixes: d166a73503ef ("spi: fspi: dynamically alloc AHB memory")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
- drivers/spi/spi-dw-mmio.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+The commit message for commit d166a73503ef ("spi: fspi: dynamically
+alloc AHB memory") is not very good.  Why is it necessary to allocate
+the AHB memory dynamically instead of during probe?  Also I suspect that
+Adam should have recieved authorship credit for that patch.
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 1df6f3deee2c..abd3bb5e52db 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -44,6 +44,13 @@ struct dw_spi_mmio {
- #define MSCC_SPI_MST_SW_MODE_SW_PIN_CTRL_MODE	BIT(13)
- #define MSCC_SPI_MST_SW_MODE_SW_SPI_CS(x)	(x << 5)
+ drivers/spi/spi-nxp-fspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
+index 019f40e2917c..1ccda82da206 100644
+--- a/drivers/spi/spi-nxp-fspi.c
++++ b/drivers/spi/spi-nxp-fspi.c
+@@ -1019,8 +1019,8 @@ static int nxp_fspi_probe(struct platform_device *pdev)
  
-+/*
-+ * For Keem Bay, CTRLR0[31] is used to select controller mode.
-+ * 0: SSI is slave
-+ * 1: SSI is master
-+ */
-+#define KEEMBAY_CTRLR0_SSIC_IS_MST		BIT(31)
-+
- struct dw_spi_mscc {
- 	struct regmap       *syscon;
- 	void __iomem        *spi_mst;
-@@ -155,6 +162,24 @@ static int dw_spi_dwc_ssi_init(struct platform_device *pdev,
- 	return 0;
- }
+ 	/* find the resources - controller memory mapped space */
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "fspi_mmap");
+-	if (IS_ERR(res)) {
+-		ret = PTR_ERR(res);
++	if (!res) {
++		ret = -ENODEV;
+ 		goto err_put_ctrl;
+ 	}
  
-+static u32 dw_spi_update_cr0_keembay(struct spi_controller *master,
-+				     struct spi_device *spi,
-+				     struct spi_transfer *transfer)
-+{
-+	u32 cr0 = dw_spi_update_cr0_v1_01a(master, spi, transfer);
-+
-+	return cr0 | KEEMBAY_CTRLR0_SSIC_IS_MST;
-+}
-+
-+static int dw_spi_keembay_init(struct platform_device *pdev,
-+			       struct dw_spi_mmio *dwsmmio)
-+{
-+	/* Register hook to configure CTRLR0 */
-+	dwsmmio->dws.update_cr0 = dw_spi_update_cr0_keembay;
-+
-+	return 0;
-+}
-+
- static int dw_spi_mmio_probe(struct platform_device *pdev)
- {
- 	int (*init_func)(struct platform_device *pdev,
-@@ -254,6 +279,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "amazon,alpine-dw-apb-ssi", .data = dw_spi_alpine_init},
- 	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_dw_apb_init},
- 	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_dwc_ssi_init},
-+	{ .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
- 	{ /* end of table */}
- };
- MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
 -- 
-2.17.1
+2.20.1
 
