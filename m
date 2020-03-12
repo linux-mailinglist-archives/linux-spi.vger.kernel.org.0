@@ -2,53 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D2E182FB4
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Mar 2020 12:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EEC182FFE
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Mar 2020 13:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbgCLL6x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Mar 2020 07:58:53 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:46334 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727007AbgCLL6x (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Mar 2020 07:58:53 -0400
-Received: by mail-io1-f66.google.com with SMTP id v3so5327057iom.13;
-        Thu, 12 Mar 2020 04:58:52 -0700 (PDT)
+        id S1726044AbgCLML7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Mar 2020 08:11:59 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:36852 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbgCLML7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Mar 2020 08:11:59 -0400
+Received: by mail-lf1-f66.google.com with SMTP id s1so4604219lfd.3;
+        Thu, 12 Mar 2020 05:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rPc++VDXh8pTtJPadUpADozZEFlA9OiPEeVtI98+2V0=;
-        b=eyg/wYE1qqMif80Ei6JWFUB7+exwdL5wQwEaAuk6ovH0TfGmz9aFTj1jbHB700ZhBD
-         16qksPZCpsWnx/o7u063JgGYhwktoCCvuifWUdm9leIkVlL6hWeQveGVOyuZIEiO3CV8
-         jU1PCQ+m9rB8+Wz3trB/8G5YJbiAnWOE5zXj3NcPLJPLeC6u5ox9HjHN4aJzz4VkMB+f
-         53Z0u1KlgzaPq8q1kWg/k6VP7qrzemfgHXTLTvE+CRxQx1t0W0Q50C1HDuhvnc85OBdT
-         2ggDRANMwETmt6bZVDcRHkLdDdJRq4728+exbpAHGFrk6emoFnfbHVwNChTHhsvpU3vf
-         1aXA==
+        bh=bhPuS2kHLGbKBKVVwz2ohfgffpqHWog6BAcU5D3FSBE=;
+        b=l5d2Kt8D9rVBConO0hJsQfXbHz5ahmwaLbLGDdsUHuKeYlfAKOonlz5/pyu4KsWiAU
+         Edz+T8DmoWjOzy7JVyOH7t65Z6nhA4PdGGEUrXIDBPEE9PG0+ht7rXbNOjY3/XxoHPEo
+         16uxDrS06mLHiiAMDwvTocwdQbczU+EtAAemu25GeFZWFLYfgLPxxgaQp2/pEAv7aYOq
+         CZ9++NtuxXYU9IoYo76er/KJAFrF0EX6z0kYusW8L5k9TYNUwDY+mcKpBZK1nx7bPL38
+         j1R506wpFxZu7cS5/KV+OMHxPJd9BSa6kTTRz6cmBkZEAXeftYrgfynGmL79ZDi9VLD1
+         hXyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rPc++VDXh8pTtJPadUpADozZEFlA9OiPEeVtI98+2V0=;
-        b=UsXpnqNkJPI9QKAjYSe+2vMGGmNIgVvYk/jSOxLKn3MwoMLc/tS/R1b2Jw4XcRX3Or
-         7fmuagp5b0qIaYYVgRz4uJDeJ6iO2l2bb5EbDa2n+IwZigymT2378YJqbDHqDtsA5o6I
-         ONfznVX1xQFBewZPZx5hs0caYkh6mbCUsO4oXLhHlbvkGXwg5iElu8kLiVvKzzexjaDt
-         52B8BWgFHMaf503Jceeb53twClo+B4vee1KN+pyyVSfjygPXCDaLF21VorloWM9OY0BS
-         o2NXquobxihkxI8xv/mmK+sopPkab4mUUdmflS9DEj90zpZRSOWdFdPkkN+AIe9TPJKv
-         8dEg==
-X-Gm-Message-State: ANhLgQ1JgGpeoVgs0GVvjRCgSP7pYC+G8YtY2qsE36ETKRNokLQHS/kQ
-        c7efOfhxJLR0SeyUWNvacO+L2mkTGV8VbOKHfeI=
-X-Google-Smtp-Source: ADFU+vs5s7ScOpNx7hc8xTMV8CjJaZqVFEqIBlNwkoPbuxbjRMc1H3X1CBBKkPsnLLDEx6buNYObDrAAQO10zWdHCpA=
-X-Received: by 2002:a6b:ef0f:: with SMTP id k15mr7177031ioh.43.1584014331993;
- Thu, 12 Mar 2020 04:58:51 -0700 (PDT)
+        bh=bhPuS2kHLGbKBKVVwz2ohfgffpqHWog6BAcU5D3FSBE=;
+        b=jJ7pHbm+bcnYq7Fs/aWQMAOS+adcbfELCuKMvfDbUJuE8X7CrOeNIK4LTgg21naPq9
+         DZtK/vHJCCX2pMNj+KXLtXGrX0CGu3qCA12cD/qcqKryZ8LUrVuRDSdbSpHxDbdmn9Ms
+         AzWJMOL3pIvvbG+3cEz2BddnaArqNVQJoE5eJ5A1GEEycekV5WmiqgjejW/qhlLjo6bN
+         eWqvAijNBrij1tKEMhS9HvAOfLOLXi2FnF4ZDDl2R02XgUg6v+e1PuGoytTZnxLVQHGt
+         +eBaYx8c5+ON4qey+EpAud4qklVNx7ljPA0iodBvcEO4lCI3fDe5qalv+5nczr/TTPFk
+         /zCA==
+X-Gm-Message-State: ANhLgQ17RAa3giWqj60aKA68aZiOjEIijV1ZI1yr7VpiKKR8102wGz/5
+        1w60MXWRWD9pOkxhD30beWZanAYQNTJ7ifwiBpo=
+X-Google-Smtp-Source: ADFU+vt+smGa5nmX26aTHJS4CvOUbbW1B0u85c531RF3WHPuD82m2io3CGiJr/IWQLQ5O69ZiTCpC6d4x2B89Zutzl8=
+X-Received: by 2002:ac2:5929:: with SMTP id v9mr5073525lfi.66.1584015115914;
+ Thu, 12 Mar 2020 05:11:55 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200312113154.GC20562@mwanda>
 In-Reply-To: <20200312113154.GC20562@mwanda>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Thu, 12 Mar 2020 06:58:31 -0500
-Message-ID: <CAHCN7xKSc7spZyq=mySWHDmSrGMkQo8FYRbn-NzYRa7iB-0BoQ@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 12 Mar 2020 09:11:44 -0300
+Message-ID: <CAOMZO5CJ7G7yJZEEPfsm1P2SnrJ7kmOPmZCWiKwrvDZjPNOnWw@mail.gmail.com>
 Subject: Re: [PATCH] spi: spi-nxp-fspi: Fix a NULL vs IS_ERR() check in probe
 To:     Dan Carpenter <dan.carpenter@oracle.com>
 Cc:     Yogesh Gaur <yogeshgaur.83@gmail.com>, Han Xu <han.xu@nxp.com>,
+        Adam Ford <aford173@gmail.com>,
         Ashish Kumar <ashish.kumar@nxp.com>,
         Mark Brown <broonie@kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
@@ -59,7 +60,9 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 6:32 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+Hi Dan,
+
+On Thu, Mar 12, 2020 at 8:33 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 >
 > The platform_get_resource_byname() function returns NULL on error, it
 > doesn't return error pointers.
@@ -70,34 +73,8 @@ On Thu, Mar 12, 2020 at 6:32 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 > The commit message for commit d166a73503ef ("spi: fspi: dynamically
 > alloc AHB memory") is not very good.  Why is it necessary to allocate
 > the AHB memory dynamically instead of during probe?  Also I suspect that
-> Adam should have recieved authorship credit for that patch.
 
-It wasn't my patch, I just pulled it in from NXP's repo.  The true
-author is Han Xu.  When I pulled in the series from NXP, I found the
-flexSPI on the i.MX8MM to become functional, and my company has a
-board with a qspi flash on it.
+Agreed and I made the same comment during review:
+https://patchwork.kernel.org/patch/11361581/
 
-adam
-
->
->  drivers/spi/spi-nxp-fspi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-> index 019f40e2917c..1ccda82da206 100644
-> --- a/drivers/spi/spi-nxp-fspi.c
-> +++ b/drivers/spi/spi-nxp-fspi.c
-> @@ -1019,8 +1019,8 @@ static int nxp_fspi_probe(struct platform_device *pdev)
->
->         /* find the resources - controller memory mapped space */
->         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "fspi_mmap");
-> -       if (IS_ERR(res)) {
-> -               ret = PTR_ERR(res);
-> +       if (!res) {
-> +               ret = -ENODEV;
->                 goto err_put_ctrl;
->         }
->
-> --
-> 2.20.1
->
+Thanks
