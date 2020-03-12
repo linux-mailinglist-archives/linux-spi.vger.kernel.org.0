@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F3B18394A
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Mar 2020 20:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011A9183952
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Mar 2020 20:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgCLTQz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Mar 2020 15:16:55 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:38521 "EHLO
+        id S1726692AbgCLTRk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Mar 2020 15:17:40 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:34792 "EHLO
         mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726469AbgCLTQz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Mar 2020 15:16:55 -0400
-Received: by mail-ot1-f68.google.com with SMTP id t28so4875435ott.5;
-        Thu, 12 Mar 2020 12:16:54 -0700 (PDT)
+        with ESMTP id S1726553AbgCLTRk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Mar 2020 15:17:40 -0400
+Received: by mail-ot1-f68.google.com with SMTP id j16so7509586otl.1;
+        Thu, 12 Mar 2020 12:17:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vVrdJ+qhKEIpJd556IN01Cf39121xsXF8l1otnFI8JQ=;
-        b=mmx2DfrtaNl1pfF3GUOiljsaFOm1XLuTkpt6XMvSTem+tJ+4SOp+G8xXthi5J5+Pcn
-         9UyBP/z3n0dYwV9yu2qKu62ladMLkRBAT1D6e20VLbVXELiL4Ro9YeVHym0eebGV4Kjy
-         oHnlzvYcjpAvbsCt8vPmpRNXROxTSd7me32rmDs2w7jhRbyExmUvQsVIkvp/2wkdT10D
-         PGl2bZYf+5bzif0Ci7iOAJYg4SaaCLj87NwVPn1DNMndkJqffhdigbuR5CcxSj3Wr7Rr
-         GsSK0uO3BLRBemVR3DIeDy6QJ07ufgXKnSjgvb6R7UHthL8DV9t5r3RLqXtp6Wr9RD82
-         m1sQ==
-X-Gm-Message-State: ANhLgQ1H6/k3fH+jBR3NmceCyGVKs7t4F6/NXudwCUz+9Z7svZ1DLytc
-        l9e4QwCrlA0x5Uko05gBvw==
-X-Google-Smtp-Source: ADFU+vvH6bRUxHrHHHS6+ktlFtWiyq46Nvumz8hQ5kL7ReKHjgRHELRbJnuG/uj1KI1hhAfO8JvCAQ==
-X-Received: by 2002:a05:6830:1e09:: with SMTP id s9mr7303753otr.149.1584040614178;
-        Thu, 12 Mar 2020 12:16:54 -0700 (PDT)
+        bh=hd21tx8Q98roPfOH6LhR20KwY0U6rAJTkIh4maqUe/M=;
+        b=tF4+UlySQK9fk1be5Dxp7a8cvo6liyZ54AMwJ/9kakHt4uc17/WnBv5jllZ/aHVUOu
+         6UojVapQ+fWswSoVqOy2DB3YAmfulyv+vNv/KVA0UGueWKqlDks2yEjI24FLYy2CS0/i
+         pvsQPDtaBYy7wNgVoLdhqFxj5L5LOC93wfRRimbEQgYuqdpjfsi+Uu9JWz2xk9W1gVKK
+         GlR88hPdHLHtQ+dGAZ+VNkTXccElkHRG7Dl/fTVcJdMnXlSmVPPVPIGRORN7Tfp/jKq8
+         IVvAl1FW3BND7H/b0k/7XmVT7Lxq3GRoO+g27s/phVFoo5UKC3Cqrik3AcvXTkyBWrGm
+         pQfA==
+X-Gm-Message-State: ANhLgQ3uWLYpkpBnNX7I4mbIw1lEZo46kqP+v85iW3QvLp1+wrqSIz6X
+        3/wRlcFz7Rn73SunABTN1Q==
+X-Google-Smtp-Source: ADFU+vspFHk47a5o9XBHxgyTVqmKFkvmz7PWngFVdlZqCUssDvxYhcc4V8uIJqJwJ6RGpki4SQQyQA==
+X-Received: by 2002:a9d:734f:: with SMTP id l15mr1007301otk.55.1584040658124;
+        Thu, 12 Mar 2020 12:17:38 -0700 (PDT)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id d9sm11580372otl.50.2020.03.12.12.16.53
+        by smtp.gmail.com with ESMTPSA id l4sm6149840oti.65.2020.03.12.12.17.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 12:16:53 -0700 (PDT)
-Received: (nullmailer pid 14872 invoked by uid 1000);
-        Thu, 12 Mar 2020 19:16:52 -0000
-Date:   Thu, 12 Mar 2020 14:16:52 -0500
+        Thu, 12 Mar 2020 12:17:37 -0700 (PDT)
+Received: (nullmailer pid 15919 invoked by uid 1000);
+        Thu, 12 Mar 2020 19:17:36 -0000
+Date:   Thu, 12 Mar 2020 14:17:36 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -43,42 +43,47 @@ Cc:     Mark Brown <broonie@kernel.org>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH v3 1/2] spi: dt-bindings: spi-controller: Fix
- #address-cells for slave mode
-Message-ID: <20200312191652.GA14819@bogus>
+Subject: Re: [PATCH v3 2/2] spi: dt-bindings: spi-controller: Fix
+ spi-[rt]x-bus-width for slave mode
+Message-ID: <20200312191736.GA15869@bogus>
 References: <20200306085038.8111-1-geert+renesas@glider.be>
- <20200306085038.8111-2-geert+renesas@glider.be>
+ <20200306085038.8111-3-geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200306085038.8111-2-geert+renesas@glider.be>
+In-Reply-To: <20200306085038.8111-3-geert+renesas@glider.be>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri,  6 Mar 2020 09:50:37 +0100, Geert Uytterhoeven wrote:
-> Currently, the DT bindings for an SPI controller specify that
-> "#address-cells" must be fixed to one.  However, that applies to an SPI
-> controller in master mode only.  When running in SPI slave mode,
-> "#address-cells" should not be specified.
+On Fri,  6 Mar 2020 09:50:38 +0100, Geert Uytterhoeven wrote:
+> The descriptions for the spi-rx-bus-width and spi-tx-bus-width
+> properties refer to "MISO" and "MOSI", which are not explained in the
+> document.  While these abbreviations are fairly common when talking
+> about SPI, and thus may not need an explanation, they are not entirely
+> correct in this context, as the SPI controller may be used in slave mode
+> instead of master mode.
 > 
-> Fix this making "#address-cells" mutually-exclusive with "spi-slave".
+> Fix this by replacing them by "read transfers" resp. "write transfers",
+> like is done for the spi-rx-delay-us and spi-tx-delay-us properties.
 > 
-> Fixes: 0a1b929356830257 ("spi: Add YAML schemas for the generic SPI options")
-> Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
 > v3:
->   - Make #address-cells mutually-exclusive with spi-slave,
+>   - No changes,
 > 
 > v2:
->   - Use "enum: [0, 1]" instead of min/max limit,
->   - use "- spi-slave" instead of "[ spi-slave ]".
+>   - New.
+> 
+> This issue was present in the .txt version of the bindings, too, so
+> technically it needs
+> Fixes: a8830cb19cfea04e ("spi: Document DT bindings for SPI controllers in slave mode")
+> but of course it won't apply to that version.
 > ---
->  Documentation/devicetree/bindings/spi/spi-controller.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  Documentation/devicetree/bindings/spi/spi-controller.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
