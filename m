@@ -2,145 +2,297 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58469184CAD
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Mar 2020 17:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B56184D04
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Mar 2020 17:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbgCMQmL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Mar 2020 12:42:11 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:33867 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726622AbgCMQmL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Mar 2020 12:42:11 -0400
-Received: by mail-pg1-f195.google.com with SMTP id t3so5306106pgn.1
-        for <linux-spi@vger.kernel.org>; Fri, 13 Mar 2020 09:42:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=s6WkIo0+SONpzpcf5vdQfXHZIbN30Eo2H37KqgrmrxU=;
-        b=DttVEW2nj1EWSDDOPAqrLLZt8g+bnvGlaARDGsCefbz0lJa0fkaU79++VphmD90RWh
-         UnQj9RjqDaeZWKRCdE3Id3MY1vagTSWVlA+rTHZfPTI7Cej3kjCgak0gEmE5WQfcr12y
-         51f602qcmq41xfOrMgNMi6K8S5NTF5EniRzlw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=s6WkIo0+SONpzpcf5vdQfXHZIbN30Eo2H37KqgrmrxU=;
-        b=sz2qXb739nbtMekN4SCUGuN8ZQbjJBBFgcblaGxu9JmmF7Vr419yFHVUqZdU9kArDK
-         T0YOCja+FgwPzG0jgYY9Pu+FVIEIRmsjwBSWctazLPdGzj1FFyEdZlsA1jWXESMXw9vT
-         ZkXcqTB0VqmMdiea53XnxXhx2JVX35V+E3ftdcHVyXKiT6EcRo/qlgZ586CG4yxpTKU4
-         Zk+zEPTPTQ0vRc+n6JX4mQP+YdWRsbYShXBWM9s0cYeha5QeXBpvnDlPgVVSt19I0nPS
-         b94HKhfs9F+Fc3FUaVDJ8JztU28ny2F2AcF29Xg6dj5tmSzdPdKa8cBMutJNOXwDh52v
-         +t3A==
-X-Gm-Message-State: ANhLgQ2G5NTWlbfZR6+fdygg9MdHG9WnVQSBHSShtWaECw6txeY2u0mH
-        P9YDiFz6o3E4rLSotKmUs1fzCA==
-X-Google-Smtp-Source: ADFU+vuwQbkLvdp2XzbaSrPiVctBFMJhZahqG7wDTFBRWfwoOXucPUHkefVUt19G+294ACbzJPzTXw==
-X-Received: by 2002:a62:ab07:: with SMTP id p7mr13046568pff.318.1584117729446;
-        Fri, 13 Mar 2020 09:42:09 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id q43sm11520128pjc.40.2020.03.13.09.42.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Mar 2020 09:42:08 -0700 (PDT)
-Date:   Fri, 13 Mar 2020 09:42:07 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-Subject: Re: [PATCH V2 2/8] soc: qcom: geni: Support for ICC voting
-Message-ID: <20200313164207.GH144492@google.com>
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-3-git-send-email-akashast@codeaurora.org>
+        id S1726553AbgCMQx2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 13 Mar 2020 12:53:28 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:56853 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbgCMQx2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Mar 2020 12:53:28 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5143823EC2;
+        Fri, 13 Mar 2020 17:53:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1584118404;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o/s4NtXKYsxA4RgfwWhA3zpVJzNOf9dpb3C9XBdpNbg=;
+        b=BRd65QOjqf7cKLLcB24LvuK7LUkR5xgsbHrFHLM3TuWylZ9xIxOujPPIK19DqbvhY3px2/
+        Sggp/yOfW6Ia7UX05KEXyIuqiP7a6dlGek0KDpQqKQTH6OkCkyTlbUPXONWCHcB4pW+d+y
+        Ew/y71urxnX0ui2oWJJlD1DTqSMOJ00=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1584105134-13583-3-git-send-email-akashast@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 13 Mar 2020 17:53:24 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, Esben Haabendal <eha@deif.com>,
+        angelo@sysam.it, andrew.smirnov@gmail.com,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Wei Chen <weic@nvidia.com>, Mohamed Hosny <mhosny@nvidia.com>,
+        peng.ma@nxp.com
+Subject: Re: [PATCH v3 0/7] NXP DSPI bugfixes and support for LS1028A
+In-Reply-To: <CA+h21hqk+pVrGgHx4iTshfE3i4WF7VANPfMf2ykPFpL3=ragag@mail.gmail.com>
+References: <20200310125542.5939-1-olteanv@gmail.com>
+ <615284875b709f602d57e4a4621a83c1@walle.cc>
+ <CA+h21hrYoHVDvsxT1EPWhYprL+zNHfE4MW7k4HxiK7ma4ZWn1g@mail.gmail.com>
+ <59b07b7d70603c6b536a7354ed0ea8d8@walle.cc>
+ <4ba077c80143c8ec679066e6d8cedca2@walle.cc>
+ <CA+h21hqk+pVrGgHx4iTshfE3i4WF7VANPfMf2ykPFpL3=ragag@mail.gmail.com>
+Message-ID: <4b77ccec9d0de0615985ebf60db9cf67@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
+X-Spam-Level: *
+X-Rspamd-Server: web
+X-Spam-Status: No, score=1.40
+X-Spam-Score: 1.40
+X-Rspamd-Queue-Id: 5143823EC2
+X-Spamd-Result: default: False [1.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_TWELVE(0.00)[15];
+         FREEMAIL_TO(0.00)[gmail.com];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,arm.com,deif.com,sysam.it,gmail.com,embeddedor.com,nvidia.com,nxp.com];
+         MID_RHS_MATCH_FROM(0.00)[];
+         SUSPICIOUS_RECIPS(1.50)[]
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Akash,
-
-On Fri, Mar 13, 2020 at 06:42:08PM +0530, Akash Asthana wrote:
-> Add necessary macros and structure variables to support ICC BW
-> voting from individual SE drivers.
+Am 2020-03-13 17:37, schrieb Vladimir Oltean:
+> Hi Michael,
 > 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
-> Changes in V2:
->  - As per Bjorn's comment dropped enums for ICC paths, given the three
->    paths individual members
+> On Fri, 13 Mar 2020 at 18:07, Michael Walle <michael@walle.cc> wrote:
+>> 
+>> Am 2020-03-10 16:22, schrieb Michael Walle:
+>> > Hi Vladimir,
+>> >
+>> > Am 2020-03-10 15:56, schrieb Vladimir Oltean:
+>> >>> (2) Also, reading the flash, every second time there is
+>> >>> (reproducibly)
+>> >>> an
+>> >>> IO error:
+>> >>>
+>> >>> # hexdump -C /dev/mtd0
+>> >>> 00000000  68 75 68 75 0a ff ff ff  ff ff ff ff ff ff ff ff
+>> >>> |huhu............|
+>> >>> 00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff
+>> >>> |................|
+>> >>> *
+>> >>> 01000000
+>> >>> # hexdump -C /dev/mtd0
+>> >>> 00000000  68 75 68 75 0a ff ff ff  ff ff ff ff ff ff ff ff
+>> >>> |huhu............|
+>> >>> 00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff
+>> >>> |................|
+>> >>> *
+>> >>> hexdump: /dev/mtd0: Input/output error
+>> >>> 00dc0000
+>> >>> # hexdump -C /dev/mtd0
+>> >>> 00000000  68 75 68 75 0a ff ff ff  ff ff ff ff ff ff ff ff
+>> >>> |huhu............|
+>> >>> 00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff
+>> >>> |................|
+>> >>> *
+>> >>> 01000000
+>> >>> # hexdump -C /dev/mtd0
+>> >>> 00000000  68 75 68 75 0a ff ff ff  ff ff ff ff ff ff ff ff
+>> >>> |huhu............|
+>> >>> 00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff
+>> >>> |................|
+>> >>> *
+>> >>> hexdump: /dev/mtd0: Input/output error
+>> >>> 00e6a000
+>> >>>
+>> >>
+>> >> Just to be clear, issue 2 is seen only after you abort another
+>> >> transaction, right?
+>> >
+>> > No, just normal uninterrupted reading. Just tried it right after
+>> > reboot. Doesn't seem to be every second time though, just random
+>> > which makes me wonder if that is another problem now. Also the
+>> > last successful reading is random.
+>> 
+>> 
+>> Ok I guess I know what the root cause is. This is an extract of
+>> the current code:
+>> 
+>> > static int dspi_transfer_one_message(struct spi_controller *ctlr,
+>> >                                    struct spi_message *message)
+>> > {
+>> > ..
+>> >       /* Kick off the interrupt train */
+>> >       dspi_fifo_write(dspi);
+>> >
+>> >       status = wait_event_interruptible(dspi->waitq,
+>> >                                         dspi->waitflags);
+>> >       dspi->waitflags = 0;
+>> > ..
+>> > }
+>> >
+>> > static int dspi_rxtx(struct fsl_dspi *dspi)
+>> > {
+>> >       dspi_fifo_read(dspi);
+>> >
+>> >       if (!dspi->len)
+>> >               /* Success! */
+>> >               return 0;
+>> >
+>> >       dspi_fifo_write(dspi);
+>> >
+>> >       return -EINPROGRESS;
+>> > }
+>> 
+>> dspi_rxtx() is used in the ISR. Both dspi_fifo_write() and dspi_rxtx()
+>> access shared data like, dspi->words_in_flight. In the EIO error case
+>> the following bytes_sent is -1, because dspi->words_in_flight is -1.
+>> 
+>> > /* Update total number of bytes that were transferred */
+>> > bytes_sent = dspi->words_in_flight * dspi->oper_word_size;
+>> 
+>> words_in_flight is always -1 after dspi_fifo_read() was called. In
+>> the error case, the ISR kicks in right in the middle of the execution
+>> of dspi_fifo_write() in dspi_transfer_one_message().
+>> 
+>> > static void dspi_fifo_write(struct fsl_dspi *dspi)
+>> > {
+>> > ..
+>> >       if (dspi->devtype_data->trans_mode == DSPI_EOQ_MODE)
+>> >               dspi_eoq_fifo_write(dspi);
+>> >        else
+>> >               dspi_xspi_fifo_write(dspi);
+>> 
+>> Now if the ISR is executed right here..
+>> 
+>> >
+>> >       /* Update total number of bytes that were transferred */
+>> >       bytes_sent = dspi->words_in_flight * dspi->oper_word_size;
+>> 
+>> .. words_in_flight might be -1.
+>> 
+>> >       msg->actual_length += bytes_sent;
+>> 
+>> and bytes_sent is negative. And this causes an IO error because
+>> the returned overall message length doesn't match.
+>> 
+>> >       dspi->progress += bytes_sent / DIV_ROUND_UP(xfer->bits_per_word, 8);
+>> > ..
+>> > }
+>> 
+>> I could not reproduce the issue with the following patch. I don't
+>> know if I got the locking correct though or if there is a better
+>> way to go.
+>> 
+>> 
+>> diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+>> index 8b16de9ed382..578fedeb16a0 100644
+>> --- a/drivers/spi/spi-fsl-dspi.c
+>> +++ b/drivers/spi/spi-fsl-dspi.c
+>> @@ -224,6 +224,7 @@ struct fsl_dspi {
+>>          u16                                     tx_cmd;
+>>          const struct fsl_dspi_devtype_data      *devtype_data;
+>> 
+>> +       spinlock_t lock;
+>>          wait_queue_head_t                       waitq;
+>>          u32                                     waitflags;
+>> 
+>> @@ -873,14 +874,20 @@ static void dspi_fifo_write(struct fsl_dspi 
+>> *dspi)
+>> 
+>>   static int dspi_rxtx(struct fsl_dspi *dspi)
+>>   {
+>> +       unsigned long flags;
+>> +
+>> +       spin_lock_irqsave(&dspi->lock, flags);
+>>          dspi_fifo_read(dspi);
+>> 
+>> -       if (!dspi->len)
+>> +       if (!dspi->len) {
+>>                  /* Success! */
+>> +               spin_unlock_irqrestore(&dspi->lock, flags);
+>>                  return 0;
+>> +       }
+>> 
+>>          dspi_fifo_write(dspi);
+>> 
+>> +       spin_unlock_irqrestore(&dspi->lock, flags);
+>>          return -EINPROGRESS;
+>>   }
+>> 
+>> @@ -950,7 +957,9 @@ static int dspi_transfer_one_message(struct
+>> spi_controller *ctlr,
+>>          struct fsl_dspi *dspi = spi_controller_get_devdata(ctlr);
+>>          struct spi_device *spi = message->spi;
+>>          struct spi_transfer *transfer;
+>> +       unsigned long flags;
+>>          int status = 0;
+>> +       int i = 0;
+>> 
+>>          if (dspi->irq)
+>>                  dspi_enable_interrupts(dspi, true);
+>> @@ -1009,7 +1018,9 @@ static int dspi_transfer_one_message(struct
+>> spi_controller *ctlr,
+>>                                  goto out;
+>>                  } else if (dspi->irq) {
+>>                          /* Kick off the interrupt train */
+>> +                       spin_lock_irqsave(&dspi->lock, flags);
+>>                          dspi_fifo_write(dspi);
+>> +                       spin_unlock_irqrestore(&dspi->lock, flags);
+>> 
+>>                          status = 
+>> wait_event_interruptible(dspi->waitq,
+>> 
+>> dspi->waitflags);
+>> @@ -1301,6 +1312,7 @@ static int dspi_probe(struct platform_device
+>> *pdev)
+>>          ctlr->cleanup = dspi_cleanup;
+>>          ctlr->slave_abort = dspi_slave_abort;
+>>          ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
+>> +       spin_lock_init(&dspi->lock);
+>> 
+>>          pdata = dev_get_platdata(&pdev->dev);
+>>          if (pdata) {
+>> 
+>> 
+>> 
+>> -michael
 > 
->  include/linux/qcom-geni-se.h | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-> index dd46494..eaae16e 100644
-> --- a/include/linux/qcom-geni-se.h
-> +++ b/include/linux/qcom-geni-se.h
-> @@ -6,6 +6,8 @@
->  #ifndef _LINUX_QCOM_GENI_SE
->  #define _LINUX_QCOM_GENI_SE
->  
-> +#include <linux/interconnect.h>
-> +
->  /* Transfer mode supported by GENI Serial Engines */
->  enum geni_se_xfer_mode {
->  	GENI_SE_INVALID,
-> @@ -33,6 +35,15 @@ struct clk;
->   * @clk:		Handle to the core serial engine clock
->   * @num_clk_levels:	Number of valid clock levels in clk_perf_tbl
->   * @clk_perf_tbl:	Table of clock frequency input to serial engine clock
-> + * @icc_path_geni_to_core:	ICC path handle for geni to core
-> + * @icc_path_cpu_to_geni:	ICC path handle for cpu to geni
-> + * @icc_path_geni_to_ddr:	ICC path handle for geni to ddr
-> + * @avg_bw_core:	Average bus bandwidth value for QUP core 2x clock
-> + * @peak_bw_core:	Peak bus bandwidth value for QUP core 2x clock
-> + * @avg_bw_cpu:		Average bus bandwidth value for CPU
-> + * @peak_bw_cpu:	Peak bus bandwidth value for CPU
-> + * @avg_bw_ddr:		Average bus bandwidth value for DDR
-> + * @peak_bw_ddr:	Peak bus bandwidth value for DDR
->   */
->  struct geni_se {
->  	void __iomem *base;
-> @@ -41,6 +52,15 @@ struct geni_se {
->  	struct clk *clk;
->  	unsigned int num_clk_levels;
->  	unsigned long *clk_perf_tbl;
-> +	struct icc_path *icc_path_geni_to_core;
-> +	struct icc_path *icc_path_cpu_to_geni;
-> +	struct icc_path *icc_path_geni_to_ddr;
-> +	unsigned int avg_bw_core;
-> +	unsigned int peak_bw_core;
-> +	unsigned int avg_bw_cpu;
-> +	unsigned int peak_bw_cpu;
-> +	unsigned int avg_bw_ddr;
-> +	unsigned int peak_bw_ddr;
+> Thanks for taking such a close look. I haven't had the time to follow 
+> up.
+> Indeed, the ISR, and therefore dspi_fifo_read, can execute before
+> dspi->words_in_flight was populated correctly. And bad things will
+> happen in that case.
+> But I wouldn't introduce a spin lock that disables interrupts on the
+> local CPU just for that - it's too complicated for this driver.
 
-Those are a lot of new individual struct members. How about clustering
-them, e.g.:
+Sure. It was just a quick test whether the problem actually goes away.
 
-struct geni_icc_path {
-	struct icc_path *path;
-	unsigned int avg_bw;
-	unsigned int peak_bw;
-};
+> I would just keep the SPI interrupt quiesced via SPI_RSER and enable
+> it only once it's safe, aka after updating dspi->words_in_flight.
 
-struct geni_iccs_paths {
-	struct geni_icc_path to_core;
-	struct geni_icc_path from_cpu;
-	struct geni_icc_path to_ddr;
-};
+I didn't want to move the interrupt_enable() around. I leave this up to
+you ;)
 
-And 'struct geni_se' just gets this entry:
-
-	struct geni_icc_paths icc;
-
-or alternatively three 'struct geni_icc_path' entries.
+-michael
