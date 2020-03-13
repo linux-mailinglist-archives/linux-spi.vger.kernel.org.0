@@ -2,82 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64539184648
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Mar 2020 12:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6302184784
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Mar 2020 14:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726569AbgCMLye (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Mar 2020 07:54:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:53532 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726406AbgCMLyd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 13 Mar 2020 07:54:33 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 681EAFEC;
-        Fri, 13 Mar 2020 04:54:33 -0700 (PDT)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1B943F534;
-        Fri, 13 Mar 2020 04:54:32 -0700 (PDT)
-Date:   Fri, 13 Mar 2020 11:54:31 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Ashish Kumar <ashish.kumar@nxp.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>, Han Xu <han.xu@nxp.com>,
-        Adam Ford <aford173@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH] spi: spi-nxp-fspi: Fix a NULL vs IS_ERR()
- check in probe
-Message-ID: <20200313115431.GB5528@sirena.org.uk>
-References: <20200312113154.GC20562@mwanda>
- <CAOMZO5CJ7G7yJZEEPfsm1P2SnrJ7kmOPmZCWiKwrvDZjPNOnWw@mail.gmail.com>
- <20200312121816.GC4038@sirena.org.uk>
- <VI1PR04MB4015D509DC78B0C7EA649CC995FA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IrhDeMKUP4DT/M7F"
-Content-Disposition: inline
-In-Reply-To: <VI1PR04MB4015D509DC78B0C7EA649CC995FA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
-X-Cookie: This page intentionally left blank.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726495AbgCMNMn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 13 Mar 2020 09:12:43 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:11696 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726216AbgCMNMm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Mar 2020 09:12:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584105162; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=b3CLsPT6+H6XAUf5xBwZbLtiEVGZ9FJA854R/d46QeI=; b=omxuhxqhmRk6M99uhojaHAOXpoKHajVIf5xqtdz1ABWih+xG4/+ghqNDh7s1uXe2X5fstgOY
+ Q6SMYwpGvo1tY/xTnbLcWLu0OctniSEmpJJIpinddiMvz5tBixUhzq6/WSp9aR3x9PFLWgcN
+ l1XQ+H2X7wawYax5YNwgqCIRHkM=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e6b86c1.7f6cb0af1928-smtp-out-n04;
+ Fri, 13 Mar 2020 13:12:33 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 2C8BDC43637; Fri, 13 Mar 2020 13:12:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from akashast-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1A70DC433CB;
+        Fri, 13 Mar 2020 13:12:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1A70DC433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+From:   Akash Asthana <akashast@codeaurora.org>
+To:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org,
+        Akash Asthana <akashast@codeaurora.org>
+Subject: [PATCH V2 0/8] Add interconnect support to QSPI and QUP drivers
+Date:   Fri, 13 Mar 2020 18:42:06 +0530
+Message-Id: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+dt-binding patch for QUP drivers.
+ - https://patchwork.kernel.org/patch/11436621/ [Convert QUP bindings
+	to YAML and add ICC, pin swap doc]
 
---IrhDeMKUP4DT/M7F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+dt-binding patch for QSPI.
+ - https://patchwork.kernel.org/patch/11436719/ [Convert QSPI binding
+	to YAML and add interconnect doc]
 
-On Fri, Mar 13, 2020 at 04:16:44AM +0000, Ashish Kumar wrote:
+High level design:
+ - QUP wrapper/common driver.
+   Vote for QUP core on behalf of earlycon from probe.
+   Remove BW vote during sys suspend call
 
-> This patch needs to drop, until further debugged, since flexspi is
-> shared ip it is not having desired result on few boards, but it is
-> needed for i.mx series, This is one of the comments from han xu. I
-> believe further modifications will be needed, if not commit msg and
-> other things can be update.
+ - SERIAL driver.
+   Vote only for CPU/CORE path because driver is in FIFO mode only
+   Vote/unvote from qcom_geni_serial_pm func.
+   Bump up the CPU vote from set_termios call based on real time need
 
-Please send a patch doing the revert with a changelog explaining why
-it's needed.
+ - I2C driver.
+   Vote for CORE/CPU/DDR path
+   Vote/unvote from runtime resume/suspend callback
+   As bus speed for I2C is fixed from probe itself no need for bump up.
 
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
+ - SPI QUP driver.
+   Vote only for CPU/CORE path because driver is in FIFO mode only
+   Vote/unvote from runtime resume/suspend callback
+   Bump up CPU vote based on real time need per transfer.
 
---IrhDeMKUP4DT/M7F
-Content-Type: application/pgp-signature; name="signature.asc"
+ - QSPI driver.
+   Vote only for CPU path
+   Vote/unvote from runtime resume/suspend callback
+   Bump up CPU vote based on real time need per transfer.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5rdHYACgkQJNaLcl1U
-h9DFCQf/UPqYCaPsBLcZEOTW72elTQpFxi4KP6BJ+mTkTETBkeHVQOP/U3FWwdDM
-THoABWIEq+t24rOwkNaro3dl6b85fkI513FBNy1vqqRA/VrjpkCRTgHAAKD/D7+g
-HQp3R/3GX5FkGJYNnmoOOQodhmR9UxklAfUASOtpiTS6wpzQw9puswv/eQO9Yumg
-526+cxrq0hePl72ZsmZlV9EkxMCkuW7X01JTLwmmC0EaFHp0E8LMU/hvAPxO9RCZ
-I9uT4S8tjPzEUZiwCm7sryHvnZePMK/8/BOv+IiZeQDXqwiW0JW6GGLK56MWH4SQ
-AwPhEnuNRd+LD/dUU6vWSvmAgMJ66A==
-=AmBc
------END PGP SIGNATURE-----
+Changes in V2:
+ - Add devm_of_icc_get() API interconnect core.
+ - Add ICC support to common driver to fix earlyconsole crash.
 
---IrhDeMKUP4DT/M7F--
+Akash Asthana (8):
+  interconnect: Add devm_of_icc_get() as exported API for users
+  soc: qcom: geni: Support for ICC voting
+  soc: qcom-geni-se: Add interconnect support to fix earlycon crash
+  tty: serial: qcom_geni_serial: Add interconnect support
+  i2c: i2c-qcom-geni: Add interconnect support
+  spi: spi-geni-qcom: Add interconnect support
+  spi: spi-qcom-qspi: Add interconnect support
+  arm64: dts: sc7180: Add interconnect for QUP and QSPI
+
+ arch/arm64/boot/dts/qcom/sc7180.dtsi  | 127 ++++++++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-qcom-geni.c    | 110 +++++++++++++++++++++++++++++
+ drivers/interconnect/core.c           |  25 +++++++
+ drivers/soc/qcom/qcom-geni-se.c       |  41 +++++++++++
+ drivers/spi/spi-geni-qcom.c           |  74 +++++++++++++++++++-
+ drivers/spi/spi-qcom-qspi.c           |  46 +++++++++++-
+ drivers/tty/serial/qcom_geni_serial.c |  69 ++++++++++++++++--
+ include/linux/interconnect.h          |   7 ++
+ include/linux/qcom-geni-se.h          |  28 ++++++++
+ 9 files changed, 521 insertions(+), 6 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
