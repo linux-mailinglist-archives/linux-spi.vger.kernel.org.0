@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68916185791
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 02:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AFB18573E
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 02:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727141AbgCOBka (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 14 Mar 2020 21:40:30 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:33473 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726530AbgCOBk3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 14 Mar 2020 21:40:29 -0400
-Received: by mail-ed1-f66.google.com with SMTP id z65so17360306ede.0;
-        Sat, 14 Mar 2020 18:40:27 -0700 (PDT)
+        id S1726699AbgCOBeZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 14 Mar 2020 21:34:25 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:38353 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726421AbgCOBeZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 14 Mar 2020 21:34:25 -0400
+Received: by mail-wm1-f66.google.com with SMTP id t13so7882694wmi.3;
+        Sat, 14 Mar 2020 18:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=tbblumJGtz/v9/Nuxr5nuZQPC5XPjWBHpqGFnIqFYbU=;
-        b=uSM7I/cLsBpGWO1Pz2VdA1/4K5w6j+wDHVtTTodTJbnwzCOeCf1oq6ncWqZV1uCg1k
-         g/z/RiKw70nR8Qu/uLbNpuie9zE2TojhvbGZOR6fw58QQ785qzxtcRTl8YwqK+DuSNbz
-         7cGKJkgfaw5ivNWWkrOlKtzv+hwRRL7K+Jvi5OR0oShde/xwf+1xHZAuYkpuox5FS/Nq
-         wJKnWpfISbp3wha1yxKoUcV6LSNGm4alo3a4nt3DcbNoXIRD9jWfcfeqcQnCPl9syCGm
-         hdJE+zFu0EQ2ZC33PRSJpC/xuMsVD2BRhHnWpCVfpJqPy6t9tqGBlY8105/5qCpnRhnJ
-         elJg==
+        bh=W4LsChYiYRCfil6DjkYr2p/X2niUsvURlPsrKK9vuOs=;
+        b=mMwz6uwyECazDiJCgbOUHKlUEAMtQg38/g8Xqg6k2LoiSVVVtZOOsgSya5j7XcIH9w
+         iMAPxKZjs03JXneZ9diWGvngfP7GIfFYVuL10HYcGY18z4749N7UlgdbhwjzLmuKuc7J
+         RBJ4PI8kUSp15b1pBT9Kaj83C8rF95WKh6ZXOnlET7I3PpKUl8F3vLPK039Hp0C6tMK0
+         ZHmYR7isWCkR+IlSZNxGDqzsFgTsSewABn1yNSes9aSqqYCjqNqO0VVny5CYiuXh/9dW
+         2SPJvOWX1drqOcChY8n/FV4YN3Qt6xArmBkRY0tmEkNqLFGistf4v/WBG+JAfy7fvLJ0
+         KejQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=tbblumJGtz/v9/Nuxr5nuZQPC5XPjWBHpqGFnIqFYbU=;
-        b=nPT2pOmkVcGKhWjCGnaS0zLK7g74glmQFKT3sIWjufDI4AdpSRU7FvAVPrQdOQSKR3
-         80u09CH1irFk9hzsDGxHnllK+nmK1UGpGWsLj8cgzOgPr1RVnJg4EdLEHOk1hjuV72yV
-         ArNEuZCzkqatrRPDjIjQV6Ce2K9w6CVljBgHhRq5cLEYcjpIYuHv6pXG3tMO+7Fmj2pj
-         KAb5l54tBmOQnuxRBYWE7suuzEXFA7lkIE6+jxIHN8ecqQ2OohiGnRH8XRm6cgWXmDOb
-         Uhb/6VOAfS3CbVE2UuaOZAmYA8ife4Hec88Jr9RgwDlkoAAgHbPMBCYf4Glx1EHfAQLe
-         bSHg==
-X-Gm-Message-State: ANhLgQ1ffm9cUSx05uRZE95Nks52D71G7Utle2rSmnRl9XZjxk37lN+H
-        uJpgUPV1/MWSnIta2ImSLFxL0+i3oJo=
-X-Google-Smtp-Source: ADFU+vsuOmeWGW4V4z2qIiw7ceA+cmGdNAQUNcqIbyuT+VdXvWp0qD3bKd75KasTsKEjcb4hc5TnAw==
-X-Received: by 2002:a5d:4a8c:: with SMTP id o12mr26840529wrq.10.1584225844781;
-        Sat, 14 Mar 2020 15:44:04 -0700 (PDT)
+        bh=W4LsChYiYRCfil6DjkYr2p/X2niUsvURlPsrKK9vuOs=;
+        b=IRe3u+PP5EZBy4BHaCxh/Wg8g/cOqq2TjHFpdm4NvHi4NDXOEdCy1NoqEH0+DTeAvM
+         nmuz8GasvZlAmWcmEemd5mCa4Eo7OuJfc3k8CiCpBegIPvZTg7VTFcgPCjqQxWKnxPbu
+         ERgLezibL4CW6AP+PyrippgP+RlK30JZhsOppwEc2gjcHfgORGbSwcFuzNIiNkDptU8T
+         KQ/KawdBkwES7RpcxJ8ydLOAuYRfe9ZwLioJnR1bEl7pelldDB38L55TAnueXpwg9b5c
+         et9Lc6ZNNWM+TkZI+wreIuq37N6QyKJoIU8vnWT1bRmY+Gscs4cOhV525MFbJZuK7Z9X
+         qeZg==
+X-Gm-Message-State: ANhLgQ2bs/wvq5iG/b2jyASZKdjgGdkLSiBACVvibBNZdzuCv7mvtsai
+        /P78/YWg9Njg6Yuf8JzPWBnj0ps9q9U=
+X-Google-Smtp-Source: ADFU+vvceGKe918gmUtPax/Kpa0CuJ0cxHQlIzPaPbiI7CPBUaRWpfSTLBN2KPObAmrLXkH/4FDSfw==
+X-Received: by 2002:a1c:9802:: with SMTP id a2mr18615176wme.117.1584225846132;
+        Sat, 14 Mar 2020 15:44:06 -0700 (PDT)
 Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id 133sm23690732wmd.5.2020.03.14.15.44.03
+        by smtp.gmail.com with ESMTPSA id 133sm23690732wmd.5.2020.03.14.15.44.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Mar 2020 15:44:04 -0700 (PDT)
+        Sat, 14 Mar 2020 15:44:05 -0700 (PDT)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,9 +50,9 @@ Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, eha@deif.com, angelo@sysam.it,
         andrew.smirnov@gmail.com, gustavo@embeddedor.com, weic@nvidia.com,
         mhosny@nvidia.com, michael@walle.cc, peng.ma@nxp.com
-Subject: [PATCH v3 06/12] spi: spi-fsl-dspi: Replace interruptible wait queue with a simple completion
-Date:   Sun, 15 Mar 2020 00:43:34 +0200
-Message-Id: <20200314224340.1544-7-olteanv@gmail.com>
+Subject: [PATCH v3 07/12] spi: spi-fsl-dspi: Avoid NULL pointer in dspi_slave_abort for non-DMA mode
+Date:   Sun, 15 Mar 2020 00:43:35 +0200
+Message-Id: <20200314224340.1544-8-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200314224340.1544-1-olteanv@gmail.com>
 References: <20200314224340.1544-1-olteanv@gmail.com>
@@ -63,173 +63,35 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Currently the driver puts the process in interruptible sleep waiting for
-the interrupt train to finish transfer to/from the tx_buf and rx_buf.
+The driver does not create the dspi->dma structure unless operating in
+DSPI_DMA_MODE, so it makes sense to check for that.
 
-But exiting the process with ctrl-c may make the kernel panic: the
-wait_event_interruptible call will return -ERESTARTSYS, which a proper
-driver implementation is perhaps supposed to handle, but nonetheless
-this one doesn't, and aborts the transfer altogether.
-
-Actually when the task is interrupted, there is still a high chance that
-the dspi_interrupt is still triggering. And if dspi_transfer_one_message
-returns execution all the way to the spi_device driver, that can free
-the spi_message and spi_transfer structures, leaving the interrupts to
-access a freed tx_buf and rx_buf.
-
-hexdump -C /dev/mtd0
-00000000  00 75 68 75 0a ff ff ff  ff ff ff ff ff ff ff ff
-|.uhu............|
-00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff
-|................|
-*
-^C[   38.495955] fsl-dspi 2120000.spi: Waiting for transfer to complete failed!
-[   38.503097] spi_master spi2: failed to transfer one message from queue
-[   38.509729] Unable to handle kernel paging request at virtual address ffff800095ab3377
-[   38.517676] Mem abort info:
-[   38.520474]   ESR = 0x96000045
-[   38.523533]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   38.528861]   SET = 0, FnV = 0
-[   38.531921]   EA = 0, S1PTW = 0
-[   38.535067] Data abort info:
-[   38.537952]   ISV = 0, ISS = 0x00000045
-[   38.541797]   CM = 0, WnR = 1
-[   38.544771] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000082621000
-[   38.551494] [ffff800095ab3377] pgd=00000020fffff003, p4d=00000020fffff003, pud=0000000000000000
-[   38.560229] Internal error: Oops: 96000045 [#1] PREEMPT SMP
-[   38.565819] Modules linked in:
-[   38.568882] CPU: 0 PID: 2729 Comm: hexdump Not tainted 5.6.0-rc4-next-20200306-00052-gd8730cdc8a0b-dirty #193
-[   38.578834] Hardware name: Kontron SMARC-sAL28 (Single PHY) on SMARC Eval 2.0 carrier (DT)
-[   38.587129] pstate: 20000085 (nzCv daIf -PAN -UAO)
-[   38.591941] pc : ktime_get_real_ts64+0x3c/0x110
-[   38.596487] lr : spi_take_timestamp_pre+0x40/0x90
-[   38.601203] sp : ffff800010003d90
-[   38.604525] x29: ffff800010003d90 x28: ffff80001200e000
-[   38.609854] x27: ffff800011da9000 x26: ffff002079c40400
-[   38.615184] x25: ffff8000117fe018 x24: ffff800011daa1a0
-[   38.620513] x23: ffff800015ab3860 x22: ffff800095ab3377
-[   38.625841] x21: 000000000000146e x20: ffff8000120c3000
-[   38.631170] x19: ffff0020795f6e80 x18: ffff800011da9948
-[   38.636498] x17: 0000000000000000 x16: 0000000000000000
-[   38.641826] x15: ffff800095ab3377 x14: 0720072007200720
-[   38.647155] x13: 0720072007200765 x12: 0775076507750771
-[   38.652483] x11: 0720076d076f0772 x10: 0000000000000040
-[   38.657812] x9 : ffff8000108e2100 x8 : ffff800011dcabe8
-[   38.663139] x7 : 0000000000000000 x6 : ffff800015ab3a60
-[   38.668468] x5 : 0000000007200720 x4 : ffff800095ab3377
-[   38.673796] x3 : 0000000000000000 x2 : 0000000000000ab0
-[   38.679125] x1 : ffff800011daa000 x0 : 0000000000000026
-[   38.684454] Call trace:
-[   38.686905]  ktime_get_real_ts64+0x3c/0x110
-[   38.691100]  spi_take_timestamp_pre+0x40/0x90
-[   38.695470]  dspi_fifo_write+0x58/0x2c0
-[   38.699315]  dspi_interrupt+0xbc/0xd0
-[   38.702987]  __handle_irq_event_percpu+0x78/0x2c0
-[   38.707706]  handle_irq_event_percpu+0x3c/0x90
-[   38.712161]  handle_irq_event+0x4c/0xd0
-[   38.716008]  handle_fasteoi_irq+0xbc/0x170
-[   38.720115]  generic_handle_irq+0x2c/0x40
-[   38.724135]  __handle_domain_irq+0x68/0xc0
-[   38.728243]  gic_handle_irq+0xc8/0x160
-[   38.732000]  el1_irq+0xb8/0x180
-[   38.735149]  spi_nor_spimem_read_data+0xe0/0x140
-[   38.739779]  spi_nor_read+0xc4/0x120
-[   38.743364]  mtd_read_oob+0xa8/0xc0
-[   38.746860]  mtd_read+0x4c/0x80
-[   38.750007]  mtdchar_read+0x108/0x2a0
-[   38.753679]  __vfs_read+0x20/0x50
-[   38.757002]  vfs_read+0xa4/0x190
-[   38.760237]  ksys_read+0x6c/0xf0
-[   38.763471]  __arm64_sys_read+0x20/0x30
-[   38.767319]  el0_svc_common.constprop.3+0x90/0x160
-[   38.772125]  do_el0_svc+0x28/0x90
-[   38.775449]  el0_sync_handler+0x118/0x190
-[   38.779468]  el0_sync+0x140/0x180
-[   38.782793] Code: 91000294 1400000f d50339bf f9405e80 (f90002c0)
-[   38.788910] ---[ end trace 55da560db4d6bef7 ]---
-[   38.793540] Kernel panic - not syncing: Fatal exception in interrupt
-[   38.799914] SMP: stopping secondary CPUs
-[   38.803849] Kernel Offset: disabled
-[   38.807344] CPU features: 0x10002,20006008
-[   38.811451] Memory Limit: none
-[   38.814513] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
-
-So it is clear that the "interruptible" part isn't handled correctly.
-When the process receives a signal, one could either attempt a clean
-abort (which appears to be difficult with this hardware) or just keep
-restarting the sleep until the wait queue really completes. But checking
-in a loop for -ERESTARTSYS is a bit too complicated for this driver, so
-just make the sleep uninterruptible, to avoid all that nonsense.
-
-The wait queue was actually restructured as a completion, after polling
-other drivers for the most "popular" approach.
-
-Fixes: 349ad66c0ab0 ("spi:Add Freescale DSPI driver for Vybrid VF610 platform")
-Reported-by: Michael Walle <michael@walle.cc>
+Fixes: f4b323905d8b ("spi: Introduce dspi_slave_abort() function for NXP's dspi SPI driver")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
 Changes in v4:
-Removed the dspi_disable_interrupts and dspi_enable_interrupts approach
-and replaced it with this method.
-
-Changes in v3:
 Patch is new.
 
- drivers/spi/spi-fsl-dspi.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 3ac004aa2abd..78c891e441cd 100644
+index 78c891e441cd..a8aef5690c5d 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -218,8 +218,7 @@ struct fsl_dspi {
- 	u16					tx_cmd;
- 	const struct fsl_dspi_devtype_data	*devtype_data;
+@@ -1201,8 +1201,10 @@ static int dspi_slave_abort(struct spi_master *master)
+ 	 * Terminate all pending DMA transactions for the SPI working
+ 	 * in SLAVE mode.
+ 	 */
+-	dmaengine_terminate_sync(dspi->dma->chan_rx);
+-	dmaengine_terminate_sync(dspi->dma->chan_tx);
++	if (dspi->devtype_data->trans_mode == DSPI_DMA_MODE) {
++		dmaengine_terminate_sync(dspi->dma->chan_rx);
++		dmaengine_terminate_sync(dspi->dma->chan_tx);
++	}
  
--	wait_queue_head_t			waitq;
--	u32					waitflags;
-+	struct completion			xfer_done;
- 
- 	struct fsl_dspi_dma			*dma;
- 
-@@ -899,10 +898,8 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
- 	if (!(spi_sr & (SPI_SR_EOQF | SPI_SR_CMDTCF)))
- 		return IRQ_NONE;
- 
--	if (dspi_rxtx(dspi) == 0) {
--		dspi->waitflags = 1;
--		wake_up_interruptible(&dspi->waitq);
--	}
-+	if (dspi_rxtx(dspi) == 0)
-+		complete(&dspi->xfer_done);
- 
- 	return IRQ_HANDLED;
- }
-@@ -982,13 +979,9 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
- 				status = dspi_poll(dspi);
- 			} while (status == -EINPROGRESS);
- 		} else if (trans_mode != DSPI_DMA_MODE) {
--			status = wait_event_interruptible(dspi->waitq,
--							  dspi->waitflags);
--			dspi->waitflags = 0;
-+			wait_for_completion(&dspi->xfer_done);
-+			reinit_completion(&dspi->xfer_done);
- 		}
--		if (status)
--			dev_err(&dspi->pdev->dev,
--				"Waiting for transfer to complete failed!\n");
- 
- 		spi_transfer_delay_exec(transfer);
- 	}
-@@ -1368,7 +1361,7 @@ static int dspi_probe(struct platform_device *pdev)
- 		goto out_clk_put;
- 	}
- 
--	init_waitqueue_head(&dspi->waitq);
-+	init_completion(&dspi->xfer_done);
- 
- poll_mode:
- 
+ 	/* Clear the internal DSPI RX and TX FIFO buffers */
+ 	regmap_update_bits(dspi->regmap, SPI_MCR,
 -- 
 2.17.1
 
