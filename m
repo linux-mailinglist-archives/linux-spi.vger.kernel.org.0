@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5BB18579D
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 02:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F053D1858F4
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 03:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726689AbgCOBmc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 14 Mar 2020 21:42:32 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:34612 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726530AbgCOBmc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 14 Mar 2020 21:42:32 -0400
-Received: by mail-wm1-f65.google.com with SMTP id x3so10629079wmj.1;
-        Sat, 14 Mar 2020 18:42:29 -0700 (PDT)
+        id S1727738AbgCOCZ0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 14 Mar 2020 22:25:26 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:42534 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727469AbgCOCZ0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 14 Mar 2020 22:25:26 -0400
+Received: by mail-ed1-f65.google.com with SMTP id b21so7013260edy.9;
+        Sat, 14 Mar 2020 19:25:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=SCcq62XmObdxi4G8Ng0Ls4FTL8TP/twoB+5fYYk3P6A=;
-        b=VMu2JY0xNk+X8BsL7I8b+jBKfBHYjMxqc6uwmMI6yJo8U29URiGKImDk8/8QpAmQFG
-         099ywS5MIjGP2Gz7Yd3HTrYZc5NVPgAc/FPMBTGowafNdRpR0c/v6sB0n9sQEejRX1A9
-         HmgxOUBA2BOknB4Rg88nlq11SsZJGNzgXDUepGmRmM7WjqkPx5bixo3NtUPQDRP7D8Vd
-         b/yawaVyTpVVugTD36GJcfncluBps/JIyz+RIAjqfT64hF0vn9gjwKHu30FLvTe1CA3F
-         yDYxe0tmgHU8qhS5YZ4AcR0oYpnd7nVI1gQaLl7fZKAiW9zJSyxLBhU4gbllyOej6r8F
-         Q5Lg==
+        bh=scVa43zyxygvECGnQm1S3eFhi/yi+v2NjhQ3Y67S8+s=;
+        b=DZJmEso7FWMpIN149v1XYbxdUTFDHNzLK2CDbFp/Orm8oQtCM3lvniQbX5hzoBkDhG
+         v2/8XXLtHbEg1zM2Qtj4Qei6Lq2OWLuFyZYGvumXDHwSzULtNLP87JBjm1cXW7dqVNvO
+         NnjoeB0033FfEVytR4YUz/Ka7BmxeW5TQV/5Yeq8Gd3DorzhW1BT7cUaVFXYYVIf/ztM
+         mPKCAPNUfDG5C7vOFjp//ESAo5w7XjU2NHbMd6+Cd6db1GmQkBPHQJbXVbyIJwiOC0QD
+         2OML2+ppsSg0DIK38Tgo3b+qzVi7+8+TzJH9kZ9XSK5C2QCQKi7FYy8Vlm4gBykd0VqZ
+         R+Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=SCcq62XmObdxi4G8Ng0Ls4FTL8TP/twoB+5fYYk3P6A=;
-        b=V1EHZI9YvdOCwmipwxr6DLOXXhYc15OWuAIDkFvESOgb369658H3eOINoco2T347Qn
-         /xQb2tsgzWRyJ0p00bD0PoARrObGMbB65UV2bHOECAMg5TQ8Q2pt9L9lli0fjIOPFuyN
-         w5S6mFqLpRyeDr8+CTifuupt91z3T51qMf2GJXRn/cFFYm7/2R3/eQpbM/35hcthgJ6J
-         wdurIZELrI0/LhIUGRPEYLrwczZsJjqDyabw+eqFqKN0F6u4H0PsUy9HObQIlf5kaf+P
-         HIPnnv/Cn08cRHoUZlxyGNHFfkpxWkAlX1bCT4D4hQSulynH3EFxg0a96iAoX6zEKjfF
-         qwvQ==
-X-Gm-Message-State: ANhLgQ1ha4a3RIiba0YScPvMNE5DXsJWjnxEtQgmdegSS0Jh2DsHtz6E
-        Sz2In2p94Alyh5paaHTv4b88lRlybI8=
-X-Google-Smtp-Source: ADFU+vtbU9ZG0AcQljb0XSyZcJgTeWtPD9mfx34wOnZw3pwoXdlDqQeUzcLLEmVa9U3XMxD+XdIl/A==
-X-Received: by 2002:a1c:4805:: with SMTP id v5mr17818569wma.98.1584225848847;
-        Sat, 14 Mar 2020 15:44:08 -0700 (PDT)
+        bh=scVa43zyxygvECGnQm1S3eFhi/yi+v2NjhQ3Y67S8+s=;
+        b=g1M3XFsOw4IVvKii6/4h0UjgHKi+rAlty5Xk7Z/LmKbWS6Q2UxYfl6kMxP2/u1lYCA
+         ol0SLacYtas8qaHC+Du1Nwow8WAQWki7XBN3IUTJq07SfAy9nMG0gwW0U0KjwqI3Xbt1
+         4axxOlY93f5H8udwWkXOqVAfI7b7cWRxzwT0bD8eUqP7hNACPPtcMOlAhsyP1OzfVtXM
+         adLajaZoeaynJbINiu/W3WpSmpvciRLxOvqfmM5MgVNbpVeFU9ifbY4LTJbh/e11u59h
+         aO5IktUy7n/zIvHhpkc+rS2Y0a5Zy06dUnSELv1AsCYoyImElNZzucnCVc5wbxYGr8bJ
+         3m/g==
+X-Gm-Message-State: ANhLgQ34RzD9f2RDTT2Vv7r7zfBeyEJ41xiM7XxfAQjWjtQt8OC9b+it
+        +UThaQJYnm5WFHAHnb/8YNGsl62WuSY=
+X-Google-Smtp-Source: ADFU+vu90cO+yTpYnx1/WdE0TgOvGt6zsVMUTfNfcOpWRUMB9PTsM0cnujazpXA46+jyq4VzkyHXAQ==
+X-Received: by 2002:adf:bbd3:: with SMTP id z19mr5532850wrg.228.1584225840599;
+        Sat, 14 Mar 2020 15:44:00 -0700 (PDT)
 Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id 133sm23690732wmd.5.2020.03.14.15.44.07
+        by smtp.gmail.com with ESMTPSA id 133sm23690732wmd.5.2020.03.14.15.43.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Mar 2020 15:44:08 -0700 (PDT)
+        Sat, 14 Mar 2020 15:44:00 -0700 (PDT)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,9 +50,9 @@ Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, eha@deif.com, angelo@sysam.it,
         andrew.smirnov@gmail.com, gustavo@embeddedor.com, weic@nvidia.com,
         mhosny@nvidia.com, michael@walle.cc, peng.ma@nxp.com
-Subject: [PATCH v3 09/12] spi: spi-fsl-dspi: Move invariant configs out of dspi_transfer_one_message
-Date:   Sun, 15 Mar 2020 00:43:37 +0200
-Message-Id: <20200314224340.1544-10-olteanv@gmail.com>
+Subject: [PATCH v3 03/12] spi: spi-fsl-dspi: Fix bits-per-word acceleration in DMA mode
+Date:   Sun, 15 Mar 2020 00:43:31 +0200
+Message-Id: <20200314224340.1544-4-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200314224340.1544-1-olteanv@gmail.com>
 References: <20200314224340.1544-1-olteanv@gmail.com>
@@ -63,125 +63,273 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-The operating mode (DMA, XSPI, EOQ) is not going to change across the
-lifetime of the device. So it makes no sense to keep writing to SPI_RSER
-on each message. Move this configuration to dspi_init instead.
+In DMA mode, dspi_setup_accel does not get called, which results in the
+dspi->oper_word_size variable (which is used by dspi_dma_xfer) to not be
+initialized properly.
 
+Because oper_word_size is zero, a few calculations end up being
+incorrect, and the DMA transfer eventually times out instead of sending
+anything on the wire.
+
+Set up native transfers (or 8-on-16 acceleration) using dspi_setup_accel
+for DMA mode too.
+
+Also take the opportunity and simplify the DMA buffer handling a little
+bit.
+
+Fixes: 6c1c26ecd9a3 ("spi: spi-fsl-dspi: Accelerate transfers using larger word size if possible")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
 Changes in v4:
-Patch is new.
+Rebased on top of "spi: spi-fsl-dspi: fix DMA mapping".
+Stopped uselessly writing to SPI_CTAR in dspi_transfer_one_message,
+since we already do that in dspi_setup_accel which we now call.
+Update message->actual_length before submitting the DMA transfer.
 
- drivers/spi/spi-fsl-dspi.c | 55 ++++++++++++++++++++------------------
- 1 file changed, 29 insertions(+), 26 deletions(-)
+Changes in v3:
+Pretty much re-did the patch. Before, dspi_setup_accel was called just
+once at the beginning of dspi_dma_xfer. Now it is called in the while
+loop. Everything else is just refactoring that follows along.
+
+Changes in v2:
+None.
+
+ drivers/spi/spi-fsl-dspi.c | 86 ++++++++++++++------------------------
+ 1 file changed, 32 insertions(+), 54 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index eab4929330e1..86255d38ffcf 100644
+index be717776dd98..8f2b73cc6ed7 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -909,7 +909,6 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
- {
- 	struct fsl_dspi *dspi = spi_controller_get_devdata(ctlr);
- 	struct spi_device *spi = message->spi;
--	enum dspi_trans_mode trans_mode;
- 	struct spi_transfer *transfer;
- 	int status = 0;
- 
-@@ -951,30 +950,11 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
- 		spi_take_timestamp_pre(dspi->ctlr, dspi->cur_transfer,
- 				       dspi->progress, !dspi->irq);
- 
--		trans_mode = dspi->devtype_data->trans_mode;
--		switch (trans_mode) {
--		case DSPI_EOQ_MODE:
--			regmap_write(dspi->regmap, SPI_RSER, SPI_RSER_EOQFE);
--			dspi_fifo_write(dspi);
--			break;
--		case DSPI_XSPI_MODE:
--			regmap_write(dspi->regmap, SPI_RSER, SPI_RSER_CMDTCFE);
--			dspi_fifo_write(dspi);
--			break;
--		case DSPI_DMA_MODE:
--			regmap_write(dspi->regmap, SPI_RSER,
--				     SPI_RSER_TFFFE | SPI_RSER_TFFFD |
--				     SPI_RSER_RFDFE | SPI_RSER_RFDFD);
-+		if (dspi->devtype_data->trans_mode == DSPI_DMA_MODE) {
- 			status = dspi_dma_xfer(dspi);
--			break;
--		default:
--			dev_err(&dspi->pdev->dev, "unsupported trans_mode %u\n",
--				trans_mode);
--			status = -EINVAL;
--			goto out;
--		}
-+		} else {
-+			dspi_fifo_write(dspi);
- 
--		if (trans_mode != DSPI_DMA_MODE) {
- 			if (dspi->irq) {
- 				wait_for_completion(&dspi->xfer_done);
- 				reinit_completion(&dspi->xfer_done);
-@@ -984,11 +964,12 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
- 				} while (status == -EINPROGRESS);
- 			}
- 		}
-+		if (status)
-+			break;
- 
- 		spi_transfer_delay_exec(transfer);
- 	}
- 
--out:
- 	message->status = status;
- 	spi_finalize_current_message(ctlr);
- 
-@@ -1179,7 +1160,7 @@ static const struct regmap_config dspi_xspi_regmap_config[] = {
- 	},
+@@ -119,7 +119,6 @@ struct fsl_dspi_devtype_data {
+ 	enum dspi_trans_mode	trans_mode;
+ 	u8			max_clock_factor;
+ 	int			fifo_size;
+-	int			dma_bufsize;
  };
  
--static void dspi_init(struct fsl_dspi *dspi)
-+static int dspi_init(struct fsl_dspi *dspi)
- {
- 	unsigned int mcr;
+ enum {
+@@ -138,7 +137,6 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
+ 	[VF610] = {
+ 		.trans_mode		= DSPI_DMA_MODE,
+ 		.max_clock_factor	= 2,
+-		.dma_bufsize		= 4096,
+ 		.fifo_size		= 4,
+ 	},
+ 	[LS1021A] = {
+@@ -167,19 +165,16 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
+ 	},
+ 	[LS2080A] = {
+ 		.trans_mode		= DSPI_DMA_MODE,
+-		.dma_bufsize		= 8,
+ 		.max_clock_factor	= 8,
+ 		.fifo_size		= 4,
+ 	},
+ 	[LS2085A] = {
+ 		.trans_mode		= DSPI_DMA_MODE,
+-		.dma_bufsize		= 8,
+ 		.max_clock_factor	= 8,
+ 		.fifo_size		= 4,
+ 	},
+ 	[LX2160A] = {
+ 		.trans_mode		= DSPI_DMA_MODE,
+-		.dma_bufsize		= 8,
+ 		.max_clock_factor	= 8,
+ 		.fifo_size		= 4,
+ 	},
+@@ -191,9 +186,6 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
+ };
  
-@@ -1193,6 +1174,26 @@ static void dspi_init(struct fsl_dspi *dspi)
+ struct fsl_dspi_dma {
+-	/* Length of transfer in words of dspi->fifo_size */
+-	u32					curr_xfer_len;
+-
+ 	u32					*tx_dma_buf;
+ 	struct dma_chan				*chan_tx;
+ 	dma_addr_t				tx_dma_phys;
+@@ -352,7 +344,7 @@ static void dspi_rx_dma_callback(void *arg)
+ 	int i;
  
- 	regmap_write(dspi->regmap, SPI_MCR, mcr);
- 	regmap_write(dspi->regmap, SPI_SR, SPI_SR_CLEAR);
-+
-+	switch (dspi->devtype_data->trans_mode) {
-+	case DSPI_EOQ_MODE:
-+		regmap_write(dspi->regmap, SPI_RSER, SPI_RSER_EOQFE);
-+		break;
-+	case DSPI_XSPI_MODE:
-+		regmap_write(dspi->regmap, SPI_RSER, SPI_RSER_CMDTCFE);
-+		break;
-+	case DSPI_DMA_MODE:
-+		regmap_write(dspi->regmap, SPI_RSER,
-+			     SPI_RSER_TFFFE | SPI_RSER_TFFFD |
-+			     SPI_RSER_RFDFE | SPI_RSER_RFDFD);
-+		break;
-+	default:
-+		dev_err(&dspi->pdev->dev, "unsupported trans_mode %u\n",
-+			dspi->devtype_data->trans_mode);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
+ 	if (dspi->rx) {
+-		for (i = 0; i < dma->curr_xfer_len; i++)
++		for (i = 0; i < dspi->words_in_flight; i++)
+ 			dspi_push_rx(dspi, dspi->dma->rx_dma_buf[i]);
+ 	}
+ 
+@@ -366,12 +358,12 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+ 	int time_left;
+ 	int i;
+ 
+-	for (i = 0; i < dma->curr_xfer_len; i++)
++	for (i = 0; i < dspi->words_in_flight; i++)
+ 		dspi->dma->tx_dma_buf[i] = dspi_pop_tx_pushr(dspi);
+ 
+ 	dma->tx_desc = dmaengine_prep_slave_single(dma->chan_tx,
+ 					dma->tx_dma_phys,
+-					dma->curr_xfer_len *
++					dspi->words_in_flight *
+ 					DMA_SLAVE_BUSWIDTH_4_BYTES,
+ 					DMA_MEM_TO_DEV,
+ 					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+@@ -389,7 +381,7 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+ 
+ 	dma->rx_desc = dmaengine_prep_slave_single(dma->chan_rx,
+ 					dma->rx_dma_phys,
+-					dma->curr_xfer_len *
++					dspi->words_in_flight *
+ 					DMA_SLAVE_BUSWIDTH_4_BYTES,
+ 					DMA_DEV_TO_MEM,
+ 					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+@@ -437,46 +429,42 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+ 	return 0;
  }
  
- static int dspi_slave_abort(struct spi_master *master)
-@@ -1348,7 +1349,9 @@ static int dspi_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto out_ctlr_put;
++static void dspi_setup_accel(struct fsl_dspi *dspi);
++
+ static int dspi_dma_xfer(struct fsl_dspi *dspi)
+ {
+ 	struct spi_message *message = dspi->cur_msg;
+ 	struct device *dev = &dspi->pdev->dev;
+-	struct fsl_dspi_dma *dma = dspi->dma;
+-	int curr_remaining_bytes;
+-	int bytes_per_buffer;
+ 	int ret = 0;
  
--	dspi_init(dspi);
-+	ret = dspi_init(dspi);
-+	if (ret)
-+		goto out_clk_put;
+-	curr_remaining_bytes = dspi->len;
+-	bytes_per_buffer = dspi->devtype_data->dma_bufsize /
+-			   dspi->devtype_data->fifo_size;
+-	while (curr_remaining_bytes) {
+-		/* Check if current transfer fits the DMA buffer */
+-		dma->curr_xfer_len = curr_remaining_bytes /
+-				     dspi->oper_word_size;
+-		if (dma->curr_xfer_len > bytes_per_buffer)
+-			dma->curr_xfer_len = bytes_per_buffer;
++	/*
++	 * dspi->len gets decremented by dspi_pop_tx_pushr in
++	 * dspi_next_xfer_dma_submit
++	 */
++	while (dspi->len) {
++		/* Figure out operational bits-per-word for this chunk */
++		dspi_setup_accel(dspi);
++
++		dspi->words_in_flight = dspi->len / dspi->oper_word_size;
++		if (dspi->words_in_flight > dspi->devtype_data->fifo_size)
++			dspi->words_in_flight = dspi->devtype_data->fifo_size;
++
++		message->actual_length += dspi->words_in_flight *
++					  dspi->oper_word_size;
  
- 	dspi->irq = platform_get_irq(pdev, 0);
- 	if (dspi->irq <= 0) {
+ 		ret = dspi_next_xfer_dma_submit(dspi);
+ 		if (ret) {
+ 			dev_err(dev, "DMA transfer failed\n");
+-			goto exit;
+-
+-		} else {
+-			const int len = dma->curr_xfer_len *
+-					dspi->oper_word_size;
+-			curr_remaining_bytes -= len;
+-			message->actual_length += len;
+-			if (curr_remaining_bytes < 0)
+-				curr_remaining_bytes = 0;
++			break;
+ 		}
+ 	}
+ 
+-exit:
+ 	return ret;
+ }
+ 
+ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ {
++	int dma_bufsize = dspi->devtype_data->fifo_size * 2;
+ 	struct device *dev = &dspi->pdev->dev;
+ 	struct dma_slave_config cfg;
+ 	struct fsl_dspi_dma *dma;
+@@ -501,16 +489,16 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 	}
+ 
+ 	dma->tx_dma_buf = dma_alloc_coherent(dma->chan_tx->device->dev,
+-					     dspi->devtype_data->dma_bufsize,
+-					     &dma->tx_dma_phys, GFP_KERNEL);
++					     dma_bufsize, &dma->tx_dma_phys,
++					     GFP_KERNEL);
+ 	if (!dma->tx_dma_buf) {
+ 		ret = -ENOMEM;
+ 		goto err_tx_dma_buf;
+ 	}
+ 
+ 	dma->rx_dma_buf = dma_alloc_coherent(dma->chan_rx->device->dev,
+-					     dspi->devtype_data->dma_bufsize,
+-					     &dma->rx_dma_phys, GFP_KERNEL);
++					     dma_bufsize, &dma->rx_dma_phys,
++					     GFP_KERNEL);
+ 	if (!dma->rx_dma_buf) {
+ 		ret = -ENOMEM;
+ 		goto err_rx_dma_buf;
+@@ -547,12 +535,10 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 
+ err_slave_config:
+ 	dma_free_coherent(dma->chan_rx->device->dev,
+-			  dspi->devtype_data->dma_bufsize,
+-			  dma->rx_dma_buf, dma->rx_dma_phys);
++			  dma_bufsize, dma->rx_dma_buf, dma->rx_dma_phys);
+ err_rx_dma_buf:
+ 	dma_free_coherent(dma->chan_tx->device->dev,
+-			  dspi->devtype_data->dma_bufsize,
+-			  dma->tx_dma_buf, dma->tx_dma_phys);
++			  dma_bufsize, dma->tx_dma_buf, dma->tx_dma_phys);
+ err_tx_dma_buf:
+ 	dma_release_channel(dma->chan_tx);
+ err_tx_channel:
+@@ -566,6 +552,7 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 
+ static void dspi_release_dma(struct fsl_dspi *dspi)
+ {
++	int dma_bufsize = dspi->devtype_data->fifo_size * 2;
+ 	struct fsl_dspi_dma *dma = dspi->dma;
+ 
+ 	if (!dma)
+@@ -573,15 +560,13 @@ static void dspi_release_dma(struct fsl_dspi *dspi)
+ 
+ 	if (dma->chan_tx) {
+ 		dma_unmap_single(dma->chan_tx->device->dev, dma->tx_dma_phys,
+-				 dspi->devtype_data->dma_bufsize,
+-				 DMA_TO_DEVICE);
++				 dma_bufsize, DMA_TO_DEVICE);
+ 		dma_release_channel(dma->chan_tx);
+ 	}
+ 
+ 	if (dma->chan_rx) {
+ 		dma_unmap_single(dma->chan_rx->device->dev, dma->rx_dma_phys,
+-				 dspi->devtype_data->dma_bufsize,
+-				 DMA_FROM_DEVICE);
++				 dma_bufsize, DMA_FROM_DEVICE);
+ 		dma_release_channel(dma->chan_rx);
+ 	}
+ }
+@@ -833,7 +818,7 @@ static void dspi_setup_accel(struct fsl_dspi *dspi)
+ 	dspi->oper_word_size = DIV_ROUND_UP(dspi->oper_bits_per_word, 8);
+ 
+ 	/*
+-	 * Update CTAR here (code is common for both EOQ and XSPI modes).
++	 * Update CTAR here (code is common for EOQ, XSPI and DMA modes).
+ 	 * We will update CTARE in the portion specific to XSPI, when we
+ 	 * also know the preload value (DTCP).
+ 	 */
+@@ -960,13 +945,6 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+ 		regmap_update_bits(dspi->regmap, SPI_MCR,
+ 				   SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF,
+ 				   SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF);
+-		/*
+-		 * Static CTAR setup for modes that don't dynamically adjust it
+-		 * via dspi_setup_accel (aka for DMA)
+-		 */
+-		regmap_write(dspi->regmap, SPI_CTAR(0),
+-			     dspi->cur_chip->ctar_val |
+-			     SPI_FRAME_BITS(transfer->bits_per_word));
+ 
+ 		spi_take_timestamp_pre(dspi->ctlr, dspi->cur_transfer,
+ 				       dspi->progress, !dspi->irq);
 -- 
 2.17.1
 
