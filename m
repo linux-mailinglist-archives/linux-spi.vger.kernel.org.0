@@ -2,76 +2,189 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 484A3185E9A
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 18:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2D9185EC6
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 18:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728634AbgCORI4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 13:08:56 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:36474 "EHLO rere.qmqm.pl"
+        id S1728999AbgCOR6r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 13:58:47 -0400
+Received: from honk.sigxcpu.org ([24.134.29.49]:51210 "EHLO honk.sigxcpu.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728915AbgCORI4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 15 Mar 2020 13:08:56 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48gQrP5N7Mzw;
-        Sun, 15 Mar 2020 18:08:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1584292133; bh=CFU5FJmuQdF3qv0nzTWEIX3XxtGpmXCO2Bcuo6/RtV0=;
-        h=Date:From:Subject:To:Cc:From;
-        b=PiXqnaA20AS+ZPf2FLuiICoBqDqhTadyz5LqerFkVUBgSqRIBBYTJXR8ArbG2AKoO
-         /724trCrD+7cm39uQY61t9m6b7oY/diuhGUpEY8RX0P/2FBLp7iojPPAhkI85CemyW
-         wiitnfK5PM1b5bfNhafcU9Bw7NKsuTvidPDsNakaqOyj8euJsuXNhDRJ5m5AgaBoA4
-         Pp/C9hMiloWng4T5Bm4NeSyVU0xvRB84YapoYHRXsa537fl9PdnB5BB9kJlV62QCxj
-         UP8Bdqg332NU3ZtC9+ig4R8Z/u7PiD7enNuH6TSU5GP16liM4jFpf1HsNS3MdTP2jW
-         CF9oVWEyRBVjg==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Sun, 15 Mar 2020 18:08:53 +0100
-Message-Id: <45912ba25c34a63b8098f471c3c8ebf8857a4716.1584292056.git.mirq-linux@rere.qmqm.pl>
-From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH] spi: fix cs_change for last transfer
+        id S1728985AbgCOR6r (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 15 Mar 2020 13:58:47 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id EBD7BFB03;
+        Sun, 15 Mar 2020 18:58:42 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id QEgVtUjIBhwL; Sun, 15 Mar 2020 18:58:40 +0100 (CET)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 62A474117D; Sun, 15 Mar 2020 18:58:39 +0100 (CET)
+Date:   Sun, 15 Mar 2020 18:58:39 +0100
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Heiko Schocher <hs@denx.de>,
+        Nikolaus Schaller <hns@goldelico.com>,
+        Hoegeun Kwon <hoegeun.kwon@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi@vger.kernel.org, Marco Franchi <marco.franchi@nxp.com>,
+        Marek Belisko <marek@goldelico.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Nickey Yang <nickey.yang@rock-chips.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Robert Chiras <robert.chiras@nxp.com>,
+        Sandeep Panda <spanda@codeaurora.org>,
+        Stefan Mavrodiev <stefan@olimex.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Vinay Simha BN <simhavcs@gmail.com>,
+        Werner Johansson <werner.johansson@sonymobile.com>
+Subject: Re: [PATCH v1 19/36] dt-bindings: display: convert
+ rocktech,jh057n00900 to DT Schema
+Message-ID: <20200315175839.GA4953@bogon.m.sigxcpu.org>
+References: <20200315134416.16527-1-sam@ravnborg.org>
+ <20200315134416.16527-20-sam@ravnborg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20200315134416.16527-20-sam@ravnborg.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Generic spi_transfer_one_message() implementation introduced in
-commit b158935f70b9 has a bug in cs_change handling: it keeps CS
-asserted when cs_change is set. Fix it.
+Hi,
+On Sun, Mar 15, 2020 at 02:43:59PM +0100, Sam Ravnborg wrote:
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Cc: "Guido Günther" <agx@sigxcpu.org>
+> Cc: Purism Kernel Team <kernel@puri.sm>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
 
-Cc: stable@vger.kernel.org
-Fixes: b158935f70b9 ("spi: Provide common spi_message processing loop")
-Signed-off-by: MichaÅ‚ MirosÅ‚aw <mirq-linux@rere.qmqm.pl>
----
- drivers/spi/spi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Guido Günther <agx@sigxcpu.org>
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 8994545367a2..5012eabde468 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1206,7 +1206,7 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 				    struct spi_message *msg)
- {
- 	struct spi_transfer *xfer;
--	bool keep_cs = false;
-+	bool keep_cs = true;
- 	int ret = 0;
- 	struct spi_statistics *statm = &ctlr->statistics;
- 	struct spi_statistics *stats = &msg->spi->statistics;
-@@ -1268,7 +1268,7 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 		if (xfer->cs_change) {
- 			if (list_is_last(&xfer->transfer_list,
- 					 &msg->transfers)) {
--				keep_cs = true;
-+				keep_cs = false;
- 			} else {
- 				spi_set_cs(msg->spi, false);
- 				_spi_transfer_cs_change_delay(msg, xfer);
--- 
-2.20.1
+Thanks!
+ -- Guido
 
+> ---
+>  .../display/panel/rocktech,jh057n00900.txt    | 23 --------
+>  .../display/panel/rocktech,jh057n00900.yaml   | 57 +++++++++++++++++++
+>  2 files changed, 57 insertions(+), 23 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.txt b/Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.txt
+> deleted file mode 100644
+> index a372c5d84695..000000000000
+> --- a/Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.txt
+> +++ /dev/null
+> @@ -1,23 +0,0 @@
+> -Rocktech jh057n00900 5.5" 720x1440 TFT LCD panel
+> -
+> -Required properties:
+> -- compatible: should be "rocktech,jh057n00900"
+> -- reg: DSI virtual channel of the peripheral
+> -- reset-gpios: panel reset gpio
+> -- backlight: phandle of the backlight device attached to the panel
+> -- vcc-supply: phandle of the regulator that provides the vcc supply voltage.
+> -- iovcc-supply: phandle of the regulator that provides the iovcc supply
+> -  voltage.
+> -
+> -Example:
+> -
+> -	&mipi_dsi {
+> -		panel@0 {
+> -			compatible = "rocktech,jh057n00900";
+> -			reg = <0>;
+> -			backlight = <&backlight>;
+> -			reset-gpios = <&gpio3 13 GPIO_ACTIVE_LOW>;
+> -			vcc-supply = <&reg_2v8_p>;
+> -			iovcc-supply = <&reg_1v8_p>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.yaml b/Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.yaml
+> new file mode 100644
+> index 000000000000..827417bbff63
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/rocktech,jh057n00900.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rocktech jh057n00900 5.5" 720x1440 TFT LCD panel
+> +
+> +maintainers:
+> +  - Guido Günther <agx@sigxcpu.org>
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: rocktech,jh057n00900
+> +
+> +  reg: true
+> +  reset-gpios: true
+> +  backlight: true
+> +
+> +  vcc-supply:
+> +    description: The regulator that provides the vcc supply voltage
+> +
+> +  iovcc-supply:
+> +    description: The regulator that provides the iovcc supply voltage
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reset-gpios
+> +  - backlight
+> +  - vcc-supply
+> +  - iovcc-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    dsi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        panel@0 {
+> +            compatible = "rocktech,jh057n00900";
+> +            reg = <0>;
+> +            backlight = <&backlight>;
+> +            reset-gpios = <&gpio3 13 GPIO_ACTIVE_LOW>;
+> +            vcc-supply = <&reg_2v8_p>;
+> +            iovcc-supply = <&reg_1v8_p>;
+> +        };
+> +    };
+> +
+> +...
+> -- 
+> 2.20.1
+> 
