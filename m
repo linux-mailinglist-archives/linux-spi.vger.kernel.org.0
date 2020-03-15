@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7EF185F35
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 19:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D836185F39
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 19:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728633AbgCOSyw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 14:54:52 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40639 "EHLO
+        id S1728639AbgCOS4b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 14:56:31 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43942 "EHLO
         mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726444AbgCOSyw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 14:54:52 -0400
-Received: by mail-lj1-f195.google.com with SMTP id 19so16103901ljj.7
-        for <linux-spi@vger.kernel.org>; Sun, 15 Mar 2020 11:54:50 -0700 (PDT)
+        with ESMTP id S1728633AbgCOS4b (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 14:56:31 -0400
+Received: by mail-lj1-f195.google.com with SMTP id r7so16128900ljp.10
+        for <linux-spi@vger.kernel.org>; Sun, 15 Mar 2020 11:56:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fTQd3aS5OhNIrglS2AjM4BcIR1NXf9NUl3ZVwz+9ZAQ=;
-        b=E+HBZbGXPHlxT3smlEDZETEl6jN6e08Qzg/pBZejJ2lk+Qr5UD3pZwb+9iv9Cf8cYl
-         fXToil1uzvcbDaq6EeGWKsti487QNARBigDgEjLOr8FfzApiBJDJCQKa0aSwOTnrk0Lr
-         cCwj6antxj6hfQgugrlBzoNTrLlgdjouHXipYd4K+7TCZUFlB8xk+pinI97b1iMma4Id
-         CYUEQQsiGurACKj/FVqICMUDE4mCyeU0A4YnwE9keZcDf8CYmr1Y+L7AkZ9YSSLtnxaN
-         dBhdqC8HLDGVqbbp24yE3Vcw5oYB08U/T10tkSUVjvNoW115kbaHQZQsChy6plpMI0PO
-         UXPQ==
+        bh=3S0v5oR3bTCtw3b5Uz5rVvk64YK1h/rSLcltspTzzJc=;
+        b=cKhTiwe8JLQgXFORz+fw8VRZAu9macKEjSEE1sB7WsCErjroARHh+wKst5Wo7Gwhf4
+         0p5dOI3Ky/JtcXSm+cM9StCGahFcvwO0Lo6mTjY3l0QxKNN66nG5vL9exxBmHn6LE8Pd
+         uU2G0nqvo02Lhasx0pForQUFgAvOaP5VoY5SHdTjI6dwpdSBFxgyozq4p9cg0fiwcU+F
+         W8qa4XnFe0refvD8FeqdwdjO0MSOTpFPwVLVsqCLYhHlJ9xeLihIQ1kJ45zWid3eV3Ds
+         cWiMIQ5ESqzXry3YWHmcRmXR6JtOOuKfw3HWefDaXrcVveKYLIjeczPuc7YXSfJMfzft
+         fN8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fTQd3aS5OhNIrglS2AjM4BcIR1NXf9NUl3ZVwz+9ZAQ=;
-        b=UpXtkFz2+NvFYpaVsYjKKRjpceWLJaSdaarTLjjRiumS2D1t4hiBQDFcRcb8pi0Ixz
-         Xohoi8kUZM3ixXdR8Pb198sBvaRyCAPtQmp3oFQPJMsIQ4rW4BdQiwqCS3CTQ9hW0q0y
-         8iYgFqxyKqKMF33HRa1WYQXe59WFEOk6g/2HVjQnN5K3WD+oI/PDUWkSQoc523LAS1ra
-         cjozJbrHjyjOTIm9UJvjNHfEUs8zdtcv1/glDZhabrWzPi3/EinuHLqpnXcyQHxwlFfI
-         psuU9i1iFwjoZVLKZpi0HWwKh3IvdYawD83MnLMA2R0u6RLuQpFqSQXggRPzjwQCzl7Y
-         SPog==
-X-Gm-Message-State: ANhLgQ3O0bJMmscrkmz1imkzIc1c5fNTaVyurSfEEjtY2pb0SGM+mNLw
-        uxoSOj35WlvxKrxAtINgN0wwDbTyPbF1tRzNBb8COw==
-X-Google-Smtp-Source: ADFU+vssbL+S14lH6N8djcDEZl02ahI9L+idvGs1zzRXqR+eWnNl2HLjxbEiYTzRMwkdmwS16Jt4Fy4vCuUNuYgAb5g=
-X-Received: by 2002:a05:651c:1026:: with SMTP id w6mr13694210ljm.168.1584298490016;
- Sun, 15 Mar 2020 11:54:50 -0700 (PDT)
+        bh=3S0v5oR3bTCtw3b5Uz5rVvk64YK1h/rSLcltspTzzJc=;
+        b=puAht6+6vjwt3tsDEEkr20+CeVdWBGIgax0cmQUQ1paFLajTzZ4hM7OtKSbpUaZ79G
+         xBY6ZSHZ7MIj+OfV10/CyvgzMagcNMZP+d3ACt4wy8oWqZvUvOxBL+VKa2S2xpQYZ/Zq
+         OhEaYzH9snzk6wsXpvxYUAufldxcaz2pGVjSWhST+bzNqV/o3hudmX7ZjBza10T5PQwy
+         IHmjNqD2uSp0xYB2vTY1/+hGXpNoez+q+sr5qprG5827b8pIC8pFGAljNdGzEnitoBis
+         vBn4P/++6yrLs9FZbY/IcUsT9zTJW45t3toXvsS+Zp4aGLEUuohzQOczadwmsxCzKdVV
+         Uw4A==
+X-Gm-Message-State: ANhLgQ335etZjpeLIp4OK45ZjYAY8vKnzneaXLFfj7Zx4vaIybDhAC17
+        yISIVTebyO8BuDR1CxPiltuII+BvYA85MqEAEz9zYw==
+X-Google-Smtp-Source: ADFU+vu8FHCAUtRF0Yn3tqP8EsUWnhS9Glxv1rrGugkRmD6+x0k9o222/MFlQ/3JytyCUYbtCsS2+dDrEb9WqE/9ABM=
+X-Received: by 2002:a05:651c:2c1:: with SMTP id f1mr14032427ljo.125.1584298587802;
+ Sun, 15 Mar 2020 11:56:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200315134416.16527-1-sam@ravnborg.org> <20200315134416.16527-7-sam@ravnborg.org>
-In-Reply-To: <20200315134416.16527-7-sam@ravnborg.org>
+References: <20200315134416.16527-1-sam@ravnborg.org> <20200315134416.16527-22-sam@ravnborg.org>
+In-Reply-To: <20200315134416.16527-22-sam@ravnborg.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 15 Mar 2020 19:54:38 +0100
-Message-ID: <CACRpkdYVrTBKxuHSGpd9=03oD4=JVxzJf8fOcQ8uu5eRt9PgAg@mail.gmail.com>
-Subject: Re: [PATCH v1 06/36] dt-bindings: display: convert ilitek,ili9322 to
+Date:   Sun, 15 Mar 2020 19:56:15 +0100
+Message-ID: <CACRpkdZF8fx2RtHKivAkn+aQiC8B27Lzwk69S0RS5QUcfj1uVw@mail.gmail.com>
+Subject: Re: [PATCH v1 21/36] dt-bindings: display: convert samsung,s6d16d0 to
  DT Schema
 To:     Sam Ravnborg <sam@ravnborg.org>
 Cc:     "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
@@ -91,34 +91,8 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Mar 15, 2020 at 2:44 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+On Sun, Mar 15, 2020 at 2:45 PM Sam Ravnborg <sam@ravnborg.org> wrote:
 
-> The .txt binding explains:
->
-> "
->     The following optional properties only apply to
->     RGB and YUV input modes and
->     can be omitted for BT.656 input modes:
-> "
->
-> This constraint is not implmented in the DT Schema.
->
-> The original binding from the .txt file referenced
-> properties that is included in panel-timing.yaml.
-> These properties are kept here as we want as close to a 1:1
-> conversion as we can. If the properties should be dropped
-> from the binding then this is a follow-up patch.
->
-> The properties in question are:
->   - pixelclk-active
->   - de-active
->   - hsync-active
->   - vsync-active
-
-Sorry about that. They should be dropped, but certainly it
-is fine to do with a follow up patch.
-
->
 > Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
 > Cc: Linus Walleij <linus.walleij@linaro.org>
 > Cc: Thierry Reding <thierry.reding@gmail.com>
