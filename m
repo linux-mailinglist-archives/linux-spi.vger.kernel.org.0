@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E3C185CDB
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 14:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8C7185CDE
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 14:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728660AbgCONox (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 09:44:53 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:37467 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728658AbgCONox (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 09:44:53 -0400
-Received: by mail-lf1-f67.google.com with SMTP id j11so11717524lfg.4;
-        Sun, 15 Mar 2020 06:44:50 -0700 (PDT)
+        id S1728665AbgCONoz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 09:44:55 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:35381 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728658AbgCONoz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 09:44:55 -0400
+Received: by mail-lj1-f196.google.com with SMTP id u12so15626856ljo.2;
+        Sun, 15 Mar 2020 06:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DKFWNzm+inHvUnuFaBbTyPTrAd4h6YpCxucuZ+VVDvg=;
-        b=nKQkRbs6p7IU6GKjqEAoG/cl1CtIpH+L/FrvbrTmJCLaV2cNEYHISe0/xnBO2pnCoi
-         tm25uzNnyMFSpPnNrAbUugYBn7ixSlcl7XtqS6N2cD9nz7IJCm+CPPK9Dj4E/sQmm0Z1
-         br7eDuzTfyk+VVm+L+T2vSOJ249dlsCTvZha1x60RHoCCaSyvaVnUZ8TGFxgFT5FY1Dz
-         ndve/sIQpzM9HJ7ubT8+f3MoVRL5it674tni+OL0RzSOAwr7Ny7ChiPqwoAxtOFekX2n
-         Ch0ZYff0Dm1FLo1o801LkUTwCVqZojTf/D+SpivzJR8GkiohK9wbY97Ult8LleZBvaYp
-         5t2A==
+        bh=85+JPdL0riE6y9vKE6MRhU8yOWIkV4ii4OdHXgpGAjY=;
+        b=iQA17Ulo+My4nZO1xTunXJ/1o8QZU5pyq+Jatgtep5c1GDb/OVWO9pxqOeCI6+kQFM
+         8qNt9KvDpO0B1n/luViP2nBRN/mjstvu1YU+nol/eCvDjlxh1RruBN0fEBHFJRBMIHUx
+         w8/mS0Qq2f6nrNBc2QLfkxFBWhewJyyg9h5jC9qoQp5jz+P7fwdarLVEEDvTtXsZpm45
+         SRuZaVWvVSQ6w3jtViQsNbmwUivJjPamVPlpVGcxLubwNe2+5mmJ26kG1uEiIEHpKfVf
+         p5rr3p1Zz3AlIrRLjfKR8aC5DaCqu5kR2uMWF51QbTyfuIIAtAMXhGOqvGLQTLJM1GEe
+         CNqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=DKFWNzm+inHvUnuFaBbTyPTrAd4h6YpCxucuZ+VVDvg=;
-        b=Pcm97/YocE1hRWudNzicDFnxItMhhOm2WyU1lunjPb/FZCwWeAwQVTv1L0XPbTraMY
-         bGD749cYd1P8pbQHah5K/SwIoKJRJuO+Vtb6c9hJm9TiMZQs6Iq9zz5ULCwdh2QSRux2
-         FWQ4Ufp6R6gl2SvWHaW3KftPEnEP3OTBiR/keVHmOUpQVMBW7+5/tExAsXkc3sGGiqAM
-         zxBZ1aIPj2xT/L9ZaO8PCTtH6Y8H3UqBGa17rb6uZl/VUgkfbp3bKgzVVtikS/Wr1s6p
-         mS9N/lSJMxKwVpJG5viuSi6ijd79hmo7NFMgYO/QUNpl1h0FG72PHAeRpBAeyLlj7gh6
-         +J/Q==
-X-Gm-Message-State: ANhLgQ3bEf3MaY0/su5Ux7WpRvDgmJTL9WhPppi9I15zf5UhpPgapmRt
-        87fmjuIv5qPD8RevSvyIonw=
-X-Google-Smtp-Source: ADFU+vs0IGyQy3vzYGDlnv9TvE4khDaBhV7yBGIAFb8i07P4mBDYkpaUXJBq/gHEcKsW7v9UOYK1uQ==
-X-Received: by 2002:a19:a415:: with SMTP id q21mr13918816lfc.21.1584279889723;
-        Sun, 15 Mar 2020 06:44:49 -0700 (PDT)
+        bh=85+JPdL0riE6y9vKE6MRhU8yOWIkV4ii4OdHXgpGAjY=;
+        b=ny+Ax2e8QAfu14HPg8ep6dlqx5WxO/U1+AtRPpJYGdFDdWEry+dfXRjUmJ+O5QsqqC
+         GeOe8Bc9IzU4lm8eme74HwT1RKfg7CA2L7ctSG9p0rRn/C2StcYJHrNQ0A3gDSlIBeEd
+         ttDG+GzqLvtDZM6QsPVz3AlMyuX6L6K7eEsJgzjc9QSRQeA+WL9fq9Qgg8WMNl8UaSaU
+         3dtf7DJoCeY6awbwW+TckGIRDRtV9QwSVZzWNPkWUqAS5fE1OF98Ay2U3DbfPYdJaoMt
+         GigAkpECCa6GsYj/2qIjXbX63XuzvZej295jIyd1wqr6fZGJriWtoT9KVN4ZhaztJ0yS
+         M59w==
+X-Gm-Message-State: ANhLgQ2LyV4bZqCzlzMSXNI3SLZdENscC+wmfm94jT+7QyuBH33AZUEK
+        vio9YoUK+iNDx7hEqhu3Wso=
+X-Google-Smtp-Source: ADFU+vsxRHkh8Taf7X9qBubBFsYa1RVHoV8i/HWKAno4brv64JuVSrPLYD3RFxAPK17fcRd3Yw9fmA==
+X-Received: by 2002:a2e:b602:: with SMTP id r2mr14217474ljn.45.1584279891718;
+        Sun, 15 Mar 2020 06:44:51 -0700 (PDT)
 Received: from saturn.lan (18.158-248-194.customer.lyse.net. [158.248.194.18])
-        by smtp.gmail.com with ESMTPSA id a9sm23025212lfb.21.2020.03.15.06.44.47
+        by smtp.gmail.com with ESMTPSA id a9sm23025212lfb.21.2020.03.15.06.44.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Mar 2020 06:44:49 -0700 (PDT)
+        Sun, 15 Mar 2020 06:44:51 -0700 (PDT)
 From:   Sam Ravnborg <sam@ravnborg.org>
 To:     dri-devel@lists.freedesktop.org,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -80,9 +80,9 @@ Cc:     Alexandre Courbot <acourbot@nvidia.com>,
         Tony Lindgren <tony@atomide.com>,
         Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Subject: [PATCH v1 10/36] dt-bindings: display: convert innolux,p097pfg to DT Schema
-Date:   Sun, 15 Mar 2020 14:43:50 +0100
-Message-Id: <20200315134416.16527-11-sam@ravnborg.org>
+Subject: [PATCH v1 11/36] dt-bindings: display: convert innolux,p120zdg-bf1 to DT Schema
+Date:   Sun, 15 Mar 2020 14:43:51 +0100
+Message-Id: <20200315134416.16527-12-sam@ravnborg.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200315134416.16527-1-sam@ravnborg.org>
 References: <20200315134416.16527-1-sam@ravnborg.org>
@@ -94,105 +94,91 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Lin Huang <hl@rock-chips.com>
+Cc: Sandeep Panda <spanda@codeaurora.org>
+Cc: Douglas Anderson <dianders@chromium.org>
 Cc: Thierry Reding <thierry.reding@gmail.com>
 Cc: Sam Ravnborg <sam@ravnborg.org>
 ---
- .../display/panel/innolux,p097pfg.txt         | 24 --------
- .../display/panel/innolux,p097pfg.yaml        | 56 +++++++++++++++++++
- 2 files changed, 56 insertions(+), 24 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/panel/innolux,p097pfg.txt
- create mode 100644 Documentation/devicetree/bindings/display/panel/innolux,p097pfg.yaml
+ .../display/panel/innolux,p120zdg-bf1.txt     | 22 ----------
+ .../display/panel/innolux,p120zdg-bf1.yaml    | 43 +++++++++++++++++++
+ 2 files changed, 43 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.txt
+ create mode 100644 Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml
 
-diff --git a/Documentation/devicetree/bindings/display/panel/innolux,p097pfg.txt b/Documentation/devicetree/bindings/display/panel/innolux,p097pfg.txt
+diff --git a/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.txt b/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.txt
 deleted file mode 100644
-index d1cab3a8f0fb..000000000000
---- a/Documentation/devicetree/bindings/display/panel/innolux,p097pfg.txt
+index 513f03466aba..000000000000
+--- a/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.txt
 +++ /dev/null
-@@ -1,24 +0,0 @@
--Innolux P097PFG 9.7" 1536x2048 TFT LCD panel
+@@ -1,22 +0,0 @@
+-Innolux P120ZDG-BF1 12.02 inch eDP 2K display panel
+-
+-This binding is compatible with the simple-panel binding, which is specified
+-in simple-panel.txt in this directory.
 -
 -Required properties:
--- compatible: should be "innolux,p097pfg"
--- reg: DSI virtual channel of the peripheral
--- avdd-supply: phandle of the regulator that provides positive voltage
--- avee-supply: phandle of the regulator that provides negative voltage
--- enable-gpios: panel enable gpio
+-- compatible: should be "innolux,p120zdg-bf1"
+-- power-supply: regulator to provide the supply voltage
 -
 -Optional properties:
+-- enable-gpios: GPIO pin to enable or disable the panel
 -- backlight: phandle of the backlight device attached to the panel
+-- no-hpd: If HPD isn't hooked up; add this property.
 -
 -Example:
--
--	&mipi_dsi {
--		panel@0 {
--			compatible = "innolux,p079zca";
--			reg = <0>;
--			avdd-supply = <...>;
--			avee-supply = <...>;
--			backlight = <&backlight>;
--			enable-gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;
--		};
+-	panel_edp: panel-edp {
+-		compatible = "innolux,p120zdg-bf1";
+-		enable-gpios = <&msmgpio 31 GPIO_ACTIVE_LOW>;
+-		power-supply = <&pm8916_l2>;
+-		backlight = <&backlight>;
+-		no-hpd;
 -	};
-diff --git a/Documentation/devicetree/bindings/display/panel/innolux,p097pfg.yaml b/Documentation/devicetree/bindings/display/panel/innolux,p097pfg.yaml
+diff --git a/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml b/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml
 new file mode 100644
-index 000000000000..5a5f071627fb
+index 000000000000..42f97b7b86b2
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/innolux,p097pfg.yaml
-@@ -0,0 +1,56 @@
++++ b/Documentation/devicetree/bindings/display/panel/innolux,p120zdg-bf1.yaml
+@@ -0,0 +1,43 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/display/panel/innolux,p097pfg.yaml#
++$id: http://devicetree.org/schemas/display/panel/innolux,p120zdg-bf1.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Innolux P097PFG 9.7" 1536x2048 TFT LCD panel
++title: Innolux P120ZDG-BF1 12.02 inch eDP 2K display panel
 +
 +maintainers:
-+  - Lin Huang <hl@rock-chips.com>
++  - Sandeep Panda <spanda@codeaurora.org>
++  - Douglas Anderson <dianders@chromium.org>
 +
 +allOf:
 +  - $ref: panel-common.yaml#
 +
 +properties:
 +  compatible:
-+    const: innolux,p097pfg
++    const: innolux,p120zdg-bf1
 +
-+  backlight: true
 +  enable-gpios: true
-+  reg: true
-+
-+  avdd-supply:
-+    description: The regulator that provides positive voltage
-+
-+  avee-supply:
-+    description: The regulator that provides negative voltage
++  power-supply: true
++  backlight: true
++  no-hpd: true
 +
 +required:
 +  - compatible
-+  - reg
-+  - avdd-supply
-+  - avee-supply
-+  - enable-gpios
-+
++  - power-supply
++        
 +additionalProperties: false
 +
 +examples:
 +  - |
 +    #include <dt-bindings/gpio/gpio.h>
 +
-+    dsi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        panel@0 {
-+            compatible = "innolux,p097pfg";
-+            reg = <0>;
-+            avdd-supply = <&avdd>;
-+            avee-supply = <&avee>;
-+            backlight = <&backlight>;
-+            enable-gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;
-+        };
++    panel_edp: panel-edp {
++        compatible = "innolux,p120zdg-bf1";
++        enable-gpios = <&msmgpio 31 GPIO_ACTIVE_LOW>;
++        power-supply = <&pm8916_l2>;
++        backlight = <&backlight>;
++        no-hpd;
 +    };
 +
 +...
