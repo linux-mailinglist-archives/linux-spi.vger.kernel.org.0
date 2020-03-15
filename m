@@ -2,53 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D836185F39
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 19:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94649185F94
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 20:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728639AbgCOS4b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 14:56:31 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:43942 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728633AbgCOS4b (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 14:56:31 -0400
-Received: by mail-lj1-f195.google.com with SMTP id r7so16128900ljp.10
-        for <linux-spi@vger.kernel.org>; Sun, 15 Mar 2020 11:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3S0v5oR3bTCtw3b5Uz5rVvk64YK1h/rSLcltspTzzJc=;
-        b=cKhTiwe8JLQgXFORz+fw8VRZAu9macKEjSEE1sB7WsCErjroARHh+wKst5Wo7Gwhf4
-         0p5dOI3Ky/JtcXSm+cM9StCGahFcvwO0Lo6mTjY3l0QxKNN66nG5vL9exxBmHn6LE8Pd
-         uU2G0nqvo02Lhasx0pForQUFgAvOaP5VoY5SHdTjI6dwpdSBFxgyozq4p9cg0fiwcU+F
-         W8qa4XnFe0refvD8FeqdwdjO0MSOTpFPwVLVsqCLYhHlJ9xeLihIQ1kJ45zWid3eV3Ds
-         cWiMIQ5ESqzXry3YWHmcRmXR6JtOOuKfw3HWefDaXrcVveKYLIjeczPuc7YXSfJMfzft
-         fN8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3S0v5oR3bTCtw3b5Uz5rVvk64YK1h/rSLcltspTzzJc=;
-        b=puAht6+6vjwt3tsDEEkr20+CeVdWBGIgax0cmQUQ1paFLajTzZ4hM7OtKSbpUaZ79G
-         xBY6ZSHZ7MIj+OfV10/CyvgzMagcNMZP+d3ACt4wy8oWqZvUvOxBL+VKa2S2xpQYZ/Zq
-         OhEaYzH9snzk6wsXpvxYUAufldxcaz2pGVjSWhST+bzNqV/o3hudmX7ZjBza10T5PQwy
-         IHmjNqD2uSp0xYB2vTY1/+hGXpNoez+q+sr5qprG5827b8pIC8pFGAljNdGzEnitoBis
-         vBn4P/++6yrLs9FZbY/IcUsT9zTJW45t3toXvsS+Zp4aGLEUuohzQOczadwmsxCzKdVV
-         Uw4A==
-X-Gm-Message-State: ANhLgQ335etZjpeLIp4OK45ZjYAY8vKnzneaXLFfj7Zx4vaIybDhAC17
-        yISIVTebyO8BuDR1CxPiltuII+BvYA85MqEAEz9zYw==
-X-Google-Smtp-Source: ADFU+vu8FHCAUtRF0Yn3tqP8EsUWnhS9Glxv1rrGugkRmD6+x0k9o222/MFlQ/3JytyCUYbtCsS2+dDrEb9WqE/9ABM=
-X-Received: by 2002:a05:651c:2c1:: with SMTP id f1mr14032427ljo.125.1584298587802;
- Sun, 15 Mar 2020 11:56:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200315134416.16527-1-sam@ravnborg.org> <20200315134416.16527-22-sam@ravnborg.org>
-In-Reply-To: <20200315134416.16527-22-sam@ravnborg.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 15 Mar 2020 19:56:15 +0100
-Message-ID: <CACRpkdZF8fx2RtHKivAkn+aQiC8B27Lzwk69S0RS5QUcfj1uVw@mail.gmail.com>
-Subject: Re: [PATCH v1 21/36] dt-bindings: display: convert samsung,s6d16d0 to
- DT Schema
-To:     Sam Ravnborg <sam@ravnborg.org>
+        id S1728734AbgCOTZE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 15:25:04 -0400
+Received: from asavdk3.altibox.net ([109.247.116.14]:35604 "EHLO
+        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728608AbgCOTZD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 15:25:03 -0400
+Received: from ravnborg.org (unknown [158.248.194.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk3.altibox.net (Postfix) with ESMTPS id 92E482003A;
+        Sun, 15 Mar 2020 20:24:53 +0100 (CET)
+Date:   Sun, 15 Mar 2020 20:24:52 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Rob Herring <robh@kernel.org>,
@@ -85,20 +55,72 @@ Cc:     "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
         Tony Lindgren <tony@atomide.com>,
         Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v1 06/36] dt-bindings: display: convert ilitek,ili9322 to
+ DT Schema
+Message-ID: <20200315192452.GA29182@ravnborg.org>
+References: <20200315134416.16527-1-sam@ravnborg.org>
+ <20200315134416.16527-7-sam@ravnborg.org>
+ <CACRpkdYVrTBKxuHSGpd9=03oD4=JVxzJf8fOcQ8uu5eRt9PgAg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdYVrTBKxuHSGpd9=03oD4=JVxzJf8fOcQ8uu5eRt9PgAg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=eMA9ckh1 c=1 sm=1 tr=0
+        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
+        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=7gkXJVJtAAAA:8
+        a=KKAkSRfTAAAA:8 a=pGLkceISAAAA:8 a=WN0NcwN0bJFRE13tjSgA:9
+        a=CjuIK1q_8ugA:10 a=E9Po1WZjFZOl8hwRPBS3:22 a=cvBusfyB2V15izCimMoJ:22
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Mar 15, 2020 at 2:45 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+Hi Linus.
 
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
+On Sun, Mar 15, 2020 at 07:54:38PM +0100, Linus Walleij wrote:
+> On Sun, Mar 15, 2020 at 2:44 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+> 
+> > The .txt binding explains:
+> >
+> > "
+> >     The following optional properties only apply to
+> >     RGB and YUV input modes and
+> >     can be omitted for BT.656 input modes:
+> > "
+> >
+> > This constraint is not implmented in the DT Schema.
+> >
+> > The original binding from the .txt file referenced
+> > properties that is included in panel-timing.yaml.
+> > These properties are kept here as we want as close to a 1:1
+> > conversion as we can. If the properties should be dropped
+> > from the binding then this is a follow-up patch.
+> >
+> > The properties in question are:
+> >   - pixelclk-active
+> >   - de-active
+> >   - hsync-active
+> >   - vsync-active
+> 
+> Sorry about that. They should be dropped, but certainly it
+> is fine to do with a follow up patch.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+I changed my mind - lets try to avoid too many patches.
+So if you do not mind I will do it in this patch - and note it in the
+changelog.
 
-Yours,
-Linus Walleij
+	Sam
+
+> 
+> >
+> > Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Thierry Reding <thierry.reding@gmail.com>
+> > Cc: Sam Ravnborg <sam@ravnborg.org>
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> Yours,
+> Linus Walleij
