@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF8C185CC6
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 14:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EE0185CC9
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 14:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728646AbgCONoh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 09:44:37 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:42462 "EHLO
+        id S1728634AbgCONol (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 09:44:41 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:33741 "EHLO
         mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728634AbgCONoh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 09:44:37 -0400
-Received: by mail-lf1-f65.google.com with SMTP id t21so11693959lfe.9;
-        Sun, 15 Mar 2020 06:44:35 -0700 (PDT)
+        with ESMTP id S1728643AbgCONok (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 09:44:40 -0400
+Received: by mail-lf1-f65.google.com with SMTP id c20so11745367lfb.0;
+        Sun, 15 Mar 2020 06:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2nNoHF8rJC/nOf5M8UDCn0+951QJCRTbyZ2ThPvlf0w=;
-        b=peaSA7XXfInnOlxZwHMfXxgxh99b4MF4RSH4zmci46aJTfHAih6Ks3JleLT1XNLKXG
-         tfiESYeF9CeV4mxStON58h1mDB4iz2RF84TVh+5jyM/MK1olmp3EnXLQuyzW4rOJ/PHr
-         T2RkT5PavJJhRaXkMvdxQjd8P0M3ZsZ0APYHq+DAwytpMGagy46rdlv4h/njIPy+iDuL
-         LJT6BzKaAnOr6dhcwwhBcm4V3D9Y109REnC5uSzp+hGLeCkFiHEHYH8KIKhG9E9BQcQA
-         C1n7QwXOVKK7UQDY/ZNCEnfslAIDSct4tK1Jkjxqgcqb9ngMMVpdYtv+uLbQTU6VXqJJ
-         BOPA==
+        bh=C9SsIXb80tx1XgE4QnEZlqaCxjB5IA7rL4pD0MP0x+E=;
+        b=fm/YHgYqGltGK7GE1wbGY7G8zo4Ns0vW+iU7MUUX5G2g9lBIU6erjBD9k0egBK3Qew
+         fl4A1fRxvOeYzHUaevzlUjY/CHHDcfr23RYzMS8kqSNgVlzb42Nexg/R5i7SLTlPhG3i
+         b6wpkipTvQupy3cSYX5bpwmfRkrOVjFQpz18z+kA/sKAj6xV2OFina1wqSALEPBHaP2Y
+         CQY80hqeEHQYylOcffvPeyftA5GfosbNh1ZeSaaEdpGAQN0sZZix4uABB+p+YWR8Ev1T
+         Z1VHRukdseG8fsVZbM0DRFvijkD7duIFuiCTwHM4xOP5Ec3dq/FF6MejPV9zTtjj+ZyU
+         nPyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=2nNoHF8rJC/nOf5M8UDCn0+951QJCRTbyZ2ThPvlf0w=;
-        b=A7DA4pl8SPhUDSah5+v7rrY2pJM+iz4mdtjHrmHlYxBQY+EHR0QpDmNJPPOSwaQEYb
-         mDK8O301Blyo+uw/65bPpvo6JQnOH7zTP6DTmUezQT9rbCGP1pUOXTxMcQdcg2DvGWjO
-         oX5W3Mvs0mOROq0uIe+ecl6s6kdkOQdFgtOA1tt8/whethK5YqMZ3g7qn4SSCfGd+TBB
-         qyPIt5iQQVVEj/9JcDY6ms6mHz6ZTfIUQ4/B91t3kwUXaZ6sHJjBXzk2g9Mv8Fpa7amP
-         9E4HPl+ZUkldpr3jGcFJAwtNucITfxzExU26n4C/buwo/gcJ+0qqVwtmnmmRY21OpDzK
-         Wk8g==
-X-Gm-Message-State: ANhLgQ2E+9imkSt2HTL5R6/xBM3/8TuM/fApAkhWTQaPmGaA6LkQOXon
-        A7YuINOhcUH9svhsUvwnMqw=
-X-Google-Smtp-Source: ADFU+vsRGsioJ1VqqB8qQWTmMk8FSUPBYKCqg6o0VA9Tjps9bftz2BrCNELrmgSTrx0twM5iMuyksg==
-X-Received: by 2002:ac2:5e7b:: with SMTP id a27mr5597020lfr.61.1584279874961;
-        Sun, 15 Mar 2020 06:44:34 -0700 (PDT)
+        bh=C9SsIXb80tx1XgE4QnEZlqaCxjB5IA7rL4pD0MP0x+E=;
+        b=E8zSxI/+xPriQGzqIYiia9lrsSdRkP9cjd7qUF3yikOgLVZe5JieAhPGuLkYv11/0c
+         sXWhSFkWlGyl3oNQ+Ru9F9rz2XiD/a93ojZ+S+DuCAVU/W1rDnb/L7rYoSm+Gq1DdnlA
+         Cjcb8zZGDfiikzovoh9FzK7T+h2sDpM1jm9lD6iVuMeJ4RTbuwxtW7/SzKHYX9zN/B8Y
+         SnbpfqWrGDp0RNYA9eo/cmt4J75pE3uy7t2F5k0iX0XT+TbHQN8Dj4v6WKIROu6PDXH5
+         gAoutad6+XrHFqtPqUxESlj8Ax86rAq0qHi0c8yvC/uuOTxtq33z8qDkDUn3BgPrOeSB
+         L9PQ==
+X-Gm-Message-State: ANhLgQ1o/rIScxelA2LWJzcUp8J5a3rZ8Te1ht0PZ34le+myo3XB+u7Q
+        U2nFF+rEPTpN193l8sMvMNs=
+X-Google-Smtp-Source: ADFU+vsmUIw0h+Jwxkxf146YRyd9fkTD5JMB5Hpegdo28MUyCENYV8foz/uamg8NsejFR3yfyJtcXg==
+X-Received: by 2002:a19:ca46:: with SMTP id h6mr2077077lfj.108.1584279876898;
+        Sun, 15 Mar 2020 06:44:36 -0700 (PDT)
 Received: from saturn.lan (18.158-248-194.customer.lyse.net. [158.248.194.18])
-        by smtp.gmail.com with ESMTPSA id a9sm23025212lfb.21.2020.03.15.06.44.32
+        by smtp.gmail.com with ESMTPSA id a9sm23025212lfb.21.2020.03.15.06.44.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Mar 2020 06:44:34 -0700 (PDT)
+        Sun, 15 Mar 2020 06:44:36 -0700 (PDT)
 From:   Sam Ravnborg <sam@ravnborg.org>
 To:     dri-devel@lists.freedesktop.org,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -80,9 +80,9 @@ Cc:     Alexandre Courbot <acourbot@nvidia.com>,
         Tony Lindgren <tony@atomide.com>,
         Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Subject: [PATCH v1 03/36] dt-bindings: display: convert samsung,s6e63m0 to DT Schema
-Date:   Sun, 15 Mar 2020 14:43:43 +0100
-Message-Id: <20200315134416.16527-4-sam@ravnborg.org>
+Subject: [PATCH v1 04/36] dt-bindings: display: convert arm,versatile-tft-panel to DT Schema
+Date:   Sun, 15 Mar 2020 14:43:44 +0100
+Message-Id: <20200315134416.16527-5-sam@ravnborg.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200315134416.16527-1-sam@ravnborg.org>
 References: <20200315134416.16527-1-sam@ravnborg.org>
@@ -93,118 +93,105 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The binding for this panel is a SPI slave.
-Reference spi-slave.yaml
-to avoid duplicating all properties.
-
 Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Jonathan Bakker <xc-racer2@live.ca>
+Cc: Linus Walleij <linus.walleij@linaro.org>
 Cc: Thierry Reding <thierry.reding@gmail.com>
 Cc: Sam Ravnborg <sam@ravnborg.org>
 ---
- .../display/panel/samsung,s6e63m0.txt         | 33 -----------
- .../display/panel/samsung,s6e63m0.yaml        | 58 +++++++++++++++++++
- 2 files changed, 58 insertions(+), 33 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.txt
- create mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
+ .../display/panel/arm,versatile-tft-panel.txt | 31 -----------
+ .../panel/arm,versatile-tft-panel.yaml        | 51 +++++++++++++++++++
+ 2 files changed, 51 insertions(+), 31 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/panel/arm,versatile-tft-panel.txt
+ create mode 100644 Documentation/devicetree/bindings/display/panel/arm,versatile-tft-panel.yaml
 
-diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.txt b/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.txt
+diff --git a/Documentation/devicetree/bindings/display/panel/arm,versatile-tft-panel.txt b/Documentation/devicetree/bindings/display/panel/arm,versatile-tft-panel.txt
 deleted file mode 100644
-index 9fb9ebeef8e4..000000000000
---- a/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.txt
+index 0601a9e34703..000000000000
+--- a/Documentation/devicetree/bindings/display/panel/arm,versatile-tft-panel.txt
 +++ /dev/null
-@@ -1,33 +0,0 @@
--Samsung s6e63m0 AMOLED LCD panel
+@@ -1,31 +0,0 @@
+-ARM Versatile TFT Panels
+-
+-These panels are connected to the daughterboards found on the
+-ARM Versatile reference designs.
+-
+-This device node must appear as a child to a "syscon"-compatible
+-node.
 -
 -Required properties:
--  - compatible: "samsung,s6e63m0"
--  - reset-gpios: GPIO spec for reset pin
--  - vdd3-supply: VDD regulator
--  - vci-supply: VCI regulator
+-- compatible: should be "arm,versatile-tft-panel"
 -
--The panel must obey rules for SPI slave device specified in document [1].
+-Required subnodes:
+-- port: see display/panel/panel-common.yaml, graph.txt
 -
--The device node can contain one 'port' child node with one child
--'endpoint' node, according to the bindings defined in [2]. This
--node should describe panel's video bus.
--
--[1]: Documentation/devicetree/bindings/spi/spi-bus.txt
--[2]: Documentation/devicetree/bindings/media/video-interfaces.txt
 -
 -Example:
 -
--		s6e63m0: display@0 {
--			compatible = "samsung,s6e63m0";
--			reg = <0>;
--			reset-gpio = <&mp05 5 1>;
--			vdd3-supply = <&ldo12_reg>;
--			vci-supply = <&ldo11_reg>;
--			spi-max-frequency = <1200000>;
+-sysreg@0 {
+-	compatible = "arm,versatile-sysreg", "syscon", "simple-mfd";
+-	reg = <0x00000 0x1000>;
 -
--			port {
--				lcd_ep: endpoint {
--					remote-endpoint = <&fimd_ep>;
--				};
+-	panel: display@0 {
+-		compatible = "arm,versatile-tft-panel";
+-
+-		port {
+-			panel_in: endpoint {
+-				remote-endpoint = <&foo>;
 -			};
 -		};
-diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/display/panel/arm,versatile-tft-panel.yaml b/Documentation/devicetree/bindings/display/panel/arm,versatile-tft-panel.yaml
 new file mode 100644
-index 000000000000..204ed76da84d
+index 000000000000..8ad7305887b4
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
-@@ -0,0 +1,58 @@
++++ b/Documentation/devicetree/bindings/display/panel/arm,versatile-tft-panel.yaml
+@@ -0,0 +1,51 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/display/panel/samsung,s6e63m0.yaml#
++$id: http://devicetree.org/schemas/display/panel/arm,versatile-tft-panel.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Samsung s6e63m0 AMOLED LCD panel
++title: ARM Versatile TFT Panels
 +
 +maintainers:
-+  - Jonathan Bakker <xc-racer2@live.ca>
++  - Linus Walleij <linus.walleij@linaro.org>
++
++description: |
++  These panels are connected to the daughterboards found on the
++  ARM Versatile reference designs.
++
++  This device node must appear as a child to a "syscon"-compatible
++  node.
 +
 +allOf:
-+  - $ref: ../../spi/spi-slave.yaml#
 +  - $ref: panel-common.yaml#
 +
 +properties:
 +  compatible:
-+    const: samsung,s6e63m0
++    const: arm,versatile-tft-panel
 +
-+  reg: true
-+  reset-gpios: true
 +  port: true
-+
-+  vdd3-supply:
-+    description: VDD regulator
-+
-+  vci-supply:
-+    description: VCI regulator
 +
 +required:
 +  - compatible
-+  - reset-gpios
-+  - vdd3-supply
-+  - vci-supply
++  - port
++
++additionalProperties: false
 +
 +examples:
 +  - |
-+    spi {
-+        reg = <0xf00 0x20>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        display@0 {
-+            compatible = "samsung,s6e63m0";
-+            reg = <0>;
-+            reset-gpios = <&mp05 5 1>;
-+            vdd3-supply = <&ldo12_reg>;
-+            vci-supply = <&ldo11_reg>;
-+            spi-max-frequency = <1200000>;
++    sysreg {
++        compatible = "arm,versatile-sysreg", "syscon", "simple-mfd";
++        reg = <0x00000 0x1000>;
++
++        panel: display@0 {
++            compatible = "arm,versatile-tft-panel";
 +
 +            port {
-+                lcd_ep: endpoint {
-+                    remote-endpoint = <&fimd_ep>;
++                panel_in: endpoint {
++                    remote-endpoint = <&foo>;
 +                };
 +            };
 +        };
