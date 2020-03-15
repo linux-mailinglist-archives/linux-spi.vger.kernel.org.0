@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC59D185CFC
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 14:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A69185CFF
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 14:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728687AbgCONpQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 09:45:16 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:39841 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728668AbgCONpQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 09:45:16 -0400
-Received: by mail-lf1-f67.google.com with SMTP id j15so11739555lfk.6;
-        Sun, 15 Mar 2020 06:45:13 -0700 (PDT)
+        id S1728690AbgCONpT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 09:45:19 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39035 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728668AbgCONpT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 09:45:19 -0400
+Received: by mail-lj1-f194.google.com with SMTP id f10so15604341ljn.6;
+        Sun, 15 Mar 2020 06:45:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=B3b7v3jOY+BEoITyEXppKyuNdMXph+o8yVRg4fC4u8I=;
-        b=ZZRgEYtfMwf8hny9XTolYcMHHBBtuR8qClGcSjJfqHToyZOJ4RqB3R5wM/xen1SHXi
-         WrTy0Ms+W5rCEdgJ0+hTMdsirV9opKmO+yk2INO0z6giusoSZTdgimlL431MUbxh+Jgy
-         o1njPeOpjedD5wwPz1aEaqF0VZHUG9FyY34zAgtFNYQFpGyJtU04Huzd1+sHBnEMulwP
-         aLyqdKw01/WCit7qD6wHV4D1pKuA8nbsyca92ZGxnwJ6hG5GTAF0wOaTDC9o/yQlQALl
-         6IgfpxFFf1xSr0QGu0vSuLK+ss3lhgCiYH5kZnrLx9qW76tAzqGMYdTl65y9hybyD8Q5
-         53Zg==
+        bh=95/tYrFLxFWhHQedTIuiprVnYZuYF3knH69CjqDuvg4=;
+        b=kVkFO0dZn3WY2eMdLtNyuUxKYmVfl5GkIYSSGuVnSVLwfS7on2M58zQL/nGUG1V6W6
+         KOPElrjpPlI3MYCbvm8oiDtkivrOfLK0wD5olkxHasi8wp5yStO5MJUKwxW4N2+56vEl
+         9SJ6aj5TLkVhBTe+OnB68MnD2QYhQTYONHmVpzs6rbf+QYn7haf7iiAwe+Byt+M1gVYR
+         aLQDOzcS6djblQkcKg6VbWUSbWcALHd+nu7VuNCO7/D1kzH0Aow495hmSMovYWMXmW0o
+         92P+Qu03iJ57nRtDk9+6a6fHVx3kIdJIKOPbcu5k4SLWQ1l8rIzuVp/v9HKFf4m9xFkJ
+         wU5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=B3b7v3jOY+BEoITyEXppKyuNdMXph+o8yVRg4fC4u8I=;
-        b=MZtFTHPKT7uI/6ecNR1xDtbXZ834WKmkA6NEoNSuwqYI2MQc9LPl2y3CXCno4spBnb
-         +scbdYZ+7VfiqSc16++FXIASVnkZkYwhIfLA/iMLO7a68Ec/NlnK9op0M1rZt7Low/h+
-         8ChiOaGPm4Au5JiLNj8la53tToF3xHlpg7P09JK0aH9LDNv5edNZBQbketiFCp0+OjX0
-         bY2Cf+p0miF288qR5IA2/xDeeGFuhVmf5venppJ71YDybslBLaJqdyNi00e59WnpM98p
-         +Cfi6NJox/vCNLoh7cDiclGnRjL7gUlxJBq/881WfKr0lubEXVYftm22LJBwh7YnN45D
-         tCEA==
-X-Gm-Message-State: ANhLgQ21set8FOQ4RFdzV7cf38IYHWsQ65jUHq1M33B9HWrj90cAWMZZ
-        pNgwSdDw78WM6+yAXKv+N5o=
-X-Google-Smtp-Source: ADFU+vs5SZ0RjLxx/mcXO1vlxdkNPH3sSNPKwNq5nPrIwT5rKIrQAIVis04WnsLYjPbxsvfuIfaWxA==
-X-Received: by 2002:a19:9d0:: with SMTP id 199mr412715lfj.175.1584279912362;
-        Sun, 15 Mar 2020 06:45:12 -0700 (PDT)
+        bh=95/tYrFLxFWhHQedTIuiprVnYZuYF3knH69CjqDuvg4=;
+        b=oDiHdruZj/ttpWQpkoJ9RZi9eisZZ8/yTiCUDYXiyN/hzqIJo5hmOOsh9MvbBgwUfh
+         zNc73OhzN7yfvXtqMDYpA9FvQyUcik2UnIskU1GHsU+JkSK/Y0xDovFZd334k4OPuaeE
+         mlGqtMAiREH6wqypXCd6R1BuVgHHwr17WBMAFIvvWy8vvqotc8tYMhjcUmuqfV/51NTa
+         srTAKOWnyv0F2GoIxKtNqbzpOpfrA1VkrO0nXQfxFNLfS/qf7/xXUXAPUId7KJPZlO8x
+         gcL/f+oN9oOBZQNWf3WLBYQqrZdpYzUSRchCeap6fEuSUgOOlLcmPIUZ1vB+rH0KPg7H
+         /szw==
+X-Gm-Message-State: ANhLgQ0tRZFSL43JuGJ9SRt2ZiT3QQbqiOU1bAaKS3Tz1k4dqQopgGhK
+        +ta2gUHBgX26vFeByFwl7C8=
+X-Google-Smtp-Source: ADFU+vvAb04MLDJqI6lPeN8wJHT/HuiV0E9v6XPvtroLZweI21bVO9Nmr0Oyc6ieS+LchZ7g0jnh2Q==
+X-Received: by 2002:a2e:870b:: with SMTP id m11mr3056178lji.109.1584279914394;
+        Sun, 15 Mar 2020 06:45:14 -0700 (PDT)
 Received: from saturn.lan (18.158-248-194.customer.lyse.net. [158.248.194.18])
-        by smtp.gmail.com with ESMTPSA id a9sm23025212lfb.21.2020.03.15.06.45.10
+        by smtp.gmail.com with ESMTPSA id a9sm23025212lfb.21.2020.03.15.06.45.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Mar 2020 06:45:11 -0700 (PDT)
+        Sun, 15 Mar 2020 06:45:13 -0700 (PDT)
 From:   Sam Ravnborg <sam@ravnborg.org>
 To:     dri-devel@lists.freedesktop.org,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -80,9 +80,9 @@ Cc:     Alexandre Courbot <acourbot@nvidia.com>,
         Tony Lindgren <tony@atomide.com>,
         Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Subject: [PATCH v1 21/36] dt-bindings: display: convert samsung,s6d16d0 to DT Schema
-Date:   Sun, 15 Mar 2020 14:44:01 +0100
-Message-Id: <20200315134416.16527-22-sam@ravnborg.org>
+Subject: [PATCH v1 22/36] dt-bindings: display: convert samsung,ld9040 to DT Schema
+Date:   Sun, 15 Mar 2020 14:44:02 +0100
+Message-Id: <20200315134416.16527-23-sam@ravnborg.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200315134416.16527-1-sam@ravnborg.org>
 References: <20200315134416.16527-1-sam@ravnborg.org>
@@ -94,108 +94,188 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Andrzej Hajda <a.hajda@samsung.com>
 Cc: Thierry Reding <thierry.reding@gmail.com>
 Cc: Sam Ravnborg <sam@ravnborg.org>
 ---
- .../display/panel/samsung,s6d16d0.txt         | 30 ----------
- .../display/panel/samsung,s6d16d0.yaml        | 56 +++++++++++++++++++
- 2 files changed, 56 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6d16d0.txt
- create mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6d16d0.yaml
+ .../bindings/display/panel/samsung,ld9040.txt |  66 ------------
+ .../display/panel/samsung,ld9040.yaml         | 100 ++++++++++++++++++
+ 2 files changed, 100 insertions(+), 66 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/panel/samsung,ld9040.txt
+ create mode 100644 Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml
 
-diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6d16d0.txt b/Documentation/devicetree/bindings/display/panel/samsung,s6d16d0.txt
+diff --git a/Documentation/devicetree/bindings/display/panel/samsung,ld9040.txt b/Documentation/devicetree/bindings/display/panel/samsung,ld9040.txt
 deleted file mode 100644
-index b94e366f451b..000000000000
---- a/Documentation/devicetree/bindings/display/panel/samsung,s6d16d0.txt
+index 354d4d1df4ff..000000000000
+--- a/Documentation/devicetree/bindings/display/panel/samsung,ld9040.txt
 +++ /dev/null
-@@ -1,30 +0,0 @@
--Samsung S6D16D0 4" 864x480 AMOLED panel
+@@ -1,66 +0,0 @@
+-Samsung LD9040 AMOLED LCD parallel RGB panel with SPI control bus
 -
 -Required properties:
--  - compatible: should be:
--    "samsung,s6d16d0",
--  - reg: the virtual channel number of a DSI peripheral
--  - vdd1-supply: I/O voltage supply
--  - reset-gpios: a GPIO spec for the reset pin (active low)
+-  - compatible: "samsung,ld9040"
+-  - reg: address of the panel on SPI bus
+-  - vdd3-supply: core voltage supply
+-  - vci-supply: voltage supply for analog circuits
+-  - reset-gpios: a GPIO spec for the reset pin
+-  - display-timings: timings for the connected panel according to [1]
+-
+-The panel must obey rules for SPI slave device specified in document [2].
+-
+-Optional properties:
+-  - power-on-delay: delay after turning regulators on [ms]
+-  - reset-delay: delay after reset sequence [ms]
+-  - panel-width-mm: physical panel width [mm]
+-  - panel-height-mm: physical panel height [mm]
 -
 -The device node can contain one 'port' child node with one child
--'endpoint' node, according to the bindings defined in
--media/video-interfaces.txt. This node should describe panel's video bus.
+-'endpoint' node, according to the bindings defined in [3]. This
+-node should describe panel's video bus.
+-
+-[1]: Documentation/devicetree/bindings/display/panel/display-timing.txt
+-[2]: Documentation/devicetree/bindings/spi/spi-bus.txt
+-[3]: Documentation/devicetree/bindings/media/video-interfaces.txt
 -
 -Example:
--&dsi {
--	...
 -
--	panel@0 {
--		compatible = "samsung,s6d16d0";
+-	lcd@0 {
+-		compatible = "samsung,ld9040";
 -		reg = <0>;
--		vdd1-supply = <&foo>;
--		reset-gpios = <&foo_gpio 0 GPIO_ACTIVE_LOW>;
+-		vdd3-supply = <&ldo7_reg>;
+-		vci-supply = <&ldo17_reg>;
+-		reset-gpios = <&gpy4 5 0>;
+-		spi-max-frequency = <1200000>;
+-		spi-cpol;
+-		spi-cpha;
+-		power-on-delay = <10>;
+-		reset-delay = <10>;
+-		panel-width-mm = <90>;
+-		panel-height-mm = <154>;
+-
+-		display-timings {
+-			timing {
+-				clock-frequency = <23492370>;
+-				hactive = <480>;
+-				vactive = <800>;
+-				hback-porch = <16>;
+-				hfront-porch = <16>;
+-				vback-porch = <2>;
+-				vfront-porch = <28>;
+-				hsync-len = <2>;
+-				vsync-len = <1>;
+-				hsync-active = <0>;
+-				vsync-active = <0>;
+-				de-active = <0>;
+-				pixelclk-active = <0>;
+-			};
+-		};
 -
 -		port {
--			panel_in: endpoint {
--				remote-endpoint = <&dsi_out>;
+-			lcd_ep: endpoint {
+-				remote-endpoint = <&fimd_dpi_ep>;
 -			};
 -		};
 -	};
--};
-diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6d16d0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6d16d0.yaml
+diff --git a/Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml b/Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml
 new file mode 100644
-index 000000000000..66d147496bc3
+index 000000000000..b6e7e87411e8
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/samsung,s6d16d0.yaml
-@@ -0,0 +1,56 @@
++++ b/Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml
+@@ -0,0 +1,100 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/display/panel/samsung,s6d16d0.yaml#
++$id: http://devicetree.org/schemas/display/panel/samsung,ld9040.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Samsung S6D16D0 4" 864x480 AMOLED panel
++title: Samsung LD9040 AMOLED LCD parallel RGB panel with SPI control bus
 +
 +maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
++  - Andrzej Hajda <a.hajda@samsung.com>
 +
 +allOf:
++  - $ref: ../../spi/spi-slave.yaml#
 +  - $ref: panel-common.yaml#
 +
 +properties:
 +  compatible:
-+    const: samsung,s6d16d0
++    const: samsung,ld9040
 +
++  display-timings: true
 +  port: true
 +  reg: true
 +  reset-gpios: true
 +
-+  vdd1-supply:
-+    description: I/O voltage supply
++  vdd3-supply:
++    description: core voltage supply
++
++  vci-supply:
++    description: voltage supply for analog circuits
++
++  power-on-delay:
++    description: delay after turning regulators on [ms]
++
++  reset-delay:
++    description: delay after reset sequence [ms]
++
++  panel-width-mm:
++    description: physical panel width [mm]
++
++  panel-height-mm:
++    description: physical panel height [mm]
 +
 +required:
 +  - compatible
 +  - reg
-+  - vdd1-supply
++  - vdd3-supply
++  - vci-supply
 +  - reset-gpios
-+
-+additionalProperties: false
++  - display-timings
 +
 +examples:
 +  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    dsi {
++    spi {
 +        #address-cells = <1>;
 +        #size-cells = <0>;
 +
-+        panel@0 {
-+            compatible = "samsung,s6d16d0";
++        lcd@0 {
++            compatible = "samsung,ld9040";
++            #address-cells = <1>;
++            #size-cells = <0>;
++
 +            reg = <0>;
-+            vdd1-supply = <&foo>;
-+            reset-gpios = <&foo_gpio 0 GPIO_ACTIVE_LOW>;
++            vdd3-supply = <&ldo7_reg>;
++            vci-supply = <&ldo17_reg>;
++            reset-gpios = <&gpy4 5 0>;
++            spi-max-frequency = <1200000>;
++            spi-cpol;
++            spi-cpha;
++            power-on-delay = <10>;
++            reset-delay = <10>;
++            panel-width-mm = <90>;
++            panel-height-mm = <154>;
++
++            display-timings {
++                timing {
++                    clock-frequency = <23492370>;
++                    hactive = <480>;
++                    vactive = <800>;
++                    hback-porch = <16>;
++                    hfront-porch = <16>;
++                    vback-porch = <2>;
++                    vfront-porch = <28>;
++                    hsync-len = <2>;
++                    vsync-len = <1>;
++                    hsync-active = <0>;
++                    vsync-active = <0>;
++                    de-active = <0>;
++                    pixelclk-active = <0>;
++                };
++            };
 +
 +            port {
-+                panel_in: endpoint {
-+                    remote-endpoint = <&dsi_out>;
++                lcd_ep: endpoint {
++                    remote-endpoint = <&fimd_dpi_ep>;
 +                };
 +            };
 +        };
