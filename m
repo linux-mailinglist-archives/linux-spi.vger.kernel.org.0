@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B12185D0A
-	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 14:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DE4185D0E
+	for <lists+linux-spi@lfdr.de>; Sun, 15 Mar 2020 14:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728696AbgCONpZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 09:45:25 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39043 "EHLO
+        id S1728637AbgCONp1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 09:45:27 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43102 "EHLO
         mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728628AbgCONpZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 09:45:25 -0400
-Received: by mail-lj1-f193.google.com with SMTP id f10so15604530ljn.6;
-        Sun, 15 Mar 2020 06:45:23 -0700 (PDT)
+        with ESMTP id S1728695AbgCONp1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 15 Mar 2020 09:45:27 -0400
+Received: by mail-lj1-f193.google.com with SMTP id r7so15605463ljp.10;
+        Sun, 15 Mar 2020 06:45:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YjUy1ADd38ONuUoZQBzdcbnlxdYpv/fTDjjTTwszQr4=;
-        b=GylaU3jU+HIKMfeaQ7IeuU+xs4umCfPUVuYcOIxrPFuj/ZoaGAtx58hYWArlZA7EOT
-         SDvJNDyUrfLHLajV+sz/k4RTvtE9kp3csCoYbzSLCzYW704ESkcsi0KgQ69hDoUImWgM
-         EUQQEB7r/5UV1oB/iSWNd37KO5mhbW92PtfiGUheYmBP13oqryI8JOhLZP2Md3qod3+w
-         4hjjEXWUNuLXk2Jd2ZXKxU/5Gu23PSR2QZGsLGI5zdZzVZ4G76ndGj3+FQTKRMys5+xF
-         LFg3F+ll2IZuKvh9rSjSrmfbA4kV/gR+L9BD1nzZIWwouuK3+qP/SUD29B0gzINCHZBS
-         sFwA==
+        bh=gRJ0qOuvj7xd3Fm3RySbuPGlTrl0RRGIeQ9SIxKWgV0=;
+        b=GkDzmzJPwQ+0Seb+vU3zv9cPxKMarphixbVlW3vImxXXMscUO9Nr73fJT7/oOmW3ov
+         R5vRP76Bf96W4TqcL3uqD+p04QsOKHp8ErA1ENrI36v9nLfm4wwoCxoVKfT5qlj7GOIG
+         mIggjRtgvbiyHXhgkl7hUBW3nsXFnS+Ak/dFYdg07Plg6A0yLvv5FiWb0DjU2DFKLsf+
+         TR0jNALHdewmoumNhJjnp3GZRiwAww2VheF5AJn2y24zdrmMtizK6UfY0yN4GMtKAaVk
+         SjSyQS3FU+GINmeQBpV2mQvsZ3cV04VeA63Jx3dHMX/IBeQJMjQeE4trV1Mz6f6rEJes
+         3CfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=YjUy1ADd38ONuUoZQBzdcbnlxdYpv/fTDjjTTwszQr4=;
-        b=mGoEaW+IiwxiRLeVFAsq0sOADvphPqf0cmBXvGlLS3Me0vrXpJPkL/UKdjmq1i+cxo
-         pku5q1TqfEOpdfj71GpR2DZQ3hqZ6MnTPJ85790RWlpWctkrNXOEmWkzcRLIhOy0uig4
-         7ING4h2aAwJvfKQ7OyC7SLIP8GpNo7sGgKTrBSw0rBlXYkJYjo0iD3rCCCQpQFZ73Jnu
-         v3FRExUjZXC89cHREij+CaAAwa6hQmuvqFCmRBOM3cMqpso1mE8u2vJSQMO/1VuURRu0
-         TFfrCWygeMFRZChwAZQQ+YriiBr+Ri5Xb6ew+R1dXBPQ16nNRsZi5JrSi8K4fqmC02CY
-         pt6w==
-X-Gm-Message-State: ANhLgQ3cvqbr/ScLWVC/yf3b1W+LFPVOuatUZQbxv/msNskZJJdiod6+
-        27S7o6mVCfo9z5V/uoj1SPg=
-X-Google-Smtp-Source: ADFU+vuBCcTjGBb970zhwI+lTBV4D9X+F5N29JU57gnyuBXoYAnBstRC+Mb4jD/+P4F27+Qag9SyXg==
-X-Received: by 2002:a2e:8991:: with SMTP id c17mr12506536lji.278.1584279922586;
-        Sun, 15 Mar 2020 06:45:22 -0700 (PDT)
+        bh=gRJ0qOuvj7xd3Fm3RySbuPGlTrl0RRGIeQ9SIxKWgV0=;
+        b=E+PUIEYP4u8h/5rzUmtqM/GRLqPt/SH+Rdza05/qqwIy+usMA/jw3zlTA5S0ERFFy1
+         vupkuYgJTOSwaB+RUL7/aX8CZWcMmhx2SJ1bFeL5IZ8WezqcgN8QtQR8lk8lAazykHWT
+         lQXy6uBrvMMwmlRfWwCYXnonJgK0zg9CF9zlI7uuEi62bOslFmVagmPAYJp2/pJEXWYB
+         YVa5g7Ajj83f3/ArN0I8IQ5OgAipm/jw/mPRN98oqzc+RZzBaP6DUYeXRBpAF+lbv7QB
+         zp7jgyiZ8W/xus+dFl+EQ+M+tRm0hc/DOkhJp6ihSkf8dspqPuqYOG6Zo+hXQJ+SzUkS
+         vCxA==
+X-Gm-Message-State: ANhLgQ3FDEuHgVdrI4yO7r07cd/eD0TL4cfclVjLKpljMverJQeICdry
+        PeOvn6heuA453vwMRFXkQyc=
+X-Google-Smtp-Source: ADFU+vuC6yiIywbBb0ZPLb4XytTRoLe/xDi8RThEg1i7adSH/tbwLJ0SiINVcnb3kmMm7ImgJPZaaA==
+X-Received: by 2002:a05:651c:2007:: with SMTP id s7mr13877995ljo.214.1584279924573;
+        Sun, 15 Mar 2020 06:45:24 -0700 (PDT)
 Received: from saturn.lan (18.158-248-194.customer.lyse.net. [158.248.194.18])
-        by smtp.gmail.com with ESMTPSA id a9sm23025212lfb.21.2020.03.15.06.45.20
+        by smtp.gmail.com with ESMTPSA id a9sm23025212lfb.21.2020.03.15.06.45.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Mar 2020 06:45:22 -0700 (PDT)
+        Sun, 15 Mar 2020 06:45:24 -0700 (PDT)
 From:   Sam Ravnborg <sam@ravnborg.org>
 To:     dri-devel@lists.freedesktop.org,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -80,9 +80,9 @@ Cc:     Alexandre Courbot <acourbot@nvidia.com>,
         Tony Lindgren <tony@atomide.com>,
         Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Subject: [PATCH v1 26/36] dt-bindings: display: convert sony,acx565akm to DT Schema
-Date:   Sun, 15 Mar 2020 14:44:06 +0100
-Message-Id: <20200315134416.16527-27-sam@ravnborg.org>
+Subject: [PATCH v1 27/36] dt-bindings: display: convert sitronix,st7701 to DT Schema
+Date:   Sun, 15 Mar 2020 14:44:07 +0100
+Message-Id: <20200315134416.16527-28-sam@ravnborg.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200315134416.16527-1-sam@ravnborg.org>
 References: <20200315134416.16527-1-sam@ravnborg.org>
@@ -93,108 +93,128 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The old binding documented that a number of properties is
+required only for a specific panel.
+The binding supports only one panel so they are now
+unconditionally required.
+
 Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
 Cc: Thierry Reding <thierry.reding@gmail.com>
 Cc: Sam Ravnborg <sam@ravnborg.org>
 ---
- .../bindings/display/panel/sony,acx565akm.txt | 30 -----------
- .../display/panel/sony,acx565akm.yaml         | 53 +++++++++++++++++++
- 2 files changed, 53 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/panel/sony,acx565akm.txt
- create mode 100644 Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml
+ .../display/panel/sitronix,st7701.txt         | 30 --------
+ .../display/panel/sitronix,st7701.yaml        | 68 +++++++++++++++++++
+ 2 files changed, 68 insertions(+), 30 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/panel/sitronix,st7701.txt
+ create mode 100644 Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
 
-diff --git a/Documentation/devicetree/bindings/display/panel/sony,acx565akm.txt b/Documentation/devicetree/bindings/display/panel/sony,acx565akm.txt
+diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7701.txt b/Documentation/devicetree/bindings/display/panel/sitronix,st7701.txt
 deleted file mode 100644
-index e12333280749..000000000000
---- a/Documentation/devicetree/bindings/display/panel/sony,acx565akm.txt
+index ccd17597f1f6..000000000000
+--- a/Documentation/devicetree/bindings/display/panel/sitronix,st7701.txt
 +++ /dev/null
 @@ -1,30 +0,0 @@
--Sony ACX565AKM SDI Panel
--========================
+-Sitronix ST7701 based LCD panels
+-
+-ST7701 designed for small and medium sizes of TFT LCD display, is
+-capable of supporting up to 480RGBX864 in resolution. It provides
+-several system interfaces like MIPI/RGB/SPI.
+-
+-Techstar TS8550B is 480x854, 2-lane MIPI DSI LCD panel which has
+-inbuilt ST7701 chip.
 -
 -Required properties:
--- compatible: "sony,acx565akm"
+-- compatible: must be "sitronix,st7701" and one of
+-  * "techstar,ts8550b"
+-- reset-gpios: a GPIO phandle for the reset pin
+-
+-Required properties for techstar,ts8550b:
+-- reg: DSI virtual channel used by that screen
+-- VCC-supply: analog regulator for MIPI circuit
+-- IOVCC-supply: I/O system regulator
 -
 -Optional properties:
--- label: a symbolic name for the panel
--- reset-gpios: panel reset gpio
+-- backlight: phandle for the backlight control.
 -
--Required nodes:
--- Video port for SDI input
--
--Example
---------
--
--acx565akm@2 {
--	compatible = "sony,acx565akm";
--	spi-max-frequency = <6000000>;
--	reg = <2>;
--
--	label = "lcd";
--	reset-gpios = <&gpio3 26 GPIO_ACTIVE_HIGH>; /* 90 */
--
--	port {
--		lcd_in: endpoint {
--			remote-endpoint = <&sdi_out>;
--		};
--	};
+-panel@0 {
+-	compatible = "techstar,ts8550b", "sitronix,st7701";
+-	reg = <0>;
+-	VCC-supply = <&reg_dldo2>;
+-	IOVCC-supply = <&reg_dldo2>;
+-	reset-gpios = <&pio 3 24 GPIO_ACTIVE_HIGH>; /* LCD-RST: PD24 */
+-	backlight = <&backlight>;
 -};
-diff --git a/Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml b/Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml
+diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml b/Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
 new file mode 100644
-index 000000000000..a0b1abb9f33d
+index 000000000000..d5811a8f615e
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml
-@@ -0,0 +1,53 @@
++++ b/Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
+@@ -0,0 +1,68 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/display/panel/sony,acx565akm.yaml#
++$id: http://devicetree.org/schemas/display/panel/sitronix,st7701.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Sony ACX565AKM SDI Panel
++title: Sitronix ST7701 based LCD panels
 +
 +maintainers:
-+  - Tomi Valkeinen <tomi.valkeinen@ti.com>
++  - Jagan Teki <jagan@amarulasolutions.com>
++
++description: |
++  ST7701 is designed for small and medium sizes of TFT LCD display, is
++  capable of supporting up to 480RGBX864 in resolution. It provides
++  several system interfaces like MIPI/RGB/SPI.
++
++  Techstar TS8550B is 480x854, 2-lane MIPI DSI LCD panel which has
++  inbuilt ST7701 chip.
 +
 +allOf:
 +  - $ref: panel-common.yaml#
-+  - $ref: ../../spi/spi-slave.yaml#
 +
 +properties:
 +  compatible:
-+    const: sony,acx565akm
++    items:
++      - enum:
++          # Techstar TS8550B
++        - techstar,ts8550b
++      - const: sitronix,st7701
 +
-+  label: true
++  reg: true
 +  reset-gpios: true
-+  port: true
++  backlight: true
++
++  VCC-supply:
++    description: analog regulator for MIPI circuit
++
++  IOVCC-supply:
++    description: I/O system regulator
 +
 +required:
 +  - compatible
-+  - port
++  - reset-gpios
++  - reg
++  - VCC-supply
++  - IOVCC-supply
 +
++additionalProperties: false
 +
 +examples:
 +  - |
 +    #include <dt-bindings/gpio/gpio.h>
 +
-+    spi {
++    dsi {
 +        #address-cells = <1>;
 +        #size-cells = <0>;
 +
-+        acx565akm@2 {
-+            compatible = "sony,acx565akm";
-+            spi-max-frequency = <6000000>;
-+            reg = <2>;
-+
-+            label = "lcd";
-+            reset-gpios = <&gpio3 26 GPIO_ACTIVE_HIGH>; /* 90 */
-+
-+            port {
-+                lcd_in: endpoint {
-+                    remote-endpoint = <&sdi_out>;
-+                };
-+            };
++        panel@0 {
++            compatible = "techstar,ts8550b", "sitronix,st7701";
++            reg = <0>;
++            VCC-supply = <&reg_dldo2>;
++            IOVCC-supply = <&reg_dldo2>;
++            reset-gpios = <&pio 3 24 GPIO_ACTIVE_HIGH>; /* LCD-RST: PD24 */
++            backlight = <&backlight>;
 +        };
 +    };
 +
