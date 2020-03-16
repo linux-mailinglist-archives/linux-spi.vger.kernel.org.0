@@ -2,38 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5F21861EF
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 03:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE64E18621D
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 03:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729934AbgCPCen (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 22:34:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38380 "EHLO mail.kernel.org"
+        id S1730046AbgCPCe7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 22:34:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38948 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729927AbgCPCem (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 15 Mar 2020 22:34:42 -0400
+        id S1730034AbgCPCe6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 15 Mar 2020 22:34:58 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F63E20726;
-        Mon, 16 Mar 2020 02:34:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 62C6520722;
+        Mon, 16 Mar 2020 02:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584326081;
-        bh=ZZnHNSt6W/dTcHetd5j2f9gR0uIYQG3CneTi7NAPW7w=;
+        s=default; t=1584326098;
+        bh=L57iPVKkL097o6qLvQ+L5j2oTFH13RI1AUODGUtvQTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NQnrHBW05I8nEmX1nlaw15c5nzfM4fjbkrSV+1Ns7ZmQk3Bbi/gqyqPe/eccb9PVU
-         ywUv2SMaz7/xy7UGIsXMg8PaDx2HE0iIZOz/KMrC6PPMbOyyq6Ee0LmhNw21fSPAah
-         cjzdIvogJdx9PZ05HRFDSHARe9Br3iwWR91RPGmk=
+        b=TzQ7xbCNHENlehAWvtA3Y1+HWvdvW34soFStkrw3Yk9CDvEXTIeD+o/zsuKLbR0lb
+         +vrIVeVYTDGSzyZhY7xgOQmKqhspecx175y330oxrOcLwC5f+kTkHGdypwJxUDx73c
+         x6FBAxSYTq86bSb1QyHOr9xkGH1M1tNcwbj0Wra8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Aaro Koskinen <aaro.koskinen@nokia.com>,
+Cc:     Yuji Sasaki <sasakiy@chromium.org>, Vinod Koul <vkoul@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 26/35] spi: spi_register_controller(): free bus id on error paths
-Date:   Sun, 15 Mar 2020 22:34:02 -0400
-Message-Id: <20200316023411.1263-26-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 03/20] spi: qup: call spi_qup_pm_resume_runtime before suspending
+Date:   Sun, 15 Mar 2020 22:34:36 -0400
+Message-Id: <20200316023453.1800-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200316023411.1263-1-sashal@kernel.org>
-References: <20200316023411.1263-1-sashal@kernel.org>
+In-Reply-To: <20200316023453.1800-1-sashal@kernel.org>
+References: <20200316023453.1800-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,95 +44,53 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Aaro Koskinen <aaro.koskinen@nokia.com>
+From: Yuji Sasaki <sasakiy@chromium.org>
 
-[ Upstream commit f9981d4f50b475d7dbb70f3022b87a3c8bba9fd6 ]
+[ Upstream commit 136b5cd2e2f97581ae560cff0db2a3b5369112da ]
 
-Some error paths leave the bus id allocated. As a result the IDR
-allocation will fail after a deferred probe. Fix by freeing the bus id
-always on error.
+spi_qup_suspend() will cause synchronous external abort when
+runtime suspend is enabled and applied, as it tries to
+access SPI controller register while clock is already disabled
+in spi_qup_pm_suspend_runtime().
 
-Signed-off-by: Aaro Koskinen <aaro.koskinen@nokia.com>
-Message-Id: <20200304111740.27915-1-aaro.koskinen@nokia.com>
+Signed-off-by: Yuji sasaki <sasakiy@chromium.org>
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Link: https://lore.kernel.org/r/20200214074340.2286170-1-vkoul@kernel.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi.c | 32 +++++++++++++++-----------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+ drivers/spi/spi-qup.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 26b91ee0855dc..c186d3a944cd0 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2452,7 +2452,7 @@ int spi_register_controller(struct spi_controller *ctlr)
- 		if (ctlr->use_gpio_descriptors) {
- 			status = spi_get_gpio_descs(ctlr);
- 			if (status)
--				return status;
-+				goto free_bus_id;
- 			/*
- 			 * A controller using GPIO descriptors always
- 			 * supports SPI_CS_HIGH if need be.
-@@ -2462,7 +2462,7 @@ int spi_register_controller(struct spi_controller *ctlr)
- 			/* Legacy code path for GPIOs from DT */
- 			status = of_spi_get_gpio_numbers(ctlr);
- 			if (status)
--				return status;
-+				goto free_bus_id;
- 		}
- 	}
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index 974a8ce58b68b..cb74fd1af2053 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -1190,6 +1190,11 @@ static int spi_qup_suspend(struct device *device)
+ 	struct spi_qup *controller = spi_master_get_devdata(master);
+ 	int ret;
  
-@@ -2470,17 +2470,14 @@ int spi_register_controller(struct spi_controller *ctlr)
- 	 * Even if it's just one always-selected device, there must
- 	 * be at least one chipselect.
- 	 */
--	if (!ctlr->num_chipselect)
--		return -EINVAL;
-+	if (!ctlr->num_chipselect) {
-+		status = -EINVAL;
-+		goto free_bus_id;
++	if (pm_runtime_suspended(device)) {
++		ret = spi_qup_pm_resume_runtime(device);
++		if (ret)
++			return ret;
 +	}
+ 	ret = spi_master_suspend(master);
+ 	if (ret)
+ 		return ret;
+@@ -1198,10 +1203,8 @@ static int spi_qup_suspend(struct device *device)
+ 	if (ret)
+ 		return ret;
  
- 	status = device_add(&ctlr->dev);
--	if (status < 0) {
--		/* free bus id */
--		mutex_lock(&board_lock);
--		idr_remove(&spi_master_idr, ctlr->bus_num);
--		mutex_unlock(&board_lock);
--		goto done;
+-	if (!pm_runtime_suspended(device)) {
+-		clk_disable_unprepare(controller->cclk);
+-		clk_disable_unprepare(controller->iclk);
 -	}
-+	if (status < 0)
-+		goto free_bus_id;
- 	dev_dbg(dev, "registered %s %s\n",
- 			spi_controller_is_slave(ctlr) ? "slave" : "master",
- 			dev_name(&ctlr->dev));
-@@ -2496,11 +2493,7 @@ int spi_register_controller(struct spi_controller *ctlr)
- 		status = spi_controller_initialize_queue(ctlr);
- 		if (status) {
- 			device_del(&ctlr->dev);
--			/* free bus id */
--			mutex_lock(&board_lock);
--			idr_remove(&spi_master_idr, ctlr->bus_num);
--			mutex_unlock(&board_lock);
--			goto done;
-+			goto free_bus_id;
- 		}
- 	}
- 	/* add statistics */
-@@ -2515,7 +2508,12 @@ int spi_register_controller(struct spi_controller *ctlr)
- 	/* Register devices from the device tree and ACPI */
- 	of_register_spi_devices(ctlr);
- 	acpi_register_spi_devices(ctlr);
--done:
-+	return status;
-+
-+free_bus_id:
-+	mutex_lock(&board_lock);
-+	idr_remove(&spi_master_idr, ctlr->bus_num);
-+	mutex_unlock(&board_lock);
- 	return status;
++	clk_disable_unprepare(controller->cclk);
++	clk_disable_unprepare(controller->iclk);
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(spi_register_controller);
+ 
 -- 
 2.20.1
 
