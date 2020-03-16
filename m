@@ -2,99 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 463F3186249
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 03:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564FD186445
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 05:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730296AbgCPCfy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 22:35:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40750 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730287AbgCPCfy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 15 Mar 2020 22:35:54 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1729577AbgCPE4o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Mar 2020 00:56:44 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:52451 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729423AbgCPE4o (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Mar 2020 00:56:44 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 48gkY22Jb2z1qrM1;
+        Mon, 16 Mar 2020 05:56:38 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 48gkY15Zwkz1qqkM;
+        Mon, 16 Mar 2020 05:56:37 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id r1eVNSGjUDpK; Mon, 16 Mar 2020 05:56:33 +0100 (CET)
+X-Auth-Info: q7tQX9kw8z3PrLvPIf9NChxZimQNyci6qXMkVkfXiBA=
+Received: from [192.168.1.106] (91-82-211-124.pool.digikabel.hu [91.82.211.124])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F5672074C;
-        Mon, 16 Mar 2020 02:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584326153;
-        bh=ZimnssbihiT/CUcvGjrmtWm5fbdnfn+B5wH6DVTDZMM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lcy+SkQYUCJqEpLLtN5fjgSp4a19uFUYFSR6kOJatsRalMGE+INAVofAAKgKIDZq6
-         nYUTCxxG+pLrA7hd5FWmm43PlBiwVgZ4h6iGqbDWxHzF+QH5z4+1xIGVOGgZJdSDio
-         BNlmssaUhL+8DkVB3gEBJHadHsHZkLJTeVIMXCQw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thommy Jakobsson <thommyj@gmail.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Mon, 16 Mar 2020 05:56:33 +0100 (CET)
+Reply-To: hs@denx.de
+Subject: Re: [PATCH v1 16/36] dt-bindings: display: convert lg,lg4573 to DT
+ Schema
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Guido Gunther <agx@sigxcpu.org>,
+        Nikolaus Schaller <hns@goldelico.com>,
+        Hoegeun Kwon <hoegeun.kwon@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi@vger.kernel.org, Marco Franchi <marco.franchi@nxp.com>,
+        Marek Belisko <marek@goldelico.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.4 4/7] spi/zynqmp: remove entry that causes a cs glitch
-Date:   Sun, 15 Mar 2020 22:35:44 -0400
-Message-Id: <20200316023548.2347-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200316023548.2347-1-sashal@kernel.org>
-References: <20200316023548.2347-1-sashal@kernel.org>
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Nickey Yang <nickey.yang@rock-chips.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Robert Chiras <robert.chiras@nxp.com>,
+        Sandeep Panda <spanda@codeaurora.org>,
+        Stefan Mavrodiev <stefan@olimex.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Vinay Simha BN <simhavcs@gmail.com>,
+        Werner Johansson <werner.johansson@sonymobile.com>
+References: <20200315134416.16527-1-sam@ravnborg.org>
+ <20200315134416.16527-17-sam@ravnborg.org>
+From:   Heiko Schocher <hs@denx.de>
+Message-ID: <d8f1a9cf-915a-24df-4ad7-edc0eab98c4f@denx.de>
+Date:   Mon, 16 Mar 2020 05:56:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200315134416.16527-17-sam@ravnborg.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Thommy Jakobsson <thommyj@gmail.com>
+Hello Sam,
 
-[ Upstream commit 5dd8304981ecffa77bb72b1c57c4be5dfe6cfae9 ]
+Am 15.03.2020 um 14:43 schrieb Sam Ravnborg:
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Heiko Schocher <hs@denx.de>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> ---
+>   .../bindings/display/panel/lg,lg4573.txt      | 19 ---------
+>   .../bindings/display/panel/lg,lg4573.yaml     | 41 +++++++++++++++++++
+>   2 files changed, 41 insertions(+), 19 deletions(-)
+>   delete mode 100644 Documentation/devicetree/bindings/display/panel/lg,lg4573.txt
+>   create mode 100644 Documentation/devicetree/bindings/display/panel/lg,lg4573.yaml
 
-In the public interface for chipselect, there is always an entry
-commented as "Dummy generic FIFO entry" pushed down to the fifo right
-after the activate/deactivate command. The dummy entry is 0x0,
-irregardless if the intention was to activate or deactive the cs. This
-causes the cs line to glitch rather than beeing activated in the case
-when there was an activate command.
+Reviewed-by: Heiko Schocher <hs@denx.de>
 
-This has been observed on oscilloscope, and have caused problems for at
-least one specific flash device type connected to the qspi port. After
-the change the glitch is gone and cs goes active when intended.
+Thanks!
 
-The reason why this worked before (except for the glitch) was because
-when sending the actual data, the CS bits are once again set. Since
-most flashes uses mode 0, there is always a half clk period anyway for
-cs to clk active setup time. If someone would rely on timing from a
-chip_select call to a transfer_one, it would fail though.
-
-It is unknown why the dummy entry was there in the first place, git log
-seems to be of no help in this case. The reference manual gives no
-indication of the necessity of this. In fact the lower 8 bits are a
-setup (or hold in case of deactivate) time expressed in cycles. So this
-should not be needed to fulfill any setup/hold timings.
-
-Signed-off-by: Thommy Jakobsson <thommyj@gmail.com>
-Reviewed-by: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
-Link: https://lore.kernel.org/r/20200224162643.29102-1-thommyj@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-zynqmp-gqspi.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index f23f36ebaf3dc..bd3945a5660a5 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -414,9 +414,6 @@ static void zynqmp_qspi_chipselect(struct spi_device *qspi, bool is_high)
- 
- 	zynqmp_gqspi_write(xqspi, GQSPI_GEN_FIFO_OFST, genfifoentry);
- 
--	/* Dummy generic FIFO entry */
--	zynqmp_gqspi_write(xqspi, GQSPI_GEN_FIFO_OFST, 0x0);
--
- 	/* Manually start the generic FIFO command */
- 	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST,
- 			zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST) |
+bye,
+Heiko
 -- 
-2.20.1
-
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
