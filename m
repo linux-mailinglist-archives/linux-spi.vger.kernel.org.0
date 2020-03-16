@@ -2,215 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A04C1874F4
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 22:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F77B187578
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 23:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732691AbgCPVn5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Mar 2020 17:43:57 -0400
-Received: from asavdk3.altibox.net ([109.247.116.14]:52332 "EHLO
-        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732652AbgCPVn5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Mar 2020 17:43:57 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk3.altibox.net (Postfix) with ESMTPS id 4283D2005A;
-        Mon, 16 Mar 2020 22:43:48 +0100 (CET)
-Date:   Mon, 16 Mar 2020 22:43:46 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Chris Zhong <zyw@rock-chips.com>,
+        id S1732743AbgCPWUl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Mar 2020 18:20:41 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:44713 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732652AbgCPWUl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Mar 2020 18:20:41 -0400
+Received: by mail-pg1-f194.google.com with SMTP id 37so10530457pgm.11
+        for <linux-spi@vger.kernel.org>; Mon, 16 Mar 2020 15:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OdJL97TnHEiwXNrNot3Nu+tTBwH6OViCGp++MAMoJjI=;
+        b=LvC1OSwZYDZhevpzNqmBIv1hskVJduDT0SK46lnoXZM7yCRwcl/gdG0KzlWgHXMvhv
+         LUgm3GaQaWEMgxGVKKdpsiCMfOg/h3Jp+Ii4+XN8ntv9ZXXcZiaZFjr3KlGAZX4TFhrU
+         Z0d7m3y3RlzzMmNzKVc3B2P2bhbDiIsD36WbQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OdJL97TnHEiwXNrNot3Nu+tTBwH6OViCGp++MAMoJjI=;
+        b=kHf350dGQTYdo/wtgzcbdNRJJ67LF/3/BEya0oWBUFHRxkFAgYSCNFajBXg/XGpCnz
+         XKvI2kwCJ4SbL/96aBkxsYu/h/mzboctRsZ/7hJ87MpdWXI99URcOM+09fRSzM0vRFrn
+         4zPv2hk2XlI+3aRGUpRYSP6P+fBs7WidmYgu1FJOMJ8AeIbSkaYblkCH7SAOmEH19ajZ
+         h4PnEaZL8WlbOd8YGTgHE36+GP1A4b/+Rx1Eps3kE/EyPwzbX1PTMTbLBN9dONAKuHji
+         5xxmTXJuTpCKcIv9HEYZxRG2lvUgus0UW3EG6pavnyYAZf0zGFAzz22GEaRiQeywCcO3
+         +rpg==
+X-Gm-Message-State: ANhLgQ2BQPDMvrM4TGBgN4qKQNB2G+BAwnRRoGmShbYkZne+xZmaHBok
+        ISENsWpIgDlBvfweiRVagLX2mg==
+X-Google-Smtp-Source: ADFU+vuzlYlb8p9d2+T6E5oG1EolUGtKK3FaYXBJKoHapG07JRQmTGibH+PYw4PUZ72sqbeZD6jwGw==
+X-Received: by 2002:aa7:8d18:: with SMTP id j24mr1884679pfe.264.1584397238841;
+        Mon, 16 Mar 2020 15:20:38 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
+        by smtp.gmail.com with ESMTPSA id f8sm828535pfq.178.2020.03.16.15.20.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2020 15:20:38 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Alok Chauhan <alokc@codeaurora.org>,
+        Dilip Kota <dkota@codeaurora.org>, skakit@codeaurora.org,
+        Girish Mahadevan <girishm@codeaurora.org>,
         Douglas Anderson <dianders@chromium.org>,
-        Guido Gunther <agx@sigxcpu.org>, Heiko Schocher <hs@denx.de>,
-        Nikolaus Schaller <hns@goldelico.com>,
-        Hoegeun Kwon <hoegeun.kwon@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lin Huang <hl@rock-chips.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, Marco Franchi <marco.franchi@nxp.com>,
-        Marek Belisko <marek@goldelico.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Nickey Yang <nickey.yang@rock-chips.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Peter Rosin <peda@axentia.se>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Robert Chiras <robert.chiras@nxp.com>,
-        Sandeep Panda <spanda@codeaurora.org>,
-        Stefan Mavrodiev <stefan@olimex.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Vinay Simha BN <simhavcs@gmail.com>,
-        Werner Johansson <werner.johansson@sonymobile.com>
-Subject: Re: [PATCH v1 02/36] dt-bindings: spi: support non-spi bindings as
- SPI slaves
-Message-ID: <20200316214346.GA23637@ravnborg.org>
-References: <20200315134416.16527-1-sam@ravnborg.org>
- <20200315134416.16527-3-sam@ravnborg.org>
- <20200316204850.gggeyjulgiy53i7x@gilmour.lan>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] spi: spi-geni-qcom: Speculative fix of "nobody cared" about interrupt
+Date:   Mon, 16 Mar 2020 15:20:01 -0700
+Message-Id: <20200316151939.1.I752ebdcfd5e8bf0de06d66e767b8974932b3620e@changeid>
+X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200316204850.gggeyjulgiy53i7x@gilmour.lan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=eMA9ckh1 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=7gkXJVJtAAAA:8
-        a=P-IC7800AAAA:8 a=VwQbUJbxAAAA:8 a=unGCcehtwgLSmkbFn9MA:9
-        a=CjuIK1q_8ugA:10 a=E9Po1WZjFZOl8hwRPBS3:22 a=d3PnA9EDa4IxuAV0gXij:22
-        a=AjGcO6oz07-iQ99wixmX:22
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Maxime.
+Every once in a while (like once in a few months on a device) people
+have seen warnings on devices using spi-geni-qcom like:
 
-On Mon, Mar 16, 2020 at 09:48:50PM +0100, Maxime Ripard wrote:
-> Hi Sam,
-> 
-> On Sun, Mar 15, 2020 at 02:43:42PM +0100, Sam Ravnborg wrote:
-> > Independent bindings can be SPI slaves which for example is
-> > the case for several panel bindings.
-> >
-> > Move SPI slave properties to spi-slave.yaml so the independent
-> > SPI slave bindings can include spi-slave.yaml rather than
-> > duplicating the properties.
-> >
-> > Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> > Cc: Maxime Ripard <maxime.ripard@bootlin.com>
-> > Cc: Rob Herring <robh@kernel.org>
-> > Cc: Mark Brown <broonie@kernel.org>
-> > Cc: linux-spi@vger.kernel.org
-> > ---
-> >  .../bindings/spi/spi-controller.yaml          | 63 +-------------
-> >  .../devicetree/bindings/spi/spi-slave.yaml    | 83 +++++++++++++++++++
-> >  2 files changed, 86 insertions(+), 60 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/spi/spi-slave.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> > index 1e0ca6ccf64b..99531c8d10dd 100644
-> > --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> > +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> > @@ -67,71 +67,14 @@ patternProperties:
-> >    "^.*@[0-9a-f]+$":
-> >      type: object
-> >
-> > +    allOf:
-> > +      - $ref: spi-slave.yaml#
-> > +
-> >      properties:
-> >        compatible:
-> >          description:
-> >            Compatible of the SPI device.
-> >
-> > -      reg:
-> > -        minimum: 0
-> > -        maximum: 256
-> > -        description:
-> > -          Chip select used by the device.
-> > -
-> > -      spi-3wire:
-> > -        $ref: /schemas/types.yaml#/definitions/flag
-> > -        description:
-> > -          The device requires 3-wire mode.
-> > -
-> > -      spi-cpha:
-> > -        $ref: /schemas/types.yaml#/definitions/flag
-> > -        description:
-> > -          The device requires shifted clock phase (CPHA) mode.
-> > -
-> > -      spi-cpol:
-> > -        $ref: /schemas/types.yaml#/definitions/flag
-> > -        description:
-> > -          The device requires inverse clock polarity (CPOL) mode.
-> > -
-> > -      spi-cs-high:
-> > -        $ref: /schemas/types.yaml#/definitions/flag
-> > -        description:
-> > -          The device requires the chip select active high.
-> > -
-> > -      spi-lsb-first:
-> > -        $ref: /schemas/types.yaml#/definitions/flag
-> > -        description:
-> > -          The device requires the LSB first mode.
-> > -
-> > -      spi-max-frequency:
-> > -        $ref: /schemas/types.yaml#/definitions/uint32
-> > -        description:
-> > -          Maximum SPI clocking speed of the device in Hz.
-> > -
-> > -      spi-rx-bus-width:
-> > -        allOf:
-> > -          - $ref: /schemas/types.yaml#/definitions/uint32
-> > -          - enum: [ 1, 2, 4, 8 ]
-> > -          - default: 1
-> > -        description:
-> > -          Bus width to the SPI bus used for MISO.
-> > -
-> > -      spi-rx-delay-us:
-> > -        description:
-> > -          Delay, in microseconds, after a read transfer.
-> > -
-> > -      spi-tx-bus-width:
-> > -        allOf:
-> > -          - $ref: /schemas/types.yaml#/definitions/uint32
-> > -          - enum: [ 1, 2, 4, 8 ]
-> > -          - default: 1
-> > -        description:
-> > -          Bus width to the SPI bus used for MOSI.
-> > -
-> > -      spi-tx-delay-us:
-> > -        description:
-> > -          Delay, in microseconds, after a write transfer.
-> > -
-> 
-> I can see what you're trying to do, but you don't really need to.
-> 
-> All the SPI devices will be declared under a spi controller node that
-> will validate its child nodes (and thus the devices) already.
+  irq ...: nobody cared (try booting with the "irqpoll" option)
 
-This was the missing piece - thanks.
-And as Mark put it "why is this suddenly an issue"?
-Turns out this is already properly handled and I made up an issue.
-Maybe Mark tried to explian it to me already...
+...where the interrupt number listed matches up with "spi_geni" in
+/proc/interrupts.
 
-> 
-> Doing it this way would actually make all the checks happen twice,
-> once as part of the SPI controller, once as part of the SPI device
-> binding, without any good reason.
+You can get "nobody cared" if the interrupt handler returns IRQ_NONE.
+Once you get into this state the driver will just stop working.
 
-I had focus on validating the example in the binding
-file and not the full picture.
+Auditing the code makes me believe that it's probably not so good
+checking "cur_mcmd" in the interrupt handler not under spinlock.
+Let's move it to be under spinlock.  While we're at it, let's not
+return IRQ_NONE.  IRQ_NONE is supposed to check the _hardware_ status
+registers and only be returned if your hardware says that there's no
+interrupt present.  It's not supposed to check software state.  In any
+case, the whole point of IRQ_NONE is if two separate devices are
+trying to share an interrupt line, which just isn't true for anyone
+using geni.
 
-One thing I do not see properly addressed, but maybe I just miss it.
-What triggers that we catch properties that are not supposed to be
-present?
+Looking more closely at the code, it looks as if there are some other
+places that could be under spinlock, so let's add.  It looks as if the
+original code was assuming that by the time that the interrupt handler
+got called that the write to "cur_mcmd" (to make it not CMD_NONE
+anymore) would make it to the processor handling the interrupt.
+Perhaps with weakly ordered memory this sometimes (though very rarely)
+happened.
 
-If we see a unsupported property "foobar":
+Patch is marked "speculative" because I have no way to reproduce this
+problem, so I'm just hoping this fixes it.  Weakly ordered memory
+makes my brain hurt.
 
-spi {
-    ...
-    panel {
-       ....
-       foobar = <1>;
-    };
-};
+Fixes: 561de45f72bd ("spi: spi-geni-qcom: Add SPI driver support for GENI based QUP")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-somewhere in a SPI slave binding we should catch this.
-If for no other reasons that it could be a simple spelling mistake
-that otherwise could go undetected for a long time.
-But maybe this is really not feasible to do?
+ drivers/spi/spi-geni-qcom.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
-	Sam
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index c3972424af71..51290a3fd203 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -151,16 +151,19 @@ static void spi_geni_set_cs(struct spi_device *slv, bool set_flag)
+ 	struct geni_se *se = &mas->se;
+ 	unsigned long time_left;
+ 
+-	reinit_completion(&mas->xfer_done);
+ 	pm_runtime_get_sync(mas->dev);
+ 	if (!(slv->mode & SPI_CS_HIGH))
+ 		set_flag = !set_flag;
+ 
++	spin_lock_irq(&mas->lock);
++	reinit_completion(&mas->xfer_done);
++
+ 	mas->cur_mcmd = CMD_CS;
+ 	if (set_flag)
+ 		geni_se_setup_m_cmd(se, SPI_CS_ASSERT, 0);
+ 	else
+ 		geni_se_setup_m_cmd(se, SPI_CS_DEASSERT, 0);
++	spin_unlock_irq(&mas->lock);
+ 
+ 	time_left = wait_for_completion_timeout(&mas->xfer_done, HZ);
+ 	if (!time_left)
+@@ -307,6 +310,8 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 	u32 spi_tx_cfg, len;
+ 	struct geni_se *se = &mas->se;
+ 
++	spin_lock_irq(&mas->lock);
++
+ 	spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
+ 	if (xfer->bits_per_word != mas->cur_bits_per_word) {
+ 		spi_setup_word_len(mas, mode, xfer->bits_per_word);
+@@ -376,6 +381,8 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 	 */
+ 	if (m_cmd & SPI_TX_ONLY)
+ 		writel(mas->tx_wm, se->base + SE_GENI_TX_WATERMARK_REG);
++
++	spin_unlock_irq(&mas->lock);
+ }
+ 
+ static int spi_geni_transfer_one(struct spi_master *spi,
+@@ -479,12 +486,17 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
+ 	u32 m_irq;
+ 	unsigned long flags;
+ 
+-	if (mas->cur_mcmd == CMD_NONE)
+-		return IRQ_NONE;
+-
+ 	spin_lock_irqsave(&mas->lock, flags);
+ 	m_irq = readl(se->base + SE_GENI_M_IRQ_STATUS);
+ 
++	/*
++	 * We don't expect to hit this, but if we do we should try our best
++	 * to clear the interrupts and return so we don't just get called
++	 * again.
++	 */
++	if (mas->cur_mcmd == CMD_NONE)
++		goto exit;
++
+ 	if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
+ 		geni_spi_handle_rx(mas);
+ 
+@@ -523,6 +535,7 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
+ 		complete(&mas->xfer_done);
+ 	}
+ 
++exit:
+ 	writel(m_irq, se->base + SE_GENI_M_IRQ_CLEAR);
+ 	spin_unlock_irqrestore(&mas->lock, flags);
+ 	return IRQ_HANDLED;
+-- 
+2.25.1.481.gfbce0eb801-goog
+
