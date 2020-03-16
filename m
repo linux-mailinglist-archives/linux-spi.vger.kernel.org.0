@@ -2,40 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73501186222
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 03:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8F218622B
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 03:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730051AbgCPCfE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 22:35:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39084 "EHLO mail.kernel.org"
+        id S1730143AbgCPCfX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 22:35:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39770 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730065AbgCPCfD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 15 Mar 2020 22:35:03 -0400
+        id S1729732AbgCPCfX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 15 Mar 2020 22:35:23 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E81C52073C;
-        Mon, 16 Mar 2020 02:35:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B473D20736;
+        Mon, 16 Mar 2020 02:35:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584326102;
-        bh=grzFEwu1pZms+HonqHguieLlr2VOdQryXghCZyo2U7s=;
+        s=default; t=1584326122;
+        bh=L57iPVKkL097o6qLvQ+L5j2oTFH13RI1AUODGUtvQTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wpRO+l7ErIBfw5ShGbHhMJPW3bDKb2oepsE2mSq0yr6DTVCc5QHokpdLT5+8iZ8T/
-         HK0JCUxMsAC1ZO0BNQwCi4DHmWptwVNewmvBcUC/QqA5+NIhv42kJqPlWukDBklywC
-         kmTehplswmE5frY76oPTFphxCsdiNsg0oeDSUo+Y=
+        b=YfeQBcXS7nbwyWzrVdjD6YUgCjx2ofoxQoU0TmQ7nqLfieMF8cPBJxKGqH6Z1CpK+
+         38AhEi20rxGk16vrAHwtViqozv2imujXq5oWXKt74Tat0exfx9i/QFCZG+a6rp6o2b
+         Tw/SKq8NZ0nj9+sRlQABbMwuiXHbnkBhZe4G7wgQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thommy Jakobsson <thommyj@gmail.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+Cc:     Yuji Sasaki <sasakiy@chromium.org>, Vinod Koul <vkoul@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 07/20] spi/zynqmp: remove entry that causes a cs glitch
-Date:   Sun, 15 Mar 2020 22:34:40 -0400
-Message-Id: <20200316023453.1800-7-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 02/15] spi: qup: call spi_qup_pm_resume_runtime before suspending
+Date:   Sun, 15 Mar 2020 22:35:06 -0400
+Message-Id: <20200316023519.2050-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200316023453.1800-1-sashal@kernel.org>
-References: <20200316023453.1800-1-sashal@kernel.org>
+In-Reply-To: <20200316023519.2050-1-sashal@kernel.org>
+References: <20200316023519.2050-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,56 +44,53 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Thommy Jakobsson <thommyj@gmail.com>
+From: Yuji Sasaki <sasakiy@chromium.org>
 
-[ Upstream commit 5dd8304981ecffa77bb72b1c57c4be5dfe6cfae9 ]
+[ Upstream commit 136b5cd2e2f97581ae560cff0db2a3b5369112da ]
 
-In the public interface for chipselect, there is always an entry
-commented as "Dummy generic FIFO entry" pushed down to the fifo right
-after the activate/deactivate command. The dummy entry is 0x0,
-irregardless if the intention was to activate or deactive the cs. This
-causes the cs line to glitch rather than beeing activated in the case
-when there was an activate command.
+spi_qup_suspend() will cause synchronous external abort when
+runtime suspend is enabled and applied, as it tries to
+access SPI controller register while clock is already disabled
+in spi_qup_pm_suspend_runtime().
 
-This has been observed on oscilloscope, and have caused problems for at
-least one specific flash device type connected to the qspi port. After
-the change the glitch is gone and cs goes active when intended.
-
-The reason why this worked before (except for the glitch) was because
-when sending the actual data, the CS bits are once again set. Since
-most flashes uses mode 0, there is always a half clk period anyway for
-cs to clk active setup time. If someone would rely on timing from a
-chip_select call to a transfer_one, it would fail though.
-
-It is unknown why the dummy entry was there in the first place, git log
-seems to be of no help in this case. The reference manual gives no
-indication of the necessity of this. In fact the lower 8 bits are a
-setup (or hold in case of deactivate) time expressed in cycles. So this
-should not be needed to fulfill any setup/hold timings.
-
-Signed-off-by: Thommy Jakobsson <thommyj@gmail.com>
-Reviewed-by: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
-Link: https://lore.kernel.org/r/20200224162643.29102-1-thommyj@gmail.com
+Signed-off-by: Yuji sasaki <sasakiy@chromium.org>
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Link: https://lore.kernel.org/r/20200214074340.2286170-1-vkoul@kernel.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-zynqmp-gqspi.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/spi/spi-qup.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index cc4d310334943..f2848c59b0b8e 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -403,9 +403,6 @@ static void zynqmp_qspi_chipselect(struct spi_device *qspi, bool is_high)
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index 974a8ce58b68b..cb74fd1af2053 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -1190,6 +1190,11 @@ static int spi_qup_suspend(struct device *device)
+ 	struct spi_qup *controller = spi_master_get_devdata(master);
+ 	int ret;
  
- 	zynqmp_gqspi_write(xqspi, GQSPI_GEN_FIFO_OFST, genfifoentry);
++	if (pm_runtime_suspended(device)) {
++		ret = spi_qup_pm_resume_runtime(device);
++		if (ret)
++			return ret;
++	}
+ 	ret = spi_master_suspend(master);
+ 	if (ret)
+ 		return ret;
+@@ -1198,10 +1203,8 @@ static int spi_qup_suspend(struct device *device)
+ 	if (ret)
+ 		return ret;
  
--	/* Dummy generic FIFO entry */
--	zynqmp_gqspi_write(xqspi, GQSPI_GEN_FIFO_OFST, 0x0);
--
- 	/* Manually start the generic FIFO command */
- 	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST,
- 			zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST) |
+-	if (!pm_runtime_suspended(device)) {
+-		clk_disable_unprepare(controller->cclk);
+-		clk_disable_unprepare(controller->iclk);
+-	}
++	clk_disable_unprepare(controller->cclk);
++	clk_disable_unprepare(controller->iclk);
+ 	return 0;
+ }
+ 
 -- 
 2.20.1
 
