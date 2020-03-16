@@ -2,32 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B59B1873DA
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 21:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523C0187436
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 21:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732503AbgCPUOL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Mar 2020 16:14:11 -0400
-Received: from foss.arm.com ([217.140.110.172]:56604 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732486AbgCPUOL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 16 Mar 2020 16:14:11 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67D1E1FB;
-        Mon, 16 Mar 2020 13:14:10 -0700 (PDT)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E7A5C3F52E;
-        Mon, 16 Mar 2020 13:14:09 -0700 (PDT)
-Date:   Mon, 16 Mar 2020 20:14:08 +0000
-From:   Mark Brown <broonie@kernel.org>
+        id S1732619AbgCPUra (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Mar 2020 16:47:30 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:37656 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732612AbgCPUra (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Mar 2020 16:47:30 -0400
+Received: by mail-pj1-f65.google.com with SMTP id ca13so9316107pjb.2
+        for <linux-spi@vger.kernel.org>; Mon, 16 Mar 2020 13:47:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pfmXc3xr7dDVUscjphZ9PfgG1CkRdszrgoIMj+cYGiM=;
+        b=m0zS/nz+dh5DzW7OJtY1OyEysBJG0asBfU/zhzlY3bVTir7wJr8IvHqzL2txO7u8OP
+         TwCkv0SgavWRtAimFcwroX34kVJs0fx7PJqKmCrABErjMKZa0rezx/rliFEMdBF3BhM0
+         LpUHV4yhDEXst5xYr3keONwo+bCtPHQ/IdU0M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pfmXc3xr7dDVUscjphZ9PfgG1CkRdszrgoIMj+cYGiM=;
+        b=QpiNWqiw4ZAn/GqdvLb0P5xsMRSvhfnKxRHHmFU6Qlly/YgXCfO+gQXdZFTTc1Jmbp
+         qgUws+j9psMceRmHeysNwab2eC+FPauqcmd2H/gAvo4OThF9pS2yK6K6+/qMuepTKSKs
+         KX6OW9nRPuJ/yVM/0syECqkxyG6C2IYN3mfaHMYmx6Tdd+hQKtoFnDPfHcuT9f7E3ZIJ
+         4nwFBt3+YOFPE6mifB4Oqx9n4Wp56IG6vgomTDSxgw5chhaMSB8DMRowzg5mCZtwBrbo
+         mx5VOpTqoZoFCkpmhWdimvizctVoZ92a8Oy3b2JNpkZk7Ow0/4l4RSU+54mjlTcXp52j
+         gFqw==
+X-Gm-Message-State: ANhLgQ0CopadOlJMvzLZj1Tm+5iLfxU5ey4N4D0yKxUFq1NhE662tElN
+        Q6li3Q/P9RVkGv4eWeEs806rp2iABjw=
+X-Google-Smtp-Source: ADFU+vt7JbiJARk1wg/fvNDttQPvT5vOZAMu2FPWJs6t+7BYZWwxYs8uQgvCvltpqDZwvt4A3rJfQA==
+X-Received: by 2002:a17:902:7003:: with SMTP id y3mr1039116plk.122.1584391648215;
+        Mon, 16 Mar 2020 13:47:28 -0700 (PDT)
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com. [209.85.215.170])
+        by smtp.gmail.com with ESMTPSA id c128sm754188pfa.11.2020.03.16.13.47.27
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2020 13:47:27 -0700 (PDT)
+Received: by mail-pg1-f170.google.com with SMTP id x7so10402556pgh.5
+        for <linux-spi@vger.kernel.org>; Mon, 16 Mar 2020 13:47:27 -0700 (PDT)
+X-Received: by 2002:a05:6102:7c7:: with SMTP id y7mr1256780vsg.198.1584391271488;
+ Mon, 16 Mar 2020 13:41:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200315134416.16527-1-sam@ravnborg.org> <20200315134416.16527-12-sam@ravnborg.org>
+In-Reply-To: <20200315134416.16527-12-sam@ravnborg.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 16 Mar 2020 13:41:00 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=U--vZ7bZ-RMGVbqxwpo9C8pBDtbmU2moUcu73kBHqm-A@mail.gmail.com>
+Message-ID: <CAD=FV=U--vZ7bZ-RMGVbqxwpo9C8pBDtbmU2moUcu73kBHqm-A@mail.gmail.com>
+Subject: Re: [PATCH v1 11/36] dt-bindings: display: convert
+ innolux,p120zdg-bf1 to DT Schema
 To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     dri-devel@lists.freedesktop.org,
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Alexandre Courbot <acourbot@nvidia.com>,
         Andrzej Hajda <a.hajda@samsung.com>,
         Brian Masney <masneyb@onstation.org>,
         Chris Zhong <zyw@rock-chips.com>,
-        Douglas Anderson <dianders@chromium.org>,
         Guido Gunther <agx@sigxcpu.org>, Heiko Schocher <hs@denx.de>,
         Nikolaus Schaller <hns@goldelico.com>,
         Hoegeun Kwon <hoegeun.kwon@samsung.com>,
@@ -37,8 +74,10 @@ Cc:     dri-devel@lists.freedesktop.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Lin Huang <hl@rock-chips.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, Marco Franchi <marco.franchi@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Marco Franchi <marco.franchi@nxp.com>,
         Marek Belisko <marek@goldelico.com>,
+        Mark Brown <broonie@kernel.org>,
         Maxime Ripard <maxime.ripard@bootlin.com>,
         Maxime Ripard <mripard@kernel.org>,
         Nickey Yang <nickey.yang@rock-chips.com>,
@@ -53,61 +92,24 @@ Cc:     dri-devel@lists.freedesktop.org,
         Tony Lindgren <tony@atomide.com>,
         Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Subject: Re: [PATCH v1 02/36] dt-bindings: spi: support non-spi bindings as
- SPI slaves
-Message-ID: <20200316201408.GK5010@sirena.org.uk>
-References: <20200315134416.16527-1-sam@ravnborg.org>
- <20200315134416.16527-3-sam@ravnborg.org>
- <20200316120239.GC5010@sirena.org.uk>
- <20200316132844.GA22822@ravnborg.org>
- <20200316163538.GJ5010@sirena.org.uk>
- <20200316185733.GA18307@ravnborg.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GmiNL4+5WUWrod5m"
-Content-Disposition: inline
-In-Reply-To: <20200316185733.GA18307@ravnborg.org>
-X-Cookie: I thought YOU silenced the guard!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
---GmiNL4+5WUWrod5m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Sun, Mar 15, 2020 at 6:44 AM Sam Ravnborg <sam@ravnborg.org> wrote:
+>
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Sandeep Panda <spanda@codeaurora.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> ---
+>  .../display/panel/innolux,p120zdg-bf1.txt     | 22 ----------
+>  .../display/panel/innolux,p120zdg-bf1.yaml    | 43 +++++++++++++++++++
+>  2 files changed, 43 insertions(+), 22 deletions(-)
 
-On Mon, Mar 16, 2020 at 07:57:33PM +0100, Sam Ravnborg wrote:
-
-> It was the best I could come up with - and this patch was called out
-> for review in the hope there is a better way than this patch.
-
-It definitely seems like a useful thing, just a bit surprised it's not
-already there and if this is the best way to do it.
-
-> We have similar examples like:
->   - pincfg-node.yaml
->   - regulatro.yaml
-
-I'm curious what properties your consumers have for regulators - I'd
-expect them to just have simple pointers to the regualtors with no
-configuration.
-
---GmiNL4+5WUWrod5m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5v3g8ACgkQJNaLcl1U
-h9CQ3gf/ckkj/FyMuU25wpmw52sUNJySLmtRn6yJPOc2AMPbRhW2r1LrNNzxczyh
-THPGUrBiVpjZ6eXQy9R+zAOFmQXHPpR2dErQ8z5M+/PH1oxwwcztLW5RXcVXbyBW
-QP2qJ+sXzqYQIp1aRXEgD5Nt/ePqsLUvgkYj7SpG5Txx5hRQiesNzVovCJeaBAU6
-CtYsvXOAfFvWhL9qNX5P9y+ULs+db7xySoOz/5wOK+e2TlWkOjTNlH5wtvY3D6oO
-zS6VHPjaCy/wCfjjXUZhXbGRb+M2ZF3bwMD5dJ6Dw2rjFUXwa33L6BhpgAcTdP/P
-QxPkPAvZsQX/9DwEs48aA5CckvRVKQ==
-=VIU6
------END PGP SIGNATURE-----
-
---GmiNL4+5WUWrod5m--
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
