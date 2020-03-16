@@ -2,26 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB92186703
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 09:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDFC186736
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 10:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730329AbgCPIxU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Mar 2020 04:53:20 -0400
-Received: from asavdk3.altibox.net ([109.247.116.14]:43946 "EHLO
-        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730295AbgCPIxT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Mar 2020 04:53:19 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk3.altibox.net (Postfix) with ESMTPS id A42282002E;
-        Mon, 16 Mar 2020 09:53:12 +0100 (CET)
-Date:   Mon, 16 Mar 2020 09:53:11 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ti.com>
-Cc:     dri-devel@lists.freedesktop.org,
+        id S1730221AbgCPJAM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Mar 2020 05:00:12 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:42638 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730204AbgCPJAL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Mar 2020 05:00:11 -0400
+Received: by mail-il1-f195.google.com with SMTP id p2so7878226ile.9;
+        Mon, 16 Mar 2020 02:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XCC5SrkpztJ9xxqUlBBdM7gPVX58z1aXERNCgJId8GA=;
+        b=uP7iM1w89MevX+DPQWWVqTgvS7D1ueYB4YDoYVrtvHmC8BvIJIs/2giQdvJ6D9KJaN
+         yoeDPNFy7dc/1kHpTP1K7vf++4wJCJ21JSbElWL8YRL3NRfQgiTIYfm++7FTmbUeWbG7
+         TxLk1g8p5zYPBsOL6KNsKSFw5aVWPIhRVLTcUAq/XpsDS5O14xcMWdoQ0Mp9FM0sbA/8
+         RbL+PWvl4uX1WQgvvE06R3spz9gIM6A4GvFVpzYhz1xQTjpiN7jWod+O0uoSwS5fbN9N
+         IzDZvgFmyA5ZzlxDEw1OIcxhzwL1QZCRBdNOzPpWFmDwTAHJO+Wk7+wCbQP7YSZ9Fy+u
+         B5tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XCC5SrkpztJ9xxqUlBBdM7gPVX58z1aXERNCgJId8GA=;
+        b=fnoIVkHVONwDD8VHcQdjQ0kM0NsWh6s6YPoqzwmsm2PAWO5IZWLYrDe89VLd0txmT5
+         V0gusxFu//oIh6tuuE/kTh3GRgm9GXIu1bJFl8PJmgEecKEQKczj97p9x7TeK/A9m58X
+         8tWdWBYwqT/VEz4iwpmmGzW2awXAyrax9ulE2+xoLYZQt6F8xe5S37G6TtiEmfIStivn
+         ESpNT34zJEyG+BhH1X5BvIDtMFf1nLcK8cD3YCpgvRoapk91gqoLESSzg+eqqIQNxn2R
+         npKOWFt1nPtUpqZ4/N9FkTuFS9GOyF4SihP7HA+/4QnW44NpA4dpbMvSjPOCC7rUhPnb
+         XotA==
+X-Gm-Message-State: ANhLgQ0TQDpFMk3N0+zrOReV2zO7G7M9b5ckyBQOLHzKlbkRz3FPviWk
+        Nsm7BvDLBcsCNoXizkRobY48Y5I4YkvALhFaYEg=
+X-Google-Smtp-Source: ADFU+vu2bbIrkxVS2wGViv1mLQNLclYUkubsdT4bhu+47DNQydeTTWNZy6HH28+VMNaYwU2/5I2g83PJz9yz9iTT6cc=
+X-Received: by 2002:a92:ba01:: with SMTP id o1mr17730663ili.217.1584349208510;
+ Mon, 16 Mar 2020 02:00:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200315134416.16527-1-sam@ravnborg.org> <20200315134416.16527-13-sam@ravnborg.org>
+In-Reply-To: <20200315134416.16527-13-sam@ravnborg.org>
+From:   Vinay Simha B N <simhavcs@gmail.com>
+Date:   Mon, 16 Mar 2020 14:29:56 +0530
+Message-ID: <CAGWqDJ7jiFoSxmQtKEVcQkTeKUKChAzU71f7V0nCrJYgO2n7ew@mail.gmail.com>
+Subject: Re: [PATCH v1 12/36] dt-bindings: display: convert jdi,lt070me05000
+ to DT Schema
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Alexandre Courbot <acourbot@nvidia.com>,
         Andrzej Hajda <a.hajda@samsung.com>,
         Brian Masney <masneyb@onstation.org>,
@@ -49,74 +81,151 @@ Cc:     dri-devel@lists.freedesktop.org,
         Robert Chiras <robert.chiras@nxp.com>,
         Sandeep Panda <spanda@codeaurora.org>,
         Stefan Mavrodiev <stefan@olimex.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Tony Lindgren <tony@atomide.com>,
-        Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Subject: Re: [PATCH v1 35/36] dt-bindings: display: convert
- lgphilips,lb035q02 to DT Schema
-Message-ID: <20200316085311.GA19201@ravnborg.org>
-References: <20200315134416.16527-1-sam@ravnborg.org>
- <20200315134416.16527-36-sam@ravnborg.org>
- <a73da9d3-43b2-3ce7-85e9-8135dbf48e98@ti.com>
- <20200316082607.GA18510@ravnborg.org>
- <a634d733-4b88-9d5a-09a1-c9551d8a077a@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a634d733-4b88-9d5a-09a1-c9551d8a077a@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=eMA9ckh1 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10
-        a=nj24DLa8QVhGY9zhrUcA:9 a=CjuIK1q_8ugA:10
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Tomi.
+sam,
 
-On Mon, Mar 16, 2020 at 10:42:45AM +0200, Tomi Valkeinen wrote:
-> On 16/03/2020 10:26, Sam Ravnborg wrote:
-> 
-> > > Isn't this also compatible with panel-simple bindings? 'label' is the only
-> > > one not in panel-simple, but that's optional and has never been used by the
-> > > panel driver.
-> > The panel is a SPI slave - which is not too obvious from the old
-> > binding.
-> > 
-> > The new DT Schema includes spi/spi-slave.yaml to give the binding
-> > proper access to the spi slave properties.
-> > 
-> > That would not be possible with panel-simple binding as no further
-> > properties are allowed with the panel-simple binding.
-> > 
-> > I hope this explains why there is a dedicated binding for this panel.
-> 
-> Hmm, but how is this different than, say, DSI panels? There are DSI panels
-> in panel-simple bindings, and those might require DSI bus parameters ('reg'
-> in the minimum).
+Reviewed-by: Vinay Simha BN <simhavcs@gmail.com>
+
+Thanks.
+
+On Sun, Mar 15, 2020 at 7:14 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+>
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Vinay Simha BN <simhavcs@gmail.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> ---
+>  .../display/panel/jdi,lt070me05000.txt        | 31 ---------
+>  .../display/panel/jdi,lt070me05000.yaml       | 69 +++++++++++++++++++
+>  2 files changed, 69 insertions(+), 31 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.txt b/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.txt
+> deleted file mode 100644
+> index 4989c91d505f..000000000000
+> --- a/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.txt
+> +++ /dev/null
+> @@ -1,31 +0,0 @@
+> -JDI model LT070ME05000 1200x1920 7" DSI Panel
+> -
+> -Required properties:
+> -- compatible: should be "jdi,lt070me05000"
+> -- vddp-supply: phandle of the regulator that provides the supply voltage
+> -  Power IC supply (3-5V)
+> -- iovcc-supply: phandle of the regulator that provides the supply voltage
+> -  IOVCC , power supply for LCM (1.8V)
+> -- enable-gpios: phandle of gpio for enable line
+> -  LED_EN, LED backlight enable, High active
+> -- reset-gpios: phandle of gpio for reset line
+> -  This should be 8mA, gpio can be configured using mux, pinctrl, pinctrl-names
+> -  XRES, Reset, Low active
+> -- dcdc-en-gpios: phandle of the gpio for power ic line
+> -  Power IC supply enable, High active
+> -
+> -Example:
+> -
+> -       dsi0: qcom,mdss_dsi@4700000 {
+> -               panel@0 {
+> -                       compatible = "jdi,lt070me05000";
+> -                       reg = <0>;
+> -
+> -                       vddp-supply = <&pm8921_l17>;
+> -                       iovcc-supply = <&pm8921_lvs7>;
+> -
+> -                       enable-gpios = <&pm8921_gpio 36 GPIO_ACTIVE_HIGH>;
+> -                       reset-gpios = <&tlmm_pinmux 54 GPIO_ACTIVE_LOW>;
+> -                       dcdc-en-gpios = <&pm8921_gpio 23 GPIO_ACTIVE_HIGH>;
+> -               };
+> -       };
+> diff --git a/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml b/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml
+> new file mode 100644
+> index 000000000000..e0abf68ecb19
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/jdi,lt070me05000.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: JDI model LT070ME05000 1200x1920 7" DSI Panel
+> +
+> +maintainers:
+> +  - Vinay Simha BN <simhavcs@gmail.com>
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: jdi,lt070me05000
+> +
+> +  enable-gpios: true
+> +  reg: true
+> +  reset-gpios: true
+> +
+> +  vddp-supply:
+> +    description: |
+> +      The regulator that provides the supply voltage Power IC supply (3-5V)
+> +
+> +  iovcc-supply:
+> +    description: |
+> +      The regulator that provides the supply voltage IOVCC,
+> +      power supply for LCM (1.8V)
+> +
+> +  dcdc-en-gpios:
+> +    description: |
+> +      phandle of the gpio for power ic line
+> +      Power IC supply enable, High active
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - vddp-supply
+> +  - iovcc-supply
+> +  - enable-gpios
+> +  - reset-gpios
+> +  - dcdc-en-gpios
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    dsi: qcom,mdss_dsi@4700000 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        panel@0 {
+> +            compatible = "jdi,lt070me05000";
+> +            reg = <0>;
+> +
+> +            vddp-supply = <&pm8921_l17>;
+> +            iovcc-supply = <&pm8921_lvs7>;
+> +
+> +            enable-gpios = <&pm8921_gpio 36 GPIO_ACTIVE_HIGH>;
+> +            reset-gpios = <&tlmm_pinmux 54 GPIO_ACTIVE_LOW>;
+> +            dcdc-en-gpios = <&pm8921_gpio 23 GPIO_ACTIVE_HIGH>;
+> +        };
+> +    };
+> +
+> +...
+> --
+> 2.20.1
+>
 
 
-We have panel-simple-dsi for DSI simple based panels.
-This binding includes the reg property.
-
-If we have included DSI panels in panel-simple.yaml, and we likely have
-by accident, then they should be moved to panel-simple-dsi.yaml.
-
-If they requires anything else then they shall have their
-own binding.
-
-panel-simple.yaml and panel-simple.dsi.yaml are on purpose
-only for the simple panels and they have:
-"additionalProperties: false" to avoid that a lot
-of extra sneaks in.
-
-I actually considered shortly a panel-simple-spi.yaml,
-but the few panels I looked at had different names
-for the power-supply so that did not fly.
-I did not check them all - we have today (with this patch-set)
-9 bindings that references spi-slave.yaml.
-
-	Sam
+-- 
+regards,
+vinaysimha
