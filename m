@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2161862D2
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 03:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB521862DA
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Mar 2020 03:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729547AbgCPCdd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 15 Mar 2020 22:33:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36178 "EHLO mail.kernel.org"
+        id S1729585AbgCPCdj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 15 Mar 2020 22:33:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36422 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729537AbgCPCdc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 15 Mar 2020 22:33:32 -0400
+        id S1729577AbgCPCdj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 15 Mar 2020 22:33:39 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 650E220739;
-        Mon, 16 Mar 2020 02:33:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15D6520724;
+        Mon, 16 Mar 2020 02:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584326012;
-        bh=AhLIt3Be5ynfJ9W7ht0BWEQsj+TQFznIuCiV6H4xBNw=;
+        s=default; t=1584326017;
+        bh=Kp7cGM0B3OtQxFLtBbwdZXKte8DH6Gpfo+yfsvS2ha0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ThxuzZnh/JQtEGPCjLswbdZz25HhnVdIT76jkGYqiuZlsqj+AvCskchajewDwLbDo
-         yQe5xPybkX/p4nSEFJWX35qF+XcAlU4hh/iHfKiojJADLwxiqfd82mkzRmEplvcVPO
-         /p45WNQ7RcMW5NvybjvWynz+pUhdlmj5dgIuiRMs=
+        b=GXXMeuimJVc29PZaT2g+m3pQRyNjcMJfAWYu54nudVP77cGd5TDUieTDDlb3pQbDG
+         N+rdkGMLxEUkK5KPIFlcrEF84viCyQlhjGXvIP2bBQqB7HFtcQdfXF1kz6U0r+56rH
+         lk4k7F3PAc0UJpDrRv8THEJpQePsofQFUUM/o0+E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yuji Sasaki <sasakiy@chromium.org>, Vinod Koul <vkoul@kernel.org>,
+Cc:     Evan Green <evgreen@chromium.org>, Rajat Jain <rajatja@google.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 10/41] spi: qup: call spi_qup_pm_resume_runtime before suspending
-Date:   Sun, 15 Mar 2020 22:32:48 -0400
-Message-Id: <20200316023319.749-10-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 15/41] spi: pxa2xx: Add CS control clock quirk
+Date:   Sun, 15 Mar 2020 22:32:53 -0400
+Message-Id: <20200316023319.749-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200316023319.749-1-sashal@kernel.org>
 References: <20200316023319.749-1-sashal@kernel.org>
@@ -44,53 +44,85 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Yuji Sasaki <sasakiy@chromium.org>
+From: Evan Green <evgreen@chromium.org>
 
-[ Upstream commit 136b5cd2e2f97581ae560cff0db2a3b5369112da ]
+[ Upstream commit 683f65ded66a9a7ff01ed7280804d2132ebfdf7e ]
 
-spi_qup_suspend() will cause synchronous external abort when
-runtime suspend is enabled and applied, as it tries to
-access SPI controller register while clock is already disabled
-in spi_qup_pm_suspend_runtime().
+In some circumstances on Intel LPSS controllers, toggling the LPSS
+CS control register doesn't actually cause the CS line to toggle.
+This seems to be failure of dynamic clock gating that occurs after
+going through a suspend/resume transition, where the controller
+is sent through a reset transition. This ruins SPI transactions
+that either rely on delay_usecs, or toggle the CS line without
+sending data.
 
-Signed-off-by: Yuji sasaki <sasakiy@chromium.org>
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Link: https://lore.kernel.org/r/20200214074340.2286170-1-vkoul@kernel.org
+Whenever CS is toggled, momentarily set the clock gating register
+to "Force On" to poke the controller into acting on CS.
+
+Signed-off-by: Rajat Jain <rajatja@google.com>
+Signed-off-by: Evan Green <evgreen@chromium.org>
+Link: https://lore.kernel.org/r/20200211223700.110252-1-rajatja@google.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-qup.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/spi/spi-pxa2xx.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index dd3434a407ea6..a364b99497e26 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -1217,6 +1217,11 @@ static int spi_qup_suspend(struct device *device)
- 	struct spi_qup *controller = spi_master_get_devdata(master);
- 	int ret;
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index 9071333ebdd86..cabd1a85d71e3 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -70,6 +70,10 @@ MODULE_ALIAS("platform:pxa2xx-spi");
+ #define LPSS_CAPS_CS_EN_SHIFT			9
+ #define LPSS_CAPS_CS_EN_MASK			(0xf << LPSS_CAPS_CS_EN_SHIFT)
  
-+	if (pm_runtime_suspended(device)) {
-+		ret = spi_qup_pm_resume_runtime(device);
-+		if (ret)
-+			return ret;
++#define LPSS_PRIV_CLOCK_GATE 0x38
++#define LPSS_PRIV_CLOCK_GATE_CLK_CTL_MASK 0x3
++#define LPSS_PRIV_CLOCK_GATE_CLK_CTL_FORCE_ON 0x3
++
+ struct lpss_config {
+ 	/* LPSS offset from drv_data->ioaddr */
+ 	unsigned offset;
+@@ -86,6 +90,8 @@ struct lpss_config {
+ 	unsigned cs_sel_shift;
+ 	unsigned cs_sel_mask;
+ 	unsigned cs_num;
++	/* Quirks */
++	unsigned cs_clk_stays_gated : 1;
+ };
+ 
+ /* Keep these sorted with enum pxa_ssp_type */
+@@ -156,6 +162,7 @@ static const struct lpss_config lpss_platforms[] = {
+ 		.tx_threshold_hi = 56,
+ 		.cs_sel_shift = 8,
+ 		.cs_sel_mask = 3 << 8,
++		.cs_clk_stays_gated = true,
+ 	},
+ };
+ 
+@@ -383,6 +390,22 @@ static void lpss_ssp_cs_control(struct spi_device *spi, bool enable)
+ 	else
+ 		value |= LPSS_CS_CONTROL_CS_HIGH;
+ 	__lpss_ssp_write_priv(drv_data, config->reg_cs_ctrl, value);
++	if (config->cs_clk_stays_gated) {
++		u32 clkgate;
++
++		/*
++		 * Changing CS alone when dynamic clock gating is on won't
++		 * actually flip CS at that time. This ruins SPI transfers
++		 * that specify delays, or have no data. Toggle the clock mode
++		 * to force on briefly to poke the CS pin to move.
++		 */
++		clkgate = __lpss_ssp_read_priv(drv_data, LPSS_PRIV_CLOCK_GATE);
++		value = (clkgate & ~LPSS_PRIV_CLOCK_GATE_CLK_CTL_MASK) |
++			LPSS_PRIV_CLOCK_GATE_CLK_CTL_FORCE_ON;
++
++		__lpss_ssp_write_priv(drv_data, LPSS_PRIV_CLOCK_GATE, value);
++		__lpss_ssp_write_priv(drv_data, LPSS_PRIV_CLOCK_GATE, clkgate);
 +	}
- 	ret = spi_master_suspend(master);
- 	if (ret)
- 		return ret;
-@@ -1225,10 +1230,8 @@ static int spi_qup_suspend(struct device *device)
- 	if (ret)
- 		return ret;
- 
--	if (!pm_runtime_suspended(device)) {
--		clk_disable_unprepare(controller->cclk);
--		clk_disable_unprepare(controller->iclk);
--	}
-+	clk_disable_unprepare(controller->cclk);
-+	clk_disable_unprepare(controller->iclk);
- 	return 0;
  }
  
+ static void cs_assert(struct spi_device *spi)
 -- 
 2.20.1
 
