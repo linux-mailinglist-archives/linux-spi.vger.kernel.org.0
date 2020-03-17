@@ -2,61 +2,24 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6828C1888C0
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 16:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5C7188AE7
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 17:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726607AbgCQPMp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 11:12:45 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:32856 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbgCQPMp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 11:12:45 -0400
-Received: by mail-vs1-f66.google.com with SMTP id y138so6304810vsy.0
-        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 08:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TMnGNLtemyYfK63VsKtAIUfhYRVvGpYyUyZZJL3pFE8=;
-        b=krPP7HlJbr5Dn8feHiKoBw/GYprYC3TKDcwhHNekL+6MG5CG72nWF0fp/Z4WONtZmZ
-         nsaZLia3aLvc4Yasfn60ZXH0MF3i2iGNSVmiZ0TyUUkfTG9D1u2h30TH8V9R3Y/Ji6va
-         ckIB9FCfSyqIcJL+IfFmAKzRjwm+b9IPUk8eU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TMnGNLtemyYfK63VsKtAIUfhYRVvGpYyUyZZJL3pFE8=;
-        b=HY8aV3lgXEYxvf9oQW1XbFgtqPsgpUSjr3Z/YPDqNX6WidU6QTWlvFVVqAH77h9QEP
-         9PjefRJ3A70Zkjqt06B9vAw3LxVnIFmHT2QowtV8ubN9ft6Zl9C9Q5E68jsi5YvjO7aX
-         kl86R28eTg3JySdJT/RixxnpKlHXBvy0agWu4bn8A4VI+LjZU7DAN7uVN5pCLVJ/FCpU
-         sYnailN8ch1wKSuGlQ7N/kpvrqt8KZpDfQX+f5Nad36QABfUYbPshyfu/l2V0QRsQJVf
-         tqNOk3LPcKrzm4g9oviu05iUZ/3PlKhZgVIh11WnTFDtpzKkQepUqT1V1CUM9gSaOHdl
-         u95A==
-X-Gm-Message-State: ANhLgQ0Id6FtGSWrO2XvDxNOl5ZNOYO+NusO2S7JJddOfe3Zrb0/Gzoi
-        X7mm9tfcPgMhFesOkcdYIFNEf7xz/Do=
-X-Google-Smtp-Source: ADFU+vte8w5MZYZyWfgc0mdOn+IMToI4aitYeLGXpAsEWbrLXJoNiNKmld/8lcLuElS/R5AvPV/6PQ==
-X-Received: by 2002:a05:6102:52f:: with SMTP id m15mr4139926vsa.195.1584457963879;
-        Tue, 17 Mar 2020 08:12:43 -0700 (PDT)
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
-        by smtp.gmail.com with ESMTPSA id k24sm1683418uaq.15.2020.03.17.08.12.42
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2020 08:12:43 -0700 (PDT)
-Received: by mail-vs1-f44.google.com with SMTP id n6so14093293vsc.3
-        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 08:12:42 -0700 (PDT)
-X-Received: by 2002:a05:6102:7c7:: with SMTP id y7mr4207665vsg.198.1584457962249;
- Tue, 17 Mar 2020 08:12:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200316151939.1.I752ebdcfd5e8bf0de06d66e767b8974932b3620e@changeid>
- <20200317121018.GB3971@sirena.org.uk>
-In-Reply-To: <20200317121018.GB3971@sirena.org.uk>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 17 Mar 2020 08:12:30 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VAeOYAG-R6aeAAoo7TsuvDBgNnqxn3XE2Mw3hwL1H7Ew@mail.gmail.com>
-Message-ID: <CAD=FV=VAeOYAG-R6aeAAoo7TsuvDBgNnqxn3XE2Mw3hwL1H7Ew@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Speculative fix of "nobody cared"
- about interrupt
-To:     Mark Brown <broonie@kernel.org>
+        id S1726130AbgCQQoU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 12:44:20 -0400
+Received: from foss.arm.com ([217.140.110.172]:40440 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726121AbgCQQoU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Mar 2020 12:44:20 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC80EFEC;
+        Tue, 17 Mar 2020 09:44:19 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 315193F52E;
+        Tue, 17 Mar 2020 09:44:19 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 16:44:17 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
 Cc:     Alok Chauhan <alokc@codeaurora.org>,
         Dilip Kota <dkota@codeaurora.org>, skakit@codeaurora.org,
         Girish Mahadevan <girishm@codeaurora.org>,
@@ -66,66 +29,85 @@ Cc:     Alok Chauhan <alokc@codeaurora.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] spi: spi-geni-qcom: Speculative fix of "nobody cared"
+ about interrupt
+Message-ID: <20200317164417.GJ3971@sirena.org.uk>
+References: <20200316151939.1.I752ebdcfd5e8bf0de06d66e767b8974932b3620e@changeid>
+ <20200317121018.GB3971@sirena.org.uk>
+ <CAD=FV=VAeOYAG-R6aeAAoo7TsuvDBgNnqxn3XE2Mw3hwL1H7Ew@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HSQ3hISbU3Um6hch"
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VAeOYAG-R6aeAAoo7TsuvDBgNnqxn3XE2Mw3hwL1H7Ew@mail.gmail.com>
+X-Cookie: There's only one everything.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-On Tue, Mar 17, 2020 at 5:10 AM Mark Brown <broonie@kernel.org> wrote:
->
-> On Mon, Mar 16, 2020 at 03:20:01PM -0700, Douglas Anderson wrote:
->
-> > +     /*
-> > +      * We don't expect to hit this, but if we do we should try our best
-> > +      * to clear the interrupts and return so we don't just get called
-> > +      * again.
-> > +      */
-> > +     if (mas->cur_mcmd == CMD_NONE)
-> > +             goto exit;
-> > +
->
-> Does this mean that there was an actual concrete message of type
-> CMD_NONE or does it mean that there was no message waiting?  If there
-> was no message then isn't the interrupt spurious?
+--HSQ3hISbU3Um6hch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There is no message of type "CMD_NONE".  The "cur_mcmd" field is
-basically where in the software state machine we're at:
+On Tue, Mar 17, 2020 at 08:12:30AM -0700, Doug Anderson wrote:
+> On Tue, Mar 17, 2020 at 5:10 AM Mark Brown <broonie@kernel.org> wrote:
+> > On Mon, Mar 16, 2020 at 03:20:01PM -0700, Douglas Anderson wrote:
 
-* CMD_NONE - Software thinks that the controller should be idle.
-* CMD_XFER - Software has started a transfer.
-* CMD_CS - Software has started a chip select change.
-* CMD_CANCEL - Software sent a "cancel".
+> >
+> > Does this mean that there was an actual concrete message of type
+> > CMD_NONE or does it mean that there was no message waiting?  If there
+> > was no message then isn't the interrupt spurious?
 
-...so certainly if we see "cur_mcmd == CMD_NONE" in the interrupt
-handler we're in an unexpected situation.  We don't expect interrupts
-while idle.  I wouldn't necessarily say it was a spurious interrupt,
-though.  To say that I'd rather look at the result of this line in the
-IRQ handler:
+> There is no message of type "CMD_NONE".  The "cur_mcmd" field is
+> basically where in the software state machine we're at:
 
-    m_irq = readl(se->base + SE_GENI_M_IRQ_STATUS);
+...
 
-...if that line returns 0 then I would be willing to say it is a
-spurious interrupt.
+> ...so certainly if we see "cur_mcmd == CMD_NONE" in the interrupt
+> handler we're in an unexpected situation.  We don't expect interrupts
+> while idle.  I wouldn't necessarily say it was a spurious interrupt,
+> though.  To say that I'd rather look at the result of this line in the
+> IRQ handler:
 
+>     m_irq = readl(se->base + SE_GENI_M_IRQ_STATUS);
 
-So there is really more than one issue at hand, I guess.
+> ...if that line returns 0 then I would be willing to say it is a
+> spurious interrupt.
 
-A) Why did we get an interrupt when we had "cur_mcmd == CMD_NONE"?
-IMO this is due to weakly ordered memory and not enough locking.
+Right, that should return IRQ_NONE if there's nothing actually asserted.
+I think you're right about the state machine though.
 
-B) If we do see an interrupt when "cur_mcmd == CMD_NONE" (even after
-we fix the locking), what should we do?  IMO we should still try to
-Ack it.  I can add a "pr_warn()" if it's helpful?
+> C) Do we care to try to detect spurious interrupts (by checking
+> SE_GENI_M_IRQ_STATUS) and return IRQ_NONE?  Right now a spurious
+> interrupt will be harmless because all of the logic in geni_spi_isr()
+> doesn't do anything if SE_GENI_M_IRQ_STATUS has no bits set.  ...but
+> it will still return IRQ_HANDLED.  I can't imagine anyone ever putting
+> this device on a shared interrupt, but if it's important I can detect
+> this and return IRQ_NONE in this case in a v2 of this patch.
 
-C) Do we care to try to detect spurious interrupts (by checking
-SE_GENI_M_IRQ_STATUS) and return IRQ_NONE?  Right now a spurious
-interrupt will be harmless because all of the logic in geni_spi_isr()
-doesn't do anything if SE_GENI_M_IRQ_STATUS has no bits set.  ...but
-it will still return IRQ_HANDLED.  I can't imagine anyone ever putting
-this device on a shared interrupt, but if it's important I can detect
-this and return IRQ_NONE in this case in a v2 of this patch.
+It's a good idea to return IRQ_NONE not just for the shared interrupt
+case but also because it lets the error handling code in the genirq core
+do it's thing and detect bugs - as seems to have happened here.  This
+one was fairly benign but you can also see things like interrupts that
+are constantly asserted by the hardware where we end up spinning in
+interrupt handlers.
 
--Doug
+--HSQ3hISbU3Um6hch
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5w/mAACgkQJNaLcl1U
+h9DXgwf/e1aqKwe3QdhJTo3ZnebAawyLn7xfkYE0amZAh7GQzsbx+MJv7Ar9hAm2
+QF8ke5T67rDag/wSDpjuuyWEgRLmmpDg78DZSNoKVgNubIFJago000bwhqkFfJJR
+T4C5EPMvzEg9rDF7NvM4WI4pNsAeBHH3l0mxA1ZLHs8capjDYvjUpZQFBBwDjT6E
+blROzd29hLzWlVs44H/3rAVcCpT11ChwSjq4haJ/dBBHe/ObAVWUVjU5rhtP3Uod
+IHvnBRbWG+iY0g8CWsZSJb9mMklOHacgPMdlnumNiYpgvM4OffyhfXQ1EnNVT2YN
+1qbOrLz1MqviNs0f4WL2+MyG57DoXA==
+=5ZtU
+-----END PGP SIGNATURE-----
+
+--HSQ3hISbU3Um6hch--
