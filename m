@@ -2,215 +2,249 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F119187F09
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 11:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309D5188227
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 12:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbgCQK6G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 06:58:06 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:31453 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726709AbgCQK6F (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 06:58:05 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584442684; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=cQuV8le5zJMXEg6Nx5zOixnWj9Q+mZRhKelZQ5b1wgI=; b=LDP9B/OG8yxMUgGYdsHEw5dBrUivBWIH13wMjJx8PC6PxkHlCyi3MMbcY5BlIgQ/zYT/I/4y
- PlI/23dq1MezDhhOaiwbLhs2d8HVyghegi7FbCRgefuBXa66aemnZTWYCZf5q6ksMCJHpKw1
- tqxg9u8Y3gii9hKyZdxi50ACFv8=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e70ad36.7f29df409538-smtp-out-n03;
- Tue, 17 Mar 2020 10:57:58 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 99225C4478C; Tue, 17 Mar 2020 10:57:57 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.8] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726730AbgCQLY4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 07:24:56 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:39385 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726634AbgCQLY4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 07:24:56 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1FF87C43636;
-        Tue, 17 Mar 2020 10:57:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1FF87C43636
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V2 3/8] soc: qcom-geni-se: Add interconnect support to fix
- earlycon crash
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-4-git-send-email-akashast@codeaurora.org>
- <20200313204441.GJ144492@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <1f86fdf0-df7c-4e4a-d4d8-8b0162e52cb4@codeaurora.org>
-Date:   Tue, 17 Mar 2020 16:27:47 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 4C603230E1;
+        Tue, 17 Mar 2020 12:24:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1584444292;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DH7/qC/0vrafdQUdfPhAFCMPVOhjlNydJl9NhPMW6H4=;
+        b=lkAth6EIWKqub3WBQbzy1ugASP5btzGanfdrY388qh4nS7e6Ha6bnA1DjlCpYUkUNexJFh
+        QOkJGFhWsIx90SMWNSe6WI1wlkC0MhQKQMXpW7dqEqCMRZa5kD8gaDDzDKCxFOjdIARyOs
+        kz9z67+kG+gidTJZ/heFu/d98/9qt4w=
 MIME-Version: 1.0
-In-Reply-To: <20200313204441.GJ144492@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Date:   Tue, 17 Mar 2020 12:24:49 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, Esben Haabendal <eha@deif.com>,
+        angelo@sysam.it, andrew.smirnov@gmail.com,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Wei Chen <weic@nvidia.com>, Mohamed Hosny <mhosny@nvidia.com>,
+        peng.ma@nxp.com
+Subject: Re: [PATCH v3 06/12] spi: spi-fsl-dspi: Replace interruptible wait
+ queue with a simple completion
+In-Reply-To: <8c22cb70b7c0acb6769e0c68540ab523@walle.cc>
+References: <20200314224340.1544-1-olteanv@gmail.com>
+ <20200314224340.1544-7-olteanv@gmail.com>
+ <20200316122613.GE5010@sirena.org.uk>
+ <CA+h21hqRV+HmAz4QGyH9ZtcFWzeCKczitcn+mfTdwAC7ZobdDw@mail.gmail.com>
+ <20200316124945.GF5010@sirena.org.uk>
+ <CA+h21hpoHGuDwpOqtWJFO7+0mQVUrmcBLW7nnGq6dt3QU5axfw@mail.gmail.com>
+ <d05fda0e119405343e540b9768db534f@walle.cc>
+ <CA+h21hqt7Xe1LrSDsCVS8zqunQp2tKGhmHDraMirxL595go4nA@mail.gmail.com>
+ <8c22cb70b7c0acb6769e0c68540ab523@walle.cc>
+Message-ID: <52ce52ed4f045c4276dfb885ed29e835@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
+X-Spam-Level: *
+X-Rspamd-Server: web
+X-Spam-Status: No, score=1.40
+X-Spam-Score: 1.40
+X-Rspamd-Queue-Id: 4C603230E1
+X-Spamd-Result: default: False [1.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_TWELVE(0.00)[15];
+         NEURAL_HAM(-0.00)[-0.617];
+         FREEMAIL_TO(0.00)[gmail.com];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,arm.com,deif.com,sysam.it,gmail.com,embeddedor.com,nvidia.com,nxp.com];
+         MID_RHS_MATCH_FROM(0.00)[];
+         SUSPICIOUS_RECIPS(1.50)[]
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Matthias,
+Am 2020-03-16 18:15, schrieb Michael Walle:
+>>> dd: /dev/mtd0: Input/output error
+>> 
+>> I don't really have a SPI flash connected to DSPI on any LS1028A 
+>> board.
+> 
+> I'm already debugging it again.
 
-On 3/14/2020 2:14 AM, Matthias Kaehlcke wrote:
-> Hi Akash,
->
-> On Fri, Mar 13, 2020 at 06:42:09PM +0530, Akash Asthana wrote:
->> V1 patch@https://patchwork.kernel.org/patch/11386469/ caused SC7180 system
->> to reset at boot time.
-> The v1 patch isn't relevant in the commit message, please just describe the
-> problem. Also the crash only occurs when earlycon is used.
-ok
->
->> As QUP core clock is shared among all the SE drivers present on particular
->> QUP wrapper, the reset seen is due to earlycon usage after QUP core clock
->> is put to 0 from other SE drivers before real console comes up.
->>
->> As earlycon can't vote for it's QUP core need, to fix this add ICC
->> support to common/QUP wrapper driver and put vote for QUP core from
->> probe on behalf of earlycon and remove vote during sys suspend.
-> Only removing the vote on suspend isn't ideal, the system might never get
-> suspended. That said I don't have a really good alternative suggestion.
->
-> One thing you could possibly do is to launch a delayed work, check
-> console_device() every second or so and remove the vote when it returns
-> non-NULL. Not claiming this would be a great solution ...
->
-> The cleanest solution might be a notifier when the early console is
-> unregistered, it seems somewhat over-engineered though ... Then again
-> other (future) uart drivers with interconnect support might run into
-> the same problem.
+Ok now maybe a more experienced kernel developer could have a look at 
+this.
 
-We are hitting this problem because QUP core clocks are shared among all 
-the SE driver present in particular QUP wrapper, if other HW controllers 
-has similar architecture we will hit this issue.
+(1) the error is EIO because the actual_length doesn't match the 
+expected
+     length
+(2) I've put trace_printk() where the actual_length is modified:
+     in dspi_fifo_write()
 
-How about if we expose an API from common driver(geni-se) for putting 
-QUP core BW vote to 0.
+         /* Update total number of bytes that were transferred */
+         bytes_sent = dspi->words_in_flight * dspi->oper_word_size;
+         msg->actual_length += bytes_sent;
+         trace_printk("msg=%px actual_length=%d bytes_sent=%d 
+word_in_flight=%d oper_word_size=%d\n",
+                         msg, msg->actual_length,
+                         bytes_sent, dspi->words_in_flight,
+                         dspi->oper_word_size);
+         dspi->progress += bytes_sent / DIV_ROUND_UP(xfer->bits_per_word, 
+8);
 
-We call this from console probe just after uart_add_one_port call 
-(console resources are enabled as part of this call) to put core quota 
-to 0 on behalf of earlyconsole?
+    At the start of the foreach transfer loop in 
+dspi_transfer_one_message():
 
->
->> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
->> Reported-by: Matthias Kaehlcke <mka@chromium.org>
->> ---
->>   drivers/soc/qcom/qcom-geni-se.c | 41 +++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 41 insertions(+)
->>
->> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
->> index 7d622ea..d244dfc 100644
->> --- a/drivers/soc/qcom/qcom-geni-se.c
->> +++ b/drivers/soc/qcom/qcom-geni-se.c
->> @@ -90,6 +90,7 @@ struct geni_wrapper {
->>   	struct device *dev;
->>   	void __iomem *base;
->>   	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
->> +	struct icc_path *icc_path_geni_to_core;
->>   };
->>   
->>   #define QUP_HW_VER_REG			0x4
->> @@ -747,11 +748,50 @@ static int geni_se_probe(struct platform_device *pdev)
->>   		}
->>   	}
->>   
->> +#ifdef CONFIG_SERIAL_EARLYCON
->> +	wrapper->icc_path_geni_to_core = devm_of_icc_get(dev, "qup-core");
->> +	if (IS_ERR(wrapper->icc_path_geni_to_core))
->> +		return PTR_ERR(wrapper->icc_path_geni_to_core);
->> +	/*
->> +	 * Put minmal BW request on core clocks on behalf of early console.
->> +	 * The vote will be removed in suspend call.
->> +	 */
->> +	ret = icc_set_bw(wrapper->icc_path_geni_to_core, Bps_to_icc(1000),
->> +			Bps_to_icc(1000));
->> +	if (ret) {
->> +		dev_err(&pdev->dev, "%s: ICC BW voting failed for core\n",
->> +			__func__);
->> +		return ret;
->> +	}
-> What is ugly about this is that it's done for every QUP, not only the one
-> with the early console. Again, I don't have a good solution for it, maybe
-> it's a limitation we have to live with :(
+         list_for_each_entry(transfer, &message->transfers, 
+transfer_list) {
+                 trace_printk("%d transfer->length=%d\n", i++, 
+transfer->len);
+                 dspi->cur_transfer = transfer;
 
-There is one more limitation from QUP core side. Core clocks for both 
-the QUP wrapper runs at same speed.
-
-core2x_1 = core2x_2 = max(core2x_1, core2x_2);
-
-So with above limitation and if we are removing early con vote from Core 
-when real console comes up. It doesn't matter whether it's done for 
-every QUP or the only with early console.
-
->
->> +#endif
->> +
->>   	dev_set_drvdata(dev, wrapper);
->>   	dev_dbg(dev, "GENI SE Driver probed\n");
->>   	return devm_of_platform_populate(dev);
->>   }
->>   
->> +static int __maybe_unused geni_se_sys_suspend(struct device *dev)
->> +{
->> +	struct geni_wrapper *wrapper = dev_get_drvdata(dev);
->> +	int ret;
->> +
->> +#ifdef CONFIG_SERIAL_EARLYCON
->> +	ret = icc_set_bw(wrapper->icc_path_geni_to_core, 0, 0);
-> I think you only want to do this on the first suspend.
-Ok, I can add that logic using global variable.
->
-> Do we need to handle the case where no 'real' console is configured?
-> In this case the early console would be active forever and setting
-> the bandwidths to 0 might cause a similar crash than the one you are
-> trying to fix. Not sure if that's a real world use case, but wanted to
-> mention it. Maybe this is an argument of the notifier approach?
-We can't support earlycon without real console.
-
-As earlyconsole doesn't do any kind of resource enablement(SE clocks, 
-pinctrl, etc) it assumes that resources are already enabled from 
-previous stages.
-
-So if real console doesn't come up no one will vote for that SE clock, 
-and it will be disabled from clk late_init call which will result into 
-un-clocked access.
+    And at the end of this function:
 
 
->
->> +	if (ret) {
->> +		dev_err(dev, "%s: ICC BW remove failed for core\n",
->> +			__func__);
->> +		return ret;
-> Aborting suspend seems too harsh since the QUP should still be fully
-> functional unless there is a general problem with the interconnects.
->
-> I would suggest to change the log to dev_warn() and return 0.
+         }
+         trace_printk("returning actual_length=%d\n", 
+message->actual_length);
 
-Ok
+         message->status = status;
+         spi_finalize_current_message(ctlr);
 
-Thanks for reviewing the patch.
+         return status;
 
-regards,
+(3) The trace is attached at the end of this mail. There is a good case 
+and the
+     bad one. What I've noticed (besides returning the wrong count, eg 
+13, which
+     seems to be the first one) is the preempt-depth which is always none 
+in the
+     bad case. In all transfers before, the preempt-depth is 1. The flags 
+are
+     usually "d.h1", sometimes "d.H1" and in case of the error "d.H.".
+     I also don't know why the fifo_write() with actual_length=13 is 
+traced after
+     all the ones printed inside the interrupt handler. Also something 
+seems to
+     be off with the words_in_flight and oper_word_size in the bad case.
 
-Akash
+     So besides the flags.. I still think there is a race between the
+     dspi_fifo_write() call in transfer_one_message and the interrupt 
+handler
+     for the shared data like words_in_flight and oper_word_size.
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+
+good one:
+               dd-1259  [000] ....  3383.499863: 
+dspi_transfer_one_message: 0 transfer->length=1
+               dd-1259  [000] ....  3383.499886: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=1 bytes_sent=1 word_in_flight=1 
+oper_word_size=1
+               dd-1259  [000] ....  3383.499891: 
+dspi_transfer_one_message: 1 transfer->length=3
+               dd-1259  [000] ....  3383.499915: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=4 bytes_sent=3 word_in_flight=3 
+oper_word_size=1
+               dd-1259  [000] ....  3383.499920: 
+dspi_transfer_one_message: 2 transfer->length=1
+               dd-1259  [000] ....  3383.499940: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=5 bytes_sent=1 word_in_flight=1 
+oper_word_size=1
+               dd-1259  [000] ....  3383.499946: 
+dspi_transfer_one_message: 3 transfer->length=64
+               dd-1259  [000] d.h1  3383.499973: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=21 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.h1  3383.499993: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=29 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.h1  3383.500013: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=37 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.h1  3383.500032: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=45 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.h1  3383.500051: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=53 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.h1  3383.500070: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=61 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.h1  3383.500089: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=69 bytes_sent=8 word_in_flight=4 
+oper_word_size=2
+               dd-1259  [000] ....  3383.500107: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=13 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] ....  3383.500111: 
+dspi_transfer_one_message: returning actual_length=69
+
+bad one:
+               dd-1259  [000] ....  3383.500149: 
+dspi_transfer_one_message: 0 transfer->length=1
+               dd-1259  [000] ....  3383.500172: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=1 bytes_sent=1 word_in_flight=1 
+oper_word_size=1
+               dd-1259  [000] ....  3383.500178: 
+dspi_transfer_one_message: 1 transfer->length=3
+               dd-1259  [000] ....  3383.500202: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=4 bytes_sent=3 word_in_flight=3 
+oper_word_size=1
+               dd-1259  [000] ....  3383.500207: 
+dspi_transfer_one_message: 2 transfer->length=1
+               dd-1259  [000] ....  3383.500227: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=5 bytes_sent=1 word_in_flight=1 
+oper_word_size=1
+               dd-1259  [000] ....  3383.500232: 
+dspi_transfer_one_message: 3 transfer->length=64
+               dd-1259  [000] d.H.  3383.500286: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=13 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.H.  3383.500307: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=21 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.H.  3383.500327: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=29 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.H.  3383.500347: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=37 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.H.  3383.500366: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=45 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.H.  3383.500385: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=53 bytes_sent=8 word_in_flight=2 
+oper_word_size=4
+               dd-1259  [000] d.H.  3383.500404: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=61 bytes_sent=8 word_in_flight=4 
+oper_word_size=2
+               dd-1259  [000] ....  3383.500436: dspi_fifo_write: 
+msg=ffff800011973840 actual_length=13 bytes_sent=8 word_in_flight=4 
+oper_word_size=2
+               dd-1259  [000] ....  3383.500441: 
+dspi_transfer_one_message: returning actual_length=13
+
+
+-michael
