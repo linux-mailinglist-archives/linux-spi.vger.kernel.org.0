@@ -2,249 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 309D5188227
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 12:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0BD18825B
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 12:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbgCQLY4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 07:24:56 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:39385 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726634AbgCQLY4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 07:24:56 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 4C603230E1;
-        Tue, 17 Mar 2020 12:24:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1584444292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DH7/qC/0vrafdQUdfPhAFCMPVOhjlNydJl9NhPMW6H4=;
-        b=lkAth6EIWKqub3WBQbzy1ugASP5btzGanfdrY388qh4nS7e6Ha6bnA1DjlCpYUkUNexJFh
-        QOkJGFhWsIx90SMWNSe6WI1wlkC0MhQKQMXpW7dqEqCMRZa5kD8gaDDzDKCxFOjdIARyOs
-        kz9z67+kG+gidTJZ/heFu/d98/9qt4w=
+        id S1726272AbgCQLjF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 07:39:05 -0400
+Received: from foss.arm.com ([217.140.110.172]:36110 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725794AbgCQLjF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Mar 2020 07:39:05 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42FBE1FB;
+        Tue, 17 Mar 2020 04:39:04 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C22AE3F534;
+        Tue, 17 Mar 2020 04:39:03 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 11:39:02 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, dri-devel@lists.freedesktop.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Guido Gunther <agx@sigxcpu.org>, Heiko Schocher <hs@denx.de>,
+        Nikolaus Schaller <hns@goldelico.com>,
+        Hoegeun Kwon <hoegeun.kwon@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi@vger.kernel.org, Marco Franchi <marco.franchi@nxp.com>,
+        Marek Belisko <marek@goldelico.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Nickey Yang <nickey.yang@rock-chips.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Robert Chiras <robert.chiras@nxp.com>,
+        Sandeep Panda <spanda@codeaurora.org>,
+        Stefan Mavrodiev <stefan@olimex.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Vinay Simha BN <simhavcs@gmail.com>,
+        Werner Johansson <werner.johansson@sonymobile.com>
+Subject: Re: [PATCH v1 02/36] dt-bindings: spi: support non-spi bindings as
+ SPI slaves
+Message-ID: <20200317113902.GA3971@sirena.org.uk>
+References: <20200315134416.16527-1-sam@ravnborg.org>
+ <20200315134416.16527-3-sam@ravnborg.org>
+ <20200316204850.gggeyjulgiy53i7x@gilmour.lan>
+ <20200316214346.GA23637@ravnborg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 17 Mar 2020 12:24:49 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, Esben Haabendal <eha@deif.com>,
-        angelo@sysam.it, andrew.smirnov@gmail.com,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Wei Chen <weic@nvidia.com>, Mohamed Hosny <mhosny@nvidia.com>,
-        peng.ma@nxp.com
-Subject: Re: [PATCH v3 06/12] spi: spi-fsl-dspi: Replace interruptible wait
- queue with a simple completion
-In-Reply-To: <8c22cb70b7c0acb6769e0c68540ab523@walle.cc>
-References: <20200314224340.1544-1-olteanv@gmail.com>
- <20200314224340.1544-7-olteanv@gmail.com>
- <20200316122613.GE5010@sirena.org.uk>
- <CA+h21hqRV+HmAz4QGyH9ZtcFWzeCKczitcn+mfTdwAC7ZobdDw@mail.gmail.com>
- <20200316124945.GF5010@sirena.org.uk>
- <CA+h21hpoHGuDwpOqtWJFO7+0mQVUrmcBLW7nnGq6dt3QU5axfw@mail.gmail.com>
- <d05fda0e119405343e540b9768db534f@walle.cc>
- <CA+h21hqt7Xe1LrSDsCVS8zqunQp2tKGhmHDraMirxL595go4nA@mail.gmail.com>
- <8c22cb70b7c0acb6769e0c68540ab523@walle.cc>
-Message-ID: <52ce52ed4f045c4276dfb885ed29e835@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Spam-Level: *
-X-Rspamd-Server: web
-X-Spam-Status: No, score=1.40
-X-Spam-Score: 1.40
-X-Rspamd-Queue-Id: 4C603230E1
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_TWELVE(0.00)[15];
-         NEURAL_HAM(-0.00)[-0.617];
-         FREEMAIL_TO(0.00)[gmail.com];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,arm.com,deif.com,sysam.it,gmail.com,embeddedor.com,nvidia.com,nxp.com];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h31gzZEtNLTqOjlF"
+Content-Disposition: inline
+In-Reply-To: <20200316214346.GA23637@ravnborg.org>
+X-Cookie: There's only one everything.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2020-03-16 18:15, schrieb Michael Walle:
->>> dd: /dev/mtd0: Input/output error
->> 
->> I don't really have a SPI flash connected to DSPI on any LS1028A 
->> board.
-> 
-> I'm already debugging it again.
 
-Ok now maybe a more experienced kernel developer could have a look at 
-this.
+--h31gzZEtNLTqOjlF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-(1) the error is EIO because the actual_length doesn't match the 
-expected
-     length
-(2) I've put trace_printk() where the actual_length is modified:
-     in dspi_fifo_write()
+On Mon, Mar 16, 2020 at 10:43:46PM +0100, Sam Ravnborg wrote:
+> On Mon, Mar 16, 2020 at 09:48:50PM +0100, Maxime Ripard wrote:
 
-         /* Update total number of bytes that were transferred */
-         bytes_sent = dspi->words_in_flight * dspi->oper_word_size;
-         msg->actual_length += bytes_sent;
-         trace_printk("msg=%px actual_length=%d bytes_sent=%d 
-word_in_flight=%d oper_word_size=%d\n",
-                         msg, msg->actual_length,
-                         bytes_sent, dspi->words_in_flight,
-                         dspi->oper_word_size);
-         dspi->progress += bytes_sent / DIV_ROUND_UP(xfer->bits_per_word, 
-8);
+> > All the SPI devices will be declared under a spi controller node that
+> > will validate its child nodes (and thus the devices) already.
 
-    At the start of the foreach transfer loop in 
-dspi_transfer_one_message():
+> This was the missing piece - thanks.
+> And as Mark put it "why is this suddenly an issue"?
+> Turns out this is already properly handled and I made up an issue.
+> Maybe Mark tried to explian it to me already...
 
-         list_for_each_entry(transfer, &message->transfers, 
-transfer_list) {
-                 trace_printk("%d transfer->length=%d\n", i++, 
-transfer->len);
-                 dspi->cur_transfer = transfer;
+No, I didn't actually understand how it worked - I was just pretty sure
+that it should and trusted that Rob and Maxime had got it right.
 
-    And at the end of this function:
+--h31gzZEtNLTqOjlF
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-         }
-         trace_printk("returning actual_length=%d\n", 
-message->actual_length);
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5wttMACgkQJNaLcl1U
+h9BF/Qf/e1f3FiL65tLxhJHgSVGWUtvYFUQ6BgqVznQPLNNNIGBfYV1AQsue7zDt
+t4vHT0WIpuT/meGsf6ZOMs/tQlq7gQK2+tZzTJEyFCpV1oRmUjdxX63sJtsPVV3T
+6rcE1CWMOlAAWIPfegrrkfLvK/LjS7bzRLhYYo7NCgqiRnCMOjsAZawCJtyWYep7
+ffPIaxTv+73EvIDvy7/CYjsJRHUGbHtta8CiKb3cm0urAvtvLbcx0ppLHhyr9GcJ
+L8uBdMkWd3DRDQM/fPUNmyuWSqGRZwBJmhU+z+jN9bKlQqIC4Iw7JytoE6IOgtg8
+9AoTLBvS4BqnlQTGit3CFa6sWdqwIg==
+=Df56
+-----END PGP SIGNATURE-----
 
-         message->status = status;
-         spi_finalize_current_message(ctlr);
-
-         return status;
-
-(3) The trace is attached at the end of this mail. There is a good case 
-and the
-     bad one. What I've noticed (besides returning the wrong count, eg 
-13, which
-     seems to be the first one) is the preempt-depth which is always none 
-in the
-     bad case. In all transfers before, the preempt-depth is 1. The flags 
-are
-     usually "d.h1", sometimes "d.H1" and in case of the error "d.H.".
-     I also don't know why the fifo_write() with actual_length=13 is 
-traced after
-     all the ones printed inside the interrupt handler. Also something 
-seems to
-     be off with the words_in_flight and oper_word_size in the bad case.
-
-     So besides the flags.. I still think there is a race between the
-     dspi_fifo_write() call in transfer_one_message and the interrupt 
-handler
-     for the shared data like words_in_flight and oper_word_size.
-
-
-good one:
-               dd-1259  [000] ....  3383.499863: 
-dspi_transfer_one_message: 0 transfer->length=1
-               dd-1259  [000] ....  3383.499886: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=1 bytes_sent=1 word_in_flight=1 
-oper_word_size=1
-               dd-1259  [000] ....  3383.499891: 
-dspi_transfer_one_message: 1 transfer->length=3
-               dd-1259  [000] ....  3383.499915: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=4 bytes_sent=3 word_in_flight=3 
-oper_word_size=1
-               dd-1259  [000] ....  3383.499920: 
-dspi_transfer_one_message: 2 transfer->length=1
-               dd-1259  [000] ....  3383.499940: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=5 bytes_sent=1 word_in_flight=1 
-oper_word_size=1
-               dd-1259  [000] ....  3383.499946: 
-dspi_transfer_one_message: 3 transfer->length=64
-               dd-1259  [000] d.h1  3383.499973: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=21 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.h1  3383.499993: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=29 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.h1  3383.500013: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=37 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.h1  3383.500032: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=45 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.h1  3383.500051: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=53 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.h1  3383.500070: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=61 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.h1  3383.500089: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=69 bytes_sent=8 word_in_flight=4 
-oper_word_size=2
-               dd-1259  [000] ....  3383.500107: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=13 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] ....  3383.500111: 
-dspi_transfer_one_message: returning actual_length=69
-
-bad one:
-               dd-1259  [000] ....  3383.500149: 
-dspi_transfer_one_message: 0 transfer->length=1
-               dd-1259  [000] ....  3383.500172: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=1 bytes_sent=1 word_in_flight=1 
-oper_word_size=1
-               dd-1259  [000] ....  3383.500178: 
-dspi_transfer_one_message: 1 transfer->length=3
-               dd-1259  [000] ....  3383.500202: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=4 bytes_sent=3 word_in_flight=3 
-oper_word_size=1
-               dd-1259  [000] ....  3383.500207: 
-dspi_transfer_one_message: 2 transfer->length=1
-               dd-1259  [000] ....  3383.500227: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=5 bytes_sent=1 word_in_flight=1 
-oper_word_size=1
-               dd-1259  [000] ....  3383.500232: 
-dspi_transfer_one_message: 3 transfer->length=64
-               dd-1259  [000] d.H.  3383.500286: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=13 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.H.  3383.500307: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=21 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.H.  3383.500327: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=29 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.H.  3383.500347: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=37 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.H.  3383.500366: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=45 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.H.  3383.500385: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=53 bytes_sent=8 word_in_flight=2 
-oper_word_size=4
-               dd-1259  [000] d.H.  3383.500404: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=61 bytes_sent=8 word_in_flight=4 
-oper_word_size=2
-               dd-1259  [000] ....  3383.500436: dspi_fifo_write: 
-msg=ffff800011973840 actual_length=13 bytes_sent=8 word_in_flight=4 
-oper_word_size=2
-               dd-1259  [000] ....  3383.500441: 
-dspi_transfer_one_message: returning actual_length=13
-
-
--michael
+--h31gzZEtNLTqOjlF--
