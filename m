@@ -2,112 +2,215 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5C7188AE7
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 17:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3AF188D2B
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 19:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgCQQoU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 12:44:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:40440 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726121AbgCQQoU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Mar 2020 12:44:20 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC80EFEC;
-        Tue, 17 Mar 2020 09:44:19 -0700 (PDT)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 315193F52E;
-        Tue, 17 Mar 2020 09:44:19 -0700 (PDT)
-Date:   Tue, 17 Mar 2020 16:44:17 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Alok Chauhan <alokc@codeaurora.org>,
-        Dilip Kota <dkota@codeaurora.org>, skakit@codeaurora.org,
-        Girish Mahadevan <girishm@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Speculative fix of "nobody cared"
- about interrupt
-Message-ID: <20200317164417.GJ3971@sirena.org.uk>
-References: <20200316151939.1.I752ebdcfd5e8bf0de06d66e767b8974932b3620e@changeid>
- <20200317121018.GB3971@sirena.org.uk>
- <CAD=FV=VAeOYAG-R6aeAAoo7TsuvDBgNnqxn3XE2Mw3hwL1H7Ew@mail.gmail.com>
+        id S1726476AbgCQS3P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 14:29:15 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:34943 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbgCQS3P (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 14:29:15 -0400
+Received: by mail-pj1-f68.google.com with SMTP id mq3so124214pjb.0
+        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 11:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nXkNFVj/QtLkq2RGYlobQmnnCoULTCQVmEQQAtgXyn8=;
+        b=f7baYWSluR11kisKxXiqjVJnTzsLjynE2xiER1acr7JCS4A4m3rIU4SXFMAGkHAWpW
+         gDKoAeNTu4WagdwEn4rEEYEW3t8V8aMFU3nb/0aoNxTIT/v+HGgNIa0dKuvLTvOzYoWA
+         uJCuXQZWG1dbdOtaFL5i+CbfQLPoQ/YX1qiJk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nXkNFVj/QtLkq2RGYlobQmnnCoULTCQVmEQQAtgXyn8=;
+        b=gA6tgWfIpPNvMrCN5JlMU3TypOWJcnURwNpQuOkN5+XgxR/ScaEe4k7pTFEitlGpRb
+         NTJs//3SMZSjyp7jFEDxUppLJqubHutGAyAdlfJhBm8GXRg3zjBVqCeHdxqiY8njSwgi
+         5/6FO3wFMfUkwT5S8O3hFxur4xDwjB3ZR8ahWVimQeTBDLKVFIL2n6Cuk0HlMQ0wPhJC
+         sIEuFsUnL1I0u7a97P8Y1AZuRZ/qxVGtFkNxL65NliQreRgMYmla5A59YAkfFZNy19BW
+         KAFbN0fyvsrZ2YttE8VGkfyRrW3iPHf38l5agnTwKhz6EAFyd9qrzuwUGafvJYS0XwHj
+         2VLg==
+X-Gm-Message-State: ANhLgQ1YAGoAzWhs82quKZbmgU4jbHmWtFeQmroC6d8MuKRxH0a/p3Lo
+        ES4wIDNcxiS5J+IcfD7rJJY9ZQ==
+X-Google-Smtp-Source: ADFU+vuzhPFjs7qV7qsPEX6L2HfAR5J0aPnTGp/vQq9cHhw+/zUume367rPFTrABrHEyKdsg0W5lpg==
+X-Received: by 2002:a17:90a:252b:: with SMTP id j40mr512503pje.189.1584469753341;
+        Tue, 17 Mar 2020 11:29:13 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id p2sm3917353pfb.41.2020.03.17.11.29.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Mar 2020 11:29:12 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 11:29:10 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+Subject: Re: [PATCH V2 3/8] soc: qcom-geni-se: Add interconnect support to
+ fix earlycon crash
+Message-ID: <20200317182910.GR144492@google.com>
+References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
+ <1584105134-13583-4-git-send-email-akashast@codeaurora.org>
+ <20200313204441.GJ144492@google.com>
+ <1f86fdf0-df7c-4e4a-d4d8-8b0162e52cb4@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HSQ3hISbU3Um6hch"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=VAeOYAG-R6aeAAoo7TsuvDBgNnqxn3XE2Mw3hwL1H7Ew@mail.gmail.com>
-X-Cookie: There's only one everything.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1f86fdf0-df7c-4e4a-d4d8-8b0162e52cb4@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Akash,
 
---HSQ3hISbU3Um6hch
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, Mar 17, 2020 at 04:27:47PM +0530, Akash Asthana wrote:
+> Hi Matthias,
+> 
+> On 3/14/2020 2:14 AM, Matthias Kaehlcke wrote:
+> > Hi Akash,
+> > 
+> > On Fri, Mar 13, 2020 at 06:42:09PM +0530, Akash Asthana wrote:
+> > > V1 patch@https://patchwork.kernel.org/patch/11386469/ caused SC7180 system
+> > > to reset at boot time.
+> > The v1 patch isn't relevant in the commit message, please just describe the
+> > problem. Also the crash only occurs when earlycon is used.
+> ok
+> > 
+> > > As QUP core clock is shared among all the SE drivers present on particular
+> > > QUP wrapper, the reset seen is due to earlycon usage after QUP core clock
+> > > is put to 0 from other SE drivers before real console comes up.
+> > > 
+> > > As earlycon can't vote for it's QUP core need, to fix this add ICC
+> > > support to common/QUP wrapper driver and put vote for QUP core from
+> > > probe on behalf of earlycon and remove vote during sys suspend.
+> > Only removing the vote on suspend isn't ideal, the system might never get
+> > suspended. That said I don't have a really good alternative suggestion.
+> > 
+> > One thing you could possibly do is to launch a delayed work, check
+> > console_device() every second or so and remove the vote when it returns
+> > non-NULL. Not claiming this would be a great solution ...
+> > 
+> > The cleanest solution might be a notifier when the early console is
+> > unregistered, it seems somewhat over-engineered though ... Then again
+> > other (future) uart drivers with interconnect support might run into
+> > the same problem.
+> 
+> We are hitting this problem because QUP core clocks are shared among all the
+> SE driver present in particular QUP wrapper, if other HW controllers has
+> similar architecture we will hit this issue.
+> 
+> How about if we expose an API from common driver(geni-se) for putting QUP
+> core BW vote to 0.
+> 
+> We call this from console probe just after uart_add_one_port call (console
+> resources are enabled as part of this call) to put core quota to 0 on behalf
+> of earlyconsole?
 
-On Tue, Mar 17, 2020 at 08:12:30AM -0700, Doug Anderson wrote:
-> On Tue, Mar 17, 2020 at 5:10 AM Mark Brown <broonie@kernel.org> wrote:
-> > On Mon, Mar 16, 2020 at 03:20:01PM -0700, Douglas Anderson wrote:
+From my notes from earlier debugging I have doubts this would work:
 
-> >
-> > Does this mean that there was an actual concrete message of type
-> > CMD_NONE or does it mean that there was no message waiting?  If there
-> > was no message then isn't the interrupt spurious?
+  There is a short window where the early console and the 'real' console coexist:
 
-> There is no message of type "CMD_NONE".  The "cur_mcmd" field is
-> basically where in the software state machine we're at:
+  [    3.858122] printk: console [ttyMSM0] enabled
+  [    3.875692] printk: bootconsole [qcom_geni0] disabled
 
-...
+  The reset probably occurs when the early console tries to write, but the ICC
+  is effectively disabled because ttyMSM0 and the other geni ports are runtime
+  suspended.
 
-> ...so certainly if we see "cur_mcmd == CMD_NONE" in the interrupt
-> handler we're in an unexpected situation.  We don't expect interrupts
-> while idle.  I wouldn't necessarily say it was a spurious interrupt,
-> though.  To say that I'd rather look at the result of this line in the
-> IRQ handler:
+> > > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> > > Reported-by: Matthias Kaehlcke <mka@chromium.org>
+> > > ---
+> > >   drivers/soc/qcom/qcom-geni-se.c | 41 +++++++++++++++++++++++++++++++++++++++++
+> > >   1 file changed, 41 insertions(+)
+> > > 
+> > > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> > > index 7d622ea..d244dfc 100644
+> > > --- a/drivers/soc/qcom/qcom-geni-se.c
+> > > +++ b/drivers/soc/qcom/qcom-geni-se.c
+> > > @@ -90,6 +90,7 @@ struct geni_wrapper {
+> > >   	struct device *dev;
+> > >   	void __iomem *base;
+> > >   	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+> > > +	struct icc_path *icc_path_geni_to_core;
+> > >   };
+> > >   #define QUP_HW_VER_REG			0x4
+> > > @@ -747,11 +748,50 @@ static int geni_se_probe(struct platform_device *pdev)
+> > >   		}
+> > >   	}
+> > > +#ifdef CONFIG_SERIAL_EARLYCON
+> > > +	wrapper->icc_path_geni_to_core = devm_of_icc_get(dev, "qup-core");
+> > > +	if (IS_ERR(wrapper->icc_path_geni_to_core))
+> > > +		return PTR_ERR(wrapper->icc_path_geni_to_core);
+> > > +	/*
+> > > +	 * Put minmal BW request on core clocks on behalf of early console.
+> > > +	 * The vote will be removed in suspend call.
+> > > +	 */
+> > > +	ret = icc_set_bw(wrapper->icc_path_geni_to_core, Bps_to_icc(1000),
+> > > +			Bps_to_icc(1000));
+> > > +	if (ret) {
+> > > +		dev_err(&pdev->dev, "%s: ICC BW voting failed for core\n",
+> > > +			__func__);
+> > > +		return ret;
+> > > +	}
+> > What is ugly about this is that it's done for every QUP, not only the one
+> > with the early console. Again, I don't have a good solution for it, maybe
+> > it's a limitation we have to live with :(
+> 
+> There is one more limitation from QUP core side. Core clocks for both the
+> QUP wrapper runs at same speed.
+> 
+> core2x_1 = core2x_2 = max(core2x_1, core2x_2);
+> 
+> So with above limitation and if we are removing early con vote from Core
+> when real console comes up. It doesn't matter whether it's done for every
+> QUP or the only with early console.
 
->     m_irq = readl(se->base + SE_GENI_M_IRQ_STATUS);
+it's still sorta ugly at an abstraction level, but it seem we have to be
+pragmatic here.
 
-> ...if that line returns 0 then I would be willing to say it is a
-> spurious interrupt.
+> > > +#endif
+> > > +
+> > >   	dev_set_drvdata(dev, wrapper);
+> > >   	dev_dbg(dev, "GENI SE Driver probed\n");
+> > >   	return devm_of_platform_populate(dev);
+> > >   }
+> > > +static int __maybe_unused geni_se_sys_suspend(struct device *dev)
+> > > +{
+> > > +	struct geni_wrapper *wrapper = dev_get_drvdata(dev);
+> > > +	int ret;
+> > > +
+> > > +#ifdef CONFIG_SERIAL_EARLYCON
+> > > +	ret = icc_set_bw(wrapper->icc_path_geni_to_core, 0, 0);
+> > I think you only want to do this on the first suspend.
+> Ok, I can add that logic using global variable.
+> > 
+> > Do we need to handle the case where no 'real' console is configured?
+> > In this case the early console would be active forever and setting
+> > the bandwidths to 0 might cause a similar crash than the one you are
+> > trying to fix. Not sure if that's a real world use case, but wanted to
+> > mention it. Maybe this is an argument of the notifier approach?
+> We can't support earlycon without real console.
+> 
+> As earlyconsole doesn't do any kind of resource enablement(SE clocks,
+> pinctrl, etc) it assumes that resources are already enabled from previous
+> stages.
+> 
+> So if real console doesn't come up no one will vote for that SE clock, and
+> it will be disabled from clk late_init call which will result into
+> un-clocked access.
 
-Right, that should return IRQ_NONE if there's nothing actually asserted.
-I think you're right about the state machine though.
+Ok, IIUC what you are saying is that earlycon can't work on its own after geni
+initialization. Because it clearly can work before (otherwise what would be
+its purpose?), supposedly because the bootloader configures the necessary
+bits.
 
-> C) Do we care to try to detect spurious interrupts (by checking
-> SE_GENI_M_IRQ_STATUS) and return IRQ_NONE?  Right now a spurious
-> interrupt will be harmless because all of the logic in geni_spi_isr()
-> doesn't do anything if SE_GENI_M_IRQ_STATUS has no bits set.  ...but
-> it will still return IRQ_HANDLED.  I can't imagine anyone ever putting
-> this device on a shared interrupt, but if it's important I can detect
-> this and return IRQ_NONE in this case in a v2 of this patch.
-
-It's a good idea to return IRQ_NONE not just for the shared interrupt
-case but also because it lets the error handling code in the genirq core
-do it's thing and detect bugs - as seems to have happened here.  This
-one was fairly benign but you can also see things like interrupts that
-are constantly asserted by the hardware where we end up spinning in
-interrupt handlers.
-
---HSQ3hISbU3Um6hch
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5w/mAACgkQJNaLcl1U
-h9DXgwf/e1aqKwe3QdhJTo3ZnebAawyLn7xfkYE0amZAh7GQzsbx+MJv7Ar9hAm2
-QF8ke5T67rDag/wSDpjuuyWEgRLmmpDg78DZSNoKVgNubIFJago000bwhqkFfJJR
-T4C5EPMvzEg9rDF7NvM4WI4pNsAeBHH3l0mxA1ZLHs8capjDYvjUpZQFBBwDjT6E
-blROzd29hLzWlVs44H/3rAVcCpT11ChwSjq4haJ/dBBHe/ObAVWUVjU5rhtP3Uod
-IHvnBRbWG+iY0g8CWsZSJb9mMklOHacgPMdlnumNiYpgvM4OffyhfXQ1EnNVT2YN
-1qbOrLz1MqviNs0f4WL2+MyG57DoXA==
-=5ZtU
------END PGP SIGNATURE-----
-
---HSQ3hISbU3Um6hch--
+In any case the bottom line is that earlycon requires a real console to be
+configured and there is no need to handle the corner case I brought up.
