@@ -2,154 +2,167 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 522A1188DA9
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 20:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F69188DB0
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 20:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726452AbgCQTHO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 15:07:14 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:41091 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726294AbgCQTHO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 15:07:14 -0400
-Received: by mail-lj1-f194.google.com with SMTP id o10so24215887ljc.8
-        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 12:07:13 -0700 (PDT)
+        id S1726452AbgCQTIJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 15:08:09 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42562 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726692AbgCQTIJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 15:08:09 -0400
+Received: by mail-pf1-f194.google.com with SMTP id x2so12101594pfn.9
+        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 12:08:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YEEc09trOmH4D9SUDPMbQiadK7H2Qw9VvDkuRLFStZo=;
-        b=RmFy6BxUBkaGc+I1s1MbSATu7fVGC1ZDQWtncIWzCCz4160Yptu+BTMXEBd43s7u2y
-         FfV8PoCRMC8uuFC8P+RJRqxTnZeDjQyjwhwyodSTiDLsDFaKrrRaYtTB7WFKhmLDmxeq
-         s2DEy9aVLpUQogfr+sbRzzhmkkAtNzcoaIR68=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=On3TrxZoVMdons7MAlatqGDBEMzx0AdGLFVPBawtJvU=;
+        b=dTGZAr5dzgdyeK5IEQHe3/AX8VuLoWpQhT/VdhP4DJxoV0huV3rLqGkgxXzCGPZUVh
+         6CDs+ql8xt71wGdob//nzp2vPt875xMXwNi1s1zh3/qkVeZ/klgLByohEg5l3T6G+l0A
+         TVKjTHElHMwg7VbOL530xuKA5YkESysgoEoYM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YEEc09trOmH4D9SUDPMbQiadK7H2Qw9VvDkuRLFStZo=;
-        b=G/mc7N3n8CeAcqz1GNM4SfyyzGLvPZqsHmfKAqsUxHaHhnmH9V7lECjZR10XfubwCH
-         N+r/8yKXBT1Lb0kaF6/agOh9YBDzd4LYapf1JKFEfqrnFtGLzJqh0PcE3ePY0FOHoMzQ
-         lgYYb3ZhpVKgZf/AcrpjPICOvHzhMfPw6nXJ3ETCCInXWK9gFz3EcDarY3giZOrGeb4n
-         v2dezpIPSxSflIxvpiywHFlMeXgYUEIgmdegDUVG+XVTw9t2QcpS6ndTE4gQjNrPhYCD
-         9fqPkbpZDiNR5Wwtlz55xf+RhO4f9L01jfLnyw6jzd1/KXeuXsUVr49k2i8kcfNI1a0I
-         wgtw==
-X-Gm-Message-State: ANhLgQ3muQI9tOogW+3wPyrW3Y863cYkvPpJIX5v2tWxGORhvWqiy1B8
-        giJnskKcyOa6Q09V0y0xQcsQLVWo1FU=
-X-Google-Smtp-Source: ADFU+vvrccNJuplkBSYY6Nw41THaXQVVX9MqJ20BvxDjsIca8yES5/RzIv9trSo/Voixl1eruG0flw==
-X-Received: by 2002:a2e:a493:: with SMTP id h19mr135479lji.67.1584472030386;
-        Tue, 17 Mar 2020 12:07:10 -0700 (PDT)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id d1sm3134843lfc.3.2020.03.17.12.07.08
-        for <linux-spi@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=On3TrxZoVMdons7MAlatqGDBEMzx0AdGLFVPBawtJvU=;
+        b=Nfd4mTFFvnUcvp0hPaK4NY/sIC+6uav9TtgwqprSJb/xKGB4MA/Z9ctMlNE+ck05rb
+         ldwMUatcMLQ4S021jllHXFYHmDHNYiqiap+36l5QHfLyKHk26esULvCuvixs+Smw14XV
+         c4g7D4jNC7tGk9U3gTsKRaOG8eZlmYucozO8rVVTTZid/LL+VXL0iMwk0bTJrMOfQU7R
+         WlAcqvj6ZWOByz5we/JUpCFkZVwKbUt0KAbqI+H9dYHidh6OkJllGZQtqs4cU5I7dMkY
+         f33T/2KkRcwagHhLgtlUD0NgXIiqoo6xxrZozibHJgX9sc3QaC9d3RV4rV9Kb+cO4ntx
+         dAfQ==
+X-Gm-Message-State: ANhLgQ2xmcN5F0H5gj8Xn04s2kR49+/tNpsLfALLPL8i+fFRuw8B45Oa
+        uurCp+BZs42FfWbw5PYgYO8nBw==
+X-Google-Smtp-Source: ADFU+vvkCmnyxErpIIBJaoMb1mhIQeDb+8ADzUZb9zLtrMcZV2qJMZpZwCNT/H09Y9i+1Xm6FkXJ7w==
+X-Received: by 2002:a63:790e:: with SMTP id u14mr615180pgc.361.1584472086000;
+        Tue, 17 Mar 2020 12:08:06 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id s123sm3795164pfs.21.2020.03.17.12.08.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2020 12:07:09 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id x143so1976199lff.12
-        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 12:07:08 -0700 (PDT)
-X-Received: by 2002:a19:8788:: with SMTP id j130mr521058lfd.130.1584472028241;
- Tue, 17 Mar 2020 12:07:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org> <1584105134-13583-3-git-send-email-akashast@codeaurora.org>
-In-Reply-To: <1584105134-13583-3-git-send-email-akashast@codeaurora.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Tue, 17 Mar 2020 12:06:31 -0700
-X-Gmail-Original-Message-ID: <CAE=gft4_Su4+SXWAW_HWy5BF1mH7QaDHCiwAAhrNaekTeU57rA@mail.gmail.com>
-Message-ID: <CAE=gft4_Su4+SXWAW_HWy5BF1mH7QaDHCiwAAhrNaekTeU57rA@mail.gmail.com>
-Subject: Re: [PATCH V2 2/8] soc: qcom: geni: Support for ICC voting
+        Tue, 17 Mar 2020 12:08:05 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 12:08:04 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        wsa@the-dreams.de, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+Subject: Re: [PATCH V2 4/8] tty: serial: qcom_geni_serial: Add interconnect
+ support
+Message-ID: <20200317190804.GS144492@google.com>
+References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
+ <1584105134-13583-5-git-send-email-akashast@codeaurora.org>
+ <20200313212833.GK144492@google.com>
+ <e9293de6-004f-6005-8cb6-66f28c080ebe@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e9293de6-004f-6005-8cb6-66f28c080ebe@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Mar 13, 2020 at 6:12 AM Akash Asthana <akashast@codeaurora.org> wrote:
->
-> Add necessary macros and structure variables to support ICC BW
-> voting from individual SE drivers.
->
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
-> Changes in V2:
->  - As per Bjorn's comment dropped enums for ICC paths, given the three
->    paths individual members
->
->  include/linux/qcom-geni-se.h | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->
-> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-> index dd46494..eaae16e 100644
-> --- a/include/linux/qcom-geni-se.h
-> +++ b/include/linux/qcom-geni-se.h
-> @@ -6,6 +6,8 @@
->  #ifndef _LINUX_QCOM_GENI_SE
->  #define _LINUX_QCOM_GENI_SE
->
-> +#include <linux/interconnect.h>
-> +
->  /* Transfer mode supported by GENI Serial Engines */
->  enum geni_se_xfer_mode {
->         GENI_SE_INVALID,
-> @@ -33,6 +35,15 @@ struct clk;
->   * @clk:               Handle to the core serial engine clock
->   * @num_clk_levels:    Number of valid clock levels in clk_perf_tbl
->   * @clk_perf_tbl:      Table of clock frequency input to serial engine clock
-> + * @icc_path_geni_to_core:     ICC path handle for geni to core
-> + * @icc_path_cpu_to_geni:      ICC path handle for cpu to geni
-> + * @icc_path_geni_to_ddr:      ICC path handle for geni to ddr
-> + * @avg_bw_core:       Average bus bandwidth value for QUP core 2x clock
-> + * @peak_bw_core:      Peak bus bandwidth value for QUP core 2x clock
-> + * @avg_bw_cpu:                Average bus bandwidth value for CPU
-> + * @peak_bw_cpu:       Peak bus bandwidth value for CPU
-> + * @avg_bw_ddr:                Average bus bandwidth value for DDR
-> + * @peak_bw_ddr:       Peak bus bandwidth value for DDR
->   */
->  struct geni_se {
->         void __iomem *base;
-> @@ -41,6 +52,15 @@ struct geni_se {
->         struct clk *clk;
->         unsigned int num_clk_levels;
->         unsigned long *clk_perf_tbl;
-> +       struct icc_path *icc_path_geni_to_core;
-> +       struct icc_path *icc_path_cpu_to_geni;
-> +       struct icc_path *icc_path_geni_to_ddr;
-> +       unsigned int avg_bw_core;
-> +       unsigned int peak_bw_core;
-> +       unsigned int avg_bw_cpu;
-> +       unsigned int peak_bw_cpu;
-> +       unsigned int avg_bw_ddr;
-> +       unsigned int peak_bw_ddr;
->  };
->
->  /* Common SE registers */
-> @@ -229,6 +249,14 @@ struct geni_se {
->  #define GENI_SE_VERSION_MINOR(ver) ((ver & HW_VER_MINOR_MASK) >> HW_VER_MINOR_SHFT)
->  #define GENI_SE_VERSION_STEP(ver) (ver & HW_VER_STEP_MASK)
->
-> +/* Core 2X clock frequency to BCM threshold mapping */
-> +#define CORE_2X_19_2_MHZ               960
-> +#define CORE_2X_50_MHZ                 2500
-> +#define CORE_2X_100_MHZ                        5000
-> +#define CORE_2X_150_MHZ                        7500
-> +#define CORE_2X_200_MHZ                        10000
-> +#define CORE_2X_236_MHZ                        16383
+On Tue, Mar 17, 2020 at 05:18:34PM +0530, Akash Asthana wrote:
+> Hi Matthias,
+> 
+> On 3/14/2020 2:58 AM, Matthias Kaehlcke wrote:
+> > Hi Akash,
+> > 
+> > On Fri, Mar 13, 2020 at 06:42:10PM +0530, Akash Asthana wrote:
+> > > Get the interconnect paths for Uart based Serial Engine device
+> > > and vote according to the baud rate requirement of the driver.
+> > > 
+> > > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> > > ---
+> > > Changes in V2:
+> > >   - As per Bjorn's comment, removed se == NULL check from geni_serial_icc_get
+> > >   - As per Bjorn's comment, removed code to set se->icc_path* to NULL in failure
+> > >   - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
+> > >     path handle
+> > >   - As per Matthias comment, added error handling for icc_set_bw call
+> > > 
+> > >   drivers/tty/serial/qcom_geni_serial.c | 69 +++++++++++++++++++++++++++++++++--
+> > >   1 file changed, 65 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> > > index 272bae0..c8ad7e9 100644
+> > > --- a/drivers/tty/serial/qcom_geni_serial.c
+> > > +++ b/drivers/tty/serial/qcom_geni_serial.c
+> > >
+> > > ...
+> > >
+> > >   static int qcom_geni_serial_request_port(struct uart_port *uport)
+> > >   {
+> > >   	struct platform_device *pdev = to_platform_device(uport->dev);
+> > > @@ -962,6 +975,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+> > >   	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
+> > >   	unsigned long clk_rate;
+> > >   	u32 ver, sampling_rate;
+> > > +	int ret;
+> > >   	qcom_geni_serial_stop_rx(uport);
+> > >   	/* baud rate */
+> > > @@ -983,6 +997,18 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+> > >   	ser_clk_cfg = SER_CLK_EN;
+> > >   	ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
+> > > +	/*
+> > > +	 * Put BW vote only on CPU path as driver supports FIFO mode only.
+> > > +	 * Assume peak_bw as twice of avg_bw.
+> > > +	 */
+> > > +	port->se.avg_bw_cpu = Bps_to_icc(baud);
+> > > +	port->se.peak_bw_cpu = Bps_to_icc(2 * baud);
+> > > +	ret = icc_set_bw(port->se.icc_path_cpu_to_geni, port->se.avg_bw_cpu,
+> > > +			port->se.peak_bw_cpu);
+> > > +	if (ret)
+> > > +		dev_err(uport->dev, "%s: ICC BW voting failed for cpu\n",
+> > > +			__func__);
+> > Should this return an error? The port might not operate properly if the ICC
+> > bandwidth couldn't be configured
+> 
+> This is void function we can't return error from here. I guess it would be
+> somewhat okay if BW voting failed for CPU path but clk_set_rate failure is
+> more serious which is called from this function, I don't think it can be
+> move to somewhere else.
 
-These are all just 50 * clock_rate. Can you instead specify that one
-define of CLK_TO_BW_RATIO 50, and then use clk_get_rate() to get the
-input clock frequency. That way, if these end up getting clocked at a
-different rate, the bandwidth also scales appropriately. Also, can you
-enumerate why 50 is an appropriate ratio?
--Evan
+ok, I missed that _set_termios() is void.
 
--Evan
+> > >   static const struct uart_ops qcom_geni_console_pops = {
+> > > @@ -1308,6 +1358,17 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+> > >   	port->rx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
+> > >   	port->tx_fifo_width = DEF_FIFO_WIDTH_BITS;
+> > > +	ret = geni_serial_icc_get(&port->se);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +	/* Set the bus quota to a reasonable value */
+> > > +	port->se.avg_bw_core = console ? Bps_to_icc(1000) :
+> > > +		Bps_to_icc(CORE_2X_50_MHZ);
+> > Why different settings for console vs. non-console?
+> 
+> QUP FW runs on core clock. To support higher throughput we want FW to run at
+> higher speed.
+> 
+> Since Console operate at 115200bps and BT operate at 3.2Mbps baud. We are
+> voting higher on core for BT usecase.
+> 
+> These value are recommended from HW team.
+
+IIUC none of the values you mention are set in stone. 115200bps seems to be a
+'standard' value for the serial console, but it could be a different baudrate.
+I guess you are referring to Qualcomm Bluetooth controllers, which are only one
+of many things that could be connected to the port. And what happens when a
+QCA BT controller is connected to a non-geni/QCA port, which doesn't know about
+its 'requirements'? The answer is that both the BT controller and the serial
+console configure the baudrate they need, hence using different values in
+_probe() is pointless.
+
+Unsurprisingly one of the first things the QCA BT driver does is to configure
+the baudrate. It typically starts with a lower ('init') speed, and then switches
+to the higher ('operational') baudrate:
+
+https://elixir.bootlin.com/linux/v5.5.8/source/drivers/bluetooth/hci_qca.c#L1256
