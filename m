@@ -2,126 +2,215 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB87187E98
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 11:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F119187F09
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 11:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726082AbgCQKpo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 06:45:44 -0400
-Received: from skedge03.snt-world.com ([91.208.41.68]:59850 "EHLO
-        skedge03.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726077AbgCQKpo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 06:45:44 -0400
-Received: from sntmail11s.snt-is.com (unknown [10.203.32.181])
+        id S1726719AbgCQK6G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 06:58:06 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:31453 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726709AbgCQK6F (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 06:58:05 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584442684; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=cQuV8le5zJMXEg6Nx5zOixnWj9Q+mZRhKelZQ5b1wgI=; b=LDP9B/OG8yxMUgGYdsHEw5dBrUivBWIH13wMjJx8PC6PxkHlCyi3MMbcY5BlIgQ/zYT/I/4y
+ PlI/23dq1MezDhhOaiwbLhs2d8HVyghegi7FbCRgefuBXa66aemnZTWYCZf5q6ksMCJHpKw1
+ tqxg9u8Y3gii9hKyZdxi50ACFv8=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e70ad36.7f29df409538-smtp-out-n03;
+ Tue, 17 Mar 2020 10:57:58 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 99225C4478C; Tue, 17 Mar 2020 10:57:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.8] (unknown [183.83.138.47])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by skedge03.snt-world.com (Postfix) with ESMTPS id BBAB767A7C0;
-        Tue, 17 Mar 2020 11:45:40 +0100 (CET)
-Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail11s.snt-is.com
- (10.203.32.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 17 Mar
- 2020 11:45:40 +0100
-Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
- sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
- 15.01.1913.007; Tue, 17 Mar 2020 11:45:40 +0100
-From:   Schrempf Frieder <frieder.schrempf@kontron.de>
-To:     Peng Fan <peng.fan@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>, Jacky Bai <ping.bai@nxp.com>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH v2] clk: imx8mm: Switch to platform driver
-Thread-Topic: [PATCH v2] clk: imx8mm: Switch to platform driver
-Thread-Index: AQHV3Nj/eAC8KOmHpke/9mSCMhEqHagN6HgAgD15JoCAAPP1AIAAclyA
-Date:   Tue, 17 Mar 2020 10:45:40 +0000
-Message-ID: <4cdbd500-2199-762c-43d9-2a49bd8e2414@kontron.de>
-References: <1562682003-20951-1-git-send-email-abel.vesa@nxp.com>
- <2df024c3-ab46-4e33-f961-5ef994aea145@kontron.de>
- <c2a9d048-6a33-f357-ac88-4eb81002fe93@kontron.de>
- <9dae8bb7-b1da-28b5-a6e9-42102a5c3be3@kontron.de>
- <AM0PR04MB4481780CEA5A8A7DB87C7D9F88F60@AM0PR04MB4481.eurprd04.prod.outlook.com>
-In-Reply-To: <AM0PR04MB4481780CEA5A8A7DB87C7D9F88F60@AM0PR04MB4481.eurprd04.prod.outlook.com>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.25.9.193]
-x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1172F57047C547449EA5A455818DC942@snt-world.com>
-Content-Transfer-Encoding: base64
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1FF87C43636;
+        Tue, 17 Mar 2020 10:57:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1FF87C43636
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V2 3/8] soc: qcom-geni-se: Add interconnect support to fix
+ earlycon crash
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
+ <1584105134-13583-4-git-send-email-akashast@codeaurora.org>
+ <20200313204441.GJ144492@google.com>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <1f86fdf0-df7c-4e4a-d4d8-8b0162e52cb4@codeaurora.org>
+Date:   Tue, 17 Mar 2020 16:27:47 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-X-SnT-MailScanner-Information: Please contact the ISP for more information
-X-SnT-MailScanner-ID: BBAB767A7C0.A1251
-X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
-X-SnT-MailScanner-SpamCheck: 
-X-SnT-MailScanner-From: frieder.schrempf@kontron.de
-X-SnT-MailScanner-To: abel.vesa@nxp.com, anson.huang@nxp.com,
-        fabio.estevam@nxp.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, mturquette@baylibre.com, peng.fan@nxp.com,
-        ping.bai@nxp.com, sboyd@kernel.org, shawnguo@kernel.org
-X-Spam-Status: No
+In-Reply-To: <20200313204441.GJ144492@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SGkgUGVuZywNCg0KT24gMTcuMDMuMjAgMDQ6NTYsIFBlbmcgRmFuIHdyb3RlOg0KPj4gU3ViamVj
-dDogUmU6IFtQQVRDSCB2Ml0gY2xrOiBpbXg4bW06IFN3aXRjaCB0byBwbGF0Zm9ybSBkcml2ZXIN
-Cj4+DQo+PiBPbiAwNi4wMi4yMCAxMTozNywgRnJpZWRlciBTY2hyZW1wZiB3cm90ZToNCj4+PiBP
-biAwNi4wMi4yMCAxMTozNCwgU2NocmVtcGYgRnJpZWRlciB3cm90ZToNCj4+Pj4gSGksDQo+Pj4+
-DQo+Pj4+IE9uIDA5LjA3LjE5IDE2OjIwLCBBYmVsIFZlc2Egd3JvdGU6DQo+Pj4+PiBUaGVyZSBp
-cyBubyBzdHJvbmcgcmVhc29uIGZvciB0aGlzIHRvIHVzZSBDTEtfT0ZfREVDTEFSRSBpbnN0ZWFk
-IG9mDQo+Pj4+PiBiZWluZyBhIHBsYXRmb3JtIGRyaXZlci4gUGx1cywgdGhpcyB3aWxsIG5vdyBi
-ZSBhbGlnbmVkIHdpdGggdGhlDQo+Pj4+PiBvdGhlciBpLk1YOE0gY2xvY2sgZHJpdmVycyB3aGlj
-aCBhcmUgcGxhdGZvcm0gZHJpdmVycy4NCj4+Pj4+DQo+Pj4+PiBJbiBvcmRlciB0byBtYWtlIHRo
-ZSBjbG9jayBwcm92aWRlciBhIHBsYXRmb3JtIGRyaXZlciBhbGwgdGhlIGRhdGENCj4+Pj4+IGFu
-ZCBjb2RlIG5lZWRzIHRvIGJlIG91dHNpZGUgb2YgLmluaXQgc2VjdGlvbi4NCj4+Pj4+DQo+Pj4+
-PiBTaWduZWQtb2ZmLWJ5OiBBYmVsIFZlc2EgPGFiZWwudmVzYUBueHAuY29tPg0KPj4+Pj4gQWNr
-ZWQtYnk6IFN0ZXBoZW4gQm95ZCA8c2JveWRAa2VybmVsLm9yZz4NCj4+Pj4NCj4+Pj4gVGhpcyBo
-YXMgYmVlbiB1cHN0cmVhbSBmb3IgcXVpdGUgc29tZSB0aW1lIG5vdywgYnV0IHNvbWVob3cgSSBo
-YXZlIGFuDQo+Pj4+IGlzc3VlIHdpdGggU1BJIG9uIHRoZSBpLk1YOE1NIHRoYXQgZ2V0cyByZXNv
-bHZlZCB3aGVuIEkgcmV2ZXJ0IHRoaXMNCj4+Pj4gcGF0Y2guDQo+Pj4+DQo+Pj4+IFdoZW4gSSB0
-cnkgdG8gcHJvYmUgYW4gU1BJIE5PUiBmbGFzaCB3aXRoIGxhdGVzdCA1LjQgb3IgZXZlbiA1LjU6
-DQo+Pj4+DQo+Pj4+ICDCoMKgwqDCoHNwaV9pbXggMzA4MjAwMDAuc3BpOiBkbWEgc2V0dXAgZXJy
-b3IgLTE5LCB1c2UgcGlvDQo+Pj4+ICDCoMKgwqDCoHNwaS1ub3Igc3BpMC4wOiB1bnJlY29nbml6
-ZWQgSkVERUMgaWQgYnl0ZXM6IDAwIDAwIDAwIDAwIDAwIDAwDQo+Pj4+ICDCoMKgwqDCoHNwaV9p
-bXggMzA4MjAwMDAuc3BpOiBwcm9iZWQNCj4+Pj4NCj4+Pj4gV2hlbiBJIHJldmVydCB0aGlzIHBh
-dGNoOg0KPj4+Pg0KPj4+PiAgwqDCoMKgwqBzcGlfaW14IDMwODIwMDAwLnNwaTogZG1hIHNldHVw
-IGVycm9yIC0xOSwgdXNlIHBpbw0KPj4+PiAgwqDCoMKgwqBzcGktbm9yIHNwaTAuMDogbXgyNXIx
-NjM1ZiAoMjA0OCBLYnl0ZXMpDQo+Pj4+ICDCoMKgwqDCoHNwaV9pbXggMzA4MjAwMDAuc3BpOiBw
-cm9iZWQNCj4+Pj4NCj4+Pj4gUGxlYXNlIG5vdGUsIHRoYXQgaW4gYm90aCBjYXNlcyBJIGhhdmUg
-ZGlzYWJsZWQgRE1BLCBhcyB0aGlzIGNhdXNlcw0KPj4+PiBldmVuIG1vcmUgdHJvdWJsZSAoc2Vl
-IFsxXSkuIEJ1dCBldmVuIHdpdGggRE1BIGVuYWJsZWQgYW5kIGlnbm9yaW5nDQo+Pj4+IHRoZSBE
-TUEgZXJyb3JzLCB0aGUgaXNzdWUgZGVzY3JpYmVkIGFib3ZlIG9jY3Vycy4NCj4+Pj4NCj4+Pj4g
-RG9lcyBzb21lb25lIGhhdmUgYW4gaWRlYSB3aGF0J3Mgd3Jvbmc/DQo+Pj4+IEFtIEkgdGhlIG9u
-bHkgdXNlciBvZiBTUEkgb24gaS5NWDhNTSBhcyB0aGlzIGlzc3VlIHNlZW1zIHRvIGV4aXN0DQo+
-Pj4+IHVwc3RyZWFtIHNpbmNlIHY1LjQtcmMxPw0KPj4NCj4+IFRoaXMgaXNzdWUgc3RpbGwgcGVy
-c2lzdHMgaW4gdjUuNi1yYzYuIENhbiBzb21lb25lIHBsZWFzZSBoYXZlIGEgbG9vaz8NCj4gDQo+
-IFdvdWxkIHlvdSBwb3N0IHlvdXIgZnVsbCBib290IGxvZyBzb21ld2hlcmU/DQoNClN1cmUsIHRo
-ZSB0d28gYm9vdGxvZ3MgYXJlIGhlcmU6IGh0dHBzOi8vcGFzdGUuZWUvcC84dUR3ZC4NClRoZSBv
-bmx5IGRpZmZlcmVuY2UgaXMgdGhhdCBpbiB0aGUgT0sgY2FzZSB0aGlzIHBhdGNoIGlzIGFwcGxp
-ZWQ6IA0KaHR0cHM6Ly9wYXN0ZS5lZS9wL3hVQnJPDQoNCj4gDQo+IFdpdGggc3VjY2Vzcy9mYWls
-IGNhc2UsIGFyZSB0aGVyZSBhbnkgZGlmZmVyZW5jZXMgaW4gc3BpIGNvbnRyb2xsZXIgcmVnaXN0
-ZXJzPw0KPiBJIHN1cHBvc2Ugbm8uDQoNCk5vLCB0aGV5IGFyZSB0aGUgc2FtZSwgZXhjZXB0IGZv
-ciBCVVJTVF9MRU5HVEggaW4gRUNTUEkxX0NPTlJFRywgd2hpY2ggDQppcyAweDJGIGluIGNhc2Ug
-b2YgZmFpbHVyZSBhbmQgMHgzRiBpbiBjYXNlIGl0IGlzIHdvcmtpbmcuIEJ1dCBJIGd1ZXNzIA0K
-dGhhdCdzIGEgcmVzdWx0IG9mIHRoZSBmYWlsZWQvc3VjY2Vzc2Z1bCB0cmFuc2ZlcnMuDQoNCj4g
-DQo+IERpZCB5b3UgbWVhc3VyZSB0aGUgc2lnbmFsIHNheWluZyBkYXRhIGluIHdoZW4gY3MgaXMg
-bG93Pw0KDQpJdCdzIGEgYml0IGRpZmZpY3VsdCB0byBhY2Nlc3MgdGhlIHNpZ25hbHMgb24gdGhl
-IGJvYXJkIHNvIEkgZGlkbid0IA0KY2hlY2sgdGhlIHNpZ25hbHMsIHlldC4NCg0KPiANCj4gQW55
-d2F5IGl0IGlzIGEgYml0IHdpcmVkIHNpbmNlIHRoaXMgcGF0Y2gganVzdCBkZWxheWVkIHRoZSBw
-cm9iZSBmb3IgYSB3aGlsZS4NCg0KWWVzLCBpdCdzIHJlYWxseSB3ZWlyZCBhbmQgaXQncyB2ZXJ5
-IHVuZm9ydHVuYXRlIHRoYXQgdGhlIEVWSyBkb2VzIG5vdCANCmhhdmUgYSBTUEkgZGV2aWNlIG9u
-Ym9hcmQuIEkgZ3Vlc3MgdGhhdCB3b3VsZCBoYXZlIGhlbHBlZCB0byBwcmV2ZW50IA0KcmVncmVz
-c2lvbnMgZHVlIHRvIGJldHRlciB0ZXN0aW5nLg0KDQpJZiB5b3UgaGF2ZSBhbnkgc3VnZ2VzdGlv
-bnMsIHBsZWFzZSBsZXQgbWUga25vdy4NCg0KVGhhbmtzLA0KRnJpZWRlcg==
+Hi Matthias,
+
+On 3/14/2020 2:14 AM, Matthias Kaehlcke wrote:
+> Hi Akash,
+>
+> On Fri, Mar 13, 2020 at 06:42:09PM +0530, Akash Asthana wrote:
+>> V1 patch@https://patchwork.kernel.org/patch/11386469/ caused SC7180 system
+>> to reset at boot time.
+> The v1 patch isn't relevant in the commit message, please just describe the
+> problem. Also the crash only occurs when earlycon is used.
+ok
+>
+>> As QUP core clock is shared among all the SE drivers present on particular
+>> QUP wrapper, the reset seen is due to earlycon usage after QUP core clock
+>> is put to 0 from other SE drivers before real console comes up.
+>>
+>> As earlycon can't vote for it's QUP core need, to fix this add ICC
+>> support to common/QUP wrapper driver and put vote for QUP core from
+>> probe on behalf of earlycon and remove vote during sys suspend.
+> Only removing the vote on suspend isn't ideal, the system might never get
+> suspended. That said I don't have a really good alternative suggestion.
+>
+> One thing you could possibly do is to launch a delayed work, check
+> console_device() every second or so and remove the vote when it returns
+> non-NULL. Not claiming this would be a great solution ...
+>
+> The cleanest solution might be a notifier when the early console is
+> unregistered, it seems somewhat over-engineered though ... Then again
+> other (future) uart drivers with interconnect support might run into
+> the same problem.
+
+We are hitting this problem because QUP core clocks are shared among all 
+the SE driver present in particular QUP wrapper, if other HW controllers 
+has similar architecture we will hit this issue.
+
+How about if we expose an API from common driver(geni-se) for putting 
+QUP core BW vote to 0.
+
+We call this from console probe just after uart_add_one_port call 
+(console resources are enabled as part of this call) to put core quota 
+to 0 on behalf of earlyconsole?
+
+>
+>> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+>> Reported-by: Matthias Kaehlcke <mka@chromium.org>
+>> ---
+>>   drivers/soc/qcom/qcom-geni-se.c | 41 +++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 41 insertions(+)
+>>
+>> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+>> index 7d622ea..d244dfc 100644
+>> --- a/drivers/soc/qcom/qcom-geni-se.c
+>> +++ b/drivers/soc/qcom/qcom-geni-se.c
+>> @@ -90,6 +90,7 @@ struct geni_wrapper {
+>>   	struct device *dev;
+>>   	void __iomem *base;
+>>   	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+>> +	struct icc_path *icc_path_geni_to_core;
+>>   };
+>>   
+>>   #define QUP_HW_VER_REG			0x4
+>> @@ -747,11 +748,50 @@ static int geni_se_probe(struct platform_device *pdev)
+>>   		}
+>>   	}
+>>   
+>> +#ifdef CONFIG_SERIAL_EARLYCON
+>> +	wrapper->icc_path_geni_to_core = devm_of_icc_get(dev, "qup-core");
+>> +	if (IS_ERR(wrapper->icc_path_geni_to_core))
+>> +		return PTR_ERR(wrapper->icc_path_geni_to_core);
+>> +	/*
+>> +	 * Put minmal BW request on core clocks on behalf of early console.
+>> +	 * The vote will be removed in suspend call.
+>> +	 */
+>> +	ret = icc_set_bw(wrapper->icc_path_geni_to_core, Bps_to_icc(1000),
+>> +			Bps_to_icc(1000));
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "%s: ICC BW voting failed for core\n",
+>> +			__func__);
+>> +		return ret;
+>> +	}
+> What is ugly about this is that it's done for every QUP, not only the one
+> with the early console. Again, I don't have a good solution for it, maybe
+> it's a limitation we have to live with :(
+
+There is one more limitation from QUP core side. Core clocks for both 
+the QUP wrapper runs at same speed.
+
+core2x_1 = core2x_2 = max(core2x_1, core2x_2);
+
+So with above limitation and if we are removing early con vote from Core 
+when real console comes up. It doesn't matter whether it's done for 
+every QUP or the only with early console.
+
+>
+>> +#endif
+>> +
+>>   	dev_set_drvdata(dev, wrapper);
+>>   	dev_dbg(dev, "GENI SE Driver probed\n");
+>>   	return devm_of_platform_populate(dev);
+>>   }
+>>   
+>> +static int __maybe_unused geni_se_sys_suspend(struct device *dev)
+>> +{
+>> +	struct geni_wrapper *wrapper = dev_get_drvdata(dev);
+>> +	int ret;
+>> +
+>> +#ifdef CONFIG_SERIAL_EARLYCON
+>> +	ret = icc_set_bw(wrapper->icc_path_geni_to_core, 0, 0);
+> I think you only want to do this on the first suspend.
+Ok, I can add that logic using global variable.
+>
+> Do we need to handle the case where no 'real' console is configured?
+> In this case the early console would be active forever and setting
+> the bandwidths to 0 might cause a similar crash than the one you are
+> trying to fix. Not sure if that's a real world use case, but wanted to
+> mention it. Maybe this is an argument of the notifier approach?
+We can't support earlycon without real console.
+
+As earlyconsole doesn't do any kind of resource enablement(SE clocks, 
+pinctrl, etc) it assumes that resources are already enabled from 
+previous stages.
+
+So if real console doesn't come up no one will vote for that SE clock, 
+and it will be disabled from clk late_init call which will result into 
+un-clocked access.
+
+
+>
+>> +	if (ret) {
+>> +		dev_err(dev, "%s: ICC BW remove failed for core\n",
+>> +			__func__);
+>> +		return ret;
+> Aborting suspend seems too harsh since the QUP should still be fully
+> functional unless there is a general problem with the interconnects.
+>
+> I would suggest to change the log to dev_warn() and return 0.
+
+Ok
+
+Thanks for reviewing the patch.
+
+regards,
+
+Akash
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
