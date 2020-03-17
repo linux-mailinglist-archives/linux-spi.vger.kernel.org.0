@@ -2,85 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 712911886B4
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 15:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6828C1888C0
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 16:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726763AbgCQOAM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 10:00:12 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:40808 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgCQOAL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Mar 2020 10:00:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=FrLx3+zGH3oU0Jo8/lq72eF8fifQc3xB2bQg8gY6tl8=; b=cGnLnBuVsp6fkYfQcJ+N0lP7Zi
-        1CQ0257uMP73Zssq480GqtOsiT6dtz3j4jFY4auOWYouzd6Noyy4GBuZ2grQ+9xBQnBkb7o8JyQgO
-        LYVpPM0bbhZnw1Ygcjk+w5hK1jV6VmA0mj+VI2m8UsxHjo1atAFpbrGsSPzlUpACujao=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
-        (envelope-from <andrew@lunn.ch>)
-        id 1jEClA-0006j0-3H; Tue, 17 Mar 2020 14:59:56 +0100
-Date:   Tue, 17 Mar 2020 14:59:56 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/28] DT: Improve validation for Marvell SoCs
-Message-ID: <20200317135956.GQ24270@lunn.ch>
-References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317134609.GN24270@lunn.ch>
- <20200317135551.GE3448@piout.net>
+        id S1726607AbgCQPMp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 11:12:45 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:32856 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726019AbgCQPMp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 11:12:45 -0400
+Received: by mail-vs1-f66.google.com with SMTP id y138so6304810vsy.0
+        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 08:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TMnGNLtemyYfK63VsKtAIUfhYRVvGpYyUyZZJL3pFE8=;
+        b=krPP7HlJbr5Dn8feHiKoBw/GYprYC3TKDcwhHNekL+6MG5CG72nWF0fp/Z4WONtZmZ
+         nsaZLia3aLvc4Yasfn60ZXH0MF3i2iGNSVmiZ0TyUUkfTG9D1u2h30TH8V9R3Y/Ji6va
+         ckIB9FCfSyqIcJL+IfFmAKzRjwm+b9IPUk8eU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TMnGNLtemyYfK63VsKtAIUfhYRVvGpYyUyZZJL3pFE8=;
+        b=HY8aV3lgXEYxvf9oQW1XbFgtqPsgpUSjr3Z/YPDqNX6WidU6QTWlvFVVqAH77h9QEP
+         9PjefRJ3A70Zkjqt06B9vAw3LxVnIFmHT2QowtV8ubN9ft6Zl9C9Q5E68jsi5YvjO7aX
+         kl86R28eTg3JySdJT/RixxnpKlHXBvy0agWu4bn8A4VI+LjZU7DAN7uVN5pCLVJ/FCpU
+         sYnailN8ch1wKSuGlQ7N/kpvrqt8KZpDfQX+f5Nad36QABfUYbPshyfu/l2V0QRsQJVf
+         tqNOk3LPcKrzm4g9oviu05iUZ/3PlKhZgVIh11WnTFDtpzKkQepUqT1V1CUM9gSaOHdl
+         u95A==
+X-Gm-Message-State: ANhLgQ0Id6FtGSWrO2XvDxNOl5ZNOYO+NusO2S7JJddOfe3Zrb0/Gzoi
+        X7mm9tfcPgMhFesOkcdYIFNEf7xz/Do=
+X-Google-Smtp-Source: ADFU+vte8w5MZYZyWfgc0mdOn+IMToI4aitYeLGXpAsEWbrLXJoNiNKmld/8lcLuElS/R5AvPV/6PQ==
+X-Received: by 2002:a05:6102:52f:: with SMTP id m15mr4139926vsa.195.1584457963879;
+        Tue, 17 Mar 2020 08:12:43 -0700 (PDT)
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
+        by smtp.gmail.com with ESMTPSA id k24sm1683418uaq.15.2020.03.17.08.12.42
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Mar 2020 08:12:43 -0700 (PDT)
+Received: by mail-vs1-f44.google.com with SMTP id n6so14093293vsc.3
+        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 08:12:42 -0700 (PDT)
+X-Received: by 2002:a05:6102:7c7:: with SMTP id y7mr4207665vsg.198.1584457962249;
+ Tue, 17 Mar 2020 08:12:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200317135551.GE3448@piout.net>
+References: <20200316151939.1.I752ebdcfd5e8bf0de06d66e767b8974932b3620e@changeid>
+ <20200317121018.GB3971@sirena.org.uk>
+In-Reply-To: <20200317121018.GB3971@sirena.org.uk>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 17 Mar 2020 08:12:30 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VAeOYAG-R6aeAAoo7TsuvDBgNnqxn3XE2Mw3hwL1H7Ew@mail.gmail.com>
+Message-ID: <CAD=FV=VAeOYAG-R6aeAAoo7TsuvDBgNnqxn3XE2Mw3hwL1H7Ew@mail.gmail.com>
+Subject: Re: [PATCH] spi: spi-geni-qcom: Speculative fix of "nobody cared"
+ about interrupt
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Alok Chauhan <alokc@codeaurora.org>,
+        Dilip Kota <dkota@codeaurora.org>, skakit@codeaurora.org,
+        Girish Mahadevan <girishm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 02:55:59PM +0100, Alexandre Belloni wrote:
-> On 17/03/2020 14:46:09+0100, Andrew Lunn wrote:
-> > On Tue, Mar 17, 2020 at 10:38:54AM +0100, Lubomir Rintel wrote:
-> > > Hello World,
-> > 
-> > Yah, that is an issue here. Marvell have a few different SoC families,
-> > each with there own maintainers. Gregory and I tend to look after
-> > 'mvebu', aka orion5x, kirkwood, dove, berlin and a few others. All the
-> > others are 'Somebody elses' problem'.
-> > 
-> 
-> Hum, berlin is not mvebu, it was the same BU as the MMP and it has been
-> sold to synopsys a while ago.
+Hi,
 
-Yes, the boundaries are a bit fluffy. At least the early work by
-Sebastian was merged via the mvebu maintainers, even if it is not
-technically part of mvebu.
+On Tue, Mar 17, 2020 at 5:10 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Mon, Mar 16, 2020 at 03:20:01PM -0700, Douglas Anderson wrote:
+>
+> > +     /*
+> > +      * We don't expect to hit this, but if we do we should try our best
+> > +      * to clear the interrupts and return so we don't just get called
+> > +      * again.
+> > +      */
+> > +     if (mas->cur_mcmd == CMD_NONE)
+> > +             goto exit;
+> > +
+>
+> Does this mean that there was an actual concrete message of type
+> CMD_NONE or does it mean that there was no message waiting?  If there
+> was no message then isn't the interrupt spurious?
 
-This is also part of the discussion about how this lot actually gets
-merged.
+There is no message of type "CMD_NONE".  The "cur_mcmd" field is
+basically where in the software state machine we're at:
 
-	   Andrew
+* CMD_NONE - Software thinks that the controller should be idle.
+* CMD_XFER - Software has started a transfer.
+* CMD_CS - Software has started a chip select change.
+* CMD_CANCEL - Software sent a "cancel".
+
+...so certainly if we see "cur_mcmd == CMD_NONE" in the interrupt
+handler we're in an unexpected situation.  We don't expect interrupts
+while idle.  I wouldn't necessarily say it was a spurious interrupt,
+though.  To say that I'd rather look at the result of this line in the
+IRQ handler:
+
+    m_irq = readl(se->base + SE_GENI_M_IRQ_STATUS);
+
+...if that line returns 0 then I would be willing to say it is a
+spurious interrupt.
+
+
+So there is really more than one issue at hand, I guess.
+
+A) Why did we get an interrupt when we had "cur_mcmd == CMD_NONE"?
+IMO this is due to weakly ordered memory and not enough locking.
+
+B) If we do see an interrupt when "cur_mcmd == CMD_NONE" (even after
+we fix the locking), what should we do?  IMO we should still try to
+Ack it.  I can add a "pr_warn()" if it's helpful?
+
+C) Do we care to try to detect spurious interrupts (by checking
+SE_GENI_M_IRQ_STATUS) and return IRQ_NONE?  Right now a spurious
+interrupt will be harmless because all of the logic in geni_spi_isr()
+doesn't do anything if SE_GENI_M_IRQ_STATUS has no bits set.  ...but
+it will still return IRQ_HANDLED.  I can't imagine anyone ever putting
+this device on a shared interrupt, but if it's important I can detect
+this and return IRQ_NONE in this case in a v2 of this patch.
+
+-Doug
