@@ -2,61 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9793B188341
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 13:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7974D188332
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 13:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbgCQMLb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 08:11:31 -0400
-Received: from sonic316-53.consmr.mail.ne1.yahoo.com ([66.163.187.179]:36373
-        "EHLO sonic316-53.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726278AbgCQMLa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 08:11:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584447089; bh=kcevCRoll2+Bsa3FDERpIV72LVcB1A4YV1b5N2AWYBk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=KCMlqjzzwS7inRC819loJS79mPsbkcFh304PAb108zZwC6pa8gLSwkQOksaUWCmP+DDcCZXF52527CmULpQ7BdSVkRvhUJMiVtnhmbC6psyu1gxYdCDQpVpfDeKnOh3/XDytGvhawq4PyZIBVX+wEvjRMk/56f1N94IPcKrSBIpS/0DLdnRtxGHw/FNjso/PBdeRhWRS9sQgDrVl5+tEASVIwm8jp8JWC8ugClr7LMOO3LOjAmg2UFQb2Sahl+KPsuJY7O8AhrKSA4JwwX0GH6Gk6PktJfj5KQ3w1pf43N7SjCqaVRWwwnWe8Z7v8Sw0RjsIoITDOH3HO6mtQxOXFw==
-X-YMail-OSG: nwaTrt4VM1lDCPW_4pvlmdHAB4HAd8ObDxV2jblZS5yJaml5hQx8to41jpdTr.o
- 6JoVPGukrqUvVKYJ6gZYVzuWzDI52hq6Rw5fdAZ_zBaw9aFChlLxFmd4omp.bcI2uxUdM.BDzeeN
- Y_hvEBIpkCPoCAm66xPD5jIBbZ0cj1xcDHRWJMhmt9MqOg27xEYgrfkdayuDTydo1p_1KfrBOEw3
- Cs5s1LGFDulJy2mMdarisTNG79jsqOxAN9t.nKTAkBRFiLCEOWQu2ZsECPjSbs9vvbocqSMdfwK8
- zkGSsD4wlCb8YiptM2I8udid3A4XpHHFbO6bqpfFSvKVY4J_FUMqZdiPniOBuzEGY.p6tuzAEmQR
- 9whpr9f7kh9EQfFTTD.9l3nbDMjfplK_aik6oYKaNchOx1SygPXhjMKQnKk.AZOH2VlFT5_cMKpH
- Dr12NC9pKhCSOY0Ly4w.jvNAVjZYC9q1hO1G3Lmbn2.z8DfYfFOop5oZaBOJ7P6M4_dHZEOgoLrb
- baIsLMPAgID1yYPnNkmAy6SujtaA2q5SGYm3Aoq8Khb4HipsTrzoPuSzUM_Wy4Vk.J5_ecFkZSnx
- UDV4uwrsNL5hjpS9Dvk9hbcI2BhQ3RQs4HRNwUq24mvpmJL8onC2W2oH5Ib2HPgWr6tPEV18EN96
- qTLFCoQxRD9cTOmSa9MHPICEbt.yISk4YVtxOgNlrRkViPOTulYpjDRM2JJVxLoTyQi1crZiDmAl
- ID0CbX4UbJJfxm0_3guinQWPXF_UqJX39mZR5vhgcfW7aTzAFlQmuRx9XC4BFQMK6TBTJY7gH7.J
- 79IJZ6JEm59ol7a6IDE.BOSkOBqtlvGzjLxCGhM6RTOfPqgcwze140Faq4fLNyXu77Xmnt9VCelv
- SbKazh3MHBrHO0fxT229tWoiEh2jWvgpBWPbPZL6ghCPspCfA90g63dMDidVXeTzVaON4txUHYI2
- rkwxE_Txwv0_WBvC.201Tn3rq_6ht1MOCUqhgjg6odqY_9ghnh0j9mggywGBwXwKhqyNzjuK7N2R
- qL6gBFODLt5qfK0Sc7fN435k_R_bti4D3Jt8bPzQEirIxTOPPx_XYvrR0cCvNDS3BRJ4Mq0r7ZGc
- qxsq0_qftRTdi6jr4Um_ci22FuoesgE9L_A45Is5kpevTQ1GwtAeGpH.ytMrONuERJ70lGsBPpPg
- MtW8WIXf.aSrdetjLNQ6a6uOvAFdrPqvaqXXCB46LMU.BUe6QcaF8d7YgtDunEtzlzaG68UP5cS.
- sVt0O8vZoU.FuxFxrK3VYR4OAARNv9Z9Mf0ggKFFAJY7wvSQKRVsZKWfBpRYK7REKQ5tNpALOFNu
- iNovnZRT4ecFBHoBIRBLkfKml6oyci_bdmw--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Mar 2020 12:11:29 +0000
-Date:   Tue, 17 Mar 2020 12:09:27 +0000 (UTC)
-From:   Stephen Li <stenn6@gabg.net>
-Reply-To: stephli947701@gmail.com
-Message-ID: <1348826789.1834294.1584446967790@mail.yahoo.com>
-Subject: REF
+        id S1726250AbgCQMKU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 08:10:20 -0400
+Received: from foss.arm.com ([217.140.110.172]:36308 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726272AbgCQMKU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Mar 2020 08:10:20 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22C4B30E;
+        Tue, 17 Mar 2020 05:10:20 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A1C53F534;
+        Tue, 17 Mar 2020 05:10:19 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 12:10:18 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Alok Chauhan <alokc@codeaurora.org>,
+        Dilip Kota <dkota@codeaurora.org>, skakit@codeaurora.org,
+        Girish Mahadevan <girishm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-geni-qcom: Speculative fix of "nobody cared"
+ about interrupt
+Message-ID: <20200317121018.GB3971@sirena.org.uk>
+References: <20200316151939.1.I752ebdcfd5e8bf0de06d66e767b8974932b3620e@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1348826789.1834294.1584446967790.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15342 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="24zk1gE8NUlDmwG9"
+Content-Disposition: inline
+In-Reply-To: <20200316151939.1.I752ebdcfd5e8bf0de06d66e767b8974932b3620e@changeid>
+X-Cookie: There's only one everything.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--24zk1gE8NUlDmwG9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Greetings,
-I was searching through a local business directory when I found your
-profile. I am Soliciting On-Behalf of my private client who is
-interested in having a serious business investment in your country. If
-you have a valid business, investment or project he can invest
-back to me for more details. Your swift response is highly needed.
-Sincerely
-Stephen Li
-Please response back to me with is my private email below for more details
-stephli947701@gmail.com
+On Mon, Mar 16, 2020 at 03:20:01PM -0700, Douglas Anderson wrote:
+
+> +	/*
+> +	 * We don't expect to hit this, but if we do we should try our best
+> +	 * to clear the interrupts and return so we don't just get called
+> +	 * again.
+> +	 */
+> +	if (mas->cur_mcmd == CMD_NONE)
+> +		goto exit;
+> +
+
+Does this mean that there was an actual concrete message of type
+CMD_NONE or does it mean that there was no message waiting?  If there
+was no message then isn't the interrupt spurious?
+
+--24zk1gE8NUlDmwG9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5wvikACgkQJNaLcl1U
+h9CCWAf+NrJf9Q2fJM35MGcoGUs8HYyVUL+NopJOwpbgEbzsTaDN+rMUwFyy9/3t
+EKFyp3Im6x70GXrpQHs5emVrYuNt8oDcn0CDY29pXq8qGuCkAFnlMufGj4dfrQA6
+/XQD0gIuvduh6qKndbhRVeVUFdiTyKKeqiCim4eAld/CTfIyyulDPo6KEVVHYt4X
+kJG/dz10WQ8oyRBckFTD1HtTPsA7TJT34V2ll71CvJcmCWZRAwLzmD9MbZRTdrv+
+J3IHwcyJp9XSTIaSBJhxizMzdz4BH4fhLSR/yQDBruEFZIzbTBskk2QOJ77qZG8k
+w0I9PWvjgN5EGCRPLk4M+HgIHbJTfw==
+=eX8I
+-----END PGP SIGNATURE-----
+
+--24zk1gE8NUlDmwG9--
