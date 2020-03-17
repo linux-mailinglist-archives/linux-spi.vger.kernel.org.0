@@ -2,112 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7216D187DBC
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 11:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB87187E98
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Mar 2020 11:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbgCQKFF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Mar 2020 06:05:05 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:35561 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgCQKFF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 06:05:05 -0400
-Received: by mail-lj1-f196.google.com with SMTP id u12so22096461ljo.2
-        for <linux-spi@vger.kernel.org>; Tue, 17 Mar 2020 03:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=n09seZt9zQSEmn7PnJzgCcHPTYjmqdsKfcWkGxOyoSw=;
-        b=hsHzKaLO8KEYIAs97rD1AMV6mMcqn8KvHqg4ovsIqvIqJsmunKOt1qYqCT5n50NIxg
-         5W5zLGTss9f2hdJk1xumbMBaQMEDyvjcEyPZ3jrVx+WFRbtYyH8TPSgzOsF/O0ZDV+R+
-         YjoSBTZStIUKJShmEh3hEBHRdVxm1SY6SdsdZnyJxUDVSUVZF76uON1MxQVFXMBzq7je
-         dlg8JkAxS2yIyOnnmUE/68pzDOxpbgCvnSFoZcOm6vs6rcpTxYbjby1S67f7NF/Fv36c
-         IE9PiIrFyxQp03l/Q0rCM6x04ylSD3FBrTKVotFLkqpNP2woyYPVF4wSIq4KiiZs1osm
-         q5YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=n09seZt9zQSEmn7PnJzgCcHPTYjmqdsKfcWkGxOyoSw=;
-        b=pa+pHW0kFkvDEMcTxBrXWSmmkeKV6l3L3WCuDzH5bv28aeVlXwm48gHrMNRI/H0F2l
-         RET8/IY/ohitxVD0mcaoe3CioP465DrF4LidWcadKJz8QhKvB5AJQ6TJPgosHl4kg09Z
-         WeFxdVOuW0MKpww821hucyNVX7lLA2L8r+tgzH8mhOlFfyLbkFBGfstCutABPIyJ4DiH
-         cvcOmqHYiSFVAGaoWwmr8CqNnQAHKj6DEMzVmGyEvEWKI5sRuz4BWiQtodfFw0B+gfPm
-         DeRjdwQcedp5t6e3sgk3X17vDvu2meV5izRcViI3Tb1SZzQoKHDgqu5SEbExmRJi/+N2
-         PmAg==
-X-Gm-Message-State: ANhLgQ1Y/ucPiYmkiYjKcLFwoluVkscr4ZrWurxxLaedtK8mp8xllyPb
-        pMcjzyvVLi7tHB7US5KK5a4WPA==
-X-Google-Smtp-Source: ADFU+vvDFgn0Sv1qdBbtE4XeAKrxupkPbSjYz/5IJ9Z1M/fD+IB/2XXNoyEDPpVkBc5aUWJYf1e6nA==
-X-Received: by 2002:a2e:8119:: with SMTP id d25mr2329766ljg.39.1584439502560;
-        Tue, 17 Mar 2020 03:05:02 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:48ef:94a3:a481:5e62:4324:124b? ([2a00:1fa0:48ef:94a3:a481:5e62:4324:124b])
-        by smtp.gmail.com with ESMTPSA id r7sm1932099ljc.3.2020.03.17.03.05.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2020 03:05:01 -0700 (PDT)
-Subject: Re: [PATCH 17/28] dt-bindings: mmc: Fix up clk-phase-sd-hs in an
- example
-To:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317093922.20785-18-lkundrak@v3.sk>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <d7ccf5c1-4bfa-2fd2-b32d-a520e96bdd1e@cogentembedded.com>
-Date:   Tue, 17 Mar 2020 13:04:55 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <20200317093922.20785-18-lkundrak@v3.sk>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1726082AbgCQKpo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Mar 2020 06:45:44 -0400
+Received: from skedge03.snt-world.com ([91.208.41.68]:59850 "EHLO
+        skedge03.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbgCQKpo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Mar 2020 06:45:44 -0400
+Received: from sntmail11s.snt-is.com (unknown [10.203.32.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by skedge03.snt-world.com (Postfix) with ESMTPS id BBAB767A7C0;
+        Tue, 17 Mar 2020 11:45:40 +0100 (CET)
+Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail11s.snt-is.com
+ (10.203.32.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 17 Mar
+ 2020 11:45:40 +0100
+Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
+ sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
+ 15.01.1913.007; Tue, 17 Mar 2020 11:45:40 +0100
+From:   Schrempf Frieder <frieder.schrempf@kontron.de>
+To:     Peng Fan <peng.fan@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>, Jacky Bai <ping.bai@nxp.com>
+CC:     dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH v2] clk: imx8mm: Switch to platform driver
+Thread-Topic: [PATCH v2] clk: imx8mm: Switch to platform driver
+Thread-Index: AQHV3Nj/eAC8KOmHpke/9mSCMhEqHagN6HgAgD15JoCAAPP1AIAAclyA
+Date:   Tue, 17 Mar 2020 10:45:40 +0000
+Message-ID: <4cdbd500-2199-762c-43d9-2a49bd8e2414@kontron.de>
+References: <1562682003-20951-1-git-send-email-abel.vesa@nxp.com>
+ <2df024c3-ab46-4e33-f961-5ef994aea145@kontron.de>
+ <c2a9d048-6a33-f357-ac88-4eb81002fe93@kontron.de>
+ <9dae8bb7-b1da-28b5-a6e9-42102a5c3be3@kontron.de>
+ <AM0PR04MB4481780CEA5A8A7DB87C7D9F88F60@AM0PR04MB4481.eurprd04.prod.outlook.com>
+In-Reply-To: <AM0PR04MB4481780CEA5A8A7DB87C7D9F88F60@AM0PR04MB4481.eurprd04.prod.outlook.com>
+Accept-Language: de-DE, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.25.9.193]
+x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1172F57047C547449EA5A455818DC942@snt-world.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SnT-MailScanner-Information: Please contact the ISP for more information
+X-SnT-MailScanner-ID: BBAB767A7C0.A1251
+X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-SnT-MailScanner-SpamCheck: 
+X-SnT-MailScanner-From: frieder.schrempf@kontron.de
+X-SnT-MailScanner-To: abel.vesa@nxp.com, anson.huang@nxp.com,
+        fabio.estevam@nxp.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, mturquette@baylibre.com, peng.fan@nxp.com,
+        ping.bai@nxp.com, sboyd@kernel.org, shawnguo@kernel.org
+X-Spam-Status: No
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello!
-
-On 17.03.2020 12:39, Lubomir Rintel wrote:
-
-> This way the validator can know that the two cells constitute a singlej
-
-    Single?
-
-> pair of clock phase degrees value, not separate items Otherwise it is
-
-    Forgot a period after "items"?
-
-> unhappy:
-> 
->    mmc-controller.example.dt.yaml: mmc@ab000000: clk-phase-sd-hs:0:
->        [63] is too short
->    mmc-controller.example.dt.yaml: mmc@ab000000: clk-phase-sd-hs:1:
->        [72] is too short
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-[...]
-
-MBR, Sergei
+SGkgUGVuZywNCg0KT24gMTcuMDMuMjAgMDQ6NTYsIFBlbmcgRmFuIHdyb3RlOg0KPj4gU3ViamVj
+dDogUmU6IFtQQVRDSCB2Ml0gY2xrOiBpbXg4bW06IFN3aXRjaCB0byBwbGF0Zm9ybSBkcml2ZXIN
+Cj4+DQo+PiBPbiAwNi4wMi4yMCAxMTozNywgRnJpZWRlciBTY2hyZW1wZiB3cm90ZToNCj4+PiBP
+biAwNi4wMi4yMCAxMTozNCwgU2NocmVtcGYgRnJpZWRlciB3cm90ZToNCj4+Pj4gSGksDQo+Pj4+
+DQo+Pj4+IE9uIDA5LjA3LjE5IDE2OjIwLCBBYmVsIFZlc2Egd3JvdGU6DQo+Pj4+PiBUaGVyZSBp
+cyBubyBzdHJvbmcgcmVhc29uIGZvciB0aGlzIHRvIHVzZSBDTEtfT0ZfREVDTEFSRSBpbnN0ZWFk
+IG9mDQo+Pj4+PiBiZWluZyBhIHBsYXRmb3JtIGRyaXZlci4gUGx1cywgdGhpcyB3aWxsIG5vdyBi
+ZSBhbGlnbmVkIHdpdGggdGhlDQo+Pj4+PiBvdGhlciBpLk1YOE0gY2xvY2sgZHJpdmVycyB3aGlj
+aCBhcmUgcGxhdGZvcm0gZHJpdmVycy4NCj4+Pj4+DQo+Pj4+PiBJbiBvcmRlciB0byBtYWtlIHRo
+ZSBjbG9jayBwcm92aWRlciBhIHBsYXRmb3JtIGRyaXZlciBhbGwgdGhlIGRhdGENCj4+Pj4+IGFu
+ZCBjb2RlIG5lZWRzIHRvIGJlIG91dHNpZGUgb2YgLmluaXQgc2VjdGlvbi4NCj4+Pj4+DQo+Pj4+
+PiBTaWduZWQtb2ZmLWJ5OiBBYmVsIFZlc2EgPGFiZWwudmVzYUBueHAuY29tPg0KPj4+Pj4gQWNr
+ZWQtYnk6IFN0ZXBoZW4gQm95ZCA8c2JveWRAa2VybmVsLm9yZz4NCj4+Pj4NCj4+Pj4gVGhpcyBo
+YXMgYmVlbiB1cHN0cmVhbSBmb3IgcXVpdGUgc29tZSB0aW1lIG5vdywgYnV0IHNvbWVob3cgSSBo
+YXZlIGFuDQo+Pj4+IGlzc3VlIHdpdGggU1BJIG9uIHRoZSBpLk1YOE1NIHRoYXQgZ2V0cyByZXNv
+bHZlZCB3aGVuIEkgcmV2ZXJ0IHRoaXMNCj4+Pj4gcGF0Y2guDQo+Pj4+DQo+Pj4+IFdoZW4gSSB0
+cnkgdG8gcHJvYmUgYW4gU1BJIE5PUiBmbGFzaCB3aXRoIGxhdGVzdCA1LjQgb3IgZXZlbiA1LjU6
+DQo+Pj4+DQo+Pj4+ICDCoMKgwqDCoHNwaV9pbXggMzA4MjAwMDAuc3BpOiBkbWEgc2V0dXAgZXJy
+b3IgLTE5LCB1c2UgcGlvDQo+Pj4+ICDCoMKgwqDCoHNwaS1ub3Igc3BpMC4wOiB1bnJlY29nbml6
+ZWQgSkVERUMgaWQgYnl0ZXM6IDAwIDAwIDAwIDAwIDAwIDAwDQo+Pj4+ICDCoMKgwqDCoHNwaV9p
+bXggMzA4MjAwMDAuc3BpOiBwcm9iZWQNCj4+Pj4NCj4+Pj4gV2hlbiBJIHJldmVydCB0aGlzIHBh
+dGNoOg0KPj4+Pg0KPj4+PiAgwqDCoMKgwqBzcGlfaW14IDMwODIwMDAwLnNwaTogZG1hIHNldHVw
+IGVycm9yIC0xOSwgdXNlIHBpbw0KPj4+PiAgwqDCoMKgwqBzcGktbm9yIHNwaTAuMDogbXgyNXIx
+NjM1ZiAoMjA0OCBLYnl0ZXMpDQo+Pj4+ICDCoMKgwqDCoHNwaV9pbXggMzA4MjAwMDAuc3BpOiBw
+cm9iZWQNCj4+Pj4NCj4+Pj4gUGxlYXNlIG5vdGUsIHRoYXQgaW4gYm90aCBjYXNlcyBJIGhhdmUg
+ZGlzYWJsZWQgRE1BLCBhcyB0aGlzIGNhdXNlcw0KPj4+PiBldmVuIG1vcmUgdHJvdWJsZSAoc2Vl
+IFsxXSkuIEJ1dCBldmVuIHdpdGggRE1BIGVuYWJsZWQgYW5kIGlnbm9yaW5nDQo+Pj4+IHRoZSBE
+TUEgZXJyb3JzLCB0aGUgaXNzdWUgZGVzY3JpYmVkIGFib3ZlIG9jY3Vycy4NCj4+Pj4NCj4+Pj4g
+RG9lcyBzb21lb25lIGhhdmUgYW4gaWRlYSB3aGF0J3Mgd3Jvbmc/DQo+Pj4+IEFtIEkgdGhlIG9u
+bHkgdXNlciBvZiBTUEkgb24gaS5NWDhNTSBhcyB0aGlzIGlzc3VlIHNlZW1zIHRvIGV4aXN0DQo+
+Pj4+IHVwc3RyZWFtIHNpbmNlIHY1LjQtcmMxPw0KPj4NCj4+IFRoaXMgaXNzdWUgc3RpbGwgcGVy
+c2lzdHMgaW4gdjUuNi1yYzYuIENhbiBzb21lb25lIHBsZWFzZSBoYXZlIGEgbG9vaz8NCj4gDQo+
+IFdvdWxkIHlvdSBwb3N0IHlvdXIgZnVsbCBib290IGxvZyBzb21ld2hlcmU/DQoNClN1cmUsIHRo
+ZSB0d28gYm9vdGxvZ3MgYXJlIGhlcmU6IGh0dHBzOi8vcGFzdGUuZWUvcC84dUR3ZC4NClRoZSBv
+bmx5IGRpZmZlcmVuY2UgaXMgdGhhdCBpbiB0aGUgT0sgY2FzZSB0aGlzIHBhdGNoIGlzIGFwcGxp
+ZWQ6IA0KaHR0cHM6Ly9wYXN0ZS5lZS9wL3hVQnJPDQoNCj4gDQo+IFdpdGggc3VjY2Vzcy9mYWls
+IGNhc2UsIGFyZSB0aGVyZSBhbnkgZGlmZmVyZW5jZXMgaW4gc3BpIGNvbnRyb2xsZXIgcmVnaXN0
+ZXJzPw0KPiBJIHN1cHBvc2Ugbm8uDQoNCk5vLCB0aGV5IGFyZSB0aGUgc2FtZSwgZXhjZXB0IGZv
+ciBCVVJTVF9MRU5HVEggaW4gRUNTUEkxX0NPTlJFRywgd2hpY2ggDQppcyAweDJGIGluIGNhc2Ug
+b2YgZmFpbHVyZSBhbmQgMHgzRiBpbiBjYXNlIGl0IGlzIHdvcmtpbmcuIEJ1dCBJIGd1ZXNzIA0K
+dGhhdCdzIGEgcmVzdWx0IG9mIHRoZSBmYWlsZWQvc3VjY2Vzc2Z1bCB0cmFuc2ZlcnMuDQoNCj4g
+DQo+IERpZCB5b3UgbWVhc3VyZSB0aGUgc2lnbmFsIHNheWluZyBkYXRhIGluIHdoZW4gY3MgaXMg
+bG93Pw0KDQpJdCdzIGEgYml0IGRpZmZpY3VsdCB0byBhY2Nlc3MgdGhlIHNpZ25hbHMgb24gdGhl
+IGJvYXJkIHNvIEkgZGlkbid0IA0KY2hlY2sgdGhlIHNpZ25hbHMsIHlldC4NCg0KPiANCj4gQW55
+d2F5IGl0IGlzIGEgYml0IHdpcmVkIHNpbmNlIHRoaXMgcGF0Y2gganVzdCBkZWxheWVkIHRoZSBw
+cm9iZSBmb3IgYSB3aGlsZS4NCg0KWWVzLCBpdCdzIHJlYWxseSB3ZWlyZCBhbmQgaXQncyB2ZXJ5
+IHVuZm9ydHVuYXRlIHRoYXQgdGhlIEVWSyBkb2VzIG5vdCANCmhhdmUgYSBTUEkgZGV2aWNlIG9u
+Ym9hcmQuIEkgZ3Vlc3MgdGhhdCB3b3VsZCBoYXZlIGhlbHBlZCB0byBwcmV2ZW50IA0KcmVncmVz
+c2lvbnMgZHVlIHRvIGJldHRlciB0ZXN0aW5nLg0KDQpJZiB5b3UgaGF2ZSBhbnkgc3VnZ2VzdGlv
+bnMsIHBsZWFzZSBsZXQgbWUga25vdy4NCg0KVGhhbmtzLA0KRnJpZWRlcg==
