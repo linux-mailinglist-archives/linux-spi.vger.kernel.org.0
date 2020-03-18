@@ -2,149 +2,135 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 912A718A07B
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Mar 2020 17:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D779D18A2D1
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Mar 2020 20:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgCRQbP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Mar 2020 12:31:15 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37336 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726916AbgCRQbP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Mar 2020 12:31:15 -0400
-Received: by mail-lj1-f196.google.com with SMTP id r24so27837902ljd.4
-        for <linux-spi@vger.kernel.org>; Wed, 18 Mar 2020 09:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TnhTytcg8/2Cxze55Eg3TEpzriYoiMzt5B1xeuc9CoY=;
-        b=FGK222eshqJqCPvE2m2PuKqq+bjIHzU2tnb5kXur4flSPtAfo4pp9ZgJvNZNB7M4+E
-         dPLzdS6HZrLY+LVoKNQVV8HWEnhXFMk+h2uQFclD5ic0GzsQzn3gr8b3EVh18LxZ7Iwc
-         6hl3OQ3EZglFarqVOjy1An2rgBl9kpceeR9QY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TnhTytcg8/2Cxze55Eg3TEpzriYoiMzt5B1xeuc9CoY=;
-        b=DoquS6C9MZ0hZBqJeadURXhVcXLq2g1FznOioEV1s6/kg0Ltmg4uWqN1EvZ0vhN+jA
-         fkPrHg1apvFATBu+Lhn255OyWPHnAlLnaM+39JGgbDqW0jvq/SEP6EncsUE395hy07eM
-         R8pARlqclY0h+knqyFwsywmA+twWQGYOPHIIRp86YtVwrUGacS3mjdPqhv0K5A6o/rDS
-         ZVLJFoGbDGdhxlAcdnAXdpHc7v9qXA4n4VSfZpGD26zMlXxndyRJMhbrJ1KHI0O7KmSw
-         r7HIqurUdH4h8/RArjQic6U1pC0PSXh4jKMlnCqq3vakE76uqimK6w6cbeOuHV1H2KSL
-         hR0w==
-X-Gm-Message-State: ANhLgQ2OdMbOMdRugkSgBf3LxbWp8/bbWhMHLs+X86+NETOsnczpXPzy
-        aSsNTrJEQxyc31ffUF8j6ydx4UxkR10=
-X-Google-Smtp-Source: ADFU+vs06LR/xKBndtIOzmvrQRQyzboH33+jQvx8Y/T01I3foDxuooCWGH49wQ2jH4xAIiaSPMESWQ==
-X-Received: by 2002:a2e:3615:: with SMTP id d21mr2930923lja.213.1584549070514;
-        Wed, 18 Mar 2020 09:31:10 -0700 (PDT)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id h9sm1486307ljk.96.2020.03.18.09.31.09
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2020 09:31:09 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id o10so27778059ljc.8
-        for <linux-spi@vger.kernel.org>; Wed, 18 Mar 2020 09:31:09 -0700 (PDT)
-X-Received: by 2002:a2e:8991:: with SMTP id c17mr2989954lji.278.1584549068513;
- Wed, 18 Mar 2020 09:31:08 -0700 (PDT)
+        id S1726821AbgCRTDb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Mar 2020 15:03:31 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:43647 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726638AbgCRTDb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Mar 2020 15:03:31 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5513123F27;
+        Wed, 18 Mar 2020 20:03:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1584558208;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dOp+Q10aNwI+UYVrwdygu1rxeT9KhHvcajdkwSJHkkM=;
+        b=Tsb9fURAvN+x5CkSFEW2TdBb5KXCI1JXLKf0R0HbHyyNOGa9E+T1KSOKHlFkGZQRBJhI1z
+        Tve698+u7Vjo7k35bvgXMh6ARTCYFvEFSt9G+h9cjzP2u3ih8cjKZJ2oZO20hZfaQVhy+A
+        1bri3ZjtkWG0N+tjVr+dhUHa0PbYdfI=
 MIME-Version: 1.0
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-8-git-send-email-akashast@codeaurora.org>
- <20200314005817.GN144492@google.com> <3aeb3083-2a31-b269-510d-eb608ff14ce5@codeaurora.org>
- <CAE=gft58QsgTCUHMHKJhcM9ZxAeMiY16CrbNv2HaTCRqwtmt7A@mail.gmail.com> <e2ee1a60-a379-5c78-355a-64aad451a944@codeaurora.org>
-In-Reply-To: <e2ee1a60-a379-5c78-355a-64aad451a944@codeaurora.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 18 Mar 2020 09:30:31 -0700
-X-Gmail-Original-Message-ID: <CAE=gft4xL9+GN2NrM9ewyPg0Fog3pnf_sLGjWRNOg7KynNh-Dg@mail.gmail.com>
-Message-ID: <CAE=gft4xL9+GN2NrM9ewyPg0Fog3pnf_sLGjWRNOg7KynNh-Dg@mail.gmail.com>
-Subject: Re: [PATCH V2 7/8] spi: spi-qcom-qspi: Add interconnect support
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        wsa@the-dreams.de, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 18 Mar 2020 20:03:28 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
+        robh+dt@kernel.org, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, eha@deif.com, angelo@sysam.it,
+        andrew.smirnov@gmail.com, gustavo@embeddedor.com, weic@nvidia.com,
+        mhosny@nvidia.com, peng.ma@nxp.com
+Subject: Re: [PATCH v5 00/12] NXP DSPI bugfixes and support for LS1028A
+In-Reply-To: <20200318001603.9650-1-olteanv@gmail.com>
+References: <20200318001603.9650-1-olteanv@gmail.com>
+Message-ID: <d37b6e0f8a35ae61bbfe147cd5809ec2@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
+X-Spam-Level: *
+X-Rspamd-Server: web
+X-Spam-Status: No, score=1.40
+X-Spam-Score: 1.40
+X-Rspamd-Queue-Id: 5513123F27
+X-Spamd-Result: default: False [1.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_TWELVE(0.00)[15];
+         NEURAL_HAM(-0.00)[-0.599];
+         FREEMAIL_TO(0.00)[gmail.com];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,arm.com,deif.com,sysam.it,gmail.com,embeddedor.com,nvidia.com,nxp.com];
+         MID_RHS_MATCH_FROM(0.00)[];
+         SUSPICIOUS_RECIPS(1.50)[]
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 6:48 AM Akash Asthana <akashast@codeaurora.org> wrote:
->
-> Hi Evan,
->
-> On 3/18/2020 12:38 AM, Evan Green wrote:
-> > On Tue, Mar 17, 2020 at 5:13 AM Akash Asthana <akashast@codeaurora.org> wrote:
-> >> Hi Matthias,
-> >>
-> >> On 3/14/2020 6:28 AM, Matthias Kaehlcke wrote:
-> >>> Hi,
-> >>>
-> >>> On Fri, Mar 13, 2020 at 06:42:13PM +0530, Akash Asthana wrote:
-> >>>> Get the interconnect paths for QSPI device and vote according to the
-> >>>> current bus speed of the driver.
-> >>>>
-> >>>> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> >>>> ---
-> >>>>    - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
-> >>>>      path handle
-> >>>>    - As per Matthias comment, added error handling for icc_set_bw call
-> >>>>
-> >>>>    drivers/spi/spi-qcom-qspi.c | 46 ++++++++++++++++++++++++++++++++++++++++++++-
-> >>>>    1 file changed, 45 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-> >>>> index 3c4f83b..ad48f43 100644
-> >>>> --- a/drivers/spi/spi-qcom-qspi.c
-> >>>> +++ b/drivers/spi/spi-qcom-qspi.c
-> >>>> @@ -2,6 +2,7 @@
-> >>>>    // Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
-> >>>>
-> >>>>    #include <linux/clk.h>
-> >>>> +#include <linux/interconnect.h>
-> >>>>    #include <linux/interrupt.h>
-> >>>>    #include <linux/io.h>
-> >>>>    #include <linux/module.h>
-> >>>> @@ -139,7 +140,10 @@ struct qcom_qspi {
-> >>>>       struct device *dev;
-> >>>>       struct clk_bulk_data *clks;
-> >>>>       struct qspi_xfer xfer;
-> >>>> -    /* Lock to protect xfer and IRQ accessed registers */
-> >>>> +    struct icc_path *icc_path_cpu_to_qspi;
-> >>>> +    unsigned int avg_bw_cpu;
-> >>>> +    unsigned int peak_bw_cpu;
-> >>> This triplet is a recurring pattern, and is probably not limited to geni SE/QSPI.
-> >>> On https://patchwork.kernel.org/patch/11436889/#23221925 I suggested the creation
-> >>> of a geni SE specific struct, however adding a generic convenience struct to
-> >>> 'linux/interconnect.h' might be the better solution:
-> >>>
-> >>> struct icc_client {
-> >>>        struct icc_path *path;
-> >>>        unsigned int avg_bw;
-> >>>        unsigned int peak_bw;
-> >>> };
-> >>>
-> >>> I'm sure there are better names for it, but this would be the idea.
-> >> Yeah, I think introducing this to ICC header would be better solution.
-> > +Georgi
-> >
-> > I'm not as convinced this structure is generally useful and belongs in
-> > the interconnect core. The thing that strikes me as weird with putting
-> > it in the core is now we're saving these values both inside and
-> > outside the interconnect core.
-> IIUC, you meant to say struct icc_req(inside icc_path) will be saving
-> avg_bw and peak_bw so no need to save it outside icc_path?
+Am 2020-03-18 01:15, schrieb Vladimir Oltean:
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> 
+> This series addresses a few issues that were missed during the previous
+> series "[PATCH 00/12] TCFQ to XSPI migration for NXP DSPI driver", on
+> SoCs other than LS1021A and LS1043A. DMA mode has been completely 
+> broken
+> by that series, and XSPI mode never worked on little-endian 
+> controllers.
+> 
+> Then it introduces support for the LS1028A chip, whose compatible has
+> recently been documented here:
+> 
+> https://lore.kernel.org/linux-devicetree/20200218171418.18297-1-michael@walle.cc/
+> 
+> The device tree for the LS1028A SoC is extended with DMA channels
+> definition, such that even though the default operating mode is XSPI,
+> one can simply change DSPI_XSPI_MODE to DSPI_DMA_MODE in the
+> devtype_data structure of the driver and use that instead.
+> 
+> Compared to earlier v4, the only change is in patch 05/12 to fix a race
+> condition signaled by Michael Walle here:
+> https://lkml.org/lkml/2020/3/17/740
+> 
+> I don't expect the "fixes" patches to reach very far down the stable
+> pipe, since there has been pretty heavy refactoring in this driver.
+> 
+> For testing, benchmarking and debugging, the mikroBUS connector on the
+> LS1028A-RDB is made available via spidev.
 
-Correct, it seems silly to store the same set of values twice in the
-framework, but with different semantics about who's watching it.
--Evan
+Patches 1-11:
+Tested-by: Michael Walle <michael@walle.cc>
+
+Thanks Vladimir for the great work.
+
+-michael
+
+> 
+> Vladimir Oltean (12):
+>   spi: spi-fsl-dspi: Don't access reserved fields in SPI_MCR
+>   spi: spi-fsl-dspi: Fix little endian access to PUSHR CMD and TXDATA
+>   spi: spi-fsl-dspi: Fix bits-per-word acceleration in DMA mode
+>   spi: spi-fsl-dspi: Avoid reading more data than written in EOQ mode
+>   spi: spi-fsl-dspi: Protect against races on dspi->words_in_flight
+>   spi: spi-fsl-dspi: Replace interruptible wait queue with a simple
+>     completion
+>   spi: spi-fsl-dspi: Avoid NULL pointer in dspi_slave_abort for non-DMA
+>     mode
+>   spi: spi-fsl-dspi: Fix interrupt-less DMA mode taking an XSPI code
+>     path
+>   spi: spi-fsl-dspi: Move invariant configs out of
+>     dspi_transfer_one_message
+>   spi: spi-fsl-dspi: Add support for LS1028A
+>   arm64: dts: ls1028a: Specify the DMA channels for the DSPI 
+> controllers
+>   arm64: dts: ls1028a-rdb: Add a spidev node for the mikroBUS
+> 
+>  .../boot/dts/freescale/fsl-ls1028a-rdb.dts    |  14 +
+>  .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |   6 +
+>  drivers/spi/spi-fsl-dspi.c                    | 324 +++++++++---------
+>  3 files changed, 182 insertions(+), 162 deletions(-)
