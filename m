@@ -2,277 +2,313 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8E618A857
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Mar 2020 23:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0C018A887
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Mar 2020 23:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbgCRWiJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Mar 2020 18:38:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52118 "EHLO mail.kernel.org"
+        id S1726813AbgCRWpg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Mar 2020 18:45:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:55998 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726619AbgCRWiJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 18 Mar 2020 18:38:09 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F0A3208D6;
-        Wed, 18 Mar 2020 22:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584571087;
-        bh=h2tPbIwaFRFhQaSi75kDBvH4/tYSSRHaaEn6nhZmdr0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kRfNA+9TdnyBzO10nx07GysVFZDKOEyZXyN8sBPtBgPClUs4D1pLwH1u86QGHRVLI
-         VhUv0WyTisoDnDbPIwbBadfuS+0br3IgNJYuxEyNep50K1HIzxTFFk4DSvdoP4Cc0a
-         lMfsOmO1OAURjbaxeaLs+C5fAoANSbhjfQwAzweA=
-Received: by mail-qt1-f171.google.com with SMTP id i26so154650qtq.8;
-        Wed, 18 Mar 2020 15:38:07 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ1e37ELRDgpPS1nBHSGnpkzOYv2pzVidmM0gJBYMfBJOmpFX0W0
-        pDr4IxegCI+qzH9NqQ7O6GthVxvMxUIq/IuRoA==
-X-Google-Smtp-Source: ADFU+vvinsamjh03SlRMcAjEI9q54HjLWIwQqxaVLevloh2bB0C7//yNJi1GoxR+dLv32cxF/ysQBxwkILHfmpn8xBI=
-X-Received: by 2002:ac8:59:: with SMTP id i25mr5558qtg.110.1584571086256; Wed,
- 18 Mar 2020 15:38:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-20-lkundrak@v3.sk>
-In-Reply-To: <20200317093922.20785-20-lkundrak@v3.sk>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 18 Mar 2020 16:37:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
-Message-ID: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
-Subject: Re: [PATCH 19/28] dt-bindings: mmc: Convert sdhci-pxa to json-schema
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726704AbgCRWpg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 18 Mar 2020 18:45:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A59E30E;
+        Wed, 18 Mar 2020 15:45:35 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BBF93F52E;
+        Wed, 18 Mar 2020 15:45:34 -0700 (PDT)
+Date:   Wed, 18 Mar 2020 22:45:33 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     andrew.smirnov@gmail.com, angelo@sysam.it, broonie@kernel.org,
+        devicetree@vger.kernel.org, eha@deif.com, gustavo@embeddedor.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, mark.rutland@arm.com,
+        mhosny@nvidia.com, michael@walle.cc,
+        Michael Walle <michael@walle.cc>, peng.ma@nxp.com,
+        robh+dt@kernel.org, shawnguo@kernel.org, weic@nvidia.com
+Subject: Applied "spi: spi-fsl-dspi: Protect against races on dspi->words_in_flight" to the spi tree
+In-Reply-To:  <20200318001603.9650-6-olteanv@gmail.com>
+Message-Id:  <applied-20200318001603.9650-6-olteanv@gmail.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
->
-> Convert the sdhci-pxa binding to DT schema format using json-schema.
+The patch
 
-Ignore what my bot said, I see you addressed that earlier in the series.
+   spi: spi-fsl-dspi: Protect against races on dspi->words_in_flight
 
-> At the same time, fix a couple of issues with the examples discovered by
-> the validation tool -- a semicolon instead of a comma and wrong node names.
->
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->  .../devicetree/bindings/mmc/sdhci-pxa.txt     |  50 ---------
->  .../devicetree/bindings/mmc/sdhci-pxa.yaml    | 101 ++++++++++++++++++
->  2 files changed, 101 insertions(+), 50 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
->  create mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
->
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt b/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
-> deleted file mode 100644
-> index 3d1b449d6097d..0000000000000
-> --- a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
-> +++ /dev/null
-> @@ -1,50 +0,0 @@
-> -* Marvell sdhci-pxa v2/v3 controller
-> -
-> -This file documents differences between the core properties in mmc.txt
-> -and the properties used by the sdhci-pxav2 and sdhci-pxav3 drivers.
-> -
-> -Required properties:
-> -- compatible: Should be "mrvl,pxav2-mmc", "mrvl,pxav3-mmc" or
-> -  "marvell,armada-380-sdhci".
-> -- reg:
-> -  * for "mrvl,pxav2-mmc" and "mrvl,pxav3-mmc", one register area for
-> -    the SDHCI registers.
-> -
-> -  * for "marvell,armada-380-sdhci", three register areas. The first
-> -    one for the SDHCI registers themselves, the second one for the
-> -    AXI/Mbus bridge registers of the SDHCI unit, the third one for the
-> -    SDIO3 Configuration register
-> -- reg names: should be "sdhci", "mbus", "conf-sdio3". only mandatory
-> -  for "marvell,armada-380-sdhci"
-> -- clocks: Array of clocks required for SDHCI; requires at least one for
-> -    I/O clock.
-> -- clock-names: Array of names corresponding to clocks property; shall be
-> -    "io" for I/O clock and "core" for optional core clock.
-> -
-> -Optional properties:
-> -- mrvl,clk-delay-cycles: Specify a number of cycles to delay for tuning.
-> -
-> -Example:
-> -
-> -sdhci@d4280800 {
-> -       compatible = "mrvl,pxav3-mmc";
-> -       reg = <0xd4280800 0x800>;
-> -       bus-width = <8>;
-> -       interrupts = <27>;
-> -       clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
-> -       clock-names = "io", "core";
-> -       non-removable;
-> -       mrvl,clk-delay-cycles = <31>;
-> -};
-> -
-> -sdhci@d8000 {
-> -       compatible = "marvell,armada-380-sdhci";
-> -       reg-names = "sdhci", "mbus", "conf-sdio3";
-> -       reg = <0xd8000 0x1000>,
-> -               <0xdc000 0x100>;
-> -               <0x18454 0x4>;
-> -       interrupts = <0 25 0x4>;
-> -       clocks = <&gateclk 17>;
-> -       clock-names = "io";
-> -       mrvl,clk-delay-cycles = <0x1F>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
-> new file mode 100644
-> index 0000000000000..4ae0926ac294f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
-> @@ -0,0 +1,101 @@
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mmc/sdhci-pxa.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell PXA SDHCI v2/v3 bindings
-> +
-> +maintainers:
-> +  - devicetree@vger.kernel.org
-> +
-> +allOf:
-> +  - $ref: mmc-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: marvell,armada-380-sdhci
-> +    then:
-> +      properties:
-> +        regs:
-> +          minItems: 3
-> +          maxItems: 3
+has been applied to the spi tree at
 
-Here, you just need minItems.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
 
-> +        reg-names:
-> +          items:
-> +            - const: sdhci
-> +            - const: mbus
-> +            - const: conf-sdio3
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-This should be under the main definition of 'reg-names' and then just
-'minItems: 3' here.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> +      required:
-> +        - reg-names
-> +    else:
-> +      properties:
-> +        regs:
-> +          minItems: 1
-> +          maxItems: 1
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Just 'maxItems' is sufficient.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-> +        reg-names:
-> +          minItems: 1
-> +          maxItems: 1
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mrvl,pxav2-mmc
-> +      - mrvl,pxav3-mmc
-> +      - marvell,armada-380-sdhci
-> +
-> +  reg: true
+Thanks,
+Mark
 
-Here you should have:
+From 0dedf901078074d6c5b41c297fac12c02c6dc41f Mon Sep 17 00:00:00 2001
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+Date: Wed, 18 Mar 2020 02:15:56 +0200
+Subject: [PATCH] spi: spi-fsl-dspi: Protect against races on
+ dspi->words_in_flight
 
-minItems: 1
-maxItems: 3
+dspi->words_in_flight is a variable populated in the *_write functions
+and used in the dspi_fifo_read function. It is also used in
+dspi_fifo_write, immediately after transmission, to update the
+message->actual_length variable used by higher layers such as spi-mem
+for integrity checking.
 
-> +
-> +  reg-names: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - const: io
-> +      - const: core
-> +
-> +  mrvl,clk-delay-cycles:
-> +    description: Specify a number of cycles to delay for tuning.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+But it may happen that the IRQ which calls dspi_fifo_read to be
+triggered before the updating of message->actual_length takes place. In
+that case, dspi_fifo_read will decrement dspi->words_in_flight to -1,
+and that will cause an invalid modification of message->actual_length.
 
-No range of valid values?
+For that, we make the simplest fix possible: to not decrement the actual
+shared variable in dspi->words_in_flight from dspi_fifo_read, but
+actually a copy of it which is on stack.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/berlin2.h>
-> +    mmc@d4280800 {
-> +        compatible = "mrvl,pxav3-mmc";
-> +        reg = <0xd4280800 0x800>;
-> +        bus-width = <8>;
-> +        interrupts = <27>;
-> +        clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
-> +        clock-names = "io", "core";
-> +        non-removable;
-> +        mrvl,clk-delay-cycles = <31>;
-> +    };
-> +  - |
-> +    mmc@d8000 {
-> +        compatible = "marvell,armada-380-sdhci";
-> +        reg-names = "sdhci", "mbus", "conf-sdio3";
-> +        reg = <0xd8000 0x1000>,
-> +              <0xdc000 0x100>,
-> +              <0x18454 0x4>;
-> +        interrupts = <0 25 0x4>;
-> +        clocks = <&gateclk 17>;
-> +        clock-names = "io";
-> +        mrvl,clk-delay-cycles = <0x1F>;
-> +    };
-> +
-> +...
-> --
-> 2.25.1
->
+But even if dspi_fifo_read from the next IRQ does not interfere with the
+dspi_fifo_write of the current chunk, the *next* dspi_fifo_write still
+can. So we must assume that everything after the last write to the TX
+FIFO can be preempted by the "TX complete" IRQ, and the dspi_fifo_write
+function must be safe against that. This means refactoring the 2
+flavours of FIFO writes (for EOQ and XSPI) such that the calculation of
+the number of words to be written is common and happens a priori. This
+way, the code for updating the message->actual_length variable works
+with a copy and not with the volatile dspi->words_in_flight.
+
+After some interior debate, the dspi->progress variable used for
+software timestamping was *not* backed up against preemption in a copy
+on stack. Because if preemption does occur between
+spi_take_timestamp_pre and spi_take_timestamp_post, there's really no
+point in trying to save anything. The first-in-time
+spi_take_timestamp_post call with a dspi->progress higher than the
+requested xfer->ptp_sts_word_post will trigger xfer->timestamped = true
+anyway and will close the deal.
+
+To understand the above a bit better, consider a transfer with
+xfer->ptp_sts_word_pre = xfer->ptp_sts_word_post = 3, and
+xfer->bits_per_words = 8 (so byte 3 needs to be timestamped). The DSPI
+controller timestamps in chunks of 4 bytes at a time, and preemption
+occurs in the middle of timestamping the first chunk:
+
+  spi_take_timestamp_pre(0)
+    .
+    . (preemption)
+    .
+    . spi_take_timestamp_pre(4)
+    .
+    . spi_take_timestamp_post(7)
+    .
+  spi_take_timestamp_post(3)
+
+So the reason I'm not bothering to back up dspi->progress for that
+spi_take_timestamp_post(3) is that spi_take_timestamp_post(7) is going
+to (a) be more honest, (b) provide better accuracy and (c) already
+render the spi_take_timestamp_post(3) into a noop by setting
+xfer->timestamped = true anyway.
+
+Fixes: d59c90a2400f ("spi: spi-fsl-dspi: Convert TCFQ users to XSPI FIFO mode")
+Reported-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Tested-by: Michael Walle <michael@walle.cc>
+Link: https://lore.kernel.org/r/20200318001603.9650-6-olteanv@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-fsl-dspi.c | 111 +++++++++++++++++--------------------
+ 1 file changed, 52 insertions(+), 59 deletions(-)
+
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index 51224b772680..f7e1e7085e31 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -669,17 +669,26 @@ static void dspi_pushr_txdata_write(struct fsl_dspi *dspi, u16 txdata)
+ 	regmap_write(dspi->regmap_pushr, dspi->pushr_tx, txdata);
+ }
+ 
+-static void dspi_xspi_write(struct fsl_dspi *dspi, int cnt, bool eoq)
++static void dspi_xspi_fifo_write(struct fsl_dspi *dspi, int num_words)
+ {
++	int num_bytes = num_words * dspi->oper_word_size;
+ 	u16 tx_cmd = dspi->tx_cmd;
+ 
+-	if (eoq)
++	/*
++	 * If the PCS needs to de-assert (i.e. we're at the end of the buffer
++	 * and cs_change does not want the PCS to stay on), then we need a new
++	 * PUSHR command, since this one (for the body of the buffer)
++	 * necessarily has the CONT bit set.
++	 * So send one word less during this go, to force a split and a command
++	 * with a single word next time, when CONT will be unset.
++	 */
++	if (!(dspi->tx_cmd & SPI_PUSHR_CMD_CONT) && num_bytes == dspi->len)
+ 		tx_cmd |= SPI_PUSHR_CMD_EOQ;
+ 
+ 	/* Update CTARE */
+ 	regmap_write(dspi->regmap, SPI_CTARE(0),
+ 		     SPI_FRAME_EBITS(dspi->oper_bits_per_word) |
+-		     SPI_CTARE_DTCP(cnt));
++		     SPI_CTARE_DTCP(num_words));
+ 
+ 	/*
+ 	 * Write the CMD FIFO entry first, and then the two
+@@ -688,7 +697,7 @@ static void dspi_xspi_write(struct fsl_dspi *dspi, int cnt, bool eoq)
+ 	dspi_pushr_cmd_write(dspi, tx_cmd);
+ 
+ 	/* Fill TX FIFO with as many transfers as possible */
+-	while (cnt--) {
++	while (num_words--) {
+ 		u32 data = dspi_pop_tx(dspi);
+ 
+ 		dspi_pushr_txdata_write(dspi, data & 0xFFFF);
+@@ -697,58 +706,15 @@ static void dspi_xspi_write(struct fsl_dspi *dspi, int cnt, bool eoq)
+ 	}
+ }
+ 
+-static void dspi_xspi_fifo_write(struct fsl_dspi *dspi)
+-{
+-	int num_fifo_entries = dspi->devtype_data->fifo_size;
+-	int bytes_in_flight;
+-	bool eoq = false;
+-
+-	/* In XSPI mode each 32-bit word occupies 2 TX FIFO entries */
+-	if (dspi->oper_word_size == 4)
+-		num_fifo_entries /= 2;
+-
+-	/*
+-	 * Integer division intentionally trims off odd (or non-multiple of 4)
+-	 * numbers of bytes at the end of the buffer, which will be sent next
+-	 * time using a smaller oper_word_size.
+-	 */
+-	dspi->words_in_flight = dspi->len / dspi->oper_word_size;
+-
+-	if (dspi->words_in_flight > num_fifo_entries)
+-		dspi->words_in_flight = num_fifo_entries;
+-
+-	bytes_in_flight = dspi->words_in_flight * dspi->oper_word_size;
+-
+-	/*
+-	 * If the PCS needs to de-assert (i.e. we're at the end of the buffer
+-	 * and cs_change does not want the PCS to stay on), then we need a new
+-	 * PUSHR command, since this one (for the body of the buffer)
+-	 * necessarily has the CONT bit set.
+-	 * So send one word less during this go, to force a split and a command
+-	 * with a single word next time, when CONT will be unset.
+-	 */
+-	if (!(dspi->tx_cmd & SPI_PUSHR_CMD_CONT) &&
+-	    bytes_in_flight == dspi->len)
+-		eoq = true;
+-
+-	dspi_xspi_write(dspi, dspi->words_in_flight, eoq);
+-}
+-
+-static void dspi_eoq_fifo_write(struct fsl_dspi *dspi)
++static void dspi_eoq_fifo_write(struct fsl_dspi *dspi, int num_words)
+ {
+-	int num_fifo_entries = dspi->devtype_data->fifo_size;
+ 	u16 xfer_cmd = dspi->tx_cmd;
+ 
+-	if (num_fifo_entries * dspi->oper_word_size > dspi->len)
+-		num_fifo_entries = dspi->len / dspi->oper_word_size;
+-
+-	dspi->words_in_flight = num_fifo_entries;
+-
+ 	/* Fill TX FIFO with as many transfers as possible */
+-	while (num_fifo_entries--) {
++	while (num_words--) {
+ 		dspi->tx_cmd = xfer_cmd;
+ 		/* Request EOQF for last transfer in FIFO */
+-		if (num_fifo_entries == 0)
++		if (num_words == 0)
+ 			dspi->tx_cmd |= SPI_PUSHR_CMD_EOQ;
+ 		/* Write combined TX FIFO and CMD FIFO entry */
+ 		dspi_pushr_write(dspi);
+@@ -765,8 +731,10 @@ static u32 dspi_popr_read(struct fsl_dspi *dspi)
+ 
+ static void dspi_fifo_read(struct fsl_dspi *dspi)
+ {
++	int num_fifo_entries = dspi->words_in_flight;
++
+ 	/* Read one FIFO entry and push to rx buffer */
+-	while (dspi->words_in_flight--)
++	while (num_fifo_entries--)
+ 		dspi_push_rx(dspi, dspi_popr_read(dspi));
+ }
+ 
+@@ -832,23 +800,48 @@ static void dspi_setup_accel(struct fsl_dspi *dspi)
+ 
+ static void dspi_fifo_write(struct fsl_dspi *dspi)
+ {
++	int num_fifo_entries = dspi->devtype_data->fifo_size;
+ 	struct spi_transfer *xfer = dspi->cur_transfer;
+ 	struct spi_message *msg = dspi->cur_msg;
+-	int bytes_sent;
++	int num_words, num_bytes;
+ 
+ 	dspi_setup_accel(dspi);
+ 
++	/* In XSPI mode each 32-bit word occupies 2 TX FIFO entries */
++	if (dspi->oper_word_size == 4)
++		num_fifo_entries /= 2;
++
++	/*
++	 * Integer division intentionally trims off odd (or non-multiple of 4)
++	 * numbers of bytes at the end of the buffer, which will be sent next
++	 * time using a smaller oper_word_size.
++	 */
++	num_words = dspi->len / dspi->oper_word_size;
++	if (num_words > num_fifo_entries)
++		num_words = num_fifo_entries;
++
++	/* Update total number of bytes that were transferred */
++	num_bytes = num_words * dspi->oper_word_size;
++	msg->actual_length += num_bytes;
++	dspi->progress += num_bytes / DIV_ROUND_UP(xfer->bits_per_word, 8);
++
++	/*
++	 * Update shared variable for use in the next interrupt (both in
++	 * dspi_fifo_read and in dspi_fifo_write).
++	 */
++	dspi->words_in_flight = num_words;
++
+ 	spi_take_timestamp_pre(dspi->ctlr, xfer, dspi->progress, !dspi->irq);
+ 
+ 	if (dspi->devtype_data->trans_mode == DSPI_EOQ_MODE)
+-		dspi_eoq_fifo_write(dspi);
++		dspi_eoq_fifo_write(dspi, num_words);
+ 	else
+-		dspi_xspi_fifo_write(dspi);
+-
+-	/* Update total number of bytes that were transferred */
+-	bytes_sent = dspi->words_in_flight * dspi->oper_word_size;
+-	msg->actual_length += bytes_sent;
+-	dspi->progress += bytes_sent / DIV_ROUND_UP(xfer->bits_per_word, 8);
++		dspi_xspi_fifo_write(dspi, num_words);
++	/*
++	 * Everything after this point is in a potential race with the next
++	 * interrupt, so we must never use dspi->words_in_flight again since it
++	 * might already be modified by the next dspi_fifo_write.
++	 */
+ 
+ 	spi_take_timestamp_post(dspi->ctlr, dspi->cur_transfer,
+ 				dspi->progress, !dspi->irq);
+-- 
+2.20.1
+
