@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F24618AAE0
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Mar 2020 03:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DCF18AAE3
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Mar 2020 03:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbgCSCyB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Mar 2020 22:54:01 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:43881 "EHLO
+        id S1726697AbgCSC4L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Mar 2020 22:56:11 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:36113 "EHLO
         mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726623AbgCSCyB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Mar 2020 22:54:01 -0400
-Received: by mail-io1-f68.google.com with SMTP id n21so705388ioo.10;
-        Wed, 18 Mar 2020 19:54:00 -0700 (PDT)
+        with ESMTP id S1726596AbgCSC4K (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Mar 2020 22:56:10 -0400
+Received: by mail-io1-f68.google.com with SMTP id d15so757122iog.3;
+        Wed, 18 Mar 2020 19:56:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jRhELSIFosVhDEfSNhPBf3PHkVl8ZbRKQYUpPQ7wXzU=;
-        b=D7qd8tbAS65M9294XGGqKvamUjmAK6EzK50zlVhQiOSvLxw0mV6FbqOIgLtooy7kXg
-         6avGvV7LWOwrEeqZ2tT/87IJ8nliqENN3Y5E8vAfUgE8L+kBP96VgT+FovYVE36EzWGQ
-         SNbZLULtyeMwBu2RBy6XuTbqIbVYJm1Pk1/mUyqWILXrJOXUXu8Y3et6KnM56HJgHPkh
-         Q2gLvCP1Qao0GvAlz1VoOEzt4F/J5pQ8XHjA1xoQKdNl0FjiqR36C/Gki5aQDrUeoal/
-         EkjUrIa/Sb3IhO+2OASjNa+AI5tXSVfddI37rTUpL/ZTYW4I1sCDPuqM6VUqJkUCiBCi
-         xr3Q==
-X-Gm-Message-State: ANhLgQ2+NVYktJaU655xdNWVWFT381B29mAmIcc2x+pdIT8UIX/5FYHR
-        XHqCCyaoK1SEqCNQ87pnUw==
-X-Google-Smtp-Source: ADFU+vvO6YKwIA3nl5Aq0cvBeeEaRXfOPZCSBBGG5GRV0LI81AIikeYB18kU3nz/ODE3APMAgXW1Kg==
-X-Received: by 2002:a02:7714:: with SMTP id g20mr1134154jac.88.1584586440057;
-        Wed, 18 Mar 2020 19:54:00 -0700 (PDT)
+        bh=PPkja5C25VerS45bxtKqwCdIAsJE8Q53wltiW2Ahl8s=;
+        b=CtUp8gxqC3+DRYKVIUSzc61WqPWnT+Or93Qwn0LqRkDsYddAgqQ1oi8lOV+t/YlRf6
+         P09L9fnXaGnWzeuUicqc87IVmmk8pSPO8kixNNvsTDWrpa60+YgJ1OF/q6QDaxBdjdNE
+         WeZiorTIxBeUHYHjXEtjAIoo8/FKfVbq73sxERtmErtoO6ZxeTKBhEKufnvuP1XWE0ea
+         w2kMDQefVOw/O0sD/uQWmIFcN1A/N3i2VaaePys27a4tdHV8eIBaUhI0ejSUv/KxLgQZ
+         8lyrf/BwVX/EKiyTwVEhh0XT9vh/nuGqPJoAXhdbfn2mE62K1Oe0C1gqh0M2LQR1dgme
+         soGw==
+X-Gm-Message-State: ANhLgQ1Rd5RN7/xaLvHN2J6djtTTysw7AEZrYNwAyzmhTRX1ZReT2TnO
+        jmfJLvwgwn4qF9D/AexWbA==
+X-Google-Smtp-Source: ADFU+vu8Zs4sikgQ9qOl1rtXnWnxbh11VSlCCgp2VF3kXoJHSN0x4GdzUn913Ju/MZHC3HITrrVJBw==
+X-Received: by 2002:a02:9608:: with SMTP id c8mr1114138jai.68.1584586566760;
+        Wed, 18 Mar 2020 19:56:06 -0700 (PDT)
 Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id n23sm323694ild.34.2020.03.18.19.53.57
+        by smtp.gmail.com with ESMTPSA id q17sm314741ilm.85.2020.03.18.19.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2020 19:53:59 -0700 (PDT)
-Received: (nullmailer pid 19802 invoked by uid 1000);
-        Thu, 19 Mar 2020 02:53:56 -0000
-Date:   Wed, 18 Mar 2020 20:53:56 -0600
+        Wed, 18 Mar 2020 19:56:06 -0700 (PDT)
+Received: (nullmailer pid 22642 invoked by uid 1000);
+        Thu, 19 Mar 2020 02:56:01 -0000
+Date:   Wed, 18 Mar 2020 20:56:01 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Sam Ravnborg <sam@ravnborg.org>
 Cc:     dri-devel@lists.freedesktop.org,
@@ -72,144 +72,105 @@ Cc:     dri-devel@lists.freedesktop.org,
         Tony Lindgren <tony@atomide.com>,
         Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Subject: Re: [PATCH v1 12/36] dt-bindings: display: convert jdi,lt070me05000
- to DT Schema
-Message-ID: <20200319025356.GC29911@bogus>
+Subject: Re: [PATCH v1 16/36] dt-bindings: display: convert lg,lg4573 to DT
+ Schema
+Message-ID: <20200319025601.GD29911@bogus>
 References: <20200315134416.16527-1-sam@ravnborg.org>
- <20200315134416.16527-13-sam@ravnborg.org>
+ <20200315134416.16527-17-sam@ravnborg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200315134416.16527-13-sam@ravnborg.org>
+In-Reply-To: <20200315134416.16527-17-sam@ravnborg.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Mar 15, 2020 at 02:43:52PM +0100, Sam Ravnborg wrote:
+On Sun, Mar 15, 2020 at 02:43:56PM +0100, Sam Ravnborg wrote:
 > Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Vinay Simha BN <simhavcs@gmail.com>
+> Cc: Heiko Schocher <hs@denx.de>
 > Cc: Thierry Reding <thierry.reding@gmail.com>
 > Cc: Sam Ravnborg <sam@ravnborg.org>
 > ---
->  .../display/panel/jdi,lt070me05000.txt        | 31 ---------
->  .../display/panel/jdi,lt070me05000.yaml       | 69 +++++++++++++++++++
->  2 files changed, 69 insertions(+), 31 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.txt
->  create mode 100644 Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml
+>  .../bindings/display/panel/lg,lg4573.txt      | 19 ---------
+>  .../bindings/display/panel/lg,lg4573.yaml     | 41 +++++++++++++++++++
+>  2 files changed, 41 insertions(+), 19 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/panel/lg,lg4573.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/lg,lg4573.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.txt b/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.txt
+> diff --git a/Documentation/devicetree/bindings/display/panel/lg,lg4573.txt b/Documentation/devicetree/bindings/display/panel/lg,lg4573.txt
 > deleted file mode 100644
-> index 4989c91d505f..000000000000
-> --- a/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.txt
+> index 824441f4e95a..000000000000
+> --- a/Documentation/devicetree/bindings/display/panel/lg,lg4573.txt
 > +++ /dev/null
-> @@ -1,31 +0,0 @@
-> -JDI model LT070ME05000 1200x1920 7" DSI Panel
+> @@ -1,19 +0,0 @@
+> -LG LG4573 TFT Liquid Crystal Display with SPI control bus
 > -
 > -Required properties:
-> -- compatible: should be "jdi,lt070me05000"
-> -- vddp-supply: phandle of the regulator that provides the supply voltage
-> -  Power IC supply (3-5V)
-> -- iovcc-supply: phandle of the regulator that provides the supply voltage
-> -  IOVCC , power supply for LCM (1.8V)
-> -- enable-gpios: phandle of gpio for enable line
-> -  LED_EN, LED backlight enable, High active
-> -- reset-gpios: phandle of gpio for reset line
-> -  This should be 8mA, gpio can be configured using mux, pinctrl, pinctrl-names
-> -  XRES, Reset, Low active
-> -- dcdc-en-gpios: phandle of the gpio for power ic line
-> -  Power IC supply enable, High active
+> -  - compatible: "lg,lg4573"
+> -  - reg: address of the panel on the SPI bus
+> -
+> -The panel must obey rules for SPI slave device specified in document [1].
+> -
+> -[1]: Documentation/devicetree/bindings/spi/spi-bus.txt
 > -
 > -Example:
 > -
-> -	dsi0: qcom,mdss_dsi@4700000 {
-> -		panel@0 {
-> -			compatible = "jdi,lt070me05000";
-> -			reg = <0>;
-> -
-> -			vddp-supply = <&pm8921_l17>;
-> -			iovcc-supply = <&pm8921_lvs7>;
-> -
-> -			enable-gpios = <&pm8921_gpio 36 GPIO_ACTIVE_HIGH>;
-> -			reset-gpios = <&tlmm_pinmux 54 GPIO_ACTIVE_LOW>;
-> -			dcdc-en-gpios = <&pm8921_gpio 23 GPIO_ACTIVE_HIGH>;
-> -		};
+> -	lcd_panel: display@0 {
+> -		#address-cells = <1>;
+> -		#size-cells = <1>;
+> -		compatible = "lg,lg4573";
+> -		spi-max-frequency = <10000000>;
+> -		reg = <0>;
 > -	};
-> diff --git a/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml b/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml
+> diff --git a/Documentation/devicetree/bindings/display/panel/lg,lg4573.yaml b/Documentation/devicetree/bindings/display/panel/lg,lg4573.yaml
 > new file mode 100644
-> index 000000000000..e0abf68ecb19
+> index 000000000000..b5b475cf8406
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml
-> @@ -0,0 +1,69 @@
+> +++ b/Documentation/devicetree/bindings/display/panel/lg,lg4573.yaml
+> @@ -0,0 +1,41 @@
 > +# SPDX-License-Identifier: GPL-2.0
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/display/panel/jdi,lt070me05000.yaml#
+> +$id: http://devicetree.org/schemas/display/panel/lg,lg4573.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: JDI model LT070ME05000 1200x1920 7" DSI Panel
+> +title: LG LG4573 TFT Liquid Crystal Display with SPI control bus
 > +
 > +maintainers:
-> +  - Vinay Simha BN <simhavcs@gmail.com>
+> +  - Heiko Schocher <hs@denx.de>
 > +
 > +allOf:
+> +  - $ref: ../../spi/spi-slave.yaml#
 > +  - $ref: panel-common.yaml#
 > +
 > +properties:
 > +  compatible:
-> +    const: jdi,lt070me05000
+> +    const: lg,lg4573
 > +
-> +  enable-gpios: true
 > +  reg: true
-> +  reset-gpios: true
-> +
-> +  vddp-supply:
-> +    description: |
-> +      The regulator that provides the supply voltage Power IC supply (3-5V)
-> +
-> +  iovcc-supply:
-> +    description: |
-> +      The regulator that provides the supply voltage IOVCC,
-> +      power supply for LCM (1.8V)
-> +
-> +  dcdc-en-gpios:
-> +    description: |
-> +      phandle of the gpio for power ic line
-> +      Power IC supply enable, High active
+> +  spi-max-frequency: true
 > +
 > +required:
 > +  - compatible
 > +  - reg
-> +  - vddp-supply
-> +  - iovcc-supply
-> +  - enable-gpios
-> +  - reset-gpios
-> +  - dcdc-en-gpios
-> +
-> +additionalProperties: false
 > +
 > +examples:
 > +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    dsi: qcom,mdss_dsi@4700000 {
+> +    spi {
+> +        compatible = "fsl,imx6q-ecspi", "fsl,imx51-ecspi";
 
-dsi {
+Better to drop this or it's going to fail when there's a schema for this 
+spi controller.
 
 > +        #address-cells = <1>;
 > +        #size-cells = <0>;
 > +
-> +        panel@0 {
-> +            compatible = "jdi,lt070me05000";
+> +        lcd_panel: display@0 {
+> +            compatible = "lg,lg4573";
+> +            spi-max-frequency = <10000000>;
 > +            reg = <0>;
-> +
-> +            vddp-supply = <&pm8921_l17>;
-> +            iovcc-supply = <&pm8921_lvs7>;
-> +
-> +            enable-gpios = <&pm8921_gpio 36 GPIO_ACTIVE_HIGH>;
-> +            reset-gpios = <&tlmm_pinmux 54 GPIO_ACTIVE_LOW>;
-> +            dcdc-en-gpios = <&pm8921_gpio 23 GPIO_ACTIVE_HIGH>;
 > +        };
 > +    };
 > +
