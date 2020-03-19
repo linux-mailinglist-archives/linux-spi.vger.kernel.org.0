@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3021918AAF5
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Mar 2020 04:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCB018AAFC
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Mar 2020 04:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726646AbgCSDHl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Mar 2020 23:07:41 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:46535 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726596AbgCSDHl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Mar 2020 23:07:41 -0400
-Received: by mail-io1-f65.google.com with SMTP id v3so711461iom.13;
-        Wed, 18 Mar 2020 20:07:40 -0700 (PDT)
+        id S1726796AbgCSDLM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Mar 2020 23:11:12 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:40774 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726596AbgCSDLM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Mar 2020 23:11:12 -0400
+Received: by mail-il1-f196.google.com with SMTP id p12so886013ilm.7;
+        Wed, 18 Mar 2020 20:11:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=86v811Y5uL+B0s1Q5xmlGYr7t3LK+8i6eRl/RIQzj58=;
-        b=iQ2nYDYUEmhxCVg8tUwGG6UZF5jttoknc2hUT3PvIGwuiUYKEMTxeKwlGqp65fl8KX
-         uIbBRdT3Dy2cAXm6qhQdCitEkxzAwK3RFGRVuHbE3LmNbAenQl3wvE9mePcGMucPScWJ
-         StAE9Z0/HY8Wt94zN9DuzXmJHKKFxWGxKPSthZInV+WVM8nmmaGnYZaqxcVof0qBD1WM
-         r8shk5HZeLq9V21J35jnSIJOhWqIWAxAkBnxpKENUwpd5X6Glqo7R9GJ5apkrYugDKec
-         VLlblKVB3IY6hoxT/5tTpYLmAOwQHKCOyqG3V+UBFSn91vsZyttRQ5Y3V3IC9/1Z/OmW
-         f62A==
-X-Gm-Message-State: ANhLgQ0HkZ+AKIBFLJXBplXByVEx5VKDVGcSCd/6iCDAja4xzzAE1HyW
-        oQoyY9K2t1AMcd+OY5hfTw==
-X-Google-Smtp-Source: ADFU+vvs+NLdPOFavAz5j6lj6RjwlLqqc+kyKy9RSv7PjfP9rE6u06LEJYD7+wFpe3wpOlq1hE41Wg==
-X-Received: by 2002:a02:5d89:: with SMTP id w131mr1171921jaa.127.1584587260151;
-        Wed, 18 Mar 2020 20:07:40 -0700 (PDT)
+        bh=J+0LKz/6lSN9Mmuvfliw6x06SgGAqZYO0grtLAW3j6U=;
+        b=nXvg518YAFbV9DjTogMhcW8gM3qUbTULAg2Zhlo7maUl/mgsFPCJ6ovTDAEqRLgzl1
+         hwz1Nj5MAnPIP6vD90HeaIz07rh9xVfWq4VezoJoKxcBWP5J3SeK6TxtR5u0Pu4Gibv8
+         bblTFRy2MjYzmhXPzkW4Kcu+p2eld3atlnsjWqIP65wZU+26bkGutFJpghV/cXakcM93
+         VpwhFj1ADuVWggb/A4xi1fpAiPeWeOwQB5ZuK7btkfYu7J35B67L07jh7KE8oNWJjNRo
+         Q7OI9wUlwVbJJZDlY2xQYfCBRrhq5pXfQ5r63JeXqUy8ueatSx7LZaFl/eqmXUh2LV8B
+         xKEQ==
+X-Gm-Message-State: ANhLgQ2HW5lV4nhxeGyOvlJIfOM/wv051othX6bFl6ZJp/0rzKjDeX9S
+        vw6v4OEdfrnlXueJ7VBXiw==
+X-Google-Smtp-Source: ADFU+vszxBuKK7lsj5bUamMMz4xX5tBX0FIRFTriRVyf3HZunP/b/Jfg3ti57aekAIMoKMFMzE3f8A==
+X-Received: by 2002:a92:d70e:: with SMTP id m14mr1224873iln.30.1584587470975;
+        Wed, 18 Mar 2020 20:11:10 -0700 (PDT)
 Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id p189sm278807iof.17.2020.03.18.20.07.35
+        by smtp.gmail.com with ESMTPSA id 10sm336743ilb.45.2020.03.18.20.11.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2020 20:07:39 -0700 (PDT)
-Received: (nullmailer pid 6632 invoked by uid 1000);
-        Thu, 19 Mar 2020 03:07:34 -0000
-Date:   Wed, 18 Mar 2020 21:07:34 -0600
+        Wed, 18 Mar 2020 20:11:10 -0700 (PDT)
+Received: (nullmailer pid 11458 invoked by uid 1000);
+        Thu, 19 Mar 2020 03:11:06 -0000
+Date:   Wed, 18 Mar 2020 21:11:06 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Sam Ravnborg <sam@ravnborg.org>
 Cc:     dri-devel@lists.freedesktop.org,
@@ -72,140 +72,136 @@ Cc:     dri-devel@lists.freedesktop.org,
         Tony Lindgren <tony@atomide.com>,
         Vinay Simha BN <simhavcs@gmail.com>,
         Werner Johansson <werner.johansson@sonymobile.com>
-Subject: Re: [PATCH v1 32/36] dt-bindings: display: convert sharp,ls037v7dw01
- to DT Schema
-Message-ID: <20200319030734.GH29911@bogus>
+Subject: Re: [PATCH v1 36/36] dt-bindings: display: convert
+ olimex,lcd-olinuxino to DT Schema
+Message-ID: <20200319031106.GI29911@bogus>
 References: <20200315134416.16527-1-sam@ravnborg.org>
- <20200315134416.16527-33-sam@ravnborg.org>
+ <20200315134416.16527-37-sam@ravnborg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200315134416.16527-33-sam@ravnborg.org>
+In-Reply-To: <20200315134416.16527-37-sam@ravnborg.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Mar 15, 2020 at 02:44:12PM +0100, Sam Ravnborg wrote:
+On Sun, Mar 15, 2020 at 02:44:16PM +0100, Sam Ravnborg wrote:
 > Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Stefan Mavrodiev <stefan@olimex.com>
 > Cc: Thierry Reding <thierry.reding@gmail.com>
 > Cc: Sam Ravnborg <sam@ravnborg.org>
 > ---
->  .../display/panel/sharp,ls037v7dw01.txt       | 43 ------------
->  .../display/panel/sharp,ls037v7dw01.yaml      | 66 +++++++++++++++++++
->  2 files changed, 66 insertions(+), 43 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/panel/sharp,ls037v7dw01.txt
->  create mode 100644 Documentation/devicetree/bindings/display/panel/sharp,ls037v7dw01.yaml
+>  .../display/panel/olimex,lcd-olinuxino.txt    | 42 -----------
+>  .../display/panel/olimex,lcd-olinuxino.yaml   | 70 +++++++++++++++++++
+>  2 files changed, 70 insertions(+), 42 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/display/panel/sharp,ls037v7dw01.txt b/Documentation/devicetree/bindings/display/panel/sharp,ls037v7dw01.txt
+> diff --git a/Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.txt b/Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.txt
 > deleted file mode 100644
-> index 0cc8981e9d49..000000000000
-> --- a/Documentation/devicetree/bindings/display/panel/sharp,ls037v7dw01.txt
+> index a89f9c830a85..000000000000
+> --- a/Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.txt
 > +++ /dev/null
-> @@ -1,43 +0,0 @@
-> -SHARP LS037V7DW01 TFT-LCD panel
-> -===================================
+> @@ -1,42 +0,0 @@
+> -Binding for Olimex Ltd. LCD-OLinuXino bridge panel.
+> -
+> -This device can be used as bridge between a host controller and LCD panels.
+> -Currently supported LCDs are:
+> -  - LCD-OLinuXino-4.3TS
+> -  - LCD-OLinuXino-5
+> -  - LCD-OLinuXino-7
+> -  - LCD-OLinuXino-10
+> -
+> -The panel itself contains:
+> -  - AT24C16C EEPROM holding panel identification and timing requirements
+> -  - AR1021 resistive touch screen controller (optional)
+> -  - FT5x6 capacitive touch screnn controller (optional)
+> -  - GT911/GT928 capacitive touch screen controller (optional)
+> -
+> -The above chips share same I2C bus. The EEPROM is factory preprogrammed with
+> -device information (id, serial, etc.) and timing requirements.
+> -
+> -Touchscreen bingings can be found in these files:
+> -  - input/touchscreen/goodix.txt
+> -  - input/touchscreen/edt-ft5x06.txt
+> -  - input/touchscreen/ar1021.txt
 > -
 > -Required properties:
-> -- compatible: "sharp,ls037v7dw01"
+> -  - compatible: should be "olimex,lcd-olinuxino"
+> -  - reg: address of the configuration EEPROM, should be <0x50>
+> -  - power-supply: phandle of the regulator that provides the supply voltage
 > -
 > -Optional properties:
-> -- label: a symbolic name for the panel
-> -- enable-gpios: a GPIO spec for the optional enable pin.
-> -  This pin is the INI pin as specified in the LS037V7DW01.pdf file.
-> -- reset-gpios: a GPIO spec for the optional reset pin.
-> -  This pin is the RESB pin as specified in the LS037V7DW01.pdf file.
-> -- mode-gpios: a GPIO
-> -  ordered MO, LR, and UD as specified in the LS037V7DW01.pdf file.
+> -  - enable-gpios: GPIO pin to enable or disable the panel
+> -  - backlight: phandle of the backlight device attacked to the panel
 > -
-> -Required nodes:
-> -- Video port for DPI input
-> -
-> -This panel can have zero to five GPIOs to configure to change configuration
-> -between QVGA and VGA mode and the scan direction. As these pins can be also
-> -configured with external pulls, all the GPIOs are considered optional with holes
-> -in the array.
-> -
-> -Example
-> --------
-> -
-> -Example when connected to a omap2+ based device:
-> -
-> -lcd0: display {
-> -	compatible = "sharp,ls037v7dw01";
-> -	power-supply = <&lcd_3v3>;
-> -	enable-gpios = <&gpio5 24 GPIO_ACTIVE_HIGH>;	/* gpio152, lcd INI */
-> -	reset-gpios = <&gpio5 27 GPIO_ACTIVE_HIGH>;	/* gpio155, lcd RESB */
-> -	mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH	/* gpio154, lcd MO */
-> -		      &gpio1 2 GPIO_ACTIVE_HIGH		/* gpio2, lcd LR */
-> -		      &gpio1 3 GPIO_ACTIVE_HIGH>;	/* gpio3, lcd UD */
-> -
-> -	port {
-> -		lcd_in: endpoint {
-> -			remote-endpoint = <&dpi_out>;
-> -		};
+> -Example:
+> -&i2c2 {
+> -	panel@50 {
+> -		compatible = "olimex,lcd-olinuxino";
+> -		reg = <0x50>;
+> -		power-supply = <&reg_vcc5v0>;
+> -		enable-gpios = <&pio 7 8 GPIO_ACTIVE_HIGH>;
+> -		backlight = <&backlight>;
 > -	};
 > -};
-> diff --git a/Documentation/devicetree/bindings/display/panel/sharp,ls037v7dw01.yaml b/Documentation/devicetree/bindings/display/panel/sharp,ls037v7dw01.yaml
+> diff --git a/Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.yaml b/Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.yaml
 > new file mode 100644
-> index 000000000000..56bd510ae398
+> index 000000000000..22d664abd552
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/sharp,ls037v7dw01.yaml
-> @@ -0,0 +1,66 @@
+> +++ b/Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.yaml
+> @@ -0,0 +1,70 @@
 > +# SPDX-License-Identifier: GPL-2.0
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/display/panel/sharp,ls037v7dw01.yaml#
+> +$id: http://devicetree.org/schemas/display/panel/olimex,lcd-olinuxino.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: SHARP LS037V7DW01 TFT-LCD panel
-> +
-> +description: |
-> +  This panel can have zero to five GPIOs to configure to change configuration
-> +  between QVGA and VGA mode and the scan direction. As these pins can be also
-> +  configured with external pulls, all the GPIOs are considered optional with holes
-> +  in the array.
+> +title: Binding for Olimex Ltd. LCD-OLinuXino bridge panel.
 > +
 > +maintainers:
-> +  - Tony Lindgren <tony@atomide.com>
+> +  - Stefan Mavrodiev <stefan@olimex.com>
+> +
+> +description: |
+> +  This device can be used as bridge between a host controller and LCD panels.
+> +  Currently supported LCDs are:
+> +    - LCD-OLinuXino-4.3TS
+> +    - LCD-OLinuXino-5
+> +    - LCD-OLinuXino-7
+> +    - LCD-OLinuXino-10
+> +
+> +  The panel itself contains:
+> +    - AT24C16C EEPROM holding panel identification and timing requirements
+> +    - AR1021 resistive touch screen controller (optional)
+> +    - FT5x6 capacitive touch screnn controller (optional)
+> +    - GT911/GT928 capacitive touch screen controller (optional)
+> +
+> +  The above chips share same I2C bus. The EEPROM is factory preprogrammed with
+> +  device information (id, serial, etc.) and timing requirements.
+> +
+> +  Touchscreen bingings can be found in these files:
+> +    - input/touchscreen/goodix.yaml
+> +    - input/touchscreen/edt-ft5x06.txt
+> +    - input/touchscreen/ar1021.txt
 > +
 > +allOf:
 > +  - $ref: panel-common.yaml#
 > +
 > +properties:
 > +  compatible:
-> +    const: sharp,ls037v7dw01
+> +    const: olimex,lcd-olinuxino
 > +
-> +  label: true
+> +  backlight: true
 > +  enable-gpios: true
-> +  reset-gpios: true
-> +  port: true
 > +  power-supply: true
-> +
-> +  mode-gpios:
-> +    description: |
-> +      GPIO ordered MO, LR, and UD as specified in LS037V7DW01.pdf
-
-3 or...
-
-> +      This panel can have zero to five GPIOs to configure to
-
-5?
-
-> +      change configuration between QVGA and VGA mode and the
-> +      scan direction. As these pins can be also configured
-> +      with external pulls, all the GPIOs are considered
-> +      optional with holes in the array.
-
-minItems: 3
-maxItems: 5
-
+> +  reg: true
 > +
 > +required:
 > +  - compatible
-> +  - port
+> +  - reg
+> +  - power-supply
 > +
 > +additionalProperties: false
 > +
@@ -213,19 +209,19 @@ maxItems: 5
 > +  - |
 > +    #include <dt-bindings/gpio/gpio.h>
 > +
-> +    lcd0: display {
-> +        compatible = "sharp,ls037v7dw01";
-> +        power-supply = <&lcd_3v3>;
-> +        enable-gpios = <&gpio5 24 GPIO_ACTIVE_HIGH>;    /* gpio152, lcd INI */
-> +        reset-gpios = <&gpio5 27 GPIO_ACTIVE_HIGH>;     /* gpio155, lcd RESB */
-> +        mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH        /* gpio154, lcd MO */
-> +                      &gpio1 2 GPIO_ACTIVE_HIGH         /* gpio2, lcd LR */
-> +                      &gpio1 3 GPIO_ACTIVE_HIGH>;       /* gpio3, lcd UD */
+> +    i2c2 {
+
+i2c {
+
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
 > +
-> +        port {
-> +            lcd_in: endpoint {
-> +                remote-endpoint = <&dpi_out>;
-> +            };
+> +        panel@50 {
+> +            compatible = "olimex,lcd-olinuxino";
+> +            reg = <0x50>;
+> +            power-supply = <&reg_vcc5v0>;
+> +            enable-gpios = <&pio 7 8 GPIO_ACTIVE_HIGH>;
+> +            backlight = <&backlight>;
 > +        };
 > +    };
 > +
