@@ -2,318 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBD218BF91
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Mar 2020 19:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F3218C0A5
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Mar 2020 20:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727148AbgCSSoy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Mar 2020 14:44:54 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:33588 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbgCSSoy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Mar 2020 14:44:54 -0400
-Received: by mail-il1-f195.google.com with SMTP id k29so3288039ilg.0;
-        Thu, 19 Mar 2020 11:44:52 -0700 (PDT)
+        id S1727194AbgCSTng (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Mar 2020 15:43:36 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39820 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725817AbgCSTng (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Mar 2020 15:43:36 -0400
+Received: by mail-pl1-f193.google.com with SMTP id m1so1492024pll.6
+        for <linux-spi@vger.kernel.org>; Thu, 19 Mar 2020 12:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=AUrpvm7nUie7dQ0qT11wsqJbElri6+aRNCl7JJRNBOA=;
+        b=My59+S7CI/GWdSKMy3K1BSkHqMaKH1SYAEBgY7D+oXZhLV3OuxRxwvtEk4EqOUQMHA
+         h8pn+KPzD+jnwDzdghZ6bxbO5SkEFbP+Eb2E34MFXJdXzrML9McGCbRCRE7jBBURPwRZ
+         3ODmgNveoAhbGTVSR2/N2Hcmd+r2KjUGphIU4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bVPAncL4ha8NzXJXnSG+TdF+CX13q8qFXUMxFUpVobg=;
-        b=H7xIHM+Ak0f/wWrmPCNoeDqlX+W6MNpcmbCbDKBJehYJwq77ItAB6IcfNzxTLOAR7y
-         kNz57vNR/I0O5+3bpiwGGuZ6Av/SbAJgp4bsEmTtP/ajmJ7FtsAoHH493ABR/ejlR7RP
-         NvKAyK2ZQZ2oiZpJ8sJnV0RVonZaIGmM0aD3x/wFhcyoKsByBZKlHYVBgJC4/hG36ySN
-         NW8nYY1cKffkleadeyNUXTb0I8/9rDUWKLs2fCAdxAqoyCgCSO0vJyqqLngwtQZdizhI
-         lS9/JmuvihM+5j7rfQyMtCqFby5SeLO00NcsZvtEY06BL2DOYPzMXI9SXg4nvgGeNXVv
-         VjiA==
-X-Gm-Message-State: ANhLgQ37oi/gKFInZlfSBinymvuahp2WCpkQ7ZMZseuQASCdIydGCc5G
-        7K4Vb7RkG3a/VEzMypVVUmhR/SU=
-X-Google-Smtp-Source: ADFU+vvu4Vv92C+H/lSWRi/W8dPRz5KT9K9C6qwdOT/iLO8CZnHanXV9AtW71HUA3ivLh8Qpd7lmPQ==
-X-Received: by 2002:a92:b61d:: with SMTP id s29mr4542370ili.66.1584643492422;
-        Thu, 19 Mar 2020 11:44:52 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id s69sm1150358ill.73.2020.03.19.11.44.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 11:44:51 -0700 (PDT)
-Received: (nullmailer pid 10183 invoked by uid 1000);
-        Thu, 19 Mar 2020 18:44:48 -0000
-Date:   Thu, 19 Mar 2020 12:44:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        broonie@kernel.org, vigneshr@ti.com, devicetree@vger.kernel.org,
-        boris.brezillon@free-electrons.com,
-        simon.k.r.goldschmidt@gmail.com, dinguyen@kernel.org,
-        tien.fong.chee@intel.com, marex@denx.de,
-        linux-mtd@lists.infradead.org, dwmw2@infradead.org, richard@nod.at,
-        computersforpeace@gmail.com, cyrille.pitchen@atmel.com,
-        david.oberhollenzer@sigma-star.at, miquel.raynal@bootlin.com,
-        tudor.ambarus@gmail.com, cheol.yong.kim@intel.com,
-        qi-ming.wu@intel.com
-Subject: Re: [PATCH v12 1/4] dt-bindings: spi: Add schema for Cadence QSPI
- Controller driver
-Message-ID: <20200319184448.GA25121@bogus>
-References: <20200310015213.1734-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200310015213.1734-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=AUrpvm7nUie7dQ0qT11wsqJbElri6+aRNCl7JJRNBOA=;
+        b=ER0VLLPx9My2VENZdD8CoiSNS6XIo0P/5dYURGNKX6Osb7R3TsrDLBYZ6BIxFc2294
+         WZVTmVhD1l3FWa8gcLn4YgUL1jShZnshE2WcQofsyrAy7GIehrK+uUAYjWtLRMKgN3kR
+         kHFm4hO1eh3J5Wz3qaQMa3ZDpF5NaRtGBcoqlw58Kl8kpYnTfJIO//leg7ljbQDVbHhZ
+         TlzN41OFI5Iy6Y/rxi9fxBrmv3tdaJBjC7BKhPvOceAV4mD83ZgyWnJ4JnL6o4JQ4zXv
+         85+9CvmW8fBElokaRnXwxMcC582sp7mviBg8LyoRBkcjpzMHxo6DfzzHxnP5ps4HBHpO
+         UqBA==
+X-Gm-Message-State: ANhLgQ0lPWRM2ya0hx7TsfdtLF0N0eyk2ypXaw8TCoZsbgIEQjs4x/Wp
+        ZxNiM8PEWjyj5EgzmRCDkyJKSg==
+X-Google-Smtp-Source: ADFU+vtsdT3busfKz6fGAHHD3V1l9Ghnb9/WDphQ22G1N//OaqyPJ8sNLSJMAiYmie0cCo6/Rbt3xQ==
+X-Received: by 2002:a17:90a:9501:: with SMTP id t1mr5661674pjo.108.1584647014709;
+        Thu, 19 Mar 2020 12:43:34 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id d17sm3145653pfo.148.2020.03.19.12.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2020 12:43:33 -0700 (PDT)
+Date:   Thu, 19 Mar 2020 12:43:32 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+Subject: Re: [PATCH V2 3/8] soc: qcom-geni-se: Add interconnect support to
+ fix earlycon crash
+Message-ID: <20200319194332.GA60149@google.com>
+References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
+ <1584105134-13583-4-git-send-email-akashast@codeaurora.org>
+ <20200313204441.GJ144492@google.com>
+ <1f86fdf0-df7c-4e4a-d4d8-8b0162e52cb4@codeaurora.org>
+ <20200317182910.GR144492@google.com>
+ <3831b33c-93ee-e5e0-fcfb-530b4738f930@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200310015213.1734-2-vadivel.muruganx.ramuthevar@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3831b33c-93ee-e5e0-fcfb-530b4738f930@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 09:52:10AM +0800, Ramuthevar,Vadivel MuruganX wrote:
-> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+On Wed, Mar 18, 2020 at 02:24:35PM +0530, Akash Asthana wrote:
+> Hi Matthias,
 > 
-> Add dt-bindings documentation for Cadence-QSPI controller to support
-> spi based flash memories.
+> On 3/17/2020 11:59 PM, Matthias Kaehlcke wrote:
+> > Hi Akash,
+> > 
+> > On Tue, Mar 17, 2020 at 04:27:47PM +0530, Akash Asthana wrote:
+> > > Hi Matthias,
+> > > 
+> > > On 3/14/2020 2:14 AM, Matthias Kaehlcke wrote:
+> > > > Hi Akash,
+> > > > 
+> > > > On Fri, Mar 13, 2020 at 06:42:09PM +0530, Akash Asthana wrote:
+> > > > > V1 patch@https://patchwork.kernel.org/patch/11386469/ caused SC7180 system
+> > > > > to reset at boot time.
+> > > > The v1 patch isn't relevant in the commit message, please just describe the
+> > > > problem. Also the crash only occurs when earlycon is used.
+> > > ok
+> > > > > As QUP core clock is shared among all the SE drivers present on particular
+> > > > > QUP wrapper, the reset seen is due to earlycon usage after QUP core clock
+> > > > > is put to 0 from other SE drivers before real console comes up.
+> > > > > 
+> > > > > As earlycon can't vote for it's QUP core need, to fix this add ICC
+> > > > > support to common/QUP wrapper driver and put vote for QUP core from
+> > > > > probe on behalf of earlycon and remove vote during sys suspend.
+> > > > Only removing the vote on suspend isn't ideal, the system might never get
+> > > > suspended. That said I don't have a really good alternative suggestion.
+> > > > 
+> > > > One thing you could possibly do is to launch a delayed work, check
+> > > > console_device() every second or so and remove the vote when it returns
+> > > > non-NULL. Not claiming this would be a great solution ...
+> > > > 
+> > > > The cleanest solution might be a notifier when the early console is
+> > > > unregistered, it seems somewhat over-engineered though ... Then again
+> > > > other (future) uart drivers with interconnect support might run into
+> > > > the same problem.
+> > > We are hitting this problem because QUP core clocks are shared among all the
+> > > SE driver present in particular QUP wrapper, if other HW controllers has
+> > > similar architecture we will hit this issue.
+> > > 
+> > > How about if we expose an API from common driver(geni-se) for putting QUP
+> > > core BW vote to 0.
+> > > 
+> > > We call this from console probe just after uart_add_one_port call (console
+> > > resources are enabled as part of this call) to put core quota to 0 on behalf
+> > > of earlyconsole?
+> >  From my notes from earlier debugging I have doubts this would work:
+> > 
+> >    There is a short window where the early console and the 'real' console coexist:
+> > 
+> >    [    3.858122] printk: console [ttyMSM0] enabled
+> >    [    3.875692] printk: bootconsole [qcom_geni0] disabled
+> > 
+> >    The reset probably occurs when the early console tries to write, but the ICC
+> >    is effectively disabled because ttyMSM0 and the other geni ports are runtime
+> >    suspended.
 > 
-> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-> ---
->  .../devicetree/bindings/mtd/cadence-quadspi.txt    |  67 -----------
->  .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 127 +++++++++++++++++++++
->  2 files changed, 127 insertions(+), 67 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mtd/cadence-quadspi.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> Code flow from console driver probe(qcom_geni_serial.c)
 > 
-> diff --git a/Documentation/devicetree/bindings/mtd/cadence-quadspi.txt b/Documentation/devicetree/bindings/mtd/cadence-quadspi.txt
-> deleted file mode 100644
-> index 945be7d5b236..000000000000
-> --- a/Documentation/devicetree/bindings/mtd/cadence-quadspi.txt
-> +++ /dev/null
-> @@ -1,67 +0,0 @@
-> -* Cadence Quad SPI controller
-> -
-> -Required properties:
-> -- compatible : should be one of the following:
-> -	Generic default - "cdns,qspi-nor".
-> -	For TI 66AK2G SoC - "ti,k2g-qspi", "cdns,qspi-nor".
-> -	For TI AM654 SoC  - "ti,am654-ospi", "cdns,qspi-nor".
-> -- reg : Contains two entries, each of which is a tuple consisting of a
-> -	physical address and length. The first entry is the address and
-> -	length of the controller register set. The second entry is the
-> -	address and length of the QSPI Controller data area.
-> -- interrupts : Unit interrupt specifier for the controller interrupt.
-> -- clocks : phandle to the Quad SPI clock.
-> -- cdns,fifo-depth : Size of the data FIFO in words.
-> -- cdns,fifo-width : Bus width of the data FIFO in bytes.
-> -- cdns,trigger-address : 32-bit indirect AHB trigger address.
-> -
-> -Optional properties:
-> -- cdns,is-decoded-cs : Flag to indicate whether decoder is used or not.
-> -- cdns,rclk-en : Flag to indicate that QSPI return clock is used to latch
-> -  the read data rather than the QSPI clock. Make sure that QSPI return
-> -  clock is populated on the board before using this property.
-> -
-> -Optional subnodes:
-> -Subnodes of the Cadence Quad SPI controller are spi slave nodes with additional
-> -custom properties:
-> -- cdns,read-delay : Delay for read capture logic, in clock cycles
-> -- cdns,tshsl-ns : Delay in nanoseconds for the length that the master
-> -                  mode chip select outputs are de-asserted between
-> -		  transactions.
-> -- cdns,tsd2d-ns : Delay in nanoseconds between one chip select being
-> -                  de-activated and the activation of another.
-> -- cdns,tchsh-ns : Delay in nanoseconds between last bit of current
-> -                  transaction and deasserting the device chip select
-> -		  (qspi_n_ss_out).
-> -- cdns,tslch-ns : Delay in nanoseconds between setting qspi_n_ss_out low
-> -                  and first bit transfer.
-> -- resets	: Must contain an entry for each entry in reset-names.
-> -		  See ../reset/reset.txt for details.
-> -- reset-names	: Must include either "qspi" and/or "qspi-ocp".
-> -
-> -Example:
-> -
-> -	qspi: spi@ff705000 {
-> -		compatible = "cdns,qspi-nor";
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -		reg = <0xff705000 0x1000>,
-> -		      <0xffa00000 0x1000>;
-> -		interrupts = <0 151 4>;
-> -		clocks = <&qspi_clk>;
-> -		cdns,is-decoded-cs;
-> -		cdns,fifo-depth = <128>;
-> -		cdns,fifo-width = <4>;
-> -		cdns,trigger-address = <0x00000000>;
-> -		resets = <&rst QSPI_RESET>, <&rst QSPI_OCP_RESET>;
-> -		reset-names = "qspi", "qspi-ocp";
-> -
-> -		flash0: n25q00@0 {
-> -			...
-> -			cdns,read-delay = <4>;
-> -			cdns,tshsl-ns = <50>;
-> -			cdns,tsd2d-ns = <50>;
-> -			cdns,tchsh-ns = <4>;
-> -			cdns,tslch-ns = <4>;
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> new file mode 100644
-> index 000000000000..d21f80604af4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> @@ -0,0 +1,127 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/spi/cdns,qspi-nor.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Cadence QSPI Flash Controller support
-> +
-> +maintainers:
-> +  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-> +
-> +allOf:
-> +  - $ref: "spi-controller.yaml#"
-> +
-> +description: |
-> +  Binding Documentation for Cadence QSPI controller,This controller is
-> +  present in the Intel LGM, Altera SoCFPGA and TI SoCs and this driver
-> +  has been tested On Intel's LGM SoC.
-> +
-> +properties:
-> +  compatible:
-> +     enum:
-> +       - cdns,qspi-nor
-> +       - ti,k2g-qspi
-> +       - ti,am654-ospi
-> +       - intel,lgm-qspi
-> +
-> +  reg:
-> +    maxItems: 2
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  cdns,fifo-depth:
-> +    description:
-> +     Depth of hardware FIFOs.
-> +    allOf:
-> +      - $ref: "/schemas/types.yaml#/definitions/uint32"
-> +      - enum: [ 128, 256 ]
-> +      - default: 128
-> +
-> +  cdns,fifo-width:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      4 byte bus width of the data FIFO in bytes.
-> +
-> +  cdns,trigger-address:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      32-bit indirect AHB trigger address.
-> +
-> +  cdns,rclk-en:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Flag to indicate that QSPI return clock is used to latch the read data
-> +      rather than the QSPI clock. Make sure that QSPI return clock is populated
-> +      on the board before using this property.
-
-Sounds like a boolean rather than a uint32? If not, then constraints on 
-the values?
-
-> +# subnode's properties
-> +patternProperties:
-> +  "^.*@[0-9a-fA-F]+$":
-
-How many chip selects do you support? The unit-address can be limited as 
-I'd guess it's less than 16. Also, should be lowercase hex.
-
-> +    type: object
-> +    description:
-> +      flash device uses the subnodes below defined properties.
-> +
-> +  cdns,read-delay:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Delay in 4 microseconds, read capture logic, in clock cycles.
-
-4us or clock cycles?
-
-> +
-> +  cdns,tshsl-ns:
-> +    description: |
-> +      Delay in 50 nanoseconds, for the length that the master mode chip select
-> +      outputs are de-asserted between transactions.
-
-Sounds like you can add:
-
-multipleOf: 50
-
-> +
-> +  cdns,tsd2d-ns:
-> +    description: |
-> +      Delay in 50 nanoseconds, between one chip select being de-activated
-> +      and the activation of another.
-
-Same here
-
-> +
-> +  cdns,tchsh-ns:
-> +    description: |
-> +      Delay in 4 nanoseconds, between last bit of current transaction and
-> +      deasserting the device chip select (qspi_n_ss_out).
-
-multipleOf: 4
-
-> +
-> +  cdns,tslch-ns:
-> +    description: |
-> +      Delay in 4 nanoseconds, between setting qspi_n_ss_out low and
-> +      first bit transfer.
-
-multipleOf: 4
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - cdns,fifo-depth
-> +  - cdns,fifo-width
-> +  - cdns,trigger-address
-> +
-> +examples:
-> +  - |
-> +    qspi: spi@ff705000 {
-
-Drop the label.
-
-> +          compatible = "cdns,qspi-nor";
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +          reg = <0xff705000 0x1000>,
-> +                <0xffa00000 0x1000>;
-> +          interrupts = <0 151 4>;
-> +          clocks = <&qspi_clk>;
-> +          cdns,fifo-depth = <128>;
-> +          cdns,fifo-width = <4>;
-> +          cdns,trigger-address = <0x00000000>;
-> +
-> +          flash0: n25q00@0 {
-
-flash@0
-
-> +              compatible = "jedec,spi-nor";
-> +              reg = <0x0>;
-> +              cdns,read-delay = <4>;
-> +              cdns,tshsl-ns = <50>;
-> +              cdns,tsd2d-ns = <50>;
-> +              cdns,tchsh-ns = <4>;
-> +              cdns,tslch-ns = <4>;
-> +          };
-> +    };
-> +
-> -- 
-> 2.11.0
+> uart_add_one_port--->uart_configure_port--->{ 1) uart_change_pm(enable
+> console resources)  2)register_console(boot to real console switch happens
+> here)}
 > 
+> Console resources are not disabled from anywhere before the switch happens
+> completely. I meant to say until we saw below logs.
+> 
+> [    3.875692] printk: bootconsole [qcom_geni0] disabled
+> 
+> I think the board reset issue cannot occur during the window where early
+> console and 'real' console coexist.
+
+Thanks for the clarification! Indeed my notes were only a hypothesis, I
+don't see evidence that there is an actual downvote shortly after console
+registration.
+
+> I have validated proposed solution by me, it is working fine.
+> 
+> Currently voting is done for every QUP and not only to which earlycon is
+> connect, with the above approach we can't remove vote from other QUPs.
+> 
+> However we can limit voting only to earlycon QUP by removing interconnect
+> from DT node of other QUPs.
+> 
+> I am not sure how clean is this solution.
+
+I'm more inclined towards a solution along the lines of what Evan
+proposed, i.e. delaying the votes (either in geni or ICC) until we
+are ready.
