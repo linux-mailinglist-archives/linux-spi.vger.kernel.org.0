@@ -2,94 +2,156 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD98D18C712
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 06:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF36318C753
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 07:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbgCTFf7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Mar 2020 01:35:59 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:44532 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726030AbgCTFf7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Mar 2020 01:35:59 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584682558; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=3o1RZ/6bELZAsXOfwev81T339te60gO/KqDzjUk4CZA=; b=jXSSEOVcr2hecCOXi98Cg/FtYoE0WD/4H6hnIlZ+8/wJE8zH+1oX6a8YvuDZCjL1pouPUYlK
- VSXuotjzUzoN3vCNf89UZ8HqSe+cH6e1xfWth2GyF4H2smMl0OwTT65yBeDyYK28yHtuoxE9
- Bi4XNhYpeiEZ1mDSiMB//CCRDXk=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e745637.7f9b3d093bc8-smtp-out-n03;
- Fri, 20 Mar 2020 05:35:51 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D3BAAC44788; Fri, 20 Mar 2020 05:35:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.13] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A570FC433CB;
-        Fri, 20 Mar 2020 05:35:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A570FC433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V2 7/8] spi: spi-qcom-qspi: Add interconnect support
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        wsa@the-dreams.de, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-8-git-send-email-akashast@codeaurora.org>
- <20200314005817.GN144492@google.com>
- <3aeb3083-2a31-b269-510d-eb608ff14ce5@codeaurora.org>
- <CAE=gft58QsgTCUHMHKJhcM9ZxAeMiY16CrbNv2HaTCRqwtmt7A@mail.gmail.com>
- <e2ee1a60-a379-5c78-355a-64aad451a944@codeaurora.org>
- <CAE=gft4xL9+GN2NrM9ewyPg0Fog3pnf_sLGjWRNOg7KynNh-Dg@mail.gmail.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <f8f7041b-c21e-2c2c-a6e7-b92e7cc3e90b@codeaurora.org>
-Date:   Fri, 20 Mar 2020 11:05:42 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726527AbgCTGGr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Mar 2020 02:06:47 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:48604 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726232AbgCTGGr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Mar 2020 02:06:47 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02K667HF013962;
+        Fri, 20 Mar 2020 01:06:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1584684367;
+        bh=54+jme14f9l+F5m+jvtM+/CK152iu0QJDNvmuwSkKso=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=dF0p6Szc2W4e1lfCb0KUwKB5d934NjsUCmhvtLSgw3fGFK78HNvmwRI9UneGh7grT
+         L/+MFnIw4JRXSgnGwaWBq4eqRlrnNFAT5GHTlXyWVPPYVwoMR499A8VY3GbMrWIg/H
+         7odLbJCtgHV8ri0MfbVTUaaeCO0QJdwvUqD3xOpg=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02K666rY003898
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 20 Mar 2020 01:06:06 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 20
+ Mar 2020 01:06:05 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Fri, 20 Mar 2020 01:06:06 -0500
+Received: from [10.250.132.43] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02K65wsQ029497;
+        Fri, 20 Mar 2020 01:05:59 -0500
+Subject: Re: [PATCH v12 1/4] dt-bindings: spi: Add schema for Cadence QSPI
+ Controller driver
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <boris.brezillon@free-electrons.com>,
+        <simon.k.r.goldschmidt@gmail.com>, <dinguyen@kernel.org>,
+        <tien.fong.chee@intel.com>, <marex@denx.de>,
+        <linux-mtd@lists.infradead.org>, <dwmw2@infradead.org>,
+        <richard@nod.at>, <computersforpeace@gmail.com>,
+        <cyrille.pitchen@atmel.com>, <david.oberhollenzer@sigma-star.at>,
+        <miquel.raynal@bootlin.com>, <tudor.ambarus@gmail.com>,
+        <cheol.yong.kim@intel.com>, <qi-ming.wu@intel.com>
+References: <20200310015213.1734-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200310015213.1734-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <c2ad909e-9042-6ba0-7213-83346c6b9908@ti.com>
+Date:   Fri, 20 Mar 2020 11:35:57 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAE=gft4xL9+GN2NrM9ewyPg0Fog3pnf_sLGjWRNOg7KynNh-Dg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200310015213.1734-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Evan,
->> IIUC, you meant to say struct icc_req(inside icc_path) will be saving
->> avg_bw and peak_bw so no need to save it outside icc_path?
-> Correct, it seems silly to store the same set of values twice in the
-> framework, but with different semantics about who's watching it.
-> -Evan
 
-Thanks for clarification! Yeah make sense not to introduce the structure 
-in ICC framework
 
-Regards,
+On 10/03/20 7:22 am, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> 
+> Add dt-bindings documentation for Cadence-QSPI controller to support
+> spi based flash memories.
+> 
+> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> ---
+>  .../devicetree/bindings/mtd/cadence-quadspi.txt    |  67 -----------
+>  .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 127 +++++++++++++++++++++
+>  2 files changed, 127 insertions(+), 67 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/cadence-quadspi.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> 
+[...]
 
-Akash
+> +
+> +# subnode's properties
+> +patternProperties:
+> +  "^.*@[0-9a-fA-F]+$":
+> +    type: object
+> +    description:
+> +      flash device uses the subnodes below defined properties.
+> +
+> +  cdns,read-delay:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Delay in 4 microseconds, read capture logic, in clock cycles.
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+
+Not its not... See the old binding description please:
+
+-- cdns,read-delay : Delay for read capture logic, in clock cycles
+
+There is no mention of 4us. Range is 0x0 - 0xF
+
+> +
+> +  cdns,tshsl-ns:
+> +    description: |
+> +      Delay in 50 nanoseconds, for the length that the master mode chip select
+> +      outputs are de-asserted between transactions.
+
+Again see the description in old binding file:
+
+ cdns,tshsl-ns : Delay in nanoseconds for the length that the master
+                  mode chip select outputs are de-asserted between
+	  	transactions.
+
+Need not be 50ns or its multiple
+
+> +
+> +  cdns,tsd2d-ns:
+> +    description: |
+> +      Delay in 50 nanoseconds, between one chip select being de-activated
+> +      and the activation of another.
+> +
+
+same here
+
+> +  cdns,tchsh-ns:
+> +    description: |
+> +      Delay in 4 nanoseconds, between last bit of current transaction and
+> +      deasserting the device chip select (qspi_n_ss_out).
+> +
+
+Same here... Need not be 4ns...
+
+> +  cdns,tslch-ns:
+> +    description: |
+> +      Delay in 4 nanoseconds, between setting qspi_n_ss_out low and
+> +      first bit transfer.
+
+
+Same here...
+
+Above four values ( cdns,*-ns) come directly from the flash datasheets.
+
+These values are converted appropriate number of cycles depending upon
+the QSPI ref_clk frequency. So, there is no easy way to express the
+constraint (or range) in DT schema. I would recommend to just stick with
+the description that is there in the old binding file without any
+modifications.
+
+Regards
+Vignesh
