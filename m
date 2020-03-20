@@ -2,55 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B809018D3E1
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 17:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBCC18D3E4
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 17:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727463AbgCTQN5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Mar 2020 12:13:57 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:37903 "EHLO
+        id S1727523AbgCTQOB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Mar 2020 12:14:01 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:34943 "EHLO
         mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727148AbgCTQN5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Mar 2020 12:13:57 -0400
-Received: by mail-wm1-f68.google.com with SMTP id l20so6994277wmi.3;
-        Fri, 20 Mar 2020 09:13:55 -0700 (PDT)
+        with ESMTP id S1727459AbgCTQN7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Mar 2020 12:13:59 -0400
+Received: by mail-wm1-f68.google.com with SMTP id m3so6995357wmi.0;
+        Fri, 20 Mar 2020 09:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=T/IZAM0hGmcP9+cRiawGBx8BIofo1ODEPgXI0xOz5JQ=;
-        b=A41y/OOh+uH341q5nsebQ7GTG7UCgVGB+mpUNhuv8UmKnkO6fL8q+Fqa4mH++LdSoD
-         wfS958k2EF6tynHcBsVvBNkydlf720FRBImd4Kseli7Wz+h4BIE48FkMpsu/5MdXizGp
-         o/e9Z8KcHHzojXMe9WgwdX3v7nb4GZE9agEGSR2seOenjrJU69IGEURgXhZT945UeEt5
-         TqxAgK6q3VZ7Fo8Qt+Z7pJjeKDWK4Yiup7Mbaw2/l//kyxft56YG/R1ik8AcSRpXcpXB
-         TLpRAatujT0RxtxgsocUXKNUzHMsTmiapla3Chub1pXR/KQRV7nWji+5dBl2Vd6kcwF5
-         ksaA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=3tKnuzyIhGtfcJxu/aubezG0WoRFs1qYucKlMVKdm1I=;
+        b=Ohj4WaIv5m7gBD3qRTznJYM59oveqQkvjuoASbLUS2YbMvla73uIZfJhHTyBhuxrjy
+         XTDUNQr9NsQZp0rCDUk7LvgvfCgkqZesw0nOOYa5K0czGIX1n9GBNJHvE1FkQJQCtDXU
+         hoQmAqAPsKyPwZarevDYV2XGJTFbdBA2XxCODcvvWQ57ofd1Zpq57oCPGEQSXIInyWF0
+         c7i7ETuuawR6Sek9yzO0K+lyOKgdZ+YOBEq5Yug3Zqxdog3HHsKCRkC9/arG7j7KPQJV
+         KrZvAOO1HtOacOvL6qbwaWhQxEOeKrxJwEDKNM5hTF28P9rCdPdIKJnxRE8Eir4iCwCY
+         x3QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=T/IZAM0hGmcP9+cRiawGBx8BIofo1ODEPgXI0xOz5JQ=;
-        b=VcL5svevf3m1mpq8LpNrs53nN6Z7IwCuApJjEvG/INx6D35GSdhy8TRQUS1MFAYMUS
-         UZKY4G14RLiPL583CtsyKvyWO72t12os196LJilf3hhB0QcSoy3J2yhRUq3jB2IfkhGc
-         c7b6+15jQtcoK3FIjFwoZ4FPZOloXpOK0sXX2rIVyuQO+U9lG8cKt6LejnCte0RdWhdH
-         C716AFDFWQ2oSXcSk+MWEI0n+tRDJpoflmVFvDfUDu9ssIdlo1gWKC+js7Rm8x7jkOCV
-         Ew4xGAtMqxdWQNKNP1Ay3OOB8esZZ5lSF8nHaE/MENn17yuet9K0bVPWWPtxjl66AqFO
-         nKbw==
-X-Gm-Message-State: ANhLgQ1ehpVny3H2x0/w4XXbbjCSYQpdPa8mbGHXW4tfrvhxaE3Yd+dK
-        SOcw/BXO1s/EPmmX58O6/Uw=
-X-Google-Smtp-Source: ADFU+vsYtsiOv0xYIgAiB/DAQonqa0r4h7melk2HzMlT4HaABV76dHwG+fxqhV7pYkNS7nGaI+Sjig==
-X-Received: by 2002:a7b:c0d7:: with SMTP id s23mr9219263wmh.104.1584720835137;
-        Fri, 20 Mar 2020 09:13:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=3tKnuzyIhGtfcJxu/aubezG0WoRFs1qYucKlMVKdm1I=;
+        b=K2HgV9KLw5CyS/4ftp+thXb0hG37zVB6wbC63XymSfn/7/cCKfswX4w7Cn2f7Mf5cc
+         x03MGrLhLEzE3aP3XzrrzAcZkoIDjfRqwQAdpys5jhKisHoLu1fCvTOG2G/YFa03zBjJ
+         5r+upF7SjkJAm1gwE00IJkkfvxu3oXPTWanGI2UlHoL33RlNyYUcjGN5Ndwj2ZvU0fTV
+         3GQkQk9MHEd2o56ialAnD8Y4l/MteQ8OphObOT1Q296LLPe6NeRp1FVXWXHNtHY8pFX1
+         wkS0lcjDedJODhDDGopAKWPj6X6ej9bvIAzhMDm7K1rH7DCOs3t2GOSalYMEtP97w9Zh
+         wt5g==
+X-Gm-Message-State: ANhLgQ09u995gkB16g+P3cFRxEB036uMqLp4ipjeFaAAXko6kXX5D6K+
+        KJ/qjPcfuLJoGCTRqc6Fv4c=
+X-Google-Smtp-Source: ADFU+vsrKrr2e57uWV5YuiO36+J0taf8dQgtGCBEGWN9JOBE0tIXL83Nue56sM5mhc3UF4v1h1pEaQ==
+X-Received: by 2002:a05:600c:2210:: with SMTP id z16mr10114381wml.38.1584720836497;
+        Fri, 20 Mar 2020 09:13:56 -0700 (PDT)
 Received: from localhost.localdomain ([79.115.60.40])
-        by smtp.gmail.com with ESMTPSA id r3sm9121154wrm.35.2020.03.20.09.13.54
+        by smtp.gmail.com with ESMTPSA id r3sm9121154wrm.35.2020.03.20.09.13.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2020 09:13:54 -0700 (PDT)
+        Fri, 20 Mar 2020 09:13:56 -0700 (PDT)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     shawnguo@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com
 Cc:     devicetree@vger.kernel.org, broonie@kernel.org,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         michael@walle.cc, peng.ma@nxp.com
-Subject: [PATCH devicetree 0/2] Remainder for "[PATCH v5 00/12] NXP DSPI bugfixes and support for LS1028A"
-Date:   Fri, 20 Mar 2020 18:13:44 +0200
-Message-Id: <20200320161346.14155-1-olteanv@gmail.com>
+Subject: [PATCH devicetree 1/2] arm64: dts: ls1028a: Specify the DMA channels for the DSPI controllers
+Date:   Fri, 20 Mar 2020 18:13:45 +0200
+Message-Id: <20200320161346.14155-2-olteanv@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200320161346.14155-1-olteanv@gmail.com>
+References: <20200320161346.14155-1-olteanv@gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -58,24 +61,47 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-The series with DSPI support for LS1028A was merged by Mark Brown in his
-linux-spi tree here:
+LS1028A has a functional connection to the eDMA module. Even if the
+spi-fsl-dspi.c driver is not using DMA for LS1028A now, define the slots
+in the DMAMUX for connecting the eDMA channels to the 3 DSPI
+controllers.
 
-https://www.spinics.net/lists/linux-spi/msg20842.html
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-These remaining 2 patches from that series apply on top of Michael
-Walle's basic device tree support patch:
-
-https://patchwork.kernel.org/patch/11389157/#23165893
-
-Vladimir Oltean (2):
-  arm64: dts: ls1028a: Specify the DMA channels for the DSPI controllers
-  arm64: dts: ls1028a-rdb: Add a spidev node for the mikroBUS
-
- arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts | 14 ++++++++++++++
- arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi    |  6 ++++++
- 2 files changed, 20 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+index 515e0a1b934f..18155273a46e 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+@@ -298,6 +298,8 @@
+ 			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+ 			clock-names = "dspi";
+ 			clocks = <&clockgen 4 1>;
++			dmas = <&edma0 0 62>, <&edma0 0 60>;
++			dma-names = "tx", "rx";
+ 			spi-num-chipselects = <4>;
+ 			little-endian;
+ 			status = "disabled";
+@@ -311,6 +313,8 @@
+ 			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+ 			clock-names = "dspi";
+ 			clocks = <&clockgen 4 1>;
++			dmas = <&edma0 0 58>, <&edma0 0 56>;
++			dma-names = "tx", "rx";
+ 			spi-num-chipselects = <4>;
+ 			little-endian;
+ 			status = "disabled";
+@@ -324,6 +328,8 @@
+ 			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+ 			clock-names = "dspi";
+ 			clocks = <&clockgen 4 1>;
++			dmas = <&edma0 0 54>, <&edma0 0 2>;
++			dma-names = "tx", "rx";
+ 			spi-num-chipselects = <3>;
+ 			little-endian;
+ 			status = "disabled";
 -- 
 2.17.1
 
