@@ -2,78 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FA018CC9C
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 12:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B23118CD85
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 13:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbgCTLUS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Mar 2020 07:20:18 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:42061 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbgCTLUS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Mar 2020 07:20:18 -0400
-Received: by mail-ot1-f67.google.com with SMTP id f66so104066otf.9
-        for <linux-spi@vger.kernel.org>; Fri, 20 Mar 2020 04:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=AQ5FoC1OvszEznNGHWNHa6rbIx4Qr8JOmnwimrbjcyEOUVVGSE5mk9MB/QUF7GExUv
-         ZIey8vANt9dj1j0wwwpPNvoWT3JF6kFrxIT1f0gH841PQB+Ji0aEWMqE/FrRpAi5oai5
-         hFwY2v1AcyJNm/MHVODBNwnJC4dmzAXwO2HfT9DBvNVjKFUYoZvl2XwM5f1WgIF856PF
-         TThUHCkPZgbzFHN2+mcbcoscgTm81+lj67bAFLOdO/teK12p1kvFtxU58g74g2t7NzZo
-         rUvIsZQYxSerz93o/WEviV/d0EtSBYJhnQKzGwXvQ2G4nm3dztLZIrRIerLXcSqax2Ko
-         MHEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=XH5wj0vvKeJH2gwkaEu++LQilsi14ILLKfkSs6VfhV7+5wqlerIz4+5LPxAgLHn56q
-         hLjyafGnT2q8p8wALoKneyYB2Nn9Up3OQ39yqZySu7T04XtQjgVHd0YkGbCdMXfhTkwQ
-         DjEIx6jPA/jt1+FWNno5zeWmNqIl9AZ+Qhuv9sDY+hHAemIQopkZrAG3uCdraa0FgZh7
-         R9ZYDvAYYqq1JSbVtUcz298rkdGM4w9VUq/QKDVfK1GgtIRm8AUSkxWH/Tm1d01JVd7O
-         9735rj9/Q7G03Z8Ef7xcibfNb7B8ig4EHG6brjJ6wveJGcKQre/2clmP9f3RHM32+4rX
-         0Qqg==
-X-Gm-Message-State: ANhLgQ0vH4sjZG0W1uNJ38xfnoVmJUMmGXm0d+YnW5ieEYGL3yjrB0Ak
-        PQBy8U1s3WXnNNTIHtgW1hU1PtHadVbVxiD2RbM=
-X-Google-Smtp-Source: ADFU+vuBBEO68qOyaPIRY/DARgRUPX0iQbK9sRD7vCRUGAF092s/g1ozReStH0c9cQA3fwLTJ3USfdGhG2wE8zXhULo=
-X-Received: by 2002:a9d:12b4:: with SMTP id g49mr6530343otg.50.1584703217840;
- Fri, 20 Mar 2020 04:20:17 -0700 (PDT)
+        id S1726893AbgCTMLU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Mar 2020 08:11:20 -0400
+Received: from foss.arm.com ([217.140.110.172]:48248 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727021AbgCTMLU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 20 Mar 2020 08:11:20 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9FB8331B;
+        Fri, 20 Mar 2020 05:11:19 -0700 (PDT)
+Received: from localhost (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5882D3F85E;
+        Fri, 20 Mar 2020 05:11:19 -0700 (PDT)
+Date:   Fri, 20 Mar 2020 12:11:17 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Tudor.Ambarus@microchip.com
+Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Ludovic.Desroches@microchip.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] spi: atmel-quadspi: Add verbose debug facilities to
+ monitor register accesses
+Message-ID: <20200320121117.GA3961@sirena.org.uk>
+References: <20200320065058.891221-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6838:40c6:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:20:17
- -0700 (PDT)
-From:   ECOWAS COMMITEE <ecowasmonitoringcommitteeabj@gmail.com>
-Date:   Fri, 20 Mar 2020 11:20:17 +0000
-Message-ID: <CAHHubrZ1ezbdrwbRJEimmavkmE1YkgwPJE1q19_7Jvh2e8vX4A@mail.gmail.com>
-Subject: HAPPY SURVIVAL OF CORONAVIRUS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oyUTqETQ0mS9luUI"
+Content-Disposition: inline
+In-Reply-To: <20200320065058.891221-1-tudor.ambarus@microchip.com>
+X-Cookie: Laugh when you can
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dear Sir/Madam
 
-HAPPY SURVIVAL OF CORONAVIRUS
+--oyUTqETQ0mS9luUI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We the West African Monitoring Committee of the West African Economic
-Community(ECOWAS)are contacting you for a business transaction which
-we feel will be of great interest to you.
+On Fri, Mar 20, 2020 at 06:51:01AM +0000, Tudor.Ambarus@microchip.com wrote:
+> From: Tudor Ambarus <tudor.ambarus@microchip.com>
+>=20
+> This feature should not be enabled in release but can be useful for
+> developers who need to monitor register accesses at some specific places.
 
-Our duty is to see to the coming in and out of funds into this sub
-region.There is a fund which we confiscated worth of $12.5 million
-dollars.We will like you to receive this fund on your name in your
-account and as well helping us in the investment.
+Looks a lot like the trace regmap would give you....
 
-You are advised to contact us as soon as you get this message for
-details of the transaction if you find it interesting.
+--oyUTqETQ0mS9luUI
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best Regards,
+-----BEGIN PGP SIGNATURE-----
 
-Mr John Aka
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl50suEACgkQJNaLcl1U
+h9D1fAf/VQnn06p5m4B5/lqhwYYKIVVW6P9u/0hBvpkxfRGfRDTxHr4lEOVO+9me
+fiHiUJiG7hRJZ7gkf9nT+yr/NG/Feih+70C7F2fkrNqflZqi7iFWEJHrT8gPjri0
+zuSkqgYo7kLnkBlrrcgaI+00KK3J15c59SZNJa9Qes/3VWtfa0jSi3x2WgAMPuGm
+z5YDPYMTAe6dqSYkYfU14FrWN+p7/039ylhVcwzWZ3aActb7Kjuw4+ND9S7u203b
++9j4IeIXpbSCEkE19P3ZczIbiCJJ0fmgZiDkNPL4WGUSDsE3jvLxcKpKSKKRuo0B
+o9T+CGXY/Htz//y4U+jLBI9Cg3BMYA==
+=JInW
+-----END PGP SIGNATURE-----
 
-Chairman
-ECOWAS
-West African Monitoring Committee
-Tel 00225 6716 6756
-Abidjan Cote D'Ivoire
+--oyUTqETQ0mS9luUI--
