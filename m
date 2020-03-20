@@ -2,313 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD38618D9EC
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 22:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FD518DC32
+	for <lists+linux-spi@lfdr.de>; Sat, 21 Mar 2020 00:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbgCTVBu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Mar 2020 17:01:50 -0400
-Received: from foss.arm.com ([217.140.110.172]:57054 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726738AbgCTVBu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 20 Mar 2020 17:01:50 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9EFF131B;
-        Fri, 20 Mar 2020 14:01:49 -0700 (PDT)
-Received: from localhost (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3534B3F792;
-        Fri, 20 Mar 2020 14:01:49 -0700 (PDT)
-Date:   Fri, 20 Mar 2020 21:01:47 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     alain.volmat@st.com, alexandre.torgue@st.com,
-        amelie.delaunay@st.com, broonie@kernel.org, fabrice.gasnier@st.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Mark Brown <broonie@kernel.org>, mcoquelin.stm32@gmail.com
-Subject: Applied "spi: stm32: Fix comments compilation warnings" to the spi tree
-In-Reply-To:  <1584711857-9162-1-git-send-email-alain.volmat@st.com>
-Message-Id:  <applied-1584711857-9162-1-git-send-email-alain.volmat@st.com>
-X-Patchwork-Hint: ignore
+        id S1727113AbgCTXsa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Mar 2020 19:48:30 -0400
+Received: from gateway31.websitewelcome.com ([192.185.143.38]:18464 "EHLO
+        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726897AbgCTXsa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Mar 2020 19:48:30 -0400
+X-Greylist: delayed 1351 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Mar 2020 19:48:29 EDT
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 1CB2223CBD9
+        for <linux-spi@vger.kernel.org>; Fri, 20 Mar 2020 18:25:58 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id FR1ajBT7yAGTXFR1ajbDWq; Fri, 20 Mar 2020 18:25:58 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oVBIDiOUACeEBMEExhB0XWqzRyL5CKRO/6X8VGFTGn4=; b=hALY/WzciDDDeEWFVpB2y/q2ON
+        qP3PjjYxkSVl7XQNt2fAJqmA6l5gfpdGSVhs0M5OhSE+Y4xmHJIz3wJuv+Z2MFfk8rp7lllrnNF94
+        H3va7Zo1uS7oDtuhFmuzWJW/78RTyLb+RlosCxZlD4cP6oFYKciX7l6i6Usi2bB5NFkLO0u4TtiSF
+        nmYDtajvpDOxqPT1fXrrVqwyECAbY0DwK7+Px1o1M4tU83iddHbjKQzBKiaChjc6RtDD4jQBtt7El
+        7DMjIv29IrGfrR0qUiv18SjB4PhppIRgecrEdXIfwJ+e00Dai2KbrXTx/h2obe5yzmDTO98ud2hAA
+        RQPRjf7Q==;
+Received: from cablelink-189-218-116-241.hosts.intercable.net ([189.218.116.241]:53620 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1jFR1Y-001MNY-IF; Fri, 20 Mar 2020 18:25:56 -0500
+Date:   Fri, 20 Mar 2020 18:25:56 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH][next] spi: spi-s3c24xx: Replace zero-length array with
+ flexible-array member
+Message-ID: <20200320232556.GA24989@embeddedor.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.218.116.241
+X-Source-L: No
+X-Exim-ID: 1jFR1Y-001MNY-IF
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: cablelink-189-218-116-241.hosts.intercable.net (embeddedor) [189.218.116.241]:53620
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 31
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-   spi: stm32: Fix comments compilation warnings
+struct foo {
+        int stuff;
+        struct boo array[];
+};
 
-has been applied to the spi tree at
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+This issue was found with the help of Coccinelle.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 1c52be8bed83e1a67b47295177b355d0f58c1372 Mon Sep 17 00:00:00 2001
-From: Alain Volmat <alain.volmat@st.com>
-Date: Fri, 20 Mar 2020 14:44:17 +0100
-Subject: [PATCH] spi: stm32: Fix comments compilation warnings
-
-Fix all functions and structure descriptions to have the driver
-warning free when built with W=1.
-
-Signed-off-by: Alain Volmat <alain.volmat@st.com>
-Reviewed-by: Amelie Delaunay <amelie.delaunay@st.com>
-Link: https://lore.kernel.org/r/1584711857-9162-1-git-send-email-alain.volmat@st.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 ---
- drivers/spi/spi-stm32.c | 62 ++++++++++++++++++++++++++++++-----------
- 1 file changed, 45 insertions(+), 17 deletions(-)
+ drivers/spi/spi-s3c24xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index e041f9c4ec47..44ac6eb3298d 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -175,7 +175,7 @@
- #define SPI_DMA_MIN_BYTES	16
- 
- /**
-- * stm32_spi_reg - stm32 SPI register & bitfield desc
-+ * struct stm32_spi_reg - stm32 SPI register & bitfield desc
-  * @reg:		register offset
-  * @mask:		bitfield mask
-  * @shift:		left shift
-@@ -187,16 +187,16 @@ struct stm32_spi_reg {
+diff --git a/drivers/spi/spi-s3c24xx.c b/drivers/spi/spi-s3c24xx.c
+index 2d6e37f25e2d..2cb3b611c294 100644
+--- a/drivers/spi/spi-s3c24xx.c
++++ b/drivers/spi/spi-s3c24xx.c
+@@ -227,7 +227,7 @@ static inline unsigned int hw_txbyte(struct s3c24xx_spi *hw, int count)
+ struct spi_fiq_code {
+ 	u32	length;
+ 	u32	ack_offset;
+-	u8	data[0];
++	u8	data[];
  };
  
- /**
-- * stm32_spi_regspec - stm32 registers definition, compatible dependent data
-- * en: enable register and SPI enable bit
-- * dma_rx_en: SPI DMA RX enable register end SPI DMA RX enable bit
-- * dma_tx_en: SPI DMA TX enable register end SPI DMA TX enable bit
-- * cpol: clock polarity register and polarity bit
-- * cpha: clock phase register and phase bit
-- * lsb_first: LSB transmitted first register and bit
-- * br: baud rate register and bitfields
-- * rx: SPI RX data register
-- * tx: SPI TX data register
-+ * struct stm32_spi_regspec - stm32 registers definition, compatible dependent data
-+ * @en: enable register and SPI enable bit
-+ * @dma_rx_en: SPI DMA RX enable register end SPI DMA RX enable bit
-+ * @dma_tx_en: SPI DMA TX enable register end SPI DMA TX enable bit
-+ * @cpol: clock polarity register and polarity bit
-+ * @cpha: clock phase register and phase bit
-+ * @lsb_first: LSB transmitted first register and bit
-+ * @br: baud rate register and bitfields
-+ * @rx: SPI RX data register
-+ * @tx: SPI TX data register
-  */
- struct stm32_spi_regspec {
- 	const struct stm32_spi_reg en;
-@@ -213,7 +213,7 @@ struct stm32_spi_regspec {
- struct stm32_spi;
- 
- /**
-- * stm32_spi_cfg - stm32 compatible configuration data
-+ * struct stm32_spi_cfg - stm32 compatible configuration data
-  * @regs: registers descriptions
-  * @get_fifo_size: routine to get fifo size
-  * @get_bpw_mask: routine to get bits per word mask
-@@ -223,13 +223,13 @@ struct stm32_spi;
-  * @set_mode: routine to configure registers to desired mode
-  * @set_data_idleness: optional routine to configure registers to desired idle
-  * time between frames (if driver has this functionality)
-- * set_number_of_data: optional routine to configure registers to desired
-+ * @set_number_of_data: optional routine to configure registers to desired
-  * number of data (if driver has this functionality)
-  * @can_dma: routine to determine if the transfer is eligible for DMA use
-  * @transfer_one_dma_start: routine to start transfer a single spi_transfer
-  * using DMA
-- * @dma_rx cb: routine to call after DMA RX channel operation is complete
-- * @dma_tx cb: routine to call after DMA TX channel operation is complete
-+ * @dma_rx_cb: routine to call after DMA RX channel operation is complete
-+ * @dma_tx_cb: routine to call after DMA TX channel operation is complete
-  * @transfer_one_irq: routine to configure interrupts for driver
-  * @irq_handler_event: Interrupt handler for SPI controller events
-  * @irq_handler_thread: thread of interrupt handler for SPI controller
-@@ -587,6 +587,7 @@ static void stm32f4_spi_read_rx(struct stm32_spi *spi)
- /**
-  * stm32h7_spi_read_rxfifo - Read bytes in Receive Data Register
-  * @spi: pointer to the spi controller data structure
-+ * @flush: boolean indicating that FIFO should be flushed
-  *
-  * Write in rx_buf depends on remaining bytes to avoid to write beyond
-  * rx_buf end.
-@@ -756,6 +757,9 @@ static void stm32h7_spi_disable(struct stm32_spi *spi)
- 
- /**
-  * stm32_spi_can_dma - Determine if the transfer is eligible for DMA use
-+ * @master: controller master interface
-+ * @spi_dev: pointer to the spi device
-+ * @transfer: pointer to spi transfer
-  *
-  * If driver has fifo and the current transfer size is greater than fifo size,
-  * use DMA. Otherwise use DMA for transfer longer than defined DMA min bytes.
-@@ -974,6 +978,8 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 
- /**
-  * stm32_spi_prepare_msg - set up the controller to transfer a single message
-+ * @master: controller master interface
-+ * @msg: pointer to spi message
-  */
- static int stm32_spi_prepare_msg(struct spi_master *master,
- 				 struct spi_message *msg)
-@@ -1026,6 +1032,7 @@ static int stm32_spi_prepare_msg(struct spi_master *master,
- 
- /**
-  * stm32f4_spi_dma_tx_cb - dma callback
-+ * @data: pointer to the spi controller data structure
-  *
-  * DMA callback is called when the transfer is complete for DMA TX channel.
-  */
-@@ -1041,6 +1048,7 @@ static void stm32f4_spi_dma_tx_cb(void *data)
- 
- /**
-  * stm32f4_spi_dma_rx_cb - dma callback
-+ * @data: pointer to the spi controller data structure
-  *
-  * DMA callback is called when the transfer is complete for DMA RX channel.
-  */
-@@ -1054,6 +1062,7 @@ static void stm32f4_spi_dma_rx_cb(void *data)
- 
- /**
-  * stm32h7_spi_dma_cb - dma callback
-+ * @data: pointer to the spi controller data structure
-  *
-  * DMA callback is called when the transfer is complete or when an error
-  * occurs. If the transfer is complete, EOT flag is raised.
-@@ -1079,6 +1088,9 @@ static void stm32h7_spi_dma_cb(void *data)
- /**
-  * stm32_spi_dma_config - configure dma slave channel depending on current
-  *			  transfer bits_per_word.
-+ * @spi: pointer to the spi controller data structure
-+ * @dma_conf: pointer to the dma_slave_config structure
-+ * @dir: direction of the dma transfer
-  */
- static void stm32_spi_dma_config(struct stm32_spi *spi,
- 				 struct dma_slave_config *dma_conf,
-@@ -1126,6 +1138,7 @@ static void stm32_spi_dma_config(struct stm32_spi *spi,
- /**
-  * stm32f4_spi_transfer_one_irq - transfer a single spi_transfer using
-  *				  interrupts
-+ * @spi: pointer to the spi controller data structure
-  *
-  * It must returns 0 if the transfer is finished or 1 if the transfer is still
-  * in progress.
-@@ -1166,6 +1179,7 @@ static int stm32f4_spi_transfer_one_irq(struct stm32_spi *spi)
- /**
-  * stm32h7_spi_transfer_one_irq - transfer a single spi_transfer using
-  *				  interrupts
-+ * @spi: pointer to the spi controller data structure
-  *
-  * It must returns 0 if the transfer is finished or 1 if the transfer is still
-  * in progress.
-@@ -1207,6 +1221,7 @@ static int stm32h7_spi_transfer_one_irq(struct stm32_spi *spi)
- /**
-  * stm32f4_spi_transfer_one_dma_start - Set SPI driver registers to start
-  *					transfer using DMA
-+ * @spi: pointer to the spi controller data structure
-  */
- static void stm32f4_spi_transfer_one_dma_start(struct stm32_spi *spi)
- {
-@@ -1227,6 +1242,7 @@ static void stm32f4_spi_transfer_one_dma_start(struct stm32_spi *spi)
- /**
-  * stm32h7_spi_transfer_one_dma_start - Set SPI driver registers to start
-  *					transfer using DMA
-+ * @spi: pointer to the spi controller data structure
-  */
- static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
- {
-@@ -1243,6 +1259,8 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
- 
- /**
-  * stm32_spi_transfer_one_dma - transfer a single spi_transfer using DMA
-+ * @spi: pointer to the spi controller data structure
-+ * @xfer: pointer to the spi_transfer structure
-  *
-  * It must returns 0 if the transfer is finished or 1 if the transfer is still
-  * in progress.
-@@ -1405,7 +1423,7 @@ static void stm32_spi_set_mbr(struct stm32_spi *spi, u32 mbrdiv)
- /**
-  * stm32_spi_communication_type - return transfer communication type
-  * @spi_dev: pointer to the spi device
-- * transfer: pointer to spi transfer
-+ * @transfer: pointer to spi transfer
-  */
- static unsigned int stm32_spi_communication_type(struct spi_device *spi_dev,
- 						 struct spi_transfer *transfer)
-@@ -1522,7 +1540,7 @@ static void stm32h7_spi_data_idleness(struct stm32_spi *spi, u32 len)
- /**
-  * stm32h7_spi_number_of_data - configure number of data at current transfer
-  * @spi: pointer to the spi controller data structure
-- * @len: transfer length
-+ * @nb_words: transfer length (in words)
-  */
- static int stm32h7_spi_number_of_data(struct stm32_spi *spi, u32 nb_words)
- {
-@@ -1546,6 +1564,9 @@ static int stm32h7_spi_number_of_data(struct stm32_spi *spi, u32 nb_words)
-  * stm32_spi_transfer_one_setup - common setup to transfer a single
-  *				  spi_transfer either using DMA or
-  *				  interrupts.
-+ * @spi: pointer to the spi controller data structure
-+ * @spi_dev: pointer to the spi device
-+ * @transfer: pointer to spi transfer
-  */
- static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 					struct spi_device *spi_dev,
-@@ -1625,6 +1646,9 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 
- /**
-  * stm32_spi_transfer_one - transfer a single spi_transfer
-+ * @master: controller master interface
-+ * @spi_dev: pointer to the spi device
-+ * @transfer: pointer to spi transfer
-  *
-  * It must return 0 if the transfer is finished or 1 if the transfer is still
-  * in progress.
-@@ -1658,6 +1682,8 @@ static int stm32_spi_transfer_one(struct spi_master *master,
- 
- /**
-  * stm32_spi_unprepare_msg - relax the hardware
-+ * @master: controller master interface
-+ * @msg: pointer to the spi message
-  */
- static int stm32_spi_unprepare_msg(struct spi_master *master,
- 				   struct spi_message *msg)
-@@ -1671,6 +1697,7 @@ static int stm32_spi_unprepare_msg(struct spi_master *master,
- 
- /**
-  * stm32f4_spi_config - Configure SPI controller as SPI master
-+ * @spi: pointer to the spi controller data structure
-  */
- static int stm32f4_spi_config(struct stm32_spi *spi)
- {
-@@ -1701,6 +1728,7 @@ static int stm32f4_spi_config(struct stm32_spi *spi)
- 
- /**
-  * stm32h7_spi_config - Configure SPI controller as SPI master
-+ * @spi: pointer to the spi controller data structure
-  */
- static int stm32h7_spi_config(struct stm32_spi *spi)
- {
+ extern struct spi_fiq_code s3c24xx_spi_fiq_txrx;
 -- 
-2.20.1
+2.23.0
 
