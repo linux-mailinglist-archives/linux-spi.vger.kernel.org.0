@@ -2,46 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 907AD18CB7F
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 11:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A270D18CBB9
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Mar 2020 11:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727039AbgCTKWx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Mar 2020 06:22:53 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:43596 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726892AbgCTKWx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Mar 2020 06:22:53 -0400
+        id S1726892AbgCTKf3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Mar 2020 06:35:29 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:12236 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727198AbgCTKf3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Mar 2020 06:35:29 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584699772; h=Content-Transfer-Encoding: Content-Type:
+ s=smtp; t=1584700528; h=Content-Transfer-Encoding: Content-Type:
  In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=60JbKnWdQrMgDSn6i45yRk/lB+J1ZqLUwhRcp62dqQc=; b=jagLjaFHsSI2UDKD55MXbd4zMVDIXIhH5pjAaDL7TTCrrv0Ep26rbDqCw7rIqN/3Wu3hKEeI
- 9ToFhGE6lipp8CpOy2JR95syRTMmQzaZKpbLu4+iYi5By7s2PbrF/IPBjAtjZqVGNlTcVE1b
- dqrCiP3ErFMZTjv9sODHGLiTcDI=
-X-Mailgun-Sending-Ip: 104.130.122.26
+ Subject: Sender; bh=MCAHrRWNbzSLU10BfuTuGxSIA19JrHAmyPBXV01gh0I=; b=W+C2nVslLmioQ7videUYxxO8r5Tr3yE99kYrgr2Q1qi8r93ZU7ROUAyjcGd5YMAOHlmKxH/8
+ ug03PFjBmUgIxbCz6F7hnIUrgZq/qy31Z/9EFFsB9LkUzPLFR99qDUP+3osUkdQh+chP0zzL
+ i1TaZzNCYlvX4qpDuFANA4atZB0=
+X-Mailgun-Sending-Ip: 104.130.122.27
 X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e74996d.7f9ac9a792d0-smtp-out-n02;
- Fri, 20 Mar 2020 10:22:37 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e749c65.7fd88d397378-smtp-out-n04;
+ Fri, 20 Mar 2020 10:35:17 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 8FEA0C43637; Fri, 20 Mar 2020 10:22:36 +0000 (UTC)
+        id A5057C432C2; Fri, 20 Mar 2020 10:35:15 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from [192.168.0.13] (unknown [183.83.138.47])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C9238C433CB;
-        Fri, 20 Mar 2020 10:22:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C9238C433CB
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B5CCAC433D2;
+        Fri, 20 Mar 2020 10:35:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B5CCAC433D2
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V2 3/8] soc: qcom-geni-se: Add interconnect support to fix
- earlycon crash
-To:     "Matthias Kaehlcke <mka@chromium.org> Evan Green" 
-        <evgreen@chromium.org>
+Subject: Re: [PATCH V2 4/8] tty: serial: qcom_geni_serial: Add interconnect
+ support
+To:     Matthias Kaehlcke <mka@chromium.org>
 Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
         bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
         mark.rutland@arm.com, robh+dt@kernel.org,
@@ -51,19 +50,19 @@ Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
         linux-serial@vger.kernel.org, dianders@chromium.org,
         evgreen@chromium.org
 References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-4-git-send-email-akashast@codeaurora.org>
- <20200313204441.GJ144492@google.com>
- <1f86fdf0-df7c-4e4a-d4d8-8b0162e52cb4@codeaurora.org>
- <20200317182910.GR144492@google.com>
- <3831b33c-93ee-e5e0-fcfb-530b4738f930@codeaurora.org>
- <20200319194332.GA60149@google.com>
+ <1584105134-13583-5-git-send-email-akashast@codeaurora.org>
+ <20200313212833.GK144492@google.com>
+ <e9293de6-004f-6005-8cb6-66f28c080ebe@codeaurora.org>
+ <20200317190804.GS144492@google.com>
+ <e95bd6e0-d1fd-9d13-47df-f7d08b443e37@codeaurora.org>
+ <20200319204248.GA204494@google.com>
 From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <a7227a1f-00a1-0818-80f3-904fe264f864@codeaurora.org>
-Date:   Fri, 20 Mar 2020 15:52:27 +0530
+Message-ID: <a886cbae-310c-a7d7-7cfc-a693422ce570@codeaurora.org>
+Date:   Fri, 20 Mar 2020 16:05:06 +0530
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200319194332.GA60149@google.com>
+In-Reply-To: <20200319204248.GA204494@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -72,153 +71,135 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Evan, Matthias,
+Hi Matthias,
 
-On 3/20/2020 1:13 AM, Matthias Kaehlcke wrote:
-> On Wed, Mar 18, 2020 at 02:24:35PM +0530, Akash Asthana wrote:
+On 3/20/2020 2:12 AM, Matthias Kaehlcke wrote:
+> On Wed, Mar 18, 2020 at 05:53:22PM +0530, Akash Asthana wrote:
 >> Hi Matthias,
 >>
->> On 3/17/2020 11:59 PM, Matthias Kaehlcke wrote:
->>> Hi Akash,
->>>
->>> On Tue, Mar 17, 2020 at 04:27:47PM +0530, Akash Asthana wrote:
+>> On 3/18/2020 12:38 AM, Matthias Kaehlcke wrote:
+>>> On Tue, Mar 17, 2020 at 05:18:34PM +0530, Akash Asthana wrote:
 >>>> Hi Matthias,
 >>>>
->>>> On 3/14/2020 2:14 AM, Matthias Kaehlcke wrote:
+>>>> On 3/14/2020 2:58 AM, Matthias Kaehlcke wrote:
 >>>>> Hi Akash,
 >>>>>
->>>>> On Fri, Mar 13, 2020 at 06:42:09PM +0530, Akash Asthana wrote:
->>>>>> V1 patch@https://patchwork.kernel.org/patch/11386469/ caused SC7180 system
->>>>>> to reset at boot time.
->>>>> The v1 patch isn't relevant in the commit message, please just describe the
->>>>> problem. Also the crash only occurs when earlycon is used.
->>>> ok
->>>>>> As QUP core clock is shared among all the SE drivers present on particular
->>>>>> QUP wrapper, the reset seen is due to earlycon usage after QUP core clock
->>>>>> is put to 0 from other SE drivers before real console comes up.
+>>>>> On Fri, Mar 13, 2020 at 06:42:10PM +0530, Akash Asthana wrote:
+>>>>>> Get the interconnect paths for Uart based Serial Engine device
+>>>>>> and vote according to the baud rate requirement of the driver.
 >>>>>>
->>>>>> As earlycon can't vote for it's QUP core need, to fix this add ICC
->>>>>> support to common/QUP wrapper driver and put vote for QUP core from
->>>>>> probe on behalf of earlycon and remove vote during sys suspend.
->>>>> Only removing the vote on suspend isn't ideal, the system might never get
->>>>> suspended. That said I don't have a really good alternative suggestion.
->>>>>
->>>>> One thing you could possibly do is to launch a delayed work, check
->>>>> console_device() every second or so and remove the vote when it returns
->>>>> non-NULL. Not claiming this would be a great solution ...
->>>>>
->>>>> The cleanest solution might be a notifier when the early console is
->>>>> unregistered, it seems somewhat over-engineered though ... Then again
->>>>> other (future) uart drivers with interconnect support might run into
->>>>> the same problem.
->>>> We are hitting this problem because QUP core clocks are shared among all the
->>>> SE driver present in particular QUP wrapper, if other HW controllers has
->>>> similar architecture we will hit this issue.
+>>>>>> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+>>>>>> ---
+>>>>>> Changes in V2:
+>>>>>>     - As per Bjorn's comment, removed se == NULL check from geni_serial_icc_get
+>>>>>>     - As per Bjorn's comment, removed code to set se->icc_path* to NULL in failure
+>>>>>>     - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
+>>>>>>       path handle
+>>>>>>     - As per Matthias comment, added error handling for icc_set_bw call
+>>>>>>
+>>>>>>     drivers/tty/serial/qcom_geni_serial.c | 69 +++++++++++++++++++++++++++++++++--
+>>>>>>     1 file changed, 65 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+>>>>>> index 272bae0..c8ad7e9 100644
+>>>>>> --- a/drivers/tty/serial/qcom_geni_serial.c
+>>>>>> +++ b/drivers/tty/serial/qcom_geni_serial.c
+>>>>>>
+>>>>>> ...
+>>>>>>
+>>>>>>     static int qcom_geni_serial_request_port(struct uart_port *uport)
+>>>>>>     {
+>>>>>>     	struct platform_device *pdev = to_platform_device(uport->dev);
+>>>>>> @@ -962,6 +975,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+>>>>>>     	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
+>>>>>>     	unsigned long clk_rate;
+>>>>>>     	u32 ver, sampling_rate;
+>>>>>> +	int ret;
+>>>>>>     	qcom_geni_serial_stop_rx(uport);
+>>>>>>     	/* baud rate */
+>>>>>> @@ -983,6 +997,18 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+>>>>>>     	ser_clk_cfg = SER_CLK_EN;
+>>>>>>     	ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
+>>>>>> +	/*
+>>>>>> +	 * Put BW vote only on CPU path as driver supports FIFO mode only.
+>>>>>> +	 * Assume peak_bw as twice of avg_bw.
+>>>>>> +	 */
+>>>>>> +	port->se.avg_bw_cpu = Bps_to_icc(baud);
+>>>>>> +	port->se.peak_bw_cpu = Bps_to_icc(2 * baud);
+>>>>>> +	ret = icc_set_bw(port->se.icc_path_cpu_to_geni, port->se.avg_bw_cpu,
+>>>>>> +			port->se.peak_bw_cpu);
+>>>>>> +	if (ret)
+>>>>>> +		dev_err(uport->dev, "%s: ICC BW voting failed for cpu\n",
+>>>>>> +			__func__);
+>>>>> Should this return an error? The port might not operate properly if the ICC
+>>>>> bandwidth couldn't be configured
+>>>> This is void function we can't return error from here. I guess it would be
+>>>> somewhat okay if BW voting failed for CPU path but clk_set_rate failure is
+>>>> more serious which is called from this function, I don't think it can be
+>>>> move to somewhere else.
+>>> ok, I missed that _set_termios() is void.
+>>>
+>>>>>>     static const struct uart_ops qcom_geni_console_pops = {
+>>>>>> @@ -1308,6 +1358,17 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+>>>>>>     	port->rx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
+>>>>>>     	port->tx_fifo_width = DEF_FIFO_WIDTH_BITS;
+>>>>>> +	ret = geni_serial_icc_get(&port->se);
+>>>>>> +	if (ret)
+>>>>>> +		return ret;
+>>>>>> +	/* Set the bus quota to a reasonable value */
+>>>>>> +	port->se.avg_bw_core = console ? Bps_to_icc(1000) :
+>>>>>> +		Bps_to_icc(CORE_2X_50_MHZ);
+>>>>> Why different settings for console vs. non-console?
+>>>> QUP FW runs on core clock. To support higher throughput we want FW to run at
+>>>> higher speed.
 >>>>
->>>> How about if we expose an API from common driver(geni-se) for putting QUP
->>>> core BW vote to 0.
+>>>> Since Console operate at 115200bps and BT operate at 3.2Mbps baud. We are
+>>>> voting higher on core for BT usecase.
 >>>>
->>>> We call this from console probe just after uart_add_one_port call (console
->>>> resources are enabled as part of this call) to put core quota to 0 on behalf
->>>> of earlyconsole?
->>>   From my notes from earlier debugging I have doubts this would work:
->>>
->>>     There is a short window where the early console and the 'real' console coexist:
->>>
->>>     [    3.858122] printk: console [ttyMSM0] enabled
->>>     [    3.875692] printk: bootconsole [qcom_geni0] disabled
->>>
->>>     The reset probably occurs when the early console tries to write, but the ICC
->>>     is effectively disabled because ttyMSM0 and the other geni ports are runtime
->>>     suspended.
->> Code flow from console driver probe(qcom_geni_serial.c)
+>>>> These value are recommended from HW team.
+>>> IIUC none of the values you mention are set in stone. 115200bps seems to be a
+>>> 'standard' value for the serial console, but it could be a different baudrate.
+>>> I guess you are referring to Qualcomm Bluetooth controllers, which are only one
+>>> of many things that could be connected to the port. And what happens when a
+>>> QCA BT controller is connected to a non-geni/QCA port, which doesn't know about
+>>> its 'requirements'? The answer is that both the BT controller and the serial
+>>> console configure the baudrate they need, hence using different values in
+>>> _probe() is pointless.
+>> Are you refering other UART drivers(not based on geni HW) as non-geni/QCA
+>> port?
 >>
->> uart_add_one_port--->uart_configure_port--->{ 1) uart_change_pm(enable
->> console resources)  2)register_console(boot to real console switch happens
->> here)}
+>> We are not scaling core BW request based on real time need like we are doing
+>> for other paths(CPU/DDR) instead we are using some fail proof value because,
+>> FW runs on core clock and core behaves a bit different than other NOCs.
 >>
->> Console resources are not disabled from anywhere before the switch happens
->> completely. I meant to say until we saw below logs.
+>> We don't have any functional relation which maps actual throughput
+>> requirement to core frequency need. In the past we faced few latency issues
+>> because of core slowness (Although it was running much higher than actual
+>> throughput requirement). To avoid such scenario we are using recommend value
+>> from HW team. These fix value can support SE drivers operating at their max
+>> possible speed(4Mbps in case of non-console).
+> ok, I missed that the core clocks aren't scaled based on the configured
+> baudrate. Apparently experience shows that it is not practical due to the
+> latency issues you mention.
+Yeah That is correct.
+>> I agree that 115200bps seems to be a 'standard' value for the serial
+>> console, but it could be a different baudrate.
 >>
->> [    3.875692] printk: bootconsole [qcom_geni0] disabled
+>> We are voting 1000 in case of console because it  has low power mode
+>> use-case in android, where voting CORE_2X_50_MHZ can be reported as a power
+>> issue.
 >>
->> I think the board reset issue cannot occur during the window where early
->> console and 'real' console coexist.
-> Thanks for the clarification! Indeed my notes were only a hypothesis, I
-> don't see evidence that there is an actual downvote shortly after console
-> registration.
->
->> I have validated proposed solution by me, it is working fine.
+>> Actually we wanted to vote 960 for console but that is not possible with
+>> current ICC design where the minimum value is 1000bps.  So any way core is
+>> running at 50 MHz as 1000 crosses the threshold for 19.2 MHz (960)
 >>
->> Currently voting is done for every QUP and not only to which earlycon is
->> connect, with the above approach we can't remove vote from other QUPs.
->>
->> However we can limit voting only to earlycon QUP by removing interconnect
->> from DT node of other QUPs.
->>
->> I am not sure how clean is this solution.
-> I'm more inclined towards a solution along the lines of what Evan
-> proposed, i.e. delaying the votes (either in geni or ICC) until we
-> are ready.
+>> only with console.
+> Thanks for the clarification. So if a board wanted to use a higher baudrate
+> for the console it (currently) shouldn't be a problem. While it would be nice
+> to have uniform settings for all UARTs it's also not a big deal to have two
+> values, just wanted to make sure it's needed
 
-Based on discussion I think the delayed solution is most suited if 
-implemented in ICC core because other ICC client might face the similar 
-problem.
-
-However for geni case I am more inclined towards below proposed solution.
-
------------------------------------------------------------------------------------------------------
-
-How about if we expose an API from common driver(geni-se) for putting QUP
-core BW vote to 0.
-
-We call this from console probe just after uart_add_one_port call (console
-resources are enabled as part of this call) to put core quota to 0 on behalf
-of earlyconsole?
----------------------------------------------------------------------------
-
-I think below are the pros and cons for above solution.
-
-Pros:
-
-1) Not only it'll solve the current issue also it'll lay foundation to 
-support earlyconsole without having a real console. In future if needed 
-we can enable rest of the earlyconsole resources(SE clocks) from common 
-driver to make it independent of real console.
-
-2) Inorder to solve bug:120934049(Add runtime PM support to common 
-driver and move enablement/disablement of AHB clocks there) reported by 
-Stephen Boyd, we'll end up adding ICC support to this driver because as 
-per HPG the order of enabling the QUP clocks should be 
-(Core-->AHB-->SE(per engine)). So we need to have the minimal possible 
-vote on QUP core before enabling AHB clocks.
-
-I agree still we have keep earlycon fix as it is(vote from common driver 
-probe and remove once real console is up) .
-
-I mentioned above bug in case it seems silly to add ICC support to 
-common driver just for earlyconsole fix.
-
-Cons:
-
-1) As Evan mentioned and I agree that the whole house of cards comes 
-down if we replace these votes in the wrong order. But I think this is 
-very unlikely to happen once fixed.
-
-2) As Matthias mentioned we are voting for all the QUPs regardless 
-earlycon is present or not, I think this is HW limitation and we have to 
-live with it.
-
-Even if I try something like below the QUP1 can come up before 
-QUP2(console) and child of QUP1 can remove vote from share QUP clocks.
-
-if (of_get_compatible_child(pdev->dev.of_node, "qcom,geni-debug-uart")) {
-
-     ret = icc_set_bw(wrapper->icc_path_geni_to_core, Bps_to_icc(1000),
-
-         Bps_to_icc(1000));
-
-}
+Okay, but I would like to keep as it is with above mentioned reason.
 
 
 Thanks,
