@@ -2,76 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C85118DE89
-	for <lists+linux-spi@lfdr.de>; Sat, 21 Mar 2020 08:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A3118EBEF
+	for <lists+linux-spi@lfdr.de>; Sun, 22 Mar 2020 20:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728182AbgCUHga (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 21 Mar 2020 03:36:30 -0400
-Received: from smtp01.smtpout.orange.fr ([80.12.242.123]:27024 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728112AbgCUHga (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 21 Mar 2020 03:36:30 -0400
-Received: from belgarion ([86.210.245.36])
-        by mwinf5d77 with ME
-        id GvcB220040nqnCN03vcMek; Sat, 21 Mar 2020 08:36:28 +0100
-X-ME-Helo: belgarion
-X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Sat, 21 Mar 2020 08:36:28 +0100
-X-ME-IP: 86.210.245.36
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 05/28] ARM: dts: pxa3xx: Fix up encoding of the /gpio interrupts property
-References: <20200317093922.20785-1-lkundrak@v3.sk>
-        <20200317093922.20785-6-lkundrak@v3.sk>
-        <20200317132854.GF24270@lunn.ch>
-X-URL:  http://belgarath.falguerolles.org/
-Date:   Sat, 21 Mar 2020 08:36:10 +0100
-In-Reply-To: <20200317132854.GF24270@lunn.ch> (Andrew Lunn's message of "Tue,
-        17 Mar 2020 14:28:54 +0100")
-Message-ID: <87y2rudus5.fsf@belgarion.home>
-User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+        id S1726623AbgCVThl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 22 Mar 2020 15:37:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46978 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726502AbgCVThl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 22 Mar 2020 15:37:41 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3FEBB2070A;
+        Sun, 22 Mar 2020 19:37:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584905860;
+        bh=EYj1ZjIKsB8UScswc5qhZWW0Mbv6Cjij0kOFbxjDnfc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1q81UiRrdoT3EWkQSrFE/8Oxf5fsbuOdedj+OpfPoWQfNboDFhUWxv7q5Cmew0r3I
+         lscAWsJuoUPQ+YbVM+cjiOtP9jryH8U4n1X2CSx2Rq587hM0J3ux2/ETMi761OGcF9
+         ik1/p1oamSU1FIdpifNjRfJIxwijWCSJDdA+nlQs=
+Date:   Sun, 22 Mar 2020 15:37:39 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.5 01/41] spi: spi-omap2-mcspi: Handle DMA size
+ restriction on AM65x
+Message-ID: <20200322193739.GO4189@sasha-vm>
+References: <20200316023319.749-1-sashal@kernel.org>
+ <20200316115057.GB5010@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20200316115057.GB5010@sirena.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Andrew Lunn <andrew@lunn.ch> writes:
-
-> On Tue, Mar 17, 2020 at 10:38:59AM +0100, Lubomir Rintel wrote:
->> This way the device tree validator learns that each cell of the property
->> constitutes a separate item. Otherwise it gets unnecessairly upset:
->> 
->>   pxa300-raumfeld-speaker-s.dt.yaml: gpio@40e00000: interrupts:
->>       [[8, 9, 10]] is too short
->> 
->> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+On Mon, Mar 16, 2020 at 11:50:57AM +0000, Mark Brown wrote:
+>On Sun, Mar 15, 2020 at 10:32:39PM -0400, Sasha Levin wrote:
+>> From: Vignesh Raghavendra <vigneshr@ti.com>
+>>
+>> [ Upstream commit e4e8276a4f652be2c7bb783a0155d4adb85f5d7d ]
+>>
+>> On AM654, McSPI can only support 4K - 1 bytes per transfer when DMA is
+>> enabled. Therefore populate master->max_transfer_size callback to
+>> inform client drivers of this restriction when DMA channels are
+>> available.
 >
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Robert Jarzmik <robert.jarzmik@free.fr.>
+>As ever this only provides information to other drivers which may be
+>buggy.
+
+I'll drop it, thanks!
 
 -- 
-Robert
+Thanks,
+Sasha
