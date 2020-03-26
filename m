@@ -2,81 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD081931F5
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Mar 2020 21:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CBB1934F3
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Mar 2020 01:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727391AbgCYUcq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Mar 2020 16:32:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:52818 "EHLO foss.arm.com"
+        id S1727554AbgCZAVe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Mar 2020 20:21:34 -0400
+Received: from mga04.intel.com ([192.55.52.120]:17738 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727236AbgCYUcq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 25 Mar 2020 16:32:46 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0899430E;
-        Wed, 25 Mar 2020 13:32:46 -0700 (PDT)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F1C13F71E;
-        Wed, 25 Mar 2020 13:32:45 -0700 (PDT)
-Date:   Wed, 25 Mar 2020 20:32:44 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "lkp@intel.com" <lkp@intel.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        id S1727547AbgCZAVe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 25 Mar 2020 20:21:34 -0400
+IronPort-SDR: 4/ITQ7ko9E83a+DKxOdi/6YmLhOiDG7zqNHkuDIwflM7bFc07NPza/64g82vce+v6UfHlF0p3T
+ gLnvLPJ9Innw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 17:21:33 -0700
+IronPort-SDR: Wrt22mJixHrSU9PzOZGj0GdTvXxmLuTjpMvFhJqR6pQgwoacV8M9CbnT4plSPj4Dxd7Q5ECS0z
+ EA1scJfgDWHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,306,1580803200"; 
+   d="scan'208";a="420502569"
+Received: from shao2-debian.sh.intel.com (HELO [10.239.13.3]) ([10.239.13.3])
+  by orsmga005.jf.intel.com with ESMTP; 25 Mar 2020 17:21:31 -0700
+Subject: Re: [kbuild-all] Re: [linux-next:master 1837/11710] sh4-linux-ld:
+ cannot find drivers/spi/.tmp_gl_spi-mux.o: No such file or directory
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "lkp@intel.com" <lkp@intel.com>
+Cc:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
         "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [linux-next:master 1837/11710] sh4-linux-ld: cannot find
- drivers/spi/.tmp_gl_spi-mux.o: No such file or directory
-Message-ID: <20200325203244.GD12169@sirena.org.uk>
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>
 References: <202003260124.NDYYFnCI%lkp@intel.com>
  <3ec603f5379aafd36f80490ef78108b225eac030.camel@alliedtelesis.co.nz>
+From:   Rong Chen <rong.a.chen@intel.com>
+Message-ID: <f8241a5b-b9cf-5d85-bdf8-b22be139ee50@intel.com>
+Date:   Thu, 26 Mar 2020 08:21:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5gxpn/Q6ypwruk0T"
-Content-Disposition: inline
 In-Reply-To: <3ec603f5379aafd36f80490ef78108b225eac030.camel@alliedtelesis.co.nz>
-X-Cookie: Do not stamp.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---5gxpn/Q6ypwruk0T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Wed, Mar 25, 2020 at 08:30:16PM +0000, Chris Packham wrote:
+On 3/26/20 4:30 AM, Chris Packham wrote:
 > On Thu, 2020-03-26 at 01:38 +0800, kbuild test robot wrote:
-
-> >    rm: cannot remove 'drivers/spi/.tmp_gl_spi-mux.o': No such file or
-> > directory
-> >    rm: cannot remove 'drivers/spi/.tmp_mx_spi-mux.o': No such file or
-> > directory
-
+>> tree:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>> master
+>> head:   bfd7a248502373da8b1c8eb0e811fdb19cc3f8b6
+>> commit: e9e40543ad5b38b848879768359fd13650529961 [1837/11710] spi:
+>> Add generic SPI multiplexer
+>> config: sh-randconfig-a001-20200325 (attached as .config)
+>> compiler: sh4-linux-gcc (GCC) 9.2.0
+>> reproduce:
+>>          wget
+>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+>>   -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          git checkout e9e40543ad5b38b848879768359fd13650529961
+>>          # save the attached .config to linux build tree
+>>          GCC_VERSION=9.2.0 make.cross ARCH=sh
+>>
+>> If you fix the issue, kindly add following tag
+>> Reported-by: kbuild test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>     sh4-linux-objcopy: Unable to change endianness of input file(s)
+>>>> sh4-linux-ld: cannot find drivers/spi/.tmp_gl_spi-mux.o: No such
+>>>> file or directory
+>>>> sh4-linux-objcopy: 'drivers/spi/.tmp_mx_spi-mux.o': No such file
+>>     rm: cannot remove 'drivers/spi/.tmp_gl_spi-mux.o': No such file or
+>> directory
+>>     rm: cannot remove 'drivers/spi/.tmp_mx_spi-mux.o': No such file or
+>> directory
+>> --
 > I attempted to reproduce this. The sh4 toolchain was unhappy with my
 > system (missing libisl.so.22). I bodged something together and got
 > errors like this all over the place. I also tried the previous commit
 > and still got the same errors.
 
-I'm not overly worried about it TBH - it looks like either an issue with
-the architecture or an infrastructure issue, this is plain C code not
-doing anything fancy and if this were an error in the code I'd expect
-that other architectures would be seeing similar problems.
+Thanks for the feedback, we'll check again.
 
---5gxpn/Q6ypwruk0T
-Content-Type: application/pgp-signature; name="signature.asc"
+Best Regards,
+Rong Chen
 
------BEGIN PGP SIGNATURE-----
+>
+>>     sh4-linux-objcopy: Unable to change endianness of input file(s)
+>>>> sh4-linux-ld: cannot find drivers/mux/.tmp_gl_core.o: No such
+>>>> file or directory
+>>>> sh4-linux-objcopy: 'drivers/mux/.tmp_mx_core.o': No such file
+>>     rm: cannot remove 'drivers/mux/.tmp_gl_core.o': No such file or
+>> directory
+>>     rm: cannot remove 'drivers/mux/.tmp_mx_core.o': No such file or
+>> directory
+>> --
+>>     sh4-linux-objcopy: Unable to change endianness of input file(s)
+>>>> sh4-linux-ld: cannot find drivers/mux/.tmp_gl_adg792a.o: No such
+>>>> file or directory
+>>>> sh4-linux-objcopy: 'drivers/mux/.tmp_mx_adg792a.o': No such file
+>>     rm: cannot remove 'drivers/mux/.tmp_gl_adg792a.o': No such file or
+>> directory
+>>     rm: cannot remove 'drivers/mux/.tmp_mx_adg792a.o': No such file or
+>> directory
+>> --
+>>>> sh4-linux-ar: drivers/mux/core.o: No such file or directory
+>> --
+>>>> sh4-linux-ld: cannot find drivers/mux/adg792a.o: No such file or
+>>>> directory
+>> ---
+>> 0-DAY CI Kernel Test Service, Intel Corporation
+>> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl57v+sACgkQJNaLcl1U
-h9BISwf+IZMbDoYOhKIWMWqP1SfWlKdbW9Vn5MyQrrG0qMaYycNlpIg7rH7NStEB
-u1D0jxU6Nq8YjtzKXrcURzjA76t8yAVnOzCpL09JXeGBOpwbgOFADHMX+BDjGwqX
-iUyQKyhm13IRxs2rIx2gqGb8QUZL7S16hsX/COqGBHWlmeCIW9YLLQM7d/+ZgYWf
-8/kHVoTKzuAvWG0qfEDj4RXla5IkG/CbJPLHIyiern16LQ3c+H2HRLOJRk4EQBfv
-4ig834LF0RFhcguR9utNZhlp4KK0EdvTTOwV7oEkZAcVVNkD2YOwStq9FYqBl9mY
-edEAWMkAQ4dYMOOwic8fXdKPI646pg==
-=nWg4
------END PGP SIGNATURE-----
-
---5gxpn/Q6ypwruk0T--
