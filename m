@@ -2,137 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC461950B1
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Mar 2020 06:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B0A1954C2
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Mar 2020 11:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbgC0Fdt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 27 Mar 2020 01:33:49 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:22681 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726518AbgC0Fdt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 Mar 2020 01:33:49 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1585287228; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=V+ERd6fCgQjZF/hnv7fmKN9YfpzFtPi8H3fqR0rE/u0=; b=ueVmS7CqXnCfDTKXUkY2dJQvYdk9f8/aw+liUyrNGY5UIseebCTCDYDo2lsTnmEscbpqALQq
- iwPsNO3pua87BZDOCb4YOHE3vTAxa+H0S3vhyDP/2PWcBSubwojj/QQciW0QkrhvH/az0h6s
- TNYD/7AviuqfauIHGBstIxCjm0s=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e7d9035.7f249cbb05e0-smtp-out-n01;
- Fri, 27 Mar 2020 05:33:41 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id ED29BC4478C; Fri, 27 Mar 2020 05:33:39 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.13] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9B442C433F2;
-        Fri, 27 Mar 2020 05:33:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9B442C433F2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V2 2/8] soc: qcom: geni: Support for ICC voting
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        wsa@the-dreams.de, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-3-git-send-email-akashast@codeaurora.org>
- <CAE=gft4_Su4+SXWAW_HWy5BF1mH7QaDHCiwAAhrNaekTeU57rA@mail.gmail.com>
- <74851dda-296d-cdc5-2449-b9ec59bbc057@codeaurora.org>
- <CAE=gft5Uucr83DoQqaE7_8_H=ExnkPBQvRiUK_+LxOMeadam_g@mail.gmail.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <51bdf6b5-28b1-64ca-011d-59990012569f@codeaurora.org>
-Date:   Fri, 27 Mar 2020 11:03:30 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726750AbgC0KEQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 27 Mar 2020 06:04:16 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44257 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgC0KEO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 Mar 2020 06:04:14 -0400
+Received: by mail-lj1-f196.google.com with SMTP id p14so9521456lji.11
+        for <linux-spi@vger.kernel.org>; Fri, 27 Mar 2020 03:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qtl1Eialsdl3z7ZP76hLFrTUnrm/Xwed3O3Is0v5u2s=;
+        b=fm1BGbXw3YbyFJAFmqHvsEnrwOu7+/+ujtJ86z5Orejx852KLJeCDtQq+soYhGzfCj
+         2rAfF7PxQg2H2Sgjn2JBjFbILfIVHBT7QxDFDZh2R3HOuTeyVGc0fKnVbnrXO43QCj8x
+         cXlH+JS+Jobqck2T5KLCJ/QxbIlZUnxiWcd/WFLXFPVgiIHA/VQnYBo2xwwlOuCaoBNf
+         PV01d4t1H3eQqxbYRIT2/sc/hXgoikPd8X3chF1TEDLMvJhtp9ZecGoNxVyrMZXDYddu
+         VUti7wxKuFzjCVhJlxMkwTw2df/O1qZUfem6Ydt42/5xj5qm4D1YHiUkYri/dNaN3Cn1
+         sdLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qtl1Eialsdl3z7ZP76hLFrTUnrm/Xwed3O3Is0v5u2s=;
+        b=ftCUs3VdiYpMQukqeLxiJKBY97iPR5nUF+b2fNJfY6UT9uMz7hfEsRcPOgh/1cWar+
+         RpqZ6e9+ZU1WpRqJjPd3oCLrdsgaG12dIqundymZGNArdXnmj+67JC3gsHf2ma5QYyPd
+         chTWfqsX0XwmNAPMcPNsp9q9FQk8TMIuTGNt6IA2pghAadEXQc2/G5EFtILZzfy4UDGo
+         /Qcgr7AJeCy1Gr0zjwyldsxJu3VjOTEYDFm40SSQbPnijWVgboX70PasAKEApk3CLBY3
+         zAiPjB7K2JXbNLLqhw8Wkqx7b+Z46fnxdmMN3KaKW2BzLgXhA7iZ8wQM23FIj6KZhMZp
+         e4WQ==
+X-Gm-Message-State: AGi0PuYlXvzjYhTn3emTJGDD9V4Gzs+3bB8P5/hzAjNtGQYB0DLElM54
+        b70tqrH9jo0CS0f695BnaoJ1dn4LiBIKCYIiLZzemw==
+X-Google-Smtp-Source: ADFU+vsLFzRSaI0mp4F0YlxEk/ZWtLbeZk2X0x8rIBWVbKHsUZE12xxYtPOS4x7TLee1muHrdP/vfqhKQcCaKg9I0tI=
+X-Received: by 2002:a2e:9605:: with SMTP id v5mr7696484ljh.258.1585303451336;
+ Fri, 27 Mar 2020 03:04:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAE=gft5Uucr83DoQqaE7_8_H=ExnkPBQvRiUK_+LxOMeadam_g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-22-lkundrak@v3.sk>
+In-Reply-To: <20200317093922.20785-22-lkundrak@v3.sk>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Mar 2020 11:04:00 +0100
+Message-ID: <CACRpkdaEnODObC7emg2M7Ayn_JkeLuc3HpV4VhJcwaZ+=sDLcg@mail.gmail.com>
+Subject: Re: [PATCH 21/28] dt-bindings: gpio: Convert mrvl-gpio to json-schema
+To:     Lubomir Rintel <lkundrak@v3.sk>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-media@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Evan,
+Hi Lubomir!
 
-On 3/20/2020 10:15 PM, Evan Green wrote:
-> On Fri, Mar 20, 2020 at 4:03 AM Akash Asthana <akashast@codeaurora.org> wrote:
->> Hi Evan,
->>
->> +/* Core 2X clock frequency to BCM threshold mapping */
->> +#define CORE_2X_19_2_MHZ               960
->> +#define CORE_2X_50_MHZ                 2500
->> +#define CORE_2X_100_MHZ                        5000
->> +#define CORE_2X_150_MHZ                        7500
->> +#define CORE_2X_200_MHZ                        10000
->> +#define CORE_2X_236_MHZ                        16383
->>
->> These are all just 50 * clock_rate. Can you instead specify that one
->> define of CLK_TO_BW_RATIO 50, and then use clk_get_rate() to get the
->> input clock frequency. That way, if these end up getting clocked at a
->> different rate, the bandwidth also scales appropriately. Also, can you
->> enumerate why 50 is an appropriate ratio?
->> -Evan
->>
->> -Evan
->>
->> Clock rate for Core 2X is controlled by BW voting only, we don't set clock rate for core 2X clock either by DFS or calling clk_set_rate API like we do for SE clocks from individual driver.
->>
->> In DT node it's not mentioned as clock.
->>
->> As discussed in patch@ https://patchwork.kernel.org/patch/11436897/  We are not scaling Core 2X clock based on dynamic need of driver instead we are putting recommended value from HW team for each driver.
-> Oh I get it. This is pretty opaque, since this table is saying "here
-> are the bandwidth values that happen to work out to a Core2X clock
-> rate of N".
+Excellent work! Just nitpicks:
 
-Hmm,  BCM threshold to CORE2X clock rate mapping is exposed to us from 
-clock team.
+On Tue, Mar 17, 2020 at 10:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
 
-BCM threshold value is internally convert to mentioned clock rate this 
-is something internal to board ICC driver.
+> +++ b/Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
+> @@ -0,0 +1,173 @@
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/mrvl-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell PXA GPIO controller
 
->   But it's not obvious why setting the Core2X clock rate to
-> N is desirable or appropriate. The answer seems to be hardware guys
-> told us these thresholds work well in practice.
-Yes, this is correct as the core clocks behaves different than any other 
-NOC, we rely on the recommendation from VI/HW team.
->   And if I'm reading
-> into it more, probably they're saying these bandwidths are too low to
-> be worth dynamically managing beyond on/off
-I am not sure whether they intend to say this.
-> At the very least we should explain some of this in the comment above
-> these defines. Something like:
-> /* Define bandwidth thresholds that cause the underlying Core 2X
-> interconnect clock to run at the named frequency. These baseline
-> values are recommended by the hardware team, and are not dynamically
-> scaled with GENI bandwidth beyond basic on/off. */
-> -Evan
+This binding is lacking a license. Please use the dual GPL+BSD license
+tag.
 
-Ok,
+> +maintainers:
+> +  - devicetree@vger.kernel.org
 
-regards,
+I don't know if Robert Jarzmik is in on maintaining this, would you accept
+it Robert?
 
-Akash
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+Yours,
+Linus Walleij
