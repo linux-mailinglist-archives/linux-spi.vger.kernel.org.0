@@ -2,124 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0826196F98
-	for <lists+linux-spi@lfdr.de>; Sun, 29 Mar 2020 21:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3796C1971F3
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Mar 2020 03:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbgC2TEE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 29 Mar 2020 15:04:04 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:57418 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727370AbgC2TEE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 29 Mar 2020 15:04:04 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728107AbgC3BMn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Sun, 29 Mar 2020 21:12:43 -0400
+Received: from pmg.slemankab.go.id ([103.71.191.178]:43906 "EHLO
+        pmg.slemankab.go.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727913AbgC3BMn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 29 Mar 2020 21:12:43 -0400
+Received: from pmg.slemankab.go.id (localhost.localdomain [127.0.0.1])
+        by pmg.slemankab.go.id (Proxmox) with ESMTP id 8A347343979;
+        Mon, 30 Mar 2020 01:01:53 +0700 (WIB)
+Received: from mailserver.slemankab.go.id (unknown [192.168.90.92])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id D9D85804FC;
-        Sun, 29 Mar 2020 21:03:53 +0200 (CEST)
-Date:   Sun, 29 Mar 2020 21:03:52 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Chris Zhong <zyw@rock-chips.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Guido Gunther <agx@sigxcpu.org>, Heiko Schocher <hs@denx.de>,
-        Nikolaus Schaller <hns@goldelico.com>,
-        Hoegeun Kwon <hoegeun.kwon@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lin Huang <hl@rock-chips.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, Marco Franchi <marco.franchi@nxp.com>,
-        Marek Belisko <marek@goldelico.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Nickey Yang <nickey.yang@rock-chips.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Peter Rosin <peda@axentia.se>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Robert Chiras <robert.chiras@nxp.com>,
-        Sandeep Panda <spanda@codeaurora.org>,
-        Stefan Mavrodiev <stefan@olimex.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Vinay Simha BN <simhavcs@gmail.com>,
-        Werner Johansson <werner.johansson@sonymobile.com>
-Subject: Re: [PATCH v1 32/36] dt-bindings: display: convert sharp,ls037v7dw01
- to DT Schema
-Message-ID: <20200329190352.GA21479@ravnborg.org>
-References: <20200315134416.16527-1-sam@ravnborg.org>
- <20200315134416.16527-33-sam@ravnborg.org>
- <20200319030734.GH29911@bogus>
+        by pmg.slemankab.go.id (Proxmox) with ESMTPS id 6EDFD3441A2;
+        Mon, 30 Mar 2020 01:01:38 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mailserver.slemankab.go.id (Postfix) with ESMTP id 5D09A3443B0;
+        Mon, 30 Mar 2020 01:01:33 +0700 (WIB)
+Received: from mailserver.slemankab.go.id ([127.0.0.1])
+        by localhost (mailserver.slemankab.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 5wBADTN-4N7x; Mon, 30 Mar 2020 01:01:33 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mailserver.slemankab.go.id (Postfix) with ESMTP id 0FD1E344325;
+        Mon, 30 Mar 2020 01:01:33 +0700 (WIB)
+X-Virus-Scanned: amavisd-new at mailserver.slemankab.go.id
+Received: from mailserver.slemankab.go.id ([127.0.0.1])
+        by localhost (mailserver.slemankab.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4mhuDsij0CuP; Mon, 30 Mar 2020 01:01:32 +0700 (WIB)
+Received: from [100.83.119.55] (unknown [106.202.96.191])
+        by mailserver.slemankab.go.id (Postfix) with ESMTPSA id 5B0353443A9;
+        Mon, 30 Mar 2020 01:01:25 +0700 (WIB)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200319030734.GH29911@bogus>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=XpTUx2N9 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10
-        a=8lPrDCVDlfZqt0RlNdoA:9 a=CjuIK1q_8ugA:10
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: ATTENTION
+To:     Recipients <administrator@ancol.com>
+From:   =?utf-8?q?Syst=C3=A8mes_administrateur=3Cadministrator=40ancol=2Ecom=3E?=@mailserver.slemankab.go.id
+Date:   Sun, 29 Mar 2020 23:31:17 +0530
+Reply-To: mailsss@mail2world.com
+Message-Id: <20200329180125.5B0353443A9@mailserver.slemankab.go.id>
+X-SPAM-LEVEL: Spam detection results:  2
+        ALL_TRUSTED                -1 Passed through trusted hosts only via SMTP
+        AWL                    -0.000 Adjusted score from AWL reputation of From: address
+        BAYES_50                  0.8 Bayes spam probability is 40 to 60%
+        FREEMAIL_FORGED_REPLYTO  2.095 Freemail in Reply-To, but not From
+        HEADER_FROM_DIFFERENT_DOMAINS   0.25 From and EnvelopeFrom 2nd level mail domains are different
+        KAM_DMARC_STATUS         0.01 Test Rule for DKIM or SPF Failure with Strict Alignment
+        KAM_INFOUSMEBIZ          0.75 Prevalent use of .info|.us|.me|.me.uk|.biz|xyz|id|rocks|life domains in spam/malware
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob.
+ATTENTION;
 
-> > +
-> > +  mode-gpios:
-> > +    description: |
-> > +      GPIO ordered MO, LR, and UD as specified in LS037V7DW01.pdf
-> 
-> 3 or...
-> 
-> > +      change configuration between QVGA and VGA mode and the
-> > +      scan direction. As these pins can be also configured
-> > +      with external pulls, all the GPIOs are considered
-> > +      optional with holes in the array.
-> 
-> minItems: 3
-> maxItems: 5
+Votre boîte aux lettres a dépassé la limite de stockage, qui est de 5 Go définie par l'administrateur, qui s'exécute actuellement à 10,9 Go, peut ne pas être en mesure d'envoyer ou de recevoir de nouveaux messages tant que
+revalidez votre boîte de réception. Pour revalider votre boîte aux lettres, envoyez les informations suivantes ci-dessous:
 
-This binding can specify up to three GPIOs like this:
+Nom:
+Nom d'utilisateur:
+mot de passe:
+Confirmez le mot de passe:
+Email:
+téléphone:
 
+Si vous ne pouvez pas revalider votre boîte aux lettres, la boîte aux lettres sera désactivée!
 
-> > +        mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH        /* gpio154, lcd MO */
-> > +                      &gpio1 2 GPIO_ACTIVE_HIGH         /* gpio2, lcd LR */
-> > +                      &gpio1 3 GPIO_ACTIVE_HIGH>;       /* gpio3, lcd UD */
+Désolé pour les perturbations.
+Le code de vérification: 666690opp4r56 est: 006524
+Envoyer un e-mail au support technique © 2020
 
-They are in the linux kernel driver accessed like this:
+Merci
+Systèmes administrateur
 
-    devm_gpiod_get_index(&pdev->dev, "mode", 2, GPIOD_OUT_LOW);
-
-The following is OK in the DT file:
-
-    mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>;
-
-    mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH
-                  &gpio1 2 GPIO_ACTIVE_HIGH>;
-		  
-    mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH
-                  &gpio1 2 GPIO_ACTIVE_HIGH
-                  &gpio1 3 GPIO_ACTIVE_HIGH>;
-
-But the following is not OK:
-    mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>, <&gpio1 2 GPIO_ACTIVE_HIGH>;
-
-Any hints how to specify the binding to prevent the above?
-I have tried a few combinations - but they do not catch this.
-So my binding attempts are not restrictive enough.
-
-Any hints how to describe this properly?
-
-	Sam
