@@ -2,176 +2,307 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F61E19A045
-	for <lists+linux-spi@lfdr.de>; Tue, 31 Mar 2020 22:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581C519A286
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Apr 2020 01:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbgCaU5m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 Mar 2020 16:57:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60168 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727852AbgCaU5m (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 31 Mar 2020 16:57:42 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AEAE4208E4;
-        Tue, 31 Mar 2020 20:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585688261;
-        bh=cZUq7aaNQWWsd7nujXKdGojgy9Xn5BD3Y6JU9Kd2Mwo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CNAgVPOG2kU8wA8iP+Bzok2rh/UxvzMgzdMFqG/gQ1EBJBPuUFtdHGtwMCeFyL+f2
-         16pbR89Ns7T9UiweJC3IRgssi7s3UEZCBUQLdz/OF7qYUTkjo7qQW3EQYcVr/iThMo
-         1kvlc1qgT1LyhGozvcK3C5sn3uvVoOYmyXIIWXrk=
-Received: by mail-qk1-f171.google.com with SMTP id 139so14818560qkd.9;
-        Tue, 31 Mar 2020 13:57:41 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ0Cy3acOvfA1C6ErLXjFk7UzzCc22AssnVLrYG7oQXQh9iTAM21
-        l6z2/Zi2rvNQQptWn2nILc3oyRXKYQi7uYNAeQ==
-X-Google-Smtp-Source: ADFU+vvq34TxHm4hqjlR/CY7tWkOnMzotYoHbjOsldxdZa66U+ehdQSMRAA7wRqGNd9dlPqxDXPM0hTjMOhNo5FqmBY=
-X-Received: by 2002:a37:aa92:: with SMTP id t140mr6375840qke.119.1585688260747;
- Tue, 31 Mar 2020 13:57:40 -0700 (PDT)
+        id S1731488AbgCaXcQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 31 Mar 2020 19:32:16 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36389 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731259AbgCaXcQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Mar 2020 19:32:16 -0400
+Received: by mail-pf1-f193.google.com with SMTP id i13so11134630pfe.3
+        for <linux-spi@vger.kernel.org>; Tue, 31 Mar 2020 16:32:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1HVkfCZfA09hqCSwGr9pi3bCsfyBjCkprFJud88h6Eg=;
+        b=LJS0gu5NPnfkn+N8TfYnBTTyF+DE7VO9inN7xOWsdRJ2Yf/pBLhcc3ZWWw10EODhVi
+         g8rPT4+9brsADpP8MdC3CRFnnM/ozbwUqPaa1B9hGMfFsY3gyf80n3dSwiQs4+cLs93K
+         glHidqby5ckbHHxSaPVuKXjN7AMOhTzSLRhftPIRQK1oB0IL3yhoOS1X+bbIJCnuI3+3
+         L2TNkCrcGIB73wdVxAq0gJv5b9B/G3ZYlIR4WnOvfHXCQXCFQMdXHMNqv0u9tDSGbmS9
+         WFQ/RhsBa7yo9P06SNZHiqiwU+b5TL7WdLY0P2D2QMP/l/Z1jjENWM8LJH8ZGqAQpJ0K
+         Y0Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1HVkfCZfA09hqCSwGr9pi3bCsfyBjCkprFJud88h6Eg=;
+        b=MdBAbQj3ANrthE0WyxyLTJS7tRYiP42w7j1OOGLDJmXL+4Jn4pjWHw6/Dymw2bb+G3
+         PQ+xzIT3rS0ZO80dvJUscnPEMamyqmnZJxxpsCbn+Pdn/IWbmzQoMiUFEJt9aTrNg1AW
+         t5pNxcb5J3NoS9wGnlNj0PXcglEKOpnA8dkYfD23rV7jeQaYXNgLyEyzxaNEOGGiG5wl
+         FTobafxQ6iZT5bdT+yiLEnrADj7xqqdF1u3ZESjs9CR5k1BZ5tdmta+FGgV83aEw1rez
+         UD1iPddOBhfYMDPIkxLKFMZ4+KIP25DV1CxJXVqQbyPdx3ouaSgHpV6iWb6CL5yAgs4M
+         GXrg==
+X-Gm-Message-State: ANhLgQ1NE1JBpoi4bLUQPqhUgDSP4qwCBN5tvBTphRj2Du52P1PFJnyE
+        fuINv/oCaac3RNHjJqlfcPP79w==
+X-Google-Smtp-Source: ADFU+vvnkx2Csw/AMK/p49sBaVOWuY1loy/APpY6aE13XVgXhALJ7Zl0e6xhwPFi2IfS425Vh5SsQg==
+X-Received: by 2002:a62:30c6:: with SMTP id w189mr20952100pfw.257.1585697532480;
+        Tue, 31 Mar 2020 16:32:12 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id a8sm91544pgg.79.2020.03.31.16.32.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2020 16:32:11 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 16:32:09 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org, wsa@the-dreams.de,
+        broonie@kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
+        georgi.djakov@linaro.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        swboyd@chromium.org, mgautam@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        mka@chromium.org, dianders@chromium.org, evgreen@chromium.org
+Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
+Message-ID: <20200331233209.GF254911@minitux>
+References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
+ <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-References: <20200315134416.16527-1-sam@ravnborg.org> <20200315134416.16527-33-sam@ravnborg.org>
- <20200319030734.GH29911@bogus> <20200329190352.GA21479@ravnborg.org>
- <CAL_JsqJGpCBohddU+h3366rzGVw6mgn5H9YMqq-MF4Ka=mVkzw@mail.gmail.com> <20200331191353.GA14267@ravnborg.org>
-In-Reply-To: <20200331191353.GA14267@ravnborg.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 31 Mar 2020 14:57:29 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+S1yjX3aH7jYiMGUsgvwCju2KgCvn57Pv9DYZ4LfHa7Q@mail.gmail.com>
-Message-ID: <CAL_Jsq+S1yjX3aH7jYiMGUsgvwCju2KgCvn57Pv9DYZ4LfHa7Q@mail.gmail.com>
-Subject: Re: [PATCH v1 32/36] dt-bindings: display: convert sharp,ls037v7dw01
- to DT Schema
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Chris Zhong <zyw@rock-chips.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Guido Gunther <agx@sigxcpu.org>, Heiko Schocher <hs@denx.de>,
-        Nikolaus Schaller <hns@goldelico.com>,
-        Hoegeun Kwon <hoegeun.kwon@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lin Huang <hl@rock-chips.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Marco Franchi <marco.franchi@nxp.com>,
-        Marek Belisko <marek@goldelico.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Nickey Yang <nickey.yang@rock-chips.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Peter Rosin <peda@axentia.se>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Robert Chiras <robert.chiras@nxp.com>,
-        Sandeep Panda <spanda@codeaurora.org>,
-        Stefan Mavrodiev <stefan@olimex.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Vinay Simha BN <simhavcs@gmail.com>,
-        Werner Johansson <werner.johansson@sonymobile.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 1:14 PM Sam Ravnborg <sam@ravnborg.org> wrote:
->
-> Hi Rob.
->
-> On Tue, Mar 31, 2020 at 11:20:13AM -0600, Rob Herring wrote:
-> > On Sun, Mar 29, 2020 at 1:04 PM Sam Ravnborg <sam@ravnborg.org> wrote:
-> > >
-> > > Hi Rob.
-> > >
-> > > > > +
-> > > > > +  mode-gpios:
-> > > > > +    description: |
-> > > > > +      GPIO ordered MO, LR, and UD as specified in LS037V7DW01.pdf
-> > > >
-> > > > 3 or...
-> > > >
-> > > > > +      change configuration between QVGA and VGA mode and the
-> > > > > +      scan direction. As these pins can be also configured
-> > > > > +      with external pulls, all the GPIOs are considered
-> > > > > +      optional with holes in the array.
-> > > >
-> > > > minItems: 3
-> > > > maxItems: 5
-> > >
-> > > This binding can specify up to three GPIOs like this:
-> >
-> > So it should be:
-> >
-> > minItems: 1
-> > maxItems: 3
-> >
-> > > > > +        mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH        /* gpio154, lcd MO */
-> > > > > +                      &gpio1 2 GPIO_ACTIVE_HIGH         /* gpio2, lcd LR */
-> > > > > +                      &gpio1 3 GPIO_ACTIVE_HIGH>;       /* gpio3, lcd UD */
-> > >
-> > > They are in the linux kernel driver accessed like this:
-> > >
-> > >     devm_gpiod_get_index(&pdev->dev, "mode", 2, GPIOD_OUT_LOW);
-> > >
-> > > The following is OK in the DT file:
-> > >
-> > >     mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>;
-> > >
-> > >     mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH
-> > >                   &gpio1 2 GPIO_ACTIVE_HIGH>;
-> > >
-> > >     mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH
-> > >                   &gpio1 2 GPIO_ACTIVE_HIGH
-> > >                   &gpio1 3 GPIO_ACTIVE_HIGH>;
-> >
-> > With the above, the 2nd 2 should fail...
-> >
-> > > But the following is not OK:
-> > >     mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>, <&gpio1 2 GPIO_ACTIVE_HIGH>;
-> >
-> > And this should pass. We want phandle+arg type properties to be
-> > bracketed like this.
->
-> OK, so if I get you right you say that we should accept the:
-> <phandle+arg>, <phandle+arg> ... syntax.
->
-> And then ignore that current DT files uses:
-> <phandle+arg phandle+arg>
->
->
-> A binding like this:
->  mode-gpios:
->     minItems: 1
->     maxItems: 3
->     description: |
->       GPIO ordered MO, LR, and UD as specified in LS037V7DW01.pdf
->       This panel can have zero to three GPIOs to configure to
->
->
-> Do not error out when the example looks like this:
->
->         mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH        /* gpio154, lcd MO */
->                       &gpio1 2 GPIO_ACTIVE_HIGH         /* gpio2, lcd LR */
->                       &gpio1 3 GPIO_ACTIVE_HIGH>;       /* gpio3, lcd UD */
+On Tue 31 Mar 04:09 PDT 2020, Akash Asthana wrote:
 
-That's because we can't distinguish between this and 1 entry as the
-schema doesn't have visibility of what #gpio-cells value is. dtc does
-check that the cell sizes are correct. We'll need to somehow combine
-that and the schema to check this form correctly.
+> Add necessary macros and structure variables to support ICC BW
+> voting from individual SE drivers.
+> 
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> ---
+> Changes in V2:
+>  - As per Bjorn's comment dropped enums for ICC paths, given the three
+>    paths individual members
+> 
+> Changes in V3:
+>  - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
+>  - Add geni_icc_path structure in common header
+> 
+>  drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
+>  include/linux/qcom-geni-se.h    | 36 +++++++++++++++
+>  2 files changed, 134 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> index 7d622ea..9344c14 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+>  }
+>  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
+>  
+> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
+> +		const char *icc_ddr)
+> +{
+> +	if (icc_core) {
 
->
-> So if I get you right this is a bug in the tooling.
+Afaict it's only this that might be passed as NULL, so please drop these
+conditionals (keep the last one).
 
-Limitation I guess. I thought you where saying the bracketed form was
-not working.
+> +		se->to_core.path = devm_of_icc_get(se->dev, "qup-core");
+> +		if (IS_ERR(se->to_core.path))
 
-Rob
+It would be useful to print an error message here (if PTR_ERR(path) !=
+-EPROBE_DEFER).
+
+> +			return PTR_ERR(se->to_core.path);
+> +	}
+> +
+> +	if (icc_cpu) {
+> +		se->from_cpu.path = devm_of_icc_get(se->dev, "qup-config");
+> +		if (IS_ERR(se->from_cpu.path))
+> +			return PTR_ERR(se->from_cpu.path);
+> +	}
+> +
+> +	if (icc_ddr) {
+> +		se->to_ddr.path = devm_of_icc_get(se->dev, "qup-memory");
+> +		if (IS_ERR(se->to_ddr.path))
+> +			return PTR_ERR(se->to_ddr.path);
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(geni_icc_get);
+> +
+> +int geni_icc_vote_on(struct geni_se *se)
+> +{
+> +	int ret;
+> +
+> +	if (se->to_core.path) {
+
+icc_set_bw(NULL, ...) is valid and will return 0, so these checks
+doesn't add any value.
+
+> +		ret = icc_set_bw(se->to_core.path, se->to_core.avg_bw,
+> +			se->to_core.peak_bw);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for core\n",
+> +						__func__);
+
+Please drop the __func__, the message is specific enough.
+
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (se->from_cpu.path) {
+> +		ret = icc_set_bw(se->from_cpu.path, se->from_cpu.avg_bw,
+> +			se->from_cpu.peak_bw);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for cpu\n",
+> +						__func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (se->to_ddr.path) {
+> +		ret = icc_set_bw(se->to_ddr.path, se->to_ddr.avg_bw,
+> +			se->to_ddr.peak_bw);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for ddr\n",
+> +						__func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(geni_icc_vote_on);
+> +
+> +int geni_icc_vote_off(struct geni_se *se)
+> +{
+> +	int ret;
+> +
+> +	if (se->to_core.path) {
+> +		ret = icc_set_bw(se->to_core.path, 0, 0);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for core\n",
+> +						__func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (se->from_cpu.path) {
+> +		ret = icc_set_bw(se->from_cpu.path, 0, 0);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for cpu\n",
+> +						__func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (se->to_ddr.path) {
+> +		ret = icc_set_bw(se->to_ddr.path, 0, 0);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for ddr\n",
+> +						__func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(geni_icc_vote_off);
+
+Given that these two functions only switch the bandwidth request between
+some value and 0, I really think we should carry a "bool enabled" on the
+path and replace these two functions with
+icc_bulk_enable()/icc_bulk_disable().
+
+The added benefit of this would be that you call icc_set_bw() instead of
+changing the geni_icc_path->{avg_bw,peak_bw} and don't need to keep
+track of them here.
+
+Regards,
+Bjorn
+
+> +
+>  static int geni_se_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+> index dd46494..a83c86b 100644
+> --- a/include/linux/qcom-geni-se.h
+> +++ b/include/linux/qcom-geni-se.h
+> @@ -6,6 +6,8 @@
+>  #ifndef _LINUX_QCOM_GENI_SE
+>  #define _LINUX_QCOM_GENI_SE
+>  
+> +#include <linux/interconnect.h>
+> +
+>  /* Transfer mode supported by GENI Serial Engines */
+>  enum geni_se_xfer_mode {
+>  	GENI_SE_INVALID,
+> @@ -25,6 +27,12 @@ enum geni_se_protocol_type {
+>  struct geni_wrapper;
+>  struct clk;
+>  
+> +struct geni_icc_path {
+> +	struct icc_path *path;
+> +	unsigned int avg_bw;
+> +	unsigned int peak_bw;
+> +};
+> +
+>  /**
+>   * struct geni_se - GENI Serial Engine
+>   * @base:		Base Address of the Serial Engine's register block
+> @@ -33,6 +41,9 @@ struct clk;
+>   * @clk:		Handle to the core serial engine clock
+>   * @num_clk_levels:	Number of valid clock levels in clk_perf_tbl
+>   * @clk_perf_tbl:	Table of clock frequency input to serial engine clock
+> + * @to_core:	ICC path structure for geni to core
+> + * @from_cpu:	ICC path structure for cpu to geni
+> + * @to_ddr:	ICC path structure for geni to ddr
+>   */
+>  struct geni_se {
+>  	void __iomem *base;
+> @@ -41,6 +52,9 @@ struct geni_se {
+>  	struct clk *clk;
+>  	unsigned int num_clk_levels;
+>  	unsigned long *clk_perf_tbl;
+> +	struct geni_icc_path to_core;
+> +	struct geni_icc_path from_cpu;
+> +	struct geni_icc_path to_ddr;
+>  };
+>  
+>  /* Common SE registers */
+> @@ -229,6 +243,21 @@ struct geni_se {
+>  #define GENI_SE_VERSION_MINOR(ver) ((ver & HW_VER_MINOR_MASK) >> HW_VER_MINOR_SHFT)
+>  #define GENI_SE_VERSION_STEP(ver) (ver & HW_VER_STEP_MASK)
+>  
+> +/*
+> + * Define bandwidth thresholds that cause the underlying Core 2X interconnect
+> + * clock to run at the named frequency. These baseline values are recommended
+> + * by the hardware team, and are not dynamically scaled with GENI bandwidth
+> + * beyond basic on/off.
+> + */
+> +#define CORE_2X_19_2_MHZ		960
+> +#define CORE_2X_50_MHZ			2500
+> +#define CORE_2X_100_MHZ			5000
+> +#define CORE_2X_150_MHZ			7500
+> +#define CORE_2X_200_MHZ			10000
+> +#define CORE_2X_236_MHZ			16383
+> +
+> +#define GENI_DEFAULT_BW			Bps_to_icc(1000)
+> +
+>  #if IS_ENABLED(CONFIG_QCOM_GENI_SE)
+>  
+>  u32 geni_se_get_qup_hw_version(struct geni_se *se);
+> @@ -416,5 +445,12 @@ int geni_se_rx_dma_prep(struct geni_se *se, void *buf, size_t len,
+>  void geni_se_tx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len);
+>  
+>  void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len);
+> +
+> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
+> +		const char *icc_ddr);
+> +
+> +int geni_icc_vote_on(struct geni_se *se);
+> +
+> +int geni_icc_vote_off(struct geni_se *se);
+>  #endif
+>  #endif
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
