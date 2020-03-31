@@ -2,183 +2,176 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A38199F5B
-	for <lists+linux-spi@lfdr.de>; Tue, 31 Mar 2020 21:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F61E19A045
+	for <lists+linux-spi@lfdr.de>; Tue, 31 Mar 2020 22:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728244AbgCaTpj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 Mar 2020 15:45:39 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39385 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728187AbgCaTpj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Mar 2020 15:45:39 -0400
-Received: by mail-pg1-f196.google.com with SMTP id g32so4795630pgb.6
-        for <linux-spi@vger.kernel.org>; Tue, 31 Mar 2020 12:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bayV+AbB5HX5Myb1k5cRFv/tdCWMylnZ8INvrTMXrfI=;
-        b=aQpSuyXYeZZdIKU/ZRyQLR/yjBumhT4BPQzzO6caqQw3UB+dLbECiyGtQwk5YJhNTL
-         gVDlLxPm2MnSKheIOpfJJmw48AMSwFqL5W39FV2CWRsY6Xx83k9GNOdEbReT+VNOecGj
-         Mxx+HItnyCBIkBZFISaKN9Dk0e9/6GtX1M15w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bayV+AbB5HX5Myb1k5cRFv/tdCWMylnZ8INvrTMXrfI=;
-        b=oSrhk7jXkjWfS/oMTSJx7V8xh0NMqsK0Yo9xQG4k44xbMnip+WOBtxg49jhiNU96PQ
-         U3qlpukYQQaCBlRca9BgHgNs2zjFmcn3TfgBqOsOKYXKwXn6oJ1lQgGoI1ujLSbLbWzP
-         XgleKNxWNjdRCruY2YUQT96vO5kTuurTHxTSFDHJb91Gcx8uJOC9f0M0Hq+gbSWXHUvn
-         RZF+Xxn70SFauiPWDte71lv3xXKU+MtDozKsN2IqrvflCgP2EE/1/MITjoYty+ZcRmTi
-         SVs2HPpvlAGydxQLiJbcoEUIMl1TOEK1zb0IYyzzyqt7ZKYxcgNjDKF1YVNPHHr1HyBZ
-         JQ8A==
-X-Gm-Message-State: ANhLgQ2Uqoey88FGOnYOdeOTUTnq4Qg8Se2SmB/KNeXQGN/xhfnirgbM
-        bzhflY3CQYWEECrHfI3iztlQ+g==
-X-Google-Smtp-Source: ADFU+vttCIKsEC/g/kbZExooJ94RSNvBXbyqZy3qhsPzPIjK9d3FJfijBLw7OLADd/fuE36KxHKduQ==
-X-Received: by 2002:a62:52d7:: with SMTP id g206mr20533720pfb.286.1585683937813;
-        Tue, 31 Mar 2020 12:45:37 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id w4sm12144309pgg.2.2020.03.31.12.45.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2020 12:45:37 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 12:45:35 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-Subject: Re: [PATCH V3 7/8] spi: spi-qcom-qspi: Add interconnect support
-Message-ID: <20200331194535.GL199755@google.com>
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-8-git-send-email-akashast@codeaurora.org>
+        id S1728493AbgCaU5m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 31 Mar 2020 16:57:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60168 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727852AbgCaU5m (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 31 Mar 2020 16:57:42 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AEAE4208E4;
+        Tue, 31 Mar 2020 20:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585688261;
+        bh=cZUq7aaNQWWsd7nujXKdGojgy9Xn5BD3Y6JU9Kd2Mwo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CNAgVPOG2kU8wA8iP+Bzok2rh/UxvzMgzdMFqG/gQ1EBJBPuUFtdHGtwMCeFyL+f2
+         16pbR89Ns7T9UiweJC3IRgssi7s3UEZCBUQLdz/OF7qYUTkjo7qQW3EQYcVr/iThMo
+         1kvlc1qgT1LyhGozvcK3C5sn3uvVoOYmyXIIWXrk=
+Received: by mail-qk1-f171.google.com with SMTP id 139so14818560qkd.9;
+        Tue, 31 Mar 2020 13:57:41 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ0Cy3acOvfA1C6ErLXjFk7UzzCc22AssnVLrYG7oQXQh9iTAM21
+        l6z2/Zi2rvNQQptWn2nILc3oyRXKYQi7uYNAeQ==
+X-Google-Smtp-Source: ADFU+vvq34TxHm4hqjlR/CY7tWkOnMzotYoHbjOsldxdZa66U+ehdQSMRAA7wRqGNd9dlPqxDXPM0hTjMOhNo5FqmBY=
+X-Received: by 2002:a37:aa92:: with SMTP id t140mr6375840qke.119.1585688260747;
+ Tue, 31 Mar 2020 13:57:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1585652976-17481-8-git-send-email-akashast@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20200315134416.16527-1-sam@ravnborg.org> <20200315134416.16527-33-sam@ravnborg.org>
+ <20200319030734.GH29911@bogus> <20200329190352.GA21479@ravnborg.org>
+ <CAL_JsqJGpCBohddU+h3366rzGVw6mgn5H9YMqq-MF4Ka=mVkzw@mail.gmail.com> <20200331191353.GA14267@ravnborg.org>
+In-Reply-To: <20200331191353.GA14267@ravnborg.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 31 Mar 2020 14:57:29 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+S1yjX3aH7jYiMGUsgvwCju2KgCvn57Pv9DYZ4LfHa7Q@mail.gmail.com>
+Message-ID: <CAL_Jsq+S1yjX3aH7jYiMGUsgvwCju2KgCvn57Pv9DYZ4LfHa7Q@mail.gmail.com>
+Subject: Re: [PATCH v1 32/36] dt-bindings: display: convert sharp,ls037v7dw01
+ to DT Schema
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Guido Gunther <agx@sigxcpu.org>, Heiko Schocher <hs@denx.de>,
+        Nikolaus Schaller <hns@goldelico.com>,
+        Hoegeun Kwon <hoegeun.kwon@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jerry Han <hanxu5@huaqin.corp-partner.google.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Marco Franchi <marco.franchi@nxp.com>,
+        Marek Belisko <marek@goldelico.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Nickey Yang <nickey.yang@rock-chips.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Robert Chiras <robert.chiras@nxp.com>,
+        Sandeep Panda <spanda@codeaurora.org>,
+        Stefan Mavrodiev <stefan@olimex.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Vinay Simha BN <simhavcs@gmail.com>,
+        Werner Johansson <werner.johansson@sonymobile.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 04:39:35PM +0530, Akash Asthana wrote:
-> Get the interconnect paths for QSPI device and vote according to the
-> current bus speed of the driver.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
-> Changes in V2:
->  - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
->    path handle
->  - As per Matthias comment, added error handling for icc_set_bw call
-> 
-> Changes in V3:
->  - No Change.
-> 
->  drivers/spi/spi-qcom-qspi.c | 46 ++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 45 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-> index 3c4f83b..ad48f43 100644
-> --- a/drivers/spi/spi-qcom-qspi.c
-> +++ b/drivers/spi/spi-qcom-qspi.c
-> @@ -2,6 +2,7 @@
->  // Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
->  
->  #include <linux/clk.h>
-> +#include <linux/interconnect.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
-> @@ -139,7 +140,10 @@ struct qcom_qspi {
->  	struct device *dev;
->  	struct clk_bulk_data *clks;
->  	struct qspi_xfer xfer;
-> -	/* Lock to protect xfer and IRQ accessed registers */
-> +	struct icc_path *icc_path_cpu_to_qspi;
-> +	unsigned int avg_bw_cpu;
-> +	unsigned int peak_bw_cpu;
-> +	/* Lock to protect data accessed by IRQs */
->  	spinlock_t lock;
->  };
->  
-> @@ -241,6 +245,20 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
->  		return ret;
->  	}
->  
-> +	/*
-> +	 * Set BW quota for CPU as driver supports FIFO mode only.
-> +	 * Assume peak bw as twice of avg bw.
-> +	 */
-> +	ctrl->avg_bw_cpu = Bps_to_icc(speed_hz);
-> +	ctrl->peak_bw_cpu = Bps_to_icc(2 * speed_hz);
-> +	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, ctrl->avg_bw_cpu,
-> +		ctrl->peak_bw_cpu);
-> +	if (ret) {
-> +		dev_err(ctrl->dev, "%s: ICC BW voting failed for cpu\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
->  	spin_lock_irqsave(&ctrl->lock, flags);
->  
->  	/* We are half duplex, so either rx or tx will be set */
-> @@ -458,6 +476,15 @@ static int qcom_qspi_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto exit_probe_master_put;
->  
-> +	ctrl->icc_path_cpu_to_qspi = devm_of_icc_get(dev, "qspi-config");
-> +	if (IS_ERR(ctrl->icc_path_cpu_to_qspi)) {
-> +		ret = PTR_ERR(ctrl->icc_path_cpu_to_qspi);
-> +		goto exit_probe_master_put;
-> +	}
-> +	/* Put BW vote on CPU path for register access */
-> +	ctrl->avg_bw_cpu = Bps_to_icc(1000);
-> +	ctrl->peak_bw_cpu = Bps_to_icc(1000);
-> +
->  	ret = platform_get_irq(pdev, 0);
->  	if (ret < 0)
->  		goto exit_probe_master_put;
-> @@ -511,9 +538,17 @@ static int __maybe_unused qcom_qspi_runtime_suspend(struct device *dev)
->  {
->  	struct spi_master *master = dev_get_drvdata(dev);
->  	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
-> +	int ret;
->  
->  	clk_bulk_disable_unprepare(QSPI_NUM_CLKS, ctrl->clks);
->  
-> +	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, 0, 0);
-> +	if (ret) {
-> +		dev_err_ratelimited(ctrl->dev, "%s: ICC BW remove failed for cpu\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -521,6 +556,15 @@ static int __maybe_unused qcom_qspi_runtime_resume(struct device *dev)
->  {
->  	struct spi_master *master = dev_get_drvdata(dev);
->  	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
-> +	int ret;
-> +
-> +	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, ctrl->avg_bw_cpu,
-> +		ctrl->peak_bw_cpu);
-> +	if (ret) {
-> +		dev_err_ratelimited(ctrl->dev, "%s: ICC BW voting failed for cpu\n",
-> +			__func__);
-> +		return ret;
-> +	}
->  
->  	return clk_bulk_prepare_enable(QSPI_NUM_CLKS, ctrl->clks);
->  }
+On Tue, Mar 31, 2020 at 1:14 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+>
+> Hi Rob.
+>
+> On Tue, Mar 31, 2020 at 11:20:13AM -0600, Rob Herring wrote:
+> > On Sun, Mar 29, 2020 at 1:04 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+> > >
+> > > Hi Rob.
+> > >
+> > > > > +
+> > > > > +  mode-gpios:
+> > > > > +    description: |
+> > > > > +      GPIO ordered MO, LR, and UD as specified in LS037V7DW01.pdf
+> > > >
+> > > > 3 or...
+> > > >
+> > > > > +      change configuration between QVGA and VGA mode and the
+> > > > > +      scan direction. As these pins can be also configured
+> > > > > +      with external pulls, all the GPIOs are considered
+> > > > > +      optional with holes in the array.
+> > > >
+> > > > minItems: 3
+> > > > maxItems: 5
+> > >
+> > > This binding can specify up to three GPIOs like this:
+> >
+> > So it should be:
+> >
+> > minItems: 1
+> > maxItems: 3
+> >
+> > > > > +        mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH        /* gpio154, lcd MO */
+> > > > > +                      &gpio1 2 GPIO_ACTIVE_HIGH         /* gpio2, lcd LR */
+> > > > > +                      &gpio1 3 GPIO_ACTIVE_HIGH>;       /* gpio3, lcd UD */
+> > >
+> > > They are in the linux kernel driver accessed like this:
+> > >
+> > >     devm_gpiod_get_index(&pdev->dev, "mode", 2, GPIOD_OUT_LOW);
+> > >
+> > > The following is OK in the DT file:
+> > >
+> > >     mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>;
+> > >
+> > >     mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH
+> > >                   &gpio1 2 GPIO_ACTIVE_HIGH>;
+> > >
+> > >     mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH
+> > >                   &gpio1 2 GPIO_ACTIVE_HIGH
+> > >                   &gpio1 3 GPIO_ACTIVE_HIGH>;
+> >
+> > With the above, the 2nd 2 should fail...
+> >
+> > > But the following is not OK:
+> > >     mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>, <&gpio1 2 GPIO_ACTIVE_HIGH>;
+> >
+> > And this should pass. We want phandle+arg type properties to be
+> > bracketed like this.
+>
+> OK, so if I get you right you say that we should accept the:
+> <phandle+arg>, <phandle+arg> ... syntax.
+>
+> And then ignore that current DT files uses:
+> <phandle+arg phandle+arg>
+>
+>
+> A binding like this:
+>  mode-gpios:
+>     minItems: 1
+>     maxItems: 3
+>     description: |
+>       GPIO ordered MO, LR, and UD as specified in LS037V7DW01.pdf
+>       This panel can have zero to three GPIOs to configure to
+>
+>
+> Do not error out when the example looks like this:
+>
+>         mode-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH        /* gpio154, lcd MO */
+>                       &gpio1 2 GPIO_ACTIVE_HIGH         /* gpio2, lcd LR */
+>                       &gpio1 3 GPIO_ACTIVE_HIGH>;       /* gpio3, lcd UD */
 
-Looks good to me besides Mark's concern about the bandwith calculation logic.
+That's because we can't distinguish between this and 1 entry as the
+schema doesn't have visibility of what #gpio-cells value is. dtc does
+check that the cell sizes are correct. We'll need to somehow combine
+that and the schema to check this form correctly.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>
+> So if I get you right this is a bug in the tooling.
+
+Limitation I guess. I thought you where saying the bracketed form was
+not working.
+
+Rob
