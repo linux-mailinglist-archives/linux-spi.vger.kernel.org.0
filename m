@@ -2,307 +2,235 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 581C519A286
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Apr 2020 01:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA9019B06E
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Apr 2020 18:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731488AbgCaXcQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 Mar 2020 19:32:16 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36389 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731259AbgCaXcQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Mar 2020 19:32:16 -0400
-Received: by mail-pf1-f193.google.com with SMTP id i13so11134630pfe.3
-        for <linux-spi@vger.kernel.org>; Tue, 31 Mar 2020 16:32:13 -0700 (PDT)
+        id S2387945AbgDAQ05 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Apr 2020 12:26:57 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:44031 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732833AbgDAQ05 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Apr 2020 12:26:57 -0400
+Received: by mail-lj1-f195.google.com with SMTP id g27so69601ljn.10
+        for <linux-spi@vger.kernel.org>; Wed, 01 Apr 2020 09:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1HVkfCZfA09hqCSwGr9pi3bCsfyBjCkprFJud88h6Eg=;
-        b=LJS0gu5NPnfkn+N8TfYnBTTyF+DE7VO9inN7xOWsdRJ2Yf/pBLhcc3ZWWw10EODhVi
-         g8rPT4+9brsADpP8MdC3CRFnnM/ozbwUqPaa1B9hGMfFsY3gyf80n3dSwiQs4+cLs93K
-         glHidqby5ckbHHxSaPVuKXjN7AMOhTzSLRhftPIRQK1oB0IL3yhoOS1X+bbIJCnuI3+3
-         L2TNkCrcGIB73wdVxAq0gJv5b9B/G3ZYlIR4WnOvfHXCQXCFQMdXHMNqv0u9tDSGbmS9
-         WFQ/RhsBa7yo9P06SNZHiqiwU+b5TL7WdLY0P2D2QMP/l/Z1jjENWM8LJH8ZGqAQpJ0K
-         Y0Tg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XlnGKqC/ksqt7PwOjXqDO3WpjQwi8cgdWrR0LC5/SsA=;
+        b=mY6lhPu6r3dtFh6Z65KXh5PfV4ehb6xbJ/qhRAI3rZHpLXxCY+F5t37DelqrPtp7D7
+         5IkwQcVghOeDbcTvjkKoVhALKtuwX4xrB2cf8+b8ZNiPjczg7fw8D7O6W8V13iFcQhUp
+         kx9C8oIn5wkZsimqa74YxFDF+Id7c35GhJrr8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1HVkfCZfA09hqCSwGr9pi3bCsfyBjCkprFJud88h6Eg=;
-        b=MdBAbQj3ANrthE0WyxyLTJS7tRYiP42w7j1OOGLDJmXL+4Jn4pjWHw6/Dymw2bb+G3
-         PQ+xzIT3rS0ZO80dvJUscnPEMamyqmnZJxxpsCbn+Pdn/IWbmzQoMiUFEJt9aTrNg1AW
-         t5pNxcb5J3NoS9wGnlNj0PXcglEKOpnA8dkYfD23rV7jeQaYXNgLyEyzxaNEOGGiG5wl
-         FTobafxQ6iZT5bdT+yiLEnrADj7xqqdF1u3ZESjs9CR5k1BZ5tdmta+FGgV83aEw1rez
-         UD1iPddOBhfYMDPIkxLKFMZ4+KIP25DV1CxJXVqQbyPdx3ouaSgHpV6iWb6CL5yAgs4M
-         GXrg==
-X-Gm-Message-State: ANhLgQ1NE1JBpoi4bLUQPqhUgDSP4qwCBN5tvBTphRj2Du52P1PFJnyE
-        fuINv/oCaac3RNHjJqlfcPP79w==
-X-Google-Smtp-Source: ADFU+vvnkx2Csw/AMK/p49sBaVOWuY1loy/APpY6aE13XVgXhALJ7Zl0e6xhwPFi2IfS425Vh5SsQg==
-X-Received: by 2002:a62:30c6:: with SMTP id w189mr20952100pfw.257.1585697532480;
-        Tue, 31 Mar 2020 16:32:12 -0700 (PDT)
-Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id a8sm91544pgg.79.2020.03.31.16.32.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 16:32:11 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 16:32:09 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org, wsa@the-dreams.de,
-        broonie@kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
-        georgi.djakov@linaro.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        swboyd@chromium.org, mgautam@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        mka@chromium.org, dianders@chromium.org, evgreen@chromium.org
-Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
-Message-ID: <20200331233209.GF254911@minitux>
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XlnGKqC/ksqt7PwOjXqDO3WpjQwi8cgdWrR0LC5/SsA=;
+        b=tDyDVThMGp4CHIYGmPIWU1V7uwmkPnguWniJiXyvJCQkfDPCTvCOivjxFnv0SHtoVl
+         NqOpzjaBTfwI8sT6D4Co5BKCR4AZdT/rVCwx5P95OD8/jRj/0C7b1D7NwVKya/GiJAhN
+         RWPj8ZVE7kynaN9jk4cstmjvlWWrrZzpnAKSxyz3b6KExz29blJzkuqhcwfhKqepOH5l
+         wI5emDw0mjT9CHM2h3SHZAV6+wGOiPgpgiKsWeL8zid9hOpYbEY5Vb4+AgjHZbjkS3RX
+         gqPBD11EPzDCM3tdkqhtlt+p0A3vzLHE+wLC/FGpayMC1yrKL+CTtsTo/EUsw1sH0a+e
+         rSGg==
+X-Gm-Message-State: AGi0PuYt7EkUMKmcXdkTgkTNAwov7GVNz0+3HmV0VNgdqZePPtzRPPPj
+        PRWqqbz+ruT8WGkp3pIbdwKyBiNUaS8=
+X-Google-Smtp-Source: APiQypI+SsTQzojdYhI9D5T5nOHHg2+oaLFQLia2kZEBZMFH43VAD3meKUuTGBRB3TRCuJOgmvfl2Q==
+X-Received: by 2002:a2e:9752:: with SMTP id f18mr13740731ljj.181.1585758413858;
+        Wed, 01 Apr 2020 09:26:53 -0700 (PDT)
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
+        by smtp.gmail.com with ESMTPSA id t13sm1905558lfc.68.2020.04.01.09.26.52
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Apr 2020 09:26:52 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id v16so109083ljg.5
+        for <linux-spi@vger.kernel.org>; Wed, 01 Apr 2020 09:26:52 -0700 (PDT)
+X-Received: by 2002:a2e:9d83:: with SMTP id c3mr13562274ljj.3.1585758411425;
+ Wed, 01 Apr 2020 09:26:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
+ <1585652976-17481-3-git-send-email-akashast@codeaurora.org> <20200331233209.GF254911@minitux>
+In-Reply-To: <20200331233209.GF254911@minitux>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 1 Apr 2020 09:26:15 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6B2UCBVaKVCJXED8waFWci8WJ+sTM3CT+3e_eYS=-BDQ@mail.gmail.com>
+Message-ID: <CAE=gft6B2UCBVaKVCJXED8waFWci8WJ+sTM3CT+3e_eYS=-BDQ@mail.gmail.com>
+Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Akash Asthana <akashast@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>, wsa@the-dreams.de,
+        Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-serial@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue 31 Mar 04:09 PDT 2020, Akash Asthana wrote:
+On Tue, Mar 31, 2020 at 4:32 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Tue 31 Mar 04:09 PDT 2020, Akash Asthana wrote:
+>
+> > Add necessary macros and structure variables to support ICC BW
+> > voting from individual SE drivers.
+> >
+> > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> > ---
+> > Changes in V2:
+> >  - As per Bjorn's comment dropped enums for ICC paths, given the three
+> >    paths individual members
+> >
+> > Changes in V3:
+> >  - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
+> >  - Add geni_icc_path structure in common header
+> >
+> >  drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/qcom-geni-se.h    | 36 +++++++++++++++
+> >  2 files changed, 134 insertions(+)
+> >
+> > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> > index 7d622ea..9344c14 100644
+> > --- a/drivers/soc/qcom/qcom-geni-se.c
+> > +++ b/drivers/soc/qcom/qcom-geni-se.c
+> > @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+> >  }
+> >  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
+> >
+> > +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
+> > +             const char *icc_ddr)
+> > +{
+> > +     if (icc_core) {
+>
+> Afaict it's only this that might be passed as NULL, so please drop these
+> conditionals (keep the last one).
+>
+> > +             se->to_core.path = devm_of_icc_get(se->dev, "qup-core");
+> > +             if (IS_ERR(se->to_core.path))
+>
+> It would be useful to print an error message here (if PTR_ERR(path) !=
+> -EPROBE_DEFER).
+>
+> > +                     return PTR_ERR(se->to_core.path);
+> > +     }
+> > +
+> > +     if (icc_cpu) {
+> > +             se->from_cpu.path = devm_of_icc_get(se->dev, "qup-config");
+> > +             if (IS_ERR(se->from_cpu.path))
+> > +                     return PTR_ERR(se->from_cpu.path);
+> > +     }
+> > +
+> > +     if (icc_ddr) {
+> > +             se->to_ddr.path = devm_of_icc_get(se->dev, "qup-memory");
+> > +             if (IS_ERR(se->to_ddr.path))
+> > +                     return PTR_ERR(se->to_ddr.path);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +EXPORT_SYMBOL(geni_icc_get);
+> > +
+> > +int geni_icc_vote_on(struct geni_se *se)
+> > +{
+> > +     int ret;
+> > +
+> > +     if (se->to_core.path) {
+>
+> icc_set_bw(NULL, ...) is valid and will return 0, so these checks
+> doesn't add any value.
+>
+> > +             ret = icc_set_bw(se->to_core.path, se->to_core.avg_bw,
+> > +                     se->to_core.peak_bw);
+> > +             if (ret) {
+> > +                     dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for core\n",
+> > +                                             __func__);
+>
+> Please drop the __func__, the message is specific enough.
+>
+> > +                     return ret;
+> > +             }
+> > +     }
+> > +
+> > +     if (se->from_cpu.path) {
+> > +             ret = icc_set_bw(se->from_cpu.path, se->from_cpu.avg_bw,
+> > +                     se->from_cpu.peak_bw);
+> > +             if (ret) {
+> > +                     dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for cpu\n",
+> > +                                             __func__);
+> > +                     return ret;
+> > +             }
+> > +     }
+> > +
+> > +     if (se->to_ddr.path) {
+> > +             ret = icc_set_bw(se->to_ddr.path, se->to_ddr.avg_bw,
+> > +                     se->to_ddr.peak_bw);
+> > +             if (ret) {
+> > +                     dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for ddr\n",
+> > +                                             __func__);
+> > +                     return ret;
+> > +             }
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +EXPORT_SYMBOL(geni_icc_vote_on);
+> > +
+> > +int geni_icc_vote_off(struct geni_se *se)
+> > +{
+> > +     int ret;
+> > +
+> > +     if (se->to_core.path) {
+> > +             ret = icc_set_bw(se->to_core.path, 0, 0);
+> > +             if (ret) {
+> > +                     dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for core\n",
+> > +                                             __func__);
+> > +                     return ret;
+> > +             }
+> > +     }
+> > +
+> > +     if (se->from_cpu.path) {
+> > +             ret = icc_set_bw(se->from_cpu.path, 0, 0);
+> > +             if (ret) {
+> > +                     dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for cpu\n",
+> > +                                             __func__);
+> > +                     return ret;
+> > +             }
+> > +     }
+> > +
+> > +     if (se->to_ddr.path) {
+> > +             ret = icc_set_bw(se->to_ddr.path, 0, 0);
+> > +             if (ret) {
+> > +                     dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for ddr\n",
+> > +                                             __func__);
+> > +                     return ret;
+> > +             }
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +EXPORT_SYMBOL(geni_icc_vote_off);
+>
+> Given that these two functions only switch the bandwidth request between
+> some value and 0, I really think we should carry a "bool enabled" on the
+> path and replace these two functions with
+> icc_bulk_enable()/icc_bulk_disable().
+>
+> The added benefit of this would be that you call icc_set_bw() instead of
+> changing the geni_icc_path->{avg_bw,peak_bw} and don't need to keep
+> track of them here.
 
-> Add necessary macros and structure variables to support ICC BW
-> voting from individual SE drivers.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
-> Changes in V2:
->  - As per Bjorn's comment dropped enums for ICC paths, given the three
->    paths individual members
-> 
-> Changes in V3:
->  - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
->  - Add geni_icc_path structure in common header
-> 
->  drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/qcom-geni-se.h    | 36 +++++++++++++++
->  2 files changed, 134 insertions(+)
-> 
-> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index 7d622ea..9344c14 100644
-> --- a/drivers/soc/qcom/qcom-geni-se.c
-> +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
->  }
->  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
->  
-> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
-> +		const char *icc_ddr)
-> +{
-> +	if (icc_core) {
+Yes yes! I had the same thought here [1].
 
-Afaict it's only this that might be passed as NULL, so please drop these
-conditionals (keep the last one).
+Georgi, what do you think?
+-Evan
 
-> +		se->to_core.path = devm_of_icc_get(se->dev, "qup-core");
-> +		if (IS_ERR(se->to_core.path))
-
-It would be useful to print an error message here (if PTR_ERR(path) !=
--EPROBE_DEFER).
-
-> +			return PTR_ERR(se->to_core.path);
-> +	}
-> +
-> +	if (icc_cpu) {
-> +		se->from_cpu.path = devm_of_icc_get(se->dev, "qup-config");
-> +		if (IS_ERR(se->from_cpu.path))
-> +			return PTR_ERR(se->from_cpu.path);
-> +	}
-> +
-> +	if (icc_ddr) {
-> +		se->to_ddr.path = devm_of_icc_get(se->dev, "qup-memory");
-> +		if (IS_ERR(se->to_ddr.path))
-> +			return PTR_ERR(se->to_ddr.path);
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(geni_icc_get);
-> +
-> +int geni_icc_vote_on(struct geni_se *se)
-> +{
-> +	int ret;
-> +
-> +	if (se->to_core.path) {
-
-icc_set_bw(NULL, ...) is valid and will return 0, so these checks
-doesn't add any value.
-
-> +		ret = icc_set_bw(se->to_core.path, se->to_core.avg_bw,
-> +			se->to_core.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for core\n",
-> +						__func__);
-
-Please drop the __func__, the message is specific enough.
-
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->from_cpu.path) {
-> +		ret = icc_set_bw(se->from_cpu.path, se->from_cpu.avg_bw,
-> +			se->from_cpu.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for cpu\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->to_ddr.path) {
-> +		ret = icc_set_bw(se->to_ddr.path, se->to_ddr.avg_bw,
-> +			se->to_ddr.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for ddr\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(geni_icc_vote_on);
-> +
-> +int geni_icc_vote_off(struct geni_se *se)
-> +{
-> +	int ret;
-> +
-> +	if (se->to_core.path) {
-> +		ret = icc_set_bw(se->to_core.path, 0, 0);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for core\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->from_cpu.path) {
-> +		ret = icc_set_bw(se->from_cpu.path, 0, 0);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for cpu\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->to_ddr.path) {
-> +		ret = icc_set_bw(se->to_ddr.path, 0, 0);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for ddr\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(geni_icc_vote_off);
-
-Given that these two functions only switch the bandwidth request between
-some value and 0, I really think we should carry a "bool enabled" on the
-path and replace these two functions with
-icc_bulk_enable()/icc_bulk_disable().
-
-The added benefit of this would be that you call icc_set_bw() instead of
-changing the geni_icc_path->{avg_bw,peak_bw} and don't need to keep
-track of them here.
-
-Regards,
-Bjorn
-
-> +
->  static int geni_se_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-> index dd46494..a83c86b 100644
-> --- a/include/linux/qcom-geni-se.h
-> +++ b/include/linux/qcom-geni-se.h
-> @@ -6,6 +6,8 @@
->  #ifndef _LINUX_QCOM_GENI_SE
->  #define _LINUX_QCOM_GENI_SE
->  
-> +#include <linux/interconnect.h>
-> +
->  /* Transfer mode supported by GENI Serial Engines */
->  enum geni_se_xfer_mode {
->  	GENI_SE_INVALID,
-> @@ -25,6 +27,12 @@ enum geni_se_protocol_type {
->  struct geni_wrapper;
->  struct clk;
->  
-> +struct geni_icc_path {
-> +	struct icc_path *path;
-> +	unsigned int avg_bw;
-> +	unsigned int peak_bw;
-> +};
-> +
->  /**
->   * struct geni_se - GENI Serial Engine
->   * @base:		Base Address of the Serial Engine's register block
-> @@ -33,6 +41,9 @@ struct clk;
->   * @clk:		Handle to the core serial engine clock
->   * @num_clk_levels:	Number of valid clock levels in clk_perf_tbl
->   * @clk_perf_tbl:	Table of clock frequency input to serial engine clock
-> + * @to_core:	ICC path structure for geni to core
-> + * @from_cpu:	ICC path structure for cpu to geni
-> + * @to_ddr:	ICC path structure for geni to ddr
->   */
->  struct geni_se {
->  	void __iomem *base;
-> @@ -41,6 +52,9 @@ struct geni_se {
->  	struct clk *clk;
->  	unsigned int num_clk_levels;
->  	unsigned long *clk_perf_tbl;
-> +	struct geni_icc_path to_core;
-> +	struct geni_icc_path from_cpu;
-> +	struct geni_icc_path to_ddr;
->  };
->  
->  /* Common SE registers */
-> @@ -229,6 +243,21 @@ struct geni_se {
->  #define GENI_SE_VERSION_MINOR(ver) ((ver & HW_VER_MINOR_MASK) >> HW_VER_MINOR_SHFT)
->  #define GENI_SE_VERSION_STEP(ver) (ver & HW_VER_STEP_MASK)
->  
-> +/*
-> + * Define bandwidth thresholds that cause the underlying Core 2X interconnect
-> + * clock to run at the named frequency. These baseline values are recommended
-> + * by the hardware team, and are not dynamically scaled with GENI bandwidth
-> + * beyond basic on/off.
-> + */
-> +#define CORE_2X_19_2_MHZ		960
-> +#define CORE_2X_50_MHZ			2500
-> +#define CORE_2X_100_MHZ			5000
-> +#define CORE_2X_150_MHZ			7500
-> +#define CORE_2X_200_MHZ			10000
-> +#define CORE_2X_236_MHZ			16383
-> +
-> +#define GENI_DEFAULT_BW			Bps_to_icc(1000)
-> +
->  #if IS_ENABLED(CONFIG_QCOM_GENI_SE)
->  
->  u32 geni_se_get_qup_hw_version(struct geni_se *se);
-> @@ -416,5 +445,12 @@ int geni_se_rx_dma_prep(struct geni_se *se, void *buf, size_t len,
->  void geni_se_tx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len);
->  
->  void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len);
-> +
-> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
-> +		const char *icc_ddr);
-> +
-> +int geni_icc_vote_on(struct geni_se *se);
-> +
-> +int geni_icc_vote_off(struct geni_se *se);
->  #endif
->  #endif
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+[1] https://lore.kernel.org/linux-arm-msm/CAE=gft58QsgTCUHMHKJhcM9ZxAeMiY16CrbNv2HaTCRqwtmt7A@mail.gmail.com/
