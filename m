@@ -2,134 +2,191 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F3819C0B3
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Apr 2020 14:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153CB19C2F2
+	for <lists+linux-spi@lfdr.de>; Thu,  2 Apr 2020 15:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387958AbgDBMKi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Apr 2020 08:10:38 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:14408 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387963AbgDBMKf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Apr 2020 08:10:35 -0400
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200402121032epoutp03e59d128d4f2f61c6cdd37ba804984d40~B-3eXCa2c1804518045epoutp03w
-        for <linux-spi@vger.kernel.org>; Thu,  2 Apr 2020 12:10:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200402121032epoutp03e59d128d4f2f61c6cdd37ba804984d40~B-3eXCa2c1804518045epoutp03w
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1585829432;
-        bh=W1uGLnSfO0xhdPy733z8ZFnqmNvQ5mZd5PW1888pFIQ=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=B8VYQz834wH1Qxg41E08Pw6zfgTbf2bFmZaT0diIwXQt5/EdFK77qlVg9aVCNxA7N
-         uiGkrkxU4wjTGcZK92cy18ROF91RX+59oSijWk2BbBZdZppZ31DFgBcqWihgNM5IuL
-         HGcrMNdgrl2OgaGnIUD5Ouczs7cL0jf+movJ4yBE=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200402121032epcas1p2956ea13226d3883536e916f5a972ed4e~B-3eEhxi63107131071epcas1p2G;
-        Thu,  2 Apr 2020 12:10:32 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.160]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 48tMMq3wbnzMqYkY; Thu,  2 Apr
-        2020 12:10:31 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EF.8F.04402.736D58E5; Thu,  2 Apr 2020 21:10:31 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20200402121030epcas1p443ac0b9ee2bbdc2afe8790bad9ab436b~B-3cjHdDB0745707457epcas1p4h;
-        Thu,  2 Apr 2020 12:10:30 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200402121030epsmtrp2679b1b0437107037b1a58c9c99139350~B-3ciewha0196701967epsmtrp2L;
-        Thu,  2 Apr 2020 12:10:30 +0000 (GMT)
-X-AuditID: b6c32a35-76bff70000001132-d5-5e85d6379325
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        46.9A.04158.636D58E5; Thu,  2 Apr 2020 21:10:30 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.88.100.192]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200402121030epsmtip2d9ec8e4c7a3e1dacafdabfefd2273d94~B-3cZhTr-3176931769epsmtip2W;
-        Thu,  2 Apr 2020 12:10:30 +0000 (GMT)
-From:   Jungseung Lee <js07.lee@samsung.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jungseung Lee <js07.lee@samsung.com>
-Subject: [PATCH] spi: spi-ep93xx: fix wrong SPI mode selection
-Date:   Thu,  2 Apr 2020 21:10:22 +0900
-Message-Id: <20200402121022.9976-1-js07.lee@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEKsWRmVeSWpSXmKPExsWy7bCmnq75tdY4g9eN0hZTHz5hs3h08zer
-        xeVdc9gsGj/eZHdg8di0qpPNo2/LKkaPz5vkApijcmwyUhNTUosUUvOS81My89JtlbyD453j
-        Tc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgLYpKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yV
-        UgtScgoMDQr0ihNzi0vz0vWS83OtDA0MjEyBKhNyMl49vcxe0MNZcfjlRuYGxk3sXYycHBIC
-        JhKzLr0Fs4UEdjBKrFyp2sXIBWR/YpT4/ngqM4TzjVHi+oRJjF2MHGAdF65AFe1llGiafoYF
-        wvnMKNE3vQlsFJuAlsSN35tYQWwRgTiJE8vmgtnMAhoSvw/cZAGxhQXsJC7duswCMpRFQFWi
-        90YdSJhXwELi9IYtjBDXyUus3nAA7AgJgYesEh+3LGCGSLhIbLx6jA3CFpZ4dXwL1DtSEp/f
-        7YWKF0vsXDmRHaK5hVHi0fIlUEXGEu/ermUGWcwsoCmxfpc+RFhRYufvuYwQd/JJvPvawwrx
-        MK9ER5sQRImSxJsHLSwQtoTEhce9UCUeEqtfxkICMVZiwZLdTBMYZWchzF/AyLiKUSy1oDg3
-        PbXYsMAQOYo2MYLTj5bpDsYp53wOMQpwMCrx8DIcbI0TYk0sK67MPcQowcGsJMLrOAMoxJuS
-        WFmVWpQfX1Sak1p8iNEUGHYTmaVEk/OBqTGvJN7Q1MjY2NjCxMzczNRYSZx36vWcOCGB9MSS
-        1OzU1ILUIpg+Jg5OqQZGuxah3Veygvc/Tnt6RmdlNk/CHI4ag59bhT8rbE9j7hX+07yk6lhz
-        t7160ete5rkXptjLnvgRf3+V3d87j2K7hBOPbM5W9iv6s4x1o1A/L5eRbXfJD7Nyw8N9s19x
-        sh3me3iN/5IXT5jibjVTBd18a/tZOasqtfmPGt9Ico+Xv/j48bcFD6crsRRnJBpqMRcVJwIA
-        MTDHy1UDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAJMWRmVeSWpSXmKPExsWy7bCSvK7ZtdY4g1sPTS2mPnzCZvHo5m9W
-        i8u75rBZNH68ye7A4rFpVSebR9+WVYwenzfJBTBHcdmkpOZklqUW6dslcGW8enqZvaCHs+Lw
-        y43MDYyb2LsYOTgkBEwkLlxR7WLk4hAS2M0o8ez6SaYuRk6guITEo51fWCBqhCUOHy6GqPnI
-        KLH5xGxWkBo2AS2JG783gdkiAgkS//4sYgexmQU0JH4fuMkCYgsL2ElcunUZbA6LgKpE7406
-        kDCvgIXE6Q1bGCFWyUus3nCAeQIjzwJGhlWMkqkFxbnpucWGBUZ5qeV6xYm5xaV56XrJ+bmb
-        GMHhoKW1g/HEifhDjAIcjEo8vAwHW+OEWBPLiitzDzFKcDArifA6zgAK8aYkVlalFuXHF5Xm
-        pBYfYpTmYFES55XPPxYpJJCeWJKanZpakFoEk2Xi4JRqYNT3XV72YubG0qUOnm+/FIVc5bBf
-        7ZV4ZzI/66dz3V07mjli/X/yH38YkvTuILfWFMvua2KCe84cPT9n292myZH2HltXSwVKXV9u
-        MSf0lW/Cpj6NGUV353SqREUXTDn4/HjeqV2C30VyT/g8ebnjkG21Zrup3p2LZ36dTpdJnPO7
-        9sHikMCKhYFKLMUZiYZazEXFiQDEpwoWAwIAAA==
-X-CMS-MailID: 20200402121030epcas1p443ac0b9ee2bbdc2afe8790bad9ab436b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200402121030epcas1p443ac0b9ee2bbdc2afe8790bad9ab436b
-References: <CGME20200402121030epcas1p443ac0b9ee2bbdc2afe8790bad9ab436b@epcas1p4.samsung.com>
+        id S1729213AbgDBNq7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 2 Apr 2020 09:46:59 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:16801 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731839AbgDBNq7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Apr 2020 09:46:59 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585835219; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=AuXWxacFMiwuBdrXF2wpRouR9O53pMajubgraeN7JGs=; b=gAY8xSvrH7L8/TfXv3DHQMthQno1jdESMNt45SJ+yCiw5vn2OByhohh8hp023BXvOl+Kn1DS
+ Wh3RClQvijdaFN1K4prDWEJJHOBtWogLCgoaqcEpuwgaLqO0zGS+wpZ1mhEUgnKgISq8drYo
+ oN6KLI3dH2cW2KD4jcSkc2yeXdU=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e85ecbf.7f9fd0586998-smtp-out-n05;
+ Thu, 02 Apr 2020 13:46:39 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E933FC44791; Thu,  2 Apr 2020 13:46:37 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.13] (unknown [183.83.138.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E822EC433D2;
+        Thu,  2 Apr 2020 13:46:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E822EC433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
+ <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+ <20200331175207.GG199755@google.com>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <759e50d2-7938-75b6-ee0b-a9ea3722ea54@codeaurora.org>
+Date:   Thu, 2 Apr 2020 19:16:29 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200331175207.GG199755@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The mode bits on control register 0 are in a different order compared
-to the spi mode define values. Thus, in the current code, it fails to
-set the correct SPI mode selection. Fix it.
+Hi Matthias,
 
-Signed-off-by: Jungseung Lee <js07.lee@samsung.com>
----
- drivers/spi/spi-ep93xx.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+On 3/31/2020 11:22 PM, Matthias Kaehlcke wrote:
+> Hi Akash,
+>
+> On Tue, Mar 31, 2020 at 04:39:30PM +0530, Akash Asthana wrote:
+>> Add necessary macros and structure variables to support ICC BW
+>> voting from individual SE drivers.
+>>
+>> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+>> ---
+>> Changes in V2:
+>>   - As per Bjorn's comment dropped enums for ICC paths, given the three
+>>     paths individual members
+>>
+>> Changes in V3:
+>>   - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
+>>   - Add geni_icc_path structure in common header
+>>
+>>   drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
+>>   include/linux/qcom-geni-se.h    | 36 +++++++++++++++
+>>   2 files changed, 134 insertions(+)
+>>
+>> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+>> index 7d622ea..9344c14 100644
+>> --- a/drivers/soc/qcom/qcom-geni-se.c
+>> +++ b/drivers/soc/qcom/qcom-geni-se.c
+>> @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+>>   }
+>>   EXPORT_SYMBOL(geni_se_rx_dma_unprep);
+>>   
+>> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
+>> +		const char *icc_ddr)
+>> +{
+>> +	if (icc_core) {
+>> +		se->to_core.path = devm_of_icc_get(se->dev, "qup-core");
+>> +		if (IS_ERR(se->to_core.path))
+>> +			return PTR_ERR(se->to_core.path);
+>> +	}
+>> +
+>> +	if (icc_cpu) {
+>> +		se->from_cpu.path = devm_of_icc_get(se->dev, "qup-config");
+>> +		if (IS_ERR(se->from_cpu.path))
+>> +			return PTR_ERR(se->from_cpu.path);
+>> +	}
+>> +
+>> +	if (icc_ddr) {
+>> +		se->to_ddr.path = devm_of_icc_get(se->dev, "qup-memory");
+>> +		if (IS_ERR(se->to_ddr.path))
+>> +			return PTR_ERR(se->to_ddr.path);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL(geni_icc_get);
+>> +
+>> +int geni_icc_vote_on(struct geni_se *se)
+>> +{
+>> +	int ret;
+>> +
+>> +	if (se->to_core.path) {
+>> +		ret = icc_set_bw(se->to_core.path, se->to_core.avg_bw,
+>> +			se->to_core.peak_bw);
+>> +		if (ret) {
+>> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for core\n",
+>> +						__func__);
+>> +			return ret;
+>> +		}
+>> +	}
+>> +
+>> +	if (se->from_cpu.path) {
+>> +		ret = icc_set_bw(se->from_cpu.path, se->from_cpu.avg_bw,
+>> +			se->from_cpu.peak_bw);
+>> +		if (ret) {
+>> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for cpu\n",
+>> +						__func__);
+>> +			return ret;
+>> +		}
+>> +	}
+>> +
+>> +	if (se->to_ddr.path) {
+>> +		ret = icc_set_bw(se->to_ddr.path, se->to_ddr.avg_bw,
+>> +			se->to_ddr.peak_bw);
+>> +		if (ret) {
+>> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for ddr\n",
+>> +						__func__);
+>> +			return ret;
+>> +		}
+>> +	}
+>
+> With an array of 'struct geni_icc_path' pointers the above could be
+> reduced to:
+>
+> 	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
+> 		if (!se->icc_paths[i])
+> 			continue;
+>
+> 		ret = icc_set_bw(se->icc_paths[i]->path, se->icc_paths[i]->avg_bw,
+> 			se->icc_paths[i]->peak_bw);
+> 		if (ret) {
+> 			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed\n",
+> 						__func__);
+> 			return ret;
+> 		}
+> 	}
+>
+> similar for geni_icc_vote_off()
+>
+> It's just a suggestion, looks also good to me as is.
 
-diff --git a/drivers/spi/spi-ep93xx.c b/drivers/spi/spi-ep93xx.c
-index 4e1ccd4e52b6..8c854b187b1d 100644
---- a/drivers/spi/spi-ep93xx.c
-+++ b/drivers/spi/spi-ep93xx.c
-@@ -31,7 +31,8 @@
- #include <linux/platform_data/spi-ep93xx.h>
- 
- #define SSPCR0			0x0000
--#define SSPCR0_MODE_SHIFT	6
-+#define SSPCR0_SPO		BIT(6)
-+#define SSPCR0_SPH		BIT(7)
- #define SSPCR0_SCR_SHIFT	8
- 
- #define SSPCR1			0x0004
-@@ -159,7 +160,10 @@ static int ep93xx_spi_chip_setup(struct spi_master *master,
- 		return err;
- 
- 	cr0 = div_scr << SSPCR0_SCR_SHIFT;
--	cr0 |= (spi->mode & (SPI_CPHA | SPI_CPOL)) << SSPCR0_MODE_SHIFT;
-+	if (spi->mode & SPI_CPOL)
-+		cr0 |= SSPCR0_SPO;
-+	if (spi->mode & SPI_CPHA)
-+		cr0 |= SSPCR0_SPH;
- 	cr0 |= dss;
- 
- 	dev_dbg(&master->dev, "setup: mode %d, cpsr %d, scr %d, dss %d\n",
+I thought giving individual path name will increase readability. But 
+that doesn't seems to be adding much value on cost of repeated code.
+
+So, I will make the suggested change in next version.
+
+Thanks,
+
+Akash
+
+>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+
 -- 
-2.17.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
