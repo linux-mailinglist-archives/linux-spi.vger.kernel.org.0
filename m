@@ -2,191 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 153CB19C2F2
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Apr 2020 15:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 868FA19D80D
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Apr 2020 15:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729213AbgDBNq7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Apr 2020 09:46:59 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:16801 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731839AbgDBNq7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Apr 2020 09:46:59 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1585835219; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=AuXWxacFMiwuBdrXF2wpRouR9O53pMajubgraeN7JGs=; b=gAY8xSvrH7L8/TfXv3DHQMthQno1jdESMNt45SJ+yCiw5vn2OByhohh8hp023BXvOl+Kn1DS
- Wh3RClQvijdaFN1K4prDWEJJHOBtWogLCgoaqcEpuwgaLqO0zGS+wpZ1mhEUgnKgISq8drYo
- oN6KLI3dH2cW2KD4jcSkc2yeXdU=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e85ecbf.7f9fd0586998-smtp-out-n05;
- Thu, 02 Apr 2020 13:46:39 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E933FC44791; Thu,  2 Apr 2020 13:46:37 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.13] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E822EC433D2;
-        Thu,  2 Apr 2020 13:46:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E822EC433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
- <20200331175207.GG199755@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <759e50d2-7938-75b6-ee0b-a9ea3722ea54@codeaurora.org>
-Date:   Thu, 2 Apr 2020 19:16:29 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
-MIME-Version: 1.0
-In-Reply-To: <20200331175207.GG199755@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        id S1728154AbgDCN4G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Apr 2020 09:56:06 -0400
+Received: from foss.arm.com ([217.140.110.172]:53532 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728023AbgDCN4G (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 3 Apr 2020 09:56:06 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F316031B;
+        Fri,  3 Apr 2020 06:56:05 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5908B3F52E;
+        Fri,  3 Apr 2020 06:56:05 -0700 (PDT)
+Date:   Fri, 03 Apr 2020 14:56:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jungseung Lee <js07.lee@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Applied "spi: spi-ep93xx: fix wrong SPI mode selection" to the spi tree
+In-Reply-To:  <20200402121022.9976-1-js07.lee@samsung.com>
+Message-Id:  <applied-20200402121022.9976-1-js07.lee@samsung.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Matthias,
+The patch
 
-On 3/31/2020 11:22 PM, Matthias Kaehlcke wrote:
-> Hi Akash,
->
-> On Tue, Mar 31, 2020 at 04:39:30PM +0530, Akash Asthana wrote:
->> Add necessary macros and structure variables to support ICC BW
->> voting from individual SE drivers.
->>
->> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
->> ---
->> Changes in V2:
->>   - As per Bjorn's comment dropped enums for ICC paths, given the three
->>     paths individual members
->>
->> Changes in V3:
->>   - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
->>   - Add geni_icc_path structure in common header
->>
->>   drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
->>   include/linux/qcom-geni-se.h    | 36 +++++++++++++++
->>   2 files changed, 134 insertions(+)
->>
->> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
->> index 7d622ea..9344c14 100644
->> --- a/drivers/soc/qcom/qcom-geni-se.c
->> +++ b/drivers/soc/qcom/qcom-geni-se.c
->> @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
->>   }
->>   EXPORT_SYMBOL(geni_se_rx_dma_unprep);
->>   
->> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
->> +		const char *icc_ddr)
->> +{
->> +	if (icc_core) {
->> +		se->to_core.path = devm_of_icc_get(se->dev, "qup-core");
->> +		if (IS_ERR(se->to_core.path))
->> +			return PTR_ERR(se->to_core.path);
->> +	}
->> +
->> +	if (icc_cpu) {
->> +		se->from_cpu.path = devm_of_icc_get(se->dev, "qup-config");
->> +		if (IS_ERR(se->from_cpu.path))
->> +			return PTR_ERR(se->from_cpu.path);
->> +	}
->> +
->> +	if (icc_ddr) {
->> +		se->to_ddr.path = devm_of_icc_get(se->dev, "qup-memory");
->> +		if (IS_ERR(se->to_ddr.path))
->> +			return PTR_ERR(se->to_ddr.path);
->> +	}
->> +
->> +	return 0;
->> +}
->> +EXPORT_SYMBOL(geni_icc_get);
->> +
->> +int geni_icc_vote_on(struct geni_se *se)
->> +{
->> +	int ret;
->> +
->> +	if (se->to_core.path) {
->> +		ret = icc_set_bw(se->to_core.path, se->to_core.avg_bw,
->> +			se->to_core.peak_bw);
->> +		if (ret) {
->> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for core\n",
->> +						__func__);
->> +			return ret;
->> +		}
->> +	}
->> +
->> +	if (se->from_cpu.path) {
->> +		ret = icc_set_bw(se->from_cpu.path, se->from_cpu.avg_bw,
->> +			se->from_cpu.peak_bw);
->> +		if (ret) {
->> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for cpu\n",
->> +						__func__);
->> +			return ret;
->> +		}
->> +	}
->> +
->> +	if (se->to_ddr.path) {
->> +		ret = icc_set_bw(se->to_ddr.path, se->to_ddr.avg_bw,
->> +			se->to_ddr.peak_bw);
->> +		if (ret) {
->> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for ddr\n",
->> +						__func__);
->> +			return ret;
->> +		}
->> +	}
->
-> With an array of 'struct geni_icc_path' pointers the above could be
-> reduced to:
->
-> 	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
-> 		if (!se->icc_paths[i])
-> 			continue;
->
-> 		ret = icc_set_bw(se->icc_paths[i]->path, se->icc_paths[i]->avg_bw,
-> 			se->icc_paths[i]->peak_bw);
-> 		if (ret) {
-> 			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed\n",
-> 						__func__);
-> 			return ret;
-> 		}
-> 	}
->
-> similar for geni_icc_vote_off()
->
-> It's just a suggestion, looks also good to me as is.
+   spi: spi-ep93xx: fix wrong SPI mode selection
 
-I thought giving individual path name will increase readability. But 
-that doesn't seems to be adding much value on cost of repeated code.
+has been applied to the spi tree at
 
-So, I will make the suggested change in next version.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
+Mark
 
-Akash
+From 61249ce08ee9d031070281dbf36871f1c794abb8 Mon Sep 17 00:00:00 2001
+From: Jungseung Lee <js07.lee@samsung.com>
+Date: Thu, 2 Apr 2020 21:10:22 +0900
+Subject: [PATCH] spi: spi-ep93xx: fix wrong SPI mode selection
 
->
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+The mode bits on control register 0 are in a different order compared
+to the spi mode define values. Thus, in the current code, it fails to
+set the correct SPI mode selection. Fix it.
 
+Signed-off-by: Jungseung Lee <js07.lee@samsung.com>
+Link: https://lore.kernel.org/r/20200402121022.9976-1-js07.lee@samsung.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-ep93xx.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-ep93xx.c b/drivers/spi/spi-ep93xx.c
+index 4e1ccd4e52b6..8c854b187b1d 100644
+--- a/drivers/spi/spi-ep93xx.c
++++ b/drivers/spi/spi-ep93xx.c
+@@ -31,7 +31,8 @@
+ #include <linux/platform_data/spi-ep93xx.h>
+ 
+ #define SSPCR0			0x0000
+-#define SSPCR0_MODE_SHIFT	6
++#define SSPCR0_SPO		BIT(6)
++#define SSPCR0_SPH		BIT(7)
+ #define SSPCR0_SCR_SHIFT	8
+ 
+ #define SSPCR1			0x0004
+@@ -159,7 +160,10 @@ static int ep93xx_spi_chip_setup(struct spi_master *master,
+ 		return err;
+ 
+ 	cr0 = div_scr << SSPCR0_SCR_SHIFT;
+-	cr0 |= (spi->mode & (SPI_CPHA | SPI_CPOL)) << SSPCR0_MODE_SHIFT;
++	if (spi->mode & SPI_CPOL)
++		cr0 |= SSPCR0_SPO;
++	if (spi->mode & SPI_CPHA)
++		cr0 |= SSPCR0_SPH;
+ 	cr0 |= dss;
+ 
+ 	dev_dbg(&master->dev, "setup: mode %d, cpsr %d, scr %d, dss %d\n",
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+2.20.1
+
