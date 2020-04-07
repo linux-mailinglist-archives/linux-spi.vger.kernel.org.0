@@ -2,88 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4E91A0551
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Apr 2020 05:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4831A066B
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Apr 2020 07:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgDGDfU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Apr 2020 23:35:20 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:54254 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726329AbgDGDfU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 6 Apr 2020 23:35:20 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz97x9Ite6MAkAA--.35S2;
-        Tue, 07 Apr 2020 11:35:13 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH] spi: spidev_test: Remove hidden temporary file when make clean
-Date:   Tue,  7 Apr 2020 11:35:12 +0800
-Message-Id: <1586230512-5507-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxz97x9Ite6MAkAA--.35S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr18urWruw1rCr4rAF48Crg_yoW8JFyxpa
-        yFv3WkCF4UXryUWr1kW395uFy7Jry7Jr1kJayYgwn5t343Zw1jgFyF9rWjkr4UCasYqasx
-        Xr47Kr1j9F1vya7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUxb18UUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1727118AbgDGFPP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Apr 2020 01:15:15 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:45170 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727045AbgDGFPP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Apr 2020 01:15:15 -0400
+Received: by mail-vs1-f66.google.com with SMTP id x82so1385423vsc.12
+        for <linux-spi@vger.kernel.org>; Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=MfHDvIBIt69xqysjTBYVVNc0kV20i2uh+5pM5bA0kgqzaY38Y8DWEj01Pvo2lprKBQ
+         GeMPmsDw8mI8JPS3USlc7fo909SxPcbTvuuO8fmlDj3Epr1eVDtR360WKQPQyhZWRFR1
+         e2AVs/X8xmnpyFeBVbEpWkW/7xUX6BkoKcBNjhVPYru9i1s3MQXqsGzojyz2OPT8Gzuk
+         eAsRgBBtJfCcoxVL23nq2mmza5GNfLtG1Vewilonxc/7to20Va10m3hSWyxvaqvjeUuq
+         +R1bw/nay987q2JQWtF8qmoAYape5iyXc2fGu9oueeJmEOdg+02io2ZWkJnJglNvfVbH
+         fVHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=H0zI6QL0n7fCqdHOcFszsCRx28QpI21Z+uqJ9rjheBuKHYsTItYd9RYDg+FL3PKJZM
+         kBdgGTNk8EZbHeUtaPK2JBAA/7m5ZVryMwa99rif/A7IVSeRkMS3miIbULkg31pDKp3u
+         v5OaOPWNKy+AnPudCTqoeKEOU0OezKtk65fvfPdbxvCezPEe1G64OllcGZpOAFwPbIiz
+         1FP2Zu05Tsk2GdJLuaZzO6OS2bFF5F9+Ah/iVs4MEgs+BVf8niIq8FPL1q2IYCBJ+bpQ
+         numSwgmD9Bb/5Jj5bLFGjF3tqMHRktCUTH5zQR4G2cJTD4SlfFG3/HLAJxxapWWW3z+i
+         ss2A==
+X-Gm-Message-State: AGi0PubaemJf2R4CBcL2FiLmwXGfu9pjJE3QsY5VNbuatbP2FsmaV26m
+        1Q4BpT9l9QMhI3vsPPk5asssQXFlZVUWg4ic2kc=
+X-Google-Smtp-Source: APiQypL+ArhsKP1HCJpJZSuqqOKzmqGe03VSBcvbyU5XLwMdkDIdNu0ELlIqojTyqMNnJA6AEodSyvd4rSFXD4DVz/E=
+X-Received: by 2002:a67:fa85:: with SMTP id f5mr495699vsq.65.1586236514277;
+ Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:ab0:254a:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:15:12 -0700 (PDT)
+From:   SANDRA DEWI <sdewisandra@gmail.com>
+Date:   Tue, 7 Apr 2020 05:15:12 +0000
+Message-ID: <CALe9-EdG2aBp2yBY=t79ZuBObzzfY6nuVfAsra6+wc2BAYMhcg@mail.gmail.com>
+Subject: whether this is your correct email address or not
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In the current code, it only removes *.o and .*.o.d file when make clean,
-there still exists useless .*.o.cmd file, just remove it.
+Dear ,Pastor
 
-Without this patch:
 
-[yangtiezhu@linux spi]$ make
-[yangtiezhu@linux spi]$ make clean
-[yangtiezhu@linux spi]$ ls -1 .*.o.cmd
-.spidev_fdx-in.o.cmd
-.spidev_fdx.o.cmd
-.spidev_test-in.o.cmd
-.spidev_test.o.cmd
 
-With this patch:
+I have a client who is an oil business man and he made a fixed deposit
+of $26 million USD in my bank, where I am the director of the branch,
+My client died with his entire family in Jordanian
 
-[yangtiezhu@linux spi]$ make
-[yangtiezhu@linux spi]$ make clean
-[yangtiezhu@linux spi]$ ls -1 .*.o.cmd
-ls: cannot access .*.o.cmd: No such file or directory
+50% of the fund will be for the church  for the work of God,the
+balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
+50% for me
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/spi/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+intervention in the Syrian Civil War 2014 leaving behind no next of
+kin. I Propose to present you as next of kin to claim the funds, if
+interested reply me for full details and how we are to
 
-diff --git a/tools/spi/Makefile b/tools/spi/Makefile
-index 2249a15..ada881a 100644
---- a/tools/spi/Makefile
-+++ b/tools/spi/Makefile
-@@ -52,7 +52,9 @@ $(OUTPUT)spidev_fdx: $(SPIDEV_FDX_IN)
- clean:
- 	rm -f $(ALL_PROGRAMS)
- 	rm -rf $(OUTPUT)include/
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
-+	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete
-+	find $(if $(OUTPUT),$(OUTPUT),.) -name '\.*.o.d' -delete
-+	find $(if $(OUTPUT),$(OUTPUT),.) -name '\.*.o.cmd' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(bindir);		\
--- 
-2.1.0
 
+
+proceed to close this deal.
+
+
+
+
+Mrs. Sandra Dewi
+
+
+
+Email  mrsdewi@gmx.com
