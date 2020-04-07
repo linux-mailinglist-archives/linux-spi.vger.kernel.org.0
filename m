@@ -2,81 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F285619F949
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Apr 2020 17:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4E91A0551
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Apr 2020 05:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729079AbgDFPxi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Apr 2020 11:53:38 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46002 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728945AbgDFPxh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Apr 2020 11:53:37 -0400
-Received: by mail-pl1-f193.google.com with SMTP id t4so6058917plq.12;
-        Mon, 06 Apr 2020 08:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=rN6eY9Qrqp2MyzcIySN26tQrPMmoMDpY4puhGFyM5mw=;
-        b=IKlSzMZCcVNTRiuuJTREdvQ0DQozB3+Tcxbfc0oOwCUd1mnh8GBsQGphFBawZ5p1+e
-         s+HTWu1zS0a2esb+KXnN83Qqf4k2nNPuiBnCgxO2jC4T5LwcwkEsLoMs+cS6sP2+oyY8
-         Ul6nUy11tEihE31ZV8128jkd3iYQ5Gai3QE7pyGE/A2MWryA7fNFPp2yKounLBFtzBkz
-         xzTKXuUGB2jsoz4KGE8fCqAx3mF4wic7bMTQQxV3E0IUF8AogHkG0ckdhb0OV9eVb5dT
-         JSUSKF95gMC6Z/juaRIFCQOG0tZCeIpZYVqSFqOhDkhS9fKlj5VNlR5Leh8wCAkIU+1v
-         h5VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=rN6eY9Qrqp2MyzcIySN26tQrPMmoMDpY4puhGFyM5mw=;
-        b=ZTVZrLkBUV9j7UXzp+n1rO1F5Cba8re+tiisggBBN7DdXnBPcLyeQnPLUYivzutYDM
-         0uQpGqhuSpZodDQUY6JaWh7zgjlWcJUXWVedEjYzp+5t9lRkuPTJijgTM6fbIcEdv0Hh
-         baeJk25QhB3j+QHdyzMKXlT55Fxl9bw983NotLyOGCJ+H+qe68qJPp9gzYrmcOnK+asr
-         CrZDbVtcOVD+wydJjey1ZyW3M6n29lJNMNDOZEsfCq47iGmzrHk3kQAzouCLyjeDJZQU
-         gagzPNzhSiDfnoKRBF8TkpIjWuKzIEQD0tcTvZ0ekRgaKIAQdzQ362oePf+KEEnNoqhX
-         g0+Q==
-X-Gm-Message-State: AGi0PuZoZ4gJT3BhejTWEDhSEXLfFL3+uIeq4CRPULCzqkAo9cr6hvqM
-        WlNVRJfRosNghng+2P+f5Ho=
-X-Google-Smtp-Source: APiQypKEwHakGNo5xil/xnae82hio7J68wiouyjW1GRU7CpJavnsLPkfCIeBBEPCBzw8SA9wgDdOUg==
-X-Received: by 2002:a17:902:b598:: with SMTP id a24mr19607934pls.230.1586188416657;
-        Mon, 06 Apr 2020 08:53:36 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4072:89a:e705:d50:b01b:c4e4:35ad])
-        by smtp.gmail.com with ESMTPSA id q43sm3851pjc.40.2020.04.06.08.53.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2020 08:53:35 -0700 (PDT)
-From:   Aishwarya R <aishwaryarj100@gmail.com>
-X-Google-Original-From: Aishwarya R <raishwar@visteon.com>
-Cc:     raishwar@visteon.com, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: spi-sh-msiof: Fix checkpatch error Complex macros should use ()
-Date:   Mon,  6 Apr 2020 21:23:01 +0530
-Message-Id: <20200406155301.21768-1-raishwar@visteon.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726420AbgDGDfU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Apr 2020 23:35:20 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:54254 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726329AbgDGDfU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 6 Apr 2020 23:35:20 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz97x9Ite6MAkAA--.35S2;
+        Tue, 07 Apr 2020 11:35:13 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] spi: spidev_test: Remove hidden temporary file when make clean
+Date:   Tue,  7 Apr 2020 11:35:12 +0800
+Message-Id: <1586230512-5507-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxz97x9Ite6MAkAA--.35S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr18urWruw1rCr4rAF48Crg_yoW8JFyxpa
+        yFv3WkCF4UXryUWr1kW395uFy7Jry7Jr1kJayYgwn5t343Zw1jgFyF9rWjkr4UCasYqasx
+        Xr47Kr1j9F1vya7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUxb18UUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fixed checkpatch error "Macros with complex values should be enclosed
-in parentheses"
+In the current code, it only removes *.o and .*.o.d file when make clean,
+there still exists useless .*.o.cmd file, just remove it.
 
-Signed-off-by: Aishwarya R <raishwar@visteon.com>
+Without this patch:
+
+[yangtiezhu@linux spi]$ make
+[yangtiezhu@linux spi]$ make clean
+[yangtiezhu@linux spi]$ ls -1 .*.o.cmd
+.spidev_fdx-in.o.cmd
+.spidev_fdx.o.cmd
+.spidev_test-in.o.cmd
+.spidev_test.o.cmd
+
+With this patch:
+
+[yangtiezhu@linux spi]$ make
+[yangtiezhu@linux spi]$ make clean
+[yangtiezhu@linux spi]$ ls -1 .*.o.cmd
+ls: cannot access .*.o.cmd: No such file or directory
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/spi/spi-sh-msiof.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/spi/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
-index 1c11a00a2c36..b2579af0e3eb 100644
---- a/drivers/spi/spi-sh-msiof.c
-+++ b/drivers/spi/spi-sh-msiof.c
-@@ -1398,7 +1398,7 @@ static int sh_msiof_spi_resume(struct device *dev)
+diff --git a/tools/spi/Makefile b/tools/spi/Makefile
+index 2249a15..ada881a 100644
+--- a/tools/spi/Makefile
++++ b/tools/spi/Makefile
+@@ -52,7 +52,9 @@ $(OUTPUT)spidev_fdx: $(SPIDEV_FDX_IN)
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+ 	rm -rf $(OUTPUT)include/
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
++	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete
++	find $(if $(OUTPUT),$(OUTPUT),.) -name '\.*.o.d' -delete
++	find $(if $(OUTPUT),$(OUTPUT),.) -name '\.*.o.cmd' -delete
  
- static SIMPLE_DEV_PM_OPS(sh_msiof_spi_pm_ops, sh_msiof_spi_suspend,
- 			 sh_msiof_spi_resume);
--#define DEV_PM_OPS	&sh_msiof_spi_pm_ops
-+#define DEV_PM_OPS	(&sh_msiof_spi_pm_ops)
- #else
- #define DEV_PM_OPS	NULL
- #endif /* CONFIG_PM_SLEEP */
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(bindir);		\
 -- 
-2.17.1
+2.1.0
 
