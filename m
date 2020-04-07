@@ -2,131 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 906581A0CEC
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Apr 2020 13:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26AB1A0D8C
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Apr 2020 14:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728179AbgDGLea (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Apr 2020 07:34:30 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:26007 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728212AbgDGLea (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Apr 2020 07:34:30 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1586259269; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=PgxDriPW1fjgOHVxa8whDLa3oewEP6YBFY38xnPglCI=; b=rORX1ZTaWXGHb11cxy7+fHXnAe++dCsouTou6vwlpYBpDtRb8h9c1zyvqF5nHrr2HNAjKf8y
- 4Q+i0f33eaAKfe67kH7Rh6LxIMASCCOol7LoQ6mNkaDllwTCoOS7ni+QK4Tg79EsFR6llHZL
- zQIbBDc2QCjILx46GQt845y8XK0=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e8c6545.7f3a4e1aab58-smtp-out-n05;
- Tue, 07 Apr 2020 11:34:29 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1C3FCC43637; Tue,  7 Apr 2020 11:34:29 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.6] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 87FCDC433F2;
-        Tue,  7 Apr 2020 11:34:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 87FCDC433F2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V3 3/8] soc: qcom-geni-se: Add interconnect support to fix
- earlycon crash
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
- <20200331182457.GH199755@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <7a4e13bf-a4b7-d75b-df42-bf5e4125258a@codeaurora.org>
-Date:   Tue, 7 Apr 2020 17:04:17 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <20200331182457.GH199755@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        id S1728482AbgDGM3N (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Apr 2020 08:29:13 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:44606 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728075AbgDGM3N (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Apr 2020 08:29:13 -0400
+Received: by mail-pg1-f195.google.com with SMTP id n13so230123pgp.11;
+        Tue, 07 Apr 2020 05:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=vOQTjEsc/b9nWGCQMtsVYfPJl+HytGkwz1UpCx9vwX8=;
+        b=MNBVjKjkXAaGGC+lGJMT5/YHMphzZ/i2GJoK2Vs0pV4BMdNwgyWmFrn2nPs24yAMGJ
+         VXKWNoh7Tq2+SsQSnNksB1r/ZUKdvgd+ahRqmeC71sBlC1IikzKclwP+8qlOMR9T63mk
+         QLbVUqEXCZJbp0p6YgQ3nkmX1DidzROnBaSxHa8PSWfH1RJh23rsl3U7IdLvTKKH2F3O
+         7/qXeBRwIKJkRMzWae0vjLHG+eovzgzqc0rFwY5c29JGobY2CKRepLCoJUVXGaXUWKHv
+         fK7GY0uhz3a7erjY3f8IdrCjL63ftba2Myvi6pIGzvasS+8dbBoyPzuMFN1cvWooRiOD
+         f0iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=vOQTjEsc/b9nWGCQMtsVYfPJl+HytGkwz1UpCx9vwX8=;
+        b=t9Mj1QPnccWZ8kiKvsUjSNb7LiHYk91gY9gpTxw/ykkhruHLXkd+afL2BpWohf05hB
+         IKCJUAv7luPVvxdm0uw0VqLgNQy8afSFazS7/zWraB96kvUSt8RFNJGiN5Juk9+0oU7P
+         Xqbx/zvlbWFlu4PzfH46TIMyk7SCwHk8+OHDy0fIsW7n4HI/F4o657kNqP4QCoLE+V5c
+         EYx8xRa4AOl7ZyyvLlpxpCnSy9iPquy4jmtbnJNrors4xVzX+26Sjlv9ntRbXkVDoVRc
+         4ra3sCnpGMhdCR+7ilCfLPx/Z+fntfzW4hAHJL4lplPahTQDCSytiqNIzaZ/2EmxUoPE
+         Qs2Q==
+X-Gm-Message-State: AGi0PuYlJIUUVTKe+749FNSLaufCI02+4CT0SvlxW1mE023CpGBYYvqP
+        7/8euNR9sicgnsnFxcRiS2pHgzK0qo1j3CC2
+X-Google-Smtp-Source: APiQypLEkKHjYIC1deoz+QQ8rx+ZY4YXbE5tVqk1ceCDuNWxjpvIjZpICuv5ce0ib1fz3VKkOSOl3Q==
+X-Received: by 2002:a62:2b07:: with SMTP id r7mr2220138pfr.273.1586262551588;
+        Tue, 07 Apr 2020 05:29:11 -0700 (PDT)
+Received: from localhost.localdomain ([2409:4072:600d:c36b:d50:b01b:c4e4:35ad])
+        by smtp.gmail.com with ESMTPSA id o11sm12966626pgh.78.2020.04.07.05.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2020 05:29:10 -0700 (PDT)
+From:   Aishwarya R <aishwaryarj100@gmail.com>
+Cc:     aishwaryarj100@gmail.com, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: spi-fsl-spi: Fix checkpatch error "foo * bar" should be "foo *bar"
+Date:   Tue,  7 Apr 2020 17:58:55 +0530
+Message-Id: <20200407122855.5531-1-aishwaryarj100@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Matthias,
+This patch fixes checkpatch error "foo * bar" should be "foo *bar"
 
+Signed-off-by: Aishwarya R <aishwaryarj100@gmail.com>
+---
+ drivers/spi/spi-fsl-spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->>   static int geni_se_probe(struct platform_device *pdev)
->>   {
->>   	struct device *dev = &pdev->dev;
->> @@ -845,6 +868,34 @@ static int geni_se_probe(struct platform_device *pdev)
->>   		}
->>   	}
->>   
->> +#ifdef CONFIG_SERIAL_EARLYCON
->> +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
->> +	if (IS_ERR(wrapper->to_core.path))
->> +		return PTR_ERR(wrapper->to_core.path);
->> +	/*
->> +	 * Put minmal BW request on core clocks on behalf of early console.
->> +	 * The vote will be removed earlycon exit function.
->> +	 *
->> +	 * Note: We are putting vote on each QUP wrapper instead only to which
->> +	 * earlycon is connected because QUP core clock of different wrapper
->> +	 * share same voltage domain. If core1 is put to 0, then core2 will
->> +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
->> +	 * we touch any of the core clock.
->> +	 * core1 = core2 = max(core1, core2)
->> +	 */
-> I don't really understand this part. According to the comment if we vote
-> (let's say) for core2 but not for core1 then:
->
-> core1: 0
-> core2: GENI_DEFAULT_BW
->
-> core1 = core2 = max(core1, core2)
->    or
-> core1 = core2 = max(0, GENI_DEFAULT_BW)
->
-> hence
->
-> core1 = core2 = GENI_DEFAULT_BW
->
-> What am I missing, why is it necessary to vote for both/all?
-say core1 is for earlycon usecase
-
-There is common switch to control both the QUP core clock. I guess most 
-appropriate description would be     switch = max(vote_on_core1, 
-vote_on_core2) + default_vote.
-
-During early bootup, vote_on_core1 = 0, vote_on_core2 = 0;
-
-As earlycon was working even without voting it's core need because there 
-was some default vote present on the core switch by ICC during bootup.
-
-So if any child(say SPI) of other QUP wrapper resumed and suspended 
-before earlycon wrapper comes up. This will make core clock to run at 
-zero and will cause NOC issue because vote_on_core1 = 0, vote_on_core2 = 
-0; and it seems default votes from core switch is removed  ASA it's 
-voted on any core.
-
-Regards,
-
-Akash
-
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 3b81772fea0d..67f022b8c81d 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -588,7 +588,7 @@ static void fsl_spi_grlib_probe(struct device *dev)
+ 	pdata->cs_control = fsl_spi_grlib_cs_control;
+ }
+ 
+-static struct spi_master * fsl_spi_probe(struct device *dev,
++static struct spi_master *fsl_spi_probe(struct device *dev,
+ 		struct resource *mem, unsigned int irq)
+ {
+ 	struct fsl_spi_platform_data *pdata = dev_get_platdata(dev);
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+2.17.1
+
