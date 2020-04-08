@@ -2,28 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 277F51A1FA5
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Apr 2020 13:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FFD1A1FF5
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Apr 2020 13:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbgDHLOH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Apr 2020 07:14:07 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:41595 "EHLO
+        id S1728497AbgDHLid (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Apr 2020 07:38:33 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:37948 "EHLO
         mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728288AbgDHLOH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Apr 2020 07:14:07 -0400
+        by vger.kernel.org with ESMTP id S1728520AbgDHLid (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Apr 2020 07:38:33 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1586344446; h=Content-Transfer-Encoding: Content-Type:
+ s=smtp; t=1586345912; h=Content-Transfer-Encoding: Content-Type:
  In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=dNLnnym4VtOUg1n6xG1Oo6xj/LOdUkzfToVq8XZ0xqo=; b=ZnsyiF1ivTO6PAvsQdI4dsrv1D3c4AtIBlqDinYtAn9NFgTQb0S/YuECik3TEQCFCbfdKcID
- 4G+fdpGH3X5khls0RGkpxofGFPTjafeNlo0K9FUJ5WHOaTm70efOCXHs6QTjBRQvaWNjkWYX
- YKMadafIE9azJXQD0aps/nwapag=
+ Subject: Sender; bh=hB+Rd4GlJbIiaitUMKZYiV6l9cOrq/VA33e0iAC+6sM=; b=f60FdBgtbIva0vLITIdJAOJ7Utx0hK6+r23ihZmgBmcraPbbcVX/CjhsiSzLsoS12aiJmi5N
+ /uV4HNwniGEwpoHMiphjFU2e6D0PwADZbwH1/hE2dppC3R7pwRIuqVui3kAF8NYFs3IAsKKr
+ T9BucQBewnhEvqROJd3otpxOrXs=
 X-Mailgun-Sending-Ip: 104.130.122.26
 X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e8db1e6.7f04e41d63e8-smtp-out-n02;
- Wed, 08 Apr 2020 11:13:42 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e8db7a4.7f727d34d618-smtp-out-n03;
+ Wed, 08 Apr 2020 11:38:12 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 572C3C44791; Wed,  8 Apr 2020 11:13:41 +0000 (UTC)
+        id 34A3AC433F2; Wed,  8 Apr 2020 11:38:12 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -33,104 +33,140 @@ Received: from [192.168.0.6] (unknown [183.83.138.47])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E552BC433F2;
-        Wed,  8 Apr 2020 11:13:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E552BC433F2
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3A453C433BA;
+        Wed,  8 Apr 2020 11:38:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3A453C433BA
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>, wsa@the-dreams.de,
-        Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
+Subject: Re: [PATCH V3 3/8] soc: qcom-geni-se: Add interconnect support to fix
+ earlycon crash
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
 References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
- <20200331233209.GF254911@minitux>
- <CAE=gft6B2UCBVaKVCJXED8waFWci8WJ+sTM3CT+3e_eYS=-BDQ@mail.gmail.com>
- <66da4cc6-3873-1d39-ecb7-e9866320c469@codeaurora.org>
- <866a5cac-9f05-703e-8c3c-168d8f219c4d@linaro.org>
+ <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
+ <20200331182457.GH199755@google.com>
+ <7a4e13bf-a4b7-d75b-df42-bf5e4125258a@codeaurora.org>
+ <20200407172604.GQ199755@google.com>
 From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <6f738ea2-d50c-3524-798c-b60e982f2c25@codeaurora.org>
-Date:   Wed, 8 Apr 2020 16:43:30 +0530
+Message-ID: <9e91aaa8-88f0-656f-b9f5-7e64014bad7a@codeaurora.org>
+Date:   Wed, 8 Apr 2020 17:08:01 +0530
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <866a5cac-9f05-703e-8c3c-168d8f219c4d@linaro.org>
+In-Reply-To: <20200407172604.GQ199755@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Georgi, Bjorn, Evan,
+Hi Matthias,
 
-On 4/7/2020 3:28 PM, Georgi Djakov wrote:
-> Hi,
+On 4/7/2020 10:56 PM, Matthias Kaehlcke wrote:
+> Hi Akash,
 >
-> On 4/7/20 09:46, Akash Asthana wrote:
->> Hi Bjorn, Evan,
+> On Tue, Apr 07, 2020 at 05:04:17PM +0530, Akash Asthana wrote:
+>> Hi Matthias,
 >>
->>>> Given that these two functions only switch the bandwidth request between
->>>> some value and 0, I really think we should carry a "bool enabled" on the
->>>> path and replace these two functions with
->>>> icc_bulk_enable()/icc_bulk_disable().
->> So, if above is implementation "bool enabled" on path can be used directly in
->> aggregation of ICC votes on particular node without using icc_set_bw call, if
->> yes then I am not aware how? or we'll be using icc_set_bw API indirectly inside
->> icc_bulk APIs?
-> If there is a repeated pattern to switch between some bandwidth value and zero,
-> it really makes sense to introduce such functions in the framework core. I think
-> that this might be very useful especially for suspend and resume cases.
-> Something like icc_{enable,disable}(struct icc_path *path) functions and also
-> the bulk versions, that will flag the path as disabled, re-aggregate and do
-> icc_set_bw().
+>>
+>>>>    static int geni_se_probe(struct platform_device *pdev)
+>>>>    {
+>>>>    	struct device *dev = &pdev->dev;
+>>>> @@ -845,6 +868,34 @@ static int geni_se_probe(struct platform_device *pdev)
+>>>>    		}
+>>>>    	}
+>>>> +#ifdef CONFIG_SERIAL_EARLYCON
+>>>> +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
+>>>> +	if (IS_ERR(wrapper->to_core.path))
+>>>> +		return PTR_ERR(wrapper->to_core.path);
+>>>> +	/*
+>>>> +	 * Put minmal BW request on core clocks on behalf of early console.
+>>>> +	 * The vote will be removed earlycon exit function.
+>>>> +	 *
+>>>> +	 * Note: We are putting vote on each QUP wrapper instead only to which
+>>>> +	 * earlycon is connected because QUP core clock of different wrapper
+>>>> +	 * share same voltage domain. If core1 is put to 0, then core2 will
+>>>> +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
+>>>> +	 * we touch any of the core clock.
+>>>> +	 * core1 = core2 = max(core1, core2)
+>>>> +	 */
+>>> I don't really understand this part. According to the comment if we vote
+>>> (let's say) for core2 but not for core1 then:
+>>>
+>>> core1: 0
+>>> core2: GENI_DEFAULT_BW
+>>>
+>>> core1 = core2 = max(core1, core2)
+>>>     or
+>>> core1 = core2 = max(0, GENI_DEFAULT_BW)
+>>>
+>>> hence
+>>>
+>>> core1 = core2 = GENI_DEFAULT_BW
+>>>
+>>> What am I missing, why is it necessary to vote for both/all?
+>> say core1 is for earlycon usecase
+>>
+>> There is common switch to control both the QUP core clock. I guess most
+>> appropriate description would be     switch = max(vote_on_core1,
+>> vote_on_core2) + default_vote.
+>>
+>> During early bootup, vote_on_core1 = 0, vote_on_core2 = 0;
+>>
+>> As earlycon was working even without voting it's core need because there was
+>> some default vote present on the core switch by ICC during bootup.
+>>
+>> So if any child(say SPI) of other QUP wrapper resumed and suspended before
+>> earlycon wrapper comes up. This will make core clock to run at zero and will
+>> cause NOC issue because vote_on_core1 = 0, vote_on_core2 = 0; and it seems
+>> default votes from core switch is removed  ASA it's voted on any core.
+> Thanks for the explication!
+>
+> You are probably totally right, but for some reason my brain still resists
+> to get it ...
+>
+> With the above my current interpretation is (assuming earlycon only votes on
+> core1):
+>
+>                        core1   core2  default  switch
+> early boot              0       0        1       1
+> SPI resume (core2)      0       1        0       1
+> SPI suspend (core2)     0       0        0       0
+> earlycon init 		1	0        0       1
+>
+>
+> What is wrong in the above table?
+>
+> Thanks for bearing with me :)
+NP :)
 
-This appears to be a non-trivial change to ICC core, as my understanding 
-of ICC core is limited as of now hence, I am not very clear of the 
-implementation of icc_bulk APIs.
+I guess you meant QUP WRAPPER 1 probe by "earlycon init".
 
-Will it be okay if I keep geni_icc_vote_on/off API as 
-is@https://patchwork.kernel.org/patch/11467511/ for now and later will 
-switch to icc_bulk once it's introduced in ICC core.
+                       core1   core2  default  switch	Time
+early boot              0       0        1       1	0s
+SPI resume (core2)      0       1        0       1	3.2s
+SPI suspend (core2)     0       0        0       0	3.3s
+QUP WRAPPER 1(probe)	1	0        0       1	5s (say)
+
+So switch is at 0 in time interval [3.3, 5] that will make core clock to run at 0.
+If we use earlycon during this time interval it will reset the board.
+
+Did above answered the query?
 
 Regards,
-
 Akash
 
->>>> The added benefit of this would be that you call icc_set_bw() instead of
->>>> changing the geni_icc_path->{avg_bw,peak_bw} and don't need to keep
->>>> track of them here.
->> Ok IIUC, we need to call icc_set_bw() from GENI driver only if we change (avg_bw
->> | peak_bw)?
-> Yes, exactly.
 >
-> Thanks,
-> Georgi
->
->> Regards,
->>
->> Akash
->>
->>> Yes yes! I had the same thought here [1].
->>>
->>> Georgi, what do you think?
->>> -Evan
->>>
->>> [1]
->>> https://lore.kernel.org/linux-arm-msm/CAE=gft58QsgTCUHMHKJhcM9ZxAeMiY16CrbNv2HaTCRqwtmt7A@mail.gmail.com/
->>>
+> Matthias
+
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
