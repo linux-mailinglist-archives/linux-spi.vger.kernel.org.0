@@ -2,113 +2,283 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2011A17B3
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Apr 2020 00:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F7B1A1DEB
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Apr 2020 11:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726417AbgDGWH0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Apr 2020 18:07:26 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:39008 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbgDGWH0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Apr 2020 18:07:26 -0400
-Received: by mail-pf1-f196.google.com with SMTP id k15so1435483pfh.6
-        for <linux-spi@vger.kernel.org>; Tue, 07 Apr 2020 15:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xQ0CMqBW6HOiKsmKZ6VgVvjTVRhpyHMNm3H4n2IX4C8=;
-        b=Rw68i3XJ5JnnwX/K/8I3yzixlUVsVtJ2etjO5TZhfnYbsajRHoeks03BiJgc4IfBou
-         pplNLgCJb4AibRRMSKpOE+MgNY2ShgtRSuFxsEr0E7TMIntadjYbMmCzEJM82pfk37t5
-         7ySqepJeD5kpr2jRBpC2O3hCv5zKx89jMhXvZIFEkqcwpMe0Zetu9YvY924vkJS9kNyA
-         fq2slWBlcJ0DDuF/xaFlnd5Kx7z+uNpxn1I5a7EeBT7muxR+VxQ0iBnYWNlYN6s/07Gf
-         3u0ljmf5E8+2Jg2asB/+5DNamV2GqzhneAUcBvpTDHXD8SF4Flpjfu8WvXugWRFK67OK
-         pP9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xQ0CMqBW6HOiKsmKZ6VgVvjTVRhpyHMNm3H4n2IX4C8=;
-        b=mj+Yz3hcGTMDAZZBWl2vTTEn9HX92P85OjOTLxYcwyze0LNK6zK2c0DMt9+nIqKK+M
-         Gjc8oG/t5tWeyt5/GjNI3CBmwlotMtZBVw69TrmyCIr71xqv66a3FyRrpan3XAEeHjTu
-         z4xnN+ChV2Qg5zje0sTLLrPHehe6EE6OQc91lZtG6aSMgV5lSEGsFqJWMbGAlritH7tf
-         xK4bF6ugomQpKebM8dV4vUb2Hk4KplX8wGv/JF0HPjCJcHrMOnR4qL4g/Npo+2Flq9Ma
-         Nw9rxB/73RW1sVYDoL/WyFu3GbtILnBIyDk4IQM7FazIN55q0O3T/Dn91nGrqMl+Zzzr
-         /LrQ==
-X-Gm-Message-State: AGi0PuYtGL2sYQDIHJGYTlu/emY0A+dcBTkcfSGUBVadFNDKbpfPH+au
-        bDiqdMS82Ozs70J0mdQgLRVBCQ==
-X-Google-Smtp-Source: APiQypImyD5jkZCA6R9BSgJ+PmtBP9/LG4f/aJX6aezk6OZplkgeFKHReg6Bg6r/hmACeL/V74aYKw==
-X-Received: by 2002:a62:75d0:: with SMTP id q199mr4566702pfc.72.1586297245671;
-        Tue, 07 Apr 2020 15:07:25 -0700 (PDT)
-Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id r9sm14091252pfg.2.2020.04.07.15.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2020 15:07:24 -0700 (PDT)
-Date:   Tue, 7 Apr 2020 15:07:30 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org, wsa@the-dreams.de,
-        broonie@kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
-        georgi.djakov@linaro.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        swboyd@chromium.org, mgautam@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        mka@chromium.org, dianders@chromium.org, evgreen@chromium.org
-Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
-Message-ID: <20200407220730.GK20625@builder.lan>
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
- <20200331233209.GF254911@minitux>
- <45191b98-60fa-cd49-3067-d58c128d2c9c@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <45191b98-60fa-cd49-3067-d58c128d2c9c@codeaurora.org>
+        id S1726965AbgDHJLe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Apr 2020 05:11:34 -0400
+Received: from laurent.telenet-ops.be ([195.130.137.89]:47124 "EHLO
+        laurent.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726980AbgDHJLe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Apr 2020 05:11:34 -0400
+Received: from ramsan ([84.195.182.253])
+        by laurent.telenet-ops.be with bizsmtp
+        id Q9BW2200E5USYZQ019BWsm; Wed, 08 Apr 2020 11:11:30 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jM6k6-0002mu-Ey; Wed, 08 Apr 2020 11:11:30 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jM6k6-0006cu-Dh; Wed, 08 Apr 2020 11:11:30 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] spi: dt-bindings: rspi: Convert to json-schema
+Date:   Wed,  8 Apr 2020 11:11:29 +0200
+Message-Id: <20200408091129.25429-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon 06 Apr 23:45 PDT 2020, Akash Asthana wrote:
+Convert the Renesas (Quad) Serial Peripheral Interface (RSPI/QSPI)
+Device Tree binding documentation to json-schema.
 
-> Hi Bjorn,
-> 
-> On 4/1/2020 5:02 AM, Bjorn Andersson wrote:
-> > On Tue 31 Mar 04:09 PDT 2020, Akash Asthana wrote:
-> > 
-> > > Add necessary macros and structure variables to support ICC BW
-> > > voting from individual SE drivers.
-> > > 
-> > > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> > > ---
-> > > Changes in V2:
-> > >   - As per Bjorn's comment dropped enums for ICC paths, given the three
-> > >     paths individual members
-> > > 
-> > > Changes in V3:
-> > >   - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
-> > >   - Add geni_icc_path structure in common header
-> > > 
-> > >   drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
-> > >   include/linux/qcom-geni-se.h    | 36 +++++++++++++++
-> > >   2 files changed, 134 insertions(+)
-> > > 
-> > > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> > > index 7d622ea..9344c14 100644
-> > > --- a/drivers/soc/qcom/qcom-geni-se.c
-> > > +++ b/drivers/soc/qcom/qcom-geni-se.c
-> > > @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
-> > >   }
-> > >   EXPORT_SYMBOL(geni_se_rx_dma_unprep);
-> > > +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
-> > > +		const char *icc_ddr)
-> > > +{
-> > > +	if (icc_core) {
-> > Afaict it's only this that might be passed as NULL, so please drop these
-> > conditionals (keep the last one).
-> IIUC you're suggesting to drop if (icc_core/cpu) but keep if (icc_ddr) ?
+Document missing properties.
+Update the second example to match reality.
+Drop the first example, as it doesn't add much value.
 
-Correct
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ .../devicetree/bindings/spi/renesas,rspi.yaml | 144 ++++++++++++++++++
+ .../devicetree/bindings/spi/spi-rspi.txt      |  73 ---------
+ 2 files changed, 144 insertions(+), 73 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-rspi.txt
 
-Thanks,
-Bjorn
+diff --git a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+new file mode 100644
+index 0000000000000000..c54ac059043f6599
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+@@ -0,0 +1,144 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/renesas,rspi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas (Quad) Serial Peripheral Interface (RSPI/QSPI)
++
++maintainers:
++  - Geert Uytterhoeven <geert+renesas@glider.be>
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - renesas,rspi-sh7757    # SH7757
++          - const: renesas,rspi        # Legacy SH
++
++      - items:
++          - enum:
++              - renesas,rspi-r7s72100  # RZ/A1H
++              - renesas,rspi-r7s9210   # RZ/A2
++          - const: renesas,rspi-rz     # RZ/A
++
++      - items:
++          - enum:
++              - renesas,qspi-r8a7743   # RZ/G1M
++              - renesas,qspi-r8a7744   # RZ/G1N
++              - renesas,qspi-r8a7745   # RZ/G1E
++              - renesas,qspi-r8a77470  # RZ/G1C
++              - renesas,qspi-r8a7790   # R-Car H2
++              - renesas,qspi-r8a7791   # R-Car M2-W
++              - renesas,qspi-r8a7792   # R-Car V2H
++              - renesas,qspi-r8a7793   # R-Car M2-N
++              - renesas,qspi-r8a7794   # R-Car E2
++          - const: renesas,qspi        # R-Car Gen2 and RZ/G1
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    oneOf:
++      - items:
++          - description: A combined interrupt
++      - items:
++          - description: Error interrupt (SPEI)
++          - description: Receive Interrupt (SPRI)
++          - description: Transmit Interrupt (SPTI)
++
++  interrupt-names:
++    oneOf:
++      - items:
++          - const: mux
++      - items:
++          - const: error
++          - const: rx
++          - const: tx
++
++  clocks:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  dmas:
++    description:
++      Must contain a list of pairs of references to DMA specifiers, one for
++      transmission, and one for reception.
++
++  dma-names:
++    minItems: 2
++    maxItems: 4
++    items:
++      enum:
++        - tx
++        - rx
++
++  num-cs:
++    description: |
++      Total number of native chip selects.
++      Hardware limitations related to chip selects:
++        - When using GPIO chip selects, at least one native chip select must
++          be left unused, as it will be driven anyway.
++    minimum: 1
++    maximum: 2
++    default: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - power-domains
++  - '#address-cells'
++  - '#size-cells'
++
++allOf:
++  - $ref: spi-controller.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - renesas,rspi-rz
++    then:
++      properties:
++        interrupts:
++          minItems: 3
++      required:
++        - interrupt-names
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - renesas,qspi
++    then:
++      required:
++        - resets
++
++examples:
++  - |
++    #include <dt-bindings/clock/r8a7791-cpg-mssr.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/r8a7791-sysc.h>
++
++    qspi: spi@e6b10000 {
++            compatible = "renesas,qspi-r8a7791", "renesas,qspi";
++            reg = <0xe6b10000 0x2c>;
++            interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++            clocks = <&cpg CPG_MOD 917>;
++            dmas = <&dmac0 0x17>, <&dmac0 0x18>, <&dmac1 0x17>, <&dmac1 0x18>;
++            dma-names = "tx", "rx", "tx", "rx";
++            power-domains = <&sysc R8A7791_PD_ALWAYS_ON>;
++            resets = <&cpg 917>;
++            num-cs = <1>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++    };
+diff --git a/Documentation/devicetree/bindings/spi/spi-rspi.txt b/Documentation/devicetree/bindings/spi/spi-rspi.txt
+deleted file mode 100644
+index 421722b939922352..0000000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-rspi.txt
++++ /dev/null
+@@ -1,73 +0,0 @@
+-Device tree configuration for Renesas RSPI/QSPI driver
+-
+-Required properties:
+-- compatible       : For Renesas Serial Peripheral Interface on legacy SH:
+-		     "renesas,rspi-<soctype>", "renesas,rspi" as fallback.
+-		     For Renesas Serial Peripheral Interface on RZ/A:
+-		     "renesas,rspi-<soctype>", "renesas,rspi-rz" as fallback.
+-		     For Quad Serial Peripheral Interface on R-Car Gen2 and
+-		     RZ/G1 devices:
+-		     "renesas,qspi-<soctype>", "renesas,qspi" as fallback.
+-		     Examples with soctypes are:
+-		        - "renesas,rspi-sh7757" (SH)
+-			- "renesas,rspi-r7s72100" (RZ/A1H)
+-			- "renesas,rspi-r7s9210" (RZ/A2)
+-			- "renesas,qspi-r8a7743" (RZ/G1M)
+-			- "renesas,qspi-r8a7744" (RZ/G1N)
+-			- "renesas,qspi-r8a7745" (RZ/G1E)
+-			- "renesas,qspi-r8a77470" (RZ/G1C)
+-			- "renesas,qspi-r8a7790" (R-Car H2)
+-			- "renesas,qspi-r8a7791" (R-Car M2-W)
+-			- "renesas,qspi-r8a7792" (R-Car V2H)
+-			- "renesas,qspi-r8a7793" (R-Car M2-N)
+-			- "renesas,qspi-r8a7794" (R-Car E2)
+-- reg              : Address start and address range size of the device
+-- interrupts       : A list of interrupt-specifiers, one for each entry in
+-		     interrupt-names.
+-		     If interrupt-names is not present, an interrupt specifier
+-		     for a single muxed interrupt.
+-- interrupt-names  : A list of interrupt names. Should contain (if present):
+-		       - "error" for SPEI,
+-		       - "rx" for SPRI,
+-		       - "tx" to SPTI,
+-		       - "mux" for a single muxed interrupt.
+-- num-cs	   : Number of chip selects. Some RSPI cores have more than 1.
+-- #address-cells   : Must be <1>
+-- #size-cells      : Must be <0>
+-
+-Optional properties:
+-- clocks           : Must contain a reference to the functional clock.
+-- dmas             : Must contain a list of two references to DMA specifiers,
+-		     one for transmission, and one for reception.
+-- dma-names        : Must contain a list of two DMA names, "tx" and "rx".
+-
+-Pinctrl properties might be needed, too.  See
+-Documentation/devicetree/bindings/pinctrl/renesas,*.
+-
+-Examples:
+-
+-	spi0: spi@e800c800 {
+-		compatible = "renesas,rspi-r7s72100", "renesas,rspi-rz";
+-		reg = <0xe800c800 0x24>;
+-		interrupts = <0 238 IRQ_TYPE_LEVEL_HIGH>,
+-			     <0 239 IRQ_TYPE_LEVEL_HIGH>,
+-			     <0 240 IRQ_TYPE_LEVEL_HIGH>;
+-		interrupt-names = "error", "rx", "tx";
+-		interrupt-parent = <&gic>;
+-		num-cs = <1>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-	};
+-
+-	spi: spi@e6b10000 {
+-		compatible = "renesas,qspi-r8a7791", "renesas,qspi";
+-		reg = <0 0xe6b10000 0 0x2c>;
+-		interrupt-parent = <&gic>;
+-		interrupts = <0 184 IRQ_TYPE_LEVEL_HIGH>;
+-		clocks = <&mstp9_clks R8A7791_CLK_QSPI_MOD>;
+-		num-cs = <1>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		dmas = <&dmac0 0x17>, <&dmac0 0x18>;
+-		dma-names = "tx", "rx";
+-	};
+-- 
+2.17.1
+
