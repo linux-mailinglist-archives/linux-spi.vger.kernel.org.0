@@ -2,283 +2,135 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F7B1A1DEB
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Apr 2020 11:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277F51A1FA5
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Apr 2020 13:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726965AbgDHJLe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Apr 2020 05:11:34 -0400
-Received: from laurent.telenet-ops.be ([195.130.137.89]:47124 "EHLO
-        laurent.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbgDHJLe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Apr 2020 05:11:34 -0400
-Received: from ramsan ([84.195.182.253])
-        by laurent.telenet-ops.be with bizsmtp
-        id Q9BW2200E5USYZQ019BWsm; Wed, 08 Apr 2020 11:11:30 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1jM6k6-0002mu-Ey; Wed, 08 Apr 2020 11:11:30 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1jM6k6-0006cu-Dh; Wed, 08 Apr 2020 11:11:30 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] spi: dt-bindings: rspi: Convert to json-schema
-Date:   Wed,  8 Apr 2020 11:11:29 +0200
-Message-Id: <20200408091129.25429-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S1728371AbgDHLOH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Apr 2020 07:14:07 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:41595 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728288AbgDHLOH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Apr 2020 07:14:07 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1586344446; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=dNLnnym4VtOUg1n6xG1Oo6xj/LOdUkzfToVq8XZ0xqo=; b=ZnsyiF1ivTO6PAvsQdI4dsrv1D3c4AtIBlqDinYtAn9NFgTQb0S/YuECik3TEQCFCbfdKcID
+ 4G+fdpGH3X5khls0RGkpxofGFPTjafeNlo0K9FUJ5WHOaTm70efOCXHs6QTjBRQvaWNjkWYX
+ YKMadafIE9azJXQD0aps/nwapag=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e8db1e6.7f04e41d63e8-smtp-out-n02;
+ Wed, 08 Apr 2020 11:13:42 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 572C3C44791; Wed,  8 Apr 2020 11:13:41 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.6] (unknown [183.83.138.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E552BC433F2;
+        Wed,  8 Apr 2020 11:13:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E552BC433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>, wsa@the-dreams.de,
+        Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-serial@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
+ <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+ <20200331233209.GF254911@minitux>
+ <CAE=gft6B2UCBVaKVCJXED8waFWci8WJ+sTM3CT+3e_eYS=-BDQ@mail.gmail.com>
+ <66da4cc6-3873-1d39-ecb7-e9866320c469@codeaurora.org>
+ <866a5cac-9f05-703e-8c3c-168d8f219c4d@linaro.org>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <6f738ea2-d50c-3524-798c-b60e982f2c25@codeaurora.org>
+Date:   Wed, 8 Apr 2020 16:43:30 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <866a5cac-9f05-703e-8c3c-168d8f219c4d@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert the Renesas (Quad) Serial Peripheral Interface (RSPI/QSPI)
-Device Tree binding documentation to json-schema.
+Hi Georgi, Bjorn, Evan,
 
-Document missing properties.
-Update the second example to match reality.
-Drop the first example, as it doesn't add much value.
+On 4/7/2020 3:28 PM, Georgi Djakov wrote:
+> Hi,
+>
+> On 4/7/20 09:46, Akash Asthana wrote:
+>> Hi Bjorn, Evan,
+>>
+>>>> Given that these two functions only switch the bandwidth request between
+>>>> some value and 0, I really think we should carry a "bool enabled" on the
+>>>> path and replace these two functions with
+>>>> icc_bulk_enable()/icc_bulk_disable().
+>> So, if above is implementation "bool enabled" on path can be used directly in
+>> aggregation of ICC votes on particular node without using icc_set_bw call, if
+>> yes then I am not aware how? or we'll be using icc_set_bw API indirectly inside
+>> icc_bulk APIs?
+> If there is a repeated pattern to switch between some bandwidth value and zero,
+> it really makes sense to introduce such functions in the framework core. I think
+> that this might be very useful especially for suspend and resume cases.
+> Something like icc_{enable,disable}(struct icc_path *path) functions and also
+> the bulk versions, that will flag the path as disabled, re-aggregate and do
+> icc_set_bw().
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- .../devicetree/bindings/spi/renesas,rspi.yaml | 144 ++++++++++++++++++
- .../devicetree/bindings/spi/spi-rspi.txt      |  73 ---------
- 2 files changed, 144 insertions(+), 73 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/renesas,rspi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-rspi.txt
+This appears to be a non-trivial change to ICC core, as my understanding 
+of ICC core is limited as of now hence, I am not very clear of the 
+implementation of icc_bulk APIs.
 
-diff --git a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-new file mode 100644
-index 0000000000000000..c54ac059043f6599
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-@@ -0,0 +1,144 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/renesas,rspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas (Quad) Serial Peripheral Interface (RSPI/QSPI)
-+
-+maintainers:
-+  - Geert Uytterhoeven <geert+renesas@glider.be>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - renesas,rspi-sh7757    # SH7757
-+          - const: renesas,rspi        # Legacy SH
-+
-+      - items:
-+          - enum:
-+              - renesas,rspi-r7s72100  # RZ/A1H
-+              - renesas,rspi-r7s9210   # RZ/A2
-+          - const: renesas,rspi-rz     # RZ/A
-+
-+      - items:
-+          - enum:
-+              - renesas,qspi-r8a7743   # RZ/G1M
-+              - renesas,qspi-r8a7744   # RZ/G1N
-+              - renesas,qspi-r8a7745   # RZ/G1E
-+              - renesas,qspi-r8a77470  # RZ/G1C
-+              - renesas,qspi-r8a7790   # R-Car H2
-+              - renesas,qspi-r8a7791   # R-Car M2-W
-+              - renesas,qspi-r8a7792   # R-Car V2H
-+              - renesas,qspi-r8a7793   # R-Car M2-N
-+              - renesas,qspi-r8a7794   # R-Car E2
-+          - const: renesas,qspi        # R-Car Gen2 and RZ/G1
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    oneOf:
-+      - items:
-+          - description: A combined interrupt
-+      - items:
-+          - description: Error interrupt (SPEI)
-+          - description: Receive Interrupt (SPRI)
-+          - description: Transmit Interrupt (SPTI)
-+
-+  interrupt-names:
-+    oneOf:
-+      - items:
-+          - const: mux
-+      - items:
-+          - const: error
-+          - const: rx
-+          - const: tx
-+
-+  clocks:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  dmas:
-+    description:
-+      Must contain a list of pairs of references to DMA specifiers, one for
-+      transmission, and one for reception.
-+
-+  dma-names:
-+    minItems: 2
-+    maxItems: 4
-+    items:
-+      enum:
-+        - tx
-+        - rx
-+
-+  num-cs:
-+    description: |
-+      Total number of native chip selects.
-+      Hardware limitations related to chip selects:
-+        - When using GPIO chip selects, at least one native chip select must
-+          be left unused, as it will be driven anyway.
-+    minimum: 1
-+    maximum: 2
-+    default: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - power-domains
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,rspi-rz
-+    then:
-+      properties:
-+        interrupts:
-+          minItems: 3
-+      required:
-+        - interrupt-names
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,qspi
-+    then:
-+      required:
-+        - resets
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/r8a7791-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7791-sysc.h>
-+
-+    qspi: spi@e6b10000 {
-+            compatible = "renesas,qspi-r8a7791", "renesas,qspi";
-+            reg = <0xe6b10000 0x2c>;
-+            interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&cpg CPG_MOD 917>;
-+            dmas = <&dmac0 0x17>, <&dmac0 0x18>, <&dmac1 0x17>, <&dmac1 0x18>;
-+            dma-names = "tx", "rx", "tx", "rx";
-+            power-domains = <&sysc R8A7791_PD_ALWAYS_ON>;
-+            resets = <&cpg 917>;
-+            num-cs = <1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi-rspi.txt b/Documentation/devicetree/bindings/spi/spi-rspi.txt
-deleted file mode 100644
-index 421722b939922352..0000000000000000
---- a/Documentation/devicetree/bindings/spi/spi-rspi.txt
-+++ /dev/null
-@@ -1,73 +0,0 @@
--Device tree configuration for Renesas RSPI/QSPI driver
--
--Required properties:
--- compatible       : For Renesas Serial Peripheral Interface on legacy SH:
--		     "renesas,rspi-<soctype>", "renesas,rspi" as fallback.
--		     For Renesas Serial Peripheral Interface on RZ/A:
--		     "renesas,rspi-<soctype>", "renesas,rspi-rz" as fallback.
--		     For Quad Serial Peripheral Interface on R-Car Gen2 and
--		     RZ/G1 devices:
--		     "renesas,qspi-<soctype>", "renesas,qspi" as fallback.
--		     Examples with soctypes are:
--		        - "renesas,rspi-sh7757" (SH)
--			- "renesas,rspi-r7s72100" (RZ/A1H)
--			- "renesas,rspi-r7s9210" (RZ/A2)
--			- "renesas,qspi-r8a7743" (RZ/G1M)
--			- "renesas,qspi-r8a7744" (RZ/G1N)
--			- "renesas,qspi-r8a7745" (RZ/G1E)
--			- "renesas,qspi-r8a77470" (RZ/G1C)
--			- "renesas,qspi-r8a7790" (R-Car H2)
--			- "renesas,qspi-r8a7791" (R-Car M2-W)
--			- "renesas,qspi-r8a7792" (R-Car V2H)
--			- "renesas,qspi-r8a7793" (R-Car M2-N)
--			- "renesas,qspi-r8a7794" (R-Car E2)
--- reg              : Address start and address range size of the device
--- interrupts       : A list of interrupt-specifiers, one for each entry in
--		     interrupt-names.
--		     If interrupt-names is not present, an interrupt specifier
--		     for a single muxed interrupt.
--- interrupt-names  : A list of interrupt names. Should contain (if present):
--		       - "error" for SPEI,
--		       - "rx" for SPRI,
--		       - "tx" to SPTI,
--		       - "mux" for a single muxed interrupt.
--- num-cs	   : Number of chip selects. Some RSPI cores have more than 1.
--- #address-cells   : Must be <1>
--- #size-cells      : Must be <0>
--
--Optional properties:
--- clocks           : Must contain a reference to the functional clock.
--- dmas             : Must contain a list of two references to DMA specifiers,
--		     one for transmission, and one for reception.
--- dma-names        : Must contain a list of two DMA names, "tx" and "rx".
--
--Pinctrl properties might be needed, too.  See
--Documentation/devicetree/bindings/pinctrl/renesas,*.
--
--Examples:
--
--	spi0: spi@e800c800 {
--		compatible = "renesas,rspi-r7s72100", "renesas,rspi-rz";
--		reg = <0xe800c800 0x24>;
--		interrupts = <0 238 IRQ_TYPE_LEVEL_HIGH>,
--			     <0 239 IRQ_TYPE_LEVEL_HIGH>,
--			     <0 240 IRQ_TYPE_LEVEL_HIGH>;
--		interrupt-names = "error", "rx", "tx";
--		interrupt-parent = <&gic>;
--		num-cs = <1>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--	};
--
--	spi: spi@e6b10000 {
--		compatible = "renesas,qspi-r8a7791", "renesas,qspi";
--		reg = <0 0xe6b10000 0 0x2c>;
--		interrupt-parent = <&gic>;
--		interrupts = <0 184 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&mstp9_clks R8A7791_CLK_QSPI_MOD>;
--		num-cs = <1>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--		dmas = <&dmac0 0x17>, <&dmac0 0x18>;
--		dma-names = "tx", "rx";
--	};
+Will it be okay if I keep geni_icc_vote_on/off API as 
+is@https://patchwork.kernel.org/patch/11467511/ for now and later will 
+switch to icc_bulk once it's introduced in ICC core.
+
+Regards,
+
+Akash
+
+>>>> The added benefit of this would be that you call icc_set_bw() instead of
+>>>> changing the geni_icc_path->{avg_bw,peak_bw} and don't need to keep
+>>>> track of them here.
+>> Ok IIUC, we need to call icc_set_bw() from GENI driver only if we change (avg_bw
+>> | peak_bw)?
+> Yes, exactly.
+>
+> Thanks,
+> Georgi
+>
+>> Regards,
+>>
+>> Akash
+>>
+>>> Yes yes! I had the same thought here [1].
+>>>
+>>> Georgi, what do you think?
+>>> -Evan
+>>>
+>>> [1]
+>>> https://lore.kernel.org/linux-arm-msm/CAE=gft58QsgTCUHMHKJhcM9ZxAeMiY16CrbNv2HaTCRqwtmt7A@mail.gmail.com/
+>>>
 -- 
-2.17.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
