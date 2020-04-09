@@ -2,170 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB41D1A27BB
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Apr 2020 19:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD441A2CBA
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Apr 2020 02:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730511AbgDHRJk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Apr 2020 13:09:40 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45674 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730501AbgDHRJk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Apr 2020 13:09:40 -0400
-Received: by mail-pf1-f195.google.com with SMTP id r14so2676890pfl.12
-        for <linux-spi@vger.kernel.org>; Wed, 08 Apr 2020 10:09:39 -0700 (PDT)
+        id S1726508AbgDIAKl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Apr 2020 20:10:41 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:41909 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbgDIAKk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Apr 2020 20:10:40 -0400
+Received: by mail-io1-f66.google.com with SMTP id b12so2049622ion.8
+        for <linux-spi@vger.kernel.org>; Wed, 08 Apr 2020 17:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=AHziH+dvb20W54djSeStIqMRFUtsTKUD7rAxti8gSRo=;
-        b=UfCqr7nW9oVwE/+3fDL2f/0drVAie/Gdd49JNzuAxmorHNRLKlrYPhlG11rr3bgejy
-         xkUe3E27ZRhPnu1zmh6s8BOyTOxFWxFtBYB6VVdIzkwz1k1M39weBC9nYeM17DDXtam8
-         cup6jFVztqp+DixZ5tXPe13GR4v5OaprUy27s=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=Xs1c6/A8GmpgdbMBrIroEWmoFbf3qfcFFbhS2ULR81Q=;
+        b=YvwQmG0ey32MfI7TwMMUYPUEqHSVa7N6UFUCFWrHzYV7f92ApwTpZRsrkK2NxuHK9N
+         lf7tDDbi8WACtwm6qhXPq930kv0vAjHrVYBNOs+aLxjcT7JbESmsCaA7Rx79zsubMh94
+         TvprauLapts7WB2UKzfQn8wWQ0qeJlDGbXV/Ljdwaw9luZP6QK5z2DqI0o/I7PT1O7vJ
+         pIhrJvGe5Qxahj/Vo/+YjcXUQsd37X8M0mjhqozuxkzFuQAo7eVFMveIm8iNhkO08D2A
+         ELH9JlJ0aKIgECoQetIxtB+4eTFcKsSiTxXSxEsBT2IRJjAALT61L08PUK0r4Pa1vQNO
+         sZgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=AHziH+dvb20W54djSeStIqMRFUtsTKUD7rAxti8gSRo=;
-        b=Gw3SBmmjHCYDbEaQ9ipxmuyXO6UdbwBWi6BqYzYVecwavYGYfipXcOokod00dY8vwi
-         Dx71klIA43BEaLVL37K9FBdm3JWdXJKT5GdkEj3pi/UHn0BtMD0KJSZmXIIjuaZZ3nsT
-         OeetjiD7lD1wGwDJbwaPYyamrKq15/a2Ec+CWjjvFGuuH5Q48+cZz42L4fv79hsxlC8r
-         ZO81b4HF6NW7ndw9UlD/Qz9Oj0LUne2vZwX/ovOOFAN6eoFRDH2IUvuOoiRJRi4m4xsR
-         LUUiVJd3Bj2DLsXgfTcYZSFvxDUrDk1G3iCcQnhEtxiC7WBT9Yr/ofiWSIQuCROvyXPw
-         eDBg==
-X-Gm-Message-State: AGi0PuYwNtyp785zV+AK7J67KikaZAURtD47HIGm8SQ/Fh014Gsg+L71
-        y62+NQ2mI4/d5lSQ7DVmvOX3tA==
-X-Google-Smtp-Source: APiQypKGNnlb36etT59dCY18zVMEKPnBzgK1wnTk5VhhNMgMuyWQeel0X5RkoYsKiR6opA9JBVYRoA==
-X-Received: by 2002:a63:1f14:: with SMTP id f20mr7742513pgf.411.1586365778377;
-        Wed, 08 Apr 2020 10:09:38 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id s10sm2317753pfd.124.2020.04.08.10.09.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Apr 2020 10:09:37 -0700 (PDT)
-Date:   Wed, 8 Apr 2020 10:09:36 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-Subject: Re: [PATCH V3 3/8] soc: qcom-geni-se: Add interconnect support to
- fix earlycon crash
-Message-ID: <20200408170936.GR199755@google.com>
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
- <20200331182457.GH199755@google.com>
- <7a4e13bf-a4b7-d75b-df42-bf5e4125258a@codeaurora.org>
- <20200407172604.GQ199755@google.com>
- <9e91aaa8-88f0-656f-b9f5-7e64014bad7a@codeaurora.org>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=Xs1c6/A8GmpgdbMBrIroEWmoFbf3qfcFFbhS2ULR81Q=;
+        b=Jo+y7kHTTUh+fR6dqym640BTCRfHp64vHS6rm2V81106HfbjmhefvgdU8vUCaP54l1
+         aowcMGaKzq9aXV7BiukJYGZpJ0C/PY5IAtKaktvnVFrWvo4WQWoCunRqXLPMlY5zSXfj
+         Zk2+Ds4UNNF7FrzfI7jGuKKFP/ZZ/5vCVCAG1fRB5SIuyEjfTXpwprZwtNgKfYuKQNT7
+         ZP/jy3Zlk0FfK2YdOWTJ5dqEsHEySzq44hEvY+9jXdovE/Ffw8rBMKd5Fl2g6h/WBCQi
+         FdPxrPZzVXXl2BOEAMxZQm42a3lIwSCf+vQXBSJitlxJDmblAYQTz+J4M/oxV49rSrjk
+         V74Q==
+X-Gm-Message-State: AGi0PuZehBo9YBt4sRTvZrO4GcsfoS+MWoXNliTaiKouJ+ivEnwiUX4S
+        K2zcByDsFf+uacP4lFN4qB8Rqz+TCTBvCJ6IQsY33yM0
+X-Google-Smtp-Source: APiQypJidDLRkLokK84weFsdDoAB7CRo2HApKk+EMwDobfV2KopOPKVfNoZo9Rk3rz1Eg1WKjbtLVFkUWB0TkqFt9DA=
+X-Received: by 2002:a5e:8b01:: with SMTP id g1mr5841606iok.154.1586391038740;
+ Wed, 08 Apr 2020 17:10:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e91aaa8-88f0-656f-b9f5-7e64014bad7a@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Reply-To: mrahmedmuzashah@gmail.com
+Received: by 2002:a05:6602:134e:0:0:0:0 with HTTP; Wed, 8 Apr 2020 17:10:38
+ -0700 (PDT)
+From:   "Mr.Ahmed Muzashah" <ahmedmuzashah@gmail.com>
+Date:   Thu, 9 Apr 2020 01:10:38 +0100
+X-Google-Sender-Auth: 72FqM7PvAqa_uK6PCrtaRKXTXgc
+Message-ID: <CAMavnFmuAqK+UK-mjvuNJeChfKL9z0TJzpDdDn3--n-+a37N0A@mail.gmail.com>
+Subject: From: Mr.Ahmed Muzashah
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 05:08:01PM +0530, Akash Asthana wrote:
-> Hi Matthias,
-> 
-> On 4/7/2020 10:56 PM, Matthias Kaehlcke wrote:
-> > Hi Akash,
-> > 
-> > On Tue, Apr 07, 2020 at 05:04:17PM +0530, Akash Asthana wrote:
-> > > Hi Matthias,
-> > > 
-> > > 
-> > > > >    static int geni_se_probe(struct platform_device *pdev)
-> > > > >    {
-> > > > >    	struct device *dev = &pdev->dev;
-> > > > > @@ -845,6 +868,34 @@ static int geni_se_probe(struct platform_device *pdev)
-> > > > >    		}
-> > > > >    	}
-> > > > > +#ifdef CONFIG_SERIAL_EARLYCON
-> > > > > +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
-> > > > > +	if (IS_ERR(wrapper->to_core.path))
-> > > > > +		return PTR_ERR(wrapper->to_core.path);
-> > > > > +	/*
-> > > > > +	 * Put minmal BW request on core clocks on behalf of early console.
-> > > > > +	 * The vote will be removed earlycon exit function.
-> > > > > +	 *
-> > > > > +	 * Note: We are putting vote on each QUP wrapper instead only to which
-> > > > > +	 * earlycon is connected because QUP core clock of different wrapper
-> > > > > +	 * share same voltage domain. If core1 is put to 0, then core2 will
-> > > > > +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
-> > > > > +	 * we touch any of the core clock.
-> > > > > +	 * core1 = core2 = max(core1, core2)
-> > > > > +	 */
-> > > > I don't really understand this part. According to the comment if we vote
-> > > > (let's say) for core2 but not for core1 then:
-> > > > 
-> > > > core1: 0
-> > > > core2: GENI_DEFAULT_BW
-> > > > 
-> > > > core1 = core2 = max(core1, core2)
-> > > >     or
-> > > > core1 = core2 = max(0, GENI_DEFAULT_BW)
-> > > > 
-> > > > hence
-> > > > 
-> > > > core1 = core2 = GENI_DEFAULT_BW
-> > > > 
-> > > > What am I missing, why is it necessary to vote for both/all?
-> > > say core1 is for earlycon usecase
-> > > 
-> > > There is common switch to control both the QUP core clock. I guess most
-> > > appropriate description would be     switch = max(vote_on_core1,
-> > > vote_on_core2) + default_vote.
-> > > 
-> > > During early bootup, vote_on_core1 = 0, vote_on_core2 = 0;
-> > > 
-> > > As earlycon was working even without voting it's core need because there was
-> > > some default vote present on the core switch by ICC during bootup.
-> > > 
-> > > So if any child(say SPI) of other QUP wrapper resumed and suspended before
-> > > earlycon wrapper comes up. This will make core clock to run at zero and will
-> > > cause NOC issue because vote_on_core1 = 0, vote_on_core2 = 0; and it seems
-> > > default votes from core switch is removed  ASA it's voted on any core.
-> > Thanks for the explication!
-> > 
-> > You are probably totally right, but for some reason my brain still resists
-> > to get it ...
-> > 
-> > With the above my current interpretation is (assuming earlycon only votes on
-> > core1):
-> > 
-> >                        core1   core2  default  switch
-> > early boot              0       0        1       1
-> > SPI resume (core2)      0       1        0       1
-> > SPI suspend (core2)     0       0        0       0
-> > earlycon init 		1	0        0       1
-> > 
-> > 
-> > What is wrong in the above table?
-> > 
-> > Thanks for bearing with me :)
-> NP :)
-> 
-> I guess you meant QUP WRAPPER 1 probe by "earlycon init".
-> 
->                       core1   core2  default  switch	Time
-> early boot              0       0        1       1	0s
-> SPI resume (core2)      0       1        0       1	3.2s
-> SPI suspend (core2)     0       0        0       0	3.3s
-> QUP WRAPPER 1(probe)	1	0        0       1	5s (say)
-> 
-> So switch is at 0 in time interval [3.3, 5] that will make core clock to run at 0.
-> If we use earlycon during this time interval it will reset the board.
-> 
-> Did above answered the query?
+Good Day,
 
-now it finally made 'click', thanks :)
+Please accept my apologies for writing you a surprise letter.I am Mr.
+Ahmed Muzashah, account Manager with an investment bank here in
+Burkina Faso.I have a very important business I want to discuss with
+you.There is a draft account opened in my firm by a long-time client
+of our bank.I have the opportunity of transferring the left over fund
+(15.8 Million UsDollars)Fiftheen Million Eight Hundred Thousand United
+States of American Dollars of one of my Bank clients who died at the
+collapsing of the world trade center at the United States on September
+11th 2001.
+
+I want to invest this funds and introduce you to our bank for this
+deal.All I require is your honest co-operation and I guarantee you
+that this will be executed under a legitimate arrangement that will
+protect us from any breach of the law.I agree that 40% of this money
+will be for you as my foreign partner,50% for me while 10% is for
+establishing of foundation for the less privilleges in your country.If
+you are really interested in my proposal further details of the
+Transfer will be forwarded unto you as soon as I receive your
+willingness mail for a successful transfer.
+
+Yours Sincerely,
+Mr.Ahmed Muzashah,
