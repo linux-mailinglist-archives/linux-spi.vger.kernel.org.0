@@ -2,39 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8681A40D0
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Apr 2020 05:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BB21A3F91
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Apr 2020 05:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgDJD5w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Apr 2020 23:57:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60820 "EHLO mail.kernel.org"
+        id S1728718AbgDJDt4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Apr 2020 23:49:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728412AbgDJDs7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:48:59 -0400
+        id S1726924AbgDJDtz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:49:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EACAE21556;
-        Fri, 10 Apr 2020 03:48:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE4A6215A4;
+        Fri, 10 Apr 2020 03:49:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490538;
-        bh=ZZEvwv/7QaI1Z8uPWGtyRONbxofPAuVPX/Mue39BQYI=;
+        s=default; t=1586490595;
+        bh=LYw3ix/eAoR7quFbY2Z0Ufg/e43oTaOtLFxQVbGDhpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RrEihmLFoTqu0zx3JlQGo4PVyTAFgZ45WP70G5po+/mkwAOsFNPjoynEBLKJjlS96
-         PgHqRaGpRLC59s/B5+B+aR+5PuVdOZYoPH/xrV3BwIUZME+hvNL9UBCMwADSi8bOgy
-         CvqgkmnSvanTfqLNFsXKFl9gvgRb8fBpZQ+I0OWM=
+        b=IS1tmnnvp89BZpw/RERQQupAbsPq6ULZD8QVYszMcqQqxnb9N7rWTryRP+Zv7eT5Y
+         oqvFIbr1UYHHKwsoX/ExCakzgYpyaj2QJM2bDWya7vw87BZiRyLo+1YxNDhCj3Yag3
+         CVKyUBv0tXSD6audVAZiqMvNOLqv5HXFdm2fC9jA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Michael Walle <michael@walle.cc>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 49/56] spi: spi-fsl-dspi: Replace interruptible wait queue with a simple completion
-Date:   Thu,  9 Apr 2020 23:47:53 -0400
-Message-Id: <20200410034800.8381-49-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 39/46] spi: spi-fsl-dspi: Replace interruptible wait queue with a simple completion
+Date:   Thu,  9 Apr 2020 23:49:02 -0400
+Message-Id: <20200410034909.8922-39-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410034800.8381-1-sashal@kernel.org>
-References: <20200410034800.8381-1-sashal@kernel.org>
+In-Reply-To: <20200410034909.8922-1-sashal@kernel.org>
+References: <20200410034909.8922-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -161,10 +161,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index a534b8af27b8d..f9d44bb1040f8 100644
+index d47bd26577b37..68e33457c814f 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -196,8 +196,7 @@ struct fsl_dspi {
+@@ -192,8 +192,7 @@ struct fsl_dspi {
  	u8					bytes_per_word;
  	const struct fsl_dspi_devtype_data	*devtype_data;
  
@@ -174,8 +174,8 @@ index a534b8af27b8d..f9d44bb1040f8 100644
  
  	struct fsl_dspi_dma			*dma;
  };
-@@ -714,10 +713,8 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
- 	if (!(spi_sr & SPI_SR_EOQF))
+@@ -703,10 +702,8 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
+ 	if (!(spi_sr & (SPI_SR_EOQF | SPI_SR_TCFQF)))
  		return IRQ_NONE;
  
 -	if (dspi_rxtx(dspi) == 0) {
@@ -187,7 +187,7 @@ index a534b8af27b8d..f9d44bb1040f8 100644
  
  	return IRQ_HANDLED;
  }
-@@ -815,13 +812,9 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+@@ -800,13 +797,9 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
  				status = dspi_poll(dspi);
  			} while (status == -EINPROGRESS);
  		} else if (trans_mode != DSPI_DMA_MODE) {
@@ -201,9 +201,9 @@ index a534b8af27b8d..f9d44bb1040f8 100644
 -			dev_err(&dspi->pdev->dev,
 -				"Waiting for transfer to complete failed!\n");
  
- 		spi_transfer_delay_exec(transfer);
- 	}
-@@ -1161,7 +1154,7 @@ static int dspi_probe(struct platform_device *pdev)
+ 		if (transfer->delay_usecs)
+ 			udelay(transfer->delay_usecs);
+@@ -1122,7 +1115,7 @@ static int dspi_probe(struct platform_device *pdev)
  		goto out_clk_put;
  	}
  
@@ -211,7 +211,7 @@ index a534b8af27b8d..f9d44bb1040f8 100644
 +	init_completion(&dspi->xfer_done);
  
  poll_mode:
- 
+ 	if (dspi->devtype_data->trans_mode == DSPI_DMA_MODE) {
 -- 
 2.20.1
 
