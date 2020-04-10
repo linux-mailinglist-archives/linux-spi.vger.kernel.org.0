@@ -2,62 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 481251A3B5A
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Apr 2020 22:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E9C1A3E14
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Apr 2020 04:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgDIUco (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Apr 2020 16:32:44 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41486 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbgDIUcn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Apr 2020 16:32:43 -0400
-Received: by mail-pg1-f196.google.com with SMTP id m13so8089pgd.8;
-        Thu, 09 Apr 2020 13:32:42 -0700 (PDT)
+        id S1726582AbgDJCP0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Apr 2020 22:15:26 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:38519 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726327AbgDJCP0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Apr 2020 22:15:26 -0400
+Received: by mail-pg1-f195.google.com with SMTP id p8so386970pgi.5
+        for <linux-spi@vger.kernel.org>; Thu, 09 Apr 2020 19:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=SV4gcePwSyug2j1XofY+vKaPN44dF/BmRIOpTLsKlF4=;
-        b=cnIRHMgb4nnkD+d3UfCblS/S4TpfGuQbiAHGWCJV9iwL8C74DjJH1XLvu86bB3FdfA
-         7O1NPMbqK3fDv68lvP0g/rwjk0hMXqSqk2Mwn5OkDJmlOxsnUpvK+H//WCYrL2dGs8hK
-         rQ4pkiFt+m0G6sE60rUn4RVObdo0TH1bSIQtfL2hnT/DHiCLVHXKlhiuhH+1VDaDQQWO
-         ybojNQg4zt7tht0oPbestmQ3dljhGevmwrVdEqeSfX1X1O+KXFijdanSeNd4Nwo0f/cy
-         CxCScl24uVI9A1W2JZzH823nTM51Pc9c1Gz1JHoYsMrCvTqDnbKZWNUeFcOdWWsH0yjD
-         R8Kg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=d7TfN17oK8F2t6OALSAXlrRz8ePlocQcOt3Tf7Trm+w=;
+        b=IAv54bR49HatWrnIw+HDgyEN9L0d+xo2Xv+gqO9biP9UAG4TQxLCmG7iTpbSCq+NuC
+         0eAR4r4KUVa6eR6XU7d3tZ5fOUaNT6Wg4F97lpYfpU8MSjA8SlYyhx+b4yh9uNhsbG4n
+         oNawBTi8CBRoYEvBS4wq84IRWkzfMxdsNljhCX1BARiGTmfgxw2N4TkfQs4duPM6QRsC
+         +daKrgaq3RS/hpXvWAQJFLUKT7QBBqjbgFTKz8Z3KRYGMMv2EvUymel++H5RKt+zsyd6
+         f8RHaCLC6Lghb4Nbso62VAu3g8UE9aQ8Yv6ZVW9+JjeIw9YffkFE9T6mZb2/j2IDS2WA
+         XF9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=SV4gcePwSyug2j1XofY+vKaPN44dF/BmRIOpTLsKlF4=;
-        b=iHgKo28aEdAUtlXz1+2ZIj9JGGqqNjtFAtH+Vge4Xesh0sYVA7k9smzOqjmPQFQpuT
-         N/ew+W6qSqrG3QZmNTJ2tXpqm3YlAJZ9Sf7yHIMo1wAT/V8FLFBGktgIo99pobqUHfZp
-         XYPS5en9C3GjFVToVLOJX65vx7x+72as1tI7yCd9Hmi3f979HqrAHbQNbXl5Wl1o54Bb
-         y7dhMzN4k1cC45m88SfTsGflLF6P/PTIxPnQvWnIouKnhANS+bBtCEewDk0N6p1AR5Rd
-         tPmMGwC1D2GGbU9NZs/ZgA2pYOu4oVa7ylHn8SqhG7h+Li0pCvlGwRgTbOY5Kb+s7s4p
-         2RUA==
-X-Gm-Message-State: AGi0PuZmLRDVQQScrA62yf5TpPdoauBd0zgaWuPC5DcKemyDINKlb8h/
-        Bf8U9jVhQAiD/KF0mD3Wb3w=
-X-Google-Smtp-Source: APiQypIcvlAfvSv1unLOKM/2cpfBJ+snZN2mRqC+/89OT27A5t9eT3isQrXtTZednNhSY5gDiXjPGg==
-X-Received: by 2002:aa7:94a5:: with SMTP id a5mr1477483pfl.67.1586464361864;
-        Thu, 09 Apr 2020 13:32:41 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f200sm20223263pfa.177.2020.04.09.13.32.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 09 Apr 2020 13:32:41 -0700 (PDT)
-Date:   Thu, 9 Apr 2020 13:32:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=d7TfN17oK8F2t6OALSAXlrRz8ePlocQcOt3Tf7Trm+w=;
+        b=BuSKjo9/5k6/Glub961DgtESIEi3JEYQARzJcoWqOCY0DJVCih7KAjCVln4Vby6VqH
+         y0PfZjgYP69dLvKUbAwsQ9usaVJsyrK+T9lDXhxhPJADn8hO1oqop8g9sNiuKSb2jpOR
+         t6LoppMDjyJOEAQzbQzcJsXevvZ+r4UtKCempIVRx1x6M7TIC97lpwPz8a9IsgHV7Jfr
+         Z3c9ZFoWP0IdHZxf0EgzWtaL0u087Jf+74fyxmWc81zRRiw36HjHR9o8YYZqWcCq9klZ
+         sKSvZsmxTOVy0OAJw9t9zPRT2GVH0JKVrVo2Ok/IYkugwqAmyxQ0ro0uf2WQGSfLf7wP
+         zItg==
+X-Gm-Message-State: AGi0PuZBA8VSMjl3LcpPMRHZaRGasUvd7q3FsjjYx3qcFZGgOAiQbK1B
+        adb5aY9hPExDiNZ5m3L2VZLzTQ==
+X-Google-Smtp-Source: APiQypJ9lhmlgi5PbLI3Ia4+q4YouJOhuN2AbjSX8A9OMK0E/D5AZg24FRtaKX79pzagH8HcG/UleQ==
+X-Received: by 2002:a65:424b:: with SMTP id d11mr2245592pgq.17.1586484921064;
+        Thu, 09 Apr 2020 19:15:21 -0700 (PDT)
+Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id e26sm388588pff.167.2020.04.09.19.15.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Apr 2020 19:15:20 -0700 (PDT)
+Date:   Thu, 9 Apr 2020 19:15:28 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Chen-Yu Tsai <wens@csie.org>, Nuno S? <nuno.sa@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Lee Jones <lee.jones@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
         Matt Mackall <mpm@selenic.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
@@ -73,20 +71,20 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: Fix dtc warnings on reg and ranges in
  examples
-Message-ID: <20200409203239.GA143353@roeck-us.net>
+Message-ID: <20200410021528.GY20625@builder.lan>
 References: <20200409202458.24509-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20200409202458.24509-1-robh@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 02:24:58PM -0600, Rob Herring wrote:
+On Thu 09 Apr 13:24 PDT 2020, Rob Herring wrote:
+
 > A recent update to dtc and changes to the default warnings introduced
 > some new warnings in the DT binding examples:
 > 
@@ -135,9 +133,10 @@ On Thu, Apr 09, 2020 at 02:24:58PM -0600, Rob Herring wrote:
 > Cc: linux-usb@vger.kernel.org
 > Signed-off-by: Rob Herring <robh@kernel.org>
 
-For hwmon:
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Regards,
+Bjorn
 
 > ---
 > Will take this via the DT tree.
