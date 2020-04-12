@@ -2,60 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BEA1A4635
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Apr 2020 14:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A211A5D90
+	for <lists+linux-spi@lfdr.de>; Sun, 12 Apr 2020 10:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbgDJMXR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Apr 2020 08:23:17 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34797 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbgDJMXR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Apr 2020 08:23:17 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jMsgm-0002jM-3i; Fri, 10 Apr 2020 12:23:16 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: remove redundant assignment to variable ms
-Date:   Fri, 10 Apr 2020 13:23:15 +0100
-Message-Id: <20200410122315.17523-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S1725873AbgDLIsj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 Apr 2020 04:48:39 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45520 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbgDLIsj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Apr 2020 04:48:39 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 60so6169470otl.12;
+        Sun, 12 Apr 2020 01:48:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ryrnnmiWMOzX1gq6Vxt4jaTEpcF4x4xQMMv3P1wro3w=;
+        b=ap1+nQp4JovGSL47Qfgt0af2I3wW8FwjJosR61IAiZ24vFpJyPzEdcNgW4eUnw7SCm
+         nLlGknlNicfa7luVtRZtCrxBRamWdhpcwKUB0O1M5A1WwO2tVV7KFcnTv45yC3CGwg2g
+         2tZwyShL/IU+zlN1iM46HZXyM6D05Xneu9gza0xC6Km2VMGKMjqYzM4HfSakyksRYE0G
+         aaQNO3kr7l+WzILi2vhuiHidcx5bdIf2d5NA1SYCSkYU4RMspAwh1oYwj3gp9PTydgGO
+         JdtgJUipos5DGm8W61HINmXr8GmlNQlaIwLp97mPGhCljA8f4inwKjs/hoUdbt+2KSvf
+         NVXA==
+X-Gm-Message-State: AGi0PuZRTtiMuQKVXa1etbeYxgefFMxE31qvK5PGbqaLsv7/OCiXUsDt
+        zSb03SYWEj99Pnqq6DFQALJhQUi9i184Co3+SEa5iQ==
+X-Google-Smtp-Source: APiQypKUSpUCFnG9oCj6HKDhZzk/Ok0xScPFxCdPYcw8sr+YVgG8G9chaRdg2kv6rM3C9zCB+TMr5Bh/Z160sTLm4gA=
+X-Received: by 2002:a4a:95a9:: with SMTP id o38mr10287105ooi.76.1586681319036;
+ Sun, 12 Apr 2020 01:48:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20200410122315.17523-1-colin.king@canonical.com>
+In-Reply-To: <20200410122315.17523-1-colin.king@canonical.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 12 Apr 2020 10:48:27 +0200
+Message-ID: <CAMuHMdVCc34r0jHrn8GiJQCzvRSmUiZgN56D0c_KgSWN0e1W1g@mail.gmail.com>
+Subject: Re: [PATCH] spi: remove redundant assignment to variable ms
+To:     Colin King <colin.king@canonical.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Fri, Apr 10, 2020 at 2:23 PM Colin King <colin.king@canonical.com> wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+>
+> The variable ms is being initialized with a value that is never read
+> and it is being updated later with a new value.  The initialization is
+> redundant and can be removed.
+>
+> Addresses-Coverity: ("Unused value")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-The variable ms is being initialized with a value that is never read
-and it is being updated later with a new value.  The initialization is
-redundant and can be removed.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/spi/spi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index c92c89467e7e..5446b07dcd3a 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1075,7 +1075,7 @@ static int spi_transfer_wait(struct spi_controller *ctlr,
- {
- 	struct spi_statistics *statm = &ctlr->statistics;
- 	struct spi_statistics *stats = &msg->spi->statistics;
--	unsigned long long ms = 1;
-+	unsigned long long ms;
- 
- 	if (spi_controller_is_slave(ctlr)) {
- 		if (wait_for_completion_interruptible(&ctlr->xfer_completion)) {
+                        Geert
+
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
