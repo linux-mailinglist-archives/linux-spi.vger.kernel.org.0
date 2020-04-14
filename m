@@ -2,92 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B80A1A86EA
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Apr 2020 19:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467241A879C
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Apr 2020 19:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407378AbgDNRGY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Apr 2020 13:06:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59172 "EHLO mail.kernel.org"
+        id S2407707AbgDNRgs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Apr 2020 13:36:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46210 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729042AbgDNRGV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 14 Apr 2020 13:06:21 -0400
+        id S1732341AbgDNRgr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 14 Apr 2020 13:36:47 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B5D820678;
-        Tue, 14 Apr 2020 17:06:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 71D142054F;
+        Tue, 14 Apr 2020 17:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586883980;
-        bh=N+wDVFj4k9qNnM4H4JBhjazm1jiklG8jskgZRqJY8vE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GLTIl/JCaTkOhZA5OQwDfanxfbTEyIdCvGi1wIKXRvXuh3XsA+ROea7ZdVEIEMoUp
-         rkUKYqb5ScEV9JzmaLWwUPEzla8bLzvty9CCTcNG/rMrOF/dgEbtEBXh5A5+9KH9XJ
-         dgb4ux3lsK5o5RvJGS7cBTojbNGLUizRObK2g7/U=
-Date:   Tue, 14 Apr 2020 18:06:18 +0100
+        s=default; t=1586885805;
+        bh=dLeDAThV8kQoCNI/yPc4Mw2qBLn+UJUjm/c3oYisn8s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gZW+wQmHQt1qRDORHekon7daC+J5AZN3hX4j7GebEVf0go2mEePNEsolKpTtqYInK
+         jrVFgHZbWzL38hA8P7bA7DsAevfE+XktPGAPGL5HqVi0WNsV+mPRsilfX01hWKHwaZ
+         Q5atE9v5j4dmCMOwV8wTWKbd+Q6ic9Z/SXiCrPUo=
+Date:   Tue, 14 Apr 2020 18:36:42 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-hwmon@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix dtc warnings on reg and ranges in
- examples
-Message-ID: <20200414170618.GG5412@sirena.org.uk>
-References: <20200409202458.24509-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kjpMrWxdCilgNbo1"
-Content-Disposition: inline
-In-Reply-To: <20200409202458.24509-1-robh@kernel.org>
-X-Cookie: I've only got 12 cards.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Aishwarya R <aishwaryarj100@gmail.com>
+Cc:     Aishwarya R <raishwar@visteon.com>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        raishwar@visteon.com
+Subject: Applied "spi: spi-sh-msiof: Fix checkpatch error Complex macros should use ()" to the spi tree
+In-Reply-To:  <20200406155301.21768-1-raishwar@visteon.com>
+Message-Id:  <applied-20200406155301.21768-1-raishwar@visteon.com>
+X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The patch
 
---kjpMrWxdCilgNbo1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+   spi: spi-sh-msiof: Fix checkpatch error Complex macros should use ()
 
-On Thu, Apr 09, 2020 at 02:24:58PM -0600, Rob Herring wrote:
-> A recent update to dtc and changes to the default warnings introduced
-> some new warnings in the DT binding examples:
+has been applied to the spi tree at
 
-Acked-by: Mark Brown <broonie@kernel.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
 
---kjpMrWxdCilgNbo1
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6V7YkACgkQJNaLcl1U
-h9C0nggAgbznZBSepYyVohp/1H4rCte0Z/wk6K7EfPvfDL1M/M+F5oW6AU4YZ7Kq
-lnSn9hweJBFpxBwrrAv0lHakge/LpEQZ1Aqig/t9jd9NgwKqJWJ8Y2aKPx+Oli9k
-mdb6G44fbxVgVruXHd1n2XzJwpISNXksvKBTYWY63Gb7DRAfzSqlexWfysRbtI/O
-NgdIihQ9ti6mjE0Nxso/6KeZbooinBxVRntCOiinYSHraOWbfTn24MQXa70JtuVC
-m7cod5i1+C4PiKb+3m5aYIEQxvzN08qRxnnZFrnknqj+N0GcA1N9wVkJ06JhXrzn
-a84u535dpkRwCg+2Nf9leoevVqXUqw==
-=wm8m
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---kjpMrWxdCilgNbo1--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 21fb1f41bcdf436f6969f4651dce0df62985f69a Mon Sep 17 00:00:00 2001
+From: Aishwarya R <aishwaryarj100@gmail.com>
+Date: Mon, 6 Apr 2020 21:23:01 +0530
+Subject: [PATCH] spi: spi-sh-msiof: Fix checkpatch error Complex macros should
+ use ()
+
+Fixed checkpatch error "Macros with complex values should be enclosed
+in parentheses"
+
+Signed-off-by: Aishwarya R <raishwar@visteon.com>
+Link: https://lore.kernel.org/r/20200406155301.21768-1-raishwar@visteon.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-sh-msiof.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
+index 1c11a00a2c36..b2579af0e3eb 100644
+--- a/drivers/spi/spi-sh-msiof.c
++++ b/drivers/spi/spi-sh-msiof.c
+@@ -1398,7 +1398,7 @@ static int sh_msiof_spi_resume(struct device *dev)
+ 
+ static SIMPLE_DEV_PM_OPS(sh_msiof_spi_pm_ops, sh_msiof_spi_suspend,
+ 			 sh_msiof_spi_resume);
+-#define DEV_PM_OPS	&sh_msiof_spi_pm_ops
++#define DEV_PM_OPS	(&sh_msiof_spi_pm_ops)
+ #else
+ #define DEV_PM_OPS	NULL
+ #endif /* CONFIG_PM_SLEEP */
+-- 
+2.20.1
+
