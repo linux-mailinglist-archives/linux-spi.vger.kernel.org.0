@@ -2,36 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 467241A879C
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Apr 2020 19:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE911A879F
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Apr 2020 19:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407707AbgDNRgs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Apr 2020 13:36:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46210 "EHLO mail.kernel.org"
+        id S2407718AbgDNRgw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Apr 2020 13:36:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46252 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732341AbgDNRgr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 14 Apr 2020 13:36:47 -0400
+        id S2407713AbgDNRgu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 14 Apr 2020 13:36:50 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 71D142054F;
-        Tue, 14 Apr 2020 17:36:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 956A02054F;
+        Tue, 14 Apr 2020 17:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586885805;
-        bh=dLeDAThV8kQoCNI/yPc4Mw2qBLn+UJUjm/c3oYisn8s=;
+        s=default; t=1586885810;
+        bh=atfGXc/+cClM0GBREiTZsOZeix3ptYsx1vBG0s8Qvgo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=gZW+wQmHQt1qRDORHekon7daC+J5AZN3hX4j7GebEVf0go2mEePNEsolKpTtqYInK
-         jrVFgHZbWzL38hA8P7bA7DsAevfE+XktPGAPGL5HqVi0WNsV+mPRsilfX01hWKHwaZ
-         Q5atE9v5j4dmCMOwV8wTWKbd+Q6ic9Z/SXiCrPUo=
-Date:   Tue, 14 Apr 2020 18:36:42 +0100
+        b=0b/WcdPVEQTjlq7Osc3ueiALOavc/xEupuRtgO7xymolTojsL7sxk4GD/t8D0txeR
+         xLLvnf4+VSkaXoh/oLUmsxh5C2/Fo+xyZ0WOA97P4EOj6DSXr4iyt5gcwWaOjDWjgl
+         5mGcNRLgzhtWNX5mboV07DFkEwDHPh8fBDHrMN+4=
+Date:   Tue, 14 Apr 2020 18:36:47 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Aishwarya R <aishwaryarj100@gmail.com>
-Cc:     Aishwarya R <raishwar@visteon.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        raishwar@visteon.com
-Subject: Applied "spi: spi-sh-msiof: Fix checkpatch error Complex macros should use ()" to the spi tree
-In-Reply-To:  <20200406155301.21768-1-raishwar@visteon.com>
-Message-Id:  <applied-20200406155301.21768-1-raishwar@visteon.com>
+To:     Jason Yan <yanaijie@huawei.com>
+Cc:     broonie@kernel.org, Hulk Robot <hulkci@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, matthias.bgg@gmail.com
+Subject: Applied "spi: spi-mtk-nor: make mtk_nor_exec_op() statuc" to the spi tree
+In-Reply-To:  <20200409085009.44971-1-yanaijie@huawei.com>
+Message-Id:  <applied-20200409085009.44971-1-yanaijie@huawei.com>
 X-Patchwork-Hint: ignore
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -40,7 +41,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 The patch
 
-   spi: spi-sh-msiof: Fix checkpatch error Complex macros should use ()
+   spi: spi-mtk-nor: make mtk_nor_exec_op() statuc
 
 has been applied to the spi tree at
 
@@ -65,35 +66,37 @@ to this mail.
 Thanks,
 Mark
 
-From 21fb1f41bcdf436f6969f4651dce0df62985f69a Mon Sep 17 00:00:00 2001
-From: Aishwarya R <aishwaryarj100@gmail.com>
-Date: Mon, 6 Apr 2020 21:23:01 +0530
-Subject: [PATCH] spi: spi-sh-msiof: Fix checkpatch error Complex macros should
- use ()
+From afedb4b7282b4c532d8aea105943e71c0efb3a6b Mon Sep 17 00:00:00 2001
+From: Jason Yan <yanaijie@huawei.com>
+Date: Thu, 9 Apr 2020 16:50:09 +0800
+Subject: [PATCH] spi: spi-mtk-nor: make mtk_nor_exec_op() statuc
 
-Fixed checkpatch error "Macros with complex values should be enclosed
-in parentheses"
+Fix the following sparse warning:
 
-Signed-off-by: Aishwarya R <raishwar@visteon.com>
-Link: https://lore.kernel.org/r/20200406155301.21768-1-raishwar@visteon.com
+drivers/spi/spi-mtk-nor.c:394:5: warning: symbol 'mtk_nor_exec_op' was
+not declared. Should it be static?
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
+Link: https://lore.kernel.org/r/20200409085009.44971-1-yanaijie@huawei.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/spi/spi-sh-msiof.c | 2 +-
+ drivers/spi/spi-mtk-nor.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
-index 1c11a00a2c36..b2579af0e3eb 100644
---- a/drivers/spi/spi-sh-msiof.c
-+++ b/drivers/spi/spi-sh-msiof.c
-@@ -1398,7 +1398,7 @@ static int sh_msiof_spi_resume(struct device *dev)
+diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+index c15a9910549f..7bc302b50396 100644
+--- a/drivers/spi/spi-mtk-nor.c
++++ b/drivers/spi/spi-mtk-nor.c
+@@ -391,7 +391,7 @@ static int mtk_nor_pp_unbuffered(struct mtk_nor *sp,
+ 	return mtk_nor_cmd_exec(sp, MTK_NOR_CMD_WRITE, 6 * BITS_PER_BYTE);
+ }
  
- static SIMPLE_DEV_PM_OPS(sh_msiof_spi_pm_ops, sh_msiof_spi_suspend,
- 			 sh_msiof_spi_resume);
--#define DEV_PM_OPS	&sh_msiof_spi_pm_ops
-+#define DEV_PM_OPS	(&sh_msiof_spi_pm_ops)
- #else
- #define DEV_PM_OPS	NULL
- #endif /* CONFIG_PM_SLEEP */
+-int mtk_nor_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
++static int mtk_nor_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ {
+ 	struct mtk_nor *sp = spi_controller_get_devdata(mem->spi->master);
+ 	int ret;
 -- 
 2.20.1
 
