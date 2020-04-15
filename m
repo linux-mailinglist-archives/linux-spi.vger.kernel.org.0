@@ -2,56 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8921A9AA9
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Apr 2020 12:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A59D1A9B79
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Apr 2020 12:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408648AbgDOKej (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Apr 2020 06:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
+        id S2896394AbgDOKy1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Apr 2020 06:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408703AbgDOKeM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Apr 2020 06:34:12 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8388C061A0C
-        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 03:34:09 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id x25so16825234wmc.0
-        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 03:34:09 -0700 (PDT)
+        with ESMTP id S2441188AbgDOKyV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Apr 2020 06:54:21 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BDAC061A0E
+        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 03:54:19 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id t14so5343702wrw.12
+        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 03:54:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PTNilJgBZZhyWSgq5FQ4sgITJPwkD0fbyzKxpSApE9g=;
-        b=Z40z8v7A93xbwxuDomrQ1jlZ+G1cx5ZSJ+kowcM3KaCigmBMo9/9LXdG9Cc9ECiiv4
-         uaXolBMvj8X+3L/7OrJcsHjT4DcCPn1zVRMkENksxP4DgkBSVSmH6tJa+xhi0+hwXTLN
-         Wy0erTwUemWru+RFm1/W0qL3DPqWvaqnKQdSiU3cUDuJQoU/F6zpKs+9DvTIu91ntF7M
-         SGS1foepnmhRpTE4egC6jDeODRIF/hkO7eUYve1V3MoekXkyvZCActFRkx6Gc18V1+y7
-         ndXf08u10868l5w+Axdrlp6BHHhD2Z/fCVwcK6Jk6XDeUIbwFr50d9obwFJ+gduNo7OY
-         goLw==
+        bh=N5achumHbyhd7pAEpLAvWmDnK4L9orFHPx3MDqdGic0=;
+        b=vbJ7rOV0wR/LUZcYwSBUqIAoh50IC66nIOBJIOymEnqWGZFxPAoxoL58zbrXjNZJP5
+         3jOa7Bk6zMW9j5w9AmwGnZ6Jpr9HXhF46KbxE58T5a2xTGCx+zxtqLPFE3QtUIaqCznm
+         /Ql9qYg/J5OnmNwi/Jub65h5MpHxHGYNAvOY3RSIXTLHQAVwvM7RoyHYNo+uSHmujtoc
+         ZYfzBeopVfidJT2oWkmAe7y2jiszM7R+nFAkwpEFTIYWmGfKTSUJIss4RjTgXxPU57qQ
+         r1/8yBMDRG7NZsSpPC89kvwVHXiG+TjDKxi9mbP2Gc6ENhHMF2ihWpSTHJwgRMrlG7hc
+         a/XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=PTNilJgBZZhyWSgq5FQ4sgITJPwkD0fbyzKxpSApE9g=;
-        b=M4TzZ2kNFP0oHvgwWvqz4NDOazzab8zt8NXRzkcjW6sCEQim5a/SSHndU3BB66Z7Le
-         Ay9C7J4DzJpnScy9+xwcxRD2ecEgNJTJAhDo5icBlsoC1xVZDVzGLZ5OjTVoLCwjEett
-         6z5rRd+yX7k9dRMvosesGiE7P2Aq7NdoSMbozMZn8sa1xFFZ9deIo+gKk7XrkJ7RgWFP
-         o3Fsm4gIgtC6YZ+JrN8WHV8ErhK6CeiQGnGVFtgi1tLZFTwpQ3llAnYDgcnsrE7yCsu3
-         HmAUdP9cO+Oh7Ba8txrTznsZncUoO6+viX8aQ7RjxrPHeKg4asDeAiO5oXH/TnbiKp8u
-         09cw==
-X-Gm-Message-State: AGi0PuaROEvOpWEHoyxG3wvJsXfyYIIf2uf1vl2S4lW2FlKAR/9vgVVR
-        JSWk67PZa4IrMhb2rdQsax8smA==
-X-Google-Smtp-Source: APiQypKBXMSKkLl3vKZS5yoXgN9eV8pgAR0WguL01vf0LrSnHKFKhjDONkGJCVMXk1MVAgVMiRcXEA==
-X-Received: by 2002:a1c:990d:: with SMTP id b13mr2392392wme.179.1586946848251;
-        Wed, 15 Apr 2020 03:34:08 -0700 (PDT)
+        bh=N5achumHbyhd7pAEpLAvWmDnK4L9orFHPx3MDqdGic0=;
+        b=ANp6qGmwVe1A37IqcI9eK3eFNR2fMDnUL+TpXXxA2/0xN4flyiDbUWfsHroW3rTgHk
+         FHIJ3DUdPgn4KVi/+a1rVTSUyFapQ2oQSpzLqZfZc/Lfr62uzvXX9zgvk9dV65gNOrPi
+         ZfCdhbecL2hFrw+LaTOTkA10SiMUfWNlYNqtyMa+eg4RRBtiBp+BXWqtbbP3tMzx6Shv
+         Rd3LQ9Hs76rNtWq2OQUSDUeZpVQ+fzXDBgTGKpcLF5LFGLQAUPSXnU8/0ixBBbQxNwJZ
+         PJQlZliVW90nE8Ot9f0urxYrsjybvXzNuxyFIyGZiaoS8oWZ/6bQgCP/nvA9saI9oCzc
+         uOcA==
+X-Gm-Message-State: AGi0PuY0XnbldV3bgSQ7LKMzoTQYfHskR4Eoq0zWy2qPTN+8N7uerVh3
+        AF1xjrU7bKRu2kxtmuNgFsvj4w==
+X-Google-Smtp-Source: APiQypJzWzAuH9J0oAP/CwcaigLX+6VY3cfSnNSog0Vu5MnQCvINZqLpelMLG0YDScc+sYv7sdMCcA==
+X-Received: by 2002:a5d:5189:: with SMTP id k9mr1072209wrv.3.1586948058564;
+        Wed, 15 Apr 2020 03:54:18 -0700 (PDT)
 Received: from [192.168.0.136] ([87.120.218.65])
-        by smtp.googlemail.com with ESMTPSA id u7sm24319753wmg.41.2020.04.15.03.34.06
+        by smtp.googlemail.com with ESMTPSA id k3sm13384202wru.90.2020.04.15.03.54.16
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 Apr 2020 03:34:07 -0700 (PDT)
+        Wed, 15 Apr 2020 03:54:17 -0700 (PDT)
 Subject: Re: [PATCH V3 7/8] spi: spi-qcom-qspi: Add interconnect support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Akash Asthana <akashast@codeaurora.org>,
-        gregkh@linuxfoundation.org, agross@kernel.org,
+To:     Akash Asthana <akashast@codeaurora.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
         bjorn.andersson@linaro.org, wsa@the-dreams.de,
         mark.rutland@arm.com, robh+dt@kernel.org,
         linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
@@ -66,7 +66,7 @@ References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
  <20200407105542.GA5247@sirena.org.uk>
  <48c60fdf-03c6-650a-2671-b8f7cc1e5c82@codeaurora.org>
  <5644ef02-f984-0f5b-d745-eca3c9573726@linaro.org>
- <20200409132042.GD5399@sirena.org.uk>
+ <eca0e6a7-effe-022c-e90e-c0672991251d@codeaurora.org>
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
@@ -112,47 +112,67 @@ Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
  7ayYJIXFqjl/X0KBcCbiAl4vbdBw1bqFnO4zd1lMXKVoa29UHqby4MPbQhjWNVv9kqp8A39+
  E9xw890l1xdERkjVKX6IEJu2hf7X3MMl9tOjBK6MvdOUxvh1bNNmXh7OlBL1MpJYY/ydIm3B
  KEmKjLDvB0pePJkdTw==
-Message-ID: <15799ba5-bcbf-92d9-ac2e-a8bea469d005@linaro.org>
-Date:   Wed, 15 Apr 2020 13:34:05 +0300
+Message-ID: <1354a27f-217b-c530-c093-d2a5d3df99b2@linaro.org>
+Date:   Wed, 15 Apr 2020 13:54:16 +0300
 MIME-Version: 1.0
-In-Reply-To: <20200409132042.GD5399@sirena.org.uk>
+In-Reply-To: <eca0e6a7-effe-022c-e90e-c0672991251d@codeaurora.org>
 Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+Hi Akash,
 
-On 4/9/20 16:20, Mark Brown wrote:
-> On Thu, Apr 09, 2020 at 04:17:22PM +0300, Georgi Djakov wrote:
+On 4/10/20 10:31, Akash Asthana wrote:
+> Hi Georgi,
+> 
+> On 4/9/2020 6:47 PM, Georgi Djakov wrote:
+>> Hi Akash,
+>>
 >> On 4/8/20 15:17, Akash Asthana wrote:
-> 
+>>> Hi Mark, Evan, Georgi,
+>>>
+>>> On 4/7/2020 4:25 PM, Mark Brown wrote:
+>>>> On Tue, Apr 07, 2020 at 03:24:42PM +0530, Akash Asthana wrote:
+>>>>> On 3/31/2020 4:53 PM, Mark Brown wrote:
+>>>>>>> +    ctrl->avg_bw_cpu = Bps_to_icc(speed_hz);
+>>>>>>> +    ctrl->peak_bw_cpu = Bps_to_icc(2 * speed_hz);
+>>>>>> I thought you were going to factor this best guess handling of peak
+>>>>>> bandwidth out into the core?
+>>>>> I can centralize this for SPI, I2C and UART  in Common driver(QUP wrapper)
+>>>>> but still for QSPI I have to keep this piece of code as is because It is not
+>>>>> child of QUP wrapper(it doesn't use common code).
+>>>> Why not?
+>>>>
+>>>>> I am not sure whether I can move this " Assume peak_bw as twice of avg_bw if
+>>>>> nothing is mentioned explicitly" to ICC core because the factor of 2 is
+>>>>> chosen randomly by me.
+>>>> That's the whole point - if this is just a random number then we may as
+>>>> well at least be consistently random.
 >>> Can we centralize below logic of peak_bw selection for all the clients to ICC core?
-> 
 >> I don't think this is a good idea for now, because this is very hardware
 >> specific. A scaling factor that works for one client might not work for another.
-> 
-> AIUI a driver can always override the setting if it's got a better idea.
-
-True.
-
+>>
 >> My questions here is how did you decide on this "multiply by two"? I can imagine
 >> that the traffic can be bursty on some interfaces, but is the factor here really
 >> a "random number" or is this based on some data patterns or performance
 >> analysis?
 > 
-> The reason I'm pushing for this to go into the core is that the numbers
-> seem to be just made up and not device specific at all (or at least
-> there's a lot of devices with the same values).
+> Factor of 2 is random number.
+> 
+> We are taking care of actual throughput requirement in avg_bw vote and
+> the intention of putting peak as twice of avg is to ensure that if high
+> speed peripherals(ex:USB) removes their votes, we shouldn't see any
+> latency issue because of other ICC client who don't vote for their BW
+> requirement or *actual* BW requirement.
 
-I might be a bit too cautious here, but the main question is what this common
-number should be then. Maybe the numbers are not device specific, but
-communication interface/bus specific? I would rather make the peak 30% higher
-than the average, but for low speed interfaces i guess the factor of two should
-also be fine?
+Thanks for clarifying, but is this latency a confirmed issue on real hardware?
+I guess voting for twice as average will work, but still wondering wouldn't
+it be more appropriate to handle it in the interconnect platform driver instead?
+Also why is the other client not voting, can we fix it?
 
 Thanks,
 Georgi
