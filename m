@@ -2,321 +2,240 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CFC1AAFBD
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Apr 2020 19:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B9F1AB02F
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Apr 2020 19:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411183AbgDORbj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Apr 2020 13:31:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47164 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2411172AbgDORbe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 15 Apr 2020 13:31:34 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D5F3D2076D;
-        Wed, 15 Apr 2020 17:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586971892;
-        bh=Q+cQLTLYqEnr0ODnP1UgJ/lLN0GED+XfKIE4VzHQtzU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=2HkilS1AnLgNFrpcMhPnKdV7tR4loJfQtvZuPUjbX4OqDsn9SoerPBDznoM4P8Evz
-         WKyyYXLurIdwrZyAzfIM338AHH/w5tr8b8dZy2t/jfNpjqmFvnbqCKMXhdhva/BreP
-         9muTxtMsbxxd0eDVr/qJKS1Hgd1Nuh9vOfhozHrw=
-Date:   Wed, 15 Apr 2020 18:31:29 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Applied "spi: dt-bindings: rspi: Convert to json-schema" to the spi tree
-In-Reply-To:  <20200408091129.25429-1-geert+renesas@glider.be>
-Message-Id:  <applied-20200408091129.25429-1-geert+renesas@glider.be>
-X-Patchwork-Hint: ignore
+        id S2411591AbgDOR6Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Apr 2020 13:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2411581AbgDOR6T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Apr 2020 13:58:19 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5E6C061A0C
+        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 10:58:17 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id k28so3325007lfe.10
+        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 10:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nzpcy1NONnpuTpQomH7DRwvMl5tjLj9Jb2RuGzAzVzQ=;
+        b=Rhq1W4O5RgO0QbKAyndh8EFeCIRnRannyee9s7/D7S7MrlemzLLJe1sauYIufdBpwB
+         rjnRHdOb/q5f4u2K1mE2l2jQcNorj07q88mFwIy4kMoF/xstjg1ThQ8IvSgZ0hss2zPC
+         FWfB9V09cmvl8pUKh8xZzHPNrX954f+AVFCEy/RVbBaKWXvbTRzQKaeOljazdniv+coy
+         ZS3xbh4gqp+YYYItJGV3TVG5521gi3tqgh67dS/Q7T3m7Le4j0zG3Kyv+sdCSgjeo+Ck
+         reFojxo7g+BiGskDmnCOWnRdbkpMQzWVqYVBSRPctH63vMmLtaHDnCLIelS8/3la2XBt
+         vdLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nzpcy1NONnpuTpQomH7DRwvMl5tjLj9Jb2RuGzAzVzQ=;
+        b=UdZ5hYbWQZW9OQHLkpr0YGQnh22tFv+eky+2SJKLW5I9MJl384lxDQNk/V7kuusBIh
+         s+jLSxhNSObqHHLgjdThjAYcfyh/xXAHgjwdwtTeyw3B4oJZUYR8zeYNK4rFVVC2u5qu
+         moIwaXSiRuqtC4r6y87DIZ2lX/MtCBCLZabxhY5J/cymXiQVeO3d3ktVlrxe7eVePBa5
+         hBc2ysCi7Y8dp7vZHyfbDW3xgwx97JV9pSJ7woELs70EvcWTUGrM0OUHZegC33oyf0An
+         YWXigmSx7d/7hc/FCfTlSJo9bQmnIIeE2GoZVyKxFTlJ/+0ULW9kn0Mp0/pjVnFwt4Mc
+         AVJA==
+X-Gm-Message-State: AGi0PubppmkOF9nphml8/IVaOqV7c5ZpLCfntVXdrhPNgJWxkUfRfthI
+        ofKOWyK2HrmXe0ca4+vVDymd0A==
+X-Google-Smtp-Source: APiQypLdnRBxk7EHTzo2pD9rDVs1dsegrkFo3Cp3M+3xAl/bMXp2h4BpVftzYureSE8PWXrAqJv8lw==
+X-Received: by 2002:ac2:489b:: with SMTP id x27mr3846150lfc.60.1586973495664;
+        Wed, 15 Apr 2020 10:58:15 -0700 (PDT)
+Received: from localhost.localdomain (c-f3d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.243])
+        by smtp.gmail.com with ESMTPSA id 1sm5758710ljw.91.2020.04.15.10.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2020 10:58:15 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Tomas Paukrt <tomaspaukrt@email.cz>,
+        =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
+Subject: [PATCH] spi: orion: Convert to use GPIO descriptors
+Date:   Wed, 15 Apr 2020 19:56:13 +0200
+Message-Id: <20200415175613.220767-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.25.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The patch
+This converts the Orion SPI master to use GPIO descriptors.
+The SPI core will obtain and manage the CS GPIOs, if any
+are defined.
 
-   spi: dt-bindings: rspi: Convert to json-schema
+I make one sematic change: when a certain chip select is using
+a GPIO line instead of the native CS I simply just enable the
+1:1 mapped native CS that would have been used if the GPIO
+was not there. As we set the SPI_MASTER_GPIO_SS the .set_cs()
+callback will be called for all chip selects whether native
+or not, and the important thing for the driver is that the
+previous native chip select (if any) is deasserted, which
+other chip select is asserted instead does not really matter.
 
-has been applied to the spi tree at
+The previous code went to great lengths to ascertain that the
+first hw CS which was hiding behind a GPIO line was used for
+all cases when the line is not using native chip select but
+this should not matter at all, just use the one "underneath"
+the GPIO at all times.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+When a GPIO is used for CS, the SPI_CS_HIGH flag is enforced,
+so the native chip select is also inverted. But that should
+not matter since we are not using it anyways.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 999866c92f4a333cb776c3e87831feeddef74f96 Mon Sep 17 00:00:00 2001
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-Date: Wed, 8 Apr 2020 11:11:29 +0200
-Subject: [PATCH] spi: dt-bindings: rspi: Convert to json-schema
-
-Convert the Renesas (Quad) Serial Peripheral Interface (RSPI/QSPI)
-Device Tree binding documentation to json-schema.
-
-Document missing properties.
-Update the second example to match reality.
-Drop the first example, as it doesn't add much value.
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20200408091129.25429-1-geert+renesas@glider.be
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: Tomas Paukrt <tomaspaukrt@email.cz>
+Cc: Jan Kundrát <jan.kundrat@cesnet.cz>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- .../devicetree/bindings/spi/renesas,rspi.yaml | 144 ++++++++++++++++++
- .../devicetree/bindings/spi/spi-rspi.txt      |  73 ---------
- 2 files changed, 144 insertions(+), 73 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/renesas,rspi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-rspi.txt
+People using Orion SPI: please test this, I think it works
+fine.
+---
+ drivers/spi/spi-orion.c | 70 ++++++++++-------------------------------
+ 1 file changed, 16 insertions(+), 54 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-new file mode 100644
-index 000000000000..c54ac059043f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-@@ -0,0 +1,144 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/renesas,rspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas (Quad) Serial Peripheral Interface (RSPI/QSPI)
-+
-+maintainers:
-+  - Geert Uytterhoeven <geert+renesas@glider.be>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - renesas,rspi-sh7757    # SH7757
-+          - const: renesas,rspi        # Legacy SH
-+
-+      - items:
-+          - enum:
-+              - renesas,rspi-r7s72100  # RZ/A1H
-+              - renesas,rspi-r7s9210   # RZ/A2
-+          - const: renesas,rspi-rz     # RZ/A
-+
-+      - items:
-+          - enum:
-+              - renesas,qspi-r8a7743   # RZ/G1M
-+              - renesas,qspi-r8a7744   # RZ/G1N
-+              - renesas,qspi-r8a7745   # RZ/G1E
-+              - renesas,qspi-r8a77470  # RZ/G1C
-+              - renesas,qspi-r8a7790   # R-Car H2
-+              - renesas,qspi-r8a7791   # R-Car M2-W
-+              - renesas,qspi-r8a7792   # R-Car V2H
-+              - renesas,qspi-r8a7793   # R-Car M2-N
-+              - renesas,qspi-r8a7794   # R-Car E2
-+          - const: renesas,qspi        # R-Car Gen2 and RZ/G1
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    oneOf:
-+      - items:
-+          - description: A combined interrupt
-+      - items:
-+          - description: Error interrupt (SPEI)
-+          - description: Receive Interrupt (SPRI)
-+          - description: Transmit Interrupt (SPTI)
-+
-+  interrupt-names:
-+    oneOf:
-+      - items:
-+          - const: mux
-+      - items:
-+          - const: error
-+          - const: rx
-+          - const: tx
-+
-+  clocks:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  dmas:
-+    description:
-+      Must contain a list of pairs of references to DMA specifiers, one for
-+      transmission, and one for reception.
-+
-+  dma-names:
-+    minItems: 2
-+    maxItems: 4
-+    items:
-+      enum:
-+        - tx
-+        - rx
-+
-+  num-cs:
-+    description: |
-+      Total number of native chip selects.
-+      Hardware limitations related to chip selects:
-+        - When using GPIO chip selects, at least one native chip select must
-+          be left unused, as it will be driven anyway.
-+    minimum: 1
-+    maximum: 2
-+    default: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - power-domains
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,rspi-rz
-+    then:
-+      properties:
-+        interrupts:
-+          minItems: 3
-+      required:
-+        - interrupt-names
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,qspi
-+    then:
-+      required:
-+        - resets
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/r8a7791-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7791-sysc.h>
-+
-+    qspi: spi@e6b10000 {
-+            compatible = "renesas,qspi-r8a7791", "renesas,qspi";
-+            reg = <0xe6b10000 0x2c>;
-+            interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&cpg CPG_MOD 917>;
-+            dmas = <&dmac0 0x17>, <&dmac0 0x18>, <&dmac1 0x17>, <&dmac1 0x18>;
-+            dma-names = "tx", "rx", "tx", "rx";
-+            power-domains = <&sysc R8A7791_PD_ALWAYS_ON>;
-+            resets = <&cpg 917>;
-+            num-cs = <1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi-rspi.txt b/Documentation/devicetree/bindings/spi/spi-rspi.txt
-deleted file mode 100644
-index 421722b93992..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-rspi.txt
-+++ /dev/null
-@@ -1,73 +0,0 @@
--Device tree configuration for Renesas RSPI/QSPI driver
+diff --git a/drivers/spi/spi-orion.c b/drivers/spi/spi-orion.c
+index 1f59beb7d27e..43f73db22f21 100644
+--- a/drivers/spi/spi-orion.c
++++ b/drivers/spi/spi-orion.c
+@@ -17,10 +17,8 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_device.h>
+-#include <linux/of_gpio.h>
+ #include <linux/clk.h>
+ #include <linux/sizes.h>
+-#include <linux/gpio.h>
+ #include <asm/unaligned.h>
+ 
+ #define DRIVER_NAME			"orion_spi"
+@@ -98,7 +96,6 @@ struct orion_spi {
+ 	struct clk              *clk;
+ 	struct clk              *axi_clk;
+ 	const struct orion_spi_dev *devdata;
+-	int			unused_hw_gpio;
+ 
+ 	struct orion_child_options	child[ORION_NUM_CHIPSELECTS];
+ };
+@@ -325,20 +322,27 @@ orion_spi_setup_transfer(struct spi_device *spi, struct spi_transfer *t)
+ static void orion_spi_set_cs(struct spi_device *spi, bool enable)
+ {
+ 	struct orion_spi *orion_spi;
+-	int cs;
+ 
+ 	orion_spi = spi_master_get_devdata(spi->master);
+ 
+-	if (gpio_is_valid(spi->cs_gpio))
+-		cs = orion_spi->unused_hw_gpio;
+-	else
+-		cs = spi->chip_select;
 -
--Required properties:
--- compatible       : For Renesas Serial Peripheral Interface on legacy SH:
--		     "renesas,rspi-<soctype>", "renesas,rspi" as fallback.
--		     For Renesas Serial Peripheral Interface on RZ/A:
--		     "renesas,rspi-<soctype>", "renesas,rspi-rz" as fallback.
--		     For Quad Serial Peripheral Interface on R-Car Gen2 and
--		     RZ/G1 devices:
--		     "renesas,qspi-<soctype>", "renesas,qspi" as fallback.
--		     Examples with soctypes are:
--		        - "renesas,rspi-sh7757" (SH)
--			- "renesas,rspi-r7s72100" (RZ/A1H)
--			- "renesas,rspi-r7s9210" (RZ/A2)
--			- "renesas,qspi-r8a7743" (RZ/G1M)
--			- "renesas,qspi-r8a7744" (RZ/G1N)
--			- "renesas,qspi-r8a7745" (RZ/G1E)
--			- "renesas,qspi-r8a77470" (RZ/G1C)
--			- "renesas,qspi-r8a7790" (R-Car H2)
--			- "renesas,qspi-r8a7791" (R-Car M2-W)
--			- "renesas,qspi-r8a7792" (R-Car V2H)
--			- "renesas,qspi-r8a7793" (R-Car M2-N)
--			- "renesas,qspi-r8a7794" (R-Car E2)
--- reg              : Address start and address range size of the device
--- interrupts       : A list of interrupt-specifiers, one for each entry in
--		     interrupt-names.
--		     If interrupt-names is not present, an interrupt specifier
--		     for a single muxed interrupt.
--- interrupt-names  : A list of interrupt names. Should contain (if present):
--		       - "error" for SPEI,
--		       - "rx" for SPRI,
--		       - "tx" to SPTI,
--		       - "mux" for a single muxed interrupt.
--- num-cs	   : Number of chip selects. Some RSPI cores have more than 1.
--- #address-cells   : Must be <1>
--- #size-cells      : Must be <0>
++	/*
++	 * If this line is using a GPIO to control chip select, this internal
++	 * .set_cs() function will still be called, so we clear any previous
++	 * chip select. The CS we activate will not have any elecrical effect,
++	 * as it is handled by a GPIO, but that doesn't matter. What we need
++	 * is to deassert the old chip select and assert some other chip select.
++	 */
+ 	orion_spi_clrbits(orion_spi, ORION_SPI_IF_CTRL_REG, ORION_SPI_CS_MASK);
+ 	orion_spi_setbits(orion_spi, ORION_SPI_IF_CTRL_REG,
+-				ORION_SPI_CS(cs));
++			  ORION_SPI_CS(spi->chip_select));
+ 
+-	/* Chip select logic is inverted from spi_set_cs */
++	/*
++	 * Chip select logic is inverted from spi_set_cs(). For lines using a
++	 * GPIO to do chip select SPI_CS_HIGH is enforced and inversion happens
++	 * in the GPIO library, but we don't care about that, because in those
++	 * cases we are dealing with an unused native CS anyways so the polarity
++	 * doesn't matter.
++	 */
+ 	if (!enable)
+ 		orion_spi_setbits(orion_spi, ORION_SPI_IF_CTRL_REG, 0x1);
+ 	else
+@@ -503,9 +507,6 @@ static int orion_spi_transfer_one(struct spi_master *master,
+ 
+ static int orion_spi_setup(struct spi_device *spi)
+ {
+-	if (gpio_is_valid(spi->cs_gpio)) {
+-		gpio_direction_output(spi->cs_gpio, !(spi->mode & SPI_CS_HIGH));
+-	}
+ 	return orion_spi_setup_transfer(spi, NULL);
+ }
+ 
+@@ -622,13 +623,13 @@ static int orion_spi_probe(struct platform_device *pdev)
+ 	master->setup = orion_spi_setup;
+ 	master->bits_per_word_mask = SPI_BPW_MASK(8) | SPI_BPW_MASK(16);
+ 	master->auto_runtime_pm = true;
++	master->use_gpio_descriptors = true;
+ 	master->flags = SPI_MASTER_GPIO_SS;
+ 
+ 	platform_set_drvdata(pdev, master);
+ 
+ 	spi = spi_master_get_devdata(master);
+ 	spi->master = master;
+-	spi->unused_hw_gpio = -1;
+ 
+ 	of_id = of_match_device(orion_spi_of_match_table, &pdev->dev);
+ 	devdata = (of_id) ? of_id->data : &orion_spi_dev_data;
+@@ -683,7 +684,6 @@ static int orion_spi_probe(struct platform_device *pdev)
+ 	for_each_available_child_of_node(pdev->dev.of_node, np) {
+ 		struct orion_direct_acc *dir_acc;
+ 		u32 cs;
+-		int cs_gpio;
+ 
+ 		/* Get chip-select number from the "reg" property */
+ 		status = of_property_read_u32(np, "reg", &cs);
+@@ -694,44 +694,6 @@ static int orion_spi_probe(struct platform_device *pdev)
+ 			continue;
+ 		}
+ 
+-		/*
+-		 * Initialize the CS GPIO:
+-		 * - properly request the actual GPIO signal
+-		 * - de-assert the logical signal so that all GPIO CS lines
+-		 *   are inactive when probing for slaves
+-		 * - find an unused physical CS which will be driven for any
+-		 *   slave which uses a CS GPIO
+-		 */
+-		cs_gpio = of_get_named_gpio(pdev->dev.of_node, "cs-gpios", cs);
+-		if (cs_gpio > 0) {
+-			char *gpio_name;
+-			int cs_flags;
 -
--Optional properties:
--- clocks           : Must contain a reference to the functional clock.
--- dmas             : Must contain a list of two references to DMA specifiers,
--		     one for transmission, and one for reception.
--- dma-names        : Must contain a list of two DMA names, "tx" and "rx".
+-			if (spi->unused_hw_gpio == -1) {
+-				dev_info(&pdev->dev,
+-					"Selected unused HW CS#%d for any GPIO CSes\n",
+-					cs);
+-				spi->unused_hw_gpio = cs;
+-			}
 -
--Pinctrl properties might be needed, too.  See
--Documentation/devicetree/bindings/pinctrl/renesas,*.
+-			gpio_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+-					"%s-CS%d", dev_name(&pdev->dev), cs);
+-			if (!gpio_name) {
+-				status = -ENOMEM;
+-				goto out_rel_axi_clk;
+-			}
 -
--Examples:
+-			cs_flags = of_property_read_bool(np, "spi-cs-high") ?
+-				GPIOF_OUT_INIT_LOW : GPIOF_OUT_INIT_HIGH;
+-			status = devm_gpio_request_one(&pdev->dev, cs_gpio,
+-					cs_flags, gpio_name);
+-			if (status) {
+-				dev_err(&pdev->dev,
+-					"Can't request GPIO for CS %d\n", cs);
+-				goto out_rel_axi_clk;
+-			}
+-		}
 -
--	spi0: spi@e800c800 {
--		compatible = "renesas,rspi-r7s72100", "renesas,rspi-rz";
--		reg = <0xe800c800 0x24>;
--		interrupts = <0 238 IRQ_TYPE_LEVEL_HIGH>,
--			     <0 239 IRQ_TYPE_LEVEL_HIGH>,
--			     <0 240 IRQ_TYPE_LEVEL_HIGH>;
--		interrupt-names = "error", "rx", "tx";
--		interrupt-parent = <&gic>;
--		num-cs = <1>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--	};
--
--	spi: spi@e6b10000 {
--		compatible = "renesas,qspi-r8a7791", "renesas,qspi";
--		reg = <0 0xe6b10000 0 0x2c>;
--		interrupt-parent = <&gic>;
--		interrupts = <0 184 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&mstp9_clks R8A7791_CLK_QSPI_MOD>;
--		num-cs = <1>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--		dmas = <&dmac0 0x17>, <&dmac0 0x18>;
--		dma-names = "tx", "rx";
--	};
+ 		/*
+ 		 * Check if an address is configured for this SPI device. If
+ 		 * not, the MBus mapping via the 'ranges' property in the 'soc'
 -- 
-2.20.1
+2.25.2
 
