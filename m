@@ -2,240 +2,245 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B9F1AB02F
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Apr 2020 19:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C441AB44B
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 01:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411591AbgDOR6Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Apr 2020 13:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2411581AbgDOR6T (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Apr 2020 13:58:19 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5E6C061A0C
-        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 10:58:17 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id k28so3325007lfe.10
-        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 10:58:17 -0700 (PDT)
+        id S2389760AbgDOXgT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Apr 2020 19:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389737AbgDOXgL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Apr 2020 19:36:11 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890C4C0610D5
+        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 16:36:06 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id w65so750131pfc.12
+        for <linux-spi@vger.kernel.org>; Wed, 15 Apr 2020 16:36:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nzpcy1NONnpuTpQomH7DRwvMl5tjLj9Jb2RuGzAzVzQ=;
-        b=Rhq1W4O5RgO0QbKAyndh8EFeCIRnRannyee9s7/D7S7MrlemzLLJe1sauYIufdBpwB
-         rjnRHdOb/q5f4u2K1mE2l2jQcNorj07q88mFwIy4kMoF/xstjg1ThQ8IvSgZ0hss2zPC
-         FWfB9V09cmvl8pUKh8xZzHPNrX954f+AVFCEy/RVbBaKWXvbTRzQKaeOljazdniv+coy
-         ZS3xbh4gqp+YYYItJGV3TVG5521gi3tqgh67dS/Q7T3m7Le4j0zG3Kyv+sdCSgjeo+Ck
-         reFojxo7g+BiGskDmnCOWnRdbkpMQzWVqYVBSRPctH63vMmLtaHDnCLIelS8/3la2XBt
-         vdLw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pLjmFUxaieQynkusHT7IMDQLKA4E8pgAQuweixOhPLU=;
+        b=Zwp7XwFBj5VZpmB/uQX+ayKhgNqPAR3ukctYPc7aJSydfS5PlYkI9urJjWfCvuubNa
+         cUGITFcmdiodmMaVIEbd026rBY+LxHuEJjw+aYrgzJIC7fGOstQBsrGjHZp5sWi+A464
+         Nzv7dMURASFrPu4WfgpU2cRUfiV+xrAB9lCEQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nzpcy1NONnpuTpQomH7DRwvMl5tjLj9Jb2RuGzAzVzQ=;
-        b=UdZ5hYbWQZW9OQHLkpr0YGQnh22tFv+eky+2SJKLW5I9MJl384lxDQNk/V7kuusBIh
-         s+jLSxhNSObqHHLgjdThjAYcfyh/xXAHgjwdwtTeyw3B4oJZUYR8zeYNK4rFVVC2u5qu
-         moIwaXSiRuqtC4r6y87DIZ2lX/MtCBCLZabxhY5J/cymXiQVeO3d3ktVlrxe7eVePBa5
-         hBc2ysCi7Y8dp7vZHyfbDW3xgwx97JV9pSJ7woELs70EvcWTUGrM0OUHZegC33oyf0An
-         YWXigmSx7d/7hc/FCfTlSJo9bQmnIIeE2GoZVyKxFTlJ/+0ULW9kn0Mp0/pjVnFwt4Mc
-         AVJA==
-X-Gm-Message-State: AGi0PubppmkOF9nphml8/IVaOqV7c5ZpLCfntVXdrhPNgJWxkUfRfthI
-        ofKOWyK2HrmXe0ca4+vVDymd0A==
-X-Google-Smtp-Source: APiQypLdnRBxk7EHTzo2pD9rDVs1dsegrkFo3Cp3M+3xAl/bMXp2h4BpVftzYureSE8PWXrAqJv8lw==
-X-Received: by 2002:ac2:489b:: with SMTP id x27mr3846150lfc.60.1586973495664;
-        Wed, 15 Apr 2020 10:58:15 -0700 (PDT)
-Received: from localhost.localdomain (c-f3d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.243])
-        by smtp.gmail.com with ESMTPSA id 1sm5758710ljw.91.2020.04.15.10.58.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2020 10:58:15 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Tomas Paukrt <tomaspaukrt@email.cz>,
-        =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Subject: [PATCH] spi: orion: Convert to use GPIO descriptors
-Date:   Wed, 15 Apr 2020 19:56:13 +0200
-Message-Id: <20200415175613.220767-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.25.2
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pLjmFUxaieQynkusHT7IMDQLKA4E8pgAQuweixOhPLU=;
+        b=SUN7l88W3oaFnohs95r4g/JF1T32qX0zAY9N3c6gwJX201jHiV6iETIWc/KxlN7fgy
+         Np605XAgUxfOncSXPjIg420VCHQzP5gyN0D71fiGLuzVyhkGE3s5c9Oe6LG+XKu4Z9nF
+         0Bm6Yoju7gIeu81Ur/W+3rBg36bo+jknVvy0lXEuJnWOF7Es0KkdZejI34M2djs7MQ5M
+         mZ/P0P2eI9BBjjafbmFzDbaGVPRLNfwJDuYp5NhoHnapqsfaafMSfp6qWzhBHfd0bx0P
+         LGVrAo15yH1ALAH3JawtbUY6l3Nti3vasv4t5NFApxTDtO6P75XyB2LgQAkcDnJacSxx
+         zehA==
+X-Gm-Message-State: AGi0PuYve3QI4/5rwwIRdfo0DQnw6y9Z9/sjsFh3JQ+RE5Guj1zIcPSz
+        KdLxhrDvGiovc9/8ITS2tDF7BA==
+X-Google-Smtp-Source: APiQypIz0P34pX0cfRwpAGteLEaBkV7qIW1T8EDzWdODd8jN+J4tKi3ktG87JgbXvbXeDOzsfRcVZw==
+X-Received: by 2002:a63:c443:: with SMTP id m3mr3027788pgg.262.1586993765853;
+        Wed, 15 Apr 2020 16:36:05 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id l190sm14983095pfl.212.2020.04.15.16.36.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2020 16:36:05 -0700 (PDT)
+Date:   Wed, 15 Apr 2020 16:36:03 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+Subject: Re: [PATCH V4 3/9] soc: qcom: geni: Support for ICC voting
+Message-ID: <20200415233603.GZ199755@google.com>
+References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
+ <1586946198-13912-4-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1586946198-13912-4-git-send-email-akashast@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This converts the Orion SPI master to use GPIO descriptors.
-The SPI core will obtain and manage the CS GPIOs, if any
-are defined.
+Hi Akash,
 
-I make one sematic change: when a certain chip select is using
-a GPIO line instead of the native CS I simply just enable the
-1:1 mapped native CS that would have been used if the GPIO
-was not there. As we set the SPI_MASTER_GPIO_SS the .set_cs()
-callback will be called for all chip selects whether native
-or not, and the important thing for the driver is that the
-previous native chip select (if any) is deasserted, which
-other chip select is asserted instead does not really matter.
+On Wed, Apr 15, 2020 at 03:53:12PM +0530, Akash Asthana wrote:
+> Add necessary macros and structure variables to support ICC BW
+> voting from individual SE drivers.
+> 
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> ---
+> Changes in V2:
+>  - As per Bjorn's comment dropped enums for ICC paths, given the three
+>    paths individual members
+> 
+> Changes in V3:
+>  - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
+>  - Add geni_icc_path structure in common header
+> 
+> Changes in V4:
+>  - As per Bjorn's comment print error message in geni_icc_get if return
+>    value is not -EPROBE_DEFER.
+>  - As per Bjorn's comment remove NULL on path before calling icc_set_bw
+>    API.
+>  - As per Bjorn's comment drop __func__ print.
+>  - As per Matthias's comment, make ICC path a array instead of individual
+>    member entry in geni_se struct.
+> 
+> Note: I have ignored below check patch suggestion because it was throwing
+>       compilation error as 'icc_ddr' is not compile time comstant.
+> 
+> WARNING: char * array declaration might be better as static const
+>  - FILE: drivers/soc/qcom/qcom-geni-se.c:726:
+>  - const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
+> 
+> 
+>  drivers/soc/qcom/qcom-geni-se.c | 61 +++++++++++++++++++++++++++++++++++++++++
+>  include/linux/qcom-geni-se.h    | 31 +++++++++++++++++++++
+>  2 files changed, 92 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> index 7d622ea..1527bc4 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -720,6 +720,67 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+>  }
+>  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
+>  
+> +int geni_icc_get(struct geni_se *se, const char *icc_ddr)
+> +{
+> +	int i, icc_err;
+> +	const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
+> +
+> +	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
+> +		if (!icc_names[i])
+> +			continue;
+> +
+> +		se->icc_paths[i].path = devm_of_icc_get(se->dev, icc_names[i]);
+> +		if (IS_ERR(se->icc_paths[i].path))
+> +			goto icc_get_failure;
+> +	}
+> +
+> +	return 0;
+> +
+> +icc_get_failure:
+> +	icc_err = PTR_ERR(se->icc_paths[i].path);
+> +	if (icc_err != -EPROBE_DEFER)
+> +		dev_err_ratelimited(se->dev, "Failed to get path:%d, ret:%d\n",
 
-The previous code went to great lengths to ascertain that the
-first hw CS which was hiding behind a GPIO line was used for
-all cases when the line is not using native chip select but
-this should not matter at all, just use the one "underneath"
-the GPIO at all times.
+Better be explicit that it's an ICC path and log icc_names[i] instead of i.
 
-When a GPIO is used for CS, the SPI_CS_HIGH flag is enforced,
-so the native chip select is also inverted. But that should
-not matter since we are not using it anyways.
+> +					i, icc_err);
+> +	return icc_err;
+> +
+> +}
+> +EXPORT_SYMBOL(geni_icc_get);
+> +
+> +int geni_icc_vote_on(struct geni_se *se)
+> +{
+> +	int i, ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
+> +		ret = icc_set_bw(se->icc_paths[i].path,
+> +			se->icc_paths[i].avg_bw, se->icc_paths[i].peak_bw);
 
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Tomas Paukrt <tomaspaukrt@email.cz>
-Cc: Jan Kundrát <jan.kundrat@cesnet.cz>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-People using Orion SPI: please test this, I think it works
-fine.
----
- drivers/spi/spi-orion.c | 70 ++++++++++-------------------------------
- 1 file changed, 16 insertions(+), 54 deletions(-)
+I'll leave it to others to decide whether it's ok to leave the
+implementation of the icc_enable/disable() APIs suggested on
+https://patchwork.kernel.org/patch/11467511/#23269555 for later.
 
-diff --git a/drivers/spi/spi-orion.c b/drivers/spi/spi-orion.c
-index 1f59beb7d27e..43f73db22f21 100644
---- a/drivers/spi/spi-orion.c
-+++ b/drivers/spi/spi-orion.c
-@@ -17,10 +17,8 @@
- #include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
- #include <linux/clk.h>
- #include <linux/sizes.h>
--#include <linux/gpio.h>
- #include <asm/unaligned.h>
- 
- #define DRIVER_NAME			"orion_spi"
-@@ -98,7 +96,6 @@ struct orion_spi {
- 	struct clk              *clk;
- 	struct clk              *axi_clk;
- 	const struct orion_spi_dev *devdata;
--	int			unused_hw_gpio;
- 
- 	struct orion_child_options	child[ORION_NUM_CHIPSELECTS];
- };
-@@ -325,20 +322,27 @@ orion_spi_setup_transfer(struct spi_device *spi, struct spi_transfer *t)
- static void orion_spi_set_cs(struct spi_device *spi, bool enable)
- {
- 	struct orion_spi *orion_spi;
--	int cs;
- 
- 	orion_spi = spi_master_get_devdata(spi->master);
- 
--	if (gpio_is_valid(spi->cs_gpio))
--		cs = orion_spi->unused_hw_gpio;
--	else
--		cs = spi->chip_select;
--
-+	/*
-+	 * If this line is using a GPIO to control chip select, this internal
-+	 * .set_cs() function will still be called, so we clear any previous
-+	 * chip select. The CS we activate will not have any elecrical effect,
-+	 * as it is handled by a GPIO, but that doesn't matter. What we need
-+	 * is to deassert the old chip select and assert some other chip select.
-+	 */
- 	orion_spi_clrbits(orion_spi, ORION_SPI_IF_CTRL_REG, ORION_SPI_CS_MASK);
- 	orion_spi_setbits(orion_spi, ORION_SPI_IF_CTRL_REG,
--				ORION_SPI_CS(cs));
-+			  ORION_SPI_CS(spi->chip_select));
- 
--	/* Chip select logic is inverted from spi_set_cs */
-+	/*
-+	 * Chip select logic is inverted from spi_set_cs(). For lines using a
-+	 * GPIO to do chip select SPI_CS_HIGH is enforced and inversion happens
-+	 * in the GPIO library, but we don't care about that, because in those
-+	 * cases we are dealing with an unused native CS anyways so the polarity
-+	 * doesn't matter.
-+	 */
- 	if (!enable)
- 		orion_spi_setbits(orion_spi, ORION_SPI_IF_CTRL_REG, 0x1);
- 	else
-@@ -503,9 +507,6 @@ static int orion_spi_transfer_one(struct spi_master *master,
- 
- static int orion_spi_setup(struct spi_device *spi)
- {
--	if (gpio_is_valid(spi->cs_gpio)) {
--		gpio_direction_output(spi->cs_gpio, !(spi->mode & SPI_CS_HIGH));
--	}
- 	return orion_spi_setup_transfer(spi, NULL);
- }
- 
-@@ -622,13 +623,13 @@ static int orion_spi_probe(struct platform_device *pdev)
- 	master->setup = orion_spi_setup;
- 	master->bits_per_word_mask = SPI_BPW_MASK(8) | SPI_BPW_MASK(16);
- 	master->auto_runtime_pm = true;
-+	master->use_gpio_descriptors = true;
- 	master->flags = SPI_MASTER_GPIO_SS;
- 
- 	platform_set_drvdata(pdev, master);
- 
- 	spi = spi_master_get_devdata(master);
- 	spi->master = master;
--	spi->unused_hw_gpio = -1;
- 
- 	of_id = of_match_device(orion_spi_of_match_table, &pdev->dev);
- 	devdata = (of_id) ? of_id->data : &orion_spi_dev_data;
-@@ -683,7 +684,6 @@ static int orion_spi_probe(struct platform_device *pdev)
- 	for_each_available_child_of_node(pdev->dev.of_node, np) {
- 		struct orion_direct_acc *dir_acc;
- 		u32 cs;
--		int cs_gpio;
- 
- 		/* Get chip-select number from the "reg" property */
- 		status = of_property_read_u32(np, "reg", &cs);
-@@ -694,44 +694,6 @@ static int orion_spi_probe(struct platform_device *pdev)
- 			continue;
- 		}
- 
--		/*
--		 * Initialize the CS GPIO:
--		 * - properly request the actual GPIO signal
--		 * - de-assert the logical signal so that all GPIO CS lines
--		 *   are inactive when probing for slaves
--		 * - find an unused physical CS which will be driven for any
--		 *   slave which uses a CS GPIO
--		 */
--		cs_gpio = of_get_named_gpio(pdev->dev.of_node, "cs-gpios", cs);
--		if (cs_gpio > 0) {
--			char *gpio_name;
--			int cs_flags;
--
--			if (spi->unused_hw_gpio == -1) {
--				dev_info(&pdev->dev,
--					"Selected unused HW CS#%d for any GPIO CSes\n",
--					cs);
--				spi->unused_hw_gpio = cs;
--			}
--
--			gpio_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
--					"%s-CS%d", dev_name(&pdev->dev), cs);
--			if (!gpio_name) {
--				status = -ENOMEM;
--				goto out_rel_axi_clk;
--			}
--
--			cs_flags = of_property_read_bool(np, "spi-cs-high") ?
--				GPIOF_OUT_INIT_LOW : GPIOF_OUT_INIT_HIGH;
--			status = devm_gpio_request_one(&pdev->dev, cs_gpio,
--					cs_flags, gpio_name);
--			if (status) {
--				dev_err(&pdev->dev,
--					"Can't request GPIO for CS %d\n", cs);
--				goto out_rel_axi_clk;
--			}
--		}
--
- 		/*
- 		 * Check if an address is configured for this SPI device. If
- 		 * not, the MBus mapping via the 'ranges' property in the 'soc'
--- 
-2.25.2
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "ICC BW voting failed on path:%d, ret:%d\n",
+> +					i, ret);
 
+Instead of logging the index, which isn't very expressive, you could have
+a static string array of the path names ({"core", "config", "ddr"} or
+similar) that is used when logging errors in _vote_on/off().
+
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(geni_icc_vote_on);
+> +
+> +int geni_icc_vote_off(struct geni_se *se)
+> +{
+> +	int i, ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
+> +		ret = icc_set_bw(se->icc_paths[i].path, 0, 0);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "ICC BW remove failed on path:%d, ret:%d\n",
+> +					i, ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(geni_icc_vote_off);
+> +
+>  static int geni_se_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+> index dd46494..b5b9316 100644
+> --- a/include/linux/qcom-geni-se.h
+> +++ b/include/linux/qcom-geni-se.h
+> @@ -6,6 +6,8 @@
+>  #ifndef _LINUX_QCOM_GENI_SE
+>  #define _LINUX_QCOM_GENI_SE
+>  
+> +#include <linux/interconnect.h>
+> +
+>  /* Transfer mode supported by GENI Serial Engines */
+>  enum geni_se_xfer_mode {
+>  	GENI_SE_INVALID,
+> @@ -25,6 +27,12 @@ enum geni_se_protocol_type {
+>  struct geni_wrapper;
+>  struct clk;
+>  
+> +struct geni_icc_path {
+> +	struct icc_path *path;
+> +	unsigned int avg_bw;
+> +	unsigned int peak_bw;
+> +};
+> +
+>  /**
+>   * struct geni_se - GENI Serial Engine
+>   * @base:		Base Address of the Serial Engine's register block
+> @@ -33,6 +41,7 @@ struct clk;
+>   * @clk:		Handle to the core serial engine clock
+>   * @num_clk_levels:	Number of valid clock levels in clk_perf_tbl
+>   * @clk_perf_tbl:	Table of clock frequency input to serial engine clock
+> + * @icc_paths:		Array of ICC paths for SE
+>   */
+>  struct geni_se {
+>  	void __iomem *base;
+> @@ -41,6 +50,7 @@ struct geni_se {
+>  	struct clk *clk;
+>  	unsigned int num_clk_levels;
+>  	unsigned long *clk_perf_tbl;
+> +	struct geni_icc_path icc_paths[3];
+
+You also need enums for the paths, otherwise you end up with code like
+this, which isn't really self-explanatory:
+
+  gi2c->se.icc_paths[0].avg_bw = GENI_DEFAULT_BW;
+  gi2c->se.icc_paths[1].avg_bw = GENI_DEFAULT_BW;
+  gi2c->se.icc_paths[2].avg_bw = Bps_to_icc(gi2c->clk_freq_out);
+
+  (from "[V4,5/9] i2c: i2c-qcom-geni: Add interconnect support")
+
+I know Bjorn asked in v1 to remove the enums you had, however it was
+a slightly different context. If we are sticking to use an array of
+'struct geni_icc_path' (which reduces redundant code) the enums are
+'needed'.
