@@ -2,89 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D841ABFE5
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 13:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21061AC02B
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 13:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633985AbgDPLng (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Apr 2020 07:43:36 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:53970 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2633981AbgDPLn3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Apr 2020 07:43:29 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C6AF6200C9A;
-        Thu, 16 Apr 2020 13:43:27 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AAE83200306;
-        Thu, 16 Apr 2020 13:43:24 +0200 (CEST)
-Received: from lsv03124.swis.in-blr01.nxp.com (lsv03124.swis.in-blr01.nxp.com [92.120.146.121])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 5DDF3402FB;
-        Thu, 16 Apr 2020 19:43:20 +0800 (SGT)
-From:   Ashish Kumar <Ashish.Kumar@nxp.com>
-To:     broonie@kernel.org, boris.brezillon@collabora.com,
-        frieder.schrempf@kontron.de
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kuldeep Singh <kuldeep.singh@nxp.com>,
-        Ashish Kumar <Ashish.kumar@nxp.com>
-Subject: [PATCH v3] spi: spi-fsl-qspi: Reduce devm_ioremap size to 4 times AHB buffer size
-Date:   Thu, 16 Apr 2020 17:13:19 +0530
-Message-Id: <1587037399-18672-1-git-send-email-Ashish.Kumar@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S2506617AbgDPLvB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Thu, 16 Apr 2020 07:51:01 -0400
+Received: from zimbra2.kalray.eu ([92.103.151.219]:37286 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504790AbgDPLu5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Apr 2020 07:50:57 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 9DE8127E0B48;
+        Thu, 16 Apr 2020 13:50:55 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id h6uaCYF89kXr; Thu, 16 Apr 2020 13:50:55 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 69CD127E0B5E;
+        Thu, 16 Apr 2020 13:50:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ufvqwe-r4Gu5; Thu, 16 Apr 2020 13:50:55 +0200 (CEST)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 56C0127E0B48;
+        Thu, 16 Apr 2020 13:50:55 +0200 (CEST)
+Date:   Thu, 16 Apr 2020 13:50:55 +0200 (CEST)
+From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalrayinc.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <622416308.15749883.1587037855167.JavaMail.zimbra@kalray.eu>
+In-Reply-To: <20200416113539.GG5354@sirena.org.uk>
+References: <20200416110823.22565-1-cleger@kalray.eu> <20200416110916.22633-1-cleger@kalray.eu> <20200416110916.22633-2-cleger@kalray.eu> <20200416113539.GG5354@sirena.org.uk>
+Subject: Re: [PATCH 2/2] spi: dw: remove cs_control and poll_mode members
+ from chip_data
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [192.168.40.202]
+X-Mailer: Zimbra 8.8.15_GA_3895 (ZimbraWebClient - FF68 (Linux)/8.8.15_GA_3895)
+Thread-Topic: remove cs_control and poll_mode members from chip_data
+Thread-Index: H1Aqi4omUkzlnJc0pg+nDZ3opzqhcA==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Reduce devm_ioremap size to (4 * AHB_BUFER_SIZE) rather than mapping
-complete QSPI-Memmory as driver is now independent of flash size.
-Flash of any size can be accessed.
+Hi Mark,
 
-Issue was reported on platform where devm_ioremap failure is observed
-with size > 256M.
-Error log on LS1021ATWR :
- fsl-quadspi 1550000.spi: ioremap failed for resource [mem 0x40000000-0x7fffffff]
- fsl-quadspi 1550000.spi: Freescale QuadSPI probe failed
- fsl-quadspi: probe of 1550000.spi failed with error -12
+Sorry, maybe the commit message was not clear enough but actually
+these fields were not initialized so it does not break anything
+(ie, the default values were always used).
 
-This change was also suggested previously:
-https://patchwork.kernel.org/patch/10508753/#22166385
+Clément
 
-Suggested-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
-Signed-off-by: Ashish Kumar <Ashish.kumar@nxp.com>
----
-v3: 
-Update comment
-v2:
-Add Suggested-by: Boris Brezillon <boris.brezillon@collabora.com>
-Incorrporate review comments from Frieder
- drivers/spi/spi-fsl-qspi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+----- On 16 Apr, 2020, at 13:35, Mark Brown broonie@kernel.org wrote:
 
-diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
-index 63c9f7e..8b95e2f 100644
---- a/drivers/spi/spi-fsl-qspi.c
-+++ b/drivers/spi/spi-fsl-qspi.c
-@@ -859,14 +859,15 @@ static int fsl_qspi_probe(struct platform_device *pdev)
- 
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 					"QuadSPI-memory");
--	q->ahb_addr = devm_ioremap_resource(dev, res);
-+	q->memmap_phy = res->start;
-+	/* Since there are 4 cs, map size required is 4 times ahb_buf_size */
-+	q->ahb_addr = devm_ioremap(dev, q->memmap_phy,
-+				   (q->devtype_data->ahb_buf_size * 4));
- 	if (IS_ERR(q->ahb_addr)) {
- 		ret = PTR_ERR(q->ahb_addr);
- 		goto err_put_ctrl;
- 	}
- 
--	q->memmap_phy = res->start;
--
- 	/* find the clocks */
- 	q->clk_en = devm_clk_get(dev, "qspi_en");
- 	if (IS_ERR(q->clk_en)) {
--- 
-2.7.4
-
+> On Thu, Apr 16, 2020 at 01:09:16PM +0200, Clement Leger wrote:
+>> Since these members were initialized only with previous dw_spi_chip
+>> struct members and that there is no user anymore, remove them. Along
+>> this removal, remove code path which were using these members.
+> 
+> This means that your first patch will break the build, to keep things
+> bisectable please do some combination of moving this before the first
+> patch and squashing it into the first patch.
