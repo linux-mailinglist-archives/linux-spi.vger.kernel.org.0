@@ -2,77 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B90DC1ACF19
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 19:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 316CF1AD192
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 22:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729033AbgDPRth (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Apr 2020 13:49:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41390 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727817AbgDPRtf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Apr 2020 13:49:35 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BB3FF221EB;
-        Thu, 16 Apr 2020 17:49:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587059375;
-        bh=BkIiYOu1Vu7EfNRs0GBJIMd9H0ATsB/nAoxMx8uYOmg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kZfbcQ//SCMfp4mqoQo4YfMqs8yyM80ZL7TXKn37X20PwC0Cmo8dF6RBuFEUqHv6Z
-         J9+oq1qxGTjaJRQXSOOxoOp0E0SF8L/fNQSvJMGUCnKJihl78qa7qpjOA1y0nVtLWS
-         7hBGIPAkBt+LNkGOBf0h9BiceJbC7bFdwOX059rA=
-Date:   Thu, 16 Apr 2020 18:49:32 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>
+        id S1728571AbgDPUz0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Apr 2020 16:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727952AbgDPUzZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Apr 2020 16:55:25 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7763BC061A0C;
+        Thu, 16 Apr 2020 13:55:25 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id g6so2203384pgs.9;
+        Thu, 16 Apr 2020 13:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tRp4sksgDku5T1RHONV+cHmwg4VeG23KppLeZFt7ais=;
+        b=OOoCdSRUwaAYiBhJa6PT3YEctiEoqdhPlElRmYMDKKMbBeuk01GkiGtDiFL2gll5R+
+         PyRTmPEtmmMT80RUx6x0V1QX+xYCxducVthmOBZRcVjhCbn38YePvR482/y5QAUqBUcG
+         pqPKMDvJOp8bc92uIlfTJMIj4h4h7d+6B1xngK1q4ER7sqUXhKcJtCi7i1heNLJeitmY
+         kG+6QB39al+TS0eQT2J1lfL5Om60QtihOTuHJ71sZ1SmzdDcIYjyWf0EzA+k/IR+i1Wg
+         UyHAO9Q+1UAcODvkzPm3Sptw8pEycAt2wzvPCjGRvJePaf/c9RCwaSHfgzRPH16psE61
+         Mq/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tRp4sksgDku5T1RHONV+cHmwg4VeG23KppLeZFt7ais=;
+        b=TxbhuxoK1+flFF8zHdoPgYu2wTHSIfJ57YbSU7TcbBNqXArt69mb30tndQDq4QKWzp
+         6co+610TKCKNRj2RRAe8yjvPs83EfwEdH9qN1gVehz3DT1REsm5p7weTDpSTVXCArvGl
+         8G6Iv9OW5dn83+P7opA/8dDS3TJeuIu5I9W0WctiXuj8LZV0wyPUgMGjjzamRPg7SkKW
+         f3alEoorsvl/B6tOn1pAYLt+jjfdZ/nILXCR53O6Ti5NypVx9o8dtSg7lHMGAtY3Yt/1
+         rx3gEOw/4SReNjapd95AOY0RWTUjUwAswvQkN55Bb3wVzR5DSFj7W5bDcCY6lV9lHMvC
+         rGFQ==
+X-Gm-Message-State: AGi0PuY0ttS1tRBCbIh/MyJQnhP9JGOpQ1YiJAF8nSfO7HMU1zKdzAlR
+        4DssWadehORr80H6IWMBr6DfpBlV
+X-Google-Smtp-Source: APiQypIcH5Hx6ZnsZmvuRfWbTPXfSA0gVMA650+jd9c+8exLd5z1RJGE3UdSg6iZkVcjuzoeu5B/tQ==
+X-Received: by 2002:a62:7656:: with SMTP id r83mr3542746pfc.71.1587070524332;
+        Thu, 16 Apr 2020 13:55:24 -0700 (PDT)
+Received: from [10.230.188.26] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id ml24sm3210343pjb.48.2020.04.16.13.55.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Apr 2020 13:55:22 -0700 (PDT)
+Subject: Re: [Patch 1/9] spi: bcm-qspi: Handle clock probe deferral
+To:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>
 Cc:     bcm-kernel-feedback-list@broadcom.com,
         Florian Fainelli <f.fainelli@gmail.com>,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch 1/9] spi: bcm-qspi: Handle clock probe deferral
-Message-ID: <20200416174932.GP5354@sirena.org.uk>
 References: <20200416174309.34044-1-kdasu.kdev@gmail.com>
+ <20200416174932.GP5354@sirena.org.uk>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <7b2db6ed-1aab-4c61-e519-a73d9e3af454@gmail.com>
+Date:   Thu, 16 Apr 2020 13:55:21 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="THYEXwetZJOK3OLY"
-Content-Disposition: inline
-In-Reply-To: <20200416174309.34044-1-kdasu.kdev@gmail.com>
-X-Cookie: Tempt me with a spoon!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200416174932.GP5354@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---THYEXwetZJOK3OLY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 16, 2020 at 01:43:01PM -0400, Kamal Dasu wrote:
-> The clock provider may not be ready by the time spi-bcm-qspi gets
-> probed, handle probe deferral using devm_clk_get_optional().
->=20
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+On 4/16/2020 10:49 AM, Mark Brown wrote:
+> On Thu, Apr 16, 2020 at 01:43:01PM -0400, Kamal Dasu wrote:
+>> The clock provider may not be ready by the time spi-bcm-qspi gets
+>> probed, handle probe deferral using devm_clk_get_optional().
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+> 
+> Did Florian author this patch or you?  The signoffs look like it was
+> him.
 
-Did Florian author this patch or you?  The signoffs look like it was
-him.
-
---THYEXwetZJOK3OLY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6YmqsACgkQJNaLcl1U
-h9C+wQf/QFckkRzTU4FhkTKvuTAukrQpq3Cm/fZK+SW6HHTZjqN6M1Of3Awj8bbv
-wuPtmvGzDfLDSwXBMPIP1geBYMjeJSdwPZ9zCszePU4WjUqvIq1DSfYCm6ix4FWA
-Bku0MBsYrGlHL5hW1PhxRb8qo2/9od/moXRwVITavaUx8fW4PxdKaeFKUagAnzly
-3/TyCdQ+sQLI4oycHL95TtJJmrL2luK4D5H0T8LicG7tFyL2JO8nF6m6qSpVeYX8
-o5apHJ6wrWX01h3md6Q9C4Kl4vax5GoYA7OqFO8QZllrFU5BQGb6S1yEUXqwf/td
-V6q12nxW5p7mhQetqyR6sUFDs3F46A==
-=UmiJ
------END PGP SIGNATURE-----
-
---THYEXwetZJOK3OLY--
+I believe I did author that one ;)
+-- 
+Florian
