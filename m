@@ -2,72 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC601ACB41
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 17:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FB11ACE70
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 19:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404406AbgDPPpV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Apr 2020 11:45:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52562 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409689AbgDPPpK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Apr 2020 11:45:10 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C60F421D91;
-        Thu, 16 Apr 2020 15:45:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587051910;
-        bh=9ry9z5cPWT6b3qsfKrvwd1wOLF1JAP7Tyrk+39VbvE8=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=i+W8m4d5EBX8ql5pApge80SNjO055BMgbvxSI7dv8kgwml5LUFY5/2iiEkoEe/OnE
-         8c/5xUi4O0ZwtTT3qirjMXXRiR9wKzo0HqVDDyeE9ATpp/Jm279hN3z4G+ZJO3bx0N
-         Ge6YHoMWFr4dTAeCpYFSxNset/qQnWJX3l6LgWiI=
-Date:   Thu, 16 Apr 2020 16:45:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Clement Leger <cleger@kalray.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20200416110823.22565-1-cleger@kalray.eu>
-References: <20200416110823.22565-1-cleger@kalray.eu>
-Subject: Re: [PATCH 0/2] Cleanup chip info in spi-dw driver
-Message-Id: <158705187475.53607.4216901757113789779.b4-ty@kernel.org>
+        id S2387900AbgDPRKG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Apr 2020 13:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731358AbgDPRKD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Apr 2020 13:10:03 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C9FC0610D5
+        for <linux-spi@vger.kernel.org>; Thu, 16 Apr 2020 10:10:03 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id w65so1923277pfc.12
+        for <linux-spi@vger.kernel.org>; Thu, 16 Apr 2020 10:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=EcaUjKr60NABrTutbb9VaO0pRJf9+Gj4l3bz6prw+yE=;
+        b=IkpAFJhJdAWshYnm+xeetGdIIaIslGQ5tzURliBkEMMopJKW5GWMhOLteksRf1Z3tm
+         dYOlW+5enQJMQNLJIAfI1YjYJeErgTn3OZivjXXSf7f5bwKv+kKwo6QBG62kv+4764RI
+         2OTJc8tejHbGSLTt4LSOavpzPxlrEqucJWYAQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EcaUjKr60NABrTutbb9VaO0pRJf9+Gj4l3bz6prw+yE=;
+        b=pLlJOoXWIC3UH40uDX80kbLK+hmVu4V4f4m5D07DYL8ZvPOJwcZY556bUGN/TqPgzR
+         DluQ5qk+QYaqSHT3GpsYCaRPye3xn4oeaWl91EqeiVBgiWEZCD/b3uIppnCPBY1vQxZ4
+         IksAynLDLTUrn1BqTACpIJMO9QdPzlUL9wAlt2mM7GlhTZ7rXY9867kIUQ6labXID7HP
+         z+ad80He/7eCsD0sby91Ovquta+gMIuaEsBBrM6+2BOJQgMaiC7DitLYWSMK6esPpbco
+         98V02vD5hH9Ew0ETesgwXoYhgVYLremviJ91nNq+JvN5GD2bZB6f7CG/lz1zbj4CDpWT
+         4lhw==
+X-Gm-Message-State: AGi0PuY5EHpNnyvqPUz4YHTzFoTVRMjFljF4wxjyx3nuKGjdkT3TzJc2
+        NBaj8GyuNvH8CcbE/ik83KFMuQ==
+X-Google-Smtp-Source: APiQypIT5kDHYuZg8YXZMEs+ue2sVRmKYbgBy+Kbwvsvc176USpnBUDGYgH/JpVw02EGzNimYbjGEQ==
+X-Received: by 2002:a63:1d4:: with SMTP id 203mr31268336pgb.74.1587057002469;
+        Thu, 16 Apr 2020 10:10:02 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id q2sm10446110pfl.174.2020.04.16.10.10.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Apr 2020 10:10:00 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 10:09:59 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+Subject: Re: [PATCH V4 5/9] i2c: i2c-qcom-geni: Add interconnect support
+Message-ID: <20200416170959.GB199755@google.com>
+References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
+ <1586946198-13912-6-git-send-email-akashast@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1586946198-13912-6-git-send-email-akashast@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 16 Apr 2020 13:08:23 +0200, Clement Leger wrote:
-> Some mechanisms have no more user, and as such code paths are unused.
-> Remove these code paths and associated structs members.
+Hi Akash,
+
+On Wed, Apr 15, 2020 at 03:53:14PM +0530, Akash Asthana wrote:
+> Get the interconnect paths for I2C based Serial Engine device
+> and vote according to the bus speed of the driver.
 > 
-> Clement Leger (2):
->   spi: dw: remove unused dw_spi_chip handling
->   spi: dw: remove cs_control and poll_mode members from chip_data
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> ---
+> Changes in V2:
+>  - As per Bjorn's comment, removed se == NULL check from geni_i2c_icc_get
+>  - As per Bjorn's comment, removed code to set se->icc_path* to NULL in failure
+>  - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
+>    path handle
+>  - As per Matthias comment, added error handling for icc_set_bw call
 > 
-> [...]
+> Changes in V3:
+>  - As per Matthias comment, use common library APIs defined in geni-se
+>    driver for ICC functionality.
+> 
+> Changes in V4:
+>  - Move peak_bw guess as twice of avg_bw if nothing mentioned explicitly
+>    to ICC core.
+> 
+>  drivers/i2c/busses/i2c-qcom-geni.c | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 18d1e4f..7bf830a 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -557,6 +557,22 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>  	gi2c->adap.dev.of_node = dev->of_node;
+>  	strlcpy(gi2c->adap.name, "Geni-I2C", sizeof(gi2c->adap.name));
+>  
+> +	ret = geni_icc_get(&gi2c->se, "qup-memory");
+> +	if (ret)
+> +		return ret;
+> +	/*
+> +	 * Set the bus quota for core and cpu to a reasonable value for
+> +	 * register access.
+> +	 * Set quota for DDR based on bus speed.
+> +	 */
+> +	gi2c->se.icc_paths[0].avg_bw = GENI_DEFAULT_BW;
+> +	gi2c->se.icc_paths[1].avg_bw = GENI_DEFAULT_BW;
+> +	gi2c->se.icc_paths[2].avg_bw = Bps_to_icc(gi2c->clk_freq_out);
 
-Applied, thanks!
-
-[1/2] spi: dw: remove unused dw_spi_chip handling
-      commit: ae9e6ac4d8542d1b16fad4bd3c3e447632437623
-[2/2] spi: dw: remove cs_control and poll_mode members from chip_data
-      commit: 33e8fd4bfbd7eb0921eb55caceed54e51912a4e6
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+As commented on patch "soc: qcom: geni: Support for ICC voting" the use
+of literals to index the paths isn't very clear, please use enums.
