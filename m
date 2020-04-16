@@ -2,103 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD7E1ACEDD
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 19:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4447C1ACEEA
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 19:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729474AbgDPRnV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Apr 2020 13:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S1729131AbgDPRna (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Apr 2020 13:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725906AbgDPRnU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Apr 2020 13:43:20 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF95C061A0C;
-        Thu, 16 Apr 2020 10:43:20 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id i10so5821939wrv.10;
-        Thu, 16 Apr 2020 10:43:20 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1725906AbgDPRn3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Apr 2020 13:43:29 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1BCC061A0C;
+        Thu, 16 Apr 2020 10:43:29 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id z6so5891483wml.2;
+        Thu, 16 Apr 2020 10:43:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=NrrUfW6vk8LgplT9nLEcV4V1JQYGDjA/MPqzeQmBnq8=;
-        b=pns9fgLXDrLLhNt5os5ASORlyC0koVOzvPif+M5x6S/CCgOKjO3IyFkQNdQoP3Z4UK
-         Tvm9T7/an5kT7IXWAtMWuoQN3Vy9ZfMa611ZA5SKsUb/YuNTorbImGAEkw5cq1ztrfoX
-         4G1rdsg4LZdti7+0vAU0O6q2Lka5A65gTEUKQUTcKrtvcFzlSgNcvgqPmC6f/fg913Z2
-         x/rYzoTUDjHhU/gVOMWsHnwbfOssQg9luk4Xte9TyK9j8IyIdlCvR5gqKHPKY7+t8M/M
-         Jpy00ecl3IC3k0B5viNA7ImKIYwSGzF+tMUghlZZEVxpNmrPKQ2qs7/18StwPQWZUrWM
-         vuqA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=Xzp810wwKqNPBd/XxF90MmmQUKarKbudjOQw99K54mY=;
+        b=DKwO1bPFHPvvMFBTU8JvDGcfCggBHgUUGQDZwQy69Cv/VWAvOlkUf5f/VQcSPF/7CV
+         EfIu2+DIDl2+/d8XJ1jpDlGogvP2xB/uuZDeZWfiWcgT2f1f6CPlbGQdf0UnSwKwpU/z
+         01ATQJUMEj5BPflvnI38K/PcvJlnOPBCz11BfJps86tdwzKCAxYzNVkzlWcYRm+3SeZl
+         ovLOUhEq/EoGlNE+3e/EvY1GFtnC222PY/Pg1LrtB4m1rMWmb9cUORGpxTuoN75OEN6w
+         aRsPaPXHQKsjekkFjtdgmQLPT6F1IPAD3676XP952lo9O6Gm0BkIrKouGIYTqoKuIeOA
+         s5Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=NrrUfW6vk8LgplT9nLEcV4V1JQYGDjA/MPqzeQmBnq8=;
-        b=rAKn0liKVkckGwh1hkjlGoFk7puEo2tGIbovLgA96/TQj5g+D3fCYrLOY9cSSYDqAv
-         2A66KjGWp4mJ8uCAi/R/8LNNuNwcWZqRwz0eg3ClK3b/4Ps9/pxOnrHfPF/tvvCv57v4
-         iof1W2Yry8LxjjnPlkespcLSxHxnXdcGY5UNz/5/I7gsmh9Btweh8BZyyHArAkZAEyKK
-         ezvSpwv7GfOw5DfNhML2tL1jC0Gjey32PPz1T8qxfsYlLQ/cdOUIFm5+G1K91C20JFfA
-         er8TMkqEEe2QCiKWLBImVgGL20esfku319MKHTTFIl9V2PrjIq8X9osPfuG5UX9qQ+6j
-         ztcg==
-X-Gm-Message-State: AGi0PuZYbas58h1DlHXUnQBZ3aaqXCMsnewLShS64ghv+kEtelnJ7Frb
-        y9NOf6N1mJM0ovYbZn2p0rybgnhoxwk=
-X-Google-Smtp-Source: APiQypKFjOmDUmtTBtpZe21AkDnu+8Yk+AWo5X3eZCnDcLMBTElU/6Y2/S8IBVEwUYWgP8g00DuvTQ==
-X-Received: by 2002:adf:fa41:: with SMTP id y1mr34531615wrr.131.1587058999291;
-        Thu, 16 Apr 2020 10:43:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=Xzp810wwKqNPBd/XxF90MmmQUKarKbudjOQw99K54mY=;
+        b=HY1Ka9Q43Xxy3q9znLNmILfNtXLQdK4+hi+u9H5N3/FBUNeA55yz+dgG8egebmjF/U
+         pAVBNEYAviaaND3LhGPCEqexfFyuK4y9tM42zpzEYSIHt5Uc3Vgi9iEodjjLcCTQJWSu
+         HmQkqyaJC68sC8il98zn9C/b+0Qmv02thENQv1bd3y48/gwD8KXXO1H3FKea6ZdKYl4J
+         TybZ6MFJByLvbtY+9uFqrqYB7IZbL8Pk1AzWNR6ipqUnrYWDbfJ35XiTFGfJA4cF+5RE
+         a7D2uIEMHJ/u5tRKgRdVNzn3MGb2JjfPsc1NVcTYpdjUD4g9HafLIvd1/2U0sHRjzNnP
+         KykA==
+X-Gm-Message-State: AGi0PubkVg1VHTzSLRi2ARL+DO7NCDY0ENItIefwGWIMZcvCnhMXJ3Vd
+        CVqz5HKznXDGUplB92wAOgM=
+X-Google-Smtp-Source: APiQypK9c36KsWLZ1dqEBikbcbA0aVNuTc/rhtVbF2X+ZIXredLS5QQYBppcegCaUd3dwmxZ6+pR3w==
+X-Received: by 2002:a1c:4603:: with SMTP id t3mr5882686wma.103.1587059008176;
+        Thu, 16 Apr 2020 10:43:28 -0700 (PDT)
 Received: from mail.broadcom.com ([192.19.231.250])
-        by smtp.gmail.com with ESMTPSA id p7sm28736296wrf.31.2020.04.16.10.43.17
+        by smtp.gmail.com with ESMTPSA id p7sm28736296wrf.31.2020.04.16.10.43.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 10:43:18 -0700 (PDT)
+        Thu, 16 Apr 2020 10:43:27 -0700 (PDT)
 From:   Kamal Dasu <kdasu.kdev@gmail.com>
 To:     Kamal Dasu <kdasu.kdev@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
-        Mark Brown <broonie@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [Patch 1/9] spi: bcm-qspi: Handle clock probe deferral
-Date:   Thu, 16 Apr 2020 13:43:01 -0400
-Message-Id: <20200416174309.34044-1-kdasu.kdev@gmail.com>
+Subject: [Patch 2/9] dt: bindings: spi: Add support for mspi on brcmstb SoCs
+Date:   Thu, 16 Apr 2020 13:43:02 -0400
+Message-Id: <20200416174309.34044-2-kdasu.kdev@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200416174309.34044-1-kdasu.kdev@gmail.com>
+References: <20200416174309.34044-1-kdasu.kdev@gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The clock provider may not be ready by the time spi-bcm-qspi gets
-probed, handle probe deferral using devm_clk_get_optional().
+Added documentation for compatibility for brcmstb SoCs :
+7425, 7429, 7435, 7216, 7278
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
 ---
- drivers/spi/spi-bcm-qspi.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ .../devicetree/bindings/spi/brcm,spi-bcm-qspi.txt      | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index 23d295f36c80..74f4579c3f6a 100644
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -1222,6 +1222,11 @@ int bcm_qspi_probe(struct platform_device *pdev,
- 	}
+diff --git a/Documentation/devicetree/bindings/spi/brcm,spi-bcm-qspi.txt b/Documentation/devicetree/bindings/spi/brcm,spi-bcm-qspi.txt
+index ad7ac80a3841..f5e518d099f2 100644
+--- a/Documentation/devicetree/bindings/spi/brcm,spi-bcm-qspi.txt
++++ b/Documentation/devicetree/bindings/spi/brcm,spi-bcm-qspi.txt
+@@ -26,6 +26,16 @@ Required properties:
+     "brcm,spi-bcm-qspi", "brcm,spi-brcmstb-qspi" : MSPI+BSPI on BRCMSTB SoCs
+     "brcm,spi-bcm-qspi", "brcm,spi-brcmstb-mspi" : Second Instance of MSPI
+ 						   BRCMSTB  SoCs
++    "brcm,spi-bcm7425-qspi", "brcm,spi-bcm-qspi", "brcm,spi-brcmstb-mspi" : Second Instance of MSPI
++    			     			  			    BRCMSTB  SoCs
++    "brcm,spi-bcm7429-qspi", "brcm,spi-bcm-qspi", "brcm,spi-brcmstb-mspi" : Second Instance of MSPI
++    			     			  			    BRCMSTB  SoCs
++    "brcm,spi-bcm7435-qspi", "brcm,spi-bcm-qspi", "brcm,spi-brcmstb-mspi" : Second Instance of MSPI
++    			     			  			    BRCMSTB  SoCs
++    "brcm,spi-bcm7216-qspi", "brcm,spi-bcm-qspi", "brcm,spi-brcmstb-mspi" : Second Instance of MSPI
++    			     			  			    BRCMSTB  SoCs
++    "brcm,spi-bcm7278-qspi", "brcm,spi-bcm-qspi", "brcm,spi-brcmstb-mspi" : Second Instance of MSPI
++    			     			  			    BRCMSTB  SoCs
+     "brcm,spi-bcm-qspi", "brcm,spi-nsp-qspi"     : MSPI+BSPI on Cygnus, NSP
+     "brcm,spi-bcm-qspi", "brcm,spi-ns2-qspi"     : NS2 SoCs
  
- 	qspi = spi_master_get_devdata(master);
-+
-+	qspi->clk = devm_clk_get_optional(&pdev->dev, NULL);
-+	if (IS_ERR(qspi->clk))
-+		return PTR_ERR(qspi->clk);
-+
- 	qspi->pdev = pdev;
- 	qspi->trans_pos.trans = NULL;
- 	qspi->trans_pos.byte = 0;
-@@ -1335,13 +1340,6 @@ int bcm_qspi_probe(struct platform_device *pdev,
- 		qspi->soc_intc = NULL;
- 	}
- 
--	qspi->clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(qspi->clk)) {
--		dev_warn(dev, "unable to get clock\n");
--		ret = PTR_ERR(qspi->clk);
--		goto qspi_probe_err;
--	}
--
- 	ret = clk_prepare_enable(qspi->clk);
- 	if (ret) {
- 		dev_err(dev, "failed to prepare clock\n");
 -- 
 2.17.1
 
