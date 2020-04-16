@@ -2,84 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D24D1AC1E8
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 14:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934211ACB36
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 17:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894533AbgDPM63 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 16 Apr 2020 08:58:29 -0400
-Received: from zimbra2.kalray.eu ([92.103.151.219]:46790 "EHLO
-        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2894447AbgDPM61 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Apr 2020 08:58:27 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id DB4B227E0DCF;
-        Thu, 16 Apr 2020 14:58:24 +0200 (CEST)
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id DHH_5V3HGF-F; Thu, 16 Apr 2020 14:58:24 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id A277C27E0DD4;
-        Thu, 16 Apr 2020 14:58:24 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id zT3WScpoRkvn; Thu, 16 Apr 2020 14:58:24 +0200 (CEST)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 8F92327E0DD2;
-        Thu, 16 Apr 2020 14:58:24 +0200 (CEST)
-Date:   Thu, 16 Apr 2020 14:58:24 +0200 (CEST)
-From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalrayinc.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <1262823717.15763605.1587041904410.JavaMail.zimbra@kalray.eu>
-In-Reply-To: <20200416124725.GI5354@sirena.org.uk>
-References: <20200416110823.22565-1-cleger@kalray.eu> <20200416110916.22633-1-cleger@kalray.eu> <20200416110916.22633-2-cleger@kalray.eu> <20200416113539.GG5354@sirena.org.uk> <622416308.15749883.1587037855167.JavaMail.zimbra@kalray.eu> <20200416124725.GI5354@sirena.org.uk>
-Subject: Re: [PATCH 2/2] spi: dw: remove cs_control and poll_mode members
- from chip_data
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [192.168.40.202]
-X-Mailer: Zimbra 8.8.15_GA_3895 (ZimbraWebClient - FF68 (Linux)/8.8.15_GA_3895)
-Thread-Topic: remove cs_control and poll_mode members from chip_data
-Thread-Index: u6+BzXYec9ZWEUrvuKhpkEo14J92aA==
+        id S2395235AbgDPPo4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Apr 2020 11:44:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52184 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2633653AbgDPPow (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Apr 2020 11:44:52 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B382A20732;
+        Thu, 16 Apr 2020 15:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587051892;
+        bh=X9AeWYGILDr+vIqgFqvmc+ZvOyiF/SVk4CiVuC6R8Nc=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=K7tOTLZiUW/77AV0LYGh+9QHxqaeu9b+fkTxqVApjFoc5o4GHdLZrGpYKXNimulDl
+         UQCTeVStN7Z4K0r6chRIiJBV/unuJwI+ODv/NizaAgGa18sEf7BPW2Tt5kdEJWuZFa
+         xIJtjzi6Xl96Bfhx/rMWK+z7GlxZSzCUN03Db4D0=
+Date:   Thu, 16 Apr 2020 16:44:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     frieder.schrempf@kontron.de, Ashish Kumar <Ashish.Kumar@nxp.com>,
+        boris.brezillon@collabora.com
+Cc:     Kuldeep Singh <kuldeep.singh@nxp.com>,
+        Ashish Kumar <Ashish.kumar@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <1587037399-18672-1-git-send-email-Ashish.Kumar@nxp.com>
+References: <1587037399-18672-1-git-send-email-Ashish.Kumar@nxp.com>
+Subject: Re: [PATCH v3] spi: spi-fsl-qspi: Reduce devm_ioremap size to 4 times AHB buffer size
+Message-Id: <158705187475.53607.18120556140108669367.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
------ On 16 Apr, 2020, at 14:47, Mark Brown broonie@kernel.org wrote:
-
-> On Thu, Apr 16, 2020 at 01:50:55PM +0200, Clément Leger wrote:
->> Hi Mark,
+On Thu, 16 Apr 2020 17:13:19 +0530, Ashish Kumar wrote:
+> Reduce devm_ioremap size to (4 * AHB_BUFER_SIZE) rather than mapping
+> complete QSPI-Memmory as driver is now independent of flash size.
+> Flash of any size can be accessed.
 > 
-> Please don't top post, reply in line with needed context.  This allows
-> readers to readily follow the flow of conversation and understand what
-> you are talking about and also helps ensure that everything in the
-> discussion is being addressed.
-
-Sorry, I'll take care of that.
-
+> Issue was reported on platform where devm_ioremap failure is observed
+> with size > 256M.
+> Error log on LS1021ATWR :
+>  fsl-quadspi 1550000.spi: ioremap failed for resource [mem 0x40000000-0x7fffffff]
+>  fsl-quadspi 1550000.spi: Freescale QuadSPI probe failed
+>  fsl-quadspi: probe of 1550000.spi failed with error -12
 > 
->> Sorry, maybe the commit message was not clear enough but actually
->> these fields were not initialized so it does not break anything
->> (ie, the default values were always used).
-> 
-> When you remove the definition of the struct and declaration of the
-> variable pointing to it then the code won't compile.
+> [...]
 
-Yes I know and I took care of that but there is probably a misunderstanding.
-There is actually two structs with the same members (dw_chip_info and
-chip_data). The first one (chip_info) if it exists, is copied into the
-second (chip_data). First patch [1/2] removes the part of code that did
-copy these fields. And then second patchs removes the usage of chip_data
-fields. Please let me know if I missed something. I tried to recompile it
-and there is no build breakage.
+Applied, thanks!
 
-Clément
+[1/1] spi: spi-fsl-qspi: Reduce devm_ioremap size to 4 times AHB buffer size
+      commit: 858e26a515c28df3ef542d9c09493b54a329d6cf
 
-> 
-> > > This means that your first patch will break the build, to keep things
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
