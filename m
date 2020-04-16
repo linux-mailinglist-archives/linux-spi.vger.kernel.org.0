@@ -2,58 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4991ACEF3
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 19:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0CA1ACEF5
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Apr 2020 19:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733292AbgDPRnr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Apr 2020 13:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S1731573AbgDPRn5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Apr 2020 13:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732896AbgDPRnn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Apr 2020 13:43:43 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C321C061A0C;
-        Thu, 16 Apr 2020 10:43:42 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id x4so5534671wmj.1;
-        Thu, 16 Apr 2020 10:43:42 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1729252AbgDPRnx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Apr 2020 13:43:53 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4298BC061A0C;
+        Thu, 16 Apr 2020 10:43:52 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id a81so5842279wmf.5;
+        Thu, 16 Apr 2020 10:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=jF5s6mIDV3imWHwN3gxECUXiGCch+faubGbjA6qiFuo=;
-        b=ZJja63VqjxQSor/OTOHUgcBFFUlAlwS2Sz6byrUNrboZexWwV0EQ+QV3R+z0m5Olrf
-         g+c2KjEO6xdMrFrxwe1kYvdTfCGDdsqa2198ujvDJPBZuEIWn0d5nkXTvd61DgbAWHal
-         p/yoD6XV7ZdWxoRAkLNYPtQ+gApo3U9rYgY72FB33U5O2JLPVYpnXygbwzwR5e/4OTY9
-         WzkB1jh8/GByzE5mVRiq5h+zGY2SR2x9BAlzwvMggjrwHmVMGQs5yiovVa9bpflUIds9
-         /2cFr/LMxGqk8/FSoZQYLYOK2Lvq5/OCH0v24WA2oKTDF0YKW9byQKlpvaEk417MjzBZ
-         Asaw==
+        bh=4OZ96LAcwn+BELPZteh+FF1ZZG0PwSRcuJ8BBRDIlsU=;
+        b=pkR7bMbd/nbASMOpMKJ+a4qCQ6/poc7lIW7LbNVFTW+mf0T3IW3Ct+a/43TpHO4EnT
+         hueTAnQsLxbZbeNCgOOileSs36x79BNaOpkFQZFt1ehtysy2kg3odHYJv7ppYPKnpGC4
+         wt6KD3wOZxakmA/qP1OnxqfyAbACL++EWURo1Tpcb2GODGRlWPze+i4KppI54rCU/Sgc
+         F7bWTRxi2OTEgMux4XnX5MC8FGy0HGqJ7v3L06UyAd3qgGpX00yS4Zr8T4hR/uJQmtQN
+         y2pASjPqye+VWN9A14dA2YNkKHr7erYdjSeFlU2EzyT2T/sm+xue0fHGO9q9bZ4VVS0M
+         z9bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=jF5s6mIDV3imWHwN3gxECUXiGCch+faubGbjA6qiFuo=;
-        b=ZIl2upFO0YeDWnBhP920Iv1U2V53JdW7mGlDg5+OEh5QLKl9ZIYjJLgfefK8M0MXd1
-         f3esux4oTeWcRMhLrb/hQj4sVKYPG9M2RjKF69FEpVYsFgjM+w9kn5M0ihhDp2dy8or1
-         vgpxaDYGcJ8ULc3s5MU4IXnVdxp8XN6bfig8TRjshANFEx2FE3Bwmlum2XLI+KnUD+KF
-         OAnXK0PPlaZiIJ57+IXfpMv86DNfyq38KLaANLxunxP5f5giJJxtsxwKct2bZZ+kxi5U
-         NPkOWbQtqVMbnj1i2BZnJH8TUfmBaIk38iaPyEPET2uyhELVoq9jr3N+lJTUETVSkrTM
-         veGA==
-X-Gm-Message-State: AGi0PuaqJvMLR6K8b7yktfqwKSQmz4Y3DOEHFwZfdSL/JLfF8T6V0GGl
-        Up5bb4rJ6m5gmxDpifScglY=
-X-Google-Smtp-Source: APiQypKABfDL3aBsjY878f0gyJuW4CTyhdV1K0/71xLp4SDNdTH/MRJGPB/DmsdCVy0QtbA9U9e4kw==
-X-Received: by 2002:a05:600c:2941:: with SMTP id n1mr6082191wmd.25.1587059021446;
-        Thu, 16 Apr 2020 10:43:41 -0700 (PDT)
+        bh=4OZ96LAcwn+BELPZteh+FF1ZZG0PwSRcuJ8BBRDIlsU=;
+        b=lRv+XqXV6n2hsZ5tUwFpnOozO+F3NbhwLaiuCg1W6zjFHMoCk7MbIjvmmHPuRsYmnj
+         LyKAIGl5/NdegshJMyUvDno8osNhkqaYS4OdDlgsFiOFQj0i/Mi3MGr4tNn6cUcYI81j
+         qUZfXR3Cej7t0XTUEJmqUkUCFDAfY7Rwa8epBBW7wxqvD0JKR53OLwbwsgAvr+SSm83g
+         noNcXzzCyjve3r3NTrLaqiV1YFGrBCiBIz1Fn31rUm2GquwWX7mcgJQno3xR7DVSZx+1
+         GICK+OwG2Sj3J0eYSLmm0cQ6PNuwyDiamup0hTMTHyt0ANJcfOxSwYsFO+/O7Z46jBhx
+         yZkQ==
+X-Gm-Message-State: AGi0PuZCovQ5HYTBasELpcwzKOA3/NP0me404tCnDWBjXxZQE/4kmLrr
+        geMFnOeAEyX0YN+Xod0oDNE=
+X-Google-Smtp-Source: APiQypKYNwLnBbdY/fFSnFE9nzSzFaHjKQi4OXnXowBqj4DelxYMkCtj9koNkJoDO7SouXLQpZ8tAg==
+X-Received: by 2002:a1c:23d6:: with SMTP id j205mr5844291wmj.22.1587059030074;
+        Thu, 16 Apr 2020 10:43:50 -0700 (PDT)
 Received: from mail.broadcom.com ([192.19.231.250])
-        by smtp.gmail.com with ESMTPSA id p7sm28736296wrf.31.2020.04.16.10.43.40
+        by smtp.gmail.com with ESMTPSA id p7sm28736296wrf.31.2020.04.16.10.43.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 10:43:41 -0700 (PDT)
+        Thu, 16 Apr 2020 10:43:49 -0700 (PDT)
 From:   Kamal Dasu <kdasu.kdev@gmail.com>
 To:     Kamal Dasu <kdasu.kdev@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
         Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [Patch 6/9] spi: bcm-qspi: Make PM suspend/resume work with SCMI clock management
-Date:   Thu, 16 Apr 2020 13:43:06 -0400
-Message-Id: <20200416174309.34044-6-kdasu.kdev@gmail.com>
+Subject: [Patch 7/9] spi: bcm-qspi: Use fastbr setting to allow faster MSPI speeds
+Date:   Thu, 16 Apr 2020 13:43:07 -0400
+Message-Id: <20200416174309.34044-7-kdasu.kdev@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200416174309.34044-1-kdasu.kdev@gmail.com>
 References: <20200416174309.34044-1-kdasu.kdev@gmail.com>
@@ -62,37 +62,103 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SCMI only passes clk_prepare_enable() and clk_disable_unprepare(), made
-changes to suspend/resume ops to use the appropriate calls so that PM
-works for ARM and ARM64 platforms.
+Setting MSPI_SPCR3.fastbr=1 allows using clock divider (SPBR) values of
+1-7, while the default value prohibits these values and requires a minimum
+clock divider value of 8.
 
 Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
 ---
- drivers/spi/spi-bcm-qspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-bcm-qspi.c | 36 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index e00208801c8b..a3936ae5a860 100644
+index a3936ae5a860..edc601dbf221 100644
 --- a/drivers/spi/spi-bcm-qspi.c
 +++ b/drivers/spi/spi-bcm-qspi.c
-@@ -1455,7 +1455,7 @@ static int __maybe_unused bcm_qspi_suspend(struct device *dev)
- 			bcm_qspi_read(qspi, BSPI, BSPI_STRAP_OVERRIDE_CTRL);
+@@ -107,13 +107,15 @@
+ #define MSPI_SPCR2_SPE				BIT(6)
+ #define MSPI_SPCR2_CONT_AFTER_CMD		BIT(7)
  
- 	spi_master_suspend(qspi->master);
--	clk_disable(qspi->clk);
-+	clk_disable_unprepare(qspi->clk);
- 	bcm_qspi_hw_uninit(qspi);
++#define MSPI_SPCR3_FASTBR			BIT(0)
++#define MSPI_SPCR3_FASTDT			BIT(1)
++
+ #define MSPI_MSPI_STATUS_SPIF			BIT(0)
  
- 	return 0;
-@@ -1473,7 +1473,7 @@ static int __maybe_unused bcm_qspi_resume(struct device *dev)
- 		qspi->soc_intc->bcm_qspi_int_set(qspi->soc_intc, MSPI_DONE,
- 						 true);
+ #define INTR_BASE_BIT_SHIFT			0x02
+ #define INTR_COUNT				0x07
  
--	ret = clk_enable(qspi->clk);
-+	ret = clk_prepare_enable(qspi->clk);
- 	if (!ret)
- 		spi_master_resume(qspi->master);
+ #define NUM_CHIPSELECT				4
+-#define QSPI_SPBR_MIN				8U
+ #define QSPI_SPBR_MAX				255U
  
+ #define OPCODE_DIOR				0xBB
+@@ -227,6 +229,25 @@ static inline bool has_bspi(struct bcm_qspi *qspi)
+ 	return qspi->bspi_mode;
+ }
+ 
++/* hardware supports spcr3 and fast baud-rate  */
++static inline bool bcm_qspi_has_fastbr(struct bcm_qspi *qspi)
++{
++	if (!has_bspi(qspi) &&
++	    ((qspi->mspi_maj_rev >= 1) &&
++	     (qspi->mspi_min_rev >= 5)))
++		return true;
++
++	return false;
++}
++
++static inline int bcm_qspi_spbr_min(struct bcm_qspi *qspi)
++{
++	if (bcm_qspi_has_fastbr(qspi))
++		return 1;
++	else
++		return 8;
++}
++
+ /* Read qspi controller register*/
+ static inline u32 bcm_qspi_read(struct bcm_qspi *qspi, enum base_type type,
+ 				unsigned int offset)
+@@ -534,7 +555,7 @@ static void bcm_qspi_hw_set_parms(struct bcm_qspi *qspi,
+ 	if (xp->speed_hz)
+ 		spbr = qspi->base_clk / (2 * xp->speed_hz);
+ 
+-	spcr = clamp_val(spbr, QSPI_SPBR_MIN, QSPI_SPBR_MAX);
++	spcr = clamp_val(spbr, bcm_qspi_spbr_min(qspi), QSPI_SPBR_MAX);
+ 	bcm_qspi_write(qspi, MSPI, MSPI_SPCR0_LSB, spcr);
+ 
+ 	spcr = MSPI_MASTER_BIT;
+@@ -544,6 +565,14 @@ static void bcm_qspi_hw_set_parms(struct bcm_qspi *qspi,
+ 	spcr |= xp->mode & 3;
+ 	bcm_qspi_write(qspi, MSPI, MSPI_SPCR0_MSB, spcr);
+ 
++	if (bcm_qspi_has_fastbr(qspi)) {
++		spcr = 0;
++
++		/* enable fastbr */
++		spcr |=	MSPI_SPCR3_FASTBR;
++		bcm_qspi_write(qspi, MSPI, MSPI_SPCR3, spcr);
++	}
++
+ 	qspi->last_parms = *xp;
+ }
+ 
+@@ -1388,7 +1417,6 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ 	}
+ 
+ 	qspi->base_clk = clk_get_rate(qspi->clk);
+-	qspi->max_speed_hz = qspi->base_clk / (QSPI_SPBR_MIN * 2);
+ 
+ 	if (data->has_mspi_rev) {
+ 		rev = bcm_qspi_read(qspi, MSPI, MSPI_REV);
+@@ -1400,6 +1428,8 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ 	qspi->mspi_maj_rev = (rev >> 4) & 0xf;
+ 	qspi->mspi_min_rev = rev & 0xf;
+ 
++	qspi->max_speed_hz = qspi->base_clk / (bcm_qspi_spbr_min(qspi) * 2);
++
+ 	bcm_qspi_hw_init(qspi);
+ 	init_completion(&qspi->mspi_done);
+ 	init_completion(&qspi->bspi_done);
 -- 
 2.17.1
 
