@@ -2,73 +2,160 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C70001ADE2F
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Apr 2020 15:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A7B1ADF2C
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Apr 2020 16:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730592AbgDQNW3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Apr 2020 09:22:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58962 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730358AbgDQNW2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 17 Apr 2020 09:22:28 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730959AbgDQOFZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Apr 2020 10:05:25 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:21766 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730947AbgDQOFX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Apr 2020 10:05:23 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1587132323; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=ZGMPRI6X+zC1V3u8H6EIQC5ZG6twErMMULJHtJ/RTpI=; b=EPJBT8f7gh64oabqV5SD9EoMJcdZYluHVQCReOm8jH81HKS4DEHCJ5135Wjt6BuQYkvee1Xr
+ RvnzTOr+RZo+iEMkShRZRKCmYF8wGi3fADR9l/XhsyyzhcU1+zB611COqHar1K8iVPj639xY
+ l7380jzh0oPvKAvNX1e/ThBluGM=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e99b7a2.7fabf0b9e5a8-smtp-out-n04;
+ Fri, 17 Apr 2020 14:05:22 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 535CFC4478F; Fri, 17 Apr 2020 14:05:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EDB5F2087E;
-        Fri, 17 Apr 2020 13:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587129748;
-        bh=fDlDCrBXL1Hrgj28P+I0Wp6MAPvYyysu+6jvwshAplE=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=a0j5IILXh6EbQWLLTR5nivO1pcKu599TldGW4k0lPFG1EASWMZbIvIGD52H/8L+x5
-         QhWmiHOw2lUzMsgV+G6WSu7I/5Ctq+8Lg0uZhMHOfeTSolY2oDUFaiwyW42gupM+LG
-         m6IKkm1I+BLWZUM51MmaLQ1zgaSiP07cgmNyBTWk=
-Date:   Fri, 17 Apr 2020 14:22:26 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Yicong Yang <yangyicong@hisilicon.com>, linux-spi@vger.kernel.org
-Cc:     john.garry@huawei.com, linux-mtd@lists.infradead.org,
-        linuxarm@huawei.com
-In-Reply-To: <1587109707-23597-1-git-send-email-yangyicong@hisilicon.com>
-References: <1587109707-23597-1-git-send-email-yangyicong@hisilicon.com>
-Subject: Re: [PATCH] spi: hisi-sfc-v3xx: add error check after per operation
-Message-Id: <158712973997.35869.11831394586423684759.b4-ty@kernel.org>
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 74279C433F2;
+        Fri, 17 Apr 2020 14:05:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 74279C433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     viresh.kumar@linaro.org, sboyd@kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Mark Brown <broonie@kernel.org>,
+        Alok Chauhan <alokc@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH v2 02/17] spi: spi-geni-qcom: Use OPP API to set clk/perf state
+Date:   Fri, 17 Apr 2020 19:34:24 +0530
+Message-Id: <1587132279-27659-3-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1587132279-27659-1-git-send-email-rnayak@codeaurora.org>
+References: <1587132279-27659-1-git-send-email-rnayak@codeaurora.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 17 Apr 2020 15:48:27 +0800, Yicong Yang wrote:
-> The controller may receive instructions of accessing protected address,
-> or may perform failed page program. These operations will not succeed
-> and the controller will receive interrupts when such failure occur.
-> Previously we don't check the interrupts and return 0 even if such
-> operation fails.
-> 
-> Check the interrupts after per command and inform the user
-> if there is an error.
-> 
-> [...]
+geni spi needs to express a perforamnce state requirement on CX
+depending on the frequency of the clock rates. Use OPP table from
+DT to register with OPP framework and use dev_pm_opp_set_rate() to
+set the clk/perf state.
 
-Applied, thanks!
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Alok Chauhan <alokc@codeaurora.org>
+Cc: Akash Asthana <akashast@codeaurora.org>
+Cc: linux-spi@vger.kernel.org
+---
+ drivers/spi/spi-geni-qcom.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-[1/1] spi: hisi-sfc-v3xx: add error check after per operation
-      commit: 59fc9ad5cb108bce18043281c7cf67f2b425d55d
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index c397242..768b2fe 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -7,6 +7,7 @@
+ #include <linux/log2.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_opp.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/qcom-geni-se.h>
+ #include <linux/spi/spi.h>
+@@ -86,6 +87,7 @@ struct spi_geni_master {
+ 	spinlock_t lock;
+ 	enum spi_m_cmd_opcode cur_mcmd;
+ 	int irq;
++	bool opp_table;
+ };
+ 
+ static int get_spi_clk_cfg(unsigned int speed_hz,
+@@ -95,7 +97,6 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+ {
+ 	unsigned long sclk_freq;
+ 	unsigned int actual_hz;
+-	struct geni_se *se = &mas->se;
+ 	int ret;
+ 
+ 	ret = geni_se_clk_freq_match(&mas->se,
+@@ -112,9 +113,9 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+ 
+ 	dev_dbg(mas->dev, "req %u=>%u sclk %lu, idx %d, div %d\n", speed_hz,
+ 				actual_hz, sclk_freq, *clk_idx, *clk_div);
+-	ret = clk_set_rate(se->clk, sclk_freq);
++	ret = dev_pm_opp_set_rate(mas->dev, sclk_freq);
+ 	if (ret)
+-		dev_err(mas->dev, "clk_set_rate failed %d\n", ret);
++		dev_err(mas->dev, "dev_pm_opp_set_rate failed %d\n", ret);
+ 	return ret;
+ }
+ 
+@@ -561,6 +562,12 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	mas->se.wrapper = dev_get_drvdata(dev->parent);
+ 	mas->se.base = base;
+ 	mas->se.clk = clk;
++	mas->se.opp = dev_pm_opp_set_clkname(&pdev->dev, "se");
++	if (IS_ERR(mas->se.opp))
++		return PTR_ERR(mas->se.opp);
++	/* OPP table is optional */
++	if (!dev_pm_opp_of_add_table(&pdev->dev))
++		mas->opp_table = true;
+ 
+ 	spi->bus_num = -1;
+ 	spi->dev.of_node = dev->of_node;
+@@ -596,6 +603,9 @@ static int spi_geni_probe(struct platform_device *pdev)
+ spi_geni_probe_runtime_disable:
+ 	pm_runtime_disable(dev);
+ 	spi_master_put(spi);
++	if (mas->opp_table)
++		dev_pm_opp_of_remove_table(&pdev->dev);
++	dev_pm_opp_put_clkname(mas->se.opp);
+ 	return ret;
+ }
+ 
+@@ -604,6 +614,9 @@ static int spi_geni_remove(struct platform_device *pdev)
+ 	struct spi_master *spi = platform_get_drvdata(pdev);
+ 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+ 
++	if (mas->opp_table)
++		dev_pm_opp_of_remove_table(&pdev->dev);
++	dev_pm_opp_put_clkname(mas->se.opp);
+ 	/* Unregister _before_ disabling pm_runtime() so we stop transfers */
+ 	spi_unregister_master(spi);
+ 
+@@ -617,6 +630,9 @@ static int __maybe_unused spi_geni_runtime_suspend(struct device *dev)
+ 	struct spi_master *spi = dev_get_drvdata(dev);
+ 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+ 
++	/* Drop the performance state vote */
++	dev_pm_opp_set_rate(dev, 0);
++
+ 	return geni_se_resources_off(&mas->se);
+ }
+ 
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
