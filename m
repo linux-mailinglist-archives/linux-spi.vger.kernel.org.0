@@ -2,144 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 616BB1AD425
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Apr 2020 03:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E231AD7F4
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Apr 2020 09:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728349AbgDQBaT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Apr 2020 21:30:19 -0400
-Received: from mx.socionext.com ([202.248.49.38]:8311 "EHLO mx.socionext.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727879AbgDQBaT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Apr 2020 21:30:19 -0400
-Received: from unknown (HELO kinkan-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 17 Apr 2020 10:30:18 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan-ex.css.socionext.com (Postfix) with ESMTP id 2F3B51800FB;
-        Fri, 17 Apr 2020 10:30:18 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 17 Apr 2020 10:30:18 +0900
-Received: from plum.e01.socionext.com (unknown [10.213.132.32])
-        by kinkan.css.socionext.com (Postfix) with ESMTP id A40591A01BB;
-        Fri, 17 Apr 2020 10:30:17 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH] dt-bindings: spi: Convert UniPhier SPI controller to json-schema
-Date:   Fri, 17 Apr 2020 10:30:14 +0900
-Message-Id: <1587087014-14598-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
+        id S1728744AbgDQHsl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Apr 2020 03:48:41 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:34492 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728925AbgDQHsk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 17 Apr 2020 03:48:40 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 0C924D82A5D41BD46BDB;
+        Fri, 17 Apr 2020 15:48:38 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 17 Apr 2020 15:48:27 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <john.garry@huawei.com>, <linux-mtd@lists.infradead.org>,
+        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>
+Subject: [PATCH] spi: hisi-sfc-v3xx: add error check after per operation
+Date:   Fri, 17 Apr 2020 15:48:27 +0800
+Message-ID: <1587109707-23597-1-git-send-email-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.8.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert UniPhier SPI controller binding to DT schema format.
+The controller may receive instructions of accessing protected address,
+or may perform failed page program. These operations will not succeed
+and the controller will receive interrupts when such failure occur.
+Previously we don't check the interrupts and return 0 even if such
+operation fails.
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Check the interrupts after per command and inform the user
+if there is an error.
+
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Acked-by: John Garry <john.garry@huawei.com>
 ---
- .../bindings/spi/socionext,uniphier-spi.yaml       | 55 ++++++++++++++++++++++
- .../devicetree/bindings/spi/spi-uniphier.txt       | 28 -----------
- 2 files changed, 55 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/socionext,uniphier-spi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-uniphier.txt
+ drivers/spi/spi-hisi-sfc-v3xx.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/socionext,uniphier-spi.yaml b/Documentation/devicetree/bindings/spi/socionext,uniphier-spi.yaml
-new file mode 100644
-index 0000000..bab8bcc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/socionext,uniphier-spi.yaml
-@@ -0,0 +1,55 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/socionext,uniphier-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
+index e3b5725..64a18d0 100644
+--- a/drivers/spi/spi-hisi-sfc-v3xx.c
++++ b/drivers/spi/spi-hisi-sfc-v3xx.c
+@@ -17,6 +17,11 @@
+ 
+ #define HISI_SFC_V3XX_VERSION (0x1f8)
+ 
++#define HISI_SFC_V3XX_INT_STAT (0x120)
++#define HISI_SFC_V3XX_INT_STAT_PP_ERR BIT(2)
++#define HISI_SFC_V3XX_INT_STAT_ADDR_IACCES BIT(5)
++#define HISI_SFC_V3XX_INT_CLR (0x12c)
++#define HISI_SFC_V3XX_INT_CLR_CLEAR (0xff)
+ #define HISI_SFC_V3XX_CMD_CFG (0x300)
+ #define HISI_SFC_V3XX_CMD_CFG_DUAL_IN_DUAL_OUT (1 << 17)
+ #define HISI_SFC_V3XX_CMD_CFG_DUAL_IO (2 << 17)
+@@ -163,7 +168,7 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
+ 					 u8 chip_select)
+ {
+ 	int ret, len = op->data.nbytes;
+-	u32 config = 0;
++	u32 int_stat, config = 0;
+ 
+ 	if (op->addr.nbytes)
+ 		config |= HISI_SFC_V3XX_CMD_CFG_ADDR_EN_MSK;
+@@ -228,6 +233,25 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * The interrupt status register indicates whether an error occurs
++	 * after per operation. Check it, and clear the interrupts for
++	 * next time judgement.
++	 */
++	int_stat = readl(host->regbase + HISI_SFC_V3XX_INT_STAT);
++	writel(HISI_SFC_V3XX_INT_CLR_CLEAR,
++	       host->regbase + HISI_SFC_V3XX_INT_CLR);
 +
-+title: Socionext UniPhier SPI controller
++	if (int_stat & HISI_SFC_V3XX_INT_STAT_ADDR_IACCES) {
++		dev_err(host->dev, "fail to access protected address\n");
++		return -EIO;
++	}
 +
-+description: |
-+  UniPhier SoCs have SCSSI which supports SPI single channel.
++	if (int_stat & HISI_SFC_V3XX_INT_STAT_PP_ERR) {
++		dev_err(host->dev, "page program operation failed\n");
++		return -EIO;
++	}
 +
-+maintainers:
-+  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-+  - Keiji Hayashibara <hayashibara.keiji@socionext.com>
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+
-+properties:
-+  "#address-cells": true
-+  "#size-cells": true
-+
-+  compatible:
-+    const: socionext,uniphier-scssi
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - resets
-+
-+examples:
-+  - |
-+    spi0: spi@54006000 {
-+        compatible = "socionext,uniphier-scssi";
-+        reg = <0x54006000 0x100>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        interrupts = <0 39 4>;
-+        clocks = <&peri_clk 11>;
-+        resets = <&peri_rst 11>;
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi-uniphier.txt b/Documentation/devicetree/bindings/spi/spi-uniphier.txt
-deleted file mode 100644
-index e120157..0000000
---- a/Documentation/devicetree/bindings/spi/spi-uniphier.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Socionext UniPhier SPI controller driver
--
--UniPhier SoCs have SCSSI which supports SPI single channel.
--
--Required properties:
-- - compatible: should be "socionext,uniphier-scssi"
-- - reg: address and length of the spi master registers
-- - #address-cells: must be <1>, see spi-bus.txt
-- - #size-cells: must be <0>, see spi-bus.txt
-- - interrupts: a single interrupt specifier
-- - pinctrl-names: should be "default"
-- - pinctrl-0: pin control state for the default mode
-- - clocks: a phandle to the clock for the device
-- - resets: a phandle to the reset control for the device
--
--Example:
--
--spi0: spi@54006000 {
--	compatible = "socionext,uniphier-scssi";
--	reg = <0x54006000 0x100>;
--	#address-cells = <1>;
--	#size-cells = <0>;
--	interrupts = <0 39 4>;
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_spi0>;
--	clocks = <&peri_clk 11>;
--	resets = <&peri_rst 11>;
--};
+ 	if (op->data.dir == SPI_MEM_DATA_IN)
+ 		hisi_sfc_v3xx_read_databuf(host, op->data.buf.in, len);
+ 
 -- 
-2.7.4
+2.8.1
 
