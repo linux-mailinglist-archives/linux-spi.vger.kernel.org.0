@@ -2,104 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E231AD7F4
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Apr 2020 09:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128511AD8D0
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Apr 2020 10:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728744AbgDQHsl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Apr 2020 03:48:41 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:34492 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728925AbgDQHsk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 17 Apr 2020 03:48:40 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 0C924D82A5D41BD46BDB;
-        Fri, 17 Apr 2020 15:48:38 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.24) by
- DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 17 Apr 2020 15:48:27 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>
-CC:     <john.garry@huawei.com>, <linux-mtd@lists.infradead.org>,
-        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>
-Subject: [PATCH] spi: hisi-sfc-v3xx: add error check after per operation
-Date:   Fri, 17 Apr 2020 15:48:27 +0800
-Message-ID: <1587109707-23597-1-git-send-email-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
+        id S1729792AbgDQIlH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Apr 2020 04:41:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729760AbgDQIlH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 17 Apr 2020 04:41:07 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B050C2137B;
+        Fri, 17 Apr 2020 08:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587112867;
+        bh=Q4esTZYVNmqT30vqB5Ty7wXcBtA09QLwSlf9T8E+ZBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j4dvaNIUbdbJ++rgfPga0xtZ6c8pwdLGVZ+75rsfMK9B9GAAJEGFjchkTAIYPyRFK
+         xAk/AsjrAsDm6THYnGnC8TPcjHOYM02u9ih+qEpIuCZ+Jk9BNw2esVekMPso2ccuNE
+         PgJnnDiPoaAGfONc5XICnGncl0FKtvoliUkQnf0A=
+Date:   Fri, 17 Apr 2020 09:41:04 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch 1/9] spi: bcm-qspi: Handle clock probe deferral
+Message-ID: <20200417084104.GA5315@sirena.org.uk>
+References: <20200416174309.34044-1-kdasu.kdev@gmail.com>
+ <20200416174932.GP5354@sirena.org.uk>
+ <7b2db6ed-1aab-4c61-e519-a73d9e3af454@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xHFwDpU9dbj6ez1V"
+Content-Disposition: inline
+In-Reply-To: <7b2db6ed-1aab-4c61-e519-a73d9e3af454@gmail.com>
+X-Cookie: MOUNT TAPE U1439 ON B3, NO RING
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The controller may receive instructions of accessing protected address,
-or may perform failed page program. These operations will not succeed
-and the controller will receive interrupts when such failure occur.
-Previously we don't check the interrupts and return 0 even if such
-operation fails.
 
-Check the interrupts after per command and inform the user
-if there is an error.
+--xHFwDpU9dbj6ez1V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Acked-by: John Garry <john.garry@huawei.com>
----
- drivers/spi/spi-hisi-sfc-v3xx.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+On Thu, Apr 16, 2020 at 01:55:21PM -0700, Florian Fainelli wrote:
+> On 4/16/2020 10:49 AM, Mark Brown wrote:
 
-diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
-index e3b5725..64a18d0 100644
---- a/drivers/spi/spi-hisi-sfc-v3xx.c
-+++ b/drivers/spi/spi-hisi-sfc-v3xx.c
-@@ -17,6 +17,11 @@
- 
- #define HISI_SFC_V3XX_VERSION (0x1f8)
- 
-+#define HISI_SFC_V3XX_INT_STAT (0x120)
-+#define HISI_SFC_V3XX_INT_STAT_PP_ERR BIT(2)
-+#define HISI_SFC_V3XX_INT_STAT_ADDR_IACCES BIT(5)
-+#define HISI_SFC_V3XX_INT_CLR (0x12c)
-+#define HISI_SFC_V3XX_INT_CLR_CLEAR (0xff)
- #define HISI_SFC_V3XX_CMD_CFG (0x300)
- #define HISI_SFC_V3XX_CMD_CFG_DUAL_IN_DUAL_OUT (1 << 17)
- #define HISI_SFC_V3XX_CMD_CFG_DUAL_IO (2 << 17)
-@@ -163,7 +168,7 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
- 					 u8 chip_select)
- {
- 	int ret, len = op->data.nbytes;
--	u32 config = 0;
-+	u32 int_stat, config = 0;
- 
- 	if (op->addr.nbytes)
- 		config |= HISI_SFC_V3XX_CMD_CFG_ADDR_EN_MSK;
-@@ -228,6 +233,25 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * The interrupt status register indicates whether an error occurs
-+	 * after per operation. Check it, and clear the interrupts for
-+	 * next time judgement.
-+	 */
-+	int_stat = readl(host->regbase + HISI_SFC_V3XX_INT_STAT);
-+	writel(HISI_SFC_V3XX_INT_CLR_CLEAR,
-+	       host->regbase + HISI_SFC_V3XX_INT_CLR);
-+
-+	if (int_stat & HISI_SFC_V3XX_INT_STAT_ADDR_IACCES) {
-+		dev_err(host->dev, "fail to access protected address\n");
-+		return -EIO;
-+	}
-+
-+	if (int_stat & HISI_SFC_V3XX_INT_STAT_PP_ERR) {
-+		dev_err(host->dev, "page program operation failed\n");
-+		return -EIO;
-+	}
-+
- 	if (op->data.dir == SPI_MEM_DATA_IN)
- 		hisi_sfc_v3xx_read_databuf(host, op->data.buf.in, len);
- 
--- 
-2.8.1
+> > Did Florian author this patch or you?  The signoffs look like it was
+> > him.
 
+> I believe I did author that one ;)
+
+In that case the patch (and any others that are similar, I saw more)
+should say so - please resend with a From: in the patch.  Kamal, if you
+do git commit --amend --author='Florian Fainelli <f.fainelli@gmail.com>'
+that should do the right thing.
+
+--xHFwDpU9dbj6ez1V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6Za5kACgkQJNaLcl1U
+h9A9xwf4tJJ4FQfCqc3g/g18a7HQvQ+rTSw1zy3scDDH2VMdbuuwSDGW/r4v4JWQ
+oU95OE0cL3DSRieGt97D4iXnct/lP+38ETY9tWW+dVYMP7s+pmXEEWgWLd/qIIFc
+seoBQuSxW0CeZTBGlS6b7SY/G2LK9c9s5kgxkhvqay0Uvc1jgKZqCu0gwKzbHXJv
+PGbE89ob5MzL7PkjsftkZ+imKogOvIf286UVvrd6setQqjh9AbMgblDhaKlvYERb
+20m9D0jkpJeTjkxYz+g8Xh5Op1b0bDgm1VY2K/wCHPRdSS3W59TY7rgZXhxD0cN5
+vsi8xG8mYfU/E/peqBMYftWPtk/j
+=gGzp
+-----END PGP SIGNATURE-----
+
+--xHFwDpU9dbj6ez1V--
