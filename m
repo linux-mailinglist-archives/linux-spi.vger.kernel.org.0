@@ -2,58 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0D81AFD6B
-	for <lists+linux-spi@lfdr.de>; Sun, 19 Apr 2020 21:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDC31AFD6D
+	for <lists+linux-spi@lfdr.de>; Sun, 19 Apr 2020 21:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbgDST03 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 19 Apr 2020 15:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S1726639AbgDST0d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 19 Apr 2020 15:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbgDST01 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Apr 2020 15:26:27 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB371C061A0C;
-        Sun, 19 Apr 2020 12:26:27 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id r4so3957104pgg.4;
-        Sun, 19 Apr 2020 12:26:27 -0700 (PDT)
+        with ESMTP id S1726022AbgDST0c (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Apr 2020 15:26:32 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FC4C061A0C;
+        Sun, 19 Apr 2020 12:26:32 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id g6so3940316pgs.9;
+        Sun, 19 Apr 2020 12:26:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=mO+e6MGsJdi3QsmX2S9FqCiq+qKAo+MDQiNuazkChc4=;
-        b=fw3l2qNlf44VEhmVx7MhxDvqReIgHU52YVRwGv+5pVVJpSv258YjV8z3/SYaKKDUud
-         Yk9KDiYve5F1+AE9cbaGrMf1YZGLtFNRSZva/rdAdNBBuc43NYguJoo60bNobK1mN39Z
-         fFdocztkjPl0qhHvPwwGHLsc3xl+VPJavWGH7wRdExLMEc020YXYt6dVMzqZCvvqVJhp
-         SBOP6hgj4Rct9M9BqhJGJ9c588HFDZbAYuIMICREe9P0bIkQ4M1GtiKdo33vX+VvBDFj
-         6+EhsU1OjN9PnRU2T8gWC+4JG8ZhSwe2x4f9EvIS/kE7iRD4wBVxWvI8v3KgT1i4RW3T
-         hSpQ==
+        bh=ZyjxQT2w1tfyUymmhQNajH9/aDxm1dT9gvQiJybw7YI=;
+        b=SbNR+P3+DzUaYoMTXySguBEbHaoi7SjpqNp5dYAr3yiGKfJL4gvu/P/IXx2ODmQtHk
+         pIUIQ69qeNi17uHyLJZPdbqHymXPzlk7MZAXM6huy1FClnOaW4en3tmUrizjOOqS318c
+         tTfSEA/3HJuZUffpMdWzQ/XDubaAVpPzPNB0f93746/MczPL14OwrYwX4jLjN8NA7YLX
+         JZg4nNqN7Uqhb9XgvzJsKfFkKbS2a+w0htvWcqzCG657zCkUdStuYO65OQHR99MBv9Fz
+         D1cAdkDq+n+NF01Gyl6WCPANyz1tgzm2IRbkZhntx2Tdhwqm4LG1UJdrOFUgYjAO8y6R
+         0wfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=mO+e6MGsJdi3QsmX2S9FqCiq+qKAo+MDQiNuazkChc4=;
-        b=Pjb8cQe9XfvXZmk4fHF6FFHMHFurA7hFic29sxntSxW3lc889L0w6zhXe7PcI5LfUy
-         OS57FKeY9AitA7bdXHQmYzjAXSbHRq6tY/YzEN7FbqdYlE+fXkt3T21gnZECbC8ULXup
-         3J/um5j7A+LRh7yC9I41cgo2nZJVjg3EndEPW9cCm4XrTNkY1BqBOrUFV/iIbHd0lOZV
-         DgM1F4Sz3fLUYHQasZpvyB1t8e02ZorIj3yUpm1PTLYtZs/G/fX85GHJKCIPSsRjEI/v
-         jIczXiq9rzzp/Pn0D3PrE9lccxgxpo0ZEZB9bXsafMVG/o/3q1HjqSEj92+ZaRs/d9+s
-         iFDQ==
-X-Gm-Message-State: AGi0PubL4TIEj4sfCJP+sUVbSE8FXlfiXvAjRQ/kQukLFUa4MfUZaV/V
-        H/Pq4lRqIgxak1yj88VSCRj6K6IFRDA=
-X-Google-Smtp-Source: APiQypJqnXNdK+cO2RqrlldcDAy0D1YMT9HhJG3cGb/+R/qsvC7Wi0ekii6019cAkXE6rGK+6y/YfA==
-X-Received: by 2002:aa7:9839:: with SMTP id q25mr13036550pfl.311.1587324387262;
-        Sun, 19 Apr 2020 12:26:27 -0700 (PDT)
+        bh=ZyjxQT2w1tfyUymmhQNajH9/aDxm1dT9gvQiJybw7YI=;
+        b=fIvREhUY1RayoYHV0Qm3jAo2XSdpMuqDyj49bq00iBU9gZXDmPvh5tdYBgQW4pYo6Q
+         HM4D2NQkeNWuwISCyZmW99swfc+Z3yUWrcmpGiVFG13fsykV+8VRiOL7UJjvtlihMRv+
+         70T8eUIVaoNJkOhZIH3Bp7elqcTtfP/qP4oKpN8pguHIRmAYY5rnCC4sBWDipngYuNBQ
+         YKH392Oy9tKcbzrT8BQ5OhKOln2ux6GE7SRTXdWcMk2NDJ345oqeVfjweD3E2sBH6tXm
+         UHashSFeniUPM71D9AqE1pK9up6HbtUQXZGvVSonCnsYw8PorIa9rJnymuQMTOFHpBEU
+         +RrQ==
+X-Gm-Message-State: AGi0PuaPmIVzGncQrD9YleZSN7N1uCIZC3oqqcTXPMJmscAtPs159CBN
+        +Ev/+LgxfZpSVrthTX8hwOI=
+X-Google-Smtp-Source: APiQypKsdOTntybjWMD089prmwm7q76XargHK9vFToamg6AnCEAsLZsfFjVNZMNyoOwnxbTtMHv/Lg==
+X-Received: by 2002:a62:3784:: with SMTP id e126mr13474412pfa.303.1587324392241;
+        Sun, 19 Apr 2020 12:26:32 -0700 (PDT)
 Received: from mail.broadcom.com ([192.19.231.250])
-        by smtp.gmail.com with ESMTPSA id x16sm22724383pfm.146.2020.04.19.12.26.26
+        by smtp.gmail.com with ESMTPSA id x16sm22724383pfm.146.2020.04.19.12.26.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Apr 2020 12:26:26 -0700 (PDT)
+        Sun, 19 Apr 2020 12:26:31 -0700 (PDT)
 From:   Kamal Dasu <kdasu.kdev@gmail.com>
 To:     Kamal Dasu <kdasu.kdev@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
         Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [Patch v2 4/9] spi: bcm-qspi: Drive MSPI peripheral SSb pin on cs_change
-Date:   Sun, 19 Apr 2020 15:23:33 -0400
-Message-Id: <20200419192339.32023-5-kdasu.kdev@gmail.com>
+Cc:     Justin Chen <justinpopo6@gmail.com>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [Patch v2 5/9] spi: bcm-qspi: when tx/rx buffer is NULL set to 0
+Date:   Sun, 19 Apr 2020 15:23:34 -0400
+Message-Id: <20200419192339.32023-6-kdasu.kdev@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200419192339.32023-1-kdasu.kdev@gmail.com>
 References: <20200419192339.32023-1-kdasu.kdev@gmail.com>
@@ -62,74 +63,58 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-As per the spi core implementation for MSPI devices when the transfer is
-the last one in the message, the chip may stay selected until the next
-transfer. On multi-device SPI busses with nothing blocking messages going
-to other devices, this is just a performance hint; starting a message to
-another device deselects this one. But in other cases, this can be used
-to ensure correctness. Some devices need protocol transactions to be built
-from a series of spi_message submissions, where the content of one message
-is determined by the results of previous messages and where the whole
-transaction ends when the chipselect goes intactive.
+From: Justin Chen <justinpopo6@gmail.com>
 
-On CS change after completing the last serial transfer, the MSPI driver
-drives SSb pin CDRAM register correctly according comments in core spi.h
-as shown below:
+Currently we set the tx/rx buffer to 0xff when NULL. This causes
+problems with some spi slaves where 0xff is a valid command. Looking
+at other drivers, the tx/rx buffer is usually set to 0x00 when NULL.
+Following this convention solves the issue.
 
-case 1) EOM =1, cs_change =0: SSb inactive
-case 2) EOM =1, cs_change =1: SSb active
-case 3) EOM =0, cs_change =0: SSb active
-case 4) EOM =0, cs_change =1: SSb inactive
-
+Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
+Signed-off-by: Justin Chen <justinpopo6@gmail.com>
 Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
 ---
- drivers/spi/spi-bcm-qspi.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/spi/spi-bcm-qspi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index d901dcb10d06..c48c399dce53 100644
+index c48c399dce53..e00208801c8b 100644
 --- a/drivers/spi/spi-bcm-qspi.c
 +++ b/drivers/spi/spi-bcm-qspi.c
-@@ -615,19 +615,15 @@ static int update_qspi_trans_byte_count(struct bcm_qspi *qspi,
- 		if (qt->trans->cs_change &&
- 		    (flags & TRANS_STATUS_BREAK_CS_CHANGE))
- 			ret |= TRANS_STATUS_BREAK_CS_CHANGE;
--		if (ret)
--			goto done;
+@@ -669,7 +669,7 @@ static void read_from_hw(struct bcm_qspi *qspi, int slots)
+ 			if (buf)
+ 				buf[tp.byte] = read_rxram_slot_u8(qspi, slot);
+ 			dev_dbg(&qspi->pdev->dev, "RD %02x\n",
+-				buf ? buf[tp.byte] : 0xff);
++				buf ? buf[tp.byte] : 0x0);
+ 		} else {
+ 			u16 *buf = tp.trans->rx_buf;
  
--		dev_dbg(&qspi->pdev->dev, "advance msg exit\n");
- 		if (bcm_qspi_mspi_transfer_is_last(qspi, qt))
--			ret = TRANS_STATUS_BREAK_EOM;
-+			ret |= TRANS_STATUS_BREAK_EOM;
- 		else
--			ret = TRANS_STATUS_BREAK_NO_BYTES;
-+			ret |= TRANS_STATUS_BREAK_NO_BYTES;
+@@ -677,7 +677,7 @@ static void read_from_hw(struct bcm_qspi *qspi, int slots)
+ 				buf[tp.byte / 2] = read_rxram_slot_u16(qspi,
+ 								      slot);
+ 			dev_dbg(&qspi->pdev->dev, "RD %04x\n",
+-				buf ? buf[tp.byte] : 0xffff);
++				buf ? buf[tp.byte / 2] : 0x0);
+ 		}
  
- 		qt->trans = NULL;
- 	}
+ 		update_qspi_trans_byte_count(qspi, &tp,
+@@ -732,13 +732,13 @@ static int write_to_hw(struct bcm_qspi *qspi, struct spi_device *spi)
+ 	while (!tstatus && slot < MSPI_NUM_CDRAM) {
+ 		if (tp.trans->bits_per_word <= 8) {
+ 			const u8 *buf = tp.trans->tx_buf;
+-			u8 val = buf ? buf[tp.byte] : 0xff;
++			u8 val = buf ? buf[tp.byte] : 0x00;
  
--done:
- 	dev_dbg(&qspi->pdev->dev, "trans %p len %d byte %d ret %x\n",
- 		qt->trans, qt->trans ? qt->trans->len : 0, qt->byte, ret);
- 	return ret;
-@@ -774,7 +770,16 @@ static int write_to_hw(struct bcm_qspi *qspi, struct spi_device *spi)
- 	bcm_qspi_write(qspi, MSPI, MSPI_NEWQP, 0);
- 	bcm_qspi_write(qspi, MSPI, MSPI_ENDQP, slot - 1);
+ 			write_txram_slot_u8(qspi, slot, val);
+ 			dev_dbg(&qspi->pdev->dev, "WR %02x\n", val);
+ 		} else {
+ 			const u16 *buf = tp.trans->tx_buf;
+-			u16 val = buf ? buf[tp.byte / 2] : 0xffff;
++			u16 val = buf ? buf[tp.byte / 2] : 0x0000;
  
--	if (tstatus & TRANS_STATUS_BREAK_DESELECT) {
-+	/*
-+	 *  case 1) EOM =1, cs_change =0: SSb inactive
-+	 *  case 2) EOM =1, cs_change =1: SSb stay active
-+	 *  case 3) EOM =0, cs_change =0: SSb stay active
-+	 *  case 4) EOM =0, cs_change =1: SSb inactive
-+	 */
-+	if (((tstatus & TRANS_STATUS_BREAK_DESELECT)
-+	     == TRANS_STATUS_BREAK_CS_CHANGE) ||
-+	    ((tstatus & TRANS_STATUS_BREAK_DESELECT)
-+	     == TRANS_STATUS_BREAK_EOM)) {
- 		mspi_cdram = read_cdram_slot(qspi, slot - 1) &
- 			~MSPI_CDRAM_CONT_BIT;
- 		write_cdram_slot(qspi, slot - 1, mspi_cdram);
+ 			write_txram_slot_u16(qspi, slot, val);
+ 			dev_dbg(&qspi->pdev->dev, "WR %04x\n", val);
 -- 
 2.17.1
 
