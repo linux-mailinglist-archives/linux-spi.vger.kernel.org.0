@@ -2,138 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0E91B1408
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Apr 2020 20:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AF61B1564
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Apr 2020 21:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgDTSKj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Apr 2020 14:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726532AbgDTSKj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Apr 2020 14:10:39 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F09C061A0C;
-        Mon, 20 Apr 2020 11:10:39 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id l3so5216018edq.13;
-        Mon, 20 Apr 2020 11:10:39 -0700 (PDT)
+        id S1725897AbgDTTJW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Apr 2020 15:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725896AbgDTTJW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Apr 2020 15:09:22 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF68C061A0C;
+        Mon, 20 Apr 2020 12:09:21 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id x4so795177wmj.1;
+        Mon, 20 Apr 2020 12:09:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OsEsVqFYdMSb7DvTNoLz36ojWhYP2bDeJgp2Rpv0Krk=;
-        b=CF9oVWum7P6oGqf/+o/Kfq8ccqpl/kqXKpD5Ov3s0d6NsvfIEGAmcv8qfwxjZn0zVg
-         ynvyXJBYZxaE6qa+9ImjKr17D04XIQPPy4Yhi0GtZvMcehBwVgh+am27oicRuZZBy69Y
-         0UE2jBqxbyKVjh3oWwFNvRqjhQiKr57pzRmKNO0fRLYyr1LtdquWn2zwQmk8e/fSC77+
-         DzC+16bcYwTLYolDPEl7ov14N67ELp26piJ8A+kX6zrkQsOK4pZJ4AzYDK0l+vPUoZ9R
-         vBNELc1LN+uOG3lJ4pojJI9EQbhO4dPXVorQBY3l7vszpjDGMIh9CeoZLnM5l5pUSdNU
-         Af9Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=MryED8uai1n3gclYsGl5qk+GTHUCazZ5O/sEZ7i7aTw=;
+        b=AjFvPXB3NEFW2PxnuZMSlnLdaQZRCuRYUfLf63TlgpoiN4aCakwkGh216tynJP/KPY
+         hCxzvDllrz2vAAo8p8AHIdRZ3HJ3c7T4Qcy/cCcqvMDOiASUmI5IpvPVj1+roqra4CjB
+         4skiMm+SGw4PvK1V3rvjGeBvvQfjfY1CsPb9Z5nk1qC4iRJl+4m59BHeJ8pEBNoRFjBr
+         SRO40pP73+/JTdzi0ob40DkALMrrLNs5mcR6qtxTQ/zxiPRSY4aYc3HEaqLg1KsVefyC
+         FBhWNKxxzWDP/k60HkT2uzcrI+pLnrJc5eSsvCblxqhpyRZ6cvyongxXXYylXPkV7m5T
+         wCIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OsEsVqFYdMSb7DvTNoLz36ojWhYP2bDeJgp2Rpv0Krk=;
-        b=n8q3eGWDsdxfa1oV7caEywVrmSGEoTzXroxa442+neiF8KVBOCOifLwLkDqB80mw0W
-         pkz7ZspJim46/gEoYE9fhz06e8wKLheG7QGVjRBkYABgaMaHGgc+dhms+itJ50ePiupk
-         XDW7cGwISEQHu7UDjzqS2zQlQpawrR5Y7ZSGM3BzksaOF7XZ20hT05W07Pdxm0nF6aKZ
-         Z2vyxodsHb6DwZZv9l017CtKfJhdRwIGJrHeeV2KfPEJBCX4dhcloBebnhB3jyb+8C4X
-         oKOLJ334LdI3SIelBPeTDPPzgcq5N++nTjvlJzg9/1rZ0zC+L7hCzT0eSPXL8ww1MBDC
-         Y1mg==
-X-Gm-Message-State: AGi0PuZnpm7Oi9KAepyRh8Ddsvb6+1XxOZvuFnWxCqJmH6TReymGFKlW
-        gz2UQ0BJ1JjsM+TxXng0ydE2VpuEet/WyWvt1HA=
-X-Google-Smtp-Source: APiQypKh8INZWiu0vYAwkyTSSdFKBGinZbwNyt+jZO5Euhz9Y9RwZQSR5ngPH+538R2KWSEW23JML9DVlLKeSSsbzMs=
-X-Received: by 2002:a50:9ea1:: with SMTP id a30mr16192872edf.318.1587406237905;
- Mon, 20 Apr 2020 11:10:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200318001603.9650-1-olteanv@gmail.com> <20200318001603.9650-13-olteanv@gmail.com>
- <CAMuHMdUDYWNOOrAXrq1Lf5_GD84Z1rr4Co5buZS-GnJvGyN5yA@mail.gmail.com>
-In-Reply-To: <CAMuHMdUDYWNOOrAXrq1Lf5_GD84Z1rr4Co5buZS-GnJvGyN5yA@mail.gmail.com>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Mon, 20 Apr 2020 21:10:27 +0300
-Message-ID: <CA+h21hpHeL08Gb36m1RNrE6agebZu7ygz9jFekOH7zGc9uLcSQ@mail.gmail.com>
-Subject: Re: [PATCH v5 12/12] arm64: dts: ls1028a-rdb: Add a spidev node for
- the mikroBUS
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Esben Haabendal <eha@deif.com>,
-        Angelo Dureghello <angelo@sysam.it>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Wei Chen <weic@nvidia.com>, Mohamed Hosny <mhosny@nvidia.com>,
-        Michael Walle <michael@walle.cc>, peng.ma@nxp.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=MryED8uai1n3gclYsGl5qk+GTHUCazZ5O/sEZ7i7aTw=;
+        b=rAkw4LbkSMhA4VQw6VAom5AK506K9N+bF7qpCYky7xre/lL9M0HcKRvoijqcsWSAFh
+         OiczP83tSN7dGOnamHe0QL68+qvbD9oOBJxyYVZQVVPiXRwy8xgYm0+4/1ykEWn+XpZE
+         WgO/hprowi6kI2UTa8UE4EES3zM7eKPBmSbAYs45y81y+9z1d3UfRdUaMw0QfqszcrR1
+         0H5JmoHCRHjseimiXejUpuuJ+mxnB+N0TXnM00iFH2NSMaU5aN26NucQxpEvJjkyddwU
+         zhAoSwNEX3yYDsMbXSlf0vziN2m4UPscoF23uRJuNKyYbzv2FZEjnQgJMM9QJXzqwKR8
+         ZQhg==
+X-Gm-Message-State: AGi0PuYxnxEcuxxzCXnwcRlBfzFxIom0BwJ/EyAKw3MhMv/UJ0qsk7AZ
+        B2sv2/crA2oT1LqMKeI9R8E=
+X-Google-Smtp-Source: APiQypLsyKNAgvuWGyKHGw0G7eoRaKGEavFsr5XFrPv90rLPDoF8meIeiXS8YTK3tz3/3UW6G4vYbg==
+X-Received: by 2002:a1c:1bcb:: with SMTP id b194mr931818wmb.4.1587409760724;
+        Mon, 20 Apr 2020 12:09:20 -0700 (PDT)
+Received: from mail.broadcom.com ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id y5sm621251wru.15.2020.04.20.12.09.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2020 12:09:20 -0700 (PDT)
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+To:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Mark Brown <broonie@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [Patch v3 1/9] spi: bcm-qspi: Handle clock probe deferral
+Date:   Mon, 20 Apr 2020 15:08:45 -0400
+Message-Id: <20200420190853.45614-2-kdasu.kdev@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200420190853.45614-1-kdasu.kdev@gmail.com>
+References: <20200420190853.45614-1-kdasu.kdev@gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Geert,
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-On Mon, 20 Apr 2020 at 21:07, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Vladimir,
->
-> On Wed, Mar 18, 2020 at 1:17 AM Vladimir Oltean <olteanv@gmail.com> wrote:
-> > From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> >
-> > For debugging, it is useful to have access to the DSPI controller
-> > signals. On the reference design board, these are exported to either the
-> > mikroBUS1 or mikroBUS2 connector (according to the CPLD register
-> > BRDCFG3[SPI3]).
-> >
-> > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
->
-> Thanks for your patch!
->
-> > --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > @@ -83,6 +83,20 @@
-> >         };
-> >  };
-> >
-> > +&dspi2 {
-> > +       bus-num = <2>;
-> > +       status = "okay";
-> > +
-> > +       /* mikroBUS1 */
-> > +       spidev@0 {
->
-> Please use generic node names, e.g. "dac@0".
->
+The clock provider may not be ready by the time spi-bcm-qspi gets
+probed, handle probe deferral using devm_clk_get_optional().
 
-It's not a DAC. It's really an unpopulated pin header. I would have
-really liked to have access to that as a char device with the default
-board DTS, via spidev. That being said, there are warnings to not use
-the "spidev" compatible in device trees. So if what I want is not
-possible, I'd rather drop the patch altogether.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+---
+ drivers/spi/spi-bcm-qspi.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-> > +               compatible = "rohm,dh2228fv";
-> > +               spi-max-frequency = <20000000>;
-> > +               fsl,spi-cs-sck-delay = <100>;
-> > +               fsl,spi-sck-cs-delay = <100>;
-> > +               reg = <0>;
-> > +       };
-> > +};
-> > +
-> >  &esdhc {
-> >         sd-uhs-sdr104;
-> >         sd-uhs-sdr50;
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
+index 23d295f36c80..74f4579c3f6a 100644
+--- a/drivers/spi/spi-bcm-qspi.c
++++ b/drivers/spi/spi-bcm-qspi.c
+@@ -1222,6 +1222,11 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ 	}
+ 
+ 	qspi = spi_master_get_devdata(master);
++
++	qspi->clk = devm_clk_get_optional(&pdev->dev, NULL);
++	if (IS_ERR(qspi->clk))
++		return PTR_ERR(qspi->clk);
++
+ 	qspi->pdev = pdev;
+ 	qspi->trans_pos.trans = NULL;
+ 	qspi->trans_pos.byte = 0;
+@@ -1335,13 +1340,6 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ 		qspi->soc_intc = NULL;
+ 	}
+ 
+-	qspi->clk = devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(qspi->clk)) {
+-		dev_warn(dev, "unable to get clock\n");
+-		ret = PTR_ERR(qspi->clk);
+-		goto qspi_probe_err;
+-	}
+-
+ 	ret = clk_prepare_enable(qspi->clk);
+ 	if (ret) {
+ 		dev_err(dev, "failed to prepare clock\n");
+-- 
+2.17.1
 
-Thanks,
--Vladimir
