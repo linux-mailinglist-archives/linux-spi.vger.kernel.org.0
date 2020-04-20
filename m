@@ -2,48 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F4B1B15CF
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Apr 2020 21:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773F91B18AA
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Apr 2020 23:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728095AbgDTTUR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Apr 2020 15:20:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36190 "EHLO mail.kernel.org"
+        id S1727972AbgDTVnV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Apr 2020 17:43:21 -0400
+Received: from ms.lwn.net ([45.79.88.28]:53958 "EHLO ms.lwn.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726141AbgDTTUQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 20 Apr 2020 15:20:16 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587410416;
-        bh=Erk10aFqeLiTLOOC0E+ba8RAcwzSD/3Wqt1/SH/rDdo=;
-        h=Subject:From:Date:To:From;
-        b=e57AnHOBh9GIuZVyP6CI7SkyjPqolnIhRXp8aDsTyQQ71jMOi3nUIvqqi0VdaaJqE
-         HGWSHxKuVt1WfRuSS0Lp06YuQYMRpNxe5X1llUPMIw6Gy8nJnGiVh0BaOEJLYNNwgk
-         13vJAYkV09pRpIOpvyvh7L8o4YjxN/KNqbXoTfv8=
+        id S1725989AbgDTVnT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 20 Apr 2020 17:43:19 -0400
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 632E4823;
+        Mon, 20 Apr 2020 21:43:17 +0000 (UTC)
+Date:   Mon, 20 Apr 2020 15:43:16 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Yuti Amonkar <yamonkar@cadence.com>,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-rdma@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-crypto@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-afs@lists.infradead.org,
+        ecryptfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ocfs2-devel@oss.oracle.com, linux-pci@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-spi@vger.kernel.org,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Matthias Brugger <mbrugger@suse.com>, netdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net
+Subject: Re: [PATCH v2 00/33] Documentation fixes for Kernel 5.8
+Message-ID: <20200420154316.28e42905@lwn.net>
+In-Reply-To: <cover.1586881715.git.mchehab+huawei@kernel.org>
+References: <cover.1586881715.git.mchehab+huawei@kernel.org>
+Organization: LWN.net
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <158741041630.1165.5127497112869386841.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 20 Apr 2020 19:20:16 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] spi: bcm-qspi: Handle clock probe deferral (2020-04-20T19:08:45)
-  Superseding: [v2] spi: bcm-qspi: Handle clock probe deferral (2020-04-19T19:23:30):
-    [v2,1/9] spi: bcm-qspi: Handle clock probe deferral
-    [v2,2/9] dt: bindings: spi: Add support for mspi on brcmstb SoCs
-    [v2,3/9] spi: bcm-qspi: Handle lack of MSPI_REV offset
-    [v2,4/9] spi: bcm-qspi: Drive MSPI peripheral SSb pin on cs_change
-    [v2,5/9] spi: bcm-qspi: when tx/rx buffer is NULL set to 0
-    [v2,6/9] spi: bcm-qspi: Make PM suspend/resume work with SCMI clock management
-    [v2,7/9] spi: bcm-qspi: Use fastbr setting to allow faster MSPI speeds
-    [v2,8/9] spi: bcm-qspi: add support for MSPI sys clk 108Mhz
-    [v2,9/9] spi: bcm-qspi: MSPI_SPCR0_MSB MSTR bit exists only on legacy controllers
+On Tue, 14 Apr 2020 18:48:26 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
 
+> Patches 1 to 5 contain changes to the documentation toolset:
+> 
+> - The first 3 patches help to reduce a lot the number of reported
+>   kernel-doc issues, by making the tool more smart.
+> 
+> - Patches 4 and 5 are meant to partially address the PDF
+>   build, with now requires Sphinx version 2.4 or upper.
+> 
+> The remaining patches fix broken references detected by
+> this tool:
+> 
+>         ./scripts/documentation-file-ref-check
+> 
+> and address other random errors due to tags being mis-interpreted
+> or mis-used.
+> 
+> They are independent each other, but some may depend on
+> the kernel-doc improvements.
+> 
+> PS.: Due to the large number of C/C, I opted to keep a smaller
+> set of C/C at this first e-mail (only e-mails with "L:" tag from
+> MAINTAINERS file).
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+OK, I've applied this set, minus #17 which was applied elsewhere.
+
+Thanks,
+
+jon
