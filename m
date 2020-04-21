@@ -2,84 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E591B2EE8
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 20:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C281B2F24
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 20:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725930AbgDUSTu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Apr 2020 14:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S1729348AbgDUSbY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Apr 2020 14:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbgDUSTt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Apr 2020 14:19:49 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03F0C0610D5;
-        Tue, 21 Apr 2020 11:19:49 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id o127so16039367iof.0;
-        Tue, 21 Apr 2020 11:19:49 -0700 (PDT)
+        with ESMTP id S1725930AbgDUSbY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Apr 2020 14:31:24 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD925C0610D6
+        for <linux-spi@vger.kernel.org>; Tue, 21 Apr 2020 11:31:23 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id x8so11249477qtp.13
+        for <linux-spi@vger.kernel.org>; Tue, 21 Apr 2020 11:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lxQpwQq8B/XSdgKzbh2ahosuLBgTHXKsqcO5uWxCwRw=;
-        b=UN3S42+kISuAL0JElfgUijnqMegdzpd3S5HIX6vcUNGFk8y3zllJ43MfIEkhQUCFic
-         Tku1lzpC75lZwS4Zyjp/0RTKrcuf3aHXJiTmWbrRzyYhJbISG2In4Df9UmYUAdmBmRPm
-         OAPl0zSXkxLKlJ9+PKLU18qkkCYvDRU2jOlRHZSt3OwlWsfCG1Pa9o+PEF4MkrvWxRIW
-         fQXPeaObIL65tZjiQhJ1Cc6y6I1NIHRyyrowBpi2Ao/6PXU7XTTwdRSRBRZM17F4DdWB
-         UJJzJGwVFkmFZrxWklU5D5kNM24V+xUdPaOmL+IOYvr6a6DTQzHHQiTX1mF8n8YjwS8X
-         8lnw==
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OBz/0wOnTCCmpPszYn+oabaHyLl3HDHXxMJEJ6NS0jU=;
+        b=KGOT3oqQ5JlJ1sZn6S5eaH2oN6QjpS5OkaorHZopxJxonMX76fIxNc63JIKVGjUuWs
+         lnm3Ggg8i3ckuAWVuj8uDaR0AKWJW3To97ZwKuePpux5ARXxNktDJDIeAo11yxZgeGRi
+         dplYCsh2B8OQ8TH3dQCIjKvoQ3CqDsX7JzfzY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lxQpwQq8B/XSdgKzbh2ahosuLBgTHXKsqcO5uWxCwRw=;
-        b=LEjej7dp2zAlVIcuRWVBZmlL/tQxmrYATpyCNVuXpntbRt5mPTHDc8zy/Sg0cv+ptv
-         tfnfk1xHv5z1zz25HdH2L6Vi0J4DDFMr9rF9bOfHKHfU9jNg+pkImcyFXVilZHn8De5x
-         LcZN/zKHUid2o/7KcuV73unRfZkBSOMa/r6U2Tk37ZBudtdXTmaxdS7/cCtyXXAj1Lox
-         FLGG4AfW/0JJVJ+9wjaGK1QZwdwbZyxzehYKgDItrpGlBO6qLK4Zmo41Bm54BMpNbx6/
-         ovaFwoBelXHai87DjGQwFCjgEcuRDHjVimYSTfG1t1S2TExdn+Ef319w7fZqM7AAX+bU
-         FI/Q==
-X-Gm-Message-State: AGi0PuZrKiWKqU/nVoDEpDSxapadFVu7rmYH3YyP86SbTxQi+TwurJB4
-        mTocE3eAc2u33x5alXUgFKQfFoKAcj00gdxm9/g=
-X-Google-Smtp-Source: APiQypIQH0s4O6zPIpOdsnG/1oem9N6RoPEneIiwVs6RC+JfDHwt2zPz+dHBF1bl2/OdqYNtiSGxbvV6KNK7M6VFA+s=
-X-Received: by 2002:a05:6638:4e:: with SMTP id a14mr20610719jap.108.1587493189031;
- Tue, 21 Apr 2020 11:19:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200420190853.45614-1-kdasu.kdev@gmail.com> <20200420190853.45614-10-kdasu.kdev@gmail.com>
- <20200421125025.GB4540@sirena.org.uk> <CAC=U0a35yfnuXN1CXV7YnHCff-Ba+7UZ2dd0rFVFSNuA=O98VQ@mail.gmail.com>
- <20200421145927.GC4540@sirena.org.uk>
-In-Reply-To: <20200421145927.GC4540@sirena.org.uk>
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
-Date:   Tue, 21 Apr 2020 14:19:36 -0400
-Message-ID: <CAC=U0a1oMy-RLdCTJ9=Wkn4o8ET8USL4euU-a6meaCJexRgzTA@mail.gmail.com>
-Subject: Re: [Patch v3 9/9] spi: bcm-qspi: MSPI_SPCR0_MSB MSTR bit exists only
- on legacy controllers
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OBz/0wOnTCCmpPszYn+oabaHyLl3HDHXxMJEJ6NS0jU=;
+        b=IW2+z9DNHLKU/MY0Df2KqIckC+V64385EM8tyMYHWs0OJUSwT27zTrtIoMjl9y1q53
+         DavdNP82Ev+ZtYl+f6RHRvaE6iE5lURYcL+DQ4TYX69d8eREpaBF7IzIYDCQayzOaYYx
+         Jh2mtI2B4VaQg8X+LGLiUOGbgaQhts1zF0rQ5ajGd2qWuMiIZD+Ez+ot81tavTBunDV0
+         J9tFj5I5yBE4cySSFLKt2EMbM00gq0G5cBwrPZ4cR/3zU10wQuMU+95uYL8eGp4gOJcR
+         HFVzdO8XctvWQwukPPHoPy+BvPMoQxEsiUQBByFFripOWtreBeUfFjGM+9d3vzkJ3Gtg
+         70wg==
+X-Gm-Message-State: AGi0PuYa17Wne5T4rF4M6H+CApvj48DVoLKlxr5qp4ri5ZsHrm8vb7BM
+        H8j6yybxdVqSLeiZR29n6B62qQ==
+X-Google-Smtp-Source: APiQypId/nvmXqxnXkiHDNZP5gIEIHkE6obQx5jymRKmOarSYMwD/jhz7GKazPIlCz5G2Q20+/4rUg==
+X-Received: by 2002:ac8:bca:: with SMTP id p10mr20913254qti.243.1587493883049;
+        Tue, 21 Apr 2020 11:31:23 -0700 (PDT)
+Received: from chatter.i7.local (107-179-243-71.cpe.teksavvy.com. [107.179.243.71])
+        by smtp.gmail.com with ESMTPSA id x24sm2308038qth.80.2020.04.21.11.31.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2020 11:31:22 -0700 (PDT)
+Date:   Tue, 21 Apr 2020 14:31:20 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [Patch v3 1/9] spi: bcm-qspi: Handle clock probe deferral
+Message-ID: <20200421183120.av3yqoaulhyglppy@chatter.i7.local>
+References: <20200420190853.45614-1-kdasu.kdev@gmail.com>
+ <20200420190853.45614-2-kdasu.kdev@gmail.com>
+ <158748156553.18089.8164001089518853868.b4-ty@kernel.org>
+ <2d810e4f-5f05-4257-59a8-882ae790ecd1@gmail.com>
+ <20200421171558.GE4540@sirena.org.uk>
+ <0d91f426-e767-2e69-bcb7-ddc4d7611861@gmail.com>
+ <20200421172005.GG4540@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200421172005.GG4540@sirena.org.uk>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 10:59 AM Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Apr 21, 2020 at 10:53:57AM -0400, Kamal Dasu wrote:
-> > On Tue, Apr 21, 2020 at 8:50 AM Mark Brown <broonie@kernel.org> wrote:
->
-> > > If this is a fix it should have been near the start of the series before
-> > > any new features to make sure that it can be applied cleanly as a fix.
->
-> > Yes it could can be after [Patch v3 3/9] spi: bcm-qspi: Handle lack of
-> > MSPI_REV offset
->
-> That's not a fix though, that's adding support for new devices?
+On Tue, Apr 21, 2020 at 06:20:05PM +0100, Mark Brown wrote:
+> > Could you provide both links with a market at the front, e.g.:
+> 
+> > Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+> > for-5.7
+> > CGIT URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/?h=for-5.7
+> 
+> Ask Konstantin to implement it (I'm using b4 ty now) and I might!
 
-Since its dependent on knowing if the MSPI_REV register exists on a
-given SoC and path 3/9, maybe I can remove the fixes tag for that
-commit.
+You can do this already in the template, if your treename is set to the 
+https URL.
 
-Kamal
+----
+Applied to
 
-Kamal
+Git:   ${treename} ${branch}
+Link:  ${treename}/log/?h=${branch}
+----
+
+-K
