@@ -2,90 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C281B2F24
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 20:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A911B2F9A
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 20:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729348AbgDUSbY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Apr 2020 14:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbgDUSbY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Apr 2020 14:31:24 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD925C0610D6
-        for <linux-spi@vger.kernel.org>; Tue, 21 Apr 2020 11:31:23 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id x8so11249477qtp.13
-        for <linux-spi@vger.kernel.org>; Tue, 21 Apr 2020 11:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OBz/0wOnTCCmpPszYn+oabaHyLl3HDHXxMJEJ6NS0jU=;
-        b=KGOT3oqQ5JlJ1sZn6S5eaH2oN6QjpS5OkaorHZopxJxonMX76fIxNc63JIKVGjUuWs
-         lnm3Ggg8i3ckuAWVuj8uDaR0AKWJW3To97ZwKuePpux5ARXxNktDJDIeAo11yxZgeGRi
-         dplYCsh2B8OQ8TH3dQCIjKvoQ3CqDsX7JzfzY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OBz/0wOnTCCmpPszYn+oabaHyLl3HDHXxMJEJ6NS0jU=;
-        b=IW2+z9DNHLKU/MY0Df2KqIckC+V64385EM8tyMYHWs0OJUSwT27zTrtIoMjl9y1q53
-         DavdNP82Ev+ZtYl+f6RHRvaE6iE5lURYcL+DQ4TYX69d8eREpaBF7IzIYDCQayzOaYYx
-         Jh2mtI2B4VaQg8X+LGLiUOGbgaQhts1zF0rQ5ajGd2qWuMiIZD+Ez+ot81tavTBunDV0
-         J9tFj5I5yBE4cySSFLKt2EMbM00gq0G5cBwrPZ4cR/3zU10wQuMU+95uYL8eGp4gOJcR
-         HFVzdO8XctvWQwukPPHoPy+BvPMoQxEsiUQBByFFripOWtreBeUfFjGM+9d3vzkJ3Gtg
-         70wg==
-X-Gm-Message-State: AGi0PuYa17Wne5T4rF4M6H+CApvj48DVoLKlxr5qp4ri5ZsHrm8vb7BM
-        H8j6yybxdVqSLeiZR29n6B62qQ==
-X-Google-Smtp-Source: APiQypId/nvmXqxnXkiHDNZP5gIEIHkE6obQx5jymRKmOarSYMwD/jhz7GKazPIlCz5G2Q20+/4rUg==
-X-Received: by 2002:ac8:bca:: with SMTP id p10mr20913254qti.243.1587493883049;
-        Tue, 21 Apr 2020 11:31:23 -0700 (PDT)
-Received: from chatter.i7.local (107-179-243-71.cpe.teksavvy.com. [107.179.243.71])
-        by smtp.gmail.com with ESMTPSA id x24sm2308038qth.80.2020.04.21.11.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2020 11:31:22 -0700 (PDT)
-Date:   Tue, 21 Apr 2020 14:31:20 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+        id S1726024AbgDUSyv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Apr 2020 14:54:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48524 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726023AbgDUSyv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Apr 2020 14:54:51 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9B53A2068F;
+        Tue, 21 Apr 2020 18:54:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587495291;
+        bh=4ADim16T+0u2BglcyovCuf/IIjoL8W8PhOujJLyZSGY=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=ZhkAIp/ZxceWgE67zgqVeVvxd+w2MDywoiQeMW0dyf+uRNYhBa8UU3R1webo45I2i
+         OLLSO3OfNG5OxUwFvAcZCA+hSXg+ZCdlzlS2G2UxtFC3svdquodJpdgHXPGxXU1fPe
+         2gPQ96gG+vEXQ/Yfqa14Uk9a4lSRUKRYcUaII3xk=
+Date:   Tue, 21 Apr 2020 19:54:48 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20200420190853.45614-2-kdasu.kdev@gmail.com>
+References: <20200420190853.45614-1-kdasu.kdev@gmail.com> <20200420190853.45614-2-kdasu.kdev@gmail.com>
 Subject: Re: [Patch v3 1/9] spi: bcm-qspi: Handle clock probe deferral
-Message-ID: <20200421183120.av3yqoaulhyglppy@chatter.i7.local>
-References: <20200420190853.45614-1-kdasu.kdev@gmail.com>
- <20200420190853.45614-2-kdasu.kdev@gmail.com>
- <158748156553.18089.8164001089518853868.b4-ty@kernel.org>
- <2d810e4f-5f05-4257-59a8-882ae790ecd1@gmail.com>
- <20200421171558.GE4540@sirena.org.uk>
- <0d91f426-e767-2e69-bcb7-ddc4d7611861@gmail.com>
- <20200421172005.GG4540@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200421172005.GG4540@sirena.org.uk>
+Message-Id: <158749528855.30690.4628410015008240508.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 06:20:05PM +0100, Mark Brown wrote:
-> > Could you provide both links with a market at the front, e.g.:
+On Mon, 20 Apr 2020 15:08:45 -0400, Kamal Dasu wrote:
+> From: Florian Fainelli <f.fainelli@gmail.com>
 > 
-> > Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
-> > for-5.7
-> > CGIT URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/?h=for-5.7
+> The clock provider may not be ready by the time spi-bcm-qspi gets
+> probed, handle probe deferral using devm_clk_get_optional().
 > 
-> Ask Konstantin to implement it (I'm using b4 ty now) and I might!
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+> 
+> [...]
 
-You can do this already in the template, if your treename is set to the 
-https URL.
-
-----
 Applied to
 
-Git:   ${treename} ${branch}
-Link:  ${treename}/log/?h=${branch}
-----
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.7
 
--K
+Thanks!
+
+[1/9] spi: bcm-qspi: Handle clock probe deferral
+      commit: 0392727c261bab65a35cd4f82ee9459bc237591d
+[2/9] dt: bindings: spi: Add support for mspi on brcmstb SoCs
+      (not applied)
+[3/9] spi: bcm-qspi: Handle lack of MSPI_REV offset
+      (not applied)
+[4/9] spi: bcm-qspi: Drive MSPI peripheral SSb pin on cs_change
+      commit: 742d5958062488d03082a9ff01a6afb3cf7bd634
+[5/9] spi: bcm-qspi: when tx/rx buffer is NULL set to 0
+      commit: 4df3bea7f9d2ddd9ac2c29ba945c7c4db2def29c
+[6/9] spi: bcm-qspi: Make PM suspend/resume work with SCMI clock management
+      commit: 1b7ad8c405c3dc0ad6c2dc61fe21fe7a446cceeb
+[7/9] spi: bcm-qspi: Use fastbr setting to allow faster MSPI speeds
+      (not applied)
+[8/9] spi: bcm-qspi: add support for MSPI sys clk 108Mhz
+      (not applied)
+[9/9] spi: bcm-qspi: MSPI_SPCR0_MSB MSTR bit exists only on legacy controllers
+      (not applied)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
