@@ -2,81 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FDA1B2A8C
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 16:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F271B2AA5
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 17:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbgDUO7a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Apr 2020 10:59:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57906 "EHLO mail.kernel.org"
+        id S1728802AbgDUPGJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Apr 2020 11:06:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59468 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726018AbgDUO7a (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Apr 2020 10:59:30 -0400
+        id S1726628AbgDUPGI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Apr 2020 11:06:08 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7DDEA2068F;
-        Tue, 21 Apr 2020 14:59:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D99A5206D6;
+        Tue, 21 Apr 2020 15:06:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587481170;
-        bh=uyT1aLMoqiSFZASoifttJFHl8XFalhQXY/HRvDYt9gA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dZ5b54x6PEBvfk2CBXWUWG1lbn6HZK0vUI5a4z0vypnlk6sWBXWgn3ZuQKQsRGbq0
-         +M5Sdc0840AwBZEuvNWohj71sChwj+1M/0FZUeH7QY3c2chy6Lf+YucZKkTWhvoI7D
-         MCzYar525Ub0F3xcQzu/jVBbux6X8HKc+dgPhf+E=
-Date:   Tue, 21 Apr 2020 15:59:27 +0100
+        s=default; t=1587481568;
+        bh=4ADim16T+0u2BglcyovCuf/IIjoL8W8PhOujJLyZSGY=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=Kxm3YcSHyHIXzDQAStma9KNvqYRZ5pyKFzGDqMVKNNj4lHR5mJ679glTavCTRbGU6
+         cFJ9Fpfxyp/jynNwxRkBw0dKGDeHsKyEeVE8buMsRGqHtTDFj5h6wlBDhCpE+OWg7q
+         GwDjN6E5JhHlh6/7qLHWGQ4XcO5DUnnUYtZinMS0=
+Date:   Tue, 21 Apr 2020 16:06:05 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>
-Cc:     bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [Patch v3 9/9] spi: bcm-qspi: MSPI_SPCR0_MSB MSTR bit exists
- only on legacy controllers
-Message-ID: <20200421145927.GC4540@sirena.org.uk>
-References: <20200420190853.45614-1-kdasu.kdev@gmail.com>
- <20200420190853.45614-10-kdasu.kdev@gmail.com>
- <20200421125025.GB4540@sirena.org.uk>
- <CAC=U0a35yfnuXN1CXV7YnHCff-Ba+7UZ2dd0rFVFSNuA=O98VQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gr/z0/N6AeWAPJVB"
-Content-Disposition: inline
-In-Reply-To: <CAC=U0a35yfnuXN1CXV7YnHCff-Ba+7UZ2dd0rFVFSNuA=O98VQ@mail.gmail.com>
-X-Cookie: Non-sequiturs make me eat lampshades.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20200420190853.45614-2-kdasu.kdev@gmail.com>
+References: <20200420190853.45614-1-kdasu.kdev@gmail.com> <20200420190853.45614-2-kdasu.kdev@gmail.com>
+Subject: Re: [Patch v3 1/9] spi: bcm-qspi: Handle clock probe deferral
+Message-Id: <158748156553.18089.8164001089518853868.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 20 Apr 2020 15:08:45 -0400, Kamal Dasu wrote:
+> From: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> The clock provider may not be ready by the time spi-bcm-qspi gets
+> probed, handle probe deferral using devm_clk_get_optional().
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+> 
+> [...]
 
---gr/z0/N6AeWAPJVB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Tue, Apr 21, 2020 at 10:53:57AM -0400, Kamal Dasu wrote:
-> On Tue, Apr 21, 2020 at 8:50 AM Mark Brown <broonie@kernel.org> wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.7
 
-> > If this is a fix it should have been near the start of the series before
-> > any new features to make sure that it can be applied cleanly as a fix.
+Thanks!
 
-> Yes it could can be after [Patch v3 3/9] spi: bcm-qspi: Handle lack of
-> MSPI_REV offset
+[1/9] spi: bcm-qspi: Handle clock probe deferral
+      commit: 0392727c261bab65a35cd4f82ee9459bc237591d
+[2/9] dt: bindings: spi: Add support for mspi on brcmstb SoCs
+      (not applied)
+[3/9] spi: bcm-qspi: Handle lack of MSPI_REV offset
+      (not applied)
+[4/9] spi: bcm-qspi: Drive MSPI peripheral SSb pin on cs_change
+      commit: 742d5958062488d03082a9ff01a6afb3cf7bd634
+[5/9] spi: bcm-qspi: when tx/rx buffer is NULL set to 0
+      commit: 4df3bea7f9d2ddd9ac2c29ba945c7c4db2def29c
+[6/9] spi: bcm-qspi: Make PM suspend/resume work with SCMI clock management
+      commit: 1b7ad8c405c3dc0ad6c2dc61fe21fe7a446cceeb
+[7/9] spi: bcm-qspi: Use fastbr setting to allow faster MSPI speeds
+      (not applied)
+[8/9] spi: bcm-qspi: add support for MSPI sys clk 108Mhz
+      (not applied)
+[9/9] spi: bcm-qspi: MSPI_SPCR0_MSB MSTR bit exists only on legacy controllers
+      (not applied)
 
-That's not a fix though, that's adding support for new devices?
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---gr/z0/N6AeWAPJVB
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6fCk4ACgkQJNaLcl1U
-h9AViQf/bQFHPo9FjLFZTBCau3RztJGYN74b26UHdDWiIMJ+X5YamwmzXtgO/f+S
-T0WrmGDL4ursd0B2KhmoEguH2wLCNO5GtIeo+Wrat8QDl+6t10veayzpdVB8GJ8G
-HNsEBoELbsZ65vmw2isZAtdx6ADSgRkDSfZkIjzip9+5EALsxbGkUTEqh6Kg8tRe
-CyOZlYj0QfqUE8gNIXj0rJlHCP1stMaTiU7RRAxiSzfXNXdh+diFFUXTu/KjSFQW
-fC2QPMQitnNBoZPw+A7DyIPaGO94iJDD4YzSzzLVz1HEdjwMPSlijtEhPQWjkWsg
-hsqoUs0b34snt53dUAGyYBr2lldUlg==
-=Bw/m
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---gr/z0/N6AeWAPJVB--
+Thanks,
+Mark
