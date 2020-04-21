@@ -2,122 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4A21B1C55
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 05:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0D31B1F86
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 09:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728190AbgDUDAu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Apr 2020 23:00:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728178AbgDUDAs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 20 Apr 2020 23:00:48 -0400
-Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 53A982082E;
-        Tue, 21 Apr 2020 03:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587438048;
-        bh=C66zT+0eni1hQi75iXGL2m0XhwqvpODjKWdzrm+Wf24=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p0xe2ozp9oV1ZLX5y+0fOMLcAjScVQncZUs+qCBH5NYLA1NqK3fmFqTPSlbv1BkNm
-         Fx+uVD9wykiqEp+a8QAetlIM66lAGyw0FkjaQH7YzOqEeKtdcIsdNO6Wi62aCDA3jl
-         VKi40FWaBDbsjn4QuVi8IGd1qZJHU8/kcpiZMpc4=
-Date:   Tue, 21 Apr 2020 11:00:35 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, Esben Haabendal <eha@deif.com>,
-        angelo@sysam.it, andrew.smirnov@gmail.com,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Wei Chen <weic@nvidia.com>, Mohamed Hosny <mhosny@nvidia.com>,
-        Michael Walle <michael@walle.cc>, peng.ma@nxp.com
-Subject: Re: [PATCH v5 12/12] arm64: dts: ls1028a-rdb: Add a spidev node for
- the mikroBUS
-Message-ID: <20200421030034.GA8571@dragon>
-References: <20200318001603.9650-1-olteanv@gmail.com>
- <20200318001603.9650-13-olteanv@gmail.com>
- <20200420143831.GB32419@dragon>
- <CA+h21hrfwJ7LMjj=sy7LG3D-FFhVSRuM5TwqfX9LvW4XKarUWA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+h21hrfwJ7LMjj=sy7LG3D-FFhVSRuM5TwqfX9LvW4XKarUWA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1726052AbgDUHJH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Apr 2020 03:09:07 -0400
+Received: from twhmllg3.macronix.com ([122.147.135.201]:50584 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726600AbgDUHJH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Apr 2020 03:09:07 -0400
+X-Greylist: delayed 1705 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Apr 2020 03:09:06 EDT
+Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
+        by TWHMLLG3.macronix.com with ESMTP id 03L6eeAQ046610
+        for <linux-spi@vger.kernel.org>; Tue, 21 Apr 2020 14:40:40 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from localhost.localdomain ([172.17.195.96])
+        by TWHMLLG3.macronix.com with ESMTP id 03L6dnMW045498;
+        Tue, 21 Apr 2020 14:39:49 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+From:   Mason Yang <masonccyang@mxic.com.tw>
+To:     broonie@kernel.org, tudor.ambarus@microchip.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        boris.brezillon@collabora.com
+Cc:     juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mason Yang <masonccyang@mxic.com.tw>
+Subject: [PATCH v2 0/5] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
+Date:   Tue, 21 Apr 2020 14:39:42 +0800
+Message-Id: <1587451187-6889-1-git-send-email-masonccyang@mxic.com.tw>
+X-Mailer: git-send-email 1.9.1
+X-MAIL: TWHMLLG3.macronix.com 03L6dnMW045498
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Apr 20, 2020 at 06:10:35PM +0300, Vladimir Oltean wrote:
-> On Mon, 20 Apr 2020 at 17:38, Shawn Guo <shawnguo@kernel.org> wrote:
-> >
-> > On Wed, Mar 18, 2020 at 02:16:03AM +0200, Vladimir Oltean wrote:
-> > > From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> > >
-> > > For debugging, it is useful to have access to the DSPI controller
-> > > signals. On the reference design board, these are exported to either the
-> > > mikroBUS1 or mikroBUS2 connector (according to the CPLD register
-> > > BRDCFG3[SPI3]).
-> > >
-> > > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> > > ---
-> > > Changes in v5:
-> > > None.
-> > >
-> > > Changes in v4:
-> > > None.
-> > >
-> > > Changes in v3:
-> > > None.
-> > >
-> > > Changes in v2:
-> > > Change compatible string for spidev node.
-> > >
-> > >  arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts | 14 ++++++++++++++
-> > >  1 file changed, 14 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > > index 6d05b76c2c7a..0d27b5667b8c 100644
-> > > --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > > +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> > > @@ -83,6 +83,20 @@
-> > >       };
-> > >  };
-> > >
-> > > +&dspi2 {
-> > > +     bus-num = <2>;
-> > > +     status = "okay";
-> > > +
-> > > +     /* mikroBUS1 */
-> > > +     spidev@0 {
-> > > +             compatible = "rohm,dh2228fv";
-> >
-> > Is the compatible documented?
-> >
-> > Shawn
-> >
-> > > +             spi-max-frequency = <20000000>;
-> > > +             fsl,spi-cs-sck-delay = <100>;
-> > > +             fsl,spi-sck-cs-delay = <100>;
-> > > +             reg = <0>;
-> > > +     };
-> > > +};
-> > > +
-> > >  &esdhc {
-> > >       sd-uhs-sdr104;
-> > >       sd-uhs-sdr50;
-> > > --
-> > > 2.17.1
-> > >
-> 
-> I don't really know what's the status with spidev compatibles. I do
-> see other device trees are using this one, I thought it should be
-> fine.
+Hello,
 
-My understanding is that every compatible needs to be documented.
+This is repost of patchset from Boris Brezillon's
+[RFC,00/18] mtd: spi-nor: Proposal for 8-8-8 mode support [1].
 
-Shawn
+Background from cover letter for RFC[1].
+
+The trend has been around Octal NOR Flash lately and the latest mainline
+already supports 1-1-8 and 1-8-8 modes.
+
+Boris opened a discussion on how we should support stateful modes (X-X-X
+and XD-XD-XD, where X is the bus width and D means Double Transfer Rate).
+
+JESD216C has defined specification for Octal 8S-8S-8S and 8D-8D-8D.
+Based on JEDEC216C Basic Flash Parameter Table (BFPT) driver extract:
+DWORD-18: command and command extension type.
+DWORD-19: enable 8S-8S-8S/8D-8D-8D mode sequences by two instructions or
+	  write CFG Reg 2.
+DWORD-20: Maximum operation speed of device in Octal mode.
+
+and xSPI profile 1.0 table:
+DWORD-1: Read Fast command, the number of dummy cycles and address nbytes
+	 for Read Status Register command.
+DWORD-2: Read/Write volatile Register command for CFG Reg2.
+DWORD-4 and DWORD-5: dummy cycles used for various frequencies.
+
+The first set of patches is according to JESD216C adding Double Transfer
+Rate(DTR) fields, extension command and command bytes number to the
+spi_mem_op struct. This is from Boris patchset.
+
+The second set of patches parse the xSPI profile 1.0 table for parameters
+needed in Octal 8D-8D-8D mode. 
+
+The third set of patches extract BFPT DWORD018,19,20 and define the 
+relevant macros and enum in spi-nor layer for Octal 8S-8S-8S and 
+8D-8D-8D mode operation. Parts of these are refer to Boris patchset but
+we enable Octal 8D-8D-8D mode in spi_nor_late_init_params() rather than
+Boris's adding a change_mode() call-back function.
+
+The last set of patches in the series support Macronix mx25uw51245g
+to tweak flash parameters a correct dummy cycles set for various frequency.
+
+Also patched spi-mxic driver for testing on Macronix's Zynq PicoZed board
+with Macronix's SPI controller (spi-mxic.c) and mx25uw51245g Octal flash.
+
+[1] https://patchwork.ozlabs.org/cover/982926/
+
+
+Summary of change log
+---------------------
+v2: 
+Parse BFPT & xSPI table for Octal 8D-8D-8D mode parameters and enable Octal
+mode in spi_nor_late_init_params().
+Using Macros in spi_nor_spimem_read_data, spi_nor_spimem_write_data and
+so on by Vignesh comments.
+
+v1:
+Without parsing BFPT & xSPI profile 1.0 table and enter Octal 8D-8D-8D
+mode directly in spi_nor_fixups hooks.
+
+
+thnaks for your time and review.
+best regards,
+Mason
+
+Mason Yang (5):
+  mtd: spi-nor: Add support for Octal 8D-8D-8D mode
+  mtd: spi-nor: sfdp: Add support for xSPI profile 1.0 table
+  mtd: spi-nor: Parse BFPT DWORD-18,19 and 20 for Octal 8D-8D-8D mode
+  mtd: spi-nor: macronix: Add Octal 8D-8D-8D supports for Macronix
+    mx25uw51245g
+  spi: mxic: Patch for Octal 8D-8D-8D mode support
+
+ drivers/mtd/spi-nor/core.c     | 220 ++++++++++++++++++++++++++++++++++++++--
+ drivers/mtd/spi-nor/core.h     |  31 ++++++
+ drivers/mtd/spi-nor/macronix.c |  41 ++++++++
+ drivers/mtd/spi-nor/sfdp.c     | 222 ++++++++++++++++++++++++++++++++++++++++-
+ drivers/mtd/spi-nor/sfdp.h     |  16 ++-
+ drivers/spi/spi-mem.c          |   8 +-
+ drivers/spi/spi-mxic.c         | 101 +++++++++++++------
+ include/linux/mtd/spi-nor.h    |  51 +++++++++-
+ include/linux/spi/spi-mem.h    |  13 +++
+ 9 files changed, 654 insertions(+), 49 deletions(-)
+
+-- 
+1.9.1
+
