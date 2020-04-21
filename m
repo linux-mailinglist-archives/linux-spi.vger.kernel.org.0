@@ -2,23 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0D31B1F86
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 09:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910DF1B1F89
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 09:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbgDUHJH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Apr 2020 03:09:07 -0400
-Received: from twhmllg3.macronix.com ([122.147.135.201]:50584 "EHLO
+        id S1726600AbgDUHJL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Apr 2020 03:09:11 -0400
+Received: from twhmllg3.macronix.com ([122.147.135.201]:50588 "EHLO
         TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726600AbgDUHJH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Apr 2020 03:09:07 -0400
-X-Greylist: delayed 1705 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Apr 2020 03:09:06 EDT
+        with ESMTP id S1728083AbgDUHJL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Apr 2020 03:09:11 -0400
 Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id 03L6eeAQ046610
-        for <linux-spi@vger.kernel.org>; Tue, 21 Apr 2020 14:40:40 +0800 (GMT-8)
+        by TWHMLLG3.macronix.com with ESMTP id 03L6efia046638
+        for <linux-spi@vger.kernel.org>; Tue, 21 Apr 2020 14:40:41 +0800 (GMT-8)
         (envelope-from masonccyang@mxic.com.tw)
 Received: from localhost.localdomain ([172.17.195.96])
-        by TWHMLLG3.macronix.com with ESMTP id 03L6dnMW045498;
-        Tue, 21 Apr 2020 14:39:49 +0800 (GMT-8)
+        by TWHMLLG3.macronix.com with ESMTP id 03L6dnMX045498;
+        Tue, 21 Apr 2020 14:39:50 +0800 (GMT-8)
         (envelope-from masonccyang@mxic.com.tw)
 From:   Mason Yang <masonccyang@mxic.com.tw>
 To:     broonie@kernel.org, tudor.ambarus@microchip.com,
@@ -26,101 +25,131 @@ To:     broonie@kernel.org, tudor.ambarus@microchip.com,
         boris.brezillon@collabora.com
 Cc:     juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH v2 0/5] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
-Date:   Tue, 21 Apr 2020 14:39:42 +0800
-Message-Id: <1587451187-6889-1-git-send-email-masonccyang@mxic.com.tw>
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Boris Brezillon <boris.brezillon@bootlin.com>
+Subject: [PATCH v2 1/5] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
+Date:   Tue, 21 Apr 2020 14:39:43 +0800
+Message-Id: <1587451187-6889-2-git-send-email-masonccyang@mxic.com.tw>
 X-Mailer: git-send-email 1.9.1
-X-MAIL: TWHMLLG3.macronix.com 03L6dnMW045498
+In-Reply-To: <1587451187-6889-1-git-send-email-masonccyang@mxic.com.tw>
+References: <1587451187-6889-1-git-send-email-masonccyang@mxic.com.tw>
+X-MAIL: TWHMLLG3.macronix.com 03L6dnMX045498
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+According to JEDEC216C SPI NORs are using 2 bytes opcodes
+when operated in OPI (Octal Peripheral Interface).
 
-This is repost of patchset from Boris Brezillon's
-[RFC,00/18] mtd: spi-nor: Proposal for 8-8-8 mode support [1].
+Add extension command, command bytes number and dtr fields to
+the spi_mem_op struct and make sure all DTR operations are
+rejected for now.
 
-Background from cover letter for RFC[1].
+Signed-off-by: Boris Brezillon <boris.brezillon@bootlin.com>
+Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
+---
+ drivers/spi/spi-mem.c       |  8 +++++++-
+ include/linux/spi/spi-mem.h | 13 +++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-The trend has been around Octal NOR Flash lately and the latest mainline
-already supports 1-1-8 and 1-8-8 modes.
-
-Boris opened a discussion on how we should support stateful modes (X-X-X
-and XD-XD-XD, where X is the bus width and D means Double Transfer Rate).
-
-JESD216C has defined specification for Octal 8S-8S-8S and 8D-8D-8D.
-Based on JEDEC216C Basic Flash Parameter Table (BFPT) driver extract:
-DWORD-18: command and command extension type.
-DWORD-19: enable 8S-8S-8S/8D-8D-8D mode sequences by two instructions or
-	  write CFG Reg 2.
-DWORD-20: Maximum operation speed of device in Octal mode.
-
-and xSPI profile 1.0 table:
-DWORD-1: Read Fast command, the number of dummy cycles and address nbytes
-	 for Read Status Register command.
-DWORD-2: Read/Write volatile Register command for CFG Reg2.
-DWORD-4 and DWORD-5: dummy cycles used for various frequencies.
-
-The first set of patches is according to JESD216C adding Double Transfer
-Rate(DTR) fields, extension command and command bytes number to the
-spi_mem_op struct. This is from Boris patchset.
-
-The second set of patches parse the xSPI profile 1.0 table for parameters
-needed in Octal 8D-8D-8D mode. 
-
-The third set of patches extract BFPT DWORD018,19,20 and define the 
-relevant macros and enum in spi-nor layer for Octal 8S-8S-8S and 
-8D-8D-8D mode operation. Parts of these are refer to Boris patchset but
-we enable Octal 8D-8D-8D mode in spi_nor_late_init_params() rather than
-Boris's adding a change_mode() call-back function.
-
-The last set of patches in the series support Macronix mx25uw51245g
-to tweak flash parameters a correct dummy cycles set for various frequency.
-
-Also patched spi-mxic driver for testing on Macronix's Zynq PicoZed board
-with Macronix's SPI controller (spi-mxic.c) and mx25uw51245g Octal flash.
-
-[1] https://patchwork.ozlabs.org/cover/982926/
-
-
-Summary of change log
----------------------
-v2: 
-Parse BFPT & xSPI table for Octal 8D-8D-8D mode parameters and enable Octal
-mode in spi_nor_late_init_params().
-Using Macros in spi_nor_spimem_read_data, spi_nor_spimem_write_data and
-so on by Vignesh comments.
-
-v1:
-Without parsing BFPT & xSPI profile 1.0 table and enter Octal 8D-8D-8D
-mode directly in spi_nor_fixups hooks.
-
-
-thnaks for your time and review.
-best regards,
-Mason
-
-Mason Yang (5):
-  mtd: spi-nor: Add support for Octal 8D-8D-8D mode
-  mtd: spi-nor: sfdp: Add support for xSPI profile 1.0 table
-  mtd: spi-nor: Parse BFPT DWORD-18,19 and 20 for Octal 8D-8D-8D mode
-  mtd: spi-nor: macronix: Add Octal 8D-8D-8D supports for Macronix
-    mx25uw51245g
-  spi: mxic: Patch for Octal 8D-8D-8D mode support
-
- drivers/mtd/spi-nor/core.c     | 220 ++++++++++++++++++++++++++++++++++++++--
- drivers/mtd/spi-nor/core.h     |  31 ++++++
- drivers/mtd/spi-nor/macronix.c |  41 ++++++++
- drivers/mtd/spi-nor/sfdp.c     | 222 ++++++++++++++++++++++++++++++++++++++++-
- drivers/mtd/spi-nor/sfdp.h     |  16 ++-
- drivers/spi/spi-mem.c          |   8 +-
- drivers/spi/spi-mxic.c         | 101 +++++++++++++------
- include/linux/mtd/spi-nor.h    |  51 +++++++++-
- include/linux/spi/spi-mem.h    |  13 +++
- 9 files changed, 654 insertions(+), 49 deletions(-)
-
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index adaa0c4..de682c5 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -154,6 +154,12 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
+ 				   op->data.dir == SPI_MEM_DATA_OUT))
+ 		return false;
+ 
++	if (op->cmd.dtr || op->addr.dtr || op->dummy.dtr || op->data.dtr)
++		return false;
++
++	if (op->cmd.nbytes != 1)
++		return false;
++
+ 	return true;
+ }
+ EXPORT_SYMBOL_GPL(spi_mem_default_supports_op);
+@@ -168,7 +174,7 @@ static bool spi_mem_buswidth_is_valid(u8 buswidth)
+ 
+ static int spi_mem_check_op(const struct spi_mem_op *op)
+ {
+-	if (!op->cmd.buswidth)
++	if (!op->cmd.buswidth || op->cmd.nbytes < 1 || op->cmd.nbytes > 2)
+ 		return -EINVAL;
+ 
+ 	if ((op->addr.nbytes && !op->addr.buswidth) ||
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index af9ff2f..bf54079 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -17,6 +17,7 @@
+ 	{							\
+ 		.buswidth = __buswidth,				\
+ 		.opcode = __opcode,				\
++		.nbytes = 1,					\
+ 	}
+ 
+ #define SPI_MEM_OP_ADDR(__nbytes, __val, __buswidth)		\
+@@ -69,11 +70,15 @@ enum spi_mem_data_dir {
+ 
+ /**
+  * struct spi_mem_op - describes a SPI memory operation
++ * @cmd.nbytes: number of opcode bytes (only 1 or 2 are valid)
+  * @cmd.buswidth: number of IO lines used to transmit the command
++ * @cmd.dtr: set true to transfer opcode in double transfer rate mode
+  * @cmd.opcode: operation opcode
++ * @cmd.ext_opcode: extension operation opcode
+  * @addr.nbytes: number of address bytes to send. Can be zero if the operation
+  *		 does not need to send an address
+  * @addr.buswidth: number of IO lines used to transmit the address cycles
++ * @addr.dtr: set true to transfer address bytes in double transfer rate mode
+  * @addr.val: address value. This value is always sent MSB first on the bus.
+  *	      Note that only @addr.nbytes are taken into account in this
+  *	      address value, so users should make sure the value fits in the
+@@ -81,34 +86,42 @@ enum spi_mem_data_dir {
+  * @dummy.nbytes: number of dummy bytes to send after an opcode or address. Can
+  *		  be zero if the operation does not require dummy bytes
+  * @dummy.buswidth: number of IO lanes used to transmit the dummy bytes
++ * @dummy.dtr: set true to transfer dummy bytes in double transfer rate mode
+  * @data.buswidth: number of IO lanes used to send/receive the data
+  * @data.dir: direction of the transfer
+  * @data.nbytes: number of data bytes to send/receive. Can be zero if the
+  *		 operation does not involve transferring data
++ * @data.dtr: set true to transfer data bytes in double transfer rate mode
+  * @data.buf.in: input buffer (must be DMA-able)
+  * @data.buf.out: output buffer (must be DMA-able)
+  */
+ struct spi_mem_op {
+ 	struct {
++		u8 nbytes;
+ 		u8 buswidth;
++		bool dtr;
+ 		u8 opcode;
++		u8 ext_opcode;
+ 	} cmd;
+ 
+ 	struct {
+ 		u8 nbytes;
+ 		u8 buswidth;
++		bool dtr;
+ 		u64 val;
+ 	} addr;
+ 
+ 	struct {
+ 		u8 nbytes;
+ 		u8 buswidth;
++		bool dtr;
+ 	} dummy;
+ 
+ 	struct {
+ 		u8 buswidth;
+ 		enum spi_mem_data_dir dir;
+ 		unsigned int nbytes;
++		bool dtr;
+ 		union {
+ 			void *in;
+ 			const void *out;
 -- 
 1.9.1
 
