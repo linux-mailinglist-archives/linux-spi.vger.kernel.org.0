@@ -2,84 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D20591B2E2C
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 19:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E591B2EE8
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 20:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbgDURUI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Apr 2020 13:20:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40144 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725990AbgDURUI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Apr 2020 13:20:08 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9A816206D5;
-        Tue, 21 Apr 2020 17:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587489608;
-        bh=Tkhv5FZI2lpcXSiwylUJy+SpFY9x+7AFo3ppBxZ0m70=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0YsZKbRvFLNmt7aYxNscTQiCjhYPZi4jt46Kt10VY0Vg0MMOtzBUQ6wd9/YvnaByj
-         JaWR/j0BcX3xft91Hm6mJpEkiefM8zCqeHqM9+Bzc5n7BBPDPTzr/g3Mf+rd01VinX
-         56m7GnDg1ks2mcSPB64l/RX8A50NO0bow8BFgiGo=
-Date:   Tue, 21 Apr 2020 18:20:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [Patch v3 1/9] spi: bcm-qspi: Handle clock probe deferral
-Message-ID: <20200421172005.GG4540@sirena.org.uk>
-References: <20200420190853.45614-1-kdasu.kdev@gmail.com>
- <20200420190853.45614-2-kdasu.kdev@gmail.com>
- <158748156553.18089.8164001089518853868.b4-ty@kernel.org>
- <2d810e4f-5f05-4257-59a8-882ae790ecd1@gmail.com>
- <20200421171558.GE4540@sirena.org.uk>
- <0d91f426-e767-2e69-bcb7-ddc4d7611861@gmail.com>
+        id S1725930AbgDUSTu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Apr 2020 14:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbgDUSTt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Apr 2020 14:19:49 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03F0C0610D5;
+        Tue, 21 Apr 2020 11:19:49 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id o127so16039367iof.0;
+        Tue, 21 Apr 2020 11:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lxQpwQq8B/XSdgKzbh2ahosuLBgTHXKsqcO5uWxCwRw=;
+        b=UN3S42+kISuAL0JElfgUijnqMegdzpd3S5HIX6vcUNGFk8y3zllJ43MfIEkhQUCFic
+         Tku1lzpC75lZwS4Zyjp/0RTKrcuf3aHXJiTmWbrRzyYhJbISG2In4Df9UmYUAdmBmRPm
+         OAPl0zSXkxLKlJ9+PKLU18qkkCYvDRU2jOlRHZSt3OwlWsfCG1Pa9o+PEF4MkrvWxRIW
+         fQXPeaObIL65tZjiQhJ1Cc6y6I1NIHRyyrowBpi2Ao/6PXU7XTTwdRSRBRZM17F4DdWB
+         UJJzJGwVFkmFZrxWklU5D5kNM24V+xUdPaOmL+IOYvr6a6DTQzHHQiTX1mF8n8YjwS8X
+         8lnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lxQpwQq8B/XSdgKzbh2ahosuLBgTHXKsqcO5uWxCwRw=;
+        b=LEjej7dp2zAlVIcuRWVBZmlL/tQxmrYATpyCNVuXpntbRt5mPTHDc8zy/Sg0cv+ptv
+         tfnfk1xHv5z1zz25HdH2L6Vi0J4DDFMr9rF9bOfHKHfU9jNg+pkImcyFXVilZHn8De5x
+         LcZN/zKHUid2o/7KcuV73unRfZkBSOMa/r6U2Tk37ZBudtdXTmaxdS7/cCtyXXAj1Lox
+         FLGG4AfW/0JJVJ+9wjaGK1QZwdwbZyxzehYKgDItrpGlBO6qLK4Zmo41Bm54BMpNbx6/
+         ovaFwoBelXHai87DjGQwFCjgEcuRDHjVimYSTfG1t1S2TExdn+Ef319w7fZqM7AAX+bU
+         FI/Q==
+X-Gm-Message-State: AGi0PuZrKiWKqU/nVoDEpDSxapadFVu7rmYH3YyP86SbTxQi+TwurJB4
+        mTocE3eAc2u33x5alXUgFKQfFoKAcj00gdxm9/g=
+X-Google-Smtp-Source: APiQypIQH0s4O6zPIpOdsnG/1oem9N6RoPEneIiwVs6RC+JfDHwt2zPz+dHBF1bl2/OdqYNtiSGxbvV6KNK7M6VFA+s=
+X-Received: by 2002:a05:6638:4e:: with SMTP id a14mr20610719jap.108.1587493189031;
+ Tue, 21 Apr 2020 11:19:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yZnyZsPjQYjG7xG7"
-Content-Disposition: inline
-In-Reply-To: <0d91f426-e767-2e69-bcb7-ddc4d7611861@gmail.com>
-X-Cookie: Non-sequiturs make me eat lampshades.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200420190853.45614-1-kdasu.kdev@gmail.com> <20200420190853.45614-10-kdasu.kdev@gmail.com>
+ <20200421125025.GB4540@sirena.org.uk> <CAC=U0a35yfnuXN1CXV7YnHCff-Ba+7UZ2dd0rFVFSNuA=O98VQ@mail.gmail.com>
+ <20200421145927.GC4540@sirena.org.uk>
+In-Reply-To: <20200421145927.GC4540@sirena.org.uk>
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+Date:   Tue, 21 Apr 2020 14:19:36 -0400
+Message-ID: <CAC=U0a1oMy-RLdCTJ9=Wkn4o8ET8USL4euU-a6meaCJexRgzTA@mail.gmail.com>
+Subject: Re: [Patch v3 9/9] spi: bcm-qspi: MSPI_SPCR0_MSB MSTR bit exists only
+ on legacy controllers
+To:     Mark Brown <broonie@kernel.org>
+Cc:     bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Apr 21, 2020 at 10:59 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, Apr 21, 2020 at 10:53:57AM -0400, Kamal Dasu wrote:
+> > On Tue, Apr 21, 2020 at 8:50 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> > > If this is a fix it should have been near the start of the series before
+> > > any new features to make sure that it can be applied cleanly as a fix.
+>
+> > Yes it could can be after [Patch v3 3/9] spi: bcm-qspi: Handle lack of
+> > MSPI_REV offset
+>
+> That's not a fix though, that's adding support for new devices?
 
---yZnyZsPjQYjG7xG7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Since its dependent on knowing if the MSPI_REV register exists on a
+given SoC and path 3/9, maybe I can remove the fixes tag for that
+commit.
 
-On Tue, Apr 21, 2020 at 10:17:10AM -0700, Florian Fainelli wrote:
+Kamal
 
-> > That then doesn't work with git itself unfortunately, someone's got to
-> > loose out :/
-
-> Could you provide both links with a market at the front, e.g.:
-
-> Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
-> for-5.7
-> CGIT URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/?h=for-5.7
-
-Ask Konstantin to implement it (I'm using b4 ty now) and I might!
-
---yZnyZsPjQYjG7xG7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6fK0QACgkQJNaLcl1U
-h9CXvAf/UAZv8UO4t1Uin3jqj6OCGFmCstSiXzKLQb6UC83EXEXtZndbgTidnKMv
-42qXpXqGgImz//y91Bv35peHhy3Ugd6d2NpBGOpgozLfUiyJXJEWXGAvr9cpd/v7
-TgLtQSuXEvKixIV6byhSNRI8huDsoFIRRcUUrLk1eg/zXY5sjQURC6O6fHZwCKXz
-/bSEIKCUTohvzJC6wh/wVxWXzlBuy85zvsUnG2WgJ9u58IxFJIJGZGpqkoipqNtJ
-357ztZeYezZAYB+St91NNk12GPW/n6IkWptiI52wrIGBoyBUU4QZTk6/jsxaOPve
-I9M/jwmVHX3d2H18f47isum/9rP01Q==
-=93nF
------END PGP SIGNATURE-----
-
---yZnyZsPjQYjG7xG7--
+Kamal
