@@ -2,100 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D76FD1B2E15
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 19:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20591B2E2C
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 19:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbgDURRN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Apr 2020 13:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725870AbgDURRM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Apr 2020 13:17:12 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70C7C061A41;
-        Tue, 21 Apr 2020 10:17:12 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id hi11so1612477pjb.3;
-        Tue, 21 Apr 2020 10:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/HKitW2kvA7NHe9STw8mIlU1852n1EZbQydCMbj93Q8=;
-        b=F0/93ttU6tdpNY4LNdtyJOF1kA7lixfPb3/t0yc+UyNI7ZKzOG7CgjBknfOmtTkIzi
-         YFl8Hql3mb2+lXJuCjIK9iuq/51Sl7n6AFy2kQZy7pzzOw1A9D20nd9WSrvj+MPsV183
-         1yne5YvmW9iYHzkQ5y1klcg/TFu1fAKqR1IE1IkRN2LYdY9bnhjRownwroPe9lSwhCYN
-         3ZkD2eK6JONdPqRFr8zqhqqj/evY4ezDBX6Iwpmzxeke3b4LrNz8h8u0Sxky9XMK4ITa
-         tN/YQq2VU7FgutJKm/jabmsKeA+xeh7EdjIN06WSW8J140+Cvb5VfL1cOpQVgXOcoF/b
-         MsVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/HKitW2kvA7NHe9STw8mIlU1852n1EZbQydCMbj93Q8=;
-        b=P6JR92fo8SqNKrzI0p8oXdmbdDYSgFCSlavuDcZsKbz5hJ3W6FevK76ztuLRcw1zjY
-         AC4+xxhq6RcHpxgwkvMcIkjm7SI0cBLuJqRiYmWjTXf4BC2QfcVplhvN2Nnl7z6qesny
-         q2KiIsHPCobL5iF/muJk3UHiV/1+FjBVDbhqLm7GaDHR8/uJCLW+gTyzfJ4ColuPCsDU
-         0KYNQ3Rm1KUSnxi0cinpmPtIpvCWfSus/KUhtV8gi6GNflC/XFalz3E//paBSlvSFUrw
-         eus0UQdRkefFAJ8MQwzm/EI1MvAbSQe3xuGaoPeq9AtGSTmfYxlzis7LjRuLT3iHq+Ni
-         AUYw==
-X-Gm-Message-State: AGi0PuZMW66VugQPXGHVWfCCpzD55Y5lJhw8fLbyudKmQvJkUncJ04Ut
-        n8t6hqe8tvZLNYgfVSVH+rLKt+zU
-X-Google-Smtp-Source: APiQypJo0hMKzUEitYOqZn2X4OfIYIrqQuOTFElZiiZQvGihQoIdzKswDgQoa9GRPAUvQiqD4I8oDw==
-X-Received: by 2002:a17:90a:343:: with SMTP id 3mr6902685pjf.178.1587489431881;
-        Tue, 21 Apr 2020 10:17:11 -0700 (PDT)
-Received: from [10.230.188.26] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z190sm1416790pfb.1.2020.04.21.10.17.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2020 10:17:10 -0700 (PDT)
-Subject: Re: [Patch v3 1/9] spi: bcm-qspi: Handle clock probe deferral
-To:     Mark Brown <broonie@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
+        id S1725963AbgDURUI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Apr 2020 13:20:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725990AbgDURUI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Apr 2020 13:20:08 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9A816206D5;
+        Tue, 21 Apr 2020 17:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587489608;
+        bh=Tkhv5FZI2lpcXSiwylUJy+SpFY9x+7AFo3ppBxZ0m70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0YsZKbRvFLNmt7aYxNscTQiCjhYPZi4jt46Kt10VY0Vg0MMOtzBUQ6wd9/YvnaByj
+         JaWR/j0BcX3xft91Hm6mJpEkiefM8zCqeHqM9+Bzc5n7BBPDPTzr/g3Mf+rd01VinX
+         56m7GnDg1ks2mcSPB64l/RX8A50NO0bow8BFgiGo=
+Date:   Tue, 21 Apr 2020 18:20:05 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
 Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [Patch v3 1/9] spi: bcm-qspi: Handle clock probe deferral
+Message-ID: <20200421172005.GG4540@sirena.org.uk>
 References: <20200420190853.45614-1-kdasu.kdev@gmail.com>
  <20200420190853.45614-2-kdasu.kdev@gmail.com>
  <158748156553.18089.8164001089518853868.b4-ty@kernel.org>
  <2d810e4f-5f05-4257-59a8-882ae790ecd1@gmail.com>
  <20200421171558.GE4540@sirena.org.uk>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <0d91f426-e767-2e69-bcb7-ddc4d7611861@gmail.com>
-Date:   Tue, 21 Apr 2020 10:17:10 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.7.0
+ <0d91f426-e767-2e69-bcb7-ddc4d7611861@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200421171558.GE4540@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yZnyZsPjQYjG7xG7"
+Content-Disposition: inline
+In-Reply-To: <0d91f426-e767-2e69-bcb7-ddc4d7611861@gmail.com>
+X-Cookie: Non-sequiturs make me eat lampshades.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--yZnyZsPjQYjG7xG7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 4/21/2020 10:15 AM, Mark Brown wrote:
-> On Tue, Apr 21, 2020 at 10:11:52AM -0700, Florian Fainelli wrote:
-> 
->>> Applied to
-> 
->>>      https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.7
-> 
->> It would be nice if the URL could be clickable, e.g.:
-> 
->> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/?h=for-5.7
-> 
-> That then doesn't work with git itself unfortunately, someone's got to
-> loose out :/
-> 
+On Tue, Apr 21, 2020 at 10:17:10AM -0700, Florian Fainelli wrote:
 
-Could you provide both links with a market at the front, e.g.:
+> > That then doesn't work with git itself unfortunately, someone's got to
+> > loose out :/
 
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
-for-5.7
-CGIT URL: 
-https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/?h=for-5.7
--- 
-Florian
+> Could you provide both links with a market at the front, e.g.:
+
+> Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+> for-5.7
+> CGIT URL: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/?h=for-5.7
+
+Ask Konstantin to implement it (I'm using b4 ty now) and I might!
+
+--yZnyZsPjQYjG7xG7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6fK0QACgkQJNaLcl1U
+h9CXvAf/UAZv8UO4t1Uin3jqj6OCGFmCstSiXzKLQb6UC83EXEXtZndbgTidnKMv
+42qXpXqGgImz//y91Bv35peHhy3Ugd6d2NpBGOpgozLfUiyJXJEWXGAvr9cpd/v7
+TgLtQSuXEvKixIV6byhSNRI8huDsoFIRRcUUrLk1eg/zXY5sjQURC6O6fHZwCKXz
+/bSEIKCUTohvzJC6wh/wVxWXzlBuy85zvsUnG2WgJ9u58IxFJIJGZGpqkoipqNtJ
+357ztZeYezZAYB+St91NNk12GPW/n6IkWptiI52wrIGBoyBUU4QZTk6/jsxaOPve
+I9M/jwmVHX3d2H18f47isum/9rP01Q==
+=93nF
+-----END PGP SIGNATURE-----
+
+--yZnyZsPjQYjG7xG7--
