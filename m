@@ -2,94 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A911B2F9A
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Apr 2020 20:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FD31B349F
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Apr 2020 03:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbgDUSyv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Apr 2020 14:54:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48524 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726023AbgDUSyv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Apr 2020 14:54:51 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9B53A2068F;
-        Tue, 21 Apr 2020 18:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587495291;
-        bh=4ADim16T+0u2BglcyovCuf/IIjoL8W8PhOujJLyZSGY=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=ZhkAIp/ZxceWgE67zgqVeVvxd+w2MDywoiQeMW0dyf+uRNYhBa8UU3R1webo45I2i
-         OLLSO3OfNG5OxUwFvAcZCA+hSXg+ZCdlzlS2G2UxtFC3svdquodJpdgHXPGxXU1fPe
-         2gPQ96gG+vEXQ/Yfqa14Uk9a4lSRUKRYcUaII3xk=
-Date:   Tue, 21 Apr 2020 19:54:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20200420190853.45614-2-kdasu.kdev@gmail.com>
-References: <20200420190853.45614-1-kdasu.kdev@gmail.com> <20200420190853.45614-2-kdasu.kdev@gmail.com>
-Subject: Re: [Patch v3 1/9] spi: bcm-qspi: Handle clock probe deferral
-Message-Id: <158749528855.30690.4628410015008240508.b4-ty@kernel.org>
+        id S1726173AbgDVBoU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Apr 2020 21:44:20 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:58132 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726039AbgDVBoU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Apr 2020 21:44:20 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id E8D396EA80555452B6AE;
+        Wed, 22 Apr 2020 09:44:16 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 22 Apr 2020 09:44:06 +0800
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+To:     Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>,
+        Ashish Kumar <Ashish.Kumar@nxp.com>
+CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-spi@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>
+Subject: [PATCH -next v2] spi: spi-fsl-qspi: Fix return value check of devm_ioremap() in probe
+Date:   Wed, 22 Apr 2020 01:45:43 +0000
+Message-ID: <20200422014543.111070-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200421093908.48213-1-weiyongjun1@huawei.com>
+References: <20200421093908.48213-1-weiyongjun1@huawei.com>
+MIME-Version: 1.0
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 20 Apr 2020 15:08:45 -0400, Kamal Dasu wrote:
-> From: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> The clock provider may not be ready by the time spi-bcm-qspi gets
-> probed, handle probe deferral using devm_clk_get_optional().
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
-> 
-> [...]
+In case of error, the function devm_ioremap() returns NULL pointer not
+ERR_PTR(). The IS_ERR() test in the return value check should be
+replaced with NULL test.
 
-Applied to
+Fixes: 858e26a515c2 ("spi: spi-fsl-qspi: Reduce devm_ioremap size to 4 times AHB buffer size")
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Reviewed-by: Ashish Kumar <Ashish.Kumar@nxp.com>
+---
+v1 -> v2: fix the subject as Ashish's suggest
+---
+ drivers/spi/spi-fsl-qspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.7
+diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
+index 83eb8a484faf..6766262d7e75 100644
+--- a/drivers/spi/spi-fsl-qspi.c
++++ b/drivers/spi/spi-fsl-qspi.c
+@@ -880,8 +880,8 @@ static int fsl_qspi_probe(struct platform_device *pdev)
+ 	/* Since there are 4 cs, map size required is 4 times ahb_buf_size */
+ 	q->ahb_addr = devm_ioremap(dev, q->memmap_phy,
+ 				   (q->devtype_data->ahb_buf_size * 4));
+-	if (IS_ERR(q->ahb_addr)) {
+-		ret = PTR_ERR(q->ahb_addr);
++	if (!q->ahb_addr) {
++		ret = -ENOMEM;
+ 		goto err_put_ctrl;
+ 	}
 
-Thanks!
 
-[1/9] spi: bcm-qspi: Handle clock probe deferral
-      commit: 0392727c261bab65a35cd4f82ee9459bc237591d
-[2/9] dt: bindings: spi: Add support for mspi on brcmstb SoCs
-      (not applied)
-[3/9] spi: bcm-qspi: Handle lack of MSPI_REV offset
-      (not applied)
-[4/9] spi: bcm-qspi: Drive MSPI peripheral SSb pin on cs_change
-      commit: 742d5958062488d03082a9ff01a6afb3cf7bd634
-[5/9] spi: bcm-qspi: when tx/rx buffer is NULL set to 0
-      commit: 4df3bea7f9d2ddd9ac2c29ba945c7c4db2def29c
-[6/9] spi: bcm-qspi: Make PM suspend/resume work with SCMI clock management
-      commit: 1b7ad8c405c3dc0ad6c2dc61fe21fe7a446cceeb
-[7/9] spi: bcm-qspi: Use fastbr setting to allow faster MSPI speeds
-      (not applied)
-[8/9] spi: bcm-qspi: add support for MSPI sys clk 108Mhz
-      (not applied)
-[9/9] spi: bcm-qspi: MSPI_SPCR0_MSB MSTR bit exists only on legacy controllers
-      (not applied)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
