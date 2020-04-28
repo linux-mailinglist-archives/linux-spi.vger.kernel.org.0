@@ -2,93 +2,173 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA28A1BC0EA
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Apr 2020 16:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5196C1BC402
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Apr 2020 17:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727881AbgD1OOv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Apr 2020 10:14:51 -0400
-Received: from mga18.intel.com ([134.134.136.126]:59849 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727988AbgD1OOu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 28 Apr 2020 10:14:50 -0400
-IronPort-SDR: LLcMwZjGyzTvoMbcz8Yfbr/pGk8dbxhv8ppinSi76U29XoFTg5e1KAM7L0YR0Rdxa5+gj+YSlB
- lhtU9MvoMrng==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2020 07:14:50 -0700
-IronPort-SDR: p91jQfLvoy5gFXMynjK2xfww/QM1aHbNBf/AbnH1flOme0Ro77zKsxpiEx5vPV17XlPHmN9jzH
- c2rrz2y3Xkqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,328,1583222400"; 
-   d="scan'208";a="459245444"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Apr 2020 07:14:46 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jTR0b-003ZOj-Uc; Tue, 28 Apr 2020 17:14:49 +0300
-Date:   Tue, 28 Apr 2020 17:14:49 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] spi: dw: Add support for Intel Keem Bay SPI
-Message-ID: <20200428141449.GV185537@smile.fi.intel.com>
-References: <20200422141142.25591-1-wan.ahmad.zainie.wan.mohamad@intel.com>
+        id S1728257AbgD1PsM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Apr 2020 11:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728021AbgD1PsM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Apr 2020 11:48:12 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D6EC03C1AB
+        for <linux-spi@vger.kernel.org>; Tue, 28 Apr 2020 08:48:11 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id a7so1300477pju.2
+        for <linux-spi@vger.kernel.org>; Tue, 28 Apr 2020 08:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=5qg09P4fJgr+a4V0kkb6T7N6RFRG+NYeOfMhOPT4/Dc=;
+        b=JDSThlqmXtrKvxvHRB6TPWEqVdcqPId/GP5ROJiq6/aWYOFWWaWAQZaEO5O41nBgtA
+         SkL8uF+189EbZWOKop390c8l3PRBjmtLVJWX2b+NGwaNX4iX0nlUPfDsAFacz/D+VqC5
+         E9M0BgOw26tKTlf2vgBUIRRD5BeJwPGtZ7Wg8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5qg09P4fJgr+a4V0kkb6T7N6RFRG+NYeOfMhOPT4/Dc=;
+        b=biQ5iONBnQ/7DfXWFlsTtXPHi9ew/wc4hI8K92bYa8TwTPntziKiVwtZM0N2hwwe04
+         72tXbaTKxu3dx0zOLHrhWmBkBKpD5oFFZls2OyFbErJfIKSGRdqefkIhU2AddGn4JpqE
+         0Oiy2SiQNWgYIUwxZYp6IP+sExGum3UroL0lT9uRabA2bAm3SPtP2fpWPr4SHQBwRbr4
+         Yq4bxGRBZtYXtRt01SoVy/F/uVtX5w5Aao1WObfiWK6uXI1ASOGLsx2JegjFqJBhAK6f
+         llt50wA2PafyTNkAyztTgZ2cxOB3aVXpB71GCdW7uA0Uz+8EJy4z0KRGwUo+0cqy9EUw
+         eugA==
+X-Gm-Message-State: AGi0PubgSioDV0WrjHh0q1/gvlSv7ma6VMD85zTEM7jjty3azrAtWLTj
+        HM9tuaB4TyFeBFJDUdS21LZztQ==
+X-Google-Smtp-Source: APiQypKnhe6XWsZGMGHpEQeihQ6bHdJTrY0q2pMJXMds500wkrvQkChdn9JC76eSbx48i4opUzXQoA==
+X-Received: by 2002:a17:90a:d985:: with SMTP id d5mr5793380pjv.171.1588088891211;
+        Tue, 28 Apr 2020 08:48:11 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id v1sm2392709pjs.36.2020.04.28.08.48.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Apr 2020 08:48:10 -0700 (PDT)
+Date:   Tue, 28 Apr 2020 08:48:09 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+Subject: Re: [PATCH V4 4/9] soc: qcom-geni-se: Add interconnect support to
+ fix earlycon crash
+Message-ID: <20200428154809.GH4525@google.com>
+References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
+ <1586946198-13912-5-git-send-email-akashast@codeaurora.org>
+ <20200416003112.GA199755@google.com>
+ <146cf8db-3c09-39a6-2886-bec0db289948@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200422141142.25591-1-wan.ahmad.zainie.wan.mohamad@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <146cf8db-3c09-39a6-2886-bec0db289948@codeaurora.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 10:11:35PM +0800, Wan Ahmad Zainie wrote:
-> This patchset adds support for DesignWare DWC_ssi. This soft IP
-> is an AMBA version 2.0-compliant AHB slave device. Existing driver
-> already supports the older APB version.
-> 
-> Intel Keem Bay SPI controller is using this IP. This patchset is
-> tested on Keem Bay evaluation module board.
+Hi Akash,
 
-Rob, can we get your Ack if everything is okay, please?
+On Tue, Apr 28, 2020 at 03:51:44PM +0530, Akash Asthana wrote:
+> Hi Matthias,
+> 
+> On 4/16/2020 6:01 AM, Matthias Kaehlcke wrote:
+> > Hi Akash,
+> > 
+> > On Wed, Apr 15, 2020 at 03:53:13PM +0530, Akash Asthana wrote:
 
-I have more patches coming to this driver and I would not like to delay this
-series to be applied.
+...
 
+> > > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> > > index 6119090..8c5d97c 100644
+> > > --- a/drivers/tty/serial/qcom_geni_serial.c
+> > > +++ b/drivers/tty/serial/qcom_geni_serial.c
+> > > @@ -1090,6 +1090,12 @@ static void qcom_geni_serial_earlycon_write(struct console *con,
+> > >   	__qcom_geni_serial_console_write(&dev->port, s, n);
+> > >   }
+> > > +static int qcom_geni_serial_earlycon_exit(struct console *con)
+> > > +{
+> > > +	geni_remove_earlycon_icc_vote();
+> > > +	return 0;
+> > > +}
+> > > +
+> > >   static int __init qcom_geni_serial_earlycon_setup(struct earlycon_device *dev,
+> > >   								const char *opt)
+> > >   {
+> > > @@ -1135,6 +1141,7 @@ static int __init qcom_geni_serial_earlycon_setup(struct earlycon_device *dev,
+> > >   	writel(stop_bit_len, uport->membase + SE_UART_TX_STOP_BIT_LEN);
+> > >   	dev->con->write = qcom_geni_serial_earlycon_write;
+> > > +	dev->con->exit = qcom_geni_serial_earlycon_exit;
+> > The idea of using the exit handler of the early console to remove the
+> > votes seemed appealing at first, however it has a drawback: the bandwidth
+> > requests in geni_se_probe() are always made when CONFIG_SERIAL_EARLYCON=y,
+> > also when the system doesn't actually use an early console. On such a
+> > system the votes would never be removed.
+> > 
+> > A possible alternative could seem to remove the vote at the end of
+> > qcom_geni_serial_probe() of the 'normal' console, but it has a similar
+> > problem: the system could not even have a normal console. One could
+> > possibly argue that CONFIG_SERIAL_QCOM_GENI_CONSOLE shouldn't be set
+> > on such a system, however it could be enabled to have a console for
+> > development, and in production the same kernel config is used, but
+> > with the console disabled through the device tree.
+> > 
+> > I don't really have a good idea at this point, maybe we just need
+> > something as ugly as a delayed work to remove the votes. Other
+> > suggestions are welcome :)
 > 
-> Changes since v1:
-> - Rework the third patch based on Rob's feedback.
+> I think we can do something like below. Before voting we are checking
+> whether earlyconsole ("qcom_geni") exits or not.  The name is fixed from
+> earlycon declaration file@drivers/tty/serial/qcom_geni_serial.c
 > 
+> OF_EARLYCON_DECLARE(qcom_geni, "qcom,geni-debug-uart",
+>                                 qcom_geni_serial_earlycon_setup);
 > 
-> Wan Ahmad Zainie (7):
->   spi: dw: Fix typo in few registers name
->   spi: dw: Add update_cr0() callback to update CTRLR0
->   dt-bindings: spi: dw-apb-ssi: Convert bindings to json-schema
->   dt-bindings: spi: dw-apb-ssi: Add compatible string for DesignWare
->     DWC_ssi
->   spi: dw: Add support for DesignWare DWC_ssi
->   dt-bindings: spi: dw-apb-ssi: Add Intel Keem Bay support
->   spi: dw: Add support for Intel Keem Bay SPI
+> ====================================================================================
 > 
->  .../bindings/spi/snps,dw-apb-ssi.txt          |  41 ------
->  .../bindings/spi/snps,dw-apb-ssi.yaml         |  72 ++++++++++
->  drivers/spi/spi-dw-mid.c                      |   4 +
->  drivers/spi/spi-dw-mmio.c                     |  57 +++++++-
->  drivers/spi/spi-dw.c                          | 125 +++++++++++++-----
->  drivers/spi/spi-dw.h                          |  25 +++-
->  6 files changed, 243 insertions(+), 81 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -809,6 +809,8 @@ static int geni_se_probe(struct platform_device *pdev)
+>         struct device *dev = &pdev->dev;
+>         struct resource *res;
+>         struct geni_wrapper *wrapper;
+> +       struct console *bcon = NULL;
+
+nit: initialization is not needed
+
+> +       int earlycon_present = 0;
+>         int ret;
 > 
-> -- 
-> 2.17.1
+>         wrapper = devm_kzalloc(dev, sizeof(*wrapper), GFP_KERNEL);
+> @@ -832,6 +834,15 @@ static int geni_se_probe(struct platform_device *pdev)
+>         }
+> 
+>  #ifdef CONFIG_SERIAL_EARLYCON
+> +       if (console_drivers)
+> +               for_each_console(bcon)
+> +                       if (!strcmp(bcon->name, "qcom_geni")) {
+> +                               earlycon_present = 1;
+> +                               break;
+> +                       }
+> +       if(!earlycon_present)
+> +               goto exit;
+> +
+>         wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
+>         if (IS_ERR(wrapper->to_core.path))
+>                 return PTR_ERR(wrapper->to_core.path);
+> @@ -858,6 +869,7 @@ static int geni_se_probe(struct platform_device *pdev)
+>         of_node_put(pdev->dev.of_node);
+>  #endif
+> 
+> +exit:
+>         dev_set_drvdata(dev, wrapper);
+>         dev_dbg(dev, "GENI SE Driver probed\n");
+>         return devm_of_platform_populate(dev);
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+This should work as long as the early console is always set up before
+geni_se is probed, which seems a safe assumption.
