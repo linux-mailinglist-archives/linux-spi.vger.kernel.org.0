@@ -2,78 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9601BCEE3
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Apr 2020 23:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838F71BCFB1
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Apr 2020 00:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726282AbgD1VhT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Apr 2020 17:37:19 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:46569 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726274AbgD1VhS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Apr 2020 17:37:18 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MPXMa-1jqB8k2Rve-00MfDB; Tue, 28 Apr 2020 23:37:12 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Sanjay R Mehta <sanju.mehta@amd.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: spi-amd: remove unused variable
-Date:   Tue, 28 Apr 2020 23:37:02 +0200
-Message-Id: <20200428213711.3643464-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.26.0
+        id S1727089AbgD1WPF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Apr 2020 18:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726559AbgD1WPE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Apr 2020 18:15:04 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B24EC03C1AC;
+        Tue, 28 Apr 2020 15:15:02 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id ms17so123687pjb.0;
+        Tue, 28 Apr 2020 15:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=boJZE6BDXCfHOPHK+WJ/6OwBrwj+STldC97IMfhZp3s=;
+        b=RduMw49iN8JvvnMv/cE3eyIXbNhV/mgQp33cK83pwnb7bh6Ao9JvLoGUByPxtqMS82
+         rsd5SbVostHX49VOHwyQw0dRszKU2VHomVMSwjnpYbDdm96YKzTXACFx/M9saR0PhSGi
+         JZrH0crPabmdbwWVFXDzPSSTjZzUtaCIi2qiURujc/NQXGozlUvy8t6YzFpefcvw7jDw
+         jA5Wpt9xsTrhjo3Vk2KlhW8R0H9/1OWrwvGDkwf+5X7sjs2bkkAmSsss4DU5ifgKNdbS
+         AyzlvcEJGVaGlVHDPb4ju4UaQ0ioEOUeU3beEL7YmIzJ/ZNXpmQAZ6RRi+mf4N8pKUfN
+         BryA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=boJZE6BDXCfHOPHK+WJ/6OwBrwj+STldC97IMfhZp3s=;
+        b=HmBwUO0GcladYROfJvpwNPupiPjyU0NlO1v2nrn+kM9qML5e7P3OZmeSincHBqwI7X
+         3yf02gUXfS3of7ej/cWQb9mjCueD1MqdyPBX3Vim5Y5rbulMbpKN0cNCjrgF7c5NqgRL
+         O3uNfRRL62PRhNeMGuBuyRDazWL4x5M8HoFRGzAalHD8vJS1RZU5XRpR7rkarI7+83Xf
+         PjhaMbSkikHmW8ZOVd4oeeQNyFKS/mnXhmdVjBMMN4Cv7QSWOs7PxcPF7h+Dh+KJi3s2
+         KW8aT8uMHtrWdqrKVrN8ro+OGYF9UKX24KbwI9JuJdF/SXIavUPLzHAmdj3X2ABJm5zD
+         G5fQ==
+X-Gm-Message-State: AGi0PuYn1CKxpgY+HSNssjw7p9Ru/F9r9wSZeLNnHNRPrL5vHp6QkObY
+        TiW4t70UzUXr7XrKXRmWyPk5pQn8tIlEMigJDv2Vh0J+
+X-Google-Smtp-Source: APiQypIW6NH2ApbvCliWq4+GnhFXVj3ODpcigahv4DKl+tO6BF1ebBSrbhk+pudPUmomEsSTYaq2N4bZMhteCmM3CGs=
+X-Received: by 2002:a17:90a:224b:: with SMTP id c69mr7881986pje.8.1588112101148;
+ Tue, 28 Apr 2020 15:15:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:RUUlGlElSt8VH6YuqnzdRtPfaVA3sQMv/NlNARHgl21NMn/5LO8
- VyuPmscDcKLjnGixtTm/+Db0LL+SXiFq3g5Zwmb1lJq7KOLf/GNO7fEZV75YNjVewbIJzy0
- lIJcG6MbX7pZOoKjZZCBWBFDafemn6zR7UH5UMSeoJVZqGxUtCaX8vTVOYqnmzaxE85DgCO
- PcT+tS9OB9Kdcn+RaaSBA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:n9JyFrAgx6k=:qN1Gd//b2P8MBRloIfOtvt
- dUfzGjLDHeP6cPZhMow9nj3k7tk897P/06P5xGv9N6FWsvgz+0P1TqH9uaWEuavYXPdu6EN3d
- TdNKH5BZqDnm/qdQ3BEiEyaL6yaLau+4niqw/yLcYtChmH+QjLb7EAbj9cw2uON9+ruPzo+eD
- /+yiRfhrmXNprMYV/1Wo5bGjHXFucm4m0wI2oeYHpsfLjy44W2mLMNP/akSHF5QzGu7Gw9CGd
- 8rEBSJdSc1dpYH/WASAOshm9L0JrEdMk30y3rlpubSUcrPtICZibMlCAxb4iBmm2L4JQAnoex
- HaZUZEP9sxvY5I3eypROot3BULvG+i3VTIRuLRJ0tmVJPScoTpU/TW2sXSqCc7XHFUq7h++RX
- TS6XvGpzj9YKTGmSgIRCrSw3Szm3QAqdErwlsU+cwafUAmHiv8GDjX50hrVILFVKRPcnL4uil
- 08ZMIDmTi3pfRyp35u34ZUz/DQ7zu2ui4mDOoU9eqMYevb03I6OGrqb8HmTzrmdXcO2G5NqAS
- XRKmUt5h+T+Uu9VuXmIiy+K4qeUxqfcu9aOTpPxMRW1ej26TlmT6C99RSmBoy1z68P4oqENw2
- M6e813U0br8W14MLlLUrXvjPNK4BIba7xu+yRqr143XhD3S5sa8K//gU0NZ9C5bEPeq6urBg+
- 0BwjUOcCIYtBZJrmZmLDxV8WydGzsdtABsMA3GXZdk11VgjpC7IEt2MSm3pVvFE+I+g9u3KDL
- TJofb3qQ6Vg0jSNUMTqFcztWhqxhKhMmy6PBhsioo6Jx1Z3+rSY3+ag6+ep1go2u9F9C2vUBC
- dAtS+imgoRoNZqxSP+LmwkuxXO+Xnir/AZDQv1n3SA5spEiR/w=
+References: <20200422141142.25591-1-wan.ahmad.zainie.wan.mohamad@intel.com>
+ <20200428141449.GV185537@smile.fi.intel.com> <20200428180720.GO5677@sirena.org.uk>
+In-Reply-To: <20200428180720.GO5677@sirena.org.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 29 Apr 2020 01:14:48 +0300
+Message-ID: <CAHp75Vf6OenGTz3Pvg9QQVEygK71E5j-2W-s+0G6dh=QDDfR2Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] spi: dw: Add support for Intel Keem Bay SPI
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This variable was defined in the original version of this file but
-never used, so remove it to avoid the warning:
+On Tue, Apr 28, 2020 at 9:08 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, Apr 28, 2020 at 05:14:49PM +0300, Andy Shevchenko wrote:
+>
+> > Rob, can we get your Ack if everything is okay, please?
+>
+> > I have more patches coming to this driver and I would not like to delay this
+> > series to be applied.
+>
+> If there are problems with the DT binding conversion
 
-drivers/spi/spi-amd.c: In function 'amd_spi_fifo_xfer':
-drivers/spi/spi-amd.c:171:17: error: unused variable 'opcode' [-Werror=unused-variable]
-  171 |  u8 cmd_opcode, opcode = 0;
+We don't know (yet) if there is any problem, that's why I'm asking Rob
+to have a look.
 
-Fixes: bbb336f39efc ("spi: spi-amd: Add AMD SPI controller driver support")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/spi/spi-amd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> it'd be good to
+> make sure the next version of the series that moves it to the last patch
+> so the rest of the series isn't blocked on it.
 
-diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index 0d9debe1386e..c5a16dd44fa3 100644
---- a/drivers/spi/spi-amd.c
-+++ b/drivers/spi/spi-amd.c
-@@ -168,7 +168,7 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
- {
- 	struct spi_master *master = amd_spi->master;
- 	struct spi_transfer *xfer = NULL;
--	u8 cmd_opcode, opcode = 0;
-+	u8 cmd_opcode;
- 	u8 *buf = NULL;
- 	u32 m_cmd = 0;
- 	u32 i = 0;
+
+
 -- 
-2.26.0
-
+With Best Regards,
+Andy Shevchenko
