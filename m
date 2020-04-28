@@ -2,104 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C34711BB20B
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Apr 2020 01:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F4D1BB375
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Apr 2020 03:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbgD0XdF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Apr 2020 19:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726233AbgD0XdD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Apr 2020 19:33:03 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2698DC03C1A7
-        for <linux-spi@vger.kernel.org>; Mon, 27 Apr 2020 16:33:02 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id g2so7600239plo.3
-        for <linux-spi@vger.kernel.org>; Mon, 27 Apr 2020 16:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=psE/TVWQ8r0hHEn8TaByg+EQGlqN2iYLLSNjuoRCa9k=;
-        b=b8SHhWvZTnoeLLp7IhgorcpvGtX2VBtc6vtxpVWuQoeDabjj0nAmuP6/TiuQUuiRNh
-         etINFZ53Wf2AxOzz/nSnynJ4yALdIG4FmtD9L7neNUYUJq9Z2xbTJRF74DW8l6RrICQy
-         4m3riY6RULFDgxpguilcjn9XbHCWm0rHcTDJs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=psE/TVWQ8r0hHEn8TaByg+EQGlqN2iYLLSNjuoRCa9k=;
-        b=t561mfVGVEHkQi1NRDDM43nG5ij0UfdHVjdYI5BJaHk/d0KpsQHLVfUKCndEbL4Ra0
-         11Of+7QnTeCIiWhcyuMaCFjhQSdd7rhLVXg2/xEJm1ByZ8rfH3kapgnTpbuAdgYCAza/
-         KOWMIZJyFW2Jez2pMLhYRKkrMdMCdKBQ87bVe/zIchJTOo6DTrlrqknF0D7q/9uf/Y6+
-         uip7qA6B1xM356jVCMlVFYkx7Tmjmpnuo04tn8Bwy7zPYlgEcD/xDKTcykzgHzSB03Ta
-         nNS2Oh2/SxpENXMKBh4g5/fynhj0wsDAdpkQQYOefC/1z/4ssOQlqqPZUm8f78VthtWW
-         t56A==
-X-Gm-Message-State: AGi0Pua/D5sQ9hdpqLwSdLSjlrmHsouUddWr+dsOqiXIhdlnsu99Iqzt
-        +eT1/KhVaYjD4PIW5x2iBQuSsQ==
-X-Google-Smtp-Source: APiQypIltu09rqzr9JI0Ay36qw8wC98n1LszdiP6AYWaeNG61gnrxNMq7cNJFmvmNXJIZr8u6f1mqQ==
-X-Received: by 2002:a17:902:a98a:: with SMTP id bh10mr24753613plb.340.1588030381558;
-        Mon, 27 Apr 2020 16:33:01 -0700 (PDT)
-Received: from evgreen-glaptop.cheshire.ch ([2601:646:c780:1404:1c5a:73fa:6d5a:5a3c])
-        by smtp.gmail.com with ESMTPSA id u15sm308980pjm.47.2020.04.27.16.33.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 27 Apr 2020 16:33:00 -0700 (PDT)
-From:   Evan Green <evgreen@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Shobhit Srivastava <shobhit.srivastava@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: pxa2xx: Apply CS clk quirk to BXT
-Date:   Mon, 27 Apr 2020 16:32:48 -0700
-Message-Id: <20200427163238.1.Ib1faaabe236e37ea73be9b8dcc6aa034cb3c8804@changeid>
-X-Mailer: git-send-email 2.24.1
+        id S1726251AbgD1BeN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Apr 2020 21:34:13 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3315 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726233AbgD1BeM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 27 Apr 2020 21:34:12 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id D0A9999B00C42AE7E8BD;
+        Tue, 28 Apr 2020 09:34:09 +0800 (CST)
+Received: from [10.65.58.147] (10.65.58.147) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Tue, 28 Apr 2020
+ 09:34:07 +0800
+Subject: Re: [PATCH v4 05/16] mtd: spi-nor: default to address width of 3 for
+ configurable widths
+To:     Pratyush Yadav <me@yadavpratyush.com>
+References: <20200424184410.8578-1-p.yadav@ti.com>
+ <20200424184410.8578-6-p.yadav@ti.com>
+ <6b6384ad-d37a-eea6-af29-322e83924912@hisilicon.com>
+ <20200427172336.ihezwq3wn75m7k3l@yadavpratyush.com>
+CC:     Pratyush Yadav <p.yadav@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Sekhar Nori <nsekhar@ti.com>
+From:   Yicong Yang <yangyicong@hisilicon.com>
+Message-ID: <f6a593ab-8685-18e0-04c8-25edd1cab11a@hisilicon.com>
+Date:   Tue, 28 Apr 2020 09:34:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200427172336.ihezwq3wn75m7k3l@yadavpratyush.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.65.58.147]
+X-CFilter-Loop: Reflected
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-With a couple allies at Intel, and much badgering, I got confirmation
-from Intel that at least BXT suffers from the same SPI chip-select
-issue as Cannonlake (and beyond). The issue being that after going
-through runtime suspend/resume, toggling the chip-select line without
-also sending data does nothing.
+Hi Pratyush,
 
-Add the quirk to BXT to briefly toggle dynamic clock gating off and
-on, forcing the fabric to wake up enough to notice the CS register
-change.
 
-Signed-off-by: Evan Green <evgreen@chromium.org>
-Cc: Shobhit Srivastava <shobhit.srivastava@intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
+On 2020/4/28 1:23, Pratyush Yadav wrote:
+> Hi Yicong,
+>
+> On 26/04/20 11:53AM, Yicong Yang wrote:
+>> On 2020/4/25 2:43, Pratyush Yadav wrote:
+>>> JESD216D.01 says that when the address width can be 3 or 4, it defaults
+>>> to 3 and enters 4-byte mode when given the appropriate command. So, when
+>>> we see a configurable width, default to 3 and let flash that default to
+>>> 4 change it in a post-bfpt fixup.
+>>>
+>>> This fixes SMPT parsing for flashes with configurable address width. If
+>>> the SMPT descriptor advertises variable address width, we use
+>>> nor->addr_width as the address width. But since it was not set to any
+>>> value from the SFDP table, the read command uses an address width of 0,
+>>> resulting in an incorrect read being issued.
+>>>
+>>> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+>>> ---
+>>>  drivers/mtd/spi-nor/sfdp.c | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
+>>> index f917631c8110..5cecc4ba2141 100644
+>>> --- a/drivers/mtd/spi-nor/sfdp.c
+>>> +++ b/drivers/mtd/spi-nor/sfdp.c
+>>> @@ -460,6 +460,7 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
+>>>  	/* Number of address bytes. */
+>>>  	switch (bfpt.dwords[BFPT_DWORD(1)] & BFPT_DWORD1_ADDRESS_BYTES_MASK) {
+>>>  	case BFPT_DWORD1_ADDRESS_BYTES_3_ONLY:
+>>> +	case BFPT_DWORD1_ADDRESS_BYTES_3_OR_4:
+>>>  		nor->addr_width = 3;
+>>>  		break;
+>> Should we also assign address width to 3 in default condition. At least we should not
+>> leave it uninitialized here.
+> The default condition would be taken when this field is 3. The value 3 
+> is reserved, and so no current device should use this value. That said, 
+> I don't see any downsides of doing so. If the value 3 means something 
+> else in later revisions of the standard, this code would need to change 
+> anyway. If not, we would use a relatively sane default for devices with 
+> a faulty BFPT.
 
-I don't actually have a BXT (Broxton/Apollolake?) system to test this.
-To be honest I suspect the issue is there in older generations as well,
-but I couldn't get Intel to confirm that, so this seemed like the
-only safe change.
----
- drivers/spi/spi-pxa2xx.c | 1 +
- 1 file changed, 1 insertion(+)
+The purpose is to set one possible value which may be used later in parsing smpt.
+In current driver, if we do nothing with the post-bfpt fixup, then the width will
+be unset. Otherwise, maybe the width can also be set in spi_nor_smpt_addr_width()
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 73d2a65d0b6ef..20dcbd35611a7 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -150,6 +150,7 @@ static const struct lpss_config lpss_platforms[] = {
- 		.tx_threshold_hi = 48,
- 		.cs_sel_shift = 8,
- 		.cs_sel_mask = 3 << 8,
-+		.cs_clk_stays_gated = true,
- 	},
- 	{	/* LPSS_CNL_SSP */
- 		.offset = 0x200,
--- 
-2.24.1
+    default:
+   +    if (!nor->addr_width)
+   +        nor->addr_width = 3;
+        return nor->addr_width;
+
+But set when parsing bfpt seems more reasonable.
+
+> I haven't received any comments on my series so far. If end up having to
+> re-roll it, I will add this change. Otherwise, I'm not sure if it is a 
+> good idea to re-roll a 16-patch series for a one liner that isn't fixing 
+> some major bug. In that case, maybe you can send an independent patch 
+> that does this after mine is merged?
+
+Fine. :)
+
+Regards,
+Yicong
+
+
 
