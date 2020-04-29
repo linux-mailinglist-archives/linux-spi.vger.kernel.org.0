@@ -2,82 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 187281BD948
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Apr 2020 12:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC6D1BD990
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Apr 2020 12:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726516AbgD2KQO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Apr 2020 06:16:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40904 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726345AbgD2KQO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 29 Apr 2020 06:16:14 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4CE8B2073E;
-        Wed, 29 Apr 2020 10:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588155373;
-        bh=q8i4eWL7WdqhySE9qkdDEO2oN95Vt5XxfTZCkIvXy+s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tdxDrRn1TW2KLfF4k9mgB5bV7cEq6S93WgiFK+Fo6ejC21q8pzgOg4aG1W6Bg3Rm/
-         7p+T4uzWtcd/q4ffg78OTPECgkMa0fEkA+oGCVWGAI4YsIvNhjaxWbteD3WSLwA1wk
-         M6uHTLt0iiysB63VMqcaj40xyIx85v0pd1ChIZJA=
-Date:   Wed, 29 Apr 2020 11:16:11 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 0/7] spi: dw: Add support for Intel Keem Bay SPI
-Message-ID: <20200429101611.GF4201@sirena.org.uk>
-References: <20200422141142.25591-1-wan.ahmad.zainie.wan.mohamad@intel.com>
- <20200428141449.GV185537@smile.fi.intel.com>
- <20200428180720.GO5677@sirena.org.uk>
- <CAHp75Vf6OenGTz3Pvg9QQVEygK71E5j-2W-s+0G6dh=QDDfR2Q@mail.gmail.com>
+        id S1726830AbgD2K04 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Apr 2020 06:26:56 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:37054 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726808AbgD2K0v (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 29 Apr 2020 06:26:51 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03TAIPhm031773;
+        Wed, 29 Apr 2020 12:26:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=KfrwcIEAAxzZTZPX1fo//g25aXA6YdvAOUL28w3PuTE=;
+ b=Lay7I5hExdMtnFVTkpr+NIhd2XgmCPQPOzT27AEFV99+bVAqiBZeiUB2Joj3M3RjD/xs
+ Jy5QZWjLgUavyRTcgyeWCs8MLApjdeKbDWfpXV8/GRXeGKgWEB+LKgl4K9ssk3PfEWe5
+ Di141+m41OY8nri1Hk0XZSVbHYbIT9tKBehSUNqbwLXyrDpNFOHem4N7nngpN4GxCsWO
+ obcIPKI6Q3XfDkYvGbRslEO6zM8XRrO8X6KyyWJf+BPcVRT1NI/fEJF6LJiYpkbeOFLc
+ fLgsmYw/hPbaoTnJYxjzIIlZK67iaFk1i4ui3Ze39c4Qt4Nz1/6fZXMgFteDXo2PrNu6 8Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 30mhjwwrfg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Apr 2020 12:26:29 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B3BA0100034;
+        Wed, 29 Apr 2020 12:26:28 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag6node3.st.com [10.75.127.18])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A44F820C7A6;
+        Wed, 29 Apr 2020 12:26:28 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SFHDAG6NODE3.st.com (10.75.127.18)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Apr 2020 12:26:28
+ +0200
+From:   <patrice.chotard@st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+CC:     <mcoquelin.stm32@gmail.com>, <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Patrice Chotard <patrice.chotard@st.com>
+Subject: spi: stm32-qspi: Fix unbalanced pm_runtime_enable issue
+Date:   Wed, 29 Apr 2020 12:26:25 +0200
+Message-ID: <20200429102625.25974-1-patrice.chotard@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xkXJwpr35CY/Lc3I"
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vf6OenGTz3Pvg9QQVEygK71E5j-2W-s+0G6dh=QDDfR2Q@mail.gmail.com>
-X-Cookie: I know how to do SPECIAL EFFECTS!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG6NODE3.st.com
+ (10.75.127.18)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-29_03:2020-04-29,2020-04-29 signatures=0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Patrice Chotard <patrice.chotard@st.com>
 
---xkXJwpr35CY/Lc3I
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Issue detected by unbinding/binding the stm32 qspi driver as following:
 
-On Wed, Apr 29, 2020 at 01:14:48AM +0300, Andy Shevchenko wrote:
-> On Tue, Apr 28, 2020 at 9:08 PM Mark Brown <broonie@kernel.org> wrote:
+root@stm32mp2:~# echo 40430000.spi > /sys/bus/platform/drivers/stm32-qspi/404300
+00.spi/driver/unbind
+root@stm32mp2:~# echo 40430000.spi > /sys/bus/platform/drivers/stm32-qspi/bind
+[  969.864021] stm32-qspi 40430000.spi: Unbalanced pm_runtime_enable!
+[  970.225161] spi-nor spi0.0: mx66u51235f (65536 Kbytes)
+[  970.935721] spi-nor spi0.1: mx66u51235f (65536 Kbytes)
 
-> > If there are problems with the DT binding conversion
+Fixes: 9d282c17b023 ("spi: stm32-qspi: Add pm_runtime support")
 
-> We don't know (yet) if there is any problem, that's why I'm asking Rob
-> to have a look.
+Signed-off-by: Patrice Chotard <patrice.chotard@st.com>
+---
+ drivers/spi/spi-stm32-qspi.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Yes, what I am saying is that in the event there are problems the
-conversion should be split out and done separately.
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 2f2ea2c42d6e..3c44bb2fd9b1 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -555,10 +555,15 @@ static const struct spi_controller_mem_ops stm32_qspi_mem_ops = {
+ 
+ static void stm32_qspi_release(struct stm32_qspi *qspi)
+ {
++	pm_runtime_get_sync(qspi->dev);
+ 	/* disable qspi */
+ 	writel_relaxed(0, qspi->io_base + QSPI_CR);
+ 	stm32_qspi_dma_free(qspi);
+ 	mutex_destroy(&qspi->lock);
++	pm_runtime_put_noidle(qspi->dev);
++	pm_runtime_disable(qspi->dev);
++	pm_runtime_set_suspended(qspi->dev);
++	pm_runtime_dont_use_autosuspend(qspi->dev);
+ 	clk_disable_unprepare(qspi->clk);
+ }
+ 
+-- 
+2.17.1
 
---xkXJwpr35CY/Lc3I
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6pU+oACgkQJNaLcl1U
-h9AuBAf/Q5h76n7Dg79KyanCi1jFT6YIpfbNPeqnl1BLqVoHg821tSkLLTxF1MID
-uKVOjYxkMDAMqdVwWap7nY3IamnZNVIG4zJ90irC9QQCUfh8UxjzOV3+uQpOBdIQ
-e8S2E/Mk3oRepFCmrX1jt9SQrTX7c3O2msmXgpAa5Oi9oYJIuEOJ3mmRPNP6VGLQ
-79SXlAkBAVdNLRDgOKKZ1DhGFA2okxlhcn8oyT1QmW8ulgb+J+udq9VZHBX6g/dX
-4Etu4kYlUFd+cg28el5vaDpoDpTsKs/UPjKo4lsFUK0BDD7hzmqF0jgFzA2jLKRc
-sGknMHYQ5LvQsWWhjCYpLeuDpMBVAQ==
-=0eWC
------END PGP SIGNATURE-----
-
---xkXJwpr35CY/Lc3I--
