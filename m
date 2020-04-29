@@ -2,39 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8FF1BD8D0
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Apr 2020 11:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187281BD948
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Apr 2020 12:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbgD2JyK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 29 Apr 2020 05:54:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41444 "EHLO mail.kernel.org"
+        id S1726516AbgD2KQO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 29 Apr 2020 06:16:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40904 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726355AbgD2JyK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 29 Apr 2020 05:54:10 -0400
+        id S1726345AbgD2KQO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 29 Apr 2020 06:16:14 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 539BD20775;
-        Wed, 29 Apr 2020 09:54:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4CE8B2073E;
+        Wed, 29 Apr 2020 10:16:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588154050;
-        bh=452VjGK66kSXwxqtayitNeyhDtlrc3sCAPk5XNOPFIE=;
+        s=default; t=1588155373;
+        bh=q8i4eWL7WdqhySE9qkdDEO2oN95Vt5XxfTZCkIvXy+s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gPwVpsMn7ZacqtQpHdfwWiIWdEva/CPwf+m9xczA9aV0gIBySjkTWIg3Ykyy/CW13
-         DNjK8qVUm5AyFWGLBjbicAnfMSBe/dia6dpUYqMA6csT9ibMQfUOa51IrvgXifBv1U
-         6A1gDshRLSkF9NA2FlCphsEJxfnDr2tk63MCexhg=
-Date:   Wed, 29 Apr 2020 10:54:07 +0100
+        b=tdxDrRn1TW2KLfF4k9mgB5bV7cEq6S93WgiFK+Fo6ejC21q8pzgOg4aG1W6Bg3Rm/
+         7p+T4uzWtcd/q4ffg78OTPECgkMa0fEkA+oGCVWGAI4YsIvNhjaxWbteD3WSLwA1wk
+         M6uHTLt0iiysB63VMqcaj40xyIx85v0pd1ChIZJA=
+Date:   Wed, 29 Apr 2020 11:16:11 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Zheng Bin <zhengbin13@huawei.com>
-Cc:     sanju.mehta@amd.com, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-amd: remove unused variable 'opcode'
-Message-ID: <20200429095407.GB4201@sirena.org.uk>
-References: <20200429013018.34046-1-zhengbin13@huawei.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 0/7] spi: dw: Add support for Intel Keem Bay SPI
+Message-ID: <20200429101611.GF4201@sirena.org.uk>
+References: <20200422141142.25591-1-wan.ahmad.zainie.wan.mohamad@intel.com>
+ <20200428141449.GV185537@smile.fi.intel.com>
+ <20200428180720.GO5677@sirena.org.uk>
+ <CAHp75Vf6OenGTz3Pvg9QQVEygK71E5j-2W-s+0G6dh=QDDfR2Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="neYutvxvOLaeuPCA"
+        protocol="application/pgp-signature"; boundary="xkXJwpr35CY/Lc3I"
 Content-Disposition: inline
-In-Reply-To: <20200429013018.34046-1-zhengbin13@huawei.com>
+In-Reply-To: <CAHp75Vf6OenGTz3Pvg9QQVEygK71E5j-2W-s+0G6dh=QDDfR2Q@mail.gmail.com>
 X-Cookie: I know how to do SPECIAL EFFECTS!!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
@@ -43,32 +50,34 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---neYutvxvOLaeuPCA
-Content-Type: text/plain; charset=utf-8
+--xkXJwpr35CY/Lc3I
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 29, 2020 at 09:30:18AM +0800, Zheng Bin wrote:
-> Fixes gcc '-Wunused-variable' warning:
->=20
-> drivers/spi/spi-amd.c:171:17: warning: unused variable =E2=80=98opcode=E2=
-=80=99 [-Wunused-variable]
+On Wed, Apr 29, 2020 at 01:14:48AM +0300, Andy Shevchenko wrote:
+> On Tue, Apr 28, 2020 at 9:08 PM Mark Brown <broonie@kernel.org> wrote:
 
-This has already been fixed.
+> > If there are problems with the DT binding conversion
 
---neYutvxvOLaeuPCA
+> We don't know (yet) if there is any problem, that's why I'm asking Rob
+> to have a look.
+
+Yes, what I am saying is that in the event there are problems the
+conversion should be split out and done separately.
+
+--xkXJwpr35CY/Lc3I
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6pTr4ACgkQJNaLcl1U
-h9CkAQf+IKXz6LRVF8IUR2H69XiPXB1wfQ1e1LUpitgHRceNMbJxLuIBoTzFAjEY
-JBcMj52tl37rJtsGZHEJswjlgrCA5NdnLvvjXIgXSZffkz5OmjJlQhJ+jqMNTIhc
-1dqS2AIISchLxd3zFxs2FkdcRO87WybcCCP/Rqc/vfijnW6E/ypMwLsMJOiFBsq/
-P53ZMbM1atAVLpMJtPzSy2T7X41ErfdnUbw1dGHt+mw8sK8q8fcEOpkXJiCN/+Yg
-sVNyrJl1xo+mcbsz5XbaAsgi2Ov19vORFSeEigv7WdUo40uaVqku2Uj167lYYsBS
-b15lo+WXaZGwLzs59mksXJumu2V9VA==
-=eGJ8
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6pU+oACgkQJNaLcl1U
+h9AuBAf/Q5h76n7Dg79KyanCi1jFT6YIpfbNPeqnl1BLqVoHg821tSkLLTxF1MID
+uKVOjYxkMDAMqdVwWap7nY3IamnZNVIG4zJ90irC9QQCUfh8UxjzOV3+uQpOBdIQ
+e8S2E/Mk3oRepFCmrX1jt9SQrTX7c3O2msmXgpAa5Oi9oYJIuEOJ3mmRPNP6VGLQ
+79SXlAkBAVdNLRDgOKKZ1DhGFA2okxlhcn8oyT1QmW8ulgb+J+udq9VZHBX6g/dX
+4Etu4kYlUFd+cg28el5vaDpoDpTsKs/UPjKo4lsFUK0BDD7hzmqF0jgFzA2jLKRc
+sGknMHYQ5LvQsWWhjCYpLeuDpMBVAQ==
+=0eWC
 -----END PGP SIGNATURE-----
 
---neYutvxvOLaeuPCA--
+--xkXJwpr35CY/Lc3I--
