@@ -2,190 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA0D1C1F87
-	for <lists+linux-spi@lfdr.de>; Fri,  1 May 2020 23:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13961C2C01
+	for <lists+linux-spi@lfdr.de>; Sun,  3 May 2020 14:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgEAVZu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 May 2020 17:25:50 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42622 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbgEAVZu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 May 2020 17:25:50 -0400
-Received: by mail-ot1-f65.google.com with SMTP id m18so3630801otq.9;
-        Fri, 01 May 2020 14:25:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IODh8vaskvY8EIkReJH8wMEH0J80lOImbjARnLzzvcQ=;
-        b=elMrq0mXwjDSMLe6oddIdoCpFVPAuhPOBnTwmJgHoFY2JwT+kmi6oejqKlOzAA7+B7
-         xIyEfvAPSZt7gyR3Lce48cgsTcRR8mO4KWX2Ktl1gSLb6VhHJOxDzbcswQTEPGHGNDkr
-         B5z5R9y6GDWPZThGrPjsGq9gOuV85jzEDYP6ixS4VsGqreKVBQgnq8fNNYqd10L7lBmX
-         rRKc2FUItMx+DShHq8k+dhbCzISClfKu8+MKq8/FD8/sVZaB7lKTw7sVpMcnyCs/wjM/
-         cp98W3raKjUGiMDdgQmDmEf36sjpi0iN6ugwlK2gbaTUOAtgs7AXwe8scsN8mpHGLy6S
-         fHWg==
-X-Gm-Message-State: AGi0Pubk+T4kJyB1CS5FplyVmYNIE1sCwEWUhwPxvJ7WjSLFmrlOIcOh
-        /GcHbWvPr3vBT2Cq6S4lTA==
-X-Google-Smtp-Source: APiQypK6GnwgIp5q8Fl8YttocWPKhKXxC4m7JVG3OzxdYotva83r0Pcn/EVz6ZtR+YXkGyZH07amqQ==
-X-Received: by 2002:a9d:7f04:: with SMTP id j4mr5397739otq.185.1588368349023;
-        Fri, 01 May 2020 14:25:49 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b19sm269926oii.1.2020.05.01.14.25.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 May 2020 14:25:48 -0700 (PDT)
-Received: (nullmailer pid 25490 invoked by uid 1000);
-        Fri, 01 May 2020 21:25:48 -0000
-Date:   Fri, 1 May 2020 16:25:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     devicetree@vger.kernel.org, Mason Yang <masonccyang@mxic.com.tw>,
-        linux-spi@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: memory: document Renesas RPC-IF
- bindings
-Message-ID: <20200501212547.GB15294@bogus>
-References: <812e6e58-d13f-3f44-5f55-22266b690c57@cogentembedded.com>
- <116683d1-d402-4d7f-3357-1c8cde807076@cogentembedded.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <116683d1-d402-4d7f-3357-1c8cde807076@cogentembedded.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727112AbgECMFF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 3 May 2020 08:05:05 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:25946 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728230AbgECMFE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 May 2020 08:05:04 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1588507504; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=lJeH6WhvvJOWKBQ8I6y7Fc+5VmlJtLxc6UHy0dmcq38=; b=qY2ITY5WBQl8QyBH19ayGg/alFTM3FSgG46bDdCLGXLZDZ6g9/6RG8Sl5fTIJ5wvbKMLRJxc
+ QTnmtxAGJRfhVXBhE2x2aJFWuLj6Zh4P4gOVNHTPWFvoNqjEeDMTcMKpzECMXrX26OUJ4T6L
+ z8ma4r7yElUN+zYcTd4FmEasiDo=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5eaeb36f.7f852fb8ca78-smtp-out-n03;
+ Sun, 03 May 2020 12:05:03 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8CA20C433D2; Sun,  3 May 2020 12:05:02 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1F4D8C43637;
+        Sun,  3 May 2020 12:04:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1F4D8C43637
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     viresh.kumar@linaro.org, sboyd@kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        Mark Brown <broonie@kernel.org>,
+        Alok Chauhan <alokc@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH v4 2/6] spi: spi-geni-qcom: Use OPP API to set clk/perf state
+Date:   Sun,  3 May 2020 17:34:25 +0530
+Message-Id: <1588507469-31889-3-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1588507469-31889-1-git-send-email-rnayak@codeaurora.org>
+References: <1588507469-31889-1-git-send-email-rnayak@codeaurora.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Apr 30, 2020 at 11:47:25PM +0300, Sergei Shtylyov wrote:
-> Renesas Reduced Pin Count Interface (RPC-IF) allows a SPI flash or
-> HyperFlash connected to the SoC to be accessed via the external address
-> space read mode or the manual mode.
-> 
-> Document the device tree bindings for the Renesas RPC-IF found in the R-Car
-> gen3 SoCs.
-> 
-> Based on the original patch by Mason Yang <masonccyang@mxic.com.tw>.
-> 
-> Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-> 
-> ---
-> Changes in version 2:
-> - rewrote the bindings in YAML.
-> 
->  Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml |   88 ++++++++++
+geni spi needs to express a perforamnce state requirement on CX
+depending on the frequency of the clock rates. Use OPP table from
+DT to register with OPP framework and use dev_pm_opp_set_rate() to
+set the clk/perf state.
 
-Not where we normally put SPI flash controllers...
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Alok Chauhan <alokc@codeaurora.org>
+Cc: Akash Asthana <akashast@codeaurora.org>
+Cc: linux-spi@vger.kernel.org
+---
+This patch has a dependency on the 'PATCH 1/6' in this series,
+due to the changes in include/linux/qcom-geni-se.h
+Its ideal if this and the previous patch gets merged via the
+msm tree (once reviewed and ack'ed)
+Greg has already responded he is fine with it for serial.
 
->  1 file changed, 88 insertions(+)
-> 
-> Index: linux/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-> ===================================================================
-> --- /dev/null
-> +++ linux/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0)
+ drivers/spi/spi-geni-qcom.c | 26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
 
-Dual license new bindings:
-
-(GPL-2.0-only OR BSD-2-Clause)
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/memory-controllers/renesas,rpc-if.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas Reduced Pin Count Interface (RPC-IF)
-> +
-> +maintainers:
-> +  - Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-> +
-> +description: |
-> +  Renesas RPC-IF allows a SPI flash or HyperFlash connected to the SoC to
-> +  be accessed via the external address space read mode or the manual mode.
-> +
-> +  The flash chip itself should be represented by a subnode of the RPC-IF node.
-> +  The flash interface is selected based on the "compatible" property of this
-> +  subnode:
-> +  - if it contains "jedec,spi-nor", then SPI is used;
-> +  - if it contains "cfi-flash", then HyperFlash is used.
-> +
-> +allOf:
-> +  - $ref: "/schemas/spi/spi-controller.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +        renesas,r8a77980-rpc-if # device is a part of R8A77980 SoC
-> +	renesas,r8a77995-rpc-if # device is a part of R8A77995 SoC
-
-Not valid yaml with tab and not valid json-schema as 'enum' is a list 
-(needs '-').
-
-> +      - enum:
-> +        renesas,rcar-gen3-rpc-if # a generic R-Car gen3 device
-> +
-> +  reg:
-> +    items:
-> +       - description: RPC-IF registers
-> +       - description: direct mapping read mode area
-> +       - description: write buffer area
-
-Wrong indentation.
-
-> +
-> +  reg-names:
-> +    items:
-> +      - const: regs
-> +      - const: dirmap
-> +      - const: wbuf
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^.*@[0-9a-f]+$":
-
-^flash@... if you're that restrictive.
-
-> +    type: object
-> +    properties:
-> +      compatible:
-> +        oneOf:
-> +          - const: cfi-flash
-> +          - const: jedec,spi-nor
-
-enum is better than oneOf+const.
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/renesas-cpg-mssr.h>
-> +    #include <dt-bindings/power/r8a77995-sysc.h>
-> +
-> +    spi@ee200000 {
-> +      compatible = "renesas,r8a77995-rpc-if", "renesas,rcar-gen3-rpc-if";
-> +      reg = <0 0xee200000 0 0x200>,
-> +            <0 0x08000000 0 0x4000000>,
-> +            <0 0xee208000 0 0x100>;
-> +      reg-names = "regs", "dirmap", "wbuf";
-> +      clocks = <&cpg CPG_MOD 917>;
-> +      power-domains = <&sysc R8A77995_PD_ALWAYS_ON>;
-> +      resets = <&cpg 917>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      flash@0 {
-> +        compatible = "jedec,spi-nor";
-> +        reg = <0>;
-> +        spi-max-frequency = <40000000>;
-> +        spi-tx-bus-width = <1>;
-> +        spi-rx-bus-width = <1>;
-> +      };
-> +    };
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index c397242..bc2916f 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -7,6 +7,7 @@
+ #include <linux/log2.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_opp.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/qcom-geni-se.h>
+ #include <linux/spi/spi.h>
+@@ -95,7 +96,6 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+ {
+ 	unsigned long sclk_freq;
+ 	unsigned int actual_hz;
+-	struct geni_se *se = &mas->se;
+ 	int ret;
+ 
+ 	ret = geni_se_clk_freq_match(&mas->se,
+@@ -112,9 +112,9 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+ 
+ 	dev_dbg(mas->dev, "req %u=>%u sclk %lu, idx %d, div %d\n", speed_hz,
+ 				actual_hz, sclk_freq, *clk_idx, *clk_div);
+-	ret = clk_set_rate(se->clk, sclk_freq);
++	ret = dev_pm_opp_set_rate(mas->dev, sclk_freq);
+ 	if (ret)
+-		dev_err(mas->dev, "clk_set_rate failed %d\n", ret);
++		dev_err(mas->dev, "dev_pm_opp_set_rate failed %d\n", ret);
+ 	return ret;
+ }
+ 
+@@ -561,6 +561,17 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	mas->se.wrapper = dev_get_drvdata(dev->parent);
+ 	mas->se.base = base;
+ 	mas->se.clk = clk;
++	mas->se.opp_table = dev_pm_opp_set_clkname(&pdev->dev, "se");
++	if (IS_ERR(mas->se.opp_table))
++		return PTR_ERR(mas->se.opp_table);
++	/* OPP table is optional */
++	ret = dev_pm_opp_of_add_table(&pdev->dev);
++	if (!ret) {
++		mas->se.has_opp_table = true;
++	} else if (ret != -ENODEV) {
++		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
++		return ret;
++	}
+ 
+ 	spi->bus_num = -1;
+ 	spi->dev.of_node = dev->of_node;
+@@ -596,6 +607,9 @@ static int spi_geni_probe(struct platform_device *pdev)
+ spi_geni_probe_runtime_disable:
+ 	pm_runtime_disable(dev);
+ 	spi_master_put(spi);
++	if (mas->se.has_opp_table)
++		dev_pm_opp_of_remove_table(&pdev->dev);
++	dev_pm_opp_put_clkname(mas->se.opp_table);
+ 	return ret;
+ }
+ 
+@@ -604,6 +618,9 @@ static int spi_geni_remove(struct platform_device *pdev)
+ 	struct spi_master *spi = platform_get_drvdata(pdev);
+ 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+ 
++	if (mas->se.has_opp_table)
++		dev_pm_opp_of_remove_table(&pdev->dev);
++	dev_pm_opp_put_clkname(mas->se.opp_table);
+ 	/* Unregister _before_ disabling pm_runtime() so we stop transfers */
+ 	spi_unregister_master(spi);
+ 
+@@ -617,6 +634,9 @@ static int __maybe_unused spi_geni_runtime_suspend(struct device *dev)
+ 	struct spi_master *spi = dev_get_drvdata(dev);
+ 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+ 
++	/* Drop the performance state vote */
++	dev_pm_opp_set_rate(dev, 0);
++
+ 	return geni_se_resources_off(&mas->se);
+ }
+ 
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
