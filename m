@@ -2,157 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFED1C2C0B
-	for <lists+linux-spi@lfdr.de>; Sun,  3 May 2020 14:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304A71C2EF6
+	for <lists+linux-spi@lfdr.de>; Sun,  3 May 2020 22:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728358AbgECMFW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 3 May 2020 08:05:22 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:35942 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728355AbgECMFW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 May 2020 08:05:22 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1588507521; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=tgtFxH0T/3jNOCd/ZT9IgGG1bh36Q8+QFTlbx43nojc=; b=NR3iFC0n7ahgx5By9WPJtZkpUSzKJ8i42Jb1eecU8Q+/CRvgAkV/KckjO1IULa5TuhAFmKZp
- vt9nWuMFr1TVaK+Zh2cYzGtmeFDGaQGJq0oaZUYTBTg9h7lPeGHlaeo6kZKw9o4pQdM2SBFn
- f1cySGnbn8yQUoySteMxfVSBvN4=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5eaeb381.7f0f97ac9c00-smtp-out-n01;
- Sun, 03 May 2020 12:05:21 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D7278C44798; Sun,  3 May 2020 12:05:19 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 55500C44799;
-        Sun,  3 May 2020 12:05:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 55500C44799
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-To:     viresh.kumar@linaro.org, sboyd@kernel.org,
-        bjorn.andersson@linaro.org, agross@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        Mark Brown <broonie@kernel.org>,
-        Alok Chauhan <alokc@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH v4 6/6] spi: spi-qcom-qspi: Use OPP API to set clk/perf state
-Date:   Sun,  3 May 2020 17:34:29 +0530
-Message-Id: <1588507469-31889-7-git-send-email-rnayak@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588507469-31889-1-git-send-email-rnayak@codeaurora.org>
-References: <1588507469-31889-1-git-send-email-rnayak@codeaurora.org>
+        id S1729037AbgECUA5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 3 May 2020 16:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728207AbgECUA5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 May 2020 16:00:57 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE787C061A0E;
+        Sun,  3 May 2020 13:00:56 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id x17so18423584wrt.5;
+        Sun, 03 May 2020 13:00:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=QqRdtHtAi8l/8c9aZkszbUa8kmMqeeh3ZFLZmpwUXmw=;
+        b=rsR9nTkgNRQ+kOj8RXQMdPcb5bI+0UB8BKi8B9ep9Fqf9BS/e8KvpLxdg1mVz4ugaU
+         4APvVLy9nGW/n6+rSDItFmATfsqLJLl/9LICi9eMNdXubXIXs57PsYy93bHAlhPj4mp5
+         d1S6ahLhalEtMEIv1t3YNmwqb55REwYOa3Im+f6Daq5d+8T0T0CSmzfFQSXALCv0EeZP
+         0KaPRpqYq+BPrpvJP8L1mE/H7707aUlh2To2vNkqES7iOLcW17IKBq6fBR45BHcFRLlp
+         0F9RrnhzOnUxXvegK2atG9ikLrHzK5Piz/vCm5cAmlrT58VOwNEDZTGp0vd6RX2PwKCL
+         79dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=QqRdtHtAi8l/8c9aZkszbUa8kmMqeeh3ZFLZmpwUXmw=;
+        b=Ldw0+G5+nGY42Om1gbI7AUsF8AHFzR7R49GSbpm5StUWB6ss0q4VVcBGP5XMJSeuaB
+         3HEUxEWmV9JZG3ULrZ/KLZ7lJwwuXQ5t5DpHLG5EO1rKSijZmOHiB/aVbh6iWOk09nnt
+         H1R+5aNwVQ/FKbN95O8CoZ/cUywXSlZkPCMxDztNGh5s4CSU20l/2AIMYptQ3nE8SHXU
+         Tb9V23ZO2YtcziA2DEhKjAoG2+tnw/eqnIxS46RpYUhq7ww0SaZfCg55/pyeZKXRyEHx
+         xWQt7Yw6tc2Yi3lf1fLzIMushxkq6utvBjDX32NIx5yvbzDrW81w14T5ePa+pGiEC1rJ
+         viZA==
+X-Gm-Message-State: AGi0Pubrq1ZKlQOf6Uk029Re9sOYzI+ofKFkctvBRApPaqciM5idXAq/
+        DtcgI5WWxClDfhL01XOLsOc=
+X-Google-Smtp-Source: APiQypJ644QIvHgh2YqgFFZPR//UNfvakJMh9tvgXPWNy87mnUXcL1Kt5Wzc5PopV/ZAmqfmph3Ypg==
+X-Received: by 2002:adf:9264:: with SMTP id 91mr2600213wrj.362.1588536055673;
+        Sun, 03 May 2020 13:00:55 -0700 (PDT)
+Received: from vasteMachine (s559503e2.adsl.online.nl. [85.149.3.226])
+        by smtp.gmail.com with ESMTPSA id q4sm9080597wrx.9.2020.05.03.13.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 May 2020 13:00:55 -0700 (PDT)
+Date:   Sun, 3 May 2020 22:00:33 +0200
+From:   Jacko Dirks <jdirks.linuxdev@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: bcm2835: Fixes bare use of unsigned
+Message-ID: <20200503200033.GA3256@vasteMachine>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-QSPI needs to vote on a performance state of a power domain depending on
-the clock rate. Add support for it by specifying the perf state/clock rate
-as an OPP table in device tree.
-
-Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Alok Chauhan <alokc@codeaurora.org>
-Cc: Akash Asthana <akashast@codeaurora.org>
-Cc: linux-spi@vger.kernel.org
+Signed-off-by: Jacko Dirks <jdirks.linuxdev@gmail.com>
 ---
- drivers/spi/spi-qcom-qspi.c | 29 ++++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+ drivers/spi/spi-bcm2835.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index 3c4f83b..eb53c00 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -8,6 +8,7 @@
- #include <linux/of.h>
- #include <linux/of_platform.h>
- #include <linux/pm_runtime.h>
-+#include <linux/pm_opp.h>
- #include <linux/spi/spi.h>
- #include <linux/spi/spi-mem.h>
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 11c235879bb7..e10b8f3b4bab 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -191,12 +191,12 @@ static void bcm2835_debugfs_remove(struct bcm2835_spi *bs)
+ }
+ #endif /* CONFIG_DEBUG_FS */
  
-@@ -139,6 +140,8 @@ struct qcom_qspi {
- 	struct device *dev;
- 	struct clk_bulk_data *clks;
- 	struct qspi_xfer xfer;
-+	struct opp_table *opp_table;
-+	bool has_opp_table;
- 	/* Lock to protect xfer and IRQ accessed registers */
- 	spinlock_t lock;
- };
-@@ -235,7 +238,7 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
- 		speed_hz = xfer->speed_hz;
- 
- 	/* In regular operation (SBL_EN=1) core must be 4x transfer clock */
--	ret = clk_set_rate(ctrl->clks[QSPI_CLK_CORE].clk, speed_hz * 4);
-+	ret = dev_pm_opp_set_rate(ctrl->dev, speed_hz * 4);
- 	if (ret) {
- 		dev_err(ctrl->dev, "Failed to set core clk %d\n", ret);
- 		return ret;
-@@ -481,6 +484,20 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	master->handle_err = qcom_qspi_handle_err;
- 	master->auto_runtime_pm = true;
- 
-+	ctrl->opp_table = dev_pm_opp_set_clkname(&pdev->dev, "core");
-+	if (IS_ERR(ctrl->opp_table)) {
-+		ret = PTR_ERR(ctrl->opp_table);
-+		goto exit_probe_master_put;
-+	}
-+	/* OPP table is optional */
-+	ret = dev_pm_opp_of_add_table(&pdev->dev);
-+	if (!ret) {
-+		ctrl->has_opp_table = true;
-+	} else if (ret != -ENODEV) {
-+		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
-+		goto exit_probe_master_put;
-+	}
-+
- 	pm_runtime_enable(dev);
- 
- 	ret = spi_register_master(master);
-@@ -488,6 +505,9 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 		return 0;
- 
- 	pm_runtime_disable(dev);
-+	if (ctrl->has_opp_table)
-+		dev_pm_opp_of_remove_table(&pdev->dev);
-+	dev_pm_opp_put_clkname(ctrl->opp_table);
- 
- exit_probe_master_put:
- 	spi_master_put(master);
-@@ -498,6 +518,11 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- static int qcom_qspi_remove(struct platform_device *pdev)
+-static inline u32 bcm2835_rd(struct bcm2835_spi *bs, unsigned reg)
++static inline u32 bcm2835_rd(struct bcm2835_spi *bs, unsigned int reg)
  {
- 	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
-+
-+	if (ctrl->has_opp_table)
-+		dev_pm_opp_of_remove_table(&pdev->dev);
-+	dev_pm_opp_put_clkname(ctrl->opp_table);
+ 	return readl(bs->regs + reg);
+ }
  
- 	/* Unregister _before_ disabling pm_runtime() so we stop transfers */
- 	spi_unregister_master(master);
-@@ -512,6 +537,8 @@ static int __maybe_unused qcom_qspi_runtime_suspend(struct device *dev)
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
- 
-+	/* Drop the performance state vote */
-+	dev_pm_opp_set_rate(dev, 0);
- 	clk_bulk_disable_unprepare(QSPI_NUM_CLKS, ctrl->clks);
- 
- 	return 0;
+-static inline void bcm2835_wr(struct bcm2835_spi *bs, unsigned reg, u32 val)
++static inline void bcm2835_wr(struct bcm2835_spi *bs, unsigned int reg, u32 val)
+ {
+ 	writel(val, bs->regs + reg);
+ }
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+2.26.2
+
