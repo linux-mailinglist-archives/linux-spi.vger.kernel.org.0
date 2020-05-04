@@ -2,94 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 304A71C2EF6
-	for <lists+linux-spi@lfdr.de>; Sun,  3 May 2020 22:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAA51C368E
+	for <lists+linux-spi@lfdr.de>; Mon,  4 May 2020 12:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbgECUA5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 3 May 2020 16:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728207AbgECUA5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 May 2020 16:00:57 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE787C061A0E;
-        Sun,  3 May 2020 13:00:56 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id x17so18423584wrt.5;
-        Sun, 03 May 2020 13:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=QqRdtHtAi8l/8c9aZkszbUa8kmMqeeh3ZFLZmpwUXmw=;
-        b=rsR9nTkgNRQ+kOj8RXQMdPcb5bI+0UB8BKi8B9ep9Fqf9BS/e8KvpLxdg1mVz4ugaU
-         4APvVLy9nGW/n6+rSDItFmATfsqLJLl/9LICi9eMNdXubXIXs57PsYy93bHAlhPj4mp5
-         d1S6ahLhalEtMEIv1t3YNmwqb55REwYOa3Im+f6Daq5d+8T0T0CSmzfFQSXALCv0EeZP
-         0KaPRpqYq+BPrpvJP8L1mE/H7707aUlh2To2vNkqES7iOLcW17IKBq6fBR45BHcFRLlp
-         0F9RrnhzOnUxXvegK2atG9ikLrHzK5Piz/vCm5cAmlrT58VOwNEDZTGp0vd6RX2PwKCL
-         79dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=QqRdtHtAi8l/8c9aZkszbUa8kmMqeeh3ZFLZmpwUXmw=;
-        b=Ldw0+G5+nGY42Om1gbI7AUsF8AHFzR7R49GSbpm5StUWB6ss0q4VVcBGP5XMJSeuaB
-         3HEUxEWmV9JZG3ULrZ/KLZ7lJwwuXQ5t5DpHLG5EO1rKSijZmOHiB/aVbh6iWOk09nnt
-         H1R+5aNwVQ/FKbN95O8CoZ/cUywXSlZkPCMxDztNGh5s4CSU20l/2AIMYptQ3nE8SHXU
-         Tb9V23ZO2YtcziA2DEhKjAoG2+tnw/eqnIxS46RpYUhq7ww0SaZfCg55/pyeZKXRyEHx
-         xWQt7Yw6tc2Yi3lf1fLzIMushxkq6utvBjDX32NIx5yvbzDrW81w14T5ePa+pGiEC1rJ
-         viZA==
-X-Gm-Message-State: AGi0Pubrq1ZKlQOf6Uk029Re9sOYzI+ofKFkctvBRApPaqciM5idXAq/
-        DtcgI5WWxClDfhL01XOLsOc=
-X-Google-Smtp-Source: APiQypJ644QIvHgh2YqgFFZPR//UNfvakJMh9tvgXPWNy87mnUXcL1Kt5Wzc5PopV/ZAmqfmph3Ypg==
-X-Received: by 2002:adf:9264:: with SMTP id 91mr2600213wrj.362.1588536055673;
-        Sun, 03 May 2020 13:00:55 -0700 (PDT)
-Received: from vasteMachine (s559503e2.adsl.online.nl. [85.149.3.226])
-        by smtp.gmail.com with ESMTPSA id q4sm9080597wrx.9.2020.05.03.13.00.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2020 13:00:55 -0700 (PDT)
-Date:   Sun, 3 May 2020 22:00:33 +0200
-From:   Jacko Dirks <jdirks.linuxdev@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: bcm2835: Fixes bare use of unsigned
-Message-ID: <20200503200033.GA3256@vasteMachine>
+        id S1727860AbgEDKPx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 May 2020 06:15:53 -0400
+Received: from mga14.intel.com ([192.55.52.115]:39941 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727786AbgEDKPx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 4 May 2020 06:15:53 -0400
+IronPort-SDR: zac0n6+mH4OGwqJlyJPhQ8YUboM1GZLbOwg4U5I+xGCy8OfgwLujC5hTbHqPAywYMUP6V/BMIf
+ XiwcgJm7sOzA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 03:15:52 -0700
+IronPort-SDR: kWzOexmE9gA9GHIa+C/aOVrhX7sZAgooMMGkA7wWet4plCES6C0LHJKpk/ebmQ5jghUQWYWDmf
+ qla8KiukKhPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,351,1583222400"; 
+   d="scan'208";a="277483002"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 04 May 2020 03:15:51 -0700
+Received: from [10.215.163.15] (ekotax-mobl.gar.corp.intel.com [10.215.163.15])
+        by linux.intel.com (Postfix) with ESMTP id 2E749580609;
+        Mon,  4 May 2020 03:15:48 -0700 (PDT)
+Subject: Re: [PATCH 1/4] spi: lantiq: Synchronize interrupt handlers and
+ transfers
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Daniel Schwierzeck <daniel.schwierzeck@gmail.com>, robh@kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hauke@hauke-m.de,
+        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
+        chuanhua.lei@linux.intel.com, qi-ming.wu@intel.com
+References: <cover.1587702428.git.eswara.kota@linux.intel.com>
+ <3bf88d24b9cad9f3df1da8ed65bf55c05693b0f2.1587702428.git.eswara.kota@linux.intel.com>
+ <310ca761-e7ae-1192-99fd-a1960697806b@gmail.com>
+ <46f31699-e781-ae33-3ee5-d51e6940ee43@linux.intel.com>
+ <20200429121310.GH4201@sirena.org.uk>
+From:   Dilip Kota <eswara.kota@linux.intel.com>
+Message-ID: <28f6511e-fe85-a834-1652-fd70def9ca88@linux.intel.com>
+Date:   Mon, 4 May 2020 18:15:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20200429121310.GH4201@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Signed-off-by: Jacko Dirks <jdirks.linuxdev@gmail.com>
----
- drivers/spi/spi-bcm2835.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index 11c235879bb7..e10b8f3b4bab 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -191,12 +191,12 @@ static void bcm2835_debugfs_remove(struct bcm2835_spi *bs)
- }
- #endif /* CONFIG_DEBUG_FS */
- 
--static inline u32 bcm2835_rd(struct bcm2835_spi *bs, unsigned reg)
-+static inline u32 bcm2835_rd(struct bcm2835_spi *bs, unsigned int reg)
- {
- 	return readl(bs->regs + reg);
- }
- 
--static inline void bcm2835_wr(struct bcm2835_spi *bs, unsigned reg, u32 val)
-+static inline void bcm2835_wr(struct bcm2835_spi *bs, unsigned int reg, u32 val)
- {
- 	writel(val, bs->regs + reg);
- }
--- 
-2.26.2
+On 4/29/2020 8:13 PM, Mark Brown wrote:
+> On Wed, Apr 29, 2020 at 04:20:53PM +0800, Dilip Kota wrote:
+>> On 4/28/2020 7:10 PM, Daniel Schwierzeck wrote:
+>>> actually there is no real bottom half. Reading or writing the FIFOs is
+>>> fast and is therefore be done in hard IRQ context. But as the comment
+>> Doing FIFO r/w in threaded irqs shouldn't cause any impact on maximum
+>> transfer rate i think.
+> Have you actually tested this?  Generally adding extra latency is going
+> to lead to some opportunity for the hardware to idle and the longer the
+> hardware is idle the lower the throughput.
+>
+>> Also the ISR should be quick enough, doing FIFO r/w in ISR adds up more
+>> latency to ISR.
+>> Handling the FIFOs r/w in threaded irq will be a better way.
+> Consider what happens on a heavily loaded system - the threaded
+> interrupt will have to be scheduled along with other tasks.
+>
+>>> for lantiq_ssc_bussy_work() state, the driver needs some busy-waiting
+>>> after the last interrupt. I don't think it's worth to replace this with
+>>> threaded interrupts which add more runtime overhead and likely decrease
+>>> the maximum transfer speed.
+>> Workqueue has a higher chances of causing SPI transfers timedout.
+> because...?
+I just tried to get the history of removing workqueue in SPI driver, on 
+GRX500 (earlier chipset of LGM) the SPI transfers got timedout with 
+workqueues during regression testing. Once changed to threaded IRQs 
+transfers are working successfully.
 
+Regards,
+Dilip
