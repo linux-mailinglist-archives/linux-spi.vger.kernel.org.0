@@ -2,90 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 568D41C5487
-	for <lists+linux-spi@lfdr.de>; Tue,  5 May 2020 13:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BE71C5549
+	for <lists+linux-spi@lfdr.de>; Tue,  5 May 2020 14:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728422AbgEELij (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 May 2020 07:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727090AbgEELij (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 May 2020 07:38:39 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E214C061A0F
-        for <linux-spi@vger.kernel.org>; Tue,  5 May 2020 04:38:39 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id mq3so993119pjb.1
-        for <linux-spi@vger.kernel.org>; Tue, 05 May 2020 04:38:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m5tteuJaA1g0qvOeePwk1w6CmDmGCRR+j/8xp3J9Trc=;
-        b=tIZD5TqEy4nKHNLy3jp+n4zw7wy00wkJZZ/P0ZZlOoQx/mMhsOvD1V3F90j+4uPeVh
-         1jyhlI0dtZc1RACG8yE689VgHqwJzH5bJ0LsYsWpClYu252KY4K78wF26oPLWTVQfb0s
-         XiSPa1whIKz0Bhdc8HBfwflU/BB7dhi9hddHhMhx7QaRCQ6yuTYD6ms4nWW5NekRI6Ga
-         X+arHqcEVCu1MX8P+4PVbyz9SI3F4iCpBtPWpexiXz8xuW29/iJbbfhpi1NIwLqt67o7
-         Uni5l9l8a6wvg7p0z8vR1WusXO1t4Sp9t1FhzzOH0cKWp+eD/F/Lt4l625Ule1oTSapB
-         8x6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m5tteuJaA1g0qvOeePwk1w6CmDmGCRR+j/8xp3J9Trc=;
-        b=MTnnRu2DcQHKDUmEe6CleCVi4Tu3iT7rl6OHakDrRkdwbU0a1sRF98SaEAct9Fcv6T
-         xmfasusd/i4u3szC2KH51p4u6zoJu98rzvWEpijAVn+9DHF8B2Q92NYvbI5sIAvFNdrY
-         BOt4aHqEzdKJ/TcwYUVdOG/KIqGQKOvr8/uvthlul380WgS6Ccf49hqMc0NumvpMvmpU
-         uKNPBQI2mpDggxKduxoZXJ4lylb88RuM4BfnG0e0yY/6vKaoaPr+zpsqZ1r88lPUTn0d
-         nTmS9d4qlppqKWDm+g22j6y0K+A/L+RVOkYy74DNRy9wKicxqKow/Z+5/vLNacWVf5ul
-         5w4w==
-X-Gm-Message-State: AGi0Pubb31qCRLdDkIZbNMCkAF0xu/w9eLhDtpdWzFVG2ryKRKPeoBZD
-        4lwE4Hws/vkF3FarxTKjTt9ilf1/Yi9EwiIX5wNmabQ9
-X-Google-Smtp-Source: APiQypLYE6hfWi/zBXXFMy30aDCp5s7twiUvlJA+LffN9TrZmNa2M83DsoWKp7l+2B8Xo0YBohGHrNFcjagVaUWQjEM=
-X-Received: by 2002:a17:90a:340c:: with SMTP id o12mr2634936pjb.22.1588678718331;
- Tue, 05 May 2020 04:38:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <CABatt_wQpbtktD=bXwJCzdm_5aLeHcQrSW2pNMRergC9jZ0sMw@mail.gmail.com>
- <CAHp75Ve9giL99P+4Q+LjcFPKPq4fzXR+8UDPDZpA+sPr0o04cg@mail.gmail.com> <CABatt_wbC9sDu04FfG6NNi6P6NzhT6tmm=PHh3VXZhR_=1K03A@mail.gmail.com>
-In-Reply-To: <CABatt_wbC9sDu04FfG6NNi6P6NzhT6tmm=PHh3VXZhR_=1K03A@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 5 May 2020 14:38:31 +0300
-Message-ID: <CAHp75VeJPuEc9HUOZ3toe29pj62xu7SR3C_+rFuQe792D1atSg@mail.gmail.com>
-Subject: Re: SPI driver probe problem during boot
-To:     Martin Townsend <mtownsend1973@gmail.com>
-Cc:     linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728756AbgEEMRp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 May 2020 08:17:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43648 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728627AbgEEMRp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 5 May 2020 08:17:45 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0EBE2206B9;
+        Tue,  5 May 2020 12:17:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588681064;
+        bh=bfdG2Z2jSgxqFge6DMBuiuW/QwY8D6K/rHpHUmAX5x0=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=xp486BAlXWrtsD9sRsErCIW+MVk/8Bnv/VDJoUSddzD20smRnQooLV1twJ1KTTMwL
+         qVRZYhm71T7MwR5IWiL13sinqTBtj9q/KT9GHIwQ8Ai18eNRxy0NtBodXsttsQ0cio
+         690jwwTXk0q3xKKqF355EW1Iyd4H6YBMGj50ns1c=
+Date:   Tue, 05 May 2020 13:17:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     linux-spi@vger.kernel.org
+In-Reply-To: <cover.1588590210.git.lukas@wunner.de>
+References: <cover.1588590210.git.lukas@wunner.de>
+Subject: Re: [PATCH 0/5] Grab bag with AMD SPI fixes
+Message-Id: <158868106200.51760.1618031684869987217.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 5, 2020 at 12:47 PM Martin Townsend <mtownsend1973@gmail.com> wrote:
-> On Tue, May 5, 2020 at 9:43 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Tue, May 5, 2020 at 11:04 AM Martin Townsend <mtownsend1973@gmail.com> wrote:
+On Mon, 4 May 2020 13:12:00 +0200, Lukas Wunner wrote:
+> Here's an assortment of drive-by fixes for the new AMD SPI driver.
+> All of them are compile-tested only.
+> 
+> Lukas Wunner (5):
+>   spi: amd: Fix duplicate iounmap in error path
+>   spi: amd: Pass probe errors back to driver core
+>   spi: amd: Drop duplicate driver data assignments
+>   spi: amd: Fix refcount underflow on remove
+>   spi: amd: Drop superfluous member from struct amd_spi
+> 
+> [...]
 
-...
+Applied to
 
-> > > Now this is on a oldish kernel (4.12) and moving the kernel forward
-> > > isn't trivial.  I was just wondering if this has been fixed already so
-> > > I could backport it, I couldn't see anything in the latest kernel but
-> > > maybe it has been solved a different way.  If not is there a better
-> > > way of fixing this? Or is the OMAP SPI controller driver the problem,
-> > > should it parse the child nodes first and set itself up accordingly?
-> >
-> > Can you confirm the issue on v5.7-rc4?
-> >
->
-> I will try but it's not always possible with these embedded SoC's
-> without a lot of work.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.8
 
-I understand that, but if issue is fixed the proper (but might be
-painful and long) way is to bisect to the fix and try to backport.
-Otherwise it will need to be fixed in newest available kernel first.
+Thanks!
 
-So, in either case you should test on latest available.
+[1/5] spi: amd: Fix duplicate iounmap in error path
+      commit: 2b60c49f3ca0648c5b02b60dc0f5b9e2c274bfb5
+[2/5] spi: amd: Pass probe errors back to driver core
+      commit: cc17fbec2e785926dafce65d014f8301847dff40
+[3/5] spi: amd: Drop duplicate driver data assignments
+      commit: 4332ea8f40c80d51a534f194291bf3b7738a7beb
+[4/5] spi: amd: Fix refcount underflow on remove
+      commit: 7b9c94bd13cc9dc9c0c4932ebacf756ae612d52a
+[5/5] spi: amd: Drop superfluous member from struct amd_spi
+      commit: 36c72a58d472b4032e09f165ea064a0251c9df07
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
--- 
-With Best Regards,
-Andy Shevchenko
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
