@@ -2,87 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 996311C544C
-	for <lists+linux-spi@lfdr.de>; Tue,  5 May 2020 13:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 568D41C5487
+	for <lists+linux-spi@lfdr.de>; Tue,  5 May 2020 13:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728497AbgEELXn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 May 2020 07:23:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728233AbgEELXn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 5 May 2020 07:23:43 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0613F206B9;
-        Tue,  5 May 2020 11:23:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588677822;
-        bh=DL0zScj/vD4HUZu7ZjuIWMlO3dmCiCLSWm3gS0fslLU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HaKjKh8DwRfQ7dxTSVgpGyrStgSwSos6CFY6S1GHOHDBkTFVjlznmIGuhUWcaOzEo
-         U79svTYKdnSvgXqGglGyIhnzG8sInZdEzByTh1bb5uS2R7TZDkV4L1HFl4GJfSR3fe
-         XXlNKJm8aqX1vLSak2cztJ+pg2943mhflAfSU55M=
-Date:   Tue, 5 May 2020 12:23:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dilip Kota <eswara.kota@linux.intel.com>
-Cc:     Daniel Schwierzeck <daniel.schwierzeck@gmail.com>, robh@kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hauke@hauke-m.de,
-        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
-        chuanhua.lei@linux.intel.com, qi-ming.wu@intel.com
-Subject: Re: [PATCH 1/4] spi: lantiq: Synchronize interrupt handlers and
- transfers
-Message-ID: <20200505112339.GC5377@sirena.org.uk>
-References: <cover.1587702428.git.eswara.kota@linux.intel.com>
- <3bf88d24b9cad9f3df1da8ed65bf55c05693b0f2.1587702428.git.eswara.kota@linux.intel.com>
- <310ca761-e7ae-1192-99fd-a1960697806b@gmail.com>
- <46f31699-e781-ae33-3ee5-d51e6940ee43@linux.intel.com>
- <20200429121310.GH4201@sirena.org.uk>
- <28f6511e-fe85-a834-1652-fd70def9ca88@linux.intel.com>
+        id S1728422AbgEELij (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 May 2020 07:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727090AbgEELij (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 May 2020 07:38:39 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E214C061A0F
+        for <linux-spi@vger.kernel.org>; Tue,  5 May 2020 04:38:39 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id mq3so993119pjb.1
+        for <linux-spi@vger.kernel.org>; Tue, 05 May 2020 04:38:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m5tteuJaA1g0qvOeePwk1w6CmDmGCRR+j/8xp3J9Trc=;
+        b=tIZD5TqEy4nKHNLy3jp+n4zw7wy00wkJZZ/P0ZZlOoQx/mMhsOvD1V3F90j+4uPeVh
+         1jyhlI0dtZc1RACG8yE689VgHqwJzH5bJ0LsYsWpClYu252KY4K78wF26oPLWTVQfb0s
+         XiSPa1whIKz0Bhdc8HBfwflU/BB7dhi9hddHhMhx7QaRCQ6yuTYD6ms4nWW5NekRI6Ga
+         X+arHqcEVCu1MX8P+4PVbyz9SI3F4iCpBtPWpexiXz8xuW29/iJbbfhpi1NIwLqt67o7
+         Uni5l9l8a6wvg7p0z8vR1WusXO1t4Sp9t1FhzzOH0cKWp+eD/F/Lt4l625Ule1oTSapB
+         8x6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m5tteuJaA1g0qvOeePwk1w6CmDmGCRR+j/8xp3J9Trc=;
+        b=MTnnRu2DcQHKDUmEe6CleCVi4Tu3iT7rl6OHakDrRkdwbU0a1sRF98SaEAct9Fcv6T
+         xmfasusd/i4u3szC2KH51p4u6zoJu98rzvWEpijAVn+9DHF8B2Q92NYvbI5sIAvFNdrY
+         BOt4aHqEzdKJ/TcwYUVdOG/KIqGQKOvr8/uvthlul380WgS6Ccf49hqMc0NumvpMvmpU
+         uKNPBQI2mpDggxKduxoZXJ4lylb88RuM4BfnG0e0yY/6vKaoaPr+zpsqZ1r88lPUTn0d
+         nTmS9d4qlppqKWDm+g22j6y0K+A/L+RVOkYy74DNRy9wKicxqKow/Z+5/vLNacWVf5ul
+         5w4w==
+X-Gm-Message-State: AGi0Pubb31qCRLdDkIZbNMCkAF0xu/w9eLhDtpdWzFVG2ryKRKPeoBZD
+        4lwE4Hws/vkF3FarxTKjTt9ilf1/Yi9EwiIX5wNmabQ9
+X-Google-Smtp-Source: APiQypLYE6hfWi/zBXXFMy30aDCp5s7twiUvlJA+LffN9TrZmNa2M83DsoWKp7l+2B8Xo0YBohGHrNFcjagVaUWQjEM=
+X-Received: by 2002:a17:90a:340c:: with SMTP id o12mr2634936pjb.22.1588678718331;
+ Tue, 05 May 2020 04:38:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Bu8it7iiRSEf40bY"
-Content-Disposition: inline
-In-Reply-To: <28f6511e-fe85-a834-1652-fd70def9ca88@linux.intel.com>
-X-Cookie: Poverty begins at home.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CABatt_wQpbtktD=bXwJCzdm_5aLeHcQrSW2pNMRergC9jZ0sMw@mail.gmail.com>
+ <CAHp75Ve9giL99P+4Q+LjcFPKPq4fzXR+8UDPDZpA+sPr0o04cg@mail.gmail.com> <CABatt_wbC9sDu04FfG6NNi6P6NzhT6tmm=PHh3VXZhR_=1K03A@mail.gmail.com>
+In-Reply-To: <CABatt_wbC9sDu04FfG6NNi6P6NzhT6tmm=PHh3VXZhR_=1K03A@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 5 May 2020 14:38:31 +0300
+Message-ID: <CAHp75VeJPuEc9HUOZ3toe29pj62xu7SR3C_+rFuQe792D1atSg@mail.gmail.com>
+Subject: Re: SPI driver probe problem during boot
+To:     Martin Townsend <mtownsend1973@gmail.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, May 5, 2020 at 12:47 PM Martin Townsend <mtownsend1973@gmail.com> wrote:
+> On Tue, May 5, 2020 at 9:43 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Tue, May 5, 2020 at 11:04 AM Martin Townsend <mtownsend1973@gmail.com> wrote:
 
---Bu8it7iiRSEf40bY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
 
-On Mon, May 04, 2020 at 06:15:47PM +0800, Dilip Kota wrote:
-> On 4/29/2020 8:13 PM, Mark Brown wrote:
+> > > Now this is on a oldish kernel (4.12) and moving the kernel forward
+> > > isn't trivial.  I was just wondering if this has been fixed already so
+> > > I could backport it, I couldn't see anything in the latest kernel but
+> > > maybe it has been solved a different way.  If not is there a better
+> > > way of fixing this? Or is the OMAP SPI controller driver the problem,
+> > > should it parse the child nodes first and set itself up accordingly?
+> >
+> > Can you confirm the issue on v5.7-rc4?
+> >
+>
+> I will try but it's not always possible with these embedded SoC's
+> without a lot of work.
 
-> > > Workqueue has a higher chances of causing SPI transfers timedout.
-> > because...?
+I understand that, but if issue is fixed the proper (but might be
+painful and long) way is to bisect to the fix and try to backport.
+Otherwise it will need to be fixed in newest available kernel first.
 
-> I just tried to get the history of removing workqueue in SPI driver, on
-> GRX500 (earlier chipset of LGM) the SPI transfers got timedout with
-> workqueues during regression testing. Once changed to threaded IRQs
-> transfers are working successfully.
+So, in either case you should test on latest available.
 
-That doesn't really explain why though, it just explains what.
 
---Bu8it7iiRSEf40bY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6xTLsACgkQJNaLcl1U
-h9DHMgf/aPi4uTtAR1hPXyPWjXGRdm0fnyj1tmL2P9wXWRg+T2JLycn95DS7eO7b
-hHsOVqARDBWCpBM+4dviis0DTExD1TaiuLp12Tl0qYwdPBUKBVlodYNYW22za9wV
-nB8lscg3UieLHMMJXZ70lBNpWAsxuCblKUy+VF5naMU3BIoTho/vY4tTnk8XAdYR
-a/H3cZbpv/TclAdnvdOfv8ZALLD5k8Cc5QF+GENIf1i8c5dGTs+9Zfakj5HhznPy
-hdbUQX7jnGMXnQvqenytxJG33PCSlfj5+3u2Y3DBU/G814PEdDqu2iuwt26PEf6F
-oOab46YmB8iPycZrWW+DNLDTyZ8csQ==
-=+ami
------END PGP SIGNATURE-----
-
---Bu8it7iiRSEf40bY--
+-- 
+With Best Regards,
+Andy Shevchenko
