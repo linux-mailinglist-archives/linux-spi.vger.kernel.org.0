@@ -2,172 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C931C5DB8
-	for <lists+linux-spi@lfdr.de>; Tue,  5 May 2020 18:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735801C60F1
+	for <lists+linux-spi@lfdr.de>; Tue,  5 May 2020 21:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730484AbgEEQiO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 May 2020 12:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728804AbgEEQiO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 May 2020 12:38:14 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093EEC061A0F
-        for <linux-spi@vger.kernel.org>; Tue,  5 May 2020 09:38:14 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id s20so1035269plp.6
-        for <linux-spi@vger.kernel.org>; Tue, 05 May 2020 09:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=luCcYzibiHAqsrwgIRj3POtmDDa35yugcUIsAAOot40=;
-        b=MAyGVAMZyJo/oMcQG84PQl4YbqtAG2c7SWxWjvlORg+zAKlaMVkPh6jZcKqjxiiqkU
-         j1EpVWllG9hKR0QcAtWtOnnDl6jHvEDz8IvUsJp+pNyztK/bEj93JS0MtKNqcbf8rnA8
-         TdQN3YzhjTKjkOKPPsrx9bObDHOZ9LsGAto+k=
+        id S1727785AbgEETTO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 May 2020 15:19:14 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:42624 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726350AbgEETTO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 May 2020 15:19:14 -0400
+Received: by mail-ot1-f65.google.com with SMTP id m18so2657689otq.9;
+        Tue, 05 May 2020 12:19:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=luCcYzibiHAqsrwgIRj3POtmDDa35yugcUIsAAOot40=;
-        b=oo4NSzYlIy5ckbrlYyrTi+iiOGBXDat9lrt0fyhd0NtJn1cpyjb/TuavbY4AGJzeR9
-         /Y1HE0rIqDHKW2mBGZipn7LabaJjkbjGmUz1kz1Wadzi3WYHCwbkbV4e+rBzcVtK9EBs
-         Uq17sNm1xTU9/JhGywv4EekpajqrLtf59ljgszdX1B+kwO0MPCjHZ8+Oe0Qhis/AN1Iw
-         qk1033cTi+MoKoQ6SrBAVUBWZJMcnn8KLaRrUyIqjRMld8hHN8ZkFiXKeUxOSYCcxvuD
-         CJtzqIfHzgulhWMeA6UbvSreM+8ffRo3rH+OGahK/oEHfQ/ZFk4GRR0hJ8ix5OpJJbwh
-         t8FQ==
-X-Gm-Message-State: AGi0PuY5MEb0KEv+4L74h52gtZ1o+17tyZ8QBd9dUrIyJUKM4FxeeXPp
-        vEyj6QAy8GhgMKyT9VLJMlcmEQ==
-X-Google-Smtp-Source: APiQypLHwVgFzIc6p5rvaNU2w6BbNNq4RXORPRe2429s/tVbdXYceAvmwdEyYfv4yP/+tX8H/T5eCA==
-X-Received: by 2002:a17:90b:1111:: with SMTP id gi17mr4096115pjb.121.1588696693595;
-        Tue, 05 May 2020 09:38:13 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id p190sm2522949pfp.207.2020.05.05.09.38.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2020 09:38:12 -0700 (PDT)
-Date:   Tue, 5 May 2020 09:38:11 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Alok Chauhan <alokc@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] spi: spi-qcom-qspi: Use OPP API to set clk/perf
- state
-Message-ID: <20200505163811.GW4525@google.com>
-References: <1588507469-31889-1-git-send-email-rnayak@codeaurora.org>
- <1588507469-31889-7-git-send-email-rnayak@codeaurora.org>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/U+Utez0g7tzaxYoGDI1nZpfAtzEcCkPAgk4/VbXcdg=;
+        b=BqhfgD33wNLxcf72Ftg/2wW59Z9qk5ZFP8dmcTRVB3Yge5g+GnydAqHmYqAmqzkgUk
+         zv790zh496mBXeEfZQKiEXhjre96hTVggFbR6D202AxoUDAw2qJcgOWPKg4tmfxZwLG8
+         ClLrc7gZtOocr+2Y8lt82H8oD6uIZjsyR36L5qlRm04g1E3jGKaSoVBC6ijiw0SjnzAb
+         DUQUKO1uEjo5bnl82yAnQaukGZgoIoV2lcLJVdae01FzH9G75L6btZt9MBgZzAMwsRIQ
+         2CDFdJGAxwB/It8pVETZH1YvCU4fQGN9iY45+bY59ZP2f3s38HMyuTGCschHV9+tTaRt
+         nfQQ==
+X-Gm-Message-State: AGi0PubjyAGxlkdHJO6jcm+YAJtxfzES4IY2F28bqzUZmTvTFbpsbX4h
+        S+2RirE1ygoKvkxDjY10ow==
+X-Google-Smtp-Source: APiQypKwZP/zlmQLc48VyxIvtAOarvdP8of6TwzErq8vONQjZi4WM1iTtep+tGTUxGO0T32VkPh4rA==
+X-Received: by 2002:a9d:708c:: with SMTP id l12mr3430660otj.335.1588706352098;
+        Tue, 05 May 2020 12:19:12 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id i5sm771139oik.11.2020.05.05.12.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 May 2020 12:19:11 -0700 (PDT)
+Received: (nullmailer pid 7384 invoked by uid 1000);
+        Tue, 05 May 2020 19:19:10 -0000
+Date:   Tue, 5 May 2020 14:19:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, andriy.shevchenko@linux.intel.com
+Subject: Re: [PATCH v5 7/7] dt-bindings: spi: dw-apb-ssi: Convert bindings to
+ json-schema
+Message-ID: <20200505191910.GA2970@bogus>
+References: <20200505130618.554-1-wan.ahmad.zainie.wan.mohamad@intel.com>
+ <20200505130618.554-8-wan.ahmad.zainie.wan.mohamad@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1588507469-31889-7-git-send-email-rnayak@codeaurora.org>
+In-Reply-To: <20200505130618.554-8-wan.ahmad.zainie.wan.mohamad@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rajendra,
-
-On Sun, May 03, 2020 at 05:34:29PM +0530, Rajendra Nayak wrote:
-> QSPI needs to vote on a performance state of a power domain depending on
-> the clock rate. Add support for it by specifying the perf state/clock rate
-> as an OPP table in device tree.
+On Tue, May 05, 2020 at 09:06:18PM +0800, Wan Ahmad Zainie wrote:
+> Convert the Synopsis DesignWare dw-apb-ssi binding to DT schema format
+> using json-schema.
 > 
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Alok Chauhan <alokc@codeaurora.org>
-> Cc: Akash Asthana <akashast@codeaurora.org>
-> Cc: linux-spi@vger.kernel.org
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
 > ---
->  drivers/spi/spi-qcom-qspi.c | 29 ++++++++++++++++++++++++++++-
->  1 file changed, 28 insertions(+), 1 deletion(-)
+>  .../bindings/spi/snps,dw-apb-ssi.txt          | 42 -----------
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 72 +++++++++++++++++++
+>  2 files changed, 72 insertions(+), 42 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+
+
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> new file mode 100644
+> index 000000000000..edc1e6fb9993
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/spi/snps,dw-apb-ssi.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Synopsys DesignWare AMBA 2.0 Synchronous Serial Interface
+> +
+> +maintainers:
+> +  - Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mscc,ocelot-spi
+> +      - mscc,jaguar2-spi
+> +      - amazon,alpine-dw-apb-ssi
+> +      - snps,dw-apb-ssi
+> +      - snps,dwc-ssi-1.01a
+> +      - intel,keembay-ssi
+
+This doesn't match what's in dts files. You have to list out every 
+combination.
+
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      - description: The register base for the controller.
+> +      - description: For "mscc,<soc>-spi", a second register set is required.
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      - description: The core clock used to generate the external SPI clock.
+> +      - description: The interface clock required for register access.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ssi_clk
+> +      - const: pclk
+> +
+> +  reg-io-width:
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
+> +      - enum: [ 2, 4 ]
+> +      - default: 4
+> +    description: The I/O register width (in bytes) implemented by this device.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +examples:
+> +  - |
+> +    spi@fff00000 {
+> +          compatible = "snps,dw-apb-ssi";
+> +          reg = <0xfff00000 0x1000>;
+> +          interrupts = <0 154 4>;
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +          clocks = <&spi_m_clk>;
+> +          num-cs = <2>;
+> +          cs-gpios = <&gpio0 13 0>,
+> +                     <&gpio0 14 0>;
+> +    };
+> -- 
+> 2.17.1
 > 
-> diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-> index 3c4f83b..eb53c00 100644
-> --- a/drivers/spi/spi-qcom-qspi.c
-> +++ b/drivers/spi/spi-qcom-qspi.c
-> @@ -8,6 +8,7 @@
->  #include <linux/of.h>
->  #include <linux/of_platform.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/pm_opp.h>
->  #include <linux/spi/spi.h>
->  #include <linux/spi/spi-mem.h>
->  
-> @@ -139,6 +140,8 @@ struct qcom_qspi {
->  	struct device *dev;
->  	struct clk_bulk_data *clks;
->  	struct qspi_xfer xfer;
-> +	struct opp_table *opp_table;
-> +	bool has_opp_table;
->  	/* Lock to protect xfer and IRQ accessed registers */
->  	spinlock_t lock;
->  };
-> @@ -235,7 +238,7 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
->  		speed_hz = xfer->speed_hz;
->  
->  	/* In regular operation (SBL_EN=1) core must be 4x transfer clock */
-> -	ret = clk_set_rate(ctrl->clks[QSPI_CLK_CORE].clk, speed_hz * 4);
-> +	ret = dev_pm_opp_set_rate(ctrl->dev, speed_hz * 4);
->  	if (ret) {
->  		dev_err(ctrl->dev, "Failed to set core clk %d\n", ret);
->  		return ret;
-> @@ -481,6 +484,20 @@ static int qcom_qspi_probe(struct platform_device *pdev)
->  	master->handle_err = qcom_qspi_handle_err;
->  	master->auto_runtime_pm = true;
->  
-> +	ctrl->opp_table = dev_pm_opp_set_clkname(&pdev->dev, "core");
-> +	if (IS_ERR(ctrl->opp_table)) {
-> +		ret = PTR_ERR(ctrl->opp_table);
-> +		goto exit_probe_master_put;
-> +	}
-> +	/* OPP table is optional */
-> +	ret = dev_pm_opp_of_add_table(&pdev->dev);
-> +	if (!ret) {
-> +		ctrl->has_opp_table = true;
-> +	} else if (ret != -ENODEV) {
-> +		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
-> +		goto exit_probe_master_put;
-> +	}
-> +
->  	pm_runtime_enable(dev);
->  
->  	ret = spi_register_master(master);
-> @@ -488,6 +505,9 @@ static int qcom_qspi_probe(struct platform_device *pdev)
->  		return 0;
->  
->  	pm_runtime_disable(dev);
-> +	if (ctrl->has_opp_table)
-> +		dev_pm_opp_of_remove_table(&pdev->dev);
-> +	dev_pm_opp_put_clkname(ctrl->opp_table);
->  
->  exit_probe_master_put:
->  	spi_master_put(master);
-> @@ -498,6 +518,11 @@ static int qcom_qspi_probe(struct platform_device *pdev)
->  static int qcom_qspi_remove(struct platform_device *pdev)
->  {
->  	struct spi_master *master = platform_get_drvdata(pdev);
-> +	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
-> +
-> +	if (ctrl->has_opp_table)
-> +		dev_pm_opp_of_remove_table(&pdev->dev);
-> +	dev_pm_opp_put_clkname(ctrl->opp_table);
-
-IIUC there can still be active transfers before the controller is
-unregistered. If that is correct the above should be done after the
-spi_unregister_master() call below.
-
->  
->  	/* Unregister _before_ disabling pm_runtime() so we stop transfers */
->  	spi_unregister_master(master);
-> @@ -512,6 +537,8 @@ static int __maybe_unused qcom_qspi_runtime_suspend(struct device *dev)
->  	struct spi_master *master = dev_get_drvdata(dev);
->  	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
->  
-> +	/* Drop the performance state vote */
-> +	dev_pm_opp_set_rate(dev, 0);
->  	clk_bulk_disable_unprepare(QSPI_NUM_CLKS, ctrl->clks);
->  
->  	return 0;
