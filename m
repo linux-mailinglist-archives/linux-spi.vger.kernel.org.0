@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BEF1C5652
-	for <lists+linux-spi@lfdr.de>; Tue,  5 May 2020 15:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF081C5654
+	for <lists+linux-spi@lfdr.de>; Tue,  5 May 2020 15:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729018AbgEENH3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 May 2020 09:07:29 -0400
+        id S1729020AbgEENHb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 May 2020 09:07:31 -0400
 Received: from mga02.intel.com ([134.134.136.20]:12710 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728268AbgEENH3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 5 May 2020 09:07:29 -0400
-IronPort-SDR: sIEbm9s2xiJ+ZgakjmNL0cyHx8+lNTAH8ipx14ufWV5xG8QZ48JIgHEt9FX3JP2XDLXKjnDsfb
- 19qDbhWS9QIg==
+        id S1728268AbgEENHb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 5 May 2020 09:07:31 -0400
+IronPort-SDR: 7nCZzMcjo74ZeJnPVTXtWyWq1Z7ccVQJ4HF6KoabfpgOpZUnPdybIHmKyJkF8Zu6AakVcjaRe4
+ F5DFxkBwOOuA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2020 06:07:28 -0700
-IronPort-SDR: QL8Xgt6N1bIWHZ/DGKCHTjs3JIXl0XiRKoadiPAvZF/WOOCF9ZpcVMeoZA/kReWEFSiD6kEJwl
- Lsc+yFrBQDeQ==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2020 06:07:30 -0700
+IronPort-SDR: HZA4mmd9N+Kg3gAWUA6/sKXEvUzpC+GiKyz/LkmVDQsn1mVKUmUuUcDu6dpqpctDqc7kejS/YI
+ yZEqDlMsA6rw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,355,1583222400"; 
-   d="scan'208";a="277868833"
+   d="scan'208";a="277868842"
 Received: from wwanmoha-ilbpg2.png.intel.com ([10.88.227.42])
-  by orsmga002.jf.intel.com with ESMTP; 05 May 2020 06:07:27 -0700
+  by orsmga002.jf.intel.com with ESMTP; 05 May 2020 06:07:29 -0700
 From:   Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
 To:     broonie@kernel.org, robh+dt@kernel.org
 Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         andriy.shevchenko@linux.intel.com,
         wan.ahmad.zainie.wan.mohamad@intel.com
-Subject: [PATCH v5 1/7] spi: dw: Fix typo in few registers name
-Date:   Tue,  5 May 2020 21:06:12 +0800
-Message-Id: <20200505130618.554-2-wan.ahmad.zainie.wan.mohamad@intel.com>
+Subject: [PATCH v5 2/7] spi: dw: Add update_cr0() callback to update CTRLR0
+Date:   Tue,  5 May 2020 21:06:13 +0800
+Message-Id: <20200505130618.554-3-wan.ahmad.zainie.wan.mohamad@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200505130618.554-1-wan.ahmad.zainie.wan.mohamad@intel.com>
 References: <20200505130618.554-1-wan.ahmad.zainie.wan.mohamad@intel.com>
@@ -40,102 +40,159 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch will fix typo in the register name used in the source code,
-to be consistent with the register name used in the databook.
+This patch adds update_cr0() callback, in struct dw_spi.
 
-Databook: DW_apb_ssi_databook.pdf version 4.01a
+Existing code that configure register CTRLR0 is moved into a new
+function, dw_spi_update_cr0(), and this will be the default.
 
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi-dw.c | 18 +++++++++---------
- drivers/spi/spi-dw.h |  8 ++++----
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ drivers/spi/spi-dw-mid.c  |  4 ++++
+ drivers/spi/spi-dw-mmio.c | 21 ++++++++++++++++++---
+ drivers/spi/spi-dw.c      | 29 +++++++++++++++++++++--------
+ drivers/spi/spi-dw.h      |  5 +++++
+ 4 files changed, 48 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
+index 0d86c37e0aeb..9cc010e9737e 100644
+--- a/drivers/spi/spi-dw-mid.c
++++ b/drivers/spi/spi-dw-mid.c
+@@ -318,5 +318,9 @@ int dw_spi_mid_init(struct dw_spi *dws)
+ 	dws->dma_rx = &mid_dma_rx;
+ 	dws->dma_ops = &mid_dma_ops;
+ #endif
++
++	/* Register hook to configure CTRLR0 */
++	dws->update_cr0 = dw_spi_update_cr0;
++
+ 	return 0;
+ }
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index 384a3ab6dc2d..a52f75e22109 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -106,6 +106,9 @@ static int dw_spi_mscc_init(struct platform_device *pdev,
+ 	dwsmmio->dws.set_cs = dw_spi_mscc_set_cs;
+ 	dwsmmio->priv = dwsmscc;
+ 
++	/* Register hook to configure CTRLR0 */
++	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
++
+ 	return 0;
+ }
+ 
+@@ -128,6 +131,18 @@ static int dw_spi_alpine_init(struct platform_device *pdev,
+ {
+ 	dwsmmio->dws.cs_override = 1;
+ 
++	/* Register hook to configure CTRLR0 */
++	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
++
++	return 0;
++}
++
++static int dw_spi_dw_apb_init(struct platform_device *pdev,
++			      struct dw_spi_mmio *dwsmmio)
++{
++	/* Register hook to configure CTRLR0 */
++	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
++
+ 	return 0;
+ }
+ 
+@@ -224,17 +239,17 @@ static int dw_spi_mmio_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id dw_spi_mmio_of_match[] = {
+-	{ .compatible = "snps,dw-apb-ssi", },
++	{ .compatible = "snps,dw-apb-ssi", .data = dw_spi_dw_apb_init},
+ 	{ .compatible = "mscc,ocelot-spi", .data = dw_spi_mscc_ocelot_init},
+ 	{ .compatible = "mscc,jaguar2-spi", .data = dw_spi_mscc_jaguar2_init},
+ 	{ .compatible = "amazon,alpine-dw-apb-ssi", .data = dw_spi_alpine_init},
+-	{ .compatible = "renesas,rzn1-spi", },
++	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_dw_apb_init},
+ 	{ /* end of table */}
+ };
+ MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
+ 
+ static const struct acpi_device_id dw_spi_mmio_acpi_match[] = {
+-	{"HISI0173", 0},
++	{"HISI0173", (kernel_ulong_t)dw_spi_dw_apb_init},
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(acpi, dw_spi_mmio_acpi_match);
 diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
-index 2b79c5a983c0..72a1c99ce9e6 100644
+index 72a1c99ce9e6..4905457641ef 100644
 --- a/drivers/spi/spi-dw.c
 +++ b/drivers/spi/spi-dw.c
-@@ -47,9 +47,9 @@ static ssize_t dw_spi_show_regs(struct file *file, char __user *user_buf,
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
- 			"=================================\n");
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
--			"CTRL0: \t\t0x%08x\n", dw_readl(dws, DW_SPI_CTRL0));
-+			"CTRLR0: \t0x%08x\n", dw_readl(dws, DW_SPI_CTRLR0));
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
--			"CTRL1: \t\t0x%08x\n", dw_readl(dws, DW_SPI_CTRL1));
-+			"CTRLR1: \t0x%08x\n", dw_readl(dws, DW_SPI_CTRLR1));
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
- 			"SSIENR: \t0x%08x\n", dw_readl(dws, DW_SPI_SSIENR));
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-@@ -57,9 +57,9 @@ static ssize_t dw_spi_show_regs(struct file *file, char __user *user_buf,
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
- 			"BAUDR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_BAUDR));
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
--			"TXFTLR: \t0x%08x\n", dw_readl(dws, DW_SPI_TXFLTR));
-+			"TXFTLR: \t0x%08x\n", dw_readl(dws, DW_SPI_TXFTLR));
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
--			"RXFTLR: \t0x%08x\n", dw_readl(dws, DW_SPI_RXFLTR));
-+			"RXFTLR: \t0x%08x\n", dw_readl(dws, DW_SPI_RXFTLR));
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
- 			"TXFLR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_TXFLR));
- 	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-@@ -304,7 +304,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
- 			(((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET))
- 		| (chip->tmode << SPI_TMOD_OFFSET);
+@@ -257,6 +257,26 @@ static irqreturn_t dw_spi_irq(int irq, void *dev_id)
+ 	return dws->transfer_handler(dws);
+ }
  
--	dw_writel(dws, DW_SPI_CTRL0, cr0);
-+	dw_writel(dws, DW_SPI_CTRLR0, cr0);
++/* Configure CTRLR0 for DW_apb_ssi */
++u32 dw_spi_update_cr0(struct spi_controller *master, struct spi_device *spi,
++		      struct spi_transfer *transfer)
++{
++	struct dw_spi *dws = spi_controller_get_devdata(master);
++	struct chip_data *chip = spi_get_ctldata(spi);
++	u32 cr0;
++
++	/* Default SPI mode is SCPOL = 0, SCPH = 0 */
++	cr0 = (transfer->bits_per_word - 1)
++		| (chip->type << SPI_FRF_OFFSET)
++		| ((((spi->mode & SPI_CPOL) ? 1 : 0) << SPI_SCOL_OFFSET) |
++		   (((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET) |
++		   (((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET))
++		| (chip->tmode << SPI_TMOD_OFFSET);
++
++	return cr0;
++}
++EXPORT_SYMBOL_GPL(dw_spi_update_cr0);
++
+ static int dw_spi_transfer_one(struct spi_controller *master,
+ 		struct spi_device *spi, struct spi_transfer *transfer)
+ {
+@@ -296,14 +316,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+ 	dws->n_bytes = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
+ 	dws->dma_width = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
+ 
+-	/* Default SPI mode is SCPOL = 0, SCPH = 0 */
+-	cr0 = (transfer->bits_per_word - 1)
+-		| (chip->type << SPI_FRF_OFFSET)
+-		| ((((spi->mode & SPI_CPOL) ? 1 : 0) << SPI_SCOL_OFFSET) |
+-			(((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET) |
+-			(((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET))
+-		| (chip->tmode << SPI_TMOD_OFFSET);
+-
++	cr0 = dws->update_cr0(master, spi, transfer);
+ 	dw_writel(dws, DW_SPI_CTRLR0, cr0);
  
  	/* Check if current transfer is a DMA transaction */
- 	if (master->can_dma && master->can_dma(master, spi, transfer))
-@@ -325,7 +325,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
- 		}
- 	} else {
- 		txlevel = min_t(u16, dws->fifo_len / 2, dws->len / dws->n_bytes);
--		dw_writel(dws, DW_SPI_TXFLTR, txlevel);
-+		dw_writel(dws, DW_SPI_TXFTLR, txlevel);
- 
- 		/* Set the interrupt mask */
- 		imask |= SPI_INT_TXEI | SPI_INT_TXOI |
-@@ -397,11 +397,11 @@ static void spi_hw_init(struct device *dev, struct dw_spi *dws)
- 		u32 fifo;
- 
- 		for (fifo = 1; fifo < 256; fifo++) {
--			dw_writel(dws, DW_SPI_TXFLTR, fifo);
--			if (fifo != dw_readl(dws, DW_SPI_TXFLTR))
-+			dw_writel(dws, DW_SPI_TXFTLR, fifo);
-+			if (fifo != dw_readl(dws, DW_SPI_TXFTLR))
- 				break;
- 		}
--		dw_writel(dws, DW_SPI_TXFLTR, 0);
-+		dw_writel(dws, DW_SPI_TXFTLR, 0);
- 
- 		dws->fifo_len = (fifo == 1) ? 0 : fifo;
- 		dev_dbg(dev, "Detected FIFO size: %u bytes\n", dws->fifo_len);
 diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index 44ef18187c15..6c34720b1b1d 100644
+index 6c34720b1b1d..2745a7e7405c 100644
 --- a/drivers/spi/spi-dw.h
 +++ b/drivers/spi/spi-dw.h
-@@ -6,14 +6,14 @@
- #include <linux/scatterlist.h>
+@@ -114,6 +114,8 @@ struct dw_spi {
+ 	u16			bus_num;
+ 	u16			num_cs;		/* supported slave numbers */
+ 	void (*set_cs)(struct spi_device *spi, bool enable);
++	u32 (*update_cr0)(struct spi_controller *master, struct spi_device *spi,
++			  struct spi_transfer *transfer);
  
- /* Register offsets */
--#define DW_SPI_CTRL0			0x00
--#define DW_SPI_CTRL1			0x04
-+#define DW_SPI_CTRLR0			0x00
-+#define DW_SPI_CTRLR1			0x04
- #define DW_SPI_SSIENR			0x08
- #define DW_SPI_MWCR			0x0c
- #define DW_SPI_SER			0x10
- #define DW_SPI_BAUDR			0x14
--#define DW_SPI_TXFLTR			0x18
--#define DW_SPI_RXFLTR			0x1c
-+#define DW_SPI_TXFTLR			0x18
-+#define DW_SPI_RXFTLR			0x1c
- #define DW_SPI_TXFLR			0x20
- #define DW_SPI_RXFLR			0x24
- #define DW_SPI_SR			0x28
+ 	/* Current message transfer state info */
+ 	size_t			len;
+@@ -240,6 +242,9 @@ extern int dw_spi_add_host(struct device *dev, struct dw_spi *dws);
+ extern void dw_spi_remove_host(struct dw_spi *dws);
+ extern int dw_spi_suspend_host(struct dw_spi *dws);
+ extern int dw_spi_resume_host(struct dw_spi *dws);
++extern u32 dw_spi_update_cr0(struct spi_controller *master,
++			     struct spi_device *spi,
++			     struct spi_transfer *transfer);
+ 
+ /* platform related setup */
+ extern int dw_spi_mid_init(struct dw_spi *dws); /* Intel MID platforms */
 -- 
 2.17.1
 
