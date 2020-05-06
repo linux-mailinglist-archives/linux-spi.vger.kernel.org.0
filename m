@@ -2,90 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 426161C70D4
-	for <lists+linux-spi@lfdr.de>; Wed,  6 May 2020 14:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3DD1C7365
+	for <lists+linux-spi@lfdr.de>; Wed,  6 May 2020 16:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728276AbgEFMwQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 May 2020 08:52:16 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3868 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728081AbgEFMwQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 6 May 2020 08:52:16 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 4E7E35DC6618286ED034;
-        Wed,  6 May 2020 20:52:13 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 6 May 2020 20:52:03 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>
-Subject: [PATCH -next] spi: bcm2835: Fix error return code in bcm2835_dma_init()
-Date:   Wed, 6 May 2020 12:56:07 +0000
-Message-ID: <20200506125607.90952-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+        id S1729349AbgEFOzY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 May 2020 10:55:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44274 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729078AbgEFOzY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 May 2020 10:55:24 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E8A2208D5;
+        Wed,  6 May 2020 14:55:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588776924;
+        bh=isIdZF9p24otwVPsTZCE2r3D2THbHvuIvaL0GltlSnQ=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=YR210sp9BEQh2sFZzNof2wGB/EXSQkTrVmU28B3+Si1/YT0FJlCS26SvhMZ/pda39
+         M9OYQ+cLita8hrLJxvEYsiNRX3ey/qv6fK+g5vHlNY1M3jxZctOiFU7Yy64fcqxbM3
+         +4KcobyLVRN3GRlXArVrQWMwUj1ttMdHUCVmICsY=
+Date:   Wed, 06 May 2020 15:55:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Yan <yanaijie@huawei.com>
+In-Reply-To: <20200506061911.19923-1-yanaijie@huawei.com>
+References: <20200506061911.19923-1-yanaijie@huawei.com>
+Subject: Re: [PATCH] spi: a3700: make a3700_spi_init() return void
+Message-Id: <158877692139.14713.2399115526239890758.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fix to return negative error code -ENOMEM from the dma mapping error
-handling case instead of 0, as done elsewhere in this function.
+On Wed, 6 May 2020 14:19:11 +0800, Jason Yan wrote:
+> Fix the following coccicheck warning:
+> 
+> drivers/spi/spi-armada-3700.c:283:8-11: Unneeded variable: "ret". Return
+> "0" on line 315
+> 
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> 
+> [...]
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/spi/spi-bcm2835.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied to
 
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index 11c235879bb7..c4f4bd135279 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -940,6 +940,7 @@ static int bcm2835_dma_init(struct spi_controller *ctlr, struct device *dev,
- 	if (dma_mapping_error(ctlr->dma_tx->device->dev, bs->fill_tx_addr)) {
- 		dev_err(dev, "cannot map zero page - not using DMA mode\n");
- 		bs->fill_tx_addr = 0;
-+		ret = -ENOMEM;
- 		goto err_release;
- 	}
- 
-@@ -949,6 +950,7 @@ static int bcm2835_dma_init(struct spi_controller *ctlr, struct device *dev,
- 						     DMA_MEM_TO_DEV, 0);
- 	if (!bs->fill_tx_desc) {
- 		dev_err(dev, "cannot prepare fill_tx_desc - not using DMA mode\n");
-+		ret = -ENOMEM;
- 		goto err_release;
- 	}
- 
-@@ -979,6 +981,7 @@ static int bcm2835_dma_init(struct spi_controller *ctlr, struct device *dev,
- 	if (dma_mapping_error(ctlr->dma_rx->device->dev, bs->clear_rx_addr)) {
- 		dev_err(dev, "cannot map clear_rx_cs - not using DMA mode\n");
- 		bs->clear_rx_addr = 0;
-+		ret = -ENOMEM;
- 		goto err_release;
- 	}
- 
-@@ -989,6 +992,7 @@ static int bcm2835_dma_init(struct spi_controller *ctlr, struct device *dev,
- 					   DMA_MEM_TO_DEV, 0);
- 		if (!bs->clear_rx_desc[i]) {
- 			dev_err(dev, "cannot prepare clear_rx_desc - not using DMA mode\n");
-+			ret = -ENOMEM;
- 			goto err_release;
- 		}
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.8
 
+Thanks!
 
+[1/1] spi: a3700: make a3700_spi_init() return void
+      commit: 5b684514af9052fdbaa60895620f75928a134196
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
