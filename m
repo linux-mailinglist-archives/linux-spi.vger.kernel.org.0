@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B9B1C74DE
-	for <lists+linux-spi@lfdr.de>; Wed,  6 May 2020 17:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C461C74E0
+	for <lists+linux-spi@lfdr.de>; Wed,  6 May 2020 17:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729689AbgEFPac (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 May 2020 11:30:32 -0400
-Received: from mga03.intel.com ([134.134.136.65]:9527 "EHLO mga03.intel.com"
+        id S1729754AbgEFPad (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 May 2020 11:30:33 -0400
+Received: from mga18.intel.com ([134.134.136.126]:57483 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729668AbgEFPab (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 6 May 2020 11:30:31 -0400
-IronPort-SDR: 1oDv/lzNBdqCrzKhbppXbO34hYdPupXvKGR8O7uiQ8Ua249V80YDb1tOq/cBuALuLwj8n6GBd0
- CdtiMWuJ9rOA==
+        id S1729607AbgEFPac (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 May 2020 11:30:32 -0400
+IronPort-SDR: /4/xD4HZXS98WW8yixebGw4ek0q7CQzhfDfJkGGpRZUknMIXtliUCpffZUPcXA+tO27A/27vl0
+ 2r8O1nYuSkUQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 08:30:30 -0700
-IronPort-SDR: rnJA6flkWUD0UeEYr/RyFqWF3hkjWGMkBLwXQYF1DC6JsP/dRwuxxKbxj0FhTRj1HZowjg5d8+
- fhqUshUEvK/g==
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 08:30:30 -0700
+IronPort-SDR: MD93rtE4rKmLv72QZ+MGBkY7e0jrccyIio4PCQ1MTRFy3ELv/a+4fdEqJettdbINuIyzjm9Scz
+ fCLInfNP1CfA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,359,1583222400"; 
-   d="scan'208";a="278263127"
+   d="scan'208";a="339041776"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 06 May 2020 08:30:29 -0700
+  by orsmga001.jf.intel.com with ESMTP; 06 May 2020 08:30:29 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 77A833BA; Wed,  6 May 2020 18:30:26 +0300 (EEST)
+        id 7CDEB348; Wed,  6 May 2020 18:30:26 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 6/8] spi: dw: Add 'mfld' suffix to Intel Medfield related routines
-Date:   Wed,  6 May 2020 18:30:23 +0300
-Message-Id: <20200506153025.21441-6-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 7/8] spi: dw: Propagate struct device pointer to ->dma_init() callback
+Date:   Wed,  6 May 2020 18:30:24 +0300
+Message-Id: <20200506153025.21441-7-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200506153025.21441-1-andriy.shevchenko@linux.intel.com>
 References: <20200506153025.21441-1-andriy.shevchenko@linux.intel.com>
@@ -42,117 +42,56 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In order to prepare driver for the extension to support newer hardware,
-add 'mfld' suffix to some related functions.
-
-While here, move DMA parameters assignment under existing #ifdef
-CONFIG_SPI_DW_MID_DMA.
-
-There is no functional change intended.
+In some cases, one of which is coming soon, we would like to have
+a struct device pointer to request DMA channel. For this purpose
+propagate it to ->dma_init() callback in DMA ops.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi-dw-mid.c | 24 ++++++++++++++----------
- drivers/spi/spi-dw-pci.c |  4 ++--
- drivers/spi/spi-dw.h     |  3 ++-
- 3 files changed, 18 insertions(+), 13 deletions(-)
+ drivers/spi/spi-dw-mid.c | 2 +-
+ drivers/spi/spi-dw.c     | 2 +-
+ drivers/spi/spi-dw.h     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-index 64523e68490d7..13b548915c8f0 100644
+index 13b548915c8f0..d73aa4ae644d5 100644
 --- a/drivers/spi/spi-dw-mid.c
 +++ b/drivers/spi/spi-dw-mid.c
 @@ -34,7 +34,7 @@ static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
  	return true;
  }
  
--static int mid_spi_dma_init(struct dw_spi *dws)
-+static int mid_spi_dma_init_mfld(struct dw_spi *dws)
+-static int mid_spi_dma_init_mfld(struct dw_spi *dws)
++static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
  {
  	struct pci_dev *dma_dev;
  	struct dw_dma_slave *tx = dws->dma_tx;
-@@ -276,14 +276,23 @@ static void mid_spi_dma_stop(struct dw_spi *dws)
- 	}
- }
+diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+index 6e56a64ccc557..b9f651e9ca028 100644
+--- a/drivers/spi/spi-dw.c
++++ b/drivers/spi/spi-dw.c
+@@ -506,7 +506,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	spi_hw_init(dev, dws);
  
--static const struct dw_spi_dma_ops mid_dma_ops = {
--	.dma_init	= mid_spi_dma_init,
-+static const struct dw_spi_dma_ops mfld_dma_ops = {
-+	.dma_init	= mid_spi_dma_init_mfld,
- 	.dma_exit	= mid_spi_dma_exit,
- 	.dma_setup	= mid_spi_dma_setup,
- 	.can_dma	= mid_spi_can_dma,
- 	.dma_transfer	= mid_spi_dma_transfer,
- 	.dma_stop	= mid_spi_dma_stop,
- };
-+
-+static void dw_spi_mid_setup_dma_mfld(struct dw_spi *dws)
-+{
-+	dws->dma_tx = &mid_dma_tx;
-+	dws->dma_rx = &mid_dma_rx;
-+	dws->dma_ops = &mfld_dma_ops;
-+}
-+#else	/* CONFIG_SPI_DW_MID_DMA */
-+static inline void dw_spi_mid_setup_dma_mfld(struct dw_spi *dws) {}
- #endif
- 
- /* Some specific info for SPI0 controller on Intel MID */
-@@ -297,7 +306,7 @@ static const struct dw_spi_dma_ops mid_dma_ops = {
- #define CLK_SPI_CDIV_MASK	0x00000e00
- #define CLK_SPI_DISABLE_OFFSET	8
- 
--int dw_spi_mid_init(struct dw_spi *dws)
-+int dw_spi_mid_init_mfld(struct dw_spi *dws)
- {
- 	void __iomem *clk_reg;
- 	u32 clk_cdiv;
-@@ -314,14 +323,9 @@ int dw_spi_mid_init(struct dw_spi *dws)
- 
- 	iounmap(clk_reg);
- 
--#ifdef CONFIG_SPI_DW_MID_DMA
--	dws->dma_tx = &mid_dma_tx;
--	dws->dma_rx = &mid_dma_rx;
--	dws->dma_ops = &mid_dma_ops;
--#endif
--
- 	/* Register hook to configure CTRLR0 */
- 	dws->update_cr0 = dw_spi_update_cr0;
- 
-+	dw_spi_mid_setup_dma_mfld(dws);
- 	return 0;
- }
-diff --git a/drivers/spi/spi-dw-pci.c b/drivers/spi/spi-dw-pci.c
-index 172a9f2996316..dd59df5122ee7 100644
---- a/drivers/spi/spi-dw-pci.c
-+++ b/drivers/spi/spi-dw-pci.c
-@@ -23,13 +23,13 @@ struct spi_pci_desc {
- };
- 
- static struct spi_pci_desc spi_pci_mid_desc_1 = {
--	.setup = dw_spi_mid_init,
-+	.setup = dw_spi_mid_init_mfld,
- 	.num_cs = 5,
- 	.bus_num = 0,
- };
- 
- static struct spi_pci_desc spi_pci_mid_desc_2 = {
--	.setup = dw_spi_mid_init,
-+	.setup = dw_spi_mid_init_mfld,
- 	.num_cs = 2,
- 	.bus_num = 1,
- };
+ 	if (dws->dma_ops && dws->dma_ops->dma_init) {
+-		ret = dws->dma_ops->dma_init(dws);
++		ret = dws->dma_ops->dma_init(dev, dws);
+ 		if (ret) {
+ 			dev_warn(dev, "DMA init failed\n");
+ 			dws->dma_inited = 0;
 diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index 5e1e78210d8d4..b7e3f0ebba44f 100644
+index b7e3f0ebba44f..642f0be642e56 100644
 --- a/drivers/spi/spi-dw.h
 +++ b/drivers/spi/spi-dw.h
-@@ -260,5 +260,6 @@ extern u32 dw_spi_update_cr0_v1_01a(struct spi_controller *master,
- 				    struct spi_transfer *transfer);
+@@ -100,7 +100,7 @@ enum dw_ssi_type {
  
- /* platform related setup */
--extern int dw_spi_mid_init(struct dw_spi *dws); /* Intel MID platforms */
-+extern int dw_spi_mid_init_mfld(struct dw_spi *dws);
-+
- #endif /* DW_SPI_HEADER_H */
+ struct dw_spi;
+ struct dw_spi_dma_ops {
+-	int (*dma_init)(struct dw_spi *dws);
++	int (*dma_init)(struct device *dev, struct dw_spi *dws);
+ 	void (*dma_exit)(struct dw_spi *dws);
+ 	int (*dma_setup)(struct dw_spi *dws, struct spi_transfer *xfer);
+ 	bool (*can_dma)(struct spi_controller *master, struct spi_device *spi,
 -- 
 2.26.2
 
