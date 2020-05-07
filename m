@@ -2,63 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8201C88EE
-	for <lists+linux-spi@lfdr.de>; Thu,  7 May 2020 13:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E371C8B32
+	for <lists+linux-spi@lfdr.de>; Thu,  7 May 2020 14:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726308AbgEGLv7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 May 2020 07:51:59 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3890 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725949AbgEGLv7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 7 May 2020 07:51:59 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id E6D67E114F2976A781C1;
-        Thu,  7 May 2020 19:51:55 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 7 May 2020 19:51:47 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Sanjay R Mehta <sanju.mehta@amd.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-spi@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] spi: spi-amd: Remove spi_master_put in amd_spi_remove()
-Date:   Thu, 7 May 2020 11:55:50 +0000
-Message-ID: <20200507115550.139457-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+        id S1725947AbgEGMnK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 May 2020 08:43:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60876 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725914AbgEGMnK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 7 May 2020 08:43:10 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D1E0206B8;
+        Thu,  7 May 2020 12:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588855389;
+        bh=GHRCGjLIZFkeZrzK2SzSVP/KSJPp1NjRDjnVBt2g46Q=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=sEc/fFkMcDfhFZKOJz568dH2RJPzmrOgVqvS5PawlNQDKY8Ve5/NHpRf3898cRykb
+         xIQKperK0S+jJEXwaj1WjwXCQJxRAYlG/LNKz0QLchdYf25NhP3xfhydJsvWp4bWwv
+         0s/o8L6ZAe/pvp7af+JHAqwJ0ws/zwhMYWh+dB4I=
+Date:   Thu, 07 May 2020 13:43:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20200507115449.8093-1-andriy.shevchenko@linux.intel.com>
+References: <20200507115449.8093-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] spi: dw: Avoid useless assignments in generic DMA setup
+Message-Id: <158885538736.44532.12869199023796188797.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The call to spi_master_put() in amd_spi_remove() is redundant and
-may causes user after free since the master have been freed by
-spi_unregister_master(), so remove it.
+On Thu, 7 May 2020 14:54:48 +0300, Andy Shevchenko wrote:
+> Generic DMA setup doesn't rely on certain type of DMA controller and thus
+> shouldn't use Intel Medfield settings, although it's harmless in this case.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/spi/spi-dw-mid.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> [...]
 
-Fixes: bbb336f39efc ("spi: spi-amd: Add AMD SPI controller driver support")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/spi/spi-amd.c | 1 -
- 1 file changed, 1 deletion(-)
+Applied to
 
-diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index c7cfc3dc20b1..e5e767ba5823 100644
---- a/drivers/spi/spi-amd.c
-+++ b/drivers/spi/spi-amd.c
-@@ -304,7 +304,6 @@ static int amd_spi_remove(struct platform_device *pdev)
- 	struct amd_spi *amd_spi = platform_get_drvdata(pdev);
- 
- 	spi_unregister_master(amd_spi->master);
--	spi_master_put(amd_spi->master);
- 	platform_set_drvdata(pdev, NULL);
- 
- 	return 0;
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.8
 
+Thanks!
 
+[1/2] spi: dw: Avoid useless assignments in generic DMA setup
+      commit: 140e45e1e62dd56ed4c264db1443a5d4f5f40352
+[2/2] spi: dw: Get rid of dma_inited flag
+      commit: a041e672cb57201d152bfc314e52d41e7643375d
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
