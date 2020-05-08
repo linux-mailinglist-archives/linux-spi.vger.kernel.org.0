@@ -2,172 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A1A1CA668
-	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 10:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C234D1CA768
+	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 11:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726598AbgEHIq3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 May 2020 04:46:29 -0400
-Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:48124 "EHLO
-        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1726616AbgEHIq2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 04:46:28 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 90BD92002599;
-        Fri,  8 May 2020 16:38:39 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id sYuJwQqgygTE; Fri,  8 May 2020 16:38:39 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 783632002518;
-        Fri,  8 May 2020 16:38:39 +0800 (HKT)
-Received: from armhf2.gtsys.com.hk (unknown [10.128.4.15])
-        by s01.gtsys.com.hk (Postfix) with ESMTP id 74876C019F9;
-        Fri,  8 May 2020 16:38:39 +0800 (HKT)
-Received: by armhf2.gtsys.com.hk (Postfix, from userid 1000)
-        id 70CD8201641; Fri,  8 May 2020 16:38:39 +0800 (HKT)
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>,
-        Jack Lo <jack.lo@gtsys.com.hk>
-Cc:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v0 1/1] spi: spi-rockchip: add support for spi slave_mode
-Date:   Fri,  8 May 2020 16:37:29 +0800
-Message-Id: <20200508083729.5560-2-chris.ruehl@gtsys.com.hk>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200508083729.5560-1-chris.ruehl@gtsys.com.hk>
-References: <20200508083729.5560-1-chris.ruehl@gtsys.com.hk>
+        id S1725815AbgEHJoh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 May 2020 05:44:37 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:41262 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726807AbgEHJoh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 05:44:37 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8C9AD80307C2;
+        Fri,  8 May 2020 09:36:52 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZVwyYHvRLEER; Fri,  8 May 2020 12:36:51 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Date:   Fri, 8 May 2020 12:36:19 +0300
+Message-ID: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch aim to add spi slave mode support to the rockchip driver.
-Fix the wrong usage of num_cs set fix to ROCKCHIP_SPI_MAX_CS_NUM,
-instead use max_native_cs flag to set the limit of native chip-select.
-Enable use_gpio_descriptors to have cs_gpiod for gpio based chip-selects.
+Baikal-T1 SoC System Controller is equipped with a Boot Controller. It's
+responsible for the system starting up from different sources. In
+particular it's possible to boot the chip either from an internal firmware
+or from an externally attached 16MB SPI flash or from the SoC SRAM
+pre-initialized with first 64KB of the external SPI flash. Though the later
+option is formally unavailable thus undocumented. Anyway in order to
+perform the booting up from the SPI flash there is a DW APB SSI-based SPI
+controller embedded into the System Boot Controller. Due to being utilized
+for a specific usecase it's got very limited resources: no IRQ, no DMA,
+a single native chip-select and just 8 bytes Tx/Rx FIFO available. In
+addition to that the transparent (from SoC CPU point of view) initial code
+execution is implemented by means of the SPI flash direct mapping method.
+It's done by a vendor-specific block built on top the SPI controller so the
+SPI flash slave device data is available just by dword-readings from a
+dedicated memory region of 16MB. Taking into account the peculiarities of
+the controller registers and physically mapped SPI flash access, very
+limited resources, seeing the normal usecase of the controller is to
+access an external SPI-nor flash, and due to multiple Baikal-T1 specifics,
+which had to be workarounded in the driver code we decided to create a
+dedicated SPI driver for it instead of using the DW APB SSI driver
+available in the kernel.
 
-Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
----
- drivers/spi/spi-rockchip.c | 46 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 41 insertions(+), 5 deletions(-)
+The driver provides callbacks for the native messages-based SPI API
+(though only if GPIO-based chip-select is declared), SPI-memory and direct
+mapping read operations. Due to not having any asynchronous signaling
+interface provided by the core we have no choice but to implement a
+polling-based data transmission/reception algorithm. In addition to that
+in order to bypass the automatic native chip-select toggle the driver
+disables the local interrupts during the memory-based transfers if no
+complementary GPIO-based chip-select detected in the platform.
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 70ef63e0b6b8..9c1ff52c0f85 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -183,6 +183,9 @@ struct rockchip_spi {
- 	u8 rsd;
- 
- 	bool cs_asserted[ROCKCHIP_SPI_MAX_CS_NUM];
-+
-+	bool slave_mode;
-+	bool slave_abort;
- };
- 
- static inline void spi_enable_chip(struct rockchip_spi *rs, bool enable)
-@@ -359,7 +362,7 @@ static void rockchip_spi_dma_rxcb(void *data)
- 	struct rockchip_spi *rs = spi_master_get_devdata(master);
- 	int state = atomic_fetch_andnot(RXDMA, &rs->state);
- 
--	if (state & TXDMA)
-+	if (state & TXDMA && !rs->slave_abort)
- 		return;
- 
- 	spi_enable_chip(rs, false);
-@@ -372,7 +375,7 @@ static void rockchip_spi_dma_txcb(void *data)
- 	struct rockchip_spi *rs = spi_master_get_devdata(master);
- 	int state = atomic_fetch_andnot(TXDMA, &rs->state);
- 
--	if (state & RXDMA)
-+	if (state & RXDMA && !rs->slave_abort)
- 		return;
- 
- 	/* Wait until the FIFO data completely. */
-@@ -466,6 +469,10 @@ static void rockchip_spi_config(struct rockchip_spi *rs,
- 	u32 cr1;
- 	u32 dmacr = 0;
- 
-+	if (rs->slavemode)
-+		cr0 |= CR0_OPM_SLAVE << CR0_OPM_OFFSET;
-+	rs->slave_abort = false;
-+
- 	cr0 |= rs->rsd << CR0_RSD_OFFSET;
- 	cr0 |= (spi->mode & 0x3U) << CR0_SCPH_OFFSET;
- 	if (spi->mode & SPI_LSB_FIRST)
-@@ -535,6 +542,16 @@ static size_t rockchip_spi_max_transfer_size(struct spi_device *spi)
- 	return ROCKCHIP_SPI_MAX_TRANLEN;
- }
- 
-+static int rockchip_spi_slave_abort(struct spi_master *master)
-+{
-+	struct rockchip_spi *rs = spi_master_get_devdata(master);
-+
-+	rs->slave_abort = true;
-+	complete(master);
-+
-+	return 0;
-+}
-+
- static int rockchip_spi_transfer_one(
- 		struct spi_master *master,
- 		struct spi_device *spi,
-@@ -589,14 +606,25 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 	struct spi_master *master;
- 	struct resource *mem;
- 	u32 rsd_nsecs;
-+	bool slave_mode;
-+	u32 num_cs = 1;
-+
-+	slave_mode = of_property_read_bool(np, "spi-slave");
-+
-+	if (slave_mode)
-+		master = spi_alloc_slave(&pdev->dev,
-+				sizeof(struct rockchip_spi));
-+	else
-+		master = spi_alloc_master(&pdev->dev,
-+				sizeof(struct rockchip_spi));
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(struct rockchip_spi));
- 	if (!master)
- 		return -ENOMEM;
- 
- 	platform_set_drvdata(pdev, master);
- 
- 	rs = spi_master_get_devdata(master);
-+	rs->slave_mode = slave_mode;
- 
- 	/* Get basic io resource and map it */
- 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-@@ -676,7 +704,16 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 	master->auto_runtime_pm = true;
- 	master->bus_num = pdev->id;
- 	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP | SPI_LSB_FIRST;
--	master->num_chipselect = ROCKCHIP_SPI_MAX_CS_NUM;
-+	if (slave_mode) {
-+		master->mode_bits |= SPI_NO_CS;
-+		master->slave_abort = rockchip_spi_slave_abort;
-+	} else {
-+		of_property_read_u32(np, "num-cs", &num_cs);
-+		master->num_chipselect = num_cs;
-+		master->use_gpio_descriptors = true;
-+		master->max_native_cs = ROCKCHIP_SPI_MAX_CS_NUM;
-+		master->flags = SPI_MASTER_GPIO_SS;
-+	}
- 	master->dev.of_node = pdev->dev.of_node;
- 	master->bits_per_word_mask = SPI_BPW_MASK(16) | SPI_BPW_MASK(8) | SPI_BPW_MASK(4);
- 	master->min_speed_hz = rs->freq / BAUDR_SCKDV_MAX;
-@@ -686,7 +723,6 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 	master->transfer_one = rockchip_spi_transfer_one;
- 	master->max_transfer_size = rockchip_spi_max_transfer_size;
- 	master->handle_err = rockchip_spi_handle_err;
--	master->flags = SPI_MASTER_GPIO_SS;
- 
- 	master->dma_tx = dma_request_chan(rs->dev, "tx");
- 	if (IS_ERR(master->dma_tx)) {
+This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
+
+New vendor prefix will be added in the framework of the next patchset:
+https://lkml.org/lkml/2020/5/6/1047
+
+Note as a result of next discussion with @Lee and @Miquel
+https://lkml.org/lkml/2020/3/6/421
+I've added dirmap_create() and dirmap_read() callbacks to this driver,
+so the Baikal-T1 Boot MFD driver won't be resubmitted and can be dropped.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Chuanhong Guo <gch981213@gmail.com>
+Cc: Tomer Maimon <tmaimon77@gmail.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (2):
+  dt-bindings: spi: Add Baikal-T1 System Boot SPI Controller binding
+  spi: Add Baikal-T1 System Boot SPI Controller driver
+
+ .../bindings/spi/baikal,bt1-sys-ssi.yaml      | 100 ++
+ drivers/spi/Kconfig                           |  13 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-bt1-sys.c                     | 873 ++++++++++++++++++
+ drivers/spi/spi-bt1-sys.h                     | 169 ++++
+ 5 files changed, 1156 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
+ create mode 100644 drivers/spi/spi-bt1-sys.c
+ create mode 100644 drivers/spi/spi-bt1-sys.h
+
 -- 
-2.20.1
+2.25.1
 
