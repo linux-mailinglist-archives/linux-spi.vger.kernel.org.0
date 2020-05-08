@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB18C1CB84F
-	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 21:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F631CB852
+	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 21:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgEHTac (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 May 2020 15:30:32 -0400
-Received: from mga03.intel.com ([134.134.136.65]:16158 "EHLO mga03.intel.com"
+        id S1726797AbgEHTdK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 May 2020 15:33:10 -0400
+Received: from mga06.intel.com ([134.134.136.31]:2774 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726767AbgEHTab (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 8 May 2020 15:30:31 -0400
-IronPort-SDR: fQJ/emE8C9GFfCH+1X9WM1oqYreCqYO+tdoWMMH6nIMCbXv7eqU4xRVcbNwtdncnlOpfQgoyGM
- YEZ8POg+szkA==
+        id S1726767AbgEHTdK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 8 May 2020 15:33:10 -0400
+IronPort-SDR: ar/jzKlPRPjHRLBb34mVRZ1tlYHqDtXcMHRJ93GCprZ5hSplf8p6ekYxq4jjzmu6ckIV9rt3Hs
+ vnH0ygEc75YQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 12:30:30 -0700
-IronPort-SDR: qUJg5FWE9T6yxRJd6UrC8vXGxIwhzVM/K7NWb+omN3LD3c/t1BhxRug8l7kdPlUb3zgtwW3ZFY
- nMLL0PlKEcGg==
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 12:33:08 -0700
+IronPort-SDR: 002AOp5wCldfgzZv4UwAGWSVaxE7gIe4/6KUiz7y4EPA3Viwh04rlES1CabE3Vx3+FfIMnAZWm
+ wzIcM96lRuPg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,368,1583222400"; 
-   d="scan'208";a="249842809"
+   d="scan'208";a="264490515"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 08 May 2020 12:30:25 -0700
+  by orsmga006.jf.intel.com with ESMTP; 08 May 2020 12:33:03 -0700
 Received: from andy by smile with local (Exim 4.93)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jX8hX-005T9Y-3I; Fri, 08 May 2020 22:30:27 +0300
-Date:   Fri, 8 May 2020 22:30:27 +0300
+        id 1jX8k6-005TAq-7s; Fri, 08 May 2020 22:33:06 +0300
+Date:   Fri, 8 May 2020 22:33:06 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -35,6 +35,11 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -42,45 +47,71 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Allison Randal <allison@lohutok.net>,
         Gareth Williams <gareth.williams.jx@renesas.com>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, fengsheng <fengsheng5@huawei.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Aditya Pakki <pakki001@umn.edu>,
-        "wuxu.wu" <wuxu.wu@huawei.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 17/17] spi: dw: Use regset32 DebugFS method to create a
- registers file
-Message-ID: <20200508193027.GW185537@smile.fi.intel.com>
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/17] spi: dw: Add generic DW DMA controller support
+Message-ID: <20200508193306.GX185537@smile.fi.intel.com>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200508132943.9826-18-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200508132943.9826-18-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 08, 2020 at 04:29:42PM +0300, Serge Semin wrote:
-> DebugFS kernel interface provides a dedicated method to create the
-> registers dump file. Use it instead of creating a generic DebugFS
-> file with manually written read callback function.
+On Fri, May 08, 2020 at 04:29:25PM +0300, Serge Semin wrote:
+> Baikal-T1 SoC provides DW DMA controller to perform low-speed peripherals
+> Mem-to-Dev and Dev-to-Mem transaction. This is also applicable to the DW
+> APB SSI devices embedded into the SoC. Currently this type DMA device is
+> supported by the DW APB SPI driver only as a middle layer code for Intel
+> MID PCI devices. Seeing the same code can be used for normal platform
+> DW DMAC device we introduced a set of patches to fix it within this
+> patchset.
+> 
+> First of all traditionally we replaced the legacy plain text-based dt-binding
+> file with yaml-based one. Then we unpinned the Intel MID specific code from
+> the generic DMA one and placed it into the spi-dw-pci.c driver, which was a
+> better place for it anyway. Then we introduced a set of naming cleanups since
+> the code was going to be used for generic DW DMAC device and DMAC usage
+> alterations to handle the controller functionality in a generic way by the
+> DW APB SSI MMIO driver as well. See the individual patches commit messages
+> for details.
+> 
+> In addition we fixed a problem in the native chip-select method, which despite
+> of multiple attempts to be fixed doesn't correctly perceive the SPI_CS_HIGH
+> flag and the enable-argument.
+> 
+> Finally as a cherry on a cake we replaced the manually written DebugFS
+> registers read method with a ready-to-use for the same purpose regset32
+> DebugFS interface usage.
 
-Of course ideal would be use something like regmap API which delivers this as a side effect.
-But this also good clean up!
-Comments below.
+Thanks! Appreciate the series (some of the things I would like to have done
+myself, but lack of time and no specific request from our hardware).
+
+Though, I will wait for v2 rebased on top of spi/for-next and I will review the
+rest of the patches (mostly those I haven't commented out).
+
+> This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+> 0e698dfa2822 ("Linux 5.7-rc4")
+> tag: v5.7-rc4
+
+Perhaps --base will do the trick?
 
 > 
+> Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
 > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+> Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+> Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
 > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > Cc: Paul Burton <paulburton@kernel.org>
 > Cc: Ralf Baechle <ralf@linux-mips.org>
@@ -90,147 +121,45 @@ Comments below.
 > Cc: Gareth Williams <gareth.williams.jx@renesas.com>
 > Cc: Rob Herring <robh+dt@kernel.org>
 > Cc: linux-mips@vger.kernel.org
+> Cc: linux-spi@vger.kernel.org
 > Cc: devicetree@vger.kernel.org
-> ---
->  drivers/spi/spi-dw.c | 85 +++++++++++++-------------------------------
->  drivers/spi/spi-dw.h |  2 ++
->  2 files changed, 27 insertions(+), 60 deletions(-)
+> Cc: linux-kernel@vger.kernel.org
 > 
-> diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
-> index 897c998af578..625a5f152e1a 100644
-> --- a/drivers/spi/spi-dw.c
-> +++ b/drivers/spi/spi-dw.c
-> @@ -32,66 +32,28 @@ struct chip_data {
->  };
->  
->  #ifdef CONFIG_DEBUG_FS
-> -#define SPI_REGS_BUFSIZE	1024
-> -static ssize_t dw_spi_show_regs(struct file *file, char __user *user_buf,
-> -		size_t count, loff_t *ppos)
-> -{
-> -	struct dw_spi *dws = file->private_data;
-> -	char *buf;
-> -	u32 len = 0;
-> -	ssize_t ret;
-> -
-> -	buf = kzalloc(SPI_REGS_BUFSIZE, GFP_KERNEL);
-> -	if (!buf)
-> -		return 0;
-> -
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"%s registers:\n", dev_name(&dws->master->dev));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"=================================\n");
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"CTRL0: \t\t0x%08x\n", dw_readl(dws, DW_SPI_CTRL0));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"CTRL1: \t\t0x%08x\n", dw_readl(dws, DW_SPI_CTRL1));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"SSIENR: \t0x%08x\n", dw_readl(dws, DW_SPI_SSIENR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"SER: \t\t0x%08x\n", dw_readl(dws, DW_SPI_SER));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"BAUDR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_BAUDR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"TXFTLR: \t0x%08x\n", dw_readl(dws, DW_SPI_TXFLTR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"RXFTLR: \t0x%08x\n", dw_readl(dws, DW_SPI_RXFLTR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"TXFLR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_TXFLR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"RXFLR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_RXFLR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"SR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_SR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"IMR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_IMR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"ISR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_ISR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"DMACR: \t\t0x%08x\n", dw_readl(dws, DW_SPI_DMACR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"DMATDLR: \t0x%08x\n", dw_readl(dws, DW_SPI_DMATDLR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"DMARDLR: \t0x%08x\n", dw_readl(dws, DW_SPI_DMARDLR));
-> -	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
-> -			"=================================\n");
-> -
-> -	ret = simple_read_from_buffer(user_buf, count, ppos, buf, len);
-> -	kfree(buf);
-> -	return ret;
-> +#define DW_SPI_DBGFS_REG(_name, _off)	\
-> +{					\
-> +	.name = _name,			\
-> +	.offset = _off			\
-
-Leave comma here.
-
->  }
->  
-> -static const struct file_operations dw_spi_regs_ops = {
-> -	.owner		= THIS_MODULE,
-> -	.open		= simple_open,
-> -	.read		= dw_spi_show_regs,
-> -	.llseek		= default_llseek,
-> +static const struct debugfs_reg32 dw_spi_dbgfs_regs[] = {
-> +	DW_SPI_DBGFS_REG("CTRL0", DW_SPI_CTRL0),
-> +	DW_SPI_DBGFS_REG("CTRL1", DW_SPI_CTRL1),
-> +	DW_SPI_DBGFS_REG("SSIENR", DW_SPI_SSIENR),
-> +	DW_SPI_DBGFS_REG("SER", DW_SPI_SER),
-> +	DW_SPI_DBGFS_REG("BAUDR", DW_SPI_BAUDR),
-> +	DW_SPI_DBGFS_REG("TXFTLR", DW_SPI_TXFLTR),
-> +	DW_SPI_DBGFS_REG("RXFTLR", DW_SPI_RXFLTR),
-> +	DW_SPI_DBGFS_REG("TXFLR", DW_SPI_TXFLR),
-> +	DW_SPI_DBGFS_REG("RXFLR", DW_SPI_RXFLR),
-> +	DW_SPI_DBGFS_REG("SR", DW_SPI_SR),
-> +	DW_SPI_DBGFS_REG("IMR", DW_SPI_IMR),
-> +	DW_SPI_DBGFS_REG("ISR", DW_SPI_ISR),
-> +	DW_SPI_DBGFS_REG("DMACR", DW_SPI_DMACR),
-> +	DW_SPI_DBGFS_REG("DMATDLR", DW_SPI_DMATDLR),
-> +	DW_SPI_DBGFS_REG("DMARDLR", DW_SPI_DMARDLR)
->  };
->  
->  static int dw_spi_debugfs_init(struct dw_spi *dws)
-> @@ -103,8 +65,11 @@ static int dw_spi_debugfs_init(struct dw_spi *dws)
->  	if (!dws->debugfs)
->  		return -ENOMEM;
->  
-> -	debugfs_create_file("registers", S_IFREG | S_IRUGO,
-> -		dws->debugfs, (void *)dws, &dw_spi_regs_ops);
-> +	dws->regset.regs = dw_spi_dbgfs_regs;
-> +	dws->regset.nregs = ARRAY_SIZE(dw_spi_dbgfs_regs);
-> +	dws->regset.base = dws->regs;
-> +	debugfs_create_regset32("registers", 0400, dws->debugfs, &dws->regset);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index a6c03ea9013c..bad0eca2efe6 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -4,6 +4,7 @@
->  
->  #include <linux/io.h>
->  #include <linux/scatterlist.h>
-> +#include <linux/debugfs.h>
-
-Perhaps keep ordered?
-
->  
->  /* Register offsets */
->  #define DW_SPI_CTRL0			0x00
-> @@ -142,6 +143,7 @@ struct dw_spi {
->  	void			*priv;
->  #ifdef CONFIG_DEBUG_FS
->  	struct dentry *debugfs;
-
-> +	struct debugfs_regset32 regset;
-
-I'm wondering why we need it here and not simple on the stack?
-
->  #endif
->  };
->  
+> Serge Semin (17):
+>   dt-bindings: spi: Convert DW SPI binding to DT schema
+>   dt-bindings: spi: dw: Add DMA properties bindings
+>   spi: dw: Split up the generic DMA code and Intel MID driver
+>   spi: dw: Cleanup generic DW DMA code namings
+>   spi: dw: Discard static DW DMA slave structures
+>   spi: dw: Add DW SPI DMA/PCI/MMIO dependency on DW SPI core
+>   spi: dw: Add Tx/Rx finish wait methods to DMA
+>   spi: dw: Clear DMAC register when done or stopped
+>   spi: dw: Enable interrupts in accordance with DMA xfer mode
+>   spi: dw: Parameterize the DMA Rx/Tx burst length
+>   spi: dw: Fix native CS being unset
+>   spi: dw: Fix dma_slave_config used partly uninitialized
+>   spi: dw: Initialize paddr in DW SPI MMIO private data
+>   spi: dw: Add DMA support to the DW SPI MMIO driver
+>   spi: dw: Use DMA max burst to set the request thresholds
+>   spi: dw: Fix Rx-only DMA transfers
+>   spi: dw: Use regset32 DebugFS method to create a registers file
+> 
+>  .../bindings/spi/snps,dw-apb-ssi.txt          |  41 ---
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 123 +++++++++
+>  .../devicetree/bindings/spi/spi-dw.txt        |  24 --
+>  drivers/spi/Kconfig                           |  16 +-
+>  drivers/spi/Makefile                          |   4 +-
+>  drivers/spi/{spi-dw-mid.c => spi-dw-dma.c}    | 237 ++++++++++++------
+>  drivers/spi/spi-dw-mmio.c                     |  15 +-
+>  drivers/spi/spi-dw-pci.c                      |  38 ++-
+>  drivers/spi/spi-dw.c                          |  89 +++----
+>  drivers/spi/spi-dw.h                          |  27 +-
+>  10 files changed, 402 insertions(+), 212 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-dw.txt
+>  rename drivers/spi/{spi-dw-mid.c => spi-dw-dma.c} (53%)
+> 
 > -- 
 > 2.25.1
 > 
