@@ -2,142 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 910991CB7FF
-	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 21:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4471CB802
+	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 21:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbgEHTO7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 May 2020 15:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726807AbgEHTO6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 15:14:58 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BD8C05BD0A
-        for <linux-spi@vger.kernel.org>; Fri,  8 May 2020 12:14:56 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id y25so1434687pfn.5
-        for <linux-spi@vger.kernel.org>; Fri, 08 May 2020 12:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B766Kq3wwMIZDh21Hnvsv+cWtRtFWNJvMN2IylFQHjI=;
-        b=LjzDUAM/U9Np2yDM7Gd/ghWCHkZnU5fcEJvc0bEeg7q4hhHoLA7UleUGvoE06Em1En
-         ahxEMpiQiF14yRL/UdS8hWULOzgsOlxJEMkaL6NWRHmQ24D//SdIkgbHHGRy0qA5Ml7U
-         cIVSdQ1efavQWrtxD04bOr2MRhrHgPNFrb77g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B766Kq3wwMIZDh21Hnvsv+cWtRtFWNJvMN2IylFQHjI=;
-        b=deJ5POtDsEgqKSKuZsogZ79kIF+I94mO0syoNf82od+nW3Gvbl6srJGKCnNXKSa1zV
-         DNwbJ1CixBJoeXVfsZkFltgStGLQnDqegO3Mu2BQJ2TBGu7TmzyIVqyWNycqaD6uOZf4
-         q6JccqDVJCMOtPZmGMTPea2CYAXLBtiyzDtCFvUNmpUYjbyrUw+fzxU+D0GOE/6kDBRZ
-         8mVKpSEEHIMdt52m1CYRcJjyvczTvgMZljnT4kl74GQnwPsocCiM1JSeoyAX/EKs+bc0
-         8ZpWyaCGH7RXoV3J68+o5IIRRPhxUFxDmSRgl+GB3m7SHs2OqaGcy+/icS6a2aTe3/6e
-         xrAw==
-X-Gm-Message-State: AGi0PuYUgx6ALJt6zXpDJUXN5LrdPTYscuD8N92aEPvTqJaNyHNEwEVE
-        E2RDYTBbVLCVCXI/O6rwdvsTbQ==
-X-Google-Smtp-Source: APiQypLoabMFrHcLg+AaIOSyN1MVOq0lrqEGKCkCFnD47I2CUY1crIKVFHSJx855pUPM6XCezTC8dw==
-X-Received: by 2002:a62:5cc7:: with SMTP id q190mr4241312pfb.98.1588965296322;
-        Fri, 08 May 2020 12:14:56 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id g16sm2550307pfq.203.2020.05.08.12.14.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 May 2020 12:14:55 -0700 (PDT)
-Date:   Fri, 8 May 2020 12:14:54 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org, georgi.djakov@linaro.org
-Subject: Re: [PATCH V5 2/7] soc: qcom-geni-se: Add interconnect support to
- fix earlycon crash
-Message-ID: <20200508191454.GH4525@google.com>
-References: <1588919619-21355-1-git-send-email-akashast@codeaurora.org>
- <1588919619-21355-3-git-send-email-akashast@codeaurora.org>
- <20200508175938.GB4525@google.com>
+        id S1726863AbgEHTQU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 May 2020 15:16:20 -0400
+Received: from mga18.intel.com ([134.134.136.126]:2802 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726767AbgEHTQU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 8 May 2020 15:16:20 -0400
+IronPort-SDR: yDSqlp6oXUxNhHNWAE/5VjSYVho4VIdqG05nyQixLuAodwzrsg/7clu6E8lwAl1/kdRHlEDLEk
+ JUvFZoVvaesg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 12:16:19 -0700
+IronPort-SDR: 8G2zCsDqKGaOduzD/IjbrrS6blG/2s5vQ0UKKYK15vyTo+SBvKQ0E7rECdq/GyzxSeDFZIb2wL
+ x/lFs9aLEeeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,368,1583222400"; 
+   d="scan'208";a="264485636"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga006.jf.intel.com with ESMTP; 08 May 2020 12:16:15 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jX8Tp-005T1w-MM; Fri, 08 May 2020 22:16:17 +0300
+Date:   Fri, 8 May 2020 22:16:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/17] spi: dw: Add generic DW DMA controller support
+Message-ID: <20200508191617.GR185537@smile.fi.intel.com>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508173609.GQ4820@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200508175938.GB4525@google.com>
+In-Reply-To: <20200508173609.GQ4820@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 08, 2020 at 10:59:38AM -0700, Matthias Kaehlcke wrote:
-> Hi Akash,
+On Fri, May 08, 2020 at 06:36:09PM +0100, Mark Brown wrote:
+> On Fri, May 08, 2020 at 04:29:25PM +0300, Serge Semin wrote:
+> > Baikal-T1 SoC provides DW DMA controller to perform low-speed peripherals
+> > Mem-to-Dev and Dev-to-Mem transaction. This is also applicable to the DW
+> > APB SSI devices embedded into the SoC. Currently this type DMA device is
 > 
-> overall this looks good to me, a few comments inline
-> 
-> On Fri, May 08, 2020 at 12:03:34PM +0530, Akash Asthana wrote:
-> > QUP core clock is shared among all the SE drivers present on particular
-> > QUP wrapper, the system will reset(unclocked access) if earlycon used after
-> > QUP core clock is put to 0 from other SE drivers before real console comes
-> > up.
-> > 
-> > As earlycon can't vote for it's QUP core need, to fix this add ICC
-> > support to common/QUP wrapper driver and put vote for QUP core from
-> > probe on behalf of earlycon and remove vote during earlycon exit call.
-> > 
-> > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> > Reported-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> > Change in V3:
-> >  - Add geni_remove_earlycon_icc_vote API that will be used by earlycon
-> >    exit function to remove ICC vote for earlyconsole.
-> >  - Remove suspend/resume hook for geni-se driver as we are no longer
-> >    removing earlyconsole ICC vote from system suspend, we are removing
-> >    from earlycon exit.
-> > 
-> > Change in V4:
-> >  - As per Matthias comment make 'earlycon_wrapper' as static structure.
-> > 
-> > Changes in V5:
-> >  - Vote for core path only after checking whether "qcom_geni" earlycon is
-> >    actually present or not by traversing over structure "console_drivers".
-> > 
-> >  drivers/soc/qcom/qcom-geni-se.c       | 63 +++++++++++++++++++++++++++++++++++
-> >  drivers/tty/serial/qcom_geni_serial.c |  7 ++++
-> >  include/linux/qcom-geni-se.h          |  2 ++
-> >  3 files changed, 72 insertions(+)
-> > 
-> > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> > index 63403bf..66fe6f2 100644
-> > --- a/drivers/soc/qcom/qcom-geni-se.c
-> > +++ b/drivers/soc/qcom/qcom-geni-se.c
+> This basically all looks good to me (without any hardware specific
+> knowledge), I had a few comments but they were mostly procedural ones -
+> mainly getting these bug fixes you've done merged as such.  Nice work.
 
-...
+Agree that is nice work!
+Though, can you please give us chance to review next version of the series and test on our hardware?
 
-> > +#ifdef CONFIG_SERIAL_EARLYCON
-> > +	if (console_drivers)
-> 
-> The loop should have curly braces ("use braces when a loop contains more than
-> a single simple statement"), even though the compiler doesn't need them in
-> this case. This is not a loop, but I was told by a maintainer that it equally
-> applies, which makes sense.
-> 
-> You could avoid one level of indentation through:
-> 
-> if (!console_drivers)
-> 	goto exit;
-> 
-> > +		for_each_console(bcon)
+Serge, I think you should base it on spi/for-next rather than vanilla.
 
-Actually the NULL check of 'console_drivers' is not needed:
+-- 
+With Best Regards,
+Andy Shevchenko
 
-#define for_each_console(con) \
-        for (con = console_drivers; con != NULL; con = con->next)
 
-see also:
-
-commit caa72c3bc584bc28b557bcf1a47532a7a6f37e6f
-Author: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date:   Mon Feb 3 15:31:25 2020 +0200
-
-    console: Drop double check for console_drivers being non-NULL
