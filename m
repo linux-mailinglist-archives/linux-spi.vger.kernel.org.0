@@ -2,93 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 704811CB08A
-	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 15:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04681CB0A8
+	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 15:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726904AbgEHNdk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 May 2020 09:33:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53656 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726736AbgEHNdj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 8 May 2020 09:33:39 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AC1B120708;
-        Fri,  8 May 2020 13:33:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588944819;
-        bh=mONIV7U+kyBJ+32pgZbmybpjfg+r5T9JwvmQQECspjk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nyn14izNbLw13+C8aRmGKLcZ3BwlQUuLEJ+wYP5GhFb2XP30lsbQM10NmgZC09Vk+
-         UckP1Oje+G2jOGzqWw2Ut/0r8k5jd+3UhDGOVWT+ssUTm6Cvxir3gVhiZHdxwzrl2M
-         ywV18wQajYEE9Ko/eynJhng+mXsz4m3l1ELplzdk=
-Date:   Fri, 8 May 2020 14:33:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/17] spi: dw: Add generic DW DMA controller support
-Message-ID: <20200508133336.GK4820@sirena.org.uk>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+        id S1727827AbgEHNmw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 May 2020 09:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726736AbgEHNmv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 09:42:51 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFBFC05BD43;
+        Fri,  8 May 2020 06:42:51 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id a8so954968ybs.3;
+        Fri, 08 May 2020 06:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pBzNAF/rm7qf9JD/mlsQ0iA9eh+VbbrEwR4tF97TGU0=;
+        b=BdKPI5hcsGYeVJ2qAcgoxudFb/SH8PYr5sEVthDkxf5m2TDBAz2c0Q2KnFBcs9vAye
+         KgE0EKzHjCXC6wRWMk6S/U/UHJXgz7Za12YEeGR7FXT5T6kJYFbWLnK80VeUg+6c/7yb
+         VK4Wd6O2kVyvPLz1Z11l2e7CtJWaVXrKJ8Icu4pbptqGD71IqTu/m/nS/5l/pGmCz87B
+         L/6EFRMpVUfAkUMPOM5ZRt1AZjfSopnzh6aXTDK23EhWaM2e6RRsISDF1GoHOpvx4iON
+         UbaiWxelgTSYwLNqty6k+rNaj7eA1fztdFYvfOORBjgF4dzGzs/MtVcbkOPy99H+19jO
+         b9Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pBzNAF/rm7qf9JD/mlsQ0iA9eh+VbbrEwR4tF97TGU0=;
+        b=iuUSYI+Lzey6Jm69wzBGo4DCUWf/6fKHWKPelKlA1KLvaQc00vXf+a9E2ZA9M1lSx1
+         EsyOze9JUrNK1qm/ZI2o/pe65xBG6cYTY2fmQy/E4sHRmqUNAboMKgRYJbbUUqTNCg5A
+         Eii0ycbMLrNgzOyd0/iNFVC5pKYmmiPXG5pUGwBWAZHgktKV3/2CQ6mP9my6DXglQi+N
+         yfGbotVXk07+x8rsJ6yBiLZlp/plxgzAE0E2MhTOWLLPO5pxz6irKVTQp6MtAUPkXhRQ
+         ZzIm7B6fg3HIftclveVVB7e9dO9Ym6Qo+00jU5SggSodYKWfQ3DevH/io6fURdjvuABB
+         Z1Ug==
+X-Gm-Message-State: AGi0Pua7lQy9golfdHjIGddrL8EoPGuOtyORehwNWaFlAQoRwFw8b7NA
+        y2dEdcWAbJ/em0p3TexpbobGK4ai5V9U3HstyC0=
+X-Google-Smtp-Source: APiQypIX5kfqFGCBsLkvNmM3MXcMOc1ZzFCbC1vb3bZA4gU/cyEFJAiTo63nwaUf5Ac11beleDD7UJGrQ7Oe237J/X8=
+X-Received: by 2002:a25:487:: with SMTP id 129mr4557690ybe.1.1588945370813;
+ Fri, 08 May 2020 06:42:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HcXnUX77nabWBLF4"
-Content-Disposition: inline
-In-Reply-To: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
-X-Cookie: Give him an evasive answer.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200508083729.5560-1-chris.ruehl@gtsys.com.hk>
+ <20200508083729.5560-2-chris.ruehl@gtsys.com.hk> <CANBLGcwA+=OB-_nOYUijWrDBSkLYhR7_PNG1ewO7LZ-zRVGoxg@mail.gmail.com>
+In-Reply-To: <CANBLGcwA+=OB-_nOYUijWrDBSkLYhR7_PNG1ewO7LZ-zRVGoxg@mail.gmail.com>
+From:   Emil Renner Berthing <emil.renner.berthing@gmail.com>
+Date:   Fri, 8 May 2020 15:42:39 +0200
+Message-ID: <CANBLGcwAhOHVBUrwLat_60D=wwKkXP2==fazQEeJNuB-CizZLQ@mail.gmail.com>
+Subject: Re: [PATCH v0 1/1] spi: spi-rockchip: add support for spi slave_mode
+To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Cc:     Jack Lo <jack.lo@gtsys.com.hk>, Heiko Stuebner <heiko@sntech.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi@vger.kernel.org,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Chris,
 
---HcXnUX77nabWBLF4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, 8 May 2020 at 15:13, Emil Renner Berthing
+<emil.renner.berthing@gmail.com> wrote:
+> If you do something like this you won't need the temporary num_cs variable:
+>
+> if (of_property_read_u32(np, "num-cs", &master->num_chipselect))
+>     master->num_chipselect = 1;
 
-On Fri, May 08, 2020 at 04:29:25PM +0300, Serge Semin wrote:
+Sorry, that should be of_property_read_u16, since num_chipselect is a u16.
 
-> Serge Semin (17):
->   dt-bindings: spi: Convert DW SPI binding to DT schema
-
-Please don't make new feature development dependent on conversion to the
-new schema format, there's quite a backlog of reviews of schema
-conversions so it can slow things down.  It's good to do the conversions
-but please do them after adding any new stuff to the binding rather than
-before.
-
---HcXnUX77nabWBLF4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl61X7AACgkQJNaLcl1U
-h9CLnAf+O/mkQGXZWskF1aU9ifA3WKCaGO7ENKOG2HlI7+/2BtDt7ImOkCrcBbKb
-K9yAjXfWqhx47uiQoeLJtmdZQVBhn73fL867tXqzbvo1IfIw8nAk7VNmePzIDMcL
-61DQCKjbmBvQd70xDDzjrOCZbMSJ5zzjWSBClVFZDi7VvB0Q7ngIRoWJkKy/mm8D
-joP8Y76nidk0LMvKgqhmCwxIXKTFgacy9ld8zckl1VgkzFAQ5AT1yKOOWZiCUHMt
-8dfJt0DwzuBEUKUDcGFXFg4duheda20SgYnFkrM19Nh/D39dqJ//xyCUhViWz/yB
-GaOwQ+OgauLqiTph56P0R/1rFek2/Q==
-=FjO8
------END PGP SIGNATURE-----
-
---HcXnUX77nabWBLF4--
+/Emil
