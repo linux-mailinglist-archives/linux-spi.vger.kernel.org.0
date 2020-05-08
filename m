@@ -2,58 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3351CB86F
-	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 21:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED7B1CB873
+	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 21:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727805AbgEHTjS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 May 2020 15:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726767AbgEHTjR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 15:39:17 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0383C05BD0A
-        for <linux-spi@vger.kernel.org>; Fri,  8 May 2020 12:39:15 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id a21so2886641ljj.11
-        for <linux-spi@vger.kernel.org>; Fri, 08 May 2020 12:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gjrGLJHLzoxchg9f/7+BzZ/emAWiNvtOkRqlM0vdoIg=;
-        b=aGj4Wnxz1/aQyFPMr7NUm4zXJhJ8h7VAryh5DVU6ZQt6AVBxS9tmKQlupGJ5KeXejP
-         KSz+L58WUX50UeLf1ShwLZkVfus9ZX0lgD06QjMNC3/zKkfIiXkiwYge15T1/gUc27aO
-         SkBLyUASa8xg9hfhlhGe48TZ8pL8eEM/DPhjceFCm41s4igWICxrTAtxmj/XVBmMuxC4
-         E0I1gaydT5OWK5CYVJmqK9YvykFVgSYts/bi6SSXxHBh3rqtCTLdTb3PJAIbT3TVcvcg
-         VNqziYQkuxX1HykgiPzPe2jl2OWQ4sEXFDROXuEuqS3AeWyiXcSOnUPjvLntH8TtjK2v
-         OUaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gjrGLJHLzoxchg9f/7+BzZ/emAWiNvtOkRqlM0vdoIg=;
-        b=CIGyW28LOkNMHzt90VT9wmBv4J9v2NFyGSqRUJXrADRB3MIMCSAp47BRjeXZJotVp8
-         U4ZX+aix2qBc1AB3i5GavIvRD0vLpcj+TwXfTmGCQDYdoqvOL/SjHGBJXJaxpMl7PhOU
-         jF49PTY4wNa6D7jZz0ndrNjZqf+nqlKIRF3u19uh6vs8kvIsBN03j0lP9bpmCWH/lnAO
-         s7O8KStY2FAKzbF9Pjg2DOVwGrG0/CsAzoantW/G3pWUys4oZWeOpAqNK6QtgQn5yIsH
-         rpIBiAJCxXXl78w3rnVcM9iUdPBh8lJs/ZB0hTqM8ZvwKHYAOsXE0/dl5WqZ+R45DMY7
-         YGZA==
-X-Gm-Message-State: AOAM53166EE6f+yK3JcB4D0BwIHRnvCu9rH8i9xrRonsGaq5ksD3pFtl
-        zRFZVPV8pRCziXiKVcrsKoujUf9pNyNLIE+r289BCw==
-X-Google-Smtp-Source: ABdhPJzVNt0K7k0tLrvgknOBlVHyrZtBVYfRv9CoX9LYJ+b2t/u4YporDzh0yTsMzYpoIig38TiOGb/ERqa5Fzvduw8=
-X-Received: by 2002:a2e:8087:: with SMTP id i7mr2546861ljg.99.1588966753962;
- Fri, 08 May 2020 12:39:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru> <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 8 May 2020 21:39:02 +0200
-Message-ID: <CACRpkdY=wkgnYPcqSzyzNpS6ckJZs-9kXfTfdwa1E+POzOBQGA@mail.gmail.com>
-Subject: Re: [PATCH 11/17] spi: dw: Fix native CS being unset
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gregory Clement <gregory.clement@bootlin.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        id S1726904AbgEHTjg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 May 2020 15:39:36 -0400
+Received: from mga02.intel.com ([134.134.136.20]:53954 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726863AbgEHTjg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 8 May 2020 15:39:36 -0400
+IronPort-SDR: 8OUODMB9SguA/uSBHM+yF9dbuB/8VJ/2Es39dRKoFCdIGu46mYn0ShyoHi5LZKllkcpi5LIktA
+ QF+iEhweIEOg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 12:39:35 -0700
+IronPort-SDR: rgqw0xeLyZwep6MX+HiLcdt6ztnkRAc6YQ574nWmOBGEnXAupAKLKXZksR8iTw7nvFJOlzw4X6
+ +IhTpczIXxYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,368,1583222400"; 
+   d="scan'208";a="264492012"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga006.jf.intel.com with ESMTP; 08 May 2020 12:39:31 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jX8qM-005TDe-Gz; Fri, 08 May 2020 22:39:34 +0300
+Date:   Fri, 8 May 2020 22:39:34 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Serge Semin <fancer.lancer@gmail.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
@@ -63,94 +40,264 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Allison Randal <allison@lohutok.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Thor Thayer <thor.thayer@linux.intel.com>,
-        "wuxu.wu" <wuxu.wu@huawei.com>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-mips@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/17] dt-bindings: spi: Convert DW SPI binding to DT
+ schema
+Message-ID: <20200508193934.GY185537@smile.fi.intel.com>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508132943.9826-2-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200508132943.9826-2-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 8, 2020 at 3:31 PM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
+On Fri, May 08, 2020 at 04:29:26PM +0300, Serge Semin wrote:
+> Modern device tree bindings are supposed to be created as YAML-files
+> in accordance with dt-schema. This commit replaces two DW SPI legacy
+> bare text bindings with YAML file. As before the bindings file states
+> that the corresponding dts node is supposed to be compatible either
+> with generic DW APB SSI controller or with Microsemi/Amazon/Renesas
+> vendors-specific controllers, to have registers, interrupts and clocks
+> properties. Though in case of Microsemi version of the controller
+> there must be two registers resources specified. Properties like
+> clock-names, reg-io-width, cs-gpio, num-cs and SPI-specific sub-nodes
+> are optional.
 
-> Commit 6e0a32d6f376 ("spi: dw: Fix default polarity of native
-> chipselect") attempted to fix the problem when GPIO active-high
-> chip-select is utilized to communicate with some SPI slave. It fixed
-> the problem, but broke the normal native CS support. At the same time
-> the reversion commit ada9e3fcc175 ("spi: dw: Correct handling of native
-> chipselect") didn't solve the problem either, since it just inverted
-> the set_cs() polarity perception without taking into account that
-> CS-high might be applicable. Here is what is done to finally fix the
-> problem.
+Can you incorporate work done here or agree with Wan how to proceed?
 
-I'm not sure this is the whole story.
+https://lore.kernel.org/linux-spi/20200505191910.GA2970@bogus/T/#md626b5f6f2294b0ebd70995d5ed0e67a360e000b
 
-I think Charles' fix made it work, and then commit
-3e5ec1db8bfee845d9f8560d1c64aeaccd586398
-"spi: Fix SPI_CS_HIGH setting when using native and GPIO CS"
-fixed it broken again.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Allison Randal <allison@lohutok.net>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Gareth Williams <gareth.williams.jx@renesas.com>
+> Cc: linux-mips@vger.kernel.org
+> ---
+>  .../bindings/spi/snps,dw-apb-ssi.txt          |  41 -------
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 113 ++++++++++++++++++
+>  .../devicetree/bindings/spi/spi-dw.txt        |  24 ----
+>  3 files changed, 113 insertions(+), 65 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-dw.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+> deleted file mode 100644
+> index 3ed08ee9feba..000000000000
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -Synopsys DesignWare AMBA 2.0 Synchronous Serial Interface.
+> -
+> -Required properties:
+> -- compatible : "snps,dw-apb-ssi" or "mscc,<soc>-spi", where soc is "ocelot" or
+> -  "jaguar2", or "amazon,alpine-dw-apb-ssi"
+> -- reg : The register base for the controller. For "mscc,<soc>-spi", a second
+> -  register set is required (named ICPU_CFG:SPI_MST)
+> -- interrupts : One interrupt, used by the controller.
+> -- #address-cells : <1>, as required by generic SPI binding.
+> -- #size-cells : <0>, also as required by generic SPI binding.
+> -- clocks : phandles for the clocks, see the description of clock-names below.
+> -   The phandle for the "ssi_clk" is required. The phandle for the "pclk" clock
+> -   is optional. If a single clock is specified but no clock-name, it is the
+> -   "ssi_clk" clock. If both clocks are listed, the "ssi_clk" must be first.
+> -
+> -Optional properties:
+> -- clock-names : Contains the names of the clocks:
+> -    "ssi_clk", for the core clock used to generate the external SPI clock.
+> -    "pclk", the interface clock, required for register access. If a clock domain
+> -     used to enable this clock then it should be named "pclk_clkdomain".
+> -- cs-gpios : Specifies the gpio pins to be used for chipselects.
+> -- num-cs : The number of chipselects. If omitted, this will default to 4.
+> -- reg-io-width : The I/O register width (in bytes) implemented by this
+> -  device.  Supported values are 2 or 4 (the default).
+> -
+> -Child nodes as per the generic SPI binding.
+> -
+> -Example:
+> -
+> -	spi@fff00000 {
+> -		compatible = "snps,dw-apb-ssi";
+> -		reg = <0xfff00000 0x1000>;
+> -		interrupts = <0 154 4>;
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
+> -		clocks = <&spi_m_clk>;
+> -		num-cs = <2>;
+> -		cs-gpios = <&gpio0 13 0>,
+> -			   <&gpio0 14 0>;
+> -	};
+> -
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> new file mode 100644
+> index 000000000000..e2f6d8aa6181
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -0,0 +1,113 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/snps,dw-apb-ssi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Synopsys DesignWare AMBA 2.0 Synchronous Serial Interface
+> +
+> +maintainers:
+> +  - Mark Brown <broonie@kernel.org>
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mscc,ocelot-spi
+> +              - mscc,jaguar2-spi
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: Generic DW SPI controller
+> +        const: snps,dw-apb-ssi
+> +      - description: Microsemi Ocelot/Jaguar2 SoC SPI controller
+> +        items:
+> +          - enum:
+> +              - mscc,ocelot-spi
+> +              - mscc,jaguar2-spi
+> +          - const: snps,dw-apb-ssi
+> +      - description: Amazon Alpine SPI controller
+> +        const: amazon,alpine-dw-apb-ssi
+> +      - description: Renesas RZ/N1 SPI controlle.
+> +        items:
+> +          - const: renesas,rzn1-spi
+> +          - const: snps,dw-apb-ssi
+> +
+> +  reg:
+> +    minItems: 1
+> +    items:
+> +      - description: DW APB SSI controller memory mapped registers
+> +      - description: SPI MST region map
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    items:
+> +      - description: SPI Controller reference clock source
+> +      - description: APB interface clock source
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: ssi_clk
+> +      - const: pclk
+> +
+> +  reg-io-width:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: I/O register width (in bytes) implemented by this device
+> +    default: 4
+> +    enum: [ 2, 4 ]
+> +
+> +  num-cs:
+> +    default: 4
+> +    minimum: 1
+> +    maximum: 4
+> +
+> +patternProperties:
+> +  "^.*@[0-9a-f]+$":
+> +    type: object
+> +    properties:
+> +      reg:
+> +        minimum: 0
+> +        maximum: 3
+> +
+> +      spi-rx-bus-width:
+> +        const: 1
+> +
+> +      spi-tx-bus-width:
+> +        const: 1
+> +
+> +unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - interrupts
+> +  - clocks
+> +
+> +examples:
+> +  - |
+> +    spi@fff00000 {
+> +      compatible = "snps,dw-apb-ssi";
+> +      reg = <0xfff00000 0x1000>;
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      interrupts = <0 154 4>;
+> +      clocks = <&spi_m_clk>;
+> +      num-cs = <2>;
+> +      cs-gpios = <&gpio0 13 0>,
+> +                 <&gpio0 14 0>;
+> +    };
+> +...
+> diff --git a/Documentation/devicetree/bindings/spi/spi-dw.txt b/Documentation/devicetree/bindings/spi/spi-dw.txt
+> deleted file mode 100644
+> index 7b63ed601990..000000000000
+> --- a/Documentation/devicetree/bindings/spi/spi-dw.txt
+> +++ /dev/null
+> @@ -1,24 +0,0 @@
+> -Synopsys DesignWare SPI master
+> -
+> -Required properties:
+> -- compatible: should be "snps,designware-spi"
+> -- #address-cells: see spi-bus.txt
+> -- #size-cells: see spi-bus.txt
+> -- reg: address and length of the spi master registers
+> -- interrupts: should contain one interrupt
+> -- clocks: spi clock phandle
+> -- num-cs: see spi-bus.txt
+> -
+> -Optional properties:
+> -- cs-gpios: see spi-bus.txt
+> -
+> -Example:
+> -
+> -spi: spi@4020a000 {
+> -	compatible = "snps,designware-spi";
+> -	interrupts = <11 1>;
+> -	reg = <0x4020a000 0x1000>;
+> -	clocks = <&pclk>;
+> -	num-cs = <2>;
+> -	cs-gpios = <&banka 0 0>;
+> -};
+> -- 
+> 2.25.1
+> 
 
-This commit will make sure only set SPI_CS_HIGH on a
-spi_device if it is using a GPIO as CS. Before this change,
-the core would set that on everything, and expect the
-.set_cs() callback to cope.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I think we fixed that and that fix should have been undone
-when applying commit 3e5ec1db8bfe.
 
-So possibly Fixes: should be set only to this commit, so
-that the fix is not backported to kernels without it.
-
-> DW SPI controller demands any native CS being set in order to proceed
-> with data transfer. So in order to activate the SPI communications we
-> must set any bit in the Slave Select DW SPI controller register no
-> matter whether the platform requests the GPIO- or native CS.
-
-Ah-ha! Maybe we should even add a comment explaining that.
-And that is why SPI_MASTER_GPIO_SS is set.
-
-I suppose my naive understanding was:
-"bit set to 1" = CS asserted (driven low)
-"bit set to 0" = CS de-asserted  (driven high)
-So that is not how this register works at all.
-
-> This commit fixes the problem for all described cases. So no matter
-> whether an SPI slave needs GPIO- or native-based CS with active-high
-> or low signal the corresponding bit will be set in SER.
-
-Makes sense.
-
->         struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
->         struct chip_data *chip = spi_get_ctldata(spi);
-> +       bool cs_high = !!(spi->mode & SPI_CS_HIGH);
->
->         /* Chip select logic is inverted from spi_set_cs() */
->         if (chip && chip->cs_control)
->                 chip->cs_control(!enable);
->
-> -       if (!enable)
-> +       if (cs_high == enable)
->                 dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
-
-This is the correct fix now but I an afraid not correct before
-commit 3e5ec1db8bfe.
-
-What I can't help but asking is: can the native chip select even
-handle active high chip select if not backed by a GPIO?
-Which register would set that polarity?
-
-Yours,
-Linus Walleij
