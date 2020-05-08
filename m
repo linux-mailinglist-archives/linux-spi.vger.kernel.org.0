@@ -2,29 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBF01CB076
-	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 15:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704811CB08A
+	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 15:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727911AbgEHNbb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 May 2020 09:31:31 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:43046 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727794AbgEHNbb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 09:31:31 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id D436C8030790;
-        Fri,  8 May 2020 13:31:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tIQrgy8F71PE; Fri,  8 May 2020 16:31:27 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
+        id S1726904AbgEHNdk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 May 2020 09:33:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53656 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726736AbgEHNdj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 8 May 2020 09:33:39 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC1B120708;
+        Fri,  8 May 2020 13:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588944819;
+        bh=mONIV7U+kyBJ+32pgZbmybpjfg+r5T9JwvmQQECspjk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nyn14izNbLw13+C8aRmGKLcZ3BwlQUuLEJ+wYP5GhFb2XP30lsbQM10NmgZC09Vk+
+         UckP1Oje+G2jOGzqWw2Ut/0r8k5jd+3UhDGOVWT+ssUTm6Cvxir3gVhiZHdxwzrl2M
+         ywV18wQajYEE9Ko/eynJhng+mXsz4m3l1ELplzdk=
+Date:   Fri, 8 May 2020 14:33:36 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -32,79 +42,53 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Allison Randal <allison@lohutok.net>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 13/17] spi: dw: Initialize paddr in DW SPI MMIO private data
-Date:   Fri, 8 May 2020 16:29:38 +0300
-Message-ID: <20200508132943.9826-14-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/17] spi: dw: Add generic DW DMA controller support
+Message-ID: <20200508133336.GK4820@sirena.org.uk>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HcXnUX77nabWBLF4"
+Content-Disposition: inline
+In-Reply-To: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+X-Cookie: Give him an evasive answer.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This field is used only for the DW SPI DMA code initialization, that's
-why there were no problems with it being uninitialized in Dw SPI MMIO
-driver. Since in a further patch we are going to introduce the DW SPI DMA
-support in the MMIO version of the driver, lets set the field with the
-physical address of the DW SPI controller registers region.
 
-Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Allison Randal <allison@lohutok.net>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Gareth Williams <gareth.williams.jx@renesas.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: devicetree@vger.kernel.org
----
- drivers/spi/spi-dw-mmio.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+--HcXnUX77nabWBLF4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 384a3ab6dc2d..2ff1b700305f 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -136,6 +136,7 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 	int (*init_func)(struct platform_device *pdev,
- 			 struct dw_spi_mmio *dwsmmio);
- 	struct dw_spi_mmio *dwsmmio;
-+	struct resource *mem;
- 	struct dw_spi *dws;
- 	int ret;
- 	int num_cs;
-@@ -148,11 +149,13 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 	dws = &dwsmmio->dws;
- 
- 	/* Get basic io resource and map it */
--	dws->regs = devm_platform_ioremap_resource(pdev, 0);
-+	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	dws->regs = devm_ioremap_resource(&pdev->dev, mem);
- 	if (IS_ERR(dws->regs)) {
- 		dev_err(&pdev->dev, "SPI region map failed\n");
- 		return PTR_ERR(dws->regs);
- 	}
-+	dws->paddr = mem->start;
- 
- 	dws->irq = platform_get_irq(pdev, 0);
- 	if (dws->irq < 0)
--- 
-2.25.1
+On Fri, May 08, 2020 at 04:29:25PM +0300, Serge Semin wrote:
 
+> Serge Semin (17):
+>   dt-bindings: spi: Convert DW SPI binding to DT schema
+
+Please don't make new feature development dependent on conversion to the
+new schema format, there's quite a backlog of reviews of schema
+conversions so it can slow things down.  It's good to do the conversions
+but please do them after adding any new stuff to the binding rather than
+before.
+
+--HcXnUX77nabWBLF4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl61X7AACgkQJNaLcl1U
+h9CLnAf+O/mkQGXZWskF1aU9ifA3WKCaGO7ENKOG2HlI7+/2BtDt7ImOkCrcBbKb
+K9yAjXfWqhx47uiQoeLJtmdZQVBhn73fL867tXqzbvo1IfIw8nAk7VNmePzIDMcL
+61DQCKjbmBvQd70xDDzjrOCZbMSJ5zzjWSBClVFZDi7VvB0Q7ngIRoWJkKy/mm8D
+joP8Y76nidk0LMvKgqhmCwxIXKTFgacy9ld8zckl1VgkzFAQ5AT1yKOOWZiCUHMt
+8dfJt0DwzuBEUKUDcGFXFg4duheda20SgYnFkrM19Nh/D39dqJ//xyCUhViWz/yB
+GaOwQ+OgauLqiTph56P0R/1rFek2/Q==
+=FjO8
+-----END PGP SIGNATURE-----
+
+--HcXnUX77nabWBLF4--
