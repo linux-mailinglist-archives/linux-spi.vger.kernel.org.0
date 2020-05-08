@@ -2,31 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD061CA83E
-	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 12:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0911CA84C
+	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 12:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726612AbgEHKWN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 May 2020 06:22:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37256 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725815AbgEHKWN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 8 May 2020 06:22:13 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D2DBA208D6;
-        Fri,  8 May 2020 10:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588933332;
-        bh=0zdzBynO1wxpltbyCDGMW3LJkzChWsD2F3DXAG0KVvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1LorngV4QwrEbOgNnfaULvNuCzhPnLImq+CL9GgvYjaScTv/v1pQTz7r67TRzncGC
-         wnJoT6sRoiyLNpqXUsZhDchHJZhmOrP9iYVSr4QGjPFiXMC9pKtsJLpWVNmXG/oO6d
-         mOSP6xhcQ5fR9Zdxi+tbEjHDtt1EygyINhUb5aEo=
-Date:   Fri, 8 May 2020 11:22:10 +0100
-From:   Mark Brown <broonie@kernel.org>
+        id S1726598AbgEHK1C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 May 2020 06:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgEHK1B (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 06:27:01 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46469C05BD43;
+        Fri,  8 May 2020 03:27:00 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id 7so5087990pjo.0;
+        Fri, 08 May 2020 03:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DZy9pkcBOrjCjg4Qkt27IkR6JTIiM5cV3+uquhM8WpE=;
+        b=Y1RvCu9eoSCgYQeLeMRJWGSFq/GuuBWI1TSDsUK7iiTFqH94KTKwyxJsT1hTpwWcoT
+         lJ2c3P57GJQkDIhAVDbhPT3WOol41JCylmoDswHN4iZ84PMqYD+nb/wzezk+xglTBfCb
+         g+WIJ4C8KyoEs1Z5yJo6etJKvPbFzZoedopO6JL719invW2D4camVQwVlIB/khCDjp2/
+         LT1QOIqdywfL6kNoiUmzy1+x/7LbQXxKFnXMYxm7usNSBYz7wBKMmAqJwVe6FRcZ0DAq
+         IclQH+U6hOj8TAQAMJ+vWG5s6NQi8WJuUSzh103tguKXGig2/CdGi6d2QvgccyTC6Uoh
+         e7Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DZy9pkcBOrjCjg4Qkt27IkR6JTIiM5cV3+uquhM8WpE=;
+        b=tUC9yS5r3SmDG5VKwZGncadzreQK76Fn0oRIUTTOtnbnX1CnIh2L3CPhhDu2uNWz/2
+         4S1hQ7bF787NJBr6QBYoRKkjSKQL4gf61vlIjpdzylav9JNm+zO8C35iFWzmTGf1hlp4
+         0+kpUfIs52ecNzpcZf9k4qe/JSpB66W7+Sg3GuGjt/eOboS3lnMdBwR/nUGwxtVNKW6L
+         RsD+oZ/88TYKrXUOMjgP1JyGlU1un0KCbHfYumGf84nJxEp84aC9t0KupJD2hR/Tbazr
+         aUFLzd0pDQnmKlVuWjM3KJPE+Y8xa3d0wkJC5JbvbU5w9mX/Kj08Di5xthHLqx1FhauZ
+         aTXA==
+X-Gm-Message-State: AGi0Pua18fsC3HNFK38gDxAWSxdC/678bl9hpRaMynFmqPsxedhmgkc0
+        cGcDEYj5L20nK+R/vWlrqvq721EPtv6wYHiV490=
+X-Google-Smtp-Source: APiQypJqDoxKMk4xvuslikRiRX8ShXnPqbto61mW3jENDen09PX1j2bdXToCAPfWo+d3kRgJCDBnTBhOzAblxyDyzr8=
+X-Received: by 2002:a17:90b:94a:: with SMTP id dw10mr5450560pjb.228.1588933619112;
+ Fri, 08 May 2020 03:26:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75VdtzdX-sOvq2cZdXqGUmU=0rdzQW_USGD_q0D59pUMTWg@mail.gmail.com> <20200508101541.e3yxaocuilaiyutg@mobilestation>
+In-Reply-To: <20200508101541.e3yxaocuilaiyutg@mobilestation>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 8 May 2020 13:26:52 +0300
+Message-ID: <CAHp75VcaVGHfYN1hjD5eKgpKJkpKEif8NxBGO1YF61_apv82Kg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+Cc:     Mark Brown <broonie@kernel.org>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -49,66 +76,43 @@ Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jassi Brar <jaswinder.singh@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Message-ID: <20200508102210.GC4820@sirena.org.uk>
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
- <CAHp75VdtzdX-sOvq2cZdXqGUmU=0rdzQW_USGD_q0D59pUMTWg@mail.gmail.com>
- <20200508101541.e3yxaocuilaiyutg@mobilestation>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+nBD6E3TurpgldQp"
-Content-Disposition: inline
-In-Reply-To: <20200508101541.e3yxaocuilaiyutg@mobilestation>
-X-Cookie: Give him an evasive answer.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---+nBD6E3TurpgldQp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, May 08, 2020 at 01:15:41PM +0300, Serge Semin wrote:
+On Fri, May 8, 2020 at 1:15 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+>
 > On Fri, May 08, 2020 at 01:03:11PM +0300, Andy Shevchenko wrote:
-
+> > On Fri, May 8, 2020 at 12:37 PM Serge Semin
+> > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > >
+> > > This SPI-controller is a part of the Baikal-T1 System Controller and
+> > > is based on the DW APB SSI IP-core, but with very limited resources:
+> > > no IRQ, no DMA, only a single native chip-select and just 8 bytes Tx/Rx
+> > > FIFO available. In order to provide a transparent initial boot code
+> > > execution this controller is also utilized by an vendor-specific block,
+> > > which provides an CS0 SPI flash direct mapping interface. Since both
+> > > direct mapping and SPI controller normal utilization are mutual exclusive
+> > > only a one of these interfaces can be used to access an external SPI
 > > > slave device. Taking into account the peculiarities of the controller
 > > > registers and physically mapped SPI flash access, very limited resources
 > > > and seeing the normal usecase of the controller is to access an external
 > > > SPI-nor flash, we decided to create a dedicated SPI driver for it.
-
+> >
 > > It seems a lot of code.
 > > Why can't you use spi-dw-mmio.c et al.?
-
+>
 > I said above why. Even though the registers set is similar It's too specific
 > to be integrated into the generic DW SSI driver.
 
-Can you be more specific about the issues?  From what you wrote it
-sounded like the main thing was chip select handling.
+At least you may do at the beginning is to reuse header spi-dw.h and
+put your stuff under
+spi-dw-baikal.c or so. Then, look at the spi-dw.c and check what can
+be reused (I think a lot).
 
-> > > The driver provides callbacks for native messages-based SPI interface,
-> > > SPI-memory and direct mapping read operations. Due to not having any
-> > > asynchronous signaling interface provided by the core we have no choice
-
-What do you mean by "asynchronous signaling interface provided by the
-core" here?
-
---+nBD6E3TurpgldQp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl61MtEACgkQJNaLcl1U
-h9BbBAf+Jl9EnhQJquSLhnymjo26KCwHkpt/NEN6OKsKTLYfqL6Emy6SUPmqzpdM
-AUxNE0209CAMHG/ThduAVeKtICEoc5aek/HHkit5GcPze80sUzY2xRTLvNtVFp2S
-DcYhPtO+n422dQo/pp4T7LOBp+9o/oLkw3laGi8PL2zqGu7JOMOaEt8Zxsr1V5OV
-UrtTzdDW6ztfatRY/p1Re4Uy+pDS6fPEgfHKxImaZSeoLSbhLc07y3R6QOtChd+p
-Kk3L9eoLS90IjB9xTHjgASfmLKE+15kuoRfH0w3bU3ldRRUVlfckYXxKklZBVRO4
-KnZnpFoa6wjOYpoPbHLv5cpFOXKpPw==
-=5r9D
------END PGP SIGNATURE-----
-
---+nBD6E3TurpgldQp--
+-- 
+With Best Regards,
+Andy Shevchenko
