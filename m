@@ -2,216 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD5E1CB7AF
-	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 20:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B5E1CB7B2
+	for <lists+linux-spi@lfdr.de>; Fri,  8 May 2020 20:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbgEHSxO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 May 2020 14:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727105AbgEHSxO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 14:53:14 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AA2C061A0C
-        for <linux-spi@vger.kernel.org>; Fri,  8 May 2020 11:53:12 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id 207so1263752pgc.6
-        for <linux-spi@vger.kernel.org>; Fri, 08 May 2020 11:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i7cajeOI7t/O4BieeA4MfIrn4RGmhWaaIwirB4vXuQc=;
-        b=aVLs5Fmu4qrpOaBYOgocdVnjGjVZbzjtw2eD0B09bZ2TwTqFF3YBdASmRvE2O6pXoI
-         crpCPiiSVN9Yy1cl+mXSGnsyl/dPDHazS/n56/2bF5m3cBfNFEf+enwAl4YI/W6ZPiXO
-         XNr/SnHsyQWRzBHlaJi4Is529BaSjn7Vekl0I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i7cajeOI7t/O4BieeA4MfIrn4RGmhWaaIwirB4vXuQc=;
-        b=iv9E3VeiAN61h6dreWKMBDp7KobHlPMzMTVMXzju4nzJoNu48Q39FSnB4BqxTrWUGe
-         sqfaeAqg2XC9Y7xqVhLWp81vYlHrSlmn1gDvjGrn/2X51p6ustDwyITKXJMEmvLde3oi
-         Usw9HyiPawRnBUte4m3wGzDEh/OdxmTA4v05GLtIAbtZpxcjb3COSlzyEKtiPS1rrBx6
-         XMgbZB3r0JF+3q764o9LrpgOzhsPcUYudB85fL+sZBTgDM8QgPNX6NQIPbA7KRq902qf
-         pUjvxAR5xipk+m+kS6OcFtrut0Sv6aYPcBfVMc6ZtIb/lsxh+75OP/Aa9Rg9wldS0BHO
-         AChg==
-X-Gm-Message-State: AGi0PuZCwDWh3+uFOEklSs6V+6Qgiv1x/ljk28JZFcJsQZrc9uzcjPqb
-        DGtzOCKrQvnbuNI0VHBwM5QBpA==
-X-Google-Smtp-Source: APiQypKROAa/6+J17up8ZlBL6maJRsHFmxy82YxcjouGV6Krao/qBNGx9il4jK0PDfZp+LoO+4NjlQ==
-X-Received: by 2002:a65:460f:: with SMTP id v15mr3259783pgq.24.1588963992211;
-        Fri, 08 May 2020 11:53:12 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id h15sm2498074pfr.161.2020.05.08.11.53.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 May 2020 11:53:11 -0700 (PDT)
-Date:   Fri, 8 May 2020 11:53:10 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org, georgi.djakov@linaro.org
-Subject: Re: [PATCH V5 6/7] spi: spi-qcom-qspi: Add interconnect support
-Message-ID: <20200508185310.GF4525@google.com>
-References: <1588919619-21355-1-git-send-email-akashast@codeaurora.org>
- <1588919619-21355-7-git-send-email-akashast@codeaurora.org>
+        id S1726885AbgEHSyq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 May 2020 14:54:46 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:57302 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726797AbgEHSyp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 May 2020 14:54:45 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 048IsMMM109512;
+        Fri, 8 May 2020 13:54:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1588964062;
+        bh=vkQhbBYwxsFf8rmPeEJkV1I4wsQY6bW0mKd96d0v7sk=;
+        h=From:To:CC:Subject:Date;
+        b=EjK6Tpyijz9OYnAmGbBNznRY4pyzIG2R19J1RWzP4p5ZjoR6H6gsQhibBd7DGHG6w
+         4x1xtPLgHOdF3yRTm4+twouWT/XIl/D5jIUtHDBw4xFlYQJnDg919/6X5sYav85PIb
+         9DOUGqo/pOzw3d1gUgplpqNfyvmidqa+iIpBS+9w=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 048IsLSG117434;
+        Fri, 8 May 2020 13:54:21 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 8 May
+ 2020 13:54:21 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 8 May 2020 13:54:21 -0500
+Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 048IsGpS077355;
+        Fri, 8 May 2020 13:54:17 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <simon.k.r.goldschmidt@gmail.com>,
+        <dinguyen@kernel.org>, <marex@denx.de>
+Subject: [PATCH 0/6] mtd: spi-nor: Move cadence-qaudspi to spi-mem framework
+Date:   Sat, 9 May 2020 00:24:05 +0530
+Message-ID: <20200508185411.487-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1588919619-21355-7-git-send-email-akashast@codeaurora.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 08, 2020 at 12:03:38PM +0530, Akash Asthana wrote:
-> Get the interconnect paths for QSPI device and vote according to the
-> current bus speed of the driver.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
-> Changes in V2:
->  - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
->    path handle
->  - As per Matthias comment, added error handling for icc_set_bw call
-> 
-> Changes in V3:
->  - No Change.
-> 
-> Changes in V4:
->  - As per Mark's comment move peak_bw guess as twice of avg_bw if
->    nothing mentioned explicitly to ICC core.
-> 
-> Changes in V5:
->  - Add icc_enable/disable to power on/off call.
->  - Save some non-zero avg/peak value to ICC core by calling geni_icc_set_bw
->    from probe so that when resume/icc_enable is called NOC are running at
->    some non-zero value.
-> 
->  drivers/spi/spi-qcom-qspi.c | 59 ++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 58 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-> index 3c4f83b..6e299f4 100644
-> --- a/drivers/spi/spi-qcom-qspi.c
-> +++ b/drivers/spi/spi-qcom-qspi.c
-> @@ -2,6 +2,7 @@
->  // Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
->  
->  #include <linux/clk.h>
-> +#include <linux/interconnect.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
-> @@ -139,7 +140,10 @@ struct qcom_qspi {
->  	struct device *dev;
->  	struct clk_bulk_data *clks;
->  	struct qspi_xfer xfer;
-> -	/* Lock to protect xfer and IRQ accessed registers */
-> +	struct icc_path *icc_path_cpu_to_qspi;
-> +	unsigned int avg_bw_cpu;
-> +	unsigned int peak_bw_cpu;
+This series is a subset of "[PATCH v12 0/4] spi: cadence-quadspi: Add
+support for the Cadence QSPI controller" by Ramuthevar,Vadivel MuruganX
+<vadivel.muruganx.ramuthevar@linux.intel.com> that intended to move
+cadence-quadspi driver to spi-mem framework
 
-There is no point in having two fields, 'peak_bw_cpu' is always assigned
-to 'avg_bw_cpu' and passed to icc_set_bw(). Just make it a single field
-'icc_bw_cpu'.
+Those patches were trying to accomplish too many things in a single set
+of patches and need to split into smaller patches. This is reduced
+version of above series.
 
-> +	/* Lock to protect data accessed by IRQs */
->  	spinlock_t lock;
->  };
->  
-> @@ -241,6 +245,20 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
->  		return ret;
->  	}
->  
-> +	/*
-> +	 * Set BW quota for CPU as driver supports FIFO mode only.
-> +	 * We don't have explicit peak requirement so keep it equal to avg_bw.
-> +	 */
-> +	ctrl->avg_bw_cpu = Bps_to_icc(speed_hz);
-> +	ctrl->peak_bw_cpu = ctrl->avg_bw_cpu;
-> +	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, ctrl->avg_bw_cpu,
-> +		ctrl->peak_bw_cpu);
-> +	if (ret) {
-> +		dev_err(ctrl->dev, "%s: ICC BW voting failed for cpu\n",
-> +			__func__);
+Changes that are intended to make migration easy are split into separate
+patches. Patches 1 to 3 drop features that cannot be supported under
+spi-mem at the moment (backward compatibility is maintained).
+Patch 4-5 are trivial cleanups. Patch 6 does the actual conversion to
+spi-mem and patch 7 moves the driver to drivers/spi folder.
 
-the logging in this patch is inconsistent. Here the error is not printed,
-at all, in other cases it's "<error>, ret:-42" or "<error> ret:-42".
-Please stick to a common format (unless there is no error). My
-suggestion would be "<error>: -42", in my perception "ret:" just adds
-noise.
+I have tested both INDAC mode (used by non TI platforms like Altera
+SoCFPGA) and DAC mode (used by TI platforms) on TI EVMs.
 
-> +		return ret;
-> +	}
-> +
->  	spin_lock_irqsave(&ctrl->lock, flags);
->  
->  	/* We are half duplex, so either rx or tx will be set */
-> @@ -458,6 +476,29 @@ static int qcom_qspi_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto exit_probe_master_put;
->  
-> +	ctrl->icc_path_cpu_to_qspi = devm_of_icc_get(dev, "qspi-config");
-> +	if (IS_ERR(ctrl->icc_path_cpu_to_qspi)) {
-> +		ret = PTR_ERR(ctrl->icc_path_cpu_to_qspi);
-> +		if (ret != -EPROBE_DEFER)
-> +			dev_err(dev, "Failed to get cpu path, ret:%d\n", ret);
-> +		goto exit_probe_master_put;
-> +	}
-> +	/* Set BW vote for register access */
-> +	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, Bps_to_icc(1000),
-> +				Bps_to_icc(1000));
-> +	if (ret) {
-> +		dev_err(ctrl->dev, "%s: ICC BW voting failed for cpu ret:%d\n",
-> +				__func__, ret);
-> +		goto exit_probe_master_put;
-> +	}
-> +
-> +	ret = icc_disable(ctrl->icc_path_cpu_to_qspi);
-> +	if (ret) {
-> +		dev_err(ctrl->dev, "%s: ICC disable failed for cpu ret:%d\n",
-> +				__func__, ret);
-> +		goto exit_probe_master_put;
-> +	}
-> +
->  	ret = platform_get_irq(pdev, 0);
->  	if (ret < 0)
->  		goto exit_probe_master_put;
-> @@ -511,9 +552,17 @@ static int __maybe_unused qcom_qspi_runtime_suspend(struct device *dev)
->  {
->  	struct spi_master *master = dev_get_drvdata(dev);
->  	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
-> +	int ret;
->  
->  	clk_bulk_disable_unprepare(QSPI_NUM_CLKS, ctrl->clks);
->  
-> +	ret = icc_disable(ctrl->icc_path_cpu_to_qspi);
-> +	if (ret) {
-> +		dev_err_ratelimited(ctrl->dev, "%s: ICC disable failed for cpu ret:%d\n",
-> +			__func__, ret);
-> +		return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -521,6 +570,14 @@ static int __maybe_unused qcom_qspi_runtime_resume(struct device *dev)
->  {
->  	struct spi_master *master = dev_get_drvdata(dev);
->  	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
-> +	int ret;
-> +
-> +	ret = icc_enable(ctrl->icc_path_cpu_to_qspi);
-> +	if (ret) {
-> +		dev_err_ratelimited(ctrl->dev, "%s: ICC enable failed for cpu ret:%d\n",
-> +			__func__, ret);
-> +		return ret;
-> +	}
->  
->  	return clk_bulk_prepare_enable(QSPI_NUM_CLKS, ctrl->clks);
->  }
+Patches to move move bindings over to
+"Documentation/devicetree/bindings/spi/" directory and also conversion
+of bindig doc to YAML will be posted separately.  Support for Intel
+platform would follow that.
+
+Changes since v12
+
+- Drop intel platform related changes
+- Drop DT bindings movement to YAML
+- Split patch moving driver to spi-mem framework framework into
+  multiple patches as suggested by Tudor.
+
+v12: https://patchwork.ozlabs.org/project/linux-mtd/list/?series=163343&state=%2A&archive=both
+
+Vadivel,
+
+I have maintained the additional changes needed on top of this series
+for Intel platform that were part of your v12 series here (needs cleanup):
+
+https://github.com/r-vignesh/linux.git branch: cqspi-mig
+
+Please use above branch to test the same.
+
+Ramuthevar Vadivel Murugan (2):
+  mtd: spi-nor: Convert cadence-quadspi to use spi-mem framework
+  spi: Move cadence-quadspi driver to drivers/spi/
+
+Vignesh Raghavendra (4):
+  mtd: spi-nor: cadence-quadspi: Drop cdns,is-decoded-cs property
+  mtd: spi-nor: cadence-quadspi: Provide a way to disable DAC mode
+  mtd: spi-nor: cadence-quadspi: Don't initialize rx_dma_complete on
+    failure
+  mtd: spi-nor: cadence-quadspi: Fix error path on failure to acquire
+    reset lines
+
+ drivers/mtd/spi-nor/controllers/Kconfig       |  11 -
+ drivers/mtd/spi-nor/controllers/Makefile      |   1 -
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ .../spi-cadence-quadspi.c}                    | 546 +++++++-----------
+ 5 files changed, 215 insertions(+), 355 deletions(-)
+ rename drivers/{mtd/spi-nor/controllers/cadence-quadspi.c => spi/spi-cadence-quadspi.c} (73%)
+
+-- 
+2.26.2
+
