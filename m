@@ -2,116 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F05CF1CC12E
-	for <lists+linux-spi@lfdr.de>; Sat,  9 May 2020 14:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FB91CC360
+	for <lists+linux-spi@lfdr.de>; Sat,  9 May 2020 19:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728377AbgEIMLo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 9 May 2020 08:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726782AbgEIMLn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 9 May 2020 08:11:43 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6422DC061A0C;
-        Sat,  9 May 2020 05:11:43 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id h12so6062976pjz.1;
-        Sat, 09 May 2020 05:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/wlJFZjwuM81Jh/anwiOMAgeJWfW7ajnVCis2G3dl9k=;
-        b=dKc+TMdVfruQ8XRDND37cvnLytXndIhsz15FSm3KMnB9sjom5WRjcOrEvJU+yPeS5m
-         uLGz8hq/6wUQa1UkJ6D9OOEWccrMgIgPRCSIg41TqPjfkTuKUC0Ehrb+iO1d1/2GLrOm
-         /fKTPoievZIameK2E1CPZF8ocqWO3Z/8TRLiqbEGadpMGPJn0yM6uLIs+CgTu4DUWr7y
-         eICNRW91C5opv2i6zQ/H16dMo5H6yMCP35TW1giskIX62HHVkbyL2rmiTQ+sX9p12pPZ
-         Jah2nAq0kBHiHiaNOja7ue0FFq5bhpEQjX4Ou6kmfYW07JR8EQFVw7saNPEW96vRu0/p
-         8Rcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/wlJFZjwuM81Jh/anwiOMAgeJWfW7ajnVCis2G3dl9k=;
-        b=hBSOicqiMoRvQ1+95fkuDEIgq954Ssij6PrQLa2WsiDEGxpO/m6OCYqr/YLIK0PAhL
-         9Z+ScU431BFPewKX2WzmbLkb0Oy8Dy2JHC22QJlhItxp0tFvEPHkoL44ONNZR2ukhQn8
-         GM78JBbnJ+8uQGl5tOUW+q35ij9PKW2VYWKoOAgGktu7lm3JZDuQSQdoPI8JjTzKsQOa
-         FBQhRkzZAM77Q/+8+m0kNzZi+zpkg01akDdrQXFJXyIVoX5iv9ciBJ1mSBzZpH/vrS7M
-         339HsfyYA72cpUg+C0OlHatXNxC4OPQXHuHmEkPxgu2LslWbPI+sg02baWTVWmYmWje9
-         +Q2w==
-X-Gm-Message-State: AGi0PualsD2RU/X9pST9Rw80C4HX1EAELEXi8gcTxHS47/7haxh8Vlyl
-        M/AnUdY0EHZN4bu4sUBvD5eCH38/8mqpoDE5SxzGgzfq
-X-Google-Smtp-Source: APiQypI4sdcR01RdvjwOkHbMaSexjDF1WdE/GFMDiJPbhE1E1Lit7yy20vvFbGNhhAxdgjUqXNuG191HfxC7kMjnnGw=
-X-Received: by 2002:a17:90b:94a:: with SMTP id dw10mr11427305pjb.228.1589026302658;
- Sat, 09 May 2020 05:11:42 -0700 (PDT)
+        id S1728420AbgEIRxQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 9 May 2020 13:53:16 -0400
+Received: from sv228.xserver.jp ([219.94.203.129]:43960 "EHLO sv228.xserver.jp"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726214AbgEIRxP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 9 May 2020 13:53:15 -0400
+X-Greylist: delayed 379 seconds by postgrey-1.27 at vger.kernel.org; Sat, 09 May 2020 13:53:14 EDT
+Received: from virusgw2.xserver.jp (virusgw2.xserver.jp [219.94.203.91])
+        by sv228.xserver.jp (Postfix) with ESMTP id 9FCF53E29FBA34;
+        Sun, 10 May 2020 02:46:54 +0900 (JST)
+Received: from sv228.xserver.jp (219.94.203.129)
+ by virusgw2.xserver.jp (F-Secure/fsigk_smtp/521/virusgw2.xserver.jp);
+ Sun, 10 May 2020 02:46:53 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw2.xserver.jp)
+Received: from webmail.xserver.ne.jp (webmail.xserver.ne.jp [210.188.201.183])
+        by sv228.xserver.jp (Postfix) with ESMTPA id 4224F3E0ECE610;
+        Sun, 10 May 2020 02:46:54 +0900 (JST)
 MIME-Version: 1.0
-References: <1588919619-21355-1-git-send-email-akashast@codeaurora.org> <1588919619-21355-3-git-send-email-akashast@codeaurora.org>
-In-Reply-To: <1588919619-21355-3-git-send-email-akashast@codeaurora.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 9 May 2020 15:11:31 +0300
-Message-ID: <CAHp75Vdjz7RBbyPwZwvNq5njwb_Jc76U=3pDpswmoFCFaGtNAQ@mail.gmail.com>
-Subject: Re: [PATCH V5 2/7] soc: qcom-geni-se: Add interconnect support to fix
- earlycon crash
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, agross@kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, mgautam@codeaurora.org,
-        linux-arm-msm@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Evan Green <evgreen@chromium.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Sun, 10 May 2020 01:46:54 +0800
+From:   Chan Leap Phala <9@qraud.com>
+To:     undisclosed-recipients:;
+Subject: Fw:
+Reply-To: chan.l.phala@gmail.com
+Mail-Reply-To: chan.l.phala@gmail.com
+Message-ID: <2b856c4949b48d1a58e0530ed1e1f4a1@qraud.com>
+X-Sender: 9@qraud.com
+User-Agent: Roundcube Webmail/1.2.0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 8, 2020 at 9:34 AM Akash Asthana <akashast@codeaurora.org> wrote:
->
-> QUP core clock is shared among all the SE drivers present on particular
-> QUP wrapper, the system will reset(unclocked access) if earlycon used after
-> QUP core clock is put to 0 from other SE drivers before real console comes
-> up.
->
-> As earlycon can't vote for it's QUP core need, to fix this add ICC
-> support to common/QUP wrapper driver and put vote for QUP core from
-> probe on behalf of earlycon and remove vote during earlycon exit call.
+Gorące pozdrowienia,
 
-...
+Wysłałem ci ten list miesiąc temu, ale nie jestem pewien, czy go 
+otrzymałeś, ponieważ nie otrzymałem od ciebie żadnej odpowiedzi, dlatego 
+ponownie go wysyłam.
 
-> +       for_each_child_of_node(parent, child) {
+Jestem adwokatem Chan Leap Phala, osobistym prawnikiem mojego zmarłego 
+klienta przed jego przedwczesną śmiercią z rodziną. Otrzymałem od jego 
+banku mandat na dostarczenie / przedstawienie bliskich krewnych kwoty 
+jego funduszu o wartości Siedemdziesiąt Osiem Milionów Pięćset Sto 
+Osiemdziesięciu Tysięcy Dolarów Amerykańskich 78 580 000 USD, więc 
+skontaktowałem się z Tobą. Po nieudanej próbie znalezienia krewnego 
+mojego zmarłego klienta postanowiłem się z tobą skontaktować, ponieważ 
+ma on to samo nazwisko i narodowość.
 
-> +               if (of_device_is_compatible(child, "qcom,geni-se-qup")) {
+Proszę o kontakt w celu uzyskania dalszych informacji: 
+(chan.l.phala@gmail.com)
 
-if (!...)
- continue;
-
-will save you a readability of the loop body.
-
-Or...
-
-> +                       wrapper = platform_get_drvdata(of_find_device_by_node(
-> +                                       child));
-
-...leave this on one line
-
-> +                       icc_put(wrapper->to_core.path);
-> +                       wrapper->to_core.path = NULL;
-> +               }
-
-And here is the question, what do you want to do if you find more
-devices with the same compatible string?
-
-> +       }
-
--- 
-With Best Regards,
-Andy Shevchenko
+Z poważaniem
+Barrister Chan Leap PHALA
+Prawnik / Adwokaci
+E-mail: chan.l.phala@gmail.com
