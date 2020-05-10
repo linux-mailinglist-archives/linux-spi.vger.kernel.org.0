@@ -2,251 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 724891CCC2B
-	for <lists+linux-spi@lfdr.de>; Sun, 10 May 2020 18:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31961CCE85
+	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 00:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbgEJQPk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 10 May 2020 12:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726446AbgEJQPk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 10 May 2020 12:15:40 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA4BC061A0C;
-        Sun, 10 May 2020 09:15:40 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id o8so3815739ybc.11;
-        Sun, 10 May 2020 09:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jP2OppdWYHG9ae8C528jnvGRJr3i8WffS/Btmm79ef4=;
-        b=UJVMboicOJwIStVUYHd58OCXInFzut0XWyCZVxttgKZS7QWuKI0cEuXq7+Otzj1xrF
-         RI28MvZ4wnyR66Y5SdApVlL5bynlIkreJTc81Fv1wpZwmFmaec0E+v0Nt05DpO6RKKvK
-         PdYhAi45YwJkA+fGV8ZfQWIMJq3AOC49pZVKWc/vh2zpYchQH1QOZG08kzCYoSdLaDNl
-         Iy5qNC73aV9h0lKQZiXNfJqTkb3VzLJfW+z0tNwNd4Nzx7lnupcarj2UpL9jr/FmlFrc
-         5puOqeRv4QCSYTBmng7kukOsXQjCcAtguVqoRY4ta+ETqJtjZInii+dm5nGDCW69Lc8s
-         wtpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jP2OppdWYHG9ae8C528jnvGRJr3i8WffS/Btmm79ef4=;
-        b=bxrxvGJ5VYH2Qsd5uJ+PX2b3medmj21UquiPwjLTqCE3dyX3KcbE3Cgk/ufKcU9eA6
-         7WHWQYG+e/qhy+CMG4jEyxs9Jwqy99z+kNPVhEhlT3ZSczo82JwyBzVwOVinFPufvv5p
-         qI/CSdH8r3ZDIo/ArTDveHejGzstXF5viVrQ6ZIZk6TCuEhI6O5o0stiJytOihigGBZF
-         BlPrl5L5C3jIargoqIpcs9E+4stn1Ng/mWAPZBuPM9wckkPcPJHi3nYg//cDPfelF8Pr
-         q2Q8lghw82olDJtd84Ihh34l1Nm/mvgNemSS2n38MFpfQUpxAh6zL22i2uF/zgpWD3+2
-         DuoA==
-X-Gm-Message-State: AGi0PuZ9lduYUDnuijWbl5EJBo9iAHc7F0dqmew4IY7rBkloufDQCO6q
-        BGWPw9sE1oHgkYZXEPGkypVJLoG3g/74O/3Au3E=
-X-Google-Smtp-Source: APiQypKywA8Hib3xDA/OXgsS2tECxAn+F0IIkb1c1aowKuxjItssElORtZsiGLY5OvroP4pQlIXgPV/MwEp4L+XvpK4=
-X-Received: by 2002:a25:c402:: with SMTP id u2mr18775323ybf.231.1589127339046;
- Sun, 10 May 2020 09:15:39 -0700 (PDT)
+        id S1729347AbgEJWRX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 10 May 2020 18:17:23 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:53961 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729342AbgEJWRW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 10 May 2020 18:17:22 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BFD26891B0;
+        Mon, 11 May 2020 10:17:17 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1589149037;
+        bh=SrgIz+PJYHKXN8CEOXRS3rQhCzXZZWj0itaj5yb73VI=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=gEu2+LoqCppAt8TRqOphp/vqL/bORRCpyc75HO2xMe7P2uzzetrCirReJdLrP72hg
+         BRzJ+9E/PAS0mct2NLJ1JVpaifeXxb31Kg7soOOdDCggCh6POqPVPD8JqNDfX9BcFN
+         sx9J8tVPeiuTZZxcS4g5bQjZJBMaZvdLug6iBmpNMJNx3/0eda8V9+NaC45gFIrPzD
+         34UD/8Ope365T8ynddyjKfiIzmWerkDn2wsl8pVNEqiVf91kqEySmfr65jplqgOmmG
+         qUUxMQihQsB+BHsA3TcWnQxj2cjmp6DAU6lcY0I6815ZZ6YDKEuuKexPyBjPjfEadW
+         l1O+ZjQJQaYEg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5eb87d6e0001>; Mon, 11 May 2020 10:17:18 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Mon, 11 May 2020 10:17:17 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.006; Mon, 11 May 2020 10:17:17 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        "Ralf Baechle" <ralf@linux-mips.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        "Chuanhong Guo" <gch981213@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Eddie James" <eajames@linux.ibm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Thread-Topic: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Thread-Index: AQHWJR1LjfOM6n85g0qPl2lemRFsA6idRtCAgAJndYCAAW/cAA==
+Date:   Sun, 10 May 2020 22:17:16 +0000
+Message-ID: <740f1569-d8d3-606a-73a8-f9feeb20e06f@alliedtelesis.co.nz>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+ <20200508113751.GD4820@sirena.org.uk>
+ <20200510002039.hwahqasnnceowskz@mobilestation>
+In-Reply-To: <20200510002039.hwahqasnnceowskz@mobilestation>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F0C745804143EC40B042AF8A4CCB7FE5@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20200508083729.5560-1-chris.ruehl@gtsys.com.hk>
- <20200508083729.5560-2-chris.ruehl@gtsys.com.hk> <CANBLGcwA+=OB-_nOYUijWrDBSkLYhR7_PNG1ewO7LZ-zRVGoxg@mail.gmail.com>
- <3890ba80-f9f7-7f22-5cb5-5b78bbf042e7@gtsys.com.hk>
-In-Reply-To: <3890ba80-f9f7-7f22-5cb5-5b78bbf042e7@gtsys.com.hk>
-From:   Emil Renner Berthing <emil.renner.berthing@gmail.com>
-Date:   Sun, 10 May 2020 18:15:27 +0200
-Message-ID: <CANBLGcxmAyPhnUB0hKdxcg7dQCfQLaHYY1Uxc6-GOmmF6rvK8Q@mail.gmail.com>
-Subject: Re: [PATCH v0 1/1] spi: spi-rockchip: add support for spi slave_mode
-To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Cc:     Jack Lo <jack.lo@gtsys.com.hk>, Heiko Stuebner <heiko@sntech.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi@vger.kernel.org,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Chris,
-
-On Sat, 9 May 2020 at 02:10, Chris Ruehl <chris.ruehl@gtsys.com.hk> wrote:
->
-> Hi Emil,
->
-> thanks for the review and your comments
->
-> On 8/5/2020 9:13 pm, Emil Renner Berthing wrote:
-> > Hi Chris,
-> >
-> > On Fri, 8 May 2020 at 10:47, Chris Ruehl <chris.ruehl@gtsys.com.hk> wrote:
-> >> This patch aim to add spi slave mode support to the rockchip driver.
-> >> Fix the wrong usage of num_cs set fix to ROCKCHIP_SPI_MAX_CS_NUM,
-> >> instead use max_native_cs flag to set the limit of native chip-select.
-> >> Enable use_gpio_descriptors to have cs_gpiod for gpio based chip-selects.
-> >>
-> >> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
-> >> ---
-> >>   drivers/spi/spi-rockchip.c | 46 +++++++++++++++++++++++++++++++++-----
-> >>   1 file changed, 41 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-> >> index 70ef63e0b6b8..9c1ff52c0f85 100644
-> >> --- a/drivers/spi/spi-rockchip.c
-> >> +++ b/drivers/spi/spi-rockchip.c
-> >> @@ -183,6 +183,9 @@ struct rockchip_spi {
-> >>          u8 rsd;
-> >>
-> >>          bool cs_asserted[ROCKCHIP_SPI_MAX_CS_NUM];
-> >> +
-> >> +       bool slave_mode;
-> >> +       bool slave_abort;
-> >>   };
-> >>
-> >>   static inline void spi_enable_chip(struct rockchip_spi *rs, bool enable)
-> >> @@ -359,7 +362,7 @@ static void rockchip_spi_dma_rxcb(void *data)
-> >>          struct rockchip_spi *rs = spi_master_get_devdata(master);
-> >>          int state = atomic_fetch_andnot(RXDMA, &rs->state);
-> >>
-> >> -       if (state & TXDMA)
-> >> +       if (state & TXDMA && !rs->slave_abort)
-> >>                  return;
-> >>
-> >>          spi_enable_chip(rs, false);
-> >> @@ -372,7 +375,7 @@ static void rockchip_spi_dma_txcb(void *data)
-> >>          struct rockchip_spi *rs = spi_master_get_devdata(master);
-> >>          int state = atomic_fetch_andnot(TXDMA, &rs->state);
-> >>
-> >> -       if (state & RXDMA)
-> >> +       if (state & RXDMA && !rs->slave_abort)
-> >>                  return;
-> >>
-> >>          /* Wait until the FIFO data completely. */
-> >> @@ -466,6 +469,10 @@ static void rockchip_spi_config(struct rockchip_spi *rs,
-> >>          u32 cr1;
-> >>          u32 dmacr = 0;
-> >>
-> >> +       if (rs->slavemode)
-> >> +               cr0 |= CR0_OPM_SLAVE << CR0_OPM_OFFSET;
-> >> +       rs->slave_abort = false;
-> >> +
-> >>          cr0 |= rs->rsd << CR0_RSD_OFFSET;
-> >>          cr0 |= (spi->mode & 0x3U) << CR0_SCPH_OFFSET;
-> >>          if (spi->mode & SPI_LSB_FIRST)
-> >> @@ -535,6 +542,16 @@ static size_t rockchip_spi_max_transfer_size(struct spi_device *spi)
-> >>          return ROCKCHIP_SPI_MAX_TRANLEN;
-> >>   }
-> >>
-> >> +static int rockchip_spi_slave_abort(struct spi_master *master)
-> >> +{
-> >> +       struct rockchip_spi *rs = spi_master_get_devdata(master);
-> >> +
-> >> +       rs->slave_abort = true;
-> >> +       complete(master);
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >>   static int rockchip_spi_transfer_one(
-> >>                  struct spi_master *master,
-> >>                  struct spi_device *spi,
-> >> @@ -589,14 +606,25 @@ static int rockchip_spi_probe(struct platform_device *pdev)
-> >>          struct spi_master *master;
-> >>          struct resource *mem;
-> >>          u32 rsd_nsecs;
-> >> +       bool slave_mode;
-> >> +       u32 num_cs = 1;
-> >> +
-> >> +       slave_mode = of_property_read_bool(np, "spi-slave");
-> >> +
-> >> +       if (slave_mode)
-> >> +               master = spi_alloc_slave(&pdev->dev,
-> >> +                               sizeof(struct rockchip_spi));
-> >> +       else
-> >> +               master = spi_alloc_master(&pdev->dev,
-> >> +                               sizeof(struct rockchip_spi));
-> >>
-> >> -       master = spi_alloc_master(&pdev->dev, sizeof(struct rockchip_spi));
-> >>          if (!master)
-> >>                  return -ENOMEM;
-> >>
-> >>          platform_set_drvdata(pdev, master);
-> >>
-> >>          rs = spi_master_get_devdata(master);
-> >> +       rs->slave_mode = slave_mode;
-> > This entry doesn't seem to be read from any of your code, and even it
-> > it was, the same information is available in master->slave, so I don't
-> > see why you need it in the rockchip_spi struct.
-> I haven't see the slave flag in the spi_controller struct, I will store the
-> information
-> there.
-> >
-> > Also spi_master is just #defined to spi_controller in spi.h, so maybe
-> > consider changing all 'struct spi_master *master' to 'struct
-> > spi_controller *ctrl' now that the driver supports both modes.
-> Can do,  but I think that is better to have a separate patch for it,
-> make it easier for review.
-
-Yes, you should probably do something like
-
-patch 1/3: change struct spi_master *master to struct spi_controller *ctrl
-patch 2/3: add slave slave mode
-patch 3/3: use num-cs property for ctrl->num_chipselect
-
-> >
-> >>          /* Get basic io resource and map it */
-> >>          mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> >> @@ -676,7 +704,16 @@ static int rockchip_spi_probe(struct platform_device *pdev)
-> >>          master->auto_runtime_pm = true;
-> >>          master->bus_num = pdev->id;
-> >>          master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP | SPI_LSB_FIRST;
-> >> -       master->num_chipselect = ROCKCHIP_SPI_MAX_CS_NUM;
-> >> +       if (slave_mode) {
-> >> +               master->mode_bits |= SPI_NO_CS;
-> >> +               master->slave_abort = rockchip_spi_slave_abort;
-> >> +       } else {
-> >> +               of_property_read_u32(np, "num-cs", &num_cs);
-> >> +               master->num_chipselect = num_cs;
-> > If you do something like this you won't need the temporary num_cs variable:
-> >
-> > if (of_property_read_u32(np, "num-cs", &master->num_chipselect))
-> >      master->num_chipselect = 1;
-> Like it , can see clearly the fallback to a default if num-cs isn't set in the
-> dts.
-> >
-> > Also it seems like you're changing the default from
-> > ROCKCHIP_SPI_MAX_CS_NUM to 1 if there is no num-cs property. Did you
-> > check that all boards either have the num-cs property defined or only
-> > needs num_chipselect = 1?
-> Only spi0 of the rockchip has a 2nd native chip select, all others a single only
-> therefore I find it less evil to use 1 vs. ROCKCHIP_SPI_MAX_CS_NUM
->
-> >> +               master->use_gpio_descriptors = true;
-> >> +               master->max_native_cs = ROCKCHIP_SPI_MAX_CS_NUM;
-> >> +               master->flags = SPI_MASTER_GPIO_SS;
-> >> +       }
-> >>          master->dev.of_node = pdev->dev.of_node;
-> >>          master->bits_per_word_mask = SPI_BPW_MASK(16) | SPI_BPW_MASK(8) | SPI_BPW_MASK(4);
-> >>          master->min_speed_hz = rs->freq / BAUDR_SCKDV_MAX;
-> >> @@ -686,7 +723,6 @@ static int rockchip_spi_probe(struct platform_device *pdev)
-> >>          master->transfer_one = rockchip_spi_transfer_one;
-> >>          master->max_transfer_size = rockchip_spi_max_transfer_size;
-> >>          master->handle_err = rockchip_spi_handle_err;
-> >> -       master->flags = SPI_MASTER_GPIO_SS;
-> >>
-> >>          master->dma_tx = dma_request_chan(rs->dev, "tx");
-> >>          if (IS_ERR(master->dma_tx)) {
-> >> --
-> >> 2.20.1
-> >>
-> >>
-> >> _______________________________________________
-> >> Linux-rockchip mailing list
-> >> Linux-rockchip@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-rockchip
->
-> --
-> GTSYS Limited RFID Technology
-> 9/F, Unit E, R07, Kwai Shing Industrial Building Phase 2,
-> 42-46 Tai Lin Pai Road, Kwai Chung, N.T., Hong Kong
-> Tel (852) 9079 9521
->
-> Disclaimer: https://www.gtsys.com.hk/email/classified.html
->
+DQpPbiAxMC8wNS8yMCAxMjoyMCBwbSwgU2VyZ2UgU2VtaW4gd3JvdGU6DQo+IE9uIEZyaSwgTWF5
+IDA4LCAyMDIwIGF0IDEyOjM3OjUxUE0gKzAxMDAsIE1hcmsgQnJvd24gd3JvdGU6DQo8c25pcD4N
+Cj4+PiArCXdyaXRlbChCSVQocmVxLT5jcyksIGJzLT5yZWdzICsgQkNfU1BJX1NFUik7DQo+Pj4g
+KwlpZiAocmVxLT5jc19ncGlvZCkgew0KPj4+ICsJCWdwaW9kX3NldF92YWx1ZV9jYW5zbGVlcChy
+ZXEtPmNzX2dwaW9kLA0KPj4+ICsJCQkJCSAhIShicy0+Y2ZnLm1vZGUgJiBTUElfQ1NfSElHSCkp
+Ow0KPj4gSWYgeW91IGhhdmUgYSBHUElPIGNoaXAgc2VsZWN0IHlvdSBzaG91bGQganVzdCBsZXQg
+dGhlIGNvcmUgbWFuYWdlIGl0DQo+PiB0aHJvdWdoIGNzX2dwaW9kIHJhdGhlciB0aGFuIG9wZW4g
+Y29kaW5nLg0KPiBPZiBjb3Vyc2UgSSBrbm93IHRoaXMsIGFuZCBub3JtYWxseSBJIHdvdWxkIGhh
+dmUgb21pdHRlZCB0aGUgR1BJTyBtYW51YWwNCj4gYXNzZXJ0aW9uIChob3BlZnVsbHkgc29vbiBt
+eSBoYW5kcyBnZXQgdG8gbWVyZ2luZyB0aGUgQVg5OTEwMCBkcml2ZXIgSSd2ZQ0KPiBkZXZlbG9w
+ZWQgc29tZSB0aW1lIGFnbykuIFRoZSB0aGluZyBpcyB0aGF0IHRoaXMgQmFpa2FsLVQxIFN5c3Rl
+bSBTU0kgZGV2aWNlDQo+IGRyaXZlciBoYXMgYmVlbiBpbml0aWFsbHkgd3JpdHRlbiBiZWZvcmUg
+Y29tbWl0IDA1NzY2MDUwZDViZCAoInNwaTogc3BpLW1lbToNCj4gZmFsbGJhY2sgdG8gdXNpbmcg
+dHJhbnNmZXJzIHdoZW4gQ1MgZ3Bpb3MgYXJlIHVzZWQiKS4gU28gYXNzZXJ0aW5nIEdQSU8gQ1Mg
+aGFkDQo+IGJlZW4gcmVxdWlyZWQgdG8gaW5pdGlhdGUgdGhlIFNQSSBtZW1vcnkgY29tbXVuaWNh
+dGlvbnMgc2VlaW5nIHRoZSBnZW5lcmljDQo+IHNwaV9tZW1fZXhlY19vcCgpIGRvZXNuJ3QgZG8g
+dGhpcy4gTWFudWFsIEdQSU8gbWFuaXB1bGF0aW9uIGlzIGluZGVlZCByZWR1bmRhbnQNCj4gZm9y
+IHRoZSBjdXJyZW50IFNQSS1tZW0gb3AgZXhlY3V0aW9uIHByb2NlZHVyZS4NCj4NCj4gU2Vjb25k
+bHkgdGhlIG1lc3NhZ2Ugb2YgdGhhdCBjb21taXQgc3RhdGVzICJEZXZpY2VzIHdpdGggY2hpcCBz
+ZWxlY3RzIGRyaXZlbg0KPiB2aWEgR1BJTyBhcmUgbm90IGNvbXBhdGlibGUgd2l0aCB0aGUgc3Bp
+LW1lbSBvcGVyYXRpb25zLiIgSSBmaW5kIHRoaXMgc3RhdGVtZW50DQo+IHF1ZXN0aW9uYWJsZSwg
+YmVjYXVzZSBmb3IgaW5zdGFuY2UgdGhpcyBkZXZpY2Ugc3VwcG9ydHMgbWVtb3J5IG9wZXJhdGlv
+bnMgd2l0aA0KPiBHUElPLWRyaXZlbiBDUy4gVGhvdWdoIGluIGN1cnJlbnQgaW1wbGVtZW50YXRp
+b24gdGhlIGRyaXZlciBmYWxsYmFjayB0byB1c2luZyBub3JtYWwNCj4gcHVzaC1wdWxsIElPIG1v
+ZGUgaWYgR1BJTyBDUyBpcyB1dGlsaXplZCBhcyBzYWZlciBvbmUuIEJ1dCBldmVuIGluIHRoaXMg
+Y2FzZQ0KPiBpdCdzIGJldHRlciB0aGFuIHNwbGl0dGluZyB0aGUgbWVtb3J5IG9wZXJhdGlvbnMg
+dXAgaW50byB0aGUgdHJhbnNmZXJzLCB3aGljaCBpcw0KPiBkZXZlbG9wZWQgaW4gdGhlIHNwaV9t
+ZW1fZXhlY19vcCgpIG1ldGhvZC4NCk9uIHRoaXMgc3BlY2lmaWMgYml0LiBNeSB1c2UtY2FzZSBm
+b3IgMDU3NjYwNTBkNWJkIHdhcyBhIFNQSSBjb250cm9sbGVyIA0KdGhhdCBzdXBwb3J0ZWQgZGly
+ZWN0IG1lbSBhY2Nlc3NlcyBidXQgYSBoYXJkd2FyZSBkZXNpZ24gdGhhdCByZXF1aXJlZCBhIA0K
+R1BJTyBDUy4gU28geWVzIEkgcHJvYmFibHkgc2hvdWxkIGhhdmUgcXVhbGlmaWVkIGl0IGFzIF9z
+b21lXyBkZXZpY2VzLg0KPiBTbyBpbiB0aGlzIG1hdHRlciBteSBxdWVzdGlvbiBpczogaG93IHRv
+IG1vZGlmeSB0aGUgU1BJLW1lbSBpbnRlcmZhY2Ugc28gdGhlDQo+IFNQSS1tZW1vcnkgb3BlcmF0
+aW9ucyB3b3VsZCBhbHNvIHdvcmsgd2l0aCBHUElPIGRyaXZlbiBDUz8gU29tZSBhZGRpdGlvbmFs
+IGZsYWcNCj4gbWlnaHQgd29yay4uLg==
