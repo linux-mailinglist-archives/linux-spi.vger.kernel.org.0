@@ -2,46 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A5B1CE191
-	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 19:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B0D1CE194
+	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 19:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730972AbgEKRVz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 May 2020 13:21:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39078 "EHLO mail.kernel.org"
+        id S1730982AbgEKRWB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 May 2020 13:22:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39390 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730966AbgEKRVy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 11 May 2020 13:21:54 -0400
+        id S1730966AbgEKRWB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 11 May 2020 13:22:01 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2EB3F20746;
-        Mon, 11 May 2020 17:21:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F68720714;
+        Mon, 11 May 2020 17:22:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589217714;
-        bh=hbim+lK4kK4svUzZv9ph3jJIF+6ksgUNjk/EOsFRWqo=;
+        s=default; t=1589217720;
+        bh=6lsmrtwsjS337+6ZaMJ1uBpd2A8KX8OTri/jsmfkVsY=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=tDNYww2k6hQ4sYbnEEt/tR5lkW++TYhDRiTFmKPKb5MPvdhzdk/yfl7iHJlGyYgGB
-         AcpkbcqGB+aCE6il8WLv5xRKCJfbIzviLk/KjDiukRD+kaNl/nA9snN4hqUFDarks/
-         JtfkPYd5hGuoGgkryUFt0KjHDjO4eHCtBqVF+yEY=
-Date:   Mon, 11 May 2020 18:21:52 +0100
+        b=GqwA1+soX8/N+5KPE26D5ForS1gU5fJ9AlJ7l/J7WzCfy2kMAOpE0COf5LJRGwyiw
+         GwgBXNebjLjld5GjFImJ9jhBF0UxIkYOJUD6gMhGPOaCrMg3QKcBgBUFciboD3fzA3
+         st/Aeh/ip4NQmPaLDrXd2xQT54fLfenVdii2fNSE=
+Date:   Mon, 11 May 2020 18:21:58 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org,
-        Alistair Francis <alistair@alistair23.me>
-Cc:     mripard@kernel.org, wens@csie.org,
-        linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20200511045330.690507-1-alistair@alistair23.me>
-References: <20200511045330.690507-1-alistair@alistair23.me>
-Subject: Re: [PATCH v2] spi: sun6i: Add support for GPIO chip select lines
-Message-Id: <158921769452.22432.2126080919845661372.b4-ty@kernel.org>
+To:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org,
+        Hulk Robot <hulkci@huawei.com>
+In-Reply-To: <20200507115550.139457-1-weiyongjun1@huawei.com>
+References: <20200507115550.139457-1-weiyongjun1@huawei.com>
+Subject: Re: [PATCH -next] spi: spi-amd: Remove spi_master_put in amd_spi_remove()
+Message-Id: <158921769453.22432.2365518895564552869.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 10 May 2020 21:53:30 -0700, Alistair Francis wrote:
-> Set use_gpio_descriptors as true to support using generic GPIO
-> lines for the chip select.
+On Thu, 7 May 2020 11:55:50 +0000, Wei Yongjun wrote:
+> The call to spi_master_put() in amd_spi_remove() is redundant and
+> may causes user after free since the master have been freed by
+> spi_unregister_master(), so remove it.
 
 Applied to
 
@@ -49,7 +49,7 @@ Applied to
 
 Thanks!
 
-[1/1] spi: sun6i: Add support for GPIO chip select lines
+[1/1] spi: spi-amd: Remove spi_master_put in amd_spi_remove()
       (no commit info)
 
 All being well this means that it will be integrated into the linux-next
