@@ -2,72 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F0E1CD65C
-	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 12:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED981CD80C
+	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 13:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728574AbgEKKUR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 May 2020 06:20:17 -0400
-Received: from mga17.intel.com ([192.55.52.151]:45324 "EHLO mga17.intel.com"
+        id S1727873AbgEKLZJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 May 2020 07:25:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40304 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728968AbgEKKUR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 11 May 2020 06:20:17 -0400
-IronPort-SDR: NpyVzT8A0pswTth/SRUcJKHBD0IB7NRDvcmyLFi7uLrUbY7FuKJpD2uKFkrPQso22wVKmLY+fy
- Oa1jZUc0IbgA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 03:20:16 -0700
-IronPort-SDR: GykbylfSzbmV/Ej+HXrmqwM/DP9kmXhFLxS8nBCs3aM1cZXR1XgO6RGiLYoXzJ+n6eh2RUiScd
- ecpFI6YZJogQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,379,1583222400"; 
-   d="scan'208";a="340510307"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 11 May 2020 03:20:16 -0700
-Received: from [10.255.160.142] (vramuthx-mobl1.gar.corp.intel.com [10.255.160.142])
-        by linux.intel.com (Postfix) with ESMTP id 715E4580569;
-        Mon, 11 May 2020 03:20:13 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH 0/6] mtd: spi-nor: Move cadence-qaudspi to spi-mem
- framework
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, simon.k.r.goldschmidt@gmail.com,
-        dinguyen@kernel.org, marex@denx.de
-References: <20200508185411.487-1-vigneshr@ti.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <22e0fc24-fa40-9fe9-8a1b-7b8e5c080020@linux.intel.com>
-Date:   Mon, 11 May 2020 18:20:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200508185411.487-1-vigneshr@ti.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726068AbgEKLZJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 11 May 2020 07:25:09 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0AF6820736;
+        Mon, 11 May 2020 11:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589196308;
+        bh=axzFcp862ivBEqBZfANOieja1Y9dpnhcBwtdnREXY+0=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=mZVF+81kOc1WTLOhTagcWWBaji4NYGD2Of6t46KZM0fWLf5O4Dd1UYaMKal/aPcGY
+         tcgvnDn2vgtAxh26ax1oVFtZ9zBjL6AZnM1utDHVY6onLbkEVM/arln/PVEuAl3ROz
+         u0wfhf/s02X+20GVT0EsDR36IM85jg9ylwQVeniU=
+Date:   Mon, 11 May 2020 12:25:05 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jay Fang <f.fangjian@huawei.com>, linux-spi@vger.kernel.org
+Cc:     huangdaode@hisilicon.com, linuxarm@huawei.com
+In-Reply-To: <1588991392-24219-1-git-send-email-f.fangjian@huawei.com>
+References: <1588991392-24219-1-git-send-email-f.fangjian@huawei.com>
+Subject: Re: [PATCH] spi: dw-mmio: Do not add acpi modalias when CONFIG_ACPI is not enabled
+Message-Id: <158919630591.8372.13162390322267160286.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Vignesh,
+On Sat, 9 May 2020 10:29:51 +0800, Jay Fang wrote:
+> Reduce unnecessary static memory allocation when CONFIG_ACPI is not enabled.
 
-On 9/5/2020 2:54 am, Vignesh Raghavendra wrote:
-> Vadivel,
-> 
-> I have maintained the additional changes needed on top of this series
-> for Intel platform that were part of your v12 series here (needs cleanup):
-> 
-> https://github.com/r-vignesh/linux.git  branch: cqspi-mig
-> 
-> Please use above branch to test the same.
+Applied to
 
-Thank you for the sending the patches on behalf of, will do the cleanup.
-also I have already prepared YAML file , will send as separate patch.
+   local tree asoc/for-5.7
 
-Regards
-Vadivel
+Thanks!
+
+[1/1] spi: dw-mmio: Do not add acpi modalias when CONFIG_ACPI is not enabled
+      (no commit info)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
