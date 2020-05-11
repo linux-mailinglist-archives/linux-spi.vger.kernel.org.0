@@ -2,64 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D7C1CD3C8
-	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 10:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1DD1CD3E9
+	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 10:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729129AbgEKIZl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 May 2020 04:25:41 -0400
-Received: from mx.socionext.com ([202.248.49.38]:36093 "EHLO mx.socionext.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729033AbgEKIZl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 11 May 2020 04:25:41 -0400
-Received: from unknown (HELO iyokan-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 11 May 2020 17:25:39 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan-ex.css.socionext.com (Postfix) with ESMTP id 0416960057;
-        Mon, 11 May 2020 17:25:40 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 11 May 2020 17:25:40 +0900
-Received: from plum.e01.socionext.com (unknown [10.213.132.32])
-        by kinkan.css.socionext.com (Postfix) with ESMTP id B30791A01BB;
-        Mon, 11 May 2020 17:25:39 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH 2/2] spi: uniphier: Use devm_platform_get_and_ioremap_resource() to simplify code
-Date:   Mon, 11 May 2020 17:25:30 +0900
-Message-Id: <1589185530-28170-2-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1589185530-28170-1-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1589185530-28170-1-git-send-email-hayashi.kunihiko@socionext.com>
+        id S1728772AbgEKIan (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 May 2020 04:30:43 -0400
+Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:58604 "EHLO
+        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1728702AbgEKIan (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 May 2020 04:30:43 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id C7A462002518;
+        Mon, 11 May 2020 16:30:40 +0800 (HKT)
+X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
+Received: from mail.gtsys.com.hk ([127.0.0.1])
+        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AuE0Dfh_okQ8; Mon, 11 May 2020 16:30:40 +0800 (HKT)
+Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id A2E5320020CB;
+        Mon, 11 May 2020 16:30:40 +0800 (HKT)
+Received: from armhf2.gtsys.com.hk (unknown [10.128.4.15])
+        by s01.gtsys.com.hk (Postfix) with ESMTP id 96943C01F94;
+        Mon, 11 May 2020 16:30:40 +0800 (HKT)
+Received: by armhf2.gtsys.com.hk (Postfix, from userid 1000)
+        id 3F6272001DE; Mon, 11 May 2020 16:30:40 +0800 (HKT)
+From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
+To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>,
+        Jack Lo <jack.lo@gtsys.com.hk>
+Cc:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] spi: spi-rockchip spi slave mode
+Date:   Mon, 11 May 2020 16:30:19 +0800
+Message-Id: <20200511083022.23678-1-chris.ruehl@gtsys.com.hk>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use devm_platform_get_and_ioremap_resource() to simplify code instead of
-platform_get_resource() and devm_ioremap_resource(). This also gets
-the resource that the following code uses.
+The spi-rockchip driver does not implement spi slave mode, but the register map
+have a corresponding flag. An example implementation found
+here: https://dev.t-firefly.com/thread-101485-1-1.html
+This patchset clean the compatiblity names and add support slave mode.
+We need the slave mode for our project, but the PCBA is not yet available
+in consequence the code in the patch isn't tested yet but need your review.
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Patch 1/3
+Cleanup, move from the compatibily layer struct spi_master over
+to struct spi_controller, and rename the related function calls.
+
+Patch 2/3
+Add support for spi slave mode and support function
+
+Patch 3/3
+Use OF property num-cs and enable support for cs_gpiods
+
+IMHO its wrong, that the num_chipselect is set fixed to the amount of 
+native chip-select lines. SPI0 which has two native lines, while the others
+SPIs one native cs line only.
+Set max_native_cs in the controller struct with ROCKCHIP_SPI_MAX_CS_NUM seems
+the correct way to do and let num-cs the OF / dts config set the CS count for
+the boards.
+
+Patch against next-20200508
+
+Thanks for review!
+
+Happy hacking
+Chris
+
+Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
 ---
- drivers/spi/spi-uniphier.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-uniphier.c b/drivers/spi/spi-uniphier.c
-index 0457d33..6a9ef8e 100644
---- a/drivers/spi/spi-uniphier.c
-+++ b/drivers/spi/spi-uniphier.c
-@@ -659,8 +659,7 @@ static int uniphier_spi_probe(struct platform_device *pdev)
- 	priv->master = master;
- 	priv->is_save_param = false;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->base = devm_ioremap_resource(&pdev->dev, res);
-+	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(priv->base)) {
- 		ret = PTR_ERR(priv->base);
- 		goto out_master_put;
--- 
-2.7.4
 
