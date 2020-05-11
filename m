@@ -2,123 +2,167 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31961CCE85
-	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 00:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F121CD060
+	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 05:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729347AbgEJWRX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 10 May 2020 18:17:23 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:53961 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729342AbgEJWRW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 10 May 2020 18:17:22 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BFD26891B0;
-        Mon, 11 May 2020 10:17:17 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1589149037;
-        bh=SrgIz+PJYHKXN8CEOXRS3rQhCzXZZWj0itaj5yb73VI=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=gEu2+LoqCppAt8TRqOphp/vqL/bORRCpyc75HO2xMe7P2uzzetrCirReJdLrP72hg
-         BRzJ+9E/PAS0mct2NLJ1JVpaifeXxb31Kg7soOOdDCggCh6POqPVPD8JqNDfX9BcFN
-         sx9J8tVPeiuTZZxcS4g5bQjZJBMaZvdLug6iBmpNMJNx3/0eda8V9+NaC45gFIrPzD
-         34UD/8Ope365T8ynddyjKfiIzmWerkDn2wsl8pVNEqiVf91kqEySmfr65jplqgOmmG
-         qUUxMQihQsB+BHsA3TcWnQxj2cjmp6DAU6lcY0I6815ZZ6YDKEuuKexPyBjPjfEadW
-         l1O+ZjQJQaYEg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5eb87d6e0001>; Mon, 11 May 2020 10:17:18 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Mon, 11 May 2020 10:17:17 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Mon, 11 May 2020 10:17:17 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mark Brown <broonie@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        "Ralf Baechle" <ralf@linux-mips.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        "Chuanhong Guo" <gch981213@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Eddie James" <eajames@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Thread-Topic: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Thread-Index: AQHWJR1LjfOM6n85g0qPl2lemRFsA6idRtCAgAJndYCAAW/cAA==
-Date:   Sun, 10 May 2020 22:17:16 +0000
-Message-ID: <740f1569-d8d3-606a-73a8-f9feeb20e06f@alliedtelesis.co.nz>
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
- <20200508113751.GD4820@sirena.org.uk>
- <20200510002039.hwahqasnnceowskz@mobilestation>
-In-Reply-To: <20200510002039.hwahqasnnceowskz@mobilestation>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F0C745804143EC40B042AF8A4CCB7FE5@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S1727834AbgEKDYq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 10 May 2020 23:24:46 -0400
+Received: from twhmllg3.macronix.com ([211.75.127.131]:52611 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbgEKDYq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 10 May 2020 23:24:46 -0400
+Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
+        by TWHMLLG3.macronix.com with ESMTP id 04B3NVVL077104;
+        Mon, 11 May 2020 11:23:31 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
+        by Forcepoint Email with ESMTP id 1866BA869F7CCFC0A268;
+        Mon, 11 May 2020 11:23:32 +0800 (CST)
+In-Reply-To: <3e33ffae-3267-015a-8535-6e1667b03e39@ti.com>
+References: <1587451187-6889-1-git-send-email-masonccyang@mxic.com.tw> <20200421092328.129308f6@collabora.com> <20200427175536.2mmei2fy6f7bg6jm@yadavpratyush.com> <OF18214CA5.6A9B2B30-ON48258558.001D894C-48258558.002249E0@mxic.com.tw> <20200428085401.574wmo6qddmumd7q@yadavpratyush.com> <OF04289CE2.B346916F-ON48258559.002280BD-48258559.00295800@mxic.com.tw> <3e33ffae-3267-015a-8535-6e1667b03e39@ti.com>
+To:     "Vignesh Raghavendra" <vigneshr@ti.com>
+Cc:     "Boris Brezillon" <boris.brezillon@collabora.com>,
+        broonie@kernel.org, juliensu@mxic.com.tw,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, "Pratyush Yadav" <me@yadavpratyush.com>,
+        miquel.raynal@bootlin.com, "Pratyush Yadav" <p.yadav@ti.com>,
+        richard@nod.at, tudor.ambarus@microchip.com
+Subject: Re: [PATCH v2 0/5] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
 MIME-Version: 1.0
+X-KeepSent: 8A6B0341:0CDED2CF-48258565:000F3369;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OF8A6B0341.0CDED2CF-ON48258565.000F3369-48258565.0012A22D@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Mon, 11 May 2020 11:23:32 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2020/05/11 AM 11:23:32,
+        Serialize complete at 2020/05/11 AM 11:23:32
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG3.macronix.com 04B3NVVL077104
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-DQpPbiAxMC8wNS8yMCAxMjoyMCBwbSwgU2VyZ2UgU2VtaW4gd3JvdGU6DQo+IE9uIEZyaSwgTWF5
-IDA4LCAyMDIwIGF0IDEyOjM3OjUxUE0gKzAxMDAsIE1hcmsgQnJvd24gd3JvdGU6DQo8c25pcD4N
-Cj4+PiArCXdyaXRlbChCSVQocmVxLT5jcyksIGJzLT5yZWdzICsgQkNfU1BJX1NFUik7DQo+Pj4g
-KwlpZiAocmVxLT5jc19ncGlvZCkgew0KPj4+ICsJCWdwaW9kX3NldF92YWx1ZV9jYW5zbGVlcChy
-ZXEtPmNzX2dwaW9kLA0KPj4+ICsJCQkJCSAhIShicy0+Y2ZnLm1vZGUgJiBTUElfQ1NfSElHSCkp
-Ow0KPj4gSWYgeW91IGhhdmUgYSBHUElPIGNoaXAgc2VsZWN0IHlvdSBzaG91bGQganVzdCBsZXQg
-dGhlIGNvcmUgbWFuYWdlIGl0DQo+PiB0aHJvdWdoIGNzX2dwaW9kIHJhdGhlciB0aGFuIG9wZW4g
-Y29kaW5nLg0KPiBPZiBjb3Vyc2UgSSBrbm93IHRoaXMsIGFuZCBub3JtYWxseSBJIHdvdWxkIGhh
-dmUgb21pdHRlZCB0aGUgR1BJTyBtYW51YWwNCj4gYXNzZXJ0aW9uIChob3BlZnVsbHkgc29vbiBt
-eSBoYW5kcyBnZXQgdG8gbWVyZ2luZyB0aGUgQVg5OTEwMCBkcml2ZXIgSSd2ZQ0KPiBkZXZlbG9w
-ZWQgc29tZSB0aW1lIGFnbykuIFRoZSB0aGluZyBpcyB0aGF0IHRoaXMgQmFpa2FsLVQxIFN5c3Rl
-bSBTU0kgZGV2aWNlDQo+IGRyaXZlciBoYXMgYmVlbiBpbml0aWFsbHkgd3JpdHRlbiBiZWZvcmUg
-Y29tbWl0IDA1NzY2MDUwZDViZCAoInNwaTogc3BpLW1lbToNCj4gZmFsbGJhY2sgdG8gdXNpbmcg
-dHJhbnNmZXJzIHdoZW4gQ1MgZ3Bpb3MgYXJlIHVzZWQiKS4gU28gYXNzZXJ0aW5nIEdQSU8gQ1Mg
-aGFkDQo+IGJlZW4gcmVxdWlyZWQgdG8gaW5pdGlhdGUgdGhlIFNQSSBtZW1vcnkgY29tbXVuaWNh
-dGlvbnMgc2VlaW5nIHRoZSBnZW5lcmljDQo+IHNwaV9tZW1fZXhlY19vcCgpIGRvZXNuJ3QgZG8g
-dGhpcy4gTWFudWFsIEdQSU8gbWFuaXB1bGF0aW9uIGlzIGluZGVlZCByZWR1bmRhbnQNCj4gZm9y
-IHRoZSBjdXJyZW50IFNQSS1tZW0gb3AgZXhlY3V0aW9uIHByb2NlZHVyZS4NCj4NCj4gU2Vjb25k
-bHkgdGhlIG1lc3NhZ2Ugb2YgdGhhdCBjb21taXQgc3RhdGVzICJEZXZpY2VzIHdpdGggY2hpcCBz
-ZWxlY3RzIGRyaXZlbg0KPiB2aWEgR1BJTyBhcmUgbm90IGNvbXBhdGlibGUgd2l0aCB0aGUgc3Bp
-LW1lbSBvcGVyYXRpb25zLiIgSSBmaW5kIHRoaXMgc3RhdGVtZW50DQo+IHF1ZXN0aW9uYWJsZSwg
-YmVjYXVzZSBmb3IgaW5zdGFuY2UgdGhpcyBkZXZpY2Ugc3VwcG9ydHMgbWVtb3J5IG9wZXJhdGlv
-bnMgd2l0aA0KPiBHUElPLWRyaXZlbiBDUy4gVGhvdWdoIGluIGN1cnJlbnQgaW1wbGVtZW50YXRp
-b24gdGhlIGRyaXZlciBmYWxsYmFjayB0byB1c2luZyBub3JtYWwNCj4gcHVzaC1wdWxsIElPIG1v
-ZGUgaWYgR1BJTyBDUyBpcyB1dGlsaXplZCBhcyBzYWZlciBvbmUuIEJ1dCBldmVuIGluIHRoaXMg
-Y2FzZQ0KPiBpdCdzIGJldHRlciB0aGFuIHNwbGl0dGluZyB0aGUgbWVtb3J5IG9wZXJhdGlvbnMg
-dXAgaW50byB0aGUgdHJhbnNmZXJzLCB3aGljaCBpcw0KPiBkZXZlbG9wZWQgaW4gdGhlIHNwaV9t
-ZW1fZXhlY19vcCgpIG1ldGhvZC4NCk9uIHRoaXMgc3BlY2lmaWMgYml0LiBNeSB1c2UtY2FzZSBm
-b3IgMDU3NjYwNTBkNWJkIHdhcyBhIFNQSSBjb250cm9sbGVyIA0KdGhhdCBzdXBwb3J0ZWQgZGly
-ZWN0IG1lbSBhY2Nlc3NlcyBidXQgYSBoYXJkd2FyZSBkZXNpZ24gdGhhdCByZXF1aXJlZCBhIA0K
-R1BJTyBDUy4gU28geWVzIEkgcHJvYmFibHkgc2hvdWxkIGhhdmUgcXVhbGlmaWVkIGl0IGFzIF9z
-b21lXyBkZXZpY2VzLg0KPiBTbyBpbiB0aGlzIG1hdHRlciBteSBxdWVzdGlvbiBpczogaG93IHRv
-IG1vZGlmeSB0aGUgU1BJLW1lbSBpbnRlcmZhY2Ugc28gdGhlDQo+IFNQSS1tZW1vcnkgb3BlcmF0
-aW9ucyB3b3VsZCBhbHNvIHdvcmsgd2l0aCBHUElPIGRyaXZlbiBDUz8gU29tZSBhZGRpdGlvbmFs
-IGZsYWcNCj4gbWlnaHQgd29yay4uLg==
+
+Hi Vignesh,
+
+> >>>
+> >>> Our mx25uw51245g supports BFPT DWORD-18,19 and 20 data and xSPI 
+> > profile 
+> >>> 1.0,
+> >>> and it comply with BFPT DWORD-19, octal mode enable sequences by 
+write 
+> > CFG 
+> >>> Reg2 
+> >>> with instruction 0x72. Therefore, I can't apply your patches.
+> >>
+> >> I didn't mean apply my patches directly. I meant more along the lines 
+of 
+> > 
+> >> edit your patches to work on top of my series. It should be as easy 
+as 
+> >> adding your flash's fixup hooks and its octal DTR enable hook, but if 
+my 
+> > 
+> >> series is missing something you need (like complete Profile 1.0 
+parsing, 
+> > 
+> >> which I left out because I wanted to be conservative and didn't see 
+any 
+> >> immediate use-case for us), let me know, and we can work together to 
+> >> address it.
+> > 
+> > yes,sure!
+> > let's work together to upstream the Octal 8D-8D-8D driver to mainline.
+> > 
+> > The main concern is where and how to enable xSPI octal mode?
+> > 
+> > Vignesh don't agree to enable it in fixup hooks and that's why I 
+patched
+> > it to spi_nor_late_init_params() and confirmed the device support xSPI 
+
+> > Octal mode after BFPT DWORD-19 and xSPI pf 1.0 have been parsed.
+> > 
+> 
+> My suggestion was to use SFDP wherever possible.. E.g: it is possible to
+> get opcode extension type from BFPT...
+> 
+> But using BFPT DWORD-19 is not correct for switching to 8D-8D-8D mode:
+> 
+> Per JESD216D.01 Bits 22:20 of  19th DWORD of BFPT:
+> 
+> Octal Enable Requirements:
+> 
+> This field describes whether the device contains a Octal Enable bit used
+> to enable 1-1-8 and 1-
+> 8-8 octal read or octal program operations.
+> 
+> So, this cannot be used for enabling 8D-8D-8D mode... Flashes that only
+> support 1S-1S-1S and 8D-8D-8D will set this field to 0.
+
+yes, you are right, the bits 22~20 your mentioned are for 1-1-8 and 1-8-8 
+mode enable requirements and they are zero if Flash only supports 
+1S-1S-1S,
+8S-8S-8S and 8D-8D-8D, just like mx25xx series.
+
+There are bits 8~4 for 8S-8S-8S and 8D-8D-8D mode enable sequences and
+I have patched these in this patches. 
+
+By bits 8~4 in 19 th DWORD of BFPT, driver will know enable 8S-8S-8S or
+8D-8D-8D by either issue two instruction (06h and E8h) or 
+by Write CFG Reg 2.
+
+mx25xx series supports enable Octal 8S-8S-8S/8D-8D-8D mode by Write CFG 
+Reg 2.
+
+
+> 
+> There is a separate table to enable 8D mode called
+> "Command Sequences to Change to Octal DDR (8D-8D-8D) mode". But if flash
+> does not have the table or has bad data, fixup hook is the only way...
+> 
+> If mx25* supports above table, please build on top of Pratyush's series
+> to add support for parsing this table. Otherwise, macronix would have to
+> use a fixup hook too...
+
+mx25xx series also supports "Command Sequences to Change to Octal DDR 
+(8D-8D-8D) mode" for sure. I will patch them in next version.
+
+For mx25* series, a fixup hook will only setup specific dummy cycles to 
+device for various frequency after xSPI 1.0 table has been parsed.
+
+
+thanks for your time & comments.
+Mason
+
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
