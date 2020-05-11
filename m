@@ -2,167 +2,165 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F121CD060
-	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 05:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC58F1CD10F
+	for <lists+linux-spi@lfdr.de>; Mon, 11 May 2020 06:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727834AbgEKDYq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 10 May 2020 23:24:46 -0400
-Received: from twhmllg3.macronix.com ([211.75.127.131]:52611 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbgEKDYq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 10 May 2020 23:24:46 -0400
-Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id 04B3NVVL077104;
-        Mon, 11 May 2020 11:23:31 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 1866BA869F7CCFC0A268;
-        Mon, 11 May 2020 11:23:32 +0800 (CST)
-In-Reply-To: <3e33ffae-3267-015a-8535-6e1667b03e39@ti.com>
-References: <1587451187-6889-1-git-send-email-masonccyang@mxic.com.tw> <20200421092328.129308f6@collabora.com> <20200427175536.2mmei2fy6f7bg6jm@yadavpratyush.com> <OF18214CA5.6A9B2B30-ON48258558.001D894C-48258558.002249E0@mxic.com.tw> <20200428085401.574wmo6qddmumd7q@yadavpratyush.com> <OF04289CE2.B346916F-ON48258559.002280BD-48258559.00295800@mxic.com.tw> <3e33ffae-3267-015a-8535-6e1667b03e39@ti.com>
-To:     "Vignesh Raghavendra" <vigneshr@ti.com>
-Cc:     "Boris Brezillon" <boris.brezillon@collabora.com>,
-        broonie@kernel.org, juliensu@mxic.com.tw,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, "Pratyush Yadav" <me@yadavpratyush.com>,
-        miquel.raynal@bootlin.com, "Pratyush Yadav" <p.yadav@ti.com>,
-        richard@nod.at, tudor.ambarus@microchip.com
-Subject: Re: [PATCH v2 0/5] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
-MIME-Version: 1.0
-X-KeepSent: 8A6B0341:0CDED2CF-48258565:000F3369;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OF8A6B0341.0CDED2CF-ON48258565.000F3369-48258565.0012A22D@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Mon, 11 May 2020 11:23:32 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2020/05/11 AM 11:23:32,
-        Serialize complete at 2020/05/11 AM 11:23:32
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG3.macronix.com 04B3NVVL077104
+        id S1725983AbgEKEwv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 May 2020 00:52:51 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:55687 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725884AbgEKEwu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 May 2020 00:52:50 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 5AFCA3FA;
+        Mon, 11 May 2020 00:52:49 -0400 (EDT)
+Received: from imap26 ([10.202.2.76])
+  by compute3.internal (MEProxy); Mon, 11 May 2020 00:52:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm1; bh=tHIWHGwD2awLQ7YfvHIbcGG38ivg
+        dphn08I12CZ2Xx4=; b=QCTj+BVkhFwvH/TOjPuWMhgNEpOGamwHoEcavOmIuSIW
+        VPQCGmRBC5zrYOHgXfRxcH7T33qczjumF32ChqB7WqueeG7i86pNit8OspWAhgla
+        lQoTj01/mnZLMkxD2xeJBZMRk3AQPLtcJScVuc9BxWzxyHBooRqSBp1kHE+3MhWl
+        6Gh4y81FVOHt/UfyOC9d/7NZ73zFDiMul2U8AZgceVQXhYEQkVrOKA1sFc96ViZK
+        P/vjcvVmBimEFphNpz8SXx5RwAuOvipiQMZJqU9yM9MNQv0sp84hGO77cAEh2xeP
+        v+3aMOA0fOtHVcSSZfKIm5/bfYjzlHqZjeys4Uld+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=tHIWHG
+        wD2awLQ7YfvHIbcGG38ivgdphn08I12CZ2Xx4=; b=gFP7sW5ExcrIVbqJ+saGLi
+        i99R+Z3Q5Ik33sL3sQpDH+F5vCwrHfC945pQeaA/E0u6Vsfl4bvfd6PwrK2ntx2H
+        iSTzHu0fHoD9Uhpt+MjRtr7LXjb8lbME/661m2WKkNFGmI1UDW9QucZHAUAiNjOR
+        KScxVJzDTI4eg1F1VqjzyWlkwd2IL1ZPIX62nCS8RyL3XU4LX8E+c3KhxOtxmByX
+        /RTfvGanwj5+XvxtH/D0n5S7f9o4fFpGtgTSXkKFw6DPPD3uPe0bHgOkUe4disWz
+        z7nJdxzGZqOKigGt6/g0JWJTF9a+qHOe2eStSLtafbo9KAUJA35zAZUFEZDl3Tpg
+        ==
+X-ME-Sender: <xms:INq4XhHZYc17U9LVumxao8pYJxhjT3UkutMvDJWgUVUtVMrHtf8puQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrkeelgdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpeetlhhishht
+    rghirhcuoegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrth
+    htvghrnhepueffkeevheejledtueevieekleekjefhjeehudfhtdfgtdfgjeejkedvveej
+    veeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:INq4XtOYh1BjK-l9aCyqQ3N8CAmTdf-2sj69GAnnPTBJC5QTNA8TOg>
+    <xmx:INq4Xrc2oJyv7MLmmA5mEaYGv8hEtzSnDLBuMU8h5kzjbPMiJJDHqw>
+    <xmx:INq4XivgtEnnbOfpUcLdjQ-kdG4AX2gtuM9uH7UCQUvvu98hb50nng>
+    <xmx:Idq4Xn-si6AyLlkZU2ihXLcHNdiHyr0DRv_TSgEGL63mmPBIJSbPfA>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2766E14200A2; Mon, 11 May 2020 00:52:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-dev0-413-g750b809-fmstable-20200507v1
+Mime-Version: 1.0
+Message-Id: <7d6d1494-31a7-4780-85f3-8bbc2f32bcd6@www.fastmail.com>
+In-Reply-To: <CAMuHMdV7qGSbw44O+ykSz3W6h6oxj-ir+9qRbeazKb+p7Z=2Mg@mail.gmail.com>
+References: <20200506014135.2941967-1-alistair@alistair23.me>
+ <CAMuHMdV7qGSbw44O+ykSz3W6h6oxj-ir+9qRbeazKb+p7Z=2Mg@mail.gmail.com>
+Date:   Sun, 10 May 2020 21:52:27 -0700
+From:   Alistair <alistair@alistair23.me>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc:     "Mark Brown" <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Maxime Ripard" <mripard@kernel.org>,
+        "Chen-Yu Tsai" <wens@csie.org>,
+        "Alistair Francis" <alistair23@gmail.com>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] spi: sun6i: Add support for GPIO chip select lines
+Content-Type: text/plain
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-Hi Vignesh,
-
-> >>>
-> >>> Our mx25uw51245g supports BFPT DWORD-18,19 and 20 data and xSPI 
-> > profile 
-> >>> 1.0,
-> >>> and it comply with BFPT DWORD-19, octal mode enable sequences by 
-write 
-> > CFG 
-> >>> Reg2 
-> >>> with instruction 0x72. Therefore, I can't apply your patches.
-> >>
-> >> I didn't mean apply my patches directly. I meant more along the lines 
-of 
-> > 
-> >> edit your patches to work on top of my series. It should be as easy 
-as 
-> >> adding your flash's fixup hooks and its octal DTR enable hook, but if 
-my 
-> > 
-> >> series is missing something you need (like complete Profile 1.0 
-parsing, 
-> > 
-> >> which I left out because I wanted to be conservative and didn't see 
-any 
-> >> immediate use-case for us), let me know, and we can work together to 
-> >> address it.
-> > 
-> > yes,sure!
-> > let's work together to upstream the Octal 8D-8D-8D driver to mainline.
-> > 
-> > The main concern is where and how to enable xSPI octal mode?
-> > 
-> > Vignesh don't agree to enable it in fixup hooks and that's why I 
-patched
-> > it to spi_nor_late_init_params() and confirmed the device support xSPI 
-
-> > Octal mode after BFPT DWORD-19 and xSPI pf 1.0 have been parsed.
-> > 
+On Wed, May 6, 2020, at 1:27 AM, Geert Uytterhoeven wrote:
+> Hi Alistair,
 > 
-> My suggestion was to use SFDP wherever possible.. E.g: it is possible to
-> get opcode extension type from BFPT...
+> On Wed, May 6, 2020 at 3:41 AM Alistair Francis <alistair@alistair23.me> wrote:
+> > Add a setup function that can be used to support using generic GPIO
+> > lines for the chip select.
+> >
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > ---
+> > drivers/spi/spi-sun6i.c | 27 +++++++++++++++++++++++++++
+> > 1 file changed, 27 insertions(+)
+> >
+> > diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+> > index ec7967be9e2f..fd4e19434942 100644
+> > --- a/drivers/spi/spi-sun6i.c
+> > +++ b/drivers/spi/spi-sun6i.c
+> > @@ -10,6 +10,7 @@
+> > #include <linux/clk.h>
+> > #include <linux/delay.h>
+> > #include <linux/device.h>
+> > +#include <linux/gpio.h>
+> > #include <linux/interrupt.h>
+> > #include <linux/io.h>
+> > #include <linux/module.h>
+> > @@ -171,6 +172,31 @@ static inline void sun6i_spi_fill_fifo(struct sun6i_spi *sspi, int len)
+> > }
+> > }
+> >
+> > +static int sun6i_spi_setup(struct spi_device *spi)
+> > +{
+> > + int ret;
+> > +
+> > + /* sanity check for native cs */
+> > + if (spi->mode & SPI_NO_CS)
+> > + return 0;
+> > + if (gpio_is_valid(spi->cs_gpio)) {
+> > + /* with gpio-cs set the GPIO to the correct level
+> > + * and as output (in case the dt has the gpio not configured
+> > + * as output but native cs)
+> > + */
+> > + ret = gpio_direction_output(spi->cs_gpio,
+> > + (spi->mode & SPI_CS_HIGH) ? 0 : 1);
+> > + if (ret)
+> > + dev_err(&spi->dev,
+> > + "could not set gpio %i as output: %i\n",
+> > + spi->cs_gpio, ret);
+> > +
+> > + return ret;
+> > + }
+> > +
+> > + return 0;
+> > +}
+> > +
+> > static void sun6i_spi_set_cs(struct spi_device *spi, bool enable)
+> > {
+> > struct sun6i_spi *sspi = spi_master_get_devdata(spi->master);
+> > @@ -470,6 +496,7 @@ static int sun6i_spi_probe(struct platform_device *pdev)
+> >
+> > master->max_speed_hz = 100 * 1000 * 1000;
+> > master->min_speed_hz = 3 * 1000;
+> > + master->setup = sun6i_spi_setup;
+> > master->set_cs = sun6i_spi_set_cs;
+> > master->transfer_one = sun6i_spi_transfer_one;
+> > master->num_chipselect = 4;
 > 
-> But using BFPT DWORD-19 is not correct for switching to 8D-8D-8D mode:
+> Can't you just set
 > 
-> Per JESD216D.01 Bits 22:20 of  19th DWORD of BFPT:
+>  master->use_gpio_descriptors = true;
 > 
-> Octal Enable Requirements:
-> 
-> This field describes whether the device contains a Octal Enable bit used
-> to enable 1-1-8 and 1-
-> 8-8 octal read or octal program operations.
-> 
-> So, this cannot be used for enabling 8D-8D-8D mode... Flashes that only
-> support 1S-1S-1S and 8D-8D-8D will set this field to 0.
+> instead and be done with it?
+> Then drivers/spi/spi.c:spi_get_gpio_descs() will configure the GPIO line
+> as output for you.
 
-yes, you are right, the bits 22~20 your mentioned are for 1-1-8 and 1-8-8 
-mode enable requirements and they are zero if Flash only supports 
-1S-1S-1S,
-8S-8S-8S and 8D-8D-8D, just like mx25xx series.
+Yep, it looks like that works. Sending a v2.
 
-There are bits 8~4 for 8S-8S-8S and 8D-8D-8D mode enable sequences and
-I have patched these in this patches. 
-
-By bits 8~4 in 19 th DWORD of BFPT, driver will know enable 8S-8S-8S or
-8D-8D-8D by either issue two instruction (06h and E8h) or 
-by Write CFG Reg 2.
-
-mx25xx series supports enable Octal 8S-8S-8S/8D-8D-8D mode by Write CFG 
-Reg 2.
-
+Alistair
 
 > 
-> There is a separate table to enable 8D mode called
-> "Command Sequences to Change to Octal DDR (8D-8D-8D) mode". But if flash
-> does not have the table or has bad data, fixup hook is the only way...
+> Gr{oetje,eeting}s,
 > 
-> If mx25* supports above table, please build on top of Pratyush's series
-> to add support for parsing this table. Otherwise, macronix would have to
-> use a fixup hook too...
-
-mx25xx series also supports "Command Sequences to Change to Octal DDR 
-(8D-8D-8D) mode" for sure. I will patch them in next version.
-
-For mx25* series, a fixup hook will only setup specific dummy cycles to 
-device for various frequency after xSPI 1.0 table has been parsed.
-
-
-thanks for your time & comments.
-Mason
-
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
-
-
-============================================================================
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
+>  Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>  -- Linus Torvalds
+> 
