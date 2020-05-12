@@ -2,70 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 433781CF257
-	for <lists+linux-spi@lfdr.de>; Tue, 12 May 2020 12:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C5A1CF307
+	for <lists+linux-spi@lfdr.de>; Tue, 12 May 2020 13:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729436AbgELK2W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 May 2020 06:28:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53354 "EHLO mail.kernel.org"
+        id S1727783AbgELLDU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 May 2020 07:03:20 -0400
+Received: from mga11.intel.com ([192.55.52.93]:37331 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728416AbgELK2W (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 12 May 2020 06:28:22 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 36D03206A3;
-        Tue, 12 May 2020 10:28:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589279301;
-        bh=zpiNmb4UCtavZMNo6BKDHyMlep5F58zW98wc3jsNU58=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=ihzpMPLAN81AlB25/9+LOE8ebLXxL9p8Pg4XBABQl/FDbwirChiSg0NqiDbyUICtM
-         CGM3YqXUwIwt0UNR/9lK5dRG+l4pBg5YaLuyq113Cjw8m0Y1V1cZAX+J0g7yVWJ43j
-         y8SHmOZ37Vf+QufDa9IByqy9+ylQ/+DwQk6gn05c=
-Date:   Tue, 12 May 2020 11:28:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-In-Reply-To: <1587720562-15293-1-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1587720562-15293-1-git-send-email-hayashi.kunihiko@socionext.com>
-Subject: Re: [PATCH v2] dt-bindings: spi: Convert UniPhier SPI controller to json-schema
-Message-Id: <158927929911.28665.8593031021251686663.b4-ty@kernel.org>
+        id S1729413AbgELLDU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 12 May 2020 07:03:20 -0400
+IronPort-SDR: hp8pXRrZ6Ckp9TbssuJGv30ZP9TG+VJ1ys+xkVLd6ig4mpaAu0qEkhDolUjM5es57wFSydoHzh
+ F+6EZiDoPe8A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 04:03:19 -0700
+IronPort-SDR: +PDkrxsIjc5ZVJ/Fac1IqXB4GhQjopbOIbTASrjxWtsjB1Bl+uCtyhbZ+GMw0o9kw+VuEYuIBP
+ v43fdWFgBjbg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,383,1583222400"; 
+   d="scan'208";a="437060687"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 12 May 2020 04:03:17 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1DB5EE1; Tue, 12 May 2020 14:03:15 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] spi: dw: Drop duplicate error message when remap resource
+Date:   Tue, 12 May 2020 14:03:15 +0300
+Message-Id: <20200512110315.58845-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 24 Apr 2020 18:29:22 +0900, Kunihiko Hayashi wrote:
-> Convert UniPhier SPI controller binding to DT schema format.
+devm_platform_ioremap_resource() will issue a message in the error case.
+Thus, no need to duplicate in the driver.
 
-Applied to
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-dw-mmio.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.8
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index bef76e210e091b..d8487209beb818 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -148,10 +148,8 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+ 
+ 	/* Get basic io resource and map it */
+ 	dws->regs = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(dws->regs)) {
+-		dev_err(&pdev->dev, "SPI region map failed\n");
++	if (IS_ERR(dws->regs))
+ 		return PTR_ERR(dws->regs);
+-	}
+ 
+ 	dws->irq = platform_get_irq(pdev, 0);
+ 	if (dws->irq < 0)
+-- 
+2.26.2
 
-Thanks!
-
-[1/1] spi: Convert UniPhier SPI controller to json-schema
-      commit: 5483ef03e075c1625c66ba728b55ef67f7cb3ed1
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
