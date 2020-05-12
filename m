@@ -2,216 +2,188 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF6D1CF353
-	for <lists+linux-spi@lfdr.de>; Tue, 12 May 2020 13:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20AC1CF66D
+	for <lists+linux-spi@lfdr.de>; Tue, 12 May 2020 16:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727783AbgELLaL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 May 2020 07:30:11 -0400
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:27299 "EHLO
-        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726891AbgELLaL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 May 2020 07:30:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1589283011; x=1620819011;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=dxXmUhUPpxBKko4J3joFmmQRuvEUizeiEmBAqHTdng0=;
-  b=J7dZQtzjxx2Ee0GsASYdMnYYC0AUxwUpcL1Uq2NyRnywyqf9E0kaUEAj
-   w7/zZ1nOk/Dk5xou6VkeHRixH7XGSKZRdVAaUQiUTDIdfINmpDgjcNZud
-   KII6fOHfFwjgJbg1m0xx4vwPxCEorfkCI0J8Ihn4peo0+pOMVnR9aowa7
-   mXciXLyBUPCNedQowfRU8ummZj/soz4CnsA8c74/cT4X+Ur14YM+u4JxH
-   GsTf0sD/P2bTwc1B7Qp3ZCYWRvEfBJ62VxataLbQ4lRIIvXADadzVi2Mb
-   Qy/1G39ucyJ5DNNzEY12crBMej329ZxMhLArOWsoDMOeVow3ZhbC1OmsF
-   w==;
-IronPort-SDR: 5M8CTnBYortKXeUXnXoaWD43z8iq4uXFSiMmFNKQUa0HYmvyHUtNioYCYEmd8JhlWEvtNftJH4
- SrqbDPwYCgVgK60V47+5j9n0Eq674akHwdDbaMaSbkuMyx9l8JaLa7i0QVxtVbPOwK1AgJ3Xtj
- siQWsTSoESVTtRmFtqoDDHj4iwX9VfW1JgQ3MdG/mh2d/98k40YIzi/fFgIaTtkO9cTa/uaTCe
- g1ZUOOi5mVJSit2nkdck789HegZFbz1Gqcy9XlFyYyh4CmVKqONE6d7m9ah+BtP6WvNhX/ViSv
- n84=
-X-IronPort-AV: E=Sophos;i="5.73,383,1583218800"; 
-   d="scan'208";a="75610674"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2020 04:29:57 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 12 May 2020 04:29:58 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Tue, 12 May 2020 04:29:55 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aC5x1LyfSHAa+XdkBuQ7lJZutuTazpgDZ8vCaUpJBR4f7d+HMrTyF93gc582X1vciVjuLxsvrD2bvaA9R4Tij01e0IIrkjdCWJo0lAbgr/QEOKw48dQoCbxPsuBjg3B3gEwmNdQFCkJkGn3+u0JkVPMX87Pf9vxth/apcOFLet+gQGmhq65YTtIVmuzkE/9mNe4TgbtoLGJSsmt5A2dVk73/xq1yJoZOfxHj18fpTRt3xW3xCkS5JZjZ/JA5kz6c8xFMQGIYXK7rszAIEBIzWHPfBhRQggU+nKxMCeDPbf00djokbgtdC3xcIXZL4GTUFuY27xDPl445vIaToBsztg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dxXmUhUPpxBKko4J3joFmmQRuvEUizeiEmBAqHTdng0=;
- b=CVy574zK5msFvTX0B+Tf9fnwpX/0THhSlnlMAaAZfFETAi2MkCqsQNVYKZkN4b0UEn9LNjR+1khilZRcxafy1CCrvD6xauSMs2ny+FJmyMNAMVUWKyoNPi3HjDsfMM4J4IIRocPr+o52xBEVN9NBSrugOZnJKEG+b8DnLOvXSUMEfArzfq7XiO4RAgd0JptiybVwdaf+tw+qW5gSS2Dhv8HhGytlRhZmajUhiSrNMc1XV/dhlXdrlghqiDBTezTLIFodzavb1Pcqjh+qIb0/bos3E9cuP3nfnpT+LBwzWe8Ji4Eq+d1gBGcR0cXsGdubKaNFm+5ol3haPnVSwM49ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dxXmUhUPpxBKko4J3joFmmQRuvEUizeiEmBAqHTdng0=;
- b=o8ubR84TsqTKlrbeH5Qboe10KvxqaqEfwJBXK+bJSfLwdjqAU8OgMstkKZBW1flx1sRPY7Jx2elm6YrnerAS7DM25jnS0ny3UJ4tF3eCqDyupwLz9QUbtvauFfeZlNgcrtrRAVZdJWDOJi9sPBUGIie8H2SRpm0HzChxV3AHRQw=
-Received: from BY5PR11MB4419.namprd11.prod.outlook.com (2603:10b6:a03:1c8::13)
- by BY5PR11MB4273.namprd11.prod.outlook.com (2603:10b6:a03:1c9::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20; Tue, 12 May
- 2020 11:29:52 +0000
-Received: from BY5PR11MB4419.namprd11.prod.outlook.com
- ([fe80::d847:5d58:5325:c536]) by BY5PR11MB4419.namprd11.prod.outlook.com
- ([fe80::d847:5d58:5325:c536%7]) with mapi id 15.20.2979.033; Tue, 12 May 2020
- 11:29:51 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <linux-mtd@lists.infradead.org>
-CC:     <vigneshr@ti.com>, <boris.brezillon@collabora.com>,
-        <alexandre.belloni@bootlin.com>, <richard@nod.at>,
-        <nsekhar@ti.com>, <linux-kernel@vger.kernel.org>,
-        <Nicolas.Ferre@microchip.com>, <Ludovic.Desroches@microchip.com>,
-        <broonie@kernel.org>, <miquel.raynal@bootlin.com>,
-        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 00/16] mtd: spi-nor: add xSPI Octal DTR support
-Thread-Topic: [PATCH v4 00/16] mtd: spi-nor: add xSPI Octal DTR support
-Thread-Index: AQHWJ3Khn/aolf/mv0usqjltSIxTLg==
-Date:   Tue, 12 May 2020 11:29:51 +0000
-Message-ID: <2352513.UHBGRE98Z5@192.168.0.120>
-References: <20200424184410.8578-1-p.yadav@ti.com>
- <144878625.o7txgtY6sz@192.168.0.120>
- <49abc8f3-5bb5-bc6d-b2ec-f14b115c58dc@ti.com>
-In-Reply-To: <49abc8f3-5bb5-bc6d-b2ec-f14b115c58dc@ti.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: lists.infradead.org; dkim=none (message not signed)
- header.d=none;lists.infradead.org; dmarc=none action=none
- header.from=microchip.com;
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a709c7c3-0de1-4d26-de04-08d7f667c97e
-x-ms-traffictypediagnostic: BY5PR11MB4273:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR11MB4273E99AF8E2073EAD9CE1DCF0BE0@BY5PR11MB4273.namprd11.prod.outlook.com>
-x-bypassexternaltag: True
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0401647B7F
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4Gv0WOjS+9tYsBLjdISMnxZsyY9Jv77VM6xy06AZZ2r/iQweAreCiYPj1OD0Y1KVSgxXez0ct8CfAwH4VGxWsy/Y6ywKy4lle/0BoGtmwE2n89iOdB432vGOQqUOi7LKvFFRujIhfPxnnNg/mH1UUa+W58+xPayZGnJZ5+6GrS5ov4GEVL5wYCqyj9XYI8GTBw0iOycX5tadsrSs4LQ6bpH2TmkUmG93hFs7v9TbnCNYPCkaJW5ss/dRs4XRb8JGVZI1tfxFoyL83TjAu4W4XaRaywtvIZwraDNgTDUd/837dHa2iVTvi66Sgn20jWz3gbsjLcq3dE5nku3aSAKD93Ze9F/rDpHZt38j4JzreiKi1/t23jatdq240cicqNIZjhALrwbcPi/jQ1+MUClLJ+/P2SKq5KQ5Sqovgew0FUy+gmR5R+8D0URZHZk1MWN/U/1a/9ExNazNJrgd/u+tgrCB0UZCXxq1Iqze/a0kKKklwMpip8sfQvsVKV8kzRnTdfiDcrqdD3g10OaBfqD3Bg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4419.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(376002)(39860400002)(366004)(346002)(136003)(396003)(33430700001)(6512007)(9686003)(6506007)(8676002)(53546011)(54906003)(6486002)(316002)(26005)(186003)(2906002)(14286002)(5660300002)(33656002)(86362001)(71200400001)(478600001)(4326008)(8936002)(7416002)(6916009)(33440700001)(66946007)(64756008)(66556008)(66446008)(66476007)(91956017)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 0z/9iDby6r1RomoUT3gx21JWxqrI3EYVWQLLFJi8jVtrhXxxYhJos+kiyjBaBuEbINB7Yut+1BS7RYLATStFiQVB9Hin/yGEDQyngsglkEtxCWTVWVi4YKOGQuoGnb8vuUit3LGMWu+PqKJDElC6o+7yDUXIlDZpl+VhBVhekW5ZKRH+BQ49coEQQAwSekBerkdd2FHBG53rPS7ajcOoTPhYgQOnJ8dQHomtZWqg66ncY370sDG7HP/7JksGO+tF0k9iu4FUY7ouza4eHorXs1HPwyH/2AyYa7HWSAogyeskJYgVLBC5ve4+MgY0s6xh+Bt22Q+8vqguJOTtvs/4VMAP1F8bzIB02UuUT6uaOfSCMnH6fqXBVH9gDW5BocI20gY5pNGobcCosEpocvCPajZR/Vy8jes95mJN+xFTgJPxQLAM+jC5Iyh4UOxEbfPpuxYSptFI4+zPWMpaxHRwvlEA68SdrYIYg0eG40A1Wa4=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <44CDA89EFFB0AE4D9EC0B1C246CED218@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1729921AbgELOFF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 May 2020 10:05:05 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:57771 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728085AbgELOFE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 May 2020 10:05:04 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1589292304; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=InNQndDpm42OcpQN7tWNfV3b6ZrAOQwNSMr11BkCV6A=; b=f7FgQZGEZjboLJE26Yc2px2wTEmSdKdjr7jBxTZ1fSRK/w2Zj9riTSmXD4saxYgH8DddrwFm
+ C14pWDODtSBC6KRVzOfWhGFgnWx1kv1Jg1GmLCLgambvCSXl3MWYM6yhMFVhfe0gtWdfHZeM
+ 81E1WPyHeeQlQtnHcdlXkLL4w74=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5ebaacb1.7f7d5de420d8-smtp-out-n01;
+ Tue, 12 May 2020 14:03:29 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 4D8B1C43636; Tue, 12 May 2020 14:03:28 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.1.100] (unknown [27.59.216.88])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id BD951C43637;
+        Tue, 12 May 2020 14:03:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BD951C43637
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V5 1/7] soc: qcom: geni: Support for ICC voting
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org, georgi.djakov@linaro.org
+References: <1588919619-21355-1-git-send-email-akashast@codeaurora.org>
+ <1588919619-21355-2-git-send-email-akashast@codeaurora.org>
+ <20200508171352.GA4525@google.com>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <88ac8c5c-d3fe-103e-af0a-0e4a96f4c7db@codeaurora.org>
+Date:   Tue, 12 May 2020 19:32:51 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: a709c7c3-0de1-4d26-de04-08d7f667c97e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2020 11:29:51.6335
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: z468bkByZ2ePhuJQZSoQnWSjgQw18GCKblKph7YUtgNcrIkd4qfNYzyvlkusdQlQo+RfuO6hymhUdA/Yok6xr7p3AkyyGTNx11Oj901DsjM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4273
+In-Reply-To: <20200508171352.GA4525@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi, Vignesh,
 
-On Tuesday, May 12, 2020 12:49:07 PM EEST Vignesh Raghavendra wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
-> On 12/05/20 11:46 am, Tudor.Ambarus@microchip.com wrote:
-> > Hi, Boris, Pratyush,
-> >=20
-> > I stripped case 2/, we'll not treat it for now.
-> >=20
-> > On Monday, May 11, 2020 12:27:12 PM EEST Boris Brezillon wrote:
-> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know
-> >> the
-> >> content is safe
-> >>=20
-> >> On Mon, 11 May 2020 09:00:35 +0000
-> >>=20
-> >> <Tudor.Ambarus@microchip.com> wrote:
-> >>> Hi, Pratyush, Boris,
-> >>>=20
-> >>> On Friday, April 24, 2020 9:43:54 PM EEST Pratyush Yadav wrote:
-> >>>> This series adds support for octal DTR flashes in the spi-nor
-> >>>> framework,
-> >>>=20
-> >>> I'm still learning about this, but I can give you my 2 cents as of no=
-w,
-> >>> to
-> >>> open the discussion. Enabling 2-2-2, 4-4-4, and 8-8-8 modes is danger=
-ous
-> >>> because the flash may not recover from unexpected resets. Entering on=
-e
-> >>> of
-> >>> these modes can be:
-> >>> 1/ volatile selectable, the device return to the 1-1-1 protocol after
-> >>> the
-> >>> next power-on. I guess this is conditioned by the optional RESET pin,
-> >>> but
-> >>> I'll have to check. Also the flash can return to the 1-1-1 mode using
-> >>> the
-> >>> software reset or through writing to its Configuration Register, with=
-out
-> >>> power-on or power- off.
-> >>=20
-> >> My understanding is that there's no standard software reset procedure
-> >> that guarantees no conflict with existing 1S commands, so even the
-> >> software reset approach doesn't work here.
-> >=20
-> > The software reset procedure can't protect you from unexpected resets, =
-but
-> > the hardware with its optional reset pin can. Pratyush to confirm.
-> >=20
-> > cut
-> >=20
-> >>> Not recovering from unexpected resets is unacceptable. One should alw=
-ays
-> >>> prefer option 1/ and condition the entering in 2-2-2, 4-4-4 and 8-8-8
-> >>> with
-> >>> the presence of the optional RESET pin.
-> >>=20
-> >> Totally agree with you on that one, but we know what happens in
-> >> practice...
-> >=20
-> > What I proposed is to condition the entering in the state-full modes wi=
-th
-> > the presence of the optional RESET pin. We would introduce an optional
-> > device tree property for the RESET pin. If hardware doesn't implement t=
-he
-> > optional RESET# signal, then we will not enter in the state-full modes.
->=20
-> Are you asking for dedicated SW controllable reset line or just an
-> indication from DT that OSPI reset line is connected to board level
-> soft/hard reset lines?
+On 5/8/2020 10:43 PM, Matthias Kaehlcke wrote:
+> Hi Akash,
+>
+> note: my comments below are clearly entering bikeshed territory. Please
+> take what you agree with and feel free to ignore the rest.
+>
+> On Fri, May 08, 2020 at 12:03:33PM +0530, Akash Asthana wrote:
+>> Add necessary macros and structure variables to support ICC BW
+>> voting from individual SE drivers.
+>>
+>> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+>> ---
+>> Changes in V2:
+>>   - As per Bjorn's comment dropped enums for ICC paths, given the three
+>>     paths individual members
+>>
+>> Changes in V3:
+>>   - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
+>>   - Add geni_icc_path structure in common header
+>>
+>> Changes in V4:
+>>   - As per Bjorn's comment print error message in geni_icc_get if return
+>>     value is not -EPROBE_DEFER.
+>>   - As per Bjorn's comment remove NULL on path before calling icc_set_bw
+>>     API.
+>>   - As per Bjorn's comment drop __func__ print.
+>>   - As per Matthias's comment, make ICC path a array instead of individual
+>>     member entry in geni_se struct.
+>>
+>> Note: I have ignored below check patch suggestion because it was throwing
+>>        compilation error as 'icc_ddr' is not compile time comstant.
+>>
+>> WARNING: char * array declaration might be better as static const
+>>   - FILE: drivers/soc/qcom/qcom-geni-se.c:726:
+>>   - const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
+>>
+>> Changes in V5:
+>>   - As per Matthias's comment defined enums for ICC paths.
+>>   - Integrate icc_enable/disable with power on/off call for driver.
+>>   - As per Matthias's comment added icc_path_names array to print icc path name
+>>     in failure case.
+>>   - As per Georgi's suggestion assume peak_bw = avg_bw if not mentioned.
+>>
+>>   drivers/soc/qcom/qcom-geni-se.c | 92 +++++++++++++++++++++++++++++++++++++++++
+>>   include/linux/qcom-geni-se.h    | 42 +++++++++++++++++++
+>>   2 files changed, 134 insertions(+)
+>>
+>> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+>> index 7d622ea..63403bf 100644
+>> --- a/drivers/soc/qcom/qcom-geni-se.c
+>> +++ b/drivers/soc/qcom/qcom-geni-se.c
+>> @@ -92,6 +92,9 @@ struct geni_wrapper {
+>>   	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+>>   };
+>>   
+>> +static const char * const icc_path_names[] = {"qup-core", "qup-config",
+>> +								"qup-memory"};
+> nit: the indentation is a bit odd. I would align it either with "qup-core" or
+> at a tab stop nearby.
+ok
+>
+>> +
+>>   #define QUP_HW_VER_REG			0x4
+>>   
+>>   /* Common SE registers */
+>> @@ -720,6 +723,95 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+>>   }
+>>   EXPORT_SYMBOL(geni_se_rx_dma_unprep);
+>>   
+>> +int geni_icc_get(struct geni_se *se, const char *icc_ddr)
+>> +{
+>> +	int i, icc_err;
+> nit: the 'icc_' prefix doesn't add value here, just 'err' would be less
+> 'noisy' IMO.
+ok
+>
+>> +	const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
+> nit: you could avoid repeating the first to strings by referencing
+> icc_path_names[GENI_TO_CORE] and icc_path_names[CPU_TO_GENI]. Not sure
+> if it's really better, it avoids the redundant names, but is slightly
+> less readable.
+I thought of that but current implementation looks neater to me.
+>
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
+>> +		if (!icc_names[i])
+>> +			continue;
+>> +
+>> +		se->icc_paths[i].path = devm_of_icc_get(se->dev, icc_names[i]);
+>> +		if (IS_ERR(se->icc_paths[i].path))
+>> +			goto icc_get_failure;
+> nit: since there is only a single label it isn't really necessary to be so
+> precise. 'goto err' is very common in the kernel, 'err_icc_get' would be
+> another alternative.
+okay
+>
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +icc_get_failure:
+>> +	icc_err = PTR_ERR(se->icc_paths[i].path);
+>> +	if (icc_err != -EPROBE_DEFER)
+>> +		dev_err_ratelimited(se->dev, "Failed to get ICC path:%s, ret:%d\n",
+> All the logs in this patch result in something like "... path:qup-core, ret:42".
+> For humans I think it is more intuitive to parse "... path 'qup-core': 42".
 
-I don't see a need for the reset line to be SW controllable, a simple=20
-indication from the device tree should be enough.
+ok
 
->=20
-> Mandating SW controllable RESET line is bit of a stretch IMO... Board
-> design may not allow wasting dedicated pin due to lack of GPIOs perhaps..
->=20
-> For eg.: TI EVM has OSPI reset line connected to board level reset out.
-> This ensures any soft/warm/hard CPU reset will trigger OSPI Flash reset,
-> but there is no SW control that allows OSPI flash alone to be reset.
-> Isn't such a reset mechanism sufficient?
->=20
+Thanks for review and feedback
 
-I think it is, yes.
+Regards,
 
-Cheers,
-ta
+Akash
 
+>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
