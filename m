@@ -2,107 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1941CFF56
-	for <lists+linux-spi@lfdr.de>; Tue, 12 May 2020 22:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F19E1CFFC4
+	for <lists+linux-spi@lfdr.de>; Tue, 12 May 2020 22:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730576AbgELUfW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 May 2020 16:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728882AbgELUfW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 May 2020 16:35:22 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6D3C061A0C;
-        Tue, 12 May 2020 13:35:22 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id b8so6696767pgi.11;
-        Tue, 12 May 2020 13:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YVFW6oIEuEyDeRl3Bg5H2zPOgggIm8lzWUpr4cAUXc0=;
-        b=PptOoIXpSNuFOhmHbdDkbkZyYo24SjYpZtgRf1eSccsXirEvsAvaVHBe5PebjyD+i6
-         ar7qmlFWqvhCtpiDskWezNkG9ip5bzSTdEW8V89Fn7sVEqtasX8OsWbDEPp28HCO4p13
-         XGD/UNskTpsPq5/jrdPV+QBNUAS4NZTfU3arve44f+h2YHCVHuOuwfHjl38bi6nbTDZZ
-         GoFzPRcCoGGun6jLZhXJ/4K9d8flLKu8E3wINm7DT2Cc8nwA9WJyyxzW1Vyc203nacpK
-         murxAbJ5Ijr7WpyaP6bIbzIBzl7UsbdlsVgol0WPQwmxVdK7hOzPyRDW5eggFpG1sFGe
-         ti2Q==
+        id S1728882AbgELUpq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 May 2020 16:45:46 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:40815 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726324AbgELUpq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 May 2020 16:45:46 -0400
+Received: by mail-oi1-f193.google.com with SMTP id v128so2652597oia.7;
+        Tue, 12 May 2020 13:45:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YVFW6oIEuEyDeRl3Bg5H2zPOgggIm8lzWUpr4cAUXc0=;
-        b=LjnWOLpY9ANHWepxXo3l8gkxJpD4yJYoGm4hS8dlhxoxHeLEZL9UrM4pSV5imRH0gn
-         vOoCNUWEWK6mz00jIORvkV9921uSnG/ORjvrkPLXcVwUEsiq/4LeaUccExr8Kkp1U9P0
-         GwXQa/KO0TPeIHtYdDmmXcC9va1vwzystGRl72P4MohOrSVQ0Cw2eBRQ/YnBFSSTwebq
-         zInf8geOb9h2iHUfs5l2Nl5xKY7SgMU7qGU7LTH3j/tBWLQaU7YmBkznxwVDDf1THpMx
-         /2laXZ++AxeHrrmZ8+9x7euRjjoQPlGYxyEI5Ycs6IpaykEYP76ZGWcyv8Mh8r9dYZBH
-         dWqw==
-X-Gm-Message-State: AGi0PuYg588xU1sXis7KbEpbB/UTknLdGBiKsv1X9GUKf9kpJpx2bmy/
-        XSun4wvXFbxfEg6X6kumb9l5PyCTVQ8wUrw6aHY=
-X-Google-Smtp-Source: APiQypJTLDvBe0FVtK0RKin5GJBBZUcW1n4ZDU2eps4uS029pWA8iLJCh5A9HjKGnTF4TEbKdT0ener6wvLDJk7Zn0E=
-X-Received: by 2002:a65:6251:: with SMTP id q17mr20697891pgv.4.1589315721498;
- Tue, 12 May 2020 13:35:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200508132943.9826-2-Sergey.Semin@baikalelectronics.ru> <20200508193934.GY185537@smile.fi.intel.com>
- <20200512202814.e6havutfpzu2gdfc@mobilestation>
-In-Reply-To: <20200512202814.e6havutfpzu2gdfc@mobilestation>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 12 May 2020 23:35:08 +0300
-Message-ID: <CAHp75VfUzx6F8QinUZf6P76ne_uG1mVitMaMZc2WREMspOAyZA@mail.gmail.com>
-Subject: Re: [PATCH 01/17] dt-bindings: spi: Convert DW SPI binding to DT schema
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bZ3SlC6IjAo3rRznak2yB2vjG0WklLB9HsgMaXr/3G8=;
+        b=ZepMXdQ/WnfBObbFd/B6M9to3Ob8Ol7WtpC39VYHjN4V7bsZEZexDAhDER0b0BbVTw
+         tHVIlA39IsnB5NgjrHBUtMO85bLadeGNJ4FD4BVDr3seuP6HkbG6qt0/JuaNw9bc6U3V
+         14bnQ3rB3FFAXvXNz+1w1xMAL4ZDecKlbC2kD7RCam5xRcl8EZUzdZVG8zKrF9Ut3IY6
+         f3UjfUTRBHiCNtKr1+/xYvz8LBGG0hBoOvHSNj+M+DqAOIBWCpGQLlWZFTw0JjGAsG7z
+         AchaYC9Vfh1f2EJvfZ5I/xPuOZgQ2dB0AbqHwAksFuXVQvO88t2A3u98QBDH4ELTptvS
+         CcQA==
+X-Gm-Message-State: AGi0Pubs2xELuMteQV/fKsLd2nq1GMHPAlCwpsuMhU1J6KxhvSJjv6j3
+        QVfU0NFWduUSdidFOv8PvOeuOQBqUA==
+X-Google-Smtp-Source: APiQypKV6dUHk4u2TZZM9pj4FNgtVQv7pL7PiPyGyXG2CpXKT8zCVpKHis+rnBPSF2vegPnG8W7f6g==
+X-Received: by 2002:aca:488c:: with SMTP id v134mr12366530oia.103.1589316344975;
+        Tue, 12 May 2020 13:45:44 -0700 (PDT)
+Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.googlemail.com with ESMTPSA id k8sm3943792ood.24.2020.05.12.13.45.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 13:45:44 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-mips@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH 1/5] spi: dt-bindings: sifive: Add missing 2nd register region
+Date:   Tue, 12 May 2020 15:45:39 -0500
+Message-Id: <20200512204543.22090-1-robh@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 12, 2020 at 11:29 PM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> +Cc: Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
->
-> On Fri, May 08, 2020 at 10:39:34PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 08, 2020 at 04:29:26PM +0300, Serge Semin wrote:
-> > > Modern device tree bindings are supposed to be created as YAML-files
-> > > in accordance with dt-schema. This commit replaces two DW SPI legacy
-> > > bare text bindings with YAML file. As before the bindings file states
-> > > that the corresponding dts node is supposed to be compatible either
-> > > with generic DW APB SSI controller or with Microsemi/Amazon/Renesas
-> > > vendors-specific controllers, to have registers, interrupts and clocks
-> > > properties. Though in case of Microsemi version of the controller
-> > > there must be two registers resources specified. Properties like
-> > > clock-names, reg-io-width, cs-gpio, num-cs and SPI-specific sub-nodes
-> > > are optional.
-> >
-> > Can you incorporate work done here or agree with Wan how to proceed?
-> >
-> > https://lore.kernel.org/linux-spi/20200505191910.GA2970@bogus/T/#md626b5f6f2294b0ebd70995d5ed0e67a360e000b
->
-> Don't worry. I'll make sure the updates provided by Wan including the new IP
-> support are preserved after rebasing this series on top of the spi/for-next.
+The 'reg' description and example have a 2nd register region for memory
+mapped flash, but the schema says there is only 1 region. Fix this.
 
-Thanks!
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: linux-spi@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Please ack, dependency for patch 5.
 
+ Documentation/devicetree/bindings/spi/spi-sifive.yaml | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-sifive.yaml b/Documentation/devicetree/bindings/spi/spi-sifive.yaml
+index 28040598bfae..fb583e57c1f2 100644
+--- a/Documentation/devicetree/bindings/spi/spi-sifive.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-sifive.yaml
+@@ -32,11 +32,10 @@ properties:
+       https://github.com/sifive/sifive-blocks/tree/master/src/main/scala/devices/spi
+ 
+   reg:
+-    maxItems: 1
+-
+-    description:
+-      Physical base address and size of SPI registers map
+-      A second (optional) range can indicate memory mapped flash
++    minItems: 1
++    items:
++      - description: SPI registers region
++      - description: Memory mapped flash region
+ 
+   interrupts:
+     maxItems: 1
 -- 
-With Best Regards,
-Andy Shevchenko
+2.20.1
+
