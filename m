@@ -2,59 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3A41D0113
-	for <lists+linux-spi@lfdr.de>; Tue, 12 May 2020 23:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805D21D06E8
+	for <lists+linux-spi@lfdr.de>; Wed, 13 May 2020 08:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731369AbgELVqR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 May 2020 17:46:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56018 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731065AbgELVqR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 12 May 2020 17:46:17 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B883620731;
-        Tue, 12 May 2020 21:46:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589319976;
-        bh=ulLHlolQRXsWXYiTML1BrCYngQd1LDZaMS96rMIfDoI=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=W+OUlqzrI5Ge8FBittf7LcuviYyZbh7RW04rzXj0LXbJmBI7zFX31BvgYAIo1XAQM
-         XL8YFWUp3Nkbad2exsH3fZKlopfu4Zg7IUCUf1Q0UnAw/lmuhbuuVc7STGue7Ix1Pc
-         C1xok6HYkI+k+YIz7N4plBlZmqeamDeYPfz3+OZc=
-Content-Type: text/plain; charset="utf-8"
+        id S1728712AbgEMGHV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 May 2020 02:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728707AbgEMGHV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 May 2020 02:07:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA81C061A0C
+        for <linux-spi@vger.kernel.org>; Tue, 12 May 2020 23:07:21 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jYkWG-0000uB-3T; Wed, 13 May 2020 08:05:28 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jYkWD-0003jr-LK; Wed, 13 May 2020 08:05:25 +0200
+Date:   Wed, 13 May 2020 08:05:25 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     vkoul@kernel.org, shawnguo@kernel.org,
+        u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
+        festevam@gmail.com, dan.j.williams@intel.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, will.deacon@arm.com,
+        l.stach@pengutronix.de, martin.fuzzey@flowbird.group,
+        kernel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 RESEND 03/13] Revert "dmaengine: imx-sdma: fix context
+ cache"
+Message-ID: <20200513060525.GJ5877@pengutronix.de>
+References: <1589218356-17475-1-git-send-email-yibin.gong@nxp.com>
+ <1589218356-17475-4-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200512204543.22090-5-robh@kernel.org>
-References: <20200512204543.22090-1-robh@kernel.org> <20200512204543.22090-5-robh@kernel.org>
-Subject: Re: [PATCH 5/5] dt-bindings: Fix incorrect 'reg' property sizes
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Date:   Tue, 12 May 2020 14:46:16 -0700
-Message-ID: <158931997603.215346.13048447179585746005@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1589218356-17475-4-git-send-email-yibin.gong@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:04:32 up 83 days, 13:35, 87 users,  load average: 0.05, 0.22,
+ 0.17
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Quoting Rob Herring (2020-05-12 13:45:43)
-> The examples template is a 'simple-bus' with a size of 1 cell for
-> #address-cells and #size-cells. The schema was only checking the entries
-> had between 2 and 4 cells which really only errors on I2C or SPI type
-> devices with a single cell.
->=20
-> The easiest fix in most cases is to change the 'reg' property to for 1 ce=
-ll
-> address and size. In some cases with child devices having 2 cells, that
-> doesn't make sense so a bus node is needed.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Tue, May 12, 2020 at 01:32:26AM +0800, Robin Gong wrote:
+> This reverts commit d288bddd8374e0a043ac9dde64a1ae6a09411d74, since
+> 'context_loaded' finally removed.
+> 
+> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
 > ---
+>  drivers/dma/imx-sdma.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+> index 4d4477d..3d4aac9 100644
+> --- a/drivers/dma/imx-sdma.c
+> +++ b/drivers/dma/imx-sdma.c
+> @@ -1338,7 +1338,6 @@ static void sdma_free_chan_resources(struct dma_chan *chan)
+>  
+>  	sdmac->event_id0 = 0;
+>  	sdmac->event_id1 = 0;
+> -	sdmac->context_loaded = false;
+>  
+>  	sdma_set_channel_priority(sdmac, 0);
 
-Acked-by: Stephen Boyd <sboyd@kernel.org> # clk
+I think this can safely be folded into the next patch which makes it
+more clear what is happening.
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
