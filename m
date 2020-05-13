@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94ADC1D09D7
-	for <lists+linux-spi@lfdr.de>; Wed, 13 May 2020 09:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2F71D09F5
+	for <lists+linux-spi@lfdr.de>; Wed, 13 May 2020 09:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731821AbgEMHVn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 May 2020 03:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S1729298AbgEMHeQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 May 2020 03:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729793AbgEMHVm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 May 2020 03:21:42 -0400
+        with ESMTP id S1728988AbgEMHeQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 May 2020 03:34:16 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556D1C061A0C
-        for <linux-spi@vger.kernel.org>; Wed, 13 May 2020 00:21:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635D8C061A0C
+        for <linux-spi@vger.kernel.org>; Wed, 13 May 2020 00:34:16 -0700 (PDT)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1jYlhs-00012g-PP; Wed, 13 May 2020 09:21:32 +0200
+        id 1jYltx-00026z-If; Wed, 13 May 2020 09:34:01 +0200
 Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1jYlhs-0008Jd-7d; Wed, 13 May 2020 09:21:32 +0200
-Date:   Wed, 13 May 2020 09:21:32 +0200
+        id 1jYltv-0000FZ-40; Wed, 13 May 2020 09:33:59 +0200
+Date:   Wed, 13 May 2020 09:33:59 +0200
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     Robin Gong <yibin.gong@nxp.com>
 Cc:     vkoul@kernel.org, shawnguo@kernel.org,
@@ -35,7 +35,7 @@ Cc:     vkoul@kernel.org, shawnguo@kernel.org,
         linux-imx@nxp.com, dmaengine@vger.kernel.org,
         devicetree@vger.kernel.org
 Subject: Re: [PATCH v7 RESEND 07/13] spi: imx: fix ERR009165
-Message-ID: <20200513072132.GL5877@pengutronix.de>
+Message-ID: <20200513073359.GM5877@pengutronix.de>
 References: <1589218356-17475-1-git-send-email-yibin.gong@nxp.com>
  <1589218356-17475-8-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
@@ -47,8 +47,8 @@ X-URL:  http://www.pengutronix.de/
 X-IRC:  #ptxdist @freenode
 X-Accept-Language: de,en
 X-Accept-Content-Type: text/plain
-X-Uptime: 08:06:09 up 83 days, 13:36, 88 users,  load average: 0.20, 0.23,
- 0.18
+X-Uptime: 09:27:29 up 83 days, 14:57, 110 users,  load average: 0.19, 0.20,
+ 0.22
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
 X-SA-Exim-Mail-From: sha@pengutronix.de
@@ -63,13 +63,6 @@ On Tue, May 12, 2020 at 01:32:30AM +0800, Robin Gong wrote:
 > Change to XCH  mode even in dma mode, please refer to the below
 > errata:
 > https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf
-
-This patch is the one bisecting will end up with when somebody uses an
-older SDMA firmware or the ROM scripts. It should have a better
-description what happens and what should be done about it.
-
-Sascha
-
 > 
 > Signed-off-by: Robin Gong <yibin.gong@nxp.com>
 > Acked-by: Mark Brown <broonie@kernel.org>
@@ -111,24 +104,20 @@ Sascha
 > +	 * to speed up fifo filling as possible.
 > +	 */
 > +	tx.dst_maxburst = spi_imx->devtype_data->fifo_size;
->  	ret = dmaengine_slave_config(master->dma_tx, &tx);
->  	if (ret) {
->  		dev_err(spi_imx->dev, "TX dma configuration failed with %d\n", ret);
-> @@ -1265,10 +1269,6 @@ static int spi_imx_sdma_init(struct device *dev, struct spi_imx_data *spi_imx,
->  {
->  	int ret;
->  
-> -	/* use pio mode for i.mx6dl chip TKT238285 */
-> -	if (of_machine_is_compatible("fsl,imx6dl"))
-> -		return 0;
-> -
->  	spi_imx->wml = spi_imx->devtype_data->fifo_size / 2;
->  
->  	/* Prepare for TX DMA: */
-> -- 
-> 2.7.4
-> 
-> 
+
+In the next patch this is changed again to:
+
++       if (spi_imx->devtype_data->tx_glitch_fixed)
++               tx.dst_maxburst = spi_imx->wml;
++       else
++               tx.dst_maxburst = spi_imx->devtype_data->fifo_size;
+
+So with tx_glitch_fixed we end up with tx.dst_maxburst being the same
+as two patches before which is rather confusing. Better introduce
+tx_glitch_fixed in this patch, or maybe even merge this patch and the
+next one.
+
+Sascha
 
 -- 
 Pengutronix e.K.                           |                             |
