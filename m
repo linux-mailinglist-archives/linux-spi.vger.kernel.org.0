@@ -2,108 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F310C1D06E4
-	for <lists+linux-spi@lfdr.de>; Wed, 13 May 2020 08:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B291D0976
+	for <lists+linux-spi@lfdr.de>; Wed, 13 May 2020 09:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729199AbgEMGHM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 May 2020 02:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728865AbgEMGHL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 May 2020 02:07:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724BCC061A0C
-        for <linux-spi@vger.kernel.org>; Tue, 12 May 2020 23:07:11 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1jYkWg-000102-4z; Wed, 13 May 2020 08:05:54 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1jYkWf-0003k4-Mm; Wed, 13 May 2020 08:05:53 +0200
-Date:   Wed, 13 May 2020 08:05:53 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     vkoul@kernel.org, shawnguo@kernel.org,
-        u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
-        festevam@gmail.com, dan.j.williams@intel.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, will.deacon@arm.com,
-        l.stach@pengutronix.de, martin.fuzzey@flowbird.group,
-        kernel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 RESEND 05/13] dmaengine: imx-sdma: remove dupilicated
- sdma_load_context
-Message-ID: <20200513060553.GK5877@pengutronix.de>
-References: <1589218356-17475-1-git-send-email-yibin.gong@nxp.com>
- <1589218356-17475-6-git-send-email-yibin.gong@nxp.com>
+        id S1730331AbgEMHEm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 May 2020 03:04:42 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43953 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729642AbgEMHEm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 May 2020 03:04:42 -0400
+Received: by mail-oi1-f195.google.com with SMTP id i22so3966938oik.10;
+        Wed, 13 May 2020 00:04:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sMqsXTZkQsUYXsgUW5SNfqYNzeikt2R+rOYAkqTmE5k=;
+        b=Qlo78ui8y08TBdBC1f87m+1ryXxVvJIB0Om7wNF+f5clbFdgRJkuZ+KV3ytof3yMzv
+         pM02R0CKD0jZQOggg78PwzYCICqcG2pqnWlJxECulifzUnEt9l855gTMvHK8AU9y91ts
+         /uQ9XkcsXgSYXTS2E0/JG62+VXh+H3y2256SXpcam2KItKvB51Ef8zoWWhXlmsWq6bgv
+         RLKfQsNJ1wZv/aYbLb16oD9ElcNCyaUn1NW+mNoOSonhUUqa8QBQvjhGKC2E9s9WZHR2
+         63gmIBtMFhzTCBuzEMmdiQyxcXTTohcGoM/8EZXUExFNtORXZDpi9p2ZZcQNWEyOb7LV
+         pMKA==
+X-Gm-Message-State: AGi0Puack8XJaENLTjvv1ed5B7u91qa0FqxGx8C9af530hSjD2PmLX0s
+        uidHH4s9Gs0xSRIp3B+eG53NviECbNhbEtanQUiqrw==
+X-Google-Smtp-Source: APiQypI2i3OcOk0fZSl5EaM/AtAYKVxaJffZ2UtQJdWMHY7G9eIbkNlIzli6zPVMpFnI38y49fid2zK+GkOq09gyGKs=
+X-Received: by 2002:aca:cd93:: with SMTP id d141mr3674965oig.148.1589353479660;
+ Wed, 13 May 2020 00:04:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1589218356-17475-6-git-send-email-yibin.gong@nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:05:32 up 83 days, 13:36, 87 users,  load average: 0.39, 0.27,
- 0.19
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+References: <20200512204543.22090-1-robh@kernel.org> <20200512204543.22090-5-robh@kernel.org>
+In-Reply-To: <20200512204543.22090-5-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 13 May 2020 09:04:28 +0200
+Message-ID: <CAMuHMdWoh94eFvVKHt5si3LOX4Nwx0-JssxVOy=fXPMXxgndXg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] dt-bindings: Fix incorrect 'reg' property sizes
+To:     Rob Herring <robh@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In the subject: s/dupilicated/duplicated/
+Hi Rob,
 
-Sascha
+On Tue, May 12, 2020 at 10:46 PM Rob Herring <robh@kernel.org> wrote:
+> The examples template is a 'simple-bus' with a size of 1 cell for
+> #address-cells and #size-cells. The schema was only checking the entries
+> had between 2 and 4 cells which really only errors on I2C or SPI type
+> devices with a single cell.
+>
+> The easiest fix in most cases is to change the 'reg' property to for 1 cell
+> address and size. In some cases with child devices having 2 cells, that
+> doesn't make sense so a bus node is needed.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-On Tue, May 12, 2020 at 01:32:28AM +0800, Robin Gong wrote:
-> Since sdma_transfer_init() will do sdma_load_context before any
-> sdma transfer, no need once more in sdma_config_channel().
-> 
-> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-> Acked-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  drivers/dma/imx-sdma.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index 397f11d..69ea44d 100644
-> --- a/drivers/dma/imx-sdma.c
-> +++ b/drivers/dma/imx-sdma.c
-> @@ -1137,7 +1137,6 @@ static void sdma_set_watermarklevel_for_p2p(struct sdma_channel *sdmac)
->  static int sdma_config_channel(struct dma_chan *chan)
->  {
->  	struct sdma_channel *sdmac = to_sdma_chan(chan);
-> -	int ret;
->  
->  	sdma_disable_channel(chan);
->  
-> @@ -1177,9 +1176,7 @@ static int sdma_config_channel(struct dma_chan *chan)
->  		sdmac->watermark_level = 0; /* FIXME: M3_BASE_ADDRESS */
->  	}
->  
-> -	ret = sdma_load_context(sdmac);
-> -
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int sdma_set_channel_priority(struct sdma_channel *sdmac,
-> -- 
-> 2.7.4
-> 
-> 
+Thanks for your patch!
+
+>  .../devicetree/bindings/arm/renesas,prr.yaml  |  2 +-
+>  .../bindings/display/renesas,cmm.yaml         |  2 +-
+>  .../interrupt-controller/renesas,irqc.yaml    |  2 +-
+>  .../bindings/media/renesas,csi2.yaml          |  2 +-
+>  .../bindings/media/renesas,vin.yaml           |  6 +-
+>  .../bindings/net/renesas,ether.yaml           |  2 +-
+>  .../bindings/pwm/renesas,pwm-rcar.yaml        |  2 +-
+>  .../bindings/spi/renesas,sh-msiof.yaml        |  2 +-
+>  .../bindings/thermal/rcar-thermal.yaml        |  6 +-
+>  .../bindings/usb/renesas,usb3-peri.yaml       |  2 +-
+>  .../bindings/usb/renesas,usbhs.yaml           |  2 +-
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
