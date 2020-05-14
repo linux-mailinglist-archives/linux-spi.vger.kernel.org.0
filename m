@@ -2,38 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 061B61D2F8C
-	for <lists+linux-spi@lfdr.de>; Thu, 14 May 2020 14:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244091D3090
+	for <lists+linux-spi@lfdr.de>; Thu, 14 May 2020 15:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727890AbgENMWS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 May 2020 08:22:18 -0400
-Received: from mga12.intel.com ([192.55.52.136]:34995 "EHLO mga12.intel.com"
+        id S1726166AbgENNDS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 May 2020 09:03:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725955AbgENMWR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 14 May 2020 08:22:17 -0400
-IronPort-SDR: jq2G9j4l+MtmXiBskeawpsxih7yy4UmJ+LGfE9+Lk1E9tY6Q3W5xMH79i5d4wHG7PLmfYN7wg4
- t4Z3FDFHyuyg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 05:22:17 -0700
-IronPort-SDR: g4YTAvFTxqNPtU0jkIbc5r78CO9/Y4ylYkQmK+EhgU7xCpQhcG80N1AgmABpc/Vg8MOpmJRO+L
- MmVc/XiEeHqQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,391,1583222400"; 
-   d="scan'208";a="464312030"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005.fm.intel.com with ESMTP; 14 May 2020 05:22:12 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jZCsQ-006cUm-3m; Thu, 14 May 2020 15:22:14 +0300
-Date:   Thu, 14 May 2020 15:22:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        id S1726056AbgENNDR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 14 May 2020 09:03:17 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ECB7C20727;
+        Thu, 14 May 2020 13:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589461396;
+        bh=HWqK1vI6OeX/1/VBHbpjutL9JM9eqNWuPbHXffjYxis=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OKuxprWtoEF6XGEz0RbupaAPXn45JEyfndEQ+ZcvMu2WGttpQ/NEjLorTXTCEN1XH
+         ycJEdYW2yNOEeOHTuLgKSR32hkraSY/hpSuhzfVGFm63XbWohsPev+YiiAsbEJRial
+         zTHbQ/wEnwy8bOqB1xicDaLNnMy4lsYhdKKSlA/s=
+Date:   Thu, 14 May 2020 14:03:13 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Serge Semin <fancer.lancer@gmail.com>,
         Gregory Clement <gregory.clement@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
         Charles Keepax <ckeepax@opensource.cirrus.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
@@ -57,38 +53,66 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-spi <linux-spi@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 11/17] spi: dw: Fix native CS being unset
-Message-ID: <20200514122214.GC185537@smile.fi.intel.com>
+Message-ID: <20200514130313.GF5127@sirena.org.uk>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
  <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
  <CACRpkdY=wkgnYPcqSzyzNpS6ckJZs-9kXfTfdwa1E+POzOBQGA@mail.gmail.com>
  <20200513001347.dyt357erev7vzy3l@mobilestation>
  <CACRpkdZTH1DNHvi4r48nLNWp4rqyYDZTzT12hw0eTNcYmgSr3Q@mail.gmail.com>
  <20200514115558.e6cqnuxqyqkysfn7@mobilestation>
+ <20200514122214.GC185537@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Il7n/DHsA0sMLmDu"
 Content-Disposition: inline
-In-Reply-To: <20200514115558.e6cqnuxqyqkysfn7@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200514122214.GC185537@smile.fi.intel.com>
+X-Cookie: I think we're in trouble.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 14, 2020 at 02:55:58PM +0300, Serge Semin wrote:
-> On Thu, May 14, 2020 at 10:31:13AM +0200, Linus Walleij wrote:
-> > On Wed, May 13, 2020 at 2:13 AM Serge Semin
-> > <Sergey.Semin@baikalelectronics.ru> wrote:
 
-> BTW I experience a problem with vger.kernel.org. For some reason a few days ago
-> it started bouncing my emails back sent to the GPIO/MIPS/SPI/kernel mailing lists.
-> I've sent multiple backward messages to the postmaster (postmaster (dog) vger.kernel.org)
-> with the bounce text, but still with no response. Could you tell me who should I
-> bother with this problem to get a help with its solution? 
+--Il7n/DHsA0sMLmDu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Perhaps, helpdesk@kernel.org ?
+On Thu, May 14, 2020 at 03:22:14PM +0300, Andy Shevchenko wrote:
+> On Thu, May 14, 2020 at 02:55:58PM +0300, Serge Semin wrote:
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > BTW I experience a problem with vger.kernel.org. For some reason a few =
+days ago
+> > it started bouncing my emails back sent to the GPIO/MIPS/SPI/kernel mai=
+ling lists.
+> > I've sent multiple backward messages to the postmaster (postmaster (dog=
+) vger.kernel.org)
+> > with the bounce text, but still with no response. Could you tell me who=
+ should I
+> > bother with this problem to get a help with its solution?=20
 
+> Perhaps, helpdesk@kernel.org ?
 
+vger is completely separate to kernel.org in terms of admin.  Usually
+the bounce messages from vger say why things are being bounced, there's
+a good chance that either mail to you is bouncing and Dave got annoyed
+with you and is trying to get your attention or something you're doing
+is looking like spam.
+
+--Il7n/DHsA0sMLmDu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl69QZEACgkQJNaLcl1U
+h9D5ogf8C/EiMwHRshlZKNdpalnGbvOPBxX0ET1v6V4dI5JSovu/AskZxYHMNGfr
+/wyCAAbJ8AjzQ8cCpizZ+KAAuhx5M3S9rr9FL+LcgofPLhGEoAMEQ4E6DuEnoy+h
+kD7lq7uJi4dzeTZUw4yG6jXrYl9AOi1k/RWa4GEZ2lMT2g25I/BVC16ObwEwpc0O
+281O7BEtXO4yEEHqLzFaAeK/eF3lu0wmc62ag98FCdXNuDyDHArKDnAZ+5Qi4R5x
+HmErKYNlmJiFtKm+DgTuQA/a8aO52O6MX4k1dRLLplm5pFP0FcMa5+X5l0ZXbLgy
+jz69X4t+H5PoqOBIXt1J9d6RJJrtfw==
+=Cprm
+-----END PGP SIGNATURE-----
+
+--Il7n/DHsA0sMLmDu--
