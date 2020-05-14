@@ -2,105 +2,172 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A291D2865
-	for <lists+linux-spi@lfdr.de>; Thu, 14 May 2020 09:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D5B1D347D
+	for <lists+linux-spi@lfdr.de>; Thu, 14 May 2020 17:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgENHDe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 May 2020 03:03:34 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:34768 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725965AbgENHDe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 May 2020 03:03:34 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1589439813; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=mD6zwcTcSV2rURIM5M2MgMVSc+SPDGYA1hmogi2AOqw=; b=xE6djdmWSTfm74opQzo4K1xJCdqjxXcFC6TlGsFrsQzSfWfYiEXxLNHUOFWx2YtYviNeLRPp
- 7OgpbRVuXrTDLXwASidQOnlUhYWV5lfIMsG/WTGKbqWmfwov+uy7iz64ahN6fwfS0boWYcuX
- 3Pv2H6vIjVqCA61XvsGMsHGl9a8=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ebced3f.7fd5c3656f80-smtp-out-n03;
- Thu, 14 May 2020 07:03:27 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 999D5C43636; Thu, 14 May 2020 07:03:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.206.24.246] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7D00DC433F2;
-        Thu, 14 May 2020 07:03:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7D00DC433F2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V5 2/7] soc: qcom-geni-se: Add interconnect support to fix
- earlycon crash
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org, georgi.djakov@linaro.org
-References: <1588919619-21355-1-git-send-email-akashast@codeaurora.org>
- <1588919619-21355-3-git-send-email-akashast@codeaurora.org>
- <20200508175938.GB4525@google.com> <20200508191454.GH4525@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <a261dfa3-2435-ab79-e7fc-29e5df107757@codeaurora.org>
-Date:   Thu, 14 May 2020 12:33:17 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726667AbgENPIK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 May 2020 11:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726240AbgENPII (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 May 2020 11:08:08 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ECDC061A0C;
+        Thu, 14 May 2020 08:08:08 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id 79so3358454iou.2;
+        Thu, 14 May 2020 08:08:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Gbex69XR4ZtBuJoqVeoYUx9nyFHm1kZR6S5jk554FrE=;
+        b=FJPRMdQokqht7U+y1ela4OESMPvwo+hnpZbq+e01yT4sc7YmX6KhRapTLoooJGnaer
+         no8q5/+yTTtmbVYURRxBEfQhhZ9J+LhKOFz0bqgGBx4PJ2Bw2ftahjLfUzXNEEvP8ccI
+         2pAP6Y2aYPKnolxMJQZEZL2TjJA9jwPSwcgeBX6VoDfVfbkeZdHE4f3iGkIRzsuBERI3
+         b0XGSa3ns7gvk1VcwnfVu1eKrphDamt+YQi9Z3l0nVtOAJFrtU66CW6UaoIx+NrhyDWG
+         bpqevwejD/G29RpG/FpMT46mNvKB9gZs0esEtTpKHnxOjUpQp/TrM51cnY7zblKAAa2T
+         Tr+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Gbex69XR4ZtBuJoqVeoYUx9nyFHm1kZR6S5jk554FrE=;
+        b=M3wnIGSuqEf/qElsJ2WUpn2RRaXc3cntoA1CwXzU51tnS1ApY+QV+CVJDqaY0/SbaS
+         UeEGqmvBlTpzPbXxysWj5Xo0HEw5lzkMSDI1BcrkwkWDvWNAgyPp5nAO3lEJKnPBktOz
+         X3bZMiEtf+0RX5LRWSG57/+o9lgeDy+8DT9PPCea2lwKpMZ9CYxJEWEigp5rhVo6HUIO
+         vH1Y3uB76cV/FXU4ymPHjk1VipvTtH+rImpeOOGoddhgNtIwmPOZ8bejzzt5sErQnhld
+         YsIKFi4oJx7x6uIJQ92bNry1nRHlxBoS/8KUkf4oJreeKD8R5QWdpZh9HCilYIzigmHP
+         nozQ==
+X-Gm-Message-State: AOAM5300q5phDhsOdufNkig62F0I6Oz8vysH8qLAPGztnqR8yo7D4Gwf
+        LF8YfkYG3NGflJqKS5rerIUELXd5FAZCMTFLSeo=
+X-Google-Smtp-Source: ABdhPJxG7GXTkoxbTPKumJL1X0BkUdzHfDr7LxNY1mkd2t1RPi+rTYGSq8vStSCW40203NqyVRJ+wEEs4doBgLVXPhg=
+X-Received: by 2002:a5d:8b8e:: with SMTP id p14mr4506860iol.110.1589468887821;
+ Thu, 14 May 2020 08:08:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200508191454.GH4525@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <1589269010-18472-1-git-send-email-dillon.minfei@gmail.com>
+ <1589269010-18472-3-git-send-email-dillon.minfei@gmail.com> <da9fbb80-571d-1217-4028-e413a0c7db84@st.com>
+In-Reply-To: <da9fbb80-571d-1217-4028-e413a0c7db84@st.com>
+From:   dillon min <dillon.minfei@gmail.com>
+Date:   Thu, 14 May 2020 15:07:32 +0800
+Message-ID: <CAL9mu0KJ0j6Rxf7YjKxVWKz_d+B6vrwqqxJM-fmzG=NonLeDYQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] ARM: dts: stm32: enable l3gd20 on stm32429-disco board
+To:     Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Mark Brown <broonie@kernel.org>, p.zabel@pengutronix.de,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Hua Dillon <dillonhua@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Matthias,
+Hi Alexandre,
 
-
->> The loop should have curly braces ("use braces when a loop contains more than
->> a single simple statement"), even though the compiler doesn't need them in
->> this case. This is not a loop, but I was told by a maintainer that it equally
->> applies, which makes sense.
->>
->> You could avoid one level of indentation through:
->>
->> if (!console_drivers)
->> 	goto exit;
->>
->>> +		for_each_console(bcon)
-> Actually the NULL check of 'console_drivers' is not needed:
+Alexandre Torgue <alexandre.torgue@st.com> =E4=BA=8E2020=E5=B9=B45=E6=9C=88=
+14=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=8D=8810:10=E5=86=99=E9=81=93=EF=
+=BC=9A
 >
-> #define for_each_console(con) \
->          for (con = console_drivers; con != NULL; con = con->next)
-
-Ok, I will remove this check.
-
-
-Regards,
-
-Akash
-
+> Hi Dillon
 >
-> see also:
+> On 5/12/20 9:36 AM, dillon.minfei@gmail.com wrote:
+> > From: dillon min <dillon.minfei@gmail.com>
+> >
+> > L3gd20, st mems motion sensor, 3-axis digital output gyroscope,
+> > connect to stm32f429 via spi5
+> >
+> > Signed-off-by: dillon min <dillon.minfei@gmail.com>
+> > ---
+> >
+> > Hi Alexandre,
+> >
+> > V2:
+> >      1, insert blank line at stm32f420-disco.dts line 143
+> >      2, add more description about l3gd20 in commit message
+> >
+> > V1:
+> >      enable l3gd20 dts binding on stm32f429-disco
+> >
+> > thanks.
+> >
+> > dillon,
+> >
+> >   arch/arm/boot/dts/stm32f429-disco.dts | 25 +++++++++++++++++++++++++
+> >   1 file changed, 25 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/=
+stm32f429-disco.dts
+> > index 30c0f67..1bfb903 100644
+> > --- a/arch/arm/boot/dts/stm32f429-disco.dts
+> > +++ b/arch/arm/boot/dts/stm32f429-disco.dts
+> > @@ -49,6 +49,8 @@
+> >   #include "stm32f429.dtsi"
+> >   #include "stm32f429-pinctrl.dtsi"
+> >   #include <dt-bindings/input/input.h>
+> > +#include <dt-bindings/interrupt-controller/irq.h>
+> > +#include <dt-bindings/gpio/gpio.h>
+> >
+> >   / {
+> >       model =3D "STMicroelectronics STM32F429i-DISCO board";
+> > @@ -127,3 +129,26 @@
+> >       pinctrl-names =3D "default";
+> >       status =3D "okay";
+> >   };
+> > +
+> > +&spi5 {
+> > +     status =3D "okay";
+> > +     pinctrl-0 =3D <&spi5_pins>;
+> > +     pinctrl-names =3D "default";
+> > +     #address-cells =3D <1>;
+> > +     #size-cells =3D <0>;
+> > +     cs-gpios =3D <&gpioc 1 GPIO_ACTIVE_LOW>;
+> > +     dmas =3D <&dma2 3 2 0x400 0x0>,
+> > +            <&dma2 4 2 0x400 0x0>;
+> > +     dma-names =3D "rx", "tx";
+> > +
 >
-> commit caa72c3bc584bc28b557bcf1a47532a7a6f37e6f
-> Author: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Date:   Mon Feb 3 15:31:25 2020 +0200
+> You added this spi5 node in this patch but also in the display series. I
+> will have issue to merge. Even if I could fix it easily, as you are
+> going to resend, the good practice could be to have several patches in
+> one series: one patch for spi5 controller, another for gyro and another
+> for display.
 >
->      console: Drop double check for console_drivers being non-NULL
+> And also same remark than Linus did in display series move DMA to soc
+> dtsi file please.
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+Sure, how about this patch sequence:
+1 add spi5 dma to soc (stm32f429.dtsi)
+2 add pin map for spi5 (stm32f4-pinctrl.dtsi)
+3 add spi5 controller with gyro (stm32f429-disco.dts)
+4 add spi modification to support gyro (spi-stm32.c)
+
+5 add ltdc pin map for stm32f429-disco board (stm32f4-pinctrl.dtsi)
+6 add ilitek-ili9341 dts bindings for disco (stm32f429-disco.dts,
+depends on above step 3)
+7 add yaml document about ilitek-ili9341 (ilitek,ili9341.yaml)
+8 add clk changes to support ltdc driver (clk-stm32f4.c)
+
+so, i will combine gyro and display two patches to one patchset next
+time. right ?
+
+thanks.
+>
+>
+> > +     l3gd20: l3gd20@0 {
+> > +             compatible =3D "st,l3gd20-gyro";
+> > +             spi-max-frequency =3D <10000000>;
+> > +             st,drdy-int-pin =3D <2>;
+> > +             interrupt-parent =3D <&gpioa>;
+> > +             interrupts =3D <1 IRQ_TYPE_EDGE_RISING>,
+> > +                             <2 IRQ_TYPE_EDGE_RISING>;
+> > +             reg =3D <0>;
+> > +             status =3D "okay";
+> > +     };
+> > +};
+> >
