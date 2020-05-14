@@ -2,96 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B241D28E5
-	for <lists+linux-spi@lfdr.de>; Thu, 14 May 2020 09:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D33A1D2A33
+	for <lists+linux-spi@lfdr.de>; Thu, 14 May 2020 10:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgENHhl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 May 2020 03:37:41 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:48595 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726075AbgENHhk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 May 2020 03:37:40 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1589441860; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=y4vCCmSr1ZBPDi4lPBD+cRmxDnvjeGEo2YEOpKBr8SQ=; b=GTRSeEapZYp5SgbxxUy4RMvI3kKCWWlAxq5R5kmzQmqIfzQOu1ZWpH9qB3x02vsPIVFU6VjT
- 4njU+Ipe3tXNtCOl6Hz/LvXNhHiCjjtvGiDlUdUodiFyCBYmTUr/kTTl7GALEP4+qSHP5CSK
- VkdIkleEFB19XQ/drmDhpxi6sNE=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ebcf543.7f9c849e23b0-smtp-out-n04;
- Thu, 14 May 2020 07:37:39 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DBB43C432C2; Thu, 14 May 2020 07:37:37 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.206.24.246] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3A39FC43636;
-        Thu, 14 May 2020 07:37:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3A39FC43636
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V5 4/7] spi: spi-geni-qcom: Add interconnect support
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org, georgi.djakov@linaro.org
-References: <1588919619-21355-1-git-send-email-akashast@codeaurora.org>
- <1588919619-21355-5-git-send-email-akashast@codeaurora.org>
- <20200508182532.GD4525@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <6a7b8129-6542-042f-e418-c4b49303d944@codeaurora.org>
-Date:   Thu, 14 May 2020 13:07:28 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1727117AbgENIb6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 May 2020 04:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726322AbgENIb0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 May 2020 04:31:26 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFE5C061A0F
+        for <linux-spi@vger.kernel.org>; Thu, 14 May 2020 01:31:26 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id w10so2588751ljo.0
+        for <linux-spi@vger.kernel.org>; Thu, 14 May 2020 01:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ch5Lo0qUlNLfqqdr8oPDugFIwsbkUAsTV/pjrrFuHLo=;
+        b=xHi/CO+kw7Zb1AKTwwXYOr5rqnL21pX27PIcAoZpAyWED1KbMsgJJ+aHzrEV/Isbwh
+         cCj8ce0L7btUVbF3US3EeioBiXXi2iCdmOyXoxSJCWosyCfLczsKK9alpmOGav2v80w+
+         vuDG2+aAvxzcOE2K3TrrYIvY0mqmBU/BMbT7IEB1scIBSlpp8HiBHlfn8UCnFVtjjBns
+         DbfLyYIf6KoVVieHkBEAcyIGtiD44sr1xCf8Lwsd64ayvLqSzC2AAnY/k71w+wMolPqK
+         JyDlDZKYHbrozYowGa+UzXmNfLBfNgsdCqJb+BahKwZn8S+ATnRlB96BNNSEyPU6wjca
+         s33g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ch5Lo0qUlNLfqqdr8oPDugFIwsbkUAsTV/pjrrFuHLo=;
+        b=oNvR1zM5A/t18yVr+zu+nW+gee8WrDbHM5OfPYZrv2qPvcNB7oBQUM/S+kqvlkKNkH
+         4zQhTof9ssS4npmhcaXDRLvBj+O+kmy1O2Xm/2bIMptARJLMOcqIy2ZFTnX6chojCJsX
+         TOlmPTg4/ROA1kzLr2KyZJ//28jxpHvH7XAL7xKi5NQy9OJBND4ACvTkjozl4iYa8c7w
+         ES4YBRt8b3BiIuLbbTjBBAIvyN9CTdzzU07O9pbD02Fj7V1IhH7Hp52yNv55iID3ycCJ
+         7GAmYK33TZY04ZQ0uWrwAEitf7MC5qvTMZeO9yakEgPctdCeyk8dAo0LR9ypz+haCbbD
+         2hQg==
+X-Gm-Message-State: AOAM533i5U9a6+Q7b/EPDsDjWhNIagJA5m0hiDkGtLg9dc9/LgbS7LsP
+        1812MTO5SShBeakdCJf7pwO1qnZC4EIJB4HowcZu9A==
+X-Google-Smtp-Source: ABdhPJxYkw641+rzOfo0jk8kZqtPycWY4TTgsg+FJ176sdZrmEbUxUP61n/P+mU74fyLtp+Q1AgVt3G79WECR07lQH0=
+X-Received: by 2002:a2e:b609:: with SMTP id r9mr1982744ljn.125.1589445084550;
+ Thu, 14 May 2020 01:31:24 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200508182532.GD4525@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
+ <CACRpkdY=wkgnYPcqSzyzNpS6ckJZs-9kXfTfdwa1E+POzOBQGA@mail.gmail.com> <20200513001347.dyt357erev7vzy3l@mobilestation>
+In-Reply-To: <20200513001347.dyt357erev7vzy3l@mobilestation>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 14 May 2020 10:31:13 +0200
+Message-ID: <CACRpkdZTH1DNHvi4r48nLNWp4rqyYDZTzT12hw0eTNcYmgSr3Q@mail.gmail.com>
+Subject: Re: [PATCH 11/17] spi: dw: Fix native CS being unset
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        "wuxu.wu" <wuxu.wu@huawei.com>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Matthias,
+On Wed, May 13, 2020 at 2:13 AM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
 
-....
-
-;
->>   
->> +	ret = geni_icc_get(&mas->se, NULL);
->> +	if (ret)
->> +		goto spi_geni_probe_runtime_disable;
->> +	/* Set the bus quota to a reasonable value for register access */
->> +	geni_icc_bw_init(&mas->se.icc_paths[GENI_TO_CORE],
->> +			Bps_to_icc(CORE_2X_50_MHZ), 0);
->> +	geni_icc_bw_init(&mas->se.icc_paths[CPU_TO_GENI], GENI_DEFAULT_BW, 0);
->> +
->> +	/* Set BW for register access */
-> This comment doesn't add any value. Register access is mentioned a few lines
-> above and from the function name it's evident that it sets the ICC bandwidth.
-ok
+> > This is the correct fix now but I an afraid not correct before
+> > commit 3e5ec1db8bfe.
 >
->> +	ret = geni_icc_set_bw(&mas->se);
->>
->> +		return ret;
->>   
->>   	return geni_se_resources_on(&mas->se);
->>   }
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Sorry, but that's "enable" flag propagation from basic spi_set_cs() to the HW CS
+> setting callback is a nightmare. In Russia there is a common saying for such
+> cases, which can be translated as "you can't figure it out without a bottle of
+> vodka".)
+>
+> Actually the fix is correct no matter whether commit 3e5ec1db8bfe is applied or
+> not. At least I don't see a connection between them.
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+OK that seems to hold given the resoning below so:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+> > What I can't help but asking is: can the native chip select even
+> > handle active high chip select if not backed by a GPIO?
+> > Which register would set that polarity?
+>
+> No. DW APB SSI doesn't support active-high mode of the native CS's.
+
+We had some related discussion what to do with this case
+when a controller can support active high CS if and only if
+it is using a GPIO instead of the native CS. We didn't really
+figure it out, I suppose ideally we should use two flags in the
+master but that exercise is for another day.
+
+Yours.
+Linus Walleij
