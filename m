@@ -2,90 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B94EF1D59C4
-	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 21:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922661D5A9D
+	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 22:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726198AbgEOTOY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 May 2020 15:14:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38234 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726283AbgEOTOX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 15 May 2020 15:14:23 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 197F020728;
-        Fri, 15 May 2020 19:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589570062;
-        bh=iFZrsBOV5jxnh/yPWq+OY/IgbdgMMbs9ic1+MA1vN5Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YNbqQqT5SvWpet8F0Kw8U3xSAcmt8/8h9BuLxjSyDK7Z5Kkonm+2Y8CM7MI5AvZPh
-         PBDm5NZEJMm1mxzpzvh0bRtM29WJnod4FI0Ycn9scdQJx62Qh+vXxiUTa2LfAxVCMt
-         gZn3w5JkKkXet0lbnnrMTrGSdVIaKnE17AJwZGCQ=
-Date:   Fri, 15 May 2020 20:14:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] spi: dw: Clear DMAC register when done or stopped
-Message-ID: <20200515191419.GQ5066@sirena.org.uk>
-References: <20200515174856.1406-1-Sergey.Semin@baikalelectronics.ru>
- <20200515175100.GL5066@sirena.org.uk>
- <20200515175420.qgejailgnzswxtdz@mobilestation>
- <20200515181219.GN5066@sirena.org.uk>
- <20200515182322.mmsfe5zu5tqmovmf@mobilestation>
+        id S1726179AbgEOUQy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 May 2020 16:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726168AbgEOUQy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 May 2020 16:16:54 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2F2C061A0C
+        for <linux-spi@vger.kernel.org>; Fri, 15 May 2020 13:16:53 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id g4so3596510ljl.2
+        for <linux-spi@vger.kernel.org>; Fri, 15 May 2020 13:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=43o0FGN5Fq1n1m6Sdyu6XN/2q9oPen95HONzGtG8NaI=;
+        b=rasFNY6KlPGGakeCYqdBKvuVpmFObIfbsTH8PsjJcVvMBa5zhm9K6BTFVJAtb7awk+
+         3yqX0uRkv+T5zsLqojPUDnycXDh5+NvsVRpHqVoJeRIA6t+6atb1t2vCeFzX7cY7ifny
+         du2XgSm2pOqgHhxIJP4+L0TYBoppN2GZl5fj+foJRbx4ykI/5TY6HRrwh2Dapx19hHbK
+         6SQdy9bl7cbOxhwtWYvDI+YlVQO3+S+9HunxTJULpJ726fcG1indWvBCE/g+C0dNbxsU
+         QMBwmrB7yMIBlIzQ7GjE84PsuhgAwwDUsn1iG4rbhTLp6qDe7CzSoyUaU9nLpP2YaROi
+         QJvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=43o0FGN5Fq1n1m6Sdyu6XN/2q9oPen95HONzGtG8NaI=;
+        b=ShdC8In0AsBWrbH3KP7qOZMNDgLZKZx06CY8b5MtvejsvwGKQ/ysNTT3iDoXMUpUHt
+         l3Sd5x7/J4NJjGHCWu0k4TGROhUOOaxFJgZzwlN+dTsevkmhotcCRqUZNvCvfAgbjQxh
+         kMB3MIylkn8ebnfY6i8+c+UuCPeZRuwWUgJKQb6NSbJB7KNYPlcKSn/2jP3beZYvsTnr
+         d1ZhVZ22ilYZRkj4v+OSBw2VasRvWhsLmIFDYy1U8Cxmfz6q7SRaVkRrGp2Pofl8D+Pk
+         7bRzS+UiNyugdjfpDaGXhBXRIwooIvVrNavO73xEGBZAIGvet7384V9xsUa2D2sNAfwh
+         9ilw==
+X-Gm-Message-State: AOAM530zZE6IcxVKvvSTp3/yxBrcVFhsrfHeU7135QYRiSbX7KIVjiH0
+        l07hbwhrFObXOeThNA8zfmo8XA==
+X-Google-Smtp-Source: ABdhPJzJ0CcrmFTRJgrtQI0QnbyoaIej/mpNW+aorlA8gD+MJtby/F88yLom1QmTf+JS/p+fTH8xog==
+X-Received: by 2002:a2e:8807:: with SMTP id x7mr3331329ljh.173.1589573812303;
+        Fri, 15 May 2020 13:16:52 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([2a00:1fa0:42eb:aebe:5652:2324:c9fa:fb8])
+        by smtp.gmail.com with ESMTPSA id o18sm1623971ljc.73.2020.05.15.13.16.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 May 2020 13:16:51 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] dt-bindings: memory: document Renesas RPC-IF
+ bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Mason Yang <masonccyang@mxic.com.tw>,
+        linux-spi@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>,
+        linux-mtd@lists.infradead.org
+References: <812e6e58-d13f-3f44-5f55-22266b690c57@cogentembedded.com>
+ <116683d1-d402-4d7f-3357-1c8cde807076@cogentembedded.com>
+ <20200501211945.GA15294@bogus>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <52ffabcd-048f-9ba8-a65f-4a22e60866bb@cogentembedded.com>
+Date:   Fri, 15 May 2020 23:16:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jigfid2yHjNFZUTO"
-Content-Disposition: inline
-In-Reply-To: <20200515182322.mmsfe5zu5tqmovmf@mobilestation>
-X-Cookie: Avoid contact with eyes.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200501211945.GA15294@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 05/02/2020 12:19 AM, Rob Herring wrote:
 
---jigfid2yHjNFZUTO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>> Renesas Reduced Pin Count Interface (RPC-IF) allows a SPI flash or
+>> HyperFlash connected to the SoC to be accessed via the external address
+>> space read mode or the manual mode.
+>>
+>> Document the device tree bindings for the Renesas RPC-IF found in the R-Car
+>> gen3 SoCs.
+>>
+>> Based on the original patch by Mason Yang <masonccyang@mxic.com.tw>.
+>>
+>> Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+>>
+>> ---
+>> Changes in version 2:
+>> - rewrote the bindings in YAML.
+>>
+>>  Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml |   88 ++++++++++
+>>  1 file changed, 88 insertions(+)
+>>
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml:  while scanning a simple key
+>   in "<unicode string>", line 29, column 9
+> could not find expected ':'
+>   in "<unicode string>", line 30, column 1
+> Documentation/devicetree/bindings/Makefile:11: recipe for target 'Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.example.dts' failed
+> make[1]: *** [Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.example.dts] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml: ignoring, error parsing file
+> warning: no schema found in file: Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml: ignoring, error parsing file
+> warning: no schema found in file: Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+> Makefile:1300: recipe for target 'dt_binding_check' failed
+> make: *** [dt_binding_check] Error 2
+> 
+> See https://patchwork.ozlabs.org/patch/1280942
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure dt-schema is up to date:
+> 
+> pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+> 
+> Please check and re-submit.
 
-On Fri, May 15, 2020 at 09:23:22PM +0300, Serge Semin wrote:
-> On Fri, May 15, 2020 at 07:12:19PM +0100, Mark Brown wrote:
+   As I've said on IRC, I have troubles installing from dt-schema.git:
 
-> > Unless someone explicitly gives you a tag for something you shouldn't
-> > usually assume that one applies, especially with maintainers giving acks
-> > on their own trees since that has process meaning - it's saying that the
-> > maintainer is OK with it being applied to some other tree which is
-> > something it's worth being careful about.
+[headless@wasted renesas-devel]$ pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade 
+Collecting git+https://github.com/devicetree-org/dt-schema.git@master
+  Cloning https://github.com/devicetree-org/dt-schema.git (to master) to /tmp/pip-4f91j8zd-build
+Collecting ruamel.yaml>0.15.69 (from dtschema==2020.6.dev4+g6a941d4)
+  Using cached https://files.pythonhosted.org/packages/a6/92/59af3e38227b9cc14520bf1e59516d99ceca53e3b8448094248171e9432b/ruamel.yaml-0.16.10-py2.py3-none-any.whl
+Collecting jsonschema>=3.0.1 (from dtschema==2020.6.dev4+g6a941d4)
+  Using cached https://files.pythonhosted.org/packages/c5/8f/51e89ce52a085483359217bc72cdbf6e75ee595d5b1d4b5ade40c7e018b8/jsonschema-3.2.0-py2.py3-none-any.whl
+Collecting rfc3987 (from dtschema==2020.6.dev4+g6a941d4)
+  Using cached https://files.pythonhosted.org/packages/65/d4/f7407c3d15d5ac779c3dd34fbbc6ea2090f77bd7dd12f207ccf881551208/rfc3987-1.3.8-py2.py3-none-any.whl
+Collecting ruamel.yaml.clib>=0.1.2 (from ruamel.yaml>0.15.69->dtschema==2020.6.dev4+g6a941d4)
+  Using cached https://files.pythonhosted.org/packages/92/28/612085de3fae9f82d62d80255d9f4cf05b1b341db1e180adcf28c1bf748d/ruamel.yaml.clib-0.2.0.tar.gz
+No files/directories in /tmp/pip-build-fwtgubpx/ruamel.yaml.clib/pip-egg-info (from PKG-INFO)
+You are using pip version 8.0.2, however version 20.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
 
-> Hm, it depends on maintainer and sub-system then. I did such "looks good" ->
-> Acked-by conversions before. Not that many, but noone argued. [1] also says it's
-> sometimes possible. Anyway, sorry for inconvenience. I'll get to remember that
-> I'd better ask explicit acked-by from you, no assumption.
-
-Like I say it's much more important when it's a patch that someone would
-normally apply themselves since it makes a much bigger difference
-process wise if you ack or apply a patch.
-
---jigfid2yHjNFZUTO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6+6gsACgkQJNaLcl1U
-h9Avagf/Xb3F6H6X5IP7yjmBuKktC6p+Hx1s7HzygvLrU75AyWVAP7lEjiDT+JtA
-o4rV6qCvmn7zmQkotmpSZ8niRyM6MM9dbsTVpkMkE3RZLFgR1R+YIsj3mpADGBvs
-Y14bbA69A9yTJ9dzdE+Xtls8fq6FBBbh1iYPvT6bsoR7hv6kqpsHVQlZhqyf/++T
-vesikNxpbFN3goTfSkewzqce/vr7VUNlQ8Gf+M9yVZZrHQFN+D/TXECX7UmXTSez
-Z7nEcI9sC1Gv8+zQSV5+WwM3Og2FnvLfuSKWlPUfSuQB5k2PFtWMfzM82xuTQBKP
-s0yzXo4ZxK9yUxagoifuBabXOrWlXg==
-=1rhX
------END PGP SIGNATURE-----
-
---jigfid2yHjNFZUTO--
+MBR, Sergei
