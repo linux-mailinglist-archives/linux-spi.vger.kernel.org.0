@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 859761D530C
-	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 17:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916F51D5331
+	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 17:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbgEOPEX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 May 2020 11:04:23 -0400
-Received: from mga18.intel.com ([134.134.136.126]:15625 "EHLO mga18.intel.com"
+        id S1726504AbgEOPIV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 May 2020 11:08:21 -0400
+Received: from mga06.intel.com ([134.134.136.31]:30332 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726171AbgEOPDz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 15 May 2020 11:03:55 -0400
-IronPort-SDR: gSJMJU+NZAQr9DsqTBBq2wIOWQLfq3BxecP9zfEBRNuxHTX0FIow1j6r8d8UgqkcXAEa2bzuNK
- TXv6zZj+5XaQ==
+        id S1726248AbgEOPIV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 15 May 2020 11:08:21 -0400
+IronPort-SDR: 03KPQs3+8c13VIvq/NtdVP3rq732cgCH+NnjvI2mK9bJmLaSymBZUcKI9/8Y/TuzLIlfhVz58g
+ wuiCCLosyTRA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 08:03:54 -0700
-IronPort-SDR: oeebT3F+ujbIeM9EWX7T/No0xt0Pr8AR5msV70GdGtgm5+5lr2eznhAaLNmS9kKoJGwA4lmXlK
- ZkzISOFVMs1Q==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 08:08:21 -0700
+IronPort-SDR: KN+Wg87nK8SnMqebrA5QJEz/3xsD/rYTEyQsxaeuNjYdmePiwQbiGrKQN3c/S0v5063fyk0q1N
+ z8hCmYZjdaSg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,395,1583222400"; 
-   d="scan'208";a="281243099"
+   d="scan'208";a="253813911"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002.jf.intel.com with ESMTP; 15 May 2020 08:03:49 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 15 May 2020 08:08:16 -0700
 Received: from andy by smile with local (Exim 4.93)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jZbsN-006tSa-HL; Fri, 15 May 2020 18:03:51 +0300
-Date:   Fri, 15 May 2020 18:03:51 +0300
+        id 1jZbwg-006tV6-Bb; Fri, 15 May 2020 18:08:18 +0300
+Date:   Fri, 15 May 2020 18:08:18 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -42,35 +42,38 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Allison Randal <allison@lohutok.net>,
         Gareth Williams <gareth.williams.jx@renesas.com>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/19] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on
- the DW SPI core
-Message-ID: <20200515150351.GM1634618@smile.fi.intel.com>
+        devicetree@vger.kernel.org,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jay Fang <f.fangjian@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Stephen Boyd <swboyd@chromium.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 17/19] spi: dw: Add DMA support to the DW SPI MMIO
+ driver
+Message-ID: <20200515150818.GP1634618@smile.fi.intel.com>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
  <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-16-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-18-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200515104758.6934-16-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200515104758.6934-18-Sergey.Semin@baikalelectronics.ru>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 15, 2020 at 01:47:54PM +0300, Serge Semin wrote:
-> Seeing all of the DW SPI driver components like DW SPI DMA/PCI/MMIO
-> depend on the DW SPI core code it's better to use the if-endif
-> conditional kernel config statement to signify that common dependency.
+On Fri, May 15, 2020 at 01:47:56PM +0300, Serge Semin wrote:
+> Since the common code in the spi-dw-dma.c driver is ready to be used
+> by the MMIO driver and now provides a method to generically (on any
+> DT or ACPI-based platforms) retrieve the Tx/Rx DMA channel handlers,
+> we can use it and a set of the common DW SPI DMA callbacks to enable
+> DMA at least for generic "snps,dw-apb-ssi" and "snps,dwc-ssi-1.01a"
+> devices.
 
-Makes sense!
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 > 
@@ -91,37 +94,31 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Cc: linux-mips@vger.kernel.org
 > Cc: devicetree@vger.kernel.org
 > ---
->  drivers/spi/Kconfig | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>  drivers/spi/spi-dw-mmio.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index 6a84f3dad35c..3cdf8310d185 100644
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -226,17 +226,20 @@ config SPI_DESIGNWARE
->  	help
->  	  general driver for SPI controller core from DesignWare
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index 0894b4c09496..e23d0c53a664 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -149,6 +149,8 @@ static int dw_spi_dw_apb_init(struct platform_device *pdev,
+>  	/* Register hook to configure CTRLR0 */
+>  	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
 >  
-> +if SPI_DESIGNWARE
+> +	dw_spi_dma_setup_generic(&dwsmmio->dws);
 > +
->  config SPI_DW_DMA
->  	bool "DMA support for DW SPI controller"
-> -	depends on SPI_DESIGNWARE
+>  	return 0;
+>  }
 >  
->  config SPI_DW_PCI
->  	tristate "PCI interface driver for DW SPI core"
-> -	depends on SPI_DESIGNWARE && PCI
-> +	depends on PCI
+> @@ -158,6 +160,8 @@ static int dw_spi_dwc_ssi_init(struct platform_device *pdev,
+>  	/* Register hook to configure CTRLR0 */
+>  	dwsmmio->dws.update_cr0 = dw_spi_update_cr0_v1_01a;
 >  
->  config SPI_DW_MMIO
->  	tristate "Memory-mapped io interface driver for DW SPI core"
-> -	depends on SPI_DESIGNWARE
-> +	depends on HAS_IOMEM
+> +	dw_spi_dma_setup_generic(&dwsmmio->dws);
 > +
-> +endif
+>  	return 0;
+>  }
 >  
->  config SPI_DLN2
->         tristate "Diolan DLN-2 USB SPI adapter"
 > -- 
 > 2.25.1
 > 
