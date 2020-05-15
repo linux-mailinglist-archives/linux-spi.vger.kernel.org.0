@@ -2,31 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF1F1D4D90
-	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 14:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D2C1D4DA1
+	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 14:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbgEOMSS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 May 2020 08:18:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41112 "EHLO mail.kernel.org"
+        id S1726141AbgEOM1D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 May 2020 08:27:03 -0400
+Received: from mga02.intel.com ([134.134.136.20]:40579 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726097AbgEOMSS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 15 May 2020 08:18:18 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 314F620657;
-        Fri, 15 May 2020 12:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589545097;
-        bh=9Dg/geS2WY+PUCSchXgvzv5fjHqTZmz9+jvLFZU/CVk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CQQTEjckxGY/W83cT10BNBZpSDTjsBfPUY2FAR25YZH/9JWCBOUPJQJwtg6k5cO8B
-         9swqCX90fbexiEfXNmj5VBA6MMcXdsKYCU1I8XywHW4ZlrXOYjz9tXZJYJlZuFIJUV
-         9KFNoM4hPDFlo8tos+IBi17ssR511l4fBOSAByxE=
-Date:   Fri, 15 May 2020 13:18:15 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        id S1726139AbgEOM1D (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 15 May 2020 08:27:03 -0400
+IronPort-SDR: flDwKY2DWv+i+mlTCT3Az2dSlh4eBlkJLH1GkE1pM7Br0bR4FDmOjSLZz1RuxbvVQ0dILVnpqW
+ nuQ/V8sn1Kig==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 05:27:02 -0700
+IronPort-SDR: wJORXsmnW7wF7NWU+mlHtKfhqd/8eoCv4nbBmAKprDpHBHY8vdrxEH5ZNSH6bW46w2gGCXFmfp
+ JrYP2WY3DncA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,395,1583222400"; 
+   d="scan'208";a="298423782"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002.fm.intel.com with ESMTP; 15 May 2020 05:26:58 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jZZQa-006r78-F8; Fri, 15 May 2020 15:27:00 +0300
+Date:   Fri, 15 May 2020 15:27:00 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
         Serge Semin <fancer.lancer@gmail.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
@@ -40,56 +44,75 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
         devicetree@vger.kernel.org,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/19] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200515121815.GB5066@sirena.org.uk>
+Subject: Re: [PATCH v2 05/19] spi: dw: Enable interrupts in accordance with
+ DMA xfer mode
+Message-ID: <20200515122700.GY185537@smile.fi.intel.com>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
  <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-3-Sergey.Semin@baikalelectronics.ru>
- <20200515120111.GV185537@smile.fi.intel.com>
+ <20200515104758.6934-6-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200515120111.GV185537@smile.fi.intel.com>
-X-Cookie: Avoid contact with eyes.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200515104758.6934-6-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, May 15, 2020 at 01:47:44PM +0300, Serge Semin wrote:
+> It's pointless to track the Tx overrun interrupts if Rx-only SPI
+> transfer is issued. Similarly there is no need in handling the Rx
+> overrun/underrun interrupts if Tx-only SPI transfer is executed.
+> So lets unmask the interrupts only if corresponding SPI
+> transactions are implied.
 
---uZ3hkaAS1mZxFaxD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+My comments below.
 
-On Fri, May 15, 2020 at 03:01:11PM +0300, Andy Shevchenko wrote:
+> Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Allison Randal <allison@lohutok.net>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Gareth Williams <gareth.williams.jx@renesas.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
 
-> General question, doesn't spi core provides us some helpers like
-> spi_delay_exec()?
+I think you really need to revisit Cc list in all patches (DT people hardly
+interested in this one, though ones where properties are being used might be
+point of interest).
 
-Well, nobody wrote one.  It's also a bit tricky to handle given that
-often you're checking some controller specific things while a FIFO in
-the IP drains/fills, though nothing insurmountable.
+...
 
---uZ3hkaAS1mZxFaxD
-Content-Type: application/pgp-signature; name="signature.asc"
+>  	/* Set the interrupt mask */
+> -	spi_umask_intr(dws, SPI_INT_TXOI | SPI_INT_RXUI | SPI_INT_RXOI);
+> +	spi_umask_intr(dws, imr);
 
------BEGIN PGP SIGNATURE-----
+Can we rather do like this
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6+iIYACgkQJNaLcl1U
-h9Ai9gf+L810S4G5FCw8xL+m5zD7ORCJcMsd3SyOTjWilDCVqE0lho+9a9VgkUGX
-tXDOyyVkifm7oAFMOZRSyO5AtoP6TT8+YqWhtBeXshAkp3SESd5prUL6RcRyoYOi
-g3LGxYtMxOOs+qXjBzWgv/XVANdxtzIEnFvuXdZyMKernn0/O430Wu8L0KQVTwlG
-379zc5OSsqCCGpYXFFmPFZnUxuDZMQCLwIQXH5YAK5nuNm5OxaAdTL3yGvm8z2Kd
-0HiCxfIEoDkoE3yPE9nRRs9AYrzIBjVFho63Llc4i06PEEkOaxpTJR5cWAxsHsQz
-vbar6grUb1yOarmWFEoQnNo3tdWTQg==
-=oiQY
------END PGP SIGNATURE-----
+	/* Set the interrupt mask */
+	if (xfer->tx_buf)
+		imr |= SPI_INT_TXOI;
+	if (xfer->rx_buf)
+		imr |= SPI_INT_RXUI | SPI_INT_RXOI;
+	spi_umask_intr(dws, imr);
 
---uZ3hkaAS1mZxFaxD--
+?
+
+(First block sets DMA, second one IRQ)
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
