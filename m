@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F311D4B64
-	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 12:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569B41D4B6A
+	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 12:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728183AbgEOKsp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 May 2020 06:48:45 -0400
+        id S1728292AbgEOKsz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 May 2020 06:48:55 -0400
 Received: from mail.baikalelectronics.com ([87.245.175.226]:35362 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728290AbgEOKso (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 May 2020 06:48:44 -0400
+        with ESMTP id S1728290AbgEOKsv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 May 2020 06:48:51 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2AD6A8029EC9;
-        Fri, 15 May 2020 10:48:40 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id A3BFF8000745;
+        Fri, 15 May 2020 10:48:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id x3g8URpO-hUZ; Fri, 15 May 2020 13:48:36 +0300 (MSK)
+        with ESMTP id FxnF9vG6Q-35; Fri, 15 May 2020 13:48:41 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -33,13 +33,14 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Gareth Williams <gareth.williams.jx@renesas.com>,
         Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        <devicetree@vger.kernel.org>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 03/19] spi: dw: Clear DMAC register when done or stopped
-Date:   Fri, 15 May 2020 13:47:42 +0300
-Message-ID: <20200515104758.6934-4-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 05/19] spi: dw: Enable interrupts in accordance with DMA xfer mode
+Date:   Fri, 15 May 2020 13:47:44 +0300
+Message-ID: <20200515104758.6934-6-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
  <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
@@ -52,14 +53,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If DMAC register is left uncleared any further DMAless transfers
-may cause the DMAC hardware handshaking interface getting activated.
-So the next DMA-based Rx/Tx transaction will be started right
-after the dma_async_issue_pending() method is invoked even if no
-DMATDLR/DMARDLR conditions are met. This at the same time may cause
-the Tx/Rx FIFO buffers underrun/overrun. In order to fix this we
-must clear DMAC register after a current DMA-based transaction is
-finished.
+It's pointless to track the Tx overrun interrupts if Rx-only SPI
+transfer is issued. Similarly there is no need in handling the Rx
+overrun/underrun interrupts if Tx-only SPI transfer is executed.
+So lets unmask the interrupts only if corresponding SPI
+transactions are implied.
 
 Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
 Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
@@ -76,57 +74,42 @@ Cc: Gareth Williams <gareth.williams.jx@renesas.com>
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: linux-mips@vger.kernel.org
 Cc: devicetree@vger.kernel.org
-
 ---
-
-Changelog v2:
-- Move the patch to the head of the series so one could be picked up to
-  the stable kernels as a fix.
-- Clear the DMACR in the DMA exit callback too.
----
- drivers/spi/spi-dw-mid.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/spi/spi-dw-mid.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-index 7a5ae1506365..0c597b6bb154 100644
+index 0c597b6bb154..1902336cb8d6 100644
 --- a/drivers/spi/spi-dw-mid.c
 +++ b/drivers/spi/spi-dw-mid.c
-@@ -108,6 +108,8 @@ static void mid_spi_dma_exit(struct dw_spi *dws)
- 		dmaengine_terminate_sync(dws->rxchan);
- 		dma_release_channel(dws->rxchan);
- 	}
-+
-+	dw_writel(dws, DW_SPI_DMACR, 0);
- }
+@@ -293,19 +293,23 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
  
- static irqreturn_t dma_transfer(struct dw_spi *dws)
-@@ -178,6 +180,8 @@ static void dw_spi_dma_tx_done(void *arg)
- 	clear_bit(TX_BUSY, &dws->dma_chan_busy);
- 	if (test_bit(RX_BUSY, &dws->dma_chan_busy))
- 		return;
-+
-+	dw_writel(dws, DW_SPI_DMACR, 0);
- 	spi_finalize_current_transfer(dws->master);
- }
+ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
+ {
+-	u16 dma_ctrl = 0;
++	u16 imr = 0, dma_ctrl = 0;
  
-@@ -249,6 +253,8 @@ static void dw_spi_dma_rx_done(void *arg)
- 	clear_bit(RX_BUSY, &dws->dma_chan_busy);
- 	if (test_bit(TX_BUSY, &dws->dma_chan_busy))
- 		return;
-+
-+	dw_writel(dws, DW_SPI_DMACR, 0);
- 	spi_finalize_current_transfer(dws->master);
- }
+ 	dw_writel(dws, DW_SPI_DMARDLR, 0xf);
+ 	dw_writel(dws, DW_SPI_DMATDLR, 0x10);
  
-@@ -342,6 +348,8 @@ static void mid_spi_dma_stop(struct dw_spi *dws)
- 		dmaengine_terminate_sync(dws->rxchan);
- 		clear_bit(RX_BUSY, &dws->dma_chan_busy);
- 	}
-+
-+	dw_writel(dws, DW_SPI_DMACR, 0);
- }
+-	if (xfer->tx_buf)
++	if (xfer->tx_buf) {
+ 		dma_ctrl |= SPI_DMA_TDMAE;
+-	if (xfer->rx_buf)
++		imr |= SPI_INT_TXOI;
++	}
++	if (xfer->rx_buf) {
+ 		dma_ctrl |= SPI_DMA_RDMAE;
++		imr |= SPI_INT_RXUI | SPI_INT_RXOI;
++	}
+ 	dw_writel(dws, DW_SPI_DMACR, dma_ctrl);
  
- static const struct dw_spi_dma_ops mfld_dma_ops = {
+ 	/* Set the interrupt mask */
+-	spi_umask_intr(dws, SPI_INT_TXOI | SPI_INT_RXUI | SPI_INT_RXOI);
++	spi_umask_intr(dws, imr);
+ 
+ 	dws->transfer_handler = dma_transfer;
+ 
 -- 
 2.25.1
 
