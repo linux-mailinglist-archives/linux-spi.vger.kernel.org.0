@@ -2,81 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA741D445B
-	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 06:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACB31D4665
+	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 08:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726064AbgEOEU5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 May 2020 00:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725616AbgEOEU4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 May 2020 00:20:56 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8C4C05BD09
-        for <linux-spi@vger.kernel.org>; Thu, 14 May 2020 21:20:56 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id e2so1084487eje.13
-        for <linux-spi@vger.kernel.org>; Thu, 14 May 2020 21:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CZOZ6zJl7K+CX7mG44VkFRrQ+i68m5YSb/XRoNfw+DM=;
-        b=iIVHuPv5gNq8xTvVicPmqogSzcYKgTL8dqAZR13fSCTolkb5ne+zYczpjliUrucji/
-         fqIdVX31b3Kpqm64VcygGK26ROBHx3wJVdWEBz/g1FTk3SCYosYa7x8MdNeTPLGqzoJ2
-         44mRypDpR0TPtlpqaSHFGNphy/hoYMZ+uMi3V6E4LPMT4dKY/NJfxNWRJzealaoNq0iw
-         GZnxWVOC4sBeYv9gJ+jrjwCJbJtDDaWsmwVMmZmH3HXo36ZrGVrQO6Z9K700+MuFyFAc
-         7ORk6HjgpkaLH5R+n54EMjpeiQN+F7XuvpqyY2TVEZ21Lank7v3T6yk91EDW8fNL6g3g
-         9+rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=CZOZ6zJl7K+CX7mG44VkFRrQ+i68m5YSb/XRoNfw+DM=;
-        b=fGSkltyscnrqVUdsErM2Mfe29kVZFQJce5lxLNo4PNbFzdKJOrZUUSa0PtU8no0p9i
-         HQpwvN6s5mhpibs57/oF96WwthOCgRbvZ3+5pnY1yXifqnFOvoq2XXFVf3BcPWgTbGWK
-         C/UQ48ZA98GKkGO4c0H+8tlgSZYA4Q33x3UnEVC0poMoOXxw5WOUvKIhLcMg+iGYwawA
-         muq2xFS8vszXQ6tUBPfdq8+i0ZBkTwpTxaAuOTiDl+0leN2rHLm+I8LGFPKWuY7XDcp7
-         Hur2flMW8sQnP9wlezGAs+vyjNK6mOke7WhT9+5k7rpgbA006s42UHWXhVRth1O7DAoN
-         DQlA==
-X-Gm-Message-State: AOAM532T8U94FCZVGvTwFi1jNanRHYM4xjJdTz5L613gAydIa2vxaolX
-        2QLmcCHHZ9R/Ht7VdgRk7A0ZlUbmxvrdstYiEDI=
-X-Google-Smtp-Source: ABdhPJwog3dKQx+/GzMBJzZIuD/kAZe+W4fTSRxVG4Nam49bWrYW4eC4IRWAULMWDHRrCt3vhzwIZcF6riTBXtbomeA=
-X-Received: by 2002:a17:906:c7cc:: with SMTP id dc12mr1100400ejb.263.1589516454907;
- Thu, 14 May 2020 21:20:54 -0700 (PDT)
+        id S1726295AbgEOGz3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 May 2020 02:55:29 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:56439 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726191AbgEOGz3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 May 2020 02:55:29 -0400
+X-Originating-IP: 42.109.214.107
+Received: from localhost (unknown [42.109.214.107])
+        (Authenticated sender: me@yadavpratyush.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 5008920006;
+        Fri, 15 May 2020 06:55:20 +0000 (UTC)
+Date:   Fri, 15 May 2020 12:25:08 +0530
+From:   Pratyush Yadav <me@yadavpratyush.com>
+To:     masonccyang@mxic.com.tw
+Cc:     vigneshr@ti.com, tudor.ambarus@microchip.com, juliensu@mxic.com.tw,
+        richard@nod.at, miquel.raynal@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        broonie@kernel.org, linux-mtd@lists.infradead.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: Re: [PATCH v2 0/5] mtd: spi-nor: Add support for Octal 8D-8D-8D mode
+Message-ID: <20200515065508.6cra7nwt3jpxwvr2@yadavpratyush.com>
+References: <1587451187-6889-1-git-send-email-masonccyang@mxic.com.tw>
+ <20200421092328.129308f6@collabora.com>
+ <20200427175536.2mmei2fy6f7bg6jm@yadavpratyush.com>
+ <OF18214CA5.6A9B2B30-ON48258558.001D894C-48258558.002249E0@mxic.com.tw>
+ <20200428085401.574wmo6qddmumd7q@yadavpratyush.com>
+ <OF04289CE2.B346916F-ON48258559.002280BD-48258559.00295800@mxic.com.tw>
+ <20200429181856.kkavelcczylg4yxf@yadavpratyush.com>
+ <OF28AE0642.4F34D6BB-ON4825855F.002D6E58-4825855F.003458C9@mxic.com.tw>
+ <20200506094028.2asq56goslfd2ngo@yadavpratyush.com>
+ <OF03B5329E.56965A70-ON48258569.000878CE-48258569.000D5FFD@mxic.com.tw>
 MIME-Version: 1.0
-Received: by 2002:a54:35c4:0:0:0:0:0 with HTTP; Thu, 14 May 2020 21:20:54
- -0700 (PDT)
-Reply-To: azizdake0@gmail.com
-From:   Aziz Dake <pauwill066@gmail.com>
-Date:   Thu, 14 May 2020 21:20:54 -0700
-Message-ID: <CAO2feTBxyAQhOQsbhm024OKH=BXDByH1E8aNB2K5pwY3qG-Liw@mail.gmail.com>
-Subject: From Honourable Barrister Aziz Dake.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <OF03B5329E.56965A70-ON48258569.000878CE-48258569.000D5FFD@mxic.com.tw>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Attn: Sir/Madam
+Hi Mason,
 
-I am Honourable Barrister Aziz the personal resident Attorney here in
-Burkina Faso to Late Mr. Muammar Muhammad Abu Minyar al-Gaddafi of
-Libya c. 1942 =E2=80=93 20 October 2011.
+On 15/05/20 10:26AM, masonccyang@mxic.com.tw wrote:
+> 
+> Hi Pratyush,
+> 
+> > > > > I can't apply your patches to enable xSPI Octal mode for 
+> > > > > mx25uw51245g because your patches set up Octal protocol first and 
+> > > > > then using Octal protocol to write Configuration Register 2(CFG 
+> > > > > Reg2). I think driver
+> > > > > should write CFG Reg2 in SPI 1-1-1 mode (power on state) and make 
+> sure
+> > > > > write CFG Reg 2 is success and then setup Octa protocol in the 
+> last.
+> > > > 
+> > > > Register writes should work in 1S mode, because nor->reg_proto is 
+> only 
+> > > > set _after_ 8D mode is enabled (see spi_nor_octal_dtr_enable()). In 
+> > > > fact, both patch 15 and 16 in my series use register writes in 1S 
+> mode.
+> > > 
+> > > but I didn't see driver roll back "nor->read/write_proto = 1" 
+> > > if xxx->octal_dtr_enable() return failed!
+> > 
+> > I copied what spi_nor_quad_enable() did, and made failure fatal. So if 
+> > xxx->octal_dtr_enable() fails, the probe would fail and the flash would 
+> > be unusable. You can try your hand at a fallback system where you try 
+> 
+> IMHO, it's not a good for system booting from SPI-NOR, 
+> driver should still keep system alive in SPI 1-1-1 mode in case of 
+> enable Octal/Quad failed.
 
-My client Late Mr. Muammar Muhammad Abu Minyar al-Gaddafi c. 1942 =E2=80=93=
- 20
-October 2011, was having a deposit sum of {thirty million four Hundred
-thousand united state dollars} only ($30.4M USD) with a security
-finance firm affiliated with African development bank here in Burkina
-Faso.
+I agree.
+ 
+> Therefore, my patches is to setup nor->read/write_proto = 8 in case 
+> driver enable Octal mode is success. And to enable Octal mode in
+> spi_nor_late_init_params()rather than as spi_nor_quad_enable()did.
 
-With the above explanation=E2=80=99s I want to move this money from Burkina
-Faso to your country, affidavit on your name, but note that this is a
-deal between me and you and should not be related to anybody until the
-deal is over for security reasons, please if interested reply as soon
-as possible.
+Like I mentioned before, spi_nor_late_init_params() is called _before_ 
+we call spi_nor_spimem_adjust_hwcaps(). That call is needed to make sure 
+the controller also supports octal mode operations. Otherwise, you'd end 
+up enabling octal mode on a controller that doesn't support it with no 
+way of going back now.
 
-Thanks,
-Honourable Barrister Aziz Dake.
+But we can still have a fallback mechanism even in spi_nor_init() that 
+would switch to a "less preferred" mode (like 1-1-1 mode) if "more 
+preferred" ones like octal or quad fail.
+
+That said, I think it would be a good idea to not keep tacking features 
+on this series. This makes it harder for reviewers because now they are 
+trying to shoot a moving target. Let basic 8D support stabilize and get 
+merged in, and then a fallback system can be submitted as a separate 
+patch series.
+
+-- 
+Regards,
+Pratyush Yadav
