@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B861D52E5
-	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 17:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859761D530C
+	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 17:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbgEOPCz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 May 2020 11:02:55 -0400
-Received: from mga01.intel.com ([192.55.52.88]:37779 "EHLO mga01.intel.com"
+        id S1727796AbgEOPEX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 May 2020 11:04:23 -0400
+Received: from mga18.intel.com ([134.134.136.126]:15625 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726144AbgEOPCz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 15 May 2020 11:02:55 -0400
-IronPort-SDR: u+rA+49iOEPwsbt5dbBxeyPlKRnijZBiXeGfVBdKT/40l157xFP6U+clmRKIuvzI5NgskqgZ3A
- MG7Yq/MwXv0Q==
+        id S1726171AbgEOPDz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 15 May 2020 11:03:55 -0400
+IronPort-SDR: gSJMJU+NZAQr9DsqTBBq2wIOWQLfq3BxecP9zfEBRNuxHTX0FIow1j6r8d8UgqkcXAEa2bzuNK
+ TXv6zZj+5XaQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 08:02:55 -0700
-IronPort-SDR: pPF5tDZcqhcLLPzgTY2JMxf40nbuiZdzldG4JbZkozpoJFkWqLEGENyw6lvT2Up2dOxF0YS3Wh
- d8P87UJjILpA==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 08:03:54 -0700
+IronPort-SDR: oeebT3F+ujbIeM9EWX7T/No0xt0Pr8AR5msV70GdGtgm5+5lr2eznhAaLNmS9kKoJGwA4lmXlK
+ ZkzISOFVMs1Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,395,1583222400"; 
-   d="scan'208";a="464752447"
+   d="scan'208";a="281243099"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005.fm.intel.com with ESMTP; 15 May 2020 08:02:50 -0700
+  by orsmga002.jf.intel.com with ESMTP; 15 May 2020 08:03:49 -0700
 Received: from andy by smile with local (Exim 4.93)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jZbrQ-006tS4-AY; Fri, 15 May 2020 18:02:52 +0300
-Date:   Fri, 15 May 2020 18:02:52 +0300
+        id 1jZbsN-006tSa-HL; Fri, 15 May 2020 18:03:51 +0300
+Date:   Fri, 15 May 2020 18:03:51 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -38,46 +38,42 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Allison Randal <allison@lohutok.net>,
         Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, John Garry <john.garry@huawei.com>,
         Chuanhong Guo <gch981213@gmail.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 14/19] spi: dw: Remove DW DMA code dependency from
- DW_DMAC_PCI
-Message-ID: <20200515150252.GL1634618@smile.fi.intel.com>
+Subject: Re: [PATCH v2 15/19] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on
+ the DW SPI core
+Message-ID: <20200515150351.GM1634618@smile.fi.intel.com>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
  <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-15-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-16-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200515104758.6934-15-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200515104758.6934-16-Sergey.Semin@baikalelectronics.ru>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 15, 2020 at 01:47:53PM +0300, Serge Semin wrote:
-> Since there is a generic method available to initialize the DW SPI DMA
-> interface on any DT and ACPI-based platforms, which in general can be
-> designed with not only DW DMAC but with any DMA engine on board, we can
-> freely remove the CONFIG_DW_DMAC_PCI config from dependency list of
-> CONFIG_SPI_DW_DMA. Especially seeing that we don't use anything DW DMAC
-> specific in the new driver.
+On Fri, May 15, 2020 at 01:47:54PM +0300, Serge Semin wrote:
+> Seeing all of the DW SPI driver components like DW SPI DMA/PCI/MMIO
+> depend on the DW SPI core code it's better to use the if-endif
+> conditional kernel config statement to signify that common dependency.
 
-Right, and used data structures are always available at compile time.
+Makes sense!
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
+> 
 > Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
 > Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
 > Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
@@ -87,30 +83,45 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > Cc: Paul Burton <paulburton@kernel.org>
 > Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
 > Cc: Arnd Bergmann <arnd@arndb.de>
 > Cc: Allison Randal <allison@lohutok.net>
 > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Cc: Gareth Williams <gareth.williams.jx@renesas.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
 > Cc: linux-mips@vger.kernel.org
 > Cc: devicetree@vger.kernel.org
 > ---
->  drivers/spi/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/spi/Kconfig | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index 03b061975f70..6a84f3dad35c 100644
+> index 6a84f3dad35c..3cdf8310d185 100644
 > --- a/drivers/spi/Kconfig
 > +++ b/drivers/spi/Kconfig
-> @@ -228,7 +228,7 @@ config SPI_DESIGNWARE
+> @@ -226,17 +226,20 @@ config SPI_DESIGNWARE
+>  	help
+>  	  general driver for SPI controller core from DesignWare
 >  
+> +if SPI_DESIGNWARE
+> +
 >  config SPI_DW_DMA
 >  	bool "DMA support for DW SPI controller"
-> -	depends on SPI_DESIGNWARE && DW_DMAC_PCI
-> +	depends on SPI_DESIGNWARE
+> -	depends on SPI_DESIGNWARE
 >  
 >  config SPI_DW_PCI
 >  	tristate "PCI interface driver for DW SPI core"
+> -	depends on SPI_DESIGNWARE && PCI
+> +	depends on PCI
+>  
+>  config SPI_DW_MMIO
+>  	tristate "Memory-mapped io interface driver for DW SPI core"
+> -	depends on SPI_DESIGNWARE
+> +	depends on HAS_IOMEM
+> +
+> +endif
+>  
+>  config SPI_DLN2
+>         tristate "Diolan DLN-2 USB SPI adapter"
 > -- 
 > 2.25.1
 > 
