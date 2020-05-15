@@ -2,110 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEC11D58FB
-	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 20:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACDA1D5903
+	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 20:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726252AbgEOSVY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 May 2020 14:21:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45978 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726191AbgEOSVY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 15 May 2020 14:21:24 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C75420728;
-        Fri, 15 May 2020 18:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589566884;
-        bh=ckBVg1MJiVxCyn1jj47za/KaV60o81y+aY8hdhxTv+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SUFZPl9QG+I4sO2uHgaBRWO0H+NYBBemyg2JiqEHfu24RGQA70mbOne0B1OJdHGHS
-         xLZS7vxraN97lS4WEorIVxzbq69D68YIEDapFNN6Zr50BpVoR+wtpTRMPNEGwzmoGf
-         sfpUPlq3KwdhOB6PUcLXJun7s1kgOTM696A25Th4=
-Date:   Fri, 15 May 2020 19:21:21 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        id S1726229AbgEOSXZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 May 2020 14:23:25 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:38480 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbgEOSXZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 May 2020 14:23:25 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6FC1980005C9;
+        Fri, 15 May 2020 18:23:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Ti73dIEaZ6s6; Fri, 15 May 2020 21:23:22 +0300 (MSK)
+Date:   Fri, 15 May 2020 21:23:22 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/19] spi: dw: Add generic DW DMA controller support
-Message-ID: <20200515182121.GP5066@sirena.org.uk>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] spi: dw: Clear DMAC register when done or stopped
+Message-ID: <20200515182322.mmsfe5zu5tqmovmf@mobilestation>
+References: <20200515174856.1406-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515175100.GL5066@sirena.org.uk>
+ <20200515175420.qgejailgnzswxtdz@mobilestation>
+ <20200515181219.GN5066@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o41d8xLWOaLD8vYh"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
-X-Cookie: Avoid contact with eyes.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200515181219.GN5066@sirena.org.uk>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, May 15, 2020 at 07:12:19PM +0100, Mark Brown wrote:
+> On Fri, May 15, 2020 at 08:54:20PM +0300, Serge Semin wrote:
+> > On Fri, May 15, 2020 at 06:51:00PM +0100, Mark Brown wrote:
+> > > On Fri, May 15, 2020 at 08:48:54PM +0300, Serge Semin wrote:
+> 
+> > > > Acked-by: Mark Brown <broonie@kernel.org>
+> 
+> > > I didn't ack this but Andy did (or at least the for-5.8 version)?
+> 
+> > Andy said he needs Fixes field to get his RB tag. You said:
+> > "This and patch 4 look good ..." Normally this means to get Acked-by.
+> 
+> Unless someone explicitly gives you a tag for something you shouldn't
+> usually assume that one applies, especially with maintainers giving acks
+> on their own trees since that has process meaning - it's saying that the
+> maintainer is OK with it being applied to some other tree which is
+> something it's worth being careful about.
 
---o41d8xLWOaLD8vYh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hm, it depends on maintainer and sub-system then. I did such "looks good" ->
+Acked-by conversions before. Not that many, but noone argued. [1] also says it's
+sometimes possible. Anyway, sorry for inconvenience. I'll get to remember that
+I'd better ask explicit acked-by from you, no assumption.
 
-On Fri, May 15, 2020 at 01:47:39PM +0300, Serge Semin wrote:
+[1] Documentation/process/submitting-patches.rst
 
-Appled:
+-Sergey
 
->   dt-bindings: spi: dw: Add Tx/Rx DMA properties
->   spi: dw: Clear DMAC register when done or stopped
->   spi: dw: Fix native CS being unset
->   spi: dw: Initialize paddr in DW SPI MMIO private data
+> 
+> On the other hand if someone says "if you do X you can add tag Y" and
+> you do X then you can generally add the tag if you do Y.
 
-Thanks.  No issues from me with the other patches.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
---o41d8xLWOaLD8vYh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6+3aAACgkQJNaLcl1U
-h9AGPAf/VsoxJ5zaBMEYFMY7L9rknyrkpX4QpC4b+7Dqn/k9fDezq5tQfvzsSRT+
-c53PKsNYEJmdWAa06UJpLHroHf4Tgu/SythyLU5ad2eUg2hHqrtoy2pFDtn4qFKp
-deRuFD01wqSKVe8zgyJ3kVRNOwosZiNYY2odh3t09vp7Xhsm0IBhlus6uRJH7szG
-YkHF44v54fVuQvm5FD5QxTIMLN8inIJk+4oC5Xx+LQ5qf7hCInCmUgg7x/d9I2mC
-HxfMDDegEPXj22WtkOvNlOlnWhL1ddS9VHNXBf7e5QDIoVlwq+9ZyKAKNMWgCYRV
-uefRPVN+eOxdTIDgjo4ftLeW9I6E4g==
-=tbav
------END PGP SIGNATURE-----
-
---o41d8xLWOaLD8vYh--
