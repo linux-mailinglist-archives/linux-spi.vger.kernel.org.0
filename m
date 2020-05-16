@@ -2,132 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E91EC1D6013
-	for <lists+linux-spi@lfdr.de>; Sat, 16 May 2020 11:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800F31D601B
+	for <lists+linux-spi@lfdr.de>; Sat, 16 May 2020 11:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbgEPJke (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 16 May 2020 05:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
+        id S1726270AbgEPJpm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 16 May 2020 05:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725997AbgEPJke (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 16 May 2020 05:40:34 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5114BC061A0C
-        for <linux-spi@vger.kernel.org>; Sat, 16 May 2020 02:40:34 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id n11so2219574pgl.9
-        for <linux-spi@vger.kernel.org>; Sat, 16 May 2020 02:40:34 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726202AbgEPJpm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 16 May 2020 05:45:42 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4092EC061A0C
+        for <linux-spi@vger.kernel.org>; Sat, 16 May 2020 02:45:42 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id x15so2255926pfa.1
+        for <linux-spi@vger.kernel.org>; Sat, 16 May 2020 02:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oLsgv6F4roMs2HoOiDJ0bdjUqpuGdCIr2pH0qBBD6v8=;
-        b=CLXsXI12hgbqtmM4I06XstIutMsY1BfcLmyE1iDdWRSLiGwkbgON+7qsPIdFylEuH2
-         DMpJEU/zMXw56YhID9WsJka0LhKOPuxLq14IEbeSFGdy/Pl1+bzEDtu4Chtfus+uIpqI
-         Ch3GA9S8AiLE00x00BbCaprFKaEhjxzGUamT773KH+LGLo/5AXhWpDYQPDk150cDz6Lq
-         RxOJgNZHP6T3IsKysVfjd3uqUHk8d1Rw6LynK8z/T7tnQn7dUz85Ccp3IRFGkG5R5mmP
-         MkesVoBAXb74Dz4TvPsyKlG1uGw7AvBt+5CZcFgkbu4OrHO/lFPEhR1r9yOBsD7lOS2U
-         2bNA==
+        bh=lZJ62fHWlt6Z60NeL5Ek6BbRHHHGV8Gk7H2eHbY2YNE=;
+        b=TMqE+yJtwiYvbQn7TkBcBxGHDnkJHWTfiz6IlOIXiHPEaS3uvCrwWZVYlcn/ZHl8FX
+         OWAAB6sB53uFbLlosDgpzvI69PrcDgClPcjogwYUzfbU16gnHlUUxhuE2X1GdvMeBLaI
+         LFG/HuXqLi3vEzxNuqmCbI1kRwY8jhGZMS8uR3aUBcojKOdr+nTYorR6BHgpoNJi45TH
+         F+hpZNEFD9xXhHpfaa7Lb/bYAOAiJ2MmqppYyQ6CGfL1UhOhb3tJ+LLfE5l8GnjB7MwC
+         j3l5m8/jRMKlDjR81vnUjeJxVxyB/SFUp3/t1RNDRP3BvLalxNo5JQTmXwWHBlaIJva5
+         ZeZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oLsgv6F4roMs2HoOiDJ0bdjUqpuGdCIr2pH0qBBD6v8=;
-        b=fUJgKFWU3jg9Xk8yUe6vaXrXtc62qShHpVa75fSupDHhVi/jBoWmojvRmBtdIBT57j
-         OagvISyc4s+bIByG/wZKJQrZHI+99kkt/EyIioz3YZm56eAnDpDuE5AOx/Cup9xa0QO9
-         HjiuRqWI3nFpZfggQnKNCNV9Ekl4T+xTe3nqrlZ2Cb5HuTXmEYJ5aKyzaMAMc/zCxzLE
-         4xUDiuvp2k1aTIs5OjkkYjD/JSr6sMh8FfZM21H8m8iiYPA0zuiuxvY07XsJXVHd7TD+
-         ifq0KideduidqztRNo85Zihhej3WEUvbDKK8eMvofSxv3TH6KoNi58ZpYqYFl8AGTsTI
-         zZlA==
-X-Gm-Message-State: AOAM533MQRy4dqjW+2vxjzk2jDZO67A6INRhDq2gXf7dsmQpdHPJ6+zQ
-        Q6rW2N43Hv8ieD9ORY9UBMIc7bywos1GgHHrNjw=
-X-Google-Smtp-Source: ABdhPJwtKMjj3Aduptyvb8s/5CoMnd6ucIVYfKeePgFKByB85cZ0UHpX40pGJaSL180Nkq1s/9VB8u6IDoFDYe5CvNY=
-X-Received: by 2002:a65:6251:: with SMTP id q17mr6801546pgv.4.1589622033811;
- Sat, 16 May 2020 02:40:33 -0700 (PDT)
+        bh=lZJ62fHWlt6Z60NeL5Ek6BbRHHHGV8Gk7H2eHbY2YNE=;
+        b=OAmftnI1ig8qtPnWa6Z9NU4A1gtumZmjkDEA4YYzmViCKbkz3OPwrbJdh1TFkEFN3f
+         MxPYMO5A2wj8lxtCrOGavMKeXV1VAoxN01gMqKFfLe1p9psWFwwtXmHfq4Yoa8xgDAN0
+         IDe4f/JW8Onakzn/pk02UPZ9rIzciUk6eVK9N3ev2NqZszX3C13ZWJ0amms7wsyAqzmj
+         3m26mn1mRKW5mmez9ws2GbTjQdKsaEL9ceW5TKKdGaItViJHcR9wb/QnxditODcW9LkG
+         7h6YeFnTBkJUgcRhZ4THunbUVCtm4Fi9mfqv4VvE4tPipJ4ABO8lj8YN/6C55zq/Lpvf
+         QwUg==
+X-Gm-Message-State: AOAM531lRXHxigYDrYqAIFu25eeJ733OBTKS1rRB8vyofRPue0qNSf63
+        1gwYgzeFQq/QkTnXc85pZRwu2k6lrp87p9hSmsM=
+X-Google-Smtp-Source: ABdhPJx2+5Dzwoxe5rj4etjhLXQgBNczFXn7uNpdmqOhM5mJ+sIaAMFL9s2R52n6meZipOln97hN6qy8uQ3/ixm7/Co=
+X-Received: by 2002:a62:f908:: with SMTP id o8mr7806717pfh.170.1589622341531;
+ Sat, 16 May 2020 02:45:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1589557526.git.lukas@wunner.de> <2397dd70cdbe95e0bc4da2b9fca0f31cb94e5aed.1589557526.git.lukas@wunner.de>
- <20200515162903.GH5066@sirena.org.uk> <20200515164404.bev4zjzcmx4nwzhi@wunner.de>
- <CAHp75Vfs=gc9c2h2amhu0eb3ux8jJAuC7CRY8fLrFiBsTwtSYQ@mail.gmail.com> <20200516065607.zrqwlh5ayoth37y4@wunner.de>
-In-Reply-To: <20200516065607.zrqwlh5ayoth37y4@wunner.de>
+References: <cover.1589557526.git.lukas@wunner.de> <8aaf9d44c153fe233b17bc2dec4eb679898d7e7b.1589557526.git.lukas@wunner.de>
+ <20200515162725.GG5066@sirena.org.uk> <20200515163147.3u4xjqdxci2neup7@wunner.de>
+ <CAHp75VduTYuVO_KhLuRNUA-zQxo8QNFMWDoLRCrGxYkZCOUovA@mail.gmail.com> <20200516064512.cwslwlkozff3mycf@wunner.de>
+In-Reply-To: <20200516064512.cwslwlkozff3mycf@wunner.de>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 16 May 2020 12:40:22 +0300
-Message-ID: <CAHp75VeOSgiprNoqs2Jn=ibNRspSWyGwpqFmJphHd3K7999mrw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] spi: bcm2835: Fix controller unregister order
+Date:   Sat, 16 May 2020 12:45:30 +0300
+Message-ID: <CAHp75VdVyOA55hiv5WFz6Zi94w3MRbivkLec029ZCszET0WDRw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] spi: Fix controller unregister order
 To:     Lukas Wunner <lukas@wunner.de>
 Cc:     Mark Brown <broonie@kernel.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Martin Sperl <kernel@martin.sperl.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, May 16, 2020 at 9:56 AM Lukas Wunner <lukas@wunner.de> wrote:
+On Sat, May 16, 2020 at 9:45 AM Lukas Wunner <lukas@wunner.de> wrote:
 >
-> On Sat, May 16, 2020 at 12:33:00AM +0300, Andy Shevchenko wrote:
-> > On Fri, May 15, 2020 at 7:45 PM Lukas Wunner <lukas@wunner.de> wrote:
-> > > On Fri, May 15, 2020 at 05:29:03PM +0100, Mark Brown wrote:
-> > > > On Fri, May 15, 2020 at 05:58:02PM +0200, Lukas Wunner wrote:
-> > > > > Fix by using the non-devm variant spi_register_controller().  Note that
-> > > > > the struct spi_controller as well as the driver-private data are not
-> > > > > freed until after bcm2835_spi_remove() has finished, so accessing them
-> > > > > is safe.
+> On Sat, May 16, 2020 at 12:37:17AM +0300, Andy Shevchenko wrote:
+> > On Fri, May 15, 2020 at 7:41 PM Lukas Wunner <lukas@wunner.de> wrote:
+> > > On Fri, May 15, 2020 at 05:27:25PM +0100, Mark Brown wrote:
+> > > > On Fri, May 15, 2020 at 05:58:01PM +0200, Lukas Wunner wrote:
+> > > > > However since commit ffbbdd21329f ("spi: create a message queueing
+> > > > > infrastructure"), spi_destroy_queue() is executed before unbinding the
+> > > > > slaves.  It sets ctlr->running = false, thereby preventing SPI bus
+> > > > > access and causing unbinding of slave devices to fail.
 > > > >
-> > > > Why not use managed allocations of clocks and DMA channels?  This is a
-> > > > standard issue with the devm APIs, if you're using them you basically
-> > > > need to use them for *everything* up to the point where you start using
-> > > > them.
+> > > > Devices should basically never fail an unbind operation - if something
+> > > > went seriously wrong there's basically nothing that can be done in terms
+> > > > of error handling and keeping the device around isn't going to help.
 > > >
-> > > There is no devm version of clk_prepare_enable(), dma_request_chan()
-> > > and various other functions invoked on ->probe() by spi-bcm2835.c.
-> > > So tearing down DMA channels, disabling clocks etc needs to happen
-> > > in the ->remove() hook and consequently devm_spi_register_controller()
-> > > cannot be used.
+> > > I guess the word "fail" in the commit message invites misinterpretations.
+> > > The driver does unbind from the slave device, but the physical device is
+> > > not left in a proper state.  E.g. interrupts may still be generated by
+> > > the device because writing a register to disable them failed.
 > >
-> > There is devm_add_action_or_reset (IIRC the name). It does a trick.
+> > I didn't check a patch, but I see a bug on kernel bugzilla against
+> > spi-pxa2xx because of this. It requires quite untrivial ->remove() in
+> > order to quiescent the DMA and other activities.
 >
-> Interesting, thanks.
+> Yes from a quick look at spi-pxa2xx.c it's immediately obvious that
+> the use of devm_spi_register_controller() is likewise completely wrong.
 >
-> However there are currently four actions performed by bcm2835_spi_remove():
+> The crucial thing to understand is that the SPI driver's ->remove()
+> hook is executed *before* any device-managed resources are released.
+> pxa2xx_spi_remove() disables the clock, frees the IRQ, releases DMA,
+> so the SPI controller is no longer usable even though it's still
+> registered!  Somehow this incorrect order got cargo-culted to dozens
+> of drivers over the years.
 >
-
->         bcm2835_debugfs_remove(bs);
-
-This one shouldn't be counted. You can init it as the last op in
-->probe() and that mustn't fail the probe.
-
->         /* Clear FIFOs, and disable the HW block */
->         bcm2835_wr(bs, BCM2835_SPI_CS,
->                    BCM2835_SPI_CS_CLEAR_RX | BCM2835_SPI_CS_CLEAR_TX)
-
-This one I don't know.
-
->         clk_disable_unprepare(bs->clk);
-
-This one traditionally done via devm_add_action_or_reset.
-
->         bcm2835_dma_release(ctlr, bs);
-
-This one probably the one which needs to be addressed ideally in DMA
-engine for all.
-
+> We use SPI-attached Ethernet chips and when the SPI driver's module
+> is unloaded, the Ethernet driver's ->ndo_stop() hook is executed to
+> bring down the interface.  For this it needs to communicate with the
+> Ethernet chip, but it can't because the ->remove() hook has already been
+> executed and unbinding of the SPI slave happens afterwards, when the
+> SPI controller is unregistered via devres_release_all().
 >
-> So I think I'd have to add four functions to perform these devm actions,
-> which would add a lot more code than just the single line added by my
-> patch.  It also seems doubtful that the teardown code will still be easy
-> to follow.  And small patches like the ones I've submitted lend themselves
-> better to backporting to stable.
+> There's another issue in spi-pxa2xx.c:  It acquires a runtime PM ref
+> even though the driver core already does that.
 >
-> Mark, please provide guidance as to which variant you'd prefer:
-> Switching to the non-devm variant of spi_register_controller() as I've
-> done here or adding devm calls for all the existing teardown steps.
+> Do you have a link to the spi-pxa2xx.c bugzilla?  Are you able to
+> test patches?  I can submit a patch but I can only compile-test it,
 
-All generic devm_* APIs have a release counterparts, you can
-explicitly call them in order you want during ->remove(). So, I still
-see a benefit of devm_*() even in such cases (makes ->probe() much
-easier).
+Here you are: https://bugzilla.kernel.org/show_bug.cgi?id=206403.
+There also a link to my GH tree where I tried to clean up a bit. And
+yes, I know about atomic handling bug there, but it's another story.
+
+I was able to reproduce the bug once or twice, but submitter has a
+test case with reproducibility close to 100%.
 
 -- 
 With Best Regards,
