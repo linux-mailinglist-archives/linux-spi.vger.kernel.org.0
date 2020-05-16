@@ -2,90 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E55621D5BB7
-	for <lists+linux-spi@lfdr.de>; Fri, 15 May 2020 23:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055DC1D5F37
+	for <lists+linux-spi@lfdr.de>; Sat, 16 May 2020 08:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbgEOVh0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 May 2020 17:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726301AbgEOVh0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 May 2020 17:37:26 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798CBC061A0C
-        for <linux-spi@vger.kernel.org>; Fri, 15 May 2020 14:37:26 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id k22so1428691pls.10
-        for <linux-spi@vger.kernel.org>; Fri, 15 May 2020 14:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=12PJ4LVKC32hDA7ji0l5dHls/k0wf58AYdIns1gYhdY=;
-        b=lLMDRCN6cFeiFSGoky9NJRQT0lRkcF/+YQaFJKWg+V7rqtGOUR0ArOS3wbNm22u7pe
-         TWZFTJIpYSqlDEmn9mNy9LRQZTqxOUFCTI+kP0T6U69YvxsDkb/iYgSuiob3oX+vf19f
-         7Ba+iErAE1Vu4oU9rF+WmUOzpTB7slxGv0cX/bPp5yd4YGrtHv437VYchJWxYHJWA5VT
-         jgNhflbGEkXpcCzP/t7Pjo9P+piGo/+fQyo+6VOv7f97YKVL9uoKZ+PFBOs4gKa2SPQa
-         0b1cwn+c9FY6eYmdPWMFaLIWI3NEQNPA4CdVYz54Lx+7THvEKropeTQ+PJVLv4S0romu
-         7EcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=12PJ4LVKC32hDA7ji0l5dHls/k0wf58AYdIns1gYhdY=;
-        b=sRLis7/gblQYD+tq/eHJCo0EZHjk/Qhi43MqQcvIa8cbJYhlaqeR3GOnYi2zEnMzNR
-         cBSsEpV+jP7rWrQMcDZ14KmRiHga42oKAlcXSBrzG7ScoROd0gcWCpvVOSO4NWUQBZjt
-         wEpB9ustENuH3DzRXuExOj1+kNJFc76f3Edq0ebeBw7akpWMAiNHSS0+C5CY3K/gg7Q/
-         B8PZ/5qupkxW6O2JxBxyDNR4I5Rwpwhh8qKlLcP4C+vyFR8oSZW/WZDm6EtYxnZCJLP+
-         NT11hZLl/rKTW1y/4GW5V67hDTuv4R40FMug1foZZa5/zJc6CvzbMyqv3Fb+p8yhLT+s
-         dTOg==
-X-Gm-Message-State: AOAM533sxErcuqj9vCl+HCC3KEIbY00L9vWjCfaHbiRqHDu9N8UqBAqx
-        9DaYTc8KeEx+07+Omw4QTfGwFkxk/2e69v0NbBI=
-X-Google-Smtp-Source: ABdhPJx5/8oNtWN1M6mE+TtSVDTz4HIgpG8Cry8bXsPjHyVZlZn6EAN35E04T6KCXm5nir5hzXFpJtCD4HLmpWcav1M=
-X-Received: by 2002:a17:90b:94a:: with SMTP id dw10mr5768706pjb.228.1589578646010;
- Fri, 15 May 2020 14:37:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1589557526.git.lukas@wunner.de> <8aaf9d44c153fe233b17bc2dec4eb679898d7e7b.1589557526.git.lukas@wunner.de>
- <20200515162725.GG5066@sirena.org.uk> <20200515163147.3u4xjqdxci2neup7@wunner.de>
-In-Reply-To: <20200515163147.3u4xjqdxci2neup7@wunner.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 16 May 2020 00:37:17 +0300
-Message-ID: <CAHp75VduTYuVO_KhLuRNUA-zQxo8QNFMWDoLRCrGxYkZCOUovA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] spi: Fix controller unregister order
-To:     Lukas Wunner <lukas@wunner.de>
+        id S1725867AbgEPGpR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 16 May 2020 02:45:17 -0400
+Received: from bmailout3.hostsharing.net ([176.9.242.62]:41237 "EHLO
+        bmailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725807AbgEPGpR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 16 May 2020 02:45:17 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id A8593100D9402;
+        Sat, 16 May 2020 08:45:12 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 1F45AAF8FC; Sat, 16 May 2020 08:45:12 +0200 (CEST)
+Date:   Sat, 16 May 2020 08:45:12 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Martin Sperl <kernel@martin.sperl.org>,
         linux-spi <linux-spi@vger.kernel.org>,
         linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
         Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 1/5] spi: Fix controller unregister order
+Message-ID: <20200516064512.cwslwlkozff3mycf@wunner.de>
+References: <cover.1589557526.git.lukas@wunner.de>
+ <8aaf9d44c153fe233b17bc2dec4eb679898d7e7b.1589557526.git.lukas@wunner.de>
+ <20200515162725.GG5066@sirena.org.uk>
+ <20200515163147.3u4xjqdxci2neup7@wunner.de>
+ <CAHp75VduTYuVO_KhLuRNUA-zQxo8QNFMWDoLRCrGxYkZCOUovA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VduTYuVO_KhLuRNUA-zQxo8QNFMWDoLRCrGxYkZCOUovA@mail.gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 15, 2020 at 7:41 PM Lukas Wunner <lukas@wunner.de> wrote:
->
-> On Fri, May 15, 2020 at 05:27:25PM +0100, Mark Brown wrote:
-> > On Fri, May 15, 2020 at 05:58:01PM +0200, Lukas Wunner wrote:
-> > > However since commit ffbbdd21329f ("spi: create a message queueing
-> > > infrastructure"), spi_destroy_queue() is executed before unbinding the
-> > > slaves.  It sets ctlr->running = false, thereby preventing SPI bus
-> > > access and causing unbinding of slave devices to fail.
+On Sat, May 16, 2020 at 12:37:17AM +0300, Andy Shevchenko wrote:
+> On Fri, May 15, 2020 at 7:41 PM Lukas Wunner <lukas@wunner.de> wrote:
+> > On Fri, May 15, 2020 at 05:27:25PM +0100, Mark Brown wrote:
+> > > On Fri, May 15, 2020 at 05:58:01PM +0200, Lukas Wunner wrote:
+> > > > However since commit ffbbdd21329f ("spi: create a message queueing
+> > > > infrastructure"), spi_destroy_queue() is executed before unbinding the
+> > > > slaves.  It sets ctlr->running = false, thereby preventing SPI bus
+> > > > access and causing unbinding of slave devices to fail.
+> > >
+> > > Devices should basically never fail an unbind operation - if something
+> > > went seriously wrong there's basically nothing that can be done in terms
+> > > of error handling and keeping the device around isn't going to help.
 > >
-> > Devices should basically never fail an unbind operation - if something
-> > went seriously wrong there's basically nothing that can be done in terms
-> > of error handling and keeping the device around isn't going to help.
->
-> I guess the word "fail" in the commit message invites misinterpretations.
-> The driver does unbind from the slave device, but the physical device is
-> not left in a proper state.  E.g. interrupts may still be generated by
-> the device because writing a register to disable them failed.
+> > I guess the word "fail" in the commit message invites misinterpretations.
+> > The driver does unbind from the slave device, but the physical device is
+> > not left in a proper state.  E.g. interrupts may still be generated by
+> > the device because writing a register to disable them failed.
+> 
+> I didn't check a patch, but I see a bug on kernel bugzilla against
+> spi-pxa2xx because of this. It requires quite untrivial ->remove() in
+> order to quiescent the DMA and other activities.
 
-I didn't check a patch, but I see a bug on kernel bugzilla against
-spi-pxa2xx because of this. It requires quite untrivial ->remove() in
-order to quiescent the DMA and other activities.
+Yes from a quick look at spi-pxa2xx.c it's immediately obvious that
+the use of devm_spi_register_controller() is likewise completely wrong.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The crucial thing to understand is that the SPI driver's ->remove()
+hook is executed *before* any device-managed resources are released.
+pxa2xx_spi_remove() disables the clock, frees the IRQ, releases DMA,
+so the SPI controller is no longer usable even though it's still
+registered!  Somehow this incorrect order got cargo-culted to dozens
+of drivers over the years.
+
+We use SPI-attached Ethernet chips and when the SPI driver's module
+is unloaded, the Ethernet driver's ->ndo_stop() hook is executed to
+bring down the interface.  For this it needs to communicate with the
+Ethernet chip, but it can't because the ->remove() hook has already been
+executed and unbinding of the SPI slave happens afterwards, when the
+SPI controller is unregistered via devres_release_all().
+
+There's another issue in spi-pxa2xx.c:  It acquires a runtime PM ref
+even though the driver core already does that.
+
+Do you have a link to the spi-pxa2xx.c bugzilla?  Are you able to
+test patches?  I can submit a patch but I can only compile-test it,
+I don't have that hardware.
+
+Thanks,
+
+Lukas
