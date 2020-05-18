@@ -2,27 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754A31D7C1B
-	for <lists+linux-spi@lfdr.de>; Mon, 18 May 2020 17:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61A31D7C58
+	for <lists+linux-spi@lfdr.de>; Mon, 18 May 2020 17:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbgERPAG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 May 2020 11:00:06 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:48704 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbgERPAF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 May 2020 11:00:05 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id B6998803080B;
-        Mon, 18 May 2020 15:00:00 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IRxMeP9Dze5J; Mon, 18 May 2020 18:00:00 +0300 (MSK)
-Date:   Mon, 18 May 2020 17:59:58 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
+        id S1727020AbgERPHF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 May 2020 11:07:05 -0400
+Received: from mga03.intel.com ([134.134.136.65]:56823 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727006AbgERPHF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 18 May 2020 11:07:05 -0400
+IronPort-SDR: bq4hgVFZ8dchReh2T46aaLSVBB1aS1v9bGHvXs4JzRDhS4+yBdUoC+Uh0i3zUhiJJ0HYkvPSQQ
+ glYfCn1jb8FQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 08:07:04 -0700
+IronPort-SDR: xijzf8j5EImrpdafZMqoJlWby9gfaCzai1/z9TN7sPPodRGqYM7lscEXvdeyWCKAmX4lgathKu
+ aI5M8PY+D/PA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
+   d="scan'208";a="254465282"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008.fm.intel.com with ESMTP; 18 May 2020 08:06:54 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jahM0-007Ry1-EZ; Mon, 18 May 2020 18:06:56 +0300
+Date:   Mon, 18 May 2020 18:06:56 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Mark Brown <broonie@kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
@@ -30,94 +41,98 @@ CC:     Serge Semin <fancer.lancer@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Allison Randal <allison@lohutok.net>,
         Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org,
         Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
         Clement Leger <cleger@kalray.eu>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 10/19] spi: dw: Use DMA max burst to set the request
- thresholds
-Message-ID: <20200518145958.gb55qtrc6gdpq2d4@mobilestation>
+        "wuxu.wu" <wuxu.wu@huawei.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 18/19] spi: dw: Use regset32 DebugFS method to create
+ regdump file
+Message-ID: <20200518150656.GE1634618@smile.fi.intel.com>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
  <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-11-Sergey.Semin@baikalelectronics.ru>
- <20200515143842.GG1634618@smile.fi.intel.com>
- <20200516200133.wmaqnfjbr7234fzo@mobilestation>
- <20200518110343.GY1634618@smile.fi.intel.com>
- <20200518125253.r4fpr4mjflclqpym@mobilestation>
- <CAHp75VeMcv-hQViCANQARiNh0LwmugsDWk=MF1c5E3t7z5h02Q@mail.gmail.com>
- <20200518134306.7rvydoasv7pmxwxl@mobilestation>
- <20200518144834.GD1634618@smile.fi.intel.com>
+ <20200515104758.6934-19-Sergey.Semin@baikalelectronics.ru>
+ <20200515151056.GQ1634618@smile.fi.intel.com>
+ <20200516204634.td52orxfnh7iewg6@mobilestation>
+ <20200518111822.GZ1634618@smile.fi.intel.com>
+ <20200518140825.jnkfpybxnwq7fx2m@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200518144834.GD1634618@smile.fi.intel.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200518140825.jnkfpybxnwq7fx2m@mobilestation>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 18, 2020 at 05:48:34PM +0300, Andy Shevchenko wrote:
-> On Mon, May 18, 2020 at 04:43:06PM +0300, Serge Semin wrote:
-> > On Mon, May 18, 2020 at 04:25:20PM +0300, Andy Shevchenko wrote:
-> > > On Mon, May 18, 2020 at 3:53 PM Serge Semin
-> > > <Sergey.Semin@baikalelectronics.ru> wrote:
-> > > > On Mon, May 18, 2020 at 02:03:43PM +0300, Andy Shevchenko wrote:
-> > > > > On Sat, May 16, 2020 at 11:01:33PM +0300, Serge Semin wrote:
-> > > > > > On Fri, May 15, 2020 at 05:38:42PM +0300, Andy Shevchenko wrote:
-> > > > > > > On Fri, May 15, 2020 at 01:47:49PM +0300, Serge Semin wrote:
-> 
-> ...
-> 
-> > > > > > It's not like anyone cared about padding in this structure in the first place)
-> > > > >
-> > > > > I think I have been caring (to some extend).
-> > > >
-> > > > Well, If you have then instead of asking to rearrange just two members (which
-> > > > by the way finely grouped by the Tx-Rx affiliation) why not sending a
-> > > > patch, which would refactor the whole structure so to be optimal for the x64
-> > > > platforms? I don't really see why this gets very important for you seeing
-> > > > Mark is Ok with this. My current commit follows the common driver design
-> > > > including the DW SSI data members grouping. On the second thought I'll leave
-> > > > it as is then.
-> > > 
-> > > Again same issue here. What is really easy to do for you here, will
-> > > become a burden and additional churn to anybody else.
-> > > So, why not to minimize it in the first place? Same with comma in
-> > > another patch. Sorry, I really don't get it.
+On Mon, May 18, 2020 at 05:08:25PM +0300, Serge Semin wrote:
+> On Mon, May 18, 2020 at 02:18:22PM +0300, Andy Shevchenko wrote:
+> > On Sat, May 16, 2020 at 11:46:34PM +0300, Serge Semin wrote:
+> > > On Fri, May 15, 2020 at 06:10:56PM +0300, Andy Shevchenko wrote:
+> > > > On Fri, May 15, 2020 at 01:47:57PM +0300, Serge Semin wrote:
+> > > > > DebugFS kernel interface provides a dedicated method to create the
+> > > > > registers dump file. Use it instead of creating a generic DebugFS
+> > > > > file with manually written read callback function.
+
+> > > > With below nit addressed,
+> > > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > > 
-> > If comma is more or less understandable (though adding it is absolutely
-> > redundant there and doesn't worth even a bit of time spending for the
-> > discussion), here you consider the patch from padding point of view.
-> > The driver developer didn't care about it, but did care about grouping the
-> > members in a corresponding way. The padding burden will be there anyway and
-> > should be fixed for the whole structure in an additional patch. Until then
-> > the way of grouping should be preserved.
+> > > > > +#define DW_SPI_DBGFS_REG(_name, _off)	\
+> > > > > +{					\
+> > > > > +	.name = _name,			\
+> > > > 
+> > > > > +	.offset = _off			\
+> > > > 
+> > > > As previously discussed (did I miss your answer?) the comma at the end leaves
+> > > > better pattern for maintenance prospective.
+> > > 
+> > > Ah, sorry. Missed that. This comma is hardly needed seeing the structure
+> > > consists of just two elements. So I'd rather leave it as is.
+> > 
+> > While it's a really small thing, I consider that it's not good to make
+> > someone's else problem what can be done here. So, please, consider to add a
+> > comma. Look at the other drivers and code in the kernel. This is at least
+> > defacto preferred style.
 > 
-> Like you said, we spent already much more time than that simple change can be
-> satisfied. And like you said, "deleloper ... did care about groupping members
-> in a corresponding way". So, if we look at this in the original code, my
-> suggestion, besides padding benefit, is consistent with existing pattern in
-> that data structure.
+> Andy, you never give up, don't you? =)
 
-What pattern do you mean? As I see it, my implementation is consistent with
-current structure structure, while yours is not.
+First of all, I really appreciate work you have done so far (I mean it).
+Now to the point.
 
--Sergey
+You see, I always try to have a rationale behind any proposed comment. I agree,
+that some of them can be considered as a bikeshedding for a certain developer,
+but on big picture with this scale of project even small change (being made or
+being rejected to be made) can provoke additional churn with a good magnitude,
+if we consider all possible cases where somebody, e.g., can take into account
+existing code to copy'n'paste from). So, I would easy give up on something if
+there will be a stronger (than mine) argument why the proposed thing is not
+good to be done (at least as a part of the discussed patch set). I also want
+to and will learn from the developers as a reviewer.
 
-> 
-> Note, I agree on extern keyword change can be postponed (it was in the original
-> code), but here you introduce a new code...
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+Hope that above will clarify my reviewer's point of view to the code.
+
+> Agreed then. I'll add comma to the
+> initializer and also after the last member here:
+>         DW_SPI_DBGFS_REG("ISR", DW_SPI_ISR),
+>         DW_SPI_DBGFS_REG("DMACR", DW_SPI_DMACR),
+>         DW_SPI_DBGFS_REG("DMATDLR", DW_SPI_DMATDLR),
+> -       DW_SPI_DBGFS_REG("DMARDLR", DW_SPI_DMARDLR)
+> +       DW_SPI_DBGFS_REG("DMARDLR", DW_SPI_DMARDLR),
+
+Good catch, thanks for taking it into consideration as well.
+
+>  };
+>  
+>  static int dw_spi_debugfs_init(struct dw_spi *dws)
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
