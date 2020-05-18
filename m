@@ -2,139 +2,219 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BD61D7CAA
-	for <lists+linux-spi@lfdr.de>; Mon, 18 May 2020 17:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AF31D7CCD
+	for <lists+linux-spi@lfdr.de>; Mon, 18 May 2020 17:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728306AbgERPU1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 May 2020 11:20:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57988 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727063AbgERPU0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 18 May 2020 11:20:26 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1BE2F20709;
-        Mon, 18 May 2020 15:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589815225;
-        bh=tSws2kjDhXaAFNWN68OWyjCdK+4AcxFyLFLzGGQxyNU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kZz+KHtEmx4LXcyztl4rmU2EAXazJQFb7E8mHywQvhoHn1/5wVi5TmH9zFMDLS4W/
-         MiKmt+x10Jms6pej2MZzFDOjkYSYEcoSMNblOS5IKOq3bv9ecuPNIZRnnJBSu7GCXv
-         mI5P/vnVxOyhBlbFI4Ezj8NA2S5v8JeiuE3LjRFQ=
-Received: by mail-ot1-f42.google.com with SMTP id x22so4751556otq.4;
-        Mon, 18 May 2020 08:20:25 -0700 (PDT)
-X-Gm-Message-State: AOAM532AXu2+ODHrVl/USjh57gFEjBKY3Xj6/SQBQi8niO4Abx/WAKpk
-        JP4+SsdoEdntaT89YyW0M+vGxKJxzww1f7hjMQ==
-X-Google-Smtp-Source: ABdhPJzAqhRdGybXpwpC/ZOQ7F9CQ8eOmJxxxyRMv1ENHmR6X3dhaIAFrOd3PP9Ko0YHK3CdCi+5NlS47TBiLzZklxs=
-X-Received: by 2002:a9d:5c8a:: with SMTP id a10mr8596315oti.129.1589815224353;
- Mon, 18 May 2020 08:20:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-29-lkundrak@v3.sk>
- <20200327195520.GA2235@bogus> <20200517193451.GG1695525@furthur.local>
-In-Reply-To: <20200517193451.GG1695525@furthur.local>
+        id S1728137AbgERP1E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 May 2020 11:27:04 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:38012 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727005AbgERP1D (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 May 2020 11:27:03 -0400
+Received: by mail-il1-f194.google.com with SMTP id j2so10230343ilr.5;
+        Mon, 18 May 2020 08:27:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HZk04ZduzeUDiGnoNDxh+Yt+cMSaZzh4xYDIz3+9lbs=;
+        b=WOTz9iDO0UnowOayR/0uOT445UWiGougKnjJSLl/36a91QzYT3COrpnMuoykdAxaRG
+         cpO5qFkRIVeOvGPXNxiE/d9s0HdLpZGjfNn2X2lhoBepEjyqi4ocFOclaVBnrUAGhQpd
+         bhuuSlhBgoCraqsVD1J/l6Snlv3Mo3bVXpv3SxIVun9JKpA7npFakklBUSW89U/kIPQl
+         IaxhGzOVTwSk97lNjwUiQKUeLWo97US27c5nGCa8XBDOaKnKnw8uc97e95r3vlcJfUS9
+         M0KhbK+phrx2CJUkowc8kNwwZIddEcAkV+qbMnH5WbrCv4yUCqzlLOOgl1h7TCqGuzuz
+         4Bkg==
+X-Gm-Message-State: AOAM5329q8GaAPdOWs3dMt6FoRio/D9qHUWSaUI/CJuJM4xIXl1UGqgd
+        oKbQUNOp0Nq4aoDH2i+XVQ==
+X-Google-Smtp-Source: ABdhPJwJ0r+woAN0IPhZDIonASVfIXBFtEtRiQdjcrjSFdjLdu5+X/NuiQSAKb+Zr2O1u6nM8LIznQ==
+X-Received: by 2002:a05:6e02:801:: with SMTP id u1mr17007953ilm.295.1589815621629;
+        Mon, 18 May 2020 08:27:01 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id b18sm476861ilh.77.2020.05.18.08.27.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2020 08:27:01 -0700 (PDT)
+Received: (nullmailer pid 12949 invoked by uid 1000);
+        Mon, 18 May 2020 15:26:59 -0000
+Date:   Mon, 18 May 2020 09:26:59 -0600
 From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 18 May 2020 09:20:13 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+oQSk=xGBiQ73SyGggo=gBOmH6xvTv1QBAUfbnt42E0A@mail.gmail.com>
-Message-ID: <CAL_Jsq+oQSk=xGBiQ73SyGggo=gBOmH6xvTv1QBAUfbnt42E0A@mail.gmail.com>
-Subject: Re: [PATCH 28/28] dt-bindings: usb: Convert ehci-mv to json-schema
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: spi: Add Baikal-T1 System Boot SPI
+ Controller binding
+Message-ID: <20200518152659.GA2525@bogus>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-2-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200508093621.31619-2-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, May 17, 2020 at 1:34 PM Lubomir Rintel <lkundrak@v3.sk> wrote:
->
-> On Fri, Mar 27, 2020 at 01:55:20PM -0600, Rob Herring wrote:
-> > On Tue, Mar 17, 2020 at 10:39:22AM +0100, Lubomir Rintel wrote:
-> > > A straightforward conversion of the ehci-mv binding to DT schema format
-> > > using json-schema.
-> > >
-> > > Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> > > ---
-> > >  .../devicetree/bindings/usb/ehci-mv.txt       | 23 -------
-> > >  .../bindings/usb/marvell,pxau2o-ehci.yaml     | 60 +++++++++++++++++++
-> > >  2 files changed, 60 insertions(+), 23 deletions(-)
-> > >  delete mode 100644 Documentation/devicetree/bindings/usb/ehci-mv.txt
-> > >  create mode 100644 Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/usb/ehci-mv.txt b/Documentation/devicetree/bindings/usb/ehci-mv.txt
-> > > deleted file mode 100644
-> > > index 335589895763e..0000000000000
-> > > --- a/Documentation/devicetree/bindings/usb/ehci-mv.txt
-> > > +++ /dev/null
-> > > @@ -1,23 +0,0 @@
-> > > -* Marvell PXA/MMP EHCI controller.
-> > > -
-> > > -Required properties:
-> > > -
-> > > -- compatible: must be "marvell,pxau2o-ehci"
-> > > -- reg: physical base addresses of the controller and length of memory mapped region
-> > > -- interrupts: one EHCI controller interrupt should be described here
-> > > -- clocks: phandle list of usb clocks
-> > > -- clock-names: should be "USBCLK"
-> > > -- phys: phandle for the PHY device
-> > > -- phy-names: should be "usb"
-> > > -
-> > > -Example:
-> > > -
-> > > -   ehci0: usb-ehci@d4208000 {
-> > > -           compatible = "marvell,pxau2o-ehci";
-> > > -           reg = <0xd4208000 0x200>;
-> > > -           interrupts = <44>;
-> > > -           clocks = <&soc_clocks MMP2_CLK_USB>;
-> > > -           clock-names = "USBCLK";
-> > > -           phys = <&usb_otg_phy>;
-> > > -           phy-names = "usb";
-> > > -   };
-> > > diff --git a/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> > > new file mode 100644
-> > > index 0000000000000..189025ef1e92e
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> > > @@ -0,0 +1,60 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
-> >
-> > Same license comment.
->
-> I wrote that binding document and chose that license.
+On Fri, May 08, 2020 at 12:36:20PM +0300, Serge Semin wrote:
+> Baikal-T1 Boot SPI is a part of the SoC System Controller and is
+> responsible for the system bootup from an external SPI flash. It's a DW
+> APB SSI-based SPI-controller with no interrupts, no DMA, with just one
+> native chip-select available and a single reference clock. Since Baikal-T1
+> SoC is normally booted up from an external SPI flash this SPI controller
+> in most of the cases is supposed to be connected to a single SPI-nor
+> flash. Additionally in order to provide a transparent from CPU point of
+> view initial code execution procedure the system designers created an IP
+> block which physically maps the SPI flash found at CS0 to a memory region.
+> 
+> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: John Garry <john.garry@huawei.com>
+> Cc: Chuanhong Guo <gch981213@gmail.com>
+> Cc: Tomer Maimon <tmaimon77@gmail.com>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-spi@vger.kernel.org
+> ---
+>  .../bindings/spi/baikal,bt1-sys-ssi.yaml      | 100 ++++++++++++++++++
+>  1 file changed, 100 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml b/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
+> new file mode 100644
+> index 000000000000..d9d3257d78f4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
+> @@ -0,0 +1,100 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/baikal,bt1-sys-ssi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Baikal-T1 System Boot SSI Controller
+> +
+> +description: |
+> +  Baikal-T1 System Controller includes a Boot SPI Controller, which is
+> +  responsible for loading chip bootup code from an external SPI flash. In order
+> +  to do this transparently from CPU point of view there is a dedicated IP block
+> +  mapping the 16MB flash to a dedicated MMIO range. The controller is based on
+> +  the DW APB SSI IP-core but equipped with very limited resources: no IRQ,
+> +  no DMA, a single native CS being necessarily connected to a 16MB SPI flash
+> +  (otherwise the system won't bootup from the flash), internal Tx/Rx FIFO of
+> +  just 8 bytes depth. Access to DW APB SSI controller registers is mutually
+> +  exclusive from normal MMIO interface and from physically mapped SPI Flash
+> +  memory. So either one or another way of using the controller functionality
+> +  can be enabled at a time.
+> +
+> +maintainers:
+> +  - Serge Semin <fancer.lancer@gmail.com>
+> +
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: baikal,bt1-sys-ssi
+> +
+> +  reg:
+> +    items:
+> +      - description: Baikal-T1 Boot Controller configuration registers
+> +      - description: Physically mapped SPI flash ROM found at CS0
+> +
+> +  reg-names:
+> +    items:
+> +      - const: config
+> +      - const: map
+> +
+> +  clocks:
+> +    description: SPI Controller reference clock source
 
-Okay, but please make it GPL-2.0-only instead of or-later. If everyone
-was attentive to licensing picking their own variations would be fine,
-but they aren't and just copy-n-paste. So there's 2 choices
-GPL-2.0-only (for converted bindings) or (GPL-2.0-only OR
-BSD-2-Clause) for new or re-licensed bindings.
+Can drop this. 
 
-Rob
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ssi_clk
+> +
+> +  num-cs:
+> +    const: 1
+> +
+> +patternProperties:
+> +  "^.*@[0-9a-f]+":
+> +    type: object
+> +    properties:
+> +      reg:
+> +        minimum: 0
+> +        maximum: 0
+> +
+> +      spi-rx-bus-width:
+> +        const: 1
+> +
+> +      spi-tx-bus-width:
+> +        const: 1
+
+What's the point of these 2 properties if they aren't required?
+
+> +
+> +unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+
+> +  - "#address-cells"
+> +  - "#size-cells"
+
+These 2 are required by spi-controller.yaml, so you can drop here.
+
+> +  - clocks
+> +
+> +examples:
+> +  - |
+> +    spi@1f040000 {
+> +      compatible = "baikal,bt1-sys-ssi";
+> +      reg = <0x1f040000 0x1000>,
+> +            <0x1c000000 0x1000000>;
+> +      reg-names = "config", "map";
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      clocks = <&ccu_sys>;
+> +      clock-names = "ssi_clk";
+> +
+> +      boot_flash: flash@0 {
+> +        compatible = "jedec,spi-nor";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        reg = <0>;
+> +
+> +        spi-max-frequency = <25000000>;
+> +      };
+> +    };
+> +...
+> -- 
+> 2.25.1
+> 
