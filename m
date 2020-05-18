@@ -2,230 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C7C1D7962
-	for <lists+linux-spi@lfdr.de>; Mon, 18 May 2020 15:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B001D79A4
+	for <lists+linux-spi@lfdr.de>; Mon, 18 May 2020 15:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbgERNLF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 May 2020 09:11:05 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:37003 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727037AbgERNLF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 May 2020 09:11:05 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1589807463; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=yesEOQOsZepZE5D6yg40ImK6nzOuLsRg9Xtx8I3BpvI=; b=HF1NLobQBhueBO9zoyoa2gc7pyaQ1WPb6VdwlNmNksQS8k+gzUbL+ty5+KXmkffl9UvQq1ff
- Wz4YE6KgpVryglJzBsnA+PvwCyni83fNHf6kt0WbtiOANU1FAlybuKeQh8GZVOYHQFyqHW+l
- eT4NSzwfb9hEnIbYNGA15Pkje+4=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ec28965.7ff19f3df148-smtp-out-n04;
- Mon, 18 May 2020 13:11:01 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 93227C433F2; Mon, 18 May 2020 13:11:00 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.11] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7EFFFC44BC3;
-        Mon, 18 May 2020 13:10:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7EFFFC44BC3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V5 6/7] spi: spi-qcom-qspi: Add interconnect support
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org, georgi.djakov@linaro.org
-References: <1588919619-21355-1-git-send-email-akashast@codeaurora.org>
- <1588919619-21355-7-git-send-email-akashast@codeaurora.org>
- <20200508185310.GF4525@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <679435ec-612e-2ff7-0edc-deac549a93ce@codeaurora.org>
-Date:   Mon, 18 May 2020 18:40:39 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726957AbgERNWP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 May 2020 09:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726854AbgERNWP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 May 2020 09:22:15 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B892C061A0C;
+        Mon, 18 May 2020 06:22:15 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id t7so4227869plr.0;
+        Mon, 18 May 2020 06:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9JqlTBOeFxsYXY8yGPgTaYilQ1ARPOh44vrjZNdkGyE=;
+        b=HszmquuAQ6p2kVYYydKaErfRawcJaiRS/7CbxuLC9KhmSnKtCqI4+G6vWNB4rgUfFh
+         aZ4VVrQKqwlOO7VBS6OcpnkTtp5dr0WvO+zaTbzgOh2OJZ4mFvIK9nh7yaS0eLQqBvEy
+         4JVyfAZTY8iDycXtAS/+2DGDMOApCrtXCh6tWcduRRy7YZ2sC1i2pb710vwLyYUIBUUQ
+         2tboclUUdVPR8YKqMcfDvt4FNYyNxrlofjhUe0WBT7nA6UxhdXhOQNbWrve8yFwQt/EX
+         mQPFEPm0UHqYhoJ+4DX5F/V4outXYRxdT1+lsmsP16S8SaFo+tMmQWPxIOC+3fx3jJX0
+         TUCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9JqlTBOeFxsYXY8yGPgTaYilQ1ARPOh44vrjZNdkGyE=;
+        b=VfxQVgjAqxbBRNvgYUauj7X1LCN2bWE55F4Hyj2GYkKpqrNzNi8Lu2WI12kurv83CR
+         BRiIxvp+oF/6CeT2WpdJb8S2YfqYfXARCxGulNkKR/BAp0wbRHeWZqrJ1Q2cgUgMkwiq
+         xYP8ptsdb1cPfpP2yUQuIcB2ZESfTMwzLpAcxiKeFQSCF92s1XfjPWO/WdM0iK3LrpHN
+         BKlzUusRGRkNXOPDQzWM1923YKo9Dbrjfhgeql3GF7giYRJCwa4JD8167JsPyvVC3SGB
+         a7W8nNZWk2J68MqzEmwjA7NvfhPAGlCKZbbZDvTeLE3AqtQGDBzv31JigR55eszUKo+2
+         VOrw==
+X-Gm-Message-State: AOAM533/bsdGcJTEMtTt0MP4au1YWdSRG34B2ycVIrGkewc9usALUPU8
+        iuKsJ1seAvP67nyZcwaeSGOTKuo6psTyOzSVFVk=
+X-Google-Smtp-Source: ABdhPJyQuof7a7R82aHDECbaNCZA+hGhIGZx2TejPySxbPfh5Al8aPTl9+HdTVytT7Yz0G/ynv4siiDFJUHd2c5xzPU=
+X-Received: by 2002:a17:902:930c:: with SMTP id bc12mr16440827plb.255.1589808134848;
+ Mon, 18 May 2020 06:22:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200508185310.GF4525@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru> <20200515104758.6934-7-Sergey.Semin@baikalelectronics.ru>
+ <20200515123422.GZ185537@smile.fi.intel.com> <20200516142030.kburieaxjg4n7c42@mobilestation>
+ <20200518110004.GW1634618@smile.fi.intel.com> <CAHp75Vf268nfwJ4Bm+A+-CsqjBSHgKVmiiON=ffUd79DCOcE8Q@mail.gmail.com>
+ <20200518123242.xoosc4pcj7heo4he@mobilestation>
+In-Reply-To: <20200518123242.xoosc4pcj7heo4he@mobilestation>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 18 May 2020 16:22:03 +0300
+Message-ID: <CAHp75Vd3RUYw45i+TZ+R1wJquYJvjR+P3-qWe=v+QBk46C_zRQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/19] spi: dw: Discard static DW DMA slave structures
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Allison Randal <allison@lohutok.net>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Matthias,
+On Mon, May 18, 2020 at 3:32 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+> On Mon, May 18, 2020 at 02:38:13PM +0300, Andy Shevchenko wrote:
+> > On Mon, May 18, 2020 at 2:01 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Sat, May 16, 2020 at 05:20:30PM +0300, Serge Semin wrote:
 
-On 5/9/2020 12:23 AM, Matthias Kaehlcke wrote:
-> On Fri, May 08, 2020 at 12:03:38PM +0530, Akash Asthana wrote:
->> Get the interconnect paths for QSPI device and vote according to the
->> current bus speed of the driver.
->>
->> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
->> ---
->> Changes in V2:
->>   - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
->>     path handle
->>   - As per Matthias comment, added error handling for icc_set_bw call
->>
->> Changes in V3:
->>   - No Change.
->>
->> Changes in V4:
->>   - As per Mark's comment move peak_bw guess as twice of avg_bw if
->>     nothing mentioned explicitly to ICC core.
->>
->> Changes in V5:
->>   - Add icc_enable/disable to power on/off call.
->>   - Save some non-zero avg/peak value to ICC core by calling geni_icc_set_bw
->>     from probe so that when resume/icc_enable is called NOC are running at
->>     some non-zero value.
->>
->>   drivers/spi/spi-qcom-qspi.c | 59 ++++++++++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 58 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
->> index 3c4f83b..6e299f4 100644
->> --- a/drivers/spi/spi-qcom-qspi.c
->> +++ b/drivers/spi/spi-qcom-qspi.c
->> @@ -2,6 +2,7 @@
->>   // Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
->>   
->>   #include <linux/clk.h>
->> +#include <linux/interconnect.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/io.h>
->>   #include <linux/module.h>
->> @@ -139,7 +140,10 @@ struct qcom_qspi {
->>   	struct device *dev;
->>   	struct clk_bulk_data *clks;
->>   	struct qspi_xfer xfer;
->> -	/* Lock to protect xfer and IRQ accessed registers */
->> +	struct icc_path *icc_path_cpu_to_qspi;
->> +	unsigned int avg_bw_cpu;
->> +	unsigned int peak_bw_cpu;
-> There is no point in having two fields, 'peak_bw_cpu' is always assigned
-> to 'avg_bw_cpu' and passed to icc_set_bw(). Just make it a single field
-> 'icc_bw_cpu'.
-Agree that we are not using peak_bw voting as of now but probably we may 
-use it in future, currently we are using only avg_bw for our need but if 
-in future power team shares some data or ask us to reduce our power 
-consumption, then with help of peak_bw we can tune ICC voting where 
-power and performance both can be met as per requirement.
+...
+
+> > > I'm not talking about stack, it's fine for me, what I'm talking about is *how*
+> > > they are being initialized. Read my message again carefully, please.
+> >
+> > And to avoid additional churn around this, the purpose is to show what
+> > Dreq number is in use actually for these transfers (that's why 0
+> > assignment is explicitly there and no counterpart Dreq filled).
 >
->> +	/* Lock to protect data accessed by IRQs */
->>   	spinlock_t lock;
->>   };
->>   
->> @@ -241,6 +245,20 @@ static int qcom_qspi_transfer_one(struct spi_master *master,
->>   		return ret;
->>   	}
->>   
->> +	/*
->> +	 * Set BW quota for CPU as driver supports FIFO mode only.
->> +	 * We don't have explicit peak requirement so keep it equal to avg_bw.
->> +	 */
->> +	ctrl->avg_bw_cpu = Bps_to_icc(speed_hz);
->> +	ctrl->peak_bw_cpu = ctrl->avg_bw_cpu;
->> +	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, ctrl->avg_bw_cpu,
->> +		ctrl->peak_bw_cpu);
->> +	if (ret) {
->> +		dev_err(ctrl->dev, "%s: ICC BW voting failed for cpu\n",
->> +			__func__);
-> the logging in this patch is inconsistent. Here the error is not printed,
-> at all, in other cases it's "<error>, ret:-42" or "<error> ret:-42".
-> Please stick to a common format (unless there is no error). My
-> suggestion would be "<error>: -42", in my perception "ret:" just adds
-> noise.
+> Sorry, but nothing persuasive so far. We still can remove their static definition
+> and explicitly assign zero or one to the src and dst request IDs on stack. I'll do
+> this in v3, since I have to send one anyway.
 
-Okay.
-
-Regards,
-
-Akash
-
->
->> +		return ret;
->> +	}
->> +
->>   	spin_lock_irqsave(&ctrl->lock, flags);
->>   
->>   	/* We are half duplex, so either rx or tx will be set */
->> @@ -458,6 +476,29 @@ static int qcom_qspi_probe(struct platform_device *pdev)
->>   	if (ret)
->>   		goto exit_probe_master_put;
->>   
->> +	ctrl->icc_path_cpu_to_qspi = devm_of_icc_get(dev, "qspi-config");
->> +	if (IS_ERR(ctrl->icc_path_cpu_to_qspi)) {
->> +		ret = PTR_ERR(ctrl->icc_path_cpu_to_qspi);
->> +		if (ret != -EPROBE_DEFER)
->> +			dev_err(dev, "Failed to get cpu path, ret:%d\n", ret);
->> +		goto exit_probe_master_put;
->> +	}
->> +	/* Set BW vote for register access */
->> +	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, Bps_to_icc(1000),
->> +				Bps_to_icc(1000));
->> +	if (ret) {
->> +		dev_err(ctrl->dev, "%s: ICC BW voting failed for cpu ret:%d\n",
->> +				__func__, ret);
->> +		goto exit_probe_master_put;
->> +	}
->> +
->> +	ret = icc_disable(ctrl->icc_path_cpu_to_qspi);
->> +	if (ret) {
->> +		dev_err(ctrl->dev, "%s: ICC disable failed for cpu ret:%d\n",
->> +				__func__, ret);
->> +		goto exit_probe_master_put;
->> +	}
->> +
->>   	ret = platform_get_irq(pdev, 0);
->>   	if (ret < 0)
->>   		goto exit_probe_master_put;
->> @@ -511,9 +552,17 @@ static int __maybe_unused qcom_qspi_runtime_suspend(struct device *dev)
->>   {
->>   	struct spi_master *master = dev_get_drvdata(dev);
->>   	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
->> +	int ret;
->>   
->>   	clk_bulk_disable_unprepare(QSPI_NUM_CLKS, ctrl->clks);
->>   
->> +	ret = icc_disable(ctrl->icc_path_cpu_to_qspi);
->> +	if (ret) {
->> +		dev_err_ratelimited(ctrl->dev, "%s: ICC disable failed for cpu ret:%d\n",
->> +			__func__, ret);
->> +		return ret;
->> +	}
->> +
->>   	return 0;
->>   }
->>   
->> @@ -521,6 +570,14 @@ static int __maybe_unused qcom_qspi_runtime_resume(struct device *dev)
->>   {
->>   	struct spi_master *master = dev_get_drvdata(dev);
->>   	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
->> +	int ret;
->> +
->> +	ret = icc_enable(ctrl->icc_path_cpu_to_qspi);
->> +	if (ret) {
->> +		dev_err_ratelimited(ctrl->dev, "%s: ICC enable failed for cpu ret:%d\n",
->> +			__func__, ret);
->> +		return ret;
->> +	}
->>   
->>   	return clk_bulk_prepare_enable(QSPI_NUM_CLKS, ctrl->clks);
->>   }
+Right, I'm completely fine with it, thanks!
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+With Best Regards,
+Andy Shevchenko
