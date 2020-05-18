@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DFD1D7623
+	by mail.lfdr.de (Postfix) with ESMTP id E7E981D7624
 	for <lists+linux-spi@lfdr.de>; Mon, 18 May 2020 13:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727825AbgERLKA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 May 2020 07:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S1726739AbgERLKF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 May 2020 07:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726739AbgERLJ7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 May 2020 07:09:59 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D6EC061A0C;
-        Mon, 18 May 2020 04:09:58 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id 5so1766111pjd.0;
-        Mon, 18 May 2020 04:09:58 -0700 (PDT)
+        with ESMTP id S1726448AbgERLKF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 May 2020 07:10:05 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01811C061A0C;
+        Mon, 18 May 2020 04:10:04 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id y18so4788708pfl.9;
+        Mon, 18 May 2020 04:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MtXq2QWDOoN0CBKSeH60c2tJASyOu/uu0I8Lzq6RPtM=;
-        b=dHoYOYK5C7B8o27fpfv0M/0F5nWFg9K5JTaF8DiGokgF4H7Hk3ORmVZhH3ivC7ze8u
-         9GAjIx2MoqagVgcDWJ6W2sYD+coutMesqQ/4GpWyxLl2zddTgTzrnncEKk+loHjJTcGw
-         L/Y5RJWiKplc++xkLT0gU1mfy/6xT5V5OLziXZkcymlb+cpNv+KfwdLRHdhzcp82TUg0
-         lOPL9DG2zyNY9DLYMuASfG4YUn+ECzfxEsqLPrrHlKxMpfMU/FbOrPf6OE3KO7bv1FZE
-         TZUTDKw68lNWMqNX6eD7G1Sn+daagSzcGiZIkyXMJGUOonAgYk7SqqajzgfcMjb26RC9
-         2d3w==
+        bh=I1T/MSXgatC2plQLGmWEDShQlFTEnK6nXGcY9iM2hHM=;
+        b=iLYajPKb4u2/NWaM0uZuIIE0Zgslm6lKb1y7vbs2KEVZmA5magKDWvcJaUjMVGG+Hq
+         HtA7x5myFIX4Z4h80DOZFCe/VoYeirGoypijZ4/g7WZ7lvx1ubsUYNofLiJhE1wIPAhS
+         3vih8uOhCFix1mDfEuK9yq+iHbVagLjCIBoienMxcwEIl1Lc8SaBOHhbQCmo6UYA0X2K
+         nPPIsaiO4+H/UuvWhNm1AEtIIELfckw275sb9XmSEP5HNnY39X5zXHA34nbxGxOeIH5p
+         97482nu6JWh6jXjVTCm8W087b5N2UPqd28djYacnRa8xQf8+F9jwruj10kyiX0vGDrp9
+         ucag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=MtXq2QWDOoN0CBKSeH60c2tJASyOu/uu0I8Lzq6RPtM=;
-        b=qd/kp793nn+on8Bv2ky53UEaIrjXA9lbypHebngMXy2h6JC2ydqNNYGPOJXNpfwoYe
-         YODy5aN1U0JJyizasRjL8r45JaKMMZ2JFdIwo58zYKSlmVDFGwtpK3Zge1vo+Seo0SKf
-         n1ovV2rg4hrPXjlFuRGHPHy9IRqdCNr1qbhL6ZheuD+1rJbLnOpPnmp1K2+KWdARrVZE
-         ebwMZTwb/mZUpX6IRIKAvPA4rddrCgIrJsbHVP1Ye/npwRKTlh4gVzbZ+tjzluV8ntFf
-         LYgaw9XVVqbEoK4BGn9NqTTAzUelEdapix5JAMaa0qb5syi+aWNaNg2P+29LjpFGRDIs
-         7d7g==
-X-Gm-Message-State: AOAM530bNO9SCIQF4Br5koNmNq3IhCjWeUWptTjLFQaDupk/xTvnMzXS
-        0ALaRfC/cFHLwlRURoxrqaQ=
-X-Google-Smtp-Source: ABdhPJwzHEtadDk8lKvsMZLyWx4METgRLJ9kcXb9N5uz/umBI8IRQjS4U+6uHzPcAIXwk0xtRO1fxg==
-X-Received: by 2002:a17:902:b187:: with SMTP id s7mr16222773plr.60.1589800198488;
-        Mon, 18 May 2020 04:09:58 -0700 (PDT)
+        bh=I1T/MSXgatC2plQLGmWEDShQlFTEnK6nXGcY9iM2hHM=;
+        b=KIGcavmUFM8YEyR9beWNvTowW7/LIBOe1g24van2xvvkjqstRazZFj+dJ1YtWH6svE
+         e5qMDjlG3gJikSsiFbglYizP6hsbPo/Vo5/Z8cXPsiEjMfruhaOaBDqmQ+6mDvOaMr2i
+         xxhI0yzYRpB5r4roX+oXZV40CUdipxxi1Z4aMbqw9uQfqYJhBST+26MZ1aTxViFbusVs
+         dCT0K+q5cdY+0DGpwLp2uF1FRHkUEHoMCJn1/Dw5GH7aKAD11+FZHOxCX1eFj1XqyuDr
+         8Jb3i66i1iDXBZZKjIYUORn7RfaCZdMNyxbf3hGdEzqb+eY01dVl8v2MRdt/UDD32G6Z
+         meWA==
+X-Gm-Message-State: AOAM530WmUDWLnaPay+CCFL92i3M4WdDrxSmUB3E1xPD6xKL5j8Ogr4+
+        lL3OwjM8FPW6fzsWq+Av39s=
+X-Google-Smtp-Source: ABdhPJzTp8verXSiF/j8yXN0XwsCs3i8VyAOtQYBHq+u7MVM7vRjm0APUV2Qcp5rZcERI/eLfvhwIg==
+X-Received: by 2002:a63:5f41:: with SMTP id t62mr14754996pgb.252.1589800203620;
+        Mon, 18 May 2020 04:10:03 -0700 (PDT)
 Received: from fmin-OptiPlex-7060.nreal.work ([103.206.190.146])
-        by smtp.gmail.com with ESMTPSA id a15sm8290630pju.3.2020.05.18.04.09.53
+        by smtp.gmail.com with ESMTPSA id a15sm8290630pju.3.2020.05.18.04.09.58
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 May 2020 04:09:58 -0700 (PDT)
+        Mon, 18 May 2020 04:10:03 -0700 (PDT)
 From:   dillon.minfei@gmail.com
 To:     robh+dt@kernel.org, p.zabel@pengutronix.de,
         mcoquelin.stm32@gmail.com, broonie@kernel.org,
@@ -57,9 +57,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
         dillon min <dillon.minfei@gmail.com>
-Subject: [PATCH v4 5/8] dt-bindings: display: panel: Add ilitek ili9341 panel bindings
-Date:   Mon, 18 May 2020 19:09:22 +0800
-Message-Id: <1589800165-3271-6-git-send-email-dillon.minfei@gmail.com>
+Subject: [PATCH v4 6/8] ARM: dts: stm32: enable ltdc binding with ili9341 on stm32429-disco board
+Date:   Mon, 18 May 2020 19:09:23 +0800
+Message-Id: <1589800165-3271-7-git-send-email-dillon.minfei@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1589800165-3271-1-git-send-email-dillon.minfei@gmail.com>
 References: <1589800165-3271-1-git-send-email-dillon.minfei@gmail.com>
@@ -70,89 +70,76 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: dillon min <dillon.minfei@gmail.com>
 
-Add documentation for "ilitek,ili9341" panel.
+Enable the ltdc & ili9341 on stm32429-disco board.
 
 Signed-off-by: dillon min <dillon.minfei@gmail.com>
 ---
- .../bindings/display/panel/ilitek,ili9341.yaml     | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
+ arch/arm/boot/dts/stm32f429-disco.dts | 48 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
-new file mode 100644
-index 0000000..2172f88
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/panel/ilitek,ili9341.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
+index 30c0f67..365d16f 100644
+--- a/arch/arm/boot/dts/stm32f429-disco.dts
++++ b/arch/arm/boot/dts/stm32f429-disco.dts
+@@ -49,6 +49,8 @@
+ #include "stm32f429.dtsi"
+ #include "stm32f429-pinctrl.dtsi"
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/gpio/gpio.h>
+ 
+ / {
+ 	model = "STMicroelectronics STM32F429i-DISCO board";
+@@ -127,3 +129,49 @@
+ 	pinctrl-names = "default";
+ 	status = "okay";
+ };
 +
-+title: Ilitek-9341 Display Panel
++&ltdc {
++	status = "okay";
++	pinctrl-0 = <&ltdc_pins_f429_disco>;
++	pinctrl-names = "default";
 +
-+maintainers:
-+  - Dillon Min <dillon.minfei@gmail.com>
++	port {
++		ltdc_out_rgb: endpoint {
++			remote-endpoint = <&panel_in_rgb>;
++		};
++	};
++};
 +
-+description: |
-+  Ilitek ILI9341 TFT panel driver with SPI control bus
-+  This is a driver for 320x240 TFT panels, accepting a rgb input
-+  streams with 16 bits or 18 bits.
++&spi5 {
++	status = "okay";
++	pinctrl-0 = <&spi5_pins>;
++	pinctrl-names = "default";
++	#address-cells = <1>;
++	#size-cells = <0>;
++	cs-gpios = <&gpioc 1 GPIO_ACTIVE_LOW>, <&gpioc 2 GPIO_ACTIVE_LOW>;
 +
-+allOf:
-+  - $ref: panel-common.yaml#
++	l3gd20: l3gd20@0 {
++		compatible = "st,l3gd20-gyro";
++		spi-max-frequency = <10000000>;
++		st,drdy-int-pin = <2>;
++		interrupt-parent = <&gpioa>;
++		interrupts = <1 IRQ_TYPE_EDGE_RISING>,
++				<2 IRQ_TYPE_EDGE_RISING>;
++		reg = <0>;
++		status = "okay";
++	};
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          # ili9341 240*320 Color on stm32f429-disco board
-+        - st,sf-tc240t-9370-t
-+      - const: ilitek,ili9341
-+
-+  reg: true
-+
-+  dc-gpios:
-+    maxItems: 1
-+    description: Display data/command selection (D/CX)
-+
-+  spi-3wire: true
-+
-+  spi-max-frequency:
-+    const: 10000000
-+
-+  port: true
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - dc-gpios
-+  - port
-+
-+examples:
-+  - |+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        panel: display@0 {
-+                 compatible = "st,sf-tc240t-9370-t",
-+                              "ilitek,ili9341";
-+                 reg = <0>;
-+                 spi-3wire;
-+                 spi-max-frequency = <10000000>;
-+                 dc-gpios = <&gpiod 13 0>;
-+                 port {
-+                         panel_in: endpoint {
-+                           remote-endpoint = <&display_out>;
-+                      };
-+                 };
-+             };
-+        };
-+...
-+
++	display: display@1{
++		/* Connect panel-ilitek-9341 to ltdc */
++		compatible = "st,sf-tc240t-9370-t";
++		reg = <1>;
++		spi-3wire;
++		spi-max-frequency = <10000000>;
++		dc-gpios = <&gpiod 13 0>;
++		port {
++			panel_in_rgb: endpoint {
++			remote-endpoint = <&ltdc_out_rgb>;
++			};
++		};
++	};
++};
 -- 
 2.7.4
 
