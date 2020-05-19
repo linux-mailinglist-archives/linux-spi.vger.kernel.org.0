@@ -2,213 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A69611D99A5
-	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 16:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6899E1D99DF
+	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 16:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729118AbgESO2k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 May 2020 10:28:40 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:43712 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728925AbgESO2j (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 10:28:39 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04JESNbM005455;
-        Tue, 19 May 2020 09:28:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589898503;
-        bh=kv17vzIbbuAt+RZqE4vM8KTFUmvobKYZHpLC7UN2u9I=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Hd2gw32ldi3xidXRZMIflFsn7cIPD3ZcxkH118Vyuenxamreavwl4f6BqTmvLoYuL
-         doTtA8lXKf1HRNtVkOGXrVbCmPwqSG79YH0rZLTF8HxHeKA4LwVb97jJfiHmYK1R2k
-         UTeWNrc/SVd67GnHYxASQ4G7O8Du6nu9zqh5n46E=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04JESNnk083849
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 19 May 2020 09:28:23 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 19
- May 2020 09:28:23 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 19 May 2020 09:28:23 -0500
-Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04JEQgjb008313;
-        Tue, 19 May 2020 09:28:18 -0500
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Pratyush Yadav <p.yadav@ti.com>, Sekhar Nori <nsekhar@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH v5 19/19] mtd: spi-nor: micron-st: allow using MT35XU512ABA in Octal DTR mode
-Date:   Tue, 19 May 2020 19:56:41 +0530
-Message-ID: <20200519142642.24131-20-p.yadav@ti.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200519142642.24131-1-p.yadav@ti.com>
-References: <20200519142642.24131-1-p.yadav@ti.com>
+        id S1729007AbgESOd6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 May 2020 10:33:58 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:51753 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgESOd6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 10:33:58 -0400
+X-Originating-IP: 86.210.146.109
+Received: from windsurf.home (lfbn-tou-1-915-109.w86-210.abo.wanadoo.fr [86.210.146.109])
+        (Authenticated sender: thomas.petazzoni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id A4C3F240008;
+        Tue, 19 May 2020 14:33:55 +0000 (UTC)
+Date:   Tue, 19 May 2020 16:33:53 +0200
+From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Jan =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>
+Subject: High CPU load when using MAX14830 SPI UART controller
+Message-ID: <20200519163353.20c03286@windsurf.home>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Since this flash doesn't have a Profile 1.0 table, the Octal DTR
-capabilities are enabled in the post SFDP fixup, along with the 8D-8D-8D
-fast read settings.
+Hello,
 
-Enable Octal DTR mode with 20 dummy cycles to allow running at the
-maximum supported frequency of 200Mhz.
+I have an ARM platform based on the Microchip SAMA5D3 processor
+(single Cortex-A5 at 536 Mhz), which has a MAX14830 (datasheet at [0],
+driver at drivers/tty/serial/max310x.c) UART controller on SPI. I'm
+running an unmodified Linux 5.6 kernel. The SPI controller driver for
+that platform is drivers/spi/spi-atmel.c.
 
-The flash supports the soft reset sequence. So, add the flag in the
-flash's info.
+[0] https://datasheets.maximintegrated.com/en/ds/MAX14830.pdf
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
----
- drivers/mtd/spi-nor/micron-st.c | 112 +++++++++++++++++++++++++++++++-
- 1 file changed, 111 insertions(+), 1 deletion(-)
+I have a remote machine sending data at 57600 bps over one of the four
+UARTs provided by the MAX14830. The data is sent 20 bytes at a time,
+every 16 ms. This means 1250 bytes per second total, i.e a pretty
+ridiculous amount of data being transferred.
 
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index 3dca5b9af3b6..3414c44a5c96 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -8,10 +8,120 @@
- 
- #include "core.h"
- 
-+#define SPINOR_OP_MT_DTR_RD	0xfd	/* Fast Read opcode in DTR mode */
-+#define SPINOR_OP_MT_RD_ANY_REG	0x85	/* Read volatile register */
-+#define SPINOR_OP_MT_WR_ANY_REG	0x81	/* Write volatile register */
-+#define SPINOR_REG_MT_CFR0V	0x00	/* For setting octal DTR mode */
-+#define SPINOR_REG_MT_CFR1V	0x01	/* For setting dummy cycles */
-+#define SPINOR_MT_DTR_NO_DQS	0xc7	/* Enable Octal DTR without DQS. */
-+#define SPINOR_MT_EXSPI		0xff	/* Enable Extended SPI (default) */
-+
-+static int spi_nor_micron_octal_dtr_enable(struct spi_nor *nor, bool enable)
-+{
-+	struct spi_mem_op op;
-+	u8 *buf = nor->bouncebuf;
-+	u8 addr_width;
-+	int ret;
-+
-+	if (enable)
-+		addr_width = 3;
-+	else
-+		addr_width = 4;
-+
-+	ret = spi_nor_write_enable(nor);
-+	if (ret)
-+		return ret;
-+
-+	if (enable)
-+		*buf = SPINOR_MT_DTR_NO_DQS;
-+	else
-+		*buf = SPINOR_MT_EXSPI;
-+	op = (struct spi_mem_op)
-+		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_MT_WR_ANY_REG, 1),
-+			   SPI_MEM_OP_ADDR(addr_width, SPINOR_REG_MT_CFR0V, 1),
-+			   SPI_MEM_OP_NO_DUMMY,
-+			   SPI_MEM_OP_DATA_OUT(1, buf, 1));
-+
-+	if (!enable)
-+		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
-+
-+	ret = spi_mem_exec_op(nor->spimem, &op);
-+	if (ret) {
-+		dev_err(nor->dev, "Failed to enable octal DTR mode\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mt35xu512aba_setup(struct spi_nor *nor,
-+			      const struct spi_nor_hwcaps *hwcaps)
-+{
-+	struct spi_mem_op op;
-+	u8 *buf = nor->bouncebuf;
-+	u8 addr_width = 3;
-+	int ret;
-+
-+	if (!nor->spimem) {
-+		dev_err(nor->dev,
-+			"operation not supported for non-spimem drivers\n");
-+		return -ENOTSUPP;
-+	}
-+
-+	/* Set dummy cycles for Fast Read to the default of 20. */
-+	ret = spi_nor_write_enable(nor);
-+	if (ret)
-+		return ret;
-+
-+	*buf = 20;
-+	op = (struct spi_mem_op)
-+		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_MT_WR_ANY_REG, 1),
-+			   SPI_MEM_OP_ADDR(addr_width, SPINOR_REG_MT_CFR1V, 1),
-+			   SPI_MEM_OP_NO_DUMMY,
-+			   SPI_MEM_OP_DATA_OUT(1, buf, 1));
-+	ret = spi_mem_exec_op(nor->spimem, &op);
-+	if (ret)
-+		return ret;
-+
-+	ret = spi_nor_wait_till_ready(nor);
-+	if (ret)
-+		return ret;
-+
-+
-+	return spi_nor_default_setup(nor, hwcaps);
-+}
-+
-+static void mt35xu512aba_default_init(struct spi_nor *nor)
-+{
-+	nor->params->octal_dtr_enable = spi_nor_micron_octal_dtr_enable;
-+	nor->params->setup = mt35xu512aba_setup;
-+}
-+
-+static void mt35xu512aba_post_sfdp_fixup(struct spi_nor *nor)
-+{
-+	/* Set the Fast Read settings. */
-+	nor->params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
-+	spi_nor_set_read_settings(&nor->params->reads[SNOR_CMD_READ_8_8_8_DTR],
-+				  0, 20, SPINOR_OP_MT_DTR_RD,
-+				  SNOR_PROTO_8_8_8_DTR);
-+
-+	nor->params->hwcaps.mask |= SNOR_HWCAPS_PP_8_8_8_DTR;
-+
-+	nor->cmd_ext_type = SPI_NOR_EXT_REPEAT;
-+	nor->params->rdsr_dummy = 8;
-+	nor->params->rdsr_addr_nbytes = 0;
-+}
-+
-+static struct spi_nor_fixups mt35xu512aba_fixups = {
-+	.default_init = mt35xu512aba_default_init,
-+	.post_sfdp = mt35xu512aba_post_sfdp_fixup,
-+};
-+
- static const struct flash_info micron_parts[] = {
- 	{ "mt35xu512aba", INFO(0x2c5b1a, 0, 128 * 1024, 512,
- 			       SECT_4K | USE_FSR | SPI_NOR_OCTAL_READ |
--			       SPI_NOR_4B_OPCODES) },
-+			       SPI_NOR_4B_OPCODES | SPI_NOR_OCTAL_DTR_READ)
-+		.fixups = &mt35xu512aba_fixups},
- 	{ "mt35xu02g", INFO(0x2c5b1c, 0, 128 * 1024, 2048,
- 			    SECT_4K | USE_FSR | SPI_NOR_OCTAL_READ |
- 			    SPI_NOR_4B_OPCODES) },
+But interestingly, this simple data transfer causes a constant 32% CPU
+load on the SAMA5D3 in the kernel side. top shows:
+
+Mem: 38204K used, 208404K free, 156K shrd, 4672K buff, 14660K cached
+CPU:   0% usr  32% sys   0% nic  66% idle   0% io   0% irq   0% sirq
+
+So, 32% of the time spent in the "system". More precisely, it shows:
+
+  PID  PPID USER     STAT   VSZ %VSZ %CPU COMMAND
+   80     2 root     SW       0   0%  21% [irq/50-spi1.3]
+   79     2 root     SW       0   0%   5% [spi1]
+  174     2 root     IW       0   0%   5% [kworker/u2:2-ev]
+   82     2 root     IW       0   0%   2% [kworker/0:2-eve]
+  256   243 root     S     1356   1%   1% ./progread /dev/ttyMAX0
+
+"progread" is the program reading the data out of the UART (it does
+nothing with it, except check it is valid). irq/50-spi1.3 is the
+threaded IRQ of the MAX14830 driver. spi1 is I assume the kthread of
+the SPI subsystem.
+
+With the sending of 20 bytes data frames every 16 ms, it means data is
+send ~62.5 per seconds.
+
+Looking at /proc/interrupts, I get ~260 interrupts per second on the
+MAX14830, which means that the "batch reading" implemented in
+2b4bac48c10848ccffd484e7cd025dc085c1bd32 is effective but not to the
+point where I have a single interrupt per received frame. Every
+second, I'm also getting 7500-7700 interrupts from the SPI controller
+of the SAMA5.
+
+"perf top" is not extremely helpful:
+
+   PerfTop:    1097 irqs/sec  kernel:90.0%  exact:  0.0% [4000Hz cycles],  (all, 1 CPU)
+-------------------------------------------------------------------------------
+
+    40.10%  [kernel]       [k] finish_task_switch
+     8.52%  [kernel]       [k] atmel_spi_transfer_one_message
+     3.92%  [kernel]       [k] schedule_timeout
+     2.41%  [kernel]       [k] __softirqentry_text_start
+     2.32%  [kernel]       [k] __sched_text_start
+     2.26%  [kernel]       [k] arch_cpu_idle
+     1.92%  [kernel]       [k] __spi_pump_messages
+     1.79%  [kernel]       [k] spi_finalize_current_message
+     1.62%  [kernel]       [k] __spi_validate
+     1.29%  [kernel]       [k] schedule
+     0.84%  [kernel]       [k] _regmap_raw_read
+     0.83%  [kernel]       [k] complete
+     0.76%  [kernel]       [k] __spi_sync
+     0.76%  [kernel]       [k] __ksize
+     0.65%  [kernel]       [k] _regmap_read
+     0.64%  libc-2.30.so   [.] strcmp
+     0.60%  [kernel]       [k] mmioset
+     0.59%  [kernel]       [k] del_timer.part.0
+     0.58%  [kernel]       [k] wait_for_completion_timeout
+     0.57%  [kernel]       [k] regmap_readable
+
+perf record/report gives:
+
+    19.42%  spi1             [kernel.kallsyms]  [k] finish_task_switch
+    17.42%  kworker/u2:1-ev  [kernel.kallsyms]  [k] finish_task_switch
+     9.22%  irq/50-spi1.3    [kernel.kallsyms]  [k] atmel_spi_transfer_one_message
+     7.76%  irq/50-spi1.3    [kernel.kallsyms]  [k] finish_task_switch
+     4.15%  irq/50-spi1.3    [kernel.kallsyms]  [k] schedule_timeout
+     4.15%  kworker/0:2-eve  [kernel.kallsyms]  [k] finish_task_switch
+     2.25%  swapper          [kernel.kallsyms]  [k] arch_cpu_idle
+     1.94%  irq/50-spi1.3    [kernel.kallsyms]  [k] __spi_pump_messages
+     1.84%  irq/50-spi1.3    [kernel.kallsyms]  [k] __spi_validate
+     1.78%  irq/50-spi1.3    [kernel.kallsyms]  [k] spi_finalize_current_message
+
+Does the very high CPU time spent in finish_task_switch() simply means
+that we're scheduling too much ?
+
+Any hints on how to improve this situation ?
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-2.26.2
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
