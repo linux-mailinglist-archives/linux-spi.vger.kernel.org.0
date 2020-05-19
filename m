@@ -2,105 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6097A1D944F
-	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 12:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468771D9462
+	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 12:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728475AbgESK0D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 May 2020 06:26:03 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:14134 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726412AbgESK0D (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 06:26:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1589883962; x=1621419962;
-  h=references:from:to:cc:subject:in-reply-to:date:
-   message-id:mime-version;
-  bh=rt0ifteO2Q6DmuLLDH31oRBTPIJqimPHw4gnMaEY94M=;
-  b=XX3ksfK61swSxk7LMN3CUZrvaY6rZn9wOcizo2zbnqLs9yukDaEf9ONp
-   yzrCK3Qu9CchLM1oBUch0nYb7VMyYZJm64vxiYI1D6MOIZN7/O/1yl81e
-   KR4unUuxgKF1AwO6gULYXIuQULDl8SnsA9yLj4FBCW/0myiYOruB/7MC3
-   IS7u46vv4pbfNtficjITtI+x4jqpTuXT2Cq6+vgoAvD/zfWj7y8pjvqad
-   aywIi6QVlht4B9CiZyPAtMrBNHZykFQaNQzGh5YhItlPwQMCulsp2O0Rf
-   yemIRy44DuKFCdWvedKMGV/GYh7iDLEDB4m2Km+eRrHH7kHLuWvUJqU4V
-   A==;
-IronPort-SDR: LdawkTFAm4n+RjRpzDLC2tUtB0nKBzLCfIAS+HLACuFeo7EkFgeCPl1TGx7GUd8jVy5JPcJRoq
- h/N3cUP2rlzaCgREWQ6bhD/rT/bYVm0EJNb+aFMriMbVsT4nhQUVhsjy7FgtejdcKvlJvxaTOm
- nTA8KGU9DjkqTLHL12uyrW/QbJk+y8HTtedTDOG8Lqgv9CweSedF6YVOR6HMoBdmlw3T4fGhjq
- 3Z5EcZAamvESE2WYI0ThqVgKztDp32U/40OiaTIh/vOaxaI6hotPkDE0d/m0S4Ln3AImXxlhYz
- bY4=
-X-IronPort-AV: E=Sophos;i="5.73,409,1583218800"; 
-   d="scan'208";a="77149472"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 May 2020 03:26:02 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 19 May 2020 03:26:03 -0700
-Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Tue, 19 May 2020 03:26:01 -0700
-References: <20200513140031.25633-1-lars.povlsen@microchip.com> <20200513140031.25633-2-lars.povlsen@microchip.com> <CAHp75VcA-oDboufsDNx1ZR4+HBwYt7LdLOpbfs7-bM9ByucKJA@mail.gmail.com>
-From:   Lars Povlsen <lars.povlsen@microchip.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Lars Povlsen <lars.povlsen@microchip.com>,
-        Mark Brown <broonie@kernel.org>, SoC Team <soc@kernel.org>,
-        "Microchip Linux Driver Support" <UNGLinuxDriver@microchip.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH 01/10] spi: dw: Add support for polled operation via no IRQ specified in DT
-In-Reply-To: <CAHp75VcA-oDboufsDNx1ZR4+HBwYt7LdLOpbfs7-bM9ByucKJA@mail.gmail.com>
-Date:   Tue, 19 May 2020 12:25:58 +0200
-Message-ID: <87a724p6fd.fsf@soft-dev15.microsemi.net>
+        id S1728616AbgESKcv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 May 2020 06:32:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43650 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726412AbgESKcu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 19 May 2020 06:32:50 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 34D6E206BE;
+        Tue, 19 May 2020 10:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589884369;
+        bh=APWdI/sKggcPUHM2EoqZ+F9oniCqmilI7u/Eu8rmUKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bb28hbkXTcnwyAr3AkQbQd7zAtdLWJXiwF/dtuByEyX/N6X+HswiTH+JVTDGBxke9
+         PRaBWt7ep0OcLP0hk1XvvEZBbrGuzZtn0CFZ5SqDVCMU8CkMuKgVJvzlMPWmK1ng2s
+         mB1xyHCzSfVJvy6NpiLF0vKH/DThsK16CNtbWd+U=
+Date:   Tue, 19 May 2020 11:32:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Message-ID: <20200519103247.GA4611@sirena.org.uk>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+ <20200508113751.GD4820@sirena.org.uk>
+ <20200510002039.hwahqasnnceowskz@mobilestation>
+ <20200511212506.GA23852@sirena.org.uk>
+ <20200518000542.ohtpem3lo2pbixbu@mobilestation>
+ <20200518151946.GH8699@sirena.org.uk>
+ <20200518211727.jrzo6tn7slqzxoyl@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
+Content-Disposition: inline
+In-Reply-To: <20200518211727.jrzo6tn7slqzxoyl@mobilestation>
+X-Cookie: Do not write below this line.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-Andy Shevchenko writes:
+--KsGdsel6WgEHnImy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> On Wed, May 13, 2020 at 5:03 PM Lars Povlsen <lars.povlsen@microchip.com> wrote:
->>
->> With this change a SPI controller can be added without having a IRQ
->> associated, and causing all transfers to be polled. For SPI controllers
->> without DMA, this can significantly improve performance by less
->> interrupt handling overhead.
->
-> ...
->
->> +#define VALID_IRQ(i) (i >= 0)
->
-> drivers/rtc/rtc-cmos.c:95:#define is_valid_irq(n)               ((n) > 0)
->
-> Candidate to be in include/linux/irq.h ?
->
-> ...
->
->> +       if (VALID_IRQ(dws->irq))
->> +               free_irq(dws->irq, master);
->
-> Isn't free_irq() aware of invalid ones (not found IRQ in the tree or
-> any other backend container won't do anything)?
->
->
->>  err_free_master:
->>         spi_controller_put(master);
->>         return ret;
->> --
->> 2.26.2
+On Tue, May 19, 2020 at 12:17:27AM +0300, Serge Semin wrote:
 
-I'll rework this with Serge.
+> Here is what we need to do to perform the EEPROM-read operation:
+> 1) Enable EEPROM-read mode.
+> 2) Initialize a corresponding registers with a number of SPI transfer words
+>    (with bits-per-word taken into account) to read.
+> 3) Push opcode + address + dummy bytes into the Tx FIFO. When it's done and
+>    the Tx FIFO is empty, the controller will proceed with read operations by
+>    pushing zeros (or ones, don't remember what level it's by default) to MOSI
+>    and pulling data from MISO into the RX FIFO.
+> 4) Keep up with getting data from the Rx FIFO so one wouldn't get overflown.
 
-Thank you!
+> Regarding programming write each time. Well, it's up to the driver implementation.
+> If opcode, address, dummy bytes and number of words to read are the same as before,
+> then re-programming isn't required.
 
--- 
-Lars Povlsen,
-Microchip
+Ah, nice.  This should be useful for far more than just flash - most
+register reads will also be able to take advantage of this, they follow
+a similar write then read pattern.
+
+--KsGdsel6WgEHnImy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7DtcwACgkQJNaLcl1U
+h9BprQf/X3CrvqOEDZw4gFuSifMWeN7xtcsAEMLPFliUUq9vUY170vk9WBvEWXcU
+8+KvebwsMCXWGekf3ySdQN5xQlLrIZ86/mMpntqTMg2Gsvxm7TsoCyW+K0JO/6Ef
+2I+nIT+t92zUZhPbyzk7kmeKmC/Jsgg9zwHQpyN0+XjQlCUy0lCYhdR/P1y/5qsV
+By+n3t6C5Vi6Dnz2wrYL+gqoH6quWA/wGQe3o0xtFyZuQIVgKogTOrgFOFW8fSBK
+NUFEEZjIMctowJ27+FDhh5NXoJXqDUUkbzKOYGEf2Nja+Kk47clbgF/tDwfMlX/3
+2duleovaghp6/F5OsQSe05zjfEutIg==
+=0tWj
+-----END PGP SIGNATURE-----
+
+--KsGdsel6WgEHnImy--
