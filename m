@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE911D999D
-	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 16:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FE81D999F
+	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 16:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729278AbgESO2S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 May 2020 10:28:18 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:59218 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729057AbgESO2S (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 10:28:18 -0400
+        id S1729290AbgESO2V (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 May 2020 10:28:21 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:43666 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729057AbgESO2U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 10:28:20 -0400
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04JES3kH075360;
-        Tue, 19 May 2020 09:28:03 -0500
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04JES852005391;
+        Tue, 19 May 2020 09:28:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589898483;
-        bh=ZfUbh82N6QxYzzf9GICZYBFd0OVcUih5gJ0g44AGOsU=;
+        s=ti-com-17Q1; t=1589898488;
+        bh=70FeLQTtJkyVxVIkf8YVfc8xOxYWAvnHPgHRRqee0UU=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=wzwkFkO6GSt+aVHpELAqfFDjKKTrIhPqxIIz8ukKSEojI64RHuUegq6Inp9vwkfvr
-         wiA+ojwUBtJQBE2mEeVekMnEV7RGuezf1LRJOddDdCI73Db3CjqWS+ioYobEhAReXh
-         ZbiTKhqoy9QiSo9l8GYfRkNWAPXAmXhF4flUc5iI=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04JES3qK082704
+        b=jmB5xyhOOK+ovbliuLlg19+s6/dkkq+DnPTORUzo2HDGwo+2VorZInvi1B4F0hIjS
+         ZGm71XOQJuP3nRcmaF2UwbbN+RA/BG4PO/3YVL9zkB529qEwe8W2ipaN9yEh7cUlER
+         HQ/nPATbj5oiuo51XbVUw9/J1oK+gPIajZLxMJmk=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04JES8cK083364
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 19 May 2020 09:28:03 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 19 May 2020 09:28:08 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 19
- May 2020 09:28:03 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 09:28:08 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 19 May 2020 09:28:03 -0500
+ Frontend Transport; Tue, 19 May 2020 09:28:08 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04JEQgjX008313;
-        Tue, 19 May 2020 09:27:58 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04JEQgjY008313;
+        Tue, 19 May 2020 09:28:03 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -53,9 +53,9 @@ To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
 CC:     Pratyush Yadav <p.yadav@ti.com>, Sekhar Nori <nsekhar@ti.com>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH v5 15/19] mtd: spi-nor: core: perform a Soft Reset on shutdown
-Date:   Tue, 19 May 2020 19:56:37 +0530
-Message-ID: <20200519142642.24131-16-p.yadav@ti.com>
+Subject: [PATCH v5 16/19] mtd: spi-nor: core: disable Octal DTR mode on suspend.
+Date:   Tue, 19 May 2020 19:56:38 +0530
+Message-ID: <20200519142642.24131-17-p.yadav@ti.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200519142642.24131-1-p.yadav@ti.com>
 References: <20200519142642.24131-1-p.yadav@ti.com>
@@ -68,98 +68,49 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Perform a Soft Reset on shutdown on flashes that support it so that the
-flash can be reset to its initial state and any configurations made by
-spi-nor (given that they're only done in volatile registers) will be
-reset. This will hand back the flash in pristine state for any further
-operations on it.
+On resume, the init procedure will be run that will re-enable it.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/core.c  | 42 +++++++++++++++++++++++++++++++++++++
- include/linux/mtd/spi-nor.h |  2 ++
- 2 files changed, 44 insertions(+)
+ drivers/mtd/spi-nor/core.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index a94376344be5..68559386f6f8 100644
+index 68559386f6f8..63ab588299f4 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
-@@ -40,6 +40,9 @@
- 
- #define SPI_NOR_MAX_ADDR_WIDTH	4
- 
-+#define SPI_NOR_SRST_SLEEP_MIN 200
-+#define SPI_NOR_SRST_SLEEP_MAX 400
-+
- /**
-  * spi_nor_get_cmd_ext() - Get the command opcode extension based on the
-  *			   extension type.
-@@ -3201,6 +3204,41 @@ static int spi_nor_init(struct spi_nor *nor)
- 	return 0;
+@@ -3239,6 +3239,23 @@ static void spi_nor_soft_reset(struct spi_nor *nor)
+ 	usleep_range(SPI_NOR_SRST_SLEEP_MIN, SPI_NOR_SRST_SLEEP_MAX);
  }
  
-+static void spi_nor_soft_reset(struct spi_nor *nor)
++/* mtd suspend handler */
++static int spi_nor_suspend(struct mtd_info *mtd)
 +{
-+	struct spi_mem_op op;
++	struct spi_nor *nor = mtd_to_spi_nor(mtd);
++	struct device *dev = nor->dev;
 +	int ret;
 +
-+	op = (struct spi_mem_op)SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_SRSTEN, 8),
-+			SPI_MEM_OP_NO_DUMMY,
-+			SPI_MEM_OP_NO_ADDR,
-+			SPI_MEM_OP_NO_DATA);
-+	spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
-+	ret = spi_mem_exec_op(nor->spimem, &op);
++	/* Disable octal DTR mode if we enabled it. */
++	ret = spi_nor_octal_dtr_enable(nor, false);
 +	if (ret) {
-+		dev_warn(nor->dev, "Software reset failed: %d\n", ret);
-+		return;
++		dev_err(dev, "suspend() failed\n");
++		return ret;
 +	}
 +
-+	op = (struct spi_mem_op)SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_SRST, 8),
-+			SPI_MEM_OP_NO_DUMMY,
-+			SPI_MEM_OP_NO_ADDR,
-+			SPI_MEM_OP_NO_DATA);
-+	spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
-+	ret = spi_mem_exec_op(nor->spimem, &op);
-+	if (ret) {
-+		dev_warn(nor->dev, "Software reset failed: %d\n", ret);
-+		return;
-+	}
-+
-+	/*
-+	 * Software Reset is not instant, and the delay varies from flash to
-+	 * flash. Looking at a few flashes, most range somewhere below 100
-+	 * microseconds. So, sleep for a range of 200-400 us.
-+	 */
-+	usleep_range(SPI_NOR_SRST_SLEEP_MIN, SPI_NOR_SRST_SLEEP_MAX);
++	return 0;
 +}
 +
  /* mtd resume handler */
  static void spi_nor_resume(struct mtd_info *mtd)
  {
-@@ -3220,6 +3258,10 @@ void spi_nor_restore(struct spi_nor *nor)
- 	if (nor->addr_width == 4 && !(nor->flags & SNOR_F_4B_OPCODES) &&
- 	    nor->flags & SNOR_F_BROKEN_RESET)
- 		nor->params->set_4byte_addr_mode(nor, false);
-+
-+	if (nor->info->flags & SPI_NOR_OCTAL_DTR_READ &&
-+	    nor->flags & SNOR_F_SOFT_RESET)
-+		spi_nor_soft_reset(nor);
- }
- EXPORT_SYMBOL_GPL(spi_nor_restore);
+@@ -3432,6 +3449,7 @@ int spi_nor_scan(struct spi_nor *nor, const char *name,
+ 	mtd->size = nor->params->size;
+ 	mtd->_erase = spi_nor_erase;
+ 	mtd->_read = spi_nor_read;
++	mtd->_suspend = spi_nor_suspend;
+ 	mtd->_resume = spi_nor_resume;
  
-diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
-index d251a5d02be2..06884a188315 100644
---- a/include/linux/mtd/spi-nor.h
-+++ b/include/linux/mtd/spi-nor.h
-@@ -51,6 +51,8 @@
- #define SPINOR_OP_CLFSR		0x50	/* Clear flag status register */
- #define SPINOR_OP_RDEAR		0xc8	/* Read Extended Address Register */
- #define SPINOR_OP_WREAR		0xc5	/* Write Extended Address Register */
-+#define SPINOR_OP_SRSTEN	0x66	/* Software Reset Enable */
-+#define SPINOR_OP_SRST		0x99	/* Software Reset */
- 
- /* 4-byte address opcodes - used on Spansion and some Macronix flashes. */
- #define SPINOR_OP_READ_4B	0x13	/* Read data bytes (low frequency) */
+ 	if (nor->params->locking_ops) {
 -- 
 2.26.2
 
