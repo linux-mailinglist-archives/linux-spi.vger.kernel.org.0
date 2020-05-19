@@ -2,76 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 950291D9D02
-	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 18:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9991D9DFA
+	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 19:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729204AbgESQkR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 May 2020 12:40:17 -0400
-Received: from sonic305-2.consmr.mail.bf2.yahoo.com ([74.6.133.41]:41367 "EHLO
-        sonic305-2.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729197AbgESQkR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 12:40:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1589906416; bh=KB5k1+sCGpSRd9pTKc0P9/4ZGPy9ZVtmix5g8Hf7Eac=; h=Date:From:Reply-To:Subject:References:From:Subject; b=rsShBZf3gXvSp1KE18stC5xzS95cHWZ2qHE2kLpjuydCVuETYTBwEnY1B0wTA0UwLC7ibv/RILe0qeoVtZfZmcS3qFSke8lzxJ5WUfnlE8tI+Ba9u/Lyvb6bSpVVSWY/o6mpgZGWilipoE+//uG7GieYZAblrBzPs1rvuE9fExNR5pIxGX5+KGkwP4+RpR73xkGkz6XbcD8b4R8v5ZfpOSAg+l2ksW8Ze3NaKC7S0VUOXdcs0j459m5WgZSqGDHxpF8WM1f03pKHQRWq7EH4AAZSdm9gvprjMXhxPpqI3Hg68Y9TZ4+oPmwk68e3i3wbzpdTtTX8VwD4nc1Ou84p2g==
-X-YMail-OSG: R7VuP90VM1k0EQq_nB4NkpF44DwtvcZVRXDA63d0cCLZj3p6LFCvHmKGpeFDmy3
- WC5Ax.iQB48OdBy9l4C60SnAwjOH0iIfDnABMZMhA6cQpICMznyO1DpK27ecYyTwWAcCvRGJcKMC
- 0TQCovOvxQoVhmDhc8Qz1nZsjNTVaGtIViLzSqk.KyOSjjLDmd3ukSGnvI0atLj5xE83AhxhwTa7
- ZHVet3cu6YkpNMJYQP3EZcFmjKl91lGJU68qPuOjtEIfl3I6Qk2bQDEckfAZYQY_rGggErxo4Kmq
- UY9Z9e73Lkyj63rv2FJ4dmI2D5RaFkRPNDK_.D2p2jx8NZ_TpaO1immV.G_k5b7hVkjcRHqop2ji
- p2nyqWIZC6wdSrz0zRwDLmoqhXkNFIJJyB3G9AdrPqhWuIqVzpSSnGsyPBHCL.XaYYB1PajWCSRL
- D.cJwapHFKxMZxoyWGN4Pd1XGnI8vEAByRsz.mPbiAomPfqiM72ukxoTeVgdD_NdzxbdqoVtNB2I
- 5N3rHsizZSDcX.FH6rmclZyDhN6NLz4Q.DGZ9RxQzcKBoA0xG1HKh9aM4nJ7qpARC3VuwDu5qUrh
- 4ayo7.4WKWKrxZ1WHwSwdLJcXVV_j4qgNNhoShXBLodc3iMOmO6GMb1r36EPXsesQkOUUVRPofd7
- aenj_n1l_fAcEiw7x_UXfkhehLOy0oGm3abLiXJyg8oOE11IxwwX.h58dRZP9S7l7Jl_S6kwkoJW
- 2bj6wUDsUXf052e5RUxIpDZM_MV13OfEdtrQQ068p_iOxyBf3vQVmBfo8l5fmVt3GMRr.zho0lt8
- 1w0DfVzfY7p1gBcZvLbKWin3RkCZGkcvxtZoMh.kFkfTlMF0JAoc7xsOUkjp3yREtaQ8sjIW9.qZ
- umP4rNOCckkVY0rUE1PiKoN7DqxhPNNqe_7dMHUPjWeMlxFgx2WPrS4twDCGBUjBQc1h9JFeHIvO
- JMeatB0qG8z_BcqNN6xpC6PWby53dEQSOy665aQxlyXWxRudCvTgRT7Ys.v5Ddw6TCMjD.SVZaSh
- Zhj4A0t95R1Dhhfe0FSDoCTtlhc.GQeBvG8rF5JWkygul1cNR8c2XBSVCwWAbx96TPdg4D2iNRK3
- e2MHmS2oNX4le871vhyWusMSSubopQS8Hz2OpZ74s92IYESetC2f47Q76zdozlPyyVhhs8fXzC1V
- XR5nRUheOgaiuU0UKiMVmfXz66VNHNry4vy31ocW.o01NQdICaS2XRisevTjowulC4o7RJ7iqrgJ
- jtf3EjcMDCXuOpxn_2_ZpatI1ETxv_JkIySAwDAToBlJWz8bd6pfzcUwLh2hVOjqqfAOGQhBxT1g
- -
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Tue, 19 May 2020 16:40:16 +0000
-Date:   Tue, 19 May 2020 16:40:14 +0000 (UTC)
-From:   jerom Njitap <jerome.njitap@aol.com>
-Reply-To: jeromenjitap100@gmail.com
-Message-ID: <2109371352.1082380.1589906414832@mail.yahoo.com>
-Subject: SESAME SEED SUPPLY BURKINA FASO
+        id S1729335AbgESRhC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 May 2020 13:37:02 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:37155 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729001AbgESRhC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 13:37:02 -0400
+Received: by mail-io1-f67.google.com with SMTP id t15so40477ios.4;
+        Tue, 19 May 2020 10:37:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XTPJr0RoCtcKkiWN8fbDLRyRDQpXZpviGSZLqL/Da5g=;
+        b=LW41viB7s8Sjv6KJfEB+P/EXQE5HrneqawvZL60GZiOu2fGYVtsz1GnXeh1nti8J6j
+         S5fJ5W8DW51OMK6u0TZALywnnC5lx77tkrnYVF6Nyfx9p8t8Fgd07G0QdzIIUYcpYZU2
+         +vOBVFCEPBPzMZqcqANgDIaQn7c+PL2HYpQNeCNKEQXtTeUwPhisK5nlUGcdnZuHjQlu
+         Xu9xwzuF/1lY2103vKFLFjnfU+f3U4vSr28ZYyqQKYzvwGn7SExphnxR1zFlNRKBQkyx
+         +O4At3463i46J61TAq5yoQ8GXCUixXB35cj0OpdUW988uZ6eRvtWEYvJl4SvDEyQJxEe
+         W2ZQ==
+X-Gm-Message-State: AOAM530pvKjFMEYVsotyA5XAhPnoGxxnvq8QCi9UtEOdE0h0TiTfjcUv
+        U6fj0N0f09hnDGCsteSXBWqD3FA=
+X-Google-Smtp-Source: ABdhPJwH2K7ECQ4/Q1DUnIHStWxaucXWvfJTMS0U8iF4gW6tfpn8mAiwZOMeQ4V6tSAqwn3rTWkewQ==
+X-Received: by 2002:a6b:d219:: with SMTP id q25mr41096iob.202.1589909821031;
+        Tue, 19 May 2020 10:37:01 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id h9sm127992ioa.6.2020.05.19.10.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2020 10:37:00 -0700 (PDT)
+Received: (nullmailer pid 341666 invoked by uid 1000);
+        Tue, 19 May 2020 17:36:58 -0000
+Date:   Tue, 19 May 2020 11:36:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     Mason Yang <masonccyang@mxic.com.tw>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: memory: document Renesas RPC-IF
+ bindings
+Message-ID: <20200519173658.GA340788@bogus>
+References: <26faf5e8-26eb-cceb-a500-f0fd64609737@cogentembedded.com>
+ <f998fe6c-c586-17cb-9343-30460ce0bf9d@cogentembedded.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <2109371352.1082380.1589906414832.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15960 YMailNodin Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f998fe6c-c586-17cb-9343-30460ce0bf9d@cogentembedded.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dear Sir,
+On Mon, 18 May 2020 23:33:15 +0300, Sergei Shtylyov wrote:
+> Renesas Reduced Pin Count Interface (RPC-IF) allows a SPI flash or
+> HyperFlash connected to the SoC to be accessed via the external address
+> space read mode or the manual mode.
+> 
+> Document the device tree bindings for the Renesas RPC-IF found in the R-Car
+> gen3 SoCs.
+> 
+> Based on the original patch by Mason Yang <masonccyang@mxic.com.tw>.
+> 
+> Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+> 
+> ---
+> Changes in version 3:
+> - fixed up the whitespace and added hyphens in the "compatible" prop text, also
+>   removed the comments;
+> - specified the subnode name as "flash", and used "enum" in the subnode text;
+> - fixed up the SPDX-License-Identifier: tag.
+> 
+> Changes in version 2:
+> - rewrote the bindings in YAML.
+> 
+>  Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml |   88 ++++++++++
+>  1 file changed, 88 insertions(+)
+> 
 
-This is to bring to your notice that we can supply your needs for
-quality Sesame seeds and other products listed below :
 
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Cashew nut
-Raw cotton
-Sesame seed
-Copper cathode
-Copper wire scraps
-Mazut 100 oil,D6
-Used rails
-HMS 1/2
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml: patternProperties:flash@[0-9a-f]+$:properties:compatible: [{'enum': ['cfi-flash', 'jedec,spi-nor']}] is not of type 'object', 'boolean'
+Documentation/devicetree/bindings/Makefile:12: recipe for target 'Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.example.dts' failed
+make[1]: *** [Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+Makefile:1300: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
 
+See https://patchwork.ozlabs.org/patch/1292811
 
-We offer the best quality at reasonable prices both on CIF and FOB,
-depending on the nature of your offer. Our company has been in this
-line of business for over a decade so you you can expect nothing but a
-top-notch professional touch and guarantee when you deal or trade with
-us.all communication should be through this email address for
-confidencial purpose(jeromenjitap100@gmail.com)and your whatsaap number.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
 
-Look forward to your response.
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
 
-Regards
-Mr Jerome
+Please check and re-submit.
+
