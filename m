@@ -2,112 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 468771D9462
-	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 12:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D359E1D9589
+	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 13:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728616AbgESKcv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 May 2020 06:32:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43650 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726412AbgESKcu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 19 May 2020 06:32:50 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34D6E206BE;
-        Tue, 19 May 2020 10:32:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589884369;
-        bh=APWdI/sKggcPUHM2EoqZ+F9oniCqmilI7u/Eu8rmUKo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bb28hbkXTcnwyAr3AkQbQd7zAtdLWJXiwF/dtuByEyX/N6X+HswiTH+JVTDGBxke9
-         PRaBWt7ep0OcLP0hk1XvvEZBbrGuzZtn0CFZ5SqDVCMU8CkMuKgVJvzlMPWmK1ng2s
-         mB1xyHCzSfVJvy6NpiLF0vKH/DThsK16CNtbWd+U=
-Date:   Tue, 19 May 2020 11:32:47 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Message-ID: <20200519103247.GA4611@sirena.org.uk>
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
- <20200508113751.GD4820@sirena.org.uk>
- <20200510002039.hwahqasnnceowskz@mobilestation>
- <20200511212506.GA23852@sirena.org.uk>
- <20200518000542.ohtpem3lo2pbixbu@mobilestation>
- <20200518151946.GH8699@sirena.org.uk>
- <20200518211727.jrzo6tn7slqzxoyl@mobilestation>
+        id S1728818AbgESLrl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 May 2020 07:47:41 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:9643 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbgESLrl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 07:47:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1589888860; x=1621424860;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+3WpN5wjU7vPXasZ7bMW3p7RrpJuTGFZkKzGqd78wTU=;
+  b=vaTGPRDyfyzUeVHwCEAWhQ/JiOaN+YjoAOXkYPaa0iJl0cTa06A05u3l
+   961k00rzhZN0NxVk8tB7UaziNvONXEmNvoBDOjnAZnjAQ/OBHRaizeeVA
+   E/LmOshFKMLravZbZsc0k+zk3i61rCvFAZ12oeC2pb8+biGdNsbPrGUN2
+   4LQHi6zULd5YK1JzN5TUE8Hqsstaikl38JsjMO+CcCfMkEn08FMvRpdoQ
+   hc/g/6/ILW4+zHCY65rXn8py4+glBbynIriRCuXWaxTNgeZGy5GKjspOY
+   4YSel8yIwhfKWQeaw2ozdUw1d/msa9CRLVnhSdTxePKPuaO5eYHzuYH0c
+   A==;
+IronPort-SDR: CXyWK6XjctxXloaSFb4QoNtDA6Ry52CMtVFwMWGs+0DsQUOSGUMc6G6B38mC5Es2J/SwA9BvfJ
+ u2JGPnUnZlU1uhKCvY/i3hMw2dhY46AVqa3O0DaJyS1gj+DNK1eUoNoWXeNcXmFyZPfF1dlxwn
+ cpxOIpB5rzwtywt157EitkEBohV4bwaDje/G7gEQzmpRy/Tqt/JjgMsaEHcBEZvD8q3/miLKAW
+ oYUGUXzphVQVVBASFzBdtONiFD9Ojr/BOrWdJ9PRRxnYDB2dVNBnBuTrgtt2NGdPeEkwhhHuup
+ ZXg=
+X-IronPort-AV: E=Sophos;i="5.73,410,1583218800"; 
+   d="scan'208";a="12828132"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 May 2020 04:47:40 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 19 May 2020 04:47:40 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
+ Transport; Tue, 19 May 2020 04:47:40 -0700
+Date:   Tue, 19 May 2020 13:47:39 +0200
+From:   Lars Povlsen <lars.povlsen@microchip.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Microchip Linux Driver Support" <UNGLinuxDriver@microchip.com>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Subject: Re: [PATCH 04/10] dt-bindings: spi: Add bindings for spi-dw-mchp
+Message-ID: <20200519114739.GD24801@soft-dev15.microsemi.net>
+References: <20200513140031.25633-1-lars.povlsen@microchip.com>
+ <20200513140031.25633-5-lars.povlsen@microchip.com>
+ <20200513145213.GJ4803@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200518211727.jrzo6tn7slqzxoyl@mobilestation>
-X-Cookie: Do not write below this line.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200513145213.GJ4803@sirena.org.uk>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 13/05/20 15:52, Mark Brown wrote:
+> Date: Wed, 13 May 2020 15:52:13 +0100
+> From: Mark Brown <broonie@kernel.org>
+> To: Lars Povlsen <lars.povlsen@microchip.com>
+> Cc: SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, Microchip
+>  Linux Driver Support <UNGLinuxDriver@microchip.com>,
+>  linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+>  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+>  Alexandre Belloni <alexandre.belloni@bootlin.com>, Serge Semin
+>  <Sergey.Semin@baikalelectronics.ru>, Serge Semin
+>  <fancer.lancer@gmail.com>, Andy Shevchenko
+>  <andriy.shevchenko@linux.intel.com>, Wan Ahmad Zainie
+>  <wan.ahmad.zainie.wan.mohamad@intel.com>
+> Subject: Re: [PATCH 04/10] dt-bindings: spi: Add bindings for spi-dw-mchp
+> User-Agent: Mutt/1.10.1 (2018-07-13)
+> 
+> On Wed, May 13, 2020 at 04:00:25PM +0200, Lars Povlsen wrote:
+> > This add DT bindings for the Microsemi/Microchip SPI controller used
+> > in various SoC's. It describes the "mscc,ocelot-spi" and
+> > "mscc,jaguar2-spi" bindings.
+> 
+> > Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+> > ---
+> >  .../bindings/spi/mscc,ocelot-spi.yaml         | 60 +++++++++++++++++++
+> >  .../bindings/spi/snps,dw-apb-ssi.txt          |  7 +--
+> 
+> That's not what this change does.  It is removing the existing binding
+> for Ocelot and Jaguar2 from the free format binding documentation and
+> adds some entirely separate YAML bindings for them.  This conflicts with
+> competing YAML conversions that both Serge Semin and Wan Ahmad Zainie
+> (CCed) have in flight at the minute.  It also doesn't strike me as a
+> good idea to fork the bindings, what's the motivation for doing that?
 
---KsGdsel6WgEHnImy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The reason for doing this was due to the fact that I felt adding
+Sparx5 support only cluttered the original driver even more.
 
-On Tue, May 19, 2020 at 12:17:27AM +0300, Serge Semin wrote:
+And since I was adding a new driver, I needed to add bindings for it -
+and (re)move the old ones.
 
-> Here is what we need to do to perform the EEPROM-read operation:
-> 1) Enable EEPROM-read mode.
-> 2) Initialize a corresponding registers with a number of SPI transfer words
->    (with bits-per-word taken into account) to read.
-> 3) Push opcode + address + dummy bytes into the Tx FIFO. When it's done and
->    the Tx FIFO is empty, the controller will proceed with read operations by
->    pushing zeros (or ones, don't remember what level it's by default) to MOSI
->    and pulling data from MISO into the RX FIFO.
-> 4) Keep up with getting data from the Rx FIFO so one wouldn't get overflown.
+I have become aware of Serge and Wan Ahmad's work, and will work out
+something on top of that.
 
-> Regarding programming write each time. Well, it's up to the driver implementation.
-> If opcode, address, dummy bytes and number of words to read are the same as before,
-> then re-programming isn't required.
-
-Ah, nice.  This should be useful for far more than just flash - most
-register reads will also be able to take advantage of this, they follow
-a similar write then read pattern.
-
---KsGdsel6WgEHnImy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7DtcwACgkQJNaLcl1U
-h9BprQf/X3CrvqOEDZw4gFuSifMWeN7xtcsAEMLPFliUUq9vUY170vk9WBvEWXcU
-8+KvebwsMCXWGekf3ySdQN5xQlLrIZ86/mMpntqTMg2Gsvxm7TsoCyW+K0JO/6Ef
-2I+nIT+t92zUZhPbyzk7kmeKmC/Jsgg9zwHQpyN0+XjQlCUy0lCYhdR/P1y/5qsV
-By+n3t6C5Vi6Dnz2wrYL+gqoH6quWA/wGQe3o0xtFyZuQIVgKogTOrgFOFW8fSBK
-NUFEEZjIMctowJ27+FDhh5NXoJXqDUUkbzKOYGEf2Nja+Kk47clbgF/tDwfMlX/3
-2duleovaghp6/F5OsQSe05zjfEutIg==
-=0tWj
------END PGP SIGNATURE-----
-
---KsGdsel6WgEHnImy--
