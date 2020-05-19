@@ -2,77 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DA71D8A4D
-	for <lists+linux-spi@lfdr.de>; Mon, 18 May 2020 23:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCCF1D911C
+	for <lists+linux-spi@lfdr.de>; Tue, 19 May 2020 09:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgERVzW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 May 2020 17:55:22 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:50388 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726250AbgERVzW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 May 2020 17:55:22 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6A1C1803080B;
-        Mon, 18 May 2020 21:55:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id KntM-jPn2GzF; Tue, 19 May 2020 00:55:18 +0300 (MSK)
-Date:   Tue, 19 May 2020 00:55:17 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>, <linux-mips@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: spi: Add Baikal-T1 System Boot SPI
- Controller binding
-Message-ID: <20200518215517.phusnx3llajik6sm@mobilestation>
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-2-Sergey.Semin@baikalelectronics.ru>
- <20200518152659.GA2525@bogus>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200518152659.GA2525@bogus>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        id S1726943AbgESHc3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 May 2020 03:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725996AbgESHc3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 May 2020 03:32:29 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB57C061A0C;
+        Tue, 19 May 2020 00:32:29 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id k19so5250032pll.9;
+        Tue, 19 May 2020 00:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=pWX1G4tWEShSf5SKh14rOfDdQ9RRQZCXQI6jij52Ttg=;
+        b=JsmEzMAS6LO4LvcW4zA7f78IImr0omcCJTEaIR1EN4hQFQFKlnZArVaZrPHuEugzNN
+         NyCG/2XyodILh1L182S6d602lXHdP4jxf1Eo7egb+C6fXWfWDFN4Jcv/V2Pds2cVj51s
+         cZM4TyGu7RaMr5Fado8GjUtTkpvbsNR3NykhRlFF/tYMYeXRFfTis/CzMfEfwoMXR323
+         WNI5j17UWtveDghQDhts4l5vucNVVBmK6JryVXUXcF1A2OtT+HUMPyvpNfv3j0QuJ9Da
+         YZmqw2zLl5kKQGpACVAOBlTz3Exp984Iu3uqfDb4VRrcbE4LYeImwg9C5A4LDo2x8jOU
+         BdEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=pWX1G4tWEShSf5SKh14rOfDdQ9RRQZCXQI6jij52Ttg=;
+        b=fc2gs0ELkqZ1HE3X6J1Wrr4NiRafwIrZy/lTNxvnt0qvZ07A31Y9nVbVqqDJrWoOhc
+         OFZoS+fSITzB9ZfFN6w0pa1ed1P1DyjMHuYtbTlkebeXvNFly1wMTgh693i0hopkBTsJ
+         I54ApGf1ogQ9JnKpaTRWjjUDMhf2u/B5qcKJaVLdLQCUxRePbPhRQSW4pVwArt0uzAXU
+         BRjjJPz8XR3pT1pqnJCkwpnyc/bvbnhaTZx6zQ9qf6lwkZNDb8+dqbPgWFvBZt6x66oC
+         81bQ8mbGmq//hDJlAPX2LZeLBWMDYKHPejEWo1SSaNw7oaZBuEGN4XEAvjL03iaCe4Vr
+         WKjw==
+X-Gm-Message-State: AOAM530KOn+ywtp9cco4NNFL1aG15qttQcTW5DRuUfYHLfj3hD4eKVlg
+        jWG5FZ1s99AIIm8MkHOageqsBIyhANw=
+X-Google-Smtp-Source: ABdhPJxYQvFg0wsKLhP4JEWJ7TlPcYJSgxzfvOmYQnLlX7NYySQy5KZVJcq+300rYVFLUJM9Hl9SFQ==
+X-Received: by 2002:a17:902:7402:: with SMTP id g2mr20402026pll.241.1589873548595;
+        Tue, 19 May 2020 00:32:28 -0700 (PDT)
+Received: from pr0gr4m-ubuntu.localdomain ([1.240.193.107])
+        by smtp.googlemail.com with ESMTPSA id m9sm9377920pgd.1.2020.05.19.00.32.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 19 May 2020 00:32:27 -0700 (PDT)
+From:   Kangmin Park <l4stpr0gr4m@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: spi: ti_qspi.txt: fix unit address
+Date:   Tue, 19 May 2020 16:32:21 +0900
+Message-Id: <1589873541-5587-1-git-send-email-l4stpr0gr4m@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 18, 2020 at 09:26:59AM -0600, Rob Herring wrote:
-> On Fri, May 08, 2020 at 12:36:20PM +0300, Serge Semin wrote:
-> > Baikal-T1 Boot SPI is a part of the SoC System Controller and is
-> > responsible for the system bootup from an external SPI flash. It's a DW
-> > APB SSI-based SPI-controller with no interrupts, no DMA, with just one
-> > native chip-select available and a single reference clock. Since Baikal-T1
-> > SoC is normally booted up from an external SPI flash this SPI controller
-> > in most of the cases is supposed to be connected to a single SPI-nor
-> > flash. Additionally in order to provide a transparent from CPU point of
-> > view initial code execution procedure the system designers created an IP
-> > block which physically maps the SPI flash found at CS0 to a memory region.
+Fix unit address to match the first address specified in the reg
+property of the node in example.
 
-BTW Rob, could you also provide your review for the next patch:
-https://lore.kernel.org/linux-mips/20200515104758.6934-20-Sergey.Semin@baikalelectronics.ru/
-?
+Signed-off-by: Kangmin Park <l4stpr0gr4m@gmail.com>
+---
+ Documentation/devicetree/bindings/spi/ti_qspi.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We agreed with Mark to merge this driver into the generic DW APB SSI code so to
-be available for another platforms. Since our DW APB SSI IP's got too many
-peculiarities I'll have to provide a new compatible string. It would be great to
-add it into the DW schema binding instead of currently available text-based
-legacy binding file.
-
-[nip]
+diff --git a/Documentation/devicetree/bindings/spi/ti_qspi.txt b/Documentation/devicetree/bindings/spi/ti_qspi.txt
+index e65fde4..47b184b 100644
+--- a/Documentation/devicetree/bindings/spi/ti_qspi.txt
++++ b/Documentation/devicetree/bindings/spi/ti_qspi.txt
+@@ -29,7 +29,7 @@ modification to bootloader.
+ Example:
+ 
+ For am4372:
+-qspi: qspi@4b300000 {
++qspi: qspi@47900000 {
+ 	compatible = "ti,am4372-qspi";
+ 	reg = <0x47900000 0x100>, <0x30000000 0x4000000>;
+ 	reg-names = "qspi_base", "qspi_mmap";
+-- 
+2.7.4
 
