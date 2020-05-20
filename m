@@ -2,117 +2,210 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FC21DB0B7
-	for <lists+linux-spi@lfdr.de>; Wed, 20 May 2020 12:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 443851DB1A6
+	for <lists+linux-spi@lfdr.de>; Wed, 20 May 2020 13:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbgETKyG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 May 2020 06:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726403AbgETKyF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 May 2020 06:54:05 -0400
-X-Greylist: delayed 559 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 May 2020 03:54:05 PDT
-Received: from office2.cesnet.cz (office2.cesnet.cz [IPv6:2001:718:1:101::144:244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D53C061A0F
-        for <linux-spi@vger.kernel.org>; Wed, 20 May 2020 03:54:05 -0700 (PDT)
-Received: from localhost (ip-94-112-198-29.net.upcbroadband.cz [94.112.198.29])
+        id S1726818AbgETL1D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 May 2020 07:27:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36334 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726435AbgETL1C (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 20 May 2020 07:27:02 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id 4C322400065;
-        Wed, 20 May 2020 12:44:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2-2020; t=1589971484;
-        bh=yVrOQlSMXLkUQo61nYnYIft5x9dvSb8aaySUwpLJgQI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=lrkh8mrQbYF60iY891AfJns9TKhVLe9/zV2BSLdt4cAjUnGB4IowIDHSadjkFziBO
-         IAJ+3Qq5ob/LZ6DD6aGK46haBsa2ZiKyk2a19hTPxBOVcFMBe8qNTr4TSBI/WwMEps
-         HUQthtMVAPY0MEv8KOujsGvfr46iRei7kz9M6InI8kSk5fJ6127BB7s4uBjExc4IZW
-         j2ZvRLf3dDaCmmMFNCgN8i0AetiHyaSZTkJrFUH36rzMta+Nd88Uw/Qb6w89gqhg83
-         zsR0OTG/pMnK9a/0tN51lnuyXhjI3bv7jbBMgBbKlzOxN+LKJBlZd7aoPjVlvxcsEW
-         Q/NAGPS8sTJpQ==
-From:   =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+        by mail.kernel.org (Postfix) with ESMTPSA id 6552E207F9;
+        Wed, 20 May 2020 11:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589974022;
+        bh=gLzVWqgqOs2IZaQXiCC28rNESIbpbdE/t+v4Lzs82DY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iF3n43r12SLt4VMNftZtUN7PQ0CY8utNHmx0ojjKjou3+K+1xgB0z6mNcRwki2McF
+         EGgkvb7fs007naatNAJPD2o3LpBAt4RzaCyS7DA6ITOJ7EBujSM9EPB6pS7dPxVgib
+         PtM/hhDuSbBYtkkAQgADW6ZtVJpL4WrWGIkupH4A=
+Date:   Wed, 20 May 2020 12:26:59 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org,
+        Jan =?iso-8859-1?Q?Kundr=E1t?= <jan.kundrat@cesnet.cz>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        nicolas.ferre@microchip.com
 Subject: Re: High CPU load when using MAX14830 SPI UART controller
-Date:   Wed, 20 May 2020 12:44:43 +0200
-MIME-Version: 1.0
-Message-ID: <4c5c972b-c8b8-4326-a1f9-438d88217a4a@cesnet.cz>
-In-Reply-To: <20200519163353.20c03286@windsurf.home>
+Message-ID: <20200520112659.GB4823@sirena.org.uk>
 References: <20200519163353.20c03286@windsurf.home>
-Organization: CESNET
-User-Agent: Trojita/v0.7-412-g2869c385e; Qt/5.13.0; xcb; Linux; Gentoo Base System release 2.4.1
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+ <20200519152449.GM4611@sirena.org.uk>
+ <20200520121819.0f816ec0@windsurf.home>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eAbsdosE1cNLO4uF"
+Content-Disposition: inline
+In-Reply-To: <20200520121819.0f816ec0@windsurf.home>
+X-Cookie: You can't get there from here.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> With the sending of 20 bytes data frames every 16 ms, it means data is
-> send ~62.5 per seconds.
->
-> Looking at /proc/interrupts, I get ~260 interrupts per second on the
-> MAX14830, which means that the "batch reading" implemented in
-> 2b4bac48c10848ccffd484e7cd025dc085c1bd32 is effective but not to the
-> point where I have a single interrupt per received frame.
 
-Hi,
-I was getting something similar when I first wrote that patch. The TL;DR=20
-version is that even though this UART has 128 byte FIFO per each direction=20=
+--eAbsdosE1cNLO4uF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-of each UART, I wanted my patch to stay conservative and only batch reads=20
-in an opportunistic manner -- I wanted not to risk a possible RX FIFO=20
-overflow. That's why the IRQ handler is eager to trigger as soon as there=20
-are some data in the RX FIFO. Our setup has no HW flow control (no RTS/CTS,=20=
+On Wed, May 20, 2020 at 12:18:19PM +0200, Thomas Petazzoni wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-no software flow control), so one has to hope that the IRQ latency is low=20
-enough...
+> > The other thing that jumps out looking at the code is that in the
+> > interrupts to complete transfers the driver will just complete() and
+> > wake the main transfer thread up, for the reads where we always have two
+> > transfers per message this will cause an extra context switch.  If the
+> > driver were able to initiate the next transfer directly from interrupt
+> > context then it should schedule less (and generally reduce latency too).
 
-The MAX14830 supports also another mode of operation where the interrupt=20
-fires only when the RX buffer gets filled over a configurable minimal=20
-threshold. This can be combined with yet another interrupt which fires=20
-whenever there's some data in the RX FIFO for "too long". Unfortunately,=20
-this timer starts over again upon reception of any additional data, so it's=20=
+> Indeed, I see. The spi-atmel driver is however really structured around
+> synchronously handling each xfer of the spi_message. I guess what we
+> would want to see is atmel_spi_transfer_one_message() start the first
+> transfer, and then wait on a completion that indicates the completion
+> of *all* xfers. And then, it's the interrupt handler that dequeues the
+> next xfer from the spi_message and submits them, so that we don't go
+> back to the calling thread for each xfer.
 
-the *youngest* byte in the RX FIFO that controls triggering of this delayed=20=
+Right.  You'd need to rearrange it to go through the entire message
+setting up DMA mappings that will be needed then had everything off to
+interrupt context or have extra complexity and optionally go back up to
+task context if there's anything complicated to handle.
 
-interrupt.
+It might also be possible to rearrange the transfers so that the entire
+message is done by the hardware if you can chain things together, though
+that only helps with DMA and it'll involve adding dummy TX and RX
+segments and might be more trouble than it's worth.
 
-I am not sure how to balance the latency ("how soon is userspace notified=20
-about this byte") with CPU utilization ("don't read data byte-by-byte from=20=
+> > I can't really see much obvious in the serial driver - it might want to
+> > consider error checking
 
-this 128 byte buffer"). If there's some cross-driver support for "something=20=
+> I'm not sure what you mean by "it might want to consider error
+> checking". Could you explain?
 
-like that" in the TTY layer, I'm sure that max310x.c could be adopted to=20
-make use of that. Otherwise, we could always add a pair of DT properties=20
-for controling:
+It wasn't checking the return values of SPI API calls.
 
-a) the "start reading from RX FIFO" timeout,
-b) "allow up to X bytes in the RX FIFO, I know that my platform has enough=20=
+> >, or if it doesn't care if transfers complete it might want to switch
+> >to async SPI calls, but nothing that looks like
+> > there's anything obvious for SPI related that you could do here.
 
-CPU and SPI bandwidth to finish reading that before the RX FIFO overflows"
+> I'm not sure how it can use async transfers. Most of the transfers are
+> initiated using regmap_read(), which inherently is synchronous: we need
+> the value of the register being read to decide if we received some
 
-BTW, there are also real SPI bus throughput limitations, see=20
-2258761213cb239e5e6c11b4ec9b1700fcb4fdcd for some numbers from my platform.=20=
+Yeah, that's mostly useful on the transmit side I think.
 
-The chip supports up to 26 MHz (but not all bus masters have clock=20
-granularities fine enough to use this), that's 3.25 MBps of raw throughput=20=
+> data, how much data we've received, etc. The only thing that could be
+> asynchronous I guess is retrieving the data from the UART RX FIFO: the
+> completion callback could push this data up to the TTY layer rather.
 
-divided among four UARTs. Reading each register takes at least two bytes,=20
-one has to check the top-level IRQ status register (to decide which UART to=20=
+That might save you some context thrashing, or allow batching of
+switches.
 
-check), then read per-UART IRQ registers, and only then start reading the=20
-data. Also, batched reading can only happen if userspace explicitly ignores=20=
+> Mark: in this situation where a threaded interrupt handler in max310x
+> is doing SPI transfers, are those SPI transfers then offloaded to the
+> SPI workqueue, causing another context switch, or are they done
+> directly within the context of the interrupt thread ? I see
+> __spi_sync() has some logic to push out the messages from the calling
+> context, I guess as opposed to offloading them to the SPI workqueue ?
 
-framing errors, parity errors, etc, otherwise the driver will have to read=20=
+It should be doing transfers in calling context if the controller is
+idle, the SPI thread should only be used when the controller is already
+busy or to clean up when the controller goes idle (which will
+unfortunately happen rather a lot in your use case).
 
-byte-by-byte, and check the line status register, etc.
+Actually looking at the code in __spi_pump_messages() again I think that
+in the case where we don't have any cleanup to do we should be able to
+avoid kicking the thread for that which should help a bit for spi-atmel.
+Can you give the patch below a go (compile tested only, not even tried
+to boot)?
 
-Anyway, I'll be happy to review and test any patches you might have; we're=20=
+You can generally get a good idea of what's going on with regard to
+context switching at the SPI level from the SPI tracepoints, and about
+any latencies in there too.
 
-using these chips and we are interested in their performance and error-free=20=
+> Overall, do we consider it "normal" to have a ~30% CPU load for what
+> looks like a very light workload ?
 
-operation.
+It feels a bit high.  It might possibly go down under load if there's
+other stuff going on, though I don't think that applies in this use case
+- it's mainly cases where we can avoid idling the hardware due to having
+a lot of batched up work.
 
-With kind regards,
-Jan
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index c083ee3995e4..9bfc622466c7 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1311,6 +1311,14 @@ void spi_finalize_current_transfer(struct spi_contro=
+ller *ctlr)
+ }
+ EXPORT_SYMBOL_GPL(spi_finalize_current_transfer);
+=20
++static void spi_idle_runtime_pm(struct spi_controller *ctlr)
++{
++	if (ctlr->auto_runtime_pm) {
++		pm_runtime_mark_last_busy(ctlr->dev.parent);
++		pm_runtime_put_autosuspend(ctlr->dev.parent);
++	}
++}
++
+ /**
+  * __spi_pump_messages - function which processes spi message queue
+  * @ctlr: controller to process queue for
+@@ -1355,10 +1363,17 @@ static void __spi_pump_messages(struct spi_controll=
+er *ctlr, bool in_kthread)
+ 			return;
+ 		}
+=20
+-		/* Only do teardown in the thread */
++		/* Defer any non-atomic teardown to the thread */
+ 		if (!in_kthread) {
+-			kthread_queue_work(&ctlr->kworker,
+-					   &ctlr->pump_messages);
++			if (!ctlr->dummy_rx && !ctlr->dummy_tx &&
++			    !ctlr->unprepare_transfer_hardware) {
++				spi_idle_runtime_pm(ctlr);
++				ctlr->busy =3D false;
++				trace_spi_controller_idle(ctlr);
++			} else {
++				kthread_queue_work(&ctlr->kworker,
++						   &ctlr->pump_messages);
++			}
+ 			spin_unlock_irqrestore(&ctlr->queue_lock, flags);
+ 			return;
+ 		}
+@@ -1375,10 +1390,7 @@ static void __spi_pump_messages(struct spi_controlle=
+r *ctlr, bool in_kthread)
+ 		    ctlr->unprepare_transfer_hardware(ctlr))
+ 			dev_err(&ctlr->dev,
+ 				"failed to unprepare transfer hardware\n");
+-		if (ctlr->auto_runtime_pm) {
+-			pm_runtime_mark_last_busy(ctlr->dev.parent);
+-			pm_runtime_put_autosuspend(ctlr->dev.parent);
+-		}
++		spi_idle_runtime_pm(ctlr);
+ 		trace_spi_controller_idle(ctlr);
+=20
+ 		spin_lock_irqsave(&ctlr->queue_lock, flags);
+
+--eAbsdosE1cNLO4uF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7FFAIACgkQJNaLcl1U
+h9BC5Qf+Pkv4+x7X0+ElE27f9XiF/IbZYfiym/0uOud+wW6O5L1C2X6qc8pjB7cU
+/H0pesryvSYiTZaCqiI5bMVOn4s8MChGwPZuLhKM0F+HdgduXg34ONS0uoVFtjKu
+kqmVsr/WeZxtGOSPzTMozVQRozoAXjTyna53jHMwTXqM1iu5Srd+D2ikd93GDr7t
+DTxx8ZEPUXyI6+VDv/1lWvOEdpMTve37c8wvEVviO2FiLdO8B6oJj1TnbXnWpJpc
+IHjwEY7e9KdV0Z6Op9bs3xFCDLv6kmIsqroj3qisWt+MWE6XVfZt1dKpWnTcI2BD
+dhI9+4YYFHU9NwGruXMSPpr0/bakEg==
+=e8bQ
+-----END PGP SIGNATURE-----
+
+--eAbsdosE1cNLO4uF--
