@@ -2,129 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 826151DCD3F
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 14:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FB71DCD50
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 14:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729323AbgEUMt2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 08:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729077AbgEUMt2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 08:49:28 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C01C061A0E;
-        Thu, 21 May 2020 05:49:27 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id 5so2983613pjd.0;
-        Thu, 21 May 2020 05:49:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=afUW27qJQI6L1BqqdvJMIc66fON07qLZGi9GUZOv8ik=;
-        b=Iebxwsjrefxk79lRwX2J8Ay+BytWYfinZA9yX5UhwQZEbYU7Qxx4WRoyHsGy0Zam9T
-         d1hqJX5b37L0aONdsg5eNcpcjTiDB9yvzk8hzfLKjyD1TbKIA/5sAJBa5CNneKY6zTWQ
-         MfzQwEKJQdFIdx9F7wGcfcXmk9tYB7uoNFDDhzRjrgBo51hnh4IwxVBia7ria/pUETWu
-         1LVBitiSJJH4KxVa9wwLGxqibX8OfMimyCgbbq2qDdknYOMMXjBiT1BTRf9e/ZzBzrOM
-         vxqmP+bVfhOtUdCQlJabhyac9/yyb98T1O7zkoSBhs49u/mAebeIBAtHWmu+2L7r5OAX
-         Ocsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=afUW27qJQI6L1BqqdvJMIc66fON07qLZGi9GUZOv8ik=;
-        b=KccRzhN7GulWQNsSI6Bn5lnQaFDjykZPc+kNocmCj5QSfMA50szCkIzVCAxTXg87V6
-         CYjb2oa899WxSKop3rpej4VgrQ1etDrwNUW76e0KIFaWfmj57jBRyYYDdSVlbwutf15h
-         cWkJlK4YBZlnbSJ+yP/NMg7S2ma3K5PBWFu7S1kSklBCIaComnde2+UvkMmeP5qmTRZX
-         7S19tzUpCs1k3dLFJhzdz4aRzkt6HdFpGW3b32BNmdEW3+Iu7Jgwt2uYc7+1MmX4eHfy
-         iWCKP/ON7Y3ug+I+0WCCWn8lJ8uM2dNocVu7l1peQ/cHRaZt8awXaTiRuxqf+KbbVzfB
-         OALQ==
-X-Gm-Message-State: AOAM532cydcsbtUnf3FSQJyTDZ78pzAmLKpRI3MNtQ97xsx5V+RtvFPG
-        SRWnxk9CiywaRf09TPgXQTT0aMmaaqkGW+S0/zg=
-X-Google-Smtp-Source: ABdhPJy1auqg02ic06nl0aIxcRQqYxvrGRv1Zyix0E5OxAP2IKGL2uJlyU/UaGEVw0y4+EwNAKMzkE5a4FyiOsuTpD0=
-X-Received: by 2002:a17:90a:1704:: with SMTP id z4mr10976564pjd.181.1590065367229;
- Thu, 21 May 2020 05:49:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
- <20200521012206.14472-4-Sergey.Semin@baikalelectronics.ru>
- <CAHp75VcOX-hZSxHqro_W2X=KzSShg1V=jAsxdz8L5TZpW0kBYA@mail.gmail.com> <20200521121228.aqplh6eftylnys3p@mobilestation>
-In-Reply-To: <20200521121228.aqplh6eftylnys3p@mobilestation>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 21 May 2020 15:49:10 +0300
-Message-ID: <CAHp75VcPSBBZu+bhnpojry3SFK7-qF7Tuif2MnsPEfbMf72_JA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/16] spi: dw: Discard static DW DMA slave structures
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        id S1729328AbgEUMwx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 08:52:53 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:43508 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729296AbgEUMww (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 08:52:52 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04LCqQBM073519;
+        Thu, 21 May 2020 07:52:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590065547;
+        bh=HhdS0k1uvFyYcnFyKdAE7u2FGKBzACV32jA6ddp5U90=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=B6AX0BmewPmUOKJI5DJ3cIZn+mQtSxDXO9Avzp912H0DIeRRFYLdBCq5F1P0K/PX7
+         ZBFr4KNidcljuogeJKGXNVIzLhPqoT8rUaNRB9jQktX4F+5LUYW8hpz+7HKo+ea875
+         9xBCwVXNAZY05h0iL5muyCMfD/8jR9tAittuvtXQ=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04LCqQkD089935
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 21 May 2020 07:52:26 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 21
+ May 2020 07:52:26 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 21 May 2020 07:52:26 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04LCqPlK071033;
+        Thu, 21 May 2020 07:52:26 -0500
+Date:   Thu, 21 May 2020 18:22:25 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <masonccyang@mxic.com.tw>
+CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
         Mark Brown <broonie@kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Clement Leger <cleger@kalray.eu>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH v5 05/19] mtd: spi-nor: add support for DTR protocol
+Message-ID: <20200521125225.odxcdjkoy5lckrbx@ti.com>
+References: <20200519142642.24131-1-p.yadav@ti.com>
+ <20200519142642.24131-6-p.yadav@ti.com>
+ <OF6C754784.29BF11CD-ON4825856F.0032D83F-4825856F.0033A4F1@mxic.com.tw>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <OF6C754784.29BF11CD-ON4825856F.0032D83F-4825856F.0033A4F1@mxic.com.tw>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 21, 2020 at 3:12 PM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
-> On Thu, May 21, 2020 at 12:57:17PM +0300, Andy Shevchenko wrote:
-> > On Thu, May 21, 2020 at 4:23 AM Serge Semin
-> > <Sergey.Semin@baikalelectronics.ru> wrote:
+Hi,
 
-...
+On 21/05/20 05:24PM, masonccyang@mxic.com.tw wrote:
+> 
+> Hi Pratyush,
+> 
+> 
+> > @@ -311,6 +313,7 @@ struct flash_info {
+> >                  * BP3 is bit 6 of status register.
+> >                  * Must be used with SPI_NOR_4BIT_BP.
+> >                  */
+> > +#define SPI_NOR_OCTAL_DTR_READ   BIT(19) /* Flash supports octal DTR 
+> Read. */
+> 
+> #define SPI_NOR_OCTAL_DTR_RDWR  BIT(19) /* Support Octal DTR Read & Write 
+> */
 
-> > Thanks for an update, but that's not what I asked for...
-> >
-> > > -static struct dw_dma_slave mid_dma_tx = { .dst_id = 1 };
-> > > -static struct dw_dma_slave mid_dma_rx = { .src_id = 0 };
-> >
-> > >  static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
-> > >  {
-> > > +       struct dw_dma_slave slave = {
-> > > +               .src_id = 0,
-> > > +               .dst_id = 0
-> > > +       };
-
-> > > -       struct dw_dma_slave *tx = dws->dma_tx;
-> > > -       struct dw_dma_slave *rx = dws->dma_rx;
-> >
-> > May we simple do
-> >
-> > struct dw_dma_slave tx = { .dst_id = 1 };
-> > struct dw_dma_slave rx = { .src_id = 0 };
-> >
-> > please?
->
-> Well, for me both solutions are equal
-
-I don't think so.
-
-> except mine consumes less stack memory.
-
-And brought confusion and less readability. :-(
-
-> The only reason why your solution might be better is that if DW DMA driver or
-> the DMA engine subsystem changed the dw_dma_slave structure instance passed to
-> the dma_request_channel() method, which non of them do. So I'll leave this for
-> Mark to decide. Mark, could you give us your final word about this?
-
-I explained already why I prefer to see them in that form. Reader can
-easily understand what request line is used for what channel.
-In your code it's hidden somewhere and on top of that that _one_
-structure on the stack adds more confusion.
+This flag only enables SNOR_HWCAPS_READ_8_8_8_DTR. It does not affect 
+SNOR_HWCAPS_PP_8_8_8_DTR. So it shouldn't be called RDWR.
+ 
+> more precisely and clearly ?
+> 
+> thanks,
+> Mason
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
+Pratyush Yadav
+Texas Instruments India
