@@ -2,91 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C6E1DD40A
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 19:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A7A1DD459
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 19:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729930AbgEURNk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 13:13:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44120 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728581AbgEURNk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 21 May 2020 13:13:40 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 82FE920759;
-        Thu, 21 May 2020 17:13:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590081220;
-        bh=nLt/i15MjrNqsvOy9V+a9DQMHa6geg3s34SazJ34AHU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q6tZlNf+RLWG225hD6Aw5iF3BpM/yh2Z7VInb6ke+UEVhW2PWK10GYrwFpmlLYW3r
-         fgo+1m6zLsuxqE5m9eDeWuPneOMyC38E/a07Y5Q9DGhN6Qs4kRPX6KBcexADrxD4bB
-         /pxKnzD9iqwZgfr27IAHNiaO85az9soxX/7mWooY=
-Date:   Thu, 21 May 2020 18:13:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: snps,dw-apb-ssi: add optional reset
- property
-Message-ID: <20200521171337.GI4770@sirena.org.uk>
+        id S1728312AbgEUR2k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 13:28:40 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:39784 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727955AbgEUR2j (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 13:28:39 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id BD6ED803087B;
+        Thu, 21 May 2020 17:28:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id eHxoNLgoGl2o; Thu, 21 May 2020 20:28:36 +0300 (MSK)
+Date:   Thu, 21 May 2020 20:28:35 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
+        Liang Jin J <liang.j.jin@ericsson.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Subject: Re: [PATCH 1/2] spi: dw: add reset control
+Message-ID: <20200521172835.pf37pyd7whg76d3a@mobilestation>
 References: <20200521170359.20430-1-dinguyen@kernel.org>
- <20200521170359.20430-2-dinguyen@kernel.org>
+ <20200521171203.GH4770@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Az4VpBrmI9+OyhK/"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200521170359.20430-2-dinguyen@kernel.org>
-X-Cookie: Keep your laws off my body!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200521171203.GH4770@sirena.org.uk>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, May 21, 2020 at 06:12:03PM +0100, Mark Brown wrote:
+> On Thu, May 21, 2020 at 12:03:58PM -0500, Dinh Nguyen wrote:
+> > Add mechanism to get the reset control and deassert it in order to bring
+> > the IP out of reset.
+> > 
+> > Signed-off-by: Liang Jin J <liang.j.jin@ericsson.com>
+> > Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+> 
+> Is the From: correct here?
+> 
+> Also adding everyone else who's got patches in flight for this driver
+> right now.
+> 
+> > ---
+> >  drivers/spi/spi-dw-mmio.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> > index 384a3ab6dc2d..5c813e15ed89 100644
+> > --- a/drivers/spi/spi-dw-mmio.c
+> > +++ b/drivers/spi/spi-dw-mmio.c
+> > @@ -20,6 +20,7 @@
+> >  #include <linux/acpi.h>
+> >  #include <linux/property.h>
+> >  #include <linux/regmap.h>
+> > +#include <linux/reset.h>
+> >  
+> >  #include "spi-dw.h"
+> >  
+> > @@ -30,6 +31,7 @@ struct dw_spi_mmio {
+> >  	struct clk     *clk;
+> >  	struct clk     *pclk;
+> >  	void           *priv;
+> > +	struct reset_control	*rstc;
+> >  };
+> >  
+> >  #define MSCC_CPU_SYSTEM_CTRL_GENERAL_CTRL	0x24
+> > @@ -145,6 +147,10 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+> >  	if (!dwsmmio)
+> >  		return -ENOMEM;
+> >  
 
---Az4VpBrmI9+OyhK/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > +	dwsmmio->rstc = devm_reset_control_get_exclusive(&pdev->dev, "spi");
 
-On Thu, May 21, 2020 at 12:03:59PM -0500, Dinh Nguyen wrote:
-> Add optional reset property.
->=20
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
->  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt b/=
-Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-> index 3ed08ee9feba..e01c557a9876 100644
-> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
-> @@ -37,5 +37,7 @@ Example:
->  		num-cs =3D <2>;
->  		cs-gpios =3D <&gpio0 13 0>,
->  			   <&gpio0 14 0>;
-> +		resets =3D <&rst SPIM0_RST>;
-> +		reset-names =3D "spi";
+It would be better to use the optional-version of the reset getter:
+devm_reset_control_get_optional_exclusive(), since for instance our DW APB SSI
+doesn't have a dedicated reset line.
 
-This only adds the example, it doesn't add anything to the actual
-binding documentation.
+Note also that you don't need to check the rstc for being NULL. It's null if the
+reset line is optional and isn't provided.
 
---Az4VpBrmI9+OyhK/
-Content-Type: application/pgp-signature; name="signature.asc"
+If we get to have this patch applied, then DT binding shall be also updated...
+Though we haven't got it reviewed yet.(
 
------BEGIN PGP SIGNATURE-----
+-Sergey
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7GtsAACgkQJNaLcl1U
-h9AnSQf9HejrmAdErVY3ochU0FJ0BN0NFP/F4rzGy344mciEsopTU3UIpdvfyBQj
-AbbZ+UOt1IAaJAKRse7bPAMKDGigZQW+g+9zYAYSidLn85rHwao8UVHmFvTRIECk
-/uWiuDT2YQVHWJgbrlSlt5n1MTffhOL7UrvDgsPIOMo4j0H17LUiDxUNMY59CJ/z
-h1Z4GtBLInhcyopo7gNns/ZYUTmFNyDBuat5pyzbaQJ8bifG2vbxbkmstNw0FO5y
-Jb0jmO/RP45iCWb2mKdu99q7LtpFV7Fkis14c0/PeNTN8ZXH00RqK1xU4KCEJg1P
-8h1KkFl3OBA5PSaefEcvZLk13CRv+Q==
-=VJF0
------END PGP SIGNATURE-----
 
---Az4VpBrmI9+OyhK/--
+
+> > +	if (!IS_ERR(dwsmmio->rstc))
+> > +		reset_control_deassert(dwsmmio->rstc);
+> > +
+> >  	dws = &dwsmmio->dws;
+> >  
+> >  	/* Get basic io resource and map it */
+> 
+> Should we also undo the reset in error paths from probe()?  It's not the
+> end of the world if we don't but...
+> 
+> > @@ -220,6 +226,9 @@ static int dw_spi_mmio_remove(struct platform_device *pdev)
+> >  	clk_disable_unprepare(dwsmmio->pclk);
+> >  	clk_disable_unprepare(dwsmmio->clk);
+> >  
+> > +	if (dwsmmio->rstc)
+> > +		reset_control_assert(dwsmmio->rstc);
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > -- 
+> > 2.17.1
+> > 
+
+
