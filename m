@@ -2,95 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 031881DCC5A
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 13:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECE11DCCAA
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 14:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729080AbgEULrs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 07:47:48 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:37058 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729077AbgEULrr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 07:47:47 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3D2D4803087B;
-        Thu, 21 May 2020 11:47:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jNgJJc_VL4Gx; Thu, 21 May 2020 14:47:38 +0300 (MSK)
-Date:   Thu, 21 May 2020 14:47:36 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Feng Tang <feng.tang@intel.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Vinod Koul <vkoul@kernel.org>, Alan Cox <alan@linux.intel.com>,
-        Linus Walleij <linus.walleij@stericsson.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Clement Leger <cleger@kalray.eu>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 01/16] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200521114736.b2azyfvym372vkdl@mobilestation>
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
- <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
- <20200521030924.GA12568@shbuild999.sh.intel.com>
+        id S1727987AbgEUMOX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 08:14:23 -0400
+Received: from mga04.intel.com ([192.55.52.120]:5175 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727949AbgEUMOW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 21 May 2020 08:14:22 -0400
+IronPort-SDR: HiyzefAXvFyNDzbb+e9dy8/clmrwIfB7ubXZDO2bf5AwVJ5MsQ4zlPa5ctcGx5/W9WTHTD/UNW
+ V0zZGYMcUhQA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 05:14:12 -0700
+IronPort-SDR: MFQk67iCXel4hNSRiGw0kw3tkSFQSs0WGWIE0LscF3gapHDp7VHSj1sMLjVmuLywmuKyIbkWIl
+ 2i7szTVcA3ug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,417,1583222400"; 
+   d="scan'208";a="466762230"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 21 May 2020 05:14:11 -0700
+Received: from [10.215.164.158] (vramuthx-mobl1.gar.corp.intel.com [10.215.164.158])
+        by linux.intel.com (Postfix) with ESMTP id AD60A5804B4;
+        Thu, 21 May 2020 05:14:05 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v2 1/1] dt-bindings: spi: Add schema for Cadence QSPI
+ Controller driver
+To:     Mark Brown <broonie@kernel.org>
+Cc:     robh@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, vigneshr@ti.com,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
+References: <20200520123612.11797-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200520124329.GF4823@sirena.org.uk>
+ <fd086da7-7e18-83bc-d423-56095b0cff96@linux.intel.com>
+ <20200521105646.GA4770@sirena.org.uk>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <24b0297c-5c33-f690-9514-68b76fc2c9ea@linux.intel.com>
+Date:   Thu, 21 May 2020 20:14:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200521030924.GA12568@shbuild999.sh.intel.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200521105646.GA4770@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Feng,
 
-On Thu, May 21, 2020 at 11:09:24AM +0800, Feng Tang wrote:
-> Hi Serge,
+Hi Mark,
+
+On 21/5/2020 6:56 pm, Mark Brown wrote:
+> On Thu, May 21, 2020 at 10:18:26AM +0800, Ramuthevar, Vadivel MuruganX wrote:
+>> On 20/5/2020 8:43 pm, Mark Brown wrote:
+>>> On Wed, May 20, 2020 at 08:36:12PM +0800, Ramuthevar,Vadivel MuruganX wrote:
 > 
-> On Thu, May 21, 2020 at 04:21:51AM +0300, Serge Semin wrote:
-
-[nip]
-
-> >  /*
-> >   * dws->dma_chan_busy is set before the dma transfer starts, callback for rx
-> >   * channel will clear a corresponding bit.
-> > @@ -200,6 +267,8 @@ static void dw_spi_dma_rx_done(void *arg)
-> >  {
-> >  	struct dw_spi *dws = arg;
-> >  
-> > +	dw_spi_dma_wait_rx_done(dws);
+>>>>    .../devicetree/bindings/mtd/cadence-quadspi.txt    |  67 -----------
+>>>>    .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 133 +++++++++++++++++++++
 > 
-> I can understand the problem about TX, but I don't see how RX
-> will get hurt, can you elaborate more? thanks
+>>> The changelog says this is adding a new binding but the actual change is
+>>> mostly a conversion to YAML.  Please split the additions out into a
+>>> separate change, ideally doing that before the conversion since there is
+>>> a backlog on review of YAML conversions.
 > 
-> - Feng
+>> Initially was sending the only YAML file alone, then reviewers suggest to me
+>> do this way so I did, next by split the patches like below...
+> 
+>> 1. remove the cadence-quadspi.txt (patch1)
+>> 2. convert txt to YAML (patch2)
+> 
+> That doesn't address either of the issues.  The removal of the old
+> bindings and addition of the YAML ones needs to be in a single patch
+> doing that conversion.  What I'm suggesting should be done separately is
+> whatever changes to the semantics of the bindings you are (according to
+> your changelog) doing.
+You mean semantics of the binding as a single patch you are suggesting 
+me, right? , Thanks!
 
-Your question is correct. You are right with your hypothesis. Ideally upon the
-dw_spi_dma_rx_done() execution Rx FIFO must be already empty. That's why the
-commit log signifies the error being mostly related with Tx FIFO. But
-practically there are many reasons why Rx FIFO might be left with data:
-DMA engine failures, incorrect DMA configuration (if DW SPI or DW DMA driver
-messed something up), controller hanging up, and so on. It's better to catch
-an error at this stage while propagating it up to the SPI device drivers.
-Especially seeing the wait-check implementation doesn't gives us much of the
-execution overhead in normal conditions. So by calling dw_spi_dma_wait_rx_done()
-we make sure that all the data has been fetched and we may freely get the
-buffers back to the client driver.
+Regards
+Vadivel
 
--Sergey
+> 
