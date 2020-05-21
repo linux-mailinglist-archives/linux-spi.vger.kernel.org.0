@@ -2,173 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3651DD24D
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 17:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B551DD259
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 17:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728313AbgEUPuP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 11:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727911AbgEUPuO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 11:50:14 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE6CC061A0F
-        for <linux-spi@vger.kernel.org>; Thu, 21 May 2020 08:50:14 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id c75so3364533pga.3
-        for <linux-spi@vger.kernel.org>; Thu, 21 May 2020 08:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sA0g0lvUpDIAD2lv16TTki6eZ5ObFWThT5hUTpKEaZM=;
-        b=SxHSttAbNR9u1pBK/vE9U0EvP6k3sUDZ9euViRsxBhKQwtZZDJ+9Slcp75EnC7zjV5
-         3QlU+9wjPe1kXPzohm590bPeD+ilHSPRnU3z+uxzqm9U8JGHzSUzIAXM/O6kuQ2PDsOe
-         dD74tuoLkEfq0G1fPZmGd+xbLTMEkayphxpyE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sA0g0lvUpDIAD2lv16TTki6eZ5ObFWThT5hUTpKEaZM=;
-        b=fvjzzhMdZ3XnYhJMDrzWjMMTaWW9djnmWUoZBpTExkS7vDfmCSPP+SQRaTnaQ/K3GY
-         KBxicEiqXBjRO48oAnUIcw4pTJkp1t1aafQ8KEjmKSdLjLoAmYlSsrBzlIWEY7Q772pR
-         O1okrqd6peycRosNjobr2WTVg8dxDT9CtgeB5jjIxWCsUe6Nf0HNi3qq5kNYn2OFVLK1
-         IG7feZ0bYoew0Uz58LJW6w96YprSb31j29U6F626QnRIW4zQdpA1wtka+1FiVQoQt8Jo
-         yXcTv/XmCOFwCdsEtfMfunGYkttHRIBD9GmWk9jSPBdOcr+TG9NEP/cJaMQcY7yHsf7p
-         c5bw==
-X-Gm-Message-State: AOAM530H23tfO8lvWf7o0Lq3BBggaSNW0MzxuIPKG6esSb7HgAnMfh+3
-        ZFMRbdZOMTWGTHLGKalSU8gJsw==
-X-Google-Smtp-Source: ABdhPJxkbbtArxWaeGThhTrUz55mXsi5ObGXQZbuxg7+tuo7TBShdw6VKuYjcKrRM+3WbVWaoAbFxQ==
-X-Received: by 2002:a62:3642:: with SMTP id d63mr2097232pfa.8.1590076213954;
-        Thu, 21 May 2020 08:50:13 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id s94sm4983713pjb.20.2020.05.21.08.50.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2020 08:50:12 -0700 (PDT)
-Date:   Thu, 21 May 2020 08:50:09 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        msavaliy@codeaurora.org, evgreen@chromium.org
-Subject: Re: [PATCH V6 1/7] soc: qcom: geni: Support for ICC voting
-Message-ID: <20200521155009.GA4525@google.com>
-References: <1590049764-20912-1-git-send-email-akashast@codeaurora.org>
- <1590049764-20912-2-git-send-email-akashast@codeaurora.org>
+        id S1727941AbgEUPvr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 11:51:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42222 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726814AbgEUPvq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 21 May 2020 11:51:46 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E5C7206F6;
+        Thu, 21 May 2020 15:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590076306;
+        bh=mO0PzgDMdpQ32+Tp34GeQLw4brmQwyU7HhvPc3aXfRc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yB9mC01ohdIgpEdwUtfCboqeKzlvDlz3L1WEsOyI/5TSYkGjP5dxxtcvEVObFbTdn
+         ciBuprt1AS/qB1bOWmpGsXRwzfnorXUw/X9fOmqrqTFcAQxvK1wWKM7BwqVL70cmjx
+         DBxceZD7Ojt4PP+Tlpj7ukfiuraFYVmV/3PM4kxw=
+Date:   Thu, 21 May 2020 16:51:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Clement Leger <cleger@kalray.eu>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 03/16] spi: dw: Discard static DW DMA slave structures
+Message-ID: <20200521155143.GE4770@sirena.org.uk>
+References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521012206.14472-4-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75VcOX-hZSxHqro_W2X=KzSShg1V=jAsxdz8L5TZpW0kBYA@mail.gmail.com>
+ <20200521121228.aqplh6eftylnys3p@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Q8BnQc91gJZX4vDc"
 Content-Disposition: inline
-In-Reply-To: <1590049764-20912-2-git-send-email-akashast@codeaurora.org>
+In-Reply-To: <20200521121228.aqplh6eftylnys3p@mobilestation>
+X-Cookie: Keep your laws off my body!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Akash,
 
-On Thu, May 21, 2020 at 01:59:18PM +0530, Akash Asthana wrote:
-> Add necessary macros and structure variables to support ICC BW
-> voting from individual SE drivers.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> Changes in V2:
->  - As per Bjorn's comment dropped enums for ICC paths, given the three
->    paths individual members
-> 
-> Changes in V3:
->  - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
->  - Add geni_icc_path structure in common header
-> 
-> Changes in V4:
->  - As per Bjorn's comment print error message in geni_icc_get if return
->    value is not -EPROBE_DEFER.
->  - As per Bjorn's comment remove NULL on path before calling icc_set_bw
->    API.
->  - As per Bjorn's comment drop __func__ print.
->  - As per Matthias's comment, make ICC path a array instead of individual
->    member entry in geni_se struct.
-> 
-> Changes in V5:
->  - As per Matthias's comment defined enums for ICC paths.
->  - Integrate icc_enable/disable with power on/off call for driver.
->  - As per Matthias's comment added icc_path_names array to print icc path name
->    in failure case.
->  - As per Georgi's suggestion assume peak_bw = avg_bw if not mentioned.
-> 
-> Changes in V6:
->  - Addressed nitpicks from Matthias.
-> 
-> Note: I have ignored below check patch suggestion because it was throwing
->       compilation error as 'icc_ddr' is not compile time comstant.
-> 
-> WARNING: char * array declaration might be better as static const
->  - FILE: drivers/soc/qcom/qcom-geni-se.c:726:
->  - const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
-> 
->  drivers/soc/qcom/qcom-geni-se.c | 92 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/qcom-geni-se.h    | 42 +++++++++++++++++++
->  2 files changed, 134 insertions(+)
-> 
-> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index 7d622ea..0b2526d 100644
-> --- a/drivers/soc/qcom/qcom-geni-se.c
-> +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -92,6 +92,9 @@ struct geni_wrapper {
->  	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
->  };
->  
-> +static const char * const icc_path_names[] = {"qup-core", "qup-config",
-> +						"qup-memory"};
-> +
->  #define QUP_HW_VER_REG			0x4
->  
->  /* Common SE registers */
-> @@ -720,6 +723,95 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
->  }
->  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
->  
-> +int geni_icc_get(struct geni_se *se, const char *icc_ddr)
-> +{
-> +	int i, err;
-> +	const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
-> +
-> +	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
-> +		if (!icc_names[i])
-> +			continue;
-> +
-> +		se->icc_paths[i].path = devm_of_icc_get(se->dev, icc_names[i]);
-> +		if (IS_ERR(se->icc_paths[i].path))
-> +			goto err;
-> +	}
-> +
-> +	return 0;
-> +
-> +err:
-> +	err = PTR_ERR(se->icc_paths[i].path);
-> +	if (err != -EPROBE_DEFER)
-> +		dev_err_ratelimited(se->dev, "Failed to get ICC path:%s :%d\n",
+--Q8BnQc91gJZX4vDc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-That's still an odd format, especially the colon before the error code. My
-suggestion was "... path 'qup-core': 42" i.e. "... path '%s': %d".
+On Thu, May 21, 2020 at 03:12:28PM +0300, Serge Semin wrote:
 
-I don't want to stall the series on nits though, if there is no need for
-a respin for other reasons this can be also fixed with a patch after this
-has landed.
+> Well, for me both solutions are equal except mine consumes less stack memory.
+> The only reason why your solution might be better is that if DW DMA driver or
+> the DMA engine subsystem changed the dw_dma_slave structure instance passed to
+> the dma_request_channel() method, which non of them do. So I'll leave this for
+> Mark to decide. Mark, could you give us your final word about this?
 
-I'm still not overly convinced about having two bandwidth values for what
-might happen in the future (or not). Typically unused functions or struct
-members that are added just in case tend to be rejected, since they can be
-added when the need actually arises. Anyway, as long as maintainers are
-happy with it I won't object.
+Honestly I'm struggling to care either way.  I guess saving a bit of
+stack is potentially useful.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+--Q8BnQc91gJZX4vDc
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7Go44ACgkQJNaLcl1U
+h9ARkgf+MntLj5Do0nvBWAqICSlgK/Xn8rMj1fR5eJDBdfgclFhZsPYUHPbZHr6I
+/U2aWUFEslX7Gq/QAu2JNA+uYp3p798aYv1u/h+Ss858qzbkBsRWNVAVFzNph0Dk
+qiruZrmFMuDqF0O/ofqHI4yiOqlJnT4KixjR7tKDoHlW4IxXrsHCCR6mAFmunYpY
+5XEIolhWrMiP6dN5vmAMwRt6My2zESwY3of8eW2lApg0n6tR2SFnWz5++CR7K04b
+TO73tMeXtI1lBogjeYz7iuC0joI16cg5aaDq5Lt6lMdbK6qhH5ZLjAynCRQLKE4C
+F/qLatJ9ve0BIC069lF4Tznzsq8NIg==
+=1v3o
+-----END PGP SIGNATURE-----
 
-
+--Q8BnQc91gJZX4vDc--
