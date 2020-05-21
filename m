@@ -2,205 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A731DCB5C
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 12:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB121DCB7C
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 12:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727880AbgEUKtH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 06:49:07 -0400
-Received: from mga17.intel.com ([192.55.52.151]:48336 "EHLO mga17.intel.com"
+        id S1728491AbgEUK4u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 06:56:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33720 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727034AbgEUKtG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 21 May 2020 06:49:06 -0400
-IronPort-SDR: ubYYU07HwqI7YVj7lwR9jUnoduzOyvfO4T0rhvQVngXRkCu1WnIyTWs0+RyDq78JCdeRu5ZO6s
- 4QASHYGjI/ow==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 03:49:06 -0700
-IronPort-SDR: j54tVNWAMKZQp/4fVJ75sZHIhe48xnM00KcoMaDyIP50TxlVD/PYD+y0lwjG06H3ynBd1zGGQv
- u2uXTKzu5nvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,417,1583222400"; 
-   d="scan'208";a="268592021"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006.jf.intel.com with ESMTP; 21 May 2020 03:49:01 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jbil6-00819S-9w; Thu, 21 May 2020 13:49:04 +0300
-Date:   Thu, 21 May 2020 13:49:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Clement Leger <cleger@kalray.eu>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/16] spi: dw: Use DMA max burst to set the request
- thresholds
-Message-ID: <20200521104904.GK1634618@smile.fi.intel.com>
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
- <20200521012206.14472-8-Sergey.Semin@baikalelectronics.ru>
+        id S1728348AbgEUK4u (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 21 May 2020 06:56:50 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D1F30206F6;
+        Thu, 21 May 2020 10:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590058609;
+        bh=seW5V778px/AgzonYSOezyKQVmV3Co7HCNgbinTsjyg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jZbg4vvcLz0BWO3+7f3IRMU9tzhJygn8ioscFP/ZqnGFrF8ie91HV+nRvRe7qZKIL
+         S4NZZiLfJgP7Eo4tw1u7++Vd48k3aP42ktKeKc4oOt/epvOoOm3tlg+XEVahGyWWCX
+         SCivWjO4FdwbrEKnERNBtyqMub/z9gqjdOyvQsgw=
+Date:   Thu, 21 May 2020 11:56:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     robh@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, vigneshr@ti.com,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
+Subject: Re: [PATCH v2 1/1] dt-bindings: spi: Add schema for Cadence QSPI
+ Controller driver
+Message-ID: <20200521105646.GA4770@sirena.org.uk>
+References: <20200520123612.11797-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200520124329.GF4823@sirena.org.uk>
+ <fd086da7-7e18-83bc-d423-56095b0cff96@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0OAP2g/MAC+5xKAE"
 Content-Disposition: inline
-In-Reply-To: <20200521012206.14472-8-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <fd086da7-7e18-83bc-d423-56095b0cff96@linux.intel.com>
+X-Cookie: Keep your laws off my body!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 21, 2020 at 04:21:57AM +0300, Serge Semin wrote:
-> Each channel of DMA controller may have a limited length of burst
-> transaction (number of IO operations performed at ones in a single
-> DMA client request). This parameter can be used to setup the most
-> optimal DMA Tx/Rx data level values. In order to avoid the Tx buffer
-> overrun we can set the DMA Tx level to be of FIFO depth minus the
-> maximum burst transactions length. To prevent the Rx buffer underflow
-> the DMA Rx level should be set to the maximum burst transactions length.
-> This commit setups the DMA channels and the DW SPI DMA Tx/Rx levels
-> in accordance with these rules.
 
-Besides one bikeshedding point, looks good to me.
-Feel free to add
+--0OAP2g/MAC+5xKAE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Thu, May 21, 2020 at 10:18:26AM +0800, Ramuthevar, Vadivel MuruganX wrote:
+> On 20/5/2020 8:43 pm, Mark Brown wrote:
+> > On Wed, May 20, 2020 at 08:36:12PM +0800, Ramuthevar,Vadivel MuruganX wrote:
 
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> 
-> ---
-> 
-> Changelog v3:
-> - Use min() method to calculate the optimal burst values.
-> ---
->  drivers/spi/spi-dw-mid.c | 37 +++++++++++++++++++++++++++++++++----
->  drivers/spi/spi-dw.h     |  2 ++
->  2 files changed, 35 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-> index be02fedd87cb..0e95d8bc85c5 100644
-> --- a/drivers/spi/spi-dw-mid.c
-> +++ b/drivers/spi/spi-dw-mid.c
-> @@ -34,6 +34,31 @@ static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
->  	return true;
->  }
->  
-> +static void mid_spi_maxburst_init(struct dw_spi *dws)
-> +{
-> +	struct dma_slave_caps caps;
-> +	u32 max_burst, def_burst;
-> +	int ret;
-> +
-> +	def_burst = dws->fifo_len / 2;
-> +
-> +	ret = dma_get_slave_caps(dws->rxchan, &caps);
-> +	if (!ret && caps.max_burst)
-> +		max_burst = caps.max_burst;
-> +	else
-> +		max_burst = RX_BURST_LEVEL;
-> +
-> +	dws->rxburst = min(max_burst, def_burst);
-> +
-> +	ret = dma_get_slave_caps(dws->txchan, &caps);
-> +	if (!ret && caps.max_burst)
-> +		max_burst = caps.max_burst;
-> +	else
-> +		max_burst = TX_BURST_LEVEL;
-> +
-> +	dws->txburst = min(max_burst, def_burst);
-> +}
-> +
->  static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
->  {
->  	struct dw_dma_slave slave = {
-> @@ -69,6 +94,8 @@ static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
->  	dws->master->dma_rx = dws->rxchan;
->  	dws->master->dma_tx = dws->txchan;
->  
-> +	mid_spi_maxburst_init(dws);
-> +
->  	return 0;
->  
->  free_rxchan:
-> @@ -94,6 +121,8 @@ static int mid_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
->  	dws->master->dma_rx = dws->rxchan;
->  	dws->master->dma_tx = dws->txchan;
->  
-> +	mid_spi_maxburst_init(dws);
-> +
->  	return 0;
->  }
->  
-> @@ -216,7 +245,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
->  	memset(&txconf, 0, sizeof(txconf));
->  	txconf.direction = DMA_MEM_TO_DEV;
->  	txconf.dst_addr = dws->dma_addr;
-> -	txconf.dst_maxburst = TX_BURST_LEVEL;
-> +	txconf.dst_maxburst = dws->txburst;
->  	txconf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
->  	txconf.dst_addr_width = convert_dma_width(dws->n_bytes);
->  	txconf.device_fc = false;
-> @@ -290,7 +319,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
->  	memset(&rxconf, 0, sizeof(rxconf));
->  	rxconf.direction = DMA_DEV_TO_MEM;
->  	rxconf.src_addr = dws->dma_addr;
-> -	rxconf.src_maxburst = RX_BURST_LEVEL;
-> +	rxconf.src_maxburst = dws->rxburst;
->  	rxconf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
->  	rxconf.src_addr_width = convert_dma_width(dws->n_bytes);
->  	rxconf.device_fc = false;
-> @@ -315,8 +344,8 @@ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
->  {
->  	u16 imr = 0, dma_ctrl = 0;
->  
-> -	dw_writel(dws, DW_SPI_DMARDLR, RX_BURST_LEVEL - 1);
-> -	dw_writel(dws, DW_SPI_DMATDLR, TX_BURST_LEVEL);
-> +	dw_writel(dws, DW_SPI_DMARDLR, dws->rxburst - 1);
-> +	dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
->  
->  	if (xfer->tx_buf) {
->  		dma_ctrl |= SPI_DMA_TDMAE;
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index 4902f937c3d7..d0c8b7d3a5d2 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -141,7 +141,9 @@ struct dw_spi {
->  
->  	/* DMA info */
->  	struct dma_chan		*txchan;
-> +	u32			txburst;
->  	struct dma_chan		*rxchan;
-> +	u32			rxburst;
->  	unsigned long		dma_chan_busy;
->  	dma_addr_t		dma_addr; /* phy address of the Data register */
->  	const struct dw_spi_dma_ops *dma_ops;
-> -- 
-> 2.25.1
-> 
+> > >   .../devicetree/bindings/mtd/cadence-quadspi.txt    |  67 -----------
+> > >   .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 133 +++++++++++++++++++++
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > The changelog says this is adding a new binding but the actual change is
+> > mostly a conversion to YAML.  Please split the additions out into a
+> > separate change, ideally doing that before the conversion since there is
+> > a backlog on review of YAML conversions.
 
+> Initially was sending the only YAML file alone, then reviewers suggest to me
+> do this way so I did, next by split the patches like below...
 
+> 1. remove the cadence-quadspi.txt (patch1)
+> 2. convert txt to YAML (patch2)
+
+That doesn't address either of the issues.  The removal of the old
+bindings and addition of the YAML ones needs to be in a single patch
+doing that conversion.  What I'm suggesting should be done separately is
+whatever changes to the semantics of the bindings you are (according to
+your changelog) doing.
+
+--0OAP2g/MAC+5xKAE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7GXmsACgkQJNaLcl1U
+h9BdFwgAgFljcWTcMb6Us4MfVHcgy1YEqUmIwGaqY2UIBzMVQryRSOVEhQ4rpXHl
+axvDWQGwewuHB1d0UU8Ec+YKWRJl/MYTCtmTHuE4OYL5ZY1YCM5udJ05u/8FuWB6
+Z1Pqt3iJ/QHc76gNqZ+BXnUMGh222ixJSSci5lTKkznlratWhtyz1wJU8IJ2I+M1
+zRwl78qMsTvBE8abg7NBXHMlQae0yQVcr0ndYjJkx8z/5C6RvFQ+WGCPjf+xTH7E
+IEQxy2zRFVI5EJjofGLCDWitAZSLDULZqh0LObpKRJN6X9aOriK+dQzSVAH2EhvE
+ElA/2sH+NZpcz19Wlp6+U+5xNYTNqw==
+=Xvew
+-----END PGP SIGNATURE-----
+
+--0OAP2g/MAC+5xKAE--
