@@ -2,29 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C129B1DCC0B
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 13:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DB51DCC09
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 13:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728887AbgEULYV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 07:24:21 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:47478 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728922AbgEULYU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        id S1729040AbgEULYU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Thu, 21 May 2020 07:24:20 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:47490 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728414AbgEULYT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 21 May 2020 07:24:19 -0400
 Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 0389779028A765082C68;
+        by Forcepoint Email with ESMTP id 09BDBD8DE7A7168C8D15;
         Thu, 21 May 2020 19:24:18 +0800 (CST)
 Received: from localhost.localdomain (10.67.165.24) by
  DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 21 May 2020 19:24:07 +0800
+ 14.3.487.0; Thu, 21 May 2020 19:24:08 +0800
 From:   Yicong Yang <yangyicong@hisilicon.com>
 To:     <broonie@kernel.org>, <tudor.ambarus@microchip.com>,
         <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>
 CC:     <john.garry@huawei.com>, <miquel.raynal@bootlin.com>,
         <richard@nod.at>, <vigneshr@ti.com>
-Subject: [RFC PATCH 2/3] mtd: spi-nor: Add prepare/unprepare support for spimem device
-Date:   Thu, 21 May 2020 19:23:50 +0800
-Message-ID: <1590060231-23242-3-git-send-email-yangyicong@hisilicon.com>
+Subject: [RFC PATCH 3/3] spi: hisi-sfc-v3xx: Add prepare/unprepare methods to avoid race condition
+Date:   Thu, 21 May 2020 19:23:51 +0800
+Message-ID: <1590060231-23242-4-git-send-email-yangyicong@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1590060231-23242-1-git-send-email-yangyicong@hisilicon.com>
 References: <1590060231-23242-1-git-send-email-yangyicong@hisilicon.com>
@@ -37,46 +37,97 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-spi-nor flash's read/write/erase/lock/unlock may be composed of a set
-of operations, and some prepare/unprepare works need to be done before/
-after these operations in spi_nor_{lock, unlock}_and_{prep, unprep}().
-Previously we only call spi-nor controllers' prepare/unprepare method
-in the functions, without spimem devices'.
+The controller can be shared with the firmware, which may cause race
+problems. As most read/write/erase/lock/unlock of spi-nor flash are
+composed of a set of operations, while the firmware may use the controller
+and start its own operation in the middle of the process started by the
+kernel driver, which may lead to the kernel driver's function broken.
 
-Add spimem devices' prepare/unprepare support. Call spi_mem_{prepare,
-unprepare}() function if it's a spimem device.
+Bit[20] in HISI_SFC_V3XX_CMD_CFG register plays a role of a lock, to
+protect the controller from firmware access, which means the firmware
+cannot reach the controller if the driver set the bit. Add prepare/
+unprepare methods for the controller, we'll hold the lock in prepare
+method and release it in unprepare method, which will solve the race
+issue.
 
 Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 ---
- drivers/mtd/spi-nor/core.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/spi/spi-hisi-sfc-v3xx.c | 41 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index cc68ea8..3a7e40a 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -1103,7 +1103,9 @@ int spi_nor_lock_and_prep(struct spi_nor *nor)
+diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
+index e3b5725..13c161c 100644
+--- a/drivers/spi/spi-hisi-sfc-v3xx.c
++++ b/drivers/spi/spi-hisi-sfc-v3xx.c
+@@ -18,6 +18,7 @@
+ #define HISI_SFC_V3XX_VERSION (0x1f8)
  
- 	mutex_lock(&nor->lock);
+ #define HISI_SFC_V3XX_CMD_CFG (0x300)
++#define HISI_SFC_V3XX_CMD_CFG_LOCK BIT(20)
+ #define HISI_SFC_V3XX_CMD_CFG_DUAL_IN_DUAL_OUT (1 << 17)
+ #define HISI_SFC_V3XX_CMD_CFG_DUAL_IO (2 << 17)
+ #define HISI_SFC_V3XX_CMD_CFG_FULL_DIO (3 << 17)
+@@ -41,6 +42,34 @@ struct hisi_sfc_v3xx_host {
+ 	int max_cmd_dword;
+ };
  
--	if (nor->controller_ops &&  nor->controller_ops->prepare) {
-+	if (nor->spimem) {
-+		ret = spi_mem_prepare(nor->spimem);
-+	} else if (nor->controller_ops &&  nor->controller_ops->prepare) {
- 		ret = nor->controller_ops->prepare(nor);
- 		if (ret) {
- 			mutex_unlock(&nor->lock);
-@@ -1115,7 +1117,9 @@ int spi_nor_lock_and_prep(struct spi_nor *nor)
++int hisi_sfc_v3xx_op_prepare(struct spi_mem *mem)
++{
++	struct spi_device *spi = mem->spi;
++	struct hisi_sfc_v3xx_host *host;
++	u32 reg = HISI_SFC_V3XX_CMD_CFG_LOCK;
++
++	host = spi_controller_get_devdata(spi->master);
++
++	writel(reg, host->regbase + HISI_SFC_V3XX_CMD_CFG);
++
++	reg = readl(host->regbase + HISI_SFC_V3XX_CMD_CFG);
++	if (!(reg & HISI_SFC_V3XX_CMD_CFG_LOCK))
++		return -EIO;
++
++	return 0;
++}
++
++void hisi_sfc_v3xx_op_unprepare(struct spi_mem *mem)
++{
++	struct spi_device *spi = mem->spi;
++	struct hisi_sfc_v3xx_host *host;
++
++	host = spi_controller_get_devdata(spi->master);
++
++	/* Release the lock and clear the command register. */
++	writel(0, host->regbase + HISI_SFC_V3XX_CMD_CFG);
++}
++
+ #define HISI_SFC_V3XX_WAIT_TIMEOUT_US		1000000
+ #define HISI_SFC_V3XX_WAIT_POLL_INTERVAL_US	10
  
- void spi_nor_unlock_and_unprep(struct spi_nor *nor)
+@@ -163,7 +192,15 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
+ 					 u8 chip_select)
  {
--	if (nor->controller_ops && nor->controller_ops->unprepare)
-+	if (nor->spimem)
-+		spi_mem_unprepare(nor->spimem);
-+	else if (nor->controller_ops && nor->controller_ops->unprepare)
- 		nor->controller_ops->unprepare(nor);
- 	mutex_unlock(&nor->lock);
- }
+ 	int ret, len = op->data.nbytes;
+-	u32 config = 0;
++	u32 config;
++
++	/*
++	 * The lock bit is in the command register. Clear the command
++	 * field with lock bit held if it has been set in
++	 * .prepare().
++	 */
++	config = readl(host->regbase + HISI_SFC_V3XX_CMD_CFG);
++	config &= HISI_SFC_V3XX_CMD_CFG_LOCK;
+ 
+ 	if (op->addr.nbytes)
+ 		config |= HISI_SFC_V3XX_CMD_CFG_ADDR_EN_MSK;
+@@ -248,6 +285,8 @@ static int hisi_sfc_v3xx_exec_op(struct spi_mem *mem,
+ 
+ static const struct spi_controller_mem_ops hisi_sfc_v3xx_mem_ops = {
+ 	.adjust_op_size = hisi_sfc_v3xx_adjust_op_size,
++	.prepare	= hisi_sfc_v3xx_op_prepare,
++	.unprepare	= hisi_sfc_v3xx_op_unprepare,
+ 	.exec_op = hisi_sfc_v3xx_exec_op,
+ };
+ 
 -- 
 2.8.1
 
