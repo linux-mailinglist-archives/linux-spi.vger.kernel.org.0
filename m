@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE451DC4AA
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 03:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC331DC4B1
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 03:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726861AbgEUBXi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 May 2020 21:23:38 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34116 "EHLO
+        id S1728138AbgEUBXp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 May 2020 21:23:45 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:34174 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726933AbgEUBXe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 May 2020 21:23:34 -0400
+        with ESMTP id S1728133AbgEUBXp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 May 2020 21:23:45 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 4C17F803078F;
-        Thu, 21 May 2020 01:23:32 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 10AC58030791;
+        Thu, 21 May 2020 01:23:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MqCpnVPk5B7M; Thu, 21 May 2020 04:23:31 +0300 (MSK)
+        with ESMTP id Ssoy7jDvi_QK; Thu, 21 May 2020 04:23:42 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -31,17 +31,17 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 12/16] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on the DW SPI core
-Date:   Thu, 21 May 2020 04:22:02 +0300
-Message-ID: <20200521012206.14472-13-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v3 14/16] spi: dw: Add DMA support to the DW SPI MMIO driver
+Date:   Thu, 21 May 2020 04:22:04 +0300
+Message-ID: <20200521012206.14472-15-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -53,9 +53,12 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Seeing all of the DW SPI driver components like DW SPI DMA/PCI/MMIO
-depend on the DW SPI core code it's better to use the if-endif
-conditional kernel config statement to signify that common dependency.
+Since the common code in the spi-dw-dma.c driver is ready to be used
+by the MMIO driver and now provides a method to generically (on any
+DT or ACPI-based platforms) retrieve the Tx/Rx DMA channel handlers,
+we can use it and a set of the common DW SPI DMA callbacks to enable
+DMA at least for generic "snps,dw-apb-ssi" and "snps,dwc-ssi-1.01a"
+devices.
 
 Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
 Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
@@ -73,37 +76,31 @@ Cc: Rob Herring <robh+dt@kernel.org>
 Cc: linux-mips@vger.kernel.org
 Cc: devicetree@vger.kernel.org
 ---
- drivers/spi/Kconfig | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/spi/spi-dw-mmio.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 6a84f3dad35c..3cdf8310d185 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -226,17 +226,20 @@ config SPI_DESIGNWARE
- 	help
- 	  general driver for SPI controller core from DesignWare
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index 0894b4c09496..e23d0c53a664 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -149,6 +149,8 @@ static int dw_spi_dw_apb_init(struct platform_device *pdev,
+ 	/* Register hook to configure CTRLR0 */
+ 	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
  
-+if SPI_DESIGNWARE
++	dw_spi_dma_setup_generic(&dwsmmio->dws);
 +
- config SPI_DW_DMA
- 	bool "DMA support for DW SPI controller"
--	depends on SPI_DESIGNWARE
+ 	return 0;
+ }
  
- config SPI_DW_PCI
- 	tristate "PCI interface driver for DW SPI core"
--	depends on SPI_DESIGNWARE && PCI
-+	depends on PCI
+@@ -158,6 +160,8 @@ static int dw_spi_dwc_ssi_init(struct platform_device *pdev,
+ 	/* Register hook to configure CTRLR0 */
+ 	dwsmmio->dws.update_cr0 = dw_spi_update_cr0_v1_01a;
  
- config SPI_DW_MMIO
- 	tristate "Memory-mapped io interface driver for DW SPI core"
--	depends on SPI_DESIGNWARE
-+	depends on HAS_IOMEM
++	dw_spi_dma_setup_generic(&dwsmmio->dws);
 +
-+endif
+ 	return 0;
+ }
  
- config SPI_DLN2
-        tristate "Diolan DLN-2 USB SPI adapter"
 -- 
 2.25.1
 
