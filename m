@@ -2,104 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F8B1DC8FA
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 10:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A8B1DC9B3
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 11:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728636AbgEUIqy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 04:46:54 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:8370 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728561AbgEUIqx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 04:46:53 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ec63f6c0001>; Thu, 21 May 2020 01:44:28 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Thu, 21 May 2020 01:46:52 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Thu, 21 May 2020 01:46:52 -0700
-Received: from [10.26.75.55] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 21 May
- 2020 08:46:50 +0000
-Subject: Re: [PATCH] spi: tegra20-slink: Fix runtime PM imbalance on error
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>
-CC:     Kangjie Lu <kjlu@umn.edu>, Laxman Dewangan <ldewangan@nvidia.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-References: <20200521074946.21799-1-dinghao.liu@zju.edu.cn>
- <CAHp75VfOeUaqRW2vRwyWaz3JJw41hX5jTgE+kZ8pB8E_HtHwqw@mail.gmail.com>
- <af91d97e-6367-996b-a925-a5c81f6fb182@nvidia.com>
-Message-ID: <046fe754-96d7-4530-2b70-e1991470ac0f@nvidia.com>
-Date:   Thu, 21 May 2020 09:46:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728755AbgEUJPD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 05:15:03 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:53910 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728748AbgEUJPC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 05:15:02 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04L9EdMR013665;
+        Thu, 21 May 2020 04:14:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590052479;
+        bh=6TWapEuxg8nAckEhBpE445YKmDj0TJ/xlqg6Fj94UN0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=MaaiESZ6aMqcrpmJHO1mfIi6xcBPy89FLOWsTC7LaSKeRbpKblQVGffGtUkHPmsGz
+         KtTJ6G2zE9wgGcvBYU37tyagCvHpizRCMMgOcroPyoWwWwrT8AucyU/I2e2Pw/IwO9
+         c3yoOkpPkfW2mWbh18+Ej1+oCaJOw0jBQh2uczPA=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04L9EdvO010693
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 21 May 2020 04:14:39 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 21
+ May 2020 04:14:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 21 May 2020 04:14:39 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04L9EcT0062434;
+        Thu, 21 May 2020 04:14:39 -0500
+Date:   Thu, 21 May 2020 14:44:36 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <masonccyang@mxic.com.tw>
+CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Mark Brown <broonie@kernel.org>, <juliensu@mxic.com.tw>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH v5 09/19] mtd: spi-nor: sfdp: parse xSPI Profile 1.0 table
+Message-ID: <20200521091434.rigqlyuwszyyikj4@ti.com>
+References: <20200519142642.24131-1-p.yadav@ti.com>
+ <20200519142642.24131-10-p.yadav@ti.com>
+ <OF83616464.480FA751-ON4825856E.002A4483-4825856E.002BE6AF@mxic.com.tw>
+ <20200520085534.yra4f5ww5xs23c4j@ti.com>
+ <OF98344913.4BF4C313-ON4825856E.0032A810-4825856E.00352141@mxic.com.tw>
+ <20200520103728.jtbslowdfrv3o5yz@ti.com>
+ <OFF5A6BA99.395182B5-ON4825856F.002B2F98-4825856F.002CD973@mxic.com.tw>
 MIME-Version: 1.0
-In-Reply-To: <af91d97e-6367-996b-a925-a5c81f6fb182@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1590050668; bh=wqcKSIH4pp4cK2tXITvJHzUw6hoJbcNsCjS4/KGudkE=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=EK/aTQ7rz3fHlcaD5IK88IPRC9F2WKPnEk8U1kjY3eUJ4aVxQTGjZo8exZK1UGoDT
-         VSL+iaoWOySo0FaGcLWp86UMMte8DBPPK90bzFD/NMty64vc2bhrqjXh5Y7qSoXIdD
-         41k9xImeVn4R27lKhd48Egf3OAYlUJHWwZMaCn43XRITX4cqt5MjJ/vTxmqFDfe2jr
-         /RwzeaVbMUcf8Igx8//gLJKvYWjb8bzkozqazOjq14y1KIFUxHb4HXSN8eElcOxesq
-         IYBSKjlRqZnSYPxtrDH+DHZAa+eriiHszqof61od+tMtBkm4/Of5zi4P2LezBBAGEv
-         vrXwXg/pZ6PvA==
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <OFF5A6BA99.395182B5-ON4825856F.002B2F98-4825856F.002CD973@mxic.com.tw>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-On 21/05/2020 09:38, Jon Hunter wrote:
+On 21/05/20 04:09PM, masonccyang@mxic.com.tw wrote:
 > 
-> On 21/05/2020 09:04, Andy Shevchenko wrote:
->> On Thu, May 21, 2020 at 10:50 AM Dinghao Liu <dinghao.liu@zju.edu.cn> wrote:
->>>
->>> pm_runtime_get_sync() increments the runtime PM usage counter even
->>> when it returns an error code. Thus a pairing decrement is needed on
->>> the error handling path to keep the counter balanced.
->>
->> ...
->>
->>>         ret = pm_runtime_get_sync(&pdev->dev);
->>>         if (ret < 0) {
->>>                 dev_err(&pdev->dev, "pm runtime get failed, e = %d\n", ret);
->>
->>> +               pm_runtime_put(&pdev->dev);
->>
->> For all your patches, please, double check what you are proposing.
->>
->> Here, I believe, the correct one will be _put_noidle().
->>
->> AFAIU you are not supposed to actually suspend the device in case of error.
->> But I might be mistaken, thus see above.
->>
->>>                 goto exit_pm_disable;
->>>         }
+> Hi Pratyush, 
 > 
+> > > > > > +   /* Get 8D-8D-8D fast read opcode and dummy cycles. */
+> > > > > > +   opcode = FIELD_GET(PROFILE1_DWORD1_RD_FAST_CMD, table[0]);
+> > > > > > +
+> > > > > > +   /*
+> > > > > > +    * Update the fast read settings. We set the default dummy 
+> > > cycles to 
+> > > > > 20
+> > > > > > +    * here. Flashes can change this value if they need to when 
+> > > enabling
+> > > > > > +    * octal mode.
+> > > > > > +    */
+> > > > > > + 
+> spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_8_8_8_DTR],
+> > > > > > +              0, 20, opcode,
+> > > > > > +              SNOR_PROTO_8_8_8_DTR);
+> > > > > > +
+> > > > > 
+> > > > > 
+> > > > > I thought we have a agreement that only do parse here, no other 
+> read 
+> > > > > parameters setting.
+> > > > 
+> > > > Yes, and I considered it. But it didn't make much sense to me to 
+> > > > introduce an extra member in struct spi_nor just to make this call 
+> in 
+> > > > some other function later.
+> > > > 
+> > > > Why exactly do you think doing this here is bad? The way I see it, 
+> we 
+> > > > avoid carrying around an extra member in spi_nor and this also 
+> allows 
+> > > > flashes to change the read settings easily in a post-sfdp hook. The 
+> > > > 4bait parsing function does something similar.
+> > > 
+> > > I think it's not a question for good or bad. 
+> > > 
+> > > 4bait parsing function parse the 4-Byte Address Instruction Table
+> > > and set up read/pp parameters there for sure.
+> > > 
+> > > Here we give the function name spi_nor_parse_profile1() but also 
+> > 
+> > But the function that parses 4bait table is also called 
+> > spi_nor_parse_4bait(). 
+> > 
+> > > do others setting that has nothing to do with it, 
+> > 
+> > Why has setting read opcode and dummy cycles got nothing to do with it? 
+> > The purpose of the Profile 1.0 table is to tell us the Read Fast 
+> > command and dummy cycles, among other things. I think it _does_ have 
+> > something to do with it.
 > 
-> Is there any reason why this is not handled in pm_runtime_get itself?
+> As you know I mean this function just do parse parameter of profile 1 
+> table
+> and keep these value data for later usage.
+> 
+> A device supports xSPI profile table could work in either 8S-8S-8S or 
+> 8D-8D-8D mode.
+> It seems to setup these parameters somewhere out here is betters.
 
-Ah I see a response from Rafael here:
-https://lkml.org/lkml/2020/5/20/1100
+As far as I know, the Profile 1.0 table only describes 8D-8D-8D mode. I 
+see no mention of 8S-8S-8S in JESD251 or JESD216D.01. No field in the 
+table describes anything related to 8S. In fact, searching for "8S" in 
+the JESD251 spec yields 0 results. 
 
-OK so this is intentional and needs to be fixed.
+Anyway, you should set up 8S parameters in SNOR_CMD_READ_8_8_8, not 
+SNOR_CMD_READ_8_8_8_DTR. 8D configuration is independent of 8S 
+configuration.
 
-Jon
+PS: If you have any more comments, please send them now. The merge 
+window is getting close, and I'd like to see this make it in.
 
 -- 
-nvpublic
+Regards,
+Pratyush Yadav
+Texas Instruments India
