@@ -2,54 +2,33 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBF51DCA8C
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 11:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268CA1DCAF3
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 12:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727776AbgEUJ5f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 05:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726405AbgEUJ5f (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 05:57:35 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B15C061A0E;
-        Thu, 21 May 2020 02:57:33 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id w19so2629291ply.11;
-        Thu, 21 May 2020 02:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ltjPOCU9A538igJqlQC+KDjFjSNLYyghW5XAjlV0EQI=;
-        b=pu4rceYVK6Lihnp83v+yc225cXHJm6lSy6vbEjEHturjUCei0W1hvCJmTDioKSPvJI
-         OSBAM7jlX9gl5xaYxJ5HvCF1SQ6mrm9cN3btWB6BgifgTY4sJZt1TBzgThmwMTl47Zdh
-         AMcraqWfMI02Jt/vFZjYUIaeaeRd5y/OraiOQVFe5NCH3dYK+8+5M1vTL0GUkbWl9muY
-         Elp78zjWwXYcNWzaKdgodX+Zjxf+cnpajpvtR1Uv+eTp8p+73hAqhT0z+8YCeA0MTljf
-         wxROOPCKgug260TPkmD7emTonRwFOBSPqNw2PA9kDuOylV+T4qifM+7zCN83rMt8YPpT
-         fUTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ltjPOCU9A538igJqlQC+KDjFjSNLYyghW5XAjlV0EQI=;
-        b=cXMcZbGUSxO4/G6sz8D94W9kJBILZP2Mzl7Aptrfdi78/N0F3dFaU0bfvE/uz60EEM
-         KA79CIiPtNX1mAb0knZfSjtrwmvo7JbDlWAwGhy2pIweUfKKDNlWgzB0nw45IQFDyq4g
-         28EeEh8hixUuHuSbfVA3tNqH7W3VxD3a9mrCCt1kpOUN7n+G34xr2HDnLWN3NFiZmA29
-         HYWHETlT+6r1RrIPTjkHL9O2XN1ypRgBAGaxcVqRHffoPouU2e/yPd/pB1MqvOnq79HT
-         03eoob7J8PibJjn11I5bzHQCO6q5RAfJVsL4sj0SQTn9u3EQoasF1UQSTwqJH9Vs3R7G
-         reQA==
-X-Gm-Message-State: AOAM533UJH/5N5DQC1KiGGk8lUCOnt4PZZ5uFV9uE2TiA4QsRBG0FHZn
-        kHC6tzskRUF4p0L4vWfdOXuqHmKh3k9O7Ax0a2U=
-X-Google-Smtp-Source: ABdhPJx4ebqcn9Ni6XbCgdV990I5/qzjx21xek5LX0qUfdKIo169E5pSe+gPowt99bXNUOjhLG135va1VeEt5wtiZTc=
-X-Received: by 2002:a17:90a:1704:: with SMTP id z4mr10186753pjd.181.1590055053473;
- Thu, 21 May 2020 02:57:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru> <20200521012206.14472-4-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200521012206.14472-4-Sergey.Semin@baikalelectronics.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 21 May 2020 12:57:17 +0300
-Message-ID: <CAHp75VcOX-hZSxHqro_W2X=KzSShg1V=jAsxdz8L5TZpW0kBYA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/16] spi: dw: Discard static DW DMA slave structures
+        id S1728363AbgEUKXy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 06:23:54 -0400
+Received: from mga18.intel.com ([134.134.136.126]:59106 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727009AbgEUKXx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 21 May 2020 06:23:53 -0400
+IronPort-SDR: o3ib3vPecimzU9mzkF8RO4jFtd59f+xTHP+EWWDa2DoX+pySusRFDc2aEQ1mN8qFwzk1VqSRWw
+ 1UFIptqrYtzA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 03:23:52 -0700
+IronPort-SDR: OvzjCwo1pOHa2LToFMqHaLpR0vxt0elBvEJ28LPE3rKa36dgGkVkUIcCQE9n08O0NgqzFXJ3BW
+ mNj7DHy6gyEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,417,1583222400"; 
+   d="scan'208";a="283003271"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002.jf.intel.com with ESMTP; 21 May 2020 03:23:48 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jbiMh-0080w2-1A; Thu, 21 May 2020 13:23:51 +0300
+Date:   Thu, 21 May 2020 13:23:51 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Mark Brown <broonie@kernel.org>,
         Serge Semin <fancer.lancer@gmail.com>,
@@ -59,64 +38,108 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Clement Leger <cleger@kalray.eu>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/16] spi: dw: Parameterize the DMA Rx/Tx burst length
+Message-ID: <20200521102351.GI1634618@smile.fi.intel.com>
+References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521012206.14472-7-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200521012206.14472-7-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 21, 2020 at 4:23 AM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> Having them declared is redundant since each struct dw_dma_chan has
-> the same structure embedded and the structure from the passed dma_chan
-> private pointer will be copied there as a result of the next calls
-> chain:
-> dma_request_channel() -> find_candidate() -> dma_chan_get() ->
-> device_alloc_chan_resources() = dwc_alloc_chan_resources() ->
-> dw_dma_filter().
-> So just remove the static dw_dma_chan structures and use a locally
-> declared data instance with dst_id/src_id set to the same values as
-> the static copies used to have.
+On Thu, May 21, 2020 at 04:21:56AM +0300, Serge Semin wrote:
+> It isn't good to have numeric literals in the code especially if there
+> are multiple of them and they are related. Let's replace the Tx and Rx
+> burst level literals with the corresponding constants.
 
-...
+Thanks!
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> - Explicitly initialize the dw_dma_slave members on stack.
-
-Thanks for an update, but that's not what I asked for...
-
-> -static struct dw_dma_slave mid_dma_tx = { .dst_id = 1 };
-> -static struct dw_dma_slave mid_dma_rx = { .src_id = 0 };
-
->  static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+> 
+> Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> 
+> ---
+> 
+> Changelog v3:
+> - Discard the dws->fifo_len utilization in the Tx FIFO DMA threshold
+>   setting.
+> ---
+>  drivers/spi/spi-dw-mid.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
+> index 7bba774885cd..be02fedd87cb 100644
+> --- a/drivers/spi/spi-dw-mid.c
+> +++ b/drivers/spi/spi-dw-mid.c
+> @@ -19,7 +19,9 @@
+>  
+>  #define WAIT_RETRIES	5
+>  #define RX_BUSY		0
+> +#define RX_BURST_LEVEL	16
+>  #define TX_BUSY		1
+> +#define TX_BURST_LEVEL	16
+>  
+>  static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
 >  {
-> +       struct dw_dma_slave slave = {
-> +               .src_id = 0,
-> +               .dst_id = 0
-> +       };
-
-(It's member, and not memberS)
-
-> -       struct dw_dma_slave *tx = dws->dma_tx;
-> -       struct dw_dma_slave *rx = dws->dma_rx;
-
-May we simple do
-
-struct dw_dma_slave tx = { .dst_id = 1 };
-struct dw_dma_slave rx = { .src_id = 0 };
-
-please?
+> @@ -214,7 +216,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
+>  	memset(&txconf, 0, sizeof(txconf));
+>  	txconf.direction = DMA_MEM_TO_DEV;
+>  	txconf.dst_addr = dws->dma_addr;
+> -	txconf.dst_maxburst = 16;
+> +	txconf.dst_maxburst = TX_BURST_LEVEL;
+>  	txconf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+>  	txconf.dst_addr_width = convert_dma_width(dws->n_bytes);
+>  	txconf.device_fc = false;
+> @@ -288,7 +290,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
+>  	memset(&rxconf, 0, sizeof(rxconf));
+>  	rxconf.direction = DMA_DEV_TO_MEM;
+>  	rxconf.src_addr = dws->dma_addr;
+> -	rxconf.src_maxburst = 16;
+> +	rxconf.src_maxburst = RX_BURST_LEVEL;
+>  	rxconf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+>  	rxconf.src_addr_width = convert_dma_width(dws->n_bytes);
+>  	rxconf.device_fc = false;
+> @@ -313,8 +315,8 @@ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
+>  {
+>  	u16 imr = 0, dma_ctrl = 0;
+>  
+> -	dw_writel(dws, DW_SPI_DMARDLR, 0xf);
+> -	dw_writel(dws, DW_SPI_DMATDLR, 0x10);
+> +	dw_writel(dws, DW_SPI_DMARDLR, RX_BURST_LEVEL - 1);
+> +	dw_writel(dws, DW_SPI_DMATDLR, TX_BURST_LEVEL);
+>  
+>  	if (xfer->tx_buf) {
+>  		dma_ctrl |= SPI_DMA_TDMAE;
+> -- 
+> 2.25.1
+> 
 
 -- 
 With Best Regards,
 Andy Shevchenko
+
+
