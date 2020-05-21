@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A5A1DC499
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 03:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4EA1DC49E
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 03:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727974AbgEUBW4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 May 2020 21:22:56 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:33836 "EHLO
+        id S1728020AbgEUBXG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 May 2020 21:23:06 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:33916 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726839AbgEUBWz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 May 2020 21:22:55 -0400
+        with ESMTP id S1727972AbgEUBXF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 May 2020 21:23:05 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 63CDB803078D;
-        Thu, 21 May 2020 01:22:51 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 7ED648029EC9;
+        Thu, 21 May 2020 01:23:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GAe9a4jjPInB; Thu, 21 May 2020 04:22:50 +0300 (MSK)
+        with ESMTP id ZCfU_3ZePPKU; Thu, 21 May 2020 04:22:59 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -28,17 +28,16 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
         <devicetree@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
         Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Clement Leger <cleger@kalray.eu>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 03/16] spi: dw: Discard static DW DMA slave structures
-Date:   Thu, 21 May 2020 04:21:53 +0300
-Message-ID: <20200521012206.14472-4-Sergey.Semin@baikalelectronics.ru>
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 06/16] spi: dw: Parameterize the DMA Rx/Tx burst length
+Date:   Thu, 21 May 2020 04:21:56 +0300
+Message-ID: <20200521012206.14472-7-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -50,16 +49,9 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Having them declared is redundant since each struct dw_dma_chan has
-the same structure embedded and the structure from the passed dma_chan
-private pointer will be copied there as a result of the next calls
-chain:
-dma_request_channel() -> find_candidate() -> dma_chan_get() ->
-device_alloc_chan_resources() = dwc_alloc_chan_resources() ->
-dw_dma_filter().
-So just remove the static dw_dma_chan structures and use a locally
-declared data instance with dst_id/src_id set to the same values as
-the static copies used to have.
+It isn't good to have numeric literals in the code especially if there
+are multiple of them and they are related. Let's replace the Tx and Rx
+burst level literals with the corresponding constants.
 
 Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
 Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
@@ -70,8 +62,8 @@ Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: linux-mips@vger.kernel.org
 Cc: devicetree@vger.kernel.org
@@ -79,81 +71,55 @@ Cc: devicetree@vger.kernel.org
 ---
 
 Changelog v3:
-- Explicitly initialize the dw_dma_slave members on stack.
+- Discard the dws->fifo_len utilization in the Tx FIFO DMA threshold
+  setting.
 ---
- drivers/spi/spi-dw-mid.c | 19 ++++++++-----------
- drivers/spi/spi-dw.h     |  2 --
- 2 files changed, 8 insertions(+), 13 deletions(-)
+ drivers/spi/spi-dw-mid.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-index cf99832ba271..8446bad0528c 100644
+index 7bba774885cd..be02fedd87cb 100644
 --- a/drivers/spi/spi-dw-mid.c
 +++ b/drivers/spi/spi-dw-mid.c
-@@ -21,9 +21,6 @@
- #define RX_BUSY		0
- #define TX_BUSY		1
+@@ -19,7 +19,9 @@
  
--static struct dw_dma_slave mid_dma_tx = { .dst_id = 1 };
--static struct dw_dma_slave mid_dma_rx = { .src_id = 0 };
--
+ #define WAIT_RETRIES	5
+ #define RX_BUSY		0
++#define RX_BURST_LEVEL	16
+ #define TX_BUSY		1
++#define TX_BURST_LEVEL	16
+ 
  static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
  {
- 	struct dw_dma_slave *s = param;
-@@ -37,9 +34,11 @@ static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
- 
- static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+@@ -214,7 +216,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
+ 	memset(&txconf, 0, sizeof(txconf));
+ 	txconf.direction = DMA_MEM_TO_DEV;
+ 	txconf.dst_addr = dws->dma_addr;
+-	txconf.dst_maxburst = 16;
++	txconf.dst_maxburst = TX_BURST_LEVEL;
+ 	txconf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+ 	txconf.dst_addr_width = convert_dma_width(dws->n_bytes);
+ 	txconf.device_fc = false;
+@@ -288,7 +290,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
+ 	memset(&rxconf, 0, sizeof(rxconf));
+ 	rxconf.direction = DMA_DEV_TO_MEM;
+ 	rxconf.src_addr = dws->dma_addr;
+-	rxconf.src_maxburst = 16;
++	rxconf.src_maxburst = RX_BURST_LEVEL;
+ 	rxconf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+ 	rxconf.src_addr_width = convert_dma_width(dws->n_bytes);
+ 	rxconf.device_fc = false;
+@@ -313,8 +315,8 @@ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
  {
-+	struct dw_dma_slave slave = {
-+		.src_id = 0,
-+		.dst_id = 0
-+	};
- 	struct pci_dev *dma_dev;
--	struct dw_dma_slave *tx = dws->dma_tx;
--	struct dw_dma_slave *rx = dws->dma_rx;
- 	dma_cap_mask_t mask;
+ 	u16 imr = 0, dma_ctrl = 0;
  
- 	/*
-@@ -54,14 +53,14 @@ static int mid_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
- 	dma_cap_set(DMA_SLAVE, mask);
+-	dw_writel(dws, DW_SPI_DMARDLR, 0xf);
+-	dw_writel(dws, DW_SPI_DMATDLR, 0x10);
++	dw_writel(dws, DW_SPI_DMARDLR, RX_BURST_LEVEL - 1);
++	dw_writel(dws, DW_SPI_DMATDLR, TX_BURST_LEVEL);
  
- 	/* 1. Init rx channel */
--	rx->dma_dev = &dma_dev->dev;
--	dws->rxchan = dma_request_channel(mask, mid_spi_dma_chan_filter, rx);
-+	slave.dma_dev = &dma_dev->dev;
-+	dws->rxchan = dma_request_channel(mask, mid_spi_dma_chan_filter, &slave);
- 	if (!dws->rxchan)
- 		goto err_exit;
- 
- 	/* 2. Init tx channel */
--	tx->dma_dev = &dma_dev->dev;
--	dws->txchan = dma_request_channel(mask, mid_spi_dma_chan_filter, tx);
-+	slave.dst_id = 1;
-+	dws->txchan = dma_request_channel(mask, mid_spi_dma_chan_filter, &slave);
- 	if (!dws->txchan)
- 		goto free_rxchan;
- 
-@@ -386,8 +385,6 @@ static const struct dw_spi_dma_ops mfld_dma_ops = {
- 
- static void dw_spi_mid_setup_dma_mfld(struct dw_spi *dws)
- {
--	dws->dma_tx = &mid_dma_tx;
--	dws->dma_rx = &mid_dma_rx;
- 	dws->dma_ops = &mfld_dma_ops;
- }
- 
-diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index 81364f501b7e..60e9e430ce7b 100644
---- a/drivers/spi/spi-dw.h
-+++ b/drivers/spi/spi-dw.h
-@@ -146,8 +146,6 @@ struct dw_spi {
- 	unsigned long		dma_chan_busy;
- 	dma_addr_t		dma_addr; /* phy address of the Data register */
- 	const struct dw_spi_dma_ops *dma_ops;
--	void			*dma_tx;
--	void			*dma_rx;
- 
- 	/* Bus interface info */
- 	void			*priv;
+ 	if (xfer->tx_buf) {
+ 		dma_ctrl |= SPI_DMA_TDMAE;
 -- 
 2.25.1
 
