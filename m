@@ -2,90 +2,216 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7239A1DD594
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 20:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0671DD5BF
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 20:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729301AbgEUSFj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 14:05:39 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:60216 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729049AbgEUSFi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 14:05:38 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04LI5DJV011706;
-        Thu, 21 May 2020 13:05:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590084313;
-        bh=cBsuSs5XQOpsuV0CecqCZ/lRLSi2so73QLU1KFL+2mY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=FLO65yzDuTlgGUCUQ7nHNXlT4uLcDc+hgAhVu0jeL9+geY1C0p7coynxs+WK7Yu4L
-         5vfHTjmN/KIWEdxbxN9I7BNVIGKnhOE79nr2G2S12qpCrHDKkJmUrUQpU3E5ZdUUkT
-         lQJX9Q/39W1YZJQEGY1SkXFUnmB9PZtZVZzCicMU=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04LI5DiY012172;
-        Thu, 21 May 2020 13:05:13 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 21
- May 2020 13:05:12 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 21 May 2020 13:05:12 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04LI5CJE066205;
-        Thu, 21 May 2020 13:05:12 -0500
-Date:   Thu, 21 May 2020 23:35:11 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, Sekhar Nori <nsekhar@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: Re: [PATCH v6 00/19] mtd: spi-nor: add xSPI Octal DTR support
-Message-ID: <20200521180511.4axjf46g6b25mp3k@ti.com>
-References: <20200520163053.24357-1-p.yadav@ti.com>
- <20200521163957.GG4770@sirena.org.uk>
+        id S1729024AbgEUSMK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 14:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729092AbgEUSMJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 14:12:09 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB54C08C5C1
+        for <linux-spi@vger.kernel.org>; Thu, 21 May 2020 11:12:09 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id t11so3560732pgg.2
+        for <linux-spi@vger.kernel.org>; Thu, 21 May 2020 11:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2Rh0MulQkkuEGbxFUvnmU8zy8iOZUosVl0yNEP696vA=;
+        b=OlGZ0rM3Y2tsnOceWhRLzPhN/MrJfxnIjkKTCTA1i2RKz2zg10vn8nGStq8JJcsMP6
+         XIs0XypHikWHZtUee5WERCzjkj5jzWvYgophopUWdFdcX+lQ5ws3YLi9a5DhSPLf+iZz
+         m0kpH2X52NoQmgb/A1zP5FFlUjYfbaLd40460=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2Rh0MulQkkuEGbxFUvnmU8zy8iOZUosVl0yNEP696vA=;
+        b=poESXS+fGzAcDRmEL2dqkuj1b6pzx3Z1XR/EcaE8Ay3p9/YSmdnr3gcpUO9kXjOi+L
+         SmTF2dBIzDD8jSvr7EOESnBZhWAqPu2DjziaEjzh5Rrq9NXGCrN/k10jufRLnKhz+iK6
+         mWSDtZj/5vk+E/osHXVWjWi2k8roEjNgS9hVe2v1eMH5PU4pKOFkMTAcH5W+u8SHGs/x
+         TliZTpcqp6Hj9Jfpmfiw/vF1nMiuV2IWxufwvHS3WSCz+RvrA3pU0Prxt2SjrdYyHq5t
+         pr5UjRd6q1fOxf6CwWt2TdEVKI40pVKuZ2MyB0vOAvo1ECbwiEeA7rTa07YB5QRf5Xs6
+         L3sg==
+X-Gm-Message-State: AOAM531APp1SpdaDzYsAL/LTFzF1uSY9qRIIWqyhiMNLAxOeVfLNe0vT
+        JVVBUkKRvVwswD0i55Zzs2Dmwg==
+X-Google-Smtp-Source: ABdhPJzWffE87ngZTa0scCppP/KReDxQI2X3ZPxnSPjf4C+oWsO/X0lg0xAf9YConEKttQ6iOKvqPw==
+X-Received: by 2002:a62:760e:: with SMTP id r14mr2630pfc.92.1590084728802;
+        Thu, 21 May 2020 11:12:08 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id l33sm5318087pje.22.2020.05.21.11.12.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 May 2020 11:12:07 -0700 (PDT)
+Date:   Thu, 21 May 2020 11:12:05 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        msavaliy@codeaurora.org, evgreen@chromium.org
+Subject: Re: [PATCH V6 2/7] soc: qcom-geni-se: Add interconnect support to
+ fix earlycon crash
+Message-ID: <20200521181205.GC4525@google.com>
+References: <1590049764-20912-1-git-send-email-akashast@codeaurora.org>
+ <1590049764-20912-3-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200521163957.GG4770@sirena.org.uk>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <1590049764-20912-3-git-send-email-akashast@codeaurora.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+Hi Akash,
 
-On 21/05/20 05:39PM, Mark Brown wrote:
-> On Wed, May 20, 2020 at 10:00:34PM +0530, Pratyush Yadav wrote:
-> > Hi,
-> > 
-> > This series adds support for octal DTR flashes in the spi-nor framework,
-> > and then adds hooks for the Cypress Semper and Mircom Xcella flashes to
-> > allow running them in octal DTR mode. This series assumes that the flash
-> > is handed to the kernel in Legacy SPI mode.
+On Thu, May 21, 2020 at 01:59:19PM +0530, Akash Asthana wrote:
+> QUP core clock is shared among all the SE drivers present on particular
+> QUP wrapper, the system will reset(unclocked access) if earlycon used after
+> QUP core clock is put to 0 from other SE drivers before real console comes
+> up.
 > 
-> Are people happy with the SPI bits of this from a MTD point of view?  I
-> don't have any concerns and could apply them on a branch even if more
-> revisions are needed for the MTD side.
+> As earlycon can't vote for it's QUP core need, to fix this add ICC
+> support to common/QUP wrapper driver and put vote for QUP core from
+> probe on behalf of earlycon and remove vote during earlycon exit call.
+> 
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> Reported-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+> Change in V3:
+>  - Add geni_remove_earlycon_icc_vote API that will be used by earlycon
+>    exit function to remove ICC vote for earlyconsole.
+>  - Remove suspend/resume hook for geni-se driver as we are no longer
+>    removing earlyconsole ICC vote from system suspend, we are removing
+>    from earlycon exit.
+> 
+> Change in V4:
+>  - As per Matthias comment make 'earlycon_wrapper' as static structure.
+> 
+> Changes in V5:
+>  - Vote for core path only after checking whether "qcom_geni" earlycon is
+>    actually present or not by traversing over structure "console_drivers".
+> 
+> Changes in V6:
+>  - As per Matthias's comment removed NULL check for console_drivers global
+>    struct, added NULL check for earlycon_wrapper in _remove_earlycon_icc_vote
+>    API
+>  - Addressed nitpicks from Andy.
+> 
+>  drivers/soc/qcom/qcom-geni-se.c       | 68 +++++++++++++++++++++++++++++++++++
+>  drivers/tty/serial/qcom_geni_serial.c |  7 ++++
+>  include/linux/qcom-geni-se.h          |  2 ++
+>  3 files changed, 77 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> index 0b2526d..ac16bb1 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -3,6 +3,7 @@
+>  
+>  #include <linux/acpi.h>
+>  #include <linux/clk.h>
+> +#include <linux/console.h>
+>  #include <linux/slab.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/io.h>
+> @@ -90,11 +91,14 @@ struct geni_wrapper {
+>  	struct device *dev;
+>  	void __iomem *base;
+>  	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+> +	struct geni_icc_path to_core;
+>  };
+>  
+>  static const char * const icc_path_names[] = {"qup-core", "qup-config",
+>  						"qup-memory"};
+>  
+> +static struct geni_wrapper *earlycon_wrapper;
+> +
+>  #define QUP_HW_VER_REG			0x4
+>  
+>  /* Common SE registers */
+> @@ -812,11 +816,38 @@ int geni_icc_disable(struct geni_se *se)
+>  }
+>  EXPORT_SYMBOL(geni_icc_disable);
+>  
+> +void geni_remove_earlycon_icc_vote(void)
+> +{
+> +	struct geni_wrapper *wrapper;
+> +	struct device_node *parent;
+> +	struct device_node *child;
+> +
+> +	if (!earlycon_wrapper)
+> +		return;
+> +
+> +	wrapper = earlycon_wrapper;
+> +	parent = of_get_next_parent(wrapper->dev->of_node);
+> +	for_each_child_of_node(parent, child) {
+> +		if (!of_device_is_compatible(child, "qcom,geni-se-qup"))
+> +			continue;
+> +		wrapper = platform_get_drvdata(of_find_device_by_node(child));
+> +		icc_put(wrapper->to_core.path);
+> +		wrapper->to_core.path = NULL;
+> +
+> +	}
+> +	of_node_put(parent);
+> +
+> +	earlycon_wrapper = NULL;
+> +}
+> +EXPORT_SYMBOL(geni_remove_earlycon_icc_vote);
+> +
+>  static int geni_se_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct resource *res;
+>  	struct geni_wrapper *wrapper;
+> +	struct console __maybe_unused *bcon;
+> +	bool __maybe_unused has_earlycon = false;
+>  	int ret;
+>  
+>  	wrapper = devm_kzalloc(dev, sizeof(*wrapper), GFP_KERNEL);
+> @@ -839,6 +870,43 @@ static int geni_se_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +#ifdef CONFIG_SERIAL_EARLYCON
+> +	for_each_console(bcon) {
+> +		if (!strcmp(bcon->name, "qcom_geni")) {
+> +			has_earlycon = true;
+> +			break;
+> +		}
+> +	}
+> +	if (!has_earlycon)
+> +		goto exit;
+> +
+> +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
+> +	if (IS_ERR(wrapper->to_core.path))
+> +		return PTR_ERR(wrapper->to_core.path);
+> +	/*
+> +	 * Put minmal BW request on core clocks on behalf of early console.
+> +	 * The vote will be removed earlycon exit function.
+> +	 *
+> +	 * Note: We are putting vote on each QUP wrapper instead only to which
+> +	 * earlycon is connected because QUP core clock of different wrapper
+> +	 * share same voltage domain. If core1 is put to 0, then core2 will
+> +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
+> +	 * we touch any of the core clock.
+> +	 * core1 = core2 = max(core1, core2)
+> +	 */
+> +	ret = icc_set_bw(wrapper->to_core.path, GENI_DEFAULT_BW,
+> +				GENI_DEFAULT_BW);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "%s: ICC BW voting failed for core :%d\n",
 
-There were a couple small changes suggested for spi-mem. Will send a 
-re-roll in a few minutes.
+should be "... core: %d"
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments India
+same for the other instances. I don't necessarily want to stall the series on
+this, it can also be addressed with a follow up patch. Up to you if you want
+to respin or not.
+
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
