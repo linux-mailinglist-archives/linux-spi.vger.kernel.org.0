@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEF21DCC0A
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 13:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C129B1DCC0B
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 13:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728414AbgEULYU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 07:24:20 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:47468 "EHLO huawei.com"
+        id S1728887AbgEULYV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 07:24:21 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:47478 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728887AbgEULYU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        id S1728922AbgEULYU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
         Thu, 21 May 2020 07:24:20 -0400
 Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id F079B301C4E315FE73B4;
-        Thu, 21 May 2020 19:24:17 +0800 (CST)
+        by Forcepoint Email with ESMTP id 0389779028A765082C68;
+        Thu, 21 May 2020 19:24:18 +0800 (CST)
 Received: from localhost.localdomain (10.67.165.24) by
  DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
  14.3.487.0; Thu, 21 May 2020 19:24:07 +0800
@@ -22,9 +22,9 @@ To:     <broonie@kernel.org>, <tudor.ambarus@microchip.com>,
         <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>
 CC:     <john.garry@huawei.com>, <miquel.raynal@bootlin.com>,
         <richard@nod.at>, <vigneshr@ti.com>
-Subject: [RFC PATCH 1/3] spi: spi-mem: add optional prepare/unprepare methods in spi_controller_mem_ops
-Date:   Thu, 21 May 2020 19:23:49 +0800
-Message-ID: <1590060231-23242-2-git-send-email-yangyicong@hisilicon.com>
+Subject: [RFC PATCH 2/3] mtd: spi-nor: Add prepare/unprepare support for spimem device
+Date:   Thu, 21 May 2020 19:23:50 +0800
+Message-ID: <1590060231-23242-3-git-send-email-yangyicong@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1590060231-23242-1-git-send-email-yangyicong@hisilicon.com>
 References: <1590060231-23242-1-git-send-email-yangyicong@hisilicon.com>
@@ -37,88 +37,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Some prepare/unprepare works may be necessary before/after a set of
-operations of the spimem device. For example, before/after spi-nor
-flash's read/write/erase/lock/unlock.
+spi-nor flash's read/write/erase/lock/unlock may be composed of a set
+of operations, and some prepare/unprepare works need to be done before/
+after these operations in spi_nor_{lock, unlock}_and_{prep, unprep}().
+Previously we only call spi-nor controllers' prepare/unprepare method
+in the functions, without spimem devices'.
 
-Add optional prepare/unprepare methods in spi_controller_mem_ops to allow
-the controller to do specific works after/before the operations. The upper
-user can use spi_mem_{prepare, unprepare}() to call the methods of the
-controller.
+Add spimem devices' prepare/unprepare support. Call spi_mem_{prepare,
+unprepare}() function if it's a spimem device.
 
 Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 ---
- drivers/spi/spi-mem.c       | 20 ++++++++++++++++++++
- include/linux/spi/spi-mem.h | 11 +++++++++++
- 2 files changed, 31 insertions(+)
+ drivers/mtd/spi-nor/core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index adaa0c4..f09cef1 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -220,6 +220,26 @@ bool spi_mem_supports_op(struct spi_mem *mem, const struct spi_mem_op *op)
- }
- EXPORT_SYMBOL_GPL(spi_mem_supports_op);
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index cc68ea8..3a7e40a 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -1103,7 +1103,9 @@ int spi_nor_lock_and_prep(struct spi_nor *nor)
  
-+int spi_mem_prepare(struct spi_mem *mem)
-+{
-+	struct spi_controller *ctlr = mem->spi->controller;
-+
-+	if (ctlr->mem_ops && ctlr->mem_ops->prepare)
-+		return ctlr->mem_ops->prepare(mem);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(spi_mem_prepare);
-+
-+void spi_mem_unprepare(struct spi_mem *mem)
-+{
-+	struct spi_controller *ctlr = mem->spi->controller;
-+
-+	if (ctlr->mem_ops && ctlr->mem_ops->unprepare)
-+		ctlr->mem_ops->unprepare(mem);
-+}
-+EXPORT_SYMBOL_GPL(spi_mem_unprepare);
-+
- static int spi_mem_access_start(struct spi_mem *mem)
+ 	mutex_lock(&nor->lock);
+ 
+-	if (nor->controller_ops &&  nor->controller_ops->prepare) {
++	if (nor->spimem) {
++		ret = spi_mem_prepare(nor->spimem);
++	} else if (nor->controller_ops &&  nor->controller_ops->prepare) {
+ 		ret = nor->controller_ops->prepare(nor);
+ 		if (ret) {
+ 			mutex_unlock(&nor->lock);
+@@ -1115,7 +1117,9 @@ int spi_nor_lock_and_prep(struct spi_nor *nor)
+ 
+ void spi_nor_unlock_and_unprep(struct spi_nor *nor)
  {
- 	struct spi_controller *ctlr = mem->spi->controller;
-diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-index af9ff2f..e40b5c3 100644
---- a/include/linux/spi/spi-mem.h
-+++ b/include/linux/spi/spi-mem.h
-@@ -215,6 +215,12 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
-  *		    limitations)
-  * @supports_op: check if an operation is supported by the controller
-  * @exec_op: execute a SPI memory operation
-+ * @prepare: do some prepare works before a set of operations. for example,
-+ *	     read/write/erase/lock/unlock operations of spi-nor flash. This
-+ *	     method is optional.
-+ * @unprepare: do some post works after a set of operations. for example,
-+ *	       read/write/erase/lock/unlock operations of spi-nor flash. This
-+ *	       method is optional.
-  * @get_name: get a custom name for the SPI mem device from the controller.
-  *	      This might be needed if the controller driver has been ported
-  *	      to use the SPI mem layer and a custom name is used to keep
-@@ -253,6 +259,8 @@ struct spi_controller_mem_ops {
- 	int (*adjust_op_size)(struct spi_mem *mem, struct spi_mem_op *op);
- 	bool (*supports_op)(struct spi_mem *mem,
- 			    const struct spi_mem_op *op);
-+	int (*prepare)(struct spi_mem *mem);
-+	void (*unprepare)(struct spi_mem *mem);
- 	int (*exec_op)(struct spi_mem *mem,
- 		       const struct spi_mem_op *op);
- 	const char *(*get_name)(struct spi_mem *mem);
-@@ -329,6 +337,9 @@ int spi_mem_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op);
- bool spi_mem_supports_op(struct spi_mem *mem,
- 			 const struct spi_mem_op *op);
- 
-+int spi_mem_prepare(struct spi_mem *mem);
-+void spi_mem_unprepare(struct spi_mem *mem);
-+
- int spi_mem_exec_op(struct spi_mem *mem,
- 		    const struct spi_mem_op *op);
- 
+-	if (nor->controller_ops && nor->controller_ops->unprepare)
++	if (nor->spimem)
++		spi_mem_unprepare(nor->spimem);
++	else if (nor->controller_ops && nor->controller_ops->unprepare)
+ 		nor->controller_ops->unprepare(nor);
+ 	mutex_unlock(&nor->lock);
+ }
 -- 
 2.8.1
 
