@@ -2,132 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DB51DCC09
-	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 13:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031881DCC5A
+	for <lists+linux-spi@lfdr.de>; Thu, 21 May 2020 13:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729040AbgEULYU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 May 2020 07:24:20 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:47490 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728414AbgEULYT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 21 May 2020 07:24:19 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 09BDBD8DE7A7168C8D15;
-        Thu, 21 May 2020 19:24:18 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.24) by
- DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 21 May 2020 19:24:08 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <broonie@kernel.org>, <tudor.ambarus@microchip.com>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>
-CC:     <john.garry@huawei.com>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>
-Subject: [RFC PATCH 3/3] spi: hisi-sfc-v3xx: Add prepare/unprepare methods to avoid race condition
-Date:   Thu, 21 May 2020 19:23:51 +0800
-Message-ID: <1590060231-23242-4-git-send-email-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1590060231-23242-1-git-send-email-yangyicong@hisilicon.com>
-References: <1590060231-23242-1-git-send-email-yangyicong@hisilicon.com>
+        id S1729080AbgEULrs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 May 2020 07:47:48 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:37058 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729077AbgEULrr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 May 2020 07:47:47 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3D2D4803087B;
+        Thu, 21 May 2020 11:47:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jNgJJc_VL4Gx; Thu, 21 May 2020 14:47:38 +0300 (MSK)
+Date:   Thu, 21 May 2020 14:47:36 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Feng Tang <feng.tang@intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Vinod Koul <vkoul@kernel.org>, Alan Cox <alan@linux.intel.com>,
+        Linus Walleij <linus.walleij@stericsson.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Clement Leger <cleger@kalray.eu>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 01/16] spi: dw: Add Tx/Rx finish wait methods to the
+ MID DMA
+Message-ID: <20200521114736.b2azyfvym372vkdl@mobilestation>
+References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
+ <20200521030924.GA12568@shbuild999.sh.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200521030924.GA12568@shbuild999.sh.intel.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The controller can be shared with the firmware, which may cause race
-problems. As most read/write/erase/lock/unlock of spi-nor flash are
-composed of a set of operations, while the firmware may use the controller
-and start its own operation in the middle of the process started by the
-kernel driver, which may lead to the kernel driver's function broken.
+Hello Feng,
 
-Bit[20] in HISI_SFC_V3XX_CMD_CFG register plays a role of a lock, to
-protect the controller from firmware access, which means the firmware
-cannot reach the controller if the driver set the bit. Add prepare/
-unprepare methods for the controller, we'll hold the lock in prepare
-method and release it in unprepare method, which will solve the race
-issue.
+On Thu, May 21, 2020 at 11:09:24AM +0800, Feng Tang wrote:
+> Hi Serge,
+> 
+> On Thu, May 21, 2020 at 04:21:51AM +0300, Serge Semin wrote:
 
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- drivers/spi/spi-hisi-sfc-v3xx.c | 41 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+[nip]
 
-diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
-index e3b5725..13c161c 100644
---- a/drivers/spi/spi-hisi-sfc-v3xx.c
-+++ b/drivers/spi/spi-hisi-sfc-v3xx.c
-@@ -18,6 +18,7 @@
- #define HISI_SFC_V3XX_VERSION (0x1f8)
- 
- #define HISI_SFC_V3XX_CMD_CFG (0x300)
-+#define HISI_SFC_V3XX_CMD_CFG_LOCK BIT(20)
- #define HISI_SFC_V3XX_CMD_CFG_DUAL_IN_DUAL_OUT (1 << 17)
- #define HISI_SFC_V3XX_CMD_CFG_DUAL_IO (2 << 17)
- #define HISI_SFC_V3XX_CMD_CFG_FULL_DIO (3 << 17)
-@@ -41,6 +42,34 @@ struct hisi_sfc_v3xx_host {
- 	int max_cmd_dword;
- };
- 
-+int hisi_sfc_v3xx_op_prepare(struct spi_mem *mem)
-+{
-+	struct spi_device *spi = mem->spi;
-+	struct hisi_sfc_v3xx_host *host;
-+	u32 reg = HISI_SFC_V3XX_CMD_CFG_LOCK;
-+
-+	host = spi_controller_get_devdata(spi->master);
-+
-+	writel(reg, host->regbase + HISI_SFC_V3XX_CMD_CFG);
-+
-+	reg = readl(host->regbase + HISI_SFC_V3XX_CMD_CFG);
-+	if (!(reg & HISI_SFC_V3XX_CMD_CFG_LOCK))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+void hisi_sfc_v3xx_op_unprepare(struct spi_mem *mem)
-+{
-+	struct spi_device *spi = mem->spi;
-+	struct hisi_sfc_v3xx_host *host;
-+
-+	host = spi_controller_get_devdata(spi->master);
-+
-+	/* Release the lock and clear the command register. */
-+	writel(0, host->regbase + HISI_SFC_V3XX_CMD_CFG);
-+}
-+
- #define HISI_SFC_V3XX_WAIT_TIMEOUT_US		1000000
- #define HISI_SFC_V3XX_WAIT_POLL_INTERVAL_US	10
- 
-@@ -163,7 +192,15 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
- 					 u8 chip_select)
- {
- 	int ret, len = op->data.nbytes;
--	u32 config = 0;
-+	u32 config;
-+
-+	/*
-+	 * The lock bit is in the command register. Clear the command
-+	 * field with lock bit held if it has been set in
-+	 * .prepare().
-+	 */
-+	config = readl(host->regbase + HISI_SFC_V3XX_CMD_CFG);
-+	config &= HISI_SFC_V3XX_CMD_CFG_LOCK;
- 
- 	if (op->addr.nbytes)
- 		config |= HISI_SFC_V3XX_CMD_CFG_ADDR_EN_MSK;
-@@ -248,6 +285,8 @@ static int hisi_sfc_v3xx_exec_op(struct spi_mem *mem,
- 
- static const struct spi_controller_mem_ops hisi_sfc_v3xx_mem_ops = {
- 	.adjust_op_size = hisi_sfc_v3xx_adjust_op_size,
-+	.prepare	= hisi_sfc_v3xx_op_prepare,
-+	.unprepare	= hisi_sfc_v3xx_op_unprepare,
- 	.exec_op = hisi_sfc_v3xx_exec_op,
- };
- 
--- 
-2.8.1
+> >  /*
+> >   * dws->dma_chan_busy is set before the dma transfer starts, callback for rx
+> >   * channel will clear a corresponding bit.
+> > @@ -200,6 +267,8 @@ static void dw_spi_dma_rx_done(void *arg)
+> >  {
+> >  	struct dw_spi *dws = arg;
+> >  
+> > +	dw_spi_dma_wait_rx_done(dws);
+> 
+> I can understand the problem about TX, but I don't see how RX
+> will get hurt, can you elaborate more? thanks
+> 
+> - Feng
 
+Your question is correct. You are right with your hypothesis. Ideally upon the
+dw_spi_dma_rx_done() execution Rx FIFO must be already empty. That's why the
+commit log signifies the error being mostly related with Tx FIFO. But
+practically there are many reasons why Rx FIFO might be left with data:
+DMA engine failures, incorrect DMA configuration (if DW SPI or DW DMA driver
+messed something up), controller hanging up, and so on. It's better to catch
+an error at this stage while propagating it up to the SPI device drivers.
+Especially seeing the wait-check implementation doesn't gives us much of the
+execution overhead in normal conditions. So by calling dw_spi_dma_wait_rx_done()
+we make sure that all the data has been fetched and we may freely get the
+buffers back to the client driver.
+
+-Sergey
