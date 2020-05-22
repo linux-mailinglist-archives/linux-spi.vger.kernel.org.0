@@ -2,36 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF071DE66D
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 14:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF351DE693
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 14:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728413AbgEVMM0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 08:12:26 -0400
-Received: from mga07.intel.com ([134.134.136.100]:42518 "EHLO mga07.intel.com"
+        id S1728827AbgEVMSY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 08:18:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728409AbgEVMM0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 May 2020 08:12:26 -0400
-IronPort-SDR: 1cr9hibZolPQMwM8ouNXnbF/OYczOHxxYHvVMRq5NTYWYlCIVQSlqJQEZhhlb5gW6g+1NNNfRN
- fNyjPnhEejGg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 05:12:25 -0700
-IronPort-SDR: gCTg5O++p2llZr3yD+aZxedjxBKcYhvzPF8SXNhINmwkdpWVoijtM9TDSppQuSFXedW+58udM6
- pEML2Pps+o7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,421,1583222400"; 
-   d="scan'208";a="300651143"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002.fm.intel.com with ESMTP; 22 May 2020 05:12:19 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jc6XF-008E5C-Vu; Fri, 22 May 2020 15:12:21 +0300
-Date:   Fri, 22 May 2020 15:12:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        id S1728475AbgEVMSX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 May 2020 08:18:23 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3D30E20756;
+        Fri, 22 May 2020 12:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590149902;
+        bh=39Z2YC/hT0DLTH/QrHnGkxDnIs+bUNDKpwlJ2UMsj60=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u+Ft0HnjgAU98axSOB3qR/6xwnjzxBk9o9hYIlkj4SxFevAgTjyTLw4u6ckl1uXGB
+         21ZP/qJQZNoRyC9/9+CrklTJUFWQ7ec5qhc0FpBM0QwQcTZtAZtJsdYb/vMgdVWfgR
+         5JsYBJz38tYaVElZskAnfIKOkrIMKz3l+CoLbzK4=
+Date:   Fri, 22 May 2020 13:18:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Linus Walleij <linus.walleij@stericsson.com>,
         Vinod Koul <vkoul@kernel.org>, Feng Tang <feng.tang@intel.com>,
         Grant Likely <grant.likely@secretlab.ca>,
@@ -53,71 +49,58 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v4 01/16] spi: dw: Add Tx/Rx finish wait methods to the
  MID DMA
-Message-ID: <20200522121221.GA1634618@smile.fi.intel.com>
+Message-ID: <20200522121820.GG5801@sirena.org.uk>
 References: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
  <20200522000806.7381-2-Sergey.Semin@baikalelectronics.ru>
  <20200522111340.GX1634618@smile.fi.intel.com>
  <20200522115235.rt3ay7lveimrgooa@mobilestation>
+ <20200522121221.GA1634618@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="L+ofChggJdETEG3Y"
 Content-Disposition: inline
-In-Reply-To: <20200522115235.rt3ay7lveimrgooa@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200522121221.GA1634618@smile.fi.intel.com>
+X-Cookie: C for yourself.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 22, 2020 at 02:52:35PM +0300, Serge Semin wrote:
-> On Fri, May 22, 2020 at 02:13:40PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 22, 2020 at 03:07:50AM +0300, Serge Semin wrote:
-> > > Since DMA transfers are performed asynchronously with actual SPI
-> > > transaction, then even if DMA transfers are finished it doesn't mean
-> > > all data is actually pushed to the SPI bus. Some data might still be
-> > > in the controller FIFO. This is specifically true for Tx-only
-> > > transfers. In this case if the next SPI transfer is recharged while
-> > > a tail of the previous one is still in FIFO, we'll loose that tail
-> > > data. In order to fix this lets add the wait procedure of the Tx/Rx
-> > > SPI transfers completion after the corresponding DMA transactions
-> > > are finished.
 
-...
+--L+ofChggJdETEG3Y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > > Changelog v4:
-> > > - Get back ndelay() method to wait for an SPI transfer completion.
-> > >   spi_delay_exec() isn't suitable for the atomic context.
-> > 
-> > OTOH we may teach spi_delay_exec() to perform atomic sleeps.
-> 
-> Please, see it's implementation. It does atomic delay when the delay value
-> is less than 10us. But selectively gets to the usleep_range() if value is
-> greater than that.
+On Fri, May 22, 2020 at 03:12:21PM +0300, Andy Shevchenko wrote:
+> On Fri, May 22, 2020 at 02:52:35PM +0300, Serge Semin wrote:
 
-Oh, than it means we may do a very long busy loop here which is not good at
-all. If we have 10Hz clock, it might take seconds of doing nothing!
+> > Please, see it's implementation. It does atomic delay when the delay value
+> > is less than 10us. But selectively gets to the usleep_range() if value is
+> > greater than that.
 
-...
+> Oh, than it means we may do a very long busy loop here which is not good at
+> all. If we have 10Hz clock, it might take seconds of doing nothing!
 
-> > > +	while (dw_spi_dma_tx_busy(dws) && retry--)
-> > > +		ndelay(ns);
-> > 
-> > I might be mistaken, but I think I told that this one misses to keep power
-> > management in mind.
-> 
-> Here we already in nearly atomic context due to the callback executed in the
-> tasklet. What power management could be during a tasklet execution? Again we
-> can't call sleeping methods in here. What do you suggest in substitution?
-> 
-> > Have you read Documentation/process/volatile-considered-harmful.rst ?
-> 
-> That's mentoring tone is redundant. Please, stop it.
+Realistically it seems unlikely that the clock will be even as slow as
+double digit kHz though, and if we do I'd not be surprised to see other
+problems kicking in.  It's definitely good to handle such things if we
+can but so long as everything is OK for realistic use cases I'm not sure
+it should be a blocker.
 
-I simple gave you pointers to where you may read about power management in busy
-loops. Yes, I admit that documentation title and the relation to busy loops is
-not obvious.
+--L+ofChggJdETEG3Y
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-With Best Regards,
-Andy Shevchenko
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7HwwsACgkQJNaLcl1U
+h9DGbQf/aA5931PtrryL4ZW3uh64EHvrtq6HdmmV34g803DbZetKXoSdCysw7oSi
+MdgShpfA9AR9+XVi5XuNVRh9REKm7VB54za86BUEm25d/W1x4G9rQiN5IxBLgwjZ
+HUCMBgd+VG+ql4pm3PmtanE4K33rwAiMJf77Bdw+oKdqvQIdiXUzBkdsOCQ+pluZ
+fOCeS+8ZfmX4nrg8f1Y8d7t633H4eHNbGe+H08iAsfBIGRfb7nmkdopxm6UviMbt
+zOixF+I4sCyeiZAXY/5GeFc27QZyKc6qjd4LAPZIc3/kjIRg8d3CkjFYDDyw6Mgq
+arVmdO3FsjblhLk4QYlHmt/Lc1alSg==
+=H1CF
+-----END PGP SIGNATURE-----
 
+--L+ofChggJdETEG3Y--
