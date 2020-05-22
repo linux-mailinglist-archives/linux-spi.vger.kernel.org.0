@@ -2,40 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C823A1DE3D9
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 12:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFE21DE3EB
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 12:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729114AbgEVKOT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 06:14:19 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:59020 "EHLO
+        id S1728416AbgEVKOb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 06:14:31 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:59034 "EHLO
         lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728861AbgEVKOS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 May 2020 06:14:18 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04MAE4cp009116;
-        Fri, 22 May 2020 05:14:04 -0500
+        with ESMTP id S1729408AbgEVKOZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 May 2020 06:14:25 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04MAE9t0009129;
+        Fri, 22 May 2020 05:14:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590142444;
-        bh=UGm3yi7Ejr5LlC2C9cUmKBQpIeGi0qN02ez2pkmDV68=;
+        s=ti-com-17Q1; t=1590142449;
+        bh=c7C3r3QF/TMH/epmeuxUZDNfTYW7xsLdZE5YulWo4ZQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=zDvFXyRIgwqyuweFUUj06HWp/335EM2w7nSbL+U0wEnN4s1LixmHgFtGbGdMIaL3J
-         Xtl9ckXu0s9Nn1BVsCcWbofGp85hdQIbG9WQm5rWpIvkJTxsVT4nbtjOwF/3MxTmBo
-         kF3XmJ7hE/xsKfO+vFfD66SiROqeWDOegje2yt2s=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04MAE4ie033622
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 May 2020 05:14:04 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+        b=aQuK0nZmERHneq9aMqavsGaFtQd9Fm16uPRWLA+aL0aVHtSWgecwH/1WbAHwOEyG4
+         eJj8u+V1TdsnB0vMW8GTA38CWqjuxCoADRp/rDJeZp3LXbdTMhDABTYXBVfg7dKod8
+         lN35OzPXBy4YkhnFFqcGd/vSJKL+m77laUQnS7Kw=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04MAE9vS049544;
+        Fri, 22 May 2020 05:14:09 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 22
- May 2020 05:14:04 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 05:14:09 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 22 May 2020 05:14:04 -0500
+ Frontend Transport; Fri, 22 May 2020 05:14:09 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04MAD1aC041179;
-        Fri, 22 May 2020 05:13:59 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04MAD1aD041179;
+        Fri, 22 May 2020 05:14:04 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -53,9 +52,9 @@ To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
 CC:     Pratyush Yadav <p.yadav@ti.com>, Sekhar Nori <nsekhar@ti.com>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH v7 11/20] mtd: spi-nor: core: use dummy cycle and address width info from SFDP
-Date:   Fri, 22 May 2020 15:42:52 +0530
-Message-ID: <20200522101301.26909-12-p.yadav@ti.com>
+Subject: [PATCH v7 12/20] mtd: spi-nor: core: do 2 byte reads for SR and FSR in DTR mode
+Date:   Fri, 22 May 2020 15:42:53 +0530
+Message-ID: <20200522101301.26909-13-p.yadav@ti.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200522101301.26909-1-p.yadav@ti.com>
 References: <20200522101301.26909-1-p.yadav@ti.com>
@@ -68,74 +67,62 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The xSPI Profile 1.0 table specifies how many dummy cycles and address
-bytes are needed for the Read Status Register command in octal DTR mode.
-Use that information to send the correct Read SR command.
+Some controllers, like the cadence qspi controller, have trouble reading
+only 1 byte in DTR mode. So, do 2 byte reads for SR and FSR commands in
+DTR mode, and then discard the second byte.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/core.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ drivers/mtd/spi-nor/core.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 642e3c07acf9..2ad248140b6c 100644
+index 2ad248140b6c..5cb7e391cd29 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
-@@ -357,6 +357,8 @@ int spi_nor_write_disable(struct spi_nor *nor)
- static int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
- {
- 	int ret;
-+	u8 addr_bytes = nor->params->rdsr_addr_nbytes;
-+	u8 dummy = nor->params->rdsr_dummy;
+@@ -350,7 +350,7 @@ int spi_nor_write_disable(struct spi_nor *nor)
+  * spi_nor_read_sr() - Read the Status Register.
+  * @nor:	pointer to 'struct spi_nor'.
+  * @sr:		pointer to a DMA-able buffer where the value of the
+- *              Status Register will be written.
++ *              Status Register will be written. Should be at least 2 bytes.
+  *
+  * Return: 0 on success, -errno otherwise.
+  */
+@@ -371,6 +371,11 @@ static int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
+ 			op.addr.nbytes = addr_bytes;
+ 			op.addr.val = 0;
+ 			op.dummy.nbytes = dummy;
++			/*
++			 * We don't want to read only one byte in DTR mode. So,
++			 * read 2 and then discard the second byte.
++			 */
++			op.data.nbytes = 2;
+ 		}
  
- 	if (nor->spimem) {
- 		struct spi_mem_op op =
-@@ -365,10 +367,21 @@ static int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
- 				   SPI_MEM_OP_NO_DUMMY,
- 				   SPI_MEM_OP_DATA_IN(1, sr, 1));
- 
-+		if (spi_nor_protocol_is_dtr(nor->reg_proto)) {
-+			op.addr.nbytes = addr_bytes;
-+			op.addr.val = 0;
-+			op.dummy.nbytes = dummy;
-+		}
-+
-+		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-+
- 		ret = spi_mem_exec_op(nor->spimem, &op);
- 	} else {
--		ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDSR,
--						    sr, 1);
-+		if (spi_nor_protocol_is_dtr(nor->reg_proto))
-+			ret = -ENOTSUPP;
-+		else
-+			ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDSR,
-+							    sr, 1);
- 	}
- 
- 	if (ret)
-@@ -388,6 +401,8 @@ static int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
- static int spi_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
- {
- 	int ret;
-+	u8 addr_bytes = nor->params->rdsr_addr_nbytes;
-+	u8 dummy = nor->params->rdsr_dummy;
- 
- 	if (nor->spimem) {
- 		struct spi_mem_op op =
-@@ -396,6 +411,12 @@ static int spi_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
- 				   SPI_MEM_OP_NO_DUMMY,
- 				   SPI_MEM_OP_DATA_IN(1, fsr, 1));
- 
-+		if (spi_nor_protocol_is_dtr(nor->reg_proto)) {
-+			op.addr.nbytes = addr_bytes;
-+			op.addr.val = 0;
-+			op.dummy.nbytes = dummy;
-+		}
-+
  		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+@@ -394,7 +399,8 @@ static int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
+  * spi_nor_read_fsr() - Read the Flag Status Register.
+  * @nor:	pointer to 'struct spi_nor'
+  * @fsr:	pointer to a DMA-able buffer where the value of the
+- *              Flag Status Register will be written.
++ *              Flag Status Register will be written. Should be at least 2
++ *              bytes.
+  *
+  * Return: 0 on success, -errno otherwise.
+  */
+@@ -415,6 +421,11 @@ static int spi_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
+ 			op.addr.nbytes = addr_bytes;
+ 			op.addr.val = 0;
+ 			op.dummy.nbytes = dummy;
++			/*
++			 * We don't want to read only one byte in DTR mode. So,
++			 * read 2 and then discard the second byte.
++			 */
++			op.data.nbytes = 2;
+ 		}
  
- 		ret = spi_mem_exec_op(nor->spimem, &op);
+ 		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
 -- 
 2.26.2
 
