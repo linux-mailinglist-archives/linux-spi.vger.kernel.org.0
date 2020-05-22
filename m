@@ -2,72 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 788D21DEF99
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 21:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4F31DF0A5
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 22:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730849AbgEVTAz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 15:00:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53594 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730840AbgEVTAy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 May 2020 15:00:54 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E465E20723;
-        Fri, 22 May 2020 19:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590174054;
-        bh=L10jn+Uod600sOFDDWCOf7L3Q48oqRtFkolpuXWEwkU=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=P3rNlBEWdzkHDM87gotRpru8wQOccT340erc292o2DNbEUI6YIXAbz2AFd9qvlxXn
-         Kj4+Q6Jp8UKg4uPbU9QvVbnlDoT49B4TNxk0zRZCxKtw8UN1//whsm3kmKqo6fqT3H
-         xdVI8WDPeOY36PD+OJZZKdmmdJXD9TgjWB2ARdlg=
-Date:   Fri, 22 May 2020 20:00:51 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Christopher Hill <ch6574@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20200521183631.37806-1-ch6574@gmail.com>
-References: <20200521183631.37806-1-ch6574@gmail.com>
-Subject: Re: [PATCH 1/3] spi: rb4xx: null pointer bug fix
-Message-Id: <159017405191.21035.13416751423126725547.b4-ty@kernel.org>
+        id S1731000AbgEVUaN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 16:30:13 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:45643 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730976AbgEVUaN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 May 2020 16:30:13 -0400
+X-Originating-IP: 157.36.98.60
+Received: from localhost (unknown [157.36.98.60])
+        (Authenticated sender: me@yadavpratyush.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 684321C0009;
+        Fri, 22 May 2020 20:30:05 +0000 (UTC)
+Date:   Sat, 23 May 2020 02:00:02 +0530
+From:   Pratyush Yadav <me@yadavpratyush.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Pratyush Yadav <p.yadav@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-kernel@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 02/20] spi: spi-mem: allow specifying a command's
+ extension
+Message-ID: <20200522203002.3bztaxrz7rxmbzgt@yadavpratyush.com>
+References: <20200522101301.26909-1-p.yadav@ti.com>
+ <20200522101301.26909-3-p.yadav@ti.com>
+ <20200522173254.05316d47@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200522173254.05316d47@collabora.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 21 May 2020 14:36:29 -0400, Christopher Hill wrote:
-> This patch fixes a null pointer bug in the spi driver spi-rb4xx.c by
-> moving the private data initialization to earlier in probe
+On 22/05/20 05:32PM, Boris Brezillon wrote:
+> On Fri, 22 May 2020 15:42:43 +0530
+> Pratyush Yadav <p.yadav@ti.com> wrote:
+> 
+> > In xSPI mode, flashes expect 2-byte opcodes. The second byte is called
+> > the "command extension". There can be 3 types of extensions in xSPI:
+> > repeat, invert, and hex. When the extension type is "repeat", the same
+> > opcode is sent twice. When it is "invert", the second byte is the
+> > inverse of the opcode. When it is "hex" an additional opcode byte based
+> > is sent with the command whose value can be anything.
+> > 
+> > So, make opcode a 16-bit value and add a 'nbytes', similar to how
+> > multiple address widths are handled.
+> 
+> A slightly different version of patch 5 should go before this patch,
+> otherwise your series is not bisectable. By slightly different, I mean
+> that you should only write one byte, but put this byte in a temporary
+> var. Or maybe you can squash patch 5 in this one and mention why you do
+> so in your commit message.
 
-Applied to
+How about the patch below before this patch? The supports_op() will 
+reject multi-byte opcodes anyway, so we only care about single-byte 
+opcodes for now. Multi-byte opcodes can be patched and tested later. 
+This avoids squashing changes in this patch and having the changes split 
+over two patches; one before and one after.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/3] spi: rb4xx: null pointer bug fix
-      commit: 678e5e1e42d74f77a6e2e9feb6f95ed72a996251
-[2/3] spi: rb4xx: update driver to be device tree aware
-      commit: 9a436c62fbb4c57c6f0be01e4fc368ed5da6b730
-[3/3] spi: rb4xx: add corresponding device tree documentation
-      commit: 39690c8d1fa3cda70aaed9afc8cba3c0a8eb1f53
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 8< --
+diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
+index 69491f3a515d..4e4292f0ee1d 100644
+--- a/drivers/spi/spi-mxic.c
++++ b/drivers/spi/spi-mxic.c
+@@ -356,6 +356,7 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	int nio = 1, i, ret;
+ 	u32 ss_ctrl;
+ 	u8 addr[8];
++	u8 opcode = op->cmd.opcode & 0xff;
+ 
+ 	ret = mxic_spi_set_freq(mxic, mem->spi->max_speed_hz);
+ 	if (ret)
+@@ -393,7 +394,7 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	writel(readl(mxic->regs + HC_CFG) | HC_CFG_MAN_CS_ASSERT,
+ 	       mxic->regs + HC_CFG);
+ 
+-	ret = mxic_spi_data_xfer(mxic, &op->cmd.opcode, NULL, 1);
++	ret = mxic_spi_data_xfer(mxic, &opcode, NULL, 1);
+ 	if (ret)
+ 		goto out;
+ 
+-- 
+Regards,
+Pratyush Yadav
