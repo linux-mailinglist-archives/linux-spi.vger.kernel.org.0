@@ -2,146 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8389E1DE4B9
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 12:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9541DE505
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 13:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728828AbgEVKqF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 06:46:05 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:34826 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728371AbgEVKqF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 May 2020 06:46:05 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04MAjcHd017015;
-        Fri, 22 May 2020 05:45:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590144338;
-        bh=+ZG6P8BF3dJ9QHRvqtMY+fgKzn83Sk8LyDmqXrBTqds=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=gZG3x5VZ9tES5/HMESW0XZnj+Gjnop5Bkkzsqrh5ftpSGzE4b//BXjEmxHjCxwZRp
-         MYdmEh8a+w5hDkWhmBRW3VmWA9gqKS5UD9RwFKQYFrZl/b8NXFki0AfeZ83Nqb7OBv
-         KETO8hkfXGbgdvmch/dSPK1FaA/Hdf7a+E/shLOM=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04MAjcK1091662;
-        Fri, 22 May 2020 05:45:38 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 22
- May 2020 05:45:38 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 22 May 2020 05:45:37 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04MAjbIc013302;
-        Fri, 22 May 2020 05:45:37 -0500
-Date:   Fri, 22 May 2020 16:15:36 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <masonccyang@mxic.com.tw>
-CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>, <juliensu@mxic.com.tw>
-Subject: Re: [PATCH v5 01/19] spi: spi-mem: allow specifying whether an op is
- DTR or not
-Message-ID: <20200522104536.4ikmhiaxg7keahdp@ti.com>
-References: <20200519142642.24131-1-p.yadav@ti.com>
- <20200519142642.24131-2-p.yadav@ti.com>
- <OF1FE36FB9.9FBEFCD6-ON4825856F.002D767F-4825856F.002E7D42@mxic.com.tw>
+        id S1729164AbgEVLGX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 07:06:23 -0400
+Received: from mga14.intel.com ([192.55.52.115]:9263 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728371AbgEVLGX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 May 2020 07:06:23 -0400
+IronPort-SDR: XRs3O2dpSFvkbXL0Pd3as093n7g/NEeNuiImE1ocoCbeHtvh2kEHhFUmssjjdMejRIdb420BbF
+ wpHHuVsfih9A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 04:06:21 -0700
+IronPort-SDR: 2aBPZ7H7oP4wUrAMiWnRuOvpa8vghN3jUDyQ6zUOMncD+XFaAfDtEf6mmt9TEPtwcIymDAPGEZ
+ VEfD0y5fpMbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,421,1583222400"; 
+   d="scan'208";a="283367982"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002.jf.intel.com with ESMTP; 22 May 2020 04:06:16 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jc5VL-008DYB-IO; Fri, 22 May 2020 14:06:19 +0300
+Date:   Fri, 22 May 2020 14:06:19 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 06/16] spi: dw: Parameterize the DMA Rx/Tx burst length
+Message-ID: <20200522110619.GU1634618@smile.fi.intel.com>
+References: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
+ <20200522000806.7381-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <OF1FE36FB9.9FBEFCD6-ON4825856F.002D767F-4825856F.002E7D42@mxic.com.tw>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20200522000806.7381-7-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-[Seems like I forgot to send this and it stayed in my Drafts folder. 
-Anyway, fixed in v7]
+On Fri, May 22, 2020 at 03:07:55AM +0300, Serge Semin wrote:
+> It isn't good to have numeric literals in the code especially if there
+> are multiple of them and they are related. Let's replace the Tx and Rx
+> burst level literals with the corresponding constants.
 
-Hi Mason,
 
-On 21/05/20 04:27PM, masonccyang@mxic.com.tw wrote:
-> 
-> Hi Pratyush,
-> 
-> Given cmd.nbytes a initial value & check it !
-> 
-> > 
-> > [PATCH v5 01/19] spi: spi-mem: allow specifying whether an op is DTR or 
-> not
-> > 
-> > Each phase is given a separate 'dtr' field so mixed protocols like
-> > 4S-4D-4D can be supported.
-> > 
-> > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> > ---
-> >  drivers/spi/spi-mem.c       | 3 +++
-> >  include/linux/spi/spi-mem.h | 8 ++++++++
-> >  2 files changed, 11 insertions(+)
-> > 
-> > diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> > index 9a86cc27fcc0..93e255287ab9 100644
-> > --- a/drivers/spi/spi-mem.c
-> > +++ b/drivers/spi/spi-mem.c
-> > @@ -156,6 +156,9 @@ bool spi_mem_default_supports_op(struct spi_mem 
-> *mem,
-> >                 op->data.dir == SPI_MEM_DATA_OUT))
-> >        return false;
-> > 
-> > +   if (op->cmd.dtr || op->addr.dtr || op->dummy.dtr || op->data.dtr)
-> > +      return false;
-> > +
-> 
-> +       if (op->cmd.nbytes != 1)
-> +               return false;
+You missed my tag.
 
-Good catch. Will fix.
- 
-> >     return true;
-> >  }
-> >  EXPORT_SYMBOL_GPL(spi_mem_default_supports_op);
+> Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
 > 
+> ---
 > 
->  static int spi_mem_check_op(const struct spi_mem_op *op)
+> Changelog v3:
+> - Discard the dws->fifo_len utilization in the Tx FIFO DMA threshold
+>   setting.
+> ---
+>  drivers/spi/spi-dw-mid.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
+> index c39bc8758339..1598c36c905f 100644
+> --- a/drivers/spi/spi-dw-mid.c
+> +++ b/drivers/spi/spi-dw-mid.c
+> @@ -20,7 +20,9 @@
+>  
+>  #define WAIT_RETRIES	5
+>  #define RX_BUSY		0
+> +#define RX_BURST_LEVEL	16
+>  #define TX_BUSY		1
+> +#define TX_BURST_LEVEL	16
+>  
+>  static bool mid_spi_dma_chan_filter(struct dma_chan *chan, void *param)
 >  {
-> -                if (!op->cmd.buswidth)
-> +                if (!op->cmd.buswidth || op->cmd.nbytes < 1 || 
-> op->cmd.nbytes > 2)
->                                  return -EINVAL;
-
-Will fix.
- 
+> @@ -198,7 +200,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
+>  	memset(&txconf, 0, sizeof(txconf));
+>  	txconf.direction = DMA_MEM_TO_DEV;
+>  	txconf.dst_addr = dws->dma_addr;
+> -	txconf.dst_maxburst = 16;
+> +	txconf.dst_maxburst = TX_BURST_LEVEL;
+>  	txconf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+>  	txconf.dst_addr_width = convert_dma_width(dws->n_bytes);
+>  	txconf.device_fc = false;
+> @@ -273,7 +275,7 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
+>  	memset(&rxconf, 0, sizeof(rxconf));
+>  	rxconf.direction = DMA_DEV_TO_MEM;
+>  	rxconf.src_addr = dws->dma_addr;
+> -	rxconf.src_maxburst = 16;
+> +	rxconf.src_maxburst = RX_BURST_LEVEL;
+>  	rxconf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+>  	rxconf.src_addr_width = convert_dma_width(dws->n_bytes);
+>  	rxconf.device_fc = false;
+> @@ -298,8 +300,8 @@ static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
+>  {
+>  	u16 imr = 0, dma_ctrl = 0;
+>  
+> -	dw_writel(dws, DW_SPI_DMARDLR, 0xf);
+> -	dw_writel(dws, DW_SPI_DMATDLR, 0x10);
+> +	dw_writel(dws, DW_SPI_DMARDLR, RX_BURST_LEVEL - 1);
+> +	dw_writel(dws, DW_SPI_DMATDLR, TX_BURST_LEVEL);
+>  
+>  	if (xfer->tx_buf) {
+>  		dma_ctrl |= SPI_DMA_TDMAE;
+> -- 
+> 2.25.1
 > 
-> > diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> > index af9ff2f0f1b2..e3dcb956bf61 100644
-> > --- a/include/linux/spi/spi-mem.h
-> > +++ b/include/linux/spi/spi-mem.h
-> 
-> #define SPI_MEM_OP_CMD(__opcode, __buswidth)                    \
->          {                                                       \
->                  .buswidth = __buswidth,                         \
->                  .opcode = __opcode,                             \
-> +                .nbytes = 1,                                    \
->          }
-
-Will fix. Thanks.
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments India
+With Best Regards,
+Andy Shevchenko
+
+
