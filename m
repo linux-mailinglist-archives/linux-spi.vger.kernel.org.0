@@ -2,151 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 322441DE16D
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 09:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1331DE22C
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 10:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728794AbgEVH6w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 03:58:52 -0400
-Received: from mga14.intel.com ([192.55.52.115]:23088 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728371AbgEVH6w (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 May 2020 03:58:52 -0400
-IronPort-SDR: SSDT+KjdkyIGtrErUb5qURx8xKoNW2Eyp0nYskeHTKGn8Ot7YtU/3IJ62fDfGz4KBWUfvYerrZ
- sPKpR87SZMlA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 00:58:49 -0700
-IronPort-SDR: Ba1UgqVNnQbJe3HN+feIC07RravYuDuHBXYUUY3XENWN37smKU3h68nyJO90j0LbE41qZLmeIu
- exY7CO5KlG5w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,420,1583222400"; 
-   d="scan'208";a="467102644"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.107])
-  by fmsmga005.fm.intel.com with ESMTP; 22 May 2020 00:58:44 -0700
-Date:   Fri, 22 May 2020 15:58:44 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        id S1729754AbgEVIiF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 04:38:05 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:50460 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729746AbgEVIiD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 May 2020 04:38:03 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04M8bcmh118407;
+        Fri, 22 May 2020 03:37:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590136658;
+        bh=yF4xwwVycaty1YYtrvz7tn0azR2eb+OYgNKHjKytnkc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=LCwSPwdXFLyyOmJwtl+CdoShpJ5fp9tEao2X9/zf2kbnHkrfB6daeZc+naZsHvv10
+         kiw+7ivb0aZ9ids8iQc7RtWrDqU/qMfeuR0E1icglIzgqW8EySon+4xkhX8cnKfZl5
+         zCPoF810ubD13ZCtI79ERZZo13Wjwa8lPZlnB+gI=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04M8bc0U071990
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 22 May 2020 03:37:38 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 22
+ May 2020 03:37:38 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 22 May 2020 03:37:38 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04M8baqV054658;
+        Fri, 22 May 2020 03:37:37 -0500
+Date:   Fri, 22 May 2020 14:07:36 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <masonccyang@mxic.com.tw>
+CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
         Mark Brown <broonie@kernel.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Vinod Koul <vkoul@kernel.org>, Alan Cox <alan@linux.intel.com>,
-        Linus Walleij <linus.walleij@stericsson.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Clement Leger <cleger@kalray.eu>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/16] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200522075844.GC12568@shbuild999.sh.intel.com>
-References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
- <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
- <20200521030924.GA12568@shbuild999.sh.intel.com>
- <20200521114736.b2azyfvym372vkdl@mobilestation>
- <20200521145520.GB12568@shbuild999.sh.intel.com>
- <20200521153317.7wjp2r47q75fm6ge@mobilestation>
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <juliensu@mxic.com.tw>
+Subject: Re: [PATCH v5 05/19] mtd: spi-nor: add support for DTR protocol
+Message-ID: <20200522083734.hs4wmfplch7icecv@ti.com>
+References: <20200519142642.24131-1-p.yadav@ti.com>
+ <20200519142642.24131-6-p.yadav@ti.com>
+ <OFAC48157A.F337A12A-ON48258570.0021F23B-48258570.0023CB62@mxic.com.tw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200521153317.7wjp2r47q75fm6ge@mobilestation>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <OFAC48157A.F337A12A-ON48258570.0021F23B-48258570.0023CB62@mxic.com.tw>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Serge,
-
-On Thu, May 21, 2020 at 06:33:17PM +0300, Serge Semin wrote:
-> > > > > +	dw_spi_dma_wait_rx_done(dws);
-> > > > 
-> > > > I can understand the problem about TX, but I don't see how RX
-> > > > will get hurt, can you elaborate more? thanks
-> > > > 
-> > > > - Feng
-> > > 
-> > > Your question is correct. You are right with your hypothesis. Ideally upon the
-> > > dw_spi_dma_rx_done() execution Rx FIFO must be already empty. That's why the
-> > > commit log signifies the error being mostly related with Tx FIFO. But
-> > > practically there are many reasons why Rx FIFO might be left with data:
-> > > DMA engine failures, incorrect DMA configuration (if DW SPI or DW DMA driver
-> > > messed something up), controller hanging up, and so on. It's better to catch
-> > > an error at this stage while propagating it up to the SPI device drivers.
-> > > Especially seeing the wait-check implementation doesn't gives us much of the
-> > > execution overhead in normal conditions. So by calling dw_spi_dma_wait_rx_done()
-> > > we make sure that all the data has been fetched and we may freely get the
-> > > buffers back to the client driver.
-> > 
-> > I see your point about checking RX. But I still don't think checking
-> > RX FIFO level is the right way to detect error. Some data left in
-> > RX FIFO doesn't always mean a error, say for some case if there is
-> > 20 words in RX FIFO, and the driver starts a DMA request for 16
-> > words, then after a sucessful DMA transaction, there are 4 words
-> > left without any error.
+On 22/05/20 02:30PM, masonccyang@mxic.com.tw wrote:
 > 
-> Neither Tx nor Rx FIFO should be left with any data after transaction is
-> finished. If they are then something has been wrong.
+> Hi Pratyush,
 > 
-> See, every SPI transfer starts with FIFO clearance since we disable/enable the
-> SPI controller by means of the SSIENR (spi_enable_chip(dws, 0) and
-> spi_enable_chip(dws, 1) called in the dw_spi_transfer_one() callback). Here is the
-> SSIENR register description: "It enables and disables all SPI Controller operations.
-> When disabled, all serial transfers are halted immediately. Transmit and receive
-> FIFO buffers are cleared when the device is disabled. It is impossible to program
-> some of the SPI Controller control registers when enabled"
 > 
-> No mater whether we start DMA request or perform the normal IRQ-based PIO, we
-> request as much data as we need and neither Tx nor Rx FIFO are supposed to
-> be left with any data after the request is finished. If data is left, then
-> either we didn't push all of the necessary data to the SPI bus, or we didn't
-> pull all the data from the FIFO, and this could have happened only due to some
-> component mulfunction (drivers, DMA engine, SPI device). In any case the SPI
-> device driver should be notified about the problem.
-
-Data left in TX FIFO and Data left in RX FIFO are 2 different stories. The
-former in dma case means the dma hw/driver has done its job, and spi hw/driver
-hasn't done its job of pushing out the data to spi slave devices, while the
-latter means the spi hw/driver has done its job, while the dma hw/driver hasn't. 
-
-And the code is called inside the dma rx channel callback, which means the
-dma driver is saying "hey, I've done my job", but apparently it hasn't if
-there is data left.
-
-As for the wait time
-
-+	nents = dw_readl(dws, DW_SPI_RXFLR);
-+	ns = (NSEC_PER_SEC / spi_get_clk(dws)) * nents * dws->n_bytes *
-+	     BITS_PER_BYTE;
-
-Using this formula for checking TX makes sense, but it doesn't for RX.
-Because the time of pushing data in TX FIFO to spi device depends on
-the clk, but the time of transferring RX FIFO to memory is up to
-the DMA controller and peripheral bus. 
-
-Also for the
-
-+	while (dw_spi_dma_rx_busy(dws) && retry--)
-+		ndelay(ns);
-+
-
-the rx busy bit is cleared after this rx/tx checking, and it should
-be always true at this point. Am I mis-reading the code?
-
-Thanks,
-Feng
-
+> > +/**
+> > + * spi_nor_spimem_setup_op() - Set up common properties of a spi-mem 
+> op.
+> > + * @nor:      pointer to a 'struct spi_nor'
+> > + * @op:         pointer to the 'struct spi_mem_op' whose properties
+> > + *         need to be initialized.
+> > + * @proto:      the protocol from which the properties need to be set.
+> > + */
+> > +void spi_nor_spimem_setup_op(const struct spi_nor *nor,
+> > +              struct spi_mem_op *op,
+> > +              const enum spi_nor_protocol proto)
+> > +{
+> > +   u8 ext;
+> > +
+> > +   op->cmd.buswidth = spi_nor_get_protocol_inst_nbits(proto);
+> > +
+> > +   if (op->addr.nbytes)
+> > +      op->addr.buswidth = spi_nor_get_protocol_addr_nbits(proto);
+> > +
+> > +   if (op->dummy.nbytes)
+> > +      op->dummy.buswidth = spi_nor_get_protocol_addr_nbits(proto);
+> > +
+> > +   if (op->data.nbytes)
+> > +      op->data.buswidth = spi_nor_get_protocol_data_nbits(proto);
+> > +
+> > +   if (spi_nor_protocol_is_dtr(proto)) {
 > 
-> -Sergey
+> As mentioned before that I am also patching mx25* which supports 8S-8S-8S 
+> and 
+> 8D-8D-8D mode.
 > 
+> please patch to spi_nor_protocol_is_8_8_8(proto) for 8S-8S-8S mode 
+> support.
+
+Like I said before, we should try to avoid creeping up the scope of this 
+series. This series aims to add 8D support. Once this lands, I don't see 
+why you can't 8S support on top. Unless we make a fundamental change 
+that makes it impossible to add 8S support, it should stay as-is.
+
+All that said, I fail to see why 8S would have any problems with this 
+function. We just fill in the buswidths from the protocol, and adjust 
+the op if it is DTR. So in case of 8S mode, this function as it is will 
+fill in the buswidths to 8 for all phases. And it won't hit the if block 
+here so this code is of no concern to 8S mode.
+ 
+> > +      /*
+> > +       * spi-mem supports mixed DTR modes, but right now we can only
+> > +       * have all phases either DTR or STR. IOW, spi-mem can have
+> > +       * something like 4S-4D-4D, but spi-nor can't. So, set all 4
+> > +       * phases to either DTR or STR.
+> > +       */
+> 
+>         if (spi_nor_protocol_is_8D_8D_8D(proto) {
+
+No. The adjustments below apply to _all_ DTR ops, not just 8D-8D-8D 
+ones. So in case someone wants to use 4D-4D-4D mode, they won't have to 
+touch this code at all.
+ 
+> > +      op->cmd.dtr = op->addr.dtr = op->dummy.dtr
+> > +                = op->data.dtr = true;
+> > +
+> > +      /* 2 bytes per clock cycle in DTR mode. */
+> > +      op->dummy.nbytes *= 2;
+> 
+>         }
+> 
+> > +
+> > +      ext = spi_nor_get_cmd_ext(nor, op);
+> > +      op->cmd.opcode = (op->cmd.opcode << 8) | ext;
+> > +      op->cmd.nbytes = 2;
+> > +   }
+> > +}
+> > +
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments India
