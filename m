@@ -2,130 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 977491DE521
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 13:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8781DE542
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 13:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728705AbgEVLNq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 07:13:46 -0400
-Received: from mga18.intel.com ([134.134.136.126]:35945 "EHLO mga18.intel.com"
+        id S1728672AbgEVLWB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 07:22:01 -0400
+Received: from mga04.intel.com ([192.55.52.120]:60359 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728657AbgEVLNp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 May 2020 07:13:45 -0400
-IronPort-SDR: 5nZ6cGtJpu/BqelmJBVFY6bt9IHwuHcrWXWe1b4R4/q5eYWaJ+ll01tsjkT64o/6KfTGJeCoUJ
- EA2hc9+FpRNA==
+        id S1728657AbgEVLWB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 May 2020 07:22:01 -0400
+IronPort-SDR: gcCWPhXXTUpBOJxgJSjXxkL9W5Z65ocgf3viDsy/PkfdzD5Jj8Vw/GvAGWJ2+FkC0i8ZoEPyTi
+ 36J3/nBeoWOw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 04:13:43 -0700
-IronPort-SDR: YuqBZU0ak8gcKa2K2aEEyKTccCzb7sOYyacUb1SqLSzh8LYIUXnWK4lETim8E4sIZVi9AL7hlA
- RTx0hq4s9PVw==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 04:22:00 -0700
+IronPort-SDR: cDFwzUziEB4bxEoKjM6HivxIJgaerdbphmckL9S+fvTazVazlnLjq+nM0AfaJk4u3f/Rqox3yF
+ OY5gw+PsOU3Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,421,1583222400"; 
-   d="scan'208";a="467149192"
+   d="scan'208";a="265399834"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005.fm.intel.com with ESMTP; 22 May 2020 04:13:38 -0700
+  by orsmga003.jf.intel.com with ESMTP; 22 May 2020 04:21:57 -0700
 Received: from andy by smile with local (Exim 4.93)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jc5cS-008Dbm-I2; Fri, 22 May 2020 14:13:40 +0300
-Date:   Fri, 22 May 2020 14:13:40 +0300
+        id 1jc5kW-008DgE-7r; Fri, 22 May 2020 14:22:00 +0300
+Date:   Fri, 22 May 2020 14:22:00 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@stericsson.com>,
-        Vinod Koul <vkoul@kernel.org>, Feng Tang <feng.tang@intel.com>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Alan Cox <alan@linux.intel.com>,
         Serge Semin <fancer.lancer@gmail.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 01/16] spi: dw: Add Tx/Rx finish wait methods to the
- MID DMA
-Message-ID: <20200522111340.GX1634618@smile.fi.intel.com>
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v4 00/16] spi: dw: Add generic DW DMA controller support
+Message-ID: <20200522112200.GY1634618@smile.fi.intel.com>
 References: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
- <20200522000806.7381-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200522000806.7381-2-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 22, 2020 at 03:07:50AM +0300, Serge Semin wrote:
-> Since DMA transfers are performed asynchronously with actual SPI
-> transaction, then even if DMA transfers are finished it doesn't mean
-> all data is actually pushed to the SPI bus. Some data might still be
-> in the controller FIFO. This is specifically true for Tx-only
-> transfers. In this case if the next SPI transfer is recharged while
-> a tail of the previous one is still in FIFO, we'll loose that tail
-> data. In order to fix this lets add the wait procedure of the Tx/Rx
-> SPI transfers completion after the corresponding DMA transactions
-> are finished.
+On Fri, May 22, 2020 at 03:07:49AM +0300, Serge Semin wrote:
+> Baikal-T1 SoC provides a DW DMA controller to perform low-speed peripherals
+> Mem-to-Dev and Dev-to-Mem transaction. This is also applicable to the DW
+> APB SSI devices embedded into the SoC. Currently the DMA-based transfers
+> are supported by the DW APB SPI driver only as a middle layer code for
+> Intel MID/Elkhart PCI devices. Seeing the same code can be used for normal
+> platform DMAC device we introduced a set of patches to fix it within this
+> series.
+> 
+> First of all we need to add the Tx and Rx DMA channels support into the DW
+> APB SSI binding. Then there are several fixes and cleanups provided as a
+> initial preparation for the Generic DMA support integration: add Tx/Rx
+> finish wait methods, clear DMAC register when done or stopped, Fix native
+> CS being unset, enable interrupts in accordance with DMA xfer mode,
+> discard static DW DMA slave structures, discard unused void priv pointer
+> and dma_width member of the dw_spi structure, provide the DMA Tx/Rx burst
+> length parametrisation and make sure it's optionally set in accordance
+> with the DMA max-burst capability.
+> 
+> In order to have the DW APB SSI MMIO driver working with DMA we need to
+> initialize the paddr field with the physical base address of the DW APB SSI
+> registers space. Then we unpin the Intel MID specific code from the
+> generic DMA one and placed it into the spi-dw-pci.c driver, which is a
+> better place for it anyway. After that the naming cleanups are performed
+> since the code is going to be used for a generic DMAC device. Finally the
+> Generic DMA initialization can be added to the generic version of the
+> DW APB SSI IP.
+> 
+> Last but not least we traditionally convert the legacy plain text-based
+> dt-binding file with yaml-based one and as a cherry on a cake replace
+> the manually written DebugFS registers read method with a ready-to-use
+> for the same purpose regset32 DebugFS interface usage.
+> 
+> This patchset is rebased and tested on the spi/for-next (5.7-rc5):
+> base-commit: fe9fce6b2cf3 ("Merge remote-tracking branch 'spi/for-5.8' into spi-next")
 
-...
-
-> Fixes: 7063c0d942a1 ("spi/dw_spi: add DMA support")
-
-Usually we put this before any other tags.
-
-> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Cc: Rob Herring <robh+dt@kernel.org>
-
-Are you sure Rob needs this to see?
-You really need to shrink Cc lists of the patches to send them on common sense basis.
-
-> Cc: linux-mips@vger.kernel.org
-
-> Cc: devicetree@vger.kernel.org
-
-Ditto.
-
-...
-
-> Changelog v4:
-> - Get back ndelay() method to wait for an SPI transfer completion.
->   spi_delay_exec() isn't suitable for the atomic context.
-
-OTOH we may teach spi_delay_exec() to perform atomic sleeps.
-
-...
-
-> +	while (dw_spi_dma_tx_busy(dws) && retry--)
-> +		ndelay(ns);
-
-I might be mistaken, but I think I told that this one misses to keep power
-management in mind.
-
-Have you read Documentation/process/volatile-considered-harmful.rst ?
-
-...
-
-> +	while (dw_spi_dma_rx_busy(dws) && retry--)
-> +		ndelay(ns);
-
-Ditto.
+I have got two bounces because of enormous Cc list in your patches.
+I highly recommend to reconsider your approach how you derive Cc lists.
 
 -- 
 With Best Regards,
