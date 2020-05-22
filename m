@@ -2,100 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 226961DEAF7
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 16:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19CD1DEBA9
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 17:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731018AbgEVO5t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 10:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        id S1730016AbgEVPVI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 11:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731342AbgEVO5r (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 May 2020 10:57:47 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAE2C061A0E;
-        Fri, 22 May 2020 07:57:47 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id j8so11576754iog.13;
-        Fri, 22 May 2020 07:57:47 -0700 (PDT)
+        with ESMTP id S1729929AbgEVPVI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 May 2020 11:21:08 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01442C061A0E;
+        Fri, 22 May 2020 08:21:07 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id b12so4507208plz.13;
+        Fri, 22 May 2020 08:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4E93R1F4OMg9K2XLuc0UwI5BfmV/kB8DZ8DcAqlj91Q=;
-        b=RJh8B/6rHjjbkuji4u+fJ26zGQ2weYdBP8O87V6gBC0R3uO3Cxuxwia4xEC5fiQpVd
-         BVao3bcj3EENB6cqKTKGBQu174xQRasXIfU4q+TkCRor9QpUGn/bNvOhtPgxnpksjF4z
-         3fsMvYjJfJTHISaJ3cUFiRzeDfD7i3e9PZi6fj0SkJEmzk7TEWtsxWUY/iwJxQpOJ2R4
-         T9SYcuC5mIwu3BPDv9d/KbkENTdJY9raVR0/065zsK9r46jPvzUkAxudp8zmyxpkPzW8
-         Mh3IcqqBDWoU5MuQNyfGmuqSaUQzuiK4qAbocc1kDDt5QghsG+0LEtcX/A9knBg3T5Ef
-         pvLw==
+        bh=XKBewF3F7MBEJ8/HUBV80QTJT/Ts1FvO4EjowDWAM/8=;
+        b=BfXBV3FDM45lgO3wynnM9a2CkNoUgn2Eklfb0WjzC9xpNzPdSzEo+oBRXI4RalRKwM
+         NKYfotgFtlRiPk8Oz2NPNs9Q1327fdqIsfRLxHEYB8H5DPyUMEu33ZT1z3p/5VSXqWBd
+         X8zJoLVEBTQu6+JYy0VKLXjvuvsYwfS7XxYXX7cscyVy5eDS9iYuAGvn7tlOVp+By5xU
+         rI+4nblRzYcj5GC0z6afyoKicDUbw+PjrGiNQGQZIrtzhjADefsIZBlqn66ppQ5Fcmn7
+         VthBUzjRuDXbBNNgwT+uOf8TscmaCkYJX5NXNVPJ+WxHHtDcwyaudlgtbmDHB+srkyNT
+         UAFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4E93R1F4OMg9K2XLuc0UwI5BfmV/kB8DZ8DcAqlj91Q=;
-        b=A8HAwTy87BkFgPBjC5bZ9vWtb7A3CPFHn+mypgqLRaGzLTcx6LaszXDLvCh6yvCPH3
-         jM0X6Pmjspr3xcYqx5Qc9pSxKvOa+dGUcCBYjfrACWASbhtJpM8qV5dDph3tN3LxvBDc
-         AvvzBnnTteSNlm4wekzi3T/9hnfHfmu4HMiW+J4+GzJPC7gjcRi6GRJHNl2Y/cnghQ80
-         PfJJdgnbmq+2OKnpomNjtoe8YQ7q6NjzChJtqOt4NWlzqtZLjnmj7Mpz6VZL817Ck+7x
-         5Yquj91e6nEwtkPCXUgXSxPT71obhiQ8eKgFRYqN84MWFnZJPSAzqgogMxp4LpVOrORb
-         uflQ==
-X-Gm-Message-State: AOAM530iIcwXx0ow2TCegm1QtUIfThknF51Av7FqPMYg08j47eKUk3lM
-        O44wTQCrrxMR56+s3QkiFOmGVGrtM5veU/fwpu4=
-X-Google-Smtp-Source: ABdhPJzIBFSsXPwSSCGw73KtvrqDIXMGD/+GjvxVG0mSEkFCp7BWwg4nqAvzm+UoIsx0S8/uDt84GiJO2N2vFmJg7HM=
-X-Received: by 2002:a05:6602:2ac9:: with SMTP id m9mr3461002iov.68.1590159466755;
- Fri, 22 May 2020 07:57:46 -0700 (PDT)
+        bh=XKBewF3F7MBEJ8/HUBV80QTJT/Ts1FvO4EjowDWAM/8=;
+        b=LqUPvOjpuhWnzafVb4CzjYcGkgLSsjDxsg9gHtd4PchEHWMiGDk0V2QJNyLbRKl6wb
+         OHwCldtIkrRCCBP0n4ZtaCreHUJps7TDRP0WJD2DPI9IEN4eOncUZLx+XJ0YZgYrkWLh
+         bFd9Ug0aJgM2szSlq6ZUFt/28ILz9N/OWTtc/52xV7auGOpx0oW4VvscuSf5ms2A3Llm
+         Uokksx6QycY+C7RmzobwmndV+oCITqzeDnqmDxvOln+IrYluinnZi7NuImqh/Wm3D6az
+         ACLO++3eyrqUtgDh05CCGYooxAaQ0q81glr0/EQCZ2Lq6i3RyEeBU1J4XBL0kq6fHudC
+         yywg==
+X-Gm-Message-State: AOAM533VZ1Us5DBnK+grTCgjvI5SxXSAh3mRKNAis0GfTa2ANV4cHPcs
+        XAxSfGuC228BRiHgcA8h0cEKBz/diP/Kv29jh0o=
+X-Google-Smtp-Source: ABdhPJyhKGvA9itVRuhkyF4uWWd0ytz++XDAbLBp9hj87LoBBGusQnr+8HiqmBoKWj4GZvMSlsF1WjkFmh5fZTEoNzc=
+X-Received: by 2002:a17:902:6ac2:: with SMTP id i2mr15639807plt.18.1590160867222;
+ Fri, 22 May 2020 08:21:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <1589800165-3271-1-git-send-email-dillon.minfei@gmail.com>
- <1589800165-3271-4-git-send-email-dillon.minfei@gmail.com> <20200522113634.GE5801@sirena.org.uk>
-In-Reply-To: <20200522113634.GE5801@sirena.org.uk>
-From:   dillon min <dillon.minfei@gmail.com>
-Date:   Fri, 22 May 2020 22:57:10 +0800
-Message-ID: <CAL9mu0LAnT+AfjpGs0O-MD2HYrpnQRmrj6qXtJQrJi9kbQLPUw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/8] spi: stm32: Add 'SPI_SIMPLEX_RX', 'SPI_3WIRE_RX'
- support for stm32f4
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, p.zabel@pengutronix.de,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        thierry.reding@gmail.com, Sam Ravnborg <sam@ravnborg.org>,
-        Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        linux-clk <linux-clk@vger.kernel.org>
+References: <20200521074946.21799-1-dinghao.liu@zju.edu.cn>
+ <CAHp75VfOeUaqRW2vRwyWaz3JJw41hX5jTgE+kZ8pB8E_HtHwqw@mail.gmail.com> <5a8a6e7b.bef25.1723b588c7f.Coremail.dinghao.liu@zju.edu.cn>
+In-Reply-To: <5a8a6e7b.bef25.1723b588c7f.Coremail.dinghao.liu@zju.edu.cn>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 22 May 2020 18:20:55 +0300
+Message-ID: <CAHp75Vem1kQviLrobJ65aVOb_VCmLkAv=5U_iXAdWPNe7n0+Ng@mail.gmail.com>
+Subject: Re: Re: [PATCH] spi: tegra20-slink: Fix runtime PM imbalance on error
+To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
+Cc:     Kangjie Lu <kjlu@umn.edu>, Laxman Dewangan <ldewangan@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-hi Mark,
-
-Thanks for reviewing.
-
-On Fri, May 22, 2020 at 7:36 PM Mark Brown <broonie@kernel.org> wrote:
+On Fri, May 22, 2020 at 10:46 AM <dinghao.liu@zju.edu.cn> wrote:
 >
-> On Mon, May 18, 2020 at 07:09:20PM +0800, dillon.minfei@gmail.com wrote:
+> Hi Andy,
 >
-> > 2, use stm32 spi's "In full-duplex (BIDIMODE=0 and RXONLY=0)", as tx_buf is
-> > null, we must add dummy data sent out before read data.
-> > so, add stm32f4_spi_tx_dummy() to handle this situation.
+> Thank you for your advice!
+
+You are welcome, but please, stop top-posting.
+
+> Your suggestion is to use pm_runtime_put_noidle(), right?
+> The only difference between pm_runtime_put() and this function
+> is that pm_runtime_put() will run an extra pm_request_idle().
 >
-> There are flags SPI_CONTROLLER_MUST_TX and SPI_CONTROLLER_MUST_RX flags
-> that the driver can set if it needs to, no need to open code this in the
-> driver.
+> I checked this patched function again and found there is a
+> pm_runtime_put() in the normal branch of pm_runtime_get_sync().
+> Does this mean the original program logic need to execute idle
+> callback?
+>
+> According to runtime PM's doc, the pm_runtime_get_sync() call
+> paired with a pm_runtime_put() call will be appropriate to ensure
+> that the device is not put back to sleep during the probe.
 
-Yes, after check SPI_CONTROLLER_MUST_TX in drivers/spi/spi.c , it's
-indeed to meet
-this situation,  i will try it and sumbmit a new patch.
+Correct.
 
-thanks.
+> Therefore
+> I think pm_runtime_put() is more appropriate here.
 
-best regards
+How come to wrong conclusion? We are considering error path. What does
+documentation say about this?
 
-Dillon
+> Do you have
+> more detailed suggestion for why we should use _put_noidle()?
+
+Because in error case there is no need to go through all code patch to
+be sure that the device is idling. Moreover, consider below case
+
+CPU1: ...somewhere in the code...
+pm_runtime_get() // with success!
+...see below...
+pm_runtime_put()
+
+CPU2: ...on parallel thread...
+ret = pm_runtime_get_sync() // failed!
+if (ret)
+  pm_runtime_put() // oi vei, we put device into sleep
+
+So, there is a potential issue.
+
+> > > pm_runtime_get_sync() increments the runtime PM usage counter even
+> > > when it returns an error code. Thus a pairing decrement is needed on
+> > > the error handling path to keep the counter balanced.
+> >
+> > ...
+> >
+> > >         ret = pm_runtime_get_sync(&pdev->dev);
+> > >         if (ret < 0) {
+> > >                 dev_err(&pdev->dev, "pm runtime get failed, e = %d\n", ret);
+> >
+> > > +               pm_runtime_put(&pdev->dev);
+> >
+> > For all your patches, please, double check what you are proposing.
+> >
+> > Here, I believe, the correct one will be _put_noidle().
+> >
+> > AFAIU you are not supposed to actually suspend the device in case of error.
+> > But I might be mistaken, thus see above.
+> >
+> > >                 goto exit_pm_disable;
+> > >         }
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
