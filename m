@@ -2,35 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6B71DE513
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 13:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977491DE521
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 13:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728800AbgEVLIO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 07:08:14 -0400
-Received: from mga04.intel.com ([192.55.52.120]:59692 "EHLO mga04.intel.com"
+        id S1728705AbgEVLNq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 07:13:46 -0400
+Received: from mga18.intel.com ([134.134.136.126]:35945 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728281AbgEVLIN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 May 2020 07:08:13 -0400
-IronPort-SDR: jDRBe9+Jog7/SaTKdA01IosEs5ahmQQ9aOP+CNk8LRuezmyCwg5I+qToJNwSvtS4IJ5h7LSPnK
- E+ajEsW76vvQ==
+        id S1728657AbgEVLNp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 May 2020 07:13:45 -0400
+IronPort-SDR: 5nZ6cGtJpu/BqelmJBVFY6bt9IHwuHcrWXWe1b4R4/q5eYWaJ+ll01tsjkT64o/6KfTGJeCoUJ
+ EA2hc9+FpRNA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 04:08:13 -0700
-IronPort-SDR: yop5Okb79dYnnKiOO+PM/IH38XfVnvEhGkMFy1nYXL35i5GvCM/lJkQT8qvW3ScDBxhmh5HEk8
- 7SNRVrS3jaAw==
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 04:13:43 -0700
+IronPort-SDR: YuqBZU0ak8gcKa2K2aEEyKTccCzb7sOYyacUb1SqLSzh8LYIUXnWK4lETim8E4sIZVi9AL7hlA
+ RTx0hq4s9PVw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,421,1583222400"; 
-   d="scan'208";a="255567204"
+   d="scan'208";a="467149192"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008.fm.intel.com with ESMTP; 22 May 2020 04:08:09 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 22 May 2020 04:13:38 -0700
 Received: from andy by smile with local (Exim 4.93)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jc5X9-008DZC-Jy; Fri, 22 May 2020 14:08:11 +0300
-Date:   Fri, 22 May 2020 14:08:11 +0300
+        id 1jc5cS-008Dbm-I2; Fri, 22 May 2020 14:13:40 +0300
+Date:   Fri, 22 May 2020 14:13:40 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@stericsson.com>,
+        Vinod Koul <vkoul@kernel.org>, Feng Tang <feng.tang@intel.com>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Alan Cox <alan@linux.intel.com>,
         Serge Semin <fancer.lancer@gmail.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
@@ -40,58 +44,88 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        "wuxu.wu" <wuxu.wu@huawei.com>, Clement Leger <cleger@kalray.eu>,
+        Linus Walleij <linus.walleij@linaro.org>,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 12/16] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on
- the DW SPI core
-Message-ID: <20200522110811.GW1634618@smile.fi.intel.com>
+Subject: Re: [PATCH v4 01/16] spi: dw: Add Tx/Rx finish wait methods to the
+ MID DMA
+Message-ID: <20200522111340.GX1634618@smile.fi.intel.com>
 References: <20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru>
- <20200522000806.7381-13-Sergey.Semin@baikalelectronics.ru>
- <20200522110738.GV1634618@smile.fi.intel.com>
+ <20200522000806.7381-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200522110738.GV1634618@smile.fi.intel.com>
+In-Reply-To: <20200522000806.7381-2-Sergey.Semin@baikalelectronics.ru>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 22, 2020 at 02:07:38PM +0300, Andy Shevchenko wrote:
-> On Fri, May 22, 2020 at 03:08:01AM +0300, Serge Semin wrote:
-> > Seeing all of the DW SPI driver components like DW SPI DMA/PCI/MMIO
-> > depend on the DW SPI core code it's better to use the if-endif
-> > conditional kernel config statement to signify that common dependency.
-> > 
-> > Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> > Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> > Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> > Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> 
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Here and for the future, when you add somebody's tag, drop their appearance in
-> Cc. git-send-email automatically converts known tags to Cc.
+On Fri, May 22, 2020 at 03:07:50AM +0300, Serge Semin wrote:
+> Since DMA transfers are performed asynchronously with actual SPI
+> transaction, then even if DMA transfers are finished it doesn't mean
+> all data is actually pushed to the SPI bus. Some data might still be
+> in the controller FIFO. This is specifically true for Tx-only
+> transfers. In this case if the next SPI transfer is recharged while
+> a tail of the previous one is still in FIFO, we'll loose that tail
+> data. In order to fix this lets add the wait procedure of the Tx/Rx
+> SPI transfers completion after the corresponding DMA transactions
+> are finished.
 
-*) here == in this entire series.
+...
 
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
+> Fixes: 7063c0d942a1 ("spi/dw_spi: add DMA support")
+
+Usually we put this before any other tags.
+
+> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Cc: Rob Herring <robh+dt@kernel.org>
+
+Are you sure Rob needs this to see?
+You really need to shrink Cc lists of the patches to send them on common sense basis.
+
+> Cc: linux-mips@vger.kernel.org
+
+> Cc: devicetree@vger.kernel.org
+
+Ditto.
+
+...
+
+> Changelog v4:
+> - Get back ndelay() method to wait for an SPI transfer completion.
+>   spi_delay_exec() isn't suitable for the atomic context.
+
+OTOH we may teach spi_delay_exec() to perform atomic sleeps.
+
+...
+
+> +	while (dw_spi_dma_tx_busy(dws) && retry--)
+> +		ndelay(ns);
+
+I might be mistaken, but I think I told that this one misses to keep power
+management in mind.
+
+Have you read Documentation/process/volatile-considered-harmful.rst ?
+
+...
+
+> +	while (dw_spi_dma_rx_busy(dws) && retry--)
+> +		ndelay(ns);
+
+Ditto.
 
 -- 
 With Best Regards,
