@@ -2,91 +2,151 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D484C1DE13B
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 09:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322441DE16D
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 09:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728304AbgEVHqJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 03:46:09 -0400
-Received: from mail.zju.edu.cn ([61.164.42.155]:41942 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728230AbgEVHqI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 May 2020 03:46:08 -0400
-Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 22 May 2020 15:45:58
- +0800 (GMT+08:00)
-X-Originating-IP: [222.205.77.158]
-Date:   Fri, 22 May 2020 15:45:58 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   dinghao.liu@zju.edu.cn
-To:     "Andy Shevchenko" <andy.shevchenko@gmail.com>
-Cc:     "Kangjie Lu" <kjlu@umn.edu>,
-        "Laxman Dewangan" <ldewangan@nvidia.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Jonathan Hunter" <jonathanh@nvidia.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-tegra@vger.kernel.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: Re: [PATCH] spi: tegra20-slink: Fix runtime PM imbalance on
- error
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.10 build 20190906(84e8bf8f)
- Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
-In-Reply-To: <CAHp75VfOeUaqRW2vRwyWaz3JJw41hX5jTgE+kZ8pB8E_HtHwqw@mail.gmail.com>
-References: <20200521074946.21799-1-dinghao.liu@zju.edu.cn>
- <CAHp75VfOeUaqRW2vRwyWaz3JJw41hX5jTgE+kZ8pB8E_HtHwqw@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        id S1728794AbgEVH6w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 03:58:52 -0400
+Received: from mga14.intel.com ([192.55.52.115]:23088 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728371AbgEVH6w (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 May 2020 03:58:52 -0400
+IronPort-SDR: SSDT+KjdkyIGtrErUb5qURx8xKoNW2Eyp0nYskeHTKGn8Ot7YtU/3IJ62fDfGz4KBWUfvYerrZ
+ sPKpR87SZMlA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 00:58:49 -0700
+IronPort-SDR: Ba1UgqVNnQbJe3HN+feIC07RravYuDuHBXYUUY3XENWN37smKU3h68nyJO90j0LbE41qZLmeIu
+ exY7CO5KlG5w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,420,1583222400"; 
+   d="scan'208";a="467102644"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.107])
+  by fmsmga005.fm.intel.com with ESMTP; 22 May 2020 00:58:44 -0700
+Date:   Fri, 22 May 2020 15:58:44 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Vinod Koul <vkoul@kernel.org>, Alan Cox <alan@linux.intel.com>,
+        Linus Walleij <linus.walleij@stericsson.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Clement Leger <cleger@kalray.eu>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/16] spi: dw: Add Tx/Rx finish wait methods to the
+ MID DMA
+Message-ID: <20200522075844.GC12568@shbuild999.sh.intel.com>
+References: <20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru>
+ <20200521012206.14472-2-Sergey.Semin@baikalelectronics.ru>
+ <20200521030924.GA12568@shbuild999.sh.intel.com>
+ <20200521114736.b2azyfvym372vkdl@mobilestation>
+ <20200521145520.GB12568@shbuild999.sh.intel.com>
+ <20200521153317.7wjp2r47q75fm6ge@mobilestation>
 MIME-Version: 1.0
-Message-ID: <5a8a6e7b.bef25.1723b588c7f.Coremail.dinghao.liu@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgBHkD42g8dem0b+AQ--.40491W
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgAIBlZdtOQZ8wAAs9
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUUbXvS07vEb7Iv0x
-        C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
-        bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
-        CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
-        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWlV2xY628EF7xvwVC2z280aVAFwI0_Gc
-        CE3s1lV2xY628EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wCS07vEe2I262IYc4CY6c8I
-        j28IcVAaY2xG8wCS07vE5I8CrVACY4xI64kE6c02F40Ex7xfMIAIbVAv7VC0I7IYx2IY67
-        AKxVWUJVWUGwCS07vEYx0Ex4A2jsIE14v26r4j6F4UMIAIbVAm72CE4IkC6x0Yz7v_Jr0_
-        Gr1lV2xY6x02cVAKzwCS07vEc2xSY4AK67AK6r4xMIAIbVCY0x0Ix7I2Y4AK64vIr41lV2
-        xY6xAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCS07vE4x8a6x804xWlV2xY6xC20s026xCa
-        FVCjc4AY6r1j6r4UMIAIbVC20s026c02F40E14v26r1j6r18MIAIbVC20s026x8GjcxK67
-        AKxVWUGVWUWwCS07vEx4CE17CEb7AF67AKxVWUtVW8ZwCS07vEIxAIcVC0I7IYx2IY67AK
-        xVWUJVWUCwCS07vEIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIAIbVCI42IY6xAIw2
-        0EY4v20xvaj40_Wr1j6rW3Jr1lV2xY6IIF0xvEx4A2jsIE14v26r4j6F4UMIAIbVCI42IY
-        6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200521153317.7wjp2r47q75fm6ge@mobilestation>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SGkgQW5keSwKClRoYW5rIHlvdSBmb3IgeW91ciBhZHZpY2UhCgpZb3VyIHN1Z2dlc3Rpb24gaXMg
-dG8gdXNlIHBtX3J1bnRpbWVfcHV0X25vaWRsZSgpLCByaWdodD8gClRoZSBvbmx5IGRpZmZlcmVu
-Y2UgYmV0d2VlbiBwbV9ydW50aW1lX3B1dCgpIGFuZCB0aGlzIGZ1bmN0aW9uCmlzIHRoYXQgcG1f
-cnVudGltZV9wdXQoKSB3aWxsIHJ1biBhbiBleHRyYSBwbV9yZXF1ZXN0X2lkbGUoKS4KIApJIGNo
-ZWNrZWQgdGhpcyBwYXRjaGVkIGZ1bmN0aW9uIGFnYWluIGFuZCBmb3VuZCB0aGVyZSBpcyBhCnBt
-X3J1bnRpbWVfcHV0KCkgaW4gdGhlIG5vcm1hbCBicmFuY2ggb2YgcG1fcnVudGltZV9nZXRfc3lu
-YygpLgpEb2VzIHRoaXMgbWVhbiB0aGUgb3JpZ2luYWwgcHJvZ3JhbSBsb2dpYyBuZWVkIHRvIGV4
-ZWN1dGUgaWRsZQpjYWxsYmFjaz8KCkFjY29yZGluZyB0byBydW50aW1lIFBNJ3MgZG9jLCB0aGUg
-cG1fcnVudGltZV9nZXRfc3luYygpIGNhbGwKcGFpcmVkIHdpdGggYSBwbV9ydW50aW1lX3B1dCgp
-IGNhbGwgd2lsbCBiZSBhcHByb3ByaWF0ZSB0byBlbnN1cmUKdGhhdCB0aGUgZGV2aWNlIGlzIG5v
-dCBwdXQgYmFjayB0byBzbGVlcCBkdXJpbmcgdGhlIHByb2JlLiBUaGVyZWZvcmUKSSB0aGluayBw
-bV9ydW50aW1lX3B1dCgpIGlzIG1vcmUgYXBwcm9wcmlhdGUgaGVyZS4gRG8geW91IGhhdmUgCm1v
-cmUgZGV0YWlsZWQgc3VnZ2VzdGlvbiBmb3Igd2h5IHdlIHNob3VsZCB1c2UgX3B1dF9ub2lkbGUo
-KT8KClJlZ2FyZHMsCkRpbmdoYW8gCj4gT24gVGh1LCBNYXkgMjEsIDIwMjAgYXQgMTA6NTAgQU0g
-RGluZ2hhbyBMaXUgPGRpbmdoYW8ubGl1QHpqdS5lZHUuY24+IHdyb3RlOgo+ID4KPiA+IHBtX3J1
-bnRpbWVfZ2V0X3N5bmMoKSBpbmNyZW1lbnRzIHRoZSBydW50aW1lIFBNIHVzYWdlIGNvdW50ZXIg
-ZXZlbgo+ID4gd2hlbiBpdCByZXR1cm5zIGFuIGVycm9yIGNvZGUuIFRodXMgYSBwYWlyaW5nIGRl
-Y3JlbWVudCBpcyBuZWVkZWQgb24KPiA+IHRoZSBlcnJvciBoYW5kbGluZyBwYXRoIHRvIGtlZXAg
-dGhlIGNvdW50ZXIgYmFsYW5jZWQuCj4gCj4gLi4uCj4gCj4gPiAgICAgICAgIHJldCA9IHBtX3J1
-bnRpbWVfZ2V0X3N5bmMoJnBkZXYtPmRldik7Cj4gPiAgICAgICAgIGlmIChyZXQgPCAwKSB7Cj4g
-PiAgICAgICAgICAgICAgICAgZGV2X2VycigmcGRldi0+ZGV2LCAicG0gcnVudGltZSBnZXQgZmFp
-bGVkLCBlID0gJWRcbiIsIHJldCk7Cj4gCj4gPiArICAgICAgICAgICAgICAgcG1fcnVudGltZV9w
-dXQoJnBkZXYtPmRldik7Cj4gCj4gRm9yIGFsbCB5b3VyIHBhdGNoZXMsIHBsZWFzZSwgZG91Ymxl
-IGNoZWNrIHdoYXQgeW91IGFyZSBwcm9wb3NpbmcuCj4gCj4gSGVyZSwgSSBiZWxpZXZlLCB0aGUg
-Y29ycmVjdCBvbmUgd2lsbCBiZSBfcHV0X25vaWRsZSgpLgo+IAo+IEFGQUlVIHlvdSBhcmUgbm90
-IHN1cHBvc2VkIHRvIGFjdHVhbGx5IHN1c3BlbmQgdGhlIGRldmljZSBpbiBjYXNlIG9mIGVycm9y
-Lgo+IEJ1dCBJIG1pZ2h0IGJlIG1pc3Rha2VuLCB0aHVzIHNlZSBhYm92ZS4KPiAKPiA+ICAgICAg
-ICAgICAgICAgICBnb3RvIGV4aXRfcG1fZGlzYWJsZTsKPiA+ICAgICAgICAgfQo+IAo+IC0tIAo+
-IFdpdGggQmVzdCBSZWdhcmRzLAo+IEFuZHkgU2hldmNoZW5rbwo=
+Hi Serge,
+
+On Thu, May 21, 2020 at 06:33:17PM +0300, Serge Semin wrote:
+> > > > > +	dw_spi_dma_wait_rx_done(dws);
+> > > > 
+> > > > I can understand the problem about TX, but I don't see how RX
+> > > > will get hurt, can you elaborate more? thanks
+> > > > 
+> > > > - Feng
+> > > 
+> > > Your question is correct. You are right with your hypothesis. Ideally upon the
+> > > dw_spi_dma_rx_done() execution Rx FIFO must be already empty. That's why the
+> > > commit log signifies the error being mostly related with Tx FIFO. But
+> > > practically there are many reasons why Rx FIFO might be left with data:
+> > > DMA engine failures, incorrect DMA configuration (if DW SPI or DW DMA driver
+> > > messed something up), controller hanging up, and so on. It's better to catch
+> > > an error at this stage while propagating it up to the SPI device drivers.
+> > > Especially seeing the wait-check implementation doesn't gives us much of the
+> > > execution overhead in normal conditions. So by calling dw_spi_dma_wait_rx_done()
+> > > we make sure that all the data has been fetched and we may freely get the
+> > > buffers back to the client driver.
+> > 
+> > I see your point about checking RX. But I still don't think checking
+> > RX FIFO level is the right way to detect error. Some data left in
+> > RX FIFO doesn't always mean a error, say for some case if there is
+> > 20 words in RX FIFO, and the driver starts a DMA request for 16
+> > words, then after a sucessful DMA transaction, there are 4 words
+> > left without any error.
+> 
+> Neither Tx nor Rx FIFO should be left with any data after transaction is
+> finished. If they are then something has been wrong.
+> 
+> See, every SPI transfer starts with FIFO clearance since we disable/enable the
+> SPI controller by means of the SSIENR (spi_enable_chip(dws, 0) and
+> spi_enable_chip(dws, 1) called in the dw_spi_transfer_one() callback). Here is the
+> SSIENR register description: "It enables and disables all SPI Controller operations.
+> When disabled, all serial transfers are halted immediately. Transmit and receive
+> FIFO buffers are cleared when the device is disabled. It is impossible to program
+> some of the SPI Controller control registers when enabled"
+> 
+> No mater whether we start DMA request or perform the normal IRQ-based PIO, we
+> request as much data as we need and neither Tx nor Rx FIFO are supposed to
+> be left with any data after the request is finished. If data is left, then
+> either we didn't push all of the necessary data to the SPI bus, or we didn't
+> pull all the data from the FIFO, and this could have happened only due to some
+> component mulfunction (drivers, DMA engine, SPI device). In any case the SPI
+> device driver should be notified about the problem.
+
+Data left in TX FIFO and Data left in RX FIFO are 2 different stories. The
+former in dma case means the dma hw/driver has done its job, and spi hw/driver
+hasn't done its job of pushing out the data to spi slave devices, while the
+latter means the spi hw/driver has done its job, while the dma hw/driver hasn't. 
+
+And the code is called inside the dma rx channel callback, which means the
+dma driver is saying "hey, I've done my job", but apparently it hasn't if
+there is data left.
+
+As for the wait time
+
++	nents = dw_readl(dws, DW_SPI_RXFLR);
++	ns = (NSEC_PER_SEC / spi_get_clk(dws)) * nents * dws->n_bytes *
++	     BITS_PER_BYTE;
+
+Using this formula for checking TX makes sense, but it doesn't for RX.
+Because the time of pushing data in TX FIFO to spi device depends on
+the clk, but the time of transferring RX FIFO to memory is up to
+the DMA controller and peripheral bus. 
+
+Also for the
+
++	while (dw_spi_dma_rx_busy(dws) && retry--)
++		ndelay(ns);
++
+
+the rx busy bit is cleared after this rx/tx checking, and it should
+be always true at this point. Am I mis-reading the code?
+
+Thanks,
+Feng
+
+> 
+> -Sergey
+> 
