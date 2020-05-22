@@ -2,149 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEF31DDFEB
-	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 08:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D484C1DE13B
+	for <lists+linux-spi@lfdr.de>; Fri, 22 May 2020 09:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbgEVGb6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 May 2020 02:31:58 -0400
-Received: from twhmllg4.macronix.com ([211.75.127.132]:40374 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728680AbgEVGb5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 May 2020 02:31:57 -0400
-Received: from twhfm1p2.macronix.com (twhfmlp2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id 04M6Uv0L024143;
-        Fri, 22 May 2020 14:30:57 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
-        by Forcepoint Email with ESMTP id 392FE906D490C16CE7F1;
-        Fri, 22 May 2020 14:30:58 +0800 (CST)
-In-Reply-To: <20200519142642.24131-6-p.yadav@ti.com>
-References: <20200519142642.24131-1-p.yadav@ti.com> <20200519142642.24131-6-p.yadav@ti.com>
-To:     "Pratyush Yadav" <p.yadav@ti.com>
-Cc:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Boris Brezillon" <boris.brezillon@collabora.com>,
+        id S1728304AbgEVHqJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 May 2020 03:46:09 -0400
+Received: from mail.zju.edu.cn ([61.164.42.155]:41942 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728230AbgEVHqI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 May 2020 03:46:08 -0400
+Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 22 May 2020 15:45:58
+ +0800 (GMT+08:00)
+X-Originating-IP: [222.205.77.158]
+Date:   Fri, 22 May 2020 15:45:58 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   dinghao.liu@zju.edu.cn
+To:     "Andy Shevchenko" <andy.shevchenko@gmail.com>
+Cc:     "Kangjie Lu" <kjlu@umn.edu>,
+        "Laxman Dewangan" <ldewangan@nvidia.com>,
         "Mark Brown" <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org,
-        "Ludovic Desroches" <ludovic.desroches@microchip.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "Sekhar Nori" <nsekhar@ti.com>, "Pratyush Yadav" <p.yadav@ti.com>,
-        "Richard Weinberger" <richard@nod.at>,
-        "Tudor Ambarus" <tudor.ambarus@microchip.com>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>, juliensu@mxic.com.tw
-Subject: Re: [PATCH v5 05/19] mtd: spi-nor: add support for DTR protocol
+        "Thierry Reding" <thierry.reding@gmail.com>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-tegra@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: Re: [PATCH] spi: tegra20-slink: Fix runtime PM imbalance on
+ error
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.10 build 20190906(84e8bf8f)
+ Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
+In-Reply-To: <CAHp75VfOeUaqRW2vRwyWaz3JJw41hX5jTgE+kZ8pB8E_HtHwqw@mail.gmail.com>
+References: <20200521074946.21799-1-dinghao.liu@zju.edu.cn>
+ <CAHp75VfOeUaqRW2vRwyWaz3JJw41hX5jTgE+kZ8pB8E_HtHwqw@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-X-KeepSent: AC48157A:F337A12A-48258570:0021F23B;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
-Message-ID: <OFAC48157A.F337A12A-ON48258570.0021F23B-48258570.0023CB62@mxic.com.tw>
-From:   masonccyang@mxic.com.tw
-Date:   Fri, 22 May 2020 14:30:58 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2020/05/22 PM 02:30:58,
-        Serialize complete at 2020/05/22 PM 02:30:58
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG4.macronix.com 04M6Uv0L024143
+Message-ID: <5a8a6e7b.bef25.1723b588c7f.Coremail.dinghao.liu@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgBHkD42g8dem0b+AQ--.40491W
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgAIBlZdtOQZ8wAAs9
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUUbXvS07vEb7Iv0x
+        C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
+        bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
+        CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWlV2xY628EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1lV2xY628EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wCS07vEe2I262IYc4CY6c8I
+        j28IcVAaY2xG8wCS07vE5I8CrVACY4xI64kE6c02F40Ex7xfMIAIbVAv7VC0I7IYx2IY67
+        AKxVWUJVWUGwCS07vEYx0Ex4A2jsIE14v26r4j6F4UMIAIbVAm72CE4IkC6x0Yz7v_Jr0_
+        Gr1lV2xY6x02cVAKzwCS07vEc2xSY4AK67AK6r4xMIAIbVCY0x0Ix7I2Y4AK64vIr41lV2
+        xY6xAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCS07vE4x8a6x804xWlV2xY6xC20s026xCa
+        FVCjc4AY6r1j6r4UMIAIbVC20s026c02F40E14v26r1j6r18MIAIbVC20s026x8GjcxK67
+        AKxVWUGVWUWwCS07vEx4CE17CEb7AF67AKxVWUtVW8ZwCS07vEIxAIcVC0I7IYx2IY67AK
+        xVWUJVWUCwCS07vEIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIAIbVCI42IY6xAIw2
+        0EY4v20xvaj40_Wr1j6rW3Jr1lV2xY6IIF0xvEx4A2jsIE14v26r4j6F4UMIAIbVCI42IY
+        6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUU==
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-Hi Pratyush,
-
-
-> +/**
-> + * spi_nor_spimem_setup_op() - Set up common properties of a spi-mem 
-op.
-> + * @nor:      pointer to a 'struct spi_nor'
-> + * @op:         pointer to the 'struct spi_mem_op' whose properties
-> + *         need to be initialized.
-> + * @proto:      the protocol from which the properties need to be set.
-> + */
-> +void spi_nor_spimem_setup_op(const struct spi_nor *nor,
-> +              struct spi_mem_op *op,
-> +              const enum spi_nor_protocol proto)
-> +{
-> +   u8 ext;
-> +
-> +   op->cmd.buswidth = spi_nor_get_protocol_inst_nbits(proto);
-> +
-> +   if (op->addr.nbytes)
-> +      op->addr.buswidth = spi_nor_get_protocol_addr_nbits(proto);
-> +
-> +   if (op->dummy.nbytes)
-> +      op->dummy.buswidth = spi_nor_get_protocol_addr_nbits(proto);
-> +
-> +   if (op->data.nbytes)
-> +      op->data.buswidth = spi_nor_get_protocol_data_nbits(proto);
-> +
-> +   if (spi_nor_protocol_is_dtr(proto)) {
-
-As mentioned before that I am also patching mx25* which supports 8S-8S-8S 
-and 
-8D-8D-8D mode.
-
-please patch to spi_nor_protocol_is_8_8_8(proto) for 8S-8S-8S mode 
-support.
-
-> +      /*
-> +       * spi-mem supports mixed DTR modes, but right now we can only
-> +       * have all phases either DTR or STR. IOW, spi-mem can have
-> +       * something like 4S-4D-4D, but spi-nor can't. So, set all 4
-> +       * phases to either DTR or STR.
-> +       */
-
-        if (spi_nor_protocol_is_8D_8D_8D(proto) {
-
-> +      op->cmd.dtr = op->addr.dtr = op->dummy.dtr
-> +                = op->data.dtr = true;
-> +
-> +      /* 2 bytes per clock cycle in DTR mode. */
-> +      op->dummy.nbytes *= 2;
-
-        }
-
-> +
-> +      ext = spi_nor_get_cmd_ext(nor, op);
-> +      op->cmd.opcode = (op->cmd.opcode << 8) | ext;
-> +      op->cmd.nbytes = 2;
-> +   }
-> +}
-> +
-
-thanks & best regards,
-Mason
-
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
-
-
-============================================================================
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
+SGkgQW5keSwKClRoYW5rIHlvdSBmb3IgeW91ciBhZHZpY2UhCgpZb3VyIHN1Z2dlc3Rpb24gaXMg
+dG8gdXNlIHBtX3J1bnRpbWVfcHV0X25vaWRsZSgpLCByaWdodD8gClRoZSBvbmx5IGRpZmZlcmVu
+Y2UgYmV0d2VlbiBwbV9ydW50aW1lX3B1dCgpIGFuZCB0aGlzIGZ1bmN0aW9uCmlzIHRoYXQgcG1f
+cnVudGltZV9wdXQoKSB3aWxsIHJ1biBhbiBleHRyYSBwbV9yZXF1ZXN0X2lkbGUoKS4KIApJIGNo
+ZWNrZWQgdGhpcyBwYXRjaGVkIGZ1bmN0aW9uIGFnYWluIGFuZCBmb3VuZCB0aGVyZSBpcyBhCnBt
+X3J1bnRpbWVfcHV0KCkgaW4gdGhlIG5vcm1hbCBicmFuY2ggb2YgcG1fcnVudGltZV9nZXRfc3lu
+YygpLgpEb2VzIHRoaXMgbWVhbiB0aGUgb3JpZ2luYWwgcHJvZ3JhbSBsb2dpYyBuZWVkIHRvIGV4
+ZWN1dGUgaWRsZQpjYWxsYmFjaz8KCkFjY29yZGluZyB0byBydW50aW1lIFBNJ3MgZG9jLCB0aGUg
+cG1fcnVudGltZV9nZXRfc3luYygpIGNhbGwKcGFpcmVkIHdpdGggYSBwbV9ydW50aW1lX3B1dCgp
+IGNhbGwgd2lsbCBiZSBhcHByb3ByaWF0ZSB0byBlbnN1cmUKdGhhdCB0aGUgZGV2aWNlIGlzIG5v
+dCBwdXQgYmFjayB0byBzbGVlcCBkdXJpbmcgdGhlIHByb2JlLiBUaGVyZWZvcmUKSSB0aGluayBw
+bV9ydW50aW1lX3B1dCgpIGlzIG1vcmUgYXBwcm9wcmlhdGUgaGVyZS4gRG8geW91IGhhdmUgCm1v
+cmUgZGV0YWlsZWQgc3VnZ2VzdGlvbiBmb3Igd2h5IHdlIHNob3VsZCB1c2UgX3B1dF9ub2lkbGUo
+KT8KClJlZ2FyZHMsCkRpbmdoYW8gCj4gT24gVGh1LCBNYXkgMjEsIDIwMjAgYXQgMTA6NTAgQU0g
+RGluZ2hhbyBMaXUgPGRpbmdoYW8ubGl1QHpqdS5lZHUuY24+IHdyb3RlOgo+ID4KPiA+IHBtX3J1
+bnRpbWVfZ2V0X3N5bmMoKSBpbmNyZW1lbnRzIHRoZSBydW50aW1lIFBNIHVzYWdlIGNvdW50ZXIg
+ZXZlbgo+ID4gd2hlbiBpdCByZXR1cm5zIGFuIGVycm9yIGNvZGUuIFRodXMgYSBwYWlyaW5nIGRl
+Y3JlbWVudCBpcyBuZWVkZWQgb24KPiA+IHRoZSBlcnJvciBoYW5kbGluZyBwYXRoIHRvIGtlZXAg
+dGhlIGNvdW50ZXIgYmFsYW5jZWQuCj4gCj4gLi4uCj4gCj4gPiAgICAgICAgIHJldCA9IHBtX3J1
+bnRpbWVfZ2V0X3N5bmMoJnBkZXYtPmRldik7Cj4gPiAgICAgICAgIGlmIChyZXQgPCAwKSB7Cj4g
+PiAgICAgICAgICAgICAgICAgZGV2X2VycigmcGRldi0+ZGV2LCAicG0gcnVudGltZSBnZXQgZmFp
+bGVkLCBlID0gJWRcbiIsIHJldCk7Cj4gCj4gPiArICAgICAgICAgICAgICAgcG1fcnVudGltZV9w
+dXQoJnBkZXYtPmRldik7Cj4gCj4gRm9yIGFsbCB5b3VyIHBhdGNoZXMsIHBsZWFzZSwgZG91Ymxl
+IGNoZWNrIHdoYXQgeW91IGFyZSBwcm9wb3NpbmcuCj4gCj4gSGVyZSwgSSBiZWxpZXZlLCB0aGUg
+Y29ycmVjdCBvbmUgd2lsbCBiZSBfcHV0X25vaWRsZSgpLgo+IAo+IEFGQUlVIHlvdSBhcmUgbm90
+IHN1cHBvc2VkIHRvIGFjdHVhbGx5IHN1c3BlbmQgdGhlIGRldmljZSBpbiBjYXNlIG9mIGVycm9y
+Lgo+IEJ1dCBJIG1pZ2h0IGJlIG1pc3Rha2VuLCB0aHVzIHNlZSBhYm92ZS4KPiAKPiA+ICAgICAg
+ICAgICAgICAgICBnb3RvIGV4aXRfcG1fZGlzYWJsZTsKPiA+ICAgICAgICAgfQo+IAo+IC0tIAo+
+IFdpdGggQmVzdCBSZWdhcmRzLAo+IEFuZHkgU2hldmNoZW5rbwo=
