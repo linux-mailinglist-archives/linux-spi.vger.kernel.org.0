@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF621E0582
-	for <lists+linux-spi@lfdr.de>; Mon, 25 May 2020 05:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332901E0587
+	for <lists+linux-spi@lfdr.de>; Mon, 25 May 2020 05:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388773AbgEYDqB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 24 May 2020 23:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S2388809AbgEYDqF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 24 May 2020 23:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388730AbgEYDqA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 May 2020 23:46:00 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083D7C061A0E;
-        Sun, 24 May 2020 20:46:00 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id ci23so7969032pjb.5;
-        Sun, 24 May 2020 20:46:00 -0700 (PDT)
+        with ESMTP id S2388730AbgEYDqD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 May 2020 23:46:03 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2569BC061A0E;
+        Sun, 24 May 2020 20:46:03 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id q8so8287284pfu.5;
+        Sun, 24 May 2020 20:46:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=GfRuA4swEZrmalrNdqlTpHmV2cl0sSIm4Vls/KHgpHc=;
-        b=b/s8P7WPUDewoqGZVXz5SBp8jQzfaawmkcFAeBHofbTFHfPjKTMllWSLGQ75XgH0w6
-         U14KzKR3jeOQrIv6TmlitrHNXfMqesnU3Jsga5vkHwEXNO++5eM+ue6eCOO+Ce5PZg9N
-         O+q0ajIM61pqMEeEqNfkTcQru0EaCWKO4PY1ZxHnodokXQC2Qa4+fPP2cZeDC9NYKyGx
-         nwuJ5x2jmSq/ayXeZkDJt6ktT6xx0vxvrpImk7JDIq2k2yN4n1Pn65NhX6FoIWK4p7Ng
-         A1kaiwWlu/NqHeLb0e6hTbNBDMs3VL95Fpge5YCi/M4Kgg+kRoMMmQx/NdjqqrnC47TN
-         B4sQ==
+        bh=TecVBwOuGZ/BbCjVyBAZuzQGGC9DlsbNm1sr3li0idE=;
+        b=oOnEvJIc5RIC+XycPQbNKIOqu3rZrB9GkscAVQFQ0bIPFUXhXArjacXi2Bv9R8irzo
+         xJ4obbevslcs+GawkyTJuMZcaQxb8t70SgchuEOmzRv9VmCoagv+xoE3hH8+uxrGu+u7
+         Tr/nTMpuhzI8FeOPEYF4CiVdLMO4Yo+CU/rEyl2ZyF/zXXNC8cydBxXGjcTypHEmgeax
+         OY8v4Xebai1cj4X0S4d58nwAtcOIGFv4+K0Qo3tuY/twGNB5zfVMY5LFwteks12B1qoP
+         WJ2FZXvTm78wjDBDexzekBDJehJ6XUiQNlj1HScpmMzEEio3Xpd63nu3vsmTHMjSstN4
+         gkgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=GfRuA4swEZrmalrNdqlTpHmV2cl0sSIm4Vls/KHgpHc=;
-        b=DGXfa0RkXVbhMsQU0aFDjcc3Zb6AmPK7cDd9trkxGJPEHdHuZ/x/xo2u/ECYeQHUXo
-         /SnvDMdz+kAxp60lnVme4WMMyQkbvbD8tvciORmufa4LW5yIhztYa1bR3L0aAw7qpI1R
-         B+okrQVXCj3UfMEo9I4J8pgDwjRhYx/ZUwH/8138cpQnvtk4ysF5FeJOM/JDTxy8pz4u
-         TuZvb9bNpbJ/IsciMZ6NuyAJF2HY0bEXWoPlGw/U1FaLsGWmIzNLq/vxiBtR7cb0AVFC
-         I9TFiPVvEqbDRVk/L0gzrciPjkzznob1A7fL+fmnnDS/MG1RDJTts9GMuAC/AFbGjUaP
-         e3Iw==
-X-Gm-Message-State: AOAM533k4yVaQndiAWp1ev01udhgWhXuo7qkN5AHVq9580aVGnlwVpD+
-        E2NvKY1YVkY0db6OfbYn0mc=
-X-Google-Smtp-Source: ABdhPJxii5WiWaGwqt4iLc/zkIDoBNCEavl9Xso9CCancCAU55WqainDQzxqHBdPlE2arZkpe3Qoug==
-X-Received: by 2002:a17:90b:8d1:: with SMTP id ds17mr17745374pjb.76.1590378359552;
-        Sun, 24 May 2020 20:45:59 -0700 (PDT)
+        bh=TecVBwOuGZ/BbCjVyBAZuzQGGC9DlsbNm1sr3li0idE=;
+        b=e5EQCYJxKWV7reWZb0ezMTVLhW4RH9e2Ll1rHSSHvtIlybhLJqLWd/00A8JLc1Jc8Z
+         7jm373Hm/KZyZuPUsgfdc9gi1iacmb3UPNkV8ICrfBXY8m1unaEY6bFJDJaz7/MniyuM
+         pA1sxF5EhDrB+/b6nBzawC7Z/U+SLVDI03COn47puDyeSZA0Rq1upHLooK8h8FoSfCzO
+         Ec7AnBliW7qfh7CDu1qL+F6tANXJxVsnxrq+Lh4QqNftqZkMhvnTouJBU3npgNBwIJQP
+         QOIQxhRonakAQMn2w6Yi8Eki1inheqDSdZorFXKEpxPlFdXFx0mcTjoZq3xK9B3Xa27Z
+         rqnQ==
+X-Gm-Message-State: AOAM533XlAjRvgRV/69lwFXLeb9aHjWX32lA1tiK/KzMbLZv2csZCZwm
+        9ETWniQ8XrfNCgUlkmsOhSM=
+X-Google-Smtp-Source: ABdhPJzcQZcr90XePIuYsKAB+iyE3OReyvFJzMWSlexKfctfg9uLTc3FLbdM/Zb/mh6AWJtg+8RtAA==
+X-Received: by 2002:a62:e305:: with SMTP id g5mr15607365pfh.144.1590378362742;
+        Sun, 24 May 2020 20:46:02 -0700 (PDT)
 Received: from fmin-OptiPlex-7060.nreal.work ([103.206.191.44])
-        by smtp.gmail.com with ESMTPSA id i98sm12152831pje.37.2020.05.24.20.45.56
+        by smtp.gmail.com with ESMTPSA id i98sm12152831pje.37.2020.05.24.20.45.59
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 24 May 2020 20:45:59 -0700 (PDT)
+        Sun, 24 May 2020 20:46:02 -0700 (PDT)
 From:   dillon.minfei@gmail.com
 To:     linus.walleij@linaro.org, broonie@kernel.org
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -53,9 +53,9 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com,
         dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
         dillon min <dillon.minfei@gmail.com>
-Subject: [PATCH v5 2/8] ARM: dts: stm32: Add pin map for ltdc & spi5 on stm32f429-disco board
-Date:   Mon, 25 May 2020 11:45:42 +0800
-Message-Id: <1590378348-8115-3-git-send-email-dillon.minfei@gmail.com>
+Subject: [PATCH v5 3/8] ARM: dts: stm32: enable ltdc binding with ili9341, gyro l3gd20 on stm32429-disco board
+Date:   Mon, 25 May 2020 11:45:43 +0800
+Message-Id: <1590378348-8115-4-git-send-email-dillon.minfei@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1590378348-8115-1-git-send-email-dillon.minfei@gmail.com>
 References: <1590378348-8115-1-git-send-email-dillon.minfei@gmail.com>
@@ -66,92 +66,76 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: dillon min <dillon.minfei@gmail.com>
 
-This patch adds the pin configuration for ltdc and spi5 controller
-on stm32f429-disco board.
+Enable the ltdc & ili9341, gyro l3gd20 on stm32429-disco board.
 
 Signed-off-by: dillon min <dillon.minfei@gmail.com>
 ---
- arch/arm/boot/dts/stm32f4-pinctrl.dtsi | 67 ++++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ arch/arm/boot/dts/stm32f429-disco.dts | 48 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
-index 392fa14..0eb107f 100644
---- a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
-@@ -316,6 +316,73 @@
- 				};
- 			};
+diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
+index 30c0f67..365d16f 100644
+--- a/arch/arm/boot/dts/stm32f429-disco.dts
++++ b/arch/arm/boot/dts/stm32f429-disco.dts
+@@ -49,6 +49,8 @@
+ #include "stm32f429.dtsi"
+ #include "stm32f429-pinctrl.dtsi"
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/gpio/gpio.h>
  
-+			ltdc_pins_f429_disco: ltdc-1 {
-+				pins {
-+					pinmux = <STM32_PINMUX('C', 6,  AF14)>,
-+						/* LCD_HSYNC */
-+						 <STM32_PINMUX('A', 4,  AF14)>,
-+						 /* LCD_VSYNC */
-+						 <STM32_PINMUX('G', 7,  AF14)>,
-+						 /* LCD_CLK */
-+						 <STM32_PINMUX('C', 10, AF14)>,
-+						 /* LCD_R2 */
-+						 <STM32_PINMUX('B', 0,  AF9)>,
-+						 /* LCD_R3 */
-+						 <STM32_PINMUX('A', 11, AF14)>,
-+						 /* LCD_R4 */
-+						 <STM32_PINMUX('A', 12, AF14)>,
-+						 /* LCD_R5 */
-+						 <STM32_PINMUX('B', 1,  AF9)>,
-+						 /* LCD_R6*/
-+						 <STM32_PINMUX('G', 6,  AF14)>,
-+						 /* LCD_R7 */
-+						 <STM32_PINMUX('A', 6,  AF14)>,
-+						 /* LCD_G2 */
-+						 <STM32_PINMUX('G', 10, AF9)>,
-+						 /* LCD_G3 */
-+						 <STM32_PINMUX('B', 10, AF14)>,
-+						 /* LCD_G4 */
-+						 <STM32_PINMUX('D', 6,  AF14)>,
-+						 /* LCD_B2 */
-+						 <STM32_PINMUX('G', 11, AF14)>,
-+						 /* LCD_B3*/
-+						 <STM32_PINMUX('B', 11, AF14)>,
-+						 /* LCD_G5 */
-+						 <STM32_PINMUX('C', 7,  AF14)>,
-+						 /* LCD_G6 */
-+						 <STM32_PINMUX('D', 3,  AF14)>,
-+						 /* LCD_G7 */
-+						 <STM32_PINMUX('G', 12, AF9)>,
-+						 /* LCD_B4 */
-+						 <STM32_PINMUX('A', 3,  AF14)>,
-+						 /* LCD_B5 */
-+						 <STM32_PINMUX('B', 8,  AF14)>,
-+						 /* LCD_B6 */
-+						 <STM32_PINMUX('B', 9,  AF14)>,
-+						 /* LCD_B7 */
-+						 <STM32_PINMUX('F', 10, AF14)>;
-+						 /* LCD_DE */
-+					slew-rate = <2>;
-+				};
-+			};
+ / {
+ 	model = "STMicroelectronics STM32F429i-DISCO board";
+@@ -127,3 +129,49 @@
+ 	pinctrl-names = "default";
+ 	status = "okay";
+ };
 +
-+			spi5_pins: spi5-0 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('F', 7, AF5)>,
-+						/* SPI5_CLK */
-+						 <STM32_PINMUX('F', 9, AF5)>;
-+						/* SPI5_MOSI */
-+					bias-disable;
-+					drive-push-pull;
-+					slew-rate = <0>;
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('F', 8, AF5)>;
-+						/* SPI5_MISO */
-+					bias-disable;
-+				};
-+			};
++&ltdc {
++	status = "okay";
++	pinctrl-0 = <&ltdc_pins_f429_disco>;
++	pinctrl-names = "default";
 +
- 			dcmi_pins: dcmi-0 {
- 				pins {
- 					pinmux = <STM32_PINMUX('A', 4, AF13)>, /* DCMI_HSYNC */
++	port {
++		ltdc_out_rgb: endpoint {
++			remote-endpoint = <&panel_in_rgb>;
++		};
++	};
++};
++
++&spi5 {
++	status = "okay";
++	pinctrl-0 = <&spi5_pins>;
++	pinctrl-names = "default";
++	#address-cells = <1>;
++	#size-cells = <0>;
++	cs-gpios = <&gpioc 1 GPIO_ACTIVE_LOW>, <&gpioc 2 GPIO_ACTIVE_LOW>;
++
++	l3gd20: l3gd20@0 {
++		compatible = "st,l3gd20-gyro";
++		spi-max-frequency = <10000000>;
++		st,drdy-int-pin = <2>;
++		interrupt-parent = <&gpioa>;
++		interrupts = <1 IRQ_TYPE_EDGE_RISING>,
++				<2 IRQ_TYPE_EDGE_RISING>;
++		reg = <0>;
++		status = "okay";
++	};
++
++	display: display@1{
++		/* Connect panel-ilitek-9341 to ltdc */
++		compatible = "st,sf-tc240t-9370-t";
++		reg = <1>;
++		spi-3wire;
++		spi-max-frequency = <10000000>;
++		dc-gpios = <&gpiod 13 0>;
++		port {
++			panel_in_rgb: endpoint {
++			remote-endpoint = <&ltdc_out_rgb>;
++			};
++		};
++	};
++};
 -- 
 2.7.4
 
