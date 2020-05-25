@@ -2,40 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1F01E09F4
-	for <lists+linux-spi@lfdr.de>; Mon, 25 May 2020 11:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C995A1E09F6
+	for <lists+linux-spi@lfdr.de>; Mon, 25 May 2020 11:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389440AbgEYJRK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 25 May 2020 05:17:10 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:49750 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389217AbgEYJRJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 May 2020 05:17:09 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04P9GvIU069096;
-        Mon, 25 May 2020 04:16:57 -0500
+        id S2389458AbgEYJRQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 25 May 2020 05:17:16 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:53186 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389454AbgEYJRP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 25 May 2020 05:17:15 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04P9H3Va076879;
+        Mon, 25 May 2020 04:17:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590398217;
-        bh=IaOq1DZIFb0ZXk7jE3XNt8/zfIsBjFRDz0kUbFwztL0=;
+        s=ti-com-17Q1; t=1590398223;
+        bh=vZHWXLCtyhdJG9oIb95lQ7NP/FmYNPGx8pS+OBRUJx0=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=jDNcP+WFg7cvZMzR0bfBwwCUb5LbrPfVF27NgkdZGRfzpVYz7hdovmXbycNgy9K+3
-         eJ3T2eIuCZbTZm4IgBm9m3x0ZCMEhvggX2pIcGlN1VQMgDzPaT9kHHHfqMvKjr7GME
-         /xYxI9d6nAHjQ5FXd2bJaiv8Lf5JXYUVIjaN+vQI=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04P9Gv5J013473
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 25 May 2020 04:16:57 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+        b=xuSjLVqdL/uD6awLR/47Z619GCwtC2Dif5V8LIxo79ScdQzmwOPLk8pIosjOp6ieh
+         YpLTfax1YdafoLeAraxM1vxWxl5XayULQcuWIULzbRaF2lKWWIH7WWp7BaT909LPUg
+         Ya9NmSYYWkZIPXNfI0/9WTBa1r3m5OGvRZW7iPJI=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P9H2qe018675;
+        Mon, 25 May 2020 04:17:03 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 25
- May 2020 04:16:57 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 04:17:02 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 25 May 2020 04:16:57 -0500
+ Frontend Transport; Mon, 25 May 2020 04:17:02 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P9FjAC034800;
-        Mon, 25 May 2020 04:16:52 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P9FjAD034800;
+        Mon, 25 May 2020 04:16:57 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -54,9 +53,9 @@ To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
 CC:     Pratyush Yadav <p.yadav@ti.com>, Sekhar Nori <nsekhar@ti.com>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH v9 12/19] mtd: spi-nor: core: enable octal DTR mode when possible
-Date:   Mon, 25 May 2020 14:45:37 +0530
-Message-ID: <20200525091544.17270-13-p.yadav@ti.com>
+Subject: [PATCH v9 13/19] mtd: spi-nor: sfdp: do not make invalid quad enable fatal
+Date:   Mon, 25 May 2020 14:45:38 +0530
+Message-ID: <20200525091544.17270-14-p.yadav@ti.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200525091544.17270-1-p.yadav@ti.com>
 References: <20200525091544.17270-1-p.yadav@ti.com>
@@ -69,88 +68,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Allow flashes to specify a hook to enable octal DTR mode. Use this hook
-whenever possible to get optimal transfer speeds.
+The Micron MT35XU512ABA flash does not support the quad enable bit. But
+instead of programming the Quad Enable Require field to 000b ("Device
+does not have a QE bit"), it is programmed to 111b ("Reserved").
+
+While this is technically incorrect, it is not reason enough to abort
+BFPT parsing. Instead, continue BFPT parsing assuming there is no quad
+enable bit present.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/core.c | 35 +++++++++++++++++++++++++++++++++++
- drivers/mtd/spi-nor/core.h |  2 ++
- 2 files changed, 37 insertions(+)
+ drivers/mtd/spi-nor/sfdp.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 5cb7e391cd29..a94376344be5 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -3097,6 +3097,35 @@ static int spi_nor_init_params(struct spi_nor *nor)
- 	return 0;
- }
+diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
+index 052cabb52df9..9fd3d8d9a127 100644
+--- a/drivers/mtd/spi-nor/sfdp.c
++++ b/drivers/mtd/spi-nor/sfdp.c
+@@ -576,10 +576,6 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
  
-+/** spi_nor_octal_dtr_enable() - enable Octal DTR I/O if needed
-+ * @nor:                 pointer to a 'struct spi_nor'
-+ * @enable:              whether to enable or disable Octal DTR
-+ *
-+ * Return: 0 on success, -errno otherwise.
-+ */
-+static int spi_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
-+{
-+	int ret;
-+
-+	if (!nor->params->octal_dtr_enable)
-+		return 0;
-+
-+	if (!(nor->read_proto == SNOR_PROTO_8_8_8_DTR &&
-+	      nor->write_proto == SNOR_PROTO_8_8_8_DTR))
-+		return 0;
-+
-+	ret = nor->params->octal_dtr_enable(nor, enable);
-+	if (ret)
-+		return ret;
-+
-+	if (enable)
-+		nor->reg_proto = SNOR_PROTO_8_8_8_DTR;
-+	else
-+		nor->reg_proto = SNOR_PROTO_1_1_1;
-+
-+	return 0;
-+}
-+
- /**
-  * spi_nor_quad_enable() - enable Quad I/O if needed.
-  * @nor:                pointer to a 'struct spi_nor'
-@@ -3136,6 +3165,12 @@ static int spi_nor_init(struct spi_nor *nor)
- {
- 	int err;
+ 	/* Quad Enable Requirements. */
+ 	switch (bfpt.dwords[BFPT_DWORD(15)] & BFPT_DWORD15_QER_MASK) {
+-	case BFPT_DWORD15_QER_NONE:
+-		params->quad_enable = NULL;
+-		break;
+-
+ 	case BFPT_DWORD15_QER_SR2_BIT1_BUGGY:
+ 		/*
+ 		 * Writing only one byte to the Status Register has the
+@@ -616,8 +612,10 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
+ 		params->quad_enable = spi_nor_sr2_bit1_quad_enable;
+ 		break;
  
-+	err = spi_nor_octal_dtr_enable(nor, true);
-+	if (err) {
-+		dev_dbg(nor->dev, "octal mode not supported\n");
-+		return err;
-+	}
-+
- 	err = spi_nor_quad_enable(nor);
- 	if (err) {
- 		dev_dbg(nor->dev, "quad mode not supported\n");
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 7e6df8322da0..6338d32a0d77 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -203,6 +203,7 @@ struct spi_nor_locking_ops {
-  *                      higher index in the array, the higher priority.
-  * @erase_map:		the erase map parsed from the SFDP Sector Map Parameter
-  *                      Table.
-+ * @octal_dtr_enable:	enables SPI NOR octal DTR mode.
-  * @quad_enable:	enables SPI NOR quad mode.
-  * @set_4byte_addr_mode: puts the SPI NOR in 4 byte addressing mode.
-  * @convert_addr:	converts an absolute address into something the flash
-@@ -226,6 +227,7 @@ struct spi_nor_flash_parameter {
++	case BFPT_DWORD15_QER_NONE:
+ 	default:
+-		return -EINVAL;
++		params->quad_enable = NULL;
++		break;
+ 	}
  
- 	struct spi_nor_erase_map        erase_map;
- 
-+	int (*octal_dtr_enable)(struct spi_nor *nor, bool enable);
- 	int (*quad_enable)(struct spi_nor *nor);
- 	int (*set_4byte_addr_mode)(struct spi_nor *nor, bool enable);
- 	u32 (*convert_addr)(struct spi_nor *nor, u32 addr);
+ 	/* Stop here if JESD216 rev B. */
 -- 
 2.26.2
 
