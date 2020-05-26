@@ -2,201 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A40C1E1E95
-	for <lists+linux-spi@lfdr.de>; Tue, 26 May 2020 11:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E394B1E1EB3
+	for <lists+linux-spi@lfdr.de>; Tue, 26 May 2020 11:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728750AbgEZJbp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 May 2020 05:31:45 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:50298 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728568AbgEZJbp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 May 2020 05:31:45 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04Q9VOEb096081;
-        Tue, 26 May 2020 04:31:24 -0500
+        id S1731691AbgEZJhd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 May 2020 05:37:33 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:36776 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728785AbgEZJhc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 May 2020 05:37:32 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04Q9bFA8034059;
+        Tue, 26 May 2020 04:37:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590485484;
-        bh=jD7sXlwKitwGx0YhJeaqEQlLnyjhXpd8mxOdk7QooZY=;
-        h=From:Subject:To:CC:References:Date:In-Reply-To;
-        b=GUDC0wrP0Ch5wK7qYXrkHjfCuwrjhH7Tc4woRZ0YGuBScfA9Bpv4xBUWTexJdnfV3
-         jwosfFsjV/yLgrlIx87iIbjPaOPwZ1W7AelQeN8QuhO01ssHvZ7Yx43DWeHlLLZSlU
-         c4p13kIklbbKQQMbejyk0Ls75gMfIAeKg3A11SkQ=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04Q9VOqX038751;
-        Tue, 26 May 2020 04:31:24 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+        s=ti-com-17Q1; t=1590485835;
+        bh=9aC5z2QPUSspxTgWIOcSf4RjNcIj4QMhk56xxtrcX2c=;
+        h=From:To:CC:Subject:Date;
+        b=nLVPrNIdpj0DwMapU7Wxvf2n+EVCK+A/Pkb7shPi+2vvPx+VHnu1lS0cLaQPjTcZz
+         qFdrtCeZYGQKp6dkR/busOQnblTgRQeNvH4HA4TsTdyxAK3PEBNQQsxE9K8QRplAZz
+         HCpOECDP3TZsaFYgub6+Gw3t1tmvDXFMG+lQv1bM=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04Q9bFN2099815
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 May 2020 04:37:15 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 26
- May 2020 04:31:24 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 04:37:15 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 26 May 2020 04:31:24 -0500
-Received: from [10.250.234.195] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04Q9VJ4V008663;
-        Tue, 26 May 2020 04:31:20 -0500
+ Frontend Transport; Tue, 26 May 2020 04:37:15 -0500
+Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04Q9b9hJ066907;
+        Tue, 26 May 2020 04:37:10 -0500
 From:   Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH 1/6] mtd: spi-nor: cadence-quadspi: Drop
- cdns,is-decoded-cs property
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Mark Brown <broonie@kernel.org>
-CC:     Boris Brezillon <bbrezillon@kernel.org>,
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
         Ramuthevar Vadivel Murugan 
         <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "simon.k.r.goldschmidt@gmail.com" <simon.k.r.goldschmidt@gmail.com>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "marex@denx.de" <marex@denx.de>
-References: <20200508185411.487-1-vigneshr@ti.com>
- <20200508185411.487-2-vigneshr@ti.com>
-Message-ID: <7ea8e0fd-9709-42b1-66d5-8976b73dd82a@ti.com>
-Date:   Tue, 26 May 2020 15:01:19 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <simon.k.r.goldschmidt@gmail.com>,
+        <dinguyen@kernel.org>, <marex@denx.de>
+Subject: [PATCH v2 0/6] mtd: spi-nor: Move cadence-qaudspi to spi-mem framework
+Date:   Tue, 26 May 2020 15:05:58 +0530
+Message-ID: <20200526093604.11846-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20200508185411.487-2-vigneshr@ti.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+mtd: spi-nor: Move cadence-qaudspi to spi-mem framework
+
+This series is a subset of "[PATCH v12 0/4] spi: cadence-quadspi: Add
+support for the Cadence QSPI controller" by Ramuthevar,Vadivel MuruganX
+<vadivel.muruganx.ramuthevar@linux.intel.com> that intended to move
+cadence-quadspi driver to spi-mem framework
+
+Those patches were trying to accomplish too many things in a single set
+of patches and need to split into smaller patches. This is reduced
+version of above series.
+
+Changes that are intended to make migration easy are split into separate
+patches. Patches 1 to 3 drop features that cannot be supported under
+spi-mem at the moment (backward compatibility is maintained).
+Patch 4-5 are trivial cleanups. Patch 6 does the actual conversion to
+spi-mem and patch 7 moves the driver to drivers/spi folder.
+
+I have tested both INDAC mode (used by non TI platforms like Altera
+SoCFPGA) and DAC mode (used by TI platforms) on TI EVMs.
+
+Patches to move move bindings over to
+"Documentation/devicetree/bindings/spi/" directory and also conversion
+of bindig doc to YAML will be posted separately.  Support for Intel
+platform would follow that.
+
+v2:
+Rework patch 1/6 to keep "cdns,is-decoded-cs" property supported.
 
 
-On 09/05/20 12:24 am, Vignesh Raghavendra wrote:
-> Cadence QSPI provides a way to automatically decode CS based on the
-> offset accessed within memory map window. This feature cannot be
-> supported in spi-mem framework as controller driver would not have
-> access to flash geometry. Therefore drop this feature in preparation to
-> moving to spi-mem.
-> 
-> Note that, this feature never worked in the driver (Direct/Indirect mode
-> accesses did not take into account size of flash on other CSs) and there
-> are no users of this feature in kernel. Therefore dropping this should
-> not cause a regression
-> 
+Ramuthevar Vadivel Murugan (2):
+  mtd: spi-nor: Convert cadence-quadspi to use spi-mem framework
+  spi: Move cadence-quadspi driver to drivers/spi/
 
-I realized cdns,is-decoded-cs property does not depend on
-cqspi_configure_cs_and_sizes() and can still be supported w/o knowing
-flash geometry... Will respin.. 
+Vignesh Raghavendra (4):
+  mtd: spi-nor: cadence-quadspi: Make driver independent of flash
+    geometry
+  mtd: spi-nor: cadence-quadspi: Provide a way to disable DAC mode
+  mtd: spi-nor: cadence-quadspi: Don't initialize rx_dma_complete on
+    failure
+  mtd: spi-nor: cadence-quadspi: Fix error path on failure to acquire
+    reset lines
 
-Regards
-Vignesh
+ drivers/mtd/spi-nor/controllers/Kconfig       |  11 -
+ drivers/mtd/spi-nor/controllers/Makefile      |   1 -
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ .../spi-cadence-quadspi.c}                    | 521 +++++++-----------
+ 5 files changed, 206 insertions(+), 339 deletions(-)
+ rename drivers/{mtd/spi-nor/controllers/cadence-quadspi.c => spi/spi-cadence-quadspi.c} (74%)
 
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
->  .../mtd/spi-nor/controllers/cadence-quadspi.c | 59 +++----------------
->  1 file changed, 9 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/controllers/cadence-quadspi.c b/drivers/mtd/spi-nor/controllers/cadence-quadspi.c
-> index 494dcab4aaaa..fa54f85e16d7 100644
-> --- a/drivers/mtd/spi-nor/controllers/cadence-quadspi.c
-> +++ b/drivers/mtd/spi-nor/controllers/cadence-quadspi.c
-> @@ -77,11 +77,7 @@ struct cqspi_st {
->        dma_addr_t              mmap_phys_base;
->  
->        int                     current_cs;
-> -     int                     current_page_size;
-> -     int                     current_erase_size;
-> -     int                     current_addr_width;
->        unsigned long           master_ref_clk_hz;
-> -     bool                    is_decoded_cs;
->        u32                     fifo_depth;
->        u32                     fifo_width;
->        bool                    rclk_en;
-> @@ -715,19 +711,15 @@ static void cqspi_chipselect(struct spi_nor *nor)
->        unsigned int reg;
->  
->        reg = readl(reg_base + CQSPI_REG_CONFIG);
-> -     if (cqspi->is_decoded_cs) {
-> -             reg |= CQSPI_REG_CONFIG_DECODE_MASK;
-> -     } else {
-> -             reg &= ~CQSPI_REG_CONFIG_DECODE_MASK;
-> +     reg &= ~CQSPI_REG_CONFIG_DECODE_MASK;
->  
-> -             /* Convert CS if without decoder.
-> -              * CS0 to 4b'1110
-> -              * CS1 to 4b'1101
-> -              * CS2 to 4b'1011
-> -              * CS3 to 4b'0111
-> -              */
-> -             chip_select = 0xF & ~(1 << chip_select);
-> -     }
-> +     /* Convert CS if without decoder.
-> +      * CS0 to 4b'1110
-> +      * CS1 to 4b'1101
-> +      * CS2 to 4b'1011
-> +      * CS3 to 4b'0111
-> +      */
-> +     chip_select = 0xF & ~(1 << chip_select);
->  
->        reg &= ~(CQSPI_REG_CONFIG_CHIPSELECT_MASK
->                 << CQSPI_REG_CONFIG_CHIPSELECT_LSB);
-> @@ -736,32 +728,6 @@ static void cqspi_chipselect(struct spi_nor *nor)
->        writel(reg, reg_base + CQSPI_REG_CONFIG);
->  }
->  
-> -static void cqspi_configure_cs_and_sizes(struct spi_nor *nor)
-> -{
-> -     struct cqspi_flash_pdata *f_pdata = nor->priv;
-> -     struct cqspi_st *cqspi = f_pdata->cqspi;
-> -     void __iomem *iobase = cqspi->iobase;
-> -     unsigned int reg;
-> -
-> -     /* configure page size and block size. */
-> -     reg = readl(iobase + CQSPI_REG_SIZE);
-> -     reg &= ~(CQSPI_REG_SIZE_PAGE_MASK << CQSPI_REG_SIZE_PAGE_LSB);
-> -     reg &= ~(CQSPI_REG_SIZE_BLOCK_MASK << CQSPI_REG_SIZE_BLOCK_LSB);
-> -     reg &= ~CQSPI_REG_SIZE_ADDRESS_MASK;
-> -     reg |= (nor->page_size << CQSPI_REG_SIZE_PAGE_LSB);
-> -     reg |= (ilog2(nor->mtd.erasesize) << CQSPI_REG_SIZE_BLOCK_LSB);
-> -     reg |= (nor->addr_width - 1);
-> -     writel(reg, iobase + CQSPI_REG_SIZE);
-> -
-> -     /* configure the chip select */
-> -     cqspi_chipselect(nor);
-> -
-> -     /* Store the new configuration of the controller */
-> -     cqspi->current_page_size = nor->page_size;
-> -     cqspi->current_erase_size = nor->mtd.erasesize;
-> -     cqspi->current_addr_width = nor->addr_width;
-> -}
-> -
->  static unsigned int calculate_ticks_for_ns(const unsigned int ref_clk_hz,
->                                           const unsigned int ns_val)
->  {
-> @@ -867,18 +833,13 @@ static void cqspi_configure(struct spi_nor *nor)
->        int switch_cs = (cqspi->current_cs != f_pdata->cs);
->        int switch_ck = (cqspi->sclk != sclk);
->  
-> -     if ((cqspi->current_page_size != nor->page_size) ||
-> -         (cqspi->current_erase_size != nor->mtd.erasesize) ||
-> -         (cqspi->current_addr_width != nor->addr_width))
-> -             switch_cs = 1;
-> -
->        if (switch_cs || switch_ck)
->                cqspi_controller_enable(cqspi, 0);
->  
->        /* Switch chip select. */
->        if (switch_cs) {
->                cqspi->current_cs = f_pdata->cs;
-> -             cqspi_configure_cs_and_sizes(nor);
-> +             cqspi_chipselect(nor);
->        }
->  
->        /* Setup baudrate divisor and delays */
-> @@ -1145,8 +1106,6 @@ static int cqspi_of_get_pdata(struct platform_device *pdev)
->        struct device_node *np = pdev->dev.of_node;
->        struct cqspi_st *cqspi = platform_get_drvdata(pdev);
->  
-> -     cqspi->is_decoded_cs = of_property_read_bool(np, "cdns,is-decoded-cs");
-> -
->        if (of_property_read_u32(np, "cdns,fifo-depth", &cqspi->fifo_depth)) {
->                dev_err(&pdev->dev, "couldn't determine fifo-depth\n");
->                return -ENXIO;
-> 
+-- 
+2.26.2
+
