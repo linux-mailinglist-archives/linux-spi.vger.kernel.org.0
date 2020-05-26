@@ -2,44 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E271E2762
-	for <lists+linux-spi@lfdr.de>; Tue, 26 May 2020 18:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C865B1E2766
+	for <lists+linux-spi@lfdr.de>; Tue, 26 May 2020 18:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388794AbgEZQqJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 May 2020 12:46:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60892 "EHLO mail.kernel.org"
+        id S2388675AbgEZQqP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 May 2020 12:46:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388339AbgEZQqJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 26 May 2020 12:46:09 -0400
+        id S1726930AbgEZQqO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 26 May 2020 12:46:14 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C409207D8;
-        Tue, 26 May 2020 16:46:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF0CC20787;
+        Tue, 26 May 2020 16:46:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590511569;
-        bh=T9Ezc7a1r4TivHOwjldsbyoxjBD6NDs54wx5Hd/nAUw=;
+        s=default; t=1590511574;
+        bh=l7cy3+L8C73qgjG74eriDphZ8Hg3bEgLDTthsCKHs78=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=icoQ2hIogxa6UBGwFV5F6Lcz4MR1dDM/ZWl1u4SPtQsRaFSXt5aMAKLJqLc67uLYc
-         utHegEFlgjwO7vGIMkGBpBDlU4mj1A+mrfSSFObTmrMphWbdqAjCvtfD3SNZpuykRk
-         mREjprM+g/wX37zzFT5QafmEVZY9HO62nMp+7xSA=
-Date:   Tue, 26 May 2020 17:46:06 +0100
+        b=Cf7NcRvw19ppHK33jNeUXbXpY53gjPp8d5VxuQMDMoU/igHurlSBzNMj5YcchNrAx
+         VmbwSaHMTRJBemByIy3IQmf4O55GM7RBEhkgO2AdYShErt3mNilTLCKgI+DKO1vn5D
+         rKnEW7tR2cbfyVPL158BAc9ecVcfFgBicwhJd3zI=
+Date:   Tue, 26 May 2020 17:46:12 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>, kjlu@umn.edu
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20200523133859.5625-1-dinghao.liu@zju.edu.cn>
-References: <20200523133859.5625-1-dinghao.liu@zju.edu.cn>
-Subject: Re: [PATCH] spi: spi-fsl-lpspi: Fix runtime PM imbalance on error
-Message-Id: <159051156064.36444.17809778699218535545.b4-ty@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-spi@vger.kernel.org
+In-Reply-To: <20200525133120.57273-1-broonie@kernel.org>
+References: <20200525133120.57273-1-broonie@kernel.org>
+Subject: Re: [PATCH] spi: Remove note about transfer limit for spi_write_then_read()
+Message-Id: <159051156064.36444.1340281885240145710.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 23 May 2020 21:38:59 +0800, Dinghao Liu wrote:
-> pm_runtime_get_sync() increments the runtime PM usage counter even
-> when it returns an error code. Thus a pairing decrement is needed on
-> the error handling path to keep the counter balanced.
+On Mon, 25 May 2020 14:31:20 +0100, Mark Brown wrote:
+> Originally spi_write_then_read() used a fixed statically allocated
+> buffer which limited the maximum message size it could handle.  This
+> restriction was removed a while ago so that we could dynamically
+> allocate a buffer if required but the kerneldoc was not updated to
+> reflect this, do so.
 
 Applied to
 
@@ -47,8 +50,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-fsl-lpspi: Fix runtime PM imbalance on error
-      commit: 8d728808194a12186ce5af0b72c8a47b42476bc3
+[1/1] spi: Remove note about transfer limit for spi_write_then_read()
+      commit: c373643b8688836c1627a805875994fe0012fc17
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
