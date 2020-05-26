@@ -2,111 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CD81E1FD9
-	for <lists+linux-spi@lfdr.de>; Tue, 26 May 2020 12:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 275F01E1FDE
+	for <lists+linux-spi@lfdr.de>; Tue, 26 May 2020 12:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731918AbgEZKiH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 May 2020 06:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728515AbgEZKiG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 May 2020 06:38:06 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468C4C03E97E;
-        Tue, 26 May 2020 03:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DcCPTegeL4/9yo2vCU/JGoVKdudEoFYRZ1hgMcX0JO0=; b=qhIXUq65KKmkwLWRnRnI9CLOIS
-        rD3r9RUkwcBrzCVqh8UlmI4LPMGuYe0mhot5T8qAOpfEpmpCQmJt5AMH+nKfagIPpkJRMleng1mxz
-        OyTK+NFKACihHd75NOPNlfEPWMGrMNPGsC1CL0dV/C0BrRk4VRNMqcAb0Anc8TK6hbWNnDiue89PQ
-        VT5+lRx38B/PrsaAuVranD0BLfTnG7SmrJxOOM7zDIHSsL7XlSdPJ4LJ5kMngek2ugR4+s3p7omsh
-        BmQoIVwFO4bL2f0m9dY/lEGh6ygghp/tRCaOp54B/zfoU6JcRyRvvI0pYLHODI1ez2TMXOONr8GyV
-        fwZhjEgQ==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:58843 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1jdWyA-00012X-Db; Tue, 26 May 2020 12:38:02 +0200
-Subject: Re: [PATCH v5 6/8] drm/panel: Add ilitek ili9341 panel driver
-To:     dillon min <dillon.minfei@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <1590378348-8115-1-git-send-email-dillon.minfei@gmail.com>
- <1590378348-8115-7-git-send-email-dillon.minfei@gmail.com>
- <CAHp75VebSZa6mwAETnM0t42RQCp4iM6_SNjmy3TB48ixsGKV8g@mail.gmail.com>
- <CAL9mu0+jmcivC6zAXxK0-oXy3n44pAU1QGD7BDq=CT2D7twROQ@mail.gmail.com>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <c085e8f5-f626-28a9-1d3f-a1c277ec5052@tronnes.org>
-Date:   Tue, 26 May 2020 12:38:00 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1731946AbgEZKjX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 May 2020 06:39:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52468 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727890AbgEZKjW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 26 May 2020 06:39:22 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 095D8207CB;
+        Tue, 26 May 2020 10:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590489562;
+        bh=mixvD35IMO/Rax98V2E/ba8PwGROnQxp9SkSn8T/kTc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Str6dfmPduJDJXafCVdmwQqKiJ/g+CwTRg2EU02IYz5WFCVKbX188v6VTXmjxnCO/
+         E0nyCRmnGtx5tRCE/WHvoVd2A7dEsFQ7+bw1KgjT4NdlDOS1Pbd1T/gQEyOBNOlPvY
+         cf67M5T16DMfjhGo1RYru5FiMmVlkq2Gi6i+xoIE=
+Date:   Tue, 26 May 2020 11:39:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, Alok Chauhan <alokc@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v5 2/6] spi: spi-geni-qcom: Use OPP API to set clk/perf
+ state
+Message-ID: <20200526103920.GB4607@sirena.org.uk>
+References: <1589368382-19607-1-git-send-email-rnayak@codeaurora.org>
+ <1589368382-19607-3-git-send-email-rnayak@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <CAL9mu0+jmcivC6zAXxK0-oXy3n44pAU1QGD7BDq=CT2D7twROQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FkmkrVfFsRoUs1wW"
+Content-Disposition: inline
+In-Reply-To: <1589368382-19607-3-git-send-email-rnayak@codeaurora.org>
+X-Cookie: Hailing frequencies open, Captain.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--FkmkrVfFsRoUs1wW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Den 26.05.2020 11.08, skrev dillon min:
-> Hi Andy,
-> 
-> Thanks for input.
-> 
-> On Tue, May 26, 2020 at 3:46 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
->>
->> On Mon, May 25, 2020 at 6:46 AM <dillon.minfei@gmail.com> wrote:
->>>
->>> From: dillon min <dillon.minfei@gmail.com>
->>>
->>>     This driver combine tiny/ili9341.c mipi_dbi_interface driver
->>>     with mipi_dpi_interface driver, can support ili9341 with serial
->>>     mode or parallel rgb interface mode by register configuration.
->>
->> Noralf told once that this driver should be unified with mi0283qt.c.
->>
->> So, what should we do here?
->>
->> --
->> With Best Regards,
->> Andy Shevchenko
-> 
-> from sam's suggestion, we can't setup two drivers to support one panel
-> in the tree. so, i copy the mipi dbi part from tiny/ili9341.c. to this driver
-> from register settings and dts binding is keep the same to tiny/ili9341.c.
-> 
-> so, in my opinion if tiny/ili9341.c is unified with mi0283qt.c, this
-> driver should be
-> too.
-> 
+On Wed, May 13, 2020 at 04:42:58PM +0530, Rajendra Nayak wrote:
+> geni spi needs to express a perforamnce state requirement on CX
+> depending on the frequency of the clock rates. Use OPP table from
+> DT to register with OPP framework and use dev_pm_opp_set_rate() to
+> set the clk/perf state.
 
-There's a discussion about MIPI DBI panels here:
+Acked-by: Mark Brown <broonie@kernel.org>
 
-MIPI DSI, DBI, and tinydrm drivers
-https://lists.freedesktop.org/archives/dri-devel/2020-May/267031.html
+--FkmkrVfFsRoUs1wW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Noralf.
+-----BEGIN PGP SIGNATURE-----
 
-> thanks.
-> 
-> best regards,
-> 
-> Dillon,
-> 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7M8dcACgkQJNaLcl1U
+h9AA7Af/eQFdEMfj/wjfDByXeXLMghZROs9DaeBA+hnwGHWeWlAMxKXoWgr/ThqN
+/oYU3Ra27+X5oBe8Ip7E6rOu4/QmFtrpvGfHFpIevuDamu+pQ5/UptGhE9s10qwn
+EI2F34O1rQn6jqUYEUoj5Uj/+gGkj+vFR1FHCxGIcoe5/BO1PzzcQ0j5TZSr5bxu
+x79QGRhAGnaa0whEKKkZrvLJ1GPDoS2DQfrrWZNYN/LP50WRf29ECvfs1VOQYXJB
+W+hlimqN7f1IMU8wmKafkqB0A+Jhmw1WCfcHq58+45D3yBC7Yo7yZACIbMGG3R1w
+nNeB9mDiPm2lSgIam/HrciOVpURVsw==
+=5vEv
+-----END PGP SIGNATURE-----
+
+--FkmkrVfFsRoUs1wW--
