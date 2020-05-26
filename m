@@ -2,82 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2526B1E2552
-	for <lists+linux-spi@lfdr.de>; Tue, 26 May 2020 17:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2FD1E2761
+	for <lists+linux-spi@lfdr.de>; Tue, 26 May 2020 18:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729529AbgEZPVa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 May 2020 11:21:30 -0400
-Received: from mga05.intel.com ([192.55.52.43]:12304 "EHLO mga05.intel.com"
+        id S2388792AbgEZQqD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 May 2020 12:46:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729088AbgEZPV3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 26 May 2020 11:21:29 -0400
-IronPort-SDR: ERqthTgHLwyVCvrIwc+eo/coykNYXMaoyQOy07pVzQ7762SPQV+YS8lXz+mFfA6dxsAgrfEe/D
- LioudAX1kZnQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2020 08:21:28 -0700
-IronPort-SDR: AdWpaJ+ilaPii6iZgsCop3Hb0oTELos+7aj9aW1C+KRJUVsgY9M4ICyOGY2I1pPgVFN4tfA33z
- +VWa6GQuWwUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,437,1583222400"; 
-   d="scan'208";a="266486528"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga003.jf.intel.com with ESMTP; 26 May 2020 08:21:26 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jdbOT-0091Ce-BG; Tue, 26 May 2020 18:21:29 +0300
-Date:   Tue, 26 May 2020 18:21:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        Sergey.Semin@baikalelectronics.ru, fancer.lancer@gmail.com,
-        lars.povlsen@microchip.com, Liang Jin J <liang.j.jin@ericsson.com>
-Subject: Re: [PATCHv2 1/2] spi: dw: add reset control
-Message-ID: <20200526152129.GS1634618@smile.fi.intel.com>
-References: <20200526151218.6186-1-dinguyen@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200526151218.6186-1-dinguyen@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S2388339AbgEZQqD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 26 May 2020 12:46:03 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 702E720787;
+        Tue, 26 May 2020 16:46:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590511562;
+        bh=S8DXF5whCJVrLiIbJyuxDnBvjgMNZGsJRChfwI5ZWs0=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=JjlT5DAKDOqfsolwZ+sidtirEa1omgURXCzlAlJDb8g32UYbF700xgJKFJn5IHdYl
+         Jx4mOmdN6KgaZTg52fTOzkklbj4SCRTGs8Gw3y1utGzs1PNnAbpTXGRikRWBAqGAsP
+         zzQjtJHZp/V0tDCoz3azzkawrkCo6Cpeku1Jc5KQ=
+Date:   Tue, 26 May 2020 17:46:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>, linux-spi@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+In-Reply-To: <cover.1590408496.git.lukas@wunner.de>
+References: <cover.1590408496.git.lukas@wunner.de>
+Subject: Re: [PATCH 0/3] Intel SPI unbind fixes
+Message-Id: <159051156064.36444.8173070417753169615.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 26, 2020 at 10:12:17AM -0500, Dinh Nguyen wrote:
-> Add mechanism to get the reset control and deassert it in order to bring
-> the IP out of reset.
+On Mon, 25 May 2020 14:25:00 +0200, Lukas Wunner wrote:
+> Fix unbind ordering issues in the Designware and PXA2xx SPI controllers
+> built into Intel SoCs.
+> 
+> To test, you'll also need the following commit:
+> https://git.kernel.org/broonie/spi/c/84855678add8
+> 
+> This is compile-tested only, so please review and test thoroughly.
+> 
+> [...]
 
-...
+Applied to
 
->  	struct clk     *clk;
->  	struct clk     *pclk;
->  	void           *priv;
-> +	struct reset_control	*rstc;
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I think either you make it one space or you align all the rest members
-accordingly. I would rather go with former.
+Thanks!
 
-...
+[1/3] spi: dw: Fix controller unregister order
+      commit: ca8b19d61e3fce5d2d7790cde27a0b57bcb3f341
+[2/3] spi: pxa2xx: Fix controller unregister order
+      commit: 32e5b57232c0411e7dea96625c415510430ac079
+[3/3] spi: pxa2xx: Fix runtime PM ref imbalance on probe error
+      commit: 65e318e17358a3fd4fcb5a69d89b14016dee2f06
 
-> +	/* find an optional reset controller */
-> +	dwsmmio->rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, "spi");
-> +	if (IS_ERR(dwsmmio->rstc)) {
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> +		if (PTR_ERR(dwsmmio->rstc) == -EPROBE_DEFER)
-> +			return PTR_ERR(dwsmmio->rstc);
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-If it's other type of errors when reset control, we ignore them...
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Why?!
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-> +	}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Mark
