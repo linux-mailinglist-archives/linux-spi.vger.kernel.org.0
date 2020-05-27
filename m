@@ -2,87 +2,167 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 586151E379E
-	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 07:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDCF1E3A55
+	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 09:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727998AbgE0FED (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 May 2020 01:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S1729107AbgE0H1l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 May 2020 03:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727996AbgE0FED (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 May 2020 01:04:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B870C061A0F
-        for <linux-spi@vger.kernel.org>; Tue, 26 May 2020 22:04:03 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1jdoEK-0001cv-QG; Wed, 27 May 2020 07:03:52 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1jdoEI-0008BI-4d; Wed, 27 May 2020 07:03:50 +0200
-Date:   Wed, 27 May 2020 07:03:50 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     mark.rutland@arm.com, broonie@kernel.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, vkoul@kernel.org, will.deacon@arm.com,
-        shawnguo@kernel.org, festevam@gmail.com,
-        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
-        dan.j.williams@intel.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: Re: [PATCH v8 00/13] add ecspi ERR009165 for i.mx6/7 soc family
-Message-ID: <20200527050350.GV11869@pengutronix.de>
-References: <1590006865-20900-1-git-send-email-yibin.gong@nxp.com>
+        with ESMTP id S1728303AbgE0H1l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 May 2020 03:27:41 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1450AC061A0F;
+        Wed, 27 May 2020 00:27:41 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id c75so11386662pga.3;
+        Wed, 27 May 2020 00:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8/pnqpOF5kxfkVhRDe0RiihBA49v54di4gIOur7X7TI=;
+        b=LLxklYnNzudxPlgcrT/fJNH2MPem+uGxJgHfy7oOISPLHa6ikpirtHb4EbdRGht7SY
+         WvJUMfY8ftB39R8dNXZmU0Tsi2+8gVyzbQCdw8JVrCCtOYOTkA4VPmul/BxC4cxSn7b2
+         pJcm00a/TAQ3Hkvjqm+ckwrHB8AcyPl9jNbg/EnnpbvIKqDkgcQMjJZnehn3ZjSV+LbB
+         YopiG1L1bRkwjA1To3JPFquX6uVMApyoXGMGTYtvF5qp8ill3bfFy8od9hHGwd+ADjFS
+         C4AH+ZC+zqbKPpKFcdUQ4GzSfrAoHBsQ5Drwozv/8sGHx5h3hzJvvdBCpRm14Hg22v5Q
+         a5Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8/pnqpOF5kxfkVhRDe0RiihBA49v54di4gIOur7X7TI=;
+        b=ltujOWTqbkJ7aXCuOVgK85f1s86baCew6Yxyjx2tmJCKanpIObHvMaA6YX9rVclbp/
+         G67Uekb3uXqtp+7sSEDHKZ9t71y3i21YrV2Ki/BPUMrWWBY4D/5KVlOaqmo5u2FwdpvB
+         nTzPwDTR/bLDEmnqUVPlutnRM6CLhnoKzMt/cr4Ug1BIwXidFK7poUS030DGAwKHuRqZ
+         mnmW3opoaDvHmgerxa4xQGS/Pte9mq3oQFER8ZkXYUDplrJW2akBRNtnamywJ1a0tS3h
+         W9AG4ynFvRPXzqN6Jry/p7qYN8qt1/acl5h1q0kg4fxSO0sfdiOR3+m/0Ptz+5ZwJeoW
+         Gheg==
+X-Gm-Message-State: AOAM531bwlbnxzrzTrWaXdYEHAJbOI0yxYLkEKxjnCZcf51EqYbSOAWt
+        jOe99hWulse+3RBnjIjlg6Q=
+X-Google-Smtp-Source: ABdhPJxTLPr+jP/ArwpWxHxmn/pRT0kb8dD0HedLtdqVNcsMKzf6roH/kNinnVypb58H7dXiI1M8vg==
+X-Received: by 2002:a63:fd57:: with SMTP id m23mr2859284pgj.325.1590564460640;
+        Wed, 27 May 2020 00:27:40 -0700 (PDT)
+Received: from fmin-OptiPlex-7060.nreal.work ([103.206.191.44])
+        by smtp.gmail.com with ESMTPSA id q201sm1371842pfq.40.2020.05.27.00.27.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 27 May 2020 00:27:40 -0700 (PDT)
+From:   dillon.minfei@gmail.com
+To:     robh+dt@kernel.org, p.zabel@pengutronix.de,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
+        thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, mturquette@baylibre.com, sboyd@kernel.org,
+        andy.shevchenko@gmail.com, noralf@tronnes.org,
+        linus.walleij@linaro.org, broonie@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
+        dillonhua@gmail.com, dillon min <dillon.minfei@gmail.com>
+Subject: [PATCH v6 0/9] Enable ili9341 and l3gd20 on stm32f429-disco
+Date:   Wed, 27 May 2020 15:27:24 +0800
+Message-Id: <1590564453-24499-1-git-send-email-dillon.minfei@gmail.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1590006865-20900-1-git-send-email-yibin.gong@nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 07:02:31 up 97 days, 12:33, 88 users,  load average: 0.44, 0.37,
- 0.27
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 21, 2020 at 04:34:12AM +0800, Robin Gong wrote:
-> There is ecspi ERR009165 on i.mx6/7 soc family, which cause FIFO
-> transfer to be send twice in DMA mode. Please get more information from:
-> https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf. The workaround is adding
-> new sdma ram script which works in XCH  mode as PIO inside sdma instead
-> of SMC mode, meanwhile, 'TX_THRESHOLD' should be 0. The issue should be
-> exist on all legacy i.mx6/7 soc family before i.mx6ul.
-> NXP fix this design issue from i.mx6ul, so newer chips including i.mx6ul/
-> 6ull/6sll do not need this workaroud anymore. All other i.mx6/7/8 chips
-> still need this workaroud. This patch set add new 'fsl,imx6ul-ecspi'
-> for ecspi driver and 'ecspi_fixed' in sdma driver to choose if need errata
-> or not.
-> The first two reverted patches should be the same issue, though, it
-> seems 'fixed' by changing to other shp script. Hope Sean or Sascha could
-> have the chance to test this patch set if could fix their issues.
-> Besides, enable sdma support for i.mx8mm/8mq and fix ecspi1 not work
-> on i.mx8mm because the event id is zero.
+From: dillon min <dillon.minfei@gmail.com>
 
-For the series:
+V6:
+1 separate '[PATCH v5 5/8]' patchs to two, each one has a Fixes tags according
+  to Stephen Boyd's suggestion
+2 fix panel-ilitek-ili9341 compile warning 'warning: Function parameter or
+  member xxx not described in xxx' with W=1
 
-Acked-by: Sascha Hauer <s.hauer@pengutronix.de>
+V5's update based on Mark Brown's suggestion, use 'SPI_MASTER_MUST_RX'
+for SPI_SIMPLEX_RX mode on stm32 spi controller.
 
-Sascha
+V5:
+1 instead of add send dummy data out under SIMPLEX_RX mode,
+  add flags 'SPI_CONTROLLER_MUST_TX' for stm32 spi driver
+2 bypass 'SPI_CONTROLLER_MUST_TX' and 'SPI_CONTROLLER_MUST_RX' under
+  'SPI_3WIRE' mode
+
+V4:
+  According to alexandre torgue's suggestion, combine ili9341 and
+  l3gd20's modification on stm32f429-disco board to one patchset.
+
+Changes:
+
+ili9341:
+
+1 update ili9341 panel driver according to Linus's suggestion
+2 drop V1's No.5 patch, sumbit new changes for clk-stm32f4
+3 merge l3gd20's change to this patchset
+
+V3:
+1 merge original tiny/ili9341.c driver to panel/panel-ilitek-ili9341.c
+  to support serial spi & parallel rgb interface in one driver.
+2 update ilitek,ili9341.yaml dts binding documentation.
+3 update stm32f429-disco dts binding
+
+V2:
+1 verify ilitek,ili9341.yaml with make O=../linux-stm32
+  dt_binding_check
+  DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/panel/
+  ilitek,ili9341.yaml
+
+V1:
+1 add ili9341 drm panel driver
+2 add ltdc, spi5 controller for stm32f429-disco
+3 add ltdc, spi5 pin map for stm32f429-disco
+4 add docs about ili9341
+5 fix ltdc driver loading hang in clk set rate bug
+
+
+L3gd20:
+
+V3:
+1 merge stm32f429-disco dtbs binding with ili9341 part
+
+V2:
+1 insert blank line at stm32f420-disco.dts line 143
+2 add more description for l3gd20 in commit message
+
+V1:
+1 enable spi5 controller on stm32f429-disco (dts)
+2 add spi5 pinmap for stm32f429-disco  (dts)
+3 add SPI_SIMPLEX_RX, SPI_3WIRE_RX support for stm32f4
+
+
+dillon min (9):
+  ARM: dts: stm32: Add dma config for spi5
+  ARM: dts: stm32: Add pin map for ltdc & spi5 on stm32f429-disco board
+  ARM: dts: stm32: enable ltdc binding with ili9341, gyro l3gd20 on    
+    stm32429-disco board
+  dt-bindings: display: panel: Add ilitek ili9341 panel bindings
+  clk: stm32: Fix stm32f429's ltdc driver hang in set clock rate
+  clk: stm32: Fix ltdc's clock turn off by clk_disable_unused() after
+    kernel     startup
+  drm/panel: Add ilitek ili9341 panel driver
+  spi: stm32: Add 'SPI_SIMPLEX_RX', 'SPI_3WIRE_RX' support for stm32f4
+  spi: flags 'SPI_CONTROLLER_MUST_RX' and 'SPI_CONTROLLER_MUST_TX' can't
+    be     coexit with 'SPI_3WIRE' mode
+
+ .../bindings/display/panel/ilitek,ili9341.yaml     |   69 ++
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi             |   67 +
+ arch/arm/boot/dts/stm32f429-disco.dts              |   48 +
+ arch/arm/boot/dts/stm32f429.dtsi                   |    3 +
+ drivers/clk/clk-stm32f4.c                          |    7 +-
+ drivers/gpu/drm/panel/Kconfig                      |   12 +
+ drivers/gpu/drm/panel/Makefile                     |    1 +
+ drivers/gpu/drm/panel/panel-ilitek-ili9341.c       | 1288 ++++++++++++++++++++
+ drivers/spi/spi-stm32.c                            |   19 +-
+ drivers/spi/spi.c                                  |    3 +-
+ 10 files changed, 1508 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-ilitek-ili9341.c
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.7.4
+
