@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3041E3EC3
-	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 12:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7391E3F18
+	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 12:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387897AbgE0KQQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 May 2020 06:16:16 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:5291 "EHLO huawei.com"
+        id S1728433AbgE0KeA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 May 2020 06:34:00 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5349 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387852AbgE0KQP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 27 May 2020 06:16:15 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 6C0BB16A13684D21B3BA;
-        Wed, 27 May 2020 18:16:13 +0800 (CST)
+        id S1729062AbgE0Kd7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 27 May 2020 06:33:59 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 1D7B8E44C1524EFBC1F4;
+        Wed, 27 May 2020 18:33:53 +0800 (CST)
 Received: from [10.65.58.147] (10.65.58.147) by DGGEMS410-HUB.china.huawei.com
  (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Wed, 27 May 2020
- 18:16:03 +0800
+ 18:33:45 +0800
 Subject: Re: [RFC PATCH 3/3] spi: hisi-sfc-v3xx: Add prepare/unprepare methods
  to avoid race condition
-To:     Boris Brezillon <boris.brezillon@collabora.com>
+To:     Pratyush Yadav <me@yadavpratyush.com>
 References: <1590060231-23242-1-git-send-email-yangyicong@hisilicon.com>
  <1590060231-23242-4-git-send-email-yangyicong@hisilicon.com>
- <20200526114348.6295df6b@collabora.com>
- <5a3cd626-fb5c-d87c-9cfa-3992caad3ebe@hisilicon.com>
- <20200527112036.69506ed5@collabora.com>
+ <20200525161436.c5h6d27pm3jptwbo@yadavpratyush.com>
+ <6a41fb13-e746-54f3-24ef-197384dde6ab@hisilicon.com>
+ <20200527093325.247l6tnxaicsqdst@yadavpratyush.com>
 CC:     <broonie@kernel.org>, <tudor.ambarus@microchip.com>,
         <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
         <richard@nod.at>, <john.garry@huawei.com>, <vigneshr@ti.com>,
         <miquel.raynal@bootlin.com>
 From:   Yicong Yang <yangyicong@hisilicon.com>
-Message-ID: <9c2a2f25-1ae5-229a-d446-ab30c69dd008@hisilicon.com>
-Date:   Wed, 27 May 2020 18:16:09 +0800
+Message-ID: <30d0d896-47cc-db61-39da-d145dbe06dc6@hisilicon.com>
+Date:   Wed, 27 May 2020 18:33:54 +0800
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
  Thunderbird/45.7.1
 MIME-Version: 1.0
-In-Reply-To: <20200527112036.69506ed5@collabora.com>
+In-Reply-To: <20200527093325.247l6tnxaicsqdst@yadavpratyush.com>
 Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.65.58.147]
@@ -46,17 +46,14 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On 2020/5/27 17:20, Boris Brezillon wrote:
-> On Wed, 27 May 2020 16:55:00 +0800
-> Yicong Yang <yangyicong@hisilicon.com> wrote:
->
->> Hi Boris,
+On 2020/5/27 17:33, Pratyush Yadav wrote:
+> On 27/05/20 04:18PM, Yicong Yang wrote:
+>> Hi Pratyush,
 >>
->>
->> On 2020/5/26 17:43, Boris Brezillon wrote:
->>> On Thu, 21 May 2020 19:23:51 +0800
->>> Yicong Yang <yangyicong@hisilicon.com> wrote:
->>>  
+>> On 2020/5/26 0:14, Pratyush Yadav wrote:
+>>> Hi Yicong,
+>>>
+>>> On 21/05/20 07:23PM, Yicong Yang wrote:
 >>>> The controller can be shared with the firmware, which may cause race
 >>>> problems. As most read/write/erase/lock/unlock of spi-nor flash are
 >>>> composed of a set of operations, while the firmware may use the controller
@@ -68,89 +65,101 @@ On 2020/5/27 17:20, Boris Brezillon wrote:
 >>>> cannot reach the controller if the driver set the bit. Add prepare/
 >>>> unprepare methods for the controller, we'll hold the lock in prepare
 >>>> method and release it in unprepare method, which will solve the race
->>>> issue.  
->>> Okay, so it looks like what we really need is a way to pass sequences
->>> (multiple operations) that are expected to be issued without
->>> interruptions. I'd prefer extending the spi_mem interface to allow that:
+>>>> issue.
+>>> I'm trying to understand the need for this change. What's wrong with
+>>> performing the lock/unlock procedure in hisi_sfc_v3xx_exec_op()? You can 
+>>> probably do something like:
 >>>
->>> int spi_mem_exec_sequence(struct spi_mem *spimem,
->>> 			  unsigned int num_ops,
->>> 		  	  const struct spi_mem_op *ops);
->>>
->>> struct spi_controller_mem_ops {
->>> 	...
->>> 	int (*exec_sequence)(struct spi_mem *mem,
->>> 			     unsigned int num_ops,
->>> 			     const struct spi_mem_op *op);
->>> 	...
->>> };  
->> The prepare/unprepare hooks is just like what spi_nor_controller_ops provides.
->> Alternatively we can use the interface you suggested, and it'll require
->> upper layer(spi-nor framework, etc) to pack the operations before call
->> spi_mem_exec_sequence().
-> We have to patch the upper layers anyway, right?
+>>>   hisi_sfc_v3xx_lock();
+>>>   ret = hisi_sfc_v3xx_generic_exec_op(host, op, chip_select);
+>>>   hisi_sfc_v3xx_unlock();
+>>>   return ret;
+>> if doing like this, suppose we perform a sequential operations like below:
+>>
+>> lock()->exec_op(cmd1)->unlock()->lock()->exec_op(cmd2)->unlock()->lock()->exec_op(cmd3)->unlock()
+>>                        ^==========^is unlocked          ^==========^is unlocked
+>>
+>> As shown above, we cannot lock the device continuously during the whole operations.
+> Correct. My argument is based on the assumption that lock() and unlock() 
+> are cheap/fast operations. If you spend very little time in lock() and 
+> unlock(), it doesn't make a big difference if you do all 3 operations in 
+> one go or one at a time.
 
-sure.
-
->>> The prepare/unprepare hooks are a bit too vague. Alternatively, we
->>> could add functions to grab/release the controller lock, but I'm not
->>> sure that's what we want since some controllers might be able to address
->>> several devices in parallel, and locking the whole controller at the
->>> spi-nor level would prevent that.  
->> I suppose the method is optional and device may choose to use it or not
->> following their own design. And the implementation is rather controller
->> specific, they may choose to lock the whole controller or only the desired
->> device to operate. 
-> Yes, this is what I'm complaining about. How can the upper layer know
-> when it should call prepare/unprepare? Let's take the SPI NAND case,
-> should we prepare before loading a page in the cache and unprepare
-> after we're done reading the page, or should we unprepare just after
-> the page has been loaded in the cache? BTW, you've not patched the SPI
-> NAND layer to call ->prepare/unprepare().
-
-It's already implemented in spi-nor framework. As for sequential operations,
-taking read as an example, the call stack looks like:
-
-->spi_nor_read()
----->spi_nor_lock_and_prep()
-------->spi_nor_controller_ops->prepare() or spi_mem_prepare() in PATCH 1/3
-...
----->spi_nor_read_data() // maybe called several times
-...
----->spi_nor_unlock_and_unprep()
-------->spi_nor_controller_ops->unprepare() or spi_mem_unprepare() in PATCH 1/3
-
-As for nand flash, I didn't add it in this RFC as I'm not certain where
-should prepare/unprepare be called.
-
-If we use spi_mem_exec_sequence() seems we'll do more works to adapt, at least
-at spi-nor side. what do you think?
+okay. we'd better not make such assumption and do what hardware suggests.
 
 
 >
+> In other words, since register write should be pretty fast, locking and 
+> unlocking should be pretty fast. If we don't spend a lot of time in 
+> lock() and unlock(), we don't gain a lot of performance by reducing 
+> those calls.
+
+I know your worries. But it won't reduce the performance as we only do lock
+and unlock in the beginning or end. See what have implemented in spi-nor
+framework, as for read:
+
+->spi_nor_read()
+--->spi_nor_lock_and_prep() // lock the device if necessary
+--->spi_nor_read_data() // maybe called several times to read wanted bytes
+--->spi_nor_unlock_and_unprep() // unlock the device
+
+we don't call lock/unlock at every spi_nor_read_data(), but just in the beginning
+/ending of the whole sequence. And we can do the same thing in
+nand framework to avoid performance reduction, if prepare/unprepare is also needed.
+
+
+>
+>> But if we use upper layer method then it looks like
 >>
->>> BTW, I don't know all the details about this lock or what this FW is
->>> exactly (where it's running, what's his priority, what kind of
->>> synchronization exists between Linux and the FW, ...), but I'm worried
->>> about potential deadlocks here.  
->> For SFC controller, both firmware and the kernel driver will require the
->> lock before a sequence of operations, and single operations like register
->> access for spi-nor flash is implemented atomically. Once the lock is held
->> by firmware/driver, then the controller cannot perform the operations sent
->> by the other one unless the lock is released.
-> Yes, that's my point. What prevents the FW from preempting Linux while
-> it's holding the lock and waiting indefinitely on this lock. Is the FW
-> running on a separate core? Don't you have other IPs with the same kind
-> of locks leading to issues if locks are not taken/released in the same
-> order? ...
+>> prepare()->exec_op(cmd1)->exec_op(cmd2)->exec_op(cmd3)->unprepare()
+>>         ^locked here                                              ^unlocked here
+>>
+>> we can hold the lock during the all 3 operations' execution.
+> If you still think doing all operations in one go is a better idea, I  
+> like Boris's idea of batching operations and its worth considering.
 
-The firmware is running on a separate co-processor so it may not preempt
-the linux.
-
-Thanks,
-Yicong
+sure. it do worth discussion and maybe we need more suggestions.
 
 
-> .
+>  
+>>> What's the benefit of making upper layers do this? Acquiring the lock is 
+>>> a simple register write, so it should be relatively fast. Unless there 
+>>> is a lot of contention on the lock between the firmware and kernel, I 
+>>> would expect the performance impact to be minimal. Maybe you can run 
+>>> some benchmarks and see if there is a real difference.
+>>>
+>>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>>>> ---
+>>>>  drivers/spi/spi-hisi-sfc-v3xx.c | 41 ++++++++++++++++++++++++++++++++++++++++-
+>>>>  1 file changed, 40 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
+>>>> index e3b5725..13c161c 100644
+>>>> --- a/drivers/spi/spi-hisi-sfc-v3xx.c
+>>>> +++ b/drivers/spi/spi-hisi-sfc-v3xx.c
+>>>> @@ -163,7 +192,15 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
+>>>>  					 u8 chip_select)
+>>>>  {
+>>>>  	int ret, len = op->data.nbytes;
+>>>> -	u32 config = 0;
+>>>> +	u32 config;
+>>>> +
+>>>> +	/*
+>>>> +	 * The lock bit is in the command register. Clear the command
+>>>> +	 * field with lock bit held if it has been set in
+>>>> +	 * .prepare().
+>>>> +	 */
+>>>> +	config = readl(host->regbase + HISI_SFC_V3XX_CMD_CFG);
+>>>> +	config &= HISI_SFC_V3XX_CMD_CFG_LOCK;
+>>> This will unlock the controller _before_ the driver issues 
+>>> hisi_sfc_v3xx_read_databuf(). I'm not very familiar with the hardware, 
+>>> but to me it seems like it can lead to a race. What if the firmware 
+>>> issues a command that over-writes the databuf (I assume this is shared 
+>>> between the two) before the driver gets a chance to copy that data to 
+>>> the kernel buffer?
+>> It won't unlock the controller if it has been locked in prepare(). It will clear
+>> the other bits in the register other than the lock bit. For single operations, as 
+>> prepare() method is not called, the bit is 0 and it won't change here.
+> Right. I misread the code. Sorry.
 >
 
