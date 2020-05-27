@@ -2,140 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFF41E3DA1
-	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 11:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473821E3E0A
+	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 11:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgE0Jdf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 May 2020 05:33:35 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:53739 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbgE0Jdf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 May 2020 05:33:35 -0400
-X-Originating-IP: 157.36.30.198
-Received: from localhost (unknown [157.36.30.198])
-        (Authenticated sender: me@yadavpratyush.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 75CEB1BF207;
-        Wed, 27 May 2020 09:33:29 +0000 (UTC)
-Date:   Wed, 27 May 2020 15:03:25 +0530
-From:   Pratyush Yadav <me@yadavpratyush.com>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     broonie@kernel.org, tudor.ambarus@microchip.com,
-        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        richard@nod.at, john.garry@huawei.com, vigneshr@ti.com,
-        miquel.raynal@bootlin.com
-Subject: Re: [RFC PATCH 3/3] spi: hisi-sfc-v3xx: Add prepare/unprepare
- methods to avoid race condition
-Message-ID: <20200527093325.247l6tnxaicsqdst@yadavpratyush.com>
-References: <1590060231-23242-1-git-send-email-yangyicong@hisilicon.com>
- <1590060231-23242-4-git-send-email-yangyicong@hisilicon.com>
- <20200525161436.c5h6d27pm3jptwbo@yadavpratyush.com>
- <6a41fb13-e746-54f3-24ef-197384dde6ab@hisilicon.com>
+        id S1729326AbgE0JvM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 May 2020 05:51:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47562 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725822AbgE0JvM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 27 May 2020 05:51:12 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E8B3520B80;
+        Wed, 27 May 2020 09:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590573071;
+        bh=0vToCKDKiiwhvCQ/ZH06T4deAF0FOse4LBq9EGr0Hdk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nVI+eY/sUvYRSX+c+Adp5mbuGsFalnf0pXTPCNoiZDzr18dCfz9a0UVW1SQjVdQOT
+         +GPqBAiQlp1MZCLnbvrTSC1VicjdfKmeCzHwVVwfMOOVW1nCw1H+fYqzrff1b1L/MY
+         tRakSOtkBjQYqVrvvfLbmRmqcEhRvThMG5/cDsK4=
+Date:   Wed, 27 May 2020 10:51:09 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     dillon.minfei@gmail.com
+Cc:     robh+dt@kernel.org, p.zabel@pengutronix.de,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
+        thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, mturquette@baylibre.com, sboyd@kernel.org,
+        andy.shevchenko@gmail.com, noralf@tronnes.org,
+        linus.walleij@linaro.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
+        dillonhua@gmail.com
+Subject: Re: [PATCH v6 8/9] spi: stm32: Add 'SPI_SIMPLEX_RX', 'SPI_3WIRE_RX'
+ support for stm32f4
+Message-ID: <20200527095109.GA5308@sirena.org.uk>
+References: <1590564453-24499-1-git-send-email-dillon.minfei@gmail.com>
+ <1590564453-24499-9-git-send-email-dillon.minfei@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="G4iJoqBmSsgzjUCe"
 Content-Disposition: inline
-In-Reply-To: <6a41fb13-e746-54f3-24ef-197384dde6ab@hisilicon.com>
+In-Reply-To: <1590564453-24499-9-git-send-email-dillon.minfei@gmail.com>
+X-Cookie: Drop in any mailbox.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 27/05/20 04:18PM, Yicong Yang wrote:
-> Hi Pratyush,
-> 
-> On 2020/5/26 0:14, Pratyush Yadav wrote:
-> > Hi Yicong,
-> >
-> > On 21/05/20 07:23PM, Yicong Yang wrote:
-> >> The controller can be shared with the firmware, which may cause race
-> >> problems. As most read/write/erase/lock/unlock of spi-nor flash are
-> >> composed of a set of operations, while the firmware may use the controller
-> >> and start its own operation in the middle of the process started by the
-> >> kernel driver, which may lead to the kernel driver's function broken.
-> >>
-> >> Bit[20] in HISI_SFC_V3XX_CMD_CFG register plays a role of a lock, to
-> >> protect the controller from firmware access, which means the firmware
-> >> cannot reach the controller if the driver set the bit. Add prepare/
-> >> unprepare methods for the controller, we'll hold the lock in prepare
-> >> method and release it in unprepare method, which will solve the race
-> >> issue.
-> > I'm trying to understand the need for this change. What's wrong with
-> > performing the lock/unlock procedure in hisi_sfc_v3xx_exec_op()? You can 
-> > probably do something like:
-> >
-> >   hisi_sfc_v3xx_lock();
-> >   ret = hisi_sfc_v3xx_generic_exec_op(host, op, chip_select);
-> >   hisi_sfc_v3xx_unlock();
-> >   return ret;
-> 
-> if doing like this, suppose we perform a sequential operations like below:
-> 
-> lock()->exec_op(cmd1)->unlock()->lock()->exec_op(cmd2)->unlock()->lock()->exec_op(cmd3)->unlock()
->                        ^==========^is unlocked          ^==========^is unlocked
-> 
-> As shown above, we cannot lock the device continuously during the whole operations.
 
-Correct. My argument is based on the assumption that lock() and unlock() 
-are cheap/fast operations. If you spend very little time in lock() and 
-unlock(), it doesn't make a big difference if you do all 3 operations in 
-one go or one at a time.
+--G4iJoqBmSsgzjUCe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In other words, since register write should be pretty fast, locking and 
-unlocking should be pretty fast. If we don't spend a lot of time in 
-lock() and unlock(), we don't gain a lot of performance by reducing 
-those calls.
+On Wed, May 27, 2020 at 03:27:32PM +0800, dillon.minfei@gmail.com wrote:
+> From: dillon min <dillon.minfei@gmail.com>
+>=20
+> in l3gd20 driver startup, there is a setup failed error return from
+> stm32 spi driver
 
-> But if we use upper layer method then it looks like
-> 
-> prepare()->exec_op(cmd1)->exec_op(cmd2)->exec_op(cmd3)->unprepare()
->         ^locked here                                              ^unlocked here
-> 
-> we can hold the lock during the all 3 operations' execution.
+Please do not submit new versions of already applied patches, please
+submit incremental updates to the existing code.  Modifying existing
+commits creates problems for other users building on top of those
+commits so it's best practice to only change pubished git commits if
+absolutely essential.
 
-If you still think doing all operations in one go is a better idea, I  
-like Boris's idea of batching operations and its worth considering.
- 
-> > What's the benefit of making upper layers do this? Acquiring the lock is 
-> > a simple register write, so it should be relatively fast. Unless there 
-> > is a lot of contention on the lock between the firmware and kernel, I 
-> > would expect the performance impact to be minimal. Maybe you can run 
-> > some benchmarks and see if there is a real difference.
-> >
-> >> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> >> ---
-> >>  drivers/spi/spi-hisi-sfc-v3xx.c | 41 ++++++++++++++++++++++++++++++++++++++++-
-> >>  1 file changed, 40 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
-> >> index e3b5725..13c161c 100644
-> >> --- a/drivers/spi/spi-hisi-sfc-v3xx.c
-> >> +++ b/drivers/spi/spi-hisi-sfc-v3xx.c
-> >> @@ -163,7 +192,15 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
-> >>  					 u8 chip_select)
-> >>  {
-> >>  	int ret, len = op->data.nbytes;
-> >> -	u32 config = 0;
-> >> +	u32 config;
-> >> +
-> >> +	/*
-> >> +	 * The lock bit is in the command register. Clear the command
-> >> +	 * field with lock bit held if it has been set in
-> >> +	 * .prepare().
-> >> +	 */
-> >> +	config = readl(host->regbase + HISI_SFC_V3XX_CMD_CFG);
-> >> +	config &= HISI_SFC_V3XX_CMD_CFG_LOCK;
-> > This will unlock the controller _before_ the driver issues 
-> > hisi_sfc_v3xx_read_databuf(). I'm not very familiar with the hardware, 
-> > but to me it seems like it can lead to a race. What if the firmware 
-> > issues a command that over-writes the databuf (I assume this is shared 
-> > between the two) before the driver gets a chance to copy that data to 
-> > the kernel buffer?
-> 
-> It won't unlock the controller if it has been locked in prepare(). It will clear
-> the other bits in the register other than the lock bit. For single operations, as 
-> prepare() method is not called, the bit is 0 and it won't change here.
+--G4iJoqBmSsgzjUCe
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Right. I misread the code. Sorry.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Regards,
-Pratyush Yadav
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7OOAkACgkQJNaLcl1U
+h9BjiAf9Ffv3ggcuNoWfvMQqMqMQaCF/81yq+JEuOCOw+nSFwBift/d6Q7Z7HWCh
+k0/gPFT+7ED90XyQWUYuDOrUuQWiqQn8UP5p2IhQDAbvY9Zr3jnDTScTPx4FSf9m
+xGGbKV0iWy7z78mHngcLf++zQtDzzZLjhK+U4CxVz5htfuOkTdDeIorLUZJnYdBH
+tZKEYJ92tDX3perBnTRtca5zIEIo7JWv6ITSh6UTFELxx0D44W6NOS7z2W3kZ7HO
+KeUa7lsUfxWs5hF11j959HVj5BG0CFVa/cA4o2dGd5aaDwXjeASUzngGM0DqNPhY
+KPzFjTZ70Yj4eNCZVnKrXNGoe9KAoQ==
+=8sEd
+-----END PGP SIGNATURE-----
+
+--G4iJoqBmSsgzjUCe--
