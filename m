@@ -2,131 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCE91E4198
-	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 14:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE7A1E423E
+	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 14:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbgE0MJY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 May 2020 08:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbgE0MJW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 May 2020 08:09:22 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1958BC08C5C1
-        for <linux-spi@vger.kernel.org>; Wed, 27 May 2020 05:09:22 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 131so3365106pfv.13
-        for <linux-spi@vger.kernel.org>; Wed, 27 May 2020 05:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=KY6Tznn/z7pknc6YzPoxOJU/b/w6YOoY471UwuqUlQU=;
-        b=kGXXsfzEktkR8Ixzk/o0WNJReihZtwUM4yTSHapYSIFzANPgGFSroDfKHZpNN0OGuy
-         z7PCqic47M8HFWLpYRICDDmmrjcIJZJybWUpOLaZroqwsn1DNwzxxZM93kky+so1x93C
-         eLdkTrpJJsgjKW1ksSrVRsgEkH7YEbbi6zHo8xcEiWAax33L3hPLzyw6zZcncdWCVOWj
-         lTK8jQaOnvIhouzpkcteeAECvrhBa02CUzVzysIHj3ZovXB1dcbxfDxvpw/uKbmqHs71
-         XLMR7R16LRn8mPOD/TzFkES4EGfyR98bon3JM78AuPAVpiPyAFSNxBLAiCJPDJrRwJ+Z
-         o8tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=KY6Tznn/z7pknc6YzPoxOJU/b/w6YOoY471UwuqUlQU=;
-        b=o/LgCcpJlJhWXCbsrHcAck5pogjSHbue2OLEwbMXAGZ2Q1a5MxOa0sbnkU6c9N7rAN
-         u95xOL7rWv4RXVerX1jei8waFdgl7i11CfFTgb+gSyydM/2vrjdeU+rTxPqbgYqxgXJG
-         LidnqiiYsMh4wB6YZDSZHINAkbvD0udWnRz//I3GLEgbWN6Ulp7c6/kh0IdSpv3HI4uV
-         bnvDVANNv1t+fI9LmgjrrHkNsxObmunCOQhcNFD3tFiEYzOJVsPSvlLFM8OkUt0+JWjc
-         C3Hcxyk1vWY7BT1aeMR5XX8SZsWVHgVgROjebMmG+xXuZ7muAbwf+mFo2+dAiSAQ/HOf
-         Edxg==
-X-Gm-Message-State: AOAM531J+PScPfGbOrgIaoV7GhAsmITuxaVq5YCfIX6M607jS3OKyW86
-        9EatNy+b4/31MQd/CMLRa1w=
-X-Google-Smtp-Source: ABdhPJyJGXBeo7jK3/LuxOtBFMFRBV96ClU5V3zXOD8m16nKnWx9m5lKx0iZ5A7UaS/HC3Pfo/lP6w==
-X-Received: by 2002:a62:1512:: with SMTP id 18mr3668793pfv.326.1590581361355;
-        Wed, 27 May 2020 05:09:21 -0700 (PDT)
-Received: from [192.168.1.59] (i60-35-254-237.s41.a020.ap.plala.or.jp. [60.35.254.237])
-        by smtp.gmail.com with ESMTPSA id q12sm2078517pfn.129.2020.05.27.05.09.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2020 05:09:20 -0700 (PDT)
-Subject: Re: [PATCH 2/3] spi: pxa2xx: Fix controller unregister order
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-Cc:     Mark Brown <broonie@kernel.org>,
+        id S1729653AbgE0M1x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 May 2020 08:27:53 -0400
+Received: from mga06.intel.com ([134.134.136.31]:31245 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725872AbgE0M1x (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 27 May 2020 08:27:53 -0400
+IronPort-SDR: e7S28aKYIqvFriwO3vy58aUU0rgzmzBOff2gLGRa/a6iqqAjl+tvRgjcjkTTyhcFYkJAxVSVEg
+ F9A4sQDZb+Rg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 05:27:52 -0700
+IronPort-SDR: r/0VV5Gn/ThQHLjfa1A9AuoFl78zCSZkHvQfgGhM5scEpvNWLa+MQIg7/c/vzmf4DFlSnIdylm
+ XaRbLtXoqtiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,441,1583222400"; 
+   d="scan'208";a="345516438"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga001.jf.intel.com with ESMTP; 27 May 2020 05:27:50 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jdvA1-009DT9-EU; Wed, 27 May 2020 15:27:53 +0300
+Date:   Wed, 27 May 2020 15:27:53 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tsuchiya Yuto <kitakar@gmail.com>
+Cc:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         linux-spi@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH 2/3] spi: pxa2xx: Fix controller unregister order
+Message-ID: <20200527122753.GN1634618@smile.fi.intel.com>
 References: <cover.1590408496.git.lukas@wunner.de>
  <834c446b1cf3284d2660f1bee1ebe3e737cd02a9.1590408496.git.lukas@wunner.de>
  <20200525132143.GX1634618@smile.fi.intel.com>
  <20200526073913.vmgak5xsrjiyn4ae@wunner.de>
  <20200526082204.GM1634618@smile.fi.intel.com>
-From:   Tsuchiya Yuto <kitakar@gmail.com>
-Message-ID: <45681e81-7efd-857f-eea1-fb4767e3d946@gmail.com>
-Date:   Wed, 27 May 2020 21:09:17 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+ <45681e81-7efd-857f-eea1-fb4767e3d946@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200526082204.GM1634618@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <45681e81-7efd-857f-eea1-fb4767e3d946@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-I tried a kernel built with the prerequisite patch to this series + all
-of patches in this series on top of v5.7-rc7 (with Arch Linux config
-+ olddefconfig).
+On Wed, May 27, 2020 at 09:09:17PM +0900, Tsuchiya Yuto wrote:
+> I tried a kernel built with the prerequisite patch to this series + all
+> of patches in this series on top of v5.7-rc7 (with Arch Linux config
+> + olddefconfig).
+> 
+> Current situations on 5.7-rc7 with Arch Linux config + olddefconfig
+> (without applying this series):
+> - I can reproduce the touch input crashing (surface3-spi) I mentioned
+>   in bugzilla [1] only after s2idle.
+> - all the other situations are the same as described in that bugzilla;
+>   I see NULL pointer dereference [2] after touch input crashing then try
+>   to unload only spi_pxa2xx_platform module.
+> 
+> So, the steps to test that I did with this series applied are:
+> 1. go into s2idle then resume from s2idle
+> 2. make a touch input then surface3-spi reports that "SPI transfer
+>    timed out" repeatedly and no longer responds to any touch input
+> 3. try to unload only spi_pxa2xx_platform module and see if the NULL
+>    pointer dereference no longer occurs
+> 
+> and I can confirm that I no longer see the NULL pointer dereference.
+> Thanks!
 
-Current situations on 5.7-rc7 with Arch Linux config + olddefconfig
-(without applying this series):
-- I can reproduce the touch input crashing (surface3-spi) I mentioned
-Â  in bugzilla [1] only after s2idle.
-- all the other situations are the same as described in that bugzilla;
-Â  I see NULL pointer dereference [2] after touch input crashing then try
-Â  to unload only spi_pxa2xx_platform module.
+Thank you very much for testing!
 
-So, the steps to test that I did with this series applied are:
-1. go into s2idle then resume from s2idle
-2. make a touch input then surface3-spi reports that "SPI transfer
-Â Â  timed out" repeatedly and no longer responds to any touch input
-3. try to unload only spi_pxa2xx_platform module and see if the NULL
-Â Â  pointer dereference no longer occurs
+> On 5/26/20 5:22 PM, Andy Shevchenko wrote:
+> > On Tue, May 26, 2020 at 09:39:13AM +0200, Lukas Wunner wrote:
+> >> On Mon, May 25, 2020 at 04:21:43PM +0300, Andy Shevchenko wrote:
+> >>> Tsuchiya Yuto, I'm going to apply this series as preparatory to my
+> >>> WIP patch in topic/spi/reload branch in my kernel tree on GitHub,
+> >>> so, it would be possible to see if this + my patch fixes crashes
+> >>> on removal. Though, please test this separately from my stuff to
+> >>> clarify if it fixes or not issue you have seen.
+> >> You also need to cherry-pick commit 84855678add8 ("spi: Fix controller
+> >> unregister order") from spi/for-next onto your topic/spi/reload branch
+> >> for reloading to work correctly.
+> >>
+> >> Alternatively, rebase your topic/spi/reload branch and redo the merge
+> >> from spi/for-next.  (You've merged spi/for-next into your branch on
+> >> May 14, but the commit was applied by Mark on May 20.)
+> > Ah, right. Will do it soon.
+> 
+> I also built a kernel against your branch topic/spi/reload
+> (permalink: https://github.com/andy-shev/linux/tree/55cb78d5a752). The
+> result is the same as only applying this series; so, to fix the NULL pointer
+> dereference that I mentioned in bugzilla [2], only this series is required.
+> 
+> Also, I want to make sure that what you tried in that branch is fixing
+> the NULL pointer dereference on spi_pxa2xx_platform module removal when
+> touch input crashed, not fixing the touch input crashing itself?
 
-and I can confirm that I no longer see the NULL pointer dereference.
-Thanks!
+Yes, my aim was to fix the SPI module reload issue. While the applied patch
+from Lukas does a huge improvement, there are still issues with ordering (you
+probably will never see them, though it's still possible based on the code).
 
-On 5/26/20 5:22 PM, Andy Shevchenko wrote:
-> On Tue, May 26, 2020 at 09:39:13AM +0200, Lukas Wunner wrote:
->> On Mon, May 25, 2020 at 04:21:43PM +0300, Andy Shevchenko wrote:
->>> Tsuchiya Yuto, I'm going to apply this series as preparatory to my
->>> WIP patch in topic/spi/reload branch in my kernel tree on GitHub,
->>> so, it would be possible to see if this + my patch fixes crashes
->>> on removal. Though, please test this separately from my stuff to
->>> clarify if it fixes or not issue you have seen.
->> You also need to cherry-pick commit 84855678add8 ("spi: Fix controller
->> unregister order") from spi/for-next onto your topic/spi/reload branch
->> for reloading to work correctly.
->>
->> Alternatively, rebase your topic/spi/reload branch and redo the merge
->> from spi/for-next.Â  (You've merged spi/for-next into your branch on
->> May 14, but the commit was applied by Mark on May 20.)
-> Ah, right. Will do it soon.
+So, as far as I understood, the touch still able to come into position where
+it's not anymore responsive. Is it correct?
 
-I also built a kernel against your branch topic/spi/reload
-(permalink: https://github.com/andy-shev/linux/tree/55cb78d5a752). The
-result is the same as only applying this series; so, to fix the NULL pointer
-dereference that I mentioned in bugzilla [2], only this series is required.
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=206403
+> [2] https://bugzilla.kernel.org/show_bug.cgi?id=206403#c1
 
-Also, I want to make sure that what you tried in that branch is fixing
-the NULL pointer dereference on spi_pxa2xx_platform module removal when
-touch input crashed, not fixing the touch input crashing itself?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=206403
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=206403#c1
 
-Thanks,
-
-Tsuchiya Yuto
