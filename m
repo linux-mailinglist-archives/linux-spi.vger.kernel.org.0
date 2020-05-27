@@ -2,33 +2,33 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E58AF1E3C20
-	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 10:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7681E3C26
+	for <lists+linux-spi@lfdr.de>; Wed, 27 May 2020 10:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388108AbgE0IfF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 May 2020 04:35:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40340 "EHLO mail.kernel.org"
+        id S2388082AbgE0IfK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 May 2020 04:35:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40484 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388082AbgE0IfE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 27 May 2020 04:35:04 -0400
+        id S2388119AbgE0IfJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 27 May 2020 04:35:09 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7453D20723;
-        Wed, 27 May 2020 08:35:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0503E2084C;
+        Wed, 27 May 2020 08:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590568504;
-        bh=4P6drQSHi9/fWQsr/Ga8r0JMRYT3l59WI9ynWwuCi20=;
+        s=default; t=1590568509;
+        bh=ExRWKKtWjwjMfUMo3XFsagCD3+PJwFwlQH9y9gF24co=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=OjqOTc1g6ZzEGZuUAXSx989Y9yhyWypaASH76M03vrBHEMdC2kKDvUqSFrGWTrFmH
-         1HPFcNZTtVVMVJUpFSVbdN9ObGVTdQznRmcwESXxXFFL1NCa3d9/N9vuwCqVXrJ7bO
-         igkQZANuQEZyBwRcwAGYW/38P863/fZt08cACyao=
+        b=oIUSl5eMOR1MZzMDvtFWB0YQE3IPL/ZM/1HMr0RMhTmwYvrsKFVWiQAh4G6mHvd+Q
+         3H28kUP+38zAqybb2CWyvvgwuV3h90u5Tfnvz/c4lyACL6RqPaJ15NHoJ0zHzmZxK2
+         qYZPvrf1QmWw+rQ4Uy7yVLf9PFu9DpYQJomN8HPg=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1590564453-24499-6-git-send-email-dillon.minfei@gmail.com>
-References: <1590564453-24499-1-git-send-email-dillon.minfei@gmail.com> <1590564453-24499-6-git-send-email-dillon.minfei@gmail.com>
-Subject: Re: [PATCH v6 5/9] clk: stm32: Fix stm32f429's ltdc driver hang in set clock rate
+In-Reply-To: <1590564453-24499-7-git-send-email-dillon.minfei@gmail.com>
+References: <1590564453-24499-1-git-send-email-dillon.minfei@gmail.com> <1590564453-24499-7-git-send-email-dillon.minfei@gmail.com>
+Subject: Re: [PATCH v6 6/9] clk: stm32: Fix ltdc's clock turn off by clk_disable_unused() after kernel startup
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
@@ -41,30 +41,28 @@ To:     airlied@linux.ie, alexandre.torgue@st.com,
         mcoquelin.stm32@gmail.com, mturquette@baylibre.com,
         noralf@tronnes.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
         sam@ravnborg.org, thierry.reding@gmail.com
-Date:   Wed, 27 May 2020 01:35:03 -0700
-Message-ID: <159056850384.88029.10852284922297394339@swboyd.mtv.corp.google.com>
+Date:   Wed, 27 May 2020 01:35:08 -0700
+Message-ID: <159056850835.88029.9264848839121822798@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Quoting dillon.minfei@gmail.com (2020-05-27 00:27:29)
+Quoting dillon.minfei@gmail.com (2020-05-27 00:27:30)
 > From: dillon min <dillon.minfei@gmail.com>
 >=20
-> This is due to misuse \u2018PLL_VCO_SAI' and'PLL_SAI' in clk-stm32f4.c
-> 'PLL_SAI' is 2, 'PLL_VCO_SAI' is 7(defined in
-> include/dt-bindings/clock/stm32fx-clock.h).
+> stm32's clk driver register two ltdc gate clk to clk core by
+> clk_hw_register_gate() and clk_hw_register_composite()
 >=20
-> 'post_div' point to 'post_div_data[]', 'post_div->pll_num'
-> is PLL_I2S or PLL_SAI.
+> first: 'stm32f429_gates[]', clk name is 'ltdc', which no user to use.
+> second: 'stm32f429_aux_clk[]', clk name is 'lcd-tft', used by ltdc driver
 >=20
-> 'clks[PLL_VCO_SAI]' has valid 'struct clk_hw* ' return
-> from stm32f4_rcc_register_pll() but, at line 1777 of
-> driver/clk/clk-stm32f4.c, use the 'clks[post_div->pll_num]',
-> equal to 'clks[PLL_SAI]', this is invalid array member at that time.
+> both of them point to the same offset of stm32's RCC register. after
+> kernel enter console, clk core turn off ltdc's clk as 'stm32f429_gates[]'
+> is no one to use. but, actually 'stm32f429_aux_clk[]' is in use.
 >=20
-> Fixes: 517633ef630e ("clk: stm32f4: Add post divisor for I2S & SAI PLLs")
+> Fixes: daf2d117cbca ("clk: stm32f4: Add lcd-tft clock")
 > Signed-off-by: dillon min <dillon.minfei@gmail.com>
 > ---
 
