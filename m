@@ -2,119 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F129C1E5A12
-	for <lists+linux-spi@lfdr.de>; Thu, 28 May 2020 10:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF9A1E5A05
+	for <lists+linux-spi@lfdr.de>; Thu, 28 May 2020 09:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbgE1H7k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 May 2020 03:59:40 -0400
-Received: from twhmllg4.macronix.com ([122.147.135.202]:31275 "EHLO
+        id S1726911AbgE1H7V (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 May 2020 03:59:21 -0400
+Received: from twhmllg4.macronix.com ([122.147.135.202]:31279 "EHLO
         TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgE1H7T (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 May 2020 03:59:19 -0400
+        with ESMTP id S1726910AbgE1H7U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 May 2020 03:59:20 -0400
 Received: from localhost.localdomain ([172.17.195.96])
-        by TWHMLLG4.macronix.com with ESMTP id 04S7wMHZ030973;
-        Thu, 28 May 2020 15:58:22 +0800 (GMT-8)
+        by TWHMLLG4.macronix.com with ESMTP id 04S7wMHa030973;
+        Thu, 28 May 2020 15:58:23 +0800 (GMT-8)
         (envelope-from masonccyang@mxic.com.tw)
 From:   Mason Yang <masonccyang@mxic.com.tw>
 To:     broonie@kernel.org, tudor.ambarus@microchip.com,
         miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
         boris.brezillon@collabora.com, matthias.bgg@gmail.com
 Cc:     p.yadav@ti.com, juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH v3 00/14] mtd: spi-nor: add xSPI Octal DTR support 
-Date:   Thu, 28 May 2020 15:58:02 +0800
-Message-Id: <1590652696-8844-1-git-send-email-masonccyang@mxic.com.tw>
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: [PATCH v3 01/14] spi: spi-mem: allow specifying whether an op is DTR or not
+Date:   Thu, 28 May 2020 15:58:03 +0800
+Message-Id: <1590652696-8844-2-git-send-email-masonccyang@mxic.com.tw>
 X-Mailer: git-send-email 1.9.1
-X-MAIL: TWHMLLG4.macronix.com 04S7wMHZ030973
+In-Reply-To: <1590652696-8844-1-git-send-email-masonccyang@mxic.com.tw>
+References: <1590652696-8844-1-git-send-email-masonccyang@mxic.com.tw>
+X-MAIL: TWHMLLG4.macronix.com 04S7wMHa030973
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+From: Pratyush Yadav <p.yadav@ti.com>
 
-JESD216C has defined specification for Octal 8S-8S-8S and 8D-8D-8D.
-Based on JEDEC216C Basic Flash Parameter Table (BFPT) driver extract
-DWORD-18: command and command extension type.
-DWORD-20: Maximum operation speed of device in Octal mode.
+Each phase is given a separate 'dtr' field so mixed protocols like
+4S-4D-4D can be supported.
 
-xSPI profile 1.0 table:
-DWORD-1: Read Fast command, the number of dummy cycles and address nbytes
-	 for Read Status Register command.
-DWORD-2: Read/Write volatile Register command for CFG Reg2.
-DWORD-4 and DWORD-5: dummy cycles used for various frequencies based on
-maximum speed of device from BFPT 20th DWORD.
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+---
+ drivers/spi/spi-mem.c       | 3 +++
+ include/linux/spi/spi-mem.h | 8 ++++++++
+ 2 files changed, 11 insertions(+)
 
-Ccommand sequences to change to octal DTR mode:
-The length of each command sequence is 8 per byte for single SPI mode and
-patching driver to parse and execute these sequences for octal DTR mode.
-
-By Vignesh's comments to patch these drivers based on Pratyush's patches
-set [1].
-
-This series adds support for Macronix mx25uw51245g works in octal DTR mode.
-
-Tested on Macronix's Zynq PicoZed board with Macronix's SPI controller
-(spi-mxic.c) driver patched on mx25uw51245g Octal flash.
-
-
-[1] https://patchwork.ozlabs.org/project/linux-mtd/cover/20200525091544.17270-1-p.yadav@ti.com/
-
-
-Summary of change log
-v3:
-Add support command sequences to change octal DTR mode and based on
-part of Pratyush's patches set.
-
-v2: 
-Parse BFPT & xSPI table for Octal 8D-8D-8D mode parameters and enable Octal
-mode in spi_nor_late_init_params().
-Using Macros in spi_nor_spimem_read_data, spi_nor_spimem_write_data and
-so on by Vignesh comments.
-
-v1:
-Without parsing BFPT & xSPI profile 1.0 table and enter Octal 8D-8D-8D
-mode directly in spi_nor_fixups hooks.
-
-
-thnaks for your time and review.
-best regards,
-Mason
-
---
-Mason Yang (7):
-  mtd: spi-nor: sfdp: get octal mode maximum speed from BFPT
-  mtd: spi-nor: sfdp: parse xSPI Profile 1.0 table
-  mtd: spi-nor: sfdp: parse command sequences to change octal DTR mode
-  mtd: spi-nor: core: add configuration register 2 read & write support
-  spi: mxic: patch for octal DTR mode support
-  mtd: spi-nor: core: execute command sequences to change octal DTR mode
-  mtd: spi-nor: macronix: Add Octal 8D-8D-8D supports for Macronix
-    mx25uw51245g
-
-Pratyush Yadav (7):
-  spi: spi-mem: allow specifying whether an op is DTR or not
-  spi: spi-mem: allow specifying a command's extension
-  mtd: spi-nor: add support for DTR protocol
-  mtd: spi-nor: sfdp: prepare BFPT parsing for JESD216 rev D
-  mtd: spi-nor: sfdp: get command opcode extension type from BFPT
-  mtd: spi-nor: core: use dummy cycle and address width info from SFDP
-  mtd: spi-nor: core: enable octal DTR mode when possible
-
- drivers/mtd/spi-nor/core.c     | 514 +++++++++++++++++++++++++++++++++++------
- drivers/mtd/spi-nor/core.h     |  49 ++++
- drivers/mtd/spi-nor/macronix.c |  55 +++++
- drivers/mtd/spi-nor/sfdp.c     | 278 +++++++++++++++++++++-
- drivers/mtd/spi-nor/sfdp.h     |  15 +-
- drivers/spi/spi-mem.c          |  16 +-
- drivers/spi/spi-mtk-nor.c      |   4 +-
- drivers/spi/spi-mxic.c         | 101 +++++---
- drivers/spi/spi-zynq-qspi.c    |  11 +-
- include/linux/mtd/spi-nor.h    |  51 ++--
- include/linux/spi/spi-mem.h    |  14 +-
- 11 files changed, 980 insertions(+), 128 deletions(-)
-
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index adaa0c4..d8905e0 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -154,6 +154,9 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
+ 				   op->data.dir == SPI_MEM_DATA_OUT))
+ 		return false;
+ 
++	if (op->cmd.dtr || op->addr.dtr || op->dummy.dtr || op->data.dtr)
++		return false;
++
+ 	return true;
+ }
+ EXPORT_SYMBOL_GPL(spi_mem_default_supports_op);
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index af9ff2f..e3dcb95 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -71,9 +71,11 @@ enum spi_mem_data_dir {
+  * struct spi_mem_op - describes a SPI memory operation
+  * @cmd.buswidth: number of IO lines used to transmit the command
+  * @cmd.opcode: operation opcode
++ * @cmd.dtr: whether the command opcode should be sent in DTR mode or not
+  * @addr.nbytes: number of address bytes to send. Can be zero if the operation
+  *		 does not need to send an address
+  * @addr.buswidth: number of IO lines used to transmit the address cycles
++ * @addr.dtr: whether the address should be sent in DTR mode or not
+  * @addr.val: address value. This value is always sent MSB first on the bus.
+  *	      Note that only @addr.nbytes are taken into account in this
+  *	      address value, so users should make sure the value fits in the
+@@ -81,7 +83,9 @@ enum spi_mem_data_dir {
+  * @dummy.nbytes: number of dummy bytes to send after an opcode or address. Can
+  *		  be zero if the operation does not require dummy bytes
+  * @dummy.buswidth: number of IO lanes used to transmit the dummy bytes
++ * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
+  * @data.buswidth: number of IO lanes used to send/receive the data
++ * @data.dtr: whether the data should be sent in DTR mode or not
+  * @data.dir: direction of the transfer
+  * @data.nbytes: number of data bytes to send/receive. Can be zero if the
+  *		 operation does not involve transferring data
+@@ -91,22 +95,26 @@ enum spi_mem_data_dir {
+ struct spi_mem_op {
+ 	struct {
+ 		u8 buswidth;
++		u8 dtr : 1;
+ 		u8 opcode;
+ 	} cmd;
+ 
+ 	struct {
+ 		u8 nbytes;
+ 		u8 buswidth;
++		u8 dtr : 1;
+ 		u64 val;
+ 	} addr;
+ 
+ 	struct {
+ 		u8 nbytes;
+ 		u8 buswidth;
++		u8 dtr : 1;
+ 	} dummy;
+ 
+ 	struct {
+ 		u8 buswidth;
++		u8 dtr : 1;
+ 		enum spi_mem_data_dir dir;
+ 		unsigned int nbytes;
+ 		union {
 -- 
 1.9.1
 
