@@ -2,124 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE60C1E5A18
-	for <lists+linux-spi@lfdr.de>; Thu, 28 May 2020 10:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0327D1E5AB9
+	for <lists+linux-spi@lfdr.de>; Thu, 28 May 2020 10:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbgE1H7u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 May 2020 03:59:50 -0400
-Received: from twhmllg4.macronix.com ([122.147.135.202]:31433 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726974AbgE1H7u (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 May 2020 03:59:50 -0400
-Received: from localhost.localdomain ([172.17.195.96])
-        by TWHMLLG4.macronix.com with ESMTP id 04S7wMHn030973;
-        Thu, 28 May 2020 15:58:34 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-From:   Mason Yang <masonccyang@mxic.com.tw>
-To:     broonie@kernel.org, tudor.ambarus@microchip.com,
+        id S1726897AbgE1I0P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 May 2020 04:26:15 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51382 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726845AbgE1I0O (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 May 2020 04:26:14 -0400
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 3A37B2A3D3D;
+        Thu, 28 May 2020 09:26:12 +0100 (BST)
+Date:   Thu, 28 May 2020 10:26:09 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Mason Yang <masonccyang@mxic.com.tw>
+Cc:     broonie@kernel.org, tudor.ambarus@microchip.com,
         miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        boris.brezillon@collabora.com, matthias.bgg@gmail.com
-Cc:     p.yadav@ti.com, juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH v3 14/14] mtd: spi-nor: macronix: Add Octal 8D-8D-8D supports for Macronix mx25uw51245g
-Date:   Thu, 28 May 2020 15:58:16 +0800
-Message-Id: <1590652696-8844-15-git-send-email-masonccyang@mxic.com.tw>
-X-Mailer: git-send-email 1.9.1
+        matthias.bgg@gmail.com, p.yadav@ti.com, juliensu@mxic.com.tw,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 00/14] mtd: spi-nor: add xSPI Octal DTR support
+Message-ID: <20200528102609.0dbb59a5@collabora.com>
 In-Reply-To: <1590652696-8844-1-git-send-email-masonccyang@mxic.com.tw>
 References: <1590652696-8844-1-git-send-email-masonccyang@mxic.com.tw>
-X-MAIL: TWHMLLG4.macronix.com 04S7wMHn030973
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Macronix mx25uw51245g is a SPI NOR that supports 1-1-1/8-8-8 mode.
+On Thu, 28 May 2020 15:58:02 +0800
+Mason Yang <masonccyang@mxic.com.tw> wrote:
 
-Correct the dummy cycles to device for various frequencies
-after xSPI profile 1.0 table parsed.
+> Hello,
+> 
+> JESD216C has defined specification for Octal 8S-8S-8S and 8D-8D-8D.
+> Based on JEDEC216C Basic Flash Parameter Table (BFPT) driver extract
+> DWORD-18: command and command extension type.
+> DWORD-20: Maximum operation speed of device in Octal mode.
+> 
+> xSPI profile 1.0 table:
+> DWORD-1: Read Fast command, the number of dummy cycles and address nbytes
+> 	 for Read Status Register command.
+> DWORD-2: Read/Write volatile Register command for CFG Reg2.
+> DWORD-4 and DWORD-5: dummy cycles used for various frequencies based on
+> maximum speed of device from BFPT 20th DWORD.
+> 
+> Ccommand sequences to change to octal DTR mode:
+> The length of each command sequence is 8 per byte for single SPI mode and
+> patching driver to parse and execute these sequences for octal DTR mode.
+> 
+> By Vignesh's comments to patch these drivers based on Pratyush's patches
+> set [1].
+> 
+> This series adds support for Macronix mx25uw51245g works in octal DTR mode.
+> 
+> Tested on Macronix's Zynq PicoZed board with Macronix's SPI controller
+> (spi-mxic.c) driver patched on mx25uw51245g Octal flash.
+> 
+> 
+> [1] https://patchwork.ozlabs.org/project/linux-mtd/cover/20200525091544.17270-1-p.yadav@ti.com/
+> 
+> 
+> Summary of change log
+> v3:
+> Add support command sequences to change octal DTR mode and based on
+> part of Pratyush's patches set.
+> 
+> v2: 
+> Parse BFPT & xSPI table for Octal 8D-8D-8D mode parameters and enable Octal
+> mode in spi_nor_late_init_params().
+> Using Macros in spi_nor_spimem_read_data, spi_nor_spimem_write_data and
+> so on by Vignesh comments.
+> 
+> v1:
+> Without parsing BFPT & xSPI profile 1.0 table and enter Octal 8D-8D-8D
+> mode directly in spi_nor_fixups hooks.
+> 
+> 
+> thnaks for your time and review.
+> best regards,
+> Mason
+> 
+> --
+> Mason Yang (7):
+>   mtd: spi-nor: sfdp: get octal mode maximum speed from BFPT
+>   mtd: spi-nor: sfdp: parse xSPI Profile 1.0 table
+>   mtd: spi-nor: sfdp: parse command sequences to change octal DTR mode
+>   mtd: spi-nor: core: add configuration register 2 read & write support
+>   spi: mxic: patch for octal DTR mode support
+>   mtd: spi-nor: core: execute command sequences to change octal DTR mode
+>   mtd: spi-nor: macronix: Add Octal 8D-8D-8D supports for Macronix
+>     mx25uw51245g
+> 
+> Pratyush Yadav (7):
+>   spi: spi-mem: allow specifying whether an op is DTR or not
+>   spi: spi-mem: allow specifying a command's extension
+>   mtd: spi-nor: add support for DTR protocol
+>   mtd: spi-nor: sfdp: prepare BFPT parsing for JESD216 rev D
+>   mtd: spi-nor: sfdp: get command opcode extension type from BFPT
+>   mtd: spi-nor: core: use dummy cycle and address width info from SFDP
+>   mtd: spi-nor: core: enable octal DTR mode when possible
 
-Enable mx25uw51245g to Octal DTR mode by executing the command sequences
-to change to octal DTR mode.
+Why are you doing that?! This series is being actively worked on by
+Pratyush, and all you gain by sending it on your own is more
+confusion. If you have patches on top of a series that's not been
+merged yet, mention the dependency in the cover letter, but don't
+resend patches that have already been sent and are being reviewed.
 
-Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
----
- drivers/mtd/spi-nor/macronix.c | 55 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
-
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index 96735d8..6c9a24c 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -8,6 +8,57 @@
- 
- #include "core.h"
- 
-+#define MXIC_CR2_DUMMY_SET_ADDR 0x300
-+
-+/* Fixup the dummy cycles to device and setup octa_dtr_enable() */
-+static void mx25uw51245g_post_sfdp_fixups(struct spi_nor *nor)
-+{
-+	struct spi_nor_flash_parameter *params = nor->params;
-+	int ret;
-+	u8 rdc, wdc;
-+
-+	ret = spi_nor_read_cr2(nor, MXIC_CR2_DUMMY_SET_ADDR, &rdc);
-+	if (ret)
-+		return;
-+
-+	/* Refer to dummy cycle and frequency table(MHz) */
-+	switch (params->dummy_cycles) {
-+	case 10:	/* 10 dummy cycles for 104 MHz */
-+		wdc = 5;
-+		break;
-+	case 12:	/* 12 dummy cycles for 133 MHz */
-+		wdc = 4;
-+		break;
-+	case 16:	/* 16 dummy cycles for 166 MHz */
-+		wdc = 2;
-+		break;
-+	case 18:	/* 18 dummy cycles for 173 MHz */
-+		wdc = 1;
-+		break;
-+	case 20:	/* 20 dummy cycles for 200 MHz */
-+	default:
-+		wdc = 0;
-+	}
-+
-+	if (rdc != wdc)
-+		spi_nor_write_cr2(nor, MXIC_CR2_DUMMY_SET_ADDR, &wdc);
-+
-+	if (params->cmd_seq[0].len) {
-+		params->octal_dtr_enable = spi_nor_cmd_seq_octal_dtr;
-+		params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
-+		params->hwcaps.mask |= SNOR_HWCAPS_PP_8_8_8_DTR;
-+
-+	} else {
-+		params->octal_dtr_enable = NULL;
-+		params->hwcaps.mask &= ~SNOR_HWCAPS_READ_8_8_8_DTR;
-+		params->hwcaps.mask &= ~SNOR_HWCAPS_PP_8_8_8_DTR;
-+	}
-+}
-+
-+static struct spi_nor_fixups mx25uw51245g_fixups = {
-+	.post_sfdp = mx25uw51245g_post_sfdp_fixups,
-+};
-+
- static int
- mx25l25635_post_bfpt_fixups(struct spi_nor *nor,
- 			    const struct sfdp_parameter_header *bfpt_header,
-@@ -84,6 +135,10 @@
- 			      SPI_NOR_QUAD_READ) },
- 	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048,
- 			      SPI_NOR_QUAD_READ) },
-+	{ "mx25uw51245g", INFO(0xc2813a, 0, 64 * 1024, 1024,
-+			      SECT_4K | SPI_NOR_4B_OPCODES |
-+			      SPI_NOR_OCTAL_DTR_READ)
-+			      .fixups = &mx25uw51245g_fixups },
- };
- 
- static void macronix_default_init(struct spi_nor *nor)
--- 
-1.9.1
-
+I think it's time you spend a bit of time learning about the submission
+process, because that's not the first mistake you do, and I'm pretty
+sure I already mentioned that in my previous reviews.
