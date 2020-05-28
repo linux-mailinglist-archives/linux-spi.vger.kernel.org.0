@@ -2,83 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBDC1E5BE9
-	for <lists+linux-spi@lfdr.de>; Thu, 28 May 2020 11:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511771E5C73
+	for <lists+linux-spi@lfdr.de>; Thu, 28 May 2020 11:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728406AbgE1Jbd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 May 2020 05:31:33 -0400
-Received: from bmailout2.hostsharing.net ([83.223.78.240]:54027 "EHLO
-        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727981AbgE1Jbc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 May 2020 05:31:32 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 017B82800B1DD;
-        Thu, 28 May 2020 11:31:28 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id C9C5C18297B; Thu, 28 May 2020 11:31:27 +0200 (CEST)
-Date:   Thu, 28 May 2020 11:31:27 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Tsuchiya Yuto <kitakar@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH 2/3] spi: pxa2xx: Fix controller unregister order
-Message-ID: <20200528093127.pjzvrqab6xvvcmgi@wunner.de>
-References: <cover.1590408496.git.lukas@wunner.de>
- <834c446b1cf3284d2660f1bee1ebe3e737cd02a9.1590408496.git.lukas@wunner.de>
- <20200525132143.GX1634618@smile.fi.intel.com>
- <20200526073913.vmgak5xsrjiyn4ae@wunner.de>
- <20200526082204.GM1634618@smile.fi.intel.com>
- <45681e81-7efd-857f-eea1-fb4767e3d946@gmail.com>
- <20200527122753.GN1634618@smile.fi.intel.com>
- <2e9365fd-9307-045a-8afe-1770f7cd7eda@gmail.com>
- <7e085731-a56f-07d5-3ad0-a8f7d0a93516@gmail.com>
- <CAHp75Ve6xUhic1g2A1cGoCOOom55Za=WXzR4C9o5=zMN80nFdA@mail.gmail.com>
+        id S2387536AbgE1Jyr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 May 2020 05:54:47 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:57262 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387440AbgE1Jyr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 May 2020 05:54:47 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04S9sKep073014;
+        Thu, 28 May 2020 04:54:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590659660;
+        bh=fFt+EvSvDnHIYU/mdgaQndevTVzx/3/nPmaY5O3YS8Y=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=QdLpXxfHddhehXDQFmZjHc3vxdZOL1M+cG5mEV72ev2HFoDsuqSVDTAOyMuF2DAyt
+         OlZQvFwghFf/ZGZRUWTQmaEOyN+js9oDwHSx6oC59XUfkyIvYzwDV3CMxD+tH8U0F/
+         w+lyEThhkiBlHPZ5b+bQkaBpT0VKUh9LSEYgmzlw=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04S9sKMb073639;
+        Thu, 28 May 2020 04:54:20 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 28
+ May 2020 04:54:20 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 28 May 2020 04:54:19 -0500
+Received: from [10.250.234.195] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04S9sFgS019886;
+        Thu, 28 May 2020 04:54:15 -0500
+Subject: Re: [PATCH v2 6/6] spi: Move cadence-quadspi driver to drivers/spi/
+To:     kbuild test robot <lkp@intel.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <kbuild-all@lists.01.org>, Boris Brezillon <bbrezillon@kernel.org>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <simon.k.r.goldschmidt@gmail.com>,
+        <dinguyen@kernel.org>, <marex@denx.de>
+References: <20200526093604.11846-7-vigneshr@ti.com>
+ <202005280400.IgqKbGTF%lkp@intel.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <3fd21609-cb9a-cbe9-f40f-a8a8a00491a2@ti.com>
+Date:   Thu, 28 May 2020 15:24:14 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Ve6xUhic1g2A1cGoCOOom55Za=WXzR4C9o5=zMN80nFdA@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <202005280400.IgqKbGTF%lkp@intel.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 28, 2020 at 11:41:21AM +0300, Andy Shevchenko wrote:
-> Thank you very much for testing, I will figure out what can be done
-> more there, but it's minor now.
-> For input and touchscreen I guess you may ask Dmitry (input subsystem
-> maintainer) and Benjamin (HID, but he might have an idea as well).
+Hi,
 
-This might not be an input issue, perhaps the spi-pxa2xx.c driver
-cannot cope with s2idle on this particular platform.
+On 28/05/20 2:28 am, kbuild test robot wrote:
+> Hi Vignesh,
+> 
+[...]
+> 
+> In file included from include/linux/err.h:5,
+> from include/linux/clk.h:12,
+> from drivers/spi/spi-cadence-quadspi.c:9:
+> include/linux/scatterlist.h: In function 'sg_set_buf':
+> arch/xtensa/include/asm/page.h:193:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+> 193 |  ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
+> |         ^~
+> include/linux/compiler.h:78:42: note: in definition of macro 'unlikely'
+> 78 | # define unlikely(x) __builtin_expect(!!(x), 0)
+> |                                          ^
+> include/linux/scatterlist.h:143:2: note: in expansion of macro 'BUG_ON'
+> 143 |  BUG_ON(!virt_addr_valid(buf));
+> |  ^~~~~~
+> arch/xtensa/include/asm/page.h:201:32: note: in expansion of macro 'pfn_valid'
+> 201 | #define virt_addr_valid(kaddr) pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
+> |                                ^~~~~~~~~
+> include/linux/scatterlist.h:143:10: note: in expansion of macro 'virt_addr_valid'
+> 143 |  BUG_ON(!virt_addr_valid(buf));
+> |          ^~~~~~~~~~~~~~~
+> In file included from ./arch/xtensa/include/generated/asm/bug.h:1,
+> from include/linux/bug.h:5,
+> from include/linux/thread_info.h:12,
+> from arch/xtensa/include/asm/current.h:18,
+> from include/linux/mutex.h:14,
+> from include/linux/notifier.h:14,
+> from include/linux/clk.h:14,
+> from drivers/spi/spi-cadence-quadspi.c:9:
+> include/linux/dma-mapping.h: In function 'dma_map_resource':
+> arch/xtensa/include/asm/page.h:193:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+> 193 |  ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
+> |         ^~
+> include/asm-generic/bug.h:139:27: note: in definition of macro 'WARN_ON_ONCE'
+> 139 |  int __ret_warn_once = !!(condition);            |                           ^~~~~~~~~
+> include/linux/dma-mapping.h:352:19: note: in expansion of macro 'pfn_valid'
+> 352 |  if (WARN_ON_ONCE(pfn_valid(PHYS_PFN(phys_addr))))
+> |                   ^~~~~~~~~
+> In file included from include/linux/shm.h:6,
+> from include/linux/sched.h:16,
+> from include/linux/ratelimit.h:6,
+> from include/linux/dev_printk.h:16,
+> from include/linux/device.h:15,
+> from include/linux/dma-mapping.h:7,
+> from drivers/spi/spi-cadence-quadspi.c:12:
+> drivers/spi/spi-cadence-quadspi.c: In function 'cqspi_direct_read_execute':
+> arch/xtensa/include/asm/page.h:193:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+> 193 |  ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
+> |         ^~
+> arch/xtensa/include/asm/page.h:201:32: note: in expansion of macro 'pfn_valid'
+> 201 | #define virt_addr_valid(kaddr) pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
+> |                                ^~~~~~~~~
+>>> drivers/spi/spi-cadence-quadspi.c:911:26: note: in expansion of macro 'virt_addr_valid'
+> 911 |  if (!cqspi->rx_chan || !virt_addr_valid(buf)) {
+> |                          ^~~~~~~~~~~~~~~
 
-E.g., pxa2xx_spi_suspend() zeroes the SSCR0 register.  It seems this
-disables or resets the controller.  But pxa2xx_spi_resume() isn't
-touching the register at all.  Maybe the register contains crap when
-coming out of s2idle, so needs to be set to a sane value on resume?
 
-Tsuchiya Yuto says that reloading the SPI controller driver makes
-the touch driver work again, so I'd check what's done on ->remove()
-and ->probe() both in the touch driver as well as in the SPI controller
-driver that fixes the problem.  The SSCR0 register is zeroed on
-->remove() and re-initialized on ->probe(), so that register may
-indeed play a role.
+Thanks for the report! But it seems with ARCH=xtensa and config that was
+attached, I see above warning for every file in the kernel that uses
+virt_addr_valid(), So, the fix for this warning is really in xtensa arch
+code and therefore should not block this series from being merged.
 
-Since the SPI controller seems to be on a PCI device, I'd also check
-if that PCI device has trouble coming out of s2idle.  If its BAR
-isn't accessible (MMIO reads return "all ones"), then the SPI controller
-and consequently the touch controller won't be accessible as well.
 
-Thanks,
-
-Lukas
+Regards
+Vignesh
