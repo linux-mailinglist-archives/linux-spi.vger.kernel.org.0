@@ -2,112 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6860F1E8387
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 18:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445F41E843B
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 19:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727103AbgE2QVl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 12:21:41 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:49750 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725821AbgE2QVk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 12:21:40 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 078768030772;
-        Fri, 29 May 2020 16:21:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id t-5OvJZSG0eC; Fri, 29 May 2020 19:21:31 +0300 (MSK)
-Date:   Fri, 29 May 2020 19:21:30 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Lars Povlsen <lars.povlsen@microchip.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, SoC Team <soc@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 00/10] spi: Adding support for Microchip Sparx5 SoC
-Message-ID: <20200529162130.hsjcde27xhohl6jl@mobilestation>
-References: <20200513140031.25633-1-lars.povlsen@microchip.com>
+        id S1726549AbgE2RAO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 13:00:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50328 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725839AbgE2RAN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 29 May 2020 13:00:13 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590771613;
+        bh=fUOqwYWT8tbTuMzPYDcpQ0z+8oF3oaSsv0YL/KNeZA4=;
+        h=Subject:From:Date:To:From;
+        b=D8Y2XWdgRJJ/YH0Xmzz73ev5VwSOQAvuOiOFWsJMQnqEW42imeZyKZ+G4zt8vTXNx
+         JFivT5B4b5gLnRAK8P4Ut5083eYqgLKdeN2Y3BxlfM7W/B0+f1/pnETrjdyDCP6V5i
+         VPfujfJ0PViKSUyvNa6kZ0s+9lTto/CcYuPXhJBE=
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200513140031.25633-1-lars.povlsen@microchip.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+linux-spi@kernel.org
+Message-Id: <159077161358.32365.3498519012737469282.git-patchwork-summary@kernel.org>
+Date:   Fri, 29 May 2020 17:00:13 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Lars,
+Hello:
 
-On Wed, May 13, 2020 at 04:00:21PM +0200, Lars Povlsen wrote:
-> This is an add-on series to the main SoC Sparx5 series
-> (Message-ID: <20200513125532.24585-1-lars.povlsen@microchip.com>).
-> 
-> The series add support for Sparx5 on top of the existing
-> ocelot/jaguar2 spi driver.
-> 
-> It spins off the existing support for the MSCC platforms into a
-> separate driver, as adding new platforms from the MSCC/Microchip
-> product lines will further complicate (clutter) the original driver.
-> 
-> New YAML dt-bindings are provided for the resulting driver.
-> 
-> It is expected that the DT patches are to be taken directly by the arm-soc
-> maintainers.
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (refs/heads/for-next):
 
-Regarding our cooperation. It can be implemented as follows. Since your patchset
-is less cumbersome than mine and is more ready to be integrated into the generic DW
-APB SSI code, it would be better to first make it through Mark', Andy' and my reviews
-to be further merged into the kernel version of the driver. After that I'll have
-my code altered so it could be applied on top of your patches. When everything
-is done we'll have a more comprehensive DW APB SSI driver with poll-based
-PIO operations support, new features like rx-delay, etc.
+Series: [PATCHv4,1/2] spi: dw: add reset control
+  Submitter: Dinh Nguyen <dinguyen@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=295785
+  Link: <20200529155806.16758-1-dinguyen@kernel.org>
+    Patches: [PATCHv4,1/2] spi: dw: add reset control
+             [PATCHv4,2/2] dt-bindings: snps,dw-apb-ssi: add optional reset property
 
-Thank you one more time for the series you've shared with us. Let's see what can
-be done to improve it...
+Total patches: 2
 
--Sergey
-
-> 
-> Lars Povlsen (10):
->   spi: dw: Add support for polled operation via no IRQ specified in DT
->   spi: dw: Add support for RX sample delay register
->   spi: dw: Add support for client driver memory operations
->   dt-bindings: spi: Add bindings for spi-dw-mchp
->   spi: spi-dw-mmio: Spin off MSCC platforms into spi-dw-mchp
->   dt-bindings: spi: spi-dw-mchp: Add Sparx5 support
->   spi: spi-dw-mchp: Add Sparx5 support
->   arm64: dts: sparx5: Add SPI controller
->   arm64: dts: sparx5: Add spi-nor support
->   arm64: dts: sparx5: Add spi-nand devices
-> 
->  .../bindings/spi/mscc,ocelot-spi.yaml         |  89 ++++
->  .../bindings/spi/snps,dw-apb-ssi.txt          |   7 +-
->  MAINTAINERS                                   |   2 +
->  arch/arm64/boot/dts/microchip/sparx5.dtsi     |  37 ++
->  .../boot/dts/microchip/sparx5_pcb125.dts      |  16 +
->  .../boot/dts/microchip/sparx5_pcb134.dts      |  22 +
->  .../dts/microchip/sparx5_pcb134_board.dtsi    |   9 +
->  .../boot/dts/microchip/sparx5_pcb135.dts      |  23 +
->  .../dts/microchip/sparx5_pcb135_board.dtsi    |   9 +
->  arch/mips/configs/generic/board-ocelot.config |   2 +-
->  drivers/spi/Kconfig                           |   7 +
->  drivers/spi/Makefile                          |   1 +
->  drivers/spi/spi-dw-mchp.c                     | 399 ++++++++++++++++++
->  drivers/spi/spi-dw-mmio.c                     |  93 ----
->  drivers/spi/spi-dw.c                          |  31 +-
->  drivers/spi/spi-dw.h                          |   4 +
->  16 files changed, 644 insertions(+), 107 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/mscc,ocelot-spi.yaml
->  create mode 100644 drivers/spi/spi-dw-mchp.c
-> 
-> --
-> 2.26.2
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/pwbot
