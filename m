@@ -2,169 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 071291E794B
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 11:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A59C1E7967
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 11:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725988AbgE2JYG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 05:24:06 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:40081 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbgE2JYF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 05:24:05 -0400
-X-Originating-IP: 42.109.222.225
-Received: from localhost (unknown [42.109.222.225])
-        (Authenticated sender: me@yadavpratyush.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 86FD1240004;
-        Fri, 29 May 2020 09:24:00 +0000 (UTC)
-Date:   Fri, 29 May 2020 14:53:53 +0530
-From:   Pratyush Yadav <me@yadavpratyush.com>
-To:     Mason Yang <masonccyang@mxic.com.tw>
-Cc:     broonie@kernel.org, tudor.ambarus@microchip.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        boris.brezillon@collabora.com, matthias.bgg@gmail.com,
-        juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        p.yadav@ti.com
-Subject: Re: [PATCH v4 1/7] mtd: spi-nor: sfdp: get octal mode maximum speed
- from BFPT
-Message-ID: <20200529092353.56nfczya6ygfbki2@yadavpratyush.com>
-References: <1590737775-4798-1-git-send-email-masonccyang@mxic.com.tw>
- <1590737775-4798-2-git-send-email-masonccyang@mxic.com.tw>
+        id S1726310AbgE2J0M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 05:26:12 -0400
+Received: from mga05.intel.com ([192.55.52.43]:42856 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725790AbgE2J0M (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 29 May 2020 05:26:12 -0400
+IronPort-SDR: 1fW3LORCQsV7Ek5VdS+OJCo8gEgzD6OCL1l5m4fnWR2F2WOE3TMpqVLQQIdcKQjCpgF2UStt/V
+ xjSrFyM686xA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 02:26:11 -0700
+IronPort-SDR: eV3HSNzOlNkNU0dRGF6h01o7RWVOKKfgkYKSky63r56KGxKAekid2lcuvuTGLbJcyagbUx4KIN
+ cKkcGqv52ezg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
+   d="scan'208";a="414915783"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga004.jf.intel.com with ESMTP; 29 May 2020 02:26:08 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1jebHG-009aJ4-Qp; Fri, 29 May 2020 12:26:10 +0300
+Date:   Fri, 29 May 2020 12:26:10 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>, Feng Tang <feng.tang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 03/16] spi: dw: Locally wait for the DMA transactions
+ completion
+Message-ID: <20200529092610.GX1634618@smile.fi.intel.com>
+References: <20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru>
+ <20200529035915.20790-4-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75VcT2zKnuRW3uxCQtbF0A65cbS20OFpz9sX0hftbjFp1hA@mail.gmail.com>
+ <20200529081204.e2j5unvvfikr2y7v@mobilestation>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1590737775-4798-2-git-send-email-masonccyang@mxic.com.tw>
+In-Reply-To: <20200529081204.e2j5unvvfikr2y7v@mobilestation>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29/05/20 03:36PM, Mason Yang wrote:
-> Get maximum operation speed of device in octal mode from
-> BFPT 20th DWORD.
-
-I don't like the idea of getting the maximum operation speed from BFPT 
-when the Profile 1.0 table already tells us that. For example, the 
-200MHz operation dummy cycles field in the 4th DWORD says that a value 
-of 0 means the frequency is not supported. So the Profile 1.0 table 
-already tells us what frequencies the flash can run at in xSPI Profile 
-1.0 mode.
-
-So IMO we should use the Profile 1.0 table for this instead because
-it will be a localized change which is easier to maintain. I also get 
-the feeling it will be less prone to mis-interpretations.
- 
-> Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
-> ---
->  drivers/mtd/spi-nor/core.h |  2 ++
->  drivers/mtd/spi-nor/sfdp.c | 36 ++++++++++++++++++++++++++++++++++++
->  drivers/mtd/spi-nor/sfdp.h |  4 ++++
->  3 files changed, 42 insertions(+)
+On Fri, May 29, 2020 at 11:12:04AM +0300, Serge Semin wrote:
+> On Fri, May 29, 2020 at 10:55:32AM +0300, Andy Shevchenko wrote:
+> > On Fri, May 29, 2020 at 7:02 AM Serge Semin
+> > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > >
+> > > Even if DMA transactions are finished it doesn't mean that the SPI
+> > > transfers are also completed. It's specifically concerns the Tx-only
+> > > SPI transfers, since there might be data left in the SPI Tx FIFO after
+> > > the DMA engine notifies that the Tx DMA procedure is done. In order to
+> > > completely fix the problem first the driver has to wait for the DMA
+> > > transaction completion, then for the corresponding SPI operations to be
+> > > finished. In this commit we implement the former part of the solution.
+> > >
+> > > Note we can't just move the SPI operations wait procedure to the DMA
+> > > completion callbacks, since these callbacks might be executed in the
+> > > tasklet context (and they will be in case of the DW DMA). In case of
+> > > slow SPI bus it can cause significant system performance drop.
+> > 
 > 
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index 6f2f6b2..7a36b22 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -190,6 +190,7 @@ struct spi_nor_locking_ops {
->   *
->   * @size:		the flash memory density in bytes.
->   * @page_size:		the page size of the SPI NOR flash memory.
-> + * @octal_max_speed:	maximum operation speed of device in octal mode.
->   * @hwcaps:		describes the read and page program hardware
->   *			capabilities.
->   * @reads:		read capabilities ordered by priority: the higher index
-> @@ -212,6 +213,7 @@ struct spi_nor_locking_ops {
->  struct spi_nor_flash_parameter {
->  	u64				size;
->  	u32				page_size;
-> +	u16				octal_max_speed;
->  
->  	struct spi_nor_hwcaps		hwcaps;
->  	struct spi_nor_read_command	reads[SNOR_CMD_READ_MAX];
-> diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-> index f6038d3..4d13f66 100644
-> --- a/drivers/mtd/spi-nor/sfdp.c
-> +++ b/drivers/mtd/spi-nor/sfdp.c
-> @@ -4,6 +4,7 @@
->   * Copyright (C) 2014, Freescale Semiconductor, Inc.
->   */
->  
-> +#include <linux/bitfield.h>
->  #include <linux/slab.h>
->  #include <linux/sort.h>
->  #include <linux/mtd/spi-nor.h>
-> @@ -26,6 +27,12 @@
->  #define SFDP_JESD216A_MINOR	5
->  #define SFDP_JESD216B_MINOR	6
->  
-> +/* Basic Flash Parameter Table 20th DWORD, Max operation speed of device */
-> +struct octal_max_speed {
-> +	u8 idx; /* Bits value */
-> +	u16 hz; /* MHz */
-> +};
-> +
->  struct sfdp_header {
->  	u32		signature; /* Ox50444653U <=> "SFDP" */
->  	u8		minor;
-> @@ -440,6 +447,22 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
->  	u32 addr;
->  	u16 half;
->  	u8 erase_mask;
-> +	static const struct octal_max_speed max_hz[] = {
-> +		/* Bits value, MHz */
-> +		{ 0x0c, 400 },
-> +		{ 0x0b, 333 },
-> +		{ 0x0a, 266 },
-> +		{ 0x09, 250 },
-> +		{ 0x08, 200 },
-> +		{ 0x07, 166 },
-> +		{ 0x06, 133 },
-> +		{ 0x05, 100 },
-> +		{ 0x04,  80 },
-> +		{ 0x03,  66 },
-> +		{ 0x02,  50 },
-> +		{ 0x01,  33 },
-> +	};
-> +	u8 idx;
->  
->  	/* JESD216 Basic Flash Parameter Table length is at least 9 DWORDs. */
->  	if (bfpt_header->length < BFPT_DWORD_MAX_JESD216)
-> @@ -604,6 +627,19 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
->  		return -EINVAL;
->  	}
->  
-> +	/* Octal mode max speed */
-> +	idx = max(FIELD_GET(BFPT_DWORD20_OCTAL_DTR_MAX_SPEED,
-> +			    bfpt.dwords[BFPT_DWORD(20)]),
-> +		  FIELD_GET(BFPT_DWORD20_OCTAL_STR_MAX_SPEED,
-> +			    bfpt.dwords[BFPT_DWORD(20)]));
-> +
-> +	for (i = 0; i < ARRAY_SIZE(max_hz); i++) {
-> +		if (max_hz[i].idx == idx) {
-> +			params->octal_max_speed = max_hz[i].hz;
-> +			break;
-> +		}
-> +	}
-> +
->  	return spi_nor_post_bfpt_fixups(nor, bfpt_header, &bfpt, params);
->  }
->  
-> diff --git a/drivers/mtd/spi-nor/sfdp.h b/drivers/mtd/spi-nor/sfdp.h
-> index e0a8ded..8ae6d9a 100644
-> --- a/drivers/mtd/spi-nor/sfdp.h
-> +++ b/drivers/mtd/spi-nor/sfdp.h
-> @@ -83,6 +83,10 @@ struct sfdp_bfpt {
->  #define BFPT_DWORD15_QER_SR2_BIT1_NO_RD		(0x4UL << 20)
->  #define BFPT_DWORD15_QER_SR2_BIT1		(0x5UL << 20) /* Spansion */
->  
-> +#define BFPT_DWORD20_OCTAL_MAX_SPEED_MASK       GENMASK(31, 16)
-> +#define BFPT_DWORD20_OCTAL_DTR_MAX_SPEED        GENMASK(31, 28)
-> +#define BFPT_DWORD20_OCTAL_STR_MAX_SPEED        GENMASK(19, 16)
-> +
->  struct sfdp_parameter_header {
->  	u8		id_lsb;
->  	u8		minor;
+> > I read commit message, I read the code. What's going on here since you
+> > repeated xfer_completion (and its wait routine) from SPI core and I'm
+> > wondering what happened to it? Why we are not calling
+> > spi_finalize_current_transfer()?
+> 
+> We discussed that in v4. You complained about using ndelay() for slow SPI bus,
+> which may cause too long atomic context execution. We agreed. Since we can't wait
+> in the tasklet context and using a dedicated kernel thread for waiting would be too
+> much, Me and Mark agreed, that
+
+> even if it causes us of the local wait-function
+> re-implementation the best approach would be not to use the generic
+> spi_transfer_wait() method, but instead wait for the DMA transactions locally
+> in the DMA driver and just return 0 from the transfer_one callback indicating
+> that the SPI transfer is finished and there is no need for SPI core to wait. As
+> a lot of DMA-based SPI drivers do.
+
+The above is missed in the commit message.
+
+> If you don't understand what the commit message says, just say so. I'll
+> reformulate it.
+
+See above. A bit of elaboration would be good. Thank you!
 
 -- 
-Regards,
-Pratyush Yadav
+With Best Regards,
+Andy Shevchenko
+
+
