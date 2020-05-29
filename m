@@ -2,76 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DBE1E8366
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 18:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6860F1E8387
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 18:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbgE2QRj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 12:17:39 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:38043 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725681AbgE2QRi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 12:17:38 -0400
-Received: by mail-il1-f193.google.com with SMTP id q18so3044195ilm.5;
-        Fri, 29 May 2020 09:17:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1WA+w4gWKVFAKdOjyjOP/tEtWPocATjUQITVK+3DOw8=;
-        b=PDY+zC261G1ze5ju591N9UrtXa3empNkOHi/d6aSVDxgN1Nty79WfF68uWvE6OvPd3
-         6KjVsuHnHZ5l+WeShXbBux6sAI1SzOUdyLyko/06X8jXUiJf+MsEnxIO4RmJz0GZstSA
-         p4hel2i10k519xHSGNdCc+CZ2KMstaolJMaytNUe/NP0Ex50v+6Mn0kf2zPWwFE9U2NH
-         PT4NV9n0gaIc7uW+WeoPdm91L8GUQB8IoEr27oF+BX2X8WMqjOtF8mANaRDzcZv65tTO
-         ANQyaB4BEtjGXZP/yDzLeAaOIpYmFDaKP7smGZhZfol/6n2Lbu/ZI848LnWdHNn0YEY9
-         DtnA==
-X-Gm-Message-State: AOAM5322RZm09Iwx18hoiEXZ4aY962uhLi2+HVcJtIUukOuM/xqqFNQ6
-        NuJ9eJi/3TQlnWs/TqKGAg==
-X-Google-Smtp-Source: ABdhPJzaiMsri3Ce6ct811n/Nx3VT+C3nOOEcWn2ikVVXzQHkkLZAWZnsnOcN0C90jGOSCtG3QTx+Q==
-X-Received: by 2002:a92:9142:: with SMTP id t63mr6838165ild.191.1590769056769;
-        Fri, 29 May 2020 09:17:36 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id j63sm1083926ilg.50.2020.05.29.09.17.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 09:17:35 -0700 (PDT)
-Received: (nullmailer pid 2494095 invoked by uid 1000);
-        Fri, 29 May 2020 16:17:32 -0000
-Date:   Fri, 29 May 2020 10:17:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     dillon.minfei@gmail.com
-Cc:     robh+dt@kernel.org, alexandre.torgue@st.com, dillonhua@gmail.com,
-        daniel@ffwll.ch, linux-spi@vger.kernel.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        sam@ravnborg.org, mcoquelin.stm32@gmail.com,
-        devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        linux-arm-kernel@lists.infradead.org, thierry.reding@gmail.com,
-        sboyd@kernel.org, broonie@kernel.org, noralf@tronnes.org,
-        airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        p.zabel@pengutronix.de, linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v6 4/9] dt-bindings: display: panel: Add ilitek ili9341
- panel bindings
-Message-ID: <20200529161732.GA2493963@bogus>
-References: <1590564453-24499-1-git-send-email-dillon.minfei@gmail.com>
- <1590564453-24499-5-git-send-email-dillon.minfei@gmail.com>
+        id S1727103AbgE2QVl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 12:21:41 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:49750 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbgE2QVk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 12:21:40 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 078768030772;
+        Fri, 29 May 2020 16:21:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id t-5OvJZSG0eC; Fri, 29 May 2020 19:21:31 +0300 (MSK)
+Date:   Fri, 29 May 2020 19:21:30 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Lars Povlsen <lars.povlsen@microchip.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, SoC Team <soc@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 00/10] spi: Adding support for Microchip Sparx5 SoC
+Message-ID: <20200529162130.hsjcde27xhohl6jl@mobilestation>
+References: <20200513140031.25633-1-lars.povlsen@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1590564453-24499-5-git-send-email-dillon.minfei@gmail.com>
+In-Reply-To: <20200513140031.25633-1-lars.povlsen@microchip.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 27 May 2020 15:27:28 +0800, dillon.minfei@gmail.com wrote:
-> From: dillon min <dillon.minfei@gmail.com>
-> 
-> Add documentation for "ilitek,ili9341" panel.
-> 
-> Signed-off-by: dillon min <dillon.minfei@gmail.com>
-> ---
->  .../bindings/display/panel/ilitek,ili9341.yaml     | 69 ++++++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
-> 
+Hello Lars,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Wed, May 13, 2020 at 04:00:21PM +0200, Lars Povlsen wrote:
+> This is an add-on series to the main SoC Sparx5 series
+> (Message-ID: <20200513125532.24585-1-lars.povlsen@microchip.com>).
+> 
+> The series add support for Sparx5 on top of the existing
+> ocelot/jaguar2 spi driver.
+> 
+> It spins off the existing support for the MSCC platforms into a
+> separate driver, as adding new platforms from the MSCC/Microchip
+> product lines will further complicate (clutter) the original driver.
+> 
+> New YAML dt-bindings are provided for the resulting driver.
+> 
+> It is expected that the DT patches are to be taken directly by the arm-soc
+> maintainers.
+
+Regarding our cooperation. It can be implemented as follows. Since your patchset
+is less cumbersome than mine and is more ready to be integrated into the generic DW
+APB SSI code, it would be better to first make it through Mark', Andy' and my reviews
+to be further merged into the kernel version of the driver. After that I'll have
+my code altered so it could be applied on top of your patches. When everything
+is done we'll have a more comprehensive DW APB SSI driver with poll-based
+PIO operations support, new features like rx-delay, etc.
+
+Thank you one more time for the series you've shared with us. Let's see what can
+be done to improve it...
+
+-Sergey
+
+> 
+> Lars Povlsen (10):
+>   spi: dw: Add support for polled operation via no IRQ specified in DT
+>   spi: dw: Add support for RX sample delay register
+>   spi: dw: Add support for client driver memory operations
+>   dt-bindings: spi: Add bindings for spi-dw-mchp
+>   spi: spi-dw-mmio: Spin off MSCC platforms into spi-dw-mchp
+>   dt-bindings: spi: spi-dw-mchp: Add Sparx5 support
+>   spi: spi-dw-mchp: Add Sparx5 support
+>   arm64: dts: sparx5: Add SPI controller
+>   arm64: dts: sparx5: Add spi-nor support
+>   arm64: dts: sparx5: Add spi-nand devices
+> 
+>  .../bindings/spi/mscc,ocelot-spi.yaml         |  89 ++++
+>  .../bindings/spi/snps,dw-apb-ssi.txt          |   7 +-
+>  MAINTAINERS                                   |   2 +
+>  arch/arm64/boot/dts/microchip/sparx5.dtsi     |  37 ++
+>  .../boot/dts/microchip/sparx5_pcb125.dts      |  16 +
+>  .../boot/dts/microchip/sparx5_pcb134.dts      |  22 +
+>  .../dts/microchip/sparx5_pcb134_board.dtsi    |   9 +
+>  .../boot/dts/microchip/sparx5_pcb135.dts      |  23 +
+>  .../dts/microchip/sparx5_pcb135_board.dtsi    |   9 +
+>  arch/mips/configs/generic/board-ocelot.config |   2 +-
+>  drivers/spi/Kconfig                           |   7 +
+>  drivers/spi/Makefile                          |   1 +
+>  drivers/spi/spi-dw-mchp.c                     | 399 ++++++++++++++++++
+>  drivers/spi/spi-dw-mmio.c                     |  93 ----
+>  drivers/spi/spi-dw.c                          |  31 +-
+>  drivers/spi/spi-dw.h                          |   4 +
+>  16 files changed, 644 insertions(+), 107 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mscc,ocelot-spi.yaml
+>  create mode 100644 drivers/spi/spi-dw-mchp.c
+> 
+> --
+> 2.26.2
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
