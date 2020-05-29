@@ -2,82 +2,309 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB231E8670
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 20:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7491E8698
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 20:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725865AbgE2SQm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 14:16:42 -0400
-Received: from bmailout2.hostsharing.net ([83.223.78.240]:36393 "EHLO
-        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbgE2SQl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 14:16:41 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 51AF828004ECF;
-        Fri, 29 May 2020 20:16:40 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 281E12A66; Fri, 29 May 2020 20:16:40 +0200 (CEST)
-Date:   Fri, 29 May 2020 20:16:40 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Mark Brown <broonie@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Martin Sperl <kernel@martin.sperl.org>,
-        linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200529181640.47dt6bfy3wkxbb34@wunner.de>
-References: <20200528185805.28991-1-nsaenzjulienne@suse.de>
- <20200529174358.som3snunfxch6phi@wunner.de>
- <36dd65bb-18a9-9697-b9b6-76eaf8cbe45c@gmail.com>
- <20200529175350.2wtoqttipa354m2m@wunner.de>
- <b832eaed-b480-b3b6-4df0-75abcc11f08a@gmail.com>
+        id S1726974AbgE2S0H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 14:26:07 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:50484 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbgE2S0H (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 14:26:07 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 0C9C28030772;
+        Fri, 29 May 2020 18:26:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id HTBV-D7sdvH6; Fri, 29 May 2020 21:26:01 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Feng Tang <feng.tang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, <linux-mips@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7] dt-bindings: spi: Convert DW SPI binding to DT schema
+Date:   Fri, 29 May 2020 21:25:43 +0300
+Message-ID: <20200529182544.9807-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b832eaed-b480-b3b6-4df0-75abcc11f08a@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 29, 2020 at 11:03:48AM -0700, Florian Fainelli wrote:
-> On 5/29/20 10:53 AM, Lukas Wunner wrote:
-> > On Fri, May 29, 2020 at 10:46:01AM -0700, Florian Fainelli wrote:
-> >> On 5/29/20 10:43 AM, Lukas Wunner wrote:
-> >>> Finally, it would be nice if the check would be optimized away when
-> >>> compiling for pre-RasPi4 products, maybe something like:
-> >>>
-> >>> +	if (IS_ENABLED(CONFIG_ARM_LPAE) && !(cs & BCM2835_SPI_CS_INTR))
-> >>> +		return IRQ_NONE;
-> >>
-> >> Rather than keying this off ARM_LPAE or any other option, this should be
-> >> keyed off a compatible string, that way we can even conditionally pass
-> >> IRQF_SHARED to the interrupt handler if we care so much about performance.
-> > 
-> > But a compatible string can't be checked at compile time, can it?
-> 
-> No, but you can have a different interrupt handler that it set at
-> runtime if you want to completely eliminate this comparison.
+Modern device tree bindings are supposed to be created as YAML-files
+in accordance with dt-schema. This commit replaces two DW SPI legacy
+bare text bindings with YAML file. As before the bindings file states
+that the corresponding dts node is supposed to be compatible either
+with generic DW APB SSI controller or with Microsemi/Amazon/Renesas/Intel
+vendors-specific controllers, to have registers, interrupts and clocks
+properties. Though in case of Microsemi version of the controller
+there must be two registers resources specified. Properties like
+clock-names, reg-io-width, cs-gpio, num-cs, DMA and slave device
+sub-nodes are optional.
 
-Good idea.  In fact the IRQ handler for platforms with shared interrupts
-could just be a wrapper which performs the BCM2835_SPI_CS_INTR check
-then tail-calls the existing IRQ handler.  The compiler would just
-inline it and everything would be fine.
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Cc: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Feng Tang <feng.tang@intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-mips@vger.kernel.org
 
+---
 
-> My point is that CONFIG_ARM_LPAE is just too brittle, there is nothing
-> that prevents you from using a non-LPAE kernel on the Pi 4, even PCIe
-> could be made to work if using super section mappings to map the PCIe
-> outbound space. Even on models with over 4GB of DRAM, if you are willing
-> to lose some of it, it can work.
+Changelog v7:
+- Rebase on top of the spi/for-next branch.
+- Add resets and reset-names properties, since Dinh Nguyen has slipped the
+  patchset optional reset-support in right in front of my nose.
+---
+ .../bindings/spi/snps,dw-apb-ssi.txt          |  49 -------
+ .../bindings/spi/snps,dw-apb-ssi.yaml         | 133 ++++++++++++++++++
+ .../devicetree/bindings/spi/spi-dw.txt        |  24 ----
+ 3 files changed, 133 insertions(+), 73 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-dw.txt
 
-Agreed.
+diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
+deleted file mode 100644
+index 0f21407a7ea3..000000000000
+--- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
++++ /dev/null
+@@ -1,49 +0,0 @@
+-Synopsys DesignWare AMBA 2.0 Synchronous Serial Interface.
+-
+-Required properties:
+-- compatible : "snps,dw-apb-ssi" or "mscc,<soc>-spi", where soc is "ocelot" or
+-  "jaguar2", or "amazon,alpine-dw-apb-ssi", or "snps,dwc-ssi-1.01a" or
+-  "intel,keembay-ssi"
+-- reg : The register base for the controller. For "mscc,<soc>-spi", a second
+-  register set is required (named ICPU_CFG:SPI_MST)
+-- interrupts : One interrupt, used by the controller.
+-- #address-cells : <1>, as required by generic SPI binding.
+-- #size-cells : <0>, also as required by generic SPI binding.
+-- clocks : phandles for the clocks, see the description of clock-names below.
+-   The phandle for the "ssi_clk" is required. The phandle for the "pclk" clock
+-   is optional. If a single clock is specified but no clock-name, it is the
+-   "ssi_clk" clock. If both clocks are listed, the "ssi_clk" must be first.
+-
+-Optional properties:
+-- clock-names : Contains the names of the clocks:
+-    "ssi_clk", for the core clock used to generate the external SPI clock.
+-    "pclk", the interface clock, required for register access. If a clock domain
+-     used to enable this clock then it should be named "pclk_clkdomain".
+-- cs-gpios : Specifies the gpio pins to be used for chipselects.
+-- num-cs : The number of chipselects. If omitted, this will default to 4.
+-- reg-io-width : The I/O register width (in bytes) implemented by this
+-  device.  Supported values are 2 or 4 (the default).
+-- dmas : Phandle + identifiers of Tx and Rx DMA channels.
+-- dma-names : Contains the names of the DMA channels. Must be "tx" and "rx".
+-- resets : contains an entry for each entry in reset-names.
+-	   See ../reset/reset.txt for details.
+-- reset-names : must contain "spi"
+-
+-Child nodes as per the generic SPI binding.
+-
+-Example:
+-
+-	spi@fff00000 {
+-		compatible = "snps,dw-apb-ssi";
+-		reg = <0xfff00000 0x1000>;
+-		interrupts = <0 154 4>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		clocks = <&spi_m_clk>;
+-		num-cs = <2>;
+-		cs-gpios = <&gpio0 13 0>,
+-			   <&gpio0 14 0>;
+-		resets = <&rst SPIM0_RST>;
+-		reset-names = "spi";
+-	};
+-
+diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+new file mode 100644
+index 000000000000..c62cbe79f00d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+@@ -0,0 +1,133 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/snps,dw-apb-ssi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Synopsys DesignWare AMBA 2.0 Synchronous Serial Interface
++
++maintainers:
++  - Mark Brown <broonie@kernel.org>
++
++allOf:
++  - $ref: "spi-controller.yaml#"
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mscc,ocelot-spi
++              - mscc,jaguar2-spi
++    then:
++      properties:
++        reg:
++          minItems: 2
++
++properties:
++  compatible:
++    oneOf:
++      - description: Generic DW SPI Controller
++        enum:
++          - snps,dw-apb-ssi
++          - snps,dwc-ssi-1.01a
++      - description: Microsemi Ocelot/Jaguar2 SoC SPI Controller
++        items:
++          - enum:
++              - mscc,ocelot-spi
++              - mscc,jaguar2-spi
++          - const: snps,dw-apb-ssi
++      - description: Amazon Alpine SPI Controller
++        const: amazon,alpine-dw-apb-ssi
++      - description: Renesas RZ/N1 SPI Controller
++        items:
++          - const: renesas,rzn1-spi
++          - const: snps,dw-apb-ssi
++      - description: Intel Keem Bay SPI Controller
++        const: intel,keembay-ssi
++
++  reg:
++    minItems: 1
++    items:
++      - description: DW APB SSI controller memory mapped registers
++      - description: SPI MST region map
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    items:
++      - description: SPI Controller reference clock source
++      - description: APB interface clock source
++
++  clock-names:
++    minItems: 1
++    items:
++      - const: ssi_clk
++      - const: pclk
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    const: spi
++
++  reg-io-width:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: I/O register width (in bytes) implemented by this device
++    default: 4
++    enum: [ 2, 4 ]
++
++  num-cs:
++    default: 4
++    minimum: 1
++    maximum: 4
++
++  dmas:
++    items:
++      - description: TX DMA Channel
++      - description: RX DMA Channel
++
++  dma-names:
++    items:
++      - const: tx
++      - const: rx
++
++patternProperties:
++  "^.*@[0-9a-f]+$":
++    type: object
++    properties:
++      reg:
++        minimum: 0
++        maximum: 3
++
++      spi-rx-bus-width:
++        const: 1
++
++      spi-tx-bus-width:
++        const: 1
++
++unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - "#address-cells"
++  - "#size-cells"
++  - interrupts
++  - clocks
++
++examples:
++  - |
++    spi@fff00000 {
++      compatible = "snps,dw-apb-ssi";
++      reg = <0xfff00000 0x1000>;
++      #address-cells = <1>;
++      #size-cells = <0>;
++      interrupts = <0 154 4>;
++      clocks = <&spi_m_clk>;
++      num-cs = <2>;
++      cs-gpios = <&gpio0 13 0>,
++                 <&gpio0 14 0>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/spi/spi-dw.txt b/Documentation/devicetree/bindings/spi/spi-dw.txt
+deleted file mode 100644
+index 7b63ed601990..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-dw.txt
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Synopsys DesignWare SPI master
+-
+-Required properties:
+-- compatible: should be "snps,designware-spi"
+-- #address-cells: see spi-bus.txt
+-- #size-cells: see spi-bus.txt
+-- reg: address and length of the spi master registers
+-- interrupts: should contain one interrupt
+-- clocks: spi clock phandle
+-- num-cs: see spi-bus.txt
+-
+-Optional properties:
+-- cs-gpios: see spi-bus.txt
+-
+-Example:
+-
+-spi: spi@4020a000 {
+-	compatible = "snps,designware-spi";
+-	interrupts = <11 1>;
+-	reg = <0x4020a000 0x1000>;
+-	clocks = <&pclk>;
+-	num-cs = <2>;
+-	cs-gpios = <&banka 0 0>;
+-};
+-- 
+2.26.2
 
-Thanks,
-
-Lukas
