@@ -2,148 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 147D01E799F
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 11:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25541E79AF
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 11:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725775AbgE2JmP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 05:42:15 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:45873 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE2JmO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 05:42:14 -0400
-X-Originating-IP: 42.109.222.225
-Received: from localhost (unknown [42.109.222.225])
-        (Authenticated sender: me@yadavpratyush.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id A530DC0007;
-        Fri, 29 May 2020 09:42:07 +0000 (UTC)
-Date:   Fri, 29 May 2020 15:12:02 +0530
-From:   Pratyush Yadav <me@yadavpratyush.com>
-To:     Mason Yang <masonccyang@mxic.com.tw>
-Cc:     broonie@kernel.org, tudor.ambarus@microchip.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        boris.brezillon@collabora.com, matthias.bgg@gmail.com,
-        juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        p.yadav@ti.com
-Subject: Re: [PATCH v4 7/7] mtd: spi-nor: macronix: Add Octal 8D-8D-8D
- supports for Macronix mx25uw51245g
-Message-ID: <20200529094202.7vjs7clhykncivux@yadavpratyush.com>
-References: <1590737775-4798-1-git-send-email-masonccyang@mxic.com.tw>
- <1590737775-4798-8-git-send-email-masonccyang@mxic.com.tw>
+        id S1726568AbgE2Jqv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 05:46:51 -0400
+Received: from mga02.intel.com ([134.134.136.20]:17071 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725306AbgE2Jqv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 29 May 2020 05:46:51 -0400
+IronPort-SDR: 539K7uaDwjzrIU8fa/6HLyhluG834wxwgg0aJ/ktglJeGRqJ75MQjyqqwQgqo2fh7n2evuGXGv
+ Mg/wd1sy/G7Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 02:46:50 -0700
+IronPort-SDR: II27uXDokvwXKCgRIhjvjcyCueBUGtMURUOyoukJkldSCEHUrp2yls6pP7patJwhBtCiYMopHp
+ 0F7Dp7NUCI+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
+   d="scan'208";a="256459486"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007.jf.intel.com with ESMTP; 29 May 2020 02:46:46 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jebbE-009aWG-QF; Fri, 29 May 2020 12:46:48 +0300
+Date:   Fri, 29 May 2020 12:46:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Linus Walleij <linus.walleij@stericsson.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Alan Cox <alan@linux.intel.com>, Vinod Koul <vkoul@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 05/16] spi: dw: Add SPI Rx-done wait method to
+ DMA-based transfer
+Message-ID: <20200529094648.GY1634618@smile.fi.intel.com>
+References: <20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru>
+ <20200529035915.20790-6-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1590737775-4798-8-git-send-email-masonccyang@mxic.com.tw>
+In-Reply-To: <20200529035915.20790-6-Sergey.Semin@baikalelectronics.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29/05/20 03:36PM, Mason Yang wrote:
-> Macronix mx25uw51245g is a SPI NOR that supports 1-1-1/8-8-8 mode.
-> 
-> Correct the dummy cycles to device for various frequencies
-> after xSPI profile 1.0 table parsed.
-> 
-> Enable mx25uw51245g to Octal DTR mode by executing the command sequences
-> to change to octal DTR mode.
-> 
-> Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
-> ---
->  drivers/mtd/spi-nor/macronix.c | 55 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-> index 96735d8..6c9a24c 100644
-> --- a/drivers/mtd/spi-nor/macronix.c
-> +++ b/drivers/mtd/spi-nor/macronix.c
-> @@ -8,6 +8,57 @@
->  
->  #include "core.h"
->  
-> +#define MXIC_CR2_DUMMY_SET_ADDR 0x300
-> +
-> +/* Fixup the dummy cycles to device and setup octa_dtr_enable() */
-> +static void mx25uw51245g_post_sfdp_fixups(struct spi_nor *nor)
+On Fri, May 29, 2020 at 06:59:03AM +0300, Serge Semin wrote:
+> Having any data left in the Rx FIFO after the DMA engine claimed it has
+> finished all DMA transactions is an abnormal situation, since the DW SPI
+> controller driver expects to have all the data being fetched and placed
+> into the SPI Rx buffer at that moment. In case if this has happened we
+> assume that DMA engine still may be doing the data fetching, thus we give
+> it sometime to finish. If after a short period of time the data is still
+> left in the Rx FIFO, the driver will give up waiting and return an error
+> indicating that the SPI controller/DMA engine must have hung up or failed
+> at some point of doing their duties.
+
+...
+
+> +static int dw_spi_dma_wait_rx_done(struct dw_spi *dws)
 > +{
-> +	struct spi_nor_flash_parameter *params = nor->params;
-> +	int ret;
-> +	u8 rdc, wdc;
+> +	int retry = WAIT_RETRIES;
+> +	struct spi_delay delay;
+> +	unsigned long ns, us;
+> +	u32 nents;
 > +
-> +	ret = spi_nor_read_cr2(nor, MXIC_CR2_DUMMY_SET_ADDR, &rdc);
-> +	if (ret)
-> +		return;
-> +
-> +	/* Refer to dummy cycle and frequency table(MHz) */
-> +	switch (params->dummy_cycles) {
-> +	case 10:	/* 10 dummy cycles for 104 MHz */
-> +		wdc = 5;
-> +		break;
-> +	case 12:	/* 12 dummy cycles for 133 MHz */
-> +		wdc = 4;
-> +		break;
-> +	case 16:	/* 16 dummy cycles for 166 MHz */
-> +		wdc = 2;
-> +		break;
-> +	case 18:	/* 18 dummy cycles for 173 MHz */
-> +		wdc = 1;
-> +		break;
-> +	case 20:	/* 20 dummy cycles for 200 MHz */
-> +	default:
-> +		wdc = 0;
-> +	}
+> +	/*
+> +	 * It's unlikely that DMA engine is still doing the data fetching, but
+> +	 * if it's let's give it some reasonable time. The timeout calculation
+> +	 * is based on the synchronous APB/SSI reference clock rate, on a
+> +	 * number of data entries left in the Rx FIFO, times a number of clock
+> +	 * periods normally needed for a single APB read/write transaction
+> +	 * without PREADY signal utilized (which is true for the DW APB SSI
+> +	 * controller).
+> +	 */
+> +	nents = dw_readl(dws, DW_SPI_RXFLR);
 
-I don't get the point of this. You already know the fastest the 
-mx25uw51245g flash can run at. Why not just use the maximum dummy 
-cycles? SPI NOR doesn't know the speed the controller is running at so 
-the best it can do is use the maximum dummy cycles possible so it never 
-falls short. Sure, it will be _slightly_ less performance, but we will 
-be sure to read the correct data, which is much much more important.
+> +	ns = NSEC_PER_SEC / dws->max_freq * 4 * nents;
 
-Is it possible to have two chips which have _exactly_ the same ID but 
-one supports say 200MHz frequency but the other doesn't? Without that, 
-we can just enable the maximum and move on.
+I think we may slightly increase precision by writing this like
 
-> +
-> +	if (rdc != wdc)
-> +		spi_nor_write_cr2(nor, MXIC_CR2_DUMMY_SET_ADDR, &wdc);
-> +
-> +	if (params->cmd_seq[0].len) {
-> +		params->octal_dtr_enable = spi_nor_cmd_seq_octal_dtr;
-> +		params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
-> +		params->hwcaps.mask |= SNOR_HWCAPS_PP_8_8_8_DTR;
+	ns = 4 * NSEC_PER_SEC / dws->max_freq * nents;
 
-Same comment as above. We are in the mx25uw51245g fixup hook. We already 
-know if the flash supports 8D mode or not from the datasheet. What is 
-the need to discover it from SFDP?
 
-> +
+> +	if (ns <= NSEC_PER_USEC) {
+> +		delay.unit = SPI_DELAY_UNIT_NSECS;
+> +		delay.value = ns;
 > +	} else {
-> +		params->octal_dtr_enable = NULL;
-> +		params->hwcaps.mask &= ~SNOR_HWCAPS_READ_8_8_8_DTR;
-> +		params->hwcaps.mask &= ~SNOR_HWCAPS_PP_8_8_8_DTR;
+> +		us = DIV_ROUND_UP(ns, NSEC_PER_USEC);
+> +		delay.unit = SPI_DELAY_UNIT_USECS;
+> +		delay.value = clamp_val(us, 0, USHRT_MAX);
 > +	}
+> +
+> +	while (dw_spi_dma_rx_busy(dws) && retry--)
+> +		spi_delay_exec(&delay, NULL);
+> +
+> +	if (retry < 0) {
+> +		dev_err(&dws->master->dev, "Rx hanged up\n");
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
 > +}
-> +
-> +static struct spi_nor_fixups mx25uw51245g_fixups = {
-> +	.post_sfdp = mx25uw51245g_post_sfdp_fixups,
-> +};
-> +
->  static int
->  mx25l25635_post_bfpt_fixups(struct spi_nor *nor,
->  			    const struct sfdp_parameter_header *bfpt_header,
-> @@ -84,6 +135,10 @@
->  			      SPI_NOR_QUAD_READ) },
->  	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048,
->  			      SPI_NOR_QUAD_READ) },
-> +	{ "mx25uw51245g", INFO(0xc2813a, 0, 64 * 1024, 1024,
-> +			      SECT_4K | SPI_NOR_4B_OPCODES |
-> +			      SPI_NOR_OCTAL_DTR_READ)
-> +			      .fixups = &mx25uw51245g_fixups },
->  };
->  
->  static void macronix_default_init(struct spi_nor *nor)
 
 -- 
-Regards,
-Pratyush Yadav
+With Best Regards,
+Andy Shevchenko
+
+
