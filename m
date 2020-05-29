@@ -2,78 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5143C1E7483
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 06:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5301E7558
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 07:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728859AbgE2EVD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 00:21:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46202 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728179AbgE2EU0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 29 May 2020 00:20:26 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590726021;
-        bh=1ScgQflyD0YBwK3kfp27yQcGKMoYYSsSkleWWkNyaqA=;
-        h=Subject:From:Date:To:From;
-        b=kDFbCOZeXXZJ/u7c48JsHliYxVp7ZWMBVnkVjLg1jZwZHj20MSwEakoUV4m3ThsLv
-         6DcSz62whCQbjc9i37IW0fxsRQpEhKFCQrSOJ3zPKeUo9151/XS5UlTByF2LbMvhFa
-         DtTp3AhbgHawwPsblUHgrMv7rBhOqL26V9QI7N8U=
+        id S1725355AbgE2F16 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 01:27:58 -0400
+Received: from twhmllg3.macronix.com ([211.75.127.131]:21142 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725308AbgE2F15 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 01:27:57 -0400
+Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
+        by TWHMLLG3.macronix.com with ESMTP id 04T5R3iF028507;
+        Fri, 29 May 2020 13:27:03 +0800 (GMT-8)
+        (envelope-from masonccyang@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
+        by Forcepoint Email with ESMTP id EE1F313970D7BAF9D89B;
+        Fri, 29 May 2020 13:27:03 +0800 (CST)
+In-Reply-To: <20200528102609.0dbb59a5@collabora.com>
+References: <1590652696-8844-1-git-send-email-masonccyang@mxic.com.tw> <20200528102609.0dbb59a5@collabora.com>
+To:     "Boris Brezillon" <boris.brezillon@collabora.com>
+Cc:     broonie@kernel.org, juliensu@mxic.com.tw,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, matthias.bgg@gmail.com,
+        miquel.raynal@bootlin.com, p.yadav@ti.com, richard@nod.at,
+        tudor.ambarus@microchip.com, vigneshr@ti.com
+Subject: Re: [PATCH v3 00/14] mtd: spi-nor: add xSPI Octal DTR support
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <159072602135.10228.5026713577643037478.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 29 May 2020 04:20:21 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-KeepSent: 584CB594:BEA39E9B-48258577:001D866D;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP4 SHF90 June 10, 2013
+Message-ID: <OF584CB594.BEA39E9B-ON48258577.001D866D-48258577.001DF14F@mxic.com.tw>
+From:   masonccyang@mxic.com.tw
+Date:   Fri, 29 May 2020 13:27:03 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2020/05/29 PM 01:27:03,
+        Serialize complete at 2020/05/29 PM 01:27:03
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG3.macronix.com 04T5R3iF028507
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] spi: dw: Add generic DW DMA controller support (2020-05-29T03:58:59)
-  Superseding: [v1] spi: dw: Add generic DW DMA controller support (2020-05-08T13:29:25):
-    [01/17] dt-bindings: spi: Convert DW SPI binding to DT schema
-    [02/17] dt-bindings: spi: dw: Add DMA properties bindings
-    [04/17] spi: dw: Cleanup generic DW DMA code namings
-    [06/17] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on DW SPI core
-    [08/17] spi: dw: Clear DMAC register when done or stopped
-    [09/17] spi: dw: Enable interrupts in accordance with DMA xfer mode
-    [10/17] spi: dw: Parameterize the DMA Rx/Tx burst length
-    [12/17] spi: dw: Fix dma_slave_config used partly uninitialized
-    [13/17] spi: dw: Initialize paddr in DW SPI MMIO private data
-  Superseding: [v2] spi: dw: Add generic DW DMA controller support (2020-05-15T10:47:40):
-    [v2,01/19] dt-bindings: spi: dw: Add Tx/Rx DMA properties
-    [v2,03/19] spi: dw: Clear DMAC register when done or stopped
-    [v2,05/19] spi: dw: Enable interrupts in accordance with DMA xfer mode
-    [v2,09/19] spi: dw: Parameterize the DMA Rx/Tx burst length
-    [v2,10/19] spi: dw: Use DMA max burst to set the request thresholds
-    [v2,11/19] spi: dw: Initialize paddr in DW SPI MMIO private data
-    [v2,14/19] spi: dw: Remove DW DMA code dependency from DW_DMAC_PCI
-    [v2,15/19] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on the DW SPI core
-    [v2,17/19] spi: dw: Add DMA support to the DW SPI MMIO driver
-    [v2,19/19] dt-bindings: spi: Convert DW SPI binding to DT schema
-  Superseding: [v3] spi: dw: Add generic DW DMA controller support (2020-05-21T01:21:50):
-    [v3,01/16] spi: dw: Add Tx/Rx finish wait methods to the MID DMA
-    [v3,02/16] spi: dw: Enable interrupts in accordance with DMA xfer mode
-    [v3,03/16] spi: dw: Discard static DW DMA slave structures
-    [v3,06/16] spi: dw: Parameterize the DMA Rx/Tx burst length
-    [v3,07/16] spi: dw: Use DMA max burst to set the request thresholds
-    [v3,11/16] spi: dw: Remove DW DMA code dependency from DW_DMAC_PCI
-    [v3,12/16] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on the DW SPI core
-    [v3,14/16] spi: dw: Add DMA support to the DW SPI MMIO driver
-    [v3,16/16] dt-bindings: spi: Convert DW SPI binding to DT schema
-  Superseding: [v4] spi: dw: Add generic DW DMA controller support (2020-05-22T00:07:51):
-    [v4,02/16] spi: dw: Enable interrupts in accordance with DMA xfer mode
-    [v4,04/16] spi: dw: Discard unused void priv pointer
-    [v4,06/16] spi: dw: Parameterize the DMA Rx/Tx burst length
-    [v4,07/16] spi: dw: Use DMA max burst to set the request thresholds
-    [v4,11/16] spi: dw: Remove DW DMA code dependency from DW_DMAC_PCI
-    [v4,12/16] spi: dw: Add DW SPI DMA/PCI/MMIO dependency on the DW SPI core
-    [v4,14/16] spi: dw: Add DMA support to the DW SPI MMIO driver
-    [v4,16/16] dt-bindings: spi: Convert DW SPI binding to DT schema
+
+Hi Boris,
+
+> > 
+> > 
+> > Summary of change log
+> > v3:
+> > Add support command sequences to change octal DTR mode and based on
+> > part of Pratyush's patches set.
+> > 
+> > v2: 
+> > Parse BFPT & xSPI table for Octal 8D-8D-8D mode parameters and enable 
+Octal
+> > mode in spi_nor_late_init_params().
+> > Using Macros in spi_nor_spimem_read_data, spi_nor_spimem_write_data 
+and
+> > so on by Vignesh comments.
+> > 
+> > v1:
+> > Without parsing BFPT & xSPI profile 1.0 table and enter Octal 8D-8D-8D
+> > mode directly in spi_nor_fixups hooks.
+> > 
+> > 
+> > thnaks for your time and review.
+> > best regards,
+> > Mason
+> > 
+> > --
+> > Mason Yang (7):
+> >   mtd: spi-nor: sfdp: get octal mode maximum speed from BFPT
+> >   mtd: spi-nor: sfdp: parse xSPI Profile 1.0 table
+> >   mtd: spi-nor: sfdp: parse command sequences to change octal DTR mode
+> >   mtd: spi-nor: core: add configuration register 2 read & write 
+support
+> >   spi: mxic: patch for octal DTR mode support
+> >   mtd: spi-nor: core: execute command sequences to change octal DTR 
+mode
+> >   mtd: spi-nor: macronix: Add Octal 8D-8D-8D supports for Macronix
+> >     mx25uw51245g
+> > 
+> > Pratyush Yadav (7):
+> >   spi: spi-mem: allow specifying whether an op is DTR or not
+> >   spi: spi-mem: allow specifying a command's extension
+> >   mtd: spi-nor: add support for DTR protocol
+> >   mtd: spi-nor: sfdp: prepare BFPT parsing for JESD216 rev D
+> >   mtd: spi-nor: sfdp: get command opcode extension type from BFPT
+> >   mtd: spi-nor: core: use dummy cycle and address width info from SFDP
+> >   mtd: spi-nor: core: enable octal DTR mode when possible
+> 
+> Why are you doing that?! This series is being actively worked on by
+> Pratyush, and all you gain by sending it on your own is more
+> confusion. If you have patches on top of a series that's not been
+> merged yet, mention the dependency in the cover letter, but don't
+> resend patches that have already been sent and are being reviewed.
+
+okay, much thank for your comments.
+Will re-submit and mention the dependency in my cover letter.
+
+Hi Pratyush,
+Sorry if these patches make you uncomfortable.
+
+> 
+> I think it's time you spend a bit of time learning about the submission
+> process, because that's not the first mistake you do, and I'm pretty
+> sure I already mentioned that in my previous reviews.
+
+best regards,
+Mason
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
