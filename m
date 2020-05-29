@@ -2,124 +2,147 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD241E76CD
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 09:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEB41E778A
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 09:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgE2HhW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 03:37:22 -0400
-Received: from twhmllg4.macronix.com ([211.75.127.132]:24836 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726774AbgE2HhW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 03:37:22 -0400
-Received: from localhost.localdomain ([172.17.195.96])
-        by TWHMLLG4.macronix.com with ESMTP id 04T7aHq3067318;
-        Fri, 29 May 2020 15:36:23 +0800 (GMT-8)
-        (envelope-from masonccyang@mxic.com.tw)
-From:   Mason Yang <masonccyang@mxic.com.tw>
-To:     broonie@kernel.org, tudor.ambarus@microchip.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        boris.brezillon@collabora.com, matthias.bgg@gmail.com
-Cc:     p.yadav@ti.com, juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: [PATCH v4 7/7] mtd: spi-nor: macronix: Add Octal 8D-8D-8D supports for Macronix mx25uw51245g
-Date:   Fri, 29 May 2020 15:36:15 +0800
-Message-Id: <1590737775-4798-8-git-send-email-masonccyang@mxic.com.tw>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1590737775-4798-1-git-send-email-masonccyang@mxic.com.tw>
-References: <1590737775-4798-1-git-send-email-masonccyang@mxic.com.tw>
-X-MAIL: TWHMLLG4.macronix.com 04T7aHq3067318
+        id S1725961AbgE2Hzu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 03:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725855AbgE2Hzt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 03:55:49 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F482C03E969;
+        Fri, 29 May 2020 00:55:49 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id d10so1041788pgn.4;
+        Fri, 29 May 2020 00:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z6s9/IaXr38uOMZ+KBf1YjM+loSDtVV15aQ5SUi0HAc=;
+        b=fMC2fYocOCX/Im4iA/3EX4G9gDKBG7O9eP4LUGsZgCVv66R7lTBjYYYhYhhKjmpj0g
+         p0xCkjTLNdHk8YRT95VVHiPtTL5pXPkAdwJg7iXmOHX/K/DoKoX7lvpueEQILVddYCk7
+         BIvsDQIG/GrfCahFkmedOQcoeWqB1D/yVMdECGdjNTABpxzIykzIl0J9DdrrUfYq7dPk
+         Mt4eG4vKx0/0eads3hx6C2T8omGrgLIvqKP77b/wOGy3RIztME6uHkfeSP5Ph1597w5b
+         xyJPhQkzAV5IIql3/FCEdspoE/odHk4CRiG2p+FLZwONEPBSKvjlgKzLJLViAytdJYmf
+         1SiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z6s9/IaXr38uOMZ+KBf1YjM+loSDtVV15aQ5SUi0HAc=;
+        b=pRjjXncrVUrPGqBhH4V6o811uB0ussUBujwg2RwX4rkotW++k35lR8xCeO3XQ+5lXY
+         j67v+Xl+wBOlxwD1dMoi6WkHi3/VNen5pFaXUA8F20LrMqi/US6qEi+XxIm+YWkt/gj3
+         u4IfEzYuw5fSxkzNQ9WtNw3OSK4US3tYgNaDPx2YI0nqWwnja8Ly9US5E/k3/CH52yUz
+         wmDanbiSgF62u7PKWUdMRRAS2eXLAHGHfplyH42yDMQCtokx3AORE5/+9Im+gEo2f/FS
+         5PJAQHimuxo1+bp6aEoHOBpW4OK7J3u0k3g5Udo13ocE59dJd1iNow92jGa4fPt82ue3
+         dltg==
+X-Gm-Message-State: AOAM531apg32BLoohv0HKq3QgYQJ40U2bmjzKPbdQmwvRQ+hQnzj1oXr
+        V91l34T7mO1Nv55xwL7VFB7jLsD3RTde2IfNc74=
+X-Google-Smtp-Source: ABdhPJztQPvnGR2j1lYeQ00/q9iGVvqSwY7oChWZphjYzN55gXTDuT+PJSQMkK+P5HpKDJN8mMSW9rH8kKjsRQY2Epw=
+X-Received: by 2002:a63:c109:: with SMTP id w9mr683396pgf.203.1590738948699;
+ Fri, 29 May 2020 00:55:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru> <20200529035915.20790-4-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200529035915.20790-4-Sergey.Semin@baikalelectronics.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 29 May 2020 10:55:32 +0300
+Message-ID: <CAHp75VcT2zKnuRW3uxCQtbF0A65cbS20OFpz9sX0hftbjFp1hA@mail.gmail.com>
+Subject: Re: [PATCH v5 03/16] spi: dw: Locally wait for the DMA transactions completion
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>, Feng Tang <feng.tang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Macronix mx25uw51245g is a SPI NOR that supports 1-1-1/8-8-8 mode.
+On Fri, May 29, 2020 at 7:02 AM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+>
+> Even if DMA transactions are finished it doesn't mean that the SPI
+> transfers are also completed. It's specifically concerns the Tx-only
+> SPI transfers, since there might be data left in the SPI Tx FIFO after
+> the DMA engine notifies that the Tx DMA procedure is done. In order to
+> completely fix the problem first the driver has to wait for the DMA
+> transaction completion, then for the corresponding SPI operations to be
+> finished. In this commit we implement the former part of the solution.
+>
+> Note we can't just move the SPI operations wait procedure to the DMA
+> completion callbacks, since these callbacks might be executed in the
+> tasklet context (and they will be in case of the DW DMA). In case of
+> slow SPI bus it can cause significant system performance drop.
 
-Correct the dummy cycles to device for various frequencies
-after xSPI profile 1.0 table parsed.
+I read commit message, I read the code. What's going on here since you
+repeated xfer_completion (and its wait routine) from SPI core and I'm
+wondering what happened to it? Why we are not calling
+spi_finalize_current_transfer()?
 
-Enable mx25uw51245g to Octal DTR mode by executing the command sequences
-to change to octal DTR mode.
+...
 
-Signed-off-by: Mason Yang <masonccyang@mxic.com.tw>
----
- drivers/mtd/spi-nor/macronix.c | 55 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+>         dws->master->cur_msg->status = -EIO;
+> -       spi_finalize_current_transfer(dws->master);
+> +       complete(&dws->dma_completion);
+>         return IRQ_HANDLED;
 
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index 96735d8..6c9a24c 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -8,6 +8,57 @@
- 
- #include "core.h"
- 
-+#define MXIC_CR2_DUMMY_SET_ADDR 0x300
-+
-+/* Fixup the dummy cycles to device and setup octa_dtr_enable() */
-+static void mx25uw51245g_post_sfdp_fixups(struct spi_nor *nor)
-+{
-+	struct spi_nor_flash_parameter *params = nor->params;
-+	int ret;
-+	u8 rdc, wdc;
-+
-+	ret = spi_nor_read_cr2(nor, MXIC_CR2_DUMMY_SET_ADDR, &rdc);
-+	if (ret)
-+		return;
-+
-+	/* Refer to dummy cycle and frequency table(MHz) */
-+	switch (params->dummy_cycles) {
-+	case 10:	/* 10 dummy cycles for 104 MHz */
-+		wdc = 5;
-+		break;
-+	case 12:	/* 12 dummy cycles for 133 MHz */
-+		wdc = 4;
-+		break;
-+	case 16:	/* 16 dummy cycles for 166 MHz */
-+		wdc = 2;
-+		break;
-+	case 18:	/* 18 dummy cycles for 173 MHz */
-+		wdc = 1;
-+		break;
-+	case 20:	/* 20 dummy cycles for 200 MHz */
-+	default:
-+		wdc = 0;
-+	}
-+
-+	if (rdc != wdc)
-+		spi_nor_write_cr2(nor, MXIC_CR2_DUMMY_SET_ADDR, &wdc);
-+
-+	if (params->cmd_seq[0].len) {
-+		params->octal_dtr_enable = spi_nor_cmd_seq_octal_dtr;
-+		params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
-+		params->hwcaps.mask |= SNOR_HWCAPS_PP_8_8_8_DTR;
-+
-+	} else {
-+		params->octal_dtr_enable = NULL;
-+		params->hwcaps.mask &= ~SNOR_HWCAPS_READ_8_8_8_DTR;
-+		params->hwcaps.mask &= ~SNOR_HWCAPS_PP_8_8_8_DTR;
-+	}
-+}
-+
-+static struct spi_nor_fixups mx25uw51245g_fixups = {
-+	.post_sfdp = mx25uw51245g_post_sfdp_fixups,
-+};
-+
- static int
- mx25l25635_post_bfpt_fixups(struct spi_nor *nor,
- 			    const struct sfdp_parameter_header *bfpt_header,
-@@ -84,6 +135,10 @@
- 			      SPI_NOR_QUAD_READ) },
- 	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048,
- 			      SPI_NOR_QUAD_READ) },
-+	{ "mx25uw51245g", INFO(0xc2813a, 0, 64 * 1024, 1024,
-+			      SECT_4K | SPI_NOR_4B_OPCODES |
-+			      SPI_NOR_OCTAL_DTR_READ)
-+			      .fixups = &mx25uw51245g_fixups },
- };
- 
- static void macronix_default_init(struct spi_nor *nor)
+...
+
+> +static int dw_spi_dma_wait(struct dw_spi *dws, struct spi_transfer *xfer)
+> +{
+> +       unsigned long long ms;
+> +
+> +       ms = xfer->len * MSEC_PER_SEC * BITS_PER_BYTE;
+> +       do_div(ms, xfer->effective_speed_hz);
+> +       ms += ms + 200;
+> +
+> +       if (ms > UINT_MAX)
+> +               ms = UINT_MAX;
+> +
+> +       ms = wait_for_completion_timeout(&dws->dma_completion,
+> +                                        msecs_to_jiffies(ms));
+> +
+> +       if (ms == 0) {
+> +               dev_err(&dws->master->cur_msg->spi->dev,
+> +                       "DMA transaction timed out\n");
+> +               return -ETIMEDOUT;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  /*
+>   * dws->dma_chan_busy is set before the dma transfer starts, callback for tx
+>   * channel will clear a corresponding bit.
+> @@ -155,7 +184,7 @@ static void dw_spi_dma_tx_done(void *arg)
+>                 return;
+>
+>         dw_writel(dws, DW_SPI_DMACR, 0);
+> -       spi_finalize_current_transfer(dws->master);
+> +       complete(&dws->dma_completion);
+>  }
+>
+>  static struct dma_async_tx_descriptor *dw_spi_dma_prepare_tx(struct dw_spi *dws,
+> @@ -204,7 +233,7 @@ static void dw_spi_dma_rx_done(void *arg)
+>                 return;
+>
+>         dw_writel(dws, DW_SPI_DMACR, 0);
+> -       spi_finalize_current_transfer(dws->master);
+> +       complete(&dws->dma_completion);
+>  }
+
+
 -- 
-1.9.1
-
+With Best Regards,
+Andy Shevchenko
