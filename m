@@ -2,41 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB681E8973
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 23:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC0B1E8974
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 23:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728105AbgE2VGJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 17:06:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60732 "EHLO mail.kernel.org"
+        id S1727879AbgE2VGR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 17:06:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60786 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727879AbgE2VGI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 29 May 2020 17:06:08 -0400
+        id S1727851AbgE2VGQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 29 May 2020 17:06:16 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE22B2071A;
-        Fri, 29 May 2020 21:06:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2486220810;
+        Fri, 29 May 2020 21:06:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590786368;
-        bh=eG7ApO4bNVe4vy71o9oLIHf9qDungmx4X5vZGoEOric=;
+        s=default; t=1590786376;
+        bh=QT16Mn7894CdBacVP3Kyw45K52umTEnl7gJ5iX+DB5k=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=iUBP81gsEGAIVVRmimTGNSSYVOADgvPtSf8LuwRbCql1RV5X4bjEN7BLbWkjUo+1Z
-         hAmzVDV0zo1OlYGeWlIC3is1kn/OKvO7hBFZXtiFX51cp07oksUA0HJAbMx9enRryO
-         sb4KOZFItiuJrYNOniWYobNklcCFneq6ggNa/23I=
-Date:   Fri, 29 May 2020 22:06:04 +0100
+        b=FjSHJzdA9hK5QSBEp0ToEbzaL6rftd+7fwks9NWHgaNWzLzqFjnyIdV+RIKEtuX5J
+         YuoFkJ3NTAKQ/YR2PHhjX5DihJ3Co9UvvcmU2uSgropcb9gqcZGKK/ry88TqR2TqxW
+         +wW/Aehb696SzuuI45o1I0a7hl/p/f2VRV/ZffFw=
+Date:   Fri, 29 May 2020 22:06:12 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-spi@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20200529183150.44149-1-andriy.shevchenko@linux.intel.com>
-References: <20200529183150.44149-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 1/2] spi: dw: Make DMA request line assignments explicit for Intel Medfield
-Message-Id: <159078636491.21150.5166126211100294804.b4-ty@kernel.org>
+In-Reply-To: <20200528102311.79948-1-andriy.shevchenko@linux.intel.com>
+References: <20200528102311.79948-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] spi: dw: Make DMA request line assignments explicit for Intel Medfield
+Message-Id: <159078636490.21150.9644492227368222786.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 29 May 2020 21:31:49 +0300, Andy Shevchenko wrote:
+On Thu, 28 May 2020 13:23:10 +0300, Andy Shevchenko wrote:
 > The 2afccbd283ae ("spi: dw: Discard static DW DMA slave structures")
 > did a clean up of global variables, which is fine, but messed up with
 > the carefully provided information in the custom DMA slave structures.
