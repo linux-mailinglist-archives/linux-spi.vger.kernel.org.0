@@ -2,86 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D54B1E8978
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 23:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F152B1E89F0
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 23:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728242AbgE2VGY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 17:06:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727851AbgE2VGY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 29 May 2020 17:06:24 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F32212071A;
-        Fri, 29 May 2020 21:06:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590786383;
-        bh=Wy32Z11enfRl2KS7dq0clcGeQmDTMJt0DxAuc8UMLDk=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=2FY1qCqLdddLXI3huvTHI+TN4vr16TVqR5EArwbWgK5KLDNdklkZ79ON6W5ZK2oDq
-         7iA+ckpsRF/7IYOpfPng95tMXdMjjpvsv5unHGqGz/w7pB0yvU/b/cZTMKfiGSjdZj
-         ZiParSY2qFWC0Sdfj0YQRfYSGRgtALYhJeGVIqbQ=
-Date:   Fri, 29 May 2020 22:06:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Feng Tang <feng.tang@intel.com>, linux-kernel@vger.kernel.org,
+        id S1728350AbgE2VWa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 17:22:30 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:42631 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727879AbgE2VW3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 17:22:29 -0400
+Received: by mail-io1-f68.google.com with SMTP id d5so860279ios.9;
+        Fri, 29 May 2020 14:22:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qZYvDr2j6Dv3sRGAtruzxneua5DcH3zuqmue20TSj2E=;
+        b=BLp9qmw5gcU0zKx3SVABPMzUUkHIu6s3uB8KuV7PtuzI5sk9X8SeXuqu1AyljJ6mL5
+         Ubx7/Et56jMsWqIOYhpI3jmAns3YGIWsnvUyZlijOX2DcggoiZZbUtZdBkVu3IYeoLjw
+         TDLVeMtg9BvyhS98Oi4N6qYgDOuHIDbDlshCOoRmse4Veam47hNGnX8tp5LJHMs94PDL
+         ohFUHsZDBTqoV3affN5jOm6aobmCUxsgtlbVC/s05hIOXJz7I08X3CZFsxIDf+fTEmz6
+         bBiK7KnQsaLxBkA3Kisq9TElXsRM6NXrxhfP5fKwTRnHz7xAKXsgJ2TkLcwRJ2ptgC3V
+         DzBA==
+X-Gm-Message-State: AOAM532LPY3lxDUgceuWFs9vwWr1Nn/tk6sfpRL/4/GhS2wjhkwjeY82
+        GiF1luda02SBL1+Xq2Pqng==
+X-Google-Smtp-Source: ABdhPJwVWPTcpvZek2C4OAFK9fa1KtWLIaDBiGIryiDD1izJ8OIhWd6dYL11PZoj7cvyVedQ/KZzNQ==
+X-Received: by 2002:a05:6638:38a:: with SMTP id y10mr9407413jap.131.1590787348508;
+        Fri, 29 May 2020 14:22:28 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id h15sm2473595iol.9.2020.05.29.14.22.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2020 14:22:27 -0700 (PDT)
+Received: (nullmailer pid 2991462 invoked by uid 1000);
+        Fri, 29 May 2020 21:22:26 -0000
+Date:   Fri, 29 May 2020 15:22:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
-        linux-mips@vger.kernel.org,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Feng Tang <feng.tang@intel.com>, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Arnd Bergmann <arnd@arndb.de>, linux-spi@vger.kernel.org,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20200529182544.9807-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200529182544.9807-1-Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v7] dt-bindings: spi: Convert DW SPI binding to DT schema
-Message-Id: <159078636491.21150.10991273309807336688.b4-ty@kernel.org>
+        linux-mips@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Subject: Re: [PATCH v6 00/16] spi: dw: Add generic DW DMA controller support
+Message-ID: <20200529212226.GA2984630@bogus>
+References: <20200529131205.31838-1-Sergey.Semin@baikalelectronics.ru>
+ <159077271266.17043.13820488074564153429.b4-ty@kernel.org>
+ <20200529172642.hcnvyzv2ocizsvpy@mobilestation>
+ <20200529173325.GR4610@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200529173325.GR4610@sirena.org.uk>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 29 May 2020 21:25:43 +0300, Serge Semin wrote:
-> Modern device tree bindings are supposed to be created as YAML-files
-> in accordance with dt-schema. This commit replaces two DW SPI legacy
-> bare text bindings with YAML file. As before the bindings file states
-> that the corresponding dts node is supposed to be compatible either
-> with generic DW APB SSI controller or with Microsemi/Amazon/Renesas/Intel
-> vendors-specific controllers, to have registers, interrupts and clocks
-> properties. Though in case of Microsemi version of the controller
-> there must be two registers resources specified. Properties like
-> clock-names, reg-io-width, cs-gpio, num-cs, DMA and slave device
-> sub-nodes are optional.
+On Fri, May 29, 2020 at 06:33:25PM +0100, Mark Brown wrote:
+> On Fri, May 29, 2020 at 08:26:42PM +0300, Serge Semin wrote:
+> 
+> > You must have missed the patch 16:
+> > 0e8332aaf059 dt-bindings: spi: Convert DW SPI binding to DT schema
+> > As you can see it has been acked by Rob. So you can also merge it into your
+> > repo. Though It has to be rebased first due to the Dinh Nguyen patches
+> > recently merged in. Do you want me to do the rebasing?
+> 
+> Please rebase.  TBH I'd not noticed Rob's review so I just left it
+> waiting for that, there's such a huge backlog there it didn't occur to
+> me that it might've been reviewed.
 
-Applied to
+Hey, I'm down to about 10 patches now. I think I'll take the rest of the 
+week off.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: Convert DW SPI binding to DT schema
-      commit: 164c05f03ffabe36564cb8959c1fad7c56f294dd
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Rob
