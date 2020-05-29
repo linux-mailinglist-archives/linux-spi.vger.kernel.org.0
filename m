@@ -2,117 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1701E7A6A
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 12:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C01CF1E7DC7
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 15:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725988AbgE2KUX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 06:20:23 -0400
-Received: from mga05.intel.com ([192.55.52.43]:46225 "EHLO mga05.intel.com"
+        id S1726827AbgE2NCq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 09:02:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46622 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725790AbgE2KUW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 29 May 2020 06:20:22 -0400
-IronPort-SDR: LukgJ8TSaQRuS3E7HpYm3kgC48gbosrwcIv8mqJQRNIl7sCDdMLGShbLrjAqLyHv1cDo/lk5k5
- 4FvXu9BKyG5w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 03:20:21 -0700
-IronPort-SDR: tCOyUULUn9i4scVuAzjaMNFp3Gasyjdf/ViwSD4S9LPTJhLmxZv2guxSvILN5a59b6/kZ8LWZP
- izErP8sOPPmA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
-   d="scan'208";a="257302559"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008.fm.intel.com with ESMTP; 29 May 2020 03:20:16 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jec7f-009aoH-8V; Fri, 29 May 2020 13:20:19 +0300
-Date:   Fri, 29 May 2020 13:20:19 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Linus Walleij <linus.walleij@stericsson.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Alan Cox <alan@linux.intel.com>, Vinod Koul <vkoul@kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 05/16] spi: dw: Add SPI Rx-done wait method to
- DMA-based transfer
-Message-ID: <20200529102019.GC1634618@smile.fi.intel.com>
-References: <20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru>
- <20200529035915.20790-6-Sergey.Semin@baikalelectronics.ru>
- <20200529094648.GY1634618@smile.fi.intel.com>
- <20200529101328.bfoyyvmwm5gfflxv@mobilestation>
+        id S1726467AbgE2NCp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 29 May 2020 09:02:45 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DBBC02077D;
+        Fri, 29 May 2020 13:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590757365;
+        bh=ARNaKA1yb6DwZcc1AOHUze81r84J7znpXdtHEL2hu1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wUQdH/bBmjvDlHFUmOvB6Sid7DD19xBcYEJP1s+aUiC6byvu1z4ZQ1HY+J+0iSnPY
+         YDH8gXxysP1y8ocbXMv23OxD/W7ebndxojTaKmK5+JtrgLkVfuUC/YOCpv6cSq4dvY
+         +hj/+PfJVGx22pNPNa6bEPgAuYgnw0O3DDn/5SIU=
+Date:   Fri, 29 May 2020 14:02:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        Sergey.Semin@baikalelectronics.ru, fancer.lancer@gmail.com,
+        andriy.shevchenko@linux.intel.com, lars.povlsen@microchip.com
+Subject: Re: [PATCHv3 2/2] spi: dw: add optional reset property
+Message-ID: <20200529130242.GA52828@sirena.org.uk>
+References: <20200527204110.25676-1-dinguyen@kernel.org>
+ <20200527204110.25676-2-dinguyen@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CE+1k2dSO48ffgeK"
 Content-Disposition: inline
-In-Reply-To: <20200529101328.bfoyyvmwm5gfflxv@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200527204110.25676-2-dinguyen@kernel.org>
+X-Cookie: Use extra care when cleaning on stairs.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 29, 2020 at 01:13:28PM +0300, Serge Semin wrote:
-> On Fri, May 29, 2020 at 12:46:48PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 29, 2020 at 06:59:03AM +0300, Serge Semin wrote:
-> > > Having any data left in the Rx FIFO after the DMA engine claimed it has
-> > > finished all DMA transactions is an abnormal situation, since the DW SPI
-> > > controller driver expects to have all the data being fetched and placed
-> > > into the SPI Rx buffer at that moment. In case if this has happened we
-> > > assume that DMA engine still may be doing the data fetching, thus we give
-> > > it sometime to finish. If after a short period of time the data is still
-> > > left in the Rx FIFO, the driver will give up waiting and return an error
-> > > indicating that the SPI controller/DMA engine must have hung up or failed
-> > > at some point of doing their duties.
-> > 
-> > ...
-> > 
-> > > +static int dw_spi_dma_wait_rx_done(struct dw_spi *dws)
-> > > +{
-> > > +	int retry = WAIT_RETRIES;
-> > > +	struct spi_delay delay;
-> > > +	unsigned long ns, us;
-> > > +	u32 nents;
-> > > +
-> > > +	/*
-> > > +	 * It's unlikely that DMA engine is still doing the data fetching, but
-> > > +	 * if it's let's give it some reasonable time. The timeout calculation
-> > > +	 * is based on the synchronous APB/SSI reference clock rate, on a
-> > > +	 * number of data entries left in the Rx FIFO, times a number of clock
-> > > +	 * periods normally needed for a single APB read/write transaction
-> > > +	 * without PREADY signal utilized (which is true for the DW APB SSI
-> > > +	 * controller).
-> > > +	 */
-> > > +	nents = dw_readl(dws, DW_SPI_RXFLR);
-> > 
-> 
-> > > +	ns = NSEC_PER_SEC / dws->max_freq * 4 * nents;
-> > 
-> > I think we may slightly increase precision by writing this like
-> > 
-> > 	ns = 4 * NSEC_PER_SEC / dws->max_freq * nents;
-> 
-> Good point. Although both 4 and NSEC_PER_SEC are signed. The later is
-> 1000000000L. Formally speaking on x32 systems (4 * 1000 000 000L) equals
-> to a negative value. Though overflow still won't happen so the result will
-> be correct. Anyway to be on a safe side it would be better to use an explicit
-> unsigned literal:
-> 
-> +       ns = 4U * NSEC_PER_SEC / dws->max_freq * nents;
 
-Yes, right.
+--CE+1k2dSO48ffgeK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Wed, May 27, 2020 at 03:41:10PM -0500, Dinh Nguyen wrote:
+> Add optional reset property.
 
+This doesn't apply against current code, please check and resend.
 
+--CE+1k2dSO48ffgeK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7RB/EACgkQJNaLcl1U
+h9CRYwf2Nalr3n2GMXgyhS8OMZTZaoN0+7yQk4fX/asqaFYHtVinVvj2mVqReiwo
+wBJ5PUtxGDLAj8XLvgbg33H1VAKOolO2/lxUvB5tSsy8OOThLB4auqXgqgUz5OTk
+x6OWGsYxX947lvjJ5VLw56qSqLxcjkR4hHLQXS4ycwYPgMe43oLgAFveoBg7fy6+
+Dt02YIeXgkfl1DOHlMii22qRoQy4FzeDEhDt0o1YYGGveSmRf6ee5SnbR9dYWpmL
+ARZdxf8b+xiigdDBVCJJf5427eFk/qrYQiAAqn5lDHccmHGE53sJwu/c530foiLw
+4o/vA82KVuVqhtfWv9ZXnnyq2UQg
+=tV+V
+-----END PGP SIGNATURE-----
+
+--CE+1k2dSO48ffgeK--
