@@ -2,232 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 462EF1E7EA6
-	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 15:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DCC1E7F4F
+	for <lists+linux-spi@lfdr.de>; Fri, 29 May 2020 15:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgE2N2Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 May 2020 09:28:25 -0400
-Received: from mga14.intel.com ([192.55.52.115]:29787 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726549AbgE2N2Z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 29 May 2020 09:28:25 -0400
-IronPort-SDR: QFMzlWVV9gu/4KcBOVGh5v2I8G3iz3I5b2Ro3agD9k+/4lK4ea/sG1lzePDL49quwk37Zi8wAc
- z7+OUg8x8ccg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 06:27:53 -0700
-IronPort-SDR: cA+BucQzZeLIfs/tSI/C39At1sHwgt9TW3geV63sMlmZpjHfaHWUg93O3YYiBL044lyiMcdscd
- lT9KxA1ArQ4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
-   d="scan'208";a="443389518"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga005.jf.intel.com with ESMTP; 29 May 2020 06:27:49 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jef39-009ce1-V3; Fri, 29 May 2020 16:27:51 +0300
-Date:   Fri, 29 May 2020 16:27:51 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>, Feng Tang <feng.tang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 00/16] spi: dw: Add generic DW DMA controller support
-Message-ID: <20200529132751.GR1634618@smile.fi.intel.com>
-References: <20200529131205.31838-1-Sergey.Semin@baikalelectronics.ru>
+        id S1726476AbgE2NzF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 May 2020 09:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbgE2NzE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 May 2020 09:55:04 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C886DC03E969
+        for <linux-spi@vger.kernel.org>; Fri, 29 May 2020 06:55:04 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id z15so3167541pjb.0
+        for <linux-spi@vger.kernel.org>; Fri, 29 May 2020 06:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=Y6e0zK8SGiIVSRaW9UOx0T9DS2NxV88rfBTA1VIDvfs=;
+        b=cTr16qJWUO8gPXJ7bJih9K+kPvwBN6cnJd48EPQFT23+UF0Qjz3i9NJfamp08IN6w6
+         jbKh/hl0LXJjsNEjBRiEaVTvSWw+Mhwaz8XDQfH4ov7p6UPeZUllAvsLzjKP8g20ANyG
+         p0YB9f8DFhx4RoPXXprlsFttVlMKm0zsm6DRz3iuaj9RNnxDymcf8xOSRMH0Bqer0ADi
+         sl4m4PI6YnVq8bO4lNMNMHfGeRTHUTDF25YftzcTf1Ingx+O7zS3VjWdctUesUqS+l7F
+         FNEu7YOjE1a9mdZ8ZIXbZRtkrZMkMpujrYjEg3rjam5QAmbuAz/K5TfbPWXoEIPSUnqX
+         ENgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=Y6e0zK8SGiIVSRaW9UOx0T9DS2NxV88rfBTA1VIDvfs=;
+        b=JnCe955wAaz/d2cmUeszsIHCO/l2JTYorwLNMQ/IfHwjBqakg68OArXSOd7WJOJHd0
+         GwKUuikBmFA2j03ecGiMmrhp2ariCnlNZPB0eoEnroshZtsijMxll93sLDgAj+nOyiQC
+         /xAWN1g/hQ4TUuLXuCRmLbDJvyUwDICUwsq2/RcHd+8+m0NnDQs5LlhoQIBmUmsTRzau
+         6FMLMcDJ9rSK8ehaCT/Ns9RUFWNCZFA7Yvjq0xZA6rcs1G92qlKZ8ZLt+x/ntpNPSIYd
+         DRXOyXkN8LSwI3h73Z7vYe1MPETHQFzEN0pR34IOKpILmtzZaNVD+iI1yuqVmgSDpHAN
+         PFfA==
+X-Gm-Message-State: AOAM5339zyqNtCM6hSTqZEMCNHDyXDpPn5NrtS+XvwyCOPkUBv0gnIE5
+        ZFzmMGn28E+leeL/KRPP3WS7RJ4Esvs=
+X-Google-Smtp-Source: ABdhPJw20mJcvyk7nbB/rdsweM3XjEjwIE/gwToKuhbEtcvNvUm6guBkjILMu57MQuGH5VeLnoG7Eg==
+X-Received: by 2002:a17:902:d711:: with SMTP id w17mr8565722ply.139.1590760504077;
+        Fri, 29 May 2020 06:55:04 -0700 (PDT)
+Received: from [192.168.1.59] (i60-35-254-237.s41.a020.ap.plala.or.jp. [60.35.254.237])
+        by smtp.gmail.com with ESMTPSA id 131sm7665987pfv.139.2020.05.29.06.55.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2020 06:55:03 -0700 (PDT)
+Subject: Re: [PATCH 2/3] spi: pxa2xx: Fix controller unregister order
+To:     Lukas Wunner <lukas@wunner.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+References: <cover.1590408496.git.lukas@wunner.de>
+ <834c446b1cf3284d2660f1bee1ebe3e737cd02a9.1590408496.git.lukas@wunner.de>
+ <20200525132143.GX1634618@smile.fi.intel.com>
+ <20200526073913.vmgak5xsrjiyn4ae@wunner.de>
+ <20200526082204.GM1634618@smile.fi.intel.com>
+ <45681e81-7efd-857f-eea1-fb4767e3d946@gmail.com>
+ <20200527122753.GN1634618@smile.fi.intel.com>
+ <2e9365fd-9307-045a-8afe-1770f7cd7eda@gmail.com>
+ <7e085731-a56f-07d5-3ad0-a8f7d0a93516@gmail.com>
+ <CAHp75Ve6xUhic1g2A1cGoCOOom55Za=WXzR4C9o5=zMN80nFdA@mail.gmail.com>
+ <20200528093127.pjzvrqab6xvvcmgi@wunner.de>
+From:   Tsuchiya Yuto <kitakar@gmail.com>
+Message-ID: <819795f3-08ce-75af-078f-32c6567a2ecf@gmail.com>
+Date:   Fri, 29 May 2020 22:54:58 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529131205.31838-1-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200528093127.pjzvrqab6xvvcmgi@wunner.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 29, 2020 at 04:11:49PM +0300, Serge Semin wrote:
-> Baikal-T1 SoC provides a DW DMA controller to perform low-speed peripherals
-> Mem-to-Dev and Dev-to-Mem transaction. This is also applicable to the DW
-> APB SSI devices embedded into the SoC. Currently the DMA-based transfers
-> are supported by the DW APB SPI driver only as a middle layer code for
-> Intel MID/Elkhart PCI devices. Seeing the same code can be used for normal
-> platform DMAC device we introduced a set of patches to fix it within this
-> series.
-> 
-> First of all we need to add the Tx and Rx DMA channels support into the DW
-> APB SSI binding. Then there are several fixes and cleanups provided as a
-> initial preparation for the Generic DMA support integration: add Tx/Rx
-> finish wait methods, clear DMAC register when done or stopped, Fix native
-> CS being unset, enable interrupts in accordance with DMA xfer mode,
-> discard static DW DMA slave structures, discard unused void priv pointer
-> and dma_width member of the dw_spi structure, provide the DMA Tx/Rx burst
-> length parametrisation and make sure it's optionally set in accordance
-> with the DMA max-burst capability.
-> 
-> In order to have the DW APB SSI MMIO driver working with DMA we need to
-> initialize the paddr field with the physical base address of the DW APB SSI
-> registers space. Then we unpin the Intel MID specific code from the
-> generic DMA one and placed it into the spi-dw-pci.c driver, which is a
-> better place for it anyway. After that the naming cleanups are performed
-> since the code is going to be used for a generic DMAC device. Finally the
-> Generic DMA initialization can be added to the generic version of the
-> DW APB SSI IP.
-> 
-> Last but not least we traditionally convert the legacy plain text-based
-> dt-binding file with yaml-based one and as a cherry on a cake replace
-> the manually written DebugFS registers read method with a ready-to-use
-> for the same purpose regset32 DebugFS interface usage.
-> 
-> This patchset is rebased and tested on the spi/for-next (5.7-rc5):
-> base-commit: fe9fce6b2cf3 ("Merge remote-tracking branch 'spi/for-5.8' into spi-next")
 
-Mark, I leave few first patches for you to decide if it's right thing to do.
-So, if you are okay, I'm not against them, thanks!
+On 5/28/20 6:31 PM, Lukas Wunner wrote:
+> On Thu, May 28, 2020 at 11:41:21AM +0300, Andy Shevchenko wrote:
+>> Thank you very much for testing, I will figure out what can be done
+>> more there, but it's minor now.
+>> For input and touchscreen I guess you may ask Dmitry (input subsystem
+>> maintainer) and Benjamin (HID, but he might have an idea as well).
+>
+> This might not be an input issue, perhaps the spi-pxa2xx.c driver
+> cannot cope with s2idle on this particular platform.
+>
+> E.g., pxa2xx_spi_suspend() zeroes the SSCR0 register.  It seems this
+> disables or resets the controller.  But pxa2xx_spi_resume() isn't
+> touching the register at all.  Maybe the register contains crap when
+> coming out of s2idle, so needs to be set to a sane value on resume?
 
-> Link: https://lore.kernel.org/linux-spi/20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v2:
-> - Rebase on top of the spi repository for-next branch.
-> - Move bindings conversion patch to the tail of the series.
-> - Move fixes to the head of the series.
-> - Apply as many changes as possible to be applied the Generic DMA
->   functionality support is added and the spi-dw-mid is moved to the
->   spi-dw-dma driver.
-> - Discard patch "spi: dw: Fix dma_slave_config used partly uninitialized"
->   since the problem has already been fixed.
-> - Add new patch "spi: dw: Discard unused void priv pointer".
-> - Add new patch "spi: dw: Discard dma_width member of the dw_spi structure".
->   n_bytes member of the DW SPI data can be used instead.
-> - Build the DMA functionality into the DW APB SSI core if required instead
->   of creating a separate kernel module.
-> - Use conditional statement instead of the ternary operator in the ref
->   clock getter.
-> 
-> Link: https://lore.kernel.org/linux-spi/20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v3:
-> - Use spi_delay_exec() method to wait for the DMA operation completion.
-> - Explicitly initialize the dw_dma_slave members on stack.
-> - Discard the dws->fifo_len utilization in the Tx FIFO DMA threshold
->   setting from the patch where we just add the default burst length
->   constants.
-> - Use min() method to calculate the optimal burst values.
-> - Add new patch which moves the spi-dw.c source file to spi-dw-core.c in
->   order to preserve the DW APB SSI core driver name.
-> - Add commas in the debugfs_reg32 structure initializer and after the last
->   entry of the dw_spi_dbgfs_regs array.
-> 
-> Link: https://lore.kernel.org/linux-spi/20200521012206.14472-1-Sergey.Semin@baikalelectronics.ru
-> Changelog v4:
-> - Get back ndelay() method to wait for an SPI transfer completion.
->   spi_delay_exec() isn't suitable for the atomic context.
-> 
-> Link: https://lore.kernel.org/linux-spi/20200522000806.7381-1-Sergey.Semin@baikalelectronics.ru
-> Changelog v5:
-> - Refactor the Tx/Rx DMA-based SPI transfers wait methods.
-> - Add a new patch "spi: dw: Set xfer effective_speed_hz".
-> - Add a new patch "spi: dw: Return any value retrieved from the
->   dma_transfer callback" as a preparation patch before implementing
->   the local DMA, Tx SPI and Rx SPI transfers wait methods.
-> - Add a new patch "spi: dw: Locally wait for the DMA transactions
->   completion", which provides a local DMA transaction complete
->   method
-> - Create a dedicated patch which adds the Rx-done wait method:
->   "spi: dw: Add SPI Rx-done wait method to DMA-based transfer".
-> - Add more detailed description of the problems the Tx/Rx-wait
->   methods-related patches fix.
-> - Wait for the SPI Tx and Rx transfers being finished in the
->   mid_spi_dma_transfer() method executed in the task context.
-> - Use spi_delay_exec() to wait for the SPI Tx/Rx completion, since now
->   the driver calls the wait methods in the kernel thread context.
-> - Use SPI_DELAY_UNIT_SCK spi_delay unit for Tx-wait delay, since SPI
->   xfer's are now have the effective_speed_hz initialized.
-> - Rx-wait for a delay correlated with the APB/SSI synchronous clock
->   rate instead of using the SPI bus clock rate.
-> 
-> Link: https://lore.kernel.org/linux-spi/20200529035915.20790-1-Sergey.Semin@baikalelectronics.ru
-> Changelog v6:
-> - Provide a more detailed description of the patch:
->   2901db35bea1 ("spi: dw: Locally wait for the DMA transfers completion")
-> - Calculate the Rx delay with better accuracy by moving 4-multiplication
->   to the head of the formulae:
->   ns = 4U * NSEC_PER_SEC / dws->max_freq * nents.
-> 
-> Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-> Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-> Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Feng Tang <feng.tang@intel.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (16):
->   spi: dw: Set xfer effective_speed_hz
->   spi: dw: Return any value retrieved from the dma_transfer callback
->   spi: dw: Locally wait for the DMA transfers completion
->   spi: dw: Add SPI Tx-done wait method to DMA-based transfer
->   spi: dw: Add SPI Rx-done wait method to DMA-based transfer
->   spi: dw: Parameterize the DMA Rx/Tx burst length
->   spi: dw: Use DMA max burst to set the request thresholds
->   spi: dw: Fix Rx-only DMA transfers
->   spi: dw: Add core suffix to the DW APB SSI core source file
->   spi: dw: Move Non-DMA code to the DW PCIe-SPI driver
->   spi: dw: Remove DW DMA code dependency from DW_DMAC_PCI
->   spi: dw: Add DW SPI DMA/PCI/MMIO dependency on the DW SPI core
->   spi: dw: Cleanup generic DW DMA code namings
->   spi: dw: Add DMA support to the DW SPI MMIO driver
->   spi: dw: Use regset32 DebugFS method to create regdump file
->   dt-bindings: spi: Convert DW SPI binding to DT schema
-> 
->  .../bindings/spi/snps,dw-apb-ssi.txt          |  44 --
->  .../bindings/spi/snps,dw-apb-ssi.yaml         | 127 +++++
->  .../devicetree/bindings/spi/spi-dw.txt        |  24 -
->  drivers/spi/Kconfig                           |  15 +-
->  drivers/spi/Makefile                          |   5 +-
->  drivers/spi/{spi-dw.c => spi-dw-core.c}       |  95 ++--
->  drivers/spi/spi-dw-dma.c                      | 482 ++++++++++++++++++
->  drivers/spi/spi-dw-mid.c                      | 382 --------------
->  drivers/spi/spi-dw-mmio.c                     |   4 +
->  drivers/spi/spi-dw-pci.c                      |  50 +-
->  drivers/spi/spi-dw.h                          |  20 +-
->  11 files changed, 719 insertions(+), 529 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-dw.txt
->  rename drivers/spi/{spi-dw.c => spi-dw-core.c} (82%)
->  create mode 100644 drivers/spi/spi-dw-dma.c
->  delete mode 100644 drivers/spi/spi-dw-mid.c
-> 
-> -- 
-> 2.26.2
-> 
+Thanks everyone. I later found that touch input (surface3_spi) crashing
+is reproducible by just putting display off/on on recent kernels. So,
+this is rather not related to s2idle. Also it seems that runtime_pm is
+not related, too.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Tsuchiya Yuto says that reloading the SPI controller driver makes
+> the touch driver work again, so I'd check what's done on ->remove()
+> and ->probe() both in the touch driver as well as in the SPI controller
+> driver that fixes the problem.  The SSCR0 register is zeroed on
+> ->remove() and re-initialized on ->probe(), so that register may
+> indeed play a role.
 
+I looked into what is done on probe()/remove() in the SPI controller
+and it seems that release/setup DMA helps to get surface3_spi driver
+working again with DMA mode.
 
+I added details to that bugzilla [1], since this crashing itself is not
+relevant to this series.
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=206403#c4
