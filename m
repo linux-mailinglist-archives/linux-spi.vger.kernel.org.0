@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1CCD1E9325
-	for <lists+linux-spi@lfdr.de>; Sat, 30 May 2020 20:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA86E1E932A
+	for <lists+linux-spi@lfdr.de>; Sat, 30 May 2020 20:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728999AbgE3Smc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 30 May 2020 14:42:32 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:18179 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728927AbgE3Smb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 30 May 2020 14:42:31 -0400
+        id S1728998AbgE3StZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 30 May 2020 14:49:25 -0400
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:65337 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728927AbgE3StY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 30 May 2020 14:49:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1590864151; x=1622400151;
+  t=1590864564; x=1622400564;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-id:content-transfer-encoding:
    mime-version;
-  bh=3X0HkmmwdYlt3B8YQ7a5lZOsqG1PbFwvQ0cBVECn3kg=;
-  b=OyHD6vd8513/nDSmx+z8yeCtRPvoX7MaQKod79SwsCbDkN/ci4sVasv2
-   99dXRdrPNhp6g+0hUTMADM/KCXV/oQf20XsQtWTsfs9ymIHdmBqwXoh+X
-   e3Hc/S+B9vgiTRqvEs44Pk5VqdH85IxVvWC8lMLr5QD4u3Eu/zJ80Kph4
-   hvikmmuQFC4u6pNNa60HUCGeozkAzhRlgU5khfPv0K+0EoFon0sSv/Wnw
-   bFltcyxrm6VvmQF2/sZAYFEphuwf3h11iY98/Yp1CBrFSnrwgBmqtwLY0
-   meKaLvSRbM0hRh6p2t8/+FpkzDCoQiphWuCzIivuSjqD2o64YFNWnbOX9
+  bh=DORpd/m44V/hOair5SZCKQnjQ8cCw8OCk8ciEtA9ceI=;
+  b=eGFWd6FgjBg7/TpoxG9kqkFET3C5x7t7Oukj8AuCe+FJw6HtcTdzzwc3
+   CdXsaxg1RoVAXbBqRuiAbeTX/JV8kgAdDLUMaUJUABsweNpDp1luGyYAi
+   JtJ9UrFOYkQyKFGzs/RZGgEcO8CiWHCdvxDddlPY3f3TkwmsZofzRT6ue
+   fJtNrTpZKonj/4Yz0qFXlcDgA+D+C8+vzBjPD3PiHLFxB19bdXb4ok9tj
+   tt6jUcVMGIq0bMdVQvQ7uHk+8k7uiz8r0AN6uaeKwKwHGHSWxJc3U+Pxa
+   UUEra8/TKtUHbHWB/JeJmUPeQzU1/B7yg5ylsWpSpgG7r6CysHPWWrvOT
    w==;
-IronPort-SDR: lIu9cni9mwU1E0ORGOylyPMw1OQ4+cy/7ubHowjGyplj5HIPAIC0hBgZmiRXLZLO5f286ICepz
- MvJ2Vay8lOsKvS3KbI3yPEMk3LrmCXlVJjjg262VgqgNOvClKoLRGNyUZgRttUtQbw/4SMVK80
- lYa7YNlCaooW+Rh23zRul4zNXFYVQ5hU6gKSwBnBS87pyKgM+wLcTK4u7viMa0LwoZumLghCgd
- /3CWwH7KPUvRng6c/ehthXZfuaT0ljCT1m/QFiVPfkH4C0Mts2Z6Rf/WVF/Cw1ZTK9H5t9CK1E
- K38=
+IronPort-SDR: svVRHTBOMEK2jIx+tagrNcjGdHef3DkVM3Vjfkd/9vXFIEeY+nD64o14UvA41RUq+GzYCfko9I
+ 0s8YTcRq7vpGC4T95nAvNSWP5TZt9R9s3kVop9mqgpyH51xDeJfkK/kIYygGne4jP9JCR9QsNv
+ AGmWSiaXFdWbcEsVy4+eSv29RxtqpdTwxtVKNCX4kFunO8QGbjwJh3RlrZYzRG9La/UPGsbeQ8
+ DMZMlfcLNjqrmWw2BC0PdKRutFZLNU0mURuxCVnH6nF5SbQyMSmcOGGQw75iBlIQaECgcOSZKi
+ +CM=
 X-IronPort-AV: E=Sophos;i="5.73,452,1583218800"; 
-   d="scan'208";a="78368972"
+   d="scan'208";a="76861330"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2020 11:42:30 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2020 11:49:23 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 30 May 2020 11:42:33 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ 15.1.1713.5; Sat, 30 May 2020 11:49:13 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
  email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Sat, 30 May 2020 11:42:20 -0700
+ Transport; Sat, 30 May 2020 11:49:13 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BwlZ9lSnhf4OuTV0y+VmBMR+yAqlrZ1ULQwi/ZqHJdQ00cbnvVEP+TLr2+gN9bxYobJf+wN5X9HPghrxRC00Vt+DD5cWqLSj8no2ZM5jgQGt1tsbj3r9lowFX/tqerlpyA74ZINt6s8zf+nxGR9kvBPRaFeWXEcF1AKy+2XdpACW0S79ItG/VJl8Khds6dr6HI3cRH1fEGTa81zrY2KkzCq8J5KlqUMF0DA9nAW9fbrSHkdYpwHOEzbWd3lhOYx0ZsKSCRMzSmhwLfquBBzs455sU5Nn1h0a5gPoDnOx9BykgemQdeEnmsvrHfhZ5JMITir0A/BYjfWHdoV5+o1FpQ==
+ b=ChyMNXNcQtMhKeral8kidgSxlyrmYc55aUe/JsUrfg038NKP6sOog7e51u3oOSW6AMOdrdleaHpgOf4CXrRRg3bCA26tu59OqGWxKDscmBbT4ATt/SZHyGD8ygI+kCpEUFcB7NYwV1ujMbVqwTE1vFevo9JGypdOkZ6M6t/ihsHgeJhtfEZ0h95NjsnszY+N1GsK7V63xYeyRMDZUYypF5SA23LHiMtXC2v11PA67iWxIQYKuaFc7Rlu/LpdYVuYZuRMwy5Vm/UVF+8YYgXLNHgFyzbfQ+22DqECl7Ps5P2CaH1rChmk42g1+qVemUiwsvDthhe9uJP5ujQn85Sa2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8sTQKSvperSBJ1cOluezahYZ9bKqYVueX8+oKlr8zGg=;
- b=lOkjK7Bzb8J0HFZiXcUu5Q1zjmgjnptbSV1v7W5VorGfPvPbZ9wU6PEVk1hsxGT9zhByhX+0angCkuUJ1ktftlyFmQUezQ9hGXP2mtZnsQzEnAzuJsEHPPdtTwg2R//VSHDWNWNxvu5AFBYN4RFMbfW+ePVeUR8LuAlduHTj2fVdFzk4KgWvmnYKRBLAwacUVhSFWdIZ4ok+qontTW9vdsoLtPFZ2HDbR019d8I8bzLG5YQPHfs4XoRe/oEfJCiCPBMRBBj3zfu6CIl2I+DkN4e5tpGBBzIWh6y65Di9E9JnEROLUB4hor+2YgbSgZyrnbPSLU9/5vrJ1H0+R+U0sQ==
+ bh=snak0XMjUHQmgARiHqXJYviibjJcMTcxIaZd8qlRhAI=;
+ b=ZmvBrJUdHLGyXrrQ7WS0EHMSDz7g/ZM/veZWnnzmOwKfZNWe6jmqjfAEQbJRjX+CuINJeZGg6gSsmFZ1X2fJ2KnJqLYPWWJJgwmzWMlgSk/0B2BYKe7khmmwb7yCPuZB1yirHy5eKM72WcDYAAZBv1uOeH5M7KZVMvemP2nW7V5uCrJK2KfQPKh4COvwzRorN9EFrdSYb6sbUqyibP33AQus0I5WErXeHcxvp1bvh9Mwr03zn4jm0KdYdlurbR8ibMB+xbm8L7C3MjNRSDZ/U7RbWRHK1Ejm8tv0/aM/juCXzCg4EgroOnniAwzKjIwYQlWbQb++zCLSGe9V6Ae73A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microchip.com; dmarc=pass action=none
  header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
@@ -56,17 +56,17 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=microchiptechnology.onmicrosoft.com;
  s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8sTQKSvperSBJ1cOluezahYZ9bKqYVueX8+oKlr8zGg=;
- b=Glmjl7cCMLqK9QTP3xWNx+wg0L6NIEZIJIw4AdDZjEuxOG6UBjOBGfp/OGDhm9lXBc6lHDclfoxcftQhv2wfdCygxD4Vo1WDx7DlxRkJwcKjDQJ11fhFyBq64eTjIJuyZBqDkXHb5K7EH/T7PG0Pk9pWOW/IqzuAK4py3XvBJMI=
+ bh=snak0XMjUHQmgARiHqXJYviibjJcMTcxIaZd8qlRhAI=;
+ b=iKqNtcBp49RME86y5v3iTbtNOGvYs0cQBXJK1b++26YvhMGkPbGZZTpvMVMkJUBWYnaV4tiS74GENjLwUuhjb+ARxzWZ8JLlEkDYxsWWivw5ps0cMEC1fG3rGWAkrBVRWXUy4CYtjS4tpp4G1Anvpqcz/C/+KjAHV27JbW2wm48=
 Received: from BY5PR11MB4419.namprd11.prod.outlook.com (2603:10b6:a03:1c8::13)
  by BY5PR11MB4241.namprd11.prod.outlook.com (2603:10b6:a03:1ca::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.19; Sat, 30 May
- 2020 18:42:26 +0000
+ 2020 18:49:21 +0000
 Received: from BY5PR11MB4419.namprd11.prod.outlook.com
  ([fe80::d847:5d58:5325:c536]) by BY5PR11MB4419.namprd11.prod.outlook.com
  ([fe80::d847:5d58:5325:c536%7]) with mapi id 15.20.3045.018; Sat, 30 May 2020
- 18:42:25 +0000
+ 18:49:21 +0000
 From:   <Tudor.Ambarus@microchip.com>
 To:     <p.yadav@ti.com>
 CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
@@ -78,16 +78,16 @@ CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <nsekhar@ti.com>,
         <boris.brezillon@collabora.com>, <masonccyang@mxic.com.tw>
-Subject: Re: [PATCH v9 13/19] mtd: spi-nor: sfdp: do not make invalid quad
- enable fatal
-Thread-Topic: [PATCH v9 13/19] mtd: spi-nor: sfdp: do not make invalid quad
- enable fatal
-Thread-Index: AQHWMnVIZMEYjFqkx0Olg5PzC+IdA6jA/zMA
-Date:   Sat, 30 May 2020 18:42:25 +0000
-Message-ID: <2267830.vuSd8QnXzO@192.168.0.120>
+Subject: Re: [PATCH v9 06/19] mtd: spi-nor: sfdp: default to addr_width of 3
+ for configurable widths
+Thread-Topic: [PATCH v9 06/19] mtd: spi-nor: sfdp: default to addr_width of 3
+ for configurable widths
+Thread-Index: AQHWMnUxYn2nq2S6PEyjm4N1aAw4D6jBASMA
+Date:   Sat, 30 May 2020 18:49:21 +0000
+Message-ID: <12165309.mSmAnqxVWc@192.168.0.120>
 References: <20200525091544.17270-1-p.yadav@ti.com>
- <20200525091544.17270-14-p.yadav@ti.com>
-In-Reply-To: <20200525091544.17270-14-p.yadav@ti.com>
+ <20200525091544.17270-7-p.yadav@ti.com>
+In-Reply-To: <20200525091544.17270-7-p.yadav@ti.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -96,88 +96,52 @@ authentication-results: ti.com; dkim=none (message not signed)
  header.d=none;ti.com; dmarc=none action=none header.from=microchip.com;
 x-originating-ip: [94.177.32.156]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ced1d5d5-284d-4cda-5fda-08d804c932c1
+x-ms-office365-filtering-correlation-id: b3ac4a8a-9257-48d6-01c9-08d804ca2a8e
 x-ms-traffictypediagnostic: BY5PR11MB4241:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR11MB4241E672821EC385C242CFB9F08C0@BY5PR11MB4241.namprd11.prod.outlook.com>
+x-microsoft-antispam-prvs: <BY5PR11MB42411C0338E797E6E6051D17F08C0@BY5PR11MB4241.namprd11.prod.outlook.com>
 x-bypassexternaltag: True
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 x-forefront-prvs: 041963B986
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gZwxSVRrO35JyKderyiQQdXs4lq7ih00xDcQrgznTOk5LwTAQxqWpPpqc43eeIxO1NlpwnL9TiImSgPhhMcH1xtdA+nq6wvszc5Vn/JLtlZETRC5yx43PfoTJ3uCIjleFA9n5IMnekFz+xin7nQcmBErFftO/2fwOtSFZFEazy4FuB39Y8cZK0OFDRH7vWj0uTilkjnDGSD+h8D21vzGoP/z6NEaFZovWhgyiNFZAVQ+chsOcWL6DUYZaTkb/daM0ih9eC01P+S04gsrRdC6y1atrJBjIQmgv3BzDQ7JxA6waxdCS+XWLIZ0u4ezDtlTzcYTC1o2CLAOAiKFdpfXmY4hUslFooM0ubNjyPeMCGuhckyQiFCT5hdW4jFklQNL
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4419.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(346002)(376002)(366004)(396003)(39850400004)(76116006)(6916009)(91956017)(8936002)(478600001)(66476007)(66946007)(64756008)(66556008)(66446008)(7416002)(54906003)(26005)(71200400001)(2906002)(83380400001)(186003)(8676002)(6486002)(316002)(5660300002)(6512007)(9686003)(86362001)(14286002)(53546011)(4326008)(6506007)(39026012);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: wbLTqMlkieEw4dS9HrNYsU6xXWfX6FfumzTQ+gdi+SGxKvHMXcAE6mklM7HO6cbbnQUvUzaRCK5jtY7C0yXVGxMmKwnNCJ/jQ79+U6LHFgZpWagcqBoJRJGDJuVitcEOi51bc0dg2upvYE/8f+IQfjhjRdxfdtwE/i8ckm6GPuFUJDnYhRmUw5Mq8BQ8qMDtnZy82DwgB3jMVd//Q/w3IQGKHKdI/xxTME6ZtDWmDI9YpWskIWi+kDhg7d0eek+BzPGzzwx+ugJmIkZDNCxvW7LHhex9X1Zy+ZzhGiEKVIZmpnCCLtEIFGekVXrzDtFNUWJgGKjolprhMwGcZSN9Zd19hDWBnPuzxFeDf0BgNXUgyF478sTn3+m1av5Yxuk/P+bugM9gn00Ix2Uh3l3UHq+AgSH3ZsRMAbRfSqJI7F8VbZcBlxRekjQc1pMID11PI7EeVvbGBAE7L7jvEdL9aNoMG2BsBv5IsFdGhf5vpFo=
+x-microsoft-antispam-message-info: lIe+D26JdD/cd/PsekUdW4TX1pbnxdwO1z05ZUYDocMitkpW8+j5cYICXbTN7BpiC6Sxnho5Y9HeMTn0Dy9qRR0RMahRAiWDB+NJIsQjyZ39DXmMkfglvtUByCW+M+npsAt7oOGB9vRGWrd8mH8EA/QF0AdilNCRIFKu6txHu46+Zt9djfk+VrFY77IkOv8PixaXQCoa/vxeZp6ktGaFBDXEOmZCun9tvebDXsdrgZhoQ4Y8wrWbxNNHCCypzou4JwzRQAXpofhhdXYk98ftQGQ0BRX9UDziSI6YoxI4UndKeJcGW+5qHePzUTDaDUvM
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4419.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(346002)(376002)(366004)(396003)(39850400004)(76116006)(6916009)(91956017)(8936002)(478600001)(66476007)(66946007)(64756008)(66556008)(66446008)(7416002)(54906003)(26005)(71200400001)(4744005)(2906002)(186003)(8676002)(6486002)(316002)(5660300002)(6512007)(9686003)(86362001)(14286002)(53546011)(4326008)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: US6pN87pdHcLEukQOfDdOA+fZ5a3b5SuaJu5FJVdhhcV1n1dAwXKEsxoAkS0yTB7bwdslIiMU2j+pez/160We7okP5VHwAfqQ+BNcoLb9qgnsZVw28lQaJ/XjBHXLrfUo/QZs5SD7ss0nqviCafW4XWo9EQD1HkhXP/GHjOEsCNqRkQ00kzKTrMvl9+h2xBmTCIJB1AoYrhms0/U/i/kCv/vg8cGBsMyQuqIDOBl1oZLUgIh8eqxLjWJWh4FAp/oRrWA0RrZfsAIJzNi5CK+ZVm2dKhNDxGooU3w1ImKfZCLU8dEk+Lq+cVp6XEo6ST6upywUNusZKRvih6BU2iNmjcDRyC3JWqYwuNTyLbdNLVVXRdrI8Me8EM0M0ZvD5sU1XbrwsP/gZ/2b+UPRjaL/4vgK4yHfr9Z4+9nhBPin7YvsSvk8VhyrZcwPDsyVIGmkO8dPbBja5eheMMp9r3y8kRB1F30UjeI7COK/QIYPbA=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9626737D8CDCAE47BA3681563B01A1D7@namprd11.prod.outlook.com>
+Content-ID: <C5B079A36B8CC4458467974125D42E53@namprd11.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: ced1d5d5-284d-4cda-5fda-08d804c932c1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2020 18:42:25.8057
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3ac4a8a-9257-48d6-01c9-08d804ca2a8e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2020 18:49:21.5120
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wKE+ZMPzkmlQjpVc+sfcl3IIL9Kd9OomJq0OW9NEjk23cNvTDWMr/nSRbLp9gebBwZyslr9TJFdaXf+qKSh9NRzM096Vbl0B4r4ICow8O1k=
+X-MS-Exchange-CrossTenant-userprincipalname: KTUHqdBuwZHNqdAiyrTUdJqJMJX9bvb+4xW2ECpO+GjZECxO5YKm8GPxc8kG+iUB4GpId7L7tsDW9xKWQhxn6FZSBAcoSMmzkPIAJ9RP1w8=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4241
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Monday, May 25, 2020 12:15:38 PM EEST Pratyush Yadav wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
+On Monday, May 25, 2020 12:15:31 PM EEST Pratyush Yadav wrote:
+> JESD216D.01 says that when the address width can be 3 or 4, it defaults
+> to 3 and enters 4-byte mode when given the appropriate command. So, when
+> we see a configurable width, default to 3 and let flash that default to
+> 4 change it in a post-bfpt fixup.
 >=20
-> The Micron MT35XU512ABA flash does not support the quad enable bit. But
-> instead of programming the Quad Enable Require field to 000b ("Device
-> does not have a QE bit"), it is programmed to 111b ("Reserved").
->=20
-> While this is technically incorrect, it is not reason enough to abort
-> BFPT parsing. Instead, continue BFPT parsing assuming there is no quad
-> enable bit present.
+> This fixes SMPT parsing for flashes with configurable address width. If
+> the SMPT descriptor advertises variable address width, we use
+> nor->addr_width as the address width. But since it was not set to any
+> value from the SFDP table, the read command uses an address width of 0,
+> resulting in an incorrect read being issued.
 >=20
 > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 > ---
->  drivers/mtd/spi-nor/sfdp.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-> index 052cabb52df9..9fd3d8d9a127 100644
-> --- a/drivers/mtd/spi-nor/sfdp.c
-> +++ b/drivers/mtd/spi-nor/sfdp.c
-> @@ -576,10 +576,6 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
->=20
->         /* Quad Enable Requirements. */
->         switch (bfpt.dwords[BFPT_DWORD(15)] & BFPT_DWORD15_QER_MASK) {
-> -       case BFPT_DWORD15_QER_NONE:
-> -               params->quad_enable =3D NULL;
-> -               break;
-> -
->         case BFPT_DWORD15_QER_SR2_BIT1_BUGGY:
->                 /*
->                  * Writing only one byte to the Status Register has the
-> @@ -616,8 +612,10 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
->                 params->quad_enable =3D spi_nor_sr2_bit1_quad_enable;
->                 break;
->=20
-> +       case BFPT_DWORD15_QER_NONE:
->         default:
-> -               return -EINVAL;
-> +               params->quad_enable =3D NULL;
-> +               break;
+>  drivers/mtd/spi-nor/sfdp.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-I would just add a dev_dbg message and break the switch.
-	dev_dbg(nor->dev, "BFPT QER reserved value used.\n");
-	break;
-
-You will then have to set params->quad_enable =3D NULL; in a post_bfpt hook=
-.
-
-Cheers,
-ta
-
-
+Applied, thanks.
 
 
