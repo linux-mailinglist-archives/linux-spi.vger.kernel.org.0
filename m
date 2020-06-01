@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 356B41E9E72
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jun 2020 08:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700581E9EB2
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jun 2020 09:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726011AbgFAGtq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Jun 2020 02:49:46 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:1860 "EHLO
+        id S1726056AbgFAHBc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Jun 2020 03:01:32 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:2963 "EHLO
         esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725283AbgFAGtp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Jun 2020 02:49:45 -0400
+        with ESMTP id S1726142AbgFAHBb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Jun 2020 03:01:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1590994184; x=1622530184;
+  t=1590994890; x=1622530890;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-id:content-transfer-encoding:
    mime-version;
-  bh=+8vJDa6Zd0rf+y4ysoGURD3mLOcl+7p1KdyiPDQ9cLk=;
-  b=2Xvy73mgPwmR0n2TaDie0/803Duwqsvrt1GCFBhbnHyPqJVQ53AbQ1gv
-   ApvN1IWV662Pr4cWFzhxAtW0r7+rvZTEdR/wMyyFA1qARBEHOCm6YmARC
-   1nnV47r3sRCkbT6vXJ9Bpi7aAN5opBAYqdBgBaAHP5Uz//mOrgm8dptiY
-   2GnMa+vCAJEVk4FpShUDDYQpCUVLAx2MbVbDI5bho6DqzUp3AOLTCjJLA
-   p0ULbPzdiQ+XNt5FyZNWBGjuagi3jbeoiMOTqQob/CU1m0hzHWHLow8c7
-   g2Zb/yKh5y1uiJYA32AaYiAxxLGDUCEAGp9GhV2nErP3upSoiHaYKqNpm
+  bh=0+8FUMEi9BKsHiSzup5nhdSrUqN3fXVb5O3Z7TcXTis=;
+  b=DFZ7oNwvclvhxMdFUImNejSmSN5tEO1hriSSXwrrC30+KLbDY2fhRTQg
+   6wD1AhAPgcOz4iIqUnUsO/v7QUR6x6sx792G/h4LkbanEM1rdMylImoF6
+   nUFm/GgUc5Mo/jgjNYpMSPqXQZw8cl6HLqlr9QCMBIXS6OauiGyHwjocs
+   krVe4SXnK0ZtVTvvnTaO12CV3EzAn8gN/e0ZJOUYf4tLJGcjnC3yE/Tx8
+   NvJCTjJGKEF3heBvnuJXIKgxeoMCUcs4o/de8uEh3j79jwj/QnrzxD7pl
+   C5EGYnKg/Y1DeP/CMgY49mteGRfZrYW1CRrq2Xxn325tzuztQJ3xKBw0d
    Q==;
-IronPort-SDR: xPvNjBlBiLVB2yqMcGOxN2uLhEaUXNYx0THc0Bgl8ASXhGb5NXFij72l5opMryoKB2FhCeDZrG
- GBngAvr1T1eyg/lPQvNJB0EZmdETPLHxdV9qx+8o+dOv3R4p9C2BcQHQexOpiDMzn2FFfv+AgM
- 6anKOgJpHyxouH3MxG3vlZ/SSLyBdDUbCJVkw+sqvbp53Gv0tNXMC2y4O2/rczgU+IviVZjklj
- ex69VCGUA9gPOhqbiGUXluBR/aDw+p69XQu/UIc53boxLH6/QV91reUuSRSE44S4nWrL9IxZB4
- 7HE=
+IronPort-SDR: qPVaH21Q75YRwodv2ScwzwoXjla2AmfBMHJWB9SL1Qb0afIHBO758CpJuNO6oVjIjNwajBFySa
+ n77CdbPhwnNEa5xm+MJo8RPDS3zc6Slxn7Gl6PFq49isH49oBGHcmLLYswPacX3Xikf26X6LPd
+ 5N49zifKKGbBZN24it/b6VDiz27e7mJI29SkmVcmoRd3EoouLuAkoXlL4MAcOR0lRHH6ppNAHe
+ K/AzQU8Z6uvkAZhef2GbDK16303vSCMfX4UBv1egBklI7gmCgVNAPCKvDdPVsEgVkA1Q0njfjr
+ AdI=
 X-IronPort-AV: E=Sophos;i="5.73,459,1583218800"; 
-   d="scan'208";a="75059760"
+   d="scan'208";a="75061190"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 May 2020 23:49:44 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jun 2020 00:00:39 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sun, 31 May 2020 23:49:32 -0700
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ 15.1.1713.5; Mon, 1 Jun 2020 00:00:42 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
  email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Sun, 31 May 2020 23:49:32 -0700
+ Transport; Mon, 1 Jun 2020 00:00:27 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mDGq1/BnO28hzLm1KnNWjB4//xPT8jU4b81ThdRJZ2XUuniqtMV0tcuif2+fvIY/DBU+Mca/gVgS0PhMeYmhn+nNR4klxfO0FqVC78+p1imZkCj7SxToN3jrzdV1D2nyXF4QRWh84w+Yh+m3M5Ghh2Dx32Q29xaYFMsexfVeLgxjm80D2NfFdRD8ixrKF5rFmpwN/QtFlztK56UyuBIUgRdLX1hFmsUZiNkHJbJ8+0NWYFtQ18/xB2GKQYyleh4JqVL9FuxbGgUh/Z711IknMPJNVDjX8pVlgec/9/emBFNp3Hel0dYBg8SviWyPqMk+8AUJA+qyPtqBT+XDy7jX2Q==
+ b=Gx6PXI+/2AmN3UioC/AmTxMLG0/dbDWbuXpslmBVYeMkMzB4fKBPdY0x+nv9HhsEpdB7kjB9Ml0E0dswrRFDnm1DYsYyysth0Zj1E/ThLab/uE9onHuphkykRdupE7leJF5Rxdda3Bi8nqml8VAviGS+wCIlYDa9jBmB5f2kHHsu1i3tuzfTeDyGAUN1/aXYyxTNOjBcHosJNKkfVHtb9D+uTmHbj2Uy/e3i8MhFMc4/HdEydxiVm4NJ2C1m3aQmCOPQMjsEz0FGqpGG3r8ARbgWRIHPkvLELJd/NWAEVob3Tpuw4iw8eL6Egn8noKYe+3h8MOFvoXBY873if4bKXQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QbMcrbEX1GD0tx9RA38IWZTAIHJl30J8hCUjzcscwRA=;
- b=hcGAxvSIL0wrFYA6pIwXVgayAuFNDFvq+IkVkm9uuN4fG1trw2d0dD0/hMVprpIWaaNn77MSIVUu6uIu2Z9JUCxu9MDFV6sQYfIjGRq0oYIJXisFD+Zt/ng77wrho+2hmePZ1xlxX91l3H7fyFbAP4lpEpMzgeQtCKz1K/lsO8l6pcx8qHsdekNSb4OU6r6RR3+zPrp3AXUs3/JsG71QWj5V8gId/JQJxSsN+szbHR4JO8SkbjB22JE7yOLSYTrHr9Gs9NavrbJ0/zNmfoC3psD1EAemANb450KHU6cjnI7/iglV9PO5llY7Lhzfg5ajoZFGZniAf/rKhWL9Umq5OQ==
+ bh=wRqymHqnXLNNfYboxhQ9KzTlcCKG7jnFiZHI2jbJDlA=;
+ b=BRM4Wc/kdlJ5eZxK+xEYHroDuu9EJMO352B3xDa3NwYIROIy9i7If/5rSfPRLAlsAAYRdtQv383kCEc6EQIL+o/7YDn1hP80/iFg1c4RcGJP+8wCvxKiJds0AhLaSb8VvYEDu5oOCgMPfz4gIWbYB7Bq4sxCDLO6oQ1KBD6hUYcAL7oAPRkGeGpYfzx6zKdR6fvYBFSOhOhhtM1ipZt8xCTE7cvQm6vaF1WU8TfiLnRWwgqm415MQZGmwFUWlZx0uTUKp/qrCsngJPPMIwx5ipLl4tQ6KZa/spBaPKAL8K+P+W1ZgnHAK73jr3UTkPuEme8Lr1rNZ9lR2DBeHIxtYg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microchip.com; dmarc=pass action=none
  header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
@@ -56,34 +56,32 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=microchiptechnology.onmicrosoft.com;
  s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QbMcrbEX1GD0tx9RA38IWZTAIHJl30J8hCUjzcscwRA=;
- b=fK3t+HTgHjwH64ZOCgFdnBxdyVWzFkfb2KmXoOnhofCYgNhzRIAIM1DJQC6qfEg7JubldfYSM0bdcCGaST3dEOAc0tCpPpGPeysGE+QHXo7vpMh2WwjC34o7P6kybeOpVz3HGqToQ+hTfytEsBRZp1IcKXxKTih6odP3pzIfUHM=
+ bh=wRqymHqnXLNNfYboxhQ9KzTlcCKG7jnFiZHI2jbJDlA=;
+ b=UwXrLoleYFXq3JY/AugJ0sorHYOLtMeqSIYhacaYNN8X8L8Of4rxQFO8UIOeq6iBLQ5k3ZNRHlnjltWuy0jpYl+Bb/2HbY5C5f2rUjBbc/Q0InkTZnqqVuTYXO6XeCmy6j+H2otNo0/owrp4wXtN6ad3YZNVtfAvF87K4Ni1h1A=
 Received: from BY5PR11MB4419.namprd11.prod.outlook.com (2603:10b6:a03:1c8::13)
- by BY5PR11MB4258.namprd11.prod.outlook.com (2603:10b6:a03:1c2::24) with
+ by BY5PR11MB4168.namprd11.prod.outlook.com (2603:10b6:a03:181::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.21; Mon, 1 Jun
- 2020 06:49:42 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.17; Mon, 1 Jun
+ 2020 07:00:34 +0000
 Received: from BY5PR11MB4419.namprd11.prod.outlook.com
  ([fe80::d847:5d58:5325:c536]) by BY5PR11MB4419.namprd11.prod.outlook.com
  ([fe80::d847:5d58:5325:c536%7]) with mapi id 15.20.3045.022; Mon, 1 Jun 2020
- 06:49:42 +0000
+ 07:00:34 +0000
 From:   <Tudor.Ambarus@microchip.com>
-To:     <vigneshr@ti.com>
-CC:     <broonie@kernel.org>, <bbrezillon@kernel.org>,
+To:     <vigneshr@ti.com>, <broonie@kernel.org>
+CC:     <bbrezillon@kernel.org>,
         <vadivel.muruganx.ramuthevar@linux.intel.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <simon.k.r.goldschmidt@gmail.com>,
         <dinguyen@kernel.org>, <marex@denx.de>
-Subject: Re: [PATCH v3 7/8] mtd: spi-nor: Convert cadence-quadspi to use
- spi-mem framework
-Thread-Topic: [PATCH v3 7/8] mtd: spi-nor: Convert cadence-quadspi to use
- spi-mem framework
-Thread-Index: AQHWN+DT7HfOrqJY3Uai3Z/950rmdA==
-Date:   Mon, 1 Jun 2020 06:49:42 +0000
-Message-ID: <2026477.zaRYUy7Czx@192.168.0.120>
+Subject: Re: [PATCH v3 8/8] spi: Move cadence-quadspi driver to drivers/spi/
+Thread-Topic: [PATCH v3 8/8] spi: Move cadence-quadspi driver to drivers/spi/
+Thread-Index: AQHWN+JYwTPU7GcYXEOZEVBVNroLHg==
+Date:   Mon, 1 Jun 2020 07:00:34 +0000
+Message-ID: <2051214.IORyQiarUF@192.168.0.120>
 References: <20200601054725.2060-1-vigneshr@ti.com>
- <20200601054725.2060-8-vigneshr@ti.com>
-In-Reply-To: <20200601054725.2060-8-vigneshr@ti.com>
+ <20200601054725.2060-9-vigneshr@ti.com>
+In-Reply-To: <20200601054725.2060-9-vigneshr@ti.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -92,50 +90,67 @@ authentication-results: ti.com; dkim=none (message not signed)
  header.d=none;ti.com; dmarc=none action=none header.from=microchip.com;
 x-originating-ip: [94.177.32.156]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 27064aec-be4f-48cd-5e1b-08d805f7f67b
-x-ms-traffictypediagnostic: BY5PR11MB4258:
-x-microsoft-antispam-prvs: <BY5PR11MB4258BBA43AA34ECCB7A9CE06F08A0@BY5PR11MB4258.namprd11.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: aa2c79d9-69e7-42ff-1cce-08d805f97b2e
+x-ms-traffictypediagnostic: BY5PR11MB4168:
+x-microsoft-antispam-prvs: <BY5PR11MB4168848F8DD36D0336AD6A58F08A0@BY5PR11MB4168.namprd11.prod.outlook.com>
 x-bypassexternaltag: True
-x-ms-oob-tlc-oobclassifiers: OLM:1148;
+x-ms-oob-tlc-oobclassifiers: OLM:4125;
 x-forefront-prvs: 0421BF7135
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OwQzQHSVAUnbPSKpFWAGBuULKJ+JG/UclJ+/oQoQFyARlIoa/2O3uGVuyjope+rt4lnetGFRbsiEunY4Fy6QJ/+AW/toyzPr3XlVmZ0pThCIEOjhJsxPXd/LK7d+UtghafEKXusvCvfNVHVywch+DKZSq6z77VqY+teBwSisz1Ff3k6PrqmDsInmcKEXnlPwl/asoBkqe0rz1WoAAR7Fwm7eGwQxoPQAvDZz/z/yERglt3YuM8d1QAGwwxRKmhaGyIQu2ADfow0kFy6kduDlfUJ/25U3ON2Rq6xNjImFU7BDDwwjFTL+vvVXCInl4+I7qFy2CIY48+3HmyDDasUA8nfRKJrIKlWTaS7Hc2NKAz5LNR16XyovRG4fQXnolMOY
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4419.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(366004)(136003)(376002)(39860400002)(346002)(396003)(6512007)(9686003)(83380400001)(8936002)(86362001)(6486002)(6916009)(478600001)(4326008)(7416002)(66446008)(71200400001)(2906002)(26005)(14286002)(76116006)(91956017)(186003)(66476007)(66556008)(64756008)(66946007)(5660300002)(6506007)(316002)(8676002)(4744005)(54906003)(53546011)(39026012);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: zypPyZexa/HWUu5aB84qzMWxbCgK8tPweYIxLkX9Iw9Zo5ZnyFMfwp23twwl+Y5UoKFWbEvIAT3dAVeNtHNAZrODW0xAYZoWZ/HJAMgVUDn2y4/nmr+UVj3refQ9vmWo52znOQ1bL/lr+BNQY2AV/CoAtDqJLT+tGdEKKbRylGfm9fzpoyOiWrYG/EFCteGMct5MP1nwiq0gTrrX75pve0HENqSZEy9ge1tnq/xJ9Ojqay/Q/FG7KVQKTtaNx5MQtdiLkocn0scNkd0pypKyK4buDokPDeR0a3wsMUITSSKd8UjerC2pA9N7eKy8cj1rpxJAol6+mhsYwfu53ssF7mnp0+7fsyceuzwEXnH7pUt+MeveCZxma0fJzYWHbQRbGAwMhdvfIon5dPpzhyeM+MBfBXDb9AJqdY8hmDquwWEmyV8/sZ7ZLKZWZEjPw71oQWO8ayf5lfx2wKoyAQOT9nG9fNiWoKNChZg58Wd6RDs=
+x-microsoft-antispam-message-info: XEvPcbc3EUMX4heYQH+dKBSQET416vgTrXS845XA3DUmp3HAdMYGYs1QUO20AT4nDi9ntAGicxJdudcKyQaQIU7oOj6EgNeEfim7On3Di0DLxL+MoY1ITq1zmVvXV2qCmBwH097GJWny4BNs4QFfmH/eQgK7WNu47Y9GgzhFBs15jk+Rpko8VTHEVmO4aelcp4aIBBw074dbPiBRsInWV+8hQqqitV3/LS5c1bG5SCkdyHBM2pkEtcCuoavR/93/0uD8e6plzlexwAzAhAvD7Nhilvyr8iHRVDVqguN8KFmL68D9YnbzRmgR2SfMEuW20iYyibNxo1mFBaP5ACg1hw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4419.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(376002)(346002)(396003)(39860400002)(136003)(366004)(316002)(5660300002)(83380400001)(26005)(14286002)(4326008)(7416002)(91956017)(86362001)(66446008)(66476007)(76116006)(64756008)(66556008)(186003)(71200400001)(54906003)(110136005)(66946007)(53546011)(6486002)(9686003)(6512007)(478600001)(2906002)(8936002)(6506007)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: X/p395m+m514Rtw1pgw9/XG4mDtrpVJFBVJSZywZh+DQVx9owpRh94hO/Ag18GnKj4WjGBpGSun5DnLEX66uMk8kC7LWY/oUybJNsiHNrGi3HlHXPGXFShU2mlqyIgcFLVOIxxX0IVPU30i/AFRqQHvXxBbrE6gZ31VXQnC99tU0jZm4n43AuPoOOpL1Q5eLxwE6Ih2cET+tu6Ru+SMaACrzkDVwZx7C5AcP5Xnn7RPC4ogakaAYKxG4YzLHG4MJAgJf8/3zEjvvmc9fzPdC18WYB70EYOHm+QbR8H47yeVGnhKa0ZviMnXrlHwe1QIo3oDsr6qZ9KJtnYG1mQ1tEe2ZDZbf5Fb7YdXYBN2VMnFlDurWmw70CF/1p490PctFedTsSWhFXYt2oPDhhTwi8bkjXED4ATn5Pk9HnpuHzZNkajSyXhrMuItAx7mNv7zJ3acjrrcx5NQXf3SJWUw9iw9VzXimDwz/39abEOi+vu8=
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3269A699FB75F64FB258808A4BA3AF58@namprd11.prod.outlook.com>
+Content-ID: <969BD4A2FE8FEA43B671AF2D528936C2@namprd11.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27064aec-be4f-48cd-5e1b-08d805f7f67b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2020 06:49:42.1857
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa2c79d9-69e7-42ff-1cce-08d805f97b2e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2020 07:00:34.3221
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l98jfNMVUUG4xQHtw11hsI9GVg5fZJbb/9vkrlGyB9AkY26plQHsDgQXEaYt5UoR/SSSzwCi5MdROSL0274XsjANoYUB+Mr6LYOfruTd/BU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4258
+X-MS-Exchange-CrossTenant-userprincipalname: VI5FwlPOX7RtQ63H7J0ilDxjFB1SR2VxwrA0SKfgPu4HctwU4sXuougSfwNVvNm2LkPAFFJnG5nBsZhx8d5+VUq9ULZxGicNzACjxw/X3aA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4168
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Monday, June 1, 2020 8:47:24 AM EEST Vignesh Raghavendra wrote:
+Hi, Mark,
+
+On Monday, June 1, 2020 8:47:25 AM EEST Vignesh Raghavendra wrote:
 > From: Ramuthevar Vadivel Murugan
 > <vadivel.muruganx.ramuthevar@linux.intel.com>
 >=20
-> Move cadence-quadspi driver to use spi-mem framework. This is required
-> to make the driver support for SPI NAND flashes in future.
+> Now that cadence-quadspi has been converted to use spi-mem framework,
+> move it under drivers/spi/
 >=20
-> Driver is feature compliant with existing SPI NOR version.
+> Update license header to match SPI subsystem style
 >=20
 > Signed-off-by: Ramuthevar Vadivel Murugan
 > <vadivel.muruganx.ramuthevar@linux.intel.com> Signed-off-by: Vignesh
 > Raghavendra <vigneshr@ti.com>
 > ---
->  .../mtd/spi-nor/controllers/cadence-quadspi.c | 476 +++++++-----------
->  1 file changed, 191 insertions(+), 285 deletions(-)
+>  drivers/mtd/spi-nor/controllers/Kconfig            | 11 -----------
+>  drivers/mtd/spi-nor/controllers/Makefile           |  1 -
+>  drivers/spi/Kconfig                                | 11 +++++++++++
+>  drivers/spi/Makefile                               |  1 +
+>  .../spi-cadence-quadspi.c}                         | 14 +++++++-------
+>  5 files changed, 19 insertions(+), 19 deletions(-)
+>  rename drivers/{mtd/spi-nor/controllers/cadence-quadspi.c =3D>
+> spi/spi-cadence-quadspi.c} (99%)
+
+If this patch set looks good to you, would you take it through the SPI tree=
+?=20
+If so, I would need an immutable tag, so I can merge back in spi-nor/next i=
+n=20
+order to fix a small conflict that will appear in drivers/mtd/spi-nor/
+controllers/Kconfig. Vignesh would have to respin this patch on top of v5.7=
+-
+rc1. With this addressed:
 
 Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 
