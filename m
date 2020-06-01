@@ -2,403 +2,158 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1311F1EA324
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jun 2020 13:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFD81EA345
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jun 2020 14:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgFALzB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Jun 2020 07:55:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36712 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725838AbgFALzA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 1 Jun 2020 07:55:00 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3D3E520738;
-        Mon,  1 Jun 2020 11:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591012498;
-        bh=FKZQiz2IYCDyjB9if7c4tHoiZBV8r/55XVRIYTNAnLw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aPrPtnuDYNxHHa3VGchyp3UrL5RpzUYqPL3GendocCQeAjwCKJIlI9tQM924wxef/
-         h5HWEnS4IsEUBgsYqDMTU3TqI2O1lfyKGxKGenLWrV6ShdF4HH7ta3TKQnkSEz4qkD
-         hyT7vh/D8t1fOBykOL1C08T6oSIyen/gd0n86U0g=
-Date:   Mon, 1 Jun 2020 12:54:56 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [GIT PULL] SPI updates for v5.8
-Message-ID: <20200601115456.GA45647@sirena.org.uk>
+        id S1727808AbgFAMA4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Jun 2020 08:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728101AbgFAMAz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Jun 2020 08:00:55 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851A4C03E97C
+        for <linux-spi@vger.kernel.org>; Mon,  1 Jun 2020 05:00:54 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id m18so7779120ljo.5
+        for <linux-spi@vger.kernel.org>; Mon, 01 Jun 2020 05:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Sddl049YX4ZGZ5Wy5UDesdVcYAxDam7/pEqJLf4Wu3g=;
+        b=BVUQM5RT0MRAtqTXxg43+IkIdgoW6ARsgZvnb5HnqF2mdOgtN6cFNBRj+3oiaFD91F
+         lAXtqVhjwqrXPWBbWFL7Q8/SNZid8NQ6T2WJhSFAuL8v8UkFrqx3SzHjP56eY0D3wBp8
+         eCf+3OeW7ewCiQ2K3fYOKj9ElVHosqSm7N4Hb0ae1qRYi2c11FKc2V9ktektMhwRa7RQ
+         bqmRj5sWfzsFLO6f9FGQY/2mTVw3GXvxL7aSWDBMDCyPoTQ2jfrQg7h7wQfnvQiZnmli
+         q1yXQPGWwOFFlQ/dFHPSJRUtU9rPdcfixs7RBuyZrBom4mTpWdJIirq/H0sZqWLrLonR
+         K9/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Sddl049YX4ZGZ5Wy5UDesdVcYAxDam7/pEqJLf4Wu3g=;
+        b=FjIJP7A1w6+IRumxNrT9oVaYQ+dwNmNrxOOEuFPsLm8djzsOkaw23pyxJn2tcawB5g
+         4Vhytw3Zny9x7f/UIyQmsDvcbyJigjfubDBEL6dR0dwXDsPMW4xJhBvoNCaFXqnJw0WA
+         ALpR2niji2DcFAk1cDeU0stEUZn4fTY+KFgrUTXNcEVzceUONSGt1+cdMXJIUve3o4Nk
+         qbifZnZwCPpnMzuRI0dNOMuI8He9vnwpQTXuXXS1ksN8hTLISxQI2JMRZwFkheXno8o5
+         4M9id5t6kegq0HfkGb+Hhw+oPjhodi3bNQd5d2Wr/wjMCmvG6GyTIMAmHLpC9V+VnIpv
+         6IPQ==
+X-Gm-Message-State: AOAM530otWKcxcEzxxEINcyW1yMVcYJQUUne39rvhd7+8OG+zfAxdINQ
+        072N8YwHQ4WAzqGA3OuX86w=
+X-Google-Smtp-Source: ABdhPJzi0BBhiknfODBzcb6oRjRSHafJOEx/XhIA9LoEybL4Ta1ozJwuGSsrxIlyPrLwaSXBgaSiGA==
+X-Received: by 2002:a2e:b051:: with SMTP id d17mr9676096ljl.254.1591012852957;
+        Mon, 01 Jun 2020 05:00:52 -0700 (PDT)
+Received: from mobilestation ([95.79.222.123])
+        by smtp.gmail.com with ESMTPSA id y18sm4757593ljj.81.2020.06.01.05.00.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2020 05:00:52 -0700 (PDT)
+Date:   Mon, 1 Jun 2020 15:00:50 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] spi: dw: Make DMA request line assignments
+ explicit for Intel Medfield
+Message-ID: <20200601120050.zyxwsknkmocrfkgy@mobilestation>
+References: <20200529183150.44149-1-andriy.shevchenko@linux.intel.com>
+ <20200529184050.bkn72tash33zgoo4@mobilestation>
+ <20200529184955.GY1634618@smile.fi.intel.com>
+ <20200529195243.GV4610@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ew6BAiZeqk4r7MaW"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Cookie: Help a swallow land at Capistrano.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200529195243.GV4610@sirena.org.uk>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, May 29, 2020 at 08:52:43PM +0100, Mark Brown wrote:
+> On Fri, May 29, 2020 at 09:49:55PM +0300, Andy Shevchenko wrote:
+> > On Fri, May 29, 2020 at 09:40:50PM +0300, Serge Semin wrote:
+> 
+> > > > -	struct dw_dma_slave slave = {
+> > > > -		.src_id = 0,
+> > > > -		.dst_id = 0
+> > > > -	};
+> 
+> > > > +	struct dw_dma_slave dma_tx = { .dst_id = 1 }, *tx = &dma_tx;
+> > > > +	struct dw_dma_slave dma_rx = { .src_id = 0 }, *rx = &dma_rx;
+> 
+> > > You know my attitude to these changes.) But anyway what's the point in having
+> > > the *tx and *rx pointers here? Without any harm to the readability you can use
+> > > the structures names directly, don't you?
+> 
+> > I will wait for Mark to decide.
+> 
 
---ew6BAiZeqk4r7MaW
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Like I said before I don't particularly care either way, I've queued the
+> patch to apply but really I'd rather that the people working on the
+> driver could come to some sort of agreement here.
 
-The following changes since commit 9cb1fd0efd195590b828b9b865421ad345a4a145:
+Mark, as you can see that's not always possible that easy to come to an
+agreement. Sometimes like this time either both solutions are very similar,
+or both have some pros and cons, so a better one just can't be chosen. In that
+case to save a time I prefer to stop arguing and just ask a maintainer of which
+one would be better for him. In any case I don't deny to respond to a review
+comment and I normally justify why I think my solution is also acceptable or
+why I don't see the proposed modification is better, whoever that comment
+provided.
 
-  Linux 5.7-rc7 (2020-05-24 15:32:54 -0700)
+On Fri, May 29, 2020 at 10:21:35PM +0300, Andy Shevchenko wrote:
+> On Fri, May 29, 2020 at 10:05 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+> > On Fri, May 29, 2020 at 09:49:55PM +0300, Andy Shevchenko wrote:
+> > > On Fri, May 29, 2020 at 09:40:50PM +0300, Serge Semin wrote:
+> > > > On Fri, May 29, 2020 at 09:31:49PM +0300, Andy Shevchenko wrote:
+> 
+> ...
+> 
+> > > > You know my attitude to these changes.) But anyway what's the point in having
+> > > > the *tx and *rx pointers here? Without any harm to the readability you can use
+> > > > the structures names directly, don't you?
+> > >
+> > > I will wait for Mark to decide.
+> >
+> > So no response to a review comment? Shall I do the same when get a review from
+> > you?.)
+> 
+> This patch is result of you insisting on your version of things when I
+> tried to explain you that it's not how it should be done. You pushed
+> your vision. Mark proposed to submit your changes and consider mine
+> which I agreed on. I will wait for him.
+> 
 
-are available in the Git repository at:
+Andy, that's not exactly the way the discussion evolved. You proposed a solution,
+you thought would be better, justified it as being more readable and maintainable.
+I considered your proposition and decided that pros didn't worth the cons,
+responded to you why I'd better stick with my patch. Since you insisted on
+implementing your solution I asked a higher level arbiter to make a final
+decision in order to stop bikeshedding around that part of the patch. Please note,
+I didn't refuse to respond, I didn't reject your review, I didn't ignore your
+comment. I considered what you said, we had a discussion proposing
+justifications for our solutions and only then I asked Mark to give us his
+last word. That was my right to do. See the difference between your response
+and mine.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-=
-v5.8
+In anyway regarding how it "should or shouldn't be done". The patchsets you had
+a chance to see and review weren't my first ones. I've sent patches to different
+kernel subsystems before and not once and nearly every maintainer/reviewer had a
+vision of what should or shouldn't be done sometimes contradicting to each other,
+what is right or wrong including the way the patches are formatted,
+merged/squashed or split up, moved, inter-mixed and so on. I didn't ignore any
+of such comments, and took them into account if they had been justified enough.
+But when it came to a situation like this, then "should or shouldn't" aren't
+right verbs to say. It's more like personal believe, personal preference rather
+than a selection of a right thing to do. The same is applicable to your comment
+regarding squashing the patches in the DMA-related series and to the patches
+like that. Don't get me wrong I very appreciate reviews you've done and most
+likely will do for my patches (since there are going to be two more series
+submitted for the DW APB SSI driver). A lot of your comments were very helpful
+and indeed implementing some of what you suggested made the patchsets better.
+But please don't assume that that valuable comments made everything you think is
+the only right thing to do, give a submitter a chance to be right too and
+let a bikeshadding go when it really doesn't worth to go on an endless arguing
+especially with respect to the situations like we've got here.
 
-for you to fetch changes up to fb02b9eb4e335f8965badd1e6ee24fdc284cb395:
-
-  Merge remote-tracking branch 'spi/for-5.8' into spi-next (2020-05-30 00:0=
-3:53 +0100)
-
-----------------------------------------------------------------
-spi: Updates for v5.8
-
-This has been a very active release for the DesignWare driver in
-particular - after a long period of inactivity we have had a lot of
-people actively working on it for unrelated reasons this cycle with some
-of that work still not landed.  Otherwise it's been fairly quiet for the
-subsystem.  Highlights include:
-
- - Lots of performance improvements and fixes for the DesignWare driver
-   from Serge Semin, Andy Shevchenko, Wan Ahmad Zainie, Clement Leger,
-   Dinh Nguyen and Jarkko Nikula.
- - Support for octal mode transfers in spidev.
- - Slave mode support for the Rockchip drivers.
- - Support for AMD controllers, Broadcom mspi and Raspberry Pi 4,
-   and Intel Elkhart Lake.
-
-----------------------------------------------------------------
-Aishwarya R (3):
-      spi: spi-fsl-lpspi: Fix indentation and open brace should be on the p=
-revious line
-      spi: spi-fsl-spi: Fix checkpatch error "foo * bar" should be "foo *ba=
-r"
-      spi: spi-sh-msiof: Fix checkpatch error Complex macros should use ()
-
-Alistair Francis (1):
-      spi: sun6i: Add support for GPIO chip select lines
-
-Andy Shevchenko (13):
-      spi: Respect DataBitLength field of SpiSerialBusV2() ACPI resource
-      spi: dw: Zero DMA Tx and Rx configurations on stack
-      spi: dw: Remove unused variable in CR0 configuring hooks
-      spi: dw: Move interrupt.h to spi-dw.h who is user of it
-      spi: dw: Downgrade interrupt.h to irqreturn.h where appropriate
-      spi: dw: Move few headers under #ifdef CONFIG_SPI_DW_MID_DMA
-      spi: dw: Add 'mfld' suffix to Intel Medfield related routines
-      spi: dw: Propagate struct device pointer to ->dma_init() callback
-      spi: dw: Avoid useless assignments in generic DMA setup
-      spi: dw: Get rid of dma_inited flag
-      spi: dw: Drop duplicate error message when remap resource
-      spi: dw: Make DMA request line assignments explicit for Intel Medfield
-      spi: dw: Refactor mid_spi_dma_setup() to separate DMA and IRQ config
-
-Angelo Dureghello (1):
-      spi: spi-fsl-dspi: fix native data copy
-
-Ashish Kumar (1):
-      spi: spi-fsl-qspi: Reduce devm_ioremap size to 4 times AHB buffer size
-
-Baolin Wang (1):
-      spi: sprd: adi: Use IS_ENABLED() to validate configs
-
-Chris Ruehl (3):
-      spi: spi-rockchip: cleanup use struct spi_controller
-      spi: spi-rockchip: add support for spi slave mode
-      spi: spi-rockchip: use num-cs property and ctlr->enable_gpiods
-
-Christophe JAILLET (1):
-      spi: sc18is602: Fix a typo in MODULE_DESCRIPTION
-
-Christopher Hill (3):
-      spi: rb4xx: null pointer bug fix
-      spi: rb4xx: update driver to be device tree aware
-      spi: rb4xx: add corresponding device tree documentation
-
-Clement Leger (2):
-      spi: dw: remove unused dw_spi_chip handling
-      spi: dw: remove cs_control and poll_mode members from chip_data
-
-Colin Ian King (1):
-      spi: remove redundant assignment to variable ms
-
-Dinghao Liu (4):
-      spi: spi-fsl-lpspi: Fix runtime PM imbalance on error
-      spi: tegra114: Fix runtime PM imbalance on error
-      spi: tegra20-slink: Fix runtime PM imbalance on error
-      spi: tegra20-sflash: Fix runtime PM imbalance on error
-
-Dinh Nguyen (2):
-      spi: dw: add reset control
-      dt-bindings: snps,dw-apb-ssi: add optional reset property
-
-Evan Green (1):
-      spi: pxa2xx: Apply CS clk quirk to BXT
-
-Florian Fainelli (3):
-      spi: bcm-qspi: Handle clock probe deferral
-      spi: bcm-qspi: Handle lack of MSPI_REV offset
-      spi: bcm2835: Implement shutdown callback
-
-Geert Uytterhoeven (4):
-      spi: dt-bindings: rspi: Convert to json-schema
-      spi: spidev: Add support for Octal mode data transfers
-      spi: spidev_test: Add support for Octal mode data transfers
-      spi: spi-mem: Fix Dual/Quad modes on Octal-capable devices
-
-Jacko Dirks (1):
-      spi: bcm2835: Fixes bare use of unsigned
-
-Jarkko Nikula (1):
-      spi: dw: Add Elkhart Lake PSE DMA support
-
-Jason Yan (2):
-      spi: spi-mtk-nor: make mtk_nor_exec_op() statuc
-      spi: a3700: make a3700_spi_init() return void
-
-Jay Fang (1):
-      spi: dw-mmio: Do not add acpi modalias when CONFIG_ACPI is not enabled
-
-Jules Irenge (1):
-      spi: atmel: Add missing annotation for atmel_spi_next_xfer_dma_submit=
-()
-
-Jungseung Lee (1):
-      spi: spi-ep93xx: fix wrong SPI mode selection
-
-Justin Chen (1):
-      spi: bcm-qspi: when tx/rx buffer is NULL set to 0
-
-Kamal Dasu (6):
-      spi: bcm-qspi: Drive MSPI peripheral SSb pin on cs_change
-      spi: bcm-qspi: Make PM suspend/resume work with SCMI clock management
-      spi: bcm-qspi: Use fastbr setting to allow faster MSPI speeds
-      spi: bcm-qspi: add support for MSPI sys clk 108Mhz
-      spi: Add support for mspi on brcmstb SoCs
-      spi: bcm-qspi: MSPI_SPCR0_MSB MSTR bit exists only on legacy controll=
-ers
-
-Kangmin Park (1):
-      spi: ti_qspi: fix unit address
-
-Kunihiko Hayashi (3):
-      spi: uniphier: Depend on HAS_IOMEM
-      spi: uniphier: Use devm_platform_get_and_ioremap_resource() to simpli=
-fy code
-      spi: Convert UniPhier SPI controller to json-schema
-
-Linus Walleij (1):
-      spi: orion: Convert to use GPIO descriptors
-
-Lukas Wunner (12):
-      spi: amd: Fix duplicate iounmap in error path
-      spi: amd: Pass probe errors back to driver core
-      spi: amd: Drop duplicate driver data assignments
-      spi: amd: Fix refcount underflow on remove
-      spi: amd: Drop superfluous member from struct amd_spi
-      spi: Fix controller unregister order
-      spi: bcm2835: Fix controller unregister order
-      spi: bcm2835aux: Fix controller unregister order
-      spi: bcm2835: Tear down DMA before turning off SPI controller
-      spi: dw: Fix controller unregister order
-      spi: pxa2xx: Fix controller unregister order
-      spi: pxa2xx: Fix runtime PM ref imbalance on probe error
-
-Mark Brown (14):
-      Merge series "Cleanup chip info in spi-dw driver" from Clement Leger =
-<cleger@kalray.eu>:
-      Merge tag 'v5.7-rc3' into spi-5.8
-      Merge branch 'for-5.7' of https://git.kernel.org/.../broonie/spi into=
- spi-5.8
-      Merge series "Grab bag with AMD SPI fixes" from Lukas Wunner <lukas@w=
-unner.de>:
-      Merge series "spi: dw: Add generic DW DMA controller support" from Se=
-rge Semin <Sergey.Semin@baikalelectronics.ru>:
-      Merge branch 'for-5.7' of https://git.kernel.org/.../broonie/spi into=
- spi-5.8
-      Merge series "spi: dw: Add generic DW DMA controller support" from Se=
-rge Semin <Sergey.Semin@baikalelectronics.ru>:
-      spi: Make spi_delay_exec() warn if called from atomic context
-      spi: Remove note about transfer limit for spi_write_then_read()
-      Merge series "add ecspi ERR009165 for i.mx6/7 soc family" from Robin =
-Gong <yibin.gong@nxp.com>:
-      Merge series "spi: dw: Add generic DW DMA controller support" from Se=
-rge Semin <Sergey.Semin@baikalelectronics.ru>:
-      spi: bcm2835: Remove shared interrupt support
-      Merge remote-tracking branch 'spi/for-5.7' into spi-linus
-      Merge remote-tracking branch 'spi/for-5.8' into spi-next
-
-Martin Sperl (1):
-      spi: bcm2835: Enable shared interrupt support
-
-Patrice Chotard (2):
-      spi: stm32-qspi: Add pm_runtime support
-      spi: stm32-qspi: Fix unbalanced pm_runtime_enable issue
-
-Peng Ma (1):
-      spi: spi-fsl-dspi: Adding shutdown hook
-
-Peter Rosin (1):
-      spi: mux: repair mux usage
-
-Rafa=C5=82 Hibner (1):
-      spi: spi-axi-spi-engine: Access register after clock initialization
-
-Robin Gong (1):
-      spi: imx: fallback to PIO if dma setup failure
-
-Sanjay R Mehta (2):
-      spi: spi-amd: Add AMD SPI controller driver support
-      spi: spi-amd: fix warning
-
-Serge Semin (24):
-      spi: dw: Fix native CS being unset
-      spi: dw: Initialize paddr in DW SPI MMIO private data
-      spi: dw: Clear DMAC register when done or stopped
-      spi: dw: Add Tx/Rx DMA properties
-      spi: dw: Enable interrupts in accordance with DMA xfer mode
-      spi: dw: Discard static DW DMA slave structures
-      spi: dw: Discard unused void priv pointer
-      spi: dw: Discard dma_width member of the dw_spi structure
-      spi: dw: Set xfer effective_speed_hz
-      spi: dw: Return any value retrieved from the dma_transfer callback
-      spi: dw: Locally wait for the DMA transfers completion
-      spi: dw: Add SPI Tx-done wait method to DMA-based transfer
-      spi: dw: Add SPI Rx-done wait method to DMA-based transfer
-      spi: dw: Parameterize the DMA Rx/Tx burst length
-      spi: dw: Use DMA max burst to set the request thresholds
-      spi: dw: Fix Rx-only DMA transfers
-      spi: dw: Add core suffix to the DW APB SSI core source file
-      spi: dw: Move Non-DMA code to the DW PCIe-SPI driver
-      spi: dw: Remove DW DMA code dependency from DW_DMAC_PCI
-      spi: dw: Add DW SPI DMA/PCI/MMIO dependency on the DW SPI core
-      spi: dw: Cleanup generic DW DMA code namings
-      spi: dw: Add DMA support to the DW SPI MMIO driver
-      spi: dw: Use regset32 DebugFS method to create regdump file
-      spi: Convert DW SPI binding to DT schema
-
-Tiezhu Yang (1):
-      spi: spidev_test: Remove hidden temporary file when make clean
-
-Wan Ahmad Zainie (6):
-      spi: dw: Fix typo in few registers name
-      spi: dw: Add update_cr0() callback to update CTRLR0
-      spi: dw: Add support for DesignWare DWC_ssi
-      spi: dw: Add support for Intel Keem Bay SPI
-      spi: dw-apb-ssi: Add compatible string for DesignWare DWC_ssi
-      spi: dw-apb-ssi: Add Intel Keem Bay support
-
-Wei Yongjun (4):
-      spi: spi-fsl-qspi: Fix return value check of devm_ioremap() in probe
-      spi: spi-amd: Fix a NULL vs IS_ERR() check in amd_spi_probe()
-      spi: uniphier: fix error return code in uniphier_spi_probe()
-      spi: bcm2835: Fix error return code in bcm2835_dma_init()
-
-Yicong Yang (1):
-      spi: hisi-sfc-v3xx: add error check after per operation
-
-dillon min (2):
-      spi: stm32: Add 'SPI_SIMPLEX_RX', 'SPI_3WIRE_RX' support for stm32f4
-      spi: flags 'SPI_CONTROLLER_MUST_RX' and 'SPI_CONTROLLER_MUST_TX' can'=
-t be coexit with 'SPI_3WIRE' mode
-
- .../devicetree/bindings/spi/brcm,spi-bcm-qspi.txt  |  10 +
- .../bindings/spi/mikrotik,rb4xx-spi.yaml           |  36 ++
- .../devicetree/bindings/spi/renesas,rspi.yaml      | 144 +++++++
- .../devicetree/bindings/spi/snps,dw-apb-ssi.txt    |  41 --
- .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   | 133 ++++++
- .../bindings/spi/socionext,uniphier-spi.yaml       |  57 +++
- Documentation/devicetree/bindings/spi/spi-dw.txt   |  24 --
- Documentation/devicetree/bindings/spi/spi-rspi.txt |  73 ----
- .../devicetree/bindings/spi/spi-uniphier.txt       |  28 --
- Documentation/devicetree/bindings/spi/ti_qspi.txt  |   2 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |   5 +
- drivers/spi/Kconfig                                |  22 +-
- drivers/spi/Makefile                               |   6 +-
- drivers/spi/spi-amd.c                              | 315 ++++++++++++++
- drivers/spi/spi-armada-3700.c                      |  10 +-
- drivers/spi/spi-atmel.c                            |   1 +
- drivers/spi/spi-axi-spi-engine.c                   |  32 +-
- drivers/spi/spi-bcm-qspi.c                         | 181 ++++++--
- drivers/spi/spi-bcm2835.c                          |  26 +-
- drivers/spi/spi-bcm2835aux.c                       |   4 +-
- drivers/spi/{spi-dw.c =3D> spi-dw-core.c}            | 233 +++++-----
- drivers/spi/spi-dw-dma.c                           | 480 +++++++++++++++++=
-++++
- drivers/spi/spi-dw-mid.c                           | 322 --------------
- drivers/spi/spi-dw-mmio.c                          |  86 +++-
- drivers/spi/spi-dw-pci.c                           |  50 ++-
- drivers/spi/spi-dw.h                               |  66 +--
- drivers/spi/spi-ep93xx.c                           |   8 +-
- drivers/spi/spi-fsl-dspi.c                         |  47 +-
- drivers/spi/spi-fsl-lpspi.c                        |  21 +-
- drivers/spi/spi-fsl-qspi.c                         |  11 +-
- drivers/spi/spi-fsl-spi.c                          |   2 +-
- drivers/spi/spi-hisi-sfc-v3xx.c                    |  26 +-
- drivers/spi/spi-imx.c                              |  31 +-
- drivers/spi/spi-mem.c                              |  10 +-
- drivers/spi/spi-mtk-nor.c                          |   2 +-
- drivers/spi/spi-mux.c                              |   8 +-
- drivers/spi/spi-orion.c                            |  70 +--
- drivers/spi/spi-pxa2xx.c                           |   6 +-
- drivers/spi/spi-rb4xx.c                            |  19 +-
- drivers/spi/spi-rockchip.c                         | 229 ++++++----
- drivers/spi/spi-sc18is602.c                        |   2 +-
- drivers/spi/spi-sh-msiof.c                         |   2 +-
- drivers/spi/spi-sprd-adi.c                         |   2 +-
- drivers/spi/spi-stm32-qspi.c                       |  62 ++-
- drivers/spi/spi-stm32.c                            |  19 +-
- drivers/spi/spi-sun6i.c                            |   1 +
- drivers/spi/spi-tegra114.c                         |   1 +
- drivers/spi/spi-tegra20-sflash.c                   |   1 +
- drivers/spi/spi-tegra20-slink.c                    |   1 +
- drivers/spi/spi-uniphier.c                         |  11 +-
- drivers/spi/spi.c                                  |  14 +-
- drivers/spi/spidev.c                               |   3 +-
- tools/spi/Makefile                                 |   4 +-
- tools/spi/spidev_test.c                            |  21 +-
- 55 files changed, 2082 insertions(+), 941 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/mikrotik,rb4xx-sp=
-i.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/renesas,rspi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.t=
-xt
- create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.y=
-aml
- create mode 100644 Documentation/devicetree/bindings/spi/socionext,uniphie=
-r-spi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-dw.txt
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-rspi.txt
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-uniphier.txt
- create mode 100644 drivers/spi/spi-amd.c
- rename drivers/spi/{spi-dw.c =3D> spi-dw-core.c} (70%)
- create mode 100644 drivers/spi/spi-dw-dma.c
- delete mode 100644 drivers/spi/spi-dw-mid.c
-
---ew6BAiZeqk4r7MaW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7U7I8ACgkQJNaLcl1U
-h9CvEAf+IZ21ruc9WPD/EmsRLT3HvWXC4rN9KU+QhoANL+CgVC1qs62hLR5oCmv4
-oSbisg8EmoGd8W1D2z+vn70/tRGZtgapH4kHq0jRnb+I5W9lM89Kd7QQuxbh0MXj
-3xf77fcfTM0z8QYkJ76ZPXPUuHFy0XQjzxDmB8K1neAZhuKn3w+MqnX/O4IXQKkB
-R36RXGmTiVv7o/F9fk6E42JLMz+mJzgmi8BnQqdnuPT9fOl9D5k1BSSIxARio1Q/
-9E8BFExHixeJQw34G9qQeNrlKOBF45GmLc7GYuA1h8DW3zFdljmHYCgiG9QaYP6B
-1WfS9gTMBjakxfKwPVtVj5TTEJk7Fw==
-=zoUT
------END PGP SIGNATURE-----
-
---ew6BAiZeqk4r7MaW--
+-Sergey
