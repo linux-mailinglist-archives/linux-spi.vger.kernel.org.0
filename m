@@ -2,105 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A874C1EAD1A
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jun 2020 20:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319D91EAF7F
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jun 2020 21:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731516AbgFASmo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Jun 2020 14:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S1727113AbgFATS3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Jun 2020 15:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731433AbgFASmn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Jun 2020 14:42:43 -0400
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3807EC03E97C
-        for <linux-spi@vger.kernel.org>; Mon,  1 Jun 2020 11:22:49 -0700 (PDT)
-Received: by mail-oo1-xc41.google.com with SMTP id h7so1609816ooc.9
-        for <linux-spi@vger.kernel.org>; Mon, 01 Jun 2020 11:22:49 -0700 (PDT)
+        with ESMTP id S1726751AbgFATS2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Jun 2020 15:18:28 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43931C061A0E
+        for <linux-spi@vger.kernel.org>; Mon,  1 Jun 2020 12:18:28 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id c11so9591009ljn.2
+        for <linux-spi@vger.kernel.org>; Mon, 01 Jun 2020 12:18:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=Qg3FAVPbW0weNZsCa0qtJe2eNAuBqsHQnnBFxoGLg78=;
-        b=ZfNdUye7sXOcsD41SZJU4liPaQJdpNRAttpGRjtuXgVyjKmvqs7W01mdTaA1yQe2FM
-         y/FfOq/wIELUtRekVtrY63Gz+alL0vfo/lFC5rsQssNizLD9o8hxWSm5emMar/3qwE51
-         8ZZz88SrLTJd+MIbC19az++NZqFx3JYAyYEHrIhrRt0IdBYyUzdM2aVNl79R7AqgyQ6m
-         Oh9m433U1jZnW2D/vLrtJ6FFTCA57xwPxvh7Lnvj0g7qCLYgLczuiuu6C36AVxTSB3kv
-         ZFtmbK2WLrXjxkI7H4zX4KDKUtV7a2uPQViCuj13Lrro4AaDjb09P614n0fko4MjyAsc
-         vFHg==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/B/vJSdZ4H+DclQbmiiPRhS99BSxRaLniCcxhXNQdaA=;
+        b=iwHH84UOoC537MGk6E7us+S+9Zdopz5u3Mz9r49FApyoOZsxNbMpSYkDpYz+aYUmIa
+         gtYJ4Nu2LvDhSS9BFKk/dXVwM+V+xJdfWYttpRfsGqdl+mfJLbnevBNm+6jq/a3qu6CS
+         79cIP/nF1F5EzENa3hIe43wwl8d/B/SzpYMrgV+aDEoXxYeViLETePnqL6+klDaawcpX
+         9Q+NOyq2LouzXifA0UFaf9jIAdeXnxvtv9zoddLb2ACAVvgArDVoDnSfzqzGD6APHcu8
+         RWbhRoiDb2muv9dDnZFBL/MccbVhteizvEX7iahC7D4K1DHIFyVP4Ro83iNhRQPi/oNz
+         WSsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=Qg3FAVPbW0weNZsCa0qtJe2eNAuBqsHQnnBFxoGLg78=;
-        b=RILARYV+tl9RDqxjwqza6kDAbwhUmVNkaCYTEbxGbsaypjvMQiZu9ifLqaqVRJWcKu
-         0MpX8sCHe6SIquHUfo4jfLwebJkSxllzYyHV7qF8q6o23yZktBAIRZxPRbeCV07yoMFW
-         xHBP+Fo6UcOb3R94gf58RGp7hoc2Xn1PCzaKb0S68/GYPb8PeZlADDHycklUVLNGPdxv
-         w5QCM6OgEce0KhskHvYnZRWAVOYqO55r4Ok+MoWoOTymPixYUklxhsnH3JCk4YTF/ODH
-         iwqalzRM7b6k4pyQ9hEkI5XZmzbHCQ3vb6cBiSJdhCNq+o4GaCPq/ZryNTam9hTXCSd6
-         5Eow==
-X-Gm-Message-State: AOAM531PAmybU2ThD8aRX6GXyviPgCXQ5DTQWQLhkOGktye3ZqKziP31
-        JnZxZ9l8nZqs+s+nXh4UI20j3EM=
-X-Google-Smtp-Source: ABdhPJx+RIiQ3ANHLJkEVdYV/hk9WlAyU9C7mi4sFCrFt7Q5T+xTxkJ1YcZdwX3F/4qZr5ZufeYxgA==
-X-Received: by 2002:a4a:9442:: with SMTP id j2mr17907728ooi.37.1591035768369;
-        Mon, 01 Jun 2020 11:22:48 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.146.204])
-        by smtp.gmail.com with ESMTPSA id t24sm5339234otp.69.2020.06.01.11.22.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2020 11:22:47 -0700 (PDT)
-Received: from t560.minyard.net (unknown [IPv6:2001:470:b8f6:1b:5946:4e5:448a:387b])
-        by serve.minyard.net (Postfix) with ESMTPA id C8055180044;
-        Mon,  1 Jun 2020 18:22:46 +0000 (UTC)
-From:   minyard@acm.org
-To:     Han Xu <han.xu@nxp.com>, linux-spi@vger.kernel.org
-Cc:     Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH] spi:fsl-espi: Ignore spurious interrupts
-Date:   Mon,  1 Jun 2020 13:22:41 -0500
-Message-Id: <20200601182241.9272-1-minyard@acm.org>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=/B/vJSdZ4H+DclQbmiiPRhS99BSxRaLniCcxhXNQdaA=;
+        b=BNPbkCyb3tYJ8RsB7iFjkuQ5fep+3wxG//+dwXkywXXfIg67ZvnyoJS+xqFMdpiKBA
+         hwqftXI5A+RcemyiY07Akw73DW5UIrPXWOJhcdFCQCSUs7MZpPEQ4bShyc2cIbGKzK/v
+         sMGJ40k7H0C3Ezy2BUccRL7UeYM6IDUyARSnoLan79fQqzeMG6bJwszxG/Znmy2LwMz2
+         dUBLfRz4TmV7NsT1n5GeYnwHmPVa5o3NFD8tSKhYkp/+unmDRE5KvMKjS1OF+92M+Jcn
+         hqAhT58u+4Gq8+oWg14FjQt/rwc6VE4zfvMSCp6E/ium6kqEungSbDSqxtzGIrREmaUv
+         T3uw==
+X-Gm-Message-State: AOAM5305TksiifEEHOVTxPLCUmJJiE6WocAjm6LaVeF0HuMPCbE65F8R
+        lQDVCKCWaLxna6lFUmFI/qHMrA==
+X-Google-Smtp-Source: ABdhPJy3cN4yLGJe+/Z+8B7cDMmCco1eIsfE3RnyFphuEUNzt9DcbvqKy/QmOpfmfS39sSO6wln/8A==
+X-Received: by 2002:a2e:970c:: with SMTP id r12mr11288156lji.145.1591039106548;
+        Mon, 01 Jun 2020 12:18:26 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([2a00:1fa0:42cb:40f3:c0fd:7859:f21:5d63])
+        by smtp.gmail.com with ESMTPSA id f12sm118393lfp.8.2020.06.01.12.18.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Jun 2020 12:18:25 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] dt-bindings: memory: document Renesas RPC-IF
+ bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Mason Yang <masonccyang@mxic.com.tw>,
+        linux-spi@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>,
+        linux-mtd@lists.infradead.org
+References: <812e6e58-d13f-3f44-5f55-22266b690c57@cogentembedded.com>
+ <116683d1-d402-4d7f-3357-1c8cde807076@cogentembedded.com>
+ <20200501212547.GB15294@bogus>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <85e1ebd0-4b27-5382-c591-59d63d5b73de@cogentembedded.com>
+Date:   Mon, 1 Jun 2020 22:18:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
+MIME-Version: 1.0
+In-Reply-To: <20200501212547.GB15294@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Corey Minyard <cminyard@mvista.com>
+On 05/02/2020 12:25 AM, Rob Herring wrote:
 
-If a interrupt comes in for the device and nothing is waiting, it will
-crash the system.  Avoid the crash.
+>> Renesas Reduced Pin Count Interface (RPC-IF) allows a SPI flash or
+>> HyperFlash connected to the SoC to be accessed via the external address
+>> space read mode or the manual mode.
+>>
+>> Document the device tree bindings for the Renesas RPC-IF found in the R-Car
+>> gen3 SoCs.
+>>
+>> Based on the original patch by Mason Yang <masonccyang@mxic.com.tw>.
+>>
+>> Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+>>
+[...]
+>> Index: linux/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+>> ===================================================================
+>> --- /dev/null
+>> +++ linux/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+>> @@ -0,0 +1,88 @@
+[...]
+>> +patternProperties:
+>> +  "^.*@[0-9a-f]+$":
+> 
+> ^flash@... if you're that restrictive.
+> 
+>> +    type: object
+>> +    properties:
+>> +      compatible:
+>> +        oneOf:
+>> +          - const: cfi-flash
+>> +          - const: jedec,spi-nor
+> 
+> enum is better than oneOf+const.
 
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
----
-I was working on a system where the firmware seemed to leave the SPI
-device in a state where an interrupt was pending.  As soon as interrupts
-were enabled the system would crash.
+        - enum:
+          - cfi-flash
+          - jedec,spi-nor
 
-It seems that the interrupt handler will crash if an interrupt comes in
-and nothing is pending.  This seems like a bad idea; this patch adds
-checking to make sure something is pending before trying to process it.
+causes the build error you encountered while trying to merge the last time.
+What was I doing wrong?
 
- drivers/spi/spi-fsl-espi.c | 5 +++++
- 1 file changed, 5 insertions(+)
+[...]
 
-diff --git a/drivers/spi/spi-fsl-espi.c b/drivers/spi/spi-fsl-espi.c
-index e60581283a24..091f0c681ff6 100644
---- a/drivers/spi/spi-fsl-espi.c
-+++ b/drivers/spi/spi-fsl-espi.c
-@@ -217,6 +217,9 @@ static void fsl_espi_fill_tx_fifo(struct fsl_espi *espi, u32 events)
- 	unsigned int tx_left;
- 	const void *tx_buf;
- 
-+	if (!espi->tx_t) /* In case we get a spurious interrupt. */
-+		return;
-+
- 	/* if events is zero transfer has not started and tx fifo is empty */
- 	tx_fifo_avail = events ? SPIE_TXCNT(events) :  FSL_ESPI_FIFO_SIZE;
- start:
-@@ -274,6 +277,8 @@ static void fsl_espi_read_rx_fifo(struct fsl_espi *espi, u32 events)
- 	unsigned int rx_left;
- 	void *rx_buf;
- 
-+	if (!rx_fifo_avail) /* In case we get a spurious interrupt. */
-+		return;
- start:
- 	rx_left = espi->rx_t->len - espi->rx_pos;
- 	rx_buf = espi->rx_t->rx_buf;
--- 
-2.17.1
-
+MBR, Sergei
