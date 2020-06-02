@@ -2,40 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2D31EB7DC
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 11:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146E51EB88A
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 11:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbgFBJFe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jun 2020 05:05:34 -0400
-Received: from mout.web.de ([212.227.15.3]:53807 "EHLO mout.web.de"
+        id S1726012AbgFBJae (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jun 2020 05:30:34 -0400
+Received: from mout.web.de ([212.227.15.4]:45805 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725811AbgFBJFd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Jun 2020 05:05:33 -0400
+        id S1725958AbgFBJae (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 2 Jun 2020 05:30:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1591088710;
-        bh=XhGeAXDfw9AiiSAdvgQbq6rf/vrbHOyi+DVrpim7IVs=;
-        h=X-UI-Sender-Class:To:Cc:Subject:From:Date;
-        b=KhkZSSBzq4cg1+S1MUCxdW3q+ygMyZKelIIs8+nygoTvJYuJs8IpVCeZNnYdfQ6Fb
-         jV7xUR6cN2hzw4d7WiI78rGl/YiThUr8LGcarJu8C0Rl7cyfbiSnKJlfFB96aWPxUb
-         3fD/OB88W9Q4mGq14X45RN1dB5Zi33RYBTiBb+a8=
+        s=dbaedf251592; t=1591090216;
+        bh=bdrTA7owL3cypaMnO4td8PYGrsq+X3bLWhlnIg20RMg=;
+        h=X-UI-Sender-Class:Cc:Subject:From:To:Date;
+        b=N6F2H4UbW7gDnzDesDfLCZHtouUYnJPdr+mXuuwZ9o/Zp3S7Qc2eixFRlQRNh1Xjs
+         xNV8wl7SKguCWLUUl2mB+QK78aywwFCC7oPFMos4RnfJCKVS8uO7RP45fGgZA0/QvN
+         4YwxDKu6mRcwiSw6WzitaQyrYIenbuzwhYNFsdhI=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.243.186.246]) by smtp.web.de (mrweb003
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0M7KOE-1ijNjM1KAY-00x06b; Tue, 02
- Jun 2020 11:05:10 +0200
-To:     Navid Emamdoost <navid.emamdoost@gmail.com>,
-        linux-spi@vger.kernel.org
+Received: from [192.168.1.2] ([2.243.186.246]) by smtp.web.de (mrweb002
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0LtFAh-1j0DOF0aYV-012nM8; Tue, 02
+ Jun 2020 11:30:16 +0200
 Cc:     Navid Emamdoost <emamd001@umn.edu>, Kangjie Lu <kjlu@umn.edu>,
         Stephen McCamant <smccaman@umn.edu>,
         Qiushi Wu <wu000273@umn.edu>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
         Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Mark Brown <broonie@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] spi: sprd: call pm_runtime_put if pm_runtime_get_sync
- fails
+Subject: Re: [PATCH] spi: img-spfi: Add missing pm_runtime_put() call in
+ img_spfi_resume()
 From:   Markus Elfring <Markus.Elfring@web.de>
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
@@ -80,54 +75,59 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <8ea80af8-e964-4488-25c6-837f2ac88493@web.de>
-Date:   Tue, 2 Jun 2020 11:05:07 +0200
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>,
+        linux-spi@vger.kernel.org
+Message-ID: <77456334-aeb6-fb4e-a5c6-3b63a898928f@web.de>
+Date:   Tue, 2 Jun 2020 11:30:13 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:r0Ml+LxQIhB/V5/UspH+IDLMruxhQLcNn86TeiX5mpWvHOPmUt6
- dhKOevzUl0PCUv6LQ/qbGfW8kgiToEULAjnKLxZXhwVgHcqxTf0Fju6Bfxhe9RlVidu9ebv
- hf/BEG5CbdaCBGIxhXV74/LqpgpLMvq6q+xWfXcApQ9OXAZxzIl5aqtovjSxzoYz3BxUS/G
- exqSPeOKvHJqs0SnGC5Yg==
+X-Provags-ID: V03:K1:evsTwxyf4VDHKUkafCjr5sX0TIpolVj2FevJRGfqgjhkSzdb+Vi
+ 46+op1dKnI0D47p5nb7uWjn4S7s5LPh7pxlUsMuQjIPzf2XZdYUR1FRgg1MvyoVcXwVNKls
+ JgAvS7uRB1SN4bbzuj0phZmnZc8XokjXmidrb0ytXHlR3JUgzkue7V+doxsVkfD9Hbbh9CE
+ M6wCRHEl/JlQiXFefc0VA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lZgWfSGFN6U=:FdqFp+0W4JZXijtRfp1A42
- Xh+yrYj8w+h/anapy1Z1wO+c+/vpZpLaYN/cq7lUpjH7Zf+aqOaVWaY+Rrmb7/dxFa+xATLGi
- WfXanV/kO0+UNIY7FAHQDSR6M+y2B95ALRdE7hChGj91n0hJEQENeNxIwmoIEvxMdY4Ea+Xvi
- oW6tWQyivByg0YzW+NEFfdL5KOyPlYhpNpkD4sl2bykYTUlB2SUkAGc+kzdwwBzdXWgQETXRQ
- CHwOzdjyuE9dgXi8FxPqwk+vKtOhWqTvVhlFPTzRLLBu9wJEi/0E23zSTyAa9PB1MKdLeUlzb
- 0gJmqTb4LgMbOnFJ/pVMAhCZuvTFsgPUmww+PrteYJDnFmpeAJ6pmGI4Z3AXkRfk2LLRplrUT
- KBSZ79NntY9jaY+5ihZbMmszW0Ck/nfuEvXpepTdT7CzZIdEunUzQVmMMmnu99SfZmyQhSd7a
- z5+e7MUUpe7TUFLFfdZ1f+vTAPd1OxgzoQYkI4Hxvp5v2gX3aSy2KP1Cn2yIpkuNGLIpbvvlw
- 0Ojqdd/Y6lGhUGSKgvgj8mYMNl419udU0SB3FaJz8CZllJDU9JofBrP3o/L2jGE6ZN3mt/IKd
- 8oR9fF+kMu6eJm6klSxLo3y1euFhTn0z6w2CdgAEdEcrLhmSeXZWRRy2Uk0h4IITyRCOB3ioi
- 9XAUuCdN/9w4LwCKUZE1UzenW0IWtY2ljNEtlkOgexwVtpFd049zfoNQOC5Pq41owWJCEY0vl
- bwzr0ODRP527qwrTlGlxmF9R0fYBrYsQut7rgfZTgWPurz94VsclPgl3kL3JO0lJBMZ0pTzuU
- UsXjhIj/AGodVmmwEL1jrcAJQvx+WkBMDlfaNNMd2XgD1eh728ypvwksm7erwcz+WKAn8ZHO0
- Q5qpp0Y5kd05yG/iTnz3HU1WcYfN8mLbfEa+fmdefbk0FTLwccilyaUrEF9xJo67+24JVUpS4
- qmH6uE9iUo7BmZ5QwtFK6UlDFcZUQgpVm4rb+rmRwlVO7NE66wuNcTOgnR45Dp9NtkfDAHS4U
- WKRQE1EiaBNefyqZZ8iBmmXycnmgETrKXCco5JRcpi5Wq9rbmGraQeX1KonW0+qMkm/rjIkHh
- zHaLmn26qM0VWvmRSkGz0uznQDCoPspDaPB1Vg/W6+d12q7n4xubORoe1mXDYWUKUI1455uM1
- PfaB0TGyVMOSEO3t2as6TIlilkmBaB2oNRPewP/yddpxkRg1IxzCbbLCHJFDfwcJ2CQx7iN2K
- 8xo9BB4COS7LkYtkR
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IuwHl3uGU7k=:hKBNM2pxFUtQaq4egL5AUX
+ iyUP0zu8OAdNn9qfpkhdadqSvR/K/EMOynsr/ZeY3V4IElfQapSkH1bb/wFBtfzALLmK3TNaG
+ lvc2pi7jpr+rLakzxcv9s3R+VUc8+mijMUmkTjFM0Pw+xfx7w1DTxfh7CmAjQP50t8YlB4IJU
+ g1ZHamMne1zSrw4Yl/niramWtSj7PZro6nkPPaV0sOLufkJUTxjOCxFxMRiyt1cqGHoEdx3ah
+ Tv6ZJYQhdF20HDWQZ8SgDPeB+N90gqBvnJMcfMS9/17GDf6hL+d+r/Fo2zcBSs+cy8/s2qUgM
+ Piu9IYlVLsi8Miy32E/5Sc4oOj1VJ+Aw49haiYjILL3lGyBmvLnWSbSPpymAkhtS6JoOA5hNU
+ IL7gVdc9cwPHWZYB9TXP8A7avL79FK8BZrEYvUf1930LxKGzaec5XvNEA6BsBreQF8S5Nz9yR
+ ta14JpcvLuQDOYz48A0O8636wd5ugjQF3h4L0FUKKELW2xcBqZZRH158XPwNKr28abRrmRa/j
+ gHPZcbyl+x1pNs577LTnKptPPbGmStiNb3X5bhQ6N+h/Eq/M2WwfeJAjek99N2C2C55bBl85L
+ MJShyeiSCqJpsfIobAlegRKo5l/QbYygX0r+nkgHJapTLhMSjQkCvMWmg3EBLir5BvHWEDb7g
+ rzUCNaEade3ytDkYUi+YP4tKQQ1T6aRCyLJqLQDHKkw38FRVgZAO8WEWJBCMkq/KLcXSU/ou3
+ 5qH/4XPOf7rqK91GR1xnN06+EAe6e5IqqsIabw/+LGJhcDjBEFWSWJgkw1IV6AcoETcGsJgvR
+ zU37g7wotZafbAbt7Q+225iqQm87Qp2ZdsQ36Z+p4k36ESqrgryeqiY9aVoRB1UQvRTJtauxr
+ Aycrq7wPYjE9ALY9WuGcRs9ZPhd5xW+dMGs+7NkDWhaEx8LDjVS7q7vSv5LRD35N80NculgRf
+ Z1Zw8tR1qglvaDFi1aTeTO2zCMYiVb5Cm7aM2cLj0cej6UjnKwqwDm/iCULLm3XmJnSIBqpxz
+ q4NYZY0N6jDOh9Kd2WcLLGd+y/0DL4x+tHjo9rwvSHlM5udvX9h57ZCTLOZQBLGHMynl7E7sG
+ IYYfGw7rs60Kcqprwl37EFCBIdUai2AcS3tumgPwbrbGUM9u2NnQpye1Wpz/eSRzIHk/NDnHB
+ ffl6qgno1LHFjSA86O0EGf8K/WbNZ4jAhz1o6q4uX4GSS4mJUtPlKuXnA1JG22H46xUnzsFeU
+ 1i5tohDfUVWBR+1On
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Please avoid a typo in the patch subject (by a possible alternative?).
+
+
 > Call to pm_runtime_get_sync increments counter even in case of
 > failure leading to incorrect ref count.
-> Call pm_runtime_put_noidle if pm_runtime_get_sync fails.
+> Call pm_runtime_put if pm_runtime_get_sync fails.
 
 How do you think about a wording variant like the following?
 
    Change description:
    The PM runtime reference counter is generally incremented by a call of
    the function =E2=80=9Cpm_runtime_get_sync=E2=80=9D.
-   Thus call the function =E2=80=9Cpm_runtime_put_noidle=E2=80=9D also in =
-one error case
+   Thus call the function =E2=80=9Cpm_runtime_put=E2=80=9D also in one err=
+or case
    to keep the reference counting consistent.
 
 
