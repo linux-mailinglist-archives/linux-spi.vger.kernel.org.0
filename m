@@ -2,87 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBC41EC027
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 18:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3361EC1EB
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 20:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727026AbgFBQfI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jun 2020 12:35:08 -0400
-Received: from mail-eopbgr700057.outbound.protection.outlook.com ([40.107.70.57]:30325
-        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726140AbgFBQfH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Jun 2020 12:35:07 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DVe855BN+hvDCgqf/0w9yQsOyIDj8jAJi027Gx7KJBHnEbGupbeINtcdq/8soyP96TTh7od5inGKJlCD6tw7h1OPPdDYZsPKgPLYv7H/F+5/RNSfAPiUB820cbDEq0KDDR8TYOPLultEKCH74dnMI1Doas7Hg7eDDk9wz7iJKomvCSzCTx+h+J4sunEQlKqJRNiwkRUS8Ymr9DQCSGdV3eEcyBcub6DlQlFQEZPikEvgmvzH1SeI8wXRIJ4FSLFcC8J+wQxMbSE6b8PclP/quW+NCokISFTqr94tpmTXCMtD3gxUk72K/qaNvnburqQRbEc8z26hUcGVEtwDTcP4Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zrNYfKVm8jgkyRB6RAeqIk7sKNlgbRS+hxYhDAkRokw=;
- b=jvBcGYM6UY64Ow3O4+4/lRmGroyGkSkbc6Zb8QqMZiWmp3jL96BlfEQMtJKodxobKzxIKo4B4dgKzt6KaCKfVAImwIkOseAzI4Go6//mo1JFb2LqglB+uiRrTQk13vGz3w8zrO/I7+6ZXKlZzDKQ0Nwtx1dD3qBDNHK/V5a4O6BTpz2KB+QPVyFdbpqhFcUkmRvNdMZBE834pcKu8/+m/gUThyBWealbd6mxxEDjTOZ0AySK4/oVlbtKeqXp1hlb826zQYlchCyTUGAuLkXXxayzyVRKPTeBIvTlWUAqcOfkKW1KYBX0SQwRc/QrJ46XARdVrB32pfnJ0EY05AmbrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
- dkim=pass header.d=infinera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zrNYfKVm8jgkyRB6RAeqIk7sKNlgbRS+hxYhDAkRokw=;
- b=YOjeDdNfuMjt/ExDN9exr9yHRdbD1MYw7chD1zygRxW5sRS7uZYXVGHR8Do8hoNW52KJUeoXvGtJE+oe2A4A6doLP0UfK8BW0VKYhpWQGpzLJj8gSJdsBzD6gwqxPydAG4SS0gTx/JDotz7iyT0fKqAkfMVBUAKjkF6BR0mBYbM=
-Received: from BN8PR10MB3540.namprd10.prod.outlook.com (2603:10b6:408:ae::24)
- by BN8PR10MB3268.namprd10.prod.outlook.com (2603:10b6:408:d2::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18; Tue, 2 Jun
- 2020 16:35:04 +0000
-Received: from BN8PR10MB3540.namprd10.prod.outlook.com
- ([fe80::c158:d59f:e3bc:1941]) by BN8PR10MB3540.namprd10.prod.outlook.com
- ([fe80::c158:d59f:e3bc:1941%2]) with mapi id 15.20.3045.024; Tue, 2 Jun 2020
- 16:35:04 +0000
-From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-To:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Linux as a SPI slave?
-Thread-Topic: Linux as a SPI slave?
-Thread-Index: AQHWOPvEoPGFwQqJ8U2iNDod95yI5w==
-Date:   Tue, 2 Jun 2020 16:35:04 +0000
-Message-ID: <4958d1437f88e47e57b9736b0c0fc067ece812f1.camel@infinera.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.3 
-authentication-results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=infinera.com;
-x-originating-ip: [88.131.87.201]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 73d247d7-1e66-4d81-d1ae-08d80712e765
-x-ms-traffictypediagnostic: BN8PR10MB3268:
-x-microsoft-antispam-prvs: <BN8PR10MB32682755FE398CE66AA20473F48B0@BN8PR10MB3268.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 0422860ED4
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nTvss20qZ2k9qeZEYJLFVH9+FUh1Ref8CzAjmE2OsWW4SgMSRsFcgJXNYwX3z4qwQ38VYKfghW62CGNlt3X0kFMDopP4QDdYHgFbm5/vawTIir0WSPo4K6ihD2d6O6KD2rNnaM0fBAXqGaCZKTgCUJkU/i6gKiVMBaQ2C3VLeC0SmxrpDgYJwSrZ9WqSh+3znt+blGDiD1/49t4o96ZGDSCQDeGKOw3ycTjSJnF9+3FfcyhHjIfo/Khr6PcsNT8a3HergLCzskgDlB93NEE6fXWpbFOQ58PzMhe0DpMBzQHIhYy19fvQO9v+DpXCeepmHHJ75Y5ARMBIrhTt/C/0Ow==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3540.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(376002)(346002)(39860400002)(396003)(136003)(478600001)(64756008)(66476007)(66446008)(316002)(66556008)(91956017)(76116006)(66946007)(86362001)(5660300002)(6506007)(6486002)(2616005)(558084003)(8936002)(26005)(36756003)(8676002)(186003)(2906002)(6916009)(71200400001)(6512007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: DcCpmzB4IlRZqznuOAfZQO76InPZCP4V8l/Vy92FdSbyr3itSufd+C4pCGm4o7ow45HqnBPlPYCKaVRGixLJ3+IgJUrsHjwjHhwtqUGrSHqsWYpM9bbka3ramc55M/oC2OIiZ0qP70KXmka3jMNWE3F6o8rzckPPRmjXVDTD+pPUjzOYoWmzigtKTxu04s5CLbZkoXoQMw9ufEUH+qwQnfponUpSCBdFijx6755astr6/vUfrxXzoUdPkNNKaNwJ74GBXGpWtC5/7aqPzobUFrqwjI3u2opgD/uIcZTdZdrCjXXNHNtmkniZnMtvbS4FJcQ/M2VjD6uieaH4VjBkLHf3l5uSZnRGfpXwamp1s1RDhAM39XGfOUEW0mgrDu9IGZAXl+45xSC8cBns0NZdnavcl/5HqA9dw4znwm9SAZzgNhI0ntPUP2Ma2gKvhiGJRfv1yMYEqv7+yyJE1iTPu2TQaKZvkOXF30ILx6Mw23E=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4AD2FE1923AD1947A450AC3E2F2887BF@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726373AbgFBSgr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jun 2020 14:36:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47670 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726728AbgFBSgr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 2 Jun 2020 14:36:47 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0C6442072F;
+        Tue,  2 Jun 2020 18:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591123006;
+        bh=OvQjdPoM0pJTu54sJl+ffqQUAsF4t+qMSrZonGhfXr4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UWuBRQkdY99dlKdSFTzfrSniB90bkr6VieoRYdv07lD+xXNP5vH7xP+znRdvLtssc
+         uMUJrCLfVqLgFEtdsG7glA6raTtaA3V0uJPcsZPHI8i+cu5RBw8I4p2mpnTsTlPFvF
+         6fokw5AX6dpDFXEYJxF79iaFpQ6VG1N82Qoz99/k=
+Date:   Tue, 2 Jun 2020 19:36:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     Navid Emamdoost <navid.emamdoost@gmail.com>,
+        linux-spi@vger.kernel.org, Navid Emamdoost <emamd001@umn.edu>,
+        Kangjie Lu <kjlu@umn.edu>, Stephen McCamant <smccaman@umn.edu>,
+        Qiushi Wu <wu000273@umn.edu>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Subject: Re: spi: spi-ti-qspi: call pm_runtime_put on pm_runtime_get failure
+Message-ID: <20200602183644.GI5684@sirena.org.uk>
+References: <26028f50-3fb8-eb08-3c9f-08ada018bf9e@web.de>
+ <20200602094947.GA5684@sirena.org.uk>
+ <1c13e0ec-e50f-9eea-5704-052d2d682727@web.de>
+ <20200602141306.GH5684@sirena.org.uk>
+ <cc8e1397-c605-d73e-363e-9d2ddfb9ae16@web.de>
 MIME-Version: 1.0
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73d247d7-1e66-4d81-d1ae-08d80712e765
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jun 2020 16:35:04.3761
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7SC9Rz5Riu2sEDZ1U+8IozYYfLXxjGxkhlxkzbXx9skvQ5zaubRIqULFdmAgOHWwot6FjEU5dTwwEk2GSdTGUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3268
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="N8NGGaQn1mzfvaPg"
+Content-Disposition: inline
+In-Reply-To: <cc8e1397-c605-d73e-363e-9d2ddfb9ae16@web.de>
+X-Cookie: We are not a clone.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-RnJvbSB3aGF0IEkgY2FuIHRlbGwsIHRoZSB3YXN0IHVzZXMgb2YgU1BJIGluIExpbnV4IGlzIGFz
-IGFuIFNQSSBtYXN0ZXIuIElzIHRoZXJlDQphbnkgdXNlIGNhc2VzIGFzIGEgU1BJIHNsYXZlPw0K
-SSBmZWFyIHRoYXQgdGhlIGxhdGVuY3kgY2FuIG1ha2UgTGludXggdW5zdWl0YWJsZSBhcyBhIFNQ
-SSBzbGF2ZSwgaGFzIGFueWJvZHkgdHJpZWQ/DQoNCiBKb2NrZQ0K
+
+--N8NGGaQn1mzfvaPg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jun 02, 2020 at 05:05:18PM +0200, Markus Elfring wrote:
+> >> I find this commit message improvable also according to Linux software
+> >> development documentation.
+
+> > Causing people to send out new versions of things for tweaks to the
+> > commit log consumes time for them and everyone they're sending changes to.
+
+> Improving patches (besides source code adjustments) is an usual software
+> development activity, isn't it?
+
+Your updates were not improvements.  The formatting was worse and to my
+native speaker eyes the grammar was worse.  With this sort of stylistic
+thing it's especially important that any review aligns with the needs
+and practices of the subsystem, there is opinion in there and multiple
+opinions just makes things harder for submitters.
+
+--N8NGGaQn1mzfvaPg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7WnDsACgkQJNaLcl1U
+h9DGkAf+PjSEqHTfl5f2iz9hfmR2SynpiykJ1XkuI/QQI+g5b8po5GEO+Ex48irJ
+eZapYj6s73KBN1FcvTkmGNrCqO1sGQwMXvsf0cIQ1gFltQt01hopOWwqGvt1MtDm
+nwCi6sU1jOjGzkQ/sgxvvIPIz8YAQ+YD177k4v6XKma565eJGukVTpQZfwWi52Xq
+MHT93raV0bDM1nZz2/xe/P1GsKd4iO/+nGbI2qA9ZmueqGzbsqphOlgf1Z/M4em2
+qIA7qVs5WkjL01yyBjwoKkZo1Q7XVp20NtZvytXut/iFx0X4XUV2E/ehB/EqAcKt
+REEO3WfKi8oLPVWCRSzau202uix/yQ==
+=NOcb
+-----END PGP SIGNATURE-----
+
+--N8NGGaQn1mzfvaPg--
