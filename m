@@ -2,157 +2,182 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 371981EC341
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 21:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D89E1EC430
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 23:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgFBTzL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jun 2020 15:55:11 -0400
-Received: from mout.web.de ([212.227.15.4]:54503 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726589AbgFBTzK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Jun 2020 15:55:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1591127692;
-        bh=F130L1o0OUvgpE9qyzKTGdlhMZWHcJ6hkaBOlTJTk5o=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=ZQ4haN4KxegQnDtQdYI7Y/CoWpq9YIlbKj7oR962NjvDRt0YEYFWBbWP6PlscFQLt
-         iUs1mIkjnRS6WGGPrxsN1iEtxMEiMERTIVy8Vc4lgU2LJ5GKi4S4MhSL7bawFBr011
-         F9lIPRXcp/7kMuV8/fFgLa5RQJhi04aFH07X0hLU=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.243.186.246]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1N14ta-1izkOc08qo-012Vj8; Tue, 02
- Jun 2020 21:54:52 +0200
-Subject: Re: spi: spi-ti-qspi: call pm_runtime_put on pm_runtime_get failure
-To:     Mark Brown <broonie@kernel.org>,
-        Navid Emamdoost <navid.emamdoost@gmail.com>,
-        linux-spi@vger.kernel.org
-Cc:     Navid Emamdoost <emamd001@umn.edu>, Kangjie Lu <kjlu@umn.edu>,
-        Stephen McCamant <smccaman@umn.edu>,
-        Qiushi Wu <wu000273@umn.edu>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-References: <26028f50-3fb8-eb08-3c9f-08ada018bf9e@web.de>
- <20200602094947.GA5684@sirena.org.uk>
- <1c13e0ec-e50f-9eea-5704-052d2d682727@web.de>
- <20200602141306.GH5684@sirena.org.uk>
- <cc8e1397-c605-d73e-363e-9d2ddfb9ae16@web.de>
- <20200602183644.GI5684@sirena.org.uk>
-From:   Markus Elfring <Markus.Elfring@web.de>
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <1d1a4e7a-1c1e-efeb-ad61-5e4f1eeecab1@web.de>
-Date:   Tue, 2 Jun 2020 21:54:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+        id S1726223AbgFBVML (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jun 2020 17:12:11 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:57460 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726112AbgFBVML (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jun 2020 17:12:11 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id A56768030835;
+        Tue,  2 Jun 2020 21:12:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id PmcTIkUkiYD7; Wed,  3 Jun 2020 00:12:04 +0300 (MSK)
+Date:   Wed, 3 Jun 2020 00:12:04 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Lars Povlsen <lars.povlsen@microchip.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, <devicetree@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        SoC Team <soc@kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 05/10] spi: spi-dw-mmio: Spin off MSCC platforms into
+ spi-dw-mchp
+Message-ID: <20200602211203.3lad22zvt5yagane@mobilestation>
+References: <20200513140031.25633-1-lars.povlsen@microchip.com>
+ <20200513140031.25633-6-lars.povlsen@microchip.com>
+ <20200513151811.GL4803@sirena.org.uk>
+ <20200519120519.GE24801@soft-dev15.microsemi.net>
 MIME-Version: 1.0
-In-Reply-To: <20200602183644.GI5684@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:qKZvH10Jo4oc0hKzX8MpYzcMlovX+bheXGDCmpsOl7B+WoitNDc
- ExjDh6rueqMj9IiBUiUkOLIOH6EET+OWHj8w6i7DVBbEBbd5OYbPKCNsDv3GszPWTCTJnEk
- qUr8bs+F9tgGWiLAnxDzZA8YCEcEPnf77+Z1xxq7iBXeaVD6f73ClXG//gtFsIKiNq9q3lN
- y/VnJK6QOW51BBwQivocA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:V3oRTXAfv3Y=:2CrUDXuECCzkf6OpfKe3aj
- YcKdwW1KddnBDJ7PkuHedvqHNhH2t2T5GLmcxI7Z+i6mBbZOTgI7SkAu4mITWyl9l56YfFjBO
- fzi2SSA/FkG8IeMFMtfUWePlnyqMGyUGIJnkEl4omgtMsevRIymu5+SnhrSBIrYjuDqEEW1Ov
- 7G/K1E25Zb/r2lItNznBLfWfOctBA7nr3tO8c1glRobfW1Efrf4KVzMNEIw9mFVNPSGqDNBZ7
- QO8+LxCHfCLNJphJZZGETt+FgY1xIj6M8Ossjx5F+KrxDCozUIx5CeZJRWS8dI1X56CxOikE2
- Kuk+UTEYlrqmQXqpu7IP8s50pSCZrrMfi/tnZbALfXceWJfJVY2qg1dNpHA+0B/0garunmxhP
- 2GVWp/jOzACAdmiUJg8USsUEbb2GZSrTT0WNyzcDgOkzxCvhsqm9K1XDxFWWs2D5WCwAuenbO
- Lg80TW5NiIFSF6qzCSX7GDDITimm4lcVeBaifSVbXYhV4jK/JYX6FyuPS+ftLl2KYLqQivcUT
- Fop/TQcnAwHxpI7pjX35ADSZBTUUd4ZdUKKnpfzo1/LH2oFyGTvtQ+8ZHi5GxdlN7I3jI7OSG
- kaLrhle3AW8zTpSVVf0oP5W6AXISfJxEsLhAiPIqnyM3IV66jfT0lKjx+QYAly5PU6wwCaHtK
- azXljt+dzN1gNbfceK9DgNakDdJ39nBjA98LUNP2ifTpuuWbSME2Vh8N6ONHopFXIr6rO6AL5
- dfhi686fNm+T067ZPoX87wgMtJOZQ6FyK92bit6HV/uBiTVMHMpcslKI+DWPOX8N7foGyCfUT
- eP9beI78skdDheNOXUnzjumq6fuFha5EvBxWPzcovj9XPZ83a2qs/sO5NqiVYHfv8+Gw8O5GF
- Qu6OulSpI/zkQhKmDqbkucymmdra3Ru1P1NKMeHBDy+9jXca+LXiixKs5iScQbMH0Ig+Gy6Nt
- vOLZtC43gD+MZ1J02ZoTYfRlGDeVnxka43CGNFpRUXBOYIchCBCqosli9R0GSCLCclmUYPB1Z
- GM/kPEB02Mb1Te8xlvnh5/lhJJySLbWoNrEv3BrIwFiyXH3HY0iYTS4aXMKSbvvhz8VD51Ccc
- wmstVenuFTOsOxovr5n2Zy3XIh40t1Pu4vGUlaKSTWBwtgQXnVmxPwawR+yRiZiOG95hSupMs
- yhnMDe7FFpCEU833fyMH8LprgAbofF1XaFuLppb+Uk/tKYQslt6rcARyJfz526baP7192rluo
- xsZj6wxd3OqrNnqG1
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200519120519.GE24801@soft-dev15.microsemi.net>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> Your updates were not improvements.
+On Tue, May 19, 2020 at 02:05:19PM +0200, Lars Povlsen wrote:
+> On 13/05/20 16:18, Mark Brown wrote:
+> > Date: Wed, 13 May 2020 16:18:11 +0100
+> > From: Mark Brown <broonie@kernel.org>
+> > To: Lars Povlsen <lars.povlsen@microchip.com>
+> > Cc: SoC Team <soc@kernel.org>, Microchip Linux Driver Support
+> >  <UNGLinuxDriver@microchip.com>, linux-spi@vger.kernel.org,
+> >  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+> >  linux-arm-kernel@lists.infradead.org, Alexandre Belloni
+> >  <alexandre.belloni@bootlin.com>
+> > Subject: Re: [PATCH 05/10] spi: spi-dw-mmio: Spin off MSCC platforms into
+> >  spi-dw-mchp
+> > User-Agent: Mutt/1.10.1 (2018-07-13)
+> > 
+> > On Wed, May 13, 2020 at 04:00:26PM +0200, Lars Povlsen wrote:
+> > 
+> > > +config SPI_DW_MCHP
+> > > +	tristate "Memory-mapped io interface driver using DW SPI core of MSCC SoCs"
+> > > +	default y if ARCH_SPARX5
+> > > +	default y if SOC_VCOREIII
+> > 
+> > Why the default ys?
+> 
+> The SoC will typically boot from SPI... But its not a requirement per
+> se. I will remove it.
+> 
+> > 
+> > > +++ b/drivers/spi/Makefile
+> > > @@ -37,6 +37,7 @@ obj-$(CONFIG_SPI_DAVINCI)		+= spi-davinci.o
+> > >  obj-$(CONFIG_SPI_DLN2)			+= spi-dln2.o
+> > >  obj-$(CONFIG_SPI_DESIGNWARE)		+= spi-dw.o
+> > >  obj-$(CONFIG_SPI_DW_MMIO)		+= spi-dw-mmio.o
+> > > +obj-$(CONFIG_SPI_DW_MCHP)		+= spi-dw-mchp.o
+> > >  obj-$(CONFIG_SPI_DW_PCI)		+= spi-dw-midpci.o
+> > >  spi-dw-midpci-objs			:= spi-dw-pci.o spi-dw-mid.o
+> > >  obj-$(CONFIG_SPI_EFM32)			+= spi-efm32.o
+> > 
+> > Please keep the file alphabetically sorted.
+> > 
+> 
+> Noted.
+> 
+> > > +++ b/drivers/spi/spi-dw-mchp.c
+> > > @@ -0,0 +1,232 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * Memory-mapped interface driver for MSCC SoCs
+> > > + *
+> > 
+> > Please make the entire comment a C++ one so things look more
+> > intentional.
+> 
+> Sure, I can do that. The presented form matches that of the other
+> spi-dw-* drivers, but I can see other using // blocks. Ack.
+> 
+> > 
+> > > +#define MAX_CS		4
+> > 
+> > This should be namespaced.
+> 
+> Ack.
+> 
 
-I find your view interesting.
+> > 
+> > > +	rx_sample_dly = 0;
+> > > +	device_property_read_u32(&pdev->dev, "spi-rx-delay-us", &rx_sample_dly);
+> > > +	dws->rx_sample_dly = DIV_ROUND_UP(rx_sample_dly,
+> > > +					  (dws->max_freq / 1000000));
 
-Do you refer to a specific wording suggestion here?
-https://lore.kernel.org/linux-spi/26028f50-3fb8-eb08-3c9f-08ada018bf9e@web.de/
-https://lkml.org/lkml/2020/6/2/210
+Perhaps 100000 is better to be replace with macro USEC_PER_SEC...
 
-You pointed another programming alternative out.
-https://lore.kernel.org/patchwork/comment/1447149/
-https://lore.kernel.org/linux-spi/20200602095411.GB5684@sirena.org.uk/
+Moreover are you sure the formulae is correct?
+dws->rx_sample_dly - a number of ssi_clk periods/cycles to delay the Rx-data sample,
+dws->max_freq - ssi_clk frequency (not period).
 
+In real math the formulae would look like:
+S = d * P [s], where d - number of delay cycles, P - ssi_clk period in seconds,
+S - requested delay in seconds.
+In the driver notation: d = dws->rx_sample_dly, P = 1 / dws->max_freq,
+S = rx_sample_dly ("spi-rx-delay-us" property value).
 
-> The formatting was worse
+dws->rx_sample_dly * (1 / dws->max_freq) = rx_sample_dly <=>
+dws->rx_sample_dly = rx_sample_dly * dws->max_freq.
 
-Do you prefer an other quotation style for function names?
+Though that's represented in seconds, so if rx_sample_dly is specified in usec,
+then you'd need to scale it down dividing by USEC_PER_SEC.
 
+For example, imagine we need a delay of 1 usec with ssi_clk of 50MHz.
+By your formulae we'd have: 1 / (50000000 / 1000000) = 0 cycles (actually 1 due
+to DIV_ROUND_UP, but incorrect anyway),
+By mine: 1 * (500000000 / 1000000) = 50 cycles. Seems closer to reality.
 
-> and to my native speaker eyes the grammar was worse.
+Am I missing something?
 
-I am curious if a more pleasing wording variant will be found.
+> > 
+> > If this is a standard feature of the DesignWare IP why parse it here and
+> > not in the generic code?
+> 
+> This is a standard feature of the DesignWare IP, so good suggestion. I
+> will arrange with Serge.
 
+Regarding "spi-rx-delay-us" and the sampling delay the IP supports. Here is what
+documentation says regarding the register, which is then initialized with this
+parameter "This register controls the number of ssi_clk cycles that are
+delayed from the default sample time before the actual sample of the rxd input
+signal occurs." While the "spi-rx-delay-us" property is described as: "Delay, in
+microseconds, after a read transfer." I may misunderstand something, but IMO
+these descriptions don't refer to the same values. The only real use of the
+"spi-rx-delay-us" property I've found in "./drivers/input/rmi4/rmi_spi.c".
+That driver gets the value of the property and just sets the delay_usecs
+of some transfers, which isn't even close to the functionality the RX_SAMPLE_DLY
+register provides. 
 
-> With this sort of stylistic thing it's especially important
-> that any review aligns with the needs and practices of the subsystem,
+To be clear the RX_SAMPLE_DLY register can be used to delay the RX-bits sample
+with respect to the normal Rx sampling timing. The delay is measured in the 
+numbers of the ssi_clk periods. (Note also that the maximum delay is limited
+with a constant parameter pre-initialized at the IP-core synthesis stage. It can
+be defined within a range [4, 255]. In our IP it's limited with just 4 periods.)
 
-Such an expectation is reasonable to some degree.
+As I see it, a better way would be to either define a new vendor-specific
+property like "snps,rx-sample-delay-ns" (note NS here, since normally the
+ssi_clk is much higher than 1MHz), or define a new generic SPI property.
+Mark, Andy?
 
+-Sergey
 
-> there is opinion in there and multiple opinions just makes things harder
-> for submitters.
-
-Do any of such views deviate from the Linux development documentation?
-
-Regards,
-Markus
+> 
+> Thank you for your comments!
+> 
+> ---Lars
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
