@@ -2,90 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3361EC1EB
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 20:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876BC1EC267
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 21:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbgFBSgr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jun 2020 14:36:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47670 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726728AbgFBSgr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Jun 2020 14:36:47 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C6442072F;
-        Tue,  2 Jun 2020 18:36:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591123006;
-        bh=OvQjdPoM0pJTu54sJl+ffqQUAsF4t+qMSrZonGhfXr4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UWuBRQkdY99dlKdSFTzfrSniB90bkr6VieoRYdv07lD+xXNP5vH7xP+znRdvLtssc
-         uMUJrCLfVqLgFEtdsG7glA6raTtaA3V0uJPcsZPHI8i+cu5RBw8I4p2mpnTsTlPFvF
-         6fokw5AX6dpDFXEYJxF79iaFpQ6VG1N82Qoz99/k=
-Date:   Tue, 2 Jun 2020 19:36:44 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     Navid Emamdoost <navid.emamdoost@gmail.com>,
-        linux-spi@vger.kernel.org, Navid Emamdoost <emamd001@umn.edu>,
-        Kangjie Lu <kjlu@umn.edu>, Stephen McCamant <smccaman@umn.edu>,
-        Qiushi Wu <wu000273@umn.edu>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Subject: Re: spi: spi-ti-qspi: call pm_runtime_put on pm_runtime_get failure
-Message-ID: <20200602183644.GI5684@sirena.org.uk>
-References: <26028f50-3fb8-eb08-3c9f-08ada018bf9e@web.de>
- <20200602094947.GA5684@sirena.org.uk>
- <1c13e0ec-e50f-9eea-5704-052d2d682727@web.de>
- <20200602141306.GH5684@sirena.org.uk>
- <cc8e1397-c605-d73e-363e-9d2ddfb9ae16@web.de>
+        id S1726922AbgFBTKj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jun 2020 15:10:39 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:57056 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbgFBTKj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jun 2020 15:10:39 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id E897C8030835;
+        Tue,  2 Jun 2020 19:10:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IvgS6PU79JwH; Tue,  2 Jun 2020 22:10:27 +0300 (MSK)
+Date:   Tue, 2 Jun 2020 22:10:25 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Lars Povlsen <lars.povlsen@microchip.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, SoC Team <soc@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 01/10] spi: dw: Add support for polled operation via no
+ IRQ specified in DT
+Message-ID: <20200602191025.ywo77nslrgswh6sw@mobilestation>
+References: <20200513140031.25633-1-lars.povlsen@microchip.com>
+ <20200513140031.25633-2-lars.povlsen@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N8NGGaQn1mzfvaPg"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <cc8e1397-c605-d73e-363e-9d2ddfb9ae16@web.de>
-X-Cookie: We are not a clone.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200513140031.25633-2-lars.povlsen@microchip.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, May 13, 2020 at 04:00:22PM +0200, Lars Povlsen wrote:
+> With this change a SPI controller can be added without having a IRQ
+> associated, and causing all transfers to be polled. For SPI controllers
+> without DMA, this can significantly improve performance by less
+> interrupt handling overhead.
+> 
+> Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+> ---
+>  drivers/spi/spi-dw.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+> index 31e3f866d11a7..e572eb34a3c1a 100644
+> --- a/drivers/spi/spi-dw.c
+> +++ b/drivers/spi/spi-dw.c
+> @@ -19,6 +19,8 @@
+>  #include <linux/debugfs.h>
+>  #endif
+> 
 
---N8NGGaQn1mzfvaPg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> +#define VALID_IRQ(i) (i >= 0)
 
-On Tue, Jun 02, 2020 at 05:05:18PM +0200, Markus Elfring wrote:
-> >> I find this commit message improvable also according to Linux software
-> >> development documentation.
+Mark and Andy are right. It is a good candidate to be in a generic IRQ-related
+code as Anyd suggested:
 
-> > Causing people to send out new versions of things for tweaks to the
-> > commit log consumes time for them and everyone they're sending changes to.
+> > drivers/rtc/rtc-cmos.c:95:#define is_valid_irq(n)               ((n) > 0)
+> > Candidate to be in include/linux/irq.h ?
 
-> Improving patches (besides source code adjustments) is an usual software
-> development activity, isn't it?
+So if you feel like to author additional useful patch integrated into the
+kernel, this one is a good chance for it.
 
-Your updates were not improvements.  The formatting was worse and to my
-native speaker eyes the grammar was worse.  With this sort of stylistic
-thing it's especially important that any review aligns with the needs
-and practices of the subsystem, there is opinion in there and multiple
-opinions just makes things harder for submitters.
+> +
+>  /* Slave spi_dev related */
+>  struct chip_data {
+>  	u8 tmode;		/* TR/TO/RO/EEPROM */
+> @@ -359,7 +361,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+>  			spi_enable_chip(dws, 1);
+>  			return ret;
+>  		}
+> -	} else if (!chip->poll_mode) {
+> +	} else if (!chip->poll_mode && VALID_IRQ(dws->irq)) {
+>  		txlevel = min_t(u16, dws->fifo_len / 2, dws->len / dws->n_bytes);
+>  		dw_writel(dws, DW_SPI_TXFLTR, txlevel);
+> 
+> @@ -379,7 +381,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+>  			return ret;
+>  	}
+> 
+> -	if (chip->poll_mode)
+> +	if (chip->poll_mode || !VALID_IRQ(dws->irq))
+>  		return poll_transfer(dws);
 
---N8NGGaQn1mzfvaPg
-Content-Type: application/pgp-signature; name="signature.asc"
+Please note. The chip->poll and the poll_transfer() methods've been discarded
+from the driver, since commit 1ceb09717e98 ("spi: dw: remove cs_control and
+poll_mode members from chip_data"). So you gonna have to get the
+poll_transfer-like method back.
 
------BEGIN PGP SIGNATURE-----
+-Sergey
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7WnDsACgkQJNaLcl1U
-h9DGkAf+PjSEqHTfl5f2iz9hfmR2SynpiykJ1XkuI/QQI+g5b8po5GEO+Ex48irJ
-eZapYj6s73KBN1FcvTkmGNrCqO1sGQwMXvsf0cIQ1gFltQt01hopOWwqGvt1MtDm
-nwCi6sU1jOjGzkQ/sgxvvIPIz8YAQ+YD177k4v6XKma565eJGukVTpQZfwWi52Xq
-MHT93raV0bDM1nZz2/xe/P1GsKd4iO/+nGbI2qA9ZmueqGzbsqphOlgf1Z/M4em2
-qIA7qVs5WkjL01yyBjwoKkZo1Q7XVp20NtZvytXut/iFx0X4XUV2E/ehB/EqAcKt
-REEO3WfKi8oLPVWCRSzau202uix/yQ==
-=NOcb
------END PGP SIGNATURE-----
-
---N8NGGaQn1mzfvaPg--
+> 
+>  	return 1;
+> @@ -487,11 +489,13 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+> 
+>  	spi_controller_set_devdata(master, dws);
+> 
+> -	ret = request_irq(dws->irq, dw_spi_irq, IRQF_SHARED, dev_name(dev),
+> -			  master);
+> -	if (ret < 0) {
+> -		dev_err(dev, "can not get IRQ\n");
+> -		goto err_free_master;
+> +	if (VALID_IRQ(dws->irq)) {
+> +		ret = request_irq(dws->irq, dw_spi_irq, IRQF_SHARED,
+> +				  dev_name(dev), master);
+> +		if (ret < 0) {
+> +			dev_err(dev, "can not get IRQ\n");
+> +			goto err_free_master;
+> +		}
+>  	}
+> 
+>  	master->use_gpio_descriptors = true;
+> @@ -539,7 +543,8 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+>  	if (dws->dma_ops && dws->dma_ops->dma_exit)
+>  		dws->dma_ops->dma_exit(dws);
+>  	spi_enable_chip(dws, 0);
+> -	free_irq(dws->irq, master);
+> +	if (VALID_IRQ(dws->irq))
+> +		free_irq(dws->irq, master);
+>  err_free_master:
+>  	spi_controller_put(master);
+>  	return ret;
+> --
+> 2.26.2
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
