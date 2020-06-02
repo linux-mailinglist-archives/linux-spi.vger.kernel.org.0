@@ -2,34 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A47A1EB792
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 10:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2D31EB7DC
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 11:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgFBIk4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jun 2020 04:40:56 -0400
-Received: from mout.web.de ([212.227.15.3]:42407 "EHLO mout.web.de"
+        id S1726174AbgFBJFe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jun 2020 05:05:34 -0400
+Received: from mout.web.de ([212.227.15.3]:53807 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726594AbgFBIkz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Jun 2020 04:40:55 -0400
+        id S1725811AbgFBJFd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 2 Jun 2020 05:05:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1591087235;
-        bh=P4Sw0AHLKTABiGZ3F2jMUCU5oo6aGFO8jS0VkJZhLf0=;
-        h=X-UI-Sender-Class:Cc:Subject:From:To:Date;
-        b=gQRcnLNOPSlN1xXwb2GNhU8D5PxUACixEv8vfXRDthHA0f/JOgUEfNKrpD6z52602
-         MkYXyeNcY/YJPNMS+xCXu31xtYkcI7nKD9+HqRPB+F9bb7wuuJ+ztYR1s85yidA7/g
-         4jQatirh4klWlmgeufGTCr2Ui3MllqhmjcuKkhhk=
+        s=dbaedf251592; t=1591088710;
+        bh=XhGeAXDfw9AiiSAdvgQbq6rf/vrbHOyi+DVrpim7IVs=;
+        h=X-UI-Sender-Class:To:Cc:Subject:From:Date;
+        b=KhkZSSBzq4cg1+S1MUCxdW3q+ygMyZKelIIs8+nygoTvJYuJs8IpVCeZNnYdfQ6Fb
+         jV7xUR6cN2hzw4d7WiI78rGl/YiThUr8LGcarJu8C0Rl7cyfbiSnKJlfFB96aWPxUb
+         3fD/OB88W9Q4mGq14X45RN1dB5Zi33RYBTiBb+a8=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.243.186.246]) by smtp.web.de (mrweb002
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0MhDRB-1jKMtO20cj-00MIdK; Tue, 02
- Jun 2020 10:40:35 +0200
+Received: from [192.168.1.2] ([2.243.186.246]) by smtp.web.de (mrweb003
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0M7KOE-1ijNjM1KAY-00x06b; Tue, 02
+ Jun 2020 11:05:10 +0200
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>,
+        linux-spi@vger.kernel.org
 Cc:     Navid Emamdoost <emamd001@umn.edu>, Kangjie Lu <kjlu@umn.edu>,
         Stephen McCamant <smccaman@umn.edu>,
-        Qiushi Wu <wu000273@umn.edu>, Mark Brown <broonie@kernel.org>,
+        Qiushi Wu <wu000273@umn.edu>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
         Dinghao Liu <dinghao.liu@zju.edu.cn>,
         LKML <linux-kernel@vger.kernel.org>,
         kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-ti-qspi: call pm_runtime_put on pm_runtime_get
- failure
+Subject: Re: [PATCH] spi: sprd: call pm_runtime_put if pm_runtime_get_sync
+ fails
 From:   Markus Elfring <Markus.Elfring@web.de>
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
@@ -74,55 +80,54 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-To:     Navid Emamdoost <navid.emamdoost@gmail.com>,
-        linux-spi@vger.kernel.org
-Message-ID: <26028f50-3fb8-eb08-3c9f-08ada018bf9e@web.de>
-Date:   Tue, 2 Jun 2020 10:40:33 +0200
+Message-ID: <8ea80af8-e964-4488-25c6-837f2ac88493@web.de>
+Date:   Tue, 2 Jun 2020 11:05:07 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Xee8jVqmdupQA1Q8ogP5YuiQtLRQ4I4+pAbq5AURMwE8RLGuIP9
- 7LiM7EiHiZ0HPJX8AmzBBrkCaIpy4/QiphB0ibCeXQNCGZiBeUqfIGC7VsfZXpeVYaVBq5t
- AED9UZ4ALHL9qXC+b9ssxB0/9ca+3zmUGQgO5h9Ad/V3N2fTj5Zb+wlU5Ojw1pM4/46qSTB
- 0amh2Iqt7Tbm53IEpLYMQ==
+X-Provags-ID: V03:K1:r0Ml+LxQIhB/V5/UspH+IDLMruxhQLcNn86TeiX5mpWvHOPmUt6
+ dhKOevzUl0PCUv6LQ/qbGfW8kgiToEULAjnKLxZXhwVgHcqxTf0Fju6Bfxhe9RlVidu9ebv
+ hf/BEG5CbdaCBGIxhXV74/LqpgpLMvq6q+xWfXcApQ9OXAZxzIl5aqtovjSxzoYz3BxUS/G
+ exqSPeOKvHJqs0SnGC5Yg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ODODpRg23Ik=:B3nRjOy2nFp9BF5hswpiI7
- n8gaObQtgDkcjMX1tx8/xn/dlRKPwh5Pw8pF6O62y0XLf1TXdygW1vSbTk+CPvovouP5zJLnl
- hlUYfamqfA8/BhriDtvblrtpPw9eRSv5R76gWLnDUGCW2sDmyxEsJPUD3uO86DUVVLMxB66EN
- xfbeAtVhyQ9PtKCVwwHupyKpVUgItqeIYbX/I6XoKAyjzaoGVDhLz5KREGwaiQjftbOh7TbRb
- QPyeO4zmdw92k+UxdB2j3+59Z/AXMyCanDDsoh8aJjThByRiIa0uQqaW96VgSE/gvMl53Goi5
- MaTeKzUKk9kXbsIeEgCRy9W5rVdh/JhVCegjkNIt9ab/SS2gRVeVi+BTa7gtJkDDbHxFq0waB
- GvAMQVzlPJk/LL1Y4BkxGQXn+1Q5AkoZyD23yYL/yM3eCrJlAVST6eGjbByjwy6cXVsNtGSc3
- Fr4l4HXsXFuWZudCl8f/ka9fUJP9N7+XMymEfPXY7EdVOsaE1FLq2TNAztIjMJ52clmi8x4yR
- xLFeMiOinfZnxB411YNWnthQJdX9i30yD76C3KKWUTIHVO+9mjlQZvmC88FFdYVfY36N2A1CB
- 8kRi5McFPsYhOR2InXGO8QB5SG2U6frJTBKA78PebRXABs4226DhQLoZbbsgmtF/On5kWfjkb
- e5jn9/282HtaBa/2G2vPvfTCHf0BvYrWk5SMa8aiaP90LO0MLlOX+yrIpa8aWpzcC+o2sYNJ2
- d6ZmQxMVOO03z5j7r0AgRWNYCUL6YfgciGV6MzOhrWWJBYQhLE6oulxNuttWkT2h7tNjsLXgi
- t+U4rBzmRnu69temCXIG3DygLxonykUR4GmNEFQpGyLjKqcLGcwwnpCabgX+46aOk5zzCscAT
- iMaNm9ezuCO/u3oF56nSQZCkkvfzItsbdMAFqoHTjhpj3GJ3YbIu27IpEtE+DFJE8zYa2Ekwo
- NlCcm99dyGseELgaEDnTYKhH/ZdfQabnqamoKU75tn+eIMlAXuIT/DZU2euXluXYl2FnusyqL
- Ag091GWrimsad0RPZY9T0+DhXKDFzK3gvZyRA6w0WLIrA6Nu0sY7JAWr9W53JvpaHbOdsjTOl
- EaO1fKibCN+WUvIWcEcPE5sWRm4UQywr7vf9j2YaYNeZkwQ+5qLAgTY90COE223kGiumD+eF8
- JJb9cWMRzNEdFy9BZG5R3qIXfbSyQFFDhdmzt9maXoVZ/wQd9W5RRTnApyaMeZbh93FP0QdjK
- q+iSxoVUD7wqaWPF6
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lZgWfSGFN6U=:FdqFp+0W4JZXijtRfp1A42
+ Xh+yrYj8w+h/anapy1Z1wO+c+/vpZpLaYN/cq7lUpjH7Zf+aqOaVWaY+Rrmb7/dxFa+xATLGi
+ WfXanV/kO0+UNIY7FAHQDSR6M+y2B95ALRdE7hChGj91n0hJEQENeNxIwmoIEvxMdY4Ea+Xvi
+ oW6tWQyivByg0YzW+NEFfdL5KOyPlYhpNpkD4sl2bykYTUlB2SUkAGc+kzdwwBzdXWgQETXRQ
+ CHwOzdjyuE9dgXi8FxPqwk+vKtOhWqTvVhlFPTzRLLBu9wJEi/0E23zSTyAa9PB1MKdLeUlzb
+ 0gJmqTb4LgMbOnFJ/pVMAhCZuvTFsgPUmww+PrteYJDnFmpeAJ6pmGI4Z3AXkRfk2LLRplrUT
+ KBSZ79NntY9jaY+5ihZbMmszW0Ck/nfuEvXpepTdT7CzZIdEunUzQVmMMmnu99SfZmyQhSd7a
+ z5+e7MUUpe7TUFLFfdZ1f+vTAPd1OxgzoQYkI4Hxvp5v2gX3aSy2KP1Cn2yIpkuNGLIpbvvlw
+ 0Ojqdd/Y6lGhUGSKgvgj8mYMNl419udU0SB3FaJz8CZllJDU9JofBrP3o/L2jGE6ZN3mt/IKd
+ 8oR9fF+kMu6eJm6klSxLo3y1euFhTn0z6w2CdgAEdEcrLhmSeXZWRRy2Uk0h4IITyRCOB3ioi
+ 9XAUuCdN/9w4LwCKUZE1UzenW0IWtY2ljNEtlkOgexwVtpFd049zfoNQOC5Pq41owWJCEY0vl
+ bwzr0ODRP527qwrTlGlxmF9R0fYBrYsQut7rgfZTgWPurz94VsclPgl3kL3JO0lJBMZ0pTzuU
+ UsXjhIj/AGodVmmwEL1jrcAJQvx+WkBMDlfaNNMd2XgD1eh728ypvwksm7erwcz+WKAn8ZHO0
+ Q5qpp0Y5kd05yG/iTnz3HU1WcYfN8mLbfEa+fmdefbk0FTLwccilyaUrEF9xJo67+24JVUpS4
+ qmH6uE9iUo7BmZ5QwtFK6UlDFcZUQgpVm4rb+rmRwlVO7NE66wuNcTOgnR45Dp9NtkfDAHS4U
+ WKRQE1EiaBNefyqZZ8iBmmXycnmgETrKXCco5JRcpi5Wq9rbmGraQeX1KonW0+qMkm/rjIkHh
+ zHaLmn26qM0VWvmRSkGz0uznQDCoPspDaPB1Vg/W6+d12q7n4xubORoe1mXDYWUKUI1455uM1
+ PfaB0TGyVMOSEO3t2as6TIlilkmBaB2oNRPewP/yddpxkRg1IxzCbbLCHJFDfwcJ2CQx7iN2K
+ 8xo9BB4COS7LkYtkR
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> The counter is incremented via pm_runtime_get even in failure case.
-> To correct the counter call pm_runtime_put in case of failure, too.
+> Call to pm_runtime_get_sync increments counter even in case of
+> failure leading to incorrect ref count.
+> Call pm_runtime_put_noidle if pm_runtime_get_sync fails.
 
 How do you think about a wording variant like the following?
 
    Change description:
    The PM runtime reference counter is generally incremented by a call of
    the function =E2=80=9Cpm_runtime_get_sync=E2=80=9D.
-   Thus call the function =E2=80=9Cpm_runtime_put_autosuspend=E2=80=9D als=
-o in one error case
+   Thus call the function =E2=80=9Cpm_runtime_put_noidle=E2=80=9D also in =
+one error case
    to keep the reference counting consistent.
 
 
