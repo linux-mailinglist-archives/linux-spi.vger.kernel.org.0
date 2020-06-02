@@ -2,95 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F48A1EC2D9
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 21:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D851EC2EF
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 21:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727921AbgFBTf6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jun 2020 15:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726420AbgFBTf5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jun 2020 15:35:57 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C70DC08C5C0;
-        Tue,  2 Jun 2020 12:35:57 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id z2so74824ilq.0;
-        Tue, 02 Jun 2020 12:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZaeDmvwutMFDkhGXN+aSrIZ/aqZNZQqgehXmm4OU8WQ=;
-        b=saHbz83DdIX3HLPmbOrEnGy96gXDa2LqsBe3j+qnBclnC0O60/LkTiWXVukocvudeF
-         qu6gwtDugAsZ5QnsvW8SIPWsXhv2lLTcmo5RzkoWhfclb7ZFhaSwvAoT7AF6DI01TJ8t
-         oHWcKllVoMI6sGMUbiwW6IPkt6/p8SwyWr2B1p788jWcu1HkoL3ja8ofpv7VKd3ovALh
-         BV7/3tjW62EE0k8wUTOpwpe4jI/5ryrpSpKFN5CbQHYZaYKR2HRyR/xCR065a7WjIVUQ
-         xXvBlIiY0+b900oIjjP7MiObfTXF1O7e3D9p2LgFFSsikadCqryBWtLGWwvJYg409SPu
-         DVJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZaeDmvwutMFDkhGXN+aSrIZ/aqZNZQqgehXmm4OU8WQ=;
-        b=tniaLj3pgfTy9hGlLRNJuF2qbUw90wuvtghLopRe7umNMdAggU3ftOTdg5UnGvd8IG
-         Fh5V60A9FkvOIaLIHQ4zXqT7rA4qg3JWp+2IMTM+x5tRYbFueELRsV8NRuRNl0S+9K5p
-         Mw0ArXt7dbqDyfZ7pEDvO8MeDE9axskXjYBqFBOzDwFPM5eJN0jt7iA+yD3BdvTqiWUr
-         A1OMVpTQjqB3xaiDQXSa9NWPk3yPcNfzB8vPYPGLF61/1pimC9FqBHVqxmENrOOjcpzj
-         tXDYqMXU/ph1sne+R9d06YdANtdXTG28gdqoOEO3WXbYQTstuOi8A0HsLmVJV07ocTUG
-         uNww==
-X-Gm-Message-State: AOAM53225w9tKZ3aSJtpDuVXsLU35xAvasICx0AeW/gsZ17IuyoRCs5j
-        3mqx4gKCV2P0n0StmkIVjW+lqZMr9B5TXmNsKMk=
-X-Google-Smtp-Source: ABdhPJx1p0jA7a00DSqjH4OmXarnO4ZgAmj5nti0GovjrHRIcvLw4r4uKb5TwNy6QqWtc6HiS36n2m7891sCmNXfgog=
-X-Received: by 2002:a05:6e02:13f4:: with SMTP id w20mr865871ilj.294.1591126556726;
- Tue, 02 Jun 2020 12:35:56 -0700 (PDT)
+        id S1726817AbgFBTjg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jun 2020 15:39:36 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:57156 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726267AbgFBTjg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jun 2020 15:39:36 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 259968030808;
+        Tue,  2 Jun 2020 19:39:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GjhvlG4R7G07; Tue,  2 Jun 2020 22:39:31 +0300 (MSK)
+Date:   Tue, 2 Jun 2020 22:39:31 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Lars Povlsen <lars.povlsen@microchip.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, SoC Team <soc@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 02/10] spi: dw: Add support for RX sample delay register
+Message-ID: <20200602193931.vl36k3c6uyiaizah@mobilestation>
+References: <20200513140031.25633-1-lars.povlsen@microchip.com>
+ <20200513140031.25633-3-lars.povlsen@microchip.com>
 MIME-Version: 1.0
-References: <26028f50-3fb8-eb08-3c9f-08ada018bf9e@web.de> <20200602094947.GA5684@sirena.org.uk>
- <1c13e0ec-e50f-9eea-5704-052d2d682727@web.de> <20200602141306.GH5684@sirena.org.uk>
- <cc8e1397-c605-d73e-363e-9d2ddfb9ae16@web.de> <20200602183644.GI5684@sirena.org.uk>
-In-Reply-To: <20200602183644.GI5684@sirena.org.uk>
-From:   Navid Emamdoost <navid.emamdoost@gmail.com>
-Date:   Tue, 2 Jun 2020 14:35:45 -0500
-Message-ID: <CAEkB2ETDxZ3hgDtC_=Z_AG2Gsd3DO1HApcOzdJf5T0EeJ5DLPQ@mail.gmail.com>
-Subject: Re: spi: spi-ti-qspi: call pm_runtime_put on pm_runtime_get failure
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Markus Elfring <Markus.Elfring@web.de>, linux-spi@vger.kernel.org,
-        Navid Emamdoost <emamd001@umn.edu>, Kangjie Lu <kjlu@umn.edu>,
-        Stephen McCamant <smccaman@umn.edu>,
-        Qiushi Wu <wu000273@umn.edu>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200513140031.25633-3-lars.povlsen@microchip.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jun 2, 2020 at 1:36 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Jun 02, 2020 at 05:05:18PM +0200, Markus Elfring wrote:
-> > >> I find this commit message improvable also according to Linux software
-> > >> development documentation.
->
-> > > Causing people to send out new versions of things for tweaks to the
-> > > commit log consumes time for them and everyone they're sending changes to.
->
-> > Improving patches (besides source code adjustments) is an usual software
-> > development activity, isn't it?
->
-> Your updates were not improvements.  The formatting was worse and to my
-> native speaker eyes the grammar was worse.  With this sort of stylistic
-> thing it's especially important that any review aligns with the needs
-> and practices of the subsystem, there is opinion in there and multiple
-> opinions just makes things harder for submitters.
+On Wed, May 13, 2020 at 04:00:23PM +0200, Lars Povlsen wrote:
+> This add support for the RX_SAMPLE_DLY register. If enabled in the
+> Designware IP, it allows tuning of the rx data signal by means of an
+> internal rx sample fifo.
+> 
+> The register is located at offset 0xf0, and if the option is not
+> enabled in the IP, changing the register will have no effect.
+> 
+> Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+> ---
+>  drivers/spi/spi-dw.c | 7 +++++++
+>  drivers/spi/spi-dw.h | 2 ++
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-dw.c b/drivers/spi/spi-dw.c
+> index e572eb34a3c1a..32997f28fa5bb 100644
+> --- a/drivers/spi/spi-dw.c
+> +++ b/drivers/spi/spi-dw.c
+> @@ -81,6 +81,9 @@ static ssize_t dw_spi_show_regs(struct file *file, char __user *user_buf,
+>  			"DMATDLR: \t0x%08x\n", dw_readl(dws, DW_SPI_DMATDLR));
+>  	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
+>  			"DMARDLR: \t0x%08x\n", dw_readl(dws, DW_SPI_DMARDLR));
 
-Thanks Mark for your constructive opinion,
-In most cases, such stylistic comments become confusing and
-discouraging to those who are trying to chip in. Personally I think as
-long as the patch does not contain typo and is not ambiguous from the
-maintainer's perspective, it should be fine to let it go forward.
+> +	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
+> +			 "RX_SAMPLE_DLY: \t0x%08x\n",
+> +			 dw_readl(dws, DW_SPI_RX_SAMPLE_DLY));
 
+debugfs_reg32 interface is now utilized in the driver to dump the registers
+state. So this will have to be converted to just a new entry in the
+dw_spi_dbgfs_regs array.
 
+>  	len += scnprintf(buf + len, SPI_REGS_BUFSIZE - len,
+>  			"=================================\n");
+> 
+> @@ -315,6 +318,10 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+>  		spi_set_clk(dws, chip->clk_div);
+>  	}
+> 
 
--- 
-Navid.
+> +	/* Apply RX sample delay, iff requested (nonzero) */
+
+s/iff/if
+
+> +	if (dws->rx_sample_dly)
+> +		dw_writel(dws, DW_SPI_RX_SAMPLE_DLY, dws->rx_sample_dly);
+> +
+>  	dws->n_bytes = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
+>  	dws->dma_width = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
+> 
+> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> index 1bf5713e047d3..ed6e47b3f50da 100644
+> --- a/drivers/spi/spi-dw.h
+> +++ b/drivers/spi/spi-dw.h
+> @@ -31,6 +31,7 @@
+>  #define DW_SPI_IDR			0x58
+>  #define DW_SPI_VERSION			0x5c
+>  #define DW_SPI_DR			0x60
+> +#define DW_SPI_RX_SAMPLE_DLY		0xf0
+>  #define DW_SPI_CS_OVERRIDE		0xf4
+> 
+>  /* Bit fields in CTRLR0 */
+> @@ -111,6 +112,7 @@ struct dw_spi {
+> 
+>  	int			cs_override;
+>  	u32			reg_io_width;	/* DR I/O width in bytes */
+
+> +	u8			rx_sample_dly;	/* RX fifo tuning (option) */
+
+This doesn't seem like a good place for this parameter. The sample delay is
+SPI-slave specific. So as I see it, the parameter should be moved to the
+chip_data.
+
+-Sergey
+
+>  	u16			bus_num;
+>  	u16			num_cs;		/* supported slave numbers */
+>  	void (*set_cs)(struct spi_device *spi, bool enable);
+> --
+> 2.26.2
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
