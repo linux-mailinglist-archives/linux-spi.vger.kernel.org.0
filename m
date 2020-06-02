@@ -2,99 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5891EBD84
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 16:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3A21EBDB8
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Jun 2020 16:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728272AbgFBOAf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Jun 2020 10:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725958AbgFBOAe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Jun 2020 10:00:34 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE05EC08C5C0;
-        Tue,  2 Jun 2020 07:00:33 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id e125so6253185lfd.1;
-        Tue, 02 Jun 2020 07:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JQjaC1xCI2dfpZan+5KWwPWqlT4N6CVI5CYUzC/YfCk=;
-        b=C4PFWgMMsPkeuD0aU2b1PhywPv60JLQj6vwv2tCKyeUIY1tZXTw5OMfEkd/LCH96I+
-         OGE8g+akc8c2SMW0b7t/4Xy6dcLfnuyQHMv8ewbaIFtgRPdBPCOUmH9npw4923JqnvTx
-         0U0P2+kEIdVecEJWWDhcEaBSCRdx5FmlmeRzbiy8il1T7SneHE7luSm/y7xeWAdOPNKr
-         R0cJYZOAtv8N6dVpJjKaPa9ksqb1AYKzCrbaMe6KIa/QlHihqTR74M1PALGo6BItp2Jn
-         69FMfSMaYYZ4NMkRNbGPNedjrYQpzMtNZqRIWFX7cDiV/3NAfbR14DsVyFOxAWLZfqkI
-         pLiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JQjaC1xCI2dfpZan+5KWwPWqlT4N6CVI5CYUzC/YfCk=;
-        b=rKUvHjn+o3mIUDFm9SX83H7G1ZQcIjOWCXtvR286tQlt+qf6w4ERJQcm3+mKvi3BMd
-         f8+pGtmVWn+2cE13fQeOPULKZQUtBPGvqnzHJnjEmIaOo20jDxVfg2sdHtEnnLJIoqjH
-         I/GyxNeNhzQ5m6daLXjE4S+rzKF1ScQEkFeHVXxvMaVzP+7aTVtGTVcCCvLaGheVAuvp
-         sqhcopSZDnCm4kGLMNLWn1p7CDSCpmwy8IZ9bvp1K9NVP6lfpgJ4BoIaJdwKocvU3e+B
-         MMdH7M/zBHJKlm//jKpPuxXklPTgJOMvorbHsx5fPGr4SfFX+nuasHHfbcL0LRcanK/D
-         866A==
-X-Gm-Message-State: AOAM531GXOSt/3ekwyru2kB7AQZP3Nwr/r4JlHATb/Wwuta3bFWRgeY3
-        OhC6vhNUIXD6AUN7bkd/xgPipPilqGyIP+I8uvBqcgAq
-X-Google-Smtp-Source: ABdhPJxSqQO5b8QV8MPWeXmo9RJ1BHb/flfWWjvc5KOiPlHrSepjUdchcC0obnTB3fTVcZDYojmtbijtE0dDR07TdJo=
-X-Received: by 2002:ac2:5b9e:: with SMTP id o30mr14041813lfn.153.1591106431562;
- Tue, 02 Jun 2020 07:00:31 -0700 (PDT)
+        id S1726037AbgFBONK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Jun 2020 10:13:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726000AbgFBONK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 2 Jun 2020 10:13:10 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DC0DE206E2;
+        Tue,  2 Jun 2020 14:13:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591107189;
+        bh=eoCV77ebnGXc80BKlBswulqCHVzwy3/Grt/NEStAdkw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IDExaWXh/vvrizG/Ny8gDiqzvGDrYpQcN8GhkpAzbJzaksTXATbU5SYXNSgvjIlIz
+         m1RK0VgQFCQKCw1+n4suuwoqS8qGrXdEP9P8xzpzh1/f4buCReS7qyKO1NhlEhircG
+         en3LPCIuungYQaEaYLAnxz/AHEmz2OfRLLpt2Eg4=
+Date:   Tue, 2 Jun 2020 15:13:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     Navid Emamdoost <navid.emamdoost@gmail.com>,
+        linux-spi@vger.kernel.org, Navid Emamdoost <emamd001@umn.edu>,
+        Kangjie Lu <kjlu@umn.edu>, Stephen McCamant <smccaman@umn.edu>,
+        Qiushi Wu <wu000273@umn.edu>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-ti-qspi: call pm_runtime_put on pm_runtime_get
+ failure
+Message-ID: <20200602141306.GH5684@sirena.org.uk>
+References: <26028f50-3fb8-eb08-3c9f-08ada018bf9e@web.de>
+ <20200602094947.GA5684@sirena.org.uk>
+ <1c13e0ec-e50f-9eea-5704-052d2d682727@web.de>
 MIME-Version: 1.0
-References: <20200602051959.60440-1-navid.emamdoost@gmail.com>
-In-Reply-To: <20200602051959.60440-1-navid.emamdoost@gmail.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Tue, 2 Jun 2020 21:59:45 +0800
-Message-ID: <CADBw62qrEutxcaEHg=C-tjVe7vQGwW_7kTVwN-fyohoGnQ903w@mail.gmail.com>
-Subject: Re: [PATCH] spi: sprd: call pm_runtime_put if pm_runtime_get_sync fails
-To:     Navid Emamdoost <navid.emamdoost@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-spi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        emamd001@umn.edu, wu000273@umn.edu, kjlu@umn.edu, smccaman@umn.edu
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ik0NlRzMGhMnxrMX"
+Content-Disposition: inline
+In-Reply-To: <1c13e0ec-e50f-9eea-5704-052d2d682727@web.de>
+X-Cookie: We are not a clone.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-On Tue, Jun 2, 2020 at 1:20 PM Navid Emamdoost
-<navid.emamdoost@gmail.com> wrote:
->
-> Call to pm_runtime_get_sync increments counter even in case of
-> failure leading to incorrect ref count.
-> Call pm_runtime_put_noidle if pm_runtime_get_sync fails.
->
-> Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+--ik0NlRzMGhMnxrMX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Looks good to me. Thanks
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+On Tue, Jun 02, 2020 at 12:02:11PM +0200, Markus Elfring wrote:
 
-> ---
->  drivers/spi/spi-sprd.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/spi/spi-sprd.c b/drivers/spi/spi-sprd.c
-> index 6678f1cbc566..860032af4b98 100644
-> --- a/drivers/spi/spi-sprd.c
-> +++ b/drivers/spi/spi-sprd.c
-> @@ -1018,6 +1018,7 @@ static int sprd_spi_remove(struct platform_device *pdev)
->         ret = pm_runtime_get_sync(ss->dev);
->         if (ret < 0) {
->                 dev_err(ss->dev, "failed to resume SPI controller\n");
-> +               pm_runtime_put_noidle(&pdev->dev);
->                 return ret;
->         }
->
-> --
-> 2.17.1
->
+> > The original changelog is perfectly fine, please stop sending these.
 
+> I find this commit message improvable also according to Linux software
+> development documentation.
 
--- 
-Baolin Wang
+Causing people to send out new versions of things for tweaks to the
+commit log consumes time for them and everyone they're sending changes
+to.  Pushing people to make trivial rewordings of their commit logs to
+match your particular taste is not a good use of people's time.
+
+--ik0NlRzMGhMnxrMX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7WXnIACgkQJNaLcl1U
+h9BIPAf/Qg3X33LluXMNn6+or5b8wx23/eNT76IKOCDLt2nsBUFeX0RTB14vx2Ij
+wQwNT/+zdryOjbNaDuuxsRM0DV4SawkJVlaUJ81/HDGRTzyD7LbZwDy7GMSrkhW/
+suZlkonuFDGJ07yuMaYGcGykfALQc8/37nX5+WSOX682mHkqnpzIy1uZL231RcLg
+hhccjsA7NflG4vQzHy6cdAnoRTVdXtp9EZ50jXdrQjS6BaAtJniAn9B6j7ifz8s/
+f3j0pUuLHqkXXY+yP5B8I0QWoTUkFSd/f+LL8PdwG5qfp17iswdqZoutqVwwzsOw
+aQeBit3pr2gLrZOVf6/Ehu7Je1Jnqw==
+=e8Ou
+-----END PGP SIGNATURE-----
+
+--ik0NlRzMGhMnxrMX--
