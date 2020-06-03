@@ -2,101 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5251ED13A
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Jun 2020 15:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEB81ED790
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Jun 2020 22:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726027AbgFCNs6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Jun 2020 09:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbgFCNsz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 3 Jun 2020 09:48:55 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C76C08C5C7
-        for <linux-spi@vger.kernel.org>; Wed,  3 Jun 2020 06:48:50 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id c21so1362767lfb.3
-        for <linux-spi@vger.kernel.org>; Wed, 03 Jun 2020 06:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
-        b=LImzFWfFZ5MGhzJT1qzCsgEXVo7xW37sUIdrDLCKiXHQE0/Tq0rYX6Af/ld5dvlhmE
-         opFt8B8vUrhAfyxGIRs7eIQZmnu+cHCt7Dz4gEu/fnBWHDlMa8iVHDbM7XgqJUtNcgor
-         I4Oj1yGJ3ygOniFn6Dr+FHDS5BV48N/ldz+eBwWbR5/ADnYCL6KuztRZu9mrKJOxMODU
-         fmVICwwGmTYXXsgICTxE6unupuMdGq6+YZvkWKysZVLYK3Wwxrg7U2ecMo3WGycHWcU1
-         w35jxyjuynpm30G3kj/I18A4vO2Y2WN0kfTajUkGc1Xe9t84eQuWhnB4AGlAS8dbrawc
-         iC3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
-        b=IEUZfrKF2BqoeSI1ebU31k9I2prBdFyRLJYpfZXEsAQkN7oATvcj7DTolk51ww6u7R
-         9/FCgnaPIHPrga3yBXd8IYe3EisWWId9mUv/0yOYOJPm/3wFFv4udITkh+ljKl5jsB4q
-         va/YOtli1Te4jy1FmnA1IF5b9e8MJFEI0nfVuQxnwUbPoAPh2ZVYTX9qaz/7MAfGtN0j
-         gBv0tooj2+QNHSBWGVSVt1V04RLQzhffjZ7kA55yM+you/MzEHuGVTH4wndaZ3aW1GM7
-         4EU1OylyTdZ8BiaQz42Uqt+SoBhNzhNux3FfNooZq87YrVtc95zsowMdL4g2zV6NHuPp
-         KaUg==
-X-Gm-Message-State: AOAM5303LqDZQ+1046zhNCWlvI7X+YZZ9favTVdmBqFM/qpgvoS05AwY
-        R2lgyM6o7Lx5D3nNsxX0qdnh+fms8nJiFWNG70VmID5vDF8=
-X-Google-Smtp-Source: ABdhPJzc66PsPJ7uf2JiXrqj7zfh07Ra5BpBms0TPKeexmxkWkfXYY+ch/Os+E85wJbdOE6Lm+0ANdybV/7KRG4HAcU=
-X-Received: by 2002:a05:6512:308e:: with SMTP id z14mr2566308lfd.29.1591192127287;
- Wed, 03 Jun 2020 06:48:47 -0700 (PDT)
+        id S1726233AbgFCUlv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 3 Jun 2020 16:41:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37318 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725922AbgFCUlu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 3 Jun 2020 16:41:50 -0400
+Received: from localhost (p5486cfa5.dip0.t-ipconnect.de [84.134.207.165])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7FD0B2074B;
+        Wed,  3 Jun 2020 20:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591216909;
+        bh=SwtQdzOor59+vXHd3f6F9lk8585uAp3wtylcBGqMqQc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kO8cFCe0Q0Bfo2MKvweLEp18Up8QwwJUUfy0MLA+laQLkKmkeSp8Hs9F96LhDicLo
+         KkN0wFE4WPkjAVyTAoNUXcGBpqBt/3TVfieXaFgF8SfkixATeezzEOOwQzJE+dFslx
+         e5dDGjeVYpL9n6tZ9xCpzkQ3js43EwtVQPhDGIOM=
+Date:   Wed, 3 Jun 2020 22:41:46 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 22/28] dt-bindings: i2c: Convert i2c-pxa to json-schema
+Message-ID: <20200603204146.GB1347@ninjato>
+References: <20200317093922.20785-1-lkundrak@v3.sk>
+ <20200317093922.20785-23-lkundrak@v3.sk>
 MIME-Version: 1.0
-Reply-To: susanjones.wife@gmail.com
-Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:46 -0700 (PDT)
-From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
-Date:   Wed, 3 Jun 2020 14:48:46 +0100
-X-Google-Sender-Auth: aH2vam-ZraP3yG1gz3ryctMgTE4
-Message-ID: <CALBhdBfusXWup1N4iFuTS3D1AZxWbZbTDS_qa-wA3FkbkE7MrQ@mail.gmail.com>
-Subject: HELLO: I AM MRS SUSAN JONES
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4bRzO86E/ozDv8r1"
+Content-Disposition: inline
+In-Reply-To: <20200317093922.20785-23-lkundrak@v3.sk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
--- 
-OUR GOLDEN OPPORTUNITY
 
-Hello Dear Friend,
+--4bRzO86E/ozDv8r1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Complement of the day, i hope you are doing great today. However, I am
-Mrs.Susan Jones, an auditor with one of the new generation banks here
-in Burkina Faso.
+On Tue, Mar 17, 2020 at 10:39:16AM +0100, Lubomir Rintel wrote:
+> A conversion of the i2c-pxa binding to DT schema format using json-schema.
+>=20
+> This also cleans ups some errors in the binding: The compatible string
+> description suggested that "mmp" in "mrvl,mmp-twsi" is to be substituted
+> with a processor model, which wouldn't be a right thing to do and indeed
+> nobody seems to have been doing that. There also was "Recommended
+> properties" section that included optional as well as mandatory
+> properties. Missing mandatory properties were added to the example.
+>=20
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 
-I am writing you this letter based on the latest development at my
-Department. i discovered some abandoned huge amount of money, Ten
-Million, Five hundred thousand  United States Dollars.($10.500.000).
-Now I am only contacting you as a foreigner because this money cannot
-be approved to a local bank account here, but can only be approved to
-any foreign account and foreign beneficiary because the money is in US
-dollars
+Waiting for an ack from someone with DT-YAML experience here.
 
-This will be  a legitimate transaction once you accept to build trust
-with me and follow simple instruction doing the transfer process,
-until the total sum transfer out of the bank here to your own bank
-account any where in the world, and I agreed to share the total money
-50/50 with you once you successful confirmed it in your bank account.
-But any expenses doing the transfer process will be deduct from the
-amount before sharing, If you are interested to work with me and
-provide a good receiving bank account, get back to me as soon as
-possible with the following details below.
 
-Your full name
-Your Profession
-Your direct mobile phone number
-Your Scanned International passport or any of your identity
+--4bRzO86E/ozDv8r1
+Content-Type: application/pgp-signature; name="signature.asc"
 
-NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
-AVOID TIME WASTED.
+-----BEGIN PGP SIGNATURE-----
 
-As soon as I receive these data's, I will forward to you the
-application form which you will send to the bank for the claim and
-transfer of the fund into your bank account as the  new beneficial.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7YCwoACgkQFA3kzBSg
+KbbJvBAAhOSQEJ8IukeodYEjHMpjA4Dcx5fvpBnGvrxXQBvSIOKYdNTW/I/RitM2
+80cJ6nuKvdFbdxDZkK4QjMuBSMmhi8AgafJmuAlBmEGItG7pElyjQ90070ISZDPD
+tVY9epZq/e8RtcYayajUN8saNIdDpvGNeEdFn6t7aLa5Sww2SpfgtkIlozOp44/6
+Tf/fjBd9Ml87SWjsIwW1f6w0dQiF3ib6oqWZXE8fxH8v6LUs8M0mE2hX23NjttP5
+/w8oAV3OqgVGMn/ydUOtmuLRzBqQ8ONO3+pG6h8lYAnPuh0ZGmpaV0RxigcJDGSd
+yTAob0lzrFXKSkQ6Kl0keFn8aC9F56OknDWMf3wm8OME85QCls7fzeAwZhEclyf5
+NrSyInNZq0xj1JQjIkagcWSmLyWu+e0Er09iVm5T/6eqUm6mElu8VpOVkiIrlI9e
+4FX7Yj8D1ucGJzgiLN8lYzUUXMl78Ym+U9Il5h3fOP/FKINTq2bvBKxjpmHIxbZb
+sBIZPdGdjNSwZ5wA4Cf01Wy0ghmMuKNVkV6IDFXmLIjszXAA3ZCX+kBFyDuHWir/
+TqkYPD+GYP6n9f+xFUlit6Kf3Pv6tXxVBnyWsS0k0LyB3dGTV9dp2d6MaA3IGP5n
+m78a0tAD4l4HN1oWcH/QNOUH5YV4ZdWonkhaHbJYZiCcjtRq+lE=
+=Qlp8
+-----END PGP SIGNATURE-----
 
-I am waiting to hear from you soon
-
-Yours
-Mrs.Susan Jones
+--4bRzO86E/ozDv8r1--
