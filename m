@@ -2,235 +2,159 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4AE1ECBA8
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Jun 2020 10:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186231ECCF5
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Jun 2020 11:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725944AbgFCIio (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Jun 2020 04:38:44 -0400
-Received: from mx1.tq-group.com ([62.157.118.193]:47224 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725355AbgFCIin (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 3 Jun 2020 04:38:43 -0400
-X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Jun 2020 04:38:42 EDT
-IronPort-SDR: z/jVJADfiYlbf7L1cZfhZDLJYTsZdqdrEhARY8Zwl9Zt8UABFKp0YBhYgOUaarv2jfPvXD0bwn
- VIjnvxsnifb0L0qTRgt+YK5Llm7Lx2qF+Nn/bf1xUNj42djbQgnapmHJY1FdRktvvZn+bEWRnq
- lhRfG+tjXWdjUfqCr/44w2rCH12iEfNzjQr0pHpslZ1hKrP+fc7nJSZKnIT1baqTK9GWTjt8F4
- 7N/gAKK5MqBoPckRcgDYE0/3gTFx3NdilWrvNNIG6XGNWSiSJB5W+CaQp2Q5WCBtpYdxF8UEdw
- 6g0=
-X-IronPort-AV: E=Sophos;i="5.73,467,1583190000"; 
-   d="scan'208";a="12527402"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 03 Jun 2020 10:31:28 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 03 Jun 2020 10:31:28 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 03 Jun 2020 10:31:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1591173088; x=1622709088;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=12gaEvPgejwcTMiFel9idGDiiN7NGsxeA5qn0WYphWw=;
-  b=filiwAvws7LXaZiT4GBJMTkU/hytB/dJ4lR9GjrnkZEm+mmumWOAja1+
-   fMzAY4mHLN9OMJI2CUPgaTLI1T+6m+mWCVn3QRd55shqryA8mYfMkNnZb
-   Z11TsW+rD7NO/Doe4QUVFN3v4xUsrdfxjRDNVcmoSDGlIAz/1ml/ftJ0w
-   MBM3SWwQe2mjY/TsOuA475AykQcjVerjGZS0lLsIz6eK3LOqJ98RDFPkE
-   wG6NbipJCPbHxiEWPMvxnJQ9u+RJAPLGldX5CtUUEUaxPeAd8XinERFTI
-   bG9O/ZVqkx6Z3oPpYjci8F+3kSIcFWuZlx6NiAvgxI+EIbCw+XqV/LQqs
-   w==;
-IronPort-SDR: 7SR6DAMyb5S1Vz+MGSbLoaghwF70s+wW8DJfdKEqs6u6ZE0Bk2Lk79NG2budY+lJKGBcaIuWaW
- ad1xdJiPq55IemDxCIe4tE53xZwD8SrIwqPq9+12XNMmmH87RAdA/AukcBoV9zcLbv6LvOXl2F
- y5H5WZzk4HPS88vS1ACernz5ZxMYTBOzZCoG+n4Ju3Ns6tjafbLOTKpK7UFKPYG8KXeImJCCz2
- W/gzLW3YWC8uybCRxxOhOT2tRjQ0QEMkf+iUd40Hwa8G1aPqrVmqf/uUTpJblMvit+Yzqbs9h5
- RnA=
-X-IronPort-AV: E=Sophos;i="5.73,467,1583190000"; 
-   d="scan'208";a="12527401"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 03 Jun 2020 10:31:28 +0200
-Received: from schifferm-ubuntu4.tq-net.de (schifferm-ubuntu4.tq-net.de [10.117.49.26])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id B9AA3280065;
-        Wed,  3 Jun 2020 10:31:28 +0200 (CEST)
-Message-ID: <5d246dd81607bb6e5cb9af86ad4e53f7a7a99c50.camel@ew.tq-group.com>
-Subject: Re: (EXT) [PATCH v8 00/13] add ecspi ERR009165 for i.mx6/7 soc
- family
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        mark.rutland@arm.com, broonie@kernel.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, vkoul@kernel.org, will.deacon@arm.com,
-        shawnguo@kernel.org, festevam@gmail.com, s.hauer@pengutronix.de,
-        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
-        dan.j.williams@intel.com,
+        id S1726099AbgFCJus (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 3 Jun 2020 05:50:48 -0400
+Received: from mail-vi1eur05on2048.outbound.protection.outlook.com ([40.107.21.48]:6042
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725888AbgFCJus (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 3 Jun 2020 05:50:48 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QPe1DWyIfEJp+qiYpQnUFG0YlE6mS9E1aC8gi0T74OH/SdpUKCquAbArKMGHYO6FzuZra7xuU7YlsVvytbt3ASNh7VycvwM+wClOcyLNMD6Qh+x2Yla3ZPxPCo32pETAmYe6KbCtE48DZQvblTcL34l4fiIcHz44VuYABypn6yZcWqGdDWu4HS4uvmHSvVM4B1/8nkdOcVVMjjRm179SOZdZjUmWwmkp8A9Wyx0CWWncAnE+dKh0QHf4v5mkR6ihLz1ovn2OhV+lJA3WOLz4swqPgo7WsfE8afV5Y37QuR6+Aw7NefNIIrK4V8miBlFLVVuHRKlGamLzBkZHA16UaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fwHA3CGnK9Mmhv6co31I8SWxE8BGy7VQvg2l451y9rg=;
+ b=ie3VfJxtsHISX6BZcrVfHZvDby5U8UOZFcQYwySb8xeuR5AJu58I4wEuphHd2fuEEv96dGeTG0qQqEcHMY4whwk/pQXbuvcVyvAHDfTDJ/IUd3Yct5AjzH/C9w5oZXK8F1cs0B6MVNIE/uJOuW9B4/khNheJuhC1oFIlwS1IFGfHvS21QDpVxSjxQ7SrJgu27FVDczUV8FQ4JzciLXbit0XshCeQ8vU1RqXqijHVEtrLvv6RSt2PxfORMfak+6dhAwL9ffRsl7tTERaBxZ6cA7td6T/AMhCEWw3wHMWSSAyMNv9dyG9+dITp+6qMNztujpvHp1etiX6DVs4kx1HcbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fwHA3CGnK9Mmhv6co31I8SWxE8BGy7VQvg2l451y9rg=;
+ b=s1hwnqWBhpiX1d+ovtqq3ctb3Nkn1BUCFYUlXcbGhz37CHnJG+23Mx2xKbby8FoyYf9ImhldDgqxVPUDNnHrqrZIQT0mUK8YQ97JATfZKUebUPn5Hx/Vp4MZf7J8tUyKnR8s18tFgdRc7ccvr8IWAlksfGKSUfJWo2iqIqaLZnI=
+Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (2603:10a6:803:119::15)
+ by VE1PR04MB6653.eurprd04.prod.outlook.com (2603:10a6:803:122::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.19; Wed, 3 Jun
+ 2020 09:50:42 +0000
+Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
+ ([fe80::5cc4:23a5:ca17:da7d]) by VE1PR04MB6638.eurprd04.prod.outlook.com
+ ([fe80::5cc4:23a5:ca17:da7d%6]) with mapi id 15.20.3045.024; Wed, 3 Jun 2020
+ 09:50:42 +0000
+From:   Robin Gong <yibin.gong@nxp.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "martin.fuzzey@flowbird.group" <martin.fuzzey@flowbird.group>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
         Markus Niebel <Markus.Niebel@tq-group.com>
-Date:   Wed, 03 Jun 2020 10:31:25 +0200
-In-Reply-To: <1590006865-20900-1-git-send-email-yibin.gong@nxp.com>
+Subject: RE: (EXT) [PATCH v8 00/13] add ecspi ERR009165 for i.mx6/7 soc family
+Thread-Topic: (EXT) [PATCH v8 00/13] add ecspi ERR009165 for i.mx6/7 soc
+ family
+Thread-Index: AQHWLqLtpxY1VGgarkKW6xpO4wG5Z6jGpXaAgAABPHA=
+Date:   Wed, 3 Jun 2020 09:50:42 +0000
+Message-ID: <VE1PR04MB663883F25395B3ECEC66384489880@VE1PR04MB6638.eurprd04.prod.outlook.com>
 References: <1590006865-20900-1-git-send-email-yibin.gong@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+ <5d246dd81607bb6e5cb9af86ad4e53f7a7a99c50.camel@ew.tq-group.com>
+In-Reply-To: <5d246dd81607bb6e5cb9af86ad4e53f7a7a99c50.camel@ew.tq-group.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: ew.tq-group.com; dkim=none (message not signed)
+ header.d=none;ew.tq-group.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [183.192.235.111]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: d160257f-7701-4631-cf65-08d807a3949f
+x-ms-traffictypediagnostic: VE1PR04MB6653:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VE1PR04MB66537E4F283E9EE211D9E37489880@VE1PR04MB6653.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 04238CD941
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8sqfZLK4sU6M13UaUhHHlNifbKOjbI1kkjOyBYIfKrHvgw8xMR9+xOMra+/7+cRwUf3MJ5MRmsprYM1VgzW0dM1hD+Ouq33w+VGQJsAvsN3acM49ffmEeFLS/WMM8pEl4MglkvWd01MJga/gXx7UInlVJm0oIvB6MwTk/a+ae12F9qCGwfSZlQMDoaD95Z7XRJ3KKZ17a3PISrrBQuKPI7LAfq3thS1Xx/chTF2xALeAlPDRzQlNcHUwlOeNsA6g88qYfrLn47NwUnUVn02oDkfj1Ygfh56UJ74BxZD6Y7GNovd2XqE0x9LrFeqkMUdH4pd2NEfJ5nmG3PGybepDoXEzcyJvNfsXCP1sfHZ6rAa9i6Ko7m6ObfZkUHxVRXUv5vZOUOv7IstEfILx49PSpg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6638.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(136003)(366004)(396003)(39860400002)(376002)(66476007)(4326008)(64756008)(66556008)(83380400001)(55016002)(7696005)(9686003)(7416002)(5660300002)(52536014)(33656002)(66446008)(76116006)(66946007)(6916009)(6506007)(186003)(71200400001)(83080400001)(478600001)(45080400002)(8676002)(316002)(26005)(86362001)(8936002)(54906003)(966005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 4mscULsWNOtNo3JbRHaDqYVxemp649Rn/X/n9ePu6f7sxoeaEZsSdD6tvmZ3C/wuQ2zU72rskyeNiYE+kVayDk3kMOObg0EmOw/Zf/D34nHWro4em55aprur3UxbNlK8UhwtK3uD07kwrIRl/C5Usn2V7GJF5l4CKUP8oTiHMGj3M65cRCUMZiu6ztQ/L4s6MbdR4DxWTZK+0b6nZYyBRAP9wdK9gbpNdQdITy72bd46/4CEwUKtRPPMA7MwHi8y4aaorv+O5fqcStX0jJ9KKmuLziO2kzM49Dfdk90iZl4gaW8AccNJJz4i+OhM3JtD4di3i/nZB/ipAD1G5lD4Wx3p67FO3/lNw0iIpk9/nzwZdCEJ9c/J2aA3vFD/eGqei6N7TojlfUzmp36yuHOz1E7juXRObML1cipNOyo7aiITEjdgtI7Zuj54we4SBlCo821wbLg3/ndT2M6kdOSfdfMdGMFn0gYo87jCdYzmHsC2QswW/Hfja7odZFoy3+c3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d160257f-7701-4631-cf65-08d807a3949f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2020 09:50:42.6870
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bHlK3KziwLJg5y+nK6uZL8k3S4zn5Vmbvz5XwIJtwluSnfBUnlUrynyV1kuBiXdub1Y6hjexXY3Euj7dMDsj1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6653
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 2020-05-21 at 04:34 +0800, Robin Gong wrote:
-> There is ecspi ERR009165 on i.mx6/7 soc family, which cause FIFO
-> transfer to be send twice in DMA mode. Please get more information
-> from:
-> https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf. The workaround is
-> adding
-> new sdma ram script which works in XCH  mode as PIO inside sdma
-> instead
-> of SMC mode, meanwhile, 'TX_THRESHOLD' should be 0. The issue should
-> be
-> exist on all legacy i.mx6/7 soc family before i.mx6ul.
-> NXP fix this design issue from i.mx6ul, so newer chips including
-> i.mx6ul/
-> 6ull/6sll do not need this workaroud anymore. All other i.mx6/7/8
-> chips
-> still need this workaroud. This patch set add new 'fsl,imx6ul-ecspi'
-> for ecspi driver and 'ecspi_fixed' in sdma driver to choose if need
-> errata
-> or not.
-> The first two reverted patches should be the same issue, though, it
-> seems 'fixed' by changing to other shp script. Hope Sean or Sascha
-> could
-> have the chance to test this patch set if could fix their issues.
-> Besides, enable sdma support for i.mx8mm/8mq and fix ecspi1 not work
-> on i.mx8mm because the event id is zero.
-> 
-> PS:
->    Please get sdma firmware from below linux-firmware and copy it to
-> your
-> local rootfs /lib/firmware/imx/sdma.
-
-
-Hello Robin,
-
-we have tried out this series, and there seems to be an issue with the
-PIO fallback. We are testing on an i.MX6Q board, and our kernel is a
-mostly-unmodified 5.4, on which we backported all SDMA patches from
-next-20200602 (imx-sdma.c is identical to next-20200602 version), and 
-then applied this whole series.
-
-We build the SDMA driver as a kernel module, which is loaded by udev,
-so the root filesystem is ready and the SDMA firmware can be loaded.
-The behaviour we're seeing is the following:
-
-1. As long as the SDMA driver is not loaded, initializing spi_imx will
-be deferred
-2. imx_sdma is loaded. The SDMA firmware is not yet loaded at this
-point
-3. spi_imx is initialized and an SPI-NOR flash is probed. To load the
-BFPT, the driver will attempt to use DMA; this will fail with EINVAL as
-long as the SDMA firmware is not ready, so the fallback to PIO happens
-(4. SDMA firmware is ready, subsequent SPI transfers use DMA)
-
-The problem happens in step 3: Whenever the driver falls back to PIO,
-the received data is corrupt. The behaviour is specific to the
-fallback: When I disable DMA completely via spi_imx.use_dma, or when
-the timing is lucky and the SDMA firmware gets loaded before the flash
-is probed, no corruption can be observed.
-
-Kind regards,
-Matthias
-
-
-
-> 
-https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/imx/sdma
-> 
-> v2:
->   1.Add commit log for reverted patches.
->   2.Add comment for 'ecspi_fixed' in sdma driver.
->   3.Add 'fsl,imx6sll-ecspi' compatible instead of 'fsl,imx6ul-ecspi'
->     rather than remove.
-> v3:
->   1.Confirm with design team make sure ERR009165 fixed on
-> i.mx6ul/i.mx6ull
->     /i.mx6sll, not fixed on i.mx8m/8mm and other i.mx6/7 legacy
-> chips.
->     Correct dts related dts patch in v2.
->   2.Clean eratta information in binding doc and new 'tx_glitch_fixed'
-> flag
->     in spi-imx driver to state ERR009165 fixed or not.
->   3.Enlarge burst size to fifo size for tx since tx_wml set to 0 in
-> the
->     errata workaroud, thus improve performance as possible.
-> v4:
->   1.Add Ack tag from Mark and Vinod
->   2.Remove checking 'event_id1' zero as 'event_id0'.
-> v5:
->   1.Add the last patch for compatible with the current uart driver
-> which
->     using rom script, so both uart ram script and rom script
-> supported
->     in latest firmware, by default uart rom script used. UART driver
->     will be broken without this patch.
-> v6:
->   1.Resend after rebase the latest next branch.
->   2.Remove below No.13~No.15 patches of v5 because they were
-> mergered.
->   	ARM: dts: imx6ul: add dma support on ecspi
->   	ARM: dts: imx6sll: correct sdma compatible
->   	arm64: defconfig: Enable SDMA on i.mx8mq/8mm
->   3.Revert "dmaengine: imx-sdma: fix context cache" since
->     'context_loaded' removed.
-> v7:
->   1.Put the last patch 13/13 'Revert "dmaengine: imx-sdma: fix
-> context
->     cache"' to the ahead of 03/13 'Revert "dmaengine: imx-sdma:
-> refine
->     to load context only once" so that no building waring during
-> comes out
->     during bisect.
->   2.Address Sascha's comments, including eliminating any i.mx6sx in
-> this
->     series, adding new 'is_imx6ul_ecspi()' instead imx in imx51 and
-> taking
->     care SMC bit for PIO.
->   3.Add back missing 'Reviewed-by' tag on 08/15(v5):09/13(v7)
->    'spi: imx: add new i.mx6ul compatible name in binding doc'
-> v8:
->   1.remove 0003-Revert-dmaengine-imx-sdma-fix-context-cache.patch and
-> merge
->     it into 04/13 of v7
->   2.add 0005-spi-imx-fallback-to-PIO-if-dma-setup-failure.patch for
-> no any
->     ecspi function broken even if sdma firmware not updated.
->   3.merge 'tx.dst_maxburst' changes in the two continous patches into
-> one
->     patch to avoid confusion.
->   4.fix typo 'duplicated'.
-> 
-> Robin Gong (13):
->   Revert "ARM: dts: imx6q: Use correct SDMA script for SPI5 core"
->   Revert "ARM: dts: imx6: Use correct SDMA script for SPI cores"
->   Revert "dmaengine: imx-sdma: refine to load context only once"
->   dmaengine: imx-sdma: remove duplicated sdma_load_context
->   spi: imx: fallback to PIO if dma setup failure
->   dmaengine: imx-sdma: add mcu_2_ecspi script
->   spi: imx: fix ERR009165
->   spi: imx: remove ERR009165 workaround on i.mx6ul
->   spi: imx: add new i.mx6ul compatible name in binding doc
->   dmaengine: imx-sdma: remove ERR009165 on i.mx6ul
->   dma: imx-sdma: add i.mx6ul compatible name
->   dmaengine: imx-sdma: fix ecspi1 rx dma not work on i.mx8mm
->   dmaengine: imx-sdma: add uart rom script
-> 
->  .../devicetree/bindings/dma/fsl-imx-sdma.txt       |  1 +
->  .../devicetree/bindings/spi/fsl-imx-cspi.txt       |  1 +
->  arch/arm/boot/dts/imx6q.dtsi                       |  2 +-
->  arch/arm/boot/dts/imx6qdl.dtsi                     |  8 +-
->  drivers/dma/imx-sdma.c                             | 67 ++++++++++
-> ------
->  drivers/spi/spi-imx.c                              | 92
-> +++++++++++++++++++---
->  include/linux/platform_data/dma-imx-sdma.h         |  8 +-
->  7 files changed, 135 insertions(+), 44 deletions(-)
-> 
-
+T24gMjAyMC8wNi8wMyBNYXR0aGlhcyBTY2hpZmZlciA8bWF0dGhpYXMuc2NoaWZmZXJAZXcudHEt
+Z3JvdXAuY29tPiB3cm90ZToNCiA+IE9uIFRodSwgMjAyMC0wNS0yMSBhdCAwNDozNCArMDgwMCwg
+Um9iaW4gR29uZyB3cm90ZToNCj4gPiBUaGVyZSBpcyBlY3NwaSBFUlIwMDkxNjUgb24gaS5teDYv
+NyBzb2MgZmFtaWx5LCB3aGljaCBjYXVzZSBGSUZPDQo+ID4gdHJhbnNmZXIgdG8gYmUgc2VuZCB0
+d2ljZSBpbiBETUEgbW9kZS4gUGxlYXNlIGdldCBtb3JlIGluZm9ybWF0aW9uDQo+ID4gZnJvbToN
+Cj4gPiBodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9
+aHR0cHMlM0ElMkYlMkZ3d3cuDQo+ID4NCj4gbnhwLmNvbSUyRmRvY3MlMkZlbiUyRmVycmF0YSUy
+RklNWDZEUUNFLnBkZiZhbXA7ZGF0YT0wMiU3QzAxJTdDDQo+IHlpYmluLmcNCj4gPg0KPiBvbmcl
+NDBueHAuY29tJTdDNDYyMTM1OGI5YmUwNGE3OWQyZDUwOGQ4MDc5ODgzNWIlN0M2ODZlYTFkM2Jj
+MmINCj4gNGM2ZmE5Mg0KPiA+DQo+IGNkOTljNWMzMDE2MzUlN0MwJTdDMSU3QzYzNzI2NzY5ODkx
+MjYzNDQ3NiZhbXA7c2RhdGE9aFI2NkgxaFAlDQo+IDJGcWI2T1hlDQo+ID4gdzl3cFhpelk4RGlO
+ZlpaMUtMd3UzS3R5ODdqYyUzRCZhbXA7cmVzZXJ2ZWQ9MC4gVGhlIHdvcmthcm91bmQgaXMNCj4g
+PiBhZGRpbmcgbmV3IHNkbWEgcmFtIHNjcmlwdCB3aGljaCB3b3JrcyBpbiBYQ0ggIG1vZGUgYXMg
+UElPIGluc2lkZSBzZG1hDQo+ID4gaW5zdGVhZCBvZiBTTUMgbW9kZSwgbWVhbndoaWxlLCAnVFhf
+VEhSRVNIT0xEJyBzaG91bGQgYmUgMC4gVGhlIGlzc3VlDQo+IHNob3VsZCBiZSBleGlzdCBvbiBh
+bGwgbGVnYWN5IGkubXg2Lzcgc29jIGZhbWlseSBiZWZvcmUgaS5teDZ1bC4NCj4gPiBOWFAgZml4
+IHRoaXMgZGVzaWduIGlzc3VlIGZyb20gaS5teDZ1bCwgc28gbmV3ZXIgY2hpcHMgaW5jbHVkaW5n
+DQo+ID4gaS5teDZ1bC8gNnVsbC82c2xsIGRvIG5vdCBuZWVkIHRoaXMgd29ya2Fyb3VkIGFueW1v
+cmUuIEFsbCBvdGhlcg0KPiA+IGkubXg2LzcvOCBjaGlwcyBzdGlsbCBuZWVkIHRoaXMgd29ya2Fy
+b3VkLiBUaGlzIHBhdGNoIHNldCBhZGQgbmV3DQo+ID4gJ2ZzbCxpbXg2dWwtZWNzcGknDQo+ID4g
+Zm9yIGVjc3BpIGRyaXZlciBhbmQgJ2Vjc3BpX2ZpeGVkJyBpbiBzZG1hIGRyaXZlciB0byBjaG9v
+c2UgaWYgbmVlZA0KPiA+IGVycmF0YSBvciBub3QuDQo+ID4gVGhlIGZpcnN0IHR3byByZXZlcnRl
+ZCBwYXRjaGVzIHNob3VsZCBiZSB0aGUgc2FtZSBpc3N1ZSwgdGhvdWdoLCBpdA0KPiA+IHNlZW1z
+ICdmaXhlZCcgYnkgY2hhbmdpbmcgdG8gb3RoZXIgc2hwIHNjcmlwdC4gSG9wZSBTZWFuIG9yIFNh
+c2NoYQ0KPiA+IGNvdWxkIGhhdmUgdGhlIGNoYW5jZSB0byB0ZXN0IHRoaXMgcGF0Y2ggc2V0IGlm
+IGNvdWxkIGZpeCB0aGVpcg0KPiA+IGlzc3Vlcy4NCj4gPiBCZXNpZGVzLCBlbmFibGUgc2RtYSBz
+dXBwb3J0IGZvciBpLm14OG1tLzhtcSBhbmQgZml4IGVjc3BpMSBub3Qgd29yaw0KPiA+IG9uIGku
+bXg4bW0gYmVjYXVzZSB0aGUgZXZlbnQgaWQgaXMgemVyby4NCj4gPg0KPiA+IFBTOg0KPiA+ICAg
+IFBsZWFzZSBnZXQgc2RtYSBmaXJtd2FyZSBmcm9tIGJlbG93IGxpbnV4LWZpcm13YXJlIGFuZCBj
+b3B5IGl0IHRvDQo+ID4geW91ciBsb2NhbCByb290ZnMgL2xpYi9maXJtd2FyZS9pbXgvc2RtYS4N
+Cj4gDQo+IA0KPiBIZWxsbyBSb2JpbiwNCj4gDQo+IHdlIGhhdmUgdHJpZWQgb3V0IHRoaXMgc2Vy
+aWVzLCBhbmQgdGhlcmUgc2VlbXMgdG8gYmUgYW4gaXNzdWUgd2l0aCB0aGUNCj4gUElPIGZhbGxi
+YWNrLiBXZSBhcmUgdGVzdGluZyBvbiBhbiBpLk1YNlEgYm9hcmQsIGFuZCBvdXIga2VybmVsIGlz
+IGENCj4gbW9zdGx5LXVubW9kaWZpZWQgNS40LCBvbiB3aGljaCB3ZSBiYWNrcG9ydGVkIGFsbCBT
+RE1BIHBhdGNoZXMgZnJvbQ0KPiBuZXh0LTIwMjAwNjAyIChpbXgtc2RtYS5jIGlzIGlkZW50aWNh
+bCB0byBuZXh0LTIwMjAwNjAyIHZlcnNpb24pLCBhbmQNCj4gdGhlbiBhcHBsaWVkIHRoaXMgd2hv
+bGUgc2VyaWVzLg0KPiANCj4gV2UgYnVpbGQgdGhlIFNETUEgZHJpdmVyIGFzIGEga2VybmVsIG1v
+ZHVsZSwgd2hpY2ggaXMgbG9hZGVkIGJ5IHVkZXYsDQo+IHNvIHRoZSByb290IGZpbGVzeXN0ZW0g
+aXMgcmVhZHkgYW5kIHRoZSBTRE1BIGZpcm13YXJlIGNhbiBiZSBsb2FkZWQuDQo+IFRoZSBiZWhh
+dmlvdXIgd2UncmUgc2VlaW5nIGlzIHRoZSBmb2xsb3dpbmc6DQo+IA0KPiAxLiBBcyBsb25nIGFz
+IHRoZSBTRE1BIGRyaXZlciBpcyBub3QgbG9hZGVkLCBpbml0aWFsaXppbmcgc3BpX2lteCB3aWxs
+DQo+IGJlIGRlZmVycmVkDQo+IDIuIGlteF9zZG1hIGlzIGxvYWRlZC4gVGhlIFNETUEgZmlybXdh
+cmUgaXMgbm90IHlldCBsb2FkZWQgYXQgdGhpcw0KPiBwb2ludA0KPiAzLiBzcGlfaW14IGlzIGlu
+aXRpYWxpemVkIGFuZCBhbiBTUEktTk9SIGZsYXNoIGlzIHByb2JlZC4gVG8gbG9hZCB0aGUNCj4g
+QkZQVCwgdGhlIGRyaXZlciB3aWxsIGF0dGVtcHQgdG8gdXNlIERNQTsgdGhpcyB3aWxsIGZhaWwg
+d2l0aCBFSU5WQUwgYXMNCj4gbG9uZyBhcyB0aGUgU0RNQSBmaXJtd2FyZSBpcyBub3QgcmVhZHks
+IHNvIHRoZSBmYWxsYmFjayB0byBQSU8gaGFwcGVucw0KPiAoNC4gU0RNQSBmaXJtd2FyZSBpcyBy
+ZWFkeSwgc3Vic2VxdWVudCBTUEkgdHJhbnNmZXJzIHVzZSBETUEpDQo+IA0KPiBUaGUgcHJvYmxl
+bSBoYXBwZW5zIGluIHN0ZXAgMzogV2hlbmV2ZXIgdGhlIGRyaXZlciBmYWxscyBiYWNrIHRvIFBJ
+TywNCj4gdGhlIHJlY2VpdmVkIGRhdGEgaXMgY29ycnVwdC4gVGhlIGJlaGF2aW91ciBpcyBzcGVj
+aWZpYyB0byB0aGUNCj4gZmFsbGJhY2s6IFdoZW4gSSBkaXNhYmxlIERNQSBjb21wbGV0ZWx5IHZp
+YSBzcGlfaW14LnVzZV9kbWEsIG9yIHdoZW4NCj4gdGhlIHRpbWluZyBpcyBsdWNreSBhbmQgdGhl
+IFNETUEgZmlybXdhcmUgZ2V0cyBsb2FkZWQgYmVmb3JlIHRoZSBmbGFzaA0KPiBpcyBwcm9iZWQs
+IG5vIGNvcnJ1cHRpb24gY2FuIGJlIG9ic2VydmVkLg0KVGhhbmtzIE1hdHRoaWFzLCB3b3VsZCB5
+b3UgbGlrZSBwb3N0IGxvZz8NCg0K
