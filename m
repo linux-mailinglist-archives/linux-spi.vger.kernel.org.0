@@ -2,138 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCB81EDC09
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 06:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC1D1EDC25
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 06:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgFDECn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Jun 2020 00:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
+        id S1726516AbgFDERg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 00:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726252AbgFDECf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 00:02:35 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78888C08C5C5
-        for <linux-spi@vger.kernel.org>; Wed,  3 Jun 2020 21:02:34 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id n9so1619596plk.1
-        for <linux-spi@vger.kernel.org>; Wed, 03 Jun 2020 21:02:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dDMZ76EfQNqsSp5sb7mLI8JiO94mOeQpyrT6zdtd3HQ=;
-        b=nmlYusCXDFiVqFXgxwlUm0gg3wIorQtKPNmSn8kUxXy2o8ATDLsqSlFD0o61OtpLts
-         2zSeOvR5nnDD2//h685p30vwSekGc1q/jRAs6eegsS86q8t4Z7JAaLx7yfVY1EK9Xiau
-         DCT2MBSjsLxms0BiWDCQF4Q6VgKuWrTFT33kU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dDMZ76EfQNqsSp5sb7mLI8JiO94mOeQpyrT6zdtd3HQ=;
-        b=AFAgFq5HGuMuwLoW8tiI1he3kqjuph95EhdSIr1W4MNOYYSPGxGkUhhWKtcCnMvcgP
-         fEMKkRCYrmajqe6OjcZCPUjwECoi3bilDMNqYQI3i6xPxW1U8fQgIza2Wh1YVEWmmn/l
-         9jb9Jt/p/a+41/W5V6OlFDQ60q64rcRdQ6BY+iigXt02e2I/Q/JyKTx5nmilV5TJdRqZ
-         93bNSfwGNKGFyLnvLQ2wCOGoYHveLEBD5rU3eWVw5xWqMF/PhMlOS1vrJIeu+cHD2P+T
-         KY/GFb+qr0t8FlwfS8rs2q/kEe58m2GJSEeKZ5fatLBQaTWGTxQqCLM5W7mlqlvItrV2
-         OuMw==
-X-Gm-Message-State: AOAM530w9hKAvkvQBI4uA0gvxvrZhF2oBAKQL5KZlZFwpNCnPjqBHzdo
-        UNndAbj7iN89QYvQv2GQycK0xQ==
-X-Google-Smtp-Source: ABdhPJxQ/Dd1yetZm6iahM4ViylSUD/mRnchtrTt1NIbGDNSI6TVF94FWNWMrr2lFeqPK0TXyTqNmA==
-X-Received: by 2002:a17:902:b710:: with SMTP id d16mr2968382pls.28.1591243353758;
-        Wed, 03 Jun 2020 21:02:33 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q6sm1193902pff.163.2020.06.03.21.02.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2020 21:02:32 -0700 (PDT)
-Date:   Wed, 3 Jun 2020 21:02:31 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mm@kvack.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH 09/10] treewide: Remove uninitialized_var() usage
-Message-ID: <202006032048.E7B1D18A1@keescook>
-References: <20200603233203.1695403-1-keescook@chromium.org>
- <20200603233203.1695403-10-keescook@chromium.org>
- <20200604033315.GA1131596@ubuntu-n2-xlarge-x86>
+        with ESMTP id S1726175AbgFDERg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 00:17:36 -0400
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD72C03E96D
+        for <linux-spi@vger.kernel.org>; Wed,  3 Jun 2020 21:17:36 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 1A940100DA1B3;
+        Thu,  4 Jun 2020 06:17:33 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id AA79527E8AE; Thu,  4 Jun 2020 06:17:32 +0200 (CEST)
+Date:   Thu, 4 Jun 2020 06:17:32 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Martin Sperl <kernel@martin.sperl.org>
+Subject: Re: [PATCH 3/3] spi: bcm2835: Enable shared interrupt support
+Message-ID: <20200604041732.7ijkvad2yadtgjid@wunner.de>
+References: <20200604034655.15930-1-f.fainelli@gmail.com>
+ <20200604034655.15930-4-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200604033315.GA1131596@ubuntu-n2-xlarge-x86>
+In-Reply-To: <20200604034655.15930-4-f.fainelli@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 08:33:15PM -0700, Nathan Chancellor wrote:
-> On Wed, Jun 03, 2020 at 04:32:02PM -0700, Kees Cook wrote:
-> > Using uninitialized_var() is dangerous as it papers over real bugs[1]
-> > (or can in the future), and suppresses unrelated compiler warnings
-> > (e.g. "unused variable"). If the compiler thinks it is uninitialized,
-> > either simply initialize the variable or make compiler changes.
-> > 
-> > I preparation for removing[2] the[3] macro[4], remove all remaining
-> > needless uses with the following script:
-> > 
-> > git grep '\buninitialized_var\b' | cut -d: -f1 | sort -u | \
-> > 	xargs perl -pi -e \
-> > 		's/\buninitialized_var\(([^\)]+)\)/\1/g;
-> > 		 s:\s*/\* (GCC be quiet|to make compiler happy) \*/$::g;'
-> > 
-> > drivers/video/fbdev/riva/riva_hw.c was manually tweaked to avoid
-> > pathological white-space.
-> > 
-> > No outstanding warnings were found building allmodconfig with GCC 9.3.0
-> > for x86_64, i386, arm64, arm, powerpc, powerpc64le, s390x, mips, sparc64,
-> > alpha, and m68k.
-> > 
-> > [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
-> > [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
-> > [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
-> > [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
-> > 
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> <snip>
-> 
-> > diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
-> > index a0f6813f4560..a71fa7204882 100644
-> > --- a/arch/powerpc/kvm/book3s_pr.c
-> > +++ b/arch/powerpc/kvm/book3s_pr.c
-> > @@ -1829,7 +1829,7 @@ static int kvmppc_vcpu_run_pr(struct kvm_run *kvm_run, struct kvm_vcpu *vcpu)
-> >  {
-> >  	int ret;
-> >  #ifdef CONFIG_ALTIVEC
-> > -	unsigned long uninitialized_var(vrsave);
-> > +	unsigned long vrsave;
-> >  #endif
-> 
-> This variable is actually unused:
-> 
-> ../arch/powerpc/kvm/book3s_pr.c:1832:16: warning: unused variable 'vrsave' [-Wunused-variable]
->         unsigned long vrsave;
->                       ^
-> 1 warning generated.
-> 
-> It has been unused since commit 99dae3bad28d ("KVM: PPC: Load/save
-> FP/VMX/VSX state directly to/from vcpu struct").
-> 
-> $ git grep vrsave 99dae3bad28d8fdd32b7bfdd5e2ec7bb2d4d019d arch/powerpc/kvm/book3s_pr.c
-> 99dae3bad28d8fdd32b7bfdd5e2ec7bb2d4d019d:arch/powerpc/kvm/book3s_pr.c:  unsigned long uninitialized_var(vrsave);
-> 
-> I would nuke the whole '#ifdef' block.
+On Wed, Jun 03, 2020 at 08:46:55PM -0700, Florian Fainelli wrote:
+> +static const struct of_device_id bcm2835_spi_match[] = {
+> +	{ .compatible = "brcm,bcm2835-spi", .data = &bcm2835_spi_interrupt },
+> +	{ .compatible = "brcm,bcm2711-spi", .data = &bcm2835_spi_sh_interrupt },
+> +	{ .compatible = "brcm,bcm7211-spi", .data = &bcm2835_spi_sh_interrupt },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, bcm2835_spi_match);
 
-Ah, thanks! I wonder why I don't have CONFIG_ALTIVEC in any of my ppc
-builds. Hmmm.
+Maybe I'm missing something but I think you either have to reverse the
+order of the entries in this array or change patch [2/3] to drop
+"brcm,bcm2835-spi" from the compatible string:
 
--Kees
+__of_match_node() iterates over the entries in the array above and
+calls __of_device_is_compatible() for each of them, which returns
+success if the entry matches any of the device's compatible string.
 
--- 
-Kees Cook
+Because "brcm,bcm2835-spi" is checked first and that string is
+present on the controllers with shared interrupt, they're all
+deemed not to use shared interrupts.
+
+If you opt so fix this by dropping "brcm,bcm2835-spi" from the
+device's compatible strings, then you have to move patch [2/3]
+behind patch [3/3].
+
+
+>  static int bcm2835_spi_probe(struct platform_device *pdev)
+>  {
+> +	irqreturn_t (*bcm2835_spi_isr_func)(int, void *);
+
+A more succinct alternative is:
+
+	irq_handler_t bcm2835_spi_isr_func;
+
+Otherwise this patch LGTM.
+
+Thanks,
+
+Lukas
