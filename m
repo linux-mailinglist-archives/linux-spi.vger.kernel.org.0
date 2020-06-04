@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7606A1EDBE7
+	by mail.lfdr.de (Postfix) with ESMTP id E2C721EDBE8
 	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 05:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbgFDDrE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Jun 2020 23:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S1726727AbgFDDrF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 3 Jun 2020 23:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727049AbgFDDrB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 3 Jun 2020 23:47:01 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C60CC03E96D;
-        Wed,  3 Jun 2020 20:47:01 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id t7so2949930pgt.3;
-        Wed, 03 Jun 2020 20:47:01 -0700 (PDT)
+        with ESMTP id S1727078AbgFDDrE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 3 Jun 2020 23:47:04 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278A8C03E96D;
+        Wed,  3 Jun 2020 20:47:03 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id j1so2580891pfe.4;
+        Wed, 03 Jun 2020 20:47:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NxEaSPQeIOPRkfXUqBGWXS3DhANeE89pJJUJwsIWN6U=;
-        b=XMh2NLBLCV1jRAsM/ApPVYMn0b8sSfJSvOD39kjJ1Om9Wed9iwphuhaPW9wZ3rsBHv
-         u8UUaLG7LjbGEYX+lAyn6swrDVh9AvFtLNGkHG7klLKXrNclPthMtPF0i2sh2fLO3ys5
-         wwT90Pe51q16aPifitePxyi03f77GMxf4NvhwVuaMusm7QLwD7q0iLO+TUj49JVRlbNe
-         6cyzApJCV7abeGs6zUhOHAfrRSSPel6w+A6rfY006mPcSKCANZernfLy0CFifmBw7JAm
-         XzUF0f/amIWLBpuMk7lrwlZdWFc2dYJbjwYnxzaY/mSz2cMDGqig2Qns1uSdl28izDXv
-         BrJw==
+        bh=ljd1gL0a9YiLaECGRPUeWMWqu+jwE37ussa58cXejzA=;
+        b=KFOe7x6IauMLNFE6HuIGA9laJSc4wQ8x9ZS2Kto1ySLnTDNb85y66ci+0Meqq7qqy/
+         5K+adi8U+uMY5S2TtJ8ek0N60iZ5UHt8DrBbU9vN/NlexZkaZSrcsT2mK/VbDiNas0Wj
+         55H9G3/nXOALk9OhppEKn1xUs0OMCg+QZ4kbpUTHnewmfqXsjToNh8rMRwoDdTGGKHZX
+         sj00WxYzUPlGyf7sDohmvVnRDurXAq2pZso/3HiHo7fVNhSX6hEw2N9J5PdlIw378rqu
+         Dt2kAGGlAyb4laYnEodsJ2kr1a9A3bstMmu64hRqIOrRA4bo80PMEwXOLNqBgXzBdAi6
+         EjJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=NxEaSPQeIOPRkfXUqBGWXS3DhANeE89pJJUJwsIWN6U=;
-        b=dXmeR56coD0mjaGzIh8a+wyEXDa3+yr4fULC+UgluqkCharkuPMiDPWzgZtpOW5dVH
-         DH7Km1eCYzGZ3EG36uDtYO3kEGZCXjpTq8/trqEbE9X43sTsgSDouKxDG49ujVt7qLFD
-         H5q8qx76/gIPzhgM8RKHUJE76lF7n0bYITtNGc1/FJA4c0yIkGr0lVOSA/sFQDwgxA33
-         nb+x0Rd43QcyF/OiqbE+jAvrqdm2KCf9hdeMVdvLcKxRW4UDYD4TcpRdsihMs4FMvUah
-         4uU5uuvUKEHJh/lBzJ4zFLoiMs2EyLKtGNmefr3X2eaFktOYvC/JyEABgvNLyCnCLBDv
-         7GNg==
-X-Gm-Message-State: AOAM533X+S7JwNCXhiZire7vlDVB+YWPCIIwX2+JhqeFmlMRrAdjs3JS
-        S+AVBXOmMTI+Tu7GbIE565dymmtx
-X-Google-Smtp-Source: ABdhPJyuRIpehL8ILBEuAv8MYZ88AthlobDOSBfpKUE+4FSI+ipnlgCRqSzcWpGqCddTssyAUSN10g==
-X-Received: by 2002:a05:6a00:150c:: with SMTP id q12mr2251871pfu.270.1591242420517;
-        Wed, 03 Jun 2020 20:47:00 -0700 (PDT)
+        bh=ljd1gL0a9YiLaECGRPUeWMWqu+jwE37ussa58cXejzA=;
+        b=fahz0hmDVyz0gJfrdpIXHf5farpnThBpHqeqRrPNwjDH5Y9RFWz8PCVfvNB0aTTb/u
+         38aahd3gQ5Bk8kcYqx9kbzHZvOOOskZGW/o+v+CHZrLvlf2cwYq6EfQqEOUdMrHVJws1
+         np8hbK11dW+ridHL2n0a1Qn6Ul4ErihSdphzwuIzAmwyoTpuXi3yXwmQ8Nhn+MtzVoN+
+         kWbC4AsFsNooLJLGVmFLH7bxRkuDx2vCHkBI0789J3ZlOSD3yd5qD9Z4m4/QVnoj2n1g
+         EzdUwWR7hrmkiRKtoNtLml3wKEVM7kkZSidH5x5YF0i/AKs+pb9eBwFwlsENncI6WhS9
+         K0AA==
+X-Gm-Message-State: AOAM531xdqo8iGloNj48FBcT6vapus3a/Oxit8F8lL+bS3xstMRjVEAo
+        GUEDsrKl+mnnH1R5a3JShHPndlcl
+X-Google-Smtp-Source: ABdhPJwNVk3QpeeMpbblNbwAltfHbm6Ih+XSP+R2DYxvoDZBP0fN/cf2VcALRGiRxP0aHkdT0nmoYA==
+X-Received: by 2002:a62:e703:: with SMTP id s3mr2151197pfh.43.1591242422257;
+        Wed, 03 Jun 2020 20:47:02 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p19sm3083367pff.116.2020.06.03.20.46.58
+        by smtp.gmail.com with ESMTPSA id p19sm3083367pff.116.2020.06.03.20.47.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2020 20:46:59 -0700 (PDT)
+        Wed, 03 Jun 2020 20:47:01 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -64,9 +64,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
         BCM2711/BCM2835 ARM ARCHITECTURE),
         Martin Sperl <kernel@martin.sperl.org>, lukas@wunner.de
-Subject: [PATCH 1/3] dt-bindings: spi: Document bcm2711 and bcm7211 SPI compatible
-Date:   Wed,  3 Jun 2020 20:46:53 -0700
-Message-Id: <20200604034655.15930-2-f.fainelli@gmail.com>
+Subject: [PATCH 2/3] ARM: dts: bcm2711: Update SPI nodes compatible strings
+Date:   Wed,  3 Jun 2020 20:46:54 -0700
+Message-Id: <20200604034655.15930-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200604034655.15930-1-f.fainelli@gmail.com>
 References: <20200604034655.15930-1-f.fainelli@gmail.com>
@@ -75,30 +75,55 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The BCM2711 and BCM7211 chips use the BCM2835 SPI controller, but there
-are severl instances of those in the system and they all share the same
-interrupt line. Document specific compatible strings such that the
-driver can take appropriate actions.
+The BCM2711 SoC features 5 SPI controllers which all share the same
+interrupt line, the SPI driver needs to support interrupt sharing,
+therefore use the chip specific compatible string to help with that.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/bcm2711.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
-index f11f295c8450..3d55dd64b1be 100644
---- a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
-+++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
-@@ -5,7 +5,8 @@ SPI0, and the other known as the "Universal SPI Master"; part of the
- auxiliary block. This binding applies to the SPI0 controller.
+diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+index a91cf68e3c4c..9a9ea67fbc2d 100644
+--- a/arch/arm/boot/dts/bcm2711.dtsi
++++ b/arch/arm/boot/dts/bcm2711.dtsi
+@@ -152,7 +152,7 @@
+ 		};
  
- Required properties:
--- compatible: Should be "brcm,bcm2835-spi".
-+- compatible: Should be one of "brcm,bcm2835-spi" for BCM2835/2836/2837 or
-+  "brcm,bcm2711-spi" for BCM2711 or "brcm,bcm7211-spi" for BCM7211.
- - reg: Should contain register location and length.
- - interrupts: Should contain interrupt.
- - clocks: The clock feeding the SPI controller.
+ 		spi3: spi@7e204600 {
+-			compatible = "brcm,bcm2835-spi";
++			compatible = "brcm,bcm2711-spi", "brcm,bcm2835-spi";
+ 			reg = <0x7e204600 0x0200>;
+ 			interrupts = <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clocks BCM2835_CLOCK_VPU>;
+@@ -162,7 +162,7 @@
+ 		};
+ 
+ 		spi4: spi@7e204800 {
+-			compatible = "brcm,bcm2835-spi";
++			compatible = "brcm,bcm2711-spi", "brcm,bcm2835-spi";
+ 			reg = <0x7e204800 0x0200>;
+ 			interrupts = <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clocks BCM2835_CLOCK_VPU>;
+@@ -172,7 +172,7 @@
+ 		};
+ 
+ 		spi5: spi@7e204a00 {
+-			compatible = "brcm,bcm2835-spi";
++			compatible = "brcm,bcm2711-spi", "brcm,bcm2835-spi";
+ 			reg = <0x7e204a00 0x0200>;
+ 			interrupts = <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clocks BCM2835_CLOCK_VPU>;
+@@ -182,7 +182,7 @@
+ 		};
+ 
+ 		spi6: spi@7e204c00 {
+-			compatible = "brcm,bcm2835-spi";
++			compatible = "brcm,bcm2711-spi", "brcm,bcm2835-spi";
+ 			reg = <0x7e204c00 0x0200>;
+ 			interrupts = <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clocks BCM2835_CLOCK_VPU>;
 -- 
 2.17.1
 
