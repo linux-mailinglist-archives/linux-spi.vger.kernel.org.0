@@ -2,28 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAE41EE8CA
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 18:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0CC1EE8EA
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 18:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729866AbgFDQrM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 4 Jun 2020 12:47:12 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:42901 "EHLO
+        id S1729925AbgFDQy6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 12:54:58 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:57075 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729861AbgFDQrL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 12:47:11 -0400
+        with ESMTP id S1729115AbgFDQy5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 12:54:57 -0400
 Received: from [192.168.1.164] ([37.4.249.202]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MQ6C0-1jKySA2XzM-00M4dq; Thu, 04 Jun 2020 18:46:58 +0200
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MRmsE-1jWTny32d8-00T9dJ; Thu, 04 Jun 2020 18:54:44 +0200
 Subject: Re: [PATCH 2/3] ARM: dts: bcm2711: Update SPI nodes compatible
  strings
 To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
+        Lukas Wunner <lukas@wunner.de>
 Cc:     "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
-        Scott Branden <sbranden@broadcom.com>, lukas@wunner.de,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
         Mark Brown <broonie@kernel.org>,
         "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
@@ -34,6 +35,8 @@ Cc:     "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE"
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 References: <20200604034655.15930-1-f.fainelli@gmail.com>
  <20200604034655.15930-3-f.fainelli@gmail.com>
+ <20200604042038.jzolu6k7q3d6bsvq@wunner.de>
+ <15c3995e-87de-0f2b-3424-5dd698b181d3@gmail.com>
 From:   Stefan Wahren <stefan.wahren@i2se.com>
 Autocrypt: addr=stefan.wahren@i2se.com; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
@@ -165,51 +168,56 @@ Autocrypt: addr=stefan.wahren@i2se.com; keydata=
  VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
  bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
  LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <91e002eb-0b7e-535a-63a5-2f1e33210be0@i2se.com>
-Date:   Thu, 4 Jun 2020 18:46:57 +0200
+Message-ID: <2978874a-fe1e-3b07-381d-55dcb00ecca7@i2se.com>
+Date:   Thu, 4 Jun 2020 18:54:42 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200604034655.15930-3-f.fainelli@gmail.com>
+In-Reply-To: <15c3995e-87de-0f2b-3424-5dd698b181d3@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Provags-ID: V03:K1:A4nwKZABvn0PpqIKraRmZFR0JD8aqD3J8e/hv/s4DSdRnZYcxfa
- a/D+ErnVPBjTWjKeJ4MX4Jdf8RW7Q452mu31jTWs3KzuivZ2OnmfSyOqfWNyXUZWYqj4/5m
- z4bQIQXIUFlPU1bqv8tS0HHW7cHCFTXhidJDaXQ+IxVMZw+CXREM8ijkLPOPT7JS/sQg8Eb
- XUQobNiw0hB1C4DKGBDiA==
+X-Provags-ID: V03:K1:dK23L3xZBA8GB0VzPd1SbXS8zd0W1QwsyZ2u55AIEKCjRGwMYnm
+ GimwKCA5YzTC7HyOyx8k19UcJWocoZ7qX9dNdNDBexqLutLLv+v44JzKTG8pfwvzSfXbB37
+ +Wm7ULGpLYNLLKC2giHX9Sr8rHXXFxlOPq0GBjLGnAHnSjvZUJRwPLkd5h5I/A1RKqA8aDH
+ E1KlbkzPy83+05JIohewA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YoSmraglVes=:6k1J92DanjTXQmTpwbmqr6
- sI/UA6hbrORx9Woc/VnovsvtvFeUUX7XdUKrpofELmXTSjC9SA1E2L9+Cwe4l6/06ly0N61n5
- mUV55FkEVVGfSFq9yIVvPBfCu7ZVfLMbilhSM3RHEnmZeZt1rXvb1POXeqAn4qd8C0MF95LGY
- 98yQC3GNVY3gQiDNpdTQdL8ktGs/jrOTMzTpVs4R+mHf88pCk/e893IHXpNDicO5xJYkKIB7x
- BJ1zF4iS+b53tocQXBQ27UuiAFMFwpMzpWIMmwgYrCitfWS9pDKZ1wBMiPFzLWZrUfIvGXL6i
- WkwvQO/k4X16W0rlAh7OU2JF/DVLXjHdkE+MBzFCBf0IxlVkMOaomsun/tclZm4xQKITdEtio
- ZSE3MO+u0anUHbpePEdw7BdfWrGwJhY04q7VO/1PekLBk9nWpFQS9pJZI0bmsYBds8ft3GD+0
- 4MiOdQFaLgs741NMxJxIs30UQc21VspyJ4roZnUZp2WVWtwGEbhY0O/e00tINcGg8qzxsIGdd
- XUIdevtgL0RpLIEmBUHwIwq+yKPjJbNV5lT8rzb4HOAy1kZ9oG+cr5yUUqZOoxyofoSWJ2Fyj
- eQBF+13B0UCv/KmikPhD4HRxiP9HOg/dNm11Eb7NwVI0zaxKC3hDdFh8vMIrX0pk9TPldwZH9
- VdhTVoDNyKkmsAeDN3LDr/8Ogjb7ZXGvGBBYUglqwYh+EyMqjaGMXJ1rp59NVPodFP0CtgNT4
- YKlVVP6xAx7cggkkatwHHb5z2vi/CxigWibJ8NFS5sLZkX1iLROZRdpbLCVpAnGuLy1SRoB41
- IgmPXyH37TeZK22PDdcOQX8fZcJWxjIDLU+YkoyeRdtJSKfeY55pqYRMcY/CRbJZgqfGArQ
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XYTsWQ1s0Bw=:jwOwxeY/T/DqHRuVZtLLAv
+ RxoqMv87x2K6CuXqq/VPBwPxc7WfEsAJcULGqubCXABhv6cTM3RRzN1OPe0UXGeNChPLj4fMQ
+ j48Zi5mroc0bcYRWH6nTO+Br+xVm1HaHUutWBPelA5G7Y5pggQKHmCG8lamD8yZtTUkJFZysC
+ syQE8gdsHcNGpuBWVcIF6/Db70tIaQ87Ib1kw2KQN3h4QP36T1/2vBLyZ+0/tfGWNhBVWHdE3
+ B5uj4OANMlM5kHWqgrZe0ks48jyHGoNJuEGdwtckWeHsgopQ9St8OMgjYY7HfJMEoFPP2QTaW
+ M4NM9cYDMfthc0wKFhr65Sp4ziHYpwbak9/znchgpgBM9bSmuADnzaTm8AFae9zK/qz4B9GDy
+ nz1wrq50vk7YezFhLkwqAAhX/7WYb/dKvPDL5wc/D9y7N/DQyuT27lAdwAbOw1CmjAIqa+rQi
+ DXRQzeQ7JIYfIcgCoSRHx/MZ4d2n+vIshySSP2ttbMwajNpBiyQIOSo/e8JkQojoA0Gqxbq1/
+ PZw+prEo/FntHNp5eFY3mv4RloVGDwvkBfLb1EKDnLOpJvkzq8FXePw1gI1XifL24LiD0PVU5
+ PULgpUp/ZPpDV7IdRMCowcdt6chnh8tdbIjHQOb2mXvqWthzoy9VML3IjAwZfINhQ46uhHnxm
+ 7UHVLaig4gWyyPHqTVt3JSV7Yw6R7/WHOrF48EpHcUl1RMICvcroUnENNP/NOG37zxEf69d13
+ ifjnKAhYM0+zutclefCARDabMcmBe3O/ycZfqbz27Ube55v4DIIi+UPTNtGpfXmGS6CPPaGRN
+ zyjEgvzq9wHTEgQk/aUrohJxpyym6Q5zZTRZO9iZzvsG7k7JBzpFa1qfgVwPoi5+b+Uf1D0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Florian,
+Am 04.06.20 um 18:40 schrieb Florian Fainelli:
+>
+> On 6/3/2020 9:20 PM, Lukas Wunner wrote:
+>> On Wed, Jun 03, 2020 at 08:46:54PM -0700, Florian Fainelli wrote:
+>>> The BCM2711 SoC features 5 SPI controllers which all share the same
+>>> interrupt line, the SPI driver needs to support interrupt sharing,
+>>> therefore use the chip specific compatible string to help with that.
+>> You're saying above that the 5 controllers all share the interrupt
+>> but below you're only changing the compatible string of 4 controllers.
+>>
+>> So I assume spi0 still has its own interrupt and only the additional
+>> 4 controllers present on the BCM2711/BCM7211 share their interrupt?
+> Correct, there are 5 instances, but only the 4 that were added for 2711
+> actually share the interrupt line, I will correct that in the next patch
+> version.
 
-Am 04.06.20 um 05:46 schrieb Florian Fainelli:
-> The BCM2711 SoC features 5 SPI controllers which all share the same
-> interrupt line, the SPI driver needs to support interrupt sharing,
-> therefore use the chip specific compatible string to help with that.
+No, all 5 instances uses the same interrupt line. Please see my comment
+before.
 
-the commit message is correct about 5 SPI controllers, but the patch
-only changes 4 ones.
-
-Please add the new compatibles also for &spi (included from
-bcm283x.dtsi) below in this file, which also share interrupt 118.
-
-Thanks
-
+Regards
 
