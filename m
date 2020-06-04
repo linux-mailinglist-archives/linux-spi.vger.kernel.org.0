@@ -2,188 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC461EDBE5
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 05:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCB81EDC09
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 06:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727078AbgFDDrH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Jun 2020 23:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S1726248AbgFDECn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 00:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727795AbgFDDrG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 3 Jun 2020 23:47:06 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339A7C08C5C0;
-        Wed,  3 Jun 2020 20:47:05 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id b16so2718072pfi.13;
-        Wed, 03 Jun 2020 20:47:05 -0700 (PDT)
+        with ESMTP id S1726252AbgFDECf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 00:02:35 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78888C08C5C5
+        for <linux-spi@vger.kernel.org>; Wed,  3 Jun 2020 21:02:34 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id n9so1619596plk.1
+        for <linux-spi@vger.kernel.org>; Wed, 03 Jun 2020 21:02:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=QQ6Hyh/m2EhPIKuAygxezflBAl58W/VBXN+x76AFtqs=;
-        b=B0/8qGwjkJ+zdXPjuEpW0NvP34Qn50UqLSD1UlkyU+uP+WAYx3+tL4pgemaok2OEzk
-         CiHrVQVPFAhZTIbUm30Wz7K2a1Tm5uzc0CnG70c9RBzjCyJjTLUInaZBkVFAADTCdxEg
-         wuSSJWKjxXHtlRxb7F3qDu81yDJCiVqbW/B5+CZom5dIBmCSQw6nCa6YindB3CDzleh7
-         ufysFY89IT01nWs9e2loDh8njH2quflbkFG0ZwEH/v2Wh2ac0HK4/MM0zsigo7M/uryW
-         wKVsoP4wsgjoIbs9n+45JNd8AyQaSqgmDd+ekrkcydGCguZbDPLW3GVY5ARUYWD+NQyv
-         M3tA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dDMZ76EfQNqsSp5sb7mLI8JiO94mOeQpyrT6zdtd3HQ=;
+        b=nmlYusCXDFiVqFXgxwlUm0gg3wIorQtKPNmSn8kUxXy2o8ATDLsqSlFD0o61OtpLts
+         2zSeOvR5nnDD2//h685p30vwSekGc1q/jRAs6eegsS86q8t4Z7JAaLx7yfVY1EK9Xiau
+         DCT2MBSjsLxms0BiWDCQF4Q6VgKuWrTFT33kU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=QQ6Hyh/m2EhPIKuAygxezflBAl58W/VBXN+x76AFtqs=;
-        b=WImZ94r0Dr1eA92KWf4zxT80YwVZJJu8IQUIooaFCj6UX3sLqIP3qP5M5uoKOiOVFc
-         Eo9X1kLYPZwieeafE6SCrYufq61OrTVMVcGz4KQtXgTTl2FBnCWS6MeERO+WergZhj/3
-         oeKNIra2q85cvyp1rRdscVRTZtcRWpZnMpayO7Vm4OUT7IWtPu9OfwAg5Fmkh58H8X5e
-         sTYU2lO4QWv0hveOU9PX0tfZm14FLogVDWS2+vAV4BbM8dxlDeGlkAN5ulrXnoRnC5ar
-         041kTc0t/zSkKZKYzeo2y/InulzdxuqEMlD+Cx5F7ml1Q7PF4YWBzFcv8xGNlTclhZ/D
-         v+gg==
-X-Gm-Message-State: AOAM533LwxRcl8/AJr3MilkWYRqoBhiIY/gD23bzLqvWEr/IETqF6hEZ
-        ZK6OgaMZFQfFQ8cktEe+cRkgeJN7
-X-Google-Smtp-Source: ABdhPJwbqlo5gRwaKOl0uPy+5X9nNBxzaPZErf6Kvavs7jP4lLEx9XgMSZvc12iLCbVBqhcgwHO+vQ==
-X-Received: by 2002:a62:1885:: with SMTP id 127mr2292423pfy.258.1591242424241;
-        Wed, 03 Jun 2020 20:47:04 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p19sm3083367pff.116.2020.06.03.20.47.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dDMZ76EfQNqsSp5sb7mLI8JiO94mOeQpyrT6zdtd3HQ=;
+        b=AFAgFq5HGuMuwLoW8tiI1he3kqjuph95EhdSIr1W4MNOYYSPGxGkUhhWKtcCnMvcgP
+         fEMKkRCYrmajqe6OjcZCPUjwECoi3bilDMNqYQI3i6xPxW1U8fQgIza2Wh1YVEWmmn/l
+         9jb9Jt/p/a+41/W5V6OlFDQ60q64rcRdQ6BY+iigXt02e2I/Q/JyKTx5nmilV5TJdRqZ
+         93bNSfwGNKGFyLnvLQ2wCOGoYHveLEBD5rU3eWVw5xWqMF/PhMlOS1vrJIeu+cHD2P+T
+         KY/GFb+qr0t8FlwfS8rs2q/kEe58m2GJSEeKZ5fatLBQaTWGTxQqCLM5W7mlqlvItrV2
+         OuMw==
+X-Gm-Message-State: AOAM530w9hKAvkvQBI4uA0gvxvrZhF2oBAKQL5KZlZFwpNCnPjqBHzdo
+        UNndAbj7iN89QYvQv2GQycK0xQ==
+X-Google-Smtp-Source: ABdhPJxQ/Dd1yetZm6iahM4ViylSUD/mRnchtrTt1NIbGDNSI6TVF94FWNWMrr2lFeqPK0TXyTqNmA==
+X-Received: by 2002:a17:902:b710:: with SMTP id d16mr2968382pls.28.1591243353758;
+        Wed, 03 Jun 2020 21:02:33 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q6sm1193902pff.163.2020.06.03.21.02.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2020 20:47:03 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
-        BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
-        linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        Martin Sperl <kernel@martin.sperl.org>, lukas@wunner.de
-Subject: [PATCH 3/3] spi: bcm2835: Enable shared interrupt support
-Date:   Wed,  3 Jun 2020 20:46:55 -0700
-Message-Id: <20200604034655.15930-4-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200604034655.15930-1-f.fainelli@gmail.com>
-References: <20200604034655.15930-1-f.fainelli@gmail.com>
+        Wed, 03 Jun 2020 21:02:32 -0700 (PDT)
+Date:   Wed, 3 Jun 2020 21:02:31 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mm@kvack.org, clang-built-linux@googlegroups.com
+Subject: Re: [PATCH 09/10] treewide: Remove uninitialized_var() usage
+Message-ID: <202006032048.E7B1D18A1@keescook>
+References: <20200603233203.1695403-1-keescook@chromium.org>
+ <20200603233203.1695403-10-keescook@chromium.org>
+ <20200604033315.GA1131596@ubuntu-n2-xlarge-x86>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200604033315.GA1131596@ubuntu-n2-xlarge-x86>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The SPI controller found in the BCM2711 and BCM7211 SoCs is instantiated
-5 times, with all instances sharing the same interrupt line. We
-specifically match the two compatible strings here to determine whether
-it is necessary to request the interrupt with the IRQF_SHARED flag and
-to use an appropriate interrupt handler capable of returning IRQ_NONE.
+On Wed, Jun 03, 2020 at 08:33:15PM -0700, Nathan Chancellor wrote:
+> On Wed, Jun 03, 2020 at 04:32:02PM -0700, Kees Cook wrote:
+> > Using uninitialized_var() is dangerous as it papers over real bugs[1]
+> > (or can in the future), and suppresses unrelated compiler warnings
+> > (e.g. "unused variable"). If the compiler thinks it is uninitialized,
+> > either simply initialize the variable or make compiler changes.
+> > 
+> > I preparation for removing[2] the[3] macro[4], remove all remaining
+> > needless uses with the following script:
+> > 
+> > git grep '\buninitialized_var\b' | cut -d: -f1 | sort -u | \
+> > 	xargs perl -pi -e \
+> > 		's/\buninitialized_var\(([^\)]+)\)/\1/g;
+> > 		 s:\s*/\* (GCC be quiet|to make compiler happy) \*/$::g;'
+> > 
+> > drivers/video/fbdev/riva/riva_hw.c was manually tweaked to avoid
+> > pathological white-space.
+> > 
+> > No outstanding warnings were found building allmodconfig with GCC 9.3.0
+> > for x86_64, i386, arm64, arm, powerpc, powerpc64le, s390x, mips, sparc64,
+> > alpha, and m68k.
+> > 
+> > [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
+> > [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
+> > [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
+> > [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
+> > 
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> <snip>
+> 
+> > diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
+> > index a0f6813f4560..a71fa7204882 100644
+> > --- a/arch/powerpc/kvm/book3s_pr.c
+> > +++ b/arch/powerpc/kvm/book3s_pr.c
+> > @@ -1829,7 +1829,7 @@ static int kvmppc_vcpu_run_pr(struct kvm_run *kvm_run, struct kvm_vcpu *vcpu)
+> >  {
+> >  	int ret;
+> >  #ifdef CONFIG_ALTIVEC
+> > -	unsigned long uninitialized_var(vrsave);
+> > +	unsigned long vrsave;
+> >  #endif
+> 
+> This variable is actually unused:
+> 
+> ../arch/powerpc/kvm/book3s_pr.c:1832:16: warning: unused variable 'vrsave' [-Wunused-variable]
+>         unsigned long vrsave;
+>                       ^
+> 1 warning generated.
+> 
+> It has been unused since commit 99dae3bad28d ("KVM: PPC: Load/save
+> FP/VMX/VSX state directly to/from vcpu struct").
+> 
+> $ git grep vrsave 99dae3bad28d8fdd32b7bfdd5e2ec7bb2d4d019d arch/powerpc/kvm/book3s_pr.c
+> 99dae3bad28d8fdd32b7bfdd5e2ec7bb2d4d019d:arch/powerpc/kvm/book3s_pr.c:  unsigned long uninitialized_var(vrsave);
+> 
+> I would nuke the whole '#ifdef' block.
 
-For the BCM2835 case which is deemed performance critical, there is no
-overhead since a dedicated handler that does not assume sharing is used.
+Ah, thanks! I wonder why I don't have CONFIG_ALTIVEC in any of my ppc
+builds. Hmmm.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/spi/spi-bcm2835.c | 48 +++++++++++++++++++++++++++++++--------
- 1 file changed, 38 insertions(+), 10 deletions(-)
+-Kees
 
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index 237bd306c268..2e73ec70ee80 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -361,11 +361,10 @@ static void bcm2835_spi_reset_hw(struct spi_controller *ctlr)
- 	bcm2835_wr(bs, BCM2835_SPI_DLEN, 0);
- }
- 
--static irqreturn_t bcm2835_spi_interrupt(int irq, void *dev_id)
-+static inline irqreturn_t bcm2835_spi_interrupt_common(struct spi_controller *ctlr,
-+						       u32 cs)
- {
--	struct spi_controller *ctlr = dev_id;
- 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
--	u32 cs = bcm2835_rd(bs, BCM2835_SPI_CS);
- 
- 	/*
- 	 * An interrupt is signaled either if DONE is set (TX FIFO empty)
-@@ -394,6 +393,27 @@ static irqreturn_t bcm2835_spi_interrupt(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static irqreturn_t bcm2835_spi_interrupt(int irq, void *dev_id)
-+{
-+	struct spi_controller *ctlr = dev_id;
-+	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
-+	u32 cs = bcm2835_rd(bs, BCM2835_SPI_CS);
-+
-+	return bcm2835_spi_interrupt_common(ctlr, cs);
-+}
-+
-+static irqreturn_t bcm2835_spi_sh_interrupt(int irq, void *dev_id)
-+{
-+	struct spi_controller *ctlr = dev_id;
-+	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
-+	u32 cs = bcm2835_rd(bs, BCM2835_SPI_CS);
-+
-+	if (!(cs & BCM2835_SPI_CS_INTR))
-+		return IRQ_NONE;
-+
-+	return bcm2835_spi_interrupt_common(ctlr, cs);
-+}
-+
- static int bcm2835_spi_transfer_one_irq(struct spi_controller *ctlr,
- 					struct spi_device *spi,
- 					struct spi_transfer *tfr,
-@@ -1287,12 +1307,26 @@ static int bcm2835_spi_setup(struct spi_device *spi)
- 	return 0;
- }
- 
-+static const struct of_device_id bcm2835_spi_match[] = {
-+	{ .compatible = "brcm,bcm2835-spi", .data = &bcm2835_spi_interrupt },
-+	{ .compatible = "brcm,bcm2711-spi", .data = &bcm2835_spi_sh_interrupt },
-+	{ .compatible = "brcm,bcm7211-spi", .data = &bcm2835_spi_sh_interrupt },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, bcm2835_spi_match);
-+
- static int bcm2835_spi_probe(struct platform_device *pdev)
- {
-+	irqreturn_t (*bcm2835_spi_isr_func)(int, void *);
- 	struct spi_controller *ctlr;
-+	unsigned long flags = 0;
- 	struct bcm2835_spi *bs;
- 	int err;
- 
-+	bcm2835_spi_isr_func = of_device_get_match_data(&pdev->dev);
-+	if (bcm2835_spi_isr_func == &bcm2835_spi_sh_interrupt)
-+		flags = IRQF_SHARED;
-+
- 	ctlr = spi_alloc_master(&pdev->dev, ALIGN(sizeof(*bs),
- 						  dma_get_cache_alignment()));
- 	if (!ctlr)
-@@ -1344,7 +1378,7 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
- 	bcm2835_wr(bs, BCM2835_SPI_CS,
- 		   BCM2835_SPI_CS_CLEAR_RX | BCM2835_SPI_CS_CLEAR_TX);
- 
--	err = devm_request_irq(&pdev->dev, bs->irq, bcm2835_spi_interrupt, 0,
-+	err = devm_request_irq(&pdev->dev, bs->irq, bcm2835_spi_isr_func, flags,
- 			       dev_name(&pdev->dev), ctlr);
- 	if (err) {
- 		dev_err(&pdev->dev, "could not request IRQ: %d\n", err);
-@@ -1400,12 +1434,6 @@ static void bcm2835_spi_shutdown(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "failed to shutdown\n");
- }
- 
--static const struct of_device_id bcm2835_spi_match[] = {
--	{ .compatible = "brcm,bcm2835-spi", },
--	{}
--};
--MODULE_DEVICE_TABLE(of, bcm2835_spi_match);
--
- static struct platform_driver bcm2835_spi_driver = {
- 	.driver		= {
- 		.name		= DRV_NAME,
 -- 
-2.17.1
-
+Kees Cook
