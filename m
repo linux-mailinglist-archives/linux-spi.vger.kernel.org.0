@@ -2,152 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C356B1EEBDB
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 22:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22361EEBE7
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 22:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729125AbgFDUZD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Jun 2020 16:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
+        id S1728272AbgFDUZb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 16:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgFDUZD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 16:25:03 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15E1C08C5C0;
-        Thu,  4 Jun 2020 13:25:01 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id t18so7517033wru.6;
-        Thu, 04 Jun 2020 13:25:01 -0700 (PDT)
+        with ESMTP id S1729763AbgFDUZ3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 16:25:29 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B01AC08C5C9
+        for <linux-spi@vger.kernel.org>; Thu,  4 Jun 2020 13:25:29 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id m7so2674258plt.5
+        for <linux-spi@vger.kernel.org>; Thu, 04 Jun 2020 13:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Kk92pwYJ8IKxem/FhLo1PGHOIRMohDuIFS2c8njRHHI=;
-        b=b0R04DBdQzKUkFz3auHl3/33aB8QKHOVW4ieezufx6qQ6fTGBGrN/jtvhl7mbb7FER
-         HCuQ78GCrJNMAB3SsvsoZEQWMMEFU15unhzkbtXKC1cw+SvTCdRFEFXqm6kb2pqGGvhm
-         acKwZyXm+VLjO1hOnPESdZ7rc4hVZ5W3AYXkesQqduDJOdfx/dd6cDIZVQkMnu3sc+v2
-         SpPs5qHe9ndiPh0toGy7mbT+ygxwUA6vANu6SnKQQi084MrjVFig6ORzDKSuzLDJRgew
-         Thicol+gjUGeMLM3dykVd8ktmrJ6Ov96MkqfP+yDx9N++dGKDzCaEav0DfLLfb/ZMHlv
-         dDuA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TblIMkzhKEVNZyPa1dQf8kFQ+MgYlpgsesY6pOK1xME=;
+        b=eTUIYqIrq5sxbgWQO/3JauOnTYpVr1lxYINDt5nKOAMkJOKF9ufyGFqb5XSmsRi3m+
+         Uksx9+kJJ0xBVvvMTZtWdGvFYckH9URWghdJ/VSzZBwwBmizmaE949JntUM6qTfFIrip
+         3zzyVfVtH7B2Lzj4WQ8kAWj65+Txwm/2hs5XFlhCKdRU1uedTRsD04P49ZgSRY5QBLTc
+         CQBCbVHZuVCB29pP2Co0mZAOf0TgkJUljtb0VB8CHI8VhuigYp30PE+r/D7MHanlVYxK
+         BKS8ooZdHaU0PWi8nTHb08bOMRG7dMr/qLVaTlH87DKKqIpufZxi7ZRUHWNmW4PpK4km
+         2vlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Kk92pwYJ8IKxem/FhLo1PGHOIRMohDuIFS2c8njRHHI=;
-        b=nE1K+ioukWbXDCEsVi8xx4RrS3PWMhLVhKozpeX2OrUPo3TPnERgExT5h2X7F0+q+B
-         VEGnuFfsfW6+GF9tT7Eiq7Y5aomVFeI2Ud+CagcLUE1CCen8fBxpz4Foi7todKOi6zBf
-         USRwuaIQ44vR9TNXmNlpXObBUSdNdlmBAs6/iaJNZHO119GUPM66A6uHc6n7cZRvDMfX
-         k1+UDMSkYlqPXNlC9hE48DqRfIdJFOEoddPElEyFl+nbYgCMY+3er3jqTu/nJT69tlIZ
-         PgGWu512sZJ6L2DnY5diYzDA73oG7ifSqYxvzGTX5bSm0EfYJKlGP1FjRg7VAjTuVknx
-         dgrg==
-X-Gm-Message-State: AOAM531k9Zo5GDCfkGzZQ8YvnxVPU56AZy/hLio1bdK82LP9saz9wd3/
-        I0FFJo+NADnzuUlIVHSgfPI=
-X-Google-Smtp-Source: ABdhPJzB8OlXyKXA79AKVZis7NyP04IisboWQ1Cd1jz0jQqqDmOACm2MkLcPS90Phps9g64nMrhXFg==
-X-Received: by 2002:a5d:46d0:: with SMTP id g16mr6560334wrs.229.1591302300380;
-        Thu, 04 Jun 2020 13:25:00 -0700 (PDT)
-Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id c5sm10129201wrb.72.2020.06.04.13.24.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jun 2020 13:24:59 -0700 (PDT)
-Subject: Re: [PATCH 3/3] spi: bcm2835: Enable shared interrupt support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Martin Sperl <kernel@martin.sperl.org>, lukas@wunner.de
-References: <20200604034655.15930-1-f.fainelli@gmail.com>
- <20200604034655.15930-4-f.fainelli@gmail.com>
- <20200604123220.GD6644@sirena.org.uk>
- <21772111-fa1f-7a50-aa92-e44b09cff4eb@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <8c8d6007-e4c6-8484-9d40-3b679842be27@gmail.com>
-Date:   Thu, 4 Jun 2020 13:24:54 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TblIMkzhKEVNZyPa1dQf8kFQ+MgYlpgsesY6pOK1xME=;
+        b=Egz0TCbLfmKCfwuwwQHXMUNT7toLT36iIka7zrvwbHEef9I7GexEoOEiSCoJclSfkT
+         mMMO9zCQ+PukDYLFUA9j90O70tF1cIkaFVCna2m/0iNc73ybDUnuoVft13oRgvIQhSdA
+         NlI+q4C2KNwd6Tu5liMmqhjjKfvkwBF93qJWgQadNooZxnhb8MMjtNV5GPvFmyQ/eXsU
+         IqpCrBAUGJ3ICxyUwjZgrITgnFDG7qAhZpAK7vGz1sTMV68KSAl5v54CiEP9sJNb9voC
+         wrs4+6Ca7zJ4ALfpYZZDaIsbO2LWXDq34/fTvaXOWtrBYZvK4Vz6jupkxDF6SkMwXpDD
+         AUEg==
+X-Gm-Message-State: AOAM5316S5vuKg7GhL9f4ctIvsjXustLXdUzfyEmrGiywm/lwbiUn2Bp
+        nxZvhrvW/c8M5eAxicneREQlFwNrGOXvjNg9mnt0eA==
+X-Google-Smtp-Source: ABdhPJzjhN/4pCp12TIV+9JXZmAnmqzfEHd9/r8jgURCikDTNzP/FuiRKg13zAi0ZiROLKM3I1SNYAlTdBzPgSsKmW0=
+X-Received: by 2002:a17:902:341:: with SMTP id 59mr6129425pld.119.1591302328252;
+ Thu, 04 Jun 2020 13:25:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <21772111-fa1f-7a50-aa92-e44b09cff4eb@gmail.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200603233203.1695403-1-keescook@chromium.org>
+ <20200603233203.1695403-4-keescook@chromium.org> <CAKwvOdnNuFySqAMk7s_cXqFM=dPX4JfvqNVLCuj90Gn4tzciAw@mail.gmail.com>
+ <202006041316.A15D952@keescook>
+In-Reply-To: <202006041316.A15D952@keescook>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 4 Jun 2020 13:25:16 -0700
+Message-ID: <CAKwvOdk9e19MqJNhGYV5mJisLOcjK+ba2sYzLgf7cvNerqNuwA@mail.gmail.com>
+Subject: Re: [PATCH 03/10] b43: Remove uninitialized_var() usage
+To:     Kees Cook <keescook@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        b43-dev@lists.infradead.org,
+        Network Development <netdev@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, Jun 4, 2020 at 1:18 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Jun 04, 2020 at 01:08:44PM -0700, Nick Desaulniers wrote:
+> > On Wed, Jun 3, 2020 at 4:32 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Using uninitialized_var() is dangerous as it papers over real bugs[1]
+> > > (or can in the future), and suppresses unrelated compiler warnings (e.g.
+> > > "unused variable"). If the compiler thinks it is uninitialized, either
+> > > simply initialize the variable or make compiler changes. As a precursor
+> > > to removing[2] this[3] macro[4], just initialize this variable to NULL,
+> > > and make the (unreachable!) code do a conditional test.
+> > >
+> > > [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
+> > > [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
+> > > [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
+> > > [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
+> > >
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >  drivers/net/wireless/broadcom/b43/phy_n.c | 10 +++++++---
+> > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/net/wireless/broadcom/b43/phy_n.c b/drivers/net/wireless/broadcom/b43/phy_n.c
+> > > index d3c001fa8eb4..88cdcea10d61 100644
+> > > --- a/drivers/net/wireless/broadcom/b43/phy_n.c
+> > > +++ b/drivers/net/wireless/broadcom/b43/phy_n.c
+> > > @@ -4222,7 +4222,7 @@ static void b43_nphy_tx_gain_table_upload(struct b43_wldev *dev)
+> >
+> > The TODOs and `#if 0` in this function are concerning.  It looks like
+> > `rf_pwr_offset_table` is only used when `phy->rev` is >=7 && < 19.
+> >
+> > Further, the loop has a case for `phy->rev >= 19` but we would have
+> > returned earlier if that was the case.
 
+oh, and there's an early return for `phy->rev < 3` I just noticed.
 
-On 6/4/2020 9:05 AM, Florian Fainelli wrote:
-> 
-> 
-> On 6/4/2020 5:32 AM, Mark Brown wrote:
->> On Wed, Jun 03, 2020 at 08:46:55PM -0700, Florian Fainelli wrote:
->>> The SPI controller found in the BCM2711 and BCM7211 SoCs is instantiated
->>> 5 times, with all instances sharing the same interrupt line. We
->>> specifically match the two compatible strings here to determine whether
->>> it is necessary to request the interrupt with the IRQF_SHARED flag and
->>> to use an appropriate interrupt handler capable of returning IRQ_NONE.
->>
->>> For the BCM2835 case which is deemed performance critical, there is no
->>> overhead since a dedicated handler that does not assume sharing is used.
->>
->> This feels hacky - it's essentially using the compatible string to set a
->> boolean flag which isn't really about the IP but rather the platform
->> integration.  It might cause problems if we do end up having to quirk
->> this version of the IP for some other reason.
-> 
-> I am not sure why it would be a problem, when you describe a piece of
-> hardware with Device Tree, even with the IP block being strictly the
-> same, its very integration into a new SoC (with details like shared
-> interrupt lines) do warrant a different compatible string. Maybe this is
-> more of a philosophical question.
-> 
->> I'm also looking at the
->> code and wondering if the overhead of checking to see if the interrupt
->> is flagged is really that severe, it's just a check to see if a bit is
->> set in a register which we already read so should be a couple of
->> instructions (which disassembly seems to confirm).  It *is* overhead so
->> there's some value in it, I'm just surprised that it's such a hot path
->> especially with a reasonably deep FIFO like this device has.
-> 
-> If it was up to me, we would just add the check on BCM2835_SPI_CS_INTR
-> not being set and return IRQ_NONE and be done with it. I appreciate that
-> Lukas has spent some tremendous amount of time working on this
-> controller driver and he has a sensitivity for performance.
-> 
->>
->> I guess ideally genirq would provide a way to figure out if an interrupt
->> is actually shared in the present system, and better yet we'd have a way
->> for drivers to say they aren't using the interrupt ATM, but that might
->> be more effort than it's really worth.  If this is needed and there's no
->> better way of figuring out if the interrupt is really shared then I'd
->> suggest a boolean flag rather than a compatible string, it's still a
->> hack but it's less likely to store up trouble for the future.
-> 
-> Instead of counting the number of SPI devices we culd request the
-> interrupt first with flags = IRQF_PROBE_SHARED, if this works, good we
-> have a single SPI master enabled, if it returns -EBUSY, try again with
-> flags = IRQF_SHARED and set-up the bcm2835_spi_sh_interrupt interrupt
-> handler to manage the sharing.
-> 
-> This would not require DT changes, which is probably better anyway.
-Unfortunately this does not work.. The first time we probe the driver we
-need to set an interrupt handler that is capable of handling a shared
-interrupt. When we probe for subsequent times, we can use the -EBUSY
-return code to know that we are in a shared interrupt context, however,
-it is too late to change the first controller interrupt handler.
+>
+> Yeah, that's why I put the "(unreachable!)" note in the commit log. ;)
 
-So we do need to know for the first time we install the interrupt
-handler whether we will be in a shared situation or not, I cannot think
-of any solution other than counting the number of available DT nodes
-with the "brcm,bcm2835-spi" compatible string.
+I don't think that note is correct.
+
+>
+> >
+> > >         u32 rfpwr_offset;
+> > >         u8 pga_gain, pad_gain;
+> > >         int i;
+> > > -       const s16 *uninitialized_var(rf_pwr_offset_table);
+> > > +       const s16 *rf_pwr_offset_table = NULL;
+> > >
+> > >         table = b43_nphy_get_tx_gain_table(dev);
+> > >         if (!table)
+> > > @@ -4256,9 +4256,13 @@ static void b43_nphy_tx_gain_table_upload(struct b43_wldev *dev)
+> > >                         pga_gain = (table[i] >> 24) & 0xf;
+> > >                         pad_gain = (table[i] >> 19) & 0x1f;
+> > >                         if (b43_current_band(dev->wl) == NL80211_BAND_2GHZ)
+> > > -                               rfpwr_offset = rf_pwr_offset_table[pad_gain];
+> > > +                               rfpwr_offset = rf_pwr_offset_table
+> > > +                                               ? rf_pwr_offset_table[pad_gain]
+> > > +                                               : 0;
+> > >                         else
+> > > -                               rfpwr_offset = rf_pwr_offset_table[pga_gain];
+> > > +                               rfpwr_offset = rf_pwr_offset_table
+> > > +                                               ? rf_pwr_offset_table[pga_gain]
+> > > +                                               : 0;
+> >
+> >
+> > The code is trying to check `phy->rev >= 7 && phy->rev < 19` once
+> > before the loop, then set `rf_pwr_offset_table`, so having another
+> > conditional on `rf_pwr_offset_table` in the loop is unnecessary. I'm
+> > ok with initializing it to `NULL`, but I'm not sure the conditional
+> > check is necessary.  Do you get a compiler warning otherwise?
+>
+> I mean, sort of the best thing to do is just remove nearly everything
+> here since it's actually unreachable. But it is commented as "when
+
+This code is reachable. Consider `phy->rev >= 7 && phy->rev < 19`.  If
+`rf_pwr_offset_table` was NULL, it would have returned early on L4246,
+so the checks added in this patch are unnecessary.  Forgive me if
+there's some other control flow I'm not considering.
+
+> supported ..." etc, so I figured I'd leave it. As part of that I didn't
+> want to leave any chance of a NULL deref, so I added the explicit tests
+> just for robustness.
+>
+> *shrug*
 -- 
-Florian
+Thanks,
+~Nick Desaulniers
