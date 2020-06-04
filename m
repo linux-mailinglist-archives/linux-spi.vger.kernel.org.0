@@ -2,54 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424D01EEB90
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 22:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDBD1EEBAE
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 22:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729058AbgFDUJD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Jun 2020 16:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        id S1729828AbgFDUQ0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 16:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728587AbgFDUI7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 16:08:59 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566C2C08C5C3
-        for <linux-spi@vger.kernel.org>; Thu,  4 Jun 2020 13:08:57 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id u5so4013531pgn.5
-        for <linux-spi@vger.kernel.org>; Thu, 04 Jun 2020 13:08:57 -0700 (PDT)
+        with ESMTP id S1728484AbgFDUQV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 16:16:21 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CD9C08C5C6
+        for <linux-spi@vger.kernel.org>; Thu,  4 Jun 2020 13:16:21 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 23so2894111pfw.10
+        for <linux-spi@vger.kernel.org>; Thu, 04 Jun 2020 13:16:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AFF1riO+rvi+JtGxWF5qzVLPXHH0Nzh8aZcDxBuji4s=;
-        b=M0mkpsLd7B3310QKl3SLGg22ik2mXjNx5FY1vzJopMffJnCw8jRcmo9fV9LTIHikFp
-         RUv7WnBJ6K5VaUslDx62awUaItJ+YKUKSU3/LS3bQT0QPBOUmH8h7pgLYyxlBLfTzZPU
-         CwkTICvo+M0GUh+egz/pFlCv8tR424B81CNZ9aQO8/k4dMiV20ohQx7N7YX7tjfxxqqp
-         JKfbJIsE+MYGNYLFN8gpzmr0Avp6j5x4qED0RF7A5OiE4WLh5w8/DvLwZz8GAkmSlO6c
-         QbXytbk3xKeeMX1S4Xa0zICtEJbZ60RM6KlvqWwsKz3NAMy2eeUR9b8nqFf/OpAnG9F0
-         SQHw==
+        bh=pCXmYsl76J0CAlxoPdk8mPZO/WOJwZ5J1IK/xTYSvtY=;
+        b=Ul9IqQ41ZiXh1TA37NXxQoP1MYWZkk1ImeHfZoGz6a6IPTQKCTgkI4vMbYvxIt8wpE
+         ElHA9RWwTvFCaySEtclTRP/dyePJtOWdEk29ahiOH2gLk0aIx7jxMqS8sHpI0dAD9/eD
+         v2pQeh6hmu6BRKkCyhh5mYDGk/czBtEllytZVgQeNFhavoEfrbFwLLVfzZ/2XW9eqAuC
+         T6PPxSNZdkIUyyCpj3L+bHh3A58HE+YTCCyomOaAjuPFYAu7WNLA0VPJGgc8Oy3KvimW
+         enSRBgfNysV+6XPIzSx1E3hPpfiQZPkCEErtaeB8Ewgc+PLJOHksAeBzo6J1PIYEAlTL
+         B91g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AFF1riO+rvi+JtGxWF5qzVLPXHH0Nzh8aZcDxBuji4s=;
-        b=MCVyGqbRJzDBg8FC9LLknRmUVNJrYMbJ/MaW8MmyhPULCg/63UIJdGBNqCR0iYVWcP
-         bysiTOMHcHwgqjol2E40plC20r1y++MKty4GboH44M9avdC55+vUsXKRgJEIWBiK/sAY
-         Xfb+mppe8J47UCypQCDfq3GzJ/bsmC8Uho66EqNra5k0A6dlf8WS4Kgb6QuA3SN+YuhI
-         etp8tdGu8RET4OLEx2EB5bVYAmWiwTZRqGuVPdVoHQ+MlbuMqtgJ8waGvKO9MH8AcZVa
-         TSSxmtC0fmb411+bqQ3tBmf3cGajMZx2wQzE0+8jZLoLkL4O/v4Us7/bQKK/PZXof4QH
-         2VrA==
-X-Gm-Message-State: AOAM530z8nuZMKq9e+KbzKQyP3tdyZVvSDYi8Cbx900EUZoZJIQ/fqCl
-        Qpw6+p9LhYX/uzzyWSD0Yi/FSbQRe8QQauIC34I4XQ==
-X-Google-Smtp-Source: ABdhPJxLMcvCCgSkDUjAgCX71OWizViN7uenmXgd4TZP4zed6Dsn/5qWQdcJBcIITrWPyVLL/7sbTfhjLEhVY3eJVkA=
-X-Received: by 2002:a63:5644:: with SMTP id g4mr5811569pgm.381.1591301336363;
- Thu, 04 Jun 2020 13:08:56 -0700 (PDT)
+        bh=pCXmYsl76J0CAlxoPdk8mPZO/WOJwZ5J1IK/xTYSvtY=;
+        b=saDhIzEcEQ9Uzt3Yqb15wCBcKLoXMaVFQW/TdubGZmUgWvq3zTFyzceAH6KCxhqkbQ
+         oTZDLFYP6w4cLt9LXLi0n07hf2/eBnzw07GCEOfWTMWK1BKoZX6gfCYAyr8IK31e+QYr
+         G53QwfLs+s1o0679ncM4Y+iIn5iUZLvVolWhCS/g3IBBMqOfyrGNXwTYd+0AVCzQ1RY4
+         19+Ysk0pYgw6UgS8MqbMnBZXOSBIxyg1ZpqE9Rrzdco7RYv7HoYOgmoNeKvT5d72xDRB
+         hi594mCbNA6DggiAAL2M3e2Y7GTL25ZGlwpBDiRKX/6Si9B7esnJ3Qqv46mIzbgEhkzK
+         u/bg==
+X-Gm-Message-State: AOAM533JzN4fjshSjOppVxkKP80LvdWxcpoaTkSd0Yy2v4gX0zdLZxbs
+        G0iNzBSIDigCm+vR5j5LcbjpKFU+4sAvqrZkW+xUaA==
+X-Google-Smtp-Source: ABdhPJye6FZH70P5vXHcitY46EI4rxFnZqJif4KZJI8zWDppq3cq3MmDJfiH17IwjHHvUarffuS8hk7FOMV62ymzGuM=
+X-Received: by 2002:a63:4f09:: with SMTP id d9mr5970154pgb.10.1591301780211;
+ Thu, 04 Jun 2020 13:16:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200603233203.1695403-1-keescook@chromium.org> <20200603233203.1695403-4-keescook@chromium.org>
-In-Reply-To: <20200603233203.1695403-4-keescook@chromium.org>
+References: <20200603233203.1695403-1-keescook@chromium.org> <20200603233203.1695403-5-keescook@chromium.org>
+In-Reply-To: <20200603233203.1695403-5-keescook@chromium.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 4 Jun 2020 13:08:44 -0700
-Message-ID: <CAKwvOdnNuFySqAMk7s_cXqFM=dPX4JfvqNVLCuj90Gn4tzciAw@mail.gmail.com>
-Subject: Re: [PATCH 03/10] b43: Remove uninitialized_var() usage
+Date:   Thu, 4 Jun 2020 13:16:08 -0700
+Message-ID: <CAKwvOdnd30bcqoNXF1ugadU=KbW3aXu07+T-891amO2_b7kQdg@mail.gmail.com>
+Subject: Re: [PATCH 04/10] rtlwifi: rtl8192cu: Remove uninitialized_var() usage
 To:     Kees Cook <keescook@chromium.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
@@ -79,7 +79,7 @@ On Wed, Jun 3, 2020 at 4:32 PM Kees Cook <keescook@chromium.org> wrote:
 > "unused variable"). If the compiler thinks it is uninitialized, either
 > simply initialize the variable or make compiler changes. As a precursor
 > to removing[2] this[3] macro[4], just initialize this variable to NULL,
-> and make the (unreachable!) code do a conditional test.
+> and avoid sending garbage by returning.
 >
 > [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
 > [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
@@ -87,63 +87,39 @@ On Wed, Jun 3, 2020 at 4:32 PM Kees Cook <keescook@chromium.org> wrote:
 > [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
 >
 > Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Fixes: dc0313f46664 ("rtlwifi: rtl8192cu: Add routine hw")
+
 > ---
->  drivers/net/wireless/broadcom/b43/phy_n.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+>  drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/net/wireless/broadcom/b43/phy_n.c b/drivers/net/wireless/broadcom/b43/phy_n.c
-> index d3c001fa8eb4..88cdcea10d61 100644
-> --- a/drivers/net/wireless/broadcom/b43/phy_n.c
-> +++ b/drivers/net/wireless/broadcom/b43/phy_n.c
-> @@ -4222,7 +4222,7 @@ static void b43_nphy_tx_gain_table_upload(struct b43_wldev *dev)
-
-The TODOs and `#if 0` in this function are concerning.  It looks like
-`rf_pwr_offset_table` is only used when `phy->rev` is >=7 && < 19.
-
-Further, the loop has a case for `phy->rev >= 19` but we would have
-returned earlier if that was the case.
-
->         u32 rfpwr_offset;
->         u8 pga_gain, pad_gain;
->         int i;
-> -       const s16 *uninitialized_var(rf_pwr_offset_table);
-> +       const s16 *rf_pwr_offset_table = NULL;
+> diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
+> index f070f25bb735..5b071b70bc08 100644
+> --- a/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
+> +++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
+> @@ -592,7 +592,7 @@ static void _rtl92cu_init_chipn_one_out_ep_priority(struct ieee80211_hw *hw,
+>                                                     bool wmm_enable,
+>                                                     u8 queue_sel)
+>  {
+> -       u16 uninitialized_var(value);
+> +       u16 value;
 >
->         table = b43_nphy_get_tx_gain_table(dev);
->         if (!table)
-> @@ -4256,9 +4256,13 @@ static void b43_nphy_tx_gain_table_upload(struct b43_wldev *dev)
->                         pga_gain = (table[i] >> 24) & 0xf;
->                         pad_gain = (table[i] >> 19) & 0x1f;
->                         if (b43_current_band(dev->wl) == NL80211_BAND_2GHZ)
-> -                               rfpwr_offset = rf_pwr_offset_table[pad_gain];
-> +                               rfpwr_offset = rf_pwr_offset_table
-> +                                               ? rf_pwr_offset_table[pad_gain]
-> +                                               : 0;
->                         else
-> -                               rfpwr_offset = rf_pwr_offset_table[pga_gain];
-> +                               rfpwr_offset = rf_pwr_offset_table
-> +                                               ? rf_pwr_offset_table[pga_gain]
-> +                                               : 0;
+>         switch (queue_sel) {
+>         case TX_SELE_HQ:
+> @@ -606,7 +606,7 @@ static void _rtl92cu_init_chipn_one_out_ep_priority(struct ieee80211_hw *hw,
+>                 break;
+>         default:
+>                 WARN_ON(1); /* Shall not reach here! */
+> -               break;
+> +               return;
+>         }
+>         _rtl92c_init_chipn_reg_priority(hw, value, value, value, value,
+>                                         value, value);
 
-
-The code is trying to check `phy->rev >= 7 && phy->rev < 19` once
-before the loop, then set `rf_pwr_offset_table`, so having another
-conditional on `rf_pwr_offset_table` in the loop is unnecessary. I'm
-ok with initializing it to `NULL`, but I'm not sure the conditional
-check is necessary.  Do you get a compiler warning otherwise?
-
->                 } else {
->                         pga_gain = (table[i] >> 24) & 0xF;
->                         if (b43_current_band(dev->wl) == NL80211_BAND_2GHZ)
-> --
-> 2.25.1
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20200603233203.1695403-4-keescook%40chromium.org.
-
-
+Whew! Nothing like passing the same value 6 times! (Other callers do
+use distinct values though, just curious seeing this instance.)
 
 -- 
 Thanks,
