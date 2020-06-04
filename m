@@ -2,110 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AA31EE53B
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 15:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B1E1EE646
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 16:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728560AbgFDNXJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Jun 2020 09:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728542AbgFDNXJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 09:23:09 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC7DC08C5C6
-        for <linux-spi@vger.kernel.org>; Thu,  4 Jun 2020 06:23:09 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id j32so5116872qte.10
-        for <linux-spi@vger.kernel.org>; Thu, 04 Jun 2020 06:23:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Zd56CSP9N2M4FrfN9ySWd7Nzjr+sOLOVU8sX9ZsvxYk=;
-        b=Z1SifWi8Glj9s1ZlViEQIoOzrtW4kQqhJPAuBmH8BuAfTlSORzOP5/aBkVIpDCF065
-         4tet6nf/xexKbX9HERYTEiH7bvvMa7jEzJZJ+Y9NbTVNdXZMe5cuQGHU5U8XYpc6rEpA
-         0M5eGOL/GQzV1R+AsSeBTDbzXk+YExg+XOlZLmxAbhKhBOAjkHQZ06AbVHRZdzvZiU7w
-         cHe+L3V8vNXxybekuzSoIvOp1xxWvK8SbdjJVplyLz5vYnbOtUIAIDcZULCyq5qUdBWf
-         hegDa8ghfSlITKfZUXou8d2OJHz3pI/kZh5/E9mjrrfnPUc08cS9ulbxQPmbEBYY1pID
-         +u9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zd56CSP9N2M4FrfN9ySWd7Nzjr+sOLOVU8sX9ZsvxYk=;
-        b=p6dXs+cyMzh+EheLSNRxA72By+g7pfs9vZXTvvlctnIid6J344h8Emj3NlsDHlMDny
-         CWGNvjua7n6zbEwS0ihBgw1H1PyPFD8kfGuTKybvf5QwhB7le7Q5Xz9FraLYn7/B/oPx
-         //Zy2NdeowwACpNr/Z3+scuGND2up1itULZkcwSZvcv4hWzWfYnHUZ59jsjLbCsUXu6A
-         tlS/TSUFWaWN33Zson02Ypc8ORH1Zey2iHDbJY/l8XbdGxJe6ofM5pWFjUR67Sj6Ou+x
-         feIBLApXAbGTl76NTNoAxhTyxGG3eMzIneJO5bC5f0UDiwdjd4bYLmpxSsNJ7eUNUAHZ
-         4xag==
-X-Gm-Message-State: AOAM5335taqKP41wmnbi1MF7dg7z1HRilMA5JisKzXew3Lw60XQ9tbe9
-        PYlxAErhoOZ19yF5KeOUoF8R/A==
-X-Google-Smtp-Source: ABdhPJxRZn/pXIUEkZhANETiTogTGf06kqn6Gs1x5NZFGFUPmFe5McyxpBqwN0tWHmbj+GOZ4kP/eQ==
-X-Received: by 2002:aed:3fa5:: with SMTP id s34mr4444014qth.343.1591276988114;
-        Thu, 04 Jun 2020 06:23:08 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id 126sm4330150qkj.89.2020.06.04.06.23.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 06:23:07 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.93)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1jgppq-001CIj-Sr; Thu, 04 Jun 2020 10:23:06 -0300
-Date:   Thu, 4 Jun 2020 10:23:06 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mm@kvack.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH 09/10] treewide: Remove uninitialized_var() usage
-Message-ID: <20200604132306.GO6578@ziepe.ca>
-References: <20200603233203.1695403-1-keescook@chromium.org>
- <20200603233203.1695403-10-keescook@chromium.org>
+        id S1728740AbgFDOFO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 10:05:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50204 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728496AbgFDOFO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 4 Jun 2020 10:05:14 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 791F820738;
+        Thu,  4 Jun 2020 14:05:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591279514;
+        bh=Epk5WMtzALPNz+dltu72WrLGhF9VGMjphVrnc6COsEA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sf7Hy+B1x7rYiLFDGpZcfyrckIXZn5Y1kIlUFPDPjdiiOSqQtrTMcxXb0oGyI9iLn
+         8jCUl4YlcOzZKOCauoNq2XeYV6TUrG/h8/TnYezlbVFMIHtNSI9OXb0L7C8W5p2kFL
+         tL+4fGnqSSpZVdGYrCnig3VUHI1yScvIB2HDtq+4=
+Date:   Thu, 4 Jun 2020 15:05:11 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Martin Sperl <kernel@martin.sperl.org>
+Subject: Re: [PATCH 2/3] ARM: dts: bcm2711: Update SPI nodes compatible
+ strings
+Message-ID: <20200604140511.GF6644@sirena.org.uk>
+References: <20200604034655.15930-1-f.fainelli@gmail.com>
+ <20200604034655.15930-3-f.fainelli@gmail.com>
+ <20200604042038.jzolu6k7q3d6bsvq@wunner.de>
+ <20200604111325.GC6644@sirena.org.uk>
+ <20200604112112.b3k4wrftckndscu6@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Zi0sgQQBxRFxMTsj"
 Content-Disposition: inline
-In-Reply-To: <20200603233203.1695403-10-keescook@chromium.org>
+In-Reply-To: <20200604112112.b3k4wrftckndscu6@wunner.de>
+X-Cookie: VMS version 2.0 ==>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 04:32:02PM -0700, Kees Cook wrote:
-> Using uninitialized_var() is dangerous as it papers over real bugs[1]
-> (or can in the future), and suppresses unrelated compiler warnings
-> (e.g. "unused variable"). If the compiler thinks it is uninitialized,
-> either simply initialize the variable or make compiler changes.
-> 
-> I preparation for removing[2] the[3] macro[4], remove all remaining
-> needless uses with the following script:
-> 
-> git grep '\buninitialized_var\b' | cut -d: -f1 | sort -u | \
-> 	xargs perl -pi -e \
-> 		's/\buninitialized_var\(([^\)]+)\)/\1/g;
-> 		 s:\s*/\* (GCC be quiet|to make compiler happy) \*/$::g;'
-> 
-> drivers/video/fbdev/riva/riva_hw.c was manually tweaked to avoid
-> pathological white-space.
-> 
-> No outstanding warnings were found building allmodconfig with GCC 9.3.0
-> for x86_64, i386, arm64, arm, powerpc, powerpc64le, s390x, mips, sparc64,
-> alpha, and m68k.
 
-At least in the infiniband part I'm confident that old gcc versions
-will print warnings after this patch.
+--Zi0sgQQBxRFxMTsj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-As the warnings are wrong, do we care? Should old gcc maybe just -Wno-
-the warning?
+On Thu, Jun 04, 2020 at 01:21:12PM +0200, Lukas Wunner wrote:
+> On Thu, Jun 04, 2020 at 12:13:25PM +0100, Mark Brown wrote:
 
-Otherwise the IB bits look ok to me
+> > Regardless of what's going on with the interrupts the compatible string
+> > should reflect the IP version so unless for some reason someone taped
+> > out two different versions of the IP it seems odd that the compatible
+> > strings would vary within a given SoC.
 
-Acked-by: Jason Gunthorpe <jgg@mellanox.com>
+> Hm.  I guess it may be possible to search the DT for other devices
+> sharing the same interrupt line and thereby determine whether
+> IRQF_SHARED is necessary.  The helper to perform this search could
+> live in drivers/of/irq.c as I imagine it might be useful in general.
 
-Jason
+That's another option, yeah - it'd be DT specific but it seems neater
+than a property and much more tractable than trying to dance around
+doing this in genirq (where we'd end up with callbacks when the second
+device registers or something else horrible).
+
+--Zi0sgQQBxRFxMTsj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7Y/5YACgkQJNaLcl1U
+h9DPAwf/UjD04C156SRCI5cTBUUAOg/X61gumN+fuyVQkAPs8CeP4cmV4HjtuXG2
+9LOnl4/Bdq17EjTvWg6+HAQvBa7i0pwE8ppy8gqcGiNqq+dn5+n9ZpcLvDea0tLX
+h2jq4LUfR3X3OgnTILP69XeLpk/ePNcpFTRij3YMnGqoa8VnlXiqP45YLEgVp0LK
+RHlYDfzgBy1NxyxckRk+emfSKseAHtWQjUz4P2zvyKUXl/tqW+Lwc/fGlfE3QfFu
+Eo1q4X4V2DuX83TzbvM8VXdJ/Lu0V05gyeYoEcQU+7j8MGno+JpLRX9C2J6uXwG+
+edz4Gd9KdV/56AJOMrKWO0i8BPznbQ==
+=DHOU
+-----END PGP SIGNATURE-----
+
+--Zi0sgQQBxRFxMTsj--
