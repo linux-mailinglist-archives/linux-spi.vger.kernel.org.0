@@ -2,112 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E24AC1EEAE2
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 21:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDB61EEB26
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 21:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729310AbgFDTJp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Jun 2020 15:09:45 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:34327 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbgFDTJp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 15:09:45 -0400
-Received: by mail-ot1-f66.google.com with SMTP id b18so5664798oti.1;
-        Thu, 04 Jun 2020 12:09:44 -0700 (PDT)
+        id S1728762AbgFDT3a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 15:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728780AbgFDT3a (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 15:29:30 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA467C08C5C3
+        for <linux-spi@vger.kernel.org>; Thu,  4 Jun 2020 12:29:29 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id t16so2612409plo.7
+        for <linux-spi@vger.kernel.org>; Thu, 04 Jun 2020 12:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BN0NA5oXxaJmgloA0bV1VuRl7DweslwGb9BXC5tlSZI=;
+        b=qNWdjuwtEh3SepeFF9fNagsbBVKMOdC+i2KqVDopsH6dlehq61YjmGsjU3zQ6/6Sm+
+         RI59y6nTt3iJaugOaLxusXHriKBWVNJCrzHeENeqAGVpHLkPMQooCck+j2xRNg4QVbq2
+         U7Aga0bTxqeYSMNSshjefDdYD9kzqlGJMlmXX3yAeOrKcPi394fVJzn+N+UEYVrgLikW
+         PJ80Ob/zePEkwKogqqleJVCwqC4lBAXZfyFsOJ1Q71OHbRbc0fyAs9RyF+VvGzxb6jyN
+         PR+j0XjbkYKBjIdoJN78dsQ95HeKy3QSGz7aES9jpi6oH42fz2hvJ1Opql+7AsV4VMb8
+         cVyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=X+qiK8YjhEONxTpdjX70xl6++OY/MUPwZ+Do1G1LJJ8=;
-        b=GW2eTPu20UwqNX0KYzVZ77nyK4NotTSEGULdpG7s3Iiub4PuOXbACySBtKn3WbvYBh
-         s4b4x4/PUmzOXvAzhlgyyHfBAb0fKY0Pn8Vt/G7D2vPmGXlWvQjPYQg02xRxMblvJKLx
-         uc91xVfPnlqT9KiicR81FI4/0gUdaplWxi3701kx3noorRHkPm+2RP9VCcC5y+Y7f5ZY
-         ikJ9YinXbYMx4cl1TGEqa5GmQBZQlzbHbh6Bfh3zgStaZW+APOiAUiH3iHQ2INqVWP/p
-         9lucmaqitdqEP3qkf01mvungAwlz41SHVUIsHr8669r0XAAJr1Hof5D/gPpTyuSLOGdA
-         2BJw==
-X-Gm-Message-State: AOAM530ihph2ICe7cs5surPRGolnMx5OxNi++eVnn9Lm6h6t6yOl08eq
-        gmTcYMbxDOp7gBeLshNltS1LLbmKEpDozFY7alw=
-X-Google-Smtp-Source: ABdhPJzhyOhHvYlAI9At8dx2VdKyrIdrlXCUe7od4PVsnRA3/MLtv6c1HELqb/95gRjonFKD9uvMPOkwcy/FsbOWC+M=
-X-Received: by 2002:a05:6830:141a:: with SMTP id v26mr4936016otp.250.1591297783928;
- Thu, 04 Jun 2020 12:09:43 -0700 (PDT)
+        bh=BN0NA5oXxaJmgloA0bV1VuRl7DweslwGb9BXC5tlSZI=;
+        b=kUjf1jrq6CFanV3fXdYeH872ORTnBXdSfGkgCCWIr9zgc131IxIqGfM2wQRCt7kHdk
+         mkzJYtUL74ZPf2xky5DL0PtQltGAibrUmStb+B70GWE4qtb0gDYsa1Jubkzjj7RMMy6X
+         kdgnK9VI98cLnm3n7vrFuoIMQjJLXaqK2x8g9fNHTE8CNDdpCZaHPRH7EzsTSi08Y4Rt
+         zkUtp6FZ2N18lk9SVKtp4dUFasHQT8pAKrmluEPWoD3uQLoGpNTAV8DoB8BhHEbjW3XD
+         8IpZLa8XQ60Mt+eOTJu7UMXhPsK+stXZa6HMYwWNskp/X/l5drfQyaqUlTfrFn/S0wB2
+         wuGw==
+X-Gm-Message-State: AOAM532DiREMy4gMvyE3QRdJVxSutSqxXoEAyMfA5D6BbDvO4UmPOQL+
+        aYv+9XglRytdtVMrwGR6P3hlZodtpp22pQwpaJ+WlQ==
+X-Google-Smtp-Source: ABdhPJzSzKsiHc4z7LwcmpkgMu0NbAbDQYhYcnmTB/97B33m/EUjE6lKfBun6ZCLEkmHQ8gJwyD1p9mb5gkpJj8C3R0=
+X-Received: by 2002:a17:902:724a:: with SMTP id c10mr6119344pll.223.1591298968901;
+ Thu, 04 Jun 2020 12:29:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200603233203.1695403-1-keescook@chromium.org>
- <20200603233203.1695403-10-keescook@chromium.org> <20200604132306.GO6578@ziepe.ca>
- <202006040757.0DFC3F28E@keescook>
-In-Reply-To: <202006040757.0DFC3F28E@keescook>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 4 Jun 2020 21:09:32 +0200
-Message-ID: <CAMuHMdVuzvvHt3j+L+_BSPFs5RgaP3rkknEUmRvTAs5nZ9SGPA@mail.gmail.com>
-Subject: Re: [PATCH 09/10] treewide: Remove uninitialized_var() usage
+References: <20200603233203.1695403-1-keescook@chromium.org> <20200603233203.1695403-6-keescook@chromium.org>
+In-Reply-To: <20200603233203.1695403-6-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 4 Jun 2020 12:29:17 -0700
+Message-ID: <CAKwvOdm5zDide5RuppY_jG=r46=UMdVJBrkBqD5x=dOMTG9cZg@mail.gmail.com>
+Subject: Re: [PATCH 05/10] ide: Remove uninitialized_var() usage
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         Alexander Potapenko <glider@google.com>,
         Joe Perches <joe@perches.com>,
         Andy Whitcroft <apw@canonical.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Lars Ellenberg <drbd-dev@lists.linbit.com>,
-        linux-block@vger.kernel.org, b43-dev@lists.infradead.org,
-        netdev <netdev@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        b43-dev@lists.infradead.org,
+        Network Development <netdev@vger.kernel.org>,
         linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Kees,
-
-On Thu, Jun 4, 2020 at 5:01 PM Kees Cook <keescook@chromium.org> wrote:
-> On Thu, Jun 04, 2020 at 10:23:06AM -0300, Jason Gunthorpe wrote:
-> > On Wed, Jun 03, 2020 at 04:32:02PM -0700, Kees Cook wrote:
-> > > Using uninitialized_var() is dangerous as it papers over real bugs[1]
-> > > (or can in the future), and suppresses unrelated compiler warnings
-> > > (e.g. "unused variable"). If the compiler thinks it is uninitialized,
-> > > either simply initialize the variable or make compiler changes.
-> > >
-> > > I preparation for removing[2] the[3] macro[4], remove all remaining
-> > > needless uses with the following script:
-> > >
-> > > git grep '\buninitialized_var\b' | cut -d: -f1 | sort -u | \
-> > >     xargs perl -pi -e \
-> > >             's/\buninitialized_var\(([^\)]+)\)/\1/g;
-> > >              s:\s*/\* (GCC be quiet|to make compiler happy) \*/$::g;'
-> > >
-> > > drivers/video/fbdev/riva/riva_hw.c was manually tweaked to avoid
-> > > pathological white-space.
-> > >
-> > > No outstanding warnings were found building allmodconfig with GCC 9.3.0
-> > > for x86_64, i386, arm64, arm, powerpc, powerpc64le, s390x, mips, sparc64,
-> > > alpha, and m68k.
-> >
-> > At least in the infiniband part I'm confident that old gcc versions
-> > will print warnings after this patch.
-> >
-> > As the warnings are wrong, do we care? Should old gcc maybe just -Wno-
-> > the warning?
+On Wed, Jun 3, 2020 at 4:32 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> I *think* a lot of those are from -Wmaybe-uninitialized, but Linus just
-> turned that off unconditionally in v5.7:
-> 78a5255ffb6a ("Stop the ad-hoc games with -Wno-maybe-initialized")
+> Using uninitialized_var() is dangerous as it papers over real bugs[1]
+> (or can in the future), and suppresses unrelated compiler warnings (e.g.
+> "unused variable"). If the compiler thinks it is uninitialized, either
+> simply initialize the variable or make compiler changes. As a precursor
+> to removing[2] this[3] macro[4], just remove this variable since it was
+> actually unused:
 >
-> I'll try to double-check with some older gcc versions. My compiler
-> collection is mostly single-axis: lots of arches, not lots of versions. ;)
+> drivers/ide/ide-taskfile.c:232:34: warning: unused variable 'flags' [-Wunused-variable]
+>         unsigned long uninitialized_var(flags);
+>                                         ^
+>
+> [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
+> [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
+> [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
+> [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
+>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Nope, support for the good old gcc 4.1 was removed a while ago.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Fixes ce1e518190ea ("ide: don't disable interrupts during kmap_atomic()")
 
-Gr{oetje,eeting}s,
+> ---
+>  drivers/ide/ide-taskfile.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/ide/ide-taskfile.c b/drivers/ide/ide-taskfile.c
+> index aab6a10435b6..a26f85ab58a9 100644
+> --- a/drivers/ide/ide-taskfile.c
+> +++ b/drivers/ide/ide-taskfile.c
+> @@ -229,7 +229,6 @@ void ide_pio_bytes(ide_drive_t *drive, struct ide_cmd *cmd,
+>         ide_hwif_t *hwif = drive->hwif;
+>         struct scatterlist *sg = hwif->sg_table;
+>         struct scatterlist *cursg = cmd->cursg;
+> -       unsigned long uninitialized_var(flags);
+>         struct page *page;
+>         unsigned int offset;
+>         u8 *buf;
+> --
+> 2.25.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20200603233203.1695403-6-keescook%40chromium.org.
 
-                        Geert
+
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+~Nick Desaulniers
