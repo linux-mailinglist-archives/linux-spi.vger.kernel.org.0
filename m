@@ -2,107 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE5A1EE476
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 14:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AA31EE53B
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 15:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbgFDMcX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Jun 2020 08:32:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43456 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725939AbgFDMcX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 4 Jun 2020 08:32:23 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC694206C3;
-        Thu,  4 Jun 2020 12:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591273942;
-        bh=xWvRXmDlWSNdWVDBwDzr3j3iEGNG5BOdPZkKa/+g8wQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m7bbgp1vHatyxhUVtAxPu9EoLuN7WVqTP2JjvTmEzE0mV5+lJsvUC4hBACN+XF2Ry
-         Kyngo8Xbi1YaXMjyWu+jBNrdyhzdtYcupKufGhWaO2XK7ctZDCRR/bbf65IP8D6cXI
-         +FO9zESvm9SMdgNoRVUcCyutLJQj+Hx72HxTyCQA=
-Date:   Thu, 4 Jun 2020 13:32:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Martin Sperl <kernel@martin.sperl.org>, lukas@wunner.de
-Subject: Re: [PATCH 3/3] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200604123220.GD6644@sirena.org.uk>
-References: <20200604034655.15930-1-f.fainelli@gmail.com>
- <20200604034655.15930-4-f.fainelli@gmail.com>
+        id S1728560AbgFDNXJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 09:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728542AbgFDNXJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 09:23:09 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC7DC08C5C6
+        for <linux-spi@vger.kernel.org>; Thu,  4 Jun 2020 06:23:09 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id j32so5116872qte.10
+        for <linux-spi@vger.kernel.org>; Thu, 04 Jun 2020 06:23:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Zd56CSP9N2M4FrfN9ySWd7Nzjr+sOLOVU8sX9ZsvxYk=;
+        b=Z1SifWi8Glj9s1ZlViEQIoOzrtW4kQqhJPAuBmH8BuAfTlSORzOP5/aBkVIpDCF065
+         4tet6nf/xexKbX9HERYTEiH7bvvMa7jEzJZJ+Y9NbTVNdXZMe5cuQGHU5U8XYpc6rEpA
+         0M5eGOL/GQzV1R+AsSeBTDbzXk+YExg+XOlZLmxAbhKhBOAjkHQZ06AbVHRZdzvZiU7w
+         cHe+L3V8vNXxybekuzSoIvOp1xxWvK8SbdjJVplyLz5vYnbOtUIAIDcZULCyq5qUdBWf
+         hegDa8ghfSlITKfZUXou8d2OJHz3pI/kZh5/E9mjrrfnPUc08cS9ulbxQPmbEBYY1pID
+         +u9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Zd56CSP9N2M4FrfN9ySWd7Nzjr+sOLOVU8sX9ZsvxYk=;
+        b=p6dXs+cyMzh+EheLSNRxA72By+g7pfs9vZXTvvlctnIid6J344h8Emj3NlsDHlMDny
+         CWGNvjua7n6zbEwS0ihBgw1H1PyPFD8kfGuTKybvf5QwhB7le7Q5Xz9FraLYn7/B/oPx
+         //Zy2NdeowwACpNr/Z3+scuGND2up1itULZkcwSZvcv4hWzWfYnHUZ59jsjLbCsUXu6A
+         tlS/TSUFWaWN33Zson02Ypc8ORH1Zey2iHDbJY/l8XbdGxJe6ofM5pWFjUR67Sj6Ou+x
+         feIBLApXAbGTl76NTNoAxhTyxGG3eMzIneJO5bC5f0UDiwdjd4bYLmpxSsNJ7eUNUAHZ
+         4xag==
+X-Gm-Message-State: AOAM5335taqKP41wmnbi1MF7dg7z1HRilMA5JisKzXew3Lw60XQ9tbe9
+        PYlxAErhoOZ19yF5KeOUoF8R/A==
+X-Google-Smtp-Source: ABdhPJxRZn/pXIUEkZhANETiTogTGf06kqn6Gs1x5NZFGFUPmFe5McyxpBqwN0tWHmbj+GOZ4kP/eQ==
+X-Received: by 2002:aed:3fa5:: with SMTP id s34mr4444014qth.343.1591276988114;
+        Thu, 04 Jun 2020 06:23:08 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id 126sm4330150qkj.89.2020.06.04.06.23.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2020 06:23:07 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.93)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1jgppq-001CIj-Sr; Thu, 04 Jun 2020 10:23:06 -0300
+Date:   Thu, 4 Jun 2020 10:23:06 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mm@kvack.org, clang-built-linux@googlegroups.com
+Subject: Re: [PATCH 09/10] treewide: Remove uninitialized_var() usage
+Message-ID: <20200604132306.GO6578@ziepe.ca>
+References: <20200603233203.1695403-1-keescook@chromium.org>
+ <20200603233203.1695403-10-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n/aVsWSeQ4JHkrmm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200604034655.15930-4-f.fainelli@gmail.com>
-X-Cookie: VMS version 2.0 ==>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200603233203.1695403-10-keescook@chromium.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Jun 03, 2020 at 04:32:02PM -0700, Kees Cook wrote:
+> Using uninitialized_var() is dangerous as it papers over real bugs[1]
+> (or can in the future), and suppresses unrelated compiler warnings
+> (e.g. "unused variable"). If the compiler thinks it is uninitialized,
+> either simply initialize the variable or make compiler changes.
+> 
+> I preparation for removing[2] the[3] macro[4], remove all remaining
+> needless uses with the following script:
+> 
+> git grep '\buninitialized_var\b' | cut -d: -f1 | sort -u | \
+> 	xargs perl -pi -e \
+> 		's/\buninitialized_var\(([^\)]+)\)/\1/g;
+> 		 s:\s*/\* (GCC be quiet|to make compiler happy) \*/$::g;'
+> 
+> drivers/video/fbdev/riva/riva_hw.c was manually tweaked to avoid
+> pathological white-space.
+> 
+> No outstanding warnings were found building allmodconfig with GCC 9.3.0
+> for x86_64, i386, arm64, arm, powerpc, powerpc64le, s390x, mips, sparc64,
+> alpha, and m68k.
 
---n/aVsWSeQ4JHkrmm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+At least in the infiniband part I'm confident that old gcc versions
+will print warnings after this patch.
 
-On Wed, Jun 03, 2020 at 08:46:55PM -0700, Florian Fainelli wrote:
-> The SPI controller found in the BCM2711 and BCM7211 SoCs is instantiated
-> 5 times, with all instances sharing the same interrupt line. We
-> specifically match the two compatible strings here to determine whether
-> it is necessary to request the interrupt with the IRQF_SHARED flag and
-> to use an appropriate interrupt handler capable of returning IRQ_NONE.
+As the warnings are wrong, do we care? Should old gcc maybe just -Wno-
+the warning?
 
-> For the BCM2835 case which is deemed performance critical, there is no
-> overhead since a dedicated handler that does not assume sharing is used.
+Otherwise the IB bits look ok to me
 
-This feels hacky - it's essentially using the compatible string to set a
-boolean flag which isn't really about the IP but rather the platform
-integration.  It might cause problems if we do end up having to quirk
-this version of the IP for some other reason.  I'm also looking at the
-code and wondering if the overhead of checking to see if the interrupt
-is flagged is really that severe, it's just a check to see if a bit is
-set in a register which we already read so should be a couple of
-instructions (which disassembly seems to confirm).  It *is* overhead so
-there's some value in it, I'm just surprised that it's such a hot path
-especially with a reasonably deep FIFO like this device has.
+Acked-by: Jason Gunthorpe <jgg@mellanox.com>
 
-I guess ideally genirq would provide a way to figure out if an interrupt
-is actually shared in the present system, and better yet we'd have a way
-for drivers to say they aren't using the interrupt ATM, but that might
-be more effort than it's really worth.  If this is needed and there's no
-better way of figuring out if the interrupt is really shared then I'd
-suggest a boolean flag rather than a compatible string, it's still a
-hack but it's less likely to store up trouble for the future.
-
---n/aVsWSeQ4JHkrmm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7Y6dMACgkQJNaLcl1U
-h9B7+wf9EOoVWdQtyWRHYDMiu4CbKwoDecBQAiwkL1NNap2tZFZU13Shxm6HyUp9
-MyFJEmzQ8SEk2fDsXPI3oyhRHoNa18WnQkKeYoksHZOW1k2rIsNy1VFcLncQnZ1q
-QWZX729ld8uBLy6Yhch8253bO7kmE9eqF3epeRJv7QWgaDrEpynYjIFbVeUOLfTV
-pDkxR/SUr32j/oEkNQp7xVpNsmTgpWQ4WbR74qeKVsZEJjF/KoiPSLXcPgXXpUHR
-j84dYhNyzykqbirfWmnDCHXoa35wYw2U0sQmNJCNdzRhqb1lAjoQGUP48BKR+PNm
-WWM2KQ5SihLXu+2wiULmjdYHTCsSUA==
-=pDpx
------END PGP SIGNATURE-----
-
---n/aVsWSeQ4JHkrmm--
+Jason
