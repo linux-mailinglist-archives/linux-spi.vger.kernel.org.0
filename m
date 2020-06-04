@@ -2,106 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 000481EE79A
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 17:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81A21EE834
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jun 2020 18:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729411AbgFDPW3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Jun 2020 11:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S1726893AbgFDQFu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Jun 2020 12:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729292AbgFDPW3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 11:22:29 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F7CC08C5C0;
-        Thu,  4 Jun 2020 08:22:28 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id c17so7770158lji.11;
-        Thu, 04 Jun 2020 08:22:28 -0700 (PDT)
+        with ESMTP id S1726026AbgFDQFu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Jun 2020 12:05:50 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF0BC08C5C0;
+        Thu,  4 Jun 2020 09:05:50 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id i12so1311929pju.3;
+        Thu, 04 Jun 2020 09:05:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Hll+dJXiojyLXcK519mMreswBK6PHaxvzDLgh0p26WU=;
-        b=L2DmN0uXC2KyUjBXJZi+YdM6TZcgHaAo/hwU1tP/L4478bcM5q0UoroK+b7mXP2R4P
-         CY4dtFPVvkSyAVNSadDFjTzPdwsP+D6eUqcI3kZvGZ6ajCkMMqMOFbgr3IfT104hlH1u
-         lRWeEsjQCwyQyAj9FSqtUsV2OVn1GCiiakgSfTvZ8K2MYTUl7u0hUTkpplg3e1KrWY/9
-         snhpOMwvfzp6FxIPzFqDy43iUYePSSShfDdso4J4gku4w5tWVs2i8FRQHbva/jSkg7vd
-         YZLPjLfOXFlhjCK9IXDlSvavi8M3D5kpvb1fwEUGzSEYis+R9Un5BXefFLYIPHMBjNN1
-         WgrQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HAWfVJ/MMzDDKipytKTsDnZ0G7qcc8KGtxLvXJOdNtk=;
+        b=Vr/I6zf9wpjvEwDaJRBX1+2aezi8wRyFreAa10APW8X1OHOEJVUF5Q7ARa3lfsQxV5
+         PonhEHPXMbOZ92Hv3xwguR8YsivIs6B6pm4J5X1yPTPMefCXweIlZEILCdduTmW+yxyw
+         OhnEBT4jsdV70Qrr/oA/Ze0IpOOH9DdR2SA5hFnhkya/j7r/2psfkWCwVhcqQIt/xwQy
+         shgoaSohosf7QXYHzM2Sp3IzNFwxzNG2HrlEmLya+hN+YPiSKSe2J76DTQQC9iYlPsjv
+         N7o0wJbseIrr7hrSLutCvvD3KwHNTA/MPX1Ln8fg20ENbh/0qci1FwGRVgYfXf/irWnd
+         uUeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hll+dJXiojyLXcK519mMreswBK6PHaxvzDLgh0p26WU=;
-        b=ffYiP/9LdZIGGHEg3/yn5vdwNpkJkoApMsKSre+NtyHImdcfErpYuDedU7oOS/3wFg
-         +RlJ3jRaOAf0CqiW0yGavgZiUl2idJ+HJI4Ev+h7UgZrFsBJJpP1yEr7P5CPOw/OFQ3J
-         /SsvkuMeX/fYJchh/sVVYgFZgmFGW7Tu8oPt16zpEAHMgTdxdUGKcaUz+HuxzNr6tUyu
-         zDiv9YxeHRjbEpILSxzzznQJt4MvRQkD/KN+/XFq+UHer8qL6ZzwkKnsdUqXL4hfKhiz
-         Saq5I6ww9yAQQAQ9wxo52FgRimoFRsccjORXrmAtkUTMQe+5vsRW1LQSzoZt4FtVmrEW
-         VKZQ==
-X-Gm-Message-State: AOAM5330SmK9XPiS9IqN7kD+3OhQvWs7RoV/w/7OhOVKri89dvaBYqxi
-        +v3Qdmt9gx9rMnuWiizuFm4z3AAFGwkbpCeOd8Q=
-X-Google-Smtp-Source: ABdhPJxQH/KP1voSsxjAeba8kcNASoNK9+7gLFDlFHUbaiNIt96Mc8wIex8PnUIxUMkLvQS6umX4ZEAcM7RZRhjcGv4=
-X-Received: by 2002:a2e:a544:: with SMTP id e4mr2625204ljn.264.1591284147467;
- Thu, 04 Jun 2020 08:22:27 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HAWfVJ/MMzDDKipytKTsDnZ0G7qcc8KGtxLvXJOdNtk=;
+        b=KXLP2vJl/fBSDRxvPujOop52zkcrCnQu4buv448yjXQJZ6alvaj4MoGWYBFWpljZSy
+         +I2uT1214BZ0h6Xm+yr7tg3rOZbnbkIZ0Rhl0FkffL9SXNY9Tyb0nu1DGrABJl2N7FV8
+         4RNNkZpsnrk5cFJ9GgOSQOQ2Ln5f2s3oj9Vg/a5VRXW137E1O0quLAjc1kqsRykoAf2L
+         gmQpTZAy60aeWS55kvQ98njQ9A+xWPYeHfh3W62yqaB9VRB36KdjIq6lyz0+/4ErUI8A
+         1DGsWwjG0pBl0+/ESv4AEA/Qkw0GELaxyloIBDJaVZz5BGCeUcYD3pXmhBjXsAutiF6m
+         2tGg==
+X-Gm-Message-State: AOAM532NjU0I5ExazNOQXGtNEvVtDAMdJancwdvnNbSYn/s9Icdxb3Hg
+        sxUzi7BlZCloEvakxtAFiDc=
+X-Google-Smtp-Source: ABdhPJzDmXwGbLzqmN4JtHAm4tslIFeo872mF9VRUt+Ly23GpPsGhckeyoYK7qV6BFeOQmVssm8UQQ==
+X-Received: by 2002:a17:90a:5806:: with SMTP id h6mr7122674pji.66.1591286749669;
+        Thu, 04 Jun 2020 09:05:49 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id n8sm5559105pjq.49.2020.06.04.09.05.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Jun 2020 09:05:48 -0700 (PDT)
+Subject: Re: [PATCH 3/3] spi: bcm2835: Enable shared interrupt support
+To:     Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Martin Sperl <kernel@martin.sperl.org>, lukas@wunner.de
+References: <20200604034655.15930-1-f.fainelli@gmail.com>
+ <20200604034655.15930-4-f.fainelli@gmail.com>
+ <20200604123220.GD6644@sirena.org.uk>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <21772111-fa1f-7a50-aa92-e44b09cff4eb@gmail.com>
+Date:   Thu, 4 Jun 2020 09:05:46 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.8.1
 MIME-Version: 1.0
-References: <20200603233203.1695403-2-keescook@chromium.org>
- <874krr8dps.fsf@nanos.tec.linutronix.de> <CANiq72kLqvriYmMkdD3yU+xJwbn-68Eiu-fTNtC+Lb+1ZRM75g@mail.gmail.com>
- <202006040745.525ECD1@keescook>
-In-Reply-To: <202006040745.525ECD1@keescook>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 4 Jun 2020 17:22:15 +0200
-Message-ID: <CANiq72mHhzfPMGbBn=NZfqLeejPG+t=GN++NJ-L0hg-2x4UPag@mail.gmail.com>
-Subject: Re: [PATCH 01/10] x86/mm/numa: Remove uninitialized_var() usage
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        b43-dev@lists.infradead.org,
-        Network Development <netdev@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-spi@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200604123220.GD6644@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jun 4, 2020 at 4:56 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Er? That's not what it looked like to me:
->
-> #define IS_BUILTIN(option) __is_defined(option)
-> #define IS_ENABLED(option) __or(IS_BUILTIN(option), IS_MODULE(option))
->
-> But just to be sure, I just tested in with a real build:
->
-> [    3.242160] IS_ENABLED(TEST_UNDEF) false
-> [    3.242691] __is_defined(TEST_UNDEF) false
-> [    3.243240] IS_ENABLED(TEST_VALUE_EMPTY) false
-> [    3.243794] __is_defined(TEST_VALUE_EMPTY) false
-> [    3.244353] IS_ENABLED(TEST_VALUE_1) true
-> [    3.244848] __is_defined(TEST_VALUE_1) true
->
-> and nope, it only works with a defined value present.
 
-You are right, it follows the Kconfig logic, returning false for
-defined-but-to-0 too.
 
-We should probably add an `IS_DEFINED()` macro kernel-wide for this
-(and add it to the `coding-guidelines.rst` since `IS_ENABLED()` is
-mentioned there, with a warning not to mix it with `__is_defined()`
-which looks it was only intended as an implementation detail for
-`include/linux/kconfig.h`).
+On 6/4/2020 5:32 AM, Mark Brown wrote:
+> On Wed, Jun 03, 2020 at 08:46:55PM -0700, Florian Fainelli wrote:
+>> The SPI controller found in the BCM2711 and BCM7211 SoCs is instantiated
+>> 5 times, with all instances sharing the same interrupt line. We
+>> specifically match the two compatible strings here to determine whether
+>> it is necessary to request the interrupt with the IRQF_SHARED flag and
+>> to use an appropriate interrupt handler capable of returning IRQ_NONE.
+> 
+>> For the BCM2835 case which is deemed performance critical, there is no
+>> overhead since a dedicated handler that does not assume sharing is used.
+> 
+> This feels hacky - it's essentially using the compatible string to set a
+> boolean flag which isn't really about the IP but rather the platform
+> integration.  It might cause problems if we do end up having to quirk
+> this version of the IP for some other reason.
 
-CC'ing Masahiro by the way.
+I am not sure why it would be a problem, when you describe a piece of
+hardware with Device Tree, even with the IP block being strictly the
+same, its very integration into a new SoC (with details like shared
+interrupt lines) do warrant a different compatible string. Maybe this is
+more of a philosophical question.
 
-Cheers,
-Miguel
+> I'm also looking at the
+> code and wondering if the overhead of checking to see if the interrupt
+> is flagged is really that severe, it's just a check to see if a bit is
+> set in a register which we already read so should be a couple of
+> instructions (which disassembly seems to confirm).  It *is* overhead so
+> there's some value in it, I'm just surprised that it's such a hot path
+> especially with a reasonably deep FIFO like this device has.
+
+If it was up to me, we would just add the check on BCM2835_SPI_CS_INTR
+not being set and return IRQ_NONE and be done with it. I appreciate that
+Lukas has spent some tremendous amount of time working on this
+controller driver and he has a sensitivity for performance.
+
+> 
+> I guess ideally genirq would provide a way to figure out if an interrupt
+> is actually shared in the present system, and better yet we'd have a way
+> for drivers to say they aren't using the interrupt ATM, but that might
+> be more effort than it's really worth.  If this is needed and there's no
+> better way of figuring out if the interrupt is really shared then I'd
+> suggest a boolean flag rather than a compatible string, it's still a
+> hack but it's less likely to store up trouble for the future.
+
+Instead of counting the number of SPI devices we culd request the
+interrupt first with flags = IRQF_PROBE_SHARED, if this works, good we
+have a single SPI master enabled, if it returns -EBUSY, try again with
+flags = IRQF_SHARED and set-up the bcm2835_spi_sh_interrupt interrupt
+handler to manage the sharing.
+
+This would not require DT changes, which is probably better anyway.
+-- 
+Florian
