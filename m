@@ -2,121 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAA21EF402
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 11:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E9B1EF556
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 12:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbgFEJZh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Jun 2020 05:25:37 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:28563 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726210AbgFEJZg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Jun 2020 05:25:36 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1591349136; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=4DMYxLsLHIEhVdnqccTaMZxujDa7ILXa6vhA3dmslLM=; b=SvjBYyWJ9LA/5JwxYqsiFGlS2pSwhnfSAK6QmLGk1Ni3pmlqDB7HDzDhpZtjy1zFwQYTbtYZ
- /TXRGWqiWNo1+jJnyS5uUB+iRl9qJGHYwwuG3HNQ2YJHqMku/t1gNQR7epLH1ppZgrIyZDKP
- XniV6AQiye28RFrPD/IFpSduQfU=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 5eda0f792738686126653d54 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 05 Jun 2020 09:25:13
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3E72CC433A0; Fri,  5 Jun 2020 09:25:12 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from tynnyri.adurom.net (tynnyri.adurom.net [51.15.11.48])
+        id S1726378AbgFEK3A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Jun 2020 06:29:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38644 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726077AbgFEK27 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Jun 2020 06:28:59 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id EA82AC433C6;
-        Fri,  5 Jun 2020 09:25:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EA82AC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mm@kvack.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH 09/10] treewide: Remove uninitialized_var() usage
-References: <20200603233203.1695403-1-keescook@chromium.org>
-        <20200603233203.1695403-10-keescook@chromium.org>
-Date:   Fri, 05 Jun 2020 12:25:05 +0300
-In-Reply-To: <20200603233203.1695403-10-keescook@chromium.org> (Kees Cook's
-        message of "Wed, 3 Jun 2020 16:32:02 -0700")
-Message-ID: <878sh1g8zy.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        by mail.kernel.org (Postfix) with ESMTPSA id 37ABC2074B;
+        Fri,  5 Jun 2020 10:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591352938;
+        bh=yVCgfIlqCzi+uxjyo1zLQ98C29QSMhFXMCE8J+smxzk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UM8OrjMXAVHbcSwvCYTfQDj36kyTpdwaC9wenIPr85WsEQYQcCDaaxBmNEXNkxKgx
+         dzmVHYOYm06xJNMWYZaCgfbeJkZ+cZc8ulSvs4+sQTHYK+Hd+2G7odslRiKHcXPBbT
+         6OmM2mF0tvQgFrf0GpONLnjjojvObsNAG0LOl3Bw=
+Date:   Fri, 5 Jun 2020 11:28:56 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Martin Sperl <kernel@martin.sperl.org>, lukas@wunner.de
+Subject: Re: [PATCH 3/3] spi: bcm2835: Enable shared interrupt support
+Message-ID: <20200605102856.GB5413@sirena.org.uk>
+References: <20200604034655.15930-1-f.fainelli@gmail.com>
+ <20200604034655.15930-4-f.fainelli@gmail.com>
+ <20200604123220.GD6644@sirena.org.uk>
+ <21772111-fa1f-7a50-aa92-e44b09cff4eb@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0eh6TmSyL6TZE2Uz"
+Content-Disposition: inline
+In-Reply-To: <21772111-fa1f-7a50-aa92-e44b09cff4eb@gmail.com>
+X-Cookie: Air is water with holes in it.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
 
-> Using uninitialized_var() is dangerous as it papers over real bugs[1]
-> (or can in the future), and suppresses unrelated compiler warnings
-> (e.g. "unused variable"). If the compiler thinks it is uninitialized,
-> either simply initialize the variable or make compiler changes.
->
-> I preparation for removing[2] the[3] macro[4], remove all remaining
-> needless uses with the following script:
->
-> git grep '\buninitialized_var\b' | cut -d: -f1 | sort -u | \
-> 	xargs perl -pi -e \
-> 		's/\buninitialized_var\(([^\)]+)\)/\1/g;
-> 		 s:\s*/\* (GCC be quiet|to make compiler happy) \*/$::g;'
->
-> drivers/video/fbdev/riva/riva_hw.c was manually tweaked to avoid
-> pathological white-space.
->
-> No outstanding warnings were found building allmodconfig with GCC 9.3.0
-> for x86_64, i386, arm64, arm, powerpc, powerpc64le, s390x, mips, sparc64,
-> alpha, and m68k.
->
-> [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
-> [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
-> [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
-> [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
->
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+--0eh6TmSyL6TZE2Uz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[...]
+On Thu, Jun 04, 2020 at 09:05:46AM -0700, Florian Fainelli wrote:
+> On 6/4/2020 5:32 AM, Mark Brown wrote:
 
->  drivers/net/wireless/ath/ath10k/core.c           |  2 +-
->  drivers/net/wireless/ath/ath6kl/init.c           |  2 +-
->  drivers/net/wireless/ath/ath9k/init.c            |  2 +-
->  drivers/net/wireless/broadcom/b43/debugfs.c      |  2 +-
->  drivers/net/wireless/broadcom/b43/dma.c          |  2 +-
->  drivers/net/wireless/broadcom/b43/lo.c           |  2 +-
->  drivers/net/wireless/broadcom/b43/phy_n.c        |  2 +-
->  drivers/net/wireless/broadcom/b43/xmit.c         | 12 ++++++------
->  .../net/wireless/broadcom/b43legacy/debugfs.c    |  2 +-
->  drivers/net/wireless/broadcom/b43legacy/main.c   |  2 +-
->  drivers/net/wireless/intel/iwlegacy/3945.c       |  2 +-
->  drivers/net/wireless/intel/iwlegacy/4965-mac.c   |  2 +-
->  .../net/wireless/realtek/rtlwifi/rtl8192cu/hw.c  |  4 ++--
+> > This feels hacky - it's essentially using the compatible string to set a
+> > boolean flag which isn't really about the IP but rather the platform
+> > integration.  It might cause problems if we do end up having to quirk
+> > this version of the IP for some other reason.
 
-For wireless drivers:
+> I am not sure why it would be a problem, when you describe a piece of
+> hardware with Device Tree, even with the IP block being strictly the
+> same, its very integration into a new SoC (with details like shared
+> interrupt lines) do warrant a different compatible string. Maybe this is
+> more of a philosophical question.
 
-Acked-by: Kalle Valo <kvalo@codeaurora.org>
+The big concern here is trying to support things going forwards - if it
+turns out that any quirks are required by this version of the IP then it
+gets very confusing and hard to keep DTs stable if you've already
+quirked something that clearly isn't the IP version with the compatible
+string.  Conversely if we start putting flags into the binding for every
+feature that might be changed in a given IP that gets complex as we
+can't ever learn new things about an existing IP version without
+updating all the DTs which is also bad.
 
--- 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> Instead of counting the number of SPI devices we culd request the
+> interrupt first with flags = IRQF_PROBE_SHARED, if this works, good we
+> have a single SPI master enabled, if it returns -EBUSY, try again with
+> flags = IRQF_SHARED and set-up the bcm2835_spi_sh_interrupt interrupt
+> handler to manage the sharing.
+
+Like you said in a followup patch that doesn't work as the first device
+to probe will think the interrupt isn't shared.  You'd need a callback
+to change to shared mode from genirq which feels...  inelegant.
+
+--0eh6TmSyL6TZE2Uz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7aHmcACgkQJNaLcl1U
+h9Cibwf/c8EkXuOornxa8rgJTVll6CNfZJosZy2JB/9uRxBsBkr+C0AmOA5gLJ0G
+/blupLSwZR6QOO5HP8QR29piU1V1gXX3/zQcDnz7HtTDrD3q+SSJADKu9rMvXrMW
+/FeddfnOo2o2P62qopKisrQS3tK6sRQxm/hlqCCa8lHWfDZ10Iuow00sUAnI1x9h
+4OG1erLcr9L5tJtAWvyvbtL75yHNJl7Dbsvwz0I0+NFMLu9etTbQ4OXtwIiab6Xu
+LlkhofTCHh9B3yD/Fh8RmRZNJUwcXUmjwMBbIAdITglUNtDMiJaZtxUrn25V4PiJ
+UKlz+CR4Hi2Me0h1JgY79Xnam2hf9w==
+=Pvqk
+-----END PGP SIGNATURE-----
+
+--0eh6TmSyL6TZE2Uz--
