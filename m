@@ -2,91 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B52BC1EF5CB
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 12:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A491EF5EE
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 12:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbgFEKwp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Jun 2020 06:52:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52888 "EHLO mail.kernel.org"
+        id S1726977AbgFEK6H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Jun 2020 06:58:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41120 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726507AbgFEKwp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 5 Jun 2020 06:52:45 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0EC742067B;
-        Fri,  5 Jun 2020 10:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591354364;
-        bh=XeO7tDwju/KKDj9cqR21WNubY9Btw3JqGz5Uwz9OKbw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qe1KvqeoJ3GrXMBQtdvkR44KDnjq5QKYn/VkETjh2pBcVx3ZDQGOGTARRoku3uwLi
-         6LBFG2SquriXQ72zOOFCUuEAKpxBeOHmb6PimnlerU7in2u8Ye3UqEa+6FtQY+N9st
-         TeEXUeHueqXJCRLpRNCxWK0yCG0yKubP6sMjgSzU=
-Date:   Fri, 5 Jun 2020 11:52:42 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        id S1726787AbgFEK6H (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Jun 2020 06:58:07 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id D5DD9ACAE;
+        Fri,  5 Jun 2020 10:58:07 +0000 (UTC)
+Message-ID: <d419325c67594d77a918f49222013f0f1f454371.camel@suse.de>
+Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Scott Branden <sbranden@broadcom.com>, lukas@wunner.de,
         Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
         "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
         "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
         <bcm-kernel-feedback-list@broadcom.com>,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-rpi-kernel@lists.infradead.org>,
         Martin Sperl <kernel@martin.sperl.org>
-Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200605105242.GD5413@sirena.org.uk>
-References: <20200604212819.715-1-f.fainelli@gmail.com>
- <f728f55fe6266718b5041b6f3b1864a673991129.camel@suse.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MAH+hnPXVZWQ5cD/"
-Content-Disposition: inline
+Date:   Fri, 05 Jun 2020 12:58:01 +0200
 In-Reply-To: <f728f55fe6266718b5041b6f3b1864a673991129.camel@suse.de>
-X-Cookie: Air is water with holes in it.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200604212819.715-1-f.fainelli@gmail.com>
+         <f728f55fe6266718b5041b6f3b1864a673991129.camel@suse.de>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-/79CtvoenK8DEBzH9xLO"
+User-Agent: Evolution 3.36.2 
+MIME-Version: 1.0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---MAH+hnPXVZWQ5cD/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--=-/79CtvoenK8DEBzH9xLO
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 05, 2020 at 10:46:57AM +0200, Nicolas Saenz Julienne wrote:
+On Fri, 2020-06-05 at 10:46 +0200, Nicolas Saenz Julienne wrote:
+> Hi Florian,
+> Thanks for taking over this!
+>=20
+> On Thu, 2020-06-04 at 14:28 -0700, Florian Fainelli wrote:
+> > The 4 SPI controller instances added in BCM2711 and BCM7211 SoCs (SPI3,
+> > SPI4, SPI5 and SPI6) share the same interrupt line with SPI0.
+>=20
+> I think this isn't 100% correct. SPI0 has its own interrupt, but SPI[3-6]
+> share
+> the same interrupt.
 
-> > -static irqreturn_t bcm2835_spi_interrupt(int irq, void *dev_id)
-> > +static inline irqreturn_t bcm2835_spi_interrupt_common(struct spi_controller
-> > *ctlr,
-> > +						       u32 cs)
+I'm wrong here, I missed this in bcm2711.dtsi:
 
-> Keep in mind the new 100 character limit.
+&spi {
+	interrupts =3D <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>;
+};
 
-That's more about stopping people doing awful contortions to shut
-checkpatch up than saying that it's a particularly good idea to lengthen
-lines.
+Sorry for the noise.
 
---MAH+hnPXVZWQ5cD/
+Regards,
+Nicolas
+
+
+--=-/79CtvoenK8DEBzH9xLO
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7aI/kACgkQJNaLcl1U
-h9BVmQf/W9KSnmOIyYg8dG9v7/Nw5sW+8xZrwv7u3lUTml6tEdkKhOHIetp1TWoR
-QSQkErpuKwkAquozYTfN67RuBNaHMOQLYKCLlqXiX7ZLXdZrLJOczzClOy71/Cn4
-bTPXoYID265sBbycA3+v/fXd9ZtjXs8a2hhnl3XJLTpVJCgGcfz8guY9gxfLvxIN
-gYwHRQO6m7/QvpCZSW8TjeFJfbsYbgLTv8QVSD49zG9y7PkZsdZ5BH4Qq8JU/Qw8
-KBJIlMPBi30TKFmIz5ZF0jyEDizUKoI1GLESuBkugr7Vy2xvOGBsgh3XT+YnBJWY
-xtaHN3xC6DFvqASDSztVTnCOsNSmvg==
-=wEcm
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7aJTkACgkQlfZmHno8
+x/5SQgf+OmvPj4BYlREL3zg38OEq+NEtQE5Tw5Oi5SBMTLf3HpyUM+ZNDOuHNB9a
+R7fFlBKHS8fIYxPawpYXKr2Z48Avs7rv1dUeD5WHKdE40ErEnSkASihptnK53bbx
+6Ysl/oZuU+s2mtHZvWhVPDSJuhf1EX5W80Iv4diqD4pAH3HVlFBdqARgjV4GND9Z
+fz3dhXgFuVS3Pdq8hsn0o5+U8965J2swadD70xt4J1vJyAM/eD9jz+AlGAh25t7o
+wYt1pUNi0yA6N+i27vLpsv+tNmgnNq9KOqzDzZomPUvYunCUl+Z3/LfvEz9EF1dr
+gTqqjhjMLd/2aovu/MYhjQs5bqrf9g==
+=lD2O
 -----END PGP SIGNATURE-----
 
---MAH+hnPXVZWQ5cD/--
+--=-/79CtvoenK8DEBzH9xLO--
+
