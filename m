@@ -2,95 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A491EF5EE
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 12:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0351EF644
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 13:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbgFEK6H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Jun 2020 06:58:07 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41120 "EHLO mx2.suse.de"
+        id S1726590AbgFELOH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Jun 2020 07:14:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39634 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726787AbgFEK6H (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 5 Jun 2020 06:58:07 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id D5DD9ACAE;
-        Fri,  5 Jun 2020 10:58:07 +0000 (UTC)
-Message-ID: <d419325c67594d77a918f49222013f0f1f454371.camel@suse.de>
-Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Scott Branden <sbranden@broadcom.com>, lukas@wunner.de,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        id S1726225AbgFELOH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Jun 2020 07:14:07 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CA18206DC;
+        Fri,  5 Jun 2020 11:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591355646;
+        bh=FhAb3NUX5XtgX3SNWFKeMQklpim0Rc+VQXAf3n11B48=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=RsNurQNAk+Ygtpn2S+ix+bGTrsx7FD9Wjhd1QTeKJ93xOpk85sjG8ut2NJ8JJwG8A
+         qEumIvaXxE7pxU/vLtRjt0oV2BIvt3iMH2r6gFpPePJM9YWmvv/Hzbc616507Yz4rS
+         ZlJS5qtQfer0Js4I41SxPRLdulUbbdzq3QDdtn5I=
+Date:   Fri, 05 Jun 2020 12:14:04 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Ray Jui <rjui@broadcom.com>,
         "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
+        lukas@wunner.de, Rob Herring <robh+dt@kernel.org>,
         "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
         <bcm-kernel-feedback-list@broadcom.com>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-rpi-kernel@lists.infradead.org>,
-        Martin Sperl <kernel@martin.sperl.org>
-Date:   Fri, 05 Jun 2020 12:58:01 +0200
-In-Reply-To: <f728f55fe6266718b5041b6f3b1864a673991129.camel@suse.de>
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+In-Reply-To: <20200604212819.715-1-f.fainelli@gmail.com>
 References: <20200604212819.715-1-f.fainelli@gmail.com>
-         <f728f55fe6266718b5041b6f3b1864a673991129.camel@suse.de>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-/79CtvoenK8DEBzH9xLO"
-User-Agent: Evolution 3.36.2 
-MIME-Version: 1.0
+Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
+Message-Id: <159135564425.14579.13716287498736798458.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 4 Jun 2020 14:28:19 -0700, Florian Fainelli wrote:
+> The 4 SPI controller instances added in BCM2711 and BCM7211 SoCs (SPI3,
+> SPI4, SPI5 and SPI6) share the same interrupt line with SPI0.
+> 
+> For the BCM2835 case which is deemed performance critical, we would like
+> to continue using an interrupt handler which does not have the extra
+> comparison on BCM2835_SPI_CS_INTR.
+> 
+> [...]
 
---=-/79CtvoenK8DEBzH9xLO
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, 2020-06-05 at 10:46 +0200, Nicolas Saenz Julienne wrote:
-> Hi Florian,
-> Thanks for taking over this!
->=20
-> On Thu, 2020-06-04 at 14:28 -0700, Florian Fainelli wrote:
-> > The 4 SPI controller instances added in BCM2711 and BCM7211 SoCs (SPI3,
-> > SPI4, SPI5 and SPI6) share the same interrupt line with SPI0.
->=20
-> I think this isn't 100% correct. SPI0 has its own interrupt, but SPI[3-6]
-> share
-> the same interrupt.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I'm wrong here, I missed this in bcm2711.dtsi:
+Thanks!
 
-&spi {
-	interrupts =3D <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>;
-};
+[1/1] spi: bcm2835: Enable shared interrupt support
+      commit: ecfbd3cf3b8bb73ac6a80ddf430b5912fd4402a6
 
-Sorry for the noise.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Regards,
-Nicolas
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---=-/79CtvoenK8DEBzH9xLO
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7aJTkACgkQlfZmHno8
-x/5SQgf+OmvPj4BYlREL3zg38OEq+NEtQE5Tw5Oi5SBMTLf3HpyUM+ZNDOuHNB9a
-R7fFlBKHS8fIYxPawpYXKr2Z48Avs7rv1dUeD5WHKdE40ErEnSkASihptnK53bbx
-6Ysl/oZuU+s2mtHZvWhVPDSJuhf1EX5W80Iv4diqD4pAH3HVlFBdqARgjV4GND9Z
-fz3dhXgFuVS3Pdq8hsn0o5+U8965J2swadD70xt4J1vJyAM/eD9jz+AlGAh25t7o
-wYt1pUNi0yA6N+i27vLpsv+tNmgnNq9KOqzDzZomPUvYunCUl+Z3/LfvEz9EF1dr
-gTqqjhjMLd/2aovu/MYhjQs5bqrf9g==
-=lD2O
------END PGP SIGNATURE-----
-
---=-/79CtvoenK8DEBzH9xLO--
-
+Thanks,
+Mark
