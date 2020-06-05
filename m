@@ -2,52 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A711EF971
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 15:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FFA1EF98B
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 15:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726956AbgFENkT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Jun 2020 09:40:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55244 "EHLO mail.kernel.org"
+        id S1727013AbgFENq5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Jun 2020 09:46:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:56078 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726553AbgFENkS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 5 Jun 2020 09:40:18 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591364418;
-        bh=fynk7lIeQE1noX7Jus+nPtyGzGfure7/72TItYyy+8Y=;
-        h=Subject:From:Date:To:From;
-        b=YG6vwPhX67OEEdD05KR/6amDwQiql47xXQg8H5eJK6gk42DA2shuDN23thDsK8h+L
-         BMgLwCuvVjCAcijbKPpF+nOdKAwQEO/kSznuYAnI9eKPn11r4iV+R4PgGZEUG1POG0
-         dYua5DdHsMN10kgbULugqgDyIP/6fGaXAI2bm7l8=
+        id S1726553AbgFENq5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Jun 2020 09:46:57 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E77131B;
+        Fri,  5 Jun 2020 06:46:56 -0700 (PDT)
+Received: from [10.57.10.23] (unknown [10.57.10.23])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E0C83F305;
+        Fri,  5 Jun 2020 06:46:53 -0700 (PDT)
+Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        lukas@wunner.de,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20200604212819.715-1-f.fainelli@gmail.com>
+ <142d48ae-2725-1368-3e11-658449662371@arm.com>
+ <20200605132037.GF5413@sirena.org.uk>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <2e371a32-fb52-03a2-82e4-5733d9f139cc@arm.com>
+Date:   Fri, 5 Jun 2020 14:46:49 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <159136441827.16770.9197406815983617598.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 05 Jun 2020 13:40:18 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <20200605132037.GF5413@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v9] add ecspi ERR009165 for i.mx6/7 soc family (2020-06-05T21:32:21)
-  Superseding: [v8] add ecspi ERR009165 for i.mx6/7 soc family (2020-05-20T20:34:12):
-    [v8,01/13] Revert "ARM: dts: imx6q: Use correct SDMA script for SPI5 core"
-    [v8,02/13] Revert "ARM: dts: imx6: Use correct SDMA script for SPI cores"
-    [v8,03/13] Revert "dmaengine: imx-sdma: refine to load context only once"
-    [v8,04/13] dmaengine: imx-sdma: remove duplicated sdma_load_context
-    [v8,05/13] spi: imx: fallback to PIO if dma setup failure
-    [v8,06/13] dmaengine: imx-sdma: add mcu_2_ecspi script
-    [v8,07/13] spi: imx: fix ERR009165
-    [v8,08/13] spi: imx: remove ERR009165 workaround on i.mx6ul
-    [v8,09/13] spi: imx: add new i.mx6ul compatible name in binding doc
-    [v8,10/13] dmaengine: imx-sdma: remove ERR009165 on i.mx6ul
-    [v8,11/13] dma: imx-sdma: add i.mx6ul compatible name
-    [v8,12/13] dmaengine: imx-sdma: fix ecspi1 rx dma not work on i.mx8mm
-    [v8,13/13] dmaengine: imx-sdma: add uart rom script
+On 2020-06-05 14:20, Mark Brown wrote:
+> On Fri, Jun 05, 2020 at 12:34:36PM +0100, Robin Murphy wrote:
+>> On 2020-06-04 22:28, Florian Fainelli wrote:
+> 
+>>> For the BCM2835 case which is deemed performance critical, we would like
+>>> to continue using an interrupt handler which does not have the extra
+>>> comparison on BCM2835_SPI_CS_INTR.
+> 
+>> FWIW, if I'm reading the patch correctly, then with sensible codegen that
+>> "overhead" should amount to a bit test on a live register plus a not-taken
+>> conditional branch - according to the 1176 TRM that should add up to a
+>> whopping 2 cycles. If that's really significant then I'd have to wonder
+>> whether you want to be at the mercy of the whole generic IRQ stack at all,
+>> and should perhaps consider using FIQ instead.
+> 
+> Yes, and indeed the compiler does seem to manage that.  It *is* non-zero
+> overhead though.
 
+True, but so's the existing level of pointer-chasing indirection that 
+with some straightforward refactoring could be taken right out of the 
+critical path and confined to just the conditional complete() call. 
+That's the kind of thing leaving me unconvinced that this is code where 
+every single cycle counts ;)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+Robin.
