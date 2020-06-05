@@ -2,36 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 457211EFC78
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 17:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3221F02B7
+	for <lists+linux-spi@lfdr.de>; Sat,  6 Jun 2020 00:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbgFEP1m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Jun 2020 11:27:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57314 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726539AbgFEP1m (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 5 Jun 2020 11:27:42 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E7F722075B;
-        Fri,  5 Jun 2020 15:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591370861;
-        bh=cwE6lN0oRc3R/lRo7XRlwrgGSlMb3orxHCcOBwJlZXA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q5Jmn118NsrWlHCB8CdqciMyPXagQuykia3JVFkCcJCzYTmb1v3C3l6d+WqCBuuxg
-         X2D0lPfLpPM/iw1FJuKwWoyG8o5jVxndq+h3q1ezTpdrSa4BM+BkILAyqPPcR3NN9X
-         0xR/4sbzqBqkW8UAQT5sfhnTNG3o1kdFnjP9RbwA=
-Date:   Fri, 5 Jun 2020 16:27:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
+        id S1728083AbgFEWEv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Jun 2020 18:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbgFEWEv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Jun 2020 18:04:51 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C08C08C5C2;
+        Fri,  5 Jun 2020 15:04:50 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id p5so11159707wrw.9;
+        Fri, 05 Jun 2020 15:04:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4obgiWJMjzopugCNtxoiM9Fhsn1z9LnA6SizhmkTt9g=;
+        b=oWoLOs1DYFcKnc8iyzbCZ5ZjmvwzsLAT0uIZzcGnirqHov3z6YGwjUGZSTtIs7Y8Rg
+         8xMoBSEI1DJHKhJu5l/4DyyYhmVYPtrPxGF8cidtj/AY1sx/rUmFNeqb6uhmNwyP9IKK
+         JLPa/uJZkImCV+PcqI0o8T8pHZQ74MxP+TYPEtsKScM/B6AGX6ocLuSxmazHCdCPqxBH
+         YKZQBoGBMLFLh6YbYGxROSRKqOmtbLRj0aI4EpP+VwyIxNqxnB7bO6Xe4di9FQCV5imO
+         fzTaYt/G66Z68LK/oltgGYC0EIj+e3eiMPpBQR/V0pd6dPfEv3sjVEZ0cw2C9Bsmeoy3
+         TEyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4obgiWJMjzopugCNtxoiM9Fhsn1z9LnA6SizhmkTt9g=;
+        b=li7UTBKe+b8qZx59wGmN87GkugFnblDLkzshtUjN6RKS7dRN/VRsM5FxLFZnmhG9rk
+         t8wCMVeXuu4iupwrrHu/aKwJqwsxrGlAyJzW2btPE5WypiovNKPRKNLcyz7qF12yV1iW
+         dtAblmMgWvXkvDzxtMnvy7n9WRa3zkhRmbmB0XBhd1ZFIZgCrxXM6oWWwJwMABALDvt/
+         c35vHawQPne/C3cyW5WPf3NJEpkI+yprGOva5aES/cvyXpalY/ICHgpuQFPO/E1ld5K2
+         FR6tuZaI44UapWyWgiXEQ12x5VibsycbO4f/8xnFQv50GBjf9v3q8aL++1eRQRwKYgOY
+         QhHQ==
+X-Gm-Message-State: AOAM530hO+wsMxJfiAmBcRa25p2fgZQf2Bkv9UKyMEq0PNgezJkrH2F5
+        qY/0I8TuXcmtEBKXREI2lSA=
+X-Google-Smtp-Source: ABdhPJwJjWSx6RXx3ecmtFnocQfoqBGkAO9vSi2BfvV03xiJ7JhGCPlV2aEFgXx7veXxm5wOr3U6nw==
+X-Received: by 2002:adf:8b0c:: with SMTP id n12mr12594963wra.340.1591394689565;
+        Fri, 05 Jun 2020 15:04:49 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id a1sm13205415wmd.28.2020.06.05.15.04.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jun 2020 15:04:48 -0700 (PDT)
+Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Mark Brown <broonie@kernel.org>, lukas@wunner.de
 Cc:     "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Scott Branden <sbranden@broadcom.com>, lukas@wunner.de,
+        Scott Branden <sbranden@broadcom.com>,
         Ray Jui <rjui@broadcom.com>, linux-kernel@vger.kernel.org,
         "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -41,61 +66,78 @@ Cc:     "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE"
         <linux-rpi-kernel@lists.infradead.org>,
         Martin Sperl <kernel@martin.sperl.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200605152739.GH5413@sirena.org.uk>
 References: <20200604212819.715-1-f.fainelli@gmail.com>
  <142d48ae-2725-1368-3e11-658449662371@arm.com>
  <20200605132037.GF5413@sirena.org.uk>
  <2e371a32-fb52-03a2-82e4-5733d9f139cc@arm.com>
  <06342e88-e130-ad7a-9f97-94f09156f868@arm.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d3fe8b56-83ef-8ef0-bb05-11c7cb2419f8@gmail.com>
+Date:   Fri, 5 Jun 2020 15:04:43 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AqCDj3hiknadvR6t"
-Content-Disposition: inline
 In-Reply-To: <06342e88-e130-ad7a-9f97-94f09156f868@arm.com>
-X-Cookie: Air is water with holes in it.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---AqCDj3hiknadvR6t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Jun 05, 2020 at 03:41:27PM +0100, Robin Murphy wrote:
-
-> Ha, and in fact having checked a build out of curiosity, this patch as-is
-> actually stands to make things considerably worse. At least with GCC 8.3 and
-> bcm2835_defconfig, bcm2835_spi_interrupt_common() doesn't get inlined, which
-> means bcm2835_spi_interrupt() pushes/pops a stack frame and makes an
-> out-of-line call to bcm2835_spi_interrupt_common(), resulting in massively
-> *more* work than the extra two instructions of simply inlining the test.
-
-Whichever compiler I was using (clang-11 probably) did manage to inline
-the tail call so it really was the two instructions but yeah, in general
-this approach is going to be fragile.
-
+On 6/5/2020 7:41 AM, Robin Murphy wrote:
+> On 2020-06-05 14:46, Robin Murphy wrote:
+>> On 2020-06-05 14:20, Mark Brown wrote:
+>>> On Fri, Jun 05, 2020 at 12:34:36PM +0100, Robin Murphy wrote:
+>>>> On 2020-06-04 22:28, Florian Fainelli wrote:
+>>>
+>>>>> For the BCM2835 case which is deemed performance critical, we would
+>>>>> like
+>>>>> to continue using an interrupt handler which does not have the extra
+>>>>> comparison on BCM2835_SPI_CS_INTR.
+>>>
+>>>> FWIW, if I'm reading the patch correctly, then with sensible codegen
+>>>> that
+>>>> "overhead" should amount to a bit test on a live register plus a
+>>>> not-taken
+>>>> conditional branch - according to the 1176 TRM that should add up to a
+>>>> whopping 2 cycles. If that's really significant then I'd have to wonder
+>>>> whether you want to be at the mercy of the whole generic IRQ stack
+>>>> at all,
+>>>> and should perhaps consider using FIQ instead.
+>>>
+>>> Yes, and indeed the compiler does seem to manage that.  It *is* non-zero
+>>> overhead though.
+>>
+>> True, but so's the existing level of pointer-chasing indirection that
+>> with some straightforward refactoring could be taken right out of the
+>> critical path and confined to just the conditional complete() call.
+>> That's the kind of thing leaving me unconvinced that this is code
+>> where every single cycle counts ;)
+> 
+> Ha, and in fact having checked a build out of curiosity, this patch
+> as-is actually stands to make things considerably worse. At least with
+> GCC 8.3 and bcm2835_defconfig, bcm2835_spi_interrupt_common() doesn't
+> get inlined, which means bcm2835_spi_interrupt() pushes/pops a stack
+> frame and makes an out-of-line call to bcm2835_spi_interrupt_common(),
+> resulting in massively *more* work than the extra two instructions of
+> simply inlining the test.
+> 
 > So yes, the overhead of inlining the test vs. the alternative is indeed
 > non-zero. It's just also negative :D
 
-And variable!
+Is it reliable across compiler versions if we use __always_inline?
 
---AqCDj3hiknadvR6t
-Content-Type: application/pgp-signature; name="signature.asc"
+The only other alternative that I can think of is using a static key to
+eliminate the test for the single controller case. This feels highly
+over engineered, but if that proves more reliable and gets everybody
+their cookie, why not.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7aZGoACgkQJNaLcl1U
-h9AX6gf7Bm5ytifNBvydJuvs4NzgM67Urhjfzt+XzOq9aPGD/YyTV42HNCmGAqGy
-SK5nGgR0rYbNixHVpe8BR8sR7ouoD+RplUaa6HByo8h538lDdtImQw5mxOM7jSqj
-YqJQrm1hwA4Exl+b3ko3Ec3LfHP8Z+IPS0pbuhibX42asNbhDsUc7dKMVGOPsA0m
-M06K9koGLwc5XEs7+4ylBVfqhTKIQSiHeg8K1TJ3VQEFBqOCBoURI0TLPUPo3PYV
-vg5NvWtlPqYwBj/gWm4+jdTPM2Ru10LTa+jU3KnroOtJSBil2tErrvKb31iWGgS5
-ECVrLTGILzwbt5Gq0ojVE1LsJVSmqg==
-=/uNB
------END PGP SIGNATURE-----
-
---AqCDj3hiknadvR6t--
+Lukas, do you have any way to test with the conditional being present
+that the performance or latency does not suffer so much that it becomes
+unacceptable for your use cases?
+-- 
+Florian
