@@ -2,74 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F8F1EF5C2
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 12:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52BC1EF5CB
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jun 2020 12:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbgFEKvF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Jun 2020 06:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726637AbgFEKvE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Jun 2020 06:51:04 -0400
-X-Greylist: delayed 109823 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Jun 2020 03:51:03 PDT
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D81C08C5C2;
-        Fri,  5 Jun 2020 03:51:03 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        id S1726749AbgFEKwp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Jun 2020 06:52:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52888 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726507AbgFEKwp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Jun 2020 06:52:45 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 04986300020AA;
-        Fri,  5 Jun 2020 12:51:01 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id C284822B009; Fri,  5 Jun 2020 12:51:00 +0200 (CEST)
-Date:   Fri, 5 Jun 2020 12:51:00 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0EC742067B;
+        Fri,  5 Jun 2020 10:52:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591354364;
+        bh=XeO7tDwju/KKDj9cqR21WNubY9Btw3JqGz5Uwz9OKbw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qe1KvqeoJ3GrXMBQtdvkR44KDnjq5QKYn/VkETjh2pBcVx3ZDQGOGTARRoku3uwLi
+         6LBFG2SquriXQ72zOOFCUuEAKpxBeOHmb6PimnlerU7in2u8Ye3UqEa+6FtQY+N9st
+         TeEXUeHueqXJCRLpRNCxWK0yCG0yKubP6sMjgSzU=
+Date:   Fri, 5 Jun 2020 11:52:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Scott Branden <sbranden@broadcom.com>, lukas@wunner.de,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
         Martin Sperl <kernel@martin.sperl.org>
 Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200605105100.kxe6wgh5itmhrgl2@wunner.de>
+Message-ID: <20200605105242.GD5413@sirena.org.uk>
 References: <20200604212819.715-1-f.fainelli@gmail.com>
+ <f728f55fe6266718b5041b6f3b1864a673991129.camel@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MAH+hnPXVZWQ5cD/"
 Content-Disposition: inline
-In-Reply-To: <20200604212819.715-1-f.fainelli@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <f728f55fe6266718b5041b6f3b1864a673991129.camel@suse.de>
+X-Cookie: Air is water with holes in it.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 02:28:19PM -0700, Florian Fainelli wrote:
-> The 4 SPI controller instances added in BCM2711 and BCM7211 SoCs (SPI3,
-> SPI4, SPI5 and SPI6) share the same interrupt line with SPI0.
-> 
-> For the BCM2835 case which is deemed performance critical, we would like
-> to continue using an interrupt handler which does not have the extra
-> comparison on BCM2835_SPI_CS_INTR.
-> 
-> To support that requirement the common interrupt handling code between
-> the shared and non-shared interrupt paths is split into a
-> bcm2835_spi_interrupt_common() and both bcm2835_spi_interrupt() as well
-> as bcm2835_spi_shared_interrupt() make use of it.
-> 
-> During probe, we determine if there is at least another instance of this
-> SPI controller, and if there is, then we install a shared interrupt
-> handler.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Reviewed-by: Lukas Wunner <lukas@wunner.de>
+--MAH+hnPXVZWQ5cD/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, Jun 05, 2020 at 10:46:57AM +0200, Nicolas Saenz Julienne wrote:
+
+> > -static irqreturn_t bcm2835_spi_interrupt(int irq, void *dev_id)
+> > +static inline irqreturn_t bcm2835_spi_interrupt_common(struct spi_controller
+> > *ctlr,
+> > +						       u32 cs)
+
+> Keep in mind the new 100 character limit.
+
+That's more about stopping people doing awful contortions to shut
+checkpatch up than saying that it's a particularly good idea to lengthen
+lines.
+
+--MAH+hnPXVZWQ5cD/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7aI/kACgkQJNaLcl1U
+h9BVmQf/W9KSnmOIyYg8dG9v7/Nw5sW+8xZrwv7u3lUTml6tEdkKhOHIetp1TWoR
+QSQkErpuKwkAquozYTfN67RuBNaHMOQLYKCLlqXiX7ZLXdZrLJOczzClOy71/Cn4
+bTPXoYID265sBbycA3+v/fXd9ZtjXs8a2hhnl3XJLTpVJCgGcfz8guY9gxfLvxIN
+gYwHRQO6m7/QvpCZSW8TjeFJfbsYbgLTv8QVSD49zG9y7PkZsdZ5BH4Qq8JU/Qw8
+KBJIlMPBi30TKFmIz5ZF0jyEDizUKoI1GLESuBkugr7Vy2xvOGBsgh3XT+YnBJWY
+xtaHN3xC6DFvqASDSztVTnCOsNSmvg==
+=wEcm
+-----END PGP SIGNATURE-----
+
+--MAH+hnPXVZWQ5cD/--
