@@ -2,44 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE9C1F30E9
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jun 2020 03:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796A21F30D3
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jun 2020 03:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727914AbgFHXHa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Jun 2020 19:07:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51676 "EHLO mail.kernel.org"
+        id S1731457AbgFIBDP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Jun 2020 21:03:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727903AbgFHXH2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:07:28 -0400
+        id S1727946AbgFHXHg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:07:36 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6FFCB20872;
-        Mon,  8 Jun 2020 23:07:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E56B2087E;
+        Mon,  8 Jun 2020 23:07:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657647;
-        bh=GwEbOMu8/8JRIBBYzWPx5EysyBB4jEBoWyltDTe3v+k=;
+        s=default; t=1591657656;
+        bh=1S5Q9TpFA1WJBMNsZ9T26wr84UeMbZz/aKxvsdAw2F8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oUnAVq/M1u/jUhL8Lwy4M2r5AstnD44z/Sit1/q3/B5qnDvqqti9HnVUOrwGw8Tj5
-         gw2o9PViPv5ZXH2hQhaeBhL5DJqSBylVGvQ7kIlhx+9+FPZrnEMa2edagafVfzKm93
-         0k8G72AzoO2FUDcvXiaO7B+B+eei1isqLfhYIUS0=
+        b=km9GvmngdZq79C+MzaGB8nqr2G2hUBnj764Y6Zvkg9+Zad9q6VXVq+tQZO+tGbLA6
+         0uGO41lNP0N3zDpyaSyAzmzRmYIu0dz/taCQ5p/XlEw9tGkXFwH3A2AZUj3Owmu4c5
+         VxKXWEhxvsY9Yu+UdwX4e49GE/6BuCMK+juDu/0E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+Cc:     Peter Rosin <peda@axentia.se>, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 062/274] spi: dw: Enable interrupts in accordance with DMA xfer mode
-Date:   Mon,  8 Jun 2020 19:02:35 -0400
-Message-Id: <20200608230607.3361041-62-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 069/274] spi: mux: repair mux usage
+Date:   Mon,  8 Jun 2020 19:02:42 -0400
+Message-Id: <20200608230607.3361041-69-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -52,68 +42,56 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+From: Peter Rosin <peda@axentia.se>
 
-[ Upstream commit 43dba9f3f98c2b184a19f856f06fe22817bfd9e0 ]
+[ Upstream commit a2b02e4623fb127fa65a13e4ac5aa56e4ae16291 ]
 
-It's pointless to track the Tx overrun interrupts if Rx-only SPI
-transfer is issued. Similarly there is no need in handling the Rx
-overrun/underrun interrupts if Tx-only SPI transfer is executed.
-So lets unmask the interrupts only if corresponding SPI
-transactions are implied.
+It is not valid to cache/short out selection of the mux.
 
-Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Link: https://lore.kernel.org/r/20200522000806.7381-3-Sergey.Semin@baikalelectronics.ru
+mux_control_select() only locks the mux until mux_control_deselect()
+is called. mux_control_deselect() may put the mux in some low power
+state or some other user of the mux might select it for other purposes.
+These things are probably not happening in the original setting where
+this driver was developed, but it is said to be a generic SPI mux.
+
+Also, the mux framework will short out the actual low level muxing
+operation when/if that is possible.
+
+Fixes: e9e40543ad5b ("spi: Add generic SPI multiplexer")
+Signed-off-by: Peter Rosin <peda@axentia.se>
+Link: https://lore.kernel.org/r/20200525104352.26807-1-peda@axentia.se
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-dw-mid.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/spi/spi-mux.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
-index 1058b8a6c8a0..e6c045ecffba 100644
---- a/drivers/spi/spi-dw-mid.c
-+++ b/drivers/spi/spi-dw-mid.c
-@@ -220,19 +220,23 @@ static struct dma_async_tx_descriptor *dw_spi_dma_prepare_rx(struct dw_spi *dws,
+diff --git a/drivers/spi/spi-mux.c b/drivers/spi/spi-mux.c
+index 4f94c9127fc1..cc9ef371db14 100644
+--- a/drivers/spi/spi-mux.c
++++ b/drivers/spi/spi-mux.c
+@@ -51,6 +51,10 @@ static int spi_mux_select(struct spi_device *spi)
+ 	struct spi_mux_priv *priv = spi_controller_get_devdata(spi->controller);
+ 	int ret;
  
- static int mid_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
- {
--	u16 dma_ctrl = 0;
-+	u16 imr = 0, dma_ctrl = 0;
++	ret = mux_control_select(priv->mux, spi->chip_select);
++	if (ret)
++		return ret;
++
+ 	if (priv->current_cs == spi->chip_select)
+ 		return 0;
  
- 	dw_writel(dws, DW_SPI_DMARDLR, 0xf);
- 	dw_writel(dws, DW_SPI_DMATDLR, 0x10);
+@@ -62,10 +66,6 @@ static int spi_mux_select(struct spi_device *spi)
+ 	priv->spi->mode = spi->mode;
+ 	priv->spi->bits_per_word = spi->bits_per_word;
  
--	if (xfer->tx_buf)
-+	if (xfer->tx_buf) {
- 		dma_ctrl |= SPI_DMA_TDMAE;
--	if (xfer->rx_buf)
-+		imr |= SPI_INT_TXOI;
-+	}
-+	if (xfer->rx_buf) {
- 		dma_ctrl |= SPI_DMA_RDMAE;
-+		imr |= SPI_INT_RXUI | SPI_INT_RXOI;
-+	}
- 	dw_writel(dws, DW_SPI_DMACR, dma_ctrl);
+-	ret = mux_control_select(priv->mux, spi->chip_select);
+-	if (ret)
+-		return ret;
+-
+ 	priv->current_cs = spi->chip_select;
  
- 	/* Set the interrupt mask */
--	spi_umask_intr(dws, SPI_INT_TXOI | SPI_INT_RXUI | SPI_INT_RXOI);
-+	spi_umask_intr(dws, imr);
- 
- 	dws->transfer_handler = dma_transfer;
- 
+ 	return 0;
 -- 
 2.25.1
 
