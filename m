@@ -2,31 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 417EF1F17D4
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jun 2020 13:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36C21F1801
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jun 2020 13:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729549AbgFHL2n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Jun 2020 07:28:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729310AbgFHL2n (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 8 Jun 2020 07:28:43 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        id S1729625AbgFHLlx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Jun 2020 07:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729648AbgFHLlw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Jun 2020 07:41:52 -0400
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75210C08C5C2;
+        Mon,  8 Jun 2020 04:41:51 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 06725206C3;
-        Mon,  8 Jun 2020 11:28:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591615722;
-        bh=YYeYKTubuK8uMi7Ksz+Evqk5yKQweEpTz0M3eAYB77A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PSssz0ftDvak2V1jNm/rzjE+e3b8E5DOT4ArB6KH14YgxL9PCjBbkPYWE8eSyESxe
-         HepGmVKPZIJj9kL9YwUIaPoveXgvhY9UdwnMctjrGkzYwv/Tu1YFc+cPW2+jw9jniL
-         oEXhLw2diniklq+QavDjLkejFy7X/SGrDRlF51yI=
-Date:   Mon, 8 Jun 2020 12:28:40 +0100
-From:   Mark Brown <broonie@kernel.org>
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 04F81100A8787;
+        Mon,  8 Jun 2020 13:41:49 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 99FFD43A8E1; Mon,  8 Jun 2020 13:41:48 +0200 (CEST)
+Date:   Mon, 8 Jun 2020 13:41:48 +0200
+From:   Lukas Wunner <lukas@wunner.de>
 To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>, lukas@wunner.de,
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -42,7 +41,7 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>, lukas@wunner.de,
         Martin Sperl <kernel@martin.sperl.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200608112840.GC4593@sirena.org.uk>
+Message-ID: <20200608114148.4bau4mdcvwgf25ut@wunner.de>
 References: <20200604212819.715-1-f.fainelli@gmail.com>
  <142d48ae-2725-1368-3e11-658449662371@arm.com>
  <20200605132037.GF5413@sirena.org.uk>
@@ -51,53 +50,41 @@ References: <20200604212819.715-1-f.fainelli@gmail.com>
  <d3fe8b56-83ef-8ef0-bb05-11c7cb2419f8@gmail.com>
  <a6f158e3-af51-01d9-331c-4bc8b6847abb@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hYooF8G/hrfVAmum"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <a6f158e3-af51-01d9-331c-4bc8b6847abb@arm.com>
-X-Cookie: I'm rated PG-34!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---hYooF8G/hrfVAmum
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
 On Mon, Jun 08, 2020 at 12:11:11PM +0100, Robin Murphy wrote:
-
-> Again, 2 cycles. The overhead of a static key alone is at least 50% of that.
-> And that's not even considering whether the change in code layout caused by
-> doubling up the IRQ handler might affect I-cache or branch predictor
-> behaviour, where a single miss stands to more than wipe out any perceived
-> saving. And all in code that has at least one obvious inefficiency left on
+> And all in code that has at least one obvious inefficiency left on
 > the table either way.
+
+Care to submit a patch to overcome that inefficiency?
+
 
 > This thread truly epitomises Knuth's "premature optimisation" quote... ;)
 
-In fairness the main reason this driver is so heavily tuned already (and
-has lead to some really nice improvements in the core) is that there are
-a number of users hitting 100% CPU utilization driving SPI devices on
-some of the older RPi hardware, IIRC around IIO type applications
-mostly.  I do tend to agree that this particular optimization is a bit
-marginal but there has been a lot of effort put into this.
+The thread came about because it can be determined at compile time
+whether the interrupt is going to be shared:
 
---hYooF8G/hrfVAmum
-Content-Type: application/pgp-signature; name="signature.asc"
+On the BCM2835 (Raspberry Pi 1), CONFIG_ARCH_MULTI_V6 is set and this
+SoC doesn't have multiple bcm2835-spi instances, so no shared interrupt.
 
------BEGIN PGP SIGNATURE-----
+The question is how to discern BCM2836/BCM2837 (Raspberry Pi 2/3), which
+do not have multiple instances, and BCM2711 (Raspberry Pi 4) which does.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7eIOcACgkQJNaLcl1U
-h9De6wf9HKTAjmkja1i1t3bz0jmsUYY8xaAjvc0kqwlkowJdSjfUHX/0ahbBtdkn
-2/kzIAPvx4B0oTHNyL3hNwMWo8hEGNhRQXwZeJjeR2MJREW6qqOXooWyFCDMJq/z
-R1W/rcSbLvGORXBiiFFhpBLEiY5rRRTZXNqw4An12tduk05ZOmpqVdKvCal0i48B
-UZ0u1AIdNOmauU8JnlhygidT3ErLH4EIFirK04AhVs8ZFVmKOvfTWzHR/zUXHzdD
-MWXKAFJcfcywFnWlqq4yeRpPFbu+c7/Ko4MJZNSpEViAzDUo7wy5SyDP4mXmC+tI
-BB0LR91M/J64eJtjSEN8MMW3rGEzwQ==
-=CMzm
------END PGP SIGNATURE-----
+The Raspberry Pi Foundation compiles BCM2711 kernels with CONFIG_ARM_LPAE=y,
+but Florian considered that kludgy as a discriminator and opted for
+runtime-detection via the compatible string instead.  If you've got
+a better idea please come forward.
 
---hYooF8G/hrfVAmum--
+Is "optimize shared IRQ support away if IS_ENABLED(CONFIG_ARCH_MULTI_V6),
+else leave it in" the best we can do?
+
+Thanks,
+
+Lukas
