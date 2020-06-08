@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A11E41F1611
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jun 2020 11:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CECC1F1609
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jun 2020 11:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729328AbgFHJ7p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Jun 2020 05:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S1729337AbgFHJ7r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Jun 2020 05:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729227AbgFHJ7p (ORCPT
+        with ESMTP id S1729259AbgFHJ7p (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Jun 2020 05:59:45 -0400
 Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E99C08C5C4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A04C08C5C5
         for <linux-spi@vger.kernel.org>; Mon,  8 Jun 2020 02:59:44 -0700 (PDT)
 Received: from ramsan ([IPv6:2a02:1810:ac12:ed60:c85f:a5bf:b1bd:702b])
         by michel.telenet-ops.be with bizsmtp
-        id oZzi2200H0R8aca06Zzioq; Mon, 08 Jun 2020 11:59:42 +0200
+        id oZzi2200M0R8aca06Zzior; Mon, 08 Jun 2020 11:59:42 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan with esmtp (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1jiEZC-0007PI-H8; Mon, 08 Jun 2020 11:59:42 +0200
+        id 1jiEZC-0007PN-JS; Mon, 08 Jun 2020 11:59:42 +0200
 Received: from geert by rox.of.borg with local (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1jiEZC-0007xL-Ez; Mon, 08 Jun 2020 11:59:42 +0200
+        id 1jiEZC-0007xR-Ho; Mon, 08 Jun 2020 11:59:42 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Chris Brandt <chris.brandt@renesas.com>, linux-spi@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org, linux-sh@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 6/8] spi: rspi: Increase bit rate range for QSPI
-Date:   Mon,  8 Jun 2020 11:59:38 +0200
-Message-Id: <20200608095940.30516-7-geert+renesas@glider.be>
+Subject: [PATCH 8/8] spi: rspi: Fill in controller speed limits
+Date:   Mon,  8 Jun 2020 11:59:40 +0200
+Message-Id: <20200608095940.30516-9-geert+renesas@glider.be>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200608095940.30516-1-geert+renesas@glider.be>
 References: <20200608095940.30516-1-geert+renesas@glider.be>
@@ -40,52 +40,72 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Increase bit rate range for QSPI by extending the range of supported
-dividers:
-  1. QSPI supports a divider of 1, by setting SPBR to zero, increasing
-     the upper limit from 48.75 to 97.5 MHz,
-  2. Make use of the Bit Rate Frequency Division Setting field in
-     Command Registers, to decrease the lower limit from 191 to 24 kbps.
+Fill in the controller speed limits, so the SPI core can use them for
+validating SPI transfers, and adjusting them where needed.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/spi/spi-rspi.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ drivers/spi/spi-rspi.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
-index ea3f2680d3c13e02..38c0cd7febabf114 100644
+index 2b5334e22ae421b5..e39fd38f5180efb3 100644
 --- a/drivers/spi/spi-rspi.c
 +++ b/drivers/spi/spi-rspi.c
-@@ -334,14 +334,26 @@ static int rspi_rz_set_config_register(struct rspi_data *rspi, int access_size)
-  */
- static int qspi_set_config_register(struct rspi_data *rspi, int access_size)
- {
--	int spbr;
+@@ -243,6 +243,8 @@ struct spi_ops {
+ 	int (*transfer_one)(struct spi_controller *ctlr,
+ 			    struct spi_device *spi, struct spi_transfer *xfer);
+ 	u16 extra_mode_bits;
++	u16 min_div;
++	u16 max_div;
+ 	u16 flags;
+ 	u16 fifo_size;
+ 	u8 num_hw_ss;
+@@ -1181,6 +1183,8 @@ static int rspi_remove(struct platform_device *pdev)
+ static const struct spi_ops rspi_ops = {
+ 	.set_config_register =	rspi_set_config_register,
+ 	.transfer_one =		rspi_transfer_one,
++	.min_div =		2,
++	.max_div =		4096,
+ 	.flags =		SPI_CONTROLLER_MUST_TX,
+ 	.fifo_size =		8,
+ 	.num_hw_ss =		2,
+@@ -1189,6 +1193,8 @@ static const struct spi_ops rspi_ops = {
+ static const struct spi_ops rspi_rz_ops = {
+ 	.set_config_register =	rspi_rz_set_config_register,
+ 	.transfer_one =		rspi_rz_transfer_one,
++	.min_div =		2,
++	.max_div =		4096,
+ 	.flags =		SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX,
+ 	.fifo_size =		8,	/* 8 for TX, 32 for RX */
+ 	.num_hw_ss =		1,
+@@ -1199,6 +1205,8 @@ static const struct spi_ops qspi_ops = {
+ 	.transfer_one =		qspi_transfer_one,
+ 	.extra_mode_bits =	SPI_TX_DUAL | SPI_TX_QUAD |
+ 				SPI_RX_DUAL | SPI_RX_QUAD,
++	.min_div =		1,
++	.max_div =		4080,
+ 	.flags =		SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX,
+ 	.fifo_size =		32,
+ 	.num_hw_ss =		1,
+@@ -1260,6 +1268,7 @@ static int rspi_probe(struct platform_device *pdev)
+ 	int ret;
+ 	const struct rspi_plat_data *rspi_pd;
+ 	const struct spi_ops *ops;
 +	unsigned long clksrc;
-+	int brdv = 0, spbr;
  
- 	/* Sets output mode, MOSI signal, and (optionally) loopback */
- 	rspi_write8(rspi, rspi->sppcr, RSPI_SPPCR);
- 
- 	/* Sets transfer bit rate */
--	spbr = DIV_ROUND_UP(clk_get_rate(rspi->clk), 2 * rspi->speed_hz);
--	rspi_write8(rspi, clamp(spbr, 0, 255), RSPI_SPBR);
+ 	ctlr = spi_alloc_master(&pdev->dev, sizeof(struct rspi_data));
+ 	if (ctlr == NULL)
+@@ -1312,6 +1321,9 @@ static int rspi_probe(struct platform_device *pdev)
+ 	ctlr->unprepare_message = rspi_unprepare_message;
+ 	ctlr->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH | SPI_LSB_FIRST |
+ 			  SPI_LOOP | ops->extra_mode_bits;
 +	clksrc = clk_get_rate(rspi->clk);
-+	if (rspi->speed_hz >= clksrc) {
-+		spbr = 0;
-+	} else {
-+		spbr = DIV_ROUND_UP(clksrc, 2 * rspi->speed_hz);
-+		while (spbr > 255 && brdv < 3) {
-+			brdv++;
-+			spbr = DIV_ROUND_UP(spbr, 2);
-+		}
-+		spbr = clamp(spbr, 0, 255);
-+	}
-+	rspi_write8(rspi, spbr, RSPI_SPBR);
-+	rspi->spcmd |= SPCMD_BRDV(brdv);
- 
- 	/* Disable dummy transmission, set byte access */
- 	rspi_write8(rspi, 0, RSPI_SPDCR);
++	ctlr->min_speed_hz = DIV_ROUND_UP(clksrc, ops->max_div);
++	ctlr->max_speed_hz = DIV_ROUND_UP(clksrc, ops->min_div);
+ 	ctlr->flags = ops->flags;
+ 	ctlr->dev.of_node = pdev->dev.of_node;
+ 	ctlr->use_gpio_descriptors = true;
 -- 
 2.17.1
 
