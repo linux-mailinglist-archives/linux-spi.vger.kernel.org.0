@@ -2,78 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF351F3B2B
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jun 2020 14:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4981F3C43
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jun 2020 15:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728416AbgFIMyu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Jun 2020 08:54:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57598 "EHLO mail.kernel.org"
+        id S1728841AbgFIN0U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Jun 2020 09:26:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43622 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728217AbgFIMyt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 9 Jun 2020 08:54:49 -0400
+        id S1727787AbgFIN0U (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 9 Jun 2020 09:26:20 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1C2720820;
-        Tue,  9 Jun 2020 12:54:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7946A2074B;
+        Tue,  9 Jun 2020 13:26:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591707289;
-        bh=2MPHkxwzXyONifMaPM7sXNmQR9wT77/yj06LmZf+Jb0=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=DIF86yhHwT5I1CvFf89UUgertwlbpk7lVYisk5QSauuw25o1Kd87gyzW33YCHVIie
-         d++esUMQkMN4rq8pFAPrfipMQGPh6IJKxfwFfssjVA0s++m6B8aTzQCbvMnadJSdQ+
-         UmFD/RQ+0c0bouWh2xAGKWoTLT71ufcrQLQKwTus=
-Date:   Tue, 09 Jun 2020 13:54:47 +0100
+        s=default; t=1591709180;
+        bh=PD6ch/MJQc9epSsTqGkjMHuE3Bn2LG6EcC5hHXFGdq8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m64ifHeq25sd9NUSmmUGWjukAom8pausfLbRSSwhrcFU3eCJVbVlg0ILMpKb/Vked
+         cAbbrFQLB4CNUK9xlRfrHUjsjod+WFOu1XpWokyplWBQ/zHrUOBIWmxvht7qCAMuLC
+         RQOC4Mh+5nXlCKj0YAB/Fe3BUxAOyMCTAMvT3N7k=
+Date:   Tue, 9 Jun 2020 14:26:18 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-sh@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Chris Brandt <chris.brandt@renesas.com>,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20200608095940.30516-1-geert+renesas@glider.be>
-References: <20200608095940.30516-1-geert+renesas@glider.be>
-Subject: Re: [PATCH 0/8] spi: rspi: Bit rate improvements
-Message-Id: <159170728714.39829.17212206680435918911.b4-ty@kernel.org>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "martin.fuzzey@flowbird.group" <martin.fuzzey@flowbird.group>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Robin Gong <yibin.gong@nxp.com>
+Subject: Re: (EXT) Re: [PATCH v9 RESEND 01/13] spi: imx: add
+ dma_sync_sg_for_device after fallback from dma
+Message-ID: <20200609132617.GF4583@sirena.org.uk>
+References: <1591485677-20533-1-git-send-email-yibin.gong@nxp.com>
+ <1591485677-20533-2-git-send-email-yibin.gong@nxp.com>
+ <20200608143458.GH4593@sirena.org.uk>
+ <VE1PR04MB66388F89015F774EE3FFF69D89850@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200608153139.GI4593@sirena.org.uk>
+ <59ce3620-00b9-bac1-30e1-011a29583642@arm.com>
+ <VE1PR04MB6638B1EC49D295C64292B7BD89820@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <bcfc3637-65af-577a-ddbd-890b6c83a6e6@arm.com>
+ <4a663b38fe5c6b2ee37049fb0dcd88b70dbf232e.camel@ew.tq-group.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="924gEkU1VlJlwnwX"
+Content-Disposition: inline
+In-Reply-To: <4a663b38fe5c6b2ee37049fb0dcd88b70dbf232e.camel@ew.tq-group.com>
+X-Cookie: Be careful!  Is it classified?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 8 Jun 2020 11:59:32 +0200, Geert Uytterhoeven wrote:
-> 	Hi Mark,
-> 
-> This patch series contains several improvements for the Renesas SPI/QSPI
-> driver related to bit rate configuration.
-> 
-> This has been tested on RSK+RZA1 (RSPI) and R-Car M2-W/Koelsch (QSPI),
-> using a scope and logic analyzer, except for the by-one divider on QSPI.
-> This has not been tested on legacy SuperH, due to lack of hardware.
-> 
-> [...]
 
-Applied to
+--924gEkU1VlJlwnwX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Tue, Jun 09, 2020 at 12:09:09PM +0200, Matthias Schiffer wrote:
 
-Thanks!
+> I assume the actual issue is that the SDMA controller is considered
+> registered before the firmware load has finished, but I have no idea
+> how feasible it would be to change that (some comments in the code
+> explain why this currently isn't the case).
 
-[1/1] spi: rspi: Use requested instead of maximum bit rate
-      commit: e0fe70051f12c25c4afb04cb10ca8648c6e761cf
+Right, this is what's causing trouble (or at least the DMA driver not
+doing PIO behind the driver I guess but that's pretty nasty).
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--924gEkU1VlJlwnwX
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-----BEGIN PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7fjfkACgkQJNaLcl1U
+h9BfBAf8CV0CLky89IU/mEpL41EP3zYDh1CpOj14T0/q0rrhzJssgAgiQpuqedGZ
++DCbmgd/BwcI8pzX9h8VKeAd+A3aA7VX99WyBCuXC0HlTSpVXfNToMQJbPtTnZ6Z
+kOgDEW/grpy/YDCsJCbShsIhns0ziINTO7tY9uPaPqBXd9oMDgFLdWRT/FprI3Ev
+k7hg5PoMjblnT55/96ZZgOCUp8OsE1U9vI+o0gModN1ksRouto/eMfei4IibQA9s
+foKiP7g14rArPdSbl+JKhnjPvIt6wrxoNdD5TCh1ZH7u/MI7VrSRr5+OGhguRzha
+K7/XCESdTGTHW+s5NU5gyADCheFsvg==
+=iBCT
+-----END PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--924gEkU1VlJlwnwX--
