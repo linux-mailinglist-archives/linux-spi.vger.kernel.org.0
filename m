@@ -2,172 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFD41F3F90
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jun 2020 17:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594471F417B
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jun 2020 18:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbgFIPiJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Jun 2020 11:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730887AbgFIPiF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Jun 2020 11:38:05 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D749C08C5C2
-        for <linux-spi@vger.kernel.org>; Tue,  9 Jun 2020 08:38:05 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id h95so1568104pje.4
-        for <linux-spi@vger.kernel.org>; Tue, 09 Jun 2020 08:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zNXPTuPYITPlXUf9e7kBdBv6V29pBmsp1U+7kcfXIt0=;
-        b=KP3OHZBJkKR3Lj6uCMOBqyToXZJQKsuReIBf8UJe/AqNMp7qafeDSi5CBzpGfzbAuH
-         +XLPg+AkiDaSsSMQDhSD/m1nySLMmUDcScF+LdeMcknzD5SFbN4tf7DSgGFZw1/NwKuV
-         4jKKzu0BsDeptbc5+jmKEGCb59pJrM6wLEh1A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zNXPTuPYITPlXUf9e7kBdBv6V29pBmsp1U+7kcfXIt0=;
-        b=dEo1dUuI+DhfJLiTcKHJlmYmI+MfzTMsRtQM+AeCb5YqdVOnVOItmL4YPq9DvtcLCt
-         qRnX/8Zik04er4AXE6ZCFyJmUfTM0s+MkrgU33/d8Mt4xR247qlsf5mOtxYs5iqV8cH+
-         TszXIWPnoWHYyXATWTjIufy/nLj5A+iFzgtRTz3nb+Bl1JQrCP7NS3OG1vKyTGgpXq3u
-         3t4eZYjeof3q6mpH9zGbcHOfoyvqsV7CZRdB6WwtbJfCnVlJZkfNAckERv7WuufPEqUI
-         6yPgAy0eUEQetRtSo3dHQUuXlxVGuT5xQjNYeNUE0iR/Gk6G0xBlhsZkJMC8GP2Ris4s
-         nC1w==
-X-Gm-Message-State: AOAM533C1k/xCCSRhsVUJEnS1EsAi+KQJQrzNoodL9hAex8rkagFJgoJ
-        8DeuQB/X+AyRjpjUrbyS4+RO7Q==
-X-Google-Smtp-Source: ABdhPJyLZg1krDhLm4HG19/WnYesweBfZBwBFVjHitwsKq7GU5d3/yfPS2CEYvHEXWAL2zbkqjxZEA==
-X-Received: by 2002:a17:902:aa48:: with SMTP id c8mr3979439plr.128.1591717084665;
-        Tue, 09 Jun 2020 08:38:04 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id q6sm10170213pff.163.2020.06.09.08.38.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2020 08:38:03 -0700 (PDT)
-Date:   Tue, 9 Jun 2020 08:38:02 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org, msavaliy@codeaurora.org
-Subject: Re: [PATCH V7 RESEND 0/7] Add interconnect support to QSPI and QUP
- drivers
-Message-ID: <20200609153802.GS4525@google.com>
-References: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
+        id S1731220AbgFIQz6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Jun 2020 12:55:58 -0400
+Received: from mout-p-101.mailbox.org ([80.241.56.151]:47362 "EHLO
+        mout-p-101.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731061AbgFIQz5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Jun 2020 12:55:57 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 49hGTk6GYmzKmhw;
+        Tue,  9 Jun 2020 18:55:54 +0200 (CEST)
+Authentication-Results: hefe.heinlein-support.de (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mailbox.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1591721753;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=j7Bl0e/NNgBksh6phq/ZeF/FFbH797+bKn2Kamf4oqw=;
+        b=JJDTCht9yz33nts07y6Sn5sCv9jPSgwxEyVW8LooI1WFFxUrSymVvrihW3wPUIpwHFV724
+        JpgZPYGrlyzRTjQF6DFwP8TAHu4p3d7fS98hczoEDPQo2ws2psrQSd6ZIZKaWvT1qwixoO
+        akOBZtX5yoBIxY/8h/eaINUPJnJJPzynla8XGhS6CFJ31pXShZ+B+fjwKkxUfHYWKQRodQ
+        31Kn4BhdqhYXfSOOu6t/elsAbSaeGSGWvwtcZ8SmTRtpqSNcFZz6jFqyk+gh1K1MZiSvWU
+        26UfxhLn+ITqOAtcwgwRBFl5KcckmmhRz80TWBw8cG6OMEht4Wlqv6zrp24epQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mailbox.org; h=
+        content-transfer-encoding:mime-version:message-id:date:date
+        :subject:subject:from:from:received; s=mail20150812; t=
+        1591721750; bh=+NSaqjpCbS41rHQqGIN0xjmkj6DIbcJlPX1xQbzYjGc=; b=l
+        sYJ0+yH4epSS2hnDVbXx3ZI+wcHgyf24ERXrR2EjgjZfFUQncTj55uvK2rMheySb
+        UYS0V/FoHAK4fY31SW4Wl6BPeEKdLXCpzw3AbHBiqE2uY8DCjLtbcVlMPan7qrkN
+        zbP0TURvmld/GrerxafQt+BIM9KGM0dIqITAMJMaHgsxgVgrS9u5NaKKdJKgQCuX
+        i8bs7cDy5Aiel/6CHq0yststTk16XKlx1JFr5yklIyyN9BiVRf1Oa879Gfo/iBO4
+        VsitGoV7Vckg/HPLk2wPfYsqCWkFwYLQ6mrXTGulf0p87KGZcAyqRrOmiVydzJbn
+        BZS4X2AQikwSoOLYHOjoA==
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id nGIsqmsi5gm7; Tue,  9 Jun 2020 18:55:50 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@mailbox.org>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Alexander Stein <alexander.stein@mailbox.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 1/1] spi: dt-bindings: amlogic, meson-gx-spicc: Fix schema for meson-g12a
+Date:   Tue,  9 Jun 2020 18:55:27 +0200
+Message-Id: <20200609165527.55183-1-alexander.stein@mailbox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: C097A1761
+X-Rspamd-Score: 0.89 / 15.00 / 15.00
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Akash,
+This fixes the following warning during dtbs_check:
+---
+spi@13000: clock-names: Additional items are not allowed ('pclk' was unexpected)
+spi@13000: clock-names: ['core', 'pclk'] is too long
+spi@13000: clocks: [[2, 23], [2, 258]] is too long
+spi@15000: clock-names: Additional items are not allowed ('pclk' was unexpected)
+spi@15000: clock-names: ['core', 'pclk'] is too long
+spi@15000: clocks: [[2, 29], [2, 261]] is too long
+---
+Conditional schema properties don't overwrite others. Instead of
+restrictions have to be validated. So general clock amount is 1-2 and
+depending on the actual device type limit the mount to 1 or 2.
 
-On Tue, Jun 09, 2020 at 11:26:27AM +0530, Akash Asthana wrote:
-> This patch series is based on tag "next-20200608" of linux-next tree.
+Signed-off-by: Alexander Stein <alexander.stein@mailbox.org>
+---
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 26 ++++++++++++-------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-Great, I was concerned there would be conflicts without a rebase.
+diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+index 9147df29022a..38efb50081e3 100644
+--- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
++++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+@@ -34,12 +34,15 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
++    items:
++      - description: controller register bus clock
++      - description: baud rate generator and delay control clock
+ 
+   clock-names:
+-    description: input clock for the baud rate generator
+-    items:
+-      - const: core
++    minItems: 1
++    maxItems: 2
+ 
+ if:
+   properties:
+@@ -51,17 +54,22 @@ if:
+ then:
+   properties:
+     clocks:
+-      contains:
+-        items:
+-          - description: controller register bus clock
+-          - description: baud rate generator and delay control clock
++      minItems: 2
+ 
+     clock-names:
+-      minItems: 2
+       items:
+         - const: core
+         - const: pclk
+ 
++else:
++  properties:
++    clocks:
++      maxItems: 1
++
++    clock-names:
++      items:
++        - const: core
++
+ required:
+   - compatible
+   - reg
+-- 
+2.27.0
 
-> Resending V7 patch with minor change in patch 6/7 (QSPI).
-
-It's not a pure resend, since it has changes in "spi:
-spi-qcom-qspi: Add interconnect support":
-
-  Changes in Resend V7:
-   - As per Matthias comment removed "unsigned int avg_bw_cpu" from
-      struct qcom_qspi as we are using that variable only once.
-
-Please increase the version number whenever you make changes or rebase.
-
-Maintainers tend to be busy, before doing actual resends folks often
-send a ping/inquiry on the original patch/series, and only resend it when
-they didn't receive a response after some time.
-
-Thanks
-
-Matthias
-
-> dt-binding patch for QUP drivers.
->  - https://patchwork.kernel.org/patch/11534149/ [Convert QUP bindings
->         to YAML and add ICC, pin swap doc]
-> 
-> High level design:
->  - QUP wrapper/common driver.
->    Vote for QUP core on behalf of earlycon from probe.
->    Remove BW vote during earlycon exit call
-> 
->  - SERIAL driver.
->    Vote only for CPU/CORE path because driver is in FIFO mode only
->    Vote/unvote from qcom_geni_serial_pm func.
->    Bump up the CPU vote from set_termios call based on real time need
-> 
->  - I2C driver.
->    Vote for CORE/CPU/DDR path
->    Vote/unvote from runtime resume/suspend callback
->    As bus speed for I2C is fixed from probe itself no need for bump up.
-> 
->  - SPI QUP driver.
->    Vote only for CPU/CORE path because driver is in FIFO mode only
->    Vote/unvote from runtime resume/suspend callback
->    Bump up CPU vote based on real time need per transfer.
-> 
->  - QSPI driver.
->    Vote only for CPU path
->    Vote/unvote from runtime resume/suspend callback
->    Bump up CPU vote based on real time need per transfer.
-> 
-> Changes in V2:
->  - Add devm_of_icc_get() API interconnect core.
->  - Add ICC support to common driver to fix earlyconsole crash.
-> 
-> Changes in V3:
->  - Define common ICC APIs in geni-se driver and use it across geni based
->    I2C,SPI and UART driver.
-> 
-> Changes in V4:
->  - Add a patch to ICC core to scale peak requirement
->    as twice of average if it is not mentioned explicilty.
-> 
-> Changes in V5:
->  - As per Georgi's suggestion removed patch from ICC core for assuming
->    peak_bw as twice of average when it's not mentioned, instead assume it
->    equall to avg_bw and keep this assumption in ICC client itself.
->  - As per Matthias suggestion use enum for GENI QUP ICC paths.
-> 
-> Changes in V6:
->  - No Major change
-> 
-> Changes in V7:
->  - As per Matthias's comment removed usage of peak_bw variable because we don't
->    have explicit peak requirement, we were voting peak = avg and this can be
->    tracked using single variable for avg bw.
->  - As per Matthias's comment improved print log.
-> 
-> Akash Asthana (7):
->   soc: qcom: geni: Support for ICC voting
->   soc: qcom-geni-se: Add interconnect support to fix earlycon crash
->   i2c: i2c-qcom-geni: Add interconnect support
->   spi: spi-geni-qcom: Add interconnect support
->   tty: serial: qcom_geni_serial: Add interconnect support
->   spi: spi-qcom-qspi: Add interconnect support
->   arm64: dts: sc7180: Add interconnect for QUP and QSPI
-> 
->  arch/arm64/boot/dts/qcom/sc7180.dtsi  | 127 ++++++++++++++++++++++++++++
->  drivers/i2c/busses/i2c-qcom-geni.c    |  26 +++++-
->  drivers/soc/qcom/qcom-geni-se.c       | 150 ++++++++++++++++++++++++++++++++++
->  drivers/spi/spi-geni-qcom.c           |  29 ++++++-
->  drivers/spi/spi-qcom-qspi.c           |  56 ++++++++++++-
->  drivers/tty/serial/qcom_geni_serial.c |  38 ++++++++-
->  include/linux/qcom-geni-se.h          |  40 +++++++++
->  7 files changed, 460 insertions(+), 6 deletions(-)
-> 
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
-> 
