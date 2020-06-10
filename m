@@ -2,125 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 495F41F4863
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jun 2020 22:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFD31F506B
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Jun 2020 10:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgFIUyh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Jun 2020 16:54:37 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:40464 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727788AbgFIUyd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Jun 2020 16:54:33 -0400
-X-IronPort-AV: E=Sophos;i="5.73,493,1583161200"; 
-   d="scan'208";a="49022066"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 10 Jun 2020 05:54:28 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2D3C340EA258;
-        Wed, 10 Jun 2020 05:54:25 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 2/2] ARM: dts: r8a7742: Add MSIOF[0123] support
-Date:   Tue,  9 Jun 2020 21:54:14 +0100
-Message-Id: <1591736054-568-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1591736054-568-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1726852AbgFJIiW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Jun 2020 04:38:22 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34871 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726758AbgFJIiC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Jun 2020 04:38:02 -0400
+Received: by mail-oi1-f195.google.com with SMTP id k4so1380885oik.2;
+        Wed, 10 Jun 2020 01:38:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wpr/vh763HjeZP+zP2FvdrT65wytnNPLkj0hJH5/HSU=;
+        b=pLzci9jHCnsmZsXD0DiNzC3IFlDNKiVrp85s8t1tBs9HXAwxY+1OOqA1vJzYbh4+d6
+         3BbX+Rogr0hOXtkrf1pu/WDtKQedB4GBAFBTjRXjdmtVtaxffhQ+bvWT4PjYSbP/sVhQ
+         +vTUWBn7DHwPFqDc4KW3a1gb1Ph4Go/waLDaLy9J4ecO4QHtYaZyNHMCFUOzXYVIZJk8
+         U1hRqEgZlyroFNu2w3ndf3EqNArnJyI+wOcTMXAGySD1a+s5ee0XorkM+zXZcxBCmA+i
+         TzXUjREXs1sQCqjuJfBHrZyDglY6rgG1G7q33d/uKzLL7nETPo834H67JAphc3DkCGqu
+         9LKQ==
+X-Gm-Message-State: AOAM533t8HTUbbUcj8fhTCWnHdr3QwepnDExBHgL/+1EG3iHdwLkKfEI
+        HJ1UzdXBeFCsvfgM9NJYxNTwIp9tTRtXWFxghDY=
+X-Google-Smtp-Source: ABdhPJy/1U4soGDENhmLUY6tvEPackTNczKlnXGG0s9S/MpJevjbk+u+NWI9rauDUQubBnlkMAamXhasUns0Cr7+PGk=
+X-Received: by 2002:aca:4255:: with SMTP id p82mr1559149oia.153.1591778280645;
+ Wed, 10 Jun 2020 01:38:00 -0700 (PDT)
+MIME-Version: 1.0
 References: <1591736054-568-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1591736054-568-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1591736054-568-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 10 Jun 2020 10:37:45 +0200
+Message-ID: <CAMuHMdWGs+UHCNXPc3TCAiRTX3M_8FLUAG5pke+=ZDr0uaP3_g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: spi: renesas,sh-msiof: Add r8a7742 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add the DT nodes needed by MSIOF[0123] interfaces to the SoC dtsi.
+On Tue, Jun 9, 2020 at 10:54 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document RZ/G1H (R8A7742) SoC bindings.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
----
- arch/arm/boot/dts/r8a7742.dtsi | 64 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/arch/arm/boot/dts/r8a7742.dtsi b/arch/arm/boot/dts/r8a7742.dtsi
-index 08af9e2..08d89cf 100644
---- a/arch/arm/boot/dts/r8a7742.dtsi
-+++ b/arch/arm/boot/dts/r8a7742.dtsi
-@@ -853,6 +853,70 @@
- 			status = "disabled";
- 		};
- 
-+		msiof0: spi@e6e20000 {
-+			compatible = "renesas,msiof-r8a7742",
-+				     "renesas,rcar-gen2-msiof";
-+			reg = <0 0xe6e20000 0 0x0064>;
-+			interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 0>;
-+			dmas = <&dmac0 0x51>, <&dmac0 0x52>,
-+			       <&dmac1 0x51>, <&dmac1 0x52>;
-+			dma-names = "tx", "rx", "tx", "rx";
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		msiof1: spi@e6e10000 {
-+			compatible = "renesas,msiof-r8a7742",
-+				     "renesas,rcar-gen2-msiof";
-+			reg = <0 0xe6e10000 0 0x0064>;
-+			interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 208>;
-+			dmas = <&dmac0 0x55>, <&dmac0 0x56>,
-+			       <&dmac1 0x55>, <&dmac1 0x56>;
-+			dma-names = "tx", "rx", "tx", "rx";
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 208>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		msiof2: spi@e6e00000 {
-+			compatible = "renesas,msiof-r8a7742",
-+				     "renesas,rcar-gen2-msiof";
-+			reg = <0 0xe6e00000 0 0x0064>;
-+			interrupts = <GIC_SPI 158 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 205>;
-+			dmas = <&dmac0 0x41>, <&dmac0 0x42>,
-+			       <&dmac1 0x41>, <&dmac1 0x42>;
-+			dma-names = "tx", "rx", "tx", "rx";
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 205>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		msiof3: spi@e6c90000 {
-+			compatible = "renesas,msiof-r8a7742",
-+				     "renesas,rcar-gen2-msiof";
-+			reg = <0 0xe6c90000 0 0x0064>;
-+			interrupts = <GIC_SPI 159 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 215>;
-+			dmas = <&dmac0 0x45>, <&dmac0 0x46>,
-+			       <&dmac1 0x45>, <&dmac1 0x46>;
-+			dma-names = "tx", "rx", "tx", "rx";
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 215>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
- 		rcar_sound: sound@ec500000 {
- 			/*
- 			 * #sound-dai-cells is required
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.7.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
