@@ -2,101 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F3E1F679F
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 14:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7498D1F6864
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 14:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728276AbgFKMKI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Jun 2020 08:10:08 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:41556 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728264AbgFKMKH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Jun 2020 08:10:07 -0400
-Received: by mail-oi1-f195.google.com with SMTP id a21so5159831oic.8;
-        Thu, 11 Jun 2020 05:10:06 -0700 (PDT)
+        id S1726537AbgFKM4l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Jun 2020 08:56:41 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:30638 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726346AbgFKM4l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Jun 2020 08:56:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591880199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fq4jWTmxvdTOixqCSNHPWC+W1UeHSFDB5a+MOgnJLHI=;
+        b=Kt8aYFcKtx2IgPLbfV1/r5bdDxq0nzLghzV9ZtxagQFzeiDufE03acC49Ct0Sba5rzYB90
+        L0OaDxqpbaPCh+WHGHztJguE0Gdd2b+/oHgPYQffuKfW1LJyzC49NnyAYrzToZSkMrYIP9
+        FlnTCpuglZXXmZBeTghe8Tw7yquRorc=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-499-8r8peULgN8yvMtj1vxG2Bw-1; Thu, 11 Jun 2020 08:56:38 -0400
+X-MC-Unique: 8r8peULgN8yvMtj1vxG2Bw-1
+Received: by mail-qt1-f198.google.com with SMTP id q21so4697839qtn.20
+        for <linux-spi@vger.kernel.org>; Thu, 11 Jun 2020 05:56:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lcgXSywPB08+B3kJ8noSU/N9DMgy+4xXYB/CxnY7Amg=;
-        b=YlTfujDe8X3ycDRnEGMpvy3bI3Tq0C2HNBKvyHBn+b3eKbGpjTj1BPopvaFzcm4c6+
-         /XkYAFrBbV3DlbIRnPnht+/dvtzUUJuQgNGQj2xMw6Ul4cPlp/m7hkFqmyzWlhJ4Xtjo
-         T2WX62k3daDoVOGM6wssDUASmM4Ac+CpycC89ua56x/65V55krS9VlGA3/Dba9NiySJ7
-         W5l+wxVK10jf53cb6tr9wdqb5cRSIbnDas91RDLiKfSIDmDMr4krpyflRcu5waBMHdAx
-         X227idctfxto4tJgrqUeyKACQ2q+CKgBxPTy4bTMwYRwh2QVmYSdbvWE8n+dOEzR590A
-         FooQ==
-X-Gm-Message-State: AOAM533KxYHZl4DFqx84sQMs1Mw0mnlVVVL5iVqq3DColwRfvGpgjm6v
-        emJr3ARUxdoeOommDDoIs11UR9LsGfc8bhDh37OP/Q==
-X-Google-Smtp-Source: ABdhPJxkw8nBqOmM/doJ6JuZq8minHv6eu19aEc1wibYnTv7Nh6qLqRMw7fVRT/pWWz4P5jRTR0aBz/eVhKqpwoAW/s=
-X-Received: by 2002:aca:1a19:: with SMTP id a25mr6016101oia.54.1591877405773;
- Thu, 11 Jun 2020 05:10:05 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=Fq4jWTmxvdTOixqCSNHPWC+W1UeHSFDB5a+MOgnJLHI=;
+        b=tB41W83xfYTpj5bUyXITCkzORrEWQAOfoKOkRC2Vakxu9yU7xYj++UWbSm4b3cXR5+
+         XXJjgrGLa1nfWpa/Mqv1r1rHKRddqZvnX7mRrgTFomdfa1yQJWRKAnFJziih9wc0x7Em
+         31W+aOcgQ3vCeA+I7LeFD2eClrwW0ZwMypwpPUyhbgZ9OIdn+viUBlYq58KW5g4CBaHe
+         fz/oZ33HdTC1616I/WNBPL+YQpXvQMqXXWFSG5Mm5NPqlRm7WpAWvpjTWOnoKnrFGArh
+         eNa2wU9i/8yTKJ0YCrXRaT0/lIbrgwxZlSfED9tFew7XBbXxaMORzNHOs/KcRzu2CF4E
+         uiZg==
+X-Gm-Message-State: AOAM533FZA6D3D6/4h7Yuu7DxO/F7KZeKtrk4CkOWzLKQq2DbOTjYbZN
+        5UZtfB9kwwj+qsRn7V5lo6cOf3LupV3mbuH/EsKCV5SyXB+ntDmJKD6DxiTrJOK3yjocAi8sCI2
+        nBxDH1qf7+J4/bFaArYrF
+X-Received: by 2002:a05:6214:b33:: with SMTP id w19mr7223587qvj.7.1591880197758;
+        Thu, 11 Jun 2020 05:56:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx+JyKVnjOWvjSt9Z4+PqIeU1E00Ib2Tef8IcgZTQ1YgELkIq0HkZauAQyYv/J2UaWpMgxv7Q==
+X-Received: by 2002:a05:6214:b33:: with SMTP id w19mr7223575qvj.7.1591880197557;
+        Thu, 11 Jun 2020 05:56:37 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id b4sm2229646qtp.63.2020.06.11.05.56.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jun 2020 05:56:36 -0700 (PDT)
+Subject: Re: [PATCH 0/6] Add more configuration and regmap support for
+ spi-altera
+To:     Xu Yilun <yilun.xu@intel.com>, broonie@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     hao.wu@intel.com, matthew.gerlach@linux.intel.com,
+        russell.h.weight@intel.com
+References: <1591845911-10197-1-git-send-email-yilun.xu@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <fb4a6f25-9f93-7618-d64e-20b93b1fcade@redhat.com>
+Date:   Thu, 11 Jun 2020 05:56:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <1591736054-568-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1591736054-568-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200610110810.GD5005@sirena.org.uk> <CAMuHMdWCHeSB9mjpdSX_-qxwo33kMb1_1R93CjBtVBPFPKkEOg@mail.gmail.com>
- <20200610164928.GJ5005@sirena.org.uk> <CAMuHMdUNo0tMxWsnXi4q8NwubPWHqTvzGOA-0hOr7oo2cRvvUg@mail.gmail.com>
- <20200611085004.GC4671@sirena.org.uk>
-In-Reply-To: <20200611085004.GC4671@sirena.org.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 Jun 2020 14:09:54 +0200
-Message-ID: <CAMuHMdUBp79ix5hPjXBARTrOokg-pWY+Rdno9-dd6dBTv+TRcw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: spi: renesas,sh-msiof: Add r8a7742 support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1591845911-10197-1-git-send-email-yilun.xu@intel.com>
+Content-Language: en-US
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+This patchset looks good to me.
 
-On Thu, Jun 11, 2020 at 10:50 AM Mark Brown <broonie@kernel.org> wrote:
-> On Wed, Jun 10, 2020 at 09:18:19PM +0200, Geert Uytterhoeven wrote:
-> > On Wed, Jun 10, 2020 at 6:49 PM Mark Brown <broonie@kernel.org> wrote:
+Reviewed-by: Tom Rix <trix@redhat.com>
+
+Thanks,
+
+Tom
+
+On 6/10/20 8:25 PM, Xu Yilun wrote:
+> This patchset adds platform_data for spi-altera, to enable more IP
+> configurations, and creating specific spi client devices. It also adds
+> regmap support, to enable the indirect access to this IP.
 >
-> > > I'm much more comfortable explicitly listing the new compatible so that
-> > > even if someone makes a DT that doesn't bother listing the fallbacks
-> > > things will work.
+> We have a PCIE based FPGA platform which integrates this IP to communicate
+> with a BMC chip (Intel MAX10) over SPI. The IP is configured as 32bit data
+> width. There is also an indirect access interface in FPGA for host to
+> access the registers of this IP. This patchset enables this use case.
 >
-> > Adding all of them would cause even more churn when adding support for
-> > a new SoC... There are already more than 700 "renesas," compatible
-> > values documented that are not directly matched by drivers.
+> Matthew Gerlach (1):
+>   spi: altera: fix size mismatch on 64 bit processors
 >
-> I'm not sure it's a particular concern, especially since you'll be
-> sending this stuff in the same series as a bindings update and an extra
-> patch in a series makes very little difference.
-
-Until the DT bindings are split off into their own project...
-
-Listing unneeded compatible values in drivers also increases binary size.
-For RSPI and MSIOF that would be +2.5 KiB each.  Times tens of drivers.
-
-Considering the RSPI driver itself is only 9 KiB, and some RZ/A1 systems
-are really memory-constrained, I think it's better to avoid that.
-
-> > Nowadays we have "make dtbs_check", so if a DTS doesn't conform to the
-> > binding, it will be flagged.
+> Xu Yilun (5):
+>   spi: altera: add 32bit data width transfer support.
+>   spi: altera: add SPI core parameters support via platform data.
+>   spi: altera: add platform data for slave information.
+>   spi: altera: use regmap instead of direct mmio register access
+>   spi: altera: move driver name string to header file
 >
-> For things that are upstream.
+>  drivers/spi/Kconfig        |   1 +
+>  drivers/spi/spi-altera.c   | 161 +++++++++++++++++++++++++++++++++++++--------
+>  include/linux/spi/altera.h |  37 +++++++++++
+>  3 files changed, 171 insertions(+), 28 deletions(-)
+>  create mode 100644 include/linux/spi/altera.h
+>
 
-The DT bindings apply to out-of-tree DTS files, too ;-)
-If they're not compliant, all odds are off.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
