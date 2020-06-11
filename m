@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB891F6074
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 05:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D961F6076
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 05:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbgFKD26 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 Jun 2020 23:28:58 -0400
+        id S1726560AbgFKD3D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Jun 2020 23:29:03 -0400
 Received: from mga18.intel.com ([134.134.136.126]:28223 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726279AbgFKD26 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 10 Jun 2020 23:28:58 -0400
-IronPort-SDR: ZMf0c3i+/FVFmC/H3yGBHfRPTNEasHUcM41IeihDRJdQZFqLzaBLq+Sm8miTqhlkqrM2rZRirS
- x9JssBAAPiRQ==
+        id S1726552AbgFKD3B (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 10 Jun 2020 23:29:01 -0400
+IronPort-SDR: Y5uFRdSm/lfwTCjWKjW+/rK5nwiVg1pkoBX26B6ZlOUMfcGrDwWkZtsJ+7DhZDdNcFZAaDH3So
+ 1TGX8VsgXuog==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2020 20:28:58 -0700
-IronPort-SDR: qler2OkVMHhjYOmbdsMSaMzd3jHEPQfEhKiD0ryoIRgmdsgzhkxLI59jNSCRDJqgsC4byTfBWs
- QPHa780vbyVg==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2020 20:29:01 -0700
+IronPort-SDR: UurW9DTzlZhB2JIUe3MsyFd0c3yEH4XHODltdbr8lz7FrbRxiT4fCNd09v/g4cfNF9KRi1Pl9O
+ EVugpzfL8wNw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,498,1583222400"; 
-   d="scan'208";a="260587360"
+   d="scan'208";a="260587374"
 Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2020 20:28:56 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2020 20:28:59 -0700
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     broonie@kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
         matthew.gerlach@linux.intel.com, russell.h.weight@intel.com
-Subject: [PATCH 3/6] spi: altera: add platform data for slave information.
-Date:   Thu, 11 Jun 2020 11:25:08 +0800
-Message-Id: <1591845911-10197-4-git-send-email-yilun.xu@intel.com>
+Subject: [PATCH 4/6] spi: altera: use regmap instead of direct mmio register access
+Date:   Thu, 11 Jun 2020 11:25:09 +0800
+Message-Id: <1591845911-10197-5-git-send-email-yilun.xu@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1591845911-10197-1-git-send-email-yilun.xu@intel.com>
 References: <1591845911-10197-1-git-send-email-yilun.xu@intel.com>
@@ -40,65 +40,254 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch introduces platform data for slave information, it allows
-spi-altera to add new spi devices once master registration is done.
+This patch adds support for regmap. It allows this driver to
+be compatible if low layer register access method is changed
+in some cases.
 
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Signed-off-by: Wu Hao <hao.wu@intel.com>
 Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 ---
- drivers/spi/spi-altera.c   | 11 +++++++++++
- include/linux/spi/altera.h |  5 +++++
- 2 files changed, 16 insertions(+)
+ drivers/spi/Kconfig        |   1 +
+ drivers/spi/spi-altera.c   | 103 ++++++++++++++++++++++++++++++++++++---------
+ include/linux/spi/altera.h |   6 +++
+ 3 files changed, 90 insertions(+), 20 deletions(-)
 
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 8f1f8fc..6d79fc7 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -59,6 +59,7 @@ comment "SPI Master Controller Drivers"
+ 
+ config SPI_ALTERA
+ 	tristate "Altera SPI Controller"
++	select REGMAP_MMIO
+ 	help
+ 	  This is the driver for the Altera SPI Controller.
+ 
 diff --git a/drivers/spi/spi-altera.c b/drivers/spi/spi-altera.c
-index e6e6708..aa9d1a2 100644
+index aa9d1a2..8d47c57 100644
 --- a/drivers/spi/spi-altera.c
 +++ b/drivers/spi/spi-altera.c
-@@ -189,6 +189,7 @@ static int altera_spi_probe(struct platform_device *pdev)
+@@ -44,7 +44,6 @@
+ #define ALTERA_SPI_MAX_CS		32
+ 
+ struct altera_spi {
+-	void __iomem *base;
+ 	int irq;
+ 	int len;
+ 	int count;
+@@ -54,8 +53,45 @@ struct altera_spi {
+ 	/* data buffers */
+ 	const unsigned char *tx;
+ 	unsigned char *rx;
++
++	struct regmap *regmap;
++	u32 base;
++
++	struct device *dev;
++};
++
++static const struct regmap_config spi_altera_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.fast_io = true,
+ };
+ 
++static int altr_spi_writel(struct altera_spi *hw, unsigned int reg,
++			   unsigned int val)
++{
++	int ret;
++
++	ret = regmap_write(hw->regmap, hw->base + reg, val);
++	if (ret)
++		dev_err(hw->dev, "fail to write reg 0x%x val 0x%x: %d\n",
++			reg, val, ret);
++
++	return ret;
++}
++
++static int altr_spi_readl(struct altera_spi *hw, unsigned int reg,
++			  unsigned int *val)
++{
++	int ret;
++
++	ret = regmap_read(hw->regmap, hw->base + reg, val);
++	if (ret)
++		dev_err(hw->dev, "fail to read reg 0x%x: %d\n", reg, ret);
++
++	return ret;
++}
++
+ static inline struct altera_spi *altera_spi_to_hw(struct spi_device *sdev)
+ {
+ 	return spi_master_get_devdata(sdev->master);
+@@ -67,12 +103,13 @@ static void altera_spi_set_cs(struct spi_device *spi, bool is_high)
+ 
+ 	if (is_high) {
+ 		hw->imr &= ~ALTERA_SPI_CONTROL_SSO_MSK;
+-		writel(hw->imr, hw->base + ALTERA_SPI_CONTROL);
+-		writel(0, hw->base + ALTERA_SPI_SLAVE_SEL);
++		altr_spi_writel(hw, ALTERA_SPI_CONTROL, hw->imr);
++		altr_spi_writel(hw, ALTERA_SPI_SLAVE_SEL, 0);
+ 	} else {
+-		writel(BIT(spi->chip_select), hw->base + ALTERA_SPI_SLAVE_SEL);
++		altr_spi_writel(hw, ALTERA_SPI_SLAVE_SEL,
++				BIT(spi->chip_select));
+ 		hw->imr |= ALTERA_SPI_CONTROL_SSO_MSK;
+-		writel(hw->imr, hw->base + ALTERA_SPI_CONTROL);
++		altr_spi_writel(hw, ALTERA_SPI_CONTROL, hw->imr);
+ 	}
+ }
+ 
+@@ -99,14 +136,14 @@ static void altera_spi_tx_word(struct altera_spi *hw)
+ 		}
+ 	}
+ 
+-	writel(txd, hw->base + ALTERA_SPI_TXDATA);
++	altr_spi_writel(hw, ALTERA_SPI_TXDATA, txd);
+ }
+ 
+ static void altera_spi_rx_word(struct altera_spi *hw)
+ {
+ 	unsigned int rxd;
+ 
+-	rxd = readl(hw->base + ALTERA_SPI_RXDATA);
++	altr_spi_readl(hw, ALTERA_SPI_RXDATA, &rxd);
+ 	if (hw->rx) {
+ 		switch (hw->bytes_per_word) {
+ 		case 1:
+@@ -133,6 +170,7 @@ static int altera_spi_txrx(struct spi_master *master,
+ 	struct spi_device *spi, struct spi_transfer *t)
+ {
+ 	struct altera_spi *hw = spi_master_get_devdata(master);
++	u32 val;
+ 
+ 	hw->tx = t->tx_buf;
+ 	hw->rx = t->rx_buf;
+@@ -143,7 +181,7 @@ static int altera_spi_txrx(struct spi_master *master,
+ 	if (hw->irq >= 0) {
+ 		/* enable receive interrupt */
+ 		hw->imr |= ALTERA_SPI_CONTROL_IRRDY_MSK;
+-		writel(hw->imr, hw->base + ALTERA_SPI_CONTROL);
++		altr_spi_writel(hw, ALTERA_SPI_CONTROL, hw->imr);
+ 
+ 		/* send the first byte */
+ 		altera_spi_tx_word(hw);
+@@ -151,9 +189,13 @@ static int altera_spi_txrx(struct spi_master *master,
+ 		while (hw->count < hw->len) {
+ 			altera_spi_tx_word(hw);
+ 
+-			while (!(readl(hw->base + ALTERA_SPI_STATUS) &
+-				 ALTERA_SPI_STATUS_RRDY_MSK))
++			for (;;) {
++				altr_spi_readl(hw, ALTERA_SPI_STATUS, &val);
++				if (val & ALTERA_SPI_STATUS_RRDY_MSK)
++					break;
++
+ 				cpu_relax();
++			}
+ 
+ 			altera_spi_rx_word(hw);
+ 		}
+@@ -175,7 +217,7 @@ static irqreturn_t altera_spi_irq(int irq, void *dev)
+ 	} else {
+ 		/* disable receive interrupt */
+ 		hw->imr &= ~ALTERA_SPI_CONTROL_IRRDY_MSK;
+-		writel(hw->imr, hw->base + ALTERA_SPI_CONTROL);
++		altr_spi_writel(hw, ALTERA_SPI_CONTROL, hw->imr);
+ 
+ 		spi_finalize_current_transfer(master);
+ 	}
+@@ -188,7 +230,9 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 	struct altera_spi_platform_data *pdata = dev_get_platdata(&pdev->dev);
  	struct altera_spi *hw;
  	struct spi_master *master;
++	void __iomem *res;
  	int err = -ENODEV;
-+	u16 i;
++	u32 val;
+ 	u16 i;
  
  	master = spi_alloc_master(&pdev->dev, sizeof(struct altera_spi));
- 	if (!master)
-@@ -244,6 +245,16 @@ static int altera_spi_probe(struct platform_device *pdev)
- 	err = devm_spi_register_master(&pdev->dev, master);
- 	if (err)
- 		goto exit;
-+
-+	if (pdata) {
-+		for (i = 0; i < pdata->num_devices; i++) {
-+			if (!spi_new_device(master, pdata->devices + i))
-+				dev_warn(&pdev->dev,
-+					 "unable to create SPI device: %s\n",
-+					 pdata->devices[i].modalias);
+@@ -220,19 +264,38 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 	master->set_cs = altera_spi_set_cs;
+ 
+ 	hw = spi_master_get_devdata(master);
++	hw->dev = &pdev->dev;
+ 
+ 	/* find and map our resources */
+-	hw->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(hw->base)) {
+-		err = PTR_ERR(hw->base);
+-		goto exit;
++	if (pdata && pdata->use_parent_regmap) {
++		hw->regmap = dev_get_regmap(pdev->dev.parent, NULL);
++		if (!hw->regmap) {
++			dev_err(&pdev->dev, "get regmap failed\n");
++			goto exit;
 +		}
-+	}
++		hw->base = pdata->regoff;
++	} else {
++		res = devm_platform_ioremap_resource(pdev, 0);
++		if (IS_ERR(res)) {
++			err = PTR_ERR(res);
++			goto exit;
++		}
 +
- 	dev_info(&pdev->dev, "base %p, irq %d\n", hw->base, hw->irq);
++		hw->regmap = devm_regmap_init_mmio(&pdev->dev, res,
++						   &spi_altera_config);
++		if (IS_ERR(hw->regmap)) {
++			dev_err(&pdev->dev, "regmap mmio init failed\n");
++			err = PTR_ERR(hw->regmap);
++			goto exit;
++		}
+ 	}
+ 	/* program defaults into the registers */
+ 	hw->imr = 0;		/* disable spi interrupts */
+-	writel(hw->imr, hw->base + ALTERA_SPI_CONTROL);
+-	writel(0, hw->base + ALTERA_SPI_STATUS);	/* clear status reg */
+-	if (readl(hw->base + ALTERA_SPI_STATUS) & ALTERA_SPI_STATUS_RRDY_MSK)
+-		readl(hw->base + ALTERA_SPI_RXDATA);	/* flush rxdata */
++	altr_spi_writel(hw, ALTERA_SPI_CONTROL, hw->imr);
++	altr_spi_writel(hw, ALTERA_SPI_STATUS, 0);	/* clear status reg */
++	altr_spi_readl(hw, ALTERA_SPI_STATUS, &val);
++	if (val & ALTERA_SPI_STATUS_RRDY_MSK)
++		altr_spi_readl(hw, ALTERA_SPI_RXDATA, &val); /* flush rxdata */
+ 	/* irq is optional */
+ 	hw->irq = platform_get_irq(pdev, 0);
+ 	if (hw->irq >= 0) {
+@@ -255,7 +318,7 @@ static int altera_spi_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	dev_info(&pdev->dev, "base %p, irq %d\n", hw->base, hw->irq);
++	dev_info(&pdev->dev, "base %u, irq %d\n", hw->base, hw->irq);
  
  	return 0;
+ exit:
 diff --git a/include/linux/spi/altera.h b/include/linux/spi/altera.h
-index 344a3fc..2d42641 100644
+index 2d42641..164ab7b 100644
 --- a/include/linux/spi/altera.h
 +++ b/include/linux/spi/altera.h
-@@ -14,11 +14,16 @@
-  * @mode_bits:		Mode bits of SPI master.
-  * @num_chipselect:	Number of chipselects.
-  * @bits_per_word_mask:	bitmask of supported bits_per_word for transfers.
-+ * @num_devices:	Number of devices that shall be added when the driver
-+ *			is probed.
-+ * @devices:		The devices to add.
+@@ -17,6 +17,10 @@
+  * @num_devices:	Number of devices that shall be added when the driver
+  *			is probed.
+  * @devices:		The devices to add.
++ * @use_parent_regmap:	If true, device uses parent regmap to access its
++ *			registers. Otherwise try map platform mmio resources.
++ * @regoff:		Offset of the device register base in parent regmap.
++ *			This field is ignored when use_parent_regmap == false.
   */
  struct altera_spi_platform_data {
  	u16				mode_bits;
- 	u16				num_chipselect;
+@@ -24,6 +28,8 @@ struct altera_spi_platform_data {
  	u32				bits_per_word_mask;
-+	u16				num_devices;
-+	struct spi_board_info		*devices;
+ 	u16				num_devices;
+ 	struct spi_board_info		*devices;
++	bool				use_parent_regmap;
++	u32				regoff;
  };
  
  #endif /* __LINUX_SPI_ALTERA_H */
