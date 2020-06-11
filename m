@@ -2,84 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4961F6631
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 13:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F3E1F679F
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 14:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727928AbgFKLEL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Jun 2020 07:04:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727897AbgFKLEL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Jun 2020 07:04:11 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E3141207C3;
-        Thu, 11 Jun 2020 11:04:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591873450;
-        bh=v2AdTRzjbbgd7womXSACVoFWkqyyTxBb929qt9XbrRs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rf8xtPQ5r3OfPpuLjL5Ki7VUsTw35zVTwMh9wIpFDiGcadbIolsGvOFiv9KndPywK
-         Y1uOy69somR5DjeG0H2iHRtZI6vejCgd0o2+jmWITNv3eOS/88KIXO+7GLE9hdm0Us
-         MD3Z/iLxcIMAlhqcqV6MW8C5rMr6gJK6jPukUQu0=
-Date:   Thu, 11 Jun 2020 12:04:08 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, hao.wu@intel.com, matthew.gerlach@linux.intel.com,
-        russell.h.weight@intel.com
-Subject: Re: [PATCH 6/6] spi: altera: fix size mismatch on 64 bit processors
-Message-ID: <20200611110407.GE4671@sirena.org.uk>
-References: <1591845911-10197-1-git-send-email-yilun.xu@intel.com>
- <1591845911-10197-7-git-send-email-yilun.xu@intel.com>
+        id S1728276AbgFKMKI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Jun 2020 08:10:08 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:41556 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728264AbgFKMKH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Jun 2020 08:10:07 -0400
+Received: by mail-oi1-f195.google.com with SMTP id a21so5159831oic.8;
+        Thu, 11 Jun 2020 05:10:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lcgXSywPB08+B3kJ8noSU/N9DMgy+4xXYB/CxnY7Amg=;
+        b=YlTfujDe8X3ycDRnEGMpvy3bI3Tq0C2HNBKvyHBn+b3eKbGpjTj1BPopvaFzcm4c6+
+         /XkYAFrBbV3DlbIRnPnht+/dvtzUUJuQgNGQj2xMw6Ul4cPlp/m7hkFqmyzWlhJ4Xtjo
+         T2WX62k3daDoVOGM6wssDUASmM4Ac+CpycC89ua56x/65V55krS9VlGA3/Dba9NiySJ7
+         W5l+wxVK10jf53cb6tr9wdqb5cRSIbnDas91RDLiKfSIDmDMr4krpyflRcu5waBMHdAx
+         X227idctfxto4tJgrqUeyKACQ2q+CKgBxPTy4bTMwYRwh2QVmYSdbvWE8n+dOEzR590A
+         FooQ==
+X-Gm-Message-State: AOAM533KxYHZl4DFqx84sQMs1Mw0mnlVVVL5iVqq3DColwRfvGpgjm6v
+        emJr3ARUxdoeOommDDoIs11UR9LsGfc8bhDh37OP/Q==
+X-Google-Smtp-Source: ABdhPJxkw8nBqOmM/doJ6JuZq8minHv6eu19aEc1wibYnTv7Nh6qLqRMw7fVRT/pWWz4P5jRTR0aBz/eVhKqpwoAW/s=
+X-Received: by 2002:aca:1a19:: with SMTP id a25mr6016101oia.54.1591877405773;
+ Thu, 11 Jun 2020 05:10:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ffoCPvUAPMgSXi6H"
-Content-Disposition: inline
-In-Reply-To: <1591845911-10197-7-git-send-email-yilun.xu@intel.com>
-X-Cookie: I like your SNOOPY POSTER!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1591736054-568-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1591736054-568-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200610110810.GD5005@sirena.org.uk> <CAMuHMdWCHeSB9mjpdSX_-qxwo33kMb1_1R93CjBtVBPFPKkEOg@mail.gmail.com>
+ <20200610164928.GJ5005@sirena.org.uk> <CAMuHMdUNo0tMxWsnXi4q8NwubPWHqTvzGOA-0hOr7oo2cRvvUg@mail.gmail.com>
+ <20200611085004.GC4671@sirena.org.uk>
+In-Reply-To: <20200611085004.GC4671@sirena.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 11 Jun 2020 14:09:54 +0200
+Message-ID: <CAMuHMdUBp79ix5hPjXBARTrOokg-pWY+Rdno9-dd6dBTv+TRcw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: spi: renesas,sh-msiof: Add r8a7742 support
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Mark,
 
---ffoCPvUAPMgSXi6H
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 11, 2020 at 10:50 AM Mark Brown <broonie@kernel.org> wrote:
+> On Wed, Jun 10, 2020 at 09:18:19PM +0200, Geert Uytterhoeven wrote:
+> > On Wed, Jun 10, 2020 at 6:49 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> > > I'm much more comfortable explicitly listing the new compatible so that
+> > > even if someone makes a DT that doesn't bother listing the fallbacks
+> > > things will work.
+>
+> > Adding all of them would cause even more churn when adding support for
+> > a new SoC... There are already more than 700 "renesas," compatible
+> > values documented that are not directly matched by drivers.
+>
+> I'm not sure it's a particular concern, especially since you'll be
+> sending this stuff in the same series as a bindings update and an extra
+> patch in a series makes very little difference.
 
-On Thu, Jun 11, 2020 at 11:25:11AM +0800, Xu Yilun wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->=20
-> The spi-altera driver was originally written with a 32
-> bit processor, where sizeof(unsigned long) is 4.  On a
-> 64 bit processor sizeof(unsigned long) is 8.  Change the structure
-> member to u32 to match the actual size of the control
-> register.
->=20
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
+Until the DT bindings are split off into their own project...
 
-You've not provided a Signed-off-by for this, I can't do anything with
-it.  For details on what Signed-off-by means and why it's important
-please see Documentation/process/submitting-patches.rst.
+Listing unneeded compatible values in drivers also increases binary size.
+For RSPI and MSIOF that would be +2.5 KiB each.  Times tens of drivers.
 
---ffoCPvUAPMgSXi6H
-Content-Type: application/pgp-signature; name="signature.asc"
+Considering the RSPI driver itself is only 9 KiB, and some RZ/A1 systems
+are really memory-constrained, I think it's better to avoid that.
 
------BEGIN PGP SIGNATURE-----
+> > Nowadays we have "make dtbs_check", so if a DTS doesn't conform to the
+> > binding, it will be flagged.
+>
+> For things that are upstream.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7iD6cACgkQJNaLcl1U
-h9DmFQf+MF+WXsXCFsAfGFGJ1jFKWqFKkoRuV75/8RMHj4RvGzpz+qi9amx3/XB4
-rwaDRe2KGuRagCKXty2M3m6Pmxz40YaVa/u1TXSTpNcInSqNJfLdicBH2c0ekJwM
-eeMtXlBR8+/2D+i0nmf0mZedynI9VhlTS7ro8bHiDEoTKDXS2TiqQmx+AzR0siIQ
-4BAXoYyFbgH66MJHUBg9+coggkvUNVl+BtoluzGuYVGkbr5ekFyjG57PFPwQ6CkI
-UI2IU48U2hZkB2RZtECWFDApxHwrYcfcnXBediZbJ6ZXIf+bR7EZMmCA84V1bI5U
-rQWoudzQthh5XCbSRsqytve8fTZVhw==
-=mDOl
------END PGP SIGNATURE-----
+The DT bindings apply to out-of-tree DTS files, too ;-)
+If they're not compliant, all odds are off.
 
---ffoCPvUAPMgSXi6H--
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
