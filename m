@@ -2,44 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5921F6933
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 15:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08AB1F6991
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 16:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727817AbgFKNkr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Jun 2020 09:40:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49704 "EHLO mail.kernel.org"
+        id S1727956AbgFKODE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Jun 2020 10:03:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726292AbgFKNkp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Jun 2020 09:40:45 -0400
+        id S1726808AbgFKODE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 11 Jun 2020 10:03:04 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29B8420760;
-        Thu, 11 Jun 2020 13:40:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9F250206C3;
+        Thu, 11 Jun 2020 14:03:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591882844;
-        bh=cvz/YxFSgXtIw2nOa4VErS/4b3tA507ZBN5/rPyfuu4=;
+        s=default; t=1591884184;
+        bh=KwaNQt8CHB0EhbuxLaFyv3pyqaPwUgg4tG0QM0szqSs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tPXBu1yFAiTRygRf37l3z9KXCEWhdc+r8uUQpZeIFKHSyzX1Mkh762yKf4crAhReV
-         zJrxSPi4Anm1TS+12b60syNQX7ROOtQrR3YNsGEJWPIsUHVt9cRHKxFimUYl/txXap
-         KN+qKdAE2Il8rMK0JhTKm44arnXXf1thA+ajbEfg=
-Date:   Thu, 11 Jun 2020 14:40:42 +0100
+        b=b0OCEbE4kM0G44R+IPkLOHrhllos+I/kAIXU2VVFnidEhAuAeVDc8opKGAmJOCJrR
+         W9HF128ZST0k9gj0ESz+vvc3vDFTMkjak1f9kycjmaPbqNjtqsF+YGjrw6o25UmMuW
+         fdG3HPBPTNr23ERnNY1wpUqRr/RxJriluUs32lNQ=
+Date:   Thu, 11 Jun 2020 15:03:01 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robin.murphy@arm.com, matthias.schiffer@ew.tq-group.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
-Message-ID: <20200611134042.GG4671@sirena.org.uk>
-References: <1591880310-1813-1-git-send-email-yibin.gong@nxp.com>
- <1591880310-1813-2-git-send-email-yibin.gong@nxp.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com, hao.wu@intel.com, matthew.gerlach@linux.intel.com,
+        russell.h.weight@intel.com
+Subject: Re: [PATCH 5/6] spi: altera: move driver name string to header file
+Message-ID: <20200611140301.GH4671@sirena.org.uk>
+References: <1591845911-10197-1-git-send-email-yilun.xu@intel.com>
+ <1591845911-10197-6-git-send-email-yilun.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iAL9S67WQOXgEPD9"
+        protocol="application/pgp-signature"; boundary="k+G3HLlWI7eRTl+h"
 Content-Disposition: inline
-In-Reply-To: <1591880310-1813-2-git-send-email-yibin.gong@nxp.com>
+In-Reply-To: <1591845911-10197-6-git-send-email-yilun.xu@intel.com>
 X-Cookie: I like your SNOOPY POSTER!!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
@@ -48,50 +46,32 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---iAL9S67WQOXgEPD9
+--k+G3HLlWI7eRTl+h
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jun 11, 2020 at 08:58:29PM +0800, Robin Gong wrote:
-> Add SPI_CONTROLLER_FALLBACK to fallback to pio mode in case dma transfer
-> failed.
-> If spi client driver want to enable this feature please set master->flags
-> with SPI_MASTER_FALLBACK and add master->fallback checking in its can_dma()
-> as spi-imx.c
+On Thu, Jun 11, 2020 at 11:25:10AM +0800, Xu Yilun wrote:
+> This allows other driver to reuse the name string for spi-altera
+> platform device creation.
 
-If we were going to do this I don't see why we'd have a flag for this
-rather than just doing it unconditionally but...
+This is a very unusual thing to do, normally we just have the users use
+the strong directly.  It feels like if we are going to change this idiom
+we should do so globally but that seems like far more trouble thanit's
+worth.
 
->  			ret = ctlr->transfer_one(ctlr, msg->spi, xfer);
->  			if (ret < 0) {
-> +				if (ctlr->cur_msg_mapped &&
-> +				   (ctlr->flags & SPI_CONTROLLER_FALLBACK)) {
-> +					__spi_unmap_msg(ctlr, msg);
-> +					ctlr->fallback = true;
-> +					goto fallback_pio;
-> +				}
-
-...I don't think this can work sensibly - this is going to try PIO if
-there's *any* error.  We might have had some sort of issue during the
-transfer for example so have some noise on the bus.  Like I said on a
-prior version of this I really think that we need to be figuring out if
-the DMA controller can support the transaction before we even map the
-buffer for it, having the controller just randomly fail underneath the
-consumer just does not sound robust.
-
---iAL9S67WQOXgEPD9
+--k+G3HLlWI7eRTl+h
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7iNFkACgkQJNaLcl1U
-h9Bf+AgAgmNtDbsABzuC2/FdzMOgrJBX+Sol1QlxGnFXxy0CasIDkgkgZFWfFd+f
-55Ee2ZOKSfoZIb3+4SPDck6koXnMJVsaBU4NFjuqzc/l3uvgXM7pKdjpnWlcRZaj
-9XPGvNv4VqLiGv+HTqbHSRdOuDAN1GZH9SSwJd15fjeZE9xA4bmzN2cT1DcxDJPl
-fMscBXBBrMIIq9Dqw1lDJuta8vKoaB3y2o1ee4nihNa8OBDL/FdVzgzl7aAiVGS3
-I38G2AZRgnZBWf2z+haWsFKMbumjUKmMB2vCjf5U4gI5N3O6iFDMFdEzkHQdTSQS
-yU4UU7726S05d44UW6lXJgFBMoB0UQ==
-=Y2mu
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7iOZUACgkQJNaLcl1U
+h9Da1gf+IVsNj1j6qCAsG0ClLwzynb1gwlrM9hM9V225dz0WnVCf+YvdK2cCN2ef
+rCAyr1EvGLyKcg+gVV4laDFfkdJFecYWKiyPGCReduMlF2mtJh0G/SlWjxSl2pN0
+v5pGgl8vDGT+tTpQcX9uRDLK+YV4RValFuMznvD0TiwifIr7UqLp69Ih4sxtbWeU
+vr7mW9Tr6ILMOXo5Stee0Ept06ejaJX4QsoFVUb3cBV+m00V/wnJUX2Yq2M1ejNF
+XsHy1J5N6aPng0+XkKZGIXViQ5ySxHFPtQPrt4X14Vi6eoLYX60ovHd7nAD8SK2e
+97mUFhJU/WztGB/CN9q1vczboJsoFQ==
+=Sc8J
 -----END PGP SIGNATURE-----
 
---iAL9S67WQOXgEPD9--
+--k+G3HLlWI7eRTl+h--
