@@ -2,48 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E76FB1F6AFA
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 17:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA981F6AFC
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 17:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728586AbgFKP3K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Jun 2020 11:29:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59436 "EHLO mail.kernel.org"
+        id S1728601AbgFKP3Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Jun 2020 11:29:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59556 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728379AbgFKP3K (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Jun 2020 11:29:10 -0400
+        id S1728379AbgFKP3P (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 11 Jun 2020 11:29:15 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 618092078D;
-        Thu, 11 Jun 2020 15:29:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DB050207ED;
+        Thu, 11 Jun 2020 15:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591889349;
-        bh=410uL909s0+tnkFVJGiSfFwLPYBvHr+dZZ6yx/EnPZM=;
+        s=default; t=1591889355;
+        bh=ufEXvIwUNU84phxn4fdLQDTEOa+3mCwvua/d+FRq8+Y=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=EmlI3lS1Vqkw7zW+PamBQ9KebtOlb/xfL2rI/dGCZ9HnKxcPJVk9N0XdzbO98XTnV
-         5g/t7/hOONGYZioV506/YhWtz5NVwD+cF3VsSA9EwK+0WOsJsN63ESb7GpD1rVOhJ6
-         kuInOitHfVqwP1+0zphXZFwJH2tRDuFEbmoeO5ws=
-Date:   Thu, 11 Jun 2020 16:29:07 +0100
+        b=q/+0Vbm0pDdriPQZBDhwQWB6K/UOS5VzAe+POFRuiPPG45yMVxJpd1Q+ZGLat5ht2
+         sxmoZNF+yagyxbDBzTAQh3HyKkHVZEyBEqPsXtW6D/LbV2jrwNi4c3/DXA11VDw9C3
+         ne+HfOiMw0W+7OHrv3vMvGDR14BPjTwcMfCU9fg8=
+Date:   Thu, 11 Jun 2020 16:29:13 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     linux-spi@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-spi@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
         linux-kernel@vger.kernel.org
-In-Reply-To: <1591880212-13479-1-git-send-email-zhangqing@loongson.cn>
-References: <1591880212-13479-1-git-send-email-zhangqing@loongson.cn>
-Subject: Re: [PATCH v2 1/2] spi: tools: Make default_tx/rx and input_tx static
-Message-Id: <159188934188.47269.5855781753690625625.b4-ty@kernel.org>
+Cc:     stable@vger.kernel.org
+In-Reply-To: <1591803717-11218-1-git-send-email-krzk@kernel.org>
+References: <1591803717-11218-1-git-send-email-krzk@kernel.org>
+Subject: Re: [PATCH] spi: spi-fsl-dspi: Free DMA memory with matching function
+Message-Id: <159188934188.47269.15444268053636073339.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 11 Jun 2020 20:56:51 +0800, Qing Zhang wrote:
-> Fix the following sparse warning:
+On Wed, 10 Jun 2020 17:41:57 +0200, Krzysztof Kozlowski wrote:
+> Driver allocates DMA memory with dma_alloc_coherent() but frees it with
+> dma_unmap_single().
 > 
-> ./spidev_test.c:50:9: warning: symbol 'default_tx' was not declared. Should it be static?
-> ./spidev_test.c:59:9: warning: symbol 'default_rx' was not declared. Should it be static?
-> ./spidev_test.c:60:6: warning: symbol 'input_tx' was not declared. Should it be static?
+> This causes DMA warning during system shutdown (with DMA debugging) on
+> Toradex Colibri VF50 module:
+> 
+>     WARNING: CPU: 0 PID: 1 at ../kernel/dma/debug.c:1036 check_unmap+0x3fc/0xb04
+>     DMA-API: fsl-edma 40098000.dma-controller: device driver frees DMA memory with wrong function
+>       [device address=0x0000000087040000] [size=8 bytes] [mapped as coherent] [unmapped as single]
+>     Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
+>       (unwind_backtrace) from [<8010bb34>] (show_stack+0x10/0x14)
+>       (show_stack) from [<8011ced8>] (__warn+0xf0/0x108)
+>       (__warn) from [<8011cf64>] (warn_slowpath_fmt+0x74/0xb8)
+>       (warn_slowpath_fmt) from [<8017d170>] (check_unmap+0x3fc/0xb04)
+>       (check_unmap) from [<8017d900>] (debug_dma_unmap_page+0x88/0x90)
+>       (debug_dma_unmap_page) from [<80601d68>] (dspi_release_dma+0x88/0x110)
+>       (dspi_release_dma) from [<80601e4c>] (dspi_shutdown+0x5c/0x80)
+>       (dspi_shutdown) from [<805845f8>] (device_shutdown+0x17c/0x220)
+>       (device_shutdown) from [<80143ef8>] (kernel_restart+0xc/0x50)
+>       (kernel_restart) from [<801441cc>] (__do_sys_reboot+0x18c/0x210)
+>       (__do_sys_reboot) from [<80100060>] (ret_fast_syscall+0x0/0x28)
+>     DMA-API: Mapped at:
+>      dma_alloc_attrs+0xa4/0x130
+>      dspi_probe+0x568/0x7b4
+>      platform_drv_probe+0x6c/0xa4
+>      really_probe+0x208/0x348
+>      driver_probe_device+0x5c/0xb4
 
 Applied to
 
@@ -51,10 +73,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: tools: Make default_tx/rx and input_tx static
-      commit: bd2077915bfebf6965480753f9dd6a8319d06d14
-[2/2] spi: tools: Add macro definitions to fix build errors
-      commit: 7bb64402a092136fb2fda995b0e0304b43c163c5
+[1/1] spi: spi-fsl-dspi: Free DMA memory with matching function
+      commit: 03fe7aaf0c3d40ef7feff2bdc7180c146989586a
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
