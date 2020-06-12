@@ -2,141 +2,143 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B071F6F85
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jun 2020 23:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458021F7224
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Jun 2020 04:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgFKViR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Jun 2020 17:38:17 -0400
-Received: from mout.gmx.net ([212.227.17.22]:36725 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725869AbgFKViR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Jun 2020 17:38:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1591911492;
-        bh=AYptKPCAxUSatQNyMDSLiyS92qMVCcnna6cxQ7i23js=;
-        h=X-UI-Sender-Class:From:To:Subject:Reply-to:Date;
-        b=JUGboHKkRPnOUtCgaMDUK3O6Ju8cMYuI1YFBZdKdIM2XaIQ6wezJWbciOFU/HEZ5B
-         wct95ysrEB7p+dDaphBhyoUSyG73nrud7nwJKk48tNpC8kuzuevB0FUCv2znMvV2pE
-         hzAJkEpRu3JSc+e8Q25k0jZ/qBmEJxVhjNLbThlg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from corona.crabdance.com ([173.228.106.43]) by mail.gmx.com
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MGhyc-1jeX692Ira-00Dr9i; Thu, 11 Jun 2020 23:38:12 +0200
-Received: by corona.crabdance.com (Postfix, from userid 1000)
-        id 85924899767; Thu, 11 Jun 2020 14:37:51 -0700 (PDT)
-From:   Stefan Schaeckeler <schaecsn@gmx.net>
-To:     linux-spi@vger.kernel.org
-Subject: How to extract opcode, addr, dummy and buffer in transfer_one_message()?
-Content-Type: text/plain
-Reply-to: schaecsn@gmx.net
-Message-Id: <20200611213751.85924899767@corona.crabdance.com>
-Date:   Thu, 11 Jun 2020 14:37:51 -0700 (PDT)
-X-Provags-ID: V03:K1:B54yBBh19r+GEwNgASx8vz59y+RtRGOxzEW2e1u/PGRLUCnZFJD
- J8PaRwOSe6uXPPTnZltEKw/ScJ56eu96gFig+stEYpEuCrg9PJNaDnTumnmhhT1nV3eOkcK
- URO58iLrtk35e0eNv/tYWWWjtsI/EI5SVqy0hZMlcKbJj5UsX+I0s6JABBYZ8Ur7dVynYDH
- R3N8jvoHnSepFo+7y66jg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VVoT6AHydO0=:4w7nsSSF+fPbvvT8lWUUTG
- zSQvP5igIJe4DumUZbVihrPVgF3eu/I1/dRi6w/0ST3GQE462nJZPqLienS38tEUAPGyBpnDz
- WTun6tgdGsy0iAOWRFWkVb+ww5OEW/s5Jnspu9TVXUv752N8B9qx3ZRR1h2om/VDvAhLHwapj
- broOQxQgIVyjGLz5wlULsRdkr7gr2IYONYAnmXT8kXHq+LlDLxzpiIkiyaMivXKCIq5OQGUba
- Cs0lUA+HDWOCZyFUNiR20DWIoVqo/bvsVS9ZFtXwSIOCoqgjfeDVFo19/d1SsOj9CfyOrGDwD
- an/1W0ggHf2GlGOgxWA1IdmzqLdL0al5WPYVhSZ8A/+emIRKGpAVblY98aS3HRMt2M3P41UQT
- 9Y8Gc3QhSe9mx4b7vrAHYFIwSnzr7IWGigFtRYXMmQ88jvz4y2czod5UJ9V+hNf50S9g94z27
- Zya0DjvhlR330Rat+tE1bmeX+ozYncyd8ux9q8sxp16pQgTtTcgEbe4hZtPNyF6pfpEzP5EAS
- 3dtEvc5tzaowt/qMfTcXQhyI58E6mZW/QNp8s5sSBbbm+frn8qYf46JNK+2R21KptLIcvFdAQ
- Du0YSzo/y/GWJ2jWzrm5JquakIXLeuHCXmaNe+oRePR5aSMsniiU3GfE2xQkbf/8+mgphnp7g
- K9a0U3Va2j7IbS9rWPiiU/DaRoPVcVxvKGjRkF3c/5OMmCznjDAQjPVILFjpopW7qwpMXHbfH
- MTfIYqWyfQaDI3zHBz2Y1o5zyUsAhmzhUW0Ifym/3TfqsxUKMo2Sblktwl4YWe4UHMFsICYZx
- a1kIjDLsfP0PQSKcEL8OGxmK2lWe3Ndx7Nc7VHOoOGsteHZYOFUOsiKal5YoPQ2c3FM1C91Ls
- 07yAkTNKthduw3U/8dmC/99WGH/rplmBC7iM17g0raeIz1d+0NonTvRTj7ZHGyKpmoSMhj4VV
- IMA9W4o+h9vc4ujOVXCCvllNIA9Lke+wz33ZJrQ/YTSBZq7xdA2WupWvruRbEx+2fEEEct0q6
- +SGdoH9QNwCesVo7E6SQSGd/6ZlqIQaYtSFncTdfys3Aq5xoDTaA9QtHtYzm4vBHquIr42sVO
- S13njB7c94+8E1vsqSegYFfUKglm6btHtvDtNmW2UGQ0XbDG9TQIuec4k+HfKweD59OG/s3yP
- 3w18o9EMmBNsOsrJNnUfJ/syCKhuLpNbxgDPoEWp3kFXIGhGhitIFKXvw40m6BS9kUPTkP02Y
- 1f1OdpYuf12MN8H++
+        id S1726326AbgFLCSl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Jun 2020 22:18:41 -0400
+Received: from mail-eopbgr50053.outbound.protection.outlook.com ([40.107.5.53]:39237
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726305AbgFLCSj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 11 Jun 2020 22:18:39 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BlfcDQzOwnw8/G9zxETWMpGuZ9LBV9O/zoF4T9dqoKxoU29mhhepI9Befkq6nEQyS03KuG7b2CvG5ACSwGUgIux1a2caIzuyRfmOSC9qPOtl0zIttT9o9XZ4VyoM402eho6EvIBmQrlqXPcts8/n+QvGBTyp03fXaPQ18ewa2ImXmLSgZrx+2yanQLe23SR+ha4UvZ66byOxiqxhmIlWXo4AW4WDiJuBi2o49/DgMFGzaJMhD7iJ7T2to/UINgPaBEoiiKtm5Ir593U/v/itZ5UUYPg61fCO6s2dPL17LobpIdRLsmgH5oOf1drWza00r0mzg+TaR30FtEHhqumnmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dHOoT8na1ffMKrVbK2XadykwDl7QE51+OUO8aCLZYI4=;
+ b=nOfIA/iqe9wuuDWm6ej89VD9Cq6h6wnFRCDlweYBPzl2FlwPdbCp14smz7JF4I3WbsDtlBwnWuEt0OxCQHw2aLy04MOvnR6fW/G109p0VnlSMS8LkfzBUdBPuAnra+ln7pJIt9k/zo3uxGAijlncArD2AVGZZsURVxkIk2J/d+OTMqm1wWgPXebEWtSqkN460tS+oPe6pMNdUOL7XLkxWm+tVItwRkAqiGn+x+CDlas7y6Q9zXZNNsikHEt9wz9CUD7QOVpyqbqdpK6rtWNOkBRZCZ0T86X2iMvMjTOc2nB2gHJklj/XtUhzxPmhu3bKZ12QdgO1Vlq+HHyBLRu5pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dHOoT8na1ffMKrVbK2XadykwDl7QE51+OUO8aCLZYI4=;
+ b=bFZo8Wo8+cVDZcGtYtmHWLaMDeHpuXn13IGKg6YzonqdF3Ya/rsYe/aueU09TA3ip3izGnl2TQXxjwkZHqb8MaZZtKzC3REKoyFA1OBXepvFRLh89oB25ohJ+tmEZfYIWbCbQP+ru9Ff4Le5qG3XEwf71HU+xDmZbvRxBIfRMKQ=
+Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (2603:10a6:803:119::15)
+ by VE1PR04MB6352.eurprd04.prod.outlook.com (2603:10a6:803:129::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.20; Fri, 12 Jun
+ 2020 02:18:32 +0000
+Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
+ ([fe80::5cc4:23a5:ca17:da7d]) by VE1PR04MB6638.eurprd04.prod.outlook.com
+ ([fe80::5cc4:23a5:ca17:da7d%6]) with mapi id 15.20.3066.023; Fri, 12 Jun 2020
+ 02:18:32 +0000
+From:   Robin Gong <yibin.gong@nxp.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "matthias.schiffer@ew.tq-group.com" 
+        <matthias.schiffer@ew.tq-group.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
+Thread-Topic: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
+Thread-Index: AQHWP6z7CX2etPvPnk+oddH8JEW5FKjTbHIAgADDYUA=
+Date:   Fri, 12 Jun 2020 02:18:32 +0000
+Message-ID: <VE1PR04MB66383245FAD2AE33CFEA76F789810@VE1PR04MB6638.eurprd04.prod.outlook.com>
+References: <1591880310-1813-1-git-send-email-yibin.gong@nxp.com>
+ <1591880310-1813-2-git-send-email-yibin.gong@nxp.com>
+ <20200611134042.GG4671@sirena.org.uk>
+In-Reply-To: <20200611134042.GG4671@sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 61648114-780b-475a-539d-08d80e76e7b3
+x-ms-traffictypediagnostic: VE1PR04MB6352:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VE1PR04MB63520D161E338E4F8C9BE9EE89810@VE1PR04MB6352.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0432A04947
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DEiW76s4wzi1S5XdKXAgF3akdk+z1jF9TMofHYZwidLFnYXML+TEL2FHyHM351GENSXmqwTraVpRddcikCIMakwS+18CIF/nbXlUexmyOiHYQL8bqpcPA7NON56YCaWiyDl5Mr5tMMwo1NIvdyjD93hReqhMXGmVKXHYCtgPKwAsJVNa5KTdmrxBma1I0B64GqiJwD0Lr5e+TNpZCE0V2pkaBF2Dt8EOEkrKM2z0D9S8lilCJne0XPzqQXaxfgUTnx0mmsiXkujUmvKvoOXV9K72ZMHL60znNWsBj7wTKgU1JoYLNQzAFsNfvFdtIZCcjelEd4vX6TZV7qTA7JrmgA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6638.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(39860400002)(366004)(136003)(396003)(376002)(186003)(26005)(4326008)(83380400001)(86362001)(8936002)(7416002)(52536014)(8676002)(478600001)(66556008)(5660300002)(316002)(6916009)(2906002)(66446008)(66946007)(55016002)(54906003)(76116006)(33656002)(7696005)(71200400001)(6506007)(64756008)(66476007)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: DV59bNnfLvJaTSGCQGmq+4gxb76h8zDXrr5V8GfMvWgWdpBsNLICs80/lnseTph8A+9FImLorC/R20JIbiuRdVRMlkotuA9tjn6LzJwoBgV3mUtzki4W56DvLJN6/yTdJs3LjTGfv3tP1RJoCaHTQmpNqV6vqpg3qDO35LuAYoAKC8RaplP1vv2R4OlGRyfkcZ7PZLQ+PqTG6L2sIodxO+ZsLHqjbUr38PCc+uqoa5uj+SCHqS9LXHLPsbDy7eQ+DoAFzIkWbgI9Vh9wcVFc2AS96fuLQe+KGoUuuYHY+B/I9TzurXwI6R9hP5Z899v8sLcof/rvwH+TAHMPmsiucQ46gQIbBrqm+b3shV7CwZXIC1CCyOSy7/72TxtE+5EnDT9PGpJzCuSW6wtU7Q1FL+WmVrnK9YgOLwIYwDk4iOTf5hdjBvmlYMJRPqtwr3sEFhLZf7fSyUbGO17ptLDBCI5nMy2Advaa4+0iH3/VrUU=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61648114-780b-475a-539d-08d80e76e7b3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2020 02:18:32.7785
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9M6VJuoOCLXgwbt5zVjDPCaxBJG5y80jtihGJ8PM6XnMIu4pJpyftBeu9KG47Pb1NahhhiK24+W0kzNseJpqdw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6352
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello linux-spi,
-
-I can implement mem_ops() a/o transfer_one_message().
-
-spi-mem.c:spi_mem_exec_op() will directly pass op to mem_ops->exec_op(). T=
-here
-I can easily extract opcode, addr, dummy and data buffer. It would probabl=
-y
-look roughly like
-
-exec_op(struct spi_mem *mem, const struct spi_mem_op *op){
-        dummy =3D addr =3D -1;
-
-        opcode =3D op->cmd.opcode;
-
-        addrlen=3Dop->addr.nbytes;
-        if (addrlen)
-            addr =3D op->addr.val;
-
-        if (op->dummy.nbytes)
-            dummy =3D QSPI_DUMMY_CYCLE;
-
-        len=3Dop->data.nbytes;
-        if (len)
-            if (op->data.dir =3D=3D SPI_MEM_DATA_IN) {
-                rxbuf =3D op->data.buf.in;
-                is_wr =3D false;
-            } else {
-                txbuf =3D op->data.buf.out;
-                is_wr =3D true;
-            }
-}
-
-That's great. What about transfer_one_message()?
-
-spi-mem.c:spi_mem_exec_op() builds a message consisting of multiple transf=
-ers.
-If there is no address, dummy or data buffer, then they will not be includ=
-ed in
-the transfer array as transfers are created like this
-
-        /* op is the first transfer */
-        tmpbuf[0] =3D op->cmd.opcode;
-        xfers[xferpos].tx_buf =3D tmpbuf;
-        ...
-
-        if (op->addr.nbytes) {
-        /* add addr transfer */
-        ...
-        }
-
-        if (op->dummy.nbytes) {
-        /* add dummy transfer */
-        ...
-        }
-
-        if (op->data.nbytes) {
-        /* add data transfer */
-        ...
-        }
-
-These transfers are then passed as a message consisting of 1 to 4 transfer=
-s to
-transfer_one_message().
-
-In transfer_one_message(), the first transfer is the opcode. How do I now =
-what
-the next transfers represent? Like in the exec_op() example above, I would=
- like
-to create and initialize my variables opcode, addr, dummy and read or writ=
-e
-buffer.
-
-
-Related question: what are the disadvantages of always using mem_ops() and
-never transfer_one_message()?
-
-Thanks,
- Stefan
+On 2020/06/11 21: 41 Mark Brown <broonie@kernel.org> wrote:
+> On Thu, Jun 11, 2020 at 08:58:29PM +0800, Robin Gong wrote:
+> > Add SPI_CONTROLLER_FALLBACK to fallback to pio mode in case dma
+> > transfer failed.
+> > If spi client driver want to enable this feature please set
+> > master->flags with SPI_MASTER_FALLBACK and add master->fallback
+> > checking in its can_dma() as spi-imx.c
+>=20
+> If we were going to do this I don't see why we'd have a flag for this rat=
+her than
+> just doing it unconditionally but...
+What do you mean flag here, 'master->flags' or SPI_MASTER_FALLBACK? 'master=
+->flags'
+could let client fallback to PIO finally and spi core clear this flag once =
+this transfer done,
+so that DMA could be tried again in the next transfer. Client could enable =
+this feature by choosing SPI_MASTER_FALLBACK freely without any impact on o=
+thers.
+>=20
+> >  			ret =3D ctlr->transfer_one(ctlr, msg->spi, xfer);
+> >  			if (ret < 0) {
+> > +				if (ctlr->cur_msg_mapped &&
+> > +				   (ctlr->flags & SPI_CONTROLLER_FALLBACK)) {
+> > +					__spi_unmap_msg(ctlr, msg);
+> > +					ctlr->fallback =3D true;
+> > +					goto fallback_pio;
+> > +				}
+>=20
+> ...I don't think this can work sensibly - this is going to try PIO if the=
+re's *any*
+> error.  We might have had some sort of issue during the transfer for exam=
+ple
+> so have some noise on the bus.  Like I said on a prior version of this I =
+really
+Any error happen in DMA could fallback to PIO , seems a nice to have, becau=
+se it could
+give chance to run in PIO which is more reliable. But if there is also erro=
+r in PIO, thus may loop here, it's better adding limit try times here?   =20
+> think that we need to be figuring out if the DMA controller can support t=
+he
+> transaction before we even map the buffer for it, having the controller j=
+ust
+> randomly fail underneath the consumer just does not sound robust.
+But dmaengine_prep_slave_sg still may return failure even if anything about
+DMA is ok before spi transfer start, such as dma description malloc failure=
+. This
+patch seems could make spi a bit robust...
