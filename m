@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D83C1F84DF
-	for <lists+linux-spi@lfdr.de>; Sat, 13 Jun 2020 21:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBBF1F880B
+	for <lists+linux-spi@lfdr.de>; Sun, 14 Jun 2020 11:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbgFMTUQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 13 Jun 2020 15:20:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48554 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726323AbgFMTUQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 13 Jun 2020 15:20:16 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592076016;
-        bh=Pax1SIuid11+T1SSmAgnQXbNByXoAA+Z4crH2sNh154=;
-        h=Subject:From:Date:To:From;
-        b=p1UpxyMy305P/56ySNIk2+gfxqScZBK8qiGcQMlutNK5WV1L3TNi1bJmDfVIpslc9
-         YIPXjjmiSTRgifuTL1ztfauNOvKoyA7JJBcd5M/MH5uZfNHeKSPsNfOAgjM0SexelZ
-         ElUZTufVofXgKA7/OJcw/FVYYFXAF+XUsSERR/ns=
+        id S1726766AbgFNJXk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 14 Jun 2020 05:23:40 -0400
+Received: from dns.tdjhs.tyc.edu.tw ([163.30.27.129]:47489 "EHLO
+        host.tdjhs.tyc.edu.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725265AbgFNJXj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 14 Jun 2020 05:23:39 -0400
+X-Greylist: delayed 7493 seconds by postgrey-1.27 at vger.kernel.org; Sun, 14 Jun 2020 05:23:39 EDT
+Received: from www.tdjhs.tyc.edu.tw (localhost.tdjhs.tyc.edu.tw [127.0.0.1])
+        by host.tdjhs.tyc.edu.tw (8.14.5/8.14.5) with ESMTP id 05DKxkPg024411;
+        Sun, 14 Jun 2020 04:59:47 +0800 (CST)
+        (envelope-from ldhlupz@gmail.com)
+From:   "L.D Holt" <ldhlupz@gmail.com>
+Reply-To: ldhlupz@gmail.com
+Subject: Re: Lucrative Proposal.
+Date:   Sun, 14 Jun 2020 04:59:46 +0800
+Message-Id: <20200613205831.M17989@gmail.com>
+X-Mailer: OpenWebMail 2.53 
+X-OriginatingIP: 212.103.50.217 (whitedove)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <159207601622.21263.9449785326062240158.git-patchwork-housekeeping@kernel.org>
-Date:   Sat, 13 Jun 2020 19:20:16 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain;
+        charset=utf-8
+To:     undisclosed-recipients:;
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v4] spi: add Renesas RPC-IF driver (2020-06-13T19:18:34)
-  Superseding: [v3] spi: add Renesas RPC-IF driver (2020-05-08T19:54:10):
-    [v3] spi: add Renesas RPC-IF driver
+Hello,
 
+Good day.I am a banker and I have a lucrative business proposal of mutual 
+benefit. Please contact me on my email: ldhlupz@gmail.com
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+Sincerely,
+L.D Holt.
