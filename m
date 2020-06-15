@@ -2,88 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2051F9520
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 13:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F5C1F9548
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 13:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728510AbgFOLS2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 07:18:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40570 "EHLO mail.kernel.org"
+        id S1729038AbgFOLZ4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 07:25:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43776 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728285AbgFOLS1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jun 2020 07:18:27 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        id S1728953AbgFOLZ4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jun 2020 07:25:56 -0400
+Received: from localhost (unknown [171.61.66.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9183620679;
-        Mon, 15 Jun 2020 11:18:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C58E20663;
+        Mon, 15 Jun 2020 11:25:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592219907;
-        bh=Kc5Uu2zfW16GC/jLDwOItAJ1ZCbBOhlBnC7jl4IzQzw=;
+        s=default; t=1592220355;
+        bh=hheBwTSFc6iwBWB8MsUTDTdzd+3OLaOnprLkDFHzJZ4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CLqA0Otm5iTchqOJNuF5+TEvlduYM9+uHf6vsS1atI8wMe7S/kxYzvwUUWFsse4+8
-         sH1eDw9PbEF9rDtnc2aheYGa9DNhyAWCXgR4cJnGEviEeGugPmWRca0LUDu2E4mP8M
-         PRkjztkO40hmW00EQKRvCSNgeGSBOeUs/BCxQ00k=
-Date:   Mon, 15 Jun 2020 12:18:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 14/29] dt: Fix broken references to renamed docs
-Message-ID: <20200615111824.GB4447@sirena.org.uk>
-References: <cover.1592203542.git.mchehab+huawei@kernel.org>
- <6866c0d6d10ce36bb151c2d3752a20eb5122c532.1592203542.git.mchehab+huawei@kernel.org>
+        b=m8rK1weuyASMxJgo3gsh7sPxRrQAYD12kwRU1DXbJp57frQ+XcatZNTgVFVlxrzQI
+         HOg/s3WpJX7CJxde07iTNDrw+n3kKCCoA2P+oBdHx2M9cBJqLd2p4ITInuMOO2Twgz
+         poRfTxYiKMbsrXKoOOM3hCXA5vN9EbhrexQch/hA=
+Date:   Mon, 15 Jun 2020 16:55:49 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "matthias.schiffer@ew.tq-group.com" 
+        <matthias.schiffer@ew.tq-group.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
+Message-ID: <20200615112549.GL1393454@vkoul-mobl>
+References: <1591880310-1813-1-git-send-email-yibin.gong@nxp.com>
+ <1591880310-1813-2-git-send-email-yibin.gong@nxp.com>
+ <20200611134042.GG4671@sirena.org.uk>
+ <VE1PR04MB66383245FAD2AE33CFEA76F789810@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200612101357.GA5396@sirena.org.uk>
+ <VE1PR04MB66384013797FE6B01943F2A889810@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200612141611.GI5396@sirena.org.uk>
+ <VE1PR04MB6638B43E3AC83286946DABCD899F0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200615071931.GK1393454@vkoul-mobl>
+ <VE1PR04MB6638959679C644C76B4D3D3A899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eAbsdosE1cNLO4uF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6866c0d6d10ce36bb151c2d3752a20eb5122c532.1592203542.git.mchehab+huawei@kernel.org>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <VE1PR04MB6638959679C644C76B4D3D3A899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Robin,
 
---eAbsdosE1cNLO4uF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 15-06-20, 08:59, Robin Gong wrote:
+> On 2020/06/15 15:20 Vinod Koul <vkoul@kernel.org> wrote:
 
-On Mon, Jun 15, 2020 at 08:46:53AM +0200, Mauro Carvalho Chehab wrote:
-> Some files got renamed. Those were all fixed automatically by
->=20
-> 	./scripts/documentation-file-ref-check --fix
+> > > Yes, but both assume spi controller driver could detect such dma
+> > > failure before dmaengine_prep_*(). Let's wait Vinod's comment for that
+> > > if dmaengine_slave_config could keep direction.
+> > 
+> > The direction is already in the prep_ call, so sending in dmaengine_slave_config
+> > is not required, pls pass it in the prep_ call
+> Hi Vinod,
+> 	Is there any way to let the device driver to know dma controller is ready
+> (in sdma case is sdma firmware loaded or not)before prep_call? Hence, spi core
+> could map dma buffer or not. Prep_call is too late for spi core since the buffers
+> have been already mapped. 
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Can you use .device_alloc_chan_resources for that? This is where all
+the resource allocation for a channel should happen...
 
---eAbsdosE1cNLO4uF
-Content-Type: application/pgp-signature; name="signature.asc"
+> 	From my view, seems dmaengine_slave_config is the only one...Further,
+> sdma need direction in dmaengine_slave_config phase, because currently
+> what's the tx/rx script used on sdma channel is decided not only peripheral_type
+> but also direction. For example, spi tx dma is running ram script to workaround
+> ecspi ERR009165 while rx dma is running rom script, so only spi tx dma channel
+> depends on sdma firmware loaded(now that could be detect by ' load_address
+> < 0' in sdma_load_context() and prep_ call finally).
+>    I knew direction is deprecated in dmaengine_slave_config, but that's really
+> very useful for sdma to check if firmware loaded and spi core could get it earlier
+> before prep_call(fallback to PIO if dma is not ready).
 
------BEGIN PGP SIGNATURE-----
+I think that is wrong expectation, dmaengine_slave_config should pass
+the slave_config to driver and nothing else. The relevant action should
+be taken in respective prep_ calls here, so that should be fixed as well
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nWQAACgkQJNaLcl1U
-h9CxiAgAhDSjkVNSd4C3SSNbhfInIakuxFRySdIdhdj0LEFFiDgpuSzr3Lod/jYy
-mKamyUcBQ6F3CafOHN8nf4MlH9u3CSElXbDvLZlah833W1ak+AWXqFDdqi3XM9Wg
-5enzsfi4JHeKxu/NGAt7YUqXKG2WxM4RL0iC1H/CsGsLII4ixSPSNHJ8BsGs2Ehx
-Dv2I9zYutWdH+3O8bk4vHtJHpZidjuobydynnmMgcHpeDXVSLPZx22W/LXsUAlfE
-HFaK+IberJIeSTebqFLV0fkB5+x9yri0Jg8SLWubAGmqiS/XEvVLx1tF0uU/ukk4
-dBx3qCxD+Vtqo7ZF4IYCIM1u5B64lg==
-=HhUo
------END PGP SIGNATURE-----
-
---eAbsdosE1cNLO4uF--
+-- 
+~Vinod
