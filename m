@@ -2,94 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6979B1F90EC
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 10:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635221F9104
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 10:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbgFOIDZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 04:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728626AbgFOIDQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 04:03:16 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ABCC061A0E;
-        Mon, 15 Jun 2020 01:03:15 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id c71so13609903wmd.5;
-        Mon, 15 Jun 2020 01:03:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gdBft9EbSQxaFcZTBWSVvkfUii6hPWZmZod51XcwM3g=;
-        b=g0xVjqvB6k9fvH6NGm+kO1T5wfZO8l3HKdzO0wSQSvO2LpekjvxflpTQDNAIQwNFao
-         CkC2YMDv0ekrfG7O72j4wUaOThC9p2xN7Tme5DBv+m+tVSh7ZrzvlkDbEBOZ7ifa9usK
-         JiwaiM2Dr8wZX+5MtOVp+PPFMUJf+zc5KIexFxEwW31/CM2AWYgZCg46reKbT1t3Gfgh
-         4Gq8r9CvsBhuWMUMYuGX62d25dJ8CzujSjfQjRUapV+wxzqtu+AYvmTD7jpQJWmoeA8I
-         qgqBqONep8a3VQZFmNc5KlCL+2UFCM1nojOHZrNSX8rYNo2XpEZG02QzWTp7NngeiSmy
-         r9gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gdBft9EbSQxaFcZTBWSVvkfUii6hPWZmZod51XcwM3g=;
-        b=QDzkuBGfFPxGkxyzaYEYuneq5sqs9NqLfkSeFvLQQIyp5MpFUYFtIKJYkH5xe2oKl2
-         08dBQrfhpxdqNmdxbLQmVcQsgDn/tDJeY2Y73DIw3ue1y57PBbwf9gGFnloIS+yrubfH
-         UZvAeootRzbNhOdVQH1a7Ze+HJtsvFDnXKkyx5Ku4p0ybAxZS/9QyQ84uKl3++LtWKo2
-         izFH+WPHSFKBpe0KBYKWEJEhnOja3nBjp0op2Q1veyYpT+RoRIpPGF1lnTZKCv6ozCzB
-         zjfy+pWsdTQwx0R8AS84VfZNJBBNO7oiEDoWsZ05NZG0upb5woSaY3ZvKsvk1iWGcRBQ
-         9Btw==
-X-Gm-Message-State: AOAM533nIZp0XB9b2LHfAahacqHwXa/q32pWjPbkET1n0PJntDp1msIY
-        ANBdER6FN58VAfVHYwn3P/I=
-X-Google-Smtp-Source: ABdhPJwYOlEd8lleqkaydTaZ9E0KnDTQorRKqyyOV9fUtb2vgr76+4VExaNKd9kXu5f/DzFqlcXUeA==
-X-Received: by 2002:a7b:cf2c:: with SMTP id m12mr11782506wmg.70.1592208194668;
-        Mon, 15 Jun 2020 01:03:14 -0700 (PDT)
-Received: from skynet.lan (168.red-88-20-188.staticip.rima-tde.net. [88.20.188.168])
-        by smtp.gmail.com with ESMTPSA id d9sm23107054wre.28.2020.06.15.01.03.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 01:03:14 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     broonie@kernel.org, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, p.zabel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH 4/4] spi: bcm63xx-hsspi: allow building for BMIPS
-Date:   Mon, 15 Jun 2020 10:03:09 +0200
-Message-Id: <20200615080309.2897694-5-noltari@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200615080309.2897694-1-noltari@gmail.com>
-References: <20200615080309.2897694-1-noltari@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1728860AbgFOIIE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 04:08:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60896 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728260AbgFOIIE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jun 2020 04:08:04 -0400
+Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88B67206E2;
+        Mon, 15 Jun 2020 08:08:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592208483;
+        bh=iJfh939iI3h+OWNmaq9Fea8SXgzPZvuVhgPWgf+fAvE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GfLNLR/ncBnXRH3pbRa3pVoMgc9chju3+cmZG4U/slQCnrS3TEeQKSHdqzi3ZhJ+7
+         Py0bopMgmUAXcVy7zU8LXRlUX8X3G7T/otWGEyP/jMjy242fHp65pM/NKhqqbUSHWY
+         i4aqIIdDovs+WifikETKxUnEehfbBTXxdLp/6Oig=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>, kernel@pengutronix.de,
+        Krzysztof Kozlowski <krzk@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH v2 1/3] spi: spi-fsl-dspi: Fix external abort on interrupt in exit paths
+Date:   Mon, 15 Jun 2020 10:07:17 +0200
+Message-Id: <1592208439-17594-1-git-send-email-krzk@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-bcm63xx-hsspi controller is present on several BMIPS SoCs (BCM6318, BCM6328,
-BCM6362 and BCM63268).
+If interrupt comes late, during probe error path or device remove (could
+be triggered with CONFIG_DEBUG_SHIRQ), the interrupt handler
+dspi_interrupt() will access registers with the clock being disabled.  This
+leads to external abort on non-linefetch on Toradex Colibri VF50 module
+(with Vybrid VF5xx):
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+    $ echo 4002d000.spi > /sys/devices/platform/soc/40000000.bus/4002d000.spi/driver/unbind
+
+    Unhandled fault: external abort on non-linefetch (0x1008) at 0x8887f02c
+    Internal error: : 1008 [#1] ARM
+    CPU: 0 PID: 136 Comm: sh Not tainted 5.7.0-next-20200610-00009-g5c913fa0f9c5-dirty #74
+    Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
+      (regmap_mmio_read32le) from [<8061885c>] (regmap_mmio_read+0x48/0x68)
+      (regmap_mmio_read) from [<8060e3b8>] (_regmap_bus_reg_read+0x24/0x28)
+      (_regmap_bus_reg_read) from [<80611c50>] (_regmap_read+0x70/0x1c0)
+      (_regmap_read) from [<80611dec>] (regmap_read+0x4c/0x6c)
+      (regmap_read) from [<80678ca0>] (dspi_interrupt+0x3c/0xa8)
+      (dspi_interrupt) from [<8017acec>] (free_irq+0x26c/0x3cc)
+      (free_irq) from [<8017dcec>] (devm_irq_release+0x1c/0x20)
+      (devm_irq_release) from [<805f98ec>] (release_nodes+0x1e4/0x298)
+      (release_nodes) from [<805f9ac8>] (devres_release_all+0x40/0x60)
+      (devres_release_all) from [<805f5134>] (device_release_driver_internal+0x108/0x1ac)
+      (device_release_driver_internal) from [<805f521c>] (device_driver_detach+0x20/0x24)
+
+Fixes: 349ad66c0ab0 ("spi:Add Freescale DSPI driver for Vybrid VF610 platform")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+
 ---
- drivers/spi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index a9896e388355..500774fe1351 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -155,7 +155,7 @@ config SPI_BCM63XX
+This is an follow up of my other patch for I2C IMX driver [1]. Let's fix the
+issues consistently.
+
+[1] https://lore.kernel.org/lkml/1592130544-19759-2-git-send-email-krzk@kernel.org/T/#u
+
+Changes since v1:
+1. Disable the IRQ instead of using non-devm interface.
+---
+ drivers/spi/spi-fsl-dspi.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index 58190c94561f..023e05c53b85 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -1400,7 +1400,7 @@ static int dspi_probe(struct platform_device *pdev)
+ 		ret = dspi_request_dma(dspi, res->start);
+ 		if (ret < 0) {
+ 			dev_err(&pdev->dev, "can't get dma channels\n");
+-			goto out_clk_put;
++			goto disable_irq;
+ 		}
+ 	}
  
- config SPI_BCM63XX_HSSPI
- 	tristate "Broadcom BCM63XX HS SPI controller driver"
--	depends on BCM63XX || ARCH_BCM_63XX || COMPILE_TEST
-+	depends on BCM63XX || BMIPS_GENERIC || ARCH_BCM_63XX || COMPILE_TEST
- 	help
- 	  This enables support for the High Speed SPI controller present on
- 	  newer Broadcom BCM63XX SoCs.
+@@ -1415,11 +1415,14 @@ static int dspi_probe(struct platform_device *pdev)
+ 	ret = spi_register_controller(ctlr);
+ 	if (ret != 0) {
+ 		dev_err(&pdev->dev, "Problem registering DSPI ctlr\n");
+-		goto out_clk_put;
++		goto disable_irq;
+ 	}
+ 
+ 	return ret;
+ 
++disable_irq:
++	if (dspi->irq > 0)
++		disable_irq(dspi->irq);
+ out_clk_put:
+ 	clk_disable_unprepare(dspi->clk);
+ out_ctlr_put:
+@@ -1435,6 +1438,8 @@ static int dspi_remove(struct platform_device *pdev)
+ 
+ 	/* Disconnect from the SPI framework */
+ 	dspi_release_dma(dspi);
++	if (dspi->irq > 0)
++		disable_irq(dspi->irq);
+ 	clk_disable_unprepare(dspi->clk);
+ 	spi_unregister_controller(dspi->ctlr);
+ 
 -- 
-2.27.0
+2.7.4
 
