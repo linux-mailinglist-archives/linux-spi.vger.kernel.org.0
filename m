@@ -2,129 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0371F904B
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 09:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898771F9096
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 09:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728729AbgFOHsZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 15 Jun 2020 03:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728735AbgFOHsY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 03:48:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541B4C05BD1E
-        for <linux-spi@vger.kernel.org>; Mon, 15 Jun 2020 00:48:24 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1jkjqg-0006Gk-PF; Mon, 15 Jun 2020 09:48:06 +0200
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1jkjqe-000242-Ti; Mon, 15 Jun 2020 09:48:04 +0200
-Message-ID: <c544bcb8ea20dadcea68e22d33c160a713c7fe02.camel@pengutronix.de>
-Subject: Re: [PATCH 14/29] dt: Fix broken references to renamed docs
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+        id S1729166AbgFOHvP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 03:51:15 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:50738 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729161AbgFOHvN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 03:51:13 -0400
+Received: by mail-wm1-f66.google.com with SMTP id l17so13600236wmj.0;
+        Mon, 15 Jun 2020 00:51:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+HRGqyB5oqaA4VgjPNyb3KQ62e/coD1Hg4szCBEPxow=;
+        b=gdU7elIPsixG+TZ3GyDUXDJEKLlaxdrRI7ecDQHi2DFVixXRPo4RAHAMJcddNNmrqy
+         6JKkfCn1IljII49Ab2/IGcgbokDo2F6LrcioozF0C41TG5Fz9xNCo7SiOjqKHVuFan3b
+         kg1no+JvNFXE0BC3C6sXuK/sQrXNfNfLRmU4p/sURlpmshIpXe+/2XuTZD54ZUHLoU+E
+         LsCb8BTw1ES0oPcjMeX+iMH12Ai6S0r5RXd7sNif1i0soGbKukSdeacb6n6RmTuBK9ml
+         GfgE+zR9DP771DIRvpdEzecoJjlKAXi2527oOE5y7tUvzw27qxioEWWJVu46ZySUlT6P
+         URkw==
+X-Gm-Message-State: AOAM533P90UD7SlDvsSHL6NZqxV5DYlgYuMqKNgy0S6k+z4JEnd7GZfJ
+        DNxA8RhuRMJA1aHrXMMVXiHcZsi8
+X-Google-Smtp-Source: ABdhPJybYmPkJSlRnaMOuMktCVCC4yXe4QTkEyvxsVBtStC2ueb6/Stxp+dCP3g7zIfQ3UXBa1NUSQ==
+X-Received: by 2002:a1c:a74d:: with SMTP id q74mr11611364wme.177.1592207471716;
+        Mon, 15 Jun 2020 00:51:11 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.184])
+        by smtp.googlemail.com with ESMTPSA id g3sm25678681wrb.46.2020.06.15.00.51.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 15 Jun 2020 00:51:11 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 09:51:09 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org
-Date:   Mon, 15 Jun 2020 09:48:04 +0200
-In-Reply-To: <6866c0d6d10ce36bb151c2d3752a20eb5122c532.1592203542.git.mchehab+huawei@kernel.org>
-References: <cover.1592203542.git.mchehab+huawei@kernel.org>
-         <6866c0d6d10ce36bb151c2d3752a20eb5122c532.1592203542.git.mchehab+huawei@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: spi-fsl-dspi: Fix external abort on interrupt
+ in exit paths
+Message-ID: <20200615075109.GA22427@kozik-lap>
+References: <1592132154-20175-1-git-send-email-krzk@kernel.org>
+ <CA+h21hpsmG+xUjWgaNcSojxeWYm4bcbMsn6_hmZrJ0A3zfVEag@mail.gmail.com>
+ <20200615071540.GB20941@kozik-lap>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200615071540.GB20941@kozik-lap>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 2020-06-15 at 08:46 +0200, Mauro Carvalho Chehab wrote:
-> Some files got renamed. Those were all fixed automatically by
+On Mon, Jun 15, 2020 at 09:15:40AM +0200, Krzysztof Kozlowski wrote:
+> On Sun, Jun 14, 2020 at 06:48:04PM +0300, Vladimir Oltean wrote:
+> > On Sun, 14 Jun 2020 at 13:57, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > >
+> > > If interrupt comes late, during probe error path or device remove (could
+> > > be triggered with CONFIG_DEBUG_SHIRQ), the interrupt handler
+> > > dspi_interrupt() will access registers with the clock being disabled.  This
+> > > leads to external abort on non-linefetch on Toradex Colibri VF50 module
+> > > (with Vybrid VF5xx):
+> > >
+> > >     $ echo 4002d000.spi > /sys/devices/platform/soc/40000000.bus/4002d000.spi/driver/unbind
+> > >
+> > >     Unhandled fault: external abort on non-linefetch (0x1008) at 0x8887f02c
+> > >     Internal error: : 1008 [#1] ARM
+> > >     CPU: 0 PID: 136 Comm: sh Not tainted 5.7.0-next-20200610-00009-g5c913fa0f9c5-dirty #74
+> > >     Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
+> > >       (regmap_mmio_read32le) from [<8061885c>] (regmap_mmio_read+0x48/0x68)
+> > >       (regmap_mmio_read) from [<8060e3b8>] (_regmap_bus_reg_read+0x24/0x28)
+> > >       (_regmap_bus_reg_read) from [<80611c50>] (_regmap_read+0x70/0x1c0)
+> > >       (_regmap_read) from [<80611dec>] (regmap_read+0x4c/0x6c)
+> > >       (regmap_read) from [<80678ca0>] (dspi_interrupt+0x3c/0xa8)
+> > >       (dspi_interrupt) from [<8017acec>] (free_irq+0x26c/0x3cc)
+> > >       (free_irq) from [<8017dcec>] (devm_irq_release+0x1c/0x20)
+> > >       (devm_irq_release) from [<805f98ec>] (release_nodes+0x1e4/0x298)
+> > >       (release_nodes) from [<805f9ac8>] (devres_release_all+0x40/0x60)
+> > >       (devres_release_all) from [<805f5134>] (device_release_driver_internal+0x108/0x1ac)
+> > >       (device_release_driver_internal) from [<805f521c>] (device_driver_detach+0x20/0x24)
+> > >
+> > > The resource-managed framework should not be used for interrupt handling,
+> > > because the resource will be released too late - after disabling clocks.
+> > > The interrupt handler is not prepared for such case.
+> > >
+> > > Fixes: 349ad66c0ab0 ("spi:Add Freescale DSPI driver for Vybrid VF610 platform")
+> > > Cc: <stable@vger.kernel.org>
+> > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > >
+> > > ---
+> > 
+> > I don't buy this argument that "the resource-managed framework should
+> > not be used for interrupt handling". What is it there for, then?
 > 
-> 	./scripts/documentation-file-ref-check --fix
+> It was created long time ago for memory allocations and since then
+> people ported to all other possibilities and used in drivers.  Just
+> because you can do something, does not necessarily mean that you
+> should...
 > 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt   | 2 +-
->  Documentation/devicetree/bindings/display/imx/fsl-imx-drm.txt | 4 ++--
->  Documentation/devicetree/bindings/display/imx/ldb.txt         | 4 ++--
->  Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt  | 2 +-
->  MAINTAINERS                                                   | 4 ++--
->  5 files changed, 8 insertions(+), 8 deletions(-)
+> > Could you just call disable_irq before clk_disable_unprepare instead
+> > of this massive rework?
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> index 715047444391..10b8459e49f8 100644
-> --- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> +++ b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> @@ -47,7 +47,7 @@ Required properties:
->  			  &lsio_mu1 1 2
->  			  &lsio_mu1 1 3
->  			  &lsio_mu1 3 3>;
-> -		See Documentation/devicetree/bindings/mailbox/fsl,mu.txt
-> +		See Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
->  		for detailed mailbox binding.
->  
->  Note: Each mu which supports general interrupt should have an alias correctly
-> diff --git a/Documentation/devicetree/bindings/display/imx/fsl-imx-drm.txt b/Documentation/devicetree/bindings/display/imx/fsl-imx-drm.txt
-> index 5bf77f6dd19d..5a99490c17b9 100644
-> --- a/Documentation/devicetree/bindings/display/imx/fsl-imx-drm.txt
-> +++ b/Documentation/devicetree/bindings/display/imx/fsl-imx-drm.txt
-> @@ -68,7 +68,7 @@ Required properties:
->    datasheet
->  - clocks : phandle to the PRE axi clock input, as described
->    in Documentation/devicetree/bindings/clock/clock-bindings.txt and
-> -  Documentation/devicetree/bindings/clock/imx6q-clock.txt.
-> +  Documentation/devicetree/bindings/clock/imx6q-clock.yaml.
->  - clock-names: should be "axi"
->  - interrupts: should contain the PRE interrupt
->  - fsl,iram: phandle pointing to the mmio-sram device node, that should be
-> @@ -94,7 +94,7 @@ Required properties:
->    datasheet
->  - clocks : phandles to the PRG ipg and axi clock inputs, as described
->    in Documentation/devicetree/bindings/clock/clock-bindings.txt and
-> -  Documentation/devicetree/bindings/clock/imx6q-clock.txt.
-> +  Documentation/devicetree/bindings/clock/imx6q-clock.yaml.
->  - clock-names: should be "ipg" and "axi"
->  - fsl,pres: phandles to the PRE units attached to this PRG, with the fixed
->    PRE as the first entry and the muxable PREs following.
-> diff --git a/Documentation/devicetree/bindings/display/imx/ldb.txt b/Documentation/devicetree/bindings/display/imx/ldb.txt
-> index 38c637fa39dd..8e6e7d797943 100644
-> --- a/Documentation/devicetree/bindings/display/imx/ldb.txt
-> +++ b/Documentation/devicetree/bindings/display/imx/ldb.txt
-> @@ -30,8 +30,8 @@ Required properties:
->                  "di2_sel" - IPU2 DI0 mux
->                  "di3_sel" - IPU2 DI1 mux
->          The needed clock numbers for each are documented in
-> -        Documentation/devicetree/bindings/clock/imx5-clock.txt, and in
-> -        Documentation/devicetree/bindings/clock/imx6q-clock.txt.
-> +        Documentation/devicetree/bindings/clock/imx5-clock.yaml, and in
-> +        Documentation/devicetree/bindings/clock/imx6q-clock.yaml.
->  
->  Optional properties:
->   - pinctrl-names : should be "default" on i.MX53, not used on i.MX6q
+> This massive rework is 9 insertions and 4 deletions, indeed I made
+> impressive, huge commit with significant impact. disable_irq() could work
+> as well so if this is preferred, no problem from my side.
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+disable_irq() should fix real world case but won't fix DEBUG_SHIRQ.
+I'll rework it as well but then we go to bigger change again.
 
-regards
-Philipp
+Best regards,
+Krzysztof
+
