@@ -2,119 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BB91F96A6
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 14:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206831F9764
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 14:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729811AbgFOMf5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 08:35:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52176 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728326AbgFOMf4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jun 2020 08:35:56 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67AC6206D7;
-        Mon, 15 Jun 2020 12:35:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592224555;
-        bh=bK7xnMNO32LjNVdhxquamLIt4CNPuSKX3tUtMf1VOH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RnslLA8y44+qEBt1UcgQpOlAoS8fYlwkJBrQqPZn/CI6GGftG9buwdzrJbOJ5EnV6
-         kkDadIVNUZkx2q1HkVr6dvQaX3OyUyGZDvUIKt5RJwzRE6jCYtR5dMfT2DDo7aHBSS
-         Dc6jNSlFc5IMjIVoR/DDJkYX7gUPB8I8NlA3HNmk=
-Date:   Mon, 15 Jun 2020 13:35:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "matthias.schiffer@ew.tq-group.com" 
-        <matthias.schiffer@ew.tq-group.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
-Message-ID: <20200615123553.GP4447@sirena.org.uk>
-References: <1591880310-1813-1-git-send-email-yibin.gong@nxp.com>
- <1591880310-1813-2-git-send-email-yibin.gong@nxp.com>
- <20200611134042.GG4671@sirena.org.uk>
- <VE1PR04MB66383245FAD2AE33CFEA76F789810@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200612101357.GA5396@sirena.org.uk>
- <VE1PR04MB66384013797FE6B01943F2A889810@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200612141611.GI5396@sirena.org.uk>
- <VE1PR04MB6638B43E3AC83286946DABCD899F0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+        id S1730019AbgFOM4O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 08:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729977AbgFOM4O (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 08:56:14 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8103C061A0E;
+        Mon, 15 Jun 2020 05:56:13 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id w16so16779760ejj.5;
+        Mon, 15 Jun 2020 05:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qXYey5+z4XH/ze0CWdNcvFvzyDDniwsSZOKQE4KvrPA=;
+        b=LWzYj+YUZE5h3uCy+V+oKermAdgPdGS6C8qL9LwMjPW6ITfnP0y2Dgs05yw/ayjMJu
+         RgJGJgRKxJtjJsprQaWp+UM3lJME/REUZLhE9zN06FpCC3UFkmHHEJrFrmCe7NeTfb6P
+         4viYgcN2myPkYCNOsbzttBX+tLoaW9BysLcBm6es9LK4wCQeyy8bmdhxBERMvuPilICH
+         NJANq3gd8DooJJODqZF5xLp8nWmuka+rLmFf2vfjj2VkOSVTvqyB2mUMzkytFygDICaj
+         etrCk9Km4O4ORHSnyhRPAlXYC5wu2pPYjB7Rc/jlmQdZ/xOxJFX2yNYUBlzYXyqSo+oY
+         goBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qXYey5+z4XH/ze0CWdNcvFvzyDDniwsSZOKQE4KvrPA=;
+        b=CjEsxxm55eC0ZxoYho8VfsBOy74pIXDF49Sc7OwWyZtZQZc++i/R1vaWrtBw+QL5To
+         qEWJZAxwrX6X1iYSOkZfRiw4hN2M+ZjZEPd8o1lVCTUQ4VBP5N/xsjScUxqFuFa+BG5N
+         bNWvVFLsgiTZQvIWGEJj/fDgQ8f2TC4tZ1cjs3wX+C5jF/vw137w0jdKLs2oZLS+OEr2
+         rYl5Miqy4UGMbNqsPHP0EfWOrCet6rC4e+dL2lzKWuNtyRulCAKynzeDycMaKMyA/3kY
+         kCtS/h5ZAD5/FgGlwcIOAI4EHJdc2kvYDUio1NLCFuewVxxysLkQlVBPSfwBsWBaETCP
+         LlNw==
+X-Gm-Message-State: AOAM530FhIG2cDYRukDKdZmm/4W47/csOXzHIQjMPdse08Ab8MtNn+BK
+        zzrkoAfdsK6MUAad5v1xiYQXXMewO63+mBzac2E=
+X-Google-Smtp-Source: ABdhPJxfD2eZnT7OjVjtGV+km3Oywp2EPuv/r9jJrK8yqXO8qIUu5maBk1Ir2ArbyCoC4j5QFo4imEk0dhb/iB+WsQo=
+X-Received: by 2002:a17:906:851:: with SMTP id f17mr24343551ejd.396.1592225772600;
+ Mon, 15 Jun 2020 05:56:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Zfao1/4IORAeFOVj"
-Content-Disposition: inline
-In-Reply-To: <VE1PR04MB6638B43E3AC83286946DABCD899F0@VE1PR04MB6638.eurprd04.prod.outlook.com>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1592208439-17594-1-git-send-email-krzk@kernel.org>
+ <e1f0326c-8ae8-ffb3-aace-10433b0c78a6@pengutronix.de> <20200615123052.GO4447@sirena.org.uk>
+In-Reply-To: <20200615123052.GO4447@sirena.org.uk>
+From:   Vladimir Oltean <olteanv@gmail.com>
+Date:   Mon, 15 Jun 2020 15:56:01 +0300
+Message-ID: <CA+h21hqC7hAenifvRqbwss=Sr+dAu3H9Dx=UF0TS0WVbkzTj2Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] spi: spi-fsl-dspi: Fix external abort on interrupt
+ in exit paths
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, stable@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 15 Jun 2020 at 15:35, Mark Brown <broonie@kernel.org> wrote:
+>
 
---Zfao1/4IORAeFOVj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>
+> Indeed.  The upshot of all this is that the interrupt needs to be freed
+> not disabled before the clocks are disabled, or some other mechanism
+> needs to be used to ensure that the interrupt handler won't attempt to
+> access the hardware when it shouldn't.  As Vladimir says there are
+> serious issues using devm for interrupt handlers (or anything else that
+> might cause code to be run) due to problems like this.
 
-On Sun, Jun 14, 2020 at 01:04:57PM +0000, Robin Gong wrote:
-> On 2020/06/12 22:16 Mark Brown <broonie@kernel.org> wrote:=20
-> > On Fri, Jun 12, 2020 at 01:48:41PM +0000, Robin Gong wrote:
-> > > On 2020/06/12 18:14 Mark Brown <broonie@kernel.org> wrote:
+And the down-shot is that whatever is done in dspi_remove (free_irq)
+also needs to be done in dspi_suspend, but with extra care in
+dspi_resume not only to request the irq again, but also to flush the
+module's FIFOs and clear interrupts, because there might have been
+nasty stuff uncaught during sleep:
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
+    regmap_update_bits(dspi->regmap, SPI_MCR,
+               SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF,
+               SPI_MCR_CLR_TXF | SPI_MCR_CLR_RXF);
+    regmap_write(dspi->regmap, SPI_SR, SPI_SR_CLEAR);
 
-> > No, I mean that the reason the DMA transfer fails may be something that
-> > happens after we've started putting things on the bus - the bit about F=
-IFOs is
-> > just a random example of an error that could happen.
+So it's pretty messy.
 
-> Sorry Mark for that I can't get your point... The bus error such as data =
-corrupt
-> seems not the spi core's business since it can only be caught in spi cont=
-roller
-> driver or upper level such as mtd driver (spi-nor) which know what's the =
-failure
-> happen at spi bus HW level or what's the correct data/message. In other w=
-ords,
-> spi core can't detect such error by transfer_one().
-
-If we see an error in transfer_one() it could be from anything, we've no
-idea what happened on the bus - the controller may have got part way
-through the transfer before failing.
-
-> But despite of that case, do you think this patch is valid for transfer_o=
-ne() failue
-> in dma and fallback to pio?
-
-No, not unless we know that nothing went out on the bus.
-
---Zfao1/4IORAeFOVj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7naygACgkQJNaLcl1U
-h9AKiwf+K/TO3gWH9vQYkVSNuWGp+wzROetikqE2P9cbQxa+EuwVUJ5cU8EOCUJV
-jUiCbGsdl41kpqm98zYU5CZy2M5hvulcfdFOi19uGDGXn8VGNRYELhUG39RvKxSM
-w+toG6fA6tvkm2nDoiiKG3N9f7mH3DgLTRw5MX631cATsLhZ5jlZnxmZOx7RH1KG
-t3Cz7VEz/t4IK+HgEhk+s2Tr0fwioHjAuFuaor6s1CFkkxeRQ95bTqIJy/nLC8ws
-Y5B+i4ul0d3lL5HAx7kssr41wpo7Iy/gTaG8/EEecEtpXOt3bJjhOnwYYUJ4oD7t
-oKFeiaZtcsy2T2uo9sH/54P9RFN2KQ==
-=5gqF
------END PGP SIGNATURE-----
-
---Zfao1/4IORAeFOVj--
+-Vladimir
