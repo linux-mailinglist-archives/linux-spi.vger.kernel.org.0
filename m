@@ -2,238 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7131F9999
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 16:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 162601F99F4
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 16:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728773AbgFOOG1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 10:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728510AbgFOOG1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 10:06:27 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7A4C061A0E
-        for <linux-spi@vger.kernel.org>; Mon, 15 Jun 2020 07:06:27 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id mb16so17594433ejb.4
-        for <linux-spi@vger.kernel.org>; Mon, 15 Jun 2020 07:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastree3d-com.20150623.gappssmtp.com; s=20150623;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=k4C/+/fRiSIFo4IwQCmhnSuHF4dvzSlHbziYd2q10mQ=;
-        b=NZ8/p+7g9oqbeQZ9B5d/f0cUBG4RZ75xNZh+kaEgvuG4T0Y5KIcXATW79vy8VHQHki
-         e3yWeeWTfYAGO510r+e/ojTL5lsR6vriuVpbvtDVjdR+ND72+xYPQpfGKqBxGFeL9bT5
-         Ij8Y67WRfNUbAZUGvhCkSj3ijJ9p1aMn2eXJHYhWB020oNjFgYAdaNOYRDxfG1d7y2Dm
-         YEBs3NJ6Ahbf2/Ir6/sw/R8U3c+l+y9vMwl1r3pTPKva9S/GmdfKNxeivNIpw6Q5nSn0
-         Q6EtqSpUJ1n622RtCppfZHake6HfduWk35qKczzCkrMWhYD3G7457U6jL2MplvqD0KV+
-         gUSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=k4C/+/fRiSIFo4IwQCmhnSuHF4dvzSlHbziYd2q10mQ=;
-        b=gueoIZHD5cT4XU4UGFPmBjJNLnebK6f4xCeM9g1eZOdj+lkbVyjufO+iC38ui/8E87
-         dm675XPAxjNhbKRk3yRbLP/tPjEVtRTzzUXJSInzxP1NGSi/f9y+IstvNWpW/gUC1P2O
-         plUtTEYvFTm+17U4Mx5DJb5feOstcO78KfhbhJI2xBa1oQK/4rTRNFk9KoClmN5roIlK
-         SsqNKgufol27MOERr7uNVMa8Nap0Gy0AqTl3ygmpcbQ50HK53VsYuPQDln3BBBPVREut
-         UNwqgFL8WokyTXNQjOxk4B0jqDjWxIVQudXAdil6XV93ihtqjAsg2oG4l919H9SBaIjS
-         W4sw==
-X-Gm-Message-State: AOAM532MgTKyll8rld8Rzv2hwrFg95vLLSQDQmFqVeZDHW4nlL6PVFtl
-        KSYGIvkBssYcd3RrveeoVr29
-X-Google-Smtp-Source: ABdhPJyuz3H0ISp8bnWfVL3IJF5WWI0Mfe4/Pv7NWPYiNpmsG89DIJEsajkV05rWnd4kfW88xq5z4g==
-X-Received: by 2002:a17:906:c150:: with SMTP id dp16mr25220134ejc.536.1592229985726;
-        Mon, 15 Jun 2020 07:06:25 -0700 (PDT)
-Received: from [192.168.33.195] (fastree1.epfl.ch. [192.26.37.52])
-        by smtp.gmail.com with ESMTPSA id n17sm1587294ejj.75.2020.06.15.07.06.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jun 2020 07:06:25 -0700 (PDT)
-From:   Adrian Fiergolski <adrian.fiergolski@fastree3d.com>
-X-Google-Original-From: Adrian Fiergolski <Adrian.Fiergolski@fastree3d.com>
-Subject: Re: [cadence-spi] daisy chain
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <7cddc1a3-f3a8-37dd-487a-cd2274b7941c@fastree3d.com>
- <CAMuHMdXzErU5z69=2gks5ySutkGw98O6+f7weiuPUp8uqTx63w@mail.gmail.com>
- <9bfce379-1878-e8e5-c452-0e24aa263cbb@fastree3d.com>
- <CAMuHMdWkbVihHqKywxDRW6ucNEySXMa-XEuaVu8Vbx2+kUU-aA@mail.gmail.com>
- <143d0505-33a2-b97f-0088-75def4c1e30d@fastree3d.com>
-Message-ID: <a1dd3e24-a393-0013-5ff7-a8e7cc7e0626@fastree3d.com>
-Date:   Mon, 15 Jun 2020 16:06:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.8.1
+        id S1730396AbgFOOTC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 10:19:02 -0400
+Received: from mail-eopbgr130044.outbound.protection.outlook.com ([40.107.13.44]:11548
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729733AbgFOOTA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jun 2020 10:19:00 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RW6Bu1CIPhPYhfH2iXy1jTWw+SbZP3vx8HkOuJwLr+56jJbHYGOk33zFIZ322LPl9chEmv++J2Q12BLcYgcNxkYdgIoSoFOS8/4QiP3ZxCryeAxhDvFkRycbzWm8nW5qQ+7Hqm1Zbn/HgfmQ+tb92IIimh4er/z1dR4rUKD7nOXbrvv91JEzb3ZrFv02p72tsalVuehjPpMDCftN2ljWCmHJMNclVStADG20DfcmwIp+WosiqfIEX7u8mfcrD/Uh8lAjhTZ4wyUi+UYtx4D57cAsol2J39Pi619RRJQwAZVVE3F172iiGnKAO1ELSnLNUsavgA0xrfzQsU3bqf353g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vefX8XkRnqcJbGrVQlZtX2fCZULbA2dLJI8hKiaWivM=;
+ b=Pdi5O8mCKYLPgSOBwvxf5k+9WusKWW5euaGiYwnxQvpAaCtatTG8+O9uOGsLFHp0GTjy7oUQlFc24zliY/1aXC0o9mwtH0amqcFXF1Dm0EHJ3qUxZK/+689nIWTnr/O2aWulU+Vx06UIqcAXhODyGeTJcA6/UkZ00Ri8DZPq4/fY47FL1eeBY2kcvuXT1RyEJE1/HzS0t0dixWqQW6HM4RZC3432z/2JoGePKad6KmRxpNeDmJrTMaPPnxVogF1pMwXYBQhmp4TQCZf6V63mzBaLOVoG15pXS/0YuqDT+FK7FObOqBZ7ZplIe58sy4H5Tu/SSy1c6J064MAHF5D2MQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vefX8XkRnqcJbGrVQlZtX2fCZULbA2dLJI8hKiaWivM=;
+ b=jHPyBQTa0We4sNiTapiHcxad3NwmHanbHUCeGsx8fGUR71XizxbzpnHboda9q6Ig5FpJs4eIS72GIiQNcSOMCQbZ7xEdA5dhYqhOdrXc4VEKM3Cdml+FnNRDLvOAd2FbKrgMKJ8JqbSdC5a5cqDjMWX0w3TKy4E8yPAYHRLJD44=
+Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (2603:10a6:803:119::15)
+ by VE1PR04MB6415.eurprd04.prod.outlook.com (2603:10a6:803:11b::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.21; Mon, 15 Jun
+ 2020 14:18:54 +0000
+Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
+ ([fe80::5cc4:23a5:ca17:da7d]) by VE1PR04MB6638.eurprd04.prod.outlook.com
+ ([fe80::5cc4:23a5:ca17:da7d%6]) with mapi id 15.20.3088.028; Mon, 15 Jun 2020
+ 14:18:54 +0000
+From:   Robin Gong <yibin.gong@nxp.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "matthias.schiffer@ew.tq-group.com" 
+        <matthias.schiffer@ew.tq-group.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
+Thread-Topic: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
+Thread-Index: AQHWP6z7CX2etPvPnk+oddH8JEW5FKjTbHIAgADDYUCAAJUwgIAACjoQgAA5dICAAOmA8IADsXmAgAANH1CAAASJgIAACZlA
+Date:   Mon, 15 Jun 2020 14:18:54 +0000
+Message-ID: <VE1PR04MB6638793C00742D5BA72F8AC2899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+References: <1591880310-1813-1-git-send-email-yibin.gong@nxp.com>
+ <1591880310-1813-2-git-send-email-yibin.gong@nxp.com>
+ <20200611134042.GG4671@sirena.org.uk>
+ <VE1PR04MB66383245FAD2AE33CFEA76F789810@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200612101357.GA5396@sirena.org.uk>
+ <VE1PR04MB66384013797FE6B01943F2A889810@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200612141611.GI5396@sirena.org.uk>
+ <VE1PR04MB6638B43E3AC83286946DABCD899F0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200615123553.GP4447@sirena.org.uk>
+ <VE1PR04MB6638C65257F41072C3D61583899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200615133905.GV4447@sirena.org.uk>
+In-Reply-To: <20200615133905.GV4447@sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [183.192.235.111]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 78c1ec6c-a227-4087-3571-08d8113708f7
+x-ms-traffictypediagnostic: VE1PR04MB6415:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VE1PR04MB6415ACC0634C21B7794E4E3F899C0@VE1PR04MB6415.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 04359FAD81
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nvTow8U+q7wxBWkMifneUgsotU9ai3gzHeTDsflteZC343sFITeQdbYOa2XWOoHmBLyWghbaSlg1ZfFImikO+9EYkvxz6Wh3e2hJFzsxwe1GAHSh1l4Rf3xPRjj0DTXbq+duH6RvGZaG6mBaHDLURJIGj8aL1dWioSyiiXYKp9Sy9srj30oY5wORjEeFFRlv9Z0B8BbP/2Lhiz2Dkjj78PlaO5IAia6EeW6FzoQgCYTK9OmoCGoLuH/kZjhtagBDxXh38vbfOO4wpRLZJQez8vndOWXdiPblw3vuipvPQgwPSrQUI555KLr9NRH+6+/i
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6638.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(54906003)(83380400001)(71200400001)(8936002)(5660300002)(52536014)(186003)(8676002)(26005)(4744005)(316002)(7696005)(478600001)(53546011)(76116006)(66476007)(66556008)(6916009)(64756008)(66446008)(33656002)(6506007)(66946007)(2906002)(86362001)(7416002)(9686003)(4326008)(55016002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: fnNB4/W0OTi84Rc+Ogok1m+DxaGA+tFek+k2ISGUhcUjBSprkFO2CJ2o/LR0KE9HUwltqGPNJst7OJjHIq83/AJg4UI4rgOPchk4UL7Izorn+wm6pC6KEGwbOpDGBvrvD7zE4naeU/lkr2CnYYORATo0WACaTcF96LPAb5hbDoWXegAjVV0nzsJPoN+SXtN7jTmVGzNivl+utqOuobRdjhFCydDbpRDz36mqaXCr8UKLepNokF47VWKc1CnczwrUZYJo/UrILZFBMp1VJajqQkZrKsGV+ZYPnveju7rVzpkRijJBZ13TXg+cR/AVW6VeYqYaEQ2O+85zsw8FXfVVlFccwnDU6qJLQTYTabSS0yIAqmBDTBcodmItRF32a/aIphsNVQDYXTOxZBCZ51kxs7y7Y4iFCK+XfpVqu2RPo+6XP5DONBBwF32PKLgs4ivWsexs6RuvkphwbBtAo1x6qB74chiImS+Xf5WVqncKdOw1PT+iHhAiHs7eALwyCd+I
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <143d0505-33a2-b97f-0088-75def4c1e30d@fastree3d.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78c1ec6c-a227-4087-3571-08d8113708f7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2020 14:18:54.3138
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uAzgrywaEFfmYboIEKPk3AJosen31bKXzQtNY3lKjuGd9bZ3EBDNWuJhyv90SyhxLKE9l1c47ALPK0OqBmK67w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6415
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Sorry for the typo in the example device tree:
-
-On 15.06.2020 15:57, Adrian Fiergolski wrote:
-> Hi Geert,
->
-> Thank you for the quick reply.
->
-> On 15.06.2020 15:07, Geert Uytterhoeven wrote:
->> Hi Adrian,
->>
->> CC devicetree
->>
->> On Mon, Jun 15, 2020 at 3:01 PM Adrian Fiergolski
->> <adrian.fiergolski@fastree3d.com> wrote:
->>> On 13.06.2020 09:33, Geert Uytterhoeven wrote:
->>>> On Fri, Jun 12, 2020 at 6:26 PM Adrian Fiergolski
->>>> <adrian.fiergolski@fastree3d.com> wrote:
->>>> I have a daisy chain of three ltc2634 slaves (iio/dac/ltc2632.c)
->>>> connected to a single chip select of the cadence-spi master. I have the
->>>> impression such a configuration is supported by none of those two
->>>> drivers. I could try to extend both, however, I haven't found any other
->>>> SPI driver, where I could find implementation inspiration. Is it
->>>> supported by kernel?
->>>>
->>>> drivers/gpio/gpio-max3191x.c supports "#daisy-chained-devices".
->>>> drivers/gpio/gpio-74x164.c supports multiple shift registers through the
->>>> "registers-number" DT property.
->>>>
->>>> So both drivers handle this in their SPI slave drivers.
->>>>
->>>> Of course this does not handle the mixed case, i.e. daisy-chaining
->>>> different types of devices.
->>>>
->>>> The documentation mentions only about the common 'daisy-chained-devices'
->>>> property (devicetree/bindings/common-properties.txt). However, in order
->>>> to try to implement it in the master driver, IMHO, the spi subsystem
->>>> would need to have a call 'no-operation' to other nodes on the
->>>> daisy-chain, which are not addressed by the given SPI access. Is there
->>>> any recommended approach to address this case?
->>>>
->>>> Supporting this in a generic way would indeed be nice, as it would mean
->>>> individual SPI slave drivers no longer have to care about it.
->>>> However, that may be difficult, as the master needs to known which
->>>> dummy (no-op) data is safe to shift through the non-addresses SPI slaves.
->>> In fact, the ultimate solution would be to have it solved at the level
->>> of the spi subsystem:
->>>
->>>   * /spi_device struct/ would contain extra callback which returns msg
->>>     to be sent for no operation.
->>>   * spi_device struct would contain a pointer to the list describing the
->>>     given daisy chain (list of spi_devices on the chain)
->>>   * /spi_device struct /would contain extra u8 daisy_chain_msg_length
->>>     indicating length of a command of the addressed device if it's on
->>>     the daisy chain
->>>     For example, in case of the ltc2634 device, the regular message
->>>     consists of 24 bits, but when device is a part of a daisy chain, the
->>>     messages are 32 bits. This 32 would be stored in
->>>     /daisy_chain_msg_length./
->>>   * When /spi_write/ was called (include/linux/spi/spi.h), the
->>>     /spi_message_init_with_transfer/ would create a msg of length equal
->>>     to a sum of /daisy_chain_msg_length/ of all devices on the chain.
->>>     Afterwards, in /spi_message_init_with_transfers/, the actual message
->>>     would be filled with the command of the addressed device on the
->>>     chain and no_operation content for all other devices on the chain
->>>     not being addressed
->> Sounds good to me.
->>
->>>   * I think in such a case, the /daisy-chained-devices /property would
->>>     be not used, as chains would be build basing on the assigned
->>>     chipselect (reg property).
->> So you still have to describe the chain in DT in some way.
->> As there can be only a single sub node with the same unit address
->> (= chip select), you probably need a container with that address, which
->> would contain all devices in the chain, in order (unit addresses 0, 1, ...).
-> Good point. So maybe at the level of the device tree, it could be
-> described like that (based on the spi-cadence example):
->
->         spi0: spi@ff040000 {
->             compatible = "cdns,spi-r1p6";
->             status = "disabled";
->             interrupt-parent = <&gic>;
->             interrupts = <0 19 4>;
->             reg = <0x0 0xff040000 0x0 0x1000>;
->             clock-names = "ref_clk", "pclk";
->             #address-cells = <1>;
->             #size-cells = <0>;
->             power-domains = <&zynqmp_firmware PD_SPI_0>;
->             daisy-chain0 : daisy_chain@0 {
->                #address-cells = <1>;
->                #size-cells = <0>;
->                reg = <0>;
->                daisy-chained-devices = 2;
->
->                dac0: ltc2632@0 {
->                    compatible = "lltc,ltc2634-l12";
->                    reg = <0>;
->                    spi-max-frequency = <1000000>;
->                };
->                dac1: ltc2632@1 {
->                    compatible = "lltc,ltc2634-l12";
->                    reg = <1>;
->                    spi-max-frequency = <2000000>;
->                };
->            };
->         };
-
-        spi0: spi@ff040000 {
-            compatible = "cdns,spi-r1p6";
-            status = "disabled";
-            interrupt-parent = <&gic>;
-            interrupts = <0 19 4>;
-            reg = <0x0 0xff040000 0x0 0x1000>;
-            clock-names = "ref_clk", "pclk";
-            #address-cells = <1>;
-            #size-cells = <0>;
-            power-domains = <&zynqmp_firmware PD_SPI_0>;
-            daisy-chain0 : daisy_chain@0 {
-               #address-cells = <1>;
-               #size-cells = <0>;
-               #daisy-chained-devices = <2>;
-
-               reg = <0>;
-               
-               dac0: ltc2632@0 {
-                   compatible = "lltc,ltc2634-l12";
-                   reg = <0>;
-                   spi-max-frequency = <1000000>;
-               };
-               dac1: ltc2632@1 {
-                   compatible = "lltc,ltc2634-l12";
-                   reg = <1>;
-                   spi-max-frequency = <2000000>;
-               };
-           };
-        };
-
->
-> Once a node has daisy-chanied-devices property defined,
-> of_register_spi_device (spi.c) will interpret it as a daisy chain. I
-> will assume, that for the given chain the lowest frequency of the whole
-> chain should be used. When it comes to the mode, as in case of
-> incompatibility no much can be done anyway, the mode of the addressed
-> spi device will be used.
->
->>> If you agree with the above description, I could try to implement it. Of
->>> course any suggestion are welcome, however, I would like to have a
->>> working solution until end of this week, so I would appreciate an active
->>> feedback. As my SoC works with kernel v4.19, I would implement it for
->>> it, test it, and move it afterwards to the master version (I hope, there
->>> were no big changes in the SPI subsystem, right?).
->> Having something that works by the end of the week sounds doable to.
->> Getting it in shape for upstreaming is a different thing...
-> Let's try then. As I wrote earlier, I will try to implement it and test
-> it with 4.19. Afterwards, I will share it with you for a general concept
-> review. Once no comments, I will try to move it to the master and we can
-> start from there the upstreaming process.
->
-> Regards,
->
-> Adrian
->
->
+On 2020/06/15 21:39 Mark Brown <broonie@kernel.org> wrote:
+> On Mon, Jun 15, 2020 at 01:35:01PM +0000, Robin Gong wrote:
+> > Then how about choosing specific error code for such dma not ready
+> > case where nothing went out on the bus neither?
+>=20
+> Yes, that's what I suggested.
+Seems not easy to find a suitable error value, how about EBADR which
+sounds like no any available dma_async_tx_descriptor got by calling dmaengi=
+ne_prep_slave_sg?=20
+#define EBADR           53      /* Invalid request descriptor */
