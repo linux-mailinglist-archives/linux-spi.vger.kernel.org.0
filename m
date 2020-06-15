@@ -2,25 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFE41F9FF3
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 21:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E4B1FA028
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 21:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731374AbgFOTJy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 15:09:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:54004 "EHLO foss.arm.com"
+        id S1729889AbgFOT0e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 15:26:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49064 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731372AbgFOTJy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jun 2020 15:09:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 087711FB;
-        Mon, 15 Jun 2020 12:09:52 -0700 (PDT)
-Received: from [10.57.9.128] (unknown [10.57.9.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2D9C3F6CF;
-        Mon, 15 Jun 2020 12:09:49 -0700 (PDT)
-Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        id S1729854AbgFOT0d (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jun 2020 15:26:33 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B0B9420756;
+        Mon, 15 Jun 2020 19:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592249193;
+        bh=AvkDF1W+evs4ACyDeBmJZSphxtaBgYojELjru6qP34U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AL6Ge9s0gex0hxoxM3nzvCoe5DV/SPRIHO8CUoZbbay9M628GxRDagsRytBs1A9hF
+         IsifoHGmtCVGfPlnC3zKNzsG6zYkedW5VzfUXPM9n6gdKYZVYEA+h/q2CB3/L5Qk9H
+         XMKdQOOeOQeTwF6cws0Y/DjmJP/RimvZu81zBaXI=
+Date:   Mon, 15 Jun 2020 20:26:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>, lukas@wunner.de,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -35,70 +41,60 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         <linux-rpi-kernel@lists.infradead.org>,
         Martin Sperl <kernel@martin.sperl.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-References: <20200604212819.715-1-f.fainelli@gmail.com>
- <142d48ae-2725-1368-3e11-658449662371@arm.com>
- <20200605132037.GF5413@sirena.org.uk>
+Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
+Message-ID: <20200615192630.GC4447@sirena.org.uk>
+References: <20200605132037.GF5413@sirena.org.uk>
  <2e371a32-fb52-03a2-82e4-5733d9f139cc@arm.com>
  <06342e88-e130-ad7a-9f97-94f09156f868@arm.com>
  <d3fe8b56-83ef-8ef0-bb05-11c7cb2419f8@gmail.com>
  <a6f158e3-af51-01d9-331c-4bc8b6847abb@arm.com>
- <20200608114148.4bau4mdcvwgf25ut@wunner.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <3d4fd3f9-9bde-90a8-bef5-9fc97cc9b363@arm.com>
-Date:   Mon, 15 Jun 2020 20:09:48 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+ <20200608112840.GC4593@sirena.org.uk>
+ <bb9dbf11-9e33-df60-f5ae-f7fdfe8458b4@gmail.com>
+ <20200615170031.GA4447@sirena.org.uk>
+ <692bc94e-d574-e07a-d834-c0d569e87bba@gmail.com>
+ <2f354ed0-9fb7-59ea-ddd1-78703d9c818e@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200608114148.4bau4mdcvwgf25ut@wunner.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dOtxUVmLoGkyu1PA"
+Content-Disposition: inline
+In-Reply-To: <2f354ed0-9fb7-59ea-ddd1-78703d9c818e@arm.com>
+X-Cookie: Offer may end without notice.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2020-06-08 12:41, Lukas Wunner wrote:
-> On Mon, Jun 08, 2020 at 12:11:11PM +0100, Robin Murphy wrote:
->> And all in code that has at least one obvious inefficiency left on
->> the table either way.
-> 
-> Care to submit a patch to overcome that inefficiency?
 
-I'll have a quick go, but without any way to measure performance impact 
-(or even test for correctness) I don't fancy going too deep based purely 
-on disassembly and ARM11 cycle timings.
+--dOtxUVmLoGkyu1PA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->> This thread truly epitomises Knuth's "premature optimisation" quote... ;)
-> 
-> The thread came about because it can be determined at compile time
-> whether the interrupt is going to be shared:
+On Mon, Jun 15, 2020 at 06:31:58PM +0100, Robin Murphy wrote:
 
-...which is exactly my point - "because it can be" is anything but proof 
-that avoiding a trivial check makes enough measurable difference to 
-justify putting in the effort to do so.
+> Now that I've been inclined to go and look up the documentation, are we sure
+> this so-very-contentious check is even correct? From my reading of things
+> we're checking whether the RXR interrupt function is *enabled*, which still
+> says nothing about whether either condition for the interrupt being
+> *asserted* is true (RXR = 1 or DONE = 1). Thus if more than one SPI instance
+> is active at once we could still end up trying to service an IRQ on a
+> controller that didn't raise it.
 
-> On the BCM2835 (Raspberry Pi 1), CONFIG_ARCH_MULTI_V6 is set and this
-> SoC doesn't have multiple bcm2835-spi instances, so no shared interrupt.
-> 
-> The question is how to discern BCM2836/BCM2837 (Raspberry Pi 2/3), which
-> do not have multiple instances, and BCM2711 (Raspberry Pi 4) which does.
+OK, I've pulled the patch from the queue for now :/
 
-Hmm, how much relative importance does that have? On a 700MHz ARM11 it's 
-obviously desirable to spend as little time in the IRQ handler as 
-possible in order to have time left to do anything else, but on the 
-other SoCs even if the IRQ remains permanently asserted it can still 
-only consume 25% of the available CPU capacity, at which point the 
-impact of 2-3 cycles either way at 1GHz+ seems pretty much immeasurable.
+--dOtxUVmLoGkyu1PA
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> The Raspberry Pi Foundation compiles BCM2711 kernels with CONFIG_ARM_LPAE=y,
-> but Florian considered that kludgy as a discriminator and opted for
-> runtime-detection via the compatible string instead.  If you've got
-> a better idea please come forward.
-> 
-> Is "optimize shared IRQ support away if IS_ENABLED(CONFIG_ARCH_MULTI_V6),
-> else leave it in" the best we can do?
+-----BEGIN PGP SIGNATURE-----
 
-In all honesty I'm starting to think it seriously might be :)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7ny2YACgkQJNaLcl1U
+h9Dlcwf/TI9wOgBtOFPjlWSb4Y2ZgnY4A2yEniFWHZl5+Z/hDkPg8DQB5gpHbOJB
+aq6nJ/zdl7Ls8/2fAZFBLoKdl1x02xn0g50XxakTsSSVgaumCRRjx/bZkpnWDRMi
+hOv3B7MZ/8QIJaoW4XW9h4Gr+FUmYL7OGkVcE0ZfPkN+raFcKBhRC6J3CZODGONN
+xa7O7JtoQu8TFEnp97ymMxfxpWdiyGRfkz0eCJMiFLjv+1CUcneJEMDJ+RRZzQbZ
+/KAoGLuKCfm0fFD5QlI9XwsSEVpPa0BHmSWbGa+cxxRZMqq0EnmYzL4TT9twKHXi
+QK/ulZP2pSHvw+ZBQfDln2Mm1nPbhQ==
+=3Gjc
+-----END PGP SIGNATURE-----
 
-Robin.
+--dOtxUVmLoGkyu1PA--
