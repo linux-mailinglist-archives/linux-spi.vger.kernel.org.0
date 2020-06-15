@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D80331F8F0D
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 09:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E49D1F8F2A
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 09:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728260AbgFOHJF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 03:09:05 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37365 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728224AbgFOHJE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 03:09:04 -0400
-Received: by mail-wm1-f66.google.com with SMTP id y20so13631363wmi.2;
-        Mon, 15 Jun 2020 00:09:02 -0700 (PDT)
+        id S1728492AbgFOHPp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 03:15:45 -0400
+Received: from mail-ej1-f68.google.com ([209.85.218.68]:45721 "EHLO
+        mail-ej1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728285AbgFOHPo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 03:15:44 -0400
+Received: by mail-ej1-f68.google.com with SMTP id o15so16222986ejm.12;
+        Mon, 15 Jun 2020 00:15:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CzfiXSV5cv7JLhyjK1ps65bA0pz2gJTN5WUTi/AVjOM=;
-        b=Ynqo/ZRH0gR10UId3L/C36REV49+nHSDWTgP5p9D+v4EHXr4Jpq3vZYPxgxL8yvEQe
-         yDmPclSLHKtMA6B3u7cZr5VmRdbuQlXTM1dHT+u6ZdLmqB2FnRe2e9ojtevQLTCDE8Qb
-         xDP81R64LD2W9sUkOcxRHs9b4n65CmMHmULi0GByu0pw8QI+EslOruTh2BhWGx/5/eEP
-         /WENJ1BnOkTGig2WKU0m5VV2u3g97SnDNGJHd/gVUEtsO4KmREn+3+rOrjraoV7ab1YJ
-         8yVw+9QArnIIHBMBHQWauw4rQqXbQHuym6f/HbbB9kdVx3dlQ+EV6NsjpoGncP9sODSB
-         vLoA==
-X-Gm-Message-State: AOAM531fzIkdX9q5QGi+7di7UbxlupwlBtJekDN+2BXYe0VN6ekEIS6o
-        5ktwth0J8tsustVFH/BTkhU=
-X-Google-Smtp-Source: ABdhPJzUIpT/J8Oc+27seBA+4hhWIDmKRQV06drUxgz+9d2MuJiRDSIu5lQ4AQFOeS2bTs/qq+d86A==
-X-Received: by 2002:a1c:bb0b:: with SMTP id l11mr12131646wmf.31.1592204941742;
-        Mon, 15 Jun 2020 00:09:01 -0700 (PDT)
+        bh=ezGycCaw0ibZSkNzIrgHWo9J2DFW467MFyh+xHFUz3E=;
+        b=O6yD+qSscWe0AfixLx9UHYAYt3C4Ne+1rqLzlIwd4EpQVQrsWAGyzJAvrddu9hjIUa
+         p7l8NPDbe80SF78zdC7Nwh/NzH0xBduJuS9sSb2XDUa3j+TcOwe/YHB4yxEGG2lOsVAW
+         kktxKloWBfuPQ1tmSqvDNjrEh85AV1zGU8OM11RlBmBit2l8FBcInSNbHwpqG/Wvqb09
+         Lcd+I5rSzJ+wTgEAUp//gptCqSCvgycYEGkVUv1HedOwCXGkAmDIhC+jMXdZuGvnFKyy
+         F6XdY/T1nEuQfqysyCHBwKek4g8Lq9QjwlWfQWeHlms1/UxLHaqoDRVGjG9kLw6gCYC9
+         /h5Q==
+X-Gm-Message-State: AOAM533syom01D5vpKpsW9mkQffOXL42f3ZCcUo0JXlh/njzzhaAnkPg
+        xh4eYBFvVmq6LZl2qGoQV0zl1yPf
+X-Google-Smtp-Source: ABdhPJyACgZYA4G7jO6h9SuACk7c2pkUmuJBW+93Py4P2vGIh/O8MANjOSByTqWqt4O5P0q6434xnw==
+X-Received: by 2002:a17:906:3158:: with SMTP id e24mr23753833eje.543.1592205343381;
+        Mon, 15 Jun 2020 00:15:43 -0700 (PDT)
 Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id g82sm21623498wmf.1.2020.06.15.00.09.00
+        by smtp.googlemail.com with ESMTPSA id o16sm8519215ejg.106.2020.06.15.00.15.41
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 15 Jun 2020 00:09:00 -0700 (PDT)
-Date:   Mon, 15 Jun 2020 09:08:58 +0200
+        Mon, 15 Jun 2020 00:15:42 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 09:15:40 +0200
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -43,111 +43,73 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Wolfram Sang <wsa@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] spi: spi-fsl-dspi: Initialize completion before
- possible interrupt
-Message-ID: <20200615070858.GA20941@kozik-lap>
+Subject: Re: [PATCH 1/2] spi: spi-fsl-dspi: Fix external abort on interrupt
+ in exit paths
+Message-ID: <20200615071540.GB20941@kozik-lap>
 References: <1592132154-20175-1-git-send-email-krzk@kernel.org>
- <1592132154-20175-2-git-send-email-krzk@kernel.org>
- <CA+h21ho_pa0H2MG-aAmUCFj37aYW4es-2V75P4KL-Zjq7qtfRQ@mail.gmail.com>
- <20200614111829.GA9694@kozik-lap>
- <CA+h21hqE3RbD2XTBbcRsMhsO2OaZ65tAaevFOr00p9ezu8O+iA@mail.gmail.com>
- <CA+h21hoVjJkGyxTEnh2Bixjoqxb12k-KK37U4Xy-27ntZz8aTw@mail.gmail.com>
- <20200614151247.GA2494@kozik-lap>
- <CA+h21hotvdXUgUzMaVfb_6EM-9kcoHvvnT4r+EHx7m6z4R0pxg@mail.gmail.com>
+ <CA+h21hpsmG+xUjWgaNcSojxeWYm4bcbMsn6_hmZrJ0A3zfVEag@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CA+h21hotvdXUgUzMaVfb_6EM-9kcoHvvnT4r+EHx7m6z4R0pxg@mail.gmail.com>
+In-Reply-To: <CA+h21hpsmG+xUjWgaNcSojxeWYm4bcbMsn6_hmZrJ0A3zfVEag@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Jun 14, 2020 at 06:34:33PM +0300, Vladimir Oltean wrote:
-> On Sun, 14 Jun 2020 at 18:12, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+On Sun, Jun 14, 2020 at 06:48:04PM +0300, Vladimir Oltean wrote:
+> On Sun, 14 Jun 2020 at 13:57, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 > >
-> > On Sun, Jun 14, 2020 at 04:43:28PM +0300, Vladimir Oltean wrote:
-> > > On Sun, 14 Jun 2020 at 16:39, Vladimir Oltean <olteanv@gmail.com> wrote:
-> > > >
-> > > > On Sun, 14 Jun 2020 at 14:18, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > > > >
-> > > > > On Sun, Jun 14, 2020 at 02:14:15PM +0300, Vladimir Oltean wrote:
-> > > > > > On Sun, 14 Jun 2020 at 13:56, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > > > > > >
-> > > > > > > If interrupt fires early, the dspi_interrupt() could complete
-> > > > > > > (dspi->xfer_done) before its initialization happens.
-> > > > > > >
-> > > > > > > Fixes: 4f5ee75ea171 ("spi: spi-fsl-dspi: Replace interruptible wait queue with a simple completion")
-> > >
-> > > Also please note that this patch merely replaced an
-> > > init_waitqueue_head with init_completion. But the "bug" (if we can
-> > > call it that) originates from even before.
+> > If interrupt comes late, during probe error path or device remove (could
+> > be triggered with CONFIG_DEBUG_SHIRQ), the interrupt handler
+> > dspi_interrupt() will access registers with the clock being disabled.  This
+> > leads to external abort on non-linefetch on Toradex Colibri VF50 module
+> > (with Vybrid VF5xx):
 > >
-> > Yeah, I know, the Fixes is not accurate. Backport to earlier kernels
-> > would be manual so I am not sure if accurate Fixes matter.
+> >     $ echo 4002d000.spi > /sys/devices/platform/soc/40000000.bus/4002d000.spi/driver/unbind
 > >
-> > >
-> > > > > > > Cc: <stable@vger.kernel.org>
-> > > > > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > > > > > ---
-> > > > > >
-> > > > > > Why would an interrupt fire before spi_register_controller, therefore
-> > > > > > before dspi_transfer_one_message could get called?
-> > > > > > Is this master or slave mode?
-> > > > >
-> > > > > I guess practically it won't fire.  It's more of a matter of logical
-> > > > > order and:
-> > > > > 1. Someone might fix the CONFIG_DEBUG_SHIRQ_FIXME one day,
-> > > >
-> > > > And what if CONFIG_DEBUG_SHIRQ_FIXME gets fixed? I uncommented it, and
-> > > > still no issues. dspi_interrupt checks the status bit of the hw, sees
-> > > > there's nothing to do, and returns IRQ_NONE.
+> >     Unhandled fault: external abort on non-linefetch (0x1008) at 0x8887f02c
+> >     Internal error: : 1008 [#1] ARM
+> >     CPU: 0 PID: 136 Comm: sh Not tainted 5.7.0-next-20200610-00009-g5c913fa0f9c5-dirty #74
+> >     Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
+> >       (regmap_mmio_read32le) from [<8061885c>] (regmap_mmio_read+0x48/0x68)
+> >       (regmap_mmio_read) from [<8060e3b8>] (_regmap_bus_reg_read+0x24/0x28)
+> >       (_regmap_bus_reg_read) from [<80611c50>] (_regmap_read+0x70/0x1c0)
+> >       (_regmap_read) from [<80611dec>] (regmap_read+0x4c/0x6c)
+> >       (regmap_read) from [<80678ca0>] (dspi_interrupt+0x3c/0xa8)
+> >       (dspi_interrupt) from [<8017acec>] (free_irq+0x26c/0x3cc)
+> >       (free_irq) from [<8017dcec>] (devm_irq_release+0x1c/0x20)
+> >       (devm_irq_release) from [<805f98ec>] (release_nodes+0x1e4/0x298)
+> >       (release_nodes) from [<805f9ac8>] (devres_release_all+0x40/0x60)
+> >       (devres_release_all) from [<805f5134>] (device_release_driver_internal+0x108/0x1ac)
+> >       (device_release_driver_internal) from [<805f521c>] (device_driver_detach+0x20/0x24)
 > >
-> > Indeed, still the logical way of initializing is to do it before any
-> > possible use.
+> > The resource-managed framework should not be used for interrupt handling,
+> > because the resource will be released too late - after disabling clocks.
+> > The interrupt handler is not prepared for such case.
 > >
-> > > >
-> > > > > 2. The hardware is actually initialized before and someone could attach
-> > > > >    to SPI bus some weird device.
-> > > > >
-> > > >
-> > > > Some weird device that does what?
+> > Fixes: 349ad66c0ab0 ("spi:Add Freescale DSPI driver for Vybrid VF610 platform")
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > >
-> > You never know what people will connect to a SoM :).
-> >
-> > Wolfram made actually much better point - bootloaders are known to
-> > initialize some things and leaving them in whatever state, assuming that
-> > Linux kernel will redo any initialization properly.
-> >
-> > Best regards,
-> > Krzysztof
-> >
+> > ---
 > 
-> I don't buy the argument.
-> So ok, maybe some broken bootloader leaves a SPI_SR interrupt pending
-> (do you have any example of that?). But the driver clears interrupts
-> by writing SPI_SR_CLEAR in dspi_init (called _before_ requesting the
-> IRQ). It clears 10 bits from the status register. There are 2 points
-> to be made here:
-> - The dspi_interrupt only handles data availability interrupt
-> (SPI_SR_EOQF | SPI_SR_CMDTCF). Only then does it matter whether the
-> completion was already initialized or not. But these interrupts _are_
-> cleared. But assume they weren't. What would Linux even do with a SPI
-> transfer initiated by the previously running software environment? Why
-> would it be a smart thing to handle that data in the first place?
-> - The 10 bits from the status register are all the bits that can be
-> cleared. The rest of the register, if you look at it, contains the TX
-> FIFO Counter, the Transmit Next Pointer, the RX FIFO Counter, and the
-> Pop Next Pointer.
-> So, unless there's something I'm missing, I don't actually see how
-> this broken bootloader can do any harm to us.
+> I don't buy this argument that "the resource-managed framework should
+> not be used for interrupt handling". What is it there for, then?
 
-Let's rephrase it: you think therefore that completion should be
-initialzed *after* requesting shared interrupts? You think that exactly
-that order shall be used in the source code?
+It was created long time ago for memory allocations and since then
+people ported to all other possibilities and used in drivers.  Just
+because you can do something, does not necessarily mean that you
+should...
+
+> Could you just call disable_irq before clk_disable_unprepare instead
+> of this massive rework?
+
+This massive rework is 9 insertions and 4 deletions, indeed I made
+impressive, huge commit with significant impact. disable_irq() could work
+as well so if this is preferred, no problem from my side.
 
 Best regards,
 Krzysztof
-
 
