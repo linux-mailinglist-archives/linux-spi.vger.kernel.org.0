@@ -2,96 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E08761F9FDE
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 21:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFE41F9FF3
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 21:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731249AbgFOTFm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 15:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729354AbgFOTFl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 15:05:41 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94BDC061A0E;
-        Mon, 15 Jun 2020 12:05:41 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id o5so19101101iow.8;
-        Mon, 15 Jun 2020 12:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GlZB0LoHOoKwQ25KMcwRS0hvH3SBcs0IIs6yHO+vpjo=;
-        b=M5y+0H5UBj1QDe1vqlNBfbMBYsTjZ+0iYenjFgi2255cNAbbu49yNXp9E+1ldZh+LT
-         d9hFBsjun9b+bmxqA3bY9bEiccRUFTei3YnSYtuKVfCfeC5TMfSGfcyQpl9xJc66YdSj
-         QEhuVa+RYnhCyPNI6H75ZkRwZ28sZVMTA0vkUtUxd55clOHJgZxfX/F1UIBRQPCtS/I+
-         hJKtmDDey99OVr2abgfmV9eCOfgKDie/+0nrWtRCdVv1sMPZp+S7wdGR/DVczn1gZErY
-         GiTjXX3+STQ8j6rk1cU6GRq9OITPAUHPnu2bby7MdV1O/D6KaQ9qG3syqgyOA1SvJdi+
-         V+TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GlZB0LoHOoKwQ25KMcwRS0hvH3SBcs0IIs6yHO+vpjo=;
-        b=CdKV31WEmNx/j+CsTJDrcSdX1SimmDMu0jM3GFS43Xa3AmLAihwUqTnYuEyH7UrcX2
-         DMSaMk8qwo2DMzaVUDLmv8d4H+DDleH4MskIrmKPIFNa9UXdLP5Bew9lJJUKdvQARHNr
-         9LdkfeQPCdfzhCwphIrC2LKN4r0FwetC7b5ekrHvdQ4up0aaB7KxvfNpGLslxR4CMEIp
-         PfzcN1Jy/zfq9w8cuBxScY5XTBGDzZElOGtVn7ZAFKXFq/BNzKXo5sDm+e75Q1akccdQ
-         QfjHOPL6Aw6vA3S6ihFvm74M/KsYLVg/pV8JMf6XWLQ3FlV/6h0sPZLOpALfhcRtG62E
-         4FiQ==
-X-Gm-Message-State: AOAM5327YasPFMIiTal8guWGeSqtduC+VisCTDPiR6wWbOeadXkUNazr
-        3Gp9CJP/rolPiWmGjqN62tFaV6qdKQQJdMVqCfhgdXrS
-X-Google-Smtp-Source: ABdhPJwFitc4fctNCGzL+an035af/hiZ0EyeHkkdO35NxHNkYJBKqvTtkAKnJdUaC4ZGvsObyOsChpvFN+rEKmpIIyc=
-X-Received: by 2002:a5e:8e47:: with SMTP id r7mr29172100ioo.204.1592247941114;
- Mon, 15 Jun 2020 12:05:41 -0700 (PDT)
+        id S1731374AbgFOTJy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 15:09:54 -0400
+Received: from foss.arm.com ([217.140.110.172]:54004 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731372AbgFOTJy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jun 2020 15:09:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 087711FB;
+        Mon, 15 Jun 2020 12:09:52 -0700 (PDT)
+Received: from [10.57.9.128] (unknown [10.57.9.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2D9C3F6CF;
+        Mon, 15 Jun 2020 12:09:49 -0700 (PDT)
+Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, linux-kernel@vger.kernel.org,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+References: <20200604212819.715-1-f.fainelli@gmail.com>
+ <142d48ae-2725-1368-3e11-658449662371@arm.com>
+ <20200605132037.GF5413@sirena.org.uk>
+ <2e371a32-fb52-03a2-82e4-5733d9f139cc@arm.com>
+ <06342e88-e130-ad7a-9f97-94f09156f868@arm.com>
+ <d3fe8b56-83ef-8ef0-bb05-11c7cb2419f8@gmail.com>
+ <a6f158e3-af51-01d9-331c-4bc8b6847abb@arm.com>
+ <20200608114148.4bau4mdcvwgf25ut@wunner.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <3d4fd3f9-9bde-90a8-bef5-9fc97cc9b363@arm.com>
+Date:   Mon, 15 Jun 2020 20:09:48 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-References: <20200615040557.2011-1-mark.tomlinson@alliedtelesis.co.nz>
-In-Reply-To: <20200615040557.2011-1-mark.tomlinson@alliedtelesis.co.nz>
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
-Date:   Mon, 15 Jun 2020 15:05:30 -0400
-Message-ID: <CAC=U0a13v6_qS0oa3Tdbf89o3ywSkugu=oMHwR_4gf9ucKg61g@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Improvements to spi-bcm-qspi
-To:     Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200608114148.4bau4mdcvwgf25ut@wunner.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Mark,
+On 2020-06-08 12:41, Lukas Wunner wrote:
+> On Mon, Jun 08, 2020 at 12:11:11PM +0100, Robin Murphy wrote:
+>> And all in code that has at least one obvious inefficiency left on
+>> the table either way.
+> 
+> Care to submit a patch to overcome that inefficiency?
 
-This block is used on multiple Broadcom SoCs and would like to get
-comments from all who deal with iProc and have touched this file as
-well.
-Please copy :
-Florian Fainelli <f.fainelli@gmail.com>
-Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-and
-bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM SPI DRIVER)
+I'll have a quick go, but without any way to measure performance impact 
+(or even test for correctness) I don't fancy going too deep based purely 
+on disassembly and ARM11 cycle timings.
 
-Kamal
+>> This thread truly epitomises Knuth's "premature optimisation" quote... ;)
+> 
+> The thread came about because it can be determined at compile time
+> whether the interrupt is going to be shared:
 
-On Mon, Jun 15, 2020 at 12:06 AM Mark Tomlinson
-<mark.tomlinson@alliedtelesis.co.nz> wrote:
->
-> This series of patches came from a single large Broadcom patch that
-> implements drivers for a number of their integrated switch chips. Mostly
-> this is just splitting the qspi driver into smaller parts and doesn't
-> include much original from me.
->
-> Mark Tomlinson (5):
->   spi: bcm-qspi: Add support for setting BSPI clock
->   spi: bcm-qspi: Improve debug reading SPI data
->   spi: bcm-qspi: Do not split transfers into small chunks
->   spi: bcm-qspi: Make multiple data blocks interrupt-driven
->   spi: bcm-qspi: Improve interrupt handling
->
->  drivers/spi/spi-bcm-qspi.c | 189 ++++++++++++++++++++++---------------
->  drivers/spi/spi-bcm-qspi.h |   5 +-
->  2 files changed, 115 insertions(+), 79 deletions(-)
->
-> --
-> 2.27.0
->
+...which is exactly my point - "because it can be" is anything but proof 
+that avoiding a trivial check makes enough measurable difference to 
+justify putting in the effort to do so.
+
+> On the BCM2835 (Raspberry Pi 1), CONFIG_ARCH_MULTI_V6 is set and this
+> SoC doesn't have multiple bcm2835-spi instances, so no shared interrupt.
+> 
+> The question is how to discern BCM2836/BCM2837 (Raspberry Pi 2/3), which
+> do not have multiple instances, and BCM2711 (Raspberry Pi 4) which does.
+
+Hmm, how much relative importance does that have? On a 700MHz ARM11 it's 
+obviously desirable to spend as little time in the IRQ handler as 
+possible in order to have time left to do anything else, but on the 
+other SoCs even if the IRQ remains permanently asserted it can still 
+only consume 25% of the available CPU capacity, at which point the 
+impact of 2-3 cycles either way at 1GHz+ seems pretty much immeasurable.
+
+> The Raspberry Pi Foundation compiles BCM2711 kernels with CONFIG_ARM_LPAE=y,
+> but Florian considered that kludgy as a discriminator and opted for
+> runtime-detection via the compatible string instead.  If you've got
+> a better idea please come forward.
+> 
+> Is "optimize shared IRQ support away if IS_ENABLED(CONFIG_ARCH_MULTI_V6),
+> else leave it in" the best we can do?
+
+In all honesty I'm starting to think it seriously might be :)
+
+Robin.
