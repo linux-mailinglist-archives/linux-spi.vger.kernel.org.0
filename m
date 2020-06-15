@@ -2,88 +2,173 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5800D1F936D
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 11:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEF61F93D2
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 11:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728986AbgFOJay (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 05:30:54 -0400
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:44194 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728773AbgFOJax (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 05:30:53 -0400
-Received: by mail-ej1-f66.google.com with SMTP id gl26so16627458ejb.11;
-        Mon, 15 Jun 2020 02:30:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=h/M83iD3faCNV0o/Y7FN4nAygVEAlSlnzSZwyREl0qc=;
-        b=ESRVGfFM+5FRbNUwN8JsxZeCu+CapM95kuzSgkyeEpV3T3dtx4QXbeRn+5/vfxYPqB
-         MlAAF/LPJHCd627hfc7wC5r7+/Tt9rXk/DuWGqhunkpOX6uFGbbNbhl4ppzDmLK77sgN
-         B8YZ0UuXwEnLi0E+aBoe8axeiemCFBcxIQ2NG46jf1N4b5pAt+z+pMeUPaDAgbVFs0fW
-         ThaAAIouAx6Kaa0kqTq1gAoiNzVtRDH29notNW5Bfc3+7ixi6Y33eXTVbv4VoUfc6MHn
-         s9AOsEgpBeOwluImapflAYb/P0FKxdv6cK5zx4ffVDifF3K+GLP4Ej7lyQLxdkUcwz42
-         s8jA==
-X-Gm-Message-State: AOAM532DaveKD9lvRc8gRNzx3e1HrDfPSUu8Ln9WGgage4fdSLQtj9q1
-        CS/FtUBD7En55IZlcAMntgDsXI5b
-X-Google-Smtp-Source: ABdhPJzj4fF0KjiTqoA2MyuBdX99hOHf6yiRkEUdkWHf10sT0uT2w/tHmSsHPNGfhKgKePOHINaHYw==
-X-Received: by 2002:a17:906:b28e:: with SMTP id q14mr12088035ejz.484.1592213451621;
-        Mon, 15 Jun 2020 02:30:51 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id m2sm8652597ejg.7.2020.06.15.02.30.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 15 Jun 2020 02:30:50 -0700 (PDT)
-Date:   Mon, 15 Jun 2020 11:30:48 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] spi: spi-fsl-dspi: Initialize completion before
- possible interrupt
-Message-ID: <20200615093048.GA26906@kozik-lap>
-References: <1592132154-20175-1-git-send-email-krzk@kernel.org>
- <1592132154-20175-2-git-send-email-krzk@kernel.org>
- <CA+h21ho_pa0H2MG-aAmUCFj37aYW4es-2V75P4KL-Zjq7qtfRQ@mail.gmail.com>
- <20200614111829.GA9694@kozik-lap>
- <CA+h21hqE3RbD2XTBbcRsMhsO2OaZ65tAaevFOr00p9ezu8O+iA@mail.gmail.com>
- <CA+h21hoVjJkGyxTEnh2Bixjoqxb12k-KK37U4Xy-27ntZz8aTw@mail.gmail.com>
- <20200614151247.GA2494@kozik-lap>
- <CA+h21hotvdXUgUzMaVfb_6EM-9kcoHvvnT4r+EHx7m6z4R0pxg@mail.gmail.com>
- <20200615070858.GA20941@kozik-lap>
- <CA+h21hoLq59R2p=+f4jZFmd5OSQ3590FeRB+oHBKLKDHq5knRg@mail.gmail.com>
+        id S1729017AbgFOJqO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 05:46:14 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:7406 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728626AbgFOJqO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 05:46:14 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05F9YmAg015035;
+        Mon, 15 Jun 2020 11:45:38 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=HzRMy6iVCZcLIfFdNcJlFmRB2z9fKYZjPMelH03qdYY=;
+ b=nOlzI78SZ3BXZsTxqFqoExmXdRONkXi5UKuqpvBc92FLtDOUT9oj+HyLeFTjarNKmxwH
+ yO/6GjTPHN7RMfwgh0/kv5U1rUzXgEF2o3ZEJ68+kTo7R+HkRAqEGRAGvOT/p44c7azE
+ 8ZGDzljkTLZb8dokG1oa27eTNcQCzjEL9LCX9FjHPQMYBhPa0PdxQkYXyvYgzkUrVGI4
+ CXDJPCMmEMMQsah697bvJDTc1OsChq0OhJn4cAf/iMsje5syLv6nRGy8cd1SdFTBhA1Y
+ Vl6vgqwoLU1Aw8xGzNpiRgQn1uVKdFOCKIZIODsOkx94i2/l8/9eUFykiSzy6m3273J7 tw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 31mmjvrwjd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Jun 2020 11:45:38 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1B0C710002A;
+        Mon, 15 Jun 2020 11:45:38 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E456E2C298D;
+        Mon, 15 Jun 2020 11:45:37 +0200 (CEST)
+Received: from lmecxl0912.tpe.st.com (10.75.127.48) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 15 Jun
+ 2020 11:45:36 +0200
+Subject: Re: [PATCH v6 2/9] ARM: dts: stm32: Add pin map for ltdc & spi5 on
+ stm32f429-disco board
+To:     <dillon.minfei@gmail.com>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <mcoquelin.stm32@gmail.com>,
+        <thierry.reding@gmail.com>, <sam@ravnborg.org>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <andy.shevchenko@gmail.com>, <noralf@tronnes.org>,
+        <linus.walleij@linaro.org>, <broonie@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-clk@vger.kernel.org>,
+        <dillonhua@gmail.com>
+References: <1590564453-24499-1-git-send-email-dillon.minfei@gmail.com>
+ <1590564453-24499-3-git-send-email-dillon.minfei@gmail.com>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <2273a168-7b14-9e28-5904-b9d2c2e2d9d3@st.com>
+Date:   Mon, 15 Jun 2020 11:45:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+h21hoLq59R2p=+f4jZFmd5OSQ3590FeRB+oHBKLKDHq5knRg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <1590564453-24499-3-git-send-email-dillon.minfei@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-15_01:2020-06-15,2020-06-15 signatures=0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 12:26:37PM +0300, Vladimir Oltean wrote:
- > Let's rephrase it: you think therefore that completion should be
-> > initialzed *after* requesting shared interrupts? You think that exactly
-> > that order shall be used in the source code?
-> >
-> > Best regards,
-> > Krzysztof
-> >
-> >
+Hi Dillon
+
+On 5/27/20 9:27 AM, dillon.minfei@gmail.com wrote:
+> From: dillon min <dillon.minfei@gmail.com>
 > 
-> I think that completion should be initialized before it is used, just
-> like any other variable. So far you have not proven any code path
-> through which it can be used uninitialized, therefore I don't see why
-> this should be accepted as a bug fix. Cleanup, cosmetic refactoring,
-> design patterns, whatever, sure.
+> This patch adds the pin configuration for ltdc and spi5 controller
+> on stm32f429-disco board.
+> 
+> Signed-off-by: dillon min <dillon.minfei@gmail.com>
+> ---
+>   arch/arm/boot/dts/stm32f4-pinctrl.dtsi | 67 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 67 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
+> index 392fa143ce07..0eb107f968cd 100644
+> --- a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
+> +++ b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
+> @@ -316,6 +316,73 @@
+>   				};
+>   			};
+>   
+> +			ltdc_pins_f429_disco: ltdc-1 {
 
-Sure, let it call then cleanup, cosmetic refactoring.
+Sorry I missed this issue during review. I changed ltdc_pins_f429_disco 
+by ltdc_pins_b when I applied your patch.
 
-Best regards,
-Krzysztof
 
+Regards
+alex
+
+> +				pins {
+> +					pinmux = <STM32_PINMUX('C', 6,  AF14)>,
+> +						/* LCD_HSYNC */
+> +						 <STM32_PINMUX('A', 4,  AF14)>,
+> +						 /* LCD_VSYNC */
+> +						 <STM32_PINMUX('G', 7,  AF14)>,
+> +						 /* LCD_CLK */
+> +						 <STM32_PINMUX('C', 10, AF14)>,
+> +						 /* LCD_R2 */
+> +						 <STM32_PINMUX('B', 0,  AF9)>,
+> +						 /* LCD_R3 */
+> +						 <STM32_PINMUX('A', 11, AF14)>,
+> +						 /* LCD_R4 */
+> +						 <STM32_PINMUX('A', 12, AF14)>,
+> +						 /* LCD_R5 */
+> +						 <STM32_PINMUX('B', 1,  AF9)>,
+> +						 /* LCD_R6*/
+> +						 <STM32_PINMUX('G', 6,  AF14)>,
+> +						 /* LCD_R7 */
+> +						 <STM32_PINMUX('A', 6,  AF14)>,
+> +						 /* LCD_G2 */
+> +						 <STM32_PINMUX('G', 10, AF9)>,
+> +						 /* LCD_G3 */
+> +						 <STM32_PINMUX('B', 10, AF14)>,
+> +						 /* LCD_G4 */
+> +						 <STM32_PINMUX('D', 6,  AF14)>,
+> +						 /* LCD_B2 */
+> +						 <STM32_PINMUX('G', 11, AF14)>,
+> +						 /* LCD_B3*/
+> +						 <STM32_PINMUX('B', 11, AF14)>,
+> +						 /* LCD_G5 */
+> +						 <STM32_PINMUX('C', 7,  AF14)>,
+> +						 /* LCD_G6 */
+> +						 <STM32_PINMUX('D', 3,  AF14)>,
+> +						 /* LCD_G7 */
+> +						 <STM32_PINMUX('G', 12, AF9)>,
+> +						 /* LCD_B4 */
+> +						 <STM32_PINMUX('A', 3,  AF14)>,
+> +						 /* LCD_B5 */
+> +						 <STM32_PINMUX('B', 8,  AF14)>,
+> +						 /* LCD_B6 */
+> +						 <STM32_PINMUX('B', 9,  AF14)>,
+> +						 /* LCD_B7 */
+> +						 <STM32_PINMUX('F', 10, AF14)>;
+> +						 /* LCD_DE */
+> +					slew-rate = <2>;
+> +				};
+> +			};
+> +
+> +			spi5_pins: spi5-0 {
+> +				pins1 {
+> +					pinmux = <STM32_PINMUX('F', 7, AF5)>,
+> +						/* SPI5_CLK */
+> +						 <STM32_PINMUX('F', 9, AF5)>;
+> +						/* SPI5_MOSI */
+> +					bias-disable;
+> +					drive-push-pull;
+> +					slew-rate = <0>;
+> +				};
+> +				pins2 {
+> +					pinmux = <STM32_PINMUX('F', 8, AF5)>;
+> +						/* SPI5_MISO */
+> +					bias-disable;
+> +				};
+> +			};
+> +
+>   			dcmi_pins: dcmi-0 {
+>   				pins {
+>   					pinmux = <STM32_PINMUX('A', 4, AF13)>, /* DCMI_HSYNC */
+> 
