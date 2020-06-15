@@ -2,100 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA7C1F9B0D
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 16:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167F51F9B1B
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 16:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730697AbgFOOz7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 10:55:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43552 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730213AbgFOOz7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jun 2020 10:55:59 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1B7E20644;
-        Mon, 15 Jun 2020 14:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592232958;
-        bh=2TC//kCSiqr/n1JFxAXwx0DjT4t5nRNJzXNSfvJPnHQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WAzQ4fSL7Ni+8MhSFeK+hvrEhia4ExOvj7gnafrN8h09OzqA8zOjGsggpxgqezOZb
-         /FiV+/68Cwz+OQkYgCZvTdup8NA67tIxQiZtGhIeChI9QUQ1HW4FBBZ+bwiaqevDRJ
-         hcqc3jkKbV2Vqns7sVYJ1qD2BUt+qAK841dWOONM=
-Date:   Mon, 15 Jun 2020 15:55:56 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "matthias.schiffer@ew.tq-group.com" 
-        <matthias.schiffer@ew.tq-group.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
-Message-ID: <20200615145556.GY4447@sirena.org.uk>
-References: <20200612101357.GA5396@sirena.org.uk>
- <VE1PR04MB66384013797FE6B01943F2A889810@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200612141611.GI5396@sirena.org.uk>
- <VE1PR04MB6638B43E3AC83286946DABCD899F0@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200615123553.GP4447@sirena.org.uk>
- <VE1PR04MB6638C65257F41072C3D61583899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200615133905.GV4447@sirena.org.uk>
- <VE1PR04MB6638793C00742D5BA72F8AC2899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200615143622.GX4447@sirena.org.uk>
- <VE1PR04MB6638D0C9FE0289FFE13ABA49899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+        id S1730815AbgFOO5R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 10:57:17 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:40081 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730652AbgFOO5R (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 10:57:17 -0400
+Received: by mail-wm1-f66.google.com with SMTP id r15so15150729wmh.5;
+        Mon, 15 Jun 2020 07:57:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mHcrbBO+Fo3bCvnKiSJoGOEsXEa+5QUFU82tEXS61oo=;
+        b=ogcYxfeBxA3qwa97mzrPW4jopWKMl64hXm7wg3STD1q+94yNg/pyj0DXYNIJfvSOQT
+         azvYNagX3x48ssnmy+HICSeQ2mkqKvnCs2zl9PU5Yj78VmJW6Lqy2vhHl0nmbcZV/649
+         w8vkmTP+K5H+jRoSaw5eRCWd3CT8Lr0zstF1/8VNEiXajHcuHSAKjpIoNnVhBOQE510m
+         LKUUEKVpyNKoZAV3ZMq8TRtpgEdtHwSN8H80hyALfXvVZs5VnK/IZas882+H30MCsHU7
+         U4uu/U/K3UKJNxMKH5oY4DoC+3XrOvRdimldFlX+9CVqmDw34Jwn7h55Ij8Yj1SlOps2
+         m2Uw==
+X-Gm-Message-State: AOAM533t3mN9LVm+kKdihYnfkL7IFG8kPLbsu+IVn0cwfVWqLUDdeQlx
+        KY1FV+M9ItiPOfq0Nv5DCjE=
+X-Google-Smtp-Source: ABdhPJxeN+YKTx2rDQYMG6z/DLFGaJz5APWUznLyEEfgFrNUKvASgGOX1PuuNkKdoJhfxX4g/JUpFA==
+X-Received: by 2002:a1c:7903:: with SMTP id l3mr13169484wme.50.1592233034481;
+        Mon, 15 Jun 2020 07:57:14 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.184])
+        by smtp.googlemail.com with ESMTPSA id s8sm24402667wrm.96.2020.06.15.07.57.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 15 Jun 2020 07:57:13 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 16:57:11 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, stable@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v2 1/3] spi: spi-fsl-dspi: Fix external abort on
+ interrupt in exit paths
+Message-ID: <20200615145711.GA24927@kozik-lap>
+References: <1592208439-17594-1-git-send-email-krzk@kernel.org>
+ <e1f0326c-8ae8-ffb3-aace-10433b0c78a6@pengutronix.de>
+ <20200615123052.GO4447@sirena.org.uk>
+ <CA+h21hqC7hAenifvRqbwss=Sr+dAu3H9Dx=UF0TS0WVbkzTj2Q@mail.gmail.com>
+ <20200615131006.GR4447@sirena.org.uk>
+ <CA+h21hpusy=zx8AuUqk_4zShtst8QeNJxCPT4dMGh0jhm5uZng@mail.gmail.com>
+ <20200615134119.GB3321@kozik-lap>
+ <CA+h21hp29i=AdZB_fBQ4mwAh=3Oovopwz3ruzzJqiKpRpZYzhg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lPJ5i9rX1WvdYcWF"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <VE1PR04MB6638D0C9FE0289FFE13ABA49899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CA+h21hp29i=AdZB_fBQ4mwAh=3Oovopwz3ruzzJqiKpRpZYzhg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Jun 15, 2020 at 05:23:28PM +0300, Vladimir Oltean wrote:
+> On Mon, 15 Jun 2020 at 16:41, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >
+> > On Mon, Jun 15, 2020 at 04:12:28PM +0300, Vladimir Oltean wrote:
+> > > On Mon, 15 Jun 2020 at 16:10, Mark Brown <broonie@kernel.org> wrote:
+> > >
+> > > >
+> > > > It's a bit unusual to need to actually free the IRQ over suspend -
+> > > > what's driving that requirement here?
+> > >
+> > > clk_disable_unprepare(dspi->clk); is driving the requirement - same as
+> > > in dspi_remove case, the module will fault when its registers are
+> > > accessed without a clock.
+> >
+> > In few cases when I have shared interrupt in different drivers, they
+> > were just disabling it during suspend. Why it has to be freed?
+> >
+> > Best regards,
+> > Krzysztof
+> >
+> 
+> Not saying it _has_ to be freed, just to be prevented from running
+> concurrently with us disabling the clock.
+> But if we can get away in dspi_suspend with just disable_irq, can't we
+> also get away in dspi_remove with just devm_free_irq?
 
---lPJ5i9rX1WvdYcWF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+One reason why they have to be different could be following scenario:
+1. Device could be unbound any time and disabling IRQ in remove() would
+   effectively disable the IRQ also for other devices using this shared
+   line. First disable_irq() really disables it, the latter just
+   increases the counter.
+2. However during system suspend, it is expected that all drivers in
+   their suspend (and later resume) callbacks will do the same - disable
+   the shared IRQ line. And finally the system disables interrupts
+   globally so the line will be balanced.
 
-On Mon, Jun 15, 2020 at 02:53:29PM +0000, Robin Gong wrote:
-> On 2020/06/15 22:36 Mark Brown <broonie@kernel.org> wrote:=20
+Freeing IRQ solves the case #1 without causing any imbalance between
+enables/disables or requests/frees.  Disabling IRQ solves the #2, also
+without any imbalance.
 
-> > We could also pass in a flag that could be set separately to the error =
-code to
-> > indicate that nothing had happened to the hardware yet.
+Best regards,
+Krzysztof
 
-> Do you mean spi-imx.c checking 'ctlr->flags' before return such error cod=
-e?
-> Or just like below done in spi.c.
 
-No, I mean passing in an additional argument which can provide richer
-data than trying to smash things into the return value.
 
---lPJ5i9rX1WvdYcWF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7ni/sACgkQJNaLcl1U
-h9DpXQf9G2jk6fHADMgZvO5cMWF40DK3HTy0XpAr55BZ3EtoJ9SfnWU4hvTmyvn/
-9gWPmaXi84y5Uq1tvrYZXp70urjy0GAgJD6gpSDPq1PPql9PhVdPtOWg0K9KYt1r
-iGep527JQyKrorlKPIZ1SLN/9qxexF4GMjkyR7Bjx4H9rrSCKyG+TLrNFGQZL0ft
-Z93yp3K+RJb8TfYwIF50LbTix6pY4mTd6kNG7rd4RLinkGjBWZWnbdwKQkgBeffM
-qKVL0ySu1Pgd24bOR6aCKQxdKuCAyxj6dy5Hwya7ZgryKH0eVDdS3P0Vx5pqXS1l
-jXQt7/A7B3EFdjfQTsqDuDAuACaijw==
-=lGYg
------END PGP SIGNATURE-----
-
---lPJ5i9rX1WvdYcWF--
