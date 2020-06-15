@@ -2,95 +2,164 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDD01F95E7
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 14:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FB21F95FD
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 14:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729815AbgFOMBu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 08:01:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60946 "EHLO mail.kernel.org"
+        id S1729761AbgFOMDq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 08:03:46 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:16186 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729734AbgFOMBt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jun 2020 08:01:49 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1729651AbgFOMDd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jun 2020 08:03:33 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1592222613; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=Ja7P+CGGeWgD0X9kD8Gyyp0YvmoG5J4vqzYFmgNyLEk=; b=gH/JFi669j2mFaR/vs9YugcIyDdFlfMyqcsfvXWJCTrpmeYwn0dV+gwN0HL2tMWpi7Y8f/SB
+ DYvuBEAgt+IzzQ5V20l99RNuHQ4yTHmJZONWq9hxShX/QznSe4W7VpuAIwoNgDE61Epkmnol
+ G9uaEb5XJHE7cdaB4QPo6+kuTvs=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n12.prod.us-east-1.postgun.com with SMTP id
+ 5ee76386c76a4e7a2a060e27 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 15 Jun 2020 12:03:18
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5FBE8C43391; Mon, 15 Jun 2020 12:03:17 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 741A320714;
-        Mon, 15 Jun 2020 12:01:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592222509;
-        bh=CM24pedTnetKRTjlq0H+6fc2bSL16QovoA2odE5GIvY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f4AIuqKc7TIwjfvhv2rmefsUZLRNT8PWkKDYmZzB2Y2K0R+Bim8k0XxWMyEWFRZyx
-         VDtL/EyqDSXpCpLHMs+CRe9zfpzov4HjNszopTxDyVAgdHctUOXZf5VWZX4Arhs8ry
-         Hbaf2QazFrz0l50kvfyfqiWJc0/uBGadeW4ift+Y=
-Date:   Mon, 15 Jun 2020 13:01:46 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org, evgreen@chromium.org,
-        msavaliy@codeaurora.org
-Subject: Re: [PATCH V7 RESEND 6/7] spi: spi-qcom-qspi: Add interconnect
- support
-Message-ID: <20200615120146.GK4447@sirena.org.uk>
-References: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
- <1591682194-32388-7-git-send-email-akashast@codeaurora.org>
- <2e299942-2a51-f023-ea6a-fa7822912d9e@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fUvfsPTz/SzOZDdw"
-Content-Disposition: inline
-In-Reply-To: <2e299942-2a51-f023-ea6a-fa7822912d9e@codeaurora.org>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 61850C433CB;
+        Mon, 15 Jun 2020 12:03:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 61850C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     bjorn.andersson@linaro.org, agross@kernel.org, robdclark@gmail.com,
+        robdclark@chromium.org, stanimir.varbanov@linaro.org
+Cc:     viresh.kumar@linaro.org, sboyd@kernel.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Alok Chauhan <alokc@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH v6 2/6] spi: spi-geni-qcom: Use OPP API to set clk/perf state
+Date:   Mon, 15 Jun 2020 17:32:40 +0530
+Message-Id: <1592222564-13556-3-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1592222564-13556-1-git-send-email-rnayak@codeaurora.org>
+References: <1592222564-13556-1-git-send-email-rnayak@codeaurora.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+geni spi needs to express a perforamnce state requirement on CX
+depending on the frequency of the clock rates. Use OPP table from
+DT to register with OPP framework and use dev_pm_opp_set_rate() to
+set the clk/perf state.
 
---fUvfsPTz/SzOZDdw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Acked-by: Mark Brown <broonie@kernel.org>
+Cc: Alok Chauhan <alokc@codeaurora.org>
+Cc: Akash Asthana <akashast@codeaurora.org>
+Cc: linux-spi@vger.kernel.org
+---
+This patch needs to land via the msm tree. Mark has acked v5, so
+this is good to land I think. v6 is just rebased on 5.8-rc1.
 
-On Mon, Jun 15, 2020 at 12:57:12PM +0530, Akash Asthana wrote:
-> Hi Mark,
->=20
-> Would you be able to review/ack this QSPI patch, you have already acked "=
-QUP
-> SPI" patch from the series "[Patch V7 RESEND 4/7]"
->=20
-> Putting a gentle reminder in-case this patch is missed.
+ drivers/spi/spi-geni-qcom.c | 26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
 
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index c397242..0d7ead1 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -7,6 +7,7 @@
+ #include <linux/log2.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_opp.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/qcom-geni-se.h>
+ #include <linux/spi/spi.h>
+@@ -95,7 +96,6 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+ {
+ 	unsigned long sclk_freq;
+ 	unsigned int actual_hz;
+-	struct geni_se *se = &mas->se;
+ 	int ret;
+ 
+ 	ret = geni_se_clk_freq_match(&mas->se,
+@@ -112,9 +112,9 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+ 
+ 	dev_dbg(mas->dev, "req %u=>%u sclk %lu, idx %d, div %d\n", speed_hz,
+ 				actual_hz, sclk_freq, *clk_idx, *clk_div);
+-	ret = clk_set_rate(se->clk, sclk_freq);
++	ret = dev_pm_opp_set_rate(mas->dev, sclk_freq);
+ 	if (ret)
+-		dev_err(mas->dev, "clk_set_rate failed %d\n", ret);
++		dev_err(mas->dev, "dev_pm_opp_set_rate failed %d\n", ret);
+ 	return ret;
+ }
+ 
+@@ -561,6 +561,17 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	mas->se.wrapper = dev_get_drvdata(dev->parent);
+ 	mas->se.base = base;
+ 	mas->se.clk = clk;
++	mas->se.opp_table = dev_pm_opp_set_clkname(&pdev->dev, "se");
++	if (IS_ERR(mas->se.opp_table))
++		return PTR_ERR(mas->se.opp_table);
++	/* OPP table is optional */
++	ret = dev_pm_opp_of_add_table(&pdev->dev);
++	if (!ret) {
++		mas->se.has_opp_table = true;
++	} else if (ret != -ENODEV) {
++		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
++		return ret;
++	}
+ 
+ 	spi->bus_num = -1;
+ 	spi->dev.of_node = dev->of_node;
+@@ -596,6 +607,9 @@ static int spi_geni_probe(struct platform_device *pdev)
+ spi_geni_probe_runtime_disable:
+ 	pm_runtime_disable(dev);
+ 	spi_master_put(spi);
++	if (mas->se.has_opp_table)
++		dev_pm_opp_of_remove_table(&pdev->dev);
++	dev_pm_opp_put_clkname(mas->se.opp_table);
+ 	return ret;
+ }
+ 
+@@ -609,6 +623,9 @@ static int spi_geni_remove(struct platform_device *pdev)
+ 
+ 	free_irq(mas->irq, spi);
+ 	pm_runtime_disable(&pdev->dev);
++	if (mas->se.has_opp_table)
++		dev_pm_opp_of_remove_table(&pdev->dev);
++	dev_pm_opp_put_clkname(mas->se.opp_table);
+ 	return 0;
+ }
+ 
+@@ -617,6 +634,9 @@ static int __maybe_unused spi_geni_runtime_suspend(struct device *dev)
+ 	struct spi_master *spi = dev_get_drvdata(dev);
+ 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+ 
++	/* Drop the performance state vote */
++	dev_pm_opp_set_rate(dev, 0);
++
+ 	return geni_se_resources_off(&mas->se);
+ }
+ 
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
-
---fUvfsPTz/SzOZDdw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nYyoACgkQJNaLcl1U
-h9DyOAf/buJgSYiAf2Fl+YYl1CDe6yV/KLmnww9YUYvfvzsGAJLXJZVQthCKq7zr
-j7m+iDZpujyNeT1zSI1hZqy7sXVaPc3zdMOP+LFa0xVHxICQh4oF0qsHbn402vI+
-S7xT0XB1vK526+pHgLJ9FS18jP7z3T2C97M/1E5IvIjpvv4HipVwAsXUuroPZy04
-2ePbyIT5rye/tCgBmh8QoZbrtOEM+NBz5zkphREYpUA0Yhb7bWjtbswguwBR+IpQ
-OW5+r2OlQ7FHxKWSChKMXAuD3zIdagwe6tkXKFr0ZqzZJpzClcNyU9GMA3PDfIYx
-cMoFw4AZrl5MTycVwk4DnifcFo+giQ==
-=sGlf
------END PGP SIGNATURE-----
-
---fUvfsPTz/SzOZDdw--
