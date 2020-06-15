@@ -2,99 +2,133 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E4B1FA028
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 21:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0293C1FA057
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 21:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729889AbgFOT0e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 15:26:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49064 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729854AbgFOT0d (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jun 2020 15:26:33 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B0B9420756;
-        Mon, 15 Jun 2020 19:26:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592249193;
-        bh=AvkDF1W+evs4ACyDeBmJZSphxtaBgYojELjru6qP34U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AL6Ge9s0gex0hxoxM3nzvCoe5DV/SPRIHO8CUoZbbay9M628GxRDagsRytBs1A9hF
-         IsifoHGmtCVGfPlnC3zKNzsG6zYkedW5VzfUXPM9n6gdKYZVYEA+h/q2CB3/L5Qk9H
-         XMKdQOOeOQeTwF6cws0Y/DjmJP/RimvZu81zBaXI=
-Date:   Mon, 15 Jun 2020 20:26:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>, lukas@wunner.de,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>, linux-kernel@vger.kernel.org,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        Martin Sperl <kernel@martin.sperl.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200615192630.GC4447@sirena.org.uk>
-References: <20200605132037.GF5413@sirena.org.uk>
- <2e371a32-fb52-03a2-82e4-5733d9f139cc@arm.com>
- <06342e88-e130-ad7a-9f97-94f09156f868@arm.com>
- <d3fe8b56-83ef-8ef0-bb05-11c7cb2419f8@gmail.com>
- <a6f158e3-af51-01d9-331c-4bc8b6847abb@arm.com>
- <20200608112840.GC4593@sirena.org.uk>
- <bb9dbf11-9e33-df60-f5ae-f7fdfe8458b4@gmail.com>
- <20200615170031.GA4447@sirena.org.uk>
- <692bc94e-d574-e07a-d834-c0d569e87bba@gmail.com>
- <2f354ed0-9fb7-59ea-ddd1-78703d9c818e@arm.com>
+        id S1728093AbgFOTc5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 15:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729836AbgFOTcy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 15:32:54 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB38C08C5C5
+        for <linux-spi@vger.kernel.org>; Mon, 15 Jun 2020 12:32:52 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id y18so7213313plr.4
+        for <linux-spi@vger.kernel.org>; Mon, 15 Jun 2020 12:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZjAXfZy5BudfnO86h+8mAf1S7F89/y7Ht34uQW17/+U=;
+        b=QBeg3rvb86U6Tj0IyJR5u6BBRDaGksrhbixbVGEFMNAmYYAm2vi8ezn7Pzjsx+8Y/N
+         0spIQQjXlTeZa6JYxyI0WQLYZewE/IOrv1eu80kZOYOGkcIsaJYdoUbYKY8F56IoVrW7
+         todjyiaALbdigpVH6qkq1a3bhohRwm98ntcpI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZjAXfZy5BudfnO86h+8mAf1S7F89/y7Ht34uQW17/+U=;
+        b=k5MHyuzSgLWZFi9gulG8Mtf8wAdNTmADO8LXw1Wc1aLQ62EYQ1SNNfI1mFdRMpiHyu
+         Oa2EshdZFy7xd5oxNrTWOeix2ZIj1DQcUwZ2ss0CJ7nkPM6VK+vxzToxR3rF6fuT64XG
+         WrcvLLdmj0yFlk1WNipa006wcHeN2w3lbQlxb66znsvrnI1MYWL4g3zka++UQknIWzOV
+         +AX6iN7EEYgMH9Yl0meRgy0cOf4uvcmem7cvz9Qb3DskgzUt6BoOeGeESmvZaS7MKpNr
+         PjroLRIIQG63FUQz/2wBiWpubO6o9b1a8tO0Dhd2V53zoEtbOZtKN3HdHV3Egjz5mk/p
+         hisQ==
+X-Gm-Message-State: AOAM533VC7yEIs1zBHZHXk3sgqhNJoVLXYCqytH1Q3ZC6T4owGkljU1J
+        JilTYYrbSlgCHvge50jEgfK90Q==
+X-Google-Smtp-Source: ABdhPJxugszkh+55zcQ6ID8nCD+Y2mp2lHGMEtD9VsXD4kV92TrXKjIOZPR9BYw/ID9xL1GXxiQnCg==
+X-Received: by 2002:a17:90b:23d2:: with SMTP id md18mr774459pjb.179.1592249571413;
+        Mon, 15 Jun 2020 12:32:51 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n189sm14973604pfn.108.2020.06.15.12.32.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2020 12:32:50 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 12:32:49 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        b43-dev@lists.infradead.org,
+        Network Development <netdev@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH 05/10] ide: Remove uninitialized_var() usage
+Message-ID: <202006151231.74D2315450@keescook>
+References: <20200603233203.1695403-1-keescook@chromium.org>
+ <20200603233203.1695403-6-keescook@chromium.org>
+ <CAKwvOdm5zDide5RuppY_jG=r46=UMdVJBrkBqD5x=dOMTG9cZg@mail.gmail.com>
+ <202006041318.B0EA9059C7@keescook>
+ <CAKwvOdk3Wc1gC0UMsFZsZqQ8n_bkPjNAJo5u3nfcyXcBaZCMHw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dOtxUVmLoGkyu1PA"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2f354ed0-9fb7-59ea-ddd1-78703d9c818e@arm.com>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdk3Wc1gC0UMsFZsZqQ8n_bkPjNAJo5u3nfcyXcBaZCMHw@mail.gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, Jun 04, 2020 at 01:29:44PM -0700, Nick Desaulniers wrote:
+> On Thu, Jun 4, 2020 at 1:20 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Thu, Jun 04, 2020 at 12:29:17PM -0700, Nick Desaulniers wrote:
+> > > On Wed, Jun 3, 2020 at 4:32 PM Kees Cook <keescook@chromium.org> wrote:
+> > > >
+> > > > Using uninitialized_var() is dangerous as it papers over real bugs[1]
+> > > > (or can in the future), and suppresses unrelated compiler warnings (e.g.
+> > > > "unused variable"). If the compiler thinks it is uninitialized, either
+> > > > simply initialize the variable or make compiler changes. As a precursor
+> > > > to removing[2] this[3] macro[4], just remove this variable since it was
+> > > > actually unused:
+> > > >
+> > > > drivers/ide/ide-taskfile.c:232:34: warning: unused variable 'flags' [-Wunused-variable]
+> > > >         unsigned long uninitialized_var(flags);
+> > > >                                         ^
+> > > >
+> > > > [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
+> > > > [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
+> > > > [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
+> > > > [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
+> > > >
+> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > >
+> > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> > Thanks for the reviews!
+> >
+> > > Fixes ce1e518190ea ("ide: don't disable interrupts during kmap_atomic()")
+> >
+> > I originally avoided adding Fixes tags because I didn't want these
+> > changes backported into a -stable without -Wmaybe-uninitialized
+> > disabled, but in these cases (variable removal), that actually does make
+> > sense. Thanks!
+> 
+> Saravana showed me a cool trick for quickly finding commits that
+> removed a particular identifier that I find faster than `git blame` or
+> vim-fugitive for the purpose of Fixes tags:
+> $ git log -S <string> <file>
 
---dOtxUVmLoGkyu1PA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ah yes, I always have to look up "-S". Good reminder!
 
-On Mon, Jun 15, 2020 at 06:31:58PM +0100, Robin Murphy wrote:
+> I've added it to our wiki:
+> https://github.com/ClangBuiltLinux/linux/wiki/Command-line-tips-and-tricks#for-finding-which-commit-may-have-removed-a-string-try.
+> I should update the first tip; what was your suggestion for
+> constraining the search to the current remote?
 
-> Now that I've been inclined to go and look up the documentation, are we sure
-> this so-very-contentious check is even correct? From my reading of things
-> we're checking whether the RXR interrupt function is *enabled*, which still
-> says nothing about whether either condition for the interrupt being
-> *asserted* is true (RXR = 1 or DONE = 1). Thus if more than one SPI instance
-> is active at once we could still end up trying to service an IRQ on a
-> controller that didn't raise it.
+Ah cool. I've updated it now. It was really to narrow to a "known set of
+tags", and Linus's tree's tags always start with "v".
 
-OK, I've pulled the patch from the queue for now :/
-
---dOtxUVmLoGkyu1PA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7ny2YACgkQJNaLcl1U
-h9Dlcwf/TI9wOgBtOFPjlWSb4Y2ZgnY4A2yEniFWHZl5+Z/hDkPg8DQB5gpHbOJB
-aq6nJ/zdl7Ls8/2fAZFBLoKdl1x02xn0g50XxakTsSSVgaumCRRjx/bZkpnWDRMi
-hOv3B7MZ/8QIJaoW4XW9h4Gr+FUmYL7OGkVcE0ZfPkN+raFcKBhRC6J3CZODGONN
-xa7O7JtoQu8TFEnp97ymMxfxpWdiyGRfkz0eCJMiFLjv+1CUcneJEMDJ+RRZzQbZ
-/KAoGLuKCfm0fFD5QlI9XwsSEVpPa0BHmSWbGa+cxxRZMqq0EnmYzL4TT9twKHXi
-QK/ulZP2pSHvw+ZBQfDln2Mm1nPbhQ==
-=3Gjc
------END PGP SIGNATURE-----
-
---dOtxUVmLoGkyu1PA--
+-- 
+Kees Cook
