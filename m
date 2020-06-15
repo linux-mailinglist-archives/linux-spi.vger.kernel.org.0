@@ -2,97 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DCB1F9A05
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 16:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525391F9A3F
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 16:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730186AbgFOOXl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 10:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729733AbgFOOXl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 10:23:41 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19887C061A0E;
-        Mon, 15 Jun 2020 07:23:41 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id mb16so17659210ejb.4;
-        Mon, 15 Jun 2020 07:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H9r0/sULFGsJQ0VS718x6ZAIaeQpzmxSr4ry5tlo8dA=;
-        b=iTGuFP6o46kqSb7OX7uzryGWmBxBXqSo1GjexOIOIdYAkPEkR6ag3kHRccJgj51job
-         IneqsherdA5JHsGp9gCUnITzRDzNGpHHUreaVA/swlF0+Z97dVzqwtpCZoLSPT21Ex+B
-         oWOA3pkQ48zu3NtCgeg+0KkRHjQJYQtb7OqLkQwds3xGr5pGQNI20mRCIruFkZGFtHyg
-         jJ77Ug1sfREkx0oD6ykfBDtCAIIIksvI16gYrJd0A+AZ022JH5wj6l+riUyZQTC6h+1b
-         aS25R0XwLX8ltDveG25Y5DTzfdyxB8qo7hgE1p/5YjszAmaI7fDcewFKnXXKhfjTs8Hw
-         k3bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H9r0/sULFGsJQ0VS718x6ZAIaeQpzmxSr4ry5tlo8dA=;
-        b=ZQG0CnDlsf7Bkw9No2ZQT2MNUfzu+WvyYqxErP/4APq6eR+ziyiJOwhuhwy3OOPC5Z
-         Tzyh5VP630t5sGAae2JWweEEMGjzCW/qWT5cppPF2RurKA7qp0m+Fvv7KteIi9lmP4E2
-         DU6vYlOQrxOvXSRRbEmZ7MkpS2+Vb2elWzH451+yfG8WGVrtMDLR+qiLOP/w4u9Ibrau
-         RD1lcCer7UsCt/niTKT3uW1rms9jvvb9e9AKniCsPPNiRR4jCZ+nybG6pDHsD2YnEDE/
-         0WOOjZJJk+xigzNJdT8SQIr9ih+foVdK92ouBwRbJ21WAlzC209dj7liHxYMMZ573D2M
-         uHcg==
-X-Gm-Message-State: AOAM532mnKr4H5YAQsA3vGa2e92Dlynsk6oXTxWUnCY5ECZSF02ARErZ
-        K3w7UL9hjv1HKo9BNUfNtfoQp6VvZqD597hDVaQ=
-X-Google-Smtp-Source: ABdhPJzYgleQ7Vn71c+CU11+ki0tmdv62jr2mfK0iQcj82yKU7B8iZmt/xGz58Y/kQv8GDe9O5ngIdCHH2iTvTZVjC8=
-X-Received: by 2002:a17:906:198d:: with SMTP id g13mr13150059ejd.281.1592231019420;
- Mon, 15 Jun 2020 07:23:39 -0700 (PDT)
+        id S1729243AbgFOOcg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 10:32:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53280 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728304AbgFOOcg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jun 2020 10:32:36 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 608AB20739;
+        Mon, 15 Jun 2020 14:32:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592231555;
+        bh=oxFQsraJAlM4VsLwbEklHGK6FLGzuPOSbKJqHy/ovIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zz+DFcdzp2Qqpeb/LsXUG3XumXxI/N5Mxja/7jAL+He4QPO347KUFJLdimIo0MQlC
+         iOe/L5Y8LpyADDvWrYvzF61PEMRuar69mbBKPXppsOcs70ge5wrL7w0tRat3ntKNqc
+         amMVp7U5gCVzIX4eUs+/RfCh3F8o4XGm9H2d3v9Y=
+Date:   Mon, 15 Jun 2020 15:32:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Cc:     kdasu.kdev@gmail.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH 4/5] spi: bcm-qspi: Make multiple data blocks
+ interrupt-driven
+Message-ID: <20200615143233.GW4447@sirena.org.uk>
+References: <20200615040557.2011-1-mark.tomlinson@alliedtelesis.co.nz>
+ <20200615040557.2011-5-mark.tomlinson@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <1592208439-17594-1-git-send-email-krzk@kernel.org>
- <e1f0326c-8ae8-ffb3-aace-10433b0c78a6@pengutronix.de> <20200615123052.GO4447@sirena.org.uk>
- <CA+h21hqC7hAenifvRqbwss=Sr+dAu3H9Dx=UF0TS0WVbkzTj2Q@mail.gmail.com>
- <20200615131006.GR4447@sirena.org.uk> <CA+h21hpusy=zx8AuUqk_4zShtst8QeNJxCPT4dMGh0jhm5uZng@mail.gmail.com>
- <20200615134119.GB3321@kozik-lap>
-In-Reply-To: <20200615134119.GB3321@kozik-lap>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Mon, 15 Jun 2020 17:23:28 +0300
-Message-ID: <CA+h21hp29i=AdZB_fBQ4mwAh=3Oovopwz3ruzzJqiKpRpZYzhg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] spi: spi-fsl-dspi: Fix external abort on interrupt
- in exit paths
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, stable@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f4arffV+Mc+T1KhS"
+Content-Disposition: inline
+In-Reply-To: <20200615040557.2011-5-mark.tomlinson@alliedtelesis.co.nz>
+X-Cookie: Offer may end without notice.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 15 Jun 2020 at 16:41, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On Mon, Jun 15, 2020 at 04:12:28PM +0300, Vladimir Oltean wrote:
-> > On Mon, 15 Jun 2020 at 16:10, Mark Brown <broonie@kernel.org> wrote:
-> >
-> > >
-> > > It's a bit unusual to need to actually free the IRQ over suspend -
-> > > what's driving that requirement here?
-> >
-> > clk_disable_unprepare(dspi->clk); is driving the requirement - same as
-> > in dspi_remove case, the module will fault when its registers are
-> > accessed without a clock.
->
-> In few cases when I have shared interrupt in different drivers, they
-> were just disabling it during suspend. Why it has to be freed?
->
-> Best regards,
-> Krzysztof
->
 
-Not saying it _has_ to be freed, just to be prevented from running
-concurrently with us disabling the clock.
-But if we can get away in dspi_suspend with just disable_irq, can't we
-also get away in dspi_remove with just devm_free_irq?
+--f4arffV+Mc+T1KhS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--Vladimir
+On Mon, Jun 15, 2020 at 04:05:56PM +1200, Mark Tomlinson wrote:
+
+> When needing to send/receive data in small chunks, make this interrupt
+> driven rather than waiting for a completion event for each small section
+> of data.
+
+Again was this done for a reason and if so do we understand why doing
+this from interrupt context is safe - how long can the interrupts be
+when stuffing the FIFO from interrupt context?
+
+> @@ -731,12 +733,14 @@ static inline u16 read_rxram_slot_u16(struct bcm_qs=
+pi *qspi, int slot)
+>  		((bcm_qspi_read(qspi, MSPI, msb_offset) & 0xff) << 8);
+>  }
+> =20
+> -static void read_from_hw(struct bcm_qspi *qspi, int slots)
+> +static void read_from_hw(struct bcm_qspi *qspi)
+>  {
+
+Things might be clearer if this refactoring were split out into a
+separate patch.
+
+> @@ -960,24 +966,21 @@ static int bcm_qspi_transfer_one(struct spi_master =
+*master,
+>  				 struct spi_transfer *trans)
+>  {
+>  	struct bcm_qspi *qspi =3D spi_master_get_devdata(master);
+> -	int slots;
+> -	unsigned long timeo =3D msecs_to_jiffies(100);
+> +	unsigned long timeo =3D msecs_to_jiffies(1000);
+
+That's a randomly chosen value - if we're now doing the entire transfer
+then we should be trying to estimate the length of time the transfer
+will take, for a very large transfer on a slow bus it's possible that
+even a second won't be enough.
+
+> -		complete(&qspi->mspi_done);
+> +
+> +		read_from_hw(qspi);
+> +
+> +		if (qspi->trans_pos.trans) {
+> +			write_to_hw(qspi);
+> +		} else {
+> +			complete(&qspi->mspi_done);
+> +			spi_finalize_current_transfer(qspi->master);
+> +		}
+> +
+
+This is adding a spi_finalize_current_transfer() which we didn't have
+before, and still leaving us doing cleanup work in the driver in another
+thread.  This is confused, the driver should only need to finalize the
+transfer explicitly if it returned a timeout from transfer_one() but
+nothing's changed there.
+
+--f4arffV+Mc+T1KhS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nhoAACgkQJNaLcl1U
+h9BbTQf/S/rXBNb0g+HDHgihuanPriLK57T6YafzoPoTCnRC2N0NZow/KuAdCdY2
+eoCi4qBSJZqpyw0nkRk3R6IDDZkSIuqz8s9ISyHVLODrpPU1kxjj/51fVhvTKe8v
+9jwNktpZzSMZN/2HZt8+pso+qNngUmLtwoXJkiRJ3elklXzxrSWgJwugVAknQ/uQ
+b8vh6daQXIvFJ7X+pTJu77WwLCbrHAD5kkNSSTZ5teePPi6Ukeoqn56nj03uHR1d
+blo9vStJ/UoZeBhuzCHkjQTKTJUYk4CMLBeA7fLsdDEYjTiTqUPZpJoxZE85mwcS
+kw+PkAn8jCozIinMqp6GpA57lhIRdg==
+=Yyad
+-----END PGP SIGNATURE-----
+
+--f4arffV+Mc+T1KhS--
