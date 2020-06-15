@@ -2,31 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D57C11F9E77
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 19:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9014E1F9E85
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 19:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730920AbgFORar (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 13:30:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41996 "EHLO mail.kernel.org"
+        id S1731259AbgFORcD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 13:32:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:52812 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729124AbgFORaq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jun 2020 13:30:46 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5E67207DA;
-        Mon, 15 Jun 2020 17:30:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592242246;
-        bh=zjfjIr28wp7lz1LzhG/6HN/tE1zYdIy5YMG1lFm5t3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kbiOeSJ5hsV6hDsh+iuN2Phq6hYAF5UJ44P9QG4f+TFAQCtZ64BlSAiZYOQpulXiK
-         67EgWWNfvy/lMMgh8iWjub0lDsZ+oJADxAMCsvwN6/9PXWGWHMOCffBDH1fAQ2ccWu
-         cq3OE58P8henl7vX0sG5AOeHjm9kUWZlb5TbeQWU=
-Date:   Mon, 15 Jun 2020 18:30:43 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, lukas@wunner.de,
+        id S1728585AbgFORcD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Jun 2020 13:32:03 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B79C1F1;
+        Mon, 15 Jun 2020 10:32:02 -0700 (PDT)
+Received: from [10.57.9.128] (unknown [10.57.9.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E3FC3F73C;
+        Mon, 15 Jun 2020 10:32:00 -0700 (PDT)
+Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     lukas@wunner.de,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -41,9 +35,8 @@ Cc:     Robin Murphy <robin.murphy@arm.com>, lukas@wunner.de,
         <linux-rpi-kernel@lists.infradead.org>,
         Martin Sperl <kernel@martin.sperl.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200615173043.GB4447@sirena.org.uk>
-References: <142d48ae-2725-1368-3e11-658449662371@arm.com>
+References: <20200604212819.715-1-f.fainelli@gmail.com>
+ <142d48ae-2725-1368-3e11-658449662371@arm.com>
  <20200605132037.GF5413@sirena.org.uk>
  <2e371a32-fb52-03a2-82e4-5733d9f139cc@arm.com>
  <06342e88-e130-ad7a-9f97-94f09156f868@arm.com>
@@ -53,44 +46,49 @@ References: <142d48ae-2725-1368-3e11-658449662371@arm.com>
  <bb9dbf11-9e33-df60-f5ae-f7fdfe8458b4@gmail.com>
  <20200615170031.GA4447@sirena.org.uk>
  <692bc94e-d574-e07a-d834-c0d569e87bba@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <2f354ed0-9fb7-59ea-ddd1-78703d9c818e@arm.com>
+Date:   Mon, 15 Jun 2020 18:31:58 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t8N2qprAjL+0GVly"
-Content-Disposition: inline
 In-Reply-To: <692bc94e-d574-e07a-d834-c0d569e87bba@gmail.com>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---t8N2qprAjL+0GVly
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Mon, Jun 15, 2020 at 10:04:46AM -0700, Florian Fainelli wrote:
-
+On 2020-06-15 18:04, Florian Fainelli wrote:
+> 
+> 
+> On 6/15/2020 10:00 AM, Mark Brown wrote:
+>> On Mon, Jun 15, 2020 at 09:34:58AM -0700, Florian Fainelli wrote:
+>>
+>>> OK, so this has been dropped for spi/for-next right? How do we move from
+>>> there?
+>>
+>> Well, I actually have it queued up for applying so unless I pull it
+>> before my scripts get that far through the stuff I queued over the merge
+>> window it'll go in (I dropped it due to it not being a bugfix).  If it
+>> were me I'd go with the two instruction hit from checking the flag TBH
+>> but otherwise I guess __always_inline should work for compilers that
+>> misoptimize.  None of this is getting in the way of the framework so if
+>> everyone involved in the driver is happy to spend time optimising it
+>> and dealing with the fragility then it's fine by me.
+> 
 > OK, how about I send you an increment patch (would a fixup be okay?)
 > that adds __always_inline since we know from this thread that some
 > compilers may mis-optimize the function inlining?
 
-That's fine for me.
+Now that I've been inclined to go and look up the documentation, are we 
+sure this so-very-contentious check is even correct? From my reading of 
+things we're checking whether the RXR interrupt function is *enabled*, 
+which still says nothing about whether either condition for the 
+interrupt being *asserted* is true (RXR = 1 or DONE = 1). Thus if more 
+than one SPI instance is active at once we could still end up trying to 
+service an IRQ on a controller that didn't raise it.
 
---t8N2qprAjL+0GVly
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nsEIACgkQJNaLcl1U
-h9DSkAf+I43C4D+5MeXey+DqEhoeIq/jqtEbSPUS6Liq/5dDiTCy2KeFvsYZ5v46
-Cvvn7ou6wPLdnXrPMiMdEl38cJzJfNAv7d3ydsMBlvAGRo6+3noBPoAU9k/gWDAd
-ZE9v3hNFw65ZI4XUK0+SsSOrXGIW9405DEUkKvstmqE8VHyvlSwtAyztcjBJubAj
-M14yKL96sow3/AUJ06Tay2iZK6k6n8VgDTy+/3AmXhX9hrw3jrE2VWYJCan9lhkZ
-64cvvmhjLHeuSa3XVtVk/+qE59QwOk9fkdIOcIgWsjL21/udkyHSNJsaWLdk5dy1
-1TdbguW5djIMdY6+QrNrDDQKtVU27A==
-=gAli
------END PGP SIGNATURE-----
-
---t8N2qprAjL+0GVly--
+Robin.
