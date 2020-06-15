@@ -2,30 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 645811F9DFE
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 19:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7331F9E0C
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jun 2020 19:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731151AbgFORAe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Jun 2020 13:00:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731104AbgFORAe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Jun 2020 13:00:34 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2213620656;
-        Mon, 15 Jun 2020 17:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592240433;
-        bh=pjNF9x2RDPj8kZJYuvgsDx7Y5A6qAlByLppUV8O4V7c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ykZg4D1WVda3DXTdJX5l0ZNtXOQVaoBZMW53mCeTqP5/BvWrjzSYGKXOaE5RjuSHL
-         qD0aM9rtiTVOu88XF56dUtwE5BI9uxSavO7+S0OM5eG3bo0KhQhI8Ba1m3tEstjOYc
-         CxIW/9zM3i9cSjjTCVvhTek75ILPzbpK0weS5GZU=
-Date:   Mon, 15 Jun 2020 18:00:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
+        id S1731167AbgFOREw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Jun 2020 13:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729682AbgFOREw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Jun 2020 13:04:52 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558F6C061A0E;
+        Mon, 15 Jun 2020 10:04:52 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id 10so8064800pfx.8;
+        Mon, 15 Jun 2020 10:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3ZukZRysDpxL7fluIxKkVz5UMBr+FzAndpusseTc58o=;
+        b=RRk08ULTO8k9lQEnZPvMHzTmLcBYiBUfQqYtqU0+OXYULw/mQHXm1p+4jWfh6uWqVy
+         XvGa5nV6UfH+8LUhazVxdugNTG+Ig2BKwdEqEvDlKp+/ZHCJfu0qmZmKLctYTHF8/5I0
+         tKl+o71fVnw8sKFXKi9LBaLsLQAg0VW4fo4fxA/NEzSICTJ4lUJMEz4jPFxoW95ow25E
+         evL5iC/gZi8hQ4RGxXqVBGGjY2giAMgQDXVSMfBkvIxaNpr9exnTy8EX3ZWjTPetND+S
+         hghLTzEoONyP3+ZOXHPAA3tt2Kh3xb7m1gs8QFmgOGiEwnmMN1RG6Yle7Zih94TlqQXH
+         gxLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3ZukZRysDpxL7fluIxKkVz5UMBr+FzAndpusseTc58o=;
+        b=qWSKX67dhZ1pxb+R28ozD/HrDr+TR7/m0eeVOob1mZ2ThWzp0t3IaZIQV7etTPlwlY
+         BMFBUAVKoJ6WywYc5/laa6BaOOv6HNfR7aj0SLip5eUr/Gn7MFqYA78TwMc/bPAkLHhM
+         LquxJhovgNeZ1wM5gXptIycptNOfjMANyN7oaFZpNh8nar3NnEf3fncvlWUBFCFnpZI6
+         G9CFez/PKWilxvOxV6Yh1Xg5Pdti6MYZ706VUJXhV/I43ql19j0JkUgKh0vpLIKQ0Bm0
+         8JY58uVcNel7Z4fMMfMlCtvU57EpjW7kXhUYEBYRPK6tbIYioZSZgL3EhswusS95WSdG
+         a1aw==
+X-Gm-Message-State: AOAM532uUtSf04wPZWyI/6o/u5qddm2ZX77uzOi/PFfyJa5oeydAUyTz
+        xbiQLYn7zLlPf3nWe4XUYYs=
+X-Google-Smtp-Source: ABdhPJxkrT/eEFR2lr5RpODPo3zO/3YcXLxATPx3PWI7oA17rPMi1gELvyI+TosRvIfdlRhWVQPn9g==
+X-Received: by 2002:a63:c407:: with SMTP id h7mr21679517pgd.174.1592240691842;
+        Mon, 15 Jun 2020 10:04:51 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b23sm12254427pgs.33.2020.06.15.10.04.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jun 2020 10:04:51 -0700 (PDT)
+Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Robin Murphy <robin.murphy@arm.com>, lukas@wunner.de,
         "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
@@ -41,8 +65,6 @@ Cc:     Robin Murphy <robin.murphy@arm.com>, lukas@wunner.de,
         <linux-rpi-kernel@lists.infradead.org>,
         Martin Sperl <kernel@martin.sperl.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: Re: [PATCH v2] spi: bcm2835: Enable shared interrupt support
-Message-ID: <20200615170031.GA4447@sirena.org.uk>
 References: <20200604212819.715-1-f.fainelli@gmail.com>
  <142d48ae-2725-1368-3e11-658449662371@arm.com>
  <20200605132037.GF5413@sirena.org.uk>
@@ -52,50 +74,41 @@ References: <20200604212819.715-1-f.fainelli@gmail.com>
  <a6f158e3-af51-01d9-331c-4bc8b6847abb@arm.com>
  <20200608112840.GC4593@sirena.org.uk>
  <bb9dbf11-9e33-df60-f5ae-f7fdfe8458b4@gmail.com>
+ <20200615170031.GA4447@sirena.org.uk>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <692bc94e-d574-e07a-d834-c0d569e87bba@gmail.com>
+Date:   Mon, 15 Jun 2020 10:04:46 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ofekNuVaYCKmvJ0U"
-Content-Disposition: inline
-In-Reply-To: <bb9dbf11-9e33-df60-f5ae-f7fdfe8458b4@gmail.com>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200615170031.GA4447@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---ofekNuVaYCKmvJ0U
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Jun 15, 2020 at 09:34:58AM -0700, Florian Fainelli wrote:
+On 6/15/2020 10:00 AM, Mark Brown wrote:
+> On Mon, Jun 15, 2020 at 09:34:58AM -0700, Florian Fainelli wrote:
+> 
+>> OK, so this has been dropped for spi/for-next right? How do we move from
+>> there?
+> 
+> Well, I actually have it queued up for applying so unless I pull it
+> before my scripts get that far through the stuff I queued over the merge
+> window it'll go in (I dropped it due to it not being a bugfix).  If it
+> were me I'd go with the two instruction hit from checking the flag TBH
+> but otherwise I guess __always_inline should work for compilers that
+> misoptimize.  None of this is getting in the way of the framework so if
+> everyone involved in the driver is happy to spend time optimising it
+> and dealing with the fragility then it's fine by me.
 
-> OK, so this has been dropped for spi/for-next right? How do we move from
-> there?
-
-Well, I actually have it queued up for applying so unless I pull it
-before my scripts get that far through the stuff I queued over the merge
-window it'll go in (I dropped it due to it not being a bugfix).  If it
-were me I'd go with the two instruction hit from checking the flag TBH
-but otherwise I guess __always_inline should work for compilers that
-misoptimize.  None of this is getting in the way of the framework so if
-everyone involved in the driver is happy to spend time optimising it
-and dealing with the fragility then it's fine by me.
-
---ofekNuVaYCKmvJ0U
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nqS4ACgkQJNaLcl1U
-h9C/sQf/Q3a6fPdDE/0SszY8YBwi3lo7IhvhUsM32lAT1geHoCRQZMcFUSMjktHG
-nv7SU6QcpZSidvlFYnamRdn5jMZSGEUDvNEASoCZ+aqhJhFG/Gb5ks94ILJMEhF8
-b4tk7QCWkn+w6n99PyrNMCh9dExt3yRkHXG2M9a6a5UHxCO2JW12sA0eyEfBW30Q
-8QNyzNCpYeclwKH0MW91BpjbUwKCPXDRcDOgmSIRX6ACrVbs6xU5BUGVdZRjMcb9
-x8zWxbr6yIZtuGKsPTyVGQDmO/wroEYA84CbYpHOEl0Oe81nhQp9nm6rJzT3IGhn
-jcdeWnCufYRam1maBk4xhwDZV6o/pA==
-=6wIF
------END PGP SIGNATURE-----
-
---ofekNuVaYCKmvJ0U--
+OK, how about I send you an increment patch (would a fixup be okay?)
+that adds __always_inline since we know from this thread that some
+compilers may mis-optimize the function inlining?
+-- 
+Florian
