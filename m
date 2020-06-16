@@ -2,86 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DB91FACF1
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 11:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E8C1FAD43
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 11:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727966AbgFPJl4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Jun 2020 05:41:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54988 "EHLO mail.kernel.org"
+        id S1726099AbgFPJ7v (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Jun 2020 05:59:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726052AbgFPJlz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 16 Jun 2020 05:41:55 -0400
-Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1726052AbgFPJ7u (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 16 Jun 2020 05:59:50 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 201D1207BC;
-        Tue, 16 Jun 2020 09:41:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0CA0720767;
+        Tue, 16 Jun 2020 09:59:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592300514;
-        bh=Sk4uiVB4B7/+E1RJwwK7lA3+sa9J1bh2Mauaa7YcTGs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uuH6hJ7BzxsYm5ac/1w5A0PPdWJGvffe+XiYFt1N1U4jLkUN/SqqpE7p4nhks72/X
-         wWj5/HjGnQVaGiZpRrFHy2qo57RMQWZt6ScWdYBz4e8ccAN2/kz8Rq/r+us9FwB+kE
-         rK3uK/BdzjNysHtJCXZd2KoUiqOG9d6d2xld1B4w=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH v3 2/2] spi: spi-fsl-dspi: Initialize completion before possible interrupt
-Date:   Tue, 16 Jun 2020 11:41:07 +0200
-Message-Id: <1592300467-29196-2-git-send-email-krzk@kernel.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1592300467-29196-1-git-send-email-krzk@kernel.org>
-References: <1592300467-29196-1-git-send-email-krzk@kernel.org>
+        s=default; t=1592301590;
+        bh=H00RGJq5KezVcrQ/vGzLRXHsGQa2G3LnLHyCG7559QU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s35iCxf2ApOcJZGyTnKb4vFHqFOY/SexyqbRTgxWkYLnGAD85dUn2XN6AYZkK4Yms
+         bl62nwah75Ax2duvcU+bVe2CmlysoY32l9chot9A7Qr1u4UA5fiP/m2ZlZQO/ik3av
+         tMj/TY1ARiyudeRqXH3l8XqEFpJspJfUFi6ej97w=
+Date:   Tue, 16 Jun 2020 10:59:48 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "matthias.schiffer@ew.tq-group.com" 
+        <matthias.schiffer@ew.tq-group.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
+Message-ID: <20200616095948.GJ4447@sirena.org.uk>
+References: <20200612141611.GI5396@sirena.org.uk>
+ <VE1PR04MB6638B43E3AC83286946DABCD899F0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200615123553.GP4447@sirena.org.uk>
+ <VE1PR04MB6638C65257F41072C3D61583899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200615133905.GV4447@sirena.org.uk>
+ <VE1PR04MB6638793C00742D5BA72F8AC2899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200615143622.GX4447@sirena.org.uk>
+ <VE1PR04MB6638D0C9FE0289FFE13ABA49899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+ <20200615145556.GY4447@sirena.org.uk>
+ <VE1PR04MB66380FD8FB7FCE79AF4B6CD4899D0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6xTM0kUsJcaNctaW"
+Content-Disposition: inline
+In-Reply-To: <VE1PR04MB66380FD8FB7FCE79AF4B6CD4899D0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+X-Cookie: Offer may end without notice.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The interrupt handler calls completion and is IRQ requested before the
-completion is initialized.  Logically it should be the other way.
 
-Fixes: 4f5ee75ea171 ("spi: spi-fsl-dspi: Replace interruptible wait queue with a simple completion")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+--6xTM0kUsJcaNctaW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
+On Tue, Jun 16, 2020 at 02:03:40AM +0000, Robin Gong wrote:
+> On 2020/06/15 22:56 Mark Brown <broonie@kernel.org> wrote:=20
 
-Changes since v2:
-1. None
+>         struct list_head transfer_list;
+> +
+> +#define        SPI_TRANS_DMA_PREP_FAIL BIT(3)  /* prepare dma failed */
+> +       u16             flags;
 
-Changes since v1:
-1. Rework the commit msg.
----
- drivers/spi/spi-fsl-dspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I'd just make this a generic flag for failures before we start
+interacting with the hardware rather than specifically this one error
+case.  Otherwise this looks fine.
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 7ecc90ec8f2f..51e0bf617b16 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -1389,6 +1389,8 @@ static int dspi_probe(struct platform_device *pdev)
- 		goto poll_mode;
- 	}
- 
-+	init_completion(&dspi->xfer_done);
-+
- 	ret = request_threaded_irq(dspi->irq, dspi_interrupt, NULL,
- 				   IRQF_SHARED, pdev->name, dspi);
- 	if (ret < 0) {
-@@ -1396,8 +1398,6 @@ static int dspi_probe(struct platform_device *pdev)
- 		goto out_clk_put;
- 	}
- 
--	init_completion(&dspi->xfer_done);
--
- poll_mode:
- 
- 	if (dspi->devtype_data->trans_mode == DSPI_DMA_MODE) {
--- 
-2.7.4
+--6xTM0kUsJcaNctaW
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7omBMACgkQJNaLcl1U
+h9CvpQf+Nxs8GAzGWD8q5WQ5Yfk5Dd+UDwg0tf7+zdTr05h6hiN4THe7qjTZBk6+
+MC0R19TGfmpOaqHJY8nh3Nr2HY2QUv+ceTtIYVmwxpG+oE9TTE1v5WQTzOTQ5HMV
+yq8qU6g8Tfa1uB6BLAchJMy2lBvU/mjNqRnDY4ONnr5qkrmmKgQZycDnilH3ICEy
+VVS2cenoNIUooeyGwBCFOO8GnxfPhYtO3P5CLZvFPmg6OEdq0qIbluxYksdknKiR
+cBMORkKWR3BEZwuCx2R6xjUk17zxIpc5Km7XmjrZXSSitzONPcMjcaqVq4mtuNAU
+5hztHr9mzDtIlWqoD8uLxSczu7wlVg==
+=AZSa
+-----END PGP SIGNATURE-----
+
+--6xTM0kUsJcaNctaW--
