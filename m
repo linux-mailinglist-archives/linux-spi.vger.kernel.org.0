@@ -2,85 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372E01FBC5E
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 19:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904521FBC63
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 19:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729782AbgFPRHG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Jun 2020 13:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729193AbgFPRHF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Jun 2020 13:07:05 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D99FC061573;
-        Tue, 16 Jun 2020 10:07:05 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id q11so21582985wrp.3;
-        Tue, 16 Jun 2020 10:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=XMRBF1iQXQfH8W0ohSSsJlVWNTVQ83/Rjd5oppXCtLI=;
-        b=fivDMkIpU7zc1RLCtNnjZu694XM1KnvZyMTP4oijXbaExASqH0Oa3tHON1Oqyv9G3g
-         qUhYNAnl6KORNi2nzVGi5fpj36Oibrg8Ztjk7odIHBRn1QUIogqFOoilx3AB7DrnN2ZH
-         1cCM8HKluGPQCeBi6Z1UvyFgxcRHKgbFG4KDqgvMdl8RtwYvpFLGXFgfzzRX5T2bYDft
-         d2ybxqYbn/wxEO5ULepxUI5kxC9qoTQcBBrNNV6mFBKOR9S3CQfWIcmI/vq7wje8cMG6
-         5a+3vK/VPNoNX2vrFc9KqxKGOGPcAJQx9VZGR74wEuhi1prQjeASf0/XYWAWSRHQxYpE
-         RZeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XMRBF1iQXQfH8W0ohSSsJlVWNTVQ83/Rjd5oppXCtLI=;
-        b=VK9PnzjxqZuHxMuupwWbjPjqrGiMlNajsHg6cVeYhioT6F5s966Jp4vXr4FaVOYIFl
-         jvvgVQcGSQVRLcwRGWJAosqPiJhKIXKl+weFVQgCfiw/OczoZtrnU70PeqK+8OG9nkx/
-         tyMPPwxEDXtolVn4CP+Zex0m50RhQaKziohjr8TYVvsPrhqe/j7NIofdJFM3F9HX5pk7
-         +IorN3YuvWkZu11EdLng5MVOPwMX6/MS7ksEDscrd/pFcxAhMoYkwHyPA3URCayCyI5R
-         N2+qvACF+fW7yRLo0UNnMSQ3pHYziOU6ZexdadyPSQHERa9RAZkThnVkuL8rlZhXDqNu
-         Hy0w==
-X-Gm-Message-State: AOAM532IgwTDIJ/0jKSLCrMzufw7cLXmyLk3NRc3FcWWKbgbTt9bmjgT
-        yUQi63+ySi96HvgqVC3N9f4=
-X-Google-Smtp-Source: ABdhPJyRfWOKefA3MT1NqEbsEMU8JAdkdhU0tJ2NJpjEQ182ORyfFqdpipoj8k/8d8CeY3edcuA+2g==
-X-Received: by 2002:adf:e751:: with SMTP id c17mr3882788wrn.134.1592327224273;
-        Tue, 16 Jun 2020 10:07:04 -0700 (PDT)
-Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id u4sm5008813wmb.48.2020.06.16.10.07.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2020 10:07:03 -0700 (PDT)
-Subject: Re: [PATCH v3 3/4] spi: bcm63xx-hsspi: add reset support
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        broonie@kernel.org, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, p.zabel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+        id S1729578AbgFPRH2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Jun 2020 13:07:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57620 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729193AbgFPRH1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 16 Jun 2020 13:07:27 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 455C020B1F;
+        Tue, 16 Jun 2020 17:07:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592327246;
+        bh=t0dF5gqUwXzjgY8Hq7zWYu2xi/32wRxgBLr94n6++N4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UeWaa3CMea0W+DXMha2w5q/BvYwDS0MFzufsW4NHfPyCD7SgYxsiu7t8o+z8DdhRS
+         WhshWRASYNuLR2pCz/NbsJx/UwnVRMjAWIxwbEAQlfd7UdgmIVmls5jW9PrAlzlfUx
+         EU+TS2HtHhZzuuQgAt09iaQSRE4q+w+e85TY1H0Q=
+Date:   Tue, 16 Jun 2020 18:07:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        p.zabel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 2/4] spi: bcm63xx-spi: allow building for BMIPS
+Message-ID: <20200616170724.GT4447@sirena.org.uk>
 References: <20200616070223.3401282-1-noltari@gmail.com>
- <20200616070223.3401282-4-noltari@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <fb07654a-048d-c428-545a-f5cb87cc9acc@gmail.com>
-Date:   Tue, 16 Jun 2020 10:07:00 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.9.0
+ <20200616070223.3401282-3-noltari@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200616070223.3401282-4-noltari@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zRW3mUn8fSI0is1a"
+Content-Disposition: inline
+In-Reply-To: <20200616070223.3401282-3-noltari@gmail.com>
+X-Cookie: Offer may end without notice.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--zRW3mUn8fSI0is1a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/16/2020 12:02 AM, Álvaro Fernández Rojas wrote:
-> bcm63xx arch resets the HSSPI controller at early boot. However, bmips arch
-> needs to perform a reset when probing the driver.
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> ---
+On Tue, Jun 16, 2020 at 09:02:21AM +0200, =C1lvaro Fern=E1ndez Rojas wrote:
+> bcm63xx-spi controller is present on several BMIPS SoCs (BCM6358, BCM6362,
+> BCM6368 and BCM63268).
 
-Same comment as patch #1.
--- 
-Florian
+Please do not submit new versions of already applied patches, please
+submit incremental updates to the existing code.  Modifying existing
+commits creates problems for other users building on top of those
+commits so it's best practice to only change pubished git commits if
+absolutely essential.
+
+--zRW3mUn8fSI0is1a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7o/EsACgkQJNaLcl1U
+h9DsuAf+JzDVfdxvzclLEL9j69hB/V/w7Fom3MnMJuSBdrOBXlSvGR8yENQthQ5E
+t2HDh+xMBncUP4yab1SLVL7YFqAe0CIf+B5F+dbwTHqWmzNlDW7pnSldJtxb5XlG
+T4GxSiK5HksPFQm5AAiUxiGJsmNjXfYvDshqyfyhqlnkMzEhz/GMOPq6rdEOa3tE
+b9HnmAZsukGNPPuDf2Q/WORbGMsTr0X/fmz0oHFAsbSCjMdl/VDZuylKWdWYq+fo
+xQJYrR5KHfcfZBvj4GXM47Lqx5CFfioELYew/+BeO0/bmPhmrVERjCPXxj8W+rti
+HRGT9h8idQyfwy1Vo12Pjbus5bvFkg==
+=ojte
+-----END PGP SIGNATURE-----
+
+--zRW3mUn8fSI0is1a--
