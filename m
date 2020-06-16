@@ -2,60 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E80BD1FADE8
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 12:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5570B1FAE25
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 12:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728187AbgFPK1W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Jun 2020 06:27:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52414 "EHLO mail.kernel.org"
+        id S1725901AbgFPKkE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Jun 2020 06:40:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56088 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728131AbgFPK1C (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 16 Jun 2020 06:27:02 -0400
+        id S1725775AbgFPKj7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 16 Jun 2020 06:39:59 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 47D932074D;
-        Tue, 16 Jun 2020 10:27:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3EA0320786;
+        Tue, 16 Jun 2020 10:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592303221;
-        bh=h+uJjTNyXThELVktOw4GwJ+7MZ17efhM9W2zSlxhrfE=;
+        s=default; t=1592303998;
+        bh=7dldRWO7gGRPlZ/8sV26jPzle1h5yQEqABWokXqyW38=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W6bU3A0EaWVwqB76C7G7Q8IPA9+8NDlndx78P4FO5p55YBIboAQ+ng5RuIHbh7arj
-         cDq2IabAY/pe4YgW8N+oycWxtz82vqVOx9X8cA2CW3t6pe1ufX8DiWIRg6MbpwFL4a
-         4lfwdoblwodIxGq5kz8hB3BKYLT1P24WTfkeaTDQ=
-Date:   Tue, 16 Jun 2020 11:26:59 +0100
+        b=s3YG0XKIGUKezsbFPu+LsttzfENLcVz6uOAgoe8u3j2JVe5uZvas/7wxHmBbu6K9t
+         ALdsxYeae+Xo/DSQ0UB0LtxZzXhGyfjKzGlO9MCz7WZaFInHWsgW/aTqaIQ1kR92IS
+         kp6WqPseGrtvHr9CykwXRzc0VOenTXqXbSlzpie0=
+Date:   Tue, 16 Jun 2020 11:39:56 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "matthias.schiffer@ew.tq-group.com" 
-        <matthias.schiffer@ew.tq-group.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 RFC 1/2] spi: introduce fallback to pio
-Message-ID: <20200616102659.GK4447@sirena.org.uk>
-References: <20200615123553.GP4447@sirena.org.uk>
- <VE1PR04MB6638C65257F41072C3D61583899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200615133905.GV4447@sirena.org.uk>
- <VE1PR04MB6638793C00742D5BA72F8AC2899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200615143622.GX4447@sirena.org.uk>
- <VE1PR04MB6638D0C9FE0289FFE13ABA49899C0@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200615145556.GY4447@sirena.org.uk>
- <VE1PR04MB66380FD8FB7FCE79AF4B6CD4899D0@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <20200616095948.GJ4447@sirena.org.uk>
- <VE1PR04MB66387499F9AF80A68F720529899D0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-spi@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>, kernel@pengutronix.de
+Subject: Re: [PATCH v2 3/3] genirq: Do not test disabled IRQs with DEBUG_SHIRQ
+Message-ID: <20200616103956.GL4447@sirena.org.uk>
+References: <1592208439-17594-1-git-send-email-krzk@kernel.org>
+ <1592208439-17594-3-git-send-email-krzk@kernel.org>
+ <20200615120844.GL4447@sirena.org.uk>
+ <CAJKOXPfEpLN9jS11WW367Na3Ukfi8p3urKDcJoafg9dHuCDSUA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qE0/TkNoJLLGUzs4"
+        protocol="application/pgp-signature"; boundary="/0D4jGRsNl8cPNu/"
 Content-Disposition: inline
-In-Reply-To: <VE1PR04MB66387499F9AF80A68F720529899D0@VE1PR04MB6638.eurprd04.prod.outlook.com>
+In-Reply-To: <CAJKOXPfEpLN9jS11WW367Na3Ukfi8p3urKDcJoafg9dHuCDSUA@mail.gmail.com>
 X-Cookie: Offer may end without notice.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
@@ -64,36 +51,44 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---qE0/TkNoJLLGUzs4
+--/0D4jGRsNl8cPNu/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Jun 16, 2020 at 10:13:08AM +0000, Robin Gong wrote:
-> On 2020/06/16 Mark Brown <broonie@kernel.org> wrote:
+On Tue, Jun 16, 2020 at 12:11:17PM +0200, Krzysztof Kozlowski wrote:
+> On Mon, Jun 15, 2020 at 01:08:44PM +0100, Mark Brown wrote:
+> > On Mon, Jun 15, 2020 at 10:07:19AM +0200, Krzysztof Kozlowski wrote:
+> > > Testing events during freeing of disabled shared interrupts
+> > > (CONFIG_DEBUG_SHIRQ) leads to false positives.  The driver disabled
+> > > interrupts on purpose to be sure that they will not fire during device
+> > > removal.
 
-> > I'd just make this a generic flag for failures before we start interacting with the
-> > hardware rather than specifically this one error case.  Otherwise this looks
-> > fine.
+> > Surely the whole issue with shared IRQs that's being tested for here is
+> > that when the interrupt is shared some other device connected to the
+> > same interrupt line may trigger an interrupt regardless of what's going
+> > on with this device?
 
-> So rename to SPI_TRANS_DMA_FAIL? I think at least DMA is MUST for fallback
-> case...
+> Yes. However if that device disabled the interrupt, it should not be
+> fired for other users. In such case the testing does not point to a
+> real issue.
 
-This is not purely for DMA, it's just about the failure having occurred
-before the transfer started.  How about _FAIL_NO_START?
+To be honest I'd say that if you're disabling a shared interrupt that's
+a bit of an issue regardless of anything else that's going on, it'll
+disrupt other devices connected to it.
 
---qE0/TkNoJLLGUzs4
+--/0D4jGRsNl8cPNu/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7onnIACgkQJNaLcl1U
-h9Cs0Qf8CdBZ6A+/Gn/ijwLKgPntYUIu7iNkeoHkhYqOXmt1S4e0m5GoT+ROMOLV
-k1elBNRfWqVdKJfHMzmk5wANM+F5XqTCOpWx0SErZRiSHMFb5V8gClcNBYTNL/eU
-3A/I62fz09JL/onIv3qEkUTsWvL3Rq7VG0mAsJvL27oMRecxS0EwEGW33kaY9axI
-59Irl+2GcI/oQchTMzeHBdBMd5bqdGjDvI2xSrqnbyip+/G1p6xHPmYRyypcl+AZ
-X976ervmpNe4o3XKh80pDajyx5aKgyQxgtB7cjE2UPSKXAgVhG+N8LWRwoAw03+y
-1fXXMrymNw+yvlVU0QNEuMOYGRjTFg==
-=9EtT
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7ooXsACgkQJNaLcl1U
+h9DoHgf+JwvDuPobncELlcEI/vWSGXCrDuPyH/+FJU0Ji63DjRavjk3dt7UI1UsD
+m70QleSoyhqku2gmsEnWKgRz08Y3KD8XCX6L/LwqmB2GKuZLlV2qHdgr6UkJ1UQ1
+XOF2w75Vip+CnBp6AlVuEGyJ9k32y6VGDXyAe8nkFZU1teHMEZ2BPv8ZwrtHIgjs
+/Mq6GUrSDXYSWkDD1AhLBG+ZjuCWm/UBy5anxCbAcnlIADxHVfLLzL58CPtOYNpy
+03RoSphUoITpHPlTssE5VGdByMnxY7116n0XbiCsP6+mVmm/KU9FpHwOYN5qmFWS
+hFrkjmbsmqNIpLXjzKQBxAiyDk5G0g==
+=x0XR
 -----END PGP SIGNATURE-----
 
---qE0/TkNoJLLGUzs4--
+--/0D4jGRsNl8cPNu/--
