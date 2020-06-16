@@ -2,184 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F581FB4B8
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 16:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBD01FBC54
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 19:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729567AbgFPOmw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Jun 2020 10:42:52 -0400
-Received: from mail-eopbgr80053.outbound.protection.outlook.com ([40.107.8.53]:41374
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728250AbgFPOmw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 16 Jun 2020 10:42:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BPFjd78Wktwm6XioOjxlAnCLDXcwck/s0R8gmKU0GCU9pRaZ+uI9xca/1Z5obxBUibfqo3YCsIXDjwGufCZOF6YFSSPVGoltOGF0+eAzBa5WfBNARGcL/fBVl44AlQaRo8Sm80pUwPdN5dwXJjdLtzL57OxJ8+GuRkFgMapfORMfuh9SZvDmdnBQxwKMYWcg0ExAGYMTfIDwwkOQR5txNJtfB/m0NeQGZw5uZmOzUvpC2Xf3YxEHQG24V7/RXLLxBj1qOwwQsSTPMU59rIYb+f/sAaDrI9DHtAESX+Rfv6eqh1DoPz+wkowiiQlBFIMtV4a8xc35JPceTUIBTuxgZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BWD0C4nag/n17IHZIAleGqEk3ypshR7pobGoU1GZAI0=;
- b=M5VMpNva1ZeTUI63HX3xqBXKxu6sOVfiEEd1mTB8tWa3HNPC7IOsOPGVNIcc3d0/XTDl374N4eEtuSHDRSiXHmusVWCYn3qJhj+JKHoJqiUkjPaw2ekcT2beZtcdX3oJ03CBxbNC6ee6PTTYHWQ6IXnYpd12KU7MWIYA+ALhoODSx99S0xfF1G0Nh2wEzV2ll7auB2TXgAArIrKwVL4nW38XNNmFWZ8ttnJPPuI9WmAq9FJlgpFvbGvS01nhg+yA+uFjvD4AcGoNLFBU9q69CLgWV81K6Mgv32vLr+L/PorTz0JtTawLA/oScPVcQsqUKV68D6zRVV1jngOBlcW9Uw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BWD0C4nag/n17IHZIAleGqEk3ypshR7pobGoU1GZAI0=;
- b=cubxPXICtEw1lFbOzy/qZ6Z9qr+enCZzXZ/u0/rzROd7b1ZM304OBtL63rmazo+/7O7ONxMDofAxl+zlRa2sywQ//ex5k3NjxJvseT65fng8DGonyLQs9fJ9f4abnq75hN5yLEMQYD729vbquKTFWt0zbwB7E1Pjf3NyqjSy91M=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (2603:10a6:803:119::15)
- by VE1PR04MB6623.eurprd04.prod.outlook.com (2603:10a6:803:125::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.24; Tue, 16 Jun
- 2020 14:42:48 +0000
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::5cc4:23a5:ca17:da7d]) by VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::5cc4:23a5:ca17:da7d%6]) with mapi id 15.20.3088.028; Tue, 16 Jun 2020
- 14:42:48 +0000
-From:   Robin Gong <yibin.gong@nxp.com>
-To:     broonie@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, robin.murphy@arm.com,
-        matthias.schiffer@ew.tq-group.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] spi: imx: add fallback feature
-Date:   Wed, 17 Jun 2020 06:42:09 +0800
-Message-Id: <1592347329-28363-3-git-send-email-yibin.gong@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1592347329-28363-1-git-send-email-yibin.gong@nxp.com>
-References: <1592347329-28363-1-git-send-email-yibin.gong@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0163.apcprd06.prod.outlook.com
- (2603:1096:1:1e::17) To VE1PR04MB6638.eurprd04.prod.outlook.com
- (2603:10a6:803:119::15)
+        id S1730252AbgFPRFN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Jun 2020 13:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729794AbgFPRFN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Jun 2020 13:05:13 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF6FC061573;
+        Tue, 16 Jun 2020 10:05:11 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id f185so3859064wmf.3;
+        Tue, 16 Jun 2020 10:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=Df4lS1a4Afgip6mUYwPxDAu7PfQ0SWY73b7vyFMbsdY=;
+        b=CI3GXRng/K5RxhCOS2ZF34C0Ye8JxjrfxOlmQhW2IhqlU78cmj9vX2qakPBpyhaKCZ
+         EPrtQxOXVVhNTmrfMvB6u7rPfCEdiaBROHPuqrCsuhN0ZnMFfiid/0hQXTDSpQ5mUHyC
+         ZazlXCmEUzZoHaTgjbXV11ff2jaft3sQcWbiOJfJhStNCguLMBeM7HzwJ45SZbMReRyG
+         +O5rdV7YmSbau/2jpbHx64yfKAnS4r79vqLfosIM7tiuGs22qPC0DG+Lo9uAGVrNeHvv
+         XODkuQyVSl8Gv3F8WG88JXp9ZD75V5UnLPgYY38/uasWV76/p+Bhnl7BKcHgJ3tnxLlF
+         3mZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Df4lS1a4Afgip6mUYwPxDAu7PfQ0SWY73b7vyFMbsdY=;
+        b=SiHqaxDlhZsrCxEGgVhw6XE4ykr1WxuVcfQtOfR0Fuuw6pQhF+o5WhvCZouL3DxDmo
+         5YrfpipNL3+/JwW5hNkH8YB9BIPKYFhnJ22tF/cLweMshTZuc+l7BLl56eql4SZ5jAQ0
+         oV3bWtihA5NIo4JUXlhyfOBfTIlWGhEse239ojNRLHs1y0i6Yd0UorE/81mkcTbyFgaq
+         pnBgvX8KCMVDpGNMnpHoHKa7dqHj0qA3IRePmJyYFN4UsLzNS+YfN2jBUhbWRcDTSzUR
+         XsefEE9sS4VBbQSD84dA0CRk6rVOaCaELknUNCWN8w2jP1iEKeMtcLzR+r3Fay4EIyKz
+         JfGw==
+X-Gm-Message-State: AOAM533kHbbvW5AZsI/3xTbnXXGX5HbqQyXtt9X97E7OXO23sggW0C/a
+        0vLI9IPd6hOGtIbNqw5e1+I=
+X-Google-Smtp-Source: ABdhPJxRRzNwKYMdzdDi5JUyzHnahhqSfODmYl+q3iopHnH3Wx2Jl5Fzl4J9jJsr+CkhwDCeg3nh7A==
+X-Received: by 2002:a7b:c0cc:: with SMTP id s12mr4346720wmh.111.1592327110274;
+        Tue, 16 Jun 2020 10:05:10 -0700 (PDT)
+Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
+        by smtp.gmail.com with ESMTPSA id w1sm4682818wmi.13.2020.06.16.10.05.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jun 2020 10:05:09 -0700 (PDT)
+Subject: Re: [PATCH v3 1/4] spi: bcm63xx-spi: add reset support
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        broonie@kernel.org, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, p.zabel@pengutronix.de,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20200616070223.3401282-1-noltari@gmail.com>
+ <20200616070223.3401282-2-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d79c9e3d-fcf3-84ab-4a13-8ff00b4b2605@gmail.com>
+Date:   Tue, 16 Jun 2020 10:05:06 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from robin-OptiPlex-790.ap.freescale.net (119.31.174.66) by SG2PR06CA0163.apcprd06.prod.outlook.com (2603:1096:1:1e::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3109.21 via Frontend Transport; Tue, 16 Jun 2020 14:42:45 +0000
-X-Mailer: git-send-email 2.7.4
-X-Originating-IP: [119.31.174.66]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: bf07b327-f169-4980-e1e8-08d812038a0f
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6623:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VE1PR04MB66235BACB166DAE88B405BEA899D0@VE1PR04MB6623.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:597;
-X-Forefront-PRVS: 04362AC73B
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DIj/4MADuq49/noAjeuFxqjRxTbcKC7nqBbXp9iEy2463fcZTzQIXm7y4cB3N85Rwwsgyyk/JZbmB5BTR5D5pzHuk60D2zxhshCv4GFDFlayp5Ad30BgbKmlnqVZBDyq4IFA7pdOc4oi7oFldWIK/bsNCBXuiYgcdJi4WTl4eWWoGHXU2fLiTgNMIYXab9XhTHSO/kMDVo90C1XIJwd7qHd3/lmFNA47uWBjGIlBGTxFozJ87BARnO+oGaBlYmd/MC9VRze5U7JCaqrvcL67Jtd42xj6mcVQGrAIAqxCJHB9smCY1pGeUa/xZGxzeqAFTwGehJOH33FDDrdpVMrOhw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6638.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(8936002)(6512007)(6506007)(66946007)(66556008)(8676002)(4326008)(66476007)(498600001)(186003)(16526019)(86362001)(2906002)(83380400001)(6486002)(26005)(52116002)(36756003)(5660300002)(7416002)(2616005)(6666004)(956004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: UNYLPLHVhD+Gc689JFfECxKaTFTd4dp0Img25I0JOYNkAFpHxjw22teliZ3Ik6Uhi15WlpSQuSMjwx8llNDBPzxXLZUvBHi73aE1CoinWC1HEo7uw2npCN8NBYmP9NwXKbCw6pCCRFJNJl+8OUAdxb9y5dWTy4jg91sgMwI6wFT2zxq69eFwFiKdF+aicq3rqbdYGINLLubJwb2RqcgdA/h0kPZ2SGicyNJlC7N1Zn2Eq0JqnKBncvKBUMQIDkNWF/3MpjHRFIkcz8Ok+sd7rYvSWpfGVbZSXadCTiJ9IlwYRNY4HGwQWak02KBMCILR/vORHTXBUIyeQLH1CASZeXd5k8BazJR6toN1uZUYiKny5VfwBwMtxPSQUwZAiSbwCBEvi3PjkefR7Hh+YWNaL5YLn0uuU6Yze+eyr7pbXWKvyw7hHESL3yX858KGwnSbX4knsPbtFYLnLKalPPJX9YJplwRbe3YyNkGMAFyewvePwn3732Nlbzqzi5XZbYPi
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf07b327-f169-4980-e1e8-08d812038a0f
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2020 14:42:48.5802
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V+pzcmYib8kkVR9Is9sLUQWLAx6L9UOb2jMaM3a81xKbyvsd+MqvDlNfYRxQCZhLw7lRyo+qED5YCTEcJ/GFFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6623
+In-Reply-To: <20200616070223.3401282-2-noltari@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add fallback pio feature in case  dma transfer failed before start.
-Besides, another whole pio transfer including setup_transfer will be
-issued by spi core, no need to restore jobs like commit bcd8e7761ec9 ("spi:
-imx: fallback to PIO if dma setup failure").
 
-Signed-off-by: Robin Gong <yibin.gong@nxp.com>
----
- drivers/spi/spi-imx.c | 35 ++++++++++++++---------------------
- 1 file changed, 14 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index b7a85e3..2b8d339 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -224,7 +224,7 @@ static bool spi_imx_can_dma(struct spi_master *master, struct spi_device *spi,
- {
- 	struct spi_imx_data *spi_imx = spi_master_get_devdata(master);
- 
--	if (!use_dma)
-+	if (!use_dma || master->fallback)
- 		return false;
- 
- 	if (!master->dma_rx)
-@@ -1364,11 +1364,12 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
- 
- 	ret = spi_imx_dma_configure(master);
- 	if (ret)
--		return ret;
-+		goto dma_failure_no_start;
- 
- 	if (!spi_imx->devtype_data->setup_wml) {
- 		dev_err(spi_imx->dev, "No setup_wml()?\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto dma_failure_no_start;
- 	}
- 	spi_imx->devtype_data->setup_wml(spi_imx);
- 
-@@ -1379,8 +1380,10 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
- 	desc_rx = dmaengine_prep_slave_sg(master->dma_rx,
- 				rx->sgl, rx->nents, DMA_DEV_TO_MEM,
- 				DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
--	if (!desc_rx)
--		return -EINVAL;
-+	if (!desc_rx) {
-+		ret = -EINVAL;
-+		goto dma_failure_no_start;
-+	}
- 
- 	desc_rx->callback = spi_imx_dma_rx_callback;
- 	desc_rx->callback_param = (void *)spi_imx;
-@@ -1425,6 +1428,10 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
- 	}
- 
- 	return transfer->len;
-+/* fallback to pio */
-+dma_failure_no_start:
-+	transfer->error |= SPI_TRANS_FAIL_NO_START;
-+	return ret;
- }
- 
- static int spi_imx_pio_transfer(struct spi_device *spi,
-@@ -1507,7 +1514,6 @@ static int spi_imx_transfer(struct spi_device *spi,
- 				struct spi_transfer *transfer)
- {
- 	struct spi_imx_data *spi_imx = spi_master_get_devdata(spi->master);
--	int ret;
- 
- 	/* flush rxfifo before transfer */
- 	while (spi_imx->devtype_data->rx_available(spi_imx))
-@@ -1516,21 +1522,8 @@ static int spi_imx_transfer(struct spi_device *spi,
- 	if (spi_imx->slave_mode)
- 		return spi_imx_pio_transfer_slave(spi, transfer);
- 
--	/*
--	 * fallback PIO mode if dma setup error happen, for example sdma
--	 * firmware may not be updated as ERR009165 required.
--	 */
--	if (spi_imx->usedma) {
--		ret = spi_imx_dma_transfer(spi_imx, transfer);
--		if (ret != -EINVAL)
--			return ret;
--
--		spi_imx->devtype_data->disable_dma(spi_imx);
--
--		spi_imx->usedma = false;
--		spi_imx->dynamic_burst = spi_imx->devtype_data->dynamic_burst;
--		dev_dbg(&spi->dev, "Fallback to PIO mode\n");
--	}
-+	if (spi_imx->usedma)
-+		return spi_imx_dma_transfer(spi_imx, transfer);
- 
- 	return spi_imx_pio_transfer(spi, transfer);
- }
+On 6/16/2020 12:02 AM, Álvaro Fernández Rojas wrote:
+> bcm63xx arch resets the SPI controller at early boot. However, bmips arch
+> needs to perform a reset when probing the driver.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> ---
+>  v3: use devm_reset_control_get_optional_exclusive
+>  v2: use devm_reset_control_get_exclusive
+> 
+>  drivers/spi/spi-bcm63xx.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
+> index 0f1b10a4ef0c..92e88901189c 100644
+> --- a/drivers/spi/spi-bcm63xx.c
+> +++ b/drivers/spi/spi-bcm63xx.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/err.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/of.h>
+> +#include <linux/reset.h>
+>  
+>  /* BCM 6338/6348 SPI core */
+>  #define SPI_6348_RSET_SIZE		64
+> @@ -493,6 +494,7 @@ static int bcm63xx_spi_probe(struct platform_device *pdev)
+>  	struct bcm63xx_spi *bs;
+>  	int ret;
+>  	u32 num_cs = BCM63XX_SPI_MAX_CS;
+> +	struct reset_control *reset;
+>  
+>  	if (dev->of_node) {
+>  		const struct of_device_id *match;
+> @@ -529,6 +531,15 @@ static int bcm63xx_spi_probe(struct platform_device *pdev)
+>  		return PTR_ERR(clk);
+>  	}
+>  
+> +	reset = devm_reset_control_get_optional_exclusive(dev, NULL);
+> +	if (IS_ERR(reset)) {
+> +		ret = PTR_ERR(reset);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev,
+> +				"failed to get reset controller: %d\n", ret);
+> +		return ret;
+> +	}
+
+When the controller is optional, you don't need to do that manual error
+checking, as it does that for you already. You can only do:
+
+if (IS_ERR(reset))
+	return PTR_ERR(reset);
+
+and that's it. With that fixed in v4, you can add:
+
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.7.4
-
+Florian
