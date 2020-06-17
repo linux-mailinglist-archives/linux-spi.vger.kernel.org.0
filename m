@@ -2,41 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466FA1FBFE1
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jun 2020 22:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CFD1FC9D9
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Jun 2020 11:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbgFPUUQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Jun 2020 16:20:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33052 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731633AbgFPUUQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 16 Jun 2020 16:20:16 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592338816;
-        bh=VnbSghNFJwHgHjauf4cRYoD6DgbA3nhckYXVYPI6iGM=;
-        h=Subject:From:Date:To:From;
-        b=0rX7MpfVK/WngW6h665igm5kgS06dIhoFVY+QjHzujoYlhX1QraAujZDm5O9UXE0O
-         BLV/gkYGqYled4lLnewxM+7PjNALAyd+xzt6csAd1sZrYONNwwiE2FBfhzcBPhtgQi
-         eF+ZAm6yKbewDY77EMXq6IOLyTt0cR+LL8KH14y4=
+        id S1725846AbgFQJau (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 Jun 2020 05:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725554AbgFQJau (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Jun 2020 05:30:50 -0400
+Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2EEC061573;
+        Wed, 17 Jun 2020 02:30:50 -0700 (PDT)
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1jlUP8-0005no-6P; Wed, 17 Jun 2020 11:30:46 +0200
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 7FB37101548; Wed, 17 Jun 2020 11:30:44 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-spi@vger.kernel.org,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>, kernel@pengutronix.de
+Subject: Re: [PATCH v2 3/3] genirq: Do not test disabled IRQs with DEBUG_SHIRQ
+In-Reply-To: <20200616103956.GL4447@sirena.org.uk>
+References: <1592208439-17594-1-git-send-email-krzk@kernel.org> <1592208439-17594-3-git-send-email-krzk@kernel.org> <20200615120844.GL4447@sirena.org.uk> <CAJKOXPfEpLN9jS11WW367Na3Ukfi8p3urKDcJoafg9dHuCDSUA@mail.gmail.com> <20200616103956.GL4447@sirena.org.uk>
+Date:   Wed, 17 Jun 2020 11:30:44 +0200
+Message-ID: <87mu52ca4b.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <159233881604.1918.10913595142399518849.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 16 Jun 2020 20:20:16 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] Add Renesas RPC-IF support (2020-06-16T20:00:20)
-  Superseding: [v3] Add Renesas RPC-IF support (2020-06-13T18:37:47):
-    [v4,1/2] dt-bindings: memory: document Renesas RPC-IF bindings
-    [v4,2/2] memory: add Renesas RPC-IF driver
+Mark Brown <broonie@kernel.org> writes:
+> On Tue, Jun 16, 2020 at 12:11:17PM +0200, Krzysztof Kozlowski wrote:
+>> On Mon, Jun 15, 2020 at 01:08:44PM +0100, Mark Brown wrote:
+>> > On Mon, Jun 15, 2020 at 10:07:19AM +0200, Krzysztof Kozlowski wrote:
+>> > > Testing events during freeing of disabled shared interrupts
+>> > > (CONFIG_DEBUG_SHIRQ) leads to false positives.  The driver disabled
+>> > > interrupts on purpose to be sure that they will not fire during device
+>> > > removal.
+>
+>> > Surely the whole issue with shared IRQs that's being tested for here is
+>> > that when the interrupt is shared some other device connected to the
+>> > same interrupt line may trigger an interrupt regardless of what's going
+>> > on with this device?
+>
+>> Yes. However if that device disabled the interrupt, it should not be
+>> fired for other users. In such case the testing does not point to a
+>> real issue.
+>
+> To be honest I'd say that if you're disabling a shared interrupt that's
+> a bit of an issue regardless of anything else that's going on, it'll
+> disrupt other devices connected to it.
+
+Correct.
+
+Shared interrupts are broken by design and I really can't understand why
+hardware people still insist on them.
+
+Thanks,
+
+        tglx
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
