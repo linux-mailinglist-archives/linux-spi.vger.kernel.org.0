@@ -2,39 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2034B1FF6BC
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jun 2020 17:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A131FF6C1
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jun 2020 17:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731572AbgFRP3Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Jun 2020 11:29:16 -0400
+        id S1731590AbgFRP3U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Jun 2020 11:29:20 -0400
 Received: from mga04.intel.com ([192.55.52.120]:21448 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731568AbgFRP3Q (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 18 Jun 2020 11:29:16 -0400
-IronPort-SDR: yziVTMYYgDV7WOK8PP/t1f/CWD35EjH55BmqwEjnHFFafLp6tfYrKVY4nAAeWqyxKEZBiSb9ad
- 8aiHHXwoPHsA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="140137418"
+        id S1731568AbgFRP3T (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 18 Jun 2020 11:29:19 -0400
+IronPort-SDR: CuzmyOyS3Y5rgZeHmw7frbvneJr6+utML8JXsId+BcUBN4vMifGtS4SIfhDVPgPp0S9QuqRVbz
+ eAjRIURW5tcg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="140137430"
 X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
-   d="scan'208";a="140137418"
+   d="scan'208";a="140137430"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 08:29:15 -0700
-IronPort-SDR: /j25VtdqKr9HjD9Kb3ZGlij9jaikyhgogQRFc/TFPU1We4SuMZDR72YtpAP9wgtL+eHB/DD5RH
- r43VYWCtz3/w==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 08:29:19 -0700
+IronPort-SDR: MB/EgPENA8SUxNDBoEdU5Zjd6gHeD8s7KkZGR5+SRpdqnz37cQGJVLZ07mnZiXfRL6IbjJTkws
+ 2+JFxk3utd6w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
-   d="scan'208";a="450675781"
+   d="scan'208";a="450675797"
 Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by orsmga005.jf.intel.com with ESMTP; 18 Jun 2020 08:29:12 -0700
+  by orsmga005.jf.intel.com with ESMTP; 18 Jun 2020 08:29:16 -0700
 From:   Xu Yilun <yilun.xu@intel.com>
 To:     broonie@kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     trix@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
         matthew.gerlach@linux.intel.com, russell.h.weight@intel.com
-Subject: [PATCH v2 5/6] spi: altera: support indirect access to the registers
-Date:   Thu, 18 Jun 2020 23:25:09 +0800
-Message-Id: <1592493910-30473-3-git-send-email-yilun.xu@intel.com>
+Subject: [PATCH v2 6/6] spi: altera: fix size mismatch on 64 bit processors
+Date:   Thu, 18 Jun 2020 23:25:10 +0800
+Message-Id: <1592493910-30473-4-git-send-email-yilun.xu@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1592493910-30473-1-git-send-email-yilun.xu@intel.com>
 References: <1592493910-30473-1-git-send-email-yilun.xu@intel.com>
@@ -43,157 +43,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch adds support for indirect access to the registers via parent
-regmap.
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-The use case is, the spi master is a sub device of a Multifunction
-device, which is connected to host by some indirect bus. To support this
-device type, a new platform_device_id is introduced, and the driver tries
-to get parent regmap for register accessing like many MFD sub device
-drivers do.
+The spi-altera driver was originally written with a 32
+bit processor, where sizeof(unsigned long) is 4.  On a
+64 bit processor sizeof(unsigned long) is 8.  Change the structure
+member to u32 to match the actual size of the control
+register.
 
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Signed-off-by: Wu Hao <hao.wu@intel.com>
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 ---
- drivers/spi/spi-altera.c | 62 ++++++++++++++++++++++++++++++++++++------------
- 1 file changed, 47 insertions(+), 15 deletions(-)
+ drivers/spi/spi-altera.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-altera.c b/drivers/spi/spi-altera.c
-index b215bdf..4f7717f 100644
+index 4f7717f..d91c093 100644
 --- a/drivers/spi/spi-altera.c
 +++ b/drivers/spi/spi-altera.c
-@@ -43,6 +43,11 @@
- 
- #define ALTERA_SPI_MAX_CS		32
- 
-+enum altera_spi_type {
-+	ALTERA_SPI_TYPE_UNKNOWN,
-+	ALTERA_SPI_TYPE_SUBDEV,
-+};
-+
- struct altera_spi {
- 	int irq;
+@@ -53,7 +53,7 @@ struct altera_spi {
  	int len;
-@@ -55,6 +60,7 @@ struct altera_spi {
- 	unsigned char *rx;
+ 	int count;
+ 	int bytes_per_word;
+-	unsigned long imr;
++	u32 imr;
  
- 	struct regmap *regmap;
-+	u32 regoff;
- 	struct device *dev;
- };
- 
-@@ -70,7 +76,7 @@ static int altr_spi_writel(struct altera_spi *hw, unsigned int reg,
- {
- 	int ret;
- 
--	ret = regmap_write(hw->regmap, reg, val);
-+	ret = regmap_write(hw->regmap, hw->regoff + reg, val);
- 	if (ret)
- 		dev_err(hw->dev, "fail to write reg 0x%x val 0x%x: %d\n",
- 			reg, val, ret);
-@@ -83,7 +89,7 @@ static int altr_spi_readl(struct altera_spi *hw, unsigned int reg,
- {
- 	int ret;
- 
--	ret = regmap_read(hw->regmap, reg, val);
-+	ret = regmap_read(hw->regmap, hw->regoff + reg, val);
- 	if (ret)
- 		dev_err(hw->dev, "fail to read reg 0x%x: %d\n", reg, ret);
- 
-@@ -225,10 +231,11 @@ static irqreturn_t altera_spi_irq(int irq, void *dev)
- 
- static int altera_spi_probe(struct platform_device *pdev)
- {
-+	const struct platform_device_id *platid = platform_get_device_id(pdev);
- 	struct altera_spi_platform_data *pdata = dev_get_platdata(&pdev->dev);
-+	enum altera_spi_type type = ALTERA_SPI_TYPE_UNKNOWN;
- 	struct altera_spi *hw;
- 	struct spi_master *master;
--	void __iomem *res;
- 	int err = -ENODEV;
- 	u32 val;
- 	u16 i;
-@@ -264,19 +271,38 @@ static int altera_spi_probe(struct platform_device *pdev)
- 	hw = spi_master_get_devdata(master);
- 	hw->dev = &pdev->dev;
- 
-+	if (platid)
-+		type = platid->driver_data;
-+
- 	/* find and map our resources */
--	res = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(res)) {
--		err = PTR_ERR(res);
--		goto exit;
--	}
-+	if (type == ALTERA_SPI_TYPE_SUBDEV) {
-+		struct resource *regoff;
- 
--	hw->regmap = devm_regmap_init_mmio(&pdev->dev, res,
--					   &spi_altera_config);
--	if (IS_ERR(hw->regmap)) {
--		dev_err(&pdev->dev, "regmap mmio init failed\n");
--		err = PTR_ERR(hw->regmap);
--		goto exit;
-+		hw->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+		if (!hw->regmap) {
-+			dev_err(&pdev->dev, "get regmap failed\n");
-+			goto exit;
-+		}
-+
-+		regoff = platform_get_resource(pdev, IORESOURCE_REG, 0);
-+		if (regoff)
-+			hw->regoff = regoff->start;
-+	} else {
-+		void __iomem *res;
-+
-+		res = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(res)) {
-+			err = PTR_ERR(res);
-+			goto exit;
-+		}
-+
-+		hw->regmap = devm_regmap_init_mmio(&pdev->dev, res,
-+						   &spi_altera_config);
-+		if (IS_ERR(hw->regmap)) {
-+			dev_err(&pdev->dev, "regmap mmio init failed\n");
-+			err = PTR_ERR(hw->regmap);
-+			goto exit;
-+		}
- 	}
- 
- 	/* program defaults into the registers */
-@@ -308,7 +334,7 @@ static int altera_spi_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	dev_info(&pdev->dev, "base %p, irq %d\n", res, hw->irq);
-+	dev_info(&pdev->dev, "regoff %u, irq %d\n", hw->regoff, hw->irq);
- 
- 	return 0;
- exit:
-@@ -325,6 +351,11 @@ static const struct of_device_id altera_spi_match[] = {
- MODULE_DEVICE_TABLE(of, altera_spi_match);
- #endif /* CONFIG_OF */
- 
-+static const struct platform_device_id altera_spi_ids[] = {
-+	{ "subdev_spi_altera", ALTERA_SPI_TYPE_SUBDEV },
-+	{ }
-+};
-+
- static struct platform_driver altera_spi_driver = {
- 	.probe = altera_spi_probe,
- 	.driver = {
-@@ -332,6 +363,7 @@ static struct platform_driver altera_spi_driver = {
- 		.pm = NULL,
- 		.of_match_table = of_match_ptr(altera_spi_match),
- 	},
-+	.id_table	= altera_spi_ids,
- };
- module_platform_driver(altera_spi_driver);
- 
+ 	/* data buffers */
+ 	const unsigned char *tx;
 -- 
 2.7.4
 
