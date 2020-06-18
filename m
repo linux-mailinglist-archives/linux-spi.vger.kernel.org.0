@@ -2,116 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAB01FFBF7
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jun 2020 21:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674CA1FFC51
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jun 2020 22:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728909AbgFRTql (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Jun 2020 15:46:41 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:31947 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728069AbgFRTql (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Jun 2020 15:46:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592509599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vAJJkV1IQ09o/T5NpQxIqWNeq9rz8g5RYhknLPVSVoA=;
-        b=fYzn15gZgRg8nB8jQUpnTa2fUOiBfOX52xDdzx/9HEMX7y7O3UBlbXNTvtvDjOH0Q6RJei
-        SRK19wvJ91531whOPxyALb30RVnIKG7ip0VnjjmvrtksvUqk0zkzH9yKXhMwpK9dF9bV2P
-        GTqIZ98iB5PHd3wZHrwtPpBUBOJ+sIA=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-10-7tD5uc_qOUeMbPlvi8mDzw-1; Thu, 18 Jun 2020 15:46:38 -0400
-X-MC-Unique: 7tD5uc_qOUeMbPlvi8mDzw-1
-Received: by mail-qv1-f69.google.com with SMTP id o1so4883187qvq.14
-        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 12:46:38 -0700 (PDT)
+        id S1730342AbgFRUKF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Jun 2020 16:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726517AbgFRUKE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Jun 2020 16:10:04 -0400
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058B9C06174E
+        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 13:10:03 -0700 (PDT)
+Received: by mail-vk1-xa44.google.com with SMTP id s6so1750980vkb.9
+        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 13:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FSwUDJQJDD2aFeE7AG8B7gwG/F8HVyWOYHj+N8WDvHg=;
+        b=koJMedVIB9/8FYoo3ICOMGrEkn7oiQpS3inzL5oZp6a4TYfZL5WhLQ8L8SZyqrFEv2
+         C3h4FeUJMoRd4JAHQg4d1XaqgoFcDrm+Tg4iDinifrhpHEjDK6Rvwk5cFrynYYQGvLAH
+         j6uk3LzHMuSgjFsiG7c2h95oQfFiTEd2dihgQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=vAJJkV1IQ09o/T5NpQxIqWNeq9rz8g5RYhknLPVSVoA=;
-        b=rD+Ey06sF3R2j7BFEWgbjXIQ+VpZAhvP9SUr0G97Jfx2fLiFFbyse2kgDtMjnZnEvK
-         x944HNHUFCPxfx3VwtilngXn5E2BQMxJRyxm/TMdndAn7VD61FdvM45pshMVqs0YcgJz
-         MBsWc/QcMsotbnBG8n7buJhJWF7hTXTkiOBmffFyho3+3gUghfwEB8f3Eyddc74557AS
-         Gs5SxhNhB0Z2dJd4JR2x2MCubcLDnAvTurh/muSG6ymW9uLxVtI6mwURJfXohGT+e39G
-         RtcQra9c+6f1q6YhvmnElR+hCTk9fodG1UYE5C+hJ2JAPEYQoZp9n/Pha0EioGGDH3pL
-         xs1Q==
-X-Gm-Message-State: AOAM530F9R9w+Xj3aN9ykZjJNprVbMgPkYvsPri2J9gEf7B0fv2py13I
-        lT9K/nXDaSVjHRQ68GNECaBBKHYCUaD0Do6O3zd6RLV6UWubLacJF5CJEEwcdzLsmrMM4R5z8Pq
-        PAhy0Lc0JjD2NxlrY0k5+
-X-Received: by 2002:a05:6214:10cb:: with SMTP id r11mr5368153qvs.203.1592509597361;
-        Thu, 18 Jun 2020 12:46:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJywrhpNMyyljoqo7iW7mbIgk7aOwkBo1Yv2CLk4QFD+fxF07OsuL8qL4aJVuxLYbOl5aNqUVw==
-X-Received: by 2002:a05:6214:10cb:: with SMTP id r11mr5368140qvs.203.1592509597113;
-        Thu, 18 Jun 2020 12:46:37 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id l188sm3605655qke.127.2020.06.18.12.46.35
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FSwUDJQJDD2aFeE7AG8B7gwG/F8HVyWOYHj+N8WDvHg=;
+        b=l/v37kys6yDRJodR8aS1tuNJE4NvSRlQcIdJ50o8RW3k0JdOqgvWvUWCrLHfkZ/BFB
+         t3t1HFmElU8IhLH6HWoKDSJdzMsaU4MpL9+MnS8lKYybImmeIGXnNpQhJZFyutsavwkk
+         /1OSGM+uYJEch/EAGABMABDZvXR8XZx8LX3yIFbFa1AbwQL2WEMrV5dLl2hARjaw6ln5
+         9+Juq2WcqgiOE8NYzFc+JgC+QksPOwgXzlBAKKFxXMF/jeGJQeec5dfPDNcL1Jikwe1i
+         MzgCC+D+PC7qcf5YRGneasV48+KgjK/FvQk5RGo87z8mCm9mYvTtnvwXboWuPP9RX8wg
+         y3uA==
+X-Gm-Message-State: AOAM533VBbzGFO0gtSm9VprrxDsGYBRWzBMczgev+/tqONfEkO4lbWI0
+        MCsFbgZ68Dhma2OKlawgjL3VtpIXYmk=
+X-Google-Smtp-Source: ABdhPJz76T8PYFNctIjSzFlgJCsxW6GtS3+uyS7MbGYO+wIGtGgBF2ZIhl20AQ0D4I7uCVH6SSVQaw==
+X-Received: by 2002:a1f:ea82:: with SMTP id i124mr4831927vkh.62.1592511000957;
+        Thu, 18 Jun 2020 13:10:00 -0700 (PDT)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id x16sm230913vko.54.2020.06.18.13.09.59
+        for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jun 2020 12:46:36 -0700 (PDT)
-Subject: Re: [PATCH v2 0/6] add regmap & indirect access support
-To:     Xu Yilun <yilun.xu@intel.com>, broonie@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     hao.wu@intel.com, matthew.gerlach@linux.intel.com,
-        russell.h.weight@intel.com
-References: <1592493910-30473-1-git-send-email-yilun.xu@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <1f684924-44a3-ca47-5f69-3401a6389e38@redhat.com>
-Date:   Thu, 18 Jun 2020 12:46:34 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Thu, 18 Jun 2020 13:09:59 -0700 (PDT)
+Received: by mail-vs1-f51.google.com with SMTP id o15so4266823vsp.12
+        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 13:09:59 -0700 (PDT)
+X-Received: by 2002:a67:8881:: with SMTP id k123mr5031158vsd.198.1592510998962;
+ Thu, 18 Jun 2020 13:09:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1592493910-30473-1-git-send-email-yilun.xu@intel.com>
-Content-Language: en-US
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+References: <20200618150626.237027-1-dianders@chromium.org>
+ <20200618080459.v4.5.Ib1e6855405fc9c99916ab7c7dee84d73a8bf3d68@changeid> <159250352382.62212.8085892973272354046@swboyd.mtv.corp.google.com>
+In-Reply-To: <159250352382.62212.8085892973272354046@swboyd.mtv.corp.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 18 Jun 2020 13:09:47 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Xh3+cROZC8dCn99MLkngsyBcxq+Gv1CERayZXExwdygA@mail.gmail.com>
+Message-ID: <CAD=FV=Xh3+cROZC8dCn99MLkngsyBcxq+Gv1CERayZXExwdygA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] spi: spi-geni-qcom: Don't keep a local state variable
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Alok Chauhan <alokc@codeaurora.org>, skakit@codeaurora.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This set looks good to me.
+Hi,
 
-Reviewed-by : Tom Rix <trix@redhat.com>
+On Thu, Jun 18, 2020 at 11:05 AM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Douglas Anderson (2020-06-18 08:06:26)
+> > @@ -126,20 +120,23 @@ static void handle_fifo_timeout(struct spi_master *spi,
+> >         struct geni_se *se = &mas->se;
+> >
+> >         spin_lock_irq(&mas->lock);
+> > -       reinit_completion(&mas->xfer_done);
+> > -       mas->cur_mcmd = CMD_CANCEL;
+> > -       geni_se_cancel_m_cmd(se);
+> > +       reinit_completion(&mas->cancel_done);
+> >         writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
+> > +       mas->cur_xfer = NULL;
+>
+> BTW, is this necessary? It's subtlely placed here without a comment why.
 
-Tom
+I believe so.  Now that we don't have the "cur_mcmd" we rely on
+cur_xfer being NULL to tell the difference between a "done" for chip
+select vs. a "done" for transfer.
 
-On 6/18/20 8:25 AM, Xu Yilun wrote:
-> Updated the regmap & indirect access support for spi-altera.
->
-> Patch #1, #2, #3 is already applied.
-> Patch #4 is an 1:1 replacement of of readl/writel with regmap_read/write
-> Patch #5 introduced a new platform_device_id to support indirect access as
->          a sub device.
-> Patch #6 is a minor fix.
->
-> Main changes from v1: 
->  - Split the v1 Patch #4 to v2 Patch #4 & #5. 
->  - Add a new platform_device_id to support indirect access.
->  - Removed the v1 Patch #5. Now we use driver name string directly.
->  - Add Yilun's Signed-off-by for Patch #6
->
->
-> Matthew Gerlach (1):
->   spi: altera: fix size mismatch on 64 bit processors
->
-> Xu Yilun (5):
->   spi: altera: add 32bit data width transfer support.
->   spi: altera: add SPI core parameters support via platform data.
->   spi: altera: add platform data for slave information.
->   spi: altera: use regmap-mmio instead of direct mmio register access
->   spi: altera: support indirect access to the registers
->
->  drivers/spi/Kconfig        |   1 +
->  drivers/spi/spi-altera.c   | 177 +++++++++++++++++++++++++++++++++++++++------
->  include/linux/spi/altera.h |  29 ++++++++
->  3 files changed, 183 insertions(+), 24 deletions(-)
->  create mode 100644 include/linux/spi/altera.h
->
+* When we start a transfer we set "cur_xfer" to a non-NULL pointer.
+When the transfer finishes we set it to NULL again.
 
+* When we start a chip select transfer we _don't_ explicitly set it to
+NULL because it should already be NULL.
+
+* When we are aborting a transfer we need to NULL so we can handle the
+chip select that will come next.
+
+I suppose it's possible that we could get by without without NULLing
+it because I believe when the "abort" IRQ finally fires then it will
+include a "DONE" and that would presumably NULL it out.  ...but I
+guess if both the cancel and abort timed out and no IRQ ever fired
+then nothing would have NULLed it and the next chip select would be
+confused.
+
+Prior to getting rid of "cur_mcmd" this all wasn't needed because
+"cur_xfer" was only ever looked at if "cur_mcmd" was set to
+"CMD_XFER".
+
+
+One part of my change that is technically not related to the removal
+of "cur_mcmd" is the part where I do "mas->tx_rem_bytes =
+mas->rx_rem_bytes = 0;".  I can split that as a separate change if you
+want but it seemed fine to just clean up this extra bit of state here.
+
+-Doug
