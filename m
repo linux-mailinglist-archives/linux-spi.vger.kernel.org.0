@@ -2,89 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 242861FF9D2
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jun 2020 19:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4491FF9E5
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jun 2020 19:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728906AbgFRRBt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Jun 2020 13:01:49 -0400
-Received: from mga17.intel.com ([192.55.52.151]:38106 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728080AbgFRRBt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 18 Jun 2020 13:01:49 -0400
-IronPort-SDR: b01uvsWBBgHi2Pep7L8an/5VUoiQ+5FqB4WNx+tCf7nul4q4gdDKeqeMYnCUJvKCyFy6OjpVYD
- LxFIkwUDDYNg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="122881263"
-X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
-   d="scan'208";a="122881263"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 10:01:48 -0700
-IronPort-SDR: AKY/p8n/8Bu9WpBqLqs44a04wbsNEBRWFcgpq9C47/mJvRfdWfOd0arw51y6nNHEWvph9IQEGX
- hE7sW4FE92Lg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
-   d="scan'208";a="421565100"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jun 2020 10:01:46 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9ABD0130; Thu, 18 Jun 2020 20:01:45 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] spi: npcm-fiu: Reuse BITS_PER_BYTE definition
-Date:   Thu, 18 Jun 2020 20:01:44 +0300
-Message-Id: <20200618170144.57433-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
+        id S1728753AbgFRRHA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Jun 2020 13:07:00 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:33257 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727926AbgFRRHA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Jun 2020 13:07:00 -0400
+Received: by mail-il1-f195.google.com with SMTP id z2so6517112ilq.0;
+        Thu, 18 Jun 2020 10:06:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ifwduw78OWeOcpzj0vaqe6BciVp2voLLjsFlxgZqSlI=;
+        b=JHUT5IuTFXlykRmFf993LPpHeY84f9UfxnycAL5sweTuCkNh98U36/T0sO+dQ/T1yR
+         SrBmzZK5rIGec74gvDq9q8btyX5u8JaSTfisHCZI+MweXev/H9L35JTQqnVZG4pT9GMA
+         FpLvqAXGXVZIl5BVExL7sZJh1Wy5Uix6uxdZ2vtZmXHCzVlX0vhMzOuzOXPIZgy6r+Kv
+         dDl3UzV9wgkpox/pST18rz4nXS1NQj2IGRG9Pc5O/l007LEsDvPUuqPBMKl6G1L1YxHo
+         cxNCp42rI7jFxydLPGpsbSEkNRIJOOr3xrYC50ABXnHP5loHKT4RIMBFOL+NAuJqjxkO
+         JLjA==
+X-Gm-Message-State: AOAM530/GGuU9f+AJpM+1iJsgz3KiBI3HO8aT7lihLzYYsWt2QC3RASj
+        05CEt9wOB8OQ817Mhw8nlg==
+X-Google-Smtp-Source: ABdhPJw81b3DAZIj3aCC5G7vPDZFbqJcRdJgtLBQ9xQ+fmU3vdQcz/N22q4w5tMZcBkmXm4va6tTMA==
+X-Received: by 2002:a92:35dd:: with SMTP id c90mr5272835ilf.103.1592500019001;
+        Thu, 18 Jun 2020 10:06:59 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id x18sm1732593ilq.46.2020.06.18.10.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2020 10:06:58 -0700 (PDT)
+Received: (nullmailer pid 539747 invoked by uid 1000);
+        Thu, 18 Jun 2020 17:06:56 -0000
+Date:   Thu, 18 Jun 2020 11:06:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        devicetree@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-spi@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 14/29] dt: Fix broken references to renamed docs
+Message-ID: <20200618170656.GA539608@bogus>
+References: <cover.1592203542.git.mchehab+huawei@kernel.org>
+ <6866c0d6d10ce36bb151c2d3752a20eb5122c532.1592203542.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6866c0d6d10ce36bb151c2d3752a20eb5122c532.1592203542.git.mchehab+huawei@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-No need to redefine already existing definition.
-So, replace custom by generic one.
+On Mon, 15 Jun 2020 08:46:53 +0200, Mauro Carvalho Chehab wrote:
+> Some files got renamed. Those were all fixed automatically by
+> 
+> 	./scripts/documentation-file-ref-check --fix
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt   | 2 +-
+>  Documentation/devicetree/bindings/display/imx/fsl-imx-drm.txt | 4 ++--
+>  Documentation/devicetree/bindings/display/imx/ldb.txt         | 4 ++--
+>  Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt  | 2 +-
+>  MAINTAINERS                                                   | 4 ++--
+>  5 files changed, 8 insertions(+), 8 deletions(-)
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-npcm-fiu.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
-index d25ee32862e0..9468e71f03ad 100644
---- a/drivers/spi/spi-npcm-fiu.c
-+++ b/drivers/spi/spi-npcm-fiu.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2019 Nuvoton Technology corporation.
- 
-+#include <linux/bits.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/device.h>
-@@ -177,7 +178,6 @@ enum {
- #define MAP_SIZE_16MB			0x1000000
- #define MAP_SIZE_8MB			0x800000
- 
--#define NUM_BITS_IN_BYTE		8
- #define FIU_DRD_MAX_DUMMY_NUMBER	3
- #define NPCM_MAX_CHIP_NUM		4
- #define CHUNK_SIZE			16
-@@ -252,8 +252,8 @@ static void npcm_fiu_set_drd(struct npcm_fiu_spi *fiu,
- 	fiu->drd_op.addr.buswidth = op->addr.buswidth;
- 	regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
- 			   NPCM_FIU_DRD_CFG_DBW,
--			   ((op->dummy.nbytes * ilog2(op->addr.buswidth))
--			    / NUM_BITS_IN_BYTE) << NPCM_FIU_DRD_DBW_SHIFT);
-+			   ((op->dummy.nbytes * ilog2(op->addr.buswidth)) / BITS_PER_BYTE)
-+			   << NPCM_FIU_DRD_DBW_SHIFT);
- 	fiu->drd_op.dummy.nbytes = op->dummy.nbytes;
- 	regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
- 			   NPCM_FIU_DRD_CFG_RDCMD, op->cmd.opcode);
--- 
-2.27.0
-
+Applied, thanks!
