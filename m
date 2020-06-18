@@ -2,80 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D01D1FF9AB
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jun 2020 18:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 242861FF9D2
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jun 2020 19:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731931AbgFRQsz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Jun 2020 12:48:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57080 "EHLO mail.kernel.org"
+        id S1728906AbgFRRBt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Jun 2020 13:01:49 -0400
+Received: from mga17.intel.com ([192.55.52.151]:38106 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728523AbgFRQsy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 18 Jun 2020 12:48:54 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1709D208C7;
-        Thu, 18 Jun 2020 16:48:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592498934;
-        bh=JjYy4elxxB+2wBR7hAUU2Tjb0skJmcm3jUXYNY6Jq38=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=FNKtWEyWKqxztlMMa/0EFi/o/yLTGyx7C/kLP+hw6kYFEh+cL+puFC/uZLMr/IV8H
-         CC/T8I0fKH9brkUZq9gyAvaxTk8XUJ3IowINRZNe8lH2mQKIRVw44AFu/+Z6FYkxjf
-         zQQaa6RxMAEAZGQ0ND+6+hKdYO4n4M+NN7gUiczA=
-Date:   Thu, 18 Jun 2020 17:48:52 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alok Chauhan <alokc@codeaurora.org>, skakit@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Dilip Kota <dkota@codeaurora.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        swboyd@chromium.org
-In-Reply-To: <20200616104050.84764-1-dianders@chromium.org>
-References: <20200616104050.84764-1-dianders@chromium.org>
-Subject: Re: [PATCH v3 0/5] spi: spi-geni-qcom: Fixes / perf improvements
-Message-Id: <159249892720.8894.5843182459934461610.b4-ty@kernel.org>
+        id S1728080AbgFRRBt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 18 Jun 2020 13:01:49 -0400
+IronPort-SDR: b01uvsWBBgHi2Pep7L8an/5VUoiQ+5FqB4WNx+tCf7nul4q4gdDKeqeMYnCUJvKCyFy6OjpVYD
+ LxFIkwUDDYNg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="122881263"
+X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
+   d="scan'208";a="122881263"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 10:01:48 -0700
+IronPort-SDR: AKY/p8n/8Bu9WpBqLqs44a04wbsNEBRWFcgpq9C47/mJvRfdWfOd0arw51y6nNHEWvph9IQEGX
+ hE7sW4FE92Lg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
+   d="scan'208";a="421565100"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jun 2020 10:01:46 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9ABD0130; Thu, 18 Jun 2020 20:01:45 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] spi: npcm-fiu: Reuse BITS_PER_BYTE definition
+Date:   Thu, 18 Jun 2020 20:01:44 +0300
+Message-Id: <20200618170144.57433-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 16 Jun 2020 03:40:45 -0700, Douglas Anderson wrote:
-> This patch series is a new version of the previous patch posted:
->   [PATCH v2] spi: spi-geni-qcom: Speculative fix of "nobody cared" about interrupt
->   https://lore.kernel.org/r/20200317133653.v2.1.I752ebdcfd5e8bf0de06d66e767b8974932b3620e@changeid
-> 
-> At this point I've done enough tracing to know that there was a real
-> race in the old code (not just weakly ordered memory problems) and
-> that should be fixed with the locking patches.
-> 
-> [...]
+No need to redefine already existing definition.
+So, replace custom by generic one.
 
-Applied to
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-npcm-fiu.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index d25ee32862e0..9468e71f03ad 100644
+--- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Nuvoton Technology corporation.
+ 
++#include <linux/bits.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/device.h>
+@@ -177,7 +178,6 @@ enum {
+ #define MAP_SIZE_16MB			0x1000000
+ #define MAP_SIZE_8MB			0x800000
+ 
+-#define NUM_BITS_IN_BYTE		8
+ #define FIU_DRD_MAX_DUMMY_NUMBER	3
+ #define NPCM_MAX_CHIP_NUM		4
+ #define CHUNK_SIZE			16
+@@ -252,8 +252,8 @@ static void npcm_fiu_set_drd(struct npcm_fiu_spi *fiu,
+ 	fiu->drd_op.addr.buswidth = op->addr.buswidth;
+ 	regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
+ 			   NPCM_FIU_DRD_CFG_DBW,
+-			   ((op->dummy.nbytes * ilog2(op->addr.buswidth))
+-			    / NUM_BITS_IN_BYTE) << NPCM_FIU_DRD_DBW_SHIFT);
++			   ((op->dummy.nbytes * ilog2(op->addr.buswidth)) / BITS_PER_BYTE)
++			   << NPCM_FIU_DRD_DBW_SHIFT);
+ 	fiu->drd_op.dummy.nbytes = op->dummy.nbytes;
+ 	regmap_update_bits(fiu->regmap, NPCM_FIU_DRD_CFG,
+ 			   NPCM_FIU_DRD_CFG_RDCMD, op->cmd.opcode);
+-- 
+2.27.0
 
-Thanks!
-
-[1/1] spi: spi-geni-qcom: No need for irqsave variant of spinlock calls
-      commit: 539afdf969d6ad7ded543d9abf14596aec411fe9
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
