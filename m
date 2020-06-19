@@ -2,79 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE40200761
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jun 2020 12:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE7A2007D1
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jun 2020 13:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732362AbgFSK5L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Jun 2020 06:57:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43944 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732574AbgFSK5F (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 19 Jun 2020 06:57:05 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC20F208B8;
-        Fri, 19 Jun 2020 10:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592564225;
-        bh=GIHyfpmtdoRnt3hDj/nrol1WQSHP0lZsUz5oCSQRoFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTZQjOiCjsnAWqGElToyVGFjzvqVCb/t+eXA9fjVbDOLAR6m04xz7b4CIs7V1Tb6Q
-         +xx/zDBVQws+RSMSrIN092I7dpmGVa7v3U+cv3i2c+EyHViVfHSR7VkQq7sIsLV5Z4
-         WqHzJDmVJINinn4sJN35OuS2KOMaBsuWGSbndLKo=
-Date:   Fri, 19 Jun 2020 11:57:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, simon.k.r.goldschmidt@gmail.com,
-        dinguyen@kernel.org, marex@denx.de
-Subject: Re: [RESEND PATCH v3 0/8] mtd: spi-nor: Move cadence-qaudspi to
- spi-mem framework
-Message-ID: <20200619105701.GD5396@sirena.org.uk>
-References: <20200601070444.16923-1-vigneshr@ti.com>
+        id S1731835AbgFSLbt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Jun 2020 07:31:49 -0400
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:58666 "EHLO
+        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731047AbgFSLbn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Jun 2020 07:31:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1592566303; x=1624102303;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UfVOSLTcqF6xKAGoXoeHxnEVgPiigXyHa28boyXOH6Q=;
+  b=G4Ze1grzQ9Fpz8HZMFNR73zB+KgdMi6tC6aOheNjlTu4JGBdFDLzosjk
+   xGYp9trZIrt7xWkrGu3H2F8wkvsWiU1tfBU3fWK6WlWnGRG0IAl+Y43eo
+   wwY4aXMgAkd1UQma1f/vQ88vAbSRd8gJl43m/fNG8lz+THLjWqe8B7E5U
+   efjZVScb6kTQjEuoy57R4V340zIGA2sXVlDtpPqlZlTXbpzqf2AptMDUr
+   OVPijVc9hcL4g17TWLb75GKNgbAYYsKgFw+Kt+zjdwYZbCjIhz5ehsAbR
+   MwwdbF7QgINdbJQprs6fmfkWWrEb06EPZZs+b5phLv5UAsZxFpcbeogrX
+   w==;
+IronPort-SDR: OC/IJX71ViysRevrfGLlaWcMy5Nz1nSqUhqRmG9vQjTkpyGFoX5wfRZGRLk0ZSps4TDWUYMd5g
+ w0312+f0izYSgJgl4K3gm9PrWhV90FhwXMPC0QHKlJNgFQmg2WwsQ27tc9twYFRJLGa8XvsAN3
+ GMAHXJcOlF9G6b5guyyz15UgAz15ZJucXxDD1SoZIqsRStNwZR1+A9ZSeGRbIjQknL4khuw90X
+ rlRvojNCLunFOFFbh1+uIGODUaW3SNv5xd63EBOkksGBpBOxjlWvIaGbeJYE75eZxaOzHeGg7c
+ j0c=
+X-IronPort-AV: E=Sophos;i="5.75,255,1589266800"; 
+   d="scan'208";a="84298522"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2020 04:31:33 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 19 Jun 2020 04:31:26 -0700
+Received: from soft-dev15.microsemi.net (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Fri, 19 Jun 2020 04:31:24 -0700
+From:   Lars Povlsen <lars.povlsen@microchip.com>
+To:     Mark Brown <broonie@kernel.org>, SoC Team <soc@kernel.org>
+CC:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 0/6] spi: Adding support for Microchip Sparx5 SoC
+Date:   Fri, 19 Jun 2020 13:31:15 +0200
+Message-ID: <20200619113121.9984-1-lars.povlsen@microchip.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8w3uRX/HFJGApMzv"
-Content-Disposition: inline
-In-Reply-To: <20200601070444.16923-1-vigneshr@ti.com>
-X-Cookie: Robot, n.:
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This is an add-on series to the main SoC Sparx5 series
+(Message-ID: <20200615133242.24911-1-lars.povlsen@microchip.com>
 
---8w3uRX/HFJGApMzv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The series add support for the Sparx5 SoC SPI controller in the
+spi-dw-mmio.c spi driver.
 
-On Mon, Jun 01, 2020 at 12:34:36PM +0530, Vignesh Raghavendra wrote:
-> This series is a subset of "[PATCH v12 0/4] spi: cadence-quadspi: Add
-> support for the Cadence QSPI controller" by Ramuthevar,Vadivel MuruganX
-> <vadivel.muruganx.ramuthevar@linux.intel.com> that intended to move
-> cadence-quadspi driver to spi-mem framework
+v2 changes:
+- Moved all RX sample delay into spi-dw-core.c, using
+  the "snps,rx-sample-delay-ns" device property.
+- Integrated Sparx5 support directly in spi-dw-mmio.c
+- Changed SPI2 configuration to per-slave "microchip,spi-interface2"
+  property.
+- Added bindings to existing snps,dw-apb-ssi.yaml file
+- Dropped patches for polled mode and SPI memory operations.
 
-Are people OK with me applying this to the SPI tree?
+Lars Povlsen (6):
+  spi: dw: Add support for RX sample delay register
+  arm64: dts: sparx5: Add SPI controller
+  spi: dw: Add Microchip Sparx5 support
+  dt-bindings: snps,dw-apb-ssi: Add sparx5, SPI slave
+    snps,rx-sample-delay-ns and microchip,spi-interface2 properties.
+  arm64: dts: sparx5: Add spi-nor support
+  arm64: dts: sparx5: Add spi-nand devices
 
---8w3uRX/HFJGApMzv
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |  24 ++++
+ arch/arm64/boot/dts/microchip/sparx5.dtsi     |  34 ++++++
+ .../boot/dts/microchip/sparx5_pcb125.dts      |  16 +++
+ .../boot/dts/microchip/sparx5_pcb134.dts      |  22 ++++
+ .../dts/microchip/sparx5_pcb134_board.dtsi    |   9 ++
+ .../boot/dts/microchip/sparx5_pcb135.dts      |  23 ++++
+ .../dts/microchip/sparx5_pcb135_board.dtsi    |   9 ++
+ drivers/spi/spi-dw-core.c                     |  20 ++++
+ drivers/spi/spi-dw-mmio.c                     | 113 +++++++++++++++++-
+ drivers/spi/spi-dw.h                          |   2 +
+ 10 files changed, 271 insertions(+), 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7smf0ACgkQJNaLcl1U
-h9AJCgf9FonwA/DZUb07wl0aFcbJGqHii8lawwyZEGqOYL9qHfuLpnXAowrmNewt
-n5DwzQvxqRYNCIDJNb5+i81koko+UC2YsJWgqEZ4OkHVDVJeacnW2/YSHsZPTmHl
-cko1Yi3YzBEe2+dGfAQBeToMgvhB8A4x336ktfToVGKYHLPTb9kyVr7x9+uxuK5G
-cViQa7wLizddnx+U6RoMR26d0Ak8dw02Ckm8isA9wsJghbgczA1zWhtxXWlzvN9D
-fPZduLohNH5Im33OnwHwJdp6o1eVoXYzPMkSco8bUW4BOBPQ3RZyhwPOyjdV+gzk
-eZUVhlqqPIsCpspvPVSQ3uiCxe2Gyg==
-=OeKp
------END PGP SIGNATURE-----
-
---8w3uRX/HFJGApMzv--
+--
+2.27.0
