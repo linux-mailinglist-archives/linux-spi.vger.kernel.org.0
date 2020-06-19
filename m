@@ -2,65 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 306C91FFFA2
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jun 2020 03:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DB01FFFDB
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jun 2020 03:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727779AbgFSB1N (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Jun 2020 21:27:13 -0400
-Received: from mga18.intel.com ([134.134.136.126]:27889 "EHLO mga18.intel.com"
+        id S1728443AbgFSBrz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Jun 2020 21:47:55 -0400
+Received: from mga06.intel.com ([134.134.136.31]:64012 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727045AbgFSB1M (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 18 Jun 2020 21:27:12 -0400
-IronPort-SDR: JxOop8CHUaG+EnReltG2xM1d6YX9E6wAqnd4CkWaky90NtZzigxLdN7HmZwHftTO9QRgnMHgk4
- ZCXpxo0JX4ZA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="130157185"
+        id S1727853AbgFSBrz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 18 Jun 2020 21:47:55 -0400
+IronPort-SDR: IJ4pmpQVXRlaVc2gTk8cNknBiA+XDWvfgeSin93KfYccS4DQePtbkGN3nWe4xUUKNyqSjacbac
+ ESAT67G0E1ew==
+X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="204278275"
 X-IronPort-AV: E=Sophos;i="5.75,253,1589266800"; 
-   d="scan'208";a="130157185"
+   d="scan'208";a="204278275"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 18:27:12 -0700
-IronPort-SDR: kutyfQht+s9SOvyPInPenXhxoCU9kZEa3l2+nnHwyqrkAPx82bCtTyEnDVEPCjAnCr4zNBjTFQ
- Dgofl5AHEhQw==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 18:47:54 -0700
+IronPort-SDR: EUqhV7ZkfPUwu4HtXvIy8HbnUxNQb5hyykNhnJ5hkW2AK/7g6uLik0QWqZ5Qiek3AU+pIUmVS1
+ F8KYPqDQSFwQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,253,1589266800"; 
-   d="scan'208";a="299895109"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Jun 2020 18:27:10 -0700
-Date:   Fri, 19 Jun 2020 09:23:28 +0800
+   d="scan'208";a="263746034"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jun 2020 18:47:52 -0700
 From:   Xu Yilun <yilun.xu@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, hao.wu@intel.com, matthew.gerlach@linux.intel.com,
-        russell.h.weight@intel.com
-Subject: Re: [PATCH v2 0/6] add regmap & indirect access support
-Message-ID: <20200619012328.GA8641@yilunxu-OptiPlex-7050>
-References: <1592493910-30473-1-git-send-email-yilun.xu@intel.com>
- <20200618153539.GM5789@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200618153539.GM5789@sirena.org.uk>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+To:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
+        matthew.gerlach@linux.intel.com, russell.h.weight@intel.com
+Subject: [RESEND PATCH v2 0/3] add regmap & indirect access support
+Date:   Fri, 19 Jun 2020 09:43:38 +0800
+Message-Id: <1592531021-11412-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 04:35:39PM +0100, Mark Brown wrote:
-> On Thu, Jun 18, 2020 at 11:25:07PM +0800, Xu Yilun wrote:
-> > Updated the regmap & indirect access support for spi-altera.
-> > 
-> > Patch #1, #2, #3 is already applied.
-> 
-> The numbering for patches within a series is there *only* to say what
-> order things need to go in in that posting, they don't have any
-> relevance from one posting to another.  Sending a series with some
-> numbers missing causes a lot of confusion since it's not clear which
-> patches even exist.
+Updated the regmap & indirect access support for spi-altera.
 
-Thanks for your guidance. I'll take care of it.
+Patch #1 is an 1:1 replacement of of readl/writel with regmap_read/write
+Patch #2 introduced a new platform_device_id to support indirect access as
+         a sub device.
+Patch #3 is a minor fix.
 
-Think I should re-send this patch to make it clear.
+Main changes from v1:
+ - Split the regmap supporting patch to 2 patches.
+ - Add a new platform_device_id to support indirect access.
+ - Removed the v1 patch "move driver name string to header file". Now we
+   use driver name string directly.
+ - Add Yilun's Signed-off-by for Patch #3.
+ - Add Tom's Reviewed-by.
 
+
+Matthew Gerlach (1):
+  spi: altera: fix size mismatch on 64 bit processors
+
+Xu Yilun (2):
+  spi: altera: use regmap-mmio instead of direct mmio register access
+  spi: altera: support indirect access to the registers
+
+ drivers/spi/Kconfig      |   1 +
+ drivers/spi/spi-altera.c | 127 +++++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 107 insertions(+), 21 deletions(-)
+
+-- 
+2.7.4
 
