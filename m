@@ -2,61 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 687E01FFF60
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jun 2020 02:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C2B1FFF64
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jun 2020 02:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbgFSAkb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Jun 2020 20:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S1728027AbgFSAlR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Jun 2020 20:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728192AbgFSAk2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Jun 2020 20:40:28 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA46C06174E
-        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 17:40:26 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id g44so2603218uae.12
-        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 17:40:26 -0700 (PDT)
+        with ESMTP id S1728036AbgFSAlP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Jun 2020 20:41:15 -0400
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFE6C06174E
+        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 17:41:14 -0700 (PDT)
+Received: by mail-vk1-xa42.google.com with SMTP id s6so1903488vkb.9
+        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 17:41:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6DwgawLhU6PL5FSPvnraXncMLYJIMmvd/uQTqyvjBRY=;
-        b=b4NAUMkrGQmHpV5jdeG0KSuh1KHDPIAQYqNtn7SUC2aPU2dvL1ju4YI+HbdSZqCFJ8
-         QfFsFtthCw2LnuS9rA3pFMieIjVHb/ZkXE051MmSaYlZym10Ic33NkHUqJYM3EX3pw+1
-         xEo2mYq+I7glhqD0CZf6QECXDtBVwBXO031ic=
+        bh=uy5QSqrLYmnNfM/E3HqOfk0DC/EqnnxRUjL0YSZ6WgA=;
+        b=Y7rVoh+ec4gvOWgtKpj1Vsh0QvK0RKO04loIzF9Re5iG2Mn3PaMhiKaKhmQ4K89iQX
+         J4y+p2BKyyFUI702a+LS9XzNcrElaD7ju6TRYuaV67aduc1HkNeWl8LB7KG/FwgZP0Lh
+         P9C0n/RxLEFHwvxs46VLMJ74VyFL9/O7576nw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6DwgawLhU6PL5FSPvnraXncMLYJIMmvd/uQTqyvjBRY=;
-        b=HT8HhZ0pTtWGpFqKHGmUqmtNuz2HZ98d6u/PGUn9Eywz7BYKMA3prTGrnFfIBSKI3s
-         wpv0ZIwRuGRjquaQR4YIAyItLlSmqy7paNGDYhN2IBQ0plot2pB/FUfRfsuQs/xHKh3c
-         puE+j8XhzIZojjVxBKIlyBcVF9IQIId7qB1ItVMc1LJiCQ8Sbs0Ik/IB5yrRQraFnbsd
-         1JjQ6iA25jxIX/rwtbeU0txNY+CGI5MnpDYWw05TKA/oM3Ux6hy0Z0gmnJuu+1dwe3ZD
-         DICZKjk73mnpIMaBj4KaXs6Zzab1GrkOSEQBpK0vFLdSdhp61Vwom08cGC4+Q1R9skU2
-         aLLw==
-X-Gm-Message-State: AOAM532mJOEfgBdFjI87Dlzoc/Yss9wEq6a8YaOs+rZFcyEvWqk1IPkc
-        F5TVrh7hXa3Zusln36PV3QaGZm9EK1I=
-X-Google-Smtp-Source: ABdhPJyfdpUCWLfCiQDRghJDZbqrn4+bu1ZmQhaNn8K3UgDenjnO4CnmJaa90fnVSrFkwYi9DRjHNw==
-X-Received: by 2002:ab0:3390:: with SMTP id y16mr809996uap.58.1592527225808;
-        Thu, 18 Jun 2020 17:40:25 -0700 (PDT)
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
-        by smtp.gmail.com with ESMTPSA id b7sm544714vsj.21.2020.06.18.17.40.25
+        bh=uy5QSqrLYmnNfM/E3HqOfk0DC/EqnnxRUjL0YSZ6WgA=;
+        b=o54lccq/xiCX05vw5A7HCS25sZJe2/vkA+hoWNvEy81bN5571q1wKZrkEsNhZ2qHx0
+         IAWch7gu6efz0SRG6h3Hi+SOvggOrz1J1GCWZWBy7k2hnkGXiyDrUEX/gd87affTDRwR
+         tTDB7yDRefW5OZ+WrIcoaeN1xvyDgl3ODUv5POvFwrfKfhxFgsmb9kvkklTpMdMQjS0d
+         s+T490E5/IfSbYIfB6LmwdemmKwSEoD3MJqRqP7wQh7mPpBD5kA3cIJKOAlBpDM/XEsX
+         /jgDFSQnyUMumQJ9fg6rMtrhXo/J5Ep2A07DX088WZXB9U/J9nf3Jf/6QBjY6BLNRhyZ
+         CCYA==
+X-Gm-Message-State: AOAM530c4hFwct/1NmeO3qYIgKspahO0pTcOhjMgYeGcJHuwIWpR3S5n
+        Ts8n3Oo/vqpt7GFDRdQE8gGsIHLtOiQ=
+X-Google-Smtp-Source: ABdhPJxxU05BDzEZZW/EXqnhRIgsH9+0AFnzk0nwx/ACjk/ts9TWMBZEoViP9s9lP6eqKXVdwDwvlw==
+X-Received: by 2002:a05:6122:106f:: with SMTP id k15mr5477689vko.21.1592527271593;
+        Thu, 18 Jun 2020 17:41:11 -0700 (PDT)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id z14sm541761vkd.31.2020.06.18.17.41.10
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jun 2020 17:40:25 -0700 (PDT)
-Received: by mail-vs1-f42.google.com with SMTP id m25so4661614vsp.8
-        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 17:40:25 -0700 (PDT)
-X-Received: by 2002:a67:8881:: with SMTP id k123mr5789198vsd.198.1592527224605;
- Thu, 18 Jun 2020 17:40:24 -0700 (PDT)
+        Thu, 18 Jun 2020 17:41:11 -0700 (PDT)
+Received: by mail-vs1-f41.google.com with SMTP id r11so4656108vsj.5
+        for <linux-spi@vger.kernel.org>; Thu, 18 Jun 2020 17:41:10 -0700 (PDT)
+X-Received: by 2002:a67:e445:: with SMTP id n5mr5773162vsm.73.1592527270545;
+ Thu, 18 Jun 2020 17:41:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200618150626.237027-1-dianders@chromium.org> <20200618233959.160032-2-swboyd@chromium.org>
-In-Reply-To: <20200618233959.160032-2-swboyd@chromium.org>
+References: <20200618150626.237027-1-dianders@chromium.org> <20200618233959.160032-1-swboyd@chromium.org>
+In-Reply-To: <20200618233959.160032-1-swboyd@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 18 Jun 2020 17:40:13 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W968K6RO0KE5Nq+MNxjN5iw7Ai0Qk0QomMSsKurx9bHA@mail.gmail.com>
-Message-ID: <CAD=FV=W968K6RO0KE5Nq+MNxjN5iw7Ai0Qk0QomMSsKurx9bHA@mail.gmail.com>
-Subject: Re: [PATCH 7/5] spi: spi-geni-qcom: Don't set {tx,rx}_rem_bytes unnecessarily
+Date:   Thu, 18 Jun 2020 17:40:59 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UwXKQcDPhqb0j+x-+kU1ZdBjVx52aY1JHx6oJRMLUPrg@mail.gmail.com>
+Message-ID: <CAD=FV=UwXKQcDPhqb0j+x-+kU1ZdBjVx52aY1JHx6oJRMLUPrg@mail.gmail.com>
+Subject: Re: [PATCH 6/5] spi: spi-geni-qcom: Simplify setup_fifo_xfer()
 To:     Stephen Boyd <swboyd@chromium.org>
 Cc:     Mark Brown <broonie@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -73,60 +73,69 @@ Hi,
 
 On Thu, Jun 18, 2020 at 4:40 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> We only need to test for these counters being non-zero when we see the
-> end of a transfer. If we're doing a CS change then they will already be
-> zero.  This implies that we don't need to set these to 0 if we're
-> cancelling an in flight transfer too, because we only care to test these
-> counters when the 'DONE' bit is set in the hardware and we've set them
-> to non-zero for a transfer.
+> The definition of SPI_FULL_DUPLEX (3) is really SPI_TX_ONLY (1) ORed
+> with SPI_RX_ONLY (2). Let's drop the define and simplify the code here a
+> bit by collapsing the setting of 'm_cmd' into conditions that are the
+> same.
 >
 > This is a non-functional change, just cleanup to consolidate code.
 >
 > Cc: Douglas Anderson <dianders@chromium.org>
 > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > ---
->  drivers/spi/spi-geni-qcom.c | 42 ++++++++++++++++++-------------------
->  1 file changed, 21 insertions(+), 21 deletions(-)
+>  drivers/spi/spi-geni-qcom.c | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
 >
 > diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> index 670f83793aa4..828cfc988a3f 100644
+> index 636c3da15db0..670f83793aa4 100644
 > --- a/drivers/spi/spi-geni-qcom.c
 > +++ b/drivers/spi/spi-geni-qcom.c
-> @@ -126,7 +126,6 @@ static void handle_fifo_timeout(struct spi_master *spi,
->          * came in while cancelling.
->          */
->         mas->cur_xfer = NULL;
-> -       mas->tx_rem_bytes = mas->rx_rem_bytes = 0;
->         geni_se_cancel_m_cmd(se);
->         spin_unlock_irq(&mas->lock);
+> @@ -51,7 +51,6 @@
+>  /* M_CMD OP codes for SPI */
+>  #define SPI_TX_ONLY            1
+>  #define SPI_RX_ONLY            2
+> -#define SPI_FULL_DUPLEX                3
+>  #define SPI_TX_RX              7
+>  #define SPI_CS_ASSERT          8
+>  #define SPI_CS_DEASSERT                9
+> @@ -357,12 +356,6 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
 >
-> @@ -517,29 +516,30 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
->                 if (mas->cur_xfer) {
->                         spi_finalize_current_transfer(spi);
->                         mas->cur_xfer = NULL;
-> +                       /*
-> +                        * If this happens, then a CMD_DONE came before all the
-> +                        * Tx buffer bytes were sent out. This is unusual, log
-> +                        * this condition and disable the WM interrupt to
-> +                        * prevent the system from stalling due an interrupt
-> +                        * storm.
-> +                        *
-> +                        * If this happens when all Rx bytes haven't been
-> +                        * received, log the condition. The only known time
-> +                        * this can happen is if bits_per_word != 8 and some
-> +                        * registers that expect xfer lengths in num spi_words
-> +                        * weren't written correctly.
-> +                        */
-> +                       if (mas->tx_rem_bytes) {
-> +                               writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
-> +                               dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
-> +                                       mas->tx_rem_bytes, mas->cur_bits_per_word);
-> +                       }
-> +                       if (mas->rx_rem_bytes)
-> +                               dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
-> +                                       mas->rx_rem_bytes, mas->cur_bits_per_word);
+>         mas->tx_rem_bytes = 0;
+>         mas->rx_rem_bytes = 0;
+> -       if (xfer->tx_buf && xfer->rx_buf)
+> -               m_cmd = SPI_FULL_DUPLEX;
+> -       else if (xfer->tx_buf)
+> -               m_cmd = SPI_TX_ONLY;
+> -       else if (xfer->rx_buf)
+> -               m_cmd = SPI_RX_ONLY;
+>
+>         spi_tx_cfg &= ~CS_TOGGLE;
+>
+> @@ -373,12 +366,14 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+>         len &= TRANS_LEN_MSK;
+>
+>         mas->cur_xfer = xfer;
+> -       if (m_cmd & SPI_TX_ONLY) {
+> +       if (xfer->tx_buf) {
+> +               m_cmd |= SPI_TX_ONLY;
+>                 mas->tx_rem_bytes = xfer->len;
+>                 writel(len, se->base + SE_SPI_TX_TRANS_LEN);
+>         }
+>
+> -       if (m_cmd & SPI_RX_ONLY) {
+> +       if (xfer->rx_buf) {
+> +               m_cmd |= SPI_RX_ONLY;
 
-...or we just remove these extra error-checks totally.  ...but if we
-want to keep them:
+If you're going to touch this, could you change "SPI_TX_ONLY" to
+"SPI_TX_ENABLED" and "SPI_RX_ONLY" to 'SPI_RX_ENABLED".  It felt
+really weird to me that if you had full duplex you were setting
+"RX_ONLY" and "TX_ONLY".
+
+Other than that, your change is nice and cleans things up a bit, so
+even if you don't do the extra cleanup:
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+
+
+-Doug
