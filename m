@@ -2,56 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7352420209C
-	for <lists+linux-spi@lfdr.de>; Sat, 20 Jun 2020 05:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA24202090
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Jun 2020 05:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733308AbgFTDbp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Jun 2020 23:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S1733270AbgFTDbX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Jun 2020 23:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733230AbgFTDbT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Jun 2020 23:31:19 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12425C0698C2
-        for <linux-spi@vger.kernel.org>; Fri, 19 Jun 2020 20:30:30 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id jz3so5003352pjb.0
-        for <linux-spi@vger.kernel.org>; Fri, 19 Jun 2020 20:30:30 -0700 (PDT)
+        with ESMTP id S1733202AbgFTDbO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Jun 2020 23:31:14 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89043C0604C0
+        for <linux-spi@vger.kernel.org>; Fri, 19 Jun 2020 20:30:28 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id d10so2913067pls.5
+        for <linux-spi@vger.kernel.org>; Fri, 19 Jun 2020 20:30:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QE7doATfVKyRNIS6o4GV46rwBSEL831INB+q/+9Rmh4=;
-        b=ASP8ZYf5F8e3CyJ7PlH33MV/i7ui6qpJA/mDIbM14iTBLSGrg0GdC9kyTZr/lfh7CG
-         GXzC9dz7nRwrAYeG29S+Q/THEeaVI5eUgF5DSRnMeurjTMSJnbVmhuDSeU19AKii4S2r
-         YKBS0Qn5aMH95xmZNn8/myVX4U8ajBfLEQ9mc=
+        bh=QVK7j0hx8FBwbrQRQLiAwPLU1M0hFNtAd7ZF9cg10jo=;
+        b=TZW89t7zN77H873mcFo8WLKtwyPOC4zRyfDeh6db7mO8VCfzF/bLHMfK7vcAzedFuv
+         1RpGH6tOBLqduS8I/DdeF83mRRrdAlWtjSzOSaXCEmWDNlYtfmcl5HjH5pc0lKbkP/sk
+         L+yXY5n0mIFfGtE2LVxuNzfT527bZqkW9h24Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QE7doATfVKyRNIS6o4GV46rwBSEL831INB+q/+9Rmh4=;
-        b=Ao9BNOjEzPHmn6hDLIzVZ2h18F5q2PdsI0unuekH2vDSXlSLmcjCr74LOt2gJC9E7A
-         XbujUc6YAT5TasbViYJxzDRB5G/oXSfuwLnnxX1fgXoS5UEHi446KH4zO4YjMEJYLZxb
-         I0bTlEOlY7OSl8reP+MvugR4SNgngZzoOGOF9ecbR7C3RDuwhDWZKPhWBuMlmIl2GUgv
-         FA/Y/vj3FjvkNVw0Jf6dmLqHxYB374Esy1TRIY9C0y2cBhMwr3MKJ2prMmtkuvL1Ju5u
-         XSWElOlGqr4wzGsLndnkU7YKRHn1Q+JjyxVxnLrfUNDFWn7SzWsGFdFnpTriHvpOFl5V
-         rRyA==
-X-Gm-Message-State: AOAM532YZYV58eiPvCPg82+zaMFF/m3YKzVZXL6rOIcugzsJCbxGoOVY
-        zwG+MgsUxJ4CvLKBu3bYwWYGPg==
-X-Google-Smtp-Source: ABdhPJwXvH55Kn4Xp+SPGU8vAiaQb11ixD/33bxeYcW2UOZTzvT5qr6VlXigT0w5zzrZdxmh+dRSYw==
-X-Received: by 2002:a17:90a:220f:: with SMTP id c15mr6886989pje.129.1592623829622;
-        Fri, 19 Jun 2020 20:30:29 -0700 (PDT)
+        bh=QVK7j0hx8FBwbrQRQLiAwPLU1M0hFNtAd7ZF9cg10jo=;
+        b=isFz27LAln14cgmNgcEWJIViy+V2DfK7TJmb5+DNvltgI23fEjguSpvu4ZvanSNadg
+         hxJ+KoT8v8hBnOGK3q/oAXl4c75bJZSTX7pIgiXkRiNyzyylsRWwqOMVD/dXfynQEAbq
+         LQ/GHZKlFz6LK6Io8cBnVbxxS1JeFi4sncFoO7Y8qN1oRtr21XwJ1iACbhcxoKMw3xRV
+         qt+VOHMzI/6eFJYBU7vLXu74KYg7WszDoBHCfKvj5IE1YNefLvKPTgfgJmgIyN/A3XSu
+         m/OPcWAOgtiMLYuZq+c+u2dw6Y+34Mg+YdZZslvMmttRDNNMlZwRjLilE1PhK+nuzYic
+         sDfA==
+X-Gm-Message-State: AOAM533kV332w1MSADN26Dggqmi5pyxBfQV90q5KtnmtsrVhzZ5eJ4R3
+        QTOgvUZzM2XBw/Ruok0FQQWFeA==
+X-Google-Smtp-Source: ABdhPJz8KX7mQAqh+M5lriaij/q9w5lLW8mo5TU5HFqGc/qxPYSRCJFCyD55HX6pgmlCF9isgzBqNQ==
+X-Received: by 2002:a17:90a:778c:: with SMTP id v12mr6634388pjk.34.1592623828165;
+        Fri, 19 Jun 2020 20:30:28 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r7sm2178138pfc.183.2020.06.19.20.30.22
+        by smtp.gmail.com with ESMTPSA id r1sm824770pjd.47.2020.06.19.20.30.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 19 Jun 2020 20:30:26 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Bart van Assche <bvanassche@acm.org>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
         Alexander Potapenko <glider@google.com>,
         Joe Perches <joe@perches.com>,
         Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
@@ -61,9 +58,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-mm@kvack.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH v2 16/16] compiler: Remove uninitialized_var() macro
-Date:   Fri, 19 Jun 2020 20:30:06 -0700
-Message-Id: <20200620033007.1444705-16-keescook@chromium.org>
+Subject: [PATCH v2 13/16] mm/debug_vm_pgtable: Remove uninitialized_var() usage
+Date:   Fri, 19 Jun 2020 20:30:07 -0700
+Message-Id: <20200620033007.1444705-17-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200620033007.1444705-1-keescook@chromium.org>
 References: <20200620033007.1444705-1-keescook@chromium.org>
@@ -75,89 +72,35 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Using uninitialized_var() is dangerous as it papers over real bugs[1]
-(or can in the future), and suppresses unrelated compiler warnings
-(e.g. "unused variable"). If the compiler thinks it is uninitialized,
-either simply initialize the variable or make compiler changes.
-
-As recommended[2] by[3] Linus[4], remove the macro. With the recent
-change to disable -Wmaybe-uninitialized in v5.7 in commit 78a5255ffb6a
-("Stop the ad-hoc games with -Wno-maybe-initialized"), this is likely
-the best time to make this treewide change.
+(or can in the future), and suppresses unrelated compiler warnings (e.g.
+"unused variable"). If the compiler thinks it is uninitialized, either
+simply initialize the variable or make compiler changes. As a precursor
+to removing[2] this[3] macro[4], just initialize this variable to NULL.
 
 [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
 [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
 [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
 [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Reviewed-by: Bart van Assche <bvanassche@acm.org>
-Reviewed-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Tested-by: Nathan Chancellor <natechancellor@gmail.com>
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+Fixes: 399145f9eb6c ("mm/debug: add tests validating architecture page table helpers")
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/compiler-clang.h | 2 --
- include/linux/compiler-gcc.h   | 6 ------
- tools/include/linux/compiler.h | 2 --
- tools/virtio/linux/kernel.h    | 2 --
- 4 files changed, 12 deletions(-)
+ mm/debug_vm_pgtable.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-index ee37256ec8bd..f2371b83aaf2 100644
---- a/include/linux/compiler-clang.h
-+++ b/include/linux/compiler-clang.h
-@@ -5,8 +5,6 @@
+diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+index e45623016aea..83c9e88a052a 100644
+--- a/mm/debug_vm_pgtable.c
++++ b/mm/debug_vm_pgtable.c
+@@ -307,7 +307,7 @@ static int __init debug_vm_pgtable(void)
+ 	phys_addr_t paddr;
+ 	unsigned long vaddr, pte_aligned, pmd_aligned;
+ 	unsigned long pud_aligned, p4d_aligned, pgd_aligned;
+-	spinlock_t *uninitialized_var(ptl);
++	spinlock_t *ptl = NULL;
  
- /* Compiler specific definitions for Clang compiler */
- 
--#define uninitialized_var(x) x = *(&(x))
--
- /* same as gcc, this was present in clang-2.6 so we can assume it works
-  * with any version that can compile the kernel
-  */
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index 7dd4e0349ef3..84e099a87383 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -59,12 +59,6 @@
- 	(typeof(ptr)) (__ptr + (off));					\
- })
- 
--/*
-- * A trick to suppress uninitialized variable warning without generating any
-- * code
-- */
--#define uninitialized_var(x) x = x
--
- #ifdef CONFIG_RETPOLINE
- #define __noretpoline __attribute__((__indirect_branch__("keep")))
- #endif
-diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
-index 9f9002734e19..2f2f4082225e 100644
---- a/tools/include/linux/compiler.h
-+++ b/tools/include/linux/compiler.h
-@@ -111,8 +111,6 @@
- # define noinline
- #endif
- 
--#define uninitialized_var(x) x = *(&(x))
--
- #include <linux/types.h>
- 
- /*
-diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-index 6683b4a70b05..1e14ab967c11 100644
---- a/tools/virtio/linux/kernel.h
-+++ b/tools/virtio/linux/kernel.h
-@@ -109,8 +109,6 @@ static inline void free_page(unsigned long addr)
- 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
- 	(type *)( (char *)__mptr - offsetof(type,member) );})
- 
--#define uninitialized_var(x) x = x
--
- # ifndef likely
- #  define likely(x)	(__builtin_expect(!!(x), 1))
- # endif
+ 	pr_info("Validating architecture page table helpers\n");
+ 	prot = vm_get_page_prot(VMFLAGS);
 -- 
 2.25.1
 
