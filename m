@@ -2,144 +2,318 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F3C201FBA
-	for <lists+linux-spi@lfdr.de>; Sat, 20 Jun 2020 04:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C330720204E
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Jun 2020 05:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731775AbgFTCWk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Jun 2020 22:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
+        id S1732782AbgFTDaU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Jun 2020 23:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731762AbgFTCWh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Jun 2020 22:22:37 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A44C06174E
-        for <linux-spi@vger.kernel.org>; Fri, 19 Jun 2020 19:22:37 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id jz3so4934519pjb.0
-        for <linux-spi@vger.kernel.org>; Fri, 19 Jun 2020 19:22:37 -0700 (PDT)
+        with ESMTP id S1732724AbgFTDaU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Jun 2020 23:30:20 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0491C06174E
+        for <linux-spi@vger.kernel.org>; Fri, 19 Jun 2020 20:30:18 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id g12so4801478pll.10
+        for <linux-spi@vger.kernel.org>; Fri, 19 Jun 2020 20:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8daI+7CHtS2SGwOQ57VLIhX3tB1mOsr4d2U1XP+ENVs=;
-        b=Jre00MLLpeaEgMC7xAvwh2VApA4lk7QcQsV8D6Mxzsvq52gxPrBBFi8bp0/8hHanCK
-         7E2qXxpp5//4sx2ENJklcEAzL5VVFcq1pAbfN1/DmdQB7AZY8ysHqm+KBKWhPRm14hTa
-         q+l3du9vfNpJxVxa+jI3vnJhiwzUUCNNx+vlw=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LZz2PxXMfhCtZUNpoQsiyyHZgxbk7VacySF4LzvmsE8=;
+        b=J7aP7EGOWrIFVsdr6vPzl54sPn9GHDby9vPKOMwuNjrOFTm9Jv2wRZ4dGb6ZoVFNte
+         0ClxAoVmV1ginOIVgi13R0P6JTywRb/yi42DqPJRiH+vBEQLzXN7TdvxMVpUe/gNUSwO
+         X24JQ5ScnHwyHx2zr+zEp6Kkmo/Opa6ndlvNA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8daI+7CHtS2SGwOQ57VLIhX3tB1mOsr4d2U1XP+ENVs=;
-        b=ZRLla/A2zPCR94BpCrh2Q75HDiqw71sK8y1XC8ozVUAtJ9o/UEoDJIWAUWgFY5n10B
-         /2EbakKl0UlcPLYN7+4U+xXibfXuDbqbqJsEcHBddVvbqy/kESn9CySEQ4+woUCNqDGU
-         BRckAdnfbH7eh9y1AauyqE5G0hMmXqERgrGCkiefZ4/Hir4s9R++P0j+m6bcVnPkIe6Q
-         jDvGYShvvjTJtPZ3NdS7Zr2TFjNFt8nA/ql2juuAKIV7xVdy1fdsbm7zASg3SSsf00kN
-         jUgvgCTDua3I/ncvhHUJWH6NTo+HwVaFpaCXGmdw+VAf6NjewaOfYYqOrAHci/kUhgz0
-         mFOA==
-X-Gm-Message-State: AOAM531mRhODm9apL94h1YIyjo4e6AQm0KcJ+IQxOFufbCn3qvQhn6PA
-        nrChqcuJN5dibPIrePxWTCMKLA==
-X-Google-Smtp-Source: ABdhPJxZVZK+DAbBoeCkpomttawBBc2pN2fNIkuE1bBJYMAglO+5AXAsYm304Uz2BQLoz+gqupcDXw==
-X-Received: by 2002:a17:902:ed49:: with SMTP id y9mr10440152plb.284.1592619756732;
-        Fri, 19 Jun 2020 19:22:36 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id m14sm6241911pjv.12.2020.06.19.19.22.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LZz2PxXMfhCtZUNpoQsiyyHZgxbk7VacySF4LzvmsE8=;
+        b=MdPuXr9UMYPYDI1dQWczybiwlOMXCxZJmzthb3texAI/sZm8d1u3PvWI48pOunzWai
+         641UlE5MhiDCyNIYzterfjv2/dR7yEUFYQhA5vqhYveNtw0x8ZR/zmxKM75j+cR6pA3v
+         U3kNHt+42p5WSwPwES78PyzA371zKlPUXlAmWbUivRF+kr7L8sWJXP7U96npAB1ScrM7
+         yK5SB8NT8uE0DfwJCLvmmjzYlvTwSvZfJ2jZzYGpnO0cpnlEkZVws+XbewzmcAd2616j
+         QAEELIMYL9jicOQpBjYHFlYkizePIU2usnwSQcNAj571JQTSgHX5mrLN02S9T3m0RyLs
+         W05Q==
+X-Gm-Message-State: AOAM532KTwLljV9FIzuxzgE4T87Ib/LGdzwibXNJN+LHN46Jp6sWg1+o
+        deAfxK6BFO6NxF984+VY96BIuw==
+X-Google-Smtp-Source: ABdhPJxZq+wgwKue1E5/Yv7A4X3NjuQTscfMR87RwRp0uC9V8SCDqAyzjPKT0iBqoNJO+7tIVRawhA==
+X-Received: by 2002:a17:90a:634a:: with SMTP id v10mr7009331pjs.50.1592623818248;
+        Fri, 19 Jun 2020 20:30:18 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n2sm7140090pfd.125.2020.06.19.20.30.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2020 19:22:36 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Alok Chauhan <alokc@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH v1 2/2] spi: spi-geni-qcom: Don't set {tx,rx}_rem_bytes unnecessarily
-Date:   Fri, 19 Jun 2020 19:22:33 -0700
-Message-Id: <20200620022233.64716-3-swboyd@chromium.org>
-X-Mailer: git-send-email 2.27.0.111.gc72c7da667-goog
-In-Reply-To: <20200620022233.64716-1-swboyd@chromium.org>
-References: <20200620022233.64716-1-swboyd@chromium.org>
+        Fri, 19 Jun 2020 20:30:17 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mm@kvack.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH v2 00/16] Remove uninitialized_var() macro
+Date:   Fri, 19 Jun 2020 20:29:51 -0700
+Message-Id: <20200620033007.1444705-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We only need to test for these counters being non-zero when we see the
-end of a transfer. If we're doing a CS change then they will already be
-zero.  This implies that we don't need to set these to 0 if we're
-cancelling an in flight transfer too, because we only care to test these
-counters when the 'DONE' bit is set in the hardware and we've set them
-to non-zero for a transfer.
+v2:
+- more special-cased fixes
+- add reviews
+v1: https://lore.kernel.org/lkml/20200603233203.1695403-1-keescook@chromium.org
 
-This is a non-functional change, just cleanup to consolidate code.
+Using uninitialized_var() is dangerous as it papers over real bugs[1]
+(or can in the future), and suppresses unrelated compiler warnings
+(e.g. "unused variable"). If the compiler thinks it is uninitialized,
+either simply initialize the variable or make compiler changes.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/spi/spi-geni-qcom.c | 42 ++++++++++++++++++-------------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+As recommended[2] by[3] Linus[4], remove the macro.
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index d8f03ffb8594..5b1dca1fff79 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -122,7 +122,6 @@ static void handle_fifo_timeout(struct spi_master *spi,
- 	reinit_completion(&mas->cancel_done);
- 	writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
- 	mas->cur_xfer = NULL;
--	mas->tx_rem_bytes = mas->rx_rem_bytes = 0;
- 	geni_se_cancel_m_cmd(se);
- 	spin_unlock_irq(&mas->lock);
- 
-@@ -513,29 +512,30 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
- 		if (mas->cur_xfer) {
- 			spi_finalize_current_transfer(spi);
- 			mas->cur_xfer = NULL;
-+			/*
-+			 * If this happens, then a CMD_DONE came before all the
-+			 * Tx buffer bytes were sent out. This is unusual, log
-+			 * this condition and disable the WM interrupt to
-+			 * prevent the system from stalling due an interrupt
-+			 * storm.
-+			 *
-+			 * If this happens when all Rx bytes haven't been
-+			 * received, log the condition. The only known time
-+			 * this can happen is if bits_per_word != 8 and some
-+			 * registers that expect xfer lengths in num spi_words
-+			 * weren't written correctly.
-+			 */
-+			if (mas->tx_rem_bytes) {
-+				writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
-+				dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
-+					mas->tx_rem_bytes, mas->cur_bits_per_word);
-+			}
-+			if (mas->rx_rem_bytes)
-+				dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
-+					mas->rx_rem_bytes, mas->cur_bits_per_word);
- 		} else {
- 			complete(&mas->cs_done);
- 		}
--
--		/*
--		 * If this happens, then a CMD_DONE came before all the Tx
--		 * buffer bytes were sent out. This is unusual, log this
--		 * condition and disable the WM interrupt to prevent the
--		 * system from stalling due an interrupt storm.
--		 * If this happens when all Rx bytes haven't been received, log
--		 * the condition.
--		 * The only known time this can happen is if bits_per_word != 8
--		 * and some registers that expect xfer lengths in num spi_words
--		 * weren't written correctly.
--		 */
--		if (mas->tx_rem_bytes) {
--			writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
--			dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
--				mas->tx_rem_bytes, mas->cur_bits_per_word);
--		}
--		if (mas->rx_rem_bytes)
--			dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
--				mas->rx_rem_bytes, mas->cur_bits_per_word);
- 	}
- 
- 	if (m_irq & M_CMD_CANCEL_EN)
+Most of the 300 uses don't cause any warnings on gcc 9.3.0, so they're in
+a single treewide commit in this series. A few others needed to actually
+get cleaned up, and I broke those out into individual patches.
+
+The tree is:
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=kspp/uninit/macro
+
+-Kees
+
+[1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
+[2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
+[3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
+[4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
+
+Jason Yan (1):
+  f2fs: Eliminate usage of uninitialized_var() macro
+
+Kees Cook (15):
+  docs: deprecated.rst: Add uninitialized_var()
+  x86/mm/numa: Remove uninitialized_var() usage
+  drbd: Remove uninitialized_var() usage
+  b43: Remove uninitialized_var() usage
+  rtlwifi: rtl8192cu: Remove uninitialized_var() usage
+  ide: Remove uninitialized_var() usage
+  clk: st: Remove uninitialized_var() usage
+  spi: davinci: Remove uninitialized_var() usage
+  clk: spear: Remove uninitialized_var() usage
+  KVM: PPC: Book3S PR: Remove uninitialized_var() usage
+  media: sur40: Remove uninitialized_var() usage
+  checkpatch: Remove awareness of uninitialized_var() macro
+  treewide: Remove uninitialized_var() usage
+  compiler: Remove uninitialized_var() macro
+  mm/debug_vm_pgtable: Remove uninitialized_var() usage
+
+ Documentation/process/deprecated.rst           | 18 ++++++++++++++++++
+ arch/arm/mach-sa1100/assabet.c                 |  2 +-
+ arch/arm/mm/alignment.c                        |  2 +-
+ arch/ia64/kernel/process.c                     |  2 +-
+ arch/ia64/mm/discontig.c                       |  2 +-
+ arch/ia64/mm/tlb.c                             |  2 +-
+ arch/mips/lib/dump_tlb.c                       |  2 +-
+ arch/mips/mm/init.c                            |  2 +-
+ arch/mips/mm/tlb-r4k.c                         |  6 +++---
+ arch/powerpc/kvm/book3s_64_mmu_radix.c         |  2 +-
+ arch/powerpc/kvm/book3s_pr.c                   |  3 ---
+ arch/powerpc/kvm/powerpc.c                     |  2 +-
+ arch/powerpc/platforms/52xx/mpc52xx_pic.c      |  2 +-
+ arch/s390/kernel/smp.c                         |  2 +-
+ arch/x86/kernel/quirks.c                       | 10 +++++-----
+ arch/x86/kvm/mmu/mmu.c                         |  2 +-
+ arch/x86/kvm/mmu/paging_tmpl.h                 |  2 +-
+ arch/x86/kvm/x86.c                             |  2 +-
+ arch/x86/mm/numa.c                             | 18 +++++++++---------
+ block/blk-merge.c                              |  2 +-
+ drivers/acpi/acpi_pad.c                        |  2 +-
+ drivers/ata/libata-scsi.c                      |  2 +-
+ drivers/atm/zatm.c                             |  2 +-
+ drivers/block/drbd/drbd_nl.c                   |  6 +++---
+ drivers/block/drbd/drbd_state.c                |  2 +-
+ drivers/block/rbd.c                            |  2 +-
+ drivers/clk/clk-gate.c                         |  2 +-
+ drivers/clk/spear/clk-vco-pll.c                |  2 +-
+ drivers/clk/st/clkgen-fsyn.c                   |  1 -
+ drivers/firewire/ohci.c                        | 14 +++++++-------
+ drivers/gpu/drm/bridge/sil-sii8620.c           |  2 +-
+ drivers/gpu/drm/drm_edid.c                     |  2 +-
+ drivers/gpu/drm/exynos/exynos_drm_dsi.c        |  6 +++---
+ drivers/gpu/drm/i915/display/intel_fbc.c       |  2 +-
+ drivers/gpu/drm/i915/gt/intel_lrc.c            |  2 +-
+ drivers/gpu/drm/i915/intel_uncore.c            |  2 +-
+ .../gpu/drm/rockchip/dw-mipi-dsi-rockchip.c    |  4 ++--
+ drivers/i2c/busses/i2c-rk3x.c                  |  2 +-
+ drivers/ide/ide-acpi.c                         |  2 +-
+ drivers/ide/ide-atapi.c                        |  2 +-
+ drivers/ide/ide-io-std.c                       |  4 ++--
+ drivers/ide/ide-io.c                           |  8 ++++----
+ drivers/ide/ide-sysfs.c                        |  2 +-
+ drivers/ide/ide-taskfile.c                     |  1 -
+ drivers/ide/umc8672.c                          |  2 +-
+ drivers/idle/intel_idle.c                      |  2 +-
+ drivers/infiniband/core/uverbs_cmd.c           |  4 ++--
+ drivers/infiniband/hw/cxgb4/cm.c               |  2 +-
+ drivers/infiniband/hw/cxgb4/cq.c               |  2 +-
+ drivers/infiniband/hw/mlx4/qp.c                |  6 +++---
+ drivers/infiniband/hw/mlx5/cq.c                |  6 +++---
+ drivers/infiniband/hw/mlx5/devx.c              |  2 +-
+ drivers/infiniband/hw/mlx5/wr.c                |  2 +-
+ drivers/infiniband/hw/mthca/mthca_qp.c         | 10 +++++-----
+ drivers/infiniband/sw/siw/siw_qp_rx.c          |  2 +-
+ drivers/input/serio/serio_raw.c                |  2 +-
+ drivers/input/touchscreen/sur40.c              |  4 +---
+ drivers/iommu/intel/iommu.c                    |  2 +-
+ drivers/md/dm-io.c                             |  2 +-
+ drivers/md/dm-ioctl.c                          |  2 +-
+ drivers/md/dm-snap-persistent.c                |  2 +-
+ drivers/md/dm-table.c                          |  2 +-
+ drivers/md/dm-writecache.c                     |  2 +-
+ drivers/md/raid5.c                             |  2 +-
+ drivers/media/dvb-frontends/rtl2832.c          |  2 +-
+ drivers/media/tuners/qt1010.c                  |  4 ++--
+ drivers/media/usb/gspca/vicam.c                |  2 +-
+ drivers/media/usb/uvc/uvc_video.c              |  8 ++++----
+ drivers/memstick/host/jmb38x_ms.c              |  2 +-
+ drivers/memstick/host/tifm_ms.c                |  2 +-
+ drivers/mmc/host/sdhci.c                       |  2 +-
+ drivers/mtd/nand/raw/nand_ecc.c                |  2 +-
+ drivers/mtd/nand/raw/s3c2410.c                 |  2 +-
+ drivers/mtd/parsers/afs.c                      |  4 ++--
+ drivers/mtd/ubi/eba.c                          |  2 +-
+ drivers/net/can/janz-ican3.c                   |  2 +-
+ drivers/net/ethernet/broadcom/bnx2.c           |  4 ++--
+ .../ethernet/mellanox/mlx5/core/pagealloc.c    |  4 ++--
+ drivers/net/ethernet/neterion/s2io.c           |  2 +-
+ drivers/net/ethernet/qlogic/qla3xxx.c          |  2 +-
+ drivers/net/ethernet/sun/cassini.c             |  2 +-
+ drivers/net/ethernet/sun/niu.c                 |  6 +++---
+ drivers/net/wan/z85230.c                       |  2 +-
+ drivers/net/wireless/ath/ath10k/core.c         |  2 +-
+ drivers/net/wireless/ath/ath6kl/init.c         |  2 +-
+ drivers/net/wireless/ath/ath9k/init.c          |  2 +-
+ drivers/net/wireless/broadcom/b43/debugfs.c    |  2 +-
+ drivers/net/wireless/broadcom/b43/dma.c        |  2 +-
+ drivers/net/wireless/broadcom/b43/lo.c         |  2 +-
+ drivers/net/wireless/broadcom/b43/phy_n.c      |  4 ++--
+ drivers/net/wireless/broadcom/b43/xmit.c       | 12 ++++++------
+ .../net/wireless/broadcom/b43legacy/debugfs.c  |  2 +-
+ drivers/net/wireless/broadcom/b43legacy/main.c |  2 +-
+ drivers/net/wireless/intel/iwlegacy/3945.c     |  2 +-
+ drivers/net/wireless/intel/iwlegacy/4965-mac.c |  2 +-
+ .../wireless/realtek/rtlwifi/rtl8192cu/hw.c    |  8 ++++----
+ drivers/pci/pcie/aer.c                         |  2 +-
+ drivers/platform/x86/hdaps.c                   |  4 ++--
+ drivers/scsi/dc395x.c                          |  2 +-
+ drivers/scsi/pm8001/pm8001_hwi.c               |  2 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c               |  2 +-
+ drivers/spi/spi-davinci.c                      |  1 -
+ drivers/ssb/driver_chipcommon.c                |  4 ++--
+ drivers/tty/cyclades.c                         |  2 +-
+ drivers/tty/isicom.c                           |  2 +-
+ drivers/usb/musb/cppi_dma.c                    |  2 +-
+ drivers/usb/storage/sddr55.c                   |  4 ++--
+ drivers/vhost/net.c                            |  6 +++---
+ drivers/video/fbdev/matrox/matroxfb_maven.c    |  6 +++---
+ drivers/video/fbdev/pm3fb.c                    |  6 +++---
+ drivers/video/fbdev/riva/riva_hw.c             |  3 +--
+ drivers/virtio/virtio_ring.c                   |  6 +++---
+ fs/afs/dir.c                                   |  2 +-
+ fs/afs/security.c                              |  2 +-
+ fs/dlm/netlink.c                               |  2 +-
+ fs/erofs/data.c                                |  4 ++--
+ fs/erofs/zdata.c                               |  2 +-
+ fs/f2fs/data.c                                 |  4 +---
+ fs/fat/dir.c                                   |  2 +-
+ fs/fuse/control.c                              |  4 ++--
+ fs/fuse/cuse.c                                 |  2 +-
+ fs/fuse/file.c                                 |  2 +-
+ fs/gfs2/aops.c                                 |  2 +-
+ fs/gfs2/bmap.c                                 |  2 +-
+ fs/gfs2/lops.c                                 |  2 +-
+ fs/hfsplus/unicode.c                           |  2 +-
+ fs/isofs/namei.c                               |  4 ++--
+ fs/jffs2/erase.c                               |  2 +-
+ fs/nfsd/nfsctl.c                               |  2 +-
+ fs/ocfs2/alloc.c                               |  4 ++--
+ fs/ocfs2/dir.c                                 | 14 +++++++-------
+ fs/ocfs2/extent_map.c                          |  4 ++--
+ fs/ocfs2/namei.c                               |  2 +-
+ fs/ocfs2/refcounttree.c                        |  2 +-
+ fs/ocfs2/xattr.c                               |  2 +-
+ fs/omfs/file.c                                 |  2 +-
+ fs/overlayfs/copy_up.c                         |  2 +-
+ fs/ubifs/commit.c                              |  6 +++---
+ fs/ubifs/dir.c                                 |  2 +-
+ fs/ubifs/file.c                                |  4 ++--
+ fs/ubifs/journal.c                             |  4 ++--
+ fs/ubifs/lpt.c                                 |  2 +-
+ fs/ubifs/tnc.c                                 |  6 +++---
+ fs/ubifs/tnc_misc.c                            |  4 ++--
+ fs/udf/balloc.c                                |  2 +-
+ fs/xfs/xfs_bmap_util.c                         |  2 +-
+ include/linux/compiler-clang.h                 |  2 --
+ include/linux/compiler-gcc.h                   |  6 ------
+ include/linux/page-flags-layout.h              |  4 +++-
+ include/net/flow_offload.h                     |  2 +-
+ kernel/async.c                                 |  4 ++--
+ kernel/audit.c                                 |  2 +-
+ kernel/debug/kdb/kdb_io.c                      |  2 +-
+ kernel/dma/debug.c                             |  2 +-
+ kernel/events/core.c                           |  2 +-
+ kernel/events/uprobes.c                        |  2 +-
+ kernel/exit.c                                  |  2 +-
+ kernel/futex.c                                 | 14 +++++++-------
+ kernel/locking/lockdep.c                       | 16 ++++++++--------
+ kernel/trace/ring_buffer.c                     |  2 +-
+ lib/radix-tree.c                               |  2 +-
+ lib/test_lockup.c                              |  2 +-
+ mm/debug_vm_pgtable.c                          |  2 +-
+ mm/frontswap.c                                 |  2 +-
+ mm/ksm.c                                       |  2 +-
+ mm/memcontrol.c                                |  2 +-
+ mm/memory.c                                    |  2 +-
+ mm/mempolicy.c                                 |  4 ++--
+ mm/page_alloc.c                                |  2 +-
+ mm/percpu.c                                    |  2 +-
+ mm/slub.c                                      |  4 ++--
+ mm/swap.c                                      |  4 ++--
+ net/dccp/options.c                             |  2 +-
+ net/ipv4/netfilter/nf_socket_ipv4.c            |  6 +++---
+ net/ipv6/ip6_flowlabel.c                       |  2 +-
+ net/ipv6/netfilter/nf_socket_ipv6.c            |  2 +-
+ net/netfilter/nf_conntrack_ftp.c               |  2 +-
+ net/netfilter/nfnetlink_log.c                  |  2 +-
+ net/netfilter/nfnetlink_queue.c                |  4 ++--
+ net/sched/cls_flow.c                           |  2 +-
+ net/sched/sch_cake.c                           |  2 +-
+ net/sched/sch_cbq.c                            |  2 +-
+ net/sched/sch_fq_codel.c                       |  2 +-
+ net/sched/sch_fq_pie.c                         |  2 +-
+ net/sched/sch_hfsc.c                           |  2 +-
+ net/sched/sch_htb.c                            |  2 +-
+ net/sched/sch_sfq.c                            |  2 +-
+ net/sunrpc/svcsock.c                           |  4 ++--
+ net/sunrpc/xprtsock.c                          | 10 +++++-----
+ net/tls/tls_sw.c                               |  2 +-
+ scripts/checkpatch.pl                          | 16 +++++-----------
+ sound/core/control_compat.c                    |  2 +-
+ sound/isa/sb/sb16_csp.c                        |  2 +-
+ sound/usb/endpoint.c                           |  2 +-
+ tools/include/linux/compiler.h                 |  2 --
+ tools/virtio/linux/kernel.h                    |  2 --
+ 196 files changed, 321 insertions(+), 330 deletions(-)
+
 -- 
-Sent by a computer, using git, on the internet
+2.25.1
 
