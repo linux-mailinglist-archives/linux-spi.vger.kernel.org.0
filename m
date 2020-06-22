@@ -2,35 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C54492032C3
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jun 2020 11:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092A02032E2
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jun 2020 11:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbgFVJDw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Jun 2020 05:03:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40632 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725907AbgFVJDv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 22 Jun 2020 05:03:51 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3708D20716;
-        Mon, 22 Jun 2020 09:03:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592816630;
-        bh=uHzWPbIY/41z+WQ/nEUcOLsdKXZ7Qrprx0s9J3nM1WI=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Xh/zfNmL3ERN7ZAuWqJeou0LUUvk4MxvRvqg/wo1SCR+kIFKaY9IoS91eJwSGmLxN
-         41gDTQtH3HmNO1ivPmHrDiY28L/xmHDYW6B2Zu88FibzNrSxqjvk4opMhmkVX7J1zb
-         BUvEkLF+J6WNitfbDSFytorOw4J66B/N2vbM1fp8=
-Content-Type: text/plain; charset="utf-8"
+        id S1726765AbgFVJHZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 Jun 2020 05:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725952AbgFVJHZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Jun 2020 05:07:25 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96812C061794;
+        Mon, 22 Jun 2020 02:07:24 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id u13so18597462iol.10;
+        Mon, 22 Jun 2020 02:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=Q5S8rsZFww2RQBPdBUO2Ls9OyyX7I+zxItrTRXSG0Dc=;
+        b=byUv3cY+AOOV8gBuW1AflMUjWv5hGVN35Q9Puu+2+t56nc7VxjmYosOJG1J+HkPYXS
+         3TZxW1V6K6ebV03vKgzZrhV1bNWxEGJ5UehJHU4zA10lNahWo0JSu66sUiWH8hJRMcW8
+         0cAibGMRjdGlKjMMTw4Nsxq4CiHO5PyxWYzhDwz1a7N+yvueYFxdG5WwKEsQxjotkVAA
+         woFysNO8jzVb9O5LFFBPb3F5iLNRl/0IayvoEqgk8TZE6VLrmrSa8+XJdlpq9+29XBpc
+         4s6HD3c4+svqyGMv4cn+41pcfMqBcYZ21Ep9jDMR6pCISERYGxSxKOue3BQZbSUIQcwi
+         V2jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=Q5S8rsZFww2RQBPdBUO2Ls9OyyX7I+zxItrTRXSG0Dc=;
+        b=cY6HEeSXp+AV7ry2wyjWEimpN0nkA6K0BeJVIFyVBkQXtL4ZM0WcjkmKIrkt7b95vz
+         UNiqP4KV7o8Shkf7aHTwSpLvRO7cbZYvzrO1qvsjX9y/I0H2pjMepSmQsQgd36rC2ahA
+         88VquX2pHcDsqhJeuCHsP14f9baGusPjyjruc+kTCPb4I/MkVvcCQf9XylNhSEuh9jv1
+         ahsqDAb37FTk3+eeNamPG2ZIjbHRD6ag/Gl88FCC99s6nRwqEpkLK3FqPy6lnReczKZK
+         o6Q7canfHcuiWV3Jz/wK7BnZUax+UqF4QqORpZXLfJg2XXlFmAc/ZZxVnO1g20QdUip8
+         W3ow==
+X-Gm-Message-State: AOAM530qYGiPJP7z2Or4q3Z6bhvbGTLyVdPJH0EsbrkS7HPOivJnuSBr
+        4MAQwBflUEqPTLtaMzvOaUXUnEhxO/PoZIXDhjA=
+X-Google-Smtp-Source: ABdhPJwOiPKxd4xAeSQ6KNxpRqMrnK69wq8YYDF8YwjNAfHrsblHFiobqwkDYYJqyfrnzy4dcsM3nJ1AWGyTJWxwexs=
+X-Received: by 2002:a6b:780d:: with SMTP id j13mr18940211iom.66.1592816843974;
+ Mon, 22 Jun 2020 02:07:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200620033007.1444705-10-keescook@chromium.org>
-References: <20200620033007.1444705-1-keescook@chromium.org> <20200620033007.1444705-10-keescook@chromium.org>
-Subject: Re: [PATCH v2 09/16] clk: spear: Remove uninitialized_var() usage
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+References: <20200620033007.1444705-1-keescook@chromium.org>
+ <CA+icZUWpHRR7ukyepiUH1dR3r4GMi-s2crfwR5vTszdt1SUTQw@mail.gmail.com> <202006200854.B2D8F21@keescook>
+In-Reply-To: <202006200854.B2D8F21@keescook>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Mon, 22 Jun 2020 11:07:14 +0200
+Message-ID: <CA+icZUV-gBgUnrm6pF2MHWC2SnK_ZBatAa9VrEJ2VbdARi1YBw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/16] Remove uninitialized_var() macro
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         Alexander Potapenko <glider@google.com>,
@@ -41,37 +64,64 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-doc@vger.kernel.org, linux-wireless@vger.kernel.org,
         linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-mm@kvack.org,
-        clang-built-linux@googlegroups.com
-To:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Date:   Mon, 22 Jun 2020 02:03:49 -0700
-Message-ID: <159281662960.62212.15318119299039755482@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Quoting Kees Cook (2020-06-19 20:30:00)
-> Using uninitialized_var() is dangerous as it papers over real bugs[1]
-> (or can in the future), and suppresses unrelated compiler warnings (e.g.
-> "unused variable"). If the compiler thinks it is uninitialized, either
-> simply initialize the variable or make compiler changes. As a precursor
-> to removing[2] this[3] macro[4], initialize "i" to zero. The compiler
-> warning was not a false positive, since clk_pll_set_rate()'s call to
-> clk_pll_round_rate_index() will always fail (since "prate" is NULL), so
-> "i" was never being initialized.
->=20
-> [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.co=
-m/
-> [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=3D1TGqCR5vQkCzWJ0QxK6Cern=
-OU6eedsudAixw@mail.gmail.com/
-> [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz=
-9knmPuXhOeg@mail.gmail.com/
-> [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=3DyVJu65TpLg=
-N_ybYNv0VEOKA@mail.gmail.com/
->=20
-> Fixes: 7d4998f71b29 ("clk: SPEAr: Vco-pll: Fix compilation warning")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+On Sat, Jun 20, 2020 at 5:57 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Sat, Jun 20, 2020 at 09:03:34AM +0200, Sedat Dilek wrote:
+> > On Sat, Jun 20, 2020 at 5:30 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > v2:
+> > > - more special-cased fixes
+> > > - add reviews
+> > > v1: https://lore.kernel.org/lkml/20200603233203.1695403-1-keescook@chromium.org
+> > >
+> > > Using uninitialized_var() is dangerous as it papers over real bugs[1]
+> > > (or can in the future), and suppresses unrelated compiler warnings
+> > > (e.g. "unused variable"). If the compiler thinks it is uninitialized,
+> > > either simply initialize the variable or make compiler changes.
+> > >
+> > > As recommended[2] by[3] Linus[4], remove the macro.
+> > >
+> > > Most of the 300 uses don't cause any warnings on gcc 9.3.0, so they're in
+> > > a single treewide commit in this series. A few others needed to actually
+> > > get cleaned up, and I broke those out into individual patches.
+> > >
+> > > The tree is:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=kspp/uninit/macro
+> > >
+> > > -Kees
+> > >
+> >
+> > Hi Kees,
+> >
+> > thanks for doing a v2 of your patchset.
+> >
+> > As I saw Jason Yan providing some "uninitialized_var() macro" patches
+> > to the MLs I pointen him to your tree "v1".
+>
+> Thanks!
+>
+> > BTW, I have tested your "v1" against Linux v5.7 (see [1]) - just
+> > yesterday with Linux v5.7.5-rc1.
+> >
+> > Is it possible to have a v2 of this patchset on top od Linux v5.7 - if
+> > you do not mind.
+>
+> Since it's only going to be for post-v5.8, I'm fine skipping the v5.7
+> testing. Mainly I'm looking at v5.8 and linux-next.
+>
+> Thanks for looking at it!
+>
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Thanks for the feedback.
+
+"I knew you'd say that."
+( Judge Dredd )
+
+- Sedat -
