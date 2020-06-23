@@ -2,46 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB31205090
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jun 2020 13:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2934C205221
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jun 2020 14:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732293AbgFWLUS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Jun 2020 07:20:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732191AbgFWLUS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 23 Jun 2020 07:20:18 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592911218;
-        bh=JdEuzOoBQSy0ATgysr8+rqhSBqYK/E54N9+5zET2IsA=;
-        h=Subject:From:Date:To:From;
-        b=aVw4xVvzyr4hIZB8MwR+HZzxjZpwMR5uZwm77EpXb/AusHpk8lucRyVf+ktUrmyXl
-         RQMp3Upiigcz55wm/nZt/b8ZMHRbngp2ToHTJ1xksLMpJeQQoIeIzH3hCqpnqif1hB
-         iekQ/Is6LP+yscSg0mUX14fB5FkSslau95zzM2Oo=
+        id S1732592AbgFWMNO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Jun 2020 08:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732518AbgFWMNO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Jun 2020 08:13:14 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4F5C061573
+        for <linux-spi@vger.kernel.org>; Tue, 23 Jun 2020 05:13:13 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id g13so4765822qtv.8
+        for <linux-spi@vger.kernel.org>; Tue, 23 Jun 2020 05:13:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
+        b=vBwY/Z6NlVu/YpXp4P2kHzwkp5ZpRtRXpGnp5ti5jAVagCbauj/6ug/nt53L98e+TN
+         dIbx2rVUYL97gS/bVwX4jenZO7NkJF3o92jYD3ZXi0gjRHTbdfQw1wkhEZzCaDq/WHWI
+         SQ3oPVN8bCoWZe/KO5UPmwdidZGRvVdygObtcteNIcoX574ZvLIcFfR5E9Z00DPQre/W
+         5JMitbpJasYPk3cySiULlE6fgHyxRD/emEYbhpIs2fntRRLGhWA7wz7HjvviwGIZxzyi
+         bMXyjo02G8nShqhL6Kyb5djCn+RJNTL8/Lm/C2G1BlADQOqD8N3s9FNFft3oS9weV1n+
+         G5Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
+        b=G5yQUNKFd/KKOmceIa+TJFvkp8e2SGyA9q19sAreXbOXz5mVV/FfG5MR6dM8kxdRAR
+         KSyvRb/1kMM8ySs+MiJ+XOcJ2iAKxl0YhGMwuomvdtuEmazFXPotZoC/Vqdr5IoSYNad
+         4sxrXdpLY/FssYmwjUhlGLYyQgkYVdYXltmxFZVeJcPSoiFXR8CQsOfyoUU1pJsTg6jS
+         B6YrKfxonrIovhqll/ZcZg8MIHNVcFUHocUYKinZUSl2RsU98moZmDXpmLQxnR9s/AM+
+         1t5lmDRroM3tcmpco2POk+gdo9xT8FbNdcnJCSnPoxg8g1s9ufNRp8Q4YBUliPbkQlsR
+         HWSw==
+X-Gm-Message-State: AOAM533rft4lfEyxYQGOZKOJIWZRZr3BJiKV/Njkssa1aAj2L8qXC0M6
+        uTYVNKrCwyahm58Tcv0AkBAi2QGc+6hCo4FqKZE=
+X-Google-Smtp-Source: ABdhPJzFM5P2zqC8TBfY/7QxGcfuOfQ8L9curUawZzv1HM9J5KYRjB0/IvMBGUNFuZxvUWFVFNyw1+tb9MJxMJuoocs=
+X-Received: by 2002:ac8:40da:: with SMTP id f26mr21488487qtm.9.1592914393152;
+ Tue, 23 Jun 2020 05:13:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <159291121821.16548.16574241212048039575.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 23 Jun 2020 11:20:18 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Received: by 2002:ac8:47c2:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 05:13:12
+ -0700 (PDT)
+Reply-To: bektery@outlook.com
+From:   YAVUZ BEKTER <bakert.jg@gmail.com>
+Date:   Tue, 23 Jun 2020 05:13:12 -0700
+Message-ID: <CAAUSuTUvZ0_kfnu-NZoKKCVE0axON3iiyXTQq5VPW+zJkDn4kA@mail.gmail.com>
+Subject: Hello.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v8] Add interconnect support to QSPI and QUP drivers (2020-06-23T10:38:50)
-  Superseding: [v7] Add interconnect support to QSPI and QUP drivers (2020-06-09T05:56:28):
-    [V7,RESEND,1/7] soc: qcom: geni: Support for ICC voting
-    [V7,RESEND,2/7] soc: qcom-geni-se: Add interconnect support to fix earlycon crash
-    [V7,RESEND,3/7] i2c: i2c-qcom-geni: Add interconnect support
-    [V7,RESEND,4/7] spi: spi-geni-qcom: Add interconnect support
-    [V7,RESEND,5/7] tty: serial: qcom_geni_serial: Add interconnect support
-    [V7,RESEND,6/7] spi: spi-qcom-qspi: Add interconnect support
-    [V7,RESEND,7/7] arm64: dts: sc7180: Add interconnect for QUP and QSPI
-
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+I am the foreign operations director of Bank of Turkey.
+My name is Mr, Yavuz. I have a sensitive investment project to discuss
+with you, please reply now.
+________________________
+Ik ben de directeur buitenlandse activiteiten van de Bank of Turkey.
+Mijn naam is meneer Yavuz. Ik moet een gevoelig investeringsproject bespreken
+met u, antwoord dan nu.
