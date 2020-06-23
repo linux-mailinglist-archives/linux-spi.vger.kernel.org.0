@@ -2,118 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 922252053E2
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jun 2020 15:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09272205423
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jun 2020 16:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732774AbgFWNxa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Jun 2020 09:53:30 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:65017 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732766AbgFWNx2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Jun 2020 09:53:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1592920408; x=1624456408;
-  h=references:from:to:cc:subject:in-reply-to:date:
-   message-id:mime-version;
-  bh=Wh8tlTmkeLmBURIATHl2HVTtETUBHTovyprw1YhBJSM=;
-  b=SMdXrCDFMmZVp3bb5Z5x1QczWxPpCryOKnOjKQ8sYF7MsyMG7KbwChWv
-   fGwf91boFgwKYuCSdQ6gkCMtHl64dyE4fX8orILhPyJcQoWNEPOHAlWUd
-   UN6Aq7y6bHK4WHqFDP6OxvkUaxFle4ozNain3uQDP0YKFMinJSnZO73z6
-   qz6t5z+ouvx3sYh9le45gPu36BlDJxUrpNXS528YO7mi6Hp/GyTc5lwY1
-   F8lJ8V/NBlb3l6QZoyINtU9sYNR19j9bdLbXX1M3ldxnolflFRzLZGBOK
-   rYd1rtTLtYA5qccP2P4QkFnE1SPH722LgaFipBZr8xp64rBkOfAIeszI/
-   Q==;
-IronPort-SDR: Hq1PluohMkhb19j9nTJJm20AtFbnzLD8gz48m6b5MdsUHRS/VsQMz2/eU3gp6WRbjRTlmIfWG8
- l6EztbvEEyQl/q8Ey00w82H6iIaiWVNRlYxzfBM9pUqWzG10mmNVZ9Zmgoxw1laDhW/EVCY4sG
- xon+qyF5ghrjG4FBnQacQicEChjGOxXMTVEgCzjmqgSvvq/wj8sC46ntVkOi1E/U7E3kKmTp7V
- vD1D7Gu8nKx9rsP8pX6Bq+117suOEQUaHH99ahxigiBndUKVkvrR2Knn+tjGzYvnr5gODwDXH7
- b5w=
-X-IronPort-AV: E=Sophos;i="5.75,271,1589266800"; 
-   d="scan'208";a="81216978"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2020 06:53:26 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 23 Jun 2020 06:53:14 -0700
-Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
- via Frontend Transport; Tue, 23 Jun 2020 06:53:12 -0700
-References: <20200619113121.9984-1-lars.povlsen@microchip.com> <20200619113121.9984-4-lars.povlsen@microchip.com> <20200619121107.GE5396@sirena.org.uk> <87imfjxtrq.fsf@soft-dev15.microsemi.net> <20200622121706.GF4560@sirena.org.uk>
-From:   Lars Povlsen <lars.povlsen@microchip.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Lars Povlsen <lars.povlsen@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        id S1732785AbgFWOIT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Jun 2020 10:08:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38754 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732698AbgFWOIS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 23 Jun 2020 10:08:18 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9D41420723;
+        Tue, 23 Jun 2020 14:08:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592921298;
+        bh=W8SifQZMmjCYOz9qiXwOH2QVh2XWoUWbt24ej70khxQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s5IZW2unLbgPcf1GaXFLgEYZkEpAwlHKNREQy+AWFQWgADend2w3xj37HI3ZnMxoY
+         e8S87CU7nCCyEn/88gb3SOmk5G9NovgAKDbzAeKUq7MGfMKxllqbYk1fw1CMlhlpts
+         cVbTTbU819ljJGLFxkJDcC17wuzu2rplU0wXHYO8=
+Date:   Tue, 23 Jun 2020 15:08:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lars Povlsen <lars.povlsen@microchip.com>
+Cc:     Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Serge Semin <fancer.lancer@gmail.com>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Subject: Re: [PATCH v2 3/6] spi: dw: Add Microchip Sparx5 support
-In-Reply-To: <20200622121706.GF4560@sirena.org.uk>
-Date:   Tue, 23 Jun 2020 15:53:22 +0200
-Message-ID: <878sgddh2l.fsf@soft-dev15.microsemi.net>
+Message-ID: <20200623140815.GF5582@sirena.org.uk>
+References: <20200619113121.9984-1-lars.povlsen@microchip.com>
+ <20200619113121.9984-4-lars.povlsen@microchip.com>
+ <20200619121107.GE5396@sirena.org.uk>
+ <87imfjxtrq.fsf@soft-dev15.microsemi.net>
+ <20200622121706.GF4560@sirena.org.uk>
+ <878sgddh2l.fsf@soft-dev15.microsemi.net>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ChQOR20MqfxkMJg9"
+Content-Disposition: inline
+In-Reply-To: <878sgddh2l.fsf@soft-dev15.microsemi.net>
+X-Cookie: No motorized vehicles allowed.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-Mark Brown writes:
+--ChQOR20MqfxkMJg9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jun 22, 2020 at 12:46:33PM +0200, Lars Povlsen wrote:
->> On Fri, Jun 19, 2020 at 01:31:18PM +0200, Lars Povlsen wrote:
->
->> >> +	if (!nEnable) {
->> >> +		/* Ensure CS toggles, so start off all disabled */
->> >> +		regmap_write(dwsmscc->syscon, SPARX5_FORCE_VAL, ~0);
->> >> +		/* CS override drive enable */
->> >> +		regmap_write(dwsmscc->syscon, SPARX5_FORCE_ENA, 1);
->
->> >This should just be setting the value to whatever the core asked for it
->> >to be set to, the driver adding extra toggles is likely to disrupt
->> >things.
->
->> I will have a look at this again. But it was added for a reason. The
->> issue is that we have two different busses in front of the controller,
->> so we might need more settle time when switching interface.
->
->If there's a mux that needs to be handled specially that mux should be
->described in DT on the relevant boards, there shouldn't just be
->something hard coded in the controller driver.
+On Tue, Jun 23, 2020 at 03:53:22PM +0200, Lars Povlsen wrote:
+> Mark Brown writes:
 
-I have been able to change this into a straight setting - no
-toggling. Just needed a settle delay.
+> >If there's a mux that needs to be handled specially that mux should be
+> >described in DT on the relevant boards, there shouldn't just be
+> >something hard coded in the controller driver.
 
-I looked at the spi-mux driver, but that is more for muxing the CS's, as
-I understand - not the actual bus segment. I could use it, but it would
-require encoding the bus segment into the CS (double the normal
-range). Also, selecting the bus interface is tightly coupled to the
-controller - its not an externally constructed board mux.
+> I looked at the spi-mux driver, but that is more for muxing the CS's, as
+> I understand - not the actual bus segment. I could use it, but it would
 
-I feel the current implementation is more to the point, and easily
-understandable. It just adds the "microchip,spi-interface2" DT property.
+It doesn't matter that much exactly what signals get switched I think,
+we can't really tell by the time we get back to the controller.
 
-It might be that a better way exists using the spi-mux framework, and if
-you have some ideas for that I'd be all ears.
+> require encoding the bus segment into the CS (double the normal
+> range). Also, selecting the bus interface is tightly coupled to the
+> controller - its not an externally constructed board mux.
 
->
->BTW please do not CC subsystem patches to soc@kernel.org unless there's
->a specific reason to do so - there's no need for it, these patches won't
->get merged via there unless something is going wrong.  Generally the
->subsystem maintainers take patches for a given subsystem.
+It sounds like this controller should be describing a mux all the time -
+if there's completely separate output buses that you can switch between
+then we'll need to know about that if someone wires up a GPIO chip
+select.
 
-Ok, duly noted.
+--ChQOR20MqfxkMJg9
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thank you for the comments.
+-----BEGIN PGP SIGNATURE-----
 
----Lars
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7yDM8ACgkQJNaLcl1U
+h9BfZgf+JDO/cCKJ4sjkHrz8THiBZ35D3xuuzurTm4Tr8gePq3LGdQdvbnaLi+kh
+ybEPdfXHOunOJtY1eV1Loo3ckwW0KEOLa5M8GuFXFicZmomG51V+/5Xx0tuf27lS
+sK5o15TjgRKD3PGmIrquSL3vdunu/X2xkV7HT5IS9sv2t6Iwh/ulyFIgD0Q/dUS/
+rTIMg7VaQAiEVYtnheZdDHIAxS8Djgwj5u4im0Wv+HtKDa4MB0GtGOB/lV9YOkzv
+DKPm2/KgoSvBGALhUslEHDJCae8z642b13PnX4vCYgCNn5fm38/a3gk3GNQWd1l5
+hJvmc2AR85/s5cD47zvzaPRz1pl35w==
+=7Tnk
+-----END PGP SIGNATURE-----
 
-
--- 
-Lars Povlsen,
-Microchip
+--ChQOR20MqfxkMJg9--
