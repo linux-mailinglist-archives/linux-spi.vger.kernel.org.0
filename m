@@ -2,133 +2,149 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABA720426C
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jun 2020 23:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2C2204902
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jun 2020 07:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730499AbgFVVEH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Jun 2020 17:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        id S1728275AbgFWFOv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Jun 2020 01:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730327AbgFVVEG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Jun 2020 17:04:06 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95466C061796
-        for <linux-spi@vger.kernel.org>; Mon, 22 Jun 2020 14:04:06 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id i12so435088pju.3
-        for <linux-spi@vger.kernel.org>; Mon, 22 Jun 2020 14:04:06 -0700 (PDT)
+        with ESMTP id S1726252AbgFWFOu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Jun 2020 01:14:50 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBA3C061573
+        for <linux-spi@vger.kernel.org>; Mon, 22 Jun 2020 22:14:50 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id r22so16249981qke.13
+        for <linux-spi@vger.kernel.org>; Mon, 22 Jun 2020 22:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XaQAHgI/fJz5n4PH9+AAQxpUaFNfDOAFJjIvvuWc6mg=;
-        b=ILThu+fBeQLbDkY3Saa7Zr6fXvZla6p/mhaacfaAod5Ou2LCXGVY9rmI/SQ12/gRGw
-         0OyvuZwHPdhHMhqZNfaygaAuqkjJxQw9ecwhpY877rYeLJOYo7K1LFnWVKMlDLVDvRVU
-         aO7im+xhoBSS7Rfzh9EnHnbqHF0AGGKdOIZCs=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7oiDqnOGO+TssYLUtaiAkGZqbTLTe8VBFV4/hAXcsaU=;
+        b=GyM4fscQ4q5oq3dAVNcL2LKqjcJve7N0SZ8ZZHhGKk95SJESE5mehZloXDB+bNh5tp
+         eD5Q2sXcgazzYyaHEaIXxhs4bl/B9ZozpMBCMbM9FGCgjMOGrLh5IWUNBHtQBXkGEfTQ
+         01Z4/4we8JqKj06ttdbLoGxTzqNX9heQz4EGo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XaQAHgI/fJz5n4PH9+AAQxpUaFNfDOAFJjIvvuWc6mg=;
-        b=J4ipKmqltlYhTIfK5MaK6JRkPpdTfheiiJ7DY5vdO3XCPpI8uD+MS/byS89lOIm3fp
-         s8oeksAdStzBmQ/cz9zx+FxwV54T+1NUWlAwqtv0hcV6oj7hS3T2hwedeoeMLYSkaoEK
-         ifBEn/wGNLUrTIdZZ8C6TQLMQ0mnsbFIHg4jVTpWSLzLhXCj5pOVPZ2qly9LtOyTiGDZ
-         NMhNkzRwF2kxyI2YPO7Y6iNR6gTwAmSTnbZ6cTDW7RLRm7WMVnJcvRHuJWFlEarsuM7Q
-         7khtUnpbej83H7Gu6IePuMoFT/GL9TZaq996zCrlMEkX7jMveSX/pPs1pkdkE/T7IaSO
-         x0Fw==
-X-Gm-Message-State: AOAM532HP8X/F7Zvxdk/0Pc7/aKUSwdnqXPHscAW9eX90tCCfNspXYuI
-        QW9lmmece6zRXePcPiAq00lZQw==
-X-Google-Smtp-Source: ABdhPJxa2RKG+txMKUm/MEMBUFpa2Kv9XKoAQ0+Lw2FAoqT0JOWKLV1rtyBoAVQcAiWWStDNJ+p+nQ==
-X-Received: by 2002:a17:902:b942:: with SMTP id h2mr20581705pls.163.1592859846012;
-        Mon, 22 Jun 2020 14:04:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d2sm10586968pfc.1.2020.06.22.14.04.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 14:04:05 -0700 (PDT)
-Date:   Mon, 22 Jun 2020 14:04:04 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        b43-dev@lists.infradead.org,
-        Network Development <netdev@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Subject: Re: [PATCH v2 04/16] b43: Remove uninitialized_var() usage
-Message-ID: <202006221403.EEAD37E94B@keescook>
-References: <20200620033007.1444705-1-keescook@chromium.org>
- <20200620033007.1444705-5-keescook@chromium.org>
- <CAKwvOdmsXuqx-3Rt_KNFq4psAeFjG2-7qQaqkJ7dDqqmscUFNw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7oiDqnOGO+TssYLUtaiAkGZqbTLTe8VBFV4/hAXcsaU=;
+        b=PZssCy0859b02FXt/eL9vKCgxBl38tpx+95lPg8xqTP0EBio2mUPAO8JDfUk8hIh5q
+         2d5L+LBvu2gV26tiSFIroiuodc3F6pcF4QTgfkszQEy2Cy3eb/fLMlZbJOGW8ZgiDoVS
+         fUrVWSuh4MjlVMo9bBwbFDC12VfteuXcrNCnhjJWtEUXWYaLDCBxKeQYgR5kiG5VTwnO
+         saSmRmTm8jJX7tXW98hVw2h0Jk6mQrFXhx5BOtucr/WPFXcFWdGt9uHMpFbLsw+Vk3tM
+         oJl4+szWiq1/wIp+kyVxGb57vc/20jI7ifpntmml3fA/ZOydO3zjPIV7QtEvo1dScpXj
+         AVlg==
+X-Gm-Message-State: AOAM531YFwmHEAgVWtwxZdJaH8t5Id1VSnhmUXHcSFGOP27qFDnDHmWe
+        uV4uur+ezFCDDZQcV4LiwyFb54fvmKc=
+X-Google-Smtp-Source: ABdhPJz4p0N0sDiQxuoUCG5p/wPuznzyCbDndRN9zVWHYcS64K2Py0nkDsID0AJQBvvxS6EViNxHPA==
+X-Received: by 2002:a37:67d7:: with SMTP id b206mr2711809qkc.144.1592889289670;
+        Mon, 22 Jun 2020 22:14:49 -0700 (PDT)
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com. [209.85.219.48])
+        by smtp.gmail.com with ESMTPSA id z4sm5221878qkb.66.2020.06.22.22.14.49
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jun 2020 22:14:49 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id d12so9124326qvn.0
+        for <linux-spi@vger.kernel.org>; Mon, 22 Jun 2020 22:14:49 -0700 (PDT)
+X-Received: by 2002:a67:e445:: with SMTP id n5mr18647007vsm.73.1592888819511;
+ Mon, 22 Jun 2020 22:06:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmsXuqx-3Rt_KNFq4psAeFjG2-7qQaqkJ7dDqqmscUFNw@mail.gmail.com>
+References: <1591682194-32388-1-git-send-email-akashast@codeaurora.org> <1591682194-32388-5-git-send-email-akashast@codeaurora.org>
+In-Reply-To: <1591682194-32388-5-git-send-email-akashast@codeaurora.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 22 Jun 2020 22:06:48 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XwV-8J9-j1j2gwQ08oF8izDv=hB9vj_SogbagOBQfN6Q@mail.gmail.com>
+Message-ID: <CAD=FV=XwV-8J9-j1j2gwQ08oF8izDv=hB9vj_SogbagOBQfN6Q@mail.gmail.com>
+Subject: Re: [PATCH V7 RESEND 4/7] spi: spi-geni-qcom: Add interconnect support
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-serial@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Evan Green <evgreen@chromium.org>, msavaliy@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 10:04:18AM -0700, Nick Desaulniers wrote:
-> On Fri, Jun 19, 2020 at 8:30 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Using uninitialized_var() is dangerous as it papers over real bugs[1]
-> > (or can in the future), and suppresses unrelated compiler warnings (e.g.
-> > "unused variable"). If the compiler thinks it is uninitialized, either
-> > simply initialize the variable or make compiler changes. As a precursor
-> > to removing[2] this[3] macro[4], just initialize this variable to NULL.
-> > No later NULL deref is possible due to the early returns outside of the
-> > (phy->rev >= 7 && phy->rev < 19) case, which explicitly tests for NULL.
-> >
-> > [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
-> > [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
-> > [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
-> > [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
-> >
-> > Fixes: 58619b14d106 ("b43: move under broadcom vendor directory")
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> I see three total uses of uninitialized_var() in this file, do we want
-> to eliminate all of them?
+Hi,
 
-This is the only one that needed an explicit initialization -- all the
-others are handled in the treewide patch. I *could* split it out here,
-but I found it easier to keep the "no op" changes together in the
-treewide patch.
+On Mon, Jun 8, 2020 at 10:57 PM Akash Asthana <akashast@codeaurora.org> wrote:
+>
+> Get the interconnect paths for SPI based Serial Engine device
+> and vote according to the current bus speed of the driver.
+>
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+> Changes in V2:
+>  - As per Bjorn's comment, removed se == NULL check from geni_spi_icc_get
+>  - As per Bjorn's comment, removed code to set se->icc_path* to NULL in failure
+>  - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
+>    path handle
+>  - As per Matthias comment, added error handling for icc_set_bw call
+>
+> Changes in V3:
+>  - As per Matthias's comment, use helper ICC function from geni-se driver.
+>
+> Changes in V4:
+>  - Move peak_bw guess as twice of avg_bw if nothing mentioned explicitly
+>    to ICC core.
+>
+> Changes in V5:
+>  - Use icc_enable/disable in power on/off call.
+>  - Save some non-zero avg/peak value to ICC core by calling geni_icc_set_bw
+>    from probe so that when resume/icc_enable is called NOC are running at
+>    some non-zero value. No need to call icc_disable after BW vote because
+>    device will resume and suspend before probe return and will leave ICC in
+>    disabled state.
+>
+> Changes in V6:
+>  - No change
+>
+> Changes in V7:
+>  - As per Matthias's comment removed usage of peak_bw variable because we don't
+>    have explicit peak requirement, we were voting peak = avg and this can be
+>    tracked using single variable for avg bw.
+>
+>  drivers/spi/spi-geni-qcom.c | 29 ++++++++++++++++++++++++++++-
+>  1 file changed, 28 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index c397242..2ace5c5 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
+> @@ -234,6 +234,12 @@ static int setup_fifo_params(struct spi_device *spi_slv,
+>                 return ret;
+>         }
+>
+> +       /* Set BW quota for CPU as driver supports FIFO mode only. */
+> +       se->icc_paths[CPU_TO_GENI].avg_bw = Bps_to_icc(mas->cur_speed_hz);
+> +       ret = geni_icc_set_bw(se);
+> +       if (ret)
+> +               return ret;
+> +
 
--Kees
+I haven't done a deep review of your patch, but a quick drive-by
+review since I happened to notice it while looking at this driver.
+You should probably also update the other path that's adjusting the
+"mas->cur_speed_hz" variable.  Specifically see setup_fifo_xfer().
 
-> 
-> > ---
-> >  drivers/net/wireless/broadcom/b43/phy_n.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/wireless/broadcom/b43/phy_n.c b/drivers/net/wireless/broadcom/b43/phy_n.c
-> > index c33b4235839d..46db91846007 100644
-> > --- a/drivers/net/wireless/broadcom/b43/phy_n.c
-> > +++ b/drivers/net/wireless/broadcom/b43/phy_n.c
-> > @@ -4222,7 +4222,7 @@ static void b43_nphy_tx_gain_table_upload(struct b43_wldev *dev)
-> >         u32 rfpwr_offset;
-> >         u8 pga_gain, pad_gain;
-> >         int i;
-> > -       const s16 *uninitialized_var(rf_pwr_offset_table);
-> > +       const s16 *rf_pwr_offset_table = NULL;
-> >
-> >         table = b43_nphy_get_tx_gain_table(dev);
-> >         if (!table)
-> > --
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+For bonus points, you could even unify the two paths.  Perhaps you
+could pick <https://crrev.com/c/2259624> and include it in your series
+(remove the WIP if you do).
 
--- 
-Kees Cook
+
+-Doug
