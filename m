@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4769A205AD3
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jun 2020 20:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB16205AD5
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jun 2020 20:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387491AbgFWSb7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Jun 2020 14:31:59 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:58488 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387676AbgFWSb6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Jun 2020 14:31:58 -0400
+        id S2387676AbgFWScC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Jun 2020 14:32:02 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:54690 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387678AbgFWScB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Jun 2020 14:32:01 -0400
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05NIVl8R085802;
-        Tue, 23 Jun 2020 13:31:47 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05NIVqXg015544;
+        Tue, 23 Jun 2020 13:31:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1592937107;
-        bh=AwUgqPJTAs+lgXrKPWqUFSnfe1vMo44ULoEq8QGuMCc=;
+        s=ti-com-17Q1; t=1592937112;
+        bh=9a5FEjuyRl6f2sP4FwKkYMtIIcrxgkw6eAbSpOG2tMI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=cken3QH39jOCdwrsZCBLQJYMhxBEZx3SVdecq45EyP2Ak5UEOB2rba+nlsjdShCS5
-         Z2+H408PWWUayFDKR13nnA9/+xTgTbGJ+qkafHJtnqXqRpSuCyRpUY9Rcsa4WREkfL
-         lHVnG0F5nw8OnJHIb9GNkcDJeSety5TCe9dTK8ms=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05NIVlIT040247
+        b=capr/+SOwq3f5WEgk2tgfSxroBJnam6gvYGi60BOsdBshuJxnXVb2JEGWM7Znrzg+
+         pYPY103Mdewgp3H9mLhvBiXf4bHUg3Rnf7QTuMc16b3d9YiI3NFrLwxJry3TDHzwYE
+         fBsG6JN7WGPuZ9wsOla2pBvEAZOWhXP/9B+6d9Uw=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05NIVq4c040341
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 23 Jun 2020 13:31:47 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 23 Jun 2020 13:31:52 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 23
- Jun 2020 13:31:47 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2020 13:31:52 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 23 Jun 2020 13:31:47 -0500
+ Frontend Transport; Tue, 23 Jun 2020 13:31:52 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05NIUVJS000942;
-        Tue, 23 Jun 2020 13:31:42 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05NIUVJT000942;
+        Tue, 23 Jun 2020 13:31:47 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -53,9 +53,9 @@ To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         <linux-mediatek@lists.infradead.org>
 CC:     Pratyush Yadav <p.yadav@ti.com>, Sekhar Nori <nsekhar@ti.com>,
         Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [PATCH v10 14/17] mtd: spi-nor: core: disable Octal DTR mode on suspend.
-Date:   Wed, 24 Jun 2020 00:00:27 +0530
-Message-ID: <20200623183030.26591-15-p.yadav@ti.com>
+Subject: [PATCH v10 15/17] mtd: spi-nor: core: expose spi_nor_default_setup() in core.h
+Date:   Wed, 24 Jun 2020 00:00:28 +0530
+Message-ID: <20200623183030.26591-16-p.yadav@ti.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200623183030.26591-1-p.yadav@ti.com>
 References: <20200623183030.26591-1-p.yadav@ti.com>
@@ -68,49 +68,48 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On resume, the init procedure will be run that will re-enable it.
+Flashes might want to add a custom setup hook to configure the flash in
+the proper mode for operation. But after that, they would still want to
+run the default setup hook because it selects the read, program, and
+erase operations. Since there is little point in repeating all that
+code, expose the spi_nor_default_setup() in core.h to
+manufacturer-specific files.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/core.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/mtd/spi-nor/core.c | 4 ++--
+ drivers/mtd/spi-nor/core.h | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 27ad9bab06dc..369d754988f0 100644
+index 369d754988f0..0bc897274278 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
-@@ -3239,6 +3239,23 @@ static void spi_nor_soft_reset(struct spi_nor *nor)
- 	usleep_range(SPI_NOR_SRST_SLEEP_MIN, SPI_NOR_SRST_SLEEP_MAX);
+@@ -2790,8 +2790,8 @@ static int spi_nor_select_erase(struct spi_nor *nor)
+ 	return 0;
  }
  
-+/* mtd suspend handler */
-+static int spi_nor_suspend(struct mtd_info *mtd)
-+{
-+	struct spi_nor *nor = mtd_to_spi_nor(mtd);
-+	struct device *dev = nor->dev;
-+	int ret;
-+
-+	/* Disable octal DTR mode if we enabled it. */
-+	ret = spi_nor_octal_dtr_enable(nor, false);
-+	if (ret) {
-+		dev_err(dev, "suspend() failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- /* mtd resume handler */
- static void spi_nor_resume(struct mtd_info *mtd)
+-static int spi_nor_default_setup(struct spi_nor *nor,
+-				 const struct spi_nor_hwcaps *hwcaps)
++int spi_nor_default_setup(struct spi_nor *nor,
++			  const struct spi_nor_hwcaps *hwcaps)
  {
-@@ -3432,6 +3449,7 @@ int spi_nor_scan(struct spi_nor *nor, const char *name,
- 	mtd->size = nor->params->size;
- 	mtd->_erase = spi_nor_erase;
- 	mtd->_read = spi_nor_read;
-+	mtd->_suspend = spi_nor_suspend;
- 	mtd->_resume = spi_nor_resume;
+ 	struct spi_nor_flash_parameter *params = nor->params;
+ 	u32 ignored_mask, shared_mask;
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index 79ce952c0539..d37a9b1d111f 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -452,6 +452,9 @@ int spi_nor_post_bfpt_fixups(struct spi_nor *nor,
+ 			     const struct sfdp_bfpt *bfpt,
+ 			     struct spi_nor_flash_parameter *params);
  
- 	if (nor->params->locking_ops) {
++int spi_nor_default_setup(struct spi_nor *nor,
++			  const struct spi_nor_hwcaps *hwcaps);
++
+ static struct spi_nor __maybe_unused *mtd_to_spi_nor(struct mtd_info *mtd)
+ {
+ 	return mtd->priv;
 -- 
 2.27.0
 
