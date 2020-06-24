@@ -2,69 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B649206994
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jun 2020 03:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D2E2077AD
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jun 2020 17:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388502AbgFXBfn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Jun 2020 21:35:43 -0400
-Received: from mga18.intel.com ([134.134.136.126]:59184 "EHLO mga18.intel.com"
+        id S2390826AbgFXPiu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Jun 2020 11:38:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388448AbgFXBfm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 23 Jun 2020 21:35:42 -0400
-IronPort-SDR: GzR4V8bjb/CtnH0HJvCxakcF5sztEtpYSPxjbG22ddU1WINR9T5fHRLxkzV1KmBgeYO4XEj/sX
- GjSyp+pHeFkQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="131712149"
-X-IronPort-AV: E=Sophos;i="5.75,273,1589266800"; 
-   d="scan'208";a="131712149"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 18:35:41 -0700
-IronPort-SDR: hkR805WW60D4MWqb1W4N7DTGGmvCrTzHKG0lrmxPalIZ2mFlolV784aLk5w76DivwmY2X710dD
- Un+CT7ewq5Jw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,273,1589266800"; 
-   d="scan'208";a="452459759"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by orsmga005.jf.intel.com with ESMTP; 23 Jun 2020 18:35:39 -0700
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, hao.wu@intel.com, matthew.gerlach@linux.intel.com,
-        russell.h.weight@intel.com, yilun.xu@intel.com
-Subject: [PATCH 2/2] spi: altera: fix module autoload
-Date:   Wed, 24 Jun 2020 09:31:26 +0800
-Message-Id: <1592962286-25752-3-git-send-email-yilun.xu@intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S2390702AbgFXPit (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 24 Jun 2020 11:38:49 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0F5202076E;
+        Wed, 24 Jun 2020 15:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593013129;
+        bh=wZJ1/+acFpJabks7yCB6ctOsug0yieFf7S7HuybhsRo=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=vICosB4at+4m6aITuoo0w40lfyEodCZFgND/yRbq36arOa/j0DxEqzyx3vSYuWGHM
+         bsGYxzzFBZ7igZgHpP9rSKTyrTpV8bLkBRzgklcZwO66SQGn4Iw/So0dKroVdb5IO8
+         vGmk9ejgqG7CDYz0WHEWIdCEd9+5puDyszEZtfxE=
+Date:   Wed, 24 Jun 2020 16:38:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        linux-spi@vger.kernel.org
+Cc:     trix@redhat.com, russell.h.weight@intel.com, hao.wu@intel.com,
+        matthew.gerlach@linux.intel.com
 In-Reply-To: <1592962286-25752-1-git-send-email-yilun.xu@intel.com>
 References: <1592962286-25752-1-git-send-email-yilun.xu@intel.com>
+Subject: Re: [PATCH 0/2] Some fixes for spi-altera
+Message-Id: <159301312738.33627.5358287024947647572.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add the MODULE_DEVICE_TABLE macro for the platform_device_id table to
-allow proper creation of modalias strings and fix autoloading module for
-this driver.
+On Wed, 24 Jun 2020 09:31:24 +0800, Xu Yilun wrote:
+> Two fixes for indirect access support patchset.
+> 
+> Xu Yilun (2):
+>   spi: altera: fix driver matching failure of the device ID "spi_altera"
+>   spi: altera: fix module autoload
+> 
+>  drivers/spi/spi-altera.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
----
- drivers/spi/spi-altera.c | 1 +
- 1 file changed, 1 insertion(+)
+Applied to
 
-diff --git a/drivers/spi/spi-altera.c b/drivers/spi/spi-altera.c
-index e272a04..809bfff 100644
---- a/drivers/spi/spi-altera.c
-+++ b/drivers/spi/spi-altera.c
-@@ -356,6 +356,7 @@ static const struct platform_device_id altera_spi_ids[] = {
- 	{ "subdev_spi_altera",	ALTERA_SPI_TYPE_SUBDEV },
- 	{ }
- };
-+MODULE_DEVICE_TABLE(platform, altera_spi_ids);
- 
- static struct platform_driver altera_spi_driver = {
- 	.probe = altera_spi_probe,
--- 
-2.7.4
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/2] spi: altera: fix driver matching failure of the device ID "spi_altera"
+      commit: de5fd9cb6a3f89a1ac8f27883d029f823112243f
+[2/2] spi: altera: fix module autoload
+      commit: 1ac6f21a948b45a49737a5eff6b4dae9f37a8dc0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
