@@ -2,58 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4994020A878
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jun 2020 00:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC58720A8A2
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jun 2020 01:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728675AbgFYW6I (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 25 Jun 2020 18:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S2403984AbgFYXNC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 25 Jun 2020 19:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728347AbgFYW6H (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 25 Jun 2020 18:58:07 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE4FC08C5DB
-        for <linux-spi@vger.kernel.org>; Thu, 25 Jun 2020 15:58:07 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id h19so8291184ljg.13
-        for <linux-spi@vger.kernel.org>; Thu, 25 Jun 2020 15:58:07 -0700 (PDT)
+        with ESMTP id S2407700AbgFYXNB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 25 Jun 2020 19:13:01 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1965EC08C5C1
+        for <linux-spi@vger.kernel.org>; Thu, 25 Jun 2020 16:13:01 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id t9so4133628lfl.5
+        for <linux-spi@vger.kernel.org>; Thu, 25 Jun 2020 16:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=sQgdyk3y6zB0hASByJVzzEmARHNFTqPRb6Kf1xIGKh0=;
-        b=oSfs64PKV38JXFXyuunReN5Z6kVfanjPQbqNiy926u6l8uP8SvoJ6QA1DQLHxjix2Y
-         S3IXOYafJgGmvwLB1jbGL7oXyQZMpgGye1p03NHK02AMCX+MltYL/6746tIQNi+rMala
-         7zsZ5l9kSGKASL4LWwBu3CZbWjZt4WCTmSznFIGBSCbBDhPb8EUIDxG8s8B6a+TWNrf6
-         04EYLlyZWINjRId7DtwXo9XBcVJcVHTJ6oAWSoAowFPoIyX71kIRGtazxNgPp2FFQBZJ
-         SXI3lU0TPTwLtGWDvoZgLdHB5QLV5iZv8XG/8WlWpkRpZ50JSNkzMEzQZs5Z30zekbpC
-         pvww==
+        bh=8l/4qnt5t8nkFw+DlUPZ4RXWogUlkAdw7ImexBI0ikI=;
+        b=IBKFFdB1A9rgQj5qLECj4YGrtznXMmNs1xQ2l57LiWgCW4He0mUH6+oAF4jP0OgRKV
+         cLd0AVGMJd/i3FpiNY5jSKTS3E2qteXfPN5/cPGWC+TDVr1oghCZYYs2H++3H9EIB3Kq
+         Hjb1vSJJdXZAq7J5AW/lzSj1ZGKodpdGM0TTWxRuQLk2NoSu9oxd6JQxbpXipfxOX0a0
+         FmX8am3sTO0/hRFzJ3pT0ipywWTEwihaC+HONP55IwfQU3bkwXoR48hbcpojn4XWbCSI
+         rR3w/KWgs7OZC0maM13ReKfc4bZQNe/R7B+QNs7ioUzNritb3PqCi3NexYQQkHH57qJE
+         0vkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=sQgdyk3y6zB0hASByJVzzEmARHNFTqPRb6Kf1xIGKh0=;
-        b=KybAmefhPpqerI5Kd7hBeGGpQgRBf1y1Lvfpihi2Dq5LOblUaTjtZe89eiI6TlHPg9
-         o4C6ie8q75eA84iHAVmRprNWaXZeISCiOSwQRK1AzroblQsPqYMPo38TvkvhsvshdQCY
-         +cRz5BH1nwb7xSkmi6jddn8qTYHFdAvXh4PprJA3y8QqKvn2kyF/gC5EiSd3+v4um8Rz
-         u2v3tbSpSzL4inWqzSTcu9m0AtTkdp9BMs2ySVUycNowveVA/tslXn32RsyjGwLvset6
-         MhWkyv2oLTQZyBbF4T1ddLsnriY0+/zpFG1pnFTcuzvJ6HMh8uyP6Gs7ySNmhFiuOtjb
-         6d0g==
-X-Gm-Message-State: AOAM5311YzzmIlXYhHGuNxuKfOCyWdAQN4jtUZxpHJl55SU0y0m7OcFb
-        nnfhCzIUlHSbsGOD1DUzF2GNigxxvNY=
-X-Google-Smtp-Source: ABdhPJxQEE90iIe3k36mti5OJlS3Nce21aY87tifTY53+oTxvmRYPwzxpFTry/L6gGVL5y7u1X6lFA==
-X-Received: by 2002:a2e:94d0:: with SMTP id r16mr16807227ljh.351.1593125885668;
-        Thu, 25 Jun 2020 15:58:05 -0700 (PDT)
+        bh=8l/4qnt5t8nkFw+DlUPZ4RXWogUlkAdw7ImexBI0ikI=;
+        b=QJSrinumSt86RGMGHfL1rSrSs9sELAZwGA9VIgLABlmS5yf75Hke3tIQISKH3QPbUW
+         Jfbn293g71qzoDgL4r5bjt9iR+/dQQMfv9kUHkAiBYmbWDKqTfhi7SqnPa3Jis3cRmRo
+         rZtZwsM/9/51hD3GvY4g4X3cH/hjdr4pVPbWPEiXRZjRaeR4nJIb3Yzfvl8Vgi+EenOM
+         GO4fRNEGNSXcPejfUiqwOlhGMWkwKq+LNaiBN/loCBicaolwgqUabK7UrKPc/+onWeAJ
+         KI6pJ/p3k6vodNhPDr2ZpKBtEiEI5dzTo+QHZ1ryC3rnF4Nx6sTb3OE3Ho6gTXyVQUOX
+         Ldvg==
+X-Gm-Message-State: AOAM533AWRM5XdJFPzudLuFsXuy5zdZVc1aDtcMuC7UR1iicyHtUtQaA
+        wuyACl5OnefxYB7amjcozSaMww==
+X-Google-Smtp-Source: ABdhPJyykQEs4yJ6jWyHPkP7TG+MV83/orei/U2wDZYisD57NjpghSYESBu06Z40mYZ2fxF9GXAL4A==
+X-Received: by 2002:a19:14e:: with SMTP id 75mr208475lfb.7.1593126779559;
+        Thu, 25 Jun 2020 16:12:59 -0700 (PDT)
 Received: from genomnajs.lan (c-d63ee155.152980-0-69706f6e6c79.bbcust.telenor.se. [85.225.62.214])
-        by smtp.gmail.com with ESMTPSA id d9sm126976ljc.117.2020.06.25.15.58.04
+        by smtp.gmail.com with ESMTPSA id m15sm1973156ljp.45.2020.06.25.16.12.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2020 15:58:05 -0700 (PDT)
+        Thu, 25 Jun 2020 16:12:59 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH] spi: npcm-pspi: Convert to use GPIO descriptors
-Date:   Fri, 26 Jun 2020 00:57:59 +0200
-Message-Id: <20200625225759.273911-1-linus.walleij@linaro.org>
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        David Lechner <david@lechnology.com>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [PATCH] spi: omap2-mcspi: Convert to use GPIO descriptors
+Date:   Fri, 26 Jun 2020 01:12:57 +0200
+Message-Id: <20200625231257.280615-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,78 +64,94 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Nuvoton PSPI driver already uses the core to handle GPIO
-chip selects but is using the old GPIO number method and
-retrieveing the GPIOs in the probe() call.
+The OMAP2 MCSPI has some kind of half-baked GPIO CS support:
+it includes code like this:
 
-Switch it over to using GPIO descriptors saving a bunch of
-code and modernizing it.
+  if (gpio_is_valid(spi->cs_gpio)) {
+        ret = gpio_request(spi->cs_gpio, dev_name(&spi->dev));
+	(...)
 
-Compile tested med ARMv7 multiplatform config augmented
-with the Nuvoton arch and this driver.
+But it doesn't parse the "cs-gpios" attribute in the device
+tree to count the number of GPIOs or pick out the GPIO numbers
+and put these in the SPI master's .cs_gpios property.
 
-Cc: Tomer Maimon <tmaimon77@gmail.com>
+We complete the implementation of supporting CS GPIOs
+from the device tree and switch it over to use the SPI core
+for this.
+
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: David Lechner <david@lechnology.com>
+Cc: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/spi/spi-npcm-pspi.c | 28 +---------------------------
- 1 file changed, 1 insertion(+), 27 deletions(-)
+ drivers/spi/spi-omap2-mcspi.c | 19 +++----------------
+ 1 file changed, 3 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/spi/spi-npcm-pspi.c b/drivers/spi/spi-npcm-pspi.c
-index 87cd0233c60b..56d10c4511db 100644
---- a/drivers/spi/spi-npcm-pspi.c
-+++ b/drivers/spi/spi-npcm-pspi.c
-@@ -10,8 +10,6 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index e9e256718ef4..1c9478e6e5d9 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -27,7 +27,6 @@
+ #include <linux/iopoll.h>
+ 
  #include <linux/spi/spi.h>
 -#include <linux/gpio.h>
--#include <linux/of_gpio.h>
- #include <linux/reset.h>
  
- #include <asm/unaligned.h>
-@@ -344,16 +342,9 @@ static int npcm_pspi_probe(struct platform_device *pdev)
- 	struct npcm_pspi *priv;
- 	struct spi_master *master;
- 	unsigned long clk_hz;
--	struct device_node *np = pdev->dev.of_node;
--	int num_cs, i;
--	int csgpio;
- 	int irq;
- 	int ret;
+ #include <linux/platform_data/spi-omap2-mcspi.h>
  
--	num_cs = of_gpio_named_count(np, "cs-gpios");
--	if (num_cs < 0)
--		return num_cs;
+@@ -1043,16 +1042,6 @@ static int omap2_mcspi_setup(struct spi_device *spi)
+ 		spi->controller_state = cs;
+ 		/* Link this to context save list */
+ 		list_add_tail(&cs->node, &ctx->cs);
 -
- 	master = spi_alloc_master(&pdev->dev, sizeof(*priv));
- 	if (!master)
- 		return -ENOMEM;
-@@ -418,24 +409,7 @@ static int npcm_pspi_probe(struct platform_device *pdev)
- 		npcm_pspi_prepare_transfer_hardware;
- 	master->unprepare_transfer_hardware =
- 		npcm_pspi_unprepare_transfer_hardware;
--	master->num_chipselect = num_cs;
+-		if (gpio_is_valid(spi->cs_gpio)) {
+-			ret = gpio_request(spi->cs_gpio, dev_name(&spi->dev));
+-			if (ret) {
+-				dev_err(&spi->dev, "failed to request gpio\n");
+-				return ret;
+-			}
+-			gpio_direction_output(spi->cs_gpio,
+-					 !(spi->mode & SPI_CS_HIGH));
+-		}
+ 	}
+ 
+ 	ret = pm_runtime_get_sync(mcspi->dev);
+@@ -1080,9 +1069,6 @@ static void omap2_mcspi_cleanup(struct spi_device *spi)
+ 
+ 		kfree(cs);
+ 	}
 -
--	for (i = 0; i < num_cs; i++) {
--		csgpio = of_get_named_gpio(np, "cs-gpios", i);
--		if (csgpio < 0) {
--			dev_err(&pdev->dev, "failed to get csgpio#%u\n", i);
--			goto out_disable_clk;
--		}
--		dev_dbg(&pdev->dev, "csgpio#%u = %d\n", i, csgpio);
--		ret = devm_gpio_request_one(&pdev->dev, csgpio,
--					    GPIOF_OUT_INIT_HIGH, DRIVER_NAME);
--		if (ret < 0) {
--			dev_err(&pdev->dev,
--				"failed to configure csgpio#%u %d\n"
--				, i, csgpio);
--			goto out_disable_clk;
--		}
--	}
+-	if (gpio_is_valid(spi->cs_gpio))
+-		gpio_free(spi->cs_gpio);
+ }
+ 
+ static irqreturn_t omap2_mcspi_irq_handler(int irq, void *data)
+@@ -1152,7 +1138,7 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
+ 
+ 	omap2_mcspi_set_enable(spi, 0);
+ 
+-	if (gpio_is_valid(spi->cs_gpio))
++	if (spi->cs_gpiod)
+ 		omap2_mcspi_set_cs(spi, spi->mode & SPI_CS_HIGH);
+ 
+ 	if (par_override ||
+@@ -1241,7 +1227,7 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
+ 
+ 	omap2_mcspi_set_enable(spi, 0);
+ 
+-	if (gpio_is_valid(spi->cs_gpio))
++	if (spi->cs_gpiod)
+ 		omap2_mcspi_set_cs(spi, !(spi->mode & SPI_CS_HIGH));
+ 
+ 	if (mcspi->fifo_depth > 0 && t)
+@@ -1431,6 +1417,7 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
+ 	master->dev.of_node = node;
+ 	master->max_speed_hz = OMAP2_MCSPI_MAX_FREQ;
+ 	master->min_speed_hz = OMAP2_MCSPI_MAX_FREQ >> 15;
 +	master->use_gpio_descriptors = true;
  
- 	/* set to default clock rate */
- 	npcm_pspi_set_baudrate(priv, NPCM_PSPI_DEFAULT_CLK);
+ 	platform_set_drvdata(pdev, master);
+ 
 -- 
 2.25.4
 
