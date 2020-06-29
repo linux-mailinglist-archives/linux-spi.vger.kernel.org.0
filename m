@@ -2,139 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C686620E97D
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Jun 2020 01:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85D120E98F
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Jun 2020 01:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728072AbgF2XnU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Jun 2020 19:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        id S1726877AbgF2Xpp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Jun 2020 19:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727081AbgF2XnU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Jun 2020 19:43:20 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C28C03E97A
-        for <linux-spi@vger.kernel.org>; Mon, 29 Jun 2020 16:43:20 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id e18so9042242pgn.7
-        for <linux-spi@vger.kernel.org>; Mon, 29 Jun 2020 16:43:20 -0700 (PDT)
+        with ESMTP id S1726802AbgF2Xpo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Jun 2020 19:45:44 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6762AC03E97A
+        for <linux-spi@vger.kernel.org>; Mon, 29 Jun 2020 16:45:44 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id m25so10196020vsp.8
+        for <linux-spi@vger.kernel.org>; Mon, 29 Jun 2020 16:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QciK5tXPc0ig4ewp8mAOTjfJLOJkGR17cLI3UFIq7P4=;
-        b=JP+KeEw5Ge2u0AgRunHG6CylzE+cjwR7RMtG2QLQWVY0SIR3gmC+cjStYNxrDVrF0T
-         cWYhp3nhvP0oIs8lc57KPy6JBKX03zycDRKQa4/w1+HqdRKKW1wBReQJuZaLVWtpYpWY
-         zztg+w4Z21un2gOixaBjAOXx1LE6O+uO7LIIc=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fYI3mC1TPWWNCe5dapKUu8m35ZbqtEKTTLgsE9b3Fkw=;
+        b=TUksazA+FGM3tucKqjgqZrt9NinjymNomhfIBEhZ4zMzZqHhHj+tz5ZLgmJ2Zd0pbP
+         jOtLn2445dpX0VSLOa02xXSbZVWvTtP8p6O5h+oU67hNQPp3Kn8EbdweXGQly9MscT6r
+         sNzdpzM4hLW9cT6jYanMVyeZC5rRI6yB6SolM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QciK5tXPc0ig4ewp8mAOTjfJLOJkGR17cLI3UFIq7P4=;
-        b=YNLYsfF0JxUhVdoJ14PjxmnILg8di0nbxC962yJLoBlcHpfJ3npx9SzWdviTZ9m+ru
-         zKAGxJr+QPwBk1Tc46ZJqVi8l92xSUrDku6R8XY8pSU9SU6KPOKEcaVuvTyxP+2KBP/B
-         efWcd/T0YqEzTZ3RpYll2EvONXVRT7iUMcDLrfspMwiC7H7atFTWBGUuViKJtL0FtAyP
-         3NQj9Nk3Q5HzthJwYjIi7BVJoEE9AN7r8xy9hw3e9IyrgvI/CkctLrBzjA0hQB6muPWc
-         6NtzkOQGPzM+V6Wz63BU5ZmXAPRrBl7S7xoa6pl+krJb5UvYBQWMlpW9Ut+K6wZquFy5
-         EqBw==
-X-Gm-Message-State: AOAM53322+Kke92PxIt/2ZFPQWEjsUqBxK8Mt1sZWn/ao6MLDJdQDf52
-        Tpl97kCePtuwPURxym54WkM5cw==
-X-Google-Smtp-Source: ABdhPJyI8g97mTqP8wUF/YUNfuHe3OhvjyzPpoxFXcVqURHplY/uOe+v6Yiqilg3jnWEFhYr70yfWQ==
-X-Received: by 2002:aa7:988f:: with SMTP id r15mr7635504pfl.2.1593474199348;
-        Mon, 29 Jun 2020 16:43:19 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id s30sm753535pgn.34.2020.06.29.16.43.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 16:43:18 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Benson Leung <bleung@chromium.org>,
-        linux-arm-msm@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        swboyd@chromium.org, Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH] spi: Avoid setting the chip select if we don't need to
-Date:   Mon, 29 Jun 2020 16:41:06 -0700
-Message-Id: <20200629164103.1.Ied8e8ad8bbb2df7f947e3bc5ea1c315e041785a2@changeid>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fYI3mC1TPWWNCe5dapKUu8m35ZbqtEKTTLgsE9b3Fkw=;
+        b=nTI1WfuyJ9/Yi7pFMO6faL70dJDJQnknTduGYXuE9TQQ0+PygwbtPqABMd5KPB+fyA
+         p7cC0jsbwtZbex/eFWlXx2x8efDfWkSH9FkmQN/v1pOT5pZVFso1SeK9wD5VOemc4ttx
+         JFcCWFM+fR6xieGnUHGjgk5xHvrr4/fjLP9S9A7URes/zSw2lFrP1iHRAXaEk5Pl911I
+         2zUeA7MdoounAOj6OX2+zv3XRFn5xI54+vh33/vOcARlPGrqFV24OcoX9/SU29HksznY
+         5V0e0b6UPEObCB4il/o0JTCmydXJATDxxGxgO6ENNYHVrlxo5iuShgAsOlYqGGjkX3Jw
+         wb5w==
+X-Gm-Message-State: AOAM532etEb34dHnxIe6ZABFGv56JDX7vIQv/3djs3M0PDqDx40wys47
+        TZsNcyr7Yb2caO/xNUrwW/ESqtUeqdc=
+X-Google-Smtp-Source: ABdhPJxbygtYzGNP6IsQBisNMXVzgrFin7gS1eNZ28vA0+Ojx85Scieq7yzJ672O0Y7xzGvmYNl+0w==
+X-Received: by 2002:a67:2f41:: with SMTP id v62mr12160048vsv.125.1593474343203;
+        Mon, 29 Jun 2020 16:45:43 -0700 (PDT)
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
+        by smtp.gmail.com with ESMTPSA id v129sm199436vkb.17.2020.06.29.16.45.42
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2020 16:45:42 -0700 (PDT)
+Received: by mail-vs1-f54.google.com with SMTP id x13so5462014vsx.13
+        for <linux-spi@vger.kernel.org>; Mon, 29 Jun 2020 16:45:42 -0700 (PDT)
+X-Received: by 2002:a67:ec58:: with SMTP id z24mr8146370vso.109.1593474341915;
+ Mon, 29 Jun 2020 16:45:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200626151946.1.I06134fd669bf91fd387dc6ecfe21d44c202bd412@changeid>
+ <20200629115316.GB5499@sirena.org.uk>
+In-Reply-To: <20200629115316.GB5499@sirena.org.uk>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 29 Jun 2020 16:45:30 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=ULboyqRb1-1o1dq9Z7FGQ2gwb3oJi2bWLwZsXu6cybpw@mail.gmail.com>
+Message-ID: <CAD=FV=ULboyqRb1-1o1dq9Z7FGQ2gwb3oJi2bWLwZsXu6cybpw@mail.gmail.com>
+Subject: Re: [PATCH] spi: spi-geni-qcom: Don't set the cs if it was already right
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dilip Kota <dkota@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On some SPI controllers (like spi-geni-qcom) setting the chip select
-is a heavy operation.  For instance on spi-geni-qcom, with the current
-code, is was measured as taking upwards of 20 us.  Even on SPI
-controllers that aren't as heavy, setting the chip select is at least
-something like a MMIO operation over some peripheral bus which isn't
-as fast as a RAM access.
+Hi,
 
-While it would be good to find ways to mitigate problems like this in
-the drivers for those SPI controllers, it can also be noted that the
-SPI framework could also help out.  Specifically, in some situations,
-we can see the SPI framework calling the driver's set_cs() with the
-same parameter several times in a row.  This is specifically observed
-when looking at the way the Chrome OS EC SPI driver (cros_ec_spi)
-works but other drivers likely trip it to some extent.
+On Mon, Jun 29, 2020 at 4:53 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Fri, Jun 26, 2020 at 03:19:50PM -0700, Douglas Anderson wrote:
+> > Setting the chip select on the Qualcomm geni SPI controller isn't
+> > exactly cheap.  Let's cache the current setting and avoid setting the
+> > chip select if it's already right.
+>
+> Seems like it'd be worth pushing this up to the core - if we're
+> constantly setting the same CS value then perhaps we ought to just stop
+> doing that?
 
-Let's solve this by caching the chip select state in the core and only
-calling into the controller if there was a change.  We check not only
-the "enable" state but also the chip select mode (active high or
-active low) since controllers may care about both the mode and the
-enable flag in their callback.
+Posted:
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+spi: Avoid setting the chip select if we don't need to
+https://lore.kernel.org/r/20200629164103.1.Ied8e8ad8bbb2df7f947e3bc5ea1c315e041785a2@changeid
 
- drivers/spi/spi.c       | 11 +++++++++++
- include/linux/spi/spi.h |  4 ++++
- 2 files changed, 15 insertions(+)
+I see that you applied my patch to "spi-geni-qcom".  If the patch to
+the core looks OK to you and lands, I think the one for the driver can
+be reverted (though it doesn't hurt).
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 6fa56590bba2..d4ba723a30da 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -778,6 +778,17 @@ static void spi_set_cs(struct spi_device *spi, bool enable)
- {
- 	bool enable1 = enable;
- 
-+	/*
-+	 * Avoid calling into the driver (or doing delays) if the chip select
-+	 * isn't actually changing from the last time this was called.
-+	 */
-+	if ((spi->controller->last_cs_enable == enable) &&
-+	    (spi->controller->last_cs_mode_high == (spi->mode & SPI_CS_HIGH)))
-+		return;
-+
-+	spi->controller->last_cs_enable = enable;
-+	spi->controller->last_cs_mode_high = spi->mode & SPI_CS_HIGH;
-+
- 	if (!spi->controller->set_cs_timing) {
- 		if (enable1)
- 			spi_delay_exec(&spi->controller->cs_setup, NULL);
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index b4917df79637..0e67a9a3a1d3 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -368,6 +368,8 @@ static inline void spi_unregister_driver(struct spi_driver *sdrv)
-  * @cur_msg_prepared: spi_prepare_message was called for the currently
-  *                    in-flight message
-  * @cur_msg_mapped: message has been mapped for DMA
-+ * @last_cs_enable: was enable true on the last call to set_cs.
-+ * @last_cs_mode_high: was (mode & SPI_CS_HIGH) true on the last call to set_cs.
-  * @xfer_completion: used by core transfer_one_message()
-  * @busy: message pump is busy
-  * @running: message pump is running
-@@ -604,6 +606,8 @@ struct spi_controller {
- 	bool				auto_runtime_pm;
- 	bool                            cur_msg_prepared;
- 	bool				cur_msg_mapped;
-+	bool				last_cs_enable;
-+	bool				last_cs_mode_high;
- 	bool                            fallback;
- 	struct completion               xfer_completion;
- 	size_t				max_dma_len;
--- 
-2.27.0.212.ge8ba1cc988-goog
-
+-Doug
