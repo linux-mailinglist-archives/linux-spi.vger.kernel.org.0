@@ -2,51 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D3820D867
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jun 2020 22:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA19C20D86B
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jun 2020 22:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730745AbgF2Tit (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Jun 2020 15:38:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46528 "EHLO mail.kernel.org"
+        id S1732064AbgF2Tix (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Jun 2020 15:38:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46616 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726923AbgF2Tir (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:38:47 -0400
+        id S1729393AbgF2Tiw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:38:52 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C6A4020809;
-        Mon, 29 Jun 2020 19:38:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E1FD220672;
+        Mon, 29 Jun 2020 19:38:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593459527;
-        bh=FXu6VEQFvtj85e0o8jHQt37JSlx7+YvMjmWkyrl0mFk=;
+        s=default; t=1593459532;
+        bh=VPcS8epBLlrFbdjA3dDA2nHXRIqkQPcanzzcopIsL6E=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=TY+A8ovGITEVcPug2AEt6kltCXPhyD/nEzn8sFhEihZmvz+3ogw3nSuIvYmoeQnjT
-         FwXJQOTVA6D/crVNSbaqMsqOAHaGXkKH2AgMS4gMRS52xJhaF+jEkOgLGE6m6zw/Xq
-         Ib7uNCCXTaFWtZgCRacVByNB+aGJVJLauuk8fCwM=
-Date:   Mon, 29 Jun 2020 20:38:45 +0100
+        b=gzT3tScuqQRogrsiLDYuckgwHfc92IZHNmS6pSZ2y0VeDfWXSDDilHXTNE6+2qvqt
+         O05MVsgga2A3nLSlF/l02o+76FB2HLok7OwYZ47AEn7oaekBaeX615cQ/E6E0mO2+1
+         lroeA8Ug/bD0BYOJEttAXecAxXRzSDtd4vtC1O8E=
+Date:   Mon, 29 Jun 2020 20:38:50 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>, linux-spi@vger.kernel.org
-Cc:     David Lechner <david@lechnology.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20200625231257.280615-1-linus.walleij@linaro.org>
-References: <20200625231257.280615-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH] spi: omap2-mcspi: Convert to use GPIO descriptors
-Message-Id: <159345952500.3556.5402410471594940721.b4-ty@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Dilip Kota <dkota@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, swboyd@chromium.org
+In-Reply-To: <20200626151946.1.I06134fd669bf91fd387dc6ecfe21d44c202bd412@changeid>
+References: <20200626151946.1.I06134fd669bf91fd387dc6ecfe21d44c202bd412@changeid>
+Subject: Re: [PATCH] spi: spi-geni-qcom: Don't set the cs if it was already right
+Message-Id: <159345952500.3556.3923328803896561754.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 26 Jun 2020 01:12:57 +0200, Linus Walleij wrote:
-> The OMAP2 MCSPI has some kind of half-baked GPIO CS support:
-> it includes code like this:
+On Fri, 26 Jun 2020 15:19:50 -0700, Douglas Anderson wrote:
+> Setting the chip select on the Qualcomm geni SPI controller isn't
+> exactly cheap.  Let's cache the current setting and avoid setting the
+> chip select if it's already right.
 > 
->   if (gpio_is_valid(spi->cs_gpio)) {
->         ret = gpio_request(spi->cs_gpio, dev_name(&spi->dev));
-> 	(...)
-> 
-> [...]
+> Using "flashrom" to read or write the EC firmware on a Chromebook
+> shows roughly a 25% reduction in interrupts and a 15% speedup.
 
 Applied to
 
@@ -54,8 +53,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: omap2-mcspi: Convert to use GPIO descriptors
-      commit: f27b1dc6412547fac256957e22d6889fb56a5470
+[1/1] spi: spi-geni-qcom: Don't set the cs if it was already right
+      commit: 638d8488ae00d2e5dd5033804e82b458d3cf85b1
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
