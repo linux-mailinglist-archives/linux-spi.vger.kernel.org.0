@@ -2,109 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D74F20BC60
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Jun 2020 00:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7CD20D162
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jun 2020 20:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbgFZWUW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Jun 2020 18:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725803AbgFZWUW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Jun 2020 18:20:22 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D985C03E97B
-        for <linux-spi@vger.kernel.org>; Fri, 26 Jun 2020 15:20:22 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id w2so4748102pgg.10
-        for <linux-spi@vger.kernel.org>; Fri, 26 Jun 2020 15:20:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yVcpaUniYerIlCyx1vTQeFNCOepnPAPlvIx24HtK4yw=;
-        b=Y3vJvMHtv5KZ2rxBZK3vacMhwJm2BUw4M6OpjYw7DFuo+buW2y6YZOxS9VLsWsK3Br
-         spHitLO/QOTPyHk30J3sevum2LgoiFO60eyouWi/LhOQ7fVk+Fmdte6Us2I3UjXnXnic
-         I2tKu6dMKjjZYxO2a9POgMdGv+hK+y3glrgMo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yVcpaUniYerIlCyx1vTQeFNCOepnPAPlvIx24HtK4yw=;
-        b=uh3bUg/UCf+ACnvt2JPq4uJgopcNVGNtmkH4JL75smWVNA6es+i+ttUPRAUmw4GQpy
-         xz0B1/PAkf5FyFT7iMvj2S01yIG745lXip5mPGgtNMYM52SytNjP+eh/v8xd24y0W8Da
-         MEJYDaSlcdSjR3jg4vOcwOVXbxQHZo61F5i0Dj0fcUIaL7EGPQ/aNF0h08c+UAHTNHb6
-         DJYxofsar6yXAjXFw9o/sT4iA7eSrGFS+xyRhk37jUtumUn2xdTBwGFrhQ0xq/jpqHLy
-         9VN9SQtnuieZIz+3vcn2fEmIAeLWGwFC6HH2NyTIN9E1KRCdbqIHhyUEWap5kReZUl4M
-         q7oA==
-X-Gm-Message-State: AOAM530rdIixXDEhq1Mo4W2HIQwXNgZXc3MBMEiDPzpfIc+4+gRV68L7
-        K1ZYucwOIP+lSQazOphDRkx9gg==
-X-Google-Smtp-Source: ABdhPJwJjzabhmueOPoNL5/wqZZOUQ+pyL+hA+NLvUlCg08OPdl1PBt92nCnlkxyWWtqpBO1KOiGhA==
-X-Received: by 2002:a63:778c:: with SMTP id s134mr767729pgc.273.1593210021506;
-        Fri, 26 Jun 2020 15:20:21 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id h9sm9001635pfk.155.2020.06.26.15.20.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 15:20:21 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, swboyd@chromium.org,
-        Dilip Kota <dkota@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH] spi: spi-geni-qcom: Don't set the cs if it was already right
-Date:   Fri, 26 Jun 2020 15:19:50 -0700
-Message-Id: <20200626151946.1.I06134fd669bf91fd387dc6ecfe21d44c202bd412@changeid>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+        id S1725936AbgF2Slj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Jun 2020 14:41:39 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:53952 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728977AbgF2Slh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Jun 2020 14:41:37 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1593456096; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=6GnZAkEI1r1nA5A52DYDoAMItSEI8yJzTvouDxd8dkQ=; b=TKDulegJuc2l/BD5+FA7z6U/9DR8Xo5xCZpHdpz4JYCAoxj1bJJlKfsHjxIPvBZ7xemUNovO
+ u3z45/bDrDxUL0579fIAwA+CgogquSvjxn/pMZKH2khREjpRrvy4/YifpFqk6y0WjPQK6Dx4
+ g7OiqxTzYfF6NhV5kiadvaRM6kk=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n12.prod.us-west-2.postgun.com with SMTP id
+ 5ef9c91a117610c7fffdca68 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Jun 2020 10:57:30
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id AD12AC433CB; Mon, 29 Jun 2020 10:57:30 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.50.61.98] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1E426C433C6;
+        Mon, 29 Jun 2020 10:57:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1E426C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH v6 6/6] spi: spi-qcom-qspi: Use OPP API to set clk/perf
+ state
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org, robdclark@gmail.com,
+        robdclark@chromium.org, stanimir.varbanov@linaro.org,
+        viresh.kumar@linaro.org, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alok Chauhan <alokc@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-spi@vger.kernel.org
+References: <1592222564-13556-1-git-send-email-rnayak@codeaurora.org>
+ <1592222564-13556-7-git-send-email-rnayak@codeaurora.org>
+ <20200624170933.GB39073@google.com> <20200624171537.GL5472@sirena.org.uk>
+ <20200624173948.GC39073@google.com> <20200624174417.GM5472@sirena.org.uk>
+ <20200624175536.GD39073@google.com> <20200624180005.GO5472@sirena.org.uk>
+ <20200624181245.GE39073@google.com>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <9f622661-480a-c207-3c15-65b4a4f1b65c@codeaurora.org>
+Date:   Mon, 29 Jun 2020 16:27:21 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200624181245.GE39073@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Setting the chip select on the Qualcomm geni SPI controller isn't
-exactly cheap.  Let's cache the current setting and avoid setting the
-chip select if it's already right.
 
-Using "flashrom" to read or write the EC firmware on a Chromebook
-shows roughly a 25% reduction in interrupts and a 15% speedup.
+On 6/24/2020 11:42 PM, Matthias Kaehlcke wrote:
+> On Wed, Jun 24, 2020 at 07:00:05PM +0100, Mark Brown wrote:
+>> On Wed, Jun 24, 2020 at 10:55:36AM -0700, Matthias Kaehlcke wrote:
+>>> On Wed, Jun 24, 2020 at 06:44:17PM +0100, Mark Brown wrote:
+>>
+>>>> Wait, so *some* of the series should go together but not other bits?
+>>>> But you want them split up for some reason?
+>>
+>>> Yes, this will almost certainly be the case, even if not for this patch.
+>>> I brought this up earlier (https://patchwork.kernel.org/cover/11604623/#23428709).
+>>
+>> I'm not really reading any of this stuff for the series as a whole, as
+>> far as I could tell I'd reviewed all my bits and was hoping whatever
+>> random platform stuff needs sorting out was going to be sorted out so I
+>> stopped getting copied on revisions :(
+> 
+> Sorry this caused you extra work, I only fully realized this when the series
+> was basically ready to land :(
+> 
+> Avoiding unnecessary revision spam is another good reason to not combine
+> technically unrelated patches in a single series.
+> 
+> If I notice similar series in the future I'll try to bring it up early.
+> 
+>>> For the QSPI patch you could argue to just take it through QCOM since the SPI
+>>> patch of this series goes through this tree, up to you, I just want to make
+>>> sure everybody is on the same page.
+>>
+>> If there are some part of this that don't have a connection with the
+>> rest of the series and should be applied separately please split them
+>> out and send them separately so it's clear what's going on.
+> 
+> Rajendra, IIUC you have to re-spin this series anyway, please split it
+> up in self-contained chunks.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+Thanks, I'll respin these as separate patches, the only reason to club them
+was because they all added 'similar' support in all these different drivers.
+Sorry for the delay, I had been out a bit and I just got back.
 
- drivers/spi/spi-geni-qcom.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 5b1dca1fff79..e99a9d57449f 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -79,6 +79,7 @@ struct spi_geni_master {
- 	unsigned int oversampling;
- 	spinlock_t lock;
- 	int irq;
-+	bool cs_flag;
- };
- 
- static int get_spi_clk_cfg(unsigned int speed_hz,
-@@ -146,10 +147,15 @@ static void spi_geni_set_cs(struct spi_device *slv, bool set_flag)
- 	struct geni_se *se = &mas->se;
- 	unsigned long time_left;
- 
--	pm_runtime_get_sync(mas->dev);
- 	if (!(slv->mode & SPI_CS_HIGH))
- 		set_flag = !set_flag;
- 
-+	if (set_flag == mas->cs_flag)
-+		return;
-+
-+	mas->cs_flag = set_flag;
-+
-+	pm_runtime_get_sync(mas->dev);
- 	spin_lock_irq(&mas->lock);
- 	reinit_completion(&mas->cs_done);
- 	if (set_flag)
 -- 
-2.27.0.212.ge8ba1cc988-goog
-
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
