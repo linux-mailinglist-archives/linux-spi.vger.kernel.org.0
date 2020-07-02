@@ -2,103 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83110212833
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Jul 2020 17:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638122128E4
+	for <lists+linux-spi@lfdr.de>; Thu,  2 Jul 2020 18:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730251AbgGBPmX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Jul 2020 11:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730223AbgGBPmU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 2 Jul 2020 11:42:20 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513D5C08C5E0
-        for <linux-spi@vger.kernel.org>; Thu,  2 Jul 2020 08:42:20 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id h22so12698165pjf.1
-        for <linux-spi@vger.kernel.org>; Thu, 02 Jul 2020 08:42:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kybd0zpVtDTcpe4L/HEboaUKNNgAnXPFcQy8ZwcEJuI=;
-        b=MwGxMiEp5/dtTA3ogef34O3PctcdhAV3Nj892QYS7iq/+bdlneIKDksIISF88MZTJs
-         551vB7jwtgzZZvtq6shJNSIVEPChNMunEoUB8LbEsFmwqHkuUWtxgcXHKQhYMgExY7+k
-         RjFrm4VGnLlBn/66+5Gz+fn0C9B0GHrDhf0l0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kybd0zpVtDTcpe4L/HEboaUKNNgAnXPFcQy8ZwcEJuI=;
-        b=lmDNM6lJlGscIy3Ue0k5Gq1nFmnoMVR8S7N7Wrrj5i6DbRqqOqNd9IJBhTJgB2pOEQ
-         ae8Yv0KBygx9Rym7zZhzc04B7BWGQFzEhx8Ez852eCjpbKwA1fUSBkwLkGGzOdQ6Cmlj
-         EiZO3qZhKT5CQcGoEVOE5d3xtsMIgImxjrvt5JMRcQkeETnmS6qJO6/54WN5rfbRRUmU
-         M16v6MJ2i/YFe7G/W1dMapSB1gNliPvFtSNfUMikpHCyxOjnOiWymjgJOkswa9CGikaH
-         2giW0EfYMlyrKNbcHTvJNXDr5KAwif03q5ESZVJYDc4VeQCRZ9NiKnH7XcNs8Dmbf6rv
-         O16g==
-X-Gm-Message-State: AOAM531aSI2D4rAjZq8cdhaXBsK8cK3sK37D6FZ0XJBt8kg2pdCdEWQc
-        Tw0IGxJ+p1nG9hidrhX+92Kg7A==
-X-Google-Smtp-Source: ABdhPJx/V021h2YOrPd2qoUZY3+ajz3Yf7zbLlvvx3ojyPgvvotTbq49bzs576UQiATe81OrpVMgog==
-X-Received: by 2002:a17:90a:7785:: with SMTP id v5mr35048412pjk.31.1593704539711;
-        Thu, 02 Jul 2020 08:42:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l191sm9749876pfd.149.2020.07.02.08.42.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 08:42:18 -0700 (PDT)
-Date:   Thu, 2 Jul 2020 08:42:17 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mm@kvack.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v2 08/16] spi: davinci: Remove uninitialized_var() usage
-Message-ID: <202007020839.545A571CA4@keescook>
-References: <20200620033007.1444705-1-keescook@chromium.org>
- <20200620033007.1444705-9-keescook@chromium.org>
- <20200701203920.GC3776@sirena.org.uk>
- <202007020819.318824DA@keescook>
- <20200702152335.GJ4483@sirena.org.uk>
+        id S1725915AbgGBQEK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 2 Jul 2020 12:04:10 -0400
+Received: from mail-eopbgr50107.outbound.protection.outlook.com ([40.107.5.107]:3332
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725379AbgGBQEK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 2 Jul 2020 12:04:10 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S/GG+y56YnlTh9zvZDbT1CKaJUhSmbshWkgzqnOe5aibjTQC97tB63VtQmgEts7gGEzrDseIinLH6mrrBF5JrdXX5rXLIl4PqJz2WZ6Tt45i1G7b8cXkAwB7LBXmnfOlJjEt8wCasVTbVFhlr+VKkkEej/gNy1hLqUe2TiBEHqmbhwk/1kTNfxXKVLe0V+p7UqjqTCut4BWeCKLARUi6CrOBhgjMASQdGAjf0fty70prVqnhffSgboh5uSRWoQRqbkfjJFhPOPiB6OTH6s4ywNJ6/5fDVJyRCWFyiA6L7O+Ni6JOkMxoG9q984XpoSsSh5LJaEjlGT2znX8tPjfAWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SSde0tYRDQoxkqvgC1/C1yJuS0yknB/Sw44Vrk9+QEQ=;
+ b=AsFHvMW3iDxjWqwrrf6hJp//bj5NGgFzfX29Mqu75OcqkIiTYxWiCrJlUD2xMPh8sjo+9dKAaXL9WzxTajYDQtZl+DCodgF8uoFsM07jjgDqxR7hyx2EWKqv9hprR0zG6rNISOCAxsbNK+ye9TE5wZinX9dE80QhVRw6oGOYTYleBMcCGUFoJERipfRA0yyjLzVPE0sZXRc0xkcrXDKO3y9pqwKgrqhNCbbfIfQPGT3GX9amU4sf3T3PCwz9P8hy06Reg+y2UGWBwSI4ZMpQglE6thtNKoWadZxX4jwqBJmaXzUkVbbRviVMJ3mFis4fFbic6ZehxIXSf43m/i05IA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SSde0tYRDQoxkqvgC1/C1yJuS0yknB/Sw44Vrk9+QEQ=;
+ b=jAQg9GQO7ho3WWjNKTlaxTlPbrYDCLDJs5oh6wyTQcMfbaTulMMZYOZk65wABkVR65YqXH1rB853yff+y19gJOBDWHzgmWxJPLq7yavHKwKt/irC0jYxI/bTkzyu4lVNKAOOTnnkRgbeUHodS+iqWtiWLAm55XuQ3wMcPCnhtiw=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=kontron.de;
+Received: from DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:50::12)
+ by DB8PR10MB3657.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:13c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.23; Thu, 2 Jul
+ 2020 16:04:06 +0000
+Received: from DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::ac04:ef33:baf3:36f3]) by DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::ac04:ef33:baf3:36f3%4]) with mapi id 15.20.3131.036; Thu, 2 Jul 2020
+ 16:04:06 +0000
+Subject: Re: [PATCH] spi: spidev: Add compatible for external SPI ports on
+ Kontron boards
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+References: <20200702141846.7752-1-frieder.schrempf@kontron.de>
+ <20200702142511.GF4483@sirena.org.uk>
+ <24ec4eed-de01-28df-ee1f-f7bcfc80051a@kontron.de>
+ <CAMuHMdUkHxOqqX95R5BEET-aSF5SYw2zufnxWuqmKnSY0NENcQ@mail.gmail.com>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+Message-ID: <992ccb30-3f82-4649-acc4-442cb2568eea@kontron.de>
+Date:   Thu, 2 Jul 2020 18:04:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+In-Reply-To: <CAMuHMdUkHxOqqX95R5BEET-aSF5SYw2zufnxWuqmKnSY0NENcQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM3PR05CA0143.eurprd05.prod.outlook.com
+ (2603:10a6:207:3::21) To DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:50::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200702152335.GJ4483@sirena.org.uk>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.10.17] (46.142.79.231) by AM3PR05CA0143.eurprd05.prod.outlook.com (2603:10a6:207:3::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.21 via Frontend Transport; Thu, 2 Jul 2020 16:04:06 +0000
+X-Originating-IP: [46.142.79.231]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 90448902-d011-4fdb-e897-08d81ea18c3f
+X-MS-TrafficTypeDiagnostic: DB8PR10MB3657:
+X-Microsoft-Antispam-PRVS: <DB8PR10MB3657A7777451AFE8C6CB4257E96D0@DB8PR10MB3657.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 0452022BE1
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A1wWlO7Vsqr/ZrG3KkGFZr48CA8TGZ1Y2w5joTV6mW0Cs+iNvjBcZ/waFhvzyUw6658190xihFulMTXpNJWBJ5ZATy4KN+xQ8nkyaMGlQM85GHw4Ri/j32HWklBMoeurxGmXgZT7FudZ9aFIm4yFpWLiRorIShQXHpA+PrOZ2CWxg3l06LpEW7VZTctDze46WE99xhlVUyvswNI1pPbfSjpckUW/jNivYc0+mgbxAkt4DGDrLEBam2r3QZYgM2JWSzVJUHtvdjOZWuRfPqwZRFsF7beYIvpL9+zdagCNELePcX68RIPNGkpWwZcMwquVvF/bKjswDcabdjBiYabVAZNWOW/a/43e8pSZRxh4AGuM1xc3UeH9DIEefqRqWZkifflzK/PUjP2PbMci9JALRBPinqcEDcJfyeMjp/fWj6UHriRZfWOzZVwhP/ycU6gNmj5R4N7L3gVpNp2NC0c1Bg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39850400004)(366004)(346002)(396003)(136003)(376002)(4326008)(6916009)(8676002)(31686004)(2616005)(956004)(966005)(54906003)(44832011)(52116002)(16526019)(45080400002)(36756003)(8936002)(16576012)(6486002)(186003)(31696002)(26005)(478600001)(66556008)(5660300002)(53546011)(2906002)(316002)(66476007)(66946007)(86362001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: XDWLW1zMHbHWjWqYQ0Vc25ZRrt1Ezm898GrfwuYs3a8kv3z9q/ZilKKjWkNVVJnt2PP40iPmYFZJLu/SPSFR/yDUQUjt/X9jc0UPJsXq/q3IG1dwsL+U+bV7eFe19OqKmE2BPzIuVSBnQx2osW22ImTqpCICp7/LMvoBLW/6x0yCPMbrW1l1lrG0Ov1TmUNgI67GWLl4+pVLItKz1mxTgK7PiOgxSkdErrnYGuuiybGUF83hJlFBmxJKi37wrGxrakRY4XlEhtPhZiD1wetUlXU1yyTObqStOhVGX5OVMFgGcFGSrQB8PDEF2ql16ZSWax042vVSW9mOfN1heYX3HFmy/8GKm6sh+e5ia98pdDMLpNVbjhzI8KkXOaX7e+i/v85lHJImVqeYTxAbCvImjg1nzH4HjO1UrF9A+5sgdUpdZBQDazuLkjrD+sT45FwKhlPqQ9FcBEttdFemTNIVn9kGnp0et4EoTDLZSmRafEI=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90448902-d011-4fdb-e897-08d81ea18c3f
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2020 16:04:06.5910
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vU0gY/STWY8hq583xD5yO5xGj/nRIWqH9GEcpoWuLoaYVyjsy5b2pmIT7iNmYHo28HCd2QHJR5MXcdbGEbxETcvGkDgPcx3OArp+6WLtyU4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3657
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 04:23:35PM +0100, Mark Brown wrote:
-> On Thu, Jul 02, 2020 at 08:21:40AM -0700, Kees Cook wrote:
-> > On Wed, Jul 01, 2020 at 09:39:20PM +0100, Mark Brown wrote:
+Hi Geert,
+
+On 02.07.20 16:57, Geert Uytterhoeven wrote:
+> Hi Frieder,
 > 
-> > > Please copy maintainers on patches :(
+> On Thu, Jul 2, 2020 at 4:46 PM Frieder Schrempf
+> <frieder.schrempf@kontron.de> wrote:
+>> On 02.07.20 16:25, Mark Brown wrote:
+>>> On Thu, Jul 02, 2020 at 04:18:46PM +0200, Schrempf Frieder wrote:
+>>>> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+>>>>
+>>>> Allow external SPI ports on Kontron boards to use the spidev driver.
+>>>
+>>> I'd have expected this to require loading a DT overlay for whatever's
+>>> attached?
+>>
+>> My intention is to use the spidev driver in the default board DT for an
+>> interface that is routed to an extension connector and has no dedicated
+>> slave device attached onboard. So users can attach sensors, etc. with
+>> userspace drivers without touching the kernel or DT.
+>>
+>> See https://eur04.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.kernel.org%2Fpatch%2F11639075%2F&amp;data=02%7C01%7Cfrieder.schrempf%40kontron.de%7C5ca9f0ba0ccb4ab0329f08d81e983d4e%7C8c9d3c973fd941c8a2b1646f3942daf1%7C0%7C0%7C637292987071583819&amp;sdata=M8y9HYICQLocSgRmak6uYsx9Y%2FoukaqgmK2D0F%2FTV98%3D&amp;reserved=0 for the boards DT.
 > 
-> > Hi! Sorry about that; the CC list was giant, so I had opted for using
-> > subsystem mailing lists where possible.
-> 
-> If you're going to err in a direction there I'd err in the direction of
-> CCing the people not the list - I only saw this since I was looking for
-> something else, I don't normally see stuff in the mailing list folder.
+> You can bind "kontron,user-spi" devices to spidev from userspace:
+> [PATCH v2 0/3] device tree spidev solution - driver_override for SPI
+> https://eur04.safelinks.protection.outlook.com/?url=https%3A%2F%2Fspinics.net%2Flists%2Flinux-spi%2Fmsg13951.html&amp;data=02%7C01%7Cfrieder.schrempf%40kontron.de%7C5ca9f0ba0ccb4ab0329f08d81e983d4e%7C8c9d3c973fd941c8a2b1646f3942daf1%7C0%7C0%7C637292987071583819&amp;sdata=D9pum1oTXWSt%2BY8Egb1J4DOgSa5KH3RwxsSmUl7LgUk%3D&amp;reserved=0
 
-Yeah, I've gotten conflicting feedback on treewide changes:
-- please CC me on only the one patch, I don't want to see everything else
-- please CC me on the whole series, I want the full context for the change
+Thanks for pointing that out. I didn't know that this is possible.
+I just tried like below it and it works like a charm:
 
-I opted toward "CC me on this series", but then I get stuck when the CC
-is giant. I think I may switch back to individual CCs for specific
-patches, and point people to lore if they want greater context. (lore
-didn't exist before...)
+ > echo "spidev" > 
+/sys/devices/platform/soc@0/30800000.bus/30840000.spi/spi_master/spi2/spi2.0/driver_override
+ > echo "spi2.0" > /sys/bus/spi/drivers/spidev/bind
 
-Thanks for the poke to make me reconsider this workflow. :)
-
--- 
-Kees Cook
+Thanks,
+Frieder
