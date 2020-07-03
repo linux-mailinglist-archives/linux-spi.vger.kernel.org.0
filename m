@@ -2,107 +2,335 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 175FE212945
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Jul 2020 18:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEA9213768
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Jul 2020 11:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbgGBQYz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 2 Jul 2020 12:24:55 -0400
-Received: from mail-eopbgr00127.outbound.protection.outlook.com ([40.107.0.127]:50144
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726082AbgGBQYy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 2 Jul 2020 12:24:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D/2DOFO4MU63m2Pa/dZesrp5ERlc6ilm9SmE+BPU55ZOPZguPPDOA4xeRCgV0A6oH1cvy26L7mb2Uek4Xqkba3onCdfSluyfY/FnBDwZPEuVvHljaT83Q1cRnr23bOKI7qcOi2uTvnvZdZVOsKH5EHO+Z4Dlps5YgDy5/ZB6wt6N65Y2q3io7MTDqHAf9K5yRK9Lsi/gCp1uJqKWZHvM3kSR11CUfy+NGnauVyz6OyCp2254lBebuJOkHjnbU5qB1dth52MIPG42OYkj8t1hljEhE3EyPdr6yDbGMs/TE8krHMnCpYynVOJsAUy0ueIuo+fByednHp+RRHRwTQOSaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z9t/qY35iaqlwM+X+tvR9OnlDdtq6AJAsJHDrdfTgEU=;
- b=GoTrwBtM/356qqrHBv5F0GkatUpt1zMBL3gvIkxLKEjd68dM4w9ljAKA/tE5SVYIXrtNHtd4I8HOIcAXYU43q6E8LvmlKXIHrobZ2jEZ/mcFYlndOnHvOduSHC2hlVin8560d5m6YgimbWfsrACyb/AzpAk2X4Yhj//MKCa+rtcPI6DnxorU+q5D0YiGVjclozs8w1cJ/FXTx7PMqq4TCwV+GNzTmNkii6mY72ePvvevNIG5LbvalArrvLwkFujUX6MSc0FzdvSsfq+aD1Z1Zwb3mbSUE/g2pDblKwzjjr0b7LRQTGaakn+bBXkeuw3tlyg58a5M2DgZA68nnAaWog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z9t/qY35iaqlwM+X+tvR9OnlDdtq6AJAsJHDrdfTgEU=;
- b=kVvo4HhqiDDStB2Gl2hf4jUE8eBaPMdHDj8tygskm6b1ww6++mhAVAethKBq24eDCBalnQaKOnyaroK5gvVpmDVfRuXy000IW9Trbq0egP/5/KBrItYb1IorUtsAQgbQtilmMQsL2L9JsYknvwlBPPOwc3mMxw042BB/TO3WQvg=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=kontron.de;
-Received: from DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:50::12)
- by DB6PR1001MB1270.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:a9::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.23; Thu, 2 Jul
- 2020 16:24:51 +0000
-Received: from DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::ac04:ef33:baf3:36f3]) by DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::ac04:ef33:baf3:36f3%4]) with mapi id 15.20.3131.036; Thu, 2 Jul 2020
- 16:24:51 +0000
-Subject: Re: [PATCH] spi: spidev: Add compatible for external SPI ports on
- Kontron boards
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20200702141846.7752-1-frieder.schrempf@kontron.de>
- <20200702142511.GF4483@sirena.org.uk>
- <24ec4eed-de01-28df-ee1f-f7bcfc80051a@kontron.de>
- <20200702150725.GI4483@sirena.org.uk>
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-Message-ID: <479d566a-213f-4e33-8ac7-7637ae88e31c@kontron.de>
-Date:   Thu, 2 Jul 2020 18:24:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-In-Reply-To: <20200702150725.GI4483@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR03CA0015.eurprd03.prod.outlook.com
- (2603:10a6:208:14::28) To DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:10:50::12)
+        id S1725915AbgGCJPI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Jul 2020 05:15:08 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:10957 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbgGCJPI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Jul 2020 05:15:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1593767707; x=1625303707;
+  h=references:from:to:cc:subject:in-reply-to:date:
+   message-id:mime-version;
+  bh=fBtSKRP9N2Fgt7VYWXnH4CSjKQi6GEbOhmh3zxMw3Ag=;
+  b=ZOufPXQkjAQ2BMM+ToBnKVQhK1c94eoKb7QNNKPuLGe6CA0NAk2rm+pd
+   LyQIsGXKAyO+OaHY4/bMwyjpMNTaP4dXQLYASeYuTyNQXzzG+X1bDU4/s
+   L2Li8l5/dnMx6auh/y7YleYNGUxK6xwYzvutLiyKXEED9JTeeyGfo8vYF
+   +2WrcOBrVXPl/EYqXUkXUk4rkgjTmHd5SvVtRJFqP7SofYcO7I1RhQTy2
+   kmjvCisWwtoKooJEtG3KlwXGP63LwDeYVz4u6Thk+xf7IpyAhdrPPemhy
+   F2azYNXIeW5ql8KdmY5EEMJK1RdxN2ohgy8wDdSYewB85UsvihfIc6sUS
+   g==;
+IronPort-SDR: Wded69KT4fpELpHp57F+Q/ZYnZ6icWWDlTQ9+rBq4isydhxOMnrvMe8O5XChU7DdAm7PKuINHs
+ zBtQKzHKa9bA/Kx7BnOcSDP+wIv2OrxKna0LH4Rw0Hj8uTLKtWgd5875lpXIrr4M8d/0gHro1H
+ 5QAUcw01oGjDssIPTB7ouwWVWXwItObZwixZ+tBTVzwNIBeOHGRRHTmKBhqXQHX5vVHOQcea7E
+ hv9ycdwgvUNcrWefoNMf6GvYM1qN12n9gSaNsGMpur2RX6dOBMBPub+j7RMPrCEHl6Jb3JYqLe
+ Jco=
+X-IronPort-AV: E=Sophos;i="5.75,307,1589266800"; 
+   d="scan'208";a="17936686"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jul 2020 02:14:06 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 3 Jul 2020 02:13:43 -0700
+Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
+ via Frontend Transport; Fri, 3 Jul 2020 02:13:41 -0700
+References: <20200702101331.26375-1-lars.povlsen@microchip.com> <20200702101331.26375-5-lars.povlsen@microchip.com> <99d9c814-24e2-b3a3-bf0f-765ee51df558@axentia.se>
+From:   Lars Povlsen <lars.povlsen@microchip.com>
+To:     Peter Rosin <peda@axentia.se>
+CC:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v3 4/8] mux: sparx5: Add Sparx5 SPI mux driver
+In-Reply-To: <99d9c814-24e2-b3a3-bf0f-765ee51df558@axentia.se>
+Date:   Fri, 3 Jul 2020 11:14:00 +0200
+Message-ID: <871rltklk7.fsf@soft-dev15.microsemi.net>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.10.17] (46.142.79.231) by AM0PR03CA0015.eurprd03.prod.outlook.com (2603:10a6:208:14::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.20 via Frontend Transport; Thu, 2 Jul 2020 16:24:50 +0000
-X-Originating-IP: [46.142.79.231]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 89ec78df-b412-4c86-25fa-08d81ea47228
-X-MS-TrafficTypeDiagnostic: DB6PR1001MB1270:
-X-Microsoft-Antispam-PRVS: <DB6PR1001MB1270B30EF4DBEA4BCE7DCE17E96D0@DB6PR1001MB1270.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 0452022BE1
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: igYvEfEnoZp1/roTJLH12wDqeo/ojOUZwB4Qx2HRZV5u35ZGM80tlaSmlGFg5eiWfH/cPV1LgDyAf45bK3YLk0OU2ZQL9FPR3KEgYpsrJ8vhJDfsJA20V1NIs8540QslJ25lIpDrtedXxk8m/j4wAnu3S93VaoKpkv/CFStX3JPz7fUqDklYRRdm+4vFZ5iSX5fsjz2rX3PH5NQG0Cliq8RT4BkMXVQ91a4ccIpS/eWjpj1x0SjtsZiTIK94xo1DD60XJCpcE7PuSsKUCvhDeZljaQESUqVQpzyBYCZHT4YkOxIMQEhlajFZ1tldHM99SD6FBna5MLmBazytdVHbBpOVxB4YBgVLHabb/blc5UwdkYQBwaEwh7OBMYf1xrlg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(376002)(39850400004)(136003)(396003)(186003)(66946007)(316002)(16576012)(2906002)(6916009)(86362001)(478600001)(36756003)(8676002)(31686004)(8936002)(5660300002)(4744005)(16526019)(6486002)(66476007)(66556008)(4326008)(26005)(31696002)(44832011)(52116002)(956004)(2616005)(53546011)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: zetbi8Vflz7DmCpGLAgOrW4QRaaETgCvE6H8LQs/In4jA1nj0F5knsVCIqprXri7pefyOi7VBvuPxussoY+nOtJ6em+m4kFuJTsuvi5TBKIRMI25U2OG/XIiOb8SF8AYY467XlDasqaKJfgL0OPkIW3IL8pwRYBACl3XL3dp9tF4I4QF9zZNxyiUgPHn6DzRrvisYPgVdRhGOAOnTGl1Kbs2cPeP/JocJLd1ZcTVtaOz8VJc3yty6YJibgm8WWEUwlo0nfGE0WAz4iVjeTuc3TxsL/eWeJ2tNeqjUbM6YfZvimgtm1Qj/BSDi9JwRFtz/tpIF5RztunWFuX1uXI13BeBPRJ/KpCm73348XOC0qnpwpSwwCiw+bSGRkK1FR0I5qX5YZh1HK/oZkHR7QDvYgy8SSnURpxi+NsfUlfKUJhd2W5Td2xXc9UCBHifON7CTf7v6Qg44u1eHwry/qsZz/s872hO68/rRSaucPVlShs=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89ec78df-b412-4c86-25fa-08d81ea47228
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR10MB2490.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2020 16:24:51.2987
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gQ+2wJDXYfKsve7RefW2JncLAoiu0esZP0yMLFBFxvH9L6XWGccHZwxCoEcirUMxLzlRgGim0gYES2xaX1UCcy1o3BWMLcwkhLBBqJEnGe8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR1001MB1270
+Content-Type: text/plain
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 02.07.20 17:07, Mark Brown wrote:
-> On Thu, Jul 02, 2020 at 04:46:09PM +0200, Frieder Schrempf wrote:
-> 
->> My intention is to use the spidev driver in the default board DT for an
->> interface that is routed to an extension connector and has no dedicated
->> slave device attached onboard. So users can attach sensors, etc. with
->> userspace drivers without touching the kernel or DT.
-> 
-> The expected way of doing this is to describe whatever was attached via
-> DT when it's attached - the device is what has the compatible, not some
-> connector in the middle of the connection.  The way you've got things
-> set up if the device has a driver then they won't be able to instantiate
-> the driver.
 
-Ok thanks, got it. I will remove the spi device from the board DT and 
-use an overlay if required. Now I got a reason to learn writing DT 
-overlays ;)
+Peter Rosin writes:
+
+> Hi!
+>
+> On 2020-07-02 12:13, Lars Povlsen wrote:
+>> The Sparx5 mux driver may be used to control selecting between two
+>> alternate SPI bus segments connected to the SPI controller
+>> (spi-dw-mmio).
+>>
+>> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+>> ---
+>>  drivers/mux/Makefile     |   2 +
+>>  drivers/mux/sparx5-spi.c | 138 +++++++++++++++++++++++++++++++++++++++
+>>  2 files changed, 140 insertions(+)
+>>  create mode 100644 drivers/mux/sparx5-spi.c
+>>
+>> diff --git a/drivers/mux/Makefile b/drivers/mux/Makefile
+>> index 6e9fa47daf566..18c3ae3582ece 100644
+>> --- a/drivers/mux/Makefile
+>> +++ b/drivers/mux/Makefile
+>> @@ -8,9 +8,11 @@ mux-adg792a-objs             := adg792a.o
+>>  mux-adgs1408-objs            := adgs1408.o
+>>  mux-gpio-objs                        := gpio.o
+>>  mux-mmio-objs                        := mmio.o
+>> +mux-sparx5-objs                      := sparx5-spi.o
+>>
+>>  obj-$(CONFIG_MULTIPLEXER)    += mux-core.o
+>>  obj-$(CONFIG_MUX_ADG792A)    += mux-adg792a.o
+>>  obj-$(CONFIG_MUX_ADGS1408)   += mux-adgs1408.o
+>>  obj-$(CONFIG_MUX_GPIO)               += mux-gpio.o
+>>  obj-$(CONFIG_MUX_MMIO)               += mux-mmio.o
+>> +obj-$(CONFIG_SPI_DW_MMIO)    += mux-sparx5.o
+>> diff --git a/drivers/mux/sparx5-spi.c b/drivers/mux/sparx5-spi.c
+>> new file mode 100644
+>> index 0000000000000..5fe9025b96a5e
+>> --- /dev/null
+>> +++ b/drivers/mux/sparx5-spi.c
+>> @@ -0,0 +1,138 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Sparx5 SPI MUX driver
+>> + *
+>> + * Copyright (c) 2019 Microsemi Corporation
+>> + *
+>> + * Author: Lars Povlsen <lars.povlsen@microchip.com>
+>> + */
+>> +
+>> +#include <linux/err.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mux/driver.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/property.h>
+>> +#include <linux/mux/driver.h>
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/bitfield.h>
+>> +
+>> +#define MSCC_IF_SI_OWNER_SISL                        0
+>> +#define MSCC_IF_SI_OWNER_SIBM                        1
+>> +#define MSCC_IF_SI_OWNER_SIMC                        2
+>> +
+>> +#define SPARX5_CPU_SYSTEM_CTRL_GENERAL_CTRL  0x88
+>> +#define SPARX5_IF_SI_OWNER                   GENMASK(7, 6)
+>> +#define SPARX5_IF_SI2_OWNER                  GENMASK(5, 4)
+>> +
+>> +#define SPARX5_MAX_CS        16
+>> +
+>> +struct mux_sparx5 {
+>> +     struct regmap *syscon;
+>> +     u8 bus[SPARX5_MAX_CS];
+>> +     int cur_bus;
+>
+> Surplus unused variable?
+>
+>> +};
+>> +
+>> +/*
+>> + * Set the owner of the SPI interfaces
+>> + */
+>> +static void mux_sparx5_set_owner(struct regmap *syscon,
+>> +                              u8 owner, u8 owner2)
+>> +{
+>> +     u32 val, msk;
+>> +
+>> +     val = FIELD_PREP(SPARX5_IF_SI_OWNER, owner) |
+>> +             FIELD_PREP(SPARX5_IF_SI2_OWNER, owner2);
+>> +     msk = SPARX5_IF_SI_OWNER | SPARX5_IF_SI2_OWNER;
+>> +     regmap_update_bits(syscon,
+>> +                        SPARX5_CPU_SYSTEM_CTRL_GENERAL_CTRL,
+>> +                        msk, val);
+>> +}
+>> +
+>> +static void mux_sparx5_set_cs_owner(struct mux_sparx5 *mux_sparx5,
+>> +                                 u8 cs, u8 owner)
+>> +{
+>> +     u8 other = (owner == MSCC_IF_SI_OWNER_SIBM ?
+>> +                 MSCC_IF_SI_OWNER_SIMC : MSCC_IF_SI_OWNER_SIBM);
+>
+> Empty line missing here.
+>
+>> +     if (mux_sparx5->bus[cs])
+>> +             /* SPI2 */
+>> +             mux_sparx5_set_owner(mux_sparx5->syscon, other, owner);
+>> +     else
+>> +             /* SPI1 */
+>> +             mux_sparx5_set_owner(mux_sparx5->syscon, owner, other);
+>> +}
+>
+>
+> This smells like there are only two states for this mux control, and that
+> the whole point of this driver is to make the exact numbering selectable.
+> I don't see the point of that. To me, it looks like the pre-existing
+> mmio-mux should be able to work. Something like this? Untested of course,
+> and I might easily have misunderstood something...
+>
+
+Peter,
+
+Good suggestion with "mmio-mux" - I overlooked it actually supports
+regmap. It makes DT configuration a little less intuitive, but removes
+the baggage of the dedicated sparx5 mux driver and bindings.
+
+It also pushes the solution towards using "spi-mux", but at least the CS
+in the DT does not have to be repeated.
+
+So a little more DT stuff, but less new code.
+
+I will try to implement the "mmio-mux"/"spi-mux" solution in a rev4.
+
+Any comments from Mark?
+
+Anyway, Peter, thank you for your comments.
+
+(Your driver comments are all valid, but it appears the driver isn't
+needed after all)
+
+Cheers,
+
+---Lars
+
+> mux: mux-controller {
+>         compatible = "mmio-mux"
+>         #mux-control-cells = <1>;
+>
+>         /* SI_OWNER and SI2_OWNER in GENERAL_CTRL */
+>         mux-reg-masks = <0x88 0xf0>;
+> };
+>
+>
+> spi0: spi@600104000 {
+>         compatible = "microchip,sparx5-spi";
+>         spi@0 {
+>                 compatible = "spi-mux";
+>                 mux-controls = <&mux 0>;
+>                 reg = <0>;
+>                 /* SI_OWNER = SIMC, SI2_OWNER = SIBM  --->  mux value 9 */
+>                 spi-flash@9 {
+>                         compatible = "jedec,spi-nor";
+>                         reg = <9>;
+>                 };
+>         };
+>         spi@e {
+>                 compatible = "spi-mux";
+>                 mux-controls = <&mux 0>;
+>                 reg = <14>;
+>                 /* SI_OWNER = SIBM, SI2_OWNER = SIMC  --->  mux value 6 */
+>                 spi-flash@6 {
+>                         compatible = "spi-nand";
+>                         reg = <6>;
+>                 };
+>         };
+> };
+>
+>> +
+>> +static int mux_sparx5_set(struct mux_control *mux, int state)
+>> +{
+>> +     struct mux_sparx5 *mux_sparx5 = mux_chip_priv(mux->chip);
+>> +
+>> +     mux_sparx5_set_cs_owner(mux_sparx5, state, MSCC_IF_SI_OWNER_SIMC);
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static const struct mux_control_ops mux_sparx5_ops = {
+>> +     .set = mux_sparx5_set,
+>> +};
+>> +
+>> +static const struct of_device_id mux_sparx5_dt_ids[] = {
+>> +     { .compatible = "microchip,sparx5-spi-mux", },
+>> +     { /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, mux_sparx5_dt_ids);
+>> +
+>> +static int mux_sparx5_probe(struct platform_device *pdev)
+>> +{
+>> +     struct device *dev = &pdev->dev;
+>> +     struct mux_chip *mux_chip;
+>> +     struct mux_sparx5 *mux_sparx5;
+>> +     struct device_node *nc;
+>> +     const char *syscon_name = "microchip,sparx5-cpu-syscon";
+>> +     int ret;
+>> +
+>> +     mux_chip = devm_mux_chip_alloc(dev, 1, sizeof(*mux_sparx5));
+>> +     if (IS_ERR(mux_chip))
+>> +             return PTR_ERR(mux_chip);
+>> +
+>> +     mux_sparx5 = mux_chip_priv(mux_chip);
+>> +     mux_chip->ops = &mux_sparx5_ops;
+>> +
+>> +     mux_sparx5->syscon =
+>> +             syscon_regmap_lookup_by_compatible(syscon_name);
+>> +     if (IS_ERR(mux_sparx5->syscon)) {
+>> +             dev_err(dev, "No syscon map %s\n", syscon_name);
+>> +             return PTR_ERR(mux_sparx5->syscon);
+>> +     }
+>> +
+>> +     /* Get bus interface mapping */
+>> +     for_each_available_child_of_node(dev->of_node, nc) {
+>> +             u32 cs, bus;
+>> +
+>> +             if (of_property_read_u32(nc, "reg", &cs) == 0 &&
+>> +                 cs < SPARX5_MAX_CS &&
+>> +                 of_property_read_u32(nc, "microchip,bus-interface",
+>> +                                      &bus) == 0)
+>> +                     mux_sparx5->bus[cs] = bus;
+>
+> The above if is a mess. The kernel model is to handle the exceptional cases
+> first and break/goto/continue/return/whatever so that the interesting code
+> can happen at lower indentation level.
+>
+>                 if (of_property_read_u32(nc, "reg", &cs))
+>                         continue;
+>                 if (cs >= SPARX5_MAX_CS)
+>                         continue;
+>                 if (of_property_read_u32(nc, "microchip,bus-interface", &bus))
+>                         continue;
+>
+>                 mux_sparc5->bus[cs] = bus;
+>
+> Cheers,
+> Peter
+>
+>> +     }
+>> +
+>> +     mux_chip->mux->states = SPARX5_MAX_CS;
+>> +
+>> +     ret = devm_mux_chip_register(dev, mux_chip);
+>> +     if (ret < 0)
+>> +             return ret;
+>> +
+>> +     dev_info(dev, "%u-way mux-controller registered\n",
+>> +              mux_chip->mux->states);
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static struct platform_driver mux_sparx5_driver = {
+>> +     .driver = {
+>> +             .name = "sparx5-mux",
+>> +             .of_match_table = of_match_ptr(mux_sparx5_dt_ids),
+>> +     },
+>> +     .probe = mux_sparx5_probe,
+>> +};
+>> +module_platform_driver(mux_sparx5_driver);
+>>
+
+-- 
+Lars Povlsen,
+Microchip
