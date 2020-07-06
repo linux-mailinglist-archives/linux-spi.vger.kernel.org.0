@@ -2,31 +2,33 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA5421598C
+	by mail.lfdr.de (Postfix) with ESMTP id AC73F21598D
 	for <lists+linux-spi@lfdr.de>; Mon,  6 Jul 2020 16:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729351AbgGFOet (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Jul 2020 10:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S1729350AbgGFOev (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Jul 2020 10:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729259AbgGFOet (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jul 2020 10:34:49 -0400
+        with ESMTP id S1729259AbgGFOeu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jul 2020 10:34:50 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C22C061755
-        for <linux-spi@vger.kernel.org>; Mon,  6 Jul 2020 07:34:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964F1C061755
+        for <linux-spi@vger.kernel.org>; Mon,  6 Jul 2020 07:34:50 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1jsSCj-0005DP-Rn; Mon, 06 Jul 2020 16:34:45 +0200
+        id 1jsSCk-0005DP-7w; Mon, 06 Jul 2020 16:34:46 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: [PATCH v2 00/10] spi: spi-sun6i: One fix and some improvements
-Date:   Mon,  6 Jul 2020 16:34:33 +0200
-Message-Id: <20200706143443.9855-1-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v2 01/10] spi: spi-sun6i: sun6i_spi_transfer_one(): fix setting of clock rate
+Date:   Mon,  6 Jul 2020 16:34:34 +0200
+Message-Id: <20200706143443.9855-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200706143443.9855-1-mkl@pengutronix.de>
+References: <20200706143443.9855-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
@@ -38,27 +40,61 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+A SPI transfer defines the _maximum_ speed of the SPI transfer. However the
+driver doesn't take into account that the clock divider is always rounded down
+(due to integer arithmetics). This results in a too high clock rate for the SPI
+transfer.
 
-this series first fixes the calculation of the clock rate. The driver will
-round up to the nearest clock rate instead of rounding down. Resulting in SPI
-devices accessed with a too high SPI clock.
+E.g.: with a mclk_rate of 24 MHz and a SPI transfer speed of 10 MHz, the
+original code calculates a reg of "0", which results in a effective divider of
+"2" and a 12 MHz clock for the SPI transfer.
 
-The remaining patches improve the performance of the driver. The changes range
-from micro-optimizations like reducing MMIO writes to the controller to
-reducing the number of needed interrupts in some use cases.
+This patch fixes the issue by using DIV_ROUND_UP() instead of a plain
+integer division.
 
-regards,
-Marc
+While there simplify the divider calculation for the CDR1 case, use
+order_base_2() instead of two ilog2() calculations.
 
-changes since v1:
-- added Maxime Ripard's to the existing patches
-- 06/10: (was 05/10 in v1)
-  "spi: spi-sun6i: sun6i_spi_drain_fifo(): introduce sun6i_spi_get_rx_fifo_count() and make use of it"
-  use FIELD_GET instead of open coding it
-  (tnx: Maxime Ripard)
-- 05/10: "spi: spi-sun6i: sun6i_spi_get_tx_fifo_count: Convert manual shift+mask to FIELD_GET()"
-  new patch
+Fixes: 3558fe900e8a ("spi: sunxi: Add Allwinner A31 SPI controller driver")
+Acked-by: Maxime Ripard <mripard@kernel.org>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/spi/spi-sun6i.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-
+diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+index ecea15534c42..fa11cc0e809b 100644
+--- a/drivers/spi/spi-sun6i.c
++++ b/drivers/spi/spi-sun6i.c
+@@ -198,7 +198,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+ 				  struct spi_transfer *tfr)
+ {
+ 	struct sun6i_spi *sspi = spi_master_get_devdata(master);
+-	unsigned int mclk_rate, div, timeout;
++	unsigned int mclk_rate, div, div_cdr1, div_cdr2, timeout;
+ 	unsigned int start, end, tx_time;
+ 	unsigned int trig_level;
+ 	unsigned int tx_len = 0;
+@@ -287,14 +287,12 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+ 	 * First try CDR2, and if we can't reach the expected
+ 	 * frequency, fall back to CDR1.
+ 	 */
+-	div = mclk_rate / (2 * tfr->speed_hz);
+-	if (div <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
+-		if (div > 0)
+-			div--;
+-
+-		reg = SUN6I_CLK_CTL_CDR2(div) | SUN6I_CLK_CTL_DRS;
++	div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
++	div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
++	if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
++		reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
+ 	} else {
+-		div = ilog2(mclk_rate) - ilog2(tfr->speed_hz);
++		div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
+ 		reg = SUN6I_CLK_CTL_CDR1(div);
+ 	}
+ 
+-- 
+2.27.0
 
