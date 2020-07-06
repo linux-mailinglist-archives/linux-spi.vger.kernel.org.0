@@ -2,76 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF912155F9
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jul 2020 12:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1494921575F
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jul 2020 14:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728648AbgGFK6p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Jul 2020 06:58:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56738 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728264AbgGFK6o (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 6 Jul 2020 06:58:44 -0400
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2EEC720772;
-        Mon,  6 Jul 2020 10:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594033124;
-        bh=DHaVeBdGgGfIr0NZuIeBEu3g1835paZKX72HGKXym7k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W62RhsPgIs5vdUGg8yamWJ4gQjU8Gs/x5guVzStRvWlRIA5hV6H0uJfc3w8rN0Eqe
-         v8mtf62fR8C0TiY06zV5tjLLv9L0B7UAyqQO/H/vNoG/XqmOEWC56gWm76kJblPJh2
-         v4ht/bYvW9A4TD+5fwiyZrSY95NI/OPmAGVSJj2E=
-Received: by mail-lf1-f42.google.com with SMTP id g2so22310128lfb.0;
-        Mon, 06 Jul 2020 03:58:44 -0700 (PDT)
-X-Gm-Message-State: AOAM5327vmVjoH9plaPkvUPlqsorpQ1G43Q/UWCQOH4KfgKrqoEeCW3g
-        Wpi+jonapzsDhkn9gfbHPT/tAqIiE6RSC+Sp/gw=
-X-Google-Smtp-Source: ABdhPJxrG3emgV5/gynjNvHC6XzEE9+FwI2aJYvVhkhtZMptOkiTLEEzndluBtzjC+DdQqeNM6+brzzYWk9YzccWoks=
-X-Received: by 2002:ac2:5593:: with SMTP id v19mr29352799lfg.43.1594033122519;
- Mon, 06 Jul 2020 03:58:42 -0700 (PDT)
+        id S1729095AbgGFMgZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Jul 2020 08:36:25 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:60369 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728885AbgGFMgZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Jul 2020 08:36:25 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0F4545C019F;
+        Mon,  6 Jul 2020 08:36:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 06 Jul 2020 08:36:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm3; bh=w
+        TtYWDcph3Ojts4gXYtwqNFAyjySvYFK34ppHH/b6PE=; b=lxZsMtXD8shWZeY4i
+        FDKOiZelsRsE26N9yN1RcEZad3DdNP5kEzR1dDli5erzgxesdxyGwkBU3xYsP6FG
+        TN28LUrkZ6RYTRo5CZQjg8oTeCjs7lIKh2+6hl+XKcYJEzES6hLzWdfx2TgI9QNG
+        aLLBoZM4adWtMIxF5hrRk+hUKXn582no1ohZlwcsPHN1guBwc1V7fWjilRjVpODG
+        Jvkq9VY/s80bZZ4VgXpSoITNbdv0U9d4NHD85fOzoCyOhHBHLcm1oj8ZSG9deyad
+        BK8kVgCuclB9SVWks7ziznQh+POVLJpScZhtwrOvBmk796RxrNrzIEgrcUMV63hY
+        jQ32g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=wTtYWDcph3Ojts4gXYtwqNFAyjySvYFK34ppHH/b6
+        PE=; b=mn3pq8KGCjIX2jjPWTassDochMm+wH4exZlKHhaf0Zqk+z570NNCPp09m
+        O8tVMkXF90SqW/qeOz+TgG0H+vTpbxoL80Df+uOuww/Xpf0u1UKqxx8DvGb0lEqM
+        ceB5oItpJsyyVmWDsHIdiGKPEmKoOwI+x5b6CaUGeO1PQ968nnfr3x4VZtD6KeXs
+        7WVKteYBXvMD+qHRKI4U9fdjjq8fl0lOBuRd75QM+Ijz9yd2LXEhs8q2FYpf5lkg
+        HoBMv9ZJsolmBMwY2vJ/nrmL/MBZmy7b6SG36wDeiPgKFSpyQJe4BvdFdtmJD84E
+        +69SkHp/s+EKoyM7mHVWEviumOYUw==
+X-ME-Sender: <xms:xxoDX1xQV7D7DSyNPsc_kYYVbxzvSeMfKACbzeAZnigI1X7UMdT8cg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudefgdehhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfejtedtjefggfffvdetuedthedtheegheeuteekfeeghfdtteejkeeludeg
+    vddunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:xxoDX1T7JaxUCY-MLVR0rHyIRGqa2bfy5C5kNrxOQoezW8ORFUvPaQ>
+    <xmx:xxoDX_XSyeyJJrwWBIN_qmuIDt7ZzVotq3Ns0v0g4g9v9vYQNdUgRQ>
+    <xmx:xxoDX3hcNlqS9TAYVaiD3Yd0Ib_8sSRFMO8PbF8YzTl-leeYZeUySQ>
+    <xmx:yBoDX6P-6KVP3ZYCMwNBDiBafCgBK3nZm7rqVYg6AXRZCwi9718wpg>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 26D2C328005E;
+        Mon,  6 Jul 2020 08:36:23 -0400 (EDT)
+Date:   Mon, 6 Jul 2020 14:36:21 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 5/9] spi: spi-sun6i: sun6i_spi_drain_fifo(): introduce
+ sun6i_spi_get_rx_fifo_count() and make use of it
+Message-ID: <20200706123621.lm4htzmwg4zn6xzv@gilmour.lan>
+References: <20200706071801.558394-1-mkl@pengutronix.de>
+ <20200706071801.558394-6-mkl@pengutronix.de>
 MIME-Version: 1.0
-References: <CA+G9fYsrGXd5survaX27kkfam1ZcJdMnzowvGdfy1xT4bGcfcA@mail.gmail.com>
-In-Reply-To: <CA+G9fYsrGXd5survaX27kkfam1ZcJdMnzowvGdfy1xT4bGcfcA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Mon, 6 Jul 2020 12:58:31 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPe1Y4JAj-OaF52UuZNkwf1Ug2VTB5kyui+GvqXsVJWsTw@mail.gmail.com>
-Message-ID: <CAJKOXPe1Y4JAj-OaF52UuZNkwf1Ug2VTB5kyui+GvqXsVJWsTw@mail.gmail.com>
-Subject: Re: WARNING: at kernel/kthread.c:819 kthread_queue_work - spi_start_queue
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-spi@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux- stable <stable@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, Peng Ma <peng.ma@nxp.com>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200706071801.558394-6-mkl@pengutronix.de>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 6 Jul 2020 at 12:55, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> While booting arm64 device dragonboard 410c the following kernel
-> warning noticed on
-> Linux version 5.8.0-rc3-next-20200706.
->
-> metadata:
->   git branch: master
->   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->   git commit: 5680d14d59bddc8bcbc5badf00dbbd4374858497
->   git describe: next-20200706
->   kernel-config:
-> https://builds.tuxbuild.com/Glr-Ql1wbp3qN3cnHogyNA/kernel.config
->
-> Crash log while booting,
+On Mon, Jul 06, 2020 at 09:17:57AM +0200, Marc Kleine-Budde wrote:
+> This patch introduces the function sun6i_spi_get_rx_fifo_count(), similar=
+ to
+> the existing sun6i_spi_get_tx_fifo_count(), to make the sun6i_spi_drain_f=
+ifo()
+> function a bit easier to read.
+>=20
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  drivers/spi/spi-sun6i.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+> index 882492774986..f70d14229483 100644
+> --- a/drivers/spi/spi-sun6i.c
+> +++ b/drivers/spi/spi-sun6i.c
+> @@ -106,6 +106,15 @@ static inline void sun6i_spi_write(struct sun6i_spi =
+*sspi, u32 reg, u32 value)
+>  	writel(value, sspi->base_addr + reg);
+>  }
+> =20
+> +static inline u32 sun6i_spi_get_rx_fifo_count(struct sun6i_spi *sspi)
+> +{
+> +	u32 reg =3D sun6i_spi_read(sspi, SUN6I_FIFO_STA_REG);
+> +
+> +	reg >>=3D SUN6I_FIFO_STA_RF_CNT_BITS;
+> +
+> +	return reg & SUN6I_FIFO_STA_RF_CNT_MASK;
+> +}
+> +
 
-Hi,
+I guess we could just use FIELD_GET here?
 
-Thanks for the report. Did bisect pointed to any specific commit?
-
-Best regards,
-Krzysztof
+Looks good otherwise, thanks!
+Maxime
