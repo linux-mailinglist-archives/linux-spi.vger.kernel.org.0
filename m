@@ -2,99 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE17216995
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jul 2020 11:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D634E2169D1
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jul 2020 12:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbgGGJzw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jul 2020 05:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726825AbgGGJzv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jul 2020 05:55:51 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CACC061755
-        for <linux-spi@vger.kernel.org>; Tue,  7 Jul 2020 02:55:51 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id a8so36649920edy.1
-        for <linux-spi@vger.kernel.org>; Tue, 07 Jul 2020 02:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastree3d-com.20150623.gappssmtp.com; s=20150623;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=/Ez/eNUFPCT1S8lswjEFBXmdJUzvT2sdIqH6wPm0/aY=;
-        b=QYe04Gp38RAEy6yPyNS14pK+XfQocLSDgJ5LEkRhAj7ABmY3kR3xx8qgc+u4Ry9uLZ
-         k7KwDZbKVUaqCo7UyJxkZneDWHjo4VIi7Myp8O0I5c2pu5SepM0Fi0OuDMrFOvYOQ0zT
-         MgkmuHp7x/wQGhMI/BKXWZyEgvQkHoZv5AWHVx3EeycrVCA6X3+sxTqWjP31srbxOqA5
-         yVtGbKBN4350Uuy3yZI1ZWcplnWdk0fBAZZ0ITq45nji+j8YX8rbkBvosF9UiyRasryu
-         hUST3Iy0F6nQyiIDl+ApwQ9pnqe7sV14ch5qEgADgY8wf41L455jHEpu1Dsym4MX3hrF
-         AZKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=/Ez/eNUFPCT1S8lswjEFBXmdJUzvT2sdIqH6wPm0/aY=;
-        b=mvpJmaaPOlxLkxyYBm3tAdqmNh4/hDY4fal53268YEYP+SUy05inAJ1QtLb1EZ9CW0
-         tTtlWPAtHwGtUt8hW5pkF+TMI6K9qPfLUOtzV+OtDCx/oHo0M47R9wnV2zfV71i5wEps
-         dNoVOiBirN00XacaKiKZB19tcCNUkgOmi36ZS9Uc8hCmDA/bATDxS9+PBZ10/9uXvX+9
-         NRRjigpaVD780YSIdYOfYUg+dIVvtlrpw+V5DFH1giy+UfGIt4tooxh2smPm1HZjsoaB
-         gdo4LgV6V3MSZiYKKASxMDR6/5Rtb6e5cGdrI7B3ReQpuMGpcaLZ+b6G0Vgwqse0xvTX
-         DfLg==
-X-Gm-Message-State: AOAM533G4G03Y5mw0bKvMUcBpnWy8UK2S4MZkxS0oga09eMzwcycwNan
-        YvrVd5tEz9/7rd5eGoqHjfog
-X-Google-Smtp-Source: ABdhPJzYEcxxIS7vSz9rt0N2e7MfND9YJ80TBhiJ+JQGtUro+WBaNmFEN1hYulHOJD1yWqfwad40/A==
-X-Received: by 2002:aa7:d50d:: with SMTP id y13mr60181703edq.230.1594115749762;
-        Tue, 07 Jul 2020 02:55:49 -0700 (PDT)
-Received: from [192.168.33.195] (fastree1.epfl.ch. [192.26.37.52])
-        by smtp.gmail.com with ESMTPSA id z22sm25865328edx.72.2020.07.07.02.55.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 02:55:49 -0700 (PDT)
-From:   Adrian Fiergolski <adrian.fiergolski@fastree3d.com>
-X-Google-Original-From: Adrian Fiergolski <Adrian.Fiergolski@fastree3d.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: Add documentation for SPI daisy chain
- driver.
-To:     Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lukas Wunner <lukas@wunner.de>, Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <202007040833.xIqR5rAw%lkp@intel.com>
- <20200706092247.20740-1-adrian.fiergolski@fastree3d.com>
- <20200706092247.20740-2-adrian.fiergolski@fastree3d.com>
- <CAMuHMdW_aTKtrUnGqf3DB=fr0ZxTsjoEjMmwSpPqhwjs-Tz7ig@mail.gmail.com>
- <d80b1b85-ee23-3244-9bb0-876986f6ff17@fastree3d.com>
- <CAMuHMdUV_2DbbUqp+0=XARyLCwPya1RqFCrr6VoTJjVAZiKJzg@mail.gmail.com>
- <20200706162246.GC6176@sirena.org.uk>
-Message-ID: <853fa4a4-ce2f-0503-2fe7-7b34b352b6e2@fastree3d.com>
-Date:   Tue, 7 Jul 2020 11:55:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.9.0
+        id S1728191AbgGGKRN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jul 2020 06:17:13 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:20782 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728145AbgGGKRK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jul 2020 06:17:10 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1594117030; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=BXI021rh3NXH5BcDC2Muu+0d+4q5W0LWbpYi2AY+2A4=; b=tnpHEyaIgFbXBSoaQc65HdSrYOdegEQbPyuK5e2VKMb9RFN0PpjSnpHplojGP6ee78jA8zZf
+ Rk4DN3kPIoygKolV0v4Z0CCMGf75DOcrWBN98HeBgFwPsAoXOdrKiuvlWNabtXwNHYWkiyog
+ Aj/DkNuR/ERhdypKcZhbMZeDj40=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n17.prod.us-west-2.postgun.com with SMTP id
+ 5f044b93d8ca07a573e8c853 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 07 Jul 2020 10:16:51
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 70EB7C433CA; Tue,  7 Jul 2020 10:16:51 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.15] (unknown [183.83.138.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id ACB36C433C6;
+        Tue,  7 Jul 2020 10:16:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org ACB36C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH 1/3] spi: spi-geni-qcom: Avoid clock setting if not needed
+To:     Douglas Anderson <dianders@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, mkshah@codeaurora.org,
+        swboyd@chromium.org, georgi.djakov@linaro.org,
+        ctheegal@codeaurora.org, mka@chromium.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20200702004509.2333554-1-dianders@chromium.org>
+ <20200701174506.1.Icfdcee14649fc0a6c38e87477b28523d4e60bab3@changeid>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <1b9f0313-0e8f-0a75-b0a5-b6a768af0a7a@codeaurora.org>
+Date:   Tue, 7 Jul 2020 15:46:22 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200706162246.GC6176@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
+In-Reply-To: <20200701174506.1.Icfdcee14649fc0a6c38e87477b28523d4e60bab3@changeid>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Geert and Mark,
 
-Thank you for your comments. I will try to address them in the next replies.
+On 7/2/2020 6:15 AM, Douglas Anderson wrote:
+> Every SPI transfer could have a different clock rate.  The
+> spi-geni-qcom controller code to deal with this was never very well
+> optimized and has always had a lot of code plus some calls into the
+> clk framework which, at the very least, would grab a mutex.  However,
+> until recently, the overhead wasn't _too_ much.  That changed with
+> commit 0e3b8a81f5df ("spi: spi-geni-qcom: Add interconnect support")
+> we're now calling geni_icc_set_bw(), which leads to a bunch of math
+> plus:
+>    geni_icc_set_bw()
+>      icc_set_bw()
+>        apply_constraints()
+>          qcom_icc_set()
+>            qcom_icc_bcm_voter_commit()
+>              rpmh_invalidate()
+>              rpmh_write_batch()
+> ...and those rpmh commands can be a bit beefy if you call them too
+> often.
 
-On 06.07.2020 18:22, Mark Brown wrote:
-> On Mon, Jul 06, 2020 at 05:32:51PM +0200, Geert Uytterhoeven wrote:
->
->> However, that information would need to be added to each driver only once.
->> With your proposal, it has to be added to all affected nodes of all DTSes
->> of all users.
-> Right, these are fixed properties of the silicon which we know simply
-> from knowing which device we have - there is no need to put them in DT
-> at all.
+Reviewed-by: Akash Asthana<akashast@codeaurora.org>
 
-I see. I agree with you. My concern was just the lack of compatibility
-with the existing drivers. I will try to add daisy_chain information to
-spi_driver struct in version v3 of the patch.
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
 
