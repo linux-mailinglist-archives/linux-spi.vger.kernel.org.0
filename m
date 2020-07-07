@@ -2,155 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC1A216919
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jul 2020 11:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE17216995
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jul 2020 11:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726763AbgGGJdT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Jul 2020 05:33:19 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33170 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbgGGJdS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jul 2020 05:33:18 -0400
-Received: by mail-oi1-f195.google.com with SMTP id k22so23033461oib.0;
-        Tue, 07 Jul 2020 02:33:18 -0700 (PDT)
+        id S1727791AbgGGJzw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Jul 2020 05:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726825AbgGGJzv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Jul 2020 05:55:51 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CACC061755
+        for <linux-spi@vger.kernel.org>; Tue,  7 Jul 2020 02:55:51 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id a8so36649920edy.1
+        for <linux-spi@vger.kernel.org>; Tue, 07 Jul 2020 02:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastree3d-com.20150623.gappssmtp.com; s=20150623;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=/Ez/eNUFPCT1S8lswjEFBXmdJUzvT2sdIqH6wPm0/aY=;
+        b=QYe04Gp38RAEy6yPyNS14pK+XfQocLSDgJ5LEkRhAj7ABmY3kR3xx8qgc+u4Ry9uLZ
+         k7KwDZbKVUaqCo7UyJxkZneDWHjo4VIi7Myp8O0I5c2pu5SepM0Fi0OuDMrFOvYOQ0zT
+         MgkmuHp7x/wQGhMI/BKXWZyEgvQkHoZv5AWHVx3EeycrVCA6X3+sxTqWjP31srbxOqA5
+         yVtGbKBN4350Uuy3yZI1ZWcplnWdk0fBAZZ0ITq45nji+j8YX8rbkBvosF9UiyRasryu
+         hUST3Iy0F6nQyiIDl+ApwQ9pnqe7sV14ch5qEgADgY8wf41L455jHEpu1Dsym4MX3hrF
+         AZKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VB02tOgm4x0vvWinn0yzASS1J5cK/IPzRsdpTAQ4rQk=;
-        b=YkxXTKpihrkXtHi+nDzxQEfwLFA9LY09pLNm+srfe3FAK9VPTD1xsEiTSn4OT1JZsO
-         fceW2TxbWuHi9U9mCZDzQ3xZH3u6aXszIqtpvD869Wyy6+jOfIoyCCWRS/0DGIyAqNIy
-         GnY+7gZdMJHidQ9A1HGVZKukbGAWtauVtTDPBXmeSRN/PXauGEHnJ4AmTjtF0+1gbExI
-         X3mdl/pv+VNjbkfr8Rwp0vwb/OytkC65EE9X5rZtmLBxXxL3iTyTLv68RfXOPw5g7trN
-         hRxE5vM29c+FQFLQPV39KYs58aied1HZdpkT1DTVg+gQtwLQWy+DehkizyiMCl+8OxpX
-         nJZQ==
-X-Gm-Message-State: AOAM5321dMsNb74ufRE9+elaNSSvUFsk5jAvaxqqaiKpt0wIOPBEVqcU
-        IwmM+U0A/FThRt/gWt3yvWFCKnEbT/AXznLqnUE=
-X-Google-Smtp-Source: ABdhPJzdnmNZM58lYV9qIqWEOtbYuwfoZLGUAXoQImbx7pakXkbzqGAN57IIyGJ4TXoicdjI0ci72Uq/yPlU117sldc=
-X-Received: by 2002:a05:6808:64a:: with SMTP id z10mr2601380oih.54.1594114397872;
- Tue, 07 Jul 2020 02:33:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <9969c8a1-e6be-38a9-ced5-ce8c5ff07046@cogentembedded.com> <54a84c75-fa17-9976-d9a6-a69ef67c418b@cogentembedded.com>
-In-Reply-To: <54a84c75-fa17-9976-d9a6-a69ef67c418b@cogentembedded.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 Jul 2020 11:33:07 +0200
-Message-ID: <CAMuHMdVnjE=BHe5MBr_NsL6LeXq30vKym8OVLp28=7sZeUBAWw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: memory: document Renesas RPC-IF bindings
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=/Ez/eNUFPCT1S8lswjEFBXmdJUzvT2sdIqH6wPm0/aY=;
+        b=mvpJmaaPOlxLkxyYBm3tAdqmNh4/hDY4fal53268YEYP+SUy05inAJ1QtLb1EZ9CW0
+         tTtlWPAtHwGtUt8hW5pkF+TMI6K9qPfLUOtzV+OtDCx/oHo0M47R9wnV2zfV71i5wEps
+         dNoVOiBirN00XacaKiKZB19tcCNUkgOmi36ZS9Uc8hCmDA/bATDxS9+PBZ10/9uXvX+9
+         NRRjigpaVD780YSIdYOfYUg+dIVvtlrpw+V5DFH1giy+UfGIt4tooxh2smPm1HZjsoaB
+         gdo4LgV6V3MSZiYKKASxMDR6/5Rtb6e5cGdrI7B3ReQpuMGpcaLZ+b6G0Vgwqse0xvTX
+         DfLg==
+X-Gm-Message-State: AOAM533G4G03Y5mw0bKvMUcBpnWy8UK2S4MZkxS0oga09eMzwcycwNan
+        YvrVd5tEz9/7rd5eGoqHjfog
+X-Google-Smtp-Source: ABdhPJzYEcxxIS7vSz9rt0N2e7MfND9YJ80TBhiJ+JQGtUro+WBaNmFEN1hYulHOJD1yWqfwad40/A==
+X-Received: by 2002:aa7:d50d:: with SMTP id y13mr60181703edq.230.1594115749762;
+        Tue, 07 Jul 2020 02:55:49 -0700 (PDT)
+Received: from [192.168.33.195] (fastree1.epfl.ch. [192.26.37.52])
+        by smtp.gmail.com with ESMTPSA id z22sm25865328edx.72.2020.07.07.02.55.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jul 2020 02:55:49 -0700 (PDT)
+From:   Adrian Fiergolski <adrian.fiergolski@fastree3d.com>
+X-Google-Original-From: Adrian Fiergolski <Adrian.Fiergolski@fastree3d.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: Add documentation for SPI daisy chain
+ driver.
+To:     Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lukas Wunner <lukas@wunner.de>, Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mason Yang <masonccyang@mxic.com.tw>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <202007040833.xIqR5rAw%lkp@intel.com>
+ <20200706092247.20740-1-adrian.fiergolski@fastree3d.com>
+ <20200706092247.20740-2-adrian.fiergolski@fastree3d.com>
+ <CAMuHMdW_aTKtrUnGqf3DB=fr0ZxTsjoEjMmwSpPqhwjs-Tz7ig@mail.gmail.com>
+ <d80b1b85-ee23-3244-9bb0-876986f6ff17@fastree3d.com>
+ <CAMuHMdUV_2DbbUqp+0=XARyLCwPya1RqFCrr6VoTJjVAZiKJzg@mail.gmail.com>
+ <20200706162246.GC6176@sirena.org.uk>
+Message-ID: <853fa4a4-ce2f-0503-2fe7-7b34b352b6e2@fastree3d.com>
+Date:   Tue, 7 Jul 2020 11:55:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200706162246.GC6176@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Sergei,
+Hi Geert and Mark,
 
-On Tue, Jun 16, 2020 at 10:01 PM Sergei Shtylyov
-<sergei.shtylyov@cogentembedded.com> wrote:
-> Renesas Reduced Pin Count Interface (RPC-IF) allows a SPI flash or
-> HyperFlash connected to the SoC to be accessed via the external address
-> space read mode or the manual mode.
+Thank you for your comments. I will try to address them in the next replies.
+
+On 06.07.2020 18:22, Mark Brown wrote:
+> On Mon, Jul 06, 2020 at 05:32:51PM +0200, Geert Uytterhoeven wrote:
 >
-> Document the device tree bindings for the Renesas RPC-IF found in the R-Car
-> gen3 SoCs.
->
-> Based on the original patch by Mason Yang <masonccyang@mxic.com.tw>.
->
-> Signed-off-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+>> However, that information would need to be added to each driver only once.
+>> With your proposal, it has to be added to all affected nodes of all DTSes
+>> of all users.
+> Right, these are fixed properties of the silicon which we know simply
+> from knowing which device we have - there is no need to put them in DT
+> at all.
 
-Thanks for your patch!
+I see. I agree with you. My concern was just the lack of compatibility
+with the existing drivers. I will try to add daisy_chain information to
+spi_driver struct in version v3 of the patch.
 
-> --- /dev/null
-> +++ linux/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/memory-controllers/renesas,rpc-if.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas Reduced Pin Count Interface (RPC-IF)
-> +
-> +maintainers:
-> +  - Sergei Shtylyov <sergei.shtylyov@gmail.com>
-> +
-> +description: |
-> +  Renesas RPC-IF allows a SPI flash or HyperFlash connected to the SoC to
-> +  be accessed via the external address space read mode or the manual mode.
-> +
-> +  The flash chip itself should be represented by a subnode of the RPC-IF node.
-> +  The flash interface is selected based on the "compatible" property of this
-> +  subnode:
-> +  - if it contains "jedec,spi-nor", then SPI is used;
-> +  - if it contains "cfi-flash", then HyperFlash is used.
-
-> +patternProperties:
-> +  "flash@[0-9a-f]+$":
-> +    type: object
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - cfi-flash
-> +          - jedec,spi-nor
-
-The above does not allow specifying e.g.
-
-    compatible = "spansion,s25fs512s", "jedec,spi-nor";
-
-arch/arm64/boot/dts/renesas/r8a77970-eagle.dt.yaml: spi@ee200000:
-flash@0:compatible: Additional items are not allowed ('jedec,spi-nor'
-was unexpected)
-arch/arm64/boot/dts/renesas/r8a77970-eagle.dt.yaml: spi@ee200000:
-flash@0:compatible:0: 'spansion,s25fs512s' is not one of ['cfi-flash',
-'jedec,spi-nor']
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/renesas-cpg-mssr.h>
-> +    #include <dt-bindings/power/r8a77995-sysc.h>
-> +
-> +    spi@ee200000 {
-> +      compatible = "renesas,r8a77995-rpc-if", "renesas,rcar-gen3-rpc-if";
-> +      reg = <0xee200000 0x200>,
-> +            <0x08000000 0x4000000>,
-> +            <0xee208000 0x100>;
-> +      reg-names = "regs", "dirmap", "wbuf";
-> +      clocks = <&cpg CPG_MOD 917>;
-> +      power-domains = <&sysc R8A77995_PD_ALWAYS_ON>;
-> +      resets = <&cpg 917>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      flash@0 {
-> +        compatible = "jedec,spi-nor";
-
-... which you nicely circumvented in the example ;-)
-
-> +        reg = <0>;
-> +        spi-max-frequency = <40000000>;
-> +        spi-tx-bus-width = <1>;
-> +        spi-rx-bus-width = <1>;
-> +      };
-> +    };
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
