@@ -2,64 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7C9218617
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jul 2020 13:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2C1218781
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jul 2020 14:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728679AbgGHL22 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Jul 2020 07:28:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48186 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728385AbgGHL21 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 8 Jul 2020 07:28:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CE33FAD4B;
-        Wed,  8 Jul 2020 11:28:26 +0000 (UTC)
-Date:   Wed, 8 Jul 2020 13:28:25 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Zhang Qiang <qiang.zhang@windriver.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: Re: [PATCH] spi: use kthread_create_worker() helper
-Message-ID: <20200708112825.GC4751@alley>
-References: <CGME20200708070913eucas1p221ca64347d0ca03709eeee86decfd1af@eucas1p2.samsung.com>
- <20200708070900.30380-1-m.szyprowski@samsung.com>
+        id S1729261AbgGHMdk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Jul 2020 08:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729127AbgGHMdc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jul 2020 08:33:32 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1C4C08EAF2
+        for <linux-spi@vger.kernel.org>; Wed,  8 Jul 2020 05:33:30 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id c16so46765269ioi.9
+        for <linux-spi@vger.kernel.org>; Wed, 08 Jul 2020 05:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=CtDA46Te1kJYGFqAkgr9Vub/YrG6WB2S+VlEURQEEM4x6m9sjli+Jz/yotFRmV/AMR
+         T/h2d+e8At09eChsFX2C+mUFLH+FsdwAy78KAtzHqTPpG69rhvmbmMUpZSALFUdgKxT3
+         rKV4TF8A0J+Za5tWsTPtObTKnCJJSeTUvLM0KCUCLapZUiUA/CE0qJguNsnmAcBYT7Bw
+         PUSSiRKtit7eL05YbTu8d4vZk3Rk52mtpEQs926eluhEg6IUrqIesfOKILheZFFzZp0P
+         0kRnPxRkSyAb2gIupk6cQmoDhkGW5ga2ONIfRh7Ui0T+vXHI9OfE4hLpnUDNkQjQgdsE
+         pxTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=ozFVVYDNNKQLmyYVL15MCEZMrW/xnhzAWTig1ODf5RunQjQSrxUWETJBW0yrtWbICV
+         GsZ8hZguzvmBn4PLkAqkwmiXbXmUxUdwK28vKk0RN5FnYAF6yLgiaJxoOIgygEPkQu9Y
+         lVuLYfBIAuKFJDJOqQpGY9aSFRs+ra9/YF6NCId6n6VGAmDtDANTgfrL5dV0Cl4SMyoX
+         3EqGH2E8QEWKVpvQRtfiHrR84jK9YaU4MV4bTDmnBt4vulY8mqDjPpmtV+YgH1UuVSUK
+         ppC9L+3FgEkDdwz/fZRGhRlAjJtpBYwZkDwD/3etaEr3tD7UOWz7fB8zDcdOGFBYO84P
+         MURw==
+X-Gm-Message-State: AOAM530er12egR3YvxcdtgoF5TCzMxTpOWcUHH0wc0JomwCFsbSuOwrj
+        TqH6JHlgVh/WeBQzbq7EdyYjEZ9s+9n4YXors20=
+X-Google-Smtp-Source: ABdhPJy69qBRFRW2d2u+0xyGHVfmVbQRW6SQ4gKLQIvGwSNWfhZDhNcIlxNh+7AirNZFy3An0aJSkt25Q8y7juQZu8o=
+X-Received: by 2002:a05:6638:12c7:: with SMTP id v7mr64754290jas.56.1594211609022;
+ Wed, 08 Jul 2020 05:33:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200708070900.30380-1-m.szyprowski@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:6602:1582:0:0:0:0 with HTTP; Wed, 8 Jul 2020 05:33:28
+ -0700 (PDT)
+Reply-To: mmsafiatou057@gmail.com
+From:   "Mrs. Safitaou Zoungrana" <richardlaurentdr@gmail.com>
+Date:   Wed, 8 Jul 2020 12:33:28 +0000
+Message-ID: <CALJAiTVXhrKZYOHVoupnx6hmXXD0i2k4MOSO6HW+mj1BAydXhA@mail.gmail.com>
+Subject: My Dear Beloved One,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed 2020-07-08 09:09:00, Marek Szyprowski wrote:
-> Since commit 4977caef05aa ("kthread: work could not be queued when worker
-> being destroyed")
+My Dear Beloved One,
 
-This commit should disappear from linux-next soon. We did not expect
-that it would cause these warnings. We first want to fix the callers
-before we put it back.
+I greet you in the name of God almighty the givers of all good things
+in life. Please kindly pardon me for any inconvenience this letter may
+cost you because I know it may come to you as a surprise as we have no
+previous correspondence.  I sent this mail praying for it to reach you
+in good health, since I myself are in a very critical health condition
+in which I sleep every night without knowing if I may be alive to see
+the next day.
 
-> there is a warning when kworker is used without the
-> internal 'task' entry properly initialized. Fix this by using
-> a kthread_create_worker() helper instead of open-coding a kworker
-> initialization.
+I am Mrs. Safiatou Zoungrana,  the wife of late Engineer Ralph
+Alphonso Zoungrana from Paris France but based here in Burkina Faso
+West Africa since eight years ago as a business woman dealing with
+gold exportation and Sales. We have been married for years before his
+sudden death although we were childless. I have been diagnosed with
+ovarian cancer and I have been battling with the sickness when my late
+lovely husband of a blessed memory was alive. May his soul rest in
+peace, Amen.
 
-But the fix is great and makes sense on its own.
+My late Husband left the sum of =E2=82=AC7.900.000.00 Seven Million Nine
+Hundred Thousand Euros in a fix/suspense account in one of the prime
+bank here in Burkina Faso. Recently, my Doctor told me that I have few
+days to live due to the cancer problem. The one that disturbs me most
+is my blood pressure sickness.
 
-The use of kthread_create_worker() simplifies the code. It uses
-the kthread worker API the right way. It will eventually allow
-to remove the FIXME in kthread_worker_fn() and add more consistency
-checks.
+Having known my health condition I decided to seek for your kind
+assistance to transfer this fund into your account and you will use it
+to establish an orphanage home in my name. I will give you more
+details about the project as soon as I receive your reply in my
+private email (mmsafiatou057@gmail.com) to handle this project because
+I do not want to state all here until I see your reply, desire and
+commitment to handle this project.
 
-I would use the above reasoning instead of the backtrace in the commit
-message. And feel free to use:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Best Regards,
-Petr Mladek
+My Regards to your family.
+Mrs. Safiatou Zoungrana.
