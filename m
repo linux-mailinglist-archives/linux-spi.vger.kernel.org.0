@@ -2,142 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C6A2190ED
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jul 2020 21:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9670E21946D
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jul 2020 01:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725787AbgGHToL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Jul 2020 15:44:11 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:57956 "EHLO smtp.al2klimov.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgGHToK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 8 Jul 2020 15:44:10 -0400
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 0322FBC0EE;
-        Wed,  8 Jul 2020 19:44:06 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] SPI SUBSYSTEM: Replace HTTP links with HTTPS ones
-Date:   Wed,  8 Jul 2020 21:44:00 +0200
-Message-Id: <20200708194400.22213-1-grandmaster@al2klimov.de>
+        id S1726245AbgGHXkA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Jul 2020 19:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbgGHXj7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Jul 2020 19:39:59 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3B2C061A0B
+        for <linux-spi@vger.kernel.org>; Wed,  8 Jul 2020 16:39:59 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id k71so262758pje.0
+        for <linux-spi@vger.kernel.org>; Wed, 08 Jul 2020 16:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nOTHh5N/RNtg5WKfhfCtwkiBRU/CH9ki0aZxMLZWNM8=;
+        b=kR2nFh1mnQTXnbdqeR27HQUqhgNSLiijZACUnlR2dWdx1wyUWWYZ+4xqJ8mu7aGSF/
+         E8hRqUv4tieRzOjR3H8OrsuoWAOVgE6FBGzhbrDkzHKNyR4bTAiUOty50yX0f4mnCR8j
+         W3W6KIJ56JwgtX0sri+CqRqhN74y8lSycCVQI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nOTHh5N/RNtg5WKfhfCtwkiBRU/CH9ki0aZxMLZWNM8=;
+        b=F1/USBdDgPBHJcjEJy969fuu1m7IRAMzKHVptAIj4fBxYakph1k81d9XgEK5yQbrRr
+         aTUIRd38x8wLUGTwqnRcm86ab9waBSKzM5u/V4z/glaPsxtg/ZWqtsJw5kotKbdPMLck
+         x/GiNpDhuTAgmim47pRzIzjugWNvyk7zIbaPSORVsDRM1bCr6Q0Kg8DUO1fkFvofPN/m
+         velRBvvpK5I+c+nCtDPBTOIBvapSu/IDeT3PVRJhSY4JGPv2Ayr9HPQXIlkdj+4oExrE
+         /NNeOuTKeuSIfI2UGw+tjNPrI+ljrKmwh2tN3K4xmAnFt5hRmVCDUxYu/l5x7GnPzbWN
+         Ct9w==
+X-Gm-Message-State: AOAM5310tfKfw7vTmXf2B23/7l5XdBDoQ1/KGD6FzskiWe+yf5ngnPl0
+        8t848X44hf46E8J9ycZ3E/z4AQ==
+X-Google-Smtp-Source: ABdhPJzoia5b4R3aKCY9DeX9VBSHtlvmbIiYbgW9yavDq1ofyRtLzgDYooiLfyGViGwhip19H04ljw==
+X-Received: by 2002:a17:90a:b38b:: with SMTP id e11mr12317231pjr.120.1594251599145;
+        Wed, 08 Jul 2020 16:39:59 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:42b0:34ff:fe3d:58e6])
+        by smtp.gmail.com with ESMTPSA id h100sm526405pjb.46.2020.07.08.16.39.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jul 2020 16:39:58 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, akashast@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        georgi.djakov@linaro.org, swboyd@chromium.org,
+        mkshah@codeaurora.org, ctheegal@codeaurora.org, mka@chromium.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH] spi: spi-geni-qcom: Set the clock properly at runtime resume
+Date:   Wed,  8 Jul 2020 16:39:39 -0700
+Message-Id: <20200708163922.1.I0b701fc23eca911a5bde4ae4fa7f97543d7f960e@changeid>
+X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++++
-X-Spam-Level: ******
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
-X-Spam: Yes
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
+In the patch ("spi: spi-geni-qcom: Avoid clock setting if not needed")
+we avoid a whole pile of clock code.  As part of that, we should have
+restored the clock at runtime resume.  Do that.
 
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
+It turns out that, at least with today's configurations, this doesn't
+actually matter.  That's because none of the current device trees have
+an OPP table for geni SPI yet.  That makes dev_pm_opp_set_rate(dev, 0)
+a no-op.  This is why it wasn't noticed in the testing of the original
+patch.  It's still a good idea to fix, though.
 
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
+Sending this as a separate patch even though I think the patch it's
+fixing [1] hasn't landed yet.  I'd be happy if this was squashed into
+that patch when landing if that suits everyone, but it could land on
+its own too.
 
- If there are any URLs to be removed completely or at least not HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
+Like the patch it's fixing, this needs to target the Qualcomm tree in
+order to avoid merge conflicts.
 
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
+[1] https://lore.kernel.org/r/20200701174506.1.Icfdcee14649fc0a6c38e87477b28523d4e60bab3@changeid
 
- If you apply the patch, please let me know.
+ drivers/spi/spi-geni-qcom.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-
- Documentation/devicetree/bindings/spi/spi-davinci.txt | 4 ++--
- Documentation/spi/spi-sc18is602.rst                   | 2 +-
- drivers/spi/spi-ep93xx.c                              | 2 +-
- drivers/spi/spi-oc-tiny.c                             | 2 +-
- drivers/spi/spi-ti-qspi.c                             | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-davinci.txt b/Documentation/devicetree/bindings/spi/spi-davinci.txt
-index 9f5b4c7c0c08..e2198a389484 100644
---- a/Documentation/devicetree/bindings/spi/spi-davinci.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-davinci.txt
-@@ -1,8 +1,8 @@
- Davinci SPI controller device bindings
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 97fac5ea6afd..e5ece1bcc4ad 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -79,6 +79,7 @@ struct spi_geni_master {
+ 	u32 tx_wm;
+ 	u32 last_mode;
+ 	unsigned long cur_speed_hz;
++	unsigned long cur_sclk_hz;
+ 	unsigned int cur_bits_per_word;
+ 	unsigned int tx_rem_bytes;
+ 	unsigned int rx_rem_bytes;
+@@ -116,6 +117,9 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+ 	ret = dev_pm_opp_set_rate(mas->dev, sclk_freq);
+ 	if (ret)
+ 		dev_err(mas->dev, "dev_pm_opp_set_rate failed %d\n", ret);
++	else
++		mas->cur_sclk_hz = sclk_freq;
++
+ 	return ret;
+ }
  
- Links on DM:
--Keystone 2 - http://www.ti.com/lit/ug/sprugp2a/sprugp2a.pdf
--dm644x - http://www.ti.com/lit/ug/sprue32a/sprue32a.pdf
-+Keystone 2 - https://www.ti.com/lit/ug/sprugp2a/sprugp2a.pdf
-+dm644x - https://www.ti.com/lit/ug/sprue32a/sprue32a.pdf
- OMAP-L138/da830 - http://www.ti.com/lit/ug/spruh77a/spruh77a.pdf
+@@ -670,7 +674,13 @@ static int __maybe_unused spi_geni_runtime_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
  
- Required properties:
-diff --git a/Documentation/spi/spi-sc18is602.rst b/Documentation/spi/spi-sc18is602.rst
-index 2a31dc722321..4ab9ca346b44 100644
---- a/Documentation/spi/spi-sc18is602.rst
-+++ b/Documentation/spi/spi-sc18is602.rst
-@@ -6,7 +6,7 @@ Supported chips:
+-	return geni_se_resources_on(&mas->se);
++	ret = geni_se_resources_on(&mas->se);
++	if (ret)
++		return ret;
++
++	dev_pm_opp_set_rate(mas->dev, mas->cur_sclk_hz);
++
++	return 0;
+ }
  
-   * NXP SI18IS602/602B/603
- 
--    Datasheet: http://www.nxp.com/documents/data_sheet/SC18IS602_602B_603.pdf
-+    Datasheet: https://www.nxp.com/documents/data_sheet/SC18IS602_602B_603.pdf
- 
- Author:
-         Guenter Roeck <linux@roeck-us.net>
-diff --git a/drivers/spi/spi-ep93xx.c b/drivers/spi/spi-ep93xx.c
-index 8c854b187b1d..ae7c79a06208 100644
---- a/drivers/spi/spi-ep93xx.c
-+++ b/drivers/spi/spi-ep93xx.c
-@@ -10,7 +10,7 @@
-  *
-  * For more information about the SPI controller see documentation on Cirrus
-  * Logic web site:
-- *     http://www.cirrus.com/en/pubs/manual/EP93xx_Users_Guide_UM1.pdf
-+ *     https://www.cirrus.com/en/pubs/manual/EP93xx_Users_Guide_UM1.pdf
-  */
- 
- #include <linux/io.h>
-diff --git a/drivers/spi/spi-oc-tiny.c b/drivers/spi/spi-oc-tiny.c
-index 9df7c5979c29..f3843f0ff260 100644
---- a/drivers/spi/spi-oc-tiny.c
-+++ b/drivers/spi/spi-oc-tiny.c
-@@ -2,7 +2,7 @@
- /*
-  * OpenCores tiny SPI master driver
-  *
-- * http://opencores.org/project,tiny_spi
-+ * https://opencores.org/project,tiny_spi
-  *
-  * Copyright (C) 2011 Thomas Chou <thomas@wytron.com.tw>
-  *
-diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
-index 366a3e5cca6b..3c41649698a5 100644
---- a/drivers/spi/spi-ti-qspi.c
-+++ b/drivers/spi/spi-ti-qspi.c
-@@ -2,7 +2,7 @@
- /*
-  * TI QSPI driver
-  *
-- * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com
-+ * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com
-  * Author: Sourav Poddar <sourav.poddar@ti.com>
-  */
- 
+ static int __maybe_unused spi_geni_suspend(struct device *dev)
 -- 
-2.27.0
+2.27.0.383.g050319c2ae-goog
 
