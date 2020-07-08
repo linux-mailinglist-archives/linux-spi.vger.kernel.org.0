@@ -2,53 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CDB218DCB
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jul 2020 19:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 667F5218DD5
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jul 2020 19:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbgGHRCn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Jul 2020 13:02:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37874 "EHLO mail.kernel.org"
+        id S1730187AbgGHREZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Jul 2020 13:04:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38510 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725989AbgGHRCn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 8 Jul 2020 13:02:43 -0400
+        id S1727937AbgGHREZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 8 Jul 2020 13:04:25 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EE1762078D;
-        Wed,  8 Jul 2020 17:02:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6B2BA206F6;
+        Wed,  8 Jul 2020 17:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594227762;
-        bh=tcQEpvfKXYviEYwZH0mvCarafvIgmX4RQCzp4S4dXEk=;
+        s=default; t=1594227864;
+        bh=IlGFoPEuvpiTmmWUgcvgenltwkXzgCwVKvpprIlvSv8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hSkMogadsUklt9G7aiuiDAwf4BMfSqpeNShgUb7qd1Ko0H7KZQjkzfRrerYxS6SLM
-         sw7izinKrm8hAwSoT97v0+URzoki85TLyeAsXgaZx1jcpGU5rI8gm6JaC1NxJSJn/S
-         j5Pw7ZGMbXl7LsyjQgCyV8e/0Vjzrngt0duu2yZQ=
-Date:   Wed, 8 Jul 2020 18:02:37 +0100
+        b=hzLi/TSZ4mT16gwsa8dYah5LASPBcD9lavU0/HVW8sHIeqfQo62PA7RMLhPwStlTo
+         PBIVPNp1ObxDv3BY46aES8jjTZizSrYcgeaSrqcuJRFmEu5XCmaVfayXhIznsTyTDu
+         sKX4FAi2cWFIX2Wn/PNvVXZfdHGILBH1U4UPAAco=
+Date:   Wed, 8 Jul 2020 18:04:19 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
+To:     Douglas Anderson <dianders@chromium.org>
 Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>, mka@chromium.org,
         Akash Asthana <akashast@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        ctheegal@codeaurora.org, Matthias Kaehlcke <mka@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 1/3] spi: spi-geni-qcom: Avoid clock setting if not needed
-Message-ID: <20200708170237.GY4655@sirena.org.uk>
-References: <20200702004509.2333554-1-dianders@chromium.org>
- <20200701174506.1.Icfdcee14649fc0a6c38e87477b28523d4e60bab3@changeid>
- <20200707120812.GA22129@sirena.org.uk>
- <CAD=FV=U5RHh_QuZ1tv9V5JtcsrhRONSa_CerYwUFsHhDOhEqdA@mail.gmail.com>
- <20200708100110.GB4655@sirena.org.uk>
- <CAD=FV=UFFN+FQhvs1Cdh7jWBRMzDvfHNiC43M_ZqiVqnWf+Y+g@mail.gmail.com>
+        Rajendra Nayak <rnayak@codeaurora.org>, swboyd@chromium.org,
+        linux-arm-msm@vger.kernel.org, georgi.djakov@linaro.org,
+        ctheegal@codeaurora.org, mkshah@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: spi-qcom-qspi: Avoid clock setting if not needed
+Message-ID: <20200708170419.GZ4655@sirena.org.uk>
+References: <20200707201641.2030532-1-dianders@chromium.org>
+ <20200707131607.1.Ia7cb4f41ce93d37d0a764b47c8a453ce9e9c70ef@changeid>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="reSNjdE3Iylkp4B8"
+        protocol="application/pgp-signature"; boundary="l4GQ7sizse6iPvDe"
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=UFFN+FQhvs1Cdh7jWBRMzDvfHNiC43M_ZqiVqnWf+Y+g@mail.gmail.com>
+In-Reply-To: <20200707131607.1.Ia7cb4f41ce93d37d0a764b47c8a453ce9e9c70ef@changeid>
 X-Cookie: Oh Dad!  We're ALL Devo!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
@@ -57,38 +50,29 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---reSNjdE3Iylkp4B8
+--l4GQ7sizse6iPvDe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Jul 08, 2020 at 08:22:05AM -0700, Doug Anderson wrote:
+On Tue, Jul 07, 2020 at 01:16:40PM -0700, Douglas Anderson wrote:
+> As per recent changes to the spi-qcom-qspi, now when we set the clock
+> we'll call into the interconnect framework and also call the OPP API.
 
-> Since the rest haven't landed, it would be nice to just land them in
-> the Qualcomm tree.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-I guess.
-
-> I think there's still more work to make the Geni SPI driver more
-> optimized, but I don't think it'll be as urgent as those patches and I
-> feel like any more major work could wait a cycle.
-
-It feels like there's more than what's already landed in flight at the
-minute, though some of that might just be the multiple rounds of reviews
-there were for the bandwidth stuff.
-
---reSNjdE3Iylkp4B8
+--l4GQ7sizse6iPvDe
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8F/CwACgkQJNaLcl1U
-h9BemQf+JIvcscVf3YMT0+iP6NxdT0RynD3DndnbkYXWTEnEZxPOYD85pGqBY5dW
-JRWAakqd8G6RJ0sVOrPH4hzxxLuove4MHEebr6kXxUnY3nvio6DyPz40pOu8ekw8
-eLhIUgs8Em5ZxCpc72Tz2XJhOwtt8WlxNhG1qmlaDaQ48LMH6kC3h+Nl6460B2bb
-JF7D8w+lvhrDO/PHsZt2BAsMF9QH6demYc7EyhQBE/dCmm1mCXzPrLonXC4+3aRi
-1V1ci374Tx4KhgVjYuzrhLFNsW7tr2PwoZiMcch1UlJUJ7f8sgEmu8QA444Nh4fv
-toKcswg0ytpd1q1r6x2pF1FVpnuXow==
-=Mmu2
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8F/JIACgkQJNaLcl1U
+h9ASewf/Qco0RI67DNoTYF+gueLZS92Y7IqejChGBBxd44wZe4PiRkAG7PLGdBbs
+NQpsOfM7WCDv4njTaGwTl6wkQ+hG5ndQGpzSBmyb1iEGSw4osykO3dtg1D7xb8kA
+dZjiglV5C8CoS0FGe5PqAFYdu5g6G0N5pc4MUKgO6zhYZzkdTNV1XalyJgLwxU3J
+SiuPdGKxb/kWRNpJpzNhmshzGeA18HMd+7UhU2Zi2mbqUxaIKTS2qb+R3V4HiRR8
+vQ+3kkBVGZNtwMIywBBmPozc3zTKOt+BFc8JVNezpOI9z07YbNxA2UAWUodxS51G
+CnVAh+IeSbzXIq1Fu8JRdVKMVElDHA==
+=x/5H
 -----END PGP SIGNATURE-----
 
---reSNjdE3Iylkp4B8--
+--l4GQ7sizse6iPvDe--
