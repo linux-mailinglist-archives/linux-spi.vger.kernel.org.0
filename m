@@ -2,132 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D760E21A24C
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jul 2020 16:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A1A21A25E
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jul 2020 16:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726517AbgGIOlK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Jul 2020 10:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S1726729AbgGIOom (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Jul 2020 10:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726410AbgGIOlJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jul 2020 10:41:09 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95F1C08C5CE
-        for <linux-spi@vger.kernel.org>; Thu,  9 Jul 2020 07:41:09 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id z5so1067064pgb.6
-        for <linux-spi@vger.kernel.org>; Thu, 09 Jul 2020 07:41:09 -0700 (PDT)
+        with ESMTP id S1726617AbgGIOol (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Jul 2020 10:44:41 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAF5C08C5CE
+        for <linux-spi@vger.kernel.org>; Thu,  9 Jul 2020 07:44:41 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id a17so1233153vsq.6
+        for <linux-spi@vger.kernel.org>; Thu, 09 Jul 2020 07:44:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k8RzlfTCja4h/a013n6RoUclRSB2CwQ+pZ4EWD7ck5E=;
-        b=LEKP3/O57jFeDUPqAXE0gJKigfdznHmRdVNJrp0qV7k3f/45Q59oQxM6R3X6Iv+CjY
-         pfYutbH9JUw/5GclUB1wLxWANHu3MPlJo5mGClpqogYr6GYTrP0gpKjPviBE/tr7yePK
-         6w8a2sTh0yI2WCfrNyBgXyixKMMv7kngi7Kog=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0Kim3CdbxyyOIhVT8nqi+K5F5C7o279gFE7n8I2AhGw=;
+        b=PCMgMMIMPYgEiSOnn0WY5wKtX6cQ7Z+UAnP1iiRucoEQNv/MdRE5U9c5KpDE2lrLCt
+         kkxmc4qkOKMgwTMSCezsgykchuRt1xzNJss9K4+HJBnMdi7Zw5W/8Z+vfTGJXDvz42Q8
+         XIw6BtvVUeg3ghXbZOO7MBapqShWQ1NOc4too=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k8RzlfTCja4h/a013n6RoUclRSB2CwQ+pZ4EWD7ck5E=;
-        b=dViB1bvdKcVyuXtwePL8RzXipipo4L5Eh/10aWYqAVNZlq4mJjRq13b2vXgUIhpb2P
-         EewCsOwG4Twd9AhjBT9p1n4+R8c84OvirEaCUHAgHYznAfk0UAuPXUJAaGMznWhTXo0v
-         nFXAyXjeEN6Pa3HC39Za/ebi9+eTpZJGb6zSE+eIM0/hG6HC9rUwGAYm77g+kOsrK6nc
-         kasgFHapXPRQoiov76ys8x6y+uJH/RLcKPJDvv5QFpKSvf5PpcEYXDGZu/hGdy+HpL5B
-         cCUCimmcz0ZtLkk+GiQ7/nf/3DR9nN2FTX9swh2k++z2dV7JXudHHff1d4SnhJLjuKOr
-         X7tw==
-X-Gm-Message-State: AOAM5309bg5GnKtNXV/lBLVY70nes6HNZHntvJj2ER9MsruEeiFi4nES
-        XQcGrk9EQ4WdOvgDHrHzCBHXKA==
-X-Google-Smtp-Source: ABdhPJx7OjhT6rpGtDr81vmAzXRNHs+d6R9lyl8dtGIdqsLzjw07GYd/mwsesp6pTXfI5ocIHc5PUg==
-X-Received: by 2002:a62:7847:: with SMTP id t68mr51401847pfc.112.1594305669025;
-        Thu, 09 Jul 2020 07:41:09 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:42b0:34ff:fe3d:58e6])
-        by smtp.gmail.com with ESMTPSA id kx3sm2849731pjb.32.2020.07.09.07.41.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 07:41:08 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     mkshah@codeaurora.org, georgi.djakov@linaro.org,
-        Akash Asthana <akashast@codeaurora.org>, swboyd@chromium.org,
-        linux-arm-msm@vger.kernel.org, mka@chromium.org,
-        ctheegal@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v2] spi: spi-geni-qcom: Set the clock properly at runtime resume
-Date:   Thu,  9 Jul 2020 07:40:49 -0700
-Message-Id: <20200709074037.v2.1.I0b701fc23eca911a5bde4ae4fa7f97543d7f960e@changeid>
-X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0Kim3CdbxyyOIhVT8nqi+K5F5C7o279gFE7n8I2AhGw=;
+        b=jxim7ffAmretJaR/SIk2DEGobENg0NbK4kXG+/wLMdW50JYw95svHd1IoEhHht+IM3
+         cIouksp/p7ACHxBzZf71IAkLDrux7wwfH5ruXG4s3zcX3UMN0SFASM6Sqt9MC9TkKVQ+
+         QNA5am118VeoiZKHObx6PCSYSD3jkAlIY7BdApEjDh3qqdIlrA2NjWBHZnIMcWFPlxlI
+         m7eqVB1tj6+fFwunzVXRoK5T4LJLi9YaxMh+lJLCmtkjIvxzjXoFy7MYnLf65Jd5Uiv6
+         hrRBI36IgtlSQ7GK1Es/lkPpNQUth9XUX909TrjvGCdB3VX1V6I+krbwAGrH4APJr7uD
+         g4xA==
+X-Gm-Message-State: AOAM533KUMxa8zPoDrMekt8u4uGHgb6ik787RruszQzQbUBE72aZozVc
+        xAPs7eNjgF9c3KJ8YG0cxM3QP0Rj13E=
+X-Google-Smtp-Source: ABdhPJw71sxlxkbw1IDAs0sskTE2Y7zej3q550tUf9Wk7V9PGYB+Lbc7KXnkr+uS/+Drz+sYm8/Btg==
+X-Received: by 2002:a05:6102:2051:: with SMTP id q17mr16347084vsr.29.1594305880660;
+        Thu, 09 Jul 2020 07:44:40 -0700 (PDT)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id i184sm358895vsc.18.2020.07.09.07.44.39
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jul 2020 07:44:39 -0700 (PDT)
+Received: by mail-vk1-f179.google.com with SMTP id c11so489780vkn.11
+        for <linux-spi@vger.kernel.org>; Thu, 09 Jul 2020 07:44:39 -0700 (PDT)
+X-Received: by 2002:a05:6122:78d:: with SMTP id k13mr41715186vkr.28.1594305878997;
+ Thu, 09 Jul 2020 07:44:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200708163922.1.I0b701fc23eca911a5bde4ae4fa7f97543d7f960e@changeid>
+ <23e53f2b-02b0-2c9b-a165-4ca5a2c84a89@codeaurora.org>
+In-Reply-To: <23e53f2b-02b0-2c9b-a165-4ca5a2c84a89@codeaurora.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 9 Jul 2020 07:44:26 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XrD0TMCNG-2JZ6_f67+yU8Z+2ofkqMvp=uA9rB2bS6og@mail.gmail.com>
+Message-ID: <CAD=FV=XrD0TMCNG-2JZ6_f67+yU8Z+2ofkqMvp=uA9rB2bS6og@mail.gmail.com>
+Subject: Re: [PATCH] spi: spi-geni-qcom: Set the clock properly at runtime resume
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Maulik Shah <mkshah@codeaurora.org>, ctheegal@codeaurora.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In the patch ("spi: spi-geni-qcom: Avoid clock setting if not needed")
-we avoid a whole pile of clock code.  As part of that, we should have
-restored the clock at runtime resume.  Do that.
+Hi,
 
-It turns out that, at least with today's configurations, this doesn't
-actually matter.  That's because none of the current device trees have
-an OPP table for geni SPI yet.  That makes dev_pm_opp_set_rate(dev, 0)
-a no-op.  This is why it wasn't noticed in the testing of the original
-patch.  It's still a good idea to fix, though.
+On Thu, Jul 9, 2020 at 1:55 AM Rajendra Nayak <rnayak@codeaurora.org> wrote:
+>
+>
+> On 7/9/2020 5:09 AM, Douglas Anderson wrote:
+> > In the patch ("spi: spi-geni-qcom: Avoid clock setting if not needed")
+> > we avoid a whole pile of clock code.  As part of that, we should have
+> > restored the clock at runtime resume.  Do that.
+> >
+> > It turns out that, at least with today's configurations, this doesn't
+> > actually matter.  That's because none of the current device trees have
+> > an OPP table for geni SPI yet.  That makes dev_pm_opp_set_rate(dev, 0)
+> > a no-op.  This is why it wasn't noticed in the testing of the original
+> > patch.  It's still a good idea to fix, though.
+>
+> good catch, without this (and with OPP tables added) we would end up removing
+> the performance vote on suspend and never put it back unless the rate changes.
+> Perhaps a similar change would be needed for spi-qcom-qspi too?
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Acked-by: Mark Brown <broonie@kernel.org>
----
-Sending this as a separate patch even though I think the patch it's
-fixing [1] hasn't landed yet.  I'd be happy if this was squashed into
-that patch when landing if that suits everyone, but it could land on
-its own too.
+The quad spi already patch had this fix and it actually mattered
+there.  That's what made me go look back and realize that I needed the
+fix in the geni SPI.  See:
 
-Like the patch it's fixing, this needs to target the Qualcomm tree in
-order to avoid merge conflicts.
+https://lore.kernel.org/r/20200707131607.1.Ia7cb4f41ce93d37d0a764b47c8a453ce9e9c70ef@changeid
 
-[1] https://lore.kernel.org/r/20200701174506.1.Icfdcee14649fc0a6c38e87477b28523d4e60bab3@changeid
+I'll send a v2 of that with Akash's suggestion of checking the return
+value, though.
 
-Changes in v2:
-- Return error from runtime resume if dev_pm_opp_set_rate() fails.
-
- drivers/spi/spi-geni-qcom.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 97fac5ea6afd..0e11a90490ff 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -79,6 +79,7 @@ struct spi_geni_master {
- 	u32 tx_wm;
- 	u32 last_mode;
- 	unsigned long cur_speed_hz;
-+	unsigned long cur_sclk_hz;
- 	unsigned int cur_bits_per_word;
- 	unsigned int tx_rem_bytes;
- 	unsigned int rx_rem_bytes;
-@@ -116,6 +117,9 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
- 	ret = dev_pm_opp_set_rate(mas->dev, sclk_freq);
- 	if (ret)
- 		dev_err(mas->dev, "dev_pm_opp_set_rate failed %d\n", ret);
-+	else
-+		mas->cur_sclk_hz = sclk_freq;
-+
- 	return ret;
- }
- 
-@@ -670,7 +674,11 @@ static int __maybe_unused spi_geni_runtime_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	return geni_se_resources_on(&mas->se);
-+	ret = geni_se_resources_on(&mas->se);
-+	if (ret)
-+		return ret;
-+
-+	return dev_pm_opp_set_rate(mas->dev, mas->cur_sclk_hz);
- }
- 
- static int __maybe_unused spi_geni_suspend(struct device *dev)
--- 
-2.27.0.383.g050319c2ae-goog
-
+-Doug
