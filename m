@@ -2,79 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDEA21B9A3
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jul 2020 17:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CD521B9AD
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jul 2020 17:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbgGJPfh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Jul 2020 11:35:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55210 "EHLO mail.kernel.org"
+        id S1727851AbgGJPkT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Jul 2020 11:40:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56746 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726872AbgGJPfh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 10 Jul 2020 11:35:37 -0400
+        id S1726828AbgGJPkS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 10 Jul 2020 11:40:18 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 53F9E20725;
-        Fri, 10 Jul 2020 15:35:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 90A1A207DD;
+        Fri, 10 Jul 2020 15:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594395336;
-        bh=gI3yEGsGyMaUOOnDy+UZFfrMEPrpJsahOsnjo0T8Coc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0HLdx85blFvC788EU5GISpD8YvLXgUcUqFLh1FxvQIhJA12/km9XIFkEF3IXMXm2P
-         nsw8XESdyQSCcinvt3Aq6Moa/pDJO2nANG7PoXscm0YfNnjvrNSGS9JuyXQk+dUxWG
-         4BKm0M/Zfk5CDuyE0QEo0tTk8dRS76QzbWH4m4jk=
-Date:   Fri, 10 Jul 2020 16:35:31 +0100
+        s=default; t=1594395618;
+        bh=yBGfKHJWIcCaqiK6pZXuN/WxGy9oTJD39ERpyC3HJZE=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=Rh3B0AA2G23e7cN0TqDiNZ4HGpI6QrwnANwUQheACFHuf8KjlMxr0O4i2mN5/pm//
+         qSCl7C95ob72boOGGaEAMR2FyvS4s23I8TtUJ7QjASt7SX4uMog+BDZDYAmj4eDDzj
+         M2xJL0gFbZqD/hKdki0w60glq8BhA3fDqQ5JOXXY=
+Date:   Fri, 10 Jul 2020 16:40:11 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Shreyas Joshi <shreyas.joshi@biamp.com>
-Cc:     linux-spi@vger.kernel.org, shreyasjoshi15@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-cadence: add support for chip select high
-Message-ID: <20200710153530.GA46888@sirena.org.uk>
-References: <20200710045140.458-1-shreyas.joshi@biamp.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3V7upXqbjpZ4EhLz"
-Content-Disposition: inline
-In-Reply-To: <20200710045140.458-1-shreyas.joshi@biamp.com>
-X-Cookie: Do clones have navels?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, shawnguo@kernel.org, robh+dt@kernel.org,
+        Anson Huang <Anson.Huang@nxp.com>, marex@denx.de,
+        devicetree@vger.kernel.org, festevam@gmail.com
+Cc:     Linux-imx@nxp.com
+In-Reply-To: <1592281575-32708-1-git-send-email-Anson.Huang@nxp.com>
+References: <1592281575-32708-1-git-send-email-Anson.Huang@nxp.com>
+Subject: Re: [PATCH V3 0/3] Convert mxs/imx spi/cspi/lpspi binding to json-schema
+Message-Id: <159439561193.49235.7694501887022961004.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 16 Jun 2020 12:26:12 +0800, Anson Huang wrote:
+> This patch series converts mxs/imx spi/cspi/lpspi binding to json-schema.
+> 
+> In fsl-imx-cspi.yaml, also update compatible, remove obsolete properties
+> "fsl,spi-num-chipselects" and update the example based on latest DT file;
+> 
+> In spi-fsl-lpspi.yaml, the original maintainer's email address pandy.gao@nxp.com
+> is no longer valid, so I use mine.
+> 
+> [...]
 
---3V7upXqbjpZ4EhLz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Fri, Jul 10, 2020 at 02:51:40PM +1000, Shreyas Joshi wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> spi cadence driver should support spi-cs-high in mode bits
-> so that the peripherals that needs the chip select to be high active can
-> use it. Add the SPI-CS-HIGH flag in the supported mode bits.
+Thanks!
 
-This doesn't apply against current code, please check and resend:
+[1/3] dt-bindings: spi: Convert mxs spi to json-schema
+      commit: e013bf2d96528c382f232a6ee068990d63e81a3d
+[2/3] dt-bindings: spi: Convert imx cspi to json-schema
+      commit: 790739c4417c17b2201bc742a9d5d819ea71799f
+[3/3] dt-bindings: spi: Convert imx lpspi to json-schema
+      commit: be8faebc2e55b2e5a335b606d11d070d53e78133
 
-HEAD is now at 3ea4eac3e29f SPI SUBSYSTEM: Replace HTTP links with HTTPS ones
-Applying: spi: spi-cadence: add support for chip select high
-error: corrupt patch at line 18
-error: could not build fake ancestor
-Patch failed at 0001 spi: spi-cadence: add support for chip select high
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---3V7upXqbjpZ4EhLz
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8IisIACgkQJNaLcl1U
-h9DBxwf/SNduPQaFfCuvDvvx11pYNTr1Jepbd3k5HKVQ+kEu7WG40id0/bBfbnFg
-apY8ORg1zqSq4Q1zogVp42+OnQ0qVrKOIYPEAXr4ztDzA7pM0LfNdKtkon2ZBkJS
-IJ6p0ic+/j4X4FTZddd/cNn6oFERL2Gjnoa0QD5MjRhlEufMyybvRZj1zGWWpcF+
-hIXIEuKJrrUzyF2BCVHnmdr9Bn2jqcMsIVXc8Mm5VDdHSTyax0V8TxSlttKmnBLa
-LoXyvqRE4T3hF/WmOHswjhlXaZKNVhkw1O5mzkyUun5mAya9wtmtrU1QXqGvv1P7
-f8nmdDKKnccShhOjafcjckrcH2Uwiw==
-=NRw/
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---3V7upXqbjpZ4EhLz--
+Thanks,
+Mark
