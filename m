@@ -2,103 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4170A21EC41
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Jul 2020 11:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A2C21ED19
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Jul 2020 11:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgGNJJV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Jul 2020 05:09:21 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:35316 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726479AbgGNJJV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 14 Jul 2020 05:09:21 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxqdQ7dg1fIVcEAA--.3823S2;
-        Tue, 14 Jul 2020 17:09:16 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Mark Brown <broonie@kernel.org>
+        id S1725952AbgGNJoW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Jul 2020 05:44:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35392 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725816AbgGNJoW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 14 Jul 2020 05:44:22 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 376F421D7A;
+        Tue, 14 Jul 2020 09:44:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594719860;
+        bh=WIzzL2vxmexuuKMhffrG8LZui4Dea/ANs5K0xx4zolE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cg7mYIXAqtB0Frw9eTLIzy3AqMaN8uzdBgVihAY/uCka7Fn7d6nvxK4PoCWN3i8lf
+         R4jgxKw1+mE/hX2r0+VcjCG9NrEsln/oLoqK8QNSiDdAlRckCgOVMzb/YvTEAOoJo2
+         dtajleBa1Jm7t1eqcoWxZWHkmoDc8iwHhxXjQb5Y=
+Date:   Tue, 14 Jul 2020 10:44:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Qing Zhang <zhangqing@loongson.cn>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Qing Zhang <zhangqing@loongson.cn>
-Subject: [PATCH] spi: Use clk_prepare_enable and clk_disable_unprepare
-Date:   Tue, 14 Jul 2020 17:09:14 +0800
-Message-Id: <1594717754-25428-1-git-send-email-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9CxqdQ7dg1fIVcEAA--.3823S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ary8Ww4UCw1fJF4UXryfXrb_yoW8Cr17pF
-        Z7tFWF9r4xXa109FsFv3yqvFyYy34fKa42kw4rK34ru345tryUtF48Xa4IvF4xuFykAF1I
-        9F4UKrs8Aan8ur7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyK14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-        0EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU0iiSUUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH] spi: Use clk_prepare_enable and clk_disable_unprepare
+Message-ID: <20200714094406.GA4900@sirena.org.uk>
+References: <1594717754-25428-1-git-send-email-zhangqing@loongson.cn>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bg08WKrSYDhXBjb5"
+Content-Disposition: inline
+In-Reply-To: <1594717754-25428-1-git-send-email-zhangqing@loongson.cn>
+X-Cookie: Your password is pitifully obvious.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert clk_enable/clk_disable to clk_prepare_enable/clk_disable_unprepare
-calls as required by common clock framework.
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- drivers/spi/spi-coldfire-qspi.c | 4 ++--
- drivers/spi/spi-omap-uwire.c    | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+--bg08WKrSYDhXBjb5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-coldfire-qspi.c b/drivers/spi/spi-coldfire-qspi.c
-index f80e06c..8996115 100644
---- a/drivers/spi/spi-coldfire-qspi.c
-+++ b/drivers/spi/spi-coldfire-qspi.c
-@@ -387,7 +387,7 @@ static int mcfqspi_probe(struct platform_device *pdev)
- 		status = PTR_ERR(mcfqspi->clk);
- 		goto fail0;
- 	}
--	clk_enable(mcfqspi->clk);
-+	clk_prepare_enable(mcfqspi->clk);
- 
- 	master->bus_num = pdata->bus_num;
- 	master->num_chipselect = pdata->num_chipselect;
-@@ -425,7 +425,7 @@ static int mcfqspi_probe(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	mcfqspi_cs_teardown(mcfqspi);
- fail1:
--	clk_disable(mcfqspi->clk);
-+	clk_disable_unprepare(mcfqspi->clk);
- fail0:
- 	spi_master_put(master);
- 
-diff --git a/drivers/spi/spi-omap-uwire.c b/drivers/spi/spi-omap-uwire.c
-index ce8dbdb..71402f7 100644
---- a/drivers/spi/spi-omap-uwire.c
-+++ b/drivers/spi/spi-omap-uwire.c
-@@ -443,7 +443,7 @@ static void uwire_cleanup(struct spi_device *spi)
- static void uwire_off(struct uwire_spi *uwire)
- {
- 	uwire_write_reg(UWIRE_SR3, 0);
--	clk_disable(uwire->ck);
-+	clk_disable_unprepare(uwire->ck);
- 	spi_master_put(uwire->bitbang.master);
- }
- 
-@@ -475,7 +475,7 @@ static int uwire_probe(struct platform_device *pdev)
- 		spi_master_put(master);
- 		return status;
- 	}
--	clk_enable(uwire->ck);
-+	clk_prepare_enable(uwire->ck);
- 
- 	if (cpu_is_omap7xx())
- 		uwire_idx_shift = 1;
--- 
-2.1.0
+On Tue, Jul 14, 2020 at 05:09:14PM +0800, Qing Zhang wrote:
+> Convert clk_enable/clk_disable to clk_prepare_enable/clk_disable_unprepare
+> calls as required by common clock framework.
+>=20
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+>  drivers/spi/spi-coldfire-qspi.c | 4 ++--
 
+Are you sure that ColdFire uses the common clock framework?
+
+>  drivers/spi/spi-omap-uwire.c    | 4 ++--
+
+It makes life easier if you send per-driver patches, that makes it
+easier for driver maintainers to review things and means that issues
+with a change in one driver won't hold up another.
+
+--bg08WKrSYDhXBjb5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8NfmMACgkQJNaLcl1U
+h9BIbAf/R2GkeQj9D8dfvZvUp0id4vPtJwbTq/q26CQepJMwZC34jt2JA0XnTtnf
+58YhpL1GG9S1rcA8KGict63K+v9IsC+YoQwtfDWQpwRUCJ7dCSpZJCAxDSMbsUrl
+TAg1bFo37gqb4zzeNBOohrp40QhAL/XV+Y8N4Eih6Sf3lBmeEPKqdLuLMumBPriR
+ZCoOEiArZMhAbSvLsCzNVRI7j0Bc3jqqQxTHDu8VxQI/4OETK/cM63UQdfKeFETv
+013BOyx+E4Ig7es5SfB1KNKIAWM44q3M4/R/MAGQs8iZZBL15pvio9QcZNyaorU/
+3RnU7uo0TMOq5QORtscA1JRNVpIvOA==
+=TPc/
+-----END PGP SIGNATURE-----
+
+--bg08WKrSYDhXBjb5--
