@@ -2,85 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB5D220456
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jul 2020 07:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7E52204B1
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jul 2020 07:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727049AbgGOF04 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jul 2020 01:26:56 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:48594 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725866AbgGOF0z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 15 Jul 2020 01:26:55 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxCdWYkw5fPuQEAA--.6136S3;
-        Wed, 15 Jul 2020 13:26:48 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] spi: coldfire-qspi: Use clk_prepare_enable and clk_disable_unprepare
-Date:   Wed, 15 Jul 2020 13:26:47 +0800
-Message-Id: <1594790807-32319-2-git-send-email-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
-References: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
-X-CM-TRANSID: AQAAf9CxCdWYkw5fPuQEAA--.6136S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrurWxur1UZrW3KFykXFy5Jwb_yoWkArbE9a
-        n8Wrs5GF4Uurs7A3WkKwn8Xryj9FWku3ZrKrs2qr1Fq3srZws8CrWDZFs8Cr93Cw42kr4S
-        yr4kCw17Ar4fGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbfAYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7
-        IE14v26r18M28IrcIa0xkI8VCY1x0267AKxVWUXVWUCwA2ocxC64kIII0Yj41l84x0c7CE
-        w4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE
-        c7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-        02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE
-        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4rMxAIw28IcxkI7V
-        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8-6pJUUUUU==
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+        id S1728775AbgGOF5Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jul 2020 01:57:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727942AbgGOF5P (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 15 Jul 2020 01:57:15 -0400
+Received: from localhost (unknown [122.171.202.192])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 062C220663;
+        Wed, 15 Jul 2020 05:57:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594792635;
+        bh=sh/y6Tv58ZbvejAQoIQ7VjPDPdiVI5suGLxy8ixlw/o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ccBKPEH3rQXWo6yxYXS2I2Zlg2bQpnTixf+T723Cut6K23obwSGs8LC/tGlIcQMhh
+         tRvVtjy4pdNc9vNYYLz3mV77xwIpzia10DvfB0RHR5uP/CP2ZPcyWHVDuB2iSvoR1u
+         OJ0W3dyzkgKGrnKDO4/kalcaLUs9xZJFNlP/+B/A=
+Date:   Wed, 15 Jul 2020 11:27:11 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org, robh+dt@kernel.org,
+        catalin.marinas@arm.com, will.deacon@arm.com, shawnguo@kernel.org,
+        festevam@gmail.com, s.hauer@pengutronix.de,
+        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
+        dan.j.williams@intel.com, matthias.schiffer@ew.tq-group.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de, dmaengine@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH v10 05/12] dmaengine: dma: imx-sdma: add fw_loaded and
+ is_ram_script
+Message-ID: <20200715055711.GW34333@vkoul-mobl>
+References: <1593523876-22387-1-git-send-email-yibin.gong@nxp.com>
+ <1593523876-22387-6-git-send-email-yibin.gong@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1593523876-22387-6-git-send-email-yibin.gong@nxp.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert clk_enable() to clk_prepare_enable() and clk_disable() to
-clk_disable_unprepare() respectively in the spi-coldfire-qspi.c.
+On 30-06-20, 21:31, Robin Gong wrote:
+> Add 'fw_loaded' and 'is_ram_script' to check if the script used by channel
+> is ram script and it's loaded or not, so that could prevent meaningless
+> following malloc dma descriptor and bd allocate in sdma_transfer_init(),
+> otherwise memory may be consumed out potentially without free in case
+> that spi fallback into pio while dma transfer failed by sdma firmware not
+> ready(next ERR009165 patch depends on sdma RAM scripts/firmware).
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-v2:
-    -Modify the commit message
-    -Split into two patches
-
- drivers/spi/spi-coldfire-qspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-coldfire-qspi.c b/drivers/spi/spi-coldfire-qspi.c
-index f80e06c..8996115 100644
---- a/drivers/spi/spi-coldfire-qspi.c
-+++ b/drivers/spi/spi-coldfire-qspi.c
-@@ -387,7 +387,7 @@ static int mcfqspi_probe(struct platform_device *pdev)
- 		status = PTR_ERR(mcfqspi->clk);
- 		goto fail0;
- 	}
--	clk_enable(mcfqspi->clk);
-+	clk_prepare_enable(mcfqspi->clk);
- 
- 	master->bus_num = pdata->bus_num;
- 	master->num_chipselect = pdata->num_chipselect;
-@@ -425,7 +425,7 @@ static int mcfqspi_probe(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	mcfqspi_cs_teardown(mcfqspi);
- fail1:
--	clk_disable(mcfqspi->clk);
-+	clk_disable_unprepare(mcfqspi->clk);
- fail0:
- 	spi_master_put(master);
- 
 -- 
-2.1.0
-
+~Vinod
