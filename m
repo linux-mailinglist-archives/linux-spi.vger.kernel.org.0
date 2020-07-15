@@ -2,100 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9B5220A26
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jul 2020 12:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F89220B8E
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jul 2020 13:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731215AbgGOKhL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jul 2020 06:37:11 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:27341 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731205AbgGOKhK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 15 Jul 2020 06:37:10 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1594809430; h=Date: Message-Id: Cc: To: References:
- In-Reply-To: From: Subject: Content-Transfer-Encoding: MIME-Version:
- Content-Type: Sender; bh=pYgx74LtrBLVD12x3ELyZuAqEdnOVxhRlDanXsj1kC8=;
- b=WnYcyc++kNhZ2ZBA1mqAZukvPRckqQ0S5MkPeXwSaY7hrYzv3/69EHnSIPqXNYcykjrxUD0Z
- qR3B48opiT+cS+xAiaJDN83WwilgAFRvwmuXMA5TN+8JvikjHwW/7cQTWcXb97KENoFsywSN
- qwVKE1+ac2WuStYGSO1GDD+Tjf8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 5f0edc4db35196d59d5e52ff (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 15 Jul 2020 10:37:01
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5B429C43449; Wed, 15 Jul 2020 10:37:01 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=2.0 tests=ALL_TRUSTED,MISSING_DATE,
-        MISSING_MID,SPF_NONE autolearn=no autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 639D1C433CA;
-        Wed, 15 Jul 2020 10:36:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 639D1C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 04/16] b43: Remove uninitialized_var() usage
-From:   Kalle Valo <kvalo@codeaurora.org>
-In-Reply-To: <20200620033007.1444705-5-keescook@chromium.org>
-References: <20200620033007.1444705-5-keescook@chromium.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mm@kvack.org,
-        clang-built-linux@googlegroups.com
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.5.2
-Message-Id: <20200715103701.5B429C43449@smtp.codeaurora.org>
-Date:   Wed, 15 Jul 2020 10:37:01 +0000 (UTC)
+        id S1731347AbgGOLJT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jul 2020 07:09:19 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:37974 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729356AbgGOLJT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Jul 2020 07:09:19 -0400
+X-IronPort-AV: E=Sophos;i="5.75,355,1589209200"; 
+   d="scan'208";a="52194034"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 15 Jul 2020 20:09:16 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 8A99F4006CDA;
+        Wed, 15 Jul 2020 20:09:11 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 00/20] Add support for [H]SCIF/TMU/CMT/THS/SDHI/MSIOF/CAN[FD]/I2C/IIC/RWDT on R8A774E1
+Date:   Wed, 15 Jul 2020 12:08:50 +0100
+Message-Id: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> wrote:
+Hi All,
 
-> Using uninitialized_var() is dangerous as it papers over real bugs[1]
-> (or can in the future), and suppresses unrelated compiler warnings (e.g.
-> "unused variable"). If the compiler thinks it is uninitialized, either
-> simply initialize the variable or make compiler changes. As a precursor
-> to removing[2] this[3] macro[4], just initialize this variable to NULL.
-> No later NULL deref is possible due to the early returns outside of the
-> (phy->rev >= 7 && phy->rev < 19) case, which explicitly tests for NULL.
-> 
-> [1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
-> [2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
-> [3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
-> [4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
-> 
-> Fixes: 58619b14d106 ("b43: move under broadcom vendor directory")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+This patch series enables support for following on RZ/G2H SoC,
+* CPU OPP
+* THS
+* CMT/TMU
+* I2C/IIC
+* MSIOF
+* RWDT
+* SDHI
+* SCIF/HSCIF
+* CAN/CANFD
 
-2 patches applied to wireless-drivers-next.git, thanks.
+Cheers,
+Prabhakar
 
-800e7a205a0f b43: Remove uninitialized_var() usage
-f8279dad4e36 rtlwifi: rtl8192cu: Remove uninitialized_var() usage
+Lad Prabhakar (14):
+  dt-bindings: thermal: rcar-gen3-thermal: Add r8a774e1 support
+  dt-bindings: timer: renesas,cmt: Document r8a774e1 CMT support
+  arm64: dts: renesas: r8a774e1: Add SCIF and HSCIF nodes
+  arm64: dts: renesas: r8a774e1: Add SDHI nodes
+  dt-bindings: i2c: renesas,i2c: Document r8a774e1 support
+  dt-bindings: i2c: renesas,iic: Document r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add I2C and IIC-DVFS support
+  dt-bindings: spi: renesas,sh-msiof: Add r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add MSIOF nodes
+  dt-bindings: watchdog: renesas,wdt: Document r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add RWDT node
+  dt-bindings: can: rcar_can: Document r8a774e1 support
+  dt-bindings: can: rcar_canfd: Document r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add CAN[FD] support
+
+Marian-Cristian Rotariu (6):
+  arm64: dts: renesas: r8a774e1: Add operating points
+  thermal: rcar_gen3_thermal: Add r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add RZ/G2H thermal support
+  arm64: dts: renesas: r8a774e1: Add CMT device nodes
+  dt-bindings: timer: renesas,tmu: Document r8a774e1 bindings
+  arm64: dts: renesas: r8a774e1: Add TMU device nodes
+
+ .../devicetree/bindings/i2c/renesas,i2c.txt   |   1 +
+ .../devicetree/bindings/i2c/renesas,iic.txt   |   1 +
+ .../devicetree/bindings/net/can/rcar_can.txt  |   1 +
+ .../bindings/net/can/rcar_canfd.txt           |   1 +
+ .../bindings/spi/renesas,sh-msiof.yaml        |   1 +
+ .../bindings/thermal/rcar-gen3-thermal.yaml   |   1 +
+ .../bindings/timer/renesas,cmt.yaml           |   2 +
+ .../devicetree/bindings/timer/renesas,tmu.txt |   1 +
+ .../bindings/watchdog/renesas,wdt.yaml        |   1 +
+ arch/arm64/boot/dts/renesas/r8a774e1.dtsi     | 713 +++++++++++++++++-
+ drivers/thermal/rcar_gen3_thermal.c           |   4 +
+ 11 files changed, 715 insertions(+), 12 deletions(-)
 
 -- 
-https://patchwork.kernel.org/patch/11615573/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.17.1
 
