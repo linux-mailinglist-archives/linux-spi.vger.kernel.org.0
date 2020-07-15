@@ -2,91 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D12220E75
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jul 2020 15:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A90221016
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jul 2020 17:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729714AbgGONv4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Jul 2020 09:51:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46222 "EHLO mail.kernel.org"
+        id S1725907AbgGOO7q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Jul 2020 10:59:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729086AbgGONv4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 15 Jul 2020 09:51:56 -0400
+        id S1725866AbgGOO7q (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 15 Jul 2020 10:59:46 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29BD620657;
-        Wed, 15 Jul 2020 13:51:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C697820771;
+        Wed, 15 Jul 2020 14:59:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594821115;
-        bh=/bT6w4f5A2YqDbGUjn8qK0yZTKezWpn570rvkh4CPno=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tZHzSmPW6RxO6+AeMs5azY0kFob3acvs6hccoS8+7AaCqxhkGsr1EAz1rTr4OoaTW
-         GzdGM7BqSU8L3jkomLXG59g9M1u0axICkVKONip1bH9DTzj+vpwdwVPBR1TUCCYmZQ
-         GWmB0C26qLaOYmhRO9Z4B+/MiJTt90IQY5ToZM3U=
-Date:   Wed, 15 Jul 2020 14:51:46 +0100
+        s=default; t=1594825186;
+        bh=Ol+skO8vaJ82IbSH0BbWqj32R+0+d6V0xznUOOv6rtg=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=Nw0INyNbmV7wApNTWXqeiHG9uWwEdeJquZslkoJGvNUUTa7Sf0t3T5Ivnu4bTB8v1
+         hG0VFTt7tzKZlgAHD3BDwQtec5IKoZpjK7SjarzeJ0FOodDU5sGP7kFNB3i9Fk9PmR
+         LyT6hmblWbZuOZIu0X8MXl1+OuMp3eP9HRsNj+uY=
+Date:   Wed, 15 Jul 2020 15:59:36 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+To:     Qing Zhang <zhangqing@loongson.cn>
 Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: spidev: Add compatible for external SPI ports on
- Kontron boards
-Message-ID: <20200715135146.GG5431@sirena.org.uk>
-References: <479d566a-213f-4e33-8ac7-7637ae88e31c@kontron.de>
- <a5b88ad9-3884-1d9c-c4ad-057266f84261@kontron.de>
- <20200713151108.GB4420@sirena.org.uk>
- <2eb6971b-7ea4-c9c8-5452-6f4b17e8860a@kontron.de>
- <20200714192907.GJ4900@sirena.org.uk>
- <16825a78-8eb0-90f2-433a-d1ae6eed6ba8@kontron.de>
- <20200715113609.GD5431@sirena.org.uk>
- <824b8479-e204-d087-7887-a2dbefa0f844@kontron.de>
- <20200715131033.GF5431@sirena.org.uk>
- <ce532200-a18c-d618-7f73-6f6ac8f8522e@kontron.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3xoW37o/FfUZJwQG"
-Content-Disposition: inline
-In-Reply-To: <ce532200-a18c-d618-7f73-6f6ac8f8522e@kontron.de>
-X-Cookie: 40 isn't old.  If you're a tree.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
+References: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
+Subject: Re: [PATCH v2 1/2] spi: omap-uwire: Use clk_prepare_enable and clk_disable_unprepare
+Message-Id: <159482517674.44770.10991348795912093074.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 15 Jul 2020 13:26:46 +0800, Qing Zhang wrote:
+> Convert clk_enable() to clk_prepare_enable() and clk_disable() to
+> clk_disable_unprepare() respectively in the spi-omap-uwire.c.
 
---3xoW37o/FfUZJwQG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Jul 15, 2020 at 03:48:37PM +0200, Frieder Schrempf wrote:
-> On 15.07.20 15:10, Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > I'm not sure platforms like this are a great fit for DT TBH - the
-> > trouble with DT is that it turns things into ABIs regardless of if it's
-> > really a finished thing, platform data based systems were a lot more
-> > flexible here.
+Thanks!
 
-> I see your point. Still it seems like the overlays would provide a
-> sufficient alternative in matters of flexibility. Raspberry Pi uses it for
-> years, which made me assume that some generic loading API is available. But
-> it seems like everything is RPi-specific and downstream.
+[1/1] spi: omap-uwire: Use clk_prepare_enable and clk_disable_unprepare
+      commit: badfae429b13ef173fe4627714894cb629aa1bc6
 
-Yes, overlays would be fine if there were a way to use them for
-connectors like this.  The connectors are a real problem, it's not just
-RPi that has their own loaders/infrastructure downstream.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---3xoW37o/FfUZJwQG
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8PCfEACgkQJNaLcl1U
-h9ClAQf7BaOgQgQ4X3u/iwrjv7DwfTmsmVKjeYTdVQS2HW1v7PpY8xIHLc+Dh8tJ
-Pb87yfYyyk7YPIxjSFVL9Xfr5BObBkmGGRAozk9dN78KFZiWJP4Q08ZLAwzD8prX
-+e27N1pSBWlZPIvxDpMe88nQrHVc9Cp8EytYCTU+uZn+IiFCzAE534mMcRgPvrAn
-bcYgIWm60d7qDjdQJDj7ByN4TXQmAm0nQj5V0/qqf88aQ7cVk65nvzgun6ExE0ZO
-Gng9RRfpmwD4w/6bbrEPFL2AO3jmKb2L48gtRsUBn348nvwGFCJ7dnmVNIR4IAxS
-eOYOnjK/EmS3Qg1suU2eW/PJ1CYSlQ==
-=Cwx6
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---3xoW37o/FfUZJwQG--
+Thanks,
+Mark
