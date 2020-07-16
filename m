@@ -2,92 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C41C022275B
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jul 2020 17:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F64222F88
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 02:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729456AbgGPPj3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jul 2020 11:39:29 -0400
-Received: from mail-oo1-f65.google.com ([209.85.161.65]:40216 "EHLO
-        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729368AbgGPPj1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Jul 2020 11:39:27 -0400
-Received: by mail-oo1-f65.google.com with SMTP id p26so1262339oos.7;
-        Thu, 16 Jul 2020 08:39:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4pjrfx9t/+IYZDQ9pVA0sHuiwjeFmOxDZhyCh8pthXQ=;
-        b=OX5OJTSSVe0LHfJcauygy7wC1E2VDUwrbtN1lR+SMQf8SP/UKikv57m8tG/WpIdblK
-         HOxoZWkNnGCJAzIRzrtw7yWnVQISDfd2mCdqiQwHP/U7xxnZ0OLNaAG3SvAbTv6gj47x
-         j6s4kaABTGrZ6vu9ZJZ8wHTDJHp7LMLn9ANmma054RyJZE0ayDzhiXNKIcjeGW/8UoWd
-         n2iP2MfWdHjqLuEZ+tIKOru0JXzJ2hPX6Br4m6X10J794NT3vCwB54wK6cri2xy3NGuY
-         MvfrrSUbn9F6Pnw7VnHTALzNYHOqttdb3Ru8RquSKNZb4AJk27+MQeOdSkVwhMQOPe5m
-         aX3g==
-X-Gm-Message-State: AOAM532XNNLAlpza/L9aIi6ZRrIqdIv03U++rivc8uc+Iel8bPI+Jboh
-        RJGcD7NlCBuUVOlV/SRJtGPEp2a/pZccRgvkdgM=
-X-Google-Smtp-Source: ABdhPJz9yIUHOi4Yj7uBIPuCgrIAlPuTnlxz7ythXKj6Ll90hmgrOzNi3DtW8p8hP8QDMl+aj8TmNfiN/dhuCtEUb2g=
-X-Received: by 2002:a4a:8381:: with SMTP id h1mr4809506oog.11.1594913966555;
- Thu, 16 Jul 2020 08:39:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-21-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594811350-14066-21-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 16 Jul 2020 17:39:15 +0200
-Message-ID: <CAMuHMdUCyARFwhEkEhyepoe_r7uk_nVpyshkXR=U4XD8_gMJww@mail.gmail.com>
-Subject: Re: [PATCH 20/20] arm64: dts: renesas: r8a774e1: Add CAN[FD] support
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726335AbgGPX6V (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jul 2020 19:58:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58806 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725958AbgGPX6U (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jul 2020 19:58:20 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8C8B20760;
+        Thu, 16 Jul 2020 23:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594943900;
+        bh=dJo9kb4YBE6Pgvpr6n4Zd+8VS1tf2cegsNKG4P8EmYg=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=boLZUyu1ctS28LcswoTG1uu4Duuw7z35fsuAGBITmdl48usvMejqhnN7Kl0orqKxz
+         yagX4N7/kBA2R46MivdQQBzPOk18pufuX3mhRcE/F2gI+txPkji3bE1o2/nHU/FCZ5
+         xrQxMzZlK4GCOMl1fr1ddq0MQGY1JaZ0n81nRmYs=
+Date:   Fri, 17 Jul 2020 00:58:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>, linux-spi@vger.kernel.org,
+        Scott Branden <sbranden@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Ray Jui <rjui@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org
+In-Reply-To: <20200709074120.110069-1-mkl@pengutronix.de>
+References: <20200709074120.110069-1-mkl@pengutronix.de>
+Subject: Re: [PATCH 0/2] spi: bcm2835/bcm2835aux: support effective_speed_hz
+Message-Id: <159494389042.42455.5858455166841706248.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 1:11 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add CAN[01] and CANFD support to RZ/G2H (R8A774E1) SoC specific dtsi.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+On Thu, 9 Jul 2020 09:41:18 +0200, Marc Kleine-Budde wrote:
+> I've picked up and forward ported Martin Sperl's patches which add support for
+> effective_speed_hz to the SPI controllers found on all raspberry pi models.
+> 
+> See the following patch, which adds this feature to the SPI core, for more
+> information:
+> 
+>     5d7e2b5ed585 spi: core: allow reporting the effectivly used speed_hz for a transfer
+> 
+> [...]
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.9.
+Applied to
 
-Gr{oetje,eeting}s,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-                        Geert
+Thanks!
 
+[1/2] spi: bcm2835: support effective_speed_hz
+      commit: 9df2003df79a0f763dbf76891fcc7d4a5141861d
+[2/2] spi: bcm2835aux: support effective_speed_hz
+      commit: 5e94c3cdaa29e28f6739c91a74d9ddd96f4ba6b6
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
