@@ -2,103 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7300E221EDE
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jul 2020 10:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDA5221F78
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jul 2020 11:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgGPIu1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jul 2020 04:50:27 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:25669 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbgGPIu1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Jul 2020 04:50:27 -0400
-X-Originating-IP: 90.65.108.121
-Received: from localhost (lfbn-lyo-1-1676-121.w90-65.abo.wanadoo.fr [90.65.108.121])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7101B240004;
-        Thu, 16 Jul 2020 08:50:23 +0000 (UTC)
-Date:   Thu, 16 Jul 2020 10:50:23 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     broonie@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Subject: Re: [PATCH 12/14] spi: spi-at91-usart: Make use of the defined
- 'struct of_device_id'
-Message-ID: <20200716085023.GA3428@piout.net>
-References: <20200715150632.409077-1-lee.jones@linaro.org>
- <20200715150632.409077-13-lee.jones@linaro.org>
- <20200715212443.GC23553@piout.net>
- <20200716075606.GM3165313@dell>
+        id S1725975AbgGPJOR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jul 2020 05:14:17 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:45059 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725908AbgGPJOQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Jul 2020 05:14:16 -0400
+Received: by mail-oo1-f67.google.com with SMTP id a9so1028535oof.12;
+        Thu, 16 Jul 2020 02:14:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/umvttECmco9Luei9fOhBDb0CHAUDRcdC1HwBC7Xg4E=;
+        b=kcK/rJzXZxApDyoiZZuLljSHQyJy6/TNEQaX83+hCprbK/5ZufeOEeGEjRAB/iOX4a
+         NAKzY5H5lm359QkCryq+oU9AriecinLxNTiJ58xH6N+w3YMzuq66S7gg7QAUBbSIeMbR
+         NWmf7NNz8pIclCeX6e+RCIQ1GAhfc2/lIIOrOppvotaoLRxNL2mrQHxJa0nPNINlAGK2
+         XjevoH2RJJt7qkQ1nZ92ae+w4195dB2aL1A0cX7IRaKzRXGIFzNAdZYWzrcMCe135MNM
+         fd6bTv4u7CO6jc5lhkrd9brC8d9P2sWI02c1n7GIOFzS0xZwpkL8SNKBjkz/EF3LieTZ
+         6sAQ==
+X-Gm-Message-State: AOAM530AmqmbmZr/4eyQl4OZd1sqa8EomuRVApr6sVoza15kcwI86aDP
+        X3jASDG7IRv+3mGmdj6zz8xbROTlhRg7mLXzMkmZaj3mWf4=
+X-Google-Smtp-Source: ABdhPJwSf2fuE6pEHCZzLONiveYq+x9tlMeGbQ9HdE1AT+cLFo/TujheBOxkigYdt+PGgM07twKCCI9qaORXDl9PdEc=
+X-Received: by 2002:a4a:675a:: with SMTP id j26mr268712oof.1.1594890855615;
+ Thu, 16 Jul 2020 02:14:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200716075606.GM3165313@dell>
+References: <1594717754-25428-1-git-send-email-zhangqing@loongson.cn> <20200714094406.GA4900@sirena.org.uk>
+In-Reply-To: <20200714094406.GA4900@sirena.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 16 Jul 2020 11:14:04 +0200
+Message-ID: <CAMuHMdUDYpAvy3NLQGjM62pW35gorac7KZn3E9JnjSvREm5K0Q@mail.gmail.com>
+Subject: Re: [PATCH] spi: Use clk_prepare_enable and clk_disable_unprepare
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Qing Zhang <zhangqing@loongson.cn>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 16/07/2020 08:56:06+0100, Lee Jones wrote:
-> On Wed, 15 Jul 2020, Alexandre Belloni wrote:
-> 
-> > Hi Lee,
-> > 
-> > On 15/07/2020 16:06:30+0100, Lee Jones wrote:
-> > > It's there so why not use it.
-> > > 
-> > 
-> > Is that the correct resolution? Isn't the proper thing to do simply
-> > removing at91_usart_spi_dt_ids as the only way it will ever be probed is
-> > through drivers/mfd/at91-usart.c and I would think matching the driver
-> > name is enough.
-> 
-> I'm 50/50 on this.
-> 
-> Happy with whatever the authors/maintainers decide most appropriate.
-> 
+On Tue, Jul 14, 2020 at 11:45 AM Mark Brown <broonie@kernel.org> wrote:
+> On Tue, Jul 14, 2020 at 05:09:14PM +0800, Qing Zhang wrote:
+> > Convert clk_enable/clk_disable to clk_prepare_enable/clk_disable_unprepare
+> > calls as required by common clock framework.
+> >
+> > Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> > ---
+> >  drivers/spi/spi-coldfire-qspi.c | 4 ++--
+>
+> Are you sure that ColdFire uses the common clock framework?
 
-Seeing that the compatible string is not documented or used by any dts,
-I would go for the removal.
+Should be fine, as per include/linux/clk.h:
 
-> > > Fixes the following W=1 kernel build warning(s):
-> > > 
-> > >  drivers/spi/spi-at91-usart.c:684:34: warning: ‘at91_usart_spi_dt_ids’ defined but not used [-Wunused-const-variable=]
-> > >  684 | static const struct of_device_id at91_usart_spi_dt_ids[] = {
-> > >  | ^~~~~~~~~~~~~~~~~~~~~
-> > > 
-> > > Cc: Radu Pirea <radu_nicolae.pirea@upb.ro>
-> > > Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> > > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > ---
-> > >  drivers/spi/spi-at91-usart.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/spi/spi-at91-usart.c b/drivers/spi/spi-at91-usart.c
-> > > index 88033422a42ae..d47a20be43ccd 100644
-> > > --- a/drivers/spi/spi-at91-usart.c
-> > > +++ b/drivers/spi/spi-at91-usart.c
-> > > @@ -692,6 +692,7 @@ static struct platform_driver at91_usart_spi_driver = {
-> > >  	.driver = {
-> > >  		.name = "at91_usart_spi",
-> > >  		.pm = &at91_usart_spi_pm_ops,
-> > > +		.of_match_table = at91_usart_spi_dt_ids,
-> > >  	},
-> > >  	.probe = at91_usart_spi_probe,
-> > >  	.remove = at91_usart_spi_remove,
-> > 
-> 
-> -- 
-> Lee Jones [李琼斯]
-> Senior Technical Lead - Developer Services
-> Linaro.org │ Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+    #ifdef CONFIG_HAVE_CLK_PREPARE
+    int clk_prepare(struct clk *clk);
+    int __must_check clk_bulk_prepare(int num_clks,
+                                      const struct clk_bulk_data *clks);
+    #else
+    static inline int clk_prepare(struct clk *clk)
+    {
+            might_sleep();
+            return 0;
+    }
+
+    static inline int __must_check
+    clk_bulk_prepare(int num_clks, const struct clk_bulk_data *clks)
+    {
+            might_sleep();
+            return 0;
+    }
+    #endif
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
