@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD33221D2C
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jul 2020 09:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40A2221D34
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jul 2020 09:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728219AbgGPHTm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jul 2020 03:19:42 -0400
-Received: from mail-mw2nam10on2066.outbound.protection.outlook.com ([40.107.94.66]:6054
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        id S1728124AbgGPHVB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jul 2020 03:21:01 -0400
+Received: from mail-dm6nam10on2059.outbound.protection.outlook.com ([40.107.93.59]:47072
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726069AbgGPHTk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jul 2020 03:19:40 -0400
+        id S1726069AbgGPHVB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jul 2020 03:21:01 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bg2+rCT8c1/Mt36mTVVcyQbgHqh9JLpV2JisuRU5zNfmvsJ/9J4mMtUAwCiuy7cvs9AQbwEmaRiJMSLf4Qn8sor+xxU+evxoX4Vvgc1E2oPCpR6ZpoQV3aXvs5AeEZjQRsIm53wSrzmW6o2O4Xq8lrtnotb9NTNsxXDgOPJ29uomLe0qlqDXEbGBUSbVlqNfK5CJos0/5nBW3H73yrYx10LxlchQPMopMZYuNyfRVbncdquLicWm//EbReDH5yDNBjs/CHRYxKq+Wq1PRKTiXKptCJcJDCa6g6E8N1q1qgTtdXuBeswiIrz+ZyhUItzIUphQdZWQdibrWjv3XkJeXw==
+ b=n3e6YnJGxZkm0VuuE4mrY2W8u2e72gVYHg1GXHpEWKie4KuMnCxwr/AEesaITiYZIH/tBRLRPR1MAGmof+MO/JfhgpQmuul2gvK7oEp7hxNh8hudwSVBZj7+K9BxIlerc39nxUtyYQYczCjTH/09UFsNbpzQGxuu620ZHF1KitAcoam6McjBcEyo2PPyFc9qrYFer3+Oub77mhfIitOeSWp+vQXMD75Krag7iZwUuSdT75GWHb69UL8+phCh5393ItvAJq0WKWl5caJ5xjuD3p+xa+dYywfb87CC2BLD1XzTYOZHWPzqAn+dLP9q0HXZqJMUj/oBiNjbtZZJx0Cb0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7VmsKkefKTJclShOW1Io1CBPm/0cO0+QLcR/QiYnB1k=;
- b=CBott1l6cndnIDM3S2MRpZOMQ9M6krn+WfpZgSDOLlNQtg+Atg0ix9+zjXBRCTm451Fhq1tb0T6+/myjD6W7LRzSmnoETE7C89qRx2JGZOiUldaCUHbbT8UOrVr6a+ZuRNrKq15vCA/+IO/KzVIhzeqTaMrkMDyQyWlwCLBafXuoDJ/RRM9+g7SZIuwa4m+CbDB5vjnRWaCsOg98UxkXQ7xXEMb21Xnz/SWyqyt65GGlc9oTCZCOlkuwLPCskgpq5bTvLhCUP7Oq07rEleXlsMFUTUDfNJ3gwe1WJW0GW3fSwGnayeOZXVdy1EYigqJOVoL1rhPlDs6GTjMLk9tbaA==
+ bh=zSm3Bs4GtjL3mWNZYTAGcOTn/A0FQohcotZnd2+iUc4=;
+ b=obgiXWgRShO2DftUG+E1lD0lRFVAMi8aKsWmaSEK42q+3iSOnd1g6IY+qt9KFQY5DShHdfrx9tRsvO76opHBq4vUdlz4FCIMFrIxn5JItwGiHrqKYTL1Yia323fr1DFE0T5oJVgujsB9AjrqyTKBasZxqSjGlcBrX7Oo5FSXuptd/iyUxeXIWSXw2c3rrORPvhb/76YbwYxDR61uvH74zgLEUZo5KA3Gzgd4SKA1HeP9RM7boMa+nsf9YoLjZSYwNJ/hX8Azx6ms6mT1z2PaIMR2Y3WeqVlfu+UxWNwMRQz0GnKD1rTwDud2hxHCUtzUgFgFobwYyOY3i2uwCTTtaA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.60.83) smtp.rcpttodomain=linaro.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7VmsKkefKTJclShOW1Io1CBPm/0cO0+QLcR/QiYnB1k=;
- b=aTrqJ5T5wBG82ukIapVPkl5UX2arRNPzxuq34Bs2bSAdTuAtih7C9p1vRY5W1txvbW8rI1/sPE3iTh+YTjx0rCYM/LLyb3DFahWrhF02pgidzQhSuHy6pbPRKgQ5Sd3MxtWBA16kdO+lQnV1umIdDlqgIHPgVDMdq44EvvfLP4w=
-Received: from MN2PR17CA0034.namprd17.prod.outlook.com (2603:10b6:208:15e::47)
- by BN6PR02MB2705.namprd02.prod.outlook.com (2603:10b6:404:fe::10) with
+ bh=zSm3Bs4GtjL3mWNZYTAGcOTn/A0FQohcotZnd2+iUc4=;
+ b=Y1ahO9to10Nrs/9LgYYwL3x6KeXJFSO8tAbeiXWjHEeskUfsAHfLH9YraaSvMtqZn0+Zgi3Nl4aiIs4z65tiCL7NF7BLwKTznRw9eKEvRxyMCKHGXxIN+NtVece30NH0Byp6lQjM6lWVNV5+xNOTHPieIce53r025Uyfig2ONHc=
+Received: from MN2PR20CA0012.namprd20.prod.outlook.com (2603:10b6:208:e8::25)
+ by DM6PR02MB6315.namprd02.prod.outlook.com (2603:10b6:5:1f7::26) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.20; Thu, 16 Jul
- 2020 07:19:37 +0000
-Received: from BL2NAM02FT061.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:15e:cafe::3a) by MN2PR17CA0034.outlook.office365.com
- (2603:10b6:208:15e::47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.18 via Frontend
- Transport; Thu, 16 Jul 2020 07:19:37 +0000
+ 2020 07:20:57 +0000
+Received: from BL2NAM02FT036.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:e8:cafe::29) by MN2PR20CA0012.outlook.office365.com
+ (2603:10b6:208:e8::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17 via Frontend
+ Transport; Thu, 16 Jul 2020 07:20:57 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
  smtp.mailfrom=xilinx.com; linaro.org; dkim=none (message not signed)
  header.d=none;linaro.org; dmarc=bestguesspass action=none
@@ -46,32 +46,31 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.60.83 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
 Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- BL2NAM02FT061.mail.protection.outlook.com (10.152.77.7) with Microsoft SMTP
- Server id 15.20.3195.18 via Frontend Transport; Thu, 16 Jul 2020 07:19:37
+ BL2NAM02FT036.mail.protection.outlook.com (10.152.77.154) with Microsoft SMTP
+ Server id 15.20.3195.18 via Frontend Transport; Thu, 16 Jul 2020 07:20:57
  +0000
-Received: from [149.199.38.66] (port=52188 helo=xsj-pvapsmtp01)
+Received: from [149.199.38.66] (port=57278 helo=xsj-pvapsmtp01)
         by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
         (envelope-from <michal.simek@xilinx.com>)
-        id 1jvy9Q-00017R-SB; Thu, 16 Jul 2020 00:17:52 -0700
+        id 1jvyAj-00018n-5N; Thu, 16 Jul 2020 00:19:13 -0700
 Received: from [127.0.0.1] (helo=localhost)
         by xsj-pvapsmtp01 with smtp (Exim 4.63)
         (envelope-from <michal.simek@xilinx.com>)
-        id 1jvyB6-0006ef-Km; Thu, 16 Jul 2020 00:19:36 -0700
-Received: from xsj-pvapsmtp01 (smtp2.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 06G7JTxa016844;
-        Thu, 16 Jul 2020 00:19:29 -0700
+        id 1jvyCO-0007ed-UD; Thu, 16 Jul 2020 00:20:56 -0700
+Received: from xsj-pvapsmtp01 (maildrop.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 06G7KjTE004534;
+        Thu, 16 Jul 2020 00:20:45 -0700
 Received: from [172.30.17.109]
         by xsj-pvapsmtp01 with esmtp (Exim 4.63)
         (envelope-from <michals@xilinx.com>)
-        id 1jvyAz-0006e0-9B; Thu, 16 Jul 2020 00:19:29 -0700
-Subject: Re: [PATCH 09/14] spi: spi-zynq-qspi: Add description for 2 missing
- attributes/parameters
+        id 1jvyCC-0007XJ-La; Thu, 16 Jul 2020 00:20:45 -0700
+Subject: Re: [PATCH 10/14] spi: spi-zynqmp-gqspi: Correct a couple of
+ misspellings in kerneldoc
 To:     Lee Jones <lee.jones@linaro.org>, broonie@kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Michal Simek <michal.simek@xilinx.com>,
-        Sureshkumar Relli <nagasure@xilinx.com>
+        linux-spi@vger.kernel.org, Michal Simek <michal.simek@xilinx.com>
 References: <20200715150632.409077-1-lee.jones@linaro.org>
- <20200715150632.409077-10-lee.jones@linaro.org>
+ <20200715150632.409077-11-lee.jones@linaro.org>
 From:   Michal Simek <michal.simek@xilinx.com>
 Autocrypt: addr=michals@xilinx.com; keydata=
  xsFNBFFuvDEBEAC9Amu3nk79+J+4xBOuM5XmDmljuukOc6mKB5bBYOa4SrWJZTjeGRf52VMc
@@ -135,12 +134,12 @@ Autocrypt: addr=michals@xilinx.com; keydata=
  oa0OZXydlVP7wrnJdi3m8DnljxyInPxbxdKGN5XnMq/r9Y70uRVyeqwp97sKLXd9GsxuaSg7
  QJKUaltvN/i7ng1UOT/xsKeVdfXuqDIIElZ+dyEVTweDM011Zv0NN3OWFz6oD+GzyBetuBwD
  0Z1MQlmNcq2bhOMzTxuXX2NDzUZs4aqEyZQ=
-Message-ID: <cd7f06a4-2c41-2f4d-309b-c30bb8d1c389@xilinx.com>
-Date:   Thu, 16 Jul 2020 09:19:27 +0200
+Message-ID: <74e6a09e-cbef-b727-aab9-e6c020a7dd6c@xilinx.com>
+Date:   Thu, 16 Jul 2020 09:20:42 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200715150632.409077-10-lee.jones@linaro.org>
+In-Reply-To: <20200715150632.409077-11-lee.jones@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -149,26 +148,26 @@ X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
 X-TM-AS-User-Approved-Sender: Yes;Yes
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(346002)(136003)(376002)(396003)(39860400002)(46966005)(356005)(9786002)(478600001)(316002)(8676002)(44832011)(82740400003)(36756003)(81166007)(47076004)(4326008)(2616005)(31686004)(426003)(336012)(107886003)(8936002)(186003)(70206006)(70586007)(26005)(83380400001)(54906003)(82310400002)(5660300002)(2906002)(31696002)(43740500002);DIR:OUT;SFP:1101;
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(376002)(346002)(39860400002)(396003)(136003)(46966005)(478600001)(36756003)(426003)(2906002)(8936002)(336012)(5660300002)(107886003)(186003)(8676002)(4326008)(2616005)(356005)(47076004)(6666004)(81166007)(82310400002)(31686004)(316002)(83380400001)(9786002)(70206006)(31696002)(70586007)(26005)(82740400003)(44832011)(43740500002);DIR:OUT;SFP:1101;
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 566e94e6-2a84-45d8-0d06-08d8295898ce
-X-MS-TrafficTypeDiagnostic: BN6PR02MB2705:
-X-Microsoft-Antispam-PRVS: <BN6PR02MB2705AFCF4D275320752124D4C67F0@BN6PR02MB2705.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 27cdb15c-6234-4a42-fbf7-08d82958c8aa
+X-MS-TrafficTypeDiagnostic: DM6PR02MB6315:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB63156C0F1AAAD96EE51F72FEC67F0@DM6PR02MB6315.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tDrLABZd/HWuvVJOx4jVQE2/VeoydzH8Dv8OmIDQkYqHRWpZmidFGaigoENtHnVn/Ea5lQN9bPShIwEYCq7qAXWvRJg/zMaheSXNFz9lcLQCRb2U7PQll/C0wyqZHSciGbt59dpiFtTAdOj+Ia20gtBA//O5sO1h5Aeig9jCQbDC3Pus7kfPuYxgxIvnkFE94H2T6FQ+PL8AmYWcVPxcQZ1oBuSY1SlvRfM4LrytCGQeg9uoEACo/ZmQcYC/y0O9wImp6M6LoH9T+KbSCqFvJbVbJ16VixBsiRIuja3lsGEqCdmHuQcfFBmlzXOV8jI90fkGS0RLFPOKnamsJ1ttsvn/NyJtrLs+GaNZmU+3gPTUQeE5QhpgMtyz04eaWcuhG6AwF6UJjzDzky1AN0k6n5ZNFpCSZr3wiZQOW90XtS4GxQkAa9jJhh0N3ev8ua37
+X-Microsoft-Antispam-Message-Info: vLnHHiB0Tcp3F5JeMr1mIKYcsyzMCExlTDsaCRBgn3LPFDdJJ3nzw/mjvql7miG7f26f15CaFzSzei9hwuVs8z8ka4vyuOSiDZ+9SX0aZ4eqsZBUji8zQruGqlbpQTAGEyQ8ozla94is3I94IlSBi1Eztp2h4PRSG58i334ewoHit+eN3JFH08JmsYpJFOjp2SSprGDKPlcBbl40uLJ6G5dFfBadDrJY/WJ+hu+fDQ3SwzbI3wPnH1MYMJLmLMEKjwDbQgg1NbEkdx6BvJ7zXJv6FM8jDn3vYBs7sU87JnLscjYIxAPKxGcJZYPjzMrsXKWuLNgcz+H5HSlth7VoucwPdA9C4KEMCMejcZb+iwInWDnu0+kmTZkNRn8+zTHIomsX9ObJShRBnZU6bFETGYkU42QUYAgnYFi91XX2N+w5WecCVQKohiX2XWQf9sr4
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2020 07:19:37.0346
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2020 07:20:57.3354
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 566e94e6-2a84-45d8-0d06-08d8295898ce
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27cdb15c-6234-4a42-fbf7-08d82958c8aa
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT061.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT036.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2705
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6315
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -179,41 +178,46 @@ X-Mailing-List: linux-spi@vger.kernel.org
 On 15. 07. 20 17:06, Lee Jones wrote:
 > Fixes the following W=1 kernel build warning(s):
 > 
->  drivers/spi/spi-zynq-qspi.c:143: warning: Function parameter or member 'dev' not described in 'zynq_qspi'
->  drivers/spi/spi-zynq-qspi.c:334: warning: Function parameter or member 'spi' not described in 'zynq_qspi_config_op'
->  drivers/spi/spi-zynq-qspi.c:334: warning: Excess function parameter 'qspi' description in 'zynq_qspi_config_op'
+>  drivers/spi/spi-zynqmp-gqspi.c:205: warning: Function parameter or member 'slavecs' not described in 'zynqmp_gqspi_selectslave'
+>  drivers/spi/spi-zynqmp-gqspi.c:205: warning: Function parameter or member 'slavebus' not described in 'zynqmp_gqspi_selectslave'
+>  drivers/spi/spi-zynqmp-gqspi.c:205: warning: Excess function parameter 'flashcs' description in 'zynqmp_gqspi_selectslave'
+>  drivers/spi/spi-zynqmp-gqspi.c:205: warning: Excess function parameter 'flashbus' description in 'zynqmp_gqspi_selectslave'
+>  drivers/spi/spi-zynqmp-gqspi.c:902: warning: Function parameter or member 'dev' not described in 'zynqmp_qspi_suspend'
+>  drivers/spi/spi-zynqmp-gqspi.c:902: warning: Excess function parameter '_dev' description in 'zynqmp_qspi_suspend'
 > 
 > Cc: Michal Simek <michal.simek@xilinx.com>
-> Cc: Sureshkumar Relli <nagasure@xilinx.com>
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  drivers/spi/spi-zynq-qspi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/spi/spi-zynqmp-gqspi.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-> index bbf3d90561f54..5d8a5ee62fa23 100644
-> --- a/drivers/spi/spi-zynq-qspi.c
-> +++ b/drivers/spi/spi-zynq-qspi.c
-> @@ -119,6 +119,7 @@
+> diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+> index 811c97a7c8589..e17a201252557 100644
+> --- a/drivers/spi/spi-zynqmp-gqspi.c
+> +++ b/drivers/spi/spi-zynqmp-gqspi.c
+> @@ -197,8 +197,8 @@ static inline void zynqmp_gqspi_write(struct zynqmp_qspi *xqspi, u32 offset,
+>  /**
+>   * zynqmp_gqspi_selectslave:	For selection of slave device
+>   * @instanceptr:	Pointer to the zynqmp_qspi structure
+> - * @flashcs:	For chip select
+> - * @flashbus:	To check which bus is selected- upper or lower
+> + * @slavecs:	For chip select
+> + * @slavebus:	To check which bus is selected- upper or lower
+>   */
+>  static void zynqmp_gqspi_selectslave(struct zynqmp_qspi *instanceptr,
+>  				     u8 slavecs, u8 slavebus)
+> @@ -892,7 +892,7 @@ static int zynqmp_qspi_start_transfer(struct spi_master *master,
 >  
 >  /**
->   * struct zynq_qspi - Defines qspi driver instance
-> + * @dev:		Pointer to the this device's information
->   * @regs:		Virtual address of the QSPI controller registers
->   * @refclk:		Pointer to the peripheral clock
->   * @pclk:		Pointer to the APB clock
-> @@ -316,7 +317,7 @@ static void zynq_qspi_chipselect(struct spi_device *spi, bool assert)
->  /**
->   * zynq_qspi_config_op - Configure QSPI controller for specified transfer
->   * @xqspi:	Pointer to the zynq_qspi structure
-> - * @qspi:	Pointer to the spi_device structure
-> + * @spi:	Pointer to the spi_device structure
+>   * zynqmp_qspi_suspend:	Suspend method for the QSPI driver
+> - * @_dev:	Address of the platform_device structure
+> + * @dev:	Address of the platform_device structure
 >   *
->   * Sets the operational mode of QSPI controller for the next QSPI transfer and
->   * sets the requested clock frequency.
+>   * This function stops the QSPI driver queue and disables the QSPI controller
+>   *
 > 
 
-Acked-by: Michal Simek <michal.simek@xilinx.com>
+Reviewed-by: Michal Simek <michal.simek@xilinx.com>
 
 Thanks,
 Michal
