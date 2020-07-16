@@ -2,49 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D8B222F90
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 02:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D40222F91
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 02:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726195AbgGPX6k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jul 2020 19:58:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59226 "EHLO mail.kernel.org"
+        id S1726250AbgGPX6q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jul 2020 19:58:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59330 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725958AbgGPX6k (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jul 2020 19:58:40 -0400
+        id S1725958AbgGPX6p (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jul 2020 19:58:45 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E5E032076D;
-        Thu, 16 Jul 2020 23:58:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0D2C120760;
+        Thu, 16 Jul 2020 23:58:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594943920;
-        bh=Vp9znY1wArAHg1obDXgiQdFCwvn3664Vxa8iozCXYXI=;
+        s=default; t=1594943925;
+        bh=UrQzO724UtSTQ7IKx66zegNUGqB6aVe9FXF7F4V8IM0=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=ylOWCr6uU0jjDA7LbMzseOLiMFQapcwGzNJLWn4RubQ6U6aPLA6savBc6r9pxpWC0
-         a5kJ3VnlRVPGifunHFMf1BKq/yKwseSwJNJvOy7I1TwuMYEh+KOhheMtKgH5zYTqde
-         Q0CipKE5VWcLFh8YtgDVxd9jk8SVuhY6i46Wl3lY=
-Date:   Fri, 17 Jul 2020 00:58:30 +0100
+        b=SPeCUHvxqY4I/M9AGNMKWRMFRPR2djwcPqfcjEUnxZvDHMnsmH9gAjsUYYvS6B+fj
+         l15TxkTs8cDivPzMCIVVLcOue/5qMW9HiQG6jY6qkTgz1V88Rhv4rYXt9X9KnPxQeP
+         FJDO3DeKWHXbYZHRz9OnO324c71EhbcPdgFIpC1E=
+Date:   Fri, 17 Jul 2020 00:58:35 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-In-Reply-To: <20200715163610.9475-1-broonie@kernel.org>
-References: <20200715163610.9475-1-broonie@kernel.org>
-Subject: Re: [PATCH] spi: Only defer to thread for cleanup when needed
-Message-Id: <159494389041.42455.2810165265122915280.b4-ty@kernel.org>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
+References: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
+Subject: Re: [PATCH v2 1/2] spi: omap-uwire: Use clk_prepare_enable and clk_disable_unprepare
+Message-Id: <159494389042.42455.11301873090946595161.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 15 Jul 2020 17:36:10 +0100, Mark Brown wrote:
-> Currently we always defer idling of controllers to the SPI thread, the goal
-> being to ensure that we're doing teardown that's not suitable for atomic
-> context in an appropriate context and to try to batch up more expensive
-> teardown operations when the system is under higher load, allowing more
-> work to be started before the SPI thread is scheduled. However when the
-> controller does not require any substantial work to idle there is no need
-> to do this, we can instead save the context switch and immediately mark
-> the controller as idle. This is particularly useful for systems where there
-> is frequent but not constant activity.
+On Wed, 15 Jul 2020 13:26:46 +0800, Qing Zhang wrote:
+> Convert clk_enable() to clk_prepare_enable() and clk_disable() to
+> clk_disable_unprepare() respectively in the spi-omap-uwire.c.
 
 Applied to
 
@@ -52,8 +46,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: Only defer to thread for cleanup when needed
-      commit: e126859729ed4a5143e5690186b8bec1c1157113
+[1/1] spi: coldfire-qspi: Use clk_prepare_enable and clk_disable_unprepare
+      commit: 499de01c5c0b813cc94dbfc722ec12487044ac4a
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
