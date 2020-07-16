@@ -2,102 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6148E22201D
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jul 2020 12:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40B9222484
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jul 2020 16:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbgGPKBZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jul 2020 06:01:25 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:36886 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725996AbgGPKBY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jul 2020 06:01:24 -0400
-Received: from [10.130.0.99] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9duJRBfuJsFAA--.4223S3;
-        Thu, 16 Jul 2020 18:01:19 +0800 (CST)
-Subject: Re: [PATCH v2 2/2] spi: coldfire-qspi: Use clk_prepare_enable and
- clk_disable_unprepare
-To:     Mark Brown <broonie@kernel.org>
-References: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
- <1594790807-32319-2-git-send-email-zhangqing@loongson.cn>
- <20200715094940.GB5431@sirena.org.uk>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <1616bb3e-ba20-46df-7818-c11c382a0d86@loongson.cn>
-Date:   Thu, 16 Jul 2020 18:01:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1728996AbgGPN7e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jul 2020 09:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728799AbgGPN7c (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Jul 2020 09:59:32 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F82C08C5C0
+        for <linux-spi@vger.kernel.org>; Thu, 16 Jul 2020 06:59:31 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id h19so7202925ljg.13
+        for <linux-spi@vger.kernel.org>; Thu, 16 Jul 2020 06:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lZC+VUIMSIdeiW4C+7bhtdxicqg0klJV1GCIZXtbGAA=;
+        b=E3j3mH3r+XkBoto3dQuOfETz6ViU9Snkp2Koila0Uf+neOY8KxhS7M8s6meXWiWRn0
+         rC5I583w3pAokCM95whNcx/gMkitc48zcX1BHKjGkc8/Q5gnu1l3s69VzIJBp1IPHfD2
+         e3gIxZhPoKCtYb/zdidvFULdF1Ey509C5qVkRq5DnwhviNHwONZW/WeOlQPCV49rBobt
+         r6OdGlqKMm8bHuVsVDaTNOunpXvtD+zkZU5b7sxSc3mgwDmYN0TlR66arJWX9kUq39ZY
+         eN2ThecFcCanhZnsSwAG//+eDbzaVZRzCswiq4RI2kP4v+pxlUGr805zVOWDU3ZOlsN2
+         hdVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lZC+VUIMSIdeiW4C+7bhtdxicqg0klJV1GCIZXtbGAA=;
+        b=iSOYCngPqKxafvonAy5H1bCxdlId2bBBlbemS3i9QU3aCWTF7AQlQCSWMG75XOyImt
+         NZhVE0q5KmaET7sfzaAjji36fPPoe/EE7xY68vluE55ybwBzk9mHpzGRKOQVy7031BMY
+         7Dt6NLqmt9R2i3QddHfKBlTHHfcNueduQocydbB2E8+QSlRIq+k0LnU+z7IUIBx0buM9
+         gq4a/DdC2yg2GyUknKNwsDOXBseqoZplbP/lmy8MkKV36TBRwfC0Nss1p6RjWEI7SOGU
+         QmGY6zk94ORfQPhvrFupu6PF2zEWoZYTm/4DUPy3HJk/DoqDQoKz7f24RE/GclKEZnZZ
+         eYug==
+X-Gm-Message-State: AOAM532lrXd6QV5F4gRSS85k8scMILZTzZtrqwnhgXUp60fLQLAP9T/7
+        kAhxMjEzXOTodldFVXIiB7nv2OyCraQLYsg+hqjFug==
+X-Google-Smtp-Source: ABdhPJyfBNW+iS3vmrvvdIc4uq6KgXCHDA3QojwI2tgqo1YiWXX74TEniRPfv5JC52n/VfPedlfGiJPMJ5384sP6Siw=
+X-Received: by 2002:a2e:8597:: with SMTP id b23mr1938808lji.338.1594907970394;
+ Thu, 16 Jul 2020 06:59:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200715094940.GB5431@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxn9duJRBfuJsFAA--.4223S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7XFyDCr1xXF17Gw4UXr4rGrg_yoW8Jr4xpF
-        WxJFWFka1UXryF9an2yr40qr1ak3yvgayUArWrKa4xXw13Gr9Yqr1rCFyDWFyYvrZ7A3WI
-        9FyxXF95AF4DCrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
-        c2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyT
-        uYvjxUx3CzDUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+References: <20200715150632.409077-1-lee.jones@linaro.org> <20200715150632.409077-9-lee.jones@linaro.org>
+In-Reply-To: <20200715150632.409077-9-lee.jones@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 16 Jul 2020 15:59:19 +0200
+Message-ID: <CACRpkdbFWy9wkMbegtL+nKG2RNvBADuxCxDRJTP8f0QGgUHZ3A@mail.gmail.com>
+Subject: Re: [PATCH 08/14] spi: spi-pl022: Provide missing struct
+ attribute/function param docs
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Sachin Verma <sachin.verma@st.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Jul 15, 2020 at 5:06 PM Lee Jones <lee.jones@linaro.org> wrote:
 
+> Also demote non-worthy kerneldoc headers to standard comment blocks.
+>
+> Fixes the following W=1 kernel build warning(s):
+>
+>  drivers/spi/spi-pl022.c:304: warning: cannot understand function prototype: 'enum ssp_writing '
+>  drivers/spi/spi-pl022.c:330: warning: Function parameter or member 'loopback' not described in 'vendor_data'
+>  drivers/spi/spi-pl022.c:398: warning: Function parameter or member 'rx_lev_trig' not described in 'pl022'
+>  drivers/spi/spi-pl022.c:398: warning: Function parameter or member 'tx_lev_trig' not described in 'pl022'
+>  drivers/spi/spi-pl022.c:398: warning: Function parameter or member 'dma_running' not described in 'pl022'
+>  drivers/spi/spi-pl022.c:670: warning: Function parameter or member 'pl022' not described in 'readwriter'
+>  drivers/spi/spi-pl022.c:1250: warning: Function parameter or member 'irq' not described in 'pl022_interrupt_handler'
+>  drivers/spi/spi-pl022.c:1250: warning: Function parameter or member 'dev_id' not described in 'pl022_interrupt_handler'
+>  drivers/spi/spi-pl022.c:1343: warning: Function parameter or member 'pl022' not described in 'set_up_next_transfer'
+>  drivers/spi/spi-pl022.c:1343: warning: Function parameter or member 'transfer' not described in 'set_up_next_transfer'
+>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Sachin Verma <sachin.verma@st.com>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
-On 07/15/2020 05:49 PM, Mark Brown wrote:
-> On Wed, Jul 15, 2020 at 01:26:47PM +0800, Qing Zhang wrote:
->> Convert clk_enable() to clk_prepare_enable() and clk_disable() to
->> clk_disable_unprepare() respectively in the spi-coldfire-qspi.c.
-> Like I said on the previous version are you sure that ColdFire uses the
-> common clock framework and has the prepare calls?
-Hi Mark,
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Thanks for your reminder again.
-
-I see the following comment and code in arch/m68k/coldfire/clk.c:
-
-For more advanced ColdFire parts that have clocks that can be enabled
-we supply enable/disable functions. These must properly define their
-clocks in their platform specific code.
-
-int clk_enable(struct clk *clk)
-{
-     unsigned long flags;
-     spin_lock_irqsave(&clk_lock, flags);
-     if ((clk->enabled++ == 0) && clk->clk_ops)
-         clk->clk_ops->enable(clk);
-     spin_unlock_irqrestore(&clk_lock, flags);
-
-     return 0;
-}
-EXPORT_SYMBOL(clk_enable);
-
-void clk_disable(struct clk *clk)
-{
-     unsigned long flags;
-
-     if (!clk)
-         return;
-
-     spin_lock_irqsave(&clk_lock, flags);
-     if ((--clk->enabled == 0) && clk->clk_ops)
-         clk->clk_ops->disable(clk);
-     spin_unlock_irqrestore(&clk_lock, flags);
-}
-EXPORT_SYMBOL(clk_disable);
-
-Thanks,
-Qing
-
+Yours,
+Linus Walleij
