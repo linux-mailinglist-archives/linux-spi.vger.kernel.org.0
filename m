@@ -2,54 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B405222F8F
+	by mail.lfdr.de (Postfix) with ESMTP id C8D8B222F90
 	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 02:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbgGPX6g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jul 2020 19:58:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59128 "EHLO mail.kernel.org"
+        id S1726195AbgGPX6k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Jul 2020 19:58:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725958AbgGPX6f (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jul 2020 19:58:35 -0400
+        id S1725958AbgGPX6k (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Jul 2020 19:58:40 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F027020760;
-        Thu, 16 Jul 2020 23:58:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E5E032076D;
+        Thu, 16 Jul 2020 23:58:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594943915;
-        bh=zUuaz9UiQ+5YHXpDQYJCKwgXocg46f7UQZ3Q9h4mnY0=;
+        s=default; t=1594943920;
+        bh=Vp9znY1wArAHg1obDXgiQdFCwvn3664Vxa8iozCXYXI=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=Sd1/CVDfTymjIA1yqV5kRac6lILU2K6GspDk5BzjzXyYndM0G9cHa/k1Q1FEYoYP/
-         UTa47S0yWQEdILX5l1H5Do/RqgD28aYsUDMUGou6TzZQ0ULAh2/KN2ICm2Rc7YGfLc
-         XlHOCXYMu6ThHUlR9IKBkKbi6IpFSL/9qSq2TMp0=
-Date:   Fri, 17 Jul 2020 00:58:25 +0100
+        b=ylOWCr6uU0jjDA7LbMzseOLiMFQapcwGzNJLWn4RubQ6U6aPLA6savBc6r9pxpWC0
+         a5kJ3VnlRVPGifunHFMf1BKq/yKwseSwJNJvOy7I1TwuMYEh+KOhheMtKgH5zYTqde
+         Q0CipKE5VWcLFh8YtgDVxd9jk8SVuhY6i46Wl3lY=
+Date:   Fri, 17 Jul 2020 00:58:30 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        ludovic.desroches@microchip.com, alexandre.belloni@bootlin.com
-In-Reply-To: <20200716043139.565734-1-tudor.ambarus@microchip.com>
-References: <20200716043139.565734-1-tudor.ambarus@microchip.com>
-Subject: Re: [PATCH] spi: atmel-quadspi: Use optimezed memcpy_fromio()/memcpy_toio()
-Message-Id: <159494389042.42455.16402064061390482292.b4-ty@kernel.org>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+In-Reply-To: <20200715163610.9475-1-broonie@kernel.org>
+References: <20200715163610.9475-1-broonie@kernel.org>
+Subject: Re: [PATCH] spi: Only defer to thread for cleanup when needed
+Message-Id: <159494389041.42455.2810165265122915280.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 16 Jul 2020 07:31:39 +0300, Tudor Ambarus wrote:
-> Optimezed mem*io operations are defined for LE platforms, use them.
-> 
-> The ARM and !ARCH_EBSA110 dependencies for COMPILE_TEST were added
-> only for the _memcpy_fromio()/_memcpy_toio() functions. Drop these
-> dependencies.
-> 
-> Tested unaligned accesses on both sama5d2 and sam9x60 QSPI controllers
-> using SPI NOR flashes, everything works ok. The following performance
-> improvement can be seen when running mtd_speedtest:
-> 
-> [...]
+On Wed, 15 Jul 2020 17:36:10 +0100, Mark Brown wrote:
+> Currently we always defer idling of controllers to the SPI thread, the goal
+> being to ensure that we're doing teardown that's not suitable for atomic
+> context in an appropriate context and to try to batch up more expensive
+> teardown operations when the system is under higher load, allowing more
+> work to be started before the SPI thread is scheduled. However when the
+> controller does not require any substantial work to idle there is no need
+> to do this, we can instead save the context switch and immediately mark
+> the controller as idle. This is particularly useful for systems where there
+> is frequent but not constant activity.
 
 Applied to
 
@@ -57,8 +52,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: atmel-quadspi: Use optimezed memcpy_fromio()/memcpy_toio()
-      commit: b780c3f38812bce7d7baebe2108738a043d6c4c3
+[1/1] spi: Only defer to thread for cleanup when needed
+      commit: e126859729ed4a5143e5690186b8bec1c1157113
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
