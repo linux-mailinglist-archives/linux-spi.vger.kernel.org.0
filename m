@@ -2,60 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88596223D6B
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 15:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A590C223D69
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 15:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727033AbgGQNzE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jul 2020 09:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S1727837AbgGQNzD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jul 2020 09:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727001AbgGQNyg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jul 2020 09:54:36 -0400
+        with ESMTP id S1727033AbgGQNyh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jul 2020 09:54:37 -0400
 Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E25EC0619D5
-        for <linux-spi@vger.kernel.org>; Fri, 17 Jul 2020 06:54:36 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id c80so14957471wme.0
-        for <linux-spi@vger.kernel.org>; Fri, 17 Jul 2020 06:54:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89287C0619D4
+        for <linux-spi@vger.kernel.org>; Fri, 17 Jul 2020 06:54:37 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id w3so17159209wmi.4
+        for <linux-spi@vger.kernel.org>; Fri, 17 Jul 2020 06:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BdU11UOQFuXyCSynzxRXM0IT1vARtgrxd2bUOuqypjo=;
-        b=Z6e2Az599CouQ+hjKJ3fh171GrmBXuuQYoyxs21YgHQXcnooWtd0d4qYE1hp7Fwp5Z
-         SM8M9boXYBJvn8lwPVCVxW6+FNHJUOfLDJ52Mrw0pvO9wEGLC8olytK/rYr01bgfpIRX
-         NfOd0UXXmOtLeEZgF7joBx8fm4hIDMZDinwqPn3IXqLfsoAW+pE3JeoJdYkxDJ+rSeGm
-         zl3LNaO8Iip6w5A2lPOWUgmwjQqpCN61R357z3ZYuT4myLa+74zeRFOI1eyXwWOm8FDM
-         ISnduGtoskDm+LkUDeOMHuTItePm8NNoAdICqcjQFMk/XhvtEoz3VYA6B7hUX6aUJ1V1
-         XjxA==
+        bh=/mBj9pAMuVLonO6aKhrgrEYwyEsNFutXpDwnyRxo/to=;
+        b=cCC6wwWlQpTMveu1qLqD9irne79EY5ETXeh1rAvAAmH+LbiFyUjRk1ScIyrfmwefTv
+         mFH+Dn3v/+xPUHoIWVWnpdkrm8IZAwwrC0nGV6nJHAUPKTjea9YuyLEZQwc1IJAswX6+
+         tCXEHvtE1nHhDMPzh2+JAiQX+k+oxlOF0rSb1BHirgI+fTnJa1Wag/CmnsEhB2k4FQei
+         IuVXnlndn2vb2xncG+l0JMF/aakBraFwN6jUo0NHQUI1LLX0qof6/3e3YtpgKX0gUI4o
+         sBKrEHsK4I3F+qIti6r6RGX+i+V2MWy7R7rwXBmQH2TfDvHmoPTS3FPp8isAlmk2K3fI
+         VMLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BdU11UOQFuXyCSynzxRXM0IT1vARtgrxd2bUOuqypjo=;
-        b=btn4GGQrgf0dnDnFn/bFEB4GzOsN64GvSP5CMVtrCXKZK13blA3T2DpIL+z6zgNJDA
-         G1FaCbjMr5YSCbXpixFa29BIX5Y/YHSMAW2QVIEXUyu+/Lki7/fv9nY/qMhUApYVtqBZ
-         VHBbzx1d1EFIPUBH6mXHe0x7P8DEiTkSXGIF3VPIBZCCHjPGK/qqKp75WkqxqGvFH7Kt
-         ps/osIT7/ZcixyHWX4Us3yKZ7q0Teo6yhf9D+4SEtafLZ8uNGGIMy2mU40yN6+iePO9W
-         KVOsdeDVdG1q4YSE0c6SVcA0jcZ1DcQLnZZv/WusvTZdrb8LjOFkbWDQtiRTrWZsbA8b
-         y/hA==
-X-Gm-Message-State: AOAM532ghgitowdLl5ebeSEPNnkcxUT+AnhbYOaHSHGbOIk0LZektgxN
-        92QM94o6me6M1wkH/xbKf1c69w==
-X-Google-Smtp-Source: ABdhPJw7B9TDI0XMbwrUhXUY/EXKQH5gIkMZxaFo6XtGIcaYGVLxDNa64CokR+smlhl5Hzf6a9aXJQ==
-X-Received: by 2002:a7b:cd83:: with SMTP id y3mr9305717wmj.105.1594994075163;
-        Fri, 17 Jul 2020 06:54:35 -0700 (PDT)
+        bh=/mBj9pAMuVLonO6aKhrgrEYwyEsNFutXpDwnyRxo/to=;
+        b=lX8o1XkVlwk6aBvoBt16BWr7WtA5y6PtAzdDY5MdAWVF299GJ+eyr/L9Il9AJNPSf4
+         ay5Vv667aOWLx5Q1HBUn0iAZNoq+2AVhr1nsgigOQGTACUWmAh9Pko5rw2cucbpv5fSi
+         6XFZ1tpvzHvRgi1Q+eHxqRQrs1wY9V8rjRlOMoDrRtIAzfKko/77uZTW+++MCNCQIxp1
+         54m7sWrC/xckB9xrZfgtAvesARiUiha3mU1ZaenN87FefZS98ne6PdDuDe6KTKP1/gC1
+         hbWl3V9dhvIW/QJEm3wz9dw1lmNyv6EI5YOuUCL+TBvyRwglwfJaDNNZfKQY5ZUXxgsx
+         qFCA==
+X-Gm-Message-State: AOAM532zMW9hl/trLdBY0Izfxhk6FVZZFNJldDG3s0uGpB4x1KSwphkG
+        Ovxh9lhPM4fX9canszITVmxwabuucxgwew==
+X-Google-Smtp-Source: ABdhPJwcTbAJHeWet+0yZMRNf1B5uWVO3GrnOII6C92tRowqv4TTCeJPT7QC54S41JczZLvDokTPCg==
+X-Received: by 2002:a1c:2d0c:: with SMTP id t12mr9259723wmt.43.1594994076272;
+        Fri, 17 Jul 2020 06:54:36 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id w128sm16118356wmb.19.2020.07.17.06.54.34
+        by smtp.gmail.com with ESMTPSA id w128sm16118356wmb.19.2020.07.17.06.54.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 06:54:34 -0700 (PDT)
+        Fri, 17 Jul 2020 06:54:35 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     broonie@kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Sachin Verma <sachin.verma@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v2 08/14] spi: spi-pl022: Provide missing struct attribute/function param docs
-Date:   Fri, 17 Jul 2020 14:54:18 +0100
-Message-Id: <20200717135424.2442271-9-lee.jones@linaro.org>
+        Sureshkumar Relli <nagasure@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: [PATCH v2 09/14] spi: spi-zynq-qspi: Add description for 2 missing attributes/parameters
+Date:   Fri, 17 Jul 2020 14:54:19 +0100
+Message-Id: <20200717135424.2442271-10-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200717135424.2442271-1-lee.jones@linaro.org>
 References: <20200717135424.2442271-1-lee.jones@linaro.org>
@@ -66,91 +66,40 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Also demote non-worthy kerneldoc headers to standard comment blocks.
-
 Fixes the following W=1 kernel build warning(s):
 
- drivers/spi/spi-pl022.c:304: warning: cannot understand function prototype: 'enum ssp_writing '
- drivers/spi/spi-pl022.c:330: warning: Function parameter or member 'loopback' not described in 'vendor_data'
- drivers/spi/spi-pl022.c:398: warning: Function parameter or member 'rx_lev_trig' not described in 'pl022'
- drivers/spi/spi-pl022.c:398: warning: Function parameter or member 'tx_lev_trig' not described in 'pl022'
- drivers/spi/spi-pl022.c:398: warning: Function parameter or member 'dma_running' not described in 'pl022'
- drivers/spi/spi-pl022.c:670: warning: Function parameter or member 'pl022' not described in 'readwriter'
- drivers/spi/spi-pl022.c:1250: warning: Function parameter or member 'irq' not described in 'pl022_interrupt_handler'
- drivers/spi/spi-pl022.c:1250: warning: Function parameter or member 'dev_id' not described in 'pl022_interrupt_handler'
- drivers/spi/spi-pl022.c:1343: warning: Function parameter or member 'pl022' not described in 'set_up_next_transfer'
- drivers/spi/spi-pl022.c:1343: warning: Function parameter or member 'transfer' not described in 'set_up_next_transfer'
+ drivers/spi/spi-zynq-qspi.c:143: warning: Function parameter or member 'dev' not described in 'zynq_qspi'
+ drivers/spi/spi-zynq-qspi.c:334: warning: Function parameter or member 'spi' not described in 'zynq_qspi_config_op'
+ drivers/spi/spi-zynq-qspi.c:334: warning: Excess function parameter 'qspi' description in 'zynq_qspi_config_op'
 
-Cc: Sachin Verma <sachin.verma@st.com>
+Cc: Sureshkumar Relli <nagasure@xilinx.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Michal Simek <michal.simek@xilinx.com>
 ---
- drivers/spi/spi-pl022.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/spi/spi-zynq-qspi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-pl022.c b/drivers/spi/spi-pl022.c
-index 66028ebbc336d..d1776fea287e5 100644
---- a/drivers/spi/spi-pl022.c
-+++ b/drivers/spi/spi-pl022.c
-@@ -298,7 +298,7 @@ enum ssp_reading {
- 	READING_U32
- };
- 
--/**
-+/*
-  * The type of writing going on on this chip
-  */
- enum ssp_writing {
-@@ -317,6 +317,7 @@ enum ssp_writing {
-  * @extended_cr: 32 bit wide control register 0 with extra
-  * features and extra features in CR1 as found in the ST variants
-  * @pl023: supports a subset of the ST extensions called "PL023"
-+ * @loopback: supports loopback mode
-  * @internal_cs_ctrl: supports chip select control register
-  */
- struct vendor_data {
-@@ -353,11 +354,14 @@ struct vendor_data {
-  * @read: the type of read currently going on
-  * @write: the type of write currently going on
-  * @exp_fifo_level: expected FIFO level
-+ * @rx_lev_trig: receive FIFO watermark level which triggers IRQ
-+ * @tx_lev_trig: transmit FIFO watermark level which triggers IRQ
-  * @dma_rx_channel: optional channel for RX DMA
-  * @dma_tx_channel: optional channel for TX DMA
-  * @sgt_rx: scattertable for the RX transfer
-  * @sgt_tx: scattertable for the TX transfer
-  * @dummypage: a dummy page used for driving data on the bus with DMA
-+ * @dma_running: indicates whether DMA is in operation
-  * @cur_cs: current chip select (gpio)
-  * @chipselects: list of chipselects (gpios)
-  */
-@@ -662,7 +666,7 @@ static void load_ssp_default_config(struct pl022 *pl022)
- 	writew(CLEAR_ALL_INTERRUPTS, SSP_ICR(pl022->virtbase));
- }
- 
--/**
-+/*
-  * This will write to TX and read from RX according to the parameters
-  * set in pl022.
-  */
-@@ -1237,6 +1241,8 @@ static inline void pl022_dma_remove(struct pl022 *pl022)
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index bbf3d90561f54..5d8a5ee62fa23 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -119,6 +119,7 @@
  
  /**
-  * pl022_interrupt_handler - Interrupt handler for SSP controller
-+ * @irq: IRQ number
-+ * @dev_id: Local device data
+  * struct zynq_qspi - Defines qspi driver instance
++ * @dev:		Pointer to the this device's information
+  * @regs:		Virtual address of the QSPI controller registers
+  * @refclk:		Pointer to the peripheral clock
+  * @pclk:		Pointer to the APB clock
+@@ -316,7 +317,7 @@ static void zynq_qspi_chipselect(struct spi_device *spi, bool assert)
+ /**
+  * zynq_qspi_config_op - Configure QSPI controller for specified transfer
+  * @xqspi:	Pointer to the zynq_qspi structure
+- * @qspi:	Pointer to the spi_device structure
++ * @spi:	Pointer to the spi_device structure
   *
-  * This function handles interrupts generated for an interrupt based transfer.
-  * If a receive overrun (ROR) interrupt is there then we disable SSP, flag the
-@@ -1334,7 +1340,7 @@ static irqreturn_t pl022_interrupt_handler(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--/**
-+/*
-  * This sets up the pointers to memory for the next message to
-  * send out on the SPI bus.
-  */
+  * Sets the operational mode of QSPI controller for the next QSPI transfer and
+  * sets the requested clock frequency.
 -- 
 2.25.1
 
