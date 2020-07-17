@@ -2,147 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F391223498
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 08:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC40C223AF1
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 13:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbgGQGa5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jul 2020 02:30:57 -0400
-Received: from mga12.intel.com ([192.55.52.136]:34707 "EHLO mga12.intel.com"
+        id S1726386AbgGQL71 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jul 2020 07:59:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727788AbgGQGa4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 17 Jul 2020 02:30:56 -0400
-IronPort-SDR: J3Pk8qD/aHosi+nsnSQOquTLMpLuxpNM9MGimICkxZO6NpvT3tezumI9KFkMRvs8jSLYTXstg+
- xGbsZXF3vkBg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9684"; a="129107947"
-X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
-   d="scan'208";a="129107947"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2020 23:30:55 -0700
-IronPort-SDR: DTYY0vqV6KCgv8R8TYqyzwKlrfaXkdeIkaaSMhD9ACvLsC8OrSgole10N6LxMbNAfqxXg0ibbc
- +GwpdBb17JzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
-   d="scan'208";a="282697277"
-Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
-  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2020 23:30:52 -0700
-From:   Dilip Kota <eswara.kota@linux.intel.com>
-To:     broonie@kernel.org, robh@kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, daniel.schwierzeck@gmail.com,
-        hauke@hauke-m.de, andriy.shevchenko@intel.com,
-        cheol.yong.kim@intel.com, chuanhua.lei@linux.intel.com,
-        qi-ming.wu@intel.com, Dilip Kota <eswara.kota@linux.intel.com>
-Subject: [PATCH v2 8/8] spi: lantiq: Add support to Lightning Mountain SoC
-Date:   Fri, 17 Jul 2020 14:27:57 +0800
-Message-Id: <4d61a75381aca9479f9fc15d07a7b05534da6bb3.1594957019.git.eswara.kota@linux.intel.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <efb650b0faa49a00788c4e0ca8ef7196bdba851d.1594957019.git.eswara.kota@linux.intel.com>
-References: <efb650b0faa49a00788c4e0ca8ef7196bdba851d.1594957019.git.eswara.kota@linux.intel.com>
-In-Reply-To: <efb650b0faa49a00788c4e0ca8ef7196bdba851d.1594957019.git.eswara.kota@linux.intel.com>
-References: <efb650b0faa49a00788c4e0ca8ef7196bdba851d.1594957019.git.eswara.kota@linux.intel.com>
+        id S1725950AbgGQL70 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 17 Jul 2020 07:59:26 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C01032065D;
+        Fri, 17 Jul 2020 11:59:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594987166;
+        bh=IBC0fxfS9D7A/ESzV86wlZOweut+yTh9ShR/uTQtWsM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l3he7Zb25ylwXTM+e0bCR6vU9eGg6EbkNVm+2ZjuZJklUHo0TgJywhDGe6XZm1pB+
+         WWjgpTpBmhJVa9E5E8uFYvmf/cGv3uAUeOHIgU3RcuPY82Yneo4mqNrDBHWDWUxM15
+         DmmiA+K8Q86iYdDD1GMBM4uHo9m9kYvctKGCRmLw=
+Date:   Fri, 17 Jul 2020 12:59:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 14/20] dt-bindings: spi: renesas,sh-msiof: Add r8a774e1
+ support
+Message-ID: <20200717115915.GD4316@sirena.org.uk>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-15-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EP0wieDxd4TSJjHq"
+Content-Disposition: inline
+In-Reply-To: <1594811350-14066-15-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Cookie: No other warranty expressed or implied.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add support to SPI controller on Intel Atom based Lightning Mountain SoC
-which reuses Lantiq SPI controller IP.
 
-Signed-off-by: Dilip Kota <eswara.kota@linux.intel.com>
----
- drivers/spi/Kconfig          |  4 ++--
- drivers/spi/spi-lantiq-ssc.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 42 insertions(+), 2 deletions(-)
+--EP0wieDxd4TSJjHq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 878849a33781b..be40310840d04 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -498,11 +498,11 @@ config SPI_NPCM_PSPI
- 
- config SPI_LANTIQ_SSC
- 	tristate "Lantiq SSC SPI controller"
--	depends on LANTIQ || COMPILE_TEST
-+	depends on LANTIQ || X86 || COMPILE_TEST
- 	help
- 	  This driver supports the Lantiq SSC SPI controller in master
- 	  mode. This controller is found on Intel (former Lantiq) SoCs like
--	  the Danube, Falcon, xRX200, xRX300.
-+	  the Danube, Falcon, xRX200, xRX300, Lightning Mountain.
- 
- config SPI_OC_TINY
- 	tristate "OpenCores tiny SPI"
-diff --git a/drivers/spi/spi-lantiq-ssc.c b/drivers/spi/spi-lantiq-ssc.c
-index 2a433d9b5d8fe..81cb1c06e2ce5 100644
---- a/drivers/spi/spi-lantiq-ssc.c
-+++ b/drivers/spi/spi-lantiq-ssc.c
-@@ -703,6 +703,24 @@ static irqreturn_t lantiq_ssc_err_interrupt(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+static irqreturn_t intel_lgm_ssc_isr(int irq, void *data)
-+{
-+	struct lantiq_ssc_spi *spi = data;
-+	const struct lantiq_ssc_hwcfg *hwcfg = spi->hwcfg;
-+	u32 val = lantiq_ssc_readl(spi, hwcfg->irncr);
-+
-+	if (!(val & LTQ_SPI_IRNEN_ALL))
-+		return IRQ_NONE;
-+
-+	if (val & LTQ_SPI_IRNEN_E)
-+		return lantiq_ssc_err_interrupt(irq, data);
-+
-+	if ((val & hwcfg->irnen_t) || (val & hwcfg->irnen_r))
-+		return lantiq_ssc_xmit_interrupt(irq, data);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int transfer_start(struct lantiq_ssc_spi *spi, struct spi_device *spidev,
- 			  struct spi_transfer *t)
- {
-@@ -803,6 +821,17 @@ static int lantiq_ssc_transfer_one(struct spi_master *master,
- 	return transfer_start(spi, spidev, t);
- }
- 
-+static int intel_lgm_cfg_irq(struct platform_device *pdev, struct lantiq_ssc_spi *spi)
-+{
-+	int irq;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	return devm_request_irq(&pdev->dev, irq, intel_lgm_ssc_isr, 0, "spi", spi);
-+}
-+
- static int lantiq_cfg_irq(struct platform_device *pdev, struct lantiq_ssc_spi *spi)
- {
- 	int irq, err;
-@@ -855,10 +884,21 @@ static const struct lantiq_ssc_hwcfg lantiq_ssc_xrx = {
- 	.irq_ack	= false,
- };
- 
-+static const struct lantiq_ssc_hwcfg intel_ssc_lgm = {
-+	.cfg_irq	= intel_lgm_cfg_irq,
-+	.irnen_r	= LTQ_SPI_IRNEN_R_XRX,
-+	.irnen_t	= LTQ_SPI_IRNEN_T_XRX,
-+	.irnicr		= 0xFC,
-+	.irncr		= 0xF8,
-+	.fifo_size_mask	= GENMASK(7, 0),
-+	.irq_ack	= true,
-+};
-+
- static const struct of_device_id lantiq_ssc_match[] = {
- 	{ .compatible = "lantiq,ase-spi", .data = &lantiq_ssc_xway, },
- 	{ .compatible = "lantiq,falcon-spi", .data = &lantiq_ssc_xrx, },
- 	{ .compatible = "lantiq,xrx100-spi", .data = &lantiq_ssc_xrx, },
-+	{ .compatible = "intel,lgm-spi", .data = &intel_ssc_lgm, },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, lantiq_ssc_match);
--- 
-2.11.0
+On Wed, Jul 15, 2020 at 12:09:04PM +0100, Lad Prabhakar wrote:
+> Document RZ/G2H (R8A774E1) SoC bindings.
 
+Please in future could you split things like this up into per subsystem
+serieses?  That's a more normal approach and avoids the huge threads and
+CC lists.
+
+--EP0wieDxd4TSJjHq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8RkpIACgkQJNaLcl1U
+h9C49gf/eW/cjPlYI1cbSfRXBxXem11Bis/Eyf7JldTeF1+MuH3As7rZdLb/Echg
+mYjYxsQ/gYm2DjC32f3rK+qY8Enzqz3k2jl7qJZ8R+pPEtfW9+ZrDHFAUyuE/Bwb
+sG+qKb/lwZ3KgqIO85RfL9b5WGktXWg26M182qVbBIZTGYRysCksSaUN6fxSKfwN
+icZD/vNKlJ9tJcfFxsjKl37Ti8ipK6ht46YI880NPw/lVkl7aFbJOsHY3LHW2JkR
+qTH281KenQZDUUXHaIqusmXvyMhns1zbIhsZxaZ9txJFNZX43TK1krvBVznJYK20
+K3YSdEJoHNWVwjPSdMbWIO1iOR9SSQ==
+=3N6n
+-----END PGP SIGNATURE-----
+
+--EP0wieDxd4TSJjHq--
