@@ -2,68 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D40222F91
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 02:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A663F22328C
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 06:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726250AbgGPX6q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Jul 2020 19:58:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59330 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725958AbgGPX6p (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Jul 2020 19:58:45 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0D2C120760;
-        Thu, 16 Jul 2020 23:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594943925;
-        bh=UrQzO724UtSTQ7IKx66zegNUGqB6aVe9FXF7F4V8IM0=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=SPeCUHvxqY4I/M9AGNMKWRMFRPR2djwcPqfcjEUnxZvDHMnsmH9gAjsUYYvS6B+fj
-         l15TxkTs8cDivPzMCIVVLcOue/5qMW9HiQG6jY6qkTgz1V88Rhv4rYXt9X9KnPxQeP
-         FJDO3DeKWHXbYZHRz9OnO324c71EhbcPdgFIpC1E=
-Date:   Fri, 17 Jul 2020 00:58:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
-References: <1594790807-32319-1-git-send-email-zhangqing@loongson.cn>
-Subject: Re: [PATCH v2 1/2] spi: omap-uwire: Use clk_prepare_enable and clk_disable_unprepare
-Message-Id: <159494389042.42455.11301873090946595161.b4-ty@kernel.org>
+        id S1726803AbgGQEof (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jul 2020 00:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbgGQEoe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jul 2020 00:44:34 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FAAC08C5DC
+        for <linux-spi@vger.kernel.org>; Thu, 16 Jul 2020 21:44:33 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id l2so15309967wmf.0
+        for <linux-spi@vger.kernel.org>; Thu, 16 Jul 2020 21:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=S9S68y6b2mPbKuzgaCo1jN4A32wueiis4gs7MPkym/M=;
+        b=YBTRlAxQNCrp0VWtdAoz7HX1TcMxgP8c+pztXkm9DckROsrCs8s1wiHI5Ty0T6SgrK
+         x1LT/2APXM2vMzv8oPhbWLw0GHTyp4WhkivO6gKr6Fyodd1U8eGi9prToTvyCdvhjwuu
+         D/2FUpr4dbooLhpYGT4dm3UwB8hQ0iuvNDR5WtKOUPmAO1XOPM9iqBTmOIE3rIhpejZD
+         UuV0PnY40TbCaLn4R1LYeLSHKHkJ1uEJRN1YQ2eDSc8zlbJWvqUCqi2RbB/AK2Bmot/z
+         bai/MmFwyt17VnEi9eZU4lF9z9MMd+wSlLUM9q4lUfSN/7KO5Q5X5N7DH8omfftLoyew
+         HClw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=S9S68y6b2mPbKuzgaCo1jN4A32wueiis4gs7MPkym/M=;
+        b=KH/0Y4icEHGOpM1I7etqLWfaaml1IgvKsvQ1+0uMWugGfvud8XioQrGMi6Lx7EGAGv
+         eEgEk+6XJYf3fJDo5xc1NXG47xH1gQJH+sLCdnHilCdA486IbRiKydnHyWP29d2xHZI3
+         GiDQBYE3rESFNjae/7srdVXRqBiWVURTBPT7lDPOwCii0qffOgwlbub8vcm+e+zUFc0p
+         TJ51h8PF/l31QaripnN7LDj04NnE1GnvzO/N19qimA79jspC2MjBBk2/i4aLRnS87bT4
+         0fuDG4xkt0cE7qjYF4YXbBDEX6+J2+3YsukY3VWkBfDSCfEa98avcwIUgUKINRb5TrEZ
+         wbMA==
+X-Gm-Message-State: AOAM531qpeVPXEEfWHU9/OXSM9MQiZyAeywPIhikz1nPUcsJFlLH/b9V
+        R/6pZGd639+5GU+Ym27d2ofNvQ==
+X-Google-Smtp-Source: ABdhPJyEBG67fJXokeAElVWPCoMwiGiAI/9HSCWG+w7OI40KZczqAmqnOUUNQcrS+TOsyYDFflbNaQ==
+X-Received: by 2002:a7b:ce83:: with SMTP id q3mr7184668wmj.5.1594961072462;
+        Thu, 16 Jul 2020 21:44:32 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:9880:a643:3e69:6393? ([2a01:e34:ed2f:f020:9880:a643:3e69:6393])
+        by smtp.googlemail.com with ESMTPSA id o21sm11356388wmh.18.2020.07.16.21.44.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jul 2020 21:44:31 -0700 (PDT)
+Subject: Re: [PATCH 03/20] thermal: rcar_gen3_thermal: Add r8a774e1 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <bcda3aae-a276-173f-71e2-381736481ab2@linaro.org>
+Date:   Fri, 17 Jul 2020 06:44:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 15 Jul 2020 13:26:46 +0800, Qing Zhang wrote:
-> Convert clk_enable() to clk_prepare_enable() and clk_disable() to
-> clk_disable_unprepare() respectively in the spi-omap-uwire.c.
+On 15/07/2020 13:08, Lad Prabhakar wrote:
+> From: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> 
+> Add r8a774e1 specific compatible string.
+> 
+> Signed-off-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> ---
 
-Applied to
+Applied, thanks
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thanks!
 
-[1/1] spi: coldfire-qspi: Use clk_prepare_enable and clk_disable_unprepare
-      commit: 499de01c5c0b813cc94dbfc722ec12487044ac4a
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
