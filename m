@@ -2,108 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A663F22328C
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 06:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65162223482
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 08:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgGQEof (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jul 2020 00:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbgGQEoe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jul 2020 00:44:34 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FAAC08C5DC
-        for <linux-spi@vger.kernel.org>; Thu, 16 Jul 2020 21:44:33 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id l2so15309967wmf.0
-        for <linux-spi@vger.kernel.org>; Thu, 16 Jul 2020 21:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=S9S68y6b2mPbKuzgaCo1jN4A32wueiis4gs7MPkym/M=;
-        b=YBTRlAxQNCrp0VWtdAoz7HX1TcMxgP8c+pztXkm9DckROsrCs8s1wiHI5Ty0T6SgrK
-         x1LT/2APXM2vMzv8oPhbWLw0GHTyp4WhkivO6gKr6Fyodd1U8eGi9prToTvyCdvhjwuu
-         D/2FUpr4dbooLhpYGT4dm3UwB8hQ0iuvNDR5WtKOUPmAO1XOPM9iqBTmOIE3rIhpejZD
-         UuV0PnY40TbCaLn4R1LYeLSHKHkJ1uEJRN1YQ2eDSc8zlbJWvqUCqi2RbB/AK2Bmot/z
-         bai/MmFwyt17VnEi9eZU4lF9z9MMd+wSlLUM9q4lUfSN/7KO5Q5X5N7DH8omfftLoyew
-         HClw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=S9S68y6b2mPbKuzgaCo1jN4A32wueiis4gs7MPkym/M=;
-        b=KH/0Y4icEHGOpM1I7etqLWfaaml1IgvKsvQ1+0uMWugGfvud8XioQrGMi6Lx7EGAGv
-         eEgEk+6XJYf3fJDo5xc1NXG47xH1gQJH+sLCdnHilCdA486IbRiKydnHyWP29d2xHZI3
-         GiDQBYE3rESFNjae/7srdVXRqBiWVURTBPT7lDPOwCii0qffOgwlbub8vcm+e+zUFc0p
-         TJ51h8PF/l31QaripnN7LDj04NnE1GnvzO/N19qimA79jspC2MjBBk2/i4aLRnS87bT4
-         0fuDG4xkt0cE7qjYF4YXbBDEX6+J2+3YsukY3VWkBfDSCfEa98avcwIUgUKINRb5TrEZ
-         wbMA==
-X-Gm-Message-State: AOAM531qpeVPXEEfWHU9/OXSM9MQiZyAeywPIhikz1nPUcsJFlLH/b9V
-        R/6pZGd639+5GU+Ym27d2ofNvQ==
-X-Google-Smtp-Source: ABdhPJyEBG67fJXokeAElVWPCoMwiGiAI/9HSCWG+w7OI40KZczqAmqnOUUNQcrS+TOsyYDFflbNaQ==
-X-Received: by 2002:a7b:ce83:: with SMTP id q3mr7184668wmj.5.1594961072462;
-        Thu, 16 Jul 2020 21:44:32 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9880:a643:3e69:6393? ([2a01:e34:ed2f:f020:9880:a643:3e69:6393])
-        by smtp.googlemail.com with ESMTPSA id o21sm11356388wmh.18.2020.07.16.21.44.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jul 2020 21:44:31 -0700 (PDT)
-Subject: Re: [PATCH 03/20] thermal: rcar_gen3_thermal: Add r8a774e1 support
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <bcda3aae-a276-173f-71e2-381736481ab2@linaro.org>
-Date:   Fri, 17 Jul 2020 06:44:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1726233AbgGQGaa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jul 2020 02:30:30 -0400
+Received: from mga18.intel.com ([134.134.136.126]:10212 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726056AbgGQGaa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 17 Jul 2020 02:30:30 -0400
+IronPort-SDR: Cfx5WmuYM9d2CALIgsoPKeGdVAifmtHr4orAdr/19dKEZWDkAlDida8DQKwWMaHyh6CyenHfLa
+ 69yWP5H7coKw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9684"; a="137006242"
+X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
+   d="scan'208";a="137006242"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2020 23:30:29 -0700
+IronPort-SDR: UstrEUAEOS5WbWF6+q1Dv4sbthHyr85FF7NRBvh50qLVkVm2uqWqeqVXa6CqDcG0sPfguSkryb
+ zufQbxwUEmqA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
+   d="scan'208";a="269458022"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Jul 2020 23:30:26 -0700
+From:   Dilip Kota <eswara.kota@linux.intel.com>
+To:     broonie@kernel.org, robh@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, daniel.schwierzeck@gmail.com,
+        hauke@hauke-m.de, andriy.shevchenko@intel.com,
+        cheol.yong.kim@intel.com, chuanhua.lei@linux.intel.com,
+        qi-ming.wu@intel.com, Dilip Kota <eswara.kota@linux.intel.com>
+Subject: [PATCH v2 1/8] spi: lantiq: fix: Rx overflow error in full duplex mode
+Date:   Fri, 17 Jul 2020 14:27:50 +0800
+Message-Id: <efb650b0faa49a00788c4e0ca8ef7196bdba851d.1594957019.git.eswara.kota@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 15/07/2020 13:08, Lad Prabhakar wrote:
-> From: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> 
-> Add r8a774e1 specific compatible string.
-> 
-> Signed-off-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> ---
+In full duplex mode, rx overflow error is observed. To overcome the error,
+wait until the complete data got received and proceed further.
 
-Applied, thanks
+Fixes: 17f84b793c01 ("spi: lantiq-ssc: add support for Lantiq SSC SPI controller")
+Signed-off-by: Dilip Kota <eswara.kota@linux.intel.com>
+---
+ drivers/spi/spi-lantiq-ssc.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-
-
+diff --git a/drivers/spi/spi-lantiq-ssc.c b/drivers/spi/spi-lantiq-ssc.c
+index 1fd7ee53d4510..44600fb71c484 100644
+--- a/drivers/spi/spi-lantiq-ssc.c
++++ b/drivers/spi/spi-lantiq-ssc.c
+@@ -184,6 +184,7 @@ struct lantiq_ssc_spi {
+ 	unsigned int			tx_fifo_size;
+ 	unsigned int			rx_fifo_size;
+ 	unsigned int			base_cs;
++	unsigned int			fdx_tx_level;
+ };
+ 
+ static u32 lantiq_ssc_readl(const struct lantiq_ssc_spi *spi, u32 reg)
+@@ -481,6 +482,7 @@ static void tx_fifo_write(struct lantiq_ssc_spi *spi)
+ 	u32 data;
+ 	unsigned int tx_free = tx_fifo_free(spi);
+ 
++	spi->fdx_tx_level = 0;
+ 	while (spi->tx_todo && tx_free) {
+ 		switch (spi->bits_per_word) {
+ 		case 2 ... 8:
+@@ -509,6 +511,7 @@ static void tx_fifo_write(struct lantiq_ssc_spi *spi)
+ 
+ 		lantiq_ssc_writel(spi, data, LTQ_SPI_TB);
+ 		tx_free--;
++		spi->fdx_tx_level++;
+ 	}
+ }
+ 
+@@ -520,6 +523,13 @@ static void rx_fifo_read_full_duplex(struct lantiq_ssc_spi *spi)
+ 	u32 data;
+ 	unsigned int rx_fill = rx_fifo_level(spi);
+ 
++	/*
++	 * Wait until all expected data to be shifted in.
++	 * Otherwise, rx overrun may occur.
++	 */
++	while (rx_fill != spi->fdx_tx_level)
++		rx_fill = rx_fifo_level(spi);
++
+ 	while (rx_fill) {
+ 		data = lantiq_ssc_readl(spi, LTQ_SPI_RB);
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.11.0
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
