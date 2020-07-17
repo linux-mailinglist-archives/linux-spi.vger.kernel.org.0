@@ -2,53 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73778223D8B
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 16:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78804223D91
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jul 2020 16:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727045AbgGQOAW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Jul 2020 10:00:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48270 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727019AbgGQOAV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 17 Jul 2020 10:00:21 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594994421;
-        bh=VKrDuU5UJ5xX4ghmhBpTW8ypAHD+vilvRq/yLisiMEE=;
-        h=Subject:From:Date:To:From;
-        b=UN3i9R8fjEl5otQPHhb7DQIHo2HJbkyhynCUYfvYeAsdABTvEDCtePznkFMCkQz3Q
-         OJ3XizKkhDc+iy5VOdhj0WVFIQpsxuocmhzrdVZfRWujZ1UpN6lAk6NFG5ZOy1OMS1
-         a7UIY5iehzirv+hooHBBj5PoZy3Q5/w99uYEst2o=
+        id S1726386AbgGQOCV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Jul 2020 10:02:21 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:50907 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726210AbgGQOCV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Jul 2020 10:02:21 -0400
+X-Originating-IP: 90.65.108.121
+Received: from localhost (lfbn-lyo-1-1676-121.w90-65.abo.wanadoo.fr [90.65.108.121])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id C50FF1BF20D;
+        Fri, 17 Jul 2020 14:02:18 +0000 (UTC)
+Date:   Fri, 17 Jul 2020 16:02:18 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     broonie@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: Re: [PATCH v2 12/14] spi: spi-at91-usart: Remove unused OF table
+ 'struct of_device_id'
+Message-ID: <20200717140218.GR3428@piout.net>
+References: <20200717135424.2442271-1-lee.jones@linaro.org>
+ <20200717135424.2442271-13-lee.jones@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <159499442163.17337.8559210407530338066.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 17 Jul 2020 14:00:21 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <20200717135424.2442271-13-lee.jones@linaro.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] Rid W=1 warnings in SPI (2020-07-17T13:54:11)
-  Superseding: [v1] Rid W=1 warnings in SPI (2020-07-15T15:06:18):
-    [01/14] spi: spi-loopback-test: Fix formatting issues in function header blocks
-    [02/14] spi: spi-bitbang: Demote obvious misuse of kerneldoc to standard comment blocks
-    [03/14] spi: spi-davinci: Fix a few kerneldoc misspellings and API slippages
-    [04/14] spi: spi-ep93xx: Fix API slippage
-    [05/14] spi: spi-meson-spifc: Fix misdocumenting of 'dev' in 'struct meson_spifc'
-    [06/14] spi: spi-meson-spicc: Remove set but never used variable 'data' from meson_spicc_reset_fifo()
-    [07/14] spi: spi-s3c64xx: Add missing entries for structs 's3c64xx_spi_dma_data' and 's3c64xx_spi_dma_data'
-    [08/14] spi: spi-pl022: Provide missing struct attribute/function param docs
-    [09/14] spi: spi-zynq-qspi: Add description for 2 missing attributes/parameters
-    [10/14] spi: spi-zynqmp-gqspi: Correct a couple of misspellings in kerneldoc
-    [11/14] spi: spi-topcliff-pch: Add missing descriptions to 'struct pch_spi_data'
-    [12/14] spi: spi-at91-usart: Make use of the defined 'struct of_device_id'
-    [13/14] spi: spi-pxa2xx: Do not define 'struct acpi_device_id' when
-    [14/14] spi: spi-amd: Do not define 'struct acpi_device_id' when
+On 17/07/2020 14:54:22+0100, Lee Jones wrote:
+> The only way this driver can be probed by MFD via its parent device.
+> 
+> No other reference to 'microchip,at91sam9g45-usart-spi' exists in the kernel.
+> 
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/spi/spi-at91-usart.c:684:34: warning: ‘at91_usart_spi_dt_ids’ defined but not used [-Wunused-const-variable=]
+>  684 | static const struct of_device_id at91_usart_spi_dt_ids[] = {
+>  | ^~~~~~~~~~~~~~~~~~~~~
+> 
+> Cc: Radu Pirea <radu_nicolae.pirea@upb.ro>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+> Suggested-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
+> ---
+>  drivers/spi/spi-at91-usart.c | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-at91-usart.c b/drivers/spi/spi-at91-usart.c
+> index 88033422a42ae..8c8352625d232 100644
+> --- a/drivers/spi/spi-at91-usart.c
+> +++ b/drivers/spi/spi-at91-usart.c
+> @@ -681,13 +681,6 @@ static const struct dev_pm_ops at91_usart_spi_pm_ops = {
+>  			   at91_usart_spi_runtime_resume, NULL)
+>  };
+>  
+> -static const struct of_device_id at91_usart_spi_dt_ids[] = {
+> -	{ .compatible = "microchip,at91sam9g45-usart-spi"},
+> -	{ /* sentinel */}
+> -};
+> -
+> -MODULE_DEVICE_TABLE(of, at91_usart_spi_dt_ids);
+> -
+>  static struct platform_driver at91_usart_spi_driver = {
+>  	.driver = {
+>  		.name = "at91_usart_spi",
+> -- 
+> 2.25.1
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
