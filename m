@@ -2,135 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B87C225655
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Jul 2020 05:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5959C225CED
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Jul 2020 12:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbgGTD4E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 19 Jul 2020 23:56:04 -0400
-Received: from outbound-ip8b.ess.barracuda.com ([209.222.82.190]:50794 "EHLO
-        outbound-ip8b.ess.barracuda.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726123AbgGTD4D (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Jul 2020 23:56:03 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102]) by mx4.us-east-2b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Mon, 20 Jul 2020 03:55:59 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iD5nAqmPrV7yL64umLSgk9pSdTMs8ODF53px7AcemiiOxHcik1f1QDMVIprOEdI8g3k0FOHyVAu15B88wDgnkHeFtw3CyGY1RU43GxfXXNNBlI9+lATq0Vpja/gMUPcn+Jvxssbkn7nbCTTKrmzMq/ZNBewFXL+jNpm2d7euyRizZkt5wGWMDZgp9xJQyMK8bXGkoKLMFyYcwzetUyEyZ4v2iz1bWqxMybEbfAg4qDD2xypIoF2eroCOm5RxlS6tNUa61Ruo92cvO05qcH5oKq7yRRpSUiVGNgnye4faAmi5CFfatoenzZJWg1XXZMVlUH5sVEPJnGEB+OgluAG4Gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9m/hY38WXMFlT1+3eTngf4z3YIPyR3xllmcCMIeWPdg=;
- b=IXyIOxyFwJ8c/hM6CSRSLZpFd1iRubHEcsSu4hWet/DmYgJODAX8QYcrXO1zVINwYTUSfGUSAWhS/4jkpSokc/Hc9xriFx7KuDNnx5PEA6kYaquPnymYzABN5nikXWdJ1W/wNSq1A1L62CSz/nALenwgA96j0ccz6dq+uKk88C86LBHoaQvhS3G5OlJUn4mxJ2oKCnm50qTC6YKNvF0eScLlcEeXtBmDGxAtXOK7N4FpVLTtN3+K2LZTePXv3wTUqN22cF7jF0JpMeXUCNlij3paVJ3jjnWhr0hJXwS/BoUVbSnY5LidlEPJ+ia6YSZBqaCfYCO/DMGPc7v0Ke7dfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=biamp.com; dmarc=pass action=none header.from=biamp.com;
- dkim=pass header.d=biamp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=biamp.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9m/hY38WXMFlT1+3eTngf4z3YIPyR3xllmcCMIeWPdg=;
- b=B9nHWytWYFFc1pJgb8qHo2Zwbs3t1CcjBYWpz8yOP+fwM4ASsL0X8j91MvKXo6jH0j2KRGqLS+JSnh+vcH3Tf2RNSS+Ri4pMMe6UFWlNX4rCV5WLbWINGDr+UK3G3F+2eJZuwzPNiAYIq2ol4+PT2xl36imsCROb6I9S2h+RoiI=
-Received: from MN2PR17MB2974.namprd17.prod.outlook.com (2603:10b6:208:dc::30)
- by MN2PR17MB3774.namprd17.prod.outlook.com (2603:10b6:208:203::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17; Mon, 20 Jul
- 2020 03:55:56 +0000
-Received: from MN2PR17MB2974.namprd17.prod.outlook.com
- ([fe80::917e:95f1:fd23:39ac]) by MN2PR17MB2974.namprd17.prod.outlook.com
- ([fe80::917e:95f1:fd23:39ac%5]) with mapi id 15.20.3195.025; Mon, 20 Jul 2020
- 03:55:56 +0000
-From:   Shreyas Joshi <Shreyas.Joshi@biamp.com>
-To:     Shreyas Joshi <Shreyas.Joshi@biamp.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "shreyasjoshi15@gmail.com" <shreyasjoshi15@gmail.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] spi: spi-cadence: add support for chip select high
-Thread-Topic: [PATCH] spi: spi-cadence: add support for chip select high
-Thread-Index: AQHWVnXjIZ8I7rtqmEm/hkQ/IY2X3akBUfSAgA6UWOA=
-Date:   Mon, 20 Jul 2020 03:55:55 +0000
-Message-ID: <MN2PR17MB29743B1AE9419961F152EC73FC7B0@MN2PR17MB2974.namprd17.prod.outlook.com>
-References: <20200710045140.458-1-shreyas.joshi@biamp.com>
- <20200710211655.1564-1-shreyas.joshi@biamp.com>
-In-Reply-To: <20200710211655.1564-1-shreyas.joshi@biamp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: biamp.com; dkim=none (message not signed)
- header.d=none;biamp.com; dmarc=none action=none header.from=biamp.com;
-x-originating-ip: [203.54.172.50]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c5935cbc-e3b2-411f-4e4a-08d82c60ce40
-x-ms-traffictypediagnostic: MN2PR17MB3774:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MN2PR17MB3774B6D7E5AF95A48785F472FC7B0@MN2PR17MB3774.namprd17.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3044;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 11fCbGvC5W29z4SIfw0rDVSWI5ONg+zLHb9n+9o2GSSXv5xMtZwrtlN5amS6H9jo7YK9NxNR67VWv0lLMzSHnjC+Ss7hsq2Ki91r3zFHL9HGrolTUPRt+IT9cTCvVKQryGXtre+iyABOApdvcy5aQmRpSORoC891IrceXmx21QYhKZuo3MycK/NYVi2P7E6afQRtpThiOPAqkW6G+IvTSiR7Oou+/ZPLA6eeo4qYaj3YUtcCpo132w4BsD2fDVvuNWOJwX/ToJ8ecH6CjePOkTh//SXbVnlt+sfYOCMgKVUzxNMPMt5Rl5DZCK8j1nlwQMZHOrWjObaGE3cjQk2YDg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR17MB2974.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(396003)(376002)(346002)(39840400004)(136003)(76116006)(55016002)(83380400001)(66446008)(64756008)(66476007)(66946007)(66556008)(9686003)(5660300002)(52536014)(26005)(8936002)(33656002)(6506007)(71200400001)(7696005)(53546011)(478600001)(186003)(86362001)(110136005)(4326008)(316002)(8676002)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: QHMyHBzhibYnLTXJc9gjswPCyxP5IykWPVP8i2Vrueck40FReJFygKW4Qsw5w+GTkYeFVknH8zOGK+yls68GNVJyxPEqjP58/p7eK/yipvKRiKEJScUExhwqyo9+LhILds6hv83FMmD/sx3hXeugZ7152hBNxmBpjFSGFtLw0MLgorDlGlIwnenZU+0A9TfQbnuvVzm5OGjWr42F/axmfSwquvqcli+3FGyJaUKGS7jomFUyo7bQutpXPP7wZNhCA6MNlsP0KszV7wx8thwXXIU7XLptse59ZVpvzwGj1Z63fwmScfO+Ckt2RVFJZOmyuDoufsMny6duUXf6351Ny5MRyKfB4wCodFemLnXGj09cD2V73+zSmJ6aYOdL52b2eke8sytoX6wjy6GSg+cwMUEgzFDEtFCmEEj+IjCW+28qf3stSdjn3UIvjMhu06/uq2+35SfV1xoB7AY6/Q1mgrEVuyXwHDdnbtVLKZIHDkY=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728348AbgGTKv4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Jul 2020 06:51:56 -0400
+Received: from mga01.intel.com ([192.55.52.88]:58387 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728273AbgGTKv4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 20 Jul 2020 06:51:56 -0400
+IronPort-SDR: c8asirTTtQNL9ATHToit3YEB8TuSWK2bKTRMxi8Igf6c7Wjeg3yeDLTTsL39eybPaxtkcxSmwH
+ kG/gl27aUrZw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9687"; a="168018623"
+X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
+   d="scan'208";a="168018623"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2020 03:51:56 -0700
+IronPort-SDR: yWvLB816gbs2y2UuzTblZ+s52FJse74tmtF0K6dpQmkQLbSIRTUZLREdN64h1T3vi/2fWlVQcV
+ vydBNbItlpyw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
+   d="scan'208";a="301234634"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002.jf.intel.com with ESMTP; 20 Jul 2020 03:51:54 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1jxTOl-002rnX-9a; Mon, 20 Jul 2020 13:51:55 +0300
+Date:   Mon, 20 Jul 2020 13:51:55 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Subject: Re: [RFC] spi: dw: Test the last revision of the DMA module
+Message-ID: <20200720105155.GT3703480@smile.fi.intel.com>
+References: <20200625220808.hac4egxalgn3pcqk@mobilestation>
+ <CAHp75VfF3GhjNEgHaQWn+LqbVZVOn3_mORSompexxxRnmiAFcg@mail.gmail.com>
+ <20200626132921.tygww3k6b74gq6pl@mobilestation>
 MIME-Version: 1.0
-X-OriginatorOrg: biamp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR17MB2974.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5935cbc-e3b2-411f-4e4a-08d82c60ce40
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2020 03:55:56.0009
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 341ac572-066c-46f6-bf06-b2d0c7ddf1be
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2VrW7RD51r2DwBckfqcYy9x6M8ZfoILVI05ZM8Rew/6CHjpxxdvk5jPXLoTlOL9qtrnYBGilP8Fbdj4NAGW0oA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR17MB3774
-X-BESS-ID: 1595217359-893007-23819-404840-1
-X-BESS-VER: 2019.1_20200714.1757
-X-BESS-Apparent-Source-IP: 104.47.58.102
-X-BESS-Outbound-Spam-Score: 0.50
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.225590 [from 
-        cloudscan21-226.us-east-2b.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH META: Sender Address Matches Recipient Address  
-X-BESS-Outbound-Spam-Status: SCORE=0.50 using account:ESS74049 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, BSF_SC0_SA_TO_FROM_ADDR_MATCH
-X-BESS-BRTS-Status: 1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200626132921.tygww3k6b74gq6pl@mobilestation>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Were you able to patch my driver successfully?
+On Fri, Jun 26, 2020 at 04:29:21PM +0300, Serge Semin wrote:
+> On Fri, Jun 26, 2020 at 01:55:53AM +0300, Andy Shevchenko wrote:
+> > On Fri, Jun 26, 2020 at 1:08 AM Serge Semin
+> > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > 
+> > > Have you tested the recent revision of the DW APB SSI driver with DMA
+> > > enabled? I am particularly concerned about the next fix in the driver:
+> > 
+> > Yes.
+> > 
+> > > > +     dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
+> > 
+> > Yes, this line is problematic.
+> > However we have experiencing another issue with Tx underrun, that's
+> > why below has not been shared.
+> 
+> Hm, are you sure you meant ?Tx? underrun? DW APB SSI doesn't provide a status
+> bit of such an error. I don't even know how it might be possible, except a point
+> when SPI Tx FIFO just gets empty. If you meant SPI <Rx> FIFO underrun, then
+> it might be due to an invalid Rx DMA channel configuration: something with
+> BLOCK-length + DST_TR_WITDH + BURST-length setting. Though I am not sure it
+> could be connected with any of my recent patches for DW APB SSI or DW DMAC.
 
------Original Message-----
-From: Shreyas Joshi <shreyas.joshi@biamp.com>=20
-Sent: Saturday, 11 July 2020 7:17 AM
-To: broonie@kernel.org; linux-spi@vger.kernel.org; shreyasjoshi15@gmail.com
-Cc: linux-kernel@vger.kernel.org; Shreyas Joshi <Shreyas.Joshi@biamp.com>
-Subject: [PATCH] spi: spi-cadence: add support for chip select high
+Tx overrun or Rx over-/underrun, wording above is not correct from my side. But
+unfortunately I don't remember which one I have got.
 
-The spi cadence driver should support spi-cs-high in mode bits so that the =
-peripherals that needs the chip select to be high active can use it. Add th=
-e SPI-CS-HIGH flag in the supported mode bits.
+> > > Generally speaking it must work (even DW APB SSI/DMA databook suggests to have
+> > > such DMATDLR setting), but in our case of a relatively slow DMA engine (it's
+> > > clocked with just twice higher frequency with respect to the max SPI bus
+> > > speed) sometimes SPI Rx FIFO gets overflown when SPI bus is configured to work
+> > > with maximum speed (there are multiple reasons why this happens, but generally
+> > > speaking all of them matter only due to the relatively slow DMA engine). The
+> > > problem is fixed by reducing a value written into the DMATDLR register.
+> > >
+> > > I am wondering whether you've tested the last revision of the driver and it
+> > > worked for your version of the DW APB SSI + DW DMAC IPs. AFAIU DMA engine on
+> > > your devices is faster than on ours and has LLPs supported. So if you haven't
+> > > noticed any problem in the recent driver, then I'll send a fixup for our version
+> > > of the DW APB SSI block only (I'll have to introduce a new compatible string).
+> > > Otherwise I could get back a setting of dws->txburst into the DW_SPI_DMATDLR
+> > > register, which isn't that optimal as the current DMATDLR setting
+> > > of (fifo_len - txburst), but at least will make things working for all DMAs.
+> > 
+> 
+> > That's what I have locally.
+> > 
+> > commit 43d9abb2711f5096e969adcf1a2fb6456fa6e275 (HEAD -> topic/ehl-dma)
+> > Author: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Date:   Tue Jun 2 15:53:03 2020 +0300
+> > 
+> >     DEBUG SPI dw (burst fix?)
+> > 
+> >     Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > 
+> > diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+> > index 5986c520b196..79342528b1f4 100644
+> > --- a/drivers/spi/spi-dw-dma.c
+> > +++ b/drivers/spi/spi-dw-dma.c
+> > @@ -373,7 +373,7 @@ static int dw_spi_dma_setup(struct dw_spi *dws,
+> > struct spi_transfer *xfer)
+> >         u16 imr = 0, dma_ctrl = 0;
+> > 
+> >         dw_writel(dws, DW_SPI_DMARDLR, dws->rxburst - 1);
+> > -       dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
+> > +       dw_writel(dws, DW_SPI_DMATDLR, dws->txburst);
+> 
+> Yep, that will solve the problem. Though in my case of setting something
+> like: 
+> > -       dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
+> > +       dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len / 2 - dws->txburst);
+> 
+> also worked. By doing so we artificially specify a Tx FIFO depth limitation,
+> which implicitly slows the "SPI Tx <-> Tx DMA channel" down, so occasionally,
+> if SPI Tx is fast enough while Tx DMA channel isn't, the SPI Tx FIFO might
+> even get emptied, but at least it will give enough time for the
+> "SPI Rx <-> Rx DMA channel" pair to fetch the incoming SPI traffic on time and
+> place the data into the memory (I suppose a text like this should be in a
+> comment above the line with the DMATDLR register setting). In my case I've
+> noticed this problem only when I executed several background user-space processes
+> intensively working with memory (like memory testbenches or just
+> "dd if=/dev/mem ..." like one-liner). My theory is that the background processes
+> implicitly slowed the Rx DMA channel down in a way so occasionally the internal
+> DMA FIFO's got full, due to which the Rx DMA channel couldn't handle the SPI Rx
+> handshaking interface requests on time to fetch data from the SPI Rx FIFO, so
+> the SPI Rx FIFO gets overflown. That chain of unfortunate problems is most likely to
+> happen in case if SPI-bus is fast enough. Obviously if I decrease the SPI bus
+> frequency, then no overflow will happen.
+> 
+> In case of our hardware setting DMATDLR with a Tx-burst length isn't enough to
+> completely prevent the SPI Rx FIFO overflow error. We also have to send SG list
+> entries one-by-one in order to solve the problem with DMA Tx LLP reloaded faster
+> than the DMA Rx LLP (remember the noLLP problem we've discussed in the DW DMA
+> mailing list?).
+> 
+> Anyway sorry for the inconvenience my patch caused. I'll send a fixup patch
+> soon, which will get back the DW_SPI_DMATDLR setting with just "dws->txburst"
 
-Signed-off-by: Shreyas Joshi <shreyas.joshi@biamp.com>
----
- drivers/spi/spi-cadence.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Any news about a fix?
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c index 82=
-a0ee09cbe1..2b6b9c1ad9d0 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -556,7 +556,7 @@ static int cdns_spi_probe(struct platform_device *pdev)
- 	master->unprepare_transfer_hardware =3D cdns_unprepare_transfer_hardware;
- 	master->set_cs =3D cdns_spi_chipselect;
- 	master->auto_runtime_pm =3D true;
--	master->mode_bits =3D SPI_CPOL | SPI_CPHA;
-+	master->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
-=20
- 	/* Set to default valid value */
- 	master->max_speed_hz =3D clk_get_rate(xspi->ref_clk) / 4;
---
-2.20.1
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
