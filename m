@@ -2,184 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C94A7226AFD
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Jul 2020 18:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AAE22701D
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Jul 2020 23:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729269AbgGTQiO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Jul 2020 12:38:14 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:15323 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388950AbgGTQiL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Jul 2020 12:38:11 -0400
-X-Originating-IP: 42.109.212.217
-Received: from localhost (unknown [42.109.212.217])
-        (Authenticated sender: me@yadavpratyush.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7114824000E;
-        Mon, 20 Jul 2020 16:38:04 +0000 (UTC)
-Date:   Mon, 20 Jul 2020 22:08:02 +0530
-From:   Pratyush Yadav <me@yadavpratyush.com>
-To:     Tudor.Ambarus@microchip.com
-Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, broonie@kernel.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
-        matthias.bgg@gmail.com, michal.simek@xilinx.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, boris.brezillon@collabora.com,
-        nsekhar@ti.com
-Subject: Re: [PATCH v10 07/17] mtd: spi-nor: sfdp: parse xSPI Profile 1.0
- table
-Message-ID: <20200720163802.veql43cmal7sunit@yadavpratyush.com>
-References: <20200623183030.26591-1-p.yadav@ti.com>
- <20200623183030.26591-8-p.yadav@ti.com>
- <1450d8c8-cda4-51e3-9f57-0b2f00825f11@microchip.com>
+        id S1726587AbgGTVCO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Jul 2020 17:02:14 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:51618 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726543AbgGTVCN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Jul 2020 17:02:13 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 64896803086A;
+        Mon, 20 Jul 2020 21:02:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dyDLtmSpDU9A; Tue, 21 Jul 2020 00:02:06 +0300 (MSK)
+Date:   Tue, 21 Jul 2020 00:02:06 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Subject: Re: [RFC] spi: dw: Test the last revision of the DMA module
+Message-ID: <20200720210206.x67j2t65pwixz5br@mobilestation>
+References: <20200625220808.hac4egxalgn3pcqk@mobilestation>
+ <CAHp75VfF3GhjNEgHaQWn+LqbVZVOn3_mORSompexxxRnmiAFcg@mail.gmail.com>
+ <20200626132921.tygww3k6b74gq6pl@mobilestation>
+ <20200720105155.GT3703480@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1450d8c8-cda4-51e3-9f57-0b2f00825f11@microchip.com>
+In-Reply-To: <20200720105155.GT3703480@smile.fi.intel.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Tudor,
+On Mon, Jul 20, 2020 at 01:51:55PM +0300, Andy Shevchenko wrote:
+> On Fri, Jun 26, 2020 at 04:29:21PM +0300, Serge Semin wrote:
+> > On Fri, Jun 26, 2020 at 01:55:53AM +0300, Andy Shevchenko wrote:
+> > > On Fri, Jun 26, 2020 at 1:08 AM Serge Semin
+> > > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > > 
+> > > > Have you tested the recent revision of the DW APB SSI driver with DMA
+> > > > enabled? I am particularly concerned about the next fix in the driver:
+> > > 
+> > > Yes.
+> > > 
+> > > > > +     dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
+> > > 
+> > > Yes, this line is problematic.
+> > > However we have experiencing another issue with Tx underrun, that's
+> > > why below has not been shared.
+> > 
+> > Hm, are you sure you meant ?Tx? underrun? DW APB SSI doesn't provide a status
+> > bit of such an error. I don't even know how it might be possible, except a point
+> > when SPI Tx FIFO just gets empty. If you meant SPI <Rx> FIFO underrun, then
+> > it might be due to an invalid Rx DMA channel configuration: something with
+> > BLOCK-length + DST_TR_WITDH + BURST-length setting. Though I am not sure it
+> > could be connected with any of my recent patches for DW APB SSI or DW DMAC.
+> 
+> Tx overrun or Rx over-/underrun, wording above is not correct from my side. But
+> unfortunately I don't remember which one I have got.
+> 
+> > > > Generally speaking it must work (even DW APB SSI/DMA databook suggests to have
+> > > > such DMATDLR setting), but in our case of a relatively slow DMA engine (it's
+> > > > clocked with just twice higher frequency with respect to the max SPI bus
+> > > > speed) sometimes SPI Rx FIFO gets overflown when SPI bus is configured to work
+> > > > with maximum speed (there are multiple reasons why this happens, but generally
+> > > > speaking all of them matter only due to the relatively slow DMA engine). The
+> > > > problem is fixed by reducing a value written into the DMATDLR register.
+> > > >
+> > > > I am wondering whether you've tested the last revision of the driver and it
+> > > > worked for your version of the DW APB SSI + DW DMAC IPs. AFAIU DMA engine on
+> > > > your devices is faster than on ours and has LLPs supported. So if you haven't
+> > > > noticed any problem in the recent driver, then I'll send a fixup for our version
+> > > > of the DW APB SSI block only (I'll have to introduce a new compatible string).
+> > > > Otherwise I could get back a setting of dws->txburst into the DW_SPI_DMATDLR
+> > > > register, which isn't that optimal as the current DMATDLR setting
+> > > > of (fifo_len - txburst), but at least will make things working for all DMAs.
+> > > 
+> > 
+> > > That's what I have locally.
+> > > 
+> > > commit 43d9abb2711f5096e969adcf1a2fb6456fa6e275 (HEAD -> topic/ehl-dma)
+> > > Author: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > Date:   Tue Jun 2 15:53:03 2020 +0300
+> > > 
+> > >     DEBUG SPI dw (burst fix?)
+> > > 
+> > >     Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > 
+> > > diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+> > > index 5986c520b196..79342528b1f4 100644
+> > > --- a/drivers/spi/spi-dw-dma.c
+> > > +++ b/drivers/spi/spi-dw-dma.c
+> > > @@ -373,7 +373,7 @@ static int dw_spi_dma_setup(struct dw_spi *dws,
+> > > struct spi_transfer *xfer)
+> > >         u16 imr = 0, dma_ctrl = 0;
+> > > 
+> > >         dw_writel(dws, DW_SPI_DMARDLR, dws->rxburst - 1);
+> > > -       dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
+> > > +       dw_writel(dws, DW_SPI_DMATDLR, dws->txburst);
+> > 
+> > Yep, that will solve the problem. Though in my case of setting something
+> > like: 
+> > > -       dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
+> > > +       dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len / 2 - dws->txburst);
+> > 
+> > also worked. By doing so we artificially specify a Tx FIFO depth limitation,
+> > which implicitly slows the "SPI Tx <-> Tx DMA channel" down, so occasionally,
+> > if SPI Tx is fast enough while Tx DMA channel isn't, the SPI Tx FIFO might
+> > even get emptied, but at least it will give enough time for the
+> > "SPI Rx <-> Rx DMA channel" pair to fetch the incoming SPI traffic on time and
+> > place the data into the memory (I suppose a text like this should be in a
+> > comment above the line with the DMATDLR register setting). In my case I've
+> > noticed this problem only when I executed several background user-space processes
+> > intensively working with memory (like memory testbenches or just
+> > "dd if=/dev/mem ..." like one-liner). My theory is that the background processes
+> > implicitly slowed the Rx DMA channel down in a way so occasionally the internal
+> > DMA FIFO's got full, due to which the Rx DMA channel couldn't handle the SPI Rx
+> > handshaking interface requests on time to fetch data from the SPI Rx FIFO, so
+> > the SPI Rx FIFO gets overflown. That chain of unfortunate problems is most likely to
+> > happen in case if SPI-bus is fast enough. Obviously if I decrease the SPI bus
+> > frequency, then no overflow will happen.
+> > 
+> > In case of our hardware setting DMATDLR with a Tx-burst length isn't enough to
+> > completely prevent the SPI Rx FIFO overflow error. We also have to send SG list
+> > entries one-by-one in order to solve the problem with DMA Tx LLP reloaded faster
+> > than the DMA Rx LLP (remember the noLLP problem we've discussed in the DW DMA
+> > mailing list?).
+> > 
+> > Anyway sorry for the inconvenience my patch caused. I'll send a fixup patch
+> > soon, which will get back the DW_SPI_DMATDLR setting with just "dws->txburst"
+> 
 
-On 08/07/20 04:01PM, Tudor.Ambarus@microchip.com wrote:
-> On 6/23/20 9:30 PM, Pratyush Yadav wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > This table is indication that the flash is xSPI compliant and hence
-> > supports octal DTR mode. Extract information like the fast read opcode,
-> > dummy cycles, the number of dummy cycles needed for a Read Status
-> > Register command, and the number of address bytes needed for a Read
-> > Status Register command.
-> > 
-> > We don't know what speed the controller is running at. Find the fast
-> > read dummy cycles for the fastest frequency the flash can run at to be
-> > sure we are never short of dummy cycles. If nothing is available,
-> > default to 20. Flashes that use a different value should update it in
-> > their fixup hooks.
-> > 
-> > Since we want to set read settings, expose spi_nor_set_read_settings()
-> > in core.h.
-> > 
-> > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> > ---
-> >  drivers/mtd/spi-nor/core.c |  2 +-
-> >  drivers/mtd/spi-nor/core.h | 10 ++++
-> >  drivers/mtd/spi-nor/sfdp.c | 98 ++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 109 insertions(+), 1 deletion(-)
-> > 
-[...]
-> > diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-> > index 3f709de5ea67..d5a24e61813c 100644
-> > --- a/drivers/mtd/spi-nor/sfdp.c
-> > +++ b/drivers/mtd/spi-nor/sfdp.c
-[...]
-> > @@ -66,6 +70,16 @@ struct sfdp_bfpt_erase {
-> >         u32                     shift;
-> >  };
-> > 
-> > +/* xSPI Profile 1.0 table (from JESD216D.01). */
-> > +#define PROFILE1_DWORD1_RD_FAST_CMD            GENMASK(15, 8)
-> > +#define PROFILE1_DWORD1_RDSR_DUMMY             BIT(28)
-> > +#define PROFILE1_DWORD1_RDSR_ADDR_BYTES                BIT(29)
-> > +#define PROFILE1_DWORD4_DUMMY_200MHZ           GENMASK(11, 7)
-> > +#define PROFILE1_DWORD5_DUMMY_166MHZ           GENMASK(31, 27)
-> > +#define PROFILE1_DWORD5_DUMMY_133MHZ           GENMASK(21, 17)
-> > +#define PROFILE1_DWORD5_DUMMY_100MHZ           GENMASK(11, 7)
-> 
-> we should order these macros in a consistent way. I see that previous macros
-> are declared in order starting from MSB to LSB.
-> 
-> > +#define PROFILE1_DUMMY_DEFAULT                 20
-> 
-> we need to explain why the default dummy value is 20.
+> Any news about a fix?
 
-No reason other than the fact that it is the default for the first flash 
-that uses Profile 1.0 parsing (S28HS512T). AFAIK a similar reasoning is 
-followed for the default being 8 for 1-1-4 or 1-1-8 modes.
+Fix is in my repo. I was going to submit it together with the rest of the
+changes concerning the DMA noLLP problem after Vinod merges my DW DMAC patchset
+in. But as you can see for some reason he doesn't rush with that at all. If you
+need it I can submit the patch separately tomorrow.
 
-I can't think of any reasonable way of deciding on a default value since 
-it varies from flash to flash.
- 
-> How about declaring all these macros immediately above of spi_nor_parse_profile1()?
-> 
-> > +
-> >  #define SMPT_CMD_ADDRESS_LEN_MASK              GENMASK(23, 22)
-> >  #define SMPT_CMD_ADDRESS_LEN_0                 (0x0UL << 22)
-> >  #define SMPT_CMD_ADDRESS_LEN_3                 (0x1UL << 22)
-> > @@ -1106,6 +1120,86 @@ static int spi_nor_parse_4bait(struct spi_nor *nor,
-> >         return ret;
-> >  }
-> > 
-> > +/**
-> > + * spi_nor_parse_profile1() - parse the xSPI Profile 1.0 table
-> > + * @nor:               pointer to a 'struct spi_nor'
-> > + * @param_header:      pointer to the 'struct sfdp_parameter_header' describing
-> > + *                     the 4-Byte Address Instruction Table length and version.
-> > + * @params:            pointer to the 'struct spi_nor_flash_parameter' to be.
-> > + *
-> > + * Return: 0 on success, -errno otherwise.
-> > + */
-> > +static int spi_nor_parse_profile1(struct spi_nor *nor,
-> > +                                 const struct sfdp_parameter_header *profile1_header,
-> > +                                 struct spi_nor_flash_parameter *params)
-> > +{
-> > +       u32 *table, opcode, addr;
-> 
-> s/table/dwords?
-> 
-> u8 opcode?
-> 
-> > +       size_t len;
-> > +       int ret, i;
-> > +       u8 dummy;
-> > +
-> > +       len = profile1_header->length * sizeof(*table);
-> > +       table = kmalloc(len, GFP_KERNEL);
-> > +       if (!table)
-> > +               return -ENOMEM;
-> > +
-> > +       addr = SFDP_PARAM_HEADER_PTP(profile1_header);
-> > +       ret = spi_nor_read_sfdp(nor, addr, len, table);
-> > +       if (ret)
-> > +               goto out;
-> > +
-> > +       /* Fix endianness of the table DWORDs. */
-> > +       for (i = 0; i < profile1_header->length; i++)
-> > +               table[i] = le32_to_cpu(table[i]);
-> 
-> le32_to_cpu_array(table, profile1_header->length);
-> 
-> > +
-> > +       /* Get 8D-8D-8D fast read opcode and dummy cycles. */
-> > +       opcode = FIELD_GET(PROFILE1_DWORD1_RD_FAST_CMD, table[0]);
-> > +
-> > +       /*
-> > +        * We don't know what speed the controller is running at. Find the
-> > +        * dummy cycles for the fastest frequency the flash can run at to be
-> > +        * sure we are never short of dummy cycles. A value of 0 means the
-> > +        * frequency is not supported.
-> > +        *
-> > +        * Default to PROFILE1_DUMMY_DEFAULT if we don't find anything, and let
-> > +        * flashes set the correct value if needed in their fixup hooks.
-> > +        */
-> > +       dummy = FIELD_GET(PROFILE1_DWORD4_DUMMY_200MHZ, table[3]);
-> > +       if (!dummy)
-> > +               dummy = FIELD_GET(PROFILE1_DWORD5_DUMMY_166MHZ, table[4]);
-> > +       if (!dummy)
-> > +               dummy = FIELD_GET(PROFILE1_DWORD5_DUMMY_133MHZ, table[4]);
-> > +       if (!dummy)
-> > +               dummy = FIELD_GET(PROFILE1_DWORD5_DUMMY_100MHZ, table[4]);
-> > +       if (!dummy)
-> > +               dummy = PROFILE1_DUMMY_DEFAULT;
-> > +
-> > +       /* Round up to an even value to avoid tripping controllers up. */
-> > +       dummy = ROUND_UP_TO(dummy, 2);
-> > +
-[...]
+-Segey
 
--- 
-Regards,
-Pratyush Yadav
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
