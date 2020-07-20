@@ -2,83 +2,135 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6282253D8
-	for <lists+linux-spi@lfdr.de>; Sun, 19 Jul 2020 21:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B87C225655
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Jul 2020 05:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbgGST4x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 19 Jul 2020 15:56:53 -0400
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:51287 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbgGST4x (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Jul 2020 15:56:53 -0400
-Date:   Sun, 19 Jul 2020 19:56:40 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1595188611;
-        bh=TposCOyDf9Rxr5ih6p99q34q6+pJI5tfjSeeVkfpM9A=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=vBX4m7koySBoj2Xk9zvIgyhZIKVZgUxehC8Vj35UvYEKEtX+L0/v3HRofLjmgQy+j
-         Vz21blaUM0rn36dWsd981a3/xKc0A7NBASXzA8IQFIeUTGWeUJKtCb6VL2IuSx047a
-         kNMrVAy99OApy0bRO6miaiTbTUKurK9gvLaqBW00=
-To:     broonie@kernel.org
-From:   Colton Lewis <colton.w.lewis@protonmail.com>
-Cc:     linux-spi@vger.kernel.org,
-        Colton Lewis <colton.w.lewis@protonmail.com>
-Reply-To: Colton Lewis <colton.w.lewis@protonmail.com>
-Subject: [PATCH] spi: correct kernel-doc inconsistency
-Message-ID: <20200719195630.148075-1-colton.w.lewis@protonmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1726173AbgGTD4E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 19 Jul 2020 23:56:04 -0400
+Received: from outbound-ip8b.ess.barracuda.com ([209.222.82.190]:50794 "EHLO
+        outbound-ip8b.ess.barracuda.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726123AbgGTD4D (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Jul 2020 23:56:03 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102]) by mx4.us-east-2b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Mon, 20 Jul 2020 03:55:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iD5nAqmPrV7yL64umLSgk9pSdTMs8ODF53px7AcemiiOxHcik1f1QDMVIprOEdI8g3k0FOHyVAu15B88wDgnkHeFtw3CyGY1RU43GxfXXNNBlI9+lATq0Vpja/gMUPcn+Jvxssbkn7nbCTTKrmzMq/ZNBewFXL+jNpm2d7euyRizZkt5wGWMDZgp9xJQyMK8bXGkoKLMFyYcwzetUyEyZ4v2iz1bWqxMybEbfAg4qDD2xypIoF2eroCOm5RxlS6tNUa61Ruo92cvO05qcH5oKq7yRRpSUiVGNgnye4faAmi5CFfatoenzZJWg1XXZMVlUH5sVEPJnGEB+OgluAG4Gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9m/hY38WXMFlT1+3eTngf4z3YIPyR3xllmcCMIeWPdg=;
+ b=IXyIOxyFwJ8c/hM6CSRSLZpFd1iRubHEcsSu4hWet/DmYgJODAX8QYcrXO1zVINwYTUSfGUSAWhS/4jkpSokc/Hc9xriFx7KuDNnx5PEA6kYaquPnymYzABN5nikXWdJ1W/wNSq1A1L62CSz/nALenwgA96j0ccz6dq+uKk88C86LBHoaQvhS3G5OlJUn4mxJ2oKCnm50qTC6YKNvF0eScLlcEeXtBmDGxAtXOK7N4FpVLTtN3+K2LZTePXv3wTUqN22cF7jF0JpMeXUCNlij3paVJ3jjnWhr0hJXwS/BoUVbSnY5LidlEPJ+ia6YSZBqaCfYCO/DMGPc7v0Ke7dfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=biamp.com; dmarc=pass action=none header.from=biamp.com;
+ dkim=pass header.d=biamp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=biamp.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9m/hY38WXMFlT1+3eTngf4z3YIPyR3xllmcCMIeWPdg=;
+ b=B9nHWytWYFFc1pJgb8qHo2Zwbs3t1CcjBYWpz8yOP+fwM4ASsL0X8j91MvKXo6jH0j2KRGqLS+JSnh+vcH3Tf2RNSS+Ri4pMMe6UFWlNX4rCV5WLbWINGDr+UK3G3F+2eJZuwzPNiAYIq2ol4+PT2xl36imsCROb6I9S2h+RoiI=
+Received: from MN2PR17MB2974.namprd17.prod.outlook.com (2603:10b6:208:dc::30)
+ by MN2PR17MB3774.namprd17.prod.outlook.com (2603:10b6:208:203::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17; Mon, 20 Jul
+ 2020 03:55:56 +0000
+Received: from MN2PR17MB2974.namprd17.prod.outlook.com
+ ([fe80::917e:95f1:fd23:39ac]) by MN2PR17MB2974.namprd17.prod.outlook.com
+ ([fe80::917e:95f1:fd23:39ac%5]) with mapi id 15.20.3195.025; Mon, 20 Jul 2020
+ 03:55:56 +0000
+From:   Shreyas Joshi <Shreyas.Joshi@biamp.com>
+To:     Shreyas Joshi <Shreyas.Joshi@biamp.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "shreyasjoshi15@gmail.com" <shreyasjoshi15@gmail.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] spi: spi-cadence: add support for chip select high
+Thread-Topic: [PATCH] spi: spi-cadence: add support for chip select high
+Thread-Index: AQHWVnXjIZ8I7rtqmEm/hkQ/IY2X3akBUfSAgA6UWOA=
+Date:   Mon, 20 Jul 2020 03:55:55 +0000
+Message-ID: <MN2PR17MB29743B1AE9419961F152EC73FC7B0@MN2PR17MB2974.namprd17.prod.outlook.com>
+References: <20200710045140.458-1-shreyas.joshi@biamp.com>
+ <20200710211655.1564-1-shreyas.joshi@biamp.com>
+In-Reply-To: <20200710211655.1564-1-shreyas.joshi@biamp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: biamp.com; dkim=none (message not signed)
+ header.d=none;biamp.com; dmarc=none action=none header.from=biamp.com;
+x-originating-ip: [203.54.172.50]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c5935cbc-e3b2-411f-4e4a-08d82c60ce40
+x-ms-traffictypediagnostic: MN2PR17MB3774:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR17MB3774B6D7E5AF95A48785F472FC7B0@MN2PR17MB3774.namprd17.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3044;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 11fCbGvC5W29z4SIfw0rDVSWI5ONg+zLHb9n+9o2GSSXv5xMtZwrtlN5amS6H9jo7YK9NxNR67VWv0lLMzSHnjC+Ss7hsq2Ki91r3zFHL9HGrolTUPRt+IT9cTCvVKQryGXtre+iyABOApdvcy5aQmRpSORoC891IrceXmx21QYhKZuo3MycK/NYVi2P7E6afQRtpThiOPAqkW6G+IvTSiR7Oou+/ZPLA6eeo4qYaj3YUtcCpo132w4BsD2fDVvuNWOJwX/ToJ8ecH6CjePOkTh//SXbVnlt+sfYOCMgKVUzxNMPMt5Rl5DZCK8j1nlwQMZHOrWjObaGE3cjQk2YDg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR17MB2974.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(396003)(376002)(346002)(39840400004)(136003)(76116006)(55016002)(83380400001)(66446008)(64756008)(66476007)(66946007)(66556008)(9686003)(5660300002)(52536014)(26005)(8936002)(33656002)(6506007)(71200400001)(7696005)(53546011)(478600001)(186003)(86362001)(110136005)(4326008)(316002)(8676002)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: QHMyHBzhibYnLTXJc9gjswPCyxP5IykWPVP8i2Vrueck40FReJFygKW4Qsw5w+GTkYeFVknH8zOGK+yls68GNVJyxPEqjP58/p7eK/yipvKRiKEJScUExhwqyo9+LhILds6hv83FMmD/sx3hXeugZ7152hBNxmBpjFSGFtLw0MLgorDlGlIwnenZU+0A9TfQbnuvVzm5OGjWr42F/axmfSwquvqcli+3FGyJaUKGS7jomFUyo7bQutpXPP7wZNhCA6MNlsP0KszV7wx8thwXXIU7XLptse59ZVpvzwGj1Z63fwmScfO+Ckt2RVFJZOmyuDoufsMny6duUXf6351Ny5MRyKfB4wCodFemLnXGj09cD2V73+zSmJ6aYOdL52b2eke8sytoX6wjy6GSg+cwMUEgzFDEtFCmEEj+IjCW+28qf3stSdjn3UIvjMhu06/uq2+35SfV1xoB7AY6/Q1mgrEVuyXwHDdnbtVLKZIHDkY=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.protonmail.ch
+MIME-Version: 1.0
+X-OriginatorOrg: biamp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR17MB2974.namprd17.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5935cbc-e3b2-411f-4e4a-08d82c60ce40
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2020 03:55:56.0009
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 341ac572-066c-46f6-bf06-b2d0c7ddf1be
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2VrW7RD51r2DwBckfqcYy9x6M8ZfoILVI05ZM8Rew/6CHjpxxdvk5jPXLoTlOL9qtrnYBGilP8Fbdj4NAGW0oA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR17MB3774
+X-BESS-ID: 1595217359-893007-23819-404840-1
+X-BESS-VER: 2019.1_20200714.1757
+X-BESS-Apparent-Source-IP: 104.47.58.102
+X-BESS-Outbound-Spam-Score: 0.50
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.225590 [from 
+        cloudscan21-226.us-east-2b.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH META: Sender Address Matches Recipient Address  
+X-BESS-Outbound-Spam-Status: SCORE=0.50 using account:ESS74049 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, BSF_SC0_SA_TO_FROM_ADDR_MATCH
+X-BESS-BRTS-Status: 1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Silence documentation build warnings by correcting kernel-doc comment
-for spi_transfer struct.
+Were you able to patch my driver successfully?
 
-Signed-off-by: Colton Lewis <colton.w.lewis@protonmail.com>
+-----Original Message-----
+From: Shreyas Joshi <shreyas.joshi@biamp.com>=20
+Sent: Saturday, 11 July 2020 7:17 AM
+To: broonie@kernel.org; linux-spi@vger.kernel.org; shreyasjoshi15@gmail.com
+Cc: linux-kernel@vger.kernel.org; Shreyas Joshi <Shreyas.Joshi@biamp.com>
+Subject: [PATCH] spi: spi-cadence: add support for chip select high
+
+The spi cadence driver should support spi-cs-high in mode bits so that the =
+peripherals that needs the chip select to be high active can use it. Add th=
+e SPI-CS-HIGH flag in the supported mode bits.
+
+Signed-off-by: Shreyas Joshi <shreyas.joshi@biamp.com>
 ---
- include/linux/spi/spi.h | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/spi/spi-cadence.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index aac57b5b7c21..80d0d045b96f 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -329,6 +329,7 @@ static inline void spi_unregister_driver(struct spi_dri=
-ver *sdrv)
-  *=09every chipselect is connected to a slave.
-  * @dma_alignment: SPI controller constraint on DMA buffers alignment.
-  * @mode_bits: flags understood by this controller driver
-+ * @buswidth_override_bits: flags to override for this controller driver
-  * @bits_per_word_mask: A mask indicating which values of bits_per_word ar=
-e
-  *=09supported by the driver. Bit n indicates that a bits_per_word n+1 is
-  *=09supported. If set, the SPI core will reject any transfer with an
-@@ -841,12 +842,7 @@ extern void spi_res_release(struct spi_controller *ctl=
-r,
-  *=09processed the word, i.e. the "pre" timestamp should be taken before
-  *=09transmitting the "pre" word, and the "post" timestamp after receiving
-  *=09transmit confirmation from the controller for the "post" word.
-- * @timestamped_pre: Set by the SPI controller driver to denote it has act=
-ed
-- *=09upon the @ptp_sts request. Not set when the SPI core has taken care o=
-f
-- *=09the task. SPI device drivers are free to print a warning if this come=
-s
-- *=09back unset and they need the better resolution.
-- * @timestamped_post: See above. The reason why both exist is that these
-- *=09booleans are also used to keep state in the core SPI logic.
-+ * @timestamped: true if the transfer has been timestamped
-  *
-  * SPI transfers always write the same number of bytes as they read.
-  * Protocol drivers should always provide @rx_buf and/or @tx_buf.
---=20
-2.26.2
-
+diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c index 82=
+a0ee09cbe1..2b6b9c1ad9d0 100644
+--- a/drivers/spi/spi-cadence.c
++++ b/drivers/spi/spi-cadence.c
+@@ -556,7 +556,7 @@ static int cdns_spi_probe(struct platform_device *pdev)
+ 	master->unprepare_transfer_hardware =3D cdns_unprepare_transfer_hardware;
+ 	master->set_cs =3D cdns_spi_chipselect;
+ 	master->auto_runtime_pm =3D true;
+-	master->mode_bits =3D SPI_CPOL | SPI_CPHA;
++	master->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
+=20
+ 	/* Set to default valid value */
+ 	master->max_speed_hz =3D clk_get_rate(xspi->ref_clk) / 4;
+--
+2.20.1
 
