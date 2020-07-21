@@ -2,107 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AD3228124
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jul 2020 15:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6863228156
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jul 2020 15:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728577AbgGUNjt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jul 2020 09:39:49 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:40623 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728477AbgGUNjt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jul 2020 09:39:49 -0400
-X-Originating-IP: 90.30.52.66
+        id S1726710AbgGUNvn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Tue, 21 Jul 2020 09:51:43 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:41515 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbgGUNvm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jul 2020 09:51:42 -0400
 Received: from windsurf.home (lfbn-bay-1-589-66.w90-30.abo.wanadoo.fr [90.30.52.66])
         (Authenticated sender: thomas.petazzoni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 3CB8240004;
-        Tue, 21 Jul 2020 13:39:46 +0000 (UTC)
-Date:   Tue, 21 Jul 2020 15:39:44 +0200
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 9F80224000B;
+        Tue, 21 Jul 2020 13:51:40 +0000 (UTC)
+Date:   Tue, 21 Jul 2020 15:51:39 +0200
 From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org,
-        Jan =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        nicolas.ferre@microchip.com
+To:     Jan =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>
+Cc:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>
 Subject: Re: High CPU load when using MAX14830 SPI UART controller
-Message-ID: <20200721153944.3c331415@windsurf.home>
-In-Reply-To: <20200520112659.GB4823@sirena.org.uk>
+Message-ID: <20200721155139.40fdb835@windsurf.home>
+In-Reply-To: <4c5c972b-c8b8-4326-a1f9-438d88217a4a@cesnet.cz>
 References: <20200519163353.20c03286@windsurf.home>
-        <20200519152449.GM4611@sirena.org.uk>
-        <20200520121819.0f816ec0@windsurf.home>
-        <20200520112659.GB4823@sirena.org.uk>
+        <4c5c972b-c8b8-4326-a1f9-438d88217a4a@cesnet.cz>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Mark,
+Hello Jan,
 
-Sorry for the very long delay in getting back to you on this. I'm
-finally back on this topic.
+On Wed, 20 May 2020 12:44:43 +0200
+Jan Kundrát <jan.kundrat@cesnet.cz> wrote:
 
-On Wed, 20 May 2020 12:26:59 +0100
-Mark Brown <broonie@kernel.org> wrote:
-
-> Right.  You'd need to rearrange it to go through the entire message
-> setting up DMA mappings that will be needed then had everything off to
-> interrupt context or have extra complexity and optionally go back up to
-> task context if there's anything complicated to handle.
-
-This overall requires some fairly significant surgery in the spi-atmel
-driver, which has code paths for PIO, peripheral DMA and dmaengine DMA,
-all of which need to be adjusted.
-
-> > I'm not sure what you mean by "it might want to consider error
-> > checking". Could you explain?  
+> I was getting something similar when I first wrote that patch. The TL;DR 
+> version is that even though this UART has 128 byte FIFO per each direction 
+> of each UART, I wanted my patch to stay conservative and only batch reads 
+> in an opportunistic manner -- I wanted not to risk a possible RX FIFO 
+> overflow. That's why the IRQ handler is eager to trigger as soon as there 
+> are some data in the RX FIFO. Our setup has no HW flow control (no RTS/CTS, 
+> no software flow control), so one has to hope that the IRQ latency is low 
+> enough...
 > 
-> It wasn't checking the return values of SPI API calls.
+> The MAX14830 supports also another mode of operation where the interrupt 
+> fires only when the RX buffer gets filled over a configurable minimal 
+> threshold. This can be combined with yet another interrupt which fires 
+> whenever there's some data in the RX FIFO for "too long". Unfortunately, 
+> this timer starts over again upon reception of any additional data, so it's 
+> the *youngest* byte in the RX FIFO that controls triggering of this delayed 
+> interrupt.
 
-Right, but this is unlikely to be the source of the CPU consumption
-issue we're seeing.
+Do you have some more details about this mode of operation? I looked a
+bit at the MAX14830 datasheet and code, but couldn't spot what allows
+an interrupt to be triggered after X bytes have been received *OR* if
+data has been sitting in the FIFO for too long.
 
-> > Mark: in this situation where a threaded interrupt handler in max310x
-> > is doing SPI transfers, are those SPI transfers then offloaded to the
-> > SPI workqueue, causing another context switch, or are they done
-> > directly within the context of the interrupt thread ? I see
-> > __spi_sync() has some logic to push out the messages from the calling
-> > context, I guess as opposed to offloading them to the SPI workqueue ?  
+> I am not sure how to balance the latency ("how soon is userspace notified 
+> about this byte") with CPU utilization ("don't read data byte-by-byte from 
+> this 128 byte buffer"). If there's some cross-driver support for "something 
+> like that" in the TTY layer, I'm sure that max310x.c could be adopted to 
+> make use of that. Otherwise, we could always add a pair of DT properties 
+> for controling:
 > 
-> It should be doing transfers in calling context if the controller is
-> idle, the SPI thread should only be used when the controller is already
-> busy or to clean up when the controller goes idle (which will
-> unfortunately happen rather a lot in your use case).
+> a) the "start reading from RX FIFO" timeout,
+> b) "allow up to X bytes in the RX FIFO, I know that my platform has enough 
+> CPU and SPI bandwidth to finish reading that before the RX FIFO overflows"
 > 
-> Actually looking at the code in __spi_pump_messages() again I think that
-> in the case where we don't have any cleanup to do we should be able to
-> avoid kicking the thread for that which should help a bit for spi-atmel.
-> Can you give the patch below a go (compile tested only, not even tried
-> to boot)?
+> BTW, there are also real SPI bus throughput limitations, see 
+> 2258761213cb239e5e6c11b4ec9b1700fcb4fdcd for some numbers from my platform. 
+> The chip supports up to 26 MHz (but not all bus masters have clock 
+> granularities fine enough to use this), that's 3.25 MBps of raw throughput 
+> divided among four UARTs. Reading each register takes at least two bytes, 
+> one has to check the top-level IRQ status register (to decide which UART to 
+> check), then read per-UART IRQ registers, and only then start reading the 
+> data. Also, batched reading can only happen if userspace explicitly ignores 
+> framing errors, parity errors, etc, otherwise the driver will have to read 
+> byte-by-byte, and check the line status register, etc.
 
-I gave it a try, and unfortunately there is no difference. But it is
-not too surprising, as top shows something like this:
-
-   80     2 root     SW       0   0%  24% [irq/50-spi1.3]
-   57     2 root     IW       0   0%   2% [kworker/0:1-eve]
-
-So it's not the kthread of the SPI subsystem that is consuming most of
-the CPU time, but really the threaded handler of the MAX14830 driver.
-What your patch does is avoid offloading to the SPI subsystem kthread
-some cleanup work when it can be done in the current context, if I
-understand correctly.
-
-> You can generally get a good idea of what's going on with regard to
-> context switching at the SPI level from the SPI tracepoints, and about
-> any latencies in there too.
-
-I'll have a look there, but I don't really have any latency issue,
-rather a CPU consumption issue, which is quite different.
-
-Thanks,
+Yes, there is definitely some significant overhead with all those SPI
+transactions. But here I'm mostly concerned about CPU usage rather than
+actual bandwidth on the UART.
 
 Thomas
 -- 
