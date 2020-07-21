@@ -2,222 +2,439 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B859227D42
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jul 2020 12:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4517A227EE7
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jul 2020 13:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729261AbgGUKjz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jul 2020 06:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726484AbgGUKjy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jul 2020 06:39:54 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B88C061794;
-        Tue, 21 Jul 2020 03:39:54 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id i18so15972875ilk.10;
-        Tue, 21 Jul 2020 03:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ThwS3sNnaYzxm6RkRoYdeoF//cTjYR2kssQx54vWp9w=;
-        b=DVhxs5ezBobHnE9TBd4flPu5hJQLpMuAU2lC54qqaNv9XMKXCMX5PaT5SlWkqrzxOw
-         EL706Ffqv525EBxHSA241prY6WAcYvLU/KkxBqS46cZCyB+AclCVSPiJa8Hoax4XXS0G
-         O/BGBd615gOBOmIDHg2fL65Q4IjlGd23UTo9BuOlh2wQWIHEHGUTRbMaVD3dc/fRzwwY
-         5kYIGyaFCuRjVqoG1eppc5hn00vDznhO9+puJnS7B6+IoS6uVwu9tLZBw+ZYIyPsOeOv
-         iucOa/CI9OxSjLfSl6r7OefuxDuy0H4AnaLeROENvSLMUlYeVtYH+BY5eR1mAVb5fb5v
-         b3/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ThwS3sNnaYzxm6RkRoYdeoF//cTjYR2kssQx54vWp9w=;
-        b=kDOTaCtCtwoJwJKTTqv26+3HATVgLEy4+drRnCu3eyMceaqEUUXg8mPWJhEcikxJab
-         oK0I4S8UFQUJLiTjkUtISRPqcbc13yPc+pMcF9ikYpkglFGB3W5KxEJH30LYb/GhOmDS
-         oqvuQQCcfFlNHo2o7xpt+RMKkjHK8SRYtbtmQXykIFEg+aEVDQWycCF8EtKA3ABhRUIO
-         i1GzZRHlBvtpUlmp46gW7GPwv6DR8FJWENjYSUlqze5z5+oRKYF9f/FGvtqRz+/Reild
-         7HGArWFIEJTR+sAlDd2dOqwRoDqv7RGEUuzZMPkesLpP4slB9DHGswRmFQ7c7y+q6V+N
-         m0mg==
-X-Gm-Message-State: AOAM530GhfySUYduwVXal+TWRD/PZWtCpaG1BynuInegc/oidE67e5ix
-        YROOQnlUPp+4I0K9Y1CEPAL4bxCrfhhSMTIei7Q=
-X-Google-Smtp-Source: ABdhPJw+/FQVMZplQXPTaorV2hEw8VbZnoDU19wgkFEZlMX3P8qajDscpYadCkFjjbvhCIYI0S6Lg8dGv0Kq5wRCsYI=
-X-Received: by 2002:a05:6e02:bcd:: with SMTP id c13mr26319082ilu.184.1595327993883;
- Tue, 21 Jul 2020 03:39:53 -0700 (PDT)
+        id S1729829AbgGULaE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jul 2020 07:30:04 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:35689 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727103AbgGULaD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jul 2020 07:30:03 -0400
+Received: from localhost (unknown [106.76.68.110])
+        (Authenticated sender: me@yadavpratyush.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id B83E924000E;
+        Tue, 21 Jul 2020 11:29:54 +0000 (UTC)
+Date:   Tue, 21 Jul 2020 16:59:51 +0530
+From:   Pratyush Yadav <me@yadavpratyush.com>
+To:     Tudor.Ambarus@microchip.com
+Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, broonie@kernel.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
+        matthias.bgg@gmail.com, michal.simek@xilinx.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, boris.brezillon@collabora.com,
+        nsekhar@ti.com
+Subject: Re: [PATCH v10 05/17] mtd: spi-nor: add support for DTR protocol
+Message-ID: <20200721112951.rngfk7njubcsahzp@yadavpratyush.com>
+References: <20200623183030.26591-1-p.yadav@ti.com>
+ <20200623183030.26591-6-p.yadav@ti.com>
+ <fbb3d7e7-75ed-dbf6-a975-2ae871bc9fbf@microchip.com>
 MIME-Version: 1.0
-References: <broonie@kernel.org> <1590378062-7965-1-git-send-email-dillon.minfei@gmail.com>
- <198ad79c-ab12-55f0-814f-afc454a7e8ef@st.com>
-In-Reply-To: <198ad79c-ab12-55f0-814f-afc454a7e8ef@st.com>
-From:   dillon min <dillon.minfei@gmail.com>
-Date:   Tue, 21 Jul 2020 18:39:16 +0800
-Message-ID: <CAL9mu0L3ZF5+nh2ENzxnu0f6AAh1ygoWx1bEkS3WkJt8TN7C7Q@mail.gmail.com>
-Subject: Re: [PATCH v5 0/8] Enable ili9341 and l3gd20 on stm32f429-disco
-To:     Alexandre Torgue <alexandre.torgue@st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, p.zabel@pengutronix.de,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        thierry.reding@gmail.com, Sam Ravnborg <sam@ravnborg.org>,
-        Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fbb3d7e7-75ed-dbf6-a975-2ae871bc9fbf@microchip.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Alexandre,
+Hi Tudor,
 
-On Tue, Jul 21, 2020 at 5:19 PM Alexandre Torgue
-<alexandre.torgue@st.com> wrote:
->
-> Hi Dillon
->
-> On 5/25/20 5:40 AM, dillon.minfei@gmail.com wrote:
-> > From: dillon min <dillon.minfei@gmail.com>
-> >
-> > V5's update based on Mark Brown's suggestion, use 'SPI_MASTER_MUST_RX'
-> > for SPI_SIMPLEX_RX mode on stm32 spi controller.
-> >
-> > V5:
-> > 1 instead of add send dummy data out under SIMPLEX_RX mode,
-> >     add flags 'SPI_CONTROLLER_MUST_TX' for stm32 spi driver
-> > 2 bypass 'SPI_CONTROLLER_MUST_TX' and 'SPI_CONTROLLER_MUST_RX' under
-> > 'SPI_3WIRE' mode
-> >
->
-> Concerning DT patches, they look goods for me. However I'll merge them
-> when drivers parts will be merged.
->
-> regards
-> Alex
-This patchset status is :
-dts:
-    ARM: dts: stm32: Add dma config for spi5
-    ARM: dts: stm32: Add pin map for ltdc & spi5 on stm32f429-disco board
-    ARM: dts: stm32: enable ltdc binding with ili9341, gyro l3gd20 on
-      stm32429-disco board
+On 07/07/20 05:37PM, Tudor.Ambarus@microchip.com wrote:
+> Hi, Pratyush,
+> 
+> On 6/23/20 9:30 PM, Pratyush Yadav wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Double Transfer Rate (DTR) is SPI protocol in which data is transferred
+> > on each clock edge as opposed to on each clock cycle. Make
+> > framework-level changes to allow supporting flashes in DTR mode.
+> > 
+> > Right now, mixed DTR modes are not supported. So, for example a mode
+> > like 4S-4D-4D will not work. All phases need to be either DTR or STR.
+> > 
+> > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> > ---
+> >  drivers/mtd/spi-nor/core.c  | 305 ++++++++++++++++++++++++++++-------- 
+> >  drivers/mtd/spi-nor/core.h  |   6 +
+> >  drivers/mtd/spi-nor/sfdp.c  |   9 +-
+> >  include/linux/mtd/spi-nor.h |  51 ++++--
+> >  4 files changed, 295 insertions(+), 76 deletions(-)
+> > 
+> > diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> > index 0369d98b2d12..22a3832b83a6 100644
+> > --- a/drivers/mtd/spi-nor/core.c
+> > +++ b/drivers/mtd/spi-nor/core.c
+> > @@ -40,6 +40,76 @@
+> > 
+> >  #define SPI_NOR_MAX_ADDR_WIDTH 4
+> > 
+> > +/**
+> > + * spi_nor_get_cmd_ext() - Get the command opcode extension based on the
+> > + *                        extension type.
+> > + * @nor:               pointer to a 'struct spi_nor'
+> > + * @op:                        pointer to the 'struct spi_mem_op' whose properties
+> > + *                     need to be initialized.
+> > + *
+> > + * Right now, only "repeat" and "invert" are supported.
+> > + *
+> > + * Return: The opcode extension.
+> > + */
+> > +static u8 spi_nor_get_cmd_ext(const struct spi_nor *nor,
+> > +                             const struct spi_mem_op *op)
+> > +{
+> > +       switch (nor->cmd_ext_type) {
+> > +       case SPI_NOR_EXT_INVERT:
+> > +               return ~op->cmd.opcode;
+> > +
+> > +       case SPI_NOR_EXT_REPEAT:
+> > +               return op->cmd.opcode;
+> > +
+> > +       default:
+> > +               dev_err(nor->dev, "Unknown command extension type\n");
+> > +               return 0;
+> > +       }
+> > +}
+> > +
+> > +/**
+> > + * spi_nor_spimem_setup_op() - Set up common properties of a spi-mem op.
+> > + * @nor:               pointer to a 'struct spi_nor'
+> > + * @op:                        pointer to the 'struct spi_mem_op' whose properties
+> > + *                     need to be initialized.
+> > + * @proto:             the protocol from which the properties need to be set.
+> > + */
+> > +void spi_nor_spimem_setup_op(const struct spi_nor *nor,
+> > +                            struct spi_mem_op *op,
+> > +                            const enum spi_nor_protocol proto)
+> 
+> There's not much to set for the REG operations.
+> 
+> > +{
+> > +       u8 ext;
+> > +
+> > +       op->cmd.buswidth = spi_nor_get_protocol_inst_nbits(proto);
+> > +
+> > +       if (op->addr.nbytes)
+> > +               op->addr.buswidth = spi_nor_get_protocol_addr_nbits(proto);
+> > +
+> > +       if (op->dummy.nbytes)
+> > +               op->dummy.buswidth = spi_nor_get_protocol_addr_nbits(proto);
+> > +
+> > +       if (op->data.nbytes)
+> > +               op->data.buswidth = spi_nor_get_protocol_data_nbits(proto);
+> 
+> How about getting rid of the above and
+> 
+> > +
+> > +       if (spi_nor_protocol_is_dtr(proto)) {
+> 
+> introduce a spi_nor_spimem_setup_dtr_op() just for the body of this if?
 
-panel-bindings: Reviewed-by: Rob Herring=EF=BC=8C need more reviewing to me=
-rge
-    dt-bindings: display: panel: Add ilitek ili9341 panel bindings
+What benefit do we get with that other than skipping a couple of if() 
+checks? The downside is that we would have to then replicate all this 
+code to assign buswidth everywhere, including in spi_nor_read_sr() and 
+spi_nor_read_fsr() adding to more boilerplate.
 
-clk: Acked-by: Stephen Boyd , need more reviewing to merge
-    clk: stm32: Fix stm32f429's ltdc driver hang in set clock rate,
-      fix duplicated ltdc clock register to 'clk_core' case ltdc's clock
-        turn off by clk_disable_unused()
+If we change anything about spi-mem ops in the future we would then 
+again have to hunt and peck all places where we create spi-mem ops and 
+update them.
 
-drm-panel:  Reviewed-by: Linus Walleij . need more reviewing to merge
-    drm/panel: Add ilitek ili9341 panel driver
+For example, I was recently experimenting with a mechanism to tell 
+controllers the maximum supported frequency for an op (xSPI says read 
+SFDP should support at least 50MHz operation so we want to make sure 
+controllers don't exceed that speed). A max speed of 0 would mean 
+controllers can go as fast as they wish (how it is done currently). 
+Having a central function to set up ops made it a 1 line change to set 
+the speed to 0 for all ops, and then we can set it to 50MHz for read 
+SFDP. The same thing without it would have me copying that line in 10-15 
+places.
 
-spi-driver: Acked-by: Mark Brown =EF=BC=8Cmerged into mainline
-    spi: stm32: Add 'SPI_SIMPLEX_RX', 'SPI_3WIRE_RX' support for stm32f4
-    spi: flags 'SPI_CONTROLLER_MUST_RX' and 'SPI_CONTROLLER_MUST_TX' can't
-      becoexit with 'SPI_3WIRE' mode
+So unless there are any significant reasons to avoid having this, I 
+think it is a good idea to keep it.
 
-For ili9341 drivers, it seems to need more time to review, or might be drop=
-ped.
-since the drm maintainer might create a new interface to support
-DPI,DBI,DSI in one driver.
-Currently it's under discussion. I will rework the ili9341 driver after tha=
-t.
+> > +               /*
+> > +                * spi-mem supports mixed DTR modes, but right now we can only
+> > +                * have all phases either DTR or STR. IOW, spi-mem can have
+> nit: SPIMEM
+> > +                * something like 4S-4D-4D, but spi-nor can't. So, set all 4
+> nit: SPI NOR
+> > +                * phases to either DTR or STR.
+> > +                */
+> > +               op->cmd.dtr = op->addr.dtr = op->dummy.dtr
+> > +                              = op->data.dtr = true;
+> > +
+> > +               /* 2 bytes per clock cycle in DTR mode. */
+> > +               op->dummy.nbytes *= 2;
+> > +
+> > +               ext = spi_nor_get_cmd_ext(nor, op);
+> > +               op->cmd.opcode = (op->cmd.opcode << 8) | ext;
+> > +               op->cmd.nbytes = 2;
+> > +       }
+> > +}
+> > +
+> >  /**
+> >   * spi_nor_spimem_bounce() - check if a bounce buffer is needed for the data
+> >   *                           transfer
+> > @@ -104,14 +174,12 @@ static ssize_t spi_nor_spimem_read_data(struct spi_nor *nor, loff_t from,
+> >         ssize_t nbytes;
+> >         int error;
+> > 
+> > -       /* get transfer protocols. */
+> > -       op.cmd.buswidth = spi_nor_get_protocol_inst_nbits(nor->read_proto);
+> > -       op.addr.buswidth = spi_nor_get_protocol_addr_nbits(nor->read_proto);
+> > -       op.dummy.buswidth = op.addr.buswidth;
+> > -       op.data.buswidth = spi_nor_get_protocol_data_nbits(nor->read_proto);
+> > +       spi_nor_spimem_setup_op(nor, &op, nor->read_proto);
+> 
+> Here we would keep the code as it were.
+> > 
+> >         /* convert the dummy cycles to the number of bytes */
+> >         op.dummy.nbytes = (nor->read_dummy * op.dummy.buswidth) / 8;
+> > +       if (spi_nor_protocol_is_dtr(nor->read_proto))
+> > +               op.dummy.nbytes *= 2;
+> 
+> And replace these 2 lines with:
+> 	if (spi_nor_protocol_is_dtr(nor->read_proto))
+> 		spi_nor_spimem_setup_dtr_op(nor, &op, nor->read_proto)
+> > 
+> >         usebouncebuf = spi_nor_spimem_bounce(nor, &op);
+> > 
+> > @@ -169,13 +237,11 @@ static ssize_t spi_nor_spimem_write_data(struct spi_nor *nor, loff_t to,
+> >         ssize_t nbytes;
+> >         int error;
+> > 
+> > -       op.cmd.buswidth = spi_nor_get_protocol_inst_nbits(nor->write_proto);
+> > -       op.addr.buswidth = spi_nor_get_protocol_addr_nbits(nor->write_proto);
+> > -       op.data.buswidth = spi_nor_get_protocol_data_nbits(nor->write_proto);
+> > -
+> >         if (nor->program_opcode == SPINOR_OP_AAI_WP && nor->sst_write_second)
+> >                 op.addr.nbytes = 0;
+> > 
+> > +       spi_nor_spimem_setup_op(nor, &op, nor->write_proto);
+> > +
+> >         if (spi_nor_spimem_bounce(nor, &op))
+> >                 memcpy(nor->bouncebuf, buf, op.data.nbytes);
+> > 
+> > @@ -227,10 +293,16 @@ int spi_nor_write_enable(struct spi_nor *nor)
+> >                                    SPI_MEM_OP_NO_DUMMY,
+> >                                    SPI_MEM_OP_NO_DATA);
+> > 
+> > +               spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+> 
+> For the reg operation we can get rid of the extra checks that were in
+> spi_nor_spimem_setup_op and simply do:
+> 
+> 		if (spi_nor_protocol_is_dtr(proto))
+> 			spi_nor_spimem_setup_dtr_op()
+> 
+> > +
+> >                 ret = spi_mem_exec_op(nor->spimem, &op);
+> >         } else {
+> > -               ret = nor->controller_ops->write_reg(nor, SPINOR_OP_WREN,
+> > -                                                    NULL, 0);
+> > +               if (spi_nor_protocol_is_dtr(nor->reg_proto))
+> > +                       ret = -ENOTSUPP;
+> > +               else
+> > +                       ret = nor->controller_ops->write_reg(nor,
+> > +                                                            SPINOR_OP_WREN,
+> > +                                                            NULL, 0);
+> 
+> Would you introduce helpers for the controller ops, like Boris
+> did in the following patch?
+> https://patchwork.ozlabs.org/project/linux-mtd/patch/20181012084825.23697-10-boris.brezillon@bootlin.com/
+> 
+> How about spi_nor_controller_ops_read_reg()
+> and spi_nor_controller_ops_write_reg() instead?
 
-But, we can use the existing "drivers/gpu/drm/tiny/ili9341.c" driver to sup=
-port
-ili9341 on stm32f429-disco board only using the spi bus. except the
-display refresh performance is not as good as the ltdc interface.
+It would get rid of the boilerplate so I think it is a good idea.
 
-I can submit a new patch just with dts changed this week for it, if you nee=
-d.
+> cut
+> 
+> > @@ -1144,7 +1291,11 @@ static int spi_nor_erase_sector(struct spi_nor *nor, u32 addr)
+> >                                    SPI_MEM_OP_NO_DUMMY,
+> >                                    SPI_MEM_OP_NO_DATA);
+> > 
+> > +               spi_nor_spimem_setup_op(nor, &op, nor->write_proto);
+> > +
+> >                 return spi_mem_exec_op(nor->spimem, &op);
+> > +       } else if (spi_nor_protocol_is_dtr(nor->write_proto)) {
+> > +               return -ENOTSUPP;
+> >         } else if (nor->controller_ops->erase) {
+> >                 return nor->controller_ops->erase(nor, addr);
+> >         }
+> 
+> here you would need a helper: spi_nor_controller_ops_erase()
 
-Thanks,
-Dillon.
->
->
->
-> > V4:
-> > According to alexandre torgue's suggestion, combine ili9341 and
-> > l3gd20's modification on stm32f429-disco board to one patchset.
-> >
-> > Changes:
-> >
-> > ili9341:
-> >
-> > 1 update ili9341 panel driver according to Linus's suggestion
-> > 2 drop V1's No.5 patch, sumbit new changes for clk-stm32f4
-> > 3 merge l3gd20's change to this patchset
-> >
-> > V3:
-> > 1 merge original tiny/ili9341.c driver to panel/panel-ilitek-ili9341.c
-> >    to support serial spi & parallel rgb interface in one driver.
-> > 2 update ilitek,ili9341.yaml dts binding documentation.
-> > 3 update stm32f429-disco dts binding
-> >
-> > V2:
-> > 1 verify ilitek,ili9341.yaml with make O=3D../linux-stm32
-> >    dt_binding_check
-> >    DT_SCHEMA_FILES=3DDocumentation/devicetree/bindings/display/panel/
-> >    ilitek,ili9341.yaml
-> >
-> > V1:
-> > 1 add ili9341 drm panel driver
-> > 2 add ltdc, spi5 controller for stm32f429-disco
-> > 3 add ltdc, spi5 pin map for stm32f429-disco
-> > 4 add docs about ili9341
-> > 5 fix ltdc driver loading hang in clk set rate bug
-> >
-> >
-> > L3gd20:
-> > V3:
-> > 1 merge stm32f429-disco dtbs binding with ili9341 part
-> >
-> > V2:
-> > 1 insert blank line at stm32f420-disco.dts line 143
-> > 2 add more description for l3gd20 in commit message
-> >
-> > V1:
-> > 1 enable spi5 controller on stm32f429-disco (dts)
-> > 2 add spi5 pinmap for stm32f429-disco  (dts)
-> > 3 add SPI_SIMPLEX_RX, SPI_3WIRE_RX support for stm32f4
-> >
-> >
-> > dillon min (8):
-> >    ARM: dts: stm32: Add dma config for spi5
-> >    ARM: dts: stm32: Add pin map for ltdc & spi5 on stm32f429-disco boar=
-d
-> >    ARM: dts: stm32: enable ltdc binding with ili9341, gyro l3gd20 on
-> >      stm32429-disco board
-> >    dt-bindings: display: panel: Add ilitek ili9341 panel bindings
-> >    clk: stm32: Fix stm32f429's ltdc driver hang in set clock rate,
-> >      fix duplicated ltdc clock register to 'clk_core' case ltdc's clock
-> >        turn off by clk_disable_unused()
-> >    drm/panel: Add ilitek ili9341 panel driver
-> >    spi: stm32: Add 'SPI_SIMPLEX_RX', 'SPI_3WIRE_RX' support for stm32f4
-> >    spi: flags 'SPI_CONTROLLER_MUST_RX' and 'SPI_CONTROLLER_MUST_TX' can=
-'t
-> >      be     coexit with 'SPI_3WIRE' mode
-> >
-> >   .../bindings/display/panel/ilitek,ili9341.yaml     |   69 ++
-> >   arch/arm/boot/dts/stm32f4-pinctrl.dtsi             |   67 +
-> >   arch/arm/boot/dts/stm32f429-disco.dts              |   48 +
-> >   arch/arm/boot/dts/stm32f429.dtsi                   |    3 +
-> >   drivers/clk/clk-stm32f4.c                          |    7 +-
-> >   drivers/gpu/drm/panel/Kconfig                      |   12 +
-> >   drivers/gpu/drm/panel/Makefile                     |    1 +
-> >   drivers/gpu/drm/panel/panel-ilitek-ili9341.c       | 1301 +++++++++++=
-+++++++++
-> >   drivers/spi/spi-stm32.c                            |   19 +-
-> >   drivers/spi/spi.c                                  |    3 +-
-> >   10 files changed, 1521 insertions(+), 9 deletions(-)
-> >   create mode 100644 Documentation/devicetree/bindings/display/panel/il=
-itek,ili9341.yaml
-> >   create mode 100644 drivers/gpu/drm/panel/panel-ilitek-ili9341.c
-> >
+Ok.
+ 
+> cut
+> 
+> > @@ -2368,12 +2517,16 @@ spi_nor_spimem_adjust_hwcaps(struct spi_nor *nor, u32 *hwcaps)
+> >         struct spi_nor_flash_parameter *params = nor->params;
+> >         unsigned int cap;
+> > 
+> > -       /* DTR modes are not supported yet, mask them all. */
+> > -       *hwcaps &= ~SNOR_HWCAPS_DTR;
+> > -
+> >         /* X-X-X modes are not supported yet, mask them all. */
+> >         *hwcaps &= ~SNOR_HWCAPS_X_X_X;
+> > 
+> > +       /*
+> > +        * If the reset line is broken, we do not want to enter a stateful
+> > +        * mode.
+> > +        */
+> > +       if (nor->flags & SNOR_F_BROKEN_RESET)
+> > +               *hwcaps &= ~(SNOR_HWCAPS_X_X_X | SNOR_HWCAPS_X_X_X_DTR);
+> 
+> A dedicated reset line is not enough for flashes that keep their state
+> in non-volatile bits. Since we can't protect from unexpected crashes in
+> the non volatile state case, we should enter these modes only with an
+> explicit request, i.e. an optional DT property: "update-nonvolatile-state",
+> or something similar.
+
+I wrote this patch with the assumption that we won't be supporting 
+non-volatile configuration as of now. In the previous discussions we 
+came to the conclusion that it is not easy to detect the flash if it 
+boots in any mode other than 1S-1S-1S [0]. So if we update non-volatile 
+state, the flash would be useless after a reboot because we won't be 
+able to detect it in 8D mode. It doesn't matter if the reset line is 
+connected or not because it will reset the flash to the non-volatile 
+state, and we can't detect it from the non-volatile state.
+
+> For the volatile state case, we can parse the SFDP SCCR map, save if we
+> can enter stateful modes in a volatile way, and if yes allow the entering.
+
+If we are not support volatile configurations, the reset line is enough 
+to take care of unexpected resets, no? I don't see any need to parse 
+SCCR map just for this.
+
+> Do the flashes that you played with define the SFDP SCCR map?
+
+FWIW, the Cypress S28HS512T flash does but the Micron MT35XU512ABA does 
+not.
+ 
+> > +
+> >         for (cap = 0; cap < sizeof(*hwcaps) * BITS_PER_BYTE; cap++) {
+> >                 int rdidx, ppidx;
+> > 
+> > @@ -2628,7 +2781,7 @@ static int spi_nor_default_setup(struct spi_nor *nor,
+> >                  * controller directly implements the spi_nor interface.
+> >                  * Yet another reason to switch to spi-mem.
+> >                  */
+> > -               ignored_mask = SNOR_HWCAPS_X_X_X;
+> > +               ignored_mask = SNOR_HWCAPS_X_X_X | SNOR_HWCAPS_X_X_X_DTR;
+> >                 if (shared_mask & ignored_mask) {
+> >                         dev_dbg(nor->dev,
+> >                                 "SPI n-n-n protocols are not supported.\n");
+> > @@ -2774,11 +2927,25 @@ static void spi_nor_info_init_params(struct spi_nor *nor)
+> >                                           SNOR_PROTO_1_1_8);
+> >         }
+> > 
+> > +       if (info->flags & SPI_NOR_OCTAL_DTR_READ) {
+> 
+> Why do we need this flag? Can't we determine if the flash supports
+> octal DTR by parsing SFDP?
+
+For Cypress S28HS512T, we can since it is xSPI compliant. We can't do 
+that for Micron MT35XU512ABA since it is not xSPI compliant.
+
+> > +               params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
+> > +               spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_8_8_8_DTR],
+> > +                                         0, 20, SPINOR_OP_READ_FAST,
+> > +                                         SNOR_PROTO_8_8_8_DTR);
+> > +       }
+> > +
+> >         /* Page Program settings. */
+> >         params->hwcaps.mask |= SNOR_HWCAPS_PP;
+> >         spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP],
+> >                                 SPINOR_OP_PP, SNOR_PROTO_1_1_1);
+> > 
+> > +       /*
+> > +        * Since xSPI Page Program opcode is backward compatible with
+> > +        * Legacy SPI, use Legacy SPI opcode there as well.
+> > +        */
+> > +       spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP_8_8_8_DTR],
+> > +                               SPINOR_OP_PP, SNOR_PROTO_8_8_8_DTR);
+> > +
+> 
+> This looks fishy. You haven't updated the hwcaps.mask, these pp settings never
+> get selected?
+
+The problem here is that I don't see any field/table in SFDP that can 
+tell us {if,which} 8D-8D-8D program commands are supported. The xSPI 
+spec says that "The program commands provide SPI backward compatible 
+commands for programming data...".
+
+So we populate the 8D page program opcodes here (and in 4bait parsing) 
+using the 1S opcodes. The flashes have to enable the hwcap in fixup 
+hooks.
+
+As an alternative, maybe we can introduce the SPI_NOR_OCTAL_DTR_PP flag 
+that can enable the hwcap here? Thoughts?
+
+> >         /*
+> >          * Sector Erase settings. Sort Erase Types in ascending order, with the
+> >          * smallest erase size starting at BIT(0).
+> > @@ -2886,7 +3053,8 @@ static int spi_nor_init_params(struct spi_nor *nor)
+> > 
+> >         spi_nor_manufacturer_init_params(nor);
+> > 
+> > -       if ((nor->info->flags & (SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)) &&
+> > +       if ((nor->info->flags & (SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
+> > +                                SPI_NOR_OCTAL_READ | SPI_NOR_OCTAL_DTR_READ)) &&
+> >             !(nor->info->flags & SPI_NOR_SKIP_SFDP))
+> >                 spi_nor_sfdp_init_params(nor);
+> > 
+> > @@ -2948,7 +3116,9 @@ static int spi_nor_init(struct spi_nor *nor)
+> >                 return err;
+> >         }
+> > 
+> > -       if (nor->addr_width == 4 && !(nor->flags & SNOR_F_4B_OPCODES)) {
+> > +       if (nor->addr_width == 4 &&
+> > +           !(nor->info->flags & SPI_NOR_OCTAL_DTR_READ) &&
+> 
+> Why is the Octal DTR read exempted?
+
+It is based on the assumption explained below that 8D mode will always 
+use 4-byte addresses so we don't need to explicitly enable 8D mode. 
+Although I think maybe we should exempt all flashes that support DTR 
+mode?
+
+> > +           !(nor->flags & SNOR_F_4B_OPCODES)) {
+> >                 /*
+> >                  * If the RESET# pin isn't hooked up properly, or the system
+> >                  * otherwise doesn't perform a reset command in the boot
+> > @@ -3007,6 +3177,9 @@ static int spi_nor_set_addr_width(struct spi_nor *nor)
+> >  {
+> >         if (nor->addr_width) {
+> >                 /* already configured from SFDP */
+> > +       } else if (spi_nor_protocol_is_dtr(nor->read_proto)) {
+> > +                /* Always use 4-byte addresses in DTR mode. */
+> > +               nor->addr_width = 4;
+> 
+> Why? DTR with 3 byte addr width should be possible too.
+
+Should it be? What would happen to the half cycle left over? Do we then 
+start the dummy phase in the middle of the cycle? We would also have to 
+start the data phase in the middle of a cycle as well and end the 
+transaction with half a cycle left over.
+
+AFAIK, the controller I tested with (Cadence QSPI) does not support 
+this. Similarly, the two flashes this series adds support for, Cypress 
+S28HS512T and Micron MT35XU512ABA, don't support 3-byte address in 8D 
+mode. I'm not sure if there are any flashes or controllers that do.
+ 
+> >         } else if (nor->info->addr_width) {
+> >                 nor->addr_width = nor->info->addr_width;
+> >         } else if (nor->mtd.size > 0x1000000) {
+> 
+> Cheers,
+> ta
+
+[0] https://lore.kernel.org/linux-mtd/20200228093658.zc3uifqg4zruokq3@ti.com/
+
+-- 
+Regards,
+Pratyush Yadav
