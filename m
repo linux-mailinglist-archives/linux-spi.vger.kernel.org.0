@@ -2,42 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E885228C30
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 00:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F880228CC7
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 01:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728456AbgGUWrf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jul 2020 18:47:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39916 "EHLO mail.kernel.org"
+        id S1728007AbgGUXpM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jul 2020 19:45:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgGUWrf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Jul 2020 18:47:35 -0400
+        id S1726587AbgGUXpL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Jul 2020 19:45:11 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4EFD12073A;
-        Tue, 21 Jul 2020 22:47:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BB9182077D;
+        Tue, 21 Jul 2020 23:45:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595371654;
-        bh=lC9beQZcJxAVoggStwsSQD4umxKrJ5gvYRxSjxfqKgs=;
+        s=default; t=1595375111;
+        bh=vNftebKTkLY/PaLWDa1NczN0BADcuqUpTe6BpSEV4N8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vx2lExdiuSTzdGyDGpUWaWm3KIVvWLX+wqdqJi/pB5vdLoMo7Hx7K8TbX5hX3b/WI
-         3rJfUp6uDE82W2HgBA4+PnVgtCqN9E8bSfBTarxi9JrjF8Flrt0COeCscy4vDNTYz8
-         BosH/RsIk27dGwTnoKIkR2ErINMfPJ7IE5Eky59o=
-Date:   Tue, 21 Jul 2020 23:47:21 +0100
+        b=0HxLDp8lVuLRUyBfdjW7oA5QrB2FpdQwhKf4zR6aWIqr71bUfr8ZPp/IJ2kvFTwYf
+         buGOYSLTFpMsks1JoE3U2wdEvIkZ+ew4QCmPylDsB5OA3erwlV1KPF4Qg0rEFzAgaA
+         I+yJ8GAt/q3LGPKUMgccQD1ImgMTb06uY1HrmUpk=
+Date:   Wed, 22 Jul 2020 00:44:58 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Clark Wang <xiaoning.wang@nxp.com>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] spi: lpspi: fix kernel warning dump when probe fail
- after calling spi_register
-Message-ID: <20200721224721.GA33193@sirena.org.uk>
+Subject: Re: [PATCH 2/5] spi: lpspi: add NULL check when probe device
+Message-ID: <20200721234458.GA16769@sirena.org.uk>
 References: <20200714075251.12777-1-xiaoning.wang@nxp.com>
- <20200714075251.12777-4-xiaoning.wang@nxp.com>
+ <20200714075251.12777-3-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
+        protocol="application/pgp-signature"; boundary="dDRMvlgZJXvWKvBx"
 Content-Disposition: inline
-In-Reply-To: <20200714075251.12777-4-xiaoning.wang@nxp.com>
-X-Cookie: Wanna buy a duck?
+In-Reply-To: <20200714075251.12777-3-xiaoning.wang@nxp.com>
+X-Cookie: Knowledge is power.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
@@ -45,44 +44,41 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---EVF5PPMfhYS0aIcm
+--dDRMvlgZJXvWKvBx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Jul 14, 2020 at 03:52:49PM +0800, Clark Wang wrote:
-> Calling devm_spi_register_controller() too early will cause problem.
-> When probe failed occurs after calling devm_spi_register_controller(),
-> the call of spi_controller_put() will trigger the following warning dump.
+On Tue, Jul 14, 2020 at 03:52:48PM +0800, Clark Wang wrote:
+> Add a NULL check for device node and lpspi_platform_info when lpspi
+> device probe.
 
-This doesn't apply against current code, please check and resend.
+This has build problems, I guess there's been a context change that's
+caused issues along with causing the later patches to not apply:
 
-> [    2.092138] ------------[ cut here ]------------
-> [    2.096876] kernfs: can not remove 'uevent', no directory
-> [    2.102440] WARNING: CPU: 0 PID: 181 at fs/kernfs/dir.c:1503 kernfs_remove_by_name_ns+0xa0/0xb0
-> [    2.111142] Modules linked in:
-> [    2.114207] CPU: 0 PID: 181 Comm: kworker/0:7 Not tainted 5.4.24-05024-g775c6e8a738c-dirty #1314
+/mnt/kernel/drivers/spi/spi-fsl-lpspi.c: In function 'fsl_lpspi_probe':
+/mnt/kernel/drivers/spi/spi-fsl-lpspi.c:824:7: error: 'np' undeclared (first use in this function); did you mean 'up'?
+  if (!np && !lpspi_platform_info) {
+       ^~
+       up
+/mnt/kernel/drivers/spi/spi-fsl-lpspi.c:824:7: note: each undeclared identifier is reported only once for each function it appears in
+/mnt/kernel/drivers/spi/spi-fsl-lpspi.c:824:14: error: 'lpspi_platform_info' undeclared (first use in this function); did you mean 'spi_board_info'?
+  if (!np && !lpspi_platform_info) {
+              ^~~~~~~~~~~~~~~~~~~
+              spi_board_info
 
-
-Please think hard before including complete backtraces in upstream
-reports, they are very large and contain almost no useful information
-relative to their size so often obscure the relevant content in your
-message. If part of the backtrace is usefully illustrative (it often is
-for search engines if nothing else) then it's usually better to pull out
-the relevant sections.
-
---EVF5PPMfhYS0aIcm
+--dDRMvlgZJXvWKvBx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8XcHkACgkQJNaLcl1U
-h9ABZwf/QAz1ZkBEQ11WvbVv1FhvqZyXhY4kxfUBGqxMBeIkKzTZqZQCusd0T7Ah
-47kcDS0t9QQE4haXfLRe7PiGvA16xTmm2px8W+vlQbkxnDIwYmIaBueWiiNXGL3x
-tIiV3nicZgAtkdYHC+XZeVTYAgsZCzywC1la/kfSjYTAU0ltKIN+DEtkQu7gbaRL
-Wh+0/Cqj8CKFJiNTyXIUiJrvRDmpbCCqUaVwhJxnom0P197kiD4SiJhp3KynaqWM
-FQZvkIfFu+U/242IVGKbgOe1grcSKZ1fCdYBwON+F5RWvLy1HdLRNmK6uyEmoLXp
-2HUXFj147kxJE/POHBVcdnidhfwwzw==
-=XZW9
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8XffkACgkQJNaLcl1U
+h9A0Mwf/dMlzfr1HWRvFHS+X/pn/UO1qlC/rqX0b3blAFFAKcPfOzkJbCG73V5kv
+rbbvGx+Hrq3EO7bX3EgPLmY4expMyV6QZ4XhuhvpBqOoQ9ouxULVbpSdO9TQWkGN
+9UTjIVq7nMX64In+0v3qYmn/FYGMlZhXQi9wuS6rwzKH0OHBGOcawtKPo2D9JeD6
+Y2DnmiS7v+/VrVd1FB6VZ8O+f4HIzIk+5HdiPAMw2ugzx1Vf7xqc2a8XF/YZQLtC
+OtNodZ+5fx24aBYvxjdI9UaDQENfjxgu0T0iq+kcla3Qjs+jGPLhns1x8ng2W+Fo
+8ai/HRqPTd3/fStOm4HxNRzOLARJYQ==
+=WCQf
 -----END PGP SIGNATURE-----
 
---EVF5PPMfhYS0aIcm--
+--dDRMvlgZJXvWKvBx--
