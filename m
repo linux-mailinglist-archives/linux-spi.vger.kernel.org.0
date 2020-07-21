@@ -2,78 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB6A228BAC
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jul 2020 23:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C485228BF0
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 00:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731287AbgGUVuP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jul 2020 17:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbgGUVuO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jul 2020 17:50:14 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19875C061794
-        for <linux-spi@vger.kernel.org>; Tue, 21 Jul 2020 14:50:14 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id o1so10846380plk.1
-        for <linux-spi@vger.kernel.org>; Tue, 21 Jul 2020 14:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rLFvuK+kzarLWaTzGm5PbHM5taHdTY+muXHU6FdT6q8=;
-        b=oVgXcOyghOpASzJt7LbZZoUOY16Q3hh0/O/tSaE/WKs1B1R8D7/QA3FWYyUjC844lR
-         wGMwLShNKPNYfjhWkJEzJHR8Z+HHgOVHdbAIIoKM8IcEA2zBXpXG22l+GJRCKLc3YXn1
-         04GCdMEBqrRHmRK5Ynv2eYR+9qS2WPxlPNDdwtBC6//aF8SmKjncRbqL7vlMYwZTzOM6
-         w8+5LvIjbM+mOcAzpmEFxxaj4cgISHysMoZwF8QoeGZZnkdvFUealAGw5yWFtayIB2BK
-         7vMVbQhFnItuHeYocmngnlzamnhd1h0vSDQM9aC6bP6rnqB+SOrIBhabOxu6aWAgS2X/
-         eP9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rLFvuK+kzarLWaTzGm5PbHM5taHdTY+muXHU6FdT6q8=;
-        b=cdEKZ1FRTcGyQrEZ4ljFXX3dAm6xOB+vw4b/x7n1x8ZtZKmUSEnjNwKso8lMoa55xP
-         Qn4UT4+5ZIlaV0ezNrGXX+tGVCCUJtv9SKRVsssnaqycugN1KyA6ADGf0aW2nDYnCoQ3
-         IHbQvB4RR5yMuxp5KN1M0JleCfHn2X8+IBVCsyg4ENPi+IZq/g26KPiQYAjp6ZCuTQxt
-         JqHXvM42d4IAzPxl2G+mvAaMBIG+sRn6aIWofp0RjxTZsmizVPA30rfmxfReEIYi+psV
-         vW8hEvJX5zkJLh9MQBEdxoeH8tce/iUYE6IsD9lHJl1Jda7cuL3CLPqzG6Kv1pmBVIOG
-         d11A==
-X-Gm-Message-State: AOAM532kqn42bM5ufXQjui7aK4yGvc/9Reit0ttgxSTojcvg0f2ohBPz
-        ZsPLel4r8jdpEQvTFwUweYfymlOqIVXTpoPqfvA=
-X-Google-Smtp-Source: ABdhPJyZjaTDJ/I+coTbcNv0105/svblqBvtbeSIewdiZUHz6O48iKVQnLeh8QIqvaLaeWWBVyw47d+wrCAss7kWtV0=
-X-Received: by 2002:a17:90a:a393:: with SMTP id x19mr7032563pjp.228.1595368213628;
- Tue, 21 Jul 2020 14:50:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200519163353.20c03286@windsurf.home> <4c5c972b-c8b8-4326-a1f9-438d88217a4a@cesnet.cz>
- <20200721155139.40fdb835@windsurf.home> <070e2fa9-bacf-4d6e-a62a-63b3db55c25e@cesnet.cz>
-In-Reply-To: <070e2fa9-bacf-4d6e-a62a-63b3db55c25e@cesnet.cz>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Jul 2020 00:49:57 +0300
-Message-ID: <CAHp75VfoTTsnr-700SZoL+wV-0zv00u4Q9AvNoRPYXc=5kJZpQ@mail.gmail.com>
+        id S1726686AbgGUWad (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jul 2020 18:30:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58788 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726555AbgGUWad (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Jul 2020 18:30:33 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B4E7E2064C;
+        Tue, 21 Jul 2020 22:30:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595370632;
+        bh=xFFSij1Tvo5a8FZcCLmFL1s046LYalCTyT1TMQt3DmE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uUeo2rK+zwevmzkMZxRMKP+LlbLxTIAkBYeLrQ0GFv+UxwlVfl78+L3Uw24DRa6IC
+         G9cy2+BX3BsfdS2bImdTajk5UI2FwqDLYR3IpZVaYvI6128BRjtuGXlBGa6RDsb0Ey
+         eztN/5Bc08oBOD7q20DN+uJbmp+KJj59xhXcgs28=
+Date:   Tue, 21 Jul 2020 23:30:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc:     linux-spi@vger.kernel.org,
+        Jan =?iso-8859-1?Q?Kundr=E1t?= <jan.kundrat@cesnet.cz>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        nicolas.ferre@microchip.com
 Subject: Re: High CPU load when using MAX14830 SPI UART controller
-To:     =?UTF-8?B?SmFuIEt1bmRyw6F0?= <jan.kundrat@cesnet.cz>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <20200721223018.GE4845@sirena.org.uk>
+References: <20200519163353.20c03286@windsurf.home>
+ <20200519152449.GM4611@sirena.org.uk>
+ <20200520121819.0f816ec0@windsurf.home>
+ <20200520112659.GB4823@sirena.org.uk>
+ <20200721153944.3c331415@windsurf.home>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UnaWdueM1EBWVRzC"
+Content-Disposition: inline
+In-Reply-To: <20200721153944.3c331415@windsurf.home>
+X-Cookie: I'm also against BODY-SURFING!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 5:32 PM Jan Kundr=C3=A1t <jan.kundrat@cesnet.cz> wr=
-ote:
 
-> I have no code, but according to the datasheet, it's the "RTimeout" bit
-> (Line Status Register, bit 0). If properly configured (RxTimeOut set and
-> the interrupt routing enabled via LSRIntEn[0], the "RTimeoutIEn" bit),
-> we're supposed to get ISR[0] set upon this timeout.
+--UnaWdueM1EBWVRzC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And usually timeout condition means no data for the time equal to
-receive 4 more words at given baudrate and bits.
-(For 8-bit words on 115200 it will be time as 10*4 / 115200 ~=3D 360us)
+On Tue, Jul 21, 2020 at 03:39:44PM +0200, Thomas Petazzoni wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
---=20
-With Best Regards,
-Andy Shevchenko
+> > > I'm not sure what you mean by "it might want to consider error
+> > > checking". Could you explain? =20
+
+> > It wasn't checking the return values of SPI API calls.
+
+> Right, but this is unlikely to be the source of the CPU consumption
+> issue we're seeing.
+
+Indeed, that was just something I noticed while reviewing.
+
+> > Actually looking at the code in __spi_pump_messages() again I think that
+> > in the case where we don't have any cleanup to do we should be able to
+> > avoid kicking the thread for that which should help a bit for spi-atmel.
+> > Can you give the patch below a go (compile tested only, not even tried
+> > to boot)?
+
+> I gave it a try, and unfortunately there is no difference. But it is
+> not too surprising, as top shows something like this:
+
+>    80     2 root     SW       0   0%  24% [irq/50-spi1.3]
+>    57     2 root     IW       0   0%   2% [kworker/0:1-eve]
+
+> So it's not the kthread of the SPI subsystem that is consuming most of
+> the CPU time, but really the threaded handler of the MAX14830 driver.
+> What your patch does is avoid offloading to the SPI subsystem kthread
+> some cleanup work when it can be done in the current context, if I
+> understand correctly.
+
+It does, yes.  Depending on the particular performance characteristics
+of the system it can sometimes help noticably to cut out those context
+thrashes if just the context switching ends up being a noticable
+overhead, regardless of how much work each thread does when it does get
+control.  In any case that's now merged in -next, I got some testing on
+other boards, so hopefully it'll help someone.
+
+> > You can generally get a good idea of what's going on with regard to
+> > context switching at the SPI level from the SPI tracepoints, and about
+> > any latencies in there too.
+
+> I'll have a look there, but I don't really have any latency issue,
+> rather a CPU consumption issue, which is quite different.
+
+Yeah, that's basically where the overhead in the SPI subsystem itself
+(rather than the specific driver) tends to be unfortunately.
+
+--UnaWdueM1EBWVRzC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8XbHoACgkQJNaLcl1U
+h9CqtAf/dzvXgG8/59g/lErs4M4bbXd7rkZE8h3H2iZ5i8wrMAmCphreuyHl1Pj3
+1iQHcR/x/glb/sZ4z3wnwgwH1tHZId7ZU58ftSQeyVYsaXi8/Ll/4pjzwNTZgi16
+3MJy1VT6Skm2c5xLBLgjkpsYJU7Dq7gzytEu/7OuGlemHMsiASVnYeqXqy5bRwRs
+cHSF/ETIQgNyd5MYCpIBiizn5EEFHfWwtqcn6ywOLVnT2R+JXq87u0xIdOpFrHyv
+uoudZipEudzB5elku8/QGD7DAzYaDWEzqU6ABV40HwZlcuGGQPTcVLTjmgwLskCa
+csXP+UW/mVwK/5c7/a5jg0rak5zd0Q==
+=PH6f
+-----END PGP SIGNATURE-----
+
+--UnaWdueM1EBWVRzC--
