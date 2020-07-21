@@ -2,106 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 864A0228C25
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 00:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E885228C30
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 00:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728927AbgGUWox (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jul 2020 18:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728025AbgGUWox (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Jul 2020 18:44:53 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15421C061794;
-        Tue, 21 Jul 2020 15:44:53 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id 9so137449wmj.5;
-        Tue, 21 Jul 2020 15:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6DknE5QGxTHlZ/zp1raxupBLAZHTzYnP+IplONM/HMs=;
-        b=e0nX/psBq57qpJS8FX982l4jvCTI4Bhmbhexi6MOgLdcmnQB38SYWG9Hpk9nuD+aFT
-         BkLk0pBBg98pYPUuGEYHc3Bl42Q/vNdsvjSIqDHI57fVeZa5r38zkNdSa1bUILAAQtF2
-         Zd3b65laObYxgBghHuq3y5/KFYFcdc3Gftmf4z1kYvUmWyOx3Lg1z9QJ2cG8AjTyLikk
-         X483CJyhc2B3rq5i47ar/0uRKrel5xghYIAoOKQfMYaVmeUWY4ox0/vaFDJ58A+2wOPo
-         qDc4KFft/HoH54/oJcL605WxE9pcsdgsECiPv/h3RN/0kOF1ACx0x4jCXL8ep6PTZ+lp
-         7h/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6DknE5QGxTHlZ/zp1raxupBLAZHTzYnP+IplONM/HMs=;
-        b=hszHsqWNWF5KM0ZOlm4hJlRPRW21sCs1i1aTtRAFvWQbOadtEFm36R0s5Ns6crb8O4
-         0NTXExrIB8ZFKGnBVxpB/L3mwaNuowWFu+sLBBxRnm0UHtwpmFZY9BcxPDQB9qOFTBbQ
-         rUuXSsYo06cehP8RtOfxuanzc3Xx0+9nn8nHxS/dym82Okhblf3sL+/5Ea6CQlumq4Mb
-         H21B7H84KHKlaI3LL6KAG8rOXK/nmz15/edG6rNjbTzbKIpKP9RlsHKjtT0KBW1Z8mvs
-         tcOis7+rwK9a0OgYAAnIQNxRZweBllacV5ZrsUl21fv9jW0/9Xv2OGDZWHuj5olG5T7v
-         0LYQ==
-X-Gm-Message-State: AOAM532JyNt8WtWb3BDaLk3/pp7MTZEaB0FHk8TSix3fxPdxaQrxAhBp
-        PZcDxKHpE9i5KSpJl8CxYTfqKAPlC8U=
-X-Google-Smtp-Source: ABdhPJxoFLjAttL0FPOz9LEBmCq1IlL6eshCp+cMXmdZngfGahGuhZDZJJvN3RpuFddJCaZW8JER1g==
-X-Received: by 2002:a1c:9a06:: with SMTP id c6mr5560010wme.23.1595371491277;
-        Tue, 21 Jul 2020 15:44:51 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.122.158])
-        by smtp.gmail.com with ESMTPSA id u17sm39203455wrp.70.2020.07.21.15.44.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2020 15:44:50 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] spi: mediatek: add spi support for mt8192 IC
-To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20200721122436.31544-1-leilk.liu@mediatek.com>
- <20200721122436.31544-2-leilk.liu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <27e48721-5e54-6947-cd8f-669f4da34c4d@gmail.com>
-Date:   Wed, 22 Jul 2020 00:44:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728456AbgGUWrf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Jul 2020 18:47:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39916 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726148AbgGUWrf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 21 Jul 2020 18:47:35 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4EFD12073A;
+        Tue, 21 Jul 2020 22:47:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595371654;
+        bh=lC9beQZcJxAVoggStwsSQD4umxKrJ5gvYRxSjxfqKgs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vx2lExdiuSTzdGyDGpUWaWm3KIVvWLX+wqdqJi/pB5vdLoMo7Hx7K8TbX5hX3b/WI
+         3rJfUp6uDE82W2HgBA4+PnVgtCqN9E8bSfBTarxi9JrjF8Flrt0COeCscy4vDNTYz8
+         BosH/RsIk27dGwTnoKIkR2ErINMfPJ7IE5Eky59o=
+Date:   Tue, 21 Jul 2020 23:47:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] spi: lpspi: fix kernel warning dump when probe fail
+ after calling spi_register
+Message-ID: <20200721224721.GA33193@sirena.org.uk>
+References: <20200714075251.12777-1-xiaoning.wang@nxp.com>
+ <20200714075251.12777-4-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20200721122436.31544-2-leilk.liu@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
+Content-Disposition: inline
+In-Reply-To: <20200714075251.12777-4-xiaoning.wang@nxp.com>
+X-Cookie: Wanna buy a duck?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--EVF5PPMfhYS0aIcm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 21/07/2020 14:24, Leilk Liu wrote:
-> From: "leilk.liu" <leilk.liu@mediatek.com>
-> 
-> This patch add spi support for mt8192 IC.
-> 
-> Signed-off-by: leilk.liu <leilk.liu@mediatek.com>
-> ---
->   drivers/spi/spi-mt65xx.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-> index 6783e12c40c2..3d0d69fe0c69 100644
-> --- a/drivers/spi/spi-mt65xx.c
-> +++ b/drivers/spi/spi-mt65xx.c
-> @@ -170,6 +170,9 @@ static const struct of_device_id mtk_spi_of_match[] = {
->   	{ .compatible = "mediatek,mt8183-spi",
->   		.data = (void *)&mt8183_compat,
->   	},
-> +	{ .compatible = "mediatek,mt8192-spi",
-> +		.data = (void *)&mt6765_compat,
-> +	},
+On Tue, Jul 14, 2020 at 03:52:49PM +0800, Clark Wang wrote:
+> Calling devm_spi_register_controller() too early will cause problem.
+> When probe failed occurs after calling devm_spi_register_controller(),
+> the call of spi_controller_put() will trigger the following warning dump.
 
-That's not needed. We will use the fallback compatible which is 
-"mediatek,mt6765-spi" which will take the correct DT data. If in the future we 
-realize that mt8192 has a difference in the HW we can add the compatible. 
-Otherwise with the binding description we should be fine
+This doesn't apply against current code, please check and resend.
 
->   	{}
->   };
->   MODULE_DEVICE_TABLE(of, mtk_spi_of_match);
-> 
+> [    2.092138] ------------[ cut here ]------------
+> [    2.096876] kernfs: can not remove 'uevent', no directory
+> [    2.102440] WARNING: CPU: 0 PID: 181 at fs/kernfs/dir.c:1503 kernfs_remove_by_name_ns+0xa0/0xb0
+> [    2.111142] Modules linked in:
+> [    2.114207] CPU: 0 PID: 181 Comm: kworker/0:7 Not tainted 5.4.24-05024-g775c6e8a738c-dirty #1314
+
+
+Please think hard before including complete backtraces in upstream
+reports, they are very large and contain almost no useful information
+relative to their size so often obscure the relevant content in your
+message. If part of the backtrace is usefully illustrative (it often is
+for search engines if nothing else) then it's usually better to pull out
+the relevant sections.
+
+--EVF5PPMfhYS0aIcm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8XcHkACgkQJNaLcl1U
+h9ABZwf/QAz1ZkBEQ11WvbVv1FhvqZyXhY4kxfUBGqxMBeIkKzTZqZQCusd0T7Ah
+47kcDS0t9QQE4haXfLRe7PiGvA16xTmm2px8W+vlQbkxnDIwYmIaBueWiiNXGL3x
+tIiV3nicZgAtkdYHC+XZeVTYAgsZCzywC1la/kfSjYTAU0ltKIN+DEtkQu7gbaRL
+Wh+0/Cqj8CKFJiNTyXIUiJrvRDmpbCCqUaVwhJxnom0P197kiD4SiJhp3KynaqWM
+FQZvkIfFu+U/242IVGKbgOe1grcSKZ1fCdYBwON+F5RWvLy1HdLRNmK6uyEmoLXp
+2HUXFj147kxJE/POHBVcdnidhfwwzw==
+=XZW9
+-----END PGP SIGNATURE-----
+
+--EVF5PPMfhYS0aIcm--
