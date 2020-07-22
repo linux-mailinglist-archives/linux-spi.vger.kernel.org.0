@@ -2,76 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ACA2293B0
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 10:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB8022943E
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 11:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728642AbgGVIhx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Jul 2020 04:37:53 -0400
-Received: from lucky1.263xmail.com ([211.157.147.130]:35594 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726638AbgGVIhx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Jul 2020 04:37:53 -0400
-Received: from localhost (unknown [192.168.167.69])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 50338CAA67;
-        Wed, 22 Jul 2020 16:37:48 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P18496T139713711163136S1595407061138531_;
-        Wed, 22 Jul 2020 16:37:47 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <b7709ae5e45381d15e4f4a4129a92abf>
-X-RL-SENDER: jon.lin@rock-chips.com
-X-SENDER: jon.lin@rock-chips.com
-X-LOGIN-NAME: jon.lin@rock-chips.com
-X-FST-TO: broonie@kernel.org
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-X-System-Flag: 0
-From:   Jon Lin <jon.lin@rock-chips.com>
-To:     broonie@kernel.org
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jon Lin <jon.lin@rock-chips.com>
-Subject: [PATCH v2 3/3] spi: rockchip: Fix error in SPI slave pio read
-Date:   Wed, 22 Jul 2020 16:37:37 +0800
-Message-Id: <20200722083737.8820-3-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200722083737.8820-1-jon.lin@rock-chips.com>
-References: <20200722083737.8820-1-jon.lin@rock-chips.com>
+        id S1731117AbgGVJAS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Jul 2020 05:00:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51562 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726870AbgGVJAR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Jul 2020 05:00:17 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595408417;
+        bh=JtxyaZlwfAofmy/R4OduHi1e9jThRxojiHiy17bWPi0=;
+        h=Subject:From:Date:To:From;
+        b=xqSgYb7Fs8ixGXhg6476piaBoRc0SF+zCqiqskt9da0mRkdwsYCMmc6fHejtkegwb
+         BU2WxsB1fd3wPDdcifEpGPNVTX7ZPJyF7x8xXEgDHYtoVpx3QP3G1mAIyn1VmlFHWo
+         fldvAmGyumr5/sW6ZVf3hJVVRYXgFdDSmcKatHEM=
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+linux-spi@kernel.org
+Message-Id: <159540841758.26567.13442040470712970783.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 22 Jul 2020 09:00:17 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The RXFLR is possible larger than rx_left in Rockchip SPI, fix it.
+Latest series: [v2] spi: rockchip: Config spi rx dma burst size depend on xfer length (2020-07-22T08:37:37)
+  Superseding: [v1] spi: rockchip: Config spi rx dma burst size depend on xfer length (2020-07-22T06:52:55):
+    [v1,1/3] spi: rockchip: Config spi rx dma burst size depend on xfer length
+    [v1,2/3] spi: rockchip: Support 64-location deep FIFOs
+    [v1,3/3] spi: rockchip: Fix error in SPI slave pio read
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
----
- drivers/spi/spi-rockchip.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index a451dacab5cf..75a8a9428ff8 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -291,7 +291,7 @@ static void rockchip_spi_pio_writer(struct rockchip_spi *rs)
- static void rockchip_spi_pio_reader(struct rockchip_spi *rs)
- {
- 	u32 words = readl_relaxed(rs->regs + ROCKCHIP_SPI_RXFLR);
--	u32 rx_left = rs->rx_left - words;
-+	u32 rx_left = (rs->rx_left > words) ? rs->rx_left - words : 0;
- 
- 	/* the hardware doesn't allow us to change fifo threshold
- 	 * level while spi is enabled, so instead make sure to leave
 -- 
-2.17.1
-
-
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/pwbot
