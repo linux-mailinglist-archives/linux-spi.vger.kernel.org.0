@@ -2,49 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1C622997B
+	by mail.lfdr.de (Postfix) with ESMTP id ED7C922997C
 	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 15:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732602AbgGVNp0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Jul 2020 09:45:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33352 "EHLO mail.kernel.org"
+        id S1732603AbgGVNpb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Jul 2020 09:45:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33438 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726973AbgGVNpZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 Jul 2020 09:45:25 -0400
+        id S1726973AbgGVNpb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Jul 2020 09:45:31 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D0DB62065D;
-        Wed, 22 Jul 2020 13:45:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F2A412065D;
+        Wed, 22 Jul 2020 13:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595425525;
-        bh=o1jYZWn/sCrcloS83rhA9Xi9FUtFoKkQvr/MsgkeLvQ=;
+        s=default; t=1595425530;
+        bh=JT1T0xY9ITfKv2BNX8GybRgJ1VpXvJMEJdQe/DKkLVY=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=YBYISbNtR3BPGk7DB4ghYIdUURz/gnTg3ZsGhlxk+C6N/KX/Iq+HIq7B+lrQs2/hD
-         TJvWIT5UiSV4ppEYwLcOMNkRfOmxWodyn2Avw+2E8bhnIY4iRl6kcMZn490iOXXMJJ
-         L6ebl0uRQ01KsH6l+NJQ+6YI/R+5/rP6CMQUuR/w=
-Date:   Wed, 22 Jul 2020 14:45:12 +0100
+        b=rgcY+8l4mr07iC6EemjNyt2U6mRg1dE2tsG1wxssacRUyXef0FqrahoMqxApqXM/S
+         NGchfdEbswOuqtUQTsNAuQQdYXQvli5hUA5U8e9yzG34Cuj4U/d3uoSw+CXEy68TbW
+         ky6gtVnXNIG2qwWyuXbTx6mtqE/yBPwD7iTupEeY=
+Date:   Wed, 22 Jul 2020 14:45:17 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Cc:     linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <20200714072226.26071-1-linus.walleij@linaro.org>
-References: <20200714072226.26071-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH] spi: ppc4xx: Convert to use GPIO descriptors
-Message-Id: <159542550175.19884.1291452700922629224.b4-ty@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Bjorn Helgaas <bjorn@helgaas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vaibhav Gupta <vaibhav.varodek@gmail.com>
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20200720155714.714114-1-vaibhavgupta40@gmail.com>
+References: <20200720155714.714114-1-vaibhavgupta40@gmail.com>
+Subject: Re: [PATCH v1] spi: spi-topcliff-pch: use generic power management
+Message-Id: <159542550175.19884.5724047291778558359.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 14 Jul 2020 09:22:26 +0200, Linus Walleij wrote:
-> This converts the PPC4xx SPI driver to use GPIO descriptors.
+On Mon, 20 Jul 2020 21:27:15 +0530, Vaibhav Gupta wrote:
+> Drivers using legacy PM have to manage PCI states and device's PM states
+> themselves. They also need to take care of configuration registers.
 > 
-> The driver is already just picking some GPIOs from the device
-> tree so the conversion is pretty straight forward. However
-> this driver is looking form a pure "gpios" property rather
-> than the standard binding "cs-gpios" so we need to add a new
-> exception to the gpiolib OF parser to allow this for this
-> driver's compatibles.
+> With improved and powerful support of generic PM, PCI Core takes care of
+> above mentioned, device-independent, jobs.
+> 
+> This driver makes use of PCI helper functions like
+> pci_save/restore_state(), pci_enable/disable_device(), pci_enable_wake()
+> and pci_set_power_state() to do required operations. In generic mode, they
+> are no longer needed.
+> 
+> [...]
 
 Applied to
 
@@ -52,8 +61,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: ppc4xx: Convert to use GPIO descriptors
-      commit: 4726773292bfdb2917a0b4d369ddccd5e2f30991
+[1/1] spi: spi-topcliff-pch: use generic power management
+      commit: f185bcc779808df5d31bc332b79b5f1455ee910b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
