@@ -2,86 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24682228D50
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 02:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E8A229154
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jul 2020 08:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731474AbgGVA5o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Jul 2020 20:57:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60052 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731629AbgGVA5o (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Jul 2020 20:57:44 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9893C20771;
-        Wed, 22 Jul 2020 00:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595379464;
-        bh=+h+FsY9O0cP/cZ84GngkSGODjVnPpI1wi4YukMbO2Hg=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=kW6wag5xKIXSTHBhUWabWkAyobTmu31J/cHJiQWKLrp8IjJvY7I9IBa8KNEYkfSBT
-         ZHolByK4OlVmjyan0cAuL9Z/oZ8oiqhgt2FiDszi380QyhnyehdsJGVurNJantEblF
-         oYCkmxxt1qjPL3bzttiZBGz6Zs0mN5JJwSB8FRKg=
-Date:   Wed, 22 Jul 2020 01:57:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20200721203951.2159-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200721203951.2159-1-Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH] spi: dw-dma: Fix Tx DMA channel working too fast
-Message-Id: <159537945107.49691.8779347106169318267.b4-ty@kernel.org>
+        id S1729253AbgGVGxI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Jul 2020 02:53:08 -0400
+Received: from lucky1.263xmail.com ([211.157.147.135]:43236 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727922AbgGVGxI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Jul 2020 02:53:08 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 12E65A186D;
+        Wed, 22 Jul 2020 14:53:00 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P18585T140686821160704S1595400779440716_;
+        Wed, 22 Jul 2020 14:53:00 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <bbc5534f0691c6925155513eb8e47065>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: broonie@kernel.org
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     broonie@kernel.org
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jon Lin <jon.lin@rock-chips.com>
+Subject: [PATCH v1 1/3] spi: rockchip: Config spi rx dma burst size depend on xfer length
+Date:   Wed, 22 Jul 2020 14:52:55 +0800
+Message-Id: <20200722065257.17943-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 21 Jul 2020 23:39:51 +0300, Serge Semin wrote:
-> It turns out having a Rx DMA channel serviced with higher priority than
-> a Tx DMA channel is not enough to provide a well balanced DMA-based SPI
-> transfer interface. There might still be moments when the Tx DMA channel
-> is occasionally handled faster than the Rx DMA channel. That in its turn
-> will eventually cause the SPI Rx FIFO overflow if SPI bus speed is high
-> enough to fill the SPI Rx FIFO in before it's cleared by the Rx DMA
-> channel. That's why having the DMA-based SPI Tx interface too optimized
-> is the errors prone, so the commit 0b2b66514fc9 ("spi: dw: Use DMA max
-> burst to set the request thresholds") though being perfectly normal from
-> the standard functionality point of view implicitly introduced the problem
-> described above. In order to fix that the Tx DMA activity is intentionally
-> slowed down by limiting the SPI Tx FIFO depth with a value twice bigger
-> than the Tx burst length calculated earlier by the
-> dw_spi_dma_maxburst_init() method.
+The burst length can be adjusted according to the transmission
+length to improve the transmission rate
 
-Applied to
+Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+---
+ drivers/spi/spi-rockchip.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 9b8a5e1233c0..63593a5b87fa 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -384,6 +384,19 @@ static void rockchip_spi_dma_txcb(void *data)
+ 	spi_finalize_current_transfer(ctlr);
+ }
+ 
++static u32 rockchip_spi_calc_burst_size(u32 data_len)
++{
++	u32 i;
++
++	/* burst size: 1, 2, 4, 8 */
++	for (i = 1; i < 8; i <<= 1) {
++		if (data_len & i)
++			break;
++	}
++
++	return i;
++}
++
+ static int rockchip_spi_prepare_dma(struct rockchip_spi *rs,
+ 		struct spi_controller *ctlr, struct spi_transfer *xfer)
+ {
+@@ -397,7 +410,8 @@ static int rockchip_spi_prepare_dma(struct rockchip_spi *rs,
+ 			.direction = DMA_DEV_TO_MEM,
+ 			.src_addr = rs->dma_addr_rx,
+ 			.src_addr_width = rs->n_bytes,
+-			.src_maxburst = 1,
++			.src_maxburst = rockchip_spi_calc_burst_size(xfer->len /
++								     rs->n_bytes),
+ 		};
+ 
+ 		dmaengine_slave_config(ctlr->dma_rx, &rxconf);
+@@ -525,7 +539,8 @@ static void rockchip_spi_config(struct rockchip_spi *rs,
+ 		writel_relaxed(rs->fifo_len / 2 - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
+ 
+ 	writel_relaxed(rs->fifo_len / 2, rs->regs + ROCKCHIP_SPI_DMATDLR);
+-	writel_relaxed(0, rs->regs + ROCKCHIP_SPI_DMARDLR);
++	writel_relaxed(rockchip_spi_calc_burst_size(xfer->len / rs->n_bytes) - 1,
++		       rs->regs + ROCKCHIP_SPI_DMARDLR);
+ 	writel_relaxed(dmacr, rs->regs + ROCKCHIP_SPI_DMACR);
+ 
+ 	/* the hardware only supports an even clock divisor, so
+-- 
+2.17.1
 
-Thanks!
 
-[1/1] spi: dw-dma: Fix Tx DMA channel working too fast
-      commit: affe93dd5b35bb0e7b0aa0505ae432dd0ac72c3f
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
