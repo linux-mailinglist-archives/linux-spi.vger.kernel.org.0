@@ -2,47 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9326322C429
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Jul 2020 13:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1882C22C42E
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jul 2020 13:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727982AbgGXLOq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 24 Jul 2020 07:14:46 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:45300 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726258AbgGXLOq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Jul 2020 07:14:46 -0400
+        id S1728044AbgGXLOw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 24 Jul 2020 07:14:52 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:23503 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726258AbgGXLOw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Jul 2020 07:14:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1595589285; x=1627125285;
+  t=1595589291; x=1627125291;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=HBzRkBtozG5b3/15vheeXwwh85YdJj3g7EowRXnUGZc=;
-  b=IIjGwtB4USZ1pwrMcCi5aOT3Wri+E7HQyr2DFNeMoouAqE4Grrq9ZaHL
-   q0e03TDb839k0jVSQQMsIoA2/E9aCIvTN1nIUnd7Zv8tc/XPG/FgOWUUD
-   sGB6JbRuNn87B4v3QURWdmwk1C8sTS2+6cqZMs4O2pn8P+3k5YO+igtWF
-   JVvkijhruL/uAm2DN7acroJyHrJcWg2lDR5lv6GLhWY9IRvTgEA23EuLv
-   dXEerb7MYJiZsVQ+UGr0VJaavv5Z5dTrDs8uUXTS7nOYnC771oamg3DBj
-   gIsjbtqCiIl+NYjXE6a+4EXtNG6zG5KFPS78Jde3VVHh7bTyNwuexyMB2
-   A==;
-IronPort-SDR: /rBGc9Tr0FIte778itXE+wvm354k0raUzpaI+9rkTaX4tPBrFoEX3QlDLQYz5xZFLR3l9RK8YG
- YHCKLBiVLho3zzDrAf6YSdOAume/6/Hr64AXCgsPZtCVawqRjw1Y1oTdgJKBSHejiZSklpfqSQ
- OIXkfXUOdd/nLVm5kMFtcPqCU1sHtG9m09MUChciTi2+Of+DkoO4+en6F55b2h5lL88DXAbFc6
- qFg9AzEgLuyNKpV+ganbTwc65Y+pp1fxNzpMLZqFCuLiS6ieHHVVLetpLtVv1bJRdRQ2qRmIJ3
- Y00=
+  bh=waqXZnk28E7CDrTE7Pdur3L9Lz9pzClbHiza62G0WAM=;
+  b=f0tuoDhVFP69LlvAgT/HphRGHkvHXjtkXfd0EiGiCXaPFfqOMbabBSlh
+   jWDmy15kk4m3+kHZGSkrKRPgGxOBRrTC1y0M8vEl7PfUVIynvk8CqVC7h
+   irrmbYhsv8BB4kSyqy3z204lTJqpN/iwFRa5LIBZv6aRykp6YN4FGAjeO
+   eDg8giTiBGsAmqSlfgt8KlJU6O0io8G03oBfLTxdsx9kP9VOB5xU0di0q
+   Kh1HLeVDcLuxbHBcZlbJrOrStnGikNvqi4t6kPbNYTmKOWx4DldsDEqnp
+   ePDsuuve8g11kPTou5gLOk1kEjW/zJj9XYGiBv9N0XBvEmeRRyWRrSz+Q
+   w==;
+IronPort-SDR: WAbbgNE1hKhldkGByJhpWpklO9SSHN044DLMhy8EFTHX5n2VBtoZ6cgSsGMLOomMNw6//JKEWu
+ Ujy7bRY681V7zVUPMUrCgzymcXVSO//q47THxAThhUnPBR2dPSlZT4KwSfInc7LrVUlAouvLHt
+ uWqvg/dV91yyg0A03xe0IIcMF/UO4B2k5NlkLIZs/WZmpo/0+CDh7sWCWhrjIcva8B404d9FMs
+ sv36Ij11KmAqrgpWRc0PxZZw1WYAMIQfeRV/jN7Nt078rH3IxLUte3vE3Wz+qaMHtno2535Q5X
+ lAQ=
 X-IronPort-AV: E=Sophos;i="5.75,390,1589266800"; 
-   d="scan'208";a="81158468"
+   d="scan'208";a="85239387"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jul 2020 04:14:45 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jul 2020 04:14:51 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 24 Jul 2020 04:14:02 -0700
+ 15.1.1979.3; Fri, 24 Jul 2020 04:14:50 -0700
 Received: from soft-dev15.microsemi.net (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Fri, 24 Jul 2020 04:14:02 -0700
+ 15.1.1979.3 via Frontend Transport; Fri, 24 Jul 2020 04:14:08 -0700
 From:   Lars Povlsen <lars.povlsen@microchip.com>
-To:     Mark Brown <broonie@kernel.org>, Peter Rosin <peda@axentia.se>,
-        "Rob Herring" <robh+dt@kernel.org>
+To:     Mark Brown <broonie@kernel.org>, Peter Rosin <peda@axentia.se>
 CC:     Lars Povlsen <lars.povlsen@microchip.com>,
         Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
         <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
@@ -50,9 +49,9 @@ CC:     Lars Povlsen <lars.povlsen@microchip.com>,
         <linux-arm-kernel@lists.infradead.org>,
         Serge Semin <fancer.lancer@gmail.com>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: [PATCH v4 4/6] dt-bindings: snps,dw-apb-ssi: Add sparx5 support, plus rx-sample-delay-ns property
-Date:   Fri, 24 Jul 2020 13:14:02 +0200
-Message-ID: <20200724111404.13293-5-lars.povlsen@microchip.com>
+Subject: [PATCH v4 5/6] arm64: dts: sparx5: Add spi-nor support
+Date:   Fri, 24 Jul 2020 13:14:03 +0200
+Message-ID: <20200724111404.13293-6-lars.povlsen@microchip.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200724111404.13293-1-lars.povlsen@microchip.com>
 References: <20200724111404.13293-1-lars.povlsen@microchip.com>
@@ -64,70 +63,96 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This has the following changes for the snps,dw-apb-ss DT bindings:
-
-- Add "microchip,sparx5-spi" as the compatible for the Sparx5 SoC
-  controller
-
-- Add the property "rx-sample-delay-ns"
+This add spi-nor device nodes to the Sparx5 reference boards.
 
 Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
 ---
- .../bindings/spi/snps,dw-apb-ssi.yaml         | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ arch/arm64/boot/dts/microchip/sparx5_pcb125.dts  | 16 ++++++++++++++++
+ .../boot/dts/microchip/sparx5_pcb134_board.dtsi  | 16 ++++++++++++++++
+ .../boot/dts/microchip/sparx5_pcb135_board.dtsi  | 16 ++++++++++++++++
+ 3 files changed, 48 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-index c62cbe79f00dd..c0adaad1aa695 100644
---- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-+++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-@@ -36,6 +36,8 @@ properties:
-               - mscc,ocelot-spi
-               - mscc,jaguar2-spi
-           - const: snps,dw-apb-ssi
-+      - description: Microchip Sparx5 SoC SPI Controller
-+        const: microchip,sparx5-spi
-       - description: Amazon Alpine SPI Controller
-         const: amazon,alpine-dw-apb-ssi
-       - description: Renesas RZ/N1 SPI Controller
-@@ -93,6 +95,12 @@ properties:
-       - const: tx
-       - const: rx
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb125.dts b/arch/arm64/boot/dts/microchip/sparx5_pcb125.dts
+index 573309fe45823..c1eb1d661174d 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb125.dts
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb125.dts
+@@ -39,6 +39,22 @@ &sdhci0 {
+ 	microchip,clock-delay = <10>;
+ };
  
-+  rx-sample-delay-ns:
-+    description: Default value of the rx-sample-delay-ns property.
-+      This value will be used if the property is not explicitly defined
-+      for a SPI slave device. Default value is 0. See below.
-+    $ref: /schemas/types.yaml#/definitions/uint32
++&spi0 {
++	status = "okay";
++	spi@0 {
++		compatible = "spi-mux";
++		mux-controls = <&mux>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0>;	/* CS0 */
++		spi-flash@9 {
++			compatible = "jedec,spi-nor";
++			spi-max-frequency = <8000000>;
++			reg = <0x9>;	/* SPI */
++		};
++	};
++};
 +
- patternProperties:
-   "^.*@[0-9a-f]+$":
-     type: object
-@@ -107,6 +115,13 @@ patternProperties:
-       spi-tx-bus-width:
-         const: 1
+ &i2c1 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
+index 18a535a043686..35984785d611c 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
+@@ -38,6 +38,22 @@ gpio-restart {
+ 	};
+ };
  
-+      rx-sample-delay-ns:
-+        description: SPI Rx sample delay offset, unit is nanoseconds.
-+          The delay from the default sample time before the actual
-+          sample of the rxd input signal occurs. The "rx_sample_delay"
-+          is an optional feature of the designware controller, and the
-+          upper limit is also subject to controller configuration.
++&spi0 {
++	status = "okay";
++	spi@0 {
++		compatible = "spi-mux";
++		mux-controls = <&mux>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0>;	/* CS0 */
++		spi-flash@9 {
++			compatible = "jedec,spi-nor";
++			spi-max-frequency = <8000000>;
++			reg = <0x9>;	/* SPI */
++		};
++	};
++};
 +
- unevaluatedProperties: false
+ &gpio {
+ 	i2cmux_pins_i: i2cmux-pins-i {
+ 	       pins = "GPIO_16", "GPIO_17", "GPIO_18", "GPIO_19",
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
+index d71f11a10b3d2..7de66806b14b3 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
+@@ -51,6 +51,22 @@ i2cmux_s32: i2cmux-3 {
+ 	};
+ };
  
- required:
-@@ -129,5 +144,11 @@ examples:
-       num-cs = <2>;
-       cs-gpios = <&gpio0 13 0>,
-                  <&gpio0 14 0>;
-+      rx-sample-delay-ns = <3>;
-+      spi-flash@1 {
-+        compatible = "spi-nand";
-+        reg = <1>;
-+        rx-sample-delay-ns = <7>;
-+      };
-     };
- ...
++&spi0 {
++	status = "okay";
++	spi@0 {
++		compatible = "spi-mux";
++		mux-controls = <&mux>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0>; /* CS0 */
++		spi-flash@9 {
++			compatible = "jedec,spi-nor";
++			spi-max-frequency = <8000000>;
++			reg = <0x9>; /* SPI */
++		};
++	};
++};
++
+ &axi {
+ 	i2c0_imux: i2c0-imux@0 {
+ 		compatible = "i2c-mux-pinctrl";
 -- 
 2.27.0
 
