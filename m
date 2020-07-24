@@ -2,44 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 173C022C41D
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Jul 2020 13:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0677F22C420
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jul 2020 13:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbgGXLOT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 24 Jul 2020 07:14:19 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:23441 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726553AbgGXLOS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Jul 2020 07:14:18 -0400
+        id S1727819AbgGXLOZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 24 Jul 2020 07:14:25 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:45266 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726553AbgGXLOY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Jul 2020 07:14:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1595589258; x=1627125258;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MSrS4SgPtucxam/i2osqyW0WomORtGwBLnc6F0rn0ms=;
-  b=U4Z/mlhQnTwkLIR7unBeUTu/Na1uOVcJJ7Ev+1NnRuUsMF2rxDl503KQ
-   cClUrel+FKyMJfxZATNqmiJAhZZ8djmYa+xhlyAe/m5yeNLaw3g34xOuR
-   Rz6wG5PvOPIR0GbZNprkU53+X2zRd75iLxFh686agsgszTGUXj8qJIsz7
-   pIrIsBwfwAhcleu08jwGuGg5ayoBKm9hHfay2NIc7unmz9m5tWkik73Ie
-   HfWe21p4Q7zI8x5urxqMH3vFldhMpRQ5Vrc7/uYc2jpot2xH5SrMRho0H
-   qYSum5TNDyroV6kwjB4y+oPGWXydBl0OJaMvJGLuvLkxWnZCc2ifbdMOF
-   w==;
-IronPort-SDR: jG1OkJTaODSRQIiJ7KNJRpIPabU+a8Vl54DQuV86wndtUUn3nOJjrMJRxbDf3qn2wpMV9TkyNM
- fnBjVjEK8p8w97YVQYnaUvntqNis2x9I5f0YgtYDVkV85kyoT0i4giwWt5AiIg5RPNotiB7E64
- OV02y/7XPEW1tmd6ccZzldOkCXo2SOx7kRtHc8iIaj7QY2Scsc69Dsx8lKoyxKqFZlNkpHEXOZ
- 3OIhW12jqMoe89e2z9NaS95IXCHL9fbs7/qn0XN8TpoaIaWTg9cFq+Rmlb/CrKwD33P7ay0wHS
- FJw=
+  t=1595589264; x=1627125264;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=kdnnUfJA3TSa21JJyP6z//+f1nK3wUmHRfNsUPX2Oak=;
+  b=oH/3fIzJMvCwcAm6GTa9/vSygMPFuQNdAyzU/68WCufBM8lRZpn3UCh6
+   /GX8nhYPFpjcARmC9Dd9O2kr/R/idYG1Cm8OY8Q//Y9DjjQf5v7KQXupd
+   MnyBEjS8R5z4G35FveOhsbWyz2/uEckn23JAxsXOpextLCS7vUugJbckf
+   SRrIxViS4SLQRzYy263FK4EyFRzF+tmHsWIFSeWqVkG3K+PuItxUKpbzF
+   6ZQNsjzrWDohFdYU/Gml59vDED02JDAjlot2yb17hL+da/Vy31Jk7tTwI
+   cUC5ZA06FlC1xnODQ1FoFwaHAxjMW9sHaBFKgDp4atcR/NO19DONLlv81
+   A==;
+IronPort-SDR: /C3Mj8ZKf4QzNT2SXnQBJzsfuUmeOSLJBst7yvDLPY4lP61PCumLJq2cs9SMzYv5rzo96y61NP
+ HDbLtSZiC5w71uenoin020UyPgzV3TMx0AXifMyLJgub2mNWXcvnx+u+fcodqSw0skJwwQrr8G
+ ZCfcUhViCAKRvJpymPlNmT+6ViN72vruQcucmlN/tROWzQmKG/HLt9V4zZDWzU1NojlIKSH2OI
+ LM/PZLUosf8APR2ksW1vlu2pF7tJd11kFOpbSxQm6tGUyac50SFV45QcrRWda+fktK0kSLNcJ5
+ LRc=
 X-IronPort-AV: E=Sophos;i="5.75,390,1589266800"; 
-   d="scan'208";a="85239319"
+   d="scan'208";a="81158351"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jul 2020 04:14:17 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jul 2020 04:14:23 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 24 Jul 2020 04:14:18 -0700
+ 15.1.1979.3; Fri, 24 Jul 2020 04:13:42 -0700
 Received: from soft-dev15.microsemi.net (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Fri, 24 Jul 2020 04:13:35 -0700
+ 15.1.1979.3 via Frontend Transport; Fri, 24 Jul 2020 04:13:40 -0700
 From:   Lars Povlsen <lars.povlsen@microchip.com>
 To:     Mark Brown <broonie@kernel.org>, Peter Rosin <peda@axentia.se>
 CC:     Lars Povlsen <lars.povlsen@microchip.com>,
@@ -49,10 +49,12 @@ CC:     Lars Povlsen <lars.povlsen@microchip.com>,
         <linux-arm-kernel@lists.infradead.org>,
         Serge Semin <fancer.lancer@gmail.com>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: [PATCH v4 0/6] spi: Adding support for Microchip Sparx5 SoC
-Date:   Fri, 24 Jul 2020 13:13:58 +0200
-Message-ID: <20200724111404.13293-1-lars.povlsen@microchip.com>
+Subject: [PATCH v4 1/6] spi: dw: Add support for RX sample delay register
+Date:   Fri, 24 Jul 2020 13:13:59 +0200
+Message-ID: <20200724111404.13293-2-lars.povlsen@microchip.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200724111404.13293-1-lars.povlsen@microchip.com>
+References: <20200724111404.13293-1-lars.povlsen@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,64 +63,124 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This is an add-on series to the main SoC Sparx5 series
-(Message-ID: <20200615133242.24911-1-lars.povlsen@microchip.com>
+This add support for the RX_SAMPLE_DLY register. If enabled in the
+Designware IP, it allows tuning of the rx data signal by means of an
+internal rx sample fifo.
 
-The series add support for the Sparx5 SoC SPI controller in the
-spi-dw-mmio.c spi driver.
+The register is controlled by the rx-sample-delay-ns DT property,
+which is defined per SPI slave as well on controller level.
 
-v4 changes:
-- Changed snps,rx-sample-delay-ns to snps,rx-sample-delay-ns
-  suggested by Rob Herring (rockchip also has this property).
-- Added support for controller-level rx-sample-delay-ns value as
-  well as per SPI slave value (rockchip has controller-level property).
-- Dropped internal mux in favor of suggested spi-mux to
-  control bus inteface selection.
+The controller level rx-sample-delay-ns will apply to all slaves
+without the property explicitly defined.
 
-v3 changes:
-- Added mux support for controlling SPI bus interface. This is new mux
-  driver, bindings and added to sparx5 base DT.
-- Removed "microchip,spi-interface2" property in favour of
-  "mux-controls" property in SPI controller (sparx5 only).
-- Changed dw_spi_sparx5_set_cs() to use the mux control instead of
-  directly acessing "mux" register. Associated code/defines moved to mux
-  driver.
-- Changed dw_spi_sparx5_set_cs() to match other similar functions in
-  signature and avoid explicit CS toggling.
-- Spun off duplicated NAND device DT chunks into separate DT file.
+The register is located at offset 0xf0, and if the option is not
+enabled in the IP, changing the register will have no effect. The
+register will only be written if any slave defines a nonzero value
+(after scaling by the clock period).
 
-v2 changes:
-- Moved all RX sample delay into spi-dw-core.c, using
-  the "snps,rx-sample-delay-ns" device property.
-- Integrated Sparx5 support directly in spi-dw-mmio.c
-- Changed SPI2 configuration to per-slave "microchip,spi-interface2"
-  property.
-- Added bindings to existing snps,dw-apb-ssi.yaml file
-- Dropped patches for polled mode and SPI memory operations.
+Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+---
+ drivers/spi/spi-dw-core.c | 26 ++++++++++++++++++++++++++
+ drivers/spi/spi-dw.h      |  3 +++
+ 2 files changed, 29 insertions(+)
 
-Lars Povlsen (6):
-  spi: dw: Add support for RX sample delay register
-  spi: dw: Add Microchip Sparx5 support
-  arm64: dts: sparx5: Add SPI controller and associated mmio-mux
-  dt-bindings: snps,dw-apb-ssi: Add sparx5 support, plus
-    rx-sample-delay-ns property
-  arm64: dts: sparx5: Add spi-nor support
-  arm64: dts: sparx5: Add spi-nand devices
-
- .../bindings/spi/snps,dw-apb-ssi.yaml         | 21 ++++++
- arch/arm64/boot/dts/microchip/sparx5.dtsi     | 47 ++++++++++++-
- .../arm64/boot/dts/microchip/sparx5_nand.dtsi | 31 ++++++++
- .../boot/dts/microchip/sparx5_pcb125.dts      | 30 ++++++++
- .../boot/dts/microchip/sparx5_pcb134.dts      |  1 +
- .../dts/microchip/sparx5_pcb134_board.dtsi    | 16 +++++
- .../boot/dts/microchip/sparx5_pcb135.dts      |  1 +
- .../dts/microchip/sparx5_pcb135_board.dtsi    | 16 +++++
- drivers/spi/spi-dw-core.c                     | 26 +++++++
- drivers/spi/spi-dw-mmio.c                     | 70 ++++++++++++++++++-
- drivers/spi/spi-dw.h                          |  3 +
- 11 files changed, 260 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm64/boot/dts/microchip/sparx5_nand.dtsi
-
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index 323c66c5db506..55afdcee7d2b2 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -12,6 +12,7 @@
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/spi/spi.h>
++#include <linux/of.h>
+ 
+ #include "spi-dw.h"
+ 
+@@ -26,6 +27,8 @@ struct chip_data {
+ 
+ 	u16 clk_div;		/* baud rate divider */
+ 	u32 speed_hz;		/* baud rate */
++
++	u32 rx_sample_dly;	/* RX sample delay */
+ };
+ 
+ #ifdef CONFIG_DEBUG_FS
+@@ -52,6 +55,7 @@ static const struct debugfs_reg32 dw_spi_dbgfs_regs[] = {
+ 	DW_SPI_DBGFS_REG("DMACR", DW_SPI_DMACR),
+ 	DW_SPI_DBGFS_REG("DMATDLR", DW_SPI_DMATDLR),
+ 	DW_SPI_DBGFS_REG("DMARDLR", DW_SPI_DMARDLR),
++	DW_SPI_DBGFS_REG("RX_SAMPLE_DLY", DW_SPI_RX_SAMPLE_DLY),
+ };
+ 
+ static int dw_spi_debugfs_init(struct dw_spi *dws)
+@@ -328,6 +332,12 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+ 	if (master->can_dma && master->can_dma(master, spi, transfer))
+ 		dws->dma_mapped = master->cur_msg_mapped;
+ 
++	/* Update RX sample delay if required */
++	if (dws->cur_rx_sample_dly != chip->rx_sample_dly) {
++		dw_writel(dws, DW_SPI_RX_SAMPLE_DLY, chip->rx_sample_dly);
++		dws->cur_rx_sample_dly = chip->rx_sample_dly;
++	}
++
+ 	/* For poll mode just disable all interrupts */
+ 	spi_mask_intr(dws, 0xff);
+ 
+@@ -380,10 +390,22 @@ static int dw_spi_setup(struct spi_device *spi)
+ 	/* Only alloc on first setup */
+ 	chip = spi_get_ctldata(spi);
+ 	if (!chip) {
++		struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
++		u32 rx_sample_dly_ns;
++
+ 		chip = kzalloc(sizeof(struct chip_data), GFP_KERNEL);
+ 		if (!chip)
+ 			return -ENOMEM;
+ 		spi_set_ctldata(spi, chip);
++		/* Get specific / default rx-sample-delay */
++		if (device_property_read_u32(&spi->dev,
++					     "rx-sample-delay-ns",
++					     &rx_sample_dly_ns) != 0)
++			/* Use default controller value */
++			rx_sample_dly_ns = dws->def_rx_sample_dly_ns;
++		chip->rx_sample_dly = DIV_ROUND_CLOSEST(rx_sample_dly_ns,
++							NSEC_PER_SEC /
++							dws->max_freq);
+ 	}
+ 
+ 	chip->tmode = SPI_TMOD_TR;
+@@ -472,6 +494,10 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	if (dws->set_cs)
+ 		master->set_cs = dws->set_cs;
+ 
++	/* Get default rx sample delay */
++	device_property_read_u32(dev, "rx-sample-delay-ns",
++				 &dws->def_rx_sample_dly_ns);
++
+ 	/* Basic HW init */
+ 	spi_hw_init(dev, dws);
+ 
+diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+index 151ba316619e6..90dfd21622d6d 100644
+--- a/drivers/spi/spi-dw.h
++++ b/drivers/spi/spi-dw.h
+@@ -34,6 +34,7 @@
+ #define DW_SPI_IDR			0x58
+ #define DW_SPI_VERSION			0x5c
+ #define DW_SPI_DR			0x60
++#define DW_SPI_RX_SAMPLE_DLY		0xf0
+ #define DW_SPI_CS_OVERRIDE		0xf4
+ 
+ /* Bit fields in CTRLR0 */
+@@ -140,6 +141,8 @@ struct dw_spi {
+ 	u8			n_bytes;	/* current is a 1/2 bytes op */
+ 	irqreturn_t		(*transfer_handler)(struct dw_spi *dws);
+ 	u32			current_freq;	/* frequency in hz */
++	u32			cur_rx_sample_dly;
++	u32			def_rx_sample_dly_ns;
+ 
+ 	/* DMA info */
+ 	struct dma_chan		*txchan;
 -- 
 2.27.0
 
