@@ -2,44 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5D422C423
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Jul 2020 13:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD46022C426
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jul 2020 13:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727955AbgGXLOa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 24 Jul 2020 07:14:30 -0400
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:42583 "EHLO
+        id S1727045AbgGXLOi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 24 Jul 2020 07:14:38 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:42608 "EHLO
         esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726553AbgGXLO3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Jul 2020 07:14:29 -0400
+        with ESMTP id S1726488AbgGXLOh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Jul 2020 07:14:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1595589269; x=1627125269;
+  t=1595589277; x=1627125277;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=iDLXHtKYHwzP+ugjc/80wOTrIdFuuALsdc6ntIleReo=;
-  b=Ew7x2spQ4OUselFgvNxCqJV15EaC6DMq+jL4YMQH5uonOIY1Kp583FOC
-   tPt5pmmmk2ym7xJAiw438fInfyH7r9WF/1R2/kbpKkI2zfTHDPlIrKmz7
-   xdM4szhLfBs9ZrhSwt5fO2ybg5d64bhBoK0lO/k0VC2AMM8a/r5Unx5EB
-   NhgzFt4WKtuVhoV8UL9SPjaoTRzoEnGEnyMarCoIkJ22GiAGiBpBm7xw4
-   C4nchTBeLQRmlg7EHfUmnn8ApwZiqNDzW5hQ/QZAtALf0UX/UreKAhhqF
-   dBuFP5eijBiT1/X3IuC4KVMljJUiJfSyryGyAmmN7TW8Z3uO8Rc+SdSFy
+  bh=PhVb16dlb4qmPmqLOrMxx9+Ich2tP3QYypUEzEv+cvQ=;
+  b=pQs+c+eD7WgZUFjeg+RuBl1kVOEn7NOC2blXKJ+gNJ3wCS8PUweT+xUc
+   DCC5b5jGtjZt8SuBLgJRH/xT/47tuEKuiizdyVh+/YzaIAaIG6tn1ptw1
+   72m7BkoghwWHHVWaWxGPwKI/8taoAGALWn3jV+S/LQd2An84YT9u0A6gu
+   M3JZ/IP/1cGtERxiTFlH20MrfyQj9N+vMBDqPNtgH33MMeEfa2RYLxKM7
+   GjgwToYvoKgyf1syN9fgHf8dNhE62CgAroZUvBcUGviQS1Az56ytOgN9/
+   pbsGAmVCER5K06utgiGK7DH+iD64wXF6PifQc23xD8sUbpJ3mvi0wl5z7
    Q==;
-IronPort-SDR: 4xykpNO1RplJvK1pWaeXhZPvN8FqR90tzfj9cDg1WTqr8Jy0z8SdWLrAs0DIiBL7JwMQHlJDEV
- BJ0F6NSLnlF9zidPz0veiaACE58sZwqPf6nTFVDxxT6qkPkSMbEOhUkaa8SohiJbRr27QtOppR
- WaN20KsEO8DwlunCTMtiXyjKCHc3e655MvyQUiPFBxA94NKhUmvDPm1gTX0W30waEgieEjj2mo
- BhwTWPsRBLxUijj+52xiNzsth6Gn7gskid2aEd97GRiWmiNF6Vhbx3CMN6IhxFHvsJa3SKyy4b
- Q9s=
+IronPort-SDR: CSQ/tMQMJG1ZWwntCnRa77eZS07q+zvgBaEZLja5CnczAfWrEt48x27ZbRHs37FFQbMAnljBkL
+ zuuyWY0tL0qAScPj4IAepHCNXT+I8oLhUMAhBmy7kgJYbWS+YLjnj0r3pro1Oe5bEi8rVHBa7J
+ mSg0/DLFRehoQZb+8znB/xBgkYPQezgfJJLcUU8NsnkvoqhkxM/4WGrdTHgXwJqQcIn7jKaorL
+ YeAX/y1FoAPQdpjCp8J/2iqdY4U4oLZHOhbvWcMR8bfm7xjIOBAK10xTa5edBwC1d4ZyosR+vS
+ iMY=
 X-IronPort-AV: E=Sophos;i="5.75,390,1589266800"; 
-   d="scan'208";a="84468704"
+   d="scan'208";a="84468734"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jul 2020 04:14:29 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jul 2020 04:14:37 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 24 Jul 2020 04:13:45 -0700
+ 15.1.1979.3; Fri, 24 Jul 2020 04:13:53 -0700
 Received: from soft-dev15.microsemi.net (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Fri, 24 Jul 2020 04:13:46 -0700
+ 15.1.1979.3 via Frontend Transport; Fri, 24 Jul 2020 04:13:54 -0700
 From:   Lars Povlsen <lars.povlsen@microchip.com>
 To:     Mark Brown <broonie@kernel.org>, Peter Rosin <peda@axentia.se>
 CC:     Lars Povlsen <lars.povlsen@microchip.com>,
@@ -49,9 +49,9 @@ CC:     Lars Povlsen <lars.povlsen@microchip.com>,
         <linux-arm-kernel@lists.infradead.org>,
         Serge Semin <fancer.lancer@gmail.com>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: [PATCH v4 2/6] spi: dw: Add Microchip Sparx5 support
-Date:   Fri, 24 Jul 2020 13:14:00 +0200
-Message-ID: <20200724111404.13293-3-lars.povlsen@microchip.com>
+Subject: [PATCH v4 3/6] arm64: dts: sparx5: Add SPI controller and associated mmio-mux
+Date:   Fri, 24 Jul 2020 13:14:01 +0200
+Message-ID: <20200724111404.13293-4-lars.povlsen@microchip.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200724111404.13293-1-lars.povlsen@microchip.com>
 References: <20200724111404.13293-1-lars.povlsen@microchip.com>
@@ -63,128 +63,68 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This adds SPI support for the Sparx5 SoC, which is using the MMIO
-Designware SPI controller.
-
-The Sparx5 differs from the Ocelot version in these areas:
-
- * The CS override is controlled by a new set of registers for
-   this purpose.
-
- * The Sparx5 SPI controller has the RX sample delay register, and it
-   must be configured for the (SPI NAND) device on SPI2.
-
- * The Sparx5 SPI controller has 2 different SPI bus interfaces on the
-   same controller (don't ask...). The "spi-mux" driver should be used
-   in conjunction with the SPI driver to select the appropriate bus.
+This adds a SPI controller to the Microchip Sparx5 SoC, as well as the
+mmio-mux that is required to select the right SPI interface for a
+given SPI device.
 
 Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
 ---
- drivers/spi/spi-dw-mmio.c | 70 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 69 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/microchip/sparx5.dtsi | 27 ++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 403403deae664..18772c0c92206 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -45,6 +45,9 @@ struct dw_spi_mmio {
- #define MSCC_SPI_MST_SW_MODE_SW_PIN_CTRL_MODE	BIT(13)
- #define MSCC_SPI_MST_SW_MODE_SW_SPI_CS(x)	(x << 5)
+diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
+index 7e811e24f0e99..2169746703dfb 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
+@@ -14,6 +14,7 @@ / {
+ 	#size-cells = <1>;
  
-+#define SPARX5_FORCE_ENA			0xa4
-+#define SPARX5_FORCE_VAL			0xa8
-+
- /*
-  * For Keem Bay, CTRLR0[31] is used to select controller mode.
-  * 0: SSI is slave
-@@ -54,7 +57,7 @@ struct dw_spi_mmio {
+ 	aliases {
++		spi0 = &spi0;
+ 		serial0 = &uart0;
+ 		serial1 = &uart1;
+ 	};
+@@ -119,8 +120,19 @@ gic: interrupt-controller@600300000 {
+ 		};
  
- struct dw_spi_mscc {
- 	struct regmap       *syscon;
--	void __iomem        *spi_mst;
-+	void __iomem        *spi_mst; /* Not sparx5 */
- };
+ 		cpu_ctrl: syscon@600000000 {
+-			compatible = "microchip,sparx5-cpu-syscon", "syscon";
++			compatible = "microchip,sparx5-cpu-syscon", "syscon",
++				     "simple-mfd";
+ 			reg = <0x6 0x00000000 0xd0>;
++			mux: mux-controller {
++				compatible = "mmio-mux";
++				#mux-control-cells = <0>;
++				/*
++				 * SI_OWNER and SI2_OWNER in GENERAL_CTRL
++				 * SPI:  value 9 - (SIMC,SIBM) = 0b1001
++				 * SPI2: value 6 - (SIBM,SIMC) = 0b0110
++				 */
++				mux-reg-masks = <0x88 0xf0>;
++			};
+ 		};
  
- /*
-@@ -134,6 +137,70 @@ static int dw_spi_mscc_jaguar2_init(struct platform_device *pdev,
- 				JAGUAR2_IF_SI_OWNER_OFFSET);
- }
+ 		reset@611010008 {
+@@ -155,6 +167,19 @@ uart1: serial@600102000 {
+ 			status = "disabled";
+ 		};
  
-+/*
-+ * The Designware SPI controller (referred to as master in the
-+ * documentation) automatically deasserts chip select when the tx fifo
-+ * is empty. The chip selects then needs to be driven by a CS override
-+ * register. enable is an active low signal.
-+ */
-+static void dw_spi_sparx5_set_cs(struct spi_device *spi, bool enable)
-+{
-+	struct dw_spi *dws = spi_master_get_devdata(spi->master);
-+	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
-+	struct dw_spi_mscc *dwsmscc = dwsmmio->priv;
-+	u8 cs = spi->chip_select;
++		spi0: spi@600104000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "microchip,sparx5-spi";
++			reg = <0x6 0x00104000 0x40>;
++			num-cs = <16>;
++			reg-io-width = <4>;
++			reg-shift = <2>;
++			clocks = <&ahb_clk>;
++			interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
++			status = "disabled";
++		};
 +
-+	if (!enable) {
-+		/* CS override drive enable */
-+		regmap_write(dwsmscc->syscon, SPARX5_FORCE_ENA, 1);
-+		/* Now set CSx enabled */
-+		regmap_write(dwsmscc->syscon, SPARX5_FORCE_VAL, ~BIT(cs));
-+		/* Allow settle */
-+		usleep_range(1, 5);
-+	} else {
-+		/* CS value */
-+		regmap_write(dwsmscc->syscon, SPARX5_FORCE_VAL, ~0);
-+		/* Allow settle */
-+		usleep_range(1, 5);
-+		/* CS override drive disable */
-+		regmap_write(dwsmscc->syscon, SPARX5_FORCE_ENA, 0);
-+	}
-+
-+	dw_spi_set_cs(spi, enable);
-+}
-+
-+static int dw_spi_mscc_sparx5_init(struct platform_device *pdev,
-+				   struct dw_spi_mmio *dwsmmio)
-+{
-+	const char *syscon_name = "microchip,sparx5-cpu-syscon";
-+	struct device *dev = &pdev->dev;
-+	struct dw_spi_mscc *dwsmscc;
-+
-+	if (!IS_ENABLED(CONFIG_SPI_MUX)) {
-+		dev_err(dev, "This driver needs CONFIG_SPI_MUX\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	dwsmscc = devm_kzalloc(dev, sizeof(*dwsmscc), GFP_KERNEL);
-+	if (!dwsmscc)
-+		return -ENOMEM;
-+
-+	dwsmscc->syscon =
-+		syscon_regmap_lookup_by_compatible(syscon_name);
-+	if (IS_ERR(dwsmscc->syscon)) {
-+		dev_err(dev, "No syscon map %s\n", syscon_name);
-+		return PTR_ERR(dwsmscc->syscon);
-+	}
-+
-+	dwsmmio->dws.set_cs = dw_spi_sparx5_set_cs;
-+	dwsmmio->priv = dwsmscc;
-+
-+	/* Register hook to configure CTRLR0 */
-+	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
-+
-+	return 0;
-+}
-+
- static int dw_spi_alpine_init(struct platform_device *pdev,
- 			      struct dw_spi_mmio *dwsmmio)
- {
-@@ -297,6 +364,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_dw_apb_init},
- 	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_dwc_ssi_init},
- 	{ .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
-+	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
- 	{ /* end of table */}
- };
- MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
+ 		timer1: timer@600105000 {
+ 			compatible = "snps,dw-apb-timer";
+ 			reg = <0x6 0x00105000 0x1000>;
 -- 
 2.27.0
 
