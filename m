@@ -2,138 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D174922D1DA
-	for <lists+linux-spi@lfdr.de>; Sat, 25 Jul 2020 00:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B1F22D511
+	for <lists+linux-spi@lfdr.de>; Sat, 25 Jul 2020 07:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgGXWht (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 24 Jul 2020 18:37:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41440 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726154AbgGXWht (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 24 Jul 2020 18:37:49 -0400
-Received: from localhost (mobile-166-175-191-139.mycingular.net [166.175.191.139])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF439206EB;
-        Fri, 24 Jul 2020 22:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595630268;
-        bh=zxwr+36uT8ubeqQoSb23nE4JB8UimJF+iQqfxvEF9FY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=knGAAh2upW0BFnDQwYIiXAZ3Ff7raBKnQ4IlptMZBVuCFXlSHptY+MTfJ35tkaIFH
-         Jq88j1WDBy1Z4RgGvaLeGRmLMLk584oX7SdMB/0yCmfMDNaImOjmsl0l05PVzNHSx9
-         w5lvfgVYFUL9qj4V1/sbAkxlvZseRM5fmTudm+tI=
-Date:   Fri, 24 Jul 2020 17:37:46 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Helgaas <bjorn@helgaas.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH v1] spi: spi-topcliff-pch: use generic power management
-Message-ID: <20200724223746.GA1538991@bjorn-Precision-5520>
+        id S1726783AbgGYFDG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 25 Jul 2020 01:03:06 -0400
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:25454 "EHLO
+        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbgGYFDF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 25 Jul 2020 01:03:05 -0400
+Date:   Sat, 25 Jul 2020 05:02:57 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1595653382;
+        bh=cZEUnqWvcfeQjd0qbFRicNbcxrZw3RQsQq3i1JQ+XK4=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=M3TVbWRuWnMTR0T8b+HCIoTPMSZfUMpSmb52y4OxxO8LujtKa/uyiKm8bh0qfogBp
+         FNTQNa2xU8DzaNEEHPN2jHPuHSb4vj2kiR5WjQzrw+pal1dLWGSYpwliK38xoFxrKQ
+         2jXP3GcXTcTn74Cia1W4xNYD9uiO+U7rfMUmArcA=
+To:     broonie@kernel.org
+From:   Colton Lewis <colton.w.lewis@protonmail.com>
+Cc:     linux-spi@vger.kernel.org,
+        Colton Lewis <colton.w.lewis@protonmail.com>
+Reply-To: Colton Lewis <colton.w.lewis@protonmail.com>
+Subject: [PATCH v2] spi: correct kernel-doc inconsistency
+Message-ID: <20200725050242.279548-1-colton.w.lewis@protonmail.com>
+In-Reply-To: <20200720143655.GA5949@sirena.org.uk>
+References: <20200719195630.148075-1-colton.w.lewis@protonmail.com> <20200720143655.GA5949@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vdo22ofbCktupFYbfYy6PQ609fsk5B6u2b3FpfKxs8OQg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.protonmail.ch
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-[+cc Rafael, in case you can clear up our wakeup confusion]
-original patch:
-https://lore.kernel.org/r/20200720155714.714114-1-vaibhavgupta40@gmail.com
+Silence documentation build warnings by correcting kernel-doc comment
+for spi_transfer struct.
 
-On Fri, Jul 24, 2020 at 11:16:55PM +0300, Andy Shevchenko wrote:
-> On Fri, Jul 24, 2020 at 6:17 PM Vaibhav Gupta <vaibhavgupta40@gmail.com> wrote:
-> > On Fri, Jul 24, 2020 at 01:51:49PM +0300, Andy Shevchenko wrote:
-> > > On Mon, Jul 20, 2020 at 7:31 PM Vaibhav Gupta <vaibhavgupta40@gmail.com> wrote:
-> 
-> ...
-> > > > +       device_wakeup_disable(dev);
+Signed-off-by: Colton Lewis <colton.w.lewis@protonmail.com>
+---
+ include/linux/spi/spi.h | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-> > >
-> > > Here I left a result. Care to explain (and perhaps send a follow up
-> > > fix) where is the counterpart to this call?
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index f8b721fcd5c6..99380c0825db 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -329,6 +329,7 @@ static inline void spi_unregister_driver(struct spi_dri=
+ver *sdrv)
+  *=09every chipselect is connected to a slave.
+  * @dma_alignment: SPI controller constraint on DMA buffers alignment.
+  * @mode_bits: flags understood by this controller driver
++ * @buswidth_override_bits: flags to override for this controller driver
+  * @bits_per_word_mask: A mask indicating which values of bits_per_word ar=
+e
+  *=09supported by the driver. Bit n indicates that a bits_per_word n+1 is
+  *=09supported. If set, the SPI core will reject any transfer with an
+@@ -846,12 +847,7 @@ extern void spi_res_release(struct spi_controller *ctl=
+r,
+  *=09processed the word, i.e. the "pre" timestamp should be taken before
+  *=09transmitting the "pre" word, and the "post" timestamp after receiving
+  *=09transmit confirmation from the controller for the "post" word.
+- * @timestamped_pre: Set by the SPI controller driver to denote it has act=
+ed
+- *=09upon the @ptp_sts request. Not set when the SPI core has taken care o=
+f
+- *=09the task. SPI device drivers are free to print a warning if this come=
+s
+- *=09back unset and they need the better resolution.
+- * @timestamped_post: See above. The reason why both exist is that these
+- *=09booleans are also used to keep state in the core SPI logic.
++ * @timestamped: true if the transfer has been timestamped
+  * @error: Error status logged by spi controller driver.
+  *
+  * SPI transfers always write the same number of bytes as they read.
+--=20
+2.26.2
 
-The common pattern seems to be "enable wakeup in suspend, disable
-wakeup in resume".
 
-The confusion in spi-topcliff-pch.c is that it *disables* wakeup in
-both the .suspend() and the .resume() methods and never seems to
-enable wakeup at all.
-
-Maybe there's something subtle we're missing, because all of the
-following are the same way; they disable wakeup in suspend and also
-disable wakeup in resume:
-
-  pch_i2c_suspend    pci_enable_wake(pdev, PCI_D3hot, 0);
-  pch_phub_suspend   pci_enable_wake(pdev, PCI_D3hot, 0);
-  tifm_7xx1_suspend  pci_enable_wake(dev, pci_choose_state(dev, state), 0);
-  pch_can_suspend    pci_enable_wake(pdev, PCI_D3hot, 0);
-  atl1e_suspend      pci_enable_wake(pdev, pci_choose_state(pdev, state), 0);
-  atl2_suspend       pci_enable_wake(pdev, pci_choose_state(pdev, state), 0);
-  smsc9420_suspend   pci_enable_wake(pdev, pci_choose_state(pdev, state), 0);
-  pch_suspend        pci_enable_wake(pdev, PCI_D3hot, 0);
-  pch_spi_suspend    pci_enable_wake(pdev, PCI_D3hot, 0);
-
-And the following are curious because they seem to disable wakeup in
-suspend but don't do anything with wakeup in resume:
-
-  jmb38x_ms_suspend  pci_enable_wake(dev, pci_choose_state(dev, state), 0);
-  rtsx_pci_suspend   pci_enable_wake(pcidev, pci_choose_state(pcidev, state), 0);
-  toshsd_pm_suspend  pci_enable_wake(pdev, PCI_D3hot, 0);
-  via_sd_suspend     pci_enable_wake(pcidev, pci_choose_state(pcidev, state), 0);
-  uli526x_suspend    pci_enable_wake(pdev, power_state, 0);
-
-All of the above *look* buggy, but maybe we're missing something.
-
-My *guess* is that most PCI drivers using generic PM shouldn't do
-anything at all with wakeup because these paths in the PCI core do it
-for them:
-
-  pci_pm_suspend_noirq             # pci_dev_pm_ops.suspend_noirq
-    if (!pdev->state_saved)
-      if (pci_power_manageable(pdev)
-        pci_prepare_to_sleep(pdev)
-	  wakeup = device_may_wakeup(&pdev->dev)
-	  pci_enable_wake(pdev, ..., wakeup)
-
-  pci_pm_resume                    # pci_dev_pm_ops.resume
-    pci_pm_default_resume
-      pci_enable_wake(pdev, ..., false)
-
-> > Yes, it seem I forgot to put device_wakeup_disable() in .suspend()
-> > when I removed pci_enable_wake(pdev, PCI_D3hot, 0); from there. It
-> > doesn't seem that .suspend() wants to enable-wake the device as
-> > the bool value passed to pci_enable_wake() is zero.
-> 
-> > Am I missing something else?
-> 
-> At least above. Either you need to drop the current call, or explain
-> how it works.
-
-> Since you have no hardware to test, I would rather ask to drop an
-> extra call or revert the change.
-
-I'm not quite sure what you mean here.  Vaibhav is converting dozens
-of drivers from legacy PCI PM to generic PM, and of course doesn't
-have any of that hardware, but it's still worth doing the conversion.
-
-If it's a bug that spi-topcliff-pch.c disables but never enables
-wakeup, I think this should turn into two patches:
-
-  1) Fix the bug by enabling wakeup in suspend (or whatever the right
-  fix is), and
-
-  2) Convert to generic PM, which may involve removing the
-  wakeup-related code completely.
-
-Bjorn
