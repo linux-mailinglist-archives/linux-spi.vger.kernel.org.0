@@ -2,98 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 605F722F290
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 16:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404F422F6B4
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 19:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729566AbgG0Oke (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jul 2020 10:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        id S1730243AbgG0Rcr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jul 2020 13:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729596AbgG0OJO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jul 2020 10:09:14 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F25C061794;
-        Mon, 27 Jul 2020 07:09:14 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id e22so2316901pjt.3;
-        Mon, 27 Jul 2020 07:09:14 -0700 (PDT)
+        with ESMTP id S1726617AbgG0Rcr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jul 2020 13:32:47 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16122C061794;
+        Mon, 27 Jul 2020 10:32:47 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id w126so9283312pfw.8;
+        Mon, 27 Jul 2020 10:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ps9gbXfMY9gEoRvLMrM4gPnJ2K1TqhpHPJ+1koA1XlE=;
-        b=TTRw/ggloTOv5tFUzkTPMaC9P4H4zn5RUSgZ8tuPIehl4KfhiSnqc9URK/XVaUe0z9
-         JvhnfDplOssiiv4MRcwj30vFBpjR4v9d7RJ8vDKStCLcNbW6thmA8ixbQq7fg4n3xfo2
-         6OS+is5nsc81nkZU1NgQk0CVMvnX3Q+RDiB8OyOC5muqXa7FHRgTfjETCJeAWpPA1JoW
-         FMZeBigEl6suZNwsCToTEl6+A5p34nuUUrcwsS1gHeMrG0zg8uJ5jtDNADTz69f4DOVF
-         E0Kpu/yHkIDaffVhBH68Vf7O/qZ1oONBQZRlKhgPYMT5CNneqqMkPbaFwpybMjOZczJh
-         KEzA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Y/oiTZvRbIGlVilYBQAce6xZVdmLxNzc+uCZkzk1V9g=;
+        b=FHs7NZnjm1y+Y0yUChIknkWpkRZeJSCPECasUc1GMHAAX0gQC7gJAuExKfTQg7YxK1
+         RUEDwI/yoCS6n/MAz2kzUyR1GEi8teb8fBWPR71NfQOMldeVOEruRq8ehJwY9KQsapzX
+         VttbXvWYZpzHEXv3/AsCgnykZlqIkofJxNQRSl86UnfHYfHfCRpGD7QfBdOkCbCuc5/u
+         +tODKkcQ1dt1Q9MPe6D5gxWZL+sf27Y1rKDqNS/HwIDAbmf/aVM8qctgzobo3bNaN9Pq
+         DXAgXHVNMFUpmOkmRAZio1bmexKAlAfRo2vsRAcg5LU52jLv2Lri37SJq3juqcItZTqY
+         /xNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ps9gbXfMY9gEoRvLMrM4gPnJ2K1TqhpHPJ+1koA1XlE=;
-        b=kLi6QHkccuVlKDkbvS5H04uhAYtkVWKnA0IbNiGGqe2GV9n+gnebD+sgdvJfiL5MBe
-         gad5bW/GMzGux0Dw7zLIQYFo0rh68IXNOTrFdUoDyrt0WCHz1QZMuBa3eT8n9fTu/3R0
-         ki6xmUyRfy46pbSJ7ViXbroixnx/1C4x7TBZSfnLudqwx77yBAU8Ne8W5L9xEZCwLVZe
-         FKlT5U8iscOmVWPOvLzOh+XZ2jMUkfEkIFTZe2+1FJh/kudDeLO+MvDHGQ/cm92XbfBB
-         VAHmyl/j3xThxceNXqaTjkpZ0kY2xlQhWsREWrme+oQl0UEEo9f1aNrKG+lVviA8HHNV
-         RA5w==
-X-Gm-Message-State: AOAM533Sv/EzZmZNeIpQTv5P9xpgC12mSpw+b9mfv+qeuh2XTUZcHsvZ
-        QI/xU6ZYbhkm/WgG4AmzB8UGKYOrlTlad6pyVyU=
-X-Google-Smtp-Source: ABdhPJxp0MKMIJLZxQNKOBEyl/pD4FWGtiC8dyXDtpZ3+4QH6ixWcadx6p17sd38M60xe6jmlABVkhI9TeebUXIBYb0=
-X-Received: by 2002:a17:90a:a393:: with SMTP id x19mr16702118pjp.228.1595858954219;
- Mon, 27 Jul 2020 07:09:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHp75Vdo22ofbCktupFYbfYy6PQ609fsk5B6u2b3FpfKxs8OQg@mail.gmail.com>
- <20200727131742.82289-1-vaibhavgupta40@gmail.com> <CAHp75VfmKvAy6bSk70g3c2qJcUzzo0AUhzxR6dFja+ZppGMLRg@mail.gmail.com>
- <20200727134646.GA114726@gmail.com>
-In-Reply-To: <20200727134646.GA114726@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 27 Jul 2020 17:08:59 +0300
-Message-ID: <CAHp75Vfuw1rAYxy41hVKNaqZQg4W-_Y=6St-X0yb5O4zN6qCfw@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: spi-topcliff-pch: drop call to wakeup-disable
-To:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Joe Perches <joe@perches.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Y/oiTZvRbIGlVilYBQAce6xZVdmLxNzc+uCZkzk1V9g=;
+        b=D6pkcIsP8QuInK/8j8YIQAVmdMcaSiKf4pm0SNROqFypP4ceJNn/oloABUBj29dB7H
+         D8IAsOf5PEC+W0aeZ1HZadhkVAS5O+TnEIKORH+UofbzsTPbj9E4FMTUGgJz1pCSVtP2
+         ct9Bd0p1qClOTYplRxMM7mEZOjOPvX1pud+W0gpZhhcxnnaJUjV4VQQX2nqZ3HeeHXyi
+         NoIye4LeCiaoTV2TLOcjy+moMRJEJ5Y59+q/shZfK4lVNUDbNifiUpo2in/HnW9PM167
+         Gh9II375z6X8nO3QSu2WQvzXrLsLnh9orP6uLqb1j3lAmt+IgD1LidD/4kjlONHHOEqL
+         b5lQ==
+X-Gm-Message-State: AOAM532VmM5tb/fiyspLc0qJkl6TTjEheMOLMnf7yrgEl4p/7WC731X7
+        lEeww7Phd4ekxAeWRnTpRBY=
+X-Google-Smtp-Source: ABdhPJyCn9FDNTlrAkhDjbasGUiicJEpzPdljaTQslwjMY8oofLHLGd1j2EDiVq6xsMqKuOfd5dCeA==
+X-Received: by 2002:a65:620e:: with SMTP id d14mr20414491pgv.360.1595871166544;
+        Mon, 27 Jul 2020 10:32:46 -0700 (PDT)
+Received: from varodek.iballbatonwifi.com ([103.105.152.86])
+        by smtp.gmail.com with ESMTPSA id x66sm15427782pgb.12.2020.07.27.10.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 10:32:45 -0700 (PDT)
+From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Bjorn Helgaas <bjorn@helgaas.com>,
         Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v3] spi: spi-topcliff-pch: drop call to wakeup-disable
+Date:   Mon, 27 Jul 2020 22:59:37 +0530
+Message-Id: <20200727172936.661567-1-vaibhavgupta40@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <CAHp75VfmKvAy6bSk70g3c2qJcUzzo0AUhzxR6dFja+ZppGMLRg@mail.gmail.com>
+References: <CAHp75VfmKvAy6bSk70g3c2qJcUzzo0AUhzxR6dFja+ZppGMLRg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Joe, can we amend checkpatch to at least shout about simple typos in
-the tag area?
-See below for the context.
+Before generic upgrade, both .suspend() and .resume() were invoking
+pci_enable_wake(pci_dev, PCI_D3hot, 0). Hence, disabling wakeup in both
+states. (Normal trend is .suspend() enables and .resume() disables the
+wakeup.)
 
-On Mon, Jul 27, 2020 at 4:48 PM Vaibhav Gupta <vaibhavgupta40@gmail.com> wrote:
-> On Mon, Jul 27, 2020 at 04:38:40PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jul 27, 2020 at 4:21 PM Vaibhav Gupta <vaibhavgupta40@gmail.com> wrote:
+This was ambiguous and may be buggy. Instead of replicating the legacy
+behavior, drop the wakeup-disable call.
 
-...
+Fixes: f185bcc77980 ("spi: spi-topcliff-pch: use generic power management")
+Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+---
+ drivers/spi/spi-topcliff-pch.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-> > > Fix: f185bcc77980("spi: spi-topcliff-pch: use generic power management")
-> >
-> > Fixes: and missed space.
-
-(1)
-
-> > > Reported by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> >
-> > Missed dash.
-> > Does checkpatch complain?
-> No, I got this message:
-> "* .patch has no obvious style problems and is ready for submission"
-
-(2)
-
+diff --git a/drivers/spi/spi-topcliff-pch.c b/drivers/spi/spi-topcliff-pch.c
+index 281a90f1b5d8..c73a03ddf5f3 100644
+--- a/drivers/spi/spi-topcliff-pch.c
++++ b/drivers/spi/spi-topcliff-pch.c
+@@ -1648,8 +1648,6 @@ static int __maybe_unused pch_spi_resume(struct device *dev)
+ 
+ 	dev_dbg(dev, "%s ENTRY\n", __func__);
+ 
+-	device_wakeup_disable(dev);
+-
+ 	/* set suspend status to false */
+ 	pd_dev_save->board_dat->suspend_sts = false;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.27.0
+
