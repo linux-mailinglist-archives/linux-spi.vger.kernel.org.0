@@ -2,41 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 178AA22EE12
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 15:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CC722EE15
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 15:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbgG0N5L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jul 2020 09:57:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47008 "EHLO mail.kernel.org"
+        id S1728863AbgG0N5Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jul 2020 09:57:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728873AbgG0N5K (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 27 Jul 2020 09:57:10 -0400
+        id S1728843AbgG0N5P (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 27 Jul 2020 09:57:15 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 010CD2070A;
-        Mon, 27 Jul 2020 13:57:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F19302070B;
+        Mon, 27 Jul 2020 13:57:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595858230;
-        bh=801YCg5Y2Y26M201PENQ7hgJs7fduBKQjxO6+Sz7+JY=;
+        s=default; t=1595858235;
+        bh=7Wjw+pSHhPm0OgmFnjV6bkDENQpBkadoXEhgPMl9EFs=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=SGeS0YfCR7+mMcTuYhMJIsImof8BWpf6MYL0XCGO3jf5X2zyp0QDOPri8alZeVcx5
-         6Wf23TcrjK7uRLMctXEZ/Sb03IsEcoEQLIodxiYEKPNrmp3qpTuspaO5T6H6vwleRR
-         cPRsFmw6aoFz4gd6A0sR8Ti0kBCRPRdhn58T36X0=
-Date:   Mon, 27 Jul 2020 14:56:53 +0100
+        b=mgqEQiwBLI/SjkF3tzaRn8FqYjBxKBfpLL5pYsskhEGtbmMxh5frhdqMfoBnELdtM
+         HJrjyAyFINYcZ/LrWcCFrF3IggTVqR2O3+kEP4YY7j+qMmzNe4hJwpUmgWpHuFaJkb
+         LTJM9AFLsaykT0mwHoBFAMFz69oTKzTlTuFTKP/w=
+Date:   Mon, 27 Jul 2020 14:56:58 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Colton Lewis <colton.w.lewis@protonmail.com>
 Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20200725050242.279548-1-colton.w.lewis@protonmail.com>
-References: <20200719195630.148075-1-colton.w.lewis@protonmail.com> <20200720143655.GA5949@sirena.org.uk> <20200725050242.279548-1-colton.w.lewis@protonmail.com>
-Subject: Re: [PATCH v2] spi: correct kernel-doc inconsistency
-Message-Id: <159585821343.22560.16007476069938782361.b4-ty@kernel.org>
+In-Reply-To: <20200719195630.148075-1-colton.w.lewis@protonmail.com>
+References: <20200719195630.148075-1-colton.w.lewis@protonmail.com>
+Subject: Re: [PATCH] spi: correct kernel-doc inconsistency
+Message-Id: <159585821343.22560.13612653659579069895.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 25 Jul 2020 05:02:57 +0000, Colton Lewis wrote:
+On Sun, 19 Jul 2020 19:56:40 +0000, Colton Lewis wrote:
 > Silence documentation build warnings by correcting kernel-doc comment
 > for spi_transfer struct.
 
