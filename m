@@ -2,93 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD15222EB6B
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 13:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEF422EBEB
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 14:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbgG0Lra (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jul 2020 07:47:30 -0400
-Received: from mailout10.rmx.de ([94.199.88.75]:60922 "EHLO mailout10.rmx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726599AbgG0Lra (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 27 Jul 2020 07:47:30 -0400
-X-Greylist: delayed 2076 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 Jul 2020 07:47:28 EDT
-Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailout10.rmx.de (Postfix) with ESMTPS id 4BFcbk088pz31wH;
-        Mon, 27 Jul 2020 13:12:50 +0200 (CEST)
-Received: from mta.arri.de (unknown [217.111.95.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by kdin02.retarus.com (Postfix) with ESMTPS id 4BFcbK2FfZz2TSDj;
-        Mon, 27 Jul 2020 13:12:29 +0200 (CEST)
-Received: from N95HX1G2.wgnetz.xx (192.168.54.121) by mta.arri.de
- (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 27 Jul
- 2020 13:12:29 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Christian Eggers <ceggers@arri.de>
-Subject: [PATCH] eeprom: at25: allow page sizes greater than 16 bit
-Date:   Mon, 27 Jul 2020 13:12:18 +0200
-Message-ID: <20200727111218.26926-1-ceggers@arri.de>
-X-Mailer: git-send-email 2.26.2
+        id S1727854AbgG0MST (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jul 2020 08:18:19 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:60781 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727078AbgG0MST (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jul 2020 08:18:19 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 127EE5C009B;
+        Mon, 27 Jul 2020 08:18:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 27 Jul 2020 08:18:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=mHtep/F/V+/ZTSTOICf7uGBozy9
+        AgBu1m/s4r2bq0Eg=; b=ktaRTNZgCdigpkG4O3q2NH6ZsEhG4cscIZ1v3xE5OKt
+        qpPvJIFX3qDfiO83dNOiUrUBGm4Zdg9Lj0H7rSNvBKihX5wQdCzFG1Eb1wAsejGG
+        kUkwyaw2/jKptMU+PQVA9TLPCzqYxnKx9EFJKJ2AZTspOH8E0ULlYH6JU+1w/9Uz
+        +jlepgj+DQIwsX4ZSdZFCzu1HJ4XpvWTh5Tng2cQd2Um+xbIvpT4zaSRWR3259Yw
+        PwAag9sJSy2px3IMK2QAwaclMV8JufnZChnxRYk7O31qKRCAo14GwdezCknfygl4
+        LCe9BmVp4yZx/djpO4c9GOUGR5rHnHBr9Nf+InWQN9A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=mHtep/
+        F/V+/ZTSTOICf7uGBozy9AgBu1m/s4r2bq0Eg=; b=kltT2+bcmkrCZVrAZMYZEg
+        3H9/G0AftWFq3Lofsb3I8Oa84uz9wrcSoGNSO091usatLYggpSZ8dqzqz52IgR8W
+        paN9xAMk8EoM3Qy8Z/mmHNzMXO1/ImRAxP1fB0XIm+wsY0iVlFAEaoqJe2w18oHw
+        QzXhD0hnfUHbKvZ4QsWJt2ZU1TaWa0PzINSMwPN36y0DVuIBqZATJ3abIyRgYL7g
+        8ANZ8HGVcTZvcqAH9iekrzjTowGas+8+H7tDPnN1yRWs/4SKwq7sK/lHhgAGb+NR
+        fCNYT1fiqrkzVa6RWzQh63Y4HDZmMnWzRZwW+EZDAkonGJXI4G5LHU1iJOpp+aNg
+        ==
+X-ME-Sender: <xms:CcYeX7UdMWi9wIo5FtayKf5m4tbSQRkeP7UpVGikiTHsANBAdSzggA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedriedtgdehtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehgtderre
+    dttddvnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghr
+    nhhordhtvggthheqnecuggftrfgrthhtvghrnhepleekgeehhfdutdeljefgleejffehff
+    fgieejhffgueefhfdtveetgeehieehgedunecukfhppeeltddrkeelrdeikedrjeeinecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimh
+    gvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:CcYeXzlgbB6qRj7Qgu3FI_56Z_QYHjlunYLndhBm8eGhXv4HKaAnvA>
+    <xmx:CcYeX3aGhGyGp81Z7HUGHzMRsu1ExyK0X0L6iJkWNCVXl8LkltzNsg>
+    <xmx:CcYeX2Ww5tIiD8EtTgTbhSZrAtHptC8h9vfAzHS9Ycg8bMBsCajnWA>
+    <xmx:CsYeX4tEKXVYhL94E4a7T5uKL0J7T88yt0oWUOvk0iFOw6OnKLC50w>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 11D9E328005E;
+        Mon, 27 Jul 2020 08:18:16 -0400 (EDT)
+Date:   Mon, 27 Jul 2020 14:18:14 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jonathan Liu <net147@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Olliver Schinagl <oliver@schinagl.nl>,
+        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [PATCH] spi: sun4i: update max transfer size reported
+Message-ID: <20200727121814.mibefpenprccgqaq@gilmour.lan>
+References: <20200727072328.510798-1-net147@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.54.121]
-X-RMX-ID: 20200727-131229-4BFcbK2FfZz2TSDj-0@kdin02
-X-RMX-SOURCE: 217.111.95.66
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="u36akzhevqsrnfat"
+Content-Disposition: inline
+In-Reply-To: <20200727072328.510798-1-net147@gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Storage technologies like FRAM have no "write pages", the whole chip can
-be written within one SPI transfer. For these chips, the page size can
-be set equal to the device size. Currently available devices are already
-bigger than 64 kiB.
 
-Signed-off-by: Christian Eggers <ceggers@arri.de>
----
- drivers/misc/eeprom/at25.c | 2 +-
- include/linux/spi/eeprom.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--u36akzhevqsrnfat
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
-index cde9a2fc1325..0e7c8dc01195 100644
---- a/drivers/misc/eeprom/at25.c
-+++ b/drivers/misc/eeprom/at25.c
-@@ -261,7 +261,7 @@ static int at25_fw_to_chip(struct device *dev, struct spi_eeprom *chip)
- 
- 	if (device_property_read_u32(dev, "pagesize", &val) == 0 ||
- 	    device_property_read_u32(dev, "at25,page-size", &val) == 0) {
--		chip->page_size = (u16)val;
-+		chip->page_size = val;
- 	} else {
- 		dev_err(dev, "Error: missing \"pagesize\" property\n");
- 		return -ENODEV;
-diff --git a/include/linux/spi/eeprom.h b/include/linux/spi/eeprom.h
-index aceccf9c71fb..1cca3dd5a748 100644
---- a/include/linux/spi/eeprom.h
-+++ b/include/linux/spi/eeprom.h
-@@ -14,7 +14,7 @@
- struct spi_eeprom {
- 	u32		byte_len;
- 	char		name[10];
--	u16		page_size;		/* for writes */
-+	u32		page_size;		/* for writes */
- 	u16		flags;
- #define	EE_ADDR1	0x0001			/*  8 bit addrs */
- #define	EE_ADDR2	0x0002			/* 16 bit addrs */
--- 
-Christian Eggers
-Embedded software developer
+On Mon, Jul 27, 2020 at 05:23:28PM +1000, Jonathan Liu wrote:
+> The spi-sun4i driver already has the ability to do large transfers.
+> However, the max transfer size reported is still fifo depth - 1.
+>=20
+> Update the max transfer size reported to the max value possible.
+>=20
+> Fixes: 196737912da5 ("spi: sun4i: Allow transfers larger than FIFO size")
+> Signed-off-by: Jonathan Liu <net147@gmail.com>
 
-Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRA 57918
-Persoenlich haftender Gesellschafter: Arnold & Richter Cine Technik GmbH
-Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRB 54477
-Geschaeftsfuehrer: Dr. Michael Neuhaeuser; Stephan Schenk; Walter Trauninger; Markus Zeiler
+Acked-by: Maxime Ripard <mripard@kernel.org>
 
+Thanks!
+Maxime
+
+--u36akzhevqsrnfat
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXx7GAAAKCRDj7w1vZxhR
+xSvfAP9c8u8Tff95lvMwSOvhDaRFeoPnHygE4hraIsJJOestDQEAl/iGmAeXeDWN
+j3YGm934Ggfog/Hllk87urkgvVL7mwM=
+=kySp
+-----END PGP SIGNATURE-----
+
+--u36akzhevqsrnfat--
