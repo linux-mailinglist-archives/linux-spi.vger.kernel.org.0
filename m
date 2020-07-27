@@ -2,95 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE1E22E670
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 09:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105E622EAE7
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 13:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbgG0HXf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jul 2020 03:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726116AbgG0HXf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jul 2020 03:23:35 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4FBC0619D2;
-        Mon, 27 Jul 2020 00:23:34 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d1so7534752plr.8;
-        Mon, 27 Jul 2020 00:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HtLi8w57gnnmKubQpAlKgfo+luXCSY1x3qq8plEtTes=;
-        b=J1xJZnJm2yihRu1lA/bmmScLbqa/2ZgzmMZlarNvKpsHmq6BxTUMhPwrwzn/lWoGEW
-         pUUSIdv0Rjpn5oVK9RgIcA9SrGFKbsG2Lw0nPW284Mr5tOub8xhjGHc0J+qrvJj4bj79
-         76FTxixvq67AltH2bbSVWk2jKNopAKQ7RLK/SVRmy5LekFy1eBh5d2/nTxtIRuAlZ/+7
-         peO452HbvzeYv6MLXQympD/1AXwd3iqbpDvH0ymGcX6Omfngqp1nxm7vuFmu+1P4EPES
-         MFOK/LKTLOwSJxm4Zi/+CCYZQ9k805cxW1SamTIfWlbk2O6tryhbk/siKs+8PVHjbVCz
-         EJBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HtLi8w57gnnmKubQpAlKgfo+luXCSY1x3qq8plEtTes=;
-        b=OcBu1xO91B8GM0t/KP3l6WRYLag+igsfg1xE/2bqj5Jlxpc/KTnaVtyjb9VRtKB/GB
-         yu9Ajfa18Rx/Ww0QKlft5Lr8tnWTLViSNWZT9aeMZA8atZXoYq6fmyXnbIJt5GkQ+8qn
-         NYA/7BAKC+xLUEsQl0rULA2L2Wumy049WjGIRtB71vrwDkHY1Ugzmli4HfIArbvamc+q
-         xrO266C0RyBtaiw/TwjFv5iRHtZwb4TNx9qKkGz/Yuj+7CWqygsUsDmn2kTApXD6+T7a
-         pRAJO/1UitGjDfE9LPtJy11pw3Hhc3srsXIMrbcUsqvD51QRZN/FMPoFdlHpebHXgmCR
-         5UEg==
-X-Gm-Message-State: AOAM533/rHtxwLzghtYg4wdNqmChoh0VXbmf7QWzVyA7zSBTRhosy2Mq
-        Sr6TlsZsh87PgQ7XJSmnc1U=
-X-Google-Smtp-Source: ABdhPJzfVEhUcVaZLk/pm7cyXJlrTQYqJd65h6yHKTNEwXlpe+fRk3ZpHXbX+9mcNDdx7cK88Ye02g==
-X-Received: by 2002:a17:90a:628b:: with SMTP id d11mr9192420pjj.167.1595834613946;
-        Mon, 27 Jul 2020 00:23:33 -0700 (PDT)
-Received: from 119-18-5-146.771205.syd.nbn.aussiebb.net (119-18-5-146.771205.syd.nbn.aussiebb.net. [119.18.5.146])
-        by smtp.gmail.com with ESMTPSA id my16sm10695118pjb.43.2020.07.27.00.23.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 00:23:33 -0700 (PDT)
-From:   Jonathan Liu <net147@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Olliver Schinagl <oliver@schinagl.nl>,
-        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
-        Jonathan Liu <net147@gmail.com>
-Subject: [PATCH] spi: sun4i: update max transfer size reported
-Date:   Mon, 27 Jul 2020 17:23:28 +1000
-Message-Id: <20200727072328.510798-1-net147@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        id S1726662AbgG0LL1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jul 2020 07:11:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38704 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726269AbgG0LL1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 27 Jul 2020 07:11:27 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EC4B4205CB;
+        Mon, 27 Jul 2020 11:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595848286;
+        bh=5cjDhcqA22LmKpF1+epE71V5q45KFj1IeAEV+bx8KEA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zwl1JoHUq8qXqIEHxk8e/QYK5paM+jXPuNbIsWBOMjuQkxkP20nHpBR+c7eMNs40n
+         8KEHAM7jD/QrC6dtSdorxbp1lPzjMRQARN26ihMDxfTED12Y308emVDGYmd0DHjM/P
+         4Z8bXbfMyJ1UcnUHuUL2S645FBnlTAY7cstJsGlA=
+Date:   Mon, 27 Jul 2020 12:11:09 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 1/4] spi: lpspi: Fix kernel warning dump when probe
+ fail after calling spi_register
+Message-ID: <20200727111109.GB6275@sirena.org.uk>
+References: <20200727031448.31661-1-xiaoning.wang@nxp.com>
+ <20200727031448.31661-2-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XOIedfhf+7KOe/yw"
+Content-Disposition: inline
+In-Reply-To: <20200727031448.31661-2-xiaoning.wang@nxp.com>
+X-Cookie: Doing gets it done.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The spi-sun4i driver already has the ability to do large transfers.
-However, the max transfer size reported is still fifo depth - 1.
 
-Update the max transfer size reported to the max value possible.
+--XOIedfhf+7KOe/yw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 196737912da5 ("spi: sun4i: Allow transfers larger than FIFO size")
-Signed-off-by: Jonathan Liu <net147@gmail.com>
----
- drivers/spi/spi-sun4i.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Jul 27, 2020 at 11:14:46AM +0800, Clark Wang wrote:
+> Calling devm_spi_register_controller() too early will cause problem.
+> When probe failed occurs after calling devm_spi_register_controller(),
+> the call of spi_controller_put() will trigger the following warning dump.
+>=20
+> [    2.092138] ------------[ cut here ]------------
+> [    2.096876] kernfs: can not remove 'uevent', no directory
+> [    2.102440] WARNING: CPU: 0 PID: 181 at fs/kernfs/dir.c:1503 kernfs_re=
+move_by_name_ns+0xa0/0xb0
+> [    2.111142] Modules linked in:
+> [    2.114207] CPU: 0 PID: 181 Comm: kworker/0:7 Not tainted 5.4.24-05024=
+-g775c6e8a738c-dirty #1314
+> [    2.122991] Hardware name: Freescale i.MX8DXL EVK (DT)
+> [    2.128141] Workqueue: events deferred_probe_work_func
 
-diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
-index cbfac6596fad..1fdfc6e6691d 100644
---- a/drivers/spi/spi-sun4i.c
-+++ b/drivers/spi/spi-sun4i.c
-@@ -198,7 +198,7 @@ static void sun4i_spi_set_cs(struct spi_device *spi, bool enable)
- 
- static size_t sun4i_spi_max_transfer_size(struct spi_device *spi)
- {
--	return SUN4I_FIFO_DEPTH - 1;
-+	return SUN4I_MAX_XFER_SIZE - 1;
- }
- 
- static int sun4i_spi_transfer_one(struct spi_master *master,
--- 
-2.27.0
+Please think hard before including complete backtraces in upstream
+reports, they are very large and contain almost no useful information
+relative to their size so often obscure the relevant content in your
+message. If part of the backtrace is usefully illustrative (it often is
+for search engines if nothing else) then it's usually better to pull out
+the relevant sections.
 
+--XOIedfhf+7KOe/yw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8etkwACgkQJNaLcl1U
+h9By2AgAgnTCFAi+3XM31B5xy1B70aDoOYf1tRMaXEQR97aYIRF+ihcgFzNIsmrH
+E3lMnfNkmIdmCHpJpRyfgdH+zIMbya8rvWnQwiO60Ar+weSi6cB9cuRY/OvpKDQp
+oz/4iFuOMzLB/+d8OABUsT1NlxvJGZR55VxQyCtWLXWCl47Qw53g5BS5iHSK0vSt
+Qnlh/I+gGGdZ3AV/d6F5LlG0/ogsM0GW9qL06b5MBKHje93LJJao6YOczrYN2RIL
+9Zt5nJ3a5BqgduNsas5XrxWjQ3QV00AIPwdKXziIhxMcQBmGv3r3dYpDQELHU5nr
+WxgW50uDCZtetlfOcgTBIt4UREDmgQ==
+=umFf
+-----END PGP SIGNATURE-----
+
+--XOIedfhf+7KOe/yw--
