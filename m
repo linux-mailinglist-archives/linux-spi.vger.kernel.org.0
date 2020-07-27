@@ -2,102 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F108B22EAEB
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 13:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD15222EB6B
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 13:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726371AbgG0LMc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jul 2020 07:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726324AbgG0LMc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jul 2020 07:12:32 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0C0C061794;
-        Mon, 27 Jul 2020 04:12:31 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id z3so8869068pfn.12;
-        Mon, 27 Jul 2020 04:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JpiOzoaiyx99ynR2WykS5OLOkmTVVgbbrLc0IXpWnR8=;
-        b=A7Sf/3coa+fxUWtaNpz7yyIgCasw1IqgduuJzPXaOtbss/krO+INI3+vdjSItItDls
-         oHfR/G8SMHJY6U/3nsURjcNTR+Sy6VixxEXkSGgQ9kJ08Hbg1rGyo+DxOIgwy8llD9dA
-         qZwNFk8MnRTfvYELpLeyxhGTAIU2Ipdzik0QYGH4+Qj9+dhFlPKtk9xbCLkyQhfLtxcU
-         eLxCX2jsCSwqDj4AkMc0S27aaBarvBSKGkNeAIUdXttVJyiz7DeBFMDfy5RzKtgc1n7y
-         6cTaL2DtTX4QM7tekW/6ie7ZUVOCkgUIWUSsrr/bfl4UfNMqe0AMTM6ecFGiH67sBPQD
-         tM4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JpiOzoaiyx99ynR2WykS5OLOkmTVVgbbrLc0IXpWnR8=;
-        b=oqmwjOutLFZhn48kFgNFBsP+PzY0Iasq0eOnzYa9/7i4F7pNSBYbpPpqZomnnnu02h
-         OU9D9uU0pxY7LRhDzYsYHEAF1CKXPDhkST29kswkJEjdBkEEYdY8wd4BXjB667kHsmfD
-         bZQmEX4YC8kMSqqSbDfAWmkzIkLlhbROfDeXYBDApBHytJYKFLw3+a3S9yP9fdguH6rP
-         fX1G6lZ4Qa2fK8TIl93DcA+/csmg+EPaZ5cXEoKjXr0ZV/XCI+eJcoZoXrLX9sYANpm+
-         XYm70EjYl28hV4NQIje7Xp2WQbfrwjw5weWdRggrlN1/Lbxo+td1avxj3fM64/uoY1hr
-         32sQ==
-X-Gm-Message-State: AOAM532U/7x4ul8R1EV2a8B3y4O3ptC5Af0EQizmgnIZHs0XyPMnqwqT
-        QHBfHvU/ipdMD0gfSVstppzbsrnUaLpyZWiUv5w=
-X-Google-Smtp-Source: ABdhPJyvf3lIpJpA/1EcG6vZkAsQqoAQLwhd16BxxYu2pcosuttYaTohVJdM6B1u4sl6qyovpGHqAgrkyoqCPCO1NOc=
-X-Received: by 2002:a63:ce41:: with SMTP id r1mr19797993pgi.203.1595848351479;
- Mon, 27 Jul 2020 04:12:31 -0700 (PDT)
+        id S1726976AbgG0Lra (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jul 2020 07:47:30 -0400
+Received: from mailout10.rmx.de ([94.199.88.75]:60922 "EHLO mailout10.rmx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726599AbgG0Lra (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 27 Jul 2020 07:47:30 -0400
+X-Greylist: delayed 2076 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 Jul 2020 07:47:28 EDT
+Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailout10.rmx.de (Postfix) with ESMTPS id 4BFcbk088pz31wH;
+        Mon, 27 Jul 2020 13:12:50 +0200 (CEST)
+Received: from mta.arri.de (unknown [217.111.95.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kdin02.retarus.com (Postfix) with ESMTPS id 4BFcbK2FfZz2TSDj;
+        Mon, 27 Jul 2020 13:12:29 +0200 (CEST)
+Received: from N95HX1G2.wgnetz.xx (192.168.54.121) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 27 Jul
+ 2020 13:12:29 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Christian Eggers <ceggers@arri.de>
+Subject: [PATCH] eeprom: at25: allow page sizes greater than 16 bit
+Date:   Mon, 27 Jul 2020 13:12:18 +0200
+Message-ID: <20200727111218.26926-1-ceggers@arri.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <CAHp75Vdo22ofbCktupFYbfYy6PQ609fsk5B6u2b3FpfKxs8OQg@mail.gmail.com>
- <20200724223746.GA1538991@bjorn-Precision-5520> <CAHp75VdSr1rguc9HJVh_rA1nBh1uyCdr18eyPosWPzCH1K2=zg@mail.gmail.com>
- <CAHp75VfKeTCBOne3tDSM46q6m_FE+7hS3H9Hx5C3RRPvueqZAQ@mail.gmail.com> <20200727070652.GA5400@gmail.com>
-In-Reply-To: <20200727070652.GA5400@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 27 Jul 2020 14:12:16 +0300
-Message-ID: <CAHp75VdzAk6U_mKn32+dmw1aNyREtaXMB6sHubE8G9imtv5=3g@mail.gmail.com>
-Subject: Re: [PATCH v1] spi: spi-topcliff-pch: use generic power management
-To:     Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Helgaas <bjorn@helgaas.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.54.121]
+X-RMX-ID: 20200727-131229-4BFcbK2FfZz2TSDj-0@kdin02
+X-RMX-SOURCE: 217.111.95.66
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 10:08 AM Vaibhav Gupta <vaibhavgupta40@gmail.com> wrote:
-> On Sat, Jul 25, 2020 at 01:44:44PM +0300, Andy Shevchenko wrote:
-> > On Sat, Jul 25, 2020 at 1:42 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
+Storage technologies like FRAM have no "write pages", the whole chip can
+be written within one SPI transfer. For these chips, the page size can
+be set equal to the device size. Currently available devices are already
+bigger than 64 kiB.
 
-...
+Signed-off-by: Christian Eggers <ceggers@arri.de>
+---
+ drivers/misc/eeprom/at25.c | 2 +-
+ include/linux/spi/eeprom.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > The only problem here, is that the 2nd is already in the Mark's tree
-> > and he doesn't do rebases.
-> > So, it will be the other way around.
-> >
-> Concluding from yours and Bjorn's suggestion, I will drop the
-> device_wakeup_disable() call form .resume() and send the fix. I will also track
-> the drivers who got similar upgrades and went un-noticed.
-
-Thanks for doing this!
-
-> As Bjorn mentioned, the problem is that I don't have hardware to test, so I just
-> replicated the legacy behaviour in generic by replacing
-> pci_enable_wake(....,false) with device_wakeup_disable().
->
-> So, from now, while upgrading drivers with generic PM, should I completely drop
-> the pci_enable_wake(....,false) calls if both .suspend() and .resume() try to
-> wakeup-disable the device?
-
-I guess the best approach is to rely on the PCI core to do the right thing.
-But mention this change in the commit message that we will have a
-track of the changes properly.
-
+diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
+index cde9a2fc1325..0e7c8dc01195 100644
+--- a/drivers/misc/eeprom/at25.c
++++ b/drivers/misc/eeprom/at25.c
+@@ -261,7 +261,7 @@ static int at25_fw_to_chip(struct device *dev, struct spi_eeprom *chip)
+ 
+ 	if (device_property_read_u32(dev, "pagesize", &val) == 0 ||
+ 	    device_property_read_u32(dev, "at25,page-size", &val) == 0) {
+-		chip->page_size = (u16)val;
++		chip->page_size = val;
+ 	} else {
+ 		dev_err(dev, "Error: missing \"pagesize\" property\n");
+ 		return -ENODEV;
+diff --git a/include/linux/spi/eeprom.h b/include/linux/spi/eeprom.h
+index aceccf9c71fb..1cca3dd5a748 100644
+--- a/include/linux/spi/eeprom.h
++++ b/include/linux/spi/eeprom.h
+@@ -14,7 +14,7 @@
+ struct spi_eeprom {
+ 	u32		byte_len;
+ 	char		name[10];
+-	u16		page_size;		/* for writes */
++	u32		page_size;		/* for writes */
+ 	u16		flags;
+ #define	EE_ADDR1	0x0001			/*  8 bit addrs */
+ #define	EE_ADDR2	0x0002			/* 16 bit addrs */
 -- 
-With Best Regards,
-Andy Shevchenko
+Christian Eggers
+Embedded software developer
+
+Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRA 57918
+Persoenlich haftender Gesellschafter: Arnold & Richter Cine Technik GmbH
+Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRB 54477
+Geschaeftsfuehrer: Dr. Michael Neuhaeuser; Stephan Schenk; Walter Trauninger; Markus Zeiler
+
