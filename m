@@ -2,117 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C5022E63D
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 09:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE1E22E670
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jul 2020 09:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgG0HIR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Jul 2020 03:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S1726211AbgG0HXf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 27 Jul 2020 03:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726116AbgG0HIR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jul 2020 03:08:17 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A929C0619D2;
-        Mon, 27 Jul 2020 00:08:17 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id q17so7506565pls.9;
-        Mon, 27 Jul 2020 00:08:16 -0700 (PDT)
+        with ESMTP id S1726116AbgG0HXf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Jul 2020 03:23:35 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4FBC0619D2;
+        Mon, 27 Jul 2020 00:23:34 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id d1so7534752plr.8;
+        Mon, 27 Jul 2020 00:23:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=r3ohMdUUisXXnJtg4Sj8gOXxHs0SULkmzOyNPW3p948=;
-        b=J7drz06irjdSn4IEzXgudUrCCZnvkKA7cxf4NRdogNw/S2loC8qb0x8wuxjbKR2HtB
-         PonGxSpWHuChJh9AYDUz65IOJtL7ALkmFRY6FQA/89hAZ2laXJu/9GNjCF8k3P/vC/67
-         LNpcl46FH8W63QyGQRdYKwDzNNpiAiqUNSDEYJoKWpTOciWVQA4+cZFE71/7GlKZntpn
-         2a4JTr5TWo3OP3y68Tdev/F0mICuQ1KuM2pRiyoXHocX0eGLj5/+DsTZKYsNihtrb2Tw
-         L8fabAssBOKF5M1nR2ITvjqijq0pPazWFZB2hG5+paAOZhilTt5mHzCCHil3ef/Kbprz
-         zPTg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HtLi8w57gnnmKubQpAlKgfo+luXCSY1x3qq8plEtTes=;
+        b=J1xJZnJm2yihRu1lA/bmmScLbqa/2ZgzmMZlarNvKpsHmq6BxTUMhPwrwzn/lWoGEW
+         pUUSIdv0Rjpn5oVK9RgIcA9SrGFKbsG2Lw0nPW284Mr5tOub8xhjGHc0J+qrvJj4bj79
+         76FTxixvq67AltH2bbSVWk2jKNopAKQ7RLK/SVRmy5LekFy1eBh5d2/nTxtIRuAlZ/+7
+         peO452HbvzeYv6MLXQympD/1AXwd3iqbpDvH0ymGcX6Omfngqp1nxm7vuFmu+1P4EPES
+         MFOK/LKTLOwSJxm4Zi/+CCYZQ9k805cxW1SamTIfWlbk2O6tryhbk/siKs+8PVHjbVCz
+         EJBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r3ohMdUUisXXnJtg4Sj8gOXxHs0SULkmzOyNPW3p948=;
-        b=SVDUM8Bl3YoOLrx7kv0CIjNwZ8G31QbEeQM5QmR8Xrd0qJeLq9YBCNYecQyKQ5Ob0Z
-         ULc+gIpPRO2dE1XhNF66WRZR+85YyJBAVLL8qPb+ZDsrD5XZktyAnlLONNd3GwZZsIj4
-         b0/xv1B7CmkGJYyraTJJZETQSLVACZ0kNHmdfgtN9bHWCr1Axhm4avgabYcytPoeU/dS
-         GwukbbZbyyRbDNuT0MxUZNM51ZsHlDtZDyh05m3NviYgpU8iiuzRcn3TT1ZvybdKwyWI
-         eebKnOR8A7hI8GsBXP0N2CeSGz5TEapD2DMijvN0ILMZ8eK+PyKSbGifPSupU2FeGPN0
-         aVWg==
-X-Gm-Message-State: AOAM531K3YUiPCxE9kIax5nGVe7IeRgbiuqG3CG7EfiaAKdBr8FguByP
-        PA8wIbe3rPY8kHuDKlB34fo=
-X-Google-Smtp-Source: ABdhPJzKJySBE72OX3M6X924GWk4LabSjO0/kXJ/nn3paqyIlriQgFdkPx1NMQe+b8k/s7JD6PLQFQ==
-X-Received: by 2002:a17:90a:6948:: with SMTP id j8mr16013497pjm.45.1595833696391;
-        Mon, 27 Jul 2020 00:08:16 -0700 (PDT)
-Received: from gmail.com ([103.105.152.86])
-        by smtp.gmail.com with ESMTPSA id o128sm13916110pfg.127.2020.07.27.00.08.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HtLi8w57gnnmKubQpAlKgfo+luXCSY1x3qq8plEtTes=;
+        b=OcBu1xO91B8GM0t/KP3l6WRYLag+igsfg1xE/2bqj5Jlxpc/KTnaVtyjb9VRtKB/GB
+         yu9Ajfa18Rx/Ww0QKlft5Lr8tnWTLViSNWZT9aeMZA8atZXoYq6fmyXnbIJt5GkQ+8qn
+         NYA/7BAKC+xLUEsQl0rULA2L2Wumy049WjGIRtB71vrwDkHY1Ugzmli4HfIArbvamc+q
+         xrO266C0RyBtaiw/TwjFv5iRHtZwb4TNx9qKkGz/Yuj+7CWqygsUsDmn2kTApXD6+T7a
+         pRAJO/1UitGjDfE9LPtJy11pw3Hhc3srsXIMrbcUsqvD51QRZN/FMPoFdlHpebHXgmCR
+         5UEg==
+X-Gm-Message-State: AOAM533/rHtxwLzghtYg4wdNqmChoh0VXbmf7QWzVyA7zSBTRhosy2Mq
+        Sr6TlsZsh87PgQ7XJSmnc1U=
+X-Google-Smtp-Source: ABdhPJzfVEhUcVaZLk/pm7cyXJlrTQYqJd65h6yHKTNEwXlpe+fRk3ZpHXbX+9mcNDdx7cK88Ye02g==
+X-Received: by 2002:a17:90a:628b:: with SMTP id d11mr9192420pjj.167.1595834613946;
+        Mon, 27 Jul 2020 00:23:33 -0700 (PDT)
+Received: from 119-18-5-146.771205.syd.nbn.aussiebb.net (119-18-5-146.771205.syd.nbn.aussiebb.net. [119.18.5.146])
+        by smtp.gmail.com with ESMTPSA id my16sm10695118pjb.43.2020.07.27.00.23.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 00:08:15 -0700 (PDT)
-Date:   Mon, 27 Jul 2020 12:36:52 +0530
-From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Helgaas <bjorn@helgaas.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH v1] spi: spi-topcliff-pch: use generic power management
-Message-ID: <20200727070652.GA5400@gmail.com>
-References: <CAHp75Vdo22ofbCktupFYbfYy6PQ609fsk5B6u2b3FpfKxs8OQg@mail.gmail.com>
- <20200724223746.GA1538991@bjorn-Precision-5520>
- <CAHp75VdSr1rguc9HJVh_rA1nBh1uyCdr18eyPosWPzCH1K2=zg@mail.gmail.com>
- <CAHp75VfKeTCBOne3tDSM46q6m_FE+7hS3H9Hx5C3RRPvueqZAQ@mail.gmail.com>
+        Mon, 27 Jul 2020 00:23:33 -0700 (PDT)
+From:   Jonathan Liu <net147@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     Olliver Schinagl <oliver@schinagl.nl>,
+        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
+        Jonathan Liu <net147@gmail.com>
+Subject: [PATCH] spi: sun4i: update max transfer size reported
+Date:   Mon, 27 Jul 2020 17:23:28 +1000
+Message-Id: <20200727072328.510798-1-net147@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfKeTCBOne3tDSM46q6m_FE+7hS3H9Hx5C3RRPvueqZAQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Jul 25, 2020 at 01:44:44PM +0300, Andy Shevchenko wrote:
-> On Sat, Jul 25, 2020 at 1:42 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Sat, Jul 25, 2020 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Fri, Jul 24, 2020 at 11:16:55PM +0300, Andy Shevchenko wrote:
-> 
-> ...
-> 
-> > > If it's a bug that spi-topcliff-pch.c disables but never enables
-> > > wakeup, I think this should turn into two patches:
-> > >
-> > >   1) Fix the bug by enabling wakeup in suspend (or whatever the right
-> > >   fix is), and
-> > >
-> > >   2) Convert to generic PM, which may involve removing the
-> > >   wakeup-related code completely.
-> >
-> > Works for me.
-> 
-> The only problem here, is that the 2nd is already in the Mark's tree
-> and he doesn't do rebases.
-> So, it will be the other way around.
->
-Concluding from yours and Bjorn's suggestion, I will drop the
-device_wakeup_disable() call form .resume() and send the fix. I will also track
-the drivers who got similar upgrades and went un-noticed.
+The spi-sun4i driver already has the ability to do large transfers.
+However, the max transfer size reported is still fifo depth - 1.
 
-As Bjorn mentioned, the problem is that I don't have hardware to test, so I just
-replicated the legacy behaviour in generic by replacing
-pci_enable_wake(....,false) with device_wakeup_disable().
+Update the max transfer size reported to the max value possible.
 
-So, from now, while upgrading drivers with generic PM, should I completely drop
-the pci_enable_wake(....,false) calls if both .suspend() and .resume() try to
-wakeup-disable the device?
+Fixes: 196737912da5 ("spi: sun4i: Allow transfers larger than FIFO size")
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+---
+ drivers/spi/spi-sun4i.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks
-Vaibhav Gupta
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
+index cbfac6596fad..1fdfc6e6691d 100644
+--- a/drivers/spi/spi-sun4i.c
++++ b/drivers/spi/spi-sun4i.c
+@@ -198,7 +198,7 @@ static void sun4i_spi_set_cs(struct spi_device *spi, bool enable)
+ 
+ static size_t sun4i_spi_max_transfer_size(struct spi_device *spi)
+ {
+-	return SUN4I_FIFO_DEPTH - 1;
++	return SUN4I_MAX_XFER_SIZE - 1;
+ }
+ 
+ static int sun4i_spi_transfer_one(struct spi_master *master,
+-- 
+2.27.0
+
