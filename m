@@ -2,153 +2,168 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93002230503
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jul 2020 10:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0565B230538
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jul 2020 10:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727878AbgG1ILI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Jul 2020 04:11:08 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:54328 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727856AbgG1ILH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jul 2020 04:11:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1595923866; x=1627459866;
-  h=references:from:to:cc:subject:in-reply-to:date:
-   message-id:mime-version;
-  bh=4348zSQswPRrH20ua261huy5XthZgYClc7uZbxDiXss=;
-  b=BloFnMYMDUNlfRnyraH1QD+B6QqXi8D6yahBhbSmU7Rn6rIygDFoutO6
-   u1gubUlWHJP1Nin5KJrdtPf24tUGu5NToQD25fMw054axTMYuZl2kI5pb
-   jG+LomAq41K4p9G0e52b5IcxrrgETbmBvnyjZrxu4v7Kh+ZjsnRxb2wDE
-   SjorAN/XwUkGjjQlCs4yRK9NFYGjG6VOANWb2UVxq0NFH1v5+WTfUmxnk
-   Qg+lvl3vqRSVFZhQ/1bPN/FUYpqs0deGPsE3wPMmkYsj9Tnly3VftLlYE
-   3U45BDPl1ZTaSLzdQvm8UrvjMjs0gwcdG3sWupJYIV6ZuDdlI2jeYSJiq
-   w==;
-IronPort-SDR: u0DQ0eKwBMew6XCiVSZ6TNgz94sf4p5fEp5KHy8R4066+bkamL02aFIDa/PnprqNt7eLr68+0O
- bdwaZdRFNX3d+PZCspEgWoLORjBExQfhW1PLxMGaME/1kwbkmFz8kyYFa9qIp3tufYwjk+pPtN
- yA1WkCcvGJwbSgD2GHiaHUjIV/LjQK2/8u8bNmSJdo3H8SmAWPfolmFlnNV80IoZpcshXAYiPe
- q7Cms7O27/x1xxDD5OZksFJvaZIS2LZWhn70jtDPdXSklcadkY8v3um+VybJnSOzHzkwoVqZR1
- 3LQ=
-X-IronPort-AV: E=Sophos;i="5.75,405,1589266800"; 
-   d="scan'208";a="83485204"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jul 2020 01:11:06 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 28 Jul 2020 01:10:19 -0700
-Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
- via Frontend Transport; Tue, 28 Jul 2020 01:11:03 -0700
-References: <20200724111404.13293-1-lars.povlsen@microchip.com> <20200724111404.13293-5-lars.povlsen@microchip.com> <20200727203847.GA782308@bogus>
-From:   Lars Povlsen <lars.povlsen@microchip.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Lars Povlsen <lars.povlsen@microchip.com>,
-        Mark Brown <broonie@kernel.org>, Peter Rosin <peda@axentia.se>,
-        "Microchip Linux Driver Support" <UNGLinuxDriver@microchip.com>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v4 4/6] dt-bindings: snps,dw-apb-ssi: Add sparx5 support, plus rx-sample-delay-ns property
-In-Reply-To: <20200727203847.GA782308@bogus>
-Date:   Tue, 28 Jul 2020 10:11:02 +0200
-Message-ID: <87sgdcf4a1.fsf@soft-dev15.microsemi.net>
+        id S1728096AbgG1IWG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Tue, 28 Jul 2020 04:22:06 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:36767 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727878AbgG1IWF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jul 2020 04:22:05 -0400
+X-Originating-IP: 86.206.138.11
+Received: from windsurf.home (lfbn-tou-1-301-11.w86-206.abo.wanadoo.fr [86.206.138.11])
+        (Authenticated sender: thomas.petazzoni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id B9B91E0015;
+        Tue, 28 Jul 2020 08:22:02 +0000 (UTC)
+Date:   Tue, 28 Jul 2020 10:22:01 +0200
+From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To:     Jan =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>
+Cc:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>
+Subject: Re: High CPU load when using MAX14830 SPI UART controller
+Message-ID: <20200728102201.515e2196@windsurf.home>
+In-Reply-To: <070e2fa9-bacf-4d6e-a62a-63b3db55c25e@cesnet.cz>
+References: <20200519163353.20c03286@windsurf.home>
+        <4c5c972b-c8b8-4326-a1f9-438d88217a4a@cesnet.cz>
+        <20200721155139.40fdb835@windsurf.home>
+        <070e2fa9-bacf-4d6e-a62a-63b3db55c25e@cesnet.cz>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello Jan,
 
-Rob Herring writes:
+On Tue, 21 Jul 2020 16:20:02 +0200
+Jan Kundrát <jan.kundrat@cesnet.cz> wrote:
 
-> On Fri, Jul 24, 2020 at 01:14:02PM +0200, Lars Povlsen wrote:
->> This has the following changes for the snps,dw-apb-ss DT bindings:
->>
->> - Add "microchip,sparx5-spi" as the compatible for the Sparx5 SoC
->>   controller
->>
->> - Add the property "rx-sample-delay-ns"
->>
->> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
->> ---
->>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 21 +++++++++++++++++++
->>  1 file changed, 21 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
->> index c62cbe79f00dd..c0adaad1aa695 100644
->> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
->> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
->> @@ -36,6 +36,8 @@ properties:
->>                - mscc,ocelot-spi
->>                - mscc,jaguar2-spi
->>            - const: snps,dw-apb-ssi
->> +      - description: Microchip Sparx5 SoC SPI Controller
->> +        const: microchip,sparx5-spi
->>        - description: Amazon Alpine SPI Controller
->>          const: amazon,alpine-dw-apb-ssi
->>        - description: Renesas RZ/N1 SPI Controller
->> @@ -93,6 +95,12 @@ properties:
->>        - const: tx
->>        - const: rx
->>
->> +  rx-sample-delay-ns:
->> +    description: Default value of the rx-sample-delay-ns property.
->> +      This value will be used if the property is not explicitly defined
->> +      for a SPI slave device. Default value is 0. See below.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->
-> Don't need a type for properties with unit suffixes.
->
-> Also, add:
->
-> 'default: 0'
->
+> I have no code, but according to the datasheet, it's the "RTimeout" bit 
+> (Line Status Register, bit 0). If properly configured (RxTimeOut set and 
+> the interrupt routing enabled via LSRIntEn[0], the "RTimeoutIEn" bit), 
+> we're supposed to get ISR[0] set upon this timeout.
+> 
+> I have not tried it, I just read the datasheet a few years ago. When you 
+> have patches, I'll be happy to test them (likely only in September, though, 
+> because of vacations).
 
-Hi Rob!
+Wow, this was really useful! I had somehow missed this when glancing
+through datasheet, but now that you pointed out, I implemented the
+following patch, which:
 
-Thank you for your input, all duly noted.
+ - Uses the RX timeout interrupt to fire an interrupt when there's data
+   in the RX FIFO *and* no characters have been received for a duration
+   equivalent to the reception time of 4 characters.
 
----Lars
+ - Uses the RX FIFO trigger interrupt to trigger an interrupt when the
+   RX FIFO is half full. This ensure that if we have a continuous flow
+   of data, we do get interrupts.
 
->> +
->>  patternProperties:
->>    "^.*@[0-9a-f]+$":
->>      type: object
->> @@ -107,6 +115,13 @@ patternProperties:
->>        spi-tx-bus-width:
->>          const: 1
->>
->> +      rx-sample-delay-ns:
->> +        description: SPI Rx sample delay offset, unit is nanoseconds.
->> +          The delay from the default sample time before the actual
->> +          sample of the rxd input signal occurs. The "rx_sample_delay"
->> +          is an optional feature of the designware controller, and the
->> +          upper limit is also subject to controller configuration.
->> +
->>  unevaluatedProperties: false
->>
->>  required:
->> @@ -129,5 +144,11 @@ examples:
->>        num-cs = <2>;
->>        cs-gpios = <&gpio0 13 0>,
->>                   <&gpio0 14 0>;
->> +      rx-sample-delay-ns = <3>;
->> +      spi-flash@1 {
->> +        compatible = "spi-nand";
->> +        reg = <1>;
->> +        rx-sample-delay-ns = <7>;
->> +      };
->>      };
->>  ...
->> --
->> 2.27.0
->>
+Thanks to that, in my scenario of receiving 20 bytes of data every
+16ms, instead of having multiple interrupts each picking max 3-4 bytes
+of data from the RX FIFO, I get a single interrupt that picks up the
+full 20 bytes of data in one go. Result: CPU consumption goes down from
+25% to 5%.
+
+Here is the patch that I have so far. I'm waiting on more testing to
+happen, and if more extensive testing is successful, I'll submit the
+patch properly. The question is what are the right thresholds. In a
+separate e-mail, Andy Shevchenko suggested the "4 characters timeout",
+which I used arbitrarily. Same question for the RX FIFO trigger at half
+the FIFO size.
+
+Best regards,
+
+Thomas
+
+commit e958c6087aa889f421323314cb33ad9756ee033e
+Author: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date:   Wed Jul 22 16:18:14 2020 +0200
+
+    serial: max310x: rework RX interrupt handling
+    
+    Currently, the RX interrupt logic uses the RXEMPTY interrupt, with the
+    RXEMPTYINV bit set, which means we get an RX interrupt as soon as the
+    RX FIFO is non-empty.
+    
+    However, with the MAX310X having a FIFO of 128 bytes, this makes very
+    poor use of the FIFO: we trigger an interrupt as soon as the RX FIFO
+    has one byte, which means a lot of interrupts, each only collecting a
+    few bytes from the FIFO, causing a significant CPU load.
+    
+    Instead this commit relies on two other RX interrupt events:
+    
+     - MAX310X_IRQ_RXFIFO_BIT, which triggers when the RX FIFO has reached
+       a certain threshold, which we define to be half of the FIFO
+       size. This ensure we get an interrupt before the RX FIFO fills up.
+    
+     - MAX310X_LSR_RXTO_BIT, which triggers when the RX FIFO has received
+       some bytes, and then no more bytes are received for a certain
+       time. Arbitrarily, this time is defined to the time is takes to
+       receive 4 characters.
+    
+    On a Microchip SAMA5D3 platform that is receiving 20 bytes every 16ms
+    over one MAX310X UART, this patch has allowed to reduce the CPU
+    consumption of the interrupt handler thread from ~25% to 6-7%.
+    
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+index 8434bd5a8ec78..a1c80850d77ed 100644
+--- a/drivers/tty/serial/max310x.c
++++ b/drivers/tty/serial/max310x.c
+@@ -1056,9 +1056,9 @@ static int max310x_startup(struct uart_port *port)
+ 	max310x_port_update(port, MAX310X_MODE1_REG,
+ 			    MAX310X_MODE1_TRNSCVCTRL_BIT, 0);
+ 
+-	/* Configure MODE2 register & Reset FIFOs*/
+-	val = MAX310X_MODE2_RXEMPTINV_BIT | MAX310X_MODE2_FIFORST_BIT;
+-	max310x_port_write(port, MAX310X_MODE2_REG, val);
++	/* Reset FIFOs*/
++	max310x_port_write(port, MAX310X_MODE2_REG,
++			   MAX310X_MODE2_FIFORST_BIT);
+ 	max310x_port_update(port, MAX310X_MODE2_REG,
+ 			    MAX310X_MODE2_FIFORST_BIT, 0);
+ 
+@@ -1086,8 +1086,27 @@ static int max310x_startup(struct uart_port *port)
+ 	/* Clear IRQ status register */
+ 	max310x_port_read(port, MAX310X_IRQSTS_REG);
+ 
+-	/* Enable RX, TX, CTS change interrupts */
+-	val = MAX310X_IRQ_RXEMPTY_BIT | MAX310X_IRQ_TXEMPTY_BIT;
++	/*
++	 * Let's ask for an interrupt after a timeout equivalent to
++	 * the receiving time of 4 characters after the last character
++	 * has been received.
++	 */
++	max310x_port_write(port, MAX310X_RXTO_REG, 4);
++
++	/*
++	 * Make sure we also get RX interrupts when the RX FIFO is
++	 * filling up quickly, so get an interrupt when half of the RX
++	 * FIFO has been filled in.
++	 */
++	max310x_port_write(port, MAX310X_FIFOTRIGLVL_REG,
++			   MAX310X_FIFOTRIGLVL_RX(MAX310X_FIFO_SIZE / 2));
++
++	/* Enable RX timeout interrupt in LSR */
++	max310x_port_write(port, MAX310X_LSR_IRQEN_REG,
++			   MAX310X_LSR_RXTO_BIT);
++
++	/* Enable LSR, RX FIFO trigger, CTS change interrupts */
++	val = MAX310X_IRQ_LSR_BIT  | MAX310X_IRQ_RXFIFO_BIT | MAX310X_IRQ_TXEMPTY_BIT;
+ 	max310x_port_write(port, MAX310X_IRQEN_REG, val | MAX310X_IRQ_CTS_BIT);
+ 
+ 	return 0;
+
+
+
 
 -- 
-Lars Povlsen,
-Microchip
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
