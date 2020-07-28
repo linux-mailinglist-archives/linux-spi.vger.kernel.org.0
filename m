@@ -2,168 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0565B230538
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jul 2020 10:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CA5230812
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jul 2020 12:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbgG1IWG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 28 Jul 2020 04:22:06 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:36767 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727878AbgG1IWF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Jul 2020 04:22:05 -0400
-X-Originating-IP: 86.206.138.11
-Received: from windsurf.home (lfbn-tou-1-301-11.w86-206.abo.wanadoo.fr [86.206.138.11])
-        (Authenticated sender: thomas.petazzoni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id B9B91E0015;
-        Tue, 28 Jul 2020 08:22:02 +0000 (UTC)
-Date:   Tue, 28 Jul 2020 10:22:01 +0200
-From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To:     Jan =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>
-Cc:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>
-Subject: Re: High CPU load when using MAX14830 SPI UART controller
-Message-ID: <20200728102201.515e2196@windsurf.home>
-In-Reply-To: <070e2fa9-bacf-4d6e-a62a-63b3db55c25e@cesnet.cz>
-References: <20200519163353.20c03286@windsurf.home>
-        <4c5c972b-c8b8-4326-a1f9-438d88217a4a@cesnet.cz>
-        <20200721155139.40fdb835@windsurf.home>
-        <070e2fa9-bacf-4d6e-a62a-63b3db55c25e@cesnet.cz>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1728775AbgG1Ksd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Jul 2020 06:48:33 -0400
+Received: from mailout08.rmx.de ([94.199.90.85]:50245 "EHLO mailout08.rmx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728588AbgG1Ksc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 28 Jul 2020 06:48:32 -0400
+X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Jul 2020 06:48:31 EDT
+Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailout08.rmx.de (Postfix) with ESMTPS id 4BGCJ33CGdzMp4W;
+        Tue, 28 Jul 2020 12:16:19 +0200 (CEST)
+Received: from mta.arri.de (unknown [217.111.95.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kdin02.retarus.com (Postfix) with ESMTPS id 4BGCHf5Pxyz2TRjk;
+        Tue, 28 Jul 2020 12:15:58 +0200 (CEST)
+Received: from N95HX1G2.wgnetz.xx (192.168.54.116) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 28 Jul
+ 2020 12:08:44 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Christian Eggers" <ceggers@arri.de>, <stable@vger.kernel.org>
+Subject: [PATCH] spi: spidev: Align buffers for DMA
+Date:   Tue, 28 Jul 2020 12:08:32 +0200
+Message-ID: <20200728100832.24788-1-ceggers@arri.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.54.116]
+X-RMX-ID: 20200728-121558-4BGCHf5Pxyz2TRjk-0@kdin02
+X-RMX-SOURCE: 217.111.95.66
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Jan,
+Simply copying all xfers from userspace into one bounce buffer causes
+alignment problems if the SPI controller uses DMA.
 
-On Tue, 21 Jul 2020 16:20:02 +0200
-Jan Kundrát <jan.kundrat@cesnet.cz> wrote:
+Ensure that all transfer data blocks within the rx and tx bounce buffers
+are aligned for DMA (according to ARCH_KMALLOC_MINALIGN).
 
-> I have no code, but according to the datasheet, it's the "RTimeout" bit 
-> (Line Status Register, bit 0). If properly configured (RxTimeOut set and 
-> the interrupt routing enabled via LSRIntEn[0], the "RTimeoutIEn" bit), 
-> we're supposed to get ISR[0] set upon this timeout.
-> 
-> I have not tried it, I just read the datasheet a few years ago. When you 
-> have patches, I'll be happy to test them (likely only in September, though, 
-> because of vacations).
+Alignment may increase the usage of the bounce buffers. In some cases,
+the buffers may need to be increased using the "bufsiz" module
+parameter.
 
-Wow, this was really useful! I had somehow missed this when glancing
-through datasheet, but now that you pointed out, I implemented the
-following patch, which:
+Signed-off-by: Christian Eggers <ceggers@arri.de>
+Cc: stable@vger.kernel.org
+---
+ drivers/spi/spidev.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
- - Uses the RX timeout interrupt to fire an interrupt when there's data
-   in the RX FIFO *and* no characters have been received for a duration
-   equivalent to the reception time of 4 characters.
-
- - Uses the RX FIFO trigger interrupt to trigger an interrupt when the
-   RX FIFO is half full. This ensure that if we have a continuous flow
-   of data, we do get interrupts.
-
-Thanks to that, in my scenario of receiving 20 bytes of data every
-16ms, instead of having multiple interrupts each picking max 3-4 bytes
-of data from the RX FIFO, I get a single interrupt that picks up the
-full 20 bytes of data in one go. Result: CPU consumption goes down from
-25% to 5%.
-
-Here is the patch that I have so far. I'm waiting on more testing to
-happen, and if more extensive testing is successful, I'll submit the
-patch properly. The question is what are the right thresholds. In a
-separate e-mail, Andy Shevchenko suggested the "4 characters timeout",
-which I used arbitrarily. Same question for the RX FIFO trigger at half
-the FIFO size.
-
-Best regards,
-
-Thomas
-
-commit e958c6087aa889f421323314cb33ad9756ee033e
-Author: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date:   Wed Jul 22 16:18:14 2020 +0200
-
-    serial: max310x: rework RX interrupt handling
-    
-    Currently, the RX interrupt logic uses the RXEMPTY interrupt, with the
-    RXEMPTYINV bit set, which means we get an RX interrupt as soon as the
-    RX FIFO is non-empty.
-    
-    However, with the MAX310X having a FIFO of 128 bytes, this makes very
-    poor use of the FIFO: we trigger an interrupt as soon as the RX FIFO
-    has one byte, which means a lot of interrupts, each only collecting a
-    few bytes from the FIFO, causing a significant CPU load.
-    
-    Instead this commit relies on two other RX interrupt events:
-    
-     - MAX310X_IRQ_RXFIFO_BIT, which triggers when the RX FIFO has reached
-       a certain threshold, which we define to be half of the FIFO
-       size. This ensure we get an interrupt before the RX FIFO fills up.
-    
-     - MAX310X_LSR_RXTO_BIT, which triggers when the RX FIFO has received
-       some bytes, and then no more bytes are received for a certain
-       time. Arbitrarily, this time is defined to the time is takes to
-       receive 4 characters.
-    
-    On a Microchip SAMA5D3 platform that is receiving 20 bytes every 16ms
-    over one MAX310X UART, this patch has allowed to reduce the CPU
-    consumption of the interrupt handler thread from ~25% to 6-7%.
-    
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index 8434bd5a8ec78..a1c80850d77ed 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -1056,9 +1056,9 @@ static int max310x_startup(struct uart_port *port)
- 	max310x_port_update(port, MAX310X_MODE1_REG,
- 			    MAX310X_MODE1_TRNSCVCTRL_BIT, 0);
- 
--	/* Configure MODE2 register & Reset FIFOs*/
--	val = MAX310X_MODE2_RXEMPTINV_BIT | MAX310X_MODE2_FIFORST_BIT;
--	max310x_port_write(port, MAX310X_MODE2_REG, val);
-+	/* Reset FIFOs*/
-+	max310x_port_write(port, MAX310X_MODE2_REG,
-+			   MAX310X_MODE2_FIFORST_BIT);
- 	max310x_port_update(port, MAX310X_MODE2_REG,
- 			    MAX310X_MODE2_FIFORST_BIT, 0);
- 
-@@ -1086,8 +1086,27 @@ static int max310x_startup(struct uart_port *port)
- 	/* Clear IRQ status register */
- 	max310x_port_read(port, MAX310X_IRQSTS_REG);
- 
--	/* Enable RX, TX, CTS change interrupts */
--	val = MAX310X_IRQ_RXEMPTY_BIT | MAX310X_IRQ_TXEMPTY_BIT;
-+	/*
-+	 * Let's ask for an interrupt after a timeout equivalent to
-+	 * the receiving time of 4 characters after the last character
-+	 * has been received.
-+	 */
-+	max310x_port_write(port, MAX310X_RXTO_REG, 4);
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 59e07675ef86..455e99c4958e 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -224,6 +224,11 @@ static int spidev_message(struct spidev_data *spidev,
+ 	for (n = n_xfers, k_tmp = k_xfers, u_tmp = u_xfers;
+ 			n;
+ 			n--, k_tmp++, u_tmp++) {
++		/* Ensure that also following allocations from rx_buf/tx_buf will meet
++		 * DMA alignment requirements.
++		 */
++		unsigned int len_aligned = ALIGN(u_tmp->len, ARCH_KMALLOC_MINALIGN);
 +
-+	/*
-+	 * Make sure we also get RX interrupts when the RX FIFO is
-+	 * filling up quickly, so get an interrupt when half of the RX
-+	 * FIFO has been filled in.
-+	 */
-+	max310x_port_write(port, MAX310X_FIFOTRIGLVL_REG,
-+			   MAX310X_FIFOTRIGLVL_RX(MAX310X_FIFO_SIZE / 2));
-+
-+	/* Enable RX timeout interrupt in LSR */
-+	max310x_port_write(port, MAX310X_LSR_IRQEN_REG,
-+			   MAX310X_LSR_RXTO_BIT);
-+
-+	/* Enable LSR, RX FIFO trigger, CTS change interrupts */
-+	val = MAX310X_IRQ_LSR_BIT  | MAX310X_IRQ_RXFIFO_BIT | MAX310X_IRQ_TXEMPTY_BIT;
- 	max310x_port_write(port, MAX310X_IRQEN_REG, val | MAX310X_IRQ_CTS_BIT);
+ 		k_tmp->len = u_tmp->len;
  
- 	return 0;
-
-
-
-
+ 		total += k_tmp->len;
+@@ -239,17 +244,17 @@ static int spidev_message(struct spidev_data *spidev,
+ 
+ 		if (u_tmp->rx_buf) {
+ 			/* this transfer needs space in RX bounce buffer */
+-			rx_total += k_tmp->len;
++			rx_total += len_aligned;
+ 			if (rx_total > bufsiz) {
+ 				status = -EMSGSIZE;
+ 				goto done;
+ 			}
+ 			k_tmp->rx_buf = rx_buf;
+-			rx_buf += k_tmp->len;
++			rx_buf += len_aligned;
+ 		}
+ 		if (u_tmp->tx_buf) {
+ 			/* this transfer needs space in TX bounce buffer */
+-			tx_total += k_tmp->len;
++			tx_total += len_aligned;
+ 			if (tx_total > bufsiz) {
+ 				status = -EMSGSIZE;
+ 				goto done;
+@@ -259,7 +264,7 @@ static int spidev_message(struct spidev_data *spidev,
+ 						(uintptr_t) u_tmp->tx_buf,
+ 					u_tmp->len))
+ 				goto done;
+-			tx_buf += k_tmp->len;
++			tx_buf += len_aligned;
+ 		}
+ 
+ 		k_tmp->cs_change = !!u_tmp->cs_change;
+@@ -293,16 +298,16 @@ static int spidev_message(struct spidev_data *spidev,
+ 		goto done;
+ 
+ 	/* copy any rx data out of bounce buffer */
+-	rx_buf = spidev->rx_buffer;
+-	for (n = n_xfers, u_tmp = u_xfers; n; n--, u_tmp++) {
++	for (n = n_xfers, k_tmp = k_xfers, u_tmp = u_xfers;
++			n;
++			n--, k_tmp++, u_tmp++) {
+ 		if (u_tmp->rx_buf) {
+ 			if (copy_to_user((u8 __user *)
+-					(uintptr_t) u_tmp->rx_buf, rx_buf,
++					(uintptr_t) u_tmp->rx_buf, k_tmp->rx_buf,
+ 					u_tmp->len)) {
+ 				status = -EFAULT;
+ 				goto done;
+ 			}
+-			rx_buf += u_tmp->len;
+ 		}
+ 	}
+ 	status = total;
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Christian Eggers
+Embedded software developer
+
+Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRA 57918
+Persoenlich haftender Gesellschafter: Arnold & Richter Cine Technik GmbH
+Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRB 54477
+Geschaeftsfuehrer: Dr. Michael Neuhaeuser; Stephan Schenk; Walter Trauninger; Markus Zeiler
+
