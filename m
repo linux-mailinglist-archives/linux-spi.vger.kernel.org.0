@@ -2,56 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DCD230F4A
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jul 2020 18:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B233230F4C
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jul 2020 18:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731428AbgG1Qbj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Jul 2020 12:31:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47226 "EHLO mail.kernel.org"
+        id S1731438AbgG1Qbp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Jul 2020 12:31:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47362 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731070AbgG1Qbi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 28 Jul 2020 12:31:38 -0400
+        id S1731437AbgG1Qbp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 28 Jul 2020 12:31:45 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D35132074F;
-        Tue, 28 Jul 2020 16:31:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F394B2074F;
+        Tue, 28 Jul 2020 16:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595953898;
-        bh=Y0EPEDkatR+hm/L7ATXN1AYrEx5ot0z2XTn8p1lfn9k=;
+        s=default; t=1595953904;
+        bh=uOlSz/K5CQEMSlJY2imn72GM1L/U1a0Z/O+/V2lbTsQ=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=XsRz5Yx7Izihr2u416eX8IBjcMS96IE8jzSRuNznwvv0+/j95cjao21EeiSrmjeZ3
-         65A97uQibhrgzNSHlpxwWWbCufCCH30RGGIlVKkElq2eLBIvQnWU3Imy2fYJJZVZt6
-         hArbZ6K4Vaqk3RsJ82a0O9wfFKLSIN2lacNA8/0k=
-Date:   Tue, 28 Jul 2020 17:31:20 +0100
+        b=Xh3Mi/uf3qB/eiCbAmaZ++dPUxW0HPHbAEbS07wRmYPAjLPBt/BZZfDAYvKrURqTS
+         zrt4YYzlzQsFFWHeSKyZqLj+j8cC7cwlt54Awzrvf3vgM1oRmPBOaT5sHNJDnS3++C
+         f9l0psRGPcl/aOUSQSHtVbLLTTkDZMNmLmJundOE=
+Date:   Tue, 28 Jul 2020 17:31:26 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Bjorn Helgaas <bjorn@helgaas.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-In-Reply-To: <20200727131742.82289-1-vaibhavgupta40@gmail.com>
-References: <CAHp75Vdo22ofbCktupFYbfYy6PQ609fsk5B6u2b3FpfKxs8OQg@mail.gmail.com> <20200727131742.82289-1-vaibhavgupta40@gmail.com>
-Subject: Re: [PATCH v2] spi: spi-topcliff-pch: drop call to wakeup-disable
-Message-Id: <159595388005.15302.1247752401935651695.b4-ty@kernel.org>
+To:     Jon Lin <jon.lin@rock-chips.com>
+Cc:     kernel@esmil.dk, heiko@sntech.de,
+        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20200723004356.6390-1-jon.lin@rock-chips.com>
+References: <20200723004356.6390-1-jon.lin@rock-chips.com>
+Subject: Re: [PATCH v3 1/3] spi: rockchip: Config spi rx dma burst size depend on xfer length
+Message-Id: <159595388006.15302.14458547695511068322.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 27 Jul 2020 18:47:43 +0530, Vaibhav Gupta wrote:
-> Before generic upgrade, both .suspend() and .resume() were invoking
-> pci_enable_wake(pci_dev, PCI_D3hot, 0). Hence, disabling wakeup in both
-> states. (Normal trend is .suspend() enables and .resume() disables the
-> wakeup.)
-> 
-> This was ambiguous and may be buggy. Instead of replicating the legacy
-> behavior, drop the wakeup-disable call.
-> 
-> [...]
+On Thu, 23 Jul 2020 08:43:54 +0800, Jon Lin wrote:
+> The burst length can be adjusted according to the transmission
+> length to improve the transmission rate
 
 Applied to
 
@@ -59,8 +48,12 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-topcliff-pch: drop call to wakeup-disable
-      commit: 15b413d93ccd0d26c29f005df82c299c8f14cbd6
+[1/3] spi: rockchip: Config spi rx dma burst size depend on xfer length
+      commit: 4d9ca632c847ab88f2f7e7e2747aea966f1390ce
+[2/3] spi: rockchip: Support 64-location deep FIFOs
+      commit: 13a96935e6f66bafb6da92791120546a4bf20889
+[3/3] spi: rockchip: Fix error in SPI slave pio read
+      commit: 4294e4accf8d695ea5605f6b189008b692e3e82c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
