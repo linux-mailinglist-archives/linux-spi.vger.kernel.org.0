@@ -2,138 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CA5230812
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jul 2020 12:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DCD230F4A
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jul 2020 18:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728775AbgG1Ksd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 28 Jul 2020 06:48:33 -0400
-Received: from mailout08.rmx.de ([94.199.90.85]:50245 "EHLO mailout08.rmx.de"
+        id S1731428AbgG1Qbj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Jul 2020 12:31:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728588AbgG1Ksc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 28 Jul 2020 06:48:32 -0400
-X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Jul 2020 06:48:31 EDT
-Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1731070AbgG1Qbi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 28 Jul 2020 12:31:38 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailout08.rmx.de (Postfix) with ESMTPS id 4BGCJ33CGdzMp4W;
-        Tue, 28 Jul 2020 12:16:19 +0200 (CEST)
-Received: from mta.arri.de (unknown [217.111.95.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by kdin02.retarus.com (Postfix) with ESMTPS id 4BGCHf5Pxyz2TRjk;
-        Tue, 28 Jul 2020 12:15:58 +0200 (CEST)
-Received: from N95HX1G2.wgnetz.xx (192.168.54.116) by mta.arri.de
- (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 28 Jul
- 2020 12:08:44 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Christian Eggers" <ceggers@arri.de>, <stable@vger.kernel.org>
-Subject: [PATCH] spi: spidev: Align buffers for DMA
-Date:   Tue, 28 Jul 2020 12:08:32 +0200
-Message-ID: <20200728100832.24788-1-ceggers@arri.de>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.54.116]
-X-RMX-ID: 20200728-121558-4BGCHf5Pxyz2TRjk-0@kdin02
-X-RMX-SOURCE: 217.111.95.66
+        by mail.kernel.org (Postfix) with ESMTPSA id D35132074F;
+        Tue, 28 Jul 2020 16:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595953898;
+        bh=Y0EPEDkatR+hm/L7ATXN1AYrEx5ot0z2XTn8p1lfn9k=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=XsRz5Yx7Izihr2u416eX8IBjcMS96IE8jzSRuNznwvv0+/j95cjao21EeiSrmjeZ3
+         65A97uQibhrgzNSHlpxwWWbCufCCH30RGGIlVKkElq2eLBIvQnWU3Imy2fYJJZVZt6
+         hArbZ6K4Vaqk3RsJ82a0O9wfFKLSIN2lacNA8/0k=
+Date:   Tue, 28 Jul 2020 17:31:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Bjorn Helgaas <bjorn@helgaas.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+In-Reply-To: <20200727131742.82289-1-vaibhavgupta40@gmail.com>
+References: <CAHp75Vdo22ofbCktupFYbfYy6PQ609fsk5B6u2b3FpfKxs8OQg@mail.gmail.com> <20200727131742.82289-1-vaibhavgupta40@gmail.com>
+Subject: Re: [PATCH v2] spi: spi-topcliff-pch: drop call to wakeup-disable
+Message-Id: <159595388005.15302.1247752401935651695.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Simply copying all xfers from userspace into one bounce buffer causes
-alignment problems if the SPI controller uses DMA.
+On Mon, 27 Jul 2020 18:47:43 +0530, Vaibhav Gupta wrote:
+> Before generic upgrade, both .suspend() and .resume() were invoking
+> pci_enable_wake(pci_dev, PCI_D3hot, 0). Hence, disabling wakeup in both
+> states. (Normal trend is .suspend() enables and .resume() disables the
+> wakeup.)
+> 
+> This was ambiguous and may be buggy. Instead of replicating the legacy
+> behavior, drop the wakeup-disable call.
+> 
+> [...]
 
-Ensure that all transfer data blocks within the rx and tx bounce buffers
-are aligned for DMA (according to ARCH_KMALLOC_MINALIGN).
+Applied to
 
-Alignment may increase the usage of the bounce buffers. In some cases,
-the buffers may need to be increased using the "bufsiz" module
-parameter.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Signed-off-by: Christian Eggers <ceggers@arri.de>
-Cc: stable@vger.kernel.org
----
- drivers/spi/spidev.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+Thanks!
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 59e07675ef86..455e99c4958e 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -224,6 +224,11 @@ static int spidev_message(struct spidev_data *spidev,
- 	for (n = n_xfers, k_tmp = k_xfers, u_tmp = u_xfers;
- 			n;
- 			n--, k_tmp++, u_tmp++) {
-+		/* Ensure that also following allocations from rx_buf/tx_buf will meet
-+		 * DMA alignment requirements.
-+		 */
-+		unsigned int len_aligned = ALIGN(u_tmp->len, ARCH_KMALLOC_MINALIGN);
-+
- 		k_tmp->len = u_tmp->len;
- 
- 		total += k_tmp->len;
-@@ -239,17 +244,17 @@ static int spidev_message(struct spidev_data *spidev,
- 
- 		if (u_tmp->rx_buf) {
- 			/* this transfer needs space in RX bounce buffer */
--			rx_total += k_tmp->len;
-+			rx_total += len_aligned;
- 			if (rx_total > bufsiz) {
- 				status = -EMSGSIZE;
- 				goto done;
- 			}
- 			k_tmp->rx_buf = rx_buf;
--			rx_buf += k_tmp->len;
-+			rx_buf += len_aligned;
- 		}
- 		if (u_tmp->tx_buf) {
- 			/* this transfer needs space in TX bounce buffer */
--			tx_total += k_tmp->len;
-+			tx_total += len_aligned;
- 			if (tx_total > bufsiz) {
- 				status = -EMSGSIZE;
- 				goto done;
-@@ -259,7 +264,7 @@ static int spidev_message(struct spidev_data *spidev,
- 						(uintptr_t) u_tmp->tx_buf,
- 					u_tmp->len))
- 				goto done;
--			tx_buf += k_tmp->len;
-+			tx_buf += len_aligned;
- 		}
- 
- 		k_tmp->cs_change = !!u_tmp->cs_change;
-@@ -293,16 +298,16 @@ static int spidev_message(struct spidev_data *spidev,
- 		goto done;
- 
- 	/* copy any rx data out of bounce buffer */
--	rx_buf = spidev->rx_buffer;
--	for (n = n_xfers, u_tmp = u_xfers; n; n--, u_tmp++) {
-+	for (n = n_xfers, k_tmp = k_xfers, u_tmp = u_xfers;
-+			n;
-+			n--, k_tmp++, u_tmp++) {
- 		if (u_tmp->rx_buf) {
- 			if (copy_to_user((u8 __user *)
--					(uintptr_t) u_tmp->rx_buf, rx_buf,
-+					(uintptr_t) u_tmp->rx_buf, k_tmp->rx_buf,
- 					u_tmp->len)) {
- 				status = -EFAULT;
- 				goto done;
- 			}
--			rx_buf += u_tmp->len;
- 		}
- 	}
- 	status = total;
--- 
-Christian Eggers
-Embedded software developer
+[1/1] spi: spi-topcliff-pch: drop call to wakeup-disable
+      commit: 15b413d93ccd0d26c29f005df82c299c8f14cbd6
 
-Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRA 57918
-Persoenlich haftender Gesellschafter: Arnold & Richter Cine Technik GmbH
-Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRB 54477
-Geschaeftsfuehrer: Dr. Michael Neuhaeuser; Stephan Schenk; Walter Trauninger; Markus Zeiler
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
