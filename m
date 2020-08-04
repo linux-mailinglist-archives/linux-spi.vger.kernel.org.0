@@ -2,80 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C5323A9EC
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Aug 2020 17:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E499A23B517
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Aug 2020 08:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728190AbgHCPx3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Aug 2020 11:53:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43756 "EHLO mail.kernel.org"
+        id S1725864AbgHDGlX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Aug 2020 02:41:23 -0400
+Received: from mailout11.rmx.de ([94.199.88.76]:39641 "EHLO mailout11.rmx.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728090AbgHCPx3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 3 Aug 2020 11:53:29 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725811AbgHDGlW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 4 Aug 2020 02:41:22 -0400
+Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 995EC207FB;
-        Mon,  3 Aug 2020 15:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596470008;
-        bh=JABhoVBSZpIh4BV5/VjfrZb0SNvOA2zWIR1+c++uwWI=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=X5MS31zDGgxIQ0QWVtqgkg6n3d4SEKFKT7kpwWJisX6E6x+MqkqGjSVb6Mj1kKV9Q
-         vCDE5NckzKPul2Ud131Hw+/c2ocEnpNnUctPoU6tAOQUup2f5pKeBelFhKhM5gXpnx
-         6xvcp91mL28p62fYcPlju+cNNXY61njbth/lQ9nc=
-Date:   Mon, 03 Aug 2020 16:53:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        linux-spi@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Octavian Purdila <octavian.purdila@intel.com>
-In-Reply-To: <a8c3205088a969dc8410eec1eba9aface60f36af.1596451035.git.lukas@wunner.de>
-References: <a8c3205088a969dc8410eec1eba9aface60f36af.1596451035.git.lukas@wunner.de>
-Subject: Re: [PATCH] spi: Prevent adding devices below an unregistering controller
-Message-Id: <159646998788.2734.17638663314582550308.b4-ty@kernel.org>
+        by mailout11.rmx.de (Postfix) with ESMTPS id 4BLQBk6YTbz41h3;
+        Tue,  4 Aug 2020 08:41:18 +0200 (CEST)
+Received: from mta.arri.de (unknown [217.111.95.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kdin02.retarus.com (Postfix) with ESMTPS id 4BLQBN1kYlz2TTKG;
+        Tue,  4 Aug 2020 08:41:00 +0200 (CEST)
+Received: from n95hx1g2.localnet (192.168.54.81) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 4 Aug
+ 2020 08:40:53 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] eeprom: at25: allow page sizes greater than 16 bit
+Date:   Tue, 4 Aug 2020 08:40:52 +0200
+Message-ID: <9183924.TykLrII94J@n95hx1g2>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <20200727111218.26926-1-ceggers@arri.de>
+References: <20200727111218.26926-1-ceggers@arri.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [192.168.54.81]
+X-RMX-ID: 20200804-084104-4BLQBN1kYlz2TTKG-0@kdin02
+X-RMX-SOURCE: 217.111.95.66
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 3 Aug 2020 13:09:01 +0200, Lukas Wunner wrote:
-> CONFIG_OF_DYNAMIC and CONFIG_ACPI allow adding SPI devices at runtime
-> using a DeviceTree overlay or DSDT patch.  CONFIG_SPI_SLAVE allows the
-> same via sysfs.
+Ping?
+
+On Monday, 27 July 2020, 13:12:18 CEST, Christian Eggers wrote:
+> Storage technologies like FRAM have no "write pages", the whole chip can
+> be written within one SPI transfer. For these chips, the page size can
+> be set equal to the device size. Currently available devices are already
+> bigger than 64 kiB.
 > 
-> But there are no precautions to prevent adding a device below a
-> controller that's being removed.  Such a device is unusable and may not
-> even be able to unbind cleanly as it becomes inaccessible once the
-> controller has been torn down.  E.g. it is then impossible to quiesce
-> the device's interrupt.
+> Signed-off-by: Christian Eggers <ceggers@arri.de>
+> ---
+>  drivers/misc/eeprom/at25.c | 2 +-
+>  include/linux/spi/eeprom.h | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> [...]
+> diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
+> index cde9a2fc1325..0e7c8dc01195 100644
+> --- a/drivers/misc/eeprom/at25.c
+> +++ b/drivers/misc/eeprom/at25.c
+> @@ -261,7 +261,7 @@ static int at25_fw_to_chip(struct device *dev, struct
+> spi_eeprom *chip)
+> 
+>  	if (device_property_read_u32(dev, "pagesize", &val) == 0 ||
+>  	    device_property_read_u32(dev, "at25,page-size", &val) == 0) {
+> -		chip->page_size = (u16)val;
+> +		chip->page_size = val;
+>  	} else {
+>  		dev_err(dev, "Error: missing \"pagesize\" property\n");
+>  		return -ENODEV;
+> diff --git a/include/linux/spi/eeprom.h b/include/linux/spi/eeprom.h
+> index aceccf9c71fb..1cca3dd5a748 100644
+> --- a/include/linux/spi/eeprom.h
+> +++ b/include/linux/spi/eeprom.h
+> @@ -14,7 +14,7 @@
+>  struct spi_eeprom {
+>  	u32		byte_len;
+>  	char		name[10];
+> -	u16		page_size;		/* for writes */
+> +	u32		page_size;		/* for writes */
+>  	u16		flags;
+>  #define	EE_ADDR1	0x0001			/*  8 bit addrs */
+>  #define	EE_ADDR2	0x0002			/* 16 bit addrs */
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thanks!
 
-[1/1] spi: Prevent adding devices below an unregistering controller
-      commit: ddf75be47ca748f8b12d28ac64d624354fddf189
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
