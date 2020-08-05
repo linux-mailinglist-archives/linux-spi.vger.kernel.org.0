@@ -2,86 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 369EE23CDBA
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Aug 2020 19:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930FD23CDB0
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Aug 2020 19:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728978AbgHERl7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Aug 2020 13:41:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42146 "EHLO mail.kernel.org"
+        id S1728954AbgHERll (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Aug 2020 13:41:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40084 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728900AbgHERkV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 5 Aug 2020 13:40:21 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1020622CAE;
-        Wed,  5 Aug 2020 11:01:47 +0000 (UTC)
+        id S1728770AbgHERdO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 5 Aug 2020 13:33:14 -0400
+Subject: Re: [GIT PULL] SPI updates for v5.9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596625308;
-        bh=E48uURU/e4C3y5TjlfnNrUSBQnpVCadc+z+Vd9h/kdU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vjiEPe14+OtcSgTUe6IvKe9v7YtFnMHcqLyu1+yzJV2lHJlinrgdZttz+o/8wF2Pn
-         kjWCfnTxkN2Yt08lbE1MOKOyiYlxVVYDwGj7fNWqJoh2bRTgpr9ZnCA1QsL5FJRKXD
-         2Qe0hIMyvTa1JtLSs+tAhtngoaoynx1LzvqEakcg=
-Date:   Wed, 5 Aug 2020 12:01:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     amelie.delaunay@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-Subject: Re: [PATCH 12/18] spi: stm32: move spi disable out of irq handler
-Message-ID: <20200805110125.GG5556@sirena.org.uk>
-References: <1596610933-32599-1-git-send-email-alain.volmat@st.com>
- <1596610933-32599-13-git-send-email-alain.volmat@st.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KR/qxknboQ7+Tpez"
-Content-Disposition: inline
-In-Reply-To: <1596610933-32599-13-git-send-email-alain.volmat@st.com>
-X-Cookie: Fast, cheap, good: pick two.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        s=default; t=1596648794;
+        bh=Ygph5uU++bkFDZq+Z0NCpFq2qyszFtu0CEY6qDf+dew=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=gaoIR0bwnkY5bYk8fIb0rGKatYL9BbW+ne5AjRfckTE43yl8A0xq8g+uiGO8VMZNB
+         Rp14Vv4lb9NpfRGOD3sEbObTLMimo1S/yuCakmQAonNK7L/gXrfEPL0DoRXheY6X9l
+         Cpun6VlYhLZFTlk/Eeua0PXChVrzTpK69bG+Q/I8=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200803124114.2B1812054F@mail.kernel.org>
+References: <20200803124114.2B1812054F@mail.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200803124114.2B1812054F@mail.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.9
+X-PR-Tracked-Commit-Id: 11ba28229f8258164731e42f4c3e93762cb6578e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b171373902b06d1b5a775de74178bf1527fee6cc
+Message-Id: <159664879424.18421.2442649014891589713.pr-tracker-bot@kernel.org>
+Date:   Wed, 05 Aug 2020 17:33:14 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The pull request you sent on Mon, 03 Aug 2020 13:39:59 +0100:
 
---KR/qxknboQ7+Tpez
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.9
 
-On Wed, Aug 05, 2020 at 09:02:07AM +0200, Alain Volmat wrote:
-> From: Antonio Borneo <antonio.borneo@st.com>
->=20
-> The spi disable could potentially require some time to finish.
-> It has to be executed at the end of a transfer, but there is
-> no reason to call it in the irq handler.
->=20
-> Simplify the irq handler by moving out the spi disable. The
-> synchronization through xfer_completion is used to defer the
-> execution of spi disable.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b171373902b06d1b5a775de74178bf1527fee6cc
 
-Should this be an unprepare_transfer_hardware() operation?  That would
-allow the framework to take care of scheduling this in an appropriate
-context with the added advantage of not needing to do it when there's
-another message scheduled immediately.
+Thank you!
 
---KR/qxknboQ7+Tpez
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8qkYUACgkQJNaLcl1U
-h9Amcwf/Z9jbsoaJGZe0lTnEB+ZN1x7Xo629kRG1It/WXDUx01vXa/0BIFFomSB8
-5z4skhqGXkfncS+6lCZzBW1dJjVMTxJTXztD4zCbb45cYbGA+rjWIn2JPMvHLLxO
-swSm5Poy0PDGddU6aVh9PrZgMJXe6z5+hogGuIfxuPIdDi0gudqZ6mxH1N7emcQh
-52kzLDjvPtfeYESQYhtaCyD/MDbrAvSPC/946BHXzIcDWpWeHJIsdNUQCghTUHHg
-D3dpBhZhYrJfaE8Iv81hlGdlEbzrRDsmdJLi918xEECHBPWEoKItosC0DRKFVo2q
-/gSifjQBt0a6jA65RbRP4i8WXRUTNA==
-=6vOj
------END PGP SIGNATURE-----
-
---KR/qxknboQ7+Tpez--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
