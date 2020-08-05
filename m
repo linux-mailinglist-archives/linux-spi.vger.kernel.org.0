@@ -2,28 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4133B23CF80
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Aug 2020 21:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C1123CF8A
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Aug 2020 21:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728380AbgHETVX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Aug 2020 15:21:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43132 "EHLO mail.kernel.org"
+        id S1728064AbgHETWV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Aug 2020 15:22:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43120 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728977AbgHERl7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 5 Aug 2020 13:41:59 -0400
+        id S1728972AbgHERl4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 5 Aug 2020 13:41:56 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E99452173E;
-        Wed,  5 Aug 2020 10:54:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C4DF22CAD;
+        Wed,  5 Aug 2020 11:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596624860;
-        bh=itzMvNq8nfgP8VKXOJXPOoZfq8+Pd5YP4oo6JUWZy/Q=;
+        s=default; t=1596625347;
+        bh=cmz98b4aN6klrGIsOTUwn9K0/pumDsFYeqieDUYCi30=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=daILxyCwv0M7mQeyhNXxvi03DAUtga5jJtqn9dQXwRgrXBcNva8DPZDusD/aFamB8
-         Au9mHe9ABAS9MqqceMBsO7YPBu1LumIOWL9uh+TWE/OO/RKyxryVA4IqaKwGaUH9uK
-         2Cbco3etFIjw9O/v4cujAsyuMP3cTEND8YVamfgM=
-Date:   Wed, 5 Aug 2020 11:53:57 +0100
+        b=SVIFO7jxtvIz8aTDGf7shxm4OV5InZb/7jnDWISeCyJFZ4UJQtRfFtLzIm4cnB7bc
+         04VZ9RTFmwFOce4ZsAgN2Sg5khJDyARPhguXwycRZ6mCSA8bnLG95y5recuPWh8wh+
+         fwpV+5nUZvh2jhG5qgSWRza5gtkWletx20dKAVGE=
+Date:   Wed, 5 Aug 2020 12:02:05 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Alain Volmat <alain.volmat@st.com>
 Cc:     amelie.delaunay@st.com, mcoquelin.stm32@gmail.com,
@@ -31,15 +31,16 @@ Cc:     amelie.delaunay@st.com, mcoquelin.stm32@gmail.com,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         fabrice.gasnier@st.com
-Subject: Re: [PATCH 09/18] spi: stm32h7: fix race condition at end of transfer
-Message-ID: <20200805105357.GD5556@sirena.org.uk>
+Subject: Re: [PATCH 13/18] spi: stm32h7: fix handling of dma transfer
+ completed
+Message-ID: <20200805110205.GH5556@sirena.org.uk>
 References: <1596610933-32599-1-git-send-email-alain.volmat@st.com>
- <1596610933-32599-10-git-send-email-alain.volmat@st.com>
+ <1596610933-32599-14-git-send-email-alain.volmat@st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3Gf/FFewwPeBMqCJ"
+        protocol="application/pgp-signature"; boundary="svZFHVx8/dhPCe52"
 Content-Disposition: inline
-In-Reply-To: <1596610933-32599-10-git-send-email-alain.volmat@st.com>
+In-Reply-To: <1596610933-32599-14-git-send-email-alain.volmat@st.com>
 X-Cookie: Fast, cheap, good: pick two.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
@@ -48,39 +49,35 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---3Gf/FFewwPeBMqCJ
+--svZFHVx8/dhPCe52
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 05, 2020 at 09:02:04AM +0200, Alain Volmat wrote:
-> From: Antonio Borneo <antonio.borneo@st.com>
+On Wed, Aug 05, 2020 at 09:02:08AM +0200, Alain Volmat wrote:
+> From: Amelie Delaunay <amelie.delaunay@st.com>
 >=20
-> The caller of stm32_spi_transfer_one(), spi_transfer_one_message(),
-> is waiting for us to call spi_finalize_current_transfer() and will
-> eventually schedule a new transfer, if available.
-> We should guarantee that the spi controller is really available
-> before calling spi_finalize_current_transfer().
->=20
-> Move the call to spi_finalize_current_transfer() _after_ the call
-> to stm32_spi_disable().
+> The rx dma is completed "after" the last data is received
+> from spi. Thus, to avoid loss of rx data, it's mandatory to
+> wait for the dma callback before tearing down the rx dma in
+> stm32_spi_disable().
 
-This seems like a bug fix and should therefore be at the start of the
-series so it can be sent to mainline without the new development work.
+Again, please put fixes at the start of the series before new
+development.
 
---3Gf/FFewwPeBMqCJ
+--svZFHVx8/dhPCe52
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8qj8UACgkQJNaLcl1U
-h9BPMwf/SVAa/tykTrFSDmtKpWBCSoTEQyhwBfjKuq+rQf3+01Akz63PIPooThf4
-4hcsMCzyVNfFiNhOCvCyeK5ccZ3iJ6ZX+CBzIp82qadb35VN1MNxMVwHPy2kshTW
-8S+oKpDXRIFEiuKmDTBW22swtHCy8m01Ng4gQXvQPBhdjIpff4sl/kAMBxPRUFBS
-TjkRi39WPFNwmRWRBrAxa99mmyOt0+83zOs0jjLRRJADsfoIaDdkISbFGJ517Wh1
-10XUqNK0kNJC8hqj6rK7jgkgQeMW3vAQaimhlJzFbnjVOgtiW74zF03RPmxM1w6V
-R+0IRfA+AzMkXP1gTek7e+vjuBraaQ==
-=4szv
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8qkawACgkQJNaLcl1U
+h9AC7wf/Tc9hKs/yIxoXXdFXrgFaODwz5noiIf85U1PqJmzIfy4Q0csYUwSL+p03
+vZmqEmP1gK3M+JsByWO+nU3KBW40ZbfLzoEuYTjfCyg3fqlR83UW+fI2s8H9ddcc
+IKjdXeSDZJzL/c+SOzHq6eMcRN/UT1K19TibNV4kuTbfOU29/uMnF87jyk7k8mzy
+RPq0QgjVFnU5EL4lUXha1Vq1p7jGVhKA1iR8yqBwP+aHbgfC6M8tueHPjztMbVX3
+fWF+54fHl9URy1O3f5ymycoNqXfHiKrjsIbCzpA9rcWILZNht5qf+YOasDNUJ0Ai
+VYjSU+o3H9L1uJKSd2QoZlsnRNUswA==
+=ARDB
 -----END PGP SIGNATURE-----
 
---3Gf/FFewwPeBMqCJ--
+--svZFHVx8/dhPCe52--
