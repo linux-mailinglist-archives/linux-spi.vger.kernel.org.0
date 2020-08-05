@@ -2,39 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E5523C676
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Aug 2020 09:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B60723C6CB
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Aug 2020 09:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728397AbgHEHEo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Aug 2020 03:04:44 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:54444 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728337AbgHEHEg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Aug 2020 03:04:36 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07573Ndi002348;
-        Wed, 5 Aug 2020 09:04:22 +0200
+        id S1725920AbgHEHOT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Aug 2020 03:14:19 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:28436 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725809AbgHEHOT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Aug 2020 03:14:19 -0400
+X-Greylist: delayed 591 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Aug 2020 03:14:17 EDT
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07573JwB012777;
+        Wed, 5 Aug 2020 09:04:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-type; s=STMicroelectronics;
- bh=wzaNlmJcYjuEGmXk71gxcc9RooPjAaosEVx5bG46On8=;
- b=V9FM4HLJUpuBD0vM8bjj3TBWFe6juXnJOc7Lj0iNyG/BjLqPkTVWs+nCsBhFfjHRgGI6
- q5XU9Zyq7y/7jQNssLBWc4ESoWHJYnHK/mW1uRaWSPWndC4Vh39ehyW2ETtdJx5aSc9z
- RhJVHGxrPi56DryV2cI+694jUwfKYm7u2kT6qR0ZxGHiDp3kMTlWwUBL6Dv3G13d4DuV
- Xt+gXthpI2unxXlySQlM6vvWoQnom4eFbEWPaWBL7KEJbBb4Oz3n5N3SKVXc3Ek5fC7s
- zjDfiSxAdgyViUXsvEpRy/AmONHQvURmaLZWBrED0MmlZ6qiQAJ9xXYSY+HZCO4I1CHO hw== 
+ bh=jqECQj44WsYLYEzqi6QoOeyI+LAhjmK9fRhP1wA1ILU=;
+ b=mkeC+VtORiROhMUOKeGVfpExcYaqMo+6KObfxARlK6zLnEH/F2XyUY5KLi/iVT3DPjL1
+ y2nKk80f4L1yeqEaJsb9H7Je7HKN5BsmO8D2/sMJ1WX069vQWoiRjUnttvW4HwR5JR1B
+ OfhYLAZv5f9AUTcOmj2QIyoNeElPqEj6m0cU7gQR1CAYzqNDnaKGHqBXDHxW6yiAysSu
+ 3JndZlylCmuJxXrlGFWv6UTRfjhNK9NCa0mth2PWFby6tNcwYbthY9Ah/NQVWNq+UrhG
+ 9+3CtxH2AogLMZkQ3DisM8rdGxsy5CyVdf7RHQko1E8ieEM617UBTxIRBIl2w7AexTwB Pw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32n6knf7e8-1
+        by mx07-00178001.pphosted.com with ESMTP id 32n6theqj6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Aug 2020 09:04:22 +0200
+        Wed, 05 Aug 2020 09:04:20 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2EA2F100034;
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 91046100038;
         Wed,  5 Aug 2020 09:04:20 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 21A242A4D8E;
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 85ACF2A4D8E;
         Wed,  5 Aug 2020 09:04:20 +0200 (CEST)
-Received: from localhost (10.75.127.48) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 5 Aug 2020 09:04:19
+Received: from localhost (10.75.127.51) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 5 Aug 2020 09:04:20
  +0200
 From:   Alain Volmat <alain.volmat@st.com>
 To:     <broonie@kernel.org>, <amelie.delaunay@st.com>
@@ -44,16 +45,16 @@ CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
         <alain.volmat@st.com>
-Subject: [PATCH 16/18] spi: stm32: always perform registers configuration prior to transfer
-Date:   Wed, 5 Aug 2020 09:02:11 +0200
-Message-ID: <1596610933-32599-17-git-send-email-alain.volmat@st.com>
+Subject: [PATCH 17/18] spi: stm32: properly handle 0 byte transfer
+Date:   Wed, 5 Aug 2020 09:02:12 +0200
+Message-ID: <1596610933-32599-18-git-send-email-alain.volmat@st.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1596610933-32599-1-git-send-email-alain.volmat@st.com>
 References: <1596610933-32599-1-git-send-email-alain.volmat@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE2.st.com
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG3NODE2.st.com (10.75.127.8) To SFHDAG3NODE2.st.com
  (10.75.127.8)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-05_04:2020-08-03,2020-08-05 signatures=0
@@ -62,78 +63,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SPI registers content may have been lost upon suspend/resume sequence.
-So, always compute and apply the necessary configuration in
-stm32_spi_transfer_one_setup routine.
+On 0 byte transfer request, return straight from the
+xfer function after finalizing the transfer.
 
 Signed-off-by: Alain Volmat <alain.volmat@st.com>
 ---
- drivers/spi/spi-stm32.c | 42 +++++++++++++++++-------------------------
- 1 file changed, 17 insertions(+), 25 deletions(-)
+ drivers/spi/spi-stm32.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 2665d8d7f318..177f82700de0 100644
+index 177f82700de0..b909afd9e99b 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
-@@ -1579,41 +1579,33 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	unsigned long flags;
- 	unsigned int comm_type;
- 	int nb_words, ret = 0;
-+	int mbr;
+@@ -1658,6 +1658,12 @@ static int stm32_spi_transfer_one(struct spi_master *master,
+ 	unsigned long timeout;
+ 	int ret;
  
- 	spin_lock_irqsave(&spi->lock, flags);
++	/* Don't do anything on 0 bytes transfers */
++	if (transfer->len == 0) {
++		spi->xfer_status = 0;
++		goto finalize;
++	}
++
+ 	spi->tx_buf = transfer->tx_buf;
+ 	spi->rx_buf = transfer->rx_buf;
+ 	spi->tx_len = spi->tx_buf ? transfer->len : 0;
+@@ -1702,6 +1708,7 @@ static int stm32_spi_transfer_one(struct spi_master *master,
  
- 	spi->cur_xferlen = transfer->len;
+ 	spi->cfg->disable(spi);
  
--	if (spi->cur_bpw != transfer->bits_per_word) {
--		spi->cur_bpw = transfer->bits_per_word;
--		spi->cfg->set_bpw(spi);
--	}
--
--	if (spi->cur_speed != transfer->speed_hz) {
--		int mbr;
--
--		/* Update spi->cur_speed with real clock speed */
--		mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
--					    spi->cfg->baud_rate_div_min,
--					    spi->cfg->baud_rate_div_max);
--		if (mbr < 0) {
--			ret = mbr;
--			goto out;
--		}
-+	spi->cur_bpw = transfer->bits_per_word;
-+	spi->cfg->set_bpw(spi);
++finalize:
+ 	spi_finalize_current_transfer(master);
  
--		transfer->speed_hz = spi->cur_speed;
--		stm32_spi_set_mbr(spi, mbr);
-+	/* Update spi->cur_speed with real clock speed */
-+	mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
-+				    spi->cfg->baud_rate_div_min,
-+				    spi->cfg->baud_rate_div_max);
-+	if (mbr < 0) {
-+		ret = mbr;
-+		goto out;
- 	}
- 
--	comm_type = stm32_spi_communication_type(spi_dev, transfer);
--	if (spi->cur_comm != comm_type) {
--		ret = spi->cfg->set_mode(spi, comm_type);
-+	transfer->speed_hz = spi->cur_speed;
-+	stm32_spi_set_mbr(spi, mbr);
- 
--		if (ret < 0)
--			goto out;
-+	comm_type = stm32_spi_communication_type(spi_dev, transfer);
-+	ret = spi->cfg->set_mode(spi, comm_type);
-+	if (ret < 0)
-+		goto out;
- 
--		spi->cur_comm = comm_type;
--	}
-+	spi->cur_comm = comm_type;
- 
- 	if (spi->cfg->set_data_idleness)
- 		spi->cfg->set_data_idleness(spi, transfer->len);
+ 	return spi->xfer_status;
 -- 
 2.7.4
 
