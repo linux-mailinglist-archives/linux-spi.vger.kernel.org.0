@@ -2,39 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1083D23C684
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Aug 2020 09:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AE923C73A
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Aug 2020 09:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728491AbgHEHFJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Aug 2020 03:05:09 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:8914 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728363AbgHEHEh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Aug 2020 03:04:37 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07572SqX030160;
-        Wed, 5 Aug 2020 09:04:21 +0200
+        id S1726104AbgHEHyV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Aug 2020 03:54:21 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:55757 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726056AbgHEHyU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Aug 2020 03:54:20 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07573JXq012759;
+        Wed, 5 Aug 2020 09:04:14 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-type; s=STMicroelectronics;
- bh=5f/kmG4N622sMrrGFS0Jhu+gX16MgwdDVf5qJCdceBQ=;
- b=PRIhE/WWA2z7xAjACT5MgmqYL9rp4r/aryLr4UTUHIqp/BAi141gpZ5eNi4SOgqk6KPv
- sVsCndw+E0LKq9Symouh6wSxpiyaDRexj+VgJolgrMHdlxpKDX5AVmzmAcosbogb/Ud6
- 5BHCpX5KrAeWvzj7QVQCb7kOFqxoKaXlkRc7J3NCYEdp+fGJP7FnA6vZimNRxJaC6ABC
- quTSCqtKAEJ0hiwuCTSOEncfaZ2qPUcO22NXExez5f4Uf/Fd+oDvi2rEXWMkEdwYHEgT
- fs9lBLZBwgHMe75OWp6dUWYOrXTz7yZSIDgH3Nb7gmPbfVBs+1mtWQwXRp71NyPnwekg BA== 
+ bh=2nQxMmex42TyLT5VNzIG8e3lAQvRSXXBh413df+tvyc=;
+ b=C9n4Z2VhCakw5bTCEHlKWhBj+bR9P5hDku9zfi4D9yNC0Q4CGE56zgyy8yTmjfrOKMZe
+ +Od2jVs6iqvV5NefItY3LPMA5lZp2Q8X+h5T8skk5U/yGw4yep8utbTqN8d9ZzNcDMRK
+ b4dDbEIjMdm2GN9greCCAm4nT7xSJoyP07Te8LjbCTqsYUGJ6guo7EE7Spv4pYtUW8Oc
+ b1/Ob2vlEjiQcR5TwCurHnrcNBTpkY+cjOdmg8JZkSj9oczPDkZd/0IThaK1DIkRGst9
+ mDXg336JAGZlBWI0HlrvTKn0CZlYv/vitWFNP6SFt2OXd/RQsSZXf5SniCTVWXyecr1V 9w== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32n6hyq7tx-1
+        by mx07-00178001.pphosted.com with ESMTP id 32n6theqhh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Aug 2020 09:04:21 +0200
+        Wed, 05 Aug 2020 09:04:14 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EE32C10002A;
-        Wed,  5 Aug 2020 09:04:20 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 143E6100034;
+        Wed,  5 Aug 2020 09:04:14 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E2F812A4D8E;
-        Wed,  5 Aug 2020 09:04:20 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 5 Aug 2020 09:04:20
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 035912A4D8E;
+        Wed,  5 Aug 2020 09:04:14 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 5 Aug 2020 09:04:13
  +0200
 From:   Alain Volmat <alain.volmat@st.com>
 To:     <broonie@kernel.org>, <amelie.delaunay@st.com>
@@ -44,16 +44,16 @@ CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
         <alain.volmat@st.com>
-Subject: [PATCH 18/18] spi: stm32h7: ensure message are smaller than max size
-Date:   Wed, 5 Aug 2020 09:02:13 +0200
-Message-ID: <1596610933-32599-19-git-send-email-alain.volmat@st.com>
+Subject: [PATCH 01/18] spi: stm32-spi: driver uses reset controller only at init
+Date:   Wed, 5 Aug 2020 09:01:56 +0200
+Message-ID: <1596610933-32599-2-git-send-email-alain.volmat@st.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1596610933-32599-1-git-send-email-alain.volmat@st.com>
 References: <1596610933-32599-1-git-send-email-alain.volmat@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG3NODE2.st.com
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG6NODE3.st.com (10.75.127.18) To SFHDAG3NODE2.st.com
  (10.75.127.8)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-05_04:2020-08-03,2020-08-05 signatures=0
@@ -62,40 +62,62 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Ensure that messages given to transfer_one handler can actually be
-handled by it. For that purpose rely on the SPI framework
-spi_split_transfers_maxsize function to split messages whenever necessary.
+From: Etienne Carriere <etienne.carriere@st.com>
 
+Remove reset controller device reference from the device private
+structure since it is used only at probe time and can be discarded
+once used to reset the SPI device.
+
+Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
 Signed-off-by: Alain Volmat <alain.volmat@st.com>
 ---
- drivers/spi/spi-stm32.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/spi/spi-stm32.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index b909afd9e99b..bd21b698af84 100644
+index 4c643dfc7fbb..838d3ce3ebae 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
-@@ -1021,6 +1021,20 @@ static int stm32_spi_prepare_msg(struct spi_master *master,
- 		spi_dev->mode & SPI_LSB_FIRST,
- 		spi_dev->mode & SPI_CS_HIGH);
+@@ -267,7 +267,6 @@ struct stm32_spi_cfg {
+  * @base: virtual memory area
+  * @clk: hw kernel clock feeding the SPI clock generator
+  * @clk_rate: rate of the hw kernel clock feeding the SPI clock generator
+- * @rst: SPI controller reset line
+  * @lock: prevent I/O concurrent access
+  * @irq: SPI controller interrupt line
+  * @fifo_size: size of the embedded fifo in bytes
+@@ -293,7 +292,6 @@ struct stm32_spi {
+ 	void __iomem *base;
+ 	struct clk *clk;
+ 	u32 clk_rate;
+-	struct reset_control *rst;
+ 	spinlock_t lock; /* prevent I/O concurrent access */
+ 	int irq;
+ 	unsigned int fifo_size;
+@@ -1824,6 +1822,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	struct spi_master *master;
+ 	struct stm32_spi *spi;
+ 	struct resource *res;
++	struct reset_control *rst;
+ 	int ret;
  
-+	/* On STM32H7, messages should not exceed a maximum size setted
-+	 * afterward via the set_number_of_data function. In order to
-+	 * ensure that, split large messages into several messages
-+	 */
-+	if (spi->cfg->set_number_of_data) {
-+		int ret;
-+
-+		ret = spi_split_transfers_maxsize(master, msg,
-+						  STM32H7_SPI_TSIZE_MAX,
-+						  GFP_KERNEL | GFP_DMA);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	spin_lock_irqsave(&spi->lock, flags);
+ 	master = spi_alloc_master(&pdev->dev, sizeof(struct stm32_spi));
+@@ -1887,11 +1886,11 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 		goto err_clk_disable;
+ 	}
  
- 	/* CPOL, CPHA and LSB FIRST bits have common register */
+-	spi->rst = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+-	if (!IS_ERR(spi->rst)) {
+-		reset_control_assert(spi->rst);
++	rst = devm_reset_control_get_exclusive(&pdev->dev, NULL);
++	if (!IS_ERR(rst)) {
++		reset_control_assert(rst);
+ 		udelay(2);
+-		reset_control_deassert(spi->rst);
++		reset_control_deassert(rst);
+ 	}
+ 
+ 	if (spi->cfg->has_fifo)
 -- 
 2.7.4
 
