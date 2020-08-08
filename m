@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB8623FA0E
-	for <lists+linux-spi@lfdr.de>; Sun,  9 Aug 2020 01:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113CB23FA39
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Aug 2020 01:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728657AbgHHXkN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 8 Aug 2020 19:40:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55554 "EHLO mail.kernel.org"
+        id S1728858AbgHHXkh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 8 Aug 2020 19:40:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56166 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726676AbgHHXkM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:40:12 -0400
+        id S1728849AbgHHXkf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 8 Aug 2020 19:40:35 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF63520716;
-        Sat,  8 Aug 2020 23:40:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5EC3D2053B;
+        Sat,  8 Aug 2020 23:40:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596930011;
+        s=default; t=1596930035;
         bh=XJ5DmlNOlYa9O5RhsrLNP3SNVFa/vv5QstJP+KMrTms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CeO+ZfyCmWVJEb+B74k76Gb1f7IJ9Wr7l1Z8yvHofSFnmKEiysuA+UsiCxdPLEQtV
-         QDUP8TXa3uodanFH60mXn+SvMdKohuUnBFPLGdms+vcgRVUQaL+ZDqPHM1o8mx8MFx
-         BVGPuCEtrZX5l/Z/x3fBXpUvB2R316SwbXlXlgDA=
+        b=VqD03Tx7WPbgBxDwJ+Eu3VodgO30yISANf5txeEwNmNlcXSVgleKlUsPBvZZCiz8Q
+         3qAs//9TFw5SD3Gb6Clh9+2saHKm9+qKWWk1qQeKw1L82+PHhqlIirRI/jHmQfhiQD
+         Ff/iUeOrz+Nv+MGexhlHOo/fnADxKHn++cD5rQ4Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dilip Kota <eswara.kota@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 20/21] spi: lantiq: fix: Rx overflow error in full duplex mode
-Date:   Sat,  8 Aug 2020 19:39:40 -0400
-Message-Id: <20200808233941.3619277-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 13/14] spi: lantiq: fix: Rx overflow error in full duplex mode
+Date:   Sat,  8 Aug 2020 19:40:12 -0400
+Message-Id: <20200808234013.3619541-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200808233941.3619277-1-sashal@kernel.org>
-References: <20200808233941.3619277-1-sashal@kernel.org>
+In-Reply-To: <20200808234013.3619541-1-sashal@kernel.org>
+References: <20200808234013.3619541-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
