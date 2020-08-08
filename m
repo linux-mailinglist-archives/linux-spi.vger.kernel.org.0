@@ -2,101 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B2323EF6D
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Aug 2020 16:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE2823FB8F
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Aug 2020 01:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgHGOvU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 7 Aug 2020 10:51:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35656 "EHLO mail.kernel.org"
+        id S1727019AbgHHXgr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 8 Aug 2020 19:36:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49490 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726394AbgHGOvN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 7 Aug 2020 10:51:13 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        id S1727012AbgHHXgq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 8 Aug 2020 19:36:46 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B3562075D;
-        Fri,  7 Aug 2020 14:51:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 39C0F207FB;
+        Sat,  8 Aug 2020 23:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596811872;
-        bh=GtxQUSKT1X96i+MH8TbBld412JSil7Bjc/gO8cpknGM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=z7kwa10CwRgjBbI0D+XhoJjmqonW7PubkJXY0+tI2NCi5UZbUoFTmztWuOokC0ZLw
-         Le+oI17nNcDBkiFI81fFh3E0dcfs9bJRzxPjaMFWpGSGLmulVziYeZQFjSrRNFT3Cf
-         cNMRVVTTuDZTA3fgy1mYPpx27u4p1ryAqHEXUUmk=
-Received: by mail-oi1-f175.google.com with SMTP id l84so2112684oig.10;
-        Fri, 07 Aug 2020 07:51:12 -0700 (PDT)
-X-Gm-Message-State: AOAM531QA7pfbSExFUAG3PV68PbC/ld8Toxoe47wrewAU35bcU70HPl1
-        sI9cGR3hNlspdZu89uZ3tfL5mfh8+8TtfDwsRQ==
-X-Google-Smtp-Source: ABdhPJzVlQPsijU2HYarRxphJJUVYNBzdoVdIPIsY8KlTginPw3B+qvmkby+kzYCLtt9HJBLG9aWsVdjUnfuAkS8/5o=
-X-Received: by 2002:aca:190c:: with SMTP id l12mr11745091oii.147.1596811871568;
- Fri, 07 Aug 2020 07:51:11 -0700 (PDT)
+        s=default; t=1596929805;
+        bh=vbTAb44KZTHCUUR1fLwfmZ7ptgPtMwcHogXlu5gZoe0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fqiUcET2QadCRQZmW3gj9AU15qUVwEnU21rfJF/SfEAt3Dg3CZ8+REML40nHh1OSM
+         TOP8zEB//3OItnf0MBatwad77Rxx/vSY/JAnQBkSmPKbZPEAT3JzvBiG/RAkMkgfBP
+         1Uds2rBYINq8j4hMZtIyY61j6O9ciFEph7oC5mMo=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Feng Tang <feng.tang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 42/72] spi: dw-dma: Fix Tx DMA channel working too fast
+Date:   Sat,  8 Aug 2020 19:35:11 -0400
+Message-Id: <20200808233542.3617339-42-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200808233542.3617339-1-sashal@kernel.org>
+References: <20200808233542.3617339-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20200727031513.31774-1-xiaoning.wang@nxp.com> <CAL_Jsq+M0bjH6KnrT4ob6YF7VZxUtgUeAJOE84Omp4PNH2hSZQ@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+M0bjH6KnrT4ob6YF7VZxUtgUeAJOE84Omp4PNH2hSZQ@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 7 Aug 2020 08:51:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL+vchPP3fJaqx4N4qYFc-w8-BO6FDgzTBKDhN0vYDN9g@mail.gmail.com>
-Message-ID: <CAL_JsqL+vchPP3fJaqx4N4qYFc-w8-BO6FDgzTBKDhN0vYDN9g@mail.gmail.com>
-Subject: Re: [PATCH V2 4/4] dt-bindings: lpspi: New property in document DT
- bindings for LPSPI
-To:     Clark Wang <xiaoning.wang@nxp.com>
-Cc:     Mark Brown <broonie@kernel.org>, Anson Huang <Anson.Huang@nxp.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 11:38 AM Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Sun, Jul 26, 2020 at 9:15 PM Clark Wang <xiaoning.wang@nxp.com> wrote:
-> >
-> > Add "fsl,spi-only-use-cs1-sel" to fit i.MX8DXL-EVK.
-> > Spi common code does not support use of CS signals discontinuously.
-> > It only uses CS1 without using CS0. So, add this property to re-config
-> > chipselect value.
-> >
-> > Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> > ---
-> > Changes:
-> > V2:
-> >  - New patch added in the v2 patchset.
-> > ---
-> >  Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-> > index 143b94a1883a..22882e769e26 100644
-> > --- a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-> > +++ b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-> > @@ -34,6 +34,12 @@ properties:
-> >        - const: per
-> >        - const: ipg
-> >
-> > +  fsl,spi-only-use-cs1-sel:
-> > +    description:
-> > +      spi common code does not support use of CS signals discontinuously.
-> > +      i.MX8DXL-EVK board only uses CS1 without using CS0. Therefore, add
-> > +      this property to re-config the chipselect value in the LPSPI driver.
->
-> This breaks linux-next and you didn't test with 'make dt_binding_check':
->
-> /builds/robherring/linux-dt-bindings/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml:
-> properties:fsl,spi-only-use-cs1-sel: {'description': 'spi common code
-> does not support use of CS signals discontinuously. i.MX8DXL-EVK board
-> only uses CS1 without using CS0. Therefore, add this property to
-> re-config the chipselect value in the LPSPI driver.'} is not valid
-> under any of the given schemas (Possible causes of the failure):
->  /builds/robherring/linux-dt-bindings/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml:
-> properties:fsl,spi-only-use-cs1-sel: 'not' is a required property
->
-> The problem is you need a type definition for a vendor specific
-> property. In this case 'type: boolean'.
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Ping! And now Linus' tree is broken. If you can't be bothered to fix
-this, perhaps it should be reverted.
+[ Upstream commit affe93dd5b35bb0e7b0aa0505ae432dd0ac72c3f ]
 
-Rob
+It turns out having a Rx DMA channel serviced with higher priority than
+a Tx DMA channel is not enough to provide a well balanced DMA-based SPI
+transfer interface. There might still be moments when the Tx DMA channel
+is occasionally handled faster than the Rx DMA channel. That in its turn
+will eventually cause the SPI Rx FIFO overflow if SPI bus speed is high
+enough to fill the SPI Rx FIFO in before it's cleared by the Rx DMA
+channel. That's why having the DMA-based SPI Tx interface too optimized
+is the errors prone, so the commit 0b2b66514fc9 ("spi: dw: Use DMA max
+burst to set the request thresholds") though being perfectly normal from
+the standard functionality point of view implicitly introduced the problem
+described above. In order to fix that the Tx DMA activity is intentionally
+slowed down by limiting the SPI Tx FIFO depth with a value twice bigger
+than the Tx burst length calculated earlier by the
+dw_spi_dma_maxburst_init() method.
+
+Fixes: 0b2b66514fc9 ("spi: dw: Use DMA max burst to set the request thresholds")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Feng Tang <feng.tang@intel.com>
+Link: https://lore.kernel.org/r/20200721203951.2159-1-Sergey.Semin@baikalelectronics.ru
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-dw-dma.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index 5986c520b1965..bb390ff67d1d8 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -372,8 +372,20 @@ static int dw_spi_dma_setup(struct dw_spi *dws, struct spi_transfer *xfer)
+ {
+ 	u16 imr = 0, dma_ctrl = 0;
+ 
++	/*
++	 * Having a Rx DMA channel serviced with higher priority than a Tx DMA
++	 * channel might not be enough to provide a well balanced DMA-based
++	 * SPI transfer interface. There might still be moments when the Tx DMA
++	 * channel is occasionally handled faster than the Rx DMA channel.
++	 * That in its turn will eventually cause the SPI Rx FIFO overflow if
++	 * SPI bus speed is high enough to fill the SPI Rx FIFO in before it's
++	 * cleared by the Rx DMA channel. In order to fix the problem the Tx
++	 * DMA activity is intentionally slowed down by limiting the SPI Tx
++	 * FIFO depth with a value twice bigger than the Tx burst length
++	 * calculated earlier by the dw_spi_dma_maxburst_init() method.
++	 */
+ 	dw_writel(dws, DW_SPI_DMARDLR, dws->rxburst - 1);
+-	dw_writel(dws, DW_SPI_DMATDLR, dws->fifo_len - dws->txburst);
++	dw_writel(dws, DW_SPI_DMATDLR, dws->txburst);
+ 
+ 	if (xfer->tx_buf)
+ 		dma_ctrl |= SPI_DMA_TDMAE;
+-- 
+2.25.1
+
