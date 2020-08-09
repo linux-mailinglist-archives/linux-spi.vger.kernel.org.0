@@ -2,105 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 113CB23FA39
-	for <lists+linux-spi@lfdr.de>; Sun,  9 Aug 2020 01:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB45323FBF1
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Aug 2020 02:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728858AbgHHXkh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 8 Aug 2020 19:40:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56166 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728849AbgHHXkf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:40:35 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5EC3D2053B;
-        Sat,  8 Aug 2020 23:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596930035;
-        bh=XJ5DmlNOlYa9O5RhsrLNP3SNVFa/vv5QstJP+KMrTms=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VqD03Tx7WPbgBxDwJ+Eu3VodgO30yISANf5txeEwNmNlcXSVgleKlUsPBvZZCiz8Q
-         3qAs//9TFw5SD3Gb6Clh9+2saHKm9+qKWWk1qQeKw1L82+PHhqlIirRI/jHmQfhiQD
-         Ff/iUeOrz+Nv+MGexhlHOo/fnADxKHn++cD5rQ4Y=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dilip Kota <eswara.kota@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 13/14] spi: lantiq: fix: Rx overflow error in full duplex mode
-Date:   Sat,  8 Aug 2020 19:40:12 -0400
-Message-Id: <20200808234013.3619541-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200808234013.3619541-1-sashal@kernel.org>
-References: <20200808234013.3619541-1-sashal@kernel.org>
+        id S1726009AbgHIAet (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 8 Aug 2020 20:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725950AbgHIAet (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 8 Aug 2020 20:34:49 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F4FC061756
+        for <linux-spi@vger.kernel.org>; Sat,  8 Aug 2020 17:34:49 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id ba10so3894298edb.3
+        for <linux-spi@vger.kernel.org>; Sat, 08 Aug 2020 17:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:mime-version:content-transfer-encoding
+         :content-description:subject:to:from:date:reply-to;
+        bh=IqFQAMj9YAqdAub1Iy6pJc/J8JTv9pU5rCFx5IyFw/Y=;
+        b=n9m78PCuQqGw73KjvWTcXIuEztxOHXG6rSTjKp4Nj0zBm4hHrqhgnyZA777kXVgASF
+         xtHhXXusunvwJvT+jgp2JylgkmhnEobQs4BYk0RwOgKToetrzQGZQphULvkcvTlVFBvS
+         kX+zm8l1MoxjzzAA7tMgKYTXmErZmsfDhWp266uf+Dcaa37pN0pbhlzU8C0PZveJ13Lk
+         +9Mh9d0urd7CncBTa25+dafPl2v3TSoUSrcTIkmFwlC4wrpuNnJYnux3Icq13mG6KwFM
+         5Vt4IyNlpPY6PeNKnzh4ypOy0Wm6R6fJzxYfJu0TQ65UDeYO0WLmfPZLcgcSeNMdFkxB
+         qfkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:content-description:subject:to:from:date
+         :reply-to;
+        bh=IqFQAMj9YAqdAub1Iy6pJc/J8JTv9pU5rCFx5IyFw/Y=;
+        b=CQGXqZEYQehMaICoR3q5x9rz6OsAPCyIIWGPhT2ZbiKqqxh4ctzr0NL/emeJEFIGuV
+         JKh6T8MPO7zl0X0vmF+cQV7nEd2TJh46vDodVHzRn85+BH1BpdKSURFSIPuBUukskPQ6
+         vTnoB//OFycdP5eXokSds83J3lWc9I0TzbdO9N2LI12M8ALAFVsAakgBSzr6uFroRt9W
+         EjKreoRqkYA/x0vX+BA2U9y1e4s30y4rS9HoICnjzzHPW+lIPOqiBPsCqGHPlQ7bPDJf
+         HD0l+cowSQBQyW1dQR+4AGoqnoorulTHUBsLCV80RLAGLkyXMzxi2kjjWV0dYsBz0hsP
+         WWUw==
+X-Gm-Message-State: AOAM533JT9m65UcLD8M+ZEg82zn3clPGVksH7UrD9EtQFwcV8TRh5r3v
+        Vqmi7sadXWGanOujvEXdLtg=
+X-Google-Smtp-Source: ABdhPJzkHW0aT/yfQoVM4bzP2vm4NkGkieccMkfuxbmWiM2u7ZpofFehShigjZkPbeFyEnweXcfuEg==
+X-Received: by 2002:a05:6402:899:: with SMTP id e25mr14865295edy.311.1596933287752;
+        Sat, 08 Aug 2020 17:34:47 -0700 (PDT)
+Received: from [192.168.0.108] ([196.171.37.220])
+        by smtp.gmail.com with ESMTPSA id l16sm9507646ejc.49.2020.08.08.17.34.42
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 08 Aug 2020 17:34:47 -0700 (PDT)
+Message-ID: <5f2f44a7.1c69fb81.a1aaa.8066@mx.google.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hello
+To:     Recipients <tchazawaarouna@gmail.com>
+From:   "Sophia" <tchazawaarouna@gmail.com>
+Date:   Sun, 09 Aug 2020 00:34:31 +0000
+Reply-To: sophiawillians00@gmail.com
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Dilip Kota <eswara.kota@linux.intel.com>
+Hello Dear,
 
-[ Upstream commit 661ccf2b3f1360be50242726f7c26ced6a9e7d52 ]
+How are you doing.
+My name is Sophia Williams
+Please reply, so that we can know more better =
 
-In full duplex mode, rx overflow error is observed. To overcome the error,
-wait until the complete data got received and proceed further.
-
-Fixes: 17f84b793c01 ("spi: lantiq-ssc: add support for Lantiq SSC SPI controller")
-Signed-off-by: Dilip Kota <eswara.kota@linux.intel.com>
-Link: https://lore.kernel.org/r/efb650b0faa49a00788c4e0ca8ef7196bdba851d.1594957019.git.eswara.kota@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-lantiq-ssc.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/spi/spi-lantiq-ssc.c b/drivers/spi/spi-lantiq-ssc.c
-index d5976615d924b..dc740b5f720ba 100644
---- a/drivers/spi/spi-lantiq-ssc.c
-+++ b/drivers/spi/spi-lantiq-ssc.c
-@@ -187,6 +187,7 @@ struct lantiq_ssc_spi {
- 	unsigned int			tx_fifo_size;
- 	unsigned int			rx_fifo_size;
- 	unsigned int			base_cs;
-+	unsigned int			fdx_tx_level;
- };
- 
- static u32 lantiq_ssc_readl(const struct lantiq_ssc_spi *spi, u32 reg)
-@@ -484,6 +485,7 @@ static void tx_fifo_write(struct lantiq_ssc_spi *spi)
- 	u32 data;
- 	unsigned int tx_free = tx_fifo_free(spi);
- 
-+	spi->fdx_tx_level = 0;
- 	while (spi->tx_todo && tx_free) {
- 		switch (spi->bits_per_word) {
- 		case 2 ... 8:
-@@ -512,6 +514,7 @@ static void tx_fifo_write(struct lantiq_ssc_spi *spi)
- 
- 		lantiq_ssc_writel(spi, data, LTQ_SPI_TB);
- 		tx_free--;
-+		spi->fdx_tx_level++;
- 	}
- }
- 
-@@ -523,6 +526,13 @@ static void rx_fifo_read_full_duplex(struct lantiq_ssc_spi *spi)
- 	u32 data;
- 	unsigned int rx_fill = rx_fifo_level(spi);
- 
-+	/*
-+	 * Wait until all expected data to be shifted in.
-+	 * Otherwise, rx overrun may occur.
-+	 */
-+	while (rx_fill != spi->fdx_tx_level)
-+		rx_fill = rx_fifo_level(spi);
-+
- 	while (rx_fill) {
- 		data = lantiq_ssc_readl(spi, LTQ_SPI_RB);
- 
--- 
-2.25.1
-
+and share photos,
+Thank you.
