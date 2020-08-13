@@ -2,138 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9F024388B
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Aug 2020 12:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4F7243CE7
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Aug 2020 17:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbgHMKbh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 13 Aug 2020 06:31:37 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35289 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726048AbgHMKbf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Aug 2020 06:31:35 -0400
-Received: from [37.161.87.136] (port=46755 helo=[192.168.42.162])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1k6AW9-000FlW-5k; Thu, 13 Aug 2020 12:31:29 +0200
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20200812203618.2656699-1-robh@kernel.org>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
-Date:   Thu, 13 Aug 2020 12:31:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726252AbgHMP7a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Aug 2020 11:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726249AbgHMP7a (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Aug 2020 11:59:30 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256A4C061757
+        for <linux-spi@vger.kernel.org>; Thu, 13 Aug 2020 08:59:30 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id p8so3147139vsm.12
+        for <linux-spi@vger.kernel.org>; Thu, 13 Aug 2020 08:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=ToE95yFkuJhD4LD7ZDsJJykke8b8cCnsh7HC0yrzVq0=;
+        b=EEVe7i8DrCVVzJaF3Zex7DHYzufzyLgvP5iWqHgoTM65sOkvVC9eBrR6mSqXygjOPK
+         xn0HjxoVi54oIqP0yYiwVCDNHwmUQ7OqUniLOtmdIPC73eHsXgBTD6rh+vPycVbRZ6Ul
+         qF8ThooAFVWr3BMZYIDoxcEPX9CPAcL983wcXnBWcFtaMod+4ahcGtjBSni0/3uA7tay
+         jk2yAnEG4ouDOsyPi56D/YCmoykHdANCgqy1u4XOsX9NuLRO5rqtnodsphcOKjrJNJDa
+         Ot5IxYiENFDszGWxMiRMva897+ecSxRa2B2UP+AGa0e675K5c6IsZzOuGts7Ci21bvqU
+         2iDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=ToE95yFkuJhD4LD7ZDsJJykke8b8cCnsh7HC0yrzVq0=;
+        b=XNwVcdls2mF7CG1PoZJCgAeZg5b1lx9TQYg7hUn2OKO4mqnN1zVsOyC5/0ninSxfEv
+         ekEL0so7wM+dsEHWORWxck3FP8B5uulQSPg4qQoQERhwVXIo4YayZTMNisehLCF2f/3Y
+         qvDOoJO2wXAtIqI++cbkWsUXsLDsTo6eXwGNe2LfkuPvSgggCrK/gEHr357Kd1NIO1wh
+         SjuEQ0ALYOcT6hDa1Mr/C51PF1UVwVLsrhb7HFVbgdxgQuLMa8HvCuy1DdHZIDh9yUPX
+         Mswx5bisRvAas7LWNDizL7N5wJxxD4m+gQLF58e8yyRpbVQBRslGkZfbyA0ESVUrMlxX
+         sLTA==
+X-Gm-Message-State: AOAM531v6oW1OE2gx5z4HPfhQRo+XRggVAN4Qyk7oGVG1gSnElu29khF
+        BAGVOQLMVUPaDDI4yqqBJSGIfE8rzwvHz4TVX9iXZQ==
+X-Google-Smtp-Source: ABdhPJxDqTRNz8HDlhO0DhSAkFEoox7QZDtZ/jQ0g/8ku4sXmiOI18qR0iUALzyRqOUNHn+V+Lji0MsVRI1XZMbKC7Y=
+X-Received: by 2002:a67:ffd8:: with SMTP id w24mr3618123vsq.148.1597334368773;
+ Thu, 13 Aug 2020 08:59:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+References: <CAD-cv=NLFXSmhvc3HPCRY-_SkCn-2+6-i+k=-jOzs59Sd1uepQ@mail.gmail.com>
+ <CAD-cv=P5TxgVOxDFJCafb=B+Tj3ABRheyuU93hfi6cw9TxXxvQ@mail.gmail.com>
+In-Reply-To: <CAD-cv=P5TxgVOxDFJCafb=B+Tj3ABRheyuU93hfi6cw9TxXxvQ@mail.gmail.com>
+From:   Andrea Tessadri <tessadriandrea@gmail.com>
+Date:   Thu, 13 Aug 2020 17:59:17 +0200
+Message-ID: <CAD-cv=PVEf82VA0pnVLz_p9ukkvYDp3AnGKeJWybos1tHsL3Jg@mail.gmail.com>
+Subject: Fwd: SPI for IMX6x with cyclic DMA for continuous transfer
+To:     linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+I've just developed and tested cyclic DMA transfer for a SPI device on
+a IMX6UL with kernel 4.9.88
+I wanted to have a single SPI transfer repeated continuously in order
+to feed a DAC for generation of a particular waveform for a medical
+device, without interruption and minimal jitter (this is why I though
+to make the change at low level, instead of making the protocol driver
+to pump several identical messages to SPI subsystem)
+I am wondering if this feature could be interesting for other
+applications and if it is worth to submit a patch for
+drivers/spi/spi-imx.c
+Thank you in advance
 
-On 12/08/20 22:36, Rob Herring wrote:
-> Clean-up incorrect indentation, extra spaces, long lines, and missing
-> EOF newline in schema files. Most of the clean-ups are for list
-> indentation which should always be 2 spaces more than the preceding
-> keyword.
-> 
-> Found with yamllint (which I plan to integrate into the checks).
-
-[...]
-
-> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> index 3d4e1685cc55..28c6461b9a9a 100644
-> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> @@ -95,10 +95,10 @@ allOf:
->        # Devices without builtin crystal
->        properties:
->          clock-names:
-> -            minItems: 1
-> -            maxItems: 2
-> -            items:
-> -              enum: [ xin, clkin ]
-> +          minItems: 1
-> +          maxItems: 2
-> +          items:
-> +            enum: [ xin, clkin ]
->          clocks:
->            minItems: 1
->            maxItems: 2
-
-Thanks for noticing, LGTM.
-
-[...]
-
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> index d7dac16a3960..36dc7b56a453 100644
-> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> @@ -33,8 +33,8 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->  
->    touchscreen-min-pressure:
-> -    description: minimum pressure on the touchscreen to be achieved in order for the
-> -                 touchscreen driver to report a touch event.
-> +    description: minimum pressure on the touchscreen to be achieved in order
-> +      for the touchscreen driver to report a touch event.
-
-Out of personal taste, I find the original layout more pleasant and
-readable. This third option is also good, especially for long descriptions:
-
-  description:
-    minimum pressure on the touchscreen to be achieved in order for the
-    touchscreen driver to report a touch event.
-
-At first glance yamllint seems to support exactly these two by default:
-
-> With indentation: {spaces: 4, check-multi-line-strings: true}
-> 
-> the following code snippet would PASS:
-> 
-> Blaise Pascal:
->     Je vous écris une longue lettre parce que
->     je n'ai pas le temps d'en écrire une courte.
-> 
-> the following code snippet would PASS:
-> 
-> Blaise Pascal: Je vous écris une longue lettre parce que
->                je n'ai pas le temps d'en écrire une courte.
-> 
-> the following code snippet would FAIL:
-> 
-> Blaise Pascal: Je vous écris une longue lettre parce que
->   je n'ai pas le temps d'en écrire une courte.
-> 
-(https://yamllint.readthedocs.io/en/stable/rules.html#module-yamllint.rules.indentation)
-
-
--- 
-Luca
-
+  Andrea
