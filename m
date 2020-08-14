@@ -2,71 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4F7243CE7
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Aug 2020 17:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F19D244396
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Aug 2020 04:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726252AbgHMP7a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Aug 2020 11:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S1726591AbgHNCsz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Aug 2020 22:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726249AbgHMP7a (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Aug 2020 11:59:30 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256A4C061757
-        for <linux-spi@vger.kernel.org>; Thu, 13 Aug 2020 08:59:30 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id p8so3147139vsm.12
-        for <linux-spi@vger.kernel.org>; Thu, 13 Aug 2020 08:59:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=ToE95yFkuJhD4LD7ZDsJJykke8b8cCnsh7HC0yrzVq0=;
-        b=EEVe7i8DrCVVzJaF3Zex7DHYzufzyLgvP5iWqHgoTM65sOkvVC9eBrR6mSqXygjOPK
-         xn0HjxoVi54oIqP0yYiwVCDNHwmUQ7OqUniLOtmdIPC73eHsXgBTD6rh+vPycVbRZ6Ul
-         qF8ThooAFVWr3BMZYIDoxcEPX9CPAcL983wcXnBWcFtaMod+4ahcGtjBSni0/3uA7tay
-         jk2yAnEG4ouDOsyPi56D/YCmoykHdANCgqy1u4XOsX9NuLRO5rqtnodsphcOKjrJNJDa
-         Ot5IxYiENFDszGWxMiRMva897+ecSxRa2B2UP+AGa0e675K5c6IsZzOuGts7Ci21bvqU
-         2iDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=ToE95yFkuJhD4LD7ZDsJJykke8b8cCnsh7HC0yrzVq0=;
-        b=XNwVcdls2mF7CG1PoZJCgAeZg5b1lx9TQYg7hUn2OKO4mqnN1zVsOyC5/0ninSxfEv
-         ekEL0so7wM+dsEHWORWxck3FP8B5uulQSPg4qQoQERhwVXIo4YayZTMNisehLCF2f/3Y
-         qvDOoJO2wXAtIqI++cbkWsUXsLDsTo6eXwGNe2LfkuPvSgggCrK/gEHr357Kd1NIO1wh
-         SjuEQ0ALYOcT6hDa1Mr/C51PF1UVwVLsrhb7HFVbgdxgQuLMa8HvCuy1DdHZIDh9yUPX
-         Mswx5bisRvAas7LWNDizL7N5wJxxD4m+gQLF58e8yyRpbVQBRslGkZfbyA0ESVUrMlxX
-         sLTA==
-X-Gm-Message-State: AOAM531v6oW1OE2gx5z4HPfhQRo+XRggVAN4Qyk7oGVG1gSnElu29khF
-        BAGVOQLMVUPaDDI4yqqBJSGIfE8rzwvHz4TVX9iXZQ==
-X-Google-Smtp-Source: ABdhPJxDqTRNz8HDlhO0DhSAkFEoox7QZDtZ/jQ0g/8ku4sXmiOI18qR0iUALzyRqOUNHn+V+Lji0MsVRI1XZMbKC7Y=
-X-Received: by 2002:a67:ffd8:: with SMTP id w24mr3618123vsq.148.1597334368773;
- Thu, 13 Aug 2020 08:59:28 -0700 (PDT)
+        with ESMTP id S1726564AbgHNCsz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Aug 2020 22:48:55 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33463C061757
+        for <linux-spi@vger.kernel.org>; Thu, 13 Aug 2020 19:48:54 -0700 (PDT)
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A0BBA8066C;
+        Fri, 14 Aug 2020 14:48:41 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1597373321;
+        bh=ou7hLrNJN0/pRe7ONfpMu46KXJsXN05tu18f3uIqijA=;
+        h=From:To:CC:Subject:Date;
+        b=BjgdLwfCf0x8CT4cx9cl0m0wTjuobrghBXiJ20pNq12ZjTvVYG9MRDSYKgnfbjdJj
+         dUAy1Mw2bgru+Bt66XVLnnppO7oUEhLUDmUMCskr7RgrYymPfslur6Jz6xE4Vjn0wn
+         2+m7r92QyUQCL1chQjeZ9Qn/m6pdh5Fnp0pldXBpdFrIzq6QJDLwXS/p/D046bs9aJ
+         r/UShX49MQX23Z21NQNIdBHhCRl08Vndmt6MG7/epmaWUscyNRhRPR0GeiP3KNEWse
+         G8PRH3gq3B6dTIXixtSGY8M0qyRA1piy+0D7LPF8B/wb3biQuKUeULX8IKCnfByB6u
+         15WL0N7BjDDDw==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f35fb8a0000>; Fri, 14 Aug 2020 14:48:42 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 14 Aug 2020 14:48:36 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.006; Fri, 14 Aug 2020 14:48:36 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "broonie@kernel.org" <broonie@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "tiago.brusamarello@datacom.ind.br" 
+        <tiago.brusamarello@datacom.ind.br>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: fsl_espi errors on v5.7.15
+Thread-Topic: fsl_espi errors on v5.7.15
+Thread-Index: AQHWceVnik7XsBYbp0S+yHVGh1hdQQ==
+Date:   Fri, 14 Aug 2020 02:48:35 +0000
+Message-ID: <3f48e5fb-33c9-8046-0f80-236eed163c16@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4668A17998FAFE4399EBF7CFFCC398CB@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CAD-cv=NLFXSmhvc3HPCRY-_SkCn-2+6-i+k=-jOzs59Sd1uepQ@mail.gmail.com>
- <CAD-cv=P5TxgVOxDFJCafb=B+Tj3ABRheyuU93hfi6cw9TxXxvQ@mail.gmail.com>
-In-Reply-To: <CAD-cv=P5TxgVOxDFJCafb=B+Tj3ABRheyuU93hfi6cw9TxXxvQ@mail.gmail.com>
-From:   Andrea Tessadri <tessadriandrea@gmail.com>
-Date:   Thu, 13 Aug 2020 17:59:17 +0200
-Message-ID: <CAD-cv=PVEf82VA0pnVLz_p9ukkvYDp3AnGKeJWybos1tHsL3Jg@mail.gmail.com>
-Subject: Fwd: SPI for IMX6x with cyclic DMA for continuous transfer
-To:     linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-I've just developed and tested cyclic DMA transfer for a SPI device on
-a IMX6UL with kernel 4.9.88
-I wanted to have a single SPI transfer repeated continuously in order
-to feed a DAC for generation of a particular waveform for a medical
-device, without interruption and minimal jitter (this is why I though
-to make the change at low level, instead of making the protocol driver
-to pump several identical messages to SPI subsystem)
-I am wondering if this feature could be interesting for other
-applications and if it is worth to submit a patch for
-drivers/spi/spi-imx.c
-Thank you in advance
-
-  Andrea
+SGksDQoNCkknbSBzZWVpbmcgYSBwcm9ibGVtIHdpdGggYWNjZXNzaW5nIHNwaS1ub3IgYWZ0ZXIg
+dXBncmFkaW5nIGEgVDIwODEgDQpiYXNlZCBzeXN0ZW0gdG8gbGludXggdjUuNy4xNQ0KDQpGb3Ig
+dGhpcyBib2FyZCB1LWJvb3QgYW5kIHRoZSB1LWJvb3QgZW52aXJvbm1lbnQgbGl2ZSBvbiBzcGkt
+bm9yLg0KDQpXaGVuIEkgdXNlIGZ3X3NldGVudiBmcm9tIHVzZXJzcGFjZSBJIGdldCB0aGUgZm9s
+bG93aW5nIGtlcm5lbCBsb2dzDQoNCiMgZndfc2V0ZW52IGZvbz0xDQpmc2xfZXNwaSBmZmUxMTAw
+MDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQhDQpmc2xfZXNwaSBm
+ZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQhDQpmc2xf
+ZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQh
+DQpmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24n
+dCBzZXQhDQpmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RP
+TiBpc24ndCBzZXQhDQpmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBT
+UElFX0RPTiBpc24ndCBzZXQhDQpmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25l
+IGJ1dCBTUElFX0RPTiBpc24ndCBzZXQhDQpmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2Zl
+ciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQhDQpmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBU
+cmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQhDQpmc2xfZXNwaSBmZmUxMTAwMDAu
+c3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQhDQpmc2xfZXNwaSBmZmUx
+MTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQhDQpmc2xfZXNw
+aSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQhDQpm
+c2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBz
+ZXQhDQpmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBp
+c24ndCBzZXQhDQpmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCByeC90
+eCBmaWZvJ3MgYXJlbid0IGVtcHR5IQ0KZnNsX2VzcGkgZmZlMTEwMDAwLnNwaTogU1BJRV9SWENO
+VCA9IDEsIFNQSUVfVFhDTlQgPSAzMg0KZnNsX2VzcGkgZmZlMTEwMDAwLnNwaTogVHJhbnNmZXIg
+ZG9uZSBidXQgcngvdHggZmlmbydzIGFyZW4ndCBlbXB0eSENCmZzbF9lc3BpIGZmZTExMDAwMC5z
+cGk6IFNQSUVfUlhDTlQgPSAxLCBTUElFX1RYQ05UID0gMzINCmZzbF9lc3BpIGZmZTExMDAwMC5z
+cGk6IFRyYW5zZmVyIGRvbmUgYnV0IHJ4L3R4IGZpZm8ncyBhcmVuJ3QgZW1wdHkhDQpmc2xfZXNw
+aSBmZmUxMTAwMDAuc3BpOiBTUElFX1JYQ05UID0gMSwgU1BJRV9UWENOVCA9IDMyDQouLi4NCg0K
+SWYgSSBydW4gZndfcHJpbnRlbnYgKGJlZm9yZSBnZXR0aW5nIGl0IGludG8gYSBiYWQgc3RhdGUp
+IGl0IGlzIGFibGUgdG8gDQpkaXNwbGF5IHRoZSBjb250ZW50IG9mIHRoZSBib2FyZHMgdS1ib290
+IGVudmlyb25tZW50Lg0KDQpJZiBiZWVuIHVuc3VjY2Vzc2Z1bCBpbiBwcm9kdWNpbmcgYSBzZXR1
+cCBmb3IgYmlzZWN0aW5nIHRoZSBpc3N1ZS4gSSBkbyANCmtub3cgdGhlIGlzc3VlIGRvZXNuJ3Qg
+b2NjdXIgb24gdGhlIG9sZCA0LjQueCBiYXNlZCBrZXJuZWwgYnV0IHRoYXQncyANCnByb2JhYmx5
+IG5vdCBtdWNoIGhlbHAuDQoNCkFueSBwb2ludGVycyBvbiB3aGF0IHRoZSBpc3N1ZSAoYW5kL29y
+IHNvbHV0aW9uKSBtaWdodCBiZS4NCg0KVGhhbmtzLA0KQ2hyaXMNCg==
