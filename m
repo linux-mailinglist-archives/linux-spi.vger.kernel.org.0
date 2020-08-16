@@ -2,90 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EBB245724
-	for <lists+linux-spi@lfdr.de>; Sun, 16 Aug 2020 11:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE97F245812
+	for <lists+linux-spi@lfdr.de>; Sun, 16 Aug 2020 16:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729162AbgHPJqt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 16 Aug 2020 05:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S1729565AbgHPObp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 16 Aug 2020 10:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728467AbgHPJqr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Aug 2020 05:46:47 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBA6C061786
-        for <linux-spi@vger.kernel.org>; Sun, 16 Aug 2020 02:46:47 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id m20so10012707eds.2
-        for <linux-spi@vger.kernel.org>; Sun, 16 Aug 2020 02:46:47 -0700 (PDT)
+        with ESMTP id S1728365AbgHPOaK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Aug 2020 10:30:10 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958DDC061373
+        for <linux-spi@vger.kernel.org>; Sun, 16 Aug 2020 07:28:37 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 184so11882445wmb.0
+        for <linux-spi@vger.kernel.org>; Sun, 16 Aug 2020 07:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=4LCfFp07XS1q66wli8dcYhD0t73DqdefUks6gneqjAA=;
-        b=UA/hgnQeK9lY/pSTvTGxC99ILLbpn/aj9S9YjxIs8gr9wnHy9R2yPiDBdo2q75Ub+1
-         E0flgbUB7kL5QJqezq37LMawpiDuUqo0nW07YFgpehC9R7NPdidV2HQvDKo3XnPTQKZz
-         /05jsRaskiK+wsDVhF0SL2YPE6Ym6H0KVQrP87ojHaddF8Tlcpj4M+skSHKiy1ujXe5e
-         bK+3b8gp3cLwlMTnLbnn1U2lR7vWDGFFc1jpeWvs3n04ZA1KPJg8KgtCuZ/qXWrwRcY/
-         /zVXpKCiDGfevKHeyhNjufmxAlDpd+mswJqU+sEBHiUyhNZFk8IoVxmlOuvmowT1kz6k
-         vLqA==
+        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
+        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
+         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
+         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
+         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
+         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
+         yMKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4LCfFp07XS1q66wli8dcYhD0t73DqdefUks6gneqjAA=;
-        b=MzrTeTff1+Es6UzAi965NiPvj+o+qEaf0m9GkxxyCNNoW2YFRHXy2tir5x8aCzUQ7y
-         4wElE6fD5cVsuC8/kceCNKHElUZpSvJHgx+tdWbB37bjsjYJIc8x5NgJQStM4W80nfrz
-         kLRAUgAiimO2hHVvtlcHN0ZDvJ/AK34XRdZZX/qVkvpzeVUZwtuzS7sHsNRIR9BFeISA
-         MUqh6Bwiqvl0MY8jAuwTZjXb2fJEhAkyC+TWYlP3cksjTipJD4JSY0JXqKWvzGbpH5dl
-         REXIl2Ydw/XdLJiaaGGcADQRrbpDUOADWH8RmBShK5ahRHL9SC0k+TDoMTZgzWj2t5fB
-         8mBA==
-X-Gm-Message-State: AOAM533jBSWMSX5jZHycC9avKN+XDV+HnBIFicdsmc+xpqXWH1yV93YC
-        +qaiYVdKv8CW4JO4Nj65jQnYvaYnI0lraw==
-X-Google-Smtp-Source: ABdhPJzcAo03qxPk5Fj1T5jheKHjvhXmeZBwMoh7uTkLshi/WLRqXnulWz+GnNHOTS/Hz4DBcFvB1g==
-X-Received: by 2002:a05:6402:7c7:: with SMTP id u7mr7947534edy.283.1597571205225;
-        Sun, 16 Aug 2020 02:46:45 -0700 (PDT)
-Received: from dfj.4.4.4.4 (host-95-248-210-252.retail.telecomitalia.it. [95.248.210.252])
-        by smtp.gmail.com with ESMTPSA id a18sm11785421ejt.69.2020.08.16.02.46.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Aug 2020 02:46:44 -0700 (PDT)
-From:   Angelo Dureghello <angelo.dureghello@timesys.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org,
-        Angelo Dureghello <angelo.dureghello@timesys.com>
-Subject: [PATCH] spi: spi-fsl-dspi: set ColdFire to DMA mode
-Date:   Sun, 16 Aug 2020 11:46:35 +0200
-Message-Id: <20200816094635.1830006-1-angelo.dureghello@timesys.com>
-X-Mailer: git-send-email 2.28.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
+        b=nGkay9vek2Kc8SXWVTl7WqTavNvFgWk1UpTxp5X7AjJn3SBlKM5cXjaEOZGEWYbLiC
+         6U5yWCn1R1Phl7gpQCxMEPQZpKf8th2p3CY2+ugPNdKPVJ+riycZTiJXpuIyhXhgXc67
+         g10yRKwRLFoA3VBAXMo2eF68J+7RkyNakCCpFSt7KRtY6maeGLpxw6mPOqa2Jeej58zJ
+         sU7J5VZFLOprcUo7fA1hwPrYiBo5JinUhr+HvVRC4bMrN5XCDUYs90shC2e59v0qvMMg
+         ZIasgW3o4gRYDZeeAQZB4dG04XFTqUroy/hLOc1rIKuHAZRR0Anr0TC94J6thIjvK6bu
+         ea4w==
+X-Gm-Message-State: AOAM5338NdylzZ3zEI2xMttcbLRmY+xzEiCM3CvgX4rYGByaJy0nOnGp
+        fyUXU9IBKQpoAQIx6+f6NZZBeN9n57ahSDP1cVA=
+X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
+X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
+ Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
+ -0700 (PDT)
+Reply-To: sctnld11170@tlen.pl
+From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
+Date:   Sun, 16 Aug 2020 07:28:30 -0700
+Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
+Subject: Hello, Please
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Set DMA transfer mode for ColdFire.
+--=20
+Dear Friend,
 
-After recent fixes to fsl edma engine, this mode can be used
-also for ColdFire, and from some raw mtd r/w tests it definitely
-improves the transfer rate, so keeping it selected.
+I'm Mr. Scott Donald a Successful businessMan dealing with
+Exportation, I got your mail contact through search to let you know my
+intension and my Ugly Situation Am a dying Man here in Los Angeles
+California Hospital Bed in (USA), I Lost my Wife and my only Daughter
+for Covid-19 and I also have a problem in my Health and I can die
+anytime I Know,
 
-Signed-off-by: Angelo Dureghello <angelo.dureghello@timesys.com>
----
- drivers/spi/spi-fsl-dspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I have a project that I am about to hand over to you. and I already
+instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
+of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
+able you
+to give 50% of this fund to Charitable Home in your State and take 50%
+don't think otherwise and why would anybody send someone you barely
+know to help you deliver a message, help me do this for the happiness
+of my soul and for God to mercy me and my Family and give Us a good
+place.
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 91c6affe139c..5b9a285d84a7 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -189,7 +189,7 @@ static const struct fsl_dspi_devtype_data devtype_data[] = {
- 		.fifo_size		= 4,
- 	},
- 	[MCF5441X] = {
--		.trans_mode		= DSPI_EOQ_MODE,
-+		.trans_mode		= DSPI_DMA_MODE,
- 		.max_clock_factor	= 8,
- 		.fifo_size		= 16,
- 	},
--- 
-2.28.0
+please, do as I said there was someone from your State that I deeply
+love so very very much and I miss her so badly I have no means to
+reach any Charitable Home there. that is why I go for a personal
+search of the Country and State and I got your mail contact through
+search to let you know my Bitterness and please, help me is getting
+Dark I ask my Doctor to help me keep you notice failure for me to
+reach you in person Your urgent Response, here is my Doctor Whats-app
+Number for urgent notice +13019692737
 
+Hope To Hear From You. I'm sending this email to you for the second
+time yet no response from you.
+
+My Regards.
+
+Mr. Scott Donald
+CEO
