@@ -2,122 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 414BA245C09
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Aug 2020 07:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6909424624D
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Aug 2020 11:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgHQFpd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Aug 2020 01:45:33 -0400
-Received: from mail2.skidata.com ([91.230.2.91]:36143 "EHLO mail2.skidata.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726308AbgHQFpd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 17 Aug 2020 01:45:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=skidata.com; i=@skidata.com; q=dns/txt; s=selector1;
-  t=1597643132; x=1629179132;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=iq6E0tROTvyWLYPqPO1Jep0gNCBrkGzldGCPeMg+7YQ=;
-  b=TiQa2LaC6eg/8+EgVhdWz+/BS136xFBuZa7mM9clCoGr+VaF0NJ81RC6
-   l1YY4PERPYIct8aW7qt60fHqYW77KzNLZCkr1RONk1befRqCcXmOQhqst
-   rynS6YSA7V4SIMCbyTPi5Hc+Xg+aYA5QZ5Kmv+BvmckHPo2p0j17CMwNo
-   ESf+24whxtcLrLALVFu7c3P//l2A0VY5gLtcwZqiGBulWLJIOIu3cZq1k
-   LqRRe2KXSgIWwzRZ22Itv976yeYXlp9DnpHVhCY199+vBibkeyI6SYacT
-   A4tOFYCCu5SMRN35loVB7RnW23pqNHCFtc/ee+JDyr9dTO3yB7EjntMqI
-   g==;
-IronPort-SDR: rZkcM47agA66V7rz7feaMdOluzUqk0bpZwPNFBS4nRIuINpiwtoyuu5PvhKvd7GxTCNDYB6kXY
- q+8aPl4488YU/sH1xOfKWdB3CMlyy7Wmb9WhpewAqI8mDDklAMKIou3zPjCur2Svcz1ng1Oj8Z
- Zy7WxGnwP3YJWucu6wpo6YHFvYGa5JHGgsVwTkK/rDs/Q9q8+zXUyPiuiSF72FTDQ+I8JVsk45
- na+58Ifn3fOwiZaehwKqTEjAYKrWjacs9o1T8V1VGA9ce2sOYhvzzUx0Gd/5S3O54kP7NGQAU7
- SbE=
-X-IronPort-AV: E=Sophos;i="5.76,322,1592863200"; 
-   d="scan'208";a="2642498"
-Date:   Mon, 17 Aug 2020 07:38:20 +0200
-From:   Richard Leitner <richard.leitner@skidata.com>
-To:     Robin Gong <yibin.gong@nxp.com>
-CC:     <mark.rutland@arm.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <catalin.marinas@arm.com>, <vkoul@kernel.org>,
-        <will.deacon@arm.com>, <shawnguo@kernel.org>, <festevam@gmail.com>,
-        <s.hauer@pengutronix.de>, <martin.fuzzey@flowbird.group>,
-        <u.kleine-koenig@pengutronix.de>, <dan.j.williams@intel.com>,
-        <matthias.schiffer@ew.tq-group.com>, <frieder.schrempf@kontron.de>,
-        <r.schwebel@pengutronix.de>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kernel@pengutronix.de>,
-        <dmaengine@vger.kernel.org>, <linux-imx@nxp.com>
-Subject: Re: [PATCH v12 04/12] dmaengine: imx-sdma: remove duplicated
- sdma_load_context
-Message-ID: <20200817053820.GB551027@pcleri>
-References: <1597161231-32303-1-git-send-email-yibin.gong@nxp.com>
- <1597161231-32303-5-git-send-email-yibin.gong@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1597161231-32303-5-git-send-email-yibin.gong@nxp.com>
-X-Originating-IP: [192.168.111.252]
-X-ClientProxiedBy: sdex6srv.skidata.net (192.168.111.84) To
- sdex5srv.skidata.net (192.168.111.83)
+        id S1726624AbgHQJQn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Aug 2020 05:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726297AbgHQJQl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Aug 2020 05:16:41 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D7BC061389;
+        Mon, 17 Aug 2020 02:16:41 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id bh1so7184409plb.12;
+        Mon, 17 Aug 2020 02:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=nYi1qCRVXukm3Vys4Ax0zzpvhrxgpQ9/OWRIEzi7jMM=;
+        b=mxWi/elPlQYhLXMLOAt36tJYQ+Hp1VAtd/uz+Kc8cIdiewSdg8n95X+KYxSdWGZJ1y
+         /1rHnM4HvYeEmKOOLXL2wTqM2vSxMsb9VJZkfdrjZ8c8pWQ4rrQImtoKQ977EHgQ+THx
+         Aa919IaWGz3+LC2CnAhGPcCnKZKjEcT2ftL3tbor1l7DdNN51bTmd6wf3G7Uglbn9gd3
+         IvO4ciTbor+qNIHbn5ZnArhfiWQHMjs284hcUdKxz9v7/11dHOTVFY1ki+iFopZAQ166
+         233J/wFqybY2SkuhDb0GHf7Xk3e7tw+qSNZabUjFckMBu8dhIwFr7uUw3BLLKtx0v0Fq
+         3HVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=nYi1qCRVXukm3Vys4Ax0zzpvhrxgpQ9/OWRIEzi7jMM=;
+        b=lrj+uJxdJpEIamwguU3hYqchl9pkUjOg1PwRFi/AX1gdgtnw6PlM/vtlnggvEKimYP
+         lJ+XZ3HSJghOSF5qDeN4B1ACqkEV5jMuhtK/mHWqv4P6mgHfX9DBGjLhpGTteNmGmqFI
+         LHNBD1g8VEsV0vSuz+t7SP73tlHY5zi3X0ddCrPuznKrAKxqpNCKkM1XUxyYV2SUJMfq
+         DXVn4hZCcHO0WOOKf/P46zAgxhEDWHUrIWpEqIbGF9c7U+fVv6v2YYAuNlQvXzZyfkoY
+         4Hurr4n7e/GkpPMPAKiyC72AYOfJ9OPxOAYLnHRS4qHCo2L2wrDsIlmAcPvxWiipKjkb
+         hCGQ==
+X-Gm-Message-State: AOAM531LIru3JgBdpugP33/3Phz8shnEq+JkBrHNCNfS7ygLLjVNKQtv
+        68OA9EMiliiZpLF+p4nKUlo=
+X-Google-Smtp-Source: ABdhPJx+wEvCOSvKZxezpdY6lLs7UvfZeX3QH5NUsgJeM5vKZGxtJnJRJpZ8+dEdqnJdMBLPa9KLfg==
+X-Received: by 2002:a17:902:8495:: with SMTP id c21mr10840498plo.82.1597655800670;
+        Mon, 17 Aug 2020 02:16:40 -0700 (PDT)
+Received: from localhost.localdomain ([49.207.202.98])
+        by smtp.gmail.com with ESMTPSA id r25sm15971028pgv.88.2020.08.17.02.16.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2020 02:16:39 -0700 (PDT)
+From:   Allen Pais <allen.cryptic@gmail.com>
+To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        3chas3@gmail.com, axboe@kernel.dk, stefanr@s5r6.in-berlin.de,
+        airlied@linux.ie, daniel@ffwll.ch, sre@kernel.org,
+        James.Bottomley@HansenPartnership.com, kys@microsoft.com,
+        deller@gmx.de, dmitry.torokhov@gmail.com, jassisinghbrar@gmail.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        maximlevitsky@gmail.com, oakad@yahoo.com, ulf.hansson@linaro.org,
+        mporter@kernel.crashing.org, alex.bou9@gmail.com,
+        broonie@kernel.org, martyn@welchs.me.uk, manohar.vanga@gmail.com,
+        mitch@sfgoth.com, davem@davemloft.net, kuba@kernel.org
+Cc:     keescook@chromium.org, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux1394-devel@lists.sourceforge.net,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-hyperv@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
+        linux-spi@vger.kernel.org, devel@driverdev.osuosl.org,
+        Allen Pais <allen.lkml@gmail.com>,
+        Romain Perier <romain.perier@gmail.com>
+Subject: [PATCH] arch: um: convert tasklets to use new tasklet_setup() API
+Date:   Mon, 17 Aug 2020 14:45:55 +0530
+Message-Id: <20200817091617.28119-1-allen.cryptic@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 11:53:43PM +0800, Robin Gong wrote:
-> Since sdma_transfer_init() will do sdma_load_context before any
-> sdma transfer, no need once more in sdma_config_channel().
-> 
-> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-> Acked-by: Vinod Koul <vkoul@kernel.org>
+From: Allen Pais <allen.lkml@gmail.com>
 
-Hi Robin,
-thanks for the pointer to this patch.
+In preparation for unconditionally passing the
+struct tasklet_struct pointer to all tasklet
+callbacks, switch to using the new tasklet_setup()
+and from_tasklet() to pass the tasklet pointer explicitly.
 
-As you suggested I've tested the two patches on my custom i.MX6DL
-board. Therefore please feel free to add:
+Signed-off-by: Romain Perier <romain.perier@gmail.com>
+Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+---
+ arch/um/drivers/vector_kern.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Tested-by: Richard Leitner <richard.leitner@skidata.com>
-
-regards;rl
-
-> ---
->  drivers/dma/imx-sdma.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index d305b80..5411e01e 100644
-> --- a/drivers/dma/imx-sdma.c
-> +++ b/drivers/dma/imx-sdma.c
-> @@ -1137,7 +1137,6 @@ static void sdma_set_watermarklevel_for_p2p(struct sdma_channel *sdmac)
->  static int sdma_config_channel(struct dma_chan *chan)
->  {
->  	struct sdma_channel *sdmac = to_sdma_chan(chan);
-> -	int ret;
->  
->  	sdma_disable_channel(chan);
->  
-> @@ -1177,9 +1176,7 @@ static int sdma_config_channel(struct dma_chan *chan)
->  		sdmac->watermark_level = 0; /* FIXME: M3_BASE_ADDRESS */
->  	}
->  
-> -	ret = sdma_load_context(sdmac);
-> -
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int sdma_set_channel_priority(struct sdma_channel *sdmac,
-> -- 
-> 2.7.4
-> 
-> 
-
+diff --git a/arch/um/drivers/vector_kern.c b/arch/um/drivers/vector_kern.c
+index 8735c468230a..06980870ae23 100644
+--- a/arch/um/drivers/vector_kern.c
++++ b/arch/um/drivers/vector_kern.c
+@@ -1196,9 +1196,9 @@ static int vector_net_close(struct net_device *dev)
+ 
+ /* TX tasklet */
+ 
+-static void vector_tx_poll(unsigned long data)
++static void vector_tx_poll(struct tasklet_struct *t)
+ {
+-	struct vector_private *vp = (struct vector_private *)data;
++	struct vector_private *vp = from_tasklet(vp, t, tx_poll);
+ 
+ 	vp->estats.tx_kicks++;
+ 	vector_send(vp->tx_queue);
+@@ -1629,7 +1629,7 @@ static void vector_eth_configure(
+ 	});
+ 
+ 	dev->features = dev->hw_features = (NETIF_F_SG | NETIF_F_FRAGLIST);
+-	tasklet_init(&vp->tx_poll, vector_tx_poll, (unsigned long)vp);
++	tasklet_setup(&vp->tx_poll, vector_tx_poll);
+ 	INIT_WORK(&vp->reset_tx, vector_reset_tx);
+ 
+ 	timer_setup(&vp->tl, vector_timer_expire, 0);
 -- 
-Richard Leitner
-Hardware R&D / Senior Embedded Linux Engineer
+2.17.1
 
-SKIDATA | Driving Your Digital Future
-
-SKIDATA GmbH
-Untersbergstraße 40 | 5083 Grödig/Salzburg | Austria
-[t] +43-6246-888-4245 | [m] +43-664-88616370
-[w] www.skidata.com
