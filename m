@@ -2,86 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC22249E0D
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Aug 2020 14:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3E8249E35
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Aug 2020 14:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728081AbgHSMei (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Aug 2020 08:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728273AbgHSMdq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Aug 2020 08:33:46 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B84C061757
-        for <linux-spi@vger.kernel.org>; Wed, 19 Aug 2020 05:33:46 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id o2so11111847qvk.6
-        for <linux-spi@vger.kernel.org>; Wed, 19 Aug 2020 05:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=kQdyoaOPXlrSc5FhSdIhoot6NFE5B/ivUZJdRymmhPM=;
-        b=mw04zpRe+ahlhPqR1lTewDa2OFzfgiS88BuWnT1WsZ01fxEao9mVMTQUfaaWZz0PMk
-         f9L4NmXsJ4oKIacsqiK27uTQZxEdJVjS57lkSCIvRWuZGgKJrbLuQIJ5SFlAL1NrHRqv
-         f7YzS9mZX7nHSu/pby3gpzusldiEIYrPzpUMxtlC9yxCZd292U2ectQInmxQrcuomNkb
-         gus7VT2VrWReHn0o8Y9Ycx363rtzOtGkTC47ixm/hRHJSEfnaEH1tQsjVOlSCDT+Ihe9
-         mJE5k4VgXQFMUKIjbgj7hXtcTPTMn9rgPGJ5/4cKAZFkI/uHZ0Z4hqmcOANX4ttPTLo9
-         wUoQ==
+        id S1728197AbgHSMhu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 19 Aug 2020 08:37:50 -0400
+Received: from mail-ej1-f65.google.com ([209.85.218.65]:41099 "EHLO
+        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727018AbgHSMhh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Aug 2020 08:37:37 -0400
+Received: by mail-ej1-f65.google.com with SMTP id t10so26087374ejs.8;
+        Wed, 19 Aug 2020 05:37:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kQdyoaOPXlrSc5FhSdIhoot6NFE5B/ivUZJdRymmhPM=;
-        b=ne3Se06Spefk1BDgck4oDUNKocKuJahB8GXRuisfyGf7ybBeGXXzGXXtdq500rHvpN
-         prJ3ooifBbtGb33Ubb9maaqxqW+hSISGCqGr2us1eGcNWhqlzBflgDRtQ00zc/w+dMLH
-         Wj2F6fTJKzsM2BmCxMhpBvGc3CfNkttvVT1l+3X+lmiYge5hAe0I1aZP0agl6UCZPm2W
-         Z/lcnJjAJaRAdmLrWfd4skW3aRni+d/K6lxZ/8NvL9FKKQUdwD2BB/QTerF/YvuwxoiK
-         mxXuMeaeKBA2jG5oQACFs+JBSEPtDj1kAYqi+czOxwoKTgbZUlOYsXB6uj88t0sufH1k
-         y9Hg==
-X-Gm-Message-State: AOAM531sZy9F810GqFHSa5gZDXjhrLW/SCrGy8m3ivdIjfYWuiror6Lv
-        LljcD4es4xo4XOUI5PXOWrs=
-X-Google-Smtp-Source: ABdhPJyB7LZzQ4ZalpJwC5j8gAZKvj/u2pHPmXKqo08qaWWU3KgR9eUe1C8fj1IiD8Ly+lrOzxMZYQ==
-X-Received: by 2002:a0c:d981:: with SMTP id y1mr24099027qvj.124.1597840425603;
-        Wed, 19 Aug 2020 05:33:45 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:482:4fb::1000])
-        by smtp.gmail.com with ESMTPSA id t8sm27625889qtc.50.2020.08.19.05.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 05:33:44 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2] spi: imx: Remove unneeded probe message
-Date:   Wed, 19 Aug 2020 09:33:30 -0300
-Message-Id: <20200819123330.22880-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=6FCKFOV4tXuhe4ALaKK45GgE/rtv2KFtTsBAHakWHm4=;
+        b=CocKN0U5OmS0A9cRNxM7XxA7kFlY1XGFx/vS47SaPi+ke1XyjYcuyi84gaHrjyvkh/
+         dvPCBmaVxEFZKYWYoT/fSALggJBilw9EpuMBcxuZbffjIHIPoJQy5z0TWM/uOQrU77X4
+         +7uKkrakBmB98YCmfhsvGprQ5exW+z9neYLOD+41qTYSRb8B1Ep+kgbwERT1NVgc91dz
+         WA0nNFcNWEUdk4oz1H5Mpz4lUsGcNHsCTnqvxNm+gKLWoV+t5nK9ENXD8vhMS9e1hFZU
+         Z1q7OW+ldGcO//JpkTmDUXDMLKuq6VnHv10RbpIArho++lzE6s79kgmRDpU47wFnORKq
+         QV6A==
+X-Gm-Message-State: AOAM5327rMf1eoWeNlrjJoxqEPQusspEMU7OljDXBFgKJIUbUxb3gea6
+        zSMTbtd8CWWgQ4PMYblmT4U=
+X-Google-Smtp-Source: ABdhPJw9xEf2bvQxWdoKfV7GBCyYJK5pCq04/DM+3vXVGjGug31Euua3pze+tmiaLYIlaBLh8/tQsA==
+X-Received: by 2002:a17:906:cc51:: with SMTP id mm17mr25546416ejb.137.1597840654741;
+        Wed, 19 Aug 2020 05:37:34 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id pv28sm18391843ejb.71.2020.08.19.05.37.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 19 Aug 2020 05:37:34 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 14:37:32 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>
+Cc:     Kukjin Kim <kgene@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        m.szyprowski@samsung.com, b.zolnierkie@samsung.com
+Subject: Re: [PATCH 5/8] spi: spi-s3c64xx: Fix doc comment for struct
+ s3c64xx_spi_driver_data
+Message-ID: <20200819123732.GA18122@kozik-lap>
+References: <20200819123208.12337-1-l.stelmach@samsung.com>
+ <CGME20200819123227eucas1p11cd47cf281a035ed02d5fc819a0370c1@eucas1p1.samsung.com>
+ <20200819123208.12337-6-l.stelmach@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200819123208.12337-6-l.stelmach@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-There is no point in printing a plain "probed" message on successful probe.
+On Wed, Aug 19, 2020 at 02:32:05PM +0200, Łukasz Stelmach wrote:
+> Signed-off-by: Łukasz Stelmach <l.stelmach@samsung.com>
 
-Just remove it and make the kernel log a bit less noisy.
+Hi,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
-Changes since v1:
-- Rebase against current linux-next tree.
+Missing commit msg - fix what exactly?
 
- drivers/spi/spi-imx.c | 2 --
- 1 file changed, 2 deletions(-)
+You need to rebase your patch as most of these were already fixed by Lee
+Jones.
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 96ef297760fc..197f60632072 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1710,8 +1710,6 @@ static int spi_imx_probe(struct platform_device *pdev)
- 		goto out_runtime_pm_put;
- 	}
- 
--	dev_info(&pdev->dev, "probed\n");
--
- 	pm_runtime_mark_last_busy(spi_imx->dev);
- 	pm_runtime_put_autosuspend(spi_imx->dev);
- 
--- 
-2.17.1
+However he did not remove the @rx_dmach and tx entries...
 
+Best regards,
+Krzysztof
+
+> ---
+>  drivers/spi/spi-s3c64xx.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 6fe896f2be18..505789f91fdf 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -155,19 +155,21 @@ struct s3c64xx_spi_port_config {
+>   * @clk: Pointer to the spi clock.
+>   * @src_clk: Pointer to the clock used to generate SPI signals.
+>   * @ioclk: Pointer to the i/o clock between master and slave
+> + * @pdev: Pointer to the SPI controller platform device
+>   * @master: Pointer to the SPI Protocol master.
+>   * @cntrlr_info: Platform specific data for the controller this driver manages.
+>   * @lock: Controller specific lock.
+>   * @state: Set of FLAGS to indicate status.
+> - * @rx_dmach: Controller's DMA channel for Rx.
+> - * @tx_dmach: Controller's DMA channel for Tx.
+> + * @rx_dma: Controller's DMA channel for Rx.
+> + * @tx_dma: Controller's DMA channel for Tx.
+>   * @sfr_start: BUS address of SPI controller regs.
+>   * @regs: Pointer to ioremap'ed controller registers.
+> - * @irq: interrupt
+>   * @xfer_completion: To indicate completion of xfer task.
+>   * @cur_mode: Stores the active configuration of the controller.
+>   * @cur_bpw: Stores the active bits per word settings.
+>   * @cur_speed: Stores the active xfer clock speed.
+> + * @port_conf: Pointer to the SPI port configuration
+> + * @port_id: SPI port ID number
+>   */
