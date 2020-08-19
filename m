@@ -2,160 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DADC2494E1
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Aug 2020 08:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D60249AE2
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Aug 2020 12:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbgHSGPT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Aug 2020 02:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S1728061AbgHSKsf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Aug 2020 06:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726461AbgHSGPR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Aug 2020 02:15:17 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE79AC061389;
-        Tue, 18 Aug 2020 23:15:16 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id g8so939308wmk.3;
-        Tue, 18 Aug 2020 23:15:16 -0700 (PDT)
+        with ESMTP id S1728013AbgHSKs3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Aug 2020 06:48:29 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910FCC061757;
+        Wed, 19 Aug 2020 03:48:28 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id h22so18666179otq.11;
+        Wed, 19 Aug 2020 03:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XqRsyRcI4JizYSBgfDQ1/ZtsmI6N1f3+iRKY5gBn554=;
-        b=c7yU/9erjCdq+iHxp9rCjXLehhXneoO0lsw/AO5h7M65mqESgPnanyqBBJl5mBa//T
-         ZgVjBkByuDCr0I7hAtydSR2Xdv0G08UUrqG5lUpjeJqXwwTJn0ZZyAPHKvE9mIxE23O7
-         JcwiePYhJXP2eOyWHo/IPZb/SAOwXykGmHyCicU1A/WqvjXxJQTShGPgD2/eSBg50e6w
-         1qcGjAXT5/FosXXB3nZO9PAMTztGiEBYycky4GPXhmh2DZeC2W8k24FF7/X2nIJ5StlL
-         zIwO+6l5zlavXXTjKFxPVm5b8MIHthImCyOnwchhhQJGne2L8jz1AL2suSLmJsKJ7jcy
-         WNFQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JFCS1wWCaky01GdCrS5KhBNLCXiKvx8eu/9Q1CWY57o=;
+        b=SAlnLFGsaJJ2xUQvXdp6/REunLAQzaLpmNpCPkhdMyKVNOL4zXoJc+uTpvFb1PLXQe
+         nN8aQpwx9KlR0QpjA0U0Eq9qCAcvJ1BkG1Pmvfae+wF16AUCkU8W0GDQheD/o4B1VrUX
+         PelVL5WwDQloIppGpod8O4LcRauK/SLT0vBKv+BhPM4L1DU+6rZBrJ0Dt0oV8Ce4u200
+         wfYajuI8k/buRZ/KOQgJS9xFj6qU+vsS6Mi/Pic5cr7hyqCbNaPaM64dCQ32B92C7zpm
+         twdkgIcY8FJxVqqD5N4bDX/Yu8aavznJiTYE5JD98MkyaozlEe8FkOVjNVcv9NBfu1pV
+         5Fgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XqRsyRcI4JizYSBgfDQ1/ZtsmI6N1f3+iRKY5gBn554=;
-        b=YxMaTsC1rymilduTRynKLQ7KkG/ZkaZM3CWmjQw3NImiK34qjoYycKE3+UmMwSK/Ay
-         2Janwgi0oRW/vXza6UPzf5lpqMyJrlfUMrZcEY1NCHTWahMlheHnFUHp/M5pV76ckXqb
-         BYSoxRkZ4AXYpmQBCV+Y6dC0jY/+EGma0r6RlHRgG41EZXqOdmNgmsHm+tz9odGDvmaH
-         42Dn2xpj/doxnigTIN3tqsHK87wm7OUfOuqJaLGjMZJOqeG6/J/FqWzXPfaXahN7bDZw
-         WzW9gd7XnT6F7Dxq8o2MKnJT/KPMDAPgFlNi+UhnXJS49pTOjCahAkT2C6PuZ+5ryvLg
-         WsTw==
-X-Gm-Message-State: AOAM533n2Xaae+Hb/xp2mb2goZo3yVr8ImajSEyUqoAJ4LoVVCZ4F4gQ
-        eRdR3nno6pVpIqqG/uA4HJ74UZNsOtPk7A==
-X-Google-Smtp-Source: ABdhPJyfWLFMBgE3nkRKJ4ipvtWCILiGRvHPLtREGRgPlFJ3JohUrFII0y8H54azDF5bepO2S12GwA==
-X-Received: by 2002:a7b:c306:: with SMTP id k6mr3375410wmj.86.1597817713640;
-        Tue, 18 Aug 2020 23:15:13 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f23:5700:855a:ccf2:be1a:9037? (p200300ea8f235700855accf2be1a9037.dip0.t-ipconnect.de. [2003:ea:8f23:5700:855a:ccf2:be1a:9037])
-        by smtp.googlemail.com with ESMTPSA id b8sm38346115wrv.4.2020.08.18.23.15.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Aug 2020 23:15:13 -0700 (PDT)
-Subject: Re: fsl_espi errors on v5.7.15
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "tiago.brusamarello@datacom.ind.br" 
-        <tiago.brusamarello@datacom.ind.br>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <3f48e5fb-33c9-8046-0f80-236eed163c16@alliedtelesis.co.nz>
- <c43a23bd-33ec-4ef2-2ca5-730342248db3@gmail.com>
- <3c72eec1-41ba-7389-eceb-3de80065555a@alliedtelesis.co.nz>
- <1bbb3726-b0a4-6eb9-9076-706b06dfb90f@alliedtelesis.co.nz>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <61bb9800-9f90-9cd4-3b17-c14a7f83d792@gmail.com>
-Date:   Wed, 19 Aug 2020 08:15:06 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JFCS1wWCaky01GdCrS5KhBNLCXiKvx8eu/9Q1CWY57o=;
+        b=uV1mk1B8VaF8tL03zX+JPDnTfyoDnCNxK3gH+iz+/rwHDaDH4hm566X1iC7oIitBQH
+         76P+QolpXTnIPEpqoQakVKdpGCMLf9musvyF1ESa7fTgxLvxsLlpc9mPgIglJ6Kdla24
+         N8C0ll+EATzolfkBKVJR3Th4rTUbCZNC/XglL/+byfkSD3y7hRaxWENgiDBdmfdfIh7U
+         Y8u1VPbZ6UuIL0gQsEiUx/i0BCYo7UPKLblql0q/72bOZsBHTbT7d2E3QZ0r9u5OlQ0m
+         V+td2rohBLQWIW0bo8naZ0z3+W9oIiIEvVpYQg8JLKwoORrOSoCIb7L0Ar3cWHzKVTZN
+         wXTA==
+X-Gm-Message-State: AOAM532ZQXvxDI/UlAajImfHfGl6AguDlbcNSDwj79tVy7i26jUl5ncm
+        IzmhgbQKiBsqdofNGeV5Bj3KUQ6wrj+EC22/IMQ=
+X-Google-Smtp-Source: ABdhPJwYTK+IRxToH0hqhLtJ7NIIqDs8lKmtEJkzNzElCKB5MQaF3rOwIOaAYWCB8rMlfnOVuvrNcqGFlbqr+yW4gKM=
+X-Received: by 2002:a9d:128c:: with SMTP id g12mr17527086otg.242.1597834108000;
+ Wed, 19 Aug 2020 03:48:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1bbb3726-b0a4-6eb9-9076-706b06dfb90f@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200817091617.28119-1-allen.cryptic@gmail.com>
+ <20200817091617.28119-2-allen.cryptic@gmail.com> <b5508ca4-0641-7265-2939-5f03cbfab2e2@kernel.dk>
+ <202008171228.29E6B3BB@keescook> <161b75f1-4e88-dcdf-42e8-b22504d7525c@kernel.dk>
+ <202008171246.80287CDCA@keescook> <df645c06-c30b-eafa-4d23-826b84f2ff48@kernel.dk>
+ <1597780833.3978.3.camel@HansenPartnership.com> <202008181309.FD3940A2D5@keescook>
+In-Reply-To: <202008181309.FD3940A2D5@keescook>
+From:   Allen <allen.lkml@gmail.com>
+Date:   Wed, 19 Aug 2020 16:18:16 +0530
+Message-ID: <CAOMdWSLi-aUeKDN8Xn-X2uW_LmWsp2n=NL3dPGiUbQKm_MxcAg@mail.gmail.com>
+Subject: Re: [PATCH] block: convert tasklets to use new tasklet_setup() API
+To:     Kees Cook <keescook@chromium.org>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Allen Pais <allen.cryptic@gmail.com>, jdike@addtoit.com,
+        richard@nod.at, anton.ivanov@cambridgegreys.com, 3chas3@gmail.com,
+        stefanr@s5r6.in-berlin.de, airlied@linux.ie, daniel@ffwll.ch,
+        sre@kernel.org, kys@microsoft.com, deller@gmx.de,
+        dmitry.torokhov@gmail.com, jassisinghbrar@gmail.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        maximlevitsky@gmail.com, oakad@yahoo.com,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        mporter@kernel.crashing.org, alex.bou9@gmail.com,
+        broonie@kernel.org, martyn@welchs.me.uk, manohar.vanga@gmail.com,
+        mitch@sfgoth.com, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux1394-devel@lists.sourceforge.net,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-hyperv@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
+        linux-spi@vger.kernel.org, devel@driverdev.osuosl.org,
+        Romain Perier <romain.perier@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19.08.2020 00:44, Chris Packham wrote:
-> Hi Again,
-> 
-> On 17/08/20 9:09 am, Chris Packham wrote:
-> 
->>
->> On 14/08/20 6:19 pm, Heiner Kallweit wrote:
->>> On 14.08.2020 04:48, Chris Packham wrote:
->>>> Hi,
->>>>
->>>> I'm seeing a problem with accessing spi-nor after upgrading a T2081
->>>> based system to linux v5.7.15
->>>>
->>>> For this board u-boot and the u-boot environment live on spi-nor.
->>>>
->>>> When I use fw_setenv from userspace I get the following kernel logs
->>>>
->>>> # fw_setenv foo=1
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
->>>> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
->>>> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
->>>> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->>>> ...
->>>>
->>> This error reporting doesn't exist yet in 4.4. So you may have an issue
->>> under 4.4 too, it's just not reported.
->>> Did you verify that under 4.4 fw_setenv actually has an effect?
->> Just double checked and yes under 4.4 the setting does get saved.
->>>> If I run fw_printenv (before getting it into a bad state) it is able to
->>>> display the content of the boards u-boot environment.
->>>>
->>> This might indicate an issue with spi being locked. I've seen related
->>> questions, just use the search engine of your choice and check for
->>> fw_setenv and locked.
->> I'm running a version of fw_setenv which includes 
->> https://gitlab.denx.de/u-boot/u-boot/-/commit/db820159 so it shouldn't 
->> be locking things unnecessarily.
->>>> If been unsuccessful in producing a setup for bisecting the issue. I do
->>>> know the issue doesn't occur on the old 4.4.x based kernel but that's
->>>> probably not much help.
->>>>
->>>> Any pointers on what the issue (and/or solution) might be.
-> 
-> I finally managed to get our board running with a vanilla kernel. With 
-> corenet64_smp_defconfig I occasionally see
-> 
->    fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
-> 
-> other than the message things seem to be working.
-> 
-> With a custom defconfig I see
-> 
->    fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->    fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
->    fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->    ...
-> 
-> and access to the spi-nor does not work until the board is reset.
-> 
-> I'll try and pick apart the differences between the two defconfigs.
-> 
-Also relevant may be:
-- Which dts are you using?
-- What's the spi-nor type, and at which frequency are you operating it?
-- Does the issue still happen if you lower the frequency?
+> > > > > > > >
+> > > > > > > > In preparation for unconditionally passing the
+> > > > > > > > struct tasklet_struct pointer to all tasklet
+> > > > > > > > callbacks, switch to using the new tasklet_setup()
+> > > > > > > > and from_tasklet() to pass the tasklet pointer explicitly.
+> > > > > > >
+> > > > > > > Who came up with the idea to add a macro 'from_tasklet' that
+> > > > > > > is just container_of? container_of in the code would be
+> > > > > > > _much_ more readable, and not leave anyone guessing wtf
+> > > > > > > from_tasklet is doing.
+> > > > > > >
+> > > > > > > I'd fix that up now before everything else goes in...
+> > > > > >
+> > > > > > As I mentioned in the other thread, I think this makes things
+> > > > > > much more readable. It's the same thing that the timer_struct
+> > > > > > conversion did (added a container_of wrapper) to avoid the
+> > > > > > ever-repeating use of typeof(), long lines, etc.
+> > > > >
+> > > > > But then it should use a generic name, instead of each sub-system
+> > > > > using some random name that makes people look up exactly what it
+> > > > > does. I'm not huge fan of the container_of() redundancy, but
+> > > > > adding private variants of this doesn't seem like the best way
+> > > > > forward. Let's have a generic helper that does this, and use it
+> > > > > everywhere.
+> > > >
+> > > > I'm open to suggestions, but as things stand, these kinds of
+> > > > treewide
+> > >
+> > > On naming? Implementation is just as it stands, from_tasklet() is
+> > > totally generic which is why I objected to it. from_member()? Not
+> > > great with naming... But I can see this going further and then we'll
+> > > suddenly have tons of these. It's not good for readability.
+> >
+> > Since both threads seem to have petered out, let me suggest in
+> > kernel.h:
+> >
+> > #define cast_out(ptr, container, member) \
+> >       container_of(ptr, typeof(*container), member)
+> >
+> > It does what you want, the argument order is the same as container_of
+> > with the only difference being you name the containing structure
+> > instead of having to specify its type.
+>
+> I like this! Shall I send this to Linus to see if this can land in -rc2
+> for use going forward?
+>
+
+Cool, I shall wait for it to be accepted and then spin out V2 with cast_out()
+
+-- 
+       - Allen
