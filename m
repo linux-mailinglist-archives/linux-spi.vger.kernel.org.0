@@ -2,136 +2,219 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841CC24A8A6
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Aug 2020 23:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8222D24AE6B
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Aug 2020 07:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbgHSVjk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Aug 2020 17:39:40 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:47048 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726482AbgHSVji (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Aug 2020 17:39:38 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 770738EE1F3;
-        Wed, 19 Aug 2020 14:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1597873176;
-        bh=P5Nf0m7rIb0VsmSGOAvsuubsuKdLazFJ3PWgYJpOQYo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=QZWzNY/RNv5GTOLC344QkDqvWPLVlJoIZZa/1SvyuRWg2n4Pm6sT1giNF3hS4dmal
-         2AgGeohtLxDuIx9MBYzKgKxS5vVGSeJVIhAssuqGCPXbCp5oJD0WlnV+VnG46ikJ5j
-         S3mk3MHG2hrcnsbyoMzE7CI3TS+/7QS3hnb2Remw=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bHKZiEX-QbYl; Wed, 19 Aug 2020 14:39:36 -0700 (PDT)
-Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 07F3F8EE0E9;
-        Wed, 19 Aug 2020 14:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1597873176;
-        bh=P5Nf0m7rIb0VsmSGOAvsuubsuKdLazFJ3PWgYJpOQYo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=QZWzNY/RNv5GTOLC344QkDqvWPLVlJoIZZa/1SvyuRWg2n4Pm6sT1giNF3hS4dmal
-         2AgGeohtLxDuIx9MBYzKgKxS5vVGSeJVIhAssuqGCPXbCp5oJD0WlnV+VnG46ikJ5j
-         S3mk3MHG2hrcnsbyoMzE7CI3TS+/7QS3hnb2Remw=
-Message-ID: <1597873172.4030.2.camel@HansenPartnership.com>
-Subject: Re: [PATCH] block: convert tasklets to use new tasklet_setup() API
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Allen <allen.lkml@gmail.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Kees Cook <keescook@chromium.org>,
-        Allen Pais <allen.cryptic@gmail.com>, jdike@addtoit.com,
-        richard@nod.at, anton.ivanov@cambridgegreys.com, 3chas3@gmail.com,
-        stefanr@s5r6.in-berlin.de, airlied@linux.ie,
-        Daniel Vetter <daniel@ffwll.ch>, sre@kernel.org,
-        kys@microsoft.com, deller@gmx.de, dmitry.torokhov@gmail.com,
-        jassisinghbrar@gmail.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, maximlevitsky@gmail.com, oakad@yahoo.com,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        mporter@kernel.crashing.org, alex.bou9@gmail.com,
-        broonie@kernel.org, martyn@welchs.me.uk, manohar.vanga@gmail.com,
-        mitch@sfgoth.com, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-um@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux1394-devel@lists.sourceforge.net,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-hyperv@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
-        linux-spi@vger.kernel.org, devel@driverdev.osuosl.org,
-        Romain Perier <romain.perier@gmail.com>
-Date:   Wed, 19 Aug 2020 14:39:32 -0700
-In-Reply-To: <CAOMdWSJRR0BhjJK1FxD7UKxNd5sk4ycmEX6TYtJjRNR6UFAj6Q@mail.gmail.com>
-References: <20200817091617.28119-1-allen.cryptic@gmail.com>
-         <20200817091617.28119-2-allen.cryptic@gmail.com>
-         <b5508ca4-0641-7265-2939-5f03cbfab2e2@kernel.dk>
-         <202008171228.29E6B3BB@keescook>
-         <161b75f1-4e88-dcdf-42e8-b22504d7525c@kernel.dk>
-         <202008171246.80287CDCA@keescook>
-         <df645c06-c30b-eafa-4d23-826b84f2ff48@kernel.dk>
-         <1597780833.3978.3.camel@HansenPartnership.com>
-         <f3312928-430c-25f3-7112-76f2754df080@kernel.dk>
-         <1597849185.3875.7.camel@HansenPartnership.com>
-         <CAOMdWSJRR0BhjJK1FxD7UKxNd5sk4ycmEX6TYtJjRNR6UFAj6Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1725828AbgHTF2f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Aug 2020 01:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725780AbgHTF2e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Aug 2020 01:28:34 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E94C061757
+        for <linux-spi@vger.kernel.org>; Wed, 19 Aug 2020 22:28:34 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id e4so484855pjd.0
+        for <linux-spi@vger.kernel.org>; Wed, 19 Aug 2020 22:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TkqRaEwUdqUnb95WVdVlCchzd1qlKL9sLuvpdnztiiE=;
+        b=HEfyNLiUb9BwML/beUT//mZWp7qHeGG07YaD02RicYRn6Bl0q7qQyZZ4/8niITC+nE
+         n6OazTrtuuQpthpqGLbS+6gdm8SLsftJZqgSW0uL5xbLqeg9d+BZHWRYA2XL7D7xm9an
+         V23P3cIGtpKRCKyPxZY6SBHZtZqtDs4xuZlnw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TkqRaEwUdqUnb95WVdVlCchzd1qlKL9sLuvpdnztiiE=;
+        b=sSQw0e1l/MMWVdYdSeUUsLmHyBRdct+1IOaGy2TCrB8UwihDkMU2/5HgTgS7YbEFNn
+         9b/xWRG1v5TlthZ8/k+UeBKvztP0/RWEde6u+vmLaWJ4eRdEbC2AYIdBrHqKhgZs9FZY
+         xzDJ01o9mDKOpBNiQUKOF1dfHrvsN769jhBy15Dm9olRjwdEnSKuISW/+0wLogaTIvs6
+         R4NsEuDAH3rCCVvXbkfVimFuvAzm7jBH/8Ucty6XjuCe/p4OPq94l0XOaQqwnVeQocIf
+         nPW5pCJVbX81vjqOjmXT3IosQmkghGaMduqBA6n40t6GNumZe2JP7v6JijDanOWkDU9e
+         7GWg==
+X-Gm-Message-State: AOAM531eyyy4FswpHnslL1v9gIinAo15HBE1RZjuN8q0CKsHBwoAspQG
+        U+mkQgpTRX3y5KfmVbv9n2U9uQ==
+X-Google-Smtp-Source: ABdhPJzG23peNv1YpN3uI1M3H6MtjjsKVYg0YIfEoz+DOlg57gm3MMONcE+5PjCcUZgPUVW9OXt/ow==
+X-Received: by 2002:a17:90a:6343:: with SMTP id v3mr1089145pjs.163.1597901314127;
+        Wed, 19 Aug 2020 22:28:34 -0700 (PDT)
+Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
+        by smtp.gmail.com with ESMTPSA id j198sm1110740pfd.205.2020.08.19.22.28.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Aug 2020 22:28:33 -0700 (PDT)
+From:   Ikjoon Jang <ikjn@chromium.org>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Ikjoon Jang <ikjn@chromium.org>
+Subject: [PATCH] dt-bindings: spi: Convert spi-mtk-nor to json-schema
+Date:   Thu, 20 Aug 2020 13:28:27 +0800
+Message-Id: <20200820052827.2642164-1-ikjn@chromium.org>
+X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 2020-08-19 at 21:54 +0530, Allen wrote:
-> > [...]
-> > > > Since both threads seem to have petered out, let me suggest in
-> > > > kernel.h:
-> > > > 
-> > > > #define cast_out(ptr, container, member) \
-> > > >     container_of(ptr, typeof(*container), member)
-> > > > 
-> > > > It does what you want, the argument order is the same as
-> > > > container_of with the only difference being you name the
-> > > > containing structure instead of having to specify its type.
-> > > 
-> > > Not to incessantly bike shed on the naming, but I don't like
-> > > cast_out, it's not very descriptive. And it has connotations of
-> > > getting rid of something, which isn't really true.
-> > 
-> > Um, I thought it was exactly descriptive: you're casting to the
-> > outer container.  I thought about following the C++ dynamic casting
-> > style, so out_cast(), but that seemed a bit pejorative.  What about
-> > outer_cast()?
-> > 
-> > > FWIW, I like the from_ part of the original naming, as it has
-> > > some clues as to what is being done here. Why not just
-> > > from_container()? That should immediately tell people what it
-> > > does without having to look up the implementation, even before
-> > > this becomes a part of the accepted coding norm.
-> > 
-> > I'm not opposed to container_from() but it seems a little less
-> > descriptive than outer_cast() but I don't really care.  I always
-> > have to look up container_of() when I'm using it so this would just
-> > be another macro of that type ...
-> > 
-> 
->  So far we have a few which have been suggested as replacement
-> for from_tasklet()
-> 
-> - out_cast() or outer_cast()
-> - from_member().
-> - container_from() or from_container()
-> 
-> from_container() sounds fine, would trimming it a bit work? like
-> from_cont().
+Convert Mediatek ARM SOC's serial NOR flash controller binding
+to json-schema format.
 
-I'm fine with container_from().  It's the same form as container_of()
-and I think we need urgent agreement to not stall everything else so
-the most innocuous name is likely to get the widest acceptance.
+Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+---
+ .../bindings/spi/mediatek,spi-mtk-nor.yaml    | 82 +++++++++++++++++++
+ .../devicetree/bindings/spi/spi-mtk-nor.txt   | 47 -----------
+ 2 files changed, 82 insertions(+), 47 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-mtk-nor.txt
 
-James
+diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+new file mode 100644
+index 000000000000..1e4bcf691539
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+@@ -0,0 +1,82 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/mediatek,spi-mtk-nor.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Serial NOR flash controller for MediaTek ARM SoCs
++
++maintainers:
++  - Bayi Cheng <bayi.cheng@mediatek.com>
++  - Chuanhong Guo <gch981213@gmail.com>
++
++description: |
++  This spi controller support single, dual, or quad mode transfer for
++  SPI NOR flash. There should be only one spi slave device following
++  generic spi bindings. It's not recommended to use this controller
++  for devices other than SPI NOR flash due to limited transfer
++  capability of this controller.
++
++allOf:
++  - $ref: /spi/spi-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - mediatek,mt2701-nor
++              - mediatek,mt2712-nor
++              - mediatek,mt7622-nor
++              - mediatek,mt7623-nor
++              - mediatek,mt7629-nor
++          - enum:
++              - mediatek,mt8173-nor
++      - items:
++          - const: mediatek,mt8173-nor
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: clock used for spi bus
++      - description: clock used for controller
++
++  clock-names:
++    items:
++      - const: "spi"
++      - const: "sf"
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8173-clk.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      nor_flash: spi@1100d000 {
++        compatible = "mediatek,mt8173-nor";
++        reg = <0 0x1100d000 0 0xe0>;
++        interrupts = <&spi_flash_irq>;
++        clocks = <&pericfg CLK_PERI_SPI>, <&topckgen CLK_TOP_SPINFI_IFR_SEL>;
++        clock-names = "spi", "sf";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        flash@0 {
++          compatible = "jedec,spi-nor";
++          reg = <0>;
++        };
++      };
++    };
++
+diff --git a/Documentation/devicetree/bindings/spi/spi-mtk-nor.txt b/Documentation/devicetree/bindings/spi/spi-mtk-nor.txt
+deleted file mode 100644
+index 984ae7fd4f94..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-mtk-nor.txt
++++ /dev/null
+@@ -1,47 +0,0 @@
+-* Serial NOR flash controller for MediaTek ARM SoCs
+-
+-Required properties:
+-- compatible: 	  For mt8173, compatible should be "mediatek,mt8173-nor",
+-		  and it's the fallback compatible for other Soc.
+-		  For every other SoC, should contain both the SoC-specific compatible
+-		  string and "mediatek,mt8173-nor".
+-		  The possible values are:
+-		  "mediatek,mt2701-nor", "mediatek,mt8173-nor"
+-		  "mediatek,mt2712-nor", "mediatek,mt8173-nor"
+-		  "mediatek,mt7622-nor", "mediatek,mt8173-nor"
+-		  "mediatek,mt7623-nor", "mediatek,mt8173-nor"
+-		  "mediatek,mt7629-nor", "mediatek,mt8173-nor"
+-		  "mediatek,mt8173-nor"
+-- reg: 		  physical base address and length of the controller's register
+-- interrupts:	  Interrupt number used by the controller.
+-- clocks: 	  the phandle of the clocks needed by the nor controller
+-- clock-names: 	  the names of the clocks
+-		  the clocks should be named "spi" and "sf". "spi" is used for spi bus,
+-		  and "sf" is used for controller, these are the clocks witch
+-		  hardware needs to enabling nor flash and nor flash controller.
+-		  See Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
+-- #address-cells: should be <1>
+-- #size-cells:	  should be <0>
+-
+-There should be only one spi slave device following generic spi bindings.
+-It's not recommended to use this controller for devices other than SPI NOR
+-flash due to limited transfer capability of this controller.
+-
+-Example:
+-
+-nor_flash: spi@1100d000 {
+-	compatible = "mediatek,mt8173-nor";
+-	reg = <0 0x1100d000 0 0xe0>;
+-	interrupts = <&spi_flash_irq>;
+-	clocks = <&pericfg CLK_PERI_SPI>,
+-		 <&topckgen CLK_TOP_SPINFI_IFR_SEL>;
+-	clock-names = "spi", "sf";
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-
+-	flash@0 {
+-		compatible = "jedec,spi-nor";
+-		reg = <0>;
+-	};
+-};
+-
+-- 
+2.28.0.220.ged08abb693-goog
 
