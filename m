@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E7024B6F3
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Aug 2020 12:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104F624B704
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Aug 2020 12:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728905AbgHTKpN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Aug 2020 06:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
+        id S1728898AbgHTKqU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Aug 2020 06:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731360AbgHTKoi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Aug 2020 06:44:38 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539CFC061350
-        for <linux-spi@vger.kernel.org>; Thu, 20 Aug 2020 03:44:31 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id 17so819066pfw.9
-        for <linux-spi@vger.kernel.org>; Thu, 20 Aug 2020 03:44:31 -0700 (PDT)
+        with ESMTP id S1731520AbgHTKot (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Aug 2020 06:44:49 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEBDC061359
+        for <linux-spi@vger.kernel.org>; Thu, 20 Aug 2020 03:44:34 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id d22so826925pfn.5
+        for <linux-spi@vger.kernel.org>; Thu, 20 Aug 2020 03:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tBvIIVWSqLOvxm5DPjzeQaBDOBFgxxRxk7Pa8spcF4Y=;
-        b=V874UKRvNzPN6yCv8qVBDzRdBiJEA270fWjz5BPet8N9PL05DbDPPGSBzOT4Y+iY/1
-         4d2DG05vPqpn16MzA1A+YMSq8cHlRMPn5JqZL3jVJih72dFB482zLOHksr4wnhik+uif
-         WcXaSkGUZ4nY/8eKsNBikSG/6AXbZcr4EdezbYKrUzTJrY0yYz4d+Bb/FG/cV8ePqrwv
-         dRyqQDFGT8c4oKA3pst29XRQ3/f3sIHW+cL2p7rERY/1sF3+Z6MTCvUuYSRYUwPPsd4+
-         AcusnBcReAvdqC0EVkWzaOONn61yPgQ5MBD3Nskh3CCbTi80YJwSyWZp2Gs9InhPlcP3
-         tmyw==
+        bh=uOWJI5P/ZjP6zythnGegEhVJsfmWoLZo0o+x47AYS0E=;
+        b=E/zVjsh1o8if8+7pFUUiz4ZhecMs1/LIs7ui21OGEwUDDEWN5BncjVTkD2/mxtNAaS
+         dcQBq6eMhvG3yCAs8AcgOvhwgYedg2Z6i8XzR0irtMGD70fqS6EJdJDlc9dVQfeKV/hz
+         5DFDXnQdSZqG2BexgfHV7DCg49HINy8/IpHTYlDc5U9WHW3v/LArJaYTquRMEYrbQOFc
+         Y5ZJ8PiOqHnOyREyUI0MI/KnHsjQAseurJS7FnldTzKFRUwL7OqYLNowieBRkhbz6W+E
+         5v6fRtyff1yeAGbnzSV2ZFchTeTi0d9aOJzWYoZbOcXC/1VvkNfAf/7lE0XPElrau2QO
+         8Ecw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tBvIIVWSqLOvxm5DPjzeQaBDOBFgxxRxk7Pa8spcF4Y=;
-        b=qYcsV+NDn4UlXsQNDwBJI9W2B5I5cnXdCMDblqDxAt50XIpapmrzxTkxMakbunid7O
-         DEx35iSyZyeLEzTVHvi0j+hB4MbtoW8k/vu3G4oU0ldE4+7ApvCuX+RxFFgdhemeEOIQ
-         mTlvUYjJBbg7jiCdD+2ZU6v7SpyE97yfKWiDFJZJmGnNi9dEJDLqFOEc67dQfA1Q+YMX
-         d/RyvcwxUhMe7IxScKsgpbzUchWc8vsYXwVEYXIdvo+cm6Dq0eaz/1pi4vLb4YrY/A+s
-         8d0DzGT5MkWXjqZfvVRjq/vTyC4xUvI9CIgWjMK8ETdBLCkI0gblIKrtIDjCGGW8e2d8
-         9R1g==
-X-Gm-Message-State: AOAM531bAjktV+1zpDc9wRmA9c9oFMlngYircEfiq5+kq41yTkJA3N9e
-        5lGU+nB6m0mTQPGl1BCiTRjQVw==
-X-Google-Smtp-Source: ABdhPJymYxVzYFrgD51zd21b7M1MPbmHJ7swyrMN/Tbs1N+OkZBWPAWKnZsexxmQeaYm+lrhpfO1EQ==
-X-Received: by 2002:aa7:9f8a:: with SMTP id z10mr1853318pfr.176.1597920270879;
-        Thu, 20 Aug 2020 03:44:30 -0700 (PDT)
+        bh=uOWJI5P/ZjP6zythnGegEhVJsfmWoLZo0o+x47AYS0E=;
+        b=ePxzqvB4z1cThg2boHIBQ9BCffQ6op6uQo6NFCOQR4gxuZacY+RdlU77b15xM6H8cV
+         7fil3VGDqNWYD+OjkvCJrJA4aEClWNG9RwjM9uaHpZ/0rVtERn0OBJPoINs9ZFlRTbnL
+         3/UkhF60mklS17+gh2wjU5r2H/r0jZE/9olHpHYgRY9k9P5E0cVRTFadmJeIvr0pPZl1
+         MUZWrFwHxRACIdbBV4UiCvPmwug6eJW2Jca3TqCY/BdDUlpUgRAPS00NmI6eIMDE9YF9
+         hOhz1XH6wjYpL56DQkuKZtJsIvLXqlWB/pTctSdli7bB7dBN/yZ4nLGmH7fQf7Exikpt
+         dVfA==
+X-Gm-Message-State: AOAM5331uMovQ+fijD9dPuvc9Dy2VFnutcwEFWiOe4dZZpoMoEBSrBzu
+        gPKCU3nguJSmVLhJPfxEp2vxTQ==
+X-Google-Smtp-Source: ABdhPJxeiVFtZ3ZkXtc4xAAHs9AvuJP9Q4J3dfZRuwjHdWNJYgaSoR+ZA2Bw6/XqrvFbTwFJYKFuRQ==
+X-Received: by 2002:aa7:9569:: with SMTP id x9mr1955507pfq.16.1597920273884;
+        Thu, 20 Aug 2020 03:44:33 -0700 (PDT)
 Received: from localhost ([122.172.43.13])
-        by smtp.gmail.com with ESMTPSA id d13sm1862811pjz.3.2020.08.20.03.44.30
+        by smtp.gmail.com with ESMTPSA id i14sm2492512pfu.50.2020.08.20.03.44.33
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Aug 2020 03:44:30 -0700 (PDT)
+        Thu, 20 Aug 2020 03:44:33 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     rnayak@codeaurora.org, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,9 +57,9 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5/8] spi: spi-geni-qcom: Unconditionally call dev_pm_opp_of_remove_table()
-Date:   Thu, 20 Aug 2020 16:13:54 +0530
-Message-Id: <91321ced21a5bbb98abc24c99e14b7f94f9045c0.1597919647.git.viresh.kumar@linaro.org>
+Subject: [PATCH 6/8] spi: spi-qcom-qspi: Unconditionally call dev_pm_opp_of_remove_table()
+Date:   Thu, 20 Aug 2020 16:13:55 +0530
+Message-Id: <4d255332a28db9d79e0bae2cb73786df9c22efd6.1597919647.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 In-Reply-To: <cover.1597919647.git.viresh.kumar@linaro.org>
 References: <cover.1597919647.git.viresh.kumar@linaro.org>
@@ -77,44 +77,52 @@ unconditionally here.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/spi/spi-geni-qcom.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/spi/spi-qcom-qspi.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 80cea5cd3612..5d3904a0aff8 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -613,9 +613,7 @@ static int spi_geni_probe(struct platform_device *pdev)
- 		return PTR_ERR(mas->se.opp_table);
+diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
+index b8857a97f40a..7fd6f631dc17 100644
+--- a/drivers/spi/spi-qcom-qspi.c
++++ b/drivers/spi/spi-qcom-qspi.c
+@@ -143,7 +143,6 @@ struct qcom_qspi {
+ 	struct qspi_xfer xfer;
+ 	struct icc_path *icc_path_cpu_to_qspi;
+ 	struct opp_table *opp_table;
+-	bool has_opp_table;
+ 	unsigned long last_speed;
+ 	/* Lock to protect data accessed by IRQs */
+ 	spinlock_t lock;
+@@ -546,9 +545,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ 	}
  	/* OPP table is optional */
  	ret = dev_pm_opp_of_add_table(&pdev->dev);
 -	if (!ret) {
--		mas->se.has_opp_table = true;
+-		ctrl->has_opp_table = true;
 -	} else if (ret != -ENODEV) {
 +	if (ret != -ENODEV) {
  		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
- 		return ret;
+ 		goto exit_probe_master_put;
  	}
-@@ -669,8 +667,7 @@ static int spi_geni_probe(struct platform_device *pdev)
- spi_geni_probe_runtime_disable:
- 	pm_runtime_disable(dev);
- 	spi_master_put(spi);
--	if (mas->se.has_opp_table)
--		dev_pm_opp_of_remove_table(&pdev->dev);
-+	dev_pm_opp_of_remove_table(&pdev->dev);
- 	dev_pm_opp_put_clkname(mas->se.opp_table);
- 	return ret;
- }
-@@ -685,8 +682,7 @@ static int spi_geni_remove(struct platform_device *pdev)
+@@ -562,8 +559,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+ 		return 0;
  
- 	free_irq(mas->irq, spi);
- 	pm_runtime_disable(&pdev->dev);
--	if (mas->se.has_opp_table)
+ 	pm_runtime_disable(dev);
+-	if (ctrl->has_opp_table)
 -		dev_pm_opp_of_remove_table(&pdev->dev);
 +	dev_pm_opp_of_remove_table(&pdev->dev);
- 	dev_pm_opp_put_clkname(mas->se.opp_table);
+ 	dev_pm_opp_put_clkname(ctrl->opp_table);
+ 
+ exit_probe_master_put:
+@@ -581,8 +577,7 @@ static int qcom_qspi_remove(struct platform_device *pdev)
+ 	spi_unregister_master(master);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+-	if (ctrl->has_opp_table)
+-		dev_pm_opp_of_remove_table(&pdev->dev);
++	dev_pm_opp_of_remove_table(&pdev->dev);
+ 	dev_pm_opp_put_clkname(ctrl->opp_table);
+ 
  	return 0;
- }
 -- 
 2.25.0.rc1.19.g042ed3e048af
 
