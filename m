@@ -2,93 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7C524E2C1
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Aug 2020 23:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3B624E740
+	for <lists+linux-spi@lfdr.de>; Sat, 22 Aug 2020 14:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgHUViV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Aug 2020 17:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgHUViT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Aug 2020 17:38:19 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543D7C061573;
-        Fri, 21 Aug 2020 14:38:19 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id df16so2734982edb.9;
-        Fri, 21 Aug 2020 14:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Gfug6M3OOZNJ6q8sApGDCaMBquL65QMuLFdwuuumNZA=;
-        b=jJ6eae3Ww+WWoXwtlu8P2VejAtCwIbkp1hM5FMDc4Zr/kaCcCRojMR7zI4Nhg7+yZW
-         ZBUofAil656eC9j0w0jL4lQVktpXNTm05+a2ZfkTTtBRkzXILrphQ69mH2Y28fQaMKU7
-         XRkWX/qyM33hcafGbIWzqz/FLGx5uvF64S5hv+B8feCw/QnKRBm9XsVSv/lAF1HqAoPx
-         Nh8SsXOgRvY+bGlhLpVMb3UuEhSy6pe1wYrVDTTqQPn1w6xxDLEsPSECpGSIukXGZYy0
-         D16/cbrmQ1yMi3uHC/qqCp0MchMfEEp6GCnqYmGe3tyQedwhCyCamdjMhAwMm2gxSHU8
-         dDtw==
+        id S1727864AbgHVMB1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Sat, 22 Aug 2020 08:01:27 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:52642 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726704AbgHVMB0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 22 Aug 2020 08:01:26 -0400
+Received: by mail-wm1-f65.google.com with SMTP id x5so4172362wmi.2;
+        Sat, 22 Aug 2020 05:01:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Gfug6M3OOZNJ6q8sApGDCaMBquL65QMuLFdwuuumNZA=;
-        b=iZlnEgO9Nc+bhNpX6kuoPeGrP/1TlVqDPlEi5IMm+QEMavk8/TZpXOZ86X9syJKJmF
-         pKmTO9GInRB/tlAN/Q/lwqSbbSZF8VbtVKm/val5z1V68SukWwFDmyy/5Fl+uEO25qam
-         4mXi2aNB2219cA91fgHUBadZYlZyK+YBzSwR8PHvX+0Rolazd1AsA8F+MPIZZ1KO6F26
-         8pGU5NwfxQ5v/bYpclV11QWGbLocGVUtiImwOLQaQqZhXlVLvEOv4OPzZBVH7aWFtX2o
-         4RqnjTwxLGykBQtE0vv5xAZXY2N6ExCxZ27MqExmHyWrHOJ7SkOFR5PZ1zXoQ0UVFUGn
-         a+MQ==
-X-Gm-Message-State: AOAM530eor/mAKMkFp2QNDB1mdHUx31pCL7I3tgXUVBIkIqzAnLNDr3P
-        PPC62UcZ/B/8xHmtDPfyLzw=
-X-Google-Smtp-Source: ABdhPJx9SolUSPU3K4hQ7fAGjLqRUXTKmcwsXFEYs/qMrfvB/XNPni7gUXanVwnJeBE6tcmYRQWomg==
-X-Received: by 2002:a50:935a:: with SMTP id n26mr4858258eda.107.1598045896089;
-        Fri, 21 Aug 2020 14:38:16 -0700 (PDT)
-Received: from localhost.localdomain ([86.126.22.216])
-        by smtp.gmail.com with ESMTPSA id cq1sm1775762edb.95.2020.08.21.14.38.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 14:38:15 -0700 (PDT)
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: add myself as maintainer for spi-fsl-dspi driver
-Date:   Sat, 22 Aug 2020 00:37:53 +0300
-Message-Id: <20200821213753.3143632-1-olteanv@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=bPouFZMIl7dlHwQoDaxlb/Nq4wtVCEDrmFr3ebXaAIM=;
+        b=l9gzW/BWHb8fmrsHN4ZkWsslyiB6i73egwzcGCrvzZEzBj0DZXnVnacONUbvDjpE74
+         fzFaT1DUgwcbk3ziLnLXHCpCXySNj0h74Og9QtUS8rocUDJnx9ssR8TwpsZT04QpMp93
+         8kyyIaVhGIgTga+WoKrzmDzcryGIaPuqJYZ6ufb0m4dlpsCRWjzSalN7uXWuwnEwhCJ3
+         ZFvXZ3ePtDj0SZ0I+y4lC0ELLEk7pe11L7YKO3q5/5braxHzllOLYUQ0WQVCdcVatKsg
+         J5M8+Jlz8ZJ9vXGFIUlXRZHPYU8Y/VSMzCP+X49eUMNYZ2teqYwOOGS12tm4vh3cZAf7
+         3Gcw==
+X-Gm-Message-State: AOAM531OSkGIzv5Y4XIdwvbUPbS12X2nJUoNHCo/Pr5wtlFXy4AgG0lI
+        R9keu5ouQhhZy4L/kT6lh6I=
+X-Google-Smtp-Source: ABdhPJz8YNXzvqgyYb9UZGsKJDnt9kosXNPfPc3M7afStiua+EoML1ySc0g9dWYlQxwULI4DhYxdGg==
+X-Received: by 2002:a05:600c:2d1:: with SMTP id 17mr7391901wmn.15.1598097683955;
+        Sat, 22 Aug 2020 05:01:23 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id t14sm10442478wrv.14.2020.08.22.05.01.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 22 Aug 2020 05:01:23 -0700 (PDT)
+Date:   Sat, 22 Aug 2020 14:01:21 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>
+Cc:     Kukjin Kim <kgene@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        m.szyprowski@samsung.com, b.zolnierkie@samsung.com
+Subject: Re: [PATCH v2 1/9] spi: spi-s3c64xx: swap s3c64xx_spi_set_cs() and
+ s3c64xx_enable_datapath()
+Message-ID: <20200822120121.GA20423@kozik-lap>
+References: <20200821161401.11307-1-l.stelmach@samsung.com>
+ <CGME20200821161405eucas1p1d43a5970c6a26389cd506aab5f986bc8@eucas1p1.samsung.com>
+ <20200821161401.11307-2-l.stelmach@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200821161401.11307-2-l.stelmach@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Since I've introduced a fairly large diff to this driver since tag v5.4,
-I would like to avoid breakage for my use cases by getting a chance to
-be copied on newly submitted patches.
+On Fri, Aug 21, 2020 at 06:13:53PM +0200, Łukasz Stelmach wrote:
+> This and the next patch fix issues with DMA transfers bigger than
 
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Just:
+"Fix issues with DMA transfers..."
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index deaafb617361..d29fa11d7742 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6884,6 +6884,14 @@ L:	linuxppc-dev@lists.ozlabs.org
- S:	Maintained
- F:	drivers/dma/fsldma.*
- 
-+FREESCALE DSPI DRIVER
-+M:	Vladimir Oltean <olteanv@gmail.com>
-+L:	linux-spi@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-+F:	drivers/spi/spi-fsl-dspi.c
-+F:	include/linux/spi/spi-fsl-dspi.h
-+
- FREESCALE ENETC ETHERNET DRIVERS
- M:	Claudiu Manoil <claudiu.manoil@nxp.com>
- L:	netdev@vger.kernel.org
--- 
-2.25.1
+The order of patches could change when applying and backporting.
 
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+Best regards,
+Krzysztof
+
+
+> 512 bytes on Exynos3250. Without the patches such transfers fail
+> to complete. This solution to the problem is found in the vendor kernel
+> for ARTIK5 boards based on Exynos3250.
+> 
+> Signed-off-by: Łukasz Stelmach <l.stelmach@samsung.com>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 924b24441789..26c7cb79cd78 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -685,11 +685,11 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+>  		sdd->state &= ~RXBUSY;
+>  		sdd->state &= ~TXBUSY;
+>  
+> -		s3c64xx_enable_datapath(sdd, xfer, use_dma);
+> -
+>  		/* Start the signals */
+>  		s3c64xx_spi_set_cs(spi, true);
+>  
+> +		s3c64xx_enable_datapath(sdd, xfer, use_dma);
+> +
+>  		spin_unlock_irqrestore(&sdd->lock, flags);
+>  
+>  		if (use_dma)
+> -- 
+> 2.26.2
+> 
