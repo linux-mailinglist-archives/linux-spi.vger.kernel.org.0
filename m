@@ -2,141 +2,183 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BF124FE0A
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Aug 2020 14:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6A724FEA2
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Aug 2020 15:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbgHXMts (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Aug 2020 08:49:48 -0400
-Received: from goliath.siemens.de ([192.35.17.28]:53242 "EHLO
-        goliath.siemens.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbgHXMts (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Aug 2020 08:49:48 -0400
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by goliath.siemens.de (8.15.2/8.15.2) with ESMTPS id 07OCnNt2009655
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Aug 2020 14:49:24 +0200
-Received: from [167.87.131.75] ([167.87.131.75])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 07OCnIUn004790;
-        Mon, 24 Aug 2020 14:49:20 +0200
-Subject: Re: [RESEND PATCH v3 5/8] mtd: spi-nor: cadence-quadspi: Handle probe
- deferral while requesting DMA channel
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Jin, Le (RC-CN DF FA R&D)" <le.jin@siemens.com>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, simon.k.r.goldschmidt@gmail.com,
-        dinguyen@kernel.org, marex@denx.de
-References: <20200601070444.16923-1-vigneshr@ti.com>
- <20200601070444.16923-6-vigneshr@ti.com>
- <6c8d9bff-3a67-0e6c-d4d1-36b7ed5007b9@web.de>
- <8cebd31a-2366-4584-b1d1-faa30c18ed6a@ti.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-Message-ID: <dbba9f0c-4621-2d58-8fb8-4cbe788558f9@siemens.com>
-Date:   Mon, 24 Aug 2020 14:49:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726008AbgHXNR0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Aug 2020 09:17:26 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:47186 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbgHXNRV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Aug 2020 09:17:21 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200824131717euoutp01c0e823076f7354b33bc42e0918d2d93f~uNq2p0st_0844408444euoutp01b;
+        Mon, 24 Aug 2020 13:17:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200824131717euoutp01c0e823076f7354b33bc42e0918d2d93f~uNq2p0st_0844408444euoutp01b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1598275037;
+        bh=OT0rqyQlWmdMQHNzRDIfGcRAB/16hVBFM4XsdepxvKw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ACZj1Mvv4Svwq0OPmzI6UcJ09Yg0d5sTog3cxDDQk3GbIB0AUzExGdVGD4TFpkE+X
+         2/oervLIkhSfCucsVU0wTC7cRsiOrQ9y7y+evjNd/8HQ5pbbrCMhP7LOQRClnXM9wX
+         bDRJjHphdEm/yStQ5d7LHWQxKg5+aqpu0fJ/UYIY=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200824131716eucas1p2440fe398c3fa497c05d22b5a92e56ab0~uNq2WXiRW2849428494eucas1p2S;
+        Mon, 24 Aug 2020 13:17:16 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 6C.E5.05997.CDDB34F5; Mon, 24
+        Aug 2020 14:17:16 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200824131716eucas1p16a3fde52aa765e7cd6584d4733762047~uNq2Cckhe0260302603eucas1p1x;
+        Mon, 24 Aug 2020 13:17:16 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200824131716eusmtrp1377337d38a0ecdd03f7106296b03990b~uNq2BugMn1770017700eusmtrp1Z;
+        Mon, 24 Aug 2020 13:17:16 +0000 (GMT)
+X-AuditID: cbfec7f4-65dff7000000176d-12-5f43bddce15a
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 5A.DB.06314.CDDB34F5; Mon, 24
+        Aug 2020 14:17:16 +0100 (BST)
+Received: from localhost (unknown [106.120.51.46]) by eusmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20200824131716eusmtip17784587fb037d3a2cfa5d332992f3853~uNq13hKY-1595415954eusmtip1S;
+        Mon, 24 Aug 2020 13:17:16 +0000 (GMT)
+From:   Lukasz Stelmach <l.stelmach@samsung.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Kukjin Kim <kgene@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        m.szyprowski@samsung.com, b.zolnierkie@samsung.com,
+        Tomasz Figa <tfiga@chromium.org>
+Subject: Re: [PATCH v2 7/9] spi: spi-s3c64xx: Ensure cur_speed holds actual
+ clock value
+Date:   Mon, 24 Aug 2020 15:17:03 +0200
+In-Reply-To: <20200822124325.GF20423@kozik-lap> (Krzysztof Kozlowski's
+        message of "Sat, 22 Aug 2020 14:43:25 +0200")
+Message-ID: <dleftj5z98xjxs.fsf%l.stelmach@samsung.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <8cebd31a-2366-4584-b1d1-faa30c18ed6a@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
+        protocol="application/pgp-signature"
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SWUwTURTN60ynBa0+CoZrESINmriBgOAQVERcJv5o4g8YtRaYFCItpAO4
+        /IAkgiKLQlBATWQRSZV9CRKRpCESQKgoixCQaCGIqCxFKQbRtoMJf+ede+6599w8MSEdFsrE
+        0Zp4VqtRxsgpe7Lx9VLPnpGWEMVe/cf9dIl5UkDX5FcJ6bxP4xSdbZwmaIOhWkTXGgeE9Pvm
+        hxSdb3gloK/PDYnoirZREW26sUIdXsc8SO4lmcHSeYKp1d2imLrSJCarXocYU63baeqs/YFI
+        NiY6kdV6HbpoH2VaLEdxDU5XMlqekskoxyEdicWA98FonW86shNLcTmCzqqYdGRvwQsI7vX/
+        FfAPE4KyoWWRVWVtGNP3i/jCUwSliw2rqkkEaW1PSKsthT2hoiLU2uCEd8Dgn0WhVUPgTgHU
+        91bZnBxxGHStDJBWTOJt0GAusvF2OBEW7nbYeAneD91v8m14Ew6A+i9jIp53gI6CcRtPYDUU
+        GL4h6wDAcyJY7jAJ+FWPQnJKD8ljR/jaXr8aYQt05WaQfP4kyM3x53szEDQ+NK/qA2Gk5zfF
+        42DoLpoV8voN8OG7Az93A+Q03id4WgI3U6W82gMqs1+uusgg82s54jEDs8u/CP5WKQgeGbOE
+        d9DWwjVxCtfEKbTYEpbbVTV78fQuKCuaJnh8ECorZ8jHSKhDzmwCp1axnI+GvezJKdVcgkbl
+        GRGrrkWWX9a10r7QhJqXw/UIi5F8vcSsD1JIhcpE7qpajzwsTp+rn71FMlITq2HlTpIj3V0X
+        pJJI5dVrrDZWoU2IYTk9chGTcmeJb/HUeSlWKePZSywbx2r/VwViO1kycs5yV+dF4MeuXimO
+        lRsNmVTNzMSJzIbdJc+SdAk49EyT852Rn8aTfX+57Amj149q5lSAP/Zobd38PMk7KC74QtgL
+        1U73d6r8cMb1mJuiyW8uMNWnN6vMLzxXYf655FC6vX1by/Hvfm0DGWqX6eG0c+ztkOIUY998
+        1PNp3dCUjJSTXJTSeyeh5ZT/ABTl4S5tAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEIsWRmVeSWpSXmKPExsVy+t/xu7p39jrHG9y+rWix+MdzJouNM9az
+        Wkx9+ITNov/xa2aL8+c3sFtsenyN1eLyrjlsFjPO72OyaPx4k91i7ZG77BafW/+xOXB7zG64
+        yOJxfcknZo9NqzrZPDYvqffo27KK0ePzJrkAtig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMT
+        Sz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jM/fVzAWbBWp6Nm7nKWBcZJgFyMnh4SAicT9Q1fZ
+        uxi5OIQEljJKXPh7l62LkQMoISWxcm46RI2wxJ9rXWwQNU8ZJXYe2MUIUsMmoCexdm0ESI2I
+        gKbE9b/fWUFqmAUOMUmsaJnPApIQFgiXuLP0GTOILQRUf2lXPzuIzSKgKrH1x0J2kDmcAmUS
+        xze5g4R5Bcwlzp6ZAdYqKmApseXFfXaIuKDEyZlPwOLMAtkSX1c/Z57AKDALSWoWktQsoKnM
+        QCet36UPEdaWWLbwNTOEbSuxbt17lgWMrKsYRVJLi3PTc4sN9YoTc4tL89L1kvNzNzEC43Db
+        sZ+bdzBe2hh8iFGAg1GJh/fHIft4IdbEsuLK3EOMKkBjHm1YfYFRiiUvPy9VSYTX6ezpOCHe
+        lMTKqtSi/Pii0pzU4kOMpkBvTmSWEk3OB6aOvJJ4Q1NDcwtLQ3Njc2MzCyVx3g6BgzFCAumJ
+        JanZqakFqUUwfUwcnFINjL51PbEna4vU1p/ZX7o3Ryfv4pSns13sX4pYajPOel7E3BbZ7qNm
+        cunTCh2NxYoHfsy78TPKWOSFYb/fAakY5h0NaiYngzr9rFdHOIt/r1F4eP8iv0/1BEGXqyyP
+        uRzuyL5vjxSKiVhQ8mPKJ36bzmy5fRP4ekX3xU+NeyYV86fT12+Z4e39SizFGYmGWsxFxYkA
+        ESmkX+UCAAA=
+X-CMS-MailID: 20200824131716eucas1p16a3fde52aa765e7cd6584d4733762047
+X-Msg-Generator: CA
+X-RootMTR: 20200824131716eucas1p16a3fde52aa765e7cd6584d4733762047
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200824131716eucas1p16a3fde52aa765e7cd6584d4733762047
+References: <20200822124325.GF20423@kozik-lap>
+        <CGME20200824131716eucas1p16a3fde52aa765e7cd6584d4733762047@eucas1p1.samsung.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 24.08.20 13:45, Vignesh Raghavendra wrote:
-> 
-> 
-> On 8/22/20 11:35 PM, Jan Kiszka wrote:
->> On 01.06.20 09:04, Vignesh Raghavendra wrote:
->>> dma_request_chan_by_mask() can throw EPROBE_DEFER if DMA provider
->>> is not yet probed. Currently driver just falls back to using PIO mode
->>> (which is less efficient) in this case. Instead return probe deferral
->>> error as is so that driver will be re probed once DMA provider is
->>> available.
->>>
->>> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
->>> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
->>> ---
-> [...]
->>>
->>>  static const struct spi_nor_controller_ops cqspi_controller_ops = {
->>> @@ -1269,8 +1274,11 @@ static int cqspi_setup_flash(struct cqspi_st *cqspi, struct device_node *np)
->>>  			dev_dbg(nor->dev, "using direct mode for %s\n",
->>>  				mtd->name);
->>>
->>> -			if (!cqspi->rx_chan)
->>> -				cqspi_request_mmap_dma(cqspi);
->>> +			if (!cqspi->rx_chan) {
->>> +				ret = cqspi_request_mmap_dma(cqspi);
->>> +				if (ret == -EPROBE_DEFER)
->>> +					goto err;
->>> +			}
->>>  		}
->>>  	}
->>>
->>>
->>
->> This seem to break reading the SPI flash on our IOT2050 [1] (didn't test
->> the eval board yet).
->>
->> Without that commit, read happens via PIO, and that works. With the
->> commit, the pattern
->>
->> with open("out.bin", "wb") as out:
->>     pos = 0
->>     while pos < 2:
->>         with open("/dev/mtd0", "rb") as mtd:
->>            mtd.seek(pos * 0x10000)
->>            out.write(mtd.read(0x10000))
->>         pos += 1
->>
->> gives the wrong result for the second block while
-> 
-> Interesting... Could you please explain wrong result? Is the data move
-> around or completely garbage?
+--=-=-=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-It looks like some stripes contain data from other parts of the flash or
-kernel RAM. It's not just garbage, there are readable strings included.
+It was <2020-08-22 sob 14:43>, when Krzysztof Kozlowski wrote:
+> On Fri, Aug 21, 2020 at 06:13:59PM +0200, =C5=81ukasz Stelmach wrote:
+>> cur_speed is used to calculate transfer timeout and needs to be
+>> set to the actual value of (half) the clock speed for precise
+>> calculations.
+>
+> If you need this only for timeout calculation just divide it in
+> s3c64xx_wait_for_dma().
 
-> 
-> Does this fail even on AM654 EVM? Could you share full script for me to
-> test locally?
+I divide it here to keep the relationship between the value the variable
+holds and the one that is inside clk_* (See? It's multiplied 3 lines
+above). If you look around every single clk_get_rate() call in the file is
+divided by two.
 
-The scripts are complete (python). Just binary-diff the outputs.
+> Otherwise why only if (cmu) case is updated?
 
-I'll try on the EVM later.
+You are righ I will update that too.
 
-> 
-> What is the flash on the board?
+However, I wonder if it is even possible that the value read from
+S3C64XX_SPI_CLK_CFG would be different than the one written to it?
 
-Le, could you answer that more precisely than I could?
+> You are also affecting here not only timeout but
+> s3c64xx_enable_datapath() which is not mentioned in commit log. In other
+> words, this looks wrong.
 
-Thanks,
-Jan
+Indeed, there is a reference too. I've corrected the message.
 
-> 
->>
->> with open("out2.bin", "wb") as out:
->>     with open("/dev/mtd0", "rb") as mtd:
->>         out.write(mtd.read(0x20000))
->>
->> (or "mtd_debug read") is fine.
->>
->> What could be the reason? Our DTBs and k3-am654-base-board.dtb had some
->> deviations /wrt the ospi node, but aligning ours to the base board made
->> no difference.
->>
->> Jan
->>
->> [1] https://github.com/siemens/linux/commits/jan/iot2050
->>
+>>=20
+>> Cc: Tomasz Figa <tfiga@chromium.org>
+>> Signed-off-by: =C5=81ukasz Stelmach <l.stelmach@samsung.com>
+>> ---
+>>  drivers/spi/spi-s3c64xx.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>=20
+>> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+>> index 02de734b8ab1..89c162efe355 100644
+>> --- a/drivers/spi/spi-s3c64xx.c
+>> +++ b/drivers/spi/spi-s3c64xx.c
+>> @@ -626,6 +626,7 @@ static int s3c64xx_spi_config(struct s3c64xx_spi_dri=
+ver_data *sdd)
+>>  		ret =3D clk_set_rate(sdd->src_clk, sdd->cur_speed * 2);
+>>  		if (ret)
+>>  			return ret;
+>> +		sdd->cur_speed =3D clk_get_rate(sdd->src_clk) / 2;
+>>  	} else {
+>>  		/* Configure Clock */
+>>  		val =3D readl(regs + S3C64XX_SPI_CLK_CFG);
+>> --=20
+>> 2.26.2
+>>=20
+>
+>
 
--- 
-Siemens AG, Corporate Technology, CT RDA IOT SES-DE
-Corporate Competence Center Embedded Linux
+=2D-=20
+=C5=81ukasz Stelmach
+Samsung R&D Institute Poland
+Samsung Electronics
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAl9Dvc8ACgkQsK4enJil
+gBA0rQgAnJlpI7A1yxNurb3bruQTwOt7iW6zXvP/OP+6/YaJoV6EciSx6JbgDwWa
+TSSmQAzzaZooyRZMGoZ0CU4mkxdgsJVuZKdVjmj5Omh/b0ElpC2IzmHoDk1mDH7I
+rbYgiJnhmlI6Qz2zNZ6kig5eUxuDq/tuZ2L3tpg6tvinzFZSvFsklA3vBAkAJqJm
+HK+VHbfcqqeoUXLQQqELF1A25ft8cD57BjOBtfL7ozjWc+SvQXSsjSQv64O8MPAK
+WMIoxt5TcIBXdR/r8Is0bvmp4Q+Yq7Q61T4nQZeqdw6RfYTlvUhhTm1IZO4aHAb/
+730YBXVP5vTjw79wVoyFF0h/mw5qcg==
+=L5s0
+-----END PGP SIGNATURE-----
+--=-=-=--
