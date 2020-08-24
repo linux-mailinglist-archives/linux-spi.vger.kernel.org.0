@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49490250423
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Aug 2020 18:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938C5250382
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Aug 2020 18:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgHXQ5w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Aug 2020 12:57:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41066 "EHLO mail.kernel.org"
+        id S1728821AbgHXQpv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Aug 2020 12:45:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728530AbgHXQi6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:38:58 -0400
+        id S1728585AbgHXQjW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:39:22 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0781C22D71;
-        Mon, 24 Aug 2020 16:38:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2EFD222BED;
+        Mon, 24 Aug 2020 16:39:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598287138;
-        bh=loNW8vulpaTwGdG8J1vyIIQEP2OudAGgSdq4gP20T0g=;
+        s=default; t=1598287162;
+        bh=w0y1C0oyg+LShJP6HIIzLK62tT/UFB/tHWbU7VLh+7s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f72e9gFrPJ6JaHk6hfLwWNxbcbihnOGR62RY5llLBlM5xzwjtnEHBUyPUct40wnMb
-         SFTbyN9O9amCNBeWP7huiIsew0PMed2a7O3TEVjTwhqQw6iJ+nGtAD9A8wWGOfRSgW
-         ai8rFyvKivDpj1MWzOT7c/IveMIpX/KhaIZaINVI=
+        b=UjI1RlISmMegfIYCZEH0k7K0FEE7YPxSryUtfxijDfFBuEl36VLTY32s0+aNJn/k/
+         4lD75siUvug4k8CMqS75uIx9UwQQschgELsXXNGqBZ8IPB+I8e9Sb7X9RJtZnmO47J
+         lnat3/542XI9+PZLPz6CIvwdmbt/c2l921J7B08Q=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Amelie Delaunay <amelie.delaunay@st.com>,
@@ -31,12 +31,12 @@ Cc:     Amelie Delaunay <amelie.delaunay@st.com>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 09/21] spi: stm32: fix stm32_spi_prepare_mbr in case of odd clk_rate
-Date:   Mon, 24 Aug 2020 12:38:33 -0400
-Message-Id: <20200824163845.606933-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 05/11] spi: stm32: fix stm32_spi_prepare_mbr in case of odd clk_rate
+Date:   Mon, 24 Aug 2020 12:39:08 -0400
+Message-Id: <20200824163914.607152-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200824163845.606933-1-sashal@kernel.org>
-References: <20200824163845.606933-1-sashal@kernel.org>
+In-Reply-To: <20200824163914.607152-1-sashal@kernel.org>
+References: <20200824163914.607152-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,7 +63,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index ad1e55d3d5d59..391a20b3d2fda 100644
+index ba9743fa2326d..179749f354c33 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
 @@ -254,7 +254,8 @@ static int stm32_spi_prepare_mbr(struct stm32_spi *spi, u32 speed_hz)
