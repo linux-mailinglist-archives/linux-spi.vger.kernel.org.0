@@ -2,40 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F421D25053E
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Aug 2020 19:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBD42504D2
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Aug 2020 19:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727064AbgHXRNL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Aug 2020 13:13:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40038 "EHLO mail.kernel.org"
+        id S1726786AbgHXRHj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Aug 2020 13:07:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41062 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728375AbgHXQhZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:37:25 -0400
+        id S1727881AbgHXQiZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:38:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4158A22D6F;
-        Mon, 24 Aug 2020 16:36:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22A9022D00;
+        Mon, 24 Aug 2020 16:37:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598287015;
-        bh=C2QSWRPkNYeyrcBSjMT19xcc/Wwhd62Z345tRHL/y0E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g5sU3c4h51cecEwmC6qH6ID8QLKLrnIpWAm2Gg4/t2AQ5gRB9kR9lDn83yTKOC/iE
-         4y/ysisR2LNJSTQsawZYCQweXydQzZwV2JDayKHjygGv2d/ezNNGCq0DKEmAyIKBZA
-         EypSxqCxDxzgX9ibq1W8P2Wz2jEvuCApj2lNnXt8=
+        s=default; t=1598287073;
+        bh=TNTJMht98D/avL71tpnv2u61lqx7nxSbAoCOPVIXz+A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pE5jAYFWsDCFsitckQBaosjtOXaPXhx9iphqwri8rcD2TVUZ0M/sNcde9dELmTqyG
+         AUr9Mpfk9Phgxz7Qr+u4gt377ZJAdgDMrgjzQzb8RzpC/fNmXgroH6bUqVKWdl0CO6
+         vG9xuEo+44+z48kFSqv3GAm9Z6BLM5DvloHRFs6A=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <alain.volmat@st.com>,
+Cc:     Tobias Schramm <t.schramm@manjaro.org>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.7 15/54] spi: stm32: always perform registers configuration prior to transfer
-Date:   Mon, 24 Aug 2020 12:35:54 -0400
-Message-Id: <20200824163634.606093-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 01/38] spi: stm32: clear only asserted irq flags on interrupt
+Date:   Mon, 24 Aug 2020 12:37:13 -0400
+Message-Id: <20200824163751.606577-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200824163634.606093-1-sashal@kernel.org>
-References: <20200824163634.606093-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,85 +43,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@st.com>
+From: Tobias Schramm <t.schramm@manjaro.org>
 
-[ Upstream commit 60ccb3515fc61a0124c70aa37317f75b67560024 ]
+[ Upstream commit ae1ba50f1e706dfd7ce402ac52c1f1f10becad68 ]
 
-SPI registers content may have been lost upon suspend/resume sequence.
-So, always compute and apply the necessary configuration in
-stm32_spi_transfer_one_setup routine.
+Previously the stm32h7 interrupt thread cleared all non-masked interrupts.
+If an interrupt was to occur during the handling of another interrupt its
+flag would be unset, resulting in a lost interrupt.
+This patches fixes the issue by clearing only the currently set interrupt
+flags.
 
-Signed-off-by: Alain Volmat <alain.volmat@st.com>
-Link: https://lore.kernel.org/r/1597043558-29668-6-git-send-email-alain.volmat@st.com
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+Link: https://lore.kernel.org/r/20200804195136.1485392-1-t.schramm@manjaro.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-stm32.c | 42 +++++++++++++++++------------------------
- 1 file changed, 17 insertions(+), 25 deletions(-)
+ drivers/spi/spi-stm32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 08492284369dd..3fe1edb23e36c 100644
+index b222ce8d083ef..db4c1584327c1 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
-@@ -1586,41 +1586,33 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	unsigned long flags;
- 	unsigned int comm_type;
- 	int nb_words, ret = 0;
-+	int mbr;
+@@ -961,7 +961,7 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
+ 		if (!spi->cur_usedma && (spi->rx_buf && (spi->rx_len > 0)))
+ 			stm32h7_spi_read_rxfifo(spi, false);
  
- 	spin_lock_irqsave(&spi->lock, flags);
+-	writel_relaxed(mask, spi->base + STM32H7_SPI_IFCR);
++	writel_relaxed(sr & mask, spi->base + STM32H7_SPI_IFCR);
  
- 	spi->cur_xferlen = transfer->len;
+ 	spin_unlock_irqrestore(&spi->lock, flags);
  
--	if (spi->cur_bpw != transfer->bits_per_word) {
--		spi->cur_bpw = transfer->bits_per_word;
--		spi->cfg->set_bpw(spi);
--	}
--
--	if (spi->cur_speed != transfer->speed_hz) {
--		int mbr;
--
--		/* Update spi->cur_speed with real clock speed */
--		mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
--					    spi->cfg->baud_rate_div_min,
--					    spi->cfg->baud_rate_div_max);
--		if (mbr < 0) {
--			ret = mbr;
--			goto out;
--		}
-+	spi->cur_bpw = transfer->bits_per_word;
-+	spi->cfg->set_bpw(spi);
- 
--		transfer->speed_hz = spi->cur_speed;
--		stm32_spi_set_mbr(spi, mbr);
-+	/* Update spi->cur_speed with real clock speed */
-+	mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
-+				    spi->cfg->baud_rate_div_min,
-+				    spi->cfg->baud_rate_div_max);
-+	if (mbr < 0) {
-+		ret = mbr;
-+		goto out;
- 	}
- 
--	comm_type = stm32_spi_communication_type(spi_dev, transfer);
--	if (spi->cur_comm != comm_type) {
--		ret = spi->cfg->set_mode(spi, comm_type);
-+	transfer->speed_hz = spi->cur_speed;
-+	stm32_spi_set_mbr(spi, mbr);
- 
--		if (ret < 0)
--			goto out;
-+	comm_type = stm32_spi_communication_type(spi_dev, transfer);
-+	ret = spi->cfg->set_mode(spi, comm_type);
-+	if (ret < 0)
-+		goto out;
- 
--		spi->cur_comm = comm_type;
--	}
-+	spi->cur_comm = comm_type;
- 
- 	if (spi->cfg->set_data_idleness)
- 		spi->cfg->set_data_idleness(spi, transfer->len);
 -- 
 2.25.1
 
