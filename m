@@ -2,75 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED8C252212
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 22:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E741252353
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 00:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbgHYUn7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Aug 2020 16:43:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51060 "EHLO mail.kernel.org"
+        id S1726391AbgHYWGv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Aug 2020 18:06:51 -0400
+Received: from mga02.intel.com ([134.134.136.20]:3658 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726149AbgHYUn7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 25 Aug 2020 16:43:59 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0E4E020738;
-        Tue, 25 Aug 2020 20:43:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598388238;
-        bh=WLo42XVgbe/Ed9YV+TS1fYp52SFu68G5Rn4m4YhTSr4=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=FkxhDRJ/FP6BR5O3GwCn3nSiyAfeSV5IOW0nsfuZOpur/u8GeUzieoOKoO69wHkFy
-         lmYEorXVo/spfmEstcYf6liWUv0wJ0mJ8OMDblo5SoRmPKvlHRV1DjqtfGmag04K1R
-         VKMo/5zPp5ql6F6+gWXIt4j9AawjXSGeraSUj/mw=
-Date:   Tue, 25 Aug 2020 21:43:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-kernel@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>, linux-spi@vger.kernel.org
-In-Reply-To: <20200825172506.14375-1-vigneshr@ti.com>
-References: <20200825172506.14375-1-vigneshr@ti.com>
-Subject: Re: [PATCH] spi: spi-cadence-quadspi: Populate get_name() interface
-Message-Id: <159838820300.25561.6639515580662716386.b4-ty@kernel.org>
+        id S1726336AbgHYWGv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 25 Aug 2020 18:06:51 -0400
+IronPort-SDR: 0q+LsUwTUppTEdFEhszVTx/OAffSL6aR7tTCgxZ4NjGWocY2adQXYJA0wPpQ7RdrmlX6C33AZo
+ XkOctnF0kb6w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="143976451"
+X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
+   d="scan'208";a="143976451"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 15:06:51 -0700
+IronPort-SDR: yADuTKWgeKCc9PVCf49RctCfYFju9B48eBZx5F6RW9H6Caa3txLDDhDUfkj2IJJt4mh6E6kHwo
+ wBPl+FvASyMw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
+   d="scan'208";a="329011301"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2020 15:06:50 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kAh5c-00BPy8-8w; Wed, 26 Aug 2020 01:06:48 +0300
+Date:   Wed, 26 Aug 2020 01:06:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Cezary Rojewski <cezary.rojewski@intel.com>
+Cc:     linux-spi@vger.kernel.org, broonie@kernel.org
+Subject: Re: [PATCH v2] spi: pxa2xx: Add SSC2 and SSPSP2 SSP registers
+Message-ID: <20200825220648.GY1891694@smile.fi.intel.com>
+References: <20200825201743.4926-1-cezary.rojewski@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200825201743.4926-1-cezary.rojewski@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 25 Aug 2020 22:55:06 +0530, Vignesh Raghavendra wrote:
-> Implement get_name() interface of spi_controller_mem_ops so as to avoid
-> changing of mtd->name due to driver being moved over to spi-mem
-> framework from SPI NOR. This avoids breaking of MTD cmdline args being
-> passed by bootloaders which maybe using old driver name.
+On Tue, Aug 25, 2020 at 10:17:43PM +0200, Cezary Rojewski wrote:
+> Update list of SSP registers with SSC2 and SSPSP2. These registers are
+> utilized by LPT/WPT AudioDSP architecture.
+> 
+> While SSC2 shares the same offset (0x40) as SSACDD, description of this
+> register for SSP device present on mentioned AudioDSP is different so
+> define separate constant to avoid any ambiguity.
+> 
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to
+Side note for the future: When you put a tag, you may remove Cc of the same
+person (git-send-email will add Cc based on the tag).
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks!
 
-[1/1] spi: spi-cadence-quadspi: Populate get_name() interface
-      commit: 2ea370a9173f4a3c80b24221049359a5d1518bc0
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
