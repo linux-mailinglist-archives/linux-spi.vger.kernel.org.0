@@ -2,68 +2,167 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E741252353
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 00:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9B7252376
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 00:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgHYWGv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Aug 2020 18:06:51 -0400
-Received: from mga02.intel.com ([134.134.136.20]:3658 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726336AbgHYWGv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 25 Aug 2020 18:06:51 -0400
-IronPort-SDR: 0q+LsUwTUppTEdFEhszVTx/OAffSL6aR7tTCgxZ4NjGWocY2adQXYJA0wPpQ7RdrmlX6C33AZo
- XkOctnF0kb6w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="143976451"
-X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
-   d="scan'208";a="143976451"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 15:06:51 -0700
-IronPort-SDR: yADuTKWgeKCc9PVCf49RctCfYFju9B48eBZx5F6RW9H6Caa3txLDDhDUfkj2IJJt4mh6E6kHwo
- wBPl+FvASyMw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
-   d="scan'208";a="329011301"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2020 15:06:50 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kAh5c-00BPy8-8w; Wed, 26 Aug 2020 01:06:48 +0300
-Date:   Wed, 26 Aug 2020 01:06:48 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     linux-spi@vger.kernel.org, broonie@kernel.org
-Subject: Re: [PATCH v2] spi: pxa2xx: Add SSC2 and SSPSP2 SSP registers
-Message-ID: <20200825220648.GY1891694@smile.fi.intel.com>
-References: <20200825201743.4926-1-cezary.rojewski@intel.com>
+        id S1726541AbgHYWUm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Aug 2020 18:20:42 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:37163 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726391AbgHYWUl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Aug 2020 18:20:41 -0400
+Received: by mail-il1-f194.google.com with SMTP id v2so131810ilq.4;
+        Tue, 25 Aug 2020 15:20:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k3KGmLJGZaOAZkv6OSfgLj0L7NmLhPE7zQczouh7MEU=;
+        b=Osys/usJ78FVhYjt6m5AckJ4c106dBCdzMGkn/WVXs7vIp6VbinlnFdHL7y+3az5CE
+         859AoNFZ4NYQSIn7Sv0oC1lOYPk2dI4BcdUgeifZafjkoCODHmVfvv3FeAORkMdECiqt
+         Nb6x8xtfQacV9o4BTW7wsWws1nAi6tuqq38kHNv36H2H9+4yr0j9nhc+c1Kck4lw9Cm+
+         AQvwpJjVG9DbXs12iRS66P/VoLuco6L+t9TF8XI0vi9x2uaiLljS9D8pPvA84vIDW6Im
+         HczMTqZvQpYHlLEK7NVRMJHDTBqwdRfpnVkFqGJ01LstbeWNmQbdqq9FIKV0DXZNQZno
+         bP8w==
+X-Gm-Message-State: AOAM531Iev/rOGth+x0rbpFE66TX9IKreec2iLjRWRAfD088TbhWWF02
+        CwqUWt3v5CujjqqzfKfOpA==
+X-Google-Smtp-Source: ABdhPJzvk8+3fhcPALS9UgRxvDmg4rJYVAmWzKAM0VmpBUEr/br5MUyUK52jUlLc3MBVxtZH4RMmfw==
+X-Received: by 2002:a92:cf09:: with SMTP id c9mr11410277ilo.38.1598394040539;
+        Tue, 25 Aug 2020 15:20:40 -0700 (PDT)
+Received: from xps15 ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id p77sm224314ill.39.2020.08.25.15.20.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 15:20:39 -0700 (PDT)
+Received: (nullmailer pid 1447409 invoked by uid 1000);
+        Tue, 25 Aug 2020 22:20:37 -0000
+Date:   Tue, 25 Aug 2020 16:20:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ikjoon Jang <ikjn@chromium.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: spi: Convert spi-mtk-nor to json-schema
+Message-ID: <20200825222037.GA1443219@bogus>
+References: <20200820052827.2642164-1-ikjn@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200825201743.4926-1-cezary.rojewski@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200820052827.2642164-1-ikjn@chromium.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 10:17:43PM +0200, Cezary Rojewski wrote:
-> Update list of SSP registers with SSC2 and SSPSP2. These registers are
-> utilized by LPT/WPT AudioDSP architecture.
+On Thu, Aug 20, 2020 at 01:28:27PM +0800, Ikjoon Jang wrote:
+> Convert Mediatek ARM SOC's serial NOR flash controller binding
+> to json-schema format.
 > 
-> While SSC2 shares the same offset (0x40) as SSACDD, description of this
-> register for SSP device present on mentioned AudioDSP is different so
-> define separate constant to avoid any ambiguity.
+> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> ---
+>  .../bindings/spi/mediatek,spi-mtk-nor.yaml    | 82 +++++++++++++++++++
+>  .../devicetree/bindings/spi/spi-mtk-nor.txt   | 47 -----------
+>  2 files changed, 82 insertions(+), 47 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-mtk-nor.txt
 > 
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+> new file mode 100644
+> index 000000000000..1e4bcf691539
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/mediatek,spi-mtk-nor.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Serial NOR flash controller for MediaTek ARM SoCs
+> +
+> +maintainers:
+> +  - Bayi Cheng <bayi.cheng@mediatek.com>
+> +  - Chuanhong Guo <gch981213@gmail.com>
+> +
+> +description: |
+> +  This spi controller support single, dual, or quad mode transfer for
+> +  SPI NOR flash. There should be only one spi slave device following
+> +  generic spi bindings. It's not recommended to use this controller
+> +  for devices other than SPI NOR flash due to limited transfer
+> +  capability of this controller.
+> +
+> +allOf:
+> +  - $ref: /spi/spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt2701-nor
+> +              - mediatek,mt2712-nor
+> +              - mediatek,mt7622-nor
+> +              - mediatek,mt7623-nor
+> +              - mediatek,mt7629-nor
+> +          - enum:
+> +              - mediatek,mt8173-nor
+> +      - items:
+> +          - const: mediatek,mt8173-nor
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock used for spi bus
+> +      - description: clock used for controller
+> +
+> +  clock-names:
+> +    items:
+> +      - const: "spi"
+> +      - const: "sf"
 
-Side note for the future: When you put a tag, you may remove Cc of the same
-person (git-send-email will add Cc based on the tag).
+Don't need quotes.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
 
+interrupts was required.
 
+Add:
+
+unevaluatedProperties: false
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8173-clk.h>
+> +
+> +    soc {
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+> +
+> +      nor_flash: spi@1100d000 {
+> +        compatible = "mediatek,mt8173-nor";
+> +        reg = <0 0x1100d000 0 0xe0>;
+> +        interrupts = <&spi_flash_irq>;
+> +        clocks = <&pericfg CLK_PERI_SPI>, <&topckgen CLK_TOP_SPINFI_IFR_SEL>;
+> +        clock-names = "spi", "sf";
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        flash@0 {
+> +          compatible = "jedec,spi-nor";
+> +          reg = <0>;
+> +        };
+> +      };
+> +    };
+> +
