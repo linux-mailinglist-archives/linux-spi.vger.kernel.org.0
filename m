@@ -2,70 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF46251E0E
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 19:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BA4251E36
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 19:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgHYRSV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Aug 2020 13:18:21 -0400
-Received: from mga03.intel.com ([134.134.136.65]:48204 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726466AbgHYRSR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 25 Aug 2020 13:18:17 -0400
-IronPort-SDR: a0z26XiXx5ypY3uBuMN3GhU3mogApj1uthYG4O32B061eYIyxZM4orJZvcdO0q0UqjpWPo5G7N
- goC2rCu5SXyw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="156152592"
-X-IronPort-AV: E=Sophos;i="5.76,353,1592895600"; 
-   d="scan'208";a="156152592"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 10:18:10 -0700
-IronPort-SDR: VQY7582Jj3+CkjHqOtYsgVgiG78E8Qyy1jvxQJJMk9z+rb6yjwgL7koWV92hctgUNNqzMc7VgL
- WqZK4r8CmJjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,353,1592895600"; 
-   d="scan'208";a="499929081"
-Received: from crojewsk-ctrl.igk.intel.com ([10.102.9.28])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Aug 2020 10:18:08 -0700
-From:   Cezary Rojewski <cezary.rojewski@intel.com>
-To:     linux-spi@vger.kernel.org
-Cc:     broonie@kernel.org, Cezary Rojewski <cezary.rojewski@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH] spi: pxa2xx: Add SSC2 and SSPSP2 SSP registers
-Date:   Tue, 25 Aug 2020 19:17:30 +0200
-Message-Id: <20200825171730.17638-1-cezary.rojewski@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726119AbgHYRZf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Aug 2020 13:25:35 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:35076 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbgHYRZ3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Aug 2020 13:25:29 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07PHPHYG106758;
+        Tue, 25 Aug 2020 12:25:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1598376317;
+        bh=jT2eGic+v+kkUY8P0eAP0PtOx1znlwcxaRGMQeI7Es0=;
+        h=From:To:CC:Subject:Date;
+        b=WL0TbBQeI4X82fsxZgtfuTCG1Nlr2P2G4TT8aaINMI5dPT6ijahcI/6eOWkuBi/xn
+         cYocGme5U0gXU1n6SVdzkx15LOsgaa/Qp22OhayMqtH8EpgK9+5IPummY1PsNuo82B
+         c9JiwEXSz2uYjBdcAEfjruC2eiT/KRpEPS1GI7Jw=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 07PHPHTr095720
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Aug 2020 12:25:17 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 25
+ Aug 2020 12:25:17 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 25 Aug 2020 12:25:17 -0500
+Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07PHPDPe080122;
+        Tue, 25 Aug 2020 12:25:14 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Pratyush Yadav <p.yadav@ti.com>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] spi: spi-cadence-quadspi: Populate get_name() interface
+Date:   Tue, 25 Aug 2020 22:55:06 +0530
+Message-ID: <20200825172506.14375-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Update list of SSP registers with SSC2 and SSPSP2. These registers are
-utilized by LPT/WPT AudioDSP architecture.
+Implement get_name() interface of spi_controller_mem_ops so as to avoid
+changing of mtd->name due to driver being moved over to spi-mem
+framework from SPI NOR. This avoids breaking of MTD cmdline args being
+passed by bootloaders which maybe using old driver name.
 
-While SSC2 shares the same offset (0x40) as SSACDD, description of this
-register for SSP device present on mentioned AudioDSP is different so
-define separate constant to avoid any ambiguity.
-
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Fixes: 31fb632b5d43c ("spi: Move cadence-quadspi driver to drivers/spi/")
+Reported-by: Jan Kiszka <jan.kiszka@siemens.com>
+Suggested-by: Boris Brezillon <boris.brezillon@collabora.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 ---
- include/linux/pxa2xx_ssp.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/spi/spi-cadence-quadspi.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/include/linux/pxa2xx_ssp.h b/include/linux/pxa2xx_ssp.h
-index 6facf27865f9..935d7db5bc32 100644
---- a/include/linux/pxa2xx_ssp.h
-+++ b/include/linux/pxa2xx_ssp.h
-@@ -41,6 +41,8 @@
- #define SSTSS		(0x38)  /* SSP Timeslot Status */
- #define SSACD		(0x3C)  /* SSP Audio Clock Divider */
- #define SSACDD		(0x40)	/* SSP Audio Clock Dither Divider */
-+#define SSC2		(0x40)	/* SSP Command / Status 2 */
-+#define SSPSP2		(0x44)	/* SSP Programmable Serial Protocol 2 */
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 1c1a9d17eec0d..508b219eabf80 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1128,8 +1128,17 @@ static int cqspi_request_mmap_dma(struct cqspi_st *cqspi)
+ 	return 0;
+ }
  
- /* Common PXA2xx bits first */
- #define SSCR0_DSS	(0x0000000f)	/* Data Size Select (mask) */
++static const char *cqspi_get_name(struct spi_mem *mem)
++{
++	struct cqspi_st *cqspi = spi_master_get_devdata(mem->spi->master);
++	struct device *dev = &cqspi->pdev->dev;
++
++	return devm_kasprintf(dev, GFP_KERNEL, "%s.%d", dev_name(dev), mem->spi->chip_select);
++}
++
+ static const struct spi_controller_mem_ops cqspi_mem_ops = {
+ 	.exec_op = cqspi_exec_mem_op,
++	.get_name = cqspi_get_name,
+ };
+ 
+ static int cqspi_setup_flash(struct cqspi_st *cqspi)
 -- 
-2.17.1
+2.28.0
 
