@@ -2,256 +2,247 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39280251311
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 09:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46E62514EA
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 11:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729410AbgHYHW4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Aug 2020 03:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729363AbgHYHW4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Aug 2020 03:22:56 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2F9C061574;
-        Tue, 25 Aug 2020 00:22:55 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id l2so9144560eji.3;
-        Tue, 25 Aug 2020 00:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OADTftaUqa0gqWbzg8dntRETIGBaFisPIux6F2d7Xks=;
-        b=LKg4zB/vDLYJda6TA91mSYdm6ubYWSNZ7yMZt6jDGsgx7tw7Kxs08Zzwiz3u5PgP0n
-         qGgdt6Aa1TeorwyggBIJXKSRz4nQc1zK15UGtG3ClWCYR8v7J+T/YwVTTRODf1Y2mkSe
-         jdG11BjPs0zKRtty0kQ7pUyHP5IrRxgWrf7UKWOHEf52VpMjvUKOiRcU4+jllCZzDwsj
-         uUmNPMZJR15ya/E6jMoIe0Iwfhr5Iv5rymdxFCmOnlM6N7LNDLq4OJygpJS1IzAhJ4t9
-         ooA/QSoN9vpa20V+0slmwh4mO0IqwcTSJ/2rNbHXk1bBcRJlEjEeDy2bECt6AOD1JUy5
-         Yl2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OADTftaUqa0gqWbzg8dntRETIGBaFisPIux6F2d7Xks=;
-        b=pWVjaUQzgOLZ9qXSm18T/gWLmaCLAefV956avCyL2vqt+I7UwB8uvx9JCCLd9jEoyT
-         VQ2fu9yK21GaWzGegH8TlII+FedK9heUs5dzwBwFajt/C4qJEplfGBRC0QUe9zKpWy9x
-         6cSfZvtEOHoPkC2D0rhXL6TLIQeHWwXDD2+ifRJIOMFcz0H4pjURQFIwOYoE80he8R6m
-         LvoFTijLvJCe7QxJRdNWscbkXH43dBR8dEFHoBcKsoz1hFgKobfQ/ho9XZiqvS2X38mK
-         sKRFdf1gudxKQL4BmcFw2Q9iP9G/1XMfNUJxcQZIeHTm1+7PWCkOcGZEqqjq0x2MpZUi
-         kcrw==
-X-Gm-Message-State: AOAM5336MD6bu4jVBMLY10LCd4KZEZZcHxFH4ViYHEf10wnT/w6jgcJi
-        Oj6qzKnVDBueE0OpuiRdN/Fj5kS8ouJM3Q==
-X-Google-Smtp-Source: ABdhPJwOkduFavTmq4VITqGicuVuRG4Vo1SQn5RrMfXrJPegMiqGfQLcpcchXDEu6lH0M99KUNcXtA==
-X-Received: by 2002:a17:906:2289:: with SMTP id p9mr8900398eja.437.1598340174058;
-        Tue, 25 Aug 2020 00:22:54 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f23:5700:40ac:16ed:6e22:2a54? (p200300ea8f23570040ac16ed6e222a54.dip0.t-ipconnect.de. [2003:ea:8f23:5700:40ac:16ed:6e22:2a54])
-        by smtp.googlemail.com with ESMTPSA id dj16sm6834217edb.5.2020.08.25.00.22.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2020 00:22:53 -0700 (PDT)
-Subject: Re: fsl_espi errors on v5.7.15
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <3f48e5fb-33c9-8046-0f80-236eed163c16@alliedtelesis.co.nz>
- <c43a23bd-33ec-4ef2-2ca5-730342248db3@gmail.com>
- <3c72eec1-41ba-7389-eceb-3de80065555a@alliedtelesis.co.nz>
- <1bbb3726-b0a4-6eb9-9076-706b06dfb90f@alliedtelesis.co.nz>
- <61bb9800-9f90-9cd4-3b17-c14a7f83d792@gmail.com>
- <0ff80ebb-e6ae-d8e1-9f0d-8759b2556141@alliedtelesis.co.nz>
- <c2dadf51-666f-72f6-7687-731f281ed7d6@alliedtelesis.co.nz>
- <4ed8a84b-0763-820e-df3e-1861d718f77d@alliedtelesis.co.nz>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <f97dc3af-d1f0-6974-ec2d-ace8d7e73993@gmail.com>
-Date:   Tue, 25 Aug 2020 09:22:48 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726095AbgHYJCQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Aug 2020 05:02:16 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:48536 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725900AbgHYJCP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Aug 2020 05:02:15 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200825090212euoutp01700f5b9288498d259a8209f47c7530c0~ud1bdEimP0084600846euoutp019;
+        Tue, 25 Aug 2020 09:02:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200825090212euoutp01700f5b9288498d259a8209f47c7530c0~ud1bdEimP0084600846euoutp019
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1598346132;
+        bh=nELQW/qZXEXb5q6ziQQU/InqD+gC34e4yfOiwAkGpIE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mVotJBVHQa2SJXC/GPLHmnFaMBDWg7oG7CrZ4LaOIUdUauuIyfLnnLS2kXYeB9Cqd
+         JbAp1s77YTwUNVGeao7Wc4uuX0Z1nRM9SrPsFKK6Y7U3tq1OueBszDUwbEZOdF2uja
+         ilC6uZP0oteoK+0bnUVW0lx1aR+VjLdJi/8S6CWM=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200825090212eucas1p150bcd747d4e709a207e26dd7a86bf9ce~ud1bEUhYL1252612526eucas1p12;
+        Tue, 25 Aug 2020 09:02:12 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 53.31.05997.493D44F5; Tue, 25
+        Aug 2020 10:02:12 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200825090211eucas1p1b63191fa778a775e33169ba2c1d3b74b~ud1amVFGr1917419174eucas1p1H;
+        Tue, 25 Aug 2020 09:02:11 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200825090211eusmtrp19b47e5e8064a4b295d1c4478b18a4c6f~ud1allHsk1202112021eusmtrp1D;
+        Tue, 25 Aug 2020 09:02:11 +0000 (GMT)
+X-AuditID: cbfec7f4-677ff7000000176d-96-5f44d3945aba
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 58.11.06017.393D44F5; Tue, 25
+        Aug 2020 10:02:11 +0100 (BST)
+Received: from localhost (unknown [106.120.51.46]) by eusmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20200825090211eusmtip2d0eced059a8edbe0bafdf0e313467860~ud1aZ3n4s1247012470eusmtip27;
+        Tue, 25 Aug 2020 09:02:11 +0000 (GMT)
+From:   Lukasz Stelmach <l.stelmach@samsung.com>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "list\@263.net\:IOMMU DRIVERS \<iommu\@lists.linux-foundation.org\>\,
+        Joerg Roedel \<joro\@8bytes.org\>\," 
+        <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH v2 7/9] spi: spi-s3c64xx: Ensure cur_speed holds actual
+ clock value
+Date:   Tue, 25 Aug 2020 11:01:53 +0200
+In-Reply-To: <CAAFQd5ADym6YapCoJ8+fJbPjSestcD_2R8L5T8jAfO4c=GFQkA@mail.gmail.com>
+        (Tomasz Figa's message of "Mon, 24 Aug 2020 15:21:34 +0200")
+Message-ID: <dleftjk0xnw132.fsf%l.stelmach@samsung.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <4ed8a84b-0763-820e-df3e-1861d718f77d@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
+        protocol="application/pgp-signature"
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SWUhUURjuzF3mqo2dRsuf0UInhTLSsrAbLVj5MA8+SERUUDbaRSVnjLm5
+        VA8uoGjoKC40TZZZg8WUWja4FUpmboNONmAqaYsDpVbiUm455PUa9Pad/1v+7xwOQ8iHKAUT
+        r73C6bTqBCXtSta1L9h2ldjDo3bPD7qxD+a/SthnhhqKLf3soNmC0QmCtdmeStna0X6KtTeV
+        0azB1ixhM6YGpWxV27CUncly0mFuqtvpfaTqvWmaUNWac2nVc1OaSm8xI9VM7dZI+qzroYtc
+        Qnwypws+csE1bkC/jC4vBqR294xQ6ah8yw3kwgDeB5X5Q9QN5MrI8SMEHQ4DJRByPIugf5QR
+        iRkEw3deU/8cJcvVpEg8RPCt+6NUPHxFkOl8saJiGBoHQVXVacHgif1hqctACxoC3yehfsS8
+        muSBz4DV2U8KmMQBMGQvWRW54EIE9VO/JQIhw/sh+8/0qmETPgCWb8I2Yb4Rum45Vs0E1sAt
+        23ck1vslhbF33iIOh7lcx1ptDxjvsEhF7APW4jxSKAo4DYqLQoW9gPMQ1JXNk6LmIHzoXaRF
+        fBSsTwyUqHeHgR8bxbXuUFR3kxDHMsjJlotqf6gueLmWooD88UdrzVSQa8yUiK9rQmBaDC1E
+        vsb/LmP87zLGlVQC74CapmBxvBMqKyYIER+G6upJ8h6izMiLS+I1sRwfouVSgni1hk/SxgbF
+        JGpq0covszo7ZhtQ05/oVoQZpFwvS28+HiWn1Mn8VU0r8l9J+vL08VukILWJWk7pKTvWYz0v
+        l11UX73G6RKjdEkJHN+KvBlS6SXbe3/snBzHqq9wlzjuMqf7x0oYF0U64j/Zz/XpFY07DvpN
+        xZx84LclfC7LP+Dn5s7FMW00YWyYoBZOvSlXDdRvregNMxaWb9f3LfCTge3qUjbyhGdJ6qv+
+        iKWQwM+ejS1JNx/7WiL0e7XGznXbTvN965xtUr3jyWTBjLXmhdmRsWHUSxrY4aPXXG9JNe0Z
+        ilsoi8y5m6Ik+Tj1nkBCx6v/Am7+G6JtAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsVy+t/xe7qTL7vEGyz+q22x+MdzJouNM9az
+        Wkx9+ITNov/xa2aL8+c3sFtsenyN1eLyrjlsFjPO72OyaPx4k91i7ZG77BafW/+xOXB7zG64
+        yOJxfcknZo9NqzrZPDYvqffo27KK0ePzJrkAtig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMT
+        Sz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jBt9fxkLfqlWnDp7j7WBcb5sFyMnh4SAicSUv+tY
+        uhi5OIQEljJKNF66wNrFyAGUkJJYOTcdokZY4s+1LjaImqeMEt/ffAOrYRPQk1i7NgKkRkRA
+        ReL3yRlsIDazwGQWiWdLDEFsYYFwiTtLnzGD2EICARLfzl1kBbFZBFQlbl2eAjaTU2ACo8T2
+        j9+YQBK8AuYSbX8+gRWJClhKbHlxnx0iLihxcuYTFogF2RJfVz9nnsAoMAtJahaS1Cyg85gF
+        NCXW79KHCGtLLFv4mhnCtpVYt+49ywJG1lWMIqmlxbnpucVGesWJucWleel6yfm5mxiBkbjt
+        2M8tOxi73gUfYhTgYFTi4W3Y5xwvxJpYVlyZe4hRBWjMow2rLzBKseTl56UqifA6nT0dJ8Sb
+        klhZlVqUH19UmpNafIjRFOjRicxSosn5wOSRVxJvaGpobmFpaG5sbmxmoSTO2yFwMEZIID2x
+        JDU7NbUgtQimj4mDU6qBccaDleLvfyoURE57nl/SwP+5/dBZGT7XO7/evTb95BfLslOorurC
+        9qn6d088mLjk0rNtc/OXWj3Knl971nzt3ntZRQelzz1SVV/pGu9b0nN5USGT+uVLz6wEGRhz
+        D/ZvsmC/fXan06yDrZGaErZltlqT/13gmeKq9yvo8YXpHSuDdUszvVVa1yixFGckGmoxFxUn
+        AgCFIZFV5gIAAA==
+X-CMS-MailID: 20200825090211eucas1p1b63191fa778a775e33169ba2c1d3b74b
+X-Msg-Generator: CA
+X-RootMTR: 20200825090211eucas1p1b63191fa778a775e33169ba2c1d3b74b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200825090211eucas1p1b63191fa778a775e33169ba2c1d3b74b
+References: <CAAFQd5ADym6YapCoJ8+fJbPjSestcD_2R8L5T8jAfO4c=GFQkA@mail.gmail.com>
+        <CGME20200825090211eucas1p1b63191fa778a775e33169ba2c1d3b74b@eucas1p1.samsung.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 25.08.2020 05:54, Chris Packham wrote:
-> 
-> On 25/08/20 10:04 am, Chris Packham wrote:
->>
->> On 20/08/20 9:08 am, Chris Packham wrote:
->>>
->>> On 19/08/20 6:15 pm, Heiner Kallweit wrote:
->>>> On 19.08.2020 00:44, Chris Packham wrote:
->>>>> Hi Again,
->>>>>
->>>>> On 17/08/20 9:09 am, Chris Packham wrote:
->>>>>
->>>>>> On 14/08/20 6:19 pm, Heiner Kallweit wrote:
->>>>>>> On 14.08.2020 04:48, Chris Packham wrote:
->>>>>>>> Hi,
->>>>>>>>
->>>>>>>> I'm seeing a problem with accessing spi-nor after upgrading a T2081
->>>>>>>> based system to linux v5.7.15
->>>>>>>>
->>>>>>>> For this board u-boot and the u-boot environment live on spi-nor.
->>>>>>>>
->>>>>>>> When I use fw_setenv from userspace I get the following kernel logs
->>>>>>>>
->>>>>>>> # fw_setenv foo=1
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't 
->>>>>>>> empty!
->>>>>>>> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't 
->>>>>>>> empty!
->>>>>>>> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->>>>>>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't 
->>>>>>>> empty!
->>>>>>>> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->>>>>>>> ...
->>>>>>>>
->>>>>>> This error reporting doesn't exist yet in 4.4. So you may have an 
->>>>>>> issue
->>>>>>> under 4.4 too, it's just not reported.
->>>>>>> Did you verify that under 4.4 fw_setenv actually has an effect?
->>>>>> Just double checked and yes under 4.4 the setting does get saved.
->>>>>>>> If I run fw_printenv (before getting it into a bad state) it is 
->>>>>>>> able to
->>>>>>>> display the content of the boards u-boot environment.
->>>>>>>>
->>>>>>> This might indicate an issue with spi being locked. I've seen 
->>>>>>> related
->>>>>>> questions, just use the search engine of your choice and check for
->>>>>>> fw_setenv and locked.
->>>>>> I'm running a version of fw_setenv which includes
->>>>>> https://gitlab.denx.de/u-boot/u-boot/-/commit/db820159 so it 
->>>>>> shouldn't
->>>>>> be locking things unnecessarily.
->>>>>>>> If been unsuccessful in producing a setup for bisecting the 
->>>>>>>> issue. I do
->>>>>>>> know the issue doesn't occur on the old 4.4.x based kernel but 
->>>>>>>> that's
->>>>>>>> probably not much help.
->>>>>>>>
->>>>>>>> Any pointers on what the issue (and/or solution) might be.
->>>>> I finally managed to get our board running with a vanilla kernel. With
->>>>> corenet64_smp_defconfig I occasionally see
->>>>>
->>>>>     fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>
->>>>> other than the message things seem to be working.
->>>>>
->>>>> With a custom defconfig I see
->>>>>
->>>>>     fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->>>>>     fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't 
->>>>> empty!
->>>>>     fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->>>>>     ...
->>>>>
->>>>> and access to the spi-nor does not work until the board is reset.
->>>>>
->>>>> I'll try and pick apart the differences between the two defconfigs.
->>>
->>> I now think my earlier testing is invalid. I have seen the problem 
->>> with either defconfig if I try hard enough. I had convinced myself 
->>> that the problem was CONFIG_PREEMPT but that was before I found 
->>> boot-to-boot differences with the same kernel.
->>>
->>> It's possible that I'm chasing multiple issues with the same symptom.
->>>
->>> The error I'm most concerned with is in the sequence
->>> 1. boot with old image
->>> 2. write environment
->>> 3. boot with new image
->>> 4. write environment
->>> 5. write fails and environment is corrupted
->>>
->>> After I recover the system things sometimes seem fine. Until I repeat 
->>> the sequence above.
->>>
->>>> Also relevant may be:
->>>> - Which dts are you using?
->>> Custom but based heavily on the t2080rdb.
->>>> - What's the spi-nor type, and at which frequency are you operating it?
->>> The board has several alternate parts for the spi-nor so the dts just 
->>> specifies compatible = "jedec,spi-nor" the actual chip detected on 
->>> the board I have is "n25q032a (4096 Kbytes)". The dts sets 
->>> spi-max-frequency = <10000000> I haven't measured the actual 
->>> frequency on the bus.
->>>> - Does the issue still happen if you lower the frequency?
->>> I did play around with the frequency initially but I should probably 
->>> give that another go now that I have a better reproduction method.
->>
->> Playing around with the frequency didn't help.
->>
->> One thing that I've found is that the problem appears to be that I end 
->> up with extra bytes in the RX FIFO. If I add code to drain the RX FIFO 
->> then the system is able to keep accessing the spi-nor (albeit with 
->> some noisy logs).
-> 
-> I've been staring at spi-fsl-espi.c for while now and I think I've 
-> identified a couple of deficiencies that may or may not be related to my 
-> issue.
-> 
-> First I think the 'Transfer done but SPIE_DON isn't set' message can be 
-> generated spuriously. In fsl_espi_irq() we read the ESPI_SPIE register. 
-> We also write back to it to clear the current events. We re-read it in 
-> fsl_espi_cpu_irq() and complain when SPIE_DON is not set. But we can 
-> naturally end up in that situation if we're doing a large read. Consider 
-> the messages for reading a block of data from a spi-nor chip
-> 
->   tx = READ_OP + ADDR
->   rx = data
-> 
-> We setup the transfer and pump out the tx_buf. The first interrupt goes 
-> off and ESPI_SPIE has SPIM_DON and SPIM_RXT set. We empty the rx fifo, 
-> clear ESPI_SPIE and wait for the next interrupt. The next interrupt 
-> fires and this time we have ESPI_SPIE with just SPIM_RXT set. This 
-> continues until we've received all the data and we finish with ESPI_SPIE 
-> having only SPIM_RXT set. When we re-read it we complain that SPIE_DON 
-> isn't set.
-> 
-> The other deficiency is that we only get an interrupt when the amount of 
-> data in the rx fifo is above FSL_ESPI_RXTHR. If there are fewer than 
-> FSL_ESPI_RXTHR left to be received we will never pull them out of the fifo.
-> 
-SPIM_DON will trigger an interrupt once the last characters have been
-transferred, and read the remaining characters from the FIFO.
+--=-=-=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-> I think the reason I'm seeing some variability is because of how fast 
-> (or slow) the interrupts get processed and how fast the spi-nor chip can 
-> fill the CPUs rx fifo.
-> 
-To rule out timing issues at high bus frequencies I initially asked
-for re-testing at lower frequencies. If you e.g. limit the bus to 1 MHz
-or even less, then timing shouldn't be an issue.
+It was <2020-08-24 pon 15:21>, when Tomasz Figa wrote:
+> On Mon, Aug 24, 2020 at 3:17 PM Lukasz Stelmach <l.stelmach@samsung.com> =
+wrote:
+>>
+>> It was <2020-08-22 sob 14:43>, when Krzysztof Kozlowski wrote:
+>> > On Fri, Aug 21, 2020 at 06:13:59PM +0200, =C5=81ukasz Stelmach wrote:
+>> >> cur_speed is used to calculate transfer timeout and needs to be
+>> >> set to the actual value of (half) the clock speed for precise
+>> >> calculations.
+>> >
+>> > If you need this only for timeout calculation just divide it in
+>> > s3c64xx_wait_for_dma().
+>>
+>> I divide it here to keep the relationship between the value the variable
+>> holds and the one that is inside clk_* (See? It's multiplied 3 lines
+>> above). If you look around every single clk_get_rate() call in the file =
+is
+>> divided by two.
+>>
+>> > Otherwise why only if (cmu) case is updated?
+>>
+>> You are righ I will update that too.
+>>
+>> However, I wonder if it is even possible that the value read from
+>> S3C64XX_SPI_CLK_CFG would be different than the one written to it?
+>>
+>
+> It is not possible for the register itself, but please see my other
+> reply, where I explained the integer rounding error which can happen
+> when calculating the value to write to the register.
 
-Last relevant functional changes have been done almost 4 years ago.
-And yours is the first such report I see. So question is what could be so
-special with your setup that it seems you're the only one being affected.
-The scenarios you describe are standard, therefore much more people
-should be affected in case of a driver bug.
+I don't have any board to test it and Marek says there is only one that
+doesn't use cmu *and* has an SPI device attached.
 
-You said that kernel config impacts how frequently the issue happens.
-Therefore question is what's the diff in kernel config, and how could
-the differences be related to SPI.
+Here is what I think should work for the !cmu case.
+
+=2D-8<---------------cut here---------------start------------->8---
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 18b89e53ceda..5ebb1caade4d 100644
+=2D-- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -655,13 +655,18 @@ static int s3c64xx_spi_config(struct
+s3c64xx_spi_driver_data *sdd)
+                        return ret;
+                sdd->cur_speed =3D clk_get_rate(sdd->src_clk) / 2;
+        } else {
++               int src_clk_rate =3D clk_get_rate(sdd->src_clk);
++               int clk_val =3D (src_clk_rate / sdd->cur_speed / 2 - 1);
++
+                /* Configure Clock */
+                val =3D readl(regs + S3C64XX_SPI_CLK_CFG);
+                val &=3D ~S3C64XX_SPI_PSR_MASK;
+=2D               val |=3D ((clk_get_rate(sdd->src_clk) / sdd->cur_speed / =
+2 - 1)
+=2D                               & S3C64XX_SPI_PSR_MASK);
++               val |=3D (clk_val & S3C64XX_SPI_PSR_MASK);
+                writel(val, regs + S3C64XX_SPI_CLK_CFG);
+
++               /* Keep the actual value */
++               sdd->cur_speed =3D src_clk_rate / (2 * (clk_val + 1));
++
+                /* Enable Clock */
+                val =3D readl(regs + S3C64XX_SPI_CLK_CFG);
+                val |=3D S3C64XX_SPI_ENCLK_ENABLE;
+=2D-8<---------------cut here---------------end--------------->8---
+
+
+>> > You are also affecting here not only timeout but
+>> > s3c64xx_enable_datapath() which is not mentioned in commit log. In oth=
+er
+>> > words, this looks wrong.
+>>
+>> Indeed, there is a reference too. I've corrected the message.
+>>
+>
+> Thanks!
+>
+> Best regards,
+> Tomasz
+>
+>> >>
+>> >> Cc: Tomasz Figa <tfiga@chromium.org>
+>> >> Signed-off-by: =C5=81ukasz Stelmach <l.stelmach@samsung.com>
+>> >> ---
+>> >>  drivers/spi/spi-s3c64xx.c | 1 +
+>> >>  1 file changed, 1 insertion(+)
+>> >>
+>> >> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+>> >> index 02de734b8ab1..89c162efe355 100644
+>> >> --- a/drivers/spi/spi-s3c64xx.c
+>> >> +++ b/drivers/spi/spi-s3c64xx.c
+>> >> @@ -626,6 +626,7 @@ static int s3c64xx_spi_config(struct s3c64xx_spi_=
+driver_data *sdd)
+>> >>              ret =3D clk_set_rate(sdd->src_clk, sdd->cur_speed * 2);
+>> >>              if (ret)
+>> >>                      return ret;
+>> >> +            sdd->cur_speed =3D clk_get_rate(sdd->src_clk) / 2;
+>> >>      } else {
+>> >>              /* Configure Clock */
+>> >>              val =3D readl(regs + S3C64XX_SPI_CLK_CFG);
+>> >> --
+>> >> 2.26.2
+>> >>
+>> >
+>> >
+>>
+>> --
+>> =C5=81ukasz Stelmach
+>> Samsung R&D Institute Poland
+>> Samsung Electronics
+>
+>
+
+=2D-=20
+=C5=81ukasz Stelmach
+Samsung R&D Institute Poland
+Samsung Electronics
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAl9E04EACgkQsK4enJil
+gBDGmwf9GF7LoqlLOeEGgYseadIIz0SaVDnQx04lZNBEvKy5teghZc/iWOoe4B6E
+xknfXtPzzgJdukcCUjs6RVtNqkLI1O2t8eAHhnT6fYP4fi1vJDmyUwjdum2mVlhx
+z54qiFeXWFBqimcEKwfxBqcdLnCq5HVgwndthlBLkk3841KrOxrzOk0DF9HyL9Yc
+DpiGijpDOo1IcqwMdizgnl04pEvuZ+dGoLWF8xYWW5vmhPrGu1O1dHRzhrPv7nCv
+TIk2+eQ+yzC1FKShL644NRwY+C10QECDx0h/VTbuDu94UKGzR4a5MDFD8oXN4s8p
+sh5/Irl1LVF4WEf+xAx3Tps7E5PSeQ==
+=5KAi
+-----END PGP SIGNATURE-----
+--=-=-=--
