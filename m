@@ -2,73 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2402521CB
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 22:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE412521DB
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 22:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbgHYUR6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Aug 2020 16:17:58 -0400
-Received: from mga06.intel.com ([134.134.136.31]:21727 "EHLO mga06.intel.com"
+        id S1726804AbgHYUUW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Aug 2020 16:20:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59686 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726149AbgHYUR6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 25 Aug 2020 16:17:58 -0400
-IronPort-SDR: gnzdHumHvRRm9IuqOI5Y1bd/uMWD+DLx6sZTar9eSYwg/aXsQAiYAry69cQ3k6wAGwbs59pDZU
- D2e81m1UyjFA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="217739661"
-X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
-   d="scan'208";a="217739661"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 13:17:56 -0700
-IronPort-SDR: xOpPe1nQiHs9Oc1hVmlKJfQjd8ogSy+bD/JRwmrQ1S8fPYjts1ppf5OXR4adrY+QfIzatdy9JA
- xcFnuR5tBpfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,354,1592895600"; 
-   d="scan'208";a="373157335"
-Received: from crojewsk-ctrl.igk.intel.com ([10.102.9.28])
-  by orsmga001.jf.intel.com with ESMTP; 25 Aug 2020 13:17:55 -0700
-From:   Cezary Rojewski <cezary.rojewski@intel.com>
-To:     linux-spi@vger.kernel.org
-Cc:     broonie@kernel.org, Cezary Rojewski <cezary.rojewski@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2] spi: pxa2xx: Add SSC2 and SSPSP2 SSP registers
-Date:   Tue, 25 Aug 2020 22:17:43 +0200
-Message-Id: <20200825201743.4926-1-cezary.rojewski@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726149AbgHYUUW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 25 Aug 2020 16:20:22 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 35BE02075E;
+        Tue, 25 Aug 2020 20:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598386821;
+        bh=GXx0JYM/PvsogyfLNpW6GWw6+4mst5NV7U5VmzZh74M=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=CE5Gx510w3gndR6NM9NgKH1d6sGzVtC7+Uoxk/Zhk7bxmdr8JdrWsqNBNr3jw0Ic0
+         oYbUlKSnQP/a3PLshXq8oQnS6MyO//9YFtRgc6nshQuDbvx9b3jeZS5mQwCOmiRUwj
+         rm0+LjDicHiGVd5hESjOKcT7+YL0zQ/BFMXclb80=
+Date:   Tue, 25 Aug 2020 21:19:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20200825050856.29616-1-chris.packham@alliedtelesis.co.nz>
+References: <20200825050856.29616-1-chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH] spi: spi-fsl-espi: Remove use of %p
+Message-Id: <159838678623.41768.18166563089033247649.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Update list of SSP registers with SSC2 and SSPSP2. These registers are
-utilized by LPT/WPT AudioDSP architecture.
+On Tue, 25 Aug 2020 17:08:56 +1200, Chris Packham wrote:
+> The register offset is already included in the device name so even prior
+> %p values being hashed printing the base was redundant. Remove the %p
+> from the dev_info() output.
 
-While SSC2 shares the same offset (0x40) as SSACDD, description of this
-register for SSP device present on mentioned AudioDSP is different so
-define separate constant to avoid any ambiguity.
+Applied to
 
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/pxa2xx_ssp.h | 4 ++++
- 1 file changed, 4 insertions(+)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/include/linux/pxa2xx_ssp.h b/include/linux/pxa2xx_ssp.h
-index 6facf27865f9..1608c760fe91 100644
---- a/include/linux/pxa2xx_ssp.h
-+++ b/include/linux/pxa2xx_ssp.h
-@@ -186,6 +186,10 @@
- #define SSIRF			0x48		/* RX FIFO trigger level */
- #define SSIRF_RxThresh(x)	((x) - 1)
- 
-+/* LPT/WPT SSP */
-+#define SSCR2		(0x40)	/* SSP Command / Status 2 */
-+#define SSPSP2		(0x44)	/* SSP Programmable Serial Protocol 2 */
-+
- enum pxa_ssp_type {
- 	SSP_UNDEFINED = 0,
- 	PXA25x_SSP,  /* pxa 210, 250, 255, 26x */
--- 
-2.17.1
+Thanks!
 
+[1/1] spi: spi-fsl-espi: Remove use of %p
+      commit: 9442a12d16a974507738e1ca1bf62e3afa39381b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
