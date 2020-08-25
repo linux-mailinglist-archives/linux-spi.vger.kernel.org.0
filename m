@@ -2,81 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4615E251F7F
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 21:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036C32520E5
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Aug 2020 21:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgHYTGP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Aug 2020 15:06:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56692 "EHLO mail.kernel.org"
+        id S1726149AbgHYTrE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Aug 2020 15:47:04 -0400
+Received: from mga09.intel.com ([134.134.136.24]:17265 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726593AbgHYTGO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 25 Aug 2020 15:06:14 -0400
-Received: from [192.168.0.50] (89-70-52-201.dynamic.chello.pl [89.70.52.201])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 363762076C;
-        Tue, 25 Aug 2020 19:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598382374;
-        bh=nFY9Byoa7IafoHZHxTgBMjQ8dyHzdWFqPV0Bq/m9pIQ=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=yUgoV8TEt4ukVuYw7absvzUjk2l9zDyAF4VAnUWfsw//qHqZf73dyR7uYYmP61Uyz
-         vYJPjzCOZxuEB0C177HjrTdx4TsfOu7aKZKomimGZogPJLauhar4wxmbVRzqET/uoB
-         3b1CiqptcnTX5cu3HiFpxpVmtOxKrzU5QXoXY2MA=
-Subject: Re: [PATCH v2 6/9] spi: spi-s3c64xx: Check return values
-To:     =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
-Cc:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        m.szyprowski@samsung.com, b.zolnierkie@samsung.com
-References: <20200821161401.11307-1-l.stelmach@samsung.com>
- <CGME20200821161407eucas1p116af63a668bdbb75fa974589e5f6139f@eucas1p1.samsung.com>
- <20200821161401.11307-7-l.stelmach@samsung.com>
-From:   Sylwester Nawrocki <snawrocki@kernel.org>
-Message-ID: <e7db038c-b8e6-8ddc-edc7-8b69c2019d04@kernel.org>
-Date:   Tue, 25 Aug 2020 21:06:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726090AbgHYTrE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 25 Aug 2020 15:47:04 -0400
+IronPort-SDR: 9+x1eazVhNHxNA7wDBRCNS4ja2Wjin3gPTjZ5Hh7ZKUK0UCfNTKZdYBvloV0+LcUoj0KEgogPu
+ +6POBqZIpNWQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="157230533"
+X-IronPort-AV: E=Sophos;i="5.76,353,1592895600"; 
+   d="scan'208";a="157230533"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 12:47:03 -0700
+IronPort-SDR: kQnvf0WEnRUxScPJj+4S02cOhCeVJXddfs+MVMUN+EsRhGmGNN99eIbVhYhWvrO7rZ7dYB3ia6
+ eVS3SgRv7b0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,353,1592895600"; 
+   d="scan'208";a="328973234"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 25 Aug 2020 12:47:02 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kAelt-00BOSv-CY; Tue, 25 Aug 2020 22:38:17 +0300
+Date:   Tue, 25 Aug 2020 22:38:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Cezary Rojewski <cezary.rojewski@intel.com>
+Cc:     linux-spi@vger.kernel.org, broonie@kernel.org
+Subject: Re: [PATCH] spi: pxa2xx: Add SSC2 and SSPSP2 SSP registers
+Message-ID: <20200825193817.GR1891694@smile.fi.intel.com>
+References: <20200825171730.17638-1-cezary.rojewski@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20200821161401.11307-7-l.stelmach@samsung.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200825171730.17638-1-cezary.rojewski@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 8/21/20 18:13, Łukasz Stelmach wrote:
-> Check return values in prepare_dma() and s3c64xx_spi_config() and
-> propagate errors upwards.
+On Tue, Aug 25, 2020 at 07:17:30PM +0200, Cezary Rojewski wrote:
+> Update list of SSP registers with SSC2 and SSPSP2. These registers are
+> utilized by LPT/WPT AudioDSP architecture.
 > 
-> Signed-off-by: Łukasz Stelmach<l.stelmach@samsung.com>
+> While SSC2 shares the same offset (0x40) as SSACDD, description of this
+> register for SSP device present on mentioned AudioDSP is different so
+> define separate constant to avoid any ambiguity.
+
+In general it's okay, couple of nit-picks, though. After addressing,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
 > ---
->   drivers/spi/spi-s3c64xx.c | 47 ++++++++++++++++++++++++++++++++-------
->   1 file changed, 39 insertions(+), 8 deletions(-)
+>  include/linux/pxa2xx_ssp.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/linux/pxa2xx_ssp.h b/include/linux/pxa2xx_ssp.h
+> index 6facf27865f9..935d7db5bc32 100644
+> --- a/include/linux/pxa2xx_ssp.h
+> +++ b/include/linux/pxa2xx_ssp.h
+> @@ -41,6 +41,8 @@
+>  #define SSTSS		(0x38)  /* SSP Timeslot Status */
+>  #define SSACD		(0x3C)  /* SSP Audio Clock Divider */
+>  #define SSACDD		(0x40)	/* SSP Audio Clock Dither Divider */
+> +#define SSC2		(0x40)	/* SSP Command / Status 2 */
 
-> @@ -298,12 +299,24 @@ static void prepare_dma(struct s3c64xx_spi_dma_data *dma,
->   
->   	desc = dmaengine_prep_slave_sg(dma->ch, sgt->sgl, sgt->nents,
->   				       dma->direction, DMA_PREP_INTERRUPT);
-> +	if (!desc) {
-> +		dev_err(&sdd->pdev->dev, "unable to prepare %s scatterlist",
-> +			dma->direction == DMA_DEV_TO_MEM ? "rx" : "tx");
-> +		return -ENOMEM;
-> +	}
->   
->   	desc->callback = s3c64xx_spi_dmacb;
->   	desc->callback_param = dma;
->   
->   	dma->cookie = dmaengine_submit(desc);
-> +	ret = dma_submit_error(dma->cookie);
-> +	if (ret) {
-> +		dev_err(&sdd->pdev->dev, "DMA submission failed");
-> +		return -EIO;
+Is it the same as been called SSCR2 in Tangier?  (Also called SSP Command
+Status register 2) I guess we may name it with R applied.
 
-Just return the error value from dma_submit_error() here?
+> +#define SSPSP2		(0x44)	/* SSP Programmable Serial Protocol 2 */
+
+Also, please move them below with a comment like LPSS SSP block:
+https://elixir.bootlin.com/linux/latest/source/include/linux/pxa2xx_ssp.h#L181
+
+>  
+>  /* Common PXA2xx bits first */
+>  #define SSCR0_DSS	(0x0000000f)	/* Data Size Select (mask) */
+> -- 
+> 2.17.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
