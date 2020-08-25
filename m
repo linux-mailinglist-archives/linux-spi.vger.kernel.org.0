@@ -2,167 +2,173 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9B7252376
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 00:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C9525238B
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 00:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbgHYWUm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Aug 2020 18:20:42 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:37163 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726391AbgHYWUl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Aug 2020 18:20:41 -0400
-Received: by mail-il1-f194.google.com with SMTP id v2so131810ilq.4;
-        Tue, 25 Aug 2020 15:20:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k3KGmLJGZaOAZkv6OSfgLj0L7NmLhPE7zQczouh7MEU=;
-        b=Osys/usJ78FVhYjt6m5AckJ4c106dBCdzMGkn/WVXs7vIp6VbinlnFdHL7y+3az5CE
-         859AoNFZ4NYQSIn7Sv0oC1lOYPk2dI4BcdUgeifZafjkoCODHmVfvv3FeAORkMdECiqt
-         Nb6x8xtfQacV9o4BTW7wsWws1nAi6tuqq38kHNv36H2H9+4yr0j9nhc+c1Kck4lw9Cm+
-         AQvwpJjVG9DbXs12iRS66P/VoLuco6L+t9TF8XI0vi9x2uaiLljS9D8pPvA84vIDW6Im
-         HczMTqZvQpYHlLEK7NVRMJHDTBqwdRfpnVkFqGJ01LstbeWNmQbdqq9FIKV0DXZNQZno
-         bP8w==
-X-Gm-Message-State: AOAM531Iev/rOGth+x0rbpFE66TX9IKreec2iLjRWRAfD088TbhWWF02
-        CwqUWt3v5CujjqqzfKfOpA==
-X-Google-Smtp-Source: ABdhPJzvk8+3fhcPALS9UgRxvDmg4rJYVAmWzKAM0VmpBUEr/br5MUyUK52jUlLc3MBVxtZH4RMmfw==
-X-Received: by 2002:a92:cf09:: with SMTP id c9mr11410277ilo.38.1598394040539;
-        Tue, 25 Aug 2020 15:20:40 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id p77sm224314ill.39.2020.08.25.15.20.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2020 15:20:39 -0700 (PDT)
-Received: (nullmailer pid 1447409 invoked by uid 1000);
-        Tue, 25 Aug 2020 22:20:37 -0000
-Date:   Tue, 25 Aug 2020 16:20:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bayi Cheng <bayi.cheng@mediatek.com>,
-        Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: spi: Convert spi-mtk-nor to json-schema
-Message-ID: <20200825222037.GA1443219@bogus>
-References: <20200820052827.2642164-1-ikjn@chromium.org>
+        id S1726788AbgHYWWd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Aug 2020 18:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbgHYWWd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Aug 2020 18:22:33 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6112C061574
+        for <linux-spi@vger.kernel.org>; Tue, 25 Aug 2020 15:22:32 -0700 (PDT)
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 25A798066C;
+        Wed, 26 Aug 2020 10:22:23 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1598394143;
+        bh=txgr+HWFTXiMGfvnsvIrOEATORmNGcS3KEA7Im9+DJg=;
+        h=From:To:CC:Subject:Date:In-Reply-To;
+        b=XD+Xf2uf56iDBSz163/qHibLMx/CmVB3YrWGZ8O3uJqow92w3cYJyXmKpG8dtu+tN
+         A8QA335zJ5f5r7o7FcQ007WCrsad0M45ehKXq4csBu3XS4+go1XzXYyf3QPphk/edy
+         pd6UsedaX77AFh542ouNs2ffQ0fbP0Tvqmc0VtqHzRRt6BICJ6qKuwhIk4O3PV0o10
+         45X8j8aPud4jRuiV7Gqo2EXcELYFuPoz4C8DqclXKO9TrJ8VLicxyUmWaJtdebijfm
+         Mm34AYBMmM5tNIMzW2TqBlLz35x8RyfB4o6maBzY7JD9Fmb4P54zGMU8xaTvGtdTwc
+         PVyQiK25ydKwA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f458f1f0001>; Wed, 26 Aug 2020 10:22:23 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Aug 2020 10:22:22 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.006; Wed, 26 Aug 2020 10:22:22 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: fsl_espi errors on v5.7.15
+Thread-Topic: fsl_espi errors on v5.7.15
+Thread-Index: AQHWceVnik7XsBYbp0S+yHVGh1hdQak2WMaAgAQdSwCAAz9MAIAAfdcAgAD5u4CAB+sMAIAAYfwAgAA6JQCAAPtUgA==
+Date:   Tue, 25 Aug 2020 22:22:21 +0000
+Message-ID: <31e91237-4f87-66da-dac3-2304779e5749@alliedtelesis.co.nz>
+In-Reply-To: <f97dc3af-d1f0-6974-ec2d-ace8d7e73993@gmail.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DD6E89351CA59E48A9BFF5130A4A7D27@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200820052827.2642164-1-ikjn@chromium.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 01:28:27PM +0800, Ikjoon Jang wrote:
-> Convert Mediatek ARM SOC's serial NOR flash controller binding
-> to json-schema format.
-> 
-> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-> ---
->  .../bindings/spi/mediatek,spi-mtk-nor.yaml    | 82 +++++++++++++++++++
->  .../devicetree/bindings/spi/spi-mtk-nor.txt   | 47 -----------
->  2 files changed, 82 insertions(+), 47 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-mtk-nor.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
-> new file mode 100644
-> index 000000000000..1e4bcf691539
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/mediatek,spi-mtk-nor.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Serial NOR flash controller for MediaTek ARM SoCs
-> +
-> +maintainers:
-> +  - Bayi Cheng <bayi.cheng@mediatek.com>
-> +  - Chuanhong Guo <gch981213@gmail.com>
-> +
-> +description: |
-> +  This spi controller support single, dual, or quad mode transfer for
-> +  SPI NOR flash. There should be only one spi slave device following
-> +  generic spi bindings. It's not recommended to use this controller
-> +  for devices other than SPI NOR flash due to limited transfer
-> +  capability of this controller.
-> +
-> +allOf:
-> +  - $ref: /spi/spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt2701-nor
-> +              - mediatek,mt2712-nor
-> +              - mediatek,mt7622-nor
-> +              - mediatek,mt7623-nor
-> +              - mediatek,mt7629-nor
-> +          - enum:
-> +              - mediatek,mt8173-nor
-> +      - items:
-> +          - const: mediatek,mt8173-nor
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: clock used for spi bus
-> +      - description: clock used for controller
-> +
-> +  clock-names:
-> +    items:
-> +      - const: "spi"
-> +      - const: "sf"
-
-Don't need quotes.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-
-interrupts was required.
-
-Add:
-
-unevaluatedProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      nor_flash: spi@1100d000 {
-> +        compatible = "mediatek,mt8173-nor";
-> +        reg = <0 0x1100d000 0 0xe0>;
-> +        interrupts = <&spi_flash_irq>;
-> +        clocks = <&pericfg CLK_PERI_SPI>, <&topckgen CLK_TOP_SPINFI_IFR_SEL>;
-> +        clock-names = "spi", "sf";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        flash@0 {
-> +          compatible = "jedec,spi-nor";
-> +          reg = <0>;
-> +        };
-> +      };
-> +    };
-> +
+T24gMjUvMDgvMjAgNzoyMiBwbSwgSGVpbmVyIEthbGx3ZWl0IHdyb3RlOg0KDQo8c25pcD4NCj4g
+SSd2ZSBiZWVuIHN0YXJpbmcgYXQgc3BpLWZzbC1lc3BpLmMgZm9yIHdoaWxlIG5vdyBhbmQgSSB0
+aGluayBJJ3ZlDQo+PiBpZGVudGlmaWVkIGEgY291cGxlIG9mIGRlZmljaWVuY2llcyB0aGF0IG1h
+eSBvciBtYXkgbm90IGJlIHJlbGF0ZWQgdG8gbXkNCj4+IGlzc3VlLg0KPj4NCj4+IEZpcnN0IEkg
+dGhpbmsgdGhlICdUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBzZXQnIG1lc3NhZ2Ug
+Y2FuIGJlDQo+PiBnZW5lcmF0ZWQgc3B1cmlvdXNseS4gSW4gZnNsX2VzcGlfaXJxKCkgd2UgcmVh
+ZCB0aGUgRVNQSV9TUElFIHJlZ2lzdGVyLg0KPj4gV2UgYWxzbyB3cml0ZSBiYWNrIHRvIGl0IHRv
+IGNsZWFyIHRoZSBjdXJyZW50IGV2ZW50cy4gV2UgcmUtcmVhZCBpdCBpbg0KPj4gZnNsX2VzcGlf
+Y3B1X2lycSgpIGFuZCBjb21wbGFpbiB3aGVuIFNQSUVfRE9OIGlzIG5vdCBzZXQuIEJ1dCB3ZSBj
+YW4NCj4+IG5hdHVyYWxseSBlbmQgdXAgaW4gdGhhdCBzaXR1YXRpb24gaWYgd2UncmUgZG9pbmcg
+YSBsYXJnZSByZWFkLiBDb25zaWRlcg0KPj4gdGhlIG1lc3NhZ2VzIGZvciByZWFkaW5nIGEgYmxv
+Y2sgb2YgZGF0YSBmcm9tIGEgc3BpLW5vciBjaGlwDQo+Pg0KPj4gICDCoHR4ID0gUkVBRF9PUCAr
+IEFERFINCj4+ICAgwqByeCA9IGRhdGENCj4+DQo+PiBXZSBzZXR1cCB0aGUgdHJhbnNmZXIgYW5k
+IHB1bXAgb3V0IHRoZSB0eF9idWYuIFRoZSBmaXJzdCBpbnRlcnJ1cHQgZ29lcw0KPj4gb2ZmIGFu
+ZCBFU1BJX1NQSUUgaGFzIFNQSU1fRE9OIGFuZCBTUElNX1JYVCBzZXQuIFdlIGVtcHR5IHRoZSBy
+eCBmaWZvLA0KPj4gY2xlYXIgRVNQSV9TUElFIGFuZCB3YWl0IGZvciB0aGUgbmV4dCBpbnRlcnJ1
+cHQuIFRoZSBuZXh0IGludGVycnVwdA0KPj4gZmlyZXMgYW5kIHRoaXMgdGltZSB3ZSBoYXZlIEVT
+UElfU1BJRSB3aXRoIGp1c3QgU1BJTV9SWFQgc2V0LiBUaGlzDQo+PiBjb250aW51ZXMgdW50aWwg
+d2UndmUgcmVjZWl2ZWQgYWxsIHRoZSBkYXRhIGFuZCB3ZSBmaW5pc2ggd2l0aCBFU1BJX1NQSUUN
+Cj4+IGhhdmluZyBvbmx5IFNQSU1fUlhUIHNldC4gV2hlbiB3ZSByZS1yZWFkIGl0IHdlIGNvbXBs
+YWluIHRoYXQgU1BJRV9ET04NCj4+IGlzbid0IHNldC4NCj4+DQo+PiBUaGUgb3RoZXIgZGVmaWNp
+ZW5jeSBpcyB0aGF0IHdlIG9ubHkgZ2V0IGFuIGludGVycnVwdCB3aGVuIHRoZSBhbW91bnQgb2YN
+Cj4+IGRhdGEgaW4gdGhlIHJ4IGZpZm8gaXMgYWJvdmUgRlNMX0VTUElfUlhUSFIuIElmIHRoZXJl
+IGFyZSBmZXdlciB0aGFuDQo+PiBGU0xfRVNQSV9SWFRIUiBsZWZ0IHRvIGJlIHJlY2VpdmVkIHdl
+IHdpbGwgbmV2ZXIgcHVsbCB0aGVtIG91dCBvZiB0aGUgZmlmby4NCj4+DQo+IFNQSU1fRE9OIHdp
+bGwgdHJpZ2dlciBhbiBpbnRlcnJ1cHQgb25jZSB0aGUgbGFzdCBjaGFyYWN0ZXJzIGhhdmUgYmVl
+bg0KPiB0cmFuc2ZlcnJlZCwgYW5kIHJlYWQgdGhlIHJlbWFpbmluZyBjaGFyYWN0ZXJzIGZyb20g
+dGhlIEZJRk8uDQoNClRoZSBUMjA4MFJNIHRoYXQgSSBoYXZlIHNheXMgdGhlIGZvbGxvd2luZyBh
+Ym91dCB0aGUgRE9OIGJpdA0KDQoiTGFzdCBjaGFyYWN0ZXIgd2FzIHRyYW5zbWl0dGVkLiBUaGUg
+bGFzdCBjaGFyYWN0ZXIgd2FzIHRyYW5zbWl0dGVkIGFuZCANCmEgbmV3IGNvbW1hbmQgY2FuIGJl
+IHdyaXR0ZW4gZm9yIHRoZSBuZXh0IGZyYW1lLiINCg0KVGhhdCBkb2VzIGF0IGxlYXN0IHNlZW0g
+dG8gZml0IHdpdGggbXkgYXNzZXJ0aW9uIHRoYXQgaXQncyBhbGwgYWJvdXQgdGhlIA0KVFggZGly
+ZWN0aW9uLiBCdXQgdGhlIGZhY3QgdGhhdCBpdCBkb2Vzbid0IGhhcHBlbiBhbGwgdGhlIHRpbWUg
+dGhyb3dzIA0Kc29tZSBkb3VidCBvbiBpdC4NCg0KPiBJIHRoaW5rIHRoZSByZWFzb24gSSdtIHNl
+ZWluZyBzb21lIHZhcmlhYmlsaXR5IGlzIGJlY2F1c2Ugb2YgaG93IGZhc3QNCj4+IChvciBzbG93
+KSB0aGUgaW50ZXJydXB0cyBnZXQgcHJvY2Vzc2VkIGFuZCBob3cgZmFzdCB0aGUgc3BpLW5vciBj
+aGlwIGNhbg0KPj4gZmlsbCB0aGUgQ1BVcyByeCBmaWZvLg0KPj4NCj4gVG8gcnVsZSBvdXQgdGlt
+aW5nIGlzc3VlcyBhdCBoaWdoIGJ1cyBmcmVxdWVuY2llcyBJIGluaXRpYWxseSBhc2tlZA0KPiBm
+b3IgcmUtdGVzdGluZyBhdCBsb3dlciBmcmVxdWVuY2llcy4gSWYgeW91IGUuZy4gbGltaXQgdGhl
+IGJ1cyB0byAxIE1Ieg0KPiBvciBldmVuIGxlc3MsIHRoZW4gdGltaW5nIHNob3VsZG4ndCBiZSBh
+biBpc3N1ZS4NClllcyBJJ3ZlIGN1cnJlbnRseSBnb3Qgc3BpLW1heC1mcmVxdWVuY3kgPSA8MTAw
+MDAwMD47IGluIG15IGR0cy4gSSB3b3VsZCANCmFsc28gZXhwZWN0IGEgc2xvd2VyIGZyZXF1ZW5j
+eSB3b3VsZCBmaXQgbXkgIkRPTiBpcyBmb3IgVFgiIG5hcnJhdGl2ZS4NCj4gTGFzdCByZWxldmFu
+dCBmdW5jdGlvbmFsIGNoYW5nZXMgaGF2ZSBiZWVuIGRvbmUgYWxtb3N0IDQgeWVhcnMgYWdvLg0K
+PiBBbmQgeW91cnMgaXMgdGhlIGZpcnN0IHN1Y2ggcmVwb3J0IEkgc2VlLiBTbyBxdWVzdGlvbiBp
+cyB3aGF0IGNvdWxkIGJlIHNvDQo+IHNwZWNpYWwgd2l0aCB5b3VyIHNldHVwIHRoYXQgaXQgc2Vl
+bXMgeW91J3JlIHRoZSBvbmx5IG9uZSBiZWluZyBhZmZlY3RlZC4NCj4gVGhlIHNjZW5hcmlvcyB5
+b3UgZGVzY3JpYmUgYXJlIHN0YW5kYXJkLCB0aGVyZWZvcmUgbXVjaCBtb3JlIHBlb3BsZQ0KPiBz
+aG91bGQgYmUgYWZmZWN0ZWQgaW4gY2FzZSBvZiBhIGRyaXZlciBidWcuDQpBZ3JlZWQuIEJ1dCBl
+dmVuIG9uIG15IGhhcmR3YXJlICh3aGljaCBtYXkgaGF2ZSBhIGxhdGVudCBpc3N1ZSBkZXNwaXRl
+IA0KYmVpbmcgaW4gdGhlIGZpZWxkIGZvciBnb2luZyBvbiA1IHllYXJzKSB0aGUgaXNzdWUgb25s
+eSB0cmlnZ2VycyB1bmRlciANCnNvbWUgZmFpcmx5IHNwZWNpZmljIGNpcmN1bXN0YW5jZXMuDQo+
+IFlvdSBzYWlkIHRoYXQga2VybmVsIGNvbmZpZyBpbXBhY3RzIGhvdyBmcmVxdWVudGx5IHRoZSBp
+c3N1ZSBoYXBwZW5zLg0KPiBUaGVyZWZvcmUgcXVlc3Rpb24gaXMgd2hhdCdzIHRoZSBkaWZmIGlu
+IGtlcm5lbCBjb25maWcsIGFuZCBob3cgY291bGQNCj4gdGhlIGRpZmZlcmVuY2VzIGJlIHJlbGF0
+ZWQgdG8gU1BJLg0KDQpJdCBkaWQgc2VlbSB0byBiZSBzb21ld2hhdCByYW5kb20uIFRoaW5ncyBs
+aWtlIENPTkZJR19QUkVFTVBUIGhhdmUgYW4gDQppbXBhY3QgYnV0IGV2ZXJ5IHRpbWUgSSBmb3Vu
+ZCBzb21ldGhpbmcgdGhhdCBzZWVtZWQgdG8gYmUgaGF2aW5nIGFuIA0KaW1wYWN0IEkndmUgYmVl
+biBhYmxlIHRvIGRpc3Byb3ZlIGl0LiBJIGFjdHVhbGx5IHRoaW5rIGl0cyBhYm91dCBob3cgDQpi
+dXN5IHRoZSBzeXN0ZW0gaXMgd2hpY2ggbWF5IG9yIG1heSBub3QgYWZmZWN0IHdoZW4gd2UgZ2V0
+IHJvdW5kIHRvIA0KcHJvY2Vzc2luZyB0aGUgaW50ZXJydXB0cy4NCg0KSSBoYXZlIG1hbmFnZWQg
+dG8gZ2V0IHRoZSAnVHJhbnNmZXIgZG9uZSBidXQgU1BJRV9ET04gaXNuJ3Qgc2V0IScgdG8gDQpv
+Y2N1ciBvbiB0aGUgVDIwODBSREIuDQoNCkkndmUgaGFkIHRvIGFkZCB0aGUgZm9sbG93aW5nIHRv
+IGV4cG9zZSB0aGUgZW52aXJvbm1lbnQgYXMgYSBtdGQgcGFydGl0aW9uDQoNCmRpZmYgLS1naXQg
+YS9hcmNoL3Bvd2VycGMvYm9vdC9kdHMvZnNsL3QyMDh4cmRiLmR0c2kgDQpiL2FyY2gvcG93ZXJw
+Yy9ib290L2R0cy9mc2wvdDIwOHhyZGIuZHRzaQ0KaW5kZXggZmY4N2U2N2M3MGRhLi5mYmY5NWZj
+MWZkNjggMTAwNjQ0DQotLS0gYS9hcmNoL3Bvd2VycGMvYm9vdC9kdHMvZnNsL3QyMDh4cmRiLmR0
+c2kNCisrKyBiL2FyY2gvcG93ZXJwYy9ib290L2R0cy9mc2wvdDIwOHhyZGIuZHRzaQ0KQEAgLTEx
+Niw2ICsxMTYsMTUgQEAgZmxhc2hAMCB7DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29tcGF0aWJsZSA9ICJtaWNyb24sbjI1
+cTUxMmF4MyIsIA0KImplZGVjLHNwaS1ub3IiOw0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlZyA9IDwwPjsNCiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBz
+cGktbWF4LWZyZXF1ZW5jeSA9IDwxMDAwMDAwMD47IC8qIA0KaW5wdXQgY2xvY2sgKi8NCisNCivC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgcGFydGl0aW9uQHUtYm9vdCB7DQorwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlZyA9IDwweDAw
+MDAwMDAwIDB4MDAxMDAwMDA+Ow0KK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBsYWJlbCA9ICJ1LWJv
+b3QiOw0KK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIH07DQorwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGFydGl0aW9uQHUtYm9vdC1lbnYgew0KK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCByZWcgPSA8MHgwMDEwMDAwMCAweDAwMDEwMDAwPjsNCivCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgbGFiZWwgPSAidS1ib290LWVudiI7DQorwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfTsNCiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH07DQogwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIH07DQoNCkFuZCBJJ20gdXNpbmcgdGhlIGZvbGxvd2luZyBzY3JpcHQg
+dG8gcG9rZSBhdCB0aGUgZW52aXJvbm1lbnQgKHdhcm5pbmcgDQppZiBhbnlvbmUgZG9lcyB0cnkg
+dGhpcyBhbmQgdGhlIGJ1ZyBoaXRzIGl0IGNhbiByZW5kZXIgeW91ciB1LWJvb3QgDQplbnZpcm9u
+bWVudCBpbnZhbGlkKS4NCg0KY2F0IGZsYXNoL2Z3X2Vudl90ZXN0LnNoDQojIS9iaW4vc2gNCg0K
+Z2VuZXJhdGVfZndfZW52X2NvbmZpZygpDQp7DQogwqAgY2F0IC9wcm9jL210ZCB8IHNlZCAncy9b
+OiJdLy9nJyB8IHdoaWxlIHJlYWQgZGV2IHNpemUgZXJhc2VzaXplIG5hbWUgOyBkbw0KIMKgwqDC
+oMKgIGVjaG8gIiRkZXYgJHNpemUgJGVyYXNlc2l6ZSAkbmFtZSINCiDCoMKgwqDCoCBbICIkbmFt
+ZSIgPSAidS1ib290LWVudiIgXSAmJiBlY2hvICIvZGV2LyRkZXYgMHgwMDAwIDB4MjAwMCANCiRl
+cmFzZXNpemUiID4vZmxhc2gvZndfZW52LmNvbmZpZw0KIMKgIGRvbmUNCn0NCg0KY3ljbGVzPTEw
+DQpbICQjIC1nZSAxIF0gJiYgY3ljbGVzPSQxDQoNCmdlbmVyYXRlX2Z3X2Vudl9jb25maWcNCg0K
+ZndfcHJpbnRlbnYgLWMgL2ZsYXNoL2Z3X2Vudi5jb25maWcNCg0KZG1lc2cgLWMgPi9kZXYvbnVs
+bA0KeD0wDQp3aGlsZSBbICR4IC1sdCAkY3ljbGVzIF07IGRvDQogwqDCoMKgIGZ3X3ByaW50ZW52
+IC1jIC9mbGFzaC9md19lbnYuY29uZmlnID4vZGV2L251bGwgfHwgYnJlYWsNCiDCoMKgwqAgZndf
+c2V0ZW52IC1jIC9mbGFzaC9md19lbnYuY29uZmlnIGZvbyAkUkFORE9NIHx8IGJyZWFrOw0KIMKg
+wqDCoCBkbWVzZyAtYyB8IGdyZXAgLXEgZnNsX2VzcGkgJiYgYnJlYWs7DQogwqDCoMKgIGxldCB4
+PXgrMQ0KZG9uZQ0KDQplY2hvICJSYW4gJHggY3ljbGVzIg0K
