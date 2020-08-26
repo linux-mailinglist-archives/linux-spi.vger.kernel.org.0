@@ -2,200 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5674A252B2C
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 12:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B2D252B49
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 12:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728129AbgHZKNL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Aug 2020 06:13:11 -0400
-Received: from david.siemens.de ([192.35.17.14]:57695 "EHLO david.siemens.de"
+        id S1728184AbgHZKUb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Aug 2020 06:20:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42574 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728015AbgHZKNL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 26 Aug 2020 06:13:11 -0400
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by david.siemens.de (8.15.2/8.15.2) with ESMTPS id 07QACq9T029900
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Aug 2020 12:12:52 +0200
-Received: from [167.87.242.222] ([167.87.242.222])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 07QACn7n030731;
-        Wed, 26 Aug 2020 12:12:50 +0200
-Subject: Re: [RESEND PATCH v3 5/8] mtd: spi-nor: cadence-quadspi: Handle probe
- deferral while requesting DMA channel
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Jin, Le (RC-CN DF FA R&D)" <le.jin@siemens.com>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, simon.k.r.goldschmidt@gmail.com,
-        dinguyen@kernel.org, marex@denx.de
-References: <20200601070444.16923-1-vigneshr@ti.com>
- <20200601070444.16923-6-vigneshr@ti.com>
- <6c8d9bff-3a67-0e6c-d4d1-36b7ed5007b9@web.de>
- <8cebd31a-2366-4584-b1d1-faa30c18ed6a@ti.com>
- <dbba9f0c-4621-2d58-8fb8-4cbe788558f9@siemens.com>
- <eff1b49e-e392-8887-b3a0-3caedc5b81cc@siemens.com>
-Message-ID: <8995f5c5-bd6a-c0e5-1e4f-1744aedd2bcd@siemens.com>
-Date:   Wed, 26 Aug 2020 12:12:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1728161AbgHZKUa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 26 Aug 2020 06:20:30 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B08352071E;
+        Wed, 26 Aug 2020 10:20:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598437230;
+        bh=I0i2q5/JqUekGhzJe594DvzcUM3i+my4rruJmCWxWeY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KvjqRbONInpcWqBDaQcpXLXdf7/ssIOhM++ISKq2qwrU7IDsH5HRQAfbJu8/hHbH7
+         1YpZXrgRtxv53dgb6kD7MFF0tXw6gvqZYI7EjFmyjPi4eCgf7pSCOQFAbTrf1U+CFS
+         OnQeDDI5a+yaKtSGiIIiyLc0w+g9ta82YCulmo74=
+Date:   Wed, 26 Aug 2020 11:19:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Qiang Zhao <qiang.zhao@nxp.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pankaj Bansal <pankaj.bansal@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        Tanveer Alam <tanveer.alam@puresoftware.com>
+Subject: Re: [PATCH] spi: spi-fsl-dspi: Add ACPI support
+Message-ID: <20200826101954.GD4965@sirena.org.uk>
+References: <20200821131029.11440-1-kuldip.dwivedi@puresoftware.com>
+ <20200821140718.GH4870@sirena.org.uk>
+ <c810740d75f64e308fd362e6c6a5f437@mail.gmail.com>
+ <20200822152118.rlwbcgfk4abjldtg@skbuf>
+ <20200824112505.GD4676@sirena.org.uk>
+ <VE1PR04MB6768E050B97AAA33501B6D6891540@VE1PR04MB6768.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <eff1b49e-e392-8887-b3a0-3caedc5b81cc@siemens.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cHMo6Wbp1wrKhbfi"
+Content-Disposition: inline
+In-Reply-To: <VE1PR04MB6768E050B97AAA33501B6D6891540@VE1PR04MB6768.eurprd04.prod.outlook.com>
+X-Cookie: Should I do my BOBBIE VINTON medley?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 24.08.20 19:20, Jan Kiszka wrote:
-> On 24.08.20 14:49, Jan Kiszka wrote:
->> On 24.08.20 13:45, Vignesh Raghavendra wrote:
->>>
->>>
->>> On 8/22/20 11:35 PM, Jan Kiszka wrote:
->>>> On 01.06.20 09:04, Vignesh Raghavendra wrote:
->>>>> dma_request_chan_by_mask() can throw EPROBE_DEFER if DMA provider
->>>>> is not yet probed. Currently driver just falls back to using PIO mode
->>>>> (which is less efficient) in this case. Instead return probe deferral
->>>>> error as is so that driver will be re probed once DMA provider is
->>>>> available.
->>>>>
->>>>> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
->>>>> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
->>>>> ---
->>> [...]
->>>>>
->>>>>  static const struct spi_nor_controller_ops cqspi_controller_ops = {
->>>>> @@ -1269,8 +1274,11 @@ static int cqspi_setup_flash(struct cqspi_st *cqspi, struct device_node *np)
->>>>>  			dev_dbg(nor->dev, "using direct mode for %s\n",
->>>>>  				mtd->name);
->>>>>
->>>>> -			if (!cqspi->rx_chan)
->>>>> -				cqspi_request_mmap_dma(cqspi);
->>>>> +			if (!cqspi->rx_chan) {
->>>>> +				ret = cqspi_request_mmap_dma(cqspi);
->>>>> +				if (ret == -EPROBE_DEFER)
->>>>> +					goto err;
->>>>> +			}
->>>>>  		}
->>>>>  	}
->>>>>
->>>>>
->>>>
->>>> This seem to break reading the SPI flash on our IOT2050 [1] (didn't test
->>>> the eval board yet).
->>>>
->>>> Without that commit, read happens via PIO, and that works. With the
->>>> commit, the pattern
->>>>
->>>> with open("out.bin", "wb") as out:
->>>>     pos = 0
->>>>     while pos < 2:
->>>>         with open("/dev/mtd0", "rb") as mtd:
->>>>            mtd.seek(pos * 0x10000)
->>>>            out.write(mtd.read(0x10000))
->>>>         pos += 1
->>>>
->>>> gives the wrong result for the second block while
->>>
->>> Interesting... Could you please explain wrong result? Is the data move
->>> around or completely garbage?
->>
->> It looks like some stripes contain data from other parts of the flash or
->> kernel RAM. It's not just garbage, there are readable strings included.
->>
->>>
->>> Does this fail even on AM654 EVM? Could you share full script for me to
->>> test locally?
->>
->> The scripts are complete (python). Just binary-diff the outputs.
->>
->> I'll try on the EVM later.
-> 
-> Done so now, could reproduce.
 
-..."could *not* reproduce" there. Sorry if that caused confusion.
+--cHMo6Wbp1wrKhbfi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> But the OSPIs are definitely different. EVM reports
-> 
-> spi-nor spi0.0: mt35xu512aba (65536 Kbytes)
-> 
-> with 4K erase size. Our our board, we have
-> 
-> spi-nor spi7.0: w25q128 (16384 Kbytes)
-> 
-> with 64K erase size.
-> 
-> Here is some extract of the hex-diffs between out.bin and out2.bin (the 
-> latter being the good one):
-> 
-> --- /dev/fd/63  2020-08-24 17:16:58.776409282 +0000
-> +++ /dev/fd/62  2020-08-24 17:16:58.776409282 +0000
-> @@ -6,18 +6,18 @@
->  00000050  0f 30 0d 06 03 55 04 07  0c 06 44 61 6c 6c 61 73  |.0...U....Dallas|
->  00000060  31 27 30 25 06 03 55 04  0a 0c 1e 54 65 78 61 73  |1'0%..U....Texas|
->  00000070  20 49 6e 73 74 72 75 6d  65 6e 74 73 20 49 6e 63  | Instruments Inc|
-> -00000080  84 8b 96 2c 0c 12 18 03  01 05 05 04 01 02 00 00  |...,............|
-> -00000090  07 06 44 45 20 01 0d 14  2a 01 00 32 05 24 30 48  |..DE ...*..2.$0H|
-> -000000a0  60 6c 30 14 01 00 00 0f  ac 04 01 00 00 0f ac 04  |`l0.............|
-> -000000b0  01 00 00 0f ac 02 0c 00  2d 1a 6f 18 17 ff ff ff  |........-.o.....|
-> +00000080  6f 72 70 6f 72 61 74 65  64 31 13 30 11 06 03 55  |orporated1.0...U|
-> +00000090  04 0b 0c 0a 50 72 6f 63  65 73 73 6f 72 73 31 13  |....Processors1.|
-> +000000a0  30 11 06 03 55 04 03 0c  0a 54 49 20 73 75 70 70  |0...U....TI supp|
-> +000000b0  6f 72 74 31 1d 30 1b 06  09 2a 86 48 86 f7 0d 01  |ort1.0...*.H....|
->  000000c0  09 01 16 0e 73 75 70 70  6f 72 74 40 74 69 2e 63  |....support@ti.c|
->  000000d0  6f 6d 30 1e 17 0d 32 30  30 37 32 32 31 31 30 30  |om0...2007221100|
->  000000e0  30 30 5a 17 0d 32 30 30  38 32 31 31 31 30 30 30  |00Z..20082111000|
->  000000f0  30 5a 30 81 9d 31 0b 30  09 06 03 55 04 06 13 02  |0Z0..1.0...U....|
-> -00000100  00 00 27 a4 00 00 42 43  5e 00 62 32 2f 00 b4 96  |..'...BC^.b2/...|
-> -00000110  24 44 0c 00 c6 00 43 0a  00 00 0b f0 43 a5 2a 01  |$D....C.....C.*.|
-> -00000120  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
-> -*
-> +00000100  55 53 31 0b 30 09 06 03  55 04 08 0c 02 54 58 31  |US1.0...U....TX1|
-> +00000110  0f 30 0d 06 03 55 04 07  0c 06 44 61 6c 6c 61 73  |.0...U....Dallas|
-> +00000120  31 27 30 25 06 03 55 04  0a 0c 1e 54 65 78 61 73  |1'0%..U....Texas|
-> +00000130  20 49 6e 73 74 72 75 6d  65 6e 74 73 20 49 6e 63  | Instruments Inc|
->  00000140  6f 72 70 6f 72 61 74 65  64 31 13 30 11 06 03 55  |orporated1.0...U|
->  00000150  04 0b 0c 0a 50 72 6f 63  65 73 73 6f 72 73 31 13  |....Processors1.|
->  00000160  30 11 06 03 55 04 03 0c  0a 54 49 20 73 75 70 70  |0...U....TI supp|
-> 
-> [...]
-> 
->  000017a0  02 8a e5 06 c8 8c e2 14  c2 8a e5 7c 01 00 ea ed  |...........|....|
->  000017b0  1f 8f e2 66 02 00 ea 5b  45 72 72 6f 72 5d 20 52  |...f...[Error] R|
-> -000017c0  69 64 20 55 54 43 20 49  44 21 21 21 0a 00 00 5b  |id UTC ID!!!...[|
-> -000017d0  45 72 72 6f 72 5d 20 49  6e 76 61 6c 69 64 20 50  |Error] Invalid P|
-> -000017e0  65 65 72 20 43 68 61 6e  6e 65 6c 20 4e 75 6d 62  |eer Channel Numb|
-> -000017f0  65 72 21 21 21 0a 00 41  73 73 65 72 74 69 6f 6e  |er!!!..Assertion|
-> +000017c0  4d 20 41 6c 6c 6f 63 20  54 58 20 43 68 20 66 61  |M Alloc TX Ch fa|
-> +000017d0  69 6c 65 64 21 21 21 0a  00 00 00 73 72 63 2f 75  |iled!!!....src/u|
-> +000017e0  64 6d 61 5f 63 68 2e 63  00 00 00 75 74 63 49 6e  |dma_ch.c...utcIn|
-> +000017f0  66 6f 20 21 3d 20 4e 55  4c 4c 5f 50 54 52 00 75  |fo != NULL_PTR.u|
->  00001800  74 63 49 64 20 3c 3d 20  55 44 4d 41 5f 4e 55 4d  |tcId <= UDMA_NUM|
->  00001810  5f 55 54 43 5f 49 4e 53  54 41 4e 43 45 00 00 72  |_UTC_INSTANCE..r|
-> 
+On Wed, Aug 26, 2020 at 08:19:41AM +0000, Qiang Zhao wrote:
+> On Mon, Aug 24, 2020 at 19:25, Mark Brown <broonie@kernel.org> wrote:
 
-I've done [1] for now in order to make the OSPI usable again here. It
-looks like reading an mtd device in one chunk (single read syscall) is
-fine, ie. "dd if=/dev/mtd3 of=content2 bs=<sizeof-mtd3>", while reading
-it in multiple chunks is problematic, e.g. "dd if=/dev/mtd3 of=content2
-bs=4096". Interestingly, the deviation is already on the first block,
-which may speak against a setup issue for a second transfer.
+> > Yes, it's a legacy from bad board file conversions and shouldn't be used at all.
 
-The content I've seen in the corrupted output may come from other parts
-of the memory. I've found my WIFI SSID there, which is definitely not
-part of our OSPI image.
+> I saw a lot of driver assign spi_controller -> num_chipselect directly, should we do like that?
 
-Jan
+Yes, you should know the number of chip selects based on the controller.
 
-[1]
-https://github.com/siemens/linux/commit/0abc3696f89f3a89214e483f7216b54e1b2196cd
+--cHMo6Wbp1wrKhbfi
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Siemens AG, Corporate Technology, CT RDA IOT SES-DE
-Corporate Competence Center Embedded Linux
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9GN0kACgkQJNaLcl1U
+h9CfaQf/cFN7Z+7Su3oU98AYqh3AS6StbT42NYYmfMw0bX/Ymf4mNxqFU4DR+fsU
+hINOEiBo8SVc4p9GMRK7hSCqOuLFrViWewEPcnfr3D4VISJ7bLAAP8SjOGa5YgTZ
+WDcXJ4STYGrR3dgxbMjyL/f1JKfMuMRYoTw2uc+uNZe4mnBIkfCGoocxdA2ZGGUc
+Qx+MrNEDTmi1xNhMFhorO/uKKNsdNLKycljcdZ3swOHOs7L064bgeICJmnpK0n3Z
+MRKyT+C3jvkcnojv55s9wI2xqcI2jtRioTAZkeZOfP+4bqqf1jCDs7xJkKMMRZwO
+idSiTyw6bsDFEL/CwcKiU1yKpG10Uw==
+=1dzn
+-----END PGP SIGNATURE-----
+
+--cHMo6Wbp1wrKhbfi--
