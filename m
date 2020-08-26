@@ -2,74 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FB4253829
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 21:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF21253851
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 21:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbgHZTRx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Aug 2020 15:17:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726825AbgHZTRv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 26 Aug 2020 15:17:51 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF3A92078A;
-        Wed, 26 Aug 2020 19:17:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598469471;
-        bh=Msg94sVnxgYZ5tSLUPVzIC5igpCZ5D0lrYqNmAZsJcA=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=GI9cwYFg4+VacryxRyhDAMm+YB4HnfU4u0sj3WwZygN1bT12wVmIPZF3GE95KfUPu
-         5UcT0iiN4WvcHMq43eFULl07EScoxqm4OxutgKo92rgfKxcMt6cpQIi/e2wh2i8E4/
-         G1XMmMgMCyATAfz8Ub5IxTSuD0zaUzrTdhJa6EaM=
-Date:   Wed, 26 Aug 2020 20:17:14 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-spi@vger.kernel.org, Ikjoon Jang <ikjn@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Bayi Cheng <bayi.cheng@mediatek.com>,
-        linux-mediatek@lists.infradead.org
-In-Reply-To: <20200826085450.508556-1-ikjn@chromium.org>
-References: <20200820052827.2642164-1-ikjn@chromium.org> <20200826085450.508556-1-ikjn@chromium.org>
-Subject: Re: [PATCH v2] dt-bindings: spi: Convert spi-mtk-nor to json-schema
-Message-Id: <159846942993.39994.12565318588814253714.b4-ty@kernel.org>
+        id S1726790AbgHZTeX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Aug 2020 15:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726191AbgHZTeW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Aug 2020 15:34:22 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102CCC061574;
+        Wed, 26 Aug 2020 12:34:22 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id m34so1585666pgl.11;
+        Wed, 26 Aug 2020 12:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TldKm6UYrDqQCB8UevAGIccUxXWB4Kosvte/jze7YQU=;
+        b=kLSOwOQwTvHZVDY6z2gnIIs2Mx5UlcXYJW4rd0W/h7CldAnnQJoRXjdI6g8EnhgTUT
+         7HpokCM1WdWTAX85W7tWBJoV8b3JY4wki1YZmYNbzGTtnPK/kL2dSP6xwx0PuxA/5Tpd
+         4SNVnsJLHX+2BvIgdcFQIaTsJvPRVAmLtFUeNIwYjmkpVIFxfBq6SiOnepU0/WwwfWJH
+         T5tiFVj6TFI9Ev8QH/YQFLy7QFHwslP1kZVGXG82aYinvEfHXZyCgv0gEtrtfpU4c3eG
+         6svBClrltN/JIU/duo2wJDcr8rVA4xx/mChjloBBvzLAEi0txKut8BmOydqUoNVQk0Ke
+         HfGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TldKm6UYrDqQCB8UevAGIccUxXWB4Kosvte/jze7YQU=;
+        b=B6XqqgWedtd2jaywKJlW6FwXvWBEDJm1B8umBVpDvPMXrjwt2ygSustXenCzBjlVfW
+         zg5aleGz+Oo2HmJYmhFg62S5SnOpS3wYu1B91zNBcuXHwww+d+O884k/zD6gqkaiAQFU
+         BioXLkV0dE327zZDaNv2XEE1eHgbbE5LToh8NvYg5w4xk5NBwvheRl3iiBisia2Lns1v
+         EHCNBtOLsIDyoH6LnmbnYXnhf9Xi3kXDcVnnkQlcx7ZzNdoqMf7pQKDOC4j9g6llSRYF
+         IfW0klk6Y8P7FEOr+tGoGxuqjmElZQIxDZtcicZzgeCxbldCKtIFBZ2M/S1rZtEQGMjc
+         /jkg==
+X-Gm-Message-State: AOAM5317lKF4TTEXXWWAUoMitKhts48oN+zNyEbxL6pDbdMim6011o28
+        yW1OJKV4EGPLE+FqXo5JQC121Sh4gEym8Uy8T4Q=
+X-Google-Smtp-Source: ABdhPJxU5LveNLI3N+AP3CiHJqnh/ejkN1V0tbzNHVbFjNlLP1SQr1TkF1bumcE9knyZOIH371onyWTP682ulHVzwUQ=
+X-Received: by 2002:a17:902:8208:: with SMTP id x8mr1690183pln.65.1598470461445;
+ Wed, 26 Aug 2020 12:34:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200821131029.11440-1-kuldip.dwivedi@puresoftware.com> <20200822183342.6sdhp6yq6i7yvdia@skbuf>
+In-Reply-To: <20200822183342.6sdhp6yq6i7yvdia@skbuf>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 26 Aug 2020 22:34:04 +0300
+Message-ID: <CAHp75VeNXy1jWNWMuZc0bfXruKc3=0H4ezwpE8jbj6GLYk5QBA@mail.gmail.com>
+Subject: Re: [PATCH] spi: spi-fsl-dspi: Add ACPI support
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Pankaj Bansal <pankaj.bansal@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        tanveer <tanveer.alam@puresoftware.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 26 Aug 2020 16:54:50 +0800, Ikjoon Jang wrote:
-> Convert Mediatek ARM SOC's serial NOR flash controller binding
-> to json-schema format.
+On Sat, Aug 22, 2020 at 9:37 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Fri, Aug 21, 2020 at 06:40:29PM +0530, kuldip dwivedi wrote:
 
-Applied to
+> Just noticed this now.
+> So for device tree, spi-fsl-dspi supports the following compatibles:
+>
+> fsl,vf610-dspi
+> fsl,ls1021a-v1.0-dspi
+> fsl,ls1012a-dspi
+> fsl,ls1028a-dspi
+> fsl,ls1043a-dspi
+> fsl,ls1046a-dspi
+> fsl,ls2080a-dspi
+> fsl,ls2085a-dspi
+> fsl,lx2160a-dspi
+>
+> Depending on the compatible string, the driver knows whether to use DMA
+> or XSPI mode, and what the FIFO size is.
+>
+> Now, of course not all of the above SoCs are going to support ACPI, but
+> it is reasonable to expect that more than one will. And in that case,
+> the driver should still be able to know on what SoC it's running,
+> because for example LS1043A doesn't support DMA, and LS2085A doesn't
+> support XSPI.
+>
+> How is this dealt with in ACPI?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Theoretically you may declare your HID in the same / similar way as
+PRP0001 and use same compatible strings and all other DT properties
+(when they make sense and not duplicate ACPI functionality).
+But better if ACPI people can tell you (I Cc'ed Rafael and ACPI
+mailing list) if it is gonna work.
 
-Thanks!
-
-[1/1] dt-bindings: spi: Convert spi-mtk-nor to json-schema
-      commit: 043ebcf3204ca1a0ce0d03cb7dc6e0d63d2cf512
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+With Best Regards,
+Andy Shevchenko
