@@ -2,56 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C857253857
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 21:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363AA2538A0
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 21:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgHZTgd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Aug 2020 15:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        id S1726798AbgHZT4y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Aug 2020 15:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726723AbgHZTgc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Aug 2020 15:36:32 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA77C061574;
-        Wed, 26 Aug 2020 12:36:32 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id d19so1598619pgl.10;
-        Wed, 26 Aug 2020 12:36:32 -0700 (PDT)
+        with ESMTP id S1726753AbgHZT4y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Aug 2020 15:56:54 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70822C061574;
+        Wed, 26 Aug 2020 12:56:53 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id k25so2812887edj.13;
+        Wed, 26 Aug 2020 12:56:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ud+hAaCROu/aZycapYYqslpUeLOacrK4Jlp2cPqS/jE=;
-        b=c9V3n4Za3diymB1HJ/nHHbAioxKv/9zo9tCkVT/oQcbSru/Yw6OCX9+Qu2MqbyXDql
-         9m0Epe1MTL4CI1PrIVngo8l6MTB6ktjDfI58STfLWMzrupjA3mYFY1VrlyNIwo48Q723
-         USUQ1jr1h8Ls6YKgalt9DWl/jtJRS+v9CKR5c2IJ3MhrWgtaLVAFeZWkGU2xTDXv+xy7
-         nqqkEN5ghOCY3S+tIzIqoqCWAu+Hpp2YWl114WL1V9V8ULCx39F8EB6WTulBNVi2S4I5
-         Ssahm90pvklWFsrsXuUp8pgcvTano+vRWNKkTguTMfyRt/3m1H6g47bTU8enWmbkyovU
-         PBnw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tk0FdBRl4yrZP8KpNGRoyatrwcoEEVz5bzGl7M6mn84=;
+        b=saLNRmhED3dlhcNReWUFAiieOMjkTrBEzsAb/2uRF4gwjrDeJqB9Xg6FPBr2zQdaug
+         TryKkusVjcz+tJ2o46njmZMb4efeTX4A6fqd40/ST8lQU5xVj+CzHOOLEf8TqQj+zFrI
+         FUAcSKjdBGoLp/kD/7W8MO6PkM0M1Kwe3FutAYpg5HuC1tVEN+XA63/Ta42bIpwUwpFY
+         6KISPdQgBHBKUdx5B7x4KuG+ZANYYBaywAbXKdqawrwKorn6waSYOKmyIvMUy/FBaTu3
+         OPW/oqlmnWrYxIZBD8Sb6vE7WgG/oltlFnRGmwhFkXLFgkgP2r8eAJ164CX9Gj/Z7xBI
+         8rGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ud+hAaCROu/aZycapYYqslpUeLOacrK4Jlp2cPqS/jE=;
-        b=ZxKDF2pn145MNdMgyMlBBnTryH+HrKLZ1y06RPphXmSaGH2CqrnQeQYQyGk5qPgdjZ
-         CJT7YROimkWnp38SWP7S29QUtcWPLhJAKfJfskkpE5/Y5dslYDyjAxmlU+bkjSZriM/s
-         qCEeeu7KWPa3DFHSz1BFL7JU0T2pTulf2zZFAdB937LEXLmi4GWZjZ5Kvbyv1R5TaUse
-         qNGB3CYQeG2+u4YRQS+g/8Ep4tKVCItAS2rEVeObwivHD3/qaXILOq2xTuNxx49s4yCg
-         ADNn5KYCAJdXmPSwv43m8a74vrarfP2ug2eelOJx2XhBY3Bgah1XtsKUvFDWe3Xbi1Cz
-         m4Bw==
-X-Gm-Message-State: AOAM530x8y5sz/GwZatDDCnVBHaFqfJuK2I9C0dQha6d40MTugPj1UYJ
-        ZyNUD1vlCR9hvyt+K3M5AYRBSB7QimrMdQ83yF4=
-X-Google-Smtp-Source: ABdhPJxsfrZpkr3NGOF+AsJzLuIpdTtILYu1EiJCQNu0puqEGa0gdWgkCHt09Wf3So2Kzcdcvf6wIAx0fQQ4PpHyy3s=
-X-Received: by 2002:a17:902:b194:: with SMTP id s20mr13417765plr.321.1598470591807;
- Wed, 26 Aug 2020 12:36:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200821131029.11440-1-kuldip.dwivedi@puresoftware.com>
- <20200822183342.6sdhp6yq6i7yvdia@skbuf> <CAHp75VeNXy1jWNWMuZc0bfXruKc3=0H4ezwpE8jbj6GLYk5QBA@mail.gmail.com>
-In-Reply-To: <CAHp75VeNXy1jWNWMuZc0bfXruKc3=0H4ezwpE8jbj6GLYk5QBA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 26 Aug 2020 22:36:15 +0300
-Message-ID: <CAHp75VetYbnOHv3LQhq4Gvs1CFe8LnZPzFAVoNmBi5DyAmZ9Jg@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-fsl-dspi: Add ACPI support
-To:     Vladimir Oltean <olteanv@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tk0FdBRl4yrZP8KpNGRoyatrwcoEEVz5bzGl7M6mn84=;
+        b=UoKAkv2sq3hWmzYGOMpdX3GZXcEeuvHWIR3KbHGnYHGu/0Hn6zmI4VWlRcXDypt1j4
+         S9qmocQHT3xxnyrNclrQNtE7r1Dw63quaVrXkw8jCfpOnQfKowxJ1na87s/cjbKFEn8U
+         AK23rlN1EQGHaCd4R8Lqk1sF23KEnsfTk74hmS08M0secfIcEC5swvzsntpNvChOo1Bu
+         54hY6EUgYX5yfvP27b8/fweEZ8E6t4MYkr09zosKGB//qz6Fj1nq810OHExOVQmvbLMJ
+         Iv3AeMwdGLB2RXhPOYKP+7Lqcr6/qjed0nU73Jq7JrL9beJKxbAXKxO5zz5fR1W5nbq8
+         mcTg==
+X-Gm-Message-State: AOAM5330WXo/MDLmdOmzfkNmmAZuhqamPYVreWcgXuf0MQUgIxl2Jv5A
+        fhoWrjnGG7SShsH+TY9+EhY=
+X-Google-Smtp-Source: ABdhPJzjoMwMKQyvECLPjHomEXVw4I0MeN1eDxKP02jaERKv3xOiex2NsMXPzcHWtpjHpqmv7twIfw==
+X-Received: by 2002:aa7:cb0a:: with SMTP id s10mr16788025edt.134.1598471811840;
+        Wed, 26 Aug 2020 12:56:51 -0700 (PDT)
+Received: from skbuf ([86.126.22.216])
+        by smtp.gmail.com with ESMTPSA id f6sm1725454edy.2.2020.08.26.12.56.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 12:56:51 -0700 (PDT)
+Date:   Wed, 26 Aug 2020 22:56:49 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
         Mark Brown <broonie@kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
@@ -62,53 +60,71 @@ Cc:     kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
         tanveer <tanveer.alam@puresoftware.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] spi: spi-fsl-dspi: Add ACPI support
+Message-ID: <20200826195649.g6k574y6ofzbagnm@skbuf>
+References: <20200821131029.11440-1-kuldip.dwivedi@puresoftware.com>
+ <20200822183342.6sdhp6yq6i7yvdia@skbuf>
+ <CAHp75VeNXy1jWNWMuZc0bfXruKc3=0H4ezwpE8jbj6GLYk5QBA@mail.gmail.com>
+ <CAHp75VetYbnOHv3LQhq4Gvs1CFe8LnZPzFAVoNmBi5DyAmZ9Jg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VetYbnOHv3LQhq4Gvs1CFe8LnZPzFAVoNmBi5DyAmZ9Jg@mail.gmail.com>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 10:34 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Sat, Aug 22, 2020 at 9:37 PM Vladimir Oltean <olteanv@gmail.com> wrote:
-> > On Fri, Aug 21, 2020 at 06:40:29PM +0530, kuldip dwivedi wrote:
+On Wed, Aug 26, 2020 at 10:36:15PM +0300, Andy Shevchenko wrote:
+> On Wed, Aug 26, 2020 at 10:34 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Sat, Aug 22, 2020 at 9:37 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+> > > On Fri, Aug 21, 2020 at 06:40:29PM +0530, kuldip dwivedi wrote:
+> >
+> > > Just noticed this now.
+> > > So for device tree, spi-fsl-dspi supports the following compatibles:
+> > >
+> > > fsl,vf610-dspi
+> > > fsl,ls1021a-v1.0-dspi
+> > > fsl,ls1012a-dspi
+> > > fsl,ls1028a-dspi
+> > > fsl,ls1043a-dspi
+> > > fsl,ls1046a-dspi
+> > > fsl,ls2080a-dspi
+> > > fsl,ls2085a-dspi
+> > > fsl,lx2160a-dspi
+> > >
+> > > Depending on the compatible string, the driver knows whether to use DMA
+> > > or XSPI mode, and what the FIFO size is.
 >
-> > Just noticed this now.
-> > So for device tree, spi-fsl-dspi supports the following compatibles:
-> >
-> > fsl,vf610-dspi
-> > fsl,ls1021a-v1.0-dspi
-> > fsl,ls1012a-dspi
-> > fsl,ls1028a-dspi
-> > fsl,ls1043a-dspi
-> > fsl,ls1046a-dspi
-> > fsl,ls2080a-dspi
-> > fsl,ls2085a-dspi
-> > fsl,lx2160a-dspi
-> >
-> > Depending on the compatible string, the driver knows whether to use DMA
-> > or XSPI mode, and what the FIFO size is.
+> FIFO size can be read from the property
 
-FIFO size can be read from the property (or better if you can derive
-it directly from HW, like DesignWare does).
-DMA is just defined by FixedDMA resources (your platform with DMA
-provides them, otherwise no such resources).
+My personal preference is for the driver to hold the expert information
+about the hardware parameters, and not the device tree. Today you need
+to know only about this set of parameters, tomorrow you need something
+new, but you also need to work with old DT blobs... It's a mess.
 
-> > Now, of course not all of the above SoCs are going to support ACPI, but
-> > it is reasonable to expect that more than one will. And in that case,
-> > the driver should still be able to know on what SoC it's running,
-> > because for example LS1043A doesn't support DMA, and LS2085A doesn't
-> > support XSPI.
-> >
-> > How is this dealt with in ACPI?
+> (or better if you can derive it directly from HW, like DesignWare
+> does).
+
+Nope, can't do that. This IP block doesn't even have an ID or revision
+register.
+
+> DMA is just defined by FixedDMA resources (your platform with DMA
+> provides them, otherwise no such resources).
 >
-> Theoretically you may declare your HID in the same / similar way as
-> PRP0001 and use same compatible strings and all other DT properties
-> (when they make sense and not duplicate ACPI functionality).
-> But better if ACPI people can tell you (I Cc'ed Rafael and ACPI
-> mailing list) if it is gonna work.
 
+This is a case of knowing that tomatoes are fruit, but being wise enough
+to not put them in a fruit salad.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I would not be happy to see this driver make the decision to use DMA
+based just on the presence of DMA channels in the firmware blob. On some
+platforms, there are DMA channels but due to an erratum they don't work.
+While on other platforms, using the DMA channels would simply cause a
+performance downgrade.
+Same thing about interrupts, in fact. The firmware blob tells the driver
+what the interrupt line is, but it doesn't mean that the driver has to
+use it.
+
+Thanks,
+-Vladimir
