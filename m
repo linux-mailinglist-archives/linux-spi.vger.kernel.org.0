@@ -2,270 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFC625277A
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 08:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC5325291A
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 10:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725786AbgHZGjI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Aug 2020 02:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726716AbgHZGjE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Aug 2020 02:39:04 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28E7C061574;
-        Tue, 25 Aug 2020 23:39:03 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id si26so1271621ejb.12;
-        Tue, 25 Aug 2020 23:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IE/AAgK2p00IDwlXwcCa+q5LrPFFg/3cF0TQP/Q5Iuk=;
-        b=eyBoBIyDYMpLNujHnBTEBv/WV3w3ncqJ15ps+uITEQQPzIdrR8SyNRWoXvuutGo37s
-         xzumD2MZRGQpQKSYgnmCrheTDVN1CHGeFiYkho1FtiqGkCZ5GWFQ5sYCLjRklAImhtiM
-         7Z/5Whz1VWSYXVrc3vT1ia8zFg0e0NMR6K6YpXTEfeEVo2+V0OLpuuiNhWEOxJLBxTCU
-         ksCpyFxlNj7UtqPEa8UlGBb/MXiwlOCctHAaK6a3wdAX8ovl/nZ9e85Rx7Ih4Ykju7m8
-         RnVzDszL6UmxGwSWNewvnOPRHKb4Iuh0luHowzR0dLIlDDcYCHTF8Hr8XtNM0fuTMFIU
-         ELSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IE/AAgK2p00IDwlXwcCa+q5LrPFFg/3cF0TQP/Q5Iuk=;
-        b=cPANFQSYGQ1XFfi5kbcXyYN4gKBj3iWI22E1L3hOqAIcQKQgk/zyQGXxKy01EeniFT
-         WKeHvmOo6oHZsd0zqBRKf0OwtzbFP6b2duGUO6HoWVT8m8i1lQS8cAhoo1K3xbLy81ok
-         4wtPxsgwSUsTUTHjHsDqG7gxZs8SERRXsu28NB2t1QfCa89PKlDgLzmxGPfap1fNTTuX
-         zf0yCgvSbd9pryoSevgimjb1IHAkzgN59Q6/wUDOwNfzjqP8wkZp8tbhCCLdqJN5Skd2
-         G+sLFSwREFNOFYTT3g/AboMRHQMTH++DaLZYEflkagyfHSUE1LgNFMoyXPCys2z6CnEv
-         oZjA==
-X-Gm-Message-State: AOAM530YYBwH96vsZbp4zNM5pdxLEoTYxXGN8q/8j1FNlYqIp4GpnTO9
-        gjNfcAzhuQTes2lwfZe83D40yfuwf586EQ==
-X-Google-Smtp-Source: ABdhPJyt9I/A4Vwfb8ZB1s33PbZZ3CP160n78L60WtrlfNWNqMD1rOj/2Q3djU7Qxo1yDr66Jp8B9Q==
-X-Received: by 2002:a17:906:7f99:: with SMTP id f25mr715988ejr.307.1598423942000;
-        Tue, 25 Aug 2020 23:39:02 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f23:5700:843d:b7c1:fb34:c675? (p200300ea8f235700843db7c1fb34c675.dip0.t-ipconnect.de. [2003:ea:8f23:5700:843d:b7c1:fb34:c675])
-        by smtp.googlemail.com with ESMTPSA id e14sm1201250edl.86.2020.08.25.23.39.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2020 23:39:01 -0700 (PDT)
-Subject: Re: fsl_espi errors on v5.7.15
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <42107721-614b-96e8-68d9-4b888206562e@alliedtelesis.co.nz>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <1020029e-4cb9-62ba-c6d6-e6b9bdf93aac@gmail.com>
-Date:   Wed, 26 Aug 2020 08:38:51 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
-MIME-Version: 1.0
-In-Reply-To: <42107721-614b-96e8-68d9-4b888206562e@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=utf-8
+        id S1726953AbgHZITq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Aug 2020 04:19:46 -0400
+Received: from mail-db8eur05on2042.outbound.protection.outlook.com ([40.107.20.42]:24224
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726016AbgHZITp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 26 Aug 2020 04:19:45 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f1dgFjqYPTXr+fKFGgCNIRkNnR0wXN/Zdlxa6EEnrtLceotD5h12teRKVSApLuChFD35h2nOQCpGn4DGkX/7BzAEqbN4mSSK0leXiTycdHwHXHctbmlnMGC7jhQLpPVK8I/CTwmSdx7sFIWm7rTFF1DaULphjHL9ZmcL41JFGMQoFxnRSFjPozNEdUvT46edRydNhyH+wL7AyzhWdgBLRFnqN4XpVwUTr3kJtmzElrSE+y3CLeLqsva8Sud8o90MxQN+QCJEcu9Zz+mrYQQkPHUe/tqbRmhYSUnzH4M+xzO5DuW+QsnNieyQaBKStJaXEIAWW3T/zRh+SUcmULbuqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EVw+2o0OAlcU+sKCNYc8HvDRLaJeIX2FQVBe7g5AqNo=;
+ b=BQCRmG8LID45c+VmeZZMICNjf8cwOqq5E1pXadX5faTooegonWET7uChsMnQ6JIyOaKiqE8GtSR73k9dL+nPtv4pdypGkVlJ6+Tnwo+a4iwwvcMCV7B8LXQriHNJ9ax7BBBuhMb2zDLYBECtYmybMOenmOf8cdNlTS0k4aY2NpnutF2ZAtCLejcSaFk852J6oiAzAUEuAHnofQmAuxEYN4KmOD7qZAq2U5mbI5bVxZui0lyclnymJb29j82mnGspFbkXYaUmdzWSGLw1btkGXBiq1NmHNg1AGaQRrK3hyMB8cN88CSb6i9POsRY8xTZfPQueWzd7pCoD3meUOFK1Vg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EVw+2o0OAlcU+sKCNYc8HvDRLaJeIX2FQVBe7g5AqNo=;
+ b=PO0uyq7dWB00zaSk6ylTbVudj5/84Lz+0/0WKpBYS6W2nYInv3dpWcpYZlv1pdVTK2RulC89tagIymU0KoU60z4HpuCZuNWI8672aGBL59EhFjo3HKcp0Yq0YnmVV9D4fkkbACC7u6uaidw3+U0akYVww2sWV/pH2yRoVn7nOq8=
+Received: from VE1PR04MB6768.eurprd04.prod.outlook.com (2603:10a6:803:129::26)
+ by VI1PR04MB4077.eurprd04.prod.outlook.com (2603:10a6:803:4b::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24; Wed, 26 Aug
+ 2020 08:19:41 +0000
+Received: from VE1PR04MB6768.eurprd04.prod.outlook.com
+ ([fe80::9149:1826:669a:4d6f]) by VE1PR04MB6768.eurprd04.prod.outlook.com
+ ([fe80::9149:1826:669a:4d6f%7]) with mapi id 15.20.3305.026; Wed, 26 Aug 2020
+ 08:19:41 +0000
+From:   Qiang Zhao <qiang.zhao@nxp.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>
+CC:     kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pankaj Bansal <pankaj.bansal@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        Tanveer Alam <tanveer.alam@puresoftware.com>
+Subject: RE: [PATCH] spi: spi-fsl-dspi: Add ACPI support
+Thread-Topic: [PATCH] spi: spi-fsl-dspi: Add ACPI support
+Thread-Index: AQHWd7yts7Mn+npl8U6aqlpS6I2eY6lCmUmAgAGSXICAABSlAIAC4qqAgALvmNA=
+Date:   Wed, 26 Aug 2020 08:19:41 +0000
+Message-ID: <VE1PR04MB6768E050B97AAA33501B6D6891540@VE1PR04MB6768.eurprd04.prod.outlook.com>
+References: <20200821131029.11440-1-kuldip.dwivedi@puresoftware.com>
+ <20200821140718.GH4870@sirena.org.uk>
+ <c810740d75f64e308fd362e6c6a5f437@mail.gmail.com>
+ <20200822152118.rlwbcgfk4abjldtg@skbuf> <20200824112505.GD4676@sirena.org.uk>
+In-Reply-To: <20200824112505.GD4676@sirena.org.uk>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 8bd4e98e-1589-40a2-9c04-08d84998c816
+x-ms-traffictypediagnostic: VI1PR04MB4077:
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB40774CEE381715B0688DF16691540@VI1PR04MB4077.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vXBAdi7z2D1YS36T8IQXh5GBiU2ownLkOYhrK2DzuNnj9O5gl0I/BdNxdYtSb1QOjfakrAcPxUZ79gTHx6Q2rH6fxn/gDM0ZhmFhGZGNGJkzkmGO3xAqM5XFLbwGa/Lt2yMJUEB9vaOmEej8tWNaSm9qukd/AOz/UkPlNoYzfvssP0O0pV3n1fPBbnQnYghFDV37YcG85VIxMK86iFtjpBRrEgqgyncicjFpHlLlsG46n/l/Vx4fYTo8kUZ8OOtPgGhegOuYYIEVNr6RrlK+r8TxoqmzmU7QQiiNISS6LBepS5lpqWrRqm7iTFnHRPEp
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6768.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(39860400002)(396003)(376002)(346002)(2906002)(86362001)(53546011)(6506007)(110136005)(7696005)(52536014)(71200400001)(4326008)(26005)(478600001)(5660300002)(8676002)(83380400001)(33656002)(55016002)(186003)(9686003)(66446008)(64756008)(66556008)(8936002)(54906003)(44832011)(66946007)(76116006)(316002)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: b9KgcJkUaeTFde54fsiMpBZdGheFTpTyZCdZQ1dipKVLhNFcOuvYjCC6fBI9aTZhBL3lK2Hyzl7LirFWlM3KISDy4yqKWvi8ieMRDbq6CvyzAUBysKgc9ZV6lnurPck9JlL2JKUSRfY+lp1vZcMFb72N3VNUgx3QcU3CVkdEgKHYo6w7/qBZuuz1htUf4dnkdhB4fYcuFu7z3LX726r6D8NA9IcX6ZnSbBbNEkpLLCdiWQQL38x87taUm+Cq5GbdyhLzaqiqvi6mtEzHigida4yGXCTbHjf7z3j8NHHBbcp51MF3EOreDkHbAhQo3cNqLtad4X88Do2h8D7mNB+OIK8moOcWcFQI0nRYGNwY40/mD33bQNlLDReJJGyktohxLAAk5XsIaq+4sfSal3xXDh4f0O95WN5invi5QDrx3BXWZmjjJ6pt7gKkaDloCFEB2eYcITpEbY+fT7zF+DVzFjNZL1nvRCVq6EP4DkNXDAokepPZ5y5i9kdHvQ2tnjE1w3AdKoTx3qrYlJVFL/VJz+8Bp2PpKKlVV0xY9UpnWiwYjVxjRVup01XD/y++XWAoXrmLJAi+2KJweof2VPMyXCJFEcZZ53pJgCfzQU66Vr05yN8w9rf6HOOODO91aS6oyyZ3UjzpapYhegNC1Np4qQ==
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6768.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bd4e98e-1589-40a2-9c04-08d84998c816
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2020 08:19:41.2067
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B1+c34Eas45sUU7cO2JCXTJ3UUaQvSHC7kN+d2p3MjOfdViRCyB2zNRgslM5VtViS19MbhKQ1h8QM9DSssJwng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4077
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 26.08.2020 08:07, Chris Packham wrote:
-> 
-> On 26/08/20 1:48 pm, Chris Packham wrote:
->>
->> On 26/08/20 10:22 am, Chris Packham wrote:
->>> On 25/08/20 7:22 pm, Heiner Kallweit wrote:
->>>
->>> <snip>
->>>> I've been staring at spi-fsl-espi.c for while now and I think I've
->>>>> identified a couple of deficiencies that may or may not be related 
->>>>> to my
->>>>> issue.
->>>>>
->>>>> First I think the 'Transfer done but SPIE_DON isn't set' message 
->>>>> can be
->>>>> generated spuriously. In fsl_espi_irq() we read the ESPI_SPIE 
->>>>> register.
->>>>> We also write back to it to clear the current events. We re-read it in
->>>>> fsl_espi_cpu_irq() and complain when SPIE_DON is not set. But we can
->>>>> naturally end up in that situation if we're doing a large read. 
->>>>> Consider
->>>>> the messages for reading a block of data from a spi-nor chip
->>>>>
->>>>>    tx = READ_OP + ADDR
->>>>>    rx = data
->>>>>
->>>>> We setup the transfer and pump out the tx_buf. The first interrupt 
->>>>> goes
->>>>> off and ESPI_SPIE has SPIM_DON and SPIM_RXT set. We empty the rx fifo,
->>>>> clear ESPI_SPIE and wait for the next interrupt. The next interrupt
->>>>> fires and this time we have ESPI_SPIE with just SPIM_RXT set. This
->>>>> continues until we've received all the data and we finish with 
->>>>> ESPI_SPIE
->>>>> having only SPIM_RXT set. When we re-read it we complain that SPIE_DON
->>>>> isn't set.
->>>>>
->>>>> The other deficiency is that we only get an interrupt when the 
->>>>> amount of
->>>>> data in the rx fifo is above FSL_ESPI_RXTHR. If there are fewer than
->>>>> FSL_ESPI_RXTHR left to be received we will never pull them out of 
->>>>> the fifo.
->>>>>
->>>> SPIM_DON will trigger an interrupt once the last characters have been
->>>> transferred, and read the remaining characters from the FIFO.
->>>
->>> The T2080RM that I have says the following about the DON bit
->>>
->>> "Last character was transmitted. The last character was transmitted 
->>> and a new command can be written for the next frame."
->>>
->>> That does at least seem to fit with my assertion that it's all about 
->>> the TX direction. But the fact that it doesn't happen all the time 
->>> throws some doubt on it.
->>>
->>>> I think the reason I'm seeing some variability is because of how fast
->>>>> (or slow) the interrupts get processed and how fast the spi-nor 
->>>>> chip can
->>>>> fill the CPUs rx fifo.
->>>>>
->>>> To rule out timing issues at high bus frequencies I initially asked
->>>> for re-testing at lower frequencies. If you e.g. limit the bus to 1 MHz
->>>> or even less, then timing shouldn't be an issue.
->>> Yes I've currently got spi-max-frequency = <1000000>; in my dts. I 
->>> would also expect a slower frequency would fit my "DON is for TX" 
->>> narrative.
->>>> Last relevant functional changes have been done almost 4 years ago.
->>>> And yours is the first such report I see. So question is what could 
->>>> be so
->>>> special with your setup that it seems you're the only one being 
->>>> affected.
->>>> The scenarios you describe are standard, therefore much more people
->>>> should be affected in case of a driver bug.
->>> Agreed. But even on my hardware (which may have a latent issue 
->>> despite being in the field for going on 5 years) the issue only 
->>> triggers under some fairly specific circumstances.
->>>> You said that kernel config impacts how frequently the issue happens.
->>>> Therefore question is what's the diff in kernel config, and how could
->>>> the differences be related to SPI.
->>>
->>> It did seem to be somewhat random. Things like CONFIG_PREEMPT have an 
->>> impact but every time I found something that seemed to be having an 
->>> impact I've been able to disprove it. I actually think its about how 
->>> busy the system is which may or may not affect when we get round to 
->>> processing the interrupts.
->>>
->>> I have managed to get the 'Transfer done but SPIE_DON isn't set!' to 
->>> occur on the T2080RDB.
->>>
->>> I've had to add the following to expose the environment as a mtd 
->>> partition
->>>
->>> diff --git a/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi 
->>> b/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
->>> index ff87e67c70da..fbf95fc1fd68 100644
->>> --- a/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
->>> +++ b/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
->>> @@ -116,6 +116,15 @@ flash@0 {
->>>                                 compatible = "micron,n25q512ax3", 
->>> "jedec,spi-nor";
->>>                                 reg = <0>;
->>>                                 spi-max-frequency = <10000000>; /* 
->>> input clock */
->>> +
->>> +                               partition@u-boot {
->>> +                                        reg = <0x00000000 0x00100000>;
->>> +                                        label = "u-boot";
->>> +                                };
->>> +                                partition@u-boot-env {
->>> +                                        reg = <0x00100000 0x00010000>;
->>> +                                        label = "u-boot-env";
->>> +                                };
->>>                         };
->>>                 };
->>>
->>> And I'm using the following script to poke at the environment 
->>> (warning if anyone does try this and the bug hits it can render your 
->>> u-boot environment invalid).
->>>
->>> cat flash/fw_env_test.sh
->>> #!/bin/sh
->>>
->>> generate_fw_env_config()
->>> {
->>>   cat /proc/mtd | sed 's/[:"]//g' | while read dev size erasesize 
->>> name ; do
->>>      echo "$dev $size $erasesize $name"
->>>      [ "$name" = "u-boot-env" ] && echo "/dev/$dev 0x0000 0x2000 
->>> $erasesize" >/flash/fw_env.config
->>>   done
->>> }
->>>
->>> cycles=10
->>> [ $# -ge 1 ] && cycles=$1
->>>
->>> generate_fw_env_config
->>>
->>> fw_printenv -c /flash/fw_env.config
->>>
->>> dmesg -c >/dev/null
->>> x=0
->>> while [ $x -lt $cycles ]; do
->>>     fw_printenv -c /flash/fw_env.config >/dev/null || break
->>>     fw_setenv -c /flash/fw_env.config foo $RANDOM || break;
->>>     dmesg -c | grep -q fsl_espi && break;
->>>     let x=x+1
->>> done
->>>
->>> echo "Ran $x cycles"
->>
->> I've also now seen the RX FIFO not empty error on the T2080RDB
->>
->> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
->> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->>
->> With my current workaround of emptying the RX FIFO. It seems 
->> survivable. Interestingly it only ever seems to be 1 extra byte in the 
->> RX FIFO and it seems to be after either a READ_SR or a READ_FSR.
->>
->> fsl_espi ffe110000.spi: tx 70
->> fsl_espi ffe110000.spi: rx 03
->> fsl_espi ffe110000.spi: Extra RX 00
->> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
->> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->> fsl_espi ffe110000.spi: tx 05
->> fsl_espi ffe110000.spi: rx 00
->> fsl_espi ffe110000.spi: Extra RX 03
->> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
->> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
->> fsl_espi ffe110000.spi: SPIE_RXCNT = 1, SPIE_TXCNT = 32
->> fsl_espi ffe110000.spi: tx 05
->> fsl_espi ffe110000.spi: rx 00
->> fsl_espi ffe110000.spi: Extra RX 03
->>
->> From all the Micron SPI-NOR datasheets I've got access to it is 
->> possible to continually read the SR/FSR. But I've no idea why it 
->> happens some times and not others.
-> 
-> So I think I've got a reproduction and I think I've bisected the problem 
-> to commit 3282a3da25bd ("powerpc/64: Implement soft interrupt replay in 
-> C"). My day is just finishing now so I haven't applied too much scrutiny 
-> to this result. Given the various rabbit holes I've been down on this 
-> issue already I'd take this information with a good degree of skepticism.
-> 
-OK, so an easy test should be to re-test with a 5.4 kernel.
-It doesn't have yet the change you're referring to, and the fsl-espi driver
-is basically the same as in 5.7 (just two small changes in 5.7).
-
-> Thanks,
-> Chris
-> 
-
+DQoNCk9uIE1vbiwgQXVnIDI0LCAyMDIwIGF0IDE5OjI1LCBNYXJrIEJyb3duIDxicm9vbmllQGtl
+cm5lbC5vcmc+IHdyb3RlOg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBN
+YXJrIEJyb3duIDxicm9vbmllQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IDIwMjDE6jjUwjI0yNUgMTk6
+MjUNCj4gVG86IFZsYWRpbWlyIE9sdGVhbiA8b2x0ZWFudkBnbWFpbC5jb20+DQo+IENjOiBrdWxk
+aXAgZHdpdmVkaSA8a3VsZGlwLmR3aXZlZGlAcHVyZXNvZnR3YXJlLmNvbT47DQo+IGxpbnV4LXNw
+aUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFFpYW5nIFpo
+YW8NCj4gPHFpYW5nLnpoYW9AbnhwLmNvbT47IFBhbmthaiBCYW5zYWwgPHBhbmthai5iYW5zYWxA
+bnhwLmNvbT47IFZhcnVuIFNldGhpDQo+IDxWLlNldGhpQG54cC5jb20+OyBUYW52ZWVyIEFsYW0g
+PHRhbnZlZXIuYWxhbUBwdXJlc29mdHdhcmUuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBz
+cGk6IHNwaS1mc2wtZHNwaTogQWRkIEFDUEkgc3VwcG9ydA0KPiANCj4gT24gU2F0LCBBdWcgMjIs
+IDIwMjAgYXQgMDY6MjE6MThQTSArMDMwMCwgVmxhZGltaXIgT2x0ZWFuIHdyb3RlOg0KPiA+IE9u
+IFNhdCwgQXVnIDIyLCAyMDIwIGF0IDA3OjM3OjI1UE0gKzA1MzAsIEt1bGRpcCBEd2l2ZWRpIHdy
+b3RlOg0KPiANCj4gPiA+ID4gVGhlIHdob2xlIHBvaW50IHdpdGggdGhlIGRldmljZSBwcm9wZXJ0
+eSBBUEkgaXMgdGhhdCBpdCB3b3JrcyB3aXRoDQo+ID4gPiA+IGJvdGggRFQgYW5kIEFDUEkgd2l0
+aG91dCBuZWVkaW5nIHNlcGFyYXRlIHBhcnNpbmcsIHRob3VnaCBpbiB0aGlzDQo+ID4gPiA+IGNh
+c2UgSSdtIHdvbmRlcmluZyB3aHkgd2UnZCBuZWVkIHRvIHNwZWNpZnkgdGhpcyBpbiBhbiBBQ1BJ
+IHN5c3RlbQ0KPiA+ID4gPiBhdCBhbGw/DQo+IA0KPiA+ID4gVW5kZXJzdG9vZC4gV2lsbCB0YWtl
+IGNhcmUgaW4gdjIgUEFUQ0gNCj4gDQo+ID4gSU1PIHRoZXJlIGlzIHplcm8gcmVhc29uIGZvciB0
+aGUgZXhpc3RlbmNlIG9mIHRoZSAic3BpLW51bS1jaGlwc2VsZWN0cyINCj4gPiBwcm9wZXJ0eSBl
+dmVuIGZvciBEVC4gV2Ugc2hvdWxkIGRlcHJlY2F0ZSBpdCAoc3RhcnQgaWdub3JpbmcgaXQgaW4N
+Cj4gPiBleGlzdGluZyBkZXZpY2UgdHJlZSBkZXBsb3ltZW50cykgYW5kIHBvcHVsYXRlIHN0cnVj
+dA0KPiA+IGZzbF9kc3BpX2RldnR5cGVfZGF0YSB3aXRoIHRoYXQgaW5mbyBiYXNlZCBvbiBTb0Mg
+Y29tcGF0aWJsZSBzdHJpbmcuDQo+IA0KPiBZZXMsIGl0J3MgYSBsZWdhY3kgZnJvbSBiYWQgYm9h
+cmQgZmlsZSBjb252ZXJzaW9ucyBhbmQgc2hvdWxkbid0IGJlIHVzZWQgYXQgYWxsLg0KDQpJIHNh
+dyBhIGxvdCBvZiBkcml2ZXIgYXNzaWduIHNwaV9jb250cm9sbGVyIC0+IG51bV9jaGlwc2VsZWN0
+IGRpcmVjdGx5LCBzaG91bGQgd2UgZG8gbGlrZSB0aGF0Pw0KDQpCUg0KUWlhbmcgWmhhbw0K
