@@ -2,145 +2,213 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A13252551
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 03:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BCB2526B1
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 08:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgHZBvu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Aug 2020 21:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbgHZBvs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Aug 2020 21:51:48 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FDAC061574;
-        Tue, 25 Aug 2020 18:51:48 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id r15so144621wrp.13;
-        Tue, 25 Aug 2020 18:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6lKBXswTrzhA0xBsr6HB8AlB5+bACM8/QHtln5EsmDM=;
-        b=rkPU8zA6FnvPI7YRdwlrF32Z+jufZRPGDhsVbublBxI+2WdfyrQZ4OMYugj2LjMgRs
-         tcBC2iVxYnWeg8Zk6YWzQfE0csZvqLsQKSxRKrpJnxvpSdJ9HVsaxBuVVCZ33a7Fy89F
-         YzL00nv71TEx1KwJewv+LaAx654GeLawZ3dB08BJtkewTW0RxdimmA59/2c32/oJxdK5
-         dSKP0GfmMvAUQJfWlO1JkSN5McliJO+sig5zbM32H0/Kuj9D+O0+2QWE9ikcOBAgMoCE
-         knF+3yVSHzD+dH7rwDtBk3Dij3c2i2NaVRbX/WHThEgypBISYgNE6EdHQjalStrd+n7R
-         ERAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6lKBXswTrzhA0xBsr6HB8AlB5+bACM8/QHtln5EsmDM=;
-        b=Smmunnpt1LjXpGp/N/t0FV0JpDIO+k456WlcUpDewg1p2nTBOA1P67S7CZhYS2eSnR
-         +OOu2WflF/myrmiKXjLyTDaOm9yWRQ/+m8rWhp4lfGRIQPptsKuzcIbQK/gfqzrsmgb2
-         BdQeToImOPECJssEo1/TBCGYzI7wfdeorUnpu7sSaErjF0BZxrIBwxej/FG4QVGmlh2X
-         1BHiv36vlSmis5BKaAtrqFc4MD1qxap9ZHiDz2gBaMW3K4hIGCY8DekMKBubBcRoWA2R
-         RBoRwxM4sCife/uTbJfjeAzX/lJkNnPNGkYKMD/Hi0cHsiYPB61eiVR70QtO+4h+3P/C
-         fPwA==
-X-Gm-Message-State: AOAM530oFG3ifVTPrO+3udsr1xhmkYJh0IEhN4H2KNWhmkrJD+j5JUa9
-        fGPsJZQ/BpxSlrw+43if6fdezIzMsx/vRGp6QYY=
-X-Google-Smtp-Source: ABdhPJyeqlKj5YPc50Em7rO4ODLMTr2DC/m+jfMJDMOpF+XoOI2kKLAaJQ+LNrc4dhPoiuNEDU0+R/Ls8lv1xf0wUss=
-X-Received: by 2002:adf:db43:: with SMTP id f3mr14164955wrj.219.1598406706678;
- Tue, 25 Aug 2020 18:51:46 -0700 (PDT)
+        id S1726034AbgHZGH1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Aug 2020 02:07:27 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:59838 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725957AbgHZGH0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Aug 2020 02:07:26 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B4D1284488;
+        Wed, 26 Aug 2020 18:07:19 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1598422039;
+        bh=An72J5d3lRampZhqj2XCfcHJc8P4Zb8uC1obKkliMMQ=;
+        h=From:To:CC:Subject:Date:In-Reply-To;
+        b=Rhrq4s4a/gDVGoKYtg/VvUB5+NnDZ5ECFO6tZJ4QdgkJ4LYUArnPBw8RAtMwMjbsV
+         JDbTLduwNz68j6WHo1+pKRtnAUsUd/A8Un3Y57g7by6+1kqcTBtZg5o1CSmcKF3E9d
+         5Isv9obivYB/+YLUu5aLEc8MPfOppSCcSPwZmhGaWjtdPi4cjrfi1pk90yTH5FpLFR
+         OVDNW9S288II70HZ7o/bBIcczuh42phcDb2d3dG0r+iZ0/g2rteYbw/AGWTLyvEf2d
+         Ll0dBp/tWagHnMkzXiT0RE+DoDk59ukEB/7bPi0b9s8BktoUmOk5ewneAdRKWP12Bi
+         vIdKgskYG0qEA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f45fc160001>; Wed, 26 Aug 2020 18:07:18 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Aug 2020 18:07:19 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.006; Wed, 26 Aug 2020 18:07:19 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: fsl_espi errors on v5.7.15
+Thread-Topic: fsl_espi errors on v5.7.15
+Thread-Index: AQHWceVnik7XsBYbp0S+yHVGh1hdQak2WMaAgAQdSwCAAz9MAIAAfdcAgAD5u4CAB+sMAIAAYfwAgAA6JQCAAPtUgIAAOXyAgABIbAA=
+Date:   Wed, 26 Aug 2020 06:07:18 +0000
+Message-ID: <42107721-614b-96e8-68d9-4b888206562e@alliedtelesis.co.nz>
+In-Reply-To: <519c3068-6c73-c17a-2016-1afe2a1d12f7@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AA3D5DA309097148AE30D7DBD5A98822@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20200817091617.28119-1-allen.cryptic@gmail.com>
- <20200817091617.28119-2-allen.cryptic@gmail.com> <b5508ca4-0641-7265-2939-5f03cbfab2e2@kernel.dk>
- <202008171228.29E6B3BB@keescook> <161b75f1-4e88-dcdf-42e8-b22504d7525c@kernel.dk>
- <202008171246.80287CDCA@keescook> <df645c06-c30b-eafa-4d23-826b84f2ff48@kernel.dk>
- <1597780833.3978.3.camel@HansenPartnership.com> <f3312928-430c-25f3-7112-76f2754df080@kernel.dk>
- <1597849185.3875.7.camel@HansenPartnership.com> <CAOMdWSJRR0BhjJK1FxD7UKxNd5sk4ycmEX6TYtJjRNR6UFAj6Q@mail.gmail.com>
- <1597873172.4030.2.camel@HansenPartnership.com>
-In-Reply-To: <1597873172.4030.2.camel@HansenPartnership.com>
-From:   Allen Pais <allen.cryptic@gmail.com>
-Date:   Wed, 26 Aug 2020 07:21:35 +0530
-Message-ID: <CAEogwTCH8qqjAnSpT0GDn+NuAps8dNbfcPVQ9h8kfOWNbzrD0w@mail.gmail.com>
-Subject: Re: [PATCH] block: convert tasklets to use new tasklet_setup() API
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Allen <allen.lkml@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        Kees Cook <keescook@chromium.org>, jdike@addtoit.com,
-        richard@nod.at, anton.ivanov@cambridgegreys.com, 3chas3@gmail.com,
-        stefanr@s5r6.in-berlin.de, airlied@linux.ie,
-        Daniel Vetter <daniel@ffwll.ch>, sre@kernel.org,
-        kys@microsoft.com, deller@gmx.de, dmitry.torokhov@gmail.com,
-        jassisinghbrar@gmail.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, maximlevitsky@gmail.com, oakad@yahoo.com,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        mporter@kernel.crashing.org, alex.bou9@gmail.com,
-        broonie@kernel.org, martyn@welchs.me.uk, manohar.vanga@gmail.com,
-        mitch@sfgoth.com, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-um@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux1394-devel@lists.sourceforge.net,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-hyperv@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
-        linux-spi@vger.kernel.org, devel@driverdev.osuosl.org,
-        Romain Perier <romain.perier@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 3:09 AM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> On Wed, 2020-08-19 at 21:54 +0530, Allen wrote:
-> > > [...]
-> > > > > Since both threads seem to have petered out, let me suggest in
-> > > > > kernel.h:
-> > > > >
-> > > > > #define cast_out(ptr, container, member) \
-> > > > >     container_of(ptr, typeof(*container), member)
-> > > > >
-> > > > > It does what you want, the argument order is the same as
-> > > > > container_of with the only difference being you name the
-> > > > > containing structure instead of having to specify its type.
-> > > >
-> > > > Not to incessantly bike shed on the naming, but I don't like
-> > > > cast_out, it's not very descriptive. And it has connotations of
-> > > > getting rid of something, which isn't really true.
-> > >
-> > > Um, I thought it was exactly descriptive: you're casting to the
-> > > outer container.  I thought about following the C++ dynamic casting
-> > > style, so out_cast(), but that seemed a bit pejorative.  What about
-> > > outer_cast()?
-> > >
-> > > > FWIW, I like the from_ part of the original naming, as it has
-> > > > some clues as to what is being done here. Why not just
-> > > > from_container()? That should immediately tell people what it
-> > > > does without having to look up the implementation, even before
-> > > > this becomes a part of the accepted coding norm.
-> > >
-> > > I'm not opposed to container_from() but it seems a little less
-> > > descriptive than outer_cast() but I don't really care.  I always
-> > > have to look up container_of() when I'm using it so this would just
-> > > be another macro of that type ...
-> > >
-> >
-> >  So far we have a few which have been suggested as replacement
-> > for from_tasklet()
-> >
-> > - out_cast() or outer_cast()
-> > - from_member().
-> > - container_from() or from_container()
-> >
-> > from_container() sounds fine, would trimming it a bit work? like
-> > from_cont().
->
-> I'm fine with container_from().  It's the same form as container_of()
-> and I think we need urgent agreement to not stall everything else so
-> the most innocuous name is likely to get the widest acceptance.
-
-Kees,
-
-  Will you be  sending the newly proposed API to Linus? I have V2
-which uses container_from()
-ready to be sent out.
-
-Thanks.
+DQpPbiAyNi8wOC8yMCAxOjQ4IHBtLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPg0KPiBPbiAyNi8w
+OC8yMCAxMDoyMiBhbSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IE9uIDI1LzA4LzIwIDc6MjIg
+cG0sIEhlaW5lciBLYWxsd2VpdCB3cm90ZToNCj4+DQo+PiA8c25pcD4NCj4+PiBJJ3ZlIGJlZW4g
+c3RhcmluZyBhdCBzcGktZnNsLWVzcGkuYyBmb3Igd2hpbGUgbm93IGFuZCBJIHRoaW5rIEkndmUN
+Cj4+Pj4gaWRlbnRpZmllZCBhIGNvdXBsZSBvZiBkZWZpY2llbmNpZXMgdGhhdCBtYXkgb3IgbWF5
+IG5vdCBiZSByZWxhdGVkIA0KPj4+PiB0byBteQ0KPj4+PiBpc3N1ZS4NCj4+Pj4NCj4+Pj4gRmly
+c3QgSSB0aGluayB0aGUgJ1RyYW5zZmVyIGRvbmUgYnV0IFNQSUVfRE9OIGlzbid0IHNldCcgbWVz
+c2FnZSANCj4+Pj4gY2FuIGJlDQo+Pj4+IGdlbmVyYXRlZCBzcHVyaW91c2x5LiBJbiBmc2xfZXNw
+aV9pcnEoKSB3ZSByZWFkIHRoZSBFU1BJX1NQSUUgDQo+Pj4+IHJlZ2lzdGVyLg0KPj4+PiBXZSBh
+bHNvIHdyaXRlIGJhY2sgdG8gaXQgdG8gY2xlYXIgdGhlIGN1cnJlbnQgZXZlbnRzLiBXZSByZS1y
+ZWFkIGl0IGluDQo+Pj4+IGZzbF9lc3BpX2NwdV9pcnEoKSBhbmQgY29tcGxhaW4gd2hlbiBTUElF
+X0RPTiBpcyBub3Qgc2V0LiBCdXQgd2UgY2FuDQo+Pj4+IG5hdHVyYWxseSBlbmQgdXAgaW4gdGhh
+dCBzaXR1YXRpb24gaWYgd2UncmUgZG9pbmcgYSBsYXJnZSByZWFkLiANCj4+Pj4gQ29uc2lkZXIN
+Cj4+Pj4gdGhlIG1lc3NhZ2VzIGZvciByZWFkaW5nIGEgYmxvY2sgb2YgZGF0YSBmcm9tIGEgc3Bp
+LW5vciBjaGlwDQo+Pj4+DQo+Pj4+IMKgIMKgdHggPSBSRUFEX09QICsgQUREUg0KPj4+PiDCoCDC
+oHJ4ID0gZGF0YQ0KPj4+Pg0KPj4+PiBXZSBzZXR1cCB0aGUgdHJhbnNmZXIgYW5kIHB1bXAgb3V0
+IHRoZSB0eF9idWYuIFRoZSBmaXJzdCBpbnRlcnJ1cHQgDQo+Pj4+IGdvZXMNCj4+Pj4gb2ZmIGFu
+ZCBFU1BJX1NQSUUgaGFzIFNQSU1fRE9OIGFuZCBTUElNX1JYVCBzZXQuIFdlIGVtcHR5IHRoZSBy
+eCBmaWZvLA0KPj4+PiBjbGVhciBFU1BJX1NQSUUgYW5kIHdhaXQgZm9yIHRoZSBuZXh0IGludGVy
+cnVwdC4gVGhlIG5leHQgaW50ZXJydXB0DQo+Pj4+IGZpcmVzIGFuZCB0aGlzIHRpbWUgd2UgaGF2
+ZSBFU1BJX1NQSUUgd2l0aCBqdXN0IFNQSU1fUlhUIHNldC4gVGhpcw0KPj4+PiBjb250aW51ZXMg
+dW50aWwgd2UndmUgcmVjZWl2ZWQgYWxsIHRoZSBkYXRhIGFuZCB3ZSBmaW5pc2ggd2l0aCANCj4+
+Pj4gRVNQSV9TUElFDQo+Pj4+IGhhdmluZyBvbmx5IFNQSU1fUlhUIHNldC4gV2hlbiB3ZSByZS1y
+ZWFkIGl0IHdlIGNvbXBsYWluIHRoYXQgU1BJRV9ET04NCj4+Pj4gaXNuJ3Qgc2V0Lg0KPj4+Pg0K
+Pj4+PiBUaGUgb3RoZXIgZGVmaWNpZW5jeSBpcyB0aGF0IHdlIG9ubHkgZ2V0IGFuIGludGVycnVw
+dCB3aGVuIHRoZSANCj4+Pj4gYW1vdW50IG9mDQo+Pj4+IGRhdGEgaW4gdGhlIHJ4IGZpZm8gaXMg
+YWJvdmUgRlNMX0VTUElfUlhUSFIuIElmIHRoZXJlIGFyZSBmZXdlciB0aGFuDQo+Pj4+IEZTTF9F
+U1BJX1JYVEhSIGxlZnQgdG8gYmUgcmVjZWl2ZWQgd2Ugd2lsbCBuZXZlciBwdWxsIHRoZW0gb3V0
+IG9mIA0KPj4+PiB0aGUgZmlmby4NCj4+Pj4NCj4+PiBTUElNX0RPTiB3aWxsIHRyaWdnZXIgYW4g
+aW50ZXJydXB0IG9uY2UgdGhlIGxhc3QgY2hhcmFjdGVycyBoYXZlIGJlZW4NCj4+PiB0cmFuc2Zl
+cnJlZCwgYW5kIHJlYWQgdGhlIHJlbWFpbmluZyBjaGFyYWN0ZXJzIGZyb20gdGhlIEZJRk8uDQo+
+Pg0KPj4gVGhlIFQyMDgwUk0gdGhhdCBJIGhhdmUgc2F5cyB0aGUgZm9sbG93aW5nIGFib3V0IHRo
+ZSBET04gYml0DQo+Pg0KPj4gIkxhc3QgY2hhcmFjdGVyIHdhcyB0cmFuc21pdHRlZC4gVGhlIGxh
+c3QgY2hhcmFjdGVyIHdhcyB0cmFuc21pdHRlZCANCj4+IGFuZCBhIG5ldyBjb21tYW5kIGNhbiBi
+ZSB3cml0dGVuIGZvciB0aGUgbmV4dCBmcmFtZS4iDQo+Pg0KPj4gVGhhdCBkb2VzIGF0IGxlYXN0
+IHNlZW0gdG8gZml0IHdpdGggbXkgYXNzZXJ0aW9uIHRoYXQgaXQncyBhbGwgYWJvdXQgDQo+PiB0
+aGUgVFggZGlyZWN0aW9uLiBCdXQgdGhlIGZhY3QgdGhhdCBpdCBkb2Vzbid0IGhhcHBlbiBhbGwg
+dGhlIHRpbWUgDQo+PiB0aHJvd3Mgc29tZSBkb3VidCBvbiBpdC4NCj4+DQo+Pj4gSSB0aGluayB0
+aGUgcmVhc29uIEknbSBzZWVpbmcgc29tZSB2YXJpYWJpbGl0eSBpcyBiZWNhdXNlIG9mIGhvdyBm
+YXN0DQo+Pj4+IChvciBzbG93KSB0aGUgaW50ZXJydXB0cyBnZXQgcHJvY2Vzc2VkIGFuZCBob3cg
+ZmFzdCB0aGUgc3BpLW5vciANCj4+Pj4gY2hpcCBjYW4NCj4+Pj4gZmlsbCB0aGUgQ1BVcyByeCBm
+aWZvLg0KPj4+Pg0KPj4+IFRvIHJ1bGUgb3V0IHRpbWluZyBpc3N1ZXMgYXQgaGlnaCBidXMgZnJl
+cXVlbmNpZXMgSSBpbml0aWFsbHkgYXNrZWQNCj4+PiBmb3IgcmUtdGVzdGluZyBhdCBsb3dlciBm
+cmVxdWVuY2llcy4gSWYgeW91IGUuZy4gbGltaXQgdGhlIGJ1cyB0byAxIE1Ieg0KPj4+IG9yIGV2
+ZW4gbGVzcywgdGhlbiB0aW1pbmcgc2hvdWxkbid0IGJlIGFuIGlzc3VlLg0KPj4gWWVzIEkndmUg
+Y3VycmVudGx5IGdvdCBzcGktbWF4LWZyZXF1ZW5jeSA9IDwxMDAwMDAwPjsgaW4gbXkgZHRzLiBJ
+IA0KPj4gd291bGQgYWxzbyBleHBlY3QgYSBzbG93ZXIgZnJlcXVlbmN5IHdvdWxkIGZpdCBteSAi
+RE9OIGlzIGZvciBUWCIgDQo+PiBuYXJyYXRpdmUuDQo+Pj4gTGFzdCByZWxldmFudCBmdW5jdGlv
+bmFsIGNoYW5nZXMgaGF2ZSBiZWVuIGRvbmUgYWxtb3N0IDQgeWVhcnMgYWdvLg0KPj4+IEFuZCB5
+b3VycyBpcyB0aGUgZmlyc3Qgc3VjaCByZXBvcnQgSSBzZWUuIFNvIHF1ZXN0aW9uIGlzIHdoYXQg
+Y291bGQgDQo+Pj4gYmUgc28NCj4+PiBzcGVjaWFsIHdpdGggeW91ciBzZXR1cCB0aGF0IGl0IHNl
+ZW1zIHlvdSdyZSB0aGUgb25seSBvbmUgYmVpbmcgDQo+Pj4gYWZmZWN0ZWQuDQo+Pj4gVGhlIHNj
+ZW5hcmlvcyB5b3UgZGVzY3JpYmUgYXJlIHN0YW5kYXJkLCB0aGVyZWZvcmUgbXVjaCBtb3JlIHBl
+b3BsZQ0KPj4+IHNob3VsZCBiZSBhZmZlY3RlZCBpbiBjYXNlIG9mIGEgZHJpdmVyIGJ1Zy4NCj4+
+IEFncmVlZC4gQnV0IGV2ZW4gb24gbXkgaGFyZHdhcmUgKHdoaWNoIG1heSBoYXZlIGEgbGF0ZW50
+IGlzc3VlIA0KPj4gZGVzcGl0ZSBiZWluZyBpbiB0aGUgZmllbGQgZm9yIGdvaW5nIG9uIDUgeWVh
+cnMpIHRoZSBpc3N1ZSBvbmx5IA0KPj4gdHJpZ2dlcnMgdW5kZXIgc29tZSBmYWlybHkgc3BlY2lm
+aWMgY2lyY3Vtc3RhbmNlcy4NCj4+PiBZb3Ugc2FpZCB0aGF0IGtlcm5lbCBjb25maWcgaW1wYWN0
+cyBob3cgZnJlcXVlbnRseSB0aGUgaXNzdWUgaGFwcGVucy4NCj4+PiBUaGVyZWZvcmUgcXVlc3Rp
+b24gaXMgd2hhdCdzIHRoZSBkaWZmIGluIGtlcm5lbCBjb25maWcsIGFuZCBob3cgY291bGQNCj4+
+PiB0aGUgZGlmZmVyZW5jZXMgYmUgcmVsYXRlZCB0byBTUEkuDQo+Pg0KPj4gSXQgZGlkIHNlZW0g
+dG8gYmUgc29tZXdoYXQgcmFuZG9tLiBUaGluZ3MgbGlrZSBDT05GSUdfUFJFRU1QVCBoYXZlIGFu
+IA0KPj4gaW1wYWN0IGJ1dCBldmVyeSB0aW1lIEkgZm91bmQgc29tZXRoaW5nIHRoYXQgc2VlbWVk
+IHRvIGJlIGhhdmluZyBhbiANCj4+IGltcGFjdCBJJ3ZlIGJlZW4gYWJsZSB0byBkaXNwcm92ZSBp
+dC4gSSBhY3R1YWxseSB0aGluayBpdHMgYWJvdXQgaG93IA0KPj4gYnVzeSB0aGUgc3lzdGVtIGlz
+IHdoaWNoIG1heSBvciBtYXkgbm90IGFmZmVjdCB3aGVuIHdlIGdldCByb3VuZCB0byANCj4+IHBy
+b2Nlc3NpbmcgdGhlIGludGVycnVwdHMuDQo+Pg0KPj4gSSBoYXZlIG1hbmFnZWQgdG8gZ2V0IHRo
+ZSAnVHJhbnNmZXIgZG9uZSBidXQgU1BJRV9ET04gaXNuJ3Qgc2V0IScgdG8gDQo+PiBvY2N1ciBv
+biB0aGUgVDIwODBSREIuDQo+Pg0KPj4gSSd2ZSBoYWQgdG8gYWRkIHRoZSBmb2xsb3dpbmcgdG8g
+ZXhwb3NlIHRoZSBlbnZpcm9ubWVudCBhcyBhIG10ZCANCj4+IHBhcnRpdGlvbg0KPj4NCj4+IGRp
+ZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvYm9vdC9kdHMvZnNsL3QyMDh4cmRiLmR0c2kgDQo+PiBi
+L2FyY2gvcG93ZXJwYy9ib290L2R0cy9mc2wvdDIwOHhyZGIuZHRzaQ0KPj4gaW5kZXggZmY4N2U2
+N2M3MGRhLi5mYmY5NWZjMWZkNjggMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3Bvd2VycGMvYm9vdC9k
+dHMvZnNsL3QyMDh4cmRiLmR0c2kNCj4+ICsrKyBiL2FyY2gvcG93ZXJwYy9ib290L2R0cy9mc2wv
+dDIwOHhyZGIuZHRzaQ0KPj4gQEAgLTExNiw2ICsxMTYsMTUgQEAgZmxhc2hAMCB7DQo+PiDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBjb21wYXRpYmxlID0gIm1pY3JvbixuMjVxNTEyYXgzIiwgDQo+PiAiamVkZWMsc3BpLW5vciI7
+DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCByZWcgPSA8MD47DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzcGktbWF4LWZyZXF1ZW5jeSA9IDwxMDAw
+MDAwMD47IC8qIA0KPj4gaW5wdXQgY2xvY2sgKi8NCj4+ICsNCj4+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGFydGl0aW9uQHUt
+Ym9vdCB7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlZyA9IDwweDAwMDAwMDAwIDB4MDAx
+MDAwMDA+Ow0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBsYWJlbCA9ICJ1LWJvb3QiOw0KPj4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIH07DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgcGFydGl0aW9uQHUtYm9vdC1lbnYgew0KPj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCByZWcgPSA8MHgwMDEwMDAwMCAweDAwMDEwMDAwPjsNCj4+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgbGFiZWwgPSAidS1ib290LWVudiI7DQo+PiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfTsNCj4+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfTsNCj4+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB9Ow0KPj4NCj4+IEFuZCBJJ20gdXNpbmcgdGhlIGZv
+bGxvd2luZyBzY3JpcHQgdG8gcG9rZSBhdCB0aGUgZW52aXJvbm1lbnQgDQo+PiAod2FybmluZyBp
+ZiBhbnlvbmUgZG9lcyB0cnkgdGhpcyBhbmQgdGhlIGJ1ZyBoaXRzIGl0IGNhbiByZW5kZXIgeW91
+ciANCj4+IHUtYm9vdCBlbnZpcm9ubWVudCBpbnZhbGlkKS4NCj4+DQo+PiBjYXQgZmxhc2gvZndf
+ZW52X3Rlc3Quc2gNCj4+ICMhL2Jpbi9zaA0KPj4NCj4+IGdlbmVyYXRlX2Z3X2Vudl9jb25maWco
+KQ0KPj4gew0KPj4gwqAgY2F0IC9wcm9jL210ZCB8IHNlZCAncy9bOiJdLy9nJyB8IHdoaWxlIHJl
+YWQgZGV2IHNpemUgZXJhc2VzaXplIA0KPj4gbmFtZSA7IGRvDQo+PiDCoMKgwqDCoCBlY2hvICIk
+ZGV2ICRzaXplICRlcmFzZXNpemUgJG5hbWUiDQo+PiDCoMKgwqDCoCBbICIkbmFtZSIgPSAidS1i
+b290LWVudiIgXSAmJiBlY2hvICIvZGV2LyRkZXYgMHgwMDAwIDB4MjAwMCANCj4+ICRlcmFzZXNp
+emUiID4vZmxhc2gvZndfZW52LmNvbmZpZw0KPj4gwqAgZG9uZQ0KPj4gfQ0KPj4NCj4+IGN5Y2xl
+cz0xMA0KPj4gWyAkIyAtZ2UgMSBdICYmIGN5Y2xlcz0kMQ0KPj4NCj4+IGdlbmVyYXRlX2Z3X2Vu
+dl9jb25maWcNCj4+DQo+PiBmd19wcmludGVudiAtYyAvZmxhc2gvZndfZW52LmNvbmZpZw0KPj4N
+Cj4+IGRtZXNnIC1jID4vZGV2L251bGwNCj4+IHg9MA0KPj4gd2hpbGUgWyAkeCAtbHQgJGN5Y2xl
+cyBdOyBkbw0KPj4gwqDCoMKgIGZ3X3ByaW50ZW52IC1jIC9mbGFzaC9md19lbnYuY29uZmlnID4v
+ZGV2L251bGwgfHwgYnJlYWsNCj4+IMKgwqDCoCBmd19zZXRlbnYgLWMgL2ZsYXNoL2Z3X2Vudi5j
+b25maWcgZm9vICRSQU5ET00gfHwgYnJlYWs7DQo+PiDCoMKgwqAgZG1lc2cgLWMgfCBncmVwIC1x
+IGZzbF9lc3BpICYmIGJyZWFrOw0KPj4gwqDCoMKgIGxldCB4PXgrMQ0KPj4gZG9uZQ0KPj4NCj4+
+IGVjaG8gIlJhbiAkeCBjeWNsZXMiDQo+DQo+IEkndmUgYWxzbyBub3cgc2VlbiB0aGUgUlggRklG
+TyBub3QgZW1wdHkgZXJyb3Igb24gdGhlIFQyMDgwUkRCDQo+DQo+IGZzbF9lc3BpIGZmZTExMDAw
+MC5zcGk6IFRyYW5zZmVyIGRvbmUgYnV0IFNQSUVfRE9OIGlzbid0IHNldCENCj4gZnNsX2VzcGkg
+ZmZlMTEwMDAwLnNwaTogVHJhbnNmZXIgZG9uZSBidXQgU1BJRV9ET04gaXNuJ3Qgc2V0IQ0KPiBm
+c2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1dCBTUElFX0RPTiBpc24ndCBz
+ZXQhDQo+IGZzbF9lc3BpIGZmZTExMDAwMC5zcGk6IFRyYW5zZmVyIGRvbmUgYnV0IFNQSUVfRE9O
+IGlzbid0IHNldCENCj4gZnNsX2VzcGkgZmZlMTEwMDAwLnNwaTogVHJhbnNmZXIgZG9uZSBidXQg
+cngvdHggZmlmbydzIGFyZW4ndCBlbXB0eSENCj4gZnNsX2VzcGkgZmZlMTEwMDAwLnNwaTogU1BJ
+RV9SWENOVCA9IDEsIFNQSUVfVFhDTlQgPSAzMg0KPg0KPiBXaXRoIG15IGN1cnJlbnQgd29ya2Fy
+b3VuZCBvZiBlbXB0eWluZyB0aGUgUlggRklGTy4gSXQgc2VlbXMgDQo+IHN1cnZpdmFibGUuIElu
+dGVyZXN0aW5nbHkgaXQgb25seSBldmVyIHNlZW1zIHRvIGJlIDEgZXh0cmEgYnl0ZSBpbiB0aGUg
+DQo+IFJYIEZJRk8gYW5kIGl0IHNlZW1zIHRvIGJlIGFmdGVyIGVpdGhlciBhIFJFQURfU1Igb3Ig
+YSBSRUFEX0ZTUi4NCj4NCj4gZnNsX2VzcGkgZmZlMTEwMDAwLnNwaTogdHggNzANCj4gZnNsX2Vz
+cGkgZmZlMTEwMDAwLnNwaTogcnggMDMNCj4gZnNsX2VzcGkgZmZlMTEwMDAwLnNwaTogRXh0cmEg
+UlggMDANCj4gZnNsX2VzcGkgZmZlMTEwMDAwLnNwaTogVHJhbnNmZXIgZG9uZSBidXQgU1BJRV9E
+T04gaXNuJ3Qgc2V0IQ0KPiBmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBUcmFuc2ZlciBkb25lIGJ1
+dCByeC90eCBmaWZvJ3MgYXJlbid0IGVtcHR5IQ0KPiBmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBT
+UElFX1JYQ05UID0gMSwgU1BJRV9UWENOVCA9IDMyDQo+IGZzbF9lc3BpIGZmZTExMDAwMC5zcGk6
+IHR4IDA1DQo+IGZzbF9lc3BpIGZmZTExMDAwMC5zcGk6IHJ4IDAwDQo+IGZzbF9lc3BpIGZmZTEx
+MDAwMC5zcGk6IEV4dHJhIFJYIDAzDQo+IGZzbF9lc3BpIGZmZTExMDAwMC5zcGk6IFRyYW5zZmVy
+IGRvbmUgYnV0IFNQSUVfRE9OIGlzbid0IHNldCENCj4gZnNsX2VzcGkgZmZlMTEwMDAwLnNwaTog
+VHJhbnNmZXIgZG9uZSBidXQgcngvdHggZmlmbydzIGFyZW4ndCBlbXB0eSENCj4gZnNsX2VzcGkg
+ZmZlMTEwMDAwLnNwaTogU1BJRV9SWENOVCA9IDEsIFNQSUVfVFhDTlQgPSAzMg0KPiBmc2xfZXNw
+aSBmZmUxMTAwMDAuc3BpOiB0eCAwNQ0KPiBmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiByeCAwMA0K
+PiBmc2xfZXNwaSBmZmUxMTAwMDAuc3BpOiBFeHRyYSBSWCAwMw0KPg0KPiBGcm9tIGFsbCB0aGUg
+TWljcm9uIFNQSS1OT1IgZGF0YXNoZWV0cyBJJ3ZlIGdvdCBhY2Nlc3MgdG8gaXQgaXMgDQo+IHBv
+c3NpYmxlIHRvIGNvbnRpbnVhbGx5IHJlYWQgdGhlIFNSL0ZTUi4gQnV0IEkndmUgbm8gaWRlYSB3
+aHkgaXQgDQo+IGhhcHBlbnMgc29tZSB0aW1lcyBhbmQgbm90IG90aGVycy4NCg0KU28gSSB0aGlu
+ayBJJ3ZlIGdvdCBhIHJlcHJvZHVjdGlvbiBhbmQgSSB0aGluayBJJ3ZlIGJpc2VjdGVkIHRoZSBw
+cm9ibGVtIA0KdG8gY29tbWl0IDMyODJhM2RhMjViZCAoInBvd2VycGMvNjQ6IEltcGxlbWVudCBz
+b2Z0IGludGVycnVwdCByZXBsYXkgaW4gDQpDIikuIE15IGRheSBpcyBqdXN0IGZpbmlzaGluZyBu
+b3cgc28gSSBoYXZlbid0IGFwcGxpZWQgdG9vIG11Y2ggc2NydXRpbnkgDQp0byB0aGlzIHJlc3Vs
+dC4gR2l2ZW4gdGhlIHZhcmlvdXMgcmFiYml0IGhvbGVzIEkndmUgYmVlbiBkb3duIG9uIHRoaXMg
+DQppc3N1ZSBhbHJlYWR5IEknZCB0YWtlIHRoaXMgaW5mb3JtYXRpb24gd2l0aCBhIGdvb2QgZGVn
+cmVlIG9mIHNrZXB0aWNpc20uDQoNClRoYW5rcywNCkNocmlzDQo=
