@@ -2,119 +2,169 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D35253322
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 17:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45A9253333
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 17:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbgHZPNZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Aug 2020 11:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S1727930AbgHZPNv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Aug 2020 11:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726905AbgHZPNZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Aug 2020 11:13:25 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84201C061756
-        for <linux-spi@vger.kernel.org>; Wed, 26 Aug 2020 08:13:24 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id b2so2060650edw.5
-        for <linux-spi@vger.kernel.org>; Wed, 26 Aug 2020 08:13:24 -0700 (PDT)
+        with ESMTP id S1728069AbgHZPNd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Aug 2020 11:13:33 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569C4C061786
+        for <linux-spi@vger.kernel.org>; Wed, 26 Aug 2020 08:13:32 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id m34so1154554pgl.11
+        for <linux-spi@vger.kernel.org>; Wed, 26 Aug 2020 08:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=puresoftware-com.20150623.gappssmtp.com; s=20150623;
-        h=return-receipt-to:from:references:in-reply-to:mime-version
-         :thread-index:disposition-notification-to:date:message-id:subject:to
-         :cc;
-        bh=oKNHl4Ny4sbuCKjpuRdgyZBkTgWLx5UkA3LoZG6V0lk=;
-        b=FB+t+sVO1/ukFnYVyxTChBvyLa9GO6obbOPr9SKpuFup/4ZpcKuf8oUyzovXq85LJn
-         PMr7eKU64znflOOOZMHs2rxL+u2r1ECZGrY573Am4BkapgOukgtfFVpIZptIJrI+NAWS
-         LqneKqDYE0pj1LYEzHA/rPRFTXnq7pwFEjbz0rsfdDmfJzAHl+jnB6Mwaxgt/DofJG1V
-         P7Hq2FrCoCtMvck+9N13aUemZGluAFC1Za44VxUz/z9+EETIFI4CwhFucg+6kfR2ZgE1
-         O7E5gwAk8ZEeIZai2ngoCB9yHMfkP7Y4ixQ1VzauUwQIDiwH6MV3WENW37VfyVjIGisx
-         6A6g==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CmlsOBKmXTTcSfq5zGubBNNUb0gupInXkPP8EnZ3d+A=;
+        b=ZqQGx8lCIpp9MgN3WVINar6Fy8irHzrpJRsjxGoHQTeWbqHYD6il/g9q7DvpK/dmQm
+         0qW7aVa3Tr+PGt5edZDuPZxHNjlNPlIhusw3juLIWAAlHZXHD4KNjNATv1u3ZoCJvNEC
+         S2smx23jdqkXqQh3IP6NS4LTsP6Gm53DxBdKk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:return-receipt-to:from:references:in-reply-to
-         :mime-version:thread-index:disposition-notification-to:date
-         :message-id:subject:to:cc;
-        bh=oKNHl4Ny4sbuCKjpuRdgyZBkTgWLx5UkA3LoZG6V0lk=;
-        b=uiTklgxIAj6KC7hZpiLrOMzvhpraTYKXVlZe3sFcFFu5IHWaM3GdsBaqEXlTybTKCu
-         cZoX/6xnkr00tPPxifPYDhUMg5hAq19btM/kh3wZjwl3yBdqA0pUkykFSZdwqZ+NjtcV
-         2nzzQ5T8ASEH4NkOnHZW4bXAGG+KL5xsCMtmQOiwh/MOngyVWM6/flUkIQRmLs2ewYHe
-         skHbNfsK7Bo/98Uz5QTge4+5qwsTtp5q0NJ06kp1Y4A31gvnP8gNhArFUeWE1woGt7GX
-         YTCw/pVSvkWCfAB6SYCXZZnkLiD2LgkTsU2+o4daXActGF54T+uyM0Gg/jdNIFBb/+WT
-         MeKA==
-X-Gm-Message-State: AOAM532cBdYH6iry/TinWtqtYI1BEeqZ5ybyKtEDUC84H6p3li4e9xRL
-        LxDvsiQl34D4HkIvODYyEQWO/FmppwlU7NkehcaUrA==
-X-Google-Smtp-Source: ABdhPJzsRVGSLe4lpmQnlT3HvkKy/20pNcOp7WTKLjOO89AFrfG0IzVA4X1dUrgiUuwohWHrh+PafH6GPl/mKHJR8rI=
-X-Received: by 2002:a05:6402:1d17:: with SMTP id dg23mr15482591edb.198.1598454802941;
- Wed, 26 Aug 2020 08:13:22 -0700 (PDT)
-From:   Kuldip Dwivedi <kuldip.dwivedi@puresoftware.com>
-References: <20200821131029.11440-1-kuldip.dwivedi@puresoftware.com>
- <20200821140718.GH4870@sirena.org.uk> <c810740d75f64e308fd362e6c6a5f437@mail.gmail.com>
- <20200822152118.rlwbcgfk4abjldtg@skbuf> <VE1PR04MB6768699B6D7A507A5BF82F9191540@VE1PR04MB6768.eurprd04.prod.outlook.com>
- <20200826114758.4agph53ag2fin6um@skbuf> <20200826142312.GH4965@sirena.org.uk> <20200826144744.c4yzgoovk6f4t3id@skbuf>
-In-Reply-To: <20200826144744.c4yzgoovk6f4t3id@skbuf>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CmlsOBKmXTTcSfq5zGubBNNUb0gupInXkPP8EnZ3d+A=;
+        b=bjuvHyg4Cg3/dbV1VYK0l7uuKhXZ3rqzYzWDaFjAVeegszi8tE4kEhhv3tKBEdX9Rb
+         QTgakepMdp58qAb/zLkkoqQ0HhJIaOkElvRZ28szmZ3G4c6Wp6X/833VBI6pKfeCndnW
+         nRRADBcSd6KnL3FftqqbkqeLb9LL1XQK2deapIvC4j0vWhRE4j05T+z91vJFg+DNGVQZ
+         ngnAgRuEOXPmYC1ok8Vdzi90VPW2OHrf+ablZKnMLjfmnffe1Jkat6p8YwRE2SUJ+iVv
+         jY1QfRwWAGe4DyQsIeZbwQrLbeI5X0r8kLQRRgXb61MSePPBnKBsuro/Va2ldXWUM8cK
+         x9pA==
+X-Gm-Message-State: AOAM532bQP4ZuuCkW/afFiUJkDYAFzcEayw77gjP33KUIfxkh5E03+2I
+        gstzmXgILBhn+6d86CU/LTTzRQ==
+X-Google-Smtp-Source: ABdhPJz9xFq7qO/RuT9QubtB+V2mx2933Vq5WDSuN5fCly0WI0GYA2lIh7xhcXijBK2JnQjkWRm3gA==
+X-Received: by 2002:a63:f909:: with SMTP id h9mr10562477pgi.250.1598454811989;
+        Wed, 26 Aug 2020 08:13:31 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d127sm3380122pfc.175.2020.08.26.08.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 08:13:30 -0700 (PDT)
+Date:   Wed, 26 Aug 2020 08:13:29 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Allen Pais <allen.cryptic@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-atm-general@lists.sourceforge.net, manohar.vanga@gmail.com,
+        airlied@linux.ie, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, sre@kernel.org,
+        anton.ivanov@cambridgegreys.com, devel@driverdev.osuosl.org,
+        linux-s390@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        maximlevitsky@gmail.com, richard@nod.at, deller@gmx.de,
+        jassisinghbrar@gmail.com, linux-spi@vger.kernel.org,
+        3chas3@gmail.com, intel-gfx@lists.freedesktop.org,
+        Jakub Kicinski <kuba@kernel.org>, mporter@kernel.crashing.org,
+        jdike@addtoit.com, oakad@yahoo.com, s.hauer@pengutronix.de,
+        linux-input@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-block@vger.kernel.org, broonie@kernel.org,
+        openipmi-developer@lists.sourceforge.net, mitch@sfgoth.com,
+        linux-arm-kernel@lists.infradead.org, Jens Axboe <axboe@kernel.dk>,
+        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
+        martyn@welchs.me.uk, dmitry.torokhov@gmail.com,
+        linux-mmc@vger.kernel.org, Allen <allen.lkml@gmail.com>,
+        linux-kernel@vger.kernel.org, alex.bou9@gmail.com,
+        stefanr@s5r6.in-berlin.de, Daniel Vetter <daniel@ffwll.ch>,
+        linux-ntb@googlegroups.com,
+        Romain Perier <romain.perier@gmail.com>, shawnguo@kernel.org,
+        David Miller <davem@davemloft.net>
+Subject: Re: [PATCH] block: convert tasklets to use new tasklet_setup() API
+Message-ID: <202008260811.1CE425B5C2@keescook>
+References: <161b75f1-4e88-dcdf-42e8-b22504d7525c@kernel.dk>
+ <202008171246.80287CDCA@keescook>
+ <df645c06-c30b-eafa-4d23-826b84f2ff48@kernel.dk>
+ <1597780833.3978.3.camel@HansenPartnership.com>
+ <f3312928-430c-25f3-7112-76f2754df080@kernel.dk>
+ <1597849185.3875.7.camel@HansenPartnership.com>
+ <CAOMdWSJRR0BhjJK1FxD7UKxNd5sk4ycmEX6TYtJjRNR6UFAj6Q@mail.gmail.com>
+ <1597873172.4030.2.camel@HansenPartnership.com>
+ <CAEogwTCH8qqjAnSpT0GDn+NuAps8dNbfcPVQ9h8kfOWNbzrD0w@mail.gmail.com>
+ <20200826095528.GX1793@kadam>
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQF7/ycK6cTpjLXBKD+ruXNZEs6GEAE4wSq+AcJdu4sBqH1NLAEjPgFbAgU/99oCtsCFlAIqZ5/wqZoKVKA=
-Date:   Wed, 26 Aug 2020 20:43:20 +0530
-Message-ID: <2e19f8979be4f962045a1597bdbe7886@mail.gmail.com>
-Subject: RE: [PATCH] spi: spi-fsl-dspi: Add ACPI support
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Qiang Zhao <qiang.zhao@nxp.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pankaj Bansal <pankaj.bansal@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>,
-        Tanveer Alam <tanveer.alam@puresoftware.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200826095528.GX1793@kadam>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> -----Original Message-----
-> From: Vladimir Oltean <olteanv@gmail.com>
-> Sent: Wednesday, August 26, 2020 8:18 PM
-> To: Mark Brown <broonie@kernel.org>
-> Cc: Qiang Zhao <qiang.zhao@nxp.com>; kuldip dwivedi
-> <kuldip.dwivedi@puresoftware.com>; linux-spi@vger.kernel.org; linux-
-> kernel@vger.kernel.org; Pankaj Bansal <pankaj.bansal@nxp.com>; Varun
-Sethi
-> <V.Sethi@nxp.com>; Tanveer Alam <tanveer.alam@puresoftware.com>
-> Subject: Re: [PATCH] spi: spi-fsl-dspi: Add ACPI support
->
-> On Wed, Aug 26, 2020 at 03:23:12PM +0100, Mark Brown wrote:
-> > On Wed, Aug 26, 2020 at 02:47:58PM +0300, Vladimir Oltean wrote:
-> >
-> > > - The compatible string plays an integral part in the functionality
-of
-> > >   the spi-fsl-dspi driver. I want to see a solution for ACPI where
-the
-> > >   driver knows on which SoC it's running on. Otherwise it doesn't
-know
-> > >   what are the silicon parameters of the DSPI module (XSPI present
-or
-> > >   not, DMA present or not, FIFO depth). I don't see that now. I just
-see
-> > >   something hardcoded for:
-> > >   { "NXP0005", .driver_data =
-> > > (kernel_ulong_t)&devtype_data[LS2085A], }
-> >
-> > Based on some other stuff I've seen with ACPI on NXP stuff it looks
-> > like they're following the same scheme but only caring about that one
-> > SoC for the time being.
->
-> So, no argument about caring only about ACPI on one particular SoC for
-the time
-> being, but there's a big difference between a solution that works for
-N=1 and one
-> that works for N=2...
->
-> Showing my ignorance here, but is there something equivalent to
-> of_machine_is_compatible() for ACPI?
-Just a query, Can't we use meaningful HID for different SoC just like
-compatible strings in DT ?
-In this way Silicon parameters can also be added in fsl_dspi_devtype_data
-structure , which is
-already exist in driver
->
-> Thanks,
-> -Vladimir
+On Wed, Aug 26, 2020 at 12:55:28PM +0300, Dan Carpenter wrote:
+> On Wed, Aug 26, 2020 at 07:21:35AM +0530, Allen Pais wrote:
+> > On Thu, Aug 20, 2020 at 3:09 AM James Bottomley
+> > <James.Bottomley@hansenpartnership.com> wrote:
+> > >
+> > > On Wed, 2020-08-19 at 21:54 +0530, Allen wrote:
+> > > > > [...]
+> > > > > > > Since both threads seem to have petered out, let me suggest in
+> > > > > > > kernel.h:
+> > > > > > >
+> > > > > > > #define cast_out(ptr, container, member) \
+> > > > > > >     container_of(ptr, typeof(*container), member)
+> > > > > > >
+> > > > > > > It does what you want, the argument order is the same as
+> > > > > > > container_of with the only difference being you name the
+> > > > > > > containing structure instead of having to specify its type.
+> > > > > >
+> > > > > > Not to incessantly bike shed on the naming, but I don't like
+> > > > > > cast_out, it's not very descriptive. And it has connotations of
+> > > > > > getting rid of something, which isn't really true.
+> > > > >
+> > > > > Um, I thought it was exactly descriptive: you're casting to the
+> > > > > outer container.  I thought about following the C++ dynamic casting
+> > > > > style, so out_cast(), but that seemed a bit pejorative.  What about
+> > > > > outer_cast()?
+> > > > >
+> > > > > > FWIW, I like the from_ part of the original naming, as it has
+> > > > > > some clues as to what is being done here. Why not just
+> > > > > > from_container()? That should immediately tell people what it
+> > > > > > does without having to look up the implementation, even before
+> > > > > > this becomes a part of the accepted coding norm.
+> > > > >
+> > > > > I'm not opposed to container_from() but it seems a little less
+> > > > > descriptive than outer_cast() but I don't really care.  I always
+> > > > > have to look up container_of() when I'm using it so this would just
+> > > > > be another macro of that type ...
+> > > > >
+> > > >
+> > > >  So far we have a few which have been suggested as replacement
+> > > > for from_tasklet()
+> > > >
+> > > > - out_cast() or outer_cast()
+> > > > - from_member().
+> > > > - container_from() or from_container()
+> > > >
+> > > > from_container() sounds fine, would trimming it a bit work? like
+> > > > from_cont().
+> > >
+> > > I'm fine with container_from().  It's the same form as container_of()
+> > > and I think we need urgent agreement to not stall everything else so
+> > > the most innocuous name is likely to get the widest acceptance.
+> > 
+> > Kees,
+> > 
+> >   Will you be  sending the newly proposed API to Linus? I have V2
+> > which uses container_from()
+> > ready to be sent out.
+> 
+> I liked that James swapped the first two arguments so that it matches
+> container_of().  Plus it's nice that when you have:
+> 
+> 	struct whatever *foo = container_from(ptr, foo, member);
+> 
+> Then it means that "ptr == &foo->member".
+
+I'm a bit stalled right now -- the merge window was keeping me busy, and
+this week is the Linux Plumbers Conference. This is on my list, but I
+haven't gotten back around to it. If you want, feel free to send the
+container_from() patch; you might be able to unblock this faster than me
+right now. :)
+
+-Kees
+
+-- 
+Kees Cook
