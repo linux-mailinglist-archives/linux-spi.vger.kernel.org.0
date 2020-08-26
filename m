@@ -2,169 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D45A9253333
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 17:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106B0253340
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Aug 2020 17:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgHZPNv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Aug 2020 11:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728069AbgHZPNd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Aug 2020 11:13:33 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569C4C061786
-        for <linux-spi@vger.kernel.org>; Wed, 26 Aug 2020 08:13:32 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id m34so1154554pgl.11
-        for <linux-spi@vger.kernel.org>; Wed, 26 Aug 2020 08:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CmlsOBKmXTTcSfq5zGubBNNUb0gupInXkPP8EnZ3d+A=;
-        b=ZqQGx8lCIpp9MgN3WVINar6Fy8irHzrpJRsjxGoHQTeWbqHYD6il/g9q7DvpK/dmQm
-         0qW7aVa3Tr+PGt5edZDuPZxHNjlNPlIhusw3juLIWAAlHZXHD4KNjNATv1u3ZoCJvNEC
-         S2smx23jdqkXqQh3IP6NS4LTsP6Gm53DxBdKk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CmlsOBKmXTTcSfq5zGubBNNUb0gupInXkPP8EnZ3d+A=;
-        b=bjuvHyg4Cg3/dbV1VYK0l7uuKhXZ3rqzYzWDaFjAVeegszi8tE4kEhhv3tKBEdX9Rb
-         QTgakepMdp58qAb/zLkkoqQ0HhJIaOkElvRZ28szmZ3G4c6Wp6X/833VBI6pKfeCndnW
-         nRRADBcSd6KnL3FftqqbkqeLb9LL1XQK2deapIvC4j0vWhRE4j05T+z91vJFg+DNGVQZ
-         ngnAgRuEOXPmYC1ok8Vdzi90VPW2OHrf+ablZKnMLjfmnffe1Jkat6p8YwRE2SUJ+iVv
-         jY1QfRwWAGe4DyQsIeZbwQrLbeI5X0r8kLQRRgXb61MSePPBnKBsuro/Va2ldXWUM8cK
-         x9pA==
-X-Gm-Message-State: AOAM532bQP4ZuuCkW/afFiUJkDYAFzcEayw77gjP33KUIfxkh5E03+2I
-        gstzmXgILBhn+6d86CU/LTTzRQ==
-X-Google-Smtp-Source: ABdhPJz9xFq7qO/RuT9QubtB+V2mx2933Vq5WDSuN5fCly0WI0GYA2lIh7xhcXijBK2JnQjkWRm3gA==
-X-Received: by 2002:a63:f909:: with SMTP id h9mr10562477pgi.250.1598454811989;
-        Wed, 26 Aug 2020 08:13:31 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d127sm3380122pfc.175.2020.08.26.08.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2020 08:13:30 -0700 (PDT)
-Date:   Wed, 26 Aug 2020 08:13:29 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Allen Pais <allen.cryptic@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-atm-general@lists.sourceforge.net, manohar.vanga@gmail.com,
-        airlied@linux.ie, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, sre@kernel.org,
-        anton.ivanov@cambridgegreys.com, devel@driverdev.osuosl.org,
-        linux-s390@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        maximlevitsky@gmail.com, richard@nod.at, deller@gmx.de,
-        jassisinghbrar@gmail.com, linux-spi@vger.kernel.org,
-        3chas3@gmail.com, intel-gfx@lists.freedesktop.org,
-        Jakub Kicinski <kuba@kernel.org>, mporter@kernel.crashing.org,
-        jdike@addtoit.com, oakad@yahoo.com, s.hauer@pengutronix.de,
-        linux-input@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-block@vger.kernel.org, broonie@kernel.org,
-        openipmi-developer@lists.sourceforge.net, mitch@sfgoth.com,
-        linux-arm-kernel@lists.infradead.org, Jens Axboe <axboe@kernel.dk>,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        martyn@welchs.me.uk, dmitry.torokhov@gmail.com,
-        linux-mmc@vger.kernel.org, Allen <allen.lkml@gmail.com>,
-        linux-kernel@vger.kernel.org, alex.bou9@gmail.com,
-        stefanr@s5r6.in-berlin.de, Daniel Vetter <daniel@ffwll.ch>,
-        linux-ntb@googlegroups.com,
-        Romain Perier <romain.perier@gmail.com>, shawnguo@kernel.org,
-        David Miller <davem@davemloft.net>
-Subject: Re: [PATCH] block: convert tasklets to use new tasklet_setup() API
-Message-ID: <202008260811.1CE425B5C2@keescook>
-References: <161b75f1-4e88-dcdf-42e8-b22504d7525c@kernel.dk>
- <202008171246.80287CDCA@keescook>
- <df645c06-c30b-eafa-4d23-826b84f2ff48@kernel.dk>
- <1597780833.3978.3.camel@HansenPartnership.com>
- <f3312928-430c-25f3-7112-76f2754df080@kernel.dk>
- <1597849185.3875.7.camel@HansenPartnership.com>
- <CAOMdWSJRR0BhjJK1FxD7UKxNd5sk4ycmEX6TYtJjRNR6UFAj6Q@mail.gmail.com>
- <1597873172.4030.2.camel@HansenPartnership.com>
- <CAEogwTCH8qqjAnSpT0GDn+NuAps8dNbfcPVQ9h8kfOWNbzrD0w@mail.gmail.com>
- <20200826095528.GX1793@kadam>
+        id S1727080AbgHZPO6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Aug 2020 11:14:58 -0400
+Received: from mga04.intel.com ([192.55.52.120]:10043 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727063AbgHZPO6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 26 Aug 2020 11:14:58 -0400
+IronPort-SDR: wUBHrVn6c+TMDO9boUFN9HrzMO3RdhpklISzTCPVpUmWJsjFBnmy9oOwg6/umCS9YowwVJo1lA
+ a+VzK/Jn48VA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9725"; a="153731071"
+X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
+   d="scan'208";a="153731071"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 08:14:57 -0700
+IronPort-SDR: ui0D5J+YgS8yIrzNWUOxpilBasUvg0PrfL6rZbVptzj+T36P8M0bw+gBtXpS0U2wlCEX2UfFdJ
+ 4TZRo2OUo+NA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
+   d="scan'208";a="295401175"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 26 Aug 2020 08:14:56 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A694C166; Wed, 26 Aug 2020 18:14:55 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/3] spi: pxa2xx: Update header block in pxa2xx_ssp.h
+Date:   Wed, 26 Aug 2020 18:14:53 +0300
+Message-Id: <20200826151455.55970-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200826095528.GX1793@kadam>
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 12:55:28PM +0300, Dan Carpenter wrote:
-> On Wed, Aug 26, 2020 at 07:21:35AM +0530, Allen Pais wrote:
-> > On Thu, Aug 20, 2020 at 3:09 AM James Bottomley
-> > <James.Bottomley@hansenpartnership.com> wrote:
-> > >
-> > > On Wed, 2020-08-19 at 21:54 +0530, Allen wrote:
-> > > > > [...]
-> > > > > > > Since both threads seem to have petered out, let me suggest in
-> > > > > > > kernel.h:
-> > > > > > >
-> > > > > > > #define cast_out(ptr, container, member) \
-> > > > > > >     container_of(ptr, typeof(*container), member)
-> > > > > > >
-> > > > > > > It does what you want, the argument order is the same as
-> > > > > > > container_of with the only difference being you name the
-> > > > > > > containing structure instead of having to specify its type.
-> > > > > >
-> > > > > > Not to incessantly bike shed on the naming, but I don't like
-> > > > > > cast_out, it's not very descriptive. And it has connotations of
-> > > > > > getting rid of something, which isn't really true.
-> > > > >
-> > > > > Um, I thought it was exactly descriptive: you're casting to the
-> > > > > outer container.  I thought about following the C++ dynamic casting
-> > > > > style, so out_cast(), but that seemed a bit pejorative.  What about
-> > > > > outer_cast()?
-> > > > >
-> > > > > > FWIW, I like the from_ part of the original naming, as it has
-> > > > > > some clues as to what is being done here. Why not just
-> > > > > > from_container()? That should immediately tell people what it
-> > > > > > does without having to look up the implementation, even before
-> > > > > > this becomes a part of the accepted coding norm.
-> > > > >
-> > > > > I'm not opposed to container_from() but it seems a little less
-> > > > > descriptive than outer_cast() but I don't really care.  I always
-> > > > > have to look up container_of() when I'm using it so this would just
-> > > > > be another macro of that type ...
-> > > > >
-> > > >
-> > > >  So far we have a few which have been suggested as replacement
-> > > > for from_tasklet()
-> > > >
-> > > > - out_cast() or outer_cast()
-> > > > - from_member().
-> > > > - container_from() or from_container()
-> > > >
-> > > > from_container() sounds fine, would trimming it a bit work? like
-> > > > from_cont().
-> > >
-> > > I'm fine with container_from().  It's the same form as container_of()
-> > > and I think we need urgent agreement to not stall everything else so
-> > > the most innocuous name is likely to get the widest acceptance.
-> > 
-> > Kees,
-> > 
-> >   Will you be  sending the newly proposed API to Linus? I have V2
-> > which uses container_from()
-> > ready to be sent out.
-> 
-> I liked that James swapped the first two arguments so that it matches
-> container_of().  Plus it's nice that when you have:
-> 
-> 	struct whatever *foo = container_from(ptr, foo, member);
-> 
-> Then it means that "ptr == &foo->member".
+We have direct users of some headers that are missed and
+have header included when forward declarations are enough.
 
-I'm a bit stalled right now -- the merge window was keeping me busy, and
-this week is the Linux Plumbers Conference. This is on my list, but I
-haven't gotten back around to it. If you want, feel free to send the
-container_from() patch; you might be able to unblock this faster than me
-right now. :)
+Update header block in pxa2xx_ssp.h to align with actual usage.
 
--Kees
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/pxa2xx_ssp.h | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
+diff --git a/include/linux/pxa2xx_ssp.h b/include/linux/pxa2xx_ssp.h
+index 6facf27865f9..f139e049e52e 100644
+--- a/include/linux/pxa2xx_ssp.h
++++ b/include/linux/pxa2xx_ssp.h
+@@ -16,10 +16,15 @@
+ #ifndef __LINUX_SSP_H
+ #define __LINUX_SSP_H
+ 
+-#include <linux/list.h>
++#include <linux/compiler_types.h>
+ #include <linux/io.h>
+-#include <linux/of.h>
++#include <linux/kconfig.h>
++#include <linux/list.h>
++#include <linux/types.h>
+ 
++struct clk;
++struct device;
++struct device_node;
+ 
+ /*
+  * SSP Serial Port Registers
 -- 
-Kees Cook
+2.28.0
+
