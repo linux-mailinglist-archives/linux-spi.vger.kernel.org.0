@@ -2,94 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0702B255797
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Aug 2020 11:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53220255BC5
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Aug 2020 15:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728788AbgH1J1p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Aug 2020 05:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728895AbgH1J1g (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Aug 2020 05:27:36 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F25C061233
-        for <linux-spi@vger.kernel.org>; Fri, 28 Aug 2020 02:27:35 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id j188so249631vsd.2
-        for <linux-spi@vger.kernel.org>; Fri, 28 Aug 2020 02:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=52zKqUSdV0qZVoQTtvFuZSla22zZLeCM10kF2S2vylo=;
-        b=L0FafcRxcvqheShftDUhSlbBJqAncc/ePSfPwPCIweprjftt5/BSgKy3BKAM1BIq8e
-         d30cYn4yCMozW389UnScIzZA25N7mV48wgStk8TiZdT1bD6uB962M94nBJaZKxYvo/Gy
-         HU7t/wY2ow3sRQ4AXXumJAONBgcaPrIKF0N0/HyR1NZiEGAeCCCp/6LL8hM7zHiVXksw
-         bQO8ZmKqH8g/4wh2kgPILpNVwbm1LvlKJLjLtafFlsn49lhNg0zke4FGIMadetI0OUW5
-         8HDZwmB0ef7yW3dz4nuGmLZrudcB6G5cqT0pOWgpJ+K/D7+LGf7Czf+JNZ77oJE6OQui
-         K13g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=52zKqUSdV0qZVoQTtvFuZSla22zZLeCM10kF2S2vylo=;
-        b=kqJTlcw0v4+p+ssPMUpeuRbCNitBTsl3LQwpXifhMKAvLFT623MikRLl++TGqETP6t
-         10GGUkBAW0139O/QVFIUGd7furpDKIQXxiKVLQr+tjg+ACeECrj8TTCo0hEl/d5kLQTQ
-         2gh/ZNTGDapOh8ewh8RAg0IxWEEK8KAzENAye//guIUC55wGzI9MAoUsb7yHTfOD3SLn
-         E4VZaugbA/lKy3JcyZQdoj5ogntiWt/GDDCEjKCeqSAx5VwlNsabql8kjsLi89FRgEb9
-         8yf+3rksSOH2QlbXbWyYZ8TTXR7go92Suyb393pjqMTlb2Yj6c74B7WD13T7gEekiWJ4
-         TJNQ==
-X-Gm-Message-State: AOAM530P2sVmjdUkeiLtd7E7S2/F0hLRj5ByL4/+qqQR6nIklWrqBpoV
-        1WGxex2sCu7B1+afee6RBAr3zmR2AC+F/931+/E9o1v1J37XW0RC
-X-Google-Smtp-Source: ABdhPJy/B7VHMvzvzbEi7QEAfxMZ4jV3nwJaVkTt3w6kaS4gxUPya72WKU4yOeFrkvQuSmkZLEUi4A5sE5rkYCX+fYk=
-X-Received: by 2002:a67:f8ce:: with SMTP id c14mr251691vsp.14.1598606854311;
- Fri, 28 Aug 2020 02:27:34 -0700 (PDT)
+        id S1726871AbgH1N7d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Aug 2020 09:59:33 -0400
+Received: from mga17.intel.com ([192.55.52.151]:6422 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725857AbgH1N6x (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 28 Aug 2020 09:58:53 -0400
+IronPort-SDR: 60n0EW5w2qDt46UfIrM8cOs/rVjpo1fDZw8iqmxPztrzauVoBl6sGnz/obB0JwnA0vjo4fCBMl
+ rmagkNpf7Q6Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="136728050"
+X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
+   d="scan'208";a="136728050"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 06:58:36 -0700
+IronPort-SDR: caX8ccmEMk+m59N5MlBLRR5sFrCPVHJGuEeD4JHaCtFsW0eb61Mc5K7a/OP9wfGh/uR1HFJ9GB
+ xd4GSN73qAgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
+   d="scan'208";a="337500883"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Aug 2020 06:58:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 914881B4; Fri, 28 Aug 2020 16:58:34 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] spi: dw: Replace dma_request_slave_channel() with dma_request_chan()
+Date:   Fri, 28 Aug 2020 16:58:18 +0300
+Message-Id: <20200828135818.2492-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20200714121856.955680-1-hch@lst.de> <20200714121856.955680-10-hch@lst.de>
- <20200828020045.GT3265@brightrain.aerifal.cx> <20200828021152.GU3265@brightrain.aerifal.cx>
- <20200828042422.GA29734@lst.de>
-In-Reply-To: <20200828042422.GA29734@lst.de>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 28 Aug 2020 11:26:57 +0200
-Message-ID: <CAPDyKFrKJrUN8mJ94g0+0Vs3aT1uq9MmHWfvzcVaoA5efaYPmQ@mail.gmail.com>
-Subject: Re: [PATCH 09/10] sh: don't allow non-coherent DMA for NOMMU
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 28 Aug 2020 at 06:24, Christoph Hellwig <hch@lst.de> wrote:
->
-> On Thu, Aug 27, 2020 at 10:11:53PM -0400, Rich Felker wrote:
-> > > This change broke SD card support on J2 because MMC_SPI spuriously
-> > > depends on HAS_DMA. It looks like it can be fixed just by removing
-> > > that dependency from drivers/mmc/host/Kconfig.
-> >
-> > It can't. mmp_spi_probe fails with ENOMEM, probably due to trying to
-> > do some DMA setup thing that's not going to be needed if the
-> > underlying SPI device doesn't support/use DMA.
->
-> Adding the linux-mmc and linux-spi lists, as that seems pretty odd.
+Drivers should use dma_request_chan() instead of dma_request_slave_channel().
 
-The mmc_spi driver needs modernizations, so I am not surprised to see
-odd things.
+dma_request_slave_channel() is a simple wrapper for dma_request_chan() eating
+up the error code for channel request failure and makes deferred probing
+impossible.
 
-My guess is that in ->probe() we check "if
-(spi->master->dev.parent->dma_mask)" - > and runs dma_map*()
-operations, which fails and leads to bailing out of ->probe() to
-return an error code.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-dw-dma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-However, by looking at the code, one get the feeling that the DMA
-support is somewhat prepared to be made optional. I guess it has never
-been really tested, as the Kconfig option has "depends on HAS_DMA"  -
-and it's been like that as long as I can remember.
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index bb390ff67d1d..afc2f11a3473 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -107,11 +107,11 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+ 
+ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ {
+-	dws->rxchan = dma_request_slave_channel(dev, "rx");
++	dws->rxchan = dma_request_chan(dev, "rx");
+ 	if (!dws->rxchan)
+ 		return -ENODEV;
+ 
+-	dws->txchan = dma_request_slave_channel(dev, "tx");
++	dws->txchan = dma_request_chan(dev, "tx");
+ 	if (!dws->txchan) {
+ 		dma_release_channel(dws->rxchan);
+ 		dws->rxchan = NULL;
+-- 
+2.28.0
 
-Kind regards
-Uffe
