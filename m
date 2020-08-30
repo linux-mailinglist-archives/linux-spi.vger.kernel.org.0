@@ -2,93 +2,345 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF31256D05
-	for <lists+linux-spi@lfdr.de>; Sun, 30 Aug 2020 11:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB43256DA6
+	for <lists+linux-spi@lfdr.de>; Sun, 30 Aug 2020 14:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbgH3JLr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 30 Aug 2020 05:11:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60982 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725869AbgH3JLq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 30 Aug 2020 05:11:46 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E151207BB;
-        Sun, 30 Aug 2020 09:11:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598778705;
-        bh=BWklOV6bppJJ3A+SKZXddiVUDib6q31F3dsVGTSMtbw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ai0UuHTnZlo4wf/I5Ov08/TrKTmcZtSZYe3sSmtFPMekal3JdcbUjzjqFbnUO+Xal
-         3yu7jLxoRUMmC3+CDPYPEQ3UI5NZnEfFVp9S1Y2s6awOmfdpwE/crUJIFWSu1iADuB
-         /HLt1Sk8k3z7Ye5JS2yTFeHHb/XaDjL5nXdJ7wQA=
-Date:   Sun, 30 Aug 2020 11:11:42 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Alex Dewar <alex.dewar90@gmail.com>,
-        York Sun <york.sun@nxp.com>, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Maxim Levitsky <maximlevitsky@gmail.com>,
-        Alex Dubov <oakad@yahoo.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Douglas Miller <dougmill@linux.ibm.com>,
-        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mark Brown <broonie@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Pete Zaitcev <zaitcev@redhat.com>, linux-edac@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-i3c@lists.infradead.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: sysfs output without newlines
-Message-ID: <20200830091142.GC112265@kroah.com>
-References: <0f837bfb394ac632241eaac3e349b2ba806bce09.camel@perches.com>
+        id S1728841AbgH3Mab (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 30 Aug 2020 08:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728609AbgH3MaZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 30 Aug 2020 08:30:25 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7916C061573;
+        Sun, 30 Aug 2020 05:30:25 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id w7so1586330pfi.4;
+        Sun, 30 Aug 2020 05:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=wr+aMjl/f4SRAIcJGA2olzHtyOUl4t3n3AY3xOhGXT8=;
+        b=LYZMw5jJx43voTzxQZNB46UXHfs3AT2iaYFzSmgMc+XQ5TPm6AqpQrYoB5LmK+Gl8D
+         nvObhSuHNsqEHSG5BnpYvaVHqP1kyncpb/U6y2HRBh548AdOAj/2U4qMbpQUWD9fMysE
+         M+7kh3GnAYeLOWj+YpkXMdAuy2nk/z2rzd/JCfqU5iki7EiXu6yZq0CKEP5fAZQ230pY
+         4LbQaKj41lvj2L9CXEm9UlT1zqDnA9QdGD4joF+Pj3QhKc15AC7131vHS2mPrnNvpcmx
+         YFOT9JwLvfjiF4axHmZgLN8YG2GHXvl+8t18kHpBrCGB6QjQySbn0JVXtYXctubKEPQU
+         cbCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=wr+aMjl/f4SRAIcJGA2olzHtyOUl4t3n3AY3xOhGXT8=;
+        b=c8+0H7G0c8ijhxhvzOxNC486ImWYfa4jmMAzsdLUX3wmuCCqDO/L6gvEppEj1GOJTZ
+         A7cmmqMszKgh7+XtONM203sAlUuy9fvsUXjABW9PAu/s80lUDb1e2zuiCHQaSim9yFov
+         +RpT3FISL/KU6+fO1/EoIj+ZUQvqkKEniT6rOH0EBIGuBtl9IhlyZjKanyAJiWgMqYQH
+         b0s3JZsQcdijkABSnISuGxX7vscE/njBb+OtmJkobvrefqElif7vBecVNI991BXbJIPz
+         RYBXOtyLBIplmT2UZuxujltASA9h+c5m90jZpd7SLCXeUtWRE6BYFuLn++I/AV6o5PmW
+         3W2w==
+X-Gm-Message-State: AOAM532eAionjQOm1p2MFHs/8rVGHYFg2NEKOD6mTRmdNb+1qVe+vn+L
+        tG1GxINo5tTw1cHci/Il/hU=
+X-Google-Smtp-Source: ABdhPJxweF7i7A6Y8no69oSI9kD8wvKIuTrHyTswEPJbVRyxm8LZRzmtvrzbvlXT0+XEE8trHrPALg==
+X-Received: by 2002:a63:ba49:: with SMTP id l9mr5195008pgu.101.1598790624880;
+        Sun, 30 Aug 2020 05:30:24 -0700 (PDT)
+Received: from localhost ([203.185.249.227])
+        by smtp.gmail.com with ESMTPSA id x187sm4967105pfc.121.2020.08.30.05.30.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Aug 2020 05:30:24 -0700 (PDT)
+Date:   Sun, 30 Aug 2020 22:30:18 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: fsl_espi errors on v5.7.15
+To:     "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "paulus@samba.org" <paulus@samba.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+References: <42107721-614b-96e8-68d9-4b888206562e@alliedtelesis.co.nz>
+        <1020029e-4cb9-62ba-c6d6-e6b9bdf93aac@gmail.com>
+        <1598510348.1g7wt0s02s.astroid@bobo.none>
+        <0068446e-06f8-6648-2f40-56f324c1ee6e@alliedtelesis.co.nz>
+In-Reply-To: <0068446e-06f8-6648-2f40-56f324c1ee6e@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f837bfb394ac632241eaac3e349b2ba806bce09.camel@perches.com>
+Message-Id: <1598788275.m90vz24p6x.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Aug 29, 2020 at 11:23:43AM -0700, Joe Perches wrote:
-> While doing an investigation for a possible treewide conversion of
-> sysfs output using sprintf/snprintf/scnprintf, I discovered
-> several instances of sysfs output without terminating newlines.
-> 
-> It seems likely all of these should have newline terminations
-> or have the \n\r termination changed to a single newline.
-> 
-> Anyone have any objection to patches adding newlines to these
-> in their original forms using sprintf/snprintf/scnprintf?
+Excerpts from Chris Packham's message of August 28, 2020 8:07 am:
+> On 27/08/20 7:12 pm, Nicholas Piggin wrote:
+>> Excerpts from Heiner Kallweit's message of August 26, 2020 4:38 pm:
+>>> On 26.08.2020 08:07, Chris Packham wrote:
+>>>> On 26/08/20 1:48 pm, Chris Packham wrote:
+>>>>> On 26/08/20 10:22 am, Chris Packham wrote:
+>>>>>> On 25/08/20 7:22 pm, Heiner Kallweit wrote:
+>>>>>>
+>>>>>> <snip>
+>>>>>>> I've been staring at spi-fsl-espi.c for while now and I think I've
+>>>>>>>> identified a couple of deficiencies that may or may not be related
+>>>>>>>> to my
+>>>>>>>> issue.
+>>>>>>>>
+>>>>>>>> First I think the 'Transfer done but SPIE_DON isn't set' message
+>>>>>>>> can be
+>>>>>>>> generated spuriously. In fsl_espi_irq() we read the ESPI_SPIE
+>>>>>>>> register.
+>>>>>>>> We also write back to it to clear the current events. We re-read i=
+t in
+>>>>>>>> fsl_espi_cpu_irq() and complain when SPIE_DON is not set. But we c=
+an
+>>>>>>>> naturally end up in that situation if we're doing a large read.
+>>>>>>>> Consider
+>>>>>>>> the messages for reading a block of data from a spi-nor chip
+>>>>>>>>
+>>>>>>>>  =C2=A0 =C2=A0tx =3D READ_OP + ADDR
+>>>>>>>>  =C2=A0 =C2=A0rx =3D data
+>>>>>>>>
+>>>>>>>> We setup the transfer and pump out the tx_buf. The first interrupt
+>>>>>>>> goes
+>>>>>>>> off and ESPI_SPIE has SPIM_DON and SPIM_RXT set. We empty the rx f=
+ifo,
+>>>>>>>> clear ESPI_SPIE and wait for the next interrupt. The next interrup=
+t
+>>>>>>>> fires and this time we have ESPI_SPIE with just SPIM_RXT set. This
+>>>>>>>> continues until we've received all the data and we finish with
+>>>>>>>> ESPI_SPIE
+>>>>>>>> having only SPIM_RXT set. When we re-read it we complain that SPIE=
+_DON
+>>>>>>>> isn't set.
+>>>>>>>>
+>>>>>>>> The other deficiency is that we only get an interrupt when the
+>>>>>>>> amount of
+>>>>>>>> data in the rx fifo is above FSL_ESPI_RXTHR. If there are fewer th=
+an
+>>>>>>>> FSL_ESPI_RXTHR left to be received we will never pull them out of
+>>>>>>>> the fifo.
+>>>>>>>>
+>>>>>>> SPIM_DON will trigger an interrupt once the last characters have be=
+en
+>>>>>>> transferred, and read the remaining characters from the FIFO.
+>>>>>> The T2080RM that I have says the following about the DON bit
+>>>>>>
+>>>>>> "Last character was transmitted. The last character was transmitted
+>>>>>> and a new command can be written for the next frame."
+>>>>>>
+>>>>>> That does at least seem to fit with my assertion that it's all about
+>>>>>> the TX direction. But the fact that it doesn't happen all the time
+>>>>>> throws some doubt on it.
+>>>>>>
+>>>>>>> I think the reason I'm seeing some variability is because of how fa=
+st
+>>>>>>>> (or slow) the interrupts get processed and how fast the spi-nor
+>>>>>>>> chip can
+>>>>>>>> fill the CPUs rx fifo.
+>>>>>>>>
+>>>>>>> To rule out timing issues at high bus frequencies I initially asked
+>>>>>>> for re-testing at lower frequencies. If you e.g. limit the bus to 1=
+ MHz
+>>>>>>> or even less, then timing shouldn't be an issue.
+>>>>>> Yes I've currently got spi-max-frequency =3D <1000000>; in my dts. I
+>>>>>> would also expect a slower frequency would fit my "DON is for TX"
+>>>>>> narrative.
+>>>>>>> Last relevant functional changes have been done almost 4 years ago.
+>>>>>>> And yours is the first such report I see. So question is what could
+>>>>>>> be so
+>>>>>>> special with your setup that it seems you're the only one being
+>>>>>>> affected.
+>>>>>>> The scenarios you describe are standard, therefore much more people
+>>>>>>> should be affected in case of a driver bug.
+>>>>>> Agreed. But even on my hardware (which may have a latent issue
+>>>>>> despite being in the field for going on 5 years) the issue only
+>>>>>> triggers under some fairly specific circumstances.
+>>>>>>> You said that kernel config impacts how frequently the issue happen=
+s.
+>>>>>>> Therefore question is what's the diff in kernel config, and how cou=
+ld
+>>>>>>> the differences be related to SPI.
+>>>>>> It did seem to be somewhat random. Things like CONFIG_PREEMPT have a=
+n
+>>>>>> impact but every time I found something that seemed to be having an
+>>>>>> impact I've been able to disprove it. I actually think its about how
+>>>>>> busy the system is which may or may not affect when we get round to
+>>>>>> processing the interrupts.
+>>>>>>
+>>>>>> I have managed to get the 'Transfer done but SPIE_DON isn't set!' to
+>>>>>> occur on the T2080RDB.
+>>>>>>
+>>>>>> I've had to add the following to expose the environment as a mtd
+>>>>>> partition
+>>>>>>
+>>>>>> diff --git a/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
+>>>>>> b/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
+>>>>>> index ff87e67c70da..fbf95fc1fd68 100644
+>>>>>> --- a/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
+>>>>>> +++ b/arch/powerpc/boot/dts/fsl/t208xrdb.dtsi
+>>>>>> @@ -116,6 +116,15 @@ flash@0 {
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "micron,n25q51=
+2ax3",
+>>>>>> "jedec,spi-nor";
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0>;
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi-max-frequency =3D <100000=
+00>; /*
+>>>>>> input clock */
+>>>>>> +
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 partition@u-boot {
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 reg =3D <0x00000000 0x00100000>;
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 label =3D "u-boot";
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 partition@u-boot-env {
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 reg =3D <0x00100000 0x00010000>;
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 label =3D "u-boot-env";
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>>>>>
+>>>>>> And I'm using the following script to poke at the environment
+>>>>>> (warning if anyone does try this and the bug hits it can render your
+>>>>>> u-boot environment invalid).
+>>>>>>
+>>>>>> cat flash/fw_env_test.sh
+>>>>>> #!/bin/sh
+>>>>>>
+>>>>>> generate_fw_env_config()
+>>>>>> {
+>>>>>>  =C2=A0 cat /proc/mtd | sed 's/[:"]//g' | while read dev size erases=
+ize
+>>>>>> name ; do
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0 echo "$dev $size $erasesize $name"
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0 [ "$name" =3D "u-boot-env" ] && echo "/dev=
+/$dev 0x0000 0x2000
+>>>>>> $erasesize" >/flash/fw_env.config
+>>>>>>  =C2=A0 done
+>>>>>> }
+>>>>>>
+>>>>>> cycles=3D10
+>>>>>> [ $# -ge 1 ] && cycles=3D$1
+>>>>>>
+>>>>>> generate_fw_env_config
+>>>>>>
+>>>>>> fw_printenv -c /flash/fw_env.config
+>>>>>>
+>>>>>> dmesg -c >/dev/null
+>>>>>> x=3D0
+>>>>>> while [ $x -lt $cycles ]; do
+>>>>>>  =C2=A0=C2=A0=C2=A0 fw_printenv -c /flash/fw_env.config >/dev/null |=
+| break
+>>>>>>  =C2=A0=C2=A0=C2=A0 fw_setenv -c /flash/fw_env.config foo $RANDOM ||=
+ break;
+>>>>>>  =C2=A0=C2=A0=C2=A0 dmesg -c | grep -q fsl_espi && break;
+>>>>>>  =C2=A0=C2=A0=C2=A0 let x=3Dx+1
+>>>>>> done
+>>>>>>
+>>>>>> echo "Ran $x cycles"
+>>>>> I've also now seen the RX FIFO not empty error on the T2080RDB
+>>>>>
+>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
+>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
+>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
+>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
+>>>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
+>>>>> fsl_espi ffe110000.spi: SPIE_RXCNT =3D 1, SPIE_TXCNT =3D 32
+>>>>>
+>>>>> With my current workaround of emptying the RX FIFO. It seems
+>>>>> survivable. Interestingly it only ever seems to be 1 extra byte in th=
+e
+>>>>> RX FIFO and it seems to be after either a READ_SR or a READ_FSR.
+>>>>>
+>>>>> fsl_espi ffe110000.spi: tx 70
+>>>>> fsl_espi ffe110000.spi: rx 03
+>>>>> fsl_espi ffe110000.spi: Extra RX 00
+>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
+>>>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
+>>>>> fsl_espi ffe110000.spi: SPIE_RXCNT =3D 1, SPIE_TXCNT =3D 32
+>>>>> fsl_espi ffe110000.spi: tx 05
+>>>>> fsl_espi ffe110000.spi: rx 00
+>>>>> fsl_espi ffe110000.spi: Extra RX 03
+>>>>> fsl_espi ffe110000.spi: Transfer done but SPIE_DON isn't set!
+>>>>> fsl_espi ffe110000.spi: Transfer done but rx/tx fifo's aren't empty!
+>>>>> fsl_espi ffe110000.spi: SPIE_RXCNT =3D 1, SPIE_TXCNT =3D 32
+>>>>> fsl_espi ffe110000.spi: tx 05
+>>>>> fsl_espi ffe110000.spi: rx 00
+>>>>> fsl_espi ffe110000.spi: Extra RX 03
+>>>>>
+>>>>>  From all the Micron SPI-NOR datasheets I've got access to it is
+>>>>> possible to continually read the SR/FSR. But I've no idea why it
+>>>>> happens some times and not others.
+>>>> So I think I've got a reproduction and I think I've bisected the probl=
+em
+>>>> to commit 3282a3da25bd ("powerpc/64: Implement soft interrupt replay i=
+n
+>>>> C"). My day is just finishing now so I haven't applied too much scruti=
+ny
+>>>> to this result. Given the various rabbit holes I've been down on this
+>>>> issue already I'd take this information with a good degree of skeptici=
+sm.
+>>>>
+>>> OK, so an easy test should be to re-test with a 5.4 kernel.
+>>> It doesn't have yet the change you're referring to, and the fsl-espi dr=
+iver
+>>> is basically the same as in 5.7 (just two small changes in 5.7).
+>> There's 6cc0c16d82f88 and maybe also other interrupt related patches
+>> around this time that could affect book E, so it's good if that exact
+>> patch is confirmed.
+>=20
+> My confirmation is basically that I can induce the issue in a 5.4 kernel=20
+> by cherry-picking 3282a3da25bd. I'm also able to "fix" the issue in=20
+> 5.9-rc2 by reverting that one commit.
+>=20
+> I both cases it's not exactly a clean cherry-pick/revert so I also=20
+> confirmed the bisection result by building at 3282a3da25bd (which sees=20
+> the issue) and the commit just before (which does not).
 
-No objection for me, patches for my subsystems will be gladly taken.
+Thanks for testing, that confirms it well.
 
-thanks,
+[snip patch]
 
-greg k-h
+> I still saw the issue with this change applied. PPC_IRQ_SOFT_MASK_DEBUG=20
+> didn't report anything (either with or without the change above).
+
+Okay, it was a bit of a shot in the dark. I still can't see what
+else has changed.
+
+What would cause this, a lost interrupt? A spurious interrupt? Or
+higher interrupt latency?
+
+I don't think the patch should cause significantly worse latency,
+(it's supposed to be a bit better if anything because it doesn't set
+up the full interrupt frame). But it's possible.
+
+Thanks,
+Nick
