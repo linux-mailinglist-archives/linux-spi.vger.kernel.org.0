@@ -2,126 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9C125782D
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Aug 2020 13:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC21257879
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Aug 2020 13:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgHaLVi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Aug 2020 07:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
+        id S1726292AbgHaLaV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Aug 2020 07:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726144AbgHaLR6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Aug 2020 07:17:58 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986DDC06123F
-        for <linux-spi@vger.kernel.org>; Mon, 31 Aug 2020 04:09:42 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id v15so415789pgh.6
-        for <linux-spi@vger.kernel.org>; Mon, 31 Aug 2020 04:09:42 -0700 (PDT)
+        with ESMTP id S1726654AbgHaL3l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Aug 2020 07:29:41 -0400
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0437C061239
+        for <linux-spi@vger.kernel.org>; Mon, 31 Aug 2020 04:29:27 -0700 (PDT)
+Received: by mail-vk1-xa41.google.com with SMTP id c25so1085119vkm.1
+        for <linux-spi@vger.kernel.org>; Mon, 31 Aug 2020 04:29:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=E02AUVeFQVT/Yby1TXwpBy6LjVsB+G1ulzMrGLTQLsU=;
-        b=FNd/akIMkL3eaopJcpGVw841qNXHifVpshOPHlo/uuzzMC1uIxR4rpF1cuEx20MJW8
-         zRU3b7IXYtOiWUHE2usegI5lqkz29pQSEe7lc2Zn6kFtFUMZkTsgPTu53uMWFebd0coM
-         iLMT0oFYlNnVymD+VsZPkcbeOQMjtAIsBp7DxOf1eo/wPc9H61/kybyugntRfQEZbv8D
-         gwC6Tj3nw1Cui3GshhMMxUmIqh6mQUDR4d6WK83d4fAnnl0g+V9RF79Hz/YfHby4mlw7
-         mR3PyKcjWV5VnHdjRO8FhwNUz77opdus4HEGeEpTBOw/d8C3bmxPjA6qWJWpAFad6iz7
-         g8gw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JIN710TFLeLsKqRRlGqyF1G56AtXFbXojtnB+ek7vjU=;
+        b=irsBQYiwNj1Qd8vMPMDZ4IELqeCiPeWMfkpBS3c2ZNz7mZFu5GH+I3B7C0OPEjwMVD
+         9jI1XXFeXGnU2b2vums9U5nwrWH6D0JR8+2oZUphySN+PnNxeueJzDWGnvYwt/oltfMD
+         22ZbWt8+LSAgrcF3KfEDBpLH3L3bqcmci89/GwhyaMurg6aJNkKIcnBmBAkNJinIQkY1
+         sd8lVRWhg89SyMdMugmmdByKiTxoWw4s11IaTQo1XbNMhUAko8qoNtgXLFhxi6gu+Sow
+         h1kW2Fb4raKYv6Gc7y/Bhtd4ewL/1azXQH6Gakmz1md2e2rsSKov/8PxpyaUZ9MImqDH
+         NVGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=E02AUVeFQVT/Yby1TXwpBy6LjVsB+G1ulzMrGLTQLsU=;
-        b=ajEuJ0BbqgDuS1rQy5r/ms67Y+y8xcteER1r0GeUAZ5Ncb2/pQtQLGv3KkWZmM90/Y
-         nS+6CkOBF8Jd8dsNIN6L+0oetP278Crh56q078pOp1T9n5UN4gbc2YYA+kkMMTTQpT+l
-         XCXYfGQim6vN/7ddTDxbgiS66MFLF3gd6Z8E2iolTHxlS1gtQdqaDFm5IeRR1uT5Pkgq
-         Ch8dDEIPeiERQZh54BBCKoonSQh0nb6E3Y3a54PXheL2HykvDoeQqDdp5Sj4NvhPJHu3
-         zCcBMBb8b9yU9r6/2tQHllzn7wzrbKhsns5GKPUHERsanfzhaJWyJ9ccEan29/xx11tv
-         OJKw==
-X-Gm-Message-State: AOAM531WnxRtIl9uXuMeataauxAwdWUyierAEzYV+gbt/gIrSs+BzDhy
-        Z5/Lg/ZoCVxl9Db9GLkcYbLmTQ==
-X-Google-Smtp-Source: ABdhPJzSBT56cUJvUmQ1jeDl1RjMGJiu46b0HYsbuCGKuS2QrgmD92t81oKVAXJFmHCb4EhXLUuNfg==
-X-Received: by 2002:aa7:9207:: with SMTP id 7mr819876pfo.156.1598872182053;
-        Mon, 31 Aug 2020 04:09:42 -0700 (PDT)
-Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id u16sm7495367pfn.134.2020.08.31.04.09.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Aug 2020 04:09:41 -0700 (PDT)
-Date:   Mon, 31 Aug 2020 16:39:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     rnayak@codeaurora.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Fabio Estevam <festevam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Qiang Yu <yuq825@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Clark <robdclark@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sean Paul <sean@poorly.run>, Shawn Guo <shawnguo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        lima@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH V2 0/8] opp: Unconditionally call
- dev_pm_opp_of_remove_table()
-Message-ID: <20200831110939.qnyugmhajkg36gzw@vireshk-i7>
-References: <cover.1598594714.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JIN710TFLeLsKqRRlGqyF1G56AtXFbXojtnB+ek7vjU=;
+        b=FQB/ndrjX3BFNYtnbKlcpWv9cOxYP/RHgPKP4N781AUhs7GN2uqmesKKBoIyP8XKdP
+         DviWXMl5BZS9CGtbeP53xEfUZY5e3uw6LY1DRnRRgmKSUK0xJqmPOVvvrXukNwyzf/WW
+         0fMrYrDYxniFBR4j0Ctb4jr+Tu5VraSHEVShmFWptojBGh1KyTEdnUX6tPBnQofk4S+k
+         sw340ih39yhJZEo7+JHeIOkDTZDLdSoha/2AuZfqtJNlO3CF+S6hWdVymXpU6OJABBts
+         uyRNSXs4oVTrBFDzhfW02pyyrYwN78xFPRUMJTuKb0rUFUo3mkp8YB92LmRHxX1m4R0L
+         y+Aw==
+X-Gm-Message-State: AOAM531mjCoIGmP5DoCcsxyOnT2Ra5sX5frTNafmGKox3rPAhVvujQ0M
+        NKrbZAWj1jsm8Txwy08kx5C+jyP4TRZCL66oh12T4g==
+X-Google-Smtp-Source: ABdhPJw4BM3EMv3eBn1ExCUI2PJJGFIfafdTX935b2p/ZrPMqqlhkRsSr+VDzuwhyidZqSRYvMBnWkwMt12C+fZFJyw=
+X-Received: by 2002:a1f:2a48:: with SMTP id q69mr458218vkq.69.1598873366828;
+ Mon, 31 Aug 2020 04:29:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1598594714.git.viresh.kumar@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200714121856.955680-1-hch@lst.de> <20200714121856.955680-10-hch@lst.de>
+ <20200828020045.GT3265@brightrain.aerifal.cx> <20200828021152.GU3265@brightrain.aerifal.cx>
+ <20200828042422.GA29734@lst.de> <CAPDyKFrKJrUN8mJ94g0+0Vs3aT1uq9MmHWfvzcVaoA5efaYPmQ@mail.gmail.com>
+ <20200828150942.GV3265@brightrain.aerifal.cx> <20200829083121.GA7851@lst.de>
+In-Reply-To: <20200829083121.GA7851@lst.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 31 Aug 2020 13:28:50 +0200
+Message-ID: <CAPDyKFpqd2n64=i5-45nJ=acbgS0AmOK0D2rtn-1bJj2HV9pnQ@mail.gmail.com>
+Subject: Re: [PATCH 09/10] sh: don't allow non-coherent DMA for NOMMU
+To:     Christoph Hellwig <hch@lst.de>, Rich Felker <dalias@libc.org>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 28-08-20, 11:37, Viresh Kumar wrote:
-> Hello,
-> 
-> This cleans up some of the user code around calls to
-> dev_pm_opp_of_remove_table().
-> 
-> All the patches can be picked by respective maintainers directly except
-> for the last patch, which needs the previous two to get merged first.
-> 
-> These are based for 5.9-rc1.
- 
-> Viresh Kumar (8):
->   cpufreq: imx6q: Unconditionally call dev_pm_opp_of_remove_table()
->   drm/lima: Unconditionally call dev_pm_opp_of_remove_table()
->   drm/msm: Unconditionally call dev_pm_opp_of_remove_table()
->   mmc: sdhci-msm: Unconditionally call dev_pm_opp_of_remove_table()
->   spi: spi-geni-qcom: Unconditionally call dev_pm_opp_of_remove_table()
->   spi: spi-qcom-qspi: Unconditionally call dev_pm_opp_of_remove_table()
->   tty: serial: qcom_geni_serial: Unconditionally call
->     dev_pm_opp_of_remove_table()
->   qcom-geni-se: remove has_opp_table
+On Sat, 29 Aug 2020 at 10:31, Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Fri, Aug 28, 2020 at 11:09:43AM -0400, Rich Felker wrote:
+> > > However, by looking at the code, one get the feeling that the DMA
+> > > support is somewhat prepared to be made optional. I guess it has never
+> > > been really tested, as the Kconfig option has "depends on HAS_DMA"  -
+> > > and it's been like that as long as I can remember.
+> >
+> > It always worked on our "byte-banged" SPI controller, with no DMA
+> > controller present, before Christoph's changes in this patch series,
+>
+> Before that nommu sh builds provided a DMA mapping implementation
+> that even worked for the streaming side (dma_map_*), but would corrupt
+> data if you used dma_alloc_coherent memory to communicate with the
+> device.
 
-During testing by some of the Linaro folks on linux-next, we found out
-that there was a bug in the OPP core (which makes the kernel crash in
-some corner cases with these patches) for which I have sent a fix
-today which should be part of 5.9-rc4:
+I see.
 
-https://lore.kernel.org/lkml/922ff0759a16299e24cacfc981ac07914d8f1826.1598865786.git.viresh.kumar@linaro.org/
+>
+> > and seems to be working now (although I have some other, hopefully
+> > unrelated regressions to debug) with #ifdef CONFIG_HAS_DMA around the
+> > if (spi->master->dev.parent->dma_mask) block in mmc_spi_probe. That's
+> > probably not the right fix though -- why isn't it checking
+> > host->dma_dev instead and only attempting DMA setup if dma_dev is
+> > non-null?
+>
+> I don't think dma_dev can be NULL right now.  dma_dev is assigned here:
+>
+>         if (spi->master->dev.parent->dma_mask) {
+>                 struct device   *dev = spi->master->dev.parent;
+>
+>                 host->dma_dev = dev;
+>
+> but for any OF or real bus device dma_mask never is zero (it actually is
+> a pointer), and the value of it also is initialized to 32-bit by default,
+> making this effectively an "if (1) {".  The driver needs some way to
+> communicate if a given device actually is DMA capable or not. Or is that
+> purely a factor of the platform which would be a little strange.
 
-Please apply the patches over rc4 only once it comes out (I will
-confirm by that time once the patch gets merged). Else you guys can
-provide your Ack and I can take the patches through OPP tree.
+Okay, thanks for clarifying things.
 
--- 
-viresh
+>
+> In which case we should do something like:
+>
+>
+> diff --git a/drivers/mmc/host/mmc_spi.c b/drivers/mmc/host/mmc_spi.c
+> index 39bb1e30c2d722..3b0cc9a70e6432 100644
+> --- a/drivers/mmc/host/mmc_spi.c
+> +++ b/drivers/mmc/host/mmc_spi.c
+> @@ -1374,7 +1374,7 @@ static int mmc_spi_probe(struct spi_device *spi)
+>         if (!host->data)
+>                 goto fail_nobuf1;
+>
+> -       if (spi->master->dev.parent->dma_mask) {
+> +       if (IS_ENABLED(CONFIG_HAS_DMA)) {
+
+I guess "#ifdef CONFIG_HAS_DMA", would work as well as CONFIG_HAS_DMA
+can't be "m".
+
+I would also suggest moving the DMA setup things into a separate
+function. Then when CONFIG_HAS_DMA is unset, we can use a stub.
+
+>                 struct device   *dev = spi->master->dev.parent;
+>
+>                 host->dma_dev = dev;
+
+Let me cook a patch that we can try.
+
+Kind regards
+Uffe
