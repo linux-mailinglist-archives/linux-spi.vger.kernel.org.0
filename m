@@ -2,166 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 783CF2574B5
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Aug 2020 09:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9C125782D
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Aug 2020 13:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728352AbgHaHw6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Aug 2020 03:52:58 -0400
-Received: from mail-eopbgr140050.outbound.protection.outlook.com ([40.107.14.50]:27033
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727844AbgHaHwm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 31 Aug 2020 03:52:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ehHMzt5WjanCjqIR9KoRfN5e1q8UGRdYlTDbLYugKpxCy4CYiwczQpsacP4c96t2Ubdj1CUsJm8ItX5FaJZeSzFTv7H4wxdOfjwRYknm/H8rYf664LRKUU2zV8d65KH/wD9PTqsC2Fc3u759Wv7w27jCsiq+Z3AOaq0NsZlsFngVAhhzuHkT39RUdOAzzj8X8BUBQtk9jfUdRhPtSyXZ7jeiGqUAUMmW+SJusQGj+kSFxaDNKXtGICCU1ru3UNARIECMcSv2fh9JchCRdHm+iGHr68nXOVoSeRHgB1h9Pn4ResgadT8eAZEpdIavTz3oUneArFT77ZoFIeCKZa0yNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LsjAevpr1iYIElTQ5w3YAoNPjTaoMSMAT5iDRdSZtzU=;
- b=fwOw6B6S1XQEfO8YkUl4WSpGLJAYTJ+0xVw46geNAA0RRej5z4rgUl68KDTj+vsjcd8yYCKn+bG8+6pdmNDx1XoNS4a6Mri1sllIVb5y+DDpX4XU0eXxmNP3RzzwQNlcFmRnzNeKqDBRxlGOEE//YlHJv1k0WHnbjaSk5Ls+ayTV9lWDqEmHyBoaaxsNpZGA3aOH7YgAuX5Lc4Uku+TAbpVgL/MHIp6W30xzmqqtfmVPpNC6Ib7r+FBjNbodQTKwVOPFdk0iBL80IMraMElZTvTRjzO8dS56pnXpAf153IQErHA0x26SlpysHfCedqMQw3mn5DTzV1KlHAW1mPZPGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LsjAevpr1iYIElTQ5w3YAoNPjTaoMSMAT5iDRdSZtzU=;
- b=kvs/V/OfsnQbAR9A01oUPIziikFos5BWkHokcX835axt3vXgGPcwDhEvYobmP0OtQR8eQ5kH/yHYb0OPPCVhrSDOxf19eG7qGqjtXVRRvqSxURCXknEd6iUO/KJ66Sac80rI10Quv+IxWajikbpuII1S16us8tEyngFJfXLgFB0=
-Authentication-Results: arm.com; dkim=none (message not signed)
- header.d=none;arm.com; dmarc=none action=none header.from=nxp.com;
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (2603:10a6:803:119::15)
- by VI1PR04MB5694.eurprd04.prod.outlook.com (2603:10a6:803:e0::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19; Mon, 31 Aug
- 2020 07:51:49 +0000
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::ad7f:d95a:5413:a950]) by VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::ad7f:d95a:5413:a950%3]) with mapi id 15.20.3326.025; Mon, 31 Aug 2020
- 07:51:49 +0000
-From:   Robin Gong <yibin.gong@nxp.com>
-To:     mark.rutland@arm.com, broonie@kernel.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, vkoul@kernel.org, will.deacon@arm.com,
-        shawnguo@kernel.org, festevam@gmail.com, s.hauer@pengutronix.de,
-        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
-        dan.j.williams@intel.com, matthias.schiffer@ew.tq-group.com,
-        frieder.schrempf@kontron.de, r.schwebel@pengutronix.de,
-        Benjamin.Bara@skidata.com, Richard.Leitner@skidata.com
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de, dmaengine@vger.kernel.org, linux-imx@nxp.com
-Subject: [PATCH v13 12/12] dmaengine: imx-sdma: add terminated list for freed descriptor in worker
-Date:   Tue,  1 Sep 2020 00:03:25 +0800
-Message-Id: <1598889805-30399-13-git-send-email-yibin.gong@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1598889805-30399-1-git-send-email-yibin.gong@nxp.com>
-References: <1598889805-30399-1-git-send-email-yibin.gong@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0104.apcprd02.prod.outlook.com
- (2603:1096:4:92::20) To VE1PR04MB6638.eurprd04.prod.outlook.com
- (2603:10a6:803:119::15)
+        id S1726654AbgHaLVi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Aug 2020 07:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgHaLR6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Aug 2020 07:17:58 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986DDC06123F
+        for <linux-spi@vger.kernel.org>; Mon, 31 Aug 2020 04:09:42 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id v15so415789pgh.6
+        for <linux-spi@vger.kernel.org>; Mon, 31 Aug 2020 04:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=E02AUVeFQVT/Yby1TXwpBy6LjVsB+G1ulzMrGLTQLsU=;
+        b=FNd/akIMkL3eaopJcpGVw841qNXHifVpshOPHlo/uuzzMC1uIxR4rpF1cuEx20MJW8
+         zRU3b7IXYtOiWUHE2usegI5lqkz29pQSEe7lc2Zn6kFtFUMZkTsgPTu53uMWFebd0coM
+         iLMT0oFYlNnVymD+VsZPkcbeOQMjtAIsBp7DxOf1eo/wPc9H61/kybyugntRfQEZbv8D
+         gwC6Tj3nw1Cui3GshhMMxUmIqh6mQUDR4d6WK83d4fAnnl0g+V9RF79Hz/YfHby4mlw7
+         mR3PyKcjWV5VnHdjRO8FhwNUz77opdus4HEGeEpTBOw/d8C3bmxPjA6qWJWpAFad6iz7
+         g8gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=E02AUVeFQVT/Yby1TXwpBy6LjVsB+G1ulzMrGLTQLsU=;
+        b=ajEuJ0BbqgDuS1rQy5r/ms67Y+y8xcteER1r0GeUAZ5Ncb2/pQtQLGv3KkWZmM90/Y
+         nS+6CkOBF8Jd8dsNIN6L+0oetP278Crh56q078pOp1T9n5UN4gbc2YYA+kkMMTTQpT+l
+         XCXYfGQim6vN/7ddTDxbgiS66MFLF3gd6Z8E2iolTHxlS1gtQdqaDFm5IeRR1uT5Pkgq
+         Ch8dDEIPeiERQZh54BBCKoonSQh0nb6E3Y3a54PXheL2HykvDoeQqDdp5Sj4NvhPJHu3
+         zCcBMBb8b9yU9r6/2tQHllzn7wzrbKhsns5GKPUHERsanfzhaJWyJ9ccEan29/xx11tv
+         OJKw==
+X-Gm-Message-State: AOAM531WnxRtIl9uXuMeataauxAwdWUyierAEzYV+gbt/gIrSs+BzDhy
+        Z5/Lg/ZoCVxl9Db9GLkcYbLmTQ==
+X-Google-Smtp-Source: ABdhPJzSBT56cUJvUmQ1jeDl1RjMGJiu46b0HYsbuCGKuS2QrgmD92t81oKVAXJFmHCb4EhXLUuNfg==
+X-Received: by 2002:aa7:9207:: with SMTP id 7mr819876pfo.156.1598872182053;
+        Mon, 31 Aug 2020 04:09:42 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id u16sm7495367pfn.134.2020.08.31.04.09.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 31 Aug 2020 04:09:41 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 16:39:39 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     rnayak@codeaurora.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Fabio Estevam <festevam@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Qiang Yu <yuq825@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Clark <robdclark@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Paul <sean@poorly.run>, Shawn Guo <shawnguo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        lima@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH V2 0/8] opp: Unconditionally call
+ dev_pm_opp_of_remove_table()
+Message-ID: <20200831110939.qnyugmhajkg36gzw@vireshk-i7>
+References: <cover.1598594714.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from robin-OptiPlex-790.ap.freescale.net (119.31.174.67) by SG2PR02CA0104.apcprd02.prod.outlook.com (2603:1096:4:92::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3326.20 via Frontend Transport; Mon, 31 Aug 2020 07:51:43 +0000
-X-Mailer: git-send-email 2.7.4
-X-Originating-IP: [119.31.174.67]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: adaeed96-9aeb-4452-bbca-08d84d82b795
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5694:
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR04MB5694FE09B1B5FF206A9A872C89510@VI1PR04MB5694.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o6ChJwAur8QXQvhl13MRCwfhTrONR+ywP0D7vUZvXeBHDpPjIIaBBuX6TA+L1maB5D4dnud9mhjV3bSh82JGITYTc106iTlJ72VrvcopOOB0pS7qTrlhcYbBz7zfd7HvAEDO0r+zSh2aYrcZXh4F85Snxjl8G19bKNCYGd/1GTHiUQxxYgpo4b4xWnyJ1xbA3szVhGE3ZB/cc/6q82sMD9qV8XMH5WmFyZI/Om9n/1AXnMn/ekNqyuIwz4IOfdfzoJX6zdw2IaM4Yq6cSIhiYyEQbUqat6o1N/j/s5uuBMs3UtpJlWXx8clyKivqsRa3RNcFchpqDmxpgoFLPPnWS2EqlcV/vKdVzJzDN63spJoNCciBegJlrB1Tf2NGrrxABSdMn36YjaQ+AEJBfhctxhcVca8VmdmvT61kIBO/9a3RDmaKeBl9E/tYa9fhSwv8JEOGuZYnHWVOOx2W2AOgqw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6638.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(346002)(376002)(39860400002)(136003)(8676002)(2616005)(2906002)(36756003)(8936002)(86362001)(5660300002)(956004)(316002)(26005)(6506007)(478600001)(6666004)(83380400001)(6486002)(7416002)(66476007)(66946007)(66556008)(4326008)(186003)(16526019)(966005)(6512007)(52116002)(921003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 1+ZqAqunm5qB0NJM/BPQBTk5Gvg1htuu1OluJOS9W0rnrvm+pQ5k67+rRx0ELQPDFJ6p7Z2GrgQcaceMDNN6dvlZwZt40fu6OAHhL2T63fEnseVHSaH2QSnblciM3tJtaz7bgOwEY3OZG+OPVrnVXVPeYa5x62IJg+DRDqcj62S4ret/zRVZyxVKunAPHn74IXYk9uIRl/qJspHbu1KvzH4LYNwtA3zT2gYxowFV6gCNmsmYlg31xJiF1Dq+Q6lOsIQiGKCx54Rj9sFiPri9DJe/L7/oR/7ZkU0bm+Q2bVcTR+JpTgn0fzebX1MeOh6vl5p132lAJ/fJ810tbW2I99eFNQOEf+EmOLQT7A50BR7g0kqlaJcB1uIpBbfUcR8Ofvpwdj5EEb6/d1fgREhTvG/WC5ZBvmPv44nHeFxhkjJTwnxaMqVlg6h0F/GUw6ZWOaUJDR+u5tLVelCbecsAOztMtdzrg/ppmWgFPEbXxwl5DjAimPFcPhzHr8hKBHCt/spQc7VqvWveAxD2DnPhSQs6oJ4flDVCZBiSAoqeXSILdVAPXBNlP/dphA6xaqyVc/sYFddb8qeYF/lVNYHzwh60UDOPsCetitl9r8xkCeUkV8DyfJ3KY6P8G+2dvkUiF1DFQJKggljb/2f8xxbNiQ==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: adaeed96-9aeb-4452-bbca-08d84d82b795
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6638.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2020 07:51:49.6804
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xFcnaYsfq+DCRL7/qC2/tBTOohst/Kzd95qHwHa1NyUW8fqs98b/oRVFE2ijCKCWsxDJ+fdf7qCH0d0wRIoXIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5694
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1598594714.git.viresh.kumar@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add terminated list for keeping descriptor so that it could be freed in
-worker without any potential involving next descriptor raised up before
-this descriptor freed, because vchan_get_all_descriptors get all
-descriptors including the last terminated descriptor and the next
-descriptor, hence, the next descriptor maybe freed unexpectly when it's
-done in worker without this patch.
-https://www.spinics.net/lists/dmaengine/msg23367.html
+On 28-08-20, 11:37, Viresh Kumar wrote:
+> Hello,
+> 
+> This cleans up some of the user code around calls to
+> dev_pm_opp_of_remove_table().
+> 
+> All the patches can be picked by respective maintainers directly except
+> for the last patch, which needs the previous two to get merged first.
+> 
+> These are based for 5.9-rc1.
+ 
+> Viresh Kumar (8):
+>   cpufreq: imx6q: Unconditionally call dev_pm_opp_of_remove_table()
+>   drm/lima: Unconditionally call dev_pm_opp_of_remove_table()
+>   drm/msm: Unconditionally call dev_pm_opp_of_remove_table()
+>   mmc: sdhci-msm: Unconditionally call dev_pm_opp_of_remove_table()
+>   spi: spi-geni-qcom: Unconditionally call dev_pm_opp_of_remove_table()
+>   spi: spi-qcom-qspi: Unconditionally call dev_pm_opp_of_remove_table()
+>   tty: serial: qcom_geni_serial: Unconditionally call
+>     dev_pm_opp_of_remove_table()
+>   qcom-geni-se: remove has_opp_table
 
-Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-Reported-by: Richard Leitner <richard.leitner@skidata.com>
----
- drivers/dma/imx-sdma.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+During testing by some of the Linaro folks on linux-next, we found out
+that there was a bug in the OPP core (which makes the kernel crash in
+some corner cases with these patches) for which I have sent a fix
+today which should be part of 5.9-rc4:
 
-diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-index 9bb6270..2fa8733 100644
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -381,6 +381,7 @@ struct sdma_channel {
- 	enum dma_status			status;
- 	struct imx_dma_data		data;
- 	struct work_struct		terminate_worker;
-+	struct list_head                terminated;
- 	bool				is_ram_script;
- };
- 
-@@ -1076,9 +1077,6 @@ static void sdma_channel_terminate_work(struct work_struct *work)
- {
- 	struct sdma_channel *sdmac = container_of(work, struct sdma_channel,
- 						  terminate_worker);
--	unsigned long flags;
--	LIST_HEAD(head);
--
- 	/*
- 	 * According to NXP R&D team a delay of one BD SDMA cost time
- 	 * (maximum is 1ms) should be added after disable of the channel
-@@ -1087,10 +1085,7 @@ static void sdma_channel_terminate_work(struct work_struct *work)
- 	 */
- 	usleep_range(1000, 2000);
- 
--	spin_lock_irqsave(&sdmac->vc.lock, flags);
--	vchan_get_all_descriptors(&sdmac->vc, &head);
--	spin_unlock_irqrestore(&sdmac->vc.lock, flags);
--	vchan_dma_desc_free_list(&sdmac->vc, &head);
-+	vchan_dma_desc_free_list(&sdmac->vc, &sdmac->terminated);
- }
- 
- static int sdma_terminate_all(struct dma_chan *chan)
-@@ -1104,6 +1099,13 @@ static int sdma_terminate_all(struct dma_chan *chan)
- 
- 	if (sdmac->desc) {
- 		vchan_terminate_vdesc(&sdmac->desc->vd);
-+		/*
-+		 * move out current descriptor into terminated list so that
-+		 * it could be free in sdma_channel_terminate_work alone
-+		 * later without potential involving next descriptor raised
-+		 * up before the last descriptor terminated.
-+		 */
-+		vchan_get_all_descriptors(&sdmac->vc, &sdmac->terminated);
- 		sdmac->desc = NULL;
- 		schedule_work(&sdmac->terminate_worker);
- 	}
-@@ -2124,6 +2126,7 @@ static int sdma_probe(struct platform_device *pdev)
- 
- 		sdmac->channel = i;
- 		sdmac->vc.desc_free = sdma_desc_free;
-+		INIT_LIST_HEAD(&sdmac->terminated);
- 		INIT_WORK(&sdmac->terminate_worker,
- 				sdma_channel_terminate_work);
- 		/*
+https://lore.kernel.org/lkml/922ff0759a16299e24cacfc981ac07914d8f1826.1598865786.git.viresh.kumar@linaro.org/
+
+Please apply the patches over rc4 only once it comes out (I will
+confirm by that time once the patch gets merged). Else you guys can
+provide your Ack and I can take the patches through OPP tree.
+
 -- 
-2.7.4
-
+viresh
