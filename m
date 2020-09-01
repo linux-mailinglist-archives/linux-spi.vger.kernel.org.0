@@ -2,41 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B73C625851C
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Sep 2020 03:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685852585CB
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Sep 2020 04:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbgIABZI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Aug 2020 21:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S1726078AbgIACws (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Aug 2020 22:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgIABZG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Aug 2020 21:25:06 -0400
+        with ESMTP id S1726020AbgIACwr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Aug 2020 22:52:47 -0400
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4E5C0613ED
-        for <linux-spi@vger.kernel.org>; Mon, 31 Aug 2020 18:25:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B4AC06136D
+        for <linux-spi@vger.kernel.org>; Mon, 31 Aug 2020 19:52:46 -0700 (PDT)
 Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 61AEF84487;
-        Tue,  1 Sep 2020 13:25:03 +1200 (NZST)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 92FDC84487;
+        Tue,  1 Sep 2020 14:52:41 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1598923503;
-        bh=+jlIR0yFHVUssNxas9cpoGDxlsd4nP3LGFJgftDmst0=;
+        s=mail181024; t=1598928761;
+        bh=IBimfJZQCB08AJq+/uVorBNTgj9Aivoa2Wj3Z5IFneY=;
         h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=IVWtnOf+D+9uAYKTM176ep4b1NiAjRQPXXOQ3HtWNgk7oqEILxwncvgXWqQVPzSV+
-         mUTLb8Z9i7UZOMJ3epa6WV0OqIe9xH3QU4FrI5ChzkMQOhMGnhWomu7vouWMFHf11o
-         5hWlQ+25uP2cY6nWvxnnFzsKHN8nMFPFivICai7uS6fIhgL8sn/DOCGJ0SuiSaVN9D
-         ZT0xBuw3l9ZjA0sEp1KjRZLCmPap/IIaLb+oX6zU3nVNSXm3HWze1jUbx2mckmVh8/
-         LYQdaE+op+DtdandJp9ATZMtrDlh3SFERWVtSg0vMh2I4fAqib658AVvU/yVCh688G
-         itZyY6jXLgSlw==
+        b=loFrE27k8NnMvfGUjpY3XfUiLeVdnTT9GCMEp4/Eg7gGEgCMdYZwuH7Q5f2QYJ1Jj
+         IXupymKpmCaMQukyqs4Qy2bHav8jdJKZk/goXiK6+WOw5MZaZ8kWXFAZay7wrdUz4B
+         VWgc+4jKVu2cM19zdoxQzS5zH/oLwd99F4r1ylNr6E+MEtMc9hxscR8zL5VkqGu7/e
+         ov0s1e2g4BEODtm0sP9sF1xnHppDmvO2MUb3mxFpaLvSYhk7btORRefOMSOXJMS6aW
+         oFUelBoZ7xKSNm3sjVS4V7pCeuIcwrhhTgGRnzC3eHkFXHPdC8mONB2igAvx0KgFBB
+         F0ruhm1Ei5wKg==
 Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f4da2f00001>; Tue, 01 Sep 2020 13:25:04 +1200
+        id <B5f4db77a0000>; Tue, 01 Sep 2020 14:52:42 +1200
 Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
  by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Sep 2020 13:25:03 +1200
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Sep 2020 14:52:38 +1200
 Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
  svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Tue, 1 Sep 2020 13:25:03 +1200
+ 15.00.1497.006; Tue, 1 Sep 2020 14:52:38 +1200
 From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
 To:     Heiner Kallweit <hkallweit1@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
@@ -49,9 +49,9 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
 Subject: Re: fsl_espi errors on v5.7.15
 Thread-Topic: fsl_espi errors on v5.7.15
-Thread-Index: AQHWceVnik7XsBYbp0S+yHVGh1hdQak2WMaAgAQdSwCAAz9MAIAAfdcAgAD5u4CAB+sMAIAAYfwAgAA6JQCAAPtUgIAAOXyAgABIbACAAAjRgIABm7wAgAD5+gCABBXPAIAAjqOAgAALRACAAAUXgIAA9CsAgADXoQA=
-Date:   Tue, 1 Sep 2020 01:25:02 +0000
-Message-ID: <39f36ad7-5dc5-f7ce-e2bc-1b59ff70e005@alliedtelesis.co.nz>
+Thread-Index: AQHWceVnik7XsBYbp0S+yHVGh1hdQak2WMaAgAQdSwCAAz9MAIAAfdcAgAD5u4CAB+sMAIAAYfwAgAA6JQCAAPtUgIAAOXyAgABIbACAAAjRgIABm7wAgAD5+gCABBXPAIAAjqOAgAALRACAAAUXgIAA9CsAgADwGYA=
+Date:   Tue, 1 Sep 2020 02:52:37 +0000
+Message-ID: <88a92234-450b-f559-d112-31d5c996c256@alliedtelesis.co.nz>
 References: <42107721-614b-96e8-68d9-4b888206562e@alliedtelesis.co.nz>
  <1020029e-4cb9-62ba-c6d6-e6b9bdf93aac@gmail.com>
  <1598510348.1g7wt0s02s.astroid@bobo.none>
@@ -70,7 +70,7 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-exchange-transport-fromentityheader: Hosted
 x-originating-ip: [10.32.1.11]
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <E9EA35C7C561544D81507B6F91F9A3C9@atlnz.lc>
+Content-ID: <3CF1724E6F0EB04EB17FB99A0315659F@atlnz.lc>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 Sender: linux-spi-owner@vger.kernel.org
@@ -194,20 +194,22 @@ eHRyYSBSWCAwMw0KPj4NCj4+DQo+PiBUaGUgcnggMDAgRXh0cmEgUlggMDMgaXMgYSBiaXQgY29u
 Y2VybmluZy4gSSd2ZSBvbmx5IGV2ZXIgc2VlbiB0aGVtIHdpdGgNCj4+IGVpdGhlciBhIFJFQURf
 U1Igb3IgYSBSRUFEX0ZTUi4gTmV2ZXIgYSBkYXRhIHJlYWQuDQo+Pg0KPiBKdXN0IHJlbWVtYmVy
 ZWQgc29tZXRoaW5nIGFib3V0IFNQSUVfRE9OOg0KPiBUcmFuc2ZlcnMgYXJlIGFsd2F5cyBmdWxs
-IGR1cGxleCwgdGhlcmVmb3JlIGluIGNhc2Ugb2YgYSByZWFkIHRoZSBjaGlwDQo+IHNlbmRzIGR1
-bW15IHplcm8ncy4gSGF2aW5nIHNhaWQgdGhhdCBpbiBjYXNlIG9mIGEgcmVhZCBTUElFX0RPTiBt
-ZWFucw0KPiB0aGF0IHRoZSBsYXN0IGR1bW15IHplcm8gd2FzIHNoaWZ0ZWQgb3V0Lg0KPg0KPiBS
-RUFEX1NSIGFuZCBSRUFEX0ZTUiBhcmUgdGhlIHNob3J0ZXN0IHRyYW5zZmVycywgMSBieXRlIG91
-dCBhbmQgMSBieXRlIGluLg0KPiBTbyB0aGUgaXNzdWUgbWF5IGhhdmUgYSBkZXBlbmRlbmN5IG9u
-IHRoZSBsZW5ndGggb2YgdGhlIHRyYW5zZmVyLg0KPiBIb3dldmVyIEkgc2VlIG5vIGdvb2QgZXhw
-bGFuYXRpb24gc28gZmFyLiBZb3UgY2FuIHRyeSBhZGRpbmcgYSBkZWxheSBvZg0KPiBhIGZldyBt
-aXJvc2Vjb25kcyBiZXR3ZWVuIHRoZSBmb2xsb3dpbmcgdG8gY29tbWFuZHMgaW4gZnNsX2VzcGlf
-YnVmcygpLg0KPg0KPiAJZnNsX2VzcGlfd3JpdGVfcmVnKGVzcGksIEVTUElfU1BJTSwgbWFzayk7
-DQo+DQo+IAkvKiBQcmV2ZW50IGZpbGxpbmcgdGhlIGZpZm8gZnJvbSBnZXR0aW5nIGludGVycnVw
-dGVkICovDQo+IAlzcGluX2xvY2tfaXJxKCZlc3BpLT5sb2NrKTsNCj4NCj4gTWF5YmUgZW5hYmxp
-bmcgaW50ZXJydXB0cyBhbmQgc2VlaW5nIHRoZSBTUElFX0RPTiBpbnRlcnJ1cHQgYXJlIHRvbyBj
-bG9zZS4NCkkgdGhpbmsgdGhpcyBtaWdodCBiZSBoZWFkaW5nIGluIHRoZSByaWdodCBkaXJlY3Rp
-b24uIFBsYXlpbmcgYWJvdXQgd2l0aCANCmEgZGVsYXkgZG9lcyBzZWVtIHRvIG1ha2UgdGhlIHR3
-byBzeW1wdG9tcyBsZXNzIGxpa2VseS4gQWx0aG91Z2ggSSBoYXZlIA0KdG8gc2V0IGl0IHF1aXRl
-IGhpZ2ggKGkuZS4gbXNsZWVwKDEwMCkpIHRvIGNvbXBsZXRlbHkgYXZvaWQgYW55IA0KcG9zc2li
-aWxpdHkgb2Ygc2VlaW5nIGVpdGhlciBtZXNzYWdlLg==
+IGR1cGxleCwNCg0KVGhhdCdzIG5vdCB0cnVlIGluIHJ4c2tpcCBtb2RlLiBTZXR0aW5nIHJ4c2tp
+cCBmb3JjZXMgdGhlIGVTUEkgaW50byANCmhhbGYtZHVwbGV4IG1vZGUuIFNvIGZhciBhbGwgdGhl
+IGluc3RhbmNlcyBvZiAiZXh0cmEiIHJ4IGJ5dGVzIGhhdmUgYmVlbiANCndoZW4gcnhza2lwID09
+IDEuDQoNCkkgdGhpbmsgdGhhdCBjb3VsZCBiZSB3aGVyZSBvdXIgZXhwZXJpZW5jZSB3aXRoIFNQ
+SUVfRE9OIGRpZmZlci4gSW4gDQpmdWxsLWR1cGxleCBtb2RlIHllcyBET04gaXMgYWx3YXlzIHNl
+dC4gSW4gaGFsZiBkdXBsZXggbW9kZSB3ZSBjYW4gZW5kIA0KdXAgd2l0aCBET04gc2V0IG9yIG5v
+dCBzZXQgZGVwZW5kaW5nIG9uIHRoZSBpbnRlcnJ1cHQgdGltaW5nLg0KDQo+IHRoZXJlZm9yZSBp
+biBjYXNlIG9mIGEgcmVhZCB0aGUgY2hpcA0KPiBzZW5kcyBkdW1teSB6ZXJvJ3MuIEhhdmluZyBz
+YWlkIHRoYXQgaW4gY2FzZSBvZiBhIHJlYWQgU1BJRV9ET04gbWVhbnMNCj4gdGhhdCB0aGUgbGFz
+dCBkdW1teSB6ZXJvIHdhcyBzaGlmdGVkIG91dC4NCj4NCj4gUkVBRF9TUiBhbmQgUkVBRF9GU1Ig
+YXJlIHRoZSBzaG9ydGVzdCB0cmFuc2ZlcnMsIDEgYnl0ZSBvdXQgYW5kIDEgYnl0ZSBpbi4NCj4g
+U28gdGhlIGlzc3VlIG1heSBoYXZlIGEgZGVwZW5kZW5jeSBvbiB0aGUgbGVuZ3RoIG9mIHRoZSB0
+cmFuc2Zlci4NCj4gSG93ZXZlciBJIHNlZSBubyBnb29kIGV4cGxhbmF0aW9uIHNvIGZhci4gWW91
+IGNhbiB0cnkgYWRkaW5nIGEgZGVsYXkgb2YNCj4gYSBmZXcgbWlyb3NlY29uZHMgYmV0d2VlbiB0
+aGUgZm9sbG93aW5nIHRvIGNvbW1hbmRzIGluIGZzbF9lc3BpX2J1ZnMoKS4NCj4NCj4gCWZzbF9l
+c3BpX3dyaXRlX3JlZyhlc3BpLCBFU1BJX1NQSU0sIG1hc2spOw0KPg0KPiAJLyogUHJldmVudCBm
+aWxsaW5nIHRoZSBmaWZvIGZyb20gZ2V0dGluZyBpbnRlcnJ1cHRlZCAqLw0KPiAJc3Bpbl9sb2Nr
+X2lycSgmZXNwaS0+bG9jayk7DQo+DQo+IE1heWJlIGVuYWJsaW5nIGludGVycnVwdHMgYW5kIHNl
+ZWluZyB0aGUgU1BJRV9ET04gaW50ZXJydXB0IGFyZSB0b28gY2xvc2Uu
