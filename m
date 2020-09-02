@@ -2,92 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61ED325A77C
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Sep 2020 10:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF95A25AC0E
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Sep 2020 15:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbgIBIOH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Sep 2020 04:14:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36546 "EHLO mail.kernel.org"
+        id S1726821AbgIBN3T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Sep 2020 09:29:19 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:2982 "EHLO smtp1.axis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgIBIOH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 2 Sep 2020 04:14:07 -0400
-Received: from [192.168.0.50] (89-70-52-201.dynamic.chello.pl [89.70.52.201])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29E232072A;
-        Wed,  2 Sep 2020 08:14:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599034446;
-        bh=5D9PpWt9bWuDNc203FjduFMM/5rtLKQAc3pFFPBSd7s=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=La76+VbBkCekCKyKhOMiO4ukzogPXQcPXmTsjW7CUn9XuTVaaKXRgbg3u/h5UPNUg
-         QDS9DQeALQK2dw8H2YN/NHsXzgeLwX5h5dOhachsvz6725rDAKReavMhrfX3f08oyk
-         /naVL0/Hw7IwW/K/aFlHGMDNDoaXa0wVYHhIJRQo=
-Subject: Re: [PATCH v2 6/9] spi: spi-s3c64xx: Check return values
-To:     Lukasz Stelmach <l.stelmach@samsung.com>
-Cc:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        m.szyprowski@samsung.com, b.zolnierkie@samsung.com
-References: <e7db038c-b8e6-8ddc-edc7-8b69c2019d04@kernel.org>
- <CGME20200901152113eucas1p2977046b7a5b4c5a519f88870d658698a@eucas1p2.samsung.com>
- <dleftjd035tteq.fsf%l.stelmach@samsung.com>
-From:   Sylwester Nawrocki <snawrocki@kernel.org>
-Message-ID: <fa403451-5f61-8edf-c696-2d020ec5b920@kernel.org>
-Date:   Wed, 2 Sep 2020 10:14:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726724AbgIBN2z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 2 Sep 2020 09:28:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; l=2096; q=dns/txt; s=axis-central1;
+  t=1599053334; x=1630589334;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AgdT9RyvsL1kMu2Pv2jpSFW1ZTFPH2ZXclfIA30Z60Y=;
+  b=d2PTxg1V9lYEarg8MYSKJMcJOU+Cok4SdbdwDBMMEZjkO8oMi5dXZUCJ
+   Ye7gZccacyTxzFwGI676L1xvSbYsGawEXzwGyb8CyfzMiPPPPY3Nn9tCA
+   Bp9T1ad5J4ZVUiduHbxX8Pc3QmmbKgW+4RTW1lPmqrfJ8LieVVgzrjXAL
+   JdEh2uCLg4aO+ACJ8maKqOyVBc1TAQouTV9aL6y9OG23pzuOsIeb17TGW
+   bS+vHgPrr6J4CijiFMjTdHgxMAQE60kq3afF6w9Sld2w/ZEgF2+0TaMZV
+   K+2ZbnuyXgZWPVk7f985KJ6p/w76esbkaGN3fIU3eo0B59ztOHty22I35
+   Q==;
+IronPort-SDR: xVA0Ecv2co77wx8zDWdXanLVFBUWn4ULzvpAmbOa/TC3EDsVdd1pzAXB3RXHSzZ98c+judpJZK
+ Xfa0lziKAwkmK8/OvcKLhDzMAYhf/2FPLIb8d7CGtGM6Xu31T57VNvRwsVU+N66hBucbI0Ooc1
+ nDlhoG3CdRFWu+oy/cg+/BCj8pyP/dEg5GqtjX7CGEJoDUZ3XyIIAyT5qELys/eO2WZRruuvsb
+ PKA6i7UF5s11ELEgfy9EtRpQKW4ZodwAmvhiPLNZxbHP+AwZH5TtgpTVKVWErzj6cPTe9cVk3+
+ jQg=
+X-IronPort-AV: E=Sophos;i="5.76,383,1592863200"; 
+   d="scan'208";a="12478310"
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <kernel@axis.com>, <linux-spi@vger.kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Subject: [PATCH] spi: spi-loopback-test: Fix out-of-bounds read
+Date:   Wed, 2 Sep 2020 15:23:41 +0200
+Message-ID: <20200902132341.7079-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <dleftjd035tteq.fsf%l.stelmach@samsung.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 9/1/20 17:21, Lukasz Stelmach wrote:
-> It was <2020-08-25 wto 21:06>, when Sylwester Nawrocki wrote:
->> On 8/21/20 18:13, Łukasz Stelmach wrote:
->>> Check return values in prepare_dma() and s3c64xx_spi_config() and
->>> propagate errors upwards.
->>>
->>> Signed-off-by: Łukasz Stelmach<l.stelmach@samsung.com>
->>> ---
->>>    drivers/spi/spi-s3c64xx.c | 47 ++++++++++++++++++++++++++++++++-------
->>>    1 file changed, 39 insertions(+), 8 deletions(-)
->>
->>> @@ -298,12 +299,24 @@ static void prepare_dma(struct s3c64xx_spi_dma_data *dma,
->>>      	desc = dmaengine_prep_slave_sg(dma->ch, sgt->sgl, sgt->nents,
->>>    				       dma->direction, DMA_PREP_INTERRUPT);
->>> +	if (!desc) {
->>> +		dev_err(&sdd->pdev->dev, "unable to prepare %s scatterlist",
->>> +			dma->direction == DMA_DEV_TO_MEM ? "rx" : "tx");
->>> +		return -ENOMEM;
->>> +	}
->>>      	desc->callback = s3c64xx_spi_dmacb;
->>>    	desc->callback_param = dma;
->>>      	dma->cookie = dmaengine_submit(desc);
->>> +	ret = dma_submit_error(dma->cookie);
->>> +	if (ret) {
->>> +		dev_err(&sdd->pdev->dev, "DMA submission failed");
->>> +		return -EIO;
->>
->> Just return the error value from dma_submit_error() here?
->>
-> 
-> --8<---------------cut here---------------start------------->8---
-> static inline int dma_submit_error(dma_cookie_t cookie)
-> {
->          return cookie < 0 ? cookie : 0;
-> 
-> }
-> --8<---------------cut here---------------end--------------->8---
-> 
-> Not quite meaningful IMHO, is it?
+The "tx/rx-transfer - crossing PAGE_SIZE" test always fails when
+len=131071 and rx_offset >= 5:
 
-dma_submit_error() returns 0 or an error code, I think it makes sense
-to propagate that error code rather than replacing it with -EIO.
+ spi-loopback-test spi0.0: Running test tx/rx-transfer - crossing PAGE_SIZE
+ ...
+   with iteration values: len = 131071, tx_off = 0, rx_off = 3
+   with iteration values: len = 131071, tx_off = 0, rx_off = 4
+   with iteration values: len = 131071, tx_off = 0, rx_off = 5
+ loopback strangeness - rx changed outside of allowed range at: ...a4321000
+   spi_msg@ffffffd5a4157690
+     frame_length:  131071
+     actual_length: 131071
+     spi_transfer@ffffffd5a41576f8
+       len:    131071
+       tx_buf: ffffffd5a4340ffc
+
+Note that rx_offset > 3 can only occur if the SPI controller driver sets
+->dma_alignment to a higher value than 4, so most SPI controller drivers
+are not affect.
+
+The allocated Rx buffer is of size SPI_TEST_MAX_SIZE_PLUS, which is 132
+KiB (assuming 4 KiB pages).  This test uses an initial offset into the
+rx_buf of PAGE_SIZE - 4, and a len of 131071, so the range expected to
+be written in this transfer ends at (4096 - 4) + 5 + 131071 == 132 KiB,
+which is also the end of the allocated buffer.  But the code which
+verifies the content of the buffer reads a byte beyond the allocated
+buffer and spuriously fails because this out-of-bounds read doesn't
+return the expected value.
+
+Fix this by using ITERATE_LEN instead of ITERATE_MAX_LEN to avoid
+testing sizes which cause out-of-bounds reads.
+
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/spi/spi-loopback-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
+index 9522d1b5786d..df981e55c24c 100644
+--- a/drivers/spi/spi-loopback-test.c
++++ b/drivers/spi/spi-loopback-test.c
+@@ -90,7 +90,7 @@ static struct spi_test spi_tests[] = {
+ 	{
+ 		.description	= "tx/rx-transfer - crossing PAGE_SIZE",
+ 		.fill_option	= FILL_COUNT_8,
+-		.iterate_len    = { ITERATE_MAX_LEN },
++		.iterate_len    = { ITERATE_LEN },
+ 		.iterate_tx_align = ITERATE_ALIGN,
+ 		.iterate_rx_align = ITERATE_ALIGN,
+ 		.transfer_count = 1,
+-- 
+2.28.0
+
