@@ -2,97 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B94A125C365
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Sep 2020 16:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C95225C2EF
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Sep 2020 16:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729245AbgICOvG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Sep 2020 10:51:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56616 "EHLO mail.kernel.org"
+        id S1729414AbgICOlL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Sep 2020 10:41:11 -0400
+Received: from mx1.tq-group.com ([62.157.118.193]:59778 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729234AbgICOP1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Sep 2020 10:15:27 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BB4D6206EB;
-        Thu,  3 Sep 2020 13:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599139402;
-        bh=uxrMI+2jcG7Rhw4PCRtsAWbNUWIO2z+gwQ/cr3AcOcg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P8ytrwH16XsbRuGogX7XR0cM8l3saDTV7V6rLJqztA3BTdEm8sKCVMgP9+guQw5oh
-         oX9mOY7DAMKky8hGQ1SKM2O4XgfH9OYRZknrqyBOiFB1S6jyiBp4KzSrTKAj5L+IxY
-         Km69Z3dSrT+aWrT+Mz5zDXcBLLs6dyRRrDBlQyfs=
-Date:   Thu, 3 Sep 2020 14:22:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+        id S1729406AbgICOk6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Sep 2020 10:40:58 -0400
+IronPort-SDR: tWkSgVr7tIYKC56ZI0vAC5S6vowOnHNZItcy5v/nmVsG5m55D0RE/PAU/7L4IXCqgFLBzgZusl
+ X0Hoca4espLj6q9/0IahoMH/DceBW+9qBKPkM62H3n6DxSbf+KHphVB9EtVdWNWzETWOILZwdL
+ KaW17BZH1NnfKT9XhyD+edGGCeiwqeWiXfJQ07FlXtJTrSasWFne3zz6z69bhHlrNtIRoHjN9m
+ S1kkgepTqbtfS2O0QmB+YyTB8fPa2LjZ65yQOKPms05CpDbrfLlmbhGZwP73ICRXz6N8BaXJUw
+ N3A=
+X-IronPort-AV: E=Sophos;i="5.76,387,1592863200"; 
+   d="scan'208";a="13722541"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 03 Sep 2020 16:40:55 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 03 Sep 2020 16:40:56 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 03 Sep 2020 16:40:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1599144055; x=1630680055;
+  h=from:to:cc:subject:date:message-id;
+  bh=HuVYZMdnTpuIAbGh0AO6RRdKYESqvMwuJdvjWZtOvjo=;
+  b=Do2UNsHQnUT/s8dV31uR/dqFZMJ0xeIqnnjx9XugtpgdbAo4c269TE2J
+   rEX080JtplHQK1JFnlsuWdnOnZkIGrm8I3kmrQb1Ks3dGncJ2RJ+ArM1P
+   ga5xXoBjC4erbzhpy0GJcDLCXJwNpq520V2FZRcDECKWj+ZVQHS9tui/z
+   Tzn9bVVOdxk3LF3nd3FnoDiOtTyBvoogM3/yu2FKs2t5+t5HBXeezk2dB
+   cdQkNbrOD1PUB/RuR9ZdHo24gDzwOD/DMzdUL+m5UIua88Wqr1eB4zX2I
+   HXwlYbvq9VMZsTVjfbnmANg7ov6llvVDjfPjlU97HkebzH2ZIRRuS8SS3
+   w==;
+IronPort-SDR: pPiXbxI+FQucBUSsBtjmOTxuJGtkJ19sEQBeNapq3BL3fx7uw5P/ny0rX1JV6Y3DiZHBPbi0Za
+ P35/aGAwImZUVYkaXU9xYpbOyddZIBghPduttFnEYEpgh+jpvzmnmwXIU6XGKXUGxmh8nQbGxS
+ x30kT87vBo33Ddhk8iX/UniQ1R3tCusCs2OCkUk1ipomAT7VxNsb99HkiOuyW2HHiQw7EUh8qx
+ ZcZnI8LVMME2YGdeU/R5R6xCUd7NgTV9swfnfw73/7xSMyxIAhfo+6JJbwwEDYReL+oSKkccvp
+ gYE=
+X-IronPort-AV: E=Sophos;i="5.76,387,1592863200"; 
+   d="scan'208";a="13722540"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 03 Sep 2020 16:40:55 +0200
+Received: from schifferm-ubuntu4.tq-net.de (unknown [10.117.49.26])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id BE6D5280065;
+        Thu,  3 Sep 2020 16:40:55 +0200 (CEST)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: spi-imx: correct interpretation of num-cs DT property?
-Message-ID: <20200903132241.GB4771@sirena.org.uk>
-References: <ecfa135b7b83a31bed821ec0740ab3cf1d39da15.camel@ew.tq-group.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ADZbWkCsHQ7r3kzd"
-Content-Disposition: inline
-In-Reply-To: <ecfa135b7b83a31bed821ec0740ab3cf1d39da15.camel@ew.tq-group.com>
-X-Cookie: Murphy was an optimist.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH] spi-imx: remove num-cs support, set num_chipselect to 4
+Date:   Thu,  3 Sep 2020 16:40:28 +0200
+Message-Id: <20200903144028.20416-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The num-cs property is not considered useful, and no in-tree Device
+Trees define it for spi-imx.
 
---ADZbWkCsHQ7r3kzd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The default value to be used when no cs-gpios are defined is set to 4 to
+give access to all native CS pins of modern i.MX SoCs (i.MX6 and newer).
 
-On Thu, Sep 03, 2020 at 11:22:20AM +0200, Matthias Schiffer wrote:
+In older SoCs, the number of CS pins varies (for example the i.MX27 has 3
+CS pins on CSPI1 and CSPI2, and only a single CS on CSPI3). Attempting
+to use the nonexisting CS pin would be an easy to notice DT
+misconfiguration; making the driver catch this doesn't seem worthwhile.
 
-> - If num-cs is set, use that
-> - If num-cs is unset, use the number of cs-gpios
-> - If num-cs is unset and no cs-gpios are defined, use a driver-provided=
-=20
-> default (which is 3 for spi-imx; this matches the number of native CS
-> pins in older implementations of this SPI controller; i.MX6 and newer
-> support up to 4)
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
+ drivers/spi/spi-imx.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-That sounds like what's expected, though we coould just skip the first
-step.
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 197f60632072..aece8482739b 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -1581,7 +1581,6 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 	const struct spi_imx_devtype_data *devtype_data = of_id ? of_id->data :
+ 		(struct spi_imx_devtype_data *)pdev->id_entry->driver_data;
+ 	bool slave_mode;
+-	u32 val;
+ 
+ 	slave_mode = devtype_data->has_slavemode &&
+ 			of_property_read_bool(np, "spi-slave");
+@@ -1605,6 +1604,7 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
+ 	master->bus_num = np ? -1 : pdev->id;
+ 	master->use_gpio_descriptors = true;
++	master->num_chipselect = 4;
+ 
+ 	spi_imx = spi_master_get_devdata(master);
+ 	spi_imx->bitbang.master = master;
+@@ -1613,17 +1613,6 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 
+ 	spi_imx->devtype_data = devtype_data;
+ 
+-	/*
+-	 * Get number of chip selects from device properties. This can be
+-	 * coming from device tree or boardfiles, if it is not defined,
+-	 * a default value of 3 chip selects will be used, as all the legacy
+-	 * board files have <= 3 chip selects.
+-	 */
+-	if (!device_property_read_u32(&pdev->dev, "num-cs", &val))
+-		master->num_chipselect = val;
+-	else
+-		master->num_chipselect = 3;
+-
+ 	spi_imx->bitbang.setup_transfer = spi_imx_setupxfer;
+ 	spi_imx->bitbang.txrx_bufs = spi_imx_transfer;
+ 	spi_imx->bitbang.master->setup = spi_imx_setup;
+-- 
+2.17.1
 
-> Also, would it make sense to add num-cs to all DTS files for boards
-> that actually use fewer than 3 CS pins?
-
-No, it was never a good idea to have that property in the first place
-and there should be no case where it helps anything.
-
-> At the moment, the num-cs property is not explicitly documented for the
-> spi-imx driver, although the driver understands it. I also suggested to
-> add this to the docs, which Fabio didn't deem a good idea (I don't
-> quite understand the reasoning here - isn't num-cs generally a useful
-> property to have?)
-
-Could you explain what benefit you would expect having num-cs to offer?
-
---ADZbWkCsHQ7r3kzd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9Q7iAACgkQJNaLcl1U
-h9DI4Qf+IFmOS7dEEhxYZrT/kDf0F1Z6Kj6qTImRT4ImOPc1hhlzs6e9o2HxAj95
-SfPAinxGHrl9ClrK2J8e4XG7xxu+UNfom6FGwma3oz0nhwPJ+kJx6LaQYDdEdCYc
-mgK3XD+n87gwKoS4DdbZxpFTdAE2XR+ngKlDJUdhYmlWxKgGZuWzJfw4ehTZlqbg
-Rvgr9CY+AT6mKFDq9dZS2AxFXpD5LLqOHj4XX25MjpWS9AdSjWuWyop24WbvF2nj
-YJqrMqto0ygGJdW94+ugGz2T+82EOI6Bm17NcpYzXHcSFT7d97GCC2kQbTQmIDql
-1sAVyODUHKz5reRHSSFsIebJiRJSjQ==
-=CrVc
------END PGP SIGNATURE-----
-
---ADZbWkCsHQ7r3kzd--
