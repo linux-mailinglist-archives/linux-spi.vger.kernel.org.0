@@ -2,125 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C95225C2EF
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Sep 2020 16:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EAD25C420
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Sep 2020 17:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729414AbgICOlL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Sep 2020 10:41:11 -0400
-Received: from mx1.tq-group.com ([62.157.118.193]:59778 "EHLO mx1.tq-group.com"
+        id S1729035AbgICPEI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Sep 2020 11:04:08 -0400
+Received: from mx1.tq-group.com ([62.157.118.193]:9827 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729406AbgICOk6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Sep 2020 10:40:58 -0400
-IronPort-SDR: tWkSgVr7tIYKC56ZI0vAC5S6vowOnHNZItcy5v/nmVsG5m55D0RE/PAU/7L4IXCqgFLBzgZusl
- X0Hoca4espLj6q9/0IahoMH/DceBW+9qBKPkM62H3n6DxSbf+KHphVB9EtVdWNWzETWOILZwdL
- KaW17BZH1NnfKT9XhyD+edGGCeiwqeWiXfJQ07FlXtJTrSasWFne3zz6z69bhHlrNtIRoHjN9m
- S1kkgepTqbtfS2O0QmB+YyTB8fPa2LjZ65yQOKPms05CpDbrfLlmbhGZwP73ICRXz6N8BaXJUw
- N3A=
-X-IronPort-AV: E=Sophos;i="5.76,387,1592863200"; 
-   d="scan'208";a="13722541"
+        id S1728924AbgICN6U (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Sep 2020 09:58:20 -0400
+IronPort-SDR: PwSSrpM7beoRNGtbZuYVQYarDacF81+BP6yekLAu15x7XInnZ+j5yvbR+RmcJR4SgQGfMy3QxF
+ +W1I13/hf7uv7PgjkRcXItnriXG56d2qnPNvuMDwP5TT2rKbRL87qo0YrJWVdCrbqnXg6xRfzf
+ doKCClYldLzMX+mQPBcJnZA6Dvz+zQ5Lr1GCrroAPKS8Mx4cGGhMgKw87yxskV3KabPuiYNNeU
+ HK/iHvecc8tGVcNFPfxJ45nNmcCZWPMtDaZYSvhFb43LTmeJBpaYKI6cYWI22gusuFIG8S9n+2
+ A1k=
+X-IronPort-AV: E=Sophos;i="5.76,386,1592863200"; 
+   d="scan'208";a="13721334"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 03 Sep 2020 16:40:55 +0200
+  by mx1-pgp.tq-group.com with ESMTP; 03 Sep 2020 15:40:44 +0200
 Received: from mx1.tq-group.com ([192.168.6.7])
   by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 03 Sep 2020 16:40:56 +0200
+  Thu, 03 Sep 2020 15:40:44 +0200
 X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 03 Sep 2020 16:40:56 +0200
+        by tq-pgp-pr1.tq-net.de on Thu, 03 Sep 2020 15:40:44 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1599144055; x=1630680055;
-  h=from:to:cc:subject:date:message-id;
-  bh=HuVYZMdnTpuIAbGh0AO6RRdKYESqvMwuJdvjWZtOvjo=;
-  b=Do2UNsHQnUT/s8dV31uR/dqFZMJ0xeIqnnjx9XugtpgdbAo4c269TE2J
-   rEX080JtplHQK1JFnlsuWdnOnZkIGrm8I3kmrQb1Ks3dGncJ2RJ+ArM1P
-   ga5xXoBjC4erbzhpy0GJcDLCXJwNpq520V2FZRcDECKWj+ZVQHS9tui/z
-   Tzn9bVVOdxk3LF3nd3FnoDiOtTyBvoogM3/yu2FKs2t5+t5HBXeezk2dB
-   cdQkNbrOD1PUB/RuR9ZdHo24gDzwOD/DMzdUL+m5UIua88Wqr1eB4zX2I
-   HXwlYbvq9VMZsTVjfbnmANg7ov6llvVDjfPjlU97HkebzH2ZIRRuS8SS3
-   w==;
-IronPort-SDR: pPiXbxI+FQucBUSsBtjmOTxuJGtkJ19sEQBeNapq3BL3fx7uw5P/ny0rX1JV6Y3DiZHBPbi0Za
- P35/aGAwImZUVYkaXU9xYpbOyddZIBghPduttFnEYEpgh+jpvzmnmwXIU6XGKXUGxmh8nQbGxS
- x30kT87vBo33Ddhk8iX/UniQ1R3tCusCs2OCkUk1ipomAT7VxNsb99HkiOuyW2HHiQw7EUh8qx
- ZcZnI8LVMME2YGdeU/R5R6xCUd7NgTV9swfnfw73/7xSMyxIAhfo+6JJbwwEDYReL+oSKkccvp
- gYE=
-X-IronPort-AV: E=Sophos;i="5.76,387,1592863200"; 
-   d="scan'208";a="13722540"
+  t=1599140444; x=1630676444;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PSRtsYjMIeQn6kkIpSqi/xNdAKBtKRUGER2IFcNijQk=;
+  b=N8JPB2+7SiBeJrScJn+KM0GUbsfIXmUgpzkMlhWMhmo/yN4YxwRQf3cI
+   HTBh2bWXK+2czsdjHkI4rSjEsXwlqaboxcmdup/N/drxkqC902yTb+js2
+   PzhqWK+fPzszJlEd0Wg6Q/zcY2gguuBaQxmEhVUJUyyT27Xe6fsWd5nu/
+   9NajEiQBmfnR/TSAaDJ020PyEaO5xl7rKZ8DkteUnsQBqF6Ic7ETDyavR
+   ZnFZwsOBGLjv2K17N+0YrJTYmf0gJTj828ci3wlmlHqctSn7GAKCwkZoT
+   Pkei9rNfLTeZ6hNJG2GAZEBNxq9lm/6C4hygxryfJbFqRpQykxDmuuwAo
+   Q==;
+IronPort-SDR: zDp6qokfh+UZ5a3ETjcvlv4kekHz7nAQLLDIdpowFcBTrgZGK7bVWsZawcpM6af3jkn2ZirSL+
+ xiYF4B0FjTeQEOaqUrbDsjYDlp5zzNTt8x6A2qaU9TbnTj+m+d4F507FtMUS8rYhkK0r0FcaZ2
+ 3R3juBoV0vLvMpOzGa/ATiyM1uMEndtaz8TpDz+FLFU2/ic8Szsk318uheKdvVFW6bqVK1t0m7
+ S++Z/We4I3MD7SRVT8cjBv34z3oZ3hm9NGMIgVKwU7J9voCKjrdHBBdawFMa00QeAu3dx5F4qY
+ xn8=
+X-IronPort-AV: E=Sophos;i="5.76,386,1592863200"; 
+   d="scan'208";a="13721333"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 03 Sep 2020 16:40:55 +0200
-Received: from schifferm-ubuntu4.tq-net.de (unknown [10.117.49.26])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id BE6D5280065;
-        Thu,  3 Sep 2020 16:40:55 +0200 (CEST)
+  by mx1.tq-group.com with ESMTP; 03 Sep 2020 15:40:43 +0200
+Received: from schifferm-ubuntu4 (unknown [10.117.49.26])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id C88BD280065;
+        Thu,  3 Sep 2020 15:40:43 +0200 (CEST)
+Message-ID: <ce08696b6bf2b3eaa84d6f056f47a8240c7479f4.camel@ew.tq-group.com>
+Subject: Re: spi-imx: correct interpretation of num-cs DT property?
 From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH] spi-imx: remove num-cs support, set num_chipselect to 4
-Date:   Thu,  3 Sep 2020 16:40:28 +0200
-Message-Id: <20200903144028.20416-1-matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.17.1
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 03 Sep 2020 15:40:43 +0200
+In-Reply-To: <20200903132241.GB4771@sirena.org.uk>
+References: <ecfa135b7b83a31bed821ec0740ab3cf1d39da15.camel@ew.tq-group.com>
+         <20200903132241.GB4771@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The num-cs property is not considered useful, and no in-tree Device
-Trees define it for spi-imx.
+On Thu, 2020-09-03 at 14:22 +0100, Mark Brown wrote:
+> * PGP Signed by an unknown key
+> 
+> On Thu, Sep 03, 2020 at 11:22:20AM +0200, Matthias Schiffer wrote:
+> 
+> > - If num-cs is set, use that
+> > - If num-cs is unset, use the number of cs-gpios
+> > - If num-cs is unset and no cs-gpios are defined, use a driver-
+> > provided 
+> > default (which is 3 for spi-imx; this matches the number of native
+> > CS
+> > pins in older implementations of this SPI controller; i.MX6 and
+> > newer
+> > support up to 4)
+> 
+> That sounds like what's expected, though we coould just skip the
+> first
+> step.
+> 
+> > Also, would it make sense to add num-cs to all DTS files for boards
+> > that actually use fewer than 3 CS pins?
+> 
+> No, it was never a good idea to have that property in the first place
+> and there should be no case where it helps anything.
 
-The default value to be used when no cs-gpios are defined is set to 4 to
-give access to all native CS pins of modern i.MX SoCs (i.MX6 and newer).
 
-In older SoCs, the number of CS pins varies (for example the i.MX27 has 3
-CS pins on CSPI1 and CSPI2, and only a single CS on CSPI3). Attempting
-to use the nonexisting CS pin would be an easy to notice DT
-misconfiguration; making the driver catch this doesn't seem worthwhile.
+Oh, thank you for the clarification.
 
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/spi/spi-imx.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+As currently no in-tree DTs use the num-cs property for spi-imx and
+it's not documented, should support for it be dropped from the driver
+altogether?
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 197f60632072..aece8482739b 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1581,7 +1581,6 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	const struct spi_imx_devtype_data *devtype_data = of_id ? of_id->data :
- 		(struct spi_imx_devtype_data *)pdev->id_entry->driver_data;
- 	bool slave_mode;
--	u32 val;
- 
- 	slave_mode = devtype_data->has_slavemode &&
- 			of_property_read_bool(np, "spi-slave");
-@@ -1605,6 +1604,7 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
- 	master->bus_num = np ? -1 : pdev->id;
- 	master->use_gpio_descriptors = true;
-+	master->num_chipselect = 4;
- 
- 	spi_imx = spi_master_get_devdata(master);
- 	spi_imx->bitbang.master = master;
-@@ -1613,17 +1613,6 @@ static int spi_imx_probe(struct platform_device *pdev)
- 
- 	spi_imx->devtype_data = devtype_data;
- 
--	/*
--	 * Get number of chip selects from device properties. This can be
--	 * coming from device tree or boardfiles, if it is not defined,
--	 * a default value of 3 chip selects will be used, as all the legacy
--	 * board files have <= 3 chip selects.
--	 */
--	if (!device_property_read_u32(&pdev->dev, "num-cs", &val))
--		master->num_chipselect = val;
--	else
--		master->num_chipselect = 3;
--
- 	spi_imx->bitbang.setup_transfer = spi_imx_setupxfer;
- 	spi_imx->bitbang.txrx_bufs = spi_imx_transfer;
- 	spi_imx->bitbang.master->setup = spi_imx_setup;
--- 
-2.17.1
+
+> 
+> > At the moment, the num-cs property is not explicitly documented for
+> > the
+> > spi-imx driver, although the driver understands it. I also
+> > suggested to
+> > add this to the docs, which Fabio didn't deem a good idea (I don't
+> > quite understand the reasoning here - isn't num-cs generally a
+> > useful
+> > property to have?)
+> 
+> Could you explain what benefit you would expect having num-cs to
+> offer?
+> 
+> * Unknown Key
+> * 0x5D5487D0
 
