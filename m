@@ -2,107 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4398D25CEC1
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Sep 2020 02:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8555A25D5AD
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Sep 2020 12:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728037AbgIDA2U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Sep 2020 20:28:20 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:42472 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726397AbgIDA2T (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Sep 2020 20:28:19 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 677E8806B5;
-        Fri,  4 Sep 2020 12:28:16 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1599179296;
-        bh=PeKvL5ah8tfQA9K2g0Ur26fGWX24dwpS7/gFm9K63hM=;
-        h=From:To:Cc:Subject:Date;
-        b=a6JRNAd7aob5eI2XZzkOFb5ZZ02HGxer81YI0ujs2yAULCbfguWR7cQ+CrLJSrC+J
-         VaVPBSsq46CnCoonOoIOCxz0vxfLGsIV49E5dVeBrVX9szyJ+6/dwUhc6FaBaCDlkE
-         BeEANfSYURAT+Q+XP1BcK8aFzg0WbS50GX26IpVG8U0/u90OPDKBQ8p5rR0PtaFS3z
-         z+yYp7LizkapHRnsXR3zqNx5YcRYE0qkqhlpD83pi9bs0w3rsu93n9aQ9d9nxPs7Lb
-         SRjslvAP5I0BA/5Vrj0P0YBgOMPbTO9YvOxnoSxeiTC43ROu9pKIqsw16zMU9KWRXe
-         a7h3Pf3onz31w==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f518a1e0000>; Fri, 04 Sep 2020 12:28:14 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id EB27A13EEBA;
-        Fri,  4 Sep 2020 12:28:15 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 2ABBB280060; Fri,  4 Sep 2020 12:28:16 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     broonie@kernel.org, npiggin@gmail.com, hkallweit1@gmail.com
-Cc:     linux-spi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        stable@vger.kernel.org
-Subject: [PATCH] spi: fsl-espi: Only process interrupts for expected events
-Date:   Fri,  4 Sep 2020 12:28:12 +1200
-Message-Id: <20200904002812.7300-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.28.0
+        id S1729942AbgIDKIJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Sep 2020 06:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728658AbgIDKIF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Sep 2020 06:08:05 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031F5C061245
+        for <linux-spi@vger.kernel.org>; Fri,  4 Sep 2020 03:08:04 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id h4so6548206ioe.5
+        for <linux-spi@vger.kernel.org>; Fri, 04 Sep 2020 03:08:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ZV60vz7OREPGMabTbmBzheGT/NljIP/4M+G9Nac3jAU=;
+        b=qsto0/v8W+MXIZ2PbWJviYD+E/93MfSNoCrKvED/jvBQ59+ZWunbSUWuDD9qpLhXZP
+         WU4wTTK2Nh9jeSnSpeHPOKTn61//shTOtcli7Rf7fhll4zS5K5rmwrD7sCZkMKRvcrWm
+         2lPcauNTYQT/EbBkcHrP64lrEQNlAcJSjVOkADQHEdPabxjDIRlVRo51TPlFm4RqTah3
+         bnmsiwW4tPWdqxlxAIy18eAyBj9x+VVAtme5TYEY91i687VH8YR5gJYF+3sV7GtSDP0i
+         s3BitYwcecV52qRbtTO8pq49Pb7cvBOjm9wGgo6iDXPak5MtAdmEGInfy3edXBFpkt54
+         ulDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=ZV60vz7OREPGMabTbmBzheGT/NljIP/4M+G9Nac3jAU=;
+        b=jYbQ8aajK4jTq0g+VdTIUsgW14rbKZ73PYnzYaRR20rBbPvj2be5n+MyvMoKXx980C
+         lh3fXFELsFV64fzBiNtCXsL/yidaMrg0y4y/Hksojjd26xw1LHLlBf6GpbjFDY+6iVHA
+         gNu95zboQ9IV1lrNcd5s0zN3yzCQwdSbzXZ1IWDHVpVsMZY7TqKR0sSk1rSgOsFakUti
+         av/4RhAFwSm3V2SW6fdGGi894Fj2IzEFpUddwGvpJW7G1/Jsof1obrxSfMEfD1Bs0MgI
+         y/rxFfz4G5Rtl6eoIwqMyaruYAGOMUO6PsO85yu2+yWtCsFD5eA947ftAcSiulH+w7yL
+         W80A==
+X-Gm-Message-State: AOAM5309P1a7PW6i9DL+1d5GMtcFtUQeyqpH/GBZPwzIEbfFFSxEMo1V
+        7e7pA68S9TPMbQ7JZ6kmeUD76+BWASAtfrFev3M=
+X-Google-Smtp-Source: ABdhPJzvlzN63gHN3fv2E5X/Sprr09klLLZl7nT2RFEVKsXKAdZbb6OzAUmJ/lhPtuVXePdWgzyWuA4/16sGyTkTjcE=
+X-Received: by 2002:a6b:da16:: with SMTP id x22mr6837093iob.33.1599214084089;
+ Fri, 04 Sep 2020 03:08:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Received: by 2002:a05:6638:1313:0:0:0:0 with HTTP; Fri, 4 Sep 2020 03:08:02
+ -0700 (PDT)
+Reply-To: robertandersonhappy1@gmail.com
+From:   robert <photakachi@gmail.com>
+Date:   Fri, 4 Sep 2020 03:08:02 -0700
+Message-ID: <CAKTgzwypcMVB5Gu3Udkz81nKyg+x=XDjHoZ=6jzdTS1W4V9rOA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The SPIE register contains counts for the TX FIFO so any time the irq
-handler was invoked we would attempt to process the RX/TX fifos. Use the
-SPIM value to mask the events so that we only process interrupts that
-were expected.
-
-This was a latent issue exposed by commit 3282a3da25bd ("powerpc/64:
-Implement soft interrupt replay in C").
-
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: stable@vger.kernel.org
----
-
-Notes:
-    I've tested this on a T2080RDB and a custom board using the T2081 SoC=
-. With
-    this change I don't see any spurious instances of the "Transfer done =
-but
-    SPIE_DON isn't set!" or "Transfer done but rx/tx fifo's aren't empty!=
-" messages
-    and the updates to spi flash are successful.
-   =20
-    I think this should go into the stable trees that contain 3282a3da25b=
-d but I
-    haven't added a Fixes: tag because I think 3282a3da25bd exposed the i=
-ssue as
-    opposed to causing it.
-
- drivers/spi/spi-fsl-espi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-fsl-espi.c b/drivers/spi/spi-fsl-espi.c
-index 7e7c92cafdbb..cb120b68c0e2 100644
---- a/drivers/spi/spi-fsl-espi.c
-+++ b/drivers/spi/spi-fsl-espi.c
-@@ -574,13 +574,14 @@ static void fsl_espi_cpu_irq(struct fsl_espi *espi,=
- u32 events)
- static irqreturn_t fsl_espi_irq(s32 irq, void *context_data)
- {
- 	struct fsl_espi *espi =3D context_data;
--	u32 events;
-+	u32 events, mask;
-=20
- 	spin_lock(&espi->lock);
-=20
- 	/* Get interrupt events(tx/rx) */
- 	events =3D fsl_espi_read_reg(espi, ESPI_SPIE);
--	if (!events) {
-+	mask =3D fsl_espi_read_reg(espi, ESPI_SPIM);
-+	if (!(events & mask)) {
- 		spin_unlock(&espi->lock);
- 		return IRQ_NONE;
- 	}
---=20
-2.28.0
-
+0JTQvtCx0YDQvtCz0L4g0LLRgNC10LzQtdC90Lgg0YHRg9GC0L7QuiDQvNC+0Lkg0YXQvtGA0L7R
+iNC40Lkg0LTRgNGD0LMuDQoNCtCa0LDQuiDRgyDRgtC10LHRjyDRgdC10LPQvtC00L3RjyDQtNC1
+0LvQsD8g0K8g0LTQsNCy0L3QviDRgdC70YvRiNGDINC+0YIg0YLQtdCx0Y8sINGH0YLQviDQv9GA
+0L7QuNGB0YXQvtC00LjRgg0K0KLQstC+0Y8g0YHRgtC+0YDQvtC90LA/INCh0LXQs9C+0LTQvdGP
+INGPINC+0YfQtdC90Ywg0YDQsNC0INGB0L7QvtCx0YnQuNGC0Ywg0LLQsNC8INC+INC80L7QtdC8
+INGD0YHQv9C10YXQtSDQsg0K0L/QvtC70YPRh9C10L3QuNC1INGN0YLQuNGFINC90LDRgdC70LXQ
+tNGB0YLQstC10L3QvdGL0YUg0YHRgNC10LTRgdGC0LIsINC/0LXRgNC10LTQsNC90L3Ri9GFINC/
+0YDQuCDRgdC+0YLRgNGD0LTQvdC40YfQtdGB0YLQstC1INC90L7QstC+0LPQvg0K0L/QsNGA0YLQ
+vdC10YAg0LjQtyDQmNC90LTQuNC4INCQ0LfQuNGPLiDQntC9INC60LDQvdCw0LTQtdGGLCDQvdC+
+INC20LjQstC10YIg0LIg0JjQvdC00LjQuCwg0L3QviDQsiDQvdCw0YHRgtC+0Y/RidC10LUg0LLR
+gNC10LzRjw0K0Y8g0L/RgNC40LXQt9C20LDRjiDQsiDQmNC90LTQuNGOINC/0L4g0LjQvdCy0LXR
+gdGC0LjRhtC40L7QvdC90YvQvCDQv9GA0L7QtdC60YLQsNC8INGB0L4g0YHQstC+0LXQuSDQtNC+
+0LvQtdC5INC+0YIg0L7QsdGJ0LXQuSDRgdGD0LzQvNGLDQrQvNC40LvQu9C40L7QvdGLINC00L7Q
+u9C70LDRgNC+0LIuINCc0LXQttC00YMg0YLQtdC8LCDRjyDQvdC1INC30LDQsdGL0Lsg0YLQstC+
+0Lgg0L/RgNC+0YjQu9GL0LUg0YPRgdC40LvQuNGPINC4INC/0L7Qv9GL0YLQutC4DQrRh9GC0L7Q
+sdGLINC/0L7QvNC+0YfRjCDQvNC90LUg0L/QtdGA0LXQtNCw0YLRjCDRjdGC0Lgg0L3QsNGB0LvQ
+tdC00YHRgtCy0LXQvdC90YvQtSDRgdGA0LXQtNGB0YLQstCwLCDQvdC10YHQvNC+0YLRgNGPINC9
+0LAg0YLQviwNCtGH0YLQviDRjdGC0L4g0L3QtSDRg9C00LDQu9C+0YHRjA0K0L3QsNC8INC60LDQ
+ui3QvdC40LHRg9C00YwsINGPINGF0L7Rh9GDLCDRh9GC0L7QsdGLINCy0Ysg0YHQstGP0LfQsNC7
+0LjRgdGMINGBINC80L7QuNC8INGB0LXQutGA0LXRgtCw0YDQtdC8INCyINCb0L7QvNC1LA0K0JfQ
+sNC/0LDQtCDQotC+0LPQviDQoNC10YHQv9GD0LHQu9C40LrQuA0K0JDRhNGA0LjQutCwLCDQtdC1
+INC30L7QstGD0YIg0KHQvtC70L7QvNC+0L0g0JHRgNGN0L3QtNC4LCDRjdGC0L4g0LXQs9C+INCw
+0LTRgNC10YEg0Y3Qu9C10LrRgtGA0L7QvdC90L7QuSDQv9C+0YfRgtGLDQooc29sb21vbmJyYW5k
+eTAwNEBnbWFpbC5jb20pDQosINC/0L7Qv9GA0L7RgdC40YLQtSDQtdCz0L4g0YHQstGP0LfQsNGC
+0YzRgdGPINGBINCQ0YTRgNC40LrQsNC90YHQutC40Lwg0LHQsNC90LrQvtC8INGA0LDQt9Cy0LjR
+gtC40Y8sINC10YHQu9C4INGPDQrRgdC+0YXRgNCw0L3QuNC7INGB0YPQvNC80YMg0LIg0YDQsNC3
+0LzQtdGA0LUgMzUwIDAwMCwwMCDQtNC+0LvQu9Cw0YDQvtCyINC00LvRjyDQstCw0YjQtdC5INC6
+0L7QvNC/0LXQvdGB0LDRhtC40LgsDQrRjdGC0L7RgiDQutC+0LzQv9C10L3RgdCw0YbQuNC+0L3Q
+vdGL0Lkg0YTQvtC90LQNCtC30LAg0LLRgdC1INC/0YDQvtGI0LvRi9C1INGD0YHQuNC70LjRjyDQ
+uCDQv9C+0L/Ri9GC0LrQuCDQv9C+0LzQvtGH0Ywg0LzQvdC1INCyINC/0YDQvtC50LTQtdC90L3Q
+vtC8DQrRgdC00LXQu9C60LAuINCvINC+0YfQtdC90Ywg0YbQtdC90LjQuyDQstCw0YjQuCDRg9GB
+0LjQu9C40Y8g0LIg0YLQviDQstGA0LXQvNGPLiDRgtCw0Log0YfRg9Cy0YHRgtCy0YPRjg0K0LHQ
+tdGB0L/Qu9Cw0YLQvdC+LCDRgdCy0Y/QttC40YLQtdGB0Ywg0YEg0LzQvtC40Lwg0YHQtdC60YDQ
+tdGC0LDRgNC10LwsINC80LjRgdGC0LXRgNC+0Lwg0KHQvtC70L7QvNC+0L3QvtC8INCR0YDRjdC9
+0LTQuCwg0LgNCtGB0L7QvtCx0YnQuNGC0LUg0LXQuSwg0LPQtNC1DQrQkNGE0YDQuNC60LDQvdGB
+0LrQuNC5INCx0LDQvdC6INGA0LDQt9Cy0LjRgtC40Y8g0L/QtdGA0LXRh9C40YHQu9C40YIg0L7Q
+sdGJ0YPRjiDRgdGD0LzQvNGDINCyINGA0LDQt9C80LXRgNC1IDM1MCAwMDAg0LTQvtC70LvQsNGA
+0L7QsiDQodCo0JAuDQoNCtCf0L7QttCw0LvRg9C50YHRgtCwLCDQvdC10LzQtdC00LvQtdC90L3Q
+viDQtNCw0LnRgtC1INC80L3QtSDQt9C90LDRgtGMINC/0LXRgNC10LLQvtC0INCQ0YTRgNC40LrQ
+sNC90YHQutC+0LPQviDQsdCw0L3QutCwINGA0LDQt9Cy0LjRgtC40Y8NCtGE0L7QvdC0ICQgMzUw
+LjAwMC4wMA0K0L3QsCDRgdCy0L7QuSDQsdCw0L3QutC+0LLRgdC60LjQuSDRgdGH0LXRgiwg0YHQ
+tdC50YfQsNGBINGPINGB0LvQuNGI0LrQvtC8INC30LDQvdGP0YIg0LjQty3Qt9CwDQrQuNC90LLQ
+tdGB0YLQuNGG0LjQvtC90L3Ri9C1INC/0YDQvtC10LrRgtGLLCDQutC+0YLQvtGA0YvQtSDRjyDQ
+stC10LTRgyDRgSDQvNC+0LjQvCDQvdC+0LLRi9C8INC/0LDRgNGC0L3QtdGA0L7QvCwg0L/QvtGN
+0YLQvtC80YMNCtGB0LLRj9C20LjRgtC10YHRjCDRgSDQvNC40YHRgtC10YDQvtC8INCh0L7Qu9C+
+0LzQvtC90L7QvCDQkdGA0Y3QvdC00Lgg0L3QsCDQtdCz0L4g0LDQtNGA0LXRgSDRjdC70LXQutGC
+0YDQvtC90L3QvtC5INC/0L7Rh9GC0YssINC+0L0NCtCx0LXQtyDQv9GA0L7QvNC10LTQu9C10L3Q
+uNGPINGB0LLRj9C20LjRgtC10YHRjCDRgSDQkNGE0YDQuNC60LDQvdGB0LrQuNC8INCx0LDQvdC6
+0L7QvCDRgNCw0LfQstC40YLQuNGPINC+0YIg0LLQsNGI0LXQs9C+INC40LzQtdC90LguDQrQkdGD
+0LTRjNGC0LUg0LIg0LHQtdC30L7Qv9Cw0YHQvdC+0YHRgtC4INC+0YIgQ292aWQgMTkuDQoNCtCh
+INGD0LLQsNC20LXQvdC40LXQvCwNCtCU0L7QutGC0L7RgCDRgNC+0LHQtdGA0YIg0LDQvdC00LXR
+gNGB0L7QvQ0K
