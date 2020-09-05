@@ -2,102 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 781D125E8A2
-	for <lists+linux-spi@lfdr.de>; Sat,  5 Sep 2020 17:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C89C25EA52
+	for <lists+linux-spi@lfdr.de>; Sat,  5 Sep 2020 22:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbgIEPTt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 5 Sep 2020 11:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726360AbgIEPTs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 5 Sep 2020 11:19:48 -0400
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54354C061244
-        for <linux-spi@vger.kernel.org>; Sat,  5 Sep 2020 08:19:46 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4BkJB34Lzyz1rtyY;
-        Sat,  5 Sep 2020 17:19:39 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4BkJB33fg7z1qy6Y;
-        Sat,  5 Sep 2020 17:19:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id HKxPIvQkAkdx; Sat,  5 Sep 2020 17:19:38 +0200 (CEST)
-X-Auth-Info: 1P9+LL5s6mTX0SM2SwU4fZXO4EUujbYRKO3bgSiMtTc=
-Received: from desktop.lan (ip-86-49-101-166.net.upcbroadband.cz [86.49.101.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Sat,  5 Sep 2020 17:19:38 +0200 (CEST)
-From:   Marek Vasut <marex@denx.de>
-To:     linux-spi@vger.kernel.org
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Antonio Borneo <borneo.antonio@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH] spi: stm32: Rate-limit the 'Communication suspended' message
-Date:   Sat,  5 Sep 2020 17:19:13 +0200
-Message-Id: <20200905151913.117775-1-marex@denx.de>
-X-Mailer: git-send-email 2.28.0
+        id S1728257AbgIEUOl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 5 Sep 2020 16:14:41 -0400
+Received: from smtp2.axis.com ([195.60.68.18]:33239 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727875AbgIEUOk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 5 Sep 2020 16:14:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; l=3257; q=dns/txt; s=axis-central1;
+  t=1599336878; x=1630872878;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=CX4yRWuFTgsS8o0t8HPYvwskW7rGZs3lnP8KiwwwypQ=;
+  b=oTnxJVwhC/MiRilqvOuOku2Fui/1beFGqVvRZ7G8VeipRqKfRMQ3obaL
+   TJwecCb/DxgXPhkUQa6Err+PgNZ0ikUKyIMa9HB4RqNfeRmEcdC1hCcRR
+   1rvPZ/epIbRxG9veMuofjqicHTQsnK2ukjazZfgsBAZVEPEIjEpqORaHA
+   MPF1xMYg5XerGkCKRpyjUmVuNJnah/Ro6oa8jz+GIjQsaeOACdbAK5bVy
+   lfFKeLRPahs6K7HIBJVxfEtDvwZfxcyyrjMXrFx7eGUaXaCvDEMeofQkY
+   W/AYxGz9kE/FEreXQdwbvwZre9eI5CisrnBl65+PMVSmEuFVlE9M4cts8
+   Q==;
+IronPort-SDR: O0hLwekSSOVBzJ+7dCDsro9+73iX47QgdecBtV/07SExZh1BDrr/mwEtTQFg1av1gnQVEvHUw1
+ 0nft0dmVqwxOZoKbxzU0loYD1tVf0XNCGCgEXfp0hTcjal9/syeuKq4rO0H5z4+bAYFUAH5qUh
+ uCmh+pvTL2YJg/OkrMApFSyF7lycGQo8OiyFRe5TT6AOLv+wqFJn5MqdKw6dEISTR/4qyGFRNq
+ ODGXLUKYfe1L4cYxDbrlBWu/1JFcv9YfzUHs+LzBupwSFzUummVTECo4PCRPlhsEaYdkPcXiAS
+ XRo=
+X-IronPort-AV: E=Sophos;i="5.76,395,1592863200"; 
+   d="scan'208";a="12231824"
+From:   Gustav Wiklander <gustav.wiklander@axis.com>
+To:     <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <kernel@axis.com>,
+        Gustav Wiklander <gustavwi@axis.com>
+Subject: [PATCH] spi: Fix memory leak on splited transfers
+Date:   Sat, 5 Sep 2020 22:14:21 +0200
+Message-ID: <20200905201421.29495-1-gustav.wiklander@axis.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The 'spi_stm32 44004000.spi: Communication suspended' message means that
-when using PIO, the kernel did not read the FIFO fast enough and so the
-SPI controller paused the transfer. Currently, this is printed on every
-single such event, so if the kernel is busy and the controller is pausing
-the transfers often, the kernel will be all the more busy scrolling this
-message into the log buffer every few milliseconds. That is not helpful.
+From: Gustav Wiklander <gustavwi@axis.com>
 
-Instead, rate-limit the message and print it every once in a while. It is
-not possible to use the default dev_warn_ratelimited(), because that is
-still too verbose, as it prints 10 lines (DEFAULT_RATELIMIT_BURST) every
-5 seconds (DEFAULT_RATELIMIT_INTERVAL). The policy here is to print 1 line
-every 50 seconds (DEFAULT_RATELIMIT_INTERVAL * 10), because 1 line is more
-than enough and the cycles saved on printing are better left to the CPU to
-handle the SPI. However, dev_warn_once() is also not useful, as the user
-should be aware that this condition is possibly recurring or ongoing. Thus
-the custom rate-limit policy.
+In the prepare_message callback the bus driver has the
+opportunity to split a transfer into smaller chunks.
+spi_map_msg is done after prepare_message.
 
-Finally, turn the message from dev_warn() to dev_dbg(), since the system
-does not suffer any sort of malfunction if this message appears, it is
-just slowing down. This further reduces the printing into the log buffer
-and frees the CPU to do useful work.
+Function spi_res_release releases the splited transfers
+in the message. Therefore spi_res_release should be called
+after spi_map_msg.
 
-Fixes: dcbe0d84dfa5 ("spi: add driver for STM32 SPI controller")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Alexandre Torgue <alexandre.torgue@st.com>
-Cc: Amelie Delaunay <amelie.delaunay@st.com>
-Cc: Antonio Borneo <borneo.antonio@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
+The previous try at this was commit c9ba7a16d0f1
+which released the splited transfers after
+spi_finalize_current_message had been called.
+This introduced a race since the message struct could be
+out of scope because the spi_sync call got completed.
+
+Fixes this leak on spi bus driver spi-bcm2835.c when transfer
+size is greater than 65532:
+
+[   76.611642][  T170] kmemleak: unreferenced object 0xfffffff06ef81480
+(size 128):
+[   76.618965][  T170] kmemleak:   comm "insmod", pid 493, jiffies
+4294941102 (age 38.540s)
+[   76.627031][  T170] kmemleak:   backtrace:
+[   76.631206][  T170] kmemleak:     [<ffffffa542c5f8f8>]
+create_object+0x100/0x288
+[   76.638596][  T170] kmemleak:     [<ffffffa5432a9ee4>]
+kmemleak_alloc+0x8c/0xe0
+[   76.645723][  T170] kmemleak:     [<ffffffa542c4cbe8>]
+__kmalloc+0x1c8/0x370
+[   76.652754][  T170] kmemleak:     [<ffffffa542e14c94>]
+sg_kmalloc+0x1c/0x68
+[   76.659782][  T170] kmemleak:     [<ffffffa542e1543c>]
+__sg_alloc_table+0xf4/0x128
+[   76.667420][  T170] kmemleak:     [<ffffffa542e15820>]
+sg_alloc_table+0x28/0xc8
+[   76.674636][  T170] kmemleak:     [<ffffffa542f938a4>]
+spi_map_buf+0xa4/0x300
+[   76.681838][  T170] kmemleak:     [<ffffffa542f94648>]
+__spi_pump_messages+0x370/0x748
+[   76.689573][  T170] kmemleak:     [<ffffffa542f94c24>]
+__spi_sync+0x1d4/0x270
+[   76.696863][  T170] kmemleak:     [<ffffffa542f94cf4>]
+spi_sync+0x34/0x58
+[   76.703562][  T170] kmemleak:     [<ffffffa4cd94a638>]
+spi_test_execute_msg+0x60/0x340 [spi_loopback_test]
+[   76.713193][  T170] kmemleak:     [<ffffffa4cd94ae60>]
+spi_test_run_iter+0x548/0x578 [spi_loopback_test]
+[   76.722740][  T170] kmemleak:     [<ffffffa4cd94af24>]
+spi_test_run_test+0x94/0x140 [spi_loopback_test]
+[   76.732037][  T170] kmemleak:     [<ffffffa4cd94b120>]
+spi_test_run_tests+0x150/0x180 [spi_loopback_test]
+[   76.741498][  T170] kmemleak:     [<ffffffa4cd94b1a0>]
+spi_loopback_test_probe+0x50/0xd0 [spi_loopback_test]
+[   76.751392][  T170] kmemleak:     [<ffffffa542f911f4>]
+spi_drv_probe+0x84/0xe0
 ---
- drivers/spi/spi-stm32.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/spi/spi.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index d4b33b358a31..a00f6b51ccbf 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -936,7 +936,11 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 	}
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index dc12af018350..0cab239d8e7f 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1327,8 +1327,6 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 	if (msg->status && ctlr->handle_err)
+ 		ctlr->handle_err(ctlr, msg);
  
- 	if (sr & STM32H7_SPI_SR_SUSP) {
--		dev_warn(spi->dev, "Communication suspended\n");
-+		static DEFINE_RATELIMIT_STATE(rs,
-+					      DEFAULT_RATELIMIT_INTERVAL * 10,
-+					      1);
-+		if (__ratelimit(&rs))
-+			dev_dbg_ratelimited(spi->dev, "Communication suspended\n");
- 		if (!spi->cur_usedma && (spi->rx_buf && (spi->rx_len > 0)))
- 			stm32h7_spi_read_rxfifo(spi, false);
- 		/*
+-	spi_res_release(ctlr, msg);
+-
+ 	spi_finalize_current_message(ctlr);
+ 
+ 	return ret;
+@@ -1725,6 +1723,13 @@ void spi_finalize_current_message(struct spi_controller *ctlr)
+ 
+ 	spi_unmap_msg(ctlr, mesg);
+ 
++	/* In the prepare_messages callback the spi bus has the opportunity to
++	 * split a transfer to smaller chunks.
++	 * Release splited transfers here since spi_map_msg is done on the
++	 * splited transfers.
++	 */
++	spi_res_release(ctlr, mesg);
++
+ 	if (ctlr->cur_msg_prepared && ctlr->unprepare_message) {
+ 		ret = ctlr->unprepare_message(ctlr, mesg);
+ 		if (ret) {
 -- 
-2.28.0
+2.11.0
 
