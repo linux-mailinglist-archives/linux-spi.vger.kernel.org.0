@@ -2,136 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C89C25EA52
-	for <lists+linux-spi@lfdr.de>; Sat,  5 Sep 2020 22:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E3725F090
+	for <lists+linux-spi@lfdr.de>; Sun,  6 Sep 2020 23:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728257AbgIEUOl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 5 Sep 2020 16:14:41 -0400
-Received: from smtp2.axis.com ([195.60.68.18]:33239 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727875AbgIEUOk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 5 Sep 2020 16:14:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; l=3257; q=dns/txt; s=axis-central1;
-  t=1599336878; x=1630872878;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=CX4yRWuFTgsS8o0t8HPYvwskW7rGZs3lnP8KiwwwypQ=;
-  b=oTnxJVwhC/MiRilqvOuOku2Fui/1beFGqVvRZ7G8VeipRqKfRMQ3obaL
-   TJwecCb/DxgXPhkUQa6Err+PgNZ0ikUKyIMa9HB4RqNfeRmEcdC1hCcRR
-   1rvPZ/epIbRxG9veMuofjqicHTQsnK2ukjazZfgsBAZVEPEIjEpqORaHA
-   MPF1xMYg5XerGkCKRpyjUmVuNJnah/Ro6oa8jz+GIjQsaeOACdbAK5bVy
-   lfFKeLRPahs6K7HIBJVxfEtDvwZfxcyyrjMXrFx7eGUaXaCvDEMeofQkY
-   W/AYxGz9kE/FEreXQdwbvwZre9eI5CisrnBl65+PMVSmEuFVlE9M4cts8
-   Q==;
-IronPort-SDR: O0hLwekSSOVBzJ+7dCDsro9+73iX47QgdecBtV/07SExZh1BDrr/mwEtTQFg1av1gnQVEvHUw1
- 0nft0dmVqwxOZoKbxzU0loYD1tVf0XNCGCgEXfp0hTcjal9/syeuKq4rO0H5z4+bAYFUAH5qUh
- uCmh+pvTL2YJg/OkrMApFSyF7lycGQo8OiyFRe5TT6AOLv+wqFJn5MqdKw6dEISTR/4qyGFRNq
- ODGXLUKYfe1L4cYxDbrlBWu/1JFcv9YfzUHs+LzBupwSFzUummVTECo4PCRPlhsEaYdkPcXiAS
- XRo=
-X-IronPort-AV: E=Sophos;i="5.76,395,1592863200"; 
-   d="scan'208";a="12231824"
-From:   Gustav Wiklander <gustav.wiklander@axis.com>
-To:     <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <kernel@axis.com>,
-        Gustav Wiklander <gustavwi@axis.com>
-Subject: [PATCH] spi: Fix memory leak on splited transfers
-Date:   Sat, 5 Sep 2020 22:14:21 +0200
-Message-ID: <20200905201421.29495-1-gustav.wiklander@axis.com>
-X-Mailer: git-send-email 2.11.0
+        id S1726165AbgIFVDw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 6 Sep 2020 17:03:52 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:44024 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726154AbgIFVDw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 6 Sep 2020 17:03:52 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 279B3891B0;
+        Mon,  7 Sep 2020 09:03:48 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1599426228;
+        bh=QBa830jtUXjIph86rIi5lGJG6AjNPZpvt0RMV5ZNHUI=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=KOcbkH/VF11n/LNlhYdI1bd/9iQl4QZUwXikYs60mtNHm08d0ZgH+2vYKkT9WYwPn
+         Ju43MqLLMtoDzR5YWbwRI9/HG3Uv+pnK53RByWg7tetCDRtffr97Dxi5WtixfFBveV
+         RdLhF2Txrk24xbZRap73agjzCffTWxMy1R+73Xp3/Gdu0QiRMBQtfI8zJGWP0qj7Oj
+         qN/FQDoY5wc2pIx5o2CNAJbOMV4INjLcm839T8+Rc6XV9WC5+Rb31WsQvX30ij24Uv
+         DV6p/5h9HcALRdSixsOOWQR1HmgyaTTjKycPJS7Itm5tdgRxIXn+UUAHRF7waHNzpW
+         YcsH+TD7daW1w==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f554eb40001>; Mon, 07 Sep 2020 09:03:48 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Sep 2020 09:03:47 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.006; Mon, 7 Sep 2020 09:03:47 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+CC:     Nicholas Piggin <npiggin@gmail.com>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "paulus@samba.org" <paulus@samba.org>
+Subject: Re: fsl_espi errors on v5.7.15
+Thread-Topic: fsl_espi errors on v5.7.15
+Thread-Index: AQHWceVnik7XsBYbp0S+yHVGh1hdQak2WMaAgAQdSwCAAz9MAIAAfdcAgAD5u4CAB+sMAIAAYfwAgAA6JQCAAPtUgIAAOXyAgABIbACAAAjRgIABm7wAgAD5+gCABBXPAIAAjqOAgAALRACAAAUXgIAA9CsAgADXoQCAAFDQAIAETfoAgAEj4oCAA2JSAA==
+Date:   Sun, 6 Sep 2020 21:03:46 +0000
+Message-ID: <ee6a85fd-35d3-2adf-02ea-35009749194b@alliedtelesis.co.nz>
+References: <1598940515.6e06nwgi0c.astroid@bobo.none>
+ <6054f0ec-d994-105b-6399-6cdb65ddd1b6@alliedtelesis.co.nz>
+ <CAFSsGVvRMQoEoBN1hpao_4uM1yF2wwuKPbMkAcwFWyE1X8HDbQ@mail.gmail.com>
+In-Reply-To: <CAFSsGVvRMQoEoBN1hpao_4uM1yF2wwuKPbMkAcwFWyE1X8HDbQ@mail.gmail.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6306C5D7E58A894E995FCB72D9029269@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Gustav Wiklander <gustavwi@axis.com>
-
-In the prepare_message callback the bus driver has the
-opportunity to split a transfer into smaller chunks.
-spi_map_msg is done after prepare_message.
-
-Function spi_res_release releases the splited transfers
-in the message. Therefore spi_res_release should be called
-after spi_map_msg.
-
-The previous try at this was commit c9ba7a16d0f1
-which released the splited transfers after
-spi_finalize_current_message had been called.
-This introduced a race since the message struct could be
-out of scope because the spi_sync call got completed.
-
-Fixes this leak on spi bus driver spi-bcm2835.c when transfer
-size is greater than 65532:
-
-[   76.611642][  T170] kmemleak: unreferenced object 0xfffffff06ef81480
-(size 128):
-[   76.618965][  T170] kmemleak:   comm "insmod", pid 493, jiffies
-4294941102 (age 38.540s)
-[   76.627031][  T170] kmemleak:   backtrace:
-[   76.631206][  T170] kmemleak:     [<ffffffa542c5f8f8>]
-create_object+0x100/0x288
-[   76.638596][  T170] kmemleak:     [<ffffffa5432a9ee4>]
-kmemleak_alloc+0x8c/0xe0
-[   76.645723][  T170] kmemleak:     [<ffffffa542c4cbe8>]
-__kmalloc+0x1c8/0x370
-[   76.652754][  T170] kmemleak:     [<ffffffa542e14c94>]
-sg_kmalloc+0x1c/0x68
-[   76.659782][  T170] kmemleak:     [<ffffffa542e1543c>]
-__sg_alloc_table+0xf4/0x128
-[   76.667420][  T170] kmemleak:     [<ffffffa542e15820>]
-sg_alloc_table+0x28/0xc8
-[   76.674636][  T170] kmemleak:     [<ffffffa542f938a4>]
-spi_map_buf+0xa4/0x300
-[   76.681838][  T170] kmemleak:     [<ffffffa542f94648>]
-__spi_pump_messages+0x370/0x748
-[   76.689573][  T170] kmemleak:     [<ffffffa542f94c24>]
-__spi_sync+0x1d4/0x270
-[   76.696863][  T170] kmemleak:     [<ffffffa542f94cf4>]
-spi_sync+0x34/0x58
-[   76.703562][  T170] kmemleak:     [<ffffffa4cd94a638>]
-spi_test_execute_msg+0x60/0x340 [spi_loopback_test]
-[   76.713193][  T170] kmemleak:     [<ffffffa4cd94ae60>]
-spi_test_run_iter+0x548/0x578 [spi_loopback_test]
-[   76.722740][  T170] kmemleak:     [<ffffffa4cd94af24>]
-spi_test_run_test+0x94/0x140 [spi_loopback_test]
-[   76.732037][  T170] kmemleak:     [<ffffffa4cd94b120>]
-spi_test_run_tests+0x150/0x180 [spi_loopback_test]
-[   76.741498][  T170] kmemleak:     [<ffffffa4cd94b1a0>]
-spi_loopback_test_probe+0x50/0xd0 [spi_loopback_test]
-[   76.751392][  T170] kmemleak:     [<ffffffa542f911f4>]
-spi_drv_probe+0x84/0xe0
----
- drivers/spi/spi.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index dc12af018350..0cab239d8e7f 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1327,8 +1327,6 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 	if (msg->status && ctlr->handle_err)
- 		ctlr->handle_err(ctlr, msg);
- 
--	spi_res_release(ctlr, msg);
--
- 	spi_finalize_current_message(ctlr);
- 
- 	return ret;
-@@ -1725,6 +1723,13 @@ void spi_finalize_current_message(struct spi_controller *ctlr)
- 
- 	spi_unmap_msg(ctlr, mesg);
- 
-+	/* In the prepare_messages callback the spi bus has the opportunity to
-+	 * split a transfer to smaller chunks.
-+	 * Release splited transfers here since spi_map_msg is done on the
-+	 * splited transfers.
-+	 */
-+	spi_res_release(ctlr, mesg);
-+
- 	if (ctlr->cur_msg_prepared && ctlr->unprepare_message) {
- 		ret = ctlr->unprepare_message(ctlr, mesg);
- 		if (ret) {
--- 
-2.11.0
-
+KHJlc2VuZCBhcyBzb21ldGhpbmcgZGVjaWRlZCB0byBpbnNlcnQgaHRtbCwgc29tZSBjb250ZXh0
+IHN0cmlwcGVkKQ0KDQpPbiA1LzA5LzIwIDU6MjMgYW0sIEhlaW5lciBLYWxsd2VpdCB3cm90ZToN
+Cj4gT24gRnJpIDQuIFNlcCAyMDIwIGF0IDAxOjU4LCBDaHJpcyBQYWNraGFtIA0KPiA8Q2hyaXMu
+UGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56IA0KPiA8bWFpbHRvOkNocmlzLlBhY2toYW1AYWxs
+aWVkdGVsZXNpcy5jby5uej4+IHdyb3RlOg0KPg0KPg0KPHNuaXA+DQo+DQo+DQo+ICAgICBJIHRy
+aWVkIGZ0cmFjZSBidXQgSSByZWFsbHkgd2Fzbid0IHN1cmUgd2hhdCBJIHdhcyBsb29raW5nIGZv
+ci4NCj4NCj4gICAgIENhcHR1cmluZyBhICJiYWQiIGNhc2Ugd2FzIHByZXR0eSB0cmlja3kuIEJ1
+dCBJIHRoaW5rIEkndmUNCj4gICAgIGlkZW50aWZpZWQgYQ0KPg0KPiAgICAgZml4IChJJ2xsIHNl
+bmQgaXQgYXMgYSBwcm9wZXIgcGF0Y2ggc2hvcnRseSkuIFRoZSBnaXN0IGlzDQo+DQo+DQo+DQo+
+ICAgICBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zcGkvc3BpLWZzbC1lc3BpLmMgYi9kcml2ZXJzL3Nw
+aS9zcGktZnNsLWVzcGkuYw0KPg0KPiAgICAgaW5kZXggN2U3YzkyY2FmZGJiLi5jYjEyMGI2OGMw
+ZTIgMTAwNjQ0DQo+DQo+ICAgICAtLS0gYS9kcml2ZXJzL3NwaS9zcGktZnNsLWVzcGkuYw0KPg0K
+PiAgICAgKysrIGIvZHJpdmVycy9zcGkvc3BpLWZzbC1lc3BpLmMNCj4NCj4gICAgIEBAIC01NzQs
+MTMgKzU3NCwxNCBAQCBzdGF0aWMgdm9pZCBmc2xfZXNwaV9jcHVfaXJxKHN0cnVjdCBmc2xfZXNw
+aQ0KPg0KPiAgICAgKmVzcGksIHUzMiBldmVudHMpDQo+DQo+ICAgICDCoMKgc3RhdGljIGlycXJl
+dHVybl90IGZzbF9lc3BpX2lycShzMzIgaXJxLCB2b2lkICpjb250ZXh0X2RhdGEpDQo+DQo+ICAg
+ICDCoMKgew0KPg0KPiAgICAgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgZnNsX2VzcGkgKmVzcGkg
+PSBjb250ZXh0X2RhdGE7DQo+DQo+ICAgICAtwqDCoMKgwqDCoMKgIHUzMiBldmVudHM7DQo+DQo+
+ICAgICArwqDCoMKgwqDCoMKgIHUzMiBldmVudHMsIG1hc2s7DQo+DQo+DQo+DQo+ICAgICDCoMKg
+wqDCoMKgwqDCoMKgIHNwaW5fbG9jaygmZXNwaS0+bG9jayk7DQo+DQo+DQo+DQo+ICAgICDCoMKg
+wqDCoMKgwqDCoMKgIC8qIEdldCBpbnRlcnJ1cHQgZXZlbnRzKHR4L3J4KSAqLw0KPg0KPiAgICAg
+wqDCoMKgwqDCoMKgwqDCoCBldmVudHMgPSBmc2xfZXNwaV9yZWFkX3JlZyhlc3BpLCBFU1BJX1NQ
+SUUpOw0KPg0KPiAgICAgLcKgwqDCoMKgwqDCoCBpZiAoIWV2ZW50cykgew0KPg0KPiAgICAgK8Kg
+wqDCoMKgwqDCoCBtYXNrID0gZnNsX2VzcGlfcmVhZF9yZWcoZXNwaSwgRVNQSV9TUElNKTsNCj4N
+Cj4gICAgICvCoMKgwqDCoMKgwqAgaWYgKCEoZXZlbnRzICYgbWFzaykpIHsNCj4NCj4gICAgIMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNwaW5fdW5sb2NrKCZlc3BpLT5sb2NrKTsN
+Cj4NCj4gICAgIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiBJUlFfTk9O
+RTsNCj4NCj4gICAgIMKgwqDCoMKgwqDCoMKgwqAgfQ0KPg0KPg0KPg0KPiAgICAgVGhlIFNQSUUg
+cmVnaXN0ZXIgY29udGFpbnMgdGhlIFRYQ05UIHNvIGV2ZW50cyBpcyBwcmV0dHkgbXVjaCBhbHdh
+eXMNCj4NCj4gICAgIGdvaW5nIHRvIGhhdmUgc29tZXRoaW5nIHNldC4gQnkgY2hlY2tpbmcgZXZl
+bnRzIGFnYWluc3Qgd2hhdCB3ZSd2ZQ0KPg0KPiAgICAgYWN0dWFsbHkgcmVxdWVzdGVkIGludGVy
+cnVwdHMgZm9yIHdlIGRvbid0IHNlZSBhbnkgc3B1cmlvdXMgZXZlbnRzLg0KPg0KPg0KPiBVc3Vh
+bGx5IHdlIHNob3VsZG7igJl0IHJlY2VpdmUgaW50ZXJydXB0cyB3ZeKAmXJlIG5vdCBpbnRlcmVz
+dGVkIGluLCANCj4gZXhjZXB0IHRoZSBpbnRlcnJ1cHQgaXMgc2hhcmVkLg0KTXkgdGhlb3J5IGlz
+IHRoYXQgd2UgZ2V0IGFuIGludGVycnVwdCB0byB0aGUgY29yZSBmb3IgUlhUIGFuZCBhbm90aGVy
+IA0KZm9yIERPTi4gV2l0aCB0aGUgY2hhbmdlcyB0byB0aGUgcG93ZXJwYyBpbnRlcnJ1cHQgaGFu
+ZGxpbmcgYW5kIHRoZSBmYWN0IA0KdGhhdCBmc2xfZXNwaV9jcHVfaXJxKCkgZG9lc24ndCBhY3R1
+YWxseSBsb29rIGF0IHRoZSBzcGVjaWZpYyBldmVudCBiaXRzIA0KbWVhbnMgdGhhdCBzb21ldGlt
+ZXMgYm90aCBldmVudHMgYXJlIGhhbmRsZWQgaW4gdGhlIHByb2Nlc3Npbmcgb2YgdGhlIA0KZmly
+c3QgaW50ZXJydXB0IGFuZCB0aGUgc2Vjb25kIG9uZSB0cmlwcyB0aGUgU1BJX0RPTiBub3Qgc2V0
+IGVycm9yLg0KDQpUaGVyZSdzIGFuIG9sZCBjb21tZW50ICJTUEkgYnVzIHNvbWV0aW1lcyBnb3Qg
+bG9zdCBpbnRlcnJ1cHRzLi4uIiB3aGljaCANCm1ha2VzIG1lIHdvbmRlciBpZiB0aGUgaW50ZXJy
+dXB0IGhhbmRsaW5nIGNoYW5nZSBoYXMgZml4ZWQgdGhpcyBvcmlnaW5hbCANCnByb2JsZW0uDQoN
+Ckkgc3RpbGwgdGhpbmsgdGhlIGNoYW5nZSBtYWtlcyBzZW5zZSByZWdhcmRsZXNzIGJlY2F1c2Ug
+dGhlIFNQSUUgDQpyZWdpc3RlciBoYXMgc29tZSBjb3VudGVyIGZpZWxkcyBpbiBpdC4NCg0KPiBU
+aGlzIGxlYWRzIHRvIHRoZSBxdWVzdGlvbjogaXMgdGhlIFNQSSBpbnRlcnJ1cHQgc2hhcmVkIHdp
+dGggYW5vdGhlciANCj4gZGV2aWNlIG9uIHlvdXIgc3lzdGVtPw0KSXQncyBub3Qgc2hhcmVkIG9u
+IGVpdGhlciB0aGUgY3VzdG9tIGJvYXJkIG9yIHRoZSBUMjA4MFJEQi4NCj4gRG8geW91IHNlZSBz
+cHVyaW91cyBpbnRlcnJ1cHRzIHdpdGggdGhlIHBhdGNoIHVuZGVyIA0KPiAvcHJvYy9pcnEvKGly
+cSkvc3B1cmlvdXM/DQoNClllcyBpdCBsb29rcyBsaWtlIGl0DQoNCltyb290QGxpbnV4Ym94IH5d
+IyBjYXQgL3Byb2MvaXJxLzUzL3NwdXJpb3VzDQpjb3VudCAzMTI2DQp1bmhhbmRsZWQgMA0KbGFz
+dF91bmhhbmRsZWQgMCBtcw0KDQpbcm9vdEBsaW51eGJveCB+XSMgL2ZsYXNoL2RkX3Rlc3Quc2gN
+Cg0KW3Jvb3RAbGludXhib3ggfl0jIGNhdCAvcHJvYy9pcnEvNTMvc3B1cmlvdXMNCmNvdW50IDEw
+MTYNCnVuaGFuZGxlZCAwDQpsYXN0X3VuaGFuZGxlZCA0Mjk0NzQ2MTAwIG1zDQoNCltyb290QGxp
+bnV4Ym94IH5dIyAvZmxhc2gvZGRfdGVzdC5zaA0KDQpbcm9vdEBsaW51eGJveCB+XSMgY2F0IC9w
+cm9jL2lycS81My9zcHVyaW91cw0KY291bnQgODgzOTENCnVuaGFuZGxlZCAwDQpsYXN0X3VuaGFu
+ZGxlZCA0Mjk0NzQ2MTAwIG1zDQoNCltyb290QGxpbnV4Ym94IH5dIyAvZmxhc2gvZGRfdGVzdC5z
+aA0KDQpbcm9vdEBsaW51eGJveCB+XSMgY2F0IC9wcm9jL2lycS81My9zcHVyaW91cw0KY291bnQg
+NzI0NTkNCnVuaGFuZGxlZCAyDQpsYXN0X3VuaGFuZGxlZCA0Mjk0NzU4NjMyIG1zDQo+DQo+DQo+
+DQo+ICAgICBJJ3ZlIHRlc3RlZCB0aGlzIG9uIHRoZSBUMjA4MFJEQiBhbmQgb24gb3VyIGN1c3Rv
+bSBoYXJkd2FyZSBhbmQgaXQNCj4gICAgIHNlZW1zDQo+DQo+ICAgICB0byByZXNvbHZlIHRoZSBw
+cm9ibGVtLg0KPg0KPg0KPg==
