@@ -2,48 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98592616FD
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Sep 2020 19:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBF12616E5
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Sep 2020 19:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729296AbgIHRXa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Sep 2020 13:23:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57046 "EHLO mail.kernel.org"
+        id S1726925AbgIHRVy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Sep 2020 13:21:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57112 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731805AbgIHRVr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 8 Sep 2020 13:21:47 -0400
+        id S1731777AbgIHRVw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 8 Sep 2020 13:21:52 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8E3420936;
-        Tue,  8 Sep 2020 17:21:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8EB622087D;
+        Tue,  8 Sep 2020 17:21:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599585706;
-        bh=fMphHg3tFmgcGef0toxwTPwTGQB1KyRmuWuLqVwJWr4=;
+        s=default; t=1599585712;
+        bh=luI7DSIeuNgw2n7bHdR4GLN46L7NHNK8S2snlSCQbck=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=dWZoWs9xsmWYDORBN/QMZA3E7NtSueytNv9FBBhz6C54vuJIvN4ZEWWv/iCKB2twk
-         khaghQsRzhVa9my4DPFBPTpEkRKTCU1QYctzalzdpUXwPg6oBzFKEkU49xkKYteXhb
-         1/oukxZa1by3Y0hhqPRjF+M+ptScDgTpvfklVdc4=
-Date:   Tue, 08 Sep 2020 18:21:02 +0100
+        b=dFlnBsh7xLTYLjXPmcTtF99utgCGYMRv8WlLIvMvkiLdI/wr5bH2/bE+bHAjpmBxr
+         +4jrbwjwD6njveoL9Vb4CJANBgwqdQMcxn6oyhC+Z4+7goB4r8UcUT9aoXjAImUEvN
+         CPIieMIpKZQy3aF+488qeOCkXgX50/wQwUyo5vnA=
+Date:   Tue, 08 Sep 2020 18:21:07 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Pratyush Yadav <p.yadav@ti.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20200831130720.4524-1-vigneshr@ti.com>
-References: <20200831130720.4524-1-vigneshr@ti.com>
-Subject: Re: [PATCH v2] spi: spi-cadence-quadspi: Fix mapping of buffers for DMA reads
-Message-Id: <159958565716.16771.5696508114648193658.b4-ty@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ikjoon Jang <ikjn@chromium.org>, linux-spi@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chuanhong Guo <gch981213@gmail.com>,
+        Bayi Cheng <bayi.cheng@mediatek.com>
+In-Reply-To: <20200826091852.519138-1-ikjn@chromium.org>
+References: <20200826091852.519138-1-ikjn@chromium.org>
+Subject: Re: [PATCH] spi: spi-mtk-nor: support standard spi properties
+Message-Id: <159958565716.16771.18117309566354827719.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 31 Aug 2020 18:37:20 +0530, Vignesh Raghavendra wrote:
-> Buffers need to mapped to DMA channel's device pointer instead of SPI
-> controller's device pointer as its system DMA that actually does data
-> transfer.
-> Data inconsistencies have been reported when reading from flash
-> without this fix.
+On Wed, 26 Aug 2020 17:18:52 +0800, Ikjoon Jang wrote:
+> Use default supports_op() to support spi-[rt]x-bus-width properties.
+> And check dummy op's byte length instead of its bus width for output.
 
 Applied to
 
@@ -51,8 +50,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-cadence-quadspi: Fix mapping of buffers for DMA reads
-      commit: 83048015ff7710b46e7c489458a93c6fe348229d
+[1/1] spi: spi-mtk-nor: support standard spi properties
+      commit: a59b2c7c56bf795cc13139d2634e86a3da7a0314
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
