@@ -2,80 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 126D2263824
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Sep 2020 23:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64812263846
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Sep 2020 23:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728207AbgIIVDH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Sep 2020 17:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S1729507AbgIIVOo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Sep 2020 17:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726414AbgIIVDG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Sep 2020 17:03:06 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467B4C061573;
-        Wed,  9 Sep 2020 14:03:05 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id s2so1954883pjr.4;
-        Wed, 09 Sep 2020 14:03:05 -0700 (PDT)
+        with ESMTP id S1728626AbgIIVOn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Sep 2020 17:14:43 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E67C061573;
+        Wed,  9 Sep 2020 14:14:42 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id k15so3255351pfc.12;
+        Wed, 09 Sep 2020 14:14:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Kk3dtIEIHLrcJXCtVTcb0P6ovpZXfJeh6sKbAWAj1no=;
-        b=Ih+9wWx7tV8Gh3D9ZZOkimGpNEiSmyOQr8AmYz36svx2Lr954NP4kKJ86JWA2YHSNx
-         f3lcFYyvCm5+CCgt0IXOKx7LkeGFYeVYiK3rc1s8p3v2qQhMqvXqhOaZm8BiZGOYqP8N
-         c2dN+MH1bBxxjj4x6SDnnW+J0PtJjlOQiS2KorrhzojRuQpOt7pf0Q7W3E8kVs2G7CUi
-         f06r1D5CRPNz2T8+oi5s4oxpECfpQhl2wfrnBeVzqkr8rcMkhdLGkoZ4zfzLQ0bg14nP
-         tdcyxIpz5WzM1h7UytzRqWSoH0QEXm3KMxFPY+d+CKzgZHExf4jaA383k7DbgK9p4vhC
-         Bbuw==
+        bh=iQzKmwOo0Zi6lGT6PpXR22p/4KKjcdAVozwCuUgWRsc=;
+        b=PnO5NUvEdNNV0rBBzYIX7aDeTfmGam9hgf9f/eNuGfkMxR2yCZdWQowQKPZJmtByJ8
+         3GcyfKMsDo4jyXo/XnEa6jyjsBDF4Z7g+FPJMpOMTj26nlaCBbZ9U6T0YLqH5iJc9PGj
+         X/lN9bUbcn8Uf+JPwfyLm1pTd6JtukCBWTkq3SiJzVshl5/kNJUF7yo+r91m0QMIopbI
+         r9g5tb9rwqRERwKJ80SODvLZJtLSMGYkZzNJArihtC+OvbXZpMAvVhPNldbmkUm/XrvG
+         ZcvEnxX2Q2Eq0pbb9VVksHeZmSd4ErSj4IGCJxH3Adwin5utiIt8ytoBCM9MHHK4uYwz
+         YGAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Kk3dtIEIHLrcJXCtVTcb0P6ovpZXfJeh6sKbAWAj1no=;
-        b=rJU9Wm+4ppjxMdgyYjES1cZzi6FODQPgU46QNXI7ZIbonFkausqbU47o7GCQmJxH4U
-         mR5DbSzUNux/knFhHuNkO4AToobSe3nInjIBByllKcxOdX+4jJpAEO6XhZ1o+S/UUF7C
-         XBDSLZl47W8wmbz3gztLO4n+/91rnxVop4TfpXD73b4cVC9TzGLtMdjH4Qbg9zQR5/MH
-         y6vXtAVxKAQkr4gWZWJXHVTkVMusoddBy37JNQjsGJaRgC79+DUjbeXBwSfUCEqnMzJ5
-         ibg1yWkCl7ob6IGBpau4JceBHlj8AUPEC6PVaW+OAK5TzQT8LYj2lfNlBQG9YsreW9Pb
-         dp3A==
-X-Gm-Message-State: AOAM532V4IN8/MYAvo93S9p+BYS4J66t5vRGOg46GsX9avPPTlzevAkQ
-        vyGmzW6EWDUrM0GqGzuP+D8=
-X-Google-Smtp-Source: ABdhPJzGfNy97zcL46hxGh9zbWvFhq+8lbc6+7e336RdPNYCnFw34GFIjCkyQca02CQCHc+DPUtv4g==
-X-Received: by 2002:a17:90a:8d05:: with SMTP id c5mr2271219pjo.222.1599685384654;
-        Wed, 09 Sep 2020 14:03:04 -0700 (PDT)
+        bh=iQzKmwOo0Zi6lGT6PpXR22p/4KKjcdAVozwCuUgWRsc=;
+        b=mPRzHKoGLFjf3cGv1Xyd5meQbP0i+Gbq8l2/xNinAyrj535QYtH25KzxwPHlMXJMaD
+         9ojGyt43whWIMhvBMD0zl5wSU3WZrNGPHSKfCsEoMDvUX5JXzt9PgRvEyxMjdM6tdW6+
+         Ynk0l7LVudsQ0OhGQ8lRQ4SMMmN5zRAWuV9lmEMDSMroY2B6798iettexFKFNR4mg4c+
+         4MePmGelfwmP0CZireCxxpYEB0hgIl7vWWQtIRZLixUa4A+R3uw9CCd3D5WM8l+7Vqx+
+         f0Qej/iCSxZ00F122cfINQ++19HRScInmiJkOBTpWctvSG7WaPRJ+9zXM8xe0tEZ3tfb
+         Vong==
+X-Gm-Message-State: AOAM531jw4ylwzeuLuK4LWUPuf8AzvJRblJdi4vYGJcp8IxzyGvfDFVy
+        tbG41uMKcKcHeBfS0yisVngNJRwGOH4=
+X-Google-Smtp-Source: ABdhPJwZ1/HSV7C6JTjYSTgF/keuH8TyMxhSCQFzc+AGr0MJ9GlUOPtKnchRs/4OoRsz4OZ1PUkp7g==
+X-Received: by 2002:a63:ba5e:: with SMTP id l30mr1911360pgu.425.1599686082098;
+        Wed, 09 Sep 2020 14:14:42 -0700 (PDT)
 Received: from [10.230.30.107] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g32sm2951874pgl.89.2020.09.09.14.02.58
+        by smtp.gmail.com with ESMTPSA id 143sm3545110pfc.66.2020.09.09.14.14.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 14:03:03 -0700 (PDT)
-Subject: Re: [PATCH 1/5] dt-bindings: spi: Fix spi-bcm-qspi compatible
- ordering
-To:     Rob Herring <robh@kernel.org>
+        Wed, 09 Sep 2020 14:14:41 -0700 (PDT)
+Subject: Re: [PATCH 0/5] qspi binding and DTS fixes
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
 Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Yendapally Reddy Dhananjaya Reddy 
-        <yendapally.reddy@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
         "maintainer:BROADCOM SPI DRIVER" 
         <bcm-kernel-feedback-list@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
+        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Yendapally Reddy Dhananjaya Reddy 
+        <yendapally.reddy@broadcom.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 References: <20200827181842.1000451-1-f.fainelli@gmail.com>
- <20200827181842.1000451-2-f.fainelli@gmail.com>
- <20200909204111.GA3041530@bogus>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <0ab569c8-593a-aaa5-daaf-12860ce5931a@gmail.com>
-Date:   Wed, 9 Sep 2020 14:02:55 -0700
+Message-ID: <c8d43c72-eed7-44ae-f8f8-f8217bab5a3a@gmail.com>
+Date:   Wed, 9 Sep 2020 14:14:39 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.2.1
 MIME-Version: 1.0
-In-Reply-To: <20200909204111.GA3041530@bogus>
+In-Reply-To: <20200827181842.1000451-1-f.fainelli@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -86,23 +83,17 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-On 9/9/2020 1:41 PM, Rob Herring wrote:
-> On Thu, 27 Aug 2020 11:18:38 -0700, Florian Fainelli wrote:
->> The binding is currently incorrectly defining the compatible strings
->> from least specific to most specific instead of the converse. Re-order
->> them from most specific (left) to least specific (right) and fix the
->> examples as well.
->>
->> Fixes: 5fc78f4c842a ("spi: Broadcom BRCMSTB, NSP, NS2 SoC bindings")
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>   .../bindings/spi/brcm,spi-bcm-qspi.txt           | 16 ++++++++--------
->>   1 file changed, 8 insertions(+), 8 deletions(-)
->>
+On 8/27/2020 11:18 AM, Florian Fainelli wrote:
+> Hi all,
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> This patch series fixes incorrectly defined compatible strings for the
+> Broadcom QSPI controller which resulted in the strings not being
+> ordered from most to least compatible.
 > 
+> We will need to apply some changes to the spi-bcm-qspi.c driver in
+> the future to assume no revision register exist, and these patches
+> are a preliminary step towards that goal.
 
-Thanks, and sorry about the nagging on IRC :)
+Series applied to devicetree/fixes, sending the PR shortly.
 -- 
 Florian
