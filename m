@@ -2,98 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64812263846
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Sep 2020 23:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFF02638FB
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Sep 2020 00:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729507AbgIIVOo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Sep 2020 17:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728626AbgIIVOn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Sep 2020 17:14:43 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E67C061573;
-        Wed,  9 Sep 2020 14:14:42 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id k15so3255351pfc.12;
-        Wed, 09 Sep 2020 14:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iQzKmwOo0Zi6lGT6PpXR22p/4KKjcdAVozwCuUgWRsc=;
-        b=PnO5NUvEdNNV0rBBzYIX7aDeTfmGam9hgf9f/eNuGfkMxR2yCZdWQowQKPZJmtByJ8
-         3GcyfKMsDo4jyXo/XnEa6jyjsBDF4Z7g+FPJMpOMTj26nlaCBbZ9U6T0YLqH5iJc9PGj
-         X/lN9bUbcn8Uf+JPwfyLm1pTd6JtukCBWTkq3SiJzVshl5/kNJUF7yo+r91m0QMIopbI
-         r9g5tb9rwqRERwKJ80SODvLZJtLSMGYkZzNJArihtC+OvbXZpMAvVhPNldbmkUm/XrvG
-         ZcvEnxX2Q2Eq0pbb9VVksHeZmSd4ErSj4IGCJxH3Adwin5utiIt8ytoBCM9MHHK4uYwz
-         YGAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=iQzKmwOo0Zi6lGT6PpXR22p/4KKjcdAVozwCuUgWRsc=;
-        b=mPRzHKoGLFjf3cGv1Xyd5meQbP0i+Gbq8l2/xNinAyrj535QYtH25KzxwPHlMXJMaD
-         9ojGyt43whWIMhvBMD0zl5wSU3WZrNGPHSKfCsEoMDvUX5JXzt9PgRvEyxMjdM6tdW6+
-         Ynk0l7LVudsQ0OhGQ8lRQ4SMMmN5zRAWuV9lmEMDSMroY2B6798iettexFKFNR4mg4c+
-         4MePmGelfwmP0CZireCxxpYEB0hgIl7vWWQtIRZLixUa4A+R3uw9CCd3D5WM8l+7Vqx+
-         f0Qej/iCSxZ00F122cfINQ++19HRScInmiJkOBTpWctvSG7WaPRJ+9zXM8xe0tEZ3tfb
-         Vong==
-X-Gm-Message-State: AOAM531jw4ylwzeuLuK4LWUPuf8AzvJRblJdi4vYGJcp8IxzyGvfDFVy
-        tbG41uMKcKcHeBfS0yisVngNJRwGOH4=
-X-Google-Smtp-Source: ABdhPJwZ1/HSV7C6JTjYSTgF/keuH8TyMxhSCQFzc+AGr0MJ9GlUOPtKnchRs/4OoRsz4OZ1PUkp7g==
-X-Received: by 2002:a63:ba5e:: with SMTP id l30mr1911360pgu.425.1599686082098;
-        Wed, 09 Sep 2020 14:14:42 -0700 (PDT)
-Received: from [10.230.30.107] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 143sm3545110pfc.66.2020.09.09.14.14.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 14:14:41 -0700 (PDT)
-Subject: Re: [PATCH 0/5] qspi binding and DTS fixes
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        "maintainer:BROADCOM SPI DRIVER" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Yendapally Reddy Dhananjaya Reddy 
-        <yendapally.reddy@broadcom.com>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200827181842.1000451-1-f.fainelli@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <c8d43c72-eed7-44ae-f8f8-f8217bab5a3a@gmail.com>
-Date:   Wed, 9 Sep 2020 14:14:39 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.2.1
+        id S1729296AbgIIW3J (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Sep 2020 18:29:09 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32396 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727782AbgIIW3I (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Sep 2020 18:29:08 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089MRYK2097724;
+        Wed, 9 Sep 2020 18:29:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=IkJ80Y1POR7TpH9syCU5eT96eUJswMK1blGxXzjoJQk=;
+ b=g6M/FfgKHiaf6Fj722WB3LNtIsYbOWU+4mHHC5ZYBCoiOVx4X9uvCmX1o3zsEIfWofvv
+ re6PP5lqEgpSP6vpvPAfbiQxwlSdZFe2Xs51Xoxnws4I6Uqnsy9FoQdIvlLV5s5GA6Gp
+ 8wxwJQzb0Y5CT2F3gbZaUTv5QXpMj0qTb7/3xByZa0zKhYUHhYtZSOx92T2NRPuV1yaY
+ gReGqEN1czspBF66w5w7bMRaxFFoVh7LnZTD4lYrIxF54ed14TsMhXKQaEmVoKaMD7dN
+ HcXzORrkN3kR7KK5UGdl1Liwwq+sHRTpDozAsVYD8XAvBmKn3E1g+I1HpfcdNJ2OJKy5 FQ== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33f7v5810r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Sep 2020 18:29:00 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 089MRU5Q012722;
+        Wed, 9 Sep 2020 22:29:00 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma05wdc.us.ibm.com with ESMTP id 33c2a9arc8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Sep 2020 22:28:59 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 089MStWd37028442
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Sep 2020 22:28:55 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB7EB136053;
+        Wed,  9 Sep 2020 22:28:58 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 610BB136055;
+        Wed,  9 Sep 2020 22:28:58 +0000 (GMT)
+Received: from SHADE6A.ibmuc.com (unknown [9.163.76.239])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Sep 2020 22:28:58 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        joel@jms.id.au, broonie@kernel.org, bradleyb@fuzziesquirrel.com,
+        robh+dt@kernel.org, arnd@arndb.de, eajames@linux.ibm.com
+Subject: [PATCH v2 0/6] spi: Fixes for FSI-attached controller
+Date:   Wed,  9 Sep 2020 17:28:51 -0500
+Message-Id: <20200909222857.28653-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20200827181842.1000451-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-09_17:2020-09-09,2020-09-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 suspectscore=1 mlxlogscore=764 priorityscore=1501
+ malwarescore=0 impostorscore=0 adultscore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009090189
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+This series implements a number of fixes for the FSI-attached SPI
+controller driver.
 
+Changes since v1:
+ - Switch to a new compatible string for the restricted version of the
+   SPI controller, rather than a new boolean parameter.
 
-On 8/27/2020 11:18 AM, Florian Fainelli wrote:
-> Hi all,
-> 
-> This patch series fixes incorrectly defined compatible strings for the
-> Broadcom QSPI controller which resulted in the strings not being
-> ordered from most to least compatible.
-> 
-> We will need to apply some changes to the spi-bcm-qspi.c driver in
-> the future to assume no revision register exist, and these patches
-> are a preliminary step towards that goal.
+Brad Bishop (3):
+  spi: fsi: Handle 9 to 15 byte transfers lengths
+  spi: fsi: Fix clock running too fast
+  spi: fsi: Fix use of the bneq+ sequencer instruction
 
-Series applied to devicetree/fixes, sending the PR shortly.
+Eddie James (3):
+  dt-bindings: fsi: fsi2spi: Add compatible string for restricted
+    version
+  spi: fsi: Implement restricted size for certain controllers
+  spi: fsi: Check mux status before transfers
+
+ .../devicetree/bindings/fsi/ibm,fsi2spi.yaml  |   1 +
+ drivers/spi/spi-fsi.c                         | 139 ++++++++++++++----
+ 2 files changed, 109 insertions(+), 31 deletions(-)
+
 -- 
-Florian
+2.26.2
+
