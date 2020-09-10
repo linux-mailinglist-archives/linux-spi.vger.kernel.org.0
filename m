@@ -2,104 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3282926495A
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Sep 2020 18:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC81D264D63
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Sep 2020 20:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbgIJQKT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Sep 2020 12:10:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56388 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731467AbgIJQHQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 10 Sep 2020 12:07:16 -0400
-Received: from localhost.localdomain (unknown [194.230.155.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7ABEA206A1;
-        Thu, 10 Sep 2020 16:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599754035;
-        bh=MKkXukV8EeYZX4MPiNOE6v88lPWyv1nk40pneoL9Dvc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YV2va4k8GgatPE4HjkQT6wxJMB018tzsU6wdlU112HCu8qtIQXQMZLx3sTUYfFctD
-         5RKV10u/yvdA1+Ll/x8FC67sYpi1JLs/iyRQDYrhi/Kmkfv9iZnGTEJ9/KgeQsYW52
-         2zWYvCiGSDi2Ft9CiL2uqOAWhSwDk7pawAKzIfW4=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Mark Brown <broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH REBASE] spi: sprd: Simplify with dev_err_probe()
-Date:   Thu, 10 Sep 2020 18:07:06 +0200
-Message-Id: <20200910160706.5883-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1725820AbgIJSl3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Sep 2020 14:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726591AbgIJSSE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Sep 2020 14:18:04 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C46C061757;
+        Thu, 10 Sep 2020 11:18:03 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id o16so419833pjr.2;
+        Thu, 10 Sep 2020 11:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JFd3P1rOkLJ0aMveQe0KPg1GqwxvSb9Woluh1JdvYp0=;
+        b=Op9WewQIHeEQlS/RoU8M6xE18aOAsW92SSqLEXdoL6DIM5z/cvbSOLwC+TG9fVWhJr
+         kOMVkkvasCDay8WDHAqgzDL2YlJ64YeMuqpraanDfiFh3i7/3kwAX6ckuxPy/KWYt4T4
+         88q3U4GbhB0qu3CCh/tQi68jHL1OS3ODXVKm5yqODXCRmVVac5yQPNlaGwI70/v/EZ7t
+         SBpkwH1th3kNVmk+9VNUru7KzXB43xlOP9zMdh9me0fB1PsFUuVQirvnEBMZxKlwY9jp
+         +YpWAQiaJyPxSCrIeDU0ggjpErGNtb0PDJzN0cvLbPJBuLuaXXeYXERl9FICtmz8nWS/
+         aO8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JFd3P1rOkLJ0aMveQe0KPg1GqwxvSb9Woluh1JdvYp0=;
+        b=sTRSyHNEEyWAtCvPfr3Pl09+8SJusX/WaEI9jzxGbZjF13JrtJyS+He0kLvn69zK64
+         7vY+9qNasDflhAn5nnuWBs647Pv3ORdW/nPcoKuYDnA461WFCPJ76ALyXKvh6Q0IOVp+
+         FnAeCTbNMnF0W5Aw4x/e2XdEUKZfLO1qPQFR9eErv5KExf0ubUJ2Ipc4la73Ht9Izgfu
+         J/aMWEtGe5SSQUR/BUOVrpaI8cigdULI3XBFyKZ2hl5lJZ4wo0+cgtxIC8yXLtsC6kj/
+         byCpYfuL2QuUsYSEY+dKQlyEwAi1yHJL1u5d1tvj2ZCQm4O+kSUZlR2COedDj3HhjJWA
+         d2IA==
+X-Gm-Message-State: AOAM5303ejn7xihi02JuKlh3g8x+b8xF1kPEIe35L8p2DbcS8c3Slkdg
+        EjmXaAySH9B8gUZ6dlBR1yg=
+X-Google-Smtp-Source: ABdhPJzkphfIrGONRGhkOvnxjIuDhqgQ5GuoK+0TLsSJppTv+BMsz6ImMXl+KGDeRe7/jApLXDLN1Q==
+X-Received: by 2002:a17:90a:bd91:: with SMTP id z17mr1101093pjr.139.1599761883254;
+        Thu, 10 Sep 2020 11:18:03 -0700 (PDT)
+Received: from [10.230.30.107] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id ca6sm2551066pjb.53.2020.09.10.11.18.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Sep 2020 11:18:01 -0700 (PDT)
+Subject: Re: [PATCH 1/4] dt-bindings: spi: Add compatible string for brcmstb
+ SoCs
+To:     Ray Jui <ray.jui@broadcom.com>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+References: <20200910152539.45584-1-ray.jui@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <583cb756-409d-afa6-0d4d-47100eb33e74@gmail.com>
+Date:   Thu, 10 Sep 2020 11:18:00 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.2.1
+MIME-Version: 1.0
+In-Reply-To: <20200910152539.45584-1-ray.jui@broadcom.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Common pattern of handling deferred probe can be simplified with
-dev_err_probe().  Less code and the error value gets printed.
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
 
----
+On 9/10/2020 8:25 AM, Ray Jui wrote:
+> Add compatible string for brcmstb 7445 SoCs.
+> 
+> Signed-off-by: Ray Jui <ray.jui@broadcom.com>
 
-Rebased on broonie/spi.git, for-5.10
----
- drivers/spi/spi-sprd-adi.c |  5 +----
- drivers/spi/spi-sprd.c     | 17 +++++------------
- 2 files changed, 6 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index 127b8bd25831..392ec5cfa3d6 100644
---- a/drivers/spi/spi-sprd-adi.c
-+++ b/drivers/spi/spi-sprd-adi.c
-@@ -504,10 +504,7 @@ static int sprd_adi_probe(struct platform_device *pdev)
- 			dev_info(&pdev->dev, "no hardware spinlock supplied\n");
- 			break;
- 		default:
--			dev_err(&pdev->dev,
--				"failed to find hwlock id, %d\n", ret);
--			fallthrough;
--		case -EPROBE_DEFER:
-+			dev_err_probe(&pdev->dev, ret, "failed to find hwlock id\n");
- 			goto put_ctlr;
- 		}
- 	}
-diff --git a/drivers/spi/spi-sprd.c b/drivers/spi/spi-sprd.c
-index 0443fec3a6ab..635738f54c73 100644
---- a/drivers/spi/spi-sprd.c
-+++ b/drivers/spi/spi-sprd.c
-@@ -553,22 +553,15 @@ static int sprd_spi_dma_tx_config(struct sprd_spi *ss, struct spi_transfer *t)
- static int sprd_spi_dma_request(struct sprd_spi *ss)
- {
- 	ss->dma.dma_chan[SPRD_SPI_RX] = dma_request_chan(ss->dev, "rx_chn");
--	if (IS_ERR_OR_NULL(ss->dma.dma_chan[SPRD_SPI_RX])) {
--		if (PTR_ERR(ss->dma.dma_chan[SPRD_SPI_RX]) == -EPROBE_DEFER)
--			return PTR_ERR(ss->dma.dma_chan[SPRD_SPI_RX]);
--
--		dev_err(ss->dev, "request RX DMA channel failed!\n");
--		return PTR_ERR(ss->dma.dma_chan[SPRD_SPI_RX]);
--	}
-+	if (IS_ERR_OR_NULL(ss->dma.dma_chan[SPRD_SPI_RX]))
-+		return dev_err_probe(ss->dev, PTR_ERR(ss->dma.dma_chan[SPRD_SPI_RX]),
-+				     "request RX DMA channel failed!\n");
- 
- 	ss->dma.dma_chan[SPRD_SPI_TX]  = dma_request_chan(ss->dev, "tx_chn");
- 	if (IS_ERR_OR_NULL(ss->dma.dma_chan[SPRD_SPI_TX])) {
- 		dma_release_channel(ss->dma.dma_chan[SPRD_SPI_RX]);
--		if (PTR_ERR(ss->dma.dma_chan[SPRD_SPI_TX]) == -EPROBE_DEFER)
--			return PTR_ERR(ss->dma.dma_chan[SPRD_SPI_TX]);
--
--		dev_err(ss->dev, "request TX DMA channel failed!\n");
--		return PTR_ERR(ss->dma.dma_chan[SPRD_SPI_TX]);
-+		return dev_err_probe(ss->dev, PTR_ERR(ss->dma.dma_chan[SPRD_SPI_TX]),
-+				     "request TX DMA channel failed!\n");
- 	}
- 
- 	return 0;
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.17.1
-
+Florian
