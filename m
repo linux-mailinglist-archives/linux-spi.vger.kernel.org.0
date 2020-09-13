@@ -2,133 +2,133 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7DA267FC0
-	for <lists+linux-spi@lfdr.de>; Sun, 13 Sep 2020 16:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0323326812D
+	for <lists+linux-spi@lfdr.de>; Sun, 13 Sep 2020 22:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbgIMOUK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 13 Sep 2020 10:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
+        id S1725938AbgIMUf2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 13 Sep 2020 16:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725931AbgIMOUI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Sep 2020 10:20:08 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85350C06174A
-        for <linux-spi@vger.kernel.org>; Sun, 13 Sep 2020 07:20:07 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id n133so14456988qkn.11
-        for <linux-spi@vger.kernel.org>; Sun, 13 Sep 2020 07:20:07 -0700 (PDT)
+        with ESMTP id S1725939AbgIMUfV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Sep 2020 16:35:21 -0400
+Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EED5C061787
+        for <linux-spi@vger.kernel.org>; Sun, 13 Sep 2020 13:35:21 -0700 (PDT)
+Received: by mail-vk1-xa43.google.com with SMTP id n193so3620247vkf.12
+        for <linux-spi@vger.kernel.org>; Sun, 13 Sep 2020 13:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Sc2ucwApAgbapLFwUU7U5vvbOcGFmFEAcEBxHT7jzJY=;
-        b=DEhuqCmAL+IOG3/PsF1Ij35CnOoDYI+nRfpBp6aCzlKamEH8x7x0RBLYDUADjggJb6
-         A/8R2EZ/1EvUsKQy/z/8KvZDHCFyIPG9UPxXTRZzroeSFsywNM8thWr131pgBrADsX6j
-         aPLmjj4YQibszPbvIlSy/CFronDjAioqWtcR/tD9EHZfS3EpbdVjWJqfsKuGRXy30vFd
-         PIIWm37fStXcT+isIQCqsbJ3J5vBBiHFrquZ6yawA0xfsgbK0JMdHT1gIck8KaooRRhm
-         Hsa5XNemIhYBH6bSNQVnA9g+k9SbdvHSI64KPPSzIj6Y6951AIsPhe/fLAm0Y8bK3JKA
-         lNuA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7//k4ZnzRlGYM9EKbMfbSQEPgFFjkWDQWTX6iz6Bros=;
+        b=LujPMVooXKT8EwHc0AmnxI0ZCCFHCgR387ccDWQ2vImrPK7nq6FNW7omZqh2xHS5q7
+         ReZy3cnXtFX8glJwNY21b3o/pCV/U6w52PLXZ88ougT3nWKZFs1RTWKLVJm5u/TYDye5
+         iNhGfZce5icXIqJi2H1Vtn3nkYF6WofKz0HRU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Sc2ucwApAgbapLFwUU7U5vvbOcGFmFEAcEBxHT7jzJY=;
-        b=TFo0J+BkMF79ckdaHvwJpUej5qwkZvS2nqdV+OaiLMkHhZjpdiypjJ4Y4E9EdR5Npx
-         8Z0AjC2fvQ0OwBQiiVpmqZW4apmr3lF3jiZDVA3MNbs4mHBuCinAgmPbh0CjmT1VnoaY
-         9UZCwgLTCSUDTLMC9FiawtnOBTP1KCL9K2b2WbybAhz6z0yHDL684lsgqYr3E/NPCdlE
-         S+bqVFkOHUSWyuOcSZhk5TPUlrPRe8t0K+Yqzt2tzbtR8/IZrfdsYsQYiFSofvfQRIzn
-         /4MaIoNQAsb4y2S9fOnGnw4T5KOVrN4fhmBpXueWG3EvlfCd8pkDuVk3o1mb3oLT1u7R
-         Heew==
-X-Gm-Message-State: AOAM530XCpK32dv9mF01WfmtzZIs+6Rc6kbYj+mU522g58fgg0XPYh8R
-        X15/XKFC3KZ0bV3edk29dmUl66ECJfA=
-X-Google-Smtp-Source: ABdhPJyUkLNYpUbV0Smoh5cnEK8yS6UZD3sZTTPSKR01Het6kujALAKUME95tOihyeu0BO9TBoxHuA==
-X-Received: by 2002:a05:620a:200d:: with SMTP id c13mr8850589qka.499.1600006798642;
-        Sun, 13 Sep 2020 07:19:58 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:482:640:9cc0:878:419e:8021])
-        by smtp.gmail.com with ESMTPSA id f8sm11739891qkb.123.2020.09.13.07.19.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Sep 2020 07:19:57 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     broonie@kernel.org
-Cc:     matthias.schiffer@ew.tq-group.com, linux-spi@vger.kernel.org,
-        shawnguo@kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
-        Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] spi: imx: Fix the number of chipselects count
-Date:   Sun, 13 Sep 2020 11:19:37 -0300
-Message-Id: <20200913141937.11588-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7//k4ZnzRlGYM9EKbMfbSQEPgFFjkWDQWTX6iz6Bros=;
+        b=hOm+N6ZQIazqUQ3VEeKWXKpQC4Tx0o0BN3BznV9GYxdR1kcfyELIDgn9X/EsqsBuAw
+         Yu1uskYzcOk4FagmiRWBQTL520gvh+ed+3OHkA8u9MUVSJctR6EnFUEPP6+La5MdALG+
+         LpjqkFAjajpNs8pY8ISGPcV911yLNteUSScZSv3aHAIDcyKCU79eoJ0C/pS3UCqmPvN+
+         jeJzcWxlDRXCW74CbjVM710Oxl5/fantjybIs8a5BWC7F24gq4bB+J9xHYzXwPRx/lpc
+         vjHmIqPcMjye9RlNcFNBfCmS+SzNl8OBfShAUaKbcV9+eNCaw1UqLwaYiDDHuErtRxh4
+         ZAIA==
+X-Gm-Message-State: AOAM531x8EP6MjmuTLy+RuLFGYNHRwR56bzjq6tbXbN6rb3rxb4hyNqE
+        0Goo87IhPbwDTGJ58sGm7Cobv3mGpHEk3w==
+X-Google-Smtp-Source: ABdhPJyBZ6Kym8V9T4zqVHrLZEm0FljhByrimuKqU9sbEIGk+oEyfjkZTvxY/BuI7f8fgLdaJZGA2Q==
+X-Received: by 2002:a1f:2e54:: with SMTP id u81mr5643624vku.10.1600029319977;
+        Sun, 13 Sep 2020 13:35:19 -0700 (PDT)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id i25sm1009985uac.2.2020.09.13.13.35.18
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Sep 2020 13:35:18 -0700 (PDT)
+Received: by mail-vs1-f48.google.com with SMTP id x203so8419605vsc.11
+        for <linux-spi@vger.kernel.org>; Sun, 13 Sep 2020 13:35:18 -0700 (PDT)
+X-Received: by 2002:a67:ff97:: with SMTP id v23mr5969962vsq.11.1600029318182;
+ Sun, 13 Sep 2020 13:35:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200912140730.1.Ie67fa32009b94702d56232c064f1d89065ee8836@changeid>
+ <20200912140730.3.Ided778fb4cd078e36c6b240d1b279cd7a534a313@changeid>
+ <20200912225440.GB3715@yoga> <CAD=FV=V=in+-GL-9p1b6w8g8CJ0jdhGWhsZNAvap=W1MAPMEKQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=V=in+-GL-9p1b6w8g8CJ0jdhGWhsZNAvap=W1MAPMEKQ@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Sun, 13 Sep 2020 13:35:06 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WdxezP_cpuQjLdgOS8geOC=uW5n=TfRoZG7vJc=_aCbQ@mail.gmail.com>
+Message-ID: <CAD=FV=WdxezP_cpuQjLdgOS8geOC=uW5n=TfRoZG7vJc=_aCbQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] spi: spi-geni-qcom: Slightly optimize setup of
+ bidirectional xfters
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On an imx6q-sabresd board, which has one single GPIO chipselect used
-for SPI, the SPI core now reports that it has 3 chipselects.
+Hi,
 
-This happens since commit 8cdcd8aeee281 ("spi: imx/fsl-lpspi: Convert to
-GPIO descriptors"), which assigned master->num_chipselect as 3 when
-'num-cs' is absent.
+On Sat, Sep 12, 2020 at 6:09 PM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Sat, Sep 12, 2020 at 3:54 PM Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+> >
+> > On Sat 12 Sep 16:08 CDT 2020, Douglas Anderson wrote:
+> >
+> > > When setting up a bidirectional transfer we need to program both the
+> > > TX and RX lengths.  We don't need a memory barrier between those two
+> > > writes.  Factor out the __iowmb() and use writel_relaxed().  This
+> > > saves a fraction of a microsecond of setup overhead on bidirectional
+> > > transfers.
+> > >
+> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > > ---
+> > >
+> > >  drivers/spi/spi-geni-qcom.c | 13 ++++++++++---
+> > >  1 file changed, 10 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> > > index 92d88bf85a90..6c7e12b68bf0 100644
+> > > --- a/drivers/spi/spi-geni-qcom.c
+> > > +++ b/drivers/spi/spi-geni-qcom.c
+> > > @@ -376,15 +376,22 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+> > >       len &= TRANS_LEN_MSK;
+> > >
+> > >       mas->cur_xfer = xfer;
+> > > +
+> > > +     /*
+> > > +      * Factor out the __iowmb() so that we can use writel_relaxed() for
+> > > +      * both writes below and thus only incur the overhead once even if
+> > > +      * we execute both of them.
+> > > +      */
+> >
+> > How many passes through this function do we have to take before saving
+> > the amount of time it took me to read this comment?
+> >
+> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>
+> Thanks for the review!  Yeah, in Chrome OS we do a crazy amount of SPI
+> transfers since our EC and security chip are connected over SPI and we
+> seem to pile a whole lot of stuff into the EC.  This means we keep
+> coming back to the SPI controller again and again when profiling
+> things.  I'm hoping that we'll eventually be able to get DMA enabled
+> here, but until then at least it's nice to make the FIFO transfers
+> better...
 
-However, 'num-cs' property is not used in any in-tree devicetree, leading
-to an incorrect count of chipselects.
+Ugh.  Given the problem that the kernel test robot found, I'm gonna
+say just drop this patch but keep the others I sent.  As per the CL
+description, it's a pretty minor optimization and even though we do a
+lot of SPI transfers it's probably more worth it to work towards DMA
+mode than to try to find a cleaner solution for this one.
 
-Fix the number of chipselects count by only assigning
-master->num_chipselect in the unlikely case when the "cs-gpios" property
-is absent.
-
-Print a warning in this case, since using native chipselects in
-several i.MX SoCs is known to be problematic.
-
-While at it, use 4 as the maximum number of native chip-select supported
-by this controller.
-
-Fixes: 8cdcd8aeee281 ("spi: imx/fsl-lpspi: Convert to GPIO descriptors")
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- drivers/spi/spi-imx.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 197f60632072..968c868cf17f 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -13,6 +13,7 @@
- #include <linux/irq.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of_gpio.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-@@ -1581,7 +1582,7 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	const struct spi_imx_devtype_data *devtype_data = of_id ? of_id->data :
- 		(struct spi_imx_devtype_data *)pdev->id_entry->driver_data;
- 	bool slave_mode;
--	u32 val;
-+	int num_cs_gpios;
- 
- 	slave_mode = devtype_data->has_slavemode &&
- 			of_property_read_bool(np, "spi-slave");
-@@ -1613,16 +1614,12 @@ static int spi_imx_probe(struct platform_device *pdev)
- 
- 	spi_imx->devtype_data = devtype_data;
- 
--	/*
--	 * Get number of chip selects from device properties. This can be
--	 * coming from device tree or boardfiles, if it is not defined,
--	 * a default value of 3 chip selects will be used, as all the legacy
--	 * board files have <= 3 chip selects.
--	 */
--	if (!device_property_read_u32(&pdev->dev, "num-cs", &val))
--		master->num_chipselect = val;
--	else
--		master->num_chipselect = 3;
-+	num_cs_gpios = gpiod_count(&pdev->dev, "cs");
-+	if ((num_cs_gpios == 0) || (num_cs_gpios == -ENOENT)) {
-+		dev_warn(&pdev->dev,
-+			 "cs-gpios not found. Using native chipselect with this SPI controller is known to be problematic\n");
-+		master->num_chipselect = 4;
-+	}
- 
- 	spi_imx->bitbang.setup_transfer = spi_imx_setupxfer;
- 	spi_imx->bitbang.txrx_bufs = spi_imx_transfer;
--- 
-2.17.1
-
+-Doug
