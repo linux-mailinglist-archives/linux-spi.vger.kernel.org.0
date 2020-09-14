@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F94268D46
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 16:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839CD268E1A
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 16:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726318AbgINOSz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Sep 2020 10:18:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32804 "EHLO mail.kernel.org"
+        id S1726682AbgINOoK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Sep 2020 10:44:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32960 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726698AbgINNHL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:07:11 -0400
+        id S1726623AbgINNF3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:05:29 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 863F022210;
-        Mon, 14 Sep 2020 13:05:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E572F2222E;
+        Mon, 14 Sep 2020 13:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600088752;
-        bh=RkDGxihzRJRoD9St/O84o4RrJ097bB39FvwlFUeYZhM=;
+        s=default; t=1600088682;
+        bh=Znj6Ys0c5jRV6GwNvsGEzPyhBwAFXhnTPfn0h1uiGBI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A+fJxgqzuKvHrSEwJIZhZxrB6HcwOej71p2QIwODlE/Duz+D3THlbwyBqCGDjT4FN
-         /O9P04vqTDprnS9TRReawkURYtL1GPHPJ5NAkvshmRJdHjOfJ2i9pN53/tXGzJYIuq
-         WEYxGLe1UraEyl56sEY5m7uhiJ1vbB6AT+UE7xCg=
+        b=iIKc23R/S0pQYrJMpIIeeBY6EIEdExg/eE+C+YdjUM8gkwTBoNnMraMILu0jWa47/
+         rAdlS24loho9VVgNfIyG9LRY182rLDc5AJTYPxGXKUbByYFCoaSO6Tgub4hKMYxXpe
+         550VbmtQSrUpVXYyV9WL6d106+UTCFoR55iOVjJM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 05/10] spi: spi-loopback-test: Fix out-of-bounds read
-Date:   Mon, 14 Sep 2020 09:05:40 -0400
-Message-Id: <20200914130545.1805084-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 06/22] spi: spi-loopback-test: Fix out-of-bounds read
+Date:   Mon, 14 Sep 2020 09:04:18 -0400
+Message-Id: <20200914130434.1804478-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914130545.1805084-1-sashal@kernel.org>
-References: <20200914130545.1805084-1-sashal@kernel.org>
+In-Reply-To: <20200914130434.1804478-1-sashal@kernel.org>
+References: <20200914130434.1804478-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
-index 50e620f4e8fe2..7120083fe7610 100644
+index 6f18d49527673..51633b2b64371 100644
 --- a/drivers/spi/spi-loopback-test.c
 +++ b/drivers/spi/spi-loopback-test.c
-@@ -74,7 +74,7 @@ static struct spi_test spi_tests[] = {
+@@ -90,7 +90,7 @@ static struct spi_test spi_tests[] = {
  	{
  		.description	= "tx/rx-transfer - crossing PAGE_SIZE",
  		.fill_option	= FILL_COUNT_8,
@@ -99,7 +99,7 @@ index 50e620f4e8fe2..7120083fe7610 100644
 +		.iterate_len    = { ITERATE_LEN },
  		.iterate_tx_align = ITERATE_ALIGN,
  		.iterate_rx_align = ITERATE_ALIGN,
- 		.transfers		= {
+ 		.transfer_count = 1,
 -- 
 2.25.1
 
