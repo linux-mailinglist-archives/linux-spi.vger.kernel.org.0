@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B74E1268D92
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 16:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C1C268D66
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 16:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbgINO1e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Sep 2020 10:27:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60290 "EHLO mail.kernel.org"
+        id S1726707AbgINOWg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Sep 2020 10:22:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32960 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726663AbgINNGE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:06:04 -0400
+        id S1726685AbgINNGm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:06:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B525D21655;
-        Mon, 14 Sep 2020 13:05:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A92A2226A;
+        Mon, 14 Sep 2020 13:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600088723;
-        bh=tFyPP/LVcV8CScN25dO/aS7HgelBcX7Ed0HLml41wzM=;
+        s=default; t=1600088734;
+        bh=E2UGo2sQGtP/cvqzed6Qm48vWtNdhAPdX997cI1qKDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QRE6h7SRRnNjT0tk2GHPFhyUZ/HomAsS+FcjHf8PwC8XWWp0pj9Sd2xKKkA4FGH79
-         EZFkpNzjrK1uekHsObQqPYWA6BnmlxWDQUNs5Woa1K4+u2wCt3xUIiRVm5Lo6OrHTi
-         YdEgLQ0C4d3qPx1JO0dd/mqJr1VAxCaqZDDay0UA=
+        b=zEjvVHYXB1xZACnuTzn6oCwLkLAV8cBtYcDst0hh0hr793aenEylMFm6dQsiJyYWk
+         aRS7QlGuRmaQf/hrwD6DtPTIC2cTSIsd0jNzTIWP2CIFvc4LfeXdsQwB1yy4IkDj/a
+         nNg28CNEI/i5DJV/G8eP3TJF1SsqZOMb1bxZXK0I=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gustav Wiklander <gustavwi@axis.com>,
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 17/19] spi: Fix memory leak on splited transfers
-Date:   Mon, 14 Sep 2020 09:05:00 -0400
-Message-Id: <20200914130502.1804708-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 06/15] spi: spi-loopback-test: Fix out-of-bounds read
+Date:   Mon, 14 Sep 2020 09:05:17 -0400
+Message-Id: <20200914130526.1804913-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914130502.1804708-1-sashal@kernel.org>
-References: <20200914130502.1804708-1-sashal@kernel.org>
+In-Reply-To: <20200914130526.1804913-1-sashal@kernel.org>
+References: <20200914130526.1804913-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,75 +43,63 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Gustav Wiklander <gustavwi@axis.com>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-[ Upstream commit b59a7ca15464c78ea1ba3b280cfc5ac5ece11ade ]
+[ Upstream commit 837ba18dfcd4db21ad58107c65bfe89753aa56d7 ]
 
-In the prepare_message callback the bus driver has the
-opportunity to split a transfer into smaller chunks.
-spi_map_msg is done after prepare_message.
+The "tx/rx-transfer - crossing PAGE_SIZE" test always fails when
+len=131071 and rx_offset >= 5:
 
-Function spi_res_release releases the splited transfers
-in the message. Therefore spi_res_release should be called
-after spi_map_msg.
+ spi-loopback-test spi0.0: Running test tx/rx-transfer - crossing PAGE_SIZE
+ ...
+   with iteration values: len = 131071, tx_off = 0, rx_off = 3
+   with iteration values: len = 131071, tx_off = 0, rx_off = 4
+   with iteration values: len = 131071, tx_off = 0, rx_off = 5
+ loopback strangeness - rx changed outside of allowed range at: ...a4321000
+   spi_msg@ffffffd5a4157690
+     frame_length:  131071
+     actual_length: 131071
+     spi_transfer@ffffffd5a41576f8
+       len:    131071
+       tx_buf: ffffffd5a4340ffc
 
-The previous try at this was commit c9ba7a16d0f1
-which released the splited transfers after
-spi_finalize_current_message had been called.
-This introduced a race since the message struct could be
-out of scope because the spi_sync call got completed.
+Note that rx_offset > 3 can only occur if the SPI controller driver sets
+->dma_alignment to a higher value than 4, so most SPI controller drivers
+are not affect.
 
-Fixes this leak on spi bus driver spi-bcm2835.c when transfer
-size is greater than 65532:
+The allocated Rx buffer is of size SPI_TEST_MAX_SIZE_PLUS, which is 132
+KiB (assuming 4 KiB pages).  This test uses an initial offset into the
+rx_buf of PAGE_SIZE - 4, and a len of 131071, so the range expected to
+be written in this transfer ends at (4096 - 4) + 5 + 131071 == 132 KiB,
+which is also the end of the allocated buffer.  But the code which
+verifies the content of the buffer reads a byte beyond the allocated
+buffer and spuriously fails because this out-of-bounds read doesn't
+return the expected value.
 
-Kmemleak:
-sg_alloc_table+0x28/0xc8
-spi_map_buf+0xa4/0x300
-__spi_pump_messages+0x370/0x748
-__spi_sync+0x1d4/0x270
-spi_sync+0x34/0x58
-spi_test_execute_msg+0x60/0x340 [spi_loopback_test]
-spi_test_run_iter+0x548/0x578 [spi_loopback_test]
-spi_test_run_test+0x94/0x140 [spi_loopback_test]
-spi_test_run_tests+0x150/0x180 [spi_loopback_test]
-spi_loopback_test_probe+0x50/0xd0 [spi_loopback_test]
-spi_drv_probe+0x84/0xe0
+Fix this by using ITERATE_LEN instead of ITERATE_MAX_LEN to avoid
+testing sizes which cause out-of-bounds reads.
 
-Signed-off-by: Gustav Wiklander <gustavwi@axis.com>
-Link: https://lore.kernel.org/r/20200908151129.15915-1-gustav.wiklander@axis.com
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Link: https://lore.kernel.org/r/20200902132341.7079-1-vincent.whitchurch@axis.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/spi/spi-loopback-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 92e6b6774d98e..1fd529a2d2f6b 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1116,8 +1116,6 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 	if (msg->status && ctlr->handle_err)
- 		ctlr->handle_err(ctlr, msg);
- 
--	spi_res_release(ctlr, msg);
--
- 	spi_finalize_current_message(ctlr);
- 
- 	return ret;
-@@ -1375,6 +1373,13 @@ void spi_finalize_current_message(struct spi_controller *ctlr)
- 
- 	spi_unmap_msg(ctlr, mesg);
- 
-+	/* In the prepare_messages callback the spi bus has the opportunity to
-+	 * split a transfer to smaller chunks.
-+	 * Release splited transfers here since spi_map_msg is done on the
-+	 * splited transfers.
-+	 */
-+	spi_res_release(ctlr, mesg);
-+
- 	if (ctlr->cur_msg_prepared && ctlr->unprepare_message) {
- 		ret = ctlr->unprepare_message(ctlr, mesg);
- 		if (ret) {
+diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
+index bed7403bb6b3a..b9a7117b6dce3 100644
+--- a/drivers/spi/spi-loopback-test.c
++++ b/drivers/spi/spi-loopback-test.c
+@@ -99,7 +99,7 @@ static struct spi_test spi_tests[] = {
+ 	{
+ 		.description	= "tx/rx-transfer - crossing PAGE_SIZE",
+ 		.fill_option	= FILL_COUNT_8,
+-		.iterate_len    = { ITERATE_MAX_LEN },
++		.iterate_len    = { ITERATE_LEN },
+ 		.iterate_tx_align = ITERATE_ALIGN,
+ 		.iterate_rx_align = ITERATE_ALIGN,
+ 		.transfer_count = 1,
 -- 
 2.25.1
 
