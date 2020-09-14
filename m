@@ -2,104 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C4C268DD4
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 16:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB80268E91
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 16:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbgINOcO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Sep 2020 10:32:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60278 "EHLO mail.kernel.org"
+        id S1726877AbgINOxD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Sep 2020 10:53:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53288 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726438AbgINNGA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:06:00 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726772AbgINOwr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Sep 2020 10:52:47 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB1E721BE5;
-        Mon, 14 Sep 2020 13:05:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F28D20715;
+        Mon, 14 Sep 2020 14:52:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600088710;
-        bh=E2UGo2sQGtP/cvqzed6Qm48vWtNdhAPdX997cI1qKDY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z6KIFh9F+BSHA5FPDyQwx8gId5pZqA3HdqpnftR+zQSvAhce/W3fyfacOxZbieWHM
-         AOgO/M5+NvyVdiKXx2sVFsVJrpMLwKtMGF6m+HY5vGtNGBXqcsW+jj054JUQM8A5No
-         ajQnnNz4nCBR7+rRjWWL2a0/2daIxjcmaUCt42M0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 06/19] spi: spi-loopback-test: Fix out-of-bounds read
-Date:   Mon, 14 Sep 2020 09:04:49 -0400
-Message-Id: <20200914130502.1804708-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914130502.1804708-1-sashal@kernel.org>
-References: <20200914130502.1804708-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        s=default; t=1600095166;
+        bh=M2DIyqZOF1aOYfADXh4hvgjSrHg+ONJQHW16u8xBjA4=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=0d2IhcbTsNq3ez+y+kRsDIEtX9nWSFo8nFYmvPWfwl7rZ/Dt+D9H9A/+CU3+bFfFk
+         a/zyAD4incso7WguvIDi8GCiGuKprme3/qQN79S57e2CJGeQNIBS6kicHaU3gLUdlO
+         eyd4Vg3/HIctzsK49G8UImGV9DWEPrApD0H8q9SM=
+Date:   Mon, 14 Sep 2020 15:51:58 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        Colin King <colin.king@canonical.com>,
+        Andy Gross <agross@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+In-Reply-To: <20200910150410.750959-1-colin.king@canonical.com>
+References: <20200910150410.750959-1-colin.king@canonical.com>
+Subject: Re: [PATCH] spi: qup: remove redundant assignment to variable ret
+Message-Id: <160009511676.5702.4493764455278443968.b4-ty@kernel.org>
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Vincent Whitchurch <vincent.whitchurch@axis.com>
+On Thu, 10 Sep 2020 16:04:10 +0100, Colin King wrote:
+> The variable ret is being initialized with a value that is
+> never read and it is being updated later with a new value. The
+> initialization is redundant and can be removed.
 
-[ Upstream commit 837ba18dfcd4db21ad58107c65bfe89753aa56d7 ]
+Applied to
 
-The "tx/rx-transfer - crossing PAGE_SIZE" test always fails when
-len=131071 and rx_offset >= 5:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
- spi-loopback-test spi0.0: Running test tx/rx-transfer - crossing PAGE_SIZE
- ...
-   with iteration values: len = 131071, tx_off = 0, rx_off = 3
-   with iteration values: len = 131071, tx_off = 0, rx_off = 4
-   with iteration values: len = 131071, tx_off = 0, rx_off = 5
- loopback strangeness - rx changed outside of allowed range at: ...a4321000
-   spi_msg@ffffffd5a4157690
-     frame_length:  131071
-     actual_length: 131071
-     spi_transfer@ffffffd5a41576f8
-       len:    131071
-       tx_buf: ffffffd5a4340ffc
+Thanks!
 
-Note that rx_offset > 3 can only occur if the SPI controller driver sets
-->dma_alignment to a higher value than 4, so most SPI controller drivers
-are not affect.
+[1/1] spi: qup: remove redundant assignment to variable ret
+      commit: 4a6c7d6f940107d6383291e2cb450039790b752d
 
-The allocated Rx buffer is of size SPI_TEST_MAX_SIZE_PLUS, which is 132
-KiB (assuming 4 KiB pages).  This test uses an initial offset into the
-rx_buf of PAGE_SIZE - 4, and a len of 131071, so the range expected to
-be written in this transfer ends at (4096 - 4) + 5 + 131071 == 132 KiB,
-which is also the end of the allocated buffer.  But the code which
-verifies the content of the buffer reads a byte beyond the allocated
-buffer and spuriously fails because this out-of-bounds read doesn't
-return the expected value.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Fix this by using ITERATE_LEN instead of ITERATE_MAX_LEN to avoid
-testing sizes which cause out-of-bounds reads.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-Link: https://lore.kernel.org/r/20200902132341.7079-1-vincent.whitchurch@axis.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-loopback-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
-index bed7403bb6b3a..b9a7117b6dce3 100644
---- a/drivers/spi/spi-loopback-test.c
-+++ b/drivers/spi/spi-loopback-test.c
-@@ -99,7 +99,7 @@ static struct spi_test spi_tests[] = {
- 	{
- 		.description	= "tx/rx-transfer - crossing PAGE_SIZE",
- 		.fill_option	= FILL_COUNT_8,
--		.iterate_len    = { ITERATE_MAX_LEN },
-+		.iterate_len    = { ITERATE_LEN },
- 		.iterate_tx_align = ITERATE_ALIGN,
- 		.iterate_rx_align = ITERATE_ALIGN,
- 		.transfer_count = 1,
--- 
-2.25.1
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
+Thanks,
+Mark
