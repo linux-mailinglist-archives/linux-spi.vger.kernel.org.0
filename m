@@ -2,114 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87044268B02
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 14:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610BC268BD9
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 15:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726467AbgINMdL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Sep 2020 08:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726364AbgINMc4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Sep 2020 08:32:56 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF15C061D73
-        for <linux-spi@vger.kernel.org>; Mon, 14 Sep 2020 05:19:51 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id l126so12482269pfd.5
-        for <linux-spi@vger.kernel.org>; Mon, 14 Sep 2020 05:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gxYQz48aGorfvze6exW0FuIKKJvVhs5z+cRnEenJUaY=;
-        b=VThCD8XFP97W3x+veKHv9N3VJDXrUGxuJpWCoAlgvtuHreklE6fEfbdH2hnwXQTGYn
-         jiafH+JK8NajqSpYChXK0W2qQH9NZ2hSgNgs/XIg1pi9H+dBdl9tXzDgqfwDoqYxiBUe
-         WQGPBNNU6FeZP/i9q3XD/JDeAm+0Ae88Oa9Wm5wGbX/fJl1k5zMrjaT3/OZo/LN3VeZJ
-         U4ly9dPhvC4zlbElSolU++T1Yb+paoCrMOcHg6Xo1zfJ8+NxZPUU/jfL70aehhM+bJtJ
-         gS6nlQ9JJB0IN6IF7Sa3ropmV+Sp6baO0SCkacwI0rLjpWxXesrJX1lWewenafz/UruM
-         h5Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=gxYQz48aGorfvze6exW0FuIKKJvVhs5z+cRnEenJUaY=;
-        b=b5Ph3YMio6kD1Vb1N6Emn5jgZVZMiORPVq0HJEeFTKypmf8RREj6Nvk06WQ+yFC3Ky
-         4pU06pn2DGBJfFE4aMWA4zjK6agG3UceZrdT7DWTlQ7qCp+LFw1Ugo6U28vRJ0plYIvf
-         ynN/S2RIn9eAOLY+Q3NG2yvTz/JcGFuPoYnvo030WbLZdSvw/1p7gm8xGf7rf4dd/3jY
-         HUriTgBmPcy+P5+Oyz+5FNlCak8E5PGFzzEwZR6q2KcETBQ0nNsNEkABFKW9iT2sCGg7
-         dyk5876Y/QiLEmBmfxV8ebWkE1tLUb0Fh9TGRnv4T9EQ9b8pMoG5DEJq1YIHSKlEQ+6G
-         6Fog==
-X-Gm-Message-State: AOAM533hL4PIe6JrAzcwsnuUDFiR5h+4hLa4uYwxonLYSBPlBTxal6Cm
-        1ol35ItmFE1b4jw1iLSGXBi3cBq3/vI4rXHgcPk=
-X-Google-Smtp-Source: ABdhPJyL7cO+nyxIMEvFsxEM5Gpne4zsuFPYw8h6/IK2GCtQOjdhzCEpPWuXrJM01NL0ugDPiFimWnZz1c3rCsZbszc=
-X-Received: by 2002:a62:64d5:: with SMTP id y204mr12787741pfb.97.1600085991101;
- Mon, 14 Sep 2020 05:19:51 -0700 (PDT)
+        id S1726537AbgINNLk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Sep 2020 09:11:40 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:37601 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726734AbgINNKK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:10:10 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1600088996; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=qzjPchJ1lLROgB9pP+RCaQlLLLIEeCxtEGrdUIxmEZU=; b=bEUnareFkKMI6SuGS8L1qiZJldoGk8COMiwuvfxBT5YVQD1eWFJnWYQC8LwtPAvxzpsduuEb
+ ddRhaX9WnndBgpS/mKVYENXOmqdgdDzBezPdKBNoLzmqjf4ReCPP1PHdVbpa0AEqpjEKIM3/
+ vum5+NJ26TptNJzDVq0OiM//Hmk=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 5f5f6b95be06707b342ac170 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 14 Sep 2020 13:09:41
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D362AC433F0; Mon, 14 Sep 2020 13:09:40 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.43.98] (unknown [47.8.187.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id BE9E5C433CA;
+        Mon, 14 Sep 2020 13:09:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BE9E5C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH] spi: spi-geni-qcom: Don't wait to start 1st transfer if
+ transmitting
+To:     Douglas Anderson <dianders@chromium.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     swboyd@chromium.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <20200912111716.1.Ied5e843fad0d6b733a1fb8bcfb364dd2fa889eb3@changeid>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <838a6074-73e6-a48b-2684-5ea2ebff443a@codeaurora.org>
+Date:   Mon, 14 Sep 2020 18:39:25 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:60d1:0:0:0:0 with HTTP; Mon, 14 Sep 2020 05:19:50
- -0700 (PDT)
-Reply-To: mrsmegwilliam6@gmail.com
-From:   Ms Mary Mcniff <diplomaticstoragecourier@gmail.com>
-Date:   Mon, 14 Sep 2020 05:19:50 -0700
-Message-ID: <CAD72A3P634cmdJwk2eeLsy2spHM=1QE+j0vb_dgHKWhtp-VgqQ@mail.gmail.com>
-Subject: Your Respond ASAP
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200912111716.1.Ied5e843fad0d6b733a1fb8bcfb364dd2fa889eb3@changeid>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+
+On 9/12/2020 11:47 PM, Douglas Anderson wrote:
+> If we're sending bytes over SPI, we know the FIFO is empty at the
+> start of the transfer.  There's no reason to wait for the interrupt
+> telling us to start--we can just start right away.  Then if we
+> transmit everything in one swell foop we don't even need to bother
+> listening for TX interrupts.
+>
+> In a test of "flashrom -p ec -r /tmp/foo.bin" interrupts were reduced
+> from ~30560 to ~29730, about a 3% savings.
+>
+> This patch looks bigger than it is because I moved a few functions
+> rather than adding a forward declaration.  The only actual change to
+> geni_spi_handle_tx() was to make it return a bool indicating if there
+> is more to tx.
+Reviewed-by: Akash Asthana <akashast@codeaurora.org>
+> Signed-off-by: Douglas Anderson<dianders@chromium.org>
+
 -- 
-From Chief Compliance Officer, Citigroup Inc CITIBANK
-388 Greenwich St, New York, 10013, United States United.
-PAYMENT CODE: FRB010
-Swift: PTBLBXXX
-==============================================
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
 
-Attention: Beneficiary,
-
-We write to inform you that Series of meetings have been held over the
-past 2 weeks with the Secretary General of United Nations,U.S
-Department of State and Dubai Union Organization this ended last
-week.And parcel is under our custody right now, It will deliver to you
-within 24 hours once you clear the charges which will cost you
-according to the BANKERS COURIER SERVICES that wish to deliver your
-ATM CARD card to
-you immediately.
-
-However, it is the pleasure of this office to inform you that your ATM
-CARD number; is 29741733 and it has been approved and upgraded in your
-favor .you call me for the pin code numbers. The ATM CARD value is us
-$10.5 Million only.
-
-Kindly contact the paying bank for the claim of your ATM visa card
-payment fund $10,500,000.00 through the below contact information;
-
-Contact Person:Mr Williams S Young
-Director of Financial Controller
-Bank Name: CITIBANK
-Bank address; 388 Greenwich St,
-New York City,10013, United States
-Email:mrsmegwilliam6@gmail.com
-
-Reconfirm the following information?
-
-(1)Your Full Name=============
-(2)Mobile Phone Number======
-(3)Current Home Address==== ====
-(4)Fax Number================
-(5)Passport/Drivers license ======
-
-Endeavor to keep me posted once you contacted the officer in charge
-through the above mentioned information.
-
-Your timely response is highly appreciated.To this end, you are
-required to forward your payment information as follows to enable us
-load your fund into the card with your information and deliver it to
-your door step. as the BANKERS COURIER SERVICES are in charge of the
-delivery services to your destination.
-
-Yours truly;
-
-Ms Mary Mcniff.
-Chief Compliance Officer, Citigroup Inc
-FEDERAL RESERVE SYSTEM.
-Email: marymcniff7@gmail.com.
