@@ -2,88 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 610BC268BD9
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 15:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74E1268D92
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Sep 2020 16:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbgINNLk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Sep 2020 09:11:40 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:37601 "EHLO m43-7.mailgun.net"
+        id S1726360AbgINO1e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Sep 2020 10:27:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60290 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726734AbgINNKK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:10:10 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1600088996; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=qzjPchJ1lLROgB9pP+RCaQlLLLIEeCxtEGrdUIxmEZU=; b=bEUnareFkKMI6SuGS8L1qiZJldoGk8COMiwuvfxBT5YVQD1eWFJnWYQC8LwtPAvxzpsduuEb
- ddRhaX9WnndBgpS/mKVYENXOmqdgdDzBezPdKBNoLzmqjf4ReCPP1PHdVbpa0AEqpjEKIM3/
- vum5+NJ26TptNJzDVq0OiM//Hmk=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIzNzdmZSIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5f5f6b95be06707b342ac170 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 14 Sep 2020 13:09:41
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D362AC433F0; Mon, 14 Sep 2020 13:09:40 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.43.98] (unknown [47.8.187.49])
+        id S1726663AbgINNGE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:06:04 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BE9E5C433CA;
-        Mon, 14 Sep 2020 13:09:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BE9E5C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH] spi: spi-geni-qcom: Don't wait to start 1st transfer if
- transmitting
-To:     Douglas Anderson <dianders@chromium.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     swboyd@chromium.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <20200912111716.1.Ied5e843fad0d6b733a1fb8bcfb364dd2fa889eb3@changeid>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <838a6074-73e6-a48b-2684-5ea2ebff443a@codeaurora.org>
-Date:   Mon, 14 Sep 2020 18:39:25 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        by mail.kernel.org (Postfix) with ESMTPSA id B525D21655;
+        Mon, 14 Sep 2020 13:05:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600088723;
+        bh=tFyPP/LVcV8CScN25dO/aS7HgelBcX7Ed0HLml41wzM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QRE6h7SRRnNjT0tk2GHPFhyUZ/HomAsS+FcjHf8PwC8XWWp0pj9Sd2xKKkA4FGH79
+         EZFkpNzjrK1uekHsObQqPYWA6BnmlxWDQUNs5Woa1K4+u2wCt3xUIiRVm5Lo6OrHTi
+         YdEgLQ0C4d3qPx1JO0dd/mqJr1VAxCaqZDDay0UA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Gustav Wiklander <gustavwi@axis.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 17/19] spi: Fix memory leak on splited transfers
+Date:   Mon, 14 Sep 2020 09:05:00 -0400
+Message-Id: <20200914130502.1804708-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200914130502.1804708-1-sashal@kernel.org>
+References: <20200914130502.1804708-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200912111716.1.Ied5e843fad0d6b733a1fb8bcfb364dd2fa889eb3@changeid>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Gustav Wiklander <gustavwi@axis.com>
 
-On 9/12/2020 11:47 PM, Douglas Anderson wrote:
-> If we're sending bytes over SPI, we know the FIFO is empty at the
-> start of the transfer.  There's no reason to wait for the interrupt
-> telling us to start--we can just start right away.  Then if we
-> transmit everything in one swell foop we don't even need to bother
-> listening for TX interrupts.
->
-> In a test of "flashrom -p ec -r /tmp/foo.bin" interrupts were reduced
-> from ~30560 to ~29730, about a 3% savings.
->
-> This patch looks bigger than it is because I moved a few functions
-> rather than adding a forward declaration.  The only actual change to
-> geni_spi_handle_tx() was to make it return a bool indicating if there
-> is more to tx.
-Reviewed-by: Akash Asthana <akashast@codeaurora.org>
-> Signed-off-by: Douglas Anderson<dianders@chromium.org>
+[ Upstream commit b59a7ca15464c78ea1ba3b280cfc5ac5ece11ade ]
 
+In the prepare_message callback the bus driver has the
+opportunity to split a transfer into smaller chunks.
+spi_map_msg is done after prepare_message.
+
+Function spi_res_release releases the splited transfers
+in the message. Therefore spi_res_release should be called
+after spi_map_msg.
+
+The previous try at this was commit c9ba7a16d0f1
+which released the splited transfers after
+spi_finalize_current_message had been called.
+This introduced a race since the message struct could be
+out of scope because the spi_sync call got completed.
+
+Fixes this leak on spi bus driver spi-bcm2835.c when transfer
+size is greater than 65532:
+
+Kmemleak:
+sg_alloc_table+0x28/0xc8
+spi_map_buf+0xa4/0x300
+__spi_pump_messages+0x370/0x748
+__spi_sync+0x1d4/0x270
+spi_sync+0x34/0x58
+spi_test_execute_msg+0x60/0x340 [spi_loopback_test]
+spi_test_run_iter+0x548/0x578 [spi_loopback_test]
+spi_test_run_test+0x94/0x140 [spi_loopback_test]
+spi_test_run_tests+0x150/0x180 [spi_loopback_test]
+spi_loopback_test_probe+0x50/0xd0 [spi_loopback_test]
+spi_drv_probe+0x84/0xe0
+
+Signed-off-by: Gustav Wiklander <gustavwi@axis.com>
+Link: https://lore.kernel.org/r/20200908151129.15915-1-gustav.wiklander@axis.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 92e6b6774d98e..1fd529a2d2f6b 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1116,8 +1116,6 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 	if (msg->status && ctlr->handle_err)
+ 		ctlr->handle_err(ctlr, msg);
+ 
+-	spi_res_release(ctlr, msg);
+-
+ 	spi_finalize_current_message(ctlr);
+ 
+ 	return ret;
+@@ -1375,6 +1373,13 @@ void spi_finalize_current_message(struct spi_controller *ctlr)
+ 
+ 	spi_unmap_msg(ctlr, mesg);
+ 
++	/* In the prepare_messages callback the spi bus has the opportunity to
++	 * split a transfer to smaller chunks.
++	 * Release splited transfers here since spi_map_msg is done on the
++	 * splited transfers.
++	 */
++	spi_res_release(ctlr, mesg);
++
+ 	if (ctlr->cur_msg_prepared && ctlr->unprepare_message) {
+ 		ret = ctlr->unprepare_message(ctlr, mesg);
+ 		if (ret) {
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+2.25.1
 
