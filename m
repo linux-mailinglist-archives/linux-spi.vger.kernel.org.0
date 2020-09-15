@@ -2,75 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DE126B558
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Sep 2020 01:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E5B26B909
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Sep 2020 02:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727396AbgIOXmc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Sep 2020 19:42:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47654 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727020AbgIOOei (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 15 Sep 2020 10:34:38 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14387206A1;
-        Tue, 15 Sep 2020 14:08:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600178937;
-        bh=gAOSKZKoFZcb8CSPjIhGpjP7jdl2VsRtqv9wSkkVAqM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kHB4Z0m8Iw9kMOxrrsoZCMv7W6q5h6kgEdn3K3a5tBamH6jW8n/rBya39fwdUpgzM
-         xwBZdgc5T9Kis/BMTvnU206XgGJa1XBu0s7va423lb7KLL4d0L4XjduDX7/vSOyEjC
-         n3xqT4n4ukHN2PcZ0ue56RQYuF5ZerrjpAC91eq8=
-Date:   Tue, 15 Sep 2020 15:08:08 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: Re: [PATCH] spi: bcm2835: mark polling_limit_us as static
-Message-ID: <20200915140808.GA4913@sirena.org.uk>
-References: <20200915132311.1112865-1-mkl@pengutronix.de>
+        id S1726302AbgIPAzZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Sep 2020 20:55:25 -0400
+Received: from mail-ej1-f67.google.com ([209.85.218.67]:39147 "EHLO
+        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbgIOLbW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Sep 2020 07:31:22 -0400
+Received: by mail-ej1-f67.google.com with SMTP id p9so4503207ejf.6;
+        Tue, 15 Sep 2020 04:29:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RQsMdph5TWkiB/OAm5VzP4BU7+j9iIC7fVgWcyn6y08=;
+        b=f2nBeb1swZoSUqWk7IcZBdphX86IWW2HBx641EexHTgHutbEu1KE7GLuTyMD9Y+3IR
+         +b0WzVIQ9jBbb5waRVq80LtjDT9qk1hthkWkAQBdnEGkn54sQDu8K37isP+2Oclmg+cY
+         RrP6QtyJTvxVCZ0QbnoL3XmYN8TGr+ruolKmf6lE8rVZniAHD+b6C/TctrYT8+LLyJRH
+         Lsw5E0kN/SX7vTHFNupRydm7fb1KahhiupmyDhztiS90Sx1FjcodHAX97XDKHpMBEWAu
+         7F1fa5L3OkSrAAGI2ToBYsDmClJ544VVnYKi4ch95QVP++pCDcQpNbLqAU3GmLD8O+Ks
+         j63g==
+X-Gm-Message-State: AOAM531ljpjInuladTQyqLOAz21n/2xH+8qtkFUAQiZ1FM1Atvar8AR2
+        q8A3ogDWlrgvIJPnLNRadOg=
+X-Google-Smtp-Source: ABdhPJykVDdbtJhhfjNLLwUBVCI49KMHfL6a3WshFxnn4/dYGha4kqeFCjpgt5AepM9SSQca4QYKuA==
+X-Received: by 2002:a17:906:49cb:: with SMTP id w11mr7865688ejv.530.1600169379610;
+        Tue, 15 Sep 2020 04:29:39 -0700 (PDT)
+Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
+        by smtp.gmail.com with ESMTPSA id s30sm12024077edc.8.2020.09.15.04.29.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 04:29:38 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ricardo Ribalda <ribalda@kernel.org>
+Subject: [PATCH] spi: xilinx: Fix info message during probe
+Date:   Tue, 15 Sep 2020 13:29:36 +0200
+Message-Id: <20200915112936.320647-1-ribalda@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tThc/1wpZn/ma/RB"
-Content-Disposition: inline
-In-Reply-To: <20200915132311.1112865-1-mkl@pengutronix.de>
-X-Cookie: Linux is obsolete
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-spi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The info message was showing the mapped address of the device. To avoid
+security problems, all virtual addresses are converted to __ptrval__, so
+the message was useless/ugly:
 
---tThc/1wpZn/ma/RB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+[    2.304949] xilinx_spi b0010000.spi-flash: at 0xB0010000 mapped to 0x(____ptrval____), irq=37
 
-On Tue, Sep 15, 2020 at 03:23:11PM +0200, Marc Kleine-Budde wrote:
-> This patch marks the global variable "polling_limit_us" as static.
+Use %pR instead:
 
-Thanks but I applied a patch for this yesterday.
+[   15.021354] xilinx_spi b0010000.spi-flash: at [mem 0xb0010000-0xb001ffff], irq=37
 
---tThc/1wpZn/ma/RB
-Content-Type: application/pgp-signature; name="signature.asc"
+Signed-off-by: Ricardo Ribalda <ribalda@kernel.org>
+---
+ drivers/spi/spi-xilinx.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
+index 8dd2bb99cb4d..523edfdf5dcd 100644
+--- a/drivers/spi/spi-xilinx.c
++++ b/drivers/spi/spi-xilinx.c
+@@ -491,8 +491,7 @@ static int xilinx_spi_probe(struct platform_device *pdev)
+ 		goto put_master;
+ 	}
+ 
+-	dev_info(&pdev->dev, "at 0x%08llX mapped to 0x%p, irq=%d\n",
+-		(unsigned long long)res->start, xspi->regs, xspi->irq);
++	dev_info(&pdev->dev, "at %pR, irq=%d\n", res, xspi->irq);
+ 
+ 	if (pdata) {
+ 		for (i = 0; i < pdata->num_devices; i++)
+-- 
+2.28.0
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9gysMACgkQJNaLcl1U
-h9CrnQf+IkqMUKRJmlqObHMXL6SUay/wRAZt08eufp6R8ICzpSm6VMN/ldtZs0y+
-+33xXpEdMdWuW/Kif8c8LN4LM4ixoR2z5DIopZJvsi5yV4AJ6S2Cox4l3D6ysdpy
-wiWu7wp4WSunZ52IbwJHwqwu9UOkZlYx376FicmsGb07TFz2TEywafF58cDraSWS
-uz5QUBve18zSExbf5EAf5WeKLVXBeg3xdsVxW/dcpt8GfPRGcFzcei1tNy7GUY9R
-Ti3r7KojfIvQKF4qV+ruPh/YA+6tN4/DeA65pYLohL0lmxqGJC3LSJAmLiM6pp4I
-MF/iKyQM/FLmJWZd3i0PIwl+YXpjnw==
-=MgLv
------END PGP SIGNATURE-----
-
---tThc/1wpZn/ma/RB--
