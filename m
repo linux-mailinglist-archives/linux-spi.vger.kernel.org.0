@@ -2,52 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F105426E4EB
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Sep 2020 21:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0FE26E6BE
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Sep 2020 22:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726430AbgIQTA2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Sep 2020 15:00:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60358 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726667AbgIQTAM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 17 Sep 2020 15:00:12 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600369211;
-        bh=tODsZyJ10X/3wsBOdW9RbDI0OhinwasoFgyKOZjbgZo=;
-        h=Subject:From:Date:To:From;
-        b=rk/VQktxxEl2giWK6nJ+ydCqzK9XOOEjinTN7u+P4HtcCl6qUbrBF69lNC8uNBs3r
-         DXwoOWTz6/+iPxHfU7nx1zZzl5uV4zcse2uETKavh1VvOa0cYwu7IDt1smQnBecEWr
-         mccDmTh3ANOgOlEB7RZ0Fqx0m45VigogoQvH9ZY4=
+        id S1726353AbgIQUY3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Sep 2020 16:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726216AbgIQUY3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Sep 2020 16:24:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B448C06174A
+        for <linux-spi@vger.kernel.org>; Thu, 17 Sep 2020 13:24:29 -0700 (PDT)
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kJ0S6-0001Ow-Ls; Thu, 17 Sep 2020 22:24:22 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH] spi: spi-imx: spi_imx_transfer(): add support for effective_speed_hz
+Date:   Thu, 17 Sep 2020 22:24:20 +0200
+Message-Id: <20200917202420.1914104-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+linux-spi@kernel.org
-Message-Id: <160036921101.10349.2310086069492752110.git-patchwork-summary@kernel.org>
-Date:   Thu, 17 Sep 2020 19:00:11 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+This patch implementes the reporting of the effectivly used speed_hz for the
+transfer by setting tfr->effective_speed_hz.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (refs/heads/for-next):
+See the following patch, which adds this feature to the SPI core for more
+information:
 
-Series: spi: Fixes for FSI-attached controller
-  Submitter: Eddie James <eajames@linux.ibm.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=346185
-  Link: <20200909222857.28653-1-eajames@linux.ibm.com>
-    Patches: [v2,1/6] spi: fsi: Handle 9 to 15 byte transfers lengths
-             [v2,2/6] spi: fsi: Fix clock running too fast
-             [v2,3/6] spi: fsi: Fix use of the bneq+ sequencer instruction
-             [v2,4/6] dt-bindings: fsi: fsi2spi: Add compatible string for restricted version
-             [v2,5/6] spi: fsi: Implement restricted size for certain controllers
-             [v2,6/6] spi: fsi: Check mux status before transfers
+    5d7e2b5ed585 spi: core: allow reporting the effectivly used speed_hz for a transfer
 
-Total patches: 6
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/spi/spi-imx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 38a5f1304cec..13692c69676f 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -1503,6 +1503,8 @@ static int spi_imx_transfer(struct spi_device *spi,
+ {
+ 	struct spi_imx_data *spi_imx = spi_master_get_devdata(spi->master);
+ 
++	transfer->effective_speed_hz = spi_imx->spi_bus_clk;
++
+ 	/* flush rxfifo before transfer */
+ 	while (spi_imx->devtype_data->rx_available(spi_imx))
+ 		readl(spi_imx->base + MXC_CSPIRXDATA);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+2.28.0
+
