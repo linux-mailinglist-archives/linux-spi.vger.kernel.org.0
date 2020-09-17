@@ -2,70 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 606F826E2A5
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Sep 2020 19:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF60F26E503
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Sep 2020 21:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726577AbgIQRkp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Sep 2020 13:40:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41440 "EHLO mail.kernel.org"
+        id S1726580AbgIQTFp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Sep 2020 15:05:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726444AbgIQRka (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 17 Sep 2020 13:40:30 -0400
+        id S1726422AbgIQS7Q (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 17 Sep 2020 14:59:16 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF749221EE;
-        Thu, 17 Sep 2020 17:29:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 43684221EE;
+        Thu, 17 Sep 2020 18:59:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600363750;
-        bh=JRzJocDVRwRz8Eu7zhneKPg+A1fbAeosEYJUkbhaBzQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YFiBEHdt6If6PKA0rqcooqTP+SeSJY5c8XgyoeWyjpMLTP9ITzjeL29Okkkh4625r
-         h0+yAD2VCb3c+yjFf2lC4GWkBrBZvQfaTP3Llk87hOHngzxqDqyjR/gJOk4kDThAVn
-         8VwkILTsfxGRxDjFxGbyW1q3s8HPaB03plBy/TZI=
-Date:   Thu, 17 Sep 2020 18:28:19 +0100
+        s=default; t=1600369147;
+        bh=CwPFDpeGZ7s3PDVG9JY+RFjjpHuVL86kwUgyhbBQP1A=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=OpuTuV5WI4tEO6rsS7ufsvi3e3V0SDRcrc+LQNZyqsP3ufIdK6rkyGjJ6nyUFWVfT
+         ZjZU8kqtzcbwc9BBIgHN8IQSOW7Z3UlnQ18O59SFEgYCO14oMu3Wdft5syW708Nucj
+         YxksC805W7RweduiMwzMuNrIIpJjbqLzrxLkDhAE=
+Date:   Thu, 17 Sep 2020 19:58:17 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, sgoud@xilinx.com, nagasure@xilinx.com
-Subject: Re: [PATCH 1/3] spi: spi-zynqmp-gqspi: Fix kernel-doc warnings
-Message-ID: <20200917172819.GA50407@sirena.org.uk>
-References: <20200909152708.2767-1-amit.kumar-mahapatra@xilinx.com>
- <20200909152708.2767-2-amit.kumar-mahapatra@xilinx.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FL5UXtIhxfXey3p5"
-Content-Disposition: inline
-In-Reply-To: <20200909152708.2767-2-amit.kumar-mahapatra@xilinx.com>
-X-Cookie: "Yo baby yo baby yo."
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Barry Song <song.bao.hua@hisilicon.com>, linux-spi@vger.kernel.org
+In-Reply-To: <20200916101042.21860-1-song.bao.hua@hisilicon.com>
+References: <20200916101042.21860-1-song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH] spi: lantiq: remove redundant irqsave and irqrestore in hardIRQ
+Message-Id: <160036909795.20353.11646112561416430259.b4-ty@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 16 Sep 2020 22:10:42 +1200, Barry Song wrote:
+> Running in hardIRQ, disabling irq is redundant.
 
---FL5UXtIhxfXey3p5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Sep 09, 2020 at 09:27:06AM -0600, Amit Kumar Mahapatra wrote:
-> Fix kernel-doc warnings in ZynqMP qspi driver file.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-This doesn't apply against current code, please check and resend.
+Thanks!
 
---FL5UXtIhxfXey3p5
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/1] spi: lantiq: remove redundant irqsave and irqrestore in hardIRQ
+      commit: 7349201d9dfe0420489aa551c2dcc80fd6364799
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9jnLMACgkQJNaLcl1U
-h9C4IQf/d5SDj8OiR48Iw4Rb+CIX+uNuskYXsPqB17uibjxOIvEBm3RZt8awHK4w
-JsVpSG6W3NzmPl4erAmIzg/5z2dstothRMBZWyBlL1uuIZAaCOKtipa708Q/p3K0
-WbmYKRiHwpSiA5Zer9XWkCPxvgAXzLFQf9W1Mw5v6i4ZTCR9DQLkoZ37crnFGsyw
-DdTYp63iRa21wamnFLqnIfH30kKqS4zAC4JCDHMif/re0XDHVM+uoTJtu/yCGa8r
-qJtJaluvErNoQbZLCYN32xiZIGphDFXoAwzSKJxNdAs3HgkNW0E6frqv6tVV2zoU
-r7mVJ4IKObDnw/Ig6be8t5V1tVC2hA==
-=4afI
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---FL5UXtIhxfXey3p5--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
