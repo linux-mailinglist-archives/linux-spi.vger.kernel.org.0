@@ -2,95 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 635EE26FE8E
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Sep 2020 15:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1473A270D56
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Sep 2020 13:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgIRNdp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Sep 2020 09:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
+        id S1726390AbgISLBS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 19 Sep 2020 07:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbgIRNdp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Sep 2020 09:33:45 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A7AC0613CE;
-        Fri, 18 Sep 2020 06:33:44 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id x2so6247984ilm.0;
-        Fri, 18 Sep 2020 06:33:44 -0700 (PDT)
+        with ESMTP id S1726129AbgISLBR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Sep 2020 07:01:17 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A6AC0613CE;
+        Sat, 19 Sep 2020 04:01:17 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id x10so6326062ybj.13;
+        Sat, 19 Sep 2020 04:01:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vHP6a/n1DUHQQL99sdaOgDDLN4fD6Mu08+md9guUmtw=;
-        b=JAHVq72phYgsTz7+cCz2K98bwVoT3voMNXxrRvYlKds4E2Tcwdic91D/30M3J8KHaM
-         HnnjFuvQEB0yHzEx/+o1bOBU06cjVuNivsU3zCGkB0dLwyvZ3GRpdMpC4QuS7aFMIC+x
-         oOJ6l2yRi3794WPpPUrCpcyqcpH/rQ7qDu9tKB/ADiCp0eguh3XjoX3ebrqNcGRRpXGU
-         v6bcRj2GhLbxfvcPcDMbzsHnOlu9IGabU5vGcCXLMOdXMEa40kyhFbI8+AQ+15pFNCUY
-         QqaESEET6BaX3HH9e1DhRzYgb733Uj+aRTGX/Vf34sTEHtPKJqHhyb/fCvOiBiYgaU/c
-         y20w==
+        bh=PO3ThUtOVECE6Q7sO1RBPWOv+G93A2kL7ZhufPrHkuo=;
+        b=rRTicOn6uKvO0Q5NRBuHBVx6FxKfY7hEgQtIbzY3x6UYuOrb2Peo0UFHYCGlf/r+o1
+         at/14EQZm7qKFaOiNfBvlAgmIS8HWRWjuh5z9HSsymdZOhQ5Q/8oABfzbZELpbV41QmE
+         ClKU7z2/FBp09wt6oOYIDsoTDzQS9V0eKKl8KvrMqs+Fb1tw0G/l6ycrd3aQYYvAjuzb
+         4+cLSeqHLYH9fgqIWcwnZjySMk75YP5qxUdX02imO2QIZlkdLfaSC3ZKPRE4+mPBx2d7
+         plhWw5ET45prLGod34H2ntCWPgLptyNquZW3noPWTwQZvZSWtaudQ/5be8fxVjLB3FjS
+         aXxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vHP6a/n1DUHQQL99sdaOgDDLN4fD6Mu08+md9guUmtw=;
-        b=EsybWkCMvtofHdIG/3MvMgV3eclVfMmeL/lk1Ep3OvHjWRv0pIjknH3vKVhszlNyKd
-         DAm8//+hKrB5jsz++i0B0JUkjwn1BVgSEzGpEb31fCtho+3kvRj/TJ9QvZ42SjNomavg
-         yTR4GPCUfqzffN9Qn+JjkUhbIcXH0ir9nElnum9RXgq1GtD/lsbwtpDMr24bnU6xPNjl
-         ZWL5ROkqST2exxjBt19or3xRYEhJY22yNMQfnRyVLRAoT6q+1ua5+ocvftgWBOr+eRoe
-         ujOYOYYYWDZ15qkGBqYnyFXTP27e0JP0A9cqGMkixaD/NJ63wT6X5PlEpR6W7gQWCXmu
-         qBKA==
-X-Gm-Message-State: AOAM531rdf5O1wne4KrXG0r+iyDSrMSP3MCylQM6k/KqtYpd3HnVe91B
-        kHdUpBhUsEbhsbl5AzaybTObTM6xotFXS/zgjLY=
-X-Google-Smtp-Source: ABdhPJz0qCBmtrO5zOnB3h0Skn1hRjcb6T2inQdpc5g/md9N8CbDjqyk4Bo7jWnekfjpoPmERo9MJNhIILGUXPyk2vM=
-X-Received: by 2002:a92:c10c:: with SMTP id p12mr4688358ile.274.1600436024267;
- Fri, 18 Sep 2020 06:33:44 -0700 (PDT)
+        bh=PO3ThUtOVECE6Q7sO1RBPWOv+G93A2kL7ZhufPrHkuo=;
+        b=sTyAMJXjCPyvrhf9DneITbC/odCZSgR7blSrYcTbtPThdJgV1POBHVz+bVGeprD3G5
+         6vi20qsrYQ/AJ5om29/B1mVB8pfHCK2M6J3ykIF/vyy1a/y9GWaiwPR/kRFKgm+tI1u0
+         8d98CKXNzhkzl3ilkYtQzoax4/UtAbmdJ7UHiHnipQd+uDR7a+PAcSZcdRsSEiDsyeE4
+         dSAh/8CjTFyJs4f8aPmXTpYYB9nwq2FFLYtz6HLz/HhfkWVp7lbU4628jDt1PAAGKsda
+         WtBlfPHW6TCHh/7hiQvwLeRBBHxRD8Ot2PRRInzP3r41CpjHFByre2Db8tx/hysn2ki6
+         j9yA==
+X-Gm-Message-State: AOAM532/trJcjGOZ2HzsAnklLqTl9bjfFs1KtM8WHbnWAQbgaUaA+uWa
+        Gq/IBnBxaSzy7VCTv3rTksKRwX1/MMksotoXw+c=
+X-Google-Smtp-Source: ABdhPJzo70CnNJoUYFT34JFmXjApv0JyI2qiop7m6rWoJcx1lPHa85dPKOpjEN/OYR7HLI29WvVkYTBlMPL1X0iMLgQ=
+X-Received: by 2002:a25:6849:: with SMTP id d70mr27831050ybc.395.1600513276955;
+ Sat, 19 Sep 2020 04:01:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200918083124.3921207-1-ikjn@chromium.org> <20200918162834.v2.2.I3de2918f09b817cc2ae6d324f1ece62779ecc7cf@changeid>
- <CAJsYDV+Um3aEsgW-829BsZSaiVCp3O2LkrTmgCthhFv4fuEnLg@mail.gmail.com>
-In-Reply-To: <CAJsYDV+Um3aEsgW-829BsZSaiVCp3O2LkrTmgCthhFv4fuEnLg@mail.gmail.com>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Fri, 18 Sep 2020 21:33:33 +0800
-Message-ID: <CAJsYDVLcNZ6kyRnZS8zcsC7R_XTZgSVqwqR+SNmNB-rbWrF=CQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] spi: spi-mtk-nor: fix mishandled logics in
- checking SPI memory operation
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <CA+V-a8sBF2ak+dYd9g=Tf_2Kwz_Om2mpK=z+KzGQQG4qJM-+zA@mail.gmail.com>
+In-Reply-To: <CA+V-a8sBF2ak+dYd9g=Tf_2Kwz_Om2mpK=z+KzGQQG4qJM-+zA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sat, 19 Sep 2020 12:00:51 +0100
+Message-ID: <CA+V-a8tcuxiDBZ0WYgrMrPjnse7On1LWiJngznZMiSOQAqT9Ag@mail.gmail.com>
+Subject: Re: [PATCH 05/20] dt-bindings: timer: renesas,cmt: Document r8a774e1
+ CMT support
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
+        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi!
+Hi Daniel and Thomas,
 
-On Fri, Sep 18, 2020 at 9:09 PM Chuanhong Guo <gch981213@gmail.com> wrote:
-> On Fri, Sep 18, 2020 at 4:34 PM Ikjoon Jang <ikjn@chromium.org> wrote:
-> > [...]
-> > +               switch (op->data.dir) {
-> > +               case SPI_MEM_DATA_IN:
-> > +                       if (!mtk_nor_match_read(op))
-> > +                               return -EINVAL;
+On Thu, Aug 27, 2020 at 6:00 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
 >
-> You are changing the code logic here.
-> mtk_nor_match_read checks if the operation can be executed
-> using controller PIO/DMA reading. Even if it's not supported,
-> we can still use PRG mode to execute the operation.
-> One example of such an operation is SPI NOR SFDP reading.
-> Your change breaks that which then breaks 1_2_2 and 1_4_4
-> reading capability because spi-nor driver parses these op formats
-> from SFDP table.
+> Hi Daniel and Thomas,
+>
+> On Wed, Jul 15, 2020 at 12:09 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >
+> > Document SoC specific bindings for RZ/G2H (r8a774e1) SoC.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  Documentation/devicetree/bindings/timer/renesas,cmt.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> Gentle ping.
+>
+Could you please pick this patch.
 
-I just noticed that you already broke this in:
-spi: spi-mtk-nor: support standard spi properties
-Please also fix the same logic in mtk_nor_supports_op in your v3.
-
--- 
-Regards,
-Chuanhong Guo
+Cheers,
+Prabhakar
