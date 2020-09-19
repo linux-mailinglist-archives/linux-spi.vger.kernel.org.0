@@ -2,71 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 435E5270D86
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Sep 2020 13:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F729270D96
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Sep 2020 13:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbgISLN7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 19 Sep 2020 07:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S1726202AbgISLZr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 19 Sep 2020 07:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726308AbgISLN7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Sep 2020 07:13:59 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2146FC0613CF
-        for <linux-spi@vger.kernel.org>; Sat, 19 Sep 2020 04:13:59 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id e17so7614617wme.0
-        for <linux-spi@vger.kernel.org>; Sat, 19 Sep 2020 04:13:58 -0700 (PDT)
+        with ESMTP id S1726343AbgISLZr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Sep 2020 07:25:47 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5891C0613D1
+        for <linux-spi@vger.kernel.org>; Sat, 19 Sep 2020 04:25:46 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id s13so7613094wmh.4
+        for <linux-spi@vger.kernel.org>; Sat, 19 Sep 2020 04:25:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rdXsTgoGM0w1H/nnYlMehpdLdQB8fsaLuG+w+yCrM5Y=;
-        b=oE1Ira58YScVwaWdnk8LgV/cmqXxiHNeIxxJxGh/47M2R9d91zsr8xnnO10hEg/rbV
-         X/OkZoB+Ec6C3icy0bbdRVni1Zi24/ZEAoEejz/V2DtZpk5RIl2uqXZF0EuIc4ajTRTP
-         stmClxW2sPQNFUxn8a5St2F18T9mfjkN/O0VMqoyDWgBFiz8MYdKiwWCffRt+7eYZW82
-         KKQ60NKca7pjSMx9p9P1MNuJL8b2UE43042p8VdL1ET41Ho6kJPh0Ed3BIQB00lJ3DPD
-         nMjGLYrTrM4RwItA7Kt243vXvwpkpoPOVcT/SuQ9cdFU5y0yWLxrjspRqE/v4y2onTNm
-         RGxw==
+        bh=1DD3p2InLpuc1wZ6+ArMyt2jtw02/u4MJluFtFegrEw=;
+        b=gTwa8afSUvU9hYVm25e8bTxFk8cwpK81K+DidtbkYO89iBSHHyR/GIwwcI2jI/icij
+         A6/kXqxyXGjBqbWqczg7y3pl6t6dHXLJZQCdIVOUyW8tLWz5b1hMAiuMFgiUCgaJ7N3v
+         139DYyKaGI0R/ANXO1O1LXdogdyg9d9xBt3uvFv4w84GLY3oukI16YzcwV1dTNZwnG2y
+         WddNukhTiNaf3Iv/SKpKDZVnXf0CK4uComulK2a24yN56vXuHh707XIS05ceKKCZjbdG
+         Py/GmWOu5hhdmP0Q47tu/Nbgc4dpNu7o4laDoHGNQFhHO1HQxi0oYJsExxCGju+McK7l
+         MnSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=rdXsTgoGM0w1H/nnYlMehpdLdQB8fsaLuG+w+yCrM5Y=;
-        b=aP7L8WLDvYgVLYHQ3614NVec0WScqS5wQrSr1P7uTvPCZ5UwBA9mzLY4wYue7bbakg
-         c8C6sgPe8O8H4Sl/wRCBEzfcTaOOsXYAbtzG21Y4sLNuGI9Ssgt+RbjDbqlyEWJAiXSd
-         axslxI6JNP2TYf9/IYC6U//WYZ0rsQOuvde29oFmlqHgInQZ2/eax7xeZT+RENMD4FCc
-         TPBNmR4ItRzdEzXZ7b+WmmX2yFr0hosik0Lmp6RdWOV0b5ESGqdLNzA8UG2QuVjJsXg0
-         4wfrnTgJUmkni2ZgprBgjHrC7pORama4zJBPaiD042MxnV99SWABijs2+iPLqpA8JEXq
-         txPw==
-X-Gm-Message-State: AOAM531CUPaoUqD/eIDqnDdxk6gv8h8ZF/67PnLDE/MfliSw/q4/98fZ
-        n6WuC2w44Cmugssug/jdZ678Dw==
-X-Google-Smtp-Source: ABdhPJxtvQBqLG15ElhXHTv/DA5n/A5hXVODsh0bX2dk1jWFMP3l4fnu0fcw+jZBZHKHnGGxUTbOHg==
-X-Received: by 2002:a7b:c40b:: with SMTP id k11mr19727844wmi.135.1600514037438;
-        Sat, 19 Sep 2020 04:13:57 -0700 (PDT)
+        bh=1DD3p2InLpuc1wZ6+ArMyt2jtw02/u4MJluFtFegrEw=;
+        b=BxNsQSrLDx12bdD+ItQs/PyqrbOkZuqcEUa63xs4AEMV3GjQXqpVrgUZ6JKodDpo/2
+         UGiFf5XxHQTOWfvIIfcGrfR80F/516lufBL2a4KVkPlyB2vzbBKPNbxHU2QIx3ZMfIN5
+         x/3Hj84GVvYJRzq4e/GOKJygZrNnM1IivOUMZY8L0rwPoqkFrlOPHAdl5BXalUNcn0NV
+         XQtaRKGXVab8+euB1zpfiVXQKPKF1WzQjcMPJ7ZFp9t/J7/WOe7netrAau4qMArUT+Rd
+         m3liz3dP/p4jBIn752X5oQ1Fh30MuLRLDRS9BMxZhyQTpIo8ppyTkouxSJRXt4G8HFDG
+         f/oA==
+X-Gm-Message-State: AOAM533xkRJHMuG012xXRZtebedGjGQzhwtO0Ex/ZHaNgjuyvYtmwttR
+        yv0GLQ8M+U8VMyJH2+BRyA7d7Q==
+X-Google-Smtp-Source: ABdhPJyF1kBWHNq5hH1sVEgtu3Qk1xgHZAzNNJKdql79su8qhtMOz0aVE29ME9G064v4G9FJtGlgVw==
+X-Received: by 2002:a7b:cbd4:: with SMTP id n20mr21318770wmi.105.1600514744986;
+        Sat, 19 Sep 2020 04:25:44 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:9142:20e7:201d:cd11? ([2a01:e34:ed2f:f020:9142:20e7:201d:cd11])
-        by smtp.googlemail.com with ESMTPSA id o129sm10277063wmb.27.2020.09.19.04.13.55
+        by smtp.googlemail.com with ESMTPSA id x2sm11083178wrl.13.2020.09.19.04.25.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Sep 2020 04:13:56 -0700 (PDT)
-Subject: Re: [PATCH 05/20] dt-bindings: timer: renesas,cmt: Document r8a774e1
- CMT support
+        Sat, 19 Sep 2020 04:25:44 -0700 (PDT)
+Subject: Re: [PATCH 02/20] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a774e1 support
 To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>
 Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Rob Herring <robh+dt@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Magnus Damm <magnus.damm@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -78,16 +78,16 @@ Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Linux PM list <linux-pm@vger.kernel.org>,
         Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
 References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CA+V-a8sBF2ak+dYd9g=Tf_2Kwz_Om2mpK=z+KzGQQG4qJM-+zA@mail.gmail.com>
- <CA+V-a8tcuxiDBZ0WYgrMrPjnse7On1LWiJngznZMiSOQAqT9Ag@mail.gmail.com>
+ <1594811350-14066-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8vwhtTWjaoXkfMBjKx90WkcoejD5ryPkXnQNEbtgnJGXQ@mail.gmail.com>
+ <CA+V-a8tzELW-F3GLqq+M3pKoYZwfsc28K-PVVQq-sxJN0pL73Q@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <bce1bbc3-203c-aa9e-6c40-5a1eb82510e3@linaro.org>
-Date:   Sat, 19 Sep 2020 13:13:55 +0200
+Message-ID: <39217547-dc5d-b84f-e709-dbf3a9d688e1@linaro.org>
+Date:   Sat, 19 Sep 2020 13:25:41 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CA+V-a8tcuxiDBZ0WYgrMrPjnse7On1LWiJngznZMiSOQAqT9Ag@mail.gmail.com>
+In-Reply-To: <CA+V-a8tzELW-F3GLqq+M3pKoYZwfsc28K-PVVQq-sxJN0pL73Q@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -95,27 +95,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19/09/2020 13:00, Lad, Prabhakar wrote:
-> Hi Daniel and Thomas,
+On 19/09/2020 13:05, Lad, Prabhakar wrote:
+> Hi Niklas/Zhang/Daniel,
 > 
-> On Thu, Aug 27, 2020 at 6:00 PM Lad, Prabhakar
+> On Thu, Aug 27, 2020 at 5:52 PM Lad, Prabhakar
 > <prabhakar.csengg@gmail.com> wrote:
 >>
->> Hi Daniel and Thomas,
+>> Hi Zhang,Daniel,Amit,
 >>
 >> On Wed, Jul 15, 2020 at 12:09 PM Lad Prabhakar
 >> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 >>>
->>> Document SoC specific bindings for RZ/G2H (r8a774e1) SoC.
+>>> Document RZ/G2H (R8A774E1) SoC bindings.
 >>>
 >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >>> ---
->>>  Documentation/devicetree/bindings/timer/renesas,cmt.yaml | 2 ++
->>>  1 file changed, 2 insertions(+)
+>>>  Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml | 1 +
+>>>  1 file changed, 1 insertion(+)
 >>>
 >> Gentle ping.
 >>
-> Could you please pick this patch.
+> Could either of please pick this patch.
 
 Applied, thanks
 
