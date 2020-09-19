@@ -2,127 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F729270D96
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Sep 2020 13:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8520270F06
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Sep 2020 17:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbgISLZr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 19 Sep 2020 07:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726343AbgISLZr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Sep 2020 07:25:47 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5891C0613D1
-        for <linux-spi@vger.kernel.org>; Sat, 19 Sep 2020 04:25:46 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id s13so7613094wmh.4
-        for <linux-spi@vger.kernel.org>; Sat, 19 Sep 2020 04:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1DD3p2InLpuc1wZ6+ArMyt2jtw02/u4MJluFtFegrEw=;
-        b=gTwa8afSUvU9hYVm25e8bTxFk8cwpK81K+DidtbkYO89iBSHHyR/GIwwcI2jI/icij
-         A6/kXqxyXGjBqbWqczg7y3pl6t6dHXLJZQCdIVOUyW8tLWz5b1hMAiuMFgiUCgaJ7N3v
-         139DYyKaGI0R/ANXO1O1LXdogdyg9d9xBt3uvFv4w84GLY3oukI16YzcwV1dTNZwnG2y
-         WddNukhTiNaf3Iv/SKpKDZVnXf0CK4uComulK2a24yN56vXuHh707XIS05ceKKCZjbdG
-         Py/GmWOu5hhdmP0Q47tu/Nbgc4dpNu7o4laDoHGNQFhHO1HQxi0oYJsExxCGju+McK7l
-         MnSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1DD3p2InLpuc1wZ6+ArMyt2jtw02/u4MJluFtFegrEw=;
-        b=BxNsQSrLDx12bdD+ItQs/PyqrbOkZuqcEUa63xs4AEMV3GjQXqpVrgUZ6JKodDpo/2
-         UGiFf5XxHQTOWfvIIfcGrfR80F/516lufBL2a4KVkPlyB2vzbBKPNbxHU2QIx3ZMfIN5
-         x/3Hj84GVvYJRzq4e/GOKJygZrNnM1IivOUMZY8L0rwPoqkFrlOPHAdl5BXalUNcn0NV
-         XQtaRKGXVab8+euB1zpfiVXQKPKF1WzQjcMPJ7ZFp9t/J7/WOe7netrAau4qMArUT+Rd
-         m3liz3dP/p4jBIn752X5oQ1Fh30MuLRLDRS9BMxZhyQTpIo8ppyTkouxSJRXt4G8HFDG
-         f/oA==
-X-Gm-Message-State: AOAM533xkRJHMuG012xXRZtebedGjGQzhwtO0Ex/ZHaNgjuyvYtmwttR
-        yv0GLQ8M+U8VMyJH2+BRyA7d7Q==
-X-Google-Smtp-Source: ABdhPJyF1kBWHNq5hH1sVEgtu3Qk1xgHZAzNNJKdql79su8qhtMOz0aVE29ME9G064v4G9FJtGlgVw==
-X-Received: by 2002:a7b:cbd4:: with SMTP id n20mr21318770wmi.105.1600514744986;
-        Sat, 19 Sep 2020 04:25:44 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9142:20e7:201d:cd11? ([2a01:e34:ed2f:f020:9142:20e7:201d:cd11])
-        by smtp.googlemail.com with ESMTPSA id x2sm11083178wrl.13.2020.09.19.04.25.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Sep 2020 04:25:44 -0700 (PDT)
-Subject: Re: [PATCH 02/20] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a774e1 support
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CA+V-a8vwhtTWjaoXkfMBjKx90WkcoejD5ryPkXnQNEbtgnJGXQ@mail.gmail.com>
- <CA+V-a8tzELW-F3GLqq+M3pKoYZwfsc28K-PVVQq-sxJN0pL73Q@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <39217547-dc5d-b84f-e709-dbf3a9d688e1@linaro.org>
-Date:   Sat, 19 Sep 2020 13:25:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726600AbgISPcA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 19 Sep 2020 11:32:00 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:50523 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726491AbgISPcA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Sep 2020 11:32:00 -0400
+X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Sat, 19 Sep 2020 11:31:58 EDT
+X-UUID: cd6e87128bfa48b7ab029e7556ad1be4-20200919
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=IrIcNVhFVMWRbTHiVNPXL4VIQ4/x908yIeAq6qk9Ekc=;
+        b=AkC4jDUGvMpB3L53ZdH1ue0FGSgGFs0n4j/r6cPjzBdoxCITafuHL1+KZakmoORsWbVBlIBD+Z+jxGoFMGRMt3JL8uVKSby43kwv/ZBVGx9o7SRkI4MdleN8ZkXPUF3oVHclKUJDTfdCQial5DRmFTjC0CrOqxeEsQbfCpWVeAQ=;
+X-UUID: cd6e87128bfa48b7ab029e7556ad1be4-20200919
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <yingjoe.chen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1990299331; Sat, 19 Sep 2020 23:26:52 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 19 Sep 2020 23:26:50 +0800
+Received: from [172.21.77.4] (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 19 Sep 2020 23:26:42 +0800
+Message-ID: <1600529204.7002.0.camel@mtksdaap41>
+Subject: Re: [PATCH v2 4/5] spi: spi-mtk-nor: support 36bit dma addressing
+ to mediatek
+From:   Yingjoe Chen <yingjoe.chen@mediatek.com>
+To:     Ikjoon Jang <ikjn@chromium.org>
+CC:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Sat, 19 Sep 2020 23:26:44 +0800
+In-Reply-To: <20200918162834.v2.4.Id1cb208392928afc7ceed4de06924243c7858cd0@changeid>
+References: <20200918083124.3921207-1-ikjn@chromium.org>
+         <20200918162834.v2.4.Id1cb208392928afc7ceed4de06924243c7858cd0@changeid>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <CA+V-a8tzELW-F3GLqq+M3pKoYZwfsc28K-PVVQq-sxJN0pL73Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-TM-SNTS-SMTP: 46E17E8B4D077AB8C9950FBED0B79A5B30E2719458EBEF71FDC429C6B020E84F2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19/09/2020 13:05, Lad, Prabhakar wrote:
-> Hi Niklas/Zhang/Daniel,
-> 
-> On Thu, Aug 27, 2020 at 5:52 PM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
->>
->> Hi Zhang,Daniel,Amit,
->>
->> On Wed, Jul 15, 2020 at 12:09 PM Lad Prabhakar
->> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->>>
->>> Document RZ/G2H (R8A774E1) SoC bindings.
->>>
->>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->>> ---
->>>  Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->> Gentle ping.
->>
-> Could either of please pick this patch.
+T24gRnJpLCAyMDIwLTA5LTE4IGF0IDE2OjMxICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
+VGhpcyBwYXRjaCBlbmFibGVzIDM2Yml0IGRtYSBhZGRyZXNzIHN1cHBvcnQgdG8gc3BpLW10ay1u
+b3IuDQo+IEN1cnJlbnRseSAzNmJpdCBkbWEgYWRkcmVzc2luZyBpcyBlbmFibGVkIG9ubHkgZm9y
+IG10ODE5Mi1ub3IuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBJa2pvb24gSmFuZyA8aWtqbkBjaHJv
+bWl1bS5vcmc+DQo+IC0tLQ0KPiANCj4gKG5vIGNoYW5nZXMgc2luY2UgdjEpDQo+IA0KPiAgZHJp
+dmVycy9zcGkvc3BpLW10ay1ub3IuYyB8IDE5ICsrKysrKysrKysrKysrKysrKy0NCj4gIDEgZmls
+ZSBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9zcGkvc3BpLW10ay1ub3IuYyBiL2RyaXZlcnMvc3BpL3NwaS1tdGstbm9y
+LmMNCj4gaW5kZXggZTE0Nzk4YTZlN2QwLi45OWRkNWRjYTc0NGUgMTAwNjQ0DQo+IC0tLSBhL2Ry
+aXZlcnMvc3BpL3NwaS1tdGstbm9yLmMNCj4gKysrIGIvZHJpdmVycy9zcGkvc3BpLW10ay1ub3Iu
+Yw0KPiBAQCAtNzgsNiArNzgsOCBAQA0KPiAgI2RlZmluZSBNVEtfTk9SX1JFR19ETUFfRkFEUgkJ
+MHg3MWMNCj4gICNkZWZpbmUgTVRLX05PUl9SRUdfRE1BX0RBRFIJCTB4NzIwDQo+ICAjZGVmaW5l
+IE1US19OT1JfUkVHX0RNQV9FTkRfREFEUgkweDcyNA0KPiArI2RlZmluZSBNVEtfTk9SX1JFR19E
+TUFfREFEUl9IQgkJMHg3MzgNCj4gKyNkZWZpbmUgTVRLX05PUl9SRUdfRE1BX0VORF9EQURSX0hC
+CTB4NzNjDQo+ICANCj4gICNkZWZpbmUgTVRLX05PUl9QUkdfTUFYX1NJWkUJCTYNCj4gIC8vIFJl
+YWRpbmcgRE1BIHNyYy9kc3QgYWRkcmVzc2VzIGhhdmUgdG8gYmUgMTYtYnl0ZSBhbGlnbmVkDQo+
+IEBAIC0xMDIsNiArMTA0LDcgQEAgc3RydWN0IG10a19ub3Igew0KPiAgCXVuc2lnbmVkIGludCBz
+cGlfZnJlcTsNCj4gIAlib29sIHdidWZfZW47DQo+ICAJYm9vbCBoYXNfaXJxOw0KPiArCWJvb2wg
+aGlnaF9kbWE7DQo+ICAJc3RydWN0IGNvbXBsZXRpb24gb3BfZG9uZTsNCj4gIH07DQo+ICANCj4g
+QEAgLTI5MSw2ICsyOTQsMTEgQEAgc3RhdGljIGludCByZWFkX2RtYShzdHJ1Y3QgbXRrX25vciAq
+c3AsIHUzMiBmcm9tLCB1bnNpZ25lZCBpbnQgbGVuZ3RoLA0KPiAgCXdyaXRlbChkbWFfYWRkciwg
+c3AtPmJhc2UgKyBNVEtfTk9SX1JFR19ETUFfREFEUik7DQo+ICAJd3JpdGVsKGRtYV9hZGRyICsg
+bGVuZ3RoLCBzcC0+YmFzZSArIE1US19OT1JfUkVHX0RNQV9FTkRfREFEUik7DQo+ICANCj4gKwlp
+ZiAoc3AtPmhpZ2hfZG1hKSB7DQo+ICsJCXdyaXRlbChkbWFfYWRkciA+PiAzMiwgc3AtPmJhc2Ug
+KyBNVEtfTk9SX1JFR19ETUFfREFEUl9IQik7DQo+ICsJCXdyaXRlbCgoZG1hX2FkZHIgKyBsZW5n
+dGgpID4+IDMyLCBzcC0+YmFzZSArIE1US19OT1JfUkVHX0RNQV9FTkRfREFEUl9IQik7DQo+ICsJ
+fQ0KPiArDQo+ICAJaWYgKHNwLT5oYXNfaXJxKSB7DQo+ICAJCXJlaW5pdF9jb21wbGV0aW9uKCZz
+cC0+b3BfZG9uZSk7DQo+ICAJCW10a19ub3Jfcm13KHNwLCBNVEtfTk9SX1JFR19JUlFfRU4sIE1U
+S19OT1JfSVJRX0RNQSwgMCk7DQo+IEBAIC01OTQsNyArNjAyLDggQEAgc3RhdGljIGNvbnN0IHN0
+cnVjdCBzcGlfY29udHJvbGxlcl9tZW1fb3BzIG10a19ub3JfbWVtX29wcyA9IHsNCj4gIH07DQo+
+ICANCj4gIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIG10a19ub3JfbWF0Y2hbXSA9
+IHsNCj4gLQl7IC5jb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE3My1ub3IiIH0sDQo+ICsJeyAu
+Y29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdDgxOTItbm9yIiwgLmRhdGEgPSAodm9pZCAqKTM2IH0s
+DQo+ICsJeyAuY29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdDgxNzMtbm9yIiwgLmRhdGEgPSAodm9p
+ZCAqKTMyIH0sDQo+ICAJeyAvKiBzZW50aW5lbCAqLyB9DQo+ICB9Ow0KPiAgTU9EVUxFX0RFVklD
+RV9UQUJMRShvZiwgbXRrX25vcl9tYXRjaCk7DQo+IEBAIC02MDcsNiArNjE2LDcgQEAgc3RhdGlj
+IGludCBtdGtfbm9yX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICAJdTgg
+KmJ1ZmZlcjsNCj4gIAlzdHJ1Y3QgY2xrICpzcGlfY2xrLCAqY3Rscl9jbGs7DQo+ICAJaW50IHJl
+dCwgaXJxOw0KPiArCXVuc2lnbmVkIGxvbmcgZG1hX2JpdHM7DQo+ICANCj4gIAliYXNlID0gZGV2
+bV9wbGF0Zm9ybV9pb3JlbWFwX3Jlc291cmNlKHBkZXYsIDApOw0KPiAgCWlmIChJU19FUlIoYmFz
+ZSkpDQo+IEBAIC02MjMsNiArNjMzLDEzIEBAIHN0YXRpYyBpbnQgbXRrX25vcl9wcm9iZShzdHJ1
+Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCWJ1ZmZlciA9IGRldm1fa21hbGxvYygmcGRl
+di0+ZGV2LA0KPiAgCQkJICAgICAgTVRLX05PUl9CT1VOQ0VfQlVGX1NJWkUgKyBNVEtfTk9SX0RN
+QV9BTElHTiwNCj4gIAkJCSAgICAgIEdGUF9LRVJORUwpOw0KPiArDQo+ICsJZG1hX2JpdHMgPSAo
+dW5zaWduZWQgbG9uZylvZl9kZXZpY2VfZ2V0X21hdGNoX2RhdGEoJnBkZXYtPmRldik7DQo+ICsJ
+aWYgKGRtYV9zZXRfbWFza19hbmRfY29oZXJlbnQoJnBkZXYtPmRldiwgRE1BX0JJVF9NQVNLKGRt
+YV9iaXRzKSkpIHsNCj4gKwkJZGV2X2VycigmcGRldi0+ZGV2LCAiZmFpbGVkIHRvIHNldCBkbWEg
+bWFzayglbHUpXG4iLCBkbWFfYml0cyk7DQo+ICsJCXJldHVybiAtRUlOVkFMOw0KPiArCX0NCj4g
+Kw0KDQpEbyB3ZSBuZWVkIHRvIHNldCBzcC0+aGlnaF9kbWEgd2hlbiB3ZSBoYXZlID4zMmJpdHMg
+RE1BPw0KDQpKb2UuQw0K
 
-Applied, thanks
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
