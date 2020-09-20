@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD3F2713A0
-	for <lists+linux-spi@lfdr.de>; Sun, 20 Sep 2020 13:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44CE27139F
+	for <lists+linux-spi@lfdr.de>; Sun, 20 Sep 2020 13:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726513AbgITL3m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 20 Sep 2020 07:29:42 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:53682 "EHLO
+        id S1726471AbgITL3l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 20 Sep 2020 07:29:41 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:53710 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726430AbgITL3b (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 20 Sep 2020 07:29:31 -0400
+        with ESMTP id S1726458AbgITL3l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 20 Sep 2020 07:29:41 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 160EE8001644;
-        Sun, 20 Sep 2020 11:29:28 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id F24AD800163F;
+        Sun, 20 Sep 2020 11:29:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id sa7y3orPH8Hw; Sun, 20 Sep 2020 14:29:27 +0300 (MSK)
+        with ESMTP id NPqE-OD8yIc0; Sun, 20 Sep 2020 14:29:30 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -31,9 +31,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         "wuxu . wu" <wuxu.wu@huawei.com>, Feng Tang <feng.tang@intel.com>,
         Rob Herring <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 08/30] spi: dw: Discard DW SSI chip type storages
-Date:   Sun, 20 Sep 2020 14:28:52 +0300
-Message-ID: <20200920112914.26501-9-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH 11/30] spi: dw: Add DWC SSI capability
+Date:   Sun, 20 Sep 2020 14:28:55 +0300
+Message-ID: <20200920112914.26501-12-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -44,76 +44,233 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Keeping SPI peripheral devices type is pointless since first it hasn't
-been functionally utilized by any of the client drivers/code and second it
-won't work for Microwire type at the very least. Moreover there is no
-point in setting up the type by means of the chip-data in the modern
-kernel. The peripheral devices with specific interface type need to be
-detected in order to activate the corresponding frame format. It most
-likely will require some peripheral device specific DT property or
-whatever to find out the interface protocol. So let's remove the serial
-interface type fields from the DW APB SSI controller and the SPI
-peripheral device private data.
+Currently DWC SSI core is supported by means of setting up the
+core-specific update_cr0() callback. It isn't suitable for multiple
+reasons. First of all having exported several methods doing the same thing
+but for different chips makes the code harder to maintain. Secondly the
+spi-dw-core driver exports the methods, then the spi-dw-mmio driver sets
+the private data callback with one of them so to be called by the core
+driver again. That makes the code logic too complicated. Thirdly using
+callbacks for just updating the CR0 register is problematic, since in case
+if the register needed to be updated from different parts of the code,
+we'd have to create another callback (for instance the SPI device-specific
+parameters don't need to be calculated each time the SPI transfer is
+submitted, so it's better to pre-calculate the CR0 data at the SPI-device
+setup stage).
 
-Note we'll preserve the explicit SSI_MOTO_SPI interface type setting up to
-signify the only currently supported interface protocol.
+So keeping all the above in mind let's discard the update_cr0() callbacks,
+define a generic and static dw_spi_update_cr0() method and create the
+DW_SPI_CAP_DWC_SSI capability, which when enabled would activate the
+alternative CR0 register layout.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/spi/spi-dw-core.c | 6 ++----
- drivers/spi/spi-dw.h      | 1 -
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ drivers/spi/spi-dw-core.c | 69 ++++++++++++---------------------------
+ drivers/spi/spi-dw-mmio.c | 20 ++----------
+ drivers/spi/spi-dw.h      |  9 +----
+ 3 files changed, 23 insertions(+), 75 deletions(-)
 
 diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index be94ed5bb896..dd9574f9fafc 100644
+index 8f9737640ec1..c21641a485ce 100644
 --- a/drivers/spi/spi-dw-core.c
 +++ b/drivers/spi/spi-dw-core.c
-@@ -23,7 +23,6 @@
- /* Slave spi_dev related */
- struct chip_data {
- 	u8 tmode;		/* TR/TO/RO/EEPROM */
--	u8 type;		/* SPI/SSP/MicroWire */
+@@ -228,60 +228,33 @@ static irqreturn_t dw_spi_irq(int irq, void *dev_id)
+ 	return dws->transfer_handler(dws);
+ }
  
- 	u16 clk_div;		/* baud rate divider */
- 	u32 speed_hz;		/* baud rate */
-@@ -238,7 +237,7 @@ u32 dw_spi_update_cr0(struct spi_controller *master, struct spi_device *spi,
+-/* Configure CTRLR0 for DW_apb_ssi */
+-u32 dw_spi_update_cr0(struct spi_controller *master, struct spi_device *spi,
+-		      struct spi_transfer *transfer)
++static void dw_spi_update_cr0(struct dw_spi *dws, struct spi_device *spi,
++			      struct spi_transfer *transfer)
+ {
+ 	struct chip_data *chip = spi_get_ctldata(spi);
+ 	u32 cr0;
  
- 	/* Default SPI mode is SCPOL = 0, SCPH = 0 */
- 	cr0 = (transfer->bits_per_word - 1)
--		| (chip->type << SPI_FRF_OFFSET)
-+		| (SSI_MOTO_SPI << SPI_FRF_OFFSET)
- 		| ((((spi->mode & SPI_CPOL) ? 1 : 0) << SPI_SCOL_OFFSET) |
- 		   (((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET) |
- 		   (((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET))
-@@ -260,7 +259,7 @@ u32 dw_spi_update_cr0_v1_01a(struct spi_controller *master,
+-	/* Default SPI mode is SCPOL = 0, SCPH = 0 */
+-	cr0 = (transfer->bits_per_word - 1)
+-		| (SSI_MOTO_SPI << SPI_FRF_OFFSET)
+-		| ((((spi->mode & SPI_CPOL) ? 1 : 0) << SPI_SCOL_OFFSET) |
+-		   (((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET) |
+-		   (((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET))
+-		| (chip->tmode << SPI_TMOD_OFFSET);
+-
+-	return cr0;
+-}
+-EXPORT_SYMBOL_GPL(dw_spi_update_cr0);
+-
+-/* Configure CTRLR0 for DWC_ssi */
+-u32 dw_spi_update_cr0_v1_01a(struct spi_controller *master,
+-			     struct spi_device *spi,
+-			     struct spi_transfer *transfer)
+-{
+-	struct dw_spi *dws = spi_controller_get_devdata(master);
+-	struct chip_data *chip = spi_get_ctldata(spi);
+-	u32 cr0;
+-
+-	/* CTRLR0[ 4: 0] Data Frame Size */
  	cr0 = (transfer->bits_per_word - 1);
  
- 	/* CTRLR0[ 7: 6] Frame Format */
--	cr0 |= chip->type << DWC_SSI_CTRLR0_FRF_OFFSET;
-+	cr0 |= SSI_MOTO_SPI << DWC_SSI_CTRLR0_FRF_OFFSET;
+-	/* CTRLR0[ 7: 6] Frame Format */
+-	cr0 |= SSI_MOTO_SPI << DWC_SSI_CTRLR0_FRF_OFFSET;
+-
+-	/*
+-	 * SPI mode (SCPOL|SCPH)
+-	 * CTRLR0[ 8] Serial Clock Phase
+-	 * CTRLR0[ 9] Serial Clock Polarity
+-	 */
+-	cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << DWC_SSI_CTRLR0_SCPOL_OFFSET;
+-	cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << DWC_SSI_CTRLR0_SCPH_OFFSET;
+-
+-	/* CTRLR0[11:10] Transfer Mode */
+-	cr0 |= chip->tmode << DWC_SSI_CTRLR0_TMOD_OFFSET;
+-
+-	/* CTRLR0[13] Shift Register Loop */
+-	cr0 |= ((spi->mode & SPI_LOOP) ? 1 : 0) << DWC_SSI_CTRLR0_SRL_OFFSET;
+-
+-	if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
+-		cr0 |= DWC_SSI_CTRLR0_KEEMBAY_MST;
++	if (!(dws->caps & DW_SPI_CAP_DWC_SSI)) {
++		cr0 |= SSI_MOTO_SPI << SPI_FRF_OFFSET;
++		cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << SPI_SCOL_OFFSET;
++		cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << SPI_SCPH_OFFSET;
++		cr0 |= ((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET;
++		cr0 |= chip->tmode << SPI_TMOD_OFFSET;
++	} else {
++		cr0 |= SSI_MOTO_SPI << DWC_SSI_CTRLR0_FRF_OFFSET;
++		cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << DWC_SSI_CTRLR0_SCPOL_OFFSET;
++		cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << DWC_SSI_CTRLR0_SCPH_OFFSET;
++		cr0 |= ((spi->mode & SPI_LOOP) ? 1 : 0) << DWC_SSI_CTRLR0_SRL_OFFSET;
++		cr0 |= chip->tmode << DWC_SSI_CTRLR0_TMOD_OFFSET;
++
++		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
++			cr0 |= DWC_SSI_CTRLR0_KEEMBAY_MST;
++	}
  
- 	/*
- 	 * SPI mode (SCPOL|SCPH)
-@@ -453,7 +452,6 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 		return -ENOMEM;
+-	return cr0;
++	dw_writel(dws, DW_SPI_CTRLR0, cr0);
+ }
+-EXPORT_SYMBOL_GPL(dw_spi_update_cr0_v1_01a);
  
- 	dws->master = master;
--	dws->type = SSI_MOTO_SPI;
- 	dws->dma_addr = (dma_addr_t)(dws->paddr + DW_SPI_DR);
+ static int dw_spi_transfer_one(struct spi_controller *master,
+ 		struct spi_device *spi, struct spi_transfer *transfer)
+@@ -290,7 +263,6 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+ 	struct chip_data *chip = spi_get_ctldata(spi);
+ 	u8 imask = 0;
+ 	u16 txlevel = 0;
+-	u32 cr0;
+ 	int ret;
  
- 	spi_controller_set_devdata(master, dws);
+ 	dws->dma_mapped = 0;
+@@ -319,8 +291,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+ 
+ 	transfer->effective_speed_hz = dws->max_freq / chip->clk_div;
+ 
+-	cr0 = dws->update_cr0(master, spi, transfer);
+-	dw_writel(dws, DW_SPI_CTRLR0, cr0);
++	dw_spi_update_cr0(dws, spi, transfer);
+ 
+ 	/* Check if current transfer is a DMA transaction */
+ 	if (master->can_dma && master->can_dma(master, spi, transfer))
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index c0d351fde782..d0cc5bf4fa4e 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -110,9 +110,6 @@ static int dw_spi_mscc_init(struct platform_device *pdev,
+ 	dwsmmio->dws.set_cs = dw_spi_mscc_set_cs;
+ 	dwsmmio->priv = dwsmscc;
+ 
+-	/* Register hook to configure CTRLR0 */
+-	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
+-
+ 	return 0;
+ }
+ 
+@@ -188,9 +185,6 @@ static int dw_spi_mscc_sparx5_init(struct platform_device *pdev,
+ 	dwsmmio->dws.set_cs = dw_spi_sparx5_set_cs;
+ 	dwsmmio->priv = dwsmscc;
+ 
+-	/* Register hook to configure CTRLR0 */
+-	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
+-
+ 	return 0;
+ }
+ 
+@@ -199,18 +193,12 @@ static int dw_spi_alpine_init(struct platform_device *pdev,
+ {
+ 	dwsmmio->dws.caps = DW_SPI_CAP_CS_OVERRIDE;
+ 
+-	/* Register hook to configure CTRLR0 */
+-	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
+-
+ 	return 0;
+ }
+ 
+ static int dw_spi_dw_apb_init(struct platform_device *pdev,
+ 			      struct dw_spi_mmio *dwsmmio)
+ {
+-	/* Register hook to configure CTRLR0 */
+-	dwsmmio->dws.update_cr0 = dw_spi_update_cr0;
+-
+ 	dw_spi_dma_setup_generic(&dwsmmio->dws);
+ 
+ 	return 0;
+@@ -219,8 +207,7 @@ static int dw_spi_dw_apb_init(struct platform_device *pdev,
+ static int dw_spi_dwc_ssi_init(struct platform_device *pdev,
+ 			       struct dw_spi_mmio *dwsmmio)
+ {
+-	/* Register hook to configure CTRLR0 */
+-	dwsmmio->dws.update_cr0 = dw_spi_update_cr0_v1_01a;
++	dwsmmio->dws.caps = DW_SPI_CAP_DWC_SSI;
+ 
+ 	dw_spi_dma_setup_generic(&dwsmmio->dws);
+ 
+@@ -230,10 +217,7 @@ static int dw_spi_dwc_ssi_init(struct platform_device *pdev,
+ static int dw_spi_keembay_init(struct platform_device *pdev,
+ 			       struct dw_spi_mmio *dwsmmio)
+ {
+-	dwsmmio->dws.caps = DW_SPI_CAP_KEEMBAY_MST;
+-
+-	/* Register hook to configure CTRLR0 */
+-	dwsmmio->dws.update_cr0 = dw_spi_update_cr0_v1_01a;
++	dwsmmio->dws.caps = DW_SPI_CAP_KEEMBAY_MST | DW_SPI_CAP_DWC_SSI;
+ 
+ 	return 0;
+ }
 diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index 063fa1b1352d..4420b4d29bac 100644
+index da9b543322c9..c02351cf2f99 100644
 --- a/drivers/spi/spi-dw.h
 +++ b/drivers/spi/spi-dw.h
-@@ -111,7 +111,6 @@ struct dw_spi_dma_ops {
+@@ -109,6 +109,7 @@ enum dw_ssi_type {
+ /* DW SPI capabilities */
+ #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
+ #define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
++#define DW_SPI_CAP_DWC_SSI		BIT(2)
  
- struct dw_spi {
- 	struct spi_controller	*master;
--	enum dw_ssi_type	type;
+ struct dw_spi;
+ struct dw_spi_dma_ops {
+@@ -136,8 +137,6 @@ struct dw_spi {
+ 	u16			bus_num;
+ 	u16			num_cs;		/* supported slave numbers */
+ 	void (*set_cs)(struct spi_device *spi, bool enable);
+-	u32 (*update_cr0)(struct spi_controller *master, struct spi_device *spi,
+-			  struct spi_transfer *transfer);
  
- 	void __iomem		*regs;
- 	unsigned long		paddr;
+ 	/* Current message transfer state info */
+ 	size_t			len;
+@@ -254,12 +253,6 @@ extern int dw_spi_add_host(struct device *dev, struct dw_spi *dws);
+ extern void dw_spi_remove_host(struct dw_spi *dws);
+ extern int dw_spi_suspend_host(struct dw_spi *dws);
+ extern int dw_spi_resume_host(struct dw_spi *dws);
+-extern u32 dw_spi_update_cr0(struct spi_controller *master,
+-			     struct spi_device *spi,
+-			     struct spi_transfer *transfer);
+-extern u32 dw_spi_update_cr0_v1_01a(struct spi_controller *master,
+-				    struct spi_device *spi,
+-				    struct spi_transfer *transfer);
+ 
+ #ifdef CONFIG_SPI_DW_DMA
+ 
 -- 
 2.27.0
 
