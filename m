@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 023ED2713DE
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFC82713DF
 	for <lists+linux-spi@lfdr.de>; Sun, 20 Sep 2020 13:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726314AbgITLc3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 20 Sep 2020 07:32:29 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:54048 "EHLO
+        id S1726344AbgITLca (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 20 Sep 2020 07:32:30 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:54046 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726344AbgITLc1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 20 Sep 2020 07:32:27 -0400
+        with ESMTP id S1726387AbgITLca (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 20 Sep 2020 07:32:30 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 5C817803017E;
-        Sun, 20 Sep 2020 11:23:32 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 56BFD803202A;
+        Sun, 20 Sep 2020 11:23:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mVfBb3tl_Let; Sun, 20 Sep 2020 14:23:31 +0300 (MSK)
+        with ESMTP id Y3gWE7XUGMmZ; Sun, 20 Sep 2020 14:23:32 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -31,9 +31,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Feng Tang <feng.tang@intel.com>, Vinod Koul <vkoul@kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 10/11] spi: dw-dma: Pass exact data to the DMA submit and wait methods
-Date:   Sun, 20 Sep 2020 14:23:21 +0300
-Message-ID: <20200920112322.24585-11-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 11/11] spi: dw-dma: Add one-by-one SG list entries transfer
+Date:   Sun, 20 Sep 2020 14:23:22 +0300
+Message-ID: <20200920112322.24585-12-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200920112322.24585-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200920112322.24585-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -44,113 +44,223 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In order to use the DMA submission and waiting methods in both generic
-DMA-based SPI transfer and one-by-one DMA SG entries transmission
-functions, we need to modify the dw_spi_dma_wait() and
-dw_spi_dma_submit_tx()/dw_spi_dma_submit_rx() prototypes. So instead of
-getting the SPI transfer object as the second argument they must accept
-the exact data structure instances they imply to use. Those are the
-current transfer length and the SPI bus frequency in case of
-dw_spi_dma_wait(), and SG list together with number of list entries in
-case of the DMA Tx/Rx submission methods.
+In case if at least one of the requested DMA engine channels doesn't
+support the hardware accelerated SG list entries traverse, the DMA driver
+will most likely work that around by performing the IRQ-based SG list
+entries resubmission. That might and will cause a problem if the DMA Tx
+channel is recharged and re-executed before the Rx DMA channel. Due to
+non-deterministic IRQ-handler execution latency the DMA Tx channel will
+start pushing data to the SPI bus before the Rx DMA channel is even
+reinitialized with the next inbound SG list entry. By doing so the DMA
+Tx channel will implicitly start filling the DW APB SSI Rx FIFO up, which
+while the DMA Rx channel being recharged and re-executed will eventually
+be overflown.
+
+In order to solve the problem we have to feed the DMA engine with SG
+list entries one-by-one. It shall keep the DW APB SSI Tx and Rx FIFOs
+synchronized and prevent the Rx FIFO overflow. Since in general the SPI
+tx_sg and rx_sg lists may have different number of entries of different
+lengths (though total length should match) we virtually split the
+SG-lists to the set of DMA transfers, which length is a minimum of the
+ordered SG-entries lengths.
+
+The solution described above is only executed if a full-duplex SPI
+transfer is requested and the DMA engine hasn't provided channels with
+hardware accelerated SG list traverse capability to handle both SG
+lists at once.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi-dw-dma.c | 35 +++++++++++++++++------------------
- 1 file changed, 17 insertions(+), 18 deletions(-)
+ drivers/spi/spi-dw-dma.c | 137 ++++++++++++++++++++++++++++++++++++++-
+ drivers/spi/spi-dw.h     |   1 +
+ 2 files changed, 137 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-index 935f073a3523..f333c2e23bf6 100644
+index f333c2e23bf6..1cbb5a9efbba 100644
 --- a/drivers/spi/spi-dw-dma.c
 +++ b/drivers/spi/spi-dw-dma.c
-@@ -188,12 +188,12 @@ static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
- 	return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+@@ -72,6 +72,23 @@ static void dw_spi_dma_maxburst_init(struct dw_spi *dws)
+ 	dw_writel(dws, DW_SPI_DMATDLR, dws->txburst);
  }
  
--static int dw_spi_dma_wait(struct dw_spi *dws, struct spi_transfer *xfer)
-+static int dw_spi_dma_wait(struct dw_spi *dws, unsigned int len, u32 speed)
++static void dw_spi_dma_sg_burst_init(struct dw_spi *dws)
++{
++	struct dma_slave_caps tx = {0}, rx = {0};
++
++	dma_get_slave_caps(dws->txchan, &tx);
++	dma_get_slave_caps(dws->rxchan, &rx);
++
++	if (tx.max_sg_burst > 0 && rx.max_sg_burst > 0)
++		dws->dma_sg_burst = min(tx.max_sg_burst, rx.max_sg_burst);
++	else if (tx.max_sg_burst > 0)
++		dws->dma_sg_burst = tx.max_sg_burst;
++	else if (rx.max_sg_burst > 0)
++		dws->dma_sg_burst = rx.max_sg_burst;
++	else
++		dws->dma_sg_burst = 0;
++}
++
+ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
  {
- 	unsigned long long ms;
+ 	struct dw_dma_slave dma_tx = { .dst_id = 1 }, *tx = &dma_tx;
+@@ -109,6 +126,8 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
  
--	ms = xfer->len * MSEC_PER_SEC * BITS_PER_BYTE;
--	do_div(ms, xfer->effective_speed_hz);
-+	ms = len * MSEC_PER_SEC * BITS_PER_BYTE;
-+	do_div(ms, speed);
- 	ms += ms + 200;
+ 	dw_spi_dma_maxburst_init(dws);
  
- 	if (ms > UINT_MAX)
-@@ -268,17 +268,16 @@ static int dw_spi_dma_config_tx(struct dw_spi *dws)
- 	return dmaengine_slave_config(dws->txchan, &txconf);
++	dw_spi_dma_sg_burst_init(dws);
++
+ 	return 0;
+ 
+ free_rxchan:
+@@ -138,6 +157,8 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ 
+ 	dw_spi_dma_maxburst_init(dws);
+ 
++	dw_spi_dma_sg_burst_init(dws);
++
+ 	return 0;
  }
  
--static int dw_spi_dma_submit_tx(struct dw_spi *dws, struct spi_transfer *xfer)
-+static int dw_spi_dma_submit_tx(struct dw_spi *dws, struct scatterlist *sgl,
-+				unsigned int nents)
- {
- 	struct dma_async_tx_descriptor *txdesc;
- 	dma_cookie_t cookie;
- 	int ret;
- 
--	txdesc = dmaengine_prep_slave_sg(dws->txchan,
--				xfer->tx_sg.sgl,
--				xfer->tx_sg.nents,
--				DMA_MEM_TO_DEV,
--				DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-+	txdesc = dmaengine_prep_slave_sg(dws->txchan, sgl, nents,
-+					 DMA_MEM_TO_DEV,
-+					 DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
- 	if (!txdesc)
- 		return -ENOMEM;
- 
-@@ -370,17 +369,16 @@ static int dw_spi_dma_config_rx(struct dw_spi *dws)
- 	return dmaengine_slave_config(dws->rxchan, &rxconf);
+@@ -466,11 +487,125 @@ static int dw_spi_dma_transfer_all(struct dw_spi *dws,
+ 	return ret;
  }
  
--static int dw_spi_dma_submit_rx(struct dw_spi *dws, struct spi_transfer *xfer)
-+static int dw_spi_dma_submit_rx(struct dw_spi *dws, struct scatterlist *sgl,
-+				unsigned int nents)
++/*
++ * In case if at least one of the requested DMA channels doesn't support the
++ * hardware accelerated SG list entries traverse, the DMA driver will most
++ * likely work that around by performing the IRQ-based SG list entries
++ * resubmission. That might and will cause a problem if the DMA Tx channel is
++ * recharged and re-executed before the Rx DMA channel. Due to
++ * non-deterministic IRQ-handler execution latency the DMA Tx channel will
++ * start pushing data to the SPI bus before the Rx DMA channel is even
++ * reinitialized with the next inbound SG list entry. By doing so the DMA Tx
++ * channel will implicitly start filling the DW APB SSI Rx FIFO up, which while
++ * the DMA Rx channel being recharged and re-executed will eventually be
++ * overflown.
++ *
++ * In order to solve the problem we have to feed the DMA engine with SG list
++ * entries one-by-one. It shall keep the DW APB SSI Tx and Rx FIFOs
++ * synchronized and prevent the Rx FIFO overflow. Since in general the tx_sg
++ * and rx_sg lists may have different number of entries of different lengths
++ * (though total length should match) let's virtually split the SG-lists to the
++ * set of DMA transfers, which length is a minimum of the ordered SG-entries
++ * lengths. An ASCII-sketch of the implemented algo is following:
++ *                  xfer->len
++ *                |___________|
++ * tx_sg list:    |___|____|__|
++ * rx_sg list:    |_|____|____|
++ * DMA transfers: |_|_|__|_|__|
++ *
++ * Note in order to have this workaround solving the denoted problem the DMA
++ * engine driver should properly initialize the max_sg_burst capability and set
++ * the DMA device max segment size parameter with maximum data block size the
++ * DMA engine supports.
++ */
++
++static int dw_spi_dma_transfer_one(struct dw_spi *dws,
++				   struct spi_transfer *xfer)
++{
++	struct scatterlist *tx_sg = NULL, *rx_sg = NULL, tx_tmp, rx_tmp;
++	unsigned int tx_len = 0, rx_len = 0;
++	unsigned int base, len;
++	int ret;
++
++	sg_init_table(&tx_tmp, 1);
++	sg_init_table(&rx_tmp, 1);
++
++	for (base = 0, len = 0; base < xfer->len; base += len) {
++		/* Fetch next Tx DMA data chunk */
++		if (!tx_len) {
++			tx_sg = !tx_sg ? &xfer->tx_sg.sgl[0] : sg_next(tx_sg);
++			sg_dma_address(&tx_tmp) = sg_dma_address(tx_sg);
++			tx_len = sg_dma_len(tx_sg);
++		}
++
++		/* Fetch next Rx DMA data chunk */
++		if (!rx_len) {
++			rx_sg = !rx_sg ? &xfer->rx_sg.sgl[0] : sg_next(rx_sg);
++			sg_dma_address(&rx_tmp) = sg_dma_address(rx_sg);
++			rx_len = sg_dma_len(rx_sg);
++		}
++
++		len = min(tx_len, rx_len);
++
++		sg_dma_len(&tx_tmp) = len;
++		sg_dma_len(&rx_tmp) = len;
++
++		/* Submit DMA Tx transfer */
++		ret = dw_spi_dma_submit_tx(dws, &tx_tmp, 1);
++		if (ret)
++			break;
++
++		/* Submit DMA Rx transfer */
++		ret = dw_spi_dma_submit_rx(dws, &rx_tmp, 1);
++		if (ret)
++			break;
++
++		/* Rx must be started before Tx due to SPI instinct */
++		dma_async_issue_pending(dws->rxchan);
++
++		dma_async_issue_pending(dws->txchan);
++
++		/*
++		 * Here we only need to wait for the DMA transfer to be
++		 * finished since SPI controller is kept enabled during the
++		 * procedure this loop implements and there is no risk to lose
++		 * data left in the Tx/Rx FIFOs.
++		 */
++		ret = dw_spi_dma_wait(dws, len, xfer->effective_speed_hz);
++		if (ret)
++			break;
++
++		reinit_completion(&dws->dma_completion);
++
++		sg_dma_address(&tx_tmp) += len;
++		sg_dma_address(&rx_tmp) += len;
++		tx_len -= len;
++		rx_len -= len;
++	}
++
++	dw_writel(dws, DW_SPI_DMACR, 0);
++
++	return ret;
++}
++
+ static int dw_spi_dma_transfer(struct dw_spi *dws, struct spi_transfer *xfer)
  {
- 	struct dma_async_tx_descriptor *rxdesc;
- 	dma_cookie_t cookie;
++	unsigned int nents;
  	int ret;
  
--	rxdesc = dmaengine_prep_slave_sg(dws->rxchan,
--				xfer->rx_sg.sgl,
--				xfer->rx_sg.nents,
--				DMA_DEV_TO_MEM,
--				DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-+	rxdesc = dmaengine_prep_slave_sg(dws->rxchan, sgl, nents,
-+					 DMA_DEV_TO_MEM,
-+					 DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
- 	if (!rxdesc)
- 		return -ENOMEM;
- 
-@@ -443,13 +441,14 @@ static int dw_spi_dma_transfer_all(struct dw_spi *dws,
- 	int ret;
- 
- 	/* Submit the DMA Tx transfer */
--	ret = dw_spi_dma_submit_tx(dws, xfer);
-+	ret = dw_spi_dma_submit_tx(dws, xfer->tx_sg.sgl, xfer->tx_sg.nents);
+-	ret = dw_spi_dma_transfer_all(dws, xfer);
++	nents = max(xfer->tx_sg.nents, xfer->rx_sg.nents);
++
++	/*
++	 * Execute normal DMA-based transfer (which submits the Rx and Tx SG
++	 * lists directly to the DMA engine at once) if either full hardware
++	 * accelerated SG list traverse is supported by both channels, or the
++	 * Tx-only SPI transfer is requested, or the DMA engine is capable to
++	 * handle both SG lists on hardware accelerated basis.
++	 */
++	if (!dws->dma_sg_burst || !xfer->rx_buf || nents <= dws->dma_sg_burst)
++		ret = dw_spi_dma_transfer_all(dws, xfer);
++	else
++		ret = dw_spi_dma_transfer_one(dws, xfer);
  	if (ret)
- 		goto err_clear_dmac;
+ 		return ret;
  
- 	/* Submit the DMA Rx transfer if required */
- 	if (xfer->rx_buf) {
--		ret = dw_spi_dma_submit_rx(dws, xfer);
-+		ret = dw_spi_dma_submit_rx(dws, xfer->rx_sg.sgl,
-+					   xfer->rx_sg.nents);
- 		if (ret)
- 			goto err_clear_dmac;
- 
-@@ -459,7 +458,7 @@ static int dw_spi_dma_transfer_all(struct dw_spi *dws,
- 
- 	dma_async_issue_pending(dws->txchan);
- 
--	ret = dw_spi_dma_wait(dws, xfer);
-+	ret = dw_spi_dma_wait(dws, xfer->len, xfer->effective_speed_hz);
- 
- err_clear_dmac:
- 	dw_writel(dws, DW_SPI_DMACR, 0);
+diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+index 151ba316619e..1d201c62d292 100644
+--- a/drivers/spi/spi-dw.h
++++ b/drivers/spi/spi-dw.h
+@@ -146,6 +146,7 @@ struct dw_spi {
+ 	u32			txburst;
+ 	struct dma_chan		*rxchan;
+ 	u32			rxburst;
++	u32			dma_sg_burst;
+ 	unsigned long		dma_chan_busy;
+ 	dma_addr_t		dma_addr; /* phy address of the Data register */
+ 	const struct dw_spi_dma_ops *dma_ops;
 -- 
 2.27.0
 
