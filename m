@@ -2,138 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 768182713BA
-	for <lists+linux-spi@lfdr.de>; Sun, 20 Sep 2020 13:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158C5271400
+	for <lists+linux-spi@lfdr.de>; Sun, 20 Sep 2020 13:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726684AbgITLa0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 20 Sep 2020 07:30:26 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:53996 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726551AbgITL3z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 20 Sep 2020 07:29:55 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 0979780060B9;
-        Sun, 20 Sep 2020 11:29:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id G4IjOgbZ2q5Y; Sun, 20 Sep 2020 14:29:43 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        "wuxu . wu" <wuxu.wu@huawei.com>, Feng Tang <feng.tang@intel.com>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 29/30] dt-bindings: spi: dw: Add Baikal-T1 SPI Controllers
-Date:   Sun, 20 Sep 2020 14:29:13 +0300
-Message-ID: <20200920112914.26501-30-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
+        id S1726326AbgITLkR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 20 Sep 2020 07:40:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44598 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726316AbgITLkR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 20 Sep 2020 07:40:17 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600602016;
+        bh=4YX7kFbrQAZ2dbBn4LIld0Vao8YGvDuHIwmhfD8afQE=;
+        h=Subject:From:Date:To:From;
+        b=jxOioKycqFQyr/+oW2NLFqgy3ZPi2HPtreGAvE+vlnx0KCA5MxWubVD7P2CVswK9O
+         kCuoUiSsWT58jc7TRSNyuGM2+F/KW4lM3CDadIFzDizikSPPga8TvE91ZkFxE//o8J
+         Mf7JuJokUjYJduosZiFVMCnvOtGynwZwMhT66sn4=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+linux-spi@kernel.org
+Message-Id: <160060201683.3089.3459316833921715408.git-patchwork-housekeeping@kernel.org>
+Date:   Sun, 20 Sep 2020 11:40:16 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-These controllers are based on the DW APB SSI IP-core and embedded into
-the SoC, so two of them are equipped with IRQ, DMA, 64 words FIFOs and 4
-native CS, while another one as being utilized by the Baikal-T1 System
-Boot Controller has got a very limited resources: no IRQ, no DMA, only a
-single native chip-select and just 8 bytes Tx/Rx FIFOs available. That's
-why we have to mark the IRQ to be optional for the later interface.
+Latest series: [v2] spi: dw-dma: Add max SG entries burst capability support (2020-09-20T11:23:20)
+  Superseding: [v1] spi: dw-dma: Add max SG entries burst capability support (2020-07-31T07:59:46):
+    [1/8] spi: dw-dma: Set DMA Level registers on init
+    [2/8] spi: dw-dma: Fail DMA-based transfer if no Tx-buffer specified
+    [3/8] spi: dw-dma: Configure the DMA channels in dma_setup
+    [4/8] spi: dw-dma: Move DMA transfers submission to the channels prep methods
+    [5/8] spi: dw-dma: Detach DMA transfer into a dedicated method
+    [6/8] spi: dw-dma: Move DMAC register cleanup to DMA transfer method
+    [7/8] spi: dw-dma: Pass exact data to the DMA submit and wait methods
+    [8/8] spi: dw-dma: Add one-by-one SG list entries transfer
 
-The SPI controller embedded into the Baikal-T1 System Boot Controller can
-be also used to directly access an external SPI flash by means of a
-dedicated FSM. The corresponding MMIO region availability is switchable by
-the embedded multiplexor, which phandle can be specified in the dts node.
 
-* We added a new example to test out the non-standard Baikal-T1 System
-Boot SPI Controller DT binding.
-
-Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- .../bindings/spi/snps,dw-apb-ssi.yaml         | 33 +++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-index c62cbe79f00d..d6ae35777dac 100644
---- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-+++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-@@ -22,6 +22,21 @@ allOf:
-       properties:
-         reg:
-           minItems: 2
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - baikal,bt1-sys-ssi
-+    then:
-+      properties:
-+        mux-controls:
-+          maxItems: 1
-+      required:
-+        - mux-controls
-+    else:
-+      required:
-+        - interrupts
- 
- properties:
-   compatible:
-@@ -44,12 +59,16 @@ properties:
-           - const: snps,dw-apb-ssi
-       - description: Intel Keem Bay SPI Controller
-         const: intel,keembay-ssi
-+      - description: Baikal-T1 SPI Controller
-+        const: baikal,bt1-ssi
-+      - description: Baikal-T1 System Boot SPI Controller
-+        const: baikal,bt1-sys-ssi
- 
-   reg:
-     minItems: 1
-     items:
-       - description: DW APB SSI controller memory mapped registers
--      - description: SPI MST region map
-+      - description: SPI MST region map or directly mapped SPI ROM
- 
-   interrupts:
-     maxItems: 1
-@@ -114,7 +133,6 @@ required:
-   - reg
-   - "#address-cells"
-   - "#size-cells"
--  - interrupts
-   - clocks
- 
- examples:
-@@ -130,4 +148,15 @@ examples:
-       cs-gpios = <&gpio0 13 0>,
-                  <&gpio0 14 0>;
-     };
-+  - |
-+    spi@1f040100 {
-+      compatible = "baikal,bt1-sys-ssi";
-+      reg = <0x1f040100 0x900>,
-+            <0x1c000000 0x1000000>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      mux-controls = <&boot_mux>;
-+      clocks = <&ccu_sys>;
-+      clock-names = "ssi_clk";
-+    };
- ...
 -- 
-2.27.0
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/pwbot
