@@ -2,88 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8318E273254
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Sep 2020 21:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC8927350F
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Sep 2020 23:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727403AbgIUTBT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Sep 2020 15:01:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42846 "EHLO mail.kernel.org"
+        id S1727285AbgIUVls (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Sep 2020 17:41:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58388 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727001AbgIUTBS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 21 Sep 2020 15:01:18 -0400
+        id S1726452AbgIUVls (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 21 Sep 2020 17:41:48 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 002172086A;
-        Mon, 21 Sep 2020 19:01:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 148B623A60;
+        Mon, 21 Sep 2020 21:41:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600714878;
-        bh=deQYkPS0iXLFmKUTBwE68qM37Y3TxhR4uGafiXwSPOA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DYBKqeCEQ+PT7FGjYNQk4XsV9/a0MPchAdZS8ZsF/KfFYeTMGCgXZ0URASLNfQDP1
-         D8luC82UtbTAOpbyluLVp7PNrc9MEGOkFZKX9sXu/M+HLIczQ03Ul2075I1nv2lNqu
-         KvW7O8M5ps+xDB0h4vLONyt/+3XtypNplQd6AVEo=
-Date:   Mon, 21 Sep 2020 20:00:25 +0100
+        s=default; t=1600724507;
+        bh=jju9SLxwn4Bjq7abtdJqJjPWwHxsd8XkpO610vWUqIg=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=VrMOy/knCTZV2eYk60oKEabmEKHp4PGyd8KckGWL0lpoTWSRD+GAhrvZyIHDGuBNt
+         5gVbxn2XXb6u/5QSkwQJ9h/M8fCrJNJU/5Rj5X8/JofHGeiUI1MN6USGGpEy7iT4y/
+         Lb2YE0gDCGfQOp7fauD5eS6TrJ42YzlIBDQ3JmZU=
+Date:   Mon, 21 Sep 2020 22:40:55 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Vignesh R <vigneshr@ti.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "spi: omap2-mcspi: Switch to readl_poll_timeout()"
-Message-ID: <20200921190025.GI4792@sirena.org.uk>
-References: <20200910122624.8769-1-a-govindraju@ti.com>
- <20200921185638.GH4792@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VaKJWhUROU/xPxjb"
-Content-Disposition: inline
-In-Reply-To: <20200921185638.GH4792@sirena.org.uk>
-X-Cookie: Love thy neighbor, tune thy piano.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     hkallweit1@gmail.com, npiggin@gmail.com,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        linux-spi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <20200904002812.7300-1-chris.packham@alliedtelesis.co.nz>
+References: <20200904002812.7300-1-chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH] spi: fsl-espi: Only process interrupts for expected events
+Message-Id: <160072445517.57049.9668130965130008187.b4-ty@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 4 Sep 2020 12:28:12 +1200, Chris Packham wrote:
+> The SPIE register contains counts for the TX FIFO so any time the irq
+> handler was invoked we would attempt to process the RX/TX fifos. Use the
+> SPIM value to mask the events so that we only process interrupts that
+> were expected.
+> 
+> This was a latent issue exposed by commit 3282a3da25bd ("powerpc/64:
+> Implement soft interrupt replay in C").
 
---VaKJWhUROU/xPxjb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, Sep 21, 2020 at 07:56:38PM +0100, Mark Brown wrote:
-> On Thu, Sep 10, 2020 at 05:56:24PM +0530, Aswath Govindraju wrote:
-> > This reverts commit 13d515c796adc49a49b0cd2212ccd7f43a37fc5a.
-> >=20
-> > The amount of time spent polling for the MCSPI_CHSTAT bits to be set on
-> > AM335x-icev2 platform is less than 1us (about 0.6us) in most cases, with
->=20
-> Please submit patches using subject lines reflecting the style for the
-> subsystem, this makes it easier for people to identify relevant patches.
-> Look at what existing commits in the area you're changing are doing and
-> make sure your subject lines visually resemble what they're doing.
-> There's no need to resubmit to fix this alone.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Oh, and also:
+Thanks!
 
-Please include human readable descriptions of things like commits and
-issues being discussed in e-mail in your mails, this makes them much
-easier for humans to read especially when they have no internet access.
-I do frequently catch up on my mail on flights or while otherwise
-travelling so this is even more pressing for me than just being about
-making things a bit easier to read.
+[1/1] spi: fsl-espi: Only process interrupts for expected events
+      commit: b867eef4cf548cd9541225aadcdcee644669b9e1
 
---VaKJWhUROU/xPxjb
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9o+EkACgkQJNaLcl1U
-h9BkJAf+M/tafx3tPXNVe/XWRpgw5xppnPA35pudyXqx0Ho9DMriH7DY9aPKrV8r
-qpCqPziXf600FNK/tSG/EaVQOY+aiBEjASkhA19Im6zhDlbgAjejsc+BrUcu495+
-K2wxRJkLnChZc7a6k67k6afWHLA2ybcMBfJWTHgaOsfyANZgbDEZ4f/5iNP6Q4a5
-e/7bREh9uBJKgzzE+wXwDKUXTNWUCknnQLAEhX7lFi4vYL5qzNV6eaLy3RIN+vLj
-XPXPxKoiwa+jUuv7yRpNQjVzptsXVCzmKn0cU7xL8MtC5opdrSxWtL19Lh5fd8c3
-0k8WCrswnedyeYNBVcMqapbxFr6mbQ==
-=0spJ
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---VaKJWhUROU/xPxjb--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
