@@ -2,76 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECFE272FC1
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Sep 2020 19:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6922627324A
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Sep 2020 20:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730331AbgIUQ71 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Sep 2020 12:59:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40096 "EHLO mail.kernel.org"
+        id S1727402AbgIUS5b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Sep 2020 14:57:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730308AbgIUQ7O (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 21 Sep 2020 12:59:14 -0400
+        id S1726395AbgIUS5b (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 21 Sep 2020 14:57:31 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4CAA5235FD;
-        Mon, 21 Sep 2020 16:59:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3D86B20888;
+        Mon, 21 Sep 2020 18:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600707553;
-        bh=ilYPXYXOrK02dbgWO785dFtleHl2+7nPjk6K0R/PBvw=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=yyPOpwzx1pKltzf4H+v0LidZoBubumrt/74zHAY5TzeAVoIQ8re/YX4A1pDxLKPo6
-         Vv1/tJnpF8BhoP6or7Ck079oNkAaG4N9D7DU/T8PUoATLp0KQqEJ2DLkYD20jr0P0O
-         GwH9D2LvhnnnkrNBzbXQKA7gy9dil44xEFwmKaEQ=
-Date:   Mon, 21 Sep 2020 17:58:21 +0100
+        s=default; t=1600714650;
+        bh=Fpuvc99D3ojSQz0Ih1e/dJpmDNQ5V5OWcXq0uMfacF4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kseT8TpGG26uG5yPWiqpdhbWGZ1/0PmnqYpqJAybACB1zN6tLEHjPIFlErnY3MSqG
+         7DzjQa4BW/y9K5FN75m/60QfvuSeIjopB9brlTSFETy4TSa2JM9dQC0cvrJE5Sx9Ci
+         4vw5PXGLPq+ORUp5nHYa/cvyCmaMta4/CKrJtz84=
+Date:   Mon, 21 Sep 2020 19:56:38 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     linux-serial@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-block@vger.kernel.org,
-        Yossi Leybovich <sleybo@amazon.com>,
-        linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        rds-devel@oss.oracle.com
-In-Reply-To: <1600601186-7420-1-git-send-email-Julia.Lawall@inria.fr>
-References: <1600601186-7420-1-git-send-email-Julia.Lawall@inria.fr>
-Subject: Re: [PATCH 00/14] drop double zeroing
-Message-Id: <160070750168.56292.17961674601916397869.b4-ty@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Sekhar Nori <nsekhar@ti.com>, Vignesh R <vigneshr@ti.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "spi: omap2-mcspi: Switch to readl_poll_timeout()"
+Message-ID: <20200921185638.GH4792@sirena.org.uk>
+References: <20200910122624.8769-1-a-govindraju@ti.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LiQwW4YX+w4axhAx"
+Content-Disposition: inline
+In-Reply-To: <20200910122624.8769-1-a-govindraju@ti.com>
+X-Cookie: Love thy neighbor, tune thy piano.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 20 Sep 2020 13:26:12 +0200, Julia Lawall wrote:
-> sg_init_table zeroes its first argument, so the allocation of that argument
-> doesn't have to.
 
-Applied to
+--LiQwW4YX+w4axhAx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Thu, Sep 10, 2020 at 05:56:24PM +0530, Aswath Govindraju wrote:
+> This reverts commit 13d515c796adc49a49b0cd2212ccd7f43a37fc5a.
+>=20
+> The amount of time spent polling for the MCSPI_CHSTAT bits to be set on
+> AM335x-icev2 platform is less than 1us (about 0.6us) in most cases, with
 
-Thanks!
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
-[1/1] spi/topcliff-pch: drop double zeroing
-      commit: ca03dba30f2b8ff45a2972c6691e4c96d8c52b3b
+--LiQwW4YX+w4axhAx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-----BEGIN PGP SIGNATURE-----
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9o92UACgkQJNaLcl1U
+h9AZYAf/fV6TOg8U++qh08UDGcRasmk50C1XO2QANRr0TYNKvCZ5WOOpyh69y9Wn
+EBrHSEAdvihbb5w8plSKMVpmZDrm5/ttmRSPwfA5OlKQqoz8oqkLZPlXifbr/+DQ
+/iAMttuRGj7eXI1WJoUcpyPFrtrRUbBcJPQHSdhHuToH0aq3SvCMcOA7+JHec9Gf
+Tb/MUKPnq6jl84c5qdojU/FpdKiznAVPPlDBZHnD07laSOxDuz40tVFBEZvHkumN
+8MXSGz6b7mL1I0Z2b+keDDa1jVzZLqnAuRutm2WV6877ykKF2FCa0Zo5sc3znh7k
+qOOqu/SKm+Cdge2ddo+KtEe0b71DVQ==
+=pequ
+-----END PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--LiQwW4YX+w4axhAx--
