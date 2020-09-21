@@ -2,249 +2,162 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCEE271DDC
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Sep 2020 10:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF7B2721D3
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Sep 2020 13:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbgIUIZX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Sep 2020 04:25:23 -0400
-Received: from mail-eopbgr80059.outbound.protection.outlook.com ([40.107.8.59]:53379
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726416AbgIUIZX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 21 Sep 2020 04:25:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jM3UPGchfu04kEpzndK7Hhpey12xTdk+lUco+nld24EP3ucrUJvh3Cd9qhzPx6At56Y4PsXU/gFL5T3U5Rv8RLH8MGaCDu4Rh0Y39gxXW8i/dDV4kbSvNQkiL2GMs1uEBn85TPBU5Una5j8fg78yKukOYcivhuS5LSTaJ1IlzsJ1dBA9MXIor6aDCtjLODMo4ERDyR5wY/bHv8LJsHzc+gkqroqpKeUscN2+f2qATyrs/hogWPxVCivc7XjO74D4jFWtI4DMN9Na1URLnfFITRk51xb8Y/iGoCg2VW/BZWdT6nqco/3FoVY5Cr2+8pBXSDfk6jt095E1/EfaMjOs4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9YLCSH+fx+UuIDsHytbS1FIG25qFesTYvscAgzZOHNI=;
- b=By7YyXdu9Ei4wPxEcBUt6A9NUNYeEp99Ouxs+M/4Pkl1BIjmmQ90/ZofiV5L6XWTOA3WGPjKn0Ie7DBIdxLkcRVKsqkFzWP8ClpvtybI2rIDU44Q7om+6QAb7oSM1moXnjJWejYuuZb3d/BTbgLE1YqSiI3KQdNoGZH0uTeZV3Y7cTitH3i8Ws+E8FHZlE03pFttK3sc+mjMooiiG+ofEQD3yv8Bo/VeSnuhdapwpoZInad0BnR2hHDdGmz8Dp8GqiAbGj2RMKCw3zlwxmUFXuZVbDBPm7Kgrh7AlzQVKM1zTX7hgQXbfoXiaE4hOJmioDCGqEt6Xj3gozKunhjnWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9YLCSH+fx+UuIDsHytbS1FIG25qFesTYvscAgzZOHNI=;
- b=aDVfxA4qMDigFqX9HwjGu5sOs9mAKplyTES8LhgpDYPY9Vb0dsffelCNkItFxDOS5ZfrjqrIL+9Aua8bGG2jxo7Fwbuglpvoq5wO3isPfKbKBMxlNSPJwHyiFJY7LKDCWfRRClpZfnlC6CfWxePm5BkIWnd2+XKKxUw7f6HQfgM=
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com (2603:10a6:803:119::15)
- by VI1PR04MB6944.eurprd04.prod.outlook.com (2603:10a6:803:133::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.14; Mon, 21 Sep
- 2020 08:25:18 +0000
-Received: from VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::ad7f:d95a:5413:a950]) by VE1PR04MB6638.eurprd04.prod.outlook.com
- ([fe80::ad7f:d95a:5413:a950%3]) with mapi id 15.20.3391.017; Mon, 21 Sep 2020
- 08:25:18 +0000
-From:   Robin Gong <yibin.gong@nxp.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-CC:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "martin.fuzzey@flowbird.group" <martin.fuzzey@flowbird.group>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "matthias.schiffer@ew.tq-group.com" 
-        <matthias.schiffer@ew.tq-group.com>,
-        "frieder.schrempf@kontron.de" <frieder.schrempf@kontron.de>,
-        "r.schwebel@pengutronix.de" <r.schwebel@pengutronix.de>,
-        "Benjamin.Bara@skidata.com" <Benjamin.Bara@skidata.com>,
-        "Richard.Leitner@skidata.com" <Richard.Leitner@skidata.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH v13 00/12] add ecspi ERR009165 for i.mx6/7 soc family
-Thread-Topic: [PATCH v13 00/12] add ecspi ERR009165 for i.mx6/7 soc family
-Thread-Index: AQHWf2tkimfqSdG8kEGKEyob2MpDZaljtaAAgA8dHUA=
-Date:   Mon, 21 Sep 2020 08:25:16 +0000
-Message-ID: <VE1PR04MB66387B8FEBBC937CE0A1AC24893A0@VE1PR04MB6638.eurprd04.prod.outlook.com>
-References: <1598889805-30399-1-git-send-email-yibin.gong@nxp.com>
- <20200911164018.6treqdmywzjhqe3a@pengutronix.de>
-In-Reply-To: <20200911164018.6treqdmywzjhqe3a@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: cba8acb2-8acd-45f3-82fb-08d85e07df91
-x-ms-traffictypediagnostic: VI1PR04MB6944:
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB6944D249F8827639BD2E9DAB893A0@VI1PR04MB6944.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1360;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pRYfi+3WPpK1DK0C+AJgtvPvVOuISMvNZnBLGZYDL+TEqTcWIZl28d6+RD9yV4t+L3MficmjoevTrdEbx8wA91YZXIdAN2goukjawQyepnwRzc25ESl1ZVlkI18Fuum/WCWRiPCNGxqYgQK72JYUKkAaiufYdz7nyGX4S341wzDKCbZhKcx+BJDFwEyxFq46Qb2Loo9+AH/JLtv/scVF9wt1lQyord2X2FLhwn4YIEk0pCTzDbTwIEf3WyRZkBQTB9vCI3qEv9d9CJCzcp4gxt+PhhBRWNmch40Kexq1aWVovAEmNpem3loWOjyyFEMK0V84X3I9F3vU3wKpAcIEG5Z0p0Wc1CBuoE4/vkIOYH4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6638.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(136003)(346002)(396003)(376002)(7416002)(8676002)(54906003)(478600001)(7696005)(966005)(316002)(66476007)(66556008)(64756008)(86362001)(2906002)(76116006)(6916009)(53546011)(66446008)(6506007)(45080400002)(66946007)(55016002)(71200400001)(52536014)(9686003)(33656002)(26005)(5660300002)(8936002)(186003)(4326008)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: pxVLiZiyHfouNUcYj7+a1Q4iulOnyCTIKGgxGtpw8/x5DmzDD5ojZ9xxwv0/07TXmHQ8M8Q5XYUC8wkNlIRdV7yvij5nw/YYJt9aYIGnidM3JY/3s0rg8bIHDcJzlnVC1Dh33CQLXpJbiJCewQ4R2mAm2Ra4RGCEnzoGnA+5P3wKodBaU8Ab2jAMCBSOnzv/LceHsdhXmbn//kijBz+JxhmCeC77SIX7yy5HXdM/Qb7yiyH+G4sipuxUf4qBbVGPaxc9jeJcy1F10gu3N1ew0hAqkJx6Jq3YALL00WdJ5x7qp/fV2hTFwccOSxuq4K6Pt7x5tzfzxlKDujl4wk3TbOeg/Yr5/qytkHj46ZBsSRZADBzrml6aVKrstuYqL9TK+Rq6qlxImyD2dBiv3spC87yyXs7glq0oR5uJx3de0WgbtUU2z5gC0DLiarRwvnbsYBecK15jgp/02H9Eq2QEvVL9pv+esV1Xb+tMYYf1dntT8Kj9UWssmBRMpAINOdK+khZNB4bhKTtJGXsRa53TtmZQNhBlpQJcgmrU+WOnLdhWPr3xxstabPEFuyyqNvmou5Yc4kCIFooq0Pg+ueKoaRaOZ3EYd2HEEqzsl+HjaTBY+D4IyHtX+ZFSxI2EavtpAwuH+OgjTwVHr5aefUKO9g==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726347AbgIULII (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Sep 2020 07:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgIULII (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Sep 2020 07:08:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56BEC061755
+        for <linux-spi@vger.kernel.org>; Mon, 21 Sep 2020 04:08:07 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1kKJfy-0004B2-5u; Mon, 21 Sep 2020 13:08:06 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1kKJfx-0004TE-OR; Mon, 21 Sep 2020 13:08:05 +0200
+Date:   Mon, 21 Sep 2020 13:08:05 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: users of spi_unregister_controller() broken?
+Message-ID: <20200921110805.GI21278@pengutronix.de>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6638.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cba8acb2-8acd-45f3-82fb-08d85e07df91
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Sep 2020 08:25:16.5621
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yrooecPYo5u8wfdUnZ9g/kH4VAByXTj1mqqwA/yyWEEjmO2xxTweKcnQxfTeG25goXhUz+HEvKDQiwF6GZ4vWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6944
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:48:16 up 214 days, 18:18, 150 users,  load average: 0.04, 0.11,
+ 0.11
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2020/09/12 0:40 Marco Felsch <m.felsch@pengutronix.de> wrote:
-> Hi Robin,
->=20
-> I took your patches and did a few test on the mainline available
-> fsl,imx6q-sabrelite. I used a vanilla linux version v5.9-rc1 for all my t=
-ests except
-> the needed SPI-NOR patches [1]. Following are my results:
-Marco, thanks for your test :)
+Hi All,
 
->=20
-> Testcase 1: "Using ROM-FW"
-> =3D=3D=3D
-> [OK] Playing Audio (SSI)
-> [OK] TX/RX bytes on a different UART (not the serial used for
->      interaction)
-> [OK] Writing to the SPI-NOR
-> [OK] Doing all at the same time (once for TX and once for RX on UART)
->=20
-> Notes:
-> - Your Patches adding a maybe noise message "sdma firmware not ready".
->   Maybe we should consider about that if it should be a warning or a info=
-.
-That means the script you're using is ram script which may not be loaded as=
- your
-case. That should be a warning I think, to avoid too much noise I have refi=
-ne it
-to dev_warn_once.
+I see the following KASan use-after-free messages from the fsl-dspi
+driver. It seems that after spi_unregister_controller() has been called
+no references to the SPI controller device are left and the device is
+freed in spi_controller_release(). This also frees the driver data
+structure which is allocated with spi_alloc_master(). Nevertheless all
+users of spi_unregister_controller() still use their driver data after
+having called spi_unregister_controller().
 
->=20
-> - For spi-nor I did run this test:
->   dd if=3D/dev/urandom of=3D/var/tmp/test1M bs=3D1M count=3D1 && \
->   flashcp -v /var/tmp/test1M /dev/mtd2
->=20
->   and checked /proc/interrupts:
->   25:    2107169          0          0          0       GPC  31
-> Level	2008000.spi
->=20
-> Testcase 2: "Using new FW from linux-firmware"
-> =3D=3D=3D
-> [OK] Playing Audio (SSI)
-> [OK] TX/RX bytes on a different UART (not the serial used for
->      interaction)
-> [OK] Writing to the SPI-NOR
-> [OK] Doing all at the same time (once for TX and once for RX on UART)
->=20
-> Notes:
-> - For spi-nor I did run this test:
->   dd if=3D/dev/urandom of=3D/var/tmp/test1M bs=3D1M count=3D1 && \
->   flashcp -v /var/tmp/test1M /dev/mtd2
->=20
->   and checked /proc/interrupts:
->   25:    2107993          0          0          0       GPC  31
-> Level	2008000.spi
->=20
->   I saw no SDMA interrupts during this testcase instead I saw only spi
->   controller interrupts.
-That's not expected. But I have tried just now and show that SDMA interrupt
-caught by spi as belows. Are you sure sdma firmware loaded indeed?
+Any idea what to do about this?
 
-./spidev_test -D /dev/spidev0.0 -s 1200000 -b 8 -S 512 -I 1 -l 8 -S 512 -I
-spi mode: 0x24
-bits per word: 8
-max speed: 1200000 Hz (1200 kHz)
-total: tx 0.5KB, rx 0.5KB
-root@imx6qpdlsolox:~# cat /proc/interrupts | grep dma
- 58:          2          0       GPC   2 Level     sdma=20
+Sascha
 
+==================================================================
+BUG: KASAN: use-after-free in dspi_remove+0x48/0x1f8
+Read of size 8 at addr ffff0009301b7610 by task systemd-shutdow/1
 
->=20
-> - According linux-firmware you did a version bump from 3.5 to 4.5 but my
->   dmesg shows:
->   imx-sdma 20ec000.sdma: loaded firmware 3.5
-3.x is used for i.mx6 family while 4.x is used for i.mx7/8 since there are =
-some
-change on ROM which depended by RAM script. Not means version bump
-between 3.5/4.5. 3.5 is correct on i.mx6q.=20
+CPU: 3 PID: 1 Comm: systemd-shutdow Not tainted 5.9.0-rc2-00019-g74a89d7f9ed7 #22
+Hardware name: TQ TQMLS1046A SoM on Arkona AT1130 (C300) board (DT)
+Call trace:
+ dump_backtrace+0x0/0x2b0
+ show_stack+0x14/0x20
+ dump_stack+0xe8/0x150
+ print_address_description.constprop.0+0x6c/0x4e0
+ kasan_report+0x130/0x1f8
+ __asan_load8+0x88/0xc0
+ dspi_remove+0x48/0x1f8
+ dspi_shutdown+0xc/0x18
+ platform_drv_shutdown+0x34/0x40
+ device_shutdown+0x1ec/0x420
+ kernel_restart_prepare+0x40/0x50
+ kernel_restart+0x14/0x60
+ __do_sys_reboot+0x294/0x2c0
+ __arm64_sys_reboot+0x50/0x60
+ el0_svc_common.constprop.0+0xa0/0x1d8
+ do_el0_svc_compat+0x2c/0x58
+ el0_sync_compat_handler+0x94/0x184
+ el0_sync_compat+0x144/0x180
 
->=20
-> SPI Benchmark:
-> =3D=3D=3D
-> flash_erase /dev/mtd2 0 0 && \
-> 	dd if=3D/dev/urandom of=3D/dev/mtd2 bs=3D1M count=3D1
->=20
-> - without firmware (ROM-FW)
->   1048576 bytes (1.0 MB, 1.0 MiB) copied, 51.9713 s, 20.2 kB/s
->=20
-> - with firmware
->   1048576 bytes (1.0 MB, 1.0 MiB) copied, 59.4174 s, 17.6 kB/s
->=20
-> Conclusion:
-> =3D=3D=3D
-> It seems that we don't have any performance boost with your patchset inst=
-ead
-> we are increasing the complexity and the interrupts...
-Yes, that's expected. What ERR009165 fix is data correct on spi bus though
-that bring performance drop in dma mode, because the workaround just let
-sdma do similar thing as cpu (PIO), while cpu running faster than sdma. If =
-you
-care much spi performance, PIO is better way. If care cpu loading, dma way
-is better.=20
+Allocated by task 1:
+ kasan_save_stack+0x24/0x50
+ __kasan_kmalloc.isra.0+0xc0/0xe0
+ kasan_kmalloc+0xc/0x18
+ __kmalloc+0x208/0x360
+ __spi_alloc_controller+0x2c/0xe8
+ dspi_probe+0xb0/0xcc8
+ platform_drv_probe+0x6c/0xc8
+ really_probe+0x144/0x510
+ driver_probe_device+0xc8/0xe0
+ device_driver_attach+0x94/0xa0
+ __driver_attach+0x70/0x110
+ bus_for_each_dev+0xe4/0x158
+ driver_attach+0x30/0x40
+ bus_add_driver+0x21c/0x2b8
+ driver_register+0xbc/0x1d0
+ __platform_driver_register+0x7c/0x88
+ fsl_dspi_driver_init+0x18/0x20
+ do_one_initcall+0xa4/0x24c
+ kernel_init_freeable+0x26c/0x2d4
+ kernel_init+0x10/0x11c
+ ret_from_fork+0x10/0x18
 
->=20
-> Pls let me know if I did something wrong during testing or if my test set=
-up was
-> wrong. Note: the /dev/mtd2 isn't mainlined yet but if you use barebox you=
- only
-> have to add:
-> 8<---------------------------------------------------------------------
-> diff --git a/arch/arm/dts/imx6qdl-sabrelite.dtsi
-> b/arch/arm/dts/imx6qdl-sabrelite.dtsi
-> index ec3d364bde..256dd90a0f 100644
-> --- a/arch/arm/dts/imx6qdl-sabrelite.dtsi
-> +++ b/arch/arm/dts/imx6qdl-sabrelite.dtsi
-> @@ -38,6 +38,11 @@
->  		label =3D "barebox-environment";
->  		reg =3D <0xe0000 0x20000>;
->  	};
-> +
-> +	parition@100000 {
-> +		label =3D "user-partition";
-> +		reg =3D <0x100000 0x100000>;
-> +	};
->  };
->=20
->  &ocotp {
-> 8<---------------------------------------------------------------------
-> to the barebox device tree.
->=20
-> [1]
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Flists.=
-infra
-> dead.org%2Fpipermail%2Flinux-mtd%2F2020-September%2F082099.html&am
-> p;data=3D02%7C01%7Cyibin.gong%40nxp.com%7C324d4b5c2f2344883a3108d85
-> 67166f9%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7C63735439234
-> 6471210&amp;sdata=3Dru8fKz6wpDhzYeaHIT28T0OybHlCFHJ41N1lJYuqKgE%3D&
-> amp;reserved=3D0
->=20
-> Regards,
->   Marco
+Freed by task 1:
+ kasan_save_stack+0x24/0x50
+ kasan_set_track+0x24/0x38
+ kasan_set_free_info+0x20/0x40
+ __kasan_slab_free+0xfc/0x170
+ kasan_slab_free+0x10/0x18
+ kfree+0xac/0x318
+ spi_controller_release+0xc/0x18
+ device_release+0x7c/0xf0
+ kobject_put+0xa4/0x170
+ device_unregister+0x20/0x30
+ spi_unregister_controller+0x104/0x178
+ dspi_remove+0x40/0x1f8
+ dspi_shutdown+0xc/0x18
+ platform_drv_shutdown+0x34/0x40
+ device_shutdown+0x1ec/0x420
+ kernel_restart_prepare+0x40/0x50
+ kernel_restart+0x14/0x60
+ __do_sys_reboot+0x294/0x2c0
+ __arm64_sys_reboot+0x50/0x60
+ el0_svc_common.constprop.0+0xa0/0x1d8
+ do_el0_svc_compat+0x2c/0x58
+ el0_sync_compat_handler+0x94/0x184
+ el0_sync_compat+0x144/0x180
+
+The buggy address belongs to the object at ffff0009301b7000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 1552 bytes inside of
+ 2048-byte region [ffff0009301b7000, ffff0009301b7800)
+The buggy address belongs to the page:
+page:00000000debc463d refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x9b01b0
+head:00000000debc463d order:3 compound_mapcount:0 compound_pincount:0
+flags: 0x2ffff00000010200(slab|head)
+raw: 2ffff00000010200 dead000000000100 dead000000000122 ffff000932003680
+raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff0009301b7500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff0009301b7580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff0009301b7600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                         ^
+ ffff0009301b7680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff0009301b7700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
