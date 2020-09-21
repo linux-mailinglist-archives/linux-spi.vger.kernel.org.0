@@ -2,80 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02A3272340
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Sep 2020 14:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03982724BD
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Sep 2020 15:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgIUMBW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Sep 2020 08:01:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46006 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726611AbgIUMBW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 21 Sep 2020 08:01:22 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C02FA214F1;
-        Mon, 21 Sep 2020 12:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600689682;
-        bh=dXheWyxz6WWyQqi01eWSM5jnC3I6vWUg+7gz+arQsnc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fzozi3sOTwlPhdjXZk22ncWUD9M3NKPVU1YneZ0elWvjzcwBZ0y4jHR2LKhOf7Ro9
-         SbR9NDgqh6QG2TRYvOfO5/ADPH0/68yZHe/IRoYZzE4VDCeEfwT1Hrveol1ooztdn9
-         +7LZPQLv4++as+UOAQBYNQdLgLKdvRHzrXXyr6CY=
-Date:   Mon, 21 Sep 2020 13:00:29 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: users of spi_unregister_controller() broken?
-Message-ID: <20200921120029.GA4792@sirena.org.uk>
-References: <20200921110805.GI21278@pengutronix.de>
+        id S1727456AbgIUNKz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Sep 2020 09:10:55 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:13808 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727428AbgIUNKx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 21 Sep 2020 09:10:53 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id EAFC137D5C4A578F6FB8;
+        Mon, 21 Sep 2020 21:10:51 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 21 Sep 2020 21:10:42 +0800
+From:   Qinglang Miao <miaoqinglang@huawei.com>
+To:     Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        "Mark Brown" <broonie@kernel.org>
+CC:     <openbmc@lists.ozlabs.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>
+Subject: [PATCH -next] spi: npcm-fiu: simplify the return expression of npcm_fiu_probe()
+Date:   Mon, 21 Sep 2020 21:11:06 +0800
+Message-ID: <20200921131106.93228-1-miaoqinglang@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="J2SCkAp4GZ/dPZZf"
-Content-Disposition: inline
-In-Reply-To: <20200921110805.GI21278@pengutronix.de>
-X-Cookie: Love thy neighbor, tune thy piano.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Simplify the return expression.
 
---J2SCkAp4GZ/dPZZf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+---
+ drivers/spi/spi-npcm-fiu.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-On Mon, Sep 21, 2020 at 01:08:05PM +0200, Sascha Hauer wrote:
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index 9468e71f0..341f7cffe 100644
+--- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -677,7 +677,6 @@ static int npcm_fiu_probe(struct platform_device *pdev)
+ 	struct npcm_fiu_spi *fiu;
+ 	void __iomem *regbase;
+ 	struct resource *res;
+-	int ret;
+ 	int id;
+ 
+ 	ctrl = spi_alloc_master(dev, sizeof(*fiu));
+@@ -736,11 +735,7 @@ static int npcm_fiu_probe(struct platform_device *pdev)
+ 	ctrl->num_chipselect = fiu->info->max_cs;
+ 	ctrl->dev.of_node = dev->of_node;
+ 
+-	ret = devm_spi_register_master(dev, ctrl);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
++	return devm_spi_register_master(dev, ctrl);
+ }
+ 
+ static int npcm_fiu_remove(struct platform_device *pdev)
+-- 
+2.23.0
 
-> I see the following KASan use-after-free messages from the fsl-dspi
-> driver. It seems that after spi_unregister_controller() has been called
-> no references to the SPI controller device are left and the device is
-> freed in spi_controller_release(). This also frees the driver data
-> structure which is allocated with spi_alloc_master(). Nevertheless all
-> users of spi_unregister_controller() still use their driver data after
-> having called spi_unregister_controller().
-
-> Any idea what to do about this?
-
-Drivers that need to use their driver_data in remove() should either use
-devm_spi_register_controller() or not use spi_register_controller() to
-allocate driver_data.  Depending on what the remove function does it may
-not be practical to do the former, most likely it won't be.
-
---J2SCkAp4GZ/dPZZf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9oldwACgkQJNaLcl1U
-h9CyYQf/fx78LWC1r5FMaCzoQA6JHYWj2z/PW7xsSHXCirfbWWfWZnpb1uuFldm7
-607Dnfu6bE9Z5Q22holUXjC4YLWYGIwtqQO1YoY3SHo0I7Tarqty3v8DLXkOcuOL
-7Ll4kD3GT8x0pC50A9AYm3AQfZHntMqviLSBBFayWnLF02OGtcKqwU6UzumHvz81
-dPJ2GwKPPh+bNGGEgAAJWQ24WkdofGnQtR/kCakQBKLuBvmd6dy9nrUIdf9AjbbI
-6rmWfDQ8hovP6rhKuQw8PvzkNDMQOgs4gLj2JNtv3rmsAoiFj5/6r0z1xt/6hUxl
-U6YOpW6u8HkmMbxRZitFAWAGOB6rrQ==
-=6EMp
------END PGP SIGNATURE-----
-
---J2SCkAp4GZ/dPZZf--
