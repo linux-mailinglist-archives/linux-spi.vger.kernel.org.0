@@ -2,92 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5986277007
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 13:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E227F277081
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 14:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726715AbgIXLew (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Sep 2020 07:34:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56940 "EHLO mail.kernel.org"
+        id S1727457AbgIXMBO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Sep 2020 08:01:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39174 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726617AbgIXLew (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 24 Sep 2020 07:34:52 -0400
+        id S1727437AbgIXMBO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 24 Sep 2020 08:01:14 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4DE6E2220D;
-        Thu, 24 Sep 2020 11:34:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F69E2344C;
+        Thu, 24 Sep 2020 12:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600947291;
-        bh=zpGCrVK8tz1aZrON992tX07fTfb1T/oz6LsOj41Eb9c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jtcDbfmy3QrqbK8tvcbhP0NsjYHl7W1Eaj9KnesXah2QJMh37kDDG45s7HTElChnQ
-         QZENgO6x1gjPu6qR6Z7h40oI4c7zrQkR3QpVrs6ywSGDSlQaQBhVWBUg+na5oNWdC0
-         QoqpcEE7J6a4m44fNnl7pG7LGW48WGgBIHFiXgf4=
-Date:   Thu, 24 Sep 2020 12:33:56 +0100
+        s=default; t=1600948873;
+        bh=ryaBH5oGdAnh2acPFTb+k+zUl7lCvR8a8asSUhj4dVg=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=XiOFQNOaX4QW0htReMlV4VUBwSqUFfSf3AJ97zSWL/d7OSoJ5pV5NXvxxDukmBwg4
+         PWFfPyE7OTmzaXgObV+ia21uyoWA4yTvtyUUge9X0j7ylFcuSVobKTIF9ufP4yPJt+
+         nGLGpaB/vYJ9aREM5bQrUxl4xuvkgXFIKvyLG4Ns=
+Date:   Thu, 24 Sep 2020 13:00:19 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Ray Jui <ray.jui@broadcom.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: spi: Add compatible string for brcmstb
- SoCs
-Message-ID: <20200924113356.GC4754@sirena.org.uk>
-References: <20200910152539.45584-1-ray.jui@broadcom.com>
- <160009511834.5702.10954218363830361529.b4-ty@kernel.org>
- <a1e13626-e87a-8114-74ae-560902ab9551@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TYecfFk8j8mZq+dy"
-Content-Disposition: inline
-In-Reply-To: <a1e13626-e87a-8114-74ae-560902ab9551@gmail.com>
-X-Cookie: Programmers do it bit by bit.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        amit.kumar-mahapatra@xilinx.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, git@xilinx.com
+In-Reply-To: <cover.1600931476.git.michal.simek@xilinx.com>
+References: <cover.1600931476.git.michal.simek@xilinx.com>
+Subject: Re: [RESEND v2 PATCH 0/3] spi: spi-zynqmp-gqspi: Update driver to use spi-mem framework
+Message-Id: <160094881929.50579.14016203179713810994.b4-ty@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 24 Sep 2020 09:11:16 +0200, Michal Simek wrote:
+> I am resending this series instead of Amit because his patches are broken
+> in lore. Mark has reported the issue with it and I clearly see that patch
+> is broken in lore.
+> For example:
+> https://lore.kernel.org/linux-spi/20200922164016.30979-2-amit.kumar-mahapatra@xilinx.com/raw
+> 
+> There is additional = which shouldn't be there.
+> @@ -183,7 +184,7 @@ static u32 zynqmp_gqspi_read(struct zynqmp_qspi *xqspi,=
+> u32 offset)
+> 
+> [...]
 
---TYecfFk8j8mZq+dy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Sep 23, 2020 at 01:38:55PM -0700, Florian Fainelli wrote:
-> On 9/14/20 7:52 AM, Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > [1/4] spi: Add compatible string for brcmstb SoCs
-> >       commit: d9f0cf9f1176d36d3824459d5b061f4719fcbb8a
-> > [2/4] spi: bcm-qspi: Add compatible string for BRCMSTB 7445 SoCs
-> >       commit: e0eeb76b818ad93718f9640b0bdad909b453a3b8
-> > [3/4] spi: bcm-qspi: Fix probe regression on iProc platforms
-> >       commit: 9a852d44b26f8e60e2ae13df563824c0f8489135
-> > [4/4] spi: bcm-qspi: Clean up 7425, 7429, and 7435 settings
-> >       commit: 3cf5d198785a6b454e6a97246795b0043aff9ac1
+Thanks!
 
-> Mark, can you also submit "spi: bcm-qspi: Fix probe regression on iProc
-> platforms" towards Linus because this is a bug fix that is currently
-> affecting the 5.9 kernel.
+[1/3] spi: spi-zynqmp-gqspi: Fix kernel-doc warnings
+      commit: 91af6eb04a6bbdb8bec8ed6d8ac7850a26604bad
+[2/3] spi: spi-zynqmp-gqspi: Update driver to use spi-mem framework
+      commit: 1c26372e5aa9e53391a1f8fe0dc7cd93a7e5ba9e
+[3/3] spi: spi-zynqmp-gqspi: Fix incorrect indentation
+      commit: f09a433b1e4057e6379b7e1207548fff30d5dca3
 
-*sigh*, OK.  Please don't send fixes in the middle of serieses, send
-them at the start of the series before any cleanups or new features.
-This ensures that they don't have any dependencies on other patches in
-the series and means that they can easily be sent as fixes without
-getting tangled up with the development work.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---TYecfFk8j8mZq+dy
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9shCQACgkQJNaLcl1U
-h9B4Twf+NFkJy7KuNAOffATLKqqcClJiumK7L7QA6oQzn5MyuQ85EZ2YlPh8spJF
-vNw1WzK+a0CQxCTi7s4jwEUZIR8G0Q1CqLAFxGk/F0bI3vHH7TpbGRvMpZ0/ixj+
-fSTroeoBmtizi21WE7qOFqqmnMM89icDbtpuszMf/uXqqsfyb38GdZPa28s97m3K
-wT91kmromhOILWvxFr+KZZBfm7auA9zCfS7D19thW4L7XZ8t//hFECZSgZ9/J9lR
-BbjNPwusRL/r+b3dfIdAr4J2CSPEUolBX8s664HR/y8P9BmM4TEiMYHIuywmWYPA
-CzDVA8Gdka3aB8Yb8apP6hMCG9EnHg==
-=JdlS
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---TYecfFk8j8mZq+dy--
+Thanks,
+Mark
