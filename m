@@ -2,41 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD13277083
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 14:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4DC277086
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 14:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727566AbgIXMBT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Sep 2020 08:01:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39312 "EHLO mail.kernel.org"
+        id S1727659AbgIXMBZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Sep 2020 08:01:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39470 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727437AbgIXMBT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 24 Sep 2020 08:01:19 -0400
+        id S1727657AbgIXMBY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 24 Sep 2020 08:01:24 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4DE062344C;
-        Thu, 24 Sep 2020 12:01:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7C44C2344C;
+        Thu, 24 Sep 2020 12:01:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600948878;
-        bh=9im5lEDLeVZt6TvOxePG0Zr0CaNkizDGZqlbtL35kQ0=;
+        s=default; t=1600948884;
+        bh=x+9aT8m2KmiQ7xrq0m8rmPW+REb7IHmCBHsFKzhmdJc=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=qFcOaf33Ve5fgR4VnEG3+D647qp52B3hjR2pP1/Ar2CajGvaFPp/5jgE/AS270X/E
-         H6jj1uAqCuilj/0hQayOoFvGwAzIKoATfhuL2JNrPlfnKJFdy03EUqUKlKfeismA8S
-         ts880bRVCqOtSU/9rO3q8d07h2g4Nz5Zd1jMm0c8=
-Date:   Thu, 24 Sep 2020 13:00:24 +0100
+        b=bIjGtro+jpHfw9qczn5Pykpo3IjOcv6eOiJXmm98rJ8VZRrvEth9x9fuZRWSOjSZK
+         48l5mzaFDEDAZ/LbOeiHK0MT7I8+QzNyGQPXqkBrCUvPC6KbkkQhYklQ744k4s84oS
+         5Zmu9IOT5zrjytemxjWKeA9ZIn72z+zpQQmYTKfo=
+Date:   Thu, 24 Sep 2020 13:00:29 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, michal.simek@xilinx.com,
-        nagasure@xilinx.com, linux-spi@vger.kernel.org, sgoud@xilinx.com
-In-Reply-To: <20200909152708.2767-1-amit.kumar-mahapatra@xilinx.com>
-References: <20200909152708.2767-1-amit.kumar-mahapatra@xilinx.com>
-Subject: Re: [PATCH 0/3]spi: spi-zynqmp-gqspi: Update driver to use spi-mem framework
-Message-Id: <160094881929.50579.15096836246623196428.b4-ty@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, git@xilinx.com,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20200922164016.30979-1-amit.kumar-mahapatra@xilinx.com>
+References: <20200922164016.30979-1-amit.kumar-mahapatra@xilinx.com>
+Subject: Re: [RESEND PATCH 0/3]spi: spi-zynqmp-gqspi: Update driver to use spi-mem framework
+Message-Id: <160094881929.50579.13423581299866478626.b4-ty@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 9 Sep 2020 09:27:05 -0600, Amit Kumar Mahapatra wrote:
+On Tue, 22 Sep 2020 10:40:13 -0600, Amit Kumar Mahapatra wrote:
 > This patch series:
 >  - Fixes kernel-doc warnings in ZynqMP qspi controller driver file.
 >  - Updates the ZynqMP qspi controller driver to use spi-mem framework.
