@@ -2,17 +2,17 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FBE2770EB
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 14:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98852770E7
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 14:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727593AbgIXMZ7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Sep 2020 08:25:59 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:14272 "EHLO huawei.com"
+        id S1727653AbgIXMZz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Sep 2020 08:25:55 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:41314 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727651AbgIXMZ7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 24 Sep 2020 08:25:59 -0400
+        id S1727468AbgIXMZy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 24 Sep 2020 08:25:54 -0400
 Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 6CA398AAA78F95E889DD;
+        by Forcepoint Email with ESMTP id 455BBEEFC9594D316F69;
         Thu, 24 Sep 2020 20:25:53 +0800 (CST)
 Received: from localhost.localdomain (10.67.165.24) by
  DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
@@ -21,9 +21,9 @@ From:   Yicong Yang <yangyicong@hisilicon.com>
 To:     <john.garry@huawei.com>, <broonie@kernel.org>
 CC:     <tudor.ambarus@microchip.com>, <linux-spi@vger.kernel.org>,
         <linux-mtd@lists.infradead.org>, <yangyicong@hisilicon.com>
-Subject: [PATCH 2/4] spi: hisi-sfc-v3xx: factor out bus config and transfer functions
-Date:   Thu, 24 Sep 2020 20:24:28 +0800
-Message-ID: <1600950270-52536-3-git-send-email-yangyicong@hisilicon.com>
+Subject: [PATCH 3/4] spi: hisi-sfc-v3xx: factor out the bit definition of interrupt register
+Date:   Thu, 24 Sep 2020 20:24:29 +0800
+Message-ID: <1600950270-52536-4-git-send-email-yangyicong@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1600950270-52536-1-git-send-email-yangyicong@hisilicon.com>
 References: <1600950270-52536-1-git-send-email-yangyicong@hisilicon.com>
@@ -35,83 +35,63 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In hisi_sfc_v3xx_generic_exec_op(), we will write the data to the buffer,
-configure and start the transfer, read the data to the buffer and check
-whether occurs an error. Factor out the config and transfer start codes
-as individual functions, to make the process a bit clearer.
+The definition of the register field in the interrupt corresponding
+registers are the same. So factor them out to public place.
 
 Acked-by: John Garry <john.garry@huawei.com>
 Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 ---
- drivers/spi/spi-hisi-sfc-v3xx.c | 33 ++++++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 9 deletions(-)
+ drivers/spi/spi-hisi-sfc-v3xx.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
-index 69f5a7b..62d4ed8 100644
+index 62d4ed8..4a241d7 100644
 --- a/drivers/spi/spi-hisi-sfc-v3xx.c
 +++ b/drivers/spi/spi-hisi-sfc-v3xx.c
-@@ -198,12 +198,12 @@ static void hisi_sfc_v3xx_write_databuf(struct hisi_sfc_v3xx_host *host,
- 	}
- }
+@@ -18,10 +18,7 @@
+ #define HISI_SFC_V3XX_VERSION (0x1f8)
  
--static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
--					 const struct spi_mem_op *op,
--					 u8 chip_select)
-+static int hisi_sfc_v3xx_start_bus(struct hisi_sfc_v3xx_host *host,
-+				   const struct spi_mem_op *op,
-+				   u8 chip_select)
- {
--	int ret = 0, len = op->data.nbytes, buswidth_mode;
--	u32 int_stat, config = 0;
-+	int len = op->data.nbytes, buswidth_mode;
-+	u32 config = 0;
+ #define HISI_SFC_V3XX_INT_STAT (0x120)
+-#define HISI_SFC_V3XX_INT_STAT_PP_ERR BIT(2)
+-#define HISI_SFC_V3XX_INT_STAT_ADDR_IACCES BIT(5)
+ #define HISI_SFC_V3XX_INT_CLR (0x12c)
+-#define HISI_SFC_V3XX_INT_CLR_CLEAR (0xff)
+ #define HISI_SFC_V3XX_CMD_CFG (0x300)
+ #define HISI_SFC_V3XX_CMD_CFG_DATA_CNT_OFF 9
+ #define HISI_SFC_V3XX_CMD_CFG_RW_MSK BIT(8)
+@@ -34,6 +31,13 @@
+ #define HISI_SFC_V3XX_CMD_ADDR (0x30c)
+ #define HISI_SFC_V3XX_CMD_DATABUF0 (0x400)
  
- 	if (op->addr.nbytes)
- 		config |= HISI_SFC_V3XX_CMD_CFG_ADDR_EN_MSK;
-@@ -227,9 +227,7 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
- 		config |= HISI_SFC_V3XX_CMD_CFG_DATA_EN_MSK;
- 	}
- 
--	if (op->data.dir == SPI_MEM_DATA_OUT)
--		hisi_sfc_v3xx_write_databuf(host, op->data.buf.out, len);
--	else if (op->data.dir == SPI_MEM_DATA_IN)
-+	if (op->data.dir == SPI_MEM_DATA_IN)
- 		config |= HISI_SFC_V3XX_CMD_CFG_RW_MSK;
- 
- 	config |= op->dummy.nbytes << HISI_SFC_V3XX_CMD_CFG_DUMMY_CNT_OFF |
-@@ -241,6 +239,23 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
- 
- 	writel(config, host->regbase + HISI_SFC_V3XX_CMD_CFG);
- 
-+	return 0;
-+}
++/* Common definition of interrupt bit masks */
++#define HISI_SFC_V3XX_INT_MASK_ALL (0x1ff)	/* all the masks */
++#define HISI_SFC_V3XX_INT_MASK_PP_ERR BIT(2)	/* page progrom error */
++#define HISI_SFC_V3XX_INT_MASK_IACCES BIT(5)	/* error visiting inaccessible/
++						 * protected address
++						 */
 +
-+static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
-+					 const struct spi_mem_op *op,
-+					 u8 chip_select)
-+{
-+	u32 int_stat;
-+	int ret;
-+
-+	if (op->data.dir == SPI_MEM_DATA_OUT)
-+		hisi_sfc_v3xx_write_databuf(host, op->data.buf.out, op->data.nbytes);
-+
-+	ret = hisi_sfc_v3xx_start_bus(host, op, chip_select);
-+	if (ret)
-+		return ret;
-+
- 	ret = hisi_sfc_v3xx_wait_cmd_idle(host);
- 	if (ret)
- 		return ret;
-@@ -265,7 +280,7 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
+ /* IO Mode definition in HISI_SFC_V3XX_CMD_CFG */
+ #define HISI_SFC_V3XX_STD (0 << 17)
+ #define HISI_SFC_V3XX_DIDO (1 << 17)
+@@ -266,15 +270,15 @@ static int hisi_sfc_v3xx_generic_exec_op(struct hisi_sfc_v3xx_host *host,
+ 	 * next time judgement.
+ 	 */
+ 	int_stat = readl(host->regbase + HISI_SFC_V3XX_INT_STAT);
+-	writel(HISI_SFC_V3XX_INT_CLR_CLEAR,
++	writel(HISI_SFC_V3XX_INT_MASK_ALL,
+ 	       host->regbase + HISI_SFC_V3XX_INT_CLR);
+ 
+-	if (int_stat & HISI_SFC_V3XX_INT_STAT_ADDR_IACCES) {
++	if (int_stat & HISI_SFC_V3XX_INT_MASK_IACCES) {
+ 		dev_err(host->dev, "fail to access protected address\n");
+ 		return -EIO;
  	}
  
- 	if (op->data.dir == SPI_MEM_DATA_IN)
--		hisi_sfc_v3xx_read_databuf(host, op->data.buf.in, len);
-+		hisi_sfc_v3xx_read_databuf(host, op->data.buf.in, op->data.nbytes);
- 
- 	return 0;
- }
+-	if (int_stat & HISI_SFC_V3XX_INT_STAT_PP_ERR) {
++	if (int_stat & HISI_SFC_V3XX_INT_MASK_PP_ERR) {
+ 		dev_err(host->dev, "page program operation failed\n");
+ 		return -EIO;
+ 	}
 -- 
 2.8.1
 
