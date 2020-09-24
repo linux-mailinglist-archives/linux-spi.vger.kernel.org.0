@@ -2,70 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C7A27708C
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 14:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C292770E9
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 14:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727657AbgIXMBc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Sep 2020 08:01:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39598 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727634AbgIXMB3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 24 Sep 2020 08:01:29 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 89C542344C;
-        Thu, 24 Sep 2020 12:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600948889;
-        bh=Gbv2myf3mm/YelzUd5RFwsmoYebMix9wSgM9SCsvMZ0=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=p/AGj8P41FOeOSee1kJ6P+5EvMNOP4CHcur8Z2oIVg7Z0AaDtls7e/ExE2rpe3IMX
-         6ein54SpZ6cfmX8Tgw4pKJoIQGWDC9hMqRlHG1eSnlXkP+l3tnpIdlVlFx9bvG3oyH
-         6xXlqDwP7D7O2QjosHQFFjHvzFUPPyrPyZu+Quo8=
-Date:   Thu, 24 Sep 2020 13:00:34 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Ray Jui <ray.jui@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
-In-Reply-To: <20200910152539.45584-1-ray.jui@broadcom.com>
-References: <20200910152539.45584-1-ray.jui@broadcom.com>
-Subject: Re: [PATCH 1/4] dt-bindings: spi: Add compatible string for brcmstb SoCs
-Message-Id: <160094881929.50579.14070314073431135713.b4-ty@kernel.org>
+        id S1727468AbgIXMZz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Sep 2020 08:25:55 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:41284 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727543AbgIXMZz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 24 Sep 2020 08:25:55 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 3AED619671D9BAFB79F9;
+        Thu, 24 Sep 2020 20:25:53 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 24 Sep 2020 20:25:45 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <john.garry@huawei.com>, <broonie@kernel.org>
+CC:     <tudor.ambarus@microchip.com>, <linux-spi@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <yangyicong@hisilicon.com>
+Subject: [PATCH 0/4] Add IRQ mode support for hisi-sfc-v3xx driver and some cleanups
+Date:   Thu, 24 Sep 2020 20:24:26 +0800
+Message-ID: <1600950270-52536-1-git-send-email-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.8.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 10 Sep 2020 08:25:36 -0700, Ray Jui wrote:
-> Add compatible string for brcmstb 7445 SoCs.
+This series mainly add the IRQ mode support for hisi-sfc-v3xx driver, and some
+cleanups for the preparation of the IRQ mode.
+After this patch, the device can work in IRQ mode, or if firmware doesn't
+declare irq support it will fall back to Poll mode.
 
-Applied to
+Patch 1-2 refactor the .exec_op() path to make it simpler and clearer.
+Patch 3 factor the definition of the interrupt bits.
+Patch 4 add the IRQ support of the driver.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thanks!
+Yicong Yang (4):
+  spi: hisi-sfc-v3xx: factor out IO modes configuration
+  spi: hisi-sfc-v3xx: factor out bus config and transfer functions
+  spi: hisi-sfc-v3xx: factor out the bit definition of interrupt
+    register
+  spi: hisi-sfc-v3xx: add support for IRQ mode
 
-[1/1] spi: bcm-qspi: Fix probe regression on iProc platforms
-      commit: 00fb259c618ea1198fc51b53a6167aa0d78672a9
+ drivers/spi/spi-hisi-sfc-v3xx.c | 261 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 190 insertions(+), 71 deletions(-)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+2.8.1
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
