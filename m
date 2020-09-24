@@ -2,97 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE83276CE2
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 11:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5986277007
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Sep 2020 13:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727318AbgIXJPC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Sep 2020 05:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727336AbgIXJPB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Sep 2020 05:15:01 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E724C0613DF
-        for <linux-spi@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id j2so2611696eds.9
-        for <linux-spi@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=blIPJEbomAKiMgTEwz666YDx51JxK5KUKkCacV2k5DGrYF1dgoN3TPlbCce3UdPyqn
-         l+sjX0//ZpWoRSpXvagCpGylKqMTkNMo/2HAZJY28dwC1rti3ofKw4Z1RDbjcvxMDnbn
-         DBnAhALu6UdIa4wCDzo7dIv9qp2U03O4u7rDCQdwmjFPbrVpv5bepecSdGtwKnTJB9rH
-         nH/oGusFJ6JM43Xna+7eDdLYcEoJL8AsTmou4kcpDb2UtDY0KPfodc/NGQ4TUEcOm3hs
-         6cMsgEJtG/d3gouoUvTe4+Wy9RSjcJnO5Ygg3P7zVsSedlaT/hDy9teH4tkT8r3LGB8W
-         6cvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=KIyxnHve/wn9prxKakIfHMxkvW3/54ovvULaxnG6/A5hRUL7U82T+xrOYfS7BlzXnq
-         DFcyMLAJRgBktEBNXYoqUt10ko4ew7226iONHMsL4+0xz8rJ4T60zvkH3n1LsOJM08yQ
-         F/3tnWPa/zWj+8+Co9UKGiHAXi9kri+bvM7213dzAgERuMdKVOf6w8dKQzMwKLHXSKjy
-         idA8OxhJXWCQtUwjEm08gmNJMzM5NlSkZUBLV+A4dwp5g9ZBknpQmwUdrULLAbo1RQxm
-         r8Ew4TQz4SkkLm0V4PCw0W2jE5vLMzAj8kAqSgyXoc5Rka8XoaYNHJ7HjgbkZeLKutEQ
-         /myQ==
-X-Gm-Message-State: AOAM533wimH35YstSOrrN8LwbzhyfQqvvwsdeiSBkDI5Ryvlux293bIS
-        F26RwsYTTk70Lg6WTkLPKf5xClAQf7y2ygKyn9I=
-X-Google-Smtp-Source: ABdhPJyTPH8PP/2mieNLbOyLqms9pUviMKvSeTWD9wb8h+Pr7H1ZfKMbyjpiQTFtDXkxINcaJ73NV9FfmSogeqXajbU=
-X-Received: by 2002:a05:6402:c15:: with SMTP id co21mr1946edb.268.1600938899597;
- Thu, 24 Sep 2020 02:14:59 -0700 (PDT)
+        id S1726715AbgIXLew (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Sep 2020 07:34:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56940 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726617AbgIXLew (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 24 Sep 2020 07:34:52 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4DE6E2220D;
+        Thu, 24 Sep 2020 11:34:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600947291;
+        bh=zpGCrVK8tz1aZrON992tX07fTfb1T/oz6LsOj41Eb9c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jtcDbfmy3QrqbK8tvcbhP0NsjYHl7W1Eaj9KnesXah2QJMh37kDDG45s7HTElChnQ
+         QZENgO6x1gjPu6qR6Z7h40oI4c7zrQkR3QpVrs6ywSGDSlQaQBhVWBUg+na5oNWdC0
+         QoqpcEE7J6a4m44fNnl7pG7LGW48WGgBIHFiXgf4=
+Date:   Thu, 24 Sep 2020 12:33:56 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Ray Jui <ray.jui@broadcom.com>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: spi: Add compatible string for brcmstb
+ SoCs
+Message-ID: <20200924113356.GC4754@sirena.org.uk>
+References: <20200910152539.45584-1-ray.jui@broadcom.com>
+ <160009511834.5702.10954218363830361529.b4-ty@kernel.org>
+ <a1e13626-e87a-8114-74ae-560902ab9551@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a54:2811:0:0:0:0:0 with HTTP; Thu, 24 Sep 2020 02:14:58
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <floradarpin.d@gmail.com>
-Date:   Thu, 24 Sep 2020 02:14:58 -0700
-Message-ID: <CAPX4zWxG6--oZzPaoMmta9n5fWHajuiA-wFBP=cbGe-CKGcWaw@mail.gmail.com>
-Subject: Lieber Freund (Assalamu Alaikum),?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TYecfFk8j8mZq+dy"
+Content-Disposition: inline
+In-Reply-To: <a1e13626-e87a-8114-74ae-560902ab9551@gmail.com>
+X-Cookie: Programmers do it bit by bit.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---=20
-Lieber Freund (Assalamu Alaikum),
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
-Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
-Mutter und eine Witwe
-mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
-hen
-Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
+--TYecfFk8j8mZq+dy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend
-United State Dollar ($ 27.500.000.00) und ich brauche eine
-vertrauensw=C3=BCrdige Investition
-Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
-jedoch
-M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
-von
-Investitionsprojekten in Ihrem Land
-Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
-bauen.
+On Wed, Sep 23, 2020 at 01:38:55PM -0700, Florian Fainelli wrote:
+> On 9/14/20 7:52 AM, Mark Brown wrote:
 
-Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
-n und
-Unternehmensgewinn zu verhandeln
-Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
+> > [1/4] spi: Add compatible string for brcmstb SoCs
+> >       commit: d9f0cf9f1176d36d3824459d5b061f4719fcbb8a
+> > [2/4] spi: bcm-qspi: Add compatible string for BRCMSTB 7445 SoCs
+> >       commit: e0eeb76b818ad93718f9640b0bdad909b453a3b8
+> > [3/4] spi: bcm-qspi: Fix probe regression on iProc platforms
+> >       commit: 9a852d44b26f8e60e2ae13df563824c0f8489135
+> > [4/4] spi: bcm-qspi: Clean up 7425, 7429, and 7435 settings
+> >       commit: 3cf5d198785a6b454e6a97246795b0043aff9ac1
 
-Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
-antworten Sie bitte dringend
-Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
-.
+> Mark, can you also submit "spi: bcm-qspi: Fix probe regression on iProc
+> platforms" towards Linus because this is a bug fix that is currently
+> affecting the 5.9 kernel.
 
-Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
-esse (
-ayishagddafio@mail.ru ) zur weiteren Diskussion.
+*sigh*, OK.  Please don't send fixes in the middle of serieses, send
+them at the start of the series before any cleanups or new features.
+This ensures that they don't have any dependencies on other patches in
+the series and means that they can easily be sent as fixes without
+getting tangled up with the development work.
 
-Freundliche Gr=C3=BC=C3=9Fe
-Frau Aisha Al-Qaddafi
+--TYecfFk8j8mZq+dy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9shCQACgkQJNaLcl1U
+h9B4Twf+NFkJy7KuNAOffATLKqqcClJiumK7L7QA6oQzn5MyuQ85EZ2YlPh8spJF
+vNw1WzK+a0CQxCTi7s4jwEUZIR8G0Q1CqLAFxGk/F0bI3vHH7TpbGRvMpZ0/ixj+
+fSTroeoBmtizi21WE7qOFqqmnMM89icDbtpuszMf/uXqqsfyb38GdZPa28s97m3K
+wT91kmromhOILWvxFr+KZZBfm7auA9zCfS7D19thW4L7XZ8t//hFECZSgZ9/J9lR
+BbjNPwusRL/r+b3dfIdAr4J2CSPEUolBX8s664HR/y8P9BmM4TEiMYHIuywmWYPA
+CzDVA8Gdka3aB8Yb8apP6hMCG9EnHg==
+=JdlS
+-----END PGP SIGNATURE-----
+
+--TYecfFk8j8mZq+dy--
