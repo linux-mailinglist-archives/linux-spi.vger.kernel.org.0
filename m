@@ -2,55 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B92E27829A
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Sep 2020 10:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A953C2782B9
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Sep 2020 10:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727658AbgIYIVz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Sep 2020 04:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        id S1727463AbgIYI1L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Sep 2020 04:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727408AbgIYIVz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Sep 2020 04:21:55 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BA1C0613CE;
-        Fri, 25 Sep 2020 01:21:55 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id s88so1556827ilb.6;
-        Fri, 25 Sep 2020 01:21:55 -0700 (PDT)
+        with ESMTP id S1727044AbgIYI1L (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Sep 2020 04:27:11 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F8EC0613CE;
+        Fri, 25 Sep 2020 01:27:11 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id l16so1528747ilt.13;
+        Fri, 25 Sep 2020 01:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LJvK1S1wM77CEwiTWGHH4blwT2BpBAlEo89Zgh09KOA=;
-        b=c6UN+CI1Fp4uk5RW2Kl5hegia7PgWhtLlM7r1U47nBCKQW72a7A4XRQcXs33oeaDor
-         +Pekks1fUk4lcSdjBfDpJNj8Lb+IWNmLhQGoYiWisLkv3D41VUsroEnfczSCvn93iMA0
-         PdgoNS1YbL/b4ZMuMJFX/1ZXSLFAggeEoX2ktDD9FO+0pwsANqptIRMKFiFYN4KX7qqC
-         WDDJstdvvqNx8NXIKmPnfS63q2GhbEEE1YnuLTkynqPYmELrM+FlCF2ozTVc/6yewcjv
-         uyqAXpyf+XMSyM3oKmVb8hOYgFUVTQTL4LQrVbqn3Y8e3BtJGlXTQ5GVgKq2oCwFpg+W
-         1DAQ==
+        bh=SrY0n+Lxp4Ps0vKWrqg8qzPispapVC5K8BCl7226S1Y=;
+        b=T0fhmfBTGttasq8Kei96OjnUWqoXnD1EhQm31QUfLpIDhsjWLMFk9PV2pa+s0Hdg4A
+         fjPpdwt7ABi70fGaUKKmKv2bZFl1TX1+6zeJIsfMkkdroMBVgloDbus7BReFk/VnR6SK
+         U3/FeQaNf+VwOjhpb7jEHXM9O0kdlPRDgdL57bNQPOItMru8HlJjVYwQ+N+2344BnMPn
+         VLAi5RiU3HyfXVpuXxk7zerjlavpgg2bAlP3+3cJTt25Ft9WDn+uxWyPYbRLNm7Ai0Pc
+         vXXXfPvNhZtFZkSVRsZBYd2w5ycRNts4T71gXQtVVij69COOyaOfL2kzw9iAAtRqdG7F
+         mAAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LJvK1S1wM77CEwiTWGHH4blwT2BpBAlEo89Zgh09KOA=;
-        b=oEJMbbOE6iBWSLh+BOEzMvxmeeLbSi9h8DHyTDtIof6BvElyucOs/D50xi3drp8aaj
-         HTKT42yyzlW2vo18yf1Cv0ov97NHX3rrnmCCm6GEcpnXVrtvSZlWPbpICLZAfFtszuMi
-         ZEvK7lSsHo7w164sQqD4HQg8mEXArXPoJoRuyBopFgRyuS47WIAc2p1NaJZ0ZS5aNy69
-         2l6zCrqK5GuSWz3o43M1yheG74rNhA1Y8nEnX8KuMmPrCQJKFdD7XQQhLryJHGCDnlgm
-         hmiAzt88U5xGyE9XhhqyIrrz8+ZQr6q5CT9iLaW5RI+XqF2lCUb8yTCxV0E8uB26A8ls
-         hDYA==
-X-Gm-Message-State: AOAM532MVpaGyMU8idUNrRJSbsVEF8L9d/ujY6bM7wQy/qFp1JlVM149
-        JjAQ6AhstOz6C/ox9rAScOe4TVHK0ACtqCDBvC0=
-X-Google-Smtp-Source: ABdhPJxbkPFY03hpX61qBi/nCU+CsJEoNVRZmepsG6KM0Jr4eQ/tgOQDlyETWRPRhaB53PSTYIq/19x3diRibukeHKw=
-X-Received: by 2002:a92:cbcf:: with SMTP id s15mr2378625ilq.39.1601022114691;
- Fri, 25 Sep 2020 01:21:54 -0700 (PDT)
+        bh=SrY0n+Lxp4Ps0vKWrqg8qzPispapVC5K8BCl7226S1Y=;
+        b=qMeJyPa4fO89sO7aVdN+57AjvY9VAlC995fcW8sLf9bCympoZrPP6pPZxLxIhjy7g+
+         +cuSCLdBkZGvqnFZzrr9bThrnCk6vkigordvUX+X6HDEnw4jONyMaYlRPAo8iSxRCZ1E
+         8FUdgCCm85KL7/gpCUsds2wwyio4RrnC1NiAxEZE1uTjIT77BruegSICKfAqJJhLNuzx
+         56OtoAUrGtmZKCtPC2+KWRx0lN3OhUkuLU7V1SCQMV3hYNe4CSjFDn6C4e3Hp1fUkV4b
+         xhY++rqNdUiVVSdkIa04esl6SulsPPvDKojoHPl7VfbNEraJoV+ukFIUVHV9fjzgiq7h
+         akAg==
+X-Gm-Message-State: AOAM533LNusq2Fm1nAdJ7eFltG5rrPtGMhRYUCmizaGxRl4UC3lWrEDf
+        l5xtGow+wjqgm4vzVbC4hsZb87Q3Nkag1i576F4=
+X-Google-Smtp-Source: ABdhPJzfUq4g2hUm0yylW2BZjBYzZffhnMg9JFRt8eQ2YfVzP7n3YGn8DdvLynY3V96ZCJFM7lK9ybFe7wDfCGFFvXY=
+X-Received: by 2002:a92:910:: with SMTP id y16mr2375456ilg.22.1601022430617;
+ Fri, 25 Sep 2020 01:27:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200925065418.1077472-1-ikjn@chromium.org> <20200925145255.v3.4.I06cb65401ab5ad63ea30c4788d26633928d80f38@changeid>
-In-Reply-To: <20200925145255.v3.4.I06cb65401ab5ad63ea30c4788d26633928d80f38@changeid>
+References: <20200925065418.1077472-1-ikjn@chromium.org> <20200925145255.v3.5.Id1cb208392928afc7ceed4de06924243c7858cd0@changeid>
+In-Reply-To: <20200925145255.v3.5.Id1cb208392928afc7ceed4de06924243c7858cd0@changeid>
 From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Fri, 25 Sep 2020 16:21:43 +0800
-Message-ID: <CAJsYDVLaw_ViJECoX8VxtrhCDg7m-fOZ0XmF1+n9Y13oVgd4oQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] spi: spi-mtk-nor: use dma_alloc_coherent() for
- bounce buffer
+Date:   Fri, 25 Sep 2020 16:26:59 +0800
+Message-ID: <CAJsYDV+EifAeMKEGwi0oH6A5EvPN8tMZQ+oqY5JGe=+kqzjMLw@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] spi: spi-mtk-nor: support 36bit dma addressing
 To:     Ikjoon Jang <ikjn@chromium.org>
 Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -71,22 +70,52 @@ Hi!
 
 On Fri, Sep 25, 2020 at 2:56 PM Ikjoon Jang <ikjn@chromium.org> wrote:
 >
-> Use dma_alloc_coherent() for bounce buffer instead of kmalloc() to
-> make sure the bounce buffer to be allocated within its DMAable range.
-
-I think the introduction of need_bounce can be in its own commit or
-at least mentioned here.
-
+> This patch enables 36bit dma address support to spi-mtk-nor.
+> Currently this is enabled only for mt8192-nor.
 >
 > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
->
 > ---
 >
 > (no changes since v1)
+>
+>  drivers/spi/spi-mtk-nor.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+> index 8dbafee7f431..35205635ed42 100644
+> --- a/drivers/spi/spi-mtk-nor.c
+> +++ b/drivers/spi/spi-mtk-nor.c
+> @@ -78,6 +78,8 @@
+>  #define MTK_NOR_REG_DMA_FADR           0x71c
+>  #define MTK_NOR_REG_DMA_DADR           0x720
+>  #define MTK_NOR_REG_DMA_END_DADR       0x724
+> +#define MTK_NOR_REG_DMA_DADR_HB                0x738
+> +#define MTK_NOR_REG_DMA_END_DADR_HB    0x73c
+>
+>  /* maximum bytes of TX in PRG mode */
+>  #define MTK_NOR_PRG_MAX_SIZE           6
+> @@ -106,6 +108,7 @@ struct mtk_nor {
+>         unsigned int spi_freq;
+>         bool wbuf_en;
+>         bool has_irq;
+> +       bool high_dma;
+>         struct completion op_done;
+>  };
+>
+> @@ -305,6 +308,11 @@ static int mtk_nor_dma_exec(struct mtk_nor *sp, u32 from, unsigned int length,
+>         writel(dma_addr, sp->base + MTK_NOR_REG_DMA_DADR);
+>         writel(dma_addr + length, sp->base + MTK_NOR_REG_DMA_END_DADR);
+>
+> +       if (sp->high_dma) {
+> +               writel(dma_addr >> 32, sp->base + MTK_NOR_REG_DMA_DADR_HB);
+> +               writel((dma_addr + length) >> 32, sp->base + MTK_NOR_REG_DMA_END_DADR_HB);
+> +       }
 
- There have been a lot of changes since v2 :)
+I remembered kbuild test robot reported a warning on this on 32-bit platforms
+in your v1. [0]
+I don't know what's the fix for this though :(
 
-Reviewed-by: Chuanhong Guo <gch981213@gmail.com>
+[0] https://marc.info/?l=linux-spi&m=159982425706940&w=2
 -- 
 Regards,
 Chuanhong Guo
