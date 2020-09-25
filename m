@@ -2,51 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7524727926B
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Sep 2020 22:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6159F27926E
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Sep 2020 22:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbgIYUnE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Sep 2020 16:43:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50920 "EHLO mail.kernel.org"
+        id S1728659AbgIYUnJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Sep 2020 16:43:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726119AbgIYUnE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 25 Sep 2020 16:43:04 -0400
+        id S1726119AbgIYUnJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 25 Sep 2020 16:43:09 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08C892086A;
-        Fri, 25 Sep 2020 20:43:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 424C422211;
+        Fri, 25 Sep 2020 20:43:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601066583;
-        bh=xf6ysVOG2uVTAcryG8bfT29KwpI5ya8L2UosHuVYtBQ=;
+        s=default; t=1601066588;
+        bh=oPM6bYG0ziHYbXZRmN2AA5X5TBawJwfVerhBHqMHWC8=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=EPHFzjT/2BkLbqF6RwI8IWvPzyWepx9xJvpGtf3UuswRKHQ/EIyNEhmucPB07JFk5
-         c3hz5tlFhS0Besb9P4smZ0womnRXZuK9svCcuZc2VpB3+Lj+wOVc5fJn+yjObvAWlX
-         IcaxKhAAJTd2uWJogP3cDqlZvkb4/nygZbs3PXrU=
-Date:   Fri, 25 Sep 2020 21:42:08 +0100
+        b=GgoN8RG8c5RxNABR8KzFMBCLLjLOKIBuYN85cL4PmfrHH1O5F8Km417yw0Mu6CU1A
+         s3A4QSgBi6Y40+2k/fdF7mJN+5eam0q5d5pOBSfQDBnPIQ1rDzEe2yfvBJlkvlcRbs
+         Ithol4KnaXVp9JJukk8aOKpYK/7CtakiNqW7UFbk=
+Date:   Fri, 25 Sep 2020 21:42:13 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Yicong Yang <yangyicong@hisilicon.com>, john.garry@huawei.com
-Cc:     linux-mtd@lists.infradead.org, tudor.ambarus@microchip.com,
-        linux-spi@vger.kernel.org
-In-Reply-To: <1600950270-52536-1-git-send-email-yangyicong@hisilicon.com>
-References: <1600950270-52536-1-git-send-email-yangyicong@hisilicon.com>
-Subject: Re: [PATCH 0/4] Add IRQ mode support for hisi-sfc-v3xx driver and some cleanups
-Message-Id: <160106652820.3325.14809043608395665853.b4-ty@kernel.org>
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
+Cc:     linux-mediatek@lists.infradead.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, bayi.cheng@mediatek.com
+In-Reply-To: <20200922114905.2942859-1-gch981213@gmail.com>
+References: <20200922114905.2942859-1-gch981213@gmail.com>
+Subject: Re: [PATCH v2] spi: spi-mtk-nor: fix timeout calculation overflow
+Message-Id: <160106652820.3325.17678735137859743508.b4-ty@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 24 Sep 2020 20:24:26 +0800, Yicong Yang wrote:
-> This series mainly add the IRQ mode support for hisi-sfc-v3xx driver, and some
-> cleanups for the preparation of the IRQ mode.
-> After this patch, the device can work in IRQ mode, or if firmware doesn't
-> declare irq support it will fall back to Poll mode.
-> 
-> Patch 1-2 refactor the .exec_op() path to make it simpler and clearer.
-> Patch 3 factor the definition of the interrupt bits.
-> Patch 4 add the IRQ support of the driver.
-> 
-> [...]
+On Tue, 22 Sep 2020 19:49:02 +0800, Chuanhong Guo wrote:
+> CLK_TO_US macro is used to calculate potential transfer time for various
+> timeout handling. However it overflows on transfer bigger than 512 bytes
+> because it first did (len * 8 * 1000000).
+> This controller typically operates at 45MHz. This patch did 2 things:
+> 1. calculate clock / 1000000 first
+> 2. add a 4M transfer size cap so that the final timeout in DMA reading
+>    doesn't overflow
 
 Applied to
 
@@ -54,14 +53,8 @@ Applied to
 
 Thanks!
 
-[1/4] spi: hisi-sfc-v3xx: factor out IO modes configuration
-      commit: 2c8af6a59744b242a193118c799a45621476f8ed
-[2/4] spi: hisi-sfc-v3xx: factor out bus config and transfer functions
-      commit: f6d2737720d6f6e5f4825b7203ad8b5cfcf9906c
-[3/4] spi: hisi-sfc-v3xx: factor out the bit definition of interrupt register
-      commit: aac6edff843871d7d732a6aa6f495b9eb1dea83a
-[4/4] spi: hisi-sfc-v3xx: add support for IRQ mode
-      commit: b1dd565124bea0f3ecde87336b48c5d0e98cd5bc
+[1/1] spi: spi-mtk-nor: fix timeout calculation overflow
+      commit: 4cafaddedb5fbef9531202ee547784409fd0de33
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
