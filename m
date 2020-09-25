@@ -2,95 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E912780EA
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Sep 2020 08:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57002780EF
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Sep 2020 08:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727198AbgIYGyY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Sep 2020 02:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S1727266AbgIYGyb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Sep 2020 02:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727135AbgIYGyY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Sep 2020 02:54:24 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E65C0613CE
-        for <linux-spi@vger.kernel.org>; Thu, 24 Sep 2020 23:54:23 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id 5so1732572pgf.5
-        for <linux-spi@vger.kernel.org>; Thu, 24 Sep 2020 23:54:23 -0700 (PDT)
+        with ESMTP id S1727194AbgIYGyb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Sep 2020 02:54:31 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC94C0613D4
+        for <linux-spi@vger.kernel.org>; Thu, 24 Sep 2020 23:54:31 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id b124so2222103pfg.13
+        for <linux-spi@vger.kernel.org>; Thu, 24 Sep 2020 23:54:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vw1KoQ4s8DeBpjj9MyCO9ispMM5JjMGFm+aZoaWCoVI=;
-        b=buj5lWW/a+hMjzNtcF/uMLSF78MUB7xqm+T2nNX04mS+0nYwnCiB3E3vUa5Dd5jiNj
-         i36ji4XPTi6D0JoZkkMNBs31NHdmTWkPUc8AwirL2lf/k3cOryvCDvXcYn9xjj5CV4EY
-         lOdRjxs4FSfryaOXZ3QyOkaIa7Nbgrcw044Nk=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HdE7nLvEFj18RV9A2g392hZIV3ihv+vkUnf6hZyZUiI=;
+        b=LOOOW3X3ilRxghcGS6kesPqVSpVDVzHB+wJ/pOrMNeujL2vcH/fbrSTfaTjDw5vAjT
+         VK5mCz6OUBRPj+obsf9HzaQt7++4c8INP61tk0DmPbOf3C3CuwsYaSz+myXOuf7KlyaE
+         ynLNjxG1dydzIlg3SUspITMegtmEZA8OjMIOo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vw1KoQ4s8DeBpjj9MyCO9ispMM5JjMGFm+aZoaWCoVI=;
-        b=rwWHOWg1hkiabGIrASiqgZwiq5S20FJ8P6RXcw37ofTJrmG/RQo76WDIzX1xI5WVBt
-         LcvQfqBMi4d12eMUOqx5rmwbfkBf1tSKC7h8DXuDlEHOydB4zWd+Nk6tXm9DTIg//m6p
-         YbPlLdHuM+0CzPlZtWc5d6I+iGv/1dcR1nVhW5T0HA/LPlqCGfx4N3xkvQoBOAaWsKri
-         2gTktJHzlxhua7ZZcmECuPUSBF8jvYv1BeBR6KS63GmA9zIEEjdkr6MZdC+Fqzc1H/8d
-         Y+8kVvubXuJ9MqTaAYHGlnQ0ip8SkMKx3MVhYPr/UWl0i41TyXI7EPSSP1CxPOFC4tKi
-         qzcQ==
-X-Gm-Message-State: AOAM533PEGG7sqh7qVGmaswWYRZ19NVRBvsJGrixzDWdVSyUW0Zso44T
-        uYdnI5cRX4NxKR4Ue54/fedyFQ==
-X-Google-Smtp-Source: ABdhPJxgajGnraK24ZhbVuK9fVP7hcc5f5AZ8YpbNmdibOe6j74I/hhduxVUpobEzgb6A2dXHC7BZA==
-X-Received: by 2002:aa7:85d4:0:b029:142:440b:fcd7 with SMTP id z20-20020aa785d40000b0290142440bfcd7mr2754055pfn.36.1601016863314;
-        Thu, 24 Sep 2020 23:54:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HdE7nLvEFj18RV9A2g392hZIV3ihv+vkUnf6hZyZUiI=;
+        b=LdcwR5RfwWvu4NK7Msv4neS7SHBXpzsLPG2RrOR/ZhpudrgmSV1iBsaev3ScDhXnU1
+         ZpSj0YTsV/Ox3LfpoBiK4BkDdf8DmYnaYmUSxNuTT9ucI9b/Us8Bvk/RoIq9I8WjY2ws
+         KKehnbAf+fJcW7AJ3ARlcZUiIvVsXHyoEvZ9FQ/UwVbyB2gEBFD4a8V63SHqyysCRoyi
+         rvYn/s9GC3voEvdve2hv2Z7qNOpPoVmKmo6/wEHeL4auxuJOj3dE1mTw5AGjW7Yrn+yy
+         PQUAZ6wkZVZGdcCOZCcoTUkW3mvxEgUVeJgxt/gSwOWSrMa9J413oWkzWaY+SHifGkon
+         Bgkg==
+X-Gm-Message-State: AOAM533U1lrbAbDrhQiZJIbZ2HvptGtBI0IhXVqHy9/zbitoHsx/refo
+        Mqd7e1dEVnOx71qcp2QLzX2QRA==
+X-Google-Smtp-Source: ABdhPJxeXe/jApGVyUA65xnQpVIAMUd3AY9UUwRBr8ghMbWnb5Si2clEbVRamnuUhqstE+vlnH9yEQ==
+X-Received: by 2002:aa7:97a8:0:b029:13e:d13d:a105 with SMTP id d8-20020aa797a80000b029013ed13da105mr2777875pfq.33.1601016870507;
+        Thu, 24 Sep 2020 23:54:30 -0700 (PDT)
 Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
-        by smtp.gmail.com with ESMTPSA id x27sm1549612pfp.128.2020.09.24.23.54.20
+        by smtp.gmail.com with ESMTPSA id x27sm1549612pfp.128.2020.09.24.23.54.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 23:54:22 -0700 (PDT)
+        Thu, 24 Sep 2020 23:54:30 -0700 (PDT)
 From:   Ikjoon Jang <ikjn@chromium.org>
 To:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
         devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-mtd@lists.infradead.org
-Cc:     Ikjoon Jang <ikjn@chromium.org>,
+Cc:     Ikjoon Jang <ikjn@chromium.org>, Rob Herring <robh@kernel.org>,
         Bayi Cheng <bayi.cheng@mediatek.com>,
         Chuanhong Guo <gch981213@gmail.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 0/6] spi: spi-mtk-nor: Add mt8192 support
-Date:   Fri, 25 Sep 2020 14:54:11 +0800
-Message-Id: <20200925065418.1077472-1-ikjn@chromium.org>
+Subject: [PATCH v3 1/6] dt-bindings: spi: add mt8192-nor compatible string
+Date:   Fri, 25 Sep 2020 14:54:12 +0800
+Message-Id: <20200925145255.v3.1.I4cd089ef1fe576535c6b6e4f1778eaab1c4441cf@changeid>
 X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+In-Reply-To: <20200925065418.1077472-1-ikjn@chromium.org>
+References: <20200925065418.1077472-1-ikjn@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patchset adds 36bit dma address and power management
-supports for mt8192-nor.
+Add MT8192 spi-nor controller support.
 
-Changes in v3:
-- Fix a bugfix of v2 in checking spi memory operation.
-- split read_dma function into two (normal/bounce)
-- Support 7bytes generic spi xfer
+Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+Acked-by: Rob Herring <robh@kernel.org>
+---
 
-Changes in v2:
-- Add power management support
-- Fix bugs in checking spi memory operation.
-- use dma_alloc_coherent for allocating bounce buffer
-- code cleanups
+(no changes since v1)
 
-Ikjoon Jang (6):
-  dt-bindings: spi: add mt8192-nor compatible string
-  spi: spi-mtk-nor: fix mishandled logics in checking SPI memory
-    operation
-  spi: spi-mtk-nor: support 7 bytes transfer of generic spi
-  spi: spi-mtk-nor: use dma_alloc_coherent() for bounce buffer
-  spi: spi-mtk-nor: support 36bit dma addressing
-  spi: spi-mtk-nor: Add power management support
+ Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/spi/mediatek,spi-mtk-nor.yaml    |   1 +
- drivers/spi/spi-mtk-nor.c                     | 333 ++++++++++++------
- 2 files changed, 230 insertions(+), 104 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+index 42c9205ac991..55c239446a5b 100644
+--- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
++++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+@@ -30,6 +30,7 @@ properties:
+               - mediatek,mt7622-nor
+               - mediatek,mt7623-nor
+               - mediatek,mt7629-nor
++              - mediatek,mt8192-nor
+           - enum:
+               - mediatek,mt8173-nor
+       - items:
 -- 
 2.28.0.681.g6f77f65b4e-goog
 
