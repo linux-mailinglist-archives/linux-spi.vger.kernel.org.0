@@ -2,103 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E102279FAE
-	for <lists+linux-spi@lfdr.de>; Sun, 27 Sep 2020 10:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BA427A45E
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Sep 2020 00:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730487AbgI0Iab (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 27 Sep 2020 04:30:31 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:32913 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730450AbgI0Iab (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Sep 2020 04:30:31 -0400
-X-UUID: 44b997db2ba1471d8bc2dc62961eaed7-20200927
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Lner+8cIRgrg0cDNcBnnCq0acUspa7hUGg30bAeP/UE=;
-        b=pFD6Tgrfv5dopQXE62tIo5gn5ppuG6Rtmvj8zQD6GN2h25xzqH8nFvBMU6jwm4rffVhfJq4sWKt6yHmYEq3ZkGplUmLFNh/6rGVgB6GsYLNI2TQbIwy8nLXuqgMHAWLZdCSkirI35c2cQM6Tb2MnMoNoQLyamtDXPnTWvTtUigs=;
-X-UUID: 44b997db2ba1471d8bc2dc62961eaed7-20200927
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <yingjoe.chen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1572921222; Sun, 27 Sep 2020 16:30:26 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sun, 27 Sep 2020 16:30:24 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 27 Sep 2020 16:30:23 +0800
-Message-ID: <1601195424.7766.4.camel@mtksdaap41>
-Subject: Re: [PATCH v3 5/6] spi: spi-mtk-nor: support 36bit dma addressing
-From:   Yingjoe Chen <yingjoe.chen@mediatek.com>
-To:     Ikjoon Jang <ikjn@chromium.org>
-CC:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Sun, 27 Sep 2020 16:30:24 +0800
-In-Reply-To: <20200925145255.v3.5.Id1cb208392928afc7ceed4de06924243c7858cd0@changeid>
-References: <20200925065418.1077472-1-ikjn@chromium.org>
-         <20200925145255.v3.5.Id1cb208392928afc7ceed4de06924243c7858cd0@changeid>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726379AbgI0Wnx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 27 Sep 2020 18:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbgI0Wnw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Sep 2020 18:43:52 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984CFC0613CE;
+        Sun, 27 Sep 2020 15:43:52 -0700 (PDT)
+Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id AA5EB23E45;
+        Mon, 28 Sep 2020 00:43:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1601246627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=srk0Y0n49p5Cox/2wkDfKg8lk++3IjgEpv8cov7ncOA=;
+        b=i1bBfn4eR5qlpiSPTQLgjOn4pJjelnbtpR2hRUIgV5EYD4Fpt0cBlMItynaAGbYsvQn1RX
+        EKXQJLrRpitnHUXZUO82RfuMzNQwXU+Nx7DhdiG9zo3zsFGXSPaZxDB7FtrkQh6lgVN41Z
+        O3ocB7EFShc9vOCzazuJ8YuCIbBJIyA=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] spi: fsl-dspi: fix NULL pointer dereference
+Date:   Mon, 28 Sep 2020 00:43:36 +0200
+Message-Id: <20200927224336.705-1-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTA5LTI1IGF0IDE0OjU0ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
-VGhpcyBwYXRjaCBlbmFibGVzIDM2Yml0IGRtYSBhZGRyZXNzIHN1cHBvcnQgdG8gc3BpLW10ay1u
-b3IuDQo+IEN1cnJlbnRseSB0aGlzIGlzIGVuYWJsZWQgb25seSBmb3IgbXQ4MTkyLW5vci4NCj4g
-DQo+IFNpZ25lZC1vZmYtYnk6IElram9vbiBKYW5nIDxpa2puQGNocm9taXVtLm9yZz4NCj4gLS0t
-DQo+IA0KPiAobm8gY2hhbmdlcyBzaW5jZSB2MSkNCj4gDQo+ICBkcml2ZXJzL3NwaS9zcGktbXRr
-LW5vci5jIHwgMTggKysrKysrKysrKysrKysrKystDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTcgaW5z
-ZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3Bp
-L3NwaS1tdGstbm9yLmMgYi9kcml2ZXJzL3NwaS9zcGktbXRrLW5vci5jDQo+IGluZGV4IDhkYmFm
-ZWU3ZjQzMS4uMzUyMDU2MzVlZDQyIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3NwaS9zcGktbXRr
-LW5vci5jDQo+ICsrKyBiL2RyaXZlcnMvc3BpL3NwaS1tdGstbm9yLmMNCj4gQEAgLTc4LDYgKzc4
-LDggQEANCj4gICNkZWZpbmUgTVRLX05PUl9SRUdfRE1BX0ZBRFIJCTB4NzFjDQo+ICAjZGVmaW5l
-IE1US19OT1JfUkVHX0RNQV9EQURSCQkweDcyMA0KPiAgI2RlZmluZSBNVEtfTk9SX1JFR19ETUFf
-RU5EX0RBRFIJMHg3MjQNCj4gKyNkZWZpbmUgTVRLX05PUl9SRUdfRE1BX0RBRFJfSEIJCTB4NzM4
-DQo+ICsjZGVmaW5lIE1US19OT1JfUkVHX0RNQV9FTkRfREFEUl9IQgkweDczYw0KPiAgDQo+ICAv
-KiBtYXhpbXVtIGJ5dGVzIG9mIFRYIGluIFBSRyBtb2RlICovDQo+ICAjZGVmaW5lIE1US19OT1Jf
-UFJHX01BWF9TSVpFCQk2DQo+IEBAIC0xMDYsNiArMTA4LDcgQEAgc3RydWN0IG10a19ub3Igew0K
-PiAgCXVuc2lnbmVkIGludCBzcGlfZnJlcTsNCj4gIAlib29sIHdidWZfZW47DQo+ICAJYm9vbCBo
-YXNfaXJxOw0KPiArCWJvb2wgaGlnaF9kbWE7DQo+ICAJc3RydWN0IGNvbXBsZXRpb24gb3BfZG9u
-ZTsNCj4gIH07DQo+ICANCj4gQEAgLTMwNSw2ICszMDgsMTEgQEAgc3RhdGljIGludCBtdGtfbm9y
-X2RtYV9leGVjKHN0cnVjdCBtdGtfbm9yICpzcCwgdTMyIGZyb20sIHVuc2lnbmVkIGludCBsZW5n
-dGgsDQo+ICAJd3JpdGVsKGRtYV9hZGRyLCBzcC0+YmFzZSArIE1US19OT1JfUkVHX0RNQV9EQURS
-KTsNCj4gIAl3cml0ZWwoZG1hX2FkZHIgKyBsZW5ndGgsIHNwLT5iYXNlICsgTVRLX05PUl9SRUdf
-RE1BX0VORF9EQURSKTsNCj4gIA0KPiArCWlmIChzcC0+aGlnaF9kbWEpIHsNCj4gKwkJd3JpdGVs
-KGRtYV9hZGRyID4+IDMyLCBzcC0+YmFzZSArIE1US19OT1JfUkVHX0RNQV9EQURSX0hCKTsNCj4g
-KwkJd3JpdGVsKChkbWFfYWRkciArIGxlbmd0aCkgPj4gMzIsIHNwLT5iYXNlICsgTVRLX05PUl9S
-RUdfRE1BX0VORF9EQURSX0hCKTsNCj4gKwl9DQo+ICsNCg0KTWF5YmUgdXNlIHVwcGVyXzMyX2Jp
-dHMoKSA/DQoNCg0KPiAgCWlmIChzcC0+aGFzX2lycSkgew0KPiAgCQlyZWluaXRfY29tcGxldGlv
-bigmc3AtPm9wX2RvbmUpOw0KPiAgCQltdGtfbm9yX3JtdyhzcCwgTVRLX05PUl9SRUdfSVJRX0VO
-LCBNVEtfTk9SX0lSUV9ETUEsIDApOw0KPiBAQCAtNjM1LDcgKzY0Myw4IEBAIHN0YXRpYyBjb25z
-dCBzdHJ1Y3Qgc3BpX2NvbnRyb2xsZXJfbWVtX29wcyBtdGtfbm9yX21lbV9vcHMgPSB7DQo+ICB9
-Ow0KPiAgDQo+ICBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtdGtfbm9yX21hdGNo
-W10gPSB7DQo+IC0JeyAuY29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdDgxNzMtbm9yIiB9LA0KPiAr
-CXsgLmNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTkyLW5vciIsIC5kYXRhID0gKHZvaWQgKikz
-NiB9LA0KPiArCXsgLmNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTczLW5vciIsIC5kYXRhID0g
-KHZvaWQgKikzMiB9LA0KPiAgCXsgLyogc2VudGluZWwgKi8gfQ0KPiAgfTsNCj4gIE1PRFVMRV9E
-RVZJQ0VfVEFCTEUob2YsIG10a19ub3JfbWF0Y2gpOw0KPiBAQCAtNjQ3LDYgKzY1Niw3IEBAIHN0
-YXRpYyBpbnQgbXRrX25vcl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAg
-CXZvaWQgX19pb21lbSAqYmFzZTsNCj4gIAlzdHJ1Y3QgY2xrICpzcGlfY2xrLCAqY3Rscl9jbGs7
-DQo+ICAJaW50IHJldCwgaXJxOw0KPiArCXVuc2lnbmVkIGxvbmcgZG1hX2JpdHM7DQo+ICANCj4g
-IAliYXNlID0gZGV2bV9wbGF0Zm9ybV9pb3JlbWFwX3Jlc291cmNlKHBkZXYsIDApOw0KPiAgCWlm
-IChJU19FUlIoYmFzZSkpDQo+IEBAIC02NjAsNiArNjcwLDEyIEBAIHN0YXRpYyBpbnQgbXRrX25v
-cl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCWlmIChJU19FUlIoY3Rs
-cl9jbGspKQ0KPiAgCQlyZXR1cm4gUFRSX0VSUihjdGxyX2Nsayk7DQo+ICANCj4gKwlkbWFfYml0
-cyA9ICh1bnNpZ25lZCBsb25nKW9mX2RldmljZV9nZXRfbWF0Y2hfZGF0YSgmcGRldi0+ZGV2KTsN
-Cj4gKwlpZiAoZG1hX3NldF9tYXNrX2FuZF9jb2hlcmVudCgmcGRldi0+ZGV2LCBETUFfQklUX01B
-U0soZG1hX2JpdHMpKSkgew0KPiArCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJmYWlsZWQgdG8gc2V0
-IGRtYSBtYXNrKCVsdSlcbiIsIGRtYV9iaXRzKTsNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJ
-fQ0KPiArDQoNCkFzIHNhaWQgaW4gcHJldmlvdXMgdmVyc2lvbi4gSSBkb24ndCBzZWUgYW55IHBs
-YWNlIGVuYWJsZSBoaWdoX2RtYSwgc28gSQ0KdGhpbmsgdGhpcyBwYXRjaCB3b24ndCBzZXQgPjMy
-Yml0cyBmb3IgYW55Y2hpcC4gV2UgbmVlZCBzb21ldGhpbmcgbGlrZToNCg0KCXNwLT5oaWRoX2Rt
-YSA9IGRtYV9iaXRzID4gMzI7DQoNCkFtIEkgbWlzc2luZyBhbnl0aGluZz8NCg0KSm9lLkMNCg0K
+Since commit 530b5affc675 ("spi: fsl-dspi: fix use-after-free in remove
+path") this driver causes a kernel oops:
+
+[    1.891065] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000080
+[    1.899889] Mem abort info:
+[    1.902692]   ESR = 0x96000004
+[    1.905754]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    1.911089]   SET = 0, FnV = 0
+[    1.914156]   EA = 0, S1PTW = 0
+[    1.917303] Data abort info:
+[    1.920193]   ISV = 0, ISS = 0x00000004
+[    1.924044]   CM = 0, WnR = 0
+[    1.927022] [0000000000000080] user address but active_mm is swapper
+[    1.933403] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[    1.938995] Modules linked in:
+[    1.942060] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.9.0-rc6-next-20200925-00026-gae556cc74e28-dirty #94
+[    1.951838] Hardware name: Kontron SMARC-sAL28 (Single PHY) on SMARC Eval 2.0 carrier (DT)
+[    1.960135] pstate: 40000005 (nZcv daif -PAN -UAO -TCO BTYPE=--)
+[    1.966168] pc : dspi_setup+0xc8/0x2e0
+[    1.969926] lr : dspi_setup+0xbc/0x2e0
+[    1.973684] sp : ffff80001139b930
+[    1.977005] x29: ffff80001139b930 x28: ffff00207a5d2000
+[    1.982338] x27: 0000000000000006 x26: ffff00207a44d410
+[    1.987669] x25: ffff002079c08100 x24: ffff00207a5d2400
+[    1.993000] x23: ffff00207a5d2600 x22: ffff800011169948
+[    1.998332] x21: ffff800010cbcd20 x20: ffff00207a58a800
+[    2.003663] x19: ffff00207a76b700 x18: 0000000000000010
+[    2.008994] x17: 0000000000000001 x16: 0000000000000019
+[    2.014326] x15: ffffffffffffffff x14: 0720072007200720
+[    2.019657] x13: 0720072007200720 x12: ffff8000111fc5e0
+[    2.024989] x11: 0000000000000003 x10: ffff8000111e45a0
+[    2.030320] x9 : 0000000000000000 x8 : ffff00207a76b780
+[    2.035651] x7 : 0000000000000000 x6 : 000000000000003f
+[    2.040982] x5 : 0000000000000040 x4 : ffff80001139b918
+[    2.046313] x3 : 0000000000000001 x2 : 64b62cc917af5100
+[    2.051643] x1 : 0000000000000000 x0 : 0000000000000000
+[    2.056973] Call trace:
+[    2.059425]  dspi_setup+0xc8/0x2e0
+[    2.062837]  spi_setup+0xcc/0x248
+[    2.066160]  spi_add_device+0xb4/0x198
+[    2.069918]  of_register_spi_device+0x250/0x370
+[    2.074462]  spi_register_controller+0x4f4/0x770
+[    2.079094]  dspi_probe+0x5bc/0x7b0
+[    2.082594]  platform_drv_probe+0x5c/0xb0
+[    2.086615]  really_probe+0xec/0x3c0
+[    2.090200]  driver_probe_device+0x60/0xc0
+[    2.094308]  device_driver_attach+0x7c/0x88
+[    2.098503]  __driver_attach+0x60/0xe8
+[    2.102263]  bus_for_each_dev+0x7c/0xd0
+[    2.106109]  driver_attach+0x2c/0x38
+[    2.109692]  bus_add_driver+0x194/0x1f8
+[    2.113538]  driver_register+0x6c/0x128
+[    2.117385]  __platform_driver_register+0x50/0x60
+[    2.122105]  fsl_dspi_driver_init+0x24/0x30
+[    2.126302]  do_one_initcall+0x54/0x2d0
+[    2.130149]  kernel_init_freeable+0x1ec/0x258
+[    2.134520]  kernel_init+0x1c/0x120
+[    2.138018]  ret_from_fork+0x10/0x34
+[    2.141606] Code: 97e0b11d aa0003f3 b4000680 f94006e0 (f9404000)
+[    2.147723] ---[ end trace 26cf63e6cbba33a8 ]---
+[    2.152374] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+[    2.160061] SMP: stopping secondary CPUs
+[    2.163999] Kernel Offset: disabled
+[    2.167496] CPU features: 0x0040022,20006008
+[    2.171777] Memory Limit: none
+[    2.174840] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+
+This is because since this commit, the allocation of the drivers private
+data is done explicitly and in this case spi_alloc_master() won't set the
+correct pointer.
+
+Fixes: 530b5affc675 ("spi: fsl-dspi: fix use-after-free in remove path")
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/spi/spi-fsl-dspi.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index a939618f5e47..dd80be987bf9 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -1236,6 +1236,8 @@ static int dspi_probe(struct platform_device *pdev)
+ 	if (!ctlr)
+ 		return -ENOMEM;
+ 
++	spi_controller_set_devdata(ctlr, dspi);
++
+ 	dspi->pdev = pdev;
+ 	dspi->ctlr = ctlr;
+ 
+-- 
+2.20.1
 
