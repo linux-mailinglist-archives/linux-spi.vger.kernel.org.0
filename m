@@ -2,165 +2,160 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 625E427A478
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Sep 2020 01:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5567527A561
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Sep 2020 04:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbgI0X1w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 27 Sep 2020 19:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
+        id S1726444AbgI1CTL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 27 Sep 2020 22:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726316AbgI0X1w (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Sep 2020 19:27:52 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE65DC0613CE;
-        Sun, 27 Sep 2020 16:27:51 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id g4so8167031edk.0;
-        Sun, 27 Sep 2020 16:27:51 -0700 (PDT)
+        with ESMTP id S1726396AbgI1CTL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Sep 2020 22:19:11 -0400
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1F4C0613CE
+        for <linux-spi@vger.kernel.org>; Sun, 27 Sep 2020 19:19:11 -0700 (PDT)
+Received: by mail-vk1-xa44.google.com with SMTP id k78so1185269vka.10
+        for <linux-spi@vger.kernel.org>; Sun, 27 Sep 2020 19:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cN3ZgKw4L6VVDpPP7WE7qkFiU9duBJ2iGZQMpu3PBaM=;
-        b=OYqkswUYk+lh0vQbjzvQQLGOEEBOLtqMXKhcTxgyloGFPXXJSeq04AgVtYJfnsn4sF
-         pY/uzr6CXc9A7zl+qs8KAiahFaI8aBHBwyT+Z4p+YfZv6BVHXT8Xrfet2vixL3kN0jMk
-         4s9EiYRdQ1mFu/A1pgUaJgfqHWQ29K2p9zLEkg+Ask5AVN9Nuodu4dlMjznB5d+3lqeM
-         d47g7RUc3Wqo962LE5wx0q2IfofFuAcn2CGy+o6/rYPXG+tnOIpI9CML095zQulfHTQT
-         iJKdt7WwIg7aDrMxmi7cQVyaBhcxqWNq2yVGk2siHzXjjlzuzguI0q4loy5zlPCtteei
-         ZoOQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8r8ZQ9WFem+xMGOEuRI4QXJqsFWB3RpcceUKwYsgmIE=;
+        b=UwBVC3kcZ8as2vQq5raFEecalgZi24VjAbQWkvAkqPqSIKs9/Rypej2ZHeDhZue48N
+         uwHaCBKHLs+1KCY4qI3wedU96I6Mux+6hJM0PRuASqzFWoIP/oTDzMJcpvPIwW0lTStL
+         nLAT/BYP8bBXu3sDR6cZGcmyVQKAKhxyLomq0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cN3ZgKw4L6VVDpPP7WE7qkFiU9duBJ2iGZQMpu3PBaM=;
-        b=lgcBNsn3Gnh9aRI3/lVA8cT1sAtRgxauenzmFC5BJT0rNTqFv2iD2fzE6f/c9n1oii
-         sqArj4iEhcIJfS1nF0UnZJakYPFBgW8VdZheFWsGuQIzhLXFauKIlLFcMYORsyFH7R8c
-         fCiDso4otJclgycz0sce7fmWcmamuZ2BG/hh/zmyn76BZ0PgtwWmG2/U77WNHkgxLdsq
-         xBINbYU0g1j3jU6GCjCJ+QF0PdWIvN8U9qGcmQguBhND3LiPrbvbo0Vo6PixDqh/BBVW
-         ocXbwHkSXpN4djjedd9M9ReT7PX/Ubt7aFbtnelUcXapeQD73F6oqjoQ8A6ORN7IdWKT
-         SPJg==
-X-Gm-Message-State: AOAM532FzjXvfoK9PRjBt0dd166FlQsFlgPg3PG6eu8aXPF5weOEAfG7
-        YvUpUVW0DnxjwcbWGxZZWdY=
-X-Google-Smtp-Source: ABdhPJyk1RP8pMcljHdB+kAVPJv23Xl9JwGhb8o9KMUPsTBTi8pcw2YBBLnwa9blaUKcnHgRf+xohw==
-X-Received: by 2002:aa7:d959:: with SMTP id l25mr12624416eds.383.1601249270550;
-        Sun, 27 Sep 2020 16:27:50 -0700 (PDT)
-Received: from skbuf ([188.25.217.212])
-        by smtp.gmail.com with ESMTPSA id qu9sm7985687ejb.24.2020.09.27.16.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2020 16:27:49 -0700 (PDT)
-Date:   Mon, 28 Sep 2020 02:27:47 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH] spi: fsl-dspi: fix NULL pointer dereference
-Message-ID: <20200927232747.3jwr6mqql727etyz@skbuf>
-References: <20200927224336.705-1-michael@walle.cc>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8r8ZQ9WFem+xMGOEuRI4QXJqsFWB3RpcceUKwYsgmIE=;
+        b=ce7uu6CQ1kLce3LiDnHNhBOHt5Sx/8Fix/saKTSXCN5Dx8lB8SMzRHuD8KoxGxs7FD
+         a9pIpSN3cQpS647LsBpEXFy01+qfTPFHnD7FQrLyyXsa9b5y+pyB+9CbmuskrwRJZj4O
+         ewaG+29A3pnqiwNJlwSAJJDxgRW9tEx8ab/gamtpfEkZa5NQbHgR2fTE+ikEWZQDA3xg
+         VuLCvh+SE07KZO3aSw0ou9FUPM0ezQg0m+wfyb70f3sG2MfLpn0EJYKsYJb7A4U5V/DM
+         VXUFSw6i3lYS3cze8vipqkAl6GSwar5HOipjCr4xH5MErFbaAvWt0b2+AqeVo/tytbyU
+         Pamg==
+X-Gm-Message-State: AOAM533ZFKBhPWnC0hc4GljA/YkU46dYhaT8HCk6NJ791JfJnKfDf4PG
+        RlJzByWPuM9MXYChGUvanEBXdEqpxrW3Cv8Sk7LGYA==
+X-Google-Smtp-Source: ABdhPJzMzVYBekXtY/fDL9QkaeRJXXppiNLoJcZ5OmOeX7nmgFpzlOFVzI+FQV2QY4jYTtNiAJiVdaRJ5Eo/3cOsnr4=
+X-Received: by 2002:a1f:fcc2:: with SMTP id a185mr3771112vki.8.1601259549093;
+ Sun, 27 Sep 2020 19:19:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200927224336.705-1-michael@walle.cc>
+References: <20200925065418.1077472-1-ikjn@chromium.org> <20200925145255.v3.5.Id1cb208392928afc7ceed4de06924243c7858cd0@changeid>
+ <1601195424.7766.4.camel@mtksdaap41>
+In-Reply-To: <1601195424.7766.4.camel@mtksdaap41>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Mon, 28 Sep 2020 10:18:58 +0800
+Message-ID: <CAATdQgDP6kd=us35FJ=MWv4KtyATjd_RbEU5ENmBK+Z-m2GnSw@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] spi: spi-mtk-nor: support 36bit dma addressing
+To:     Yingjoe Chen <yingjoe.chen@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 12:43:36AM +0200, Michael Walle wrote:
-> Since commit 530b5affc675 ("spi: fsl-dspi: fix use-after-free in remove
-> path") this driver causes a kernel oops:
-> 
-> [    1.891065] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000080
-> [    1.899889] Mem abort info:
-> [    1.902692]   ESR = 0x96000004
-> [    1.905754]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    1.911089]   SET = 0, FnV = 0
-> [    1.914156]   EA = 0, S1PTW = 0
-> [    1.917303] Data abort info:
-> [    1.920193]   ISV = 0, ISS = 0x00000004
-> [    1.924044]   CM = 0, WnR = 0
-> [    1.927022] [0000000000000080] user address but active_mm is swapper
-> [    1.933403] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> [    1.938995] Modules linked in:
-> [    1.942060] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.9.0-rc6-next-20200925-00026-gae556cc74e28-dirty #94
-> [    1.951838] Hardware name: Kontron SMARC-sAL28 (Single PHY) on SMARC Eval 2.0 carrier (DT)
-> [    1.960135] pstate: 40000005 (nZcv daif -PAN -UAO -TCO BTYPE=--)
-> [    1.966168] pc : dspi_setup+0xc8/0x2e0
-> [    1.969926] lr : dspi_setup+0xbc/0x2e0
-> [    1.973684] sp : ffff80001139b930
-> [    1.977005] x29: ffff80001139b930 x28: ffff00207a5d2000
-> [    1.982338] x27: 0000000000000006 x26: ffff00207a44d410
-> [    1.987669] x25: ffff002079c08100 x24: ffff00207a5d2400
-> [    1.993000] x23: ffff00207a5d2600 x22: ffff800011169948
-> [    1.998332] x21: ffff800010cbcd20 x20: ffff00207a58a800
-> [    2.003663] x19: ffff00207a76b700 x18: 0000000000000010
-> [    2.008994] x17: 0000000000000001 x16: 0000000000000019
-> [    2.014326] x15: ffffffffffffffff x14: 0720072007200720
-> [    2.019657] x13: 0720072007200720 x12: ffff8000111fc5e0
-> [    2.024989] x11: 0000000000000003 x10: ffff8000111e45a0
-> [    2.030320] x9 : 0000000000000000 x8 : ffff00207a76b780
-> [    2.035651] x7 : 0000000000000000 x6 : 000000000000003f
-> [    2.040982] x5 : 0000000000000040 x4 : ffff80001139b918
-> [    2.046313] x3 : 0000000000000001 x2 : 64b62cc917af5100
-> [    2.051643] x1 : 0000000000000000 x0 : 0000000000000000
-> [    2.056973] Call trace:
-> [    2.059425]  dspi_setup+0xc8/0x2e0
-> [    2.062837]  spi_setup+0xcc/0x248
-> [    2.066160]  spi_add_device+0xb4/0x198
-> [    2.069918]  of_register_spi_device+0x250/0x370
-> [    2.074462]  spi_register_controller+0x4f4/0x770
-> [    2.079094]  dspi_probe+0x5bc/0x7b0
-> [    2.082594]  platform_drv_probe+0x5c/0xb0
-> [    2.086615]  really_probe+0xec/0x3c0
-> [    2.090200]  driver_probe_device+0x60/0xc0
-> [    2.094308]  device_driver_attach+0x7c/0x88
-> [    2.098503]  __driver_attach+0x60/0xe8
-> [    2.102263]  bus_for_each_dev+0x7c/0xd0
-> [    2.106109]  driver_attach+0x2c/0x38
-> [    2.109692]  bus_add_driver+0x194/0x1f8
-> [    2.113538]  driver_register+0x6c/0x128
-> [    2.117385]  __platform_driver_register+0x50/0x60
-> [    2.122105]  fsl_dspi_driver_init+0x24/0x30
-> [    2.126302]  do_one_initcall+0x54/0x2d0
-> [    2.130149]  kernel_init_freeable+0x1ec/0x258
-> [    2.134520]  kernel_init+0x1c/0x120
-> [    2.138018]  ret_from_fork+0x10/0x34
-> [    2.141606] Code: 97e0b11d aa0003f3 b4000680 f94006e0 (f9404000)
-> [    2.147723] ---[ end trace 26cf63e6cbba33a8 ]---
-> [    2.152374] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> [    2.160061] SMP: stopping secondary CPUs
-> [    2.163999] Kernel Offset: disabled
-> [    2.167496] CPU features: 0x0040022,20006008
-> [    2.171777] Memory Limit: none
-> [    2.174840] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
-> 
-> This is because since this commit, the allocation of the drivers private
-> data is done explicitly and in this case spi_alloc_master() won't set the
-> correct pointer.
-> 
-> Fixes: 530b5affc675 ("spi: fsl-dspi: fix use-after-free in remove path")
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
+On Sun, Sep 27, 2020 at 4:30 PM Yingjoe Chen <yingjoe.chen@mediatek.com> wrote:
+>
+> On Fri, 2020-09-25 at 14:54 +0800, Ikjoon Jang wrote:
+> > This patch enables 36bit dma address support to spi-mtk-nor.
+> > Currently this is enabled only for mt8192-nor.
+> >
+> > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> > ---
+> >
+> > (no changes since v1)
+> >
+> >  drivers/spi/spi-mtk-nor.c | 18 +++++++++++++++++-
+> >  1 file changed, 17 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+> > index 8dbafee7f431..35205635ed42 100644
+> > --- a/drivers/spi/spi-mtk-nor.c
+> > +++ b/drivers/spi/spi-mtk-nor.c
+> > @@ -78,6 +78,8 @@
+> >  #define MTK_NOR_REG_DMA_FADR         0x71c
+> >  #define MTK_NOR_REG_DMA_DADR         0x720
+> >  #define MTK_NOR_REG_DMA_END_DADR     0x724
+> > +#define MTK_NOR_REG_DMA_DADR_HB              0x738
+> > +#define MTK_NOR_REG_DMA_END_DADR_HB  0x73c
+> >
+> >  /* maximum bytes of TX in PRG mode */
+> >  #define MTK_NOR_PRG_MAX_SIZE         6
+> > @@ -106,6 +108,7 @@ struct mtk_nor {
+> >       unsigned int spi_freq;
+> >       bool wbuf_en;
+> >       bool has_irq;
+> > +     bool high_dma;
+> >       struct completion op_done;
+> >  };
+> >
+> > @@ -305,6 +308,11 @@ static int mtk_nor_dma_exec(struct mtk_nor *sp, u32 from, unsigned int length,
+> >       writel(dma_addr, sp->base + MTK_NOR_REG_DMA_DADR);
+> >       writel(dma_addr + length, sp->base + MTK_NOR_REG_DMA_END_DADR);
+> >
+> > +     if (sp->high_dma) {
+> > +             writel(dma_addr >> 32, sp->base + MTK_NOR_REG_DMA_DADR_HB);
+> > +             writel((dma_addr + length) >> 32, sp->base + MTK_NOR_REG_DMA_END_DADR_HB);
+> > +     }
+> > +
+>
+> Maybe use upper_32_bits() ?
 
-Sascha, how did you test commit 530b5affc675?
+Thanks, good to know that!
 
->  drivers/spi/spi-fsl-dspi.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-> index a939618f5e47..dd80be987bf9 100644
-> --- a/drivers/spi/spi-fsl-dspi.c
-> +++ b/drivers/spi/spi-fsl-dspi.c
-> @@ -1236,6 +1236,8 @@ static int dspi_probe(struct platform_device *pdev)
->  	if (!ctlr)
->  		return -ENOMEM;
->  
-> +	spi_controller_set_devdata(ctlr, dspi);
-> +
->  	dspi->pdev = pdev;
->  	dspi->ctlr = ctlr;
->  
-> -- 
-> 2.20.1
-> 
+>
+>
+> >       if (sp->has_irq) {
+> >               reinit_completion(&sp->op_done);
+> >               mtk_nor_rmw(sp, MTK_NOR_REG_IRQ_EN, MTK_NOR_IRQ_DMA, 0);
+> > @@ -635,7 +643,8 @@ static const struct spi_controller_mem_ops mtk_nor_mem_ops = {
+> >  };
+> >
+> >  static const struct of_device_id mtk_nor_match[] = {
+> > -     { .compatible = "mediatek,mt8173-nor" },
+> > +     { .compatible = "mediatek,mt8192-nor", .data = (void *)36 },
+> > +     { .compatible = "mediatek,mt8173-nor", .data = (void *)32 },
+> >       { /* sentinel */ }
+> >  };
+> >  MODULE_DEVICE_TABLE(of, mtk_nor_match);
+> > @@ -647,6 +656,7 @@ static int mtk_nor_probe(struct platform_device *pdev)
+> >       void __iomem *base;
+> >       struct clk *spi_clk, *ctlr_clk;
+> >       int ret, irq;
+> > +     unsigned long dma_bits;
+> >
+> >       base = devm_platform_ioremap_resource(pdev, 0);
+> >       if (IS_ERR(base))
+> > @@ -660,6 +670,12 @@ static int mtk_nor_probe(struct platform_device *pdev)
+> >       if (IS_ERR(ctlr_clk))
+> >               return PTR_ERR(ctlr_clk);
+> >
+> > +     dma_bits = (unsigned long)of_device_get_match_data(&pdev->dev);
+> > +     if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(dma_bits))) {
+> > +             dev_err(&pdev->dev, "failed to set dma mask(%lu)\n", dma_bits);
+> > +             return -EINVAL;
+> > +     }
+> > +
+>
+> As said in previous version. I don't see any place enable high_dma, so I
+> think this patch won't set >32bits for anychip. We need something like:
+>
+>         sp->hidh_dma = dma_bits > 32;
+>
+> Am I missing anything?
 
-Thanks,
--Vladimir
+Yeah, you're right, that line disappeared between v2 ~ v3 (by mistake).
+
+>
+> Joe.C
+>
