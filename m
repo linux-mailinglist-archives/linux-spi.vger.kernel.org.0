@@ -2,112 +2,302 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C703627D392
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Sep 2020 18:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2629D27D3A8
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Sep 2020 18:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728462AbgI2QY0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Sep 2020 12:24:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35092 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728184AbgI2QY0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 29 Sep 2020 12:24:26 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E43C20936;
-        Tue, 29 Sep 2020 16:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601396664;
-        bh=dhKVn14Jw3VzBvqZ7pteBlKnBHkITxetT0CvZPxh7ps=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=WjLEtiGDnXaRoHtQM3NgjSZcKDn2UyFfuKgX0ZXnxMP+8kEf0A5LnSVKo+sjOTW6o
-         X7lgMCoAglxIavtaaSZF7EG2flKMkoBupr2ZHxIjJXNotAMm2N/lrwgk3UVUZrHAVr
-         CiU7hlYszwOiTjTjVGpm8qrv4dcnQ3Cp27lEAfEc=
-Date:   Tue, 29 Sep 2020 17:23:26 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Feng Tang <feng.tang@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        devicetree@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
-        "wuxu . wu" <wuxu.wu@huawei.com>
-In-Reply-To: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH 00/30] spi: dw: Add full Baikal-T1 SPI Controllers support
-Message-Id: <160139659999.766.14300777884222792440.b4-ty@kernel.org>
+        id S1728702AbgI2QaG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Sep 2020 12:30:06 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:53692 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728126AbgI2QaG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Sep 2020 12:30:06 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 08TGTluH062802;
+        Tue, 29 Sep 2020 11:29:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1601396987;
+        bh=0l1Tyc97rGOgxjmQ7OreIDdDxEEBoiTnGd8r31UAwrY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=e+F6S2/liT+0aqnl0QJscD6rhJ+1QkEhZTjDSY1ayovmflU0lOnXI9F5zWQW8u5VH
+         3sa8Ztyq7CFmZ0gT49LhjY8acrAzXKUVlmoYkKgC2OyIHOH9xcnqcoiLVqW4EpIWSj
+         ASSyxNefPohrbsweiv8QigoWCqy9ZvrH/Z7Qog/I=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 08TGTldM025187
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 29 Sep 2020 11:29:47 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 29
+ Sep 2020 11:29:47 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 29 Sep 2020 11:29:46 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08TGTjja040249;
+        Tue, 29 Sep 2020 11:29:46 -0500
+Date:   Tue, 29 Sep 2020 21:59:45 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <Tudor.Ambarus@microchip.com>
+CC:     <me@yadavpratyush.com>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <broonie@kernel.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <Ludovic.Desroches@microchip.com>, <matthias.bgg@gmail.com>,
+        <michal.simek@xilinx.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <boris.brezillon@collabora.com>, <nsekhar@ti.com>
+Subject: Re: [PATCH v10 05/17] mtd: spi-nor: add support for DTR protocol
+Message-ID: <20200929162943.qbnzmzgxb75wdpyo@ti.com>
+References: <20200623183030.26591-1-p.yadav@ti.com>
+ <20200623183030.26591-6-p.yadav@ti.com>
+ <fbb3d7e7-75ed-dbf6-a975-2ae871bc9fbf@microchip.com>
+ <20200721112951.rngfk7njubcsahzp@yadavpratyush.com>
+ <f9a22bc5-35f6-9507-b0e7-dcbad51caea7@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f9a22bc5-35f6-9507-b0e7-dcbad51caea7@microchip.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 20 Sep 2020 14:28:44 +0300, Serge Semin wrote:
-> Originally I intended to merge a dedicated Baikal-T1 System Boot SPI
-> Controller driver into the kernel and leave the DW APB SSI driver
-> untouched. But after a long discussion (see the link at the bottom of the
-> letter) Mark and Andy persuaded me to integrate what we developed there
-> into the DW APB SSI core driver to be useful for another controllers,
-> which may have got the same peculiarities/problems as ours:
-> - No IRQ.
-> - No DMA.
-> - No GPIO CS, so a native CS is utilized.
-> - small Tx/Rx FIFO depth.
-> - Automatic CS assertion/de-assertion.
-> - Slow system bus.
-> All of them have been fixed in the framework of this patchset in some
-> extent at least for the SPI memory operations. As I expected it wasn't
-> that easy and the integration took that many patches as you can see from
-> the subject. Though some of them are mere cleanups or weakly related with
-> the subject fixes, but we just couldn't leave the code as is at some
-> places since we were working with the DW APB SSI driver anyway. Here is
-> what we did to fix the original DW APB SSI driver, to make it less messy.
+On 29/09/20 03:42PM, Tudor.Ambarus@microchip.com wrote:
+> Hi, Pratyush,
 > 
-> [...]
+> I'm replying to v10 so that we continue the discussion, but this applies to v13 as well.
+> 
+> On 7/21/20 2:29 PM, Pratyush Yadav wrote:
+> 
+> >>> @@ -2368,12 +2517,16 @@ spi_nor_spimem_adjust_hwcaps(struct spi_nor *nor, u32 *hwcaps)
+> >>>         struct spi_nor_flash_parameter *params = nor->params;
+> >>>         unsigned int cap;
+> >>>
+> >>> -       /* DTR modes are not supported yet, mask them all. */
+> >>> -       *hwcaps &= ~SNOR_HWCAPS_DTR;
+> >>> -
+> >>>         /* X-X-X modes are not supported yet, mask them all. */
+> >>>         *hwcaps &= ~SNOR_HWCAPS_X_X_X;
+> >>>
+> >>> +       /*
+> >>> +        * If the reset line is broken, we do not want to enter a stateful
+> >>> +        * mode.
+> >>> +        */
+> >>> +       if (nor->flags & SNOR_F_BROKEN_RESET)
+> >>> +               *hwcaps &= ~(SNOR_HWCAPS_X_X_X | SNOR_HWCAPS_X_X_X_DTR);
+> >>
+> >> A dedicated reset line is not enough for flashes that keep their state
+> >> in non-volatile bits. Since we can't protect from unexpected crashes in
+> >> the non volatile state case, we should enter these modes only with an
+> >> explicit request, i.e. an optional DT property: "update-nonvolatile-state",
+> >> or something similar.
+> > 
+> > I wrote this patch with the assumption that we won't be supporting> non-volatile configuration as of now. In the previous discussions we
+> 
+> I think we have to take care of the stateful flashes now, otherwise we'll risk
+> to end up with users that let their flashes in a mode from which they can't recover.
+> I made some small RFC patches in reply to your v13, let me know what you think.
 
-Applied to
+I haven't gone through them yet. Will check tomorrow.
+ 
+> > came to the conclusion that it is not easy to detect the flash if it
+> > boots in any mode other than 1S-1S-1S [0]. So if we update non-volatile
+> > state, the flash would be useless after a reboot because we won't be
+> > able to detect it in 8D mode. It doesn't matter if the reset line is
+> > connected or not because it will reset the flash to the non-volatile
+> > state, and we can't detect it from the non-volatile state.
+> 
+> correct, so a reset line for stateful modes doesn't help and the comment from the
+> code should be updated. s/stateful/stateless
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+We are talking about two different kinds of "state" here. The state you 
+are talking about is the persistent state of the flash configured via 
+non-volatile registers. Yes, a reset line doesn't help in that case at 
+all.
 
-Thanks!
+The other state is the non-persistent state we set on the flash. Using 
+1S-1S-8D mode is stateless in the sense that we didn't change any state 
+on the flash to be able to use this mode, and only had to use the 
+correct opcode. If we execute a 1S-1S-1S command next it will also work 
+because the flash is still interpreting opcodes in 1S mode. Using 
+8D-8D-8D or 4S-4S-4S mode is stateful because we did have to configure 
+some state on the flash (which can very well be volatile). Once 8D-8D-8D 
+or 4S-4S-4S mode is entered, we cannot execute 1S-1S-1S commands until 
+we reset the flash because now the flash is interpreting commands in 4S 
+or 8D mode. This means we introduced some state on the flash.
 
-[1/9] spi: dw: Discard IRQ threshold macro
-      commit: 07918df724f2fed02327e3cbfe58a5d5568b2cc2
-[2/9] spi: dw: Initialize n_bytes before the memory barrier
-      commit: 8225c1c9a073c323f68833d136fcf94fbc75a275
-[3/9] spi: spi-dw: Remove extraneous locking
-      commit: 0b6bfad4cee4a3d5c49e01fa00284db4b676360e
-[4/9] spi: dw: Clear IRQ status on DW SPI controller reset
-      commit: a128f6ecd56a32e559889145003425b0c7d406e3
-[5/9] spi: dw: Disable all IRQs when controller is unused
-      commit: a1d5aa6f7f97b15e8fd917169239088823471741
-[6/9] spi: dw: Use relaxed IO-methods to access FIFOs
-      commit: 7e31cea7d1e0f4b683dc45c21530cd3ee82559b4
-[7/9] spi: dw: Discard DW SSI chip type storages
-      commit: 675e7c9d71cedee3988b554c47971be77e72d2db
-[8/9] spi: dw: Convert CS-override to DW SPI capabilities
-      commit: cc760f3143f53ea8387cd76cffc43bdc89db9df4
-[9/9] spi: dw: Add KeemBay Master capability
-      commit: ffb7ca54c95b4c76ad8a9aa1b2b16d61df2a7139
+Having a reset line will not help against the former but will help 
+against the latter. If the flash is in a stateful mode like 8D-8D-8D 
+without a reset line, an unexpected reset could leave bootloader unable 
+to boot because it issues the commands in 1S-1S-1S mode that the flash 
+cannot interpret. So even if the state we set is volatile, we still want 
+to avoid doing it if there is no reset line.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+So I think the code and comment should stay as they are.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> > 
+> >> For the volatile state case, we can parse the SFDP SCCR map, save if we
+> >> can enter stateful modes in a volatile way, and if yes allow the entering.
+> > 
+> > If we are not support volatile configurations, the reset line is enough
+> > to take care of unexpected resets, no? I don't see any need to parse
+> 
+> the reset line is excellent for the stateless flashes, it guarantees that the
+> volatile bits will return to their default state. Disabling the clock, waiting
+> for a period and re-enabling it again should do the trick too, but probably
+> a dedicated reset line is safer.
+> 
+> > SCCR map just for this.
+> 
+> This fits the RFC that I sent to your v13. We need to parse as much as we can
+> from the SFDP tables so that we don't abuse the flash info flags.
+> 
+> > 
+> >> Do the flashes that you played with define the SFDP SCCR map?
+> > 
+> > FWIW, the Cypress S28HS512T flash does but the Micron MT35XU512ABA does
+> > not.
+> > 
+> >>> +
+> >>>         for (cap = 0; cap < sizeof(*hwcaps) * BITS_PER_BYTE; cap++) {
+> >>>                 int rdidx, ppidx;
+> >>>
+> >>> @@ -2628,7 +2781,7 @@ static int spi_nor_default_setup(struct spi_nor *nor,
+> >>>                  * controller directly implements the spi_nor interface.
+> >>>                  * Yet another reason to switch to spi-mem.
+> >>>                  */
+> >>> -               ignored_mask = SNOR_HWCAPS_X_X_X;
+> >>> +               ignored_mask = SNOR_HWCAPS_X_X_X | SNOR_HWCAPS_X_X_X_DTR;
+> >>>                 if (shared_mask & ignored_mask) {
+> >>>                         dev_dbg(nor->dev,
+> >>>                                 "SPI n-n-n protocols are not supported.\n");
+> >>> @@ -2774,11 +2927,25 @@ static void spi_nor_info_init_params(struct spi_nor *nor)
+> >>>                                           SNOR_PROTO_1_1_8);
+> >>>         }
+> >>>
+> >>> +       if (info->flags & SPI_NOR_OCTAL_DTR_READ) {
+> >>
+> >> Why do we need this flag? Can't we determine if the flash supports
+> >> octal DTR by parsing SFDP?
+> > 
+> > For Cypress S28HS512T, we can since it is xSPI compliant. We can't do
+> > that for Micron MT35XU512ABA since it is not xSPI compliant.
+> 
+> Ok
+> 
+> > 
+> >>> +               params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
+> >>> +               spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_8_8_8_DTR],
+> >>> +                                         0, 20, SPINOR_OP_READ_FAST,
+> >>> +                                         SNOR_PROTO_8_8_8_DTR);
+> >>> +       }
+> >>> +
+> >>>         /* Page Program settings. */
+> >>>         params->hwcaps.mask |= SNOR_HWCAPS_PP;
+> >>>         spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP],
+> >>>                                 SPINOR_OP_PP, SNOR_PROTO_1_1_1);
+> >>>
+> >>> +       /*
+> >>> +        * Since xSPI Page Program opcode is backward compatible with
+> >>> +        * Legacy SPI, use Legacy SPI opcode there as well.
+> >>> +        */
+> >>> +       spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP_8_8_8_DTR],
+> >>> +                               SPINOR_OP_PP, SNOR_PROTO_8_8_8_DTR);
+> >>> +
+> >>
+> >> This looks fishy. You haven't updated the hwcaps.mask, these pp settings never
+> >> get selected?
+> > 
+> > The problem here is that I don't see any field/table in SFDP that can
+> > tell us {if,which} 8D-8D-8D program commands are supported. The xSPI
+> > spec says that "The program commands provide SPI backward compatible
+> > commands for programming data...".
+> > 
+> > So we populate the 8D page program opcodes here (and in 4bait parsing)
+> > using the 1S opcodes. The flashes have to enable the hwcap in fixup
+> > hooks.
+> 
+> I see. Would be good if you write this description as a comment, or in the commit
+> message.
+> 
+> > 
+> > As an alternative, maybe we can introduce the SPI_NOR_OCTAL_DTR_PP flag
+> > that can enable the hwcap here? Thoughts?
+> 
+> Should be fine the way that you did. We can change this later on if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+I have already added it in v11 and later. Since it is already there I 
+suppose it can stay.
+ 
+> > 
+> >>>         /*
+> >>>          * Sector Erase settings. Sort Erase Types in ascending order, with the
+> >>>          * smallest erase size starting at BIT(0).
+> >>> @@ -2886,7 +3053,8 @@ static int spi_nor_init_params(struct spi_nor *nor)
+> >>>
+> >>>         spi_nor_manufacturer_init_params(nor);
+> >>>
+> >>> -       if ((nor->info->flags & (SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)) &&
+> >>> +       if ((nor->info->flags & (SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
+> >>> +                                SPI_NOR_OCTAL_READ | SPI_NOR_OCTAL_DTR_READ)) &&
+> >>>             !(nor->info->flags & SPI_NOR_SKIP_SFDP))
+> >>>                 spi_nor_sfdp_init_params(nor);
+> >>>
+> >>> @@ -2948,7 +3116,9 @@ static int spi_nor_init(struct spi_nor *nor)
+> >>>                 return err;
+> >>>         }
+> >>>
+> >>> -       if (nor->addr_width == 4 && !(nor->flags & SNOR_F_4B_OPCODES)) {
+> >>> +       if (nor->addr_width == 4 &&
+> >>> +           !(nor->info->flags & SPI_NOR_OCTAL_DTR_READ) &&
+> >>
+> >> Why is the Octal DTR read exempted?
+> > 
+> > It is based on the assumption explained below that 8D mode will always
+> > use 4-byte addresses so we don't need to explicitly enable 8D mode.
+> > Although I think maybe we should exempt all flashes that support DTR
+> > mode?
+> 
+> 4-4-4-dtr can work with 3-byte addresses, check MX25L25673G. 2-2-2-dtr should work too.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Yes, I didn't catch this before.
+ 
+> 
+> > 
+> >>> +           !(nor->flags & SNOR_F_4B_OPCODES)) {
+> >>>                 /*
+> >>>                  * If the RESET# pin isn't hooked up properly, or the system
+> >>>                  * otherwise doesn't perform a reset command in the boot
+> >>> @@ -3007,6 +3177,9 @@ static int spi_nor_set_addr_width(struct spi_nor *nor)
+> >>>  {
+> >>>         if (nor->addr_width) {
+> >>>                 /* already configured from SFDP */
+> >>> +       } else if (spi_nor_protocol_is_dtr(nor->read_proto)) {
+> >>> +                /* Always use 4-byte addresses in DTR mode. */
+> >>> +               nor->addr_width = 4;
+> >>
+> >> Why? DTR with 3 byte addr width should be possible too.
+> > 
+> > Should it be? What would happen to the half cycle left over? Do we then
+> > start the dummy phase in the middle of the cycle? We would also have to
+> > start the data phase in the middle of a cycle as well and end the
+> > transaction with half a cycle left over.
+> > 
+> > AFAIK, the controller I tested with (Cadence QSPI) does not support
+> > this. Similarly, the two flashes this series adds support for, Cypress
+> > S28HS512T and Micron MT35XU512ABA, don't support 3-byte address in 8D
+> > mode. I'm not sure if there are any flashes or controllers that do.
+> 
+> how about conditioning this only for 8-8-8-dtr?
 
-Thanks,
-Mark
+Yes, it should only apply for 8D-8D-8D. Will fix.
+ 
+> I'll now jump to v13 and continue the review there.
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments India
