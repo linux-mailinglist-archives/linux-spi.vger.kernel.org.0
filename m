@@ -2,28 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D8027CF21
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Sep 2020 15:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E2727CFF9
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Sep 2020 15:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728695AbgI2N3L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Sep 2020 09:29:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43880 "EHLO mail.kernel.org"
+        id S1728917AbgI2Nxd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Sep 2020 09:53:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728448AbgI2N3L (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 29 Sep 2020 09:29:11 -0400
+        id S1727328AbgI2Nxd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 29 Sep 2020 09:53:33 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B8DB0208FE;
-        Tue, 29 Sep 2020 13:29:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E017C207C4;
+        Tue, 29 Sep 2020 13:53:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601386150;
-        bh=cFnWipWsvzKq0QWJiU/ZjmzGD2hQyr2IG3LD/6DIPNU=;
+        s=default; t=1601387612;
+        bh=XMlJFSSuGLwN5k1WwBefP32bozx8G9mTS3B5NnSlArI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=twh62VJHIJHrbjpauzhuMluy8KBotG8kEzuwCsBMwVuJUb9S0PqiLWFqHXjY9Mw9c
-         Um7Q+fE0TLWvcAX/9ZHwmC8Iu6KnmHI/S9ux31ZOAQo8OEO5EQhO4Ypvg14cPLLaiS
-         Wx0zCHEjczonFOCggJY7WanqVaci7XCan39om1cs=
-Date:   Tue, 29 Sep 2020 14:28:11 +0100
+        b=u/bz7GDKIVERvmjP07DfF7CO+293Gz1UAt+rBmWu17V2qzF+0qTFiNpmREcXcVWVw
+         IQanQVHjqxoBSg05IsapueT7Tcjrf+WJjD9qjUQCnc3Mse8jYI4A1x14LtQE2KgKeO
+         /vlGWgnaiSN+1GrlOak46O+mPgTsHwU7ippWMze0=
+Date:   Tue, 29 Sep 2020 14:52:33 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
@@ -36,16 +36,15 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         "wuxu . wu" <wuxu.wu@huawei.com>, Feng Tang <feng.tang@intel.com>,
         Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/30] Revert: spi: spi-dw: Add lock protect dw_spi rx/tx
- to prevent concurrent calls
-Message-ID: <20200929132811.GF4799@sirena.org.uk>
+Subject: Re: [PATCH 11/30] spi: dw: Add DWC SSI capability
+Message-ID: <20200929135233.GG4799@sirena.org.uk>
 References: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
- <20200920112914.26501-5-Sergey.Semin@baikalelectronics.ru>
+ <20200920112914.26501-12-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+ts6NCQ4mrNQIV8p"
+        protocol="application/pgp-signature"; boundary="eVzOFob/8UvintSX"
 Content-Disposition: inline
-In-Reply-To: <20200920112914.26501-5-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200920112914.26501-12-Sergey.Semin@baikalelectronics.ru>
 X-Cookie: I left my WALLET in the BATHROOM!!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -53,34 +52,39 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---+ts6NCQ4mrNQIV8p
+--eVzOFob/8UvintSX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Sun, Sep 20, 2020 at 02:28:48PM +0300, Serge Semin wrote:
-> There is no point in having the commit 19b61392c5a8 ("spi: spi-dw: Add
-> lock protect dw_spi rx/tx to prevent concurrent calls") applied. The
-> commit author made an assumption that the problem with the rx data
+On Sun, Sep 20, 2020 at 02:28:55PM +0300, Serge Semin wrote:
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+> -	/*
+> -	 * SPI mode (SCPOL|SCPH)
+> -	 * CTRLR0[ 8] Serial Clock Phase
+> -	 * CTRLR0[ 9] Serial Clock Polarity
+> -	 */
+> -	cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << DWC_SSI_CTRLR0_SCPOL_OFFSET;
+> -	cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << DWC_SSI_CTRLR0_SCPH_OFFSET;
 
---+ts6NCQ4mrNQIV8p
+> +		cr0 |= SSI_MOTO_SPI << DWC_SSI_CTRLR0_FRF_OFFSET;
+> +		cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << DWC_SSI_CTRLR0_SCPOL_OFFSET;
+> +		cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << DWC_SSI_CTRLR0_SCPH_OFFSET;
+
+The new code seems less well commented than the old code here.
+
+--eVzOFob/8UvintSX
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9zNmoACgkQJNaLcl1U
-h9BBvQf/QU0hc1jrkeVXFBPWkdr9yvmXWX8FQWaMUkx3ukXHKkNYv9cLZFj8Xidx
-DRJAaNwueEpbihutbrA67Q5Nos6OzJPE6YKMvKIVNfYAAedPzoEX7qPM6grfT5ro
-ElFdLB7goGfTB+44utjSAg7LY7oLU6aemiz+6WHwa5wECOkEam3aLikY/9hi3Hvn
-+u+3BSza0zzsori3UFXlQ6ueJ70hkPSZIuw1hCLv6NESLe0+NF5bUU5TOt+GzyxQ
-QNX/+m3OvhvugoOXj1pHN+oGT6Co7HCq9kU9o+OB32Vj67jj7oyMET66UmdvoA8z
-ASXi4cslqY7yqjhjYN+MvtjSfrLNng==
-=UrRA
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9zPCAACgkQJNaLcl1U
+h9DKGgf8Dusx5FsYcQ5npzfLKiRdTmIprfoh+fIEbrMCruynt16OBQS/sX6tmoGe
+SRj8t6pzB+q7LJ49Ct9MG0mDcCfTSXRp2B+bXCT8cOVmGR64fdYYprqdJw0P2iRL
+rAm6idVXHqjHOM1PnJNlInPIEIQwFqqMXQ9tyn9dgOHDK80pHbZPtXxx/ouBRYi9
+YldOhxizTwenaE0koaxF4blxjPOs2f10QRlKji9zCMqMTOInFjtffJ7YDl56MMDI
+AXHvn8wTj0rDOkNXgmEN5kJrTTVG0ocZrJXTm5QLoGQD4eeAcrTuWhOg3+pRY8o7
+p0Izj1+Tyj0LVHTejlwAq239vgPhMw==
+=r+YB
 -----END PGP SIGNATURE-----
 
---+ts6NCQ4mrNQIV8p--
+--eVzOFob/8UvintSX--
