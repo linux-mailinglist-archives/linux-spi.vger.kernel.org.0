@@ -2,129 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0991927BD0A
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Sep 2020 08:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B1C27BE21
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Sep 2020 09:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727315AbgI2GW0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Sep 2020 02:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
+        id S1725819AbgI2HiF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Sep 2020 03:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727416AbgI2GWX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Sep 2020 02:22:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBA9C061755
-        for <linux-spi@vger.kernel.org>; Mon, 28 Sep 2020 23:22:23 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kN91k-0005Qj-Js; Tue, 29 Sep 2020 08:22:16 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kN91k-0006OL-AN; Tue, 29 Sep 2020 08:22:16 +0200
-Date:   Tue, 29 Sep 2020 08:22:16 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.8 28/29] spi: fsl-dspi: fix use-after-free in
- remove path
-Message-ID: <20200929062216.GL11648@pengutronix.de>
-References: <20200929013027.2406344-1-sashal@kernel.org>
- <20200929013027.2406344-28-sashal@kernel.org>
+        with ESMTP id S1725710AbgI2HiF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Sep 2020 03:38:05 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0B2C0613D1
+        for <linux-spi@vger.kernel.org>; Tue, 29 Sep 2020 00:38:05 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id o20so3664373pfp.11
+        for <linux-spi@vger.kernel.org>; Tue, 29 Sep 2020 00:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=io1cz9TQOCr2lsgpG0jFMP3QgjGEulFGbq1UdpXz5V4=;
+        b=ZOFyvlCLR8T8JpIU79KN9MsP6sRAHSvMzIjIZONONWF7W/+U3LsaU1wt67X0ZP3Wn2
+         mGZIaHbxB+vQzJGNYTotCQJhBH+z54Ff0okyevumh7NAhymfIacbmmYBsbRkFuQiK1bn
+         QslXqt5AOL4KyTGwdLRHnoAhiSyL7klugyFjg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=io1cz9TQOCr2lsgpG0jFMP3QgjGEulFGbq1UdpXz5V4=;
+        b=FqjiDhF1xTDy26H5RX71lUtVt5kgJQK+LBPCkT72XnCwNQ4lcp890AWpY26ftdRbzN
+         168pWMEeyNDGPN20gaJ8Z9VB7LyNsVdZYgkf8wMlkBfXbp6bSy4Ks/BIJNkunlL95cnW
+         o4Hq44mlisAsXqb72AEm8gBJiGXq/mAGlKePIeoBwmcANt5OD1T2ZIubi8fuT4PlLDZB
+         no8Qzi/PUQ2drVaXgCsIsK9VQmxgp13PpDCuEzAij99TzdDRfG+whQZofAH9FacluZ0A
+         UTZzNX2njmXpQxA+zaQCRdgJNcMYQxarrmGWx94L/fMZwmpVUALUCK2ZyF63RPr6vLPE
+         vXPQ==
+X-Gm-Message-State: AOAM533+uRcc9Iy0RqeN3T3hWdo7FxSNPM8y+iao+TrxqNUntz2/SPq9
+        gfPKYlC0wreKiKArqQ6W4B+lJw==
+X-Google-Smtp-Source: ABdhPJwXYEUsBsCIdgNi3hgFN2mrzey+Q3KLI0dKFDQsChyUPfOEB+KJ/+oKD8iGZQr8LY3JxgnjqQ==
+X-Received: by 2002:a65:6883:: with SMTP id e3mr2228137pgt.250.1601365084796;
+        Tue, 29 Sep 2020 00:38:04 -0700 (PDT)
+Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
+        by smtp.gmail.com with ESMTPSA id e13sm3737317pjy.38.2020.09.29.00.37.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 00:38:00 -0700 (PDT)
+From:   Ikjoon Jang <ikjn@chromium.org>
+To:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Cc:     Ikjoon Jang <ikjn@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v4 0/4] spi: spi-mtk-nor: Add mt8192 support.
+Date:   Tue, 29 Sep 2020 15:37:51 +0800
+Message-Id: <20200929073755.3741416-1-ikjn@chromium.org>
+X-Mailer: git-send-email 2.28.0.709.gb0816b6eb0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200929013027.2406344-28-sashal@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:20:02 up 222 days, 13:50, 130 users,  load average: 0.00, 0.10,
- 0.15
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Sasha,
 
-On Mon, Sep 28, 2020 at 09:30:25PM -0400, Sasha Levin wrote:
-> From: Sascha Hauer <s.hauer@pengutronix.de>
-> 
-> [ Upstream commit 530b5affc675ade5db4a03f04ed7cd66806c8a1a ]
-> 
-> spi_unregister_controller() not only unregisters the controller, but
-> also frees the controller. This will free the driver data with it, so
-> we must not access it later dspi_remove().
-> 
-> Solve this by allocating the driver data separately from the SPI
-> controller.
-> 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Link: https://lore.kernel.org/r/20200923131026.20707-1-s.hauer@pengutronix.de
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/spi/spi-fsl-dspi.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
+This patchset adds 36bit dma address and power management
+supports for mt8192-nor. Additionally, use dma_alloc_coherent()
+instead of kmalloc() for internal bounce buffer for platforms
+of only supporting 32bit addresses.
 
-This patch causes a regression and shouldn't be applied without the fix
-in https://lkml.org/lkml/2020/9/28/300.
+Changes in v4:
+- Drop two patches from a list which already addressed by
+  an another series and not directly related with mt8192 support
+- Fix 0-day ci 'shift-count-overflow' warning
+- Fix missing 'high_dma' initialization for 36bit address
 
-Sascha
+Changes in v3:
+- Fix a bugfix of v2 in checking spi memory operation.
+- split read_dma function into two (normal/bounce)
+- Support 7bytes generic spi xfer
 
-> index 91c6affe139c9..aae9f9a7aea6c 100644
-> --- a/drivers/spi/spi-fsl-dspi.c
-> +++ b/drivers/spi/spi-fsl-dspi.c
-> @@ -1273,11 +1273,14 @@ static int dspi_probe(struct platform_device *pdev)
->  	void __iomem *base;
->  	bool big_endian;
->  
-> -	ctlr = spi_alloc_master(&pdev->dev, sizeof(struct fsl_dspi));
-> +	dspi = devm_kzalloc(&pdev->dev, sizeof(*dspi), GFP_KERNEL);
-> +	if (!dspi)
-> +		return -ENOMEM;
-> +
-> +	ctlr = spi_alloc_master(&pdev->dev, 0);
->  	if (!ctlr)
->  		return -ENOMEM;
->  
-> -	dspi = spi_controller_get_devdata(ctlr);
->  	dspi->pdev = pdev;
->  	dspi->ctlr = ctlr;
->  
-> @@ -1414,7 +1417,7 @@ static int dspi_probe(struct platform_device *pdev)
->  	if (dspi->devtype_data->trans_mode != DSPI_DMA_MODE)
->  		ctlr->ptp_sts_supported = true;
->  
-> -	platform_set_drvdata(pdev, ctlr);
-> +	platform_set_drvdata(pdev, dspi);
->  
->  	ret = spi_register_controller(ctlr);
->  	if (ret != 0) {
-> @@ -1437,8 +1440,7 @@ static int dspi_probe(struct platform_device *pdev)
->  
->  static int dspi_remove(struct platform_device *pdev)
->  {
-> -	struct spi_controller *ctlr = platform_get_drvdata(pdev);
-> -	struct fsl_dspi *dspi = spi_controller_get_devdata(ctlr);
-> +	struct fsl_dspi *dspi = platform_get_drvdata(pdev);
->  
->  	/* Disconnect from the SPI framework */
->  	spi_unregister_controller(dspi->ctlr);
-> -- 
-> 2.25.1
-> 
-> 
+Changes in v2:
+- Add power management support
+- Fix bugs in checking spi memory operation.
+- use dma_alloc_coherent for allocating bounce buffer
+- code cleanups
+
+Ikjoon Jang (4):
+  dt-bindings: spi: add mt8192-nor compatible string
+  spi: spi-mtk-nor: use dma_alloc_coherent() for bounce buffer
+  spi: spi-mtk-nor: support 36bit dma addressing
+  spi: spi-mtk-nor: Add power management support
+
+ .../bindings/spi/mediatek,spi-mtk-nor.yaml    |   1 +
+ drivers/spi/spi-mtk-nor.c                     | 210 ++++++++++++------
+ 2 files changed, 147 insertions(+), 64 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.28.0.709.gb0816b6eb0-goog
+
