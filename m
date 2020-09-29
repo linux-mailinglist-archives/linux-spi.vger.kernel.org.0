@@ -2,146 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5F727D406
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Sep 2020 18:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A7227D40B
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Sep 2020 18:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728911AbgI2Q5z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Sep 2020 12:57:55 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:59458 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728728AbgI2Q5z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Sep 2020 12:57:55 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 08TGvgCN072729;
-        Tue, 29 Sep 2020 11:57:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1601398663;
-        bh=ZjsMCRxqgZfNl/B8Bnf/B0HPPXkHxOxgRdvcoJ1EHs4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Xh8+aOwVV9+lh0mvVMUcKcfgTIYokgwRlJLO/XnsYWOrTo1QISttpld+a9HZMFyYN
-         zKChsbfnpxLLmI4u//ArR1Igyqvrj9UvLjii0/GwpUdzRpMljWwf2OcSqTdrOsTucW
-         G6OfERD2O1pTSKTO730J+dwDfVUOJf0N5srSj2Ac=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 08TGvgtu067181
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 29 Sep 2020 11:57:42 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 29
- Sep 2020 11:57:42 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 29 Sep 2020 11:57:42 -0500
-Received: from [10.250.235.166] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08TGvabf047655;
-        Tue, 29 Sep 2020 11:57:36 -0500
-Subject: Re: [PATCH v10 05/17] mtd: spi-nor: add support for DTR protocol
-To:     <Tudor.Ambarus@microchip.com>, <me@yadavpratyush.com>
-CC:     <p.yadav@ti.com>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <broonie@kernel.org>, <Nicolas.Ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>,
-        <matthias.bgg@gmail.com>, <michal.simek@xilinx.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <boris.brezillon@collabora.com>, <nsekhar@ti.com>
-References: <20200623183030.26591-1-p.yadav@ti.com>
- <20200623183030.26591-6-p.yadav@ti.com>
- <fbb3d7e7-75ed-dbf6-a975-2ae871bc9fbf@microchip.com>
- <20200721112951.rngfk7njubcsahzp@yadavpratyush.com>
- <f9a22bc5-35f6-9507-b0e7-dcbad51caea7@microchip.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <df262497-028e-83a7-eb4e-25c20fc7e216@ti.com>
-Date:   Tue, 29 Sep 2020 22:27:35 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728728AbgI2Q67 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Sep 2020 12:58:59 -0400
+Received: from mail-oo1-f66.google.com ([209.85.161.66]:35548 "EHLO
+        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728385AbgI2Q67 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Sep 2020 12:58:59 -0400
+Received: by mail-oo1-f66.google.com with SMTP id k13so1452588oor.2;
+        Tue, 29 Sep 2020 09:58:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qL1+dUVZc7/FRZNXOFrFvDJ142erdjwjd9zJZIOHq50=;
+        b=kVMspgCJdV6RJBQBFVLKSqwnDd4ow6UmUS88IQSmj/T6JEm535U0ufv7U8De03EBQk
+         zBeevLojvW//waNuIG/0wYfHtWKJK0DTjdQ0H+WevT7vrWAyXYispXNciyDzhacbNoXP
+         DjtW3qb9a6tHKOJdbJZWfILprZZ2LPPeKM8mHKsxS2n+qyKPS3t0U+vsDd/PgItJ76Pm
+         KSDVbH+zarkHD0IlYTRWFVdw+y5NwMSfhK8OyETrQxQtSSq52CcBIYEJqS/o27y4USAV
+         /dDCLOeNTOLnAAjMcrp5b4ilkIehKTI1AJitJMjRUtHIokO3Alsk2tBIUo1NMytqXFXW
+         Spwg==
+X-Gm-Message-State: AOAM531t/y5fXBFcYyiFDua+PAc8SpxGrWkc5X9jzJZO1YGKAWKySnQu
+        aZlI3bN7tXHbecrEAvFgBg==
+X-Google-Smtp-Source: ABdhPJz+hm6g2H8hVGsLti0LBkjY2MyJFyjhR0LdDpUD3Zw8SCc4VQurzB6MLyErzsdi2oDudi+X4A==
+X-Received: by 2002:a4a:d80a:: with SMTP id f10mr5379686oov.76.1601398738179;
+        Tue, 29 Sep 2020 09:58:58 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id j16sm1118642ota.1.2020.09.29.09.58.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 09:58:57 -0700 (PDT)
+Received: (nullmailer pid 772313 invoked by uid 1000);
+        Tue, 29 Sep 2020 16:58:56 -0000
+Date:   Tue, 29 Sep 2020 11:58:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        "wuxu . wu" <wuxu.wu@huawei.com>, Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        devicetree@vger.kernel.org,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 29/30] dt-bindings: spi: dw: Add Baikal-T1 SPI Controllers
+Message-ID: <20200929165856.GA772254@bogus>
+References: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
+ <20200920112914.26501-30-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-In-Reply-To: <f9a22bc5-35f6-9507-b0e7-dcbad51caea7@microchip.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200920112914.26501-30-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
-On 9/29/20 9:12 PM, Tudor.Ambarus@microchip.com wrote:
-> Hi, Pratyush,
+On Sun, 20 Sep 2020 14:29:13 +0300, Serge Semin wrote:
+> These controllers are based on the DW APB SSI IP-core and embedded into
+> the SoC, so two of them are equipped with IRQ, DMA, 64 words FIFOs and 4
+> native CS, while another one as being utilized by the Baikal-T1 System
+> Boot Controller has got a very limited resources: no IRQ, no DMA, only a
+> single native chip-select and just 8 bytes Tx/Rx FIFOs available. That's
+> why we have to mark the IRQ to be optional for the later interface.
 > 
-> I'm replying to v10 so that we continue the discussion, but this applies to v13 as well.
+> The SPI controller embedded into the Baikal-T1 System Boot Controller can
+> be also used to directly access an external SPI flash by means of a
+> dedicated FSM. The corresponding MMIO region availability is switchable by
+> the embedded multiplexor, which phandle can be specified in the dts node.
 > 
-> On 7/21/20 2:29 PM, Pratyush Yadav wrote:
+> * We added a new example to test out the non-standard Baikal-T1 System
+> Boot SPI Controller DT binding.
 > 
->>>> @@ -2368,12 +2517,16 @@ spi_nor_spimem_adjust_hwcaps(struct spi_nor *nor, u32 *hwcaps)
->>>>         struct spi_nor_flash_parameter *params = nor->params;
->>>>         unsigned int cap;
->>>>
->>>> -       /* DTR modes are not supported yet, mask them all. */
->>>> -       *hwcaps &= ~SNOR_HWCAPS_DTR;
->>>> -
->>>>         /* X-X-X modes are not supported yet, mask them all. */
->>>>         *hwcaps &= ~SNOR_HWCAPS_X_X_X;
->>>>
->>>> +       /*
->>>> +        * If the reset line is broken, we do not want to enter a stateful
->>>> +        * mode.
->>>> +        */
->>>> +       if (nor->flags & SNOR_F_BROKEN_RESET)
->>>> +               *hwcaps &= ~(SNOR_HWCAPS_X_X_X | SNOR_HWCAPS_X_X_X_DTR);
->>>
->>> A dedicated reset line is not enough for flashes that keep their state
->>> in non-volatile bits. Since we can't protect from unexpected crashes in
->>> the non volatile state case, we should enter these modes only with an
->>> explicit request, i.e. an optional DT property: "update-nonvolatile-state",
->>> or something similar.
->>
->> I wrote this patch with the assumption that we won't be supporting> non-volatile configuration as of now. In the previous discussions we
-> 
-> I think we have to take care of the stateful flashes now, otherwise we'll risk
-> to end up with users that let their flashes in a mode from which they can't recover.
-> I made some small RFC patches in reply to your v13, let me know what you think.
-> 
->> came to the conclusion that it is not easy to detect the flash if it
->> boots in any mode other than 1S-1S-1S [0]. So if we update non-volatile
->> state, the flash would be useless after a reboot because we won't be
->> able to detect it in 8D mode. It doesn't matter if the reset line is
->> connected or not because it will reset the flash to the non-volatile
->> state, and we can't detect it from the non-volatile state.
-> 
-> correct, so a reset line for stateful modes doesn't help and the comment from the
-> code should be updated. s/stateful/stateless
-
-Entering an IO mode even using volatile bits (which gets cleared on SW
-or HW reset) creates a "state" that SW needs to keep track of which is
-why "stateful" term is used. I think that's what is implied here
-
-AFAIU, Boris's original RFC[1] introducing X-X-X mode also used
-"stateful mode" term in the same context .
-
-
->>
->>> For the volatile state case, we can parse the SFDP SCCR map, save if we
->>> can enter stateful modes in a volatile way, and if yes allow the entering.
->>
->> If we are not support volatile configurations, the reset line is enough
->> to take care of unexpected resets, no? I don't see any need to parse
-> 
-> the reset line is excellent for the stateless flashes, it guarantees that the
-> volatile bits will return to their default state. Disabling the clock, waiting
-> for a period and re-enabling it again should do the trick too, but probably
-> a dedicated reset line is safer.
+> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 33 +++++++++++++++++--
+>  1 file changed, 31 insertions(+), 2 deletions(-)
 > 
 
-I don't think disable-wait-enable sequence of clock input to flash will
-trigger a reset... You have to take down the power and thus force flash
-to go through power-down/power-up sequence or use HW or SW reset sequences
-
-[1]
-https://patchwork.ozlabs.org/project/linux-mtd/cover/20181012084825.23697-1-boris.brezillon@bootlin.com/
-
-Regards
-Vignesh
+Reviewed-by: Rob Herring <robh@kernel.org>
