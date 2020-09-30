@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F43527EBC0
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Sep 2020 17:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1128527EBD4
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Sep 2020 17:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729351AbgI3PDT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Sep 2020 11:03:19 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40940 "EHLO
+        id S1725892AbgI3PIC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Sep 2020 11:08:02 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40982 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbgI3PDR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Sep 2020 11:03:17 -0400
+        with ESMTP id S1725385AbgI3PIB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Sep 2020 11:08:01 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C565D803086A;
-        Wed, 30 Sep 2020 15:03:14 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 35906803071C;
+        Wed, 30 Sep 2020 15:07:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id nMbdrwTON2px; Wed, 30 Sep 2020 18:03:13 +0300 (MSK)
-Date:   Wed, 30 Sep 2020 18:03:12 +0300
+        with ESMTP id sVk4b5xaWthO; Wed, 30 Sep 2020 18:07:57 +0300 (MSK)
+Date:   Wed, 30 Sep 2020 18:07:57 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -30,56 +30,40 @@ CC:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         "wuxu . wu" <wuxu.wu@huawei.com>, Feng Tang <feng.tang@intel.com>,
         Rob Herring <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 11/30] spi: dw: Add DWC SSI capability
-Message-ID: <20200930150312.ipt724uihixblr3a@mobilestation>
+Subject: Re: [PATCH 02/30] spi: dw: Use ternary op to init set_cs callback
+Message-ID: <20200930150757.5uewiwkyey6soey7@mobilestation>
 References: <20200920112914.26501-1-Sergey.Semin@baikalelectronics.ru>
- <20200920112914.26501-12-Sergey.Semin@baikalelectronics.ru>
- <20200929135233.GG4799@sirena.org.uk>
- <20200929221737.fiwjr4y3vhme4546@mobilestation>
+ <20200920112914.26501-3-Sergey.Semin@baikalelectronics.ru>
+ <20200929131153.GD4799@sirena.org.uk>
+ <20200929215553.xgst2v5ssweymlpw@mobilestation>
+ <20200930145759.7djm5xijhg6mjtg3@mobilestation>
+ <20200930150117.GK4974@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200929221737.fiwjr4y3vhme4546@mobilestation>
+In-Reply-To: <20200930150117.GK4974@sirena.org.uk>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Mark,
-A concrete question is below of my previous comment.
+On Wed, Sep 30, 2020 at 04:01:17PM +0100, Mark Brown wrote:
+> On Wed, Sep 30, 2020 at 05:57:59PM +0300, Serge Semin wrote:
+> > On Wed, Sep 30, 2020 at 12:55:55AM +0300, Serge Semin wrote:
+> 
+> > > +	if (dws->set_cs)
+> > > +		master->set_cs = dws->set_cs;
+> > > +	else
+> > > +		master->set_cs = dw_spi_set_cs;
+> 
 
-On Wed, Sep 30, 2020 at 01:17:37AM +0300, Serge Semin wrote:
-> On Tue, Sep 29, 2020 at 02:52:33PM +0100, Mark Brown wrote:
-> > On Sun, Sep 20, 2020 at 02:28:55PM +0300, Serge Semin wrote:
-> > 
-> > > -	/*
-> > > -	 * SPI mode (SCPOL|SCPH)
-> > > -	 * CTRLR0[ 8] Serial Clock Phase
-> > > -	 * CTRLR0[ 9] Serial Clock Polarity
-> > > -	 */
-> > > -	cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << DWC_SSI_CTRLR0_SCPOL_OFFSET;
-> > > -	cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << DWC_SSI_CTRLR0_SCPH_OFFSET;
-> > 
+> > Judging by having your comment on this patch you obviously didn't like the
+> > ternary operator used to assign a default value to the set_cs callback. So I
+> > suggested a solution, which may suit you. What do you think about it? Agree,
+> > disagree, insist on leaving this part of the code along, etc.
 > 
-> > > +		cr0 |= SSI_MOTO_SPI << DWC_SSI_CTRLR0_FRF_OFFSET;
-> > > +		cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << DWC_SSI_CTRLR0_SCPOL_OFFSET;
-> > > +		cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << DWC_SSI_CTRLR0_SCPH_OFFSET;
-> > 
-> > The new code seems less well commented than the old code here.
-> 
-> You are right. The comments are omitted. The thing is that they are absolutely
-> redundant here, for the same reason they haven't been added to the standard
-> update_cr0() method. Both the DWC SSI-capable and standard DW APB SSI-specific
-> part of the code do the same thing: setup the CTRLR0 fields, which are described
-> by the macro definitions. So there is no need to duplicate that information in
-> the comments, moreover seeing it can be inferred from the code.
-> 
-> -Sergey
+> That looks fine.
 
-My response to your comment was that those in-code comments have been absolutely
-redundant. So I just removed them, since I was touching that part of the driver
-anyway. If you are agree with me having that done here, then please, accept the
-patch the way it is. If you disagree, or have any other though, please give me
-your answer, why.
+Ok. I'll implement it in the next patchset version.
 
 -Sergey
