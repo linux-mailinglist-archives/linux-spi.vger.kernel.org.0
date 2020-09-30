@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A47CB27F1E9
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Sep 2020 20:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B58B27F1E6
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Sep 2020 20:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730140AbgI3S4p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Sep 2020 14:56:45 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:41858 "EHLO
+        id S1725892AbgI3S4o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Sep 2020 14:56:44 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:41880 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730321AbgI3S4G (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Sep 2020 14:56:06 -0400
+        with ESMTP id S1730333AbgI3S4I (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Sep 2020 14:56:08 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 1314C803202C;
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id F16A6803202F;
         Wed, 30 Sep 2020 18:56:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qV1eoHZYHGZ2; Wed, 30 Sep 2020 21:56:00 +0300 (MSK)
+        with ESMTP id 94DPJKjBYCel; Wed, 30 Sep 2020 21:56:01 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -31,9 +31,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         "wuxu . wu" <wuxu.wu@huawei.com>, Feng Tang <feng.tang@intel.com>,
         Rob Herring <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 15/21] spi: dw: Move num-of retries parameter to the header file
-Date:   Wed, 30 Sep 2020 21:55:39 +0300
-Message-ID: <20200930185545.29959-16-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 16/21] spi: dw: Add generic DW SSI status-check method
+Date:   Wed, 30 Sep 2020 21:55:40 +0300
+Message-ID: <20200930185545.29959-17-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200930185545.29959-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200930185545.29959-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -44,59 +44,118 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The parameter will be needed for another wait-done method being added in
-the framework of the SPI memory operation modification in a further
-commit.
+The DW SSI errors handling method can be generically implemented for all
+types of the transfers: IRQ, DMA and poll-based ones. It will be a
+function which checks the overflow/underflow error flags and resets the
+controller if any of them is set. In the framework of this commit we make
+use of the new method to detect the errors in the IRQ- and DMA-based SPI
+transfer execution procedures.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/spi/spi-dw-dma.c | 5 ++---
- drivers/spi/spi-dw.h     | 2 ++
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ drivers/spi/spi-dw-core.c | 43 +++++++++++++++++++++++++++++++--------
+ drivers/spi/spi-dw-dma.c  | 11 ++--------
+ drivers/spi/spi-dw.h      |  1 +
+ 3 files changed, 37 insertions(+), 18 deletions(-)
 
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index a6f86314567f..72b205dc6c81 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -169,23 +169,48 @@ static void dw_reader(struct dw_spi *dws)
+ 	}
+ }
+ 
+-static void int_error_stop(struct dw_spi *dws, const char *msg)
++int dw_spi_check_status(struct dw_spi *dws, bool raw)
+ {
+-	spi_reset_chip(dws);
++	u32 irq_status;
++	int ret = 0;
++
++	if (raw)
++		irq_status = dw_readl(dws, DW_SPI_RISR);
++	else
++		irq_status = dw_readl(dws, DW_SPI_ISR);
++
++	if (irq_status & SPI_INT_RXOI) {
++		dev_err(&dws->master->dev, "RX FIFO overflow detected\n");
++		ret = -EIO;
++	}
++
++	if (irq_status & SPI_INT_RXUI) {
++		dev_err(&dws->master->dev, "RX FIFO underflow detected\n");
++		ret = -EIO;
++	}
+ 
+-	dev_err(&dws->master->dev, "%s\n", msg);
+-	dws->master->cur_msg->status = -EIO;
+-	spi_finalize_current_transfer(dws->master);
++	if (irq_status & SPI_INT_TXOI) {
++		dev_err(&dws->master->dev, "TX FIFO overflow detected\n");
++		ret = -EIO;
++	}
++
++	/* Generically handle the erroneous situation */
++	if (ret) {
++		spi_reset_chip(dws);
++		if (dws->master->cur_msg)
++			dws->master->cur_msg->status = ret;
++	}
++
++	return ret;
+ }
++EXPORT_SYMBOL_GPL(dw_spi_check_status);
+ 
+ static irqreturn_t dw_spi_transfer_handler(struct dw_spi *dws)
+ {
+ 	u16 irq_status = dw_readl(dws, DW_SPI_ISR);
+ 
+-	/* Error handling */
+-	if (irq_status & (SPI_INT_TXOI | SPI_INT_RXOI | SPI_INT_RXUI)) {
+-		dw_readl(dws, DW_SPI_ICR);
+-		int_error_stop(dws, "interrupt_transfer: fifo overrun/underrun");
++	if (dw_spi_check_status(dws, false)) {
++		spi_finalize_current_transfer(dws->master);
+ 		return IRQ_HANDLED;
+ 	}
+ 
 diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-index bb390ff67d1d..9db119dc5554 100644
+index 9db119dc5554..1969b09b4f5e 100644
 --- a/drivers/spi/spi-dw-dma.c
 +++ b/drivers/spi/spi-dw-dma.c
-@@ -17,7 +17,6 @@
+@@ -144,17 +144,10 @@ static void dw_spi_dma_exit(struct dw_spi *dws)
  
- #include "spi-dw.h"
- 
--#define WAIT_RETRIES	5
- #define RX_BUSY		0
- #define RX_BURST_LEVEL	16
- #define TX_BUSY		1
-@@ -208,7 +207,7 @@ static inline bool dw_spi_dma_tx_busy(struct dw_spi *dws)
- static int dw_spi_dma_wait_tx_done(struct dw_spi *dws,
- 				   struct spi_transfer *xfer)
+ static irqreturn_t dw_spi_dma_transfer_handler(struct dw_spi *dws)
  {
--	int retry = WAIT_RETRIES;
-+	int retry = SPI_WAIT_RETRIES;
- 	struct spi_delay delay;
- 	u32 nents;
+-	u16 irq_status = dw_readl(dws, DW_SPI_ISR);
++	dw_spi_check_status(dws, false);
  
-@@ -283,7 +282,7 @@ static inline bool dw_spi_dma_rx_busy(struct dw_spi *dws)
+-	if (!irq_status)
+-		return IRQ_NONE;
+-
+-	dw_readl(dws, DW_SPI_ICR);
+-	spi_reset_chip(dws);
+-
+-	dev_err(&dws->master->dev, "%s: FIFO overrun/underrun\n", __func__);
+-	dws->master->cur_msg->status = -EIO;
+ 	complete(&dws->dma_completion);
++
+ 	return IRQ_HANDLED;
+ }
  
- static int dw_spi_dma_wait_rx_done(struct dw_spi *dws)
- {
--	int retry = WAIT_RETRIES;
-+	int retry = SPI_WAIT_RETRIES;
- 	struct spi_delay delay;
- 	unsigned long ns, us;
- 	u32 nents;
 diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index eb1d46983319..946065201c9c 100644
+index 946065201c9c..5eb98ece2f2a 100644
 --- a/drivers/spi/spi-dw.h
 +++ b/drivers/spi/spi-dw.h
-@@ -100,6 +100,8 @@
- #define SPI_DMA_RDMAE			(1 << 0)
- #define SPI_DMA_TDMAE			(1 << 1)
- 
-+#define SPI_WAIT_RETRIES		5
-+
- enum dw_ssi_type {
- 	SSI_MOTO_SPI = 0,
- 	SSI_TI_SSP,
+@@ -261,6 +261,7 @@ static inline void spi_shutdown_chip(struct dw_spi *dws)
+ extern void dw_spi_set_cs(struct spi_device *spi, bool enable);
+ extern void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+ 				 struct dw_spi_cfg *cfg);
++extern int dw_spi_check_status(struct dw_spi *dws, bool raw);
+ extern int dw_spi_add_host(struct device *dev, struct dw_spi *dws);
+ extern void dw_spi_remove_host(struct dw_spi *dws);
+ extern int dw_spi_suspend_host(struct dw_spi *dws);
 -- 
 2.27.0
 
