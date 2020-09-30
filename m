@@ -2,468 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 949F127F1E0
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Sep 2020 20:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258EA27F1FD
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Sep 2020 20:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730516AbgI3S4Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Sep 2020 14:56:25 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:41806 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730381AbgI3S4Q (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Sep 2020 14:56:16 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 5CD0A800114E;
-        Wed, 30 Sep 2020 18:56:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FV7mmWUAGElu; Wed, 30 Sep 2020 21:56:05 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        "wuxu . wu" <wuxu.wu@huawei.com>, Feng Tang <feng.tang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 21/21] spi: dw: Add Baikal-T1 SPI Controller glue driver
-Date:   Wed, 30 Sep 2020 21:55:45 +0300
-Message-ID: <20200930185545.29959-22-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200930185545.29959-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200930185545.29959-1-Sergey.Semin@baikalelectronics.ru>
+        id S1726992AbgI3S5k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Sep 2020 14:57:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59720 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725771AbgI3S5k (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 30 Sep 2020 14:57:40 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601492259;
+        bh=RuigJMb5MKiIsroV2IFnKh2SOc5m4VVtz0pT3P/ufY0=;
+        h=Subject:From:Date:To:From;
+        b=Lc8r+/eoARtyPljC6cy9bwh1tY2IuCWXS2sXnzl7jWdWPaI7BYaWT7ppcRMZLOyxW
+         QEdgo6EEZsX+24UF3J4JObphgTQKhqpGBwg2e5o9I9OEfun/9eHR5g3wcguwivOgoh
+         Z9dWOsea3MfpgkuwN2zhDapWqgvRm1eHjCgCJ3Os=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <160149225936.9864.7965741160127372180.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 30 Sep 2020 18:57:39 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Baikal-T1 is equipped with three DW APB SSI-based MMIO SPI controllers.
-Two of them are pretty much normal: with IRQ, DMA, FIFOs of 64 words
-depth, 4x CSs, but the third one as being a part of the Baikal-T1 System
-Boot Controller has got a very limited resources: no IRQ, no DMA, only a
-single native chip-select and Tx/Rx FIFO with just 8 words depth
-available. In order to provide a transparent initial boot code execution
-the Boot SPI controller is also utilized by an vendor-specific IP-block,
-which exposes an SPI flash direct mapping interface. Since both direct
-mapping and SPI controller normal utilization are mutual exclusive only
-one of these interfaces can be used to access an external SPI slave
-device. That's why a dedicated mux is embedded into the System Boot
-Controller. All of that is taken into account in the Baikal-T1-specific DW
-APB SSI glue driver implemented by means of the DW SPI core module.
+Latest series: [v2] spi: dw: Add full Baikal-T1 SPI Controllers support (2020-09-30T18:55:25)
+  Superseding: [v1] spi: dw: Add full Baikal-T1 SPI Controllers support (2020-09-20T11:28:45):
+    [01/30] spi: dw: Discard IRQ threshold macro
+    [02/30] spi: dw: Use ternary op to init set_cs callback
+    [03/30] spi: dw: Initialize n_bytes before the memory barrier
+    [04/30] Revert: spi: spi-dw: Add lock protect dw_spi rx/tx to prevent concurrent calls
+    [05/30] spi: dw: Clear IRQ status on DW SPI controller reset
+    [06/30] spi: dw: Disable all IRQs when controller is unused
+    [07/30] spi: dw: Use relaxed IO-methods to access FIFOs
+    [08/30] spi: dw: Discard DW SSI chip type storages
+    [09/30] spi: dw: Convert CS-override to DW SPI capabilities
+    [10/30] spi: dw: Add KeemBay Master capability
+    [11/30] spi: dw: Add DWC SSI capability
+    [12/30] spi: dw: Detach SPI device specific CR0 config method
+    [13/30] spi: dw: Update SPI bus speed in a config function
+    [14/30] spi: dw: Simplify the SPI bus speed config procedure
+    [15/30] spi: dw: Update Rx sample delay in the config function
+    [16/30] spi: dw: Add DW SPI controller config structure
+    [17/30] spi: dw: Refactor data IO procedure
+    [18/30] spi: dw: Refactor IRQ-based SPI transfer procedure
+    [19/30] spi: dw: Perform IRQ setup in a dedicated function
+    [20/30] spi: dw: Unmask IRQs after enabling the chip
+    [21/30] spi: dw: Discard chip enabling on DMA setup error
+    [22/30] spi: dw: De-assert chip-select on reset
+    [23/30] spi: dw: Explicitly de-assert CS on SPI transfer completion
+    [24/30] spi: dw: Move num-of retries parameter to the header file
+    [25/30] spi: dw: Add generic DW SSI status-check method
+    [26/30] spi: dw: Add memory operations support
+    [27/30] spi: dw: Introduce max mem-ops SPI bus frequency setting
+    [28/30] spi: dw: Add poll-based SPI transfers support
+    [29/30] dt-bindings: spi: dw: Add Baikal-T1 SPI Controllers
+    [30/30] spi: dw: Add Baikal-T1 SPI Controller glue driver
 
-Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/spi/Kconfig      |  28 ++++
- drivers/spi/Makefile     |   1 +
- drivers/spi/spi-dw-bt1.c | 339 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 368 insertions(+)
- create mode 100644 drivers/spi/spi-dw-bt1.c
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 1f70bb1e7fa9..415d57b2057f 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -252,6 +252,34 @@ config SPI_DW_MMIO
- 	tristate "Memory-mapped io interface driver for DW SPI core"
- 	depends on HAS_IOMEM
- 
-+config SPI_DW_BT1
-+	tristate "Baikal-T1 SPI driver for DW SPI core"
-+	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
-+	help
-+	  Baikal-T1 SoC is equipped with three DW APB SSI-based MMIO SPI
-+	  controllers. Two of them are pretty much normal: with IRQ, DMA,
-+	  FIFOs of 64 words depth, 4x CSs, but the third one as being a
-+	  part of the Baikal-T1 System Boot Controller has got a very
-+	  limited resources: no IRQ, no DMA, only a single native
-+	  chip-select and Tx/Rx FIFO with just 8 words depth available.
-+	  The later one is normally connected to an external SPI-nor flash
-+	  of 128Mb (in general can be of bigger size).
-+
-+config SPI_DW_BT1_DIRMAP
-+	bool "Directly mapped Baikal-T1 Boot SPI flash support"
-+	depends on SPI_DW_BT1
-+	select MULTIPLEXER
-+	select MUX_MMIO
-+	help
-+	  Directly mapped SPI flash memory is an interface specific to the
-+	  Baikal-T1 System Boot Controller. It is a 16MB MMIO region, which
-+	  can be used to access a peripheral memory device just by
-+	  reading/writing data from/to it. Note that the system APB bus
-+	  will stall during each IO from/to the dirmap region until the
-+	  operation is finished. So try not to use it concurrently with
-+	  time-critical tasks (like the SPI memory operations implemented
-+	  in this driver).
-+
- endif
- 
- config SPI_DLN2
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index cf955ea803cd..21dc75842aca 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -39,6 +39,7 @@ obj-$(CONFIG_SPI_DLN2)			+= spi-dln2.o
- obj-$(CONFIG_SPI_DESIGNWARE)		+= spi-dw.o
- spi-dw-y				:= spi-dw-core.o
- spi-dw-$(CONFIG_SPI_DW_DMA)		+= spi-dw-dma.o
-+obj-$(CONFIG_SPI_DW_BT1)		+= spi-dw-bt1.o
- obj-$(CONFIG_SPI_DW_MMIO)		+= spi-dw-mmio.o
- obj-$(CONFIG_SPI_DW_PCI)		+= spi-dw-pci.o
- obj-$(CONFIG_SPI_EFM32)			+= spi-efm32.o
-diff --git a/drivers/spi/spi-dw-bt1.c b/drivers/spi/spi-dw-bt1.c
-new file mode 100644
-index 000000000000..f382dfad7842
---- /dev/null
-+++ b/drivers/spi/spi-dw-bt1.c
-@@ -0,0 +1,339 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
-+//
-+// Authors:
-+//   Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-+//   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-+//
-+// Baikal-T1 DW APB SPI and System Boot SPI driver
-+//
-+
-+#include <linux/clk.h>
-+#include <linux/cpumask.h>
-+#include <linux/err.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/mux/consumer.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/property.h>
-+#include <linux/slab.h>
-+#include <linux/spi/spi-mem.h>
-+#include <linux/spi/spi.h>
-+
-+#include "spi-dw.h"
-+
-+#define BT1_BOOT_DIRMAP		0
-+#define BT1_BOOT_REGS		1
-+
-+struct dw_spi_bt1 {
-+	struct dw_spi		dws;
-+	struct clk		*clk;
-+	struct mux_control	*mux;
-+
-+#ifdef CONFIG_SPI_DW_BT1_DIRMAP
-+	void __iomem		*map;
-+	resource_size_t		map_len;
-+#endif
-+};
-+#define to_dw_spi_bt1(_ctlr) \
-+	container_of(spi_controller_get_devdata(_ctlr), struct dw_spi_bt1, dws)
-+
-+typedef int (*dw_spi_bt1_init_cb)(struct platform_device *pdev,
-+				    struct dw_spi_bt1 *dwsbt1);
-+
-+#ifdef CONFIG_SPI_DW_BT1_DIRMAP
-+
-+static int dw_spi_bt1_dirmap_create(struct spi_mem_dirmap_desc *desc)
-+{
-+	struct dw_spi_bt1 *dwsbt1 = to_dw_spi_bt1(desc->mem->spi->controller);
-+
-+	if (!dwsbt1->map ||
-+	    !dwsbt1->dws.mem_ops.supports_op(desc->mem, &desc->info.op_tmpl))
-+		return -EOPNOTSUPP;
-+
-+	/*
-+	 * Make sure the requested region doesn't go out of the physically
-+	 * mapped flash memory bounds and the operation is read-only.
-+	 */
-+	if (desc->info.offset + desc->info.length > dwsbt1->map_len ||
-+	    desc->info.op_tmpl.data.dir != SPI_MEM_DATA_IN)
-+		return -EOPNOTSUPP;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Directly mapped SPI memory region is only accessible in the dword chunks.
-+ * That's why we have to create a dedicated read-method to copy data from there
-+ * to the passed buffer.
-+ */
-+static void dw_spi_bt1_dirmap_copy_from_map(void *to, void __iomem *from, size_t len)
-+{
-+	size_t shift, chunk;
-+	u32 data;
-+
-+	/*
-+	 * We split the copying up into the next three stages: unaligned head,
-+	 * aligned body, unaligned tail.
-+	 */
-+	shift = (size_t)from & 0x3;
-+	if (shift) {
-+		chunk = min_t(size_t, 4 - shift, len);
-+		data = readl_relaxed(from - shift);
-+		memcpy(to, &data + shift, chunk);
-+		from += chunk;
-+		to += chunk;
-+		len -= chunk;
-+	}
-+
-+	while (len >= 4) {
-+		data = readl_relaxed(from);
-+		memcpy(to, &data, 4);
-+		from += 4;
-+		to += 4;
-+		len -= 4;
-+	}
-+
-+	if (len) {
-+		data = readl_relaxed(from);
-+		memcpy(to, &data, len);
-+	}
-+}
-+
-+static ssize_t dw_spi_bt1_dirmap_read(struct spi_mem_dirmap_desc *desc,
-+				      u64 offs, size_t len, void *buf)
-+{
-+	struct dw_spi_bt1 *dwsbt1 = to_dw_spi_bt1(desc->mem->spi->controller);
-+	struct dw_spi *dws = &dwsbt1->dws;
-+	struct spi_mem *mem = desc->mem;
-+	struct dw_spi_cfg cfg;
-+	int ret;
-+
-+	/*
-+	 * Make sure the requested operation length is valid. Truncate the
-+	 * length if it's greater than the length of the MMIO region.
-+	 */
-+	if (offs >= dwsbt1->map_len || !len)
-+		return 0;
-+
-+	len = min_t(size_t, len, dwsbt1->map_len - offs);
-+
-+	/* Collect the controller configuration required by the operation */
-+	cfg.tmode = SPI_TMOD_EPROMREAD;
-+	cfg.dfs = 8;
-+	cfg.ndf = 4;
-+	cfg.freq = mem->spi->max_speed_hz;
-+
-+	/* Make sure the corresponding CS is de-asserted on transmission */
-+	dw_spi_set_cs(mem->spi, false);
-+
-+	spi_enable_chip(dws, 0);
-+
-+	dw_spi_update_config(dws, mem->spi, &cfg);
-+
-+	spi_umask_intr(dws, SPI_INT_RXFI);
-+
-+	spi_enable_chip(dws, 1);
-+
-+	/*
-+	 * Enable the transparent mode of the System Boot Controller.
-+	 * The SPI core IO should have been locked before calling this method
-+	 * so noone would be touching the controller' registers during the
-+	 * dirmap operation.
-+	 */
-+	ret = mux_control_select(dwsbt1->mux, BT1_BOOT_DIRMAP);
-+	if (ret)
-+		return ret;
-+
-+	dw_spi_bt1_dirmap_copy_from_map(buf, dwsbt1->map + offs, len);
-+
-+	mux_control_deselect(dwsbt1->mux);
-+
-+	dw_spi_set_cs(mem->spi, true);
-+
-+	ret = dw_spi_check_status(dws, true);
-+
-+	return ret ?: len;
-+}
-+
-+#endif /* CONFIG_SPI_DW_BT1_DIRMAP */
-+
-+static int dw_spi_bt1_std_init(struct platform_device *pdev,
-+			       struct dw_spi_bt1 *dwsbt1)
-+{
-+	struct dw_spi *dws = &dwsbt1->dws;
-+
-+	dws->irq = platform_get_irq(pdev, 0);
-+	if (dws->irq < 0)
-+		return dws->irq;
-+
-+	dws->num_cs = 4;
-+
-+	/*
-+	 * Baikal-T1 Normal SPI Controllers don't always keep up with full SPI
-+	 * bus speed especially when it comes to the concurrent access to the
-+	 * APB bus resources. Thus we have no choice but to set a constraint on
-+	 * the SPI bus frequency for the memory operations which require to
-+	 * read/write data as fast as possible.
-+	 */
-+	dws->max_mem_freq = 20000000U;
-+
-+	dw_spi_dma_setup_generic(dws);
-+
-+	return 0;
-+}
-+
-+static int dw_spi_bt1_sys_init(struct platform_device *pdev,
-+			       struct dw_spi_bt1 *dwsbt1)
-+{
-+	struct resource *mem __maybe_unused;
-+	struct dw_spi *dws = &dwsbt1->dws;
-+
-+	/*
-+	 * Baikal-T1 System Boot Controller is equipped with a mux, which
-+	 * switches between the directly mapped SPI flash access mode and
-+	 * IO access to the DW APB SSI registers. Note the mux controller
-+	 * must be setup to preserve the registers being accessible by default
-+	 * (on idle-state).
-+	 */
-+	dwsbt1->mux = devm_mux_control_get(&pdev->dev, NULL);
-+	if (IS_ERR(dwsbt1->mux))
-+		return PTR_ERR(dwsbt1->mux);
-+
-+	/*
-+	 * Directly mapped SPI flash memory is a 16MB MMIO region, which can be
-+	 * used to access a peripheral memory device just by reading/writing
-+	 * data from/to it. Note the system APB bus will stall during each IO
-+	 * from/to the dirmap region until the operation is finished. So don't
-+	 * use it concurrently with time-critical tasks (like the SPI memory
-+	 * operations implemented in the DW APB SSI driver).
-+	 */
-+#ifdef CONFIG_SPI_DW_BT1_DIRMAP
-+	mem = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-+	if (mem) {
-+		dwsbt1->map = devm_ioremap_resource(&pdev->dev, mem);
-+		if (!IS_ERR(dwsbt1->map)) {
-+			dwsbt1->map_len = (mem->end - mem->start + 1);
-+			dws->mem_ops.dirmap_create = dw_spi_bt1_dirmap_create;
-+			dws->mem_ops.dirmap_read = dw_spi_bt1_dirmap_read;
-+		} else {
-+			dwsbt1->map = NULL;
-+		}
-+	}
-+#endif /* CONFIG_SPI_DW_BT1_DIRMAP */
-+
-+	/*
-+	 * There is no IRQ, no DMA and just one CS available on the System Boot
-+	 * SPI controller.
-+	 */
-+	dws->irq = IRQ_NOTCONNECTED;
-+	dws->num_cs = 1;
-+
-+	/*
-+	 * Baikal-T1 System Boot SPI Controller doesn't keep up with the full
-+	 * SPI bus speed due to relatively slow APB bus and races for it'
-+	 * resources from different CPUs. The situation is worsen by a small
-+	 * FIFOs depth (just 8 words). It works better in a single CPU mode
-+	 * though, but still tends to be not fast enough at low CPU
-+	 * frequencies.
-+	 */
-+	if (num_possible_cpus() > 1)
-+		dws->max_mem_freq = 10000000U;
-+	else
-+		dws->max_mem_freq = 20000000U;
-+
-+	return 0;
-+}
-+
-+static int dw_spi_bt1_probe(struct platform_device *pdev)
-+{
-+	dw_spi_bt1_init_cb init_func;
-+	struct dw_spi_bt1 *dwsbt1;
-+	struct resource *mem;
-+	struct dw_spi *dws;
-+	int ret;
-+
-+	dwsbt1 = devm_kzalloc(&pdev->dev, sizeof(struct dw_spi_bt1), GFP_KERNEL);
-+	if (!dwsbt1)
-+		return -ENOMEM;
-+
-+	dws = &dwsbt1->dws;
-+
-+	dws->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
-+	if (IS_ERR(dws->regs))
-+		return PTR_ERR(dws->regs);
-+
-+	dws->paddr = mem->start;
-+
-+	dwsbt1->clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(dwsbt1->clk))
-+		return PTR_ERR(dwsbt1->clk);
-+
-+	ret = clk_prepare_enable(dwsbt1->clk);
-+	if (ret)
-+		return ret;
-+
-+	dws->bus_num = pdev->id;
-+	dws->reg_io_width = 4;
-+	dws->max_freq = clk_get_rate(dwsbt1->clk);
-+	if (!dws->max_freq)
-+		goto err_disable_clk;
-+
-+	init_func = device_get_match_data(&pdev->dev);
-+	ret = init_func(pdev, dwsbt1);
-+	if (ret)
-+		goto err_disable_clk;
-+
-+	pm_runtime_enable(&pdev->dev);
-+
-+	ret = dw_spi_add_host(&pdev->dev, dws);
-+	if (ret)
-+		goto err_disable_clk;
-+
-+	platform_set_drvdata(pdev, dwsbt1);
-+
-+	return 0;
-+
-+err_disable_clk:
-+	clk_disable_unprepare(dwsbt1->clk);
-+
-+	return ret;
-+}
-+
-+static int dw_spi_bt1_remove(struct platform_device *pdev)
-+{
-+	struct dw_spi_bt1 *dwsbt1 = platform_get_drvdata(pdev);
-+
-+	dw_spi_remove_host(&dwsbt1->dws);
-+
-+	pm_runtime_disable(&pdev->dev);
-+
-+	clk_disable_unprepare(dwsbt1->clk);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id dw_spi_bt1_of_match[] = {
-+	{ .compatible = "baikal,bt1-ssi", .data = dw_spi_bt1_std_init},
-+	{ .compatible = "baikal,bt1-sys-ssi", .data = dw_spi_bt1_sys_init},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, dw_spi_bt1_of_match);
-+
-+static struct platform_driver dw_spi_bt1_driver = {
-+	.probe	= dw_spi_bt1_probe,
-+	.remove	= dw_spi_bt1_remove,
-+	.driver	= {
-+		.name		= "bt1-sys-ssi",
-+		.of_match_table	= dw_spi_bt1_of_match,
-+	},
-+};
-+module_platform_driver(dw_spi_bt1_driver);
-+
-+MODULE_AUTHOR("Serge Semin <Sergey.Semin@baikalelectronics.ru>");
-+MODULE_DESCRIPTION("Baikal-T1 System Boot SPI Controller driver");
-+MODULE_LICENSE("GPL v2");
 -- 
-2.27.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
