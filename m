@@ -2,76 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F05928078A
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Oct 2020 21:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B6C2807FA
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Oct 2020 21:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729990AbgJATML convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 1 Oct 2020 15:12:11 -0400
-Received: from mail-ej1-f65.google.com ([209.85.218.65]:37338 "EHLO
-        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729927AbgJATML (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Oct 2020 15:12:11 -0400
-Received: by mail-ej1-f65.google.com with SMTP id nw23so9702795ejb.4;
-        Thu, 01 Oct 2020 12:12:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=6v7eOGX7vaObSzK5Xt420tK2IOxcStrJuaNw6Dc3XQU=;
-        b=M/Qylx5Uts7qZyl4P3dz+PprvVc9aww7ORoGQV6brsEc0Ocku2hw863l0MqExfxJUu
-         T2FkNH96EKkalEodnBxpcZ8wJSJ5dZxBHmyvFqkAPUCgd0hqMB9d03KqBve2NCcVL7h6
-         HtwaEsRv1HIhWJYhMWSkRmvNkLVdZOI5j7V/R4pEqn6O+PvXFrMj3llhLZJ8a8Pv63vd
-         qewAiik4dJvvwowcEUQflh0mpWpDsJQ+EdwDXfnpb3O508/RnXcw3Ma4uwcLE1VnQbmI
-         vT/e258d4wXtmaZbkvf0ekWpOOIAAu8k8i3243fapn7KoW5t4VTNyY7I8NG8nXQvKwTd
-         5Ukg==
-X-Gm-Message-State: AOAM53082kLrijvrAIKGO17n4GL67EPrhJ5oBgxIueuMjHW+0t9v7pqe
-        YR4FJ2F5jQz+q8PQf4lkE4Y=
-X-Google-Smtp-Source: ABdhPJxPNlJX1V1ToP7OmScTlJgP9YpQwGnshebQXKQqLpTNBDjedJ9RWr/odhjHthdJRHaOJPff6Q==
-X-Received: by 2002:a17:906:f897:: with SMTP id lg23mr10241605ejb.89.1601579528960;
-        Thu, 01 Oct 2020 12:12:08 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.194])
-        by smtp.googlemail.com with ESMTPSA id ao17sm985977ejc.18.2020.10.01.12.12.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 01 Oct 2020 12:12:07 -0700 (PDT)
-Date:   Thu, 1 Oct 2020 21:12:04 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>
-Cc:     Kukjin Kim <kgene@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        id S1732755AbgJAToj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Oct 2020 15:44:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39172 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730070AbgJAToj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 1 Oct 2020 15:44:39 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 66B6220759;
+        Thu,  1 Oct 2020 19:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601581478;
+        bh=2V7HlSyNEslc1covxiaFiHZZqdlJlvt46hDyXQkVCA0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OJtnGfOAkZWCTKRePMT7l9YhEV6zYwI8uN8ywntl6jogf79hNNlUEeoWHbYWpjFC8
+         nMiJc2FX2JzivOgcjnlbQO6bDjaLHbjFr4oGjmBIrFLwxRF2BbOQaEEWkUn1lD1MIC
+         iRwVhjWf6say2NuFPsEZuZ0Z/Caxnn/B6DxPi8dc=
+Date:   Thu, 1 Oct 2020 20:43:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Lukasz Stelmach <l.stelmach@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Kukjin Kim <kgene@kernel.org>, Andi Shyti <andi@etezian.org>,
         linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         m.szyprowski@samsung.com, b.zolnierkie@samsung.com
-Subject: Re: [PATCH v2 RESEND 7/9] spi: spi-s3c64xx: Ensure cur_speed holds
- actual clock value
-Message-ID: <20201001191204.GC11048@kozik-lap>
-References: <20200821161401.11307-1-l.stelmach@samsung.com>
- <20201001152148.29747-1-l.stelmach@samsung.com>
- <CGME20201001152248eucas1p132a63f588f62d902879322ebadd67173@eucas1p1.samsung.com>
- <20201001152148.29747-8-l.stelmach@samsung.com>
+Subject: Re: [PATCH v2 RESEND 0/9] Some fixes for spi-s3c64xx
+Message-ID: <20201001194339.GX6715@sirena.org.uk>
+References: <20201001161340.GM6715@sirena.org.uk>
+ <CGME20201001182315eucas1p1b1fc9d5d0ea91db6e56e92d5cf2583e5@eucas1p1.samsung.com>
+ <dleftjft6xg60r.fsf%l.stelmach@samsung.com>
+ <20201001190257.GA11048@kozik-lap>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Y974o0GblB/Ae/yP"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20201001152148.29747-8-l.stelmach@samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201001190257.GA11048@kozik-lap>
+X-Cookie: Stay away from flying saucers today.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 05:21:46PM +0200, Łukasz Stelmach wrote:
-> Make sure the cur_speed value used in s3c64xx_enable_datapath()
-> to configure DMA channel and in s3c64xx_wait_for_*() to calculate the
-> transfer timeout is set to the actual value of (half) the clock speed.
-> 
-> Suggested-by: Tomasz Figa <tomasz.figa@gmail.com>
-> Signed-off-by: Łukasz Stelmach <l.stelmach@samsung.com>
-> ---
->  drivers/spi/spi-s3c64xx.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+--Y974o0GblB/Ae/yP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best regards,
-Krzysztof
+On Thu, Oct 01, 2020 at 09:02:57PM +0200, Krzysztof Kozlowski wrote:
+
+> That is correct. We did not provide final comments on the list so they
+> could be added here - in change log. This would also be an explanation
+> why there is a resend. Another solution would be to extend the commit #7
+> description - why only CMU case is covered.
+
+If there's a new changelog then it's not a resend, the changelog is part
+of the content so I'd expect a version bump for that alone.  IIRC the
+changelog needed some clarification anyway?
+
+--Y974o0GblB/Ae/yP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl92MWoACgkQJNaLcl1U
+h9DkUwf/Q5mZrBgWiJ7OR5eXyU6SNeIUcRLdLbFiKgF+3qvxJ1woZzsRRhKnRIMX
+oIF1Pdls2/dYfciM0H50BkbEp9HS8RALDbyx0S33yzU6tnzyd/lQx2GTXfiwzaOv
+fXlFteC36RYVbKD0iFBVEzVFph8xLXxGwqYFkoeLuTMAFLwI7Jm9CJyYG7O8/wYm
+R+gIjO20BYA/43uRbXz1zWT75zWYOaq/wRHv/NKsvb8IeFnaM19rXt9pKKa6h+xM
+admrHi4BPQW5MSoxMl0n1DWknzAUFbAcGOewBhDT5O5BosQiw7b0HC802hzZbKw3
+sN1l4PAqHgmJ9MHZPX7iWFvArD1iEQ==
+=oJPR
+-----END PGP SIGNATURE-----
+
+--Y974o0GblB/Ae/yP--
