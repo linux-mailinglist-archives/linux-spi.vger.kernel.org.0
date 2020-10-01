@@ -2,132 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78669280292
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Oct 2020 17:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641E32803A0
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Oct 2020 18:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732475AbgJAPXF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Oct 2020 11:23:05 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:41216 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732672AbgJAPWv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Oct 2020 11:22:51 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20201001152250euoutp02ea7dbb571d5b4480c40e40f10433e839~555UwA-ND2409324093euoutp02N
-        for <linux-spi@vger.kernel.org>; Thu,  1 Oct 2020 15:22:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20201001152250euoutp02ea7dbb571d5b4480c40e40f10433e839~555UwA-ND2409324093euoutp02N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1601565770;
-        bh=tbbrF9drxp3pC+sI39T9dolcDVWc06CYhVYWFYzZKJI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=glDkB4uR9YmcfihHbkadImGxgNUHe/R8lbGURVk/J3b1+sleSJnhaJEnfogZw3h7i
-         BGQ4q/qHpIdcMiDVKFqpFSZAxnyMUa+gKOjH/e6zwtD6CkgQMq6ciUKkPW1pTxj/IV
-         dmX9t3dr4S51vktBxD/0w+L4RLFfIcWI6AorW2r4=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20201001152250eucas1p162a51ed471768b7e38a2ef5c9682dfad~555UXMCq-0403504035eucas1p1V;
-        Thu,  1 Oct 2020 15:22:50 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 8A.29.05997.944F57F5; Thu,  1
-        Oct 2020 16:22:49 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20201001152249eucas1p165b78adf542a48b38b49cb5e00500e26~555T8naj52388923889eucas1p1U;
-        Thu,  1 Oct 2020 15:22:49 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201001152249eusmtrp159095f80c45780b374022dbabb6274ef~555T8ByB42671626716eusmtrp1l;
-        Thu,  1 Oct 2020 15:22:49 +0000 (GMT)
-X-AuditID: cbfec7f4-677ff7000000176d-58-5f75f4495ebf
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id F7.D5.06017.944F57F5; Thu,  1
-        Oct 2020 16:22:49 +0100 (BST)
-Received: from localhost (unknown [106.120.51.46]) by eusmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20201001152249eusmtip2788ed82cb2e3736d5270d8767df6eeee~555TuJjq70082600826eusmtip2_;
-        Thu,  1 Oct 2020 15:22:49 +0000 (GMT)
-From:   =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
-To:     Kukjin Kim <kgene@kernel.org>,
+        id S1732026AbgJAQOm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Oct 2020 12:14:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39632 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731917AbgJAQOm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 1 Oct 2020 12:14:42 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E10D320759;
+        Thu,  1 Oct 2020 16:14:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601568881;
+        bh=QfU1X7o6CMv2QgATvf/sDmoCIsKFJq810j1nD3jmnHo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ujOpC++6SqUikoMRcuslDHokLz1aTcwJc9LWD9k9kpYnnPIJi6IdR0ZjQSd8iHJhm
+         EjvA2C/6W/bOeLKovX3iX9nng/J1vOwmhQRG1tAwQ0dMdxogy3iS+g7tC60pxicO5m
+         evfOJEMZMYm6seqxrkH56mhbO5SbcnYCIkjka3ls=
+Date:   Thu, 1 Oct 2020 17:13:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>
+Cc:     Kukjin Kim <kgene@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Tomasz Figa <tomasz.figa@gmail.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, b.zolnierkie@samsung.com,
-        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
-Subject: [PATCH v2 RESEND 9/9] spi: spi-s3c64xx: Turn on interrupts upon
- resume
-Date:   Thu,  1 Oct 2020 17:21:48 +0200
-Message-Id: <20201001152148.29747-10-l.stelmach@samsung.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201001152148.29747-1-l.stelmach@samsung.com>
-MIME-Version: 1.0
-Organization: Samsung R&D Institute Poland
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTcRTnf+92dxWn1yl4ME0aFmSlWSJXE0kJWV96fQgKfEy9qORUNmcZ
-        5BMy36mUz/Ktw2zma04xk5WZaK5spmYLREU0InKj1ETbdpX89jvn/B7nwCFxwSDXmYxLSGak
-        CeJ4IWHNUb3dnDx10SgPP63r86cbN1YwurOig0s/Wlgi6OLF7zit1b7g0XMaBaK7Fj9z6U8D
-        NQRdoR3C6Mxfczz6+Rs9j24b2EbnbUQzTeu4qL9KzxN1teUSou6mdFFRTxsSGboOXyFuWgdE
-        M/FxKYzUKzDCOnbhVTOWtEbc6X45jTLQCjcPWZFA+YChqdeErUkBpUDwczuXxxZGBPp5I84W
-        BgR/n0ygfUn5lg5jB60I5vP3JSsIPuhVuJlFUEFQ3PzOYuxI9WFQYtByzAOckkNBv4YwYwfq
-        KlQ3VPLMmEMdhd9LGRbMpwJgua+Wx8a5QU5rn4VvZepPlrwmWI49jFUuWTztKA9oz5rZ83eD
-        7N5qy95AfeFBZ1Hd3t4XoLh8E2OxA6yN9uwFuMB4WYFJTJpwOpSV+rLaAgSqmg0OyzkHXye3
-        CDMHp45Dx4AX2w4Cg1LDZaW2MPvDnl3BFkpV5Tjb5sOD+wKW7Q7K4sE9Q2coXFOgh0hYdeCY
-        qgMHVP3PqkN4G3Ji5DJJDCM7k8Dc9pSJJTJ5QoxnVKKkC5l+anxn1KhGA9uRGkSRSGjDp4bl
-        4QKuOEWWKtEgIHGhIz/4/XiYgB8tTr3LSBPDpfJ4RqZBh0iO0Il/tmE1VEDFiJOZWwyTxEj3
-        pxhp5ZyBKo99e1qfdDmvcVZ3YuRIZGHajchpV4+Ua9tR8PiaMnTMbzdCvf6xoT0wcCQu44+C
-        mbKbUrfX8rFufIbIr180XKKiMjtc8q4HSk/yJ3y9XXcdd5RZqZJsZ79nynv4jrHORx1i365r
-        ycFWg/3D3NN8l4f6Q1oEMz4KnVY/HEQLObJYsbcHLpWJ/wGSRJquTwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNIsWRmVeSWpSXmKPExsVy+t/xe7qeX0rjDa6ekLFY/OM5k8XGGetZ
-        LaY+fMJm0f/4NbPF+fMb2C1uHlrBaLHp8TVWi8u75rBZzDi/j8mi8eNNdou1R+6yW6za9YfR
-        gcfj+pJPzB47Z91l99i0qpPNY/OSeo++LasYPT5vkgtgi9KzKcovLUlVyMgvLrFVija0MNIz
-        tLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DLeLh/KVPBK7aKzXuvMjYwPmftYuTkkBAw
-        kZj+6woTiC0ksJRRYutVmy5GDqC4lMTKuekQJcISf651sXUxcgGVPGWUaF9znw0kwSbgKNG/
-        9AQrSEJEYD+TxKUL91lAEswC5RKXZj1nB7GFBfwlPpy5DNbAIqAq8e1JA1icV8BG4un2+ewQ
-        G+Ql2pdvB6vhBIqfm3iYDeKgXIndu4+yQdQLSpyc+YQF5DhmAXWJ9fOEQML8AloSa5quQ62V
-        l2jeOpt5AqPQLCQdsxA6ZiGpWsDIvIpRJLW0ODc9t9hIrzgxt7g0L10vOT93EyMwIrcd+7ll
-        B2PXu+BDjAIcjEo8vAIHSuOFWBPLiitzDzFKcDArifA6nT0dJ8SbklhZlVqUH19UmpNafIjR
-        FOjNicxSosn5wGSRVxJvaGpobmFpaG5sbmxmoSTO2yFwMEZIID2xJDU7NbUgtQimj4mDU6qB
-        8YplQpxeTeBHttmTX7QeFfSfvy3pqYZc3qVJWT+WvD3C7aB963Gi4MrpQlXdaWGz7j2wNMni
-        jp90d1OMbsHHM10P7zv/d/wY/u63h9JG/2Sx9k9Wzg83XTT7or717r9vTv2Snl0bXv/w7dOJ
-        NGXvMPbw/5Ted+nruWOhDnaGXlo5WfGHFrJZKbEUZyQaajEXFScCAPKNMsPeAgAA
-X-CMS-MailID: 20201001152249eucas1p165b78adf542a48b38b49cb5e00500e26
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20201001152249eucas1p165b78adf542a48b38b49cb5e00500e26
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20201001152249eucas1p165b78adf542a48b38b49cb5e00500e26
+        Andi Shyti <andi@etezian.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        m.szyprowski@samsung.com, b.zolnierkie@samsung.com
+Subject: Re: [PATCH v2 RESEND 0/9] Some fixes for spi-s3c64xx
+Message-ID: <20201001161340.GM6715@sirena.org.uk>
 References: <20200821161401.11307-1-l.stelmach@samsung.com>
-        <20201001152148.29747-1-l.stelmach@samsung.com>
-        <CGME20201001152249eucas1p165b78adf542a48b38b49cb5e00500e26@eucas1p1.samsung.com>
+ <CGME20201001152246eucas1p1ee289b8a85b707f7496355c081623796@eucas1p1.samsung.com>
+ <20201001152148.29747-1-l.stelmach@samsung.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kaF1vgn83Aa7CiXN"
+Content-Disposition: inline
+In-Reply-To: <20201001152148.29747-1-l.stelmach@samsung.com>
+X-Cookie: Stay away from flying saucers today.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-s3c64xx_spi_hwinit() disables interrupts. In s3c64xx_spi_probe() after
-calling s3c64xx_spi_hwinit() they are enabled with the following call.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Łukasz Stelmach <l.stelmach@samsung.com>
----
- drivers/spi/spi-s3c64xx.c | 4 ++++
- 1 file changed, 4 insertions(+)
+--kaF1vgn83Aa7CiXN
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index ea5a22dec53d..53e3581bcd7b 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1378,6 +1378,10 @@ static int s3c64xx_spi_runtime_resume(struct device *dev)
- 
- 	s3c64xx_spi_hwinit(sdd);
- 
-+	writel(S3C64XX_SPI_INT_RX_OVERRUN_EN | S3C64XX_SPI_INT_RX_UNDERRUN_EN |
-+	       S3C64XX_SPI_INT_TX_OVERRUN_EN | S3C64XX_SPI_INT_TX_UNDERRUN_EN,
-+	       sdd->regs + S3C64XX_SPI_INT_EN);
-+
- 	return 0;
- 
- err_disable_src_clk:
--- 
-2.26.2
+On Thu, Oct 01, 2020 at 05:21:39PM +0200, =C5=81ukasz Stelmach wrote:
+> This is a series of fixes created during porting a device driver (these
+> patches will be released soon too) for an SPI device to the current kerne=
+l.
 
+There appeared to be a number of outstanding review comments (misleading
+commit message on patch 7, some concerns about the non-CMU case), please
+address those.
+
+Please don't send new patches in reply to old ones, it buries them in
+threads and can make it hard to follow what's going on.
+
+--kaF1vgn83Aa7CiXN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl92ADMACgkQJNaLcl1U
+h9Dvbwf/RxRHBrkQpmJBwvP6aCwHfrBFfZdf8prH5Yv/UlBniia8LJYK7YX2R8/Y
+Cu+5SvplgHueBk53qt+oQ0M5iv1DOn4TbXyhsZXUqwlyKh4tGb+LKpRrc8AR09Sp
+nYuTT/+AuBsxWdG3aUdILbsEeqtj8k7krbLz8qrd6wsi9idAaZtsFuIMNhVmRcuv
+mvxTFebn/PKTNeC1win9D668cSe6oRcDVbuD/GUsYZA+CuVnOi/jR/ZQn6rv9Q+Y
+jyWtAWBfl+bRe+yQqwITfaiLzeu0Y1CizmsO14piuAoNhxUEinhE+7FlJlgf44Jx
+uQ/xxgm8jvwtQV3zbUlXM6ybioqPnw==
+=ZotW
+-----END PGP SIGNATURE-----
+
+--kaF1vgn83Aa7CiXN--
