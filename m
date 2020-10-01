@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6225D280A33
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Oct 2020 00:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD95B280A22
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Oct 2020 00:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387476AbgJAW3q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Oct 2020 18:29:46 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:48242 "EHLO
+        id S2387463AbgJAW3m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Oct 2020 18:29:42 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:48270 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733258AbgJAW3D (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Oct 2020 18:29:03 -0400
+        with ESMTP id S1733264AbgJAW3F (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Oct 2020 18:29:05 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 43D92803086A;
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id B40F1803202E;
         Thu,  1 Oct 2020 22:28:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Mf0Lyd3Bxl2C; Fri,  2 Oct 2020 01:28:58 +0300 (MSK)
+        with ESMTP id hgug7Is7bY9B; Fri,  2 Oct 2020 01:28:59 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -31,9 +31,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         "wuxu . wu" <wuxu.wu@huawei.com>, Feng Tang <feng.tang@intel.com>,
         Rob Herring <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 14/21] spi: dw: Explicitly de-assert CS on SPI transfer completion
-Date:   Fri, 2 Oct 2020 01:28:22 +0300
-Message-ID: <20201001222829.15977-15-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v3 15/21] spi: dw: Move num-of retries parameter to the header file
+Date:   Fri, 2 Oct 2020 01:28:23 +0300
+Message-ID: <20201001222829.15977-16-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201001222829.15977-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201001222829.15977-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -44,32 +44,59 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-By design of the currently available native set_cs callback, the CS
-de-assertion will be done only if it's required by the corresponding
-controller capability. But in order to pre-fill the Tx FIFO buffer with
-data during the SPI memory ops execution the SER register needs to be left
-cleared before that. We'll also need a way to explicitly set and clear the
-corresponding CS bit at a certain moment of the operation. Let's alter
-the set_cs function then to also de-activate the CS, when it's required.
+The parameter will be needed for another wait-done method being added in
+the framework of the SPI memory operation modification in a further
+commit.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/spi/spi-dw-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-dw-dma.c | 5 ++---
+ drivers/spi/spi-dw.h     | 2 ++
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index fca929280aab..a6f86314567f 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -100,7 +100,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
- 	 */
- 	if (cs_high == enable)
- 		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
--	else if (dws->caps & DW_SPI_CAP_CS_OVERRIDE)
-+	else
- 		dw_writel(dws, DW_SPI_SER, 0);
- }
- EXPORT_SYMBOL_GPL(dw_spi_set_cs);
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index bb390ff67d1d..9db119dc5554 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -17,7 +17,6 @@
+ 
+ #include "spi-dw.h"
+ 
+-#define WAIT_RETRIES	5
+ #define RX_BUSY		0
+ #define RX_BURST_LEVEL	16
+ #define TX_BUSY		1
+@@ -208,7 +207,7 @@ static inline bool dw_spi_dma_tx_busy(struct dw_spi *dws)
+ static int dw_spi_dma_wait_tx_done(struct dw_spi *dws,
+ 				   struct spi_transfer *xfer)
+ {
+-	int retry = WAIT_RETRIES;
++	int retry = SPI_WAIT_RETRIES;
+ 	struct spi_delay delay;
+ 	u32 nents;
+ 
+@@ -283,7 +282,7 @@ static inline bool dw_spi_dma_rx_busy(struct dw_spi *dws)
+ 
+ static int dw_spi_dma_wait_rx_done(struct dw_spi *dws)
+ {
+-	int retry = WAIT_RETRIES;
++	int retry = SPI_WAIT_RETRIES;
+ 	struct spi_delay delay;
+ 	unsigned long ns, us;
+ 	u32 nents;
+diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+index eb1d46983319..946065201c9c 100644
+--- a/drivers/spi/spi-dw.h
++++ b/drivers/spi/spi-dw.h
+@@ -100,6 +100,8 @@
+ #define SPI_DMA_RDMAE			(1 << 0)
+ #define SPI_DMA_TDMAE			(1 << 1)
+ 
++#define SPI_WAIT_RETRIES		5
++
+ enum dw_ssi_type {
+ 	SSI_MOTO_SPI = 0,
+ 	SSI_TI_SSP,
 -- 
 2.27.0
 
