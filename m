@@ -2,132 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E01A28125E
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Oct 2020 14:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DEB2812C5
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Oct 2020 14:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387957AbgJBMXS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 2 Oct 2020 08:23:18 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:54178 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387919AbgJBMXB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Oct 2020 08:23:01 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20201002122256euoutp02144c5bfb05ddaab0c7b9d61a6823a939~6LFiu-lTz2196421964euoutp02N
-        for <linux-spi@vger.kernel.org>; Fri,  2 Oct 2020 12:22:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20201002122256euoutp02144c5bfb05ddaab0c7b9d61a6823a939~6LFiu-lTz2196421964euoutp02N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1601641376;
-        bh=f/KuQfJ1RwS6nqmPWEc337gr7kbEjJQjnrujYNmhICE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LOEBdClYP4EjGghx1LWWF+Cy44x8vKEwvhOQypAODifhUZKjEQk2Gl0fvaqpH+TBy
-         WBfLXfmbUVslK9O9DKH1FjrwEoiHPua8Z1ia16Uzmo+fPpHbEMMjA/AUwFxAhdh9fM
-         vsWYsTklM6K84wWJ9Pl9XHUKE6fyGIVA5gT9dcWY=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20201002122256eucas1p2298f0dce69266f0ef85a610aedb7199b~6LFiRm4B-1010210102eucas1p2K;
-        Fri,  2 Oct 2020 12:22:56 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id F5.42.06456.0AB177F5; Fri,  2
-        Oct 2020 13:22:56 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20201002122256eucas1p10093b3619fbe5f96ae351920329d1626~6LFh7A0NO0998409984eucas1p1D;
-        Fri,  2 Oct 2020 12:22:56 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201002122256eusmtrp1825b3cb0ad387e0924d5cb6303447670~6LFh6VMjH1376413764eusmtrp1O;
-        Fri,  2 Oct 2020 12:22:56 +0000 (GMT)
-X-AuditID: cbfec7f2-7efff70000001938-9f-5f771ba0f4f7
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id F1.CD.06314.F9B177F5; Fri,  2
-        Oct 2020 13:22:55 +0100 (BST)
-Received: from localhost (unknown [106.120.51.46]) by eusmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20201002122255eusmtip27ea039f48d8ac51da319a2d6cd605682~6LFhvw5MM1355513555eusmtip2Y;
-        Fri,  2 Oct 2020 12:22:55 +0000 (GMT)
-From:   =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
-To:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
+        id S2387877AbgJBMcA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Fri, 2 Oct 2020 08:32:00 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:38847 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbgJBMb7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 2 Oct 2020 08:31:59 -0400
+Received: by mail-ej1-f66.google.com with SMTP id ce10so1725670ejc.5;
+        Fri, 02 Oct 2020 05:31:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ruty7DVy+OZPgSY4H/PWNx+35iqlcL+AUfsjOvXskTs=;
+        b=bCidhWP34d7hMNiuycxC4287P50KNdhUGOpcSVSh8X3Y17my6Oqo2/kyG8WjruGyrF
+         Lm+TXvzaCphpGV1DF9R1x66vNB9h67zBPB+RB72Sr3KNTFL8KvWL5sOu2nJE79BqFB05
+         gBpW0Hm9nR7q3UQuNH0+XSq7wdjpdIVDORyZ2soCYm0dYePfFWHCUrpTOtdPit6kewjB
+         e0LwG9wUrxzlFeas9mnMOG9GKsD7JOQx9F8pbaoqrKD1gFffSfYFC98oahTvyT8bGkxh
+         msaBQ5pS8RB9RD+5goykYKZqcoPyKMv8m8HeIutN9co3STxYosnwmsOK5G5FHabXl6vC
+         OPYA==
+X-Gm-Message-State: AOAM533mqHZKRCTMcghRzpGgTAvAN9+sYGYXA0CRTVxhFL08lF+I95JX
+        s9zTmRslrvUAzoJ9paSUWLk7xH3Vd+Q=
+X-Google-Smtp-Source: ABdhPJyhM3dwv7SEyAI4chEDpCbHJ/cxuWy1xtuG8hiRd28Nc8mdupnHvxGqdM5WftW4lVi38BAeFQ==
+X-Received: by 2002:a17:906:37c6:: with SMTP id o6mr2118364ejc.404.1601641917025;
+        Fri, 02 Oct 2020 05:31:57 -0700 (PDT)
+Received: from pi3 ([194.230.155.194])
+        by smtp.googlemail.com with ESMTPSA id a22sm1039191ejt.65.2020.10.02.05.31.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 05:31:55 -0700 (PDT)
+Date:   Fri, 2 Oct 2020 14:31:53 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>
+Cc:     Kukjin Kim <kgene@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>,
         Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
         linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        =?UTF-8?q?Bart=C5=82omiej=20=C5=BBo=C5=82nierkiewicz?= 
-        <b.zolnierkie@samsung.com>,
-        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
-Subject: [PATCH v3 9/9] spi: spi-s3c64xx: Turn on interrupts upon resume
-Date:   Fri,  2 Oct 2020 14:22:43 +0200
-Message-Id: <20201002122243.26849-10-l.stelmach@samsung.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201002122243.26849-1-l.stelmach@samsung.com>
-MIME-Version: 1.0
-Organization: Samsung R&D Institute Poland
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLKsWRmVeSWpSXmKPExsWy7djPc7oLpMvjDRbtF7RY/OM5k8XGGetZ
-        LaY+fMJm0f/4NbPF+fMb2C1uHlrBaLHp8TVWi8u75rBZzDi/j8mi8eNNdou1R+6yW6za9YfR
-        gcfj+pJPzB47Z91l99i0qpPNY/OSeo++LasYPT5vkgtgi+KySUnNySxLLdK3S+DKuLF0PVPB
-        K7aKzkurWBsYn7N2MXJySAiYSDw7+pm5i5GLQ0hgBaPEvX2voZwvjBIn77axQDifGSV2nZjH
-        BNMy7fYHqKrljBIndu9jg3CeM0rsX/OJGaSKTcBRon/pCVaQhIjAdiaJiZ/Pg81iFjjKKLH5
-        wVUWkCphAQ+J3qYPYHNZBFQlWhdMAuvmFbCROPpnFtQ+eYn25dvZQGxOoPjJRdvYIGoEJU7O
-        fAI2h19AS2JN03UwmxmovnnrbLD7JATusUs82PKIGWKQi0T/121QQ4UlXh3fwg5hy0icntwD
-        1MwBZNdLTJ5kBtHbwyixbc4PFogaa4k7536xgdQwC2hKrN+lDxF2lOhYMI0RopVP4sZbQYgT
-        +CQmbZvODBHmlehoE4KoVpFY178HaqCURO+rFYwTGJVmIXlmFpIHZiHsWsDIvIpRPLW0ODc9
-        tdgwL7Vcrzgxt7g0L10vOT93EyMwUZ3+d/zTDsavl5IOMQpwMCrx8GYcKo0XYk0sK67MPcQo
-        wcGsJMLrdPZ0nBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFe40UvY4UE0hNLUrNTUwtSi2CyTByc
-        Ug2M+p1zO7Y4CTWbsJ+L/iH26aff7AXMzVkhe7OYsg0mW2Uff3lGSZuliHO6wfXF+7Se3e/w
-        7r86RXCLmlhA3OKlm/VvR97avGj6m0fVP4zD0tNvpX2rL379midTv+7AjNID8+Nl757XaOm4
-        t+NmnvH0gFsvW16zdh4tVlvaafCse9uRWN2++dGvlFiKMxINtZiLihMBKnO7blADAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsVy+t/xe7rzpcvjDS5PsLJY/OM5k8XGGetZ
-        LaY+fMJm0f/4NbPF+fMb2C1uHlrBaLHp8TVWi8u75rBZzDi/j8mi8eNNdou1R+6yW6za9YfR
-        gcfj+pJPzB47Z91l99i0qpPNY/OSeo++LasYPT5vkgtgi9KzKcovLUlVyMgvLrFVija0MNIz
-        tLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DLuLF0PVPBK7aKzkurWBsYn7N2MXJySAiY
-        SEy7/YG5i5GLQ0hgKaPEjmuzmLoYOYASUhIr56ZD1AhL/LnWxQZiCwk8ZZRYNpkZxGYTcJTo
-        X3qCFaRXRGA/k8SlC/dZQBxmgcOMEpfXrWMCqRIW8JDobfoAZrMIqEq0LpgE1s0rYCNx9M8s
-        JogN8hLty7eDbeAEip9ctA1qm7VE68e5rBD1ghInZz5hATmOWUBdYv08IZAwv4CWxJqm6ywg
-        NjPQmOats5knMArNQtIxC6FjFpKqBYzMqxhFUkuLc9Nziw31ihNzi0vz0vWS83M3MQJjctux
-        n5t3MF7aGHyIUYCDUYmHV+BAabwQa2JZcWXuIUYJDmYlEV6ns6fjhHhTEiurUovy44tKc1KL
-        DzGaAr05kVlKNDkfmC7ySuINTQ3NLSwNzY3Njc0slMR5OwQOxggJpCeWpGanphakFsH0MXFw
-        SjUwLrz79yR/3dvKd895BL736XXwR52+zRMonuhet+/owhOn2EQNXVXbvzCsnPi0rE5/+rmo
-        ecr/NsleanwWqxjFEKm0xnaBsFdSVf6KLUky5+wNuk2KvSI5qll/ZGhFP9wXrCPWpB5T/rw9
-        QoiDx7nlS0NHbOAuSUvz69vnX0zJKdT7sb/xY6cSS3FGoqEWc1FxIgBUrg4f3wIAAA==
-X-CMS-MailID: 20201002122256eucas1p10093b3619fbe5f96ae351920329d1626
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20201002122256eucas1p10093b3619fbe5f96ae351920329d1626
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20201002122256eucas1p10093b3619fbe5f96ae351920329d1626
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        =?utf-8?Q?Bart=C5=82omiej_=C5=BBo=C5=82nierkiewicz?= 
+        <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH v3 7/9] spi: spi-s3c64xx: Ensure cur_speed holds actual
+ clock value
+Message-ID: <20201002123153.GA7463@pi3>
 References: <20201002122243.26849-1-l.stelmach@samsung.com>
-        <CGME20201002122256eucas1p10093b3619fbe5f96ae351920329d1626@eucas1p1.samsung.com>
+ <CGME20201002122255eucas1p21976a8ba0566564b79a9dd6f62cd4caf@eucas1p2.samsung.com>
+ <20201002122243.26849-8-l.stelmach@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20201002122243.26849-8-l.stelmach@samsung.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-s3c64xx_spi_hwinit() disables interrupts. In s3c64xx_spi_probe() after
-calling s3c64xx_spi_hwinit() they are enabled with the following call.
+On Fri, Oct 02, 2020 at 02:22:41PM +0200, Łukasz Stelmach wrote:
+> Make sure the cur_speed value used in s3c64xx_enable_datapath()
+> to configure DMA channel and in s3c64xx_wait_for_*() to calculate the
+> transfer timeout is set to the actual value of (half) the clock speed.
+> 
+> Don't change non-CMU case, because no frequency calculation errors have
+> been reported.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Suggested-by: Tomasz Figa <tomasz.figa@gmail.com>
+> Signed-off-by: Łukasz Stelmach <l.stelmach@samsung.com>
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Łukasz Stelmach <l.stelmach@samsung.com>
----
- drivers/spi/spi-s3c64xx.c | 4 ++++
- 1 file changed, 4 insertions(+)
+For the future, tags are added in chronological order, so first is
+suggested (as someone suggested to make a patch), then your SoB (as you
+wrote it) and then my review (because you had to write a patch before I
+could review).
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 9f728a7c59a1..dfa7c91e13aa 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1378,6 +1378,10 @@ static int s3c64xx_spi_runtime_resume(struct device *dev)
- 
- 	s3c64xx_spi_hwinit(sdd);
- 
-+	writel(S3C64XX_SPI_INT_RX_OVERRUN_EN | S3C64XX_SPI_INT_RX_UNDERRUN_EN |
-+	       S3C64XX_SPI_INT_TX_OVERRUN_EN | S3C64XX_SPI_INT_TX_UNDERRUN_EN,
-+	       sdd->regs + S3C64XX_SPI_INT_EN);
-+
- 	return 0;
- 
- err_disable_src_clk:
--- 
-2.26.2
+All other patches here have these mixed up. No need to resend, but keep
+it in mind for the future.
+
+Best regards,
+Krzysztof
 
