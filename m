@@ -2,37 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3831283DD9
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Oct 2020 19:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C51F283DDA
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Oct 2020 19:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727530AbgJERzx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Oct 2020 13:55:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50406 "EHLO mail.kernel.org"
+        id S1726996AbgJERz6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Oct 2020 13:55:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50524 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727320AbgJERzx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 5 Oct 2020 13:55:53 -0400
+        id S1727032AbgJERz6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 5 Oct 2020 13:55:58 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F0B92083B;
-        Mon,  5 Oct 2020 17:55:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8433E20B80;
+        Mon,  5 Oct 2020 17:55:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601920552;
-        bh=/YYqoxgnewwjyfR7ZhR+yOk7SdtO5OpBzT2DcHZa1Zo=;
+        s=default; t=1601920558;
+        bh=FD1Z2L6GBgUx39XjAEGMkg821R7+nSUHP9MIuFaZ6ns=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=a8uDN8e1TjwS2NrxJagJf99/dyQQbVvUwuSssqO6wDi/6OS4y/Xf54vjmpfXAhnr4
-         7ya0wac5/Djy6TzhWJhMe1i1ang9ZGML6n+C0JgeMTVxk1govWSu3e3IreoG+Lb1yR
-         2aAAIGT7o7lfvxCm6AAfASN7xlGSOkft70nWdJ5Q=
-Date:   Mon, 05 Oct 2020 18:54:49 +0100
+        b=um48qCyaocW25/ixTszKwJvLesJ8VILKkn86htQKXhtV0pGAvt/MyyZ99rZSc9m6h
+         EuhFC60OozkxBHI9p+j0jx4Vvkox4+PgYtg2XZJ4VLP408Q4VARBpcUYz5xh9K8zFl
+         wEztX4MTU4Ax39FeKD1sZJc/31rxjj/3jGG7bGbc=
+Date:   Mon, 05 Oct 2020 18:54:55 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20201005112549.22222-1-geert+renesas@glider.be>
-References: <20201005112549.22222-1-geert+renesas@glider.be>
-Subject: Re: [PATCH] spi: renesas,sh-msiof: Add r8a77961 support
-Message-Id: <160192047990.23319.4803614539729270841.b4-ty@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jean-Hugues Deschenes <jean-hugues.deschenes@octasic.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-spi@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
+        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>
+In-Reply-To: <20201002211648.24320-1-Sergey.Semin@baikalelectronics.ru>
+References: <20201002211648.24320-1-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH] MAINTAINERS: Add maintainer of DW APB SSI driver
+Message-Id: <160192047989.23319.2518589634425010273.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,8 +42,8 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 5 Oct 2020 13:25:47 +0200, Geert Uytterhoeven wrote:
-> Document R-Car M3-W+ (R8A77961) SoC bindings.
+On Sat, 3 Oct 2020 00:16:47 +0300, Serge Semin wrote:
+> Add myself as a maintainer of the Synopsis DesignWare APB SSI driver.
 
 Applied to
 
@@ -49,8 +51,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: renesas,sh-msiof: Add r8a77961 support
-      commit: aef161f4f1b829e91c4aaaac75c2b8fcdbc033fc
+[1/1] MAINTAINERS: Add maintainer of DW APB SSI driver
+      commit: 1c33524f79853f41e80390b1a223254aadd30bd4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
