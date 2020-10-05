@@ -2,92 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 560E828366E
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Oct 2020 15:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68352838B1
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Oct 2020 17:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgJENWj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Oct 2020 09:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725936AbgJENWj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Oct 2020 09:22:39 -0400
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB367C0613CE
-        for <linux-spi@vger.kernel.org>; Mon,  5 Oct 2020 06:22:38 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4C4h9760Hqz1s5VH;
-        Mon,  5 Oct 2020 15:22:35 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4C4h97537gz1qqkK;
-        Mon,  5 Oct 2020 15:22:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id bzkkvaEfiYd1; Mon,  5 Oct 2020 15:22:34 +0200 (CEST)
-X-Auth-Info: 8ge+jIr5f8nayvLs8bUvV5P8XW8PWVTtHbnAQLSHH3I=
-Received: from desktop.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Mon,  5 Oct 2020 15:22:34 +0200 (CEST)
-From:   Marek Vasut <marex@denx.de>
-To:     linux-spi@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robin Gong <b38343@freescale.com>,
+        id S1726697AbgJEPBs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Oct 2020 11:01:48 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:37172 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725981AbgJEPBq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Oct 2020 11:01:46 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 3DF5F1C0B7C; Mon,  5 Oct 2020 17:01:43 +0200 (CEST)
+Date:   Mon, 5 Oct 2020 17:01:42 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] spi: imx: Fix freeing of DMA channels if spi_bitbang_start() fails
-Date:   Mon,  5 Oct 2020 15:22:29 +0200
-Message-Id: <20201005132229.513119-1-marex@denx.de>
-X-Mailer: git-send-email 2.28.0
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another round of adding missing
+ 'additionalProperties'
+Message-ID: <20201005150142.GA28675@duo.ucw.cz>
+References: <20201002234143.3570746-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="xHFwDpU9dbj6ez1V"
+Content-Disposition: inline
+In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If the SPI controller has has_dmamode = true and spi_bitbang_start() fails
-in spi_imx_probe(), then the driver must release the DMA channels acquired
-in spi_imx_sdma_init() by calling spi_imx_sdma_exit() in the fail path.
 
-Fixes: f62caccd12c1 ("spi: spi-imx: add DMA support")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Robin Gong <b38343@freescale.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-To: linux-spi@vger.kernel.org
----
- drivers/spi/spi-imx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+--xHFwDpU9dbj6ez1V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 38a5f1304cec..e38e5ad3c706 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1707,7 +1707,7 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	ret = spi_bitbang_start(&spi_imx->bitbang);
- 	if (ret) {
- 		dev_err(&pdev->dev, "bitbang start failed with %d\n", ret);
--		goto out_runtime_pm_put;
-+		goto out_bitbang_start;
- 	}
- 
- 	dev_info(&pdev->dev, "probed\n");
-@@ -1717,6 +1717,9 @@ static int spi_imx_probe(struct platform_device *pdev)
- 
- 	return ret;
- 
-+out_bitbang_start:
-+	if (spi_imx->devtype_data->has_dmamode)
-+		spi_imx_sdma_exit(spi_imx);
- out_runtime_pm_put:
- 	pm_runtime_dont_use_autosuspend(spi_imx->dev);
- 	pm_runtime_put_sync(spi_imx->dev);
--- 
-2.28.0
+Hi!
 
+> Another round of wack-a-mole. The json-schema default is additional
+> unknown properties are allowed, but for DT all properties should be
+> defined.
+
+for leds:
+
+Acked-by: Pavel Machek <pavel@ucw.cz>
+
+I assume you apply it..?
+								Pavel
+							=09
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--xHFwDpU9dbj6ez1V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX3s1VgAKCRAw5/Bqldv6
+8owIAKDAkiq29W/tD49n7es9bNcHQLqXywCfWHIfHZ6OrlZTPZUQgy45PCK/EKM=
+=qVmv
+-----END PGP SIGNATURE-----
+
+--xHFwDpU9dbj6ez1V--
