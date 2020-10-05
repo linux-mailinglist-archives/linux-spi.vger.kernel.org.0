@@ -2,115 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3087C283B1C
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Oct 2020 17:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60958283DD6
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Oct 2020 19:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728697AbgJEPji (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Oct 2020 11:39:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42716 "EHLO mail.kernel.org"
+        id S1725960AbgJERzn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Oct 2020 13:55:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50240 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727972AbgJEPjW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 5 Oct 2020 11:39:22 -0400
-Received: from earth.universe (dyndsl-095-033-158-146.ewe-ip-backbone.de [95.33.158.146])
+        id S1727032AbgJERzn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 5 Oct 2020 13:55:43 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CD5C2085B;
-        Mon,  5 Oct 2020 15:39:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 656EF207EA;
+        Mon,  5 Oct 2020 17:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601912361;
-        bh=YDa9qgcYN/rLvsHl7wxHnDzXxyPxrajJMh139W2bTQc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yt3ruZa68573tch0c/Ho1ALzHfCpTDMLesbdlPmWRDYNKB50IT55EoZp87fsRkzgz
-         7+6j5JNoNjJ3AsqOjA1un0djegx8x339kHr5uakI101R3J4o5G+KgoyioglXZXg5dL
-         Bxy38eyfhsJbMySPsKZTFlatV3r6LR8AuCR8oLYA=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 1CDCB3C0C87; Mon,  5 Oct 2020 17:39:19 +0200 (CEST)
-Date:   Mon, 5 Oct 2020 17:39:19 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-iio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        linux-leds@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-rockchip@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-gpio@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-hwmon@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-spi@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>, netdev@vger.kernel.org,
-        Baolin Wang <baolin.wang7@gmail.com>,
+        s=default; t=1601920542;
+        bh=ItfLLw2+vNr2ji+ODmGYqxcQS7KfC6wQ0sqQErFx7+4=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=YTeXAAX6dWlIwrE4UjCo/de+iktEoPEJ5AF1yxw4vIvsgTBnW0jfo9hkfcMQDOG9K
+         RY3WupE+b+iXzbVgEYMWZ1T437Efpu/mqaKE5hFMr48kXd79zQn36TvmouqFywVVt7
+         x2Ulq910M1Frzp5PJr2c8mmxzLTqHoC+LCn6ycpI=
+Date:   Mon, 05 Oct 2020 18:54:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Marek Vasut <marex@denx.de>, linux-spi@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Shawn Guo <shawnguo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH] dt-bindings: Another round of adding missing
- 'additionalProperties'
-Message-ID: <20201005153919.llmcjbz4hiqvzd4x@earth.universe>
-References: <20201002234143.3570746-1-robh@kernel.org>
+        Robin Gong <b38343@freescale.com>
+In-Reply-To: <20201005132229.513119-1-marex@denx.de>
+References: <20201005132229.513119-1-marex@denx.de>
+Subject: Re: [PATCH] spi: imx: Fix freeing of DMA channels if spi_bitbang_start() fails
+Message-Id: <160192047990.23319.3690375960587172147.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ruzfmjzmyxibtjj5"
-Content-Disposition: inline
-In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 5 Oct 2020 15:22:29 +0200, Marek Vasut wrote:
+> If the SPI controller has has_dmamode = true and spi_bitbang_start() fails
+> in spi_imx_probe(), then the driver must release the DMA channels acquired
+> in spi_imx_sdma_init() by calling spi_imx_sdma_exit() in the fail path.
 
---ruzfmjzmyxibtjj5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Oct 02, 2020 at 06:41:43PM -0500, Rob Herring wrote:
-> Another round of wack-a-mole. The json-schema default is additional
-> unknown properties are allowed, but for DT all properties should be
-> defined.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->=20
-> I'll take this thru the DT tree.
->=20
->  [...]
->  .../bindings/power/supply/cw2015_battery.yaml |  2 ++
->  .../bindings/power/supply/rohm,bd99954.yaml   |  8 ++++++++
-> [...]
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Acked-by: Sebastian Reichel <sre@kernel.org>
+Thanks!
 
--- Sebastian
+[1/1] spi: imx: Fix freeing of DMA channels if spi_bitbang_start() fails
+      commit: 45f0bbdafd26d6d772172563b30bff561cec9133
 
---ruzfmjzmyxibtjj5
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl97PhAACgkQ2O7X88g7
-+pqkbg/9HQHD97P7Thh0rG2tNf/oTuwqdbqpGz8XffiIbWso3SaAukPavFc/b34T
-Bhf9ldAe4Jy7Sz8qDavKYO8qMWOF8av5Je5ajNG3fFmRAO28Jz1vcRsxn7JiTvlU
-SnlrNgxMlppGfzCt59G/IH6GyJVUVhZduf1HhaterbutugRNLE6LKY85rtwPlCR6
-d4+sJE+gKYJmNhxj1XYyVrXoWQs22IA8nJggb2g2l5nHfFolffKHFRXTX5Ax7WFL
-vhm/uSgz/4T9RyObm3lx4ODSSZqC3oc1E0DR3jf97rWH6xGUVFuJoAtE5ZpS5AJt
-uC3k2QQJ8mCt5fUA+khtnS4DIsF07uOzd5Hbex8NcXiFnlO/9GYWlmGXxlAnhdrk
-vSk8jlPgslc4xKpae1y8DFQiMndd9+1g0b4ZOJ6RnhaNpnOoFOIIPmC2ViRnQ8/0
-kv5w7Hop2CIxAYj3Jk1IzlmtbmJeQt39ya7uHNJhV2ISd8P3AmrkcNedPd8OV7MO
-7DrV+n/aKjH2gLYX0+377iH59APbluDQd64e+iDir2L5PP4BWXmyMOGqZ+Od7ScJ
-YT7hlpoKPVwZ1lqta77S7LDpYrRtyv8Ce5EsFineimEc1b4N51GTMh6lDPIGVcXz
-Xa1GC6kpGXU9Cx39fOb5K64cnrJ5Whplgiyv+4xd1suU1q25CZM=
-=XHTx
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---ruzfmjzmyxibtjj5--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
