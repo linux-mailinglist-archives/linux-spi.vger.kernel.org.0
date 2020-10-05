@@ -2,39 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60958283DD6
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Oct 2020 19:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3831283DD9
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Oct 2020 19:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725960AbgJERzn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Oct 2020 13:55:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50240 "EHLO mail.kernel.org"
+        id S1727530AbgJERzx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Oct 2020 13:55:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50406 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727032AbgJERzn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 5 Oct 2020 13:55:43 -0400
+        id S1727320AbgJERzx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 5 Oct 2020 13:55:53 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 656EF207EA;
-        Mon,  5 Oct 2020 17:55:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6F0B92083B;
+        Mon,  5 Oct 2020 17:55:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601920542;
-        bh=ItfLLw2+vNr2ji+ODmGYqxcQS7KfC6wQ0sqQErFx7+4=;
+        s=default; t=1601920552;
+        bh=/YYqoxgnewwjyfR7ZhR+yOk7SdtO5OpBzT2DcHZa1Zo=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=YTeXAAX6dWlIwrE4UjCo/de+iktEoPEJ5AF1yxw4vIvsgTBnW0jfo9hkfcMQDOG9K
-         RY3WupE+b+iXzbVgEYMWZ1T437Efpu/mqaKE5hFMr48kXd79zQn36TvmouqFywVVt7
-         x2Ulq910M1Frzp5PJr2c8mmxzLTqHoC+LCn6ycpI=
-Date:   Mon, 05 Oct 2020 18:54:39 +0100
+        b=a8uDN8e1TjwS2NrxJagJf99/dyQQbVvUwuSssqO6wDi/6OS4y/Xf54vjmpfXAhnr4
+         7ya0wac5/Djy6TzhWJhMe1i1ang9ZGML6n+C0JgeMTVxk1govWSu3e3IreoG+Lb1yR
+         2aAAIGT7o7lfvxCm6AAfASN7xlGSOkft70nWdJ5Q=
+Date:   Mon, 05 Oct 2020 18:54:49 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Marek Vasut <marex@denx.de>, linux-spi@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Robin Gong <b38343@freescale.com>
-In-Reply-To: <20201005132229.513119-1-marex@denx.de>
-References: <20201005132229.513119-1-marex@denx.de>
-Subject: Re: [PATCH] spi: imx: Fix freeing of DMA channels if spi_bitbang_start() fails
-Message-Id: <160192047990.23319.3690375960587172147.b4-ty@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20201005112549.22222-1-geert+renesas@glider.be>
+References: <20201005112549.22222-1-geert+renesas@glider.be>
+Subject: Re: [PATCH] spi: renesas,sh-msiof: Add r8a77961 support
+Message-Id: <160192047990.23319.4803614539729270841.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -42,10 +40,8 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 5 Oct 2020 15:22:29 +0200, Marek Vasut wrote:
-> If the SPI controller has has_dmamode = true and spi_bitbang_start() fails
-> in spi_imx_probe(), then the driver must release the DMA channels acquired
-> in spi_imx_sdma_init() by calling spi_imx_sdma_exit() in the fail path.
+On Mon, 5 Oct 2020 13:25:47 +0200, Geert Uytterhoeven wrote:
+> Document R-Car M3-W+ (R8A77961) SoC bindings.
 
 Applied to
 
@@ -53,8 +49,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: imx: Fix freeing of DMA channels if spi_bitbang_start() fails
-      commit: 45f0bbdafd26d6d772172563b30bff561cec9133
+[1/1] spi: renesas,sh-msiof: Add r8a77961 support
+      commit: aef161f4f1b829e91c4aaaac75c2b8fcdbc033fc
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
