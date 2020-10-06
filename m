@@ -2,54 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 971AB284913
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Oct 2020 11:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F99F284923
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Oct 2020 11:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726078AbgJFJN3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Oct 2020 05:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S1725939AbgJFJNk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Oct 2020 05:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726117AbgJFJNT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Oct 2020 05:13:19 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19FFC0613E0
-        for <linux-spi@vger.kernel.org>; Tue,  6 Oct 2020 02:13:17 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id i12so5813304ota.5
-        for <linux-spi@vger.kernel.org>; Tue, 06 Oct 2020 02:13:17 -0700 (PDT)
+        with ESMTP id S1726330AbgJFJNf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Oct 2020 05:13:35 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE650C0613D1
+        for <linux-spi@vger.kernel.org>; Tue,  6 Oct 2020 02:13:33 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id db4so7589245qvb.4
+        for <linux-spi@vger.kernel.org>; Tue, 06 Oct 2020 02:13:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8dDgYnCSpFzq6wD68V8dBs1dGtEohkus4tfFLo0MV6k=;
-        b=mMV78gRfUiTX0Fhq7sbtPeAZE51FANqXe2ffb+yEjr5QoeawgMMwQ8XSrhilmLvHtx
-         sEQF9fUq5Cmu8qOzxjbqa7RQXLkqpoqkoe++HcWkcaLYHbckkwjq/ue7xT3XAD7Uwx43
-         V06RGxgjHInxMdw3DBkk+/9rjGYrV+FnbFAksujQ3/k0njBC0ztFm62WAFNts1zyT9yx
-         oCohLIW+tNgNLvhP4H4CyiMr4WGBCs1Zex5WjzDVN9v47A0drQeaNuCYVRG5QCA6OMto
-         TQSAPGix4TPbAEDvrfDxLrnk+h7EjMNps8LmL2KLypfVwnIUdvEC6slFmF9jTy6w85lq
-         wAsw==
+        bh=9zZ3JqKuAucMkJsBK3uQ6oqn08Q8o246NeeOkBUzIpE=;
+        b=sl5DvJTU8XoKckrDy72v6SE14TnVpy4Bt91zBzW0shyY1MAQ6mAh44/03XDifpnVyT
+         4w+72PUsHJIIJhKHPRrCT8pTCi2CZ3lYrznO931Zy9GGzbJgV3AbLMDW/WTkvZw1ySi0
+         xZ8mKac9WB616FWJmzh+4pR4DO2W+qMrWvhETvIhmdmS6svN/TirR+Lk59vHi5nED0Fw
+         UNsL0wfC4tJEer6UJgLfY8iJyldfPPnH6zruIDXY8NS9LaxnxiZNZZ15iF6VLc8jtGT7
+         kw77Swrlk5F0D0JlHVpGszmJH8RyljctW41ctPimXYx2UDZ6rbS2tZM9fINpQJUVuEtk
+         CGiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8dDgYnCSpFzq6wD68V8dBs1dGtEohkus4tfFLo0MV6k=;
-        b=nc/jfEDPpW1Io3ZYmKodr1NrofKanM7Wb3emyEaFBb78ipWskyAJNKshAtiekP9pHI
-         BhKAIDSgW6md3p79sDQkRC12SIdoK+kGQNt92MkxB3UA8yM9WBo5nAJDuUG6xXt7Mb2K
-         mVKIKeIN7Wq0WRVXr+afMrYP3NJO/rPCUuYq5xoMnBCW7Y3Dz3qsi8j6WwnxwtLOTZ0d
-         +E5sWg/CUdTruBM28gEtlUWuhn9+Cut+7V0YN8aWIu+s23P/WhlpWwxO65HSoUFTVQEE
-         Bman3Qycanbhn3ihpt187IAuJEgl0JUi3ICy3ScflFTupB3kyhkbES57d98oTe8YVTl+
-         82Aw==
-X-Gm-Message-State: AOAM533Vkwr5gHxesW3+xxc6/NK1jCi3TtNdtzKnRd3lObpYE3XfEiEX
-        B4CUI2tm1R58FFcQjRoyAd/evbDviphfL/D5sZ+8QbiIBX7Rkw==
-X-Google-Smtp-Source: ABdhPJyShwqC7yW6UgNo8q98koC+vDiOR29TMFNqADEMu067y863m4dqGu1r37N7vNMGC6BIcV2u4BNvWr4WQc/Y4R4=
-X-Received: by 2002:ab0:130a:: with SMTP id g10mr2309765uae.100.1601975596602;
- Tue, 06 Oct 2020 02:13:16 -0700 (PDT)
+        bh=9zZ3JqKuAucMkJsBK3uQ6oqn08Q8o246NeeOkBUzIpE=;
+        b=N2zWk8t0kwvPOZGqrSxPHhXC0jPb8Ex8C1Kj5CeTPyPtu9E2M4hziR0watWjZ4+rR2
+         ZQ2uDq8Yzo1CFc91jbpSyLGnEScOTxRSLspQKRVimu+E5fa7HqQAVRMyLLDaxk8KYEvv
+         OP7hVZTvKgYlG81Cg1u+DYj1E/jH7aLOEHszqnTzKaAYIDC4QD8s7NhcNMeBUNRYPrjF
+         vWiWosqWw1DwB6BBF/R0NzJnuN3e1w3gqLCI5l1/IVVRVsdl4ASjbwqbnJrbi6bPI5J3
+         RMRvX6zf0R9qC2wCN+eRwSbxxr3Pb3BjVqdfP7TCYeR3XkMW5UGO693+ldDW6GeEfetO
+         QeBQ==
+X-Gm-Message-State: AOAM531xvYc6XlfA1PlviWjrDO1//VBLivedk3MiwIhjvHcOOajGmqBF
+        7O33J3stCnT8M9vJKE1xWlorKYPgy5qYRFpZL9RtG1gI9LYpUw==
+X-Google-Smtp-Source: ABdhPJw+U5yOHue/Ytd8RPqMjT92IYE0mZoO7yO1YIY/4s+p2JNLru501tVYMlY3tURTLHPZrBHXQO8va9HmuomgCis=
+X-Received: by 2002:a67:6b07:: with SMTP id g7mr2713184vsc.48.1601975612161;
+ Tue, 06 Oct 2020 02:13:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-2-robh@kernel.org>
-In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-5-robh@kernel.org>
+In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 6 Oct 2020 11:12:39 +0200
-Message-ID: <CAPDyKFqMic9_3OBvSWrdrXonDjeC+8kjDobTunijxvL6gYDPjQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
+Date:   Tue, 6 Oct 2020 11:12:55 +0200
+Message-ID: <CAPDyKFoxg_i8tcRjV_htv9s1Z=gxYzJtxPAnCqRR9gzR2hkG0w@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
+ in common schemas
 To:     Rob Herring <robh@kernel.org>
 Cc:     DTML <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -122,33 +123,25 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 On Mon, 5 Oct 2020 at 20:38, Rob Herring <robh@kernel.org> wrote:
 >
-> This doesn't yet do anything in the tools, but make it explicit so we can
-> check either 'unevaluatedProperties' or 'additionalProperties' is present
-> in schemas.
->
-> 'unevaluatedProperties' is appropriate when including another schema (via
-> '$ref') and all possible properties and/or child nodes are not
-> explicitly listed in the schema with the '$ref'.
->
-> This is in preparation to add a meta-schema to check for missing
-> 'unevaluatedProperties' or 'additionalProperties'. This has been a
-> constant source of review issues.
+> In order to add meta-schema checks for additional/unevaluatedProperties
+> being present, all schema need to make this explicit. As common/shared
+> schema are included by other schemas, they should always allow for
+> additionalProperties.
 >
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
 
 [...]
 
->  .../devicetree/bindings/mmc/amlogic,meson-mx-sdhc.yaml       | 2 ++
->  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml        | 2 ++
->  Documentation/devicetree/bindings/mmc/ingenic,mmc.yaml       | 2 ++
->  Documentation/devicetree/bindings/mmc/owl-mmc.yaml           | 2 ++
->  Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml  | 2 ++
->  Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml         | 2 ++
->  .../devicetree/bindings/mmc/socionext,uniphier-sd.yaml       | 2 ++
->  Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml  | 2 ++
+>  Documentation/devicetree/bindings/mmc/mmc-controller.yaml    | 2 ++
+>  .../devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml     | 2 ++
+>  Documentation/devicetree/bindings/mtd/nand-controller.yaml   | 2 ++
 
-For mmc:
+[...]
+
+>  Documentation/devicetree/bindings/power/power-domain.yaml    | 2 ++
+
+For mmc and power-domain:
 
 Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
