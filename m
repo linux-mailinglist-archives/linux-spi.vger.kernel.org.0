@@ -2,136 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013EA2847B9
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Oct 2020 09:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7522847E3
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Oct 2020 09:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727264AbgJFHni (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Oct 2020 03:43:38 -0400
-Received: from mail-oo1-f66.google.com ([209.85.161.66]:45394 "EHLO
-        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbgJFHnf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Oct 2020 03:43:35 -0400
-Received: by mail-oo1-f66.google.com with SMTP id h8so2944257ooc.12;
-        Tue, 06 Oct 2020 00:43:33 -0700 (PDT)
+        id S1726181AbgJFHyP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Oct 2020 03:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgJFHyO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Oct 2020 03:54:14 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C5AC061755
+        for <linux-spi@vger.kernel.org>; Tue,  6 Oct 2020 00:54:13 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id i3so1220513pjz.4
+        for <linux-spi@vger.kernel.org>; Tue, 06 Oct 2020 00:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pn/wc+bv9MvSQdOJW1Jb3BA5CiEn9SyA0DgRDMi+3Ec=;
+        b=jnrqiy+PEyHmqOdKQpRiNZc2B9pj0yNj+q0J+7yu6pjJe84nEEIajU6P/iv+lcG2ps
+         taqxtHaEfZK3j9uFREtuzmFl9eapXiQoVBg+/2BKtvE+Jv32UnZbwSdg+tQhYilVE1pB
+         N9LaZlZ+o0439ZNk6c5/WIr4MphQ9cz5+AFXw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LzRJVHcc4AOcRIg5DtD/82Z3g3zvHdupm81fE1K+lIM=;
-        b=BW/5PAt2AJgMD9SfH/QsesYXt+U/6bJFbJQJfG5sxIYovIOzcyQ6gF2bIj00iMfQ8d
-         RZygqQIpMNr1c+c+L666giDhaIvxt5bpg7pDbrKAdRYbskhePtOFUFbeCsi0PR6i9hri
-         ukWIrXxRgbSvImT6J1AG3aaltDe/P34wE+52dYRr/0L4r82SfI/cnWcILSJRt6MC4EFH
-         SLfakT9+lnXcfJoqT4igN3gNVxCTnXPonal2wWndqUtrEghaWXsLvLlSScDMWEnpjS0m
-         HDh/nWOTCWl2WQupa64z+xozEO0bj2+IfqFYzSW5VUxjh8t+/MDCnCUK5icpBh4CnM7+
-         knFw==
-X-Gm-Message-State: AOAM531AZ0jK25lmTr78zk4FeDlzxsf7eKFhghkWNIuZSDrAmrWiyT8O
-        jhv9FD23b84uzn6+4x0NIIkF/ZddD/1VaqeSXVk=
-X-Google-Smtp-Source: ABdhPJyU6RRQM46ugWdopDgtkhgi7iGduwzWS1jU+uDheEg5pvon8IztULtlGUyDWuzb6A77GTJ3kgcTOraYuvM5h0M=
-X-Received: by 2002:a4a:4f17:: with SMTP id c23mr2343959oob.11.1601970213208;
- Tue, 06 Oct 2020 00:43:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pn/wc+bv9MvSQdOJW1Jb3BA5CiEn9SyA0DgRDMi+3Ec=;
+        b=gRVW5YeovWLveHREGpamui4ytzoMdfiYHYT3fxOFebVUJP/7Y7tN3PD35edu3p1cbq
+         YW/+AcSun6svblGwF3QLpWPJyqZUCTv2DXf/L6h3zk8Hi8+iZJxu+oryrwGkI4/ZLyfz
+         3UBxXEr22IBe8/jdxXeyNz+lcQVYKznNf9n+xQvIzxh4uSHiEZmZnCNsmMpvD6h/XTQm
+         fXOBCBu4OpJqLX8Ml8GdEIGadf1KtW1KPp+aAYl/+m4L67lqoiFpFyRJSBdb90gGV+w5
+         dnJUn+NrMBZROHoa1igmWn3ozmRgcNkv9kcElbdCgyPhzHKC8y8loQ0UnF3SgoSI6XQU
+         IPwg==
+X-Gm-Message-State: AOAM533w088OXpP+JSJl7RJmBI19+wAEtpMPjnGN3V8Z5aIXl5JH+vzO
+        MBBAeY4NhtZz5Ge8yT367uHLpg==
+X-Google-Smtp-Source: ABdhPJx5OPq6K6XkaaIZsYsK+H0mb4/hLwZpnh5ySm23bU5vcYbJ2YvYJEYeLvpJ7zXkxVXimWHMpw==
+X-Received: by 2002:a17:90a:a101:: with SMTP id s1mr3014013pjp.220.1601970853389;
+        Tue, 06 Oct 2020 00:54:13 -0700 (PDT)
+Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
+        by smtp.gmail.com with ESMTPSA id r6sm2545147pfq.11.2020.10.06.00.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2020 00:54:12 -0700 (PDT)
+From:   Ikjoon Jang <ikjn@chromium.org>
+To:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Cc:     Ikjoon Jang <ikjn@chromium.org>,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v5 0/4] spi: spi-mtk-nor: Add mt8192 support.
+Date:   Tue,  6 Oct 2020 15:54:01 +0800
+Message-Id: <20201006075405.11658-1-ikjn@chromium.org>
+X-Mailer: git-send-email 2.28.0.806.g8561365e88-goog
 MIME-Version: 1.0
-References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-5-robh@kernel.org>
-In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Oct 2020 09:43:22 +0200
-Message-ID: <CAMuHMdVfNE_vLgmCEH7-cat_OasxxZ958WMDUmaFi8PbbEvbaA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
- in common schemas
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-can@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Oct 5, 2020 at 8:39 PM Rob Herring <robh@kernel.org> wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As common/shared
-> schema are included by other schemas, they should always allow for
-> additionalProperties.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+This patchset adds 36bit dma address and power management
+supports for mt8192-nor.
 
->  Documentation/devicetree/bindings/bus/simple-pm-bus.yaml     | 2 ++
+Changes in v5:
+- Rebase from merge conflict
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Changes in v4:
+- Drop two patches from a list, addressed by an another series
+- Fix 0-day ci 'shift-count-overflow' warning
 
-Gr{oetje,eeting}s,
+Changes in v3:
+- Fix a bugfix of v2 in checking spi memory operation.
+- split read_dma function into two (normal/bounce)
+- Support 7bytes generic spi xfer
 
-                        Geert
+Changes in v2:
+- Add power management support
+- Fix bugs in checking spi memory operation.
+- use dma_alloc_coherent for allocating bounce buffer
+- code cleanups
+
+Ikjoon Jang (4):
+  dt-bindings: spi: add mt8192-nor compatible string
+  spi: spi-mtk-nor: use dma_alloc_coherent() for bounce buffer
+  spi: spi-mtk-nor: support 36bit dma addressing
+  spi: spi-mtk-nor: Add power management support
+
+ .../bindings/spi/mediatek,spi-mtk-nor.yaml    |   1 +
+ drivers/spi/spi-mtk-nor.c                     | 211 ++++++++++++------
+ 2 files changed, 148 insertions(+), 64 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.28.0.806.g8561365e88-goog
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
