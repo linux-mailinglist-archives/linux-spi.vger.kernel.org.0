@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 875DD286BA4
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Oct 2020 01:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB52286BD7
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Oct 2020 01:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728304AbgJGXz3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Oct 2020 19:55:29 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:45740 "EHLO
+        id S1729003AbgJGX4d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Oct 2020 19:56:33 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:45760 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728413AbgJGXz2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Oct 2020 19:55:28 -0400
+        with ESMTP id S1728480AbgJGXza (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 7 Oct 2020 19:55:30 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 4D85E803202B;
-        Wed,  7 Oct 2020 23:55:21 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 314F480305E2;
+        Wed,  7 Oct 2020 23:55:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CyI8ydeZGgvZ; Thu,  8 Oct 2020 02:55:20 +0300 (MSK)
+        with ESMTP id sEVfmK9HCbR4; Thu,  8 Oct 2020 02:55:21 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Mark Brown <broonie@kernel.org>,
         Serge Semin <fancer.lancer@gmail.com>
@@ -31,9 +31,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         "wuxu . wu" <wuxu.wu@huawei.com>, Feng Tang <feng.tang@intel.com>,
         Rob Herring <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 06/21] spi: dw: Update Rx sample delay in the config function
-Date:   Thu, 8 Oct 2020 02:54:55 +0300
-Message-ID: <20201007235511.4935-7-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v4 07/21] spi: dw: Add DW SPI controller config structure
+Date:   Thu, 8 Oct 2020 02:54:56 +0300
+Message-ID: <20201007235511.4935-8-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20201007235511.4935-1-Sergey.Semin@baikalelectronics.ru>
 References: <20201007235511.4935-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -44,53 +44,143 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Rx sample delay can be SPI device specific, and should be synchronously
-initialized with the rest of the communication and peripheral device
-related controller setups. So let's move the Rx-sample delay setup into
-the DW APB SSI configuration update method.
+DW APB SSI controller can be used by the two SPI core interfaces:
+traditional SPI transfers and SPI memory operations. The controller needs
+to be accordingly configured at runtime when the corresponding operations
+are executed. In order to do that for the both interfaces from a single
+function we introduce a new data wrapper for the transfer mode, data
+width, number of data frames (for the automatic data transfer) and the bus
+frequency. It will be used by the update_config() method to tune the DW
+APB SSI up.
+
+The update_config() method is made exported to be used not only by the DW
+SPI core driver, but by the glue layer drivers too. This will be required
+in a coming further commit.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 ---
- drivers/spi/spi-dw-core.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/spi/spi-dw-core.c | 29 +++++++++++++++++------------
+ drivers/spi/spi-dw.h      | 10 ++++++++++
+ 2 files changed, 27 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index cc341080d1a4..12080ea2ad84 100644
+index 12080ea2ad84..01ab743bf177 100644
 --- a/drivers/spi/spi-dw-core.c
 +++ b/drivers/spi/spi-dw-core.c
-@@ -294,13 +294,18 @@ static void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
- 		spi_set_clk(dws, clk_div);
- 		dws->current_freq = speed_hz;
- 	}
-+
-+	/* Update RX sample delay if required */
-+	if (dws->cur_rx_sample_dly != chip->rx_sample_dly) {
-+		dw_writel(dws, DW_SPI_RX_SAMPLE_DLY, chip->rx_sample_dly);
-+		dws->cur_rx_sample_dly = chip->rx_sample_dly;
-+	}
+@@ -20,10 +20,8 @@
+ #include <linux/debugfs.h>
+ #endif
+ 
+-/* Slave spi_dev related */
++/* Slave spi_device related */
+ struct chip_data {
+-	u8 tmode;		/* TR/TO/RO/EEPROM */
+-
+ 	u32 cr0;
+ 	u32 rx_sample_dly;	/* RX sample delay */
+ };
+@@ -266,8 +264,8 @@ static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)
+ 	return cr0;
  }
+ 
+-static void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+-				 struct spi_transfer *transfer)
++void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
++			  struct dw_spi_cfg *cfg)
+ {
+ 	struct chip_data *chip = spi_get_ctldata(spi);
+ 	u32 cr0 = chip->cr0;
+@@ -275,19 +273,22 @@ static void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+ 	u16 clk_div;
+ 
+ 	/* CTRLR0[ 4/3: 0] Data Frame Size */
+-	cr0 |= (transfer->bits_per_word - 1);
++	cr0 |= (cfg->dfs - 1);
+ 
+ 	if (!(dws->caps & DW_SPI_CAP_DWC_SSI))
+ 		/* CTRLR0[ 9:8] Transfer Mode */
+-		cr0 |= chip->tmode << SPI_TMOD_OFFSET;
++		cr0 |= cfg->tmode << SPI_TMOD_OFFSET;
+ 	else
+ 		/* CTRLR0[11:10] Transfer Mode */
+-		cr0 |= chip->tmode << DWC_SSI_CTRLR0_TMOD_OFFSET;
++		cr0 |= cfg->tmode << DWC_SSI_CTRLR0_TMOD_OFFSET;
+ 
+ 	dw_writel(dws, DW_SPI_CTRLR0, cr0);
+ 
++	if (cfg->tmode == SPI_TMOD_EPROMREAD || cfg->tmode == SPI_TMOD_RO)
++		dw_writel(dws, DW_SPI_CTRLR1, cfg->ndf ? cfg->ndf - 1 : 0);
++
+ 	/* Note DW APB SSI clock divider doesn't support odd numbers */
+-	clk_div = (DIV_ROUND_UP(dws->max_freq, transfer->speed_hz) + 1) & 0xfffe;
++	clk_div = (DIV_ROUND_UP(dws->max_freq, cfg->freq) + 1) & 0xfffe;
+ 	speed_hz = dws->max_freq / clk_div;
+ 
+ 	if (dws->current_freq != speed_hz) {
+@@ -301,11 +302,17 @@ static void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+ 		dws->cur_rx_sample_dly = chip->rx_sample_dly;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(dw_spi_update_config);
  
  static int dw_spi_transfer_one(struct spi_controller *master,
  		struct spi_device *spi, struct spi_transfer *transfer)
  {
  	struct dw_spi *dws = spi_controller_get_devdata(master);
--	struct chip_data *chip = spi_get_ctldata(spi);
++	struct dw_spi_cfg cfg = {
++		.tmode = SPI_TMOD_TR,
++		.dfs = transfer->bits_per_word,
++		.freq = transfer->speed_hz,
++	};
  	u8 imask = 0;
  	u16 txlevel = 0;
  	int ret;
-@@ -326,12 +331,6 @@ static int dw_spi_transfer_one(struct spi_controller *master,
- 	if (master->can_dma && master->can_dma(master, spi, transfer))
- 		dws->dma_mapped = master->cur_msg_mapped;
+@@ -323,7 +330,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
  
--	/* Update RX sample delay if required */
--	if (dws->cur_rx_sample_dly != chip->rx_sample_dly) {
--		dw_writel(dws, DW_SPI_RX_SAMPLE_DLY, chip->rx_sample_dly);
--		dws->cur_rx_sample_dly = chip->rx_sample_dly;
--	}
+ 	spi_enable_chip(dws, 0);
+ 
+-	dw_spi_update_config(dws, spi, transfer);
++	dw_spi_update_config(dws, spi, &cfg);
+ 
+ 	transfer->effective_speed_hz = dws->current_freq;
+ 
+@@ -409,8 +416,6 @@ static int dw_spi_setup(struct spi_device *spi)
+ 	 */
+ 	chip->cr0 = dw_spi_prepare_cr0(dws, spi);
+ 
+-	chip->tmode = SPI_TMOD_TR;
 -
- 	/* For poll mode just disable all interrupts */
- 	spi_mask_intr(dws, 0xff);
+ 	return 0;
+ }
  
+diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+index c02351cf2f99..2a2346438564 100644
+--- a/drivers/spi/spi-dw.h
++++ b/drivers/spi/spi-dw.h
+@@ -111,6 +111,14 @@ enum dw_ssi_type {
+ #define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
+ #define DW_SPI_CAP_DWC_SSI		BIT(2)
+ 
++/* Slave spi_transfer/spi_mem_op related */
++struct dw_spi_cfg {
++	u8 tmode;
++	u8 dfs;
++	u32 ndf;
++	u32 freq;
++};
++
+ struct dw_spi;
+ struct dw_spi_dma_ops {
+ 	int (*dma_init)(struct device *dev, struct dw_spi *dws);
+@@ -249,6 +257,8 @@ static inline void spi_shutdown_chip(struct dw_spi *dws)
+ }
+ 
+ extern void dw_spi_set_cs(struct spi_device *spi, bool enable);
++extern void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
++				 struct dw_spi_cfg *cfg);
+ extern int dw_spi_add_host(struct device *dev, struct dw_spi *dws);
+ extern void dw_spi_remove_host(struct dw_spi *dws);
+ extern int dw_spi_suspend_host(struct dw_spi *dws);
 -- 
 2.27.0
 
