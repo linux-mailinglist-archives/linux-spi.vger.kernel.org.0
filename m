@@ -2,122 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC7128CF47
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Oct 2020 15:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85EC28D1D9
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Oct 2020 18:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727245AbgJMNjk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Oct 2020 09:39:40 -0400
-Received: from mailout12.rmx.de ([94.199.88.78]:48441 "EHLO mailout12.rmx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728819AbgJMNjk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 13 Oct 2020 09:39:40 -0400
-Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailout12.rmx.de (Postfix) with ESMTPS id 4C9c932nCCzRw7v;
-        Tue, 13 Oct 2020 15:39:35 +0200 (CEST)
-Received: from mta.arri.de (unknown [217.111.95.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by kdin02.retarus.com (Postfix) with ESMTPS id 4C9c822gQxz2TTMg;
-        Tue, 13 Oct 2020 15:38:42 +0200 (CEST)
-Received: from n95hx1g2.localnet (192.168.54.60) by mta.arri.de
- (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 13 Oct
- 2020 13:58:03 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-CC:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: imx: Revert "spi: imx: enable runtime pm support"
-Date:   Tue, 13 Oct 2020 13:58:02 +0200
-Message-ID: <1687325.7ZoAM7eIpP@n95hx1g2>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <20201012140753.GF12463@pengutronix.de>
-References: <20201009042738.26602-1-ceggers@arri.de> <6367849.hfWVFoRi9M@n95hx1g2> <20201012140753.GF12463@pengutronix.de>
+        id S1731528AbgJMQJP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Oct 2020 12:09:15 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:55502 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731478AbgJMQJO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 13 Oct 2020 12:09:14 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id CAE464F4C12807697711;
+        Wed, 14 Oct 2020 00:09:06 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.177.134) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 14 Oct 2020 00:08:58 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Rob Herring <robh+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Dan Murphy <dmurphy@ti.com>,
+        linux-leds <linux-leds@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 0/6] fix all errors except one reported by dt_binding_check
+Date:   Wed, 14 Oct 2020 00:08:39 +0800
+Message-ID: <20201013160845.1772-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [192.168.54.60]
-X-RMX-ID: 20201013-153852-4C9c822gQxz2TTMg-0@kdin02
-X-RMX-SOURCE: 217.111.95.66
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.177.134]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Monday, 12 October 2020, 16:07:53 CEST, Sascha Hauer wrote:
-> On Fri, Oct 09, 2020 at 09:48:29AM +0200, Christian Eggers wrote:
-> 
-> 525c9e5a32bd introduced pm_runtime support for the i.MX SPI driver. With
-> this pm_runtime is used to bring up the clocks initially. When CONFIG_PM
-> is disabled the clocks are no longer enabled and the driver doesn't work
-> anymore. Fix this by enabling the clocks in the probe function and
-> telling pm_runtime that the device is active using
-> pm_runtime_set_active().
-> 
-> Fixes: 525c9e5a32bd spi: imx: enable runtime pm support
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->  drivers/spi/spi-imx.c | 23 +++++++++++++++--------
->  1 file changed, 15 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-> index 38a5f1304cec..c796e937dc6a 100644
-> --- a/drivers/spi/spi-imx.c
-> +++ b/drivers/spi/spi-imx.c
-> @@ -1674,15 +1674,18 @@ static int spi_imx_probe(struct platform_device
-> *pdev) goto out_master_put;
->  	}
-> 
-> -	pm_runtime_enable(spi_imx->dev);
-> +	ret = clk_prepare_enable(spi_imx->clk_per);
-> +	if (ret)
-> +		goto out_master_put;
-> +
-> +	ret = clk_prepare_enable(spi_imx->clk_ipg);
-> +	if (ret)
-> +		goto out_put_per;
-> +
->  	pm_runtime_set_autosuspend_delay(spi_imx->dev, MXC_RPM_TIMEOUT);
->  	pm_runtime_use_autosuspend(spi_imx->dev);
-> -
-> -	ret = pm_runtime_get_sync(spi_imx->dev);
-> -	if (ret < 0) {
-> -		dev_err(spi_imx->dev, "failed to enable clock\n");
-> -		goto out_runtime_pm_put;
-> -	}
-> +	pm_runtime_set_active(spi_imx->dev);
-> +	pm_runtime_enable(spi_imx->dev);
-> 
->  	spi_imx->spi_clk = clk_get_rate(spi_imx->clk_per);
->  	/*
-> @@ -1719,8 +1722,12 @@ static int spi_imx_probe(struct platform_device
-> *pdev)
-> 
->  out_runtime_pm_put:
->  	pm_runtime_dont_use_autosuspend(spi_imx->dev);
-> -	pm_runtime_put_sync(spi_imx->dev);
-> +	pm_runtime_set_suspended(&pdev->dev);
->  	pm_runtime_disable(spi_imx->dev);
-> +
-> +	clk_disable_unprepare(spi_imx->clk_ipg);
-> +out_put_per:
-> +	clk_disable_unprepare(spi_imx->clk_per);
->  out_master_put:
->  	spi_master_put(master);
+When people add multiple or common YAML files, they usually perform a full
+dt_binding_check. Unfortunately, some YAML files cannot pass the self-check.
+The errors or warning are listed below. It is necessary to eliminate them,
+so that people's time and energy are not wasted every time when execute
+comprehensive dt_binding_check.
 
-With this patch applied, my system (!CONFIG_PM) doesn't freeze anymore when 
-the spi-imx driver is loaded.
+This error is fixed by Patch 1:
+/root/leizhen/linux-next/Documentation/devicetree/bindings/leds/leds-lp55xx.example.dt.yaml: led-controller@33: multi-led@2:color:0:0: 9 is greater than the maximum of 8
+        From schema: /root/leizhen/linux-next/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
 
-Thank you very much!
+These errors are fixed by Patch 2:
+/root/leizhen/linux-next/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.example.dt.yaml: ec@0: 'typec' does not match any of the regexes: 'pinctrl-[0-9]+'
+        From schema: /root/leizhen/linux-next/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+/root/leizhen/linux-next/Documentation/devicetree/bindings/extcon/extcon-usbc-cros-ec.example.dt.yaml: cros-ec@0: 'extcon0', 'extcon1' do not match any of the regexes: 'pinctrl-[0-9]+'
+        From schema: /root/leizhen/linux-next/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+/root/leizhen/linux-next/Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.example.dt.yaml: cros-ec@0: 'ec-pwm' does not match any of the regexes: 'pinctrl-[0-9]+'
+        From schema: /root/leizhen/linux-next/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+/root/leizhen/linux-next/Documentation/devicetree/bindings/regulator/google,cros-ec-regulator.example.dt.yaml: ec@0: '#address-cells', '#size-cells', 'regulator@0' do not match any of the regexes: 'pinctrl-[0-9]+'
+        From schema: /root/leizhen/linux-next/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+/root/leizhen/linux-next/Documentation/devicetree/bindings/sound/google,cros-ec-codec.example.dt.yaml: cros-ec@0: '#address-cells', '#size-cells', 'ec-codec@10500000' do not match any of the regexes: 'pinctrl-[0-9]+'
+        From schema: /root/leizhen/linux-next/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
 
-Tested-by: Christian Eggers <ceggers@arri.de>
-[tested for !CONFIG_PM only]
-Cc: stable@vger.kernel.org  # 5.9.x only
+These errors are fixed by Patch 3 and 4:
+Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.example.dts:21.13-30.11: Warning (spi_bus_bridge): /example-0/spi: incorrect #address-cells for SPI bus
+Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.example.dts:21.13-30.11: Warning (spi_bus_bridge): /example-0/spi: incorrect #size-cells for SPI bus
+Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'spi_bus_bridge'
 
+Patch 5 and 6 fix the dtbs_check errors detected by Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
+arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
+  also defined at arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts:225.7-237.3
+arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
+  also defined at arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts:225.7-237.3
+arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed prerequisite 'spi_bus_bridge'
+arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
+  also defined at arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts:225.7-237.3
+arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
+  also defined at arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts:225.7-237.3
+arch/arm/boot/dts/mmp2-olpc-xo-1-75.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'spi_bus_bridge'
+/root/leizhen/linux-next/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dt.yaml: slave: 'cmd-gpios' is a required property
+        From schema: /root/leizhen/linux-next/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
+/root/leizhen/linux-next/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dt.yaml: slave: 'cmd-gpio' does not match any of the regexes: 'pinctrl-[0-9]+'
+        From schema: /root/leizhen/linux-next/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
+
+I have no good idea for this one, so leave it.
+Documentation/devicetree/bindings/pci/xilinx-versal-cpm.example.dts:43.62-47.30: Warning (pci_device_reg): /example-0/versal/pcie@fca10000/interrupt-controller: missing PCI reg property
+
+
+Zhen Lei (6):
+  dt-bindings: leds: choose correct color value of multi-led
+  dt-bindings: mfd: google,cros-ec: explicitly allow additional
+    properties
+  spi: dt-bindings: spi-controller: explicitly require
+    #address-cells=<0> for slave mode
+  dt-bindings: misc: explicitly add #address-cells for slave mode
+  ARM: dts: mmp2-olpc-xo-1-75: explicitly add #address-cells=<0> for
+    slave mode
+  dt-bindings: misc: correct the property name cmd-gpios to cmd-gpio
+
+ .../devicetree/bindings/leds/leds-lp55xx.yaml        |  2 +-
+ .../devicetree/bindings/mfd/google,cros-ec.yaml      |  2 +-
+ .../devicetree/bindings/misc/olpc,xo1.75-ec.yaml     |  8 +++++---
+ .../devicetree/bindings/spi/spi-controller.yaml      | 20 ++++++++++++++------
+ arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts              |  2 +-
+ 5 files changed, 22 insertions(+), 12 deletions(-)
+
+-- 
+1.8.3
 
 
