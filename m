@@ -2,80 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF7A28D824
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Oct 2020 03:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E4F28DC6C
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Oct 2020 11:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727145AbgJNBww (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Oct 2020 21:52:52 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:15211 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725874AbgJNBww (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 13 Oct 2020 21:52:52 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 6ED6BDA8A616D0B13FFA;
-        Wed, 14 Oct 2020 09:52:47 +0800 (CST)
-Received: from [127.0.0.1] (10.174.177.134) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Wed, 14 Oct 2020
- 09:52:43 +0800
-Subject: Re: [PATCH 2/6] dt-bindings: mfd: google,cros-ec: explicitly allow
- additional properties
-To:     Dan Murphy <dmurphy@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        "Pavel Machek" <pavel@ucw.cz>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20201013160845.1772-1-thunder.leizhen@huawei.com>
- <20201013160845.1772-3-thunder.leizhen@huawei.com>
- <d2457f7a-625f-b046-9cfa-8f920de07377@ti.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <0a3e1b00-df93-8c81-6ecb-355bd7693ab6@huawei.com>
-Date:   Wed, 14 Oct 2020 09:52:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1729064AbgJNJJq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Oct 2020 05:09:46 -0400
+Received: from first.geanix.com ([116.203.34.67]:53572 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728922AbgJNJJj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 14 Oct 2020 05:09:39 -0400
+X-Greylist: delayed 411 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Oct 2020 05:09:38 EDT
+Received: from zen.localdomain (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id 05D16F41496;
+        Wed, 14 Oct 2020 09:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1602666165; bh=aUqpmVAAjoLv03iR1lJWlTTuq3Ra9mS4JJvcrMl80zQ=;
+        h=From:To:Cc:Subject:Date;
+        b=QcYSlGx8F2sB7kmz03FAAv1M7+kRXre/GguSc7U4PJJ8+IIe8Dh94yJ53k2fI8XYF
+         a5sRm/MWvWXFODTETN/HObcw8Ol5k5UQj6SeZhQCd9dbs+ErMBzpluhuYnI5SEuBxi
+         2P9tzE8NSOIiraaIhoufXXsiwr18KzNjHCMtYrvmoySnSNG4NzaYKjOwGKBXftW7Ae
+         rT/J80Cy/ANS8+OrZKg2oIyC5xEhwAPbT2b6gy0GKro/p+diILKXmUGqBaPdpeqNiM
+         EgCmac227s8YKodVqSBuCE70rwYm+4tPgvPBOaCcu3AvI/H5hl/AqLHG6cWhO7cn20
+         Q1+83MApLj99w==
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Scott Branden <sbranden@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] spi: bcm2835: fix gpio cs level inversion
+Date:   Wed, 14 Oct 2020 11:02:30 +0200
+Message-Id: <20201014090230.2706810-1-martin@geanix.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <d2457f7a-625f-b046-9cfa-8f920de07377@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.134]
-X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on ff3d05386fc5
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The work on improving gpio chip-select in spi core, and the following
+fixes, has caused the bcm2835 spi driver to use wrong levels. Fix this
+by simply removing level handling in the bcm2835 driver, and let the
+core do its work.
 
+Fixes: 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH setting when using native and GPIO CS")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
+---
+ drivers/spi/spi-bcm2835.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-On 2020/10/14 1:53, Dan Murphy wrote:
-> Zhen
-> 
-> On 10/13/20 11:08 AM, Zhen Lei wrote:
->> There are so many properties have not been described in this yaml file,
->> and a lot of errors will be reported. Especially, some yaml files such as
->> google,cros-ec-typec.yaml, extcon-usbc-cros-ec.yaml can not pass the
->> self-check, because of the examples. So temporarily allow additional
->> properties to keep the comprehensive dt_binding_check result clean.
-> 
-> My preference is to fix the binding to pass the checks and not just work around the issues. Working around the issues may mean the issues never get fixed.
-
-I agree with your first sentence：don't just work around the issues. But these
-errors are so annoying. Hope someone can add the description of the missing properties.
-I'm not familiar with this module anyway.
-
-And I don't fully agree with your last sentence. After all, the main properties are listed,
-and the ones that are not listed should be minor ones.
-
-> 
-> Dan
-> 
-> 
-> .
-> 
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index b87116e9b413..9b6ba94fe878 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1259,18 +1259,6 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 	if (!chip)
+ 		return 0;
+ 
+-	/*
+-	 * Retrieve the corresponding GPIO line used for CS.
+-	 * The inversion semantics will be handled by the GPIO core
+-	 * code, so we pass GPIOD_OUT_LOW for "unasserted" and
+-	 * the correct flag for inversion semantics. The SPI_CS_HIGH
+-	 * on spi->mode cannot be checked for polarity in this case
+-	 * as the flag use_gpio_descriptors enforces SPI_CS_HIGH.
+-	 */
+-	if (of_property_read_bool(spi->dev.of_node, "spi-cs-high"))
+-		lflags = GPIO_ACTIVE_HIGH;
+-	else
+-		lflags = GPIO_ACTIVE_LOW;
+ 	spi->cs_gpiod = gpiochip_request_own_desc(chip, 8 - spi->chip_select,
+ 						  DRV_NAME,
+ 						  lflags,
+-- 
+2.28.0
 
