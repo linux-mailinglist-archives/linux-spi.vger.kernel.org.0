@@ -2,106 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B52A228E215
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Oct 2020 16:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B7828E778
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Oct 2020 21:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726019AbgJNOSl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Oct 2020 10:18:41 -0400
-Received: from bmailout2.hostsharing.net ([83.223.78.240]:50933 "EHLO
-        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgJNOSk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Oct 2020 10:18:40 -0400
-X-Greylist: delayed 564 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Oct 2020 10:18:40 EDT
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id BD1232800B483;
-        Wed, 14 Oct 2020 16:09:12 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id A41F418764F; Wed, 14 Oct 2020 16:09:12 +0200 (CEST)
-Date:   Wed, 14 Oct 2020 16:09:12 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S1726596AbgJNTkj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Oct 2020 15:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbgJNTkj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Oct 2020 15:40:39 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C6AC061755;
+        Wed, 14 Oct 2020 12:40:39 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id l16so697120eds.3;
+        Wed, 14 Oct 2020 12:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lRMFdmQbJ5RahqqzJGdCdnXN6VjpqgrM3/AzM/NSqzs=;
+        b=jIqFCyoO2QgQafSwkepnJAuwDFR6kAlaIBpaKFCSVsIbm3U4IRiuFqrWQK/UuJuETb
+         XW2xwse1CbW9hDpK+y5urtEIaZSCf7qMQrl9yeCUxzRp4wJ+eEXlyB5V1keoqkR9VICq
+         TG9/oUhge2if8N+DcKMuPw8NQ8ahJiNGsgTwszuj+RxPOh1sYgLssl8BqzU4osOn9Fri
+         D5G+QvbdTQfx9C/ueCNid5ERfp5VRa6FtjTUt6Q6D2GZf32NtMXbH4UPx+JwR5bM660S
+         /DxCztcH4G3ITPSHS/9slHk1kjkfhBCE4XYEEo2GTS1O4pRihlFmFjrApnCle24ATl+A
+         V6mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lRMFdmQbJ5RahqqzJGdCdnXN6VjpqgrM3/AzM/NSqzs=;
+        b=Yda9yJAnrD+2VdzwI3IM2kuVYB5cAsafkhuU0jC/kjXnfADVEgNAZlUzshkKq4msc6
+         Sd9UXjH94LBnSFE0/3UuHWo9aOcqbIJRR+xLWHIEQqCnBDPttNXE1fbVap/4SnUQSgns
+         2tcwN7DDQgGwGJQrP0is5GwCKojL31r2QOYoV8ZNivlH/aY7ZVSqHsvjvtT9aggA/gfO
+         2cFAo0eeL0Brjn6PkRfOliN5kavP1yQVNgom50W2Pwvv+EDCJ+RkAmfbRAYngeVma8/8
+         mmwZECcpcjlpErQOKuYGu5AKkXQo2NNlM4nz8bSOs1mK1yzrxWAvYa+lkKwObBVc1nw+
+         oP5Q==
+X-Gm-Message-State: AOAM533o6Z3uA0k3TxPlpT1eJm0leW7T438tqZqiJOT+okyKilPkprMy
+        gYLQhjXKxAv+3C/TJEQccEA=
+X-Google-Smtp-Source: ABdhPJwTlkidij8uzIBt8afLdP/uVjlMjEX+Qn4s95C4fiJXGrEN7a7XveWZy1IMuR1OgdD8M0N45A==
+X-Received: by 2002:a50:ee19:: with SMTP id g25mr622258eds.160.1602704437708;
+        Wed, 14 Oct 2020 12:40:37 -0700 (PDT)
+Received: from skbuf ([188.26.174.215])
+        by smtp.gmail.com with ESMTPSA id x2sm258225edr.65.2020.10.14.12.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2020 12:40:37 -0700 (PDT)
+Date:   Wed, 14 Oct 2020 22:40:35 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
         Mark Brown <broonie@kernel.org>
 Subject: Re: Use after free in bcm2835_spi_remove()
-Message-ID: <20201014140912.GB24850@wunner.de>
+Message-ID: <20201014194035.ukduovokggu37uba@skbuf>
 References: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
+ <20201014140912.GB24850@wunner.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201014140912.GB24850@wunner.de>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 04:48:42PM -0700, Florian Fainelli wrote:
-> With KASAN now working on ARM 32-bit, I was able to get the following
-> trace upon reboot which invokes bcm2835_spi_shutdown() calling
-> bcm2835_spi_remove(), the same can be triggered by doing a driver unbind:
+On Wed, Oct 14, 2020 at 04:09:12PM +0200, Lukas Wunner wrote:
+> Apparently the problem is that spi_unregister_controller() drops the
+> last ref on the controller, causing it to be freed, and afterwards we
+> access the controller's private data, which is part of the same
+> allocation as struct spi_controller:
+>
+> bcm2835_spi_remove()
+>   spi_unregister_controller()
+>     device_unregister()
+>       put_device()
+>         spi_controller_release()  #  spi_master_class.dev_release()
+> 	  kfree(ctlr)
+>   bcm2835_dma_release(ctlr, bs)
+>   ...
 
-Thank you for the report.  Apparently the problem is that
-spi_unregister_controller() drops the last ref on the controller,
-causing it to be freed, and afterwards we access the controller's
-private data, which is part of the same allocation as
-struct spi_controller:
-
-bcm2835_spi_remove()
-  spi_unregister_controller()
-    device_unregister()
-      put_device()
-        spi_controller_release()  #  spi_master_class.dev_release()
-	  kfree(ctlr)
-  bcm2835_dma_release(ctlr, bs)
-  ...
-
-However, when I submitted commit 9dd277ff92d0, I double-checked that
-the kfree() happens after bcm2835_spi_remove() has finished and I
-even wrote in the commit message:
-
-   "Note that
-    the struct spi_controller as well as the driver-private data are not
-    freed until after bcm2835_spi_remove() has finished, so accessing them
-    is safe."
-
-I'm puzzled now that it doesn't work as intended.  I do not see any
-recent commits which changed the behavior, so I must have made a
-mistake and missed something.
-
-The below patch should fix the issue.  Could you verify that?
-Unfortunately I do not have access to a RasPi currently.
-
-An alternative to this patch would be a devm function which acquires
-a ref on the spi controller on ->probe() and automatically releases it
-after ->remove() has finished.  This could be used by other SPI drivers
-as well.
-
-Thanks,
-
-Lukas
-
--- >8 --
-
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index 41986ac..5254fda 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -1377,6 +1377,7 @@ static int bcm2835_spi_remove(struct platform_device *pdev)
- 
- 	bcm2835_debugfs_remove(bs);
- 
-+	spi_controller_get(ctlr);
- 	spi_unregister_controller(ctlr);
- 
- 	bcm2835_dma_release(ctlr, bs);
-@@ -1386,6 +1387,7 @@ static int bcm2835_spi_remove(struct platform_device *pdev)
- 		   BCM2835_SPI_CS_CLEAR_RX | BCM2835_SPI_CS_CLEAR_TX);
- 
- 	clk_disable_unprepare(bs->clk);
-+	spi_controller_put(ctlr);
- 
- 	return 0;
- }
-
+Also see these threads:
+https://lore.kernel.org/linux-spi/20200922112241.GO4792@sirena.org.uk/T/#t
+https://lore.kernel.org/linux-spi/270b94fd1e546d0c17a735c1f55500e58522da04.camel@suse.de/T/#u
+And here's how _not_ to fix it:
+https://lore.kernel.org/linux-spi/160088764365.36195.16185348610086043664.b4-ty@kernel.org/T/#t
+At least without some care to not break other things:
+https://lore.kernel.org/linux-spi/20200928080432.GC11648@pengutronix.de/T/#t
