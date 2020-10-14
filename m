@@ -2,118 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6FD28E1AE
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Oct 2020 15:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52A228E215
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Oct 2020 16:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388653AbgJNNuW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Oct 2020 09:50:22 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:41202 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726680AbgJNNuV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Oct 2020 09:50:21 -0400
-Received: by mail-oi1-f195.google.com with SMTP id q136so3267447oic.8;
-        Wed, 14 Oct 2020 06:50:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=T+lXWYZNK3Q/86DTyObhFOK72+nQRALeWr13HjYTpkA=;
-        b=BUXkctr/cJA0sCd2qSPqBRJOSYhxRU5OKyr8UlMbAgTlXsGZJfEDNBCo6HaJAmVlyC
-         3ssELGWk9iDW8aj2UIFagrn/0NqcVpYIiFR4c68YmZ4Orwl6fgt7YEI8qVcoMs1yAigz
-         kQzuxYW3/B4SjqEdKkgwi5mnWGnkJXkZwThN0pVH+Xjpvn7aK9iGa80SGyjTzEH4g2dw
-         /KHo5UcSzvZnSO98fuh8oDPMep7DBwWzGl0c6Tz/EDyb8fqUB3MLCBVcg6IbrvYpsk3l
-         vApGAc7l0fCb2HsgIJ5qhImJH69DZwKN/xmY6L985bYWyvuZGeKmLu8un8V2j20dtNWf
-         tosg==
-X-Gm-Message-State: AOAM531qYP8Dfm4uejRmO7mSklg17BNV5EUfh7lSUfdoADbg2v9F+qZW
-        BFxe/Yfld6dzi8BU0o2/AA==
-X-Google-Smtp-Source: ABdhPJwBwzjfoCwN+5C7fXVadoxI98n+WgVzrNbDfrKV3BDTP85OLoUwNnnp9bI2euXzw7/77YIU8Q==
-X-Received: by 2002:aca:54c2:: with SMTP id i185mr2099742oib.169.1602683420675;
-        Wed, 14 Oct 2020 06:50:20 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h5sm1211010otb.11.2020.10.14.06.50.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 06:50:19 -0700 (PDT)
-Received: (nullmailer pid 1576100 invoked by uid 1000);
-        Wed, 14 Oct 2020 13:50:19 -0000
-Date:   Wed, 14 Oct 2020 08:50:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Dan Murphy <dmurphy@ti.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
+        id S1726019AbgJNOSl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Oct 2020 10:18:41 -0400
+Received: from bmailout2.hostsharing.net ([83.223.78.240]:50933 "EHLO
+        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbgJNOSk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Oct 2020 10:18:40 -0400
+X-Greylist: delayed 564 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Oct 2020 10:18:40 EDT
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id BD1232800B483;
+        Wed, 14 Oct 2020 16:09:12 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id A41F418764F; Wed, 14 Oct 2020 16:09:12 +0200 (CEST)
+Date:   Wed, 14 Oct 2020 16:09:12 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/6] dt-bindings: misc: correct the property name
- cmd-gpios to cmd-gpio
-Message-ID: <20201014135019.GA1563910@bogus>
-References: <20201013160845.1772-1-thunder.leizhen@huawei.com>
- <20201013160845.1772-7-thunder.leizhen@huawei.com>
- <bda5f620-7140-51fb-fadd-6ebd3c0db935@ti.com>
- <4f5f9b55-9fad-9318-82d4-6b258643738b@huawei.com>
+        Mark Brown <broonie@kernel.org>
+Subject: Re: Use after free in bcm2835_spi_remove()
+Message-ID: <20201014140912.GB24850@wunner.de>
+References: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4f5f9b55-9fad-9318-82d4-6b258643738b@huawei.com>
+In-Reply-To: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 09:29:26AM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2020/10/14 1:32, Dan Murphy wrote:
-> > Zhen
-> > 
-> > On 10/13/20 11:08 AM, Zhen Lei wrote:
-> >> The property name used in arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts is
-> >> cmd-gpio.
-> >>
-> >> arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts:235:
-> >> cmd-gpio = <&gpio 155 GPIO_ACTIVE_HIGH>;
-> >>
-> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >> ---
-> >>   Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml | 6 +++---
-> >>   1 file changed, 3 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-> >> index b3c45c046ba5e37..c7a06a9650db2ed 100644
-> >> --- a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-> >> +++ b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-> >> @@ -24,7 +24,7 @@ properties:
-> >>     compatible:
-> >>       const: olpc,xo1.75-ec
-> >>   -  cmd-gpios:
-> >> +  cmd-gpio:
-> > 
-> > Preference is gpios not gpio. But Rob H accept or reject
-> 
-> Look at the search result below. It seems that the driver have not been merged into mainline.
+On Tue, Oct 13, 2020 at 04:48:42PM -0700, Florian Fainelli wrote:
+> With KASAN now working on ARM 32-bit, I was able to get the following
+> trace upon reboot which invokes bcm2835_spi_shutdown() calling
+> bcm2835_spi_remove(), the same can be triggered by doing a driver unbind:
 
-Yes, in drivers/platform/olpc/olpc-xo175-ec.c.
+Thank you for the report.  Apparently the problem is that
+spi_unregister_controller() drops the last ref on the controller,
+causing it to be freed, and afterwards we access the controller's
+private data, which is part of the same allocation as
+struct spi_controller:
 
-Your mistake is the gpiod api takes just 'cmd' as the GPIO core handles 
-both forms.
+bcm2835_spi_remove()
+  spi_unregister_controller()
+    device_unregister()
+      put_device()
+        spi_controller_release()  #  spi_master_class.dev_release()
+	  kfree(ctlr)
+  bcm2835_dma_release(ctlr, bs)
+  ...
 
-> But the property name is really used as cmd-gpio at mmp2-olpc-xo-1-75.dts:235, I don't think
-> the mmp2-olpc-xo-1-75.dts can make a mistake. Otherwise, the driver will not work properly.
-> Meanwhile, Both names cmd-gpios and cmd-gpio seem to be in use. But I prefer cmd-gpio, after
-> all, only one gpio is assigned now. The motorola,cmd-gpios add "s" because it contains 3 gpio.
+However, when I submitted commit 9dd277ff92d0, I double-checked that
+the kfree() happens after bcm2835_spi_remove() has finished and I
+even wrote in the commit message:
 
-The preference is it is always '-gpios' just like it's always 
-'interrupts' or 'clocks'.
+   "Note that
+    the struct spi_controller as well as the driver-private data are not
+    freed until after bcm2835_spi_remove() has finished, so accessing them
+    is safe."
 
-However, whether to change this is really up to the OLPC folks. Given 
-the driver has always supported both forms, it should be okay to change 
-the dts. Though there could be other users besides the kernel.
+I'm puzzled now that it doesn't work as intended.  I do not see any
+recent commits which changed the behavior, so I must have made a
+mistake and missed something.
 
-Rob
+The below patch should fix the issue.  Could you verify that?
+Unfortunately I do not have access to a RasPi currently.
+
+An alternative to this patch would be a devm function which acquires
+a ref on the spi controller on ->probe() and automatically releases it
+after ->remove() has finished.  This could be used by other SPI drivers
+as well.
+
+Thanks,
+
+Lukas
+
+-- >8 --
+
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 41986ac..5254fda 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1377,6 +1377,7 @@ static int bcm2835_spi_remove(struct platform_device *pdev)
+ 
+ 	bcm2835_debugfs_remove(bs);
+ 
++	spi_controller_get(ctlr);
+ 	spi_unregister_controller(ctlr);
+ 
+ 	bcm2835_dma_release(ctlr, bs);
+@@ -1386,6 +1387,7 @@ static int bcm2835_spi_remove(struct platform_device *pdev)
+ 		   BCM2835_SPI_CS_CLEAR_RX | BCM2835_SPI_CS_CLEAR_TX);
+ 
+ 	clk_disable_unprepare(bs->clk);
++	spi_controller_put(ctlr);
+ 
+ 	return 0;
+ }
+
