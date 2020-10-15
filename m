@@ -2,96 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250AD28EC5F
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Oct 2020 06:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1996928ECD2
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Oct 2020 07:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgJOEqe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Oct 2020 00:46:34 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:15215 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726535AbgJOEqe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 15 Oct 2020 00:46:34 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id DCD3BC3150ACB8255FE8;
-        Thu, 15 Oct 2020 12:46:28 +0800 (CST)
-Received: from thunder-town.china.huawei.com (10.174.177.134) by
- DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 15 Oct 2020 12:46:20 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Rob Herring <robh+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Dan Murphy <dmurphy@ti.com>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
+        id S1728572AbgJOFnu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Oct 2020 01:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727397AbgJOFnu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Oct 2020 01:43:50 -0400
+X-Greylist: delayed 317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Oct 2020 22:43:50 PDT
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0ECC061755
+        for <linux-spi@vger.kernel.org>; Wed, 14 Oct 2020 22:43:50 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id ED8363000C9B0;
+        Thu, 15 Oct 2020 07:38:29 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id D141C1C023C; Thu, 15 Oct 2020 07:38:29 +0200 (CEST)
+Date:   Thu, 15 Oct 2020 07:38:29 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v2 1/1] dt-bindings: misc: add support for both property names cmd-gpios and cmd-gpio
-Date:   Thu, 15 Oct 2020 12:44:43 +0800
-Message-ID: <20201015044443.1828-2-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20201015044443.1828-1-thunder.leizhen@huawei.com>
-References: <20201015044443.1828-1-thunder.leizhen@huawei.com>
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: Re: Use after free in bcm2835_spi_remove()
+Message-ID: <20201015053829.GA2461@wunner.de>
+References: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
+ <20201014140912.GB24850@wunner.de>
+ <20201014194035.ukduovokggu37uba@skbuf>
+ <20201014202505.GF4580@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.177.134]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201014202505.GF4580@sirena.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The definition "gpio_suffixes[] = { "gpios", "gpio" }" shows that both
-property names "cmd-gpios" and "cmd-gpio" are supported. But currently
-only "cmd-gpios" is allowed in this yaml, and the name used in
-mmp2-olpc-xo-1-75.dts is cmd-gpio. As a result, the following errors is
-reported.
+[cc += Sascha]
 
-slave: 'cmd-gpios' is a required property
-slave: 'cmd-gpio' does not match any of the regexes: 'pinctrl-[0-9]+'
+On Wed, Oct 14, 2020 at 09:25:05PM +0100, Mark Brown wrote:
+> > On Wed, Oct 14, 2020 at 04:09:12PM +0200, Lukas Wunner wrote:
+> > > Apparently the problem is that spi_unregister_controller() drops the
+> > > last ref on the controller, causing it to be freed, and afterwards we
+> > > access the controller's private data, which is part of the same
+> > > allocation as struct spi_controller:
+> 
+> Right, the proposed patch is yet another way to fix the issue - it all
+> comes back to the fact that you shouldn't be using the driver data after
+> unregistering if it was allocated as part of allocating the controller.
+> This framework feature is unfortunately quite error prone.
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+How about holding a ref on the controller as long as the SPI driver
+is bound to the controller's parent device?  See below for a patch,
+compile-tested only for lack of an SPI-equipped machine.
 
-diff --git a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-index b3c45c046ba5e37..dd549380a085709 100644
---- a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-+++ b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-@@ -24,15 +24,21 @@ properties:
-   compatible:
-     const: olpc,xo1.75-ec
+Makes sense or dumb idea?
+
+If this approach is deemed to be a case of "midlayer fallacy",
+we could alternatively do this in a library function which drivers
+opt-in to.  Or, given that the majority of drivers seems to be affected,
+make it the default and allow drivers to opt-out.
+
+-- >8 --
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 0cab239..5afa275 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2399,6 +2399,11 @@ static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
+ extern struct class spi_slave_class;	/* dummy */
+ #endif
  
--  cmd-gpios:
-+  spi-cpha: true
++static void __spi_controller_put(void *ctlr)
++{
++	spi_controller_put(ctlr);
++}
 +
-+patternProperties:
-+  "^cmd-gpio[s]?$":
-     description: GPIO uspecifier of the CMD pin
-     maxItems: 1
+ /**
+  * __spi_alloc_controller - allocate an SPI master or slave controller
+  * @dev: the controller, possibly using the platform_bus
+@@ -2414,6 +2419,7 @@ static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
+  * This call is used only by SPI controller drivers, which are the
+  * only ones directly touching chip registers.  It's how they allocate
+  * an spi_controller structure, prior to calling spi_register_controller().
++ * The structure is accessible as long as the SPI driver is bound to @dev.
+  *
+  * This must be called from context that can sleep.
+  *
+@@ -2429,6 +2435,7 @@ struct spi_controller *__spi_alloc_controller(struct device *dev,
+ {
+ 	struct spi_controller	*ctlr;
+ 	size_t ctlr_size = ALIGN(sizeof(*ctlr), dma_get_cache_alignment());
++	int ret;
  
--  spi-cpha: true
--
- required:
-   - compatible
--  - cmd-gpios
+ 	if (!dev)
+ 		return NULL;
+@@ -2449,6 +2456,13 @@ struct spi_controller *__spi_alloc_controller(struct device *dev,
+ 	pm_suspend_ignore_children(&ctlr->dev, true);
+ 	spi_controller_set_devdata(ctlr, (void *)ctlr + ctlr_size);
+ 
++	spi_controller_get(ctlr);
++	ret = devm_add_action(dev, __spi_controller_put, ctlr);
++	if (ret) {
++		kfree(ctlr);
++		return NULL;
++	}
 +
-+oneOf:
-+  - required:
-+      - cmd-gpio
-+  - required:
-+      - cmd-gpios
- 
- additionalProperties: false
- 
--- 
-1.8.3
-
-
+ 	return ctlr;
+ }
+ EXPORT_SYMBOL_GPL(__spi_alloc_controller);
