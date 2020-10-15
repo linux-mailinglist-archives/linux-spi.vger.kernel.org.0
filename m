@@ -2,70 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CC828F4D0
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Oct 2020 16:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE9228F553
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Oct 2020 16:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388062AbgJOOe1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Oct 2020 10:34:27 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:38472 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387589AbgJOOe1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 15 Oct 2020 10:34:27 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 4B252DB1A6D78C01F9D8;
-        Thu, 15 Oct 2020 22:34:25 +0800 (CST)
-Received: from code-website.localdomain (10.175.127.227) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 15 Oct 2020 22:34:15 +0800
-From:   yangerkun <yangerkun@huawei.com>
-To:     <sashal@kernel.org>, <gregkh@linuxfoundation.org>,
-        <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <stable@vger.kernel.org>,
-        <yangerkun@huawei.com>, <yi.zhang@huawei.com>,
-        <chenwenyong2@huawei.com>
-Subject: [PATCH 4.4.y] spi: unbinding slave before calling spi_destroy_queue
-Date:   Thu, 15 Oct 2020 22:38:34 +0800
-Message-ID: <20201015143834.1136778-1-yangerkun@huawei.com>
-X-Mailer: git-send-email 2.25.4
+        id S2389067AbgJOOym (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Oct 2020 10:54:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388348AbgJOOym (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 15 Oct 2020 10:54:42 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602773682;
+        bh=yFwUiDTQCWn4oO+HyQGrXZ/37RFpwrYTUYMU0Um6h1c=;
+        h=Subject:From:Date:To:From;
+        b=Thd22s7q+sx04sKrKCv2IFsXkjGoMBuAGFTxvRQrhCQ410+CruZDkiLjNCUmyOhv9
+         bj00R2MwXbePXylzd48Ot1FT0hqSfCI/feTJYFIzy9jGXENsbgZA52f+2WV7bve6S+
+         lccz6Ep4//mt24GwpbHKZGOB8Sl1O14Sfrsl07O8=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <160277368223.9314.14644802045097761016.git-patchwork-housekeeping@kernel.org>
+Date:   Thu, 15 Oct 2020 14:54:42 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We make a mistake while backport 'commit 84855678add8 ("spi: Fix
-controller unregister order")'. What we should do is call __unreigster
-for each device before spi_destroy_queue. This problem exist in
-linux-4.4.y/linux-4.9.y.
+Latest series: [v1] spi: unbinding slave before calling spi_destroy_queue (2020-10-15T14:38:34)
+  Superseding: [v1] spi: unbinding slave before calling spi_destroy_queue (2020-10-15T14:29:51):
+    spi: unbinding slave before calling spi_destroy_queue
 
-Signed-off-by: yangerkun <yangerkun@huawei.com>
----
- drivers/spi/spi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index fe03771da5124..18031b755c376 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1957,13 +1957,13 @@ static int __unregister(struct device *dev, void *null)
-  */
- void spi_unregister_master(struct spi_master *master)
- {
-+	device_for_each_child(&master->dev, NULL, __unregister);
-+
- 	if (master->queued) {
- 		if (spi_destroy_queue(master))
- 			dev_err(&master->dev, "queue remove failed\n");
- 	}
- 
--	device_for_each_child(&master->dev, NULL, __unregister);
--
- 	mutex_lock(&board_lock);
- 	list_del(&master->list);
- 	mutex_unlock(&board_lock);
 -- 
-2.25.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
