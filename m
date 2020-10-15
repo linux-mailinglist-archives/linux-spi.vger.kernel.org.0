@@ -2,59 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7199528ECDE
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Oct 2020 07:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8589228ED42
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Oct 2020 08:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728898AbgJOFxj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Oct 2020 01:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727397AbgJOFxj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Oct 2020 01:53:39 -0400
-X-Greylist: delayed 554 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Oct 2020 22:53:39 PDT
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6189FC061755
-        for <linux-spi@vger.kernel.org>; Wed, 14 Oct 2020 22:53:39 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 7768E100FC137;
-        Thu, 15 Oct 2020 07:44:23 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 405311D5BAF; Thu, 15 Oct 2020 07:44:23 +0200 (CEST)
-Date:   Thu, 15 Oct 2020 07:44:23 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Daniel Mack <daniel@zonque.org>, kernel@pengutronix.de
-Subject: Re: [PATCH 0/6] Fix use-after-free in SPI drivers
-Message-ID: <20201015054423.GA21422@wunner.de>
-References: <20200922093228.24917-1-s.hauer@pengutronix.de>
+        id S1729524AbgJOGzQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Oct 2020 02:55:16 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:43482 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725208AbgJOGzP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 15 Oct 2020 02:55:15 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id DA764941533202C8BB5C;
+        Thu, 15 Oct 2020 14:55:11 +0800 (CST)
+Received: from [127.0.0.1] (10.174.177.134) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Thu, 15 Oct 2020
+ 14:55:10 +0800
+Subject: Re: [PATCH 2/6] dt-bindings: mfd: google,cros-ec: explicitly allow
+ additional properties
+To:     Rob Herring <robh@kernel.org>
+CC:     Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        linux-leds <linux-leds@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20201013160845.1772-1-thunder.leizhen@huawei.com>
+ <20201013160845.1772-3-thunder.leizhen@huawei.com>
+ <20201014133844.GA1555058@bogus>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <2ab384ce-9700-3673-299f-3b8ab302d387@huawei.com>
+Date:   Thu, 15 Oct 2020 14:55:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200922093228.24917-1-s.hauer@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201014133844.GA1555058@bogus>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.134]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 11:32:22AM +0200, Sascha Hauer wrote:
->   spi: bcm2835: Use devm_spi_register_controller()
->   spi: dw: Use devm_spi_register_controller()
->   spi: pxa2xx: Use devm_spi_register_controller()
 
-Sorry but NAK at least for these three patches as they re-introduce
-the issue fixed by 9dd277ff92d0, 32e5b57232c0, ca8b19d61e3f.
 
-The use-after-free is real but it needs to be addressed differently.
-Let's continue the discussion in this thread:
+On 2020/10/14 21:38, Rob Herring wrote:
+> On Wed, Oct 14, 2020 at 12:08:41AM +0800, Zhen Lei wrote:
+>> There are so many properties have not been described in this yaml file,
+>> and a lot of errors will be reported. Especially, some yaml files such as
+>> google,cros-ec-typec.yaml, extcon-usbc-cros-ec.yaml can not pass the
+>> self-check, because of the examples. So temporarily allow additional
+>> properties to keep the comprehensive dt_binding_check result clean.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> There's proper fixes for these under review.
 
-https://lore.kernel.org/linux-spi/20201015053829.GA2461@wunner.de/
+That's a good news.
 
-Thanks,
+> 
+> Rob
+> 
+> .
+> 
 
-Lukas
