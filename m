@@ -2,52 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF4828F3A6
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Oct 2020 15:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6C628F4A7
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Oct 2020 16:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729969AbgJONv0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Oct 2020 09:51:26 -0400
-Received: from edge.kilargo.pl ([77.252.52.110]:24065 "EHLO edge.kilargo.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726925AbgJONv0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 15 Oct 2020 09:51:26 -0400
-X-Greylist: delayed 421 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 09:51:15 EDT
-Received: from mail.kilargo.pl (77.252.52.107) by edge.kilargo.pl
- (77.252.52.109) with Microsoft SMTP Server (TLS) id 8.3.485.1; Thu, 15 Oct
- 2020 15:41:42 +0200
-Received: from User (185.248.12.71) by MAIL.kilargo.pl (172.22.0.36) with
- Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 15 Oct 2020 14:54:56 +0200
-Reply-To: <kim.leang2011@yahoo.com>
-From:   Kim Leang <mechanik@kilargo.pl>
-Subject: Greeting! !!
-Date:   Thu, 15 Oct 2020 15:54:59 +0300
+        id S2388133AbgJOOZr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Oct 2020 10:25:47 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:59226 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388099AbgJOOZr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 15 Oct 2020 10:25:47 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 25B96C6838B07580676D;
+        Thu, 15 Oct 2020 22:25:44 +0800 (CST)
+Received: from code-website.localdomain (10.175.127.227) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 15 Oct 2020 22:25:33 +0800
+From:   yangerkun <yangerkun@huawei.com>
+To:     <sashal@kernel.org>, <gregkh@linuxfoundation.org>,
+        <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <stable@vger.kernel.org>,
+        <yangerkun@huawei.com>, <yi.zhang@huawei.com>,
+        <chenwenyong2@huawei.com>
+Subject: [PATCH] spi: unbinding slave before calling spi_destroy_queue
+Date:   Thu, 15 Oct 2020 22:29:51 +0800
+Message-ID: <20201015142951.1133415-1-yangerkun@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <4f8e309dade94ae8bac1d709c3e7bb19@mail.kilargo.pl>
-To:     Undisclosed recipients:;
-X-Originating-IP: [185.248.12.71]
-X-ClientProxiedBy: mail.kilargo.pl (172.22.0.36) To MAIL.kilargo.pl
- (172.22.0.36)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A295AAB9B6B647163
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Greeting!
+We make a mistake while backport 'commit 84855678add8 ("spi: Fix
+controller unregister order")'. What we should do is call __unreigster
+for each device before spi_destroy_queue. This problem exist in
+linux-4.4.y/linux-4.9.y.
 
-I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
+Signed-off-by: yangerkun <yangerkun@huawei.com>
+---
+ drivers/spi/spi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index fe03771da5124..18031b755c376 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1957,13 +1957,13 @@ static int __unregister(struct device *dev, void *null)
+  */
+ void spi_unregister_master(struct spi_master *master)
+ {
++	device_for_each_child(&master->dev, NULL, __unregister);
++
+ 	if (master->queued) {
+ 		if (spi_destroy_queue(master))
+ 			dev_err(&master->dev, "queue remove failed\n");
+ 	}
+ 
+-	device_for_each_child(&master->dev, NULL, __unregister);
+-
+ 	mutex_lock(&board_lock);
+ 	list_del(&master->list);
+ 	mutex_unlock(&board_lock);
+-- 
+2.25.4
 
-The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
-
-Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
-
-Thanks and have a nice day,
-Mr. Kim Leang.
