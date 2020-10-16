@@ -2,31 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E54222901EA
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Oct 2020 11:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B562901F0
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Oct 2020 11:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405599AbgJPJcF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Oct 2020 05:32:05 -0400
-Received: from mga18.intel.com ([134.134.136.126]:24863 "EHLO mga18.intel.com"
+        id S2405701AbgJPJcQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Oct 2020 05:32:16 -0400
+Received: from mga14.intel.com ([192.55.52.115]:62030 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405570AbgJPJcF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 16 Oct 2020 05:32:05 -0400
-IronPort-SDR: K9DIYLcmJgpy1tzuC3AEmgZIp9UmAA9rB6LquPQGz/T38X+pMF8WojZbOnWIPEUwMeQmeKV/Rh
- 5tRZzAxwTvRA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="154372586"
+        id S2405578AbgJPJcJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Oct 2020 05:32:09 -0400
+IronPort-SDR: kuUCZda6NGNA0Hn88F1mdYVQMxB5lh4q6BAVIlyFKn81TaPBZVW1SUkOCzah4wiiHXZvo7FPPQ
+ bvytdQhp0KCA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="165802846"
 X-IronPort-AV: E=Sophos;i="5.77,382,1596524400"; 
-   d="scan'208";a="154372586"
+   d="scan'208";a="165802846"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 02:32:04 -0700
-IronPort-SDR: 8DUbFVb1M02M/9aChUWxIYZVHOWrggmD5GmVhn5o8VMhxbDf2hOeYV0o3kueXbwWJup2Sco6aR
- JtE2LBs8xEtA==
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 02:32:08 -0700
+IronPort-SDR: Ik2tmaDozOiVXuFkwMocSRVinIdFXhKiXihBFajVHNelbyB6V8DCcmBDdAkFcY4XtNbhB4ysEA
+ CZS2W8ABJddg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,382,1596524400"; 
-   d="scan'208";a="521115420"
+   d="scan'208";a="352136790"
 Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Oct 2020 02:32:00 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 16 Oct 2020 02:32:05 -0700
 From:   "Ramuthevar,Vadivel MuruganX" 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
 To:     vigneshr@ti.com, tudor.ambarus@microchip.com, broonie@kernel.org,
@@ -37,9 +37,9 @@ Cc:     devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
         richard@nod.at, cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
         Ramuthevar Vadivel Murugan 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
-Subject: [PATCH v1 4/6] spi: cadence-quadspi: Add QSPI support for Intel LGM SoC
-Date:   Fri, 16 Oct 2020 17:31:36 +0800
-Message-Id: <20201016093138.28871-5-vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v1 5/6] spi: cadence-quadspi: Disable the DAC for Intel LGM SoC
+Date:   Fri, 16 Oct 2020 17:31:37 +0800
+Message-Id: <20201016093138.28871-6-vadivel.muruganx.ramuthevar@linux.intel.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201016093138.28871-1-vadivel.muruganx.ramuthevar@linux.intel.com>
 References: <20201016093138.28871-1-vadivel.muruganx.ramuthevar@linux.intel.com>
@@ -49,41 +49,54 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 
-Add QSPI controller support for Intel LGM SoC.
+On Intel Lightning Mountain(LGM) SoCs QSPI controller do not use
+Direct Access Controller(DAC).
+
+This patch adds a quirk to disable the Direct Access Controller
+for data transfer instead it uses indirect data transfer.
 
 Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 ---
- drivers/spi/Kconfig               | 2 +-
- drivers/spi/spi-cadence-quadspi.c | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/spi/spi-cadence-quadspi.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index d2c976e55b8b..926da61eee5a 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -203,7 +203,7 @@ config SPI_CADENCE
- 
- config SPI_CADENCE_QUADSPI
- 	tristate "Cadence Quad SPI controller"
--	depends on OF && (ARM || ARM64 || COMPILE_TEST)
-+	depends on OF && (ARM || ARM64 || X86 || COMPILE_TEST)
- 	help
- 	  Enable support for the Cadence Quad SPI Flash controller.
- 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 40938cf3806d..d7b10c46fa70 100644
+index d7b10c46fa70..3d017b484114 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1401,6 +1401,9 @@ static const struct of_device_id cqspi_dt_ids[] = {
- 		.compatible = "ti,am654-ospi",
- 		.data = &am654_ospi,
- 	},
-+	{
-+		.compatible = "intel,lgm-qspi",
-+	},
- 	{ /* end of table */ }
+@@ -1106,6 +1106,13 @@ static void cqspi_controller_init(struct cqspi_st *cqspi)
+ 	reg |= CQSPI_REG_CONFIG_ENB_DIR_ACC_CTRL;
+ 	writel(reg, cqspi->iobase + CQSPI_REG_CONFIG);
+ 
++	/* Disable direct access controller */
++	if (!cqspi->use_direct_mode) {
++		reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
++		reg &= ~CQSPI_REG_CONFIG_ENB_DIR_ACC_CTRL;
++		writel(reg, cqspi->iobase + CQSPI_REG_CONFIG);
++	}
++
+ 	cqspi_controller_enable(cqspi, 1);
+ }
+ 
+@@ -1388,6 +1395,10 @@ static const struct cqspi_driver_platdata am654_ospi = {
+ 	.quirks = CQSPI_NEEDS_WR_DELAY,
  };
  
++static const struct cqspi_driver_platdata intel_lgm_qspi = {
++	.quirks = CQSPI_DISABLE_DAC_MODE,
++};
++
+ static const struct of_device_id cqspi_dt_ids[] = {
+ 	{
+ 		.compatible = "cdns,qspi-nor",
+@@ -1403,6 +1414,7 @@ static const struct of_device_id cqspi_dt_ids[] = {
+ 	},
+ 	{
+ 		.compatible = "intel,lgm-qspi",
++		.data = &intel_lgm_qspi,
+ 	},
+ 	{ /* end of table */ }
+ };
 -- 
 2.11.0
 
