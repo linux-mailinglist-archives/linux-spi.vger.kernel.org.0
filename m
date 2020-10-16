@@ -2,126 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B620F2906FE
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Oct 2020 16:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2826A29098E
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Oct 2020 18:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406069AbgJPOOE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Oct 2020 10:14:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52542 "EHLO mail.kernel.org"
+        id S2410757AbgJPQSy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Oct 2020 12:18:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395282AbgJPOOD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 16 Oct 2020 10:14:03 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S2410751AbgJPQSx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Oct 2020 12:18:53 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7339321527;
-        Fri, 16 Oct 2020 14:14:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2C4B6207BC;
+        Fri, 16 Oct 2020 16:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602857642;
-        bh=/Wy1dqxW7oC6Qye976pyOHB3NEyzVajEMIVxWnNoiWI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GvfirHosPoQlrZ9dHvK/MiR7ld0pnZ1gIqpgnPDdlppchrxHv71dL73zET/FkkRbX
-         tpqynbY8hwuhIjWFSMFkHjBO9r32xo2deIPkDs7E/9OfxpB5pjmz47kNzImHNVhmWP
-         Gky4SSBzFgYnYuDePGs3dGZiWfdwrzyOS730N2ug=
-Received: by mail-oi1-f180.google.com with SMTP id h10so2597082oie.5;
-        Fri, 16 Oct 2020 07:14:02 -0700 (PDT)
-X-Gm-Message-State: AOAM5332Zt9j9+/2e3ssCOcDCWxTZ2BFwwWZRU0xSKaHVO8SRA8RNBNQ
-        it5k5E9hTlDFu4inXIjklq1Mv4BeEcGzLm2SBg==
-X-Google-Smtp-Source: ABdhPJwvkvemmhvQLSwCQm4gpIYMftfka7WMIAmWLyZGAJSnJ52MchXcPRDmVK7L+Va3qkbuIITfwhAYwzEjNkMAFBA=
-X-Received: by 2002:aca:4c52:: with SMTP id z79mr2691947oia.147.1602857641568;
- Fri, 16 Oct 2020 07:14:01 -0700 (PDT)
+        s=default; t=1602865132;
+        bh=HtlLolkp5hR0VMPg+WOgBQp8RKSusLTKuW8c46vYJgs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p8k+vRIxvh61Veg2Pz/2x2LvRjPmAfLnbPI2iNgowenQOJ70GBvDl+swG2TyuLs0h
+         D+QDG8CafsI9cukSFGGmGitp8e6auM5WFBJ29IH0hdsCDqQdFX5DltteNIyGoF0Ti2
+         zbfPzBFxz4B0GShvjBu7klo7MtA9rVfVJtaOaw0Y=
+Date:   Fri, 16 Oct 2020 17:18:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     vigneshr@ti.com, tudor.ambarus@microchip.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        miquel.raynal@bootlin.com, simon.k.r.goldschmidt@gmail.com,
+        dinguyen@kernel.org, richard@nod.at, cheol.yong.kim@intel.com,
+        qi-ming.wu@intel.com
+Subject: Re: [PATCH v1 2/6] dt-bindings: spi: Convert cadence-quadspi.txt to
+ cadence-quadspi.yaml
+Message-ID: <20201016161844.GH5274@sirena.org.uk>
+References: <20201016093138.28871-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201016093138.28871-3-vadivel.muruganx.ramuthevar@linux.intel.com>
 MIME-Version: 1.0
-References: <20201013160845.1772-1-thunder.leizhen@huawei.com>
- <20201013160845.1772-7-thunder.leizhen@huawei.com> <bda5f620-7140-51fb-fadd-6ebd3c0db935@ti.com>
- <4f5f9b55-9fad-9318-82d4-6b258643738b@huawei.com> <20201014135019.GA1563910@bogus>
- <49b680f8-d7d7-8ea3-894c-73cbfacc5ba4@huawei.com>
-In-Reply-To: <49b680f8-d7d7-8ea3-894c-73cbfacc5ba4@huawei.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 16 Oct 2020 09:13:49 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJKOeZybxnu+Z2ugaGwebrnbtmJ8n0st-=n3NbAf9_pyw@mail.gmail.com>
-Message-ID: <CAL_JsqJKOeZybxnu+Z2ugaGwebrnbtmJ8n0st-=n3NbAf9_pyw@mail.gmail.com>
-Subject: Re: [PATCH 6/6] dt-bindings: misc: correct the property name
- cmd-gpios to cmd-gpio
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Dan Murphy <dmurphy@ti.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bygAmIonOAIqBxQB"
+Content-Disposition: inline
+In-Reply-To: <20201016093138.28871-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Cookie: Pournelle must die!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 10:23 PM Leizhen (ThunderTown)
-<thunder.leizhen@huawei.com> wrote:
->
->
->
-> On 2020/10/14 21:50, Rob Herring wrote:
-> > On Wed, Oct 14, 2020 at 09:29:26AM +0800, Leizhen (ThunderTown) wrote:
-> >>
-> >>
-> >> On 2020/10/14 1:32, Dan Murphy wrote:
-> >>> Zhen
-> >>>
-> >>> On 10/13/20 11:08 AM, Zhen Lei wrote:
-> >>>> The property name used in arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts is
-> >>>> cmd-gpio.
-> >>>>
-> >>>> arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts:235:
-> >>>> cmd-gpio = <&gpio 155 GPIO_ACTIVE_HIGH>;
-> >>>>
-> >>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >>>> ---
-> >>>>   Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml | 6 +++---
-> >>>>   1 file changed, 3 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-> >>>> index b3c45c046ba5e37..c7a06a9650db2ed 100644
-> >>>> --- a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-> >>>> +++ b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-> >>>> @@ -24,7 +24,7 @@ properties:
-> >>>>     compatible:
-> >>>>       const: olpc,xo1.75-ec
-> >>>>   -  cmd-gpios:
-> >>>> +  cmd-gpio:
-> >>>
-> >>> Preference is gpios not gpio. But Rob H accept or reject
-> >>
-> >> Look at the search result below. It seems that the driver have not been merged into mainline.
-> >
-> > Yes, in drivers/platform/olpc/olpc-xo175-ec.c.
-> >
-> > Your mistake is the gpiod api takes just 'cmd' as the GPIO core handles
-> > both forms.
->
-> OK, thanks for your information. I have found that it defined by gpio_suffixes[].
->
-> >
-> >> But the property name is really used as cmd-gpio at mmp2-olpc-xo-1-75.dts:235, I don't think
-> >> the mmp2-olpc-xo-1-75.dts can make a mistake. Otherwise, the driver will not work properly.
-> >> Meanwhile, Both names cmd-gpios and cmd-gpio seem to be in use. But I prefer cmd-gpio, after
-> >> all, only one gpio is assigned now. The motorola,cmd-gpios add "s" because it contains 3 gpio.
-> >
-> > The preference is it is always '-gpios' just like it's always
-> > 'interrupts' or 'clocks'.
-> >
-> > However, whether to change this is really up to the OLPC folks. Given
-> > the driver has always supported both forms, it should be okay to change
-> > the dts. Though there could be other users besides the kernel.
->
-> If both "cmd-gpios" and "cmd-gpio" are supported, should we use enum to list both
-> of them in yaml? or use patternProperties?
 
-No, we pick one or the other. Given Lubomir is okay with a dts change,
-we should use just 'cmd-gpios'.
+--bygAmIonOAIqBxQB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+On Fri, Oct 16, 2020 at 05:31:34PM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel=
+=2Ecom>
+>=20
+> Convert the cadence-quadspi.txt documentation to cadence-quadspi.yaml
+> remove the cadence-quadspi.txt from Documentation/devicetree/bindings/spi/
+
+Please make YAML conversions the last thing in any patch series -
+there's sometimes a backlog on reviews as the DT maintainers are very
+busy so this means that delays with them don't hold the rest of the
+series up.
+
+--bygAmIonOAIqBxQB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+Jx+MACgkQJNaLcl1U
+h9Dndgf/WIBohsik4TAsHbT7NjLwWhhyd6itL+7pmlPnRG87WCHo6txvKu/HYUxr
+dgYts7F7r8iGhaXdSgFVybwbdDOYPKMClFPAwDulQKt/ieAm86VS35Wu9i4hsgx8
+hsRg3aF7GsYTqqkMHRjVGPUxLiGfIbEHzG87WGVQVpSIdwwS8tubDD1sIUiQ6NaI
+szsC8tP5EMyz2aR+hsAXReAl3H3X/EWZkAiQLzqF40+DIb4r9ZTI7jvH256kHba0
+nfnsbFLq+N1hh5yNnbcRYARtusmhbuYRJN3qI3cFw8remiBsWXzVrAJFPhreCMrw
+2bWhyivezbTpl0HPqc+ZO+SUSDOWvg==
+=eZL+
+-----END PGP SIGNATURE-----
+
+--bygAmIonOAIqBxQB--
