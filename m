@@ -2,31 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B562901F0
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Oct 2020 11:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107502901F1
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Oct 2020 11:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405701AbgJPJcQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S2405764AbgJPJcQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Fri, 16 Oct 2020 05:32:16 -0400
-Received: from mga14.intel.com ([192.55.52.115]:62030 "EHLO mga14.intel.com"
+Received: from mga07.intel.com ([134.134.136.100]:44810 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405578AbgJPJcJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 16 Oct 2020 05:32:09 -0400
-IronPort-SDR: kuUCZda6NGNA0Hn88F1mdYVQMxB5lh4q6BAVIlyFKn81TaPBZVW1SUkOCzah4wiiHXZvo7FPPQ
- bvytdQhp0KCA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="165802846"
+        id S2405685AbgJPJcO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Oct 2020 05:32:14 -0400
+IronPort-SDR: v3iy7ApjClUBPxbRgfuVF0SH3NYbxCyBkPDy7TSIABhVrw3eSNWb40au6LAg6bf0fbODlWnAWO
+ XK3mPzW8i0xg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="230763033"
 X-IronPort-AV: E=Sophos;i="5.77,382,1596524400"; 
-   d="scan'208";a="165802846"
+   d="scan'208";a="230763033"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 02:32:08 -0700
-IronPort-SDR: Ik2tmaDozOiVXuFkwMocSRVinIdFXhKiXihBFajVHNelbyB6V8DCcmBDdAkFcY4XtNbhB4ysEA
- CZS2W8ABJddg==
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 02:32:12 -0700
+IronPort-SDR: Mp6Tp/RETcAlV94DqN0Aos0Zaq8oC3zpLNY589c/nNqmrGOFmO/hSoZd8NsJSSjHbdFJzrYj5Q
+ LNNcHfajz46g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,382,1596524400"; 
-   d="scan'208";a="352136790"
+   d="scan'208";a="522175941"
 Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Oct 2020 02:32:05 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 16 Oct 2020 02:32:09 -0700
 From:   "Ramuthevar,Vadivel MuruganX" 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
 To:     vigneshr@ti.com, tudor.ambarus@microchip.com, broonie@kernel.org,
@@ -37,9 +37,9 @@ Cc:     devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
         richard@nod.at, cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
         Ramuthevar Vadivel Murugan 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
-Subject: [PATCH v1 5/6] spi: cadence-quadspi: Disable the DAC for Intel LGM SoC
-Date:   Fri, 16 Oct 2020 17:31:37 +0800
-Message-Id: <20201016093138.28871-6-vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v1 6/6] spi: cadence-quadspi: Add multi-chipselect support for Intel LGM SoC
+Date:   Fri, 16 Oct 2020 17:31:38 +0800
+Message-Id: <20201016093138.28871-7-vadivel.muruganx.ramuthevar@linux.intel.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201016093138.28871-1-vadivel.muruganx.ramuthevar@linux.intel.com>
 References: <20201016093138.28871-1-vadivel.muruganx.ramuthevar@linux.intel.com>
@@ -49,54 +49,67 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 
-On Intel Lightning Mountain(LGM) SoCs QSPI controller do not use
-Direct Access Controller(DAC).
-
-This patch adds a quirk to disable the Direct Access Controller
-for data transfer instead it uses indirect data transfer.
+Add multiple chipselect support for Intel LGM SoCs,
+currently QSPI-NOR and QSPI-NAND supported.
 
 Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/spi/spi-cadence-quadspi.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index d7b10c46fa70..3d017b484114 100644
+index 3d017b484114..3bf6d3697631 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1106,6 +1106,13 @@ static void cqspi_controller_init(struct cqspi_st *cqspi)
- 	reg |= CQSPI_REG_CONFIG_ENB_DIR_ACC_CTRL;
- 	writel(reg, cqspi->iobase + CQSPI_REG_CONFIG);
+@@ -38,6 +38,7 @@
  
-+	/* Disable direct access controller */
+ /* Capabilities */
+ #define CQSPI_SUPPORTS_OCTAL		BIT(0)
++#define CQSPI_SUPPORTS_MULTI_CHIPSELECT BIT(1)
+ 
+ struct cqspi_st;
+ 
+@@ -75,6 +76,7 @@ struct cqspi_st {
+ 	bool			is_decoded_cs;
+ 	u32			fifo_depth;
+ 	u32			fifo_width;
++	u32			num_chipselect;
+ 	bool			rclk_en;
+ 	u32			trigger_address;
+ 	u32			wr_delay;
+@@ -1070,6 +1072,14 @@ static int cqspi_of_get_pdata(struct cqspi_st *cqspi)
+ 		return -ENXIO;
+ 	}
+ 
 +	if (!cqspi->use_direct_mode) {
-+		reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
-+		reg &= ~CQSPI_REG_CONFIG_ENB_DIR_ACC_CTRL;
-+		writel(reg, cqspi->iobase + CQSPI_REG_CONFIG);
++		if (of_property_read_u32(np, "num-chipselect",
++					 &cqspi->num_chipselect)) {
++			dev_err(dev, "couldn't determine number of cs\n");
++			return -ENXIO;
++		}
 +	}
 +
- 	cqspi_controller_enable(cqspi, 1);
- }
+ 	cqspi->rclk_en = of_property_read_bool(np, "cdns,rclk-en");
  
-@@ -1388,6 +1395,10 @@ static const struct cqspi_driver_platdata am654_ospi = {
- 	.quirks = CQSPI_NEEDS_WR_DELAY,
- };
+ 	return 0;
+@@ -1307,6 +1317,9 @@ static int cqspi_probe(struct platform_device *pdev)
+ 	cqspi->current_cs = -1;
+ 	cqspi->sclk = 0;
  
-+static const struct cqspi_driver_platdata intel_lgm_qspi = {
-+	.quirks = CQSPI_DISABLE_DAC_MODE,
-+};
++	if (ddata->hwcaps_mask & CQSPI_SUPPORTS_MULTI_CHIPSELECT)
++		master->num_chipselect = cqspi->num_chipselect;
 +
- static const struct of_device_id cqspi_dt_ids[] = {
- 	{
- 		.compatible = "cdns,qspi-nor",
-@@ -1403,6 +1414,7 @@ static const struct of_device_id cqspi_dt_ids[] = {
- 	},
- 	{
- 		.compatible = "intel,lgm-qspi",
-+		.data = &intel_lgm_qspi,
- 	},
- 	{ /* end of table */ }
+ 	ret = cqspi_setup_flash(cqspi);
+ 	if (ret) {
+ 		dev_err(dev, "failed to setup flash parameters %d\n", ret);
+@@ -1396,6 +1409,7 @@ static const struct cqspi_driver_platdata am654_ospi = {
  };
+ 
+ static const struct cqspi_driver_platdata intel_lgm_qspi = {
++	.hwcaps_mask = CQSPI_SUPPORTS_MULTI_CHIPSELECT,
+ 	.quirks = CQSPI_DISABLE_DAC_MODE,
+ };
+ 
 -- 
 2.11.0
 
