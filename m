@@ -2,94 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D36329002B
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Oct 2020 10:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5382E2901F6
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Oct 2020 11:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404833AbgJPIu0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Oct 2020 04:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404750AbgJPIuZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Oct 2020 04:50:25 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CD6C061755;
-        Fri, 16 Oct 2020 01:50:25 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id c21so1623776ljj.0;
-        Fri, 16 Oct 2020 01:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=l2g0WanDfq/KDOh+/VcHyYkZcE8dM9/DlazBWuJO0Zw=;
-        b=JA1GNd8+HG69mXKrInW+0dljGSbVqvNVsQIb2Q4Wl6dfWRYeempCQLpYb9LCCx0tF/
-         M//4FdO2QES7EtI0dmhPQ5LSEOjx95yO8c8ekXQETgalMH9LDJJYMryKl7NQY+wTG5P3
-         Z3pwCjpROLpJoK87+6xDJczYQvv1oZgEbOt5G8VxPFs45ijMGsNewG+SUAGA2oWWhOEg
-         92Jl18IA1nE773vlSc40rcMiXogokilNW+h5C0A2yh2aFVlfYIbztIhTmG8aiZO7rErV
-         tpHdPSoVBgF27FnMYuUMLviVlfDXNiiunM4jihEFO01voqCV2NAZ4zeKCMGegQKSYFTL
-         fx8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=l2g0WanDfq/KDOh+/VcHyYkZcE8dM9/DlazBWuJO0Zw=;
-        b=uQLr0TtkaGB06LOnQNkX7CcRlBWW3Hvo8su3z8wRAhKbTIZs/IyPY4VmCIKDZreZG/
-         W0m0jo6GkNRENJCUDOsP8shU6hg5PE8CVbteB6xbLdgw3klWXyVfnTszTNA/0tUGYu1j
-         P7gR5aUGpqgZBT29niAkj8PFJDpj6FxiXRJOaaoY0ugdAC/XLdNxYxF+saTpF6AaeWgC
-         F/TWK3Kj0qL3YoYku0wNiwzpDmAOsX+ZDpQiMD6rQMMjuHagdSIYj2q26Mb7eetWZjOz
-         xj20b2srGAISUET7E2qXbBgOJIGjIU4lZ+KOme3VniFn9rdQNPgA8AsyEKp+u3qU7Cys
-         rqng==
-X-Gm-Message-State: AOAM533kT5Kn72rUU/CANuGwCyVy8dPo2Lt5ZEXAYT32O2P1GCHWHhVy
-        ylbgKOGI27WjZ4vaBtQ0KEU=
-X-Google-Smtp-Source: ABdhPJwdW1Qe4VdACE8m9bGNR8Vib87O4M73lJOUO9VrfM5U5CqccUuVSr6SJSEuRzCSoN2I39zj2g==
-X-Received: by 2002:a2e:b5c1:: with SMTP id g1mr1014660ljn.305.1602838224050;
-        Fri, 16 Oct 2020 01:50:24 -0700 (PDT)
-Received: from ubuntu-18.lintech.local ([80.87.144.137])
-        by smtp.gmail.com with ESMTPSA id 62sm607435lfk.47.2020.10.16.01.50.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 01:50:23 -0700 (PDT)
-From:   Alexander Kochetkov <al.kochet@gmail.com>
-To:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexander Kochetkov <al.kochet@gmail.com>
-Subject: [PATCH] spi: rockchip: enable autosuspend feature
-Date:   Fri, 16 Oct 2020 11:50:14 +0300
-Message-Id: <20201016085014.31667-1-al.kochet@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S2405827AbgJPJck (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Oct 2020 05:32:40 -0400
+Received: from mga05.intel.com ([192.55.52.43]:13863 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394926AbgJPJck (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Oct 2020 05:32:40 -0400
+IronPort-SDR: 8TjIjk4A7P2OdlrDY5KhLQMR42qkAOjvqliQ4TlA0YDiG+fd4SC4Lflq7i9T0v6hUB0iZpeLs3
+ pTABurC6Mo4Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="251262326"
+X-IronPort-AV: E=Sophos;i="5.77,382,1596524400"; 
+   d="scan'208";a="251262326"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 02:32:40 -0700
+IronPort-SDR: b3IAJ/inc4Ors43S6Y/XBEMgQ4ArEtssPm3w5MiKzpq4v0R6V6QLk4Y5pZOOBIPknp+UFJYS1K
+ uEiFenBq9I+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,382,1596524400"; 
+   d="scan'208";a="346481812"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Oct 2020 02:31:44 -0700
+From:   "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     vigneshr@ti.com, tudor.ambarus@microchip.com, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        simon.k.r.goldschmidt@gmail.com, dinguyen@kernel.org,
+        richard@nod.at, cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
+        "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v1 0/6] spi: cadence-quadspi: Add QSPI controller support for Intel LGM SoC
+Date:   Fri, 16 Oct 2020 17:31:32 +0800
+Message-Id: <20201016093138.28871-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If SPI is used for periodic polling any sensor, significant delays
-sometimes appear. Switching on module clocks during resume lead to delays.
-Enabling autosuspend mode causes the controller to not suspend between
-SPI transfers and the delays disappear.
+Add QSPI controller support for Intel LGM SoC.
 
-Signed-off-by: Alexander Kochetkov <al.kochet@gmail.com>
----
- drivers/spi/spi-rockchip.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Note from Vignesh(mtd subsystem maintainer):
+This series is a subset of "[PATCH v12 0/4] spi: cadence-quadspi: Add
+support for the Cadence QSPI controller" by Ramuthevar,Vadivel MuruganX
+<vadivel.muruganx.ramuthevar@linux.intel.com> that intended to move
+cadence-quadspi driver to spi-mem framework
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 2cc6d9951b52..3e77b1a79bc8 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -157,6 +157,8 @@
- 
- #define ROCKCHIP_SPI_MAX_CS_NUM			2
- 
-+#define ROCKCHIP_AUTOSUSPEND_TIMEOUT		2000
-+
- struct rockchip_spi {
- 	struct device *dev;
- 
-@@ -670,6 +672,8 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 		goto err_disable_spiclk;
- 	}
- 
-+	pm_runtime_set_autosuspend_delay(&pdev->dev, ROCKCHIP_AUTOSUSPEND_TIMEOUT);
-+	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
+Those patches were trying to accomplish too many things in a single set
+of patches and need to split into smaller patches. This is reduced
+version of above series.
+
+Changes that are intended to make migration easy are split into separate
+patches. Patches 1 to 3 drop features that cannot be supported under
+spi-mem at the moment (backward compatibility is maintained).
+Patch 4-5 are trivial cleanups. Patch 6 does the actual conversion to
+spi-mem and patch 7 moves the driver to drivers/spi folder.
+
+I have tested both INDAC mode (used by non TI platforms like Altera
+SoCFPGA) and DAC mode (used by TI platforms) on TI EVMs.
+
+Patches to move move bindings over to
+"Documentation/devicetree/bindings/spi/" directory and also conversion
+of bindig doc to YAML will be posted separately.  Support for Intel
+platform would follow that.
+
+Reference:
+	https://lkml.org/lkml/2020/6/1/50
+
+Ramuthevar Vadivel Murugan (6):
+  spi: Move cadence-quadspi.txt to Documentation/devicetree/bindings/spi
+  dt-bindings: spi: Convert cadence-quadspi.txt to cadence-quadspi.yaml
+  dt-bindings: spi: Add compatible for Intel LGM SoC
+  spi: cadence-quadspi: Add QSPI support for Intel LGM SoC
+  spi: cadence-quadspi: Disable the DAC for Intel LGM SoC
+  spi: cadence-quadspi: Add multi-chipselect support for Intel LGM SoC
+
+ .../devicetree/bindings/mtd/cadence-quadspi.txt    |  67 ---------
+ .../devicetree/bindings/spi/cadence-quadspi.yaml   | 149 +++++++++++++++++++++
+ drivers/spi/Kconfig                                |   2 +-
+ drivers/spi/spi-cadence-quadspi.c                  |  29 ++++
+ 4 files changed, 179 insertions(+), 68 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/cadence-quadspi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+
 -- 
-2.17.1
+2.11.0
 
