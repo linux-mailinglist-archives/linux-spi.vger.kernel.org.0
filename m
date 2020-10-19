@@ -2,102 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D73292D05
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Oct 2020 19:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA102293076
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Oct 2020 23:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727458AbgJSRnj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Oct 2020 13:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbgJSRnj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Oct 2020 13:43:39 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E7BC0613CE;
-        Mon, 19 Oct 2020 10:43:39 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id c21so1040714ljj.0;
-        Mon, 19 Oct 2020 10:43:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=0vrWp9pDBfjblkGus7WCqC4oVtXZHu9bkKVvgRqfJGA=;
-        b=m1F1+vh/eEYSo2a3Ta/q+PMJkFsWw6jIAD9ZPvAyKdlQH7nsz4NtpHU+wAtQ+S5ANh
-         hCSC3x0QHVKLT4Ev/fOF72amwXKpf7OxknxMD1gjZ09g7u3Pok2UsChz/pth3zgzE/na
-         DXVpTyId1naSsI8T+opQ+7ym+EcHyKWQNBfOClNGZemblk0dx3fmMkxf+m3nffM12W9y
-         dy1jnB5cEL9i5C//t/rr9XBOWp8epGqzCdziyrJLRCkzlz4IXNC4mvfzIqcjib/SB9lv
-         C9bPCqoPuhW+4cC0K/N03ZbThEMOqvQKZU9QhoTEiUHMhzOQ9iIenL5oSy+em4HoJtgx
-         G60g==
+        id S1732977AbgJSV1B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Oct 2020 17:27:01 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:37517 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727453AbgJSV1A (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Oct 2020 17:27:00 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t77so1668559oie.4;
+        Mon, 19 Oct 2020 14:27:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=0vrWp9pDBfjblkGus7WCqC4oVtXZHu9bkKVvgRqfJGA=;
-        b=Dc/2j4twOiJ0GURMYi9QlnVWrl0osYsGsLaW5TQhPgKavJHn7tnVa9uVsFU5vN3fuj
-         jZDYRxd7/+qE+2gIjDNZTWeflQ22WBfDhzsMa1WRv3WdBLioJNeHCkjTEvlOYH7g9IfX
-         9MkcRQmxB3CrZ0JutcuySP5zpDtE2DVB84lGG0evETjM8LSs1Q2UX7dKBMjOb2HtfNJf
-         CSFyP5g7cou+jcbMCdN2FQ8YFjJTfif/Am+tk5qsTU6vEBauW3TtIOeNG9Er7USTQ7He
-         aDv974DSqj2NXEw6PScTMaOtmqwp3F0RHBvDQqnuvGM0h2cavAkHhTQaQARnoAeL5g0K
-         MqsA==
-X-Gm-Message-State: AOAM533ztA4cCd6koCnymrYBP+C/v+uKksv8+bBLWHJoYdo5fsQND6N8
-        8/GiaushdhKnvzSQb6FRv9iCYienCiIZ5A==
-X-Google-Smtp-Source: ABdhPJw5tjN+paj+xrwRXiSeXGqzW2Mu5QDoGZjT9BgbnWvfsMNDjjKCtMCS+eUuFs3odSY4cub/Tw==
-X-Received: by 2002:a2e:83c9:: with SMTP id s9mr454939ljh.168.1603129417240;
-        Mon, 19 Oct 2020 10:43:37 -0700 (PDT)
-Received: from [192.168.7.20] (95-25-113-230.broadband.corbina.ru. [95.25.113.230])
-        by smtp.gmail.com with ESMTPSA id z10sm76647lfd.159.2020.10.19.10.43.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Oct 2020 10:43:36 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH] spi: spi-sun6i: implement DMA-based transfer mode
-From:   Alexander Kochetkov <al.kochet@gmail.com>
-In-Reply-To: <20201019082129.myxpxla5xwoqwldo@gilmour.lan>
-Date:   Mon, 19 Oct 2020 20:43:34 +0300
-Cc:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=42ogECBDpzk2B5hmCqC8GkPZe7LO6DVjQPS1WqgAupk=;
+        b=KdAX1eL76U9nJzL+hI7hBSVrB0uYTNm7p7m99CZCWYByM+8TIVS/EuBoEpGlLLJs7g
+         u6+bMWZ0o2noi1Y3nzpWMtDYOrjVNO55BlY0x90nTY0s9jDEyzchcWY3ZwxtJEAhugUT
+         WXXaNSTYxjrBG6sTLmF7y061AE6ld9lhOfsT5Fkg6HyGQIET4mr0fbhvEh2oiuTUq6jN
+         Y1nlKOFAlWhUuv+BjtS1ieCQ7MCskFc9txT1ZL2geu45Srq8tJo+LqPwvctTjU3Fu+ML
+         30QyJjtmdH8U9n8gsVyK7Ul/u82zpVY3wj5gEneL3/FjKbyVkCLufCgMMBOCMcONznP9
+         STCQ==
+X-Gm-Message-State: AOAM531meRiUkodNn9MpumoMZHgbZv0AKfBa/nlEmNV1SB90FhDV30ZX
+        3eSLiapcEpGNCi8yYwKnkg==
+X-Google-Smtp-Source: ABdhPJyrNwSPp+oizqlohV+Jk9na5ohcz5ZJi2MZq3Mv+DPJMT15e364TpcafQ8LYV7NQH+/2SdFag==
+X-Received: by 2002:aca:dd08:: with SMTP id u8mr1013442oig.85.1603142819915;
+        Mon, 19 Oct 2020 14:26:59 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id k51sm236334otc.46.2020.10.19.14.26.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2020 14:26:59 -0700 (PDT)
+Received: (nullmailer pid 3630412 invoked by uid 1000);
+        Mon, 19 Oct 2020 21:26:58 -0000
+Date:   Mon, 19 Oct 2020 16:26:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     simon.k.r.goldschmidt@gmail.com, richard@nod.at,
+        qi-ming.wu@intel.com, vigneshr@ti.com, linux-spi@vger.kernel.org,
+        broonie@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        cheol.yong.kim@intel.com, tudor.ambarus@microchip.com,
+        miquel.raynal@bootlin.com, dinguyen@kernel.org,
         linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4EC91DD5-5611-4B48-B6FC-00690B400584@gmail.com>
-References: <20201015154740.20825-1-al.kochet@gmail.com>
- <20201019082129.myxpxla5xwoqwldo@gilmour.lan>
-To:     Maxime Ripard <maxime@cerno.tech>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
+Subject: Re: [PATCH v1 1/6] spi: Move cadence-quadspi.txt to
+ Documentation/devicetree/bindings/spi
+Message-ID: <20201019212658.GA3630377@bogus>
+References: <20201016093138.28871-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201016093138.28871-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201016093138.28871-2-vadivel.muruganx.ramuthevar@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 16 Oct 2020 17:31:33 +0800, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> 
+> Move the Documentation/devicetree/bindings/mtd/cadence-quadspi.txt to
+> Documentation/devicetree/bindings/spi/
+> 
+> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> ---
+>  Documentation/devicetree/bindings/{mtd => spi}/cadence-quadspi.txt | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename Documentation/devicetree/bindings/{mtd => spi}/cadence-quadspi.txt (100%)
+> 
 
-
-> 19 =D0=BE=D0=BA=D1=82. 2020 =D0=B3., =D0=B2 11:21, Maxime Ripard =
-<maxime@cerno.tech> =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0):
->=20
-> Hi!
->=20
-> On Thu, Oct 15, 2020 at 06:47:40PM +0300, Alexander Kochetkov wrote:
->> DMA-based transfer will be enabled if data length is larger than FIFO =
-size
->> (64 bytes for A64). This greatly reduce number of interrupts for
->> transferring data.
->>=20
->> For smaller data size PIO mode will be used. In PIO mode whole buffer =
-will
->> be loaded into FIFO.
->>=20
->> If driver failed to request DMA channels then it fallback for PIO =
-mode.
->>=20
->> Tested on SOPINE (https://www.pine64.org/sopine/)
->>=20
->> Signed-off-by: Alexander Kochetkov <al.kochet@gmail.com>
->=20
-> Thanks for working on this, it's been a bit overdue
-
-Hi, Maxime!
-
-We did custom A64 based computation module for our product.
-Do you mean that A64 is obsolete or EOL product?
-If so, can you recommend active replacement for A64 from Allwinner same =
-price?
-
-Alexander=
+Acked-by: Rob Herring <robh@kernel.org>
