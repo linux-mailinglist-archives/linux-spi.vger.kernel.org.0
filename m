@@ -2,140 +2,149 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2D2294F75
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Oct 2020 17:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A601294FA3
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Oct 2020 17:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2443780AbgJUPDx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Oct 2020 11:03:53 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:38715 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2443567AbgJUPDw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Oct 2020 11:03:52 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id D535EB56;
-        Wed, 21 Oct 2020 11:03:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 21 Oct 2020 11:03:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=qxb2dhapqEcV1wlUzpI50HpbL56
-        z//q+bmCX0zPuRWk=; b=iuWAIt2XcaEtAHn23qs5m92uT1vkZNTgIK12LRSyAqR
-        XoIF76zW0AhIBPocwKxxyGc6912NVKR1TUWLIqsdiGKxOSGW1DUawXkVXosY+UkO
-        sNqAhHBd8M/cOYU8UsGWbtT1QVUjNBGkKg2Gn7L2kVc/YbyFrmUFZ9RhW4gtTrBt
-        g1fyOIV5+1zHjEqdCDNqkyDwGaoUW7W6e/5K0p2AlMRbKpj1g9pBgr/qHOotCZRK
-        tuY74vNKth41EoVZj0VEWWe98Nt2rCJqcKDUaqXIxx2gxDu/elm6BuKSKk9u2xSO
-        F3EXmrOgtDGxXrt4jyB/63AED0uI5+r+bnHjjr1Ksrg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=qxb2dh
-        apqEcV1wlUzpI50HpbL56z//q+bmCX0zPuRWk=; b=iU2dQe7Qx7Wu8kCpHOCyig
-        FGNSeeIWoVYLqRsDiq5p3rdSeWvD18xiV2gbm7SCoQHF5eBPp2tc62WgSsevE0pf
-        IKiK0DYdkQvZG4YyH2nUmmTLewIZUCrU1d223IFBwq9ZcvBjHpJy5cY7YHt5vN3w
-        DCYe9E4I/uvJLK+ptxuVxDH7rVFrrnv4OGJD85XEPH9/r65en9c+dcrZl+tmM7/w
-        2+HcbvCC4k/wL7UFJ9F/cGnpQKc4jiPCxcK6ypZm4eUx6E+CQ95tihIT3Dsa7kYP
-        YuGMmznmxatXIH3JbiObiR4YzaKKPm2o/siZuK3cIPehVUjfU9Og0lMx0EtKo0Pw
-        ==
-X-ME-Sender: <xms:1k2QX7P03KAusWuHx7Aw6TxTdtCRN4P-zA6TkawjfBmJ9Of-is_pSA>
-    <xme:1k2QX18e5xif-7xmDVXtF2BsGF4NKbw5i7aodd-6D0B3JDZi9Tg2l_gyqAQZcPgsZ
-    gVyyETTELbFo-z2pqg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrjeehgdekhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelvefggfevhfdvueejkefguedtleeujeevjeevhfdvvdefgefgffdtgfelgfdt
-    hfenucffohhmrghinhepphhinhgvieegrdhorhhgnecukfhppeeltddrkeelrdeikedrje
-    einecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgr
-    gihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:1k2QX6SgpZiECmRQYw4XcbsZSp2f5IPaTU3OZ1ghF6hflwUsap5UoA>
-    <xmx:1k2QX_sp7GAO4HUqGSz3v_V1S7UPkPNDZiaNG5QCK23_c3oLrMk7XA>
-    <xmx:1k2QXzcm7Qs_B9MJa7LJSsJoUDtij6C8k1p4w3MXhxE2bUCMGacpWw>
-    <xmx:102QX_6LFvDtvFdjW8hy6H45ggFZX1VjddmyK_UUzrftSjX3ED7s4A>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 48FE13064610;
-        Wed, 21 Oct 2020 11:03:50 -0400 (EDT)
-Date:   Wed, 21 Oct 2020 17:03:48 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Chen-Yu Tsai <wens@csie.org>
-Cc:     Alexander Kochetkov <al.kochet@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: spi-sun6i: implement DMA-based transfer mode
-Message-ID: <20201021150348.g2anzbqalhrmypdl@gilmour.lan>
-References: <20201015154740.20825-1-al.kochet@gmail.com>
- <20201019082129.myxpxla5xwoqwldo@gilmour.lan>
- <4EC91DD5-5611-4B48-B6FC-00690B400584@gmail.com>
- <CAGb2v64ruUf7Lv-cHZTRPs-U-gOboGtTwOB3+qtxZTFyLVFLjg@mail.gmail.com>
+        id S2444104AbgJUPNx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Oct 2020 11:13:53 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:35062 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2443906AbgJUPNx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Oct 2020 11:13:53 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09LFDVs8113882;
+        Wed, 21 Oct 2020 10:13:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1603293211;
+        bh=3wSeAduo54FZJAeg21M6ZmUHKkp0796GqW6JPL5m2s8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=aIktxFzxQ69nNQVzokofgflbN7y2X1rCHTocosMVZmGXQgsfRkd4cOcJ24/KOHJpj
+         zvlJXJQHsNoXjh6lQC9XYiNmr/jVupeotNVmULAphUfG5dwV2uE6uLm0Bo4HVZ7Cuw
+         CjGOES18Me0eyqjy3cqPTxSkMr9TrFLokBT1RiZM=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09LFDVbV089314
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 21 Oct 2020 10:13:31 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 21
+ Oct 2020 10:13:31 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 21 Oct 2020 10:13:31 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09LFDU9o122395;
+        Wed, 21 Oct 2020 10:13:30 -0500
+Date:   Wed, 21 Oct 2020 20:43:29 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+CC:     <vigneshr@ti.com>, <tudor.ambarus@microchip.com>,
+        <broonie@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <miquel.raynal@bootlin.com>,
+        <simon.k.r.goldschmidt@gmail.com>, <dinguyen@kernel.org>,
+        <richard@nod.at>, <cheol.yong.kim@intel.com>,
+        <qi-ming.wu@intel.com>
+Subject: Re: [PATCH v2 3/6] spi: cadence-quadspi: Add multi-chipselect
+ support for Intel LGM SoC
+Message-ID: <20201021151329.t24cli4rnk6esttm@ti.com>
+References: <20201021025507.51001-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201021025507.51001-4-vadivel.muruganx.ramuthevar@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="cswefexiyy5rohzg"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAGb2v64ruUf7Lv-cHZTRPs-U-gOboGtTwOB3+qtxZTFyLVFLjg@mail.gmail.com>
+In-Reply-To: <20201021025507.51001-4-vadivel.muruganx.ramuthevar@linux.intel.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
---cswefexiyy5rohzg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 21/10/20 10:55AM, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> 
+> Add multiple chipselect support for Intel LGM SoCs,
+> currently QSPI-NOR and QSPI-NAND supported.
+> 
+> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> ---
+>  drivers/spi/spi-cadence-quadspi.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> index 3d017b484114..3bf6d3697631 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -38,6 +38,7 @@
+>  
+>  /* Capabilities */
+>  #define CQSPI_SUPPORTS_OCTAL		BIT(0)
+> +#define CQSPI_SUPPORTS_MULTI_CHIPSELECT BIT(1)
+>  
+>  struct cqspi_st;
+>  
+> @@ -75,6 +76,7 @@ struct cqspi_st {
+>  	bool			is_decoded_cs;
+>  	u32			fifo_depth;
+>  	u32			fifo_width;
+> +	u32			num_chipselect;
+>  	bool			rclk_en;
+>  	u32			trigger_address;
+>  	u32			wr_delay;
+> @@ -1070,6 +1072,14 @@ static int cqspi_of_get_pdata(struct cqspi_st *cqspi)
+>  		return -ENXIO;
+>  	}
+>  
+> +	if (!cqspi->use_direct_mode) {
 
-On Tue, Oct 20, 2020 at 11:52:34AM +0800, Chen-Yu Tsai wrote:
-> On Tue, Oct 20, 2020 at 1:43 AM Alexander Kochetkov <al.kochet@gmail.com>=
- wrote:
-> >
-> >
-> >
-> > > 19 =D0=BE=D0=BA=D1=82. 2020 =D0=B3., =D0=B2 11:21, Maxime Ripard <max=
-ime@cerno.tech> =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0):
-> > >
-> > > Hi!
-> > >
-> > > On Thu, Oct 15, 2020 at 06:47:40PM +0300, Alexander Kochetkov wrote:
-> > >> DMA-based transfer will be enabled if data length is larger than FIF=
-O size
-> > >> (64 bytes for A64). This greatly reduce number of interrupts for
-> > >> transferring data.
-> > >>
-> > >> For smaller data size PIO mode will be used. In PIO mode whole buffe=
-r will
-> > >> be loaded into FIFO.
-> > >>
-> > >> If driver failed to request DMA channels then it fallback for PIO mo=
-de.
-> > >>
-> > >> Tested on SOPINE (https://www.pine64.org/sopine/)
-> > >>
-> > >> Signed-off-by: Alexander Kochetkov <al.kochet@gmail.com>
-> > >
-> > > Thanks for working on this, it's been a bit overdue
-> >
-> > Hi, Maxime!
-> >
-> > We did custom A64 based computation module for our product.
-> > Do you mean that A64 is obsolete or EOL product?
-> > If so, can you recommend active replacement for A64 from Allwinner same=
- price?
->=20
-> I believe what Maxime meant was that DMA transfer for SPI is a long
-> sought-after feature, but no one had finished it.
+Shouldn't this be guarded by CQSPI_SUPPORTS_MULTI_CHIPSELECT instead of 
+cqspi->use_direct_mode?
 
-Yeah, that's what I meant :)
+Also, cqspi->use_direct_mode would always be false here because 
+cqspi_of_get_pdata() is called before we set it...
 
-Maxime
+> +		if (of_property_read_u32(np, "num-chipselect",
+> +					 &cqspi->num_chipselect)) {
+> +			dev_err(dev, "couldn't determine number of cs\n");
+> +			return -ENXIO;
 
---cswefexiyy5rohzg
-Content-Type: application/pgp-signature; name="signature.asc"
+... so even if someone doesn't want to use multiple chip selects they 
+would have to specify this property or the probe will fail, which is the 
+case on J721E EVM for example.
 
------BEGIN PGP SIGNATURE-----
+> +		}
+> +	}
+> +
+>  	cqspi->rclk_en = of_property_read_bool(np, "cdns,rclk-en");
+>  
+>  	return 0;
+> @@ -1307,6 +1317,9 @@ static int cqspi_probe(struct platform_device *pdev)
+>  	cqspi->current_cs = -1;
+>  	cqspi->sclk = 0;
+>  
+> +	if (ddata->hwcaps_mask & CQSPI_SUPPORTS_MULTI_CHIPSELECT)
+> +		master->num_chipselect = cqspi->num_chipselect;
+> +
+>  	ret = cqspi_setup_flash(cqspi);
+>  	if (ret) {
+>  		dev_err(dev, "failed to setup flash parameters %d\n", ret);
+> @@ -1396,6 +1409,7 @@ static const struct cqspi_driver_platdata am654_ospi = {
+>  };
+>  
+>  static const struct cqspi_driver_platdata intel_lgm_qspi = {
+> +	.hwcaps_mask = CQSPI_SUPPORTS_MULTI_CHIPSELECT,
+>  	.quirks = CQSPI_DISABLE_DAC_MODE,
+>  };
+>  
+> -- 
+> 2.11.0
+> 
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5BN1AAKCRDj7w1vZxhR
-xeajAQDDQfn/PTTmGCss/aqPhvUim5gLLSaV4p3P4gdxSpylWQEAkHNQa448LP1N
-bvAej+dehNCy7akUYd7zXzYe3O5QNwM=
-=CuAY
------END PGP SIGNATURE-----
-
---cswefexiyy5rohzg--
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments India
