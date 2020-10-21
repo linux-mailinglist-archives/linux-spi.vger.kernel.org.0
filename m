@@ -2,87 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA571294EFF
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Oct 2020 16:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F977294F71
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Oct 2020 17:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442789AbgJUOrE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Oct 2020 10:47:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54422 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2443730AbgJUOrD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 21 Oct 2020 10:47:03 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E0EE1222C8;
-        Wed, 21 Oct 2020 14:47:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603291622;
-        bh=0NLUXsL5nZSTu+tt4TPTX6Sh3M6zxBuxgNfiiDG7Fpo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bfvo/x5A8xKQQpTGJw8BZgjqA4Ld52q97GDNBC4BKcfuqnVOPbW2H0ZWQx+qbPYIY
-         tc6PtJ4QA6KnRX5ASSliuqK10I1I/kQ4Uah+LNxYrcrE04zoAvHjx6agj6PhA24ZVX
-         l6OJo54sJI5gSwQOM46j1vUX7Np2h3VU0ZifM3Rc=
-Date:   Wed, 21 Oct 2020 15:46:50 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc:     vigneshr@ti.com, tudor.ambarus@microchip.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        miquel.raynal@bootlin.com, simon.k.r.goldschmidt@gmail.com,
-        dinguyen@kernel.org, richard@nod.at, cheol.yong.kim@intel.com,
-        qi-ming.wu@intel.com
-Subject: Re: [PATCH v2 3/6] spi: cadence-quadspi: Add multi-chipselect
- support for Intel LGM SoC
-Message-ID: <20201021144650.GG4497@sirena.org.uk>
-References: <20201021025507.51001-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20201021025507.51001-4-vadivel.muruganx.ramuthevar@linux.intel.com>
+        id S2443914AbgJUPDD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Oct 2020 11:03:03 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:50647 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2443913AbgJUPDD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Oct 2020 11:03:03 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id B5DFDC55;
+        Wed, 21 Oct 2020 11:03:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 21 Oct 2020 11:03:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=eFu2bMtKLMG2xcNKdFGhIE+PQM9
+        o3Uc5LUJogHhz2Gs=; b=Wj7UfHKNvs6ZE2gpNUHen4UfQD2mJouXSI7fpBabzf6
+        o8O/L3bSwm/SS9dMUEXFPgDNzVnasdHEnrWcjeZXwhzdlPx8L5glX5sdAZ3ykZv8
+        jE9pRJCxQ0gyOeGeXWXh7ZwGoNqI4W1D62F2/o0CuqqKN4Tc8eIe3KjglHmolcpx
+        ekdOWrojCmdLKCyfpBNhoBrFSIxrCNAurdyLB318QUSp2mUypTfeojAN5imh/SDi
+        nxFSlWGDrYolJ58T3EGXBlxar8QQ+EEPXJbVFHelC+p+JhWsrvvQi6ZdVtTcrnyd
+        hh5kc2wjZq2Ppa3wH1DBmgCJrblgFLTBdW728+1tUKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=eFu2bM
+        tKLMG2xcNKdFGhIE+PQM9o3Uc5LUJogHhz2Gs=; b=VfsL+q72UXF29qV3PdEnn/
+        hkuQaqJr1h6+7075pWMCpPF9ttEd2hND4RmuLWqCCafmRcp0fdaXN5h+358MH0tV
+        JqysWvMX3wnSffEAZ9NdQOAYnbqHCge2wMTiMuHut29q4O9dCyZn1DcTM2+mTxuv
+        fKZji5ka4TgU/AeG+xOOABTMuhQNuGkz1pVzSMrjJ183J43TXZBvw2fb8fhRO5Wb
+        YTus+N/LcSqLWKrv/T+HzNJMMzN5AOP1DEtiLGmxJ9aer20znDnf1/r5TaDEFQ/L
+        7NEt+FxNuhVye7KW7fux3YbBJDx5C+JjMqkgIlxno2QeXotyqIkrkxJyp4jAOliA
+        ==
+X-ME-Sender: <xms:pE2QX9k_OPJndof2SPWVOsC7Mg65fKuJU2_HvxYkAhGqTShfB3UfGA>
+    <xme:pE2QX41BUv0E_fYqmkap84jHRXh5j-B36vmU_AYylPfp1sYyCHMJRFmOoHE9fazwM
+    NiGeemNW7eYfR8rzfE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrjeehgdekhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:pE2QXzrvRm6L3WhWHc7n4bJ-QcCDHdgjkc2XuT-qwLz3itjJdV0bGQ>
+    <xmx:pE2QX9ljfcnK1En9aVNlwyX5edvIKu4xmN45DXZqkfaQMJV2rTGSlQ>
+    <xmx:pE2QX709aOjP5KmGFbxAFc7mqO21mwDkuUA0UUWbfUUgWWO9Z_zPPQ>
+    <xmx:pU2QX8ynPXceos8qOYAlzlCbLxaZjUaTGiW9kOBdfsfjyWqGo6Vt1A>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 53F693280059;
+        Wed, 21 Oct 2020 11:03:00 -0400 (EDT)
+Date:   Wed, 21 Oct 2020 17:02:58 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Alexander Kochetkov <al.kochet@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: spi-sun6i: enable autosuspend feature
+Message-ID: <20201021150258.mwis3ez5b6emqoci@gilmour.lan>
+References: <20201019150343.2520-1-akochetkov@lintech.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xjyYRNSh/RebjC6o"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="d2rnhfszvqavfh5e"
 Content-Disposition: inline
-In-Reply-To: <20201021025507.51001-4-vadivel.muruganx.ramuthevar@linux.intel.com>
-X-Cookie: That does not compute.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201019150343.2520-1-akochetkov@lintech.ru>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---xjyYRNSh/RebjC6o
+--d2rnhfszvqavfh5e
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 21, 2020 at 10:55:04AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+On Mon, Oct 19, 2020 at 06:03:43PM +0300, Alexander Kochetkov wrote:
+> From: Alexander Kochetkov <al.kochet@gmail.com>
+>=20
+> If SPI is used for periodic polling any sensor, significant delays
+> sometimes appear. Switching on module clocks during resume lead to delays.
+> Enabling autosuspend mode causes the controller to not suspend between
+> SPI transfers and the delays disappear.
+>=20
+> The commit also remove unnecessary call to pm_runtime_idle() used
+> to explicit put device to suspended state. Without pm_runtime_idle() PM
+> core will put device in the suspended state just after probe() returns.
+>=20
+> Signed-off-by: Alexander Kochetkov <al.kochet@gmail.com>
 
-> Add multiple chipselect support for Intel LGM SoCs,
-> currently QSPI-NOR and QSPI-NAND supported.
+Acked-by: Maxime Ripard <mripard@kernel.org>
 
-> +	if (ddata->hwcaps_mask & CQSPI_SUPPORTS_MULTI_CHIPSELECT)
-> +		master->num_chipselect = cqspi->num_chipselect;
+Thanks!
+Maxime
 
-I'm not seeing anywhere else where we reference num_chipselect in this
-patch - we parse the value, set it in the SPI controller and then never
-otherwise use it?  This makes me wonder if the property is really
-mandatory.  If it is then there should be something in the binding
-document saying that it's required when the compatible is your new
-compatible string, that way the validation can verify that the property
-is present in DTs including this controller.
-
---xjyYRNSh/RebjC6o
+--d2rnhfszvqavfh5e
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+QSdoACgkQJNaLcl1U
-h9BCUAf9HN/1ZjEGsiutV1X75aof27IiVliID+mogMUMJjQFl3XjdW3Aw87evS9v
-WHiFPZ97HYyVjogF7gHKUA26LPqa3k7RL816DcD2F4yMIMizhiaCcMBtfpdBE73E
-rkPpiv+/coyx4Z4OxEN2BeVAHxWorDwUXylWEHV9QBWGVyborj+Ltcr2+0iAfKuy
-8uiKsr/tK8N1RJ4Yk7FqSjUSZPslq3sOjBnWs4tzgfLnLszmbzI6id7E/hg3+4YH
-dqCe7aFU/MV0v91lO37TxoXQzwaEpzl2NyPUFzuHXPVy5sfUq/ldKSt5z/zfHxV0
-yge74zz8U4bkVoDwq1R4+6vJxYqRgg==
-=ABDR
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5BNogAKCRDj7w1vZxhR
+xSudAQCh8jxQhmFsw2AHAgbds1TcgyA1wyq6U0aRuMfs0OJbaQEAlxiWpoFxPZpA
+GHh9Nazv5DJzszLvscpQJXY2ZnNxsQA=
+=amT9
 -----END PGP SIGNATURE-----
 
---xjyYRNSh/RebjC6o--
+--d2rnhfszvqavfh5e--
