@@ -2,104 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 124C1294B64
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Oct 2020 12:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81945294CE5
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Oct 2020 14:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410309AbgJUKpq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Oct 2020 06:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388699AbgJUKpq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 21 Oct 2020 06:45:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021DDC0613CE
-        for <linux-spi@vger.kernel.org>; Wed, 21 Oct 2020 03:45:45 -0700 (PDT)
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kVBcj-000800-De; Wed, 21 Oct 2020 12:45:41 +0200
-Received: from sha by dude02.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kVBci-0005cs-Q4; Wed, 21 Oct 2020 12:45:40 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Christian Eggers <ceggers@arri.de>, stable@vger.kernel.org
-Subject: [PATCH] spi: imx: fix runtime pm support for !CONFIG_PM
-Date:   Wed, 21 Oct 2020 12:45:13 +0200
-Message-Id: <20201021104513.21560-1-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
+        id S2442511AbgJUMk1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Oct 2020 08:40:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39130 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394405AbgJUMkZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 21 Oct 2020 08:40:25 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2BD3F22275;
+        Wed, 21 Oct 2020 12:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603284024;
+        bh=+CBaQPUx7XVyQiN7FAvvUJkjEx6kAbYTgy2PMnvM5FM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g8wMoLURdOKef+AtsPQ7CoPpez8dprtmRsVugQlwldMlQdx5TPz+Kfq8czpCONMZ4
+         iBpIBEiXSillx/F3z8d5scmYOwISdTLLg+xEmQD673nv0yjR5oZmFYH/+oVt3gUiaJ
+         Dbx4QByh88bnZZ9ZW/OfLCPedWIRNbRf4F0MTumI=
+Date:   Wed, 21 Oct 2020 13:40:13 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     vigneshr@ti.com, tudor.ambarus@microchip.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        miquel.raynal@bootlin.com, simon.k.r.goldschmidt@gmail.com,
+        dinguyen@kernel.org, richard@nod.at, cheol.yong.kim@intel.com,
+        qi-ming.wu@intel.com
+Subject: Re: [PATCH v2 5/6] dt-bindings: spi: Convert cadence-quadspi.txt to
+ cadence-quadspi.yaml
+Message-ID: <20201021124013.GE4497@sirena.org.uk>
+References: <20201021025507.51001-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201021025507.51001-6-vadivel.muruganx.ramuthevar@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uCPdOCrL+PnN2Vxy"
+Content-Disposition: inline
+In-Reply-To: <20201021025507.51001-6-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Cookie: That does not compute.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-525c9e5a32bd introduced pm_runtime support for the i.MX SPI driver. With
-this pm_runtime is used to bring up the clocks initially. When CONFIG_PM
-is disabled the clocks are no longer enabled and the driver doesn't work
-anymore. Fix this by enabling the clocks in the probe function and
-telling pm_runtime that the device is active using
-pm_runtime_set_active().
 
-Fixes: 525c9e5a32bd spi: imx: enable runtime pm support
-Tested-by: Christian Eggers <ceggers@arri.de> [tested for !CONFIG_PM only]
-Cc: stable@vger.kernel.org  # 5.9.x only
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
----
- drivers/spi/spi-imx.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+--uCPdOCrL+PnN2Vxy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 38a5f1304cec..c796e937dc6a 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1674,15 +1674,18 @@ static int spi_imx_probe(struct platform_device *pdev)
- 		goto out_master_put;
- 	}
- 
--	pm_runtime_enable(spi_imx->dev);
-+	ret = clk_prepare_enable(spi_imx->clk_per);
-+	if (ret)
-+		goto out_master_put;
-+
-+	ret = clk_prepare_enable(spi_imx->clk_ipg);
-+	if (ret)
-+		goto out_put_per;
-+
- 	pm_runtime_set_autosuspend_delay(spi_imx->dev, MXC_RPM_TIMEOUT);
- 	pm_runtime_use_autosuspend(spi_imx->dev);
--
--	ret = pm_runtime_get_sync(spi_imx->dev);
--	if (ret < 0) {
--		dev_err(spi_imx->dev, "failed to enable clock\n");
--		goto out_runtime_pm_put;
--	}
-+	pm_runtime_set_active(spi_imx->dev);
-+	pm_runtime_enable(spi_imx->dev);
- 
- 	spi_imx->spi_clk = clk_get_rate(spi_imx->clk_per);
- 	/*
-@@ -1719,8 +1722,12 @@ static int spi_imx_probe(struct platform_device *pdev)
- 
- out_runtime_pm_put:
- 	pm_runtime_dont_use_autosuspend(spi_imx->dev);
--	pm_runtime_put_sync(spi_imx->dev);
-+	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_disable(spi_imx->dev);
-+
-+	clk_disable_unprepare(spi_imx->clk_ipg);
-+out_put_per:
-+	clk_disable_unprepare(spi_imx->clk_per);
- out_master_put:
- 	spi_master_put(master);
- 
--- 
-2.20.1
+On Wed, Oct 21, 2020 at 10:55:06AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel=
+=2Ecom>
+>=20
+> Convert the cadence-quadspi.txt documentation to cadence-quadspi.yaml
+> remove the cadence-quadspi.txt from Documentation/devicetree/bindings/spi/
 
+This is patch 5/6, not patch 6/6 as I suggested :/
+
+--uCPdOCrL+PnN2Vxy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+QLCwACgkQJNaLcl1U
+h9BbAAf/YM0k2iVJQk3ZZTpt3a7VpEFh1nmu2nQljnukDeA+/Gnk4Z+7JGxrMALJ
+qJSvm+d9osWVrjn1a6gQHlGJJT2k/pQd/orYzmIi9pecL3FLj+Zl16pstQxjzpCS
+5F8yhLiwm8CuB2q7YNtBgejkeBZFpmUkHmzwqYV3VoBmfEHWj6V2peux1nQrk27X
+uw5BgnRFo+7yId3wCD+41ewPp3DO8/4FvfHMUn7cXy9ASM1EfWfjJDeIomxdA3GU
+TkGCvLjNqf1q7zNyvF0kayMofN44C2lYaMp9mceULPByJByN53roLfHlcQslbo85
+iKFs4JhaWtOjOZ7O7TbQiE9Q5qKapg==
+=NlDZ
+-----END PGP SIGNATURE-----
+
+--uCPdOCrL+PnN2Vxy--
