@@ -2,98 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F98295E16
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Oct 2020 14:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0517F2961D3
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Oct 2020 17:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503915AbgJVMM7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Oct 2020 08:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503681AbgJVMM7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Oct 2020 08:12:59 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10FEC0613CE;
-        Thu, 22 Oct 2020 05:12:58 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 40AA030000E5D;
-        Thu, 22 Oct 2020 14:12:55 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 2DCBEF5996; Thu, 22 Oct 2020 14:12:55 +0200 (CEST)
-Date:   Thu, 22 Oct 2020 14:12:54 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: Use after free in bcm2835_spi_remove()
-Message-ID: <20201022121254.GA3847@wunner.de>
-References: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
- <20201014140912.GB24850@wunner.de>
- <20201014194035.ukduovokggu37uba@skbuf>
- <20201014202505.GF4580@sirena.org.uk>
- <b094c266-99ce-4462-9041-7d1659b13300@gmail.com>
+        id S2508479AbgJVPni (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Oct 2020 11:43:38 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:44415 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2508315AbgJVPni (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Oct 2020 11:43:38 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2387D5C00C9;
+        Thu, 22 Oct 2020 11:43:37 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 22 Oct 2020 11:43:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=qQcssX4y6y38K9RgQ4janqr2ZQA
+        j8lZs3yvwrRKlDUo=; b=gjLvTVm3R2ZB47yKS5mM/X73sRUGmxyXVjcoUsZaas/
+        /qi2TrMEbOOYcG42P5qLYfTnlRMjMbm0ok9XrFl54XUzqoaQNJxGwHGEaGCgJdMS
+        ItWVqAhcQbWeOBdpF7YU9rPdjy1NWgUEt8PT2TxUeSKMa3jDWnFSIQgVH9Av/XpX
+        Y305HV64yMzbwL01mCwc0U/16+tNu175/O+totUYqBEPZjWPD7KW2IRTy8Ms30eh
+        caYccnKn0dihYPDufgEt9TvCCw4d4YbBMCweWEpZnhAsscP11bfEAELvpWhNthWq
+        GcN1BSoQP4Iys53bBPHotoWaKR49zp5iIs5rt+udb/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=qQcssX
+        4y6y38K9RgQ4janqr2ZQAj8lZs3yvwrRKlDUo=; b=XKQe4eaTOA6vq0wFrUOae1
+        9DHPqJT41PnPCZ9Tz9Cfkr7hJRhNG5MDa3ikpkR7OfNKXDNEZXx0NMoOGsqVwTbW
+        dn4uLC7zYb2HM9ggB8dDM8q+0voI/rkkum+chqr+82kNmoexxFYU3qAmEb55v+fz
+        d99pD0sHDaXH9rBv4YgoqXV4z9b86Ipyevpm6k1qpoPl32jN/DLBVydBIbu3mAAZ
+        TYh6mA5osD5tSJUE13PFtc2RU3iaAowLOrZS5ziQecxfK1LvTY1wccH/iO6wPVGd
+        uzn99IvvmcqnVWkmXO+tjTJIXDsQTdBclJeuj9lNP7ciMXNZsWyqR5hjWhFHBRWQ
+        ==
+X-ME-Sender: <xms:p6iRX-NiFx5u6px0KrD1oSKkY5_Mbvs2LRTDwQS0-VLUYuC1RFaPdg>
+    <xme:p6iRX88oBx4b1KQwwSh0TTwmG2CVZILt6WTA2_c3M-PgAU_ofZmmAhP-kkNVKYZG6
+    qpSHSGj05vJ3pxc63k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrjeekgddutdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeffuedugfdvjeeihedvgefhieeikeelteehteekffetudeiueeggfduueevffet
+    geenucffohhmrghinhepphhinhgvieegrdhorhhgnecukfhppeeltddrkeelrdeikedrje
+    einecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgr
+    gihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:p6iRX1Sy6k89lk-6nqQl3srn-xIgTwpAa7U0ImOKCEYuw_keHKv9Dg>
+    <xmx:p6iRX-vReGUBiDFEq0w8I_nVY8CHROzX6Lq0dNA9_OsYIxS8aP9EVQ>
+    <xmx:p6iRX2dH8kss364liqw0h65dLz_isDPQ3WRv_xVLOAq22m-QV7mEuA>
+    <xmx:qaiRX26LM7xFWLdGjx9uMSkus5U0QC-l484zr3birAf5-pTmiH1BwA>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 64ED53064684;
+        Thu, 22 Oct 2020 11:43:35 -0400 (EDT)
+Date:   Thu, 22 Oct 2020 17:43:34 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Alexander Kochetkov <al.kochet@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] spi: spi-sun6i: implement DMA-based transfer mode
+Message-ID: <20201022154334.qqkoihzjxzdfhvce@gilmour.lan>
+References: <20201022075221.23332-1-akochetkov@lintech.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="24oxrxwiyl7dicsw"
 Content-Disposition: inline
-In-Reply-To: <b094c266-99ce-4462-9041-7d1659b13300@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201022075221.23332-1-akochetkov@lintech.ru>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 02:20:16PM -0700, Florian Fainelli wrote:
-> In bcm2835_spi_remove(), spi_controller_unregister() will free the ctlr
-> reference which will lead to an use after free in bcm2835_release_dma().
-> 
-> To avoid this use after free, allocate the bcm2835_spi structure with a
-> different lifecycle than the spi_controller structure such that we
-> unregister the SPI controller, free up all the resources and finally let
-> device managed allocations free the bcm2835_spi structure.
-[...]
-> -	if (ctlr->dma_tx) {
-> -		dmaengine_terminate_sync(ctlr->dma_tx);
-> +	if (dma_tx) {
-> +		dmaengine_terminate_sync(dma_tx);
->  
->  		if (bs->fill_tx_desc)
->  			dmaengine_desc_free(bs->fill_tx_desc);
->  
->  		if (bs->fill_tx_addr)
-> -			dma_unmap_page_attrs(ctlr->dma_tx->device->dev,
-> +			dma_unmap_page_attrs(dma_tx->device->dev,
->  					     bs->fill_tx_addr, sizeof(u32),
->  					     DMA_TO_DEVICE,
->  					     DMA_ATTR_SKIP_CPU_SYNC);
->  
-> -		dma_release_channel(ctlr->dma_tx);
-> -		ctlr->dma_tx = NULL;
-> +		dma_release_channel(dma_tx);
->  	}
 
-You must set ctlr->dma_tx and ctlr->dma_rx to NULL because the driver
-checks their value in a couple of places.
+--24oxrxwiyl7dicsw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-E.g. bcm2835_spi_setup() checks ctlr->dma_rx.
+On Thu, Oct 22, 2020 at 10:52:21AM +0300, Alexander Kochetkov wrote:
+> From: Alexander Kochetkov <al.kochet@gmail.com>
+>=20
+> DMA-based transfer will be enabled if data length is larger than FIFO size
+> (64 bytes for A64). This greatly reduce number of interrupts for
+> transferring data.
+>=20
+> For smaller data size PIO mode will be used. In PIO mode whole buffer will
+> be loaded into FIFO.
+>=20
+> If driver failed to request DMA channels then it fallback for PIO mode.
+>=20
+> Tested on SOPINE (https://www.pine64.org/sopine/)
+>=20
+> Signed-off-by: Alexander Kochetkov <al.kochet@gmail.com>
 
-Likewise, the error paths of bcm2835_dma_init() and bcm2835_spi_probe()
-call bcm2835_dma_release() and the latter checks ctlr->dma_tx and
-ctlr->dma_rx to determine whether DMA was set up, hence needs to be
-torn down.
+Acked-by: Maxime Ripard <mripard@kernel.org>
 
+Thanks!
+Maxime
 
-> +	bs = devm_kzalloc(&pdev->dev, sizeof(*bs), GFP_KERNEL);
-> +	if (!bs)
-> +		return -ENOMEM;
-> +
->  	ctlr = spi_alloc_master(&pdev->dev, ALIGN(sizeof(*bs),
->  						  dma_get_cache_alignment()));
+--24oxrxwiyl7dicsw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You can set the second argument to spi_alloc_master() to 0
-to conserve memory.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5GopgAKCRDj7w1vZxhR
+xR6mAP9cQRYGW5IK0TdSiOXRAXSI4XovnETyUkuY1fx/Re6dCAD8CkftTek57e84
+yyPrPE3Cy9Cn+zK4d2OnSjIZIfDv+QY=
+=6+uq
+-----END PGP SIGNATURE-----
 
-Lukas
+--24oxrxwiyl7dicsw--
