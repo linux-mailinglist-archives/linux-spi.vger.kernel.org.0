@@ -2,73 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CAF297490
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Oct 2020 18:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4369B2979FB
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Oct 2020 02:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1752238AbgJWQhp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Oct 2020 12:37:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33694 "EHLO mail.kernel.org"
+        id S1759019AbgJXA3K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 23 Oct 2020 20:29:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751836AbgJWQdt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 23 Oct 2020 12:33:49 -0400
-Received: from mail.kernel.org (ip5f5ad5a3.dynamic.kabel-deutschland.de [95.90.213.163])
+        id S1756447AbgJXA3K (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 23 Oct 2020 20:29:10 -0400
+Received: from localhost (cpc102338-sgyl38-2-0-cust404.18-2.cable.virginm.net [77.102.33.149])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 111952469C;
-        Fri, 23 Oct 2020 16:33:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5BD42223EA;
+        Sat, 24 Oct 2020 00:29:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603470828;
-        bh=Ify6hjJmLmH3/dY+Zjs+KW5ON5EvHvsN04EfiSRU+tk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TjI7bXZnCCjIXvwHbPoXtn79kE4t2/WqrbiWK/5UXkqnP9Cq6uhfWC3dn4/uKzjoN
-         aNx0yqHr5/5bTRIrNjBqD8SlTApht4gbD43B8gH9SCVQK0avb9IhBd1A0ySQvr/6iO
-         pslyU5Gv5lwp9+o5+kNmMEHcZvc/it2UoxRGeBwU=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kW00g-002Awf-1e; Fri, 23 Oct 2020 18:33:46 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: [PATCH v3 29/56] spi: fix a typo inside a kernel-doc markup
-Date:   Fri, 23 Oct 2020 18:33:16 +0200
-Message-Id: <a103f4f48735caa1a09fad94c5d76e73e2ce37b8.1603469755.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1603469755.git.mchehab+huawei@kernel.org>
-References: <cover.1603469755.git.mchehab+huawei@kernel.org>
+        s=default; t=1603499349;
+        bh=zfimlyBy7JEtPZjy/CuXm+eSPqDJs5sU0y4ieMN/Z3g=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=xcK0oNK5NCsH0KeLEAKdJqCLlymmK4uR6NPQLk26LCjwWgUzFpgg9krOau33iiuj6
+         bPIZfJ2f2GAz7bSV1liD0jhdrABbDwnuQZvmj8bhiMTDkfDn+st9NxI7Wf6/cncnlc
+         e/34mFKkNF1DTLlLWoYXwnaLFFH39AGrS4nlyByI=
+Date:   Sat, 24 Oct 2020 01:29:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>, linux-spi@vger.kernel.org
+Cc:     kernel@pengutronix.de, stable@vger.kernel.org,
+        Christian Eggers <ceggers@arri.de>
+In-Reply-To: <20201021104513.21560-1-s.hauer@pengutronix.de>
+References: <20201021104513.21560-1-s.hauer@pengutronix.de>
+Subject: Re: [PATCH] spi: imx: fix runtime pm support for !CONFIG_PM
+Message-Id: <160349934785.28519.1780967767109665800.b4-ty@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-spi_split_tranfers_maxsize -> spi_split_transfers_maxsize
+On Wed, 21 Oct 2020 12:45:13 +0200, Sascha Hauer wrote:
+> 525c9e5a32bd introduced pm_runtime support for the i.MX SPI driver. With
+> this pm_runtime is used to bring up the clocks initially. When CONFIG_PM
+> is disabled the clocks are no longer enabled and the driver doesn't work
+> anymore. Fix this by enabling the clocks in the probe function and
+> telling pm_runtime that the device is active using
+> pm_runtime_set_active().
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/spi/spi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Applied to
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 0cab239d8e7f..22679c8645db 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3193,9 +3193,9 @@ static int __spi_split_transfer_maxsize(struct spi_controller *ctlr,
- }
- 
- /**
-- * spi_split_tranfers_maxsize - split spi transfers into multiple transfers
-- *                              when an individual transfer exceeds a
-- *                              certain size
-+ * spi_split_transfers_maxsize - split spi transfers into multiple transfers
-+ *                               when an individual transfer exceeds a
-+ *                               certain size
-  * @ctlr:    the @spi_controller for this transfer
-  * @msg:   the @spi_message to transform
-  * @maxsize:  the maximum when to apply this
--- 
-2.26.2
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/1] spi: imx: fix runtime pm support for !CONFIG_PM
+      commit: 43b6bf406cd0319e522638f97c9086b7beebaeaa
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
