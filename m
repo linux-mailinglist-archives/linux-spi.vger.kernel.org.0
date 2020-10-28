@@ -2,315 +2,256 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 130C529E146
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Oct 2020 02:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A064C29E192
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Oct 2020 03:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728933AbgJ2B6O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 28 Oct 2020 21:58:14 -0400
-Received: from mga07.intel.com ([134.134.136.100]:24275 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726397AbgJ2B5J (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 28 Oct 2020 21:57:09 -0400
-IronPort-SDR: 2hyjUgtEvnZeTFafQp/5asqBCxT3uL1h1mb/0S037zXyVittqdJnetweAcDEMvfdhlqvUOsAyL
- Z9F2QlB2diYg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9788"; a="232547317"
-X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
-   d="scan'208";a="232547317"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2020 18:57:08 -0700
-IronPort-SDR: BBFOpNs+xm1X41QNT0+QYCdDvFNVvvjlL+BRLT1wHnVfEw5MAZt5QzOXTELkoEpCRno/Mqo3fo
- 22I7fsKwlK/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
-   d="scan'208";a="526554316"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Oct 2020 18:57:08 -0700
-Received: from [10.226.38.22] (vramuthx-MOBL1.gar.corp.intel.com [10.226.38.22])
-        by linux.intel.com (Postfix) with ESMTP id 057F9580713;
-        Wed, 28 Oct 2020 18:57:04 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v4 5/6] dt-bindings: spi: Convert cadence-quadspi.txt to
- cadence-quadspi.yaml
-To:     Rob Herring <robh@kernel.org>
-Cc:     broonie@kernel.org, vigneshr@ti.com, tudor.ambarus@microchip.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
-        simon.k.r.goldschmidt@gmail.com, dinguyen@kernel.org,
-        richard@nod.at, cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20201027082251.30056-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20201027082251.30056-6-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20201028150707.GA4023049@bogus>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <65f01613-7303-9c93-694b-c276aa179cf6@linux.intel.com>
-Date:   Thu, 29 Oct 2020 09:57:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
-MIME-Version: 1.0
-In-Reply-To: <20201028150707.GA4023049@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1729020AbgJ2CCG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 28 Oct 2020 22:02:06 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:11855 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727473AbgJ1VtO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Oct 2020 17:49:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1603921753; x=1635457753;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=ldqSJLKSm1gN+2qq9QgNLKK56VR4x8Eu2c80+ohOxAI=;
+  b=s/QZYHz9FaZsLeqMdUWSQIT7cm9YPLzH0cVjqJxQAj5s891P2Yi+XG+F
+   afmmIPG3pFMX+bvRb0HGks2cCoA3OpI7GlmoS6pRlvvb23lucRPqQccQi
+   fefM5XvT0E0Gs0MPY7OO6pXL7OWP7THrPti5xhpevBFMzlz8xtattrmQR
+   uTNq/wqf+zqCKHbjVbfmMWBH6J9mcFyObuptszqKN4bVlPjsCG/HbtUfj
+   +686SCGK/d0PMyXf4Gzz+jnVSXbo4wBXhNl994K5RS9iwwWYEA5g+gOke
+   HjgfsNaujp67GzVreCkkQGGGQFXwJT8rrjZFF4nDSmOYw/mLLHDS55kYN
+   Q==;
+IronPort-SDR: z+vPs9i09rrttTCYnWnQm6jZbQ75TrtPqFpCpMle3sxhTMgIpKv3rMiiIb+0uhBJuGFpATosYm
+ 81/h0SJtbw21g50Xu2cI9QrCho6H+hDd04sHa6HIYbq4csuyf/MjucbaX1K2bHeKGMNoQTTJFe
+ rJLS98Y9ZUnFyP4kqkSsTXfVb0Bi8KTxqqn4IMmjaHA++7FCHEOO1hgZzob1GSEmFC3KJC0KHw
+ juHc5lBUp+6Fhht0VA3KTPv9vS6BVgn6M+PavnE38NHcqzkDg+sVz6iDJW8Tz2U/Wozt5XDqWr
+ BSk=
+X-IronPort-AV: E=Sophos;i="5.77,426,1596524400"; 
+   d="scan'208";a="31497578"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Oct 2020 02:45:34 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 28 Oct 2020 02:45:33 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
+ via Frontend Transport; Wed, 28 Oct 2020 02:45:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CSkZ6O0QecFirBdZHMfkVwUn2Q+L32WMllZ7Lv7p7tDVC4h6yuZUrm5mC9QUiDnMn6rVB9E5rsN9p3wz6d+2btgul2parlLUzZdAFImha4HJd7xsgwYk5kMx6MvZFrNqVdTbNreYQ6mEduxEb0HGv6ySKn1DDb6Rbg6haCuvvtMeQlkjMQNMsh2WQdaD1nJXzPvnNQIQ1pimt9lc0G8meexzVyRUgx7VpYbMsBmeGUOqdneDv0iYjg2+SSPgWKKIGZzl1peS26pY9dzLCZH3CYzlcTdVU/CrXmFxdRTF2IDzmW6uHnivjF+l0wfLwqHek6VH5CdQgPSub0k1bAelDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ldqSJLKSm1gN+2qq9QgNLKK56VR4x8Eu2c80+ohOxAI=;
+ b=G5c4uJas+I1sWeyvbW2t04XwK+6z/M+ipKYEDiodhMSHo1ed5ZW2h7J1PNEcG/Ztak/tbg0gYxMdJOZ1VNMwoUVI8A+5MVW27e8o7VtBH7WcRQDncYnW2lSL4NkLVQ3lDTdWRR4oPE16VqooD28Fc4m9Ix9KlqV7e2uJLzf0iGP6AdckruhgMCDFTtIsyfy4uYmFk64Lr5f42K61mgilLsn03lYI+d6PTJyVl683POD1q2y6h1QMAj3Cgzz89wFPhMX9VJ3UvcSiYN6aWuJp6gZJ7vz3jpfaPnStzX8i/3q2QOquYXnyqAxdiLvbqutT0NkW1ynC7hprBGubEtcu/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ldqSJLKSm1gN+2qq9QgNLKK56VR4x8Eu2c80+ohOxAI=;
+ b=RMqTY6rvKebllZ1SfTTWpTAWMMzi64i56wqv8/z4NrA392R0tPY/SvCkIxP7G7BICOuAq0bCTLJ4RAvMxHAR9pZKRJ4G+7kOelvrGQ1mOkzjfEx8pAL3BSIAV3XAW6/NjSzfXs/De+n0SXv5ZqFNShnY+lGLWS0UL9x4NXtvJt8=
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
+ by SN6PR11MB2878.namprd11.prod.outlook.com (2603:10b6:805:56::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.27; Wed, 28 Oct
+ 2020 09:45:31 +0000
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::7c1b:6212:7f1e:5c6f]) by SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::7c1b:6212:7f1e:5c6f%3]) with mapi id 15.20.3477.028; Wed, 28 Oct 2020
+ 09:45:30 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <masonccyang@mxic.com.tw>, <broonie@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <boris.brezillon@collabora.com>, <matthias.bgg@gmail.com>
+CC:     <juliensu@mxic.com.tw>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <p.yadav@ti.com>, <ycllin@mxic.com.tw>
+Subject: Re: [PATCH v4 3/7] mtd: spi-nor: sfdp: parse command sequences to
+ change octal DTR mode
+Thread-Topic: [PATCH v4 3/7] mtd: spi-nor: sfdp: parse command sequences to
+ change octal DTR mode
+Thread-Index: AQHWrQ8R5RqJKCpNnEOs1eXdDu8vbg==
+Date:   Wed, 28 Oct 2020 09:45:30 +0000
+Message-ID: <ef36ad59-8081-4d0c-f4aa-57ef66a602f1@microchip.com>
+References: <1590737775-4798-1-git-send-email-masonccyang@mxic.com.tw>
+ <1590737775-4798-4-git-send-email-masonccyang@mxic.com.tw>
+In-Reply-To: <1590737775-4798-4-git-send-email-masonccyang@mxic.com.tw>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+authentication-results: mxic.com.tw; dkim=none (message not signed)
+ header.d=none;mxic.com.tw; dmarc=none action=none header.from=microchip.com;
+x-originating-ip: [86.127.107.112]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4d06b3f7-a404-4406-7c9b-08d87b26357c
+x-ms-traffictypediagnostic: SN6PR11MB2878:
+x-microsoft-antispam-prvs: <SN6PR11MB28784732280AB66CE57ACCB1F0170@SN6PR11MB2878.namprd11.prod.outlook.com>
+x-bypassexternaltag: True
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GaI7pqBp5zSJa4P3xItyO3nfYLdM69dX7+JGtsy9j7S8H9rT4U4ZfzW3Z0/vJ9BrDtKsEzckXclSoxyQ67S7wPOs9SKuK0UZf8hSMza+FpsAO37WUxJtR3vMVTGYJFoW/LzK7p0QDjLPfcyS0yGVLP+eDkzv9FDMlXtVQ8m3eJf2IzrHfWag1EUR1K4H+vx8s6wEE+mVXQKsfeQCQp74eE3Q/dBqfjEcmaqmFEhPf/9DYHy/0y9B7DpJArKgoyXIRlGODMgRxAO+KOkS+Lcip8kgleO5OiNk59kwFgXNimgH2egLpy67qxgHvQ5TdoSXVCdNmNiKqhLpGT9AMOJ726rxu9HimtRnaycYdgWVfXSXjr0JuCpnhAX+4BMZG6b/
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(396003)(39860400002)(346002)(376002)(26005)(31696002)(66556008)(7416002)(66946007)(8676002)(66476007)(66446008)(64756008)(53546011)(83380400001)(316002)(4326008)(478600001)(8936002)(76116006)(6512007)(6486002)(6506007)(2616005)(186003)(71200400001)(5660300002)(54906003)(110136005)(31686004)(36756003)(86362001)(2906002)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: s+cH+7UxVf+If7fk9RjLXKo/+KHnNeBluW/0Rt2vTtfywq1RtCECqxlm8GOaq1SoE4CD6+gEAfNRza6dJUw+8EKZdduvrxeTHJDqNt2/FYyl5pyUFxXTvRUecvLOO6DWL7OaUPRiA33ehT3pXYcaZ1/5gm4tMod7cd7a95RrSifPDZguLWHgWiDS74sWh6iLN94Ps7TlSb2OigGCSS5tVPSO+goplDmwKZYxbgYSJA1ABIZ1TbHW8Cxce7jyv1qwQeKinzTX+NC6GcEmr5nSM54nkkMjcwd2Zq9wor4yC/nymixoCYR5LBRP/SVMTIbX+Tj/4IsGgsIuI2MFRPYIHCl6pQwH5kjGTz09EZpSKgAtOkAp/FNzY+r5VPIQrJrQhQE6U0mrvEcyXEgekSPo0gu08+t9sgaBnKxqDq8VKz7f/S1wnykiTiTc64chSzeBRawK5fbG8VzHb+hEZTxF73DKbtC1b5S0g8DLL6TUlXtybnCRyko+7nmzoKvKQin21sA5MbHA9I+sGptSq38nFXbl2fOyYgDFj3sYFfO5W31xlqjVxgXfV/5RYhW7jLM3kopgSDObP6Y9zvY09NrZ7be9rZd9l5hLSPThqz9BlEPLct4nVFmqd+l83FWRUa0gVfryC+gZ2qy1ubrx6hryaA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <142BA76BB48DDB4382EA26B7B29C8911@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d06b3f7-a404-4406-7c9b-08d87b26357c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 09:45:30.7816
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fB1nj4yvccQt2tKxf4h9QjFEPnY9FcjoIPV/PzXOjXUkPreFgguEBQJQsm6AvFtF7cw0/oOTkxbxJ/OYyEjnqsDF1vAWHqoWtKWov7RREnE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2878
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
-
-Thank you for your review comments...
-
-On 28/10/2020 11:07 pm, Rob Herring wrote:
-> On Tue, Oct 27, 2020 at 04:22:50PM +0800, Ramuthevar,Vadivel MuruganX wrote:
->> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->>
->> Convert the cadence-quadspi.txt documentation to cadence-quadspi.yaml
->> remove the cadence-quadspi.txt from Documentation/devicetree/bindings/spi/
->>
->> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->> ---
->>   .../devicetree/bindings/spi/cadence-quadspi.txt    |  67 ----------
->>   .../devicetree/bindings/spi/cadence-quadspi.yaml   | 148 +++++++++++++++++++++
->>   2 files changed, 148 insertions(+), 67 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.txt
->>   create mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt b/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
->> deleted file mode 100644
->> index 945be7d5b236..000000000000
->> --- a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
->> +++ /dev/null
->> @@ -1,67 +0,0 @@
->> -* Cadence Quad SPI controller
->> -
->> -Required properties:
->> -- compatible : should be one of the following:
->> -	Generic default - "cdns,qspi-nor".
->> -	For TI 66AK2G SoC - "ti,k2g-qspi", "cdns,qspi-nor".
->> -	For TI AM654 SoC  - "ti,am654-ospi", "cdns,qspi-nor".
->> -- reg : Contains two entries, each of which is a tuple consisting of a
->> -	physical address and length. The first entry is the address and
->> -	length of the controller register set. The second entry is the
->> -	address and length of the QSPI Controller data area.
->> -- interrupts : Unit interrupt specifier for the controller interrupt.
->> -- clocks : phandle to the Quad SPI clock.
->> -- cdns,fifo-depth : Size of the data FIFO in words.
->> -- cdns,fifo-width : Bus width of the data FIFO in bytes.
->> -- cdns,trigger-address : 32-bit indirect AHB trigger address.
->> -
->> -Optional properties:
->> -- cdns,is-decoded-cs : Flag to indicate whether decoder is used or not.
->> -- cdns,rclk-en : Flag to indicate that QSPI return clock is used to latch
->> -  the read data rather than the QSPI clock. Make sure that QSPI return
->> -  clock is populated on the board before using this property.
->> -
->> -Optional subnodes:
->> -Subnodes of the Cadence Quad SPI controller are spi slave nodes with additional
->> -custom properties:
->> -- cdns,read-delay : Delay for read capture logic, in clock cycles
->> -- cdns,tshsl-ns : Delay in nanoseconds for the length that the master
->> -                  mode chip select outputs are de-asserted between
->> -		  transactions.
->> -- cdns,tsd2d-ns : Delay in nanoseconds between one chip select being
->> -                  de-activated and the activation of another.
->> -- cdns,tchsh-ns : Delay in nanoseconds between last bit of current
->> -                  transaction and deasserting the device chip select
->> -		  (qspi_n_ss_out).
->> -- cdns,tslch-ns : Delay in nanoseconds between setting qspi_n_ss_out low
->> -                  and first bit transfer.
->> -- resets	: Must contain an entry for each entry in reset-names.
->> -		  See ../reset/reset.txt for details.
->> -- reset-names	: Must include either "qspi" and/or "qspi-ocp".
->> -
->> -Example:
->> -
->> -	qspi: spi@ff705000 {
->> -		compatible = "cdns,qspi-nor";
->> -		#address-cells = <1>;
->> -		#size-cells = <0>;
->> -		reg = <0xff705000 0x1000>,
->> -		      <0xffa00000 0x1000>;
->> -		interrupts = <0 151 4>;
->> -		clocks = <&qspi_clk>;
->> -		cdns,is-decoded-cs;
->> -		cdns,fifo-depth = <128>;
->> -		cdns,fifo-width = <4>;
->> -		cdns,trigger-address = <0x00000000>;
->> -		resets = <&rst QSPI_RESET>, <&rst QSPI_OCP_RESET>;
->> -		reset-names = "qspi", "qspi-ocp";
->> -
->> -		flash0: n25q00@0 {
->> -			...
->> -			cdns,read-delay = <4>;
->> -			cdns,tshsl-ns = <50>;
->> -			cdns,tsd2d-ns = <50>;
->> -			cdns,tchsh-ns = <4>;
->> -			cdns,tslch-ns = <4>;
->> -		};
->> -	};
->> diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml b/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
->> new file mode 100644
->> index 000000000000..da11cb3bedeb
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
->> @@ -0,0 +1,148 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/spi/cadence-quadspi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Cadence Quad SPI controller
->> +
->> +maintainers:
->> +  - Vadivel Murugan <vadivel.muruganx.ramuthevar@intel.com>
->> +
->> +allOf:
->> +  - $ref: "spi-controller.yaml#"
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +         - const: cdns,qspi-nor
->> +         - const: ti,k2g-qspi, cdns,qspi-nor
->> +         - const: ti,am654-ospi, cdns,qspi-nor
-> 
-> This is still not right. 'const' points to a single string which is not
-> what you want.
-oh my bad, you are right, will update,thanks!
-
-Regards
-Vadivel
-> 
->> +
->> +  reg:
->> +    items:
->> +      - description: the controller register set
->> +      - description: the controller data area
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  cdns,fifo-depth:
->> +    description:
->> +      Size of the data FIFO in words.
->> +    $ref: "/schemas/types.yaml#/definitions/uint32"
->> +    enum: [ 128, 256 ]
->> +    default: 128
->> +
->> +  cdns,fifo-width:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      Bus width of the data FIFO in bytes.
->> +    default: 4
->> +
->> +  cdns,trigger-address:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      32-bit indirect AHB trigger address.
->> +
->> +  cdns,is-decoded-cs:
->> +    type: boolean
->> +    description:
->> +      Flag to indicate whether decoder is used or not.
->> +
->> +  cdns,rclk-en:
->> +    type: boolean
->> +    description:
->> +      Flag to indicate that QSPI return clock is used to latch the read
->> +      data rather than the QSPI clock. Make sure that QSPI return clock
->> +      is populated on the board before using this property.
->> +
->> +  resets:
->> +    maxItems : 2
->> +
->> +  reset-names:
->> +    minItems: 1
->> +    maxItems: 2
->> +    items:
->> +      enum: [ qspi, qspi-ocp ]
->> +
->> +# subnode's properties
->> +patternProperties:
->> +  "@[0-9a-f]+$":
->> +    type: object
->> +    description:
->> +      flash device uses the subnodes below defined properties.
->> +    properties:
->> +      cdns,read-delay:
->> +        $ref: /schemas/types.yaml#/definitions/uint32
->> +        description:
->> +          Delay for read capture logic, in clock cycles.
->> +
->> +      cdns,tshsl-ns:
->> +        description:
->> +          Delay in nanoseconds for the length that the master mode chip select
->> +          outputs are de-asserted between transactions.
->> +
->> +      cdns,tsd2d-ns:
->> +        description:
->> +          Delay in nanoseconds between one chip select being de-activated
->> +          and the activation of another.
->> +
->> +      cdns,tchsh-ns:
->> +        description:
->> +          Delay in nanoseconds between last bit of current transaction and
->> +          deasserting the device chip select (qspi_n_ss_out).
->> +
->> +      cdns,tslch-ns:
->> +        description:
->> +          Delay in nanoseconds between setting qspi_n_ss_out low and
->> +          first bit transfer.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - clocks
->> +  - cdns,fifo-depth
->> +  - cdns,fifo-width
->> +  - cdns,trigger-address
->> +  - cdns,is-decoded-cs
->> +  - cdns,rclk-en
->> +  - resets
->> +  - reset-names
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    qspi: spi@ff705000 {
->> +      compatible = "cadence,qspi","cdns,qpsi-nor";
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +      reg = <0xff705000 0x1000>,
->> +            <0xffa00000 0x1000>;
->> +      interrupts = <0 151 4>;
->> +      clocks = <&qspi_clk>;
->> +      cdns,fifo-depth = <128>;
->> +      cdns,fifo-width = <4>;
->> +      cdns,trigger-address = <0x00000000>;
->> +      resets = <&rst 0x1>, <&rst 0x2>;
->> +      reset-names = "qspi", "qspi-ocp";
->> +
->> +      flash@0 {
->> +              compatible = "jedec,spi-nor";
->> +              reg = <0x0>;
->> +              cdns,read-delay = <4>;
->> +              cdns,tshsl-ns = <50>;
->> +              cdns,tsd2d-ns = <50>;
->> +              cdns,tchsh-ns = <4>;
->> +              cdns,tslch-ns = <4>;
->> +     };
->> +
->> +    };
->> +
->> +...
->> -- 
->> 2.11.0
->>
+SGksIE1hc29uLCBZQyBMaW4sDQoNCk9uIDUvMjkvMjAgMTA6MzYgQU0sIE1hc29uIFlhbmcgd3Jv
+dGU6DQo+IEEgc2V0IG9mIHNpbXBsZSBjb21tYW5kIHNlcXVlbmNlcyBpcyBwcm92aWRlZCB3aGlj
+aCBjYW4gYmUgZXhlY3V0ZWQNCj4gZGlyZWN0bHkgYnkgdGhlIGhvc3QgY29udHJvbGxlciB0byBl
+bmFibGUgb2N0YWwgRFRSIG1vZGUuDQo+IA0KPiBFYWNoIGNvbW1hbmQgc2VxdWVuY2UgaXMgOCBw
+ZXIgYnl0ZSBmb3Igc2luZ2xlIFNQSSBtb2RlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogTWFzb24g
+WWFuZyA8bWFzb25jY3lhbmdAbXhpYy5jb20udHc+DQo+IC0tLQ0KPiAgZHJpdmVycy9tdGQvc3Bp
+LW5vci9jb3JlLmggfCAgMjAgKysrKysrKysrDQo+ICBkcml2ZXJzL210ZC9zcGktbm9yL3NmZHAu
+YyB8IDEwNCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4g
+IDIgZmlsZXMgY2hhbmdlZCwgMTI0IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL210ZC9zcGktbm9yL2NvcmUuaCBiL2RyaXZlcnMvbXRkL3NwaS1ub3IvY29yZS5oDQo+
+IGluZGV4IGEzM2Y4MDcuLjhkZTdmNTMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbXRkL3NwaS1u
+b3IvY29yZS5oDQo+ICsrKyBiL2RyaXZlcnMvbXRkL3NwaS1ub3IvY29yZS5oDQo+IEBAIC0xODMs
+NiArMTgzLDIzIEBAIHN0cnVjdCBzcGlfbm9yX2xvY2tpbmdfb3BzIHsNCj4gIH07DQo+ICANCj4g
+IC8qKg0KPiArICogc3RydWN0IGNtZF9zZXFfb2N0YWxfZHRyIC0gY29tbWFuZCBzZXF1ZW5jZXMg
+dG8gY2hhbmdlIHRvIG9jdGFsIERUUiBtb2RlDQo+ICsgKiBFYWNoIGNvbW1hbmQgc2VxdWVuY2Ug
+aXMgOCBwZXIgYnl0ZSBmb3Igc2luZ2xlIFNQSSBtb2RlLg0KPiArICogQGxlbjoJY29tbW1hbmQg
+bGVuZ3RoIG9mIGVhY2ggY29tbWFuZCBzZXF1ZW5jZS4NCj4gKyAqIEBvcGNvZGU6CWNvbW1hbmQg
+Y29kZS4NCj4gKyAqIEBhZGRyOglhZGRyZXNzIG9mZnNldCB0byBkZXZpY2UuDQo+ICsgKiBAZGF0
+YToJZGF0YSB3cml0ZSB0byBkZXZpY2UuDQo+ICsgKi8NCj4gK3N0cnVjdCBjbWRfc2VxX29jdGFs
+X2R0ciB7DQo+ICsJdTggbGVuOw0KPiArCXU4IG9wY29kZTsNCj4gKwl1MzIgYWRkcjsNCj4gKwl1
+OCBkYXRhOw0KPiArfTsNCg0KWW91IGRlZmluZSBzZXZlbiBieXRlcyBmb3IgdGhlIGNvbW1hbmQg
+c2VxdWVuY2UsIHdoaWxlIHRoZSB0YWJsZSBkZWZpbmVzDQplaWdodCBieXRlczogZmlyc3QgYnl0
+ZSBpbmRpY2F0ZXMgdGhlIGxlbmd0aCBvZiB0aGUgc2VxdWVuY2UsIGFuZCB0aGUNCmZvbGxvd2lu
+ZyBzZXZlbiBieXRlcyBhcmUgdmFsdWVzIHRvIGJlIG91dHB1dCBieSB0aGUgY29udHJvbGxlci4N
+CkhvdyBkaWQgeW91IGNob29zZSB0aGlzIGNtZCBzZXEgb3JnYW5pemF0aW9uPyBUaGUgc3RhbmRh
+cmQgcmVmZXJzIHRvIHRoZQ0KNy1ieXRlIHNlcXVlbmNlIGFzICJieXRlIHZhbHVlcyB0byBiZSBv
+dXRwdXQgYnkgdGhlIGNvbnRyb2xsZXIiLCBpdCBkb2Vzbid0DQppbmRpY2F0ZSBhdCB3aGljaCBv
+ZmZzZXQgdGhlIG9wY29kZSwgYWRkciBhbmQgZGF0YSBhcmUuDQoNCj4gKw0KPiArI2RlZmluZSBD
+TURfU0VRX05VTQk0DQo+ICsNCj4gKy8qKg0KPiAgICogc3RydWN0IHNwaV9ub3JfZmxhc2hfcGFy
+YW1ldGVyIC0gU1BJIE5PUiBmbGFzaCBwYXJhbWV0ZXJzIGFuZCBzZXR0aW5ncy4NCj4gICAqIElu
+Y2x1ZGVzIGxlZ2FjeSBmbGFzaCBwYXJhbWV0ZXJzIGFuZCBzZXR0aW5ncyB0aGF0IGNhbiBiZSBv
+dmVyd3JpdHRlbg0KPiAgICogYnkgdGhlIHNwaV9ub3JfZml4dXBzIGhvb2tzLCBvciBkeW5hbWlj
+YWxseSB3aGVuIHBhcnNpbmcgdGhlIEpFU0QyMTYNCj4gQEAgLTIwNSw2ICsyMjIsNyBAQCBzdHJ1
+Y3Qgc3BpX25vcl9sb2NraW5nX29wcyB7DQo+ICAgKiAgICAgICAgICAgICAgICAgICAgICBoaWdo
+ZXIgaW5kZXggaW4gdGhlIGFycmF5LCB0aGUgaGlnaGVyIHByaW9yaXR5Lg0KPiAgICogQGVyYXNl
+X21hcDoJCXRoZSBlcmFzZSBtYXAgcGFyc2VkIGZyb20gdGhlIFNGRFAgU2VjdG9yIE1hcCBQYXJh
+bWV0ZXINCj4gICAqICAgICAgICAgICAgICAgICAgICAgIFRhYmxlLg0KPiArICogQGNtZF9zZXE6
+CQljb21tYW5kIHNlcXVlbmNlIHRvIGNoYW5nZSB0byBvY3RhbCBEVFIgbW9kZS4NCj4gICAqIEBx
+dWFkX2VuYWJsZToJZW5hYmxlcyBTUEkgTk9SIHF1YWQgbW9kZS4NCj4gICAqIEBzZXRfNGJ5dGVf
+YWRkcl9tb2RlOiBwdXRzIHRoZSBTUEkgTk9SIGluIDQgYnl0ZSBhZGRyZXNzaW5nIG1vZGUuDQo+
+ICAgKiBAY29udmVydF9hZGRyOgljb252ZXJ0cyBhbiBhYnNvbHV0ZSBhZGRyZXNzIGludG8gc29t
+ZXRoaW5nIHRoZSBmbGFzaA0KPiBAQCAtMjMyLDYgKzI1MCw4IEBAIHN0cnVjdCBzcGlfbm9yX2Zs
+YXNoX3BhcmFtZXRlciB7DQo+ICANCj4gIAlzdHJ1Y3Qgc3BpX25vcl9lcmFzZV9tYXAgICAgICAg
+IGVyYXNlX21hcDsNCj4gIA0KPiArCXN0cnVjdCBjbWRfc2VxX29jdGFsX2R0cgljbWRfc2VxW0NN
+RF9TRVFfTlVNXTsNCj4gKw0KPiAgCWludCAoKnF1YWRfZW5hYmxlKShzdHJ1Y3Qgc3BpX25vciAq
+bm9yKTsNCj4gIAlpbnQgKCpzZXRfNGJ5dGVfYWRkcl9tb2RlKShzdHJ1Y3Qgc3BpX25vciAqbm9y
+LCBib29sIGVuYWJsZSk7DQo+ICAJdTMyICgqY29udmVydF9hZGRyKShzdHJ1Y3Qgc3BpX25vciAq
+bm9yLCB1MzIgYWRkcik7DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL210ZC9zcGktbm9yL3NmZHAu
+YyBiL2RyaXZlcnMvbXRkL3NwaS1ub3Ivc2ZkcC5jDQo+IGluZGV4IDI3YTRkZTQuLmVmMTkyOTAg
+MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbXRkL3NwaS1ub3Ivc2ZkcC5jDQo+ICsrKyBiL2RyaXZl
+cnMvbXRkL3NwaS1ub3Ivc2ZkcC5jDQo+IEBAIC0yMSw2ICsyMSw3IEBADQo+ICAjZGVmaW5lIFNG
+RFBfU0VDVE9SX01BUF9JRAkweGZmODEJLyogU2VjdG9yIE1hcCBUYWJsZSAqLw0KPiAgI2RlZmlu
+ZSBTRkRQXzRCQUlUX0lECQkweGZmODQgIC8qIDQtYnl0ZSBBZGRyZXNzIEluc3RydWN0aW9uIFRh
+YmxlICovDQo+ICAjZGVmaW5lIFNGRFBfUFJPRklMRTFfSUQJMHhmZjA1CS8qIHhTUEkgUHJvZmls
+ZSAxLjAgdGFibGUuICovDQo+ICsjZGVmaW5lIFNGRFBfQ01EX1RPXzhEVFJfSUQJMHhmZjBhICAv
+KiBDb21tYW5kIFNlcXVlbmNlcyB0byBPY3RhbCBEVFIgKi8NCj4gIA0KPiAgI2RlZmluZSBTRkRQ
+X1NJR05BVFVSRQkJMHg1MDQ0NDY1M1UNCj4gICNkZWZpbmUgU0ZEUF9KRVNEMjE2X01BSk9SCTEN
+Cj4gQEAgLTQ5LDYgKzUwLDE5IEBAIHN0cnVjdCB4c3BpX2R1bW15X2N5Y2xlcyB7DQo+ICAJdTgg
+c2hpZnQ7CS8qIEJpdCBzaGlmdCAqLw0KPiAgfTsNCj4gIA0KPiArI2RlZmluZSBDTURfVE9fOERU
+Ul9MRU4JCQlHRU5NQVNLKDMxLCAyNCkNCj4gKyNkZWZpbmUgQ01EX1RPXzhEVFJfT1BDT0RFCQlH
+RU5NQVNLKDIzLCAxNikNCj4gKyNkZWZpbmUgQ01EX1RPXzhEVFJfMV9BRERSCQlHRU5NQVNLKDE1
+LCA4KQ0KPiArI2RlZmluZSBDTURfVE9fOERUUl8xX0FERFJfREFUQQkJR0VOTUFTSyg3LCAwKQ0K
+PiArI2RlZmluZSBDTURfVE9fOERUUl80X0FERFJfTVNCCQlHRU5NQVNLKDE1LCAwKQ0KPiArI2Rl
+ZmluZSBDTURfVE9fOERUUl80X0FERFJfTFNCCQlHRU5NQVNLKDMxLCAxNikNCj4gKyNkZWZpbmUg
+Q01EX1RPXzhEVFJfNF9BRERSX0RBVEEJCUdFTk1BU0soMTUsIDgpDQo+ICsjZGVmaW5lIENNRF9U
+T184RFRSX1NJWkVfTUFYCQk4DQo+ICsNCj4gK3N0cnVjdCBzZmRwX2NtZF90b184ZHRyIHsNCj4g
+Kwl1MzIJZHdvcmRzW0NNRF9UT184RFRSX1NJWkVfTUFYXTsNCj4gK307DQo+ICsNCj4gIC8qIEJh
+c2ljIEZsYXNoIFBhcmFtZXRlciBUYWJsZSAyMHRoIERXT1JELCBNYXggb3BlcmF0aW9uIHNwZWVk
+IG9mIGRldmljZSAqLw0KPiAgc3RydWN0IG9jdGFsX21heF9zcGVlZCB7DQo+ICAJdTggaWR4OyAv
+KiBCaXRzIHZhbHVlICovDQo+IEBAIC0xMjE5LDYgKzEyMzMsOTEgQEAgc3RhdGljIGludCBzcGlf
+bm9yX3BhcnNlX3Byb2ZpbGUxKHN0cnVjdCBzcGlfbm9yICpub3IsDQo+ICB9DQo+ICANCj4gIC8q
+Kg0KPiArICogc3BpX25vcl9wYXJzZV9jbWRfdG9fOGR0cigpIC0gcGFyc2UgdGhlIGNvbW1hbmQg
+c2VxdWVuY2UgdG8gb2N0YWwgRFRSDQo+ICsgKiBAbm9yOgkJcG9pbnRlciB0byBhICdzdHJ1Y3Qg
+c3BpX25vcicNCj4gKyAqIEBwYXJhbV9oZWFkZXI6CWNvbW1hbmQgc2VxdWVuY2UgdG8gb2N0YWwg
+RFRSIHBhcmFtZXRlciB0YWJsZSBoZWFkZXIuDQo+ICsgKiBAcGFyYW1zOgkJcG9pbnRlciB0byB0
+aGUgJ3N0cnVjdCBzcGlfbm9yX2ZsYXNoX3BhcmFtZXRlcicgdG8gYmUuDQo+ICsgKg0KPiArICog
+UmV0dXJuOiAwIG9uIHN1Y2Nlc3MsIC1lcnJubyBvdGhlcndpc2UuDQo+ICsgKi8NCj4gK3N0YXRp
+YyBpbnQgc3BpX25vcl9wYXJzZV9jbWRfdG9fOGR0cihzdHJ1Y3Qgc3BpX25vciAqbm9yLA0KPiAr
+CQkJCSAgICAgY29uc3Qgc3RydWN0IHNmZHBfcGFyYW1ldGVyX2hlYWRlciAqaGVhZGVyLA0KPiAr
+CQkJCSAgICAgc3RydWN0IHNwaV9ub3JfZmxhc2hfcGFyYW1ldGVyICpwYXJhbXMpDQo+ICt7DQo+
+ICsJc3RydWN0IHNmZHBfY21kX3RvXzhkdHIgY21kX3NlcTsNCg0KeW91J2xsIG5lZWQgdG8ga21h
+bGxvYyBjbWRfc2VxIGJlY2F1c2Ugc3BpX25vcl9yZWFkX3NmZHAgZXhwZWN0cyBhIERNQS1hYmxl
+DQpidWZmZXIuDQoNCj4gKwl1MzIgaSwgaiwgYWRkcjsNCj4gKwlzaXplX3QgbGVuOw0KPiArCWlu
+dCByZXQ7DQo+ICsNCj4gKwlpZiAoaGVhZGVyLT5tYWpvciAhPSBTRkRQX0pFU0QyMTZfTUFKT1Ig
+fHwNCj4gKwkgICAgaGVhZGVyLT5sZW5ndGggPCBDTURfVE9fOERUUl9TSVpFX01BWCkNCj4gKwkJ
+cmV0dXJuIC1FSU5WQUw7DQo+ICsNCj4gKwlsZW4gPSBtaW5fdChzaXplX3QsIHNpemVvZihjbWRf
+c2VxKSwNCj4gKwkJICAgIGhlYWRlci0+bGVuZ3RoICogc2l6ZW9mKHUzMikpOw0KPiArDQo+ICsJ
+bWVtc2V0KCZjbWRfc2VxLCAwLCBzaXplb2YoY21kX3NlcSkpOw0KDQpubyBuZWVkIHRvIHNldCB0
+aGUgY29udGVudHMgdG8gemVybywgY21kX3NlcSB3aWxsIGJlIG92ZXJ3cml0dGVuIHdpdGgNCnRo
+ZSB2YWx1ZXMgcmVhZCBmcm9tIHNmZHAuDQoNCj4gKw0KPiArCWFkZHIgPSBTRkRQX1BBUkFNX0hF
+QURFUl9QVFAoaGVhZGVyKTsNCj4gKwlyZXQgPSBzcGlfbm9yX3JlYWRfc2ZkcChub3IsIGFkZHIs
+IGxlbiwgJmNtZF9zZXEpOw0KPiArCWlmIChyZXQpDQo+ICsJCWdvdG8gb3V0Ow0KPiArDQo+ICsJ
+LyogRml4IGVuZGlhbm5lc3Mgb2YgdGhlIENvbW1hbmQgU2VxdWVuY2VzIHRvIG9jdGFsIERUUi4g
+Ki8NCj4gKwlsZTMyX3RvX2NwdV9hcnJheShjbWRfc2VxLmR3b3JkcywgQ01EX1RPXzhEVFJfU0la
+RV9NQVgpOw0KPiArDQo+ICsJbWVtc2V0KHBhcmFtcy0+Y21kX3NlcSwgMCwgc2l6ZW9mKHBhcmFt
+cy0+Y21kX3NlcVtDTURfU0VRX05VTV0pKTsNCg0KcGFyYW1zLT5jbWRfc2VxIGlzIGFscmVhZHkg
+ZmlsbGVkIHdpdGggemVyb2VzLCBubyBuZWVkIHRvIG1lbXNldCBpdHMNCmNvbnRlbnRzIHRvIHpl
+cm8NCg0KPiArDQo+ICsJZm9yIChpID0gMCwgaiA9IDA7DQo+ICsJICAgICBpIDwgQ01EX1NFUV9O
+VU0gJiYgaiA8IENNRF9UT184RFRSX1NJWkVfTUFYOyBpKyssIGogKz0gMikgew0KPiArCQlwYXJh
+bXMtPmNtZF9zZXFbaV0ubGVuID0gRklFTERfR0VUKENNRF9UT184RFRSX0xFTiwNCj4gKwkJCQkJ
+CSAgIGNtZF9zZXEuZHdvcmRzW2pdKTsNCj4gKwkJaWYgKCFwYXJhbXMtPmNtZF9zZXFbaV0ubGVu
+KQ0KPiArCQkJYnJlYWs7DQo+ICsNCj4gKwkJc3dpdGNoIChwYXJhbXMtPmNtZF9zZXFbaV0ubGVu
+KSB7DQo+ICsJCWNhc2UgMToNCj4gKwkJCXBhcmFtcy0+Y21kX3NlcVtpXS5vcGNvZGUgPQ0KPiAr
+CQkJCUZJRUxEX0dFVChDTURfVE9fOERUUl9PUENPREUsDQo+ICsJCQkJCSAgY21kX3NlcS5kd29y
+ZHNbal0pOw0KPiArCQkJYnJlYWs7DQo+ICsNCj4gKwkJY2FzZSAzOg0KPiArCQkJcGFyYW1zLT5j
+bWRfc2VxW2ldLm9wY29kZSA9DQo+ICsJCQkJRklFTERfR0VUKENNRF9UT184RFRSX09QQ09ERSwN
+Cj4gKwkJCQkJICBjbWRfc2VxLmR3b3Jkc1tqXSk7DQo+ICsJCQlwYXJhbXMtPmNtZF9zZXFbaV0u
+YWRkciA9DQo+ICsJCQkJRklFTERfR0VUKENNRF9UT184RFRSXzFfQUREUiwNCj4gKwkJCQkJICBj
+bWRfc2VxLmR3b3Jkc1tqXSk7DQo+ICsJCQlwYXJhbXMtPmNtZF9zZXFbaV0uZGF0YSA9DQo+ICsJ
+CQkJRklFTERfR0VUKENNRF9UT184RFRSXzFfQUREUl9EQVRBLA0KPiArCQkJCQkgIGNtZF9zZXEu
+ZHdvcmRzW2pdKTsNCj4gKwkJCWJyZWFrOw0KPiArDQo+ICsJCWNhc2UgNjoNCj4gKwkJCXBhcmFt
+cy0+Y21kX3NlcVtpXS5vcGNvZGUgPQ0KPiArCQkJCUZJRUxEX0dFVChDTURfVE9fOERUUl9PUENP
+REUsDQo+ICsJCQkJCSAgY21kX3NlcS5kd29yZHNbal0pOw0KPiArCQkJcGFyYW1zLT5jbWRfc2Vx
+W2ldLmFkZHIgPQ0KPiArCQkJCUZJRUxEX0dFVChDTURfVE9fOERUUl80X0FERFJfTVNCLA0KPiAr
+CQkJCQkgIGNtZF9zZXEuZHdvcmRzW2pdKSA8PCAxNiB8DQo+ICsJCQkJRklFTERfR0VUKENNRF9U
+T184RFRSXzRfQUREUl9MU0IsDQo+ICsJCQkJCSAgY21kX3NlcS5kd29yZHNbaiArIDFdKTsNCj4g
+KwkJCXBhcmFtcy0+Y21kX3NlcVtpXS5kYXRhID0NCj4gKwkJCQlGSUVMRF9HRVQoQ01EX1RPXzhE
+VFJfNF9BRERSX0RBVEEsDQo+ICsJCQkJCSAgY21kX3NlcS5kd29yZHNbaiArIDFdKTsNCj4gKwkJ
+CWJyZWFrOw0KDQpob3cgc2hvdWxkIHdlIHRyZWF0IGNhc2UgMiwgNSBhbmQgNz8gRnJvbSB3aGVy
+ZSB0aGUgYXNzdW1wdGlvbnMgb24gaG93DQpkYXRhIGlzIG9yZ2FuaXplZCBpbiB0aGUgY21kIHNl
+cXVlbmNlPw0KDQpUaGFua3MsDQp0YQ0KDQo+ICsNCj4gKwkJZGVmYXVsdDoNCj4gKwkJCWJyZWFr
+Ow0KPiArCQl9DQo+ICsJfQ0KPiArDQo+ICtvdXQ6DQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCj4g
+Kw0KPiArLyoqDQo+ICAgKiBzcGlfbm9yX3BhcnNlX3NmZHAoKSAtIHBhcnNlIHRoZSBTZXJpYWwg
+Rmxhc2ggRGlzY292ZXJhYmxlIFBhcmFtZXRlcnMuDQo+ICAgKiBAbm9yOgkJcG9pbnRlciB0byBh
+ICdzdHJ1Y3Qgc3BpX25vcicNCj4gICAqIEBwYXJhbXM6CQlwb2ludGVyIHRvIHRoZSAnc3RydWN0
+IHNwaV9ub3JfZmxhc2hfcGFyYW1ldGVyJyB0byBiZQ0KPiBAQCAtMTMyMyw2ICsxNDIyLDExIEBA
+IGludCBzcGlfbm9yX3BhcnNlX3NmZHAoc3RydWN0IHNwaV9ub3IgKm5vciwNCj4gIAkJCWVyciA9
+IHNwaV9ub3JfcGFyc2VfcHJvZmlsZTEobm9yLCBwYXJhbV9oZWFkZXIsIHBhcmFtcyk7DQo+ICAJ
+CQlicmVhazsNCj4gIA0KPiArCQljYXNlIFNGRFBfQ01EX1RPXzhEVFJfSUQ6DQo+ICsJCQllcnIg
+PSBzcGlfbm9yX3BhcnNlX2NtZF90b184ZHRyKG5vciwNCj4gKwkJCQkJCQlwYXJhbV9oZWFkZXIs
+IHBhcmFtcyk7DQo+ICsJCQlicmVhazsNCj4gKw0KPiAgCQlkZWZhdWx0Og0KPiAgCQkJYnJlYWs7
+DQo+ICAJCX0NCj4gDQoNCg==
