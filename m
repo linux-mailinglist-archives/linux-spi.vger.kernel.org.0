@@ -2,116 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B291729FE62
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Oct 2020 08:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F95E2A00B5
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Oct 2020 10:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725790AbgJ3HZM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Oct 2020 03:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
+        id S1726017AbgJ3JG0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 30 Oct 2020 05:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbgJ3HZL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Oct 2020 03:25:11 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED71C0613D3;
-        Fri, 30 Oct 2020 00:25:10 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id t6so2527598plq.11;
-        Fri, 30 Oct 2020 00:25:10 -0700 (PDT)
+        with ESMTP id S1725808AbgJ3JGZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Oct 2020 05:06:25 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C171C0613CF;
+        Fri, 30 Oct 2020 02:06:25 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id p15so6782541ioh.0;
+        Fri, 30 Oct 2020 02:06:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hw/KvprqF2aWL/drMKTS7o6ufRsuBx5x5vRDgirN2WY=;
-        b=mGOR8hd7i0ta5xeu/n+B2eq8da3ixbJY2wWNH+Sk0jHMDG5oUDnhDEhRuRw/rTFBN7
-         LVPNhafi/GRSJJwI9lLrcEn2nYWJcXm2IbgsBayFQNobmyQ6rtQTVu0S3hEjkZB5P21W
-         OhC6CkCW3Qbmor01eJpgXmRdyLlcudxhoqnbzQtmat4KMmL/3QOXW5Dm7cfWJaYPt1tl
-         udqazUPqrtAfkKSR7ThsiU7qfRp9tERKA29pp/p64BFFGsU+wQzi5H2Fe62R4ZxnhSxd
-         l2pjrxRtTcpCeQxAumJ6ZBDS6GwfII6gs/p5oGW/wI672SzKmhQhc/Ep+Qo/C832Eekd
-         rSow==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ajoTgRnqXmGr4NGz4sDpf2t3leA2CkfA49rjJDDlhoM=;
+        b=KefjnyhYCfoYAm8EPLwzn8mn34N7B1TMaMJeF/wDuWddo58+UlTWBx1rN+Lb6ilbFL
+         R9xoEiBixZKDGgnqOalWsSSdeN9mkKx4jf9JLPBcsK3T2ymLpf5W22DOWn+XkqaystSQ
+         nls507X9al+GqM/2iGLlMTjznJS2kAensbitYckM9I+4aicXw5oCiproVXMfqX1p+btO
+         qn2J1elUsgRgmcJbr9pJkmuwJRYyKX9vXGRjr81ksVNCc6gy9t1ULavQAJq0KyhuUaP9
+         15mJOWUI3bxFFI2diqj/bBE6Z9WUsq27mWuuPera5ono9nNMxgykCnQ7ry+srf40XFd1
+         lIjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hw/KvprqF2aWL/drMKTS7o6ufRsuBx5x5vRDgirN2WY=;
-        b=g4siQ0W5wGF2q1uzUZk0CqYQXr0USYpA6Zr8EbHcaFYg+wTSyLUU12EFv45sGV44lA
-         AJOI0goXfdW6ch8uTQf5/WovIIbSDXaUdnNVykWZp12UWn0WWTiGFF1dGC58HagB4hby
-         ejy1ak4lfErmFCfX9daEMmrslVacEWpjzXRBiKoXsFwZEoiDnxJCRcIdc73QW+zZgEW2
-         Fp326GHGwfoRhBkBJCpfW4N+pqK4ajlhLixgZ/9CB8itY021ABurMc67/URHJ1jB4+5V
-         X0OSo52NtYv+0ATqSofFh6FQA4lVRZTrrpvempVo1jtZ5pepN6sJXrokqNR/XHJEI5xM
-         3zPQ==
-X-Gm-Message-State: AOAM532Toc+LMhqtrrP7gGQfEPYkUsRKcUuYZHVqhNtEflxKmseNKXiX
-        JGgojHtCKvvb38KwU9i9VCE=
-X-Google-Smtp-Source: ABdhPJwwSDxlAVPNV6R9bvmn4/zwrH64JjCCMrXyWhUNz/DKEn4/f4wt2kdJC6/9SHjhTLGsSKH/5A==
-X-Received: by 2002:a17:902:bd03:b029:d6:89e2:5b5e with SMTP id p3-20020a170902bd03b02900d689e25b5emr6831929pls.70.1604042710013;
-        Fri, 30 Oct 2020 00:25:10 -0700 (PDT)
-Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id h2sm2126510pjv.15.2020.10.30.00.24.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ajoTgRnqXmGr4NGz4sDpf2t3leA2CkfA49rjJDDlhoM=;
+        b=m1TgrjtLdu7lICkmQoi1AIuA7gE78XQnKfcBXhohK5TmJ5wOQ22WX60fHIqxD/kTDF
+         nUtDoUQalUXEW1R4FIkpMeOkQOjCTNNpTRfma+iIK0fjkeN+7cGF65u/HYNw5p3ReUZo
+         uw9kK/Q38Mp+q9hxW8KCY44EIZFhwAI9fur6m4tGf/5ivLghQkstCXTXkWE8dFrSfybT
+         BE1Xm+SiMHn21EI9ySexFLTiFa+WKXEnQBfTLnlyGcsVJLUsuVistju8VpwqASiywGvd
+         pxeJGa0i6tJCYHfExrMYbI+j1czPScnFurv6lZKBS6fQXqRRYsADxM1zmRIYB+FkcbKK
+         9Zow==
+X-Gm-Message-State: AOAM530V7IR5rtdOEfTjbLE+vJdb8qoId/xPKAmg2YaDzRWtq8E/k16d
+        qfhzInB486T+4vh8uSHwSy8=
+X-Google-Smtp-Source: ABdhPJw85sVyP6y5ilqXEh1EvkZzIms/rsekSrV637FLs1tm3tNCCEayMR8NXGizRE+7xH5lc+aNFg==
+X-Received: by 2002:a6b:fe11:: with SMTP id x17mr1031699ioh.192.1604048784946;
+        Fri, 30 Oct 2020 02:06:24 -0700 (PDT)
+Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id c1sm4878264ile.0.2020.10.30.02.06.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2020 00:25:09 -0700 (PDT)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Bangzheng Liu <bangzheng.liu@unisoc.com>
-Subject: [PATCH] spi: sprd: add runtime pm for transfer message
-Date:   Fri, 30 Oct 2020 15:24:44 +0800
-Message-Id: <20201030072444.22122-1-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 30 Oct 2020 02:06:23 -0700 (PDT)
+Date:   Fri, 30 Oct 2020 02:06:21 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        stable@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] spi: bcm2835: fix gpio cs level inversion
+Message-ID: <20201030090621.GA3594676@ubuntu-m3-large-x86>
+References: <20201014090230.2706810-1-martin@geanix.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201014090230.2706810-1-martin@geanix.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Bangzheng Liu <bangzheng.liu@unisoc.com>
+On Wed, Oct 14, 2020 at 11:02:30AM +0200, Martin Hundebøll wrote:
+> The work on improving gpio chip-select in spi core, and the following
+> fixes, has caused the bcm2835 spi driver to use wrong levels. Fix this
+> by simply removing level handling in the bcm2835 driver, and let the
+> core do its work.
+> 
+> Fixes: 3e5ec1db8bfe ("spi: Fix SPI_CS_HIGH setting when using native and GPIO CS")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Martin Hundebøll <martin@geanix.com>
+> ---
+>  drivers/spi/spi-bcm2835.c | 12 ------------
+>  1 file changed, 12 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+> index b87116e9b413..9b6ba94fe878 100644
+> --- a/drivers/spi/spi-bcm2835.c
+> +++ b/drivers/spi/spi-bcm2835.c
+> @@ -1259,18 +1259,6 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+>  	if (!chip)
+>  		return 0;
+>  
+> -	/*
+> -	 * Retrieve the corresponding GPIO line used for CS.
+> -	 * The inversion semantics will be handled by the GPIO core
+> -	 * code, so we pass GPIOD_OUT_LOW for "unasserted" and
+> -	 * the correct flag for inversion semantics. The SPI_CS_HIGH
+> -	 * on spi->mode cannot be checked for polarity in this case
+> -	 * as the flag use_gpio_descriptors enforces SPI_CS_HIGH.
+> -	 */
+> -	if (of_property_read_bool(spi->dev.of_node, "spi-cs-high"))
+> -		lflags = GPIO_ACTIVE_HIGH;
+> -	else
+> -		lflags = GPIO_ACTIVE_LOW;
+>  	spi->cs_gpiod = gpiochip_request_own_desc(chip, 8 - spi->chip_select,
+>  						  DRV_NAME,
+>  						  lflags,
+> -- 
+> 2.28.0
+> 
+> 
 
-Before transfer one message, spi core would set chipselect, sprd spi
-device should be resumed from runtime suspend, otherwise kernel would
-crash once access spi registers. The sprd spi device can be suspended
-until clearing chipselect which would be executed after transfer.
+Clang now warns:
 
-Fixes: e7d973a31c24 ("spi: sprd: Add SPI driver for Spreadtrum SC9860")
-Signed-off-by: Bangzheng Liu <bangzheng.liu@unisoc.com>
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
- drivers/spi/spi-sprd.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+drivers/spi/spi-bcm2835.c:1264:9: warning: variable 'lflags' is uninitialized when used here [-Wuninitialized]
+                                                  lflags,
+                                                  ^~~~~~
+drivers/spi/spi-bcm2835.c:1196:2: note: variable 'lflags' is declared here
+        enum gpio_lookup_flags lflags;
+        ^
+1 warning generated.
 
-diff --git a/drivers/spi/spi-sprd.c b/drivers/spi/spi-sprd.c
-index 635738f54c73..1733d10eb296 100644
---- a/drivers/spi/spi-sprd.c
-+++ b/drivers/spi/spi-sprd.c
-@@ -293,15 +293,25 @@ static void sprd_spi_chipselect(struct spi_device *sdev, bool cs)
- 	struct spi_controller *sctlr = sdev->controller;
- 	struct sprd_spi *ss = spi_controller_get_devdata(sctlr);
- 	u32 val;
-+	int ret;
- 
--	val = readl_relaxed(ss->base + SPRD_SPI_CTL0);
- 	/*  The SPI controller will pull down CS pin if cs is 0 */
- 	if (!cs) {
--		val &= ~SPRD_SPI_CS0_VALID;
-+		ret = pm_runtime_get_sync(ss->dev);
-+		if (ret < 0) {
-+			pm_runtime_put_noidle(ss->dev);
-+			dev_err(ss->dev, "Failed to power device: %d\n", ret);
-+			return;
-+		}
-+		val = readl_relaxed(ss->base + SPRD_SPI_CTL0);
-+		val &= ~SPRD_SPI_CS0_VALID; /* set cs0 valid */
- 		writel_relaxed(val, ss->base + SPRD_SPI_CTL0);
- 	} else {
--		val |= SPRD_SPI_CSN_MASK;
-+		val = readl_relaxed(ss->base + SPRD_SPI_CTL0);
-+		val |= SPRD_SPI_CSN_MASK; /* set all cs invalid */
- 		writel_relaxed(val, ss->base + SPRD_SPI_CTL0);
-+		pm_runtime_mark_last_busy(ss->dev);
-+		pm_runtime_put_autosuspend(ss->dev);
- 	}
- }
- 
--- 
-2.20.1
-
+Cheers,
+Nathan
