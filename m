@@ -2,84 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 593E929FCC5
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Oct 2020 05:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A00A29FD41
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Oct 2020 06:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbgJ3Emt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Oct 2020 00:42:49 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:37182 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbgJ3Ems (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Oct 2020 00:42:48 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09U4ggZg025782;
-        Thu, 29 Oct 2020 23:42:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1604032962;
-        bh=eqoZBq5/ceWt03VWmFJalh7jjQmcg8qkau2eAe0ufVk=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=BxK0yPKAYrZcupWSyBGf0GEqzw6Memj08XvC4DhWbhc+am+OhGzwlPulHCJMFRMc2
-         ehXcnKEpkl1JnfX+5fnhPaWzG2VcMTCdE3zv+WeiaVY83d7zt2VfcxMzSX9uUMD5Ss
-         sLvhSpkJQdvtLkOPNzv6Qu6VGDKoXLud+//mwu0E=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09U4ggWb067529
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 29 Oct 2020 23:42:42 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 29
- Oct 2020 23:42:41 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 29 Oct 2020 23:42:41 -0500
-Received: from [10.250.233.179] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09U4gdgN040637;
-        Thu, 29 Oct 2020 23:42:40 -0500
-Subject: Re: [RFC] Accessing QSPI device under mtd
-To:     Dinh Nguyen <dinguyen@kernel.org>, <linux-spi@vger.kernel.org>
-CC:     "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        <Tudor.Ambarus@microchip.com>, Mark Brown <broonie@kernel.org>,
-        Richard Gong <richard.gong@intel.com>
-References: <7918ea88-3ede-743e-4444-587d0f625c2e@kernel.org>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <b881ec8a-694f-8025-1dd0-e1c979e43816@ti.com>
-Date:   Fri, 30 Oct 2020 10:12:38 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <7918ea88-3ede-743e-4444-587d0f625c2e@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S1725812AbgJ3Fb7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 30 Oct 2020 01:31:59 -0400
+Received: from mga11.intel.com ([192.55.52.93]:29693 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725767AbgJ3Fb7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 30 Oct 2020 01:31:59 -0400
+IronPort-SDR: U1wskGKyUx5cr+ZgRnf8HWvF+YVabt6Vi81MbY1ySCJTyJZKS+Uqp8GXGVRmSmkXo8EpWOulXA
+ wkUSGRoM42EQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9789"; a="165065156"
+X-IronPort-AV: E=Sophos;i="5.77,432,1596524400"; 
+   d="scan'208";a="165065156"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2020 22:31:59 -0700
+IronPort-SDR: vxUjKadQ/48teY3wzsDK6UiTeYbmt2YJ4FjdSmjptCcDISmyYVkEAm3KtDbi79yTjx2r7mSjCG
+ /SnEg+h4AwHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,432,1596524400"; 
+   d="scan'208";a="304673625"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Oct 2020 22:31:55 -0700
+From:   "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     broonie@kernel.org, vigneshr@ti.com, tudor.ambarus@microchip.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        simon.k.r.goldschmidt@gmail.com, dinguyen@kernel.org,
+        richard@nod.at, cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
+        "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v6 0/6] spi: cadence-quadspi: Add QSPI controller support for Intel LGM SoC
+Date:   Fri, 30 Oct 2020 13:31:47 +0800
+Message-Id: <20201030053153.5319-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+Add QSPI controller support for Intel LGM SoC.
 
-On 10/30/20 1:17 AM, Dinh Nguyen wrote:
-> Hi,
-> 
-> With commit "a314f6367787ee mtd: spi-nor: Convert cadence-quadspi to use
-> spi-mem framework", I can no longer access the QSPI device under
-> /dev/mtd<n> on the Intel Stratix10 and Agilex platforms and is breaking
-> a few tests we have in-house.
-> 
-> Can someone point me to how to access the QSPI device using the spi-mem
-> framework?
-> 
+Note from Vignesh(mtd subsystem maintainer):
+This series is a subset of "[PATCH v12 0/4] spi: cadence-quadspi: Add
+support for the Cadence QSPI controller" by Ramuthevar,Vadivel MuruganX
+<vadivel.muruganx.ramuthevar@linux.intel.com> that intended to move
+cadence-quadspi driver to spi-mem framework
 
-There is should be no visible change to userspace. /dev/mtdX devices
-should still get created based on cmdline or ofpart.
+Those patches were trying to accomplish too many things in a single set
+of patches and need to split into smaller patches. This is reduced
+version of above series.
 
-Could you elaborate what fails? Is the flash detected and /dev/mtdX
-devices created? Is the issue with read or write or erase?
+Changes that are intended to make migration easy are split into separate
+patches. Patches 1 to 3 drop features that cannot be supported under
+spi-mem at the moment (backward compatibility is maintained).
+Patch 4-5 are trivial cleanups. Patch 6 does the actual conversion to
+spi-mem and patch 7 moves the driver to drivers/spi folder.
 
-Also what is the kernel version and .config being used? Full bootlog +
-testcase that fails would be helpful.
+I have tested both INDAC mode (used by non TI platforms like Altera
+SoCFPGA) and DAC mode (used by TI platforms) on TI EVMs.
 
-Regards
-Vignesh
+Patches to move move bindings over to
+"Documentation/devicetree/bindings/spi/" directory and also conversion
+of bindig doc to YAML will be posted separately.  Support for Intel
+platform would follow that.
+
+Reference:
+        https://lkml.org/lkml/2020/6/1/50
+
+---
+v6:
+  - Rob's review comments update
+  - add compatible string in properly aligned
+  - remove cadence-qspi extra comaptible string in example
+v5:
+  - Rob's review comments update
+  - const with single compatible string kept
+v4:
+  - Rob's review comments update
+  - remove '|' no formatting to preserve
+  - child node attributes follows under 'properties' under '@[0-9a-f]+$'.
+v3:
+  - Pratyush review comments update
+  - CQSPI_SUPPORTS_MULTI_CHIPSELECT macro used instead of cqspi->use_direct_mode
+  - disable DAC support placed in end of controller_init
+v2:
+  - Rob's review comments update for dt-bindings
+  - add 'oneOf' for compatible selection
+  - drop un-neccessary descriptions
+  - add the cdns,is-decoded-cs and cdns,rclk-en properties as schema
+  - remove 'allOf' in not required place
+  - add AdditionalProperties false
+  - add minItems/maxItems for qspi reset attributes
+
+resend-v1:
+  - As per Mark's suggestion , reorder the patch series 1-3 driver
+    support patches, series 4-6 dt-bindings patches.
+v1:
+  - initial version
+
+
+
+Ramuthevar Vadivel Murugan (6):
+  spi: cadence-quadspi: Add QSPI support for Intel LGM SoC
+  spi: cadence-quadspi: Disable the DAC for Intel LGM SoC
+  spi: cadence-quadspi: Add multi-chipselect support for Intel LGM SoC
+  spi: Move cadence-quadspi.txt to Documentation/devicetree/bindings/spi
+  dt-bindings: spi: Convert cadence-quadspi.txt to cadence-quadspi.yaml
+  dt-bindings: spi: Add compatible for Intel LGM SoC
+
+ .../devicetree/bindings/mtd/cadence-quadspi.txt    |  67 ---------
+ .../devicetree/bindings/spi/cadence-quadspi.yaml   | 150 +++++++++++++++++++++
+ drivers/spi/Kconfig                                |   2 +-
+ drivers/spi/spi-cadence-quadspi.c                  |  31 +++++
+ 4 files changed, 182 insertions(+), 68 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/cadence-quadspi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+
+-- 
+2.11.0
+
