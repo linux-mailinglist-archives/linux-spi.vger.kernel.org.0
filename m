@@ -2,80 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 216242A06BE
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Oct 2020 14:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1492A078D
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Oct 2020 15:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726078AbgJ3NtE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Oct 2020 09:49:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44894 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725939AbgJ3NtE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 30 Oct 2020 09:49:04 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 27A782076E;
-        Fri, 30 Oct 2020 13:49:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604065743;
-        bh=gAOAzJ+EvPOQGcYrP5tBVHcQPsPaGVH/vBEbdOwHmU0=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=n/YM+51sL37qLvcTLOh6AUalZqHvELlYPaB+nAR9BFllz5CHISDp9fYiIJDLNCUps
-         h5x5tBZXwy4r1dB3RRIDDsHITTOgNre8iYDjh6mYX1+IOjqDQkxJYnD+hU78Cokh5I
-         I1wVMewtJZhk1jUSeEwXD2J7qVc4R7m0x/qrlOzk=
-Date:   Fri, 30 Oct 2020 13:48:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        ludovic.desroches@microchip.com, alexandre.belloni@bootlin.com
-In-Reply-To: <20201030121116.869105-1-tudor.ambarus@microchip.com>
-References: <20201030121116.869105-1-tudor.ambarus@microchip.com>
-Subject: Re: [PATCH] spi: atmel: Downgrade to dev_dbg when dma_request_chan() fails
-Message-Id: <160406573670.21358.15332693887628851701.b4-ty@kernel.org>
+        id S1726718AbgJ3OMN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 30 Oct 2020 10:12:13 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43114 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbgJ3OMN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Oct 2020 10:12:13 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1kYV8U-0006ee-Tl; Fri, 30 Oct 2020 14:12:10 +0000
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
+From:   Colin Ian King <colin.king@canonical.com>
+Subject: re: spi: bcm2835: fix gpio cs level inversion
+Cc:     Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-spi@vger.kernel.org,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <ad239665-e342-cdef-71c0-4eba06b76797@canonical.com>
+Date:   Fri, 30 Oct 2020 14:12:10 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 30 Oct 2020 14:11:16 +0200, Tudor Ambarus wrote:
-> The IP's DMA capabilities are described in the SoC dtsi, to spare
-> users duplicating the DMA bindings in their board device tree. Users
-> that don't want to use DMA, have to overwrite the DMA bindings in
-> their board device tree. An example is:
-> commit ddcdaeb88242 ("ARM: dts: at91: sama5d2: Add DMA bindings for the SPI and UART flx4 functions")
-> 
-> When the DMA bindings are overwritten, one could see on the console:
-> atmel_spi fc018400.spi: error -ENODEV: No TX DMA channel, DMA is disabled
-> atmel_spi fc018400.spi: Atmel SPI Controller using PIO only
-> 
-> [...]
+Hi,
 
-Applied to
+Static analysis with coverity on today's linux-next has detected a
+potential issue in  bcm2835_spi_setup() in the following commit:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+commit 5e31ba0c0543a04483b53151eb5b7413efece94c
+Author: Martin Hundebøll <martin@geanix.com>
+Date:   Wed Oct 14 11:02:30 2020 +0200
 
-Thanks!
+    spi: bcm2835: fix gpio cs level inversion
 
-[1/1] spi: atmel: Downgrade to dev_dbg when dma_request_chan() fails
-      commit: 23fc86eb2f30fc975e5705bb1a2cf92956d2edd7
+The analysis is as follows:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+1191 static int bcm2835_spi_setup(struct spi_device *spi)
+1192 {
+1193        struct spi_controller *ctlr = spi->controller;
+1194        struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+1195        struct gpio_chip *chip;
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+1. var_decl: Declaring variable lflags without initializer.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+... and later on ...
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Uninitialized scalar variable (UNINIT)
 
-Thanks,
-Mark
+9. uninit_use_in_call: Using uninitialized value lflags when calling
+gpiochip_request_own_desc. [show details]
+
+1262        spi->cs_gpiod = gpiochip_request_own_desc(chip, 8 -
+spi->chip_select,
+1263                                                  DRV_NAME,
+1264                                                  lflags,
+1265                                                  GPIOD_OUT_LOW);
+
+
+The call to gpiochip_request_own_desc passes the uninitalized lflags
+down to  gpiod_configure_flags:
+
+int gpiod_configure_flags(struct gpio_desc *desc, const char *con_id,
+3698                unsigned long lflags, enum gpiod_flags dflags)
+3699{
+3700        int ret;
+3701
+3702        if (lflags & GPIO_ACTIVE_LOW)
+3703                set_bit(FLAG_ACTIVE_LOW, &desc->flags);
+3704
+3705        if (lflags & GPIO_OPEN_DRAIN)
+3706                set_bit(FLAG_OPEN_DRAIN, &desc->flags);
+
+so this looks like lflags needs to be initialized with something
+legitimate, probably zero?
+
+Colin
