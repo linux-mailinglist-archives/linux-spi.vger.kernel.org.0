@@ -2,61 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 185F82A1359
-	for <lists+linux-spi@lfdr.de>; Sat, 31 Oct 2020 04:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCCF2A137E
+	for <lists+linux-spi@lfdr.de>; Sat, 31 Oct 2020 06:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbgJaDbQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Oct 2020 23:31:16 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:6999 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726164AbgJaDbP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Oct 2020 23:31:15 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CNPpn3SjWzhd7P;
-        Sat, 31 Oct 2020 11:31:13 +0800 (CST)
-Received: from localhost (10.174.176.180) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Sat, 31 Oct 2020
- 11:31:04 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <broonie@kernel.org>, <bbrezillon@kernel.org>,
-        <frieder.schrempf@exceet.de>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH] spi: spi-mem: Fix passing zero to 'PTR_ERR' warning
-Date:   Sat, 31 Oct 2020 11:30:42 +0800
-Message-ID: <20201031033042.42892-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1725890AbgJaFYw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 31 Oct 2020 01:24:52 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:50012 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725822AbgJaFYw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 31 Oct 2020 01:24:52 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09V5OVAb016785;
+        Sat, 31 Oct 2020 00:24:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1604121871;
+        bh=7QZYP3Fkmns+ZS3BaGOm50P9gDWBVi9Bv50zxJzTdzY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=C9UAhrJnY3GJ+m4mihYu3r/qgfOvw4Ne5m44Pp90SoW5x2vlL5ozL0KKMWEIeFari
+         DWbu7x4UwHSYDXurMAMGBjAB4fh2l7UN/3D/b8bNBLu0JQwchGqq2RTj1yX61uxnG7
+         wFd+vEjE+gMm2JcGWkeBasuD6D2uhRSGEhCNqnps=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09V5OVE5086911
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 31 Oct 2020 00:24:31 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Sat, 31
+ Oct 2020 00:24:30 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Sat, 31 Oct 2020 00:24:30 -0500
+Received: from [10.250.233.179] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09V5OR62081123;
+        Sat, 31 Oct 2020 00:24:28 -0500
+Subject: Re: [RFC] Accessing QSPI device under mtd
+To:     Dinh Nguyen <dinguyen@kernel.org>, <linux-spi@vger.kernel.org>
+CC:     "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        <Tudor.Ambarus@microchip.com>, Mark Brown <broonie@kernel.org>,
+        Richard Gong <richard.gong@intel.com>
+References: <7918ea88-3ede-743e-4444-587d0f625c2e@kernel.org>
+ <b881ec8a-694f-8025-1dd0-e1c979e43816@ti.com>
+ <3d216597-c7d5-be37-2008-abd0dc2ea75e@kernel.org>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <70ffca2c-f454-625e-5c87-4d30441763e9@ti.com>
+Date:   Sat, 31 Oct 2020 10:54:27 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.176.180]
-X-CFilter-Loop: Reflected
+In-Reply-To: <3d216597-c7d5-be37-2008-abd0dc2ea75e@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fix smatch warning:
 
-drivers/spi/spi-mem.c:746 spi_mem_probe() warn: passing zero to 'PTR_ERR'
 
-Fixes: 5d27a9c8ea9e ("spi: spi-mem: Extend the SPI mem interface to set a custom memory name")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/spi/spi-mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 10/31/20 12:53 AM, Dinh Nguyen wrote:
+> Hi Vignesh,
+> 
+> I'm using the standard arm64 defconfig. Attached are 2 bootlogs, v5.8
+> and v5.9. On the v5.8, I can see the QSPI devices under /dev/mtdX, and
+> has this in the bootlog:
+> 
+> [    1.073562] cadence-qspi ff8d2000.spi: mt25qu02g (262144 Kbytes)
+> [    1.079865] 2 fixed-partitions partitions found on MTD device
+> ff8d2000.spi.0
+> [    1.086917] Creating 2 MTD partitions on "ff8d2000.spi.0":
+> [    1.092401] 0x000000000000-0x000003fe0000 : "Boot and fpga data"
+> [    1.103073] 0x000003fe0000-0x000010000000 : "Root Filesystem - JFFS2"
+> 
+> In v5.9, I don't see the above output in the bootlog, and there are no
+> /dev/mtdX. I did a bisect and it resulted in commit "a314f6367787ee mtd:
+> spi-nor: Convert cadence-quadspi to use spi-mem framework". If I revert
+> this patch, then QSPI device is under /dev/mtdX.
+> 
+> There were no changes in the Stratix10 DTS files between v5.8 and v5.9
+> that should have any affect on QSPI.
+> 
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index ef53290b7d24..a1b4d085834a 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -743,7 +743,7 @@ static int spi_mem_probe(struct spi_device *spi)
- 		mem->name = dev_name(&spi->dev);
- 
- 	if (IS_ERR_OR_NULL(mem->name))
--		return PTR_ERR(mem->name);
-+		return PTR_ERR_OR_ZERO(mem->name);
- 
- 	spi_set_drvdata(spi, mem);
- 
--- 
-2.17.1
+I think I found the problem. Looking at
+arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts:
 
+	&qspi {
+        	...
+	        flash@0 {
+        	        compatible = "n25q00a";
+			...
+		};
+	};
+
+Flash node is using non standard compatible "n25q00a". Per
+Documentation/devicetree/bindings/mtd/jedec,spi-nor.txt, SPI NOR flash
+node must include "jedec,spi-nor" as compatible.
+
+Old driver under drivers/mtd/spi-nor/ worked because, it directly called
+spi_nor_scan() w/o looking at compatible string.
+
+Could you try adding "jedec,spi-nor" to flash node's compatible list and
+see if everything works?
+
+
+[...]
