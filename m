@@ -2,70 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1A92A2D47
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Nov 2020 15:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBBF2A314B
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Nov 2020 18:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbgKBOr6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Nov 2020 09:47:58 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6690 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725914AbgKBOr6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Nov 2020 09:47:58 -0500
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CPwkg072nz15N3g;
-        Mon,  2 Nov 2020 22:47:55 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.487.0; Mon, 2 Nov 2020
- 22:47:50 +0800
-From:   Zhang Qilong <zhangqilong3@huawei.com>
-To:     <broonie@kernel.org>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>
-CC:     <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <linux-spi@vger.kernel.org>
-Subject: [PATCH] spi: imx: fix reference leak in two imx operations
-Date:   Mon, 2 Nov 2020 22:58:35 +0800
-Message-ID: <20201102145835.4765-1-zhangqilong3@huawei.com>
-X-Mailer: git-send-email 2.26.0.106.g9fadedd
+        id S1727705AbgKBRTN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Nov 2020 12:19:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40020 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726860AbgKBRTN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 2 Nov 2020 12:19:13 -0500
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0EE62222EC;
+        Mon,  2 Nov 2020 17:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604337552;
+        bh=9vVh0lTE5lrIqf0Vlrah6c3QQDXVQYB/8zbDtf8TtRY=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=18hv3bGgd3rNYYJqbok26eU9xGlwxgqe04q0gtS999B0y8ikyKPPYOxGvA+BT8iED
+         EqdaOwVWyMqnnUt12vvd7QFevwI8H6yEbEbzpYhdphLq8AonDQo0RpV95FbPOvPyzi
+         3itkOmzb+juodjpVnuIgrnzZrOf0lyZPRZctxun0=
+Date:   Mon, 02 Nov 2020 17:19:04 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     YueHaibing <yuehaibing@huawei.com>, frieder.schrempf@exceet.de,
+        bbrezillon@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20201031033042.42892-1-yuehaibing@huawei.com>
+References: <20201031033042.42892-1-yuehaibing@huawei.com>
+Subject: Re: [PATCH] spi: spi-mem: Fix passing zero to 'PTR_ERR' warning
+Message-Id: <160433754396.19045.17758426366195897910.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.225]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-pm_runtime_get_sync will increment pm usage counter even it
-failed. Forgetting to pm_runtime_put_noidle will result in
-reference leak in callers(spi_imx_prepare_message and
-spi_imx_remove), so we should fix it.
+On Sat, 31 Oct 2020 11:30:42 +0800, YueHaibing wrote:
+> Fix smatch warning:
+> 
+> drivers/spi/spi-mem.c:746 spi_mem_probe() warn: passing zero to 'PTR_ERR'
 
-Fixes: 525c9e5a32bd7 ("spi: imx: enable runtime pm support")
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
----
- drivers/spi/spi-imx.c | 2 ++
- 1 file changed, 2 insertions(+)
+Applied to
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 060b1f5c9b04..e582a6665d26 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1538,6 +1538,7 @@ spi_imx_prepare_message(struct spi_master *master, struct spi_message *msg)
- 
- 	ret = pm_runtime_get_sync(spi_imx->dev);
- 	if (ret < 0) {
-+		pm_runtime_put_noidle(spi_imx->dev);
- 		dev_err(spi_imx->dev, "failed to enable clock\n");
- 		return ret;
- 	}
-@@ -1740,6 +1741,7 @@ static int spi_imx_remove(struct platform_device *pdev)
- 
- 	ret = pm_runtime_get_sync(spi_imx->dev);
- 	if (ret < 0) {
-+		pm_runtime_put_noidle(spi_imx->dev);
- 		dev_err(spi_imx->dev, "failed to enable clock\n");
- 		return ret;
- 	}
--- 
-2.17.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/1] spi: spi-mem: Fix passing zero to 'PTR_ERR' warning
+      commit: a9c52d42814a44472fe1205775320ec20f556908
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
