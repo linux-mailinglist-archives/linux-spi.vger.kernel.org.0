@@ -2,126 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B052A22FD
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Nov 2020 03:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BA72A2337
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Nov 2020 04:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727517AbgKBCTe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 1 Nov 2020 21:19:34 -0500
-Received: from mail-eopbgr40059.outbound.protection.outlook.com ([40.107.4.59]:52910
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727498AbgKBCTd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 1 Nov 2020 21:19:33 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Oq1IIWcMp59VjYrLFweJcTqr01gLKF6+kvNzciW8NjT5//Gx66SeyeeQbhgaIrks9EbyMVZHXw/+lKYhE7X6Pjx5Bm5CAOJdSdJ9Ad6fTf050xu2IaQygPD6RSMuY0CqCXmDNBqmF2psxm6DjVrUa+Usmis15cTaE0GQOXFb7oPxYb2K2ktAdLljOkXTOHRsKl2J/q34vxSX+P1wdjHbNm461K5B74+CKKLwN6kQN5GSLi0c8RtFkHdRMnFAl/Kw7mY2Xv+NxYYmAnyqdqfpHMOoCGgdaqnL/IkXlgqJAM0aqLN9+iccV0gsYQq+Q1P88DejqibhWPJ8iklKJLAuPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ffem3QRw9HxhCOPe0tuLIiCGizXtgMTTY1pv1xcXOcg=;
- b=VBPrvZVhWaoEmI9LlrLJIOP/VcHF9oq1CfVfx/V7B4BhQfYOOZ3LZNSKB7eqU+h8bJ6/QF2gUtPlSc9e/mavD1v3FWUNjOtpg4nHqJQw2GFMfke9wo9u/Qo7h9qXHZ1l8kYwWHMaYECCv3bENoOpT1tDkQ9riVJBGi2PHwiLu87Z8+CwjrgEgJtWpv4Aa4b02rf5+ioeUJs2rjiSQs51dRflN3brTNX9Vn/WRsYe/bsT5tfchm/vu5RZgOizwTjPiROf6XHgkKZ4EBOI5sn1tojVVxJRa0eexllMFbBueHnDOQ1Tg41HruEe6LiTTU+ZE8uTeOeBqFblCV9WRjPjww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ffem3QRw9HxhCOPe0tuLIiCGizXtgMTTY1pv1xcXOcg=;
- b=en+aNg923czt07bssjF0L/KblusrT5ajL/SkY3ZG0h+a3jyswA38u/4VwIXoHlSFRL+BWm9dY/J+qBIpsClEzUinWenekVcZb99z3u3I+HOqaod/DI0QzE5pv17lgOVfZ/uLU1/XXDYdUjsw8yrazFsHppXHxbBeDp0s2V6B5rs=
-Received: from VE1PR04MB6768.eurprd04.prod.outlook.com (2603:10a6:803:129::26)
- by VI1PR04MB4144.eurprd04.prod.outlook.com (2603:10a6:803:45::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Mon, 2 Nov
- 2020 02:19:28 +0000
-Received: from VE1PR04MB6768.eurprd04.prod.outlook.com
- ([fe80::f16e:a79:2203:5d35]) by VE1PR04MB6768.eurprd04.prod.outlook.com
- ([fe80::f16e:a79:2203:5d35%6]) with mapi id 15.20.3499.030; Mon, 2 Nov 2020
- 02:19:28 +0000
-From:   Qiang Zhao <qiang.zhao@nxp.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] spi: fsl-dspi: fix NULL pointer dereference
-Thread-Topic: [PATCH] spi: fsl-dspi: fix NULL pointer dereference
-Thread-Index: AQHWrdB51nJYwHeGTEukPNQ8v2xIXamwIq4AgAP98WA=
-Date:   Mon, 2 Nov 2020 02:19:28 +0000
-Message-ID: <VE1PR04MB67686E6B184C4EC4076172AE91100@VE1PR04MB6768.eurprd04.prod.outlook.com>
-References: <20201029084035.19604-1-qiang.zhao@nxp.com>
- <20201030131828.7h25eps7wuf655eh@skbuf>
-In-Reply-To: <20201030131828.7h25eps7wuf655eh@skbuf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7acac0d7-d000-460c-7f4e-08d87ed5b9e5
-x-ms-traffictypediagnostic: VI1PR04MB4144:
-x-microsoft-antispam-prvs: <VI1PR04MB414424C165998C91EE85327291100@VI1PR04MB4144.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: srorWgCQzaOSbTAEmAGD0zxtoeLf9Rix1hdWBauy90nA6zkX/A30fYRsliqYbkYjMLI7p5lfZp6n8GjjplP5OtM5aITvqn6I/CGPE+jfpH+2ZYzRzj5I56J+pxJBRJmFbZC77Lvr9BZSSinMNh5Ug/FuCwfgdU8tuUURfLdKWJKp/paFEHs29ys8Cgs9klxYmD1l0i/9b+Bd4ze4eFZjiYXyAFu2XH8D/Ohq/UVfRuTV8BzS+995CIp0MrvjKt/JG/UYnA3cDx4EOgq4oAtQ7bMgevIrNBAPuX8YxAZTDxHiN0P+u/jXefo7Vcfe7pm3TBJQ5NVMhvvJD7MlikMncw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6768.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(44832011)(33656002)(26005)(53546011)(5660300002)(8676002)(478600001)(66946007)(110136005)(7696005)(316002)(2906002)(186003)(86362001)(71200400001)(76116006)(9686003)(54906003)(66476007)(55016002)(66556008)(66446008)(64756008)(8936002)(6506007)(52536014)(4326008)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: GRuoWXg/nbxqkko3y4MAkwgaJVasRizmvbJeg90X9jpjdELqAcR/4d89uZx9aMK4lg5HmUhaTR8AXpgxkaui2+s1E8c7ifhdPHulPEFMBbC+JIKmSGcfjimL9TkNCPGhWtts4CVUgxljgkrcjIwqkyhckxfAJaL2Scia4UO29b0i9GMdsFMx8n69IyfFH1+YEVWLSJorKewqHzN8p5sE7rMR91LSfyaBlDkd0EpoiR7fiw9IfbVqgEVhgpWwuMCM/4wOtFpaVNd+AA0b6aAlw0o11Ua2aBoYjHQps277r9sBdftcFwq+AIQV8OT5LHXzGtshkcopEnBlCSJGP+AiHA7AvDz4LxQYauLw7lgTd+7/4K4qBKEBXY3hfxkjPFmY8Hibwab7HEmkqObDnIzEcN2bXtGD6oJdPOMH/FxKwmizo0I8raaR5Ju9RnUoDKRN+HQBCgt+MvlN39J33y09r+CuqubWcqhugtgA4UUtFhZHklQTKg/6hzqqin+kwJk4wjZhDom4qAgCAdAkqnaDDRZtAv1TJn92FGSgb5yiHyTyG4wcyE8igx/SEZc2QMYC/7DQe0MImZFVBely0L26bwwAv5rz4oUG9jqYuJRNk4EUPNSRY6snIAaF7Gm/J6ysQMpuhKJK7A3a7IHZ+jcjrg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S1727450AbgKBDDw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 1 Nov 2020 22:03:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48320 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727445AbgKBDDw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 1 Nov 2020 22:03:52 -0500
+Received: from [10.0.0.28] (cpe-70-114-140-30.austin.res.rr.com [70.114.140.30])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6967B20773;
+        Mon,  2 Nov 2020 03:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604286231;
+        bh=Dak7xTSbex0tqxcRXv/lfFZMhw2wC7Af/NDVajmsiXs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=KzEqun9yafmycBwN8LZfxK2NBre5NvcJmSZXyUddZXQj1ImrdvT9NkeVA4CPtlqDV
+         r/nAbvo2foLHKwqmHUhq+uY0W7QTdo/zjT3u4gLPf3WzqVV4jqYPFb9c2t88D3DX50
+         1u3eghwXJCwxyY9SOVW5ebT3UHsyEzEuCbXOJYQI=
+Subject: Re: [RFC] Accessing QSPI device under mtd
+To:     Vignesh Raghavendra <vigneshr@ti.com>, linux-spi@vger.kernel.org
+Cc:     "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        Tudor.Ambarus@microchip.com, Mark Brown <broonie@kernel.org>,
+        Richard Gong <richard.gong@intel.com>
+References: <7918ea88-3ede-743e-4444-587d0f625c2e@kernel.org>
+ <b881ec8a-694f-8025-1dd0-e1c979e43816@ti.com>
+ <3d216597-c7d5-be37-2008-abd0dc2ea75e@kernel.org>
+ <70ffca2c-f454-625e-5c87-4d30441763e9@ti.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+Autocrypt: addr=dinguyen@kernel.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <5261561d-17ad-2053-19fb-ae5301546b48@kernel.org>
+Date:   Sun, 1 Nov 2020 21:03:50 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6768.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7acac0d7-d000-460c-7f4e-08d87ed5b9e5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2020 02:19:28.4104
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mL4WhRhvi7RzMVBvY0uym02jMgBsP+fW9ZicFVnbrNT8/X3CafwYDfsMyDBzyLLx9FxB6V3wpXoRhapsyBSUkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4144
+In-Reply-To: <70ffca2c-f454-625e-5c87-4d30441763e9@ti.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gVGh1LCBPY3QgMzAsIDIwMjAgYXQgMjE6MThQTSArMDgwMCwgVmxhZGltaXIgT2x0ZWFuIDxv
-bHRlYW52QGdtYWlsLmNvbT4gd3JvdGU6DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0N
-Cj4gRnJvbTogVmxhZGltaXIgT2x0ZWFuIDxvbHRlYW52QGdtYWlsLmNvbT4NCj4gU2VudDogMjAy
-MMTqMTDUwjMwyNUgMjE6MTgNCj4gVG86IFFpYW5nIFpoYW8gPHFpYW5nLnpoYW9AbnhwLmNvbT4N
-Cj4gQ2M6IGJyb29uaWVAa2VybmVsLm9yZzsgbGludXgtc3BpQHZnZXIua2VybmVsLm9yZzsNCj4g
-bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBzcGk6
-IGZzbC1kc3BpOiBmaXggTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlDQo+IA0KPiBPbiBUaHUsIE9j
-dCAyOSwgMjAyMCBhdCAwNDo0MDozNVBNICswODAwLCBRaWFuZyBaaGFvIHdyb3RlOg0KPiA+IEZy
-b206IFpoYW8gUWlhbmcgPHFpYW5nLnpoYW9AbnhwLmNvbT4NCj4gPg0KPiA+IFNpbmNlIGNvbW1p
-dCA1MzBiNWFmZmM2NzUgKCJzcGk6IGZzbC1kc3BpOiBmaXggdXNlLWFmdGVyLWZyZWUgaW4NCj4g
-PiByZW1vdmUgcGF0aCIpLCB0aGlzIGRyaXZlciBjYXVzZXMgYSBrZXJuZWwgb29wczoNCj4gPg0K
-PiA+IFsgICA2NC41ODc0MzFdIFVuYWJsZSB0byBoYW5kbGUga2VybmVsIE5VTEwgcG9pbnRlciBk
-ZXJlZmVyZW5jZSBhdA0KPiA+IHZpcnR1YWwgYWRkcmVzcyAwMDAwMDAwMDAwMDAwMDIwDQo+ID4g
-Wy4uXQ0KPiA+IFsgICA2NC43NTYwODBdIENhbGwgdHJhY2U6DQo+ID4gWyAgIDY0Ljc1ODUyNl0g
-IGRzcGlfc3VzcGVuZCsweDMwLzB4NzgNCj4gPiBbICAgNjQuNzYyMDEyXSAgcGxhdGZvcm1fcG1f
-c3VzcGVuZCsweDI4LzB4NzANCj4gPg0KPiA+IFRoaXMgaXMgYmVjYXVzZSBzaW5jZSB0aGlzIGNv
-bW1pdCwgdGhlIGRyaXZlcnMgcHJpdmF0ZSBkYXRhIHBvaW50IHRvDQo+ID4gImRzcGkiIGluc3Rl
-YWQgb2YgImN0bHIiLCB0aGUgY29kZXMgaW4gc3VzcGVuZCBhbmQgcmVzdW1lIGZ1bmMgd2VyZQ0K
-PiA+IG5vdCBtb2RpZmllZCBjb3JyZXNwb25kbHkuDQo+ID4NCj4gPiBGaXhlczogNTMwYjVhZmZj
-Njc1ICgic3BpOiBmc2wtZHNwaTogZml4IHVzZS1hZnRlci1mcmVlIGluIHJlbW92ZQ0KPiA+IHBh
-dGgiKQ0KPiA+IFNpZ25lZC1vZmYtYnk6IFpoYW8gUWlhbmcgPHFpYW5nLnpoYW9AbnhwLmNvbT4N
-Cj4gPiAtLS0NCj4gDQo+IFJldmlld2VkLWJ5OiBWbGFkaW1pciBPbHRlYW4gPG9sdGVhbnZAZ21h
-aWwuY29tPg0KPiANCj4gUGxlYXNlIHJlc2VuZCB3aXRoIE1hcmsncyBjb21tZW50LiBJIHdvdWxk
-IHByZWZlciB0aGF0IHlvdSBldmVuIHJlbW92ZSB0aGUNCj4gc3RhY2sgdHJhY2UgY29tcGxldGVs
-eSBhbmQgbWFrZSBpdCBtb3JlIG9idmlvdXMgaW4gdGhlIGNvbW1pdCBtZXNzYWdlIGl0c2VsZg0K
-PiB0aGF0IHRoZSBOVUxMIHBvaW50ZXIgb2NjdXJzIGR1cmluZyBzdXNwZW5kL3Jlc3VtZS4NCj4g
-U29tZWhvdyB0aGF0IG1hbmFnZWQgdG8gZ2V0IG9ic2N1cmVkIGluIHlvdXIgY3VycmVudCB2ZXJz
-aW9uLiBJdCBpcyBhbHNvIG5vdA0KPiBoZWxwZnVsIGF0IGFsbCB0aGF0IHRoZXJlIGFscmVhZHkg
-ZXhpc3RzIGEgY29tbWl0IHRpdGxlZCAnc3BpOg0KPiBmc2wtZHNwaTogZml4IE5VTEwgcG9pbnRl
-ciBkZXJlZmVyZW5jZScgb24gdGhpcyBkcml2ZXIuIFRoaXMgY2F1c2VzIGNvbmZ1c2lvbiBmb3IN
-Cj4gYmFja3BvcnRlcnMuIFBsZWFzZSBwcm92aWRlIGEgdW5pcXVlIGNvbW1pdCBtZXNzYWdlLg0K
-PiBUaGFua3MuDQoNCkhvdyBhYm91dCBpdCBsb29rcyBsaWtlIGJlbG93Og0KDQogICAgc3BpOiBm
-c2wtZHNwaTogZml4IHdyb25nIHBvaW50ZXIgaW4gc3VzcGVuZC9yZXN1bWUNCg0KICAgIFNpbmNl
-IGNvbW1pdCA1MzBiNWFmZmM2NzUgKCJzcGk6IGZzbC1kc3BpOiBmaXggdXNlLWFmdGVyLWZyZWUg
-aW4NCiAgICByZW1vdmUgcGF0aCIpLCB0aGlzIGRyaXZlciBjYXVzZXMgYSAiTlVMTCBwb2ludGVy
-IGRlcmVmZXJlbmNlIg0KICAgIGluIGRzcGlfc3VzcGVuZC9yZXN1bWUuDQogICAgVGhpcyBpcyBi
-ZWNhdXNlIHNpbmNlIHRoaXMgY29tbWl0LCB0aGUgZHJpdmVycyBwcml2YXRlIGRhdGEgcG9pbnQg
-dG8NCiAgICAiZHNwaSIgaW5zdGVhZCBvZiAiY3RsciIsIHRoZSBjb2RlcyBpbiBzdXNwZW5kIGFu
-ZCByZXN1bWUgZnVuYyB3ZXJlDQogICAgbm90IG1vZGlmaWVkIGNvcnJlc3BvbmRseS4NCg0KDQpC
-ZXN0IFJlZ2FyZHMsDQpRaWFuZyBaaGFvDQo=
+
+
+On 10/31/20 12:24 AM, Vignesh Raghavendra wrote:
+> 
+> 
+> On 10/31/20 12:53 AM, Dinh Nguyen wrote:
+>> Hi Vignesh,
+>>
+>> I'm using the standard arm64 defconfig. Attached are 2 bootlogs, v5.8
+>> and v5.9. On the v5.8, I can see the QSPI devices under /dev/mtdX, and
+>> has this in the bootlog:
+>>
+>> [    1.073562] cadence-qspi ff8d2000.spi: mt25qu02g (262144 Kbytes)
+>> [    1.079865] 2 fixed-partitions partitions found on MTD device
+>> ff8d2000.spi.0
+>> [    1.086917] Creating 2 MTD partitions on "ff8d2000.spi.0":
+>> [    1.092401] 0x000000000000-0x000003fe0000 : "Boot and fpga data"
+>> [    1.103073] 0x000003fe0000-0x000010000000 : "Root Filesystem - JFFS2"
+>>
+>> In v5.9, I don't see the above output in the bootlog, and there are no
+>> /dev/mtdX. I did a bisect and it resulted in commit "a314f6367787ee mtd:
+>> spi-nor: Convert cadence-quadspi to use spi-mem framework". If I revert
+>> this patch, then QSPI device is under /dev/mtdX.
+>>
+>> There were no changes in the Stratix10 DTS files between v5.8 and v5.9
+>> that should have any affect on QSPI.
+>>
+> 
+> I think I found the problem. Looking at
+> arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts:
+> 
+> 	&qspi {
+>         	...
+> 	        flash@0 {
+>         	        compatible = "n25q00a";
+> 			...
+> 		};
+> 	};
+> 
+> Flash node is using non standard compatible "n25q00a". Per
+> Documentation/devicetree/bindings/mtd/jedec,spi-nor.txt, SPI NOR flash
+> node must include "jedec,spi-nor" as compatible.
+> 
+> Old driver under drivers/mtd/spi-nor/ worked because, it directly called
+> spi_nor_scan() w/o looking at compatible string.
+> 
+> Could you try adding "jedec,spi-nor" to flash node's compatible list and
+> see if everything works?
+> 
+> 
+
+Yes, that fixed it! I have a question though, if I also change it to
+"jedec,spi-nor" on the v5.8 kernel, prior to the spi-mem commit, I get
+this error:
+
+[    1.075268] cadence-qspi ff8d2000.spi: unrecognized JEDEC id bytes:
+d0 5d 91 08 22 00
+[    1.083091] cadence-qspi ff8d2000.spi: Cadence QSPI NOR probe failed -2
+[    1.089761] cadence-qspi: probe of ff8d2000.spi failed with error -2
+
+Do you know why that is?
+
+Thanks,
+Dinh
