@@ -2,91 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDF02A37CC
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Nov 2020 01:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CBE2A3A4B
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Nov 2020 03:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725921AbgKCAeG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Nov 2020 19:34:06 -0500
-Received: from mga04.intel.com ([192.55.52.120]:25247 "EHLO mga04.intel.com"
+        id S1725988AbgKCCPX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Nov 2020 21:15:23 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:41376 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725906AbgKCAeG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 2 Nov 2020 19:34:06 -0500
-IronPort-SDR: eq0scj/uCsSvlIK1VVt1x795Pvv5ov73+NTfMwIuLMjYENMVoXuWz6mkO1yE7yAZHGdORZ4Tqa
- Rnpq4tywEO2A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9793"; a="166384287"
-X-IronPort-AV: E=Sophos;i="5.77,446,1596524400"; 
-   d="scan'208";a="166384287"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2020 16:34:06 -0800
-IronPort-SDR: xbRQgWYrcrOuBoJfyMtFIq//3D72oJFk5fUeMIoJaOSek8AZq7zsaD5ZO3DeEPEjvEH7K1hGmG
- DZ0XEXWFmZBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,446,1596524400"; 
-   d="scan'208";a="357499912"
-Received: from lkp-server02.sh.intel.com (HELO 9353403cd79d) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Nov 2020 16:34:03 -0800
-Received: from kbuild by 9353403cd79d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kZkGw-0000FJ-Vh; Tue, 03 Nov 2020 00:34:02 +0000
-Date:   Tue, 3 Nov 2020 08:33:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, broonie@kernel.org,
-        robh+dt@kernel.org, joel@jms.id.au, andrew@aj.id.au, clg@kaod.org,
-        bbrezillon@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-spi@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: [RFC PATCH] spi: aspeed: aspeed_spi_get_io_mode() can be static
-Message-ID: <20201103003331.GA44379@4742e760afe2>
-References: <20201102075213.32404-5-chin-ting_kuo@aspeedtech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201102075213.32404-5-chin-ting_kuo@aspeedtech.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1725982AbgKCCPX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 2 Nov 2020 21:15:23 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3FE49200293;
+        Tue,  3 Nov 2020 03:15:21 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E70EB200145;
+        Tue,  3 Nov 2020 03:15:18 +0100 (CET)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id A75FF402BC;
+        Tue,  3 Nov 2020 03:15:15 +0100 (CET)
+From:   Qiang Zhao <qiang.zhao@nxp.com>
+To:     olteanv@gmail.com, broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhao Qiang <qiang.zhao@nxp.com>
+Subject: [Patch v2] spi: fsl-dspi: fix wrong pointer in suspend/resume
+Date:   Tue,  3 Nov 2020 10:05:46 +0800
+Message-Id: <20201103020546.1822-1-qiang.zhao@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Zhao Qiang <qiang.zhao@nxp.com>
 
-Signed-off-by: kernel test robot <lkp@intel.com>
+Since commit 530b5affc675 ("spi: fsl-dspi: fix use-after-free in
+remove path"), this driver causes a "NULL pointer dereference"
+in dspi_suspend/resume.
+This is because since this commit, the drivers private data point to
+"dspi" instead of "ctlr", the codes in suspend and resume func were
+not modified correspondly.
+
+Fixes: 530b5affc675 ("spi: fsl-dspi: fix use-after-free in remove path")
+Signed-off-by: Zhao Qiang <qiang.zhao@nxp.com>
 ---
- spi-aspeed.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Changes for v2:
+	- modify commit msg
 
-diff --git a/drivers/spi/spi-aspeed.c b/drivers/spi/spi-aspeed.c
-index 795f67c9ca6ac3..6b067dee833246 100644
---- a/drivers/spi/spi-aspeed.c
-+++ b/drivers/spi/spi-aspeed.c
-@@ -144,7 +144,7 @@ static void aspeed_spi_chip_set_4byte(struct aspeed_spi_controller *ast_ctrl,
- 	writel(reg_val, ast_ctrl->regs + OFFSET_CE_ADDR_MODE_CTRL);
- }
+ drivers/spi/spi-fsl-dspi.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index 3967afa..1a08c1d 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -1080,12 +1080,11 @@ MODULE_DEVICE_TABLE(of, fsl_dspi_dt_ids);
+ #ifdef CONFIG_PM_SLEEP
+ static int dspi_suspend(struct device *dev)
+ {
+-	struct spi_controller *ctlr = dev_get_drvdata(dev);
+-	struct fsl_dspi *dspi = spi_controller_get_devdata(ctlr);
++	struct fsl_dspi *dspi = dev_get_drvdata(dev);
  
--uint32_t aspeed_spi_get_io_mode(uint32_t bus_width)
-+static uint32_t aspeed_spi_get_io_mode(uint32_t bus_width)
+ 	if (dspi->irq)
+ 		disable_irq(dspi->irq);
+-	spi_controller_suspend(ctlr);
++	spi_controller_suspend(dspi->ctlr);
+ 	clk_disable_unprepare(dspi->clk);
+ 
+ 	pinctrl_pm_select_sleep_state(dev);
+@@ -1095,8 +1094,7 @@ static int dspi_suspend(struct device *dev)
+ 
+ static int dspi_resume(struct device *dev)
  {
- 	switch (bus_width) {
- 	case 1:
-@@ -295,8 +295,8 @@ aspeed_2600_spi_clk_basic_setting(struct aspeed_spi_controller *ast_ctrl,
-  * content is too monotonous, the frequency recorded in the device
-  * tree will be adopted.
-  */
--int aspeed_2600_spi_timing_calibration(struct aspeed_spi_controller *ast_ctrl,
--				       uint32_t cs)
-+static int aspeed_2600_spi_timing_calibration(struct aspeed_spi_controller *ast_ctrl,
-+					      uint32_t cs)
- {
- 	int ret = 0;
- 	struct device *dev = ast_ctrl->dev;
-@@ -432,7 +432,7 @@ int aspeed_2600_spi_timing_calibration(struct aspeed_spi_controller *ast_ctrl,
-  * of its related flash size. Namely, the total decoded size
-  * from flash 0 to flash N should be multiple of flash (N + 1).
-  */
--void aspeed_2600_adjust_decode_sz(uint32_t decode_sz_arr[], int len)
-+static void aspeed_2600_adjust_decode_sz(uint32_t decode_sz_arr[], int len)
- {
- 	int cs, j;
- 	uint32_t sz;
+-	struct spi_controller *ctlr = dev_get_drvdata(dev);
+-	struct fsl_dspi *dspi = spi_controller_get_devdata(ctlr);
++	struct fsl_dspi *dspi = dev_get_drvdata(dev);
+ 	int ret;
+ 
+ 	pinctrl_pm_select_default_state(dev);
+@@ -1104,7 +1102,7 @@ static int dspi_resume(struct device *dev)
+ 	ret = clk_prepare_enable(dspi->clk);
+ 	if (ret)
+ 		return ret;
+-	spi_controller_resume(ctlr);
++	spi_controller_resume(dspi->ctlr);
+ 	if (dspi->irq)
+ 		enable_irq(dspi->irq);
+ 
+-- 
+2.7.4
+
