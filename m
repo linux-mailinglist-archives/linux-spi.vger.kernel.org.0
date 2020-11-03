@@ -2,32 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0B32A3DE6
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Nov 2020 08:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8BE2A3DEB
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Nov 2020 08:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725968AbgKCHnn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Nov 2020 02:43:43 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7038 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725958AbgKCHnn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Nov 2020 02:43:43 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CQMGg5mvbzhXkR;
-        Tue,  3 Nov 2020 15:43:39 +0800 (CST)
+        id S1727889AbgKCHnv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Nov 2020 02:43:51 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:7448 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727898AbgKCHns (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Nov 2020 02:43:48 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CQMGn33GyzhfTt;
+        Tue,  3 Nov 2020 15:43:45 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 3 Nov 2020 15:43:35 +0800
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 3 Nov 2020 15:43:36 +0800
 From:   Qinglang Miao <miaoqinglang@huawei.com>
 To:     Mark Brown <broonie@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>
+        Matthias Brugger <matthias.bgg@gmail.com>
 CC:     <linux-spi@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Qinglang Miao <miaoqinglang@huawei.com>
-Subject: [PATCH v2] spi: bcm63xx-hsspi: fix missing clk_disable_unprepare() on error in bcm63xx_hsspi_resume
-Date:   Tue, 3 Nov 2020 15:49:11 +0800
-Message-ID: <20201103074911.195530-1-miaoqinglang@huawei.com>
+Subject: [PATCH v2] spi: mt7621: fix missing clk_disable_unprepare() on error in mt7621_spi_probe
+Date:   Tue, 3 Nov 2020 15:49:12 +0800
+Message-ID: <20201103074912.195576-1-miaoqinglang@huawei.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -39,31 +39,34 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Fix the missing clk_disable_unprepare() before return
-from bcm63xx_hsspi_resume in the error handling case when
-fails to prepare and enable bs->pll_clk.
+from mt7621_spi_probe in the error handling case.
 
-Fixes: 0fd85869c2a9 ("spi/bcm63xx-hsspi: keep pll clk enabled")
+Fixes: cbd66c626e16 ("spi: mt7621: Move SPI driver out of staging")
 Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
 ---
- drivers/spi/spi-bcm63xx-hsspi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/spi/spi-mt7621.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
-index 9909b18f3..1f08d7553 100644
---- a/drivers/spi/spi-bcm63xx-hsspi.c
-+++ b/drivers/spi/spi-bcm63xx-hsspi.c
-@@ -494,8 +494,10 @@ static int bcm63xx_hsspi_resume(struct device *dev)
- 
- 	if (bs->pll_clk) {
- 		ret = clk_prepare_enable(bs->pll_clk);
--		if (ret)
-+		if (ret) {
-+			clk_disable_unprepare(bs->clk);
- 			return ret;
-+		}
+diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
+index 2c3b7a2a1..2cdae7994 100644
+--- a/drivers/spi/spi-mt7621.c
++++ b/drivers/spi/spi-mt7621.c
+@@ -353,6 +353,7 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+ 	master = spi_alloc_master(&pdev->dev, sizeof(*rs));
+ 	if (!master) {
+ 		dev_info(&pdev->dev, "master allocation failed\n");
++		clk_disable_unprepare(clk);
+ 		return -ENOMEM;
  	}
  
- 	spi_master_resume(master);
+@@ -377,6 +378,7 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+ 	ret = device_reset(&pdev->dev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "SPI reset failed!\n");
++		clk_disable_unprepare(clk);
+ 		return ret;
+ 	}
+ 
 -- 
 2.23.0
 
