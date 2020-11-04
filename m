@@ -2,100 +2,217 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8BB2A6F40
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Nov 2020 21:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 158322A701A
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Nov 2020 23:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732445AbgKDUyn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Nov 2020 15:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732388AbgKDUyk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Nov 2020 15:54:40 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC19C0613D4
-        for <linux-spi@vger.kernel.org>; Wed,  4 Nov 2020 12:54:38 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id p63so53522ybc.7
-        for <linux-spi@vger.kernel.org>; Wed, 04 Nov 2020 12:54:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=ydU8MqNb5ODaxL3+Z2DSyH1qiAoSfviF3VEkdiIDKBY=;
-        b=Mi+nN8QIQ7x63V+TG/eYb4r6c6UacmC9riV2b3bPg3sSUVtnALhVnovndw/IexzccJ
-         nx8Les/RmPNDQZDpqqytrNU82vpIYrJEEOw/MlSsV4hCS6sIDVhvOvXWlTszMpvrP1nl
-         iSdNI7J0W6i3+3z87KzdLwSTQr6AEw+LipxCCs1IocG+9tkFWO6epStStoDcqwxzSDsY
-         i5MBM4tspoQnVHGlZ4PAtsEecXczCzCKWjA2c/WonpQkECU5wL8woPGrIAmt5fxWFCmY
-         hWwsXUMHpeyhOtvxkHcgqCZ8SUsTQTBZdHayWNXal4DLYAwiiH1LLtDiqi6SOXBP7d70
-         gX3Q==
+        id S1732194AbgKDWCr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Nov 2020 17:02:47 -0500
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:42244 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728952AbgKDWCo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Nov 2020 17:02:44 -0500
+Received: by mail-oo1-f67.google.com with SMTP id l26so9504oop.9;
+        Wed, 04 Nov 2020 14:02:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=ydU8MqNb5ODaxL3+Z2DSyH1qiAoSfviF3VEkdiIDKBY=;
-        b=uSCy0TJTL34htCeo50gU9Xo8+FxYVefE/WxwpygsL5Eu2Z8S2VyJ3FJ7axfaMq/0aA
-         my3Q7y2rZmmpbCZaJTCzgyTt1d8ZjqEoOKi6NRl/ulo8qSB7tpa0lGawehwAWbUW+ZVD
-         Hyu6djtfBDrmxUUtjE1hW3QSC9cy8TaxDQF0ywuQVRyU85z2uV9fpHA1rGCoufidkMkq
-         NFT7ZhTRYrXFlQhPKPJ0620qbx+CexXwrYSvJ1/boFbGDcWLZYntDLr+aXyrDoiBooj3
-         it1ZH7MdK6Z1Ykxbb2wj6zJHR0a6BUnyg4wBR8x/BKf9fH4iM4qPiXOyrKdCVHFYIyBx
-         hVew==
-X-Gm-Message-State: AOAM530GuNoYOpPLLpys7uIO7AZSbqJ4a/2yz0CzqHCpkSGi2C634+Q9
-        BFU0g+NmzPwfKc59j0oEeue6w7DmIo4Llag=
-X-Google-Smtp-Source: ABdhPJw5zVtQunGCPIAfu7fOW9XCFg0q3VsIcMowV4//GgSeDsTJfw4AS5PE/RJBihvUIcjkmYJH4b+ocO86DZg=
-Sender: "saravanak via sendgmr" <saravanak@saravanak.san.corp.google.com>
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:7220:84ff:fe09:fedc])
- (user=saravanak job=sendgmr) by 2002:a25:8709:: with SMTP id
- a9mr36737716ybl.208.1604523278064; Wed, 04 Nov 2020 12:54:38 -0800 (PST)
-Date:   Wed,  4 Nov 2020 12:54:31 -0800
-In-Reply-To: <20201104205431.3795207-1-saravanak@google.com>
-Message-Id: <20201104205431.3795207-2-saravanak@google.com>
-Mime-Version: 1.0
-References: <20201104205431.3795207-1-saravanak@google.com>
-X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
-Subject: [PATCH v1 2/2] spi: Populate fwnode in of_register_spi_device()
-From:   Saravana Kannan <saravanak@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Cheng-Jui.Wang@mediatek.com, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        clang-built-linux@googlegroups.com,
-        Daniel Mentz <danielmentz@google.com>,
-        linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VDlYs9n7jp3BkABO++FRUphY3QSzFMD8WBO0XVDWXfk=;
+        b=ucnx0akGyoPYU+vOtvCeI4x/RTyPzFnELdIchPkIBePBMmNyJyo0yU3xhfGZr9lxhf
+         orqlOVAKKaw5ovguwbCPM+zPjqmPmE3Cg/KqE1ukv6qDuAReApITgUSoNcnYQdTCtZHy
+         WK11HK+ER9ACyFIHaZM4MntUOUQTzPyghxH5Ye6wXFxzukT7zSjZWGgjcp1vq8sfPc8V
+         y9TsDFPyWWeacZjfOXBvdGackzbOZdIAJkdxbvSrVD0UrNrZcvNqq/XbmZGgGEkWSjfl
+         MTqeT4MqM68XBMs8hw4CdIr8LaXmcYhbmARQlBZsvTzSEU3D/cc4awZuXZnUqccvUpLK
+         5wbQ==
+X-Gm-Message-State: AOAM533zDKLxxABFQG3sehV+FrRe4L7WdPGk0zh0oIxF5SsKCKcWMoyT
+        5vEgh/hw9YvqmMg6tUr5IA==
+X-Google-Smtp-Source: ABdhPJw3lztNesCSTmOBj3NmKNBGvLCXlWnNHcO3ktPxftYN54oBueW17S3m8c54UDmKm7JdyPFDEQ==
+X-Received: by 2002:a4a:4203:: with SMTP id h3mr205139ooj.0.1604527363404;
+        Wed, 04 Nov 2020 14:02:43 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id q7sm764304oig.42.2020.11.04.14.02.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2020 14:02:42 -0800 (PST)
+Received: (nullmailer pid 5906 invoked by uid 1000);
+        Wed, 04 Nov 2020 22:02:41 -0000
+Date:   Wed, 4 Nov 2020 16:02:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     broonie@kernel.org, vigneshr@ti.com, tudor.ambarus@microchip.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        simon.k.r.goldschmidt@gmail.com, dinguyen@kernel.org,
+        richard@nod.at, cheol.yong.kim@intel.com, qi-ming.wu@intel.com
+Subject: Re: [PATCH v6 5/6] dt-bindings: spi: Convert cadence-quadspi.txt to
+ cadence-quadspi.yaml
+Message-ID: <20201104220241.GA4192737@bogus>
+References: <20201030053153.5319-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201030053153.5319-6-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201030151837.GA3854035@bogus>
+ <a49505e9-500a-1c88-b5b5-1f6ea5e94c86@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a49505e9-500a-1c88-b5b5-1f6ea5e94c86@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Daniel Mentz <danielmentz@google.com>
+On Mon, Nov 02, 2020 at 01:59:41PM +0800, Ramuthevar, Vadivel MuruganX wrote:
+> Hi Rob,
+> 
+> Thank you for the review comments...
+> 
+> On 30/10/2020 11:18 pm, Rob Herring wrote:
+> > On Fri, Oct 30, 2020 at 01:31:52PM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> > > From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> > > 
+> > > Convert the cadence-quadspi.txt documentation to cadence-quadspi.yaml
+> > > remove the cadence-quadspi.txt from Documentation/devicetree/bindings/spi/
+> > > 
+> > > Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> > > ---
+> > >   .../devicetree/bindings/spi/cadence-quadspi.txt    |  67 ---------
+> > >   .../devicetree/bindings/spi/cadence-quadspi.yaml   | 149 +++++++++++++++++++++
+> > >   2 files changed, 149 insertions(+), 67 deletions(-)
+> > >   delete mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+> > >   create mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt b/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+> > > deleted file mode 100644
+> > > index 945be7d5b236..000000000000
+> > > --- a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+> > > +++ /dev/null
+> > > @@ -1,67 +0,0 @@
+> > > -* Cadence Quad SPI controller
+> > > -
+> > > -Required properties:
+> > > -- compatible : should be one of the following:
+> > > -	Generic default - "cdns,qspi-nor".
+> > > -	For TI 66AK2G SoC - "ti,k2g-qspi", "cdns,qspi-nor".
+> > > -	For TI AM654 SoC  - "ti,am654-ospi", "cdns,qspi-nor".
+> > > -- reg : Contains two entries, each of which is a tuple consisting of a
+> > > -	physical address and length. The first entry is the address and
+> > > -	length of the controller register set. The second entry is the
+> > > -	address and length of the QSPI Controller data area.
+> > > -- interrupts : Unit interrupt specifier for the controller interrupt.
+> > > -- clocks : phandle to the Quad SPI clock.
+> > > -- cdns,fifo-depth : Size of the data FIFO in words.
+> > > -- cdns,fifo-width : Bus width of the data FIFO in bytes.
+> > > -- cdns,trigger-address : 32-bit indirect AHB trigger address.
+> > > -
+> > > -Optional properties:
+> > > -- cdns,is-decoded-cs : Flag to indicate whether decoder is used or not.
+> > > -- cdns,rclk-en : Flag to indicate that QSPI return clock is used to latch
+> > > -  the read data rather than the QSPI clock. Make sure that QSPI return
+> > > -  clock is populated on the board before using this property.
+> > > -
+> > > -Optional subnodes:
+> > > -Subnodes of the Cadence Quad SPI controller are spi slave nodes with additional
+> > > -custom properties:
+> > > -- cdns,read-delay : Delay for read capture logic, in clock cycles
+> > > -- cdns,tshsl-ns : Delay in nanoseconds for the length that the master
+> > > -                  mode chip select outputs are de-asserted between
+> > > -		  transactions.
+> > > -- cdns,tsd2d-ns : Delay in nanoseconds between one chip select being
+> > > -                  de-activated and the activation of another.
+> > > -- cdns,tchsh-ns : Delay in nanoseconds between last bit of current
+> > > -                  transaction and deasserting the device chip select
+> > > -		  (qspi_n_ss_out).
+> > > -- cdns,tslch-ns : Delay in nanoseconds between setting qspi_n_ss_out low
+> > > -                  and first bit transfer.
+> > > -- resets	: Must contain an entry for each entry in reset-names.
+> > > -		  See ../reset/reset.txt for details.
+> > > -- reset-names	: Must include either "qspi" and/or "qspi-ocp".
+> > > -
+> > > -Example:
+> > > -
+> > > -	qspi: spi@ff705000 {
+> > > -		compatible = "cdns,qspi-nor";
+> > > -		#address-cells = <1>;
+> > > -		#size-cells = <0>;
+> > > -		reg = <0xff705000 0x1000>,
+> > > -		      <0xffa00000 0x1000>;
+> > > -		interrupts = <0 151 4>;
+> > > -		clocks = <&qspi_clk>;
+> > > -		cdns,is-decoded-cs;
+> > > -		cdns,fifo-depth = <128>;
+> > > -		cdns,fifo-width = <4>;
+> > > -		cdns,trigger-address = <0x00000000>;
+> > > -		resets = <&rst QSPI_RESET>, <&rst QSPI_OCP_RESET>;
+> > > -		reset-names = "qspi", "qspi-ocp";
+> > > -
+> > > -		flash0: n25q00@0 {
+> > > -			...
+> > > -			cdns,read-delay = <4>;
+> > > -			cdns,tshsl-ns = <50>;
+> > > -			cdns,tsd2d-ns = <50>;
+> > > -			cdns,tchsh-ns = <4>;
+> > > -			cdns,tslch-ns = <4>;
+> > > -		};
+> > > -	};
+> > > diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml b/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+> > > new file mode 100644
+> > > index 000000000000..ec22b040d804
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+> > > @@ -0,0 +1,149 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/spi/cadence-quadspi.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Cadence Quad SPI controller
+> > > +
+> > > +maintainers:
+> > > +  - Vadivel Murugan <vadivel.muruganx.ramuthevar@intel.com>
+> > > +
+> > > +allOf:
+> > > +  - $ref: "spi-controller.yaml#"
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    oneOf:
+> > > +      - items:
+> > 
+> > You don't need 'oneOf' if there is only one entry...
+> > 
+> > So you've dropped 'cdns,qspi-nor' alone being valid. Granted, the txt
+> > file was fuzzy as to whether or not that was valid. So you have to look
+> > at all the dts files and see. I prefer we don't allow that and require a
+> > more specific compatible, but if there's a bunch then we should allow
+> > for it. The commit message should summarize what you decide.
+> we need bunch of compatibles as below, TI, Altera and Intel uses different
+> compatible's so we added 'oneOf'.
 
-This allows the fw_devlink feature to work for spi devices
-too.  This avoids unnecessary probe deferrals related to spi devices and
-improves suspend/resume ordering for spi devices when fw_devlink=on.
+Then you add oneOf when you need it. You don't for what you wrote, 
+but once it is correct you will as Altera uses 'cdns,qspi-nor' alone. 
 
-Signed-off-by: Daniel Mentz <danielmentz@google.com>
-[saravanak: Minor commit text cleanup]
-Signed-off-by: Saravana Kannan <saravanak@google.com>
----
- drivers/spi/spi.c | 1 +
- 1 file changed, 1 insertion(+)
+> cdns,qspi-nor can be dropped instead I can add cadence,qspi ,because this
+> driver suuports qspi-nor and qspi-nand as well.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 0cab239d8e7f..d533aa939cca 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2037,6 +2037,7 @@ of_register_spi_device(struct spi_controller *ctlr, struct device_node *nc)
- 	/* Store a pointer to the node in the device structure */
- 	of_node_get(nc);
- 	spi->dev.of_node = nc;
-+	spi->dev.fwnode = of_fwnode_handle(nc);
- 
- 	/* Register the new device */
- 	rc = spi_add_device(spi);
--- 
-2.29.1.341.ge80a0c044ae-goog
+No, you can't change it because it is an ABI.
 
+> 
+> Sure, let me go through other documentation files for reference.
+> 
+> > 
+> > > +          - enum:
+> > > +              - ti,k2g-qspi
+> > > +              - ti,am654-ospi
+> > > +          - const: cdns,qspi-nor
+> > 
+> > > +examples:
+> > > +  - |
+> > > +    qspi: spi@ff705000 {
+> > > +      compatible = "cadence,qspi","cdns,qpsi-nor";
+> > 
+> > And you missed fixing this.
+> Yes, fixed by "cadence,qspi" keeping alone, need to remove cdns,qspi-nor,
+> thanks!
+
+Nope!
+
+Rob
