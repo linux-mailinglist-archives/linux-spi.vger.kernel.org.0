@@ -2,35 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 272A52A6F1B
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Nov 2020 21:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2B92A6F1E
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Nov 2020 21:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730730AbgKDUoJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 Nov 2020 15:44:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59338 "EHLO mail.kernel.org"
+        id S1732408AbgKDUoP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Nov 2020 15:44:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59406 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730347AbgKDUoJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 4 Nov 2020 15:44:09 -0500
+        id S1732407AbgKDUoP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 4 Nov 2020 15:44:15 -0500
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4FA4B20825;
-        Wed,  4 Nov 2020 20:44:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A023720637;
+        Wed,  4 Nov 2020 20:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604522648;
-        bh=o0QfSMczmLnJsCOVHz/PGb8+Vm1UfQlMxw1Aki4kxtU=;
+        s=default; t=1604522655;
+        bh=phWy8wFs8Ni447e7zJCWex9IyDOgystXGx2LhFrSuXU=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=EQOQQ/g98gnWCiFIkLLDHI8qDZB75K2ty9pLDmYDttBvNd9DFjFCubURZd+VK0N7U
-         rBrAW/SaPknRuUBCfhzg5JUNE1QLO7HrDkl2j0tH5dlv01/D8G9XLaubodysi50FqA
-         mQ0XEsBEQpzXqQz8HVnoJ+wYPnz0doPaQwso6WXE=
-Date:   Wed, 04 Nov 2020 20:43:58 +0000
+        b=lHeZ8c8cjP2z7YbzhkQIqjZ8QYW1DHL6slov+fl9jqJAdCYlRaVyk3IMNwk6ZkO7p
+         6keEOEh1f6QX1tZOVSZTvgGyYarp1jNC4vbTwp+2BvwRgpwd0ippvTgmS0XI74EEeQ
+         pD1if11oi8sY09Zzx1+8q5qgBiSpqQ9EZ+vK8OCI=
+Date:   Wed, 04 Nov 2020 20:44:03 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Qiang Zhao <qiang.zhao@nxp.com>, olteanv@gmail.com
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20201029084035.19604-1-qiang.zhao@nxp.com>
-References: <20201029084035.19604-1-qiang.zhao@nxp.com>
-Subject: Re: [PATCH] spi: fsl-dspi: fix NULL pointer dereference
-Message-Id: <160452263224.7406.18149040308248180970.b4-ty@kernel.org>
+In-Reply-To: <20201103020546.1822-1-qiang.zhao@nxp.com>
+References: <20201103020546.1822-1-qiang.zhao@nxp.com>
+Subject: Re: [Patch v2] spi: fsl-dspi: fix wrong pointer in suspend/resume
+Message-Id: <160452263225.7406.16957258089179572669.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -38,35 +38,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 29 Oct 2020 16:40:35 +0800, Qiang Zhao wrote:
+On Tue, 3 Nov 2020 10:05:46 +0800, Qiang Zhao wrote:
 > Since commit 530b5affc675 ("spi: fsl-dspi: fix use-after-free in
-> remove path"), this driver causes a kernel oops:
-> 
-> [   64.587431] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000020
-> [..]
-> [   64.756080] Call trace:
-> [   64.758526]  dspi_suspend+0x30/0x78
-> [   64.762012]  platform_pm_suspend+0x28/0x70
-> [   64.766107]  dpm_run_callback.isra.19+0x24/0x70
-> [   64.770635]  __device_suspend+0xf4/0x2f0
-> [   64.774553]  dpm_suspend+0xec/0x1e0
-> [   64.778036]  dpm_suspend_start+0x80/0xa0
-> [   64.781957]  suspend_devices_and_enter+0x118/0x4f0
-> [   64.786743]  pm_suspend+0x1e0/0x260
-> [   64.790227]  state_store+0x8c/0x118
-> [   64.793712]  kobj_attr_store+0x18/0x30
-> [   64.797459]  sysfs_kf_write+0x40/0x58
-> [   64.801118]  kernfs_fop_write+0x148/0x240
-> [   64.805126]  vfs_write+0xc0/0x230
-> [   64.808436]  ksys_write+0x6c/0x100
-> [   64.811833]  __arm64_sys_write+0x1c/0x28
-> [   64.815753]  el0_svc_common.constprop.3+0x68/0x170
-> [   64.820541]  do_el0_svc+0x24/0x90
-> [   64.823853]  el0_sync_handler+0x118/0x168
-> [   64.827858]  el0_sync+0x158/0x180
-> 
-> [...]
+> remove path"), this driver causes a "NULL pointer dereference"
+> in dspi_suspend/resume.
+> This is because since this commit, the drivers private data point to
+> "dspi" instead of "ctlr", the codes in suspend and resume func were
+> not modified correspondly.
 
 Applied to
 
