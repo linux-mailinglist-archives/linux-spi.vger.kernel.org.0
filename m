@@ -2,107 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FA32A83BE
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Nov 2020 17:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE1E2A83D5
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Nov 2020 17:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbgKEQn0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Nov 2020 11:43:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47894 "EHLO mail.kernel.org"
+        id S1730808AbgKEQqL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Nov 2020 11:46:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48874 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731149AbgKEQnZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 5 Nov 2020 11:43:25 -0500
+        id S1731591AbgKEQqI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 5 Nov 2020 11:46:08 -0500
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5B552080D;
-        Thu,  5 Nov 2020 16:43:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AD20021734;
+        Thu,  5 Nov 2020 16:46:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604594604;
-        bh=nzUBLENvNGw4qP7529IkPGt+67Ej7GsURN40SwoTbuQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PqIqOxZpYIytUMk1dkb5b3eIQUatp1Du9XOiOGzQ22gJ2Xofp+ZV5a/hHGDK7NXfs
-         N4qyhQfu5EeA5H8bNzRWF6Om4Zu+rIJ25FfR+VIktuHEfmU4Cyko/KJc6ie19+JLZf
-         HBKenVSBGWEPXANLQiRnbgp7EEh3c7fQVOfbFu6A=
-Date:   Thu, 5 Nov 2020 16:43:12 +0000
+        s=default; t=1604594768;
+        bh=wtWcZImzIvis+6s4aqj2PVanmzHYRehKf1m1UvMPp/c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I5gqClIjo+ksRu2iDogMyo4TCPk+CjZLCSdtasb7QVCNo5BPFCOaALgRktqsAuIY9
+         +ynSfOyti7fKDM2sEoiIR6iZoC/4++dFtf0gl+w2lFlmBn9JcsZTzrCZB+wQTLSrVa
+         9AUzihQdOx0A0mqMxwt0La0oCtSWfzBRLODRuBDU=
 From:   Mark Brown <broonie@kernel.org>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
-        robh+dt@kernel.org, Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        joel@jms.id.au, andrew@aj.id.au, bbrezillon@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, linux-spi@vger.kernel.org,
-        BMC-SW@aspeedtech.com
-Subject: Re: [v3 4/4] spi: aspeed: Add ASPEED FMC/SPI memory controller driver
-Message-ID: <20201105164312.GE4856@sirena.org.uk>
-References: <20201105120331.9853-1-chin-ting_kuo@aspeedtech.com>
- <20201105120331.9853-5-chin-ting_kuo@aspeedtech.com>
- <fd8fa472-53bb-c992-3dc2-5a984a439c07@kaod.org>
- <20201105161132.37eb3265@collabora.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a+b56+3nqLzpiR9O"
-Content-Disposition: inline
-In-Reply-To: <20201105161132.37eb3265@collabora.com>
-X-Cookie: It's the thought, if any, that counts!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.10-rc2
+Date:   Thu, 05 Nov 2020 16:45:46 +0000
+Message-Id: <20201105164607.AD20021734@mail.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
---a+b56+3nqLzpiR9O
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 
-On Thu, Nov 05, 2020 at 04:11:32PM +0100, Boris Brezillon wrote:
-> C=E9dric Le Goater <clg@kaod.org> wrote:
+are available in the Git repository at:
 
-> > Thanks for this driver. It's much cleaner than the previous and we shou=
-ld=20
-> > try adding support for the AST2500 SoC also. I guess we can keep the ol=
-d=20
-> > driver for the AST2400 which has a different register layout.
-> >=20
-> > On the patchset, I think we should split this patch in three :=20
-> >=20
-> >  - basic support
-> >  - AHB window calculation depending on the flash size
-> >  - read training support =20
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.10-rc2
 
-> I didn't look closely at the implementation, but if the read training
-> tries to read a section of the NOR, I'd recommend exposing that feature
-> through spi-mem and letting the SPI-NOR framework trigger the training
-> instead of doing that at dirmap creation time (remember that spi-mem is
-> also used for SPI NANDs which use the dirmap API too, and this training
-> is unlikely to work there).
+for you to fetch changes up to 9bd77a9ce31dd242fece27219d14fbee5068dd85:
 
-> The SPI-NOR framework could pass a read op template and a reference
-> pattern such that all the spi-mem driver has to do is execute the
-> template op and compare the output to the reference buffer.
+  spi: fsl-dspi: fix wrong pointer in suspend/resume (2020-11-04 17:50:24 +0000)
 
-That seems like a good idea.
+----------------------------------------------------------------
+spi: Fixes for v5.10
 
-> > We should avoid magic values when setting registers. This is confusing=
-=20
-> > and defines are much better.
+A small collection of driver specific fixes that have come in since the
+merge window, nothing too major here but all good to ahve.
 
-It does depend a bit on documentation though, it's not a hard
-requirement.
+----------------------------------------------------------------
+Mark Brown (1):
+      Merge tag 'v5.10-rc1' into spi-5.10
 
---a+b56+3nqLzpiR9O
-Content-Type: application/pgp-signature; name="signature.asc"
+Martin Hundebøll (1):
+      spi: bcm2835: fix gpio cs level inversion
 
------BEGIN PGP SIGNATURE-----
+Sascha Hauer (1):
+      spi: imx: fix runtime pm support for !CONFIG_PM
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+kK58ACgkQJNaLcl1U
-h9DGCgf+I0rBJDAblAFHQZV/Foq1amFegL1fHRXAk5+kobJswoMMwbeep5jlgZ4k
-P/9UMfROv98skgwDGByNx79txjX5xCcUMW5Oz10pk7y0e9UQya8fUTUrf0gbQza6
-OMXG9IMBZObmiJgUKahOaZqmoYo3CE0XJSwjiZwnk9hXQ23t2nsfFZMKe0ZfIORl
-vnx/OpoGDVLmnIwCGNIpV+DjdGXuXCVPB4i7NgsQUdyhORxa8WOJUrWAkwC/FCNi
-cGHBoQSQYoe1lxm8KCC/xqPqDe5MqIF5+46TFNLORhzTY529mYEdXcHDAE4QZ6bx
-nbw7Y3kGyBBE3YjsakRkeoNj/oFcjA==
-=QXki
------END PGP SIGNATURE-----
+Zhao Qiang (1):
+      spi: fsl-dspi: fix wrong pointer in suspend/resume
 
---a+b56+3nqLzpiR9O--
+ drivers/spi/spi-bcm2835.c  | 12 ------------
+ drivers/spi/spi-fsl-dspi.c | 10 ++++------
+ drivers/spi/spi-imx.c      | 23 +++++++++++++++--------
+ 3 files changed, 19 insertions(+), 26 deletions(-)
