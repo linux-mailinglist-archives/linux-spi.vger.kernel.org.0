@@ -2,82 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DD02A81E3
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Nov 2020 16:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1583D2A81E7
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Nov 2020 16:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731129AbgKEPJF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Nov 2020 10:09:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56566 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731074AbgKEPJF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 5 Nov 2020 10:09:05 -0500
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        id S1730660AbgKEPLi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Thu, 5 Nov 2020 10:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728371AbgKEPLh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Nov 2020 10:11:37 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3C6C0613CF;
+        Thu,  5 Nov 2020 07:11:37 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 20AA520715;
-        Thu,  5 Nov 2020 15:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604588944;
-        bh=D2JgNaVO7/v+NMSWbv1jTB9LjsefocwYfuMTBHME4gI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X3bQyPtxuYUYnDNliqn1oWmZ5bgAhtPDUAI9NFui6Fh8TErByBtX8Vjx5dwkYUoIz
-         1oINJoZAu+6gKLC73EPaDmkvsnEYPHNdQzZOcoIa3lFGOMnZp/UXMQwdOKXeS0ZGGC
-         Evtg6DNd1M79W4dJK7VKhLyLsXh+HUJfwPwqIWdA=
-Date:   Thu, 5 Nov 2020 15:08:53 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
-Cc:     linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Scott Branden <sbranden@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: Re: [PATCH] spi: bcm2835: remove use of uninitialized gpio flags
- variable
-Message-ID: <20201105150853.GD4856@sirena.org.uk>
-References: <20201014090230.2706810-1-martin@geanix.com>
- <20201105090615.620315-1-martin@geanix.com>
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 08C0F1F464C0;
+        Thu,  5 Nov 2020 15:11:36 +0000 (GMT)
+Date:   Thu, 5 Nov 2020 16:11:32 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@kaod.org>,
+        <robh+dt@kernel.org>
+Cc:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, <broonie@kernel.org>,
+        <joel@jms.id.au>, <andrew@aj.id.au>, <bbrezillon@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-spi@vger.kernel.org>,
+        <BMC-SW@aspeedtech.com>
+Subject: Re: [v3 4/4] spi: aspeed: Add ASPEED FMC/SPI memory controller
+ driver
+Message-ID: <20201105161132.37eb3265@collabora.com>
+In-Reply-To: <fd8fa472-53bb-c992-3dc2-5a984a439c07@kaod.org>
+References: <20201105120331.9853-1-chin-ting_kuo@aspeedtech.com>
+        <20201105120331.9853-5-chin-ting_kuo@aspeedtech.com>
+        <fd8fa472-53bb-c992-3dc2-5a984a439c07@kaod.org>
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rz+pwK2yUstbofK6"
-Content-Disposition: inline
-In-Reply-To: <20201105090615.620315-1-martin@geanix.com>
-X-Cookie: It's the thought, if any, that counts!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
---rz+pwK2yUstbofK6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 5 Nov 2020 15:09:11 +0100
+Cédric Le Goater <clg@kaod.org> wrote:
 
-On Thu, Nov 05, 2020 at 10:06:15AM +0100, Martin Hundeb=F8ll wrote:
-> Removing the duplicate gpio chip select level handling in
-> bcm2835_spi_setup() left the lflags variable uninitialized. Avoid trhe
-> use of such variable by passing default flags to
-> gpiochip_request_own_desc().
+> Hello Chin-Ting,
+> 
+> Thanks for this driver. It's much cleaner than the previous and we should 
+> try adding support for the AST2500 SoC also. I guess we can keep the old 
+> driver for the AST2400 which has a different register layout.
+> 
+> On the patchset, I think we should split this patch in three : 
+> 
+>  - basic support
+>  - AHB window calculation depending on the flash size
+>  - read training support  
 
-Please don't send patches in reply to old threads, it buries them and
-can make it unclear what is a new patch which needs review.  Send new
-patches as new threads.
+I didn't look closely at the implementation, but if the read training
+tries to read a section of the NOR, I'd recommend exposing that feature
+through spi-mem and letting the SPI-NOR framework trigger the training
+instead of doing that at dirmap creation time (remember that spi-mem is
+also used for SPI NANDs which use the dirmap API too, and this training
+is unlikely to work there).
 
---rz+pwK2yUstbofK6
-Content-Type: application/pgp-signature; name="signature.asc"
+The SPI-NOR framework could pass a read op template and a reference
+pattern such that all the spi-mem driver has to do is execute the
+template op and compare the output to the reference buffer.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+kFYQACgkQJNaLcl1U
-h9DLQwf+IY6ZUeKN6LZpR8BdpMEzU2EICJ6txyKs3L3bqqMYs2D54HKzdjmrJvOK
-klYvs8f/zhnitGrd57+suKBQLUGvD8AZqbqYyjpv435maMfpQEP3hEKOc4T1ksir
-7OPjvMtwRupnCMU2kAFrn6iCKzkdonLxKGPcpqa6W6GDXyVRm4vkcTh8C2xUYhCv
-xXoXTkrrKfBPhs3FhSPHMUDZg9mTlpYykRwwjCK0ilOF+PghmKLaPIHW0cnCShKU
-1U7tISpcnNtPLTG2xD+DuCDLVMV3uaKOMA3A+5R0CgpzE0Gv7+iEuK66js4UGeIt
-24K97h9NjsdvjgT8V81ys7nfqXFH5w==
-=7rMt
------END PGP SIGNATURE-----
+> 
+> We should avoid magic values when setting registers. This is confusing 
+> and defines are much better.
+>  
+> AST2500 support will be a bit challenging because HW does not allow    
+> to configure a 128MB AHB window, max is 120MB This is a bug and the work 
+> around is to use user mode for the remaining 8MB. Something to keep in
+> mind.
 
---rz+pwK2yUstbofK6--
+Most SPI-MEM controllers don't have such a big dirmap window anyway, and
+that shouldn't be a problem, because we don't expose the direct mapping
+directly (as would be done if we were trying to support something like
+XIP). That means that, assuming your controller allows controlling the
+base spi-mem address the direct mapping points to, you should be able
+to adjust the window at runtime and make it point where you requested.
+
+Note that dirmap_{read,write}() are allowed to return less data than
+requested thus simplifying the case where a specific access requires a
+window adjustment in the middle of an read/write operation.
+
+Regards,
+
+Boris
