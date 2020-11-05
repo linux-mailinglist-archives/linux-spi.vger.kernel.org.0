@@ -2,60 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 093B52A7954
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Nov 2020 09:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 538292A7A07
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Nov 2020 10:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728272AbgKEIa0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Nov 2020 03:30:26 -0500
-Received: from mail.fullbizgoal.com ([80.211.27.207]:48752 "EHLO
-        server1.mail.fullbizgoal.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727731AbgKEIa0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Nov 2020 03:30:26 -0500
-Received: by server1.mail.fullbizgoal.com (Postfix, from userid 1001)
-        id C42E1A22E9; Thu,  5 Nov 2020 08:30:18 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fullbizgoal.com;
-        s=mail; t=1604565024;
-        bh=1A+RQztZunBjkjQlXgr2uQY18vlGaIq8j7jGOmWqiI0=;
-        h=Date:From:To:Subject:From;
-        b=tgU7WEUcwrtsY0XZNtr5OYfpUQv2wN2wLdQ+LBghKRdQNs0qNe88J8Eknhs0jy/GR
-         7MH9UGdDCV+/nLoq3D/Thji//KzLrwWXdWseXmiilUU4e2T8QTvFN27es8A1ViaKYX
-         VTmIxO4W1zbWtUAgBBNHGdc574WTBq3So48g44ofHSSv+91mecTiLY7oa7hZgnASFL
-         C1FG7dBkpJ267yVOcnguxkBMzCw+1MrX/oV+nVrxKBInZ/yHJtI7dtWtTCuRojsFfV
-         E9kogxU5M88S653rL3ALdrva7jwEyEPnrRGuCQbDIK0hSCbIrEdXQMJiFojbvgHddG
-         IotwWzaM9T5gw==
-Received: by mail.fullbizgoal.com for <linux-spi@vger.kernel.org>; Thu,  5 Nov 2020 08:30:14 GMT
-Message-ID: <20201105074501-0.1.2o.eyuz.0.1qs2egxkea@fullbizgoal.com>
-Date:   Thu,  5 Nov 2020 08:30:14 GMT
-From:   "Ethan Smith" <ethan.smith@fullbizgoal.com>
-To:     <linux-spi@vger.kernel.org>
-Subject: Disinfectant
-X-Mailer: mail.fullbizgoal.com
+        id S1728553AbgKEJGd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Nov 2020 04:06:33 -0500
+Received: from first.geanix.com ([116.203.34.67]:41956 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727731AbgKEJGc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 5 Nov 2020 04:06:32 -0500
+Received: from zen.localdomain (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id CBB19EC4CD9;
+        Thu,  5 Nov 2020 09:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1604567190; bh=UbM8Yd9BDcaDrqhzOEsBaU3gI3qMZVu6V25NKV/MxtM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=YeVVtnn0FzVaiTclO10f9Uk3k005fENPUCr5N5gK0HOChJEKnktkOXQwI5xUBb/Nq
+         qni7FgfKNu1ljTdJw0Nlj1C40dEu0xM3J59xO5ACl25Hw3oWPmxAV5seCdPY+wfpin
+         Mm/Y9DzGgRMwBCdT3jOuO2BJaeKGJoEerkpru6vmyrYIYMdLK5lzCKnG+0OnyOS4Om
+         tfuBLG4CXDWCpwocslovnToYfOitfBTOl5QP1B4Q+YsgsPZ5C8QSlzgT74J7Y0MPiX
+         DY9kDlBDulsPapSMwH91+XJ2rbx4XgfS7a9uCG6w2/+0u4kWOVAGL9409IUr2AuAJD
+         7M8ASi0QXiHDw==
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Scott Branden <sbranden@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: [PATCH] spi: bcm2835: remove use of uninitialized gpio flags variable
+Date:   Thu,  5 Nov 2020 10:06:15 +0100
+Message-Id: <20201105090615.620315-1-martin@geanix.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201014090230.2706810-1-martin@geanix.com>
+References: <20201014090230.2706810-1-martin@geanix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on ff3d05386fc5
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Good morning,
+Removing the duplicate gpio chip select level handling in
+bcm2835_spi_setup() left the lflags variable uninitialized. Avoid trhe
+use of such variable by passing default flags to
+gpiochip_request_own_desc().
 
-looking for companies interested in raising additional capital by diversi=
-fying their offer in soaps, liquids and gels for hand disinfection and co=
-smetics for body and hair care.
+Fixes: 5e31ba0c0543 ("spi: bcm2835: fix gpio cs level inversion")
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
+---
 
-The distribution of innovative products corresponding to the current pref=
-erences of customers in the field of hygiene and preventive healthcare al=
-lows our partners to gain new markets and achieve better economic results=
-=2E
+Feel free to squash this commit with my previous patch, if rebasing
+for-next is allowed.
 
-In addition to products with bactericidal action, our range includes show=
-er gels, shampoos and hair conditioners, as well as efficient, concentrat=
-ed detergents.
+ drivers/spi/spi-bcm2835.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-The versatility (suitable for all skin types) combined with an affordable=
- price means that customers make an informed choice of a product among ot=
-hers available on the market.
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index 9b6ba94fe878..7104cf17b848 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1193,7 +1193,6 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 	struct spi_controller *ctlr = spi->controller;
+ 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+ 	struct gpio_chip *chip;
+-	enum gpio_lookup_flags lflags;
+ 	u32 cs;
+ 
+ 	/*
+@@ -1261,7 +1260,7 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 
+ 	spi->cs_gpiod = gpiochip_request_own_desc(chip, 8 - spi->chip_select,
+ 						  DRV_NAME,
+-						  lflags,
++						  GPIO_LOOKUP_FLAGS_DEFAULT,
+ 						  GPIOD_OUT_LOW);
+ 	if (IS_ERR(spi->cs_gpiod))
+ 		return PTR_ERR(spi->cs_gpiod);
+-- 
+2.28.0
 
-Are you interested in cooperation?
-
-Ethan Smith
