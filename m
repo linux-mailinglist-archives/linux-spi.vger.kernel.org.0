@@ -2,134 +2,190 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EF82A9DA9
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Nov 2020 20:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C39D2A9E74
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Nov 2020 21:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728109AbgKFTNW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Nov 2020 14:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        id S1727341AbgKFUL5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Nov 2020 15:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727069AbgKFTNW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Nov 2020 14:13:22 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CB8C0613CF
-        for <linux-spi@vger.kernel.org>; Fri,  6 Nov 2020 11:13:20 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id i193so2062730yba.1
-        for <linux-spi@vger.kernel.org>; Fri, 06 Nov 2020 11:13:20 -0800 (PST)
+        with ESMTP id S1728140AbgKFUL5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Nov 2020 15:11:57 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72B6C0613CF
+        for <linux-spi@vger.kernel.org>; Fri,  6 Nov 2020 12:11:56 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id 23so2696366ljv.7
+        for <linux-spi@vger.kernel.org>; Fri, 06 Nov 2020 12:11:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lDPmrGFyyFCuKqcXej1vTwCKboywcjbteDegF6u/TEM=;
-        b=qDSXDHqVps4VOYMWow1GJ0SanYAuA1SdO6RbRbZ31Wh4pI55eM0GeW/IGBYf9468HB
-         DO4nCTQMXR432ljb7SJvfNZF2qWgRKGagrJvUmOT4o82vRxaBJss0WGtrldob4GRA9Zn
-         Xxs1Xl2TRU/R3J5RM9Lwu5yHGCOJDimnz2NJz7sZIhLzKW/Je9zerb3v3ratHqEhbMqG
-         MQElstyGbHkQwv3qIm73AGIUyxncTZjlrIkanVoFNg5C3jThhLeE8PLaSwuoGhBC43K7
-         wcaFDe3YAlBewKAQt0Nacc/VIXSdgPyfaZct8KRI3oeYn/u+CsztnWHuWfahAFWe8HNo
-         usYg==
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=hRONIS8TkG7r0XXlasa1NbHUOv649A+SSBDIrePZGCY=;
+        b=WHNvUXrsobv+yvNRW/eMfdcz6ksrx4H54MB0Vwt2up7tNQg0bw7EJQXtP0enLyUEs9
+         091TFNQ7LWHH2XeBsoQWRKOrzVyDeezZgECrpG14pbdi6/iUVnxUfYrnDoz0gd59eXhP
+         BLhKJlwhvPLS5nVugTgjDyPs8tpNBNHmOPxAX9BpFW+0+b3Wfq4s+Fn/wDUNDJoJbvMC
+         HyLuJ0EWV/6yZGX304kt3tPV91JoJ4MYbGhviH9e3p8qa0YfFoFZdEkL9OsitLCgme/x
+         3/NGK7I5gsT9/RGeUXGGUZx3sROCV5+gl33qO8M7i9z4R/EMHbA75ISlpTRFWLt8PRha
+         Y32Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lDPmrGFyyFCuKqcXej1vTwCKboywcjbteDegF6u/TEM=;
-        b=QBgLiEzX0OKg1n4tTUXYKzee+E148Di+6t7oFiyT3kyHJIEkLyBiQvVGg0CcTXKT/8
-         QxVtgjxaFqE8nPvfzTxfgN7ms97Ld+ydfNa926zwoBqN8FPy07Txc68DpXRVeympMq84
-         9avJkAq0XIcljQk1MhZWQoplvwmusGaiGtrco1l9dg3DSc2h8TiaDzp9IwSc371ShPPs
-         fJNzbCINJYGfJwvdV8jKNkimDBwkHZsg7SfngM6v0NZg/cxpjSTPBtMzsLNDtRvBl0JW
-         nXs/UgqNsVSoCa2Aw2JeNezKB6MAS0Pu32hlc+SwqIFHqWsnMbgsJQVRnPivcJsbSuzD
-         B1UA==
-X-Gm-Message-State: AOAM531/IrhIc7cQWCI8tJNiwW1O8ZTfdv6LHR3pdBFOMnHrPcYAtaTd
-        J00nJz7/AgB7kH57LKkx/465+ujv10q5weWAoeEVCA==
-X-Google-Smtp-Source: ABdhPJxdpwkjU6nef5hnn+qBzVQD4nTVfGkL+NAu+//5kga1xXgG9HgNv//s3EOvEsHYitfkxS3QOuETzCIFrw7hEjQ=
-X-Received: by 2002:a25:c483:: with SMTP id u125mr4486728ybf.310.1604689999367;
- Fri, 06 Nov 2020 11:13:19 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=hRONIS8TkG7r0XXlasa1NbHUOv649A+SSBDIrePZGCY=;
+        b=p7VALtpcuBGCDMpQEaaleH1xzD1c/pn0wd0ZDM5NnlJzfmeSNcGITCgNxMunHdJFA4
+         KXOXa2rPB6YzXil486Rd2KG/XC0BhuFMYNN26si3pxCplgRDHdw3BkwEk8OCHOAe0LGW
+         flDeEgWCOdfP0aa0YN8eGGZ/znEDMhkEhKmzPHYNHoX7CJ82DUB/3kY8lhz3IGVI43Lj
+         doLS/A0FVeEouSD0yPaeoF/VOc84sX06VFJeM/0rE7V5iTAVpUZH5D8VKiPwUC1ysx5W
+         JcfsJSkv0JBOMBBCqrZqJhAOuw2ll8YixQ9+cswFLneOyle6hBTDx8xrfoAJn2DbgPxT
+         wl1g==
+X-Gm-Message-State: AOAM531jKqLuxGaF+0+BYxcg66LDGZSCQZGpd80oYEa2Adbj/Ds+JDTJ
+        tpqHBX1HTApXa2zsiUH2yKcSiB4F8Lrp/lTFMjmJocfHQ/ukNeRB
+X-Google-Smtp-Source: ABdhPJzbbJO6GvLiu3caaZnCPCGy7l13AZDYkjjj/NRQpOV2nW7NcGVr0el1gUrftci5wExG0bJQLbuIr9Y95xP9xY4=
+X-Received: by 2002:a2e:8808:: with SMTP id x8mr1314977ljh.384.1604693514928;
+ Fri, 06 Nov 2020 12:11:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20201104205431.3795207-1-saravanak@google.com>
- <20201104205431.3795207-2-saravanak@google.com> <20201105171201.GF4856@sirena.org.uk>
- <CAGETcx9_En10j0DwktXtPDrx=Aqdr2iWEuHmYB-=SnfODTmMfg@mail.gmail.com> <20201106151011.GE49612@sirena.org.uk>
-In-Reply-To: <20201106151011.GE49612@sirena.org.uk>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 6 Nov 2020 11:12:43 -0800
-Message-ID: <CAGETcx-i--K+1go-+126bBB85BG8kksgRr3j3hnCRfkt0vqBMA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] spi: Populate fwnode in of_register_spi_device()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Cheng-Jui.Wang@mediatek.com,
-        Android Kernel Team <kernel-team@android.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        linux-spi@vger.kernel.org
+From:   Glenn Schmottlach <gschmottlach@gmail.com>
+Date:   Fri, 6 Nov 2020 15:11:43 -0500
+Message-ID: <CAMS2kBHyempbPTT5dnJ8Vb+FMop4-BjyKa4A=tB+U-cS4h7aDw@mail.gmail.com>
+Subject: Linux SPI Slave fails to respond under high load on BeagleBone Black
+To:     linux-spi@vger.kernel.org
+Cc:     broonie@kernel.org, vigneshr@ti.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Nov 6, 2020 at 7:10 AM Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Nov 05, 2020 at 11:26:44AM -0800, Saravana Kannan wrote:
-> > On Thu, Nov 5, 2020 at 9:12 AM Mark Brown <broonie@kernel.org> wrote:
->
-> > > >       of_node_get(nc);
-> > > >       spi->dev.of_node = nc;
-> > > > +     spi->dev.fwnode = of_fwnode_handle(nc);
->
-> > > Why is this a manual step in an individual subsystem rather than
-> > > something done in the driver core
->
-> > It can't be done in driver core because "fwnode" is the abstraction
-> > driver core uses. It shouldn't care or know if the firmware is DT,
-> > ACPI or something else -- that's the whole point of fwnode.
->
-> Clearly it *can* be done in the driver core, the question is do we want
-> to.  The abstraction thing feels weaker at init than use after init,
-> "init from X" is a common enough pattern.  If it's done by the driver
-> core there would be no possibility of anything that creates devices
-> getting things wrong here, and the driver core already has a bunch of
-> integration with both DT and ACPI so it seems like a weird boundary to
-> have.
->
-> > > and wouldn't that just be a case of
-> > > checking to see if there is a fwnode already set and only initializing
-> > > if not anyway?
->
-> > Honestly, we should be deleting device.of_node and always use
-> > device.fwnode. But that's a long way away (lots of clean up). The
-> > "common" place to do this is where a struct device is created from a
-> > firmware (device_node, acpi_device, etc). I don't see a "common place"
-> > for when a device is created out of a device_node, so I think this
-> > patch is a reasonable middle ground.
->
-> That is obviously a much bigger job that's going to require going
-> through subsystems (and their drivers) properly to eliminate references
-> to of_node, I'm not clear how doing this little bit per subsystem rather
-> than in the core helps or hinders going through and doing that.  I don't
-> think you'll ever have a single place where a device is constructed, and
-> I'm not sure that that is even desirable, since there are per subsystem
-> things that need doing.
->
-> I'd be totally happy with eliminating all references to of_node from the
-> subsystem but for this it seems more sensible to do it in the driver
-> core and cover everything rather than running around everything that
-> creates a device from DT individually and having stuff fall through the
-> cracks - it's been a year since the equivalent change was made in I2C
-> for example, we've had new buses merged in that time never mind SPI not
-> being covered.
+I have encountered a problem utilizing the Linux SPI slave capability
+between two BeagleBone Blacks (BBBs) where one is SPI master and the
+other is configured as the SPI slave. The two devices are directly
+wired together with short leads (2-3 inches long).
 
-Since you kicked off another thread while we were still discussing it
-here, I'll just move to that thread. I don't want to discuss the same
-thing in two different places.
+Both boards are using the same linux-ti-staging kernel:
 
-> BTW I'm also missing patch 1 and the cover letter for this series, not
-> sure what's going on there?
+Linux beaglebone 5.4.74-g227e67c99f #1 PREEMPT Fri Nov 6 14:47:05 UTC
+2020 armv7l armv7l armv7l GNU/Linux
 
-Sorry, scripting error. There is no series.
+I believe the real issue exists in the McSPI driver
+(spi-omap2-mcspi.c) and its implementation of SPI slave support. Let
+me explain what I am seeing.
 
--Saravana
+One the SPI master I run the following command:
+
+spi-pipe -d /dev/spidev0.0 -s 1000000 -b 32 -n -1 < /dev/random | hexdump -vC
+
+On the BBB configured as the SPI slave I run the same:
+
+spi-pipe -d /dev/spidev0.0 -s 1000000 -b 32 -n -1 < /dev/random | hexdump -vC
+
+I would expect 32 bytes of random data to be passed back and forth
+between the two devices continuously. Please note, I do *not* expect
+the SPI master to receive consecutive 32 byte blocks of purely random
+data since there will be a "gap" in time when the SPI slave sends a 32
+byte chunk/message and reloads the driver with the next chunk to send.
+So the expectation is that the SPI slave will clock out 32 chunks of
+random data followed by some zeros while the SPI master continues to
+clock data and the next chunk is loaded on the SPI slave.
+
+This does work briefly (2-3 transfers) until the SPI slave stops
+clocking out random data and seems to get stuck waiting for the clock
+(and receive data) from the SPI master. I can run the same experiment
+using single invocations of the transfers indefinitely,
+
+E.g. On each device running the same command...
+
+spi-pipe -d /dev/spidev0.0 -s 1000000 -b 32 -n 1 < /dev/random | hexdump -vC
+
+Where "-n 1" says to send one chunk then exit the program. The problem
+occurs when I allow both to run indefinitely. I have verified with a
+logic analyzer that the SPI master is properly clocking out the random
+data with clocks and chip selects toggling. I do not believe this is
+an issue with the SPI master.
+
+I modified the 'spi-pipe' program so that it will *only* transmit data
+(e.g. set the rx_buf for the SPI transfer structure is set to NULL) in
+the ioctl(fd, SPI_IOC_MESSAGE(1), &transfer) call. When configured, I
+would expect the spi-pipe program would block until I invoked spi-pipe
+on the SPI master since it provides the chip select and clocks for the
+bi-directional data flow. Unfortunately, the spi-pipe program on the
+slave device immediately returns. I instrumented the kernel driver and
+see the following sequence:
+
+spi-pipe -d /dev/spidev0.0 -s 1000000 -b 32 -n 1 -i 2 < /dev/random
+[  593.951328] omap2_mcspi_setup_transfer(931): enter
+[  593.956168] omap2_mcspi_setup_transfer(1012): exit
+[  593.965574] omap2_mcspi_transfer_one(1186): enter
+[  593.972971] omap2_mcspi_setup_transfer(931): enter
+[  593.979186] omap2_mcspi_setup_transfer(1012): exit
+[  593.984008] omap2_mcspi_txrx_dma(620): enter
+[  593.989569] omap2_mcspi_tx_dma(420): enter
+[  593.993709] omap2_mcspi_set_dma_req(204): enter
+[  594.000076] omap2_mcspi_set_dma_req(220): exit
+[  594.000103] omap2_mcspi_tx_callback(405): enter
+[  594.009181] omap2_mcspi_set_dma_req(204): enter
+[  594.013727] omap2_mcspi_set_dma_req(220): exit
+[  594.018208] omap2_mcspi_tx_callback(410): exit
+[  594.026941] omap2_mcspi_tx_dma(443): exit
+[  594.032559] omap2_mcspi_txrx_dma(667): start wait for dma tx completion
+[  594.040999] mcspi_wait_for_completion(371): enter
+[  594.045742] omap2_mcspi_set_dma_req(204): enter
+[  594.052341] omap2_mcspi_set_dma_req(220): exit
+[  594.056814] omap2_mcspi_setup_transfer(931): enter
+[  594.063635] omap2_mcspi_setup_transfer(1012): exit
+[  594.069399] omap2_mcspi_transfer_one(1299): exit
+[  594.074665] omap2_mcspi_setup_transfer(931): enter
+[  594.080932] omap2_mcspi_setup_transfer(1012): exit
+
+It's clear that the driver (or ioctl() call) isn't blocking but seems
+to just queue up the data and exits. I believe this might be a symptom
+of a larger problem with the SPI slave implementation. Below is the
+sequence I see from the SPI slave when both sides (master/slave) are
+run indefinitely and the SPI slave stops responding.
+
+[ 2383.618465] omap2_mcspi_rx_dma(541): start wait for RX completion
+[ 2383.625394] mcspi_wait_for_completion(371): enter
+[ 2396.370655] omap2_mcspi_irq_handler(1141): irqstat = 0x30001
+[ 2396.376506] omap2_mcspi_rx_callback(391): enter
+[ 2396.381069] omap2_mcspi_set_dma_req(204): enter
+[ 2396.385678] omap2_mcspi_set_dma_req(220): exit
+[ 2396.390160] omap2_mcspi_rx_callback(396): exit
+[ 2396.403603] omap2_mcspi_set_dma_req(204): enter
+[ 2396.408194] omap2_mcspi_set_dma_req(220): exit
+[ 2396.412670] omap2_mcspi_txrx_dma(667): start wait for dma tx completion
+[ 2396.424886] mcspi_wait_for_completion(371): enter
+[ 2396.429628] omap2_mcspi_set_dma_req(204): enter
+[ 2396.435543] omap2_mcspi_set_dma_req(220): exit
+[ 2396.440015] omap2_mcspi_setup_transfer(931): enter
+[ 2396.446107] omap2_mcspi_setup_transfer(1012): exit
+[ 2396.450925] omap2_mcspi_transfer_one(1299): exit
+[ 2396.457608] omap2_mcspi_transfer_one(1186): enter
+00000000  52 aa d3 90 95 23 c0 aa  8f 49 e3 0b 86 a1 95 de  |R....#...I......|
+00000010  85 3f 32 b4 c9 fd 57 c7  31 7d ea c6 05 bd cd 18  |.?2...W.1}......|
+[ 2396.468439] omap2_mcspi_setup_transfer(931): enter
+[ 2396.478826] omap2_mcspi_setup_transfer(1012): exit
+[ 2396.486384] omap2_mcspi_txrx_dma(620): enter
+[ 2396.490687] omap2_mcspi_irq_handler(1141): irqstat = 0x3000F
+[ 2396.497536] omap2_mcspi_tx_dma(420): enter
+[ 2396.501679] omap2_mcspi_set_dma_req(204): enter
+[ 2396.507560] omap2_mcspi_set_dma_req(220): exit
+[ 2396.512029] omap2_mcspi_tx_dma(443): exit
+[ 2396.517290] omap2_mcspi_rx_dma(464): enter
+[ 2396.521432] omap2_mcspi_set_dma_req(204): enter
+[ 2396.527294] omap2_mcspi_set_dma_req(220): exit
+[ 2396.527322] omap2_mcspi_rx_callback(391): enter
+[ 2396.536380] omap2_mcspi_set_dma_req(204): enter
+[ 2396.540933] omap2_mcspi_set_dma_req(220): exit
+[ 2396.545405] omap2_mcspi_rx_callback(396): exit
+[ 2396.552488] omap2_mcspi_rx_dma(541): start wait for RX completion
+[ 2396.559512] mcspi_wait_for_completion(371): enter
+[ 2396.565084] omap2_mcspi_set_dma_req(204): enter
+[ 2396.569639] omap2_mcspi_set_dma_req(220): exit
+[ 2396.575395] omap2_mcspi_txrx_dma(667): start wait for dma tx completion
+[ 2396.582045] mcspi_wait_for_completion(371): enter
+
+At this point spi-pipe on the slave no longer responds to the master
+device and I have to ctrl-c to exit it.
+
+I am hoping someone can explain what is going on or confirm that there
+is indeed a bug in the slave implementation of spi-omap2-mcspi.c. I
+hope someone might be able to suggest a fix for this issue that I
+could try out. I am open to testing any suggestions.
+
+Thanks . . .
