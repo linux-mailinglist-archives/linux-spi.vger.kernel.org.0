@@ -2,171 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F272A980C
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Nov 2020 16:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4492A9813
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Nov 2020 16:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727520AbgKFPHN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Nov 2020 10:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726708AbgKFPHL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Nov 2020 10:07:11 -0500
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E7CC0613CF;
-        Fri,  6 Nov 2020 07:07:11 -0800 (PST)
-Received: by mail-qk1-x742.google.com with SMTP id s14so1284636qkg.11;
-        Fri, 06 Nov 2020 07:07:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=PVN4GnwT1M8qbwSdJv3enlb0YS6kxWNKqU65jyrdvdk=;
-        b=Kg5lc83UF6M93kViL/jvkSmmIgxzuf7yhlb5awT4Ng7xoHi4QkpYVIn94V0H0b7dwj
-         0RiZeoypQGPTzMMue6rmdqQQeYNhlE813lXKpDHzEzg/+dB/jfDkq5VklMT8b3I1795h
-         Z/cNEABj/QIBQz2LwAGNOYioYZB+Q/jYiGL/tCTuhJnI6zSHqbrjdWfewblZvxnDcWjv
-         kapEEs9MArRTm+Ui2D8x9EaAOq90UGLFZn7iUAIpoS7P8Zsm3rYvQMhGJQ50C4HSbCfi
-         i/eSmbjOC0RUP05DYuedZ1NQmTcnSqm6jHKFpZGAfvZWAK+mYg9V0b8gFuwpOYBTKgQy
-         YmKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=PVN4GnwT1M8qbwSdJv3enlb0YS6kxWNKqU65jyrdvdk=;
-        b=le8kXP+5625iK2qiW4iTgG1p6SahXibooHuYfxgEkfYfXJ//xqHe2686XpXIW9LKdw
-         CQUpUBerD5S2ylVNk5SvewGN8EfoINAuTELK+Qxk1ut40qwj84VixlBzmeAEqTFX0BVl
-         dgdEczpF1ExrGlRUqSGqfvAUsVhP9GiNr9MkirwN01IUKmPWT0WfcCSRKP7+mupcB2oq
-         NNJSLPvx/2qWWqf+srAZW3X7wl6aOYQverl3sz5+qj1w67MU1y4uOwSBMy605iDzGXhG
-         SEdQPRa8yxi4JaV51HOGjOKTMvdxoLXFP9ASB8EujaEprTh7NzW7HEiPbvyqpNJ70nJg
-         cEVQ==
-X-Gm-Message-State: AOAM532wclC14myEO/3HziNIPLcjY9W2kNxktteUwcvL3PFpSCUMd8MW
-        owxgO7nMcr0vjoekajXYSWo=
-X-Google-Smtp-Source: ABdhPJzbNOzciyp7b8vITRbT/IiQNasuzf0g+GgqMQCvb7/HBqAWH161Yb8CBmjHP+al9jzNMgCt2Q==
-X-Received: by 2002:a05:620a:1024:: with SMTP id a4mr2003922qkk.390.1604675230712;
-        Fri, 06 Nov 2020 07:07:10 -0800 (PST)
-Received: from localhost.localdomain ([198.52.185.246])
-        by smtp.gmail.com with ESMTPSA id q188sm700731qka.56.2020.11.06.07.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 07:07:10 -0800 (PST)
-From:   Sven Van Asbroeck <thesven73@gmail.com>
-X-Google-Original-From: Sven Van Asbroeck <TheSven73@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Sven Van Asbroeck <thesven73@gmail.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Simon Han <z.han@kunbus.com>, Lukas Wunner <lukas@wunner.de>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] spi: fix client driver breakages when using GPIO descriptors
-Date:   Fri,  6 Nov 2020 10:07:06 -0500
-Message-Id: <20201106150706.29089-1-TheSven73@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726422AbgKFPK0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Nov 2020 10:10:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45414 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727499AbgKFPKZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 6 Nov 2020 10:10:25 -0500
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8ADB322227;
+        Fri,  6 Nov 2020 15:10:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604675425;
+        bh=qThnILg5nCb2Hmeq+KRlqMIjinhD+Gy6r+f/5IjtZiw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pfKvbldlEjCUrMNJLyz6fMKmY16F90mXAb0rAyB1oXKnd22Z8cE41SI1B7o4oPWX7
+         VWYOnlKUOLf3h+uRmL3y3+Hs9/Mc8PVRIOq1h6MbC+CoI7jO8PpPhzb/SGglWGdToj
+         2oZ8sjwhQv2fFDzzIAgc9xlPTk+/6o7lPCylfiJs=
+Date:   Fri, 6 Nov 2020 15:10:11 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Cheng-Jui.Wang@mediatek.com,
+        Android Kernel Team <kernel-team@android.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] spi: Populate fwnode in of_register_spi_device()
+Message-ID: <20201106151011.GE49612@sirena.org.uk>
+References: <20201104205431.3795207-1-saravanak@google.com>
+ <20201104205431.3795207-2-saravanak@google.com>
+ <20201105171201.GF4856@sirena.org.uk>
+ <CAGETcx9_En10j0DwktXtPDrx=Aqdr2iWEuHmYB-=SnfODTmMfg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wTWi5aaYRw9ix9vO"
+Content-Disposition: inline
+In-Reply-To: <CAGETcx9_En10j0DwktXtPDrx=Aqdr2iWEuHmYB-=SnfODTmMfg@mail.gmail.com>
+X-Cookie: It's the thought, if any, that counts!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Sven Van Asbroeck <thesven73@gmail.com>
 
-Commit f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
-introduced the optional use of GPIO descriptors for chip selects.
+--wTWi5aaYRw9ix9vO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A side-effect of this change: when a SPI bus uses GPIO descriptors,
-all its client devices have SPI_CS_HIGH set in spi->mode. This flag is
-required for the SPI bus to operate correctly.
+On Thu, Nov 05, 2020 at 11:26:44AM -0800, Saravana Kannan wrote:
+> On Thu, Nov 5, 2020 at 9:12 AM Mark Brown <broonie@kernel.org> wrote:
 
-This unfortunately breaks many client drivers, which use the following
-pattern to configure their underlying SPI bus:
+> > >       of_node_get(nc);
+> > >       spi->dev.of_node = nc;
+> > > +     spi->dev.fwnode = of_fwnode_handle(nc);
 
-static int client_device_probe(struct spi_device *spi)
-{
-	...
-	spi->mode = SPI_MODE_0;
-	spi->bits_per_word = 8;
-	err = spi_setup(spi);
-	..
-}
+> > Why is this a manual step in an individual subsystem rather than
+> > something done in the driver core
 
-In short, many client drivers overwrite the SPI_CS_HIGH bit in
-spi->mode, and break the underlying SPI bus driver.
+> It can't be done in driver core because "fwnode" is the abstraction
+> driver core uses. It shouldn't care or know if the firmware is DT,
+> ACPI or something else -- that's the whole point of fwnode.
 
-This is especially true for Freescale/NXP imx ecspi, where large
-numbers of spi client drivers now no longer work.
+Clearly it *can* be done in the driver core, the question is do we want
+to.  The abstraction thing feels weaker at init than use after init,
+"init from X" is a common enough pattern.  If it's done by the driver
+core there would be no possibility of anything that creates devices
+getting things wrong here, and the driver core already has a bunch of
+integration with both DT and ACPI so it seems like a weird boundary to
+have.
 
-Proposed fix:
--------------
-When using gpio descriptors, depend on gpiolib to handle CS polarity.
-Existing quirks in gpiolib ensure that this is handled correctly.
+> > and wouldn't that just be a case of
+> > checking to see if there is a fwnode already set and only initializing
+> > if not anyway?
 
-Existing gpiolib behaviour will force the polarity of any chip-select
-gpiod to active-high (if 'spi-active-high' devicetree prop present) or
-active-low (if 'spi-active-high' absent). Irrespective of whether
-the gpio is marked GPIO_ACTIVE_[HIGH|LOW] in the devicetree.
+> Honestly, we should be deleting device.of_node and always use
+> device.fwnode. But that's a long way away (lots of clean up). The
+> "common" place to do this is where a struct device is created from a
+> firmware (device_node, acpi_device, etc). I don't see a "common place"
+> for when a device is created out of a device_node, so I think this
+> patch is a reasonable middle ground.
 
-Loose ends:
------------
-If this fix is applied:
-- is commit 138c9c32f090
-  ("spi: spidev: Fix CS polarity if GPIO descriptors are used")
-  still necessary / correct ?
+That is obviously a much bigger job that's going to require going
+through subsystems (and their drivers) properly to eliminate references
+to of_node, I'm not clear how doing this little bit per subsystem rather
+than in the core helps or hinders going through and doing that.  I don't
+think you'll ever have a single place where a device is constructed, and
+I'm not sure that that is even desirable, since there are per subsystem
+things that need doing.
 
-Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
-Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
----
+I'd be totally happy with eliminating all references to of_node from the
+subsystem but for this it seems more sensible to do it in the driver
+core and cover everything rather than running around everything that
+creates a device from DT individually and having stuff fall through the
+cracks - it's been a year since the equivalent change was made in I2C
+for example, we've had new buses merged in that time never mind SPI not
+being covered.
 
-Tree: v5.10-rc2
+BTW I'm also missing patch 1 and the cover letter for this series, not
+sure what's going on there?
 
-To: Mark Brown <broonie@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>
-Cc: Simon Han <z.han@kunbus.com>
-Cc: Lukas Wunner <lukas@wunner.de>
-Cc: linux-spi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+--wTWi5aaYRw9ix9vO
+Content-Type: application/pgp-signature; name="signature.asc"
 
- drivers/spi/spi.c | 23 ++++++-----------------
- 1 file changed, 6 insertions(+), 17 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 0cab239d8e7f..7566482c052c 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -812,18 +812,16 @@ static void spi_set_cs(struct spi_device *spi, bool enable)
- 		enable = !enable;
- 
- 	if (spi->cs_gpiod || gpio_is_valid(spi->cs_gpio)) {
--		/*
--		 * Honour the SPI_NO_CS flag and invert the enable line, as
--		 * active low is default for SPI. Execution paths that handle
--		 * polarity inversion in gpiolib (such as device tree) will
--		 * enforce active high using the SPI_CS_HIGH resulting in a
--		 * double inversion through the code above.
--		 */
- 		if (!(spi->mode & SPI_NO_CS)) {
- 			if (spi->cs_gpiod)
-+				/* polarity handled by gpiolib */
- 				gpiod_set_value_cansleep(spi->cs_gpiod,
--							 !enable);
-+							 enable1);
- 			else
-+				/*
-+				 * invert the enable line, as active low is
-+				 * default for SPI.
-+				 */
- 				gpio_set_value_cansleep(spi->cs_gpio, !enable);
- 		}
- 		/* Some SPI masters need both GPIO CS & slave_select */
-@@ -1992,15 +1990,6 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 	}
- 	spi->chip_select = value;
- 
--	/*
--	 * For descriptors associated with the device, polarity inversion is
--	 * handled in the gpiolib, so all gpio chip selects are "active high"
--	 * in the logical sense, the gpiolib will invert the line if need be.
--	 */
--	if ((ctlr->use_gpio_descriptors) && ctlr->cs_gpiods &&
--	    ctlr->cs_gpiods[spi->chip_select])
--		spi->mode |= SPI_CS_HIGH;
--
- 	/* Device speed */
- 	if (!of_property_read_u32(nc, "spi-max-frequency", &value))
- 		spi->max_speed_hz = value;
--- 
-2.17.1
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+lZ1IACgkQJNaLcl1U
+h9DyUgf9GVIIEgVFeiFwfpBxRp9KUtKikyJJ4G/Plgv+Bogc094JDTo+SIaMoQbG
+cmwe2/ku3ir8I4FL8ud8W572cFMJbzHdG+giRDMDzb69A+mmfwUiW8D48ZhVX4ks
+LGqvriy1bH0BKfzAvoduiZTjGxeIEeZ7/k2i1r4oq9X35GLl3o4po4045SW8uWVQ
+XQ9Gdy0PgMcUEcdwDnWlaRzXmUUMmYRpVdhliGYiAoQJ754UPh2Vl9dCj3nhw1vI
+uI0s2QMjWdYju1fJtjkStB8b8mZkSWyoeoMJSZhi+d8Ie3bEi7u5QPc+F4f9Ln59
+IJVRNPipUqgtxuadJaa6Ak57PilcXA==
+=zoTL
+-----END PGP SIGNATURE-----
 
+--wTWi5aaYRw9ix9vO--
