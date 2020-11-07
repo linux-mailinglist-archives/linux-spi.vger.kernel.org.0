@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 259392AA567
-	for <lists+linux-spi@lfdr.de>; Sat,  7 Nov 2020 14:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 436002AA56A
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Nov 2020 14:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727494AbgKGNeC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 7 Nov 2020 08:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
+        id S1727990AbgKGNeU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 7 Nov 2020 08:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727084AbgKGNeC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Nov 2020 08:34:02 -0500
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E911C0613CF;
-        Sat,  7 Nov 2020 05:34:02 -0800 (PST)
-Received: by mail-qk1-x743.google.com with SMTP id k9so3762330qki.6;
-        Sat, 07 Nov 2020 05:34:02 -0800 (PST)
+        with ESMTP id S1727084AbgKGNeT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Nov 2020 08:34:19 -0500
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD330C0613CF;
+        Sat,  7 Nov 2020 05:34:19 -0800 (PST)
+Received: by mail-qv1-xf44.google.com with SMTP id w5so1810262qvn.12;
+        Sat, 07 Nov 2020 05:34:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cgygmZxcrPCaXUcxy5sWPsLyE59i3yYRAYjJcbg36cg=;
-        b=P4ZZvfCj5FfPAh6P+CzmqyCBwg6kbvlcDf/0KQYIUFmcCoH96dUrKTT9dgPaa8nXr+
-         QZuqlPuK6WemrdAczvusuEXIsqEROhVM2y10wIvvXxt1Rp+l1qjM/ASmi2AvNlByOXsW
-         X1KY945fhjFilMlibsrAaEPpVwf4P3p4fQOR8yBeM6J2+oNZxdiuqrctY87LpW+8H98I
-         wdoh5hu1AmpOIG0jv91TVqL01JvePdyuSoC1MI0LWKtsWN33orcp41VG0LpmCOibjAKF
-         laErLeWQQ3UNyVHA5bEteRFTTWpm0CKnAoY3cZ+iHfvtYBz7pA0rKtGuTIc7YARaT2uT
-         HpLg==
+        bh=44ZrDKfH3x7ZWkU/9cqJtBpMieXFvYfttGTFzMae91Y=;
+        b=OmorHa1pXiHiyQxGplOwQtnzxGiWgKgTCwHvH5vfY0F7IuYfik5JlUEyg4Zp+NGMBM
+         sk68SwanQsEpg2n2OXw2114orITDj2nJ2JCf/LmRs6BydxxIuTFZCveOYG5Z39N96sL/
+         at+bD+9lSBUQtl7/Czl6HTbh5X6T4LmvG7TCj+91U6m7PV4Lf7iNS6jzil/HPxJtHE9d
+         UrpR/IuJPXZ4MowAP2QuFhpSnmIi2s76g355owIAd1pQ9pDdSDUL6c4DXBZYs7BC7ybI
+         5X3cweZXxpwy3Xt/22LZJoboEsGnoDoVZ8gZEiSyyb8X86YcSqFK/cGqgr6WcXugPyDL
+         khkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=cgygmZxcrPCaXUcxy5sWPsLyE59i3yYRAYjJcbg36cg=;
-        b=U0J17RU7G5k6kvL+GhFGKq2h3RzuJma4cm7vH0mf1IXs275c3ConlruGx2c9FOgm1F
-         fSLpZiOd/6KY5aTMbA4uB6x6KKgts++lSNT1tdyhLt/iM2svh715nMc9t1IGHL4s/NSg
-         r5fsuouCw3yvMGH4zZX24xgQwf3YoYAm69SRFHXwZMU8snWZHpUBAyBojqiTM+j9qSDn
-         L0NC8iVpxCjFKPhVFiKMZgHO+/7Fq1gxa2q84ds7t0bTLTgeb+cO32F36LIsKMWOlXfO
-         bVQCAgo673J6zBfqXwGaWQZP52COc/bBKqAR8yqbBhGn+9a31iF64d+fur42CiQaMcdS
-         dArQ==
-X-Gm-Message-State: AOAM5305wFDOX4dM/ymYNQrs2JCTGWMCgNrt2ioUAxbqN9p5fax31yT5
-        4omSXZdagQczd+BVOjgDDXY=
-X-Google-Smtp-Source: ABdhPJwWwStW9USc+7zEAiO3Ay8nV6LTJWVF1ojxBwaVaHGmQZV7m9sY6fFc75YFBHI4sY/TBgF16w==
-X-Received: by 2002:a05:620a:1276:: with SMTP id b22mr552113qkl.256.1604756041288;
-        Sat, 07 Nov 2020 05:34:01 -0800 (PST)
+        bh=44ZrDKfH3x7ZWkU/9cqJtBpMieXFvYfttGTFzMae91Y=;
+        b=J3VqQ7bwn4F6T+3+K4zfonSrbXf+AfCY71nv6BkXiRH9Nvd9nSZ470l9A75QHUq3mF
+         g7hNgrV80AKqQuJeeuo4BIxfsAfwdu9XMvXeeBfVw6J0iSD23lyt2H612c6+hKbqdjCe
+         cGgn7kSOfg/dKyiH2CHrSOxULDzgSWfomDQSeU9R1P7B/qhpAEKHruzy+DslyKPQ/sHu
+         tND/jf7m8xQS+WLre6/slAPN+yk0s1QH5zrB3jqBfAoA+BHcN+or6h6WbLv3zoXLmp6N
+         NvjRLuDSSEsSc7cD5+wHXU2qMZuv9Ed3bCs8Og/JJ8u6EI8pdRG7tegDLPVnNeTITc7B
+         8JEA==
+X-Gm-Message-State: AOAM53194VPHXo8YiGRgBzFpIezTb+eaOcA5KNE1Nn+kOgnbU8j/ZjcD
+        EQZwHTW9w3LbFm3s/cyC9ls=
+X-Google-Smtp-Source: ABdhPJx4/Iu1kjdK7aNO5xPmFgJDKkeSY6ycB+bhid2xfRsbEvur41S7FP9EbPhN2X1JGHjYDjv9EQ==
+X-Received: by 2002:a0c:fa50:: with SMTP id k16mr6129700qvo.41.1604756059104;
+        Sat, 07 Nov 2020 05:34:19 -0800 (PST)
 Received: from [192.168.1.201] (pool-108-51-35-162.washdc.fios.verizon.net. [108.51.35.162])
-        by smtp.googlemail.com with ESMTPSA id k11sm2480644qtu.45.2020.11.07.05.34.00
+        by smtp.googlemail.com with ESMTPSA id z2sm2588780qkg.76.2020.11.07.05.34.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Nov 2020 05:34:00 -0800 (PST)
-Subject: Re: [PATCH 14/32] dt-bindings: Define all Kendryte K210 clock IDs
+        Sat, 07 Nov 2020 05:34:18 -0800 (PST)
+Subject: Re: [PATCH 15/32] dt-bindings: Define Kendryte K210 sysctl registers
 To:     Damien Le Moal <damien.lemoal@wdc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
@@ -59,7 +59,7 @@ To:     Damien Le Moal <damien.lemoal@wdc.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-gpio@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
 References: <20201107081420.60325-1-damien.lemoal@wdc.com>
- <20201107081420.60325-15-damien.lemoal@wdc.com>
+ <20201107081420.60325-16-damien.lemoal@wdc.com>
 From:   Sean Anderson <seanga2@gmail.com>
 Autocrypt: addr=seanga2@gmail.com; prefer-encrypt=mutual; keydata=
  mQENBFe74PkBCACoLC5Zq2gwrDcCkr+EPGsT14bsxrW07GiYzQhLCgwnPdEpgU95pXltbFhw
@@ -75,12 +75,12 @@ Autocrypt: addr=seanga2@gmail.com; prefer-encrypt=mutual; keydata=
  N1ahpqqNmXe0uLdP0pu55JCqhrGw2SinkRMdWyhSxT56uNwIVHGhLTqH7Q4t1N6G1EH626qa
  SvIJsWlNpll6Y3AYLDw2/Spw/hqieS2PQ/Ky3rPZnvJt7/aSNYsKoFGX0yjkH67Uq8Lx0k1L
  w8jpXnbEPQN3A2ZJCbeM
-Message-ID: <af85a79d-547f-b948-440c-756456576706@gmail.com>
-Date:   Sat, 7 Nov 2020 08:33:59 -0500
+Message-ID: <7d8a869c-df9e-7a26-4049-8de543dabe33@gmail.com>
+Date:   Sat, 7 Nov 2020 08:34:17 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201107081420.60325-15-damien.lemoal@wdc.com>
+In-Reply-To: <20201107081420.60325-16-damien.lemoal@wdc.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -89,87 +89,62 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 11/7/20 3:14 AM, Damien Le Moal wrote:
-> Define unique arbitrary IDs for all 44 clocks available on the Kendryte
-> K210 RISC-V SoC in the header file include/dt-bindings/clock/k210-clk.h.
+> Introduce the dt-bindings file include/dt-bindings/mfd/k210_sysctl.h to
+> define the offset of all registers of the K210 system controller.
 > 
 > Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 > ---
->  include/dt-bindings/clock/k210-clk.h | 61 +++++++++++++++++++++++-----
->  1 file changed, 50 insertions(+), 11 deletions(-)
+>  include/dt-bindings/mfd/k210-sysctl.h | 41 +++++++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 include/dt-bindings/mfd/k210-sysctl.h
 > 
-> diff --git a/include/dt-bindings/clock/k210-clk.h b/include/dt-bindings/clock/k210-clk.h
-> index 5a2fd64d1a49..8d7ab2f0737c 100644
-> --- a/include/dt-bindings/clock/k210-clk.h
-> +++ b/include/dt-bindings/clock/k210-clk.h
-> @@ -3,18 +3,57 @@
->   * Copyright (C) 2019-20 Sean Anderson <seanga2@gmail.com>
->   * Copyright (c) 2020 Western Digital Corporation or its affiliates.
->   */
-> -#ifndef K210_CLK_H
-> -#define K210_CLK_H
-> +#ifndef CLOCK_K210_CLK_H
-> +#define CLOCK_K210_CLK_H
->  
->  /*
-> - * Arbitrary identifiers for clocks.
-> - * The structure is: in0 -> pll0 -> aclk -> cpu
-> - *
-> - * Since we use the hardware defaults for now, set all these to the same clock.
-> + * Kendryte K210 SoC clock identifiers (arbitrary values).
->   */
-> -#define K210_CLK_PLL0   0
-> -#define K210_CLK_PLL1   0
-> -#define K210_CLK_ACLK   0
-> -#define K210_CLK_CPU    0
-> +#define K210_CLK_IN0	0
-> +#define K210_CLK_PLL0	1
-> +#define K210_CLK_PLL1	2
-> +#define K210_CLK_PLL2	3
-> +#define K210_CLK_ACLK	4
-> +#define K210_CLK_CPU	5
-> +#define K210_CLK_CLINT	6
-> +#define K210_CLK_DMA	7
-> +#define K210_CLK_FFT	8
-> +#define K210_CLK_SRAM0	9
-> +#define K210_CLK_SRAM1	10
-> +#define K210_CLK_ROM	11
-> +#define K210_CLK_DVP	12
-> +#define K210_CLK_APB0	13
-> +#define K210_CLK_APB1	14
-> +#define K210_CLK_APB2	15
-> +#define K210_CLK_AI	16
-> +#define K210_CLK_I2S0	17
-> +#define K210_CLK_I2S1	18
-> +#define K210_CLK_I2S2	19
-> +#define K210_CLK_I2S0_M	20
-> +#define K210_CLK_I2S1_M	21
-> +#define K210_CLK_I2S2_M	22
-> +#define K210_CLK_WDT0	23
-> +#define K210_CLK_WDT1	24
-> +#define K210_CLK_SPI0	25
-> +#define K210_CLK_SPI1	26
-> +#define K210_CLK_SPI2	27
-> +#define K210_CLK_I2C0	28
-> +#define K210_CLK_I2C1	29
-> +#define K210_CLK_I2C2	30
-> +#define K210_CLK_SPI3	31
-> +#define K210_CLK_TIMER0	32
-> +#define K210_CLK_TIMER1	33
-> +#define K210_CLK_TIMER2	34
-> +#define K210_CLK_GPIO	35
-> +#define K210_CLK_UART1	36
-> +#define K210_CLK_UART2	37
-> +#define K210_CLK_UART3	38
-> +#define K210_CLK_FPIOA	39
-> +#define K210_CLK_SHA	40
-> +#define K210_CLK_AES	41
-> +#define K210_CLK_OTP	42
-> +#define K210_CLK_RTC	43
->  
-> -#endif /* K210_CLK_H */
-> +#define K210_NUM_CLKS	44
+> diff --git a/include/dt-bindings/mfd/k210-sysctl.h b/include/dt-bindings/mfd/k210-sysctl.h
+> new file mode 100644
+> index 000000000000..5cc386d3c9ca
+> --- /dev/null
+> +++ b/include/dt-bindings/mfd/k210-sysctl.h
+> @@ -0,0 +1,41 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Copyright (C) 2020 Sean Anderson <seanga2@gmail.com>
+> + * Copyright (c) 2020 Western Digital Corporation or its affiliates.
+> + */
+> +#ifndef MFD_K210_SYSCTL_H
+> +#define MFD_K210_SYSCTL_H
 > +
-> +#endif /* CLOCK_K210_CLK_H */
+> +/*
+> + * Kendryte K210 SoC system controller registers offsets.
+> + * Taken from Kendryte SDK (kendryte-standalone-sdk).
+> + */
+> +#define K210_SYSCTL_GIT_ID	0x00 /* Git short commit id */
+> +#define K210_SYSCTL_UART_BAUD	0x04 /* Default UARTHS baud rate */
+> +#define K210_SYSCTL_PLL0	0x08 /* PLL0 controller */
+> +#define K210_SYSCTL_PLL1	0x0C /* PLL1 controller */
+> +#define K210_SYSCTL_PLL2	0x10 /* PLL2 controller */
+> +#define K210_SYSCTL_PLL_LOCK	0x18 /* PLL lock tester */
+> +#define K210_SYSCTL_ROM_ERROR	0x1C /* AXI ROM detector */
+> +#define K210_SYSCTL_SEL0	0x20 /* Clock select controller 0 */
+> +#define K210_SYSCTL_SEL1	0x24 /* Clock select controller 1 */
+> +#define K210_SYSCTL_EN_CENT	0x28 /* Central clock enable */
+> +#define K210_SYSCTL_EN_PERI	0x2C /* Peripheral clock enable */
+> +#define K210_SYSCTL_SOFT_RESET	0x30 /* Soft reset ctrl */
+> +#define K210_SYSCTL_PERI_RESET	0x34 /* Peripheral reset controller */
+> +#define K210_SYSCTL_THR0	0x38 /* Clock threshold controller 0 */
+> +#define K210_SYSCTL_THR1	0x3C /* Clock threshold controller 1 */
+> +#define K210_SYSCTL_THR2	0x40 /* Clock threshold controller 2 */
+> +#define K210_SYSCTL_THR3	0x44 /* Clock threshold controller 3 */
+> +#define K210_SYSCTL_THR4	0x48 /* Clock threshold controller 4 */
+> +#define K210_SYSCTL_THR5	0x4C /* Clock threshold controller 5 */
+> +#define K210_SYSCTL_THR6	0x50 /* Clock threshold controller 6 */
+> +#define K210_SYSCTL_MISC	0x54 /* Miscellaneous controller */
+> +#define K210_SYSCTL_PERI	0x58 /* Peripheral controller */
+> +#define K210_SYSCTL_SPI_SLEEP	0x5C /* SPI sleep controller */
+> +#define K210_SYSCTL_RESET_STAT	0x60 /* Reset source status */
+> +#define K210_SYSCTL_DMA_SEL0	0x64 /* DMA handshake selector 0 */
+> +#define K210_SYSCTL_DMA_SEL1	0x68 /* DMA handshake selector 1 */
+> +#define K210_SYSCTL_POWER_SEL	0x6C /* IO Power Mode Select controller */
+> +
+> +#endif /* MFD_K210_SYSCTL_H */
 > 
 
 Reviewed-by: Sean Anderson <seanga2@gmail.com>
