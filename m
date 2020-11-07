@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5052AA558
-	for <lists+linux-spi@lfdr.de>; Sat,  7 Nov 2020 14:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF8E2AA55B
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Nov 2020 14:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728058AbgKGN2z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 7 Nov 2020 08:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        id S1727824AbgKGNaY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 7 Nov 2020 08:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727084AbgKGN2y (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Nov 2020 08:28:54 -0500
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183AAC0613CF;
-        Sat,  7 Nov 2020 05:28:54 -0800 (PST)
-Received: by mail-qt1-x843.google.com with SMTP id v11so2438052qtq.12;
-        Sat, 07 Nov 2020 05:28:54 -0800 (PST)
+        with ESMTP id S1727084AbgKGNaX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Nov 2020 08:30:23 -0500
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5375EC0613CF;
+        Sat,  7 Nov 2020 05:30:23 -0800 (PST)
+Received: by mail-qk1-x741.google.com with SMTP id i21so3742650qka.12;
+        Sat, 07 Nov 2020 05:30:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dn/HeCtFRABC/ah/L2n0R362D6f38waNtj4v0HJdssk=;
-        b=cPN5CiQPwqDFVdbga3mf9g1vnoSpLPtjYCc/HxBibpMnEaRnpr33do1VW5dfiICuTp
-         jEtINCzgBVSdEirrEB2MkxaBSk3sStb8qRwNL7hYWpTOkvgQ+20uCjmn0LpUcuKXcB+8
-         X7rcr9H67tt1H4y6iJA5ohPcnsjhX7Pj96O9PVwlO7GW/0btNxuCSsGormYU4UghSiNm
-         kWCZQxZfYB/ZuVJZRPGfEW0lIKttInLPzFzvoVN0gneMKZEBF8di96124tIyDCQ3rFPC
-         xo1e0R4v3NSrbz13WpomNhr9Ar9ViL/+HWYwYoaGTg4bOgPI7oAyUyZhN3jRF1C9KLup
-         bEiA==
+        bh=aH9ahL2m2DlHuwZs2NqTSjAIDujecJY29VfTCOj5jeU=;
+        b=VAYpZIFpKxEuxOQAeStWmuFaDWxD6BnD9LnhR6Qw0B4UuSTVaJGuga2JpzdGAXoZZX
+         iEr8M06RRg/pr7SEvHg6iIKsqGR3sI8Kq1kpshcuOXgZfZMiFE9GTs5rmrHnyA0UwDxs
+         YI2c0S2Xwaa9EVrHZg/37eafdSe/L5L1WAvQXHlGHcLH6kT/xF8rNWTBAo5GUFwb1lKp
+         OMFYu3ZhQQCzZe9lXhD0KEsuJEu0pCxDgN50qziRUqGfb3DzmxX721vIwSVV5TzxNnO2
+         y56yKdGr/RWw1DUiie76feZXnE4YEK8q6SXLO6gOzgfMsVo7xXCUOa4QJpv1H5enubQq
+         AKCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=dn/HeCtFRABC/ah/L2n0R362D6f38waNtj4v0HJdssk=;
-        b=C4iP5ePrtgWXMJrvjUEYbJMHYLHEhodVvp5OIuyOFPF+n84hiE8KTImuzdoC6ruukK
-         RIDP4T5wwcKYWuQt3Q04BhaKi1TfZT9Oz+X956rZMBWA/ibsQTZF0KKsNqSQ3IyFYC/A
-         9h8Umd7CPSrAMOqGBEtR7/vpnUxwnRqEm225iKYUyAUHycjX2etoBXD8XnwmvOOk+rGT
-         dEZk4xpcRSXEyhkL/HAIq4k52FsLO65Ox+EFbkoQrzyCxg9E4csMYL+k6ZyqS0m/2Qq5
-         ASfbQnwRbFm3aseDmIawDVA00Ezuiqy5KmOnV6tRapsNeRwUBXojJIVo31riPtStU+ka
-         VXmg==
-X-Gm-Message-State: AOAM531pJZstT4bEySkTyjFx/VWDtpmohFddqWuuUGFUt+ZKokO+pyFi
-        dTbw/ezHnprS/cMA/Yp+jQ8=
-X-Google-Smtp-Source: ABdhPJxa0jkI7jybW+0vygF/BSBlg4wHi5TOu+7IGUDmgwmNWnxQbSOqQzhXElvDte5P+hUZEBYnrg==
-X-Received: by 2002:ac8:13c1:: with SMTP id i1mr5798465qtj.78.1604755733365;
-        Sat, 07 Nov 2020 05:28:53 -0800 (PST)
+        bh=aH9ahL2m2DlHuwZs2NqTSjAIDujecJY29VfTCOj5jeU=;
+        b=NUPY3zG1+9T7K7GlknQOUQrOJM9dNmSaxcsUh+sKPoVJk+i000KG3ANbA5GNiP6wPH
+         DHinHs7i40n6zSpco3ZAQk8xhiR2Mhm8m97mCr/xssZItTdAKKT9uc2/hfwkiI8AD2lW
+         hfhyCFZoXEpL5AzRDb3tslpSw4zxzftZXt7bjQEv6i5YU0wMtATtF48jnVs1hGbNvCFX
+         T8Vsf+X5mHDP22nWPiWQo23I7EZd8cwOn8wbs8VIVHAxoPUIU1OaU7X43bIh1M0Ywgp8
+         4IE0XoP8p+HLztOMeIK9Ot3BXGxEDSoOOy+nWpd9UfBJLE12gkQCGeBUnguoRnBEEn83
+         ZPdQ==
+X-Gm-Message-State: AOAM533b7d9shWNJ/XVzMVSZ3s7bSuYicHeLKIFPNH6S+cjlK+UONuAz
+        AoS+Hc9DyQhliY6Vsth0P7I=
+X-Google-Smtp-Source: ABdhPJxOT/pYuXPyEgZh5TmoJxgfExJ8PLvUKy/bvI3d5LIGOh4LPdRHV+esMbz8yiqk6VeaczLyXg==
+X-Received: by 2002:a37:41d2:: with SMTP id o201mr5819416qka.425.1604755822578;
+        Sat, 07 Nov 2020 05:30:22 -0800 (PST)
 Received: from [192.168.1.201] (pool-108-51-35-162.washdc.fios.verizon.net. [108.51.35.162])
-        by smtp.googlemail.com with ESMTPSA id q1sm2346943qti.95.2020.11.07.05.28.52
+        by smtp.googlemail.com with ESMTPSA id k15sm2513306qtk.64.2020.11.07.05.30.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Nov 2020 05:28:52 -0800 (PST)
-Subject: Re: [PATCH 02/32] spi: dw: Add support for 32-bits ctrlr0 layout
+        Sat, 07 Nov 2020 05:30:22 -0800 (PST)
+Subject: Re: [PATCH 03/32] spi: dw: Fix driving MOSI low while recieving
 To:     Damien Le Moal <damien.lemoal@wdc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
@@ -59,7 +59,7 @@ To:     Damien Le Moal <damien.lemoal@wdc.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-gpio@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
 References: <20201107081420.60325-1-damien.lemoal@wdc.com>
- <20201107081420.60325-3-damien.lemoal@wdc.com>
+ <20201107081420.60325-4-damien.lemoal@wdc.com>
 From:   Sean Anderson <seanga2@gmail.com>
 Autocrypt: addr=seanga2@gmail.com; prefer-encrypt=mutual; keydata=
  mQENBFe74PkBCACoLC5Zq2gwrDcCkr+EPGsT14bsxrW07GiYzQhLCgwnPdEpgU95pXltbFhw
@@ -75,12 +75,12 @@ Autocrypt: addr=seanga2@gmail.com; prefer-encrypt=mutual; keydata=
  N1ahpqqNmXe0uLdP0pu55JCqhrGw2SinkRMdWyhSxT56uNwIVHGhLTqH7Q4t1N6G1EH626qa
  SvIJsWlNpll6Y3AYLDw2/Spw/hqieS2PQ/Ky3rPZnvJt7/aSNYsKoFGX0yjkH67Uq8Lx0k1L
  w8jpXnbEPQN3A2ZJCbeM
-Message-ID: <e166976c-5119-a63b-25ff-8c403e4fc0ae@gmail.com>
-Date:   Sat, 7 Nov 2020 08:28:51 -0500
+Message-ID: <2f2acc07-aa00-5d21-e8f6-d99407bf9590@gmail.com>
+Date:   Sat, 7 Nov 2020 08:30:21 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201107081420.60325-3-damien.lemoal@wdc.com>
+In-Reply-To: <20201107081420.60325-4-damien.lemoal@wdc.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -89,83 +89,40 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 11/7/20 3:13 AM, Damien Le Moal wrote:
-> Synopsis DesignWare DW_apb_ssi version 4 defines a 32-bit layout of
-> the ctrlr0 register for SPI masters. The layout of ctrlr0 is:
+> Fix for the Synopsis DesignWare SPI mmio driver taken from the work
+> by Sean Anderson for the U-Boot project. Sean comments:
 > 
-> |   31 .. 23  | 22 .. 21 | 20 .. 16 |
-> | other stuff | spi_frf  |  dfs_32  |
+> The resting state of MOSI is high when nothing is driving it. If we
+> drive it low while recieving, it looks like we are transmitting 0x00
+> instead of transmitting nothing. This can confuse slaves (like SD cards)
+> which allow new commands to be sent over MOSI while they are returning
+> data over MISO. The return of MOSI from 0 to 1 at the end of recieving
+> a byte can look like a start bit and a transmission bit to an SD card.
+> This will cause the card to become out-of-sync with the SPI device, as
+> it thinks the device has already started transmitting two bytes of a new
+> command. The mmc-spi driver will not detect the R1 response from the SD
+> card, since it is sent too early, and offset by two bits. This patch
+> fixes transfer errors when using SD cards with dw spi.
 > 
-> |   15 .. 10  | 9 .. 8 | 7 .. 6 | 5 .. 4 | 3 .. 0 |
-> | other stuff |  tmod  |  mode  |  frf   |  dfs   |
-> 
-> Th main difference of this layout with the 16-bits version is the data
-> frame format field which resides in bits 16..20 instead of bits 3..0.
-> 
-> Introduce the DW SPI capability flag DW_SPI_CAP_DFS_32 to let a
-> platform signal that this layout is in use. Modify
-> dw_spi_update_config() to test this capability flag to set the data
-> frame format field at the correct register location.
-> 
-> Suggested-by: Sean Anderson <seanga2@gmail.com>
+> Signed-off-by: Sean Anderson <seanga2@gmail.com>
 > Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 > ---
->  drivers/spi/spi-dw-core.c | 8 ++++++--
->  drivers/spi/spi-dw.h      | 9 +++++++++
->  2 files changed, 15 insertions(+), 2 deletions(-)
+>  drivers/spi/spi-dw-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 2e50cc0a9291..841c85247f01 100644
+> index 841c85247f01..c2ef1d8d46d5 100644
 > --- a/drivers/spi/spi-dw-core.c
 > +++ b/drivers/spi/spi-dw-core.c
-> @@ -311,8 +311,12 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
->  	u32 speed_hz;
->  	u16 clk_div;
+> @@ -137,7 +137,7 @@ static inline u32 rx_max(struct dw_spi *dws)
+>  static void dw_writer(struct dw_spi *dws)
+>  {
+>  	u32 max = tx_max(dws);
+> -	u16 txw = 0;
+> +	u16 txw = 0xffff;
 >  
-> -	/* CTRLR0[ 4/3: 0] Data Frame Size */
-> -	cr0 |= (cfg->dfs - 1);
-> +	if (!(dws->caps & DW_SPI_CAP_DFS_32))
-> +		/* CTRLR0[ 4/3: 0] Data Frame Size */
-> +		cr0 |= (cfg->dfs - 1);
-> +	else
-> +		/* CTRLR0[20: 16] Data Frame Size */
-> +		cr0 |= (cfg->dfs - 1) << DWC_APB_CTRLR0_32_DFS_OFFSET;
->  
->  	if (!(dws->caps & DW_SPI_CAP_DWC_SSI))
->  		/* CTRLR0[ 9:8] Transfer Mode */
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index faf40cb66498..48a11a51a407 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -9,6 +9,7 @@
->  #include <linux/io.h>
->  #include <linux/scatterlist.h>
->  #include <linux/spi/spi-mem.h>
-> +#include <linux/bitfield.h>
->  
->  /* Register offsets */
->  #define DW_SPI_CTRLR0			0x00
-> @@ -72,6 +73,13 @@
->  #define DWC_SSI_CTRLR0_FRF_OFFSET	6
->  #define DWC_SSI_CTRLR0_DFS_OFFSET	0
->  
-> +/*
-> + * Bit fields in CTRLR0 for DWC_apb_ssi v4 32-bits ctrlr0.
-> + * Based on DW_apb_ssi Databook v4.02a.
-> + */
-> +#define DWC_APB_CTRLR0_32_DFS_OFFSET	16
-> +#define DWC_APB_CTRLR0_32_DFS_MASK	GENMASK(20, 16)
-> +
->  /*
->   * For Keem Bay, CTRLR0[31] is used to select controller mode.
->   * 0: SSI is slave
-> @@ -121,6 +129,7 @@ enum dw_ssi_type {
->  #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
->  #define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
->  #define DW_SPI_CAP_DWC_SSI		BIT(2)
-> +#define DW_SPI_CAP_DFS_32		BIT(3)
->  
->  /* Slave spi_transfer/spi_mem_op related */
->  struct dw_spi_cfg {
+>  	while (max--) {
+>  		if (dws->tx) {
 > 
 
 Reviewed-by: Sean Anderson <seanga2@gmail.com>
