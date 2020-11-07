@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3ABF2AA355
-	for <lists+linux-spi@lfdr.de>; Sat,  7 Nov 2020 09:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0EA2AA35A
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Nov 2020 09:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgKGIOd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 7 Nov 2020 03:14:33 -0500
+        id S1727955AbgKGIOf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 7 Nov 2020 03:14:35 -0500
 Received: from esa3.hgst.iphmx.com ([216.71.153.141]:57208 "EHLO
         esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727833AbgKGIOc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Nov 2020 03:14:32 -0500
+        with ESMTP id S1727833AbgKGIOe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Nov 2020 03:14:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1604736871; x=1636272871;
+  t=1604736874; x=1636272874;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zXOUn4luDWiHlH2xEcGo8nQgZxG+Qoj008WbUn42J5Y=;
-  b=crzFMs3XDaG1cU78uSsHo8c1cOoAik6QKMOG4iMG67YtD0Yn7FD5eBQU
-   uAvnH/SDOfS0zI1+biTtDmv2JC26+Fw1tvJKPgdG0ilgfr2fwELCNuzLw
-   aXe7z8NDl3UYqs7ulqd//G10jT9YUb1kGIBp2OFs2Aln5/gqF4YAa0rBD
-   SideB1a3jauIoLlxfES6SM+PxN6m8yuB+ipgB5qekOfQNMnrWNou9s+jH
-   yYJR4A7nbFyq9e7PPYELrmdV5vI2nIzb3bcq1ESkadC9ferEJvT6p2Q5q
-   E2SonPf3h1wnvjHYrXdc4rmORG9DLwAQrsGx7ullwVGXJRf8KZ6oPqXvn
-   w==;
-IronPort-SDR: S9Edc8I9RiGkZAvf3c1nFzN0b6n9qHT7xyK5WQXGchHPp2zVSYE5F7lNRDXGD3rG70NqYpC4bt
- 2/NW8eA8O7UGrqyks8PGn/18r+bV3kF7ZoLfWojzNLuIn7RQsiPoyXzaJa39SBYCijT1k5dPtw
- PTnibuFVkkWwh8li1ByLBWKLH7JpazkhmdJYP73Y5RLBukhLv+XvmVBfrhOHKSFz8QpnnFy3FJ
- hv0+sFx9vYCyNpO1F+Nm2nP77s1c/cz7XtPK0fJVAyZViYodktQvptyxgvoG9+s6BZHXJQhYLc
- KC0=
+  bh=aCvWQLDyaSFYntB4Womc0e0j3CRsIntIfbuSiFLr4hA=;
+  b=QshweGYemJGcT+KkzovV5Pwo18pjWZTCW8g3u1CTCEdIBWJC7EJAcDdg
+   DAImK8qOXPy+gVlzduQkc0P9q05LXvxzjG0oC91IP3dwDUOEfUMFo0wnv
+   K+1WjPuBDcfsDLiRltK1GvqpTuFlqClk+5WjN3nWs+NuTMcwsiFAyMc8Z
+   dYPIekGvygw5Rq73diPfYPDa3bJQ+XpIXgOyWRXZ1c4OpWgOeFrHudKUh
+   uXmFqJDDaKlcm65v2/liCIjD6yEbhvClZe8iFGkfiBfZd08yEJJqo6r7G
+   1jH5hOzqc0YmU3jX9fwgBgTufIYiIbsmYFOC5hnM2dLWrBRH0rwDnyZeK
+   Q==;
+IronPort-SDR: a5Xd+Se+25c2QTbWar5nszM6hEg8bzpP7QZXiBmHiIX8kiPd3tTKK8VILkOLnvRC6WH7Z9Ojdb
+ /T37LvV7XUa5v2L3OD+Ubs/1cKoWX3q74tTHcmeCaGxRwFXrB2EnNPOygoTlByNO021/t2gOH5
+ QWuksXJOAZ+pFHjb2Rz80Flm+ZVkAOVCiKOuILn/x5aozS+OJni/exvdYmZxo5e1V6TrBbAkbo
+ 2dkqE1fMksvzGrA8JcF3LVYdv8OMgjjHIof13xLct5pjoZPchIoBgJ5hOImAvKntDhkBaxbNfg
+ m7A=
 X-IronPort-AV: E=Sophos;i="5.77,459,1596470400"; 
-   d="scan'208";a="156564361"
+   d="scan'208";a="156564364"
 Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Nov 2020 16:14:31 +0800
-IronPort-SDR: iTOv1qbttoj9oV6ab4Q2KjBD6lMVP4SQebjOckLOn9CY3oaqDXbuBBF73QyLQa92mfVZYsRNfL
- n7clU7NC+LzXc6RehVTvXxHAD9ozVD4eFTTA9rDgNIDou4+HBPMJu/NPfQihfsrqn1ggQpUh9f
- baFGLv/UBYGKhG/Blxuv74vWnZuOht+FwlteVSyAvCfWEcO/HJ2El7omxwOUX2Xn/RVVGT0Xyu
- mQfnqU1EVrTdyhpP+c8HCqnwdiGrDUw4TRDEQhiscbuYYzbs4ZB7KhuIq4TNVOuVMhI8CTyRBP
- HTJtx5HEsLv8LpquX8OFlYdw
+  by ob1.hgst.iphmx.com with ESMTP; 07 Nov 2020 16:14:34 +0800
+IronPort-SDR: KAErByTJHniAColHyFeX8orwtASriU/MKROjO/z33lDVn5RRdECdUm4qmn1NXcgK4VTu/G7TPV
+ 1DrFiinJCWe3OhCewJxavf7T+KqkyjRvANgYo93eR8u2SRzOAo2UhU18k1URgE46BBGzbaPHYj
+ rsqIebwLqSTBxA0UyI6xJj5Hut/Bsavxt2wCUwPACNwu+Z2VE2OXfZR8XsPbLNDes/tzizo3XR
+ jCR1Hob+BX5D06OIxeN4AHF8nDyuCoFIt+Jn9yHO8Q0tcm9aLQywPN5i1N7fYzAy+zmZQOC/DX
+ qcA3xjArOwwbYAhEer/54hkA
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 23:59:22 -0800
-IronPort-SDR: 5bMS7b8/oLSlphvaD4IRhBm6Eo/58VNOp/fpJO2woBA813YdnNsPHPyJK/Z/P5Qjuvf5fIKXww
- +hPXtu1SxJzByuUOQ/9GIaSKjctTWWsy2g3FaIZMcFDPX5XqJTMQTKHQldpOI/+AQzkPQddNjN
- nM8wKRoWn59ma3g0/DCaPbkXtaaxsTWHTXKmGM3YPZk/xAfSVJAhfiTaHkKcAoxX0QD5ShtmUR
- 9+mCVSuTOeM6wmBgCiaK4xvFT9GmfT2ZkxTHkPv9DxFfMkqn+T3ghAnlBxLxwx/ArefX6JBG8s
- NPA=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 23:59:25 -0800
+IronPort-SDR: xnMAOU5B9k8aXLtf1hpdfpBLHr6sZSOKvHHBazK2i2wFWcv7QRgwZDB5yRurYFkmsx6Ckwu05/
+ WIME6Tf0b8tFqPDMJp7/bOJ2eMa/MWFmwTtlEgPFNFta0wWOqkFLFw+s9KUG4tiHjNQjPzfJzZ
+ /Y+aqMbroxYK3YbaE0zZbN7MU/4qG8l2hqxL0GzsGZG88bgSljIGv2IlEe2BTxWw+VOgklowg5
+ t4NjYuQ2n8DxVap/Y0ZPa9osrcuQ405tsfj9NtcR3I/JsJDarohMqN/7Ix0DY0jcQmIqLh7HX+
+ nZg=
 WDCIronportException: Internal
 Received: from hdrdzf2.ad.shared (HELO twashi.fujisawa.hgst.com) ([10.84.71.85])
-  by uls-op-cesaip01.wdc.com with ESMTP; 07 Nov 2020 00:14:30 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 07 Nov 2020 00:14:32 -0800
 From:   Damien Le Moal <damien.lemoal@wdc.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
@@ -58,9 +58,9 @@ To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-gpio@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
 Cc:     Sean Anderson <seanga2@gmail.com>
-Subject: [PATCH 03/32] spi: dw: Fix driving MOSI low while recieving
-Date:   Sat,  7 Nov 2020 17:13:51 +0900
-Message-Id: <20201107081420.60325-4-damien.lemoal@wdc.com>
+Subject: [PATCH 04/32] spi: dw: Introduce polling device tree property
+Date:   Sat,  7 Nov 2020 17:13:52 +0900
+Message-Id: <20201107081420.60325-5-damien.lemoal@wdc.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201107081420.60325-1-damien.lemoal@wdc.com>
 References: <20201107081420.60325-1-damien.lemoal@wdc.com>
@@ -70,40 +70,80 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fix for the Synopsis DesignWare SPI mmio driver taken from the work
-by Sean Anderson for the U-Boot project. Sean comments:
+With boards that have slow interrupts context switch, and a fast device
+connected to a spi master, e.g. an SD card through mmc-spi, using
+dw_spi_poll_transfer() intead of the regular interrupt based
+dw_spi_transfer_handler() function is more efficient and can avoid a lot
+of RX FIFO overflow errors while keeping the device SPI frequency
+reasonnably high (for speed). Introduce the "polling" device tree
+property to allow requesting polled processing of transfer depending on
+the connected device while keeping the spi master interrupts property
+unschanged. E.g. device trees such as:
 
-The resting state of MOSI is high when nothing is driving it. If we
-drive it low while recieving, it looks like we are transmitting 0x00
-instead of transmitting nothing. This can confuse slaves (like SD cards)
-which allow new commands to be sent over MOSI while they are returning
-data over MISO. The return of MOSI from 0 to 1 at the end of recieving
-a byte can look like a start bit and a transmission bit to an SD card.
-This will cause the card to become out-of-sync with the SPI device, as
-it thinks the device has already started transmitting two bytes of a new
-command. The mmc-spi driver will not detect the R1 response from the SD
-card, since it is sent too early, and offset by two bits. This patch
-fixes transfer errors when using SD cards with dw spi.
+Generic soc.dtsi dts:
 
-Signed-off-by: Sean Anderson <seanga2@gmail.com>
+spi0: spi@53000000 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	compatible = "snps,dw-apb-ssi";
+	reg = <0x53000000 0x100>;
+	interrupts = <2>;
+	...
+}
+
+Board specific dts:
+
+...
+&spi0 {
+	polling;
+	status = "okay";
+
+	slot@0 {
+		compatible = "mmc-spi-slot";
+		reg = <0>;
+		voltage-ranges = <3300 3300>;
+		spi-max-frequency = <4000000>;
+	};
+}
+
+will result in using polled transfers for the SD card while other boards
+using spi0 for different peripherals can use interrupt based transfers
+without needing to change the generic base soc dts.
+
 Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 ---
- drivers/spi/spi-dw-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-dw-mmio.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index 841c85247f01..c2ef1d8d46d5 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -137,7 +137,7 @@ static inline u32 rx_max(struct dw_spi *dws)
- static void dw_writer(struct dw_spi *dws)
- {
- 	u32 max = tx_max(dws);
--	u16 txw = 0;
-+	u16 txw = 0xffff;
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index d0cc5bf4fa4e..3f1bc384cb45 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -20,6 +20,7 @@
+ #include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
++#include <linux/interrupt.h>
  
- 	while (max--) {
- 		if (dws->tx) {
+ #include "spi-dw.h"
+ 
+@@ -246,9 +247,13 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+ 
+ 	dws->paddr = mem->start;
+ 
+-	dws->irq = platform_get_irq(pdev, 0);
+-	if (dws->irq < 0)
+-		return dws->irq; /* -ENXIO */
++	if (device_property_read_bool(&pdev->dev, "polling")) {
++		dws->irq = IRQ_NOTCONNECTED;
++	} else {
++		dws->irq = platform_get_irq(pdev, 0);
++		if (dws->irq < 0)
++			return dws->irq; /* -ENXIO */
++	}
+ 
+ 	dwsmmio->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(dwsmmio->clk))
 -- 
 2.28.0
 
