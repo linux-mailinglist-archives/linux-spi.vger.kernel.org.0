@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB562AA34B
-	for <lists+linux-spi@lfdr.de>; Sat,  7 Nov 2020 09:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014422AA34F
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Nov 2020 09:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727868AbgKGIO1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 7 Nov 2020 03:14:27 -0500
+        id S1727892AbgKGIOa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 7 Nov 2020 03:14:30 -0500
 Received: from esa3.hgst.iphmx.com ([216.71.153.141]:57208 "EHLO
         esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727738AbgKGIO1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Nov 2020 03:14:27 -0500
+        with ESMTP id S1727833AbgKGIOa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 7 Nov 2020 03:14:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1604736866; x=1636272866;
+  t=1604736869; x=1636272869;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BqUviBNZqhcYKVjLlBRgbOvJ4y6AYLOsGaaxkI1tHXE=;
-  b=WbLmDeHMpyuMAj5o6aC3ehE826nSoTpBtKiuqxJrh9QieKpt5VVYIGEM
-   P5BxAyT0VYjpY33M4I5MIqPeLlvVeswKj5ZZU/78m+elcsvEyLNWmS/Fg
-   YeEgYsYj7wYE7+NqI5xY0QhIp0Qwgzrkl5UJ9eDGc413EMqkcMrpKt+U9
-   Dl4smzilr+Oftroz10BHEE0mR/IEtO7YACeHKUyQBzQV6CPiLBHFpYly5
-   SSnbNa33q7Cnk70/yLwva9DVbYB7AqsmZpcnMl7jViHjG8WztzR4tpGCB
-   ANdHtans1lhNlmwZFFfRlxjoSIgDITVVYUWQMXKNXwb+Q4xp9LbZ1hMqt
-   A==;
-IronPort-SDR: n771JepbWCHDRkYyn8eHlO+UD9lV3sUgQrKoHBpkBj7/26yMD0PvmFHEJh7Fg1b3OZV5IZi+YM
- aLs3US7E1aU+D1JYFzLMYtkZVOt3O/P8z7PGAPQ6ZzKeuzBT+P9X2+FKFFj5YoJ8X+Gs4UchL1
- Lbokr311ZW3yP/SY/KWdYRsEHqqQ6SHkBpjmeZc5gmlCSW/FA/fa5cm6n8IbJlEVKyqYZgGwCS
- G38Ie2i8IPv6HuQtPABDm/3OXTfjHlXFn8xnyZGWg8UhnepZ+Io5Qh0GymXFqeUy499JgMebav
- f1k=
+  bh=fn84oUZ4BNOGbDuiZmuvLT5yqWitqbl3jm2qr9SJ9bI=;
+  b=edEe2bsF7O2amA9pJV2t9HKaazSKyc6ecuGi9rkzU+Ra9TzEqo633C8h
+   aiwZ2l56NqwtgRS0UYiZJr2uMQXXd+wGXp5hkgelJCVLbxZuvW7Qq+Yy3
+   b3+g/OjNeX7lUt2t72sdLxnOCammeBeWMAcPT161Ut+t8mmcjSR5zFBxZ
+   N8Fx8Gs0a+3sGvs8zCqu/k+V0m6LgZGpQs5Ewivm1AzXk6Qjg/BqXhqAD
+   tQ7/3JoK4MTA6LU1aeij1tEGbG+hJLmv39k6uqdroQpBDSihMUSxRUo3K
+   pqKBiM85YbF+Y/3dvAj2KDY6kAV/oDE2xpvfX3a97lbagU5ohhw9HzBGW
+   g==;
+IronPort-SDR: n6bxo9BMXs8tOxfB8F51PMEkY7MmWlGZYFrUCpTftKzpydzyiImc79nFe+e5lQDpqDR3SGel1w
+ fVaIbV7cEpRfge3u+L2YlaeleZJWOZOaCMXvgzWWvLeRTmzeRTI2pF5DhWgeYbwNQ13KRCqxCd
+ ACZ9r2g60Ju+yFvzMvAZv58g2hIqVjogw2f2UgIxsK10Fd4KVf6iEaSE1CGXAJAzjSSbgdNRuj
+ y9t+SJSA6k6vZvNW/6SL8rBuJCP/dE4GBaQ06rJlX1aHEkBGL/XSe77mLsXBsCpag1GJnOAk18
+ Hms=
 X-IronPort-AV: E=Sophos;i="5.77,459,1596470400"; 
-   d="scan'208";a="156564357"
+   d="scan'208";a="156564358"
 Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Nov 2020 16:14:26 +0800
-IronPort-SDR: CViM24XLr0s7xjdVlrD3qV2x7d5ahqOLGtfj6NwpuToaZWpy/uS4bssZd4bEZH4Sw4QOHEW2QD
- TrToZ5NlkAX0ddU0K7J/VLq/MvsWO3HqJh+K91GoK4e8JtGdJyV39OtZxiCgHCsG8Z2ymEIioI
- No7d6V1X4d+d6ZHLx6uHdUcZ6unfMXJSyraKM3HE+i3E8W1hfph+3je7D9Ug5mBOg9CJW1z06x
- bQSephzJS3Y3ps7ruC1E2m3+03z05EkU6/zKAnQCbc6VN8UsXTtSlOqCMBr6ECkd8uEvZRthwz
- X4CIW2tNehmo14F7SN+Xdov2
+  by ob1.hgst.iphmx.com with ESMTP; 07 Nov 2020 16:14:28 +0800
+IronPort-SDR: ujIRzSqCMmY6Vmwv2MOOv+fBgnUaQgcAYsJbqzHzspAq2vU020ZbtPtreqerLQh2wbZBdPQO+K
+ xzmm3OvYPQvsb1Q7VEvJSNGQ0OaCi/k4kGNAgr2p0e41g8qHEz/LSZVPqil9fCmya8aMBq2nbY
+ J70YerqdU8B0Uxkk92CRwcA6/G0fE4CS3PTT+h5r944YcHX0kK3+4KF0Viz1/dbfR0/mqqrD9+
+ fyzY1kAOmxvyLF40XB+MdAFlGmjpH5i9klRDOLNkCiKaNYK65Czy8M9hPxf3+8EjY00nXKbQ7S
+ 3VQMqe/2qqzVz9q/RgSyPgrZ
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 23:59:17 -0800
-IronPort-SDR: TmBsa7t3u9A7oOAAJ6Q9xlQB6YGNq7OndCgwgljnfYFrMAktTQLVE89+b449fpt9Mw7Xr+O3BY
- U9zIY390So2hnkbpscRoeheh9r+XlcJwEykzBi55qYwq0hTm5aoaNFV3b2Bc2yubJYy5jJJpZp
- jjMxRqB1Bc9lZQysDb6Pcr+5RH/AgWpwmT3QihEA/AcCs4BgEg5egeDogJqj32RBmxwcAmcke+
- le/0xfq+Zm5V7QU1z0BA81wKCy48rumCkg4lGF2bMCmkGnS9pARlhm+ISDPatWjLyhaaTddJm4
- 7Y8=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 23:59:20 -0800
+IronPort-SDR: Pjy+CvffHDUeaBXBpKnVSfEEU+ksIQROzGmmXPC5PVw7W7LyOuXXasEaoNM6f2hnV3YBECU9iq
+ LnhkeIJzWOWBBFB12SV915WaNLKoDeKBQAlm7wE6ylqZDcZgeX7vg18qvU4TLQeIZea9IAf/N5
+ I/Z9Kje7pGer8lGFz4ym/VEXgpvR8GX9vS6cccuowARmvkDKv4pwcaXx6DsKcVZyvwULF4rSo7
+ tgkrLgReXXsDTAjMXLh8x2qgfjYOktPdjaRoIl6Ew59pEikbYpOPsXvP7jJ5M1w1uqP8qplYF+
+ tQY=
 WDCIronportException: Internal
 Received: from hdrdzf2.ad.shared (HELO twashi.fujisawa.hgst.com) ([10.84.71.85])
-  by uls-op-cesaip01.wdc.com with ESMTP; 07 Nov 2020 00:14:24 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 07 Nov 2020 00:14:27 -0800
 From:   Damien Le Moal <damien.lemoal@wdc.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
@@ -58,9 +58,9 @@ To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-gpio@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
 Cc:     Sean Anderson <seanga2@gmail.com>
-Subject: [PATCH 01/32] of: Fix property supplier parsing
-Date:   Sat,  7 Nov 2020 17:13:49 +0900
-Message-Id: <20201107081420.60325-2-damien.lemoal@wdc.com>
+Subject: [PATCH 02/32] spi: dw: Add support for 32-bits ctrlr0 layout
+Date:   Sat,  7 Nov 2020 17:13:50 +0900
+Message-Id: <20201107081420.60325-3-damien.lemoal@wdc.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201107081420.60325-1-damien.lemoal@wdc.com>
 References: <20201107081420.60325-1-damien.lemoal@wdc.com>
@@ -70,60 +70,83 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The DesignWare GPIO driver gpio-dwapb ("snps,dw-apb-gpio" or
-"apm,xgene-gpio-v2" compatible string) defines the property
-"snps,nr-gpios" for the user to specify the number of GPIOs available
-on a port. The "-gpios" suffix of this property name ends up being
-interpreted as a cell reference when properties are parsed in
-of_link_to_suppliers(), leading to error messages such as:
+Synopsis DesignWare DW_apb_ssi version 4 defines a 32-bit layout of
+the ctrlr0 register for SPI masters. The layout of ctrlr0 is:
 
-OF: /soc/bus@50200000/gpio-controller@50200000/gpio-port@0: could not
-find phandle
+|   31 .. 23  | 22 .. 21 | 20 .. 16 |
+| other stuff | spi_frf  |  dfs_32  |
 
-Fix this by manually defining a parse_gpios() function which ignores
-this property, skipping the search for the supplier and thus avoiding
-the device tree parsing error.
+|   15 .. 10  | 9 .. 8 | 7 .. 6 | 5 .. 4 | 3 .. 0 |
+| other stuff |  tmod  |  mode  |  frf   |  dfs   |
 
+Th main difference of this layout with the 16-bits version is the data
+frame format field which resides in bits 16..20 instead of bits 3..0.
+
+Introduce the DW SPI capability flag DW_SPI_CAP_DFS_32 to let a
+platform signal that this layout is in use. Modify
+dw_spi_update_config() to test this capability flag to set the data
+frame format field at the correct register location.
+
+Suggested-by: Sean Anderson <seanga2@gmail.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 ---
- drivers/of/property.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/spi/spi-dw-core.c | 8 ++++++--
+ drivers/spi/spi-dw.h      | 9 +++++++++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/of/property.c b/drivers/of/property.c
-index 408a7b5f06a9..d16111c0d6da 100644
---- a/drivers/of/property.c
-+++ b/drivers/of/property.c
-@@ -1308,7 +1308,6 @@ DEFINE_SIMPLE_PROP(pinctrl7, "pinctrl-7", NULL)
- DEFINE_SIMPLE_PROP(pinctrl8, "pinctrl-8", NULL)
- DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
- DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
--DEFINE_SUFFIX_PROP(gpios, "-gpios", "#gpio-cells")
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index 2e50cc0a9291..841c85247f01 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -311,8 +311,12 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+ 	u32 speed_hz;
+ 	u16 clk_div;
  
- static struct device_node *parse_iommu_maps(struct device_node *np,
- 					    const char *prop_name, int index)
-@@ -1319,6 +1318,22 @@ static struct device_node *parse_iommu_maps(struct device_node *np,
- 	return of_parse_phandle(np, prop_name, (index * 4) + 1);
- }
+-	/* CTRLR0[ 4/3: 0] Data Frame Size */
+-	cr0 |= (cfg->dfs - 1);
++	if (!(dws->caps & DW_SPI_CAP_DFS_32))
++		/* CTRLR0[ 4/3: 0] Data Frame Size */
++		cr0 |= (cfg->dfs - 1);
++	else
++		/* CTRLR0[20: 16] Data Frame Size */
++		cr0 |= (cfg->dfs - 1) << DWC_APB_CTRLR0_32_DFS_OFFSET;
  
-+static struct device_node *parse_gpios(struct device_node *np,
-+				       const char *prop_name, int index)
-+{
-+	/*
-+	 * Quirck for the DesignWare gpio-dwapb GPIO driver which defines
-+	 * the "snps,nr-gpios" property to indicate the total number of GPIOs
-+	 * available. As this conflict with "xx-gpios" reference properties,
-+	 * ignore it.
-+	 */
-+	if (strcmp(prop_name, "snps,nr-gpios") == 0)
-+		return NULL;
+ 	if (!(dws->caps & DW_SPI_CAP_DWC_SSI))
+ 		/* CTRLR0[ 9:8] Transfer Mode */
+diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+index faf40cb66498..48a11a51a407 100644
+--- a/drivers/spi/spi-dw.h
++++ b/drivers/spi/spi-dw.h
+@@ -9,6 +9,7 @@
+ #include <linux/io.h>
+ #include <linux/scatterlist.h>
+ #include <linux/spi/spi-mem.h>
++#include <linux/bitfield.h>
+ 
+ /* Register offsets */
+ #define DW_SPI_CTRLR0			0x00
+@@ -72,6 +73,13 @@
+ #define DWC_SSI_CTRLR0_FRF_OFFSET	6
+ #define DWC_SSI_CTRLR0_DFS_OFFSET	0
+ 
++/*
++ * Bit fields in CTRLR0 for DWC_apb_ssi v4 32-bits ctrlr0.
++ * Based on DW_apb_ssi Databook v4.02a.
++ */
++#define DWC_APB_CTRLR0_32_DFS_OFFSET	16
++#define DWC_APB_CTRLR0_32_DFS_MASK	GENMASK(20, 16)
 +
-+	return parse_suffix_prop_cells(np, prop_name, index,
-+				       "-gpios", "#gpio-cells");
-+}
-+
- static const struct supplier_bindings of_supplier_bindings[] = {
- 	{ .parse_prop = parse_clocks, },
- 	{ .parse_prop = parse_interconnects, },
+ /*
+  * For Keem Bay, CTRLR0[31] is used to select controller mode.
+  * 0: SSI is slave
+@@ -121,6 +129,7 @@ enum dw_ssi_type {
+ #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
+ #define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
+ #define DW_SPI_CAP_DWC_SSI		BIT(2)
++#define DW_SPI_CAP_DFS_32		BIT(3)
+ 
+ /* Slave spi_transfer/spi_mem_op related */
+ struct dw_spi_cfg {
 -- 
 2.28.0
 
