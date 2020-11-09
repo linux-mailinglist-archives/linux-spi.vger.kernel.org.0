@@ -2,112 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6962AAED3
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 02:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE042AB1BA
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 08:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728993AbgKIBtr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 8 Nov 2020 20:49:47 -0500
-Received: from mga03.intel.com ([134.134.136.65]:18410 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727979AbgKIBtr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 8 Nov 2020 20:49:47 -0500
-IronPort-SDR: BM1AGjrYzDMAGbOrxgq46qbdaODHkWwj+s4p+Zpy66ei6/zbk8h4MJK4xTBee1wrO1vBd9gCn7
- hJ88H06a9spQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9799"; a="169850568"
-X-IronPort-AV: E=Sophos;i="5.77,462,1596524400"; 
-   d="scan'208";a="169850568"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2020 17:49:46 -0800
-IronPort-SDR: mc73/uhYoWhYM70tMCojdVsZFFyppQDXmvyv45t6fdHgfh8bHovRdMtfwsRy6tDgH+Jk0iU5hO
- BaLxi8zkbZPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,462,1596524400"; 
-   d="scan'208";a="338203731"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 08 Nov 2020 17:49:46 -0800
-Received: from [10.213.33.64] (vramuthx-MOBL1.gar.corp.intel.com [10.213.33.64])
-        by linux.intel.com (Postfix) with ESMTP id E9A1A580870;
-        Sun,  8 Nov 2020 17:49:42 -0800 (PST)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v6 6/6] dt-bindings: spi: Add compatible for Intel LGM SoC
-To:     Rob Herring <robh@kernel.org>
-Cc:     broonie@kernel.org, vigneshr@ti.com, tudor.ambarus@microchip.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
-        simon.k.r.goldschmidt@gmail.com, dinguyen@kernel.org,
-        richard@nod.at, cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20201030053153.5319-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20201030053153.5319-7-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20201104220321.GB4192737@bogus>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <12deb9bb-6b3b-d71b-0a6e-5b58da23e09d@linux.intel.com>
-Date:   Mon, 9 Nov 2020 09:49:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.1
+        id S1729391AbgKIHZr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Nov 2020 02:25:47 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:60668 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728038AbgKIHZr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 02:25:47 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0A97Pik4044731;
+        Mon, 9 Nov 2020 01:25:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1604906744;
+        bh=wPDzD3wdBhogJ2w34E4sOoZHnHl52AdJRen78Jv9Zv0=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=EIejFMtZYZfWDgDXcPgme5edtNCh51sq+nTmPv43wT96m7yWEPAlp8shNN7FFlaFi
+         xSyyK29PgHS423vVtOQ1Iu9CWJ2sdDifdFVbNwkxOP1ixroKdz+6FQBn5mqzH3cZyX
+         v0jc0jKi8b9IR9CfdItu+CFfJ0u5ges37xUew8Os=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0A97Pi4L079312
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 9 Nov 2020 01:25:44 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 9 Nov
+ 2020 01:25:44 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 9 Nov 2020 01:25:44 -0600
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0A97Ph8Q112252;
+        Mon, 9 Nov 2020 01:25:43 -0600
+Subject: Re: [PATCH] spi: davinci: Fix use-after-free on unbind
+To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>
+References: <dd060534490eca5e946eb9165916542b01a9358d.1604874488.git.lukas@wunner.de>
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+Message-ID: <40f3a2cf-be25-f4f3-6231-cbd5570b8a64@ti.com>
+Date:   Mon, 9 Nov 2020 09:26:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <20201104220321.GB4192737@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <dd060534490eca5e946eb9165916542b01a9358d.1604874488.git.lukas@wunner.de>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+Hi Lukas,
 
-On 5/11/2020 6:03 am, Rob Herring wrote:
-> On Fri, Oct 30, 2020 at 01:31:53PM +0800, Ramuthevar,Vadivel MuruganX wrote:
->> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->>
->> Add compatible for Intel LGM SoC.
->>
->> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->> ---
->>   Documentation/devicetree/bindings/spi/cadence-quadspi.yaml | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml b/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
->> index ec22b040d804..58ecdab939df 100644
->> --- a/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
->> +++ b/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
->> @@ -19,6 +19,7 @@ properties:
->>             - enum:
->>                 - ti,k2g-qspi
->>                 - ti,am654-ospi
->> +              - intel,lgm-qspi
+On 09/11/2020 0.41, Lukas Wunner wrote:
+> davinci_spi_remove() accesses the driver's private data after it's been
+> freed with spi_master_put().
 > 
-> As this change shows, you don't need 'oneOf' for Intel...
-As we you have suggested in the previous mail, I framed like below with 
-'oneOf'
+> Fix by moving the spi_master_put() to the end of the function.
 
-properties:
-   compatible:
-     oneOf:
-       - items:
-           - enum:
-               - ti,k2g-qspi
-               - ti,am654-ospi
-           - const: cdns,qspi-nor
+Thanks for spotting it,
 
-       - items:
-           - enum:
-               - intel,lgm-qspi
-               - cadence,qspi   #compatible for generic in future use
-           - const: cdns,qspi-nor
+Acked-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
 
-so that ignoring error message warning can be avoided as well, Thanks!
-
-
-Regards
-Vadivel
-
+> Fixes: fe5fd2540947 ("spi: davinci: Use dma_request_chan() for requesting DMA channel")
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Cc: <stable@vger.kernel.org> # v4.7+
+> Cc: Peter Ujfalusi <peter.ujfalusi@ti.com>
+> ---
+>  drivers/spi/spi-davinci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->>             - const: cdns,qspi-nor
->>   
->>     reg:
->> -- 
->> 2.11.0
->>
+> diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
+> index 818f2b22875d..7453a1dbbc06 100644
+> --- a/drivers/spi/spi-davinci.c
+> +++ b/drivers/spi/spi-davinci.c
+> @@ -1040,13 +1040,13 @@ static int davinci_spi_remove(struct platform_device *pdev)
+>  	spi_bitbang_stop(&dspi->bitbang);
+>  
+>  	clk_disable_unprepare(dspi->clk);
+> -	spi_master_put(master);
+>  
+>  	if (dspi->dma_rx) {
+>  		dma_release_channel(dspi->dma_rx);
+>  		dma_release_channel(dspi->dma_tx);
+>  	}
+>  
+> +	spi_master_put(master);
+>  	return 0;
+>  }
+>  
+> 
+
+- Péter
+
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
