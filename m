@@ -2,101 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE042AB1BA
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 08:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 961142AB5B1
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 12:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729391AbgKIHZr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Nov 2020 02:25:47 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:60668 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728038AbgKIHZr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 02:25:47 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0A97Pik4044731;
-        Mon, 9 Nov 2020 01:25:44 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1604906744;
-        bh=wPDzD3wdBhogJ2w34E4sOoZHnHl52AdJRen78Jv9Zv0=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=EIejFMtZYZfWDgDXcPgme5edtNCh51sq+nTmPv43wT96m7yWEPAlp8shNN7FFlaFi
-         xSyyK29PgHS423vVtOQ1Iu9CWJ2sdDifdFVbNwkxOP1ixroKdz+6FQBn5mqzH3cZyX
-         v0jc0jKi8b9IR9CfdItu+CFfJ0u5ges37xUew8Os=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0A97Pi4L079312
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 9 Nov 2020 01:25:44 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 9 Nov
- 2020 01:25:44 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 9 Nov 2020 01:25:44 -0600
-Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0A97Ph8Q112252;
-        Mon, 9 Nov 2020 01:25:43 -0600
-Subject: Re: [PATCH] spi: davinci: Fix use-after-free on unbind
-To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>
-References: <dd060534490eca5e946eb9165916542b01a9358d.1604874488.git.lukas@wunner.de>
-From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
-Message-ID: <40f3a2cf-be25-f4f3-6231-cbd5570b8a64@ti.com>
-Date:   Mon, 9 Nov 2020 09:26:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1729446AbgKILCQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Nov 2020 06:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727826AbgKILCP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 06:02:15 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609A0C0613CF
+        for <linux-spi@vger.kernel.org>; Mon,  9 Nov 2020 03:02:15 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kc4w5-0001m3-QE; Mon, 09 Nov 2020 12:02:09 +0100
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kc4w5-0003LB-Al; Mon, 09 Nov 2020 12:02:09 +0100
+Date:   Mon, 9 Nov 2020 12:02:09 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH v2 2/2] Input: ads7846: do not overwrite spi->mode flags
+ set by spi framework
+Message-ID: <20201109110209.lz5polbjvvoq5fwa@pengutronix.de>
+References: <20201027095724.18654-1-o.rempel@pengutronix.de>
+ <20201027095724.18654-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <dd060534490eca5e946eb9165916542b01a9358d.1604874488.git.lukas@wunner.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201027095724.18654-3-o.rempel@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:01:07 up 360 days,  2:19, 29 users,  load average: 0.49, 0.22,
+ 0.11
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Lukas,
+Hello Dmitry,
 
-On 09/11/2020 0.41, Lukas Wunner wrote:
-> davinci_spi_remove() accesses the driver's private data after it's been
-> freed with spi_master_put().
+ping for this patch as well.
+
+Regards,
+Oleksij
+
+On Tue, Oct 27, 2020 at 10:57:24AM +0100, Oleksij Rempel wrote:
+> Do not overwrite spi->mode flags set by spi framework, otherwise the
+> chip select polarity will get lost.
 > 
-> Fix by moving the spi_master_put() to the end of the function.
-
-Thanks for spotting it,
-
-Acked-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-
-> Fixes: fe5fd2540947 ("spi: davinci: Use dma_request_chan() for requesting DMA channel")
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Cc: <stable@vger.kernel.org> # v4.7+
-> Cc: Peter Ujfalusi <peter.ujfalusi@ti.com>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
->  drivers/spi/spi-davinci.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/input/touchscreen/ads7846.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-> index 818f2b22875d..7453a1dbbc06 100644
-> --- a/drivers/spi/spi-davinci.c
-> +++ b/drivers/spi/spi-davinci.c
-> @@ -1040,13 +1040,13 @@ static int davinci_spi_remove(struct platform_device *pdev)
->  	spi_bitbang_stop(&dspi->bitbang);
->  
->  	clk_disable_unprepare(dspi->clk);
-> -	spi_master_put(master);
->  
->  	if (dspi->dma_rx) {
->  		dma_release_channel(dspi->dma_rx);
->  		dma_release_channel(dspi->dma_tx);
->  	}
->  
-> +	spi_master_put(master);
->  	return 0;
->  }
->  
+> diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+> index 8fd7fc39c4fd..f2dc2c8ab5ec 100644
+> --- a/drivers/input/touchscreen/ads7846.c
+> +++ b/drivers/input/touchscreen/ads7846.c
+> @@ -1288,7 +1288,8 @@ static int ads7846_probe(struct spi_device *spi)
+>  	 * may not.  So we stick to very-portable 8 bit words, both RX and TX.
+>  	 */
+>  	spi->bits_per_word = 8;
+> -	spi->mode = SPI_MODE_0;
+> +	spi->mode &= ~SPI_MODE_X_MASK;
+> +	spi->mode |= SPI_MODE_0;
+>  	err = spi_setup(spi);
+>  	if (err < 0)
+>  		return err;
+> -- 
+> 2.28.0
+> 
 > 
 
-- Péter
-
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
