@@ -2,85 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 440772ABF7B
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 16:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635702ABF82
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 16:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729960AbgKIPOj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Nov 2020 10:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729791AbgKIPNe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 10:13:34 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047BAC0613CF;
-        Mon,  9 Nov 2020 07:13:32 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id e21so7381202pgr.11;
-        Mon, 09 Nov 2020 07:13:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qHWsdF+9c9Znyw/+xmlrHFHZZNlg9caiciX5yI+PJqg=;
-        b=h/xYBWjJerd+Nng65RxzaEks1xJhwINQyY9Kk84UP0ulcLuRhnmTobsVYl3EaoGFCr
-         pmRS8cTieTCtPXnqRHSV81aivSlGEFes5pjpp+y+DAjSEjaETUwjo3t7vma6iGQpHtaA
-         qr3Rn9lg5N9jeL+Hlgd6tevc5NbF3r5DuW9qEcUbSMWmIO/fU4BZwQndEgYRP4zocklU
-         ZmgImOQ17grJhUCyvTmxMCR4ocfKILJSZMBwVVzqk1G/oTvwKehmO/xQB6rTtzYJHxxA
-         46TfEl4s0YenH/OSsT0v8VTAoIXqo7BPVjX530QwGZRCIPobomB982/lQwc7wXvK3h1h
-         zKGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qHWsdF+9c9Znyw/+xmlrHFHZZNlg9caiciX5yI+PJqg=;
-        b=gHmMwMJNnLOKHqbXk9EgyOL8kJJxdDWjdjUZtpZQn5qQiGsvR4SLa+u/Fa1rocsX/t
-         tjb5pnYzXuMz8RR9x8ZQzj5YXBwzWOMssGaerUQS2YxcL0n4DfZJsZFMoVNgZYlrwUaJ
-         ijvLdafohk1SAVu3494Go6SctnTE4XyjqiLSXRBtmV8i5bgbmCApsyBYVBaHGnQo5lU4
-         o7VKdvhfYfw9R35EeCrGCeEsArEcdIKQNMMs4tPWo2fN3P+0Bp7bzDAMIVI5DyAP7DdS
-         0NS8P9WPufG8vpdEBBc6LoE0gCeEpV7fLVdXq+iu08hJgoZ1ZKUVOAc/j54+CFkZUPPE
-         ufWA==
-X-Gm-Message-State: AOAM532StM3jfcToTj8WG8IZCFhHis0kIA4pCkV3E9Rs6h8qgo1Tpr0H
-        kdX7VIxM+sp6780wsTU94ogF5NSGVCcMe6ax96I=
-X-Google-Smtp-Source: ABdhPJzbzt1UYLvSnFqF0Z8uM3EiVS1ndggK5B8kpcpbTxvC1ovHRrCqnbQrmSaPrTMJIc851fa8tqkAO+ZtDX3BrV8=
-X-Received: by 2002:a63:4511:: with SMTP id s17mr13179323pga.4.1604934812562;
- Mon, 09 Nov 2020 07:13:32 -0800 (PST)
+        id S1729791AbgKIPPQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Nov 2020 10:15:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36386 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729776AbgKIPPQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 9 Nov 2020 10:15:16 -0500
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 81FEE2083B;
+        Mon,  9 Nov 2020 15:15:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604934915;
+        bh=uFzFBI18XxshAHcL4NhF+sS3BMnRmbg8BqeNyv++o0M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=2Tw+6ILFxObelRhzyGvW51nXQ9LjMct/tFT9Qbi6suDFUjer5t5bc3lXSE8PdoZ3x
+         LeLEzfCfXZ7R8YRrQdeKrrUTTym3vVNuogga3ki0aQeSRZe2mQFzDoMWy98/HI0Yg1
+         YUCDbERcXhErSj5WOmjH7mJdL8h8bYI65i+XCpgI=
+Received: by mail-oi1-f171.google.com with SMTP id w145so10533850oie.9;
+        Mon, 09 Nov 2020 07:15:15 -0800 (PST)
+X-Gm-Message-State: AOAM531M6E9C5KDVahnw5nt1RW6SQLmiGahTQXUcuhPxua9sAmhndTZj
+        sGv+2Y17wn8ddaaGQ+BHlr6/BepSgThKr/A5/A==
+X-Google-Smtp-Source: ABdhPJwZOpxjKNbOsGNSg9idbBszbu7k/mTdWpWiUyHqU+3dbB8MLknOWOA7Fat6Wp5mRQPMoAna61QddrvPSp3GwFg=
+X-Received: by 2002:aca:5dc2:: with SMTP id r185mr9550220oib.106.1604934914871;
+ Mon, 09 Nov 2020 07:15:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20201107081420.60325-1-damien.lemoal@wdc.com> <20201107081420.60325-2-damien.lemoal@wdc.com>
-In-Reply-To: <20201107081420.60325-2-damien.lemoal@wdc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 9 Nov 2020 17:14:21 +0200
-Message-ID: <CAHp75VfvUZ6h+JGCUQ65i7qFsugvbd3n=aCprgvp=geRSpQEhQ@mail.gmail.com>
-Subject: Re: [PATCH 01/32] of: Fix property supplier parsing
-To:     Damien Le Moal <damien.lemoal@wdc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+References: <20201030053153.5319-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201030053153.5319-7-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201104220321.GB4192737@bogus> <12deb9bb-6b3b-d71b-0a6e-5b58da23e09d@linux.intel.com>
+In-Reply-To: <12deb9bb-6b3b-d71b-0a6e-5b58da23e09d@linux.intel.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 9 Nov 2020 09:15:03 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLh=zGiaVaT2nyJjRDLnryR1ZNbK2D=0+MO4Lb=q--yDw@mail.gmail.com>
+Message-ID: <CAL_JsqLh=zGiaVaT2nyJjRDLnryR1ZNbK2D=0+MO4Lb=q--yDw@mail.gmail.com>
+Subject: Re: [PATCH v6 6/6] dt-bindings: spi: Add compatible for Intel LGM SoC
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>, Vignesh R <vigneshr@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Anderson <seanga2@gmail.com>
+        devicetree@vger.kernel.org,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        simon.k.r.goldschmidt@gmail.com, Dinh Nguyen <dinguyen@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Kim, Cheol Yong" <cheol.yong.kim@intel.com>,
+        "Wu, Qiming" <qi-ming.wu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Nov 7, 2020 at 10:14 AM Damien Le Moal <damien.lemoal@wdc.com> wrote:
+On Sun, Nov 8, 2020 at 7:49 PM Ramuthevar, Vadivel MuruganX
+<vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
+>
+> Hi Rob,
+>
+> On 5/11/2020 6:03 am, Rob Herring wrote:
+> > On Fri, Oct 30, 2020 at 01:31:53PM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> >> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> >>
+> >> Add compatible for Intel LGM SoC.
+> >>
+> >> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> >> ---
+> >>   Documentation/devicetree/bindings/spi/cadence-quadspi.yaml | 1 +
+> >>   1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml b/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+> >> index ec22b040d804..58ecdab939df 100644
+> >> --- a/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+> >> +++ b/Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+> >> @@ -19,6 +19,7 @@ properties:
+> >>             - enum:
+> >>                 - ti,k2g-qspi
+> >>                 - ti,am654-ospi
+> >> +              - intel,lgm-qspi
+> >
+> > As this change shows, you don't need 'oneOf' for Intel...
+> As we you have suggested in the previous mail, I framed like below with
+> 'oneOf'
+>
+> properties:
+>    compatible:
+>      oneOf:
+>        - items:
+>            - enum:
+>                - ti,k2g-qspi
+>                - ti,am654-ospi
+>            - const: cdns,qspi-nor
+>
+>        - items:
+>            - enum:
+>                - intel,lgm-qspi
+>                - cadence,qspi   #compatible for generic in future use
 
-> @@ -1308,7 +1308,6 @@ DEFINE_SIMPLE_PROP(pinctrl7, "pinctrl-7", NULL)
->  DEFINE_SIMPLE_PROP(pinctrl8, "pinctrl-8", NULL)
->  DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
->  DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
-> -DEFINE_SUFFIX_PROP(gpios, "-gpios", "#gpio-cells")
+Why are you not using the documented vendor prefix 'cdns'?
 
-Sorry, but the above doesn't sound right to me.
-It's a generic code and you may imagine how many systems you broke by
-this change.
+In any case, adding this is pointless. Your 'generic' compatible is below.
 
--- 
-With Best Regards,
-Andy Shevchenko
+And you still don't need 'oneOf' here. The enum contents here can be
+in the first 'enum'.
+
+>            - const: cdns,qspi-nor
+>
+> so that ignoring error message warning can be avoided as well, Thanks!
+
+In the example? Fix the example!
+
+
+Rob
