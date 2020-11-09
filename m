@@ -2,100 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADDD2ABEDB
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 15:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A37C2ABEEA
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 15:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730773AbgKIOjR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Nov 2020 09:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S1729850AbgKIOla (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Nov 2020 09:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730649AbgKIOjQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 09:39:16 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBFBC0613CF;
-        Mon,  9 Nov 2020 06:39:16 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id 62so7288366pgg.12;
-        Mon, 09 Nov 2020 06:39:16 -0800 (PST)
+        with ESMTP id S1726952AbgKIOla (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 09:41:30 -0500
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10D7C0613CF;
+        Mon,  9 Nov 2020 06:41:29 -0800 (PST)
+Received: by mail-vs1-xe43.google.com with SMTP id h5so5072577vsp.3;
+        Mon, 09 Nov 2020 06:41:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ffm6KC46cKGPhajXyegh9kwdKAZi/LxDhZRupkk2+WY=;
-        b=PdsNeHrU36CbnidyPH8nvMrCkCSnvDbNdbChvGCp+msYDwsHcoUJGPstS2hIVBQDa9
-         YIjzAfq1oqLdyBzuuGaQHjFM8qGqbhOZWKBHma84Q1uya0ewxyFniachwstu5CaDMnaf
-         e0FTzvQXJbNuEyoAqqGbziv8jJoQPEu0PxOiWiI+2vRse/OHFGGC4X6Z+K/injdbIVPI
-         n9bvHahef0K69VyBY4Wu9KkQxZDoURTu0TkyMp+HjTJmVZxzuQXAz3HS4WVfsPLR9hrU
-         LO3ey6mxgLr9apMEegIyRzrJT9j4cW0Dqc5sqAsvkw+gO0Jz2HguGIvGvz+EGeRaT9aV
-         wS7A==
+        bh=psnNy3QTtX/D1uoSbPA7cfyikpVZsBuIEGMQour2XRE=;
+        b=LIzpzS0g4PiuKnCEWPFVRmEERGdUrGPL0WK+VMtHllrC4v151WNFAQsZRvk3RmZdbf
+         q4uVYskOcYNX8qTuRnciCPDBW0fJp922FI1tCt62FOlH2Qd5aKs3Cq+t4wbKJUvru7UK
+         r0NfCmD6f2KUgeIhzFsei3pEoXPXJefDGG4Vw0Db6Apjml5k8fu/vm0DtNRRnDOO8Mt/
+         mE1jD/49tAF3NgqOkoYU8n+wKQ7DizRA8DBfLd2cOcM3nI2whJIETfvny2LQPzzHG3KR
+         UsVF2YSnrOL/wiTQfbRjxL6kU4TUGYyXFHa8y5MUJrVQGVU8W3eNURr2017hSlQmW3YQ
+         wpgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ffm6KC46cKGPhajXyegh9kwdKAZi/LxDhZRupkk2+WY=;
-        b=dumdme/CVwxBlPsgMgK2JrBaoT5NCW/oxWx9kU48sgssMvHkWJJI0zFqYhlVvxvNGh
-         BQ8xCnaqb2EhSXgm94nFF9A4hpxRC39U/0BmgRCrqHHpdV5sDqGTLbLoS18pgmTtr/vG
-         hOnynJ3UqNje04Xp4sR7I4dm+YlSWKrZ0lvd1w1Lp+6iKDzN34zxohO2zMlkOUrChWey
-         rmeVgTcqPjddFlDXec1qYcJS4/YpjMVfIOd+d/77sgq4vGYQsZqN+5KbM1Ek1LANYLZ1
-         aLDtxfuQ3FgptPmUnxhd3PCgSmdSw7HfjEVgSKrmjLjxMHbRb4/r3Yw+wy4LFZyV9XvI
-         IqMQ==
-X-Gm-Message-State: AOAM530AJOTdOLaynw4XucHorM5M2TsweYAoY793mlcytAZ2ABF7US2L
-        YiNKUNbL4SQ2yBqzg4LflSK1U250pHD87iXb2zw=
-X-Google-Smtp-Source: ABdhPJyJOrsPckCzGNxst/26rQDteMKaKBS2MMunYNWtaF3z18NtyEmQgctYOprlHcSmFeVQ0WNOf3A38nQUhfWYJV8=
-X-Received: by 2002:aa7:8c4f:0:b029:18b:f361:4aa3 with SMTP id
- e15-20020aa78c4f0000b029018bf3614aa3mr7819210pfd.73.1604932755994; Mon, 09
- Nov 2020 06:39:15 -0800 (PST)
+        bh=psnNy3QTtX/D1uoSbPA7cfyikpVZsBuIEGMQour2XRE=;
+        b=chh2GIB7dkObDy1uAXtQGP0Lolhph1BtnK2GhsDxHdz5qiVCKt7tYwsYf+4A0G9ZUy
+         DJcQgO4e001KV6thu5e7hl7WWWyOgj1BV8Vp8fOWQ4osuimVSH73Ca0SrJ9AdCDV/77U
+         NKI/1BMwu/EEmZ2V1E/JWHgZc4X41s7KVq6vw0vm8Aq/GEQz0+swzGW+W7EVZBoOoEVu
+         6d5hcsHSPKh7dbkVgXZ2KlpFe0VroXqMhXYY3LgrAEXZ/foj+MGdjQ0lrieeFb8Fqjjs
+         Ppqa4hcj9yVgRDQMa6pa2JVAnWFpsL+y4R5D1xLgwKMTLxTPHoJWxKpkYxWotLH6cOAp
+         dWKw==
+X-Gm-Message-State: AOAM5309pAjYcTOUiY/DyBTJyD8Gs8SBS2QYixTQmhxpzQAVl2zF03xS
+        N2IUxZ6D29/N1N1IhvutRPpPw+CGjapBcZka4L0=
+X-Google-Smtp-Source: ABdhPJyBu3fkqNB1vZfypbjgqBD/gBgpoPDRvZL8h4tVJrCeFgQTl7tGomyBv2HvTQn41T46w4xyqDY4+/8tJf29ao0=
+X-Received: by 2002:a67:2ac1:: with SMTP id q184mr7758992vsq.57.1604932889025;
+ Mon, 09 Nov 2020 06:41:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20201107081420.60325-1-damien.lemoal@wdc.com> <20201107081420.60325-3-damien.lemoal@wdc.com>
- <20201109142529.tt5ojjyn36vd3ohe@mobilestation> <6dc6d52e-a39d-c351-5280-71b9e8eafe37@gmail.com>
-In-Reply-To: <6dc6d52e-a39d-c351-5280-71b9e8eafe37@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 9 Nov 2020 16:40:04 +0200
-Message-ID: <CAHp75VejtoTRAM1JmGib3OaJwzuw9Bb-qb08+XhdZUOuzTGUKw@mail.gmail.com>
-Subject: Re: [PATCH 02/32] spi: dw: Add support for 32-bits ctrlr0 layout
-To:     Sean Anderson <seanga2@gmail.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
+References: <20201106150706.29089-1-TheSven73@gmail.com> <CAHp75VfP1R7bXV6nWWnovWB5BMFcNNEmwBQXheBCUVDbr=xXGA@mail.gmail.com>
+In-Reply-To: <CAHp75VfP1R7bXV6nWWnovWB5BMFcNNEmwBQXheBCUVDbr=xXGA@mail.gmail.com>
+From:   Sven Van Asbroeck <thesven73@gmail.com>
+Date:   Mon, 9 Nov 2020 09:41:18 -0500
+Message-ID: <CAGngYiVu3cXtzb5PaoDOoyqjuuohLQ+em6Keg-qgDFFn2tdp=Q@mail.gmail.com>
+Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO descriptors
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Simon Han <z.han@kunbus.com>, Lukas Wunner <lukas@wunner.de>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 9, 2020 at 4:34 PM Sean Anderson <seanga2@gmail.com> wrote:
-> On 11/9/20 9:25 AM, Serge Semin wrote:
-> > On Sat, Nov 07, 2020 at 05:13:50PM +0900, Damien Le Moal wrote:
+Hi Andy, thank you for looking at this patch !
 
-...
-
-> > Are you sure they have been moved from [0, 3] to [16, 20]? I don't have the
-> > manual for the 4.0x version of the core, but according to this patch:
-> > https://patchwork.kernel.org/project/spi-devel-general/patch/1575907443-26377-7-git-send-email-wan.ahmad.zainie.wan.mohamad@intel.com/
-> > it has been ok to use the lowest four bits for DFS setting. Is the commit
-> > message misleading there?
+On Mon, Nov 9, 2020 at 9:24 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> This commit message is a truncated version of [1].
-
-I don't see how they are related.
-
-> Importantly, DFS is
-> valid when SSI_MAX_XFER_SIZE=16. When it =32, then DFS_32 must be used
-> (since DFS is constant 0xF). Since SSI_MAX_XFER_SIZE is a synthesis
-> parameter, there exist devices where DFS must be used, and also where
-> DFS_32 must be used.
+> Sounds like "many SPI drivers have to be fixed".
 >
-> [1] https://patchwork.ozlabs.org/project/uboot/patch/20201016225755.302659-10-seanga2@gmail.com/
 
+I don't disagree. Fact is that after the imx cspi bus driver was converted
+to gpio descriptors, most spi client drivers broke. It would be great if this
+could be fixed. Any method that the community can find a consensus on,
+would be great :)
 
--- 
-With Best Regards,
-Andy Shevchenko
+One the one hand: the fact that many spi client drivers just overwrite
+flags and values in their parent bus structure, doesn't sound idiomatic.
+I guess those spi->... values should really be opaque, and we should
+be using accessor functions, eg.:
+
+    static int acme_probe(struct spi_device *spi)
+    {
+        ...
+        // won't touch SPI_CS_HIGH flag
+        spi_set_mode_clock(spi, SPI_MODE_0);
+        ...
+    }
+
+On the other hand, it sounds very confusing to set SPI_CS_HIGH on
+all spi buses that use gpio descriptors: especially because gpiolib
+already handles absolutely everything related to polarity. And the
+SPI_CS_HIGH flag gets set even for chip-selects that are active-low.
