@@ -2,153 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E2B2AC61B
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 21:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C832AC655
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 21:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729599AbgKIUpL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Nov 2020 15:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbgKIUpK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 15:45:10 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FEDC0613CF;
-        Mon,  9 Nov 2020 12:45:09 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id h23so7588215ljg.13;
-        Mon, 09 Nov 2020 12:45:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xleOeNICgG0vwSm5hJnysiXKM3yQ5B3QY8UUY+zBMgU=;
-        b=BtJOr3n+oEvi29MidTbCXT7DDDOg8dn1y7D7gereDVMHC0EljuUpu8DAvhNHjMQGyZ
-         zIjF8HCv+xW8ZAUP8dVlP/fJeHcnM34A0S2ZBY9pDiQsQUdGeQPr6ADaATbSQ228YWz+
-         XXXayw7srrvzjZyicsNXxFgY/ODh9gsl9QeLuSzRyVD5jNxWdFrVoH0SctAS/fPhJUUl
-         gtr2mqPgWcbj6XsYK2QKg3PK0D916/M5ZX63w6Lp62o5kJ7HHOzW3z8wp2D7xyQqXO31
-         AYmznFJbrt15o3POcJzyYrcONEHVFRqEvCFGctEmOTbU/elIWynnQy4IpnmB0qo6RuVX
-         Ci4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xleOeNICgG0vwSm5hJnysiXKM3yQ5B3QY8UUY+zBMgU=;
-        b=JW1Xt0/VHvxTJs1Jux4Ax/D35o93EYB+yKyi5OkcO/UsdUKxde8BJGwRZMh5jmxyuG
-         geM0Qxgl1p0exPh/EH8d93hVsblr1YkzAnbx4fYBm49P0lHiK0zns5Q5fOIWZGUyZOen
-         ge0jYcfXpB9DLLjezFSwz2UUMqr+8pwW5+six6AsiEpIuIMBzA7UtALR+uzJomMAHKE4
-         pDQIxJuoCsoTeQgAroE1Xc+7ChAJ+ezruxEanUbzmhyMo87lhkNOspB7MGKivT3N1t6e
-         LZ589aRoPSIyBrewrcwZPq2pDj2FXGC9LxwaP8bfIE/5FO85kFXjZEDVPQF8rNVZBs0/
-         2dUw==
-X-Gm-Message-State: AOAM532AKMDOdOqYu6INfc9cbX4dKDJu+OGRyv6E69/ykK6Ug0VbbSPM
-        h9UFj9cf+pC2kGV+zqeG0mClKlXpu7UoFS50
-X-Google-Smtp-Source: ABdhPJwPfo9KB6YtEoJkeHK76OC4rgJuIhLlDo2MBXl0lJDnZj3HCkxJEr0CD312vs0esIJMUMVsEA==
-X-Received: by 2002:a2e:85c4:: with SMTP id h4mr6453285ljj.250.1604954707454;
-        Mon, 09 Nov 2020 12:45:07 -0800 (PST)
-Received: from mobilestation ([95.79.141.114])
-        by smtp.gmail.com with ESMTPSA id v22sm251076ljd.9.2020.11.09.12.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 12:45:06 -0800 (PST)
-Date:   Mon, 9 Nov 2020 23:45:04 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <damien.lemoal@wdc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-clk@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Anderson <seanga2@gmail.com>
-Subject: Re: [PATCH 05/32] spi: dw: Introduce DW_SPI_CAP_POLL_NODELAY
-Message-ID: <20201109204504.npjdxnxgzkngif3s@mobilestation>
-References: <20201107081420.60325-1-damien.lemoal@wdc.com>
- <20201107081420.60325-6-damien.lemoal@wdc.com>
+        id S1725946AbgKIUwn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Nov 2020 15:52:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33482 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730260AbgKIUwm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 9 Nov 2020 15:52:42 -0500
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 81380221FB;
+        Mon,  9 Nov 2020 20:52:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604955161;
+        bh=D2C0dwhvGc/byaIhEDmOPOOvSRn49LYfvX5fua57lQU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=zZSrg3tvNee2ietU2BpJkGBKg/kzb2mddFoYf98vEp4qdGqMDk//tKMvlLoVGSLOC
+         jyajCyn85Hvzt+jWYbMNDEm7FsGVuDKSf4enMv4N166pyV7R554+HlcgaiYUbVbDdb
+         wRPyA6Kdam7lkVaDQsa/y8BFBXXw0QAmETjyz+6k=
+Received: by mail-ot1-f44.google.com with SMTP id i18so10364136ots.0;
+        Mon, 09 Nov 2020 12:52:41 -0800 (PST)
+X-Gm-Message-State: AOAM533bjSa3CIPq3ojS15SA1xiudcZxVVnlLlfX0xBtCZxqo2d93rVa
+        nwl55FHhPGdAfBt2lb6Pa4162CWgM4uzYYckKg==
+X-Google-Smtp-Source: ABdhPJxOhi7q2TyR1cU1bUXAG1nazgiWne5zeC8nU0nRaw0X6g9uRWTSp5SOeyBKdMyk9NnV3n4OJCWoPencr/BRt0Q=
+X-Received: by 2002:a9d:5e14:: with SMTP id d20mr10925302oti.107.1604955160785;
+ Mon, 09 Nov 2020 12:52:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201107081420.60325-6-damien.lemoal@wdc.com>
+References: <20201107081420.60325-1-damien.lemoal@wdc.com> <20201107081420.60325-2-damien.lemoal@wdc.com>
+ <CAHp75VfvUZ6h+JGCUQ65i7qFsugvbd3n=aCprgvp=geRSpQEhQ@mail.gmail.com> <20201109174450.myombn5skpj5wcxh@mobilestation>
+In-Reply-To: <20201109174450.myombn5skpj5wcxh@mobilestation>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 9 Nov 2020 14:52:29 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+sz09YWxpyM_tBbvJzidbARUVF2fvxMe-SS666WvNRBQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+sz09YWxpyM_tBbvJzidbARUVF2fvxMe-SS666WvNRBQ@mail.gmail.com>
+Subject: Re: [PATCH 01/32] of: Fix property supplier parsing
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Anderson <seanga2@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Nov 07, 2020 at 05:13:53PM +0900, Damien Le Moal wrote:
-> On slow systems, i.e. systems with a slow CPU resulting in slow context
-> switches, calling spi_delay_exec() when executing polled transfers
-> using dw_spi_poll_transfer() can lead to RX FIFO overflows. Allow
-> platforms to opt out of delayed polling by introducing the
-> DW_SPI_CAP_POLL_NODELAY DW SPI capability flag to disable
-> the execution of spi_delay_exec() in dw_spi_poll_transfer().
+On Mon, Nov 9, 2020 at 11:45 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+>
+> Hello Andy,
+>
+> On Mon, Nov 09, 2020 at 05:14:21PM +0200, Andy Shevchenko wrote:
+> > On Sat, Nov 7, 2020 at 10:14 AM Damien Le Moal <damien.lemoal@wdc.com> wrote:
+> >
+> > > @@ -1308,7 +1308,6 @@ DEFINE_SIMPLE_PROP(pinctrl7, "pinctrl-7", NULL)
+> > >  DEFINE_SIMPLE_PROP(pinctrl8, "pinctrl-8", NULL)
+> > >  DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
+> > >  DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
+> > > -DEFINE_SUFFIX_PROP(gpios, "-gpios", "#gpio-cells")
+> >
+> > Sorry, but the above doesn't sound right to me.
+> > It's a generic code and you may imagine how many systems you broke by
+> > this change.
+>
+> Damien replaced the macro above with the code below (your removed it from your
+> message):
+>
+> +static struct device_node *parse_gpios(struct device_node *np,
+> +                                      const char *prop_name, int index)
+> +{
+> +       /*
+> +        * Quirck for the DesignWare gpio-dwapb GPIO driver which defines
+> +        * the "snps,nr-gpios" property to indicate the total number of GPIOs
+> +        * available. As this conflict with "xx-gpios" reference properties,
+> +        * ignore it.
+> +        */
+> +       if (strcmp(prop_name, "snps,nr-gpios") == 0)
+> +               return NULL;
+> +
+> +       return parse_suffix_prop_cells(np, prop_name, index,
+> +                                      "-gpios", "#gpio-cells");
+> +}
+>
+> So AFAICS removing the macro shouldn't cause any problem.
+>
+> My concern was whether the quirk has been really needed. As I said the
+> "snps,nr-gpios" property has been marked as deprecated in favor of the standard
+> "ngpios" one. Due to the problem noted by Damien any deprecated property
+> utilization will cause the DW APB SSI DT-nodes probe malfunction. That
+> though implicitly but is supposed to encourage people to provide fixes for
+> the dts-files with the deprecated property replaced with "ngpios".
 
-Please, have a more thorough problem review. Rx FIFO shouldn't
-overflow even for the CPUs with slow context switch. If it does, then
-most likely there is a bug in the code. So it's not a good idea to
-work it around by introducing a dts-property in any case.
+May be deprecated, but we've still got 53 cases in upstream dts files.
+Plus changing doesn't work well for new DT with old kernels unless we
+backport 'ngpios' support.
 
-Just to note in case of our hardware no matter what CPU frequency I
-specified (it can be varied from 200MHz to 1500MHz), there have never
-been seen the Rx FIFO overflow error even with heavy background tasks
-executed. I am really puzzled why some context switch causes the error
-in your case...
+> On the other hand an encouragement based on breaking the kernel doesn't seem a
+> good solution. So as I see it either we should accept the solution provided by
+> Damien, or replace it with a series of fixes for all dts-es with DW APB SSI
+> DT-node defined. I suggest to hear the OF-subsystem maintainers out what
+> solution would they prefer.
 
-As I said in another thread, some logical MMC-SPI drivers errors may
-happen if the native CS is utilized...
+I'd suggest making failing to parse a warning rather than an error.
+The devlink stuff is off by default anyways and is still changing.
 
-On the other hand, if you have a DMA-engine utilized together with
-your controller and the Tx DMA-channel is tuned to work faster than
-the Rx DMA-channel, then the Rx FIFO overflow will eventually happen.
-So replacing the DMA-based transfers with the poll- or IRQ-based ones
-shall indeed solve the problem. But the better solution would be to
-balance the DMA-channels priority if your DMA-controller is capable of
-doing that.
-
--Sergey
-
-> 
-> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-> ---
->  drivers/spi/spi-dw-core.c | 12 ++++++++----
->  drivers/spi/spi-dw.h      |  1 +
->  2 files changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index c2ef1d8d46d5..16a6fd569145 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -385,14 +385,18 @@ static int dw_spi_poll_transfer(struct dw_spi *dws,
->  	u16 nbits;
->  	int ret;
->  
-> -	delay.unit = SPI_DELAY_UNIT_SCK;
-> -	nbits = dws->n_bytes * BITS_PER_BYTE;
-> +	if (!(dws->caps & DW_SPI_CAP_POLL_NODELAY)) {
-> +		delay.unit = SPI_DELAY_UNIT_SCK;
-> +		nbits = dws->n_bytes * BITS_PER_BYTE;
-> +	}
->  
->  	do {
->  		dw_writer(dws);
->  
-> -		delay.value = nbits * (dws->rx_len - dws->tx_len);
-> -		spi_delay_exec(&delay, transfer);
-> +		if (!(dws->caps & DW_SPI_CAP_POLL_NODELAY)) {
-> +			delay.value = nbits * (dws->rx_len - dws->tx_len);
-> +			spi_delay_exec(&delay, transfer);
-> +		}
->  
->  		dw_reader(dws);
->  
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index 48a11a51a407..25f6372b993a 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -130,6 +130,7 @@ enum dw_ssi_type {
->  #define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
->  #define DW_SPI_CAP_DWC_SSI		BIT(2)
->  #define DW_SPI_CAP_DFS_32		BIT(3)
-> +#define DW_SPI_CAP_POLL_NODELAY		BIT(4)
->  
->  /* Slave spi_transfer/spi_mem_op related */
->  struct dw_spi_cfg {
-> -- 
-> 2.28.0
-> 
+Rob
