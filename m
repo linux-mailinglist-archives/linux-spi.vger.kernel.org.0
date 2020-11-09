@@ -2,76 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD10E2ABE86
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 15:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A872ABE90
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Nov 2020 15:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730202AbgKIOVv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Nov 2020 09:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S1730197AbgKIOYW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Nov 2020 09:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730041AbgKIOVu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 09:21:50 -0500
+        with ESMTP id S1730035AbgKIOYW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 9 Nov 2020 09:24:22 -0500
 Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE08C0613CF
-        for <linux-spi@vger.kernel.org>; Mon,  9 Nov 2020 06:21:50 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id r10so7260612pgb.10
-        for <linux-spi@vger.kernel.org>; Mon, 09 Nov 2020 06:21:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5647BC0613CF;
+        Mon,  9 Nov 2020 06:24:22 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id r186so7296852pgr.0;
+        Mon, 09 Nov 2020 06:24:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4GMBoB959F8I/yHY10NXzv7YVgWaUaagFE7TNa7x+WU=;
-        b=nThHWUF3NQLXKjImHwACxUVPr66QA6dk+eGAMfLgzO6QTkP6JUZLCbBLqmijMCAxp2
-         6PbW56ueDSeRPQqTwYH0zUxMl5chqBVcjz9JrGi9gLYNZl0yW1DoGtr8dJA+2y7y0eRM
-         RtnyXj5RPvsptzFhGTCeupqYXHNLzxa0aFqXhZaweVtEZQFtmDXmGlnhMyA68tck5ZnB
-         PWyfegGVG+y+lGht7Ahep+aEXighn4eiUIXON5FYkFOV31jvOlZaTtOzuBbTAe+7YQK3
-         z8pOktko0RHfBVC4HR3WOinb+S+/ehiZ5esNTjiziLPvzZ4lwQItleh5y97Ov6cg2Wm5
-         GZsg==
+        bh=I0JWH1SE4fNuIvP9pni+ltgPPpUk5UXe6Ja6Dl7UHNM=;
+        b=jevuavzxcW3HQorjQwheDNNI2A/fFPMvKDn0mcJGqAZBwBmCKwMTdKJpXVkQPCC+xc
+         0wzcYAZ5Q9lDDiVmS1vQywVJM7xxtr6bERgHvaw2TEYngDMWsfm/UvAbGMQVmFwZV6AE
+         lsMhtSpPyA8oDLU44HCn1M8NMYKKMjwqaHtlsW2DLk/QnsFFxCiUlGtC6gh6DgouC3yv
+         ZuWZI00QluQK5J/HrBKfORylQVbU6tR9TYZ61UkFhd1dTptjTzMHdN3pV6bzUplif+Sy
+         B0mjgvK9zvjtFqHsvXmc3piUc2zpJLAweR5Z9rqfcxL7qRHQeczNP/gpziee4ovyEAeC
+         SdMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4GMBoB959F8I/yHY10NXzv7YVgWaUaagFE7TNa7x+WU=;
-        b=Hl86mzQZCZRLYkQVnxlokd+2zJQQbXnRQ6QnNooq2+Sdsbqt2c2QC2HVsl0TSaGfth
-         FvI3Fs28EKv996KooB196soOB9vE4yK3qTBjWwg23ZEJ+zINcb6Hjb/wTUIAtw++1GwO
-         VGc+Q4QJvNsv995CRjN79da1xxP4vw7gr12yoO0zB2CAd0JzXu8G+UlyqBrQJgqXL/HT
-         sGElyTlkRpSrIno9si1aF3MsWn8Wu8X3M4kxXCqpvbk1afI0/XkHcY6vYhT6RG2+1L1C
-         6go20dQvJHvC6KSF1ok/sxIM1zP8LGgQgVoWn9qCJlQirVjvMfsLw2l7N1IFJgDxUX1o
-         HOPg==
-X-Gm-Message-State: AOAM532vVRzzDuCFJ3xUhNnezfCviRN74qvoJgrka6ok2HFHnXkXCpl3
-        JJo8uWgMFNH/nqVx4PtpMwCgqVqBkdm3hpsQ95o=
-X-Google-Smtp-Source: ABdhPJwroqN66MsrMjkxbMNldFbeTZAV2fgVPAsREhbWnTRVoOOAMu3jKaoY8lzc2p4Qv43dEfa3EYaQwwMVv46/oyo=
-X-Received: by 2002:aa7:942a:0:b029:164:a853:f0fc with SMTP id
- y10-20020aa7942a0000b0290164a853f0fcmr13556411pfo.40.1604931710181; Mon, 09
- Nov 2020 06:21:50 -0800 (PST)
+        bh=I0JWH1SE4fNuIvP9pni+ltgPPpUk5UXe6Ja6Dl7UHNM=;
+        b=HmhhnF8mLX8j7KnSWena5LS4wePUGslk2xCmf8mrR4XxvwYe3hCd4UeDIuPlOR0E7w
+         yuBdI01C1WRWTlTsvjoHngUU+G4XZHY2lZ8W0ivja1L/xLpC00sXYTe/drf1GJ99yf7Q
+         Is0FWJwtrUg2HOALoHX/82FF30aPPEomlm+zZVv5M6iCLk25iq/PFdpoM/AwJa34LNWc
+         j4MeWH/SERu4BdsoAsFfbm5rBuUkYSJSE+ypH4tgo7oDgR4xRURaDUz3KOSUNUJaXA/r
+         UsKWQ/i+zzf03Z1dSzI33t5sVG90OTdsR71L3hiCKUgPmdyeCUEmVfr5ixttSycMvPIa
+         ObZg==
+X-Gm-Message-State: AOAM530vNtA7ozUJYR6RKN91xGbSbD6ntA9HYPDVG3yXD+kNAqg6MjdH
+        1UTxGHPXkH4rMh4BGTtp7Of1IJrrQK8470JmPoM=
+X-Google-Smtp-Source: ABdhPJwidLp7E0/LPaDZe10ybjQfbINm9x2SALC+02oxtUeVB16O5+WJcb4yxzJw4LIARuGK1yf21/HmLLMPqjNbLWw=
+X-Received: by 2002:a63:4511:: with SMTP id s17mr13018417pga.4.1604931861810;
+ Mon, 09 Nov 2020 06:24:21 -0800 (PST)
 MIME-Version: 1.0
-References: <dd060534490eca5e946eb9165916542b01a9358d.1604874488.git.lukas@wunner.de>
- <232281df1ab91d8f0f553a62d5f97fc264ace4da.1604874488.git.lukas@wunner.de>
-In-Reply-To: <232281df1ab91d8f0f553a62d5f97fc264ace4da.1604874488.git.lukas@wunner.de>
+References: <20201106150706.29089-1-TheSven73@gmail.com>
+In-Reply-To: <20201106150706.29089-1-TheSven73@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 9 Nov 2020 16:22:38 +0200
-Message-ID: <CAHp75Vc+Gi_+SAj93_Aj95R-1h=rbMH_==G9Pgg1fcp5uQQcfg@mail.gmail.com>
-Subject: Re: [PATCH] spi: synquacer: Disable clock in probe error path
-To:     Lukas Wunner <lukas@wunner.de>
+Date:   Mon, 9 Nov 2020 16:25:10 +0200
+Message-ID: <CAHp75VfP1R7bXV6nWWnovWB5BMFcNNEmwBQXheBCUVDbr=xXGA@mail.gmail.com>
+Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO descriptors
+To:     Sven Van Asbroeck <thesven73@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Simon Han <z.han@kunbus.com>, Lukas Wunner <lukas@wunner.de>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 9, 2020 at 12:52 AM Lukas Wunner <lukas@wunner.de> wrote:
+On Fri, Nov 6, 2020 at 5:08 PM Sven Van Asbroeck <thesven73@gmail.com> wrote:
 >
-> If the calls to platform_get_irq() or devm_request_irq() fail on probe
-> of the SynQuacer SPI driver, the clock "sspi->clk" is erroneously not
-> unprepared and disabled.
+> From: Sven Van Asbroeck <thesven73@gmail.com>
 >
-> If the clock rate "master->max_speed_hz" cannot be determined, the same
-> happens and in addition the spi_master struct is not freed.
+> Commit f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
+> introduced the optional use of GPIO descriptors for chip selects.
+>
+> A side-effect of this change: when a SPI bus uses GPIO descriptors,
+> all its client devices have SPI_CS_HIGH set in spi->mode. This flag is
+> required for the SPI bus to operate correctly.
+>
+> This unfortunately breaks many client drivers, which use the following
+> pattern to configure their underlying SPI bus:
+>
+> static int client_device_probe(struct spi_device *spi)
+> {
+>         ...
+>         spi->mode = SPI_MODE_0;
+>         spi->bits_per_word = 8;
+>         err = spi_setup(spi);
+>         ..
+> }
+>
+> In short, many client drivers overwrite the SPI_CS_HIGH bit in
+> spi->mode, and break the underlying SPI bus driver.
 
-Wouldn't be better to switch over devm_add_action_or_reset() in such cases?
+Sounds like "many SPI drivers have to be fixed".
+
+
 
 -- 
 With Best Regards,
