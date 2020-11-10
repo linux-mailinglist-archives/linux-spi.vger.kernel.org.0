@@ -2,132 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8760D2AD892
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 15:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B83BD2AD8F3
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 15:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730432AbgKJOUi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Nov 2020 09:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S1730687AbgKJOkK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Nov 2020 09:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730059AbgKJOUi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 09:20:38 -0500
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327D6C0613CF;
-        Tue, 10 Nov 2020 06:20:38 -0800 (PST)
-Received: by mail-qk1-x741.google.com with SMTP id h15so11485031qkl.13;
-        Tue, 10 Nov 2020 06:20:38 -0800 (PST)
+        with ESMTP id S1726721AbgKJOkK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 09:40:10 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D90C0613CF
+        for <linux-spi@vger.kernel.org>; Tue, 10 Nov 2020 06:40:10 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id w142so10908206lff.8
+        for <linux-spi@vger.kernel.org>; Tue, 10 Nov 2020 06:40:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=oJx9xQKc52ebOodjQ1LDvOG8BVuJTChcS2sdwxrpBsY=;
-        b=f1D9kNtV1Xe5AbRNdk82ZhouiPlBOEaxMlksIuXiflWbZuQ7D0pMnWLRs3SBDGq3vT
-         rqEpemlORRYRAB1juT3hZqgamDISa/mtB3qWmWN7O5sQeZdChsZNzuYpD3Mie/hZZ6j7
-         DwXPTmo+k6bCsoYwMCs9WYZCkAEFR+mSWPmj7MQB2ABrzfDFp9MnjgAXZzTQgoYasG72
-         Z7WWS3jD3SBKl8Z3szg6LPGQHYKEQ9AT7DqbBJidQidA6bAz7A1vtJHGWPv2jyWKcQ21
-         CFxZUpCjjMilnoZoQIqKD25cDm1eEiJ9ct/Td3heQrick/OvL6lXsW1BtfQlJQVUTtEm
-         OiGg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XMIR0x3v/SOduiNJI+iAqXslKNdg1Phd+avxtEvAmZ0=;
+        b=yMvmv62jzEb5fWYRyJZ4EfNvXQWxI0M2a6MD6A14Kx2zX0+pJwr0BFTgurkn/NFcYN
+         SEuffXDjbLtIeQtWDaXAhzdEJoRKIeHAT5dvDEySvCGFrvh9bPI0L3QFezJRcPZWqkwR
+         FIQqy4YacfO3Oj7lxlpiIQnlZ4lyLWMQFP58iJL3VeCk2S/Z0o+9+n36DPvrUm3djefP
+         Nf8fsoRkRTr406syuJyIdGYjtpWJFYIFc/AlaHKP8gv0mbHpRynDsz7F35XR6HyAaEkO
+         LEgu4epTlp38o7p3nKYvORMzrP2I8j9HTmYhHZ1PbN3l0woZQdGi2pyG9yox7ZCDvkr+
+         JmKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=oJx9xQKc52ebOodjQ1LDvOG8BVuJTChcS2sdwxrpBsY=;
-        b=ht/9dDu2jIcySvF2T2gcCwRzIMy8nLasRyPoaXRxhyc9NSqRbnQfwkmipTGdR4tDi1
-         9OQH37T/EcizkETFom4eF8cVKxd/dYdu5gV4Hg+BPcZMjMnjHxlCodeed+rz2uunrkqU
-         XeLVUWV8jqJRpFmvvl3B+jzSRcsRfayMsmkYSd74JsO2Pt9G/97NnfzSA30ZoB9h36EP
-         Ge7Fu+0L5OkXu7/ARF2he9IM2Qkv7VTGoU/RTKEanTFHfC9lxRoGtaR5axlm7RdrT4t2
-         eeVVq8HFKia3fbxt+7HIA8LW1o3sgRKXqIHMO5YAwMrBbZjgY/hJL0PlkIbuFCbpXxE5
-         WgeQ==
-X-Gm-Message-State: AOAM530Zni99hKAGMUdBy1kTGTYTNMxSMRTg811vhPzlpyJGgcbZMTqh
-        6UoGrfoeD/wwVwUgBcLORNs=
-X-Google-Smtp-Source: ABdhPJzSdQzvYsv4MjhvHeoiKsBktwTCINCy3aruXB7KC2rEvml2fggDY9qbhNun3v/ix/5DrNVcKw==
-X-Received: by 2002:a37:4e57:: with SMTP id c84mr19132583qkb.394.1605018037188;
-        Tue, 10 Nov 2020 06:20:37 -0800 (PST)
-Received: from localhost.localdomain ([198.52.185.246])
-        by smtp.gmail.com with ESMTPSA id h6sm6858534qtm.68.2020.11.10.06.20.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2020 06:20:36 -0800 (PST)
-From:   Sven Van Asbroeck <thesven73@gmail.com>
-X-Google-Original-From: Sven Van Asbroeck <TheSven73@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Sven Van Asbroeck <thesven73@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Frederic LAMBERT <frdrc66@gmail.com>,
-        Gabor Juhos <juhosg@openwrt.org>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH net v2] net: phy: spi_ks8995: Do not overwrite SPI mode flags
-Date:   Tue, 10 Nov 2020 09:20:32 -0500
-Message-Id: <20201110142032.24071-1-TheSven73@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XMIR0x3v/SOduiNJI+iAqXslKNdg1Phd+avxtEvAmZ0=;
+        b=f9HkI+uQw70+XTKwyCfLHCwKdnESEjQlMEeKfmHOmXL8in2TiSt5fUIrMVtH0QJKG9
+         +UFwQZ3uBZyASuM0EHFSr/FFZQju2dyY9RGNMrMLH9Umh+pw8EzaESW4j/p9mYSao1vC
+         wK5MuapenXnKKYBDIqB4aCSv/JZ+T0KSY+Fo+eZdeE1KEaUgq/mQeY41Aic72DOW5gXu
+         D177yHnLsbM5y7qNkS6FwDGLuBNSeAqByEe6KopHPUDLQ42nvInFiMTtjQeE8QzVJzS1
+         BPQsg+NudVPF5vajx068p5dxiXXSMbYFE+C6WAmiKq+Q5IwJokTB8q0T9U6ZFULCmk2u
+         DFyA==
+X-Gm-Message-State: AOAM533AJ2iohrsnRfLKsa1lX94yGwvetsX/HvOx4kP8j+YIk8xcvm5p
+        C+yf20txuvk8dC5WTT0cMVjPhYDIVwK0eruIO05owA==
+X-Google-Smtp-Source: ABdhPJwZKZCcPYORmeuUmPxVdMBipXbwsghexY2Fo6mTCT8Nwc9BfXeRqZ9vpij7/rcd11cpqaaXACeFiLO1OmB0y3k=
+X-Received: by 2002:a19:ca05:: with SMTP id a5mr4591668lfg.571.1605019208781;
+ Tue, 10 Nov 2020 06:40:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20201107081420.60325-1-damien.lemoal@wdc.com> <20201107081420.60325-10-damien.lemoal@wdc.com>
+In-Reply-To: <20201107081420.60325-10-damien.lemoal@wdc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 10 Nov 2020 15:39:57 +0100
+Message-ID: <CACRpkda1Pd3hTiEHWDOAz3zCMA6WK4VmvjkNv0O_ckFaWQ-zSw@mail.gmail.com>
+Subject: Re: [PATCH 09/32] riscv: Fix SiFive gpio probe
+To:     Damien Le Moal <damien.lemoal@wdc.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Anderson <seanga2@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Sven Van Asbroeck <thesven73@gmail.com>
+On Sat, Nov 7, 2020 at 9:14 AM Damien Le Moal <damien.lemoal@wdc.com> wrote:
 
-This driver makes sure the underlying SPI bus is set to "mode 0"
-by assigning SPI_MODE_0 to spi->mode. Which overwrites all other
-SPI mode flags.
+> Fix the check on the number of IRQs to allow up to the maximum (32)
+> instead of only the maximum minus one.
+>
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 
-In some circumstances, this can break the underlying SPI bus driver.
-For example, if SPI_CS_HIGH is set on the SPI bus, the driver
-will clear that flag, which results in a chip-select polarity issue.
+I just ripped this patch out of your patch set and applied it to
+the GPIO tree with some minor change to the subject.
 
-Fix by changing only the SPI_MODE_N bits, i.e. SPI_CPHA and SPI_CPOL.
-
-Fixes: a8e510f682fe ("phy: Micrel KS8995MA 5-ports 10/100 managed Ethernet switch support added")
-Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
-Link: https://patchwork.kernel.org/project/spi-devel-general/patch/20201106150706.29089-1-TheSven73@gmail.com/#23747737
-Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
----
-
-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git # 989ef49bdf10
-
-To be followed by a proposed spi helper function. Submit to net-next after net
-gets merged into net-next.
-
-# large number of people, from get_maintainer.pl
-To: Andrew Lunn <andrew@lunn.ch>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Frederic LAMBERT <frdrc66@gmail.com>
-Cc: Gabor Juhos <juhosg@openwrt.org>
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>
-
-# Cc SPI group, suggested by Jakub Kicinski
-Cc: linux-spi@vger.kernel.org
-
- drivers/net/phy/spi_ks8995.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/phy/spi_ks8995.c b/drivers/net/phy/spi_ks8995.c
-index 4b198399bfa2..3c6c87a09b03 100644
---- a/drivers/net/phy/spi_ks8995.c
-+++ b/drivers/net/phy/spi_ks8995.c
-@@ -491,7 +491,9 @@ static int ks8995_probe(struct spi_device *spi)
- 
- 	spi_set_drvdata(spi, ks);
- 
--	spi->mode = SPI_MODE_0;
-+	/* use SPI_MODE_0 without changing any other mode flags */
-+	spi->mode &= ~(SPI_CPHA | SPI_CPOL);
-+	spi->mode |= SPI_MODE_0;
- 	spi->bits_per_word = 8;
- 	err = spi_setup(spi);
- 	if (err) {
--- 
-2.17.1
-
+Yours,
+Linus Walleij
