@@ -2,26 +2,26 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EDB2AD1CB
+	by mail.lfdr.de (Postfix) with ESMTP id 26BA02AD1CA
 	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 09:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731705AbgKJIuy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Nov 2020 03:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
+        id S1729301AbgKJIux (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Nov 2020 03:50:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730102AbgKJIuv (ORCPT
+        with ESMTP id S1731705AbgKJIuv (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 03:50:51 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA29DC0613D1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C200FC0613CF
         for <linux-spi@vger.kernel.org>; Tue, 10 Nov 2020 00:50:50 -0800 (PST)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1kcPMT-0004bn-Bm; Tue, 10 Nov 2020 09:50:45 +0100
+        id 1kcPMT-0004bo-Bm; Tue, 10 Nov 2020 09:50:45 +0100
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1kcPMS-0004Fs-4G; Tue, 10 Nov 2020 09:50:44 +0100
+        id 1kcPMS-0004G0-5A; Tue, 10 Nov 2020 09:50:44 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Alexandru Ardelean <alexandru.ardelean@analog.com>,
@@ -29,10 +29,12 @@ To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         linux-spi@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: [PATCH v1 0/2] Input: ads7846: reduce SPI related CPU load 
-Date:   Tue, 10 Nov 2020 09:50:39 +0100
-Message-Id: <20201110085041.16303-1-o.rempel@pengutronix.de>
+Subject: [PATCH v2 1/2] Input: ads7846: convert to full duplex
+Date:   Tue, 10 Nov 2020 09:50:40 +0100
+Message-Id: <20201110085041.16303-2-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201110085041.16303-1-o.rempel@pengutronix.de>
+References: <20201110085041.16303-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
@@ -43,20 +45,329 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-changes v2:
-- add back settle_delay_usecs support
-- execute power down on the end of the main transfer.
-- make it work with 2.5MHz SPI clock
+Starting with following patch, the ads7845 was partially converted to
+full duplex mode:
+3eac5c7e44f3 Input: ads7846 - extend the driver for ads7845 controller support
 
-This series is optimizing SPI transfer related CPU load.
+Since it is not touchscreen controller specific, it is better to make
+this conversion consequent for complete driver. This will reduce CPU
+load and make driver more readable.
 
-Oleksij Rempel (2):
-  Input: ads7846: convert to full duplex
-  Input: ads7846: convert to one message
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/input/touchscreen/ads7846.c | 193 +++++++++-------------------
+ 1 file changed, 62 insertions(+), 131 deletions(-)
 
- drivers/input/touchscreen/ads7846.c | 456 ++++++++++++----------------
- 1 file changed, 199 insertions(+), 257 deletions(-)
-
+diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+index 393ab337a9c4..e9a520c9ad69 100644
+--- a/drivers/input/touchscreen/ads7846.c
++++ b/drivers/input/touchscreen/ads7846.c
+@@ -62,19 +62,25 @@
+ /* this driver doesn't aim at the peak continuous sample rate */
+ #define	SAMPLE_BITS	(8 /*cmd*/ + 16 /*sample*/ + 2 /* before, after */)
+ 
+-struct ts_event {
+-	/*
+-	 * For portability, we can't read 12 bit values using SPI (which
+-	 * would make the controller deliver them as native byte order u16
+-	 * with msbs zeroed).  Instead, we read them as two 8-bit values,
+-	 * *** WHICH NEED BYTESWAPPING *** and range adjustment.
++struct ads7846_buf {
++	u8 cmd;
++	/* This union is a temporary hack. The driver does an in-place
++	 * endianness conversion. This will be cleaned up in the next
++	 * patch.
+ 	 */
+-	u16	x;
+-	u16	y;
+-	u16	z1, z2;
+-	bool	ignore;
+-	u8	x_buf[3];
+-	u8	y_buf[3];
++	union {
++		__be16 data_be16;
++		u16 data;
++	};
++} __attribute__((__packed__));
++
++
++struct ts_event {
++	bool ignore;
++	struct ads7846_buf x;
++	struct ads7846_buf y;
++	struct ads7846_buf z1;
++	struct ads7846_buf z2;
+ };
+ 
+ /*
+@@ -83,11 +89,12 @@ struct ts_event {
+  * systems where main memory is not DMA-coherent (most non-x86 boards).
+  */
+ struct ads7846_packet {
+-	u8			read_x, read_y, read_z1, read_z2, pwrdown;
+-	u16			dummy;		/* for the pwrdown read */
+-	struct ts_event		tc;
+-	/* for ads7845 with mpc5121 psc spi we use 3-byte buffers */
+-	u8			read_x_cmd[3], read_y_cmd[3], pwrdown_cmd[3];
++	struct ts_event tc;
++	struct ads7846_buf read_x_cmd;
++	struct ads7846_buf read_y_cmd;
++	struct ads7846_buf read_z1_cmd;
++	struct ads7846_buf read_z2_cmd;
++	struct ads7846_buf pwrdown_cmd;
+ };
+ 
+ struct ads7846 {
+@@ -694,16 +701,9 @@ static int ads7846_get_value(struct ads7846 *ts, struct spi_message *m)
+ 	int value;
+ 	struct spi_transfer *t =
+ 		list_entry(m->transfers.prev, struct spi_transfer, transfer_list);
++	struct ads7846_buf *buf = t->rx_buf;
+ 
+-	if (ts->model == 7845) {
+-		value = be16_to_cpup((__be16 *)&(((char *)t->rx_buf)[1]));
+-	} else {
+-		/*
+-		 * adjust:  on-wire is a must-ignore bit, a BE12 value, then
+-		 * padding; built from two 8 bit values written msb-first.
+-		 */
+-		value = be16_to_cpup((__be16 *)t->rx_buf);
+-	}
++	value = be16_to_cpup(&buf->data_be16);
+ 
+ 	/* enforce ADC output is 12 bits width */
+ 	return (value >> 3) & 0xfff;
+@@ -713,8 +713,9 @@ static void ads7846_update_value(struct spi_message *m, int val)
+ {
+ 	struct spi_transfer *t =
+ 		list_entry(m->transfers.prev, struct spi_transfer, transfer_list);
++	struct ads7846_buf *buf = t->rx_buf;
+ 
+-	*(u16 *)t->rx_buf = val;
++	buf->data = val;
+ }
+ 
+ static void ads7846_read_state(struct ads7846 *ts)
+@@ -782,16 +783,14 @@ static void ads7846_report_state(struct ads7846 *ts)
+ 	 * from on-the-wire format as part of debouncing to get stable
+ 	 * readings.
+ 	 */
++	x = packet->tc.x.data;
++	y = packet->tc.y.data;
+ 	if (ts->model == 7845) {
+-		x = *(u16 *)packet->tc.x_buf;
+-		y = *(u16 *)packet->tc.y_buf;
+ 		z1 = 0;
+ 		z2 = 0;
+ 	} else {
+-		x = packet->tc.x;
+-		y = packet->tc.y;
+-		z1 = packet->tc.z1;
+-		z2 = packet->tc.z2;
++		z1 = packet->tc.z1.data;
++		z2 = packet->tc.z2.data;
+ 	}
+ 
+ 	/* range filtering */
+@@ -1008,26 +1007,11 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 	spi_message_init(m);
+ 	m->context = ts;
+ 
+-	if (ts->model == 7845) {
+-		packet->read_y_cmd[0] = READ_Y(vref);
+-		packet->read_y_cmd[1] = 0;
+-		packet->read_y_cmd[2] = 0;
+-		x->tx_buf = &packet->read_y_cmd[0];
+-		x->rx_buf = &packet->tc.y_buf[0];
+-		x->len = 3;
+-		spi_message_add_tail(x, m);
+-	} else {
+-		/* y- still on; turn on only y+ (and ADC) */
+-		packet->read_y = READ_Y(vref);
+-		x->tx_buf = &packet->read_y;
+-		x->len = 1;
+-		spi_message_add_tail(x, m);
+-
+-		x++;
+-		x->rx_buf = &packet->tc.y;
+-		x->len = 2;
+-		spi_message_add_tail(x, m);
+-	}
++	packet->read_y_cmd.cmd = READ_Y(vref);
++	x->tx_buf = &packet->read_y_cmd;
++	x->rx_buf = &packet->tc.y;
++	x->len = 3;
++	spi_message_add_tail(x, m);
+ 
+ 	/*
+ 	 * The first sample after switching drivers can be low quality;
+@@ -1037,15 +1021,11 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 	if (pdata->settle_delay_usecs) {
+ 		x->delay.value = pdata->settle_delay_usecs;
+ 		x->delay.unit = SPI_DELAY_UNIT_USECS;
+-
+ 		x++;
+-		x->tx_buf = &packet->read_y;
+-		x->len = 1;
+-		spi_message_add_tail(x, m);
+ 
+-		x++;
++		x->tx_buf = &packet->read_y_cmd;
+ 		x->rx_buf = &packet->tc.y;
+-		x->len = 2;
++		x->len = 3;
+ 		spi_message_add_tail(x, m);
+ 	}
+ 
+@@ -1054,28 +1034,13 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 	spi_message_init(m);
+ 	m->context = ts;
+ 
+-	if (ts->model == 7845) {
+-		x++;
+-		packet->read_x_cmd[0] = READ_X(vref);
+-		packet->read_x_cmd[1] = 0;
+-		packet->read_x_cmd[2] = 0;
+-		x->tx_buf = &packet->read_x_cmd[0];
+-		x->rx_buf = &packet->tc.x_buf[0];
+-		x->len = 3;
+-		spi_message_add_tail(x, m);
+-	} else {
+-		/* turn y- off, x+ on, then leave in lowpower */
+-		x++;
+-		packet->read_x = READ_X(vref);
+-		x->tx_buf = &packet->read_x;
+-		x->len = 1;
+-		spi_message_add_tail(x, m);
+-
+-		x++;
+-		x->rx_buf = &packet->tc.x;
+-		x->len = 2;
+-		spi_message_add_tail(x, m);
+-	}
++	/* turn y- off, x+ on, then leave in lowpower */
++	x++;
++	packet->read_x_cmd.cmd = READ_X(vref);
++	x->tx_buf = &packet->read_x_cmd;
++	x->rx_buf = &packet->tc.x;
++	x->len = 3;
++	spi_message_add_tail(x, m);
+ 
+ 	/* ... maybe discard first sample ... */
+ 	if (pdata->settle_delay_usecs) {
+@@ -1083,13 +1048,9 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 		x->delay.unit = SPI_DELAY_UNIT_USECS;
+ 
+ 		x++;
+-		x->tx_buf = &packet->read_x;
+-		x->len = 1;
+-		spi_message_add_tail(x, m);
+-
+-		x++;
++		x->tx_buf = &packet->read_x_cmd;
+ 		x->rx_buf = &packet->tc.x;
+-		x->len = 2;
++		x->len = 3;
+ 		spi_message_add_tail(x, m);
+ 	}
+ 
+@@ -1101,14 +1062,10 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 		m->context = ts;
+ 
+ 		x++;
+-		packet->read_z1 = READ_Z1(vref);
+-		x->tx_buf = &packet->read_z1;
+-		x->len = 1;
+-		spi_message_add_tail(x, m);
+-
+-		x++;
++		packet->read_z1_cmd.cmd = READ_Z1(vref);
++		x->tx_buf = &packet->read_z1_cmd;
+ 		x->rx_buf = &packet->tc.z1;
+-		x->len = 2;
++		x->len = 3;
+ 		spi_message_add_tail(x, m);
+ 
+ 		/* ... maybe discard first sample ... */
+@@ -1117,13 +1074,9 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 			x->delay.unit = SPI_DELAY_UNIT_USECS;
+ 
+ 			x++;
+-			x->tx_buf = &packet->read_z1;
+-			x->len = 1;
+-			spi_message_add_tail(x, m);
+-
+-			x++;
++			x->tx_buf = &packet->read_z1_cmd;
+ 			x->rx_buf = &packet->tc.z1;
+-			x->len = 2;
++			x->len = 3;
+ 			spi_message_add_tail(x, m);
+ 		}
+ 
+@@ -1133,14 +1086,10 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 		m->context = ts;
+ 
+ 		x++;
+-		packet->read_z2 = READ_Z2(vref);
+-		x->tx_buf = &packet->read_z2;
+-		x->len = 1;
+-		spi_message_add_tail(x, m);
+-
+-		x++;
++		packet->read_z2_cmd.cmd = READ_Z2(vref);
++		x->tx_buf = &packet->read_z2_cmd;
+ 		x->rx_buf = &packet->tc.z2;
+-		x->len = 2;
++		x->len = 3;
+ 		spi_message_add_tail(x, m);
+ 
+ 		/* ... maybe discard first sample ... */
+@@ -1149,13 +1098,9 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 			x->delay.unit = SPI_DELAY_UNIT_USECS;
+ 
+ 			x++;
+-			x->tx_buf = &packet->read_z2;
+-			x->len = 1;
+-			spi_message_add_tail(x, m);
+-
+-			x++;
++			x->tx_buf = &packet->read_z2_cmd;
+ 			x->rx_buf = &packet->tc.z2;
+-			x->len = 2;
++			x->len = 3;
+ 			spi_message_add_tail(x, m);
+ 		}
+ 	}
+@@ -1166,24 +1111,10 @@ static void ads7846_setup_spi_msg(struct ads7846 *ts,
+ 	spi_message_init(m);
+ 	m->context = ts;
+ 
+-	if (ts->model == 7845) {
+-		x++;
+-		packet->pwrdown_cmd[0] = PWRDOWN;
+-		packet->pwrdown_cmd[1] = 0;
+-		packet->pwrdown_cmd[2] = 0;
+-		x->tx_buf = &packet->pwrdown_cmd[0];
+-		x->len = 3;
+-	} else {
+-		x++;
+-		packet->pwrdown = PWRDOWN;
+-		x->tx_buf = &packet->pwrdown;
+-		x->len = 1;
+-		spi_message_add_tail(x, m);
+-
+-		x++;
+-		x->rx_buf = &packet->dummy;
+-		x->len = 2;
+-	}
++	x++;
++	packet->pwrdown_cmd.cmd = PWRDOWN;
++	x->tx_buf = &packet->pwrdown_cmd;
++	x->len = 3;
+ 
+ 	CS_CHANGE(*x);
+ 	spi_message_add_tail(x, m);
 -- 
 2.28.0
 
