@@ -2,89 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A538F2ADC95
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 18:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B142AE1FF
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 22:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729718AbgKJRGt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Nov 2020 12:06:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726428AbgKJRGt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 12:06:49 -0500
-Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54405C0613CF;
-        Tue, 10 Nov 2020 09:06:49 -0800 (PST)
-Received: by mail-vk1-xa44.google.com with SMTP id i3so1741944vkk.11;
-        Tue, 10 Nov 2020 09:06:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S2hWuyWxfHf1nsWdsAhIbK8CXsUZ34HwpLnb4gds8BU=;
-        b=lW6eap4yjPFwd1xqWN/nDsAprEZlgu9pTkSR9mnNtKq9hNOXXSnfbZKvaK8g983w+k
-         +5/MCRNK1AiIEr9DM/ogps8y3szbop8gag+BjlFGjPNqnN3uBiWgTP2daIahCSO3tiJ+
-         xpgZzkWV6FeGT7w+G55XkKUHDMULe4kHUhE98YPgah3hkG0gaRvd+JW60JI9P1gWOO8F
-         yVlZP9F2ehj+sP8PvvrqHC1iwLngn2Ue6osK9rmegIubwPxBFY5MYxUoqZySwj5DACt9
-         BWxiab/Dq3GHmXPqcUZHQ4KL2T85Z7zaK7lZ3OK4qAPg02WYiseVqF5HcVEZ6rytoujr
-         /lqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S2hWuyWxfHf1nsWdsAhIbK8CXsUZ34HwpLnb4gds8BU=;
-        b=c8C708/0Rdqv+F9z0RAQ+rPZxP5CaUgncP5Ps5F0k0QNb7dkZEh65o5oXCjNZoPUP+
-         WkJXWecdaqgFA0xo7xKUgsGeL3Gi9RKIrPRZQDvO0bv0Gw6j0UKFRnNhJ1VAabjMStrh
-         OR2rSjCs/qSi6yWSh+tn+ML9NA2LBIErLOhH4cpvPuCx56k34T8CedJp4kp/8wUK3aUV
-         O0ySE/S/3540Xlqni+EyDPaKkG9mLqPO0cKa1xKbF4pBi9uO6YzIvgu2gc5oxJSqBsz9
-         3V74mlqXHGZauDliBgvUHnJafXu3pd9J/W2/e3m89pQ0favyoDap/G0RmxPKddwzD/1e
-         yC1w==
-X-Gm-Message-State: AOAM533oBfk86YW9H7hgCX9HQMIpJsGej5IRXa0rdHyGlKKO3OnKfmRP
-        +ZIStw8eh7g+qmoq0fI62xvCinL80iBNw0kkfyRA3WZq
-X-Google-Smtp-Source: ABdhPJzdhz3B1Nkrey7mX9SwbyLt0HkCknfCWhlRzq6S8L9mLF1ihwVNQ1vecQE7/g9Mu7sHMVpk+WHFgYSswxoiE10=
-X-Received: by 2002:a1f:5587:: with SMTP id j129mr11529056vkb.0.1605028008315;
- Tue, 10 Nov 2020 09:06:48 -0800 (PST)
+        id S1726706AbgKJVrn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Nov 2020 16:47:43 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54502 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726467AbgKJVrn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 16:47:43 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AALjdG8054992;
+        Tue, 10 Nov 2020 16:47:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=fWNuh/RWn7nJYNmvvejOiDVQ5IzNrZ3RaYxmZNKCRjY=;
+ b=MYqvAYtuWXtzOxRB58nKUhoVQqi/uUGWfxgFwSt5gzXpqMe0xyGoqm7Qdrn7S9ddQ3el
+ vbvP0+gxp4dckvUtlP0ao3EuTSi4GTA3vw+NiMYJDc8PxvsUcgjItJR+LFhlCBP00ExO
+ MXLQna9IwHzjPrdOS0RqjmaG5I22SNMOsUw9+Qz6IUfqCDoLq5PKRby+QoHirQR9opnU
+ 2UMkZSkDsBWSsx91Y5XkS2WJarpAuDTv9lKX0AXXFluTM9OwJR/SdcGn+hNQzaBNTCS0
+ vC+QcxXwfQcqlxhp0/eTNwoj1vwk1jG+EeRmnkzVFyKBMSys7wv8d+XhZnHfgDECBUhS 8A== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34qpjs75gb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Nov 2020 16:47:40 -0500
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AALg3Pq024551;
+        Tue, 10 Nov 2020 21:47:39 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04wdc.us.ibm.com with ESMTP id 34q5nen3ms-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Nov 2020 21:47:39 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AALlWjN11010812
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Nov 2020 21:47:32 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 44AF76A047;
+        Tue, 10 Nov 2020 21:47:38 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5DAF36A04D;
+        Tue, 10 Nov 2020 21:47:37 +0000 (GMT)
+Received: from SHADE6A.ibmuc.com (unknown [9.65.201.129])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 10 Nov 2020 21:47:37 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, joel@jms.id.au, broonie@kernel.org,
+        eajames@linux.ibm.com
+Subject: [PATCH] spi: fsi: Fix transfer returning without finalizing message
+Date:   Tue, 10 Nov 2020 15:47:36 -0600
+Message-Id: <20201110214736.25718-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20201110142032.24071-1-TheSven73@gmail.com> <CAHp75Ve7jZyshwLuNKvuk7uvj43SpcZT_=csOYXVFUqhtmFo3A@mail.gmail.com>
-In-Reply-To: <CAHp75Ve7jZyshwLuNKvuk7uvj43SpcZT_=csOYXVFUqhtmFo3A@mail.gmail.com>
-From:   Sven Van Asbroeck <thesven73@gmail.com>
-Date:   Tue, 10 Nov 2020 12:06:37 -0500
-Message-ID: <CAGngYiV6i=fsySH35UgL2fKiNp1VAfdkJ=hrZ8nmMn_1fkaa-Q@mail.gmail.com>
-Subject: Re: [PATCH net v2] net: phy: spi_ks8995: Do not overwrite SPI mode flags
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Frederic LAMBERT <frdrc66@gmail.com>,
-        Gabor Juhos <juhosg@openwrt.org>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-10_08:2020-11-10,2020-11-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 mlxlogscore=826 bulkscore=0 suspectscore=1
+ lowpriorityscore=0 adultscore=0 clxscore=1011 impostorscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2011100143
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-PING Jakub
+In the case that the SPI mux isn't set, the transfer_one_message
+function returns without finalizing the message. This means that
+the transfer never completes, resulting in hung tasks and an
+eventual kernel panic. Fix it by finalizing the transfer in this
+case.
 
-On Tue, Nov 10, 2020 at 11:30 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> I see that this is a fix for backporing, but maybe you can send a
-> patches on top of this to:
->   1) introduce
->  #define SPI_MODE_MASK  (SPI_CPHA | SPI_CPOL)
->        spi->mode &= ~SPI_MODE_MASK;
-> > +       spi->mode |= SPI_MODE_0;
->
-Jakub,
+Fixes: 9211a441e606 ("spi: fsi: Check mux status before transfers")
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/spi/spi-fsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is it possible to merge Andy's suggestion into net?
-Or should this go into net-next?
+diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+index 8a440c7078ef..3920cd3286d8 100644
+--- a/drivers/spi/spi-fsi.c
++++ b/drivers/spi/spi-fsi.c
+@@ -477,7 +477,7 @@ static int fsi_spi_transfer_one_message(struct spi_controller *ctlr,
+ 
+ 	rc = fsi_spi_check_mux(ctx->fsi, ctx->dev);
+ 	if (rc)
+-		return rc;
++		goto error;
+ 
+ 	list_for_each_entry(transfer, &mesg->transfers, transfer_list) {
+ 		struct fsi_spi_sequence seq;
+-- 
+2.26.2
 
-Thank you,
-Sven
