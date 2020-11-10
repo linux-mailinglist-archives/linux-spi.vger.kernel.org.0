@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D06AB2ADC2E
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 17:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FEC02ADC67
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 17:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727018AbgKJQak (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Nov 2020 11:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S1729630AbgKJQvA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Nov 2020 11:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726152AbgKJQak (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 11:30:40 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DB0C0613CF;
-        Tue, 10 Nov 2020 08:30:40 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id v12so11871077pfm.13;
-        Tue, 10 Nov 2020 08:30:40 -0800 (PST)
+        with ESMTP id S1726152AbgKJQvA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 11:51:00 -0500
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343FFC0613CF;
+        Tue, 10 Nov 2020 08:51:00 -0800 (PST)
+Received: by mail-ua1-x941.google.com with SMTP id h26so4147575uan.10;
+        Tue, 10 Nov 2020 08:51:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Emb5D9r6vMHQJaEak29n+N1kdy4zO6KUWrIUTneLBuA=;
-        b=KwVcNwoaZUVIsJ7CPNOmwmBCeNBSuC/UrOIDzWAvLPJMMAKYGyLVTvgaczyoqb8FCQ
-         1c9vI7nEXtfXHENvngRyNRQDw8qVpWnbBopZrL3w4yFV0p1JlpinDoj9BR2Opy0qiTxa
-         LFB9snRr255eu/iHxvfgyhrMZ81yrsOedZoWapUPqNwI41hezobZOGorYjqjpyEihN9L
-         EoJiOHfPAn8ocKWgLPFU0cFEmC6XJmsPe4Tzy0OwGMER/1G0nzT6DKDy/pQz6264HszE
-         JYbyzeYu30l+XMqsR8tCAyoObX4RYzzFuL3AcWC4pUyOWUhkWT5guIC9eE7W6w1gvLEp
-         bkNA==
+        bh=P2fke6SNE78arONNLo03LN6tLXiq8mc1yC6giNIagFQ=;
+        b=bA5uUF19oRrzOd4oaigCdDwfRWwrBXT5aFHXFJm34rrPM5gbHB29KKq2lbq43n8TkD
+         kRvoaPoBOP1TyxPSAPdCbNYynt0Xlzkm5KJwdHhB+TTk4TEyJLa3+vaXi6yaYKnPjY+M
+         TdYUVmfb7ESvi4HgmbFjIQ+ip9jAYnRI4X1qe+T9r7NBLFoH+x29ha20qtrDZ6X0U0ft
+         T5UvjXPr+R0qddTL8qPoG5fl8aWJR8m0wsVS8k73a1DjpdA3tc5diJgHXoYEfW48DDfV
+         5MQSaWvCcq6vizH/vCHHa+DlsC3BurwvH9dybwkriTcWxl6b+kUteHUMgoGPsG6xdrsL
+         zZbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Emb5D9r6vMHQJaEak29n+N1kdy4zO6KUWrIUTneLBuA=;
-        b=obsPEiEuSznbBq8V0/GBU4uzLlvdgYolFE3rQjDL9IV4hVWM2ZPkJXPrAo1PMxuTqu
-         58pGsjQs+Uy7PSWQnytJfK1L820k34Mi0ZZErs68iVotTDCgG0YtHzqycF+CWXCzXrj2
-         TtPmbjtaOSFANe3CxNV9Z6Zzk/QPsF1SV5OxGJBoDDEDUJ4vHNM26+2Da6OvxBnITvHi
-         cfv4+IlE7EKjm8rL5LSFCOYyZ+HCAQsVXJXaNxzgvhIOlx5oh7JdgNUdX4QK34I0d+YX
-         Gn/WCU4M9+BTmOiNAnZQIydclHHvrEPgE5/lHfzGfvWiUCP+a9j4OBRypYh4w4vS7Z1h
-         0xsw==
-X-Gm-Message-State: AOAM533f7nk6x7S6SmxEtDN1xGYA8UkI8A2+jxUAiqqNJ9RZFu7jxyT2
-        luPRaAdU9YPev1ZIeGwB79Dg7cvCwIyn68O44uPo33kAqS1l1A==
-X-Google-Smtp-Source: ABdhPJyY0453AcBPMxoZFi1CIwxdJZwtVD04o73CzpSKHWth3PJ3hVVfK5CtNjnLjtzEhr+F6cT7YPfm5EByAZw29gQ=
-X-Received: by 2002:a63:3e05:: with SMTP id l5mr17259587pga.74.1605025839839;
- Tue, 10 Nov 2020 08:30:39 -0800 (PST)
+        bh=P2fke6SNE78arONNLo03LN6tLXiq8mc1yC6giNIagFQ=;
+        b=pkjzgqpTsfvGTPmOO25amyVabz4zBvYv27wzXG21eRzrw2nquz+o6m4eWTjoz+WQTF
+         UcVlte/ckIWPROe4sMeGbRNvp52dP8RbmG+DOG3s27vgMvTfxEDZBMwYUeeXGxU5jZgJ
+         bKrQ5CTv3vN/kjPcuoOPHQGxs8LhFgGgERQRPEaImUb1OvaOZMpcNU5/JIoRNEaUB/x+
+         zzrOQPoqMnVv4lCKwWl3QVMjsULjGr5gwhXgudP2+tNtVziEPOnjhX9gEtZyYzBp11Mu
+         z7BFz/eyj0lTgjJGyoc+/emQUKgttMrpISvjYFr249HrInNil9VWoVVL+M7Z+b73Mfkj
+         v+aQ==
+X-Gm-Message-State: AOAM530GC4dGKSrKCxVrb0YvCVFQuAaRO9RVyz/WKEMuR+/EC2NxS42p
+        gqQmlOVEJsKjAgAQOic1hkW6EKy9/rbgolLnZYU=
+X-Google-Smtp-Source: ABdhPJyzMHeIx4nPgOzA6O0HRgI3ylVtWtGxTNPsxoW2CGjovQvP3LRzfRdi2urV5of0+I/bG62rU18AdBBEHru1cNI=
+X-Received: by 2002:ab0:380d:: with SMTP id x13mr10663454uav.41.1605027059205;
+ Tue, 10 Nov 2020 08:50:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20201110142032.24071-1-TheSven73@gmail.com>
-In-Reply-To: <20201110142032.24071-1-TheSven73@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 10 Nov 2020 18:31:28 +0200
-Message-ID: <CAHp75Ve7jZyshwLuNKvuk7uvj43SpcZT_=csOYXVFUqhtmFo3A@mail.gmail.com>
+References: <20201110142032.24071-1-TheSven73@gmail.com> <CAHp75Ve7jZyshwLuNKvuk7uvj43SpcZT_=csOYXVFUqhtmFo3A@mail.gmail.com>
+In-Reply-To: <CAHp75Ve7jZyshwLuNKvuk7uvj43SpcZT_=csOYXVFUqhtmFo3A@mail.gmail.com>
+From:   Sven Van Asbroeck <thesven73@gmail.com>
+Date:   Tue, 10 Nov 2020 11:50:48 -0500
+Message-ID: <CAGngYiVxca29mPoGxP11QpaXxegLGCVL7Boe_AqS9nnujRcZ+Q@mail.gmail.com>
 Subject: Re: [PATCH net v2] net: phy: spi_ks8995: Do not overwrite SPI mode flags
-To:     Sven Van Asbroeck <thesven73@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -69,35 +69,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 4:20 PM Sven Van Asbroeck <thesven73@gmail.com> wrote:
+Hi Andy, thank you for the feedback.
+
+On Tue, Nov 10, 2020 at 11:30 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> From: Sven Van Asbroeck <thesven73@gmail.com>
+> I see that this is a fix for backporing, but maybe you can send a
+> patches on top of this to:
+>   1) introduce
+>  #define SPI_MODE_MASK  (SPI_CPHA | SPI_CPOL)
+>        spi->mode &= ~SPI_MODE_MASK;
 >
-> This driver makes sure the underlying SPI bus is set to "mode 0"
-> by assigning SPI_MODE_0 to spi->mode. Which overwrites all other
-> SPI mode flags.
->
-> In some circumstances, this can break the underlying SPI bus driver.
-> For example, if SPI_CS_HIGH is set on the SPI bus, the driver
-> will clear that flag, which results in a chip-select polarity issue.
->
-> Fix by changing only the SPI_MODE_N bits, i.e. SPI_CPHA and SPI_CPOL.
 
-I see that this is a fix for backporing, but maybe you can send a
-patches on top of this to:
-  1) introduce
- #define SPI_MODE_MASK  (SPI_CPHA | SPI_CPOL)
+Andrew Lunn suggested that a spi helper function would
+probably fit the bill. I am planning to submit that to net-next
+after this patch is accepted in next (and next is merged into
+net-next).
 
-> +       /* use SPI_MODE_0 without changing any other mode flags */
-> +       spi->mode &= ~(SPI_CPHA | SPI_CPOL);
+I am learning that net is only for the most minimal of fixes.
 
-2)
-       spi->mode &= ~SPI_MODE_MASK;
-
-> +       spi->mode |= SPI_MODE_0;
-
-?
-
--- 
-With Best Regards,
-Andy Shevchenko
+See the previous discussion here:
+https://patchwork.ozlabs.org/project/netdev/patch/20201109193117.2017-1-TheSven73@gmail.com/
