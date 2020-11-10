@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEC02ADC67
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 17:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A538F2ADC95
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 18:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729630AbgKJQvA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Nov 2020 11:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S1729718AbgKJRGt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Nov 2020 12:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726152AbgKJQvA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 11:51:00 -0500
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343FFC0613CF;
-        Tue, 10 Nov 2020 08:51:00 -0800 (PST)
-Received: by mail-ua1-x941.google.com with SMTP id h26so4147575uan.10;
-        Tue, 10 Nov 2020 08:51:00 -0800 (PST)
+        with ESMTP id S1726428AbgKJRGt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 12:06:49 -0500
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54405C0613CF;
+        Tue, 10 Nov 2020 09:06:49 -0800 (PST)
+Received: by mail-vk1-xa44.google.com with SMTP id i3so1741944vkk.11;
+        Tue, 10 Nov 2020 09:06:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=P2fke6SNE78arONNLo03LN6tLXiq8mc1yC6giNIagFQ=;
-        b=bA5uUF19oRrzOd4oaigCdDwfRWwrBXT5aFHXFJm34rrPM5gbHB29KKq2lbq43n8TkD
-         kRvoaPoBOP1TyxPSAPdCbNYynt0Xlzkm5KJwdHhB+TTk4TEyJLa3+vaXi6yaYKnPjY+M
-         TdYUVmfb7ESvi4HgmbFjIQ+ip9jAYnRI4X1qe+T9r7NBLFoH+x29ha20qtrDZ6X0U0ft
-         T5UvjXPr+R0qddTL8qPoG5fl8aWJR8m0wsVS8k73a1DjpdA3tc5diJgHXoYEfW48DDfV
-         5MQSaWvCcq6vizH/vCHHa+DlsC3BurwvH9dybwkriTcWxl6b+kUteHUMgoGPsG6xdrsL
-         zZbw==
+        bh=S2hWuyWxfHf1nsWdsAhIbK8CXsUZ34HwpLnb4gds8BU=;
+        b=lW6eap4yjPFwd1xqWN/nDsAprEZlgu9pTkSR9mnNtKq9hNOXXSnfbZKvaK8g983w+k
+         +5/MCRNK1AiIEr9DM/ogps8y3szbop8gag+BjlFGjPNqnN3uBiWgTP2daIahCSO3tiJ+
+         xpgZzkWV6FeGT7w+G55XkKUHDMULe4kHUhE98YPgah3hkG0gaRvd+JW60JI9P1gWOO8F
+         yVlZP9F2ehj+sP8PvvrqHC1iwLngn2Ue6osK9rmegIubwPxBFY5MYxUoqZySwj5DACt9
+         BWxiab/Dq3GHmXPqcUZHQ4KL2T85Z7zaK7lZ3OK4qAPg02WYiseVqF5HcVEZ6rytoujr
+         /lqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=P2fke6SNE78arONNLo03LN6tLXiq8mc1yC6giNIagFQ=;
-        b=pkjzgqpTsfvGTPmOO25amyVabz4zBvYv27wzXG21eRzrw2nquz+o6m4eWTjoz+WQTF
-         UcVlte/ckIWPROe4sMeGbRNvp52dP8RbmG+DOG3s27vgMvTfxEDZBMwYUeeXGxU5jZgJ
-         bKrQ5CTv3vN/kjPcuoOPHQGxs8LhFgGgERQRPEaImUb1OvaOZMpcNU5/JIoRNEaUB/x+
-         zzrOQPoqMnVv4lCKwWl3QVMjsULjGr5gwhXgudP2+tNtVziEPOnjhX9gEtZyYzBp11Mu
-         z7BFz/eyj0lTgjJGyoc+/emQUKgttMrpISvjYFr249HrInNil9VWoVVL+M7Z+b73Mfkj
-         v+aQ==
-X-Gm-Message-State: AOAM530GC4dGKSrKCxVrb0YvCVFQuAaRO9RVyz/WKEMuR+/EC2NxS42p
-        gqQmlOVEJsKjAgAQOic1hkW6EKy9/rbgolLnZYU=
-X-Google-Smtp-Source: ABdhPJyzMHeIx4nPgOzA6O0HRgI3ylVtWtGxTNPsxoW2CGjovQvP3LRzfRdi2urV5of0+I/bG62rU18AdBBEHru1cNI=
-X-Received: by 2002:ab0:380d:: with SMTP id x13mr10663454uav.41.1605027059205;
- Tue, 10 Nov 2020 08:50:59 -0800 (PST)
+        bh=S2hWuyWxfHf1nsWdsAhIbK8CXsUZ34HwpLnb4gds8BU=;
+        b=c8C708/0Rdqv+F9z0RAQ+rPZxP5CaUgncP5Ps5F0k0QNb7dkZEh65o5oXCjNZoPUP+
+         WkJXWecdaqgFA0xo7xKUgsGeL3Gi9RKIrPRZQDvO0bv0Gw6j0UKFRnNhJ1VAabjMStrh
+         OR2rSjCs/qSi6yWSh+tn+ML9NA2LBIErLOhH4cpvPuCx56k34T8CedJp4kp/8wUK3aUV
+         O0ySE/S/3540Xlqni+EyDPaKkG9mLqPO0cKa1xKbF4pBi9uO6YzIvgu2gc5oxJSqBsz9
+         3V74mlqXHGZauDliBgvUHnJafXu3pd9J/W2/e3m89pQ0favyoDap/G0RmxPKddwzD/1e
+         yC1w==
+X-Gm-Message-State: AOAM533oBfk86YW9H7hgCX9HQMIpJsGej5IRXa0rdHyGlKKO3OnKfmRP
+        +ZIStw8eh7g+qmoq0fI62xvCinL80iBNw0kkfyRA3WZq
+X-Google-Smtp-Source: ABdhPJzdhz3B1Nkrey7mX9SwbyLt0HkCknfCWhlRzq6S8L9mLF1ihwVNQ1vecQE7/g9Mu7sHMVpk+WHFgYSswxoiE10=
+X-Received: by 2002:a1f:5587:: with SMTP id j129mr11529056vkb.0.1605028008315;
+ Tue, 10 Nov 2020 09:06:48 -0800 (PST)
 MIME-Version: 1.0
 References: <20201110142032.24071-1-TheSven73@gmail.com> <CAHp75Ve7jZyshwLuNKvuk7uvj43SpcZT_=csOYXVFUqhtmFo3A@mail.gmail.com>
 In-Reply-To: <CAHp75Ve7jZyshwLuNKvuk7uvj43SpcZT_=csOYXVFUqhtmFo3A@mail.gmail.com>
 From:   Sven Van Asbroeck <thesven73@gmail.com>
-Date:   Tue, 10 Nov 2020 11:50:48 -0500
-Message-ID: <CAGngYiVxca29mPoGxP11QpaXxegLGCVL7Boe_AqS9nnujRcZ+Q@mail.gmail.com>
+Date:   Tue, 10 Nov 2020 12:06:37 -0500
+Message-ID: <CAGngYiV6i=fsySH35UgL2fKiNp1VAfdkJ=hrZ8nmMn_1fkaa-Q@mail.gmail.com>
 Subject: Re: [PATCH net v2] net: phy: spi_ks8995: Do not overwrite SPI mode flags
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Andrew Lunn <andrew@lunn.ch>,
@@ -69,7 +69,7 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Andy, thank you for the feedback.
+PING Jakub
 
 On Tue, Nov 10, 2020 at 11:30 AM Andy Shevchenko
 <andy.shevchenko@gmail.com> wrote:
@@ -79,14 +79,12 @@ On Tue, Nov 10, 2020 at 11:30 AM Andy Shevchenko
 >   1) introduce
 >  #define SPI_MODE_MASK  (SPI_CPHA | SPI_CPOL)
 >        spi->mode &= ~SPI_MODE_MASK;
+> > +       spi->mode |= SPI_MODE_0;
 >
+Jakub,
 
-Andrew Lunn suggested that a spi helper function would
-probably fit the bill. I am planning to submit that to net-next
-after this patch is accepted in next (and next is merged into
-net-next).
+Is it possible to merge Andy's suggestion into net?
+Or should this go into net-next?
 
-I am learning that net is only for the most minimal of fixes.
-
-See the previous discussion here:
-https://patchwork.ozlabs.org/project/netdev/patch/20201109193117.2017-1-TheSven73@gmail.com/
+Thank you,
+Sven
