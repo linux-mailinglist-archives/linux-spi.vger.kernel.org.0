@@ -2,33 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E63672AF8AA
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 20:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A428D2AF8B3
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 20:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbgKKTHE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 14:07:04 -0500
-Received: from mailout1.hostsharing.net ([83.223.95.204]:53119 "EHLO
-        mailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbgKKTHE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 14:07:04 -0500
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        id S1725900AbgKKTIf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 14:08:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727439AbgKKTIe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 14:08:34 -0500
+Received: from mailout1.hostsharing.net (mailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5fcc:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D5DC0613D1
+        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 11:08:34 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout1.hostsharing.net (Postfix) with ESMTPS id 5989810190FCD;
-        Wed, 11 Nov 2020 20:07:01 +0100 (CET)
+        by mailout1.hostsharing.net (Postfix) with ESMTPS id 82636101933FD;
+        Wed, 11 Nov 2020 20:08:28 +0100 (CET)
 Received: from localhost (unknown [89.246.108.87])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id C3695609762E;
-        Wed, 11 Nov 2020 20:07:01 +0100 (CET)
-X-Mailbox-Line: From 5e31a9a59fd1c0d0b795b2fe219f25e5ee855f9d Mon Sep 17 00:00:00 2001
-Message-Id: <cover.1605121038.git.lukas@wunner.de>
-In-Reply-To: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id E6109609762E;
+        Wed, 11 Nov 2020 20:08:28 +0100 (CET)
+X-Mailbox-Line: From 272bae2ef08abd21388c98e23729886663d19192 Mon Sep 17 00:00:00 2001
+Message-Id: <272bae2ef08abd21388c98e23729886663d19192.1605121038.git.lukas@wunner.de>
+In-Reply-To: <cover.1605121038.git.lukas@wunner.de>
 References: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
+        <cover.1605121038.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
-Date:   Wed, 11 Nov 2020 20:07:00 +0100
-Subject: [PATCH 0/4] Use-after-free be gone
+Date:   Wed, 11 Nov 2020 20:07:10 +0100
+Subject: [PATCH 1/4] spi: Introduce device-managed SPI controller allocation
 To:     Mark Brown <broonie@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>
 Cc:     linux-spi@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
@@ -39,60 +43,165 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Here's my proposal to fix the use-after-free bugs reported by
-Sascha Hauer and Florian Fainelli:
+SPI driver probing currently comprises two steps, whereas removal
+comprises only one step:
 
-I scrutinized all SPI drivers in the v5.10 tree:
+    spi_alloc_master()
+    spi_register_controller()
 
-* There are 9 drivers with a use-after-free in the ->remove() hook
-  caused by accessing driver private data after spi_unregister_controller().
+    spi_unregister_controller()
 
-* There are 8 drivers which leak the spi_controller in the ->probe()
-  error path because of a missing spi_controller_put().
+That's because spi_unregister_controller() calls device_unregister()
+instead of device_del(), thereby releasing the reference on the
+spi_controller which was obtained by spi_alloc_master().
 
-I'm introducing devm_spi_alloc_master/slave() which automatically
-calls spi_controller_put() on ->remove().  This fixes both classes
-of bugs while at the same time reducing code amount and complexity
-in the ->probe() hook.
+An SPI driver's private data is contained in the same memory allocation
+as the spi_controller struct.  Thus, once spi_unregister_controller()
+has been called, the private data is inaccessible.  But some drivers
+need to access it after spi_unregister_controller() to perform further
+teardown steps.
 
-I propose that spi_controller_unregister() should no longer release
-a reference on the spi_controller.  Instead, drivers need to either
-do it themselves or use one of the devm functions introduced herein.
-The vast majority of drivers can be converted to the devm functions.
-See the commit message of patch [1/4] for the rationale and details.
+Introduce devm_spi_alloc_master() and devm_spi_alloc_slave(), which
+release a reference on the spi_controller struct only after the driver
+has unbound, thereby keeping the memory allocation accessible.  Change
+spi_unregister_controller() to not release a reference if the
+spi_controller was allocated by one of these new devm functions.
 
-Enclosed are patches for 3 Broadcom drivers.
-Patches for the other drivers are on this branch:
-https://github.com/l1k/linux/commits/spi_fixes
+The present commit is small enough to be backportable to stable.
+It allows fixing drivers which use the private data in their ->remove()
+hook after it's been freed.  It also allows fixing drivers which neglect
+to release a reference on the spi_controller in the probe error path.
 
-@Florian Fainelli:  Could you verify that there are no KASAN splats or
-leaks with these patches?  Unfortunately I do not have any SPI-capable
-hardware at my disposal right now, so can only compile-test.  You may
-want to augment spi_controller_release() with a printk() to log when
-the spi_controller is freed.
+Long-term, most SPI drivers shall be moved over to the devm functions
+introduced herein.  The few that can't shall be changed in a treewide
+commit to explicitly release the last reference on the controller.
+That commit shall amend spi_unregister_controller() to no longer release
+a reference, thereby completing the migration.
 
-@Mark Brown:  Patches [2/4] to [4/4] reference the SHA-1 of patch [1/4]
-in their stable tags.  Because the hash is unknown to me until you apply
-the patch, I've used "123456789abc" as a placeholder.  You'll have to
-replace the hash if/when applying.  Alternatively, only apply patch [1/4]
-and I'll repost the other patches with the hash fixed up.
+As a result, the behaviour will be less surprising and more consistent
+with subsystems such as IIO, which also includes the private data in the
+allocation of the generic iio_dev struct, but calls device_del() in
+iio_device_unregister().
 
-Thanks!
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+---
+ drivers/spi/spi.c       | 58 ++++++++++++++++++++++++++++++++++++++++-
+ include/linux/spi/spi.h | 19 ++++++++++++++
+ 2 files changed, 76 insertions(+), 1 deletion(-)
 
-
-Lukas Wunner (4):
-  spi: Introduce device-managed SPI controller allocation
-  spi: bcm2835: Fix use-after-free on unbind
-  spi: bcm2835aux: Fix use-after-free on unbind
-  spi: bcm-qspi: Fix use-after-free on unbind
-
- drivers/spi/spi-bcm-qspi.c   | 34 ++++++++-------------
- drivers/spi/spi-bcm2835.c    | 24 +++++----------
- drivers/spi/spi-bcm2835aux.c | 21 +++++--------
- drivers/spi/spi.c            | 58 +++++++++++++++++++++++++++++++++++-
- include/linux/spi/spi.h      | 19 ++++++++++++
- 5 files changed, 103 insertions(+), 53 deletions(-)
-
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 0cab239d8e7f..8a60926f9b0d 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2453,6 +2453,49 @@ struct spi_controller *__spi_alloc_controller(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(__spi_alloc_controller);
+ 
++static void devm_spi_release_controller(struct device *dev, void *ctlr)
++{
++	spi_controller_put(*(struct spi_controller **)ctlr);
++}
++
++/**
++ * __devm_spi_alloc_controller - resource-managed __spi_alloc_controller()
++ * @dev: physical device of SPI controller
++ * @size: how much zeroed driver-private data to allocate
++ * @slave: whether to allocate an SPI master (false) or SPI slave (true)
++ * Context: can sleep
++ *
++ * Allocate an SPI controller and automatically release a reference on it
++ * when @dev is unbound from its driver.  Drivers are thus relieved from
++ * having to call spi_controller_put().
++ *
++ * The arguments to this function are identical to __spi_alloc_controller().
++ *
++ * Return: the SPI controller structure on success, else NULL.
++ */
++struct spi_controller *__devm_spi_alloc_controller(struct device *dev,
++						   unsigned int size,
++						   bool slave)
++{
++	struct spi_controller **ptr, *ctlr;
++
++	ptr = devres_alloc(devm_spi_release_controller, sizeof(*ptr),
++			   GFP_KERNEL);
++	if (!ptr)
++		return NULL;
++
++	ctlr = __spi_alloc_controller(dev, size, slave);
++	if (ctlr) {
++		*ptr = ctlr;
++		devres_add(dev, ptr);
++	} else {
++		devres_free(ptr);
++	}
++
++	return ctlr;
++}
++EXPORT_SYMBOL_GPL(__devm_spi_alloc_controller);
++
+ #ifdef CONFIG_OF
+ static int of_spi_get_gpio_numbers(struct spi_controller *ctlr)
+ {
+@@ -2789,6 +2832,11 @@ int devm_spi_register_controller(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_spi_register_controller);
+ 
++static int devm_spi_match_controller(struct device *dev, void *res, void *ctlr)
++{
++	return *(struct spi_controller **)res == ctlr;
++}
++
+ static int __unregister(struct device *dev, void *null)
+ {
+ 	spi_unregister_device(to_spi_device(dev));
+@@ -2830,7 +2878,15 @@ void spi_unregister_controller(struct spi_controller *ctlr)
+ 	list_del(&ctlr->list);
+ 	mutex_unlock(&board_lock);
+ 
+-	device_unregister(&ctlr->dev);
++	device_del(&ctlr->dev);
++
++	/* Release the last reference on the controller if its driver
++	 * has not yet been converted to devm_spi_alloc_master/slave().
++	 */
++	if (!devres_find(ctlr->dev.parent, devm_spi_release_controller,
++			 devm_spi_match_controller, ctlr))
++		put_device(&ctlr->dev);
++
+ 	/* free bus id */
+ 	mutex_lock(&board_lock);
+ 	if (found == ctlr)
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 99380c0825db..b390fdac1587 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -734,6 +734,25 @@ static inline struct spi_controller *spi_alloc_slave(struct device *host,
+ 	return __spi_alloc_controller(host, size, true);
+ }
+ 
++struct spi_controller *__devm_spi_alloc_controller(struct device *dev,
++						   unsigned int size,
++						   bool slave);
++
++static inline struct spi_controller *devm_spi_alloc_master(struct device *dev,
++							   unsigned int size)
++{
++	return __devm_spi_alloc_controller(dev, size, false);
++}
++
++static inline struct spi_controller *devm_spi_alloc_slave(struct device *dev,
++							  unsigned int size)
++{
++	if (!IS_ENABLED(CONFIG_SPI_SLAVE))
++		return NULL;
++
++	return __devm_spi_alloc_controller(dev, size, true);
++}
++
+ extern int spi_register_controller(struct spi_controller *ctlr);
+ extern int devm_spi_register_controller(struct device *dev,
+ 					struct spi_controller *ctlr);
 -- 
 2.28.0
 
