@@ -2,92 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AF92AF5B6
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 17:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAAE2AF636
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 17:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727451AbgKKQDu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 11:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
+        id S1726203AbgKKQY0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 11:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727449AbgKKQDt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 11:03:49 -0500
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCECC0613D1;
-        Wed, 11 Nov 2020 08:03:49 -0800 (PST)
-Received: by mail-vs1-xe41.google.com with SMTP id t8so1444033vsr.2;
-        Wed, 11 Nov 2020 08:03:49 -0800 (PST)
+        with ESMTP id S1726036AbgKKQY0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 11:24:26 -0500
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F661C0613D1;
+        Wed, 11 Nov 2020 08:24:26 -0800 (PST)
+Received: by mail-ua1-x944.google.com with SMTP id v16so873798uat.9;
+        Wed, 11 Nov 2020 08:24:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=D688jg4M+etuC7EpYy8xu4NpHHM16onVnkpm0PnCHSE=;
-        b=EUVSumJRdY0k1MZnLF87QI4teakp/ioGjlxubbDNbipGpb1jusqpdfbpGluzMARVYZ
-         Ntpic0dA7/DDhld7e9nhodJrSALDAac49lQlnSJTpybritrAxdf6o6KAS5a8mb1Q517F
-         MBlbovHIhXkkLgVD71UcKRK6jzCHPcH6eqeFjwupM2sNc2zXREHiIwpBcMY8di2Sh5HQ
-         iDgjDiSQV8QQWu7xhRcHg2/FcM/KAY7OT85E/EWW/PeDc1XRmZGOhfGoZ576n/05mT5p
-         msjhvQ3fCkZHHrtGsUdtj+iBcQCaeVcJ+gwXR+XWx32FN+kOWj+hBqaA4LNfNYkI3sAH
-         BzZg==
+        bh=ApPLUFcnKDn71TaylPm6eHhhvyQNjdkfYuRqJ1JLvIE=;
+        b=DQX/rMcMM1jCqyXpIRlSZ47lySB+30dO2HivcfQU+j9CdEyevHbnxItvQ2L/pOjxVR
+         29gVdmOe449NOk211xGfWsjfiMFVKp6sDamdJncl2l7/nQDcPm4rxN7RMWGNZgGWxHAt
+         0Q7XnwP2tv42M97S+FkFshC/A20yNq8z1kj0ODIDdAifG2MM5zrrW/BvO/5ztOBvpYtC
+         E3JUkXJVw5KoBtm6oqwMMtol5+mzPy9fQTv0fPICMbHjJku+uhd1qFJ0XUCtV/75gUbV
+         NiZGxXzE62BIh3TyE2M7D5yxV7u+Z/6GCC4gm3qIan+vyIf2QeyofPMcBDN0RqNTb4TV
+         Jr9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=D688jg4M+etuC7EpYy8xu4NpHHM16onVnkpm0PnCHSE=;
-        b=baKaBQfrinK9msQ7RHG8uvFzAkIfNr6tTYl5mo23XcdfFmDwueakP5R7x8eXWL2fWl
-         boQKDXhYp9wSs+W67NGN4UqQAQyIQc/DnHPWllX7F8NNKqj22SaGJOwWTelWP2zjI4H8
-         ha3Acwilou+BCMGzc6k6ETHprtPxEkmSH/HhrCWztweBETBx59d+oFLfKiPvsNYxDmSx
-         SUY8fDsEZnFJpQbL8//QRotAo16pkse4kebv5crRQOAInvrqkuGnrEO3bCymofeoTuH4
-         g/8DvmllWrB+b7WdTMsze45veIrveaiiu/MkDRM26STRBHN8VHl4MD1jItkSdzW6RIF3
-         BjNA==
-X-Gm-Message-State: AOAM533yW56bZ9S8L0p4eYtEhHd7IO02CYh1Sm3YX7Ar4MT1hJESNg6U
-        Fr/wuEhdfeTjTKTYZ7aj44fawQEiXBKZ9o2FBOY=
-X-Google-Smtp-Source: ABdhPJx6dKfkko6dw4C422lE0JZk0ZIW2NnYWaOwinI5G9DsXjc9yecsD8la7prLfBL0eyvFO0AoZUgTtltyTG6JNyc=
-X-Received: by 2002:a67:2c53:: with SMTP id s80mr16661846vss.12.1605110628574;
- Wed, 11 Nov 2020 08:03:48 -0800 (PST)
+        bh=ApPLUFcnKDn71TaylPm6eHhhvyQNjdkfYuRqJ1JLvIE=;
+        b=f4ENxhSpXsmnZ/3s7M0elxOJ33586oNOmmloa6wfm4bIxrBO0xGomUAnh61+DFfE1L
+         CdNAPk2WOO56774pygFxnMCqa4vWuhdIuFGFyru1ZUsfOP28W/07CxiNysMJ1L4ZNsyC
+         PmVfnDFfHLXtIEpfVv2z+eisM9l5wCBGhr+aMTZ6SwLHS58Q+IKoXFFzQOECAQoHZzzm
+         N94kGVtEHx4Ep/Gxh4snC/N+d6pAj7+aN5R4mkgkzCFFVvALfjC5zQhdOt/qccyB5oNW
+         RwITGhA9eN10hhahQPv6DoYXTRi8T3oznjuIXiLgLF+fn5vfiolTrUQi+DgmowAxpllm
+         N8yg==
+X-Gm-Message-State: AOAM533hqe2OO6iWMUxbkDkz3nmaX1fTziSp+ApEFif1nlkeEzaGZ2Le
+        2SC9BmTtMh3QHR0QoCVcfi51TgfDucO1SUGQHx8=
+X-Google-Smtp-Source: ABdhPJw1Gddy9gH/d3534yIUUFT+M1v5k1d/va9EFsczYYPkS4/PRzQEeKU9gIvOQMFcVjKGjtyT9ovkzB+nr3AK9Ns=
+X-Received: by 2002:ab0:281a:: with SMTP id w26mr13677174uap.49.1605111865547;
+ Wed, 11 Nov 2020 08:24:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20201110142032.24071-1-TheSven73@gmail.com>
-In-Reply-To: <20201110142032.24071-1-TheSven73@gmail.com>
+References: <20201106150706.29089-1-TheSven73@gmail.com> <160510968064.12304.14797288117651443603.b4-ty@kernel.org>
+In-Reply-To: <160510968064.12304.14797288117651443603.b4-ty@kernel.org>
 From:   Sven Van Asbroeck <thesven73@gmail.com>
-Date:   Wed, 11 Nov 2020 11:03:37 -0500
-Message-ID: <CAGngYiVftXwcYbeSgXtiu9aMUG6GQTAcON=CK32o5=YLM40g4A@mail.gmail.com>
-Subject: Re: [PATCH net v2] net: phy: spi_ks8995: Do not overwrite SPI mode flags
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Frederic LAMBERT <frdrc66@gmail.com>,
-        Gabor Juhos <juhosg@openwrt.org>,
+Date:   Wed, 11 Nov 2020 11:24:14 -0500
+Message-ID: <CAGngYiVAdPSCEQm5pJdFQ+3VpwNH1vGD6rPNK1_SQK3Uvfbt5A@mail.gmail.com>
+Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO descriptors
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Jonathan Cameron <jonathan.cameron@huawei.com>,
-        linux-spi <linux-spi@vger.kernel.org>
+        Lukas Wunner <lukas@wunner.de>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Simon Han <z.han@kunbus.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-A spi core fix has been accepted which makes this patch unnecessary.
+On Wed, Nov 11, 2020 at 10:48 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> Applied to
+>
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/commit/?id=766c6b63aa044e84b045803b40b14754d69a2a1d
+Thank you !
 
-On Tue, Nov 10, 2020 at 9:20 AM Sven Van Asbroeck <thesven73@gmail.com> wrote:
->
->
-> This driver makes sure the underlying SPI bus is set to "mode 0"
-> by assigning SPI_MODE_0 to spi->mode. Which overwrites all other
-> SPI mode flags.
->
-> In some circumstances, this can break the underlying SPI bus driver.
-> For example, if SPI_CS_HIGH is set on the SPI bus, the driver
-> will clear that flag, which results in a chip-select polarity issue.
->
-> Fix by changing only the SPI_MODE_N bits, i.e. SPI_CPHA and SPI_CPOL.
->
-> Fixes: a8e510f682fe ("phy: Micrel KS8995MA 5-ports 10/100 managed Ethernet switch support added")
-> Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
-> Link: https://patchwork.kernel.org/project/spi-devel-general/patch/20201106150706.29089-1-TheSven73@gmail.com/#23747737
-> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
-> ---
+Now that our minds are still focused on this subject, should
+commit 138c9c32f090 ("spi: spidev: Fix CS polarity if GPIO descriptors
+are used")
+be reverted?
+
+This fixed spidev to deal with SPI_CS_HIGH on gpiod.
+But after our fix, its behaviour will probably be broken again.
+
+Another candidate for revert is
+commit ada9e3fcc175 ("spi: dw: Correct handling of native chipselect")
+although I don't understand that code well enough to be sure.
+
+Adding Charles Keepax.
