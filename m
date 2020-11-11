@@ -2,163 +2,159 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1192AF245
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 14:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3682AF324
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 15:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgKKNgd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 08:36:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbgKKNgW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 08:36:22 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6988CC0613D4
-        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 05:36:20 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id e27so3168600lfn.7
-        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 05:36:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=olXpuWKRZd2WOj54U9lEqVR1jNZf54WvQA2P0HktWA8=;
-        b=eRY3pQzc5vWFBm8wrOM4Wk6hZ+JxLZ3rHp0gEIWEeHkhSnhREBOU/e0aVNADZH0ruk
-         UVPfX6cy0/3JkT1vtC0PD8U89ubNGTY0mu+ANzfz4qT5e+u0JTLn+M3GvNjHTBfVgTe+
-         PdvI0NbRfNiOoz5liE3cjMHkdSjV9DHxIKSK6UMmeigTvdEcN/PlHHmfod0PaE1BbG1d
-         9ADjQRW1u2FS132A3xwYY2oUzxt4CDQPOF8SLsrDMqc+1od/wbL+a10ODbVzc8xnnEkC
-         8lMsfyrIhqdKFjBc2kxadw9S9WaSWg/wJsfXQTDU1qnlLcqNB8TzootgY44FC+UMFomO
-         w8Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=olXpuWKRZd2WOj54U9lEqVR1jNZf54WvQA2P0HktWA8=;
-        b=FYL4JooJ5cceBZoZKvr7l7l1wUHqZ38fx5TxPxRAugVqhWUggCm6jel3GmAmrXE14s
-         EeoUXJ5HwUmTPSwgL6ZolfiEqvaez9PvlPNbikuoXf4cwfnt3iJ0bxXbyvTWgajqtrzp
-         RHh9RvvCkAoo3UK3q+NxprN3QXkpIxZgPYK8l0ngTYitxX7+/lg+fO3j4KlHnRa9/1WK
-         9hhMsIT4yB+rChf4wC1s+6pI6ewOPeH3uvm/TISCJFfHLrblA42dd+PFMGDb8MdOQ//9
-         BGrCl4S/yN1G3LObZBqq6a0XciTEgBiWuJn90v0xkVtqHWXFDG7pBTra8ypBE9dx7GPs
-         3tAw==
-X-Gm-Message-State: AOAM530mrpJ9BJE2YNH7sJer4CtgPn67C1LPrVPQ/7ulq+e+gyZ++smZ
-        D1dxrQEHpSvJhUxME8UbgQTv5oHj1FovdbhGHSaq4A==
-X-Google-Smtp-Source: ABdhPJzKrjwSKLLnsJwC2KZlvsGs1Zr74mP1FjA9nd1bGkwMn4wIkdimLhhhQSoCGGwqcznTPuB8RMSStDXllzU2OgA=
-X-Received: by 2002:ac2:4ac7:: with SMTP id m7mr7303223lfp.572.1605101778759;
- Wed, 11 Nov 2020 05:36:18 -0800 (PST)
+        id S1726774AbgKKOKl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 09:10:41 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:34176 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726149AbgKKOKk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 09:10:40 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ABDtxR2020013;
+        Wed, 11 Nov 2020 09:10:37 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com with ESMTP id 34npaawjxn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Nov 2020 09:10:37 -0500
+Received: from SCSQMBX10.ad.analog.com (SCSQMBX10.ad.analog.com [10.77.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 0ABEAZgL046900
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Wed, 11 Nov 2020 09:10:36 -0500
+Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by SCSQMBX10.ad.analog.com
+ (10.77.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Wed, 11 Nov
+ 2020 06:10:34 -0800
+Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX10.ad.analog.com
+ (10.77.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Wed, 11 Nov 2020 06:10:34 -0800
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0ABEAVc7003735;
+        Wed, 11 Nov 2020 09:10:31 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <broonie@kernel.org>, <dragos.bogdan@analog.com>,
+        <ardeleanalex@gmail.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH] spi: Add SPI_NO_TX/RX support
+Date:   Wed, 11 Nov 2020 16:15:29 +0200
+Message-ID: <20201111141529.98147-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20201106150706.29089-1-TheSven73@gmail.com> <CAHp75VfP1R7bXV6nWWnovWB5BMFcNNEmwBQXheBCUVDbr=xXGA@mail.gmail.com>
- <CAGngYiVu3cXtzb5PaoDOoyqjuuohLQ+em6Keg-qgDFFn2tdp=Q@mail.gmail.com>
- <CACRpkdagAK1X6FT=sug5FGA1iipXnOT_ujtMBh9cVnep_DpWyA@mail.gmail.com> <20201111123327.GB4847@sirena.org.uk>
-In-Reply-To: <20201111123327.GB4847@sirena.org.uk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 11 Nov 2020 14:36:07 +0100
-Message-ID: <CACRpkdZW3G48Yj3yGMTKZGwVEQOSs1VeVTTGLgyoJViM3=Yedg@mail.gmail.com>
-Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO descriptors
-To:     Mark Brown <broonie@kernel.org>,
-        Grant Likely <grant.likely@arm.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Sven Van Asbroeck <thesven73@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Simon Han <z.han@kunbus.com>, Lukas Wunner <lukas@wunner.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-11_06:2020-11-10,2020-11-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=858 clxscore=1011 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 adultscore=0 spamscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011110082
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 1:33 PM Mark Brown <broonie@kernel.org> wrote:
-> On Wed, Nov 11, 2020 at 02:05:19AM +0100, Linus Walleij wrote:
+From: Dragos Bogdan <dragos.bogdan@analog.com>
 
-> > I would say that anything that has:
->
-> > spi->mode = ...
->
-> > is essentially broken.
->
-> This is not clear to me, most of these settings are things that are
-> constant for the device so it's not clear that they should be being set
-> by the device tree in the first place.
+Transmit/receive only is a valid SPI mode. For example, the MOSI/TX line
+might be missing from an ADC while for a DAC the MISO/RX line may be
+optional. This patch adds these two new modes: SPI_NO_TX and
+SPI_NO_RX. This way, the drivers will be able to identify if any of
+these two lines is missing and to adjust the transfers accordingly.
 
-This was added initially with some two properties
-in drivers/of/of_spi.c in 2008:
-commit 284b01897340974000bcc84de87a4e1becc8a83d
-"spi: Add OF binding support for SPI busses"
+Signed-off-by: Dragos Bogdan <dragos.bogdan@analog.com>
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+---
+ drivers/spi/spi.c       | 25 ++++++++++++++++++++-----
+ include/linux/spi/spi.h |  2 ++
+ 2 files changed, 22 insertions(+), 5 deletions(-)
 
-This was around the time ARM was first starting to migrate
-to device tree, so I suppose it made sense to them/us back
-then.
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 22679c8645db..fc12fcf11126 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1934,6 +1934,9 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 	/* Device DUAL/QUAD mode */
+ 	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
+ 		switch (value) {
++		case 0:
++			spi->mode |= SPI_NO_TX;
++			break;
+ 		case 1:
+ 			break;
+ 		case 2:
+@@ -1955,6 +1958,9 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 
+ 	if (!of_property_read_u32(nc, "spi-rx-bus-width", &value)) {
+ 		switch (value) {
++		case 0:
++			spi->mode |= SPI_NO_RX;
++			break;
+ 		case 1:
+ 			break;
+ 		case 2:
+@@ -3275,12 +3281,16 @@ int spi_setup(struct spi_device *spi)
+ 	unsigned	bad_bits, ugly_bits;
+ 	int		status;
+ 
+-	/* check mode to prevent that DUAL and QUAD set at the same time
++	/* check mode to prevent that any two of DUAL, QUAD and NO_MOSI/MISO
++	 * are set at the same time
+ 	 */
+-	if (((spi->mode & SPI_TX_DUAL) && (spi->mode & SPI_TX_QUAD)) ||
+-		((spi->mode & SPI_RX_DUAL) && (spi->mode & SPI_RX_QUAD))) {
++	if ((hweight_long(spi->mode &
++		(SPI_TX_DUAL | SPI_TX_QUAD | SPI_NO_TX)) > 1) ||
++	    (hweight_long(spi->mode &
++		(SPI_RX_DUAL | SPI_RX_QUAD | SPI_NO_RX)) > 1)) {
+ 		dev_err(&spi->dev,
+-		"setup: can not select dual and quad at the same time\n");
++		"setup: can not select any two of dual, quad and no-rx/tx "
++		"at the same time\n");
+ 		return -EINVAL;
+ 	}
+ 	/* if it is SPI_3WIRE mode, DUAL and QUAD should be forbidden
+@@ -3294,7 +3304,8 @@ int spi_setup(struct spi_device *spi)
+ 	 * SPI_CS_WORD has a fallback software implementation,
+ 	 * so it is ignored here.
+ 	 */
+-	bad_bits = spi->mode & ~(spi->controller->mode_bits | SPI_CS_WORD);
++	bad_bits = spi->mode & ~(spi->controller->mode_bits | SPI_CS_WORD |
++				 SPI_NO_TX | SPI_NO_RX);
+ 	/* nothing prevents from working with active-high CS in case if it
+ 	 * is driven by GPIO.
+ 	 */
+@@ -3550,6 +3561,8 @@ static int __spi_validate(struct spi_device *spi, struct spi_message *message)
+ 		 * 2. check tx/rx_nbits match the mode in spi_device
+ 		 */
+ 		if (xfer->tx_buf) {
++			if (spi->mode & SPI_NO_TX)
++				return -EINVAL;
+ 			if (xfer->tx_nbits != SPI_NBITS_SINGLE &&
+ 				xfer->tx_nbits != SPI_NBITS_DUAL &&
+ 				xfer->tx_nbits != SPI_NBITS_QUAD)
+@@ -3563,6 +3576,8 @@ static int __spi_validate(struct spi_device *spi, struct spi_message *message)
+ 		}
+ 		/* check transfer rx_nbits */
+ 		if (xfer->rx_buf) {
++			if (spi->mode & SPI_NO_RX)
++				return -EINVAL;
+ 			if (xfer->rx_nbits != SPI_NBITS_SINGLE &&
+ 				xfer->rx_nbits != SPI_NBITS_DUAL &&
+ 				xfer->rx_nbits != SPI_NBITS_QUAD)
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 99380c0825db..2e9058f79b2d 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -185,6 +185,8 @@ struct spi_device {
+ #define	SPI_TX_OCTAL	0x2000			/* transmit with 8 wires */
+ #define	SPI_RX_OCTAL	0x4000			/* receive with 8 wires */
+ #define	SPI_3WIRE_HIZ	0x8000			/* high impedance turnaround */
++#define	SPI_NO_TX	0x10000			/* no transmit wire */
++#define	SPI_NO_RX	0x20000			/* no receive wire */
+ 	int			irq;
+ 	void			*controller_state;
+ 	void			*controller_data;
+-- 
+2.17.1
 
-Some properties were the accumulated over time.
-
-commit d57a4282d04810417c4ed2a49cbbeda8b3569b18
-"spi/devicetree: Move devicetree support code into spi directory"
-made this part of the SPI subsystem.
-
-This seems as simple as nobody was there to push back and
-say "wait the devices can specify that with code, don't put it
-as properties in device tree". To be honest we have kind of
-moved back and forward on that topic over time. :/
-
-> The idea that the chip select
-> might be being inverted like it is by this whole gpiolib/DT/new binding
-> thing is breaking expectations too.
-
-OK I think you're right, then this patch probably brings the behaviour
-back to expectations and it's how I should have done it in the first
-place. My bad code :/
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-> > The core sets up vital things in .mode from e.g. device tree in
-> > of_spi_parse_dt():
->
-> >         /* Mode (clock phase/polarity/etc.) */
-> >         if (of_property_read_bool(nc, "spi-cpha"))
-> >                 spi->mode |= SPI_CPHA;
-> >         if (of_property_read_bool(nc, "spi-cpol"))
-> >                 spi->mode |= SPI_CPOL;
-> >         if (of_property_read_bool(nc, "spi-3wire"))
-> >                 spi->mode |= SPI_3WIRE;
-> >         if (of_property_read_bool(nc, "spi-lsb-first"))
-> >                 spi->mode |= SPI_LSB_FIRST;
-> >         if (of_property_read_bool(nc, "spi-cs-high"))
-> >                 spi->mode |= SPI_CS_HIGH;
->
-> > All this gets overwritten and ignored when a client just assigns mode
-> > like that. Not just SPI_CS_HIGH. I doubt things are different
-> > with ACPI.
->
-> OTOH most of these are things the device driver should just get right
-> without needing any input from DT, there's a few where there's plausible
-> options (eg, you can imagine pin strap configuration for 3 wire mode)
-
-Yes I actually ran into a case where the same Samsung display support
-both 4 and 3-wire mode so that needs to be configured in the device
-tree depending on the layout of the electronics. Arguably we should have
-just standardized the device tree bindings and let the individual SPI
-drivers parse that themselves in such cases.
-
-> so generally it's not clear how many of these make sense for anything
-> other than spidev.  This binding all predates my involvement so I don't
-> know the thought process here.
-
-I dug out some details, let's see if Grant has some historical anecdotes
-to add. The usage document from back then doesn't really say what
-device properties should be encoded in the device tree and what
-should just be assigned by code and e.g. determined from the
-compatible-string. It was later that especially Rob pointed out that
-random properties on device nodes was overused and that simply
-knowing the compatible is often enough.
-
-I don't know if we ever formalized it, there is nowadays a rule akin to
-
-"if a property can be determined from the compatible-string, and if the
- compatible-string is identifying the variant of the electronic component,
- then do not add this property to the device tree description. Just
- deduce it from the compatible-string, assign it with code to the device
- model of the operating system and handle it inside the operating system."
-
-I think this, while clear and intuitive, wasn't at all clear and intuitive in
-the recent past.
-
-Yours,
-Linus Walleij
