@@ -2,143 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6F22AF39C
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 15:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EFC2AF402
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 15:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbgKKOcR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 09:32:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44210 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726338AbgKKOcR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 11 Nov 2020 09:32:17 -0500
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7DDD9207BB;
-        Wed, 11 Nov 2020 14:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605105136;
-        bh=muSLYibs0ZGONy3L3c3n/+gux1chNtnCxNxW3stscoY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hFrzd16CQbRJJPLAQQTpdLQo9C4aF3SuO8TVnJGuUByiW/sFMF7U+EjQcJUgQWl8q
-         jT9hFgWFtHhUE2CXdk2ELs2U4FsIWQ1qB7qnEyINQQ+BFMIXXvXLTNnvwtf33vgQl0
-         06CfiJvGvJuGCsWAn9fthW6u8Of7C0n1Dv8/H0FQ=
-Received: by mail-oi1-f176.google.com with SMTP id m17so2372584oie.4;
-        Wed, 11 Nov 2020 06:32:16 -0800 (PST)
-X-Gm-Message-State: AOAM531NAuFq9m1ALadD7tdYO2toDm9sZ5TC98+hOz8qDCVgE6TfDCZR
-        FxdyAXq8avsGWHFmn3OeHf74bRwnRnFVNxj5cA==
-X-Google-Smtp-Source: ABdhPJyBAmSgmXMjpq6AAOkmqmbZGZptg0qCA3HGPghqhOTq/+URiIjllWXA/wYIci1U+X2mffVzaZzIIAj2IJIQudY=
-X-Received: by 2002:aca:5dc2:: with SMTP id r185mr2316288oib.106.1605105135706;
- Wed, 11 Nov 2020 06:32:15 -0800 (PST)
+        id S1726460AbgKKOpp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 09:45:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbgKKOpj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 09:45:39 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9308C0613D1;
+        Wed, 11 Nov 2020 06:45:38 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id i7so1576268pgh.6;
+        Wed, 11 Nov 2020 06:45:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QuhezNq2xmeafvchQlzIbY9JsjQJ+3pWNXa3pdsQlqM=;
+        b=n9A+JbAZEp3NuDeNnot2mOxvTR+YMefqh/LkPfVIG96h2znG40AYdzJoppK12VwM9C
+         dEZKlBFP9+OfNTsfH492yUBO3CtBdvH3Dq+FxW9wW4ta5A04judTu+phr4LKJA5pwmQm
+         MwU9K/STQoo3SNT6aScow4A26pZ75n8VsHARak/u6xfM5K+Wlapaa2pmE8JGTmCIwCUq
+         kZjU/bcTaFTT1R+aIOURcGSK1pbZOpBj6euvV6MgbMKRlw38aF8xwYNUPR0msnooajYo
+         GarSJ07O9eUQ0mWSCj1n+ZcOeoZw0ueTCrsxkGFhpO4LG265hmcJ3U7lq0Hp/Cit5lSH
+         RBWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QuhezNq2xmeafvchQlzIbY9JsjQJ+3pWNXa3pdsQlqM=;
+        b=l7waHv/L+RN/duo7oe9Fr5sORu8ovvKNwoXwOqFNLfE++w6M41BtkwTeLpSK8g9KVz
+         Wtkm5JsUY/HTlpBhXfc1lYcoso+vycYWGPvwnziKzCqaG1mOC1ZERuXEJfoDyTzdI0Yv
+         C1/awZyfXtSfXjaCvqetPonn+NBFXnKLS+M0FNAjb6wFWWuSImdjkAFK0Bpa/0EUGQBw
+         OQt4kL0Gq1r7FyHwAeWLO4BkudGUIdh96gsrnuhtFRfH+4xa+lCYiQENHSGVsxtLkgqy
+         XAAhmvGGqMtVSESqBfoiX6mcYKwozPckIWauethJjYcFL82idkN4To2ewY/9NuqwyMVv
+         Q23A==
+X-Gm-Message-State: AOAM530EarNNWF6wjxD0+kEUhnhhi7HGZAXyaEjvnyR+DnAlNMezAPVs
+        p7L7+ykOIpZQ8awLcASwJ83Hj4AGICFZbGEGuwOcL/iqYco=
+X-Google-Smtp-Source: ABdhPJwfFs9Ko3GXgbbFnEJ2HrhiolTOdqkgYSc2ZxfRKOwzjknjGIHQuaLwEkORM4NOTv2HSLWbxTQ9u12afLeSTyg=
+X-Received: by 2002:a63:3e05:: with SMTP id l5mr21572969pga.74.1605105938509;
+ Wed, 11 Nov 2020 06:45:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20201107081420.60325-1-damien.lemoal@wdc.com> <20201107081420.60325-25-damien.lemoal@wdc.com>
- <20201109153625.GB1330401@bogus> <04b266c7-bba9-d847-a526-f64f76c11a50@gmail.com>
-In-Reply-To: <04b266c7-bba9-d847-a526-f64f76c11a50@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 11 Nov 2020 08:32:04 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJy_6ALEKdk7ZOEaM58Xi6NLBYd_aYNeVr2CpyjSBVpmA@mail.gmail.com>
-Message-ID: <CAL_JsqJy_6ALEKdk7ZOEaM58Xi6NLBYd_aYNeVr2CpyjSBVpmA@mail.gmail.com>
-Subject: Re: [PATCH 24/32] dt-bindings: Document kendryte,k210-fpioa bindings
-To:     Sean Anderson <seanga2@gmail.com>
-Cc:     Damien Le Moal <damien.lemoal@wdc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
+References: <20201111141529.98147-1-alexandru.ardelean@analog.com>
+In-Reply-To: <20201111141529.98147-1-alexandru.ardelean@analog.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 11 Nov 2020 16:46:27 +0200
+Message-ID: <CAHp75VcKmiBM1WQTtmJ7L3kpB1xdXX=xOtM2zCAtaszXBcHokg@mail.gmail.com>
+Subject: Re: [PATCH] spi: Add SPI_NO_TX/RX support
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
+        "Bogdan, Dragos" <dragos.bogdan@analog.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 9, 2020 at 9:45 AM Sean Anderson <seanga2@gmail.com> wrote:
+On Wed, Nov 11, 2020 at 4:13 PM Alexandru Ardelean
+<alexandru.ardelean@analog.com> wrote:
 >
-> On 11/9/20 10:36 AM, Rob Herring wrote:
-> > On Sat, Nov 07, 2020 at 05:14:12PM +0900, Damien Le Moal wrote:
-> >> Document the device tree bindings for the Kendryte K210 SoC Fully
-> >> Programmable IO Array (FPIOA) pinctrl driver in
-> >> Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml
-> >>
-> >> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-> >> ---
-> >>  .../bindings/pinctrl/kendryte,k210-fpioa.yaml | 106 ++++++++++++++++++
-> >>  1 file changed, 106 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml b/Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml
-> >> new file mode 100644
-> >> index 000000000000..8730add88ee0
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml
-> >> @@ -0,0 +1,106 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/pinctrl/kendryte,k210-fpioa.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Kendryte K210 FPIOA (Fully Programmable IO Array) Device Tree Bindings
-> >> +
-> >> +maintainers:
-> >> +  - Damien Le Moal <damien.lemoal@wdc.com>
-> >> +
-> >> +description:
-> >> +  The Kendryte K210 SoC Fully Programmable IO Array controller allows assiging
-> >> +  any of 256 possible functions to any of 48 IO pins. Pin function configuration
-> >> +  is performed on a per-pin basis.
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    const: kendryte,k210-fpioa
-> >> +
-> >> +  reg:
-> >> +    description: FPIOA controller register space base address and size
-> >> +
-> >> +  clocks:
-> >> +    minItems: 2
-> >> +    maxItems: 2
-> >
-> > Can drop these. Implied by 'items' length.
-> >
-> >> +    items:
-> >> +      - description: Controller reference clock source
-> >> +      - description: APB interface clock source
-> >> +
-> >> +  clock-names:
-> >> +    minItems: 2
-> >> +    maxItems: 2
-> >> +    items:
-> >> +      - const: ref
-> >> +      - const: pclk
-> >> +
-> >> +  resets:
-> >> +    maxItems: 1
-> >> +
-> >> +  kendryte,sysctl:
-> >> +    minItems: 1
-> >> +    maxItems: 1
-> >> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> >> +    description: |
-> >> +      phandle to the system controller node
-> >> +
-> >> +  kendryte,power-offset:
-> >> +    minItems: 1
-> >> +    maxItems: 1
-> >> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >> +    description: |
-> >> +      Offset of the power domain control register of the system controller.
-> >
-> > Sounds like you should be using power-domains binding.
+> From: Dragos Bogdan <dragos.bogdan@analog.com>
 >
-> This is for pin power domains. E.g. pins 0-5 can be set to 1V8 or 3V3 logic levels.
+> Transmit/receive only is a valid SPI mode. For example, the MOSI/TX line
+> might be missing from an ADC while for a DAC the MISO/RX line may be
+> optional. This patch adds these two new modes: SPI_NO_TX and
+> SPI_NO_RX. This way, the drivers will be able to identify if any of
+> these two lines is missing and to adjust the transfers accordingly.
 
-Okay, please make that clear in the description. You can combine the
-above 2 properties into one which is a phandle+offset.
+Shouldn't this update a binding documentation?
 
-Rob
+...
+
+> -       /* check mode to prevent that DUAL and QUAD set at the same time
+> +       /* check mode to prevent that any two of DUAL, QUAD and NO_MOSI/MISO
+> +        * are set at the same time
+>          */
+
+/*
+ * Perhaps switch to proper multi-line comment style
+ * at the same time?
+ */
+
+...
+
+>  #define        SPI_TX_OCTAL    0x2000                  /* transmit with 8 wires */
+>  #define        SPI_RX_OCTAL    0x4000                  /* receive with 8 wires */
+>  #define        SPI_3WIRE_HIZ   0x8000                  /* high impedance turnaround */
+> +#define        SPI_NO_TX       0x10000                 /* no transmit wire */
+> +#define        SPI_NO_RX       0x20000                 /* no receive wire */
+
+Perhaps switch to use BIT() instead at some point (as a prerequisite
+patch, for example)
+
+-- 
+With Best Regards,
+Andy Shevchenko
