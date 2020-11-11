@@ -2,60 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FB62AF9A3
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 21:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7A02AFA37
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 22:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgKKUSq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 15:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S1726867AbgKKVMJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 16:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbgKKUSp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 15:18:45 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F85C0613D1
-        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 12:18:45 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id 62so2119612pgg.12
-        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 12:18:45 -0800 (PST)
+        with ESMTP id S1725966AbgKKVMJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 16:12:09 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33551C0613D1
+        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 13:12:09 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id i13so2246416pgm.9
+        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 13:12:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=t7L0L4aP1v5HurXmPpQkRg8dlnv78jIP5mkUxJgxuzo=;
-        b=HhF8ZH8gqrwzeF1wtXCMl4qyjAm/wHMUqFu+yKo1Yecwxu99UXKC6KTTjE8jCAFMOf
-         fbZHbCmmzsjbwCoqFf3g5upWc/ZScWN585j2KlDLsFK8DPIsnjSEFAQnHl/N4XBluVEu
-         ebqw9zU5D4yqi8mRNRhaXbETOnq4KRZ2cUspqWwpZYApF1ODvHbksLS1eWhoXUdsuPUG
-         z/jbz2ptIQTvzL24WrJhBPGoviTlgFzT+ExSGikhIGMATLysd5nPLCmIsM+9hcZo0N9H
-         wDkrBiEwfhBWYR1gpHD8ryVAU5Mo4rkApCeesx05sdhxVHFZdKkPl+D1P2a8lIHH3i/p
-         mfyw==
+        bh=IqeYh89riCh59WyKlH/n9QSLdgiFQIgE+bTjhc6Hh2M=;
+        b=i/OGnyOPM0FNt7Bzwxd15eDnLFWlWDRqKxMZ+0ZF+ZT+9lPn4KB/IOiIB7XdmOUhmr
+         9MATTX1yFm6o4z5WRyyxHBWaVWXs3EF13y1KlOPPlqmyHgeKtuU+HPhbjFqvUZFIHHTG
+         3Z9i66IqTYrmxT/f7OFsh8GqjhMKbEMRFpOYfj1nAKF7Rw2RGdLgQ8W3zIXOcWVhOKPZ
+         II4yvIV3FviFv6jS/G3TizU+FdgcNcZ0PT83/uj2y8sy9lhYh0W2QlNMPQJsIcO996U6
+         c/cm/xOmWip57ucB7il5Ti9kwFGgUusT5Zu3X+Rhjy3tzUnrTNhZgJQ3Ntn5vhQRLNbT
+         i4kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=t7L0L4aP1v5HurXmPpQkRg8dlnv78jIP5mkUxJgxuzo=;
-        b=PTleFC7vvsaWkEPiIO8B9zqBYNwrN4K3KUUXj0T6Pftz7mrRebzF931Ide4cOKR3P8
-         yxCRx9FAmzuGOjKKNEGgKjISDmjgKB5EQr5a2ismKAJXkObeP4mZomC28ONfXPRwbz+4
-         jzgWAivwvPxUMprcDBlk0iC/cn5Mb9GLUU7hEt25g07oS3GmJkVCjee/8c+MuX3Ea5nM
-         +HEOOHeIkGWPbNAuST2v9avymm0vAQdw8K7fzBhQBqF+vnLOCARXOAGup73zVQaaVbhn
-         0nUgkfY2u5HBM6YX+4ERjB6SxVaX4wRLz0yBzEgiLgjbOBRcVZdrWAeJR/zEwv0EXYco
-         iwsA==
-X-Gm-Message-State: AOAM5333oUZO/VP17ajbrGxBE5fGxU6788DMF2oGcv8RZ2W4HCaMHpuV
-        s17DTK3/SmzCnk/BsrSGSv8=
-X-Google-Smtp-Source: ABdhPJwlJVM0knxNxCHpgzOV9rAwctwcCsOlyH79rWLsyxy3ok4wc+UuM480/f2iLS8C//48p3hWKg==
-X-Received: by 2002:a17:90b:496:: with SMTP id bh22mr5603924pjb.120.1605125924956;
-        Wed, 11 Nov 2020 12:18:44 -0800 (PST)
+        bh=IqeYh89riCh59WyKlH/n9QSLdgiFQIgE+bTjhc6Hh2M=;
+        b=TUM++HZ1woe0JGsOiCWVRJtHovsVojS1z7maCNWQkHxJBrqrVZf0eXU3xh/UZZMhre
+         Md0iMf6vqiOwiRaGRAHKqvdsOLaQOxfOCwa8kwrTp2v1A9bmq7u90lOvgIOKEUmdpqPj
+         kaZdewLTnt0bO0Oh8a7cY7NBySV48X07NYwiWlBIThZ4+TAdN98HXDWwfluy/WXMdRtT
+         7UPzEIaYueIQwwm6j/nnqnmxK5ebpWlsliX6gZ310hnYrzJ5sQLos2N16I9q+LlkXdVl
+         AearsWs5N5hB663CR/jBacapz4L2msMaTp6IAtTG7tpB8WVsqpugD8oU8A90EV4tkl7f
+         C/pw==
+X-Gm-Message-State: AOAM53236RwE/s8QAjyolISJAeW0GSMCmPrMOlicVG+IHIDrBPjFiCO4
+        5rg7P5V64bQbxt369ImADOI=
+X-Google-Smtp-Source: ABdhPJwHU6gmpQTIo1Hr0ZdNPH+Nlip2FNikuJGHlGsgf47IpF/3/MSKkj7BdRNI/g+rB/Gl6dkwGA==
+X-Received: by 2002:a63:ff5d:: with SMTP id s29mr12074748pgk.290.1605129128761;
+        Wed, 11 Nov 2020 13:12:08 -0800 (PST)
 Received: from [10.67.48.230] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id a7sm3229833pjz.10.2020.11.11.12.18.40
+        by smtp.googlemail.com with ESMTPSA id b21sm135664pjo.43.2020.11.11.13.12.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2020 12:18:43 -0800 (PST)
-Subject: Re: [PATCH 2/4] spi: bcm2835: Fix use-after-free on unbind
+        Wed, 11 Nov 2020 13:12:08 -0800 (PST)
+Subject: Re: [PATCH 4/4] spi: bcm-qspi: Fix use-after-free on unbind
 To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+        Kamal Dasu <kdasu.kdev@gmail.com>
 References: <bd6eaa71-46cc-0aca-65ff-ae716864cbe3@gmail.com>
  <cover.1605121038.git.lukas@wunner.de>
- <ad66e0a0ad96feb848814842ecf5b6a4539ef35c.1605121038.git.lukas@wunner.de>
+ <5e31a9a59fd1c0d0b795b2fe219f25e5ee855f9d.1605121038.git.lukas@wunner.de>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  mQGiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -111,12 +111,12 @@ Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  caxTGgc5zzQHeX67eMzrGomG3ZnIxmd1sAbgvJUDaD2GrYlulfwGWwWyTNbWRvMighVdPkSF
  6XFgQaosWxkV0OELLy2N485YrTr2Uq64VKyxpncLh50e2RnyAJ9Za0Dx0yyp44iD1OvHtkEI
  M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
-Message-ID: <898d4aff-8d37-27a6-242c-3b19541faaec@gmail.com>
-Date:   Wed, 11 Nov 2020 12:18:38 -0800
+Message-ID: <a3f8010e-98ff-f3b7-55d0-0d888c60fa20@gmail.com>
+Date:   Wed, 11 Nov 2020 13:12:06 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <ad66e0a0ad96feb848814842ecf5b6a4539ef35c.1605121038.git.lukas@wunner.de>
+In-Reply-To: <5e31a9a59fd1c0d0b795b2fe219f25e5ee855f9d.1605121038.git.lukas@wunner.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -125,22 +125,33 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 11/11/20 11:07 AM, Lukas Wunner wrote:
-> bcm2835_spi_remove() accesses the driver's private data after calling
-> spi_unregister_controller() even though that function releases the last
-> reference on the spi_controller and thereby frees the private data.
+> bcm_qspi_remove() calls spi_unregister_master() even though
+> bcm_qspi_probe() calls devm_spi_register_master().  The spi_master is
+> therefore unregistered and freed twice on unbind.
+> 
+> Moreover, since commit 0392727c261b ("spi: bcm-qspi: Handle clock probe
+> deferral"), bcm_qspi_probe() leaks the spi_master allocation if the call
+> to devm_clk_get_optional() fails.
 > 
 > Fix by switching over to the new devm_spi_alloc_master() helper which
-> keeps the private data accessible until the driver has unbound.
+> keeps the private data accessible until the driver has unbound and also
+> avoids the spi_master leak on probe.
 > 
-> Fixes: f8043872e796 ("spi: add driver for BCM2835")
-> Reported-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
+> While at it, fix an ordering issue in bcm_qspi_remove() wherein
+> spi_unregister_master() is called after uninitializing the hardware,
+> disabling the clock and freeing an IRQ data structure.  The correct
+> order is to call spi_unregister_master() *before* those teardown steps
+> because bus accesses may still be ongoing until that function returns.
+> 
+> Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
 > Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Cc: <stable@vger.kernel.org> # v3.10+: 123456789abc: spi: Introduce device-managed SPI controller allocation
-> Cc: <stable@vger.kernel.org> # v3.10+
-> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: <stable@vger.kernel.org> # v4.9+: 123456789abc: spi: Introduce device-managed SPI controller allocation
+> Cc: <stable@vger.kernel.org> # v4.9+
+> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+
+We did have an use-after-free before your patch, thanks!
 -- 
 Florian
