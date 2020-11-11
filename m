@@ -2,35 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8062AF566
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 16:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0B52AF568
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 16:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727505AbgKKPsW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 10:48:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43326 "EHLO mail.kernel.org"
+        id S1726812AbgKKPs2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 10:48:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43398 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726812AbgKKPsW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 11 Nov 2020 10:48:22 -0500
+        id S1726830AbgKKPs1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 11 Nov 2020 10:48:27 -0500
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10A3620756;
-        Wed, 11 Nov 2020 15:48:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CFFC920709;
+        Wed, 11 Nov 2020 15:48:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605109701;
-        bh=9NBbD+OcbdaFnuN/BNx8tHXhybYgFcK2wS0IumABVjA=;
+        s=default; t=1605109707;
+        bh=oI7bvlM+XQDEUeywMg6ebIblQMGk3Om1vOkpZO/GiDc=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=mZYZgwnFS1u6URxxDk0XFRNSQbpc/TEyV+FSc44GZsZqFhqRUJM8h4UC6a1phYlmD
-         lMlDGKnb6yl5MwWV+xL0CeDkwYmMW/tfj72cpLX2hNCNLg2/ACr8Kg6C2Z9hlXCwcd
-         sqJdgJK/IV43fNkvxK6zb636BbApvz+/phE63bRM=
-Date:   Wed, 11 Nov 2020 15:48:06 +0000
+        b=M+qgUB2Bl4xyC5wdaUVMnzVJqksnVEgZnqmx89ZpE0juN0msNFTrJz9KQpGABQnBM
+         ik+emIG7deoGW32rtRB68Orloi1Jb1z1M8ebd4ixqx/kg6KwrXS5vFPCPZrhwkWnyC
+         aw0PFhAvm6axgqgNgeYJax+qfGj48VwfhHjXD5v0=
+Date:   Wed, 11 Nov 2020 15:48:12 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>, linux-spi@vger.kernel.org
-Cc:     joel@jms.id.au, linux-kernel@vger.kernel.org
-In-Reply-To: <20201110214736.25718-1-eajames@linux.ibm.com>
-References: <20201110214736.25718-1-eajames@linux.ibm.com>
-Subject: Re: [PATCH] spi: fsi: Fix transfer returning without finalizing message
-Message-Id: <160510968063.12304.5298198996185481749.b4-ty@kernel.org>
+To:     Zhang Qilong <zhangqilong3@huawei.com>, baolin.wang7@gmail.com,
+        zhang.lyra@gmail.com, orsonzhai@gmail.com
+Cc:     linux-spi@vger.kernel.org
+In-Reply-To: <20201106015035.139574-1-zhangqilong3@huawei.com>
+References: <20201106015035.139574-1-zhangqilong3@huawei.com>
+Subject: Re: [PATCH] spi: sprd: fix reference leak in sprd_spi_remove
+Message-Id: <160510968064.12304.11059570696073252679.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -38,12 +39,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 10 Nov 2020 15:47:36 -0600, Eddie James wrote:
-> In the case that the SPI mux isn't set, the transfer_one_message
-> function returns without finalizing the message. This means that
-> the transfer never completes, resulting in hung tasks and an
-> eventual kernel panic. Fix it by finalizing the transfer in this
-> case.
+On Fri, 6 Nov 2020 09:50:35 +0800, Zhang Qilong wrote:
+> pm_runtime_get_sync will increment pm usage counter even it
+> failed. Forgetting to pm_runtime_put_noidle will result in
+> reference leak in sprd_spi_remove, so we should fix it.
 
 Applied to
 
@@ -51,8 +50,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: fsi: Fix transfer returning without finalizing message
-      commit: ee4ad5d06509b3aea79b6a77bebd09ef891bed8d
+[1/1] spi: sprd: fix reference leak in sprd_spi_remove
+      commit: e4062765bc2a41e025e29dd56bad798505036427
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
