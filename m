@@ -2,72 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 122142AE3B9
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Nov 2020 23:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F882AE505
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 01:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730894AbgKJWxr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Nov 2020 17:53:47 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:47184 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730254AbgKJWxr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Nov 2020 17:53:47 -0500
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
-        (envelope-from <andrew@lunn.ch>)
-        id 1kccW6-006MY8-H1; Tue, 10 Nov 2020 23:53:34 +0100
-Date:   Tue, 10 Nov 2020 23:53:34 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sven Van Asbroeck <thesven73@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Frederic LAMBERT <frdrc66@gmail.com>,
-        Gabor Juhos <juhosg@openwrt.org>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH net v2] net: phy: spi_ks8995: Do not overwrite SPI mode
- flags
-Message-ID: <20201110225334.GN1456319@lunn.ch>
-References: <20201110142032.24071-1-TheSven73@gmail.com>
- <CAHp75Ve7jZyshwLuNKvuk7uvj43SpcZT_=csOYXVFUqhtmFo3A@mail.gmail.com>
- <CAGngYiV6i=fsySH35UgL2fKiNp1VAfdkJ=hrZ8nmMn_1fkaa-Q@mail.gmail.com>
+        id S1727275AbgKKAnm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Nov 2020 19:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732345AbgKKAnk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Nov 2020 19:43:40 -0500
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BE0C0613D1;
+        Tue, 10 Nov 2020 16:43:38 -0800 (PST)
+Received: by mail-qv1-xf44.google.com with SMTP id b11so123804qvr.9;
+        Tue, 10 Nov 2020 16:43:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=te32oWHsYf0/wGLDWEI6cIibT/+xmHk3vK5gsEaTJAE=;
+        b=Wh/1MusAFQr1P+adqfyA+GYD7VTCLGKwroma4jrLWO4bKZDVPWwPPaTcCmv57qRTDL
+         T53+mUwexHTysyi5ganvZXdKGQHF3lU0zJTMDda6725pSeSMzzoiLzFaw6J7zr41DYWj
+         7noNgjLBb5huieK1rcPGJvyjDutXL7O+h+gVI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=te32oWHsYf0/wGLDWEI6cIibT/+xmHk3vK5gsEaTJAE=;
+        b=MQ+ji9pRDuJvYVKh5IeP51KgdWRZpyl3zwPTM5cT7FJSlZYFvA5IYlVkPDqb2qY3kX
+         AbImDHAOObTZwzN1RKe6iZVsQoySqJTDXUWQOdhcnI1OxSEwcjicTHpJLSAvqpO2JEtJ
+         vX/tLtEWXd8P7v9rx2q0n44Yus0iUgHKG6GdeU3NPVafXjAwJkPh9PK0LSZqY3J29qy6
+         oZLMj4QIw6Mj8NYGkO+tHZW7QZv/4lNUDSuSTM/3HZJoLXssMDHSMh4xi/R+H1glzD5v
+         eVDdzhnw57cCrfdYsMIaQydRKFdLyQB+peBlvOllM2V5Hd+WSSgNL0IrjYS5jJcFXSg/
+         +7AA==
+X-Gm-Message-State: AOAM5310kVKksoR5RP+2GX6xzH8Cpc21GRTklz8XxAJUsILsUwwa9lsZ
+        xrXyKKa3tFovGMuDJx11bToj0X9sEu/u40WW+So=
+X-Google-Smtp-Source: ABdhPJxwSR8jaL2QblXNkRiGuqX6BzhLqsEEFBqEJ4jzOyA/LlxG2dPKvFfXqc04nuaPz1WCZpERZqP6TCIzq43Jytg=
+X-Received: by 2002:ad4:5387:: with SMTP id i7mr21854679qvv.43.1605055417808;
+ Tue, 10 Nov 2020 16:43:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGngYiV6i=fsySH35UgL2fKiNp1VAfdkJ=hrZ8nmMn_1fkaa-Q@mail.gmail.com>
+References: <20201110214736.25718-1-eajames@linux.ibm.com>
+In-Reply-To: <20201110214736.25718-1-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 11 Nov 2020 00:43:25 +0000
+Message-ID: <CACPK8XdUs9o-F5Ap0Y-w287yocXnS64LKe=MHxGZjOZuA=7-uA@mail.gmail.com>
+Subject: Re: [PATCH] spi: fsi: Fix transfer returning without finalizing message
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-spi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 12:06:37PM -0500, Sven Van Asbroeck wrote:
-> PING Jakub
-> 
-> On Tue, Nov 10, 2020 at 11:30 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> > I see that this is a fix for backporing, but maybe you can send a
-> > patches on top of this to:
-> >   1) introduce
-> >  #define SPI_MODE_MASK  (SPI_CPHA | SPI_CPOL)
-> >        spi->mode &= ~SPI_MODE_MASK;
-> > > +       spi->mode |= SPI_MODE_0;
-> >
-> Jakub,
-> 
-> Is it possible to merge Andy's suggestion into net?
-> Or should this go into net-next?
+On Tue, 10 Nov 2020 at 21:47, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> In the case that the SPI mux isn't set, the transfer_one_message
+> function returns without finalizing the message. This means that
+> the transfer never completes, resulting in hung tasks and an
+> eventual kernel panic. Fix it by finalizing the transfer in this
+> case.
+>
+> Fixes: 9211a441e606 ("spi: fsi: Check mux status before transfers")
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-I would keep with the minimal fix for the moment, it keeps the
-dependencies simple.
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-When you add a helper, it should really be somewhere in the SPI code,
-not the net code. So we need both the SPI and the net maintainers to
-cooperate to get the helper merged, and then this driver using the
-helper.
-
-	Andrew
+> ---
+>  drivers/spi/spi-fsi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+> index 8a440c7078ef..3920cd3286d8 100644
+> --- a/drivers/spi/spi-fsi.c
+> +++ b/drivers/spi/spi-fsi.c
+> @@ -477,7 +477,7 @@ static int fsi_spi_transfer_one_message(struct spi_controller *ctlr,
+>
+>         rc = fsi_spi_check_mux(ctx->fsi, ctx->dev);
+>         if (rc)
+> -               return rc;
+> +               goto error;
+>
+>         list_for_each_entry(transfer, &mesg->transfers, transfer_list) {
+>                 struct fsi_spi_sequence seq;
+> --
+> 2.26.2
+>
