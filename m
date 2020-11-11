@@ -2,159 +2,143 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3682AF324
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 15:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6F22AF39C
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 15:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726774AbgKKOKl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 09:10:41 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:34176 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726149AbgKKOKk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 09:10:40 -0500
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ABDtxR2020013;
-        Wed, 11 Nov 2020 09:10:37 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com with ESMTP id 34npaawjxn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Nov 2020 09:10:37 -0500
-Received: from SCSQMBX10.ad.analog.com (SCSQMBX10.ad.analog.com [10.77.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 0ABEAZgL046900
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Wed, 11 Nov 2020 09:10:36 -0500
-Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by SCSQMBX10.ad.analog.com
- (10.77.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Wed, 11 Nov
- 2020 06:10:34 -0800
-Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX10.ad.analog.com
- (10.77.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Wed, 11 Nov 2020 06:10:34 -0800
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0ABEAVc7003735;
-        Wed, 11 Nov 2020 09:10:31 -0500
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <broonie@kernel.org>, <dragos.bogdan@analog.com>,
-        <ardeleanalex@gmail.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH] spi: Add SPI_NO_TX/RX support
-Date:   Wed, 11 Nov 2020 16:15:29 +0200
-Message-ID: <20201111141529.98147-1-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727000AbgKKOcR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 09:32:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44210 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726338AbgKKOcR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 11 Nov 2020 09:32:17 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7DDD9207BB;
+        Wed, 11 Nov 2020 14:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605105136;
+        bh=muSLYibs0ZGONy3L3c3n/+gux1chNtnCxNxW3stscoY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hFrzd16CQbRJJPLAQQTpdLQo9C4aF3SuO8TVnJGuUByiW/sFMF7U+EjQcJUgQWl8q
+         jT9hFgWFtHhUE2CXdk2ELs2U4FsIWQ1qB7qnEyINQQ+BFMIXXvXLTNnvwtf33vgQl0
+         06CfiJvGvJuGCsWAn9fthW6u8Of7C0n1Dv8/H0FQ=
+Received: by mail-oi1-f176.google.com with SMTP id m17so2372584oie.4;
+        Wed, 11 Nov 2020 06:32:16 -0800 (PST)
+X-Gm-Message-State: AOAM531NAuFq9m1ALadD7tdYO2toDm9sZ5TC98+hOz8qDCVgE6TfDCZR
+        FxdyAXq8avsGWHFmn3OeHf74bRwnRnFVNxj5cA==
+X-Google-Smtp-Source: ABdhPJyBAmSgmXMjpq6AAOkmqmbZGZptg0qCA3HGPghqhOTq/+URiIjllWXA/wYIci1U+X2mffVzaZzIIAj2IJIQudY=
+X-Received: by 2002:aca:5dc2:: with SMTP id r185mr2316288oib.106.1605105135706;
+ Wed, 11 Nov 2020 06:32:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-11_06:2020-11-10,2020-11-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 mlxlogscore=858 clxscore=1011 lowpriorityscore=0
- suspectscore=0 bulkscore=0 impostorscore=0 adultscore=0 spamscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011110082
+References: <20201107081420.60325-1-damien.lemoal@wdc.com> <20201107081420.60325-25-damien.lemoal@wdc.com>
+ <20201109153625.GB1330401@bogus> <04b266c7-bba9-d847-a526-f64f76c11a50@gmail.com>
+In-Reply-To: <04b266c7-bba9-d847-a526-f64f76c11a50@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 11 Nov 2020 08:32:04 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJy_6ALEKdk7ZOEaM58Xi6NLBYd_aYNeVr2CpyjSBVpmA@mail.gmail.com>
+Message-ID: <CAL_JsqJy_6ALEKdk7ZOEaM58Xi6NLBYd_aYNeVr2CpyjSBVpmA@mail.gmail.com>
+Subject: Re: [PATCH 24/32] dt-bindings: Document kendryte,k210-fpioa bindings
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     Damien Le Moal <damien.lemoal@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Dragos Bogdan <dragos.bogdan@analog.com>
+On Mon, Nov 9, 2020 at 9:45 AM Sean Anderson <seanga2@gmail.com> wrote:
+>
+> On 11/9/20 10:36 AM, Rob Herring wrote:
+> > On Sat, Nov 07, 2020 at 05:14:12PM +0900, Damien Le Moal wrote:
+> >> Document the device tree bindings for the Kendryte K210 SoC Fully
+> >> Programmable IO Array (FPIOA) pinctrl driver in
+> >> Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml
+> >>
+> >> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+> >> ---
+> >>  .../bindings/pinctrl/kendryte,k210-fpioa.yaml | 106 ++++++++++++++++++
+> >>  1 file changed, 106 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml b/Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml
+> >> new file mode 100644
+> >> index 000000000000..8730add88ee0
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/pinctrl/kendryte,k210-fpioa.yaml
+> >> @@ -0,0 +1,106 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/pinctrl/kendryte,k210-fpioa.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Kendryte K210 FPIOA (Fully Programmable IO Array) Device Tree Bindings
+> >> +
+> >> +maintainers:
+> >> +  - Damien Le Moal <damien.lemoal@wdc.com>
+> >> +
+> >> +description:
+> >> +  The Kendryte K210 SoC Fully Programmable IO Array controller allows assiging
+> >> +  any of 256 possible functions to any of 48 IO pins. Pin function configuration
+> >> +  is performed on a per-pin basis.
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    const: kendryte,k210-fpioa
+> >> +
+> >> +  reg:
+> >> +    description: FPIOA controller register space base address and size
+> >> +
+> >> +  clocks:
+> >> +    minItems: 2
+> >> +    maxItems: 2
+> >
+> > Can drop these. Implied by 'items' length.
+> >
+> >> +    items:
+> >> +      - description: Controller reference clock source
+> >> +      - description: APB interface clock source
+> >> +
+> >> +  clock-names:
+> >> +    minItems: 2
+> >> +    maxItems: 2
+> >> +    items:
+> >> +      - const: ref
+> >> +      - const: pclk
+> >> +
+> >> +  resets:
+> >> +    maxItems: 1
+> >> +
+> >> +  kendryte,sysctl:
+> >> +    minItems: 1
+> >> +    maxItems: 1
+> >> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> >> +    description: |
+> >> +      phandle to the system controller node
+> >> +
+> >> +  kendryte,power-offset:
+> >> +    minItems: 1
+> >> +    maxItems: 1
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    description: |
+> >> +      Offset of the power domain control register of the system controller.
+> >
+> > Sounds like you should be using power-domains binding.
+>
+> This is for pin power domains. E.g. pins 0-5 can be set to 1V8 or 3V3 logic levels.
 
-Transmit/receive only is a valid SPI mode. For example, the MOSI/TX line
-might be missing from an ADC while for a DAC the MISO/RX line may be
-optional. This patch adds these two new modes: SPI_NO_TX and
-SPI_NO_RX. This way, the drivers will be able to identify if any of
-these two lines is missing and to adjust the transfers accordingly.
+Okay, please make that clear in the description. You can combine the
+above 2 properties into one which is a phandle+offset.
 
-Signed-off-by: Dragos Bogdan <dragos.bogdan@analog.com>
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- drivers/spi/spi.c       | 25 ++++++++++++++++++++-----
- include/linux/spi/spi.h |  2 ++
- 2 files changed, 22 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 22679c8645db..fc12fcf11126 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1934,6 +1934,9 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 	/* Device DUAL/QUAD mode */
- 	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
- 		switch (value) {
-+		case 0:
-+			spi->mode |= SPI_NO_TX;
-+			break;
- 		case 1:
- 			break;
- 		case 2:
-@@ -1955,6 +1958,9 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 
- 	if (!of_property_read_u32(nc, "spi-rx-bus-width", &value)) {
- 		switch (value) {
-+		case 0:
-+			spi->mode |= SPI_NO_RX;
-+			break;
- 		case 1:
- 			break;
- 		case 2:
-@@ -3275,12 +3281,16 @@ int spi_setup(struct spi_device *spi)
- 	unsigned	bad_bits, ugly_bits;
- 	int		status;
- 
--	/* check mode to prevent that DUAL and QUAD set at the same time
-+	/* check mode to prevent that any two of DUAL, QUAD and NO_MOSI/MISO
-+	 * are set at the same time
- 	 */
--	if (((spi->mode & SPI_TX_DUAL) && (spi->mode & SPI_TX_QUAD)) ||
--		((spi->mode & SPI_RX_DUAL) && (spi->mode & SPI_RX_QUAD))) {
-+	if ((hweight_long(spi->mode &
-+		(SPI_TX_DUAL | SPI_TX_QUAD | SPI_NO_TX)) > 1) ||
-+	    (hweight_long(spi->mode &
-+		(SPI_RX_DUAL | SPI_RX_QUAD | SPI_NO_RX)) > 1)) {
- 		dev_err(&spi->dev,
--		"setup: can not select dual and quad at the same time\n");
-+		"setup: can not select any two of dual, quad and no-rx/tx "
-+		"at the same time\n");
- 		return -EINVAL;
- 	}
- 	/* if it is SPI_3WIRE mode, DUAL and QUAD should be forbidden
-@@ -3294,7 +3304,8 @@ int spi_setup(struct spi_device *spi)
- 	 * SPI_CS_WORD has a fallback software implementation,
- 	 * so it is ignored here.
- 	 */
--	bad_bits = spi->mode & ~(spi->controller->mode_bits | SPI_CS_WORD);
-+	bad_bits = spi->mode & ~(spi->controller->mode_bits | SPI_CS_WORD |
-+				 SPI_NO_TX | SPI_NO_RX);
- 	/* nothing prevents from working with active-high CS in case if it
- 	 * is driven by GPIO.
- 	 */
-@@ -3550,6 +3561,8 @@ static int __spi_validate(struct spi_device *spi, struct spi_message *message)
- 		 * 2. check tx/rx_nbits match the mode in spi_device
- 		 */
- 		if (xfer->tx_buf) {
-+			if (spi->mode & SPI_NO_TX)
-+				return -EINVAL;
- 			if (xfer->tx_nbits != SPI_NBITS_SINGLE &&
- 				xfer->tx_nbits != SPI_NBITS_DUAL &&
- 				xfer->tx_nbits != SPI_NBITS_QUAD)
-@@ -3563,6 +3576,8 @@ static int __spi_validate(struct spi_device *spi, struct spi_message *message)
- 		}
- 		/* check transfer rx_nbits */
- 		if (xfer->rx_buf) {
-+			if (spi->mode & SPI_NO_RX)
-+				return -EINVAL;
- 			if (xfer->rx_nbits != SPI_NBITS_SINGLE &&
- 				xfer->rx_nbits != SPI_NBITS_DUAL &&
- 				xfer->rx_nbits != SPI_NBITS_QUAD)
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 99380c0825db..2e9058f79b2d 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -185,6 +185,8 @@ struct spi_device {
- #define	SPI_TX_OCTAL	0x2000			/* transmit with 8 wires */
- #define	SPI_RX_OCTAL	0x4000			/* receive with 8 wires */
- #define	SPI_3WIRE_HIZ	0x8000			/* high impedance turnaround */
-+#define	SPI_NO_TX	0x10000			/* no transmit wire */
-+#define	SPI_NO_RX	0x20000			/* no receive wire */
- 	int			irq;
- 	void			*controller_state;
- 	void			*controller_data;
--- 
-2.17.1
-
+Rob
