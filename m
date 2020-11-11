@@ -2,36 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0B52AF568
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 16:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067FC2AF56A
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 16:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726812AbgKKPs2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 10:48:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43398 "EHLO mail.kernel.org"
+        id S1727610AbgKKPse (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 10:48:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43446 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726830AbgKKPs1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 11 Nov 2020 10:48:27 -0500
+        id S1727340AbgKKPse (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 11 Nov 2020 10:48:34 -0500
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CFFC920709;
-        Wed, 11 Nov 2020 15:48:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0409C2072C;
+        Wed, 11 Nov 2020 15:48:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605109707;
-        bh=oI7bvlM+XQDEUeywMg6ebIblQMGk3Om1vOkpZO/GiDc=;
+        s=default; t=1605109713;
+        bh=Vje9tSJh73NycJPShBspvjAw9v4lHDiFLPEBIsUQorM=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=M+qgUB2Bl4xyC5wdaUVMnzVJqksnVEgZnqmx89ZpE0juN0msNFTrJz9KQpGABQnBM
-         ik+emIG7deoGW32rtRB68Orloi1Jb1z1M8ebd4ixqx/kg6KwrXS5vFPCPZrhwkWnyC
-         aw0PFhAvm6axgqgNgeYJax+qfGj48VwfhHjXD5v0=
-Date:   Wed, 11 Nov 2020 15:48:12 +0000
+        b=LwPdFOkIGbiFebdmm9Rjevedo87On5lKJOCwPDSwO2bdUum+28ByzKOfzesiRtTMy
+         7hTGL7EZKpApQ9elAIfeg/BTzNuIEQ4YMgx1uFPHlmalPC6NrGO6SKsoD4NncvreeU
+         Kmo5wmRu3rg4EoF+WO4fKzApjmrJuqwanPxKps8U=
+Date:   Wed, 11 Nov 2020 15:48:17 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Zhang Qilong <zhangqilong3@huawei.com>, baolin.wang7@gmail.com,
-        zhang.lyra@gmail.com, orsonzhai@gmail.com
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20201106015035.139574-1-zhangqilong3@huawei.com>
-References: <20201106015035.139574-1-zhangqilong3@huawei.com>
-Subject: Re: [PATCH] spi: sprd: fix reference leak in sprd_spi_remove
-Message-Id: <160510968064.12304.11059570696073252679.b4-ty@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-spi@vger.kernel.org,
+        Simon Han <z.han@kunbus.com>, linux-kernel@vger.kernel.org
+In-Reply-To: <20201106150706.29089-1-TheSven73@gmail.com>
+References: <20201106150706.29089-1-TheSven73@gmail.com>
+Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO descriptors
+Message-Id: <160510968064.12304.14797288117651443603.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -39,10 +41,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 6 Nov 2020 09:50:35 +0800, Zhang Qilong wrote:
-> pm_runtime_get_sync will increment pm usage counter even it
-> failed. Forgetting to pm_runtime_put_noidle will result in
-> reference leak in sprd_spi_remove, so we should fix it.
+On Fri, 6 Nov 2020 10:07:06 -0500, Sven Van Asbroeck wrote:
+> Commit f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
+> introduced the optional use of GPIO descriptors for chip selects.
+> 
+> A side-effect of this change: when a SPI bus uses GPIO descriptors,
+> all its client devices have SPI_CS_HIGH set in spi->mode. This flag is
+> required for the SPI bus to operate correctly.
+> 
+> [...]
 
 Applied to
 
@@ -50,8 +57,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: sprd: fix reference leak in sprd_spi_remove
-      commit: e4062765bc2a41e025e29dd56bad798505036427
+[1/1] spi: fix client driver breakages when using GPIO descriptors
+      commit: 766c6b63aa044e84b045803b40b14754d69a2a1d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
