@@ -2,101 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EFC2AF402
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 15:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5A82AF429
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 15:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgKKOpp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 09:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S1727279AbgKKOyX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 09:54:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbgKKOpj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 09:45:39 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9308C0613D1;
-        Wed, 11 Nov 2020 06:45:38 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id i7so1576268pgh.6;
-        Wed, 11 Nov 2020 06:45:38 -0800 (PST)
+        with ESMTP id S1727422AbgKKOyU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 09:54:20 -0500
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCFFC0613D1;
+        Wed, 11 Nov 2020 06:54:20 -0800 (PST)
+Received: by mail-ot1-x343.google.com with SMTP id 30so2354166otx.9;
+        Wed, 11 Nov 2020 06:54:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QuhezNq2xmeafvchQlzIbY9JsjQJ+3pWNXa3pdsQlqM=;
-        b=n9A+JbAZEp3NuDeNnot2mOxvTR+YMefqh/LkPfVIG96h2znG40AYdzJoppK12VwM9C
-         dEZKlBFP9+OfNTsfH492yUBO3CtBdvH3Dq+FxW9wW4ta5A04judTu+phr4LKJA5pwmQm
-         MwU9K/STQoo3SNT6aScow4A26pZ75n8VsHARak/u6xfM5K+Wlapaa2pmE8JGTmCIwCUq
-         kZjU/bcTaFTT1R+aIOURcGSK1pbZOpBj6euvV6MgbMKRlw38aF8xwYNUPR0msnooajYo
-         GarSJ07O9eUQ0mWSCj1n+ZcOeoZw0ueTCrsxkGFhpO4LG265hmcJ3U7lq0Hp/Cit5lSH
-         RBWg==
+         :cc:content-transfer-encoding;
+        bh=s26bSvuqGwtlpmnW3ixIL61JgOIY8AH9b81Xo/VdBLE=;
+        b=AIirCFf6VcRbiUqAeiEp7cJjZZh0oS2CVANPvn31qwaSkpP3vMouje7Jjk00DAl7Gx
+         BxRcFBPe8ZcuFwF80aQO51g6vxOViLbnSxqccBMJvGjyp01wv/zuMOqMUcWI0Bq7Imdo
+         x/p+XIn+pQpIACVojazCi1xXCVN0NNXlyPSn0soWQMQquywtfRJSwinH6CD3S2rSTQPV
+         5vIcamJTn9/bESmrZqwoxl12eQPbig6ZL6PC+0QdrPg5aZdaJVnb90BFEMEC7FiVHsSl
+         WPwYLgNSZi53YI7zJdMSYu0G7/pLDTXzaBlf8j1sb/0TuV8y7UgNGv5yp4SPDpY7b+g/
+         9rzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QuhezNq2xmeafvchQlzIbY9JsjQJ+3pWNXa3pdsQlqM=;
-        b=l7waHv/L+RN/duo7oe9Fr5sORu8ovvKNwoXwOqFNLfE++w6M41BtkwTeLpSK8g9KVz
-         Wtkm5JsUY/HTlpBhXfc1lYcoso+vycYWGPvwnziKzCqaG1mOC1ZERuXEJfoDyTzdI0Yv
-         C1/awZyfXtSfXjaCvqetPonn+NBFXnKLS+M0FNAjb6wFWWuSImdjkAFK0Bpa/0EUGQBw
-         OQt4kL0Gq1r7FyHwAeWLO4BkudGUIdh96gsrnuhtFRfH+4xa+lCYiQENHSGVsxtLkgqy
-         XAAhmvGGqMtVSESqBfoiX6mcYKwozPckIWauethJjYcFL82idkN4To2ewY/9NuqwyMVv
-         Q23A==
-X-Gm-Message-State: AOAM530EarNNWF6wjxD0+kEUhnhhi7HGZAXyaEjvnyR+DnAlNMezAPVs
-        p7L7+ykOIpZQ8awLcASwJ83Hj4AGICFZbGEGuwOcL/iqYco=
-X-Google-Smtp-Source: ABdhPJwfFs9Ko3GXgbbFnEJ2HrhiolTOdqkgYSc2ZxfRKOwzjknjGIHQuaLwEkORM4NOTv2HSLWbxTQ9u12afLeSTyg=
-X-Received: by 2002:a63:3e05:: with SMTP id l5mr21572969pga.74.1605105938509;
- Wed, 11 Nov 2020 06:45:38 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s26bSvuqGwtlpmnW3ixIL61JgOIY8AH9b81Xo/VdBLE=;
+        b=IwytsLwJDXs0TQZixqjOgZ2AJw7H2TgvCpsLb1flExTKaLUSHYoJVQPWgJ6yPgpxeF
+         Zsii9I0M3jzu35heBTmdUWIqBesCnNYoeM3LmEBNri747XmtkoQejedhe6/SaIFCRChq
+         87KKn8XN0uYzKXRK9hMk8oWi9Qf4yWIxoOdp9MY2si9U+MWNy/iIxwrn/vWYYigrXVer
+         ajgLC9+wFzi0PfrU4dz2bDOD05VhDJTvVGDHd8pGFRbLznvor79AysrPB4WEfmNMQOF1
+         hfG7Icz+YkpJorjprkHDeJTVr9ctTblWWheCzDFMYAh0BAv3tKzy9ciloBZCe9EX2v7t
+         dEsA==
+X-Gm-Message-State: AOAM531ZDv6ZEZa811K418j9HYiZ7qrNO67HatPFa2wZv2K7zEG0pnss
+        F/zeIj3HyVEXh9/tq6CgvYenxultYCl3ejTEL7M=
+X-Google-Smtp-Source: ABdhPJzKUtpV+ovbTBFcdsFufUkf+Vj3JoBmKzpdfDsurM1/47xOcoCmDKG5UZM5GI7XShYRhktP+FIPWagRiJoz/ps=
+X-Received: by 2002:a9d:6f91:: with SMTP id h17mr2669643otq.224.1605106459501;
+ Wed, 11 Nov 2020 06:54:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20201111141529.98147-1-alexandru.ardelean@analog.com>
-In-Reply-To: <20201111141529.98147-1-alexandru.ardelean@analog.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 Nov 2020 16:46:27 +0200
-Message-ID: <CAHp75VcKmiBM1WQTtmJ7L3kpB1xdXX=xOtM2zCAtaszXBcHokg@mail.gmail.com>
+References: <20201111141529.98147-1-alexandru.ardelean@analog.com> <CAHp75VcKmiBM1WQTtmJ7L3kpB1xdXX=xOtM2zCAtaszXBcHokg@mail.gmail.com>
+In-Reply-To: <CAHp75VcKmiBM1WQTtmJ7L3kpB1xdXX=xOtM2zCAtaszXBcHokg@mail.gmail.com>
+From:   Alexandru Ardelean <ardeleanalex@gmail.com>
+Date:   Wed, 11 Nov 2020 16:54:08 +0200
+Message-ID: <CA+U=DsrNLR=5LyoCjdtyD9Y=KddZVyE8c+cLr2Xzef68iyeSyA@mail.gmail.com>
 Subject: Re: [PATCH] spi: Add SPI_NO_TX/RX support
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        "Bogdan, Dragos" <dragos.bogdan@analog.com>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>
+        "Bogdan, Dragos" <dragos.bogdan@analog.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 4:13 PM Alexandru Ardelean
-<alexandru.ardelean@analog.com> wrote:
+On Wed, Nov 11, 2020 at 4:45 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> From: Dragos Bogdan <dragos.bogdan@analog.com>
+> On Wed, Nov 11, 2020 at 4:13 PM Alexandru Ardelean
+> <alexandru.ardelean@analog.com> wrote:
+> >
+> > From: Dragos Bogdan <dragos.bogdan@analog.com>
+> >
+> > Transmit/receive only is a valid SPI mode. For example, the MOSI/TX lin=
+e
+> > might be missing from an ADC while for a DAC the MISO/RX line may be
+> > optional. This patch adds these two new modes: SPI_NO_TX and
+> > SPI_NO_RX. This way, the drivers will be able to identify if any of
+> > these two lines is missing and to adjust the transfers accordingly.
 >
-> Transmit/receive only is a valid SPI mode. For example, the MOSI/TX line
-> might be missing from an ADC while for a DAC the MISO/RX line may be
-> optional. This patch adds these two new modes: SPI_NO_TX and
-> SPI_NO_RX. This way, the drivers will be able to identify if any of
-> these two lines is missing and to adjust the transfers accordingly.
+> Shouldn't this update a binding documentation?
 
-Shouldn't this update a binding documentation?
+oh,
+good catch
 
-...
+>
+> ...
+>
+> > -       /* check mode to prevent that DUAL and QUAD set at the same tim=
+e
+> > +       /* check mode to prevent that any two of DUAL, QUAD and NO_MOSI=
+/MISO
+> > +        * are set at the same time
+> >          */
+>
+> /*
+>  * Perhaps switch to proper multi-line comment style
+>  * at the same time?
+>  */
 
-> -       /* check mode to prevent that DUAL and QUAD set at the same time
-> +       /* check mode to prevent that any two of DUAL, QUAD and NO_MOSI/MISO
-> +        * are set at the same time
->          */
+=C2=AF\_(=E3=83=84)_/=C2=AF
 
-/*
- * Perhaps switch to proper multi-line comment style
- * at the same time?
- */
+Not sure what SPI prefers as multi-line comment style,
+But ok.
 
-...
+>
+> ...
+>
+> >  #define        SPI_TX_OCTAL    0x2000                  /* transmit wit=
+h 8 wires */
+> >  #define        SPI_RX_OCTAL    0x4000                  /* receive with=
+ 8 wires */
+> >  #define        SPI_3WIRE_HIZ   0x8000                  /* high impedan=
+ce turnaround */
+> > +#define        SPI_NO_TX       0x10000                 /* no transmit =
+wire */
+> > +#define        SPI_NO_RX       0x20000                 /* no receive w=
+ire */
+>
+> Perhaps switch to use BIT() instead at some point (as a prerequisite
+> patch, for example)
 
->  #define        SPI_TX_OCTAL    0x2000                  /* transmit with 8 wires */
->  #define        SPI_RX_OCTAL    0x4000                  /* receive with 8 wires */
->  #define        SPI_3WIRE_HIZ   0x8000                  /* high impedance turnaround */
-> +#define        SPI_NO_TX       0x10000                 /* no transmit wire */
-> +#define        SPI_NO_RX       0x20000                 /* no receive wire */
+I'll leave this up to the maintainer preference.
+Maybe I'll do it as a second patch here, so that I can be dropped.
 
-Perhaps switch to use BIT() instead at some point (as a prerequisite
-patch, for example)
-
--- 
-With Best Regards,
-Andy Shevchenko
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
