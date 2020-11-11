@@ -2,82 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4512AF68F
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 17:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C56A2AF88E
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Nov 2020 19:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbgKKQcS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Nov 2020 11:32:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53974 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725979AbgKKQcQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 11 Nov 2020 11:32:16 -0500
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 95440206F1;
-        Wed, 11 Nov 2020 16:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605112336;
-        bh=72CkBFpUBSDsvXuGAkNdpZijpYjYImRaVmVjuqTUVSg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2hPhikYb426IkOVPIC3MrzCFHFFGowsTGGP9W+7zyN2WVeHWWvDlNLo0YTpIc14Cl
-         4kMiFfMUpyUQby7aqWmQpQHmXv+//df6OZWIQfRbKkEK51K4foczvQCK7ZoJZcbw7A
-         Dlg0/B1WCirPhIo3ozdMghQ5HMuVWTGLGfDj6oGg=
-Date:   Wed, 11 Nov 2020 16:32:00 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Sven Van Asbroeck <thesven73@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Simon Han <z.han@kunbus.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO
- descriptors
-Message-ID: <20201111163200.GC4847@sirena.org.uk>
-References: <20201106150706.29089-1-TheSven73@gmail.com>
- <160510968064.12304.14797288117651443603.b4-ty@kernel.org>
- <CAGngYiVAdPSCEQm5pJdFQ+3VpwNH1vGD6rPNK1_SQK3Uvfbt5A@mail.gmail.com>
+        id S1726216AbgKKSwA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Nov 2020 13:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbgKKSv7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Nov 2020 13:51:59 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF22C0613D1;
+        Wed, 11 Nov 2020 10:51:59 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id r9so1149908pjl.5;
+        Wed, 11 Nov 2020 10:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l1Pegl0AGNVKaWQlJGzbmp8EJmfVq5zNsJCWYXHqOnQ=;
+        b=Sma0B//i35MjdI7HCYP+08L7s9F239NGmzphbelfWa2ENFCQpLLXlUAe/x+rjedsc6
+         TN+lVpjjqEDnl8+S0iZ9yMEzpBhMl5fsd5c58bomv+UyWH/687H7nkHD0TdeMVM3uTiZ
+         wi3zkTu6uazExkFK/R8FQeJUrhOrFd4rRoyQgA0m8XFEEuQFykA1uPP96y3dIEon9A/N
+         KC0zThADnhzemVUeqw1HtK/p7TqhPM5784XAMpECJJ4Hr1AM0LV+Pa+FfGLe9qnRIKbi
+         Z4d8oGK7j/bCc7FjqRt2I0NQC8CWxCC16nYIoi07nkO2QONKakdpxzTBFJhi9A8Nav90
+         YI3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l1Pegl0AGNVKaWQlJGzbmp8EJmfVq5zNsJCWYXHqOnQ=;
+        b=YFcZZ9YOuc85yuwDNvCLtrEk0RtYOMOvoxOUIAjqKqElWgCKMo80ezV0ruSdS/HDT4
+         35dWB7gUFIkH0GNg0wJXU/3GHF3/urSfWdjnuTu4NOBP2c5NKfMpcT8pVoJmaNU6/I6O
+         Vqao/nvAxkbq6/5zh3WqJzPUPcWXpj/Tkc/MFs+91GdiwBlmkv5O/RKruHzrjZbVGahe
+         1PDJ2sNZXWQG1XEOaac82YK1zze+ZStjS5eHXOHRhVhnqqikkW1M4URv5g+yq7xrtTby
+         lsMQ0hjMyT34Ad2/AqHO02o6zXkFdDjlkhdzgav08bqP4PY5SRpEcBxUa7h3nQuFu9JC
+         ATxg==
+X-Gm-Message-State: AOAM5336sVi2bXgE7ZaIRTsnxGwP8I895qWgK93IyM4U8uTv/8A4RWTH
+        v2Gu2Tldiz0Oj42lhDrSNxE=
+X-Google-Smtp-Source: ABdhPJyVUxQq2cBj6TbT7F1VtW6AHWOcUSdgcCYuaWRLgf846LUydwLec7E5iGdGUkH1FvYA9TxFWg==
+X-Received: by 2002:a17:902:bd01:b029:d4:d73d:7644 with SMTP id p1-20020a170902bd01b02900d4d73d7644mr22293923pls.69.1605120718101;
+        Wed, 11 Nov 2020 10:51:58 -0800 (PST)
+Received: from dtor-ws ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id v18sm3367522pfn.35.2020.11.11.10.51.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2020 10:51:57 -0800 (PST)
+Date:   Wed, 11 Nov 2020 10:51:55 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-spi@vger.kernel.org, David Jander <david@protonic.nl>
+Subject: Re: [PATCH v2 2/2] Input: ads7846: do not overwrite spi->mode flags
+ set by spi framework
+Message-ID: <20201111185155.GX1003057@dtor-ws>
+References: <20201027095724.18654-1-o.rempel@pengutronix.de>
+ <20201027095724.18654-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JWEK1jqKZ6MHAcjA"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGngYiVAdPSCEQm5pJdFQ+3VpwNH1vGD6rPNK1_SQK3Uvfbt5A@mail.gmail.com>
-X-Cookie: I'm not available for comment..
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201027095724.18654-3-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Oct 27, 2020 at 10:57:24AM +0100, Oleksij Rempel wrote:
+> Do not overwrite spi->mode flags set by spi framework, otherwise the
+> chip select polarity will get lost.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
---JWEK1jqKZ6MHAcjA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-On Wed, Nov 11, 2020 at 11:24:14AM -0500, Sven Van Asbroeck wrote:
+Mark, could you please pick up this one through your tree as well? I do
+not believe that outstanding patches that I have in my queue for this
+driver will clash with it.  
 
-> Now that our minds are still focused on this subject, should
-> commit 138c9c32f090 ("spi: spidev: Fix CS polarity if GPIO descriptors
-> are used")
-> be reverted?
+Thanks!
 
-If you think changes should be made to the code please propose patches
-making them - reverts are just normal patches with changelogs.
+> ---
+>  drivers/input/touchscreen/ads7846.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+> index 8fd7fc39c4fd..f2dc2c8ab5ec 100644
+> --- a/drivers/input/touchscreen/ads7846.c
+> +++ b/drivers/input/touchscreen/ads7846.c
+> @@ -1288,7 +1288,8 @@ static int ads7846_probe(struct spi_device *spi)
+>  	 * may not.  So we stick to very-portable 8 bit words, both RX and TX.
+>  	 */
+>  	spi->bits_per_word = 8;
+> -	spi->mode = SPI_MODE_0;
+> +	spi->mode &= ~SPI_MODE_X_MASK;
+> +	spi->mode |= SPI_MODE_0;
+>  	err = spi_setup(spi);
+>  	if (err < 0)
+>  		return err;
+> -- 
+> 2.28.0
+> 
 
---JWEK1jqKZ6MHAcjA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+sEf8ACgkQJNaLcl1U
-h9CmaAf6A0ij5B2nu0gr76TVf+bSTOgpbMF9zasf5KZtW4r9mjsLt9cG8UL7EV/d
-y1K9ISunQ1OrYvORnXa2zi/NDR+sc7hZ3Qv3yF4Uow4YBhCQb8Kgl2+IsuwKbSFG
-jt6WGWseblvCeg320k6JWlDrv2yKzEJUOeCHf7uWH6cm9wF0/87EE/XJ88O/13iG
-juxL85pM05WwiqYGcjdZA0EiyrzX0V5bOQqQhjtDg29QpnugizUh1itHJrMEJaGH
-H6ZBcXhSmWMltY6gqUV840P1sdsNLYGlL8i7cLAlg63LJVuM/GOC5iP/Ck2tGTnw
-bkrL7HIbmV/zRL8T+Z1/bFjZND0uZw==
-=JgJA
------END PGP SIGNATURE-----
-
---JWEK1jqKZ6MHAcjA--
+-- 
+Dmitry
