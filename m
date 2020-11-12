@@ -2,114 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF212B0043
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Nov 2020 08:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62ED2B0441
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Nov 2020 12:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725902AbgKLHV3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Nov 2020 02:21:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgKLHV3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Nov 2020 02:21:29 -0500
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9536C0613D6
-        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 23:21:28 -0800 (PST)
-Received: by mail-il1-x142.google.com with SMTP id a20so4319975ilk.13
-        for <linux-spi@vger.kernel.org>; Wed, 11 Nov 2020 23:21:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ab2X7D8rQV+rUh3MG2vmCj3eeC4kvsZIlLSd9hzapi4=;
-        b=o695KMSlvlKK8s2nZB3RnNNjASazEvqZxx7SlWDLIfkA7DjvTGHQKtr7OeUjA+JK/W
-         6AsWT7BcKyt6qJFEm42kuZq/NhNqqk+O/5M33EKitgOxYwwKwIv4xVOTPW0KtSDKxWoi
-         N/WtmAKQP0MX+WWeb1AnqArll7M6n1MD4y/2o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ab2X7D8rQV+rUh3MG2vmCj3eeC4kvsZIlLSd9hzapi4=;
-        b=WiilN/ULoadMTFhnC6oCCPx0kogr5q3n/zXuRNy6yVvc/PZLYKF1l6blDNo6hIk2IH
-         Q88enG54CSJiG1/SsikJlVXi4i4IeSHtA2fb/UBsxBF9FTT2yvxX9lkZtQ+YnbIz1S3R
-         yvNh1Yk++EmSg5um1E3cpWqFaEanUdHYsK0wii5kJ4FG2okW1go8SldHL6ta4WG8UiHB
-         4NzEyH+HgdNQ6cSd7g4d6KgFbWgyrrL62tC8tTF913B56PHK5r9DQKr15++f2Espbyvp
-         KhpwTbllAPqBxBpTz7SS84HqWlSuBqqDOz9ynEE2OppVewFHoOc971GSPW289U3YHB4n
-         BveQ==
-X-Gm-Message-State: AOAM533dCim50Fkm1vwaOs38+SAxxcA7kgzXgqjwJ65qTB0z9gfJpoal
-        pzBmZd8gOQ/K02YSGqVEWGPavpNsFn37a2dUuHdW
-X-Google-Smtp-Source: ABdhPJwG3l0icsmB1IU32yQpvlFd8k79z2GNzpvnNWW307BnW87hWqYbQJNHXepVhLwR9j1SCouAAn38lAiRUpIrLCw=
-X-Received: by 2002:a92:512:: with SMTP id q18mr20861835ile.147.1605165688041;
- Wed, 11 Nov 2020 23:21:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20201107081420.60325-1-damien.lemoal@wdc.com> <20201107081420.60325-9-damien.lemoal@wdc.com>
-In-Reply-To: <20201107081420.60325-9-damien.lemoal@wdc.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 11 Nov 2020 23:21:17 -0800
-Message-ID: <CAOnJCUJO3Oqy94MbT-eV+xaJn9obE0H=zpvuJuch-aY5e9bfgQ@mail.gmail.com>
-Subject: Re: [PATCH 08/32] riscv: Fix kernel time_init()
-To:     Damien Le Moal <damien.lemoal@wdc.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        id S1727762AbgKLLrn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Nov 2020 06:47:43 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:10250 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728201AbgKLLlw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Nov 2020 06:41:52 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0ACBd5pe021048;
+        Thu, 12 Nov 2020 05:41:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=j/1abh6t7YrrzXU1SesVqlhurYOExGuzAxH/2JLe2ws=;
+ b=E6gdlPIyElcjoqqMFHiI7N2SUDwd0NEVIJ9pQdaud6Al7tw8inWp8UDSv4irRqaS54Wp
+ p1Swh03GraIF3TM9yZH9JbhvdfAI+KhTwS8WeCmPdtU0mjiYrT6YOPNazoedsIDg4pEt
+ dhSSHWY7L7bsTujScVFKcgiUFdZwJHIhBcqBIwZZPIgiOH86IE0CwtRcnymRRPuc5xNT
+ EcyS7hfqrXJq9WHheHBH1d79iowXh8N7mYEIH2ZdrpWCPoTnQuoY41A56uKoc6lzBYGI
+ 8TFlYsAzGSz9fQ9+zUrz0OlChjc5Wrob+tK8g53FiRYTEWH9kArxv3vUHtyoBOpOVijw Ig== 
+Received: from ediex02.ad.cirrus.com ([5.172.152.52])
+        by mx0a-001ae601.pphosted.com with ESMTP id 34rn2yh5q1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 12 Nov 2020 05:41:38 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Thu, 12 Nov
+ 2020 11:41:36 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
+ Transport; Thu, 12 Nov 2020 11:41:36 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 88F877C;
+        Thu, 12 Nov 2020 11:41:36 +0000 (UTC)
+Date:   Thu, 12 Nov 2020 11:41:36 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Sven Van Asbroeck <thesven73@gmail.com>
+CC:     Mark Brown <broonie@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Anderson <seanga2@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Simon Han <z.han@kunbus.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO
+ descriptors
+Message-ID: <20201112114136.GE10899@ediswmail.ad.cirrus.com>
+References: <20201106150706.29089-1-TheSven73@gmail.com>
+ <160510968064.12304.14797288117651443603.b4-ty@kernel.org>
+ <CAGngYiVAdPSCEQm5pJdFQ+3VpwNH1vGD6rPNK1_SQK3Uvfbt5A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAGngYiVAdPSCEQm5pJdFQ+3VpwNH1vGD6rPNK1_SQK3Uvfbt5A@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
+ mlxscore=0 priorityscore=1501 bulkscore=0 impostorscore=0 phishscore=0
+ malwarescore=0 clxscore=1011 adultscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011120069
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Nov 7, 2020 at 12:15 AM Damien Le Moal <damien.lemoal@wdc.com> wrote:
->
-> If of_clk_init() is not called in time_init(), clock providers defined
-> in the system device tree are not initialized, resulting in failures for
-> other devices to initialize due to missing clocks.
-> Similarly to other architectures and to the default kernel time_init()
-> implementation, call of_clk_init() before executing timer_probe() in
-> time_init().
->
-> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-> ---
->  arch/riscv/kernel/time.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/arch/riscv/kernel/time.c b/arch/riscv/kernel/time.c
-> index 4d3a1048ad8b..8a5cf99c0776 100644
-> --- a/arch/riscv/kernel/time.c
-> +++ b/arch/riscv/kernel/time.c
-> @@ -4,6 +4,7 @@
->   * Copyright (C) 2017 SiFive
->   */
->
-> +#include <linux/of_clk.h>
->  #include <linux/clocksource.h>
->  #include <linux/delay.h>
->  #include <asm/sbi.h>
-> @@ -24,6 +25,8 @@ void __init time_init(void)
->         riscv_timebase = prop;
->
->         lpj_fine = riscv_timebase / HZ;
-> +
-> +       of_clk_init(NULL);
->         timer_probe();
->  }
->
-> --
-> 2.28.0
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+On Wed, Nov 11, 2020 at 11:24:14AM -0500, Sven Van Asbroeck wrote:
+> On Wed, Nov 11, 2020 at 10:48 AM Mark Brown <broonie@kernel.org> wrote:
+> >
+> > Applied to
+> >
+> >    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thank you !
+> 
+> Now that our minds are still focused on this subject, should
+> commit 138c9c32f090 ("spi: spidev: Fix CS polarity if GPIO descriptors
+> are used")
+> be reverted?
+> 
+> This fixed spidev to deal with SPI_CS_HIGH on gpiod.
+> But after our fix, its behaviour will probably be broken again.
+> 
+> Another candidate for revert is
+> commit ada9e3fcc175 ("spi: dw: Correct handling of native chipselect")
+> although I don't understand that code well enough to be sure.
+> 
+> Adding Charles Keepax.
 
+Looks like the code has changed a fair amount since my patch. The
+important detail from it was trying to clarify the semantics of the
+controller->set_cs callback. That function is called with a boolean
+argument and that argument could have two possible meanings:
 
-Reviewed-by: Atish Patra <atish.patra@wdc.com>
+1) True means apply a high logic level to the chip select line.
+2) True mean apply chip select.
 
--- 
-Regards,
-Atish
+Under interpretation 2) the chip select line would be set to a
+different logic level depending on if the device is active high or
+active low.
+
+If I remember correctly at the point of my patch the core had just
+changed between the two a couple of times but now consistently did 1)
+(and looks like it still does), my patch intended to updated the
+spi-dw driver to match that, as my SPI had stopped working. I think
+it then turned out, my patch broke some other use-cases and that
+the bit in the IP basically had 2) semantics in hardware. Which is
+what this patch fixed:
+
+commit 9aea644ca17b ("spi: dw: Fix native CS being unset")
+
+After that patch my patch is mostly replaced so I don't think it
+would make any sense to revert my patch at this point, and I
+don't think your patch will break the spi-dw driver. I don't
+have easy access to the hardware right now to test, but I will
+give it is quick run when that option becomes available to me
+again.
+
+Your fix looks good to me, but I suspect you do need to fix the
+spidev stuff although I have haven't looked at that in detail.
+
+Thanks,
+Charles
