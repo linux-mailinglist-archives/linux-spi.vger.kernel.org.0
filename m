@@ -2,102 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBEC2B54B9
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 00:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 764032B5513
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 00:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726357AbgKPXDp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Nov 2020 18:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725379AbgKPXDp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 18:03:45 -0500
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D94C0613CF
-        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 15:03:45 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        id S1729573AbgKPXeK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 18:34:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41492 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726227AbgKPXeJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 16 Nov 2020 18:34:09 -0500
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 97D98100E417A;
-        Tue, 17 Nov 2020 00:03:38 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id B956A870AC; Tue, 17 Nov 2020 00:03:39 +0100 (CET)
-Date:   Tue, 17 Nov 2020 00:03:39 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Navid Emamdoost <navid.emamdoost@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH for-5.10] spi: gpio: Don't leak SPI master in probe error
- path
-Message-ID: <20201116230339.GA25992@wunner.de>
-References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
- <49102f5bbb3f1592d9cfd7b39ac5e131a031f950.1605512876.git.lukas@wunner.de>
- <CAHQ1cqHs+jTzp2dYx0cAosLaoBWXpmBivW5bPKbckS=un9k9SA@mail.gmail.com>
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0188E22314;
+        Mon, 16 Nov 2020 23:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605569649;
+        bh=jYfF/Df9sJgPWiehVRzemv1qkjlKpJfp3meLqrvQK6s=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=o0e08W1IMyTXEbl6IULFYskAlrpG2rKkfJNYBXos/b+6mXpdIePpUxP3AgqVp0blf
+         nd3k3Aa/UQRRYHCCDuM5DELBo9uBTC3v8INL/u4fxtE9A9iQv5pMxBsdfUEySeXCXD
+         oxtYv1iYMHxmFwWkD8ldP13x0zhioCE3udoFb+No=
+Date:   Mon, 16 Nov 2020 23:33:50 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     tudor.ambarus@microchip.com,
+        Zhihao Cheng <chengzhihao1@huawei.com>,
+        vadivel.muruganx.ramuthevar@linux.intel.com,
+        p.zabel@pengutronix.de, vigneshr@ti.com
+Cc:     yi.zhang@huawei.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20201116141836.2970579-1-chengzhihao1@huawei.com>
+References: <20201116141836.2970579-1-chengzhihao1@huawei.com>
+Subject: Re: [PATCH v2] spi: cadence-quadspi: Fix error return code in cqspi_probe
+Message-Id: <160556963072.29969.15448651614213250723.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHQ1cqHs+jTzp2dYx0cAosLaoBWXpmBivW5bPKbckS=un9k9SA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 11:23:43AM -0800, Andrey Smirnov wrote:
-> On Mon, Nov 16, 2020 at 12:44 AM Lukas Wunner <lukas@wunner.de> wrote:
-> > If the call to devm_spi_register_master() fails on probe of the GPIO SPI
-> > driver, the spi_master struct is erroneously not freed:
-> >
-> > After allocating the spi_master, its reference count is 1.  The driver
-> > unconditionally decrements the reference count on unbind using a devm
-> > action.  Before calling devm_spi_register_master(), the driver
-> > unconditionally increments the reference count because on success,
-> > that function will decrement the reference count on unbind.  However on
-> > failure, devm_spi_register_master() does *not* decrement the reference
-> > count, so the spi_master is leaked.
-> 
-> Not sure I fully understand this. On failure
-> devm_spi_register_master() will return a negative error code which
-> should result in probe failure and release of devres resource, right?
+On Mon, 16 Nov 2020 22:18:36 +0800, Zhihao Cheng wrote:
+> Fix to return the error code from
+> devm_reset_control_get_optional_exclusive() instaed of 0
+> in cqspi_probe().
 
-Yes, but that just decrements the refcount from 2 to 1:
+Applied to
 
-    /* refcount initialized to 1 */
-    master = spi_alloc_master(dev, sizeof(*spi_gpio));
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-    ...
+Thanks!
 
-    /* refcount incremented to 2 */
-    return devm_spi_register_master(&pdev->dev, spi_master_get(master));
+[1/1] spi: cadence-quadspi: Fix error return code in cqspi_probe
+      commit: ac9978fcad3c5abc43cdd225441ce9459c36e16b
 
-    ...
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-    /* on failure of devm_spi_register_master(), refcount decremented to 1
-       by devres action */
-    spi_gpio_put()
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> > The issue was introduced by commits 8b797490b4db ("spi: gpio: Make sure
-> > spi_master_put() is called in every error path") and 79567c1a321e ("spi:
-> > gpio: Use devm_spi_register_master()"), which sought to plug leaks
-> > introduced by 9b00bc7b901f ("spi: spi-gpio: Rewrite to use GPIO
-> > descriptors") but missed this remaining leak.
-> 
-> That extra spi_master_get() that might be problematic was present in
-> the code before 8b797490b4db ("spi: gpio: Make sure spi_master_put()
-> is called in every error path") and I think was first introduced in
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers?h=v5.9-rc4&id=702a4879ec337463f858c8ab467482cce260bf18
-> 
-> Or am I missing something?
-
-The extra spi_master_get() was introduced by 79567c1a321e.
-I don't see it in spi-gpio.c before that commit.
-
-Its quite possible that I missed something myself, nobody's perfect.
-But just from code inspection it seems wrong the way it is right now.
-
-Shout if I failed to explain it properly and I'll try again. :)
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-
-Lukas
+Mark
