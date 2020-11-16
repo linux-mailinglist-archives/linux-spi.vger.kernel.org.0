@@ -2,145 +2,129 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AF32B3FAF
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 10:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1302B4258
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 12:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgKPJYk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Nov 2020 04:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S1728283AbgKPLMe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 06:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726215AbgKPJYj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 04:24:39 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968C2C0613D1
-        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 01:24:39 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id 131so3030974pfb.9
-        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 01:24:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d+yksa/L/+O/IgdR91ydcBfWFIPXBuS75+yDTd5UP+s=;
-        b=gXltbHYZFSKk18EC26Ru7n9PknIiEOdJ2O+cT/vCIPlOHUCfJqi9YdOqw7xsvSNoBg
-         MVzBkiImO+1jrabMHyeelgBpZjgoxB68Jzf8D6yRLpUwFtwof81LxHJBtIohMEyf9EC2
-         YW6iKO56lePLu4l1zmeBAtINBrLJzg5odeOXg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d+yksa/L/+O/IgdR91ydcBfWFIPXBuS75+yDTd5UP+s=;
-        b=JmhxDcbKjzoHufBIAn+6x1BNIxpUFmtFBvTp5lMO/1UE+TVq52lOa0HAUcSk5SDoTh
-         wzB1afFA/osfauy8vfbhR5SZojJsiuIR2Q8gA89C058d0Jx1+m+7pDYnfffKyn82rn25
-         5dGBI74TUiVwYxNB92kIVLhqCfy0ChZOxh+iqoU0uGl55Av1zQFef9pzT5GFtLZF2z1p
-         wjEJp/jIiR4X3JQqLmMkOUOhJU5RMB1XB+wZXwPrnbafkhvvc9/Ub/tUaHnXwJjRPoeA
-         6GOl1EGYWKmvyhx8ymCxH3R0DV2H5Ghpyna/kRQsTHKCRecrRbSdjpks5cwSxVqTUe4I
-         8cSA==
-X-Gm-Message-State: AOAM532guROrlFweczD9e3mwW+NU6CM23mU7nOdhY0dVku0EWxDYIEt7
-        U/IdkXUnnPWTTZeFq2ZIKDf/woHf+I8xCGKo+sbWrw==
-X-Google-Smtp-Source: ABdhPJxnG8c6YKbLRbp3hBZ10giLjivBjhq+YC6gIMq+1Ad5c5KvK5LrvLXI/LpkaZc2VBbaRYxZE9YglNEVs/M6lNY=
-X-Received: by 2002:a65:4905:: with SMTP id p5mr11516053pgs.299.1605518678986;
- Mon, 16 Nov 2020 01:24:38 -0800 (PST)
+        with ESMTP id S1726419AbgKPLMe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 06:12:34 -0500
+X-Greylist: delayed 420 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Nov 2020 03:12:34 PST
+Received: from mx2.mailbox.org (mx2a.mailbox.org [IPv6:2001:67c:2050:104:0:2:25:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72426C0613CF
+        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 03:12:34 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 14707A0E18;
+        Mon, 16 Nov 2020 12:05:30 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id fuAU4mW-USTn; Mon, 16 Nov 2020 12:05:26 +0100 (CET)
+Subject: Re: [PATCH for-5.10] spi: mt7621: Don't leak SPI master in probe
+ error path
+To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
+ <800f7035a29c1ae65386f2e17a2b5ef9d2b39268.1605512876.git.lukas@wunner.de>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <be0493ac-cc02-c79a-afa9-48e959a8442f@denx.de>
+Date:   Mon, 16 Nov 2020 12:05:25 +0100
 MIME-Version: 1.0
-References: <1605084902-13151-1-git-send-email-bayi.cheng@mediatek.com> <1605084902-13151-2-git-send-email-bayi.cheng@mediatek.com>
-In-Reply-To: <1605084902-13151-2-git-send-email-bayi.cheng@mediatek.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Mon, 16 Nov 2020 17:24:28 +0800
-Message-ID: <CAATdQgCk6cmD35AQ_pHvotA+Mh8tEiYnHkQVzr5L7ZrpU18z1Q@mail.gmail.com>
-Subject: Re: [PATCH v1] spi: spi-mtk-nor: add axi clock control for MT8192 spi-nor
-To:     Bayi Cheng <bayi.cheng@mediatek.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-spi@vger.kernel.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        srv_heupstream@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <800f7035a29c1ae65386f2e17a2b5ef9d2b39268.1605512876.git.lukas@wunner.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: de-DE
+Content-Transfer-Encoding: 7bit
+X-MBO-SPAM-Probability: 
+X-Rspamd-Score: -5.81 / 15.00 / 15.00
+X-Rspamd-Queue-Id: E30291778
+X-Rspamd-UID: e63e3f
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 4:55 PM Bayi Cheng <bayi.cheng@mediatek.com> wrote:
->
-> From: bayi cheng <bayi.cheng@mediatek.com>
->
-> MT8192 spi-nor is an independent sub system, we need extra control axi
-> bus clock for it. Add support for the additional axi clock to allow it
-> to be configured appropriately.
->
-> Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
+On 16.11.20 09:23, Lukas Wunner wrote:
+> If the calls to device_reset() or devm_spi_register_controller() fail on
+> probe of the MediaTek MT7621 SPI driver, the spi_controller struct is
+> erroneously not freed.  Fix by switching over to the new
+> devm_spi_alloc_master() helper.
+> 
+> Moreover, the SYS clock is enabled on probe but not disabled if any of
+> the subsequent probe steps fails.
+> 
+> Finally, there's an ordering issue in mt7621_spi_remove() wherein
+> the spi_controller is unregistered after disabling the SYS clock.
+> The correct order is to call spi_unregister_controller() *before* this
+> teardown step because bus accesses may still be ongoing until that
+> function returns.
+> 
+> All of these bugs have existed since the driver was first introduced,
+> so it seems fair to fix them together in a single commit.
+> 
+> Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Cc: <stable@vger.kernel.org> # v4.17+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
+> Cc: <stable@vger.kernel.org> # v4.17+
 
-Tested-by: Ikjoon Jang <ikjn@chromium.org>
+Reviewed-by: Stefan Roese <sr@denx.de>
+
+Thanks,
+Stefan
 
 > ---
->  drivers/spi/spi-mtk-nor.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
-> index b97f26a..bf2d0f9 100644
-> --- a/drivers/spi/spi-mtk-nor.c
-> +++ b/drivers/spi/spi-mtk-nor.c
-> @@ -103,6 +103,7 @@ struct mtk_nor {
->         dma_addr_t buffer_dma;
->         struct clk *spi_clk;
->         struct clk *ctlr_clk;
-> +       struct clk *axi_clk;
->         unsigned int spi_freq;
->         bool wbuf_en;
->         bool has_irq;
-> @@ -672,6 +673,7 @@ static void mtk_nor_disable_clk(struct mtk_nor *sp)
->  {
->         clk_disable_unprepare(sp->spi_clk);
->         clk_disable_unprepare(sp->ctlr_clk);
-> +       clk_disable_unprepare(sp->axi_clk);
->  }
->
->  static int mtk_nor_enable_clk(struct mtk_nor *sp)
-> @@ -688,6 +690,13 @@ static int mtk_nor_enable_clk(struct mtk_nor *sp)
->                 return ret;
->         }
->
-> +       ret = clk_prepare_enable(sp->axi_clk);
-> +       if (ret) {
-> +               clk_disable_unprepare(sp->spi_clk);
-> +               clk_disable_unprepare(sp->ctlr_clk);
-> +               return ret;
-> +       }
+>   drivers/spi/spi-mt7621.c | 18 ++++++++++++++----
+>   1 file changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
+> index 2c3b7a2a1ec7..d7cda66c4b26 100644
+> --- a/drivers/spi/spi-mt7621.c
+> +++ b/drivers/spi/spi-mt7621.c
+> @@ -350,10 +350,11 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+>   	if (status)
+>   		return status;
+>   
+> -	master = spi_alloc_master(&pdev->dev, sizeof(*rs));
+> +	master = devm_spi_alloc_master(&pdev->dev, sizeof(*rs));
+>   	if (!master) {
+>   		dev_info(&pdev->dev, "master allocation failed\n");
+> -		return -ENOMEM;
+> +		ret = -ENOMEM;
+> +		goto err_clk_disable;
+>   	}
+>   
+>   	master->mode_bits = SPI_LSB_FIRST;
+> @@ -377,10 +378,18 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+>   	ret = device_reset(&pdev->dev);
+>   	if (ret) {
+>   		dev_err(&pdev->dev, "SPI reset failed!\n");
+> -		return ret;
+> +		goto err_clk_disable;
+>   	}
+>   
+> -	return devm_spi_register_controller(&pdev->dev, master);
+> +	ret = spi_register_controller(master);
+> +	if (ret)
+> +		goto err_clk_disable;
 > +
->         return 0;
->  }
->
-> @@ -746,7 +755,7 @@ static int mtk_nor_probe(struct platform_device *pdev)
->         struct spi_controller *ctlr;
->         struct mtk_nor *sp;
->         void __iomem *base;
-> -       struct clk *spi_clk, *ctlr_clk;
-> +       struct clk *spi_clk, *ctlr_clk, *axi_clk;
->         int ret, irq;
->         unsigned long dma_bits;
->
-> @@ -762,6 +771,10 @@ static int mtk_nor_probe(struct platform_device *pdev)
->         if (IS_ERR(ctlr_clk))
->                 return PTR_ERR(ctlr_clk);
->
-> +       axi_clk = devm_clk_get_optional(&pdev->dev, "axi");
-> +       if (IS_ERR(axi_clk))
-> +               return PTR_ERR(axi_clk);
+> +	return 0;
 > +
->         dma_bits = (unsigned long)of_device_get_match_data(&pdev->dev);
->         if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(dma_bits))) {
->                 dev_err(&pdev->dev, "failed to set dma mask(%lu)\n", dma_bits);
-> @@ -794,6 +807,7 @@ static int mtk_nor_probe(struct platform_device *pdev)
->         sp->dev = &pdev->dev;
->         sp->spi_clk = spi_clk;
->         sp->ctlr_clk = ctlr_clk;
-> +       sp->axi_clk = axi_clk;
->         sp->high_dma = (dma_bits > 32);
->         sp->buffer = dmam_alloc_coherent(&pdev->dev,
->                                 MTK_NOR_BOUNCE_BUF_SIZE + MTK_NOR_DMA_ALIGN,
-> --
-> 1.9.1
->
+> +err_clk_disable:
+> +	clk_disable_unprepare(clk);
+> +	return ret;
+>   }
+>   
+>   static int mt7621_spi_remove(struct platform_device *pdev)
+> @@ -391,6 +400,7 @@ static int mt7621_spi_remove(struct platform_device *pdev)
+>   	master = dev_get_drvdata(&pdev->dev);
+>   	rs = spi_controller_get_devdata(master);
+>   
+> +	spi_unregister_controller(master);
+>   	clk_disable_unprepare(rs->clk);
+>   
+>   	return 0;
+> 
