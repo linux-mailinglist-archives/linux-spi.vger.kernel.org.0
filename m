@@ -2,81 +2,167 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30F22B508B
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 20:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3072B5100
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 20:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728055AbgKPTHy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Nov 2020 14:07:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54724 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725879AbgKPTHx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 16 Nov 2020 14:07:53 -0500
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 394732225B;
-        Mon, 16 Nov 2020 19:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605553672;
-        bh=yosXMLmSKHZhkAgd5D8vJ5A8qZi+NPfl8uhqpTpOj6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nqKf9OldNsSdey8/QJeb1luOcd4HwBPSIVYjTLj4rB/CEnWdloMS9AvJgcRqaIgM2
-         mgirUWUsENniK2QwP3AomrpBweLg3Y6wSN+dQ54U4OIrdm5kUuW0WVBaLQs4D8sLIU
-         13UQXjlpCrGXInaBO3eJFoqP6K57yNj+VU9/tw68=
-Date:   Mon, 16 Nov 2020 19:07:33 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, vigneshr@ti.com, p.yadav@ti.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-Subject: Re: [PATCH v7 5/6] dt-bindings: spi: Convert cadence-quadspi.txt to
- cadence-quadspi.yaml
-Message-ID: <20201116190733.GF4739@sirena.org.uk>
-References: <20201116031003.19062-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20201116031003.19062-6-vadivel.muruganx.ramuthevar@linux.intel.com>
+        id S1729064AbgKPTX5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 14:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729060AbgKPTX5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 14:23:57 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820E3C0613CF
+        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 11:23:55 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id c17so19994230wrc.11
+        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 11:23:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kJVNgcnJ0Pau7sBe5FOENQOZoDCii1XpWWQQL/od8GM=;
+        b=dfY5e1mczd7zQndZHlxrO48ynspsDL0tejgffhk0p7vMH3r3fymGB7Yjr9z5gqGFLc
+         pZeozd6avTu8LdvIBOODmJ5NM6jotB2EKkdfweoSSmSm+tEhajdHRSjDFqH13tIWvX7f
+         4oy3cQ3xFUxmUcZlppc89Mq1ljxtPBV4DeKbrqFOkIXmxmdS1vBKrA2O51YvYrbaMybV
+         lbXEbPVqufxaGDlAiYg+F4efmz2WGFx4ZagaTMUrLgfx113HKINpWt5qP2y+ZLLRHSe8
+         FlROHxwsN9gwKRg7+UNscTYWToYuRppAOIvQtqB4C0kLM2s7tE8kP6bvCLsJpzA6hMc2
+         HpYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kJVNgcnJ0Pau7sBe5FOENQOZoDCii1XpWWQQL/od8GM=;
+        b=ML9Bmmk3uv+erKWsq/PSvdbSlpE7Z/0bMp91KQApaSwW5180HtmQ1GB2AOvur5g6nJ
+         bQDPWaegFr+fC+vjYwEp/9OxdtJ/TySBIVM8uxmyzZl2b54+H9jngV2ehkFbEu5BdTuW
+         sM4xNmjJKXXZh7KIbtS1TAMMpqFtTrNI4s2B7+TzM6dZGhVe6V1/qjr7CgyYTU8JzQFL
+         wBHY3RmbfXK6qRtBgp+4viOOAMeFT7uIcxTZ/8pi5ULBVWL6srMZjt4dgfg6wdabkOv5
+         qvRdd6V0tBBK526D4UM/ymMwqHk5xhx2/hYy37KVl3z7FFh/nRK8T0mP6O4GJ5KpozCn
+         cgAg==
+X-Gm-Message-State: AOAM5314a/E7ugeF/ZznbK1lmzYdwtL9IbwwgXAbs/wOt3xfp/IrZmFk
+        jRF3Em40f7j8Xi60pMC4d+vEvUfvV2OIuRIJgPQ=
+X-Google-Smtp-Source: ABdhPJx1a9fTmWWrS1pCz7vLNvrBZNJnNVV35XMnurqr/1f04ZXbRC1H1KMsac8/XHJt4slIlyRM/XFh6kxz7nKPB9s=
+X-Received: by 2002:adf:f005:: with SMTP id j5mr20893530wro.417.1605554634192;
+ Mon, 16 Nov 2020 11:23:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eDB11BtaWSyaBkpc"
-Content-Disposition: inline
-In-Reply-To: <20201116031003.19062-6-vadivel.muruganx.ramuthevar@linux.intel.com>
-X-Cookie: Immanuel doesn't pun, he Kant.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
+ <49102f5bbb3f1592d9cfd7b39ac5e131a031f950.1605512876.git.lukas@wunner.de>
+In-Reply-To: <49102f5bbb3f1592d9cfd7b39ac5e131a031f950.1605512876.git.lukas@wunner.de>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Mon, 16 Nov 2020 11:23:43 -0800
+Message-ID: <CAHQ1cqHs+jTzp2dYx0cAosLaoBWXpmBivW5bPKbckS=un9k9SA@mail.gmail.com>
+Subject: Re: [PATCH for-5.10] spi: gpio: Don't leak SPI master in probe error path
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Navid Emamdoost <navid.emamdoost@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Nov 16, 2020 at 12:44 AM Lukas Wunner <lukas@wunner.de> wrote:
+>
+> If the call to devm_spi_register_master() fails on probe of the GPIO SPI
+> driver, the spi_master struct is erroneously not freed:
+>
+> After allocating the spi_master, its reference count is 1.  The driver
+> unconditionally decrements the reference count on unbind using a devm
+> action.  Before calling devm_spi_register_master(), the driver
+> unconditionally increments the reference count because on success,
+> that function will decrement the reference count on unbind.  However on
+> failure, devm_spi_register_master() does *not* decrement the reference
+> count, so the spi_master is leaked.
 
---eDB11BtaWSyaBkpc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Not sure I fully understand this. On failure
+devm_spi_register_master() will return a negative error code which
+should result in probe failure and release of devres resource, right?
 
-On Mon, Nov 16, 2020 at 11:10:02AM +0800, Ramuthevar,Vadivel MuruganX wrote:
-> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel=
-=2Ecom>
->=20
-> Convert the cadence-quadspi.txt documentation to cadence-quadspi.yaml
-> remove the cadence-quadspi.txt from Documentation/devicetree/bindings/spi/
+>
+> The issue was introduced by commits 8b797490b4db ("spi: gpio: Make sure
+> spi_master_put() is called in every error path") and 79567c1a321e ("spi:
+> gpio: Use devm_spi_register_master()"), which sought to plug leaks
+> introduced by 9b00bc7b901f ("spi: spi-gpio: Rewrite to use GPIO
+> descriptors") but missed this remaining leak.
+>
 
-As previously and repeatedly requested please make any conversions to
-YAML the *final* thing in serieses so that issues with the conversion do
-not hold up other development.
+That extra spi_master_get() that might be problematic was present in
+the code before 8b797490b4db ("spi: gpio: Make sure spi_master_put()
+is called in every error path") and I think was first introduced in
 
---eDB11BtaWSyaBkpc
-Content-Type: application/pgp-signature; name="signature.asc"
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers?h=v5.9-rc4&id=702a4879ec337463f858c8ab467482cce260bf18
 
------BEGIN PGP SIGNATURE-----
+Or am I missing something?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+yzfUACgkQJNaLcl1U
-h9Db5Af7BSeCmDzgNuAKNa2DAq6jwsMGG9DCDDfsoV8mVxxj88/2ctalltiwpuki
-WiVDc6AuNbqSQhFOWzh5kI1zqNra9A9s1YP8Z69Uld1B/ZrqL5LDr9a9xgWBvsE7
-Co768+PNi5fp1x2hoiFF1MgAUOMsGmKkALVxborYTqB4f3/CC9SJYh94yxYd2dRD
-wdtvJQr4gmGKdwhuhjwKcl+m5dyQ9uI9zWZZFmwkCXRzaW27ndw83utGRPd4Z6ht
-ExGxovoAX/V+HX/sI4133h+F3emUKGJi0c3jT5GLZPRgFDXVSx/B04FBzfn2qlE+
-uleRMfluu5LB/PQJzQrNCFNzeZSYHQ==
-=Hmhj
------END PGP SIGNATURE-----
+Not really questioning the validity of this fix, just trying to
+understand what I missed in 8b797490b4db ("spi: gpio: Make sure
+spi_master_put() is called in every error path")
 
---eDB11BtaWSyaBkpc--
+> The situation was later aggravated by commit d3b0ffa1d75d ("spi: gpio:
+> prevent memory leak in spi_gpio_probe"), which introduced a
+> use-after-free because it releases a reference on the spi_master if
+> devm_add_action_or_reset() fails even though the function already
+> does that.
+>
+> Fix by switching over to the new devm_spi_alloc_master() helper.
+>
+> Fixes: 9b00bc7b901f ("spi: spi-gpio: Rewrite to use GPIO descriptors")
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Cc: <stable@vger.kernel.org> # v4.17+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
+> Cc: <stable@vger.kernel.org> # v5.1-: 8b797490b4db: spi: gpio: Make sure spi_master_put() is called in every error path
+> Cc: <stable@vger.kernel.org> # v5.1-: 45beec351998: spi: bitbang: Introduce spi_bitbang_init()
+> Cc: <stable@vger.kernel.org> # v5.1-: 79567c1a321e: spi: gpio: Use devm_spi_register_master()
+> Cc: <stable@vger.kernel.org> # v5.4-: d3b0ffa1d75d: spi: gpio: prevent memory leak in spi_gpio_probe
+> Cc: <stable@vger.kernel.org> # v4.17+
+> Cc: Navid Emamdoost <navid.emamdoost@gmail.com>
+> Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/spi/spi-gpio.c | 15 ++-------------
+>  1 file changed, 2 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
+> index 7ceb0ba27b75..0584f4d2fde2 100644
+> --- a/drivers/spi/spi-gpio.c
+> +++ b/drivers/spi/spi-gpio.c
+> @@ -350,11 +350,6 @@ static int spi_gpio_probe_pdata(struct platform_device *pdev,
+>         return 0;
+>  }
+>
+> -static void spi_gpio_put(void *data)
+> -{
+> -       spi_master_put(data);
+> -}
+> -
+>  static int spi_gpio_probe(struct platform_device *pdev)
+>  {
+>         int                             status;
+> @@ -363,16 +358,10 @@ static int spi_gpio_probe(struct platform_device *pdev)
+>         struct device                   *dev = &pdev->dev;
+>         struct spi_bitbang              *bb;
+>
+> -       master = spi_alloc_master(dev, sizeof(*spi_gpio));
+> +       master = devm_spi_alloc_master(dev, sizeof(*spi_gpio));
+>         if (!master)
+>                 return -ENOMEM;
+>
+> -       status = devm_add_action_or_reset(&pdev->dev, spi_gpio_put, master);
+> -       if (status) {
+> -               spi_master_put(master);
+> -               return status;
+> -       }
+> -
+>         if (pdev->dev.of_node)
+>                 status = spi_gpio_probe_dt(pdev, master);
+>         else
+> @@ -432,7 +421,7 @@ static int spi_gpio_probe(struct platform_device *pdev)
+>         if (status)
+>                 return status;
+>
+> -       return devm_spi_register_master(&pdev->dev, spi_master_get(master));
+> +       return devm_spi_register_master(&pdev->dev, master);
+>  }
+>
+>  MODULE_ALIAS("platform:" DRIVER_NAME);
+> --
+> 2.28.0
+>
