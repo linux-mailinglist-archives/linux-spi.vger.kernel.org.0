@@ -2,129 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1302B4258
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 12:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6AFA2B43CC
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 13:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbgKPLMe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Nov 2020 06:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726419AbgKPLMe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 06:12:34 -0500
-X-Greylist: delayed 420 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Nov 2020 03:12:34 PST
-Received: from mx2.mailbox.org (mx2a.mailbox.org [IPv6:2001:67c:2050:104:0:2:25:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72426C0613CF
-        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 03:12:34 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1730019AbgKPMd3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 07:33:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47786 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728329AbgKPMd3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 16 Nov 2020 07:33:29 -0500
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id 14707A0E18;
-        Mon, 16 Nov 2020 12:05:30 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id fuAU4mW-USTn; Mon, 16 Nov 2020 12:05:26 +0100 (CET)
-Subject: Re: [PATCH for-5.10] spi: mt7621: Don't leak SPI master in probe
- error path
-To:     Lukas Wunner <lukas@wunner.de>, Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
- <800f7035a29c1ae65386f2e17a2b5ef9d2b39268.1605512876.git.lukas@wunner.de>
-From:   Stefan Roese <sr@denx.de>
-Message-ID: <be0493ac-cc02-c79a-afa9-48e959a8442f@denx.de>
-Date:   Mon, 16 Nov 2020 12:05:25 +0100
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D40F206D8;
+        Mon, 16 Nov 2020 12:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605530008;
+        bh=e8/VTfxGQssIIRXhK6YulGsoXbXfiFst8cUFK7vjU8Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HK/xfacL/GMIV0YAt9cDrec21A34c5vySwI9RcUqj7oFfzxkBbesVh2yJD42BnUKW
+         yvlCVbi4XvbBl76BWOa2TPlaKJiLzAEcszOlkxZ0mbleSFVFZhVr0A/iuzr/b9gSLq
+         nErgIli9Roz6jNOXhbQnySH+Re4illiEb3dVjFSI=
+Date:   Mon, 16 Nov 2020 12:33:09 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "seanga2@gmail.com" <seanga2@gmail.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH 04/32] spi: dw: Introduce polling device tree property
+Message-ID: <20201116123309.GA4739@sirena.org.uk>
+References: <20201107081420.60325-1-damien.lemoal@wdc.com>
+ <20201107081420.60325-5-damien.lemoal@wdc.com>
+ <20201109195913.itgfj2ga5y7sr6zx@mobilestation>
+ <58943f7988706497040cac6f6108336286e9d15f.camel@wdc.com>
+ <20201115160146.efxcdjhm7f2nmivo@mobilestation>
+ <BL0PR04MB65149D8B62167C11B26E0EA7E7E30@BL0PR04MB6514.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <800f7035a29c1ae65386f2e17a2b5ef9d2b39268.1605512876.git.lukas@wunner.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: de-DE
-Content-Transfer-Encoding: 7bit
-X-MBO-SPAM-Probability: 
-X-Rspamd-Score: -5.81 / 15.00 / 15.00
-X-Rspamd-Queue-Id: E30291778
-X-Rspamd-UID: e63e3f
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/9DWx/yDrRhgMJTb"
+Content-Disposition: inline
+In-Reply-To: <BL0PR04MB65149D8B62167C11B26E0EA7E7E30@BL0PR04MB6514.namprd04.prod.outlook.com>
+X-Cookie: Immanuel doesn't pun, he Kant.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 16.11.20 09:23, Lukas Wunner wrote:
-> If the calls to device_reset() or devm_spi_register_controller() fail on
-> probe of the MediaTek MT7621 SPI driver, the spi_controller struct is
-> erroneously not freed.  Fix by switching over to the new
-> devm_spi_alloc_master() helper.
-> 
-> Moreover, the SYS clock is enabled on probe but not disabled if any of
-> the subsequent probe steps fails.
-> 
-> Finally, there's an ordering issue in mt7621_spi_remove() wherein
-> the spi_controller is unregistered after disabling the SYS clock.
-> The correct order is to call spi_unregister_controller() *before* this
-> teardown step because bus accesses may still be ongoing until that
-> function returns.
-> 
-> All of these bugs have existed since the driver was first introduced,
-> so it seems fair to fix them together in a single commit.
-> 
-> Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Cc: <stable@vger.kernel.org> # v4.17+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
-> Cc: <stable@vger.kernel.org> # v4.17+
 
-Reviewed-by: Stefan Roese <sr@denx.de>
+--/9DWx/yDrRhgMJTb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks,
-Stefan
+On Mon, Nov 16, 2020 at 07:47:47AM +0000, Damien Le Moal wrote:
+> On 2020/11/16 1:02, Serge Semin wrote:
 
-> ---
->   drivers/spi/spi-mt7621.c | 18 ++++++++++++++----
->   1 file changed, 14 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
-> index 2c3b7a2a1ec7..d7cda66c4b26 100644
-> --- a/drivers/spi/spi-mt7621.c
-> +++ b/drivers/spi/spi-mt7621.c
-> @@ -350,10 +350,11 @@ static int mt7621_spi_probe(struct platform_device *pdev)
->   	if (status)
->   		return status;
->   
-> -	master = spi_alloc_master(&pdev->dev, sizeof(*rs));
-> +	master = devm_spi_alloc_master(&pdev->dev, sizeof(*rs));
->   	if (!master) {
->   		dev_info(&pdev->dev, "master allocation failed\n");
-> -		return -ENOMEM;
-> +		ret = -ENOMEM;
-> +		goto err_clk_disable;
->   	}
->   
->   	master->mode_bits = SPI_LSB_FIRST;
-> @@ -377,10 +378,18 @@ static int mt7621_spi_probe(struct platform_device *pdev)
->   	ret = device_reset(&pdev->dev);
->   	if (ret) {
->   		dev_err(&pdev->dev, "SPI reset failed!\n");
-> -		return ret;
-> +		goto err_clk_disable;
->   	}
->   
-> -	return devm_spi_register_controller(&pdev->dev, master);
-> +	ret = spi_register_controller(master);
-> +	if (ret)
-> +		goto err_clk_disable;
-> +
-> +	return 0;
-> +
-> +err_clk_disable:
-> +	clk_disable_unprepare(clk);
-> +	return ret;
->   }
->   
->   static int mt7621_spi_remove(struct platform_device *pdev)
-> @@ -391,6 +400,7 @@ static int mt7621_spi_remove(struct platform_device *pdev)
->   	master = dev_get_drvdata(&pdev->dev);
->   	rs = spi_controller_get_devdata(master);
->   
-> +	spi_unregister_controller(master);
->   	clk_disable_unprepare(rs->clk);
->   
->   	return 0;
-> 
+> > Moreover I've just taken alook at the MMC SPI driver. Turns out it
+> > has already been fixed to send ones to the MMC port when it's
+> > required. So If you still experience the MOSI-level problem
+> > then that fix might have been done incorrect at some extent...
+
+> OK. Thanks for the info. I need to rebase on the latest SPI tree then. However,
+> scripts/get_maintainer.pl does not mention any. Where is that hosted ?
+
+You can read MAINTAINERS directly if there's some bug with
+get_maintainer:
+
+SPI SUBSYSTEM
+M:      Mark Brown <broonie@kernel.org>
+L:      linux-spi@vger.kernel.org
+S:      Maintained
+Q:      http://patchwork.kernel.org/project/spi-devel-general/list/
+T:      git git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+F:      Documentation/devicetree/bindings/spi/
+F:      Documentation/spi/
+F:      drivers/spi/
+F:      include/linux/spi/
+F:      include/uapi/linux/spi/
+F:      tools/spi/
+
+--/9DWx/yDrRhgMJTb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+ycYQACgkQJNaLcl1U
+h9A3cAf/e+CAnK183KkMz2xKprNRhYUu248F8nYK4ZUjoj587uL6DnxlO0M67f9Y
+cTaFO94jtUHWLwVX2na0qY1WBg7ygPDm9SUyEIj4yXq7+rvvqhZSGKe+FXD40Lkw
+sWZgW4XNMu0mdH3TXxWVJpZFUS2qqnP6+YKMAAgMTGpBpW7XKnogBdNIdL4dWf5Y
+79h9HGcvlGAneWyttFhS3/Q3izYLrtQ2u8TbslgiXSMRF8uIPsr/Kt3tgPss83Zc
+95k7yc0jPiU1FeRfrGrXSFqH5FL8vZ/DjuDn//GBm0BV1MwX77KTym7DHvhVtsjC
+viCA2ZSWKBZDxPp7Byv4ovbJL2LaWg==
+=xuTA
+-----END PGP SIGNATURE-----
+
+--/9DWx/yDrRhgMJTb--
