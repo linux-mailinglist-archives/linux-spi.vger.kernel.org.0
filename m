@@ -2,86 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B9A2B3EE4
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 09:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19882B3EF0
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 09:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726588AbgKPIj5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Nov 2020 03:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S1726682AbgKPIme (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 03:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbgKPIj5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 03:39:57 -0500
-Received: from mailout2.hostsharing.net (mailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ee9:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57719C0613CF
-        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 00:39:57 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        with ESMTP id S1726158AbgKPIme (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 03:42:34 -0500
+Received: from mailout1.hostsharing.net (mailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5fcc:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31427C0613CF
+        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 00:42:34 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout2.hostsharing.net (Postfix) with ESMTPS id D8CF21018982B;
-        Mon, 16 Nov 2020 09:39:55 +0100 (CET)
+        by mailout1.hostsharing.net (Postfix) with ESMTPS id D8C19101903D8;
+        Mon, 16 Nov 2020 09:42:31 +0100 (CET)
 Received: from localhost (unknown [89.246.108.87])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 97F066035EEE;
-        Mon, 16 Nov 2020 09:39:55 +0100 (CET)
-X-Mailbox-Line: From 4a7efc3865aace7d28ddb74776ee05695be80bd4 Mon Sep 17 00:00:00 2001
-Message-Id: <4a7efc3865aace7d28ddb74776ee05695be80bd4.1605512876.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 853976035EEE;
+        Mon, 16 Nov 2020 09:42:32 +0100 (CET)
+X-Mailbox-Line: From 800f7035a29c1ae65386f2e17a2b5ef9d2b39268 Mon Sep 17 00:00:00 2001
+Message-Id: <800f7035a29c1ae65386f2e17a2b5ef9d2b39268.1605512876.git.lukas@wunner.de>
 In-Reply-To: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
 References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
-Date:   Mon, 16 Nov 2020 09:23:06 +0100
-Subject: [PATCH for-5.10] spi: mxic: Don't leak SPI master in probe error path
+Date:   Mon, 16 Nov 2020 09:23:07 +0100
+Subject: [PATCH for-5.10] spi: mt7621: Don't leak SPI master in probe error
+ path
 To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, Mason Yang <masonccyang@mxic.com.tw>
+Cc:     linux-spi@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Roese <sr@denx.de>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If the calls to devm_clk_get() or devm_ioremap_resource() fail on probe
-of the Macronix SPI driver, the spi_master struct is erroneously not freed.
+If the calls to device_reset() or devm_spi_register_controller() fail on
+probe of the MediaTek MT7621 SPI driver, the spi_controller struct is
+erroneously not freed.  Fix by switching over to the new
+devm_spi_alloc_master() helper.
 
-Fix by switching over to the new devm_spi_alloc_master() helper.
+Moreover, the SYS clock is enabled on probe but not disabled if any of
+the subsequent probe steps fails.
 
-Fixes: b942d80b0a39 ("spi: Add MXIC controller driver")
+Finally, there's an ordering issue in mt7621_spi_remove() wherein
+the spi_controller is unregistered after disabling the SYS clock.
+The correct order is to call spi_unregister_controller() *before* this
+teardown step because bus accesses may still be ongoing until that
+function returns.
+
+All of these bugs have existed since the driver was first introduced,
+so it seems fair to fix them together in a single commit.
+
+Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
 Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Cc: <stable@vger.kernel.org> # v5.0+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
-Cc: <stable@vger.kernel.org> # v5.0+
-Cc: Mason Yang <masonccyang@mxic.com.tw>
+Cc: <stable@vger.kernel.org> # v4.17+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
+Cc: <stable@vger.kernel.org> # v4.17+
 ---
- drivers/spi/spi-mxic.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/spi/spi-mt7621.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
-index 8c630acb0110..96b418293bf2 100644
---- a/drivers/spi/spi-mxic.c
-+++ b/drivers/spi/spi-mxic.c
-@@ -529,7 +529,7 @@ static int mxic_spi_probe(struct platform_device *pdev)
- 	struct mxic_spi *mxic;
- 	int ret;
+diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
+index 2c3b7a2a1ec7..d7cda66c4b26 100644
+--- a/drivers/spi/spi-mt7621.c
++++ b/drivers/spi/spi-mt7621.c
+@@ -350,10 +350,11 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+ 	if (status)
+ 		return status;
  
--	master = spi_alloc_master(&pdev->dev, sizeof(struct mxic_spi));
-+	master = devm_spi_alloc_master(&pdev->dev, sizeof(struct mxic_spi));
- 	if (!master)
- 		return -ENOMEM;
- 
-@@ -574,15 +574,9 @@ static int mxic_spi_probe(struct platform_device *pdev)
- 	ret = spi_register_master(master);
- 	if (ret) {
- 		dev_err(&pdev->dev, "spi_register_master failed\n");
--		goto err_put_master;
-+		pm_runtime_disable(&pdev->dev);
+-	master = spi_alloc_master(&pdev->dev, sizeof(*rs));
++	master = devm_spi_alloc_master(&pdev->dev, sizeof(*rs));
+ 	if (!master) {
+ 		dev_info(&pdev->dev, "master allocation failed\n");
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto err_clk_disable;
  	}
  
--	return 0;
--
--err_put_master:
--	spi_master_put(master);
--	pm_runtime_disable(&pdev->dev);
--
- 	return ret;
+ 	master->mode_bits = SPI_LSB_FIRST;
+@@ -377,10 +378,18 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+ 	ret = device_reset(&pdev->dev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "SPI reset failed!\n");
+-		return ret;
++		goto err_clk_disable;
+ 	}
+ 
+-	return devm_spi_register_controller(&pdev->dev, master);
++	ret = spi_register_controller(master);
++	if (ret)
++		goto err_clk_disable;
++
++	return 0;
++
++err_clk_disable:
++	clk_disable_unprepare(clk);
++	return ret;
  }
  
+ static int mt7621_spi_remove(struct platform_device *pdev)
+@@ -391,6 +400,7 @@ static int mt7621_spi_remove(struct platform_device *pdev)
+ 	master = dev_get_drvdata(&pdev->dev);
+ 	rs = spi_controller_get_devdata(master);
+ 
++	spi_unregister_controller(master);
+ 	clk_disable_unprepare(rs->clk);
+ 
+ 	return 0;
 -- 
 2.28.0
 
