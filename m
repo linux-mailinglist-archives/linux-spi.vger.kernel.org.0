@@ -2,155 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBB12B3EAC
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 09:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC052B3EB9
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 09:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726249AbgKPIa1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Nov 2020 03:30:27 -0500
-Received: from mailout1.hostsharing.net ([83.223.95.204]:57829 "EHLO
-        mailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726176AbgKPIa0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 03:30:26 -0500
+        id S1727130AbgKPIdl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 03:33:41 -0500
+Received: from mailout2.hostsharing.net ([83.223.78.233]:33501 "EHLO
+        mailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726558AbgKPIdl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 03:33:41 -0500
 Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout1.hostsharing.net (Postfix) with ESMTPS id 4A975101903D8;
-        Mon, 16 Nov 2020 09:30:23 +0100 (CET)
+        by mailout2.hostsharing.net (Postfix) with ESMTPS id B461E10189A1B;
+        Mon, 16 Nov 2020 09:33:39 +0100 (CET)
 Received: from localhost (unknown [89.246.108.87])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id E32486035EEE;
-        Mon, 16 Nov 2020 09:30:23 +0100 (CET)
-X-Mailbox-Line: From 76a3e9a52fdb5ff60d992c6cc2e64f29d3d3ea8b Mon Sep 17 00:00:00 2001
-Message-Id: <76a3e9a52fdb5ff60d992c6cc2e64f29d3d3ea8b.1605512876.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 6E10E6035EEE;
+        Mon, 16 Nov 2020 09:33:39 +0100 (CET)
+X-Mailbox-Line: From 0aeb0e948baf98ae69b69bae135cb31abe5a9181 Mon Sep 17 00:00:00 2001
+Message-Id: <0aeb0e948baf98ae69b69bae135cb31abe5a9181.1605512876.git.lukas@wunner.de>
 In-Reply-To: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
 References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
-Date:   Mon, 16 Nov 2020 09:23:02 +0100
-Subject: [PATCH for-5.10] spi: spi-qcom-qspi: Fix use-after-free on unbind
+Date:   Mon, 16 Nov 2020 09:23:03 +0100
+Subject: [PATCH for-5.10] spi: spi-sh: Fix use-after-free on unbind
 To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>
+Cc:     linux-spi@vger.kernel.org, Axel Lin <axel.lin@ingics.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-qcom_qspi_remove() accesses the driver's private data after calling
+spi_sh_remove() accesses the driver's private data after calling
 spi_unregister_master() even though that function releases the last
 reference on the spi_master and thereby frees the private data.
 
 Fix by switching over to the new devm_spi_alloc_master() helper which
 keeps the private data accessible until the driver has unbound.
 
-Fixes: f79a158d37c2 ("spi: spi-qcom-qspi: Use OPP API to set clk/perf state")
+Fixes: 680c1305e259 ("spi/spi_sh: use spi_unregister_master instead of spi_master_put in remove path")
 Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Cc: <stable@vger.kernel.org> # v5.9+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
-Cc: <stable@vger.kernel.org> # v5.9+
-Cc: Rajendra Nayak <rnayak@codeaurora.org>
+Cc: <stable@vger.kernel.org> # v3.0+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
+Cc: <stable@vger.kernel.org> # v3.0+
+Cc: Axel Lin <axel.lin@ingics.com>
 ---
- drivers/spi/spi-qcom-qspi.c | 42 ++++++++++++++-----------------------
- 1 file changed, 16 insertions(+), 26 deletions(-)
+ drivers/spi/spi-sh.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index 5eed88af6899..8863be370884 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -462,7 +462,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-sh.c b/drivers/spi/spi-sh.c
+index 20bdae5fdf3b..15123a8f41e1 100644
+--- a/drivers/spi/spi-sh.c
++++ b/drivers/spi/spi-sh.c
+@@ -440,7 +440,7 @@ static int spi_sh_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
  
- 	dev = &pdev->dev;
- 
--	master = spi_alloc_master(dev, sizeof(*ctrl));
-+	master = devm_spi_alloc_master(dev, sizeof(*ctrl));
- 	if (!master)
+-	master = spi_alloc_master(&pdev->dev, sizeof(struct spi_sh_data));
++	master = devm_spi_alloc_master(&pdev->dev, sizeof(struct spi_sh_data));
+ 	if (master == NULL) {
+ 		dev_err(&pdev->dev, "spi_alloc_master error.\n");
  		return -ENOMEM;
- 
-@@ -473,54 +473,49 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	spin_lock_init(&ctrl->lock);
- 	ctrl->dev = dev;
- 	ctrl->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(ctrl->base)) {
--		ret = PTR_ERR(ctrl->base);
--		goto exit_probe_master_put;
--	}
-+	if (IS_ERR(ctrl->base))
-+		return PTR_ERR(ctrl->base);
- 
- 	ctrl->clks = devm_kcalloc(dev, QSPI_NUM_CLKS,
- 				  sizeof(*ctrl->clks), GFP_KERNEL);
--	if (!ctrl->clks) {
+@@ -458,16 +458,14 @@ static int spi_sh_probe(struct platform_device *pdev)
+ 		break;
+ 	default:
+ 		dev_err(&pdev->dev, "No support width\n");
+-		ret = -ENODEV;
+-		goto error1;
++		return -ENODEV;
+ 	}
+ 	ss->irq = irq;
+ 	ss->master = master;
+ 	ss->addr = devm_ioremap(&pdev->dev, res->start, resource_size(res));
+ 	if (ss->addr == NULL) {
+ 		dev_err(&pdev->dev, "ioremap error.\n");
 -		ret = -ENOMEM;
--		goto exit_probe_master_put;
--	}
-+	if (!ctrl->clks)
+-		goto error1;
 +		return -ENOMEM;
- 
- 	ctrl->clks[QSPI_CLK_CORE].id = "core";
- 	ctrl->clks[QSPI_CLK_IFACE].id = "iface";
- 	ret = devm_clk_bulk_get(dev, QSPI_NUM_CLKS, ctrl->clks);
- 	if (ret)
--		goto exit_probe_master_put;
-+		return ret;
- 
- 	ctrl->icc_path_cpu_to_qspi = devm_of_icc_get(dev, "qspi-config");
--	if (IS_ERR(ctrl->icc_path_cpu_to_qspi)) {
--		ret = dev_err_probe(dev, PTR_ERR(ctrl->icc_path_cpu_to_qspi),
--				    "Failed to get cpu path\n");
--		goto exit_probe_master_put;
--	}
-+	if (IS_ERR(ctrl->icc_path_cpu_to_qspi))
-+		return dev_err_probe(dev, PTR_ERR(ctrl->icc_path_cpu_to_qspi),
-+				     "Failed to get cpu path\n");
-+
- 	/* Set BW vote for register access */
- 	ret = icc_set_bw(ctrl->icc_path_cpu_to_qspi, Bps_to_icc(1000),
- 				Bps_to_icc(1000));
- 	if (ret) {
- 		dev_err(ctrl->dev, "%s: ICC BW voting failed for cpu: %d\n",
- 				__func__, ret);
--		goto exit_probe_master_put;
+ 	}
+ 	INIT_LIST_HEAD(&ss->queue);
+ 	spin_lock_init(&ss->lock);
+@@ -477,7 +475,7 @@ static int spi_sh_probe(struct platform_device *pdev)
+ 	ret = request_irq(irq, spi_sh_irq, 0, "spi_sh", ss);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "request_irq error\n");
+-		goto error1;
 +		return ret;
  	}
  
- 	ret = icc_disable(ctrl->icc_path_cpu_to_qspi);
- 	if (ret) {
- 		dev_err(ctrl->dev, "%s: ICC disable failed for cpu: %d\n",
- 				__func__, ret);
--		goto exit_probe_master_put;
-+		return ret;
- 	}
+ 	master->num_chipselect = 2;
+@@ -496,9 +494,6 @@ static int spi_sh_probe(struct platform_device *pdev)
  
- 	ret = platform_get_irq(pdev, 0);
- 	if (ret < 0)
--		goto exit_probe_master_put;
-+		return ret;
- 	ret = devm_request_irq(dev, ret, qcom_qspi_irq,
- 			IRQF_TRIGGER_HIGH, dev_name(dev), ctrl);
- 	if (ret) {
- 		dev_err(dev, "Failed to request irq %d\n", ret);
--		goto exit_probe_master_put;
-+		return ret;
- 	}
- 
- 	master->max_speed_hz = 300000000;
-@@ -537,10 +532,8 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	master->auto_runtime_pm = true;
- 
- 	ctrl->opp_table = dev_pm_opp_set_clkname(&pdev->dev, "core");
--	if (IS_ERR(ctrl->opp_table)) {
--		ret = PTR_ERR(ctrl->opp_table);
--		goto exit_probe_master_put;
--	}
-+	if (IS_ERR(ctrl->opp_table))
-+		return PTR_ERR(ctrl->opp_table);
- 	/* OPP table is optional */
- 	ret = dev_pm_opp_of_add_table(&pdev->dev);
- 	if (ret && ret != -ENODEV) {
-@@ -562,9 +555,6 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- exit_probe_put_clkname:
- 	dev_pm_opp_put_clkname(ctrl->opp_table);
- 
--exit_probe_master_put:
+  error3:
+ 	free_irq(irq, ss);
+- error1:
 -	spi_master_put(master);
 -
  	return ret;
