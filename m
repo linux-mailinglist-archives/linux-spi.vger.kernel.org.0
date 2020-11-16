@@ -2,62 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDF82B4645
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 15:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908BC2B4A2C
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Nov 2020 17:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730464AbgKPOr0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 16 Nov 2020 09:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730457AbgKPOrX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 09:47:23 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48277C0613CF
-        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 06:47:23 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kefml-0000g9-JG; Mon, 16 Nov 2020 15:47:15 +0100
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kefmk-0008T7-SO; Mon, 16 Nov 2020 15:47:14 +0100
-Message-ID: <00f1e6b477c84b8c671f12e42bb9612133fbea6c.camel@pengutronix.de>
-Subject: Re: [PATCH v2] spi: cadence-quadspi: Fix error return code in
- cqspi_probe
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>, broonie@kernel.org,
-        tudor.ambarus@microchip.com,
-        vadivel.muruganx.ramuthevar@linux.intel.com, vigneshr@ti.com
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Date:   Mon, 16 Nov 2020 15:47:14 +0100
-In-Reply-To: <20201116141836.2970579-1-chengzhihao1@huawei.com>
-References: <20201116141836.2970579-1-chengzhihao1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        id S1731498AbgKPP7U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 10:59:20 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:43504 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730176AbgKPP7U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 10:59:20 -0500
+Received: by mail-oi1-f193.google.com with SMTP id t143so19251623oif.10;
+        Mon, 16 Nov 2020 07:59:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SJJPyWX2YfUe3Oo/pSRmO63ep2/WK35OXd5bs3M2IcQ=;
+        b=c6/xKqnxyy4sBROghcDLpPwbkHY6cQlgjBRg6IynbSfGuQZzwDOgbyrJUQX0B72c6u
+         VkMrf+Hri8ffWTpeZ+KWDd2jw+dVdySiMqr39T/rHjJSoTDxmtkBcbMNlqa6q+Oe9hWR
+         AA4vU+6KVMfI6WBH+Y6blE9Hv6ZJlprPbMbUMJw8BpzBaeOBwFL1KTj+d5pziH34kfHa
+         9ZGZe0w8Gl6gN+UxG0lEyxVXUUFl1uvWTFcIngdjArpYbb0pbCH6baM7SNIgkIAarZof
+         enKFVt/wQLWGnLxB7iRJa9r55RAmFDfnk+ufmYBLeRBzkmS9tTu+DDB/4QAhqZ/AxAyM
+         extQ==
+X-Gm-Message-State: AOAM533Kvgom6kI7SgyQIDz24gFR3KxcpjQec2KoXMLk3ePFR3O2sCCo
+        Ng2edO2//HHEqBlWzTHrwQ==
+X-Google-Smtp-Source: ABdhPJzQVVlCe5JBQgZWAhVNGpgd/3mlIHTXO3Qh2MI/c+q0LPqR/euoc7LLgVnhVEWw5aDq2rcggQ==
+X-Received: by 2002:aca:b156:: with SMTP id a83mr78786oif.150.1605542359327;
+        Mon, 16 Nov 2020 07:59:19 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w22sm209679oie.49.2020.11.16.07.59.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2020 07:59:18 -0800 (PST)
+Received: (nullmailer pid 1725008 invoked by uid 1000);
+        Mon, 16 Nov 2020 15:59:17 -0000
+Date:   Mon, 16 Nov 2020 09:59:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        vigneshr@ti.com, p.yadav@ti.com, devicetree@vger.kernel.org,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
+Subject: Re: [PATCH v7 5/6] dt-bindings: spi: Convert cadence-quadspi.txt to
+ cadence-quadspi.yaml
+Message-ID: <20201116155917.GA1719083@bogus>
+References: <20201116031003.19062-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20201116031003.19062-6-vadivel.muruganx.ramuthevar@linux.intel.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201116031003.19062-6-vadivel.muruganx.ramuthevar@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 2020-11-16 at 22:18 +0800, Zhihao Cheng wrote:
-> Fix to return the error code from
-> devm_reset_control_get_optional_exclusive() instaed of 0
-> in cqspi_probe().
+On Mon, Nov 16, 2020 at 11:10:02AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 > 
-> Fixes: 31fb632b5d43ca ("spi: Move cadence-quadspi driver to drivers/spi/")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Convert the cadence-quadspi.txt documentation to cadence-quadspi.yaml
+> remove the cadence-quadspi.txt from Documentation/devicetree/bindings/spi/
+> 
+> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> ---
+>  .../devicetree/bindings/spi/cadence-quadspi.txt    |  67 ----------
+>  .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 147 +++++++++++++++++++++
+>  2 files changed, 147 insertions(+), 67 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt b/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+> deleted file mode 100644
+> index 945be7d5b236..000000000000
+> --- a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+> +++ /dev/null
+> @@ -1,67 +0,0 @@
+> -* Cadence Quad SPI controller
+> -
 
-Thank you,
+WTF?
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> -Required properties:
+> -- compatible : should be one of the following:
+> -	Generic default - "cdns,qspi-nor".
+> -	For TI 66AK2G SoC - "ti,k2g-qspi", "cdns,qspi-nor".
+> -	For TI AM654 SoC  - "ti,am654-ospi", "cdns,qspi-nor".
 
-regards
-Philipp
+
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - cdns,qspi-nor
+> +          - ti,k2g-qspi
+> +          - ti,am654-ospi
+
+
+> +examples:
+> +  - |
+> +    qspi: spi@ff705000 {
+> +      compatible = "cdns,qspi-nor";
+
+I give up.
