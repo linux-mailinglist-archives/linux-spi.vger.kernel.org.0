@@ -2,77 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7F22B56AA
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 03:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E838B2B589E
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 05:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbgKQCQW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Nov 2020 21:16:22 -0500
-Received: from mga09.intel.com ([134.134.136.24]:44261 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727472AbgKQCQW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 16 Nov 2020 21:16:22 -0500
-IronPort-SDR: PbJGY+ed4JifbPaG2QLRcj+RrTMQFFow/x7WAoJ3Ki84Mz8aOxvt3czXxXSQqvpenQe3OdHOxk
- ZiyFx9ELKt1A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="171019265"
-X-IronPort-AV: E=Sophos;i="5.77,484,1596524400"; 
-   d="scan'208";a="171019265"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 18:16:19 -0800
-IronPort-SDR: Di+NFc+q6jZhrHWVsvRMrloOEAgjXLd3pyvSbWk3pssZl2eMj0jBfZFWzP92vTT6Q8yv2mDgjo
- zrrdzn2/SLmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,484,1596524400"; 
-   d="scan'208";a="367922696"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 16 Nov 2020 18:16:18 -0800
-Received: from [10.213.151.175] (vramuthx-MOBL1.gar.corp.intel.com [10.213.151.175])
-        by linux.intel.com (Postfix) with ESMTP id 1A900580428;
-        Mon, 16 Nov 2020 18:16:15 -0800 (PST)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v7 5/6] dt-bindings: spi: Convert cadence-quadspi.txt to
- cadence-quadspi.yaml
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, vigneshr@ti.com, p.yadav@ti.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20201116031003.19062-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20201116031003.19062-6-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20201116190733.GF4739@sirena.org.uk>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <17f8b568-77f6-df85-252c-2edadd2a76e5@linux.intel.com>
-Date:   Tue, 17 Nov 2020 10:16:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
+        id S1726822AbgKQEDD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 23:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgKQEDD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 23:03:03 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74432C0613CF
+        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 20:03:03 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id i13so15156334pgm.9
+        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 20:03:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OnFWkKbgTPSKzkcbDYVmQtyHgS5LWlDndIFMAevZ/z8=;
+        b=dc1Oq66d8WGN6+JfFt5BcEZu6VpwkJB5j1q5uN8XpT4D77j8GlKE0GVrQhqOwIVYMM
+         tn2bWeY0wvlM8x7htFJTWKWREvBdC17iQBj1vZqqcW/7qA3VdmCGPuOJDHyQNcwhXcW/
+         W6cTdueOC4Zx1zbNRLVppm0tNJM88OuCcHjFo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OnFWkKbgTPSKzkcbDYVmQtyHgS5LWlDndIFMAevZ/z8=;
+        b=dAE5tXjICCBfX5xkSPGHuytTg59U9n7G4dkF3JBS8oCsGaN6qhuhl/E0XDl2dewR5+
+         2EdMwr9UA9gkbUtlPz5s75U+nZ+hHKsnirNAis4kBDFwd0bHO18yRkm2Fi3wF3eTDr0B
+         G81+dsbNgS1GjalvLAItjJLsT0buBvD4QmXscs4ONXgdBWin+pbBjIq37RGVGVqIjMnj
+         5VIkX6/vmShxVIly4Eux917tAHrGGNTK+7TBlg/h17vKt7/KI8YXNOWPkLFtV5SgqPjb
+         8AEi0AY+f2dvTK75b6uZToM2yYR5wpVNczALpxIZvxbm1yTMW7J3r13Lx6DC5OyxFxBt
+         q0WA==
+X-Gm-Message-State: AOAM532PDhbTeXCP1FEE+SMQc5JDE8LWjZ9Q9keD8zp2QVuj8zfyBYIC
+        SpeHj8q5wwMfQ+Ul7nOEetE/n82wjFKMo8jGkDWLqQ==
+X-Google-Smtp-Source: ABdhPJxcg1BHjkmJYhVuw5GKqadsRfQsH9+pXy3+fwE6jh2NqvFO5cA1IdMIB25qOvMd03chZ7S/85g9faTYWE13vM0=
+X-Received: by 2002:a17:90b:30d0:: with SMTP id hi16mr2427876pjb.144.1605585783014;
+ Mon, 16 Nov 2020 20:03:03 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201116190733.GF4739@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
+ <a203c24658b7d70ddb27bf1f9898fe6f896fead5.1605512876.git.lukas@wunner.de>
+In-Reply-To: <a203c24658b7d70ddb27bf1f9898fe6f896fead5.1605512876.git.lukas@wunner.de>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Tue, 17 Nov 2020 12:02:51 +0800
+Message-ID: <CAATdQgDi_AfRvQ5Qe9yjU5xZHPm3CcVXyAd5EX4M824sg4ZDtw@mail.gmail.com>
+Subject: Re: [PATCH for-5.10] spi: spi-mtk-nor: Don't leak SPI master in probe
+ error path
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+On Mon, Nov 16, 2020 at 4:43 PM Lukas Wunner <lukas@wunner.de> wrote:
+>
+> If the call to devm_spi_register_controller() fails on probe of the
+> MediaTek SPI NOR driver, the spi_controller struct is erroneously not
+> freed.
+>
+> Since commit a1daaa991ed1 ("spi: spi-mtk-nor: use dma_alloc_coherent()
+> for bounce buffer"), the same happens if the call to
+> dmam_alloc_coherent() fails.
+>
+> Since commit 3bfd9103c7af ("spi: spi-mtk-nor: Add power management
+> support"), the same happens if the call to mtk_nor_enable_clk() fails.
+>
+> Fix by switching over to the new devm_spi_alloc_master() helper.
+>
+> Fixes: 881d1ee9fe81 ("spi: add support for mediatek spi-nor controller")
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
 
-On 17/11/2020 3:07 am, Mark Brown wrote:
-> On Mon, Nov 16, 2020 at 11:10:02AM +0800, Ramuthevar,Vadivel MuruganX wrote:
->> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->>
->> Convert the cadence-quadspi.txt documentation to cadence-quadspi.yaml
->> remove the cadence-quadspi.txt from Documentation/devicetree/bindings/spi/
-> 
-> As previously and repeatedly requested please make any conversions to
-> YAML the *final* thing in serieses so that issues with the conversion do
-> not hold up other development.
-Thank you for the suggestions...
-I understood like order of series to be changed, that's the reason 
-added-up YAML conversion patches at the end of series, sorry I will drop 
-the patches of YAML conversion.
+Reviewed-by: Ikjoon Jang <ikjn@chromium.org>
 
-Regards
-Vadivel
-> 
+> Cc: <stable@vger.kernel.org> # v5.7+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
+> Cc: <stable@vger.kernel.org> # v5.7+
+> Cc: Chuanhong Guo <gch981213@gmail.com>
+> Cc: Ikjoon Jang <ikjn@chromium.org>
+> ---
+>  drivers/spi/spi-mtk-nor.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+> index b97f26a60cbe..288f6c2bbd57 100644
+> --- a/drivers/spi/spi-mtk-nor.c
+> +++ b/drivers/spi/spi-mtk-nor.c
+> @@ -768,7 +768,7 @@ static int mtk_nor_probe(struct platform_device *pdev)
+>                 return -EINVAL;
+>         }
+>
+> -       ctlr = spi_alloc_master(&pdev->dev, sizeof(*sp));
+> +       ctlr = devm_spi_alloc_master(&pdev->dev, sizeof(*sp));
+>         if (!ctlr) {
+>                 dev_err(&pdev->dev, "failed to allocate spi controller\n");
+>                 return -ENOMEM;
+> --
+> 2.28.0
+>
