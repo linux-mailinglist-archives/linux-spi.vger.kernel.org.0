@@ -2,130 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 027192B556F
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 00:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07D42B558A
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 01:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgKPX7d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Nov 2020 18:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbgKPX7d (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 18:59:33 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6D9C0613CF
-        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 15:59:33 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id l1so20932979wrb.9
-        for <linux-spi@vger.kernel.org>; Mon, 16 Nov 2020 15:59:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ip7pzwO/oZepntmcP1UnnfZv5FeIGf4UVJKD8XytUJg=;
-        b=no2c23pZ4DqtDy6Xa3U91a1fLlAjbDWkWu1/9MlV9kLdRj46YhOKj8XjIjpt8gXD3L
-         MIcj/ERM7jeNdYmD1J7fVegevHyWgMV+KHpsVXeLrN5bAdlr2AL/2Op9+tplCicaqMbp
-         bZssH+X9Zv1lMwB03yIsituqvJ+TBCHdJNaPSZElmVNhWVEW/6/dffotYqcXp6EI6OA3
-         kJFbDmhp4Ic6q3EVblW7wKAISjYE4ZeC1JCmpZGTCPcWMY/DFB+LEKgShSdZjd38Flyl
-         H8VVPwXSbjdhi1R99rLKkWa+1yIZ6WYbpyCvLbDV34qu29oiIqRK91EenuO3nlJIMChK
-         QX4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ip7pzwO/oZepntmcP1UnnfZv5FeIGf4UVJKD8XytUJg=;
-        b=LcJHqxPcWcu/+VMhoiDh2pnrdtFqHsKqcx6XonvHPD/M55E9n/dcq/A8NBDIaWZXoX
-         FW5Lb57rDG2FF4rcPj1IZkrj1oQzr4AtJOpfEus8J8m58WOsKUIstGKwoIZDswtYRbgR
-         5aNDCmgF3QAZ3SuBK/AIc1m9Ua/jwu/F/Ve0lLNPGlr0hCqZpbk4INAUVDwwIZzLlS6Q
-         gQcDnV8C6+z86y2Jhrcbv5HpgJvRC0X6arw0nuQmNY5fzz53qTOyqiQ/pfLUTskRXhYw
-         ENUMM/2/A2MIwDJnqmVnR3OISnpM0OBQeullP7zYhXFC/zRVKLF85Jgk3EmteMVS7Psw
-         65Zw==
-X-Gm-Message-State: AOAM531u3WByskgdYSBq4aDlqMIaQqaQxF158G7NVlNf7R07QDZHgG3l
-        UYZdlmhxmcS5d9MorbhZnhsQhiKIqvgc+dkRkh4=
-X-Google-Smtp-Source: ABdhPJzzyEwWIFQDB7JmSTtDLil6oEFxekybZsyRS+m3kMcidUhmHCifwvFc9UXIEyB9z83NXDVIycbZ1lPhfgabmgE=
-X-Received: by 2002:a5d:698c:: with SMTP id g12mr21653489wru.36.1605571171621;
- Mon, 16 Nov 2020 15:59:31 -0800 (PST)
+        id S1728290AbgKQAI6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Nov 2020 19:08:58 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:46928 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726355AbgKQAI5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Nov 2020 19:08:57 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 4165E806AC;
+        Tue, 17 Nov 2020 13:08:52 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1605571732;
+        bh=wKzDSvjyemjUgMegwRGh/s2qiK7Q90DAOnmI1lz/PbI=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=1Mn1NPsyJ4VCOMRqXYFf64lqfBs4NKzopnp37oDl32X4jmdNr8Cht/xcfObflzftB
+         /kFnyUbzF+bQmMIOlAxfXB0nKw/udlPmtuHimGIt/ExI3iACbQ8McE7wp4ZHx8Tz3e
+         N9IAQfuRyslmTJzLOGkIl/rDKTa9e5fgcc/qNsKNZj4Z4Exn+8AG7P8lS8WNBXhUya
+         X64xvc4KT9j6P1ImDv0rnVbIBPHlUXyPAlcO4wyz619IeU4c9ff8RPRcLEDkncct3K
+         NKpl71g8k0Sjw/+MuzK9MHC9XuGOv3mg7UYwSxRdhNh/8oSBf+Zf8TJ9hp0Hr5yayZ
+         g7dQet3NXIdQA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5fb314930000>; Tue, 17 Nov 2020 13:08:51 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 17 Nov 2020 13:08:51 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.008; Tue, 17 Nov 2020 13:08:51 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Subject: Re: [PATCH v5 2/2] spi: Add generic SPI multiplexer
+Thread-Topic: [PATCH v5 2/2] spi: Add generic SPI multiplexer
+Thread-Index: AQHV2ws2/p8yDzV/8U25Wa5FU7HxrKnHGE6AgAVDVAA=
+Date:   Tue, 17 Nov 2020 00:08:50 +0000
+Message-ID: <104152dd-a51e-1893-cc6b-022aecd89250@alliedtelesis.co.nz>
+References: <20200204032838.20739-3-chris.packham@alliedtelesis.co.nz>
+ <20201113154633.21542-1-nsaenzjulienne@suse.de>
+In-Reply-To: <20201113154633.21542-1-nsaenzjulienne@suse.de>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2C940F91EF07274D86BCE85D636E8CD6@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
- <49102f5bbb3f1592d9cfd7b39ac5e131a031f950.1605512876.git.lukas@wunner.de>
- <CAHQ1cqHs+jTzp2dYx0cAosLaoBWXpmBivW5bPKbckS=un9k9SA@mail.gmail.com> <20201116230339.GA25992@wunner.de>
-In-Reply-To: <20201116230339.GA25992@wunner.de>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Mon, 16 Nov 2020 15:59:20 -0800
-Message-ID: <CAHQ1cqHx0Bq+g8qFK_QdjGHgKHyLgev_5EAwo3CAF9knGfNVSg@mail.gmail.com>
-Subject: Re: [PATCH for-5.10] spi: gpio: Don't leak SPI master in probe error path
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Navid Emamdoost <navid.emamdoost@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 3:03 PM Lukas Wunner <lukas@wunner.de> wrote:
->
-> On Mon, Nov 16, 2020 at 11:23:43AM -0800, Andrey Smirnov wrote:
-> > On Mon, Nov 16, 2020 at 12:44 AM Lukas Wunner <lukas@wunner.de> wrote:
-> > > If the call to devm_spi_register_master() fails on probe of the GPIO SPI
-> > > driver, the spi_master struct is erroneously not freed:
-> > >
-> > > After allocating the spi_master, its reference count is 1.  The driver
-> > > unconditionally decrements the reference count on unbind using a devm
-> > > action.  Before calling devm_spi_register_master(), the driver
-> > > unconditionally increments the reference count because on success,
-> > > that function will decrement the reference count on unbind.  However on
-> > > failure, devm_spi_register_master() does *not* decrement the reference
-> > > count, so the spi_master is leaked.
-> >
-> > Not sure I fully understand this. On failure
-> > devm_spi_register_master() will return a negative error code which
-> > should result in probe failure and release of devres resource, right?
->
-> Yes, but that just decrements the refcount from 2 to 1:
->
->     /* refcount initialized to 1 */
->     master = spi_alloc_master(dev, sizeof(*spi_gpio));
->
->     ...
->
->     /* refcount incremented to 2 */
->     return devm_spi_register_master(&pdev->dev, spi_master_get(master));
->
->     ...
->
->     /* on failure of devm_spi_register_master(), refcount decremented to 1
->        by devres action */
->     spi_gpio_put()
->
->
-> > > The issue was introduced by commits 8b797490b4db ("spi: gpio: Make sure
-> > > spi_master_put() is called in every error path") and 79567c1a321e ("spi:
-> > > gpio: Use devm_spi_register_master()"), which sought to plug leaks
-> > > introduced by 9b00bc7b901f ("spi: spi-gpio: Rewrite to use GPIO
-> > > descriptors") but missed this remaining leak.
-> >
-> > That extra spi_master_get() that might be problematic was present in
-> > the code before 8b797490b4db ("spi: gpio: Make sure spi_master_put()
-> > is called in every error path") and I think was first introduced in
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers?h=v5.9-rc4&id=702a4879ec337463f858c8ab467482cce260bf18
-> >
-> > Or am I missing something?
->
-> The extra spi_master_get() was introduced by 79567c1a321e.
-> I don't see it in spi-gpio.c before that commit.
->
-> Its quite possible that I missed something myself, nobody's perfect.
-> But just from code inspection it seems wrong the way it is right now.
->
-> Shout if I failed to explain it properly and I'll try again. :)
->
-
-Before 79567c1a321e extra spi_master_get() was a part of
-spi_bitbang_start(). Ah, OK, it had it's own local spi_master_put() on
-failure, which I lost when inlinging that function. My bad. Good to
-see that the with devm_spi_alloc_master() cleanup path is sane and
-easy to read once again.
-
-> Thanks,
->
-> Lukas
+DQpPbiAxNC8xMS8yMCA0OjQ2IGFtLCBOaWNvbGFzIFNhZW56IEp1bGllbm5lIHdyb3RlOg0KPiBV
+cG9uIHJlZ2lzdGVyaW5nIHNwaS1tdXgncyBkZXZpY2VzIHRocm91Z2ggc3BpX2FkZF9kZXZpY2Uo
+KSB0aGUga2VybmVsIGdldHMNCj4gc3R1Y2sgd2FpdGluZyBmb3IgdGhlICdzcGlfYWRkX2xvY2sn
+IG11dGV4IHRvIGJlIHJlbGVhc2VkLiBUaGUgbXV0ZXggaGFwcGVucyB0bw0KPiBiZSBoZWxkIGJ5
+IHNwaS1tdXgncyBwYXJlbnQgU1BJIGJ1cywgd2hpY2ggdW5sdWNraWx5LCBpcyB3YWl0aW5nIGZv
+ciBzcGktbXV4J3MNCj4gcHJvYmUgdG8gZmluaXNoIGJlZm9yZSByZWxlYXNpbmcgaXQuDQoNCkkg
+anVzdCByZS10ZXN0ZWQgbXkgc3lzdGVtIHdpdGggdjUuMTAuMC1yYzQgYW5kIGRpZG4ndCBzZWUg
+YW55IHByb2JsZW0uIA0KTXkgZHRzIGlzIHByZXR0eSBzaW1pbGFyIHRvIHlvdXJzIHRoZSBvbmx5
+IG9idmlvdXMgdGhpbmcgbWlzc2luZyBpcyANCmBtdXgtY29udHJvbC1uYW1lcyA9ICJzcGkiO2Ag
+YW5kIEkgYWxzbyBzZXQgYCNzaXplLWNlbGxzID0gPDE+O2AgKGxldCBtZSANCmtub3cgaWYgeW91
+IHdhbnQgbWUgdG8gcG9zdCB0aGUgd2hvbGUgdGhpbmcpLg0KDQpJdCBtaWdodCBiZSBkZXBlbmRl
+bnQgb24gdGhlIGhvc3Qgc3BpIGNvbnRyb2xsZXIuIFRoZSByZS10ZXN0IEkganVzdCBkaWQgDQp3
+YXMgb24gYSBib2FyZCB1c2luZyB0aGUgc3BpLW9yaW9uLmMgZHJpdmVyIGFuZCBJIHRlc3RlZCBt
+eSBvcmlnaW5hbCANCmNoYW5nZSBvbiBhIGJvYXJkIHVzaW5nIHNwaS1iY20tcXNwaS5jIChJIGhh
+dmVuJ3QgZ290IHRoZSBib2FyZCBoYW5keSANCnJpZ2h0IG5vdyBidXQgSSBjb3VsZCBnbyBhbmQg
+ZmluZCBvbmUgaWYgbmVjZXNzYXJ5KS4NCg0KPiBJIG1pZ2h0IGFzd2VsbCBiZSBkb2luZyBzb21l
+dGhpbmcgd3JvbmcuIEJ1dCBzbyBmYXIgSSB0cnVzdCBteSBEVA0KPiBpbXBsZW1lbnRhdGlvbjoN
+Cj4NCj4gCSZzcGkgew0KPiAJCXN0YXR1cyA9ICJva2F5IjsNCj4gCQlwaW5jdHJsLW5hbWVzID0g
+ImRlZmF1bHQiOw0KPiAJCXBpbmN0cmwtMCA9IDwmc3BpMF9ncGlvNz47DQo+DQo+IAkJc3BpQDAg
+ew0KPiAJCQljb21wYXRpYmxlID0gInNwaS1tdXgiOw0KPiAJCQlyZWcgPSA8MD47DQo+IAkJCSNh
+ZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiAJCQkjc2l6ZS1jZWxscyA9IDwwPjsNCj4gCQkJc3BpLW1h
+eC1mcmVxdWVuY3kgPSA8MTAwMDAwMDAwPjsNCj4NCj4gCQkJbXV4LWNvbnRyb2xzID0gPCZncGlv
+X211eD47DQo+DQo+IAkJCXc1NTAwQDAgew0KPiAJCQkJY29tcGF0aWJsZSA9ICJ3aXpuZXQsdzU1
+MDAiOw0KPiAJCQkJcmVnID0gPDA+Ow0KPiAJCQkJcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsN
+Cj4gCQkJCXBpbmN0cmwtMCA9IDwmZXRoMV9waW5zPjsNCj4gCQkJCWludGVycnVwdC1wYXJlbnQg
+PSA8JmdwaW8+Ow0KPiAJCQkJaW50ZXJydXB0cyA9IDwyNyBJUlFfVFlQRV9FREdFX0ZBTExJTkc+
+Ow0KPiAJCQkJc3BpLW1heC1mcmVxdWVuY3kgPSA8MzAwMDAwMDA+Ow0KPiAJCQl9Ow0KPg0KPiAJ
+CQlzcGktZmxhc2hAMSB7DQo+IAkJCQljb21wYXRpYmxlID0gImplZGVjLHNwaS1ub3IiOw0KPiAJ
+CQkJcmVnID0gPDE+Ow0KPiAJCQkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+IAkJCQkjc2l6ZS1j
+ZWxscyA9IDwwPjsNCj4gCQkJCXNwaS1tYXgtZnJlcXVlbmN5ID0gPDE2MDAwMDAwPjsNCj4gCQkJ
+fTsNCj4gCQl9Ow0KPiAJfTsNCj4NCj4gUmVnYXJkcywNCj4gTmljb2xhcw==
