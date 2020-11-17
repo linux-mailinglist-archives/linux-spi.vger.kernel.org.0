@@ -2,39 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC3E2B71B6
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 23:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354B82B71B8
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 23:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728677AbgKQWik (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Nov 2020 17:38:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42056 "EHLO mail.kernel.org"
+        id S1729336AbgKQWip (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Nov 2020 17:38:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42148 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726319AbgKQWij (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Nov 2020 17:38:39 -0500
+        id S1726319AbgKQWip (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Nov 2020 17:38:45 -0500
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 72C27206E0;
-        Tue, 17 Nov 2020 22:38:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 51E3520715;
+        Tue, 17 Nov 2020 22:38:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605652719;
-        bh=vILjhSWwMhfSHXOq6DY+7hG8MW09zNf3uZxuRd/5cNY=;
+        s=default; t=1605652724;
+        bh=wHy2P0xb54yFxWzSQj7Qowcm8SXFHPL2YFDPyxGpG7Y=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=klOp3GTLcro2EGF4J5btw7KN/m95MW2EkFF7zhDqNpqkU37AR5fw7p6Bw5s7ZVct6
-         zf4XunnqWy53oznHQ34AIBH+x7xHzXEENXH3pLcWpTiZDaIc9x5AuySDzNuSZA3dkc
-         4hPzK/AEKoFqAuFkWi2yvnfGX6efe14G8jvTik3I=
-Date:   Tue, 17 Nov 2020 22:38:19 +0000
+        b=qKRPLLi1XaoN35ASNfhgDA9V8BAFm+St9tAC7gr9XPoZWv48u5a71S9MoumvD+8gE
+         V8JL3cK/b//kgBsF39UvTZvIMEh65IStyn1kSIcU1rFJ8sODFKQi6i8a9BgirHocB3
+         vWR1TbP7x9BBkIW8V7rlefSlioXeJ508rYd2A7Mk=
+Date:   Tue, 17 Nov 2020 22:38:25 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-In-Reply-To: <20201117094054.4696-1-Sergey.Semin@baikalelectronics.ru>
-References: <20201117094054.4696-1-Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH] spi: dw: Set transfer handler before unmasking the IRQs
-Message-Id: <160565269952.23908.7875361978634320011.b4-ty@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     linux-spi@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
+In-Reply-To: <a420c23a363a3bc9aa684c6e790c32a8af106d17.1605512876.git.lukas@wunner.de>
+References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de> <a420c23a363a3bc9aa684c6e790c32a8af106d17.1605512876.git.lukas@wunner.de>
+Subject: Re: [PATCH for-5.10] spi: npcm-fiu: Don't leak SPI master in probe error path
+Message-Id: <160565269952.23908.15969685283681589514.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -42,18 +38,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 17 Nov 2020 12:40:54 +0300, Serge Semin wrote:
-> It turns out the IRQs most like can be unmasked before the controller is
-> enabled with no problematic consequences. The manual doesn't explicitly
-> state that, but the examples perform the controller initialization
-> procedure in that order. So the commit da8f58909e7e ("spi: dw: Unmask IRQs
-> after enabling the chip") hasn't been that required as I thought. But
-> anyway setting the IRQs up after the chip enabling still worth adding
-> since it has simplified the code a bit. The problem is that it has
-> introduced a potential bug. The transfer handler pointer is now
-> initialized after the IRQs are enabled. That may and eventually will cause
-> an invalid or uninitialized callback invocation. Fix that just by
-> performing the callback initialization before the IRQ unmask procedure.
+On Mon, 16 Nov 2020 09:23:10 +0100, Lukas Wunner wrote:
+> If the calls to of_match_device(), of_alias_get_id(),
+> devm_ioremap_resource(), devm_regmap_init_mmio() or devm_clk_get()
+> fail on probe of the NPCM FIU SPI driver, the spi_controller struct is
+> erroneously not freed.
+> 
+> Fix by switching over to the new devm_spi_alloc_master() helper.
 
 Applied to
 
@@ -61,8 +52,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: dw: Set transfer handler before unmasking the IRQs
-      commit: a41b0ad07bfa081584218431cb0cd7e7ecc71210
+[1/1] spi: npcm-fiu: Don't leak SPI master in probe error path
+      commit: 04a9cd51d3f3308a98cbc6adc07acb12fbade011
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
