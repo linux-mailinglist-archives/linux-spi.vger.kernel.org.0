@@ -2,381 +2,378 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3692B67B4
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 15:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF6D2B6D4C
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 19:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728491AbgKQOoT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Nov 2020 09:44:19 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:42189 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728198AbgKQOoS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Nov 2020 09:44:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1605624257; x=1637160257;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ZRefrFq7+GgF0WB7oOPzeRB+7peIVR3wiXCTMj4q9Xc=;
-  b=f7uY6MtaC5+iRt105WfdH+K/BZvzJFN/nRXPWLztiCihzhf42i2O0Db7
-   JlbYrpQp46E9BnyJfQ0m9U49ReNUXZhqt6mHEa/17+zJFhu0MHZUY1FPl
-   WBs4JrqJDhHeZxOZPZmYsEklQBwn6SQyZML3Ha1M/UCHCbOYmcGLzr2TX
-   AcFpOeoWSgMVTz3+Cx9IFUH4Ahx6WNmk5gBPgGDYpI7F0+OAIMzsVBmo0
-   t16aSJ+75+lZsNCzBWhZELIBT8e5Xfo3dAzTpEZLNntl/9UIM6EH583wS
-   yAWVCR5dyLsLnC6A7ja85cpsHPb+ixw+sdfOJ2EaxDkdaLC1Nx3is5LQ3
-   Q==;
-IronPort-SDR: OrWn7TV8fkQ8XnAjJ44mWHYgQLdOcY3VUuVZ6hRydyWeVnBMX6tX67AapJvrUQrYLj3yWxQ/jb
- 0ml5kMf29iv137glhPKPBVccs4AGCet/yAhh9sVsYZqT31Agk3Rhi8AzKQgR7UINCzPhUit+Hm
- 3as1uP+F44S7TmFzEuwMMPL/vY4ZfhZeCBbi2Tp5KKq38odDwvCndhHJmv/snp6j7n7rJ7/9R2
- 5gIELc65VOUzV2aesAUoBy26gOoQ59fw4D7/c8v53eo8jjIfYt1W8QXTB/EUtL4cskGRhfSIy0
- 0QU=
-X-IronPort-AV: E=Sophos;i="5.77,485,1596470400"; 
-   d="scan'208";a="152704578"
-Received: from mail-dm6nam08lp2044.outbound.protection.outlook.com (HELO NAM04-DM6-obe.outbound.protection.outlook.com) ([104.47.73.44])
-  by ob1.hgst.iphmx.com with ESMTP; 17 Nov 2020 22:44:16 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XNS8F4r2EK7h4eXXAJP8q0qUYRIb68/z4kIVogG2D8PwnXKdi1NEGZcmckQWEDVHWu0hoBLuohsk/ajs+7BL7xtNDeA+rkyUg0TDUVOiRMqLJZ3uozUVFtGVMM5eXrFrBaCF4TIowAShKg1n8tu65jZI+++KEp9yib1/otOAbuhHIBa9g8MIfo/tzMl2XuxqHxjgSAhfP3g8Oxal2h7X5367BueThBAiX/gGP3EnnFRMfD8G5joFcWqQoOVFStMESUfoeY0US2pnNphUwe/1/UCfN3JlmQbWWpFFI+CSL6sLKciVZur0vPX5UpLL1aiD/lAy6OgSNar2Iavw6sLR/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZRefrFq7+GgF0WB7oOPzeRB+7peIVR3wiXCTMj4q9Xc=;
- b=VEuwgOY4/S0uiFUA806ntjhXVcdIidNeOoXgK16HzN8qQ7DS/4uNCr/wLgyoXIHFltFRivoXWDu2f5ASqigf857WgPHzc2WmyhE6/Ivu/uhTlp6O4cGbK5wf07/WJVu44LN/u5MYbN4Iopiy0ZJpu0qjCRzeKcp+xpO8ii8fQdHlz47Omol1eIuDEZtXaCdjfUxCKEJQ7GTpARHicHFe0OWLjG5MObb2bX7d4msbOFJJLkAlZ47uaWYNXWoNICUTnfclGWTRRuMn9YrbBt9XAlsBq5nEA0urFNEcAnZmtdMR+cCZzYgKCPqBOMGTYL/VVc94jeWv16rWzfzAj2IOlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        id S1730925AbgKQS0t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Nov 2020 13:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730922AbgKQS0s (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Nov 2020 13:26:48 -0500
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3651CC0613CF
+        for <linux-spi@vger.kernel.org>; Tue, 17 Nov 2020 10:26:48 -0800 (PST)
+Received: by mail-lj1-x243.google.com with SMTP id 11so25441050ljf.2
+        for <linux-spi@vger.kernel.org>; Tue, 17 Nov 2020 10:26:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZRefrFq7+GgF0WB7oOPzeRB+7peIVR3wiXCTMj4q9Xc=;
- b=XgOg8Ape1Vr7xdOIeK9Q3w+kAkiNrvLX3LkOwxW9RRcNedyFBFRTvhgCt5f8I8JxHj68Mc/O3lWEexjjuE6uqOVPh3zlUvMY3joLQXWg4+yyRkO9VGD07iswYSKToBubnHldhNMEcRppkulLMlHgWXKZQ+kp/lLs8a42ZEP1/eg=
-Received: from BL0PR04MB6514.namprd04.prod.outlook.com (2603:10b6:208:1ca::23)
- by MN2PR04MB6477.namprd04.prod.outlook.com (2603:10b6:208:1aa::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Tue, 17 Nov
- 2020 14:44:14 +0000
-Received: from BL0PR04MB6514.namprd04.prod.outlook.com
- ([fe80::4c3e:2b29:1dc5:1a85]) by BL0PR04MB6514.namprd04.prod.outlook.com
- ([fe80::4c3e:2b29:1dc5:1a85%7]) with mapi id 15.20.3499.034; Tue, 17 Nov 2020
- 14:44:13 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C3dvz/P9TXVMhGJc6R48+GdvqzGzrr3Wp6d2c8ypfZY=;
+        b=XFo+EIIgyJM5X336vLyeEXn5zHTTmXB6AynT8DspiNtD7Md9/zqNIRhU0BRWFKUtBc
+         tHmg4Iheq3hjZLjhDRcI10j7SenTzgnWNR/VA8E2jnpZXVPKPvCKlQMPxHzuuVsBoPVZ
+         IazmdZYQV+XOSBETK/Bu3ZuDjmcUyh+/DcKweFeu3MD4vyv3uRQeNNe4X6oUJj9iTo9M
+         u3CrpbO+czImzuihyeD+LnRdLS1gYKgVrSGpq/9f6Y+qQSMbXgIF/ws8ofx1ZcbEg6oM
+         no8XvJJUBG1h2gKWFbr9OL5vEnNvF5P1uqf2zXuTtoHIb+WWiiRvxKwEyRu6g//VXKhT
+         cccg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C3dvz/P9TXVMhGJc6R48+GdvqzGzrr3Wp6d2c8ypfZY=;
+        b=Q/pTsXDx+5ZNdt96RMY25Yo4QBsMXccjcBmSesUQqhhD4wjlWzVMhCxRXOoDX8StZH
+         kgQfHQZzEJPzRYMST1FFyhnlVTqnDpLKw1+jrIVVm1LbQaiSZpkp0qVpnTDJhCJ2f2e6
+         BezZSZ71Spfb1P6iFLT8ifKRjEO+IzRtVDCDjPdiO7IHWCAcTYMV4F3zpnYwtgRNNDTB
+         JJsoATjnrIQKhRHpP8bJhzQ6wwt6+FDaJvRj38J3BnexcXaCOpCcgnf2EfVjo+Huvvnr
+         oDO/WJdfnZ4NkpGcSjzUHDLpn+Sq9/I5ambPbu1sI1O+F7TUn3XFXE34w6g39Kaw96QZ
+         CzCw==
+X-Gm-Message-State: AOAM533OIyKSUmnEOXVld4kTpeIc8ajfChDSm6D3+f6xLxki5bXKg6NF
+        G9kkZ3unKyAWiv/bQ/Uktg8KBlqSxr/WUuRx
+X-Google-Smtp-Source: ABdhPJwEI+RE3BFXIfHPfb7lQCv06PMMNu2hirRc4GMdK4vs+jabsPsyRJnMXoAKw4GiORZBtExZmA==
+X-Received: by 2002:a2e:8750:: with SMTP id q16mr2251555ljj.53.1605637606517;
+        Tue, 17 Nov 2020 10:26:46 -0800 (PST)
+Received: from mobilestation ([95.79.141.114])
+        by smtp.gmail.com with ESMTPSA id r7sm3262287lfm.88.2020.11.17.10.26.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Nov 2020 10:26:45 -0800 (PST)
+Date:   Tue, 17 Nov 2020 21:26:42 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
         "broonie@kernel.org" <broonie@kernel.org>,
         "palmer@dabbelt.com" <palmer@dabbelt.com>,
         "seanga2@gmail.com" <seanga2@gmail.com>
 Subject: Re: [PATCH 04/32] spi: dw: Introduce polling device tree property
-Thread-Topic: [PATCH 04/32] spi: dw: Introduce polling device tree property
-Thread-Index: AQHWtN4Jq5yxP9fdykKNjBOI754ZyqnLXIyAgAEZ8gA=
-Date:   Tue, 17 Nov 2020 14:44:13 +0000
-Message-ID: <ea6a82e27a66600e7d4eb1668282d42dbaabf4b0.camel@wdc.com>
+Message-ID: <20201117182642.qz3il63x6lcx6owg@mobilestation>
 References: <20201107081420.60325-1-damien.lemoal@wdc.com>
-         <20201107081420.60325-5-damien.lemoal@wdc.com>
-         <20201109195913.itgfj2ga5y7sr6zx@mobilestation>
-         <58943f7988706497040cac6f6108336286e9d15f.camel@wdc.com>
-         <20201115160146.efxcdjhm7f2nmivo@mobilestation>
-         <BL0PR04MB65149D8B62167C11B26E0EA7E7E30@BL0PR04MB6514.namprd04.prod.outlook.com>
-         <20201116215505.enelrzxaxb2457a6@mobilestation>
-In-Reply-To: <20201116215505.enelrzxaxb2457a6@mobilestation>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.38.1 (3.38.1-1.fc33) 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=wdc.com;
-x-originating-ip: [2400:2411:43c0:6000:8d3e:27aa:85c2:44b5]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9a0d0ae8-9090-4ff4-6455-08d88b0740b8
-x-ms-traffictypediagnostic: MN2PR04MB6477:
-x-microsoft-antispam-prvs: <MN2PR04MB64776D3602607C964E235212E7E20@MN2PR04MB6477.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f/HDAB0V3zZ+/mRrWpOhKiMPGig0GZctERceiEP4hA1+XZ0AGSRi8ncIp2oRykljhx2iwu+LFomgTyv6BVgOjGhDKiYGifpNyTTpq+XDefnmihY2wraWbVXf7Mdu01+YRm9lbXY4OeMtSgjS0eYwb0qoMKiH4NE8w+nLn/nWBFwnm/akJX/am2HgbRygFM1go/hwxh0anIAsnw+knT9kcMPkA7Ml9XGZWly3OPvNNnilgkuC4O5XsZ+Wy4IA6ZB0EVJNgOBrYSFSP89+rXPkhwlX5CWbS4D0ga/IFSnMTF21tQtzYsVUzJxjRHKcrd4Lqlo3zJjFG77pf3RFNvXsYg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR04MB6514.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(71200400001)(6486002)(6506007)(53546011)(6916009)(4326008)(8676002)(8936002)(30864003)(86362001)(2906002)(83380400001)(66946007)(66556008)(6512007)(36756003)(4001150100001)(66446008)(186003)(91956017)(76116006)(2616005)(498600001)(5660300002)(66476007)(54906003)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: 1PtOULaLInasHNSVczNf0Zzw2Q3l4f6AKD3z3k1njXRcIk47y9Ow3n0+K2u/7m8lRF//ph3BPmefmuIyCASDZSt0/Ia88Q1MhiwxgK1trV9eMlAe/nuMpLjClOY0otovSxhoklUV+9FXhHZn3BG0F154Hf4rktCbkZfqzVuNW2i9tPlVBaE8Qk2BQZoVZIdhTbp5x6W75D+h8qpKeJIUYdpRqfbmlFabRoChw9sSijpFlaa82sHIVoxpQpxaxbt4RzW8MxI6awrcPOhYf44S5HVbXpBs+hV/k0vNmyQcQYKzTiO9TPOPrKeBWR0ADFcr0Kckv0wh8lVuU2GnDQ6z1lPa11kNSqQmOuHcmodQCisSHoZO7/f5cbKEh5OoBPGp+0Ay5p19FX8VbYgamA5wKG3PW8o+T6+pMAJdjARkPNLYmIjQwoDz+AA5EopDcOBqRCLblvmAQAB2xBaG8GBnqn87MbRugfwzg34eIYgi4GBEj9a8pfhKJKShn0mAdEhTAvuzV8rLw0IjQHUzjyPR6dAnFsVOK65Lbn5NzJePvt0wzV0xTM8w8tMe7Yno3y6h3JdceMdf5lHtrAk1smVWQXINT7uEC7kzYXAWWXVojtVod9TIF6wUz9myqFmD5DzhlC/7ZcQoxaGK9ztQbecFuyDVJtNBeT9NEDnINJpyGcD1R08FexgMaFtDrC/lGqzMOdODMuVoIZFToK4yeGb7Lg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5F2C234C034D3A4CBF4DE9FA4811FBE4@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <20201107081420.60325-5-damien.lemoal@wdc.com>
+ <20201109195913.itgfj2ga5y7sr6zx@mobilestation>
+ <58943f7988706497040cac6f6108336286e9d15f.camel@wdc.com>
+ <20201115160146.efxcdjhm7f2nmivo@mobilestation>
+ <BL0PR04MB65149D8B62167C11B26E0EA7E7E30@BL0PR04MB6514.namprd04.prod.outlook.com>
+ <20201116215505.enelrzxaxb2457a6@mobilestation>
+ <ea6a82e27a66600e7d4eb1668282d42dbaabf4b0.camel@wdc.com>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR04MB6514.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a0d0ae8-9090-4ff4-6455-08d88b0740b8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2020 14:44:13.8150
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WN+MVzI8A9khZ05RsrhnwfVN+ESUZ9fet1tvpOj39bqqPGAMbBKsCZNHllAeF269j0iDPe4RpFJhuLaInC+P0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6477
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea6a82e27a66600e7d4eb1668282d42dbaabf4b0.camel@wdc.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTExLTE3IGF0IDAwOjU1ICswMzAwLCBTZXJnZSBTZW1pbiB3cm90ZToNCj4g
-T24gTW9uLCBOb3YgMTYsIDIwMjAgYXQgMDc6NDc6NDdBTSArMDAwMCwgRGFtaWVuIExlIE1vYWwg
-d3JvdGU6DQo+ID4gT24gMjAyMC8xMS8xNiAxOjAyLCBTZXJnZSBTZW1pbiB3cm90ZToNCj4gPiA+
-IE9uIEZyaSwgTm92IDEzLCAyMDIwIGF0IDA5OjIyOjU0QU0gKzAwMDAsIERhbWllbiBMZSBNb2Fs
-IHdyb3RlOg0KPiA+ID4gPiBPbiBNb24sIDIwMjAtMTEtMDkgYXQgMjI6NTkgKzAzMDAsIFNlcmdl
-IFNlbWluIHdyb3RlOg0KPiA+ID4gPiA+IE9uIFNhdCwgTm92IDA3LCAyMDIwIGF0IDA1OjEzOjUy
-UE0gKzA5MDAsIERhbWllbiBMZSBNb2FsIHdyb3RlOg0KPiA+ID4gPiA+ID4gV2l0aCBib2FyZHMg
-dGhhdCBoYXZlIHNsb3cgaW50ZXJydXB0cyBjb250ZXh0IHN3aXRjaCwgYW5kIGEgZmFzdCBkZXZp
-Y2UNCj4gPiA+ID4gPiA+IGNvbm5lY3RlZCB0byBhIHNwaSBtYXN0ZXIsIGUuZy4gYW4gU0QgY2Fy
-ZCB0aHJvdWdoIG1tYy1zcGksDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiB1c2luZw0KPiA+ID4g
-PiA+ID4gZHdfc3BpX3BvbGxfdHJhbnNmZXIoKSBpbnRlYWQgb2YgdGhlIHJlZ3VsYXIgaW50ZXJy
-dXB0IGJhc2VkDQo+ID4gPiA+ID4gPiBkd19zcGlfdHJhbnNmZXJfaGFuZGxlcigpIGZ1bmN0aW9u
-IGlzIG1vcmUgZWZmaWNpZW50IGFuZA0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IEkgY2FuIGJlbGll
-dmUgaW4gdGhhdC4gQnV0IHRoZSBuZXh0IHBhcnQgc2VlbXMgcXVlc3Rpb25hYmxlOg0KPiA+ID4g
-PiA+IA0KPiA+ID4gPiA+ID4gY2FuIGF2b2lkIGEgbG90DQo+ID4gPiA+ID4gPiBvZiBSWCBGSUZP
-IG92ZXJmbG93IGVycm9ycyB3aGlsZSBrZWVwaW5nIHRoZSBkZXZpY2UgU1BJIGZyZXF1ZW5jeQ0K
-PiA+ID4gPiA+ID4gcmVhc29ubmFibHkgaGlnaCAoZm9yIHNwZWVkKS4NCj4gPiA+ID4gPiANCj4g
-PiA+ID4gPiBObyBtYXR0ZXIgd2hldGhlciBpdCdzIGFuIElSUS1iYXNlZCBvciBwb2xsLWJhc2Vk
-IHRyYW5zZmVyLCBhcyBsb25nIGFzIGENCj4gPiA+ID4gPiBjbGllbnQgU1BJLWRldmljZSBpcyBj
-b25uZWN0ZWQgd2l0aCBhIEdQSU8tYmFzZWQgY2hpcC1zZWxlY3QgKG9yIHRoZQ0KPiA+ID4gPiA+
-IERXIEFQQiBTU0ktY29udHJvbGxlciBmZWF0dXJlIG9mIHRoZSBhdXRvbWF0aWMgY2hpcC1zZWxl
-Y3QgdG9nZ2xpbmcgaXMNCj4gPiA+ID4gPiBmaXhlZCksIHRoZSBSeCBGSUZPIHNob3VsZCBuZXZl
-ciBvdmVycnVuLiBJdCdzIGVuc3VyZWQgYnkgdGhlIHRyYW5zZmVyDQo+ID4gPiA+ID4gYWxnb3Jp
-dGhtIGRlc2lnbiBieSBjYWxjdWxhdGluZyB0aGUgcnh0eF9nYXAgaW4gdGhlIGR3X3dyaXRlcigp
-DQo+ID4gPiA+ID4gbWV0aG9kLiBJZiB0aGUgZXJyb3Igc3RpbGwgaGFwcGVucyB0aGVuIHRoZXJl
-IG11c3QgYmUgc29tZSBidWcgaW4NCj4gPiA+ID4gPiB0aGUgY29kZS4NCj4gPiA+ID4gPiANCj4g
-PiA+ID4gPiBJdCdzIGFsc28gc3RyYW5nZSB0byBoZWFyIHRoYXQgdGhlIHBvbGxpbmctYmFzZWQg
-dHJhbnNmZXIgaGVscHMNCj4gPiA+ID4gPiB0byBhdm9pZCB0aGUgUnggRklGTyBvdmVyZmxvdyBl
-cnJvcnMsIHdoaWxlIHRoZSBJUlEtYmFzZWQgdHJhbnNmZXINCj4gPiA+ID4gPiBjYXVzZXMgdGhl
-bS4gQm90aCBvZiB0aG9zZSBtZXRob2RzIGFyZSBiYXNlZCBvbiB0aGUgc2FtZSBkd193cml0ZXIo
-KQ0KPiA+ID4gPiA+IGFuZCBkd19yZWFkZXIoKSBtZXRob2RzLiBTbyBiYXNpY2FsbHkgdGhleSBi
-b3RoIHNob3VsZCBlaXRoZXIgd29yaw0KPiA+ID4gPiA+IHdlbGwgb3IgY2F1c2UgdGhlIGVycm9y
-cyBhdCBzYW1lIHRpbWUuDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gU28gdG8gc3BlYWsgY291bGQg
-eW91IG1vcmUgdGhyb3VnaCBkZWJ1ZyB5b3VyIGNhc2U/DQo+ID4gPiA+IA0KPiA+ID4gPiBJIGRp
-ZC4gQW5kIEkgaGF2ZSBtdWNoIGJldHRlciByZXN1bHRzIG5vdy4gTGV0IG1lIGV4cGxhaW46DQo+
-ID4gPiANCj4gPiA+ID4gMSkgVGhlIGRldmljZSB0cmVlIHdhcyBzZXR0aW5nIHVwIHRoZSBTUEkg
-Y29udHJvbGxlciB1c2luZyB0aGUgY29udHJvbGxlcg0KPiA+ID4gPiBpbnRlcm5hbCBjaGlwIHNl
-bGVjdCwgbm90IGEgR1BJTy1iYXNlZCBjaGlwIHNlbGVjdC4gVW50aWwgbm93LCBJIGNvdWxkIG5l
-dmVyDQo+ID4gPiA+IGdldCB0aGUgR1BJTy1iYXNlZCBjaGlwIHNlbGVjdCB0byB3b3JrLiBJIGZp
-bmFsbHkgZm91bmQgb3V0IHdoeTogSSBzaW1wbHkNCj4gPiA+ID4gbmVlZGVkIHRvIGFkZCB0aGUg
-InNwaS1jcy1oaWdoIiBwcm9wZXJ0eSB0byB0aGUgbW1jLXNsb3Qgbm9kZS4gV2l0aCB0aGF0LCB0
-aGUNCj4gPiA+ID4gQ1MgZ3BpbyBpcyBjb3JyZWN0bHkgZHJpdmVuIGFjdGl2ZS1oaWdoIGluc3Rl
-YWQgb2YgdGhlIGRlZmF1bHQgYWN0aXZlLWxvdyBhbmQNCj4gPiA+ID4gdGhlIFNEIGNhcmQgd29y
-a3MuDQo+ID4gPiANCj4gPiA+IFllYXAsIHRoYXQncyB0aGUgbWFpbiBwcm9ibGVtIG9mIHRoZSBz
-dGFuZGFyZCBEVyBBUEIgU1NJIGNvbnRyb2xsZXINCj4gPiA+IHJlbGVhc2VkIGJ5IFN5bm9wc3lz
-LiBDdXJyZW50bHkgU1BJLWZsYXNoJ2VzIGFyZSB0aGUgb25seSBTUEkNCj4gPiA+IHBlcmlwaGVy
-YWwgZGV2aWNlcyB3aGljaCBhcmUgY2FwYWJsZSB0byB3b3JrIHdpdGggbmF0aXZlIERXIEFQQiBT
-U0kNCj4gPiA+IGNoaXAtc2VsZWN0cy4gSSd2ZSBmaXhlZCB0aGF0IGZvciBmbGFzaGVzIHJlY2Vu
-dGx5IGJ5IGF0b21pemluZyB0aGUNCj4gPiA+IFNQSSBtZW1vcnkgb3BlcmF0aW9ucyAoZXhlY3V0
-aW5nIHRoZW0gd2l0aCB0aGUgbG9jYWwgSVJRcyBkaXNhYmxlZCkNCj4gPiA+IGFuZCBwZXJmb3Jt
-aW5nIHRoZW0gb24gdGhlIHBvbGwtYmFzZWQgYmFzaXMuIEFsYXMgdGhlIG5vcm1hbA0KPiA+ID4g
-U1BJLXRyYW5zZmVycyBzdGlsbCBjYW4ndCBiZSBwcm9wZXJseSBleGVjdXRlZCB3aXRoIG5hdGl2
-ZQ0KPiA+ID4gY2hpcC1zZWxlY3RzLg0KPiA+ID4gDQo+ID4gPiA+IDIpIFdpdGggdGhpcyBjaGFu
-Z2UgdXNpbmcgdGhlIEdQSU8tYmFzZWQgQ1MsIHRoZSBwYXRjaCAic3BpOiBkdzogRml4IGRyaXZp
-bmcNCj4gPiA+ID4gTU9TSSBsb3cgd2hpbGUgcmVjZWl2aW5nIiBiZWNhbWUgY29tcGxldGVseSB1
-bm5lY2Vzc2FyeS4gVGhlIFNEIGNhcmQgd29ya3MNCj4gPiA+ID4gd2l0aG91dCBpdC4NCj4gPiA+
-IA0KPiA+ID4gSG0sIHRoYXQncyB3ZWlyZC4gTU9TSSBsZXZlbCBoYXMgbm90aGluZyB0b2RvIHdp
-dGggdGhlIGNoaXAtc2VsZWN0cy4NCj4gPiA+IEFyZSB5b3Ugc3VyZSB0aGUgb3JpZ2luYWwgcHJv
-YmxlbSBoYXMgYmVlbiBjb25uZWN0ZWQgd2l0aCB0aGUgVHggbGFuZQ0KPiA+ID4gbGV2ZWw/IE9u
-IHRoZSBvdGhlciBoYW5kIGFyZSB5b3Ugc3VyZSB0aGUgcHJvYmxlbSBoYXMgZ29uZSBhd2F5IGFm
-dGVyDQo+ID4gPiBhbGw/DQo+ID4gDQo+ID4gTm90IHN1cmUgb2YgYW55dGhpbmcgaGVyZSA6KSBC
-dXQgcmVtb3ZpbmcgdGhlIHBhdGNoIGNoYW5naW5nIE1PU0kgbGV2ZWwgZGlkIG5vdA0KPiA+IHBy
-ZXZlbnQgdGhlIFNEIGNhcmQgdG8gYmUgc2Nhbm5lZCAmIGFjY2Vzc2VkIGNvcnJlY3RseS4gQmVm
-b3JlICh3aXRoIG5hdGl2ZSBjaGlwDQo+ID4gc2VsZWN0KSwgdGhlIGZpcnN0IGNvbW1hbmQgd291
-bGQgbm90IGV2ZW4gY29tcGxldGUuLi4NCj4gPiANCj4gPiA+IE1vcmVvdmVyIEkndmUganVzdCB0
-YWtlbiBhbG9vayBhdCB0aGUgTU1DIFNQSSBkcml2ZXIuIFR1cm5zIG91dCBpdA0KPiA+ID4gaGFz
-IGFscmVhZHkgYmVlbiBmaXhlZCB0byBzZW5kIG9uZXMgdG8gdGhlIE1NQyBwb3J0IHdoZW4gaXQn
-cw0KPiA+ID4gcmVxdWlyZWQuIFNvIElmIHlvdSBzdGlsbCBleHBlcmllbmNlIHRoZSBNT1NJLWxl
-dmVsIHByb2JsZW0NCj4gPiA+IHRoZW4gdGhhdCBmaXggbWlnaHQgaGF2ZSBiZWVuIGRvbmUgaW5j
-b3JyZWN0IGF0IHNvbWUgZXh0ZW50Li4uDQo+ID4gDQo+IA0KPiA+IE9LLiBUaGFua3MgZm9yIHRo
-ZSBpbmZvLiBJIG5lZWQgdG8gcmViYXNlIG9uIHRoZSBsYXRlc3QgU1BJIHRyZWUgdGhlbi4gSG93
-ZXZlciwNCj4gPiBzY3JpcHRzL2dldF9tYWludGFpbmVyLnBsIGRvZXMgbm90IG1lbnRpb24gYW55
-LiBXaGVyZSBpcyB0aGF0IGhvc3RlZCA/DQo+IA0KPiBJIG1lYW50IHRoZSBkcml2ZXJzL21tYy9o
-b3N0L21tY19zcGkuYyBkcml2ZXIuIFNlZSB0aGUgIm9uZXMiIGJ1ZmZlcg0KPiBiZWluZyB1c2Vk
-IGFzIHNwaV90cmFuc2Zlci0+dHhfYnVmIHNvbWV0aW1lcyB0aGVyZT8gVGhhdCdzIHdoYXQgaXMN
-Cj4gc3VwcG9zZWQgdG8gZml4IHRoZSBNT1NJIGxldmVsIHByb2JsZW0uIFNvIGlmIGF0IHNvbWUg
-cG9pbnQgdGhlIE1NQw0KPiBTUEkgZHJpdmVyIHBlcmZvcm1zIGFuIFJ4LW9ubHkgU1BJIHRyYW5z
-ZmVyIHdpdGggbm8gb25lcy1idWZmZXINCj4gc3BlY2lmaWVkIGFzIHRoZSB0eF9idWYgb25lLCBi
-dXQgdGhlIE1NQyBTUEkgcHJvdG9jb2wgcmVxdWlyZXMgZm9yIGFuIFNEDQo+IGNhcmQgdG8gcmVj
-ZWl2ZSBvbmVzLCB0aGVuIHRoZSBwcm90b2NvbCBwcm9ibGVtIHdpbGwgaGFwcGVuLg0KPiANCj4g
-PiANCj4gPiANCj4gPiA+ID4gTm93IGZvciB0ZXN0aW5nLCBJIGFsc28gcmVtb3ZlZCB0aGlzIHBv
-bGxpbmcgY2hhbmdlLiBSZXN1bHRzIGFyZSB0aGVzZToNCj4gPiA+ID4gMSkgV2l0aCB0aGUgc2Ft
-ZSBTUEkgZnJlcXVlbmN5IGFzIGJlZm9yZSAoNE1IeiksIEkgY2FuIHJ1biB0aGUgU0QgY2FyZCBh
-dCBhYm91dA0KPiA+ID4gPiAzMDAgS0IvcyAocmVhZCkgYnV0IEkgYW0gc3RpbGwgc2VlaW5nIHNv
-bWUgUlggRklGTyBvdmVyZmxvdyBlcnJvcnMuIE5vdCBhIGxvdCwNCj4gPiA+ID4gYnV0IGVub3Vn
-aCB0byBiZSBhbm5veWluZywgZXNwZWNpYWxseSBvbiBib290IGFzIHRoZSBwYXJ0aXRpb24gc2Nh
-biBzb21ldGltZXMNCj4gPiA+ID4gZmFpbHMgYmVjYXVzZSBvZiB0aGVzZSBlcnJvcnMuIEluIG1v
-c3QgY2FzZXMsIHRoZSBibG9jayBsYXllciByZXRyeSBvZiBmYWlsZWQNCj4gPiA+ID4gcmVhZC93
-cml0ZXMgY292ZXIgYW5kIG5vIGJhZCBlcnJvcnMgaGFwcGVuLCBidXQgdGhlIFJYIEZJRk8gb3Zl
-cmZsb3cgZXJyb3INCj4gPiA+ID4gbWVzc2FnZXMgc3RpbGwgcG9wIHVwLg0KPiA+ID4gPiAyKSBM
-b29raW5nIGludG8gdGhlIGNvZGUgZnVydGhlciwgSSByZWFsaXplZCB0aGF0IFJYRkxUUiBpcyBz
-ZXQgdG8gaGFsZiB0aGUNCj4gPiA+ID4gZmlmbyBzaXplIG1pbnVzIDEuIFRoYXQgc291bmQgcmVh
-c29uYWJsZSwgYnV0IGFzIHRoYXQgZGVsYXlzIGludGVycnVwdA0KPiA+ID4gPiBnZW5lcmF0aW9u
-IHVudGlsIHRoZSBSWCBmaWZvIGlzIGFsbW9zdCBmdWxsLCBJIGRlY2lkZWQgdG8gdHJ5IGEgdmFs
-dWUgb2YgMCB0bw0KPiA+ID4gPiBnZXQgdGhlIGludGVycnVwdCBhcyBzb29uIGFzIGRhdGEgaXMg
-YXZhaWxhYmxlIHJhdGhlciB0aGFuIHdhaXRpbmcgZm9yIGEgY2h1bmsuDQo+ID4gPiA+IFdpdGgg
-dGhhdCwgYWxsIFJYIEZJRk8gb3ZlcmZsb3cgZXJyb3JzIGdvIGF3YXksIGFuZCBJIGNvdWxkIGV2
-ZW4gZG91YmxlIHRoZSBTUEkNCj4gPiA+ID4gZnJlcXVlbmN5IHRvIDhNSHosIGdldHRpbmcgYSBz
-b2xpZCA2NTBLQi9zIGZyb20gdGhlIFNEIGNhcmQgd2l0aG91dCBhbnkgZXJyb3INCj4gPiA+ID4g
-YXQgYWxsLg0KPiA+ID4gPiANCj4gPiA+IA0KPiA+ID4gUGxlYXNlLCBzZWUgbXkgbGFzdCBjb21t
-ZW50Li4uDQo+ID4gPiANCj4gPiA+ID4gTXkgdGFrZToNCj4gPiA+ID4gKiBUaGlzIGNvbnRyb2xs
-ZXIgaW50ZXJuYWwgQ1Mgc2VlbXMgdG8gYmUgdG90YWxseSBicm9rZW4uDQo+ID4gPiANCj4gPiA+
-IE5hdGl2ZSBDUyBhcmVuJ3QgYnJva2VuLCB0aGV5IGp1c3QgaGF2ZSBiZWVuIGRlc2lnbmVkIHNv
-IGl0IGlzbid0IHRoYXQNCj4gPiA+IGVhc3kgdG8gdXNlIHRoZW0gaW4gdGhlIGxpbnV4IGtlcm5l
-bC4gTGludXgga2VybmVsIFNQSS1jb3JlIGV4cGVjdHMNCj4gPiA+IHRoZSBjaGlwLXNlbGVjdCBi
-ZWluZyBkcml2ZW4gdGhlIHdheSBpdCBuZWVkcyBhdCB0aGUgY2VydGFpbiBtb21lbnRzLA0KPiA+
-ID4gd2hpbGUgRFcgQVBCIFNTSSB0b2dnbGVzIHRoZW0gYXV0b21hdGljYWxseSBhdCB0aGUgbW9t
-ZW50IG9mIHRoZSBkYXRhDQo+ID4gPiBwdXNoaW5nL3BvcHBpbmcgdG8vZnJvbSB0aGUgU1BJIGJ1
-cy4gU29tZSBoYXJkd2FyZSB2ZW5kb3JzIHRoYXQgYm91Z2h0DQo+ID4gPiB0aGUgRFcgQVBCIFNT
-SSBJUC1jb3JlIGhhdmUgZml4ZWQgdGhhdCBieSBwcm92aWRpbmcgYSB3YXkgb2YgZGlyZWN0DQo+
-ID4gPiBDUyBsYW5lIGNvbnRyb2wgKHNlZSBzcGktZHctbW1pby5jOiBNaWNyb3NlbWksIFNwYXJ4
-NSwgQWxwaW5lDQo+ID4gPiBwbGF0Zm9ybXMpLg0KPiA+IA0KPiA+IE9LLiBUaGFua3MgZm9yIHRo
-ZSBkZXRhaWxzLg0KPiA+IA0KPiA+ID4gPiAqIFRoaXMgU29DIGhhcyByZWFsbHkgc2xvdyBpbnRl
-cnJ1cHRzLCBzbyBnZW5lcmF0aW5nIHRoZXNlIGVhcmxpZXIgcmF0aGVyIHRoYW4NCj4gPiA+ID4g
-bGF0ZXIgZ2l2ZXMgdGltZSB0byB0aGUgSVJRIGhhbmRsZXIgdG8ga2ljayBpbiBiZWZvcmUgdGhl
-IEZJRk8gb3ZlcmZsb3dzLg0KPiA+ID4gDQo+ID4gPiBJIGFtIHByZXR0eSBzdXJlIHRoYXQncyBu
-b3QgdGhlIHJlYXNvbi4gU2VlIG15IG5leHQgY29tbWVudC4NCj4gPiA+IA0KPiA+ID4gPiANCj4g
-PiA+ID4gSW4gdGhlIFYyIHNlcmllcyBmb3IgU1BJIERXLCBJIGFkZGVkIGEgRFdfU1BJX0NBUF9S
-WEZMVFJfQ0xFQVIgY2FwYWJpbGl0eSBmbGFnDQo+ID4gPiA+IHRvIHNldCBSWEZMVFIgdG8gMCwg
-YWx3YXlzLiBUaGF0IHdvcmtzIHdlbGwsIGJ1dCB0aGlzIGlzIG1heSBiZSBzdGlsbCBzaW1pbGFy
-DQo+ID4gPiA+IHRvIHRoZSAicG9sbGluZyIgaGFjayBpbiB0aGUgc2Vuc2UgdGhhdCBpdCBpcyB0
-dW5pbmcgZm9yIHRoaXMgU29DIHJhdGhlciB0aGFuIGENCj4gPiA+ID4gcHJvcGVydHkgb2YgdGhl
-IGNvbnRyb2xsZXIuIEJ1dCBJIGRvIG5vdCBzZWUgYW55IG90aGVyIHNpbXBsZSB3YXkgb2YgcmVt
-b3ZpbmcNCj4gPiA+ID4gdGhlc2UgYW5ub3lpbmcgUlggRklGTyBvdmVyZmxvdyBlcnJvcnMuDQo+
-ID4gPiANCj4gPiA+IEFsYXMgbm8sIFJYLUZJRk8gbGV2ZWwgdmFsdWUgc2hvdWxkbid0IGFmZmVj
-dCB0aGUgU1BJLXRyYW5zZmVycw0KPiA+ID4gZXhlY3V0aW9uIHJlc3VsdHMuIEknbGwgdHJ5IHRv
-IGV4cGxhaW4gaXQgb25lIG1vcmUgdGltZS4gRFcgQVBCIFNTSQ0KPiA+ID4gcHJvdmlkZXMgdGhy
-ZWUgbW9kZXMgb2YgdHJhbnNmZXJzIChUTU9ELWVzLCBzZWUgdGhlIGNoaXAgbWFudWFsIGZvcg0K
-PiA+ID4gZGV0YWlscykuIE9uZSBvZiB0aGVtIGlzIFRNT0Q9MHgwIC0gVHJhbnNtaXQgYW5kIFJl
-Y2VpdmUuIFNpbXBseQ0KPiA+ID4gc3BlYWtpbmcgdGhlIG1vZGUgZXNzZW5jZSBpcyBpZiB5b3Ug
-cHVzaCBhIGJ5dGUgb2YgZGF0YSB0byB0aGUgVHgNCj4gPiA+IEZJRk8geW91J2xsIHN5bmNocm9u
-b3VzbHkgZ2V0IGEgYnl0ZSBvZiBkYXRhIGJhY2sgaW4gdGhlIFJ4IEZJRk8gYSBiaXQNCj4gPiA+
-IGxhdGVyIGZyb20gdGhlIGludGVybmFsIHNoaWZ0IHJlZ2lzdGVyLiBUaGUgSVJRLWJhc2VkIHRy
-YW5zZmVycyBoYXZlDQo+ID4gPiBiZWVuIGRldmVsb3BlZCBmdWxsIGJhc2VkIG9uIHRoYXQgbW9k
-ZS4gU28gaXQncyBhYnNvbHV0ZWx5IHBvc3NpYmxlIHRvDQo+ID4gPiBpbXBsZW1lbnQgYSBzdGFi
-bGUgYWxnb3JpdGhtLCB3aGljaCB3b3VsZCB3b3JrIHdpdGhvdXQgYSByaXNrIG9mDQo+ID4gPiBn
-ZXR0aW5nIHRoZSBSeCBGSUZPIG92ZXJmbG93IG9yIHRoZSBUeCBGSUZPIG92ZXJydW4uIFN1Y2gg
-YWxnb3JpdGhtDQo+ID4gPiBzaG91bGQganVzdCBwcmVzZXJ2ZSBhIGJhbGFuY2Ugb2Ygc2VudCBk
-YXRhIHNvIHRoZSByZWNlaXZlZCBkYXRhDQo+ID4gPiB3b3VsZG4ndCBjYXVzZSB0aGUgUnggRklG
-TyBvdmVycnVuLiBBcyB5b3UgdW5kZXJzdGFuZCBzdWNoIGFsZ29yaXRobQ0KPiA+ID4gZG9lc24n
-dCBkZXBlbmQgb24gdGhlIElSUWVzIHBlcmZvcm1hbmNlLiBObyBtYXR0ZXIgaG93IHNsb3cgdGhl
-IElSUXMNCj4gPiA+IGhhbmRsZXIgaXMgZXhlY3V0ZSwgYXMgbG9uZyBhcyBpdCdzIGV4ZWN1dGVk
-LCB0aGUgU1BJIHRyYW5zZmVycw0KPiA+ID4gcHJvY2VkdXJlIHNoYWxsIGdvIG9uIHdpdGggbm8g
-ZXJyb3JzIGluY2x1ZGluZyB0aGUgUnggRklGTyBvdmVyZmxvd3MuDQo+ID4gDQo+ID4gT0suIEkg
-Z2V0IGl0IG5vdy4NCj4gPiANCj4gPiA+IEF0IGxlYXN0IHRoYXQncyB3aGF0IHRoZSBvcmlnaW5h
-bCBEVyBBUEIgU1NJIGRyaXZlciBkZXZlbG9wZXINCj4gPiA+IGltcGxpZWQgd2hlbiBjcmVhdGVk
-IHRoZSBjb2RlIGFuZCB3aGF0IEkgd2FzIHRyeWluZyB0byBwcmVzZXJ2ZSBpbiBteQ0KPiA+ID4g
-cGF0Y2hlcy4gSWYgeW91IHN0aWxsIGdldCB0aGUgZXJyb3JzICh5b3Ugc3VyZSBpdCdzIFJ4IEZJ
-Rk8gb3ZlcmZsb3dzLA0KPiA+ID4gYXJlbid0IHlvdT8pLCB0aGVuIHNvbWV0aGluZyB3ZW50IHdy
-b25nIGFuZCBlaXRoZXIgbWUgb3IgdGhlIG9yaWdpbmFsDQo+ID4gPiBhdXRob3Igb3Igc29tZW9u
-ZSBlbHNlIGhhcyBicm9rZW4gdGhlIGNvZGUuDQo+ID4gDQo+IA0KPiA+IFllcCwgMTAwJSBzdXJl
-IGl0IGlzIFJYIEZJRk8gb3ZlcmZsb3cgZXJyb3IuIFRoZSBiaXQgaW4gdGhlIElSUSBzdGF0dXMg
-aXMgc2V0Lg0KPiA+IENoZWNrZWQgaXQuIEFuZCB0aGF0IGlzIHRoZSB0cmlnZ2VyIGZvciB0aGUg
-ZXJyb3IgbWVzc2FnZSB3aGljaCBleGFjdGx5IHNheXMNCj4gPiB0aGF0ICJSWCBGSUZPIG92ZXJm
-bG93Ii4gU28gdGhhdCB3b3VsZCBtZWFuIHRoYXQgdG9vIG1hbnkgYnl0ZXMgYXJlIGJlaW5nDQo+
-ID4gd3JpdHRlbiB0byB0aGUgVFggRklGTywgcmlnaHQgPyBPciByYXRoZXIsIHRoYXQgd2hlbiB0
-aGUgVFggRklGTyBpcyB3cml0dGVuLCBpdA0KPiA+IHdyaXRlcyBtb3JlIGJ5dGVzIHRoYW4gd2hh
-dCBpcyBhdmFpbGFibGUgaW4gdGhlIFJYIEZJRk8gPw0KPiANCj4gSSdkIHNheSB0aGF0IGluIGFw
-cGxpYW5jZSB0byB0aGUgaW1wbGVtZW50ZWQgaW4gdGhlIGRyaXZlciBhbGdvcml0aG0NCj4gdGhl
-IGVycm9yIGhhcyBiZWVuIGluZGVlZCBjYXVzZWQgYnkgd3JpdGluZyB0b28gbWFueSBieXRlcyB0
-byB0aGUgVHgNCj4gRklGTy4gQnV0IHRoYXQgaW4gaXRzIHR1cm4gaW1wbGljaXRseSBjYXVzZWQg
-dGhlIFJ4IEZJRk8gb3ZlcmZsb3cuDQo+IA0KPiBUaGUgZXJyb3IgeW91IHNlZSBpbiB0aGUgbG9n
-IHNwZWNpZmljYWxseSBtZWFucyB0aGF0IHRoZSBSeCBGSUZPIGhhcw0KPiBiZWVuIGZ1bGwgYW5k
-IHRoZXJlIGhhcyBiZWVuIG1vcmUgZGF0YSB0byByZWNlaXZlLCBidXQgZHVlIHRvIG5vdA0KPiBo
-YXZpbmcgYW55IGZyZWUgc3BhY2UgaW4gdGhlIFJ4IEZJRk8gdGhhdCBkYXRhIGhhcyBiZWVuIGRp
-c2NhcmRlZC4gSW4NCj4gYXBwbGlhbmNlIHRvIERXIEFQQiBTU0kgZHJpdmVyLCBhcyBJIHNhaWQs
-IGl0IG1lYW5zIHRoYXQgdGhlcmUgaXMgYQ0KPiBtaXN0YWtlIGluIHRoZSBJUlEtYmFzZWQgU1BJ
-LXRyYW5zZmVyIGV4ZWN1dGlvbiBwcm9jZWR1cmUuIFdlJ3ZlDQo+IHdyaXR0ZW4gdG9vIG11Y2gg
-ZGF0YSB0byB0aGUgVHggRklGTyBzbyB0aGUgYmFsYW5jZSBiZXR3ZWVuIHRoZSBzZW50DQo+IGFu
-ZCByZWNlaXZlZCBieXRlcyBoYXMgYmVlbiB2aW9sYXRlZC4gSVNSIGNvdWxkbid0IGhhbmRsZSB0
-aGUNCj4gaW50ZXJydXB0IG9uIHRpbWUgYW5kIHRoZSBSeCBGSUZPIGhhcyBnb3Qgb3ZlcnJ1bi4g
-SWYgdGhlIGJhbGFuY2UNCj4gd2Fzbid0IHZpb2xhdGVkIG9yIHRoZSBJU1Igd2FzIGV4ZWN1dGVk
-IG9uIHRpbWUgd2Ugd291bGRuJ3QgaGF2ZSBnb3QNCj4gdGhlIG92ZXJydW4uIFN1cHBvc2VkbHkg
-dGhhdCdzIHdoeSB0aGUgZXJyb3IgaGFzbid0IGJlZW4gc2VlbiBvbiBteSBvcg0KPiBvdGhlciBw
-bGF0Zm9ybXMgYnV0IG9ubHkgb24geW91cnMgYW5kIG9ubHkgd2l0aCBub3JtYWwgUlhGVEwgcmVn
-aXN0ZXINCj4gdmFsdWUuIFRoZSBJU1IgaXMgZXhlY3V0ZWQgb24gdGltZSBzbyB0aGUgYmFsYW5j
-ZSB2aW9sYXRpb24gZG9lc24ndA0KPiBhZmZlY3QgdGhlIHRyYW5zZmVyIHRoYXQgbXVjaCBhcyBp
-biB5b3VyIGNhc2UuIE15IGd1ZXNzIHRoYXQgdGhlDQo+IHByb2JsZW0gbWlnaHQgYmUgY29ubmVj
-dGVkIHdpdGggdGhlIG9mZi1ieS1vbmUgYnVnLiBCdXQgdGhhdCdzIGp1c3QgYQ0KPiBoeXBvdGhl
-c2lzLg0KPiANCj4gPiANCj4gPiBJZiB0aGF0IGlzIHRoZSBjYXNlLCB0aGVuIGl0IHNlZW1zIHRv
-IG1lIHRoYXQgdHhfbWF4KCkgc2hvdWxkIGJlIG1vZGlmaWVkIGENCj4gPiBsaXR0bGU6IHJ4X2xl
-biBtYXkgYmUgbGFyZ2UgKHNheSBhIHNlY3RvciksIGluIHdoaWNoIGNhc2Ugcnh0eF9nYXAgb3Zl
-cmZsb3dzDQo+ID4gKGJlY29tZXMgc3VwZXIgbGFyZ2UpLCB3aXRoIHRoZSByZXN1bHQgdGhhdCB0
-eF9tYXgoKSByZXR1cm5zIHR4X3Jvb20uIEJ1dCB0aGF0DQo+ID4gbWF5IGJlIGxhcmdlciB0aGFu
-IHRoZSBmcmVlIHNwYWNlIGluIHRoZSBSWCBGSUZPLCBubyA/DQo+IA0KPiBZZWFoLCBJIGFsc28g
-Y29uc2lkZXJlZCB0aGUgdHhfbWF4KCkgbWV0aG9kIGFzIGEgZmlyc3QgcGxhY2UgdG8gYmxhbWUu
-DQo+IEJ1dCBhbGFzIEkgZmFpbGVkIHRvIHNlZSB3aGF0IG1pZ2h0IGJlIHdyb25nIHRoZXJlLg0K
-PiANCj4gTGV0J3MgYW5hbHl6ZSB3aGF0IHR4X21heCgpIGRvZXMuIEl0IG1heSBnZXQgdXMgdG8g
-YSBiZXR0ZXINCj4gdW5kZXJzdGFuZGluZyB3aGF0IGlzIGdvaW5nIG9uIGR1cmluZyBlYWNoIHNl
-bmQgb3BlcmF0aW9uLg0KPiANCj4gSGVyZSB3ZSBjYWxjdWxhdGUgYSBmcmVlIHNwYWNlIGluIHRo
-ZSBUeCBGSUZPOg0KPiA+IHR4X3Jvb20gPSBkd3MtPmZpZm9fbGVuIC0gZHdfcmVhZGwoZHdzLCBE
-V19TUElfVFhGTFIpOw0KPiBJdCBjYW4gYmUgd2l0aGluIFswLCBmaWZvX2xlbl0uIFNvIGlmIFR4
-IEZJRk8gaXMgZnVsbCB0aGVyZSBpcyBubyByb29tDQo+IGZvciBuZXcgZGF0YSB0byBzZW5kLiBJ
-ZiBpdCdzIGVtcHR5IHdlIGNhbiBzZW5kIGRhdGEgdXAgdG8gb2YgRklGTw0KPiBsZW5ndGguDQo+
-IA0KPiBUaGUgbmV4dCBpcyBhIG1hZ2ljIGZvcm11bGFlLCB3aGljaCBtYWtlcyBzdXJlIHRoZSBs
-ZW5ndGggb2YgdGhlIHNlbnQgZGF0YQ0KPiBhbHdheXMgZG9lc24ndCBleGNlZWQgdGhlIFJ4IEZJ
-Rk8gbGVuZ3RoLiBJbiBvdGhlciB3b3JkcyBpdCBwcmVzZXJ2ZQ0KPiB0aGUgc28gY2FsbGVkIGJh
-bGFuY2U6IChyeF9sZW4gLSB0eF9sZW4gPD0gZmlmb19sZW4pLg0KPiA+IHJ4dHhfZ2FwID0gZHdz
-LT5maWZvX2xlbiAtIChkd3MtPnJ4X2xlbiAtIGR3cy0+dHhfbGVuKTsNCj4gKHJ4X2xlbiAtIHR4
-X2xlbikgZ2l2ZXMgdXMgYSBudW1iZXIgb2YgZGF0YSB3aGljaCBoYXMgYWxyZWFkeSBiZWVuDQo+
-IHdyaXR0ZW4gdG8gdGhlIFR4IEZJRk8sIGJ1dCB0aGUgY29ycmVzcG9uZGluZyBpbmNvbWluZyBk
-YXRhIHN0aWxsDQo+IGhhc24ndCBiZWVuIHJlYWQgYmFjayBmcm9tIHRoZSBidXMuIFRoZSBmb3Jt
-dWxhZSBhYm92ZSB3b3JrcyB3ZWxsDQo+IHdoaWxlIHRoZSBuZXh0IHN0YXRlbWVudHMgYXJlIHZh
-bGlkOg0KPiAxKSByeF9sZW4gaXMgYWx3YXlzIGdyZWF0ZXIgdGhhbiBvciBlcXVhbCB0byB0eF9s
-ZW4uIEluZGVlZCBkdWUgdG8gdGhlDQo+IFNQSSBuYXR1cmUgZmlyc3Qgd2Ugd3JpdGUgZGF0YSB0
-byB0aGUgVHggRklGTyBhbmQgZGVjcmVtZW50IHRoZSB0eF9sZW4NCj4gdmFyaWFibGUgYWNjb3Jk
-aW5nbHksIHRoZW4gd2UgcmVhZCBkYXRhIGZyb20gdGhlIFJ4IEZJRk8gYW5kIGRlY3JlbWVudA0K
-PiB0aGUgcnhfbGVuIHZhcmlhYmxlLg0KPiAyKSAocnhfbGVuIC0gdHhfbGVuKSBpcyBhbHdheXMg
-bGVzcyB0aGFuIG9yIGVxdWFsIHRvIGZpZm9fbGVuLiBJIGRvbid0DQo+IHJlYWxseSBzZWUgd2hl
-biB0aGlzIGNvdWxkIGJlIGluY29ycmVjdCwgZXNwZWNpYWxseSBzZWVpbmcgd2UgYWx3YXlzDQo+
-IHNlbmQgYW5kIHJlY2VpdmVkIGRhdGEgYnkgbm8gbW9yZSB0aGFuIHRoZSBGSUZPIGxlbmd0aCBj
-aHVua3MgYW5kDQo+IG1ha2Ugc3VyZSB0aGUgZGlmZmVyZW5jZSBiZXR3ZWVuIHRoZSBzZW50IGFu
-ZCByZWNlaXZlZCBkYXRhIGxlbmd0aA0KPiBkb2Vzbid0IGV4Y2VlZCB0aGUgRklGTyBsZW5ndGgu
-IFRoZSByZWFkaW5nIGlzIGFsd2F5cyBkb25lIGJlZm9yZQ0KPiB3cml0aW5nLg0KPiANCj4gRmlu
-YWxseSB3ZSBnZXQgdG8gc2VsZWN0IGFuIGFsbG93ZWQgbnVtYmVyIG9mIGRhdGEgdG8gc2VuZC4g
-SXQncw0KPiB0aGUgbWluaW11bSBvZiB0aGUgVHggZGF0YSBsZW5ndGgsIFJ4IEZJRk8gZnJlZSBz
-cGFjZSBhbmQgdGhlIGxlbmd0aA0KPiBvZiB0aGUgZGF0YSB3aGljaCBkb2Vzbid0IGxldCB0aGUg
-UnggRklGTyB0byBvdmVmbG93Og0KPiA+IHJldHVybiBtaW4zKCh1MzIpZHdzLT50eF9sZW4sIHR4
-X3Jvb20sIHJ4dHhfZ2FwKTsNCj4gDQo+IEFsYXMgY3VycmVudGx5IEkgZG9uJ3Qgc2VlIGF0IHdo
-YXQgcG9pbnQgdGhlIGFsZ29yaXRobSBjb3VsZCBiZQ0KPiBpbmNvcnJlY3RseSBpbXBsZW1lbnRl
-ZC4uLg0KPiANCj4gPiANCj4gPiBJIHRoaW5rIEkgbmVlZCB0byBkbyBhIHJvdW5kIG9mIGRlYnVn
-IGFnYWluLCB0cmFjaW5nIHRoZXNlIHZhbHVlcyB0byBmaWd1cmUgb3V0DQo+ID4gd2hhdCBpcyBn
-b2luZyBvbi4gSSBjYW4gcmVwcm9kdWNlIHRoZSBlcnJvcnMgdmVyeSBlYXNpbHkgKEkganVzdCBu
-ZWVkIHRvIGNyYW5rDQo+ID4gdXAgdGhlIFNQSSBmcmVxdWVuY3kpLg0KPiANCj4gWWVhcCwgdGhh
-dCB3aGF0IEkgd291bGQgaGF2ZSBiZWVuIGRvaW5nIGlmIEkgaGFkIHRoZSBwcm9ibGVtDQo+IHJl
-cHJvZHVjaWJsZS4NCg0KRm91bmQgdGhlIGJ1ZyA6KQ0KVGhlIGZpeCBpczoNCg0KZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvc3BpL3NwaS1kdy1jb3JlLmMgYi9kcml2ZXJzL3NwaS9zcGktZHctY29yZS5j
-DQppbmRleCBlM2I3NmU0MGVkNzMuLmI3NTM4MDkzYzdlZiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMv
-c3BpL3NwaS1kdy1jb3JlLmMNCisrKyBiL2RyaXZlcnMvc3BpL3NwaS1kdy1jb3JlLmMNCkBAIC04
-MjgsNyArODI4LDcgQEAgc3RhdGljIHZvaWQgc3BpX2h3X2luaXQoc3RydWN0IGRldmljZSAqZGV2
-LCBzdHJ1Y3QgZHdfc3BpDQoqZHdzKQ0KICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAg
-ICBkd193cml0ZWwoZHdzLCBEV19TUElfVFhGVExSLCAwKTsNCiANCi0gICAgICAgICAgICAgICBk
-d3MtPmZpZm9fbGVuID0gKGZpZm8gPT0gMSkgPyAwIDogZmlmbzsNCisgICAgICAgICAgICAgICBk
-d3MtPmZpZm9fbGVuID0gKGZpZm8gPT0gMSkgPyAwIDogZmlmbyAtIDE7DQogICAgICAgICAgICAg
-ICAgZGV2X2RiZyhkZXYsICJEZXRlY3RlZCBGSUZPIHNpemU6ICV1IGJ5dGVzXG4iLCBkd3MtPmZp
-Zm9fbGVuKTsNCiAgICAgICAgfQ0KDQpCYXNpY2FsbHksIGZpZm9fbGVuIGlzIG9mZiBieSBvbmUs
-IG9uZSB0b28gbGFyZ2UgYW5kIHRoYXQgY2F1c2VzIHRoZSBSWCBGSUZPDQpvdmVyZmxvdyBlcnJv
-ci4gVGhlIGxvb3AgYWJvdmUgYnJlYWtzIHdoZW4gdGhlIHdyaXR0ZW4gZmlmbyB2YWx1ZSBkb2Vz
-IG5vdA0KbWF0Y2ggdGhlIHJlYWQgb25lLCB3aGljaCBtZWFucyB0aGF0IHRoZSBsYXN0IGNvcnJl
-Y3Qgb25lIGlzIGF0IHN0ZXAgZmlmbyAtIDEuDQoNCkkgcmVhbGl6ZWQgdGhhdCBieSB0cmFjaW5n
-IHRoZSB0cmFuc2ZlcnMgUlggZmlyc3QsIHRoZW4gVFggaW4NCmR3X3NwaV90cmFuc2Zlcl9oYW5k
-bGVyKCkuSSBkaWQgbm90IHNlZSBhbnl0aGluZyB3cm9uZyB3aXRoIHR4X21heCgpIGFuZA0Kcnhf
-bWF4KCksIGFsbCB0aGUgbnVtYmVycyBhbHdheXMgYWRkZWQgdXAgY29ycmVjdGx5IGVpdGhlciB1
-cCB0byB0cmFuc2ZlciBsZW4NCm9yIHRvIGZpZm9fbGVuLCBhcyB0aGV5IHNob3VsZC4gSXQgbG9v
-a2VkIGFsbCBnb29kLiBCdXQgdGhlbiBJIHJlYWxpemVkIHRoYXQgUlgNCkZJRk8gZXJyb3JzIHdv
-dWxkIHRyaWdnZXIgMTAwJSBvZiB0aGUgdGltZSBmb3I6DQoxKSB0cmFuc2ZlcnMgbGFyZ2VyIHRo
-YW4gZmlmbyBzaXplICgzMiBpbiBteSBjYXNlKQ0KMikgRklGTyBzbG90cyB1c2VkIGZvciBUWCAr
-IFJYIGFkZGluZyB1cCB0byAzMg0KQWZ0ZXIgc29tZSB0d2Vha2luZywgZm91bmQgdGhlIGFib3Zl
-LiBTaW5jZSB0aGF0IGJ1ZyBzaG91bGQgYmUgYWZmZWN0aW5nIGFsbA0KZHctYXBiIHNwaSBkZXZp
-Y2VzLCBub3Qgc3VyZSB3aHkgaXQgZG9lcyBub3QgbWFuaWZlc3QgaXRzZWxmIG1vcmUgb2Z0ZW4u
-DQoNCldpdGggdGhlIGFib3ZlIGZpeCwgdGhlIFNEIGNhcmQgaXMgbm93IHJ1bm5pbmcgZmxhd2xl
-c3NseSBhdCAxLjJNQi9zIHdpdGgNCm1heGltdW0gU1BJIGZyZXF1ZW5jeSwgemVybyBlcnJvcnMg
-bm8gbWF0dGVyIGhvdyBoYXJkIEkgaGl0IGl0IHdpdGggdHJhZmZpYy4NCg0KRHJvcHBpbmcgYWxs
-IG90aGVyIHBhdGNoZXMgKGV4Y2VwdCAzMi1iaXRzIENSMCBzdXBwb3J0IHRoYXQgaXMgc3RpbGwg
-bmVlZGVkKS4NClRoZSBNT1NJIGxpbmUgZHJpdmUgcGF0Y2ggZG9lcyBub3Qgc2VlbSB0byBiZSBu
-ZWNlc3NhcnkgYWZ0ZXIgYWxsLiBNeSBndWVzcyBpcw0KdGhhdCBpdCB3YXMgdGhlIGZhY3QgdGhh
-dCBzb21ldGltZXMgb25lIG1vcmUgYnl0ZSB0aGFuIG5lY2Vzc2FyeSB3YXMgYmVpbmcgc2VudA0K
-ZHVlIHRvIGZpZm8gbGVuIGJlaW5nIG9mIGJ5IG9uZS4gV2l0aCB0aGF0IGZpeGVkLCB0aGVyZSBp
-cyBuZXZlciBhbnkgIjAiIGJ5dGUNCnRyYW5zbWl0dGVkLCBzbyBubyBuZWVkIHRvIHNldCB0aGUg
-dmFsdWUgb2YgdHh3IHRvICIweGZmZmYiLg0KDQpXaWxsIHNlbmQgcHJvcGVyIHBhdGNoZXMgdG9t
-b3Jyb3csIG9ubHkgMiA6KQ0KDQotLSANCkRhbWllbiBMZSBNb2FsDQpXZXN0ZXJuIERpZ2l0YWwN
-Cg==
+On Tue, Nov 17, 2020 at 02:44:13PM +0000, Damien Le Moal wrote:
+> On Tue, 2020-11-17 at 00:55 +0300, Serge Semin wrote:
+> > On Mon, Nov 16, 2020 at 07:47:47AM +0000, Damien Le Moal wrote:
+> > > On 2020/11/16 1:02, Serge Semin wrote:
+> > > > On Fri, Nov 13, 2020 at 09:22:54AM +0000, Damien Le Moal wrote:
+> > > > > On Mon, 2020-11-09 at 22:59 +0300, Serge Semin wrote:
+> > > > > > On Sat, Nov 07, 2020 at 05:13:52PM +0900, Damien Le Moal wrote:
+> > > > > > > With boards that have slow interrupts context switch, and a fast device
+> > > > > > > connected to a spi master, e.g. an SD card through mmc-spi,
+> > > > > > 
+> > > > > > > using
+> > > > > > > dw_spi_poll_transfer() intead of the regular interrupt based
+> > > > > > > dw_spi_transfer_handler() function is more efficient and
+> > > > > > 
+> > > > > > I can believe in that. But the next part seems questionable:
+> > > > > > 
+> > > > > > > can avoid a lot
+> > > > > > > of RX FIFO overflow errors while keeping the device SPI frequency
+> > > > > > > reasonnably high (for speed).
+> > > > > > 
+> > > > > > No matter whether it's an IRQ-based or poll-based transfer, as long as a
+> > > > > > client SPI-device is connected with a GPIO-based chip-select (or the
+> > > > > > DW APB SSI-controller feature of the automatic chip-select toggling is
+> > > > > > fixed), the Rx FIFO should never overrun. It's ensured by the transfer
+> > > > > > algorithm design by calculating the rxtx_gap in the dw_writer()
+> > > > > > method. If the error still happens then there must be some bug in
+> > > > > > the code.
+> > > > > > 
+> > > > > > It's also strange to hear that the polling-based transfer helps
+> > > > > > to avoid the Rx FIFO overflow errors, while the IRQ-based transfer
+> > > > > > causes them. Both of those methods are based on the same dw_writer()
+> > > > > > and dw_reader() methods. So basically they both should either work
+> > > > > > well or cause the errors at same time.
+> > > > > > 
+> > > > > > So to speak could you more through debug your case?
+> > > > > 
+> > > > > I did. And I have much better results now. Let me explain:
+> > > > 
+> > > > > 1) The device tree was setting up the SPI controller using the controller
+> > > > > internal chip select, not a GPIO-based chip select. Until now, I could never
+> > > > > get the GPIO-based chip select to work. I finally found out why: I simply
+> > > > > needed to add the "spi-cs-high" property to the mmc-slot node. With that, the
+> > > > > CS gpio is correctly driven active-high instead of the default active-low and
+> > > > > the SD card works.
+> > > > 
+> > > > Yeap, that's the main problem of the standard DW APB SSI controller
+> > > > released by Synopsys. Currently SPI-flash'es are the only SPI
+> > > > peripheral devices which are capable to work with native DW APB SSI
+> > > > chip-selects. I've fixed that for flashes recently by atomizing the
+> > > > SPI memory operations (executing them with the local IRQs disabled)
+> > > > and performing them on the poll-based basis. Alas the normal
+> > > > SPI-transfers still can't be properly executed with native
+> > > > chip-selects.
+> > > > 
+> > > > > 2) With this change using the GPIO-based CS, the patch "spi: dw: Fix driving
+> > > > > MOSI low while receiving" became completely unnecessary. The SD card works
+> > > > > without it.
+> > > > 
+> > > > Hm, that's weird. MOSI level has nothing todo with the chip-selects.
+> > > > Are you sure the original problem has been connected with the Tx lane
+> > > > level? On the other hand are you sure the problem has gone away after
+> > > > all?
+> > > 
+> > > Not sure of anything here :) But removing the patch changing MOSI level did not
+> > > prevent the SD card to be scanned & accessed correctly. Before (with native chip
+> > > select), the first command would not even complete...
+> > > 
+> > > > Moreover I've just taken alook at the MMC SPI driver. Turns out it
+> > > > has already been fixed to send ones to the MMC port when it's
+> > > > required. So If you still experience the MOSI-level problem
+> > > > then that fix might have been done incorrect at some extent...
+> > > 
+> > 
+> > > OK. Thanks for the info. I need to rebase on the latest SPI tree then. However,
+> > > scripts/get_maintainer.pl does not mention any. Where is that hosted ?
+> > 
+> > I meant the drivers/mmc/host/mmc_spi.c driver. See the "ones" buffer
+> > being used as spi_transfer->tx_buf sometimes there? That's what is
+> > supposed to fix the MOSI level problem. So if at some point the MMC
+> > SPI driver performs an Rx-only SPI transfer with no ones-buffer
+> > specified as the tx_buf one, but the MMC SPI protocol requires for an SD
+> > card to receive ones, then the protocol problem will happen.
+> > 
+> > > 
+> > > 
+> > > > > Now for testing, I also removed this polling change. Results are these:
+> > > > > 1) With the same SPI frequency as before (4MHz), I can run the SD card at about
+> > > > > 300 KB/s (read) but I am still seeing some RX FIFO overflow errors. Not a lot,
+> > > > > but enough to be annoying, especially on boot as the partition scan sometimes
+> > > > > fails because of these errors. In most cases, the block layer retry of failed
+> > > > > read/writes cover and no bad errors happen, but the RX FIFO overflow error
+> > > > > messages still pop up.
+> > > > > 2) Looking into the code further, I realized that RXFLTR is set to half the
+> > > > > fifo size minus 1. That sound reasonable, but as that delays interrupt
+> > > > > generation until the RX fifo is almost full, I decided to try a value of 0 to
+> > > > > get the interrupt as soon as data is available rather than waiting for a chunk.
+> > > > > With that, all RX FIFO overflow errors go away, and I could even double the SPI
+> > > > > frequency to 8MHz, getting a solid 650KB/s from the SD card without any error
+> > > > > at all.
+> > > > > 
+> > > > 
+> > > > Please, see my last comment...
+> > > > 
+> > > > > My take:
+> > > > > * This controller internal CS seems to be totally broken.
+> > > > 
+> > > > Native CS aren't broken, they just have been designed so it isn't that
+> > > > easy to use them in the linux kernel. Linux kernel SPI-core expects
+> > > > the chip-select being driven the way it needs at the certain moments,
+> > > > while DW APB SSI toggles them automatically at the moment of the data
+> > > > pushing/popping to/from the SPI bus. Some hardware vendors that bought
+> > > > the DW APB SSI IP-core have fixed that by providing a way of direct
+> > > > CS lane control (see spi-dw-mmio.c: Microsemi, Sparx5, Alpine
+> > > > platforms).
+> > > 
+> > > OK. Thanks for the details.
+> > > 
+> > > > > * This SoC has really slow interrupts, so generating these earlier rather than
+> > > > > later gives time to the IRQ handler to kick in before the FIFO overflows.
+> > > > 
+> > > > I am pretty sure that's not the reason. See my next comment.
+> > > > 
+> > > > > 
+> > > > > In the V2 series for SPI DW, I added a DW_SPI_CAP_RXFLTR_CLEAR capability flag
+> > > > > to set RXFLTR to 0, always. That works well, but this is may be still similar
+> > > > > to the "polling" hack in the sense that it is tuning for this SoC rather than a
+> > > > > property of the controller. But I do not see any other simple way of removing
+> > > > > these annoying RX FIFO overflow errors.
+> > > > 
+> > > > Alas no, RX-FIFO level value shouldn't affect the SPI-transfers
+> > > > execution results. I'll try to explain it one more time. DW APB SSI
+> > > > provides three modes of transfers (TMOD-es, see the chip manual for
+> > > > details). One of them is TMOD=0x0 - Transmit and Receive. Simply
+> > > > speaking the mode essence is if you push a byte of data to the Tx
+> > > > FIFO you'll synchronously get a byte of data back in the Rx FIFO a bit
+> > > > later from the internal shift register. The IRQ-based transfers have
+> > > > been developed full based on that mode. So it's absolutely possible to
+> > > > implement a stable algorithm, which would work without a risk of
+> > > > getting the Rx FIFO overflow or the Tx FIFO overrun. Such algorithm
+> > > > should just preserve a balance of sent data so the received data
+> > > > wouldn't cause the Rx FIFO overrun. As you understand such algorithm
+> > > > doesn't depend on the IRQes performance. No matter how slow the IRQs
+> > > > handler is execute, as long as it's executed, the SPI transfers
+> > > > procedure shall go on with no errors including the Rx FIFO overflows.
+> > > 
+> > > OK. I get it now.
+> > > 
+> > > > At least that's what the original DW APB SSI driver developer
+> > > > implied when created the code and what I was trying to preserve in my
+> > > > patches. If you still get the errors (you sure it's Rx FIFO overflows,
+> > > > aren't you?), then something went wrong and either me or the original
+> > > > author or someone else has broken the code.
+> > > 
+> > 
+> > > Yep, 100% sure it is RX FIFO overflow error. The bit in the IRQ status is set.
+> > > Checked it. And that is the trigger for the error message which exactly says
+> > > that "RX FIFO overflow". So that would mean that too many bytes are being
+> > > written to the TX FIFO, right ? Or rather, that when the TX FIFO is written, it
+> > > writes more bytes than what is available in the RX FIFO ?
+> > 
+> > I'd say that in appliance to the implemented in the driver algorithm
+> > the error has been indeed caused by writing too many bytes to the Tx
+> > FIFO. But that in its turn implicitly caused the Rx FIFO overflow.
+> > 
+> > The error you see in the log specifically means that the Rx FIFO has
+> > been full and there has been more data to receive, but due to not
+> > having any free space in the Rx FIFO that data has been discarded. In
+> > appliance to DW APB SSI driver, as I said, it means that there is a
+> > mistake in the IRQ-based SPI-transfer execution procedure. We've
+> > written too much data to the Tx FIFO so the balance between the sent
+> > and received bytes has been violated. ISR couldn't handle the
+> > interrupt on time and the Rx FIFO has got overrun. If the balance
+> > wasn't violated or the ISR was executed on time we wouldn't have got
+> > the overrun. Supposedly that's why the error hasn't been seen on my or
+> > other platforms but only on yours and only with normal RXFTL register
+> > value. The ISR is executed on time so the balance violation doesn't
+> > affect the transfer that much as in your case. My guess that the
+> > problem might be connected with the off-by-one bug. But that's just a
+> > hypothesis.
+> > 
+> > > 
+> > > If that is the case, then it seems to me that tx_max() should be modified a
+> > > little: rx_len may be large (say a sector), in which case rxtx_gap overflows
+> > > (becomes super large), with the result that tx_max() returns tx_room. But that
+> > > may be larger than the free space in the RX FIFO, no ?
+> > 
+> > Yeah, I also considered the tx_max() method as a first place to blame.
+> > But alas I failed to see what might be wrong there.
+> > 
+> > Let's analyze what tx_max() does. It may get us to a better
+> > understanding what is going on during each send operation.
+> > 
+> > Here we calculate a free space in the Tx FIFO:
+> > > tx_room = dws->fifo_len - dw_readl(dws, DW_SPI_TXFLR);
+> > It can be within [0, fifo_len]. So if Tx FIFO is full there is no room
+> > for new data to send. If it's empty we can send data up to of FIFO
+> > length.
+> > 
+> > The next is a magic formulae, which makes sure the length of the sent data
+> > always doesn't exceed the Rx FIFO length. In other words it preserve
+> > the so called balance: (rx_len - tx_len <= fifo_len).
+> > > rxtx_gap = dws->fifo_len - (dws->rx_len - dws->tx_len);
+> > (rx_len - tx_len) gives us a number of data which has already been
+> > written to the Tx FIFO, but the corresponding incoming data still
+> > hasn't been read back from the bus. The formulae above works well
+> > while the next statements are valid:
+> > 1) rx_len is always greater than or equal to tx_len. Indeed due to the
+> > SPI nature first we write data to the Tx FIFO and decrement the tx_len
+> > variable accordingly, then we read data from the Rx FIFO and decrement
+> > the rx_len variable.
+> > 2) (rx_len - tx_len) is always less than or equal to fifo_len. I don't
+> > really see when this could be incorrect, especially seeing we always
+> > send and received data by no more than the FIFO length chunks and
+> > make sure the difference between the sent and received data length
+> > doesn't exceed the FIFO length. The reading is always done before
+> > writing.
+> > 
+> > Finally we get to select an allowed number of data to send. It's
+> > the minimum of the Tx data length, Rx FIFO free space and the length
+> > of the data which doesn't let the Rx FIFO to oveflow:
+> > > return min3((u32)dws->tx_len, tx_room, rxtx_gap);
+> > 
+> > Alas currently I don't see at what point the algorithm could be
+> > incorrectly implemented...
+> > 
+> > > 
+> > > I think I need to do a round of debug again, tracing these values to figure out
+> > > what is going on. I can reproduce the errors very easily (I just need to crank
+> > > up the SPI frequency).
+> > 
+> > Yeap, that what I would have been doing if I had the problem
+> > reproducible.
+> 
+
+> Found the bug :)
+> The fix is:
+> 
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index e3b76e40ed73..b7538093c7ef 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -828,7 +828,7 @@ static void spi_hw_init(struct device *dev, struct dw_spi
+> *dws)
+>                 }
+>                 dw_writel(dws, DW_SPI_TXFTLR, 0);
+>  
+> -               dws->fifo_len = (fifo == 1) ? 0 : fifo;
+> +               dws->fifo_len = (fifo == 1) ? 0 : fifo - 1;
+>                 dev_dbg(dev, "Detected FIFO size: %u bytes\n", dws->fifo_len);
+>         }
+> 
+> Basically, fifo_len is off by one, one too large and that causes the RX FIFO
+> overflow error. The loop above breaks when the written fifo value does not
+> match the read one, which means that the last correct one is at step fifo - 1.
+> 
+> I realized that by tracing the transfers RX first, then TX in
+> dw_spi_transfer_handler().I did not see anything wrong with tx_max() and
+> rx_max(), all the numbers always added up correctly either up to transfer len
+> or to fifo_len, as they should. It looked all good. But then I realized that RX
+> FIFO errors would trigger 100% of the time for:
+> 1) transfers larger than fifo size (32 in my case)
+> 2) FIFO slots used for TX + RX adding up to 32
+> After some tweaking, found the above. Since that bug should be affecting all
+> dw-apb spi devices, not sure why it does not manifest itself more often.
+> 
+> With the above fix, the SD card is now running flawlessly at 1.2MB/s with
+> maximum SPI frequency, zero errors no matter how hard I hit it with traffic.
+
+Hm, what you've found is the clue to getting where the problem lies,
+but I don't see fifo_len being calculated incorrectly in my HW. In my
+case it equals to 64 and 8 bytes for two different controllers. Those
+are the correct SSI_TX_FIFO_DEPTH/SSI_RX_FIFO_DEPTH parameters values
+our controllers have been synthesized with.
+
+But I've just realized that DW APB SSI controller can be synthesized
+with Rx and Tx FIFO having different depths. (Synopsys, really, what
+scenario did you imagine to provide such configuration?..). Anyway is
+it possible that you've got a controller which (most likely by
+mistake) has been synthesized with Rx_fifo_len != Tx_fifo_len? If so
+then that will explain the problem you are having, but everyone else
+isn't. The algorithm thinks that both FIFOs length match and equals to
+the Tx FIFO length. If Rx FIFO length is smaller even with a single
+byte, you'll end up with occasional overflows.
+
+Note if you don't have a manual with the parameters selected for your
+IP-core, you can just fix the fifo_len detection loop by replacing the
+TXFTLR with RXFTLR. Then just print the detected Rx and Tx FIFO
+lengths out. If they don't match, then, bingo, that's the root cause
+of the problem.
+
+-Sergey
+
+> 
+> Dropping all other patches (except 32-bits CR0 support that is still needed).
+> The MOSI line drive patch does not seem to be necessary after all. My guess is
+> that it was the fact that sometimes one more byte than necessary was being sent
+> due to fifo len being of by one. With that fixed, there is never any "0" byte
+> transmitted, so no need to set the value of txw to "0xffff".
+> 
+> Will send proper patches tomorrow, only 2 :)
+> 
+> -- 
+> Damien Le Moal
+> Western Digital
