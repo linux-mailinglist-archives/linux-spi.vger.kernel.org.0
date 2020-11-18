@@ -2,72 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CD22B71BA
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Nov 2020 23:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976BF2B731A
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Nov 2020 01:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729351AbgKQWiv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Nov 2020 17:38:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42270 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726319AbgKQWiu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Nov 2020 17:38:50 -0500
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B0C3120715;
-        Tue, 17 Nov 2020 22:38:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605652730;
-        bh=lw7G6IpSo/H8/hFVo1fq+gUL1Im6b7QfvDPyFQTlXuU=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=bfNItgKLtstT4i3s9qXRaIvVnLM5v0dgppHdUzGhnn5/3fkSZhi1jn2nsbXxoTOLB
-         2iPv1K2OwDNSAlCWstyfwosw4y5oDWguAqNsn7wy0EIdz6F+AzPeu46XP8LN3iNwsh
-         lfQ8O79MgyzN76VSGO3O50kJtG1g09ptxXsnVa9o=
-Date:   Tue, 17 Nov 2020 22:38:30 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     kernel@pengutronix.de, shawnguo@kernel.org,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20201116202606.29888-1-festevam@gmail.com>
-References: <20201116202606.29888-1-festevam@gmail.com>
-Subject: Re: [PATCH] spi: imx: Remove unused .id_table support
-Message-Id: <160565269951.23908.14015311346732871559.b4-ty@kernel.org>
+        id S1727514AbgKRAb1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Nov 2020 19:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726657AbgKRAb0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Nov 2020 19:31:26 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674FAC0613CF;
+        Tue, 17 Nov 2020 16:31:25 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id t8so279510pfg.8;
+        Tue, 17 Nov 2020 16:31:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=47SWtasEytDoDRyJHDoekvy/wBGX282Q45nU6ZNPmD0=;
+        b=V7bK46oL8GZ8BlAf5Gg/xm24qZGUbQD1IaDASznpm19Ct2rSKrR962N//p13IMLoCE
+         RDps1RuoldxeK8e5BNG8+lWdZlEojocz2W4XpywXklBB6kQ/HPtdyFZkdHn/foMjKOgE
+         dnW90Toc6jMeawxU+LCiYgwwY7Zu6I5j1CUkgucZqxE4gZssbwpH1nb1pcjf29MsoXzE
+         5saRvINvQcAUBRqPzfAPwxi9RHn9WocqOSxJXtSsaY2/a+3H1gZKVjCV4lmTeKjyPtFv
+         tc79keeDE8aQMvFARVSbAkm2Jtg+wVywePoKloYMKFSdfY7e2FYzjvazdRnSaxjTYwQt
+         wYOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=47SWtasEytDoDRyJHDoekvy/wBGX282Q45nU6ZNPmD0=;
+        b=hgUkfghDh9JDUCKAwhSVBlaT0kub3Z+ETZ9lipnRdhQbfoP7fVjthrzUo/kOyvvpxL
+         NusgykuSRZA1MfBuHbrRwfu1BZ8Hf5Wt/Oa88rFn3W4e+sSMuavKQUxlPzlcOsv0Twsk
+         VR4L2shCzfJUZGsjYEwLY/F/doL5wqlLomKiKsVzPjK449TNNI3WLuQUpnEbBToq6gLP
+         NhdRT7F2AgduPW/foe7Np2xe3WlJkq8RLkIbhEFXuZ3uMMXlOU2V3JTQ3A8522apCCry
+         Hn8/AtLsru5w1YdL2/J+xwFIHZAzX+xBjyja+JX5LpZgNTYSXFLsL4r47crJP0yhKCeM
+         5nPQ==
+X-Gm-Message-State: AOAM530W2Ov39tCowpGGsFYOMuuphcTEqqzvYykermhEz2/Y8OTn2rJS
+        mUJ0a/Xkzaf1WUuqv534vOw=
+X-Google-Smtp-Source: ABdhPJzrU60dQjf9UZ+oq8kLcuhK2h1KdnUVCu+dn/b/zh7hVRleuaFbGWzjFK3x9t03vSYrXZ7tKw==
+X-Received: by 2002:a62:7e4f:0:b029:18c:9322:739b with SMTP id z76-20020a627e4f0000b029018c9322739bmr1930195pfc.7.1605659484934;
+        Tue, 17 Nov 2020 16:31:24 -0800 (PST)
+Received: from dtor-ws ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id m204sm9004378pfd.118.2020.11.17.16.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Nov 2020 16:31:24 -0800 (PST)
+Date:   Tue, 17 Nov 2020 16:31:21 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-spi@vger.kernel.org, David Jander <david@protonic.nl>
+Subject: Re: [PATCH v2 1/2] Input: ads7846: convert to full duplex
+Message-ID: <20201118003121.GC2009714@dtor-ws>
+References: <20201110085041.16303-1-o.rempel@pengutronix.de>
+ <20201110085041.16303-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201110085041.16303-2-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 16 Nov 2020 17:26:06 -0300, Fabio Estevam wrote:
-> Since 5.10-rc1 i.MX is a devicetree-only platform and the existing
-> .id_table support in this driver was only useful for old non-devicetree
-> platforms.
+On Tue, Nov 10, 2020 at 09:50:40AM +0100, Oleksij Rempel wrote:
+> Starting with following patch, the ads7845 was partially converted to
+> full duplex mode:
+> 3eac5c7e44f3 Input: ads7846 - extend the driver for ads7845 controller support
+> 
+> Since it is not touchscreen controller specific, it is better to make
+> this conversion consequent for complete driver. This will reduce CPU
+> load and make driver more readable.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Applied to
+Applied, thank you.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: imx: Remove unused .id_table support
-      commit: 6e3dbfcb3c8a1ef8cc73a8637f778673f5c6e91c
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Dmitry
