@@ -2,101 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCBC2B7371
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Nov 2020 02:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1202B737C
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Nov 2020 02:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726981AbgKRBD4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Nov 2020 20:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S1727155AbgKRBIV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Nov 2020 20:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbgKRBDz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Nov 2020 20:03:55 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28993C061A4D
-        for <linux-spi@vger.kernel.org>; Tue, 17 Nov 2020 17:03:54 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id z21so485319lfe.12
-        for <linux-spi@vger.kernel.org>; Tue, 17 Nov 2020 17:03:54 -0800 (PST)
+        with ESMTP id S1725943AbgKRBIU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Nov 2020 20:08:20 -0500
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69020C061A48
+        for <linux-spi@vger.kernel.org>; Tue, 17 Nov 2020 17:08:20 -0800 (PST)
+Received: by mail-lj1-x243.google.com with SMTP id o24so470220ljj.6
+        for <linux-spi@vger.kernel.org>; Tue, 17 Nov 2020 17:08:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PlgdtYEdscf+tUFxFKexbIH/xB8SATTGk+HtZWc0bWE=;
-        b=Z26LAAgIMRvns+YZ8VKNh4K8pGmPO8h21+E3k1Ss952Ds8+3HjzO/6VaW4hLl/zw0n
-         vFg7thdmnfIgF60Nmbp0Irvho8TtVEGlnsH78gqUVpE1560l97xDwRwnLpyzEZKAyoJ0
-         8xV74Ax68cLJ6kkpWkYcqaN4W+13B0A0Q7Y8s7RuRJKC7G6w95xmky1uk3t719ABaO8E
-         jihYCw8JiNNepaHlzMkj/FyCYzeISl92Jwmm2oBWxbR8UtDnUhMZN8f+1DOMfI19b6Gr
-         tMzPxZwnq7OxXiFhfAAgwygwEtU6lS2tzIThdUUnLtha7pJS/IlxLaJaNbuTMFoN5VRu
-         BduQ==
+        bh=CC35HEt4K1i1sTZSdlQEvHPbxlvjssojhb57sLmWSqo=;
+        b=rKGJVPa7DwJOFwfSACzIV6e22jkz5jIRar9MWLIEUTQnSSbIu/Wjb91gOHuyCGfgvt
+         CEpmbYMpgFo03i1LDoK+MBBnL+EuVwMWdW4lkp2mEndc4PoFYAXDtt9sQHCYKcstiaTB
+         3z7fdaHMwf3fSRiy+kZPT1b8rexk44hWqBqsPo8YI/DejBVmMWxfAHPVOG/YV9rCrSC3
+         zNGydyAeNj8sZh7t1BUnlGsrojl9ciR/fwNd1CF7YUTMVasyJGoOgySEtDwjU7aw4BbH
+         QmKfp/Mm2+pe4tCMKRUvsata4lzUBFf6Rc7AiB5VnAvSF3vcEWK8NaTAw8W627y9EgoG
+         VoJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PlgdtYEdscf+tUFxFKexbIH/xB8SATTGk+HtZWc0bWE=;
-        b=MR5UnigPsjzdq+OVA46ShT/Rh+lIpWJuaXvhdFi7hyAf2fDHjm2bG6lQ2Gfe5RuIDo
-         RwDnYQ8RDRcVI1vSJdIdWrX5keegp+71LIyrU0FIb1q+9E4f0/hqD6EJHFOnBvQhrRkz
-         Z4jIAJhVsVsxqCTFGaGv2dfxK/5+ZNJgnoavbKLHrAcpadgc4a4YP9Kr8ELpPBtnyETH
-         bQRtrZcbA8e4QwqNSdK/TkfleH+RtzUDYtZGAP8ILupvOieDkgz4I+iPKr3Dgeyg/qcY
-         VTqPUEbV59vpSAxgo1Q5EAiBWK/EXTh5fDmT8ghWcZQOzm4UTw8uWlAf/MXRIiSa0DxN
-         G1Eg==
-X-Gm-Message-State: AOAM5327Ynw3yH4YNccHdCUr0cgmrMdgv675KNQjNOdQxAJxva8xI978
-        7pqmubq0fr5rpBcH1S0nh2f382cEmt78XKWAxPXsgw==
-X-Google-Smtp-Source: ABdhPJxtYOMsiELQpvhHELtHITV36jbt6UUELQ1GVqJL6sY+qb8cCr4K+e625Tl0PN6+YLyd/w50j/5Q6lHpIFTHeMQ=
-X-Received: by 2002:ac2:4ac7:: with SMTP id m7mr2551245lfp.572.1605661432618;
- Tue, 17 Nov 2020 17:03:52 -0800 (PST)
+        bh=CC35HEt4K1i1sTZSdlQEvHPbxlvjssojhb57sLmWSqo=;
+        b=CVWOyTcHmzahXCQdtCwd1TZXouKQzE3nN7YhYmKKUlmRCnK7xlDM+I+7/M0JYk1D01
+         7p8YXMwWaSQkSnokSzHP5zbw9HnanRUYy2AEtsPaLA3p9jST0vRdleZmS4GpeRK9fAzh
+         4+ABFxQ7FHcRGivw+bfMXOSgvkBwB//wvWPmNCrQBeD287W3S7sFoHgMCoEHiUGfEC3j
+         MrG/zGQN7N/n/XDOG9FR8yclEWl/zvMCKv1QBWRdYpZIhzLQ4/UVAW8Jo3Z1xZECVpxO
+         d3afNVIieYtqPIuBfYqsf3DfU9e4ARJhBgAsJIdqG63n9W1PJiKlmICaIOsj8ryNpViY
+         G6iA==
+X-Gm-Message-State: AOAM53018jlNEYMr4xzRPjxRd75HeoJQYEXuue4x7B6yiwH13UcDdIO4
+        bE7iPtJcKrS+z7DXKhav88n159177sfNTEsHPyn2AysCpkcmNw==
+X-Google-Smtp-Source: ABdhPJyJMKk2p5bN0BYKZFVDSwE/NRYLgfbKHWTwwD2/xXErDhUwukZfqHAG9Jz7L5vbAwqkipmnJNt3Usgke4LdymI=
+X-Received: by 2002:a05:651c:c2:: with SMTP id 2mr2741494ljr.104.1605661697461;
+ Tue, 17 Nov 2020 17:08:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20201106150706.29089-1-TheSven73@gmail.com> <CAHp75VfP1R7bXV6nWWnovWB5BMFcNNEmwBQXheBCUVDbr=xXGA@mail.gmail.com>
- <CAGngYiVu3cXtzb5PaoDOoyqjuuohLQ+em6Keg-qgDFFn2tdp=Q@mail.gmail.com>
- <CACRpkdagAK1X6FT=sug5FGA1iipXnOT_ujtMBh9cVnep_DpWyA@mail.gmail.com>
- <20201111123327.GB4847@sirena.org.uk> <CACRpkdZW3G48Yj3yGMTKZGwVEQOSs1VeVTTGLgyoJViM3=Yedg@mail.gmail.com>
- <20201116210632.GJ4739@sirena.org.uk>
-In-Reply-To: <20201116210632.GJ4739@sirena.org.uk>
+References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
+ <49102f5bbb3f1592d9cfd7b39ac5e131a031f950.1605512876.git.lukas@wunner.de>
+In-Reply-To: <49102f5bbb3f1592d9cfd7b39ac5e131a031f950.1605512876.git.lukas@wunner.de>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 18 Nov 2020 02:03:41 +0100
-Message-ID: <CACRpkdayWzWKHv69cg_GL2O=NWozqi_ZLnH1WdMOHzEb1bU-xA@mail.gmail.com>
-Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO descriptors
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Grant Likely <grant.likely@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Simon Han <z.han@kunbus.com>, Lukas Wunner <lukas@wunner.de>,
+Date:   Wed, 18 Nov 2020 02:08:05 +0100
+Message-ID: <CACRpkdZeLvNz+b5K3iXMOTk=2JciFco5emhYEA_oeG73t=xdhw@mail.gmail.com>
+Subject: Re: [PATCH for-5.10] spi: gpio: Don't leak SPI master in probe error path
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Mark Brown <broonie@kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Navid Emamdoost <navid.emamdoost@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 10:06 PM Mark Brown <broonie@kernel.org> wrote:
-> On Wed, Nov 11, 2020 at 02:36:07PM +0100, Linus Walleij wrote:
+On Mon, Nov 16, 2020 at 9:44 AM Lukas Wunner <lukas@wunner.de> wrote:
 
-> > I don't know if we ever formalized it, there is nowadays a rule akin to
+> If the call to devm_spi_register_master() fails on probe of the GPIO SPI
+> driver, the spi_master struct is erroneously not freed:
 >
-> > "if a property can be determined from the compatible-string, and if the
-> >  compatible-string is identifying the variant of the electronic component,
-> >  then do not add this property to the device tree description. Just
-> >  deduce it from the compatible-string, assign it with code to the device
-> >  model of the operating system and handle it inside the operating system."
+> After allocating the spi_master, its reference count is 1.  The driver
+> unconditionally decrements the reference count on unbind using a devm
+> action.  Before calling devm_spi_register_master(), the driver
+> unconditionally increments the reference count because on success,
+> that function will decrement the reference count on unbind.  However on
+> failure, devm_spi_register_master() does *not* decrement the reference
+> count, so the spi_master is leaked.
 >
-> > I think this, while clear and intuitive, wasn't at all clear and intuitive in
-> > the recent past.
+> The issue was introduced by commits 8b797490b4db ("spi: gpio: Make sure
+> spi_master_put() is called in every error path") and 79567c1a321e ("spi:
+> gpio: Use devm_spi_register_master()"), which sought to plug leaks
+> introduced by 9b00bc7b901f ("spi: spi-gpio: Rewrite to use GPIO
+> descriptors") but missed this remaining leak.
 >
-> I think the main push in the other direction has always been people who
-> want to not have to write a driver at all and put absolutely everything
-> into DT which has scaling issues :/
+> The situation was later aggravated by commit d3b0ffa1d75d ("spi: gpio:
+> prevent memory leak in spi_gpio_probe"), which introduced a
+> use-after-free because it releases a reference on the spi_master if
+> devm_add_action_or_reset() fails even though the function already
+> does that.
+>
+> Fix by switching over to the new devm_spi_alloc_master() helper.
+>
+> Fixes: 9b00bc7b901f ("spi: spi-gpio: Rewrite to use GPIO descriptors")
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Cc: <stable@vger.kernel.org> # v4.17+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
+> Cc: <stable@vger.kernel.org> # v5.1-: 8b797490b4db: spi: gpio: Make sure spi_master_put() is called in every error path
+> Cc: <stable@vger.kernel.org> # v5.1-: 45beec351998: spi: bitbang: Introduce spi_bitbang_init()
+> Cc: <stable@vger.kernel.org> # v5.1-: 79567c1a321e: spi: gpio: Use devm_spi_register_master()
+> Cc: <stable@vger.kernel.org> # v5.4-: d3b0ffa1d75d: spi: gpio: prevent memory leak in spi_gpio_probe
+> Cc: <stable@vger.kernel.org> # v4.17+
+> Cc: Navid Emamdoost <navid.emamdoost@gmail.com>
+> Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
 
-What I can't understand is what gave them that idea.
-
-This thing looks like a dream to these people for example:
-https://gist.github.com/Minecrell/56c2b20118ba00a9723f0785301bc5ec#file-dsi_panel_s6e88a0_ams452ef01_qhd_octa_video-dtsi
-And it looks like a nightmare to me.
-
-(There is even a tool to convert this description into a proper display
-driver now.)
-
-It just seems to be one of those golden hammer things: everything
-start to look like nails.
+That's a really good fix. Thanks to looking into this!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
