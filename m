@@ -2,75 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 473132B81F1
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Nov 2020 17:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB2A2B8632
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Nov 2020 22:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727835AbgKRQ3j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 18 Nov 2020 11:29:39 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:51306 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727807AbgKRQ3j (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 18 Nov 2020 11:29:39 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id F071A8030809;
-        Wed, 18 Nov 2020 16:29:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qaudjfTZt0c0; Wed, 18 Nov 2020 19:29:33 +0300 (MSK)
-Date:   Wed, 18 Nov 2020 19:29:31 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] spi: Take the SPI IO-mutex in the spi_setup() method
-Message-ID: <20201118162931.sdpofyw74yyr5n5z@mobilestation>
-References: <20201117094517.5654-1-Sergey.Semin@baikalelectronics.ru>
- <20201118131604.GC4827@sirena.org.uk>
+        id S1726360AbgKRVAZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 18 Nov 2020 16:00:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55922 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725822AbgKRVAY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 18 Nov 2020 16:00:24 -0500
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 80E39246AA;
+        Wed, 18 Nov 2020 21:00:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605733224;
+        bh=spkhx3mTpbrol3ioqiZqCn/UIi+RkhiA4Wro0eYHxEQ=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=EeMU8cTGdzUJR9azgm0SOrPvB0s4X42/hQeUl94rRcUuTp6rHpD1AwJM2zdT3i5N3
+         Gq6hmSfgTCamiyhDYlf3ojlEDpgR+Yob+kZI4St106SaY2Ei5dG4U94W352xsnRaby
+         tZkkex1wKCsk7dgkereJsY6Mpb5JuSqchK/wLYoU=
+Date:   Wed, 18 Nov 2020 21:00:03 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     s.hauer@pengutronix.de, shawnguo@kernel.org,
+        Zhang Qilong <zhangqilong3@huawei.com>
+Cc:     festevam@gmail.com, linux-imx@nxp.com, kernel@pengutronix.de,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20201106012421.95420-1-zhangqilong3@huawei.com>
+References: <20201106012421.95420-1-zhangqilong3@huawei.com>
+Subject: Re: [PATCH] spi: mxs: fix reference leak in mxs_spi_probe
+Message-Id: <160573320342.46706.17251700312199098743.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20201118131604.GC4827@sirena.org.uk>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Nov 18, 2020 at 01:16:04PM +0000, Mark Brown wrote:
-> On Tue, Nov 17, 2020 at 12:45:17PM +0300, Serge Semin wrote:
-> 
-> > method being called at the same time. In particular in calling the
-> > spi_set_cs(false) while there is an SPI-transfer being executed. In my
-> > case due to the commit cited above all CSs get to be switched off by
-> > calling the spi_setup() for /dev/spidev0.1 while there is an concurrent
-> > SPI-transfer execution performed on /dev/spidev0.0. Of course a situation
-> > of the spi_setup() being called while there is an SPI-transfer being
-> > executed for two different SPI peripheral devices of the same controller
-> > may happen not only for the spidev driver, but for instance for MMC SPI +
-> > some another device, or spi_setup() being called from an SPI-peripheral
-> > probe method while some other device has already been probed and is being
-> > used by a corresponding driver...
-> 
-> It's documented that a driver's spi_setup() operation is supposed to
-> support being able to be called concurrently with other transfers, see
-> spi-summary.rst.
-> 
-> > Of course I could have provided a fix affecting the DW APB SSI driver
-> > only, for instance, by creating a mutual exclusive access to the set_cs
-> > callback and setting/clearing only the bit responsible for the
-> > corresponding chip-select. But after a short research I've discovered that
-> > the problem most likely affects a lot of the other drivers:
-> 
-> Yeah, problems with it are very common as the documentation has noted
-> since forever.  IIRC there was some problem triggered by trying to force
-> it to be serialised but I can't remember what it was.
+On Fri, 6 Nov 2020 09:24:21 +0800, Zhang Qilong wrote:
+> pm_runtime_get_sync will increment pm usage counter even it
+> failed. Forgetting to pm_runtime_put_noidle will result in
+> reference leak in mxs_spi_probe, so we should fix it.
 
-Does it mean nack for this patch from you? So you suggest to fix the controller
-driver instead, right? If so the best solution would be to just lock the
-IO mutex in the set_cs callback of the DW APB SSI driver...
+Applied to
 
--Sergey
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/1] spi: mxs: fix reference leak in mxs_spi_probe
+      commit: 03fc41afaa6549baa2dab7a84e1afaf5cadb5b18
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
