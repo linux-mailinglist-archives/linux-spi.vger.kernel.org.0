@@ -2,490 +2,506 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F39182B8DEE
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Nov 2020 09:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A3D2B8E54
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Nov 2020 10:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725915AbgKSIvm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Nov 2020 03:51:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725873AbgKSIvl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Nov 2020 03:51:41 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBE1C0613CF
-        for <linux-spi@vger.kernel.org>; Thu, 19 Nov 2020 00:51:41 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id l11so7146465lfg.0
-        for <linux-spi@vger.kernel.org>; Thu, 19 Nov 2020 00:51:41 -0800 (PST)
+        id S1726625AbgKSI5n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 19 Nov 2020 03:57:43 -0500
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:40867 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726569AbgKSI5m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 19 Nov 2020 03:57:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1605776262; x=1637312262;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=o+y+5Ui3R+3Dp4bwJxfTSz5gRVbvs1gXFReWV7m0QYo=;
+  b=Iaf6cT3cnStG/HlcXfN85hE6e5WNEfMUENpn3nUwQ/1MkVxzMhnwiLF+
+   f1p3PhLFHjGh/loshSdAgwkR3NDx6DYLyU8e5AfpARr9EzBnrWKCShiEV
+   X05kWGDpy4oQZFKyDp3q17uNscbZnBIDvPVjkRJeMJsJIY5C+Jv2D91yX
+   79kLkvilX1Tr/UM/QDB6UgDvx93tnQ2Ctod+fG1OCFCmwkB+Ldq+k5qJO
+   Lx/N4EbX92/d+cnlR5F20V8xUiGMFasFKdGwuCRor69sUER7TKnllBdwA
+   OyVsyy1hokBKkBzHwAe7StMjf7wqkDFB/MqWsSRuMMsdeYUY6vykIk2JO
+   A==;
+IronPort-SDR: iBe2g81/cuRfb9F1u1BJgG+7Q8e2qTwDwDpWT6Sri12gx8N/B0afSfIBg8OTjHR4EVgS90xlvD
+ rbGjhk/S86gfRot23H0K8ztIX8pq1dT8cw3722cz/+ONaUAKy9mNnnAcsturtlVhli2On5Tk6u
+ jywco3AT9KYV7xTs0Ynv2HFJ7g5wgG+cmgIznnTfVDeP3R3NebAHjDMfvdOUUVJmvHzVl4si3P
+ fBkb+4cq+JmZBa1/T/oT0bL+mqYS8ki6WIyTk9F7Tmmepixt9X/LupKTK5IK6O3AXOyrAqti7U
+ 5AE=
+X-IronPort-AV: E=Sophos;i="5.77,490,1596470400"; 
+   d="scan'208";a="152880468"
+Received: from mail-bn8nam11lp2176.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.176])
+  by ob1.hgst.iphmx.com with ESMTP; 19 Nov 2020 16:57:41 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YDrnKuIY7R4v1bQIPo+G838jDvtCNgsZGuDdfLkmnpz0lea4I0twIGblv8KhhUAyfeAeXg0CcpeeZPT7eCi2amg8gLWgWh3oUrlnacCujsvstnXaaGu5ZdDNBcMlgArv4f4J/pXgEXIVbPGAh1i1Hau+2Tmx8MWPvaSCJR2hy+8bNyd3BHt1xyIC60JhYQUOWMyM4rrpVUE35m09/N89gw44kVfkCIiG+5jYXQ3HXipv1k8U0ziLDNRDAsUcZvm8E15vv92+qz5SZ9LDsF3d03HgYXhhUbTgDxU16ND1i91YxfKoiBPiAR5G+9ZVF7Ej2KBnsoM9IfaO09tIcbax4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o+y+5Ui3R+3Dp4bwJxfTSz5gRVbvs1gXFReWV7m0QYo=;
+ b=DanlbO0EXcWJNZrJuAOT8w6qhP9vUH4VNYLJx/8vWDvZih2JPM9hXZ60blnCJjb/V2AZS/elv3+KX5vZtGV5taFyCsoV1UFHHJP9MZMt2rErnHlbRDPvKutiaYyYcLeevuMJGF7kjv92fP3HVGCiChJbf1T2Lnsc5hzAR3GuUOLi4OT5YCoBxp9s0zxrEQ3RaBc2bBic96xZMsGcNZQ79p8e/p61PLTEIPlHfKGlPlxiOkRkuQEToIhTDwcgQdF1ma6vn6xIaw2Flw7ZKGTeKIGUgBfUivULud44Y7bC3AgloiaMdspaqCRmJlk5dyjcKrwLIcLPJ9Qb93AePMqF0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=wER44k0LgCwqCBOSPc9JTt6FvmNY04IFTYn/N7lVgmk=;
-        b=PI7qBlFIaO4QJnzcF1HfA09Si2n3NSrR98KAbHNt1EmSDafIJpq6R/UbG3I/m8yfqC
-         LHHOYugmpXgr4kSPuh4AP3Mg24h7KbWVNtRhQmjtm5k+0+2NMXbmaendC6R7e/82yWTZ
-         phgzkT7zKRcAjncTbfTxSq2TvgRUUFMp8u+kdEmN+nCgy+XgrQU7cAtn8fyPzRw+OZzQ
-         vhRvGDGDt+5Sa4xkbOtAvoI3lCSifylPXTvbgNBxvxHYi18AaIhoUW6r4dvPFEWsoRoB
-         xcAnBM3Vx0acQB/EOeSuIdH1AjqSonTK3IwQLfdvD4KjsrphWf9gCJxuG1qUruz7Ba10
-         nYxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=wER44k0LgCwqCBOSPc9JTt6FvmNY04IFTYn/N7lVgmk=;
-        b=TQH+NuPxH1nZLH6A2HWN5jD4cacPFlY7nFO+/wn/f5bqX2FYxZYCcg/S5PojyHcdJS
-         WXP7Loh7Ei8iwR9PcYH4J0dn7oexz6yYgTOJYomUfXhljagfMnCLCF9ZqLjiPLXaKvNd
-         ei1fYcz2wOalq3x5HRskKzBOrLzx3ibxiSxOby+upTx+2+6AwIksOA2KzXd6t1Q5wzMw
-         9+w1qh27nEQsELViBNJbfwgOQx6jWUMU5U37A7f78H8INqyaVEE3g2k5mFji4akgOLcQ
-         gs7hVucC0ziCMBoK9z37QjKnEIeSUCJhN1xTtzYM73qIl8aPpTA/aWYCY/5dU+XqMfff
-         mysw==
-X-Gm-Message-State: AOAM533B5eZMw34yfqHhEzqhi3TKZTPOyaBZetJNE/wqV/WpDWi3fzk4
-        p/N50vk7eu7Tj300xjDAvs8=
-X-Google-Smtp-Source: ABdhPJz5HwvHBwEkS/Gz8Ynt/C+QJUkj9ZUXmk1XNnKBqhaM5JRdjvJnLNrsjs20mED0T5HEIN+5lw==
-X-Received: by 2002:a19:84c5:: with SMTP id g188mr6054593lfd.270.1605775899420;
-        Thu, 19 Nov 2020 00:51:39 -0800 (PST)
-Received: from mobilestation ([95.79.141.114])
-        by smtp.gmail.com with ESMTPSA id r7sm3884536lfc.206.2020.11.19.00.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 00:51:38 -0800 (PST)
-Date:   Thu, 19 Nov 2020 11:51:36 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o+y+5Ui3R+3Dp4bwJxfTSz5gRVbvs1gXFReWV7m0QYo=;
+ b=H9gsJrBqL4dl+FEpi4G/gHz4QPYKx/cXz4++V7rOi/bX+gHamnMwo1/ROxD+dFBFtcBdsT8ZAWqCdoKr9c9F+gpWypWD7YQBZ/EvVhPeZ+pYHi1kIC/oDIjFc0KFhWp45+CGsltDzNirVu8zwfoGCMUfTEejh3UrTo5lbm1JDa0=
+Received: from BL0PR04MB6514.namprd04.prod.outlook.com (2603:10b6:208:1ca::23)
+ by MN2PR04MB6991.namprd04.prod.outlook.com (2603:10b6:208:1e1::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Thu, 19 Nov
+ 2020 08:57:39 +0000
+Received: from BL0PR04MB6514.namprd04.prod.outlook.com
+ ([fe80::4c3e:2b29:1dc5:1a85]) by BL0PR04MB6514.namprd04.prod.outlook.com
+ ([fe80::4c3e:2b29:1dc5:1a85%7]) with mapi id 15.20.3499.034; Thu, 19 Nov 2020
+ 08:57:39 +0000
+From:   Damien Le Moal <Damien.LeMoal@wdc.com>
+To:     "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
         "broonie@kernel.org" <broonie@kernel.org>,
         "palmer@dabbelt.com" <palmer@dabbelt.com>,
         "seanga2@gmail.com" <seanga2@gmail.com>
 Subject: Re: [PATCH 04/32] spi: dw: Introduce polling device tree property
-Message-ID: <20201119085136.sppfel7qbuj5jwpx@mobilestation>
+Thread-Topic: [PATCH 04/32] spi: dw: Introduce polling device tree property
+Thread-Index: AQHWtN4Jq5yxP9fdykKNjBOI754ZyqnLXIyAgAEZ8gCAAD4qAIAAq8EAgACxV4CAAOm2AIAAPS0AgAABsAA=
+Date:   Thu, 19 Nov 2020 08:57:39 +0000
+Message-ID: <3a422525f388fa135e611703580319699d8bc8b1.camel@wdc.com>
 References: <20201109195913.itgfj2ga5y7sr6zx@mobilestation>
- <58943f7988706497040cac6f6108336286e9d15f.camel@wdc.com>
- <20201115160146.efxcdjhm7f2nmivo@mobilestation>
- <BL0PR04MB65149D8B62167C11B26E0EA7E7E30@BL0PR04MB6514.namprd04.prod.outlook.com>
- <20201116215505.enelrzxaxb2457a6@mobilestation>
- <ea6a82e27a66600e7d4eb1668282d42dbaabf4b0.camel@wdc.com>
- <20201117182642.qz3il63x6lcx6owg@mobilestation>
- <3b81075dfc0b168631f3fc86c98cdd17caf85a8c.camel@wdc.com>
- <20201118151609.4bfvuoe6s6no5tcd@mobilestation>
- <bd1e3345c7414d0f6818d59be0e236b58a1f8ace.camel@wdc.com>
+         <58943f7988706497040cac6f6108336286e9d15f.camel@wdc.com>
+         <20201115160146.efxcdjhm7f2nmivo@mobilestation>
+         <BL0PR04MB65149D8B62167C11B26E0EA7E7E30@BL0PR04MB6514.namprd04.prod.outlook.com>
+         <20201116215505.enelrzxaxb2457a6@mobilestation>
+         <ea6a82e27a66600e7d4eb1668282d42dbaabf4b0.camel@wdc.com>
+         <20201117182642.qz3il63x6lcx6owg@mobilestation>
+         <3b81075dfc0b168631f3fc86c98cdd17caf85a8c.camel@wdc.com>
+         <20201118151609.4bfvuoe6s6no5tcd@mobilestation>
+         <bd1e3345c7414d0f6818d59be0e236b58a1f8ace.camel@wdc.com>
+         <20201119085136.sppfel7qbuj5jwpx@mobilestation>
+In-Reply-To: <20201119085136.sppfel7qbuj5jwpx@mobilestation>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.38.1 (3.38.1-1.fc33) 
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [2400:2411:43c0:6000:8d3e:27aa:85c2:44b5]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: dcdab2e4-3c4f-4c19-2229-08d88c692b1f
+x-ms-traffictypediagnostic: MN2PR04MB6991:
+x-microsoft-antispam-prvs: <MN2PR04MB69910582C0C986D81559340BE7E00@MN2PR04MB6991.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:2582;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fxepJIy7QHE1wKDo/ZjEAzjWvIs5ovk5cd9q54/jK9HIbzsXQNjm/G0oVN2jWnbR0Sl8gX8RZdtD7dORzbGEjdbpo1g6K39sj61gl/xGywEDFsFyDObNOHaPH12Pm86ByA4YKMu1QuIX+zGrN4+1EG3mWkJX3BlPNScpEoIcgwah+O3lhhuElqPSiTKW+9rQwc2sHAvA1CCzquS67CC97s5Fnrek6/MvVCwEVHwG8jdtbVOViWC7JKDOEt0M3lBMnYL87qqMY5IP0sR6h2qoDHcfW18XtjYhi9vr/dvEXZ9QzGAoO6tDkpKHZGxNIa6SpmZrmThf7Cn4nQmk/9T+Q+OIp9sdvCen9cYxYr9mVREuqQiQRJWJwdTQvfOgj3jIOTEDvATVN1jcaplNW8mn5aQtc+iH6JOVLqa5Qna5oBUiRVhvDcbI1NQB14BxjH6Q5SAkKT1MGTtJrXiA1Uau5ujWjZ5lr4QUAkmjkD2v+bE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR04MB6514.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(346002)(396003)(39860400002)(376002)(5660300002)(4326008)(4001150100001)(6486002)(30864003)(83080400002)(8676002)(54906003)(83380400001)(86362001)(8936002)(316002)(36756003)(66446008)(966005)(478600001)(6512007)(2616005)(186003)(91956017)(76116006)(66946007)(6506007)(66556008)(66476007)(64756008)(71200400001)(2906002)(6916009)(482324003)(579004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: D8q1hBJFzD7dKCOQea46vIug5tuYbL/eab2k4ixwbdOUmvx/PBe79lCybVbPFN1C190wD5SP1UeK5Nc3xxVHQRk6iCZKGzcQYR9hB9jdRwPY3vamiy3O3+JkzM/djMpYyX3hg6TRWept0CyBpZYAGHipIZ27OgQYmpJpuuIO4RtNUELmwqzUb3mvpCka8ShTfJJLf5zIaa8niK0IvoJ9+GBdP97o25TyYcnxBfqi2oCJlX7V93RKkYKoglXNCJz42Z6jdonFvb0jUOz9brbJ/2Qww2oi/Y1T0tnWHWCIsqGsitHyOuELdSMu0MbHFiMoTCTiGKMnyh3HDdpaytPoOM6i813b07srOrIvcvbjQDyEMOSdoj9eArnQ+GRRQro68ZToFtmec29TpiWJno65+k4D2Sxti03Hncl6r/SEJF6TEX1Mu3Sgc5NdvtDH+njXJIXxmpizUPnwKd8svzW8v/lH6NkaFNRgeY/nuJbJmXquQSkhBTiH/keGgz/vVTIRj870AQKvPvf7QuWAIhpgj/Q87JJjE6ASqhPsjyx+q4Sv3F4tb5u1Sl+nttnr/uZAjs1OFQ5fMSUVr6gkqQ4YpyPVUiVegtFXnWh67LZ8ODchzJsIF8yrWzW3gtcXIk3IhjxRtO8AgOkZhc1NDG2xa+A0U4fVmHRS3DYtKjI7gQ9F43ICu6GmhqINKsQnPgQPm7FY8qOkqYgRMk23l1ke8g==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9842BB2E630AF0488BADAF99651CADDB@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bd1e3345c7414d0f6818d59be0e236b58a1f8ace.camel@wdc.com>
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR04MB6514.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dcdab2e4-3c4f-4c19-2229-08d88c692b1f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Nov 2020 08:57:39.4287
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: O6GsJIEVQPstBXLAKsBtkoA6LzAWFnwFNX4UBPybTOcqjc+f4TQUa/FsHAjVEzmgzrbfLUeXJMgQtdOqmyAuMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6991
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 05:12:40AM +0000, Damien Le Moal wrote:
-> On Wed, 2020-11-18 at 18:16 +0300, Serge Semin wrote:
-> > On Wed, Nov 18, 2020 at 04:41:27AM +0000, Damien Le Moal wrote:
-> > > On Tue, 2020-11-17 at 21:26 +0300, Serge Semin wrote:
-> > > [...]
-> > > > > Found the bug :)
-> > > > > The fix is:
-> > > > > 
-> > > > > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> > > > > index e3b76e40ed73..b7538093c7ef 100644
-> > > > > --- a/drivers/spi/spi-dw-core.c
-> > > > > +++ b/drivers/spi/spi-dw-core.c
-> > > > > @@ -828,7 +828,7 @@ static void spi_hw_init(struct device *dev, struct dw_spi
-> > > > > *dws)
-> > > > >                 }
-> > > > >                 dw_writel(dws, DW_SPI_TXFTLR, 0);
-> > > > >  
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > -               dws->fifo_len = (fifo == 1) ? 0 : fifo;
-> > > > > +               dws->fifo_len = (fifo == 1) ? 0 : fifo - 1;
-> > > > >                 dev_dbg(dev, "Detected FIFO size: %u bytes\n", dws->fifo_len);
-> > > > >         }
-> > > > > 
-> > > > > Basically, fifo_len is off by one, one too large and that causes the RX FIFO
-> > > > > overflow error. The loop above breaks when the written fifo value does not
-> > > > > match the read one, which means that the last correct one is at step fifo - 1.
-> > > > > 
-> > > > > I realized that by tracing the transfers RX first, then TX in
-> > > > > dw_spi_transfer_handler().I did not see anything wrong with tx_max() and
-> > > > > rx_max(), all the numbers always added up correctly either up to transfer len
-> > > > > or to fifo_len, as they should. It looked all good. But then I realized that RX
-> > > > > FIFO errors would trigger 100% of the time for:
-> > > > > 1) transfers larger than fifo size (32 in my case)
-> > > > > 2) FIFO slots used for TX + RX adding up to 32
-> > > > > After some tweaking, found the above. Since that bug should be affecting all
-> > > > > dw-apb spi devices, not sure why it does not manifest itself more often.
-> > > > > 
-> > > > > With the above fix, the SD card is now running flawlessly at 1.2MB/s with
-> > > > > maximum SPI frequency, zero errors no matter how hard I hit it with traffic.
-> > > > 
-> > > > Hm, what you've found is the clue to getting where the problem lies,
-> > > > but I don't see fifo_len being calculated incorrectly in my HW. In my
-> > > > case it equals to 64 and 8 bytes for two different controllers. Those
-> > > > are the correct SSI_TX_FIFO_DEPTH/SSI_RX_FIFO_DEPTH parameters values
-> > > > our controllers have been synthesized with.
-> > > > 
-> > > > But I've just realized that DW APB SSI controller can be synthesized
-> > > > with Rx and Tx FIFO having different depths. (Synopsys, really, what
-> > > > scenario did you imagine to provide such configuration?..). Anyway is
-> > > > it possible that you've got a controller which (most likely by
-> > > > mistake) has been synthesized with Rx_fifo_len != Tx_fifo_len? If so
-> > > > then that will explain the problem you are having, but everyone else
-> > > > isn't. The algorithm thinks that both FIFOs length match and equals to
-> > > > the Tx FIFO length. If Rx FIFO length is smaller even with a single
-> > > > byte, you'll end up with occasional overflows.
-> > > > 
-> > > > Note if you don't have a manual with the parameters selected for your
-> > > > IP-core, you can just fix the fifo_len detection loop by replacing the
-> > > > TXFTLR with RXFTLR. Then just print the detected Rx and Tx FIFO
-> > > > lengths out. If they don't match, then, bingo, that's the root cause
-> > > > of the problem.
-> > > 
-> > 
-> > > Just checked: TX and RX fifo depth match and the maximum size I can see in both
-> > > RXFTLR and TXFTLR is 31, when the fifo for loop stops with fifo=32. I checked
-> > > the Synopsis DW apb_ssi v4 specs and for both RXFTLR and TXFTLR, it says:
-> > > 
-> > > "If you attempt to set this value greater than the depth of the FIFO,
-> > > this field is not written and retains its current value."
-> > > 
-> > > So for a FIFO max depth of 32, as the K210 SoC documents (very poor spec sheet,
-> > > but that information is written), the loop should stop for fifo=33 with the
-> > > registers indicating 32. My fix should be correct.
-> > 
-> > v3.22a spec says "greater than or equal to the depth of the FIFO" for
-> > TXFTLR and "greater than the depth of the FIFO" - for RXFTLR. In my
-> > case both of the formulations make sense. Seeing the semantic of the
-> > registers is different and recollecting how vague vendors can describe
-> > the essence of regs, in both cases FIFO depth would be detected as
-> > (MAX_value + 1). That is obvious for TXFTLR (in v3.22a formulation),
-> > but isn't for RXFTLR. In the later case we need to keep in mind that
-> > the controller internally increments (RXFTLR.RFT + 1) then compares it
-> > with RXFLR.RXTFL. Most likely the RXFTLR description text means that
-> > incremented value when says: "If you attempt to set this value greater
-> > than the depth of the FIFO, this field is not written and retains its
-> > current value." but not the actual value written into the register.
-> > 
-> > Regarding DW APB SSI v4 spec. I don't really know why the description
-> > has changed for TXFTLR. I also don't have the v4 spec to better
-> > understand what they really meant there. But if the TXFTLR/RXFTLR
-> > registers semantic has changed, then I'd start to dig in the aspects
-> > of that change and whether it affects the FIFO-depth calculation
-> > algorithm...
-> 
-> I spent a lot of time reading the spec yesterday and did not see any text that
-> conflicts with what the driver is doing. The semantic of TXFTLR and RXFTLR is
-> still as you describe above for v3, the internal +1 increment for RXFTLR is
-> still there.
-> 
-> > Anyway regarding your fix. Please see the next two commits, which have
-> > already attempted to introduce a change proposed by you, but then
-> > reverted it back:
-> > d297933cc7fc ("spi: dw: Fix detecting FIFO depth")
-> > 9d239d353c31 ("spi: dw: revisit FIFO size detection again")
-> > 
-> > I don't think Andy was wrong reverting the fix back, especially seeing
-> > the current FIFO-depth detection algorithm implementation is correct
-> > for both types of my controllers (with 8 and 64 words depths). I know
-> > with what parameters the controllers have been synthesized and the
-> > detected depths match them.
-> 
-> OK. Got it.
-> 
-> > 
-> > > 
-> > > However (I think this may be the catch), the spec also says:
-> > > 
-> > > "This register is sized to the number of address bits needed to access the
-> > > FIFO."
-> > > 
-> > > So for a fifo depth of 32, the register would be 5 bits only, preventing it
-> > > from ever indicating 32.
-> > 
-> > In accordance with the registers semantic we shall never write a
-> > FIFO-depth value into them and actually we aren't able to do that.
-> > First of all indeed there is no point in setting the FIFO-depth value
-> > into the TXFTLR because that will cause the TXE-IRQ being constantly
-> > generated (because the level of the Tx FIFO will be always less than
-> > or equal to the FIFO-depth). There is no point in setting the
-> > FIFO-depth into the RXFTLR because that will effectively disable the
-> > RXF-IRQ (the level of the Rx FIFO will be never greater than
-> > FIFO-depth + 1). Secondly the TXFTLR/RXFTLR registers width have been
-> > defined as: TX_ABW-1:0 and RX_ABW-1:0 unlike the FIFO level registers
-> > TXFLR/RXFLR: TX_ABW:0 and RX_ABW:0 . So we just literally can't set a
-> > value wider than the register is.
-> 
-> Yep, understood.
-> 
-> > 
-> > > I think that this spec clause takes precedence over
-> > > the previous one, and for a fifo max depth that is a power of 2 (which I assume
-> > > is the case on most synthesis of the device), the detection loop actually
-> > > works. But it would be buggy (off by one) for any other value of the fifo max
-> > > depth that is not a power of 2.
-> > > 
-> > > If the above is correct, and my SoC spec sheet is also correct, then all I can
-> > > think of now is a HW bug. Because no matter what I do or how I look at it, the
-> > > RX FIFO overflow always happen when the sum of TX bytes sent and RX bytes left
-> > > to receive equals exactly 32. Sending 32B on TX fifo does nto seem to cause any
-> > > problem, so the TX fifo seems to indeed be 32B deep. But on the RX side, it
-> > > really look like 31 is the value to use.
-> > 
-> > Of course we shouldn't reject a possibility of having a HW bug here,
-> > but that is always a last resort and needs to be firmly proved.
-> > In your case we may assume one of two causes of the problem:
-> > 1) There is the depths mismatch.
-> >    But how come you still get the RXFLR to be filled with data of
-> >    greater length than we think the Rx FIFO depth is?.. Anyway the
-> >    weird behaviour still can be explained by the non-standard
-> >    configuration especially if the depth isn't power of 2, that
-> >    Synopsys might haven't even tested it, etc.
-> 
-
-> I have never seen RXFLR being larger than 32, which is the assumed TX and RX
-> fifo depth. However, the spec do mention that in case of overrun, the extra
-> bytes are dropped, so I do not think seeing RXFLR being larger than fifo depth
-> is possible. When the RX fifo overrun error occur, RXFLR always indicate 32. I
-> thought of the following possibilities as potential bugs:
-> a) the trace shows that the driver is not trying to ask for more bytes than the
-> fifo can hold, so the controller may be trying to push one more byte than was
-> requested.
-> b) The RX fifo depth is in fact 31 instead of the documented & detected 32.
-> c) The RX fifo is indeed 32, but the overrun trigger is off-by-one and triggers
-> when RXFLR == 32 instead of when RXFLR == 32 && one more byte was requested.
-> 
-> (b) and (c) being kind-of equivalent. For (a), I thought the MOSI line drive
-> high or low (txw = 0 or txw = 0xffff in dw_writer()) may matter, but that does
-> not seem to be the case. Changing txw init value has no effect. So I kind of
-> ruled (a) out.
-
-I am more inclined in thinking of what we having is either b) or c)
-here. Who knows how synopsys implemented Tx/Rx FIFOs infrastructure
-in hardware? It might be that depths mismatch just makes the both
-FIFOs having the same size like max(SSI_TX_FIFO_DEPTH,
-SSI_RX_FIFO_DEPTH) but will cause the Rx FIFO overrun interrupt in
-case of the overflow. We can only guess in this matter. On the other
-hand if there is no mismatch it might be just a bug in the IP-core. In
-that case the problem must be fixed by the vendor in further IP-core
-releases. But the current revision needs to be worked around in
-software anyway.
-
-> 
-> > 2) There is a HW bug, due to which the RXO interrupt is generated even
-> >    though there is no actual overrun.
-> > Let's try to prove or disprove them.
-> > 
-> > Let's assume that there is indeed the depths mismatch here:
-> > (SSI_TX_FIFO_DEPTH = 32) != (SSI_RX_FIFO_DEPTH = 31), and for some
-> > reason (due to for instance the TXFTLR/RXFTLR semantic change or
-> > the HW bug or etc) we can't detect the Rx FIFO depth by the algorithm
-> > in the driver. If so we can't rely on the depth detection loop and
-> > need to try to prove the depths mismatch somehow else. It would be
-> > also better to exclude the driver code from the problem equation...
-> > 
-> > Since we are sure the Rx FIFO depth must be smaller than the Tx FIFO
-> > depth (otherwise you wouldn't be getting the Rx FIFO overflows), then
-> > we can just try to manually execute a small SPI transfer of the Tx FIFO
-> > depth length. If the mismatch takes place or an HW bug with false RXO,
-> > then we'll get the Rx FIFO overflow flag set.
-> > 
-> > I've created a small shell-script (you can find it in the attachment)
-> > which runs a single SPI transfer of the passed length by manually
-> > setting a DW APB SSI controller up with help of the devmem utility.
-> > In our case the length is supposed to be equal to the FIFO depth.
-> > Here is what happens if I run it on my hardware (depth equals to 64
-> > and the controller registers physical address is 0x1f04e000):
-> > 
-> > root@msbt2:~# ./check_mismatch.sh 64 0x1f04e000
-> > 1. Tx FIFO lvl 0, Rx FIFO lvl 0, RISR 0x00000000
-> > 1. Tx FIFO lvl 64, Rx FIFO lvl 0, RISR 0x00000000
-> > 2. Tx FIFO lvl 0, Rx FIFO lvl 64, RISR 0x00000011
-> > 
-> > See, after sending and receiving all the data the status register
-> > detects the normal TXE and RXF interrupts. But if our assumptions are
-> > correct in your case it shall be something like 0x00000019 also
-> > presenting the RXO interrupt.
-> > 
-> > * Note AFAIU you might need to fix the script a bit to set the DFS
-> > * field at the correct place of CTRLR0...
-> 
-
-> After adjusting for the CTRLR0 32 bits format, I get this:
-> 
-> For DEPTH = 32:
-> 
-> 1. Tx FIFO lvl 0, Rx FIFO lvl 0, RISR 0x00000000
-> 1. Tx FIFO lvl 32, Rx FIFO lvl 0, RISR 0x00000000
-> 2. Tx FIFO lvl 0, Rx FIFO lvl 32, RISR 0x00000019
-> 
-> Et voila: RX overrun which matches what I was seeing with the driver trace.
-> 
-> Now for DEPTH = 31:
-> 
-> 1. Tx FIFO lvl 0, Rx FIFO lvl 0, RISR 0x00000000
-> 1. Tx FIFO lvl 31, Rx FIFO lvl 0, RISR 0x00000000
-> 2. Tx FIFO lvl 0, Rx FIFO lvl 31, RISR 0x00000011
-> 
-> Normal transfer...
-
-Yeap, that proves the assumption of having either the depths mismatch
-or a HW bug.
-
-> 
-> > If after running the attached script you get the RXO status set, then
-> > indeed there is either the depths mismatch or there is a HW bug. If
-> > the TXFTLR/RXFTLR semantic hasn't changed in spec v4, then the
-> > mismatch or a HW bug don't let us to detect the Rx FIFO depth by means
-> > of the algorithm implemented in the driver. Then we have no choice but
-> > to manually set the FIFO depth for the K210 SPI controller.
-> 
-> I do not have the older v3 specs on hand now, but I can get them. I will and
-> compare but from reading the v4 specs yesterday, I have not seen anything that
-> does not match the driver behavior.
-> 
-> > 
-> > > 
-> > > Here is a trace for a 64B transfer (errors happen only for transfers larger
-> > > than 32 B):
-> > > 
-> > > IRQ(1):
-> > > [    1.062978] spi_master spi1: ## RX: used 0/0, len 64 -> rx 0
-> > > [    1.068533] spi_master spi1: ## TX: used 0/0, room 32, len 64, gap 32 -> tx
-> > > 32
-> > > 
-> > > IRQ(2):
-> > > [    1.076052] spi_master spi1: ## RX: used 16/15, len 64 -> rx 15
-> > > [    1.081647] spi_master spi1: ## TX: used 0/17, room 32, len 32, gap 15 -> tx
-> > > 15
-> > > 
-> > > IRQ(3):
-> > > [    1.088932] spi_master spi1: RX FIFO overflow detected
-> > > [    1.094053] spi_master spi1: ## TX/RX used 0/32, len 17/49
-> > > 
-> > > Each pair of line correspond to one execution of dw_spi_transfer_handler() on
-> > > an IRQ occurrence. The first line is what rx_max() sees when dw_reader() is
-> > > called, the second line is what tx_max() sees when dw_writer() is executed. The
-> > > "used x/y" part of the messages shows TXFLR/RXFLR values.
-> > > 
-> > > (1) After setup of the transfer and enabling the controller, IRQ(1) occurs,
-> > > nothing to receive yet, TX fifo all empty, 32 B are written. All expected. OK.
-> > > (2) More than fifo_len / 2 - 1 (as RXFTLR is set in dw_spi_irq_setup) become
-> > > available and IRQ(2) trigger, 15 Bytes are received. When dw_writer() runs, it
-> > > sees the rxtxgap at 15B (17B still to receive from the previous 32B written),
-> > > so writes only 15B. All good, again expected. Note that when dw_writer() runs,
-> > > the remaining 17B to be received are already available, but that is likely due
-> > > to the delay from the pr_info() message print.
-> > > (3) Next IRQ(3) is the error, showing that all TX bytes have been processed and
-> > > that the RX fifo is full with 32B.
-> > > 
-> > > If the RX fifo max depth is indeed 32, I do not understand why the overflow
-> > > error is triggered at step (3). There are no more than 32B that can possibly be
-> > > received. Putting back the "drive MOSI lne high" patch does not change
-> > > anything. Same behavior.
-> > 
-> > The log you've sent indeed looks weird. I'd one more time performed
-> > the next steps:
-> > 1) Study the spec paying special attention to the TXFTLR/RXFTLR and
-> >    TXFLR/RXFLR registers descriptions. Mostly we need to make sure
-> >    that nothing has changed since the older controller revisions and
-> >    what the driver implements is correct for your controller.
-> > 2) Try to find an internal doc with the DW APB SSI IP-core parameters
-> >    initialized during the controller synthesize. Try to find the
-> >    SSI_TX_FIFO_DEPTH/SSI_RX_FIFO_DEPTH parameters value.
-> > 3) Try to find an errata doc for your controller revision and make
-> >    sure it doesn't have anything about the problem you are getting
-> >    here.
-> 
-
-> The K210 documentation is extremely poor. All that is available is here:
-> 
-> https://s3.cn-north-1.amazonaws.com.cn/dl.kendryte.com/documents/kendryte_datasheet_20181011163248_en.pdf
-
-That's just a datasheet. It can't be used to find the reason of the
-problem.
-
-> 
-> And as you can see, that is all very high level. The best source of information
-> is the SDK code here:
-> 
-> https://github.com/kendryte/kendryte-standalone-sdk
-> 
-> In that code, TX fifo length is clearly hard-coded at 32, but the RX fifo depth
-> is not clear as the code always sets RXFTLR to 0 and the code is rather trivial
-> doing a loop up to RXFLR to receive bytes.
-> 
-> > 4) Run the attached script to make sure that the problem isn't
-> >    connected with a bug in the driver, but either with the depths
-> >    mismatch or with an HW bug.
-> 
-> Since applying the fifo depth detection loop to RXFLTR leads to the same result
-> (max register value = 31, meaning a fifo depth of 32), it really looks like an
-> off-by-one HW bug on the trigger for the RX overrun status. 
-> > 
-> > > 
-> > > I am out of ideas at this point and can only think that I am facing a HW bug
-> > > that needs a quirk somewhere.
-> > > 
-> > > Thoughts ? Do you think it is OK to add a quirk flag for this SoC to have
-> > > fifo_len reduced by one ? Adding a DT property to manually force a value for
-> > > fifo_len would work too.
-> > 
-> > So if none of the steps above gives us an answer, then we need to dig
-> > dipper into the driver code and we missing something. If 2) - 4) proves the
-> > depths mismatch or a HW bug, then you can patch the spi-dw-mmio.c code to set
-> > a custom fifo_len for the K210 SPI controller.
-> > 
-> > Anyway I don't think a quirk flag would be a good solution here because
-> > the problem seems very specific to your controller...
-> 
-
-> Indeed. So what about this:
-> 
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index d0cc5bf4fa4e..17c06039a74d 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -222,6 +222,21 @@ static int dw_spi_keembay_init(struct platform_device
-> *pdev,
->         return 0;
->  }
->  
-> +static int dw_spi_canaan_k210_init(struct platform_device *pdev,
-> +                                  struct dw_spi_mmio *dwsmmio)
-> +{
-> +       /*
-> +        * The Canaan Kendryte K210 SoC DW apb_ssi v4 spi controller is
-> +        * documented to have a 32 words deep TX and RX FIFO, which
-> +        * spi_hw_init() detects. However, when the RX FIFO is filled up to
-> +        * 32 entries (RXFLR = 32), an RX FIFO overrun error occurs. Avoid this
-> +        * problem by force setting fifo_len to 31.
-> +        */
-> +       dwsmmio->dws.fifo_len = 31;
-> +
-> +       return 0;
-> +}
-> +
->  static int dw_spi_mmio_probe(struct platform_device *pdev)
->  {
->         int (*init_func)(struct platform_device *pdev,
-> @@ -335,6 +350,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
->         { .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_dwc_ssi_init},
->         { .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
->         { .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
-> +       { .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
->         { /* end of table */}
->  };
->  MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
-> 
-> No added capability flag and problem solved: no RX overrun errors and the SD
-> card is running at 1.2 MB/s.
-
-Looks good to me. Let's fix it this way and be done with it seeing the
-problem is indeed in the k210 SPI controller peculiarity.)
-
--Sergey
-
-> 
-> -- 
-> Damien Le Moal
-> Western Digital
+T24gVGh1LCAyMDIwLTExLTE5IGF0IDExOjUxICswMzAwLCBTZXJnZSBTZW1pbiB3cm90ZToNCj4g
+T24gVGh1LCBOb3YgMTksIDIwMjAgYXQgMDU6MTI6NDBBTSArMDAwMCwgRGFtaWVuIExlIE1vYWwg
+d3JvdGU6DQo+ID4gT24gV2VkLCAyMDIwLTExLTE4IGF0IDE4OjE2ICswMzAwLCBTZXJnZSBTZW1p
+biB3cm90ZToNCj4gPiA+IE9uIFdlZCwgTm92IDE4LCAyMDIwIGF0IDA0OjQxOjI3QU0gKzAwMDAs
+IERhbWllbiBMZSBNb2FsIHdyb3RlOg0KPiA+ID4gPiBPbiBUdWUsIDIwMjAtMTEtMTcgYXQgMjE6
+MjYgKzAzMDAsIFNlcmdlIFNlbWluIHdyb3RlOg0KPiA+ID4gPiBbLi4uXQ0KPiA+ID4gPiA+ID4g
+Rm91bmQgdGhlIGJ1ZyA6KQ0KPiA+ID4gPiA+ID4gVGhlIGZpeCBpczoNCj4gPiA+ID4gPiA+IA0K
+PiA+ID4gPiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3BpL3NwaS1kdy1jb3JlLmMgYi9kcml2
+ZXJzL3NwaS9zcGktZHctY29yZS5jDQo+ID4gPiA+ID4gPiBpbmRleCBlM2I3NmU0MGVkNzMuLmI3
+NTM4MDkzYzdlZiAxMDA2NDQNCj4gPiA+ID4gPiA+IC0tLSBhL2RyaXZlcnMvc3BpL3NwaS1kdy1j
+b3JlLmMNCj4gPiA+ID4gPiA+ICsrKyBiL2RyaXZlcnMvc3BpL3NwaS1kdy1jb3JlLmMNCj4gPiA+
+ID4gPiA+IEBAIC04MjgsNyArODI4LDcgQEAgc3RhdGljIHZvaWQgc3BpX2h3X2luaXQoc3RydWN0
+IGRldmljZSAqZGV2LCBzdHJ1Y3QgZHdfc3BpDQo+ID4gPiA+ID4gPiAqZHdzKQ0KPiA+ID4gPiA+
+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9DQo+ID4gPiA+ID4gPiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGR3X3dyaXRlbChkd3MsIERXX1NQSV9UWEZUTFIsIDAp
+Ow0KPiA+ID4gPiA+ID4gwqANCj4gPiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4g
+PiANCj4gPiA+ID4gPiA+IC0gICAgICAgICAgICAgICBkd3MtPmZpZm9fbGVuID0gKGZpZm8gPT0g
+MSkgPyAwIDogZmlmbzsNCj4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICBkd3MtPmZpZm9fbGVu
+ID0gKGZpZm8gPT0gMSkgPyAwIDogZmlmbyAtIDE7DQo+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoGRldl9kYmcoZGV2LCAiRGV0ZWN0ZWQgRklGTyBzaXplOiAldSBi
+eXRlc1xuIiwgZHdzLT5maWZvX2xlbik7DQo+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgfQ0K
+PiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiBCYXNpY2FsbHksIGZpZm9fbGVuIGlzIG9mZiBieSBv
+bmUsIG9uZSB0b28gbGFyZ2UgYW5kIHRoYXQgY2F1c2VzIHRoZSBSWCBGSUZPDQo+ID4gPiA+ID4g
+PiBvdmVyZmxvdyBlcnJvci4gVGhlIGxvb3AgYWJvdmUgYnJlYWtzIHdoZW4gdGhlIHdyaXR0ZW4g
+ZmlmbyB2YWx1ZSBkb2VzIG5vdA0KPiA+ID4gPiA+ID4gbWF0Y2ggdGhlIHJlYWQgb25lLCB3aGlj
+aCBtZWFucyB0aGF0IHRoZSBsYXN0IGNvcnJlY3Qgb25lIGlzIGF0IHN0ZXAgZmlmbyAtIDEuDQo+
+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+IEkgcmVhbGl6ZWQgdGhhdCBieSB0cmFjaW5nIHRoZSB0
+cmFuc2ZlcnMgUlggZmlyc3QsIHRoZW4gVFggaW4NCj4gPiA+ID4gPiA+IGR3X3NwaV90cmFuc2Zl
+cl9oYW5kbGVyKCkuSSBkaWQgbm90IHNlZSBhbnl0aGluZyB3cm9uZyB3aXRoIHR4X21heCgpIGFu
+ZA0KPiA+ID4gPiA+ID4gcnhfbWF4KCksIGFsbCB0aGUgbnVtYmVycyBhbHdheXMgYWRkZWQgdXAg
+Y29ycmVjdGx5IGVpdGhlciB1cCB0byB0cmFuc2ZlciBsZW4NCj4gPiA+ID4gPiA+IG9yIHRvIGZp
+Zm9fbGVuLCBhcyB0aGV5IHNob3VsZC4gSXQgbG9va2VkIGFsbCBnb29kLiBCdXQgdGhlbiBJIHJl
+YWxpemVkIHRoYXQgUlgNCj4gPiA+ID4gPiA+IEZJRk8gZXJyb3JzIHdvdWxkIHRyaWdnZXIgMTAw
+JSBvZiB0aGUgdGltZSBmb3I6DQo+ID4gPiA+ID4gPiAxKSB0cmFuc2ZlcnMgbGFyZ2VyIHRoYW4g
+ZmlmbyBzaXplICgzMiBpbiBteSBjYXNlKQ0KPiA+ID4gPiA+ID4gMikgRklGTyBzbG90cyB1c2Vk
+IGZvciBUWCArIFJYIGFkZGluZyB1cCB0byAzMg0KPiA+ID4gPiA+ID4gQWZ0ZXIgc29tZSB0d2Vh
+a2luZywgZm91bmQgdGhlIGFib3ZlLiBTaW5jZSB0aGF0IGJ1ZyBzaG91bGQgYmUgYWZmZWN0aW5n
+IGFsbA0KPiA+ID4gPiA+ID4gZHctYXBiIHNwaSBkZXZpY2VzLCBub3Qgc3VyZSB3aHkgaXQgZG9l
+cyBub3QgbWFuaWZlc3QgaXRzZWxmIG1vcmUgb2Z0ZW4uDQo+ID4gPiA+ID4gPiANCj4gPiA+ID4g
+PiA+IFdpdGggdGhlIGFib3ZlIGZpeCwgdGhlIFNEIGNhcmQgaXMgbm93IHJ1bm5pbmcgZmxhd2xl
+c3NseSBhdCAxLjJNQi9zIHdpdGgNCj4gPiA+ID4gPiA+IG1heGltdW0gU1BJIGZyZXF1ZW5jeSwg
+emVybyBlcnJvcnMgbm8gbWF0dGVyIGhvdyBoYXJkIEkgaGl0IGl0IHdpdGggdHJhZmZpYy4NCj4g
+PiA+ID4gPiANCj4gPiA+ID4gPiBIbSwgd2hhdCB5b3UndmUgZm91bmQgaXMgdGhlIGNsdWUgdG8g
+Z2V0dGluZyB3aGVyZSB0aGUgcHJvYmxlbSBsaWVzLA0KPiA+ID4gPiA+IGJ1dCBJIGRvbid0IHNl
+ZSBmaWZvX2xlbiBiZWluZyBjYWxjdWxhdGVkIGluY29ycmVjdGx5IGluIG15IEhXLiBJbiBteQ0K
+PiA+ID4gPiA+IGNhc2UgaXQgZXF1YWxzIHRvIDY0IGFuZCA4IGJ5dGVzIGZvciB0d28gZGlmZmVy
+ZW50IGNvbnRyb2xsZXJzLiBUaG9zZQ0KPiA+ID4gPiA+IGFyZSB0aGUgY29ycmVjdCBTU0lfVFhf
+RklGT19ERVBUSC9TU0lfUlhfRklGT19ERVBUSCBwYXJhbWV0ZXJzIHZhbHVlcw0KPiA+ID4gPiA+
+IG91ciBjb250cm9sbGVycyBoYXZlIGJlZW4gc3ludGhlc2l6ZWQgd2l0aC4NCj4gPiA+ID4gPiAN
+Cj4gPiA+ID4gPiBCdXQgSSd2ZSBqdXN0IHJlYWxpemVkIHRoYXQgRFcgQVBCIFNTSSBjb250cm9s
+bGVyIGNhbiBiZSBzeW50aGVzaXplZA0KPiA+ID4gPiA+IHdpdGggUnggYW5kIFR4IEZJRk8gaGF2
+aW5nIGRpZmZlcmVudCBkZXB0aHMuIChTeW5vcHN5cywgcmVhbGx5LCB3aGF0DQo+ID4gPiA+ID4g
+c2NlbmFyaW8gZGlkIHlvdSBpbWFnaW5lIHRvIHByb3ZpZGUgc3VjaCBjb25maWd1cmF0aW9uPy4u
+KS4gQW55d2F5IGlzDQo+ID4gPiA+ID4gaXQgcG9zc2libGUgdGhhdCB5b3UndmUgZ290IGEgY29u
+dHJvbGxlciB3aGljaCAobW9zdCBsaWtlbHkgYnkNCj4gPiA+ID4gPiBtaXN0YWtlKSBoYXMgYmVl
+biBzeW50aGVzaXplZCB3aXRoIFJ4X2ZpZm9fbGVuICE9IFR4X2ZpZm9fbGVuPyBJZiBzbw0KPiA+
+ID4gPiA+IHRoZW4gdGhhdCB3aWxsIGV4cGxhaW4gdGhlIHByb2JsZW0geW91IGFyZSBoYXZpbmcs
+IGJ1dCBldmVyeW9uZSBlbHNlDQo+ID4gPiA+ID4gaXNuJ3QuIFRoZSBhbGdvcml0aG0gdGhpbmtz
+IHRoYXQgYm90aCBGSUZPcyBsZW5ndGggbWF0Y2ggYW5kIGVxdWFscyB0bw0KPiA+ID4gPiA+IHRo
+ZSBUeCBGSUZPIGxlbmd0aC4gSWYgUnggRklGTyBsZW5ndGggaXMgc21hbGxlciBldmVuIHdpdGgg
+YSBzaW5nbGUNCj4gPiA+ID4gPiBieXRlLCB5b3UnbGwgZW5kIHVwIHdpdGggb2NjYXNpb25hbCBv
+dmVyZmxvd3MuDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gTm90ZSBpZiB5b3UgZG9uJ3QgaGF2ZSBh
+IG1hbnVhbCB3aXRoIHRoZSBwYXJhbWV0ZXJzIHNlbGVjdGVkIGZvciB5b3VyDQo+ID4gPiA+ID4g
+SVAtY29yZSwgeW91IGNhbiBqdXN0IGZpeCB0aGUgZmlmb19sZW4gZGV0ZWN0aW9uIGxvb3AgYnkg
+cmVwbGFjaW5nIHRoZQ0KPiA+ID4gPiA+IFRYRlRMUiB3aXRoIFJYRlRMUi4gVGhlbiBqdXN0IHBy
+aW50IHRoZSBkZXRlY3RlZCBSeCBhbmQgVHggRklGTw0KPiA+ID4gPiA+IGxlbmd0aHMgb3V0LiBJ
+ZiB0aGV5IGRvbid0IG1hdGNoLCB0aGVuLCBiaW5nbywgdGhhdCdzIHRoZSByb290IGNhdXNlDQo+
+ID4gPiA+ID4gb2YgdGhlIHByb2JsZW0uDQo+ID4gPiA+IA0KPiA+ID4gDQo+ID4gPiA+IEp1c3Qg
+Y2hlY2tlZDogVFggYW5kIFJYIGZpZm8gZGVwdGggbWF0Y2ggYW5kIHRoZSBtYXhpbXVtIHNpemUg
+SSBjYW4gc2VlIGluIGJvdGgNCj4gPiA+ID4gUlhGVExSIGFuZCBUWEZUTFIgaXMgMzEsIHdoZW4g
+dGhlIGZpZm8gZm9yIGxvb3Agc3RvcHMgd2l0aCBmaWZvPTMyLiBJIGNoZWNrZWQNCj4gPiA+ID4g
+dGhlIFN5bm9wc2lzIERXIGFwYl9zc2kgdjQgc3BlY3MgYW5kIGZvciBib3RoIFJYRlRMUiBhbmQg
+VFhGVExSLCBpdCBzYXlzOg0KPiA+ID4gPiANCj4gPiA+ID4gIklmIHlvdSBhdHRlbXB0IHRvIHNl
+dCB0aGlzIHZhbHVlIGdyZWF0ZXIgdGhhbiB0aGUgZGVwdGggb2YgdGhlIEZJRk8sDQo+ID4gPiA+
+IHRoaXMgZmllbGQgaXMgbm90IHdyaXR0ZW4gYW5kIHJldGFpbnMgaXRzIGN1cnJlbnQgdmFsdWUu
+Ig0KPiA+ID4gPiANCj4gPiA+ID4gU28gZm9yIGEgRklGTyBtYXggZGVwdGggb2YgMzIsIGFzIHRo
+ZSBLMjEwIFNvQyBkb2N1bWVudHMgKHZlcnkgcG9vciBzcGVjIHNoZWV0LA0KPiA+ID4gPiBidXQg
+dGhhdCBpbmZvcm1hdGlvbiBpcyB3cml0dGVuKSwgdGhlIGxvb3Agc2hvdWxkIHN0b3AgZm9yIGZp
+Zm89MzMgd2l0aCB0aGUNCj4gPiA+ID4gcmVnaXN0ZXJzIGluZGljYXRpbmcgMzIuIE15IGZpeCBz
+aG91bGQgYmUgY29ycmVjdC4NCj4gPiA+IA0KPiA+ID4gdjMuMjJhIHNwZWMgc2F5cyAiZ3JlYXRl
+ciB0aGFuIG9yIGVxdWFsIHRvIHRoZSBkZXB0aCBvZiB0aGUgRklGTyIgZm9yDQo+ID4gPiBUWEZU
+TFIgYW5kICJncmVhdGVyIHRoYW4gdGhlIGRlcHRoIG9mIHRoZSBGSUZPIiAtIGZvciBSWEZUTFIu
+IEluIG15DQo+ID4gPiBjYXNlIGJvdGggb2YgdGhlIGZvcm11bGF0aW9ucyBtYWtlIHNlbnNlLiBT
+ZWVpbmcgdGhlIHNlbWFudGljIG9mIHRoZQ0KPiA+ID4gcmVnaXN0ZXJzIGlzIGRpZmZlcmVudCBh
+bmQgcmVjb2xsZWN0aW5nIGhvdyB2YWd1ZSB2ZW5kb3JzIGNhbiBkZXNjcmliZQ0KPiA+ID4gdGhl
+IGVzc2VuY2Ugb2YgcmVncywgaW4gYm90aCBjYXNlcyBGSUZPIGRlcHRoIHdvdWxkIGJlIGRldGVj
+dGVkIGFzDQo+ID4gPiAoTUFYX3ZhbHVlICsgMSkuIFRoYXQgaXMgb2J2aW91cyBmb3IgVFhGVExS
+IChpbiB2My4yMmEgZm9ybXVsYXRpb24pLA0KPiA+ID4gYnV0IGlzbid0IGZvciBSWEZUTFIuIElu
+IHRoZSBsYXRlciBjYXNlIHdlIG5lZWQgdG8ga2VlcCBpbiBtaW5kIHRoYXQNCj4gPiA+IHRoZSBj
+b250cm9sbGVyIGludGVybmFsbHkgaW5jcmVtZW50cyAoUlhGVExSLlJGVCArIDEpIHRoZW4gY29t
+cGFyZXMgaXQNCj4gPiA+IHdpdGggUlhGTFIuUlhURkwuIE1vc3QgbGlrZWx5IHRoZSBSWEZUTFIg
+ZGVzY3JpcHRpb24gdGV4dCBtZWFucyB0aGF0DQo+ID4gPiBpbmNyZW1lbnRlZCB2YWx1ZSB3aGVu
+IHNheXM6ICJJZiB5b3UgYXR0ZW1wdCB0byBzZXQgdGhpcyB2YWx1ZSBncmVhdGVyDQo+ID4gPiB0
+aGFuIHRoZSBkZXB0aCBvZiB0aGUgRklGTywgdGhpcyBmaWVsZCBpcyBub3Qgd3JpdHRlbiBhbmQg
+cmV0YWlucyBpdHMNCj4gPiA+IGN1cnJlbnQgdmFsdWUuIiBidXQgbm90IHRoZSBhY3R1YWwgdmFs
+dWUgd3JpdHRlbiBpbnRvIHRoZSByZWdpc3Rlci4NCj4gPiA+IA0KPiA+ID4gUmVnYXJkaW5nIERX
+IEFQQiBTU0kgdjQgc3BlYy4gSSBkb24ndCByZWFsbHkga25vdyB3aHkgdGhlIGRlc2NyaXB0aW9u
+DQo+ID4gPiBoYXMgY2hhbmdlZCBmb3IgVFhGVExSLiBJIGFsc28gZG9uJ3QgaGF2ZSB0aGUgdjQg
+c3BlYyB0byBiZXR0ZXINCj4gPiA+IHVuZGVyc3RhbmQgd2hhdCB0aGV5IHJlYWxseSBtZWFudCB0
+aGVyZS4gQnV0IGlmIHRoZSBUWEZUTFIvUlhGVExSDQo+ID4gPiByZWdpc3RlcnMgc2VtYW50aWMg
+aGFzIGNoYW5nZWQsIHRoZW4gSSdkIHN0YXJ0IHRvIGRpZyBpbiB0aGUgYXNwZWN0cw0KPiA+ID4g
+b2YgdGhhdCBjaGFuZ2UgYW5kIHdoZXRoZXIgaXQgYWZmZWN0cyB0aGUgRklGTy1kZXB0aCBjYWxj
+dWxhdGlvbg0KPiA+ID4gYWxnb3JpdGhtLi4uDQo+ID4gDQo+ID4gSSBzcGVudCBhIGxvdCBvZiB0
+aW1lIHJlYWRpbmcgdGhlIHNwZWMgeWVzdGVyZGF5IGFuZCBkaWQgbm90IHNlZSBhbnkgdGV4dCB0
+aGF0DQo+ID4gY29uZmxpY3RzIHdpdGggd2hhdCB0aGUgZHJpdmVyIGlzIGRvaW5nLiBUaGUgc2Vt
+YW50aWMgb2YgVFhGVExSIGFuZCBSWEZUTFIgaXMNCj4gPiBzdGlsbCBhcyB5b3UgZGVzY3JpYmUg
+YWJvdmUgZm9yIHYzLCB0aGUgaW50ZXJuYWwgKzEgaW5jcmVtZW50IGZvciBSWEZUTFIgaXMNCj4g
+PiBzdGlsbCB0aGVyZS4NCj4gPiANCj4gPiA+IEFueXdheSByZWdhcmRpbmcgeW91ciBmaXguIFBs
+ZWFzZSBzZWUgdGhlIG5leHQgdHdvIGNvbW1pdHMsIHdoaWNoIGhhdmUNCj4gPiA+IGFscmVhZHkg
+YXR0ZW1wdGVkIHRvIGludHJvZHVjZSBhIGNoYW5nZSBwcm9wb3NlZCBieSB5b3UsIGJ1dCB0aGVu
+DQo+ID4gPiByZXZlcnRlZCBpdCBiYWNrOg0KPiA+ID4gZDI5NzkzM2NjN2ZjICgic3BpOiBkdzog
+Rml4IGRldGVjdGluZyBGSUZPIGRlcHRoIikNCj4gPiA+IDlkMjM5ZDM1M2MzMSAoInNwaTogZHc6
+IHJldmlzaXQgRklGTyBzaXplIGRldGVjdGlvbiBhZ2FpbiIpDQo+ID4gPiANCj4gPiA+IEkgZG9u
+J3QgdGhpbmsgQW5keSB3YXMgd3JvbmcgcmV2ZXJ0aW5nIHRoZSBmaXggYmFjaywgZXNwZWNpYWxs
+eSBzZWVpbmcNCj4gPiA+IHRoZSBjdXJyZW50IEZJRk8tZGVwdGggZGV0ZWN0aW9uIGFsZ29yaXRo
+bSBpbXBsZW1lbnRhdGlvbiBpcyBjb3JyZWN0DQo+ID4gPiBmb3IgYm90aCB0eXBlcyBvZiBteSBj
+b250cm9sbGVycyAod2l0aCA4IGFuZCA2NCB3b3JkcyBkZXB0aHMpLiBJIGtub3cNCj4gPiA+IHdp
+dGggd2hhdCBwYXJhbWV0ZXJzIHRoZSBjb250cm9sbGVycyBoYXZlIGJlZW4gc3ludGhlc2l6ZWQg
+YW5kIHRoZQ0KPiA+ID4gZGV0ZWN0ZWQgZGVwdGhzIG1hdGNoIHRoZW0uDQo+ID4gDQo+ID4gT0su
+IEdvdCBpdC4NCj4gPiANCj4gPiA+IA0KPiA+ID4gPiANCj4gPiA+ID4gSG93ZXZlciAoSSB0aGlu
+ayB0aGlzIG1heSBiZSB0aGUgY2F0Y2gpLCB0aGUgc3BlYyBhbHNvIHNheXM6DQo+ID4gPiA+IA0K
+PiA+ID4gPiAiVGhpcyByZWdpc3RlciBpcyBzaXplZCB0byB0aGUgbnVtYmVyIG9mIGFkZHJlc3Mg
+Yml0cyBuZWVkZWQgdG8gYWNjZXNzIHRoZQ0KPiA+ID4gPiBGSUZPLiINCj4gPiA+ID4gDQo+ID4g
+PiA+IFNvIGZvciBhIGZpZm8gZGVwdGggb2YgMzIsIHRoZSByZWdpc3RlciB3b3VsZCBiZSA1IGJp
+dHMgb25seSwgcHJldmVudGluZyBpdA0KPiA+ID4gPiBmcm9tIGV2ZXIgaW5kaWNhdGluZyAzMi4N
+Cj4gPiA+IA0KPiA+ID4gSW4gYWNjb3JkYW5jZSB3aXRoIHRoZSByZWdpc3RlcnMgc2VtYW50aWMg
+d2Ugc2hhbGwgbmV2ZXIgd3JpdGUgYQ0KPiA+ID4gRklGTy1kZXB0aCB2YWx1ZSBpbnRvIHRoZW0g
+YW5kIGFjdHVhbGx5IHdlIGFyZW4ndCBhYmxlIHRvIGRvIHRoYXQuDQo+ID4gPiBGaXJzdCBvZiBh
+bGwgaW5kZWVkIHRoZXJlIGlzIG5vIHBvaW50IGluIHNldHRpbmcgdGhlIEZJRk8tZGVwdGggdmFs
+dWUNCj4gPiA+IGludG8gdGhlIFRYRlRMUiBiZWNhdXNlIHRoYXQgd2lsbCBjYXVzZSB0aGUgVFhF
+LUlSUSBiZWluZyBjb25zdGFudGx5DQo+ID4gPiBnZW5lcmF0ZWQgKGJlY2F1c2UgdGhlIGxldmVs
+IG9mIHRoZSBUeCBGSUZPIHdpbGwgYmUgYWx3YXlzIGxlc3MgdGhhbg0KPiA+ID4gb3IgZXF1YWwg
+dG8gdGhlIEZJRk8tZGVwdGgpLiBUaGVyZSBpcyBubyBwb2ludCBpbiBzZXR0aW5nIHRoZQ0KPiA+
+ID4gRklGTy1kZXB0aCBpbnRvIHRoZSBSWEZUTFIgYmVjYXVzZSB0aGF0IHdpbGwgZWZmZWN0aXZl
+bHkgZGlzYWJsZSB0aGUNCj4gPiA+IFJYRi1JUlEgKHRoZSBsZXZlbCBvZiB0aGUgUnggRklGTyB3
+aWxsIGJlIG5ldmVyIGdyZWF0ZXIgdGhhbg0KPiA+ID4gRklGTy1kZXB0aCArIDEpLiBTZWNvbmRs
+eSB0aGUgVFhGVExSL1JYRlRMUiByZWdpc3RlcnMgd2lkdGggaGF2ZSBiZWVuDQo+ID4gPiBkZWZp
+bmVkIGFzOiBUWF9BQlctMTowIGFuZCBSWF9BQlctMTowIHVubGlrZSB0aGUgRklGTyBsZXZlbCBy
+ZWdpc3RlcnMNCj4gPiA+IFRYRkxSL1JYRkxSOiBUWF9BQlc6MCBhbmQgUlhfQUJXOjAgLiBTbyB3
+ZSBqdXN0IGxpdGVyYWxseSBjYW4ndCBzZXQgYQ0KPiA+ID4gdmFsdWUgd2lkZXIgdGhhbiB0aGUg
+cmVnaXN0ZXIgaXMuDQo+ID4gDQo+ID4gWWVwLCB1bmRlcnN0b29kLg0KPiA+IA0KPiA+ID4gDQo+
+ID4gPiA+IEkgdGhpbmsgdGhhdCB0aGlzIHNwZWMgY2xhdXNlIHRha2VzIHByZWNlZGVuY2Ugb3Zl
+cg0KPiA+ID4gPiB0aGUgcHJldmlvdXMgb25lLCBhbmQgZm9yIGEgZmlmbyBtYXggZGVwdGggdGhh
+dCBpcyBhIHBvd2VyIG9mIDIgKHdoaWNoIEkgYXNzdW1lDQo+ID4gPiA+IGlzIHRoZSBjYXNlIG9u
+IG1vc3Qgc3ludGhlc2lzIG9mIHRoZSBkZXZpY2UpLCB0aGUgZGV0ZWN0aW9uIGxvb3AgYWN0dWFs
+bHkNCj4gPiA+ID4gd29ya3MuIEJ1dCBpdCB3b3VsZCBiZSBidWdneSAob2ZmIGJ5IG9uZSkgZm9y
+IGFueSBvdGhlciB2YWx1ZSBvZiB0aGUgZmlmbyBtYXgNCj4gPiA+ID4gZGVwdGggdGhhdCBpcyBu
+b3QgYSBwb3dlciBvZiAyLg0KPiA+ID4gPiANCj4gPiA+ID4gSWYgdGhlIGFib3ZlIGlzIGNvcnJl
+Y3QsIGFuZCBteSBTb0Mgc3BlYyBzaGVldCBpcyBhbHNvIGNvcnJlY3QsIHRoZW4gYWxsIEkgY2Fu
+DQo+ID4gPiA+IHRoaW5rIG9mIG5vdyBpcyBhIEhXIGJ1Zy4gQmVjYXVzZSBubyBtYXR0ZXIgd2hh
+dCBJIGRvIG9yIGhvdyBJIGxvb2sgYXQgaXQsIHRoZQ0KPiA+ID4gPiBSWCBGSUZPIG92ZXJmbG93
+IGFsd2F5cyBoYXBwZW4gd2hlbiB0aGUgc3VtIG9mIFRYIGJ5dGVzIHNlbnQgYW5kIFJYIGJ5dGVz
+IGxlZnQNCj4gPiA+ID4gdG8gcmVjZWl2ZSBlcXVhbHMgZXhhY3RseSAzMi4gU2VuZGluZyAzMkIg
+b24gVFggZmlmbyBkb2VzIG50byBzZWVtIHRvIGNhdXNlIGFueQ0KPiA+ID4gPiBwcm9ibGVtLCBz
+byB0aGUgVFggZmlmbyBzZWVtcyB0byBpbmRlZWQgYmUgMzJCIGRlZXAuIEJ1dCBvbiB0aGUgUlgg
+c2lkZSwgaXQNCj4gPiA+ID4gcmVhbGx5IGxvb2sgbGlrZSAzMSBpcyB0aGUgdmFsdWUgdG8gdXNl
+Lg0KPiA+ID4gDQo+ID4gPiBPZiBjb3Vyc2Ugd2Ugc2hvdWxkbid0IHJlamVjdCBhIHBvc3NpYmls
+aXR5IG9mIGhhdmluZyBhIEhXIGJ1ZyBoZXJlLA0KPiA+ID4gYnV0IHRoYXQgaXMgYWx3YXlzIGEg
+bGFzdCByZXNvcnQgYW5kIG5lZWRzIHRvIGJlIGZpcm1seSBwcm92ZWQuDQo+ID4gPiBJbiB5b3Vy
+IGNhc2Ugd2UgbWF5IGFzc3VtZSBvbmUgb2YgdHdvIGNhdXNlcyBvZiB0aGUgcHJvYmxlbToNCj4g
+PiA+IDEpIFRoZXJlIGlzIHRoZSBkZXB0aHMgbWlzbWF0Y2guDQo+ID4gPiDCoMKgwqBCdXQgaG93
+IGNvbWUgeW91IHN0aWxsIGdldCB0aGUgUlhGTFIgdG8gYmUgZmlsbGVkIHdpdGggZGF0YSBvZg0K
+PiA+ID4gwqDCoMKgZ3JlYXRlciBsZW5ndGggdGhhbiB3ZSB0aGluayB0aGUgUnggRklGTyBkZXB0
+aCBpcz8uLiBBbnl3YXkgdGhlDQo+ID4gPiDCoMKgwqB3ZWlyZCBiZWhhdmlvdXIgc3RpbGwgY2Fu
+IGJlIGV4cGxhaW5lZCBieSB0aGUgbm9uLXN0YW5kYXJkDQo+ID4gPiDCoMKgwqBjb25maWd1cmF0
+aW9uIGVzcGVjaWFsbHkgaWYgdGhlIGRlcHRoIGlzbid0IHBvd2VyIG9mIDIsIHRoYXQNCj4gPiA+
+IMKgwqDCoFN5bm9wc3lzIG1pZ2h0IGhhdmVuJ3QgZXZlbiB0ZXN0ZWQgaXQsIGV0Yy4NCj4gPiAN
+Cj4gDQo+ID4gSSBoYXZlIG5ldmVyIHNlZW4gUlhGTFIgYmVpbmcgbGFyZ2VyIHRoYW4gMzIsIHdo
+aWNoIGlzIHRoZSBhc3N1bWVkIFRYIGFuZCBSWA0KPiA+IGZpZm8gZGVwdGguIEhvd2V2ZXIsIHRo
+ZSBzcGVjIGRvIG1lbnRpb24gdGhhdCBpbiBjYXNlIG9mIG92ZXJydW4sIHRoZSBleHRyYQ0KPiA+
+IGJ5dGVzIGFyZSBkcm9wcGVkLCBzbyBJIGRvIG5vdCB0aGluayBzZWVpbmcgUlhGTFIgYmVpbmcg
+bGFyZ2VyIHRoYW4gZmlmbyBkZXB0aA0KPiA+IGlzIHBvc3NpYmxlLiBXaGVuIHRoZSBSWCBmaWZv
+IG92ZXJydW4gZXJyb3Igb2NjdXIsIFJYRkxSIGFsd2F5cyBpbmRpY2F0ZSAzMi4gSQ0KPiA+IHRo
+b3VnaHQgb2YgdGhlIGZvbGxvd2luZyBwb3NzaWJpbGl0aWVzIGFzIHBvdGVudGlhbCBidWdzOg0K
+PiA+IGEpIHRoZSB0cmFjZSBzaG93cyB0aGF0IHRoZSBkcml2ZXIgaXMgbm90IHRyeWluZyB0byBh
+c2sgZm9yIG1vcmUgYnl0ZXMgdGhhbiB0aGUNCj4gPiBmaWZvIGNhbiBob2xkLCBzbyB0aGUgY29u
+dHJvbGxlciBtYXkgYmUgdHJ5aW5nIHRvIHB1c2ggb25lIG1vcmUgYnl0ZSB0aGFuIHdhcw0KPiA+
+IHJlcXVlc3RlZC4NCj4gPiBiKSBUaGUgUlggZmlmbyBkZXB0aCBpcyBpbiBmYWN0IDMxIGluc3Rl
+YWQgb2YgdGhlIGRvY3VtZW50ZWQgJiBkZXRlY3RlZCAzMi4NCj4gPiBjKSBUaGUgUlggZmlmbyBp
+cyBpbmRlZWQgMzIsIGJ1dCB0aGUgb3ZlcnJ1biB0cmlnZ2VyIGlzIG9mZi1ieS1vbmUgYW5kIHRy
+aWdnZXJzDQo+ID4gd2hlbiBSWEZMUiA9PSAzMiBpbnN0ZWFkIG9mIHdoZW4gUlhGTFIgPT0gMzIg
+JiYgb25lIG1vcmUgYnl0ZSB3YXMgcmVxdWVzdGVkLg0KPiA+IA0KPiA+IChiKSBhbmQgKGMpIGJl
+aW5nIGtpbmQtb2YgZXF1aXZhbGVudC4gRm9yIChhKSwgSSB0aG91Z2h0IHRoZSBNT1NJIGxpbmUg
+ZHJpdmUNCj4gPiBoaWdoIG9yIGxvdyAodHh3ID0gMCBvciB0eHcgPSAweGZmZmYgaW4gZHdfd3Jp
+dGVyKCkpIG1heSBtYXR0ZXIsIGJ1dCB0aGF0IGRvZXMNCj4gPiBub3Qgc2VlbSB0byBiZSB0aGUg
+Y2FzZS4gQ2hhbmdpbmcgdHh3IGluaXQgdmFsdWUgaGFzIG5vIGVmZmVjdC4gU28gSSBraW5kIG9m
+DQo+ID4gcnVsZWQgKGEpIG91dC4NCj4gDQo+IEkgYW0gbW9yZSBpbmNsaW5lZCBpbiB0aGlua2lu
+ZyBvZiB3aGF0IHdlIGhhdmluZyBpcyBlaXRoZXIgYikgb3IgYykNCj4gaGVyZS4gV2hvIGtub3dz
+IGhvdyBzeW5vcHN5cyBpbXBsZW1lbnRlZCBUeC9SeCBGSUZPcyBpbmZyYXN0cnVjdHVyZQ0KPiBp
+biBoYXJkd2FyZT8gSXQgbWlnaHQgYmUgdGhhdCBkZXB0aHMgbWlzbWF0Y2gganVzdCBtYWtlcyB0
+aGUgYm90aA0KPiBGSUZPcyBoYXZpbmcgdGhlIHNhbWUgc2l6ZSBsaWtlIG1heChTU0lfVFhfRklG
+T19ERVBUSCwNCj4gU1NJX1JYX0ZJRk9fREVQVEgpIGJ1dCB3aWxsIGNhdXNlIHRoZSBSeCBGSUZP
+IG92ZXJydW4gaW50ZXJydXB0IGluDQo+IGNhc2Ugb2YgdGhlIG92ZXJmbG93LiBXZSBjYW4gb25s
+eSBndWVzcyBpbiB0aGlzIG1hdHRlci4gT24gdGhlIG90aGVyDQo+IGhhbmQgaWYgdGhlcmUgaXMg
+bm8gbWlzbWF0Y2ggaXQgbWlnaHQgYmUganVzdCBhIGJ1ZyBpbiB0aGUgSVAtY29yZS4gSW4NCj4g
+dGhhdCBjYXNlIHRoZSBwcm9ibGVtIG11c3QgYmUgZml4ZWQgYnkgdGhlIHZlbmRvciBpbiBmdXJ0
+aGVyIElQLWNvcmUNCj4gcmVsZWFzZXMuIEJ1dCB0aGUgY3VycmVudCByZXZpc2lvbiBuZWVkcyB0
+byBiZSB3b3JrZWQgYXJvdW5kIGluDQo+IHNvZnR3YXJlIGFueXdheS4NCj4gDQo+ID4gDQo+ID4g
+PiAyKSBUaGVyZSBpcyBhIEhXIGJ1ZywgZHVlIHRvIHdoaWNoIHRoZSBSWE8gaW50ZXJydXB0IGlz
+IGdlbmVyYXRlZCBldmVuDQo+ID4gPiDCoMKgwqB0aG91Z2ggdGhlcmUgaXMgbm8gYWN0dWFsIG92
+ZXJydW4uDQo+ID4gPiBMZXQncyB0cnkgdG8gcHJvdmUgb3IgZGlzcHJvdmUgdGhlbS4NCj4gPiA+
+IA0KPiA+ID4gTGV0J3MgYXNzdW1lIHRoYXQgdGhlcmUgaXMgaW5kZWVkIHRoZSBkZXB0aHMgbWlz
+bWF0Y2ggaGVyZToNCj4gPiA+IChTU0lfVFhfRklGT19ERVBUSCA9IDMyKSAhPSAoU1NJX1JYX0ZJ
+Rk9fREVQVEggPSAzMSksIGFuZCBmb3Igc29tZQ0KPiA+ID4gcmVhc29uIChkdWUgdG8gZm9yIGlu
+c3RhbmNlIHRoZSBUWEZUTFIvUlhGVExSIHNlbWFudGljIGNoYW5nZSBvcg0KPiA+ID4gdGhlIEhX
+IGJ1ZyBvciBldGMpIHdlIGNhbid0IGRldGVjdCB0aGUgUnggRklGTyBkZXB0aCBieSB0aGUgYWxn
+b3JpdGhtDQo+ID4gPiBpbiB0aGUgZHJpdmVyLiBJZiBzbyB3ZSBjYW4ndCByZWx5IG9uIHRoZSBk
+ZXB0aCBkZXRlY3Rpb24gbG9vcCBhbmQNCj4gPiA+IG5lZWQgdG8gdHJ5IHRvIHByb3ZlIHRoZSBk
+ZXB0aHMgbWlzbWF0Y2ggc29tZWhvdyBlbHNlLiBJdCB3b3VsZCBiZQ0KPiA+ID4gYWxzbyBiZXR0
+ZXIgdG8gZXhjbHVkZSB0aGUgZHJpdmVyIGNvZGUgZnJvbSB0aGUgcHJvYmxlbSBlcXVhdGlvbi4u
+Lg0KPiA+ID4gDQo+ID4gPiBTaW5jZSB3ZSBhcmUgc3VyZSB0aGUgUnggRklGTyBkZXB0aCBtdXN0
+IGJlIHNtYWxsZXIgdGhhbiB0aGUgVHggRklGTw0KPiA+ID4gZGVwdGggKG90aGVyd2lzZSB5b3Ug
+d291bGRuJ3QgYmUgZ2V0dGluZyB0aGUgUnggRklGTyBvdmVyZmxvd3MpLCB0aGVuDQo+ID4gPiB3
+ZSBjYW4ganVzdCB0cnkgdG8gbWFudWFsbHkgZXhlY3V0ZSBhIHNtYWxsIFNQSSB0cmFuc2ZlciBv
+ZiB0aGUgVHggRklGTw0KPiA+ID4gZGVwdGggbGVuZ3RoLiBJZiB0aGUgbWlzbWF0Y2ggdGFrZXMg
+cGxhY2Ugb3IgYW4gSFcgYnVnIHdpdGggZmFsc2UgUlhPLA0KPiA+ID4gdGhlbiB3ZSdsbCBnZXQg
+dGhlIFJ4IEZJRk8gb3ZlcmZsb3cgZmxhZyBzZXQuDQo+ID4gPiANCj4gPiA+IEkndmUgY3JlYXRl
+ZCBhIHNtYWxsIHNoZWxsLXNjcmlwdCAoeW91IGNhbiBmaW5kIGl0IGluIHRoZSBhdHRhY2htZW50
+KQ0KPiA+ID4gd2hpY2ggcnVucyBhIHNpbmdsZSBTUEkgdHJhbnNmZXIgb2YgdGhlIHBhc3NlZCBs
+ZW5ndGggYnkgbWFudWFsbHkNCj4gPiA+IHNldHRpbmcgYSBEVyBBUEIgU1NJIGNvbnRyb2xsZXIg
+dXAgd2l0aCBoZWxwIG9mIHRoZSBkZXZtZW0gdXRpbGl0eS4NCj4gPiA+IEluIG91ciBjYXNlIHRo
+ZSBsZW5ndGggaXMgc3VwcG9zZWQgdG8gYmUgZXF1YWwgdG8gdGhlIEZJRk8gZGVwdGguDQo+ID4g
+PiBIZXJlIGlzIHdoYXQgaGFwcGVucyBpZiBJIHJ1biBpdCBvbiBteSBoYXJkd2FyZSAoZGVwdGgg
+ZXF1YWxzIHRvIDY0DQo+ID4gPiBhbmQgdGhlIGNvbnRyb2xsZXIgcmVnaXN0ZXJzIHBoeXNpY2Fs
+IGFkZHJlc3MgaXMgMHgxZjA0ZTAwMCk6DQo+ID4gPiANCj4gPiA+IHJvb3RAbXNidDI6fiMgLi9j
+aGVja19taXNtYXRjaC5zaCA2NCAweDFmMDRlMDAwDQo+ID4gPiAxLiBUeCBGSUZPIGx2bCAwLCBS
+eCBGSUZPIGx2bCAwLCBSSVNSIDB4MDAwMDAwMDANCj4gPiA+IDEuIFR4IEZJRk8gbHZsIDY0LCBS
+eCBGSUZPIGx2bCAwLCBSSVNSIDB4MDAwMDAwMDANCj4gPiA+IDIuIFR4IEZJRk8gbHZsIDAsIFJ4
+IEZJRk8gbHZsIDY0LCBSSVNSIDB4MDAwMDAwMTENCj4gPiA+IA0KPiA+ID4gU2VlLCBhZnRlciBz
+ZW5kaW5nIGFuZCByZWNlaXZpbmcgYWxsIHRoZSBkYXRhIHRoZSBzdGF0dXMgcmVnaXN0ZXINCj4g
+PiA+IGRldGVjdHMgdGhlIG5vcm1hbCBUWEUgYW5kIFJYRiBpbnRlcnJ1cHRzLiBCdXQgaWYgb3Vy
+IGFzc3VtcHRpb25zIGFyZQ0KPiA+ID4gY29ycmVjdCBpbiB5b3VyIGNhc2UgaXQgc2hhbGwgYmUg
+c29tZXRoaW5nIGxpa2UgMHgwMDAwMDAxOSBhbHNvDQo+ID4gPiBwcmVzZW50aW5nIHRoZSBSWE8g
+aW50ZXJydXB0Lg0KPiA+ID4gDQo+ID4gPiAqIE5vdGUgQUZBSVUgeW91IG1pZ2h0IG5lZWQgdG8g
+Zml4IHRoZSBzY3JpcHQgYSBiaXQgdG8gc2V0IHRoZSBERlMNCj4gPiA+ICogZmllbGQgYXQgdGhl
+IGNvcnJlY3QgcGxhY2Ugb2YgQ1RSTFIwLi4uDQo+ID4gDQo+IA0KPiA+IEFmdGVyIGFkanVzdGlu
+ZyBmb3IgdGhlIENUUkxSMCAzMiBiaXRzIGZvcm1hdCwgSSBnZXQgdGhpczoNCj4gPiANCj4gPiBG
+b3IgREVQVEggPSAzMjoNCj4gPiANCj4gPiAxLiBUeCBGSUZPIGx2bCAwLCBSeCBGSUZPIGx2bCAw
+LCBSSVNSIDB4MDAwMDAwMDANCj4gPiAxLiBUeCBGSUZPIGx2bCAzMiwgUnggRklGTyBsdmwgMCwg
+UklTUiAweDAwMDAwMDAwDQo+ID4gMi4gVHggRklGTyBsdmwgMCwgUnggRklGTyBsdmwgMzIsIFJJ
+U1IgMHgwMDAwMDAxOQ0KPiA+IA0KPiA+IEV0IHZvaWxhOiBSWCBvdmVycnVuIHdoaWNoIG1hdGNo
+ZXMgd2hhdCBJIHdhcyBzZWVpbmcgd2l0aCB0aGUgZHJpdmVyIHRyYWNlLg0KPiA+IA0KPiA+IE5v
+dyBmb3IgREVQVEggPSAzMToNCj4gPiANCj4gPiAxLiBUeCBGSUZPIGx2bCAwLCBSeCBGSUZPIGx2
+bCAwLCBSSVNSIDB4MDAwMDAwMDANCj4gPiAxLiBUeCBGSUZPIGx2bCAzMSwgUnggRklGTyBsdmwg
+MCwgUklTUiAweDAwMDAwMDAwDQo+ID4gMi4gVHggRklGTyBsdmwgMCwgUnggRklGTyBsdmwgMzEs
+IFJJU1IgMHgwMDAwMDAxMQ0KPiA+IA0KPiA+IE5vcm1hbCB0cmFuc2Zlci4uLg0KPiANCj4gWWVh
+cCwgdGhhdCBwcm92ZXMgdGhlIGFzc3VtcHRpb24gb2YgaGF2aW5nIGVpdGhlciB0aGUgZGVwdGhz
+IG1pc21hdGNoDQo+IG9yIGEgSFcgYnVnLg0KPiANCj4gPiANCj4gPiA+IElmIGFmdGVyIHJ1bm5p
+bmcgdGhlIGF0dGFjaGVkIHNjcmlwdCB5b3UgZ2V0IHRoZSBSWE8gc3RhdHVzIHNldCwgdGhlbg0K
+PiA+ID4gaW5kZWVkIHRoZXJlIGlzIGVpdGhlciB0aGUgZGVwdGhzIG1pc21hdGNoIG9yIHRoZXJl
+IGlzIGEgSFcgYnVnLiBJZg0KPiA+ID4gdGhlIFRYRlRMUi9SWEZUTFIgc2VtYW50aWMgaGFzbid0
+IGNoYW5nZWQgaW4gc3BlYyB2NCwgdGhlbiB0aGUNCj4gPiA+IG1pc21hdGNoIG9yIGEgSFcgYnVn
+IGRvbid0IGxldCB1cyB0byBkZXRlY3QgdGhlIFJ4IEZJRk8gZGVwdGggYnkgbWVhbnMNCj4gPiA+
+IG9mIHRoZSBhbGdvcml0aG0gaW1wbGVtZW50ZWQgaW4gdGhlIGRyaXZlci4gVGhlbiB3ZSBoYXZl
+IG5vIGNob2ljZSBidXQNCj4gPiA+IHRvIG1hbnVhbGx5IHNldCB0aGUgRklGTyBkZXB0aCBmb3Ig
+dGhlIEsyMTAgU1BJIGNvbnRyb2xsZXIuDQo+ID4gDQo+ID4gSSBkbyBub3QgaGF2ZSB0aGUgb2xk
+ZXIgdjMgc3BlY3Mgb24gaGFuZCBub3csIGJ1dCBJIGNhbiBnZXQgdGhlbS4gSSB3aWxsIGFuZA0K
+PiA+IGNvbXBhcmUgYnV0IGZyb20gcmVhZGluZyB0aGUgdjQgc3BlY3MgeWVzdGVyZGF5LCBJIGhh
+dmUgbm90IHNlZW4gYW55dGhpbmcgdGhhdA0KPiA+IGRvZXMgbm90IG1hdGNoIHRoZSBkcml2ZXIg
+YmVoYXZpb3IuDQo+ID4gDQo+ID4gPiANCj4gPiA+ID4gDQo+ID4gPiA+IEhlcmUgaXMgYSB0cmFj
+ZSBmb3IgYSA2NEIgdHJhbnNmZXIgKGVycm9ycyBoYXBwZW4gb25seSBmb3IgdHJhbnNmZXJzIGxh
+cmdlcg0KPiA+ID4gPiB0aGFuIDMyIEIpOg0KPiA+ID4gPiANCj4gPiA+ID4gSVJRKDEpOg0KPiA+
+ID4gPiBbICAgIDEuMDYyOTc4XSBzcGlfbWFzdGVyIHNwaTE6ICMjIFJYOiB1c2VkIDAvMCwgbGVu
+IDY0IC0+IHJ4IDANCj4gPiA+ID4gWyAgICAxLjA2ODUzM10gc3BpX21hc3RlciBzcGkxOiAjIyBU
+WDogdXNlZCAwLzAsIHJvb20gMzIsIGxlbiA2NCwgZ2FwIDMyIC0+IHR4DQo+ID4gPiA+IDMyDQo+
+ID4gPiA+IA0KPiA+ID4gPiBJUlEoMik6DQo+ID4gPiA+IFsgICAgMS4wNzYwNTJdIHNwaV9tYXN0
+ZXIgc3BpMTogIyMgUlg6IHVzZWQgMTYvMTUsIGxlbiA2NCAtPiByeCAxNQ0KPiA+ID4gPiBbICAg
+IDEuMDgxNjQ3XSBzcGlfbWFzdGVyIHNwaTE6ICMjIFRYOiB1c2VkIDAvMTcsIHJvb20gMzIsIGxl
+biAzMiwgZ2FwIDE1IC0+IHR4DQo+ID4gPiA+IDE1DQo+ID4gPiA+IA0KPiA+ID4gPiBJUlEoMyk6
+DQo+ID4gPiA+IFsgICAgMS4wODg5MzJdIHNwaV9tYXN0ZXIgc3BpMTogUlggRklGTyBvdmVyZmxv
+dyBkZXRlY3RlZA0KPiA+ID4gPiBbICAgIDEuMDk0MDUzXSBzcGlfbWFzdGVyIHNwaTE6ICMjIFRY
+L1JYIHVzZWQgMC8zMiwgbGVuIDE3LzQ5DQo+ID4gPiA+IA0KPiA+ID4gPiBFYWNoIHBhaXIgb2Yg
+bGluZSBjb3JyZXNwb25kIHRvIG9uZSBleGVjdXRpb24gb2YgZHdfc3BpX3RyYW5zZmVyX2hhbmRs
+ZXIoKSBvbg0KPiA+ID4gPiBhbiBJUlEgb2NjdXJyZW5jZS4gVGhlIGZpcnN0IGxpbmUgaXMgd2hh
+dCByeF9tYXgoKSBzZWVzIHdoZW4gZHdfcmVhZGVyKCkgaXMNCj4gPiA+ID4gY2FsbGVkLCB0aGUg
+c2Vjb25kIGxpbmUgaXMgd2hhdCB0eF9tYXgoKSBzZWVzIHdoZW4gZHdfd3JpdGVyKCkgaXMgZXhl
+Y3V0ZWQuIFRoZQ0KPiA+ID4gPiAidXNlZCB4L3kiIHBhcnQgb2YgdGhlIG1lc3NhZ2VzIHNob3dz
+IFRYRkxSL1JYRkxSIHZhbHVlcy4NCj4gPiA+ID4gDQo+ID4gPiA+ICgxKSBBZnRlciBzZXR1cCBv
+ZiB0aGUgdHJhbnNmZXIgYW5kIGVuYWJsaW5nIHRoZSBjb250cm9sbGVyLCBJUlEoMSkgb2NjdXJz
+LA0KPiA+ID4gPiBub3RoaW5nIHRvIHJlY2VpdmUgeWV0LCBUWCBmaWZvIGFsbCBlbXB0eSwgMzIg
+QiBhcmUgd3JpdHRlbi4gQWxsIGV4cGVjdGVkLiBPSy4NCj4gPiA+ID4gKDIpIE1vcmUgdGhhbiBm
+aWZvX2xlbiAvIDIgLSAxIChhcyBSWEZUTFIgaXMgc2V0IGluIGR3X3NwaV9pcnFfc2V0dXApIGJl
+Y29tZQ0KPiA+ID4gPiBhdmFpbGFibGUgYW5kIElSUSgyKSB0cmlnZ2VyLCAxNSBCeXRlcyBhcmUg
+cmVjZWl2ZWQuIFdoZW4gZHdfd3JpdGVyKCkgcnVucywgaXQNCj4gPiA+ID4gc2VlcyB0aGUgcnh0
+eGdhcCBhdCAxNUIgKDE3QiBzdGlsbCB0byByZWNlaXZlIGZyb20gdGhlIHByZXZpb3VzIDMyQiB3
+cml0dGVuKSwNCj4gPiA+ID4gc28gd3JpdGVzIG9ubHkgMTVCLiBBbGwgZ29vZCwgYWdhaW4gZXhw
+ZWN0ZWQuIE5vdGUgdGhhdCB3aGVuIGR3X3dyaXRlcigpIHJ1bnMsDQo+ID4gPiA+IHRoZSByZW1h
+aW5pbmcgMTdCIHRvIGJlIHJlY2VpdmVkIGFyZSBhbHJlYWR5IGF2YWlsYWJsZSwgYnV0IHRoYXQg
+aXMgbGlrZWx5IGR1ZQ0KPiA+ID4gPiB0byB0aGUgZGVsYXkgZnJvbSB0aGUgcHJfaW5mbygpIG1l
+c3NhZ2UgcHJpbnQuDQo+ID4gPiA+ICgzKSBOZXh0IElSUSgzKSBpcyB0aGUgZXJyb3IsIHNob3dp
+bmcgdGhhdCBhbGwgVFggYnl0ZXMgaGF2ZSBiZWVuIHByb2Nlc3NlZCBhbmQNCj4gPiA+ID4gdGhh
+dCB0aGUgUlggZmlmbyBpcyBmdWxsIHdpdGggMzJCLg0KPiA+ID4gPiANCj4gPiA+ID4gSWYgdGhl
+IFJYIGZpZm8gbWF4IGRlcHRoIGlzIGluZGVlZCAzMiwgSSBkbyBub3QgdW5kZXJzdGFuZCB3aHkg
+dGhlIG92ZXJmbG93DQo+ID4gPiA+IGVycm9yIGlzIHRyaWdnZXJlZCBhdCBzdGVwICgzKS4gVGhl
+cmUgYXJlIG5vIG1vcmUgdGhhbiAzMkIgdGhhdCBjYW4gcG9zc2libHkgYmUNCj4gPiA+ID4gcmVj
+ZWl2ZWQuIFB1dHRpbmcgYmFjayB0aGUgImRyaXZlIE1PU0kgbG5lIGhpZ2giIHBhdGNoIGRvZXMg
+bm90IGNoYW5nZQ0KPiA+ID4gPiBhbnl0aGluZy4gU2FtZSBiZWhhdmlvci4NCj4gPiA+IA0KPiA+
+ID4gVGhlIGxvZyB5b3UndmUgc2VudCBpbmRlZWQgbG9va3Mgd2VpcmQuIEknZCBvbmUgbW9yZSB0
+aW1lIHBlcmZvcm1lZA0KPiA+ID4gdGhlIG5leHQgc3RlcHM6DQo+ID4gPiAxKSBTdHVkeSB0aGUg
+c3BlYyBwYXlpbmcgc3BlY2lhbCBhdHRlbnRpb24gdG8gdGhlIFRYRlRMUi9SWEZUTFIgYW5kDQo+
+ID4gPiDCoMKgwqBUWEZMUi9SWEZMUiByZWdpc3RlcnMgZGVzY3JpcHRpb25zLiBNb3N0bHkgd2Ug
+bmVlZCB0byBtYWtlIHN1cmUNCj4gPiA+IMKgwqDCoHRoYXQgbm90aGluZyBoYXMgY2hhbmdlZCBz
+aW5jZSB0aGUgb2xkZXIgY29udHJvbGxlciByZXZpc2lvbnMgYW5kDQo+ID4gPiDCoMKgwqB3aGF0
+IHRoZSBkcml2ZXIgaW1wbGVtZW50cyBpcyBjb3JyZWN0IGZvciB5b3VyIGNvbnRyb2xsZXIuDQo+
+ID4gPiAyKSBUcnkgdG8gZmluZCBhbiBpbnRlcm5hbCBkb2Mgd2l0aCB0aGUgRFcgQVBCIFNTSSBJ
+UC1jb3JlIHBhcmFtZXRlcnMNCj4gPiA+IMKgwqDCoGluaXRpYWxpemVkIGR1cmluZyB0aGUgY29u
+dHJvbGxlciBzeW50aGVzaXplLiBUcnkgdG8gZmluZCB0aGUNCj4gPiA+IMKgwqDCoFNTSV9UWF9G
+SUZPX0RFUFRIL1NTSV9SWF9GSUZPX0RFUFRIIHBhcmFtZXRlcnMgdmFsdWUuDQo+ID4gPiAzKSBU
+cnkgdG8gZmluZCBhbiBlcnJhdGEgZG9jIGZvciB5b3VyIGNvbnRyb2xsZXIgcmV2aXNpb24gYW5k
+IG1ha2UNCj4gPiA+IMKgwqDCoHN1cmUgaXQgZG9lc24ndCBoYXZlIGFueXRoaW5nIGFib3V0IHRo
+ZSBwcm9ibGVtIHlvdSBhcmUgZ2V0dGluZw0KPiA+ID4gwqDCoMKgaGVyZS4NCj4gPiANCj4gDQo+
+ID4gVGhlIEsyMTAgZG9jdW1lbnRhdGlvbiBpcyBleHRyZW1lbHkgcG9vci4gQWxsIHRoYXQgaXMg
+YXZhaWxhYmxlIGlzIGhlcmU6DQo+ID4gDQo+ID4gaHR0cHM6Ly9zMy5jbi1ub3J0aC0xLmFtYXpv
+bmF3cy5jb20uY24vZGwua2VuZHJ5dGUuY29tL2RvY3VtZW50cy9rZW5kcnl0ZV9kYXRhc2hlZXRf
+MjAxODEwMTExNjMyNDhfZW4ucGRmDQo+IA0KPiBUaGF0J3MganVzdCBhIGRhdGFzaGVldC4gSXQg
+Y2FuJ3QgYmUgdXNlZCB0byBmaW5kIHRoZSByZWFzb24gb2YgdGhlDQo+IHByb2JsZW0uDQoNCkkg
+ZGlkIHNheSB0aGF0IHRoZSBkb2N1bWVudGF0aW9uIHdhcyBwb29yIDopDQoNCg0KPiANCj4gPiAN
+Cj4gPiBBbmQgYXMgeW91IGNhbiBzZWUsIHRoYXQgaXMgYWxsIHZlcnkgaGlnaCBsZXZlbC4gVGhl
+IGJlc3Qgc291cmNlIG9mIGluZm9ybWF0aW9uDQo+ID4gaXMgdGhlIFNESyBjb2RlIGhlcmU6DQo+
+ID4gDQo+ID4gaHR0cHM6Ly9naXRodWIuY29tL2tlbmRyeXRlL2tlbmRyeXRlLXN0YW5kYWxvbmUt
+c2RrDQo+ID4gDQo+ID4gSW4gdGhhdCBjb2RlLCBUWCBmaWZvIGxlbmd0aCBpcyBjbGVhcmx5IGhh
+cmQtY29kZWQgYXQgMzIsIGJ1dCB0aGUgUlggZmlmbyBkZXB0aA0KPiA+IGlzIG5vdCBjbGVhciBh
+cyB0aGUgY29kZSBhbHdheXMgc2V0cyBSWEZUTFIgdG8gMCBhbmQgdGhlIGNvZGUgaXMgcmF0aGVy
+IHRyaXZpYWwNCj4gPiBkb2luZyBhIGxvb3AgdXAgdG8gUlhGTFIgdG8gcmVjZWl2ZSBieXRlcy4N
+Cj4gPiANCj4gPiA+IDQpIFJ1biB0aGUgYXR0YWNoZWQgc2NyaXB0IHRvIG1ha2Ugc3VyZSB0aGF0
+IHRoZSBwcm9ibGVtIGlzbid0DQo+ID4gPiDCoMKgwqBjb25uZWN0ZWQgd2l0aCBhIGJ1ZyBpbiB0
+aGUgZHJpdmVyLCBidXQgZWl0aGVyIHdpdGggdGhlIGRlcHRocw0KPiA+ID4gwqDCoMKgbWlzbWF0
+Y2ggb3Igd2l0aCBhbiBIVyBidWcuDQo+ID4gDQo+ID4gU2luY2UgYXBwbHlpbmcgdGhlIGZpZm8g
+ZGVwdGggZGV0ZWN0aW9uIGxvb3AgdG8gUlhGTFRSIGxlYWRzIHRvIHRoZSBzYW1lIHJlc3VsdA0K
+PiA+IChtYXggcmVnaXN0ZXIgdmFsdWUgPSAzMSwgbWVhbmluZyBhIGZpZm8gZGVwdGggb2YgMzIp
+LCBpdCByZWFsbHkgbG9va3MgbGlrZSBhbg0KPiA+IG9mZi1ieS1vbmUgSFcgYnVnIG9uIHRoZSB0
+cmlnZ2VyIGZvciB0aGUgUlggb3ZlcnJ1biBzdGF0dXMuIA0KPiA+ID4gDQo+ID4gPiA+IA0KPiA+
+ID4gPiBJIGFtIG91dCBvZiBpZGVhcyBhdCB0aGlzIHBvaW50IGFuZCBjYW4gb25seSB0aGluayB0
+aGF0IEkgYW0gZmFjaW5nIGEgSFcgYnVnDQo+ID4gPiA+IHRoYXQgbmVlZHMgYSBxdWlyayBzb21l
+d2hlcmUuDQo+ID4gPiA+IA0KPiA+ID4gPiBUaG91Z2h0cyA/IERvIHlvdSB0aGluayBpdCBpcyBP
+SyB0byBhZGQgYSBxdWlyayBmbGFnIGZvciB0aGlzIFNvQyB0byBoYXZlDQo+ID4gPiA+IGZpZm9f
+bGVuIHJlZHVjZWQgYnkgb25lID8gQWRkaW5nIGEgRFQgcHJvcGVydHkgdG8gbWFudWFsbHkgZm9y
+Y2UgYSB2YWx1ZSBmb3INCj4gPiA+ID4gZmlmb19sZW4gd291bGQgd29yayB0b28uDQo+ID4gPiAN
+Cj4gPiA+IFNvIGlmIG5vbmUgb2YgdGhlIHN0ZXBzIGFib3ZlIGdpdmVzIHVzIGFuIGFuc3dlciwg
+dGhlbiB3ZSBuZWVkIHRvIGRpZw0KPiA+ID4gZGlwcGVyIGludG8gdGhlIGRyaXZlciBjb2RlIGFu
+ZCB3ZSBtaXNzaW5nIHNvbWV0aGluZy4gSWYgMikgLSA0KSBwcm92ZXMgdGhlDQo+ID4gPiBkZXB0
+aHMgbWlzbWF0Y2ggb3IgYSBIVyBidWcsIHRoZW4geW91IGNhbiBwYXRjaCB0aGUgc3BpLWR3LW1t
+aW8uYyBjb2RlIHRvIHNldA0KPiA+ID4gYSBjdXN0b20gZmlmb19sZW4gZm9yIHRoZSBLMjEwIFNQ
+SSBjb250cm9sbGVyLg0KPiA+ID4gDQo+ID4gPiBBbnl3YXkgSSBkb24ndCB0aGluayBhIHF1aXJr
+IGZsYWcgd291bGQgYmUgYSBnb29kIHNvbHV0aW9uIGhlcmUgYmVjYXVzZQ0KPiA+ID4gdGhlIHBy
+b2JsZW0gc2VlbXMgdmVyeSBzcGVjaWZpYyB0byB5b3VyIGNvbnRyb2xsZXIuLi4NCj4gPiANCj4g
+DQo+ID4gSW5kZWVkLiBTbyB3aGF0IGFib3V0IHRoaXM6DQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvc3BpL3NwaS1kdy1tbWlvLmMgYi9kcml2ZXJzL3NwaS9zcGktZHctbW1pby5jDQo+
+ID4gaW5kZXggZDBjYzViZjRmYTRlLi4xN2MwNjAzOWE3NGQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJp
+dmVycy9zcGkvc3BpLWR3LW1taW8uYw0KPiA+ICsrKyBiL2RyaXZlcnMvc3BpL3NwaS1kdy1tbWlv
+LmMNCj4gPiBAQCAtMjIyLDYgKzIyMiwyMSBAQCBzdGF0aWMgaW50IGR3X3NwaV9rZWVtYmF5X2lu
+aXQoc3RydWN0IHBsYXRmb3JtX2RldmljZQ0KPiA+ICpwZGV2LA0KPiA+IMKgwqDCoMKgwqDCoMKg
+wqByZXR1cm4gMDsNCj4gPiDCoH0NCj4gPiDCoA0KPiA+IA0KPiA+IA0KPiA+IA0KPiA+IA0KPiA+
+IA0KPiA+IA0KPiA+IA0KPiA+ICtzdGF0aWMgaW50IGR3X3NwaV9jYW5hYW5fazIxMF9pbml0KHN0
+cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBzdHJ1Y3QgZHdfc3BpX21taW8gKmR3c21taW8pDQo+ID4gK3sNCj4gPiArICAg
+ICAgIC8qDQo+ID4gKyAgICAgICAgKiBUaGUgQ2FuYWFuIEtlbmRyeXRlIEsyMTAgU29DIERXIGFw
+Yl9zc2kgdjQgc3BpIGNvbnRyb2xsZXIgaXMNCj4gPiArICAgICAgICAqIGRvY3VtZW50ZWQgdG8g
+aGF2ZSBhIDMyIHdvcmRzIGRlZXAgVFggYW5kIFJYIEZJRk8sIHdoaWNoDQo+ID4gKyAgICAgICAg
+KiBzcGlfaHdfaW5pdCgpIGRldGVjdHMuIEhvd2V2ZXIsIHdoZW4gdGhlIFJYIEZJRk8gaXMgZmls
+bGVkIHVwIHRvDQo+ID4gKyAgICAgICAgKiAzMiBlbnRyaWVzIChSWEZMUiA9IDMyKSwgYW4gUlgg
+RklGTyBvdmVycnVuIGVycm9yIG9jY3Vycy4gQXZvaWQgdGhpcw0KPiA+ICsgICAgICAgICogcHJv
+YmxlbSBieSBmb3JjZSBzZXR0aW5nIGZpZm9fbGVuIHRvIDMxLg0KPiA+ICsgICAgICAgICovDQo+
+ID4gKyAgICAgICBkd3NtbWlvLT5kd3MuZmlmb19sZW4gPSAzMTsNCj4gPiArDQo+ID4gKyAgICAg
+ICByZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiDCoHN0YXRpYyBpbnQgZHdfc3BpX21taW9f
+cHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gPiDCoHsNCj4gPiDCoMKgwqDC
+oMKgwqDCoMKgaW50ICgqaW5pdF9mdW5jKShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2LA0K
+PiA+IEBAIC0zMzUsNiArMzUwLDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBvZl9kZXZpY2VfaWQg
+ZHdfc3BpX21taW9fb2ZfbWF0Y2hbXSA9IHsNCj4gPiDCoMKgwqDCoMKgwqDCoMKgeyAuY29tcGF0
+aWJsZSA9ICJzbnBzLGR3Yy1zc2ktMS4wMWEiLCAuZGF0YSA9IGR3X3NwaV9kd2Nfc3NpX2luaXR9
+LA0KPiA+IMKgwqDCoMKgwqDCoMKgwqB7IC5jb21wYXRpYmxlID0gImludGVsLGtlZW1iYXktc3Np
+IiwgLmRhdGEgPSBkd19zcGlfa2VlbWJheV9pbml0fSwNCj4gPiDCoMKgwqDCoMKgwqDCoMKgeyAu
+Y29tcGF0aWJsZSA9ICJtaWNyb2NoaXAsc3Bhcng1LXNwaSIsIGR3X3NwaV9tc2NjX3NwYXJ4NV9p
+bml0fSwNCj4gPiArICAgICAgIHsgLmNvbXBhdGlibGUgPSAiY2FuYWFuLGsyMTAtc3BpIiwgZHdf
+c3BpX2NhbmFhbl9rMjEwX2luaXR9LA0KPiA+IMKgwqDCoMKgwqDCoMKgwqB7IC8qIGVuZCBvZiB0
+YWJsZSAqL30NCj4gPiDCoH07DQo+ID4gwqBNT0RVTEVfREVWSUNFX1RBQkxFKG9mLCBkd19zcGlf
+bW1pb19vZl9tYXRjaCk7DQo+ID4gDQo+ID4gTm8gYWRkZWQgY2FwYWJpbGl0eSBmbGFnIGFuZCBw
+cm9ibGVtIHNvbHZlZDogbm8gUlggb3ZlcnJ1biBlcnJvcnMgYW5kIHRoZSBTRA0KPiA+IGNhcmQg
+aXMgcnVubmluZyBhdCAxLjIgTUIvcy4NCj4gDQo+IExvb2tzIGdvb2QgdG8gbWUuIExldCdzIGZp
+eCBpdCB0aGlzIHdheSBhbmQgYmUgZG9uZSB3aXRoIGl0IHNlZWluZyB0aGUNCj4gcHJvYmxlbSBp
+cyBpbmRlZWQgaW4gdGhlIGsyMTAgU1BJIGNvbnRyb2xsZXIgcGVjdWxpYXJpdHkuKQ0KDQpPSy4g
+U2VuZGluZyBwYXRjaGVzLg0KDQpUaGFua3MgIQ0KDQoNCi0tIA0KRGFtaWVuIExlIE1vYWwNCldl
+c3Rlcm4gRGlnaXRhbA0K
