@@ -2,133 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E28E2B9F5B
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Nov 2020 01:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB782BB002
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Nov 2020 17:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgKTAe0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 19 Nov 2020 19:34:26 -0500
-Received: from mga09.intel.com ([134.134.136.24]:11591 "EHLO mga09.intel.com"
+        id S1729153AbgKTQS4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Nov 2020 11:18:56 -0500
+Received: from mx2.suse.de ([195.135.220.15]:54946 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726154AbgKTAe0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 19 Nov 2020 19:34:26 -0500
-IronPort-SDR: p5XUTT3ag2CTB9dQFi/1JhzwmJdQVn48f3G9OMj6k2IzKrUIBS2iIS4FWY/Wrv86s3mVe2qf5Z
- J8PtQiIzOCkA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9810"; a="171558251"
-X-IronPort-AV: E=Sophos;i="5.78,354,1599548400"; 
-   d="scan'208";a="171558251"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 16:34:25 -0800
-IronPort-SDR: eeeBn7+16YW+iSbQfMJEJ2UAcXVpvq/j7G9JdiIzK1GWAklsaRWMgOpNUpkMUE8KLNi1SIH5gq
- g25Uqvr95ujQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,354,1599548400"; 
-   d="scan'208";a="534981484"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Nov 2020 16:34:24 -0800
-Received: from [10.213.153.3] (vramuthx-MOBL1.gar.corp.intel.com [10.213.153.3])
-        by linux.intel.com (Postfix) with ESMTP id A8653580409;
-        Thu, 19 Nov 2020 16:34:22 -0800 (PST)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v8 0/6] spi: cadence-quadspi: Add QSPI controller support
- for Intel LGM SoC
-To:     Vignesh Raghavendra <vigneshr@ti.com>, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     linux-mtd@lists.infradead.org, p.yadav@ti.com,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com
-References: <20201119055551.26493-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <3f9abc46-b874-465e-152f-f6c0065e5613@ti.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <9d0ed730-59fc-b00e-5648-f1e5aeab0333@linux.intel.com>
-Date:   Fri, 20 Nov 2020 08:34:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
+        id S1729444AbgKTQSz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 20 Nov 2020 11:18:55 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1A298ACC6;
+        Fri, 20 Nov 2020 16:18:54 +0000 (UTC)
+Message-ID: <2b7f555bee663a033e2e8fc50f019c9b580a7c66.camel@suse.de>
+Subject: Re: [PATCH v5 2/2] spi: Add generic SPI multiplexer
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Date:   Fri, 20 Nov 2020 17:18:50 +0100
+In-Reply-To: <104152dd-a51e-1893-cc6b-022aecd89250@alliedtelesis.co.nz>
+References: <20200204032838.20739-3-chris.packham@alliedtelesis.co.nz>
+         <20201113154633.21542-1-nsaenzjulienne@suse.de>
+         <104152dd-a51e-1893-cc6b-022aecd89250@alliedtelesis.co.nz>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-nPpUsDmncpRH0ei3magB"
+User-Agent: Evolution 3.36.5 
 MIME-Version: 1.0
-In-Reply-To: <3f9abc46-b874-465e-152f-f6c0065e5613@ti.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Vignesh,
 
-Thank you for the review comments...
+--=-nPpUsDmncpRH0ei3magB
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 19/11/2020 9:06 pm, Vignesh Raghavendra wrote:
-> 
-> 
-> On 11/19/20 11:25 AM, Ramuthevar,Vadivel MuruganX wrote:
->> Add QSPI controller support for Intel LGM SoC.
->>
->> Note from Vignesh(mtd subsystem maintainer):
->> This series is a subset of "[PATCH v12 0/4] spi: cadence-quadspi: Add
->> support for the Cadence QSPI controller" by Ramuthevar,Vadivel MuruganX
->> <vadivel.muruganx.ramuthevar@linux.intel.com> that intended to move
->> cadence-quadspi driver to spi-mem framework
->>
->> Those patches were trying to accomplish too many things in a single set
->> of patches and need to split into smaller patches. This is reduced
->> version of above series.
->>
->> Changes that are intended to make migration easy are split into separate
->> patches. Patches 1 to 3 drop features that cannot be supported under
->> spi-mem at the moment (backward compatibility is maintained).
->> Patch 4-5 are trivial cleanups. Patch 6 does the actual conversion to
->> spi-mem and patch 7 moves the driver to drivers/spi folder.
->>
-> 
-> This text no longer makes sense anymore with few patches dropped and
-> others reordered
-Just for reference added, will drop it.
-> 
->> I have tested both INDAC mode (used by non TI platforms like Altera
->> SoCFPGA) and DAC mode (used by TI platforms) on TI EVMs.
->>
->> Patches to move move bindings over to
->> "Documentation/devicetree/bindings/spi/" directory and also conversion
->> of bindig doc to YAML will be posted separately.  Support for Intel
->> platform would follow that.
->>
->> Reference:
->>          https://lkml.org/lkml/2020/6/1/50
->>
->> ---
->> v8:
->>    - As Mark suggested to add the dt-bindings documentation patches
->>      end of the series , so dropped.
-> 
-> 
->>
->> Ramuthevar Vadivel Murugan (6):
->>    spi: cadence-quadspi: Add QSPI support for Intel LGM SoC
->>    spi: cadence-quadspi: Disable the DAC for Intel LGM SoC
->>    spi: cadence-quadspi: Add multi-chipselect support for Intel LGM SoC
->>    spi: Move cadence-quadspi.txt to Documentation/devicetree/bindings/spi
->>    dt-bindings: spi: Convert cadence-quadspi.txt to cadence-quadspi.yaml
->>    dt-bindings: spi: Add compatible for Intel LGM SoC
->>
-> 
-> This is quite confusing... Summary/diffstat still shows patches 4 to 6
-> and so does the patch numbering in $subject while changelog says
-> otherwise and I received only 3 patches in my Inbox?
-oh my bad, while patch creation wrongly added, will correct it, thanks!
+On Tue, 2020-11-17 at 00:08 +0000, Chris Packham wrote:
+> On 14/11/20 4:46 am, Nicolas Saenz Julienne wrote:
+> > Upon registering spi-mux's devices through spi_add_device() the kernel =
+gets
+> > stuck waiting for the 'spi_add_lock' mutex to be released. The mutex ha=
+ppens to
+> > be held by spi-mux's parent SPI bus, which unluckily, is waiting for sp=
+i-mux's
+> > probe to finish before releasing it.
+>=20
+> I just re-tested my system with v5.10.0-rc4 and didn't see any problem.=
+=20
+> My dts is pretty similar to yours the only obvious thing missing is=20
+> `mux-control-names =3D "spi";` and I also set `#size-cells =3D <1>;` (let=
+ me=20
+> know if you want me to post the whole thing).
+>=20
+> It might be dependent on the host spi controller. The re-test I just did=
+=20
+> was on a board using the spi-orion.c driver and I tested my original=20
+> change on a board using spi-bcm-qspi.c (I haven't got the board handy=20
+> right now but I could go and find one if necessary).
 
-Regards
-Vadivel
-> 
-> 
->>   .../devicetree/bindings/mtd/cadence-quadspi.txt    |  67 ----------
->>   .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 148 +++++++++++++++++++++
->>   drivers/spi/Kconfig                                |   2 +-
->>   drivers/spi/spi-cadence-quadspi.c                  |  33 ++++-
->>   4 files changed, 178 insertions(+), 72 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/mtd/cadence-quadspi.txt
->>   create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
->>
-> 
-> So does the diffstat...
-> 
+Found the issue, something silly on my side. Sorry for the noise.
+
+Regards,
+Nicolas
+
+
+--=-nPpUsDmncpRH0ei3magB
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl+37GoACgkQlfZmHno8
+x/5GZgf/R2nkIl4aPSZPwKJzMdQQE60+w/KbP6MCNKterlddKumSwb5DnIEWXyil
+s/OeckEQUlZ5V09WUnPkNlARrH6tZDYWQLboQEpYReSWeLmvgcSHCp7PYBU/rXj8
+gqtkTd5AK8EFhZQUOHNQsG3O9VeB7GvNXrWuqOjciDiMmoPfe443na1T97R2K9Fj
+K3Fmj/2bNz52+9C99ZDCvxEurco91atavZvzpcJ5ISaTHOeJE5XZ2yyrJBcGNMZT
+uHDgDku+o61+ZoeWGz6HYUFp/ec6Da2JPhdsZ2U0cgruhUKpa7RHzNjqlkmdz8fL
+SjWiw1/Cci3o6sfAwjQjQ7MRUh8KYQ==
+=sdk7
+-----END PGP SIGNATURE-----
+
+--=-nPpUsDmncpRH0ei3magB--
+
