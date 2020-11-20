@@ -2,93 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB782BB002
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Nov 2020 17:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3C92BB140
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Nov 2020 18:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729153AbgKTQS4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Nov 2020 11:18:56 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54946 "EHLO mx2.suse.de"
+        id S1727157AbgKTRSK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Nov 2020 12:18:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58142 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729444AbgKTQSz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 20 Nov 2020 11:18:55 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 1A298ACC6;
-        Fri, 20 Nov 2020 16:18:54 +0000 (UTC)
-Message-ID: <2b7f555bee663a033e2e8fc50f019c9b580a7c66.camel@suse.de>
-Subject: Re: [PATCH v5 2/2] spi: Add generic SPI multiplexer
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Date:   Fri, 20 Nov 2020 17:18:50 +0100
-In-Reply-To: <104152dd-a51e-1893-cc6b-022aecd89250@alliedtelesis.co.nz>
-References: <20200204032838.20739-3-chris.packham@alliedtelesis.co.nz>
-         <20201113154633.21542-1-nsaenzjulienne@suse.de>
-         <104152dd-a51e-1893-cc6b-022aecd89250@alliedtelesis.co.nz>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-nPpUsDmncpRH0ei3magB"
-User-Agent: Evolution 3.36.5 
+        id S1726255AbgKTRSK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 20 Nov 2020 12:18:10 -0500
+Received: from localhost (cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net [92.233.91.117])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 20E1822252;
+        Fri, 20 Nov 2020 17:18:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605892689;
+        bh=uy+51xeLLzq1vXGE7LGJb4vNbh6FZc0ca+/BpSaUnJ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TzOH+qDooBkM+qvyFtDXceRJ1uL8IxPw/J70qTrL7zQrK29OIKZBH7oM6az5lypL7
+         jd3ZlMeuno8YVqrLgLffY6Ui4owRy524YZhVa7lW1GJJOgrvMhBGU6mrjy/vlcieZo
+         iUem9dXye8RjtpAWFLrCcSs8Wn556NVCn8dNnurE=
+Date:   Fri, 20 Nov 2020 17:17:48 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] spi: Take the SPI IO-mutex in the spi_setup() method
+Message-ID: <20201120171629.GH6751@sirena.org.uk>
+References: <20201117094517.5654-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NqNl6FRZtoRUn5bW"
+Content-Disposition: inline
+In-Reply-To: <20201117094517.5654-1-Sergey.Semin@baikalelectronics.ru>
+X-Cookie: Have at you!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---=-nPpUsDmncpRH0ei3magB
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--NqNl6FRZtoRUn5bW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 2020-11-17 at 00:08 +0000, Chris Packham wrote:
-> On 14/11/20 4:46 am, Nicolas Saenz Julienne wrote:
-> > Upon registering spi-mux's devices through spi_add_device() the kernel =
-gets
-> > stuck waiting for the 'spi_add_lock' mutex to be released. The mutex ha=
-ppens to
-> > be held by spi-mux's parent SPI bus, which unluckily, is waiting for sp=
-i-mux's
-> > probe to finish before releasing it.
->=20
-> I just re-tested my system with v5.10.0-rc4 and didn't see any problem.=
-=20
-> My dts is pretty similar to yours the only obvious thing missing is=20
-> `mux-control-names =3D "spi";` and I also set `#size-cells =3D <1>;` (let=
- me=20
-> know if you want me to post the whole thing).
->=20
-> It might be dependent on the host spi controller. The re-test I just did=
-=20
-> was on a board using the spi-orion.c driver and I tested my original=20
-> change on a board using spi-bcm-qspi.c (I haven't got the board handy=20
-> right now but I could go and find one if necessary).
+On Tue, Nov 17, 2020 at 12:45:17PM +0300, Serge Semin wrote:
 
-Found the issue, something silly on my side. Sorry for the noise.
+> Of course I could have provided a fix affecting the DW APB SSI driver
+> only, for instance, by creating a mutual exclusive access to the set_cs
+> callback and setting/clearing only the bit responsible for the
+> corresponding chip-select. But after a short research I've discovered that
 
-Regards,
-Nicolas
+I think the driver needs a fix anyway for the case where there's a mix
+of devices with standard and inverted chip selects, it assumes they all
+have the same polarity AFAICT.
 
-
---=-nPpUsDmncpRH0ei3magB
+--NqNl6FRZtoRUn5bW
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl+37GoACgkQlfZmHno8
-x/5GZgf/R2nkIl4aPSZPwKJzMdQQE60+w/KbP6MCNKterlddKumSwb5DnIEWXyil
-s/OeckEQUlZ5V09WUnPkNlARrH6tZDYWQLboQEpYReSWeLmvgcSHCp7PYBU/rXj8
-gqtkTd5AK8EFhZQUOHNQsG3O9VeB7GvNXrWuqOjciDiMmoPfe443na1T97R2K9Fj
-K3Fmj/2bNz52+9C99ZDCvxEurco91atavZvzpcJ5ISaTHOeJE5XZ2yyrJBcGNMZT
-uHDgDku+o61+ZoeWGz6HYUFp/ec6Da2JPhdsZ2U0cgruhUKpa7RHzNjqlkmdz8fL
-SjWiw1/Cci3o6sfAwjQjQ7MRUh8KYQ==
-=sdk7
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+3+jsACgkQJNaLcl1U
+h9BwLgf+Lis0gdGmaCp6BXLmrpL/5yxKSuQ4g3xHQigJuLJyrPf4GoaQSMv34u1z
+rGowoRkVYkjpfeqtFAG9ns/ozKKdVJkgcycEWl/KZI6Gia7COUdlNHHaiJaSeDQk
+qqTbB4ZoDVrSRqd7tE6hAurM18DxwY5fFYEvN39XOZEakqMeqgQ8x9+iwe59VPsw
+bwJV0FzAIPnCx/AbdIaU+FA6LTJpSJp1dWzzVW+tvxXkeEpBgVAHMOdSc8LwnkiS
+szD4KAaR3VRvQ3rjunaXQlJPVctdIhPnknVEFnZKDwaQIBlmoyvy0By1CZ3+woMZ
+Ogq5RaosPg+EOYnY3K0VFUFShzSd4w==
+=YaE4
 -----END PGP SIGNATURE-----
 
---=-nPpUsDmncpRH0ei3magB--
-
+--NqNl6FRZtoRUn5bW--
