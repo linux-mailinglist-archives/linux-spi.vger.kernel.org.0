@@ -2,93 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B8D2BB865
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Nov 2020 22:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0DC2BB869
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Nov 2020 22:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728136AbgKTVej (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Nov 2020 16:34:39 -0500
-Received: from esa1.microchip.iphmx.com ([68.232.147.91]:56967 "EHLO
-        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727665AbgKTVej (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Nov 2020 16:34:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1605908078; x=1637444078;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BVeI0aooSO+qLNmmszrCacN2qEtNqOqvzmyg0r6BJYI=;
-  b=UO5ugB4ohC4p2dI/2+sgkDYZou3A8uZs9jWpldfZZzzWKD47WEqumQkv
-   y1kQdKLi5ld1ZQV7Fu8oSkkdUYhJR16L8bj0EJu/6uNPGaDfyVki8o1Hk
-   pP0vwFfEw0Y0HbQD1u4lDaRbktivY3EKHODQ2RtW0DpkU+YaNFXOmiMi1
-   kgqOTDdJjiQjuncnCLu940iHGhcm3cwtdmovvYpcNWGl2pV+eUboxYuji
-   R9n8SuvxfU9Qiz8HWADDjzjUZ91xEw96ZZQmENJkSey8tbcdSNtACwAU4
-   iS54Gba4zQfA3JAOjQqPldeXI9QPfZUvVO83h3TBpq7I0jKg5JtuePzyE
-   g==;
-IronPort-SDR: OFnJbqeRoB8ZQ7usWXLaVbnt8OYMK6gpLBHnVeu4bpTiARpCsm5IkiRSjDC9sQjcT8b6OqiKOG
- 8iET1vkgUyEtr1OurjBoQcvpmkdm08yvxD5z8LlCdHsaIkSKQBM5s4mOTdNFxtPb+V+YmfJmZJ
- rTVc5+JYQrGJGKq9SZowJY4FCnxXGMCQEMlmG1jDdMpFUMxfOrq60Ld/9eZBAVJsxTdZByMRbl
- wjfStueYc6toZ2K+Ns54/OmTr/TaOQfTsPSHaW2Nned8QOr7JLI1sXU/K4ErJqUkehd9YVPHf2
- jfs=
-X-IronPort-AV: E=Sophos;i="5.78,357,1599548400"; 
-   d="scan'208";a="104498487"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Nov 2020 14:34:38 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 20 Nov 2020 14:34:38 -0700
-Received: from soft-dev10.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Fri, 20 Nov 2020 14:34:37 -0700
-From:   Lars Povlsen <lars.povlsen@microchip.com>
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>
-CC:     Lars Povlsen <lars.povlsen@microchip.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] spi: dw: Fix spi registration for controllers overriding CS
-Date:   Fri, 20 Nov 2020 22:34:14 +0100
-Message-ID: <20201120213414.339701-1-lars.povlsen@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        id S1727364AbgKTVgV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Nov 2020 16:36:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50994 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727248AbgKTVgV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 20 Nov 2020 16:36:21 -0500
+Received: from localhost (cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net [92.233.91.117])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0720F2237B;
+        Fri, 20 Nov 2020 21:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605908180;
+        bh=1rzRLgdpZdI/PWxav/ixRoMIL2da2T/gEM+OQBevwqY=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=CIZEaTqeAUy4sehhHduWQSnyEpi4pM2TWmjPaIyZDGAmEJNv1GMd/FPufJreF2xoS
+         O2nwVi2iS1WmWUMCGDnKMfCIto23AU3zT+U9/br1RPw3sgrKPZjbAlr3CTabqjkKP1
+         X6vIOhd8p5Ed0hDEgEieOy6SvSti5HQAAv82NA+c=
+Date:   Fri, 20 Nov 2020 21:35:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+In-Reply-To: <20201117094517.5654-1-Sergey.Semin@baikalelectronics.ru>
+References: <20201117094517.5654-1-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [RFC PATCH] spi: Take the SPI IO-mutex in the spi_setup() method
+Message-Id: <160590815903.48662.5764722048038617376.b4-ty@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When SPI DW memory ops support was introduced, there was a check for
-excluding controllers which supplied their own CS function. Even so,
-the mem_ops pointer is *always* presented to the SPI core.
+On Tue, 17 Nov 2020 12:45:17 +0300, Serge Semin wrote:
+> I've discovered that due to the recent commit 49d7d695ca4b ("spi: dw:
+> Explicitly de-assert CS on SPI transfer completion") a concurrent usage of
+> the spidev devices with different chip-selects causes the "SPI transfer
+> timed out" error. The root cause of the problem has turned to be in a race
+> condition of the SPI-transfer execution procedure and the spi_setup()
+> method being called at the same time. In particular in calling the
+> spi_set_cs(false) while there is an SPI-transfer being executed. In my
+> case due to the commit cited above all CSs get to be switched off by
+> calling the spi_setup() for /dev/spidev0.1 while there is an concurrent
+> SPI-transfer execution performed on /dev/spidev0.0. Of course a situation
+> of the spi_setup() being called while there is an SPI-transfer being
+> executed for two different SPI peripheral devices of the same controller
+> may happen not only for the spidev driver, but for instance for MMC SPI +
+> some another device, or spi_setup() being called from an SPI-peripheral
+> probe method while some other device has already been probed and is being
+> used by a corresponding driver...
+> 
+> [...]
 
-This causes the SPI core sanity check in spi_controller_check_ops() to
-refuse registration, since a mem_ops pointer is being supplied without
-an exec_op member function.
+Applied to
 
-The end result is failure of the SPI DW driver on sparx5 and similar
-platforms.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-The fix in the core SPI DW driver is to avoid presenting the mem_ops
-pointer if the exec_op function is not set.
+Thanks!
 
-Fixes: 6423207e57ea (spi: dw: Add memory operations support)
-Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
----
- drivers/spi/spi-dw-core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[1/1] spi: Take the SPI IO-mutex in the spi_setup() method
+      commit: 4fae3a58ab59d8a286864d61fe1846283a0316f2
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index 2e50cc0a9291..a0794eac2094 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -875,7 +875,8 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 		master->set_cs = dw_spi_set_cs;
- 	master->transfer_one = dw_spi_transfer_one;
- 	master->handle_err = dw_spi_handle_err;
--	master->mem_ops = &dws->mem_ops;
-+	if (dws->mem_ops.exec_op)
-+		master->mem_ops = &dws->mem_ops;
- 	master->max_speed_hz = dws->max_freq;
- 	master->dev.of_node = dev->of_node;
- 	master->dev.fwnode = dev->fwnode;
---
-2.25.1
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
