@@ -2,149 +2,223 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A07032C03A6
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Nov 2020 11:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DF52C09B9
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Nov 2020 14:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728690AbgKWKt1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 23 Nov 2020 05:49:27 -0500
-Received: from relay-us1.mymailcheap.com ([51.81.35.219]:45666 "EHLO
-        relay-us1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728374AbgKWKt0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Nov 2020 05:49:26 -0500
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id E0D9B20E92;
-        Mon, 23 Nov 2020 10:49:24 +0000 (UTC)
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id 5BFD6260EB;
-        Mon, 23 Nov 2020 10:49:20 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay1.mymailcheap.com (Postfix) with ESMTPS id 4FBC13F1C5;
-        Mon, 23 Nov 2020 10:49:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id 355132A3E1;
-        Mon, 23 Nov 2020 05:49:18 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1606128558;
-        bh=Ie7rzoJQCjwB5Or+bKi9/xV3Pf6HEUgwzJivbfNLlEY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=UlnRBCp+NUvxtnU3k9XFOAH1sDiBBmInfyUUbBw5vYmFC40N/F44gJgKeKuQHgvT9
-         4/lgcVHVgJiKOqYTI0A8nHNsJRmFwa3RFdFbtkYqmvym+NmNjyBFkyGf+NyzYGIOLA
-         biQJ7U1hKvX1/E139kwhlm8GHmOVp9fJITKkiolI=
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CiMMwUKtPOFK; Mon, 23 Nov 2020 05:49:14 -0500 (EST)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        id S2388086AbgKWNKs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 23 Nov 2020 08:10:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45356 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732718AbgKWNKr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 23 Nov 2020 08:10:47 -0500
+Received: from localhost (cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net [92.233.91.117])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Mon, 23 Nov 2020 05:49:14 -0500 (EST)
-Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id 5AD40400C1;
-        Mon, 23 Nov 2020 10:49:13 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="Gsi8kQTc";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [192.168.1.203] (unknown [183.157.63.183])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id D21A7400C1;
-        Mon, 23 Nov 2020 10:48:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1606128544;
-        bh=Ie7rzoJQCjwB5Or+bKi9/xV3Pf6HEUgwzJivbfNLlEY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Gsi8kQTcfNik76wElxof20Ymx/GUnnjGakbU074HlMUcxR3WrIZnGHh4l+rSlVuE4
-         mXY8T/XRXITh9FFAmMqMCXlReAWuvyQwVDPQfhkN0OccpJR/XnVuWMSejCUl0oERUD
-         +t2q6BWiwyEahZoCYKKm219hG66HKa8rOBWULhBE=
-Subject: Re: [PATCH 2/3] MIPS: Loongson64: DTS: Add SPI support to LS3A
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 0F1DA20782;
+        Mon, 23 Nov 2020 13:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606137046;
+        bh=IK8iGoBaaPTZaTeG35tJXRdHCQ/+tEeL55PsyX83ECs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=khzvEGIuZBik9TXnF5/42sz0ds1J1ypvdVO9AKoxkwv4PiBafMg6dXtsclzd5TAiW
+         N9O/v4JBRkJTn9qT8BpjpVsTewGIEXb2pRyfBk2ga08KgcxJMmKjicpf6p2pG03/Sy
+         TPK4drnlyONXMNRHa1Ev+smrdTvRnWosC7JagZFQ=
+Date:   Mon, 23 Nov 2020 13:10:23 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 1/3] spi: Loongson: Add Loongson 3A+7A SPI controller
+ driver support
+Message-ID: <20201123131023.GC6322@sirena.org.uk>
 References: <1606123148-315-1-git-send-email-zhangqing@loongson.cn>
- <1606123148-315-2-git-send-email-zhangqing@loongson.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <7e878d14-37b2-769e-400a-548a846943fe@flygoat.com>
-Date:   Mon, 23 Nov 2020 18:48:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <1606123148-315-2-git-send-email-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 5AD40400C1
-X-Spamd-Result: default: False [1.40 / 10.00];
-         ARC_NA(0.00)[];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         MID_RHS_MATCH_FROM(0.00)[];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all:c];
-         RECEIVED_SPAMHAUS_PBL(0.00)[183.157.63.183:received];
-         ML_SERVERS(-3.10)[213.133.102.83];
-         DKIM_TRACE(0.00)[flygoat.com:+];
-         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         RCPT_COUNT_TWELVE(0.00)[12];
-         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
-         RCVD_COUNT_TWO(0.00)[2];
-         SUSPICIOUS_RECIPS(1.50)[];
-         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1]
-X-Rspamd-Server: mail20.mymailcheap.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2/5bycvrmDh4d1IB"
+Content-Disposition: inline
+In-Reply-To: <1606123148-315-1-git-send-email-zhangqing@loongson.cn>
+X-Cookie: Dry clean only.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-ÔÚ 2020/11/23 17:19, Qing Zhang Ð´µÀ:
-> The LS3A SPI module is now supported, enable it.
->
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->   arch/mips/boot/dts/loongson/loongson64c-package.dtsi | 7 +++++++
->   1 file changed, 7 insertions(+)
->
-> diff --git a/arch/mips/boot/dts/loongson/loongson64c-package.dtsi b/arch/mips/boot/dts/loongson/loongson64c-package.dtsi
-> index 5bb876a..2025c5a 100644
-> --- a/arch/mips/boot/dts/loongson/loongson64c-package.dtsi
-> +++ b/arch/mips/boot/dts/loongson/loongson64c-package.dtsi
-> @@ -60,5 +60,12 @@
->   			interrupt-parent = <&liointc>;
->   			no-loopback-test;
->   		};
+--2/5bycvrmDh4d1IB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Nov 23, 2020 at 05:19:06PM +0800, Qing Zhang wrote:
+
+> This module is integrated into the Loongson-3A SoC and the LS7A bridge ch=
+ip.
+
+It looks like this needs quite a bit of update to fit into the SPI
+subsystem properly, fortunately most of that is cutting code out of the
+driver so you can use core features so it shouldn't be too bad.  There's
+also a bunch of pretty minor stylistic issues none of which look too
+difficult to address.
+
+> @@ -968,6 +968,12 @@ config SPI_AMD
+>  	help
+>  	  Enables SPI controller driver for AMD SoC.
+> =20
+> +config SPI_LOONGSON
+> +        tristate "Loongson SPI Controller Support"
+
+Please keep Kconfig and Makefile sorted.
+
+> +        depends on CPU_LOONGSON32 || CPU_LOONGSON64
+
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Loongson3A+7A SPI driver
+> + *
+
+Please make the entire comment a C++ one so things look more
+intentional.
+
+> +#include <linux/pci.h>
+> +#include <linux/of.h>
+> +/*define spi register */
+> +#define	SPCR	0x00
+
+Missing blank line.
+
+> +#define	SPSR	0x01
+> +#define FIFO	0x02
+
+This indentation is unclear, also all these defines could use some
+namespacing to avoid collisions with anything that gets defined in a
+header.
+
+> +	hz  =3D t ? t->speed_hz : spi->max_speed_hz;
 > +
-> +                spi: spi@1fe00220 {
-> +                        compatible = "loongson,loongson-spi";
+> +	if (!hz)
+> +		hz =3D spi->max_speed_hz;
 
-You have to add dt schema document..
+Please write normal conditional statements to improve legibility, and
+note that the core will ensure that the transfer always has a speed set.
 
-Also I'd sugguest you to name it as loongson,pci-spi to avoid collision.
+> +	if ((hz && loongson_spi->hz !=3D hz) || ((spi->mode ^ loongson_spi->mod=
+e) & (SPI_CPOL | SPI_CPHA))) {
 
-Loongson-1 MCUs do have MMIO SPI controller with similiar register layout.
+Please try to keep your lines less than 80 columns (there's not a hard
+limit here but it helps legibility).
 
-Thanks
+> +		bit =3D fls(div) - 1;
+> +		if ((1<<bit) =3D=3D div)
 
-- Jiaxun
+1 << bit
 
-> +                        reg=<0 0x1fe00220 0x11>;
-> +                        #address-cells = <1>;
-> +                        #size-cells = <0>;
-> +               };
->   	};
->   };
+> +static int loongson_spi_setup(struct spi_device *spi)
+> +{
+> +	struct loongson_spi *loongson_spi;
+> +
+> +	loongson_spi =3D spi_master_get_devdata(spi->master);
+> +	if (spi->bits_per_word % 8)
+> +		return -EINVAL;
+> +
+> +	if (spi->chip_select >=3D spi->master->num_chipselect)
+> +		return -EINVAL;
+> +
+> +	loongson_spi_update_state(loongson_spi, spi, NULL);
+
+> +	set_cs(loongson_spi, spi, 1);
+
+The setup() operation shouldn't configure the physical controller state
+unless there are separate configuration registers per chip select -
+another device could be active when setup() is called.
+
+
+> +static int loongson_spi_write_read_8bit(struct spi_device *spi,
+> +		const u8 **tx_buf, u8 **rx_buf, unsigned int num)
+> +{
+> +	struct loongson_spi *loongson_spi;
+> +	loongson_spi =3D spi_master_get_devdata(spi->master);
+> +
+> +	if (tx_buf && *tx_buf) {
+> +		loongson_spi_write_reg(loongson_spi, FIFO, *((*tx_buf)++));
+> +		while ((loongson_spi_read_reg(loongson_spi, SPSR) & 0x1) =3D=3D 1);
+> +        } else {
+> +		loongson_spi_write_reg(loongson_spi, FIFO, 0);
+> +		while ((loongson_spi_read_reg(loongson_spi, SPSR) & 0x1) =3D=3D 1);
+> +        }
+
+The indentation is messed up here, looks like you have some kind of
+tab/space confusion.
+
+> +	count =3D xfer->len;
+> +
+> +	do {
+> +		if (loongson_spi_write_read_8bit(spi, &tx, &rx, count) < 0)
+> +			goto out;
+
+This is the only caller of _write_read_8bit(), may sa well inline it?
+
+> +static inline int set_cs(struct loongson_spi *loongson_spi, struct spi_d=
+evice  *spi, int val)
+
+Why is this static inline?  This should be an operation provided to the
+SPI core.
+
+> +{
+> +	int cs =3D loongson_spi_read_reg(loongson_spi, SFCS) & ~(0x11 << spi->c=
+hip_select);
+> +
+> +        if (spi->mode  & SPI_CS_HIGH)
+> +		val =3D !val;
+> +	loongson_spi_write_reg(loongson_spi, SFCS,
+> +                        (val ? (0x11 << spi->chip_select):(0x1 << spi->c=
+hip_select)) | cs);
+
+There's mult
+
+> +static void loongson_spi_work(struct work_struct *work)
+> +{
+
+Drivers shouldn't be open coding a message queue, implement
+transfer_one_message() and let the core handle it for you.
+
+> +static const struct of_device_id loongson_spi_id_table[] =3D {
+> +	{ .compatible =3D "loongson,loongson-spi", },
+> +	{ },
+> +};
+
+This is introducing a new DT binding, there should also be a new binding
+document added.
+
+> +static int loongson_spi_pci_register(struct pci_dev *pdev,
+> +		const struct pci_device_id *ent)
+> +{
+> +	int ret;
+> +	unsigned char v8;
+
+I would expect the PCI device to be a separate module with a dependency
+on PCI, I'm kind of surprised that this builds on !PCI systems but I
+guess it's possible there's stubs.
+
+--2/5bycvrmDh4d1IB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+7tL4ACgkQJNaLcl1U
+h9Dp6wf+LS5rzWonzfdI46UmU1mp1V9cDVLM3skheEP4YYLevRPl1G2Sz27sqMuN
+dIZZcGnaQ2285+0FPe1o+dudIYoWWUhVsSbftToxet3WxfWFre01QZTXiS0H1lOJ
+FWCb0cgJhc5nLj9SPJeXEUvtgqcLEjWfnOgAknpfdsE7kvHEkZ0kEd8Hzac4oAyC
+t3RIVuMJInTwNTf/l6qY1h3WjTrrz9gq9Z5oIomXOhTFXGEL8O2hNhSzmXtVrE8J
+PeEJcwe3aQbV34qnNbxTT+hgPlwTcEis0/KeAbaSFsv5R+OS4mwW+za8iJ67B0gN
+5BIWFNplE8NF/5LdgCQdoaWPpHqRTA==
+=j5jz
+-----END PGP SIGNATURE-----
+
+--2/5bycvrmDh4d1IB--
